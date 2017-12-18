@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Che Shian Hung, 
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -38,12 +38,9 @@ import boa.types.*;
  * @author rdyer
  * @author ankuraga
  * @author rramu
- * @author hungc
  */
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	BoaType lastRetType;
-	Integer newNameCounter = 0;
-	HashMap<String, String> newName = new HashMap<String, String>();
 
 	/**
 	 * This verifies visitors have at most 1 before/after for a type.
@@ -484,19 +481,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final Identifier n, final SymbolTable env) {
 		n.env = env;
 
-		if(newName.containsKey(n.getToken()) && env.hasLocal(newName.get(n.getToken()))){
-			n.setToken(newName.get(n.getToken()));
-		}
-		else if(newName.containsKey(n.getToken())){
-			Integer c = newNameCounter - 1;
-			while (c > 0){
-				if(env.hasLocal(n.getToken() + Integer.toString(c))){
-					n.setToken(n.getToken() + Integer.toString(c));
-					break;
-				}
-				c--;
-			}
-		}
 		if (env.hasType(n.getToken()))
 			n.type = SymbolTable.getType(n.getToken());
 		else
@@ -915,17 +899,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final VarDeclStatement n, final SymbolTable env) {
 		n.env = env;
 
-		if(n.hasInitializer()){
-		if(!(n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof FunctionExpression)){
-
-			String oldId = n.getId().getToken();
-			String newId = oldId + Integer.toString(newNameCounter);
-			n.getId().setToken(newId);
-			newNameCounter++;
-				newName.put(oldId, newId);
-			}
-		}
-		
 		final String id = n.getId().getToken();
 
 		if (env.hasGlobal(id))
