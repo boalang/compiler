@@ -59,6 +59,9 @@ public class BoaArray extends BoaType {
 			return true;
 		}
 
+		if (that instanceof BoaProtoList)
+			return true;
+
 		// otherwise, if it's not an array, forget it
 		if (!(that instanceof BoaArray))
 			return false;
