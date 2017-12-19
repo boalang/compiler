@@ -1,0 +1,6 @@
+o: output collection of int;
+repos: array of CodeRepository = input.code_repositories;
+id := function(fields: array of CodeRepository){
+  o << 1;
+};
+id(repos);
