@@ -37,21 +37,20 @@ public class BoaNormalFormIntrinsics {
 	 * @return  map of variables which are not arg0, arg1, arg2, ...
 	 * @throws Exception
 	 */
-	// FIXME would prefer the return type is array instead of map
-	@FunctionSpec(name = "getnoargsvariables", returnType = "map[Expression] of Expression", formalParameters = { "Expression" })
-	public static HashMap<Expression, Expression>  getNoArgsVariables(final Expression e) throws Exception {
-		final HashMap<Expression, Expression> variableMap = new HashMap<Expression, Expression>();
+	@FunctionSpec(name = "getnoargsvariables", returnType = "array of Expression", formalParameters = { "Expression" })
+	public static Expression[] getNoArgsVariables(final Expression e) throws Exception {
+		final ArrayList<Expression> variableList = new ArrayList<Expression>();
 
 		if (e.getKind() == ExpressionKind.VARACCESS) {
 			final String var = e.getVariable();
 			if (!var.matches("arg\\$[0-9]+") && !"rcv$".equals(var))
-				variableMap.put(e, e);
+				variableList.add(e);
 		} else {
 			for (final Expression sub : e.getExpressionsList())
-				variableMap.putAll(getNoArgsVariables(sub));
+				variableList.addAll(Arrays.asList(getNoArgsVariables(sub)));
 		}
 
-		return variableMap;
+		return variableList.toArray(new Expression[variableList.size()]);
 	}
 
 	/**
