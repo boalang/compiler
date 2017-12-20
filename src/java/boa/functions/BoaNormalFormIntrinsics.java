@@ -1125,7 +1125,7 @@ public class BoaNormalFormIntrinsics {
 			// literals are converted to numbers, if possible
 			case LITERAL:
 				if (BoaAstIntrinsics.isIntLit(e))
-					return Long.parseLong(e.getLiteral());
+					return Long.decode(e.getLiteral());
 				if (BoaAstIntrinsics.isFloatLit(e))
 					return Double.parseDouble(e.getLiteral());
 				return e;
