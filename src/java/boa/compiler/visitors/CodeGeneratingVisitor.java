@@ -1386,12 +1386,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 		}
 
-		if (lhsType instanceof BoaArray && t instanceof BoaProtoList){
-			String[] rhsType = ((BoaProtoList)t).getType().toString().split(" ");
-			System.out.println("rhs type: " + rhsType[2]);
-			src += ".toArray(new boa.types.Code." + rhsType[2] + "[" + src + ".size()])";
-		}
-
 		if (!type.assigns(t)) {
 			final BoaFunction f = n.env.getCast(t, type);
 

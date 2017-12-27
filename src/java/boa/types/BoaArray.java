@@ -59,8 +59,15 @@ public class BoaArray extends BoaType {
 			return true;
 		}
 
-		if (that instanceof BoaProtoList)
-			return true;
+		// if that is a protolist
+		if (that instanceof BoaProtoList){
+			String lhs = this.type.toString();
+			String[] rhs = that.toString().split(" ");
+			if(lhs.equals(rhs[2]))
+				return true;
+			else if(lhs.equals("Expression") && rhs[2].equals("Statement"))
+				return true;
+		}
 
 		// otherwise, if it's not an array, forget it
 		if (!(that instanceof BoaArray))

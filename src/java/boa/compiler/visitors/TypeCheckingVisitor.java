@@ -955,9 +955,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 			if (lhs instanceof BoaArray && rhs instanceof BoaTuple)
 				rhs = new BoaArray(((BoaTuple)rhs).getMember(0));
-			if (lhs instanceof BoaArray && rhs instanceof BoaProtoList){
-				((BoaProtoList)rhs).setType(lhs);
-			}
 
 			if (rhs != null && !lhs.assigns(rhs) && !env.hasCast(rhs, lhs))
 				throw new TypeCheckException(n.getInitializer(), "incorrect type '" + rhs + "' for assignment to '" + id + ": " + lhs + "'");
