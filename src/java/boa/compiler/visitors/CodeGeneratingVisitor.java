@@ -1990,8 +1990,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (replaced.contains("${K}") || replaced.contains("${V}")) {
 			if (args.size() == 1 && args.get(0).type instanceof BoaMap) {
 				final BoaMap m = (BoaMap)args.get(0).type;
-				replaced = replaced.replace("${K}", m.getIndexType().toBoxedJavaType());
-				replaced = replaced.replace("${V}", m.getType().toBoxedJavaType());
+				String indexType = m.getIndexType().toBoxedJavaType();
+				String valueType = m.getType().toBoxedJavaType();
+				if (m.getIndexType() instanceof BoaArray)
+					indexType = indexType.replace("[]", "[0]");
+				else if (m.getIndexType() instanceof BoaSet || m.getIndexType() instanceof BoaStack || m.getIndexType() instanceof BoaMap)
+					indexType = indexType.replaceAll("<(.*)>", "");
+				if (m.getType() instanceof BoaArray )
+					valueType = valueType.replace("[]", "[0]");
+				else if (m.getType() instanceof BoaSet || m.getType() instanceof BoaStack || m.getType() instanceof BoaMap)
+					valueType = valueType.replaceAll("<(.*)>", "");
+				replaced = replaced.replace("${K}", indexType);
+				replaced = replaced.replace("${V}", valueType);
 			} else if (args.size() == 1 && args.get(0).type instanceof BoaStack) {
 				final BoaStack s = (BoaStack)args.get(0).type;
 				replaced = replaced.replace("${V}", s.getType().toBoxedJavaType());
