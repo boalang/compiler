@@ -1,5 +1,6 @@
 package boa.aggregators;
 
+import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Expression;
 import boa.io.EmitKey;
 
@@ -53,6 +54,125 @@ public class PreconditionAggregator extends Aggregator {
             apiPrecondition.put(api, precondClients);
         }
 
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void finish() throws IOException, InterruptedException {
+        Map<String, Map<Expression, Set<String>>> inferredPreconditions = doInference();
+        apiPrecondition.clear();
+        //doFiltering();
+        //doRanking();
+
+        for (String api: inferredPreconditions.keySet()) {
+            Set<Expression> preconds = inferredPreconditions.get(api).keySet();
+            for (Expression precond: preconds) {
+                this.collect(prettyprint(precond) + " : " + inferredPreconditions.get(api).get(precond).size() );
+            }
+        }
+    }
+
+    /**
+     * Infer the weak preconditions from the mined preconditions.
+     *
+     * @return map
+     */
+    private Map<String, Map<Expression, Set<String>>> doInference() {
+        Map<String, Map<Expression, Set<String>>> infPrecondition = new HashMap<String, Map<Expression, Set<String>>>();
+        Set<String> apis = apiPrecondition.keySet();
+
+        for (String api: apis) {
+            Map<Expression, Set<String>> precondClients = new HashMap<Expression, Set<String>>(apiPrecondition.get(api));
+            Set<Expression> preconds = new HashSet<Expression>(precondClients.keySet());
+
+            for (Expression eqPrecond: preconds) {
+                if (eqPrecond.getKind() == ExpressionKind.EQ) {
+
+                    for (Expression sineqPrecond: preconds) {
+                        if (sineqPrecond.getKind() == ExpressionKind.LT || sineqPrecond.getKind() == ExpressionKind.GT) {
+                            if (eqPrecond.getExpressions(0).equals(sineqPrecond.getExpressions(0)) &&
+                                    eqPrecond.getExpressions(1).equals(sineqPrecond.getExpressions(1))) {
+
+                                Expression nsineqPrecond;
+                                Expression lhs = sineqPrecond.getExpressions(0);
+                                Expression rhs = sineqPrecond.getExpressions(1);
+
+                                if (sineqPrecond.getKind() == ExpressionKind.GT) {
+                                    nsineqPrecond = parseexpression(prettyprint(lhs) + ">=" + prettyprint(rhs));
+
+                                    if (!containsKind(preconds, ExpressionKind.GTEQ))
+                                        precondClients.put(nsineqPrecond, new HashSet<String>());
+
+                                } else {
+                                    nsineqPrecond = parseexpression(prettyprint(lhs) + "<=" + prettyprint(rhs));
+
+                                    if (!containsKind(preconds, ExpressionKind.LTEQ))
+                                        precondClients.put(nsineqPrecond, new HashSet<String>());
+                                }
+
+                                if (precondClients.get(eqPrecond).size() == precondClients.get(sineqPrecond).size())
+                                    precondClients.put(nsineqPrecond, union(precondClients.get(nsineqPrecond),
+                                            union(precondClients.get(eqPrecond),
+                                                    precondClients.get(sineqPrecond))));
+                                else if (precondClients.get(eqPrecond).size() > precondClients.get(sineqPrecond).size())
+                                    precondClients.put(nsineqPrecond, union(precondClients.get(nsineqPrecond),
+                                            precondClients.get(sineqPrecond)));
+                                else
+                                    precondClients.put(nsineqPrecond, union(precondClients.get(nsineqPrecond),
+                                            precondClients.get(eqPrecond)));
+
+                                //Conditions with implications
+                                if (precondClients.get(eqPrecond).size() <= precondClients.get(nsineqPrecond).size())
+                                    precondClients.remove(eqPrecond);
+
+                                if (precondClients.get(sineqPrecond).size() <= precondClients.get(nsineqPrecond).size())
+                                    precondClients.remove(sineqPrecond);
+                            }
+                        }
+                    }
+                }
+            }
+
+            infPrecondition.put(api, precondClients);
+        }
+
+        return infPrecondition;
+    }
+
+    private void doFiltering() {
+    }
+
+    private void doRanking() {
+    }
+
+    /**
+     * Checks the presence of a particular ExpressionKind in a set.
+     *
+     * @param exprs set of expressions
+     * @param eKind ExpressionKind to be searched
+     * @return true if Expressionkind is present in the set
+     */
+    private boolean containsKind(Set<Expression> exprs, ExpressionKind eKind) {
+        for (Expression e: exprs) {
+            if (eKind == e.getKind())
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Performs union operation on two given sets.
+     *
+     * @param s1
+     * @param s2
+     * @param <T>
+     * @return the union of two sets
+     */
+    private <T> Set<T> union(Set<T> s1, Set<T> s2) {
+        Set<T> s = new HashSet<T>(s1);
+        s.addAll(s2);
+        return s;
     }
 
 }
