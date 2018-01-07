@@ -2,13 +2,9 @@ package boa.aggregators;
 
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Expression;
-import boa.io.EmitKey;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static boa.functions.BoaAstIntrinsics.parseexpression;
 import static boa.functions.BoaAstIntrinsics.prettyprint;
@@ -52,15 +48,21 @@ public class PreconditionAggregator extends Aggregator {
     /** {@inheritDoc} */
     @Override
     public void finish() throws IOException, InterruptedException {
-        precondMethods = doInference(precondMethods);
-        precondProjects = doInference(precondProjects);
-
-        //doFiltering(inferredPreconditions);
+        doInference();
+        Map<String, Double> filteredPreconds = doFiltering();
         //doRanking();
 
-        for (Expression precond: precondMethods.keySet()) {
-            this.collect(prettyprint(precond) + " : " + precondMethods.get(precond).size() );
+        for (String precond: filteredPreconds.keySet()) {
+            this.collect(precond + " : " + filteredPreconds.get(precond));
         }
+    }
+
+    /**
+     *  Infer preconditions for both projects and method calls
+     */
+    private void doInference(){
+        precondMethods = infer(precondMethods);
+        precondProjects = infer(precondProjects);
     }
 
     /**
@@ -68,9 +70,9 @@ public class PreconditionAggregator extends Aggregator {
      *
      * @return map
      */
-    private Map<Expression, Set<String>> doInference(Map<Expression, Set<String>> precondMP) {
+    private Map<Expression, Set<String>> infer(Map<Expression, Set<String>> precondMP) {
         Map<Expression, Set<String>> infPreconditions = new HashMap<Expression, Set<String>>(precondMP);
-        Set<Expression> preconds = new HashSet<Expression>(infPreconditions.keySet());
+        Set<Expression> preconds = infPreconditions.keySet();
         int count1 = 0;
         int count2 = 0;
 
@@ -129,12 +131,54 @@ public class PreconditionAggregator extends Aggregator {
         return infPreconditions;
     }
 
-    private void doFiltering(Map<String, Map<Expression, Set<String>>> infPreconditions) {
-        
+    /**
+     * Filter out the preconditions with confidence less than 0.5
+     *
+     * @return filtered preconditons map
+     */
+
+    private Map<String, Double> doFiltering() {
+        Map<String, Double> precondConfM = calConfidence(precondMethods);
+        precondMethods = new WeakHashMap<Expression, Set<String>>(0); //Reclaim memory
+        Map<String, Double> precondConfP = calConfidence(precondProjects);
+        precondProjects = new WeakHashMap<Expression, Set<String>>(0);
+
+        Map<String, Double> filteredPreconds = new HashMap<String, Double>();
+
+        Set<String> preconds= precondConfM.keySet();
+        for (String precond: preconds) {
+            if(precondConfM.get(precond) >= 0.5 && precondConfP.get(precond) >= 0.5)
+                filteredPreconds.put(precond, precondConfM.get(precond)*precondConfP.get(precond));
+        }
+
+        return filteredPreconds;
+    }
+
+    /**
+     * Calculate confidence of each precondition in the map
+     *
+     * @param precondMP map of preconditon and set of clientmethods/projects
+     * @return map of precondition and confidence
+     */
+    private Map<String, Double> calConfidence(Map<Expression, Set<String>> precondMP) {
+        Map<String, Double> precondConf = new HashMap<String, Double>();
+        Set<Expression> preconds = precondMP.keySet();
+
+        Set<String> totalCalls = new HashSet<String>();
+        for (Expression precond: preconds)
+            totalCalls.addAll(precondMP.get(precond));
+
+        for (Expression precond: preconds) {
+            Double conf = precondMP.get(precond).size()/(totalCalls.size()*1.0);
+            precondConf.put(prettyprint(precond), conf);
+        }
+
+        return precondConf;
     }
 
     private void doRanking() {
     }
+
 
     /**
      * Checks the presence of a particular ExpressionKind in a set.
