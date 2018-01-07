@@ -50,10 +50,10 @@ public class PreconditionAggregator extends Aggregator {
     public void finish() throws IOException, InterruptedException {
         doInference();
         Map<String, Double> filteredPreconds = doFiltering();
-        //doRanking();
+        SortedMap<String, Double> rankedPreconds = doRanking(filteredPreconds);
 
-        for (String precond: filteredPreconds.keySet()) {
-            this.collect(precond + " : " + filteredPreconds.get(precond));
+        for (String precond: rankedPreconds.keySet()) {
+            this.collect(precond + " : " + rankedPreconds.get(precond));
         }
     }
 
@@ -147,7 +147,7 @@ public class PreconditionAggregator extends Aggregator {
 
         Set<String> preconds= precondConfM.keySet();
         for (String precond: preconds) {
-            if(precondConfM.get(precond) >= 0.5 && precondConfP.get(precond) >= 0.5)
+            if (precondConfM.get(precond) >= 0.5 && precondConfP.get(precond) >= 0.5)
                 filteredPreconds.put(precond, precondConfM.get(precond)*precondConfP.get(precond));
         }
 
@@ -176,9 +176,33 @@ public class PreconditionAggregator extends Aggregator {
         return precondConf;
     }
 
-    private void doRanking() {
+    /**
+     * Rank the preconditions based on their confidence value
+     *
+     * @param filteredPreconds map of filtered precondtion
+     * @return ranked preconditions
+     */
+    private SortedMap<String, Double> doRanking(Map<String, Double> filteredPreconds) {
+        SortedMap<String, Double> rankedPreconds = new TreeMap<String, Double>(new PreconditionComparator(filteredPreconds));
+        rankedPreconds.putAll(filteredPreconds);
+        return rankedPreconds;
     }
 
+    /**
+     * Comparator to sort map based on values
+     *
+     */
+    public class PreconditionComparator implements Comparator<String> {
+        private Map<String, Double>  m;
+
+        public PreconditionComparator(Map<String, Double> m) {
+            this.m = m;
+        }
+
+        public int compare(String a, String b) {
+            return (m.get(b) + b).compareTo(m.get(a) + a);
+        }
+    }
 
     /**
      * Checks the presence of a particular ExpressionKind in a set.
