@@ -84,7 +84,8 @@ public class PreconditionAggregator extends Aggregator {
         for (String api: apis) {
             Map<Expression, Set<String>> precondClients = new HashMap<Expression, Set<String>>(apiPrecondition.get(api));
             Set<Expression> preconds = new HashSet<Expression>(precondClients.keySet());
-
+            int count1 = 0;
+            int count2 = 0;
             for (Expression eqPrecond: preconds) {
                 if (eqPrecond.getKind() == ExpressionKind.EQ) {
 
@@ -93,6 +94,7 @@ public class PreconditionAggregator extends Aggregator {
                             if (eqPrecond.getExpressions(0).equals(sineqPrecond.getExpressions(0)) &&
                                     eqPrecond.getExpressions(1).equals(sineqPrecond.getExpressions(1))) {
 
+                                count1++;
                                 Expression nsineqPrecond;
                                 Expression lhs = sineqPrecond.getExpressions(0);
                                 Expression rhs = sineqPrecond.getExpressions(1);
@@ -123,13 +125,16 @@ public class PreconditionAggregator extends Aggregator {
 
                                 //Conditions with implications
                                 if (precondClients.get(eqPrecond).size() <= precondClients.get(nsineqPrecond).size())
-                                    precondClients.remove(eqPrecond);
+                                    count2++;
 
                                 if (precondClients.get(sineqPrecond).size() <= precondClients.get(nsineqPrecond).size())
                                     precondClients.remove(sineqPrecond);
                             }
                         }
                     }
+
+                    if (count2 == 2 || (count2 == 1 && count1 == 1))
+                        precondClients.remove(eqPrecond);
                 }
             }
 
