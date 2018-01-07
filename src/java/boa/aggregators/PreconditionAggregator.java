@@ -13,62 +13,53 @@ import java.util.Set;
 import static boa.functions.BoaAstIntrinsics.parseexpression;
 import static boa.functions.BoaAstIntrinsics.prettyprint;
 
+
 @AggregatorSpec(name = "precondition")
 public class PreconditionAggregator extends Aggregator {
-    private Map<String, Map<Expression, Set<String>>> apiPrecondition;
+    private Map<Expression, Set<String>> precondMethods;
+    private Map<Expression, Set<String>> precondProjects;
 
     /**
      * Construct a {@link PreconditionAggregator}
      */
     public PreconditionAggregator() {
-        this.apiPrecondition = new HashMap<String, Map<Expression, Set<String>>>();
+        this.precondMethods = new HashMap<Expression, Set<String>>();  //preconditions: set of methods
+        this.precondProjects = new HashMap<Expression, Set<String>>(); //preconditions: set of projects
     }
 
     /** {@inheritDoc} */
     @Override
     public void aggregate(String data, String metadata) throws IOException, InterruptedException, FinishedException {
         //data expected format: "pid:client:fq_clientmethodname"
-        EmitKey key = getKey();
-        String api = key.getIndex();
 
-        int splitLoc = data.indexOf(':');
-        String clientmethod = data.substring(0, splitLoc);
-        String precond = data.substring(splitLoc+1, data.length());
+        int splitIndex = data.indexOf(':');
+        String project = data.substring(0, splitIndex);
+        String clientmethod = data.substring(0, data.indexOf(':', splitIndex+1));
+        String precond = data.substring(data.indexOf(':', splitIndex+1)+1, data.length());
 
         Expression precondition = parseexpression(precond);
 
-        if (apiPrecondition.containsKey(api)) {
-            if (apiPrecondition.get(api).containsKey(precondition)) {
-                apiPrecondition.get(api).get(precondition).add(clientmethod);
-            }
-            else {
-                Set<String>  setOfClients = new HashSet<String>();
-                setOfClients.add(clientmethod);
-                apiPrecondition.get(api).put(precondition, setOfClients);
-            }
-        } else {
-            Set<String>  setOfClients = new HashSet<String>();
-            setOfClients.add(clientmethod);
-            Map<Expression, Set<String>> precondClients = new HashMap<Expression, Set<String>>();
-            precondClients.put(precondition, setOfClients);
-            apiPrecondition.put(api, precondClients);
+        if (!precondMethods.containsKey(precondition)) {
+            precondMethods.put(precondition, new HashSet<String>());
+            precondProjects.put(precondition, new HashSet<String>());
         }
+
+        precondMethods.get(precondition).add(clientmethod);
+        precondProjects.get(precondition).add(project);
 
     }
 
     /** {@inheritDoc} */
     @Override
     public void finish() throws IOException, InterruptedException {
-        Map<String, Map<Expression, Set<String>>> inferredPreconditions = doInference();
-        apiPrecondition.clear();
-        //doFiltering();
+        precondMethods = doInference(precondMethods);
+        precondProjects = doInference(precondProjects);
+
+        //doFiltering(inferredPreconditions);
         //doRanking();
 
-        for (String api: inferredPreconditions.keySet()) {
-            Set<Expression> preconds = inferredPreconditions.get(api).keySet();
-            for (Expression precond: preconds) {
-                this.collect(prettyprint(precond) + " : " + inferredPreconditions.get(api).get(precond).size() );
-            }
+        for (Expression precond: precondMethods.keySet()) {
+            this.collect(prettyprint(precond) + " : " + precondMethods.get(precond).size() );
         }
     }
 
@@ -77,74 +68,69 @@ public class PreconditionAggregator extends Aggregator {
      *
      * @return map
      */
-    private Map<String, Map<Expression, Set<String>>> doInference() {
-        Map<String, Map<Expression, Set<String>>> infPrecondition = new HashMap<String, Map<Expression, Set<String>>>();
-        Set<String> apis = apiPrecondition.keySet();
+    private Map<Expression, Set<String>> doInference(Map<Expression, Set<String>> precondMP) {
+        Map<Expression, Set<String>> infPreconditions = new HashMap<Expression, Set<String>>(precondMP);
+        Set<Expression> preconds = new HashSet<Expression>(infPreconditions.keySet());
+        int count1 = 0;
+        int count2 = 0;
 
-        for (String api: apis) {
-            Map<Expression, Set<String>> precondClients = new HashMap<Expression, Set<String>>(apiPrecondition.get(api));
-            Set<Expression> preconds = new HashSet<Expression>(precondClients.keySet());
-            int count1 = 0;
-            int count2 = 0;
-            for (Expression eqPrecond: preconds) {
-                if (eqPrecond.getKind() == ExpressionKind.EQ) {
+        for (Expression eqPrecond: preconds) {
+            if (eqPrecond.getKind() == ExpressionKind.EQ) {
 
-                    for (Expression sineqPrecond: preconds) {
-                        if (sineqPrecond.getKind() == ExpressionKind.LT || sineqPrecond.getKind() == ExpressionKind.GT) {
-                            if (eqPrecond.getExpressions(0).equals(sineqPrecond.getExpressions(0)) &&
+                for (Expression sineqPrecond: preconds) {
+                    if (sineqPrecond.getKind() == ExpressionKind.LT || sineqPrecond.getKind() == ExpressionKind.GT) {
+                        if (eqPrecond.getExpressions(0).equals(sineqPrecond.getExpressions(0)) &&
                                     eqPrecond.getExpressions(1).equals(sineqPrecond.getExpressions(1))) {
 
-                                count1++;
-                                Expression nsineqPrecond;
-                                Expression lhs = sineqPrecond.getExpressions(0);
-                                Expression rhs = sineqPrecond.getExpressions(1);
+                            count1++;
+                            Expression nsineqPrecond;
+                            Expression lhs = sineqPrecond.getExpressions(0);
+                            Expression rhs = sineqPrecond.getExpressions(1);
 
-                                if (sineqPrecond.getKind() == ExpressionKind.GT) {
-                                    nsineqPrecond = parseexpression(prettyprint(lhs) + ">=" + prettyprint(rhs));
+                            if (sineqPrecond.getKind() == ExpressionKind.GT) {
+                                nsineqPrecond = parseexpression(prettyprint(lhs) + ">=" + prettyprint(rhs));
 
-                                    if (!containsKind(preconds, ExpressionKind.GTEQ))
-                                        precondClients.put(nsineqPrecond, new HashSet<String>());
+                                if (!containsKind(preconds, ExpressionKind.GTEQ))
+                                    infPreconditions.put(nsineqPrecond, new HashSet<String>());
 
-                                } else {
-                                    nsineqPrecond = parseexpression(prettyprint(lhs) + "<=" + prettyprint(rhs));
+                            } else {
+                                nsineqPrecond = parseexpression(prettyprint(lhs) + "<=" + prettyprint(rhs));
 
-                                    if (!containsKind(preconds, ExpressionKind.LTEQ))
-                                        precondClients.put(nsineqPrecond, new HashSet<String>());
-                                }
+                                if (!containsKind(preconds, ExpressionKind.LTEQ))
+                                    infPreconditions.put(nsineqPrecond, new HashSet<String>());
+                            }
 
-                                if (precondClients.get(eqPrecond).size() == precondClients.get(sineqPrecond).size())
-                                    precondClients.put(nsineqPrecond, union(precondClients.get(nsineqPrecond),
-                                            union(precondClients.get(eqPrecond),
-                                                    precondClients.get(sineqPrecond))));
-                                else if (precondClients.get(eqPrecond).size() > precondClients.get(sineqPrecond).size())
-                                    precondClients.put(nsineqPrecond, union(precondClients.get(nsineqPrecond),
-                                            precondClients.get(sineqPrecond)));
-                                else
-                                    precondClients.put(nsineqPrecond, union(precondClients.get(nsineqPrecond),
-                                            precondClients.get(eqPrecond)));
+                            if (infPreconditions.get(eqPrecond).size() == infPreconditions.get(sineqPrecond).size())
+                                infPreconditions.put(nsineqPrecond, union(infPreconditions.get(nsineqPrecond),
+                                                                     union(infPreconditions.get(eqPrecond),
+                                                                            infPreconditions.get(sineqPrecond))));
+                            else if (infPreconditions.get(eqPrecond).size() > infPreconditions.get(sineqPrecond).size())
+                                      infPreconditions.put(nsineqPrecond, union(infPreconditions.get(nsineqPrecond),
+                                                                                 infPreconditions.get(sineqPrecond)));
+                            else
+                                infPreconditions.put(nsineqPrecond, union(infPreconditions.get(nsineqPrecond),
+                                                                           infPreconditions.get(eqPrecond)));
 
                                 //Conditions with implications
-                                if (precondClients.get(eqPrecond).size() <= precondClients.get(nsineqPrecond).size())
-                                    count2++;
+                            if (infPreconditions.get(eqPrecond).size() <= infPreconditions.get(nsineqPrecond).size())
+                                count2++;
 
-                                if (precondClients.get(sineqPrecond).size() <= precondClients.get(nsineqPrecond).size())
-                                    precondClients.remove(sineqPrecond);
-                            }
+                            if (infPreconditions.get(sineqPrecond).size() <= infPreconditions.get(nsineqPrecond).size())
+                                infPreconditions.get(sineqPrecond).clear();
                         }
                     }
-
-                    if (count2 == 2 || (count2 == 1 && count1 == 1))
-                        precondClients.remove(eqPrecond);
                 }
-            }
 
-            infPrecondition.put(api, precondClients);
+                if (count2 == 2 || (count2 == 1 && count1 == 1))
+                    infPreconditions.get(eqPrecond).clear();  //not removing for consistency b/w methods and projects
+            }
         }
 
-        return infPrecondition;
+        return infPreconditions;
     }
 
-    private void doFiltering() {
+    private void doFiltering(Map<String, Map<Expression, Set<String>>> infPreconditions) {
+        
     }
 
     private void doRanking() {
