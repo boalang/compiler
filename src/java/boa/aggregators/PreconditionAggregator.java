@@ -25,6 +25,10 @@ import java.util.*;
 import static boa.functions.BoaAstIntrinsics.parseexpression;
 import static boa.functions.BoaAstIntrinsics.prettyprint;
 
+/**
+ * @author marafat
+ */
+
 
 @AggregatorSpec(name = "precondition")
 public class PreconditionAggregator extends Aggregator {
@@ -42,7 +46,7 @@ public class PreconditionAggregator extends Aggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(String data, String metadata) throws IOException, InterruptedException, FinishedException {
-		//data expected format: "pid:client:fq_clientmethodname"
+		//data expected format: "pid:fq_clientmethodname:precondition"
 
 		int splitIndex = data.indexOf(':');
 		String project = data.substring(0, splitIndex);
@@ -153,7 +157,6 @@ public class PreconditionAggregator extends Aggregator {
 	 *
 	 * @return filtered preconditons map
 	 */
-
 	private Map<String, Double> doFiltering() {
 		Map<String, Double> precondConfM = calConfidence(precondMethods);
 		precondMethods = new WeakHashMap<Expression, Set<String>>(0); //Reclaim memory
