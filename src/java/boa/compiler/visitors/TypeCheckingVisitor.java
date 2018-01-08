@@ -1540,6 +1540,10 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		for (final Expression e : el) {
 			e.accept(this, env);
 
+			if (e.type instanceof BoaProtoList) {
+				types.add(new BoaArray(((BoaProtoList) e.type).getType()));
+				continue;
+			}
 			// special case of a function call, use its return type instead of function type
 			if (e.type instanceof BoaFunction) {
 				callFinder.start(e);

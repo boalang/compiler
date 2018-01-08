@@ -560,16 +560,7 @@ public class SymbolTable {
 	}
 
 	public BoaFunction getFunction(final String id, final List<BoaType> formalParameters) {
-		if(globalFunctions.hasFunction(id))
-			return this.getFunction(id, formalParameters.toArray(new BoaType[formalParameters.size()]));
-		List<BoaType> newBTList = new ArrayList<BoaType>();
-		for(BoaType bt: formalParameters){
-			if(bt instanceof BoaProtoList)
-				newBTList.add(new BoaArray(((BoaProtoList) bt).getType()));
-			else
-				newBTList.add(bt);
-		}
-		return this.getFunction(id, newBTList.toArray(new BoaType[formalParameters.size()]));
+		return this.getFunction(id, formalParameters.toArray(new BoaType[formalParameters.size()]));
 	}
 
 	public BoaFunction getFunction(final String id, final BoaType[] formalParameters) {
