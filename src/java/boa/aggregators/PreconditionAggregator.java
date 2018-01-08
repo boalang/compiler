@@ -89,7 +89,7 @@ public class PreconditionAggregator extends Aggregator {
 	 */
 	private Map<Expression, Set<String>> infer(Map<Expression, Set<String>> precondMP) {
 		Map<Expression, Set<String>> infPreconditions = new HashMap<Expression, Set<String>>(precondMP);
-		Set<Expression> preconds = infPreconditions.keySet();
+		Set<Expression> preconds = new HashSet<Expression>(infPreconditions.keySet());
 		int count1 = 0;
 		int count2 = 0;
 
@@ -109,13 +109,13 @@ public class PreconditionAggregator extends Aggregator {
 							if (sineqPrecond.getKind() == ExpressionKind.GT) {
 								nsineqPrecond = parseexpression(prettyprint(lhs) + ">=" + prettyprint(rhs));
 
-								if (!containsKind(preconds, ExpressionKind.GTEQ))
+								if (!containsExp(preconds, nsineqPrecond))
 									infPreconditions.put(nsineqPrecond, new HashSet<String>());
 
 							} else {
 								nsineqPrecond = parseexpression(prettyprint(lhs) + "<=" + prettyprint(rhs));
 
-								if (!containsKind(preconds, ExpressionKind.LTEQ))
+								if (!containsExp(preconds, nsineqPrecond))
 									infPreconditions.put(nsineqPrecond, new HashSet<String>());
 							}
 
@@ -225,12 +225,12 @@ public class PreconditionAggregator extends Aggregator {
 	 * Checks the presence of a particular ExpressionKind in a set.
 	 *
 	 * @param exprs set of expressions
-	 * @param eKind ExpressionKind to be searched
+	 * @param expr Expressionto be searched
 	 * @return true if Expressionkind is present in the set
 	 */
-	private boolean containsKind(Set<Expression> exprs, ExpressionKind eKind) {
+	private boolean containsExp(Set<Expression> exprs, Expression expr) {
 		for (Expression e: exprs) {
-			if (eKind == e.getKind())
+			if (expr.equals(e))
 				return true;
 		}
 
