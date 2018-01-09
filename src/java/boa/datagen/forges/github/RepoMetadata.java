@@ -93,7 +93,7 @@ public class RepoMetadata {
 	private String homepage;
 	private String summaryPage;
 	private long created_timestamp = -1;
-	private String description;
+	private String description = "";
 	private String os;
 	private String[] programmingLanguages;
 	private int[] programmingLanguagesLOC;
@@ -123,6 +123,7 @@ public class RepoMetadata {
 			this.id = jsonProject.get(GIT_ID).getAsString();
 		if (jsonProject.has(GIT_NAME))
 			this.name = jsonProject.get(GIT_NAME).getAsString();
+			this.gitRepository = "htps://github.com/" + jsonProject.get(GIT_NAME).getAsString() + ".git";
 		if (jsonProject.has(GIT_SHORT_DESCRIPTION))
 			this.shortDescription = jsonProject.get(GIT_SHORT_DESCRIPTION).getAsString();
 		if (jsonProject.has(GIT_HOME_PAGE) && !jsonProject.get(GIT_HOME_PAGE).isJsonNull()) {
@@ -137,7 +138,7 @@ public class RepoMetadata {
 			this.created_timestamp = getTimeStamp(time); // project.setCreatedDate(timestamp
 															// * 1000000);
 		}
-		if (jsonProject.has(GIT_DESCRIPTION))
+		if (jsonProject.has(GIT_DESCRIPTION) && !jsonProject.get(GIT_DESCRIPTION).isJsonNull())
 			this.description = jsonProject.get(GIT_DESCRIPTION).getAsString();
         /*if (jsonProject.has("os")) {
 	    	JSONArray jsonOSes = jsonProject.getJSONArray("os");
@@ -299,10 +300,10 @@ public class RepoMetadata {
 			}
 			if (!bugs.isEmpty())
 				project.addAllBugRepositories(bugs);
-	    }*/
+	    }
 		if (jsonProject.has(GIT_GIT_REPO)) {
 			this.gitRepository = jsonProject.get(GIT_GIT_REPO).getAsString();
-		}
+		}*/
 	}
 
 	private long getTimeStamp(String time) {
