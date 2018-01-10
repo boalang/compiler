@@ -70,12 +70,13 @@ public class PreconditionAggregator extends Aggregator {
 	public void finish() throws IOException, InterruptedException {
 		doInference();
 		Map<String, Double> filteredPreconds = doFiltering();
-		SortedMap<String, Double> rankedPreconds = doRanking(filteredPreconds);
+		List<Map.Entry<String, Double>> rankedPreconds = doRanking(filteredPreconds);
 
 		//Send to Writer
-		for (String precond: rankedPreconds.keySet()) {
-			this.collect(precond + " : " + rankedPreconds.get(precond));
+		for(Map.Entry<String, Double> precondConf: rankedPreconds){
+			this.collect(precondConf.getKey()+": "+precondConf.getValue());
 		}
+
 	}
 
 	/**
@@ -202,25 +203,21 @@ public class PreconditionAggregator extends Aggregator {
 	 * @param filteredPreconds map of filtered precondtion
 	 * @return ranked preconditions
 	 */
-	private SortedMap<String, Double> doRanking(Map<String, Double> filteredPreconds) {
-		SortedMap<String, Double> rankedPreconds = new TreeMap<String, Double>(new PreconditionComparator(filteredPreconds));
-		rankedPreconds.putAll(filteredPreconds);
+	private List<Map.Entry<String, Double>> doRanking(Map<String, Double> filteredPreconds) {
+		List<Map.Entry<String, Double>> rankedPreconds = new ArrayList<Map.Entry<String, Double>>(filteredPreconds.entrySet());
+		Collections.sort(rankedPreconds, new PreconditionComparator());
+
 		return rankedPreconds;
 	}
 
 	/**
-	 * Comparator to sort map based on values
+	 * Comparator to sort preconditions based on confidence values
 	 *
 	 */
-	public class PreconditionComparator implements Comparator<String> {
-		private Map<String, Double>  m;
-
-		public PreconditionComparator(Map<String, Double> m) {
-			this.m = m;
-		}
-
-		public int compare(String a, String b) {
-			return (m.get(b) + b).compareTo(m.get(a) + a);
+	public class PreconditionComparator implements Comparator<Map.Entry<String, Double>> {
+		public int compare( Map.Entry<String, Double> p1, Map.Entry<String, Double> p2 )
+		{
+			return (p2.getValue()).compareTo(p1.getValue());
 		}
 	}
 
