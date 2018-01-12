@@ -123,7 +123,7 @@ public class RepoMetadata {
 			this.id = jsonProject.get(GIT_ID).getAsString();
 		if (jsonProject.has(GIT_NAME))
 			this.name = jsonProject.get(GIT_NAME).getAsString();
-			this.gitRepository = "htps://github.com/" + jsonProject.get(GIT_NAME).getAsString() + ".git";
+			this.gitRepository = "https://github.com/" + jsonProject.get(GIT_NAME).getAsString() + ".git";
 		if (jsonProject.has(GIT_SHORT_DESCRIPTION))
 			this.shortDescription = jsonProject.get(GIT_SHORT_DESCRIPTION).getAsString();
 		if (jsonProject.has(GIT_HOME_PAGE) && !jsonProject.get(GIT_HOME_PAGE).isJsonNull()) {
@@ -300,10 +300,10 @@ public class RepoMetadata {
 			}
 			if (!bugs.isEmpty())
 				project.addAllBugRepositories(bugs);
-	    }
+	    }*/
 		if (jsonProject.has(GIT_GIT_REPO)) {
 			this.gitRepository = jsonProject.get(GIT_GIT_REPO).getAsString();
-		}*/
+		}
 	}
 
 	private long getTimeStamp(String time) {
