@@ -1458,19 +1458,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TupleType n, final SymbolTable env) {
-		// Create a temporary SymbolTable to check typle types
-		SymbolTable oldEnv = new SymbolTable();
-		try{
-			oldEnv = env.cloneNonLocals();
-		} catch(final Exception e){
-			throw new TypeCheckException(n, e.getMessage(), e);
-		}
-		n.env = oldEnv;
+        n.env = env;
+        final SymbolTable e = new SymbolTable();
 
 		final List<BoaType> types = new ArrayList<BoaType>();
 
 		for (final Component c : n.getMembers()) {
-			c.accept(this, oldEnv);
+			c.accept(this, e);
 			types.add(c.type);
 		}
 
