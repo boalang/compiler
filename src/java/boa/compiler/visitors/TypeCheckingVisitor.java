@@ -1458,8 +1458,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TupleType n, final SymbolTable env) {
-        n.env = env;
-        final SymbolTable e = new SymbolTable();
+		n.env = env;
+		final SymbolTable e = new SymbolTable();
 
 		final List<BoaType> types = new ArrayList<BoaType>();
 
