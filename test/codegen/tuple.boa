@@ -8,12 +8,11 @@ tup1: t1 = { 5, "string", false };
 
 # structurally similar tuple, different names
 type t2 = { i2: int, s: string, b2: bool };
-#tup2: t2 = { 5, "string", false };
+tup2: t2 = { 5, "string", false };
 
 # no explicit type
-# FIXME
-#tup3 := { 5, "string", false };
-#tup4 := { 5, false };
+tup3 := { 5, "string", false };
+tup4 := { 5, false };
 
 
 # access by name
@@ -37,19 +36,19 @@ tup1.f2 = false;
 #tup3.f1 = "foo";
 #tup3.f2 = false;
 
-#tup4.f0 = 3;
-#tup4.f1 = true;
+tup4.f0 = 3;
+tup4.f1 = true;
 
 
 # assignment
-#tup1 = tup2;
-#tup1 = tup3;
+tup1 = tup2;
+tup1 = tup3;
 tup1 = { 5, "string", false };
 
-#tup2 = tup1;
-#tup2 = tup3;
-#tup2 = { 5, "string", false };
+tup2 = tup1;
+tup2 = tup3;
+tup2 = { 5, "string", false };
 
-#tup3 = tup1;
-#tup3 = tup2;
-#tup3 = { 5, "string", false };
+tup3 = tup1;
+tup3 = tup2;
+tup3 = { 5, "string", false };
