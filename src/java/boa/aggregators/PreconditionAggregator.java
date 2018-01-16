@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Robert Dyer, Mohd Arafat
+ * Copyright 2018, Robert Dyer, Mohd Arafat
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,10 +28,10 @@ import static boa.functions.BoaAstIntrinsics.prettyprint;
 /**
  * @author marafat
  */
-
-
-@AggregatorSpec(name = "precondition")
+@AggregatorSpec(name = "precondition", formalParameters = { "float" })
 public class PreconditionAggregator extends Aggregator {
+	private double sigma = 0.5;
+
 	private Map<Expression, Set<String>> precondMethods;
 	private Map<Expression, Set<String>> precondProjects;
 
@@ -39,21 +39,26 @@ public class PreconditionAggregator extends Aggregator {
 	 * Construct a {@link PreconditionAggregator}
 	 */
 	public PreconditionAggregator() {
+		this(0.5);
+	}
+
+	public PreconditionAggregator(final double sigma) {
+		this.sigma = sigma;
 		this.precondMethods = new HashMap<Expression, Set<String>>();  //preconditions: set of methods
 		this.precondProjects = new HashMap<Expression, Set<String>>(); //preconditions: set of projects
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(String data, String metadata) throws IOException, InterruptedException, FinishedException {
+	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
 		//data expected format: "pid:fq_clientmethodname:precondition"
 
 		int splitIndex = data.indexOf(':');
-		String project = data.substring(0, splitIndex);
-		String clientmethod = data.substring(0, data.indexOf(':', splitIndex+1));
-		String precond = data.substring(data.indexOf(':', splitIndex+1)+1, data.length());
+		final String project = data.substring(0, splitIndex);
+		final String clientmethod = data.substring(0, data.indexOf(':', splitIndex+1));
+		final String precond = data.substring(data.indexOf(':', splitIndex+1)+1, data.length());
 
-		Expression precondition = parseexpression(precond);
+		final Expression precondition = parseexpression(precond);
 
 		if (!precondMethods.containsKey(precondition)) {
 			precondMethods.put(precondition, new HashSet<String>());
@@ -62,21 +67,20 @@ public class PreconditionAggregator extends Aggregator {
 
 		precondMethods.get(precondition).add(clientmethod);
 		precondProjects.get(precondition).add(project);
-
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		doInference();
-		Map<String, Double> filteredPreconds = doFiltering();
-		List<Map.Entry<String, Double>> rankedPreconds = doRanking(filteredPreconds);
+
+		final Map<String, Double> filteredPreconds = doFiltering();
+		final List<Map.Entry<String, Double>> rankedPreconds = doRanking(filteredPreconds);
 
 		//Send to Writer
-		for(Map.Entry<String, Double> precondConf: rankedPreconds){
+		for (final Map.Entry<String, Double> precondConf : rankedPreconds){
 			this.collect(precondConf.getKey()+": "+precondConf.getValue());
 		}
-
 	}
 
 	/**
@@ -93,23 +97,22 @@ public class PreconditionAggregator extends Aggregator {
 	 * @return map
 	 */
 	private Map<Expression, Set<String>> infer(Map<Expression, Set<String>> precondMP) {
-		Map<Expression, Set<String>> infPreconditions = new HashMap<Expression, Set<String>>(precondMP);
-		Set<Expression> preconds = new HashSet<Expression>(infPreconditions.keySet());
+		final Map<Expression, Set<String>> infPreconditions = new HashMap<Expression, Set<String>>(precondMP);
+		final Set<Expression> preconds = new HashSet<Expression>(infPreconditions.keySet());
 		int count1 = 0;
 		int count2 = 0;
 
-		for (Expression eqPrecond: preconds) {
+		for (final Expression eqPrecond : preconds) {
 			if (eqPrecond.getKind() == ExpressionKind.EQ) {
-
-				for (Expression sineqPrecond: preconds) {
+				for (final Expression sineqPrecond : preconds) {
 					if (sineqPrecond.getKind() == ExpressionKind.LT || sineqPrecond.getKind() == ExpressionKind.GT) {
 						if (eqPrecond.getExpressions(0).equals(sineqPrecond.getExpressions(0)) &&
 									eqPrecond.getExpressions(1).equals(sineqPrecond.getExpressions(1))) {
 
 							count1++;
 							Expression nsineqPrecond;
-							Expression lhs = sineqPrecond.getExpressions(0);
-							Expression rhs = sineqPrecond.getExpressions(1);
+							final Expression lhs = sineqPrecond.getExpressions(0);
+							final Expression rhs = sineqPrecond.getExpressions(1);
 
 							if (sineqPrecond.getKind() == ExpressionKind.GT) {
 								nsineqPrecond = parseexpression(prettyprint(lhs) + ">=" + prettyprint(rhs));
@@ -126,14 +129,14 @@ public class PreconditionAggregator extends Aggregator {
 
 							if (infPreconditions.get(eqPrecond).size() == infPreconditions.get(sineqPrecond).size())
 								infPreconditions.put(nsineqPrecond, union(infPreconditions.get(nsineqPrecond),
-																	 union(infPreconditions.get(eqPrecond),
+																	union(infPreconditions.get(eqPrecond),
 																			infPreconditions.get(sineqPrecond))));
 							else if (infPreconditions.get(eqPrecond).size() > infPreconditions.get(sineqPrecond).size())
-									  infPreconditions.put(nsineqPrecond, union(infPreconditions.get(nsineqPrecond),
-																				 infPreconditions.get(sineqPrecond)));
+								infPreconditions.put(nsineqPrecond, union(infPreconditions.get(nsineqPrecond),
+																			infPreconditions.get(sineqPrecond)));
 							else
 								infPreconditions.put(nsineqPrecond, union(infPreconditions.get(nsineqPrecond),
-																		   infPreconditions.get(eqPrecond)));
+																			infPreconditions.get(eqPrecond)));
 
 								//Conditions with implications
 							if (infPreconditions.get(eqPrecond).size() <= infPreconditions.get(nsineqPrecond).size())
@@ -154,21 +157,21 @@ public class PreconditionAggregator extends Aggregator {
 	}
 
 	/**
-	 * Filter out the preconditions with confidence less than 0.5
+	 * Filter out the preconditions with confidence less than sigma
 	 *
 	 * @return filtered preconditons map
 	 */
 	private Map<String, Double> doFiltering() {
-		Map<String, Double> precondConfM = calConfidence(precondMethods);
+		final Map<String, Double> precondConfM = calConfidence(precondMethods);
 		precondMethods = new WeakHashMap<Expression, Set<String>>(0); //Reclaim memory
-		Map<String, Double> precondConfP = calConfidence(precondProjects);
+		final Map<String, Double> precondConfP = calConfidence(precondProjects);
 		precondProjects = new WeakHashMap<Expression, Set<String>>(0);
 
-		Map<String, Double> filteredPreconds = new HashMap<String, Double>();
+		final Map<String, Double> filteredPreconds = new HashMap<String, Double>();
 
-		Set<String> preconds= precondConfM.keySet();
-		for (String precond: preconds) {
-			if (precondConfM.get(precond) >= 0.5 && precondConfP.get(precond) >= 0.5)
+		final Set<String> preconds = precondConfM.keySet();
+		for (final String precond: preconds) {
+			if (precondConfM.get(precond) >= sigma && precondConfP.get(precond) >= sigma)
 				filteredPreconds.put(precond, precondConfM.get(precond)*precondConfP.get(precond));
 		}
 
@@ -181,16 +184,16 @@ public class PreconditionAggregator extends Aggregator {
 	 * @param precondMP map of preconditon and set of clientmethods/projects
 	 * @return map of precondition and confidence
 	 */
-	private Map<String, Double> calConfidence(Map<Expression, Set<String>> precondMP) {
-		Map<String, Double> precondConf = new HashMap<String, Double>();
-		Set<Expression> preconds = precondMP.keySet();
+	private Map<String, Double> calConfidence(final Map<Expression, Set<String>> precondMP) {
+		final Map<String, Double> precondConf = new HashMap<String, Double>();
+		final Set<Expression> preconds = precondMP.keySet();
 
-		Set<String> totalCalls = new HashSet<String>();
-		for (Expression precond: preconds)
+		final Set<String> totalCalls = new HashSet<String>();
+		for (final Expression precond : preconds)
 			totalCalls.addAll(precondMP.get(precond));
 
-		for (Expression precond: preconds) {
-			Double conf = precondMP.get(precond).size()/(totalCalls.size()*1.0);
+		for (final Expression precond : preconds) {
+			final Double conf = precondMP.get(precond).size() / (totalCalls.size() * 1.0);
 			precondConf.put(prettyprint(precond), conf);
 		}
 
@@ -203,10 +206,9 @@ public class PreconditionAggregator extends Aggregator {
 	 * @param filteredPreconds map of filtered precondtion
 	 * @return ranked preconditions
 	 */
-	private List<Map.Entry<String, Double>> doRanking(Map<String, Double> filteredPreconds) {
-		List<Map.Entry<String, Double>> rankedPreconds = new ArrayList<Map.Entry<String, Double>>(filteredPreconds.entrySet());
+	private List<Map.Entry<String, Double>> doRanking(final Map<String, Double> filteredPreconds) {
+		final List<Map.Entry<String, Double>> rankedPreconds = new ArrayList<Map.Entry<String, Double>>(filteredPreconds.entrySet());
 		Collections.sort(rankedPreconds, new PreconditionComparator());
-
 		return rankedPreconds;
 	}
 
@@ -215,8 +217,7 @@ public class PreconditionAggregator extends Aggregator {
 	 *
 	 */
 	public class PreconditionComparator implements Comparator<Map.Entry<String, Double>> {
-		public int compare( Map.Entry<String, Double> p1, Map.Entry<String, Double> p2 )
-		{
+		public int compare(final Map.Entry<String, Double> p1, final Map.Entry<String, Double> p2) {
 			return (p2.getValue()).compareTo(p1.getValue());
 		}
 	}
@@ -228,8 +229,8 @@ public class PreconditionAggregator extends Aggregator {
 	 * @param expr Expressionto be searched
 	 * @return true if Expressionkind is present in the set
 	 */
-	private boolean containsExp(Set<Expression> exprs, Expression expr) {
-		for (Expression e: exprs) {
+	private boolean containsExp(final Set<Expression> exprs, final Expression expr) {
+		for (final Expression e : exprs) {
 			if (expr.equals(e))
 				return true;
 		}
@@ -245,8 +246,8 @@ public class PreconditionAggregator extends Aggregator {
 	 * @param <T>
 	 * @return the union of two sets
 	 */
-	private <T> Set<T> union(Set<T> s1, Set<T> s2) {
-		Set<T> s = new HashSet<T>(s1);
+	private <T> Set<T> union(final Set<T> s1, final Set<T> s2) {
+		final Set<T> s = new HashSet<T>(s1);
 		s.addAll(s2);
 		return s;
 	}
