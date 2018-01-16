@@ -6,11 +6,12 @@ f := function(j: int){
         j = 2;
     };
     j = 1;
-    a(2);
+    a(j);
 };
 
-g := function(k: int){
+g := function(k: int) : int {
     k = 3;
+    return k;
 };
 
 o << 1;
