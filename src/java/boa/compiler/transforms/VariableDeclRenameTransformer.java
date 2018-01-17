@@ -17,13 +17,10 @@
 package boa.compiler.transforms;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
 import boa.compiler.ast.Selector;
-import boa.compiler.ast.Call;
-import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.types.OutputType;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
@@ -40,14 +37,12 @@ import boa.types.BoaFunction;
 public class VariableDeclRenameTransformer extends AbstractVisitorNoArgNoRet {
 	Integer counter;
 	HashMap<String, Integer> varHash = new HashMap<String, Integer>();
-	HashSet<String> outputSet = new HashSet<String>();
 
 	/** {@inheritDoc} */
 	@Override
 	public void start(Node n) {
 		counter = 0;
 		varHash.clear();
-		outputSet.clear();
 		super.start(n);
 	}
 
