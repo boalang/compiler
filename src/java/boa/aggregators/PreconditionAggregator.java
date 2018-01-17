@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, Robert Dyer, Mohd Arafat
+ * Copyright 2018, Robert Dyer, Mohd Arafat, Jingyi Su
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +27,7 @@ import static boa.functions.BoaAstIntrinsics.prettyprint;
 
 /**
  * @author marafat
+ * @author jsu
  */
 @AggregatorSpec(name = "precondition", formalParameters = { "float" })
 public class PreconditionAggregator extends Aggregator {
