@@ -31,6 +31,7 @@ import static boa.functions.BoaAstIntrinsics.prettyprint;
 @AggregatorSpec(name = "precondition", formalParameters = { "float" })
 public class PreconditionAggregator extends Aggregator {
 	private double sigma = 0.5;
+	private int args = 0;
 
 	private Map<Expression, Set<String>> precondMethods;
 	private Map<Expression, Set<String>> precondProjects;
@@ -51,12 +52,14 @@ public class PreconditionAggregator extends Aggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		//data expected format: "pid:fq_clientmethodname:precondition"
+		//data expected format: "no_of_args:pid:fq_clientmethodname:precondition"
 
-		int splitIndex = data.indexOf(':');
-		final String project = data.substring(0, splitIndex);
-		final String clientmethod = data.substring(0, data.indexOf(':', splitIndex+1));
-		final String precond = data.substring(data.indexOf(':', splitIndex+1)+1, data.length());
+		String[] sData = data.split(":", 4);
+
+		this.args = Integer.parseInt(sData[0]);
+		final String project = sData[1];
+		final String clientmethod = sData[2];
+		final String precond = sData[3];
 
 		final Expression precondition = parseexpression(precond);
 
@@ -163,9 +166,9 @@ public class PreconditionAggregator extends Aggregator {
 	 */
 	private Map<String, Double> doFiltering() {
 		final Map<String, Double> precondConfM = calConfidence(precondMethods);
-		precondMethods = new WeakHashMap<Expression, Set<String>>(0); //Reclaim memory
+		precondMethods.clear();
 		final Map<String, Double> precondConfP = calConfidence(precondProjects);
-		precondProjects = new WeakHashMap<Expression, Set<String>>(0);
+		precondProjects.clear();
 
 		final Map<String, Double> filteredPreconds = new HashMap<String, Double>();
 
@@ -205,12 +208,69 @@ public class PreconditionAggregator extends Aggregator {
 	 *
 	 * @param filteredPreconds map of filtered precondtion
 	 * @return ranked preconditions
+	 * @throws IOException
+	 * @throws InterruptedException
 	 */
-	private List<Map.Entry<String, Double>> doRanking(final Map<String, Double> filteredPreconds) {
-		final List<Map.Entry<String, Double>> rankedPreconds = new ArrayList<Map.Entry<String, Double>>(filteredPreconds.entrySet());
+	private List<Map.Entry<String, Double>> doRanking(final Map<String, Double> filteredPreconds) throws IOException, InterruptedException {
+
+		final Map<String, Double> finalPreconds = new HashMap<String, Double>();
+		final Set<SortedSet<String>> argsComb = kCombinations();   //k = 2^args - 1
+
+		for (SortedSet<String> s: argsComb) {
+			final Map<String, Double> argPrecond = new HashMap<String, Double>();
+			for (String precond: filteredPreconds.keySet()) {
+				boolean allPresent = true;
+				for (String arg : s) {
+				   if (!precond.contains(arg)) {
+					   allPresent = false;
+					   break;
+				   }
+				}
+
+				if (allPresent)
+					argPrecond.put(precond, filteredPreconds.get(precond));
+			}
+
+			if (argPrecond.size() > 0) {
+				final List<Map.Entry<String, Double>> topPrecond = new ArrayList<Map.Entry<String, Double>>(argPrecond.entrySet());
+				Collections.sort(topPrecond, new PreconditionComparator());
+				finalPreconds.put(topPrecond.get(0).getKey(), topPrecond.get(0).getValue());
+			}
+		}
+
+		final List<Map.Entry<String, Double>> rankedPreconds = new ArrayList<Map.Entry<String, Double>>(finalPreconds.entrySet());
 		Collections.sort(rankedPreconds, new PreconditionComparator());
+
 		return rankedPreconds;
 	}
+
+	/**
+	 *
+	 * @return set of all combinations of arguments
+	 */
+	private  Set<SortedSet<String>> kCombinations() {
+		final Set<SortedSet<String>> comb = new HashSet<SortedSet<String>>();
+		final List<String> argList = new ArrayList<String>();
+		comb.add(new TreeSet<String>(Collections.singletonList("rcv$")));
+		argList.add("rcv$");
+
+		for (int i = 0; i < args; i++) {
+			comb.add(new TreeSet<String>(Collections.singletonList("arg$" + Integer.toString(i))));
+			argList.add("arg$" + Integer.toString(i));
+		}
+
+		for (String arg: argList) {
+			final Set<SortedSet<String>> tempComb = new HashSet<SortedSet<String>>(comb);
+			for (SortedSet<String> s: tempComb) {
+				SortedSet<String> t = new TreeSet<String>(s);
+				t.add(arg);
+				comb.add(t);
+			}
+		}
+
+		return comb;
+	}
+
 
 	/**
 	 * Comparator to sort preconditions based on confidence values
