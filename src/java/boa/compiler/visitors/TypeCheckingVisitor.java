@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *

@@ -36,6 +36,7 @@ import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 import boa.types.*;
+import boa.compiler.transforms.VariableDeclRenameTransformer;
 
 /**
  *
@@ -43,7 +44,6 @@ import boa.types.*;
  * @author rdyer
  * @author ankuraga
  * @author rramu
- * @author hungc
  */
 public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/**
@@ -52,9 +52,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 */
 	String identifier="";
 	String traversalNodeIdentifier="";
-	Integer varDeclCounter = 0;
-	HashMap<String, Integer> varDeclHashmap = new HashMap<String, Integer>();
-	HashMap<String, ArrayList<Integer>> varDeclListHash = new HashMap<String, ArrayList<Integer>>();
 
 	protected class AggregatorDescription {
 		protected String aggregator;
@@ -184,18 +181,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				return;
 
 			final ST st = stg.getInstanceOf("VarDecl");
-			final String token = n.getId().getToken();
 
-			varDeclCounter++;
-			if(varDeclListHash.containsKey(token)){
-				ArrayList<Integer> ary = varDeclListHash.get(token);
-				ary.add(varDeclCounter);
-				varDeclListHash.put(token, ary);
-			}
-			else
-				varDeclListHash.put(token, new ArrayList<Integer>(Arrays.asList(varDeclCounter)));
-
-			st.add("id", token + Integer.toString(varDeclCounter));
+			st.add("id", n.getId().getToken());
 			st.add("type", n.type.toJavaType());
 
 			if (n.isStatic())
@@ -525,6 +512,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	protected final TupleDeclaratorCodeGeneratingVisitor tupleDeclarator;
 	protected final EnumDeclaratorCodeGeneratingVisitor enumDeclarator;
 
+	protected final VariableDeclRenameTransformer varDeclRenamer = new VariableDeclRenameTransformer();
+
 	protected final HashMap<String, AggregatorDescription> aggregators = new HashMap<String, AggregatorDescription>();
 
 	protected final String name;
@@ -551,10 +540,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final ST st = stg.getInstanceOf("Job");
 
 		st.add("name", this.name);
-		varDeclCounter = 0;
-		varDeclHashmap.clear();
-		varDeclListHash.clear();
 
+		this.varDeclRenamer.start(n);
 		this.varDecl.start(n);
 		this.functionDeclarator.start(n);
 		this.tupleDeclarator.start(n);
@@ -851,7 +838,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Identifier n) {
-		String id = n.getToken();
+		final String id = n.getToken();
 		if (n.env.hasType(id)) {
 			if (n.env.getNeedsBoxing())
 				code.add(SymbolTable.getType(id).toBoxedJavaType());
@@ -859,9 +846,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				code.add(SymbolTable.getType(id).toJavaType());
 			return;
 		}
-
-		if(varDeclHashmap.containsKey(id))
-			id = id + Integer.toString(varDeclHashmap.get(id));
 
 		// otherwise return the identifier template
 		final ST st = stg.getInstanceOf("Identifier");
@@ -1363,15 +1347,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		final ST st = stg.getInstanceOf("Assignment");
-
-		ArrayList<Integer> ary = varDeclListHash.get(n.getId().getToken());
-		Integer index = ary.remove(0);
-		varDeclHashmap.put(n.getId().getToken(), index);
-		st.add("lhs", "___" + n.getId().getToken() + Integer.toString(index));
-		if(ary.isEmpty())
-			varDeclListHash.remove(n.getId().getToken());
-		else
-			varDeclListHash.put(n.getId().getToken(), ary);
+		st.add("lhs", "___" + n.getId().getToken());
 
 		if (!n.hasInitializer()) {
 			if (lhsType instanceof BoaProtoMap ||
