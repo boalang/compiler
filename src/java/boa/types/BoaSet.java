@@ -124,7 +124,7 @@ public class BoaSet extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "java.util.LinkedHashSet<" + this.type.toBoxedJavaType() + ">";
+		return "java.util.Set<" + this.type.toBoxedJavaType() + ">";
 	}
 
 	/** {@inheritDoc} */

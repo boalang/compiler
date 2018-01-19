@@ -124,15 +124,15 @@ new <type>()
 }
 >>
 
-TupleType(name, fields, types) ::= <<
+TupleType(name, fields, fieldTypes, initializeTypes) ::= <<
 private class <name>
 {
-	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
-	<name>( <fields,types:{field,type|<type> ___<field>}; separator=", "> ){
-		<fields,types:{field,type|this.___<field> = new <type>(___<field>)}; separator="; ">;
+	<fields,fieldTypes:{field,type|<type> ___<field>}; separator="; ">;
+	<name>( <fields,fieldTypes:{field,type|<type> ___<field>}; separator=", "> ){
+		<fields,initializeTypes:{field,type|this.___<field> = new <type>(___<field>)}; separator="; ">;
 	}
 	<name>( <name> tmp){
-		<fields,types:{field,type|this.___<field> = new <type>(tmp.___<field>)}; separator="; ">;
+		<fields,initializeTypes:{field,type|this.___<field> = new <type>(tmp.___<field>)}; separator="; ">;
 	}
 	public <name> clone() {
     		return new <name>(this);

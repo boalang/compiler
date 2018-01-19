@@ -280,7 +280,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			final List<Component> members = n.getMembers();
 			final List<String> fields = new ArrayList<String>();
-			final List<String> types = new ArrayList<String>();
+			final List<String> fieldTypes = new ArrayList<String>();
+			final List<String> initializeTypes = new ArrayList<String>();
 
 			int fieldCount = 0;
 			for (final Component c : members) {
@@ -290,12 +291,17 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					fields.add("f" + fieldCount);
 				}
 				fieldCount++;
-				types.add(c.getType().type.toBoxedJavaType());
+				fieldTypes.add(c.getType().type.toBoxedJavaType());
+				if(c.getType().type instanceof BoaSet)
+					initializeTypes.add(c.getType().type.toBoxedJavaType().replace("Set", "LinkedHashSet"));
+				else
+					initializeTypes.add(c.getType().type.toBoxedJavaType());
 			}
 
 			st.add("name", tupType.toJavaType());
 			st.add("fields", fields);
-			st.add("types", types);
+			st.add("fieldTypes", fieldTypes);
+			st.add("initializeTypes", initializeTypes);
 
 			code.add(st.render());
 		}
@@ -1856,7 +1862,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		n.env.setNeedsBoxing(false);
 
-		code.add(st.render());
+		code.add(st.render().replaceAll("LinkedHashSet", "Set"));
 	}
 
 	/** {@inheritDoc} */

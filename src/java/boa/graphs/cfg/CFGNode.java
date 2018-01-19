@@ -59,7 +59,7 @@ public class CFGNode implements Comparable<CFGNode> {
 	public java.util.ArrayList<CFGNode> predecessors = new java.util.ArrayList<CFGNode>();
 	public java.util.ArrayList<CFGNode> successors = new java.util.ArrayList<CFGNode>();
 
-	public LinkedHashSet<String> useVariables = new LinkedHashSet<String>();
+	public Set<String> useVariables = new LinkedHashSet<String>();
 	public String defVariables;
 	
 	@Override
@@ -191,7 +191,7 @@ public class CFGNode implements Comparable<CFGNode> {
 		return parameters;
 	}
 
-	public void setUseVariables(LinkedHashSet<String> useVariables) {
+	public void setUseVariables(Set<String> useVariables) {
 		this.useVariables = useVariables;
 	}
 
@@ -215,7 +215,7 @@ public class CFGNode implements Comparable<CFGNode> {
 		return labelOfID.get(classNameId);
 	}
 
-	public LinkedHashSet<String> getUseVariables() {
+	public Set<String> getUseVariables() {
 		return useVariables;
 	}
 
@@ -378,8 +378,8 @@ public class CFGNode implements Comparable<CFGNode> {
 		return defVar;
 	}
 
-	public LinkedHashSet<String> processUse() {
-		LinkedHashSet<String> useVar= new LinkedHashSet<String>();
+	public Set<String> processUse() {
+		Set<String> useVar= new LinkedHashSet<String>();
 		if(this.expr!=null) {
 			if(this.expr.getKind().toString().equals("ASSIGN")) {
 				traverseExpr(useVar, this.rhs);
@@ -391,7 +391,7 @@ public class CFGNode implements Comparable<CFGNode> {
 		return useVar;
 	}
 
-	public static void traverseExpr(LinkedHashSet<String> useVar, final boa.types.Ast.Expression expr) {		
+	public static void traverseExpr(Set<String> useVar, final boa.types.Ast.Expression expr) {
 		if(expr.hasVariable()) {
 			if(expr.getExpressionsList().size()!=0) {
 				useVar.add("this");
@@ -417,7 +417,7 @@ public class CFGNode implements Comparable<CFGNode> {
 		}
 	}
 
-	public static void traverseVarDecls(LinkedHashSet<String> useVar, final boa.types.Ast.Variable vardecls) {		
+	public static void traverseVarDecls(Set<String> useVar, final boa.types.Ast.Variable vardecls) {
 		if(vardecls.hasInitializer()) {
 			traverseExpr(useVar, vardecls.getInitializer());			
 		}
