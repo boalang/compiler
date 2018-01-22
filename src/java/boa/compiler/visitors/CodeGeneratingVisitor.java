@@ -182,7 +182,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final ST st = stg.getInstanceOf("VarDecl");
 
 			st.add("id", n.getId().getToken());
-			st.add("type", n.type.toJavaType());
+			st.add("type", n.type.toInterfaceJavaType());
 
 			if (n.isStatic())
 				st.add("isstatic", true);
@@ -291,11 +291,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					fields.add("f" + fieldCount);
 				}
 				fieldCount++;
-				fieldTypes.add(c.getType().type.toBoxedJavaType());
-				if(c.getType().type instanceof BoaSet)
-					initializeTypes.add(c.getType().type.toBoxedJavaType().replace("Set", "LinkedHashSet"));
-				else
-					initializeTypes.add(c.getType().type.toBoxedJavaType());
+				fieldTypes.add(c.getType().type.toInterfaceJavaType());
+				initializeTypes.add(c.getType().type.toBoxedJavaType());
 			}
 
 			st.add("name", tupType.toJavaType());
@@ -1850,19 +1847,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final MapType n) {
-		final ST st = stg.getInstanceOf("MapType");
-
-		n.env.setNeedsBoxing(true);
-
-		n.getIndex().accept(this);
-		st.add("key", code.removeLast());
-
-		n.getValue().accept(this);
-		st.add("value", code.removeLast());
-
-		n.env.setNeedsBoxing(false);
-
-		code.add(st.render().replaceAll("LinkedHashSet", "Set"));
+		code.add(n.type.toJavaType());
 	}
 
 	/** {@inheritDoc} */

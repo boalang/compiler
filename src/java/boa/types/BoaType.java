@@ -112,6 +112,28 @@ public abstract class BoaType {
 	}
 
 	/**
+	 * Returns a string representation of the interface Java equivalent of this Boa
+	 * type.
+	 *
+	 * @return A String containing the name of the interface Java type equivalent to this
+	 *         Boa type
+	 */
+	public String toInterfaceJavaType() {
+		return toBoxedJavaType();
+	}
+
+	/**
+	 * Returns a string representation of the parameter Java equivalent of this Boa
+	 * type.
+	 *
+	 * @return A String containing the name of the parameter Java type equivalent to this
+	 *         Boa type
+	 */
+	public String toParameterJavaType() {
+		return toBoxedJavaType();
+	}
+
+	/**
 	 * Takes a type name and returns one suitable for use as an identifier.
 	 *
 	 * @param t the type name to clean
