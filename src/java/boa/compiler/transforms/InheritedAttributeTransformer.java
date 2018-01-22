@@ -196,9 +196,10 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArgNoRet {
 			//    c) For each type T in the set from 1b:
 			for (final BoaTuple b: currentSet.getCurrentTypes()) {
 				env = e.env;
-
 				//       i)   Add a variable 's_T_#' of type 'stack of T' at the top-most scope of the AST
-				final VarDeclStatement v = ASTFactory.createVarDecl(stackPrefix + stackCounter++, new StackType(new Component(ASTFactory.createIdentifier(getTypeName(b), env))), new BoaStack(b), env);
+				final StackType st = new StackType(new Component(ASTFactory.createIdentifier(getTypeName(b), env)));
+				st.type = new BoaStack(b);
+				final VarDeclStatement v = ASTFactory.createVarDecl(stackPrefix + stackCounter++, st, new BoaStack(b), env);
 				v.env = v.getType().env = ((StackType)v.getType()).getValue().getType().env = n.env;
 				v.env.set(v.getId().getToken(), v.type);
 				n.getStatements().add(0, v);

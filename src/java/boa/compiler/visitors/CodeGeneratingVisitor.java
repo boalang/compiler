@@ -1872,14 +1872,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StackType n) {
-		if(n.type != null)
-			code.add(n.type.toJavaType());
-		else{
-			final ST st = stg.getInstanceOf("StackType");
-			n.getValue().accept(this);
-			st.add("value", code.removeLast());
-			code.add(st.render());
-		}
+		code.add(n.type.toJavaType());
 	}
 
 	/** {@inheritDoc} */
