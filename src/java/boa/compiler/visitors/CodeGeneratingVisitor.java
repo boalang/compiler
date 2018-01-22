@@ -1872,31 +1872,20 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StackType n) {
-		final ST st = stg.getInstanceOf("StackType");
-
-		n.env.setNeedsBoxing(true);
-
-		n.getValue().accept(this);
-		st.add("value", code.removeLast());
-
-		n.env.setNeedsBoxing(false);
-
-		code.add(st.render());
+		if(n.type != null)
+			code.add(n.type.toJavaType());
+		else{
+			final ST st = stg.getInstanceOf("StackType");
+			n.getValue().accept(this);
+			st.add("value", code.removeLast());
+			code.add(st.render());
+		}
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SetType n) {
-		final ST st = stg.getInstanceOf("SetType");
-
-		n.env.setNeedsBoxing(true);
-
-		n.getValue().accept(this);
-		st.add("value", code.removeLast());
-
-		n.env.setNeedsBoxing(false);
-
-		code.add(st.render());
+		code.add(n.type.toJavaType());
 	}
 
 	/** {@inheritDoc} */
