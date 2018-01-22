@@ -230,7 +230,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			for (final Component c : params) {
 				args.add(c.getIdentifier().getToken());
-				types.add(c.getType().type.toJavaType());
+				types.add(c.getType().type.toInterfaceJavaType());
 			}
 
 			st.add("name", funcType.toJavaType());
@@ -1583,7 +1583,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (!(c instanceof BoaName))
 				continue;
 			args.add(((BoaName)c).getId());
-			types.add(((BoaName)c).getType().toJavaType());
+			types.add(((BoaName)c).getType().toInterfaceJavaType());
 		}
 
 		this.varDecl.start(n);
@@ -1815,7 +1815,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		for (int i = 0; i < paramTypes.length; i++) {
 			args.add(((BoaName) paramTypes[i]).getId());
-			types.add(paramTypes[i].toJavaType());
+			types.add(paramTypes[i].toInterfaceJavaType());
 		}
 
 		st.add("name", funcType.toJavaType());

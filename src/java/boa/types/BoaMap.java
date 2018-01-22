@@ -154,7 +154,13 @@ public class BoaMap extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toInterfaceJavaType() {
-		return "java.util.HashMap<" + this.indexType.toParameterJavaType() + ", " + this.valueType.toParameterJavaType() + ">";
+		return "java.util.Map<" + this.indexType.toParameterJavaType() + ", " + this.valueType.toParameterJavaType() + ">";
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String toParameterJavaType() {
+		return "java.util.Map<" + this.indexType.toParameterJavaType() + ", " + this.valueType.toParameterJavaType() + ">";
 	}
 
 	/** {@inheritDoc} */
