@@ -18,7 +18,6 @@ identifierMap ::= [
 		
 VarDecl(isstatic, type, id) ::= "<if(isstatic)>static <endif><type> ___<id>;<\n>"
 ArrayType(type) ::= "<type>[]"
-StackType(value) ::= "java.util.Stack\<<value>>"
 Block(statements) ::= <<
 {
 	<statements:{s | <s>}>}
