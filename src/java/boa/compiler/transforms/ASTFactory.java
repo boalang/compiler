@@ -43,7 +43,7 @@ public class ASTFactory {
 				ASTFactory.createIdentifier(name, env),
 				type
 			);
-		var.type = t;
+		type.type = var.type = t;
 		return var;
 	}
 
