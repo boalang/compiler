@@ -6,6 +6,7 @@ m3: map[stack of int] of stack of int;
 m4: map[map[set of int] of set of int] of map[array of int] of array of int;
 
 
+### Testing m1 #############
 a1: array of int = {1, 1};
 a2: array of int = {2, 2};
 
@@ -14,6 +15,8 @@ m1[a1] = a2;
 k1 := keys(m1);
 v1 := values(m1);
 
+
+### Testing m2 #############
 s1: set of int;
 s2: set of int;
 add(s1, 1);
@@ -25,6 +28,8 @@ m2[s1] = s2;
 k2 := keys(m2);
 v2 := values(m2);
 
+
+### Testing m3 #############
 st1: stack of int;
 st2: stack of int;
 push(st1, 1);
@@ -36,6 +41,8 @@ m3[st1] = st2;
 k3 := keys(m3);
 v3 := values(m3);
 
+
+### Testing m4 #############
 m4[m2] = m1;
 
 k4 := keys(m4);

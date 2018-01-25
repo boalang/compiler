@@ -2004,10 +2004,20 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				replaced = replaced.replace("${V}", valueType);
 			} else if (args.size() == 1 && args.get(0).type instanceof BoaStack) {
 				final BoaStack s = (BoaStack)args.get(0).type;
-				replaced = replaced.replace("${V}", s.getType().toBoxedJavaType());
+				String valueType = s.getType().toBoxedJavaType();
+				if (s.getType() instanceof BoaArray)
+					valueType = valueType.replace("[]", "[0]");
+				else if (s.getType() instanceof BoaSet || s.getType() instanceof BoaStack || s.getType() instanceof BoaMap)
+					valueType = valueType.replaceAll("<(.*)>", "");
+				replaced = replaced.replace("${V}", valueType);
 			} else if (args.size() == 1 && args.get(0).type instanceof BoaSet) {
 				final BoaSet s = (BoaSet)args.get(0).type;
-				replaced = replaced.replace("${V}", s.getType().toBoxedJavaType());
+				String valueType = s.getType().toBoxedJavaType();
+				if (s.getType() instanceof BoaArray)
+					valueType = valueType.replace("[]", "[0]");
+				else if (s.getType() instanceof BoaSet || s.getType() instanceof BoaStack || s.getType() instanceof BoaMap)
+					valueType = valueType.replaceAll("<(.*)>", "");
+				replaced = replaced.replace("${V}", valueType);
 			}
 		}
 
