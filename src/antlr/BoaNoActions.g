@@ -492,6 +492,7 @@ DOLLAR      : '$';
 EQUALS      : '=';
 EMIT        : '<<';
 RIGHT_ARROW : '->';
+ML_STRING   : '"""';
 
 //
 // literals
@@ -566,7 +567,7 @@ RegexCharacter
 	;
 
 MultilineStringLiteral
-	: '"""' (StringCharacter | [\n\r])* '"""'
+	: ML_STRING (StringCharacter | ["\n\r])*? ML_STRING
 	;
 
 StringLiteral
