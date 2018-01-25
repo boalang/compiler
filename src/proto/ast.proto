@@ -109,7 +109,7 @@ enum TypeKind {
 	DELEGATE = 7;
 	/** A generic type */
 	GENERIC = 8;
-	/** A trait in PHP */
+	/** A trait */
 	TRAIT = 9;
 	/** Pritimitve type */
 	PRIMITIVE = 10;
