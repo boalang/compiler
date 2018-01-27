@@ -1990,34 +1990,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (replaced.contains("${K}") || replaced.contains("${V}")) {
 			if (args.size() == 1 && args.get(0).type instanceof BoaMap) {
 				final BoaMap m = (BoaMap)args.get(0).type;
-				String indexType = m.getIndexType().toBoxedJavaType();
-				String valueType = m.getType().toBoxedJavaType();
-				if (m.getIndexType() instanceof BoaArray)
-					indexType = indexType.replace("[]", "[0]");
-				else if (m.getIndexType() instanceof BoaSet || m.getIndexType() instanceof BoaStack || m.getIndexType() instanceof BoaMap)
-					indexType = indexType.replaceAll("<(.*)>", "");
-				if (m.getType() instanceof BoaArray )
-					valueType = valueType.replace("[]", "[0]");
-				else if (m.getType() instanceof BoaSet || m.getType() instanceof BoaStack || m.getType() instanceof BoaMap)
-					valueType = valueType.replaceAll("<(.*)>", "");
-				replaced = replaced.replace("${K}", indexType);
-				replaced = replaced.replace("${V}", valueType);
+				replaced = replaced.replace("${K}", nonScalarTypeTransform(m.getIndexType(), m.getIndexType().toBoxedJavaType()));
+				replaced = replaced.replace("${V}", nonScalarTypeTransform(m.getType(), m.getType().toBoxedJavaType()));
 			} else if (args.size() == 1 && args.get(0).type instanceof BoaStack) {
 				final BoaStack s = (BoaStack)args.get(0).type;
-				String valueType = s.getType().toBoxedJavaType();
-				if (s.getType() instanceof BoaArray)
-					valueType = valueType.replace("[]", "[0]");
-				else if (s.getType() instanceof BoaSet || s.getType() instanceof BoaStack || s.getType() instanceof BoaMap)
-					valueType = valueType.replaceAll("<(.*)>", "");
-				replaced = replaced.replace("${V}", valueType);
+				replaced = replaced.replace("${V}", nonScalarTypeTransform(s.getType(), s.getType().toBoxedJavaType()));
 			} else if (args.size() == 1 && args.get(0).type instanceof BoaSet) {
 				final BoaSet s = (BoaSet)args.get(0).type;
-				String valueType = s.getType().toBoxedJavaType();
-				if (s.getType() instanceof BoaArray)
-					valueType = valueType.replace("[]", "[0]");
-				else if (s.getType() instanceof BoaSet || s.getType() instanceof BoaStack || s.getType() instanceof BoaMap)
-					valueType = valueType.replaceAll("<(.*)>", "");
-				replaced = replaced.replace("${V}", valueType);
+				replaced = replaced.replace("${V}", nonScalarTypeTransform(s.getType(), s.getType().toBoxedJavaType()));
 			}
 		}
 
@@ -2025,6 +2005,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			replaced = replaced.replace("${" + i + "}", parameters[i]);
 
 		return replaced;
+	}
+
+	private static String nonScalarTypeTransform(final BoaType type , String typeStr) {
+		if (type instanceof BoaArray)
+			typeStr = typeStr.replace("[]", "[0]");
+		else if (type instanceof BoaSet || type instanceof BoaStack || type instanceof BoaMap)
+			typeStr = typeStr.replaceAll("<(.*)>", "");
+		return typeStr;
 	}
 
 	protected static String camelCase(final String string) {
