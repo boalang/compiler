@@ -16,6 +16,7 @@
  */
 package boa.graphs.cfg;
 
+import boa.types.Control.CFGEdge.CFGEdgeLabel;
 import boa.types.Control.CFGNode.CFGNodeType;
 
 /**
@@ -113,5 +114,27 @@ public class CFGEdge {
 	private void delete() {
 		this.src.getOutEdges().remove(this);
 		this.dest.getInEdges().remove(this);
+	}
+
+	public boa.types.Control.CFGEdge.Builder newBuilder() {
+		final boa.types.Control.CFGEdge.Builder eb = boa.types.Control.CFGEdge.newBuilder();
+		eb.setLabel(CFGEdge.getLabel(this.label));
+		return eb;
+	}
+
+	public static CFGEdgeLabel getLabel(final String label) {
+		if (label.equals(".")) {
+			return CFGEdgeLabel.DEFAULT;
+		} else if (label.equals("T")) {
+			return CFGEdgeLabel.TRUE;
+		} else if (label.equals("F")) {
+			return CFGEdgeLabel.FALSE;
+		} else if (label.equals("B")) {
+			return CFGEdgeLabel.BACKEDGE;
+		} else if (label.equals("E")) {
+			return CFGEdgeLabel.EXITEDGE;
+		} else {
+			return CFGEdgeLabel.NIL;
+		}
 	}
 }
