@@ -684,12 +684,13 @@ public class CFG {
 		for (final Expression e : root.getUpdatesList()) {
 			branch.mergeSeq(traverse(cfgNode, e));
 		}
+
+		branch.adjustBreakNodes("CONTINUE");
 		graph.mergeABranch(branch, control, "T");
 		graph.addBackEdges(branch, control, "B");
-
-		graph.adjustBreakNodes("");
-
+		
 		graph.getOuts().clear();
+		graph.adjustBreakNodes("BREAK");
 		graph.getOuts().add(control);
 
 		return graph;
@@ -706,12 +707,12 @@ public class CFG {
 		graph.mergeSeq(control);
 
 		final CFG branch = traverse(control, root.getStatements(0));
+		branch.adjustBreakNodes("CONTINUE");
 		graph.mergeABranch(branch, control, "T");
 		graph.addBackEdges(branch, control, "B");
-
-		graph.adjustBreakNodes("");
-
+		
 		graph.getOuts().clear();
+		graph.adjustBreakNodes("BREAK");
 		graph.getOuts().add(control);
 
 		return graph;
@@ -728,11 +729,12 @@ public class CFG {
 		graph.mergeSeq(control);
 
 		final CFG branch = traverse(control, root.getStatements(0));
+		branch.adjustBreakNodes("CONTINUE");
 		graph.mergeABranch(branch, control, "T");
 		graph.addBackEdges(branch, control, "B");
-
-		graph.adjustBreakNodes("");
+		
 		graph.getOuts().clear();
+		graph.adjustBreakNodes("BREAK");
 		graph.getOuts().add(control);
 
 		return graph;
@@ -763,14 +765,14 @@ public class CFG {
 		final CFG graph = new CFG();
 		final String label;
 		if (root.getKind().name() == null) {
-			label = "";
+			label = "BREAK";
 		} else {
 			label = root.getKind().name();
 		}
 		final CFGNode node = new CFGNode(label, CFGNodeType.OTHER, "<GOTO>", label);
 		node.setAstNode(root);
 		graph.addBreakNode(node);
-		graph.getOuts().add(node);
+		//graph.getOuts().add(node);
 		return graph;
 	}
 
@@ -778,7 +780,7 @@ public class CFG {
 		final CFG graph = new CFG();
 		final String label;
 		if (root.getKind().name() == null) {
-			label = "";
+			label = "CONTINUE";
 		} else {
 			label = root.getKind().name();
 		}
