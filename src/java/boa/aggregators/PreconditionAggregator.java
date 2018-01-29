@@ -57,7 +57,8 @@ public class PreconditionAggregator extends Aggregator {
 
 		String[] sData = data.split(":", 4);
 
-		this.args = Integer.parseInt(sData[0]);
+		if(Integer.parseInt(sData[0]) > this.args)
+			this.args = Integer.parseInt(sData[0]);
 		final String project = sData[1];
 		final String clientmethod = sData[2];
 		final String precond = sData[3];
