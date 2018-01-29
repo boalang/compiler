@@ -2007,11 +2007,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		return replaced;
 	}
 
-	private static String nonScalarTypeTransform(final BoaType type , String typeStr) {
+	private static String nonScalarTypeTransform(final BoaType type, String typeStr) {
 		if (type instanceof BoaArray)
-			typeStr = typeStr.replace("[]", "[0]");
-		else if (type instanceof BoaSet || type instanceof BoaStack || type instanceof BoaMap)
-			typeStr = typeStr.replaceAll("<(.*)>", "");
+			return typeStr.replace("[]", "[0]");
+		if (type instanceof BoaSet || type instanceof BoaStack || type instanceof BoaMap)
+			return typeStr.replaceAll("<(.*)>", "");
 		return typeStr;
 	}
 
