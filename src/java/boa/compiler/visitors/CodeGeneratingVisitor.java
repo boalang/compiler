@@ -784,7 +784,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (t instanceof BoaArray && ((BoaArray)t).getType() instanceof BoaEnum) {
                 st.add("type", "Object[] ");
 			} else {
-                st.add("type", t.toJavaType());
+                st.add("type", t.toJavaType().replaceAll("<(.*)>", ""));
             }
 
 			st.add("exprlist", code.removeLast());
@@ -1825,7 +1825,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		n.getValue().accept(this);
 		n.env.setNeedsBoxing(boxing);
 
-		st.add("type", code.removeLast());
+		st.add("type", code.removeLast().replaceAll("<(.*)>", ""));
 
 		code.add(st.render());
 	}
