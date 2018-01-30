@@ -62,7 +62,7 @@ public class BoaNormalFormIntrinsics {
 	 * @return the expression in symbolic form
 	 */
 	@FunctionSpec(name = "converttosymbolicname", returnType = "Expression", formalParameters = { "Expression", "Expression", "array of Expression"})
-	public static Expression convertToSymbolicName(final Expression e, final Expression reciever, final Expression[] arguments) {
+	public static Expression convertToSymbolicName(final Expression e, final Expression reciever, final Expression[] arguments) throws Exception {
 		final List<Expression> convertedExpression = new ArrayList<Expression>();
 		for (final Expression sub : e.getExpressionsList())
 			convertedExpression.add(convertToSymbolicName(sub, reciever, arguments));
@@ -143,6 +143,33 @@ public class BoaNormalFormIntrinsics {
 				for (int i = 0; i < arguments.length; i++) {
 					if (e.equals(arguments[i]))
 						return createVariable("arg$" + Integer.toString(i));
+				}
+
+				for (int i = 0; i < arguments.length; i++) {
+					Map<Integer, List<Object[]>> componentMap = seperate(arguments[i], true, true);
+					final List<Object[]> variableList = new ArrayList<Object[]>();
+
+					if (componentMap.containsKey(-1))
+						break;
+
+					if (componentMap.containsKey(0))
+						variableList.addAll(componentMap.get(0));
+					if (componentMap.containsKey(1))
+						variableList.addAll(componentMap.get(1));
+
+					boolean exist = false;
+					for (Object[] o: variableList) {
+						if (o[0].equals(e)) {
+							o[0] = createVariable("arg$" + Integer.toString(i));
+							exist = true;
+						} else
+							o[2] = !(boolean) o[2];
+					}
+
+					if (!exist)
+						break;
+
+					return combineLeft(variableList);
 				}
 
 				return e;
