@@ -163,7 +163,7 @@ public class BoaNormalFormIntrinsics {
 							o[0] = createVariable("arg$" + Integer.toString(i));
 							exist = true;
 						} else
-							o[2] = !(boolean) o[2];
+							o[2] = !((Boolean)o[2]);
 					}
 
 					if (!exist)
