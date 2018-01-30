@@ -155,7 +155,7 @@ public class CFG {
 
 		for (final CFGNode aNode : outs) {
 			for (final CFGNode anoNode : target.ins) {
-				createNewEdge(aNode, anoNode);
+				new CFGEdge(aNode, anoNode);
 			}
 		}
 
@@ -165,10 +165,6 @@ public class CFG {
 
 		breaks.addAll(target.breaks);
 		returns.addAll(target.returns);
-	}
-
-	public void createNewEdge(final CFGNode node, final CFGNode anoNode) {
-		new CFGEdge(node, anoNode);
 	}
 
 	public void createNewEdge(final CFGNode node, final CFGNode anoNode, final String label) {
@@ -185,7 +181,7 @@ public class CFG {
 		ins.remove(branch);
 		for (final CFGNode aNode : outs) {
 			if (!aNode.equals(branch)) {
-				createNewEdge(aNode, branch);
+				new CFGEdge(aNode, branch);
 			}
 		}
 
@@ -215,7 +211,7 @@ public class CFG {
 
 		for (final CFGNode aNode : saveOuts) {
 			for (final CFGNode anoNode : target.ins) {
-				createNewEdge(aNode, anoNode);
+				new CFGEdge(aNode, anoNode);
 			}
 		}
 		outs.addAll(target.outs);
@@ -230,7 +226,7 @@ public class CFG {
 		nodes.addAll(target.getNodes());
 		// merge Edges
 		for (final CFGNode aNode : target.ins) {
-			createNewEdge(branch, aNode);
+			new CFGEdge(branch, aNode);
 		}
 		// keep all outs node of children
 		outs.addAll(target.outs);
@@ -684,12 +680,13 @@ public class CFG {
 		for (final Expression e : root.getUpdatesList()) {
 			branch.mergeSeq(traverse(cfgNode, e));
 		}
+
+		branch.adjustBreakNodes("CONTINUE");
 		graph.mergeABranch(branch, control, "T");
 		graph.addBackEdges(branch, control, "B");
-
-		graph.adjustBreakNodes("");
-
+		
 		graph.getOuts().clear();
+		graph.adjustBreakNodes("BREAK");
 		graph.getOuts().add(control);
 
 		return graph;
@@ -706,12 +703,12 @@ public class CFG {
 		graph.mergeSeq(control);
 
 		final CFG branch = traverse(control, root.getStatements(0));
+		branch.adjustBreakNodes("CONTINUE");
 		graph.mergeABranch(branch, control, "T");
 		graph.addBackEdges(branch, control, "B");
-
-		graph.adjustBreakNodes("");
-
+		
 		graph.getOuts().clear();
+		graph.adjustBreakNodes("BREAK");
 		graph.getOuts().add(control);
 
 		return graph;
@@ -728,11 +725,12 @@ public class CFG {
 		graph.mergeSeq(control);
 
 		final CFG branch = traverse(control, root.getStatements(0));
+		branch.adjustBreakNodes("CONTINUE");
 		graph.mergeABranch(branch, control, "T");
 		graph.addBackEdges(branch, control, "B");
-
-		graph.adjustBreakNodes("");
+		
 		graph.getOuts().clear();
+		graph.adjustBreakNodes("BREAK");
 		graph.getOuts().add(control);
 
 		return graph;
@@ -763,14 +761,14 @@ public class CFG {
 		final CFG graph = new CFG();
 		final String label;
 		if (root.getKind().name() == null) {
-			label = "";
+			label = "BREAK";
 		} else {
 			label = root.getKind().name();
 		}
 		final CFGNode node = new CFGNode(label, CFGNodeType.OTHER, "<GOTO>", label);
 		node.setAstNode(root);
 		graph.addBreakNode(node);
-		graph.getOuts().add(node);
+		//graph.getOuts().add(node);
 		return graph;
 	}
 
@@ -778,7 +776,7 @@ public class CFG {
 		final CFG graph = new CFG();
 		final String label;
 		if (root.getKind().name() == null) {
-			label = "";
+			label = "CONTINUE";
 		} else {
 			label = root.getKind().name();
 		}
@@ -941,7 +939,7 @@ public class CFG {
 			for (final CFGEdge edge : node.getOutEdges()) {
 				final CFGNode anoNode = edge.getDest();
 				final int index = node.getId() * size + anoNode.getId();
-				edgeLabels.put(index, getLabel(edge.label()));
+				edgeLabels.put(index, CFGEdge.getLabel(edge.label()));
 			}
 		}
 
@@ -957,21 +955,5 @@ public class CFG {
 			}
 		}
 		return b;
-	}
-
-	private final CFGEdgeLabel getLabel(final String label) {
-		if (label.equals(".")) {
-			return CFGEdgeLabel.DEFAULT;
-		} else if (label.equals("T")) {
-			return CFGEdgeLabel.TRUE;
-		} else if (label.equals("F")) {
-			return CFGEdgeLabel.FALSE;
-		} else if (label.equals("B")) {
-			return CFGEdgeLabel.BACKEDGE;
-		} else if (label.equals("E")) {
-			return CFGEdgeLabel.EXITEDGE;
-		} else {
-			return CFGEdgeLabel.NIL;
-		}
 	}
 }
