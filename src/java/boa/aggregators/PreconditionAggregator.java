@@ -92,8 +92,8 @@ public class PreconditionAggregator extends Aggregator {
 	 *  Infer preconditions for both projects and method calls
 	 */
 	private void doInference(){
-		precondMethods = infer(precondMethods);
-		precondProjects = infer(precondProjects);
+		precondMethods = removeEquality(infer(precondMethods));
+		precondProjects = removeEquality(infer(precondProjects));
 	}
 
 	/**
@@ -104,8 +104,6 @@ public class PreconditionAggregator extends Aggregator {
 	private Map<Expression, Set<String>> infer(Map<Expression, Set<String>> precondMP) {
 		final Map<Expression, Set<String>> infPreconditions = new HashMap<Expression, Set<String>>(precondMP);
 		final Set<Expression> preconds = new HashSet<Expression>(infPreconditions.keySet());
-		//int count1 = 0;
-		//int count2 = 0;
 
 		for (final Expression eqPrecond : preconds) {
 			if (eqPrecond.getKind() == ExpressionKind.EQ) {
@@ -114,7 +112,6 @@ public class PreconditionAggregator extends Aggregator {
 						if (eqPrecond.getExpressions(0).equals(sineqPrecond.getExpressions(0)) &&
 									eqPrecond.getExpressions(1).equals(sineqPrecond.getExpressions(1))) {
 
-							//count1++;
 							Expression nsineqPrecond;
 							final Expression lhs = sineqPrecond.getExpressions(0);
 							final Expression rhs = sineqPrecond.getExpressions(1);
@@ -144,21 +141,33 @@ public class PreconditionAggregator extends Aggregator {
 																			infPreconditions.get(eqPrecond)));
 
 							//Conditions with implications
-							//if (infPreconditions.get(eqPrecond).size() <= infPreconditions.get(nsineqPrecond).size())
-							//	count2++;
-
 							if (infPreconditions.get(sineqPrecond).size() <= infPreconditions.get(nsineqPrecond).size())
 								infPreconditions.get(sineqPrecond).clear();
 						}
 					}
 				}
-
-				//if (count2 == 2 || (count2 == 1 && count1 == 1))
-					infPreconditions.get(eqPrecond).clear();  //not removing for consistency b/w methods and projects
 			}
 		}
 
 		return infPreconditions;
+	}
+
+	/**
+	 *
+	 * @param precondMP
+	 * @return
+	 */
+	private Map<Expression, Set<String>> removeEquality(Map<Expression, Set<String>> precondMP) {
+		final Map<Expression, Set<String>> filtPreconditions = new HashMap<Expression, Set<String>>(precondMP);
+		final Set<Expression> preconds = new HashSet<Expression>(filtPreconditions.keySet());
+
+		for (final Expression precond : preconds) {
+			if (precond.getKind() == ExpressionKind.EQ || precond.getKind() == ExpressionKind.NEQ)
+				if (precond.getExpressions(1).hasLiteral())
+					filtPreconditions.remove(precond);
+		}
+
+		return filtPreconditions;
 	}
 
 	/**
