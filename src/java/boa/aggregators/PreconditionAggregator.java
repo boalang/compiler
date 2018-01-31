@@ -104,8 +104,8 @@ public class PreconditionAggregator extends Aggregator {
 	private Map<Expression, Set<String>> infer(Map<Expression, Set<String>> precondMP) {
 		final Map<Expression, Set<String>> infPreconditions = new HashMap<Expression, Set<String>>(precondMP);
 		final Set<Expression> preconds = new HashSet<Expression>(infPreconditions.keySet());
-		int count1 = 0;
-		int count2 = 0;
+		//int count1 = 0;
+		//int count2 = 0;
 
 		for (final Expression eqPrecond : preconds) {
 			if (eqPrecond.getKind() == ExpressionKind.EQ) {
@@ -114,7 +114,7 @@ public class PreconditionAggregator extends Aggregator {
 						if (eqPrecond.getExpressions(0).equals(sineqPrecond.getExpressions(0)) &&
 									eqPrecond.getExpressions(1).equals(sineqPrecond.getExpressions(1))) {
 
-							count1++;
+							//count1++;
 							Expression nsineqPrecond;
 							final Expression lhs = sineqPrecond.getExpressions(0);
 							final Expression rhs = sineqPrecond.getExpressions(1);
@@ -143,9 +143,9 @@ public class PreconditionAggregator extends Aggregator {
 								infPreconditions.put(nsineqPrecond, union(infPreconditions.get(nsineqPrecond),
 																			infPreconditions.get(eqPrecond)));
 
-								//Conditions with implications
-							if (infPreconditions.get(eqPrecond).size() <= infPreconditions.get(nsineqPrecond).size())
-								count2++;
+							//Conditions with implications
+							//if (infPreconditions.get(eqPrecond).size() <= infPreconditions.get(nsineqPrecond).size())
+							//	count2++;
 
 							if (infPreconditions.get(sineqPrecond).size() <= infPreconditions.get(nsineqPrecond).size())
 								infPreconditions.get(sineqPrecond).clear();
@@ -153,7 +153,7 @@ public class PreconditionAggregator extends Aggregator {
 					}
 				}
 
-				if (count2 == 2 || (count2 == 1 && count1 == 1))
+				//if (count2 == 2 || (count2 == 1 && count1 == 1))
 					infPreconditions.get(eqPrecond).clear();  //not removing for consistency b/w methods and projects
 			}
 		}
