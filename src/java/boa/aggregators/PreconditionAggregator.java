@@ -212,7 +212,7 @@ public class PreconditionAggregator extends Aggregator {
 
 		final Set<String> totalCalls = new HashSet<String>();
 		for (final Expression precond : preconds)
-			if (precondMP.get(precond).size() > 10)
+			if (precondMP.get(precond).size() > 1)
 				totalCalls.addAll(precondMP.get(precond));
 
 		for (final Expression precond : preconds) {
