@@ -22,8 +22,7 @@ import boa.types.Ast.Expression;
 import java.io.IOException;
 import java.util.*;
 
-import static boa.functions.BoaAstIntrinsics.parseexpression;
-import static boa.functions.BoaAstIntrinsics.prettyprint;
+import static boa.functions.BoaAstIntrinsics.*;
 
 /**
  * @author marafat
@@ -70,7 +69,7 @@ public class PreconditionAggregator extends Aggregator {
 			precondProjects.put(precondition, new HashSet<String>());
 		}
 
-		precondMethods.get(precondition).add(clientmethod);
+		precondMethods.get(precondition).add(project + clientmethod);
 		precondProjects.get(precondition).add(project);
 	}
 
@@ -162,9 +161,18 @@ public class PreconditionAggregator extends Aggregator {
 		final Set<Expression> preconds = new HashSet<Expression>(filtPreconditions.keySet());
 
 		for (final Expression precond : preconds) {
-			if (precond.getKind() == ExpressionKind.EQ || precond.getKind() == ExpressionKind.NEQ)
-				if (precond.getExpressions(1).hasLiteral())
-					filtPreconditions.remove(precond);
+			if (precond.getKind() == ExpressionKind.EQ || precond.getKind() == ExpressionKind.NEQ) {
+				try {
+					if (precond.getExpressions(1).getKind() == ExpressionKind.OP_SUB) {
+						if (isIntLit(precond.getExpressions(1).getExpressions(0)) ||
+								isFloatLit(precond.getExpressions(1).getExpressions(0)))
+							filtPreconditions.remove(precond);
+					} else if (isIntLit(precond.getExpressions(1)) || isFloatLit(precond.getExpressions(1)))
+						filtPreconditions.remove(precond);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		return filtPreconditions;
@@ -204,11 +212,16 @@ public class PreconditionAggregator extends Aggregator {
 
 		final Set<String> totalCalls = new HashSet<String>();
 		for (final Expression precond : preconds)
-			totalCalls.addAll(precondMP.get(precond));
+			if (precondMP.get(precond).size() > 10)
+				totalCalls.addAll(precondMP.get(precond));
 
 		for (final Expression precond : preconds) {
-			final Double conf = precondMP.get(precond).size() / (totalCalls.size() * 1.0);
-			precondConf.put(prettyprint(precond), conf);
+			final Double conf;
+			if (precondMP.get(precond).size() > 1) {
+				conf = precondMP.get(precond).size() / (totalCalls.size() * 1.0);
+				precondConf.put(prettyprint(precond), conf);
+			} else
+				precondConf.put(prettyprint(precond), 0.0);
 		}
 
 		return precondConf;
