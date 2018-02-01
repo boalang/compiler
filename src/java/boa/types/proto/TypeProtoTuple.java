@@ -21,9 +21,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import boa.types.BoaInt;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.ChangeKindProtoMap;
 import boa.types.proto.enums.TypeKindProtoMap;
 
 /**
@@ -46,6 +48,27 @@ public class TypeProtoTuple extends BoaProtoTuple {
 
 		names.put("qualified_name", counter++);
 		members.add(new BoaString());
+		
+		names.put("id", counter++);
+		members.add(new BoaString());
+		
+		names.put("change_kind", counter++);
+		members.add(new ChangeKindProtoMap());
+		
+		names.put("mapped_node", counter++);
+		members.add(new BoaInt());
+		
+		names.put("declaration_file", counter++);
+		members.add(new BoaInt());
+		
+		names.put("declaration", counter++);
+		members.add(new BoaInt());
+		
+		names.put("key", counter++);
+		members.add(new BoaInt());
+		
+		names.put("computed_name", counter++);
+		members.add(new ExpressionProtoTuple());
 	}
 
 	/**
