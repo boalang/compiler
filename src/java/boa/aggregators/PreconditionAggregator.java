@@ -77,7 +77,6 @@ public class PreconditionAggregator extends Aggregator {
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		doInference();
-
 		final Map<String, Double> filteredPreconds = doFiltering();
 		final List<Map.Entry<String, Double>> rankedPreconds = doRanking(filteredPreconds);
 
@@ -88,7 +87,7 @@ public class PreconditionAggregator extends Aggregator {
 	}
 
 	/**
-	 *  Infer preconditions for both projects and method calls
+	 *  Infers preconditions for both projects and method calls
 	 */
 	private void doInference(){
 		precondMethods = removeEquality(infer(precondMethods));
@@ -96,9 +95,9 @@ public class PreconditionAggregator extends Aggregator {
 	}
 
 	/**
-	 * Infer the weak preconditions from the mined preconditions.
+	 * Infers the weak preconditions from the mined preconditions.
 	 *
-	 * @return map
+	 * @return map of all preconditions which include inferred preconditions
 	 */
 	private Map<Expression, Set<String>> infer(Map<Expression, Set<String>> precondMP) {
 		final Map<Expression, Set<String>> infPreconditions = new HashMap<Expression, Set<String>>(precondMP);
@@ -152,23 +151,27 @@ public class PreconditionAggregator extends Aggregator {
 	}
 
 	/**
+	 * Removes specific preconditions like equality
 	 *
-	 * @param precondMP
-	 * @return
+	 * @param precondMP map of preconditions after inference step
+	 * @return map of preconditons with specific preconditions removed
 	 */
-	private Map<Expression, Set<String>> removeEquality(Map<Expression, Set<String>> precondMP) {
+	private Map<Expression, Set<String>> removeEquality(final Map<Expression, Set<String>> precondMP) {
 		final Map<Expression, Set<String>> filtPreconditions = new HashMap<Expression, Set<String>>(precondMP);
 		final Set<Expression> preconds = new HashSet<Expression>(filtPreconditions.keySet());
 
 		for (final Expression precond : preconds) {
-			if (precond.getKind() == ExpressionKind.EQ || precond.getKind() == ExpressionKind.NEQ) {
+			if (precond.getKind() == ExpressionKind.OTHER)
+				filtPreconditions.remove(precond);
+			else if (precond.getKind() == ExpressionKind.EQ || precond.getKind() == ExpressionKind.NEQ) {
 				try {
-					if (precond.getExpressions(1).getKind() == ExpressionKind.OP_SUB) {
+					if (isIntLit(precond.getExpressions(1)) || isFloatLit(precond.getExpressions(1)))
+						filtPreconditions.remove(precond);
+					else if (precond.getExpressions(1).getKind() == ExpressionKind.OP_SUB) {
 						if (isIntLit(precond.getExpressions(1).getExpressions(0)) ||
 								isFloatLit(precond.getExpressions(1).getExpressions(0)))
 							filtPreconditions.remove(precond);
-					} else if (isIntLit(precond.getExpressions(1)) || isFloatLit(precond.getExpressions(1)))
-						filtPreconditions.remove(precond);
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -179,7 +182,7 @@ public class PreconditionAggregator extends Aggregator {
 	}
 
 	/**
-	 * Filter out the preconditions with confidence less than sigma
+	 * Filters out the preconditions with confidence less than sigma
 	 *
 	 * @return filtered preconditons map
 	 */
@@ -201,7 +204,7 @@ public class PreconditionAggregator extends Aggregator {
 	}
 
 	/**
-	 * Calculate confidence of each precondition in the map
+	 * Calculates confidence for each precondition in the map
 	 *
 	 * @param precondMP map of preconditon and set of clientmethods/projects
 	 * @return map of precondition and confidence
@@ -228,7 +231,7 @@ public class PreconditionAggregator extends Aggregator {
 	}
 
 	/**
-	 * Rank the preconditions based on their confidence value
+	 * Ranks the preconditions based on their confidence value
 	 *
 	 * @param filteredPreconds map of filtered precondtion
 	 * @return ranked preconditions
@@ -238,7 +241,7 @@ public class PreconditionAggregator extends Aggregator {
 	private List<Map.Entry<String, Double>> doRanking(final Map<String, Double> filteredPreconds) throws IOException, InterruptedException {
 
 		final Map<String, Double> finalPreconds = new HashMap<String, Double>();
-		final Set<SortedSet<String>> argsComb = kCombinations();   //k = 2^args - 1
+		final Set<SortedSet<String>> argsComb = kCombinations();   //k = 2^(args+1) - 1
 
 		for (SortedSet<String> s: argsComb) {
 			final Map<String, Double> argPrecond = new HashMap<String, Double>();
@@ -269,6 +272,7 @@ public class PreconditionAggregator extends Aggregator {
 	}
 
 	/**
+	 * Generates all possible combinations of arguments and reciever
 	 *
 	 * @return set of all combinations of arguments
 	 */
@@ -298,7 +302,6 @@ public class PreconditionAggregator extends Aggregator {
 
 	/**
 	 * Comparator to sort preconditions based on confidence values
-	 *
 	 */
 	public class PreconditionComparator implements Comparator<Map.Entry<String, Double>> {
 		public int compare(final Map.Entry<String, Double> p1, final Map.Entry<String, Double> p2) {
