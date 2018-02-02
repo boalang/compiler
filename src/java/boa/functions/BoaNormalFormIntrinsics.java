@@ -88,7 +88,7 @@ public class BoaNormalFormIntrinsics {
 			case OP_MULT:
 			case OP_DIV:
 			case OP_MOD:
-				Expression replacedExpr = createExpression(e.getKind(),
+				final Expression replacedExpr = createExpression(e.getKind(),
 						convertedExpression.toArray(new Expression[convertedExpression.size()]));
 
 				if (replacedExpr.equals(reciever))
@@ -109,7 +109,7 @@ public class BoaNormalFormIntrinsics {
 				for(int i = 0; i < convertedExpression.size(); i++) {
 					b.setExpressions(i, convertedExpression.get(i));
 				}
-				Expression replacedExpr1 = b.build();
+				final Expression replacedExpr1 = b.build();
 
 				if (replacedExpr1.equals(reciever))
 					return createVariable("rcv$");
@@ -144,9 +144,9 @@ public class BoaNormalFormIntrinsics {
 					if (e.equals(arguments[i]))
 						return createVariable("arg$" + Integer.toString(i));
 				}
-
+                /*
 				for (int i = 0; i < arguments.length; i++) {
-					Map<Integer, List<Object[]>> componentMap = seperate(arguments[i], true, true);
+					final Map<Integer, List<Object[]>> componentMap = seperate(arguments[i], true, true);
 					final List<Object[]> variableList = new ArrayList<Object[]>();
 
 					if (componentMap.containsKey(-1))
@@ -158,7 +158,7 @@ public class BoaNormalFormIntrinsics {
 						variableList.addAll(componentMap.get(1));
 
 					boolean exist = false;
-					for (Object[] o: variableList) {
+					for (final Object[] o: variableList) {
 						if (o[0].equals(e)) {
 							o[0] = createVariable("arg$" + Integer.toString(i));
 							exist = true;
@@ -166,12 +166,11 @@ public class BoaNormalFormIntrinsics {
 							o[2] = !((Boolean)o[2]);
 					}
 
-					if (!exist)
-						break;
+					if (exist)
+						return combineLeft(variableList);
 
-					return combineLeft(variableList);
 				}
-
+                */
 				return e;
 
 			// TODO: Handle as per need
@@ -572,13 +571,13 @@ public class BoaNormalFormIntrinsics {
 
 			case OP_MULT:
 			case OP_DIV:
-				List<Object[]> l = seperateNumDenom(e, 'n');
-				List<Expression> num= new ArrayList<Expression>();
-				List<Expression> den = new ArrayList<Expression>();
+				final List<Object[]> l = seperateNumDenom(e, 'n');
+				final List<Expression> num= new ArrayList<Expression>();
+				final List<Expression> den = new ArrayList<Expression>();
 
 				Collections.sort(l, new ExpressionArrayComparator());
 				int signCount = 0;
-				for(Object[] o: l) {
+				for(final Object[] o: l) {
 					if(((Expression)o[0]).getKind() == ExpressionKind.OP_SUB) {
 						if(((Expression)o[0]).getExpressionsCount() == 1 ) {
 							signCount++;
@@ -594,10 +593,10 @@ public class BoaNormalFormIntrinsics {
 				}
 
 				Expression sortExpr;
-				Expression numerator = createExpression(ExpressionKind.OP_MULT, num.toArray(new Expression[num.size()]));
+				final Expression numerator = createExpression(ExpressionKind.OP_MULT, num.toArray(new Expression[num.size()]));
 
 				if(den.size() != 0) {
-					Expression denominator = createExpression(ExpressionKind.OP_MULT, den.toArray(new Expression[den.size()]));
+					final Expression denominator = createExpression(ExpressionKind.OP_MULT, den.toArray(new Expression[den.size()]));
 					sortExpr = createExpression(ExpressionKind.OP_DIV, numerator, denominator);
 				}
 				else
@@ -651,7 +650,7 @@ public class BoaNormalFormIntrinsics {
 
 		switch (expr.getKind()) {
 			case OP_MULT:
-				for(Expression e: expr.getExpressionsList())
+				for(final Expression e: expr.getExpressionsList())
 					result.addAll(seperateNumDenom(e, type));
 				break;
 
@@ -668,12 +667,12 @@ public class BoaNormalFormIntrinsics {
 			case OP_SUB:
 			case PAREN:
 				//These cases will not execute once the expression is fully siimplified
-				Object[] oo = {normalize(expr), type};
+				final Object[] oo = {normalize(expr), type};
 				result.add(oo);
 				break;
 
 			default:
-				Object[] o = {expr, type};
+				final Object[] o = {expr, type};
 				result.add(o);
 		}
 
@@ -772,7 +771,7 @@ public class BoaNormalFormIntrinsics {
 	 */
 	@FunctionSpec(name = "converttoarray", returnType = "array of Expression", formalParameters = { "map[int] of Expression" })
 	public static Expression[] convertToArray(Map<Long, Expression> m) {
-		Expression[] a = new Expression[m.size()];
+		final Expression[] a = new Expression[m.size()];
 		for(int i = 0; i < m.size(); i++){
 			a[i] = m.get((long)i);
 		}
