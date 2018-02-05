@@ -154,16 +154,20 @@ public class PreconditionAggregator extends Aggregator {
 		final Set<Expression> preconds = new HashSet<Expression>(mergedPreconditions.keySet());
 
 		for (final Expression strongPrecond : preconds) {
-			if (strongPrecond.getKind() == ExpressionKind.EQ ||
-					strongPrecond.getKind() == ExpressionKind.LT ||
-					strongPrecond.getKind() == ExpressionKind.GT) {
-				for (final Expression weakPrecond : preconds) {
-					if (mergedPreconditions.get(weakPrecond).size() >= mergedPreconditions.get(strongPrecond).size()) {
+			for (final Expression weakPrecond : preconds) {
+				if (strongPrecond.getKind() == ExpressionKind.EQ &&
+						(weakPrecond.getKind() == ExpressionKind.LTEQ || weakPrecond.getKind() == ExpressionKind.GTEQ)) {
+					if (mergedPreconditions.get(strongPrecond).size() <= mergedPreconditions.get(weakPrecond).size())
 						mergedPreconditions.get(weakPrecond).addAll(mergedPreconditions.get(strongPrecond));
-						if (strongPrecond.getKind() != ExpressionKind.EQ) //Equalities are removed in removeEquality
-							mergedPreconditions.get(strongPrecond).clear();
+				}
+				else if (strongPrecond.getKind() == ExpressionKind.LT && weakPrecond.getKind() == ExpressionKind.LTEQ ||
+						strongPrecond.getKind() == ExpressionKind.GT && weakPrecond.getKind() == ExpressionKind.GTEQ) {
+					if (mergedPreconditions.get(strongPrecond).size() <= mergedPreconditions.get(weakPrecond).size()) {
+						mergedPreconditions.get(weakPrecond).addAll(mergedPreconditions.get(strongPrecond));
+						mergedPreconditions.get(strongPrecond).clear();
 					}
 				}
+
 			}
 		}
 
