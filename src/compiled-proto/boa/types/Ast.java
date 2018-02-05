@@ -93,7 +93,7 @@ public final class Ast {
      * <code>TRAIT = 9;</code>
      *
      * <pre>
-     ** A trait in PHP 
+     ** A trait 
      * </pre>
      */
     TRAIT(11, 9),
@@ -223,7 +223,7 @@ public final class Ast {
      * <code>TRAIT = 9;</code>
      *
      * <pre>
-     ** A trait in PHP 
+     ** A trait 
      * </pre>
      */
     public static final int TRAIT_VALUE = 9;

@@ -662,7 +662,7 @@ public final class Diff {
        * <code>SOURCE_PHP_ERROR = 400;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that had a parse error 
+       ** The file represents a PHP source file that had a parse error 
        * </pre>
        */
       SOURCE_PHP_ERROR(35, 400),
@@ -670,7 +670,7 @@ public final class Diff {
        * <code>SOURCE_PHP5 = 401;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES1 
+       ** The file represents a PHP source file that parsed without error as ES1 
        * </pre>
        */
       SOURCE_PHP5(36, 401),
@@ -678,7 +678,7 @@ public final class Diff {
        * <code>SOURCE_PHP5_3 = 402;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES2 
+       ** The file represents a PHP source file that parsed without error as ES2 
        * </pre>
        */
       SOURCE_PHP5_3(37, 402),
@@ -686,7 +686,7 @@ public final class Diff {
        * <code>SOURCE_PHP5_4 = 403;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES3 
+       ** The file represents a PHP source file that parsed without error as ES3 
        * </pre>
        */
       SOURCE_PHP5_4(38, 403),
@@ -694,7 +694,7 @@ public final class Diff {
        * <code>SOURCE_PHP5_5 = 404;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES5 
+       ** The file represents a PHP source file that parsed without error as ES5 
        * </pre>
        */
       SOURCE_PHP5_5(39, 404),
@@ -702,7 +702,7 @@ public final class Diff {
        * <code>SOURCE_PHP5_6 = 405;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES6 
+       ** The file represents a PHP source file that parsed without error as ES6 
        * </pre>
        */
       SOURCE_PHP5_6(40, 405),
@@ -710,7 +710,7 @@ public final class Diff {
        * <code>SOURCE_PHP7_0 = 406;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES7 
+       ** The file represents a PHP source file that parsed without error as ES7 
        * </pre>
        */
       SOURCE_PHP7_0(41, 406),
@@ -718,7 +718,7 @@ public final class Diff {
        * <code>SOURCE_PHP7_1 = 407;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES8 
+       ** The file represents a PHP source file that parsed without error as ES8 
        * </pre>
        */
       SOURCE_PHP7_1(42, 407),
@@ -1112,7 +1112,7 @@ public final class Diff {
        * <code>SOURCE_PHP_ERROR = 400;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that had a parse error 
+       ** The file represents a PHP source file that had a parse error 
        * </pre>
        */
       public static final int SOURCE_PHP_ERROR_VALUE = 400;
@@ -1120,7 +1120,7 @@ public final class Diff {
        * <code>SOURCE_PHP5 = 401;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES1 
+       ** The file represents a PHP source file that parsed without error as ES1 
        * </pre>
        */
       public static final int SOURCE_PHP5_VALUE = 401;
@@ -1128,7 +1128,7 @@ public final class Diff {
        * <code>SOURCE_PHP5_3 = 402;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES2 
+       ** The file represents a PHP source file that parsed without error as ES2 
        * </pre>
        */
       public static final int SOURCE_PHP5_3_VALUE = 402;
@@ -1136,7 +1136,7 @@ public final class Diff {
        * <code>SOURCE_PHP5_4 = 403;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES3 
+       ** The file represents a PHP source file that parsed without error as ES3 
        * </pre>
        */
       public static final int SOURCE_PHP5_4_VALUE = 403;
@@ -1144,7 +1144,7 @@ public final class Diff {
        * <code>SOURCE_PHP5_5 = 404;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES5 
+       ** The file represents a PHP source file that parsed without error as ES5 
        * </pre>
        */
       public static final int SOURCE_PHP5_5_VALUE = 404;
@@ -1152,7 +1152,7 @@ public final class Diff {
        * <code>SOURCE_PHP5_6 = 405;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES6 
+       ** The file represents a PHP source file that parsed without error as ES6 
        * </pre>
        */
       public static final int SOURCE_PHP5_6_VALUE = 405;
@@ -1160,7 +1160,7 @@ public final class Diff {
        * <code>SOURCE_PHP7_0 = 406;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES7 
+       ** The file represents a PHP source file that parsed without error as ES7 
        * </pre>
        */
       public static final int SOURCE_PHP7_0_VALUE = 406;
@@ -1168,7 +1168,7 @@ public final class Diff {
        * <code>SOURCE_PHP7_1 = 407;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES8 
+       ** The file represents a PHP source file that parsed without error as ES8 
        * </pre>
        */
       public static final int SOURCE_PHP7_1_VALUE = 407;
