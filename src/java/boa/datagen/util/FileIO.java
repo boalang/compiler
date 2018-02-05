@@ -161,16 +161,6 @@ public class FileIO {
 		File dir = new File(outPath), file = new File(dir, name);
 		if (!file.exists()) {
 			URL url = new URL(link);
-			HttpURLConnection huc =  ( HttpURLConnection )  url.openConnection (); 
-			huc.setRequestMethod ("GET"); 
-			huc.connect () ; 
-			int code = huc.getResponseCode() ;
-			if (code == 404){
-//				System.out.println("url test returned 404");
-				return null;
-	//		}else {
-//				System.out.println("url test returned " + code);
-			}
 			ReadableByteChannel rbc = Channels.newChannel(url.openStream());
 			if (!dir.exists())
 				dir.mkdirs();
