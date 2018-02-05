@@ -122,9 +122,10 @@ public class PomFile {
 				link += "/" + name;
 				try {
 					String p = FileIO.getFile(outPath, name, link);
-					if (p != null)
+					if (p != null) {
 						paths.add(p);
-					break;
+						break;
+					}
 				} catch (IOException ex) {
 				}
 			}
