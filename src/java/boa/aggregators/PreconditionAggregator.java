@@ -92,8 +92,8 @@ public class PreconditionAggregator extends Aggregator {
 	 * Infers preconditions for both projects and method calls
 	 */
 	private void doInference() {
-		precondMethods = removeEquality(infer(precondMethods));
-		precondProjects = removeEquality(infer(precondProjects));
+		precondMethods = removeEquality(mergeConditionsWithImplication(infer(precondMethods)));
+		precondProjects = removeEquality(mergeConditionsWithImplication(infer(precondProjects)));
 	}
 
 	/**
@@ -133,9 +133,6 @@ public class PreconditionAggregator extends Aggregator {
 							else
 								infPreconditions.get(nsineqPrecond).addAll(infPreconditions.get(eqPrecond));
 
-							// conditions with implications
-							if (infPreconditions.get(sineqPrecond).size() <= infPreconditions.get(nsineqPrecond).size())
-								infPreconditions.get(sineqPrecond).clear();
 						}
 					}
 				}
@@ -143,6 +140,34 @@ public class PreconditionAggregator extends Aggregator {
 		}
 
 		return infPreconditions;
+	}
+
+	/**
+	 * Merges preconditions with implications
+	 *
+	 * @param precondMP inferred Preconditions
+	 * @return map of precondition with precondition with implication merged
+	 */
+
+	private Map<Expression, Set<String>> mergeConditionsWithImplication(final Map<Expression, Set<String>> precondMP) {
+		final Map<Expression, Set<String>> mergedPreconditions = new HashMap<Expression, Set<String>>(precondMP);
+		final Set<Expression> preconds = new HashSet<Expression>(mergedPreconditions.keySet());
+
+		for (final Expression strongPrecond : preconds) {
+			if (strongPrecond.getKind() == ExpressionKind.EQ ||
+					strongPrecond.getKind() == ExpressionKind.LT ||
+					strongPrecond.getKind() == ExpressionKind.GT) {
+				for (final Expression weakPrecond : preconds) {
+					if (mergedPreconditions.get(weakPrecond).size() >= mergedPreconditions.get(strongPrecond).size()) {
+						mergedPreconditions.get(weakPrecond).addAll(mergedPreconditions.get(strongPrecond));
+						if (strongPrecond.getKind() != ExpressionKind.EQ) //Equalities are removed in removeEquality
+							mergedPreconditions.get(strongPrecond).clear();
+					}
+				}
+			}
+		}
+
+		return  mergedPreconditions;
 	}
 
 	/**
