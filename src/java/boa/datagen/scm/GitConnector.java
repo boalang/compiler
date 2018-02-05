@@ -69,8 +69,7 @@ public class GitConnector extends AbstractConnector {
 		repository.close();
 	}
 	
-	public Map<String, Integer> countChangedFiles() {
-		Map<String, Integer> counts = new HashMap<String, Integer>();
+	public void countChangedFiles(List<String> commits, Map<String, Integer> counts) {
 		RevWalk temprevwalk = new RevWalk(repository);
 		try {
 			revwalk.reset();
@@ -82,6 +81,7 @@ public class GitConnector extends AbstractConnector {
 			for (final RevCommit rc: revwalk) {
 				final GitCommit gc = new GitCommit(this, repository, temprevwalk);
 				System.out.println(rc.getName());
+				commits.add(rc.getName());
 				int count = gc.countChangedFiles(rc);
 				counts.put(rc.getName(), count);
 			}
@@ -92,7 +92,6 @@ public class GitConnector extends AbstractConnector {
 			temprevwalk.dispose();
 			temprevwalk.close();
 		}
-		return counts;
 	}
 
 	@Override
