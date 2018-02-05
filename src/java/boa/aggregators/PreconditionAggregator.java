@@ -111,28 +111,27 @@ public class PreconditionAggregator extends Aggregator {
 					if (sineqPrecond.getKind() == ExpressionKind.LT || sineqPrecond.getKind() == ExpressionKind.GT) {
 						if (eqPrecond.getExpressions(0).equals(sineqPrecond.getExpressions(0)) &&
 									eqPrecond.getExpressions(1).equals(sineqPrecond.getExpressions(1))) {
-                            final Expression.Builder builder = Expression.newBuilder(sineqPrecond);
+							final Expression.Builder builder = Expression.newBuilder(sineqPrecond);
 
 							if (sineqPrecond.getKind() == ExpressionKind.GT)
-                                builder.setKind(ExpressionKind.GTEQ);
+								builder.setKind(ExpressionKind.GTEQ);
 							else
-                                builder.setKind(ExpressionKind.LTEQ);
+								builder.setKind(ExpressionKind.LTEQ);
 
 							final Expression nsineqPrecond = builder.build();
 
-							if (!containsExp(preconds, nsineqPrecond))
+							if (!preconds.contains(nsineqPrecond))
 								infPreconditions.put(nsineqPrecond, new HashSet<String>());
 
-							if (infPreconditions.get(eqPrecond).size() == infPreconditions.get(sineqPrecond).size())
-								infPreconditions.put(nsineqPrecond, union(infPreconditions.get(nsineqPrecond),
-																		union(infPreconditions.get(eqPrecond),
-																			infPreconditions.get(sineqPrecond))));
+							if (infPreconditions.get(eqPrecond).size() == infPreconditions.get(sineqPrecond).size()) {
+								Set<String> tempSet = new HashSet<String>(infPreconditions.get(nsineqPrecond));
+								tempSet.addAll(infPreconditions.get(eqPrecond));
+								infPreconditions.get(nsineqPrecond).addAll(tempSet);
+							}
 							else if (infPreconditions.get(eqPrecond).size() > infPreconditions.get(sineqPrecond).size())
-								infPreconditions.put(nsineqPrecond, union(infPreconditions.get(nsineqPrecond),
-																			infPreconditions.get(sineqPrecond)));
+								infPreconditions.get(nsineqPrecond).addAll(infPreconditions.get(sineqPrecond));
 							else
-								infPreconditions.put(nsineqPrecond, union(infPreconditions.get(nsineqPrecond),
-																			infPreconditions.get(eqPrecond)));
+								infPreconditions.get(nsineqPrecond).addAll(infPreconditions.get(eqPrecond));
 
 							// conditions with implications
 							if (infPreconditions.get(sineqPrecond).size() <= infPreconditions.get(nsineqPrecond).size())
@@ -301,33 +300,4 @@ public class PreconditionAggregator extends Aggregator {
 		}
 	}
 
-	/**
-	 * Checks the presence of a particular ExpressionKind in a set.
-	 *
-	 * @param exprs set of expressions
-	 * @param expr Expressionto be searched
-	 * @return true if Expressionkind is present in the set
-	 */
-	private boolean containsExp(final Set<Expression> exprs, final Expression expr) {
-		for (final Expression e : exprs) {
-			if (expr.equals(e))
-				return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Performs union operation on two given sets.
-	 *
-	 * @param s1
-	 * @param s2
-	 * @param <T>
-	 * @return the union of two sets
-	 */
-	private <T> Set<T> union(final Set<T> s1, final Set<T> s2) {
-		final Set<T> s = new HashSet<T>(s1);
-		s.addAll(s2);
-		return s;
-	}
 }

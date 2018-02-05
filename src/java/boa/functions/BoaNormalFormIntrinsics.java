@@ -144,7 +144,7 @@ public class BoaNormalFormIntrinsics {
 					if (e.equals(arguments[i]))
 						return createVariable("arg$" + Integer.toString(i));
 				}
-                /*
+				/*
 				for (int i = 0; i < arguments.length; i++) {
 					final Map<Integer, List<Object[]>> componentMap = seperate(arguments[i], true, true);
 					final List<Object[]> variableList = new ArrayList<Object[]>();
@@ -170,7 +170,7 @@ public class BoaNormalFormIntrinsics {
 						return combineLeft(variableList);
 
 				}
-                */
+				*/
 				return e;
 
 			// TODO: Handle as per need
