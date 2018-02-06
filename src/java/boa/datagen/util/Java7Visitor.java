@@ -96,12 +96,10 @@ public class Java7Visitor extends ASTVisitor {
 			b.setName("");
 		} else {
 			b.setName(pkg.getName().getFullyQualifiedName());
-			try {
-				for (Object a : pkg.annotations()) {
-					((Annotation)a).accept(this);
-					b.addModifiers(modifiers.pop());
-				}
-			} catch (UnsupportedOperationException e) {}
+			for (Object a : pkg.annotations()) {
+				((Annotation)a).accept(this);
+				b.addModifiers(modifiers.pop());
+			}
 			Integer index = (Integer) pkg.getProperty(Java7Visitor.PROPERTY_INDEX);
 			if (index != null) {
 				b.setKey(index);
@@ -117,10 +115,8 @@ public class Java7Visitor extends ASTVisitor {
 		for (Object i : node.imports()) {
 			ImportDeclaration id = (ImportDeclaration)i;
 			String imp = "";
-			try {
-				if (id.isStatic())
-					imp += "static ";
-			} catch (UnsupportedOperationException e) {}
+			if (id.isStatic())
+				imp += "static ";
 			imp += id.getName().getFullyQualifiedName();
 			if (id.isOnDemand())
 				imp += ".*";
@@ -227,84 +223,76 @@ public class Java7Visitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.TypeKind.INTERFACE);
 		else
 			b.setKind(boa.types.Ast.TypeKind.CLASS);
-		try {
-			for (Object m : node.modifiers()) {
-				if (((IExtendedModifier)m).isAnnotation())
-					((Annotation)m).accept(this);
-				else
-					((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-				b.addModifiers(modifiers.pop());
-			}
-		} catch (UnsupportedOperationException e) {}
-		try {
-			for (Object t : node.typeParameters()) {
-				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-				String name = ((TypeParameter)t).getName().getFullyQualifiedName();
-				String bounds = "";
-				for (Object o : ((TypeParameter)t).typeBounds()) {
-					if (bounds.length() > 0)
-						bounds += " & ";
-					bounds += typeName((org.eclipse.jdt.core.dom.Type)o);
-				}
+		for (Object m : node.modifiers()) {
+			if (((IExtendedModifier)m).isAnnotation())
+				((Annotation)m).accept(this);
+			else
+				((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
+			b.addModifiers(modifiers.pop());
+		}
+		for (Object t : node.typeParameters()) {
+			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+			String name = ((TypeParameter)t).getName().getFullyQualifiedName();
+			String bounds = "";
+			for (Object o : ((TypeParameter)t).typeBounds()) {
 				if (bounds.length() > 0)
-					name = name + " extends " + bounds;
-				tb.setName(name);
-				tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-				setTypeBinding(tb, ((TypeParameter) t).getName());
-				Integer index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
-				if (index != null) {
-					tb.setKey(index);
-					ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
-					if (status != null) {
-						tb.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
-						if (mappedNode != null)
-							tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
-				}
-				b.addGenericParameters(tb.build());
+					bounds += " & ";
+				bounds += typeName((org.eclipse.jdt.core.dom.Type)o);
 			}
-		} catch (UnsupportedOperationException e) {}
-		try {
-			if (node.getSuperclassType() != null) {
-				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-				tb.setName(typeName(node.getSuperclassType()));
-				tb.setKind(boa.types.Ast.TypeKind.CLASS);
-				setTypeBinding(tb, node.getSuperclassType());
-				Integer index = (Integer) node.getSuperclassType().getProperty(Java7Visitor.PROPERTY_INDEX);
-				if (index != null) {
-					tb.setKey(index);
-					ChangeKind status = (ChangeKind) node.getSuperclassType().getProperty(TreedConstants.PROPERTY_STATUS);
-					if (status != null) {
-						tb.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) node.getSuperclassType().getProperty(TreedConstants.PROPERTY_MAP);
-						if (mappedNode != null)
-							tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
+			if (bounds.length() > 0)
+				name = name + " extends " + bounds;
+			tb.setName(name);
+			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
+			setTypeBinding(tb, ((TypeParameter) t).getName());
+			Integer index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 				}
-				b.addParents(tb.build());
 			}
-		} catch (UnsupportedOperationException e) {}
-		try {
-			for (Object t : node.superInterfaceTypes()) {
-				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-				tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
-				tb.setKind(boa.types.Ast.TypeKind.INTERFACE);
-				setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
-				Integer index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
-				if (index != null) {
-					tb.setKey(index);
-					ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
-					if (status != null) {
-						tb.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
-						if (mappedNode != null)
-							tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
+			b.addGenericParameters(tb.build());
+		}
+		if (node.getSuperclassType() != null) {
+			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+			tb.setName(typeName(node.getSuperclassType()));
+			tb.setKind(boa.types.Ast.TypeKind.CLASS);
+			setTypeBinding(tb, node.getSuperclassType());
+			Integer index = (Integer) node.getSuperclassType().getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) node.getSuperclassType().getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) node.getSuperclassType().getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 				}
-				b.addParents(tb.build());
 			}
-		} catch (UnsupportedOperationException e) {}
+			b.addParents(tb.build());
+		}
+		for (Object t : node.superInterfaceTypes()) {
+			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
+			tb.setKind(boa.types.Ast.TypeKind.INTERFACE);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			Integer index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
+			b.addParents(tb.build());
+		}
 		for (Object d : node.bodyDeclarations()) {
 			if (d instanceof FieldDeclaration) {
 				fields.push(new ArrayList<boa.types.Ast.Variable>());
@@ -460,15 +448,13 @@ public class Java7Visitor extends ASTVisitor {
 					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 			}
 		}
-		try {
-			for (Object m : node.modifiers()) {
-				if (((IExtendedModifier)m).isAnnotation())
-					((Annotation)m).accept(this);
-				else
-					((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-				b.addModifiers(modifiers.pop());
-			}
-		} catch (UnsupportedOperationException e) {}
+		for (Object m : node.modifiers()) {
+			if (((IExtendedModifier)m).isAnnotation())
+				((Annotation)m).accept(this);
+			else
+				((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
+			b.addModifiers(modifiers.pop());
+		}
 		for (Object d : node.bodyDeclarations()) {
 			if (d instanceof FieldDeclaration) {
 				fields.push(new ArrayList<boa.types.Ast.Variable>());
@@ -668,71 +654,65 @@ public class Java7Visitor extends ASTVisitor {
 			b.setName("<init>");
 		else
 			b.setName(node.getName().getFullyQualifiedName());
-		try {
-			for (Object m : node.modifiers()) {
-				if (((IExtendedModifier)m).isAnnotation())
-					((Annotation)m).accept(this);
-				else
-					((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-				b.addModifiers(modifiers.pop());
-			}
-		} catch (UnsupportedOperationException e) {}
+		for (Object m : node.modifiers()) {
+			if (((IExtendedModifier)m).isAnnotation())
+				((Annotation)m).accept(this);
+			else
+				((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
+			b.addModifiers(modifiers.pop());
+		}
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-		try {
-			if (node.getReturnType2() != null) {
-				String name = typeName(node.getReturnType2());
-				for (int i = 0; i < node.getExtraDimensions(); i++)
-					name += "[]";
-				tb.setName(name);
-				tb.setKind(boa.types.Ast.TypeKind.OTHER);
-				setTypeBinding(tb, node.getReturnType2());
-				index = (Integer) node.getReturnType2().getProperty(Java7Visitor.PROPERTY_INDEX);
-				if (index != null) {
-					tb.setKey(index);
-					ChangeKind status = (ChangeKind) node.getReturnType2().getProperty(TreedConstants.PROPERTY_STATUS);
-					if (status != null) {
-						tb.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) node.getReturnType2().getProperty(TreedConstants.PROPERTY_MAP);
-						if (mappedNode != null)
-							tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
+		if (node.getReturnType2() != null) {
+			String name = typeName(node.getReturnType2());
+			for (int i = 0; i < node.getExtraDimensions(); i++)
+				name += "[]";
+			tb.setName(name);
+			tb.setKind(boa.types.Ast.TypeKind.OTHER);
+			setTypeBinding(tb, node.getReturnType2());
+			index = (Integer) node.getReturnType2().getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) node.getReturnType2().getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) node.getReturnType2().getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 				}
-				b.setReturnType(tb.build());
-			} else {
-				tb.setName("void");
-				tb.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
-				b.setReturnType(tb.build());
 			}
-		} catch (UnsupportedOperationException e) {}
-		try {
-			for (Object t : node.typeParameters()) {
-				boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
-				String name = ((TypeParameter)t).getName().getFullyQualifiedName();
-				String bounds = "";
-				for (Object o : ((TypeParameter)t).typeBounds()) {
-					if (bounds.length() > 0)
-						bounds += " & ";
-					bounds += typeName((org.eclipse.jdt.core.dom.Type)o);
-				}
+			b.setReturnType(tb.build());
+		} else {
+			tb.setName("void");
+			tb.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
+			b.setReturnType(tb.build());
+		}
+		for (Object t : node.typeParameters()) {
+			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
+			String name = ((TypeParameter)t).getName().getFullyQualifiedName();
+			String bounds = "";
+			for (Object o : ((TypeParameter)t).typeBounds()) {
 				if (bounds.length() > 0)
-					name = name + " extends " + bounds;
-				tp.setName(name);
-				tp.setKind(boa.types.Ast.TypeKind.GENERIC);
-				setTypeBinding(tp, ((TypeParameter)t).getName());
-				index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
-				if (index != null) {
-					tp.setKey(index);
-					ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
-					if (status != null) {
-						tp.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
-						if (mappedNode != null)
-							tp.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
-				}
-				b.addGenericParameters(tp.build());
+					bounds += " & ";
+				bounds += typeName((org.eclipse.jdt.core.dom.Type)o);
 			}
-		} catch (UnsupportedOperationException e) {}
+			if (bounds.length() > 0)
+				name = name + " extends " + bounds;
+			tp.setName(name);
+			tp.setKind(boa.types.Ast.TypeKind.GENERIC);
+			setTypeBinding(tp, ((TypeParameter)t).getName());
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tp.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tp.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tp.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
+			b.addGenericParameters(tp.build());
+		}
 		for (Object o : node.parameters()) {
 			SingleVariableDeclaration ex = (SingleVariableDeclaration)o;
 			Variable.Builder vb = Variable.newBuilder();
@@ -748,23 +728,19 @@ public class Java7Visitor extends ASTVisitor {
 				}
 			}
 			vb.setName(ex.getName().getFullyQualifiedName());
-			try {
-				for (Object m : ex.modifiers()) {
-					if (((IExtendedModifier)m).isAnnotation())
-						((Annotation)m).accept(this);
-					else
-						((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-					vb.addModifiers(modifiers.pop());
-				}
-			} catch (UnsupportedOperationException e) {}
+			for (Object m : ex.modifiers()) {
+				if (((IExtendedModifier)m).isAnnotation())
+					((Annotation)m).accept(this);
+				else
+					((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
+				vb.addModifiers(modifiers.pop());
+			}
 			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
 			String name = typeName(ex.getType());
 			for (int i = 0; i < ex.getExtraDimensions(); i++)
 				name += "[]";
-			try {
-				if (ex.isVarargs())
-					name += "...";
-			} catch (UnsupportedOperationException e) {}
+			if (ex.isVarargs())
+				name += "...";
 			tp.setName(name);
 			tp.setKind(boa.types.Ast.TypeKind.OTHER);
 			setTypeBinding(tp, ex.getType());
@@ -786,11 +762,11 @@ public class Java7Visitor extends ASTVisitor {
 			}
 			b.addArguments(vb.build());
 		}
-		for (Object o : node.thrownExceptions()) {
+		for (Object o : node.thrownExceptionTypes()) {
 			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
-			tp.setName(typeName((org.eclipse.jdt.core.dom.Name) o));
+			tp.setName(typeName((org.eclipse.jdt.core.dom.Type) o));
 			tp.setKind(boa.types.Ast.TypeKind.CLASS);
-			setTypeBinding(tp, (org.eclipse.jdt.core.dom.Name) o);
+			setTypeBinding(tp, (org.eclipse.jdt.core.dom.Type) o);
 			index = (Integer) ((ASTNode) o).getProperty(Java7Visitor.PROPERTY_INDEX);
 			if (index != null) {
 				tp.setKey(index);
@@ -831,15 +807,13 @@ public class Java7Visitor extends ASTVisitor {
 			}
 		}
 		b.setName(node.getName().getFullyQualifiedName());
-		try {
-			for (Object m : node.modifiers()) {
-				if (((IExtendedModifier)m).isAnnotation())
-					((Annotation)m).accept(this);
-				else
-					((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-				b.addModifiers(modifiers.pop());
-			}
-		} catch (UnsupportedOperationException e) {}
+		for (Object m : node.modifiers()) {
+			if (((IExtendedModifier)m).isAnnotation())
+				((Annotation)m).accept(this);
+			else
+				((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
+			b.addModifiers(modifiers.pop());
+		}
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(typeName(node.getType()));
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
@@ -886,15 +860,13 @@ public class Java7Visitor extends ASTVisitor {
 				}
 			}
 			b.setName(f.getName().getFullyQualifiedName());
-			try {
-				for (Object m : node.modifiers()) {
-					if (((IExtendedModifier)m).isAnnotation())
-						((Annotation)m).accept(this);
-					else
-						((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-					b.addModifiers(modifiers.pop());
-				}
-			} catch (UnsupportedOperationException e) {}
+			for (Object m : node.modifiers()) {
+				if (((IExtendedModifier)m).isAnnotation())
+					((Annotation)m).accept(this);
+				else
+					((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
+				b.addModifiers(modifiers.pop());
+			}
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			String name = typeName(node.getType());
 			for (int i = 0; i < f.getExtraDimensions(); i++)
@@ -1151,15 +1123,13 @@ public class Java7Visitor extends ASTVisitor {
 			}
 		}
 		vb.setName(ex.getName().getFullyQualifiedName());
-		try {
-			for (Object m : ex.modifiers()) {
-				if (((IExtendedModifier)m).isAnnotation())
-					((Annotation)m).accept(this);
-				else
-					((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-				vb.addModifiers(modifiers.pop());
-			}
-		} catch (UnsupportedOperationException e) {}
+		for (Object m : ex.modifiers()) {
+			if (((IExtendedModifier)m).isAnnotation())
+				((Annotation)m).accept(this);
+			else
+				((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
+			vb.addModifiers(modifiers.pop());
+		}
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		String name = typeName(ex.getType());
 		for (int i = 0; i < ex.getExtraDimensions(); i++)
@@ -1222,26 +1192,24 @@ public class Java7Visitor extends ASTVisitor {
 			((org.eclipse.jdt.core.dom.Expression)a).accept(this);
 			eb.addMethodArgs(expressions.pop());
 		}
-		try {
-			for (Object t : node.typeArguments()) {
-				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-				tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
-				tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-				setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
-				index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
-				if (index != null) {
-					tb.setKey(index);
-					ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
-					if (status != null) {
-						tb.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
-						if (mappedNode != null)
-							tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
+		for (Object t : node.typeArguments()) {
+			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
+			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 				}
-				eb.addGenericParameters(tb.build());
 			}
-		} catch (UnsupportedOperationException e) {}
+			eb.addGenericParameters(tb.build());
+		}
 		b.setExpression(eb.build());
 		list.add(b.build());
 		return false;
@@ -1360,15 +1328,13 @@ public class Java7Visitor extends ASTVisitor {
 			}
 		}
 		vb.setName(ex.getName().getFullyQualifiedName());
-		try {
-			for (Object m : ex.modifiers()) {
-				if (((IExtendedModifier)m).isAnnotation())
-					((Annotation)m).accept(this);
-				else
-					((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-				vb.addModifiers(modifiers.pop());
-			}
-		} catch (UnsupportedOperationException e) {}
+		for (Object m : ex.modifiers()) {
+			if (((IExtendedModifier)m).isAnnotation())
+				((Annotation)m).accept(this);
+			else
+				((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
+			vb.addModifiers(modifiers.pop());
+		}
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		String name = typeName(ex.getType());
 		for (int i = 0; i < ex.getExtraDimensions(); i++)
@@ -1509,15 +1475,13 @@ public class Java7Visitor extends ASTVisitor {
 			}
 		}
 		b.setName("<clinit>");
-		try {
-			for (Object m : node.modifiers()) {
-				if (((IExtendedModifier)m).isAnnotation())
-					((Annotation)m).accept(this);
-				else
-					((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-				b.addModifiers(modifiers.pop());
-			}
-		} catch (UnsupportedOperationException e) {}
+		for (Object m : node.modifiers()) {
+			if (((IExtendedModifier)m).isAnnotation())
+				((Annotation)m).accept(this);
+			else
+				((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
+			b.addModifiers(modifiers.pop());
+		}
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName("void");
 		tb.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
@@ -1628,26 +1592,24 @@ public class Java7Visitor extends ASTVisitor {
 			((org.eclipse.jdt.core.dom.Expression)a).accept(this);
 			eb.addMethodArgs(expressions.pop());
 		}
-		try {
-			for (Object t : node.typeArguments()) {
-				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-				tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
-				tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-				setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
-				index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
-				if (index != null) {
-					tb.setKey(index);
-					ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
-					if (status != null) {
-						tb.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
-						if (mappedNode != null)
-							tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
+		for (Object t : node.typeArguments()) {
+			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
+			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 				}
-				eb.addGenericParameters(tb.build());
 			}
-		} catch (UnsupportedOperationException e) {}
+			eb.addGenericParameters(tb.build());
+		}
 		b.setExpression(eb.build());
 		list.add(b.build());
 		return false;
@@ -1780,13 +1742,11 @@ public class Java7Visitor extends ASTVisitor {
 			visitFinally(node.getFinally());
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
-		try {
-			if (node.resources() != null)
-				for (Object v : node.resources()) {
-					((VariableDeclarationExpression)v).accept(this);
-					b.addInitializations(expressions.pop());
-				}
-		} catch (UnsupportedOperationException e) {}
+		if (node.resources() != null)
+			for (Object v : node.resources()) {
+				((VariableDeclarationExpression)v).accept(this);
+				b.addInitializations(expressions.pop());
+			}
 		list.add(b.build());
 		return false;
 	}
@@ -1871,15 +1831,13 @@ public class Java7Visitor extends ASTVisitor {
 				}
 			}
 			vb.setName(f.getName().getFullyQualifiedName());
-			try {
-				for (Object m : node.modifiers()) {
-					if (((IExtendedModifier)m).isAnnotation())
-						((Annotation)m).accept(this);
-					else
-						((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-					vb.addModifiers(modifiers.pop());
-				}
-			} catch (UnsupportedOperationException e) {}
+			for (Object m : node.modifiers()) {
+				if (((IExtendedModifier)m).isAnnotation())
+					((Annotation)m).accept(this);
+				else
+					((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
+				vb.addModifiers(modifiers.pop());
+			}
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			String name = typeName(node.getType());
 			for (int i = 0; i < f.getExtraDimensions(); i++)
@@ -2185,44 +2143,40 @@ public class Java7Visitor extends ASTVisitor {
 			}
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEW);
-		try {
-			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			tb.setName(typeName(node.getType()));
-			tb.setKind(boa.types.Ast.TypeKind.CLASS);
-			setTypeBinding(tb, node.getType());
-			index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+		tb.setName(typeName(node.getType()));
+		tb.setKind(boa.types.Ast.TypeKind.CLASS);
+		setTypeBinding(tb, node.getType());
+		index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			tb.setKey(index);
+			ChangeKind status = (ChangeKind) node.getType().getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				tb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getType().getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		b.setNewType(tb.build());
+		for (Object t : node.typeArguments()) {
+			boa.types.Ast.Type.Builder gtb = boa.types.Ast.Type.newBuilder();
+			gtb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
+			gtb.setKind(boa.types.Ast.TypeKind.GENERIC);
+			setTypeBinding(gtb, (org.eclipse.jdt.core.dom.Type) t);
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
 			if (index != null) {
-				tb.setKey(index);
-				ChangeKind status = (ChangeKind) node.getType().getProperty(TreedConstants.PROPERTY_STATUS);
+				gtb.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
 				if (status != null) {
-					tb.setChangeKind(status);
-					ASTNode mappedNode = (ASTNode) node.getType().getProperty(TreedConstants.PROPERTY_MAP);
+					gtb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
 					if (mappedNode != null)
-						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+						gtb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 				}
 			}
-			b.setNewType(tb.build());
-		} catch (UnsupportedOperationException e) {}
-		try {
-			for (Object t : node.typeArguments()) {
-				boa.types.Ast.Type.Builder gtb = boa.types.Ast.Type.newBuilder();
-				gtb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
-				gtb.setKind(boa.types.Ast.TypeKind.GENERIC);
-				setTypeBinding(gtb, (org.eclipse.jdt.core.dom.Type) t);
-				index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
-				if (index != null) {
-					gtb.setKey(index);
-					ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
-					if (status != null) {
-						gtb.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
-						if (mappedNode != null)
-							gtb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
-				}
-				b.addGenericParameters(gtb.build());
-			}
-		} catch (UnsupportedOperationException e) {}
+			b.addGenericParameters(gtb.build());
+		}
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
 			b.addExpressions(expressions.pop());
@@ -2486,26 +2440,24 @@ public class Java7Visitor extends ASTVisitor {
 			((org.eclipse.jdt.core.dom.Expression)a).accept(this);
 			b.addMethodArgs(expressions.pop());
 		}
-		try {
-			for (Object t : node.typeArguments()) {
-				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-				tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
-				tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-				setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
-				index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
-				if (index != null) {
-					tb.setKey(index);
-					ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
-					if (status != null) {
-						tb.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
-						if (mappedNode != null)
-							tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
+		for (Object t : node.typeArguments()) {
+			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
+			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 				}
-				b.addGenericParameters(tb.build());
 			}
-		} catch (UnsupportedOperationException e) {}
+			b.addGenericParameters(tb.build());
+		}
 		expressions.push(b.build());
 		return false;
 	}
@@ -2711,26 +2663,24 @@ public class Java7Visitor extends ASTVisitor {
 			((org.eclipse.jdt.core.dom.Expression)a).accept(this);
 			b.addMethodArgs(expressions.pop());
 		}
-		try {
-			for (Object t : node.typeArguments()) {
-				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-				tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
-				tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-				setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
-				index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
-				if (index != null) {
-					tb.setKey(index);
-					ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
-					if (status != null) {
-						tb.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
-						if (mappedNode != null)
-							tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
+		for (Object t : node.typeArguments()) {
+			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
+			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 				}
-				b.addGenericParameters(tb.build());
 			}
-		} catch (UnsupportedOperationException e) {}
+			b.addGenericParameters(tb.build());
+		}
 		expressions.push(b.build());
 		return false;
 	}
@@ -2814,15 +2764,13 @@ public class Java7Visitor extends ASTVisitor {
 				}
 			}
 			b.setName(f.getName().getFullyQualifiedName());
-			try {
-				for (Object m : node.modifiers()) {
-					if (((IExtendedModifier)m).isAnnotation())
-						((Annotation)m).accept(this);
-					else
-						((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-					b.addModifiers(modifiers.pop());
-				}
-			} catch (UnsupportedOperationException e) {}
+			for (Object m : node.modifiers()) {
+				if (((IExtendedModifier)m).isAnnotation())
+					((Annotation)m).accept(this);
+				else
+					((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
+				b.addModifiers(modifiers.pop());
+			}
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			String name = typeName(node.getType());
 			for (int i = 0; i < f.getExtraDimensions(); i++)
@@ -2854,10 +2802,6 @@ public class Java7Visitor extends ASTVisitor {
 
 	//////////////////////////////////////////////////////////////
 	// Utility methods
-
-	protected String typeName(final org.eclipse.jdt.core.dom.Name name) {
-		return name.getFullyQualifiedName();
-	}
 
 	protected String typeName(final org.eclipse.jdt.core.dom.Type t) {
 		if (t.isArrayType())
