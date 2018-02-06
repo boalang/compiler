@@ -6,10 +6,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.CatchClause;
@@ -17,9 +19,12 @@ import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.ContinueStatement;
 import org.eclipse.jdt.core.dom.DoStatement;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
+import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.InfixExpression;
+import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Modifier;
@@ -79,7 +84,6 @@ public class TreedMapper implements TreedConstants {
 		mapTopDown();
 		markChanges();
 		markUnchanges(astM);
-		
 	}
 
 	private void markUnchanges(ASTNode node) {
@@ -520,12 +524,17 @@ public class TreedMapper implements TreedConstants {
 				return node1.getStartPosition() - node2.getStartPosition();
 			}
 		});
+		Set<ASTNode> visitedAncestorsM = new HashSet<ASTNode>(), visitedAncestorsN = new HashSet<ASTNode>();
 		for (ASTNode nodeM : heightsM) {
 			ASTNode nodeN = treeMap.get(nodeM).keySet().iterator().next();
 			ArrayList<ASTNode> ancestorsM = new ArrayList<ASTNode>(), ancestorsN = new ArrayList<ASTNode>();
+			ancestorsM.removeAll(visitedAncestorsM);
+			ancestorsN.removeAll(visitedAncestorsN);
 			getNotYetMappedAncestors(nodeM, ancestorsM);
 			getNotYetMappedAncestors(nodeN, ancestorsN);
 			map(ancestorsM, ancestorsN, MIN_SIM);
+			visitedAncestorsM.addAll(ancestorsM);
+			visitedAncestorsN.addAll(ancestorsN);
 		}
 	}
 
@@ -894,6 +903,66 @@ public class TreedMapper implements TreedConstants {
 	}
 
 	private void mapMoving() {
+		astM.accept(new ASTVisitor() {
+			@Override
+			public boolean visit(AnnotationTypeMemberDeclaration node) {
+				HashMap<ASTNode, Double> maps = treeMap.get(node);
+				if (!maps.isEmpty()) {
+					ASTNode mapped = maps.keySet().iterator().next();
+					mapMoving(node, mapped);
+					return false;
+				}
+				return true;
+			}
+			
+			@Override
+			public boolean visit(EnumConstantDeclaration node) {
+				HashMap<ASTNode, Double> maps = treeMap.get(node);
+				if (!maps.isEmpty()) {
+					ASTNode mapped = maps.keySet().iterator().next();
+					mapMoving(node, mapped);
+					return false;
+				}
+				return true;
+			}
+			
+			@Override
+			public boolean visit(FieldDeclaration node) {
+				HashMap<ASTNode, Double> maps = treeMap.get(node);
+				if (!maps.isEmpty()) {
+					ASTNode mapped = maps.keySet().iterator().next();
+					mapMoving(node, mapped);
+					return false;
+				}
+				return true;
+			}
+			
+			@Override
+			public boolean visit(Initializer node) {
+				HashMap<ASTNode, Double> maps = treeMap.get(node);
+				if (!maps.isEmpty()) {
+					ASTNode mapped = maps.keySet().iterator().next();
+					mapMoving(node, mapped);
+					return false;
+				}
+				return true;
+			}
+			
+			@Override
+			public boolean visit(MethodDeclaration node) {
+				HashMap<ASTNode, Double> maps = treeMap.get(node);
+				if (!maps.isEmpty()) {
+					ASTNode mapped = maps.keySet().iterator().next();
+					mapMoving(node, mapped);
+					return false;
+				}
+				return true;
+			}
+		});
+//		mapMoving(astM, astN);
+	}
+
+	private void mapMoving(ASTNode astM, ASTNode astN) {
 		ArrayList<ASTNode> lM = getNotYetMappedDescendantContainers(astM), lN = getNotYetMappedDescendantContainers(astN);
 		ArrayList<ASTNode> heightsM = new ArrayList<ASTNode>(lM), heightsN = new ArrayList<ASTNode>(lN);
 		Collections.sort(heightsM, new Comparator<ASTNode>() {
