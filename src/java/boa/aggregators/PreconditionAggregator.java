@@ -157,15 +157,19 @@ public class PreconditionAggregator extends Aggregator {
 			for (final Expression weakPrecond : preconds) {
 				if (strongPrecond.getKind() == ExpressionKind.EQ &&
 						(weakPrecond.getKind() == ExpressionKind.LTEQ || weakPrecond.getKind() == ExpressionKind.GTEQ)) {
-					if (mergedPreconditions.get(strongPrecond).size() <= mergedPreconditions.get(weakPrecond).size())
-						mergedPreconditions.get(weakPrecond).addAll(mergedPreconditions.get(strongPrecond));
+					if (strongPrecond.getExpressions(0).equals(weakPrecond.getExpressions(0)) &&
+							strongPrecond.getExpressions(1).equals(weakPrecond.getExpressions(1)))
+						if (mergedPreconditions.get(strongPrecond).size() <= mergedPreconditions.get(weakPrecond).size())
+							mergedPreconditions.get(weakPrecond).addAll(mergedPreconditions.get(strongPrecond));
 				}
 				else if (strongPrecond.getKind() == ExpressionKind.LT && weakPrecond.getKind() == ExpressionKind.LTEQ ||
 						strongPrecond.getKind() == ExpressionKind.GT && weakPrecond.getKind() == ExpressionKind.GTEQ) {
-					if (mergedPreconditions.get(strongPrecond).size() <= mergedPreconditions.get(weakPrecond).size()) {
-						mergedPreconditions.get(weakPrecond).addAll(mergedPreconditions.get(strongPrecond));
-						mergedPreconditions.get(strongPrecond).clear();
-					}
+					if (strongPrecond.getExpressions(0).equals(weakPrecond.getExpressions(0)) &&
+							strongPrecond.getExpressions(1).equals(weakPrecond.getExpressions(1)))
+						if (mergedPreconditions.get(strongPrecond).size() <= mergedPreconditions.get(weakPrecond).size()) {
+							mergedPreconditions.get(weakPrecond).addAll(mergedPreconditions.get(strongPrecond));
+							mergedPreconditions.get(strongPrecond).clear();
+						}
 				}
 
 			}
