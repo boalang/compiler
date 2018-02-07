@@ -565,7 +565,19 @@ public class TreedMapper implements TreedConstants {
 			pairsOfAncestor.put(nodeM, pairs1);
 		}
 		ArrayList<ASTNode> nodes = new ArrayList<ASTNode>();
-		while (!pairs.isEmpty()) {
+		Set<ASTNode> matches = new HashSet<ASTNode>();
+		for (int i = 0; i < pairs.size(); i++) {
+			Pair pair = pairs.get(i);
+			ASTNode nodeM = (ASTNode) pair.getObj1(), nodeN = (ASTNode) pair.getObj2();
+			if (matches.contains(nodeM) || matches.contains(nodeN))
+				continue;
+			setMap(nodeM, nodeN, pair.getWeight());
+			nodes.add(nodeM);
+			nodes.add(nodeN);
+			matches.add(nodeM);
+			matches.add(nodeN);
+		}
+		/*while (!pairs.isEmpty()) {
 			Pair pair = pairs.get(0);
 			ASTNode nodeM = (ASTNode) pair.getObj1(), nodeN = (ASTNode) pair.getObj2();
 			setMap(nodeM, nodeN, pair.getWeight());
@@ -575,7 +587,7 @@ public class TreedMapper implements TreedConstants {
 				pairs.remove(p);
 			for (Pair p : pairsOfAncestor.get(nodeN))
 				pairs.remove(p);
-		}
+		}*/
 		return nodes;
 	}
 
@@ -623,15 +635,17 @@ public class TreedMapper implements TreedConstants {
 		if (!childrenM.isEmpty() && !childrenN.isEmpty()) {
 			HashMap<String, Integer> vM = treeVector.get(nodeM), vN = treeVector.get(nodeN);
 			double sim = computeSimilarity(vM, vN);
-			double[] sims = computeVectorSimilarity(childrenM, childrenN);
+			/*double[] sims = computeSimilarity(childrenM, childrenN);
 			for (double s : sims)
 				sim += s;
-			return sim / (sims.length + 1);
+			return sim / (sims.length + 1);*/
+			return sim;
 		}
 		return 0;
 	}
 
-	private double[] computeVectorSimilarity(ArrayList<ASTNode> l1, ArrayList<ASTNode> l2) {
+	@SuppressWarnings("unused")
+	private double[] computeSimilarity(ArrayList<ASTNode> l1, ArrayList<ASTNode> l2) {
 		double[] sims = new double[Math.max(l1.size(), l2.size())];
 		Arrays.fill(sims, 0.0);
 		HashMap<ASTNode, HashSet<Pair>> pairsOfNode = new HashMap<ASTNode, HashSet<Pair>>();
@@ -701,6 +715,7 @@ public class TreedMapper implements TreedConstants {
 		mapTopDown(astM);
 	}
 
+	@SuppressWarnings("deprecation")
 	private void mapTopDown(ASTNode nodeM) {
 		ArrayList<ASTNode> childrenM = tree.get(nodeM);
 		HashMap<ASTNode, Double> maps = treeMap.get(nodeM);
@@ -830,15 +845,6 @@ public class TreedMapper implements TreedConstants {
 					nodesM.remove(iM);
 					nodesN.remove(iN);
 				}
-				/*lcsM.clear(); lcsN.clear();
-				lss(nodesM, nodesN, lcsM, lcsN, MIN_SIM);
-				for (int i = lcsM.size()-1; i >= 0; i--) {
-					int iM = lcsM.get(i), iN = lcsN.get(i);
-					ASTNode nM = nodesM.get(iM), nN = nodesN.get(iN);
-					setMap(nM, nN, 0.99050); // TODO
-					nodesM.remove(iM);
-					nodesN.remove(iN);
-				}*/
 				lcsM.clear(); lcsN.clear();
 				ArrayList<ASTNode> mappedNodes = map(nodesM, nodesN, MIN_SIM);
 				for (int i = 0; i < mappedNodes.size(); i += 2) {
@@ -846,7 +852,7 @@ public class TreedMapper implements TreedConstants {
 					nodesM.remove(mappedNodeM);
 					nodesN.remove(mappedNodeN);
 				}
-				ArrayList<ASTNode> maxsM = new ArrayList<ASTNode>(), maxsN = new ArrayList<ASTNode>();
+				/*ArrayList<ASTNode> maxsM = new ArrayList<ASTNode>(), maxsN = new ArrayList<ASTNode>();
 				int maxhM = maxHeight(nodesM, maxsM), maxhN = maxHeight(nodesN, maxsN);
 				if (maxhM >= maxhN) {
 					for (ASTNode node : maxsM) {
@@ -865,13 +871,14 @@ public class TreedMapper implements TreedConstants {
 					ASTNode mappedNodeM = mappedNodes.get(i), mappedNodeN = mappedNodes.get(i+1);
 					nodesM.remove(mappedNodeM);
 					nodesN.remove(mappedNodeN);
-				}
+				}*/
 			}
 		}
 		for (ASTNode child : childrenM)
 			mapTopDown(child);
 	}
 
+	@SuppressWarnings("unused")
 	private int maxHeight(ArrayList<ASTNode> nodes, ArrayList<ASTNode> maxs) {
 		int max = 0;
 		for (ASTNode node : nodes) {
