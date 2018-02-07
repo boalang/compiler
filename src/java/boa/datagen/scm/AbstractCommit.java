@@ -28,7 +28,6 @@ import org.apache.hadoop.io.SequenceFile.Writer;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.php.internal.core.PHPVersion;
-import org.eclipse.php.internal.core.ast.nodes.ASTParser;
 import org.eclipse.php.internal.core.ast.nodes.Program;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Context;
@@ -502,6 +501,32 @@ public abstract class AbstractCommit {
 			cu.accept(errorCheck);
 
 			if (!errorCheck.hasError || storeOnError) {
+				final ASTRoot.Builder ast = ASTRoot.newBuilder();
+				// final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
+				final Java7Visitor visitor;
+				if (astLevel == AST.JLS8)
+					visitor = new Java8Visitor(content);
+				else
+					visitor = new Java7Visitor(content);
+				try {
+					ast.addNamespaces(visitor.getNamespaces(cu));
+					/*
+					 * for (final Comment c : visitor.getComments())
+					 * comments.addComments(c);
+					 */
+				} catch (final UnsupportedOperationException e) {
+					if (debugparse) {
+						System.err.println("Error visiting: " + path);
+						e.printStackTrace();
+					}
+					return false;
+				} catch (final Exception e) {
+					if (debug)
+						System.err.println("Error visiting: " + path);
+					e.printStackTrace();
+					return false;
+				}
+				
 				ASTRoot.Builder preAst = null;
 				CompilationUnit preCu = null;
 				if (fb.getChange() == ChangeKind.MODIFIED && fb.getPreviousIndicesCount() == 1) {
@@ -533,10 +558,11 @@ public abstract class AbstractCommit {
 							preAst.addNamespaces(preVisitor.getNamespaces(preCu));
 						} catch (Exception e) {
 							preAst = null;
+							preCu = null;
 						}
 					}
 				}
-				final ASTRoot.Builder ast = ASTRoot.newBuilder();
+				
 				Integer index = (Integer) cu.getProperty(Java7Visitor.PROPERTY_INDEX);
 				if (index != null) {
 					ast.setKey(index);
@@ -547,27 +573,7 @@ public abstract class AbstractCommit {
 						ast.setMappedNode((Integer) preCu.getProperty(TreedConstants.PROPERTY_INDEX));
 					}
 				}
-				// final CommentsRoot.Builder comments =
-				// CommentsRoot.newBuilder();
-				final Java7Visitor visitor;
-				if (astLevel == AST.JLS8)
-					visitor = new Java8Visitor(content);
-				else
-					visitor = new Java7Visitor(content);
-				try {
-					ast.addNamespaces(visitor.getNamespaces(cu));
-					/*
-					 * for (final Comment c : visitor.getComments())
-					 * comments.addComments(c);
-					 */
-				} catch (final UnsupportedOperationException e) {
-					return false;
-				} catch (final Exception e) {
-					if (debug)
-						System.err.println("Error visiting: " + path);
-					e.printStackTrace();
-					return false;
-				}
+				
 				long len = astWriter.getLength();
 				try {
 					astWriter.append(new LongWritable(len), new BytesWritable(ast.build().toByteArray()));
@@ -576,7 +582,6 @@ public abstract class AbstractCommit {
 						e.printStackTrace();
 					len = Long.MAX_VALUE;
 				}
-				// fb.setComments(comments);
 				long plen = astWriter.getLength();
 				if (preAst != null && plen > len) {
 					try {
@@ -591,6 +596,7 @@ public abstract class AbstractCommit {
 					fb.setMappedKey(plen);
 				else
 					fb.setMappedKey(-1);
+				// fb.setComments(comments);
 			}
 
 			return !errorCheck.hasError;
