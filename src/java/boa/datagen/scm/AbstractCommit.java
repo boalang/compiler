@@ -21,7 +21,6 @@ package boa.datagen.scm;
 import java.io.*;
 import java.util.*;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile.Writer;
@@ -351,7 +350,7 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted PHP5_3: revision " + id + ": file " + path);
 			} else if (debugparse)
 				System.err.println("Accepted PHP5: revision " + id + ": file " + path);
-		} else {
+		}/* else {
 			final String content = getFileContents(path);
 			if (STORE_ASCII_PRINTABLE_CONTENTS && StringUtils.isAsciiPrintable(content)) {
 				try {
@@ -361,7 +360,7 @@ public abstract class AbstractCommit {
 					e.printStackTrace();
 				}
 			}
-		}
+		}*/
 		try {
 			if (astWriter.getLength() > len) {
 				fb.setKey(len);
