@@ -51,6 +51,7 @@ import boa.datagen.util.Java8Visitor;
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
+import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 
 /**
@@ -129,7 +130,11 @@ public abstract class AbstractConnector implements AutoCloseable {
 					true);
 			parser.setResolveBindings(true);
 	//		parser.setBindingsRecovery(true);
-			parser.createASTs(fileContents, paths, null, new String[0], r, null);
+			try {
+				parser.createASTs(fileContents, paths, null, new String[0], r, null);
+			} catch (Exception e) {
+				return new ArrayList<ChangedFile>();
+			}
 
 			final Map<String, Integer> declarationFile = new HashMap<String, Integer>(), declarationNode = new HashMap<String, Integer>();
 			collectDeclarations(paths, cus, snapshot.size(), declarationFile, declarationNode);
@@ -150,7 +155,11 @@ public abstract class AbstractConnector implements AutoCloseable {
 				}
 				
 				String content = fileContents.get(sourceFilePath);
-				final Java8Visitor visitor = new Java8Visitor(content, declarationFile, declarationNode);
+				Java7Visitor visitor = null;
+				if (cf.getKind() == FileKind.SOURCE_JAVA_JLS8)
+					visitor = new Java8Visitor(content, declarationFile, declarationNode);
+				else
+					visitor = new Java7Visitor(content, declarationFile, declarationNode);
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				try {
 					ast.addNamespaces(visitor.getNamespaces(cu));
@@ -376,8 +385,10 @@ public abstract class AbstractConnector implements AutoCloseable {
 			setRevisions();
 		}
 		final List<Revision> revs = new ArrayList<Revision>();
-		for (final AbstractCommit rev : revisions)
+		for (int i = 0; i < revisions.size(); i++) {
+			final AbstractCommit rev = revisions.get(i);
 			revs.add(rev.asProtobuf(parse, astWriter, contentWriter));
+		}
 
 		return revs;
 	}
