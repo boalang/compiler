@@ -79,9 +79,11 @@ public class BoaNormalFormIntrinsics {
 			case LOGICAL_OR:
 			case LOGICAL_NOT:
 			case PAREN:
-			case ASSIGN:
 			case NEW:
 				return createExpression(e.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()]));
+
+			case ASSIGN:
+				return createExpression(e.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()])).getExpressions(1);
 
 			case OP_ADD:
 			case OP_SUB:
