@@ -158,6 +158,9 @@ public class BoaGenerator {
 		if (cl.hasOption("debug")) {
 			DefaultProperties.DEBUG = true;
 		}
+		if (cl.hasOption("debugparse")) {
+			DefaultProperties.DEBUGPARSE = true;
+		}
 		if (cl.hasOption("libs")) {
 			DefaultProperties.CLASSPATH_ROOT = cl.getOptionValue("libs");
 		}
