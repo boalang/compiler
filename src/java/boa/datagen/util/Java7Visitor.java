@@ -833,7 +833,6 @@ public class Java7Visitor extends ASTVisitor {
 		if (node.getDefault() != null) {
 			if (node.getDefault() instanceof Annotation) {
 				// FIXME
-				modifiers.pop();
 			} else {
 				boa.types.Ast.Statement.Builder sb = boa.types.Ast.Statement.newBuilder();
 				sb.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
