@@ -831,11 +831,16 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		b.setReturnType(tb.build());
 		if (node.getDefault() != null) {
-			boa.types.Ast.Statement.Builder sb = boa.types.Ast.Statement.newBuilder();
-			sb.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
-			node.getDefault().accept(this);
-			sb.setExpression(expressions.pop());
-			b.addStatements(sb.build());
+			if (node.getDefault() instanceof Annotation) {
+				// FIXME
+				modifiers.pop();
+			} else {
+				boa.types.Ast.Statement.Builder sb = boa.types.Ast.Statement.newBuilder();
+				sb.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
+				node.getDefault().accept(this);
+				sb.setExpression(expressions.pop());
+				b.addStatements(sb.build());
+			}
 		}
 		setDeclaringClass(b, node.resolveBinding());
 		list.add(b.build());
