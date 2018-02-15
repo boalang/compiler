@@ -84,15 +84,47 @@ public class IssueProtoTuple extends BoaProtoTuple {
 
 		names.put("comments", counter++);
 		members.add(new BoaProtoList(new IssueCommentProtoTuple()));
-
-		/** The issues's associated milestone */
-//		optional string milestone = 23;
-		//optional string depends_on = 24;
-		/** The issue's blocked or locked status */
-//		optional string blocked = 25;
 		/*
-		optional string secrecy = 26;
-		repeated IssueChange changes = 27;
+		names.put("component", counter++);
+		members.add(new BoaString());
+		
+		names.put("resolution", counter++);
+		members.add(new BoaString());
+		
+		names.put("duplicated_by", counter++);
+		members.add(new BoaString());
+		
+		names.put("duplicate_of", counter++);
+		members.add(new BoaString());
+		
+		names.put("subcomponent", counter++);
+		members.add(new BoaString());
+		
+		names.put("version", counter++);
+		members.add(new BoaString());
+		
+		names.put("os", counter++);
+		members.add(new BoaString());
+		
+		names.put("platform", counter++);
+		members.add(new BoaString());
+*/
+		/** The issues's associated milestone */
+		names.put("milestone", counter++);
+		members.add(new BoaString());
+		
+		//	names.put("depends_on", counter++);
+		//members.add(new BoaString());
+		
+		/** The issue's blocked or locked status */
+		names.put("blocked", counter++);
+		members.add(new BoaString());
+		/*
+		names.put("secrecy", counter++);
+		members.add(new BoaString());
+		
+		names.put("changes", counter++);
+		members.add(new BoaProtoList(new IssueChangeProtoTuple()));
 		 */
 
 		names.put("pullUrl", counter++);
@@ -115,6 +147,10 @@ public class IssueProtoTuple extends BoaProtoTuple {
 
 		names.put("other_labels", counter++);
 		members.add(new BoaProtoList(new IssueLabelProtoMap()));
+	
+		names.put("commit", counter++);
+		members.add(new BoaString());
+		
 	}
 
 	/**
