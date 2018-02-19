@@ -148,6 +148,18 @@ public class BoaTuple extends BoaType {
 		return shortenedType(s, "BoaTup");
 	}
 
+	private int hash = 0;
+
+	@Override
+	public int hashCode() {
+		if (hash == 0) {
+			final int prime = 31;
+			hash = super.hashCode();
+			hash = prime * hash + (this.members == null ? 0 : this.members.hashCode());
+		}
+		return hash;
+	}
+
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj)

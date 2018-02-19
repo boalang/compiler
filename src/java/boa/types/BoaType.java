@@ -154,5 +154,11 @@ public abstract class BoaType {
 
 	/** {@inheritDoc} */
 	@Override
+	public int hashCode() {
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public abstract String toString();
 }
