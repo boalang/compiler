@@ -274,6 +274,10 @@ public class TreedMapper implements TreedConstants {
 	}
 
 	private void mapPivots(ArrayList<ASTNode> lM, ArrayList<ASTNode> lN, ArrayList<ASTNode> heightsM, ArrayList<ASTNode> heightsN) {
+		if (lM.size() * lN.size() > MAX_BIPARTITE_MATCH_SIZE) {
+			lM.clear();
+			lN.clear();
+		}
 		ArrayList<Integer> lcsM = new ArrayList<Integer>(), lcsN = new ArrayList<Integer>();
 		lcs(lM, lN, lcsM, lcsN);
 		for (int i = lcsM.size()-1; i >= 0; i--) {
@@ -317,7 +321,7 @@ public class TreedMapper implements TreedConstants {
 				l.remove(i);
 				heights.remove(0);
 				ArrayList<ASTNode> children = getChildrenContainers(node);
-				if (!children.isEmpty()) {
+				if (!children.isEmpty() && children.size() <= MAX_EXPENSION_SIZE) {
 					expanded = true;
 					for (int j = 0; j < children.size(); j++) {
 						ASTNode child = children.get(j);
