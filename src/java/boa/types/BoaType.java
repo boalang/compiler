@@ -159,7 +159,7 @@ public abstract class BoaType {
 		Class<?> clazz = this.getClass();
 		Integer code = typeHashCodeMap.get(clazz);
 		if (code == null) {
-			code = typeHashCodeMap.size();
+			code = typeHashCodeMap.size() + 1;
 			typeHashCodeMap.put(clazz, code);
 		}
 		return code;
