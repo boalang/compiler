@@ -170,7 +170,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 						comments.addComments(c);*/
 				} catch (final UnsupportedOperationException e) {
 					continue;
-				} catch (final Exception e) {
+				} catch (final Throwable e) {
 					System.err.println("Error visiting " + sourceFilePath + " when parsing head snapshot!!!");
 					e.printStackTrace();
 					continue;
@@ -396,9 +396,9 @@ public abstract class AbstractConnector implements AutoCloseable {
 			long endTime = System.currentTimeMillis();
 			long time = endTime - startTime;
 			if (time > maxTime) {
+				System.out.println("Max time " + (time / 1000) + " at commit " + rev.id);
 				maxTime = time;
 				commitId = rev.id;
-				System.out.println("Max time " + (maxTime / 1000) + " at commit " + commitId);
 			}
 		}
 

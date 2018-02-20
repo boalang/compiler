@@ -556,7 +556,7 @@ public abstract class AbstractCommit {
 							else
 								preVisitor = new Java7Visitor(previousContent);
 							preAst.addNamespaces(preVisitor.getNamespaces(preCu));
-						} catch (Exception e) {
+						} catch (Throwable e) {
 							preAst = null;
 							preCu = null;
 						}
