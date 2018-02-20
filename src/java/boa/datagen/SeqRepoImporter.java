@@ -299,7 +299,7 @@ public class SeqRepoImporter {
 				conn = new GitConnector(gitDir.getAbsolutePath());
 				final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
 				for (final Revision rev : conn.getCommits(true, astWriter, contentWriter)) {
-					  if (debug) System.out.println("Storing '" + name + "' revision: " + rev.getId());
+					// if (debug) System.out.println("Storing '" + name + "' revision: " + rev.getId());
 					// build new rev w/ no namespaces
 					final Revision.Builder revBuilder = Revision.newBuilder(rev);
 					repoBuilder.addRevisions(revBuilder);
