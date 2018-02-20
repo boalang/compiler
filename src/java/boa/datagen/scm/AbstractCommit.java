@@ -167,6 +167,9 @@ public abstract class AbstractCommit {
 			revision.setLog(message);
 		else
 			revision.setLog("");
+		
+		for (int parentIndex : this.parentIndices)
+			revision.addParents(parentIndex);
 
 		for (ChangedFile.Builder cfb : changedFiles) {
 			if (cfb.getChange() == ChangeKind.DELETED || cfb.getChange() == ChangeKind.UNKNOWN) {
@@ -523,12 +526,13 @@ public abstract class AbstractCommit {
 					if (debug)
 						System.err.println("Error visiting: " + path);
 					e.printStackTrace();
+					System.exit(-1);
 					return false;
 				}
 				
 				ASTRoot.Builder preAst = null;
 				CompilationUnit preCu = null;
-				if (fb.getChange() == ChangeKind.MODIFIED && fb.getPreviousIndicesCount() == 1) {
+				if (fb.getChange() == ChangeKind.MODIFIED && this.parentIndices.length == 1 && fb.getPreviousIndicesCount() == 1) {
 					AbstractCommit previousCommit = this.connector.revisions.get(fb.getPreviousVersions(0));
 					ChangedFile.Builder pcf = previousCommit.changedFiles.get(fb.getPreviousIndices(0));
 					String previousFilePath = pcf.getName();
