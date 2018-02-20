@@ -268,14 +268,11 @@ public abstract class AbstractCommit {
 								fb.setKind(FileKind.SOURCE_JS_ES7);
 								if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_7, false, astWriter)) {
 									if (debugparse)
-										System.err
-												.println("Found ES3 parse error in: revision " + id + ": file " + path);
+										System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 									fb.setKind(FileKind.SOURCE_JS_ES8);
-									if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_8, false,
-											astWriter)) {
+									if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_8, false, astWriter)) {
 										if (debugparse)
-											System.err.println(
-													"Found ES4 parse error in: revision " + id + ": file " + path);
+											System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
 										fb.setKind(FileKind.SOURCE_JS_ERROR);
 										// try {
 										// astWriter.append(new
@@ -324,14 +321,11 @@ public abstract class AbstractCommit {
 								fb.setKind(FileKind.SOURCE_PHP7_0);
 								if (!parsePHPFile(path, fb, content, PHPVersion.PHP7_0, false, astWriter)) {
 									if (debugparse)
-										System.err
-												.println("Found ES3 parse error in: revision " + id + ": file " + path);
+										System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 									fb.setKind(FileKind.SOURCE_PHP7_1);
-									if (!parsePHPFile(path, fb, content, PHPVersion.PHP7_1, false,
-											astWriter)) {
+									if (!parsePHPFile(path, fb, content, PHPVersion.PHP7_1, false, astWriter)) {
 										if (debugparse)
-											System.err.println(
-													"Found ES4 parse error in: revision " + id + ": file " + path);
+											System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
 										fb.setKind(FileKind.SOURCE_PHP_ERROR);
 										// try {
 										// astWriter.append(new
@@ -404,7 +398,8 @@ public abstract class AbstractCommit {
 			} catch (final Exception e) {
 				if (debug)
 					System.err.println("Error visiting: " + path);
-				 e.printStackTrace();
+				e.printStackTrace();
+				System.exit(-1);
 				return false;
 			}
 			try {
@@ -455,7 +450,8 @@ public abstract class AbstractCommit {
 				} catch (final Exception e) {
 					if (debug)
 						System.err.println("Error visiting: " + path);
-					 e.printStackTrace();
+					e.printStackTrace();
+					System.exit(-1);
 					return false;
 				}
 
