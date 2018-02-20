@@ -395,7 +395,7 @@ public abstract class AbstractCommit {
 				ast.addNamespaces(visitor.getNamespace(cu));
 			} catch (final UnsupportedOperationException e) {
 				return false;
-			} catch (final Exception e) {
+			} catch (final Throwable e) {
 				if (debug)
 					System.err.println("Error visiting: " + path);
 				e.printStackTrace();
@@ -447,7 +447,7 @@ public abstract class AbstractCommit {
 					 */
 				} catch (final UnsupportedOperationException e) {
 					return false;
-				} catch (final Exception e) {
+				} catch (final Throwable e) {
 					if (debug)
 						System.err.println("Error visiting: " + path);
 					e.printStackTrace();
@@ -519,7 +519,7 @@ public abstract class AbstractCommit {
 						e.printStackTrace();
 					}
 					return false;
-				} catch (final Exception e) {
+				} catch (final Throwable e) {
 					if (debug)
 						System.err.println("Error visiting: " + path);
 					e.printStackTrace();

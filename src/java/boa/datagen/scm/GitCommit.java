@@ -78,7 +78,7 @@ public class GitCommit extends AbstractCommit {
 		try {
 			buffer.reset();
 			buffer.write(repository.open(fileid, Constants.OBJ_BLOB).getCachedBytes());
-		} catch (final IOException e) {
+		} catch (final Throwable e) {
 			if (debug)
 				System.err.println("Git Error getting contents for '" + path + "' at revision " + id + ": " + e.getMessage());
 		}
