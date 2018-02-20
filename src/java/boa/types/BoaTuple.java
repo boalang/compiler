@@ -156,8 +156,8 @@ public class BoaTuple extends BoaType {
 		if (!hashed) {
 			final int prime = 31;
 			hash = super.hashCode();
-			hash = prime * hash + (this.members == null ? 0 : this.members.hashCode());
 			hashed = true;
+			hash = prime * hash + (this.members == null ? 0 : this.members.hashCode());
 		}
 		return hash;
 	}
