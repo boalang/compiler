@@ -58,6 +58,9 @@ import boa.types.Shared.ChangeKind;
  * @author rdyer
  */
 public abstract class AbstractConnector implements AutoCloseable {
+	public static long maxTime = 0;
+	public static String commitId = "";
+	
 	protected static final boolean debug = boa.datagen.util.Properties.getBoolean("debug", boa.datagen.DefaultProperties.DEBUG);
 	protected static final String classpathRoot = boa.datagen.util.Properties.getProperty("libs", boa.datagen.DefaultProperties.CLASSPATH_ROOT);
 
@@ -386,8 +389,17 @@ public abstract class AbstractConnector implements AutoCloseable {
 		}
 		final List<Revision> revs = new ArrayList<Revision>();
 		for (int i = 0; i < revisions.size(); i++) {
+			long startTime = System.currentTimeMillis();
 			final AbstractCommit rev = revisions.get(i);
+			System.out.println("Commit " + (i+1) + " to protobuf: " + rev.id);
 			revs.add(rev.asProtobuf(parse, astWriter, contentWriter));
+			long endTime = System.currentTimeMillis();
+			long time = endTime - startTime;
+			if (time > maxTime) {
+				maxTime = time;
+				commitId = rev.id;
+				System.out.println("Max time " + (maxTime / 1000) + " at commit " + commitId);
+			}
 		}
 
 		return revs;
