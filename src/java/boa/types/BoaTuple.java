@@ -149,13 +149,15 @@ public class BoaTuple extends BoaType {
 	}
 
 	private int hash = 0;
+	private boolean hashed = false;
 
 	@Override
 	public int hashCode() {
-		if (hash == 0) {
+		if (!hashed) {
 			final int prime = 31;
 			hash = super.hashCode();
 			hash = prime * hash + (this.members == null ? 0 : this.members.hashCode());
+			hashed = true;
 		}
 		return hash;
 	}
