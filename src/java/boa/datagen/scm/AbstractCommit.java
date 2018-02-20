@@ -168,8 +168,9 @@ public abstract class AbstractCommit {
 		else
 			revision.setLog("");
 		
-		for (int parentIndex : this.parentIndices)
-			revision.addParents(parentIndex);
+		if (this.parentIndices != null)
+			for (int parentIndex : this.parentIndices)
+				revision.addParents(parentIndex);
 
 		for (ChangedFile.Builder cfb : changedFiles) {
 			if (cfb.getChange() == ChangeKind.DELETED || cfb.getChange() == ChangeKind.UNKNOWN) {
