@@ -373,18 +373,8 @@ public class JavaScriptVisitor implements NodeVisitor {
 			vb.setName(((Name) node.getIterator()).getIdentifier());
 			s.setVariableDeclaration(vb);
 		} else if (node.getIterator() instanceof VariableDeclaration) {
-			VariableDeclaration vd = (VariableDeclaration) node.getIterator();
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(ModifierKind.SCOPE);
-			if (vd.isConst())
-				mb.setScope(Modifier.Scope.CONST);
-			else if (vd.isLet())
-				mb.setScope(Modifier.Scope.LET);
-			else if (vd.isVar())
-				mb.setScope(Modifier.Scope.VAR);
-			vb.addModifiers(mb);
-			vb.setName(vd.getVariables().get(0).getTarget().getString());
-			s.setVariableDeclaration(vb);
+			node.getIterator().visit(this);
+			s.addInitializations(expressions.pop());
 		} else
 			throw new RuntimeException("unsupported node " + node.getIterator().getClass().getSimpleName() + " as iterator of forin loop");
 		node.getIteratedObject().visit(this);
