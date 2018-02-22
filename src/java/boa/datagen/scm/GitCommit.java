@@ -91,18 +91,26 @@ public class GitCommit extends AbstractCommit {
 		File file = new File(classpathRoot, name);
 		if (!file.exists()) {
 			ObjectId fileid = filePathGitObjectIds.get(path);
+			OutputStream fos = null;
 			try {
 				buffer.reset();
 				buffer.write(repository.open(fileid, Constants.OBJ_BLOB).getCachedBytes());
-				OutputStream fos = new FileOutputStream(file);
+				fos = new FileOutputStream(file);
 				buffer.writeTo(fos);
-				buffer.flush();
-				fos.flush();
-				fos.close();
 			} catch (final IOException e) {
 				if (debug)
 					System.err.println("Git Error write contents of '" + path + "' at revision " + id + ": " + e.getMessage());
 				return null;
+			} finally {
+				try {
+					buffer.flush();
+				} catch (Exception e) {}
+				if (fos != null) {
+					try {
+						fos.flush();
+						fos.close();
+					} catch (Exception e) {}
+				}
 			}
 		}
 		return file.getAbsolutePath();

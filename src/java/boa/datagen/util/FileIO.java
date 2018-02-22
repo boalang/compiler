@@ -29,13 +29,19 @@ import java.util.Scanner;
  */
 public class FileIO {
 	public static void writeObjectToFile(Object object, String objectFile, boolean append) {
+		ObjectOutputStream out = null;
 		try {
-			ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(objectFile, append)));
+			out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(objectFile, append)));
 			out.writeObject(object);
-			out.flush();
-			out.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (out != null) {
+				try {
+					out.flush();
+					out.close();
+				} catch (Exception e) {}
+			}
 		}
 	}
 	
@@ -178,8 +184,10 @@ public class FileIO {
 				return null;
 			} finally {
 				if (fos != null) {
-					fos.flush();
-					fos.close();
+					try {
+						fos.flush();
+						fos.close();
+					} catch (Exception e) {}
 				}
 			}
 		}
