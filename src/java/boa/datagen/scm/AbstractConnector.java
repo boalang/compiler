@@ -173,6 +173,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 				} catch (final Throwable e) {
 					System.err.println("Error visiting " + sourceFilePath + " when parsing head snapshot!!!");
 					e.printStackTrace();
+					System.exit(-1);
 					continue;
 				}
 				if (astWriter != null && len > -1) {
@@ -391,7 +392,8 @@ public abstract class AbstractConnector implements AutoCloseable {
 		for (int i = 0; i < revisions.size(); i++) {
 			long startTime = System.currentTimeMillis();
 			final AbstractCommit rev = revisions.get(i);
-			System.out.println("Commit " + (i+1) + " to protobuf: " + rev.id);
+			if (debug)
+				System.out.println("Commit " + (i+1) + " to protobuf: " + rev.id);
 			revs.add(rev.asProtobuf(parse, astWriter, contentWriter));
 			long endTime = System.currentTimeMillis();
 			long time = endTime - startTime;

@@ -130,8 +130,7 @@ public class SeqRepoImporter {
 		for (File file : jsonCacheDir.listFiles()) {
 			if (file.getName().endsWith("buf-map")) {
 				@SuppressWarnings("unchecked")
-				HashMap<String, byte[]> repos = (HashMap<String, byte[]>) FileIO
-						.readObjectFromFile(file.getAbsolutePath());
+				HashMap<String, byte[]> repos = (HashMap<String, byte[]>) FileIO.readObjectFromFile(file.getAbsolutePath());
 				for (String key : repos.keySet()) {
 					byte[] bs = repos.get(key);
 					if (poolSize > 1)
@@ -304,6 +303,8 @@ public class SeqRepoImporter {
 					repoBuilder.addRevisions(revBuilder);
 				}
 				if (repoBuilder.getRevisionsCount() > 0) {
+					if (debug)
+						System.out.println("Build head snapshot");
 					repoBuilder.setHead(conn.getHeadCommitOffset());
 					repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[]{"java"}, astWriter));
 				}
