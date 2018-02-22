@@ -366,15 +366,8 @@ public class JavaScriptVisitor implements NodeVisitor {
 			for (boa.types.Ast.Statement x : statements.pop())
 				s.addStatements(x);
 		}
-		boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
-		if (node.getIterator() instanceof Name) {
-			vb.setName(((Name) node.getIterator()).getIdentifier());
-			s.setVariableDeclaration(vb);
-		} else if (node.getIterator() instanceof VariableDeclaration) {
-			node.getIterator().visit(this);
-			s.addInitializations(expressions.pop());
-		} else
-			throw new RuntimeException("unsupported node " + node.getIterator().getClass().getSimpleName() + " as iterator of forin loop");
+		node.getIterator().visit(this);
+		s.addInitializations(expressions.pop());
 		node.getIteratedObject().visit(this);
 		s.setExpression(expressions.pop());
 		list.add(s.build());
