@@ -322,7 +322,8 @@ public class Java8Visitor extends Java7Visitor {
 		}
 		if (node.resolveMethodBinding() != null) {
 			IMethodBinding mb = node.resolveMethodBinding();
-			eb.setReturnType(buildType(mb.getReturnType()));
+			if (mb.getReturnType() != null)
+				eb.setReturnType(buildType(mb.getReturnType()));
 			if (mb.getDeclaringClass() != null)
 				eb.setDeclaringType(buildType(mb.getDeclaringClass()));
 		}
@@ -386,7 +387,8 @@ public class Java8Visitor extends Java7Visitor {
 		}
 		if (node.resolveMethodBinding() != null) {
 			IMethodBinding mb = node.resolveMethodBinding();
-			eb.setReturnType(buildType(mb.getReturnType()));
+			if (mb.getReturnType() != null)
+				eb.setReturnType(buildType(mb.getReturnType()));
 			if (mb.getDeclaringClass() != null)
 				eb.setDeclaringType(buildType(mb.getDeclaringClass()));
 		}
@@ -436,7 +438,8 @@ public class Java8Visitor extends Java7Visitor {
 		}
 		if (node.resolveMethodBinding() != null) {
 			IMethodBinding mb = node.resolveMethodBinding();
-			eb.setReturnType(buildType(mb.getReturnType()));
+			if (mb.getReturnType() != null)
+				eb.setReturnType(buildType(mb.getReturnType()));
 			if (mb.getDeclaringClass() != null)
 				eb.setDeclaringType(buildType(mb.getDeclaringClass()));
 		}
@@ -488,7 +491,8 @@ public class Java8Visitor extends Java7Visitor {
 		}
 		if (node.resolveMethodBinding() != null) {
 			IMethodBinding mb = node.resolveMethodBinding();
-			eb.setReturnType(buildType(mb.getReturnType()));
+			if (mb.getReturnType() != null)
+				eb.setReturnType(buildType(mb.getReturnType()));
 			if (mb.getDeclaringClass() != null)
 				eb.setDeclaringType(buildType(mb.getDeclaringClass()));
 		}
