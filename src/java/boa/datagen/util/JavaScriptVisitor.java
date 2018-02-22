@@ -285,10 +285,8 @@ public class JavaScriptVisitor implements NodeVisitor {
 		vb.addModifiers(mb.build());
 		b.setVariableDeclaration(vb.build());
 		if (node.getCatchCondition() != null) {
-			Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 			node.getCatchCondition().visit(this);
-			eb.addExpressions(expressions.pop());
-			b.addConditions(eb.build());
+			b.addConditions(expressions.pop());
 		}
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().visit(this);
