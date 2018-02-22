@@ -26,11 +26,14 @@ namespaces {
         }
       }
     }
-    variable_declaration {
-      name: "x"
-      modifiers {
-        kind: SCOPE
-        scope: VAR
+    initializations {
+      kind: VARDECL
+      variable_decls {
+        name: "x"
+        modifiers {
+          kind: SCOPE
+          scope: VAR
+        }
       }
     }
     expression {
