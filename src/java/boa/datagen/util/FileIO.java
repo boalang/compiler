@@ -170,10 +170,18 @@ public class FileIO {
 			ReadableByteChannel rbc = Channels.newChannel(url.openStream());
 			if (!dir.exists())
 				dir.mkdirs();
-			FileOutputStream fos = new FileOutputStream(dir.getAbsolutePath() + "/" + name);
-			fos.getChannel().transferFrom(rbc, 0, Integer.MAX_VALUE);
-			fos.flush();
-			fos.close();
+			FileOutputStream fos = null;
+			try {
+				fos = new FileOutputStream(dir.getAbsolutePath() + "/" + name);
+				fos.getChannel().transferFrom(rbc, 0, Integer.MAX_VALUE);
+			} catch (Exception e) {
+				return null;
+			} finally {
+				if (fos != null) {
+					fos.flush();
+					fos.close();
+				}
+			}
 		}
 		return file.getAbsolutePath();
 	}
