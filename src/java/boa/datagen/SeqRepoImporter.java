@@ -286,10 +286,9 @@ public class SeqRepoImporter {
 				} catch (GitAPIException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}catch (org.eclipse.jgit.api.errors.JGitInternalException e) {
+				} catch (org.eclipse.jgit.api.errors.JGitInternalException e) {
 					//e.printStackTrace();
 				}
-
 			}
 
 			if (debug)
@@ -315,7 +314,7 @@ public class SeqRepoImporter {
 
 				projBuilder.setCodeRepositories(i, repoBuilder);
 				return projBuilder.build();
-			} catch (final Exception e) {
+			} catch (final Throwable e) {
 				printError(e, "unknown error");
 			} finally {
 				if (conn != null) {
