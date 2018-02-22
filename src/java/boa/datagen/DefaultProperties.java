@@ -74,6 +74,7 @@ public class DefaultProperties {
 	public static String localIssuePath = null;
 	public static String localCommentPath = null;
 	
+	@SuppressWarnings("unused")
 	private static String getRoot() {
 		File dir = new File(System.getProperty("user.dir"));
 		while (dir.getParentFile() != null)
@@ -82,10 +83,12 @@ public class DefaultProperties {
 	}
 
 	private static String getClasspathRoot() {
-		String path = getRoot() + "/libs";
-		File dir = new File(path);
+		// String path = getRoot() + "/libs";
+		String path = System.getProperty("user.dir");
+		File dir = new File(path).getParentFile();
+		dir = new File(dir, "libs");
 		if (!dir.exists())
 			dir.mkdirs();
-		return path;
+		return dir.getAbsolutePath();
 	}
 }
