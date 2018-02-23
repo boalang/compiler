@@ -2274,7 +2274,8 @@ public class Java7Visitor extends ASTVisitor {
 				IVariableBinding vb = (IVariableBinding) node.resolveBinding();
 				if (vb.isField())
 					b.setIsMemberAccess(true);
-				b.setReturnType(buildType(vb.getType()));
+				if(vb.getType() != null)
+					b.setReturnType(buildType(vb.getType()));
 				if (vb.getDeclaringClass() != null)
 					b.setDeclaringType(buildType(vb.getDeclaringClass()));
 			} else
