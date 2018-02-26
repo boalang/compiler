@@ -2242,7 +2242,8 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		if (node.resolveFieldBinding() != null) {
 			IVariableBinding vb = node.resolveFieldBinding();
-			b.setReturnType(buildType(vb.getType()));
+			if (vb.getType() != null)
+				b.setReturnType(buildType(vb.getType()));
 			if (vb.getDeclaringClass() != null)
 				b.setDeclaringType(buildType(vb.getDeclaringClass()));
 		}
@@ -2303,7 +2304,8 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		if (node.resolveBinding() != null && node.resolveBinding() instanceof IVariableBinding) {
 			IVariableBinding vb = (IVariableBinding) node.resolveBinding();
-			b.setReturnType(buildType(vb.getType()));
+			if (vb.getType() != null)
+				b.setReturnType(buildType(vb.getType()));
 			if (vb.getDeclaringClass() != null)
 				b.setDeclaringType(buildType(vb.getDeclaringClass()));
 		} else if (node.resolveTypeBinding() != null) {
@@ -2624,7 +2626,8 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		if (node.resolveFieldBinding() != null) {
 			IVariableBinding vb = node.resolveFieldBinding();
-			b.setReturnType(buildType(vb.getType()));
+			if (vb.getType() != null)
+				b.setReturnType(buildType(vb.getType()));
 			if (vb.getDeclaringClass() != null)
 				b.setDeclaringType(buildType(vb.getDeclaringClass()));
 		}
