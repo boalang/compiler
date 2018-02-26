@@ -1,16 +1,14 @@
 package boa.datagen.forges.github;
 
 import boa.datagen.util.FileIO;
+import gnu.trove.set.hash.THashSet;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Scanner;
 
 
 /**
@@ -40,7 +38,7 @@ public class LanguageDownloadWorker implements Runnable {
 	final static int RECORDS_PER_FILE = 100;
 	final int startFileNumber;
 	final int endFileNumber;
-	HashSet<String> names = GithubLanguageDownloadMaster.names;
+	THashSet<String> names = GithubLanguageDownloadMaster.names;
 	String namesFilePath = "";
 
 	public LanguageDownloadWorker(String repoPath, String output, TokenList tokenList, int start, int end, int index) {

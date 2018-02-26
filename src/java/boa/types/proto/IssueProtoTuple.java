@@ -27,6 +27,9 @@ import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaTime;
 import boa.types.BoaType;
+import boa.types.proto.enums.IssueLabelProtoMap;
+import boa.types.proto.enums.IssuePriorityProtoMap;
+import boa.types.proto.enums.IssueStatusProtoMap;
 
 /**
  * A {@link IssueProtoTuple}.
@@ -44,7 +47,7 @@ public class IssueProtoTuple extends BoaProtoTuple {
 		members.add(new BoaString());
 
 		names.put("status", counter++);
-		members.add(new BoaString());
+		members.add(new IssueStatusProtoMap());
 
 		names.put("author", counter++);
 		members.add(new PersonProtoTuple());
@@ -74,13 +77,44 @@ public class IssueProtoTuple extends BoaProtoTuple {
 		members.add(new BoaInt());
 
 		names.put("priority", counter++);
-		members.add(new BoaString());
+		members.add(new IssuePriorityProtoMap());
 
 		names.put("files", counter++);
 		members.add(new BoaProtoList(new AttachmentProtoTuple()));
 
 		names.put("comments", counter++);
 		members.add(new BoaProtoList(new IssueCommentProtoTuple()));
+
+		/** The issues's associated milestone */
+//		optional string milestone = 23;
+		//optional string depends_on = 24;
+		/** The issue's blocked or locked status */
+//		optional string blocked = 25;
+		/*
+		optional string secrecy = 26;
+		repeated IssueChange changes = 27;
+		 */
+
+		names.put("pullUrl", counter++);
+		members.add(new BoaString());
+
+		names.put("assignees", counter++);
+		members.add(new BoaProtoList(new PersonProtoTuple()));
+
+		names.put("number", counter++);
+		members.add(new BoaInt());
+
+		names.put("labels", counter++);
+		members.add(new BoaProtoList(new IssueLabelProtoMap()));
+
+		names.put("other_status", counter++);
+		members.add(new BoaString());
+
+		names.put("other_priority", counter++);
+		members.add(new BoaString());
+
+		names.put("other_labels", counter++);
+		members.add(new BoaProtoList(new IssueLabelProtoMap()));
 	}
 
 	/**

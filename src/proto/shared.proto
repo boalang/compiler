@@ -1,5 +1,4 @@
 package boa.types;
-
 option optimize_for = SPEED;
 
 /** A unique person's information */
@@ -10,4 +9,36 @@ message Person {
 	required string real_name = 2;
 	/** The person's email address, if known */
 	required string email = 3;
+}
+
+/** Describes the kind of change for the file */
+enum ChangeKind {
+	option allow_alias = true;
+
+	/** The artifact or program entity/element did not already exist and was added */
+	ADDED = 1;
+
+	/** The artifact or program entity/element was deleted */
+	DELETED = 2;
+	/** @exclude */
+	REMOVED = 2;
+
+	/** The artifact or program entity/element already existed and was modified */
+	MODIFIED = 3;
+	/** @exclude */
+	CHANGED = 3;
+
+	/** The label of the artifact or program entity/element was renamed */
+	RENAMED = 4;
+	/** The artifact or program entity/element was moved to a different parent */
+	MOVED = 4;
+
+	/** The artifact or program entity/element was copied from another one */
+	COPIED = 5;
+
+	/** The artifact or program entity/element was merged */
+	MERGED = 6;
+
+	/** The artifact or program entity/element was unchanged */
+	UNCHANGED = 7;
 }

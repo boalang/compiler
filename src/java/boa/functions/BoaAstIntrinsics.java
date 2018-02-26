@@ -39,9 +39,9 @@ import boa.types.Ast.Statement.StatementKind;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
-import boa.types.Diff.ChangedFile.ChangeKind;
 import boa.types.Issues.IssueRepository;
 import boa.types.Issues.IssuesRoot;
+import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
 import boa.types.Toplevel.Project;
 
@@ -218,7 +218,8 @@ public class BoaAstIntrinsics {
 				p = new Path(DefaultProperties.localDataPath);
 				fs = FileSystem.getLocal(conf);
 			} else {
-                p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+				p = new Path(
+					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
 					new Path(
 						conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")),
 						new Path("ast")
@@ -241,7 +242,8 @@ public class BoaAstIntrinsics {
 				p = new Path(DefaultProperties.localCommentPath);
 				fs = FileSystem.getLocal(conf);
 			} else {
-                p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+				p = new Path(
+					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
 					new Path(
 						conf.get("boa.comments.dir", conf.get("boa.input.dir", "repcache/live")),
 						new Path("comments")
@@ -264,7 +266,8 @@ public class BoaAstIntrinsics {
 				p = new Path(DefaultProperties.localIssuePath);
 				fs = FileSystem.getLocal(conf);
 			} else {
-                p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+				p = new Path(
+					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
 					new Path(
 						conf.get("boa.issues.dir", conf.get("boa.input.dir", "repcache/live")),
 						new Path("issues")

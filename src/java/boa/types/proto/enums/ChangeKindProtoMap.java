@@ -29,6 +29,6 @@ public class ChangeKindProtoMap extends BoaProtoMap {
 	/** {@inheritDoc} */
 	@Override
 	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-		return boa.types.Diff.ChangedFile.ChangeKind.class;
+		return boa.types.Shared.ChangeKind.class;
 	}
 }

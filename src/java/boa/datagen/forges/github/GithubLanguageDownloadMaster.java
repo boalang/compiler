@@ -1,16 +1,13 @@
 package boa.datagen.forges.github;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.HashSet;
-import java.util.Scanner;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import boa.datagen.util.FileIO;
+import gnu.trove.set.hash.THashSet;
 
 /**
  * Created by nmtiwari on 9/19/16.
@@ -20,7 +17,7 @@ public class GithubLanguageDownloadMaster {
 	public final String langNameDir;
 	public final String tokenFile;
 	public final static int MAX_NUM_THREADS = 5;
-	public static HashSet<String> names = new HashSet<String>();
+	public static THashSet<String> names = new THashSet<String>();
 
 	public GithubLanguageDownloadMaster(String input, String output, String tokenFile) {
 		this.repoNameDir = input;
@@ -81,7 +78,7 @@ public class GithubLanguageDownloadMaster {
 			new Thread(worker).start();
 		}
 		start = end + 1;
-		end = totalFies + shareSize;
+		end = totalFies;
 		LanguageDownloadWorker worker = new LanguageDownloadWorker(this.repoNameDir, this.langNameDir, tokens, start,
 				end, i);
 		new Thread(worker).start();

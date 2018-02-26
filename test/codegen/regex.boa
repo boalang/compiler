@@ -1,0 +1,4 @@
+o: output sum of int;
+
+if (match(`"foo"`, input.name))
+    o << 1;

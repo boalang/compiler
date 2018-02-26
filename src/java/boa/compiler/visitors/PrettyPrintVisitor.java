@@ -574,7 +574,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		strm.print(" of ");
 		n.getType().accept(this);
 		if (n.hasWeight()) {
-			strm.print("weight ");
+			strm.print(" weight ");
 			n.getWeight().accept(this);
 		}
 	}

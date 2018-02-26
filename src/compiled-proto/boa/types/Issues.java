@@ -26,15 +26,20 @@ public final class Issues {
     com.google.protobuf.ByteString
         getUrlBytes();
 
-    // required .boa.types.IssueRepository.IssueKind kind = 2;
+    // optional string name = 2;
     /**
-     * <code>required .boa.types.IssueRepository.IssueKind kind = 2;</code>
+     * <code>optional string name = 2;</code>
      */
-    boolean hasKind();
+    boolean hasName();
     /**
-     * <code>required .boa.types.IssueRepository.IssueKind kind = 2;</code>
+     * <code>optional string name = 2;</code>
      */
-    boa.types.Issues.IssueRepository.IssueKind getKind();
+    java.lang.String getName();
+    /**
+     * <code>optional string name = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getNameBytes();
 
     // required string key = 3;
     /**
@@ -107,15 +112,9 @@ public final class Issues {
               url_ = input.readBytes();
               break;
             }
-            case 16: {
-              int rawValue = input.readEnum();
-              boa.types.Issues.IssueRepository.IssueKind value = boa.types.Issues.IssueRepository.IssueKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(2, rawValue);
-              } else {
-                bitField0_ |= 0x00000002;
-                kind_ = value;
-              }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              name_ = input.readBytes();
               break;
             }
             case 26: {
@@ -162,115 +161,6 @@ public final class Issues {
       return PARSER;
     }
 
-    /**
-     * Protobuf enum {@code boa.types.IssueRepository.IssueKind}
-     */
-    public enum IssueKind
-        implements com.google.protobuf.ProtocolMessageEnum {
-      /**
-       * <code>OTHER = 0;</code>
-       */
-      OTHER(0, 0),
-      /**
-       * <code>BUGS = 1;</code>
-       */
-      BUGS(1, 1),
-      /**
-       * <code>FEATURES = 2;</code>
-       */
-      FEATURES(2, 2),
-      /**
-       * <code>SUPPORT = 3;</code>
-       */
-      SUPPORT(3, 3),
-      /**
-       * <code>PATCHES = 4;</code>
-       */
-      PATCHES(4, 4),
-      ;
-
-      /**
-       * <code>OTHER = 0;</code>
-       */
-      public static final int OTHER_VALUE = 0;
-      /**
-       * <code>BUGS = 1;</code>
-       */
-      public static final int BUGS_VALUE = 1;
-      /**
-       * <code>FEATURES = 2;</code>
-       */
-      public static final int FEATURES_VALUE = 2;
-      /**
-       * <code>SUPPORT = 3;</code>
-       */
-      public static final int SUPPORT_VALUE = 3;
-      /**
-       * <code>PATCHES = 4;</code>
-       */
-      public static final int PATCHES_VALUE = 4;
-
-
-      public final int getNumber() { return value; }
-
-      public static IssueKind valueOf(int value) {
-        switch (value) {
-          case 0: return OTHER;
-          case 1: return BUGS;
-          case 2: return FEATURES;
-          case 3: return SUPPORT;
-          case 4: return PATCHES;
-          default: return null;
-        }
-      }
-
-      public static com.google.protobuf.Internal.EnumLiteMap<IssueKind>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static com.google.protobuf.Internal.EnumLiteMap<IssueKind>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<IssueKind>() {
-              public IssueKind findValueByNumber(int number) {
-                return IssueKind.valueOf(number);
-              }
-            };
-
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(index);
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return boa.types.Issues.IssueRepository.getDescriptor().getEnumTypes().get(0);
-      }
-
-      private static final IssueKind[] VALUES = values();
-
-      public static IssueKind valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        return VALUES[desc.getIndex()];
-      }
-
-      private final int index;
-      private final int value;
-
-      private IssueKind(int index, int value) {
-        this.index = index;
-        this.value = value;
-      }
-
-      // @@protoc_insertion_point(enum_scope:boa.types.IssueRepository.IssueKind)
-    }
-
     private int bitField0_;
     // required string url = 1;
     public static final int URL_FIELD_NUMBER = 1;
@@ -315,20 +205,47 @@ public final class Issues {
       }
     }
 
-    // required .boa.types.IssueRepository.IssueKind kind = 2;
-    public static final int KIND_FIELD_NUMBER = 2;
-    private boa.types.Issues.IssueRepository.IssueKind kind_;
+    // optional string name = 2;
+    public static final int NAME_FIELD_NUMBER = 2;
+    private java.lang.Object name_;
     /**
-     * <code>required .boa.types.IssueRepository.IssueKind kind = 2;</code>
+     * <code>optional string name = 2;</code>
      */
-    public boolean hasKind() {
+    public boolean hasName() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required .boa.types.IssueRepository.IssueKind kind = 2;</code>
+     * <code>optional string name = 2;</code>
      */
-    public boa.types.Issues.IssueRepository.IssueKind getKind() {
-      return kind_;
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          name_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string name = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     // required string key = 3;
@@ -376,7 +293,7 @@ public final class Issues {
 
     private void initFields() {
       url_ = "";
-      kind_ = boa.types.Issues.IssueRepository.IssueKind.OTHER;
+      name_ = "";
       key_ = "";
     }
     private byte memoizedIsInitialized = -1;
@@ -385,10 +302,6 @@ public final class Issues {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasUrl()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasKind()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -407,7 +320,7 @@ public final class Issues {
         output.writeBytes(1, getUrlBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeEnum(2, kind_.getNumber());
+        output.writeBytes(2, getNameBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(3, getKeyBytes());
@@ -427,7 +340,7 @@ public final class Issues {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, kind_.getNumber());
+          .computeBytesSize(2, getNameBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
@@ -551,7 +464,7 @@ public final class Issues {
         super.clear();
         url_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Issues.IssueRepository.IssueKind.OTHER;
+        name_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
         key_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -590,7 +503,7 @@ public final class Issues {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.kind_ = kind_;
+        result.name_ = name_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
@@ -616,8 +529,10 @@ public final class Issues {
           url_ = other.url_;
           onChanged();
         }
-        if (other.hasKind()) {
-          setKind(other.getKind());
+        if (other.hasName()) {
+          bitField0_ |= 0x00000002;
+          name_ = other.name_;
+          onChanged();
         }
         if (other.hasKey()) {
           bitField0_ |= 0x00000004;
@@ -630,10 +545,6 @@ public final class Issues {
 
       public final boolean isInitialized() {
         if (!hasUrl()) {
-          
-          return false;
-        }
-        if (!hasKind()) {
           
           return false;
         }
@@ -737,38 +648,76 @@ public final class Issues {
         return this;
       }
 
-      // required .boa.types.IssueRepository.IssueKind kind = 2;
-      private boa.types.Issues.IssueRepository.IssueKind kind_ = boa.types.Issues.IssueRepository.IssueKind.OTHER;
+      // optional string name = 2;
+      private java.lang.Object name_ = "";
       /**
-       * <code>required .boa.types.IssueRepository.IssueKind kind = 2;</code>
+       * <code>optional string name = 2;</code>
        */
-      public boolean hasKind() {
+      public boolean hasName() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required .boa.types.IssueRepository.IssueKind kind = 2;</code>
+       * <code>optional string name = 2;</code>
        */
-      public boa.types.Issues.IssueRepository.IssueKind getKind() {
-        return kind_;
+      public java.lang.String getName() {
+        java.lang.Object ref = name_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          name_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>required .boa.types.IssueRepository.IssueKind kind = 2;</code>
+       * <code>optional string name = 2;</code>
        */
-      public Builder setKind(boa.types.Issues.IssueRepository.IssueKind value) {
-        if (value == null) {
-          throw new NullPointerException();
+      public com.google.protobuf.ByteString
+          getNameBytes() {
+        java.lang.Object ref = name_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          name_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
         }
-        bitField0_ |= 0x00000002;
-        kind_ = value;
+      }
+      /**
+       * <code>optional string name = 2;</code>
+       */
+      public Builder setName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        name_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required .boa.types.IssueRepository.IssueKind kind = 2;</code>
+       * <code>optional string name = 2;</code>
        */
-      public Builder clearKind() {
+      public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        kind_ = boa.types.Issues.IssueRepository.IssueKind.OTHER;
+        name_ = getDefaultInstance().getName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string name = 2;</code>
+       */
+      public Builder setNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        name_ = value;
         onChanged();
         return this;
       }
@@ -1550,72 +1499,123 @@ public final class Issues {
     // required string id = 1;
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** The issue's id 
+     * </pre>
      */
     boolean hasId();
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** The issue's id 
+     * </pre>
      */
     java.lang.String getId();
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** The issue's id 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // required string status = 2;
+    // required .boa.types.Issue.IssueStatus status = 2;
     /**
-     * <code>required string status = 2;</code>
+     * <code>required .boa.types.Issue.IssueStatus status = 2;</code>
+     *
+     * <pre>
+     ** The issue' status i.e open, closed etc.. 
+     * </pre>
      */
     boolean hasStatus();
     /**
-     * <code>required string status = 2;</code>
+     * <code>required .boa.types.Issue.IssueStatus status = 2;</code>
+     *
+     * <pre>
+     ** The issue' status i.e open, closed etc.. 
+     * </pre>
      */
-    java.lang.String getStatus();
-    /**
-     * <code>required string status = 2;</code>
-     */
-    com.google.protobuf.ByteString
-        getStatusBytes();
+    boa.types.Issues.Issue.IssueStatus getStatus();
 
     // required .boa.types.Person author = 3;
     /**
      * <code>required .boa.types.Person author = 3;</code>
+     *
+     * <pre>
+     ** The author of the issue 
+     * </pre>
      */
     boolean hasAuthor();
     /**
      * <code>required .boa.types.Person author = 3;</code>
+     *
+     * <pre>
+     ** The author of the issue 
+     * </pre>
      */
     boa.types.Shared.Person getAuthor();
     /**
      * <code>required .boa.types.Person author = 3;</code>
+     *
+     * <pre>
+     ** The author of the issue 
+     * </pre>
      */
     boa.types.Shared.PersonOrBuilder getAuthorOrBuilder();
 
     // optional .boa.types.Person assignee = 4;
     /**
      * <code>optional .boa.types.Person assignee = 4;</code>
+     *
+     * <pre>
+     ** The primary assignee 
+     * </pre>
      */
     boolean hasAssignee();
     /**
      * <code>optional .boa.types.Person assignee = 4;</code>
+     *
+     * <pre>
+     ** The primary assignee 
+     * </pre>
      */
     boa.types.Shared.Person getAssignee();
     /**
      * <code>optional .boa.types.Person assignee = 4;</code>
+     *
+     * <pre>
+     ** The primary assignee 
+     * </pre>
      */
     boa.types.Shared.PersonOrBuilder getAssigneeOrBuilder();
 
     // required string summary = 5;
     /**
      * <code>required string summary = 5;</code>
+     *
+     * <pre>
+     ** The summary and or title of the issue 
+     * </pre>
      */
     boolean hasSummary();
     /**
      * <code>required string summary = 5;</code>
+     *
+     * <pre>
+     ** The summary and or title of the issue 
+     * </pre>
      */
     java.lang.String getSummary();
     /**
      * <code>required string summary = 5;</code>
+     *
+     * <pre>
+     ** The summary and or title of the issue 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getSummaryBytes();
@@ -1623,14 +1623,26 @@ public final class Issues {
     // required string description = 6;
     /**
      * <code>required string description = 6;</code>
+     *
+     * <pre>
+     ** The description and or body of the issue 
+     * </pre>
      */
     boolean hasDescription();
     /**
      * <code>required string description = 6;</code>
+     *
+     * <pre>
+     ** The description and or body of the issue 
+     * </pre>
      */
     java.lang.String getDescription();
     /**
      * <code>required string description = 6;</code>
+     *
+     * <pre>
+     ** The description and or body of the issue 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getDescriptionBytes();
@@ -1638,49 +1650,89 @@ public final class Issues {
     // required uint64 created_date = 7;
     /**
      * <code>required uint64 created_date = 7;</code>
+     *
+     * <pre>
+     ** The created date 
+     * </pre>
      */
     boolean hasCreatedDate();
     /**
      * <code>required uint64 created_date = 7;</code>
+     *
+     * <pre>
+     ** The created date 
+     * </pre>
      */
     long getCreatedDate();
 
     // required uint64 modified_date = 8;
     /**
      * <code>required uint64 modified_date = 8;</code>
+     *
+     * <pre>
+     ** The last modified date, aka update date 
+     * </pre>
      */
     boolean hasModifiedDate();
     /**
      * <code>required uint64 modified_date = 8;</code>
+     *
+     * <pre>
+     ** The last modified date, aka update date 
+     * </pre>
      */
     long getModifiedDate();
 
     // optional uint64 completed_date = 9;
     /**
      * <code>optional uint64 completed_date = 9;</code>
+     *
+     * <pre>
+     ** The closed date 
+     * </pre>
      */
     boolean hasCompletedDate();
     /**
      * <code>optional uint64 completed_date = 9;</code>
+     *
+     * <pre>
+     ** The closed date 
+     * </pre>
      */
     long getCompletedDate();
 
     // repeated string keywords = 10;
     /**
      * <code>repeated string keywords = 10;</code>
+     *
+     * <pre>
+     ** Keywords/tags 
+     * </pre>
      */
     java.util.List<java.lang.String>
     getKeywordsList();
     /**
      * <code>repeated string keywords = 10;</code>
+     *
+     * <pre>
+     ** Keywords/tags 
+     * </pre>
      */
     int getKeywordsCount();
     /**
      * <code>repeated string keywords = 10;</code>
+     *
+     * <pre>
+     ** Keywords/tags 
+     * </pre>
      */
     java.lang.String getKeywords(int index);
     /**
      * <code>repeated string keywords = 10;</code>
+     *
+     * <pre>
+     ** Keywords/tags 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getKeywordsBytes(int index);
@@ -1688,49 +1740,80 @@ public final class Issues {
     // optional int32 vote = 11;
     /**
      * <code>optional int32 vote = 11;</code>
+     *
+     * <pre>
+     ** Count of votes 
+     * </pre>
      */
     boolean hasVote();
     /**
      * <code>optional int32 vote = 11;</code>
+     *
+     * <pre>
+     ** Count of votes 
+     * </pre>
      */
     int getVote();
 
-    // optional string priority = 12;
+    // optional .boa.types.Issue.IssuePriority priority = 12;
     /**
-     * <code>optional string priority = 12;</code>
+     * <code>optional .boa.types.Issue.IssuePriority priority = 12;</code>
+     *
+     * <pre>
+     ** The issue's priority 
+     * </pre>
      */
     boolean hasPriority();
     /**
-     * <code>optional string priority = 12;</code>
+     * <code>optional .boa.types.Issue.IssuePriority priority = 12;</code>
+     *
+     * <pre>
+     ** The issue's priority 
+     * </pre>
      */
-    java.lang.String getPriority();
-    /**
-     * <code>optional string priority = 12;</code>
-     */
-    com.google.protobuf.ByteString
-        getPriorityBytes();
+    boa.types.Issues.Issue.IssuePriority getPriority();
 
     // repeated .boa.types.Attachment files = 13;
     /**
      * <code>repeated .boa.types.Attachment files = 13;</code>
+     *
+     * <pre>
+     ** Attachment files 
+     * </pre>
      */
     java.util.List<boa.types.Issues.Attachment> 
         getFilesList();
     /**
      * <code>repeated .boa.types.Attachment files = 13;</code>
+     *
+     * <pre>
+     ** Attachment files 
+     * </pre>
      */
     boa.types.Issues.Attachment getFiles(int index);
     /**
      * <code>repeated .boa.types.Attachment files = 13;</code>
+     *
+     * <pre>
+     ** Attachment files 
+     * </pre>
      */
     int getFilesCount();
     /**
      * <code>repeated .boa.types.Attachment files = 13;</code>
+     *
+     * <pre>
+     ** Attachment files 
+     * </pre>
      */
     java.util.List<? extends boa.types.Issues.AttachmentOrBuilder> 
         getFilesOrBuilderList();
     /**
      * <code>repeated .boa.types.Attachment files = 13;</code>
+     *
+     * <pre>
+     ** Attachment files 
+     * </pre>
      */
     boa.types.Issues.AttachmentOrBuilder getFilesOrBuilder(
         int index);
@@ -1740,20 +1823,7 @@ public final class Issues {
      * <code>repeated .boa.types.IssueComment comments = 14;</code>
      *
      * <pre>
-     *
-     *optional string component = 15;
-     *optional string resolution = 16;
-     *repeated string duplicated_by = 17;
-     *optional string duplicate_of = 18;
-     *optional string subcomponent = 19;
-     *optional string version = 20;
-     *optional string os = 21;
-     *optional string platform = 22;
-     *optional string milestone = 23;
-     *optional string depends_on = 24;
-     *optional string blocked = 25;
-     *optional string secrecy = 26;
-     *repeated IssueChange changes = 27;
+     ** The issue's comments 
      * </pre>
      */
     java.util.List<boa.types.Issues.IssueComment> 
@@ -1762,20 +1832,7 @@ public final class Issues {
      * <code>repeated .boa.types.IssueComment comments = 14;</code>
      *
      * <pre>
-     *
-     *optional string component = 15;
-     *optional string resolution = 16;
-     *repeated string duplicated_by = 17;
-     *optional string duplicate_of = 18;
-     *optional string subcomponent = 19;
-     *optional string version = 20;
-     *optional string os = 21;
-     *optional string platform = 22;
-     *optional string milestone = 23;
-     *optional string depends_on = 24;
-     *optional string blocked = 25;
-     *optional string secrecy = 26;
-     *repeated IssueChange changes = 27;
+     ** The issue's comments 
      * </pre>
      */
     boa.types.Issues.IssueComment getComments(int index);
@@ -1783,20 +1840,7 @@ public final class Issues {
      * <code>repeated .boa.types.IssueComment comments = 14;</code>
      *
      * <pre>
-     *
-     *optional string component = 15;
-     *optional string resolution = 16;
-     *repeated string duplicated_by = 17;
-     *optional string duplicate_of = 18;
-     *optional string subcomponent = 19;
-     *optional string version = 20;
-     *optional string os = 21;
-     *optional string platform = 22;
-     *optional string milestone = 23;
-     *optional string depends_on = 24;
-     *optional string blocked = 25;
-     *optional string secrecy = 26;
-     *repeated IssueChange changes = 27;
+     ** The issue's comments 
      * </pre>
      */
     int getCommentsCount();
@@ -1804,20 +1848,7 @@ public final class Issues {
      * <code>repeated .boa.types.IssueComment comments = 14;</code>
      *
      * <pre>
-     *
-     *optional string component = 15;
-     *optional string resolution = 16;
-     *repeated string duplicated_by = 17;
-     *optional string duplicate_of = 18;
-     *optional string subcomponent = 19;
-     *optional string version = 20;
-     *optional string os = 21;
-     *optional string platform = 22;
-     *optional string milestone = 23;
-     *optional string depends_on = 24;
-     *optional string blocked = 25;
-     *optional string secrecy = 26;
-     *repeated IssueChange changes = 27;
+     ** The issue's comments 
      * </pre>
      */
     java.util.List<? extends boa.types.Issues.IssueCommentOrBuilder> 
@@ -1826,27 +1857,278 @@ public final class Issues {
      * <code>repeated .boa.types.IssueComment comments = 14;</code>
      *
      * <pre>
-     *
-     *optional string component = 15;
-     *optional string resolution = 16;
-     *repeated string duplicated_by = 17;
-     *optional string duplicate_of = 18;
-     *optional string subcomponent = 19;
-     *optional string version = 20;
-     *optional string os = 21;
-     *optional string platform = 22;
-     *optional string milestone = 23;
-     *optional string depends_on = 24;
-     *optional string blocked = 25;
-     *optional string secrecy = 26;
-     *repeated IssueChange changes = 27;
+     ** The issue's comments 
      * </pre>
      */
     boa.types.Issues.IssueCommentOrBuilder getCommentsOrBuilder(
         int index);
+
+    // optional string milestone = 23;
+    /**
+     * <code>optional string milestone = 23;</code>
+     *
+     * <pre>
+     ** The issues's associated milestone 
+     * </pre>
+     */
+    boolean hasMilestone();
+    /**
+     * <code>optional string milestone = 23;</code>
+     *
+     * <pre>
+     ** The issues's associated milestone 
+     * </pre>
+     */
+    java.lang.String getMilestone();
+    /**
+     * <code>optional string milestone = 23;</code>
+     *
+     * <pre>
+     ** The issues's associated milestone 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getMilestoneBytes();
+
+    // optional string blocked = 25;
+    /**
+     * <code>optional string blocked = 25;</code>
+     *
+     * <pre>
+     ** The issue's blocked or locked status 
+     * </pre>
+     */
+    boolean hasBlocked();
+    /**
+     * <code>optional string blocked = 25;</code>
+     *
+     * <pre>
+     ** The issue's blocked or locked status 
+     * </pre>
+     */
+    java.lang.String getBlocked();
+    /**
+     * <code>optional string blocked = 25;</code>
+     *
+     * <pre>
+     ** The issue's blocked or locked status 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getBlockedBytes();
+
+    // optional string pullUrl = 28;
+    /**
+     * <code>optional string pullUrl = 28;</code>
+     *
+     * <pre>
+     ** The URL for the issue's associated pull request 
+     * </pre>
+     */
+    boolean hasPullUrl();
+    /**
+     * <code>optional string pullUrl = 28;</code>
+     *
+     * <pre>
+     ** The URL for the issue's associated pull request 
+     * </pre>
+     */
+    java.lang.String getPullUrl();
+    /**
+     * <code>optional string pullUrl = 28;</code>
+     *
+     * <pre>
+     ** The URL for the issue's associated pull request 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getPullUrlBytes();
+
+    // repeated .boa.types.Person assignees = 29;
+    /**
+     * <code>repeated .boa.types.Person assignees = 29;</code>
+     *
+     * <pre>
+     ** List of assigned persons 
+     * </pre>
+     */
+    java.util.List<boa.types.Shared.Person> 
+        getAssigneesList();
+    /**
+     * <code>repeated .boa.types.Person assignees = 29;</code>
+     *
+     * <pre>
+     ** List of assigned persons 
+     * </pre>
+     */
+    boa.types.Shared.Person getAssignees(int index);
+    /**
+     * <code>repeated .boa.types.Person assignees = 29;</code>
+     *
+     * <pre>
+     ** List of assigned persons 
+     * </pre>
+     */
+    int getAssigneesCount();
+    /**
+     * <code>repeated .boa.types.Person assignees = 29;</code>
+     *
+     * <pre>
+     ** List of assigned persons 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Shared.PersonOrBuilder> 
+        getAssigneesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Person assignees = 29;</code>
+     *
+     * <pre>
+     ** List of assigned persons 
+     * </pre>
+     */
+    boa.types.Shared.PersonOrBuilder getAssigneesOrBuilder(
+        int index);
+
+    // required uint32 number = 30;
+    /**
+     * <code>required uint32 number = 30;</code>
+     *
+     * <pre>
+     ** The issue's number 
+     * </pre>
+     */
+    boolean hasNumber();
+    /**
+     * <code>required uint32 number = 30;</code>
+     *
+     * <pre>
+     ** The issue's number 
+     * </pre>
+     */
+    int getNumber();
+
+    // repeated .boa.types.Issue.IssueLabel labels = 31;
+    /**
+     * <code>repeated .boa.types.Issue.IssueLabel labels = 31;</code>
+     *
+     * <pre>
+     ** The issue's labels 
+     * </pre>
+     */
+    java.util.List<boa.types.Issues.Issue.IssueLabel> getLabelsList();
+    /**
+     * <code>repeated .boa.types.Issue.IssueLabel labels = 31;</code>
+     *
+     * <pre>
+     ** The issue's labels 
+     * </pre>
+     */
+    int getLabelsCount();
+    /**
+     * <code>repeated .boa.types.Issue.IssueLabel labels = 31;</code>
+     *
+     * <pre>
+     ** The issue's labels 
+     * </pre>
+     */
+    boa.types.Issues.Issue.IssueLabel getLabels(int index);
+
+    // optional string other_status = 32;
+    /**
+     * <code>optional string other_status = 32;</code>
+     *
+     * <pre>
+     ** The issue' other status 
+     * </pre>
+     */
+    boolean hasOtherStatus();
+    /**
+     * <code>optional string other_status = 32;</code>
+     *
+     * <pre>
+     ** The issue' other status 
+     * </pre>
+     */
+    java.lang.String getOtherStatus();
+    /**
+     * <code>optional string other_status = 32;</code>
+     *
+     * <pre>
+     ** The issue' other status 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getOtherStatusBytes();
+
+    // optional string other_priority = 33;
+    /**
+     * <code>optional string other_priority = 33;</code>
+     *
+     * <pre>
+     ** The issue's other priority 
+     * </pre>
+     */
+    boolean hasOtherPriority();
+    /**
+     * <code>optional string other_priority = 33;</code>
+     *
+     * <pre>
+     ** The issue's other priority 
+     * </pre>
+     */
+    java.lang.String getOtherPriority();
+    /**
+     * <code>optional string other_priority = 33;</code>
+     *
+     * <pre>
+     ** The issue's other priority 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getOtherPriorityBytes();
+
+    // repeated string other_labels = 34;
+    /**
+     * <code>repeated string other_labels = 34;</code>
+     *
+     * <pre>
+     ** The issue's other labels 
+     * </pre>
+     */
+    java.util.List<java.lang.String>
+    getOtherLabelsList();
+    /**
+     * <code>repeated string other_labels = 34;</code>
+     *
+     * <pre>
+     ** The issue's other labels 
+     * </pre>
+     */
+    int getOtherLabelsCount();
+    /**
+     * <code>repeated string other_labels = 34;</code>
+     *
+     * <pre>
+     ** The issue's other labels 
+     * </pre>
+     */
+    java.lang.String getOtherLabels(int index);
+    /**
+     * <code>repeated string other_labels = 34;</code>
+     *
+     * <pre>
+     ** The issue's other labels 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getOtherLabelsBytes(int index);
   }
   /**
    * Protobuf type {@code boa.types.Issue}
+   *
+   * <pre>
+   ** An issue in the repository 
+   * </pre>
    */
   public static final class Issue extends
       com.google.protobuf.GeneratedMessage
@@ -1901,9 +2183,15 @@ public final class Issues {
               id_ = input.readBytes();
               break;
             }
-            case 18: {
-              bitField0_ |= 0x00000002;
-              status_ = input.readBytes();
+            case 16: {
+              int rawValue = input.readEnum();
+              boa.types.Issues.Issue.IssueStatus value = boa.types.Issues.Issue.IssueStatus.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                status_ = value;
+              }
               break;
             }
             case 26: {
@@ -1970,9 +2258,15 @@ public final class Issues {
               vote_ = input.readInt32();
               break;
             }
-            case 98: {
-              bitField0_ |= 0x00000400;
-              priority_ = input.readBytes();
+            case 96: {
+              int rawValue = input.readEnum();
+              boa.types.Issues.Issue.IssuePriority value = boa.types.Issues.Issue.IssuePriority.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(12, rawValue);
+              } else {
+                bitField0_ |= 0x00000400;
+                priority_ = value;
+              }
               break;
             }
             case 106: {
@@ -1991,6 +2285,85 @@ public final class Issues {
               comments_.add(input.readMessage(boa.types.Issues.IssueComment.PARSER, extensionRegistry));
               break;
             }
+            case 186: {
+              bitField0_ |= 0x00000800;
+              milestone_ = input.readBytes();
+              break;
+            }
+            case 202: {
+              bitField0_ |= 0x00001000;
+              blocked_ = input.readBytes();
+              break;
+            }
+            case 226: {
+              bitField0_ |= 0x00002000;
+              pullUrl_ = input.readBytes();
+              break;
+            }
+            case 234: {
+              if (!((mutable_bitField0_ & 0x00020000) == 0x00020000)) {
+                assignees_ = new java.util.ArrayList<boa.types.Shared.Person>();
+                mutable_bitField0_ |= 0x00020000;
+              }
+              assignees_.add(input.readMessage(boa.types.Shared.Person.PARSER, extensionRegistry));
+              break;
+            }
+            case 240: {
+              bitField0_ |= 0x00004000;
+              number_ = input.readUInt32();
+              break;
+            }
+            case 248: {
+              int rawValue = input.readEnum();
+              boa.types.Issues.Issue.IssueLabel value = boa.types.Issues.Issue.IssueLabel.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(31, rawValue);
+              } else {
+                if (!((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
+                  labels_ = new java.util.ArrayList<boa.types.Issues.Issue.IssueLabel>();
+                  mutable_bitField0_ |= 0x00080000;
+                }
+                labels_.add(value);
+              }
+              break;
+            }
+            case 250: {
+              int length = input.readRawVarint32();
+              int oldLimit = input.pushLimit(length);
+              while(input.getBytesUntilLimit() > 0) {
+                int rawValue = input.readEnum();
+                boa.types.Issues.Issue.IssueLabel value = boa.types.Issues.Issue.IssueLabel.valueOf(rawValue);
+                if (value == null) {
+                  unknownFields.mergeVarintField(31, rawValue);
+                } else {
+                  if (!((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
+                    labels_ = new java.util.ArrayList<boa.types.Issues.Issue.IssueLabel>();
+                    mutable_bitField0_ |= 0x00080000;
+                  }
+                  labels_.add(value);
+                }
+              }
+              input.popLimit(oldLimit);
+              break;
+            }
+            case 258: {
+              bitField0_ |= 0x00008000;
+              otherStatus_ = input.readBytes();
+              break;
+            }
+            case 266: {
+              bitField0_ |= 0x00010000;
+              otherPriority_ = input.readBytes();
+              break;
+            }
+            case 274: {
+              if (!((mutable_bitField0_ & 0x00400000) == 0x00400000)) {
+                otherLabels_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00400000;
+              }
+              otherLabels_.add(input.readBytes());
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -2007,6 +2380,15 @@ public final class Issues {
         }
         if (((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
           comments_ = java.util.Collections.unmodifiableList(comments_);
+        }
+        if (((mutable_bitField0_ & 0x00020000) == 0x00020000)) {
+          assignees_ = java.util.Collections.unmodifiableList(assignees_);
+        }
+        if (((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
+          labels_ = java.util.Collections.unmodifiableList(labels_);
+        }
+        if (((mutable_bitField0_ & 0x00400000) == 0x00400000)) {
+          otherLabels_ = new com.google.protobuf.UnmodifiableLazyStringList(otherLabels_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -2039,18 +2421,518 @@ public final class Issues {
       return PARSER;
     }
 
+    /**
+     * Protobuf enum {@code boa.types.Issue.IssueLabel}
+     *
+     * <pre>
+     ** Describes the kind/label of issue 
+     * </pre>
+     */
+    public enum IssueLabel
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>OTHER_LABEL = 0;</code>
+       */
+      OTHER_LABEL(0, 0),
+      /**
+       * <code>BUG = 1;</code>
+       */
+      BUG(1, 1),
+      /**
+       * <code>ENHANCEMENT = 2;</code>
+       */
+      ENHANCEMENT(2, 2),
+      /**
+       * <code>PROPOSAL = 3;</code>
+       */
+      PROPOSAL(3, 3),
+      /**
+       * <code>TASK = 4;</code>
+       */
+      TASK(4, 4),
+      /**
+       * <code>FEATURE = 5;</code>
+       */
+      FEATURE(5, 5),
+      /**
+       * <code>SUPPORT = 6;</code>
+       */
+      SUPPORT(6, 6),
+      /**
+       * <code>DISCUSSION = 7;</code>
+       */
+      DISCUSSION(7, 7),
+      /**
+       * <code>DOCUMENTATION = 8;</code>
+       */
+      DOCUMENTATION(8, 8),
+      /**
+       * <code>SUGGESTION = 9;</code>
+       */
+      SUGGESTION(9, 9),
+      /**
+       * <code>QUESTION = 10;</code>
+       */
+      QUESTION(10, 10),
+      /**
+       * <code>TEST = 11;</code>
+       */
+      TEST(11, 11),
+      ;
+
+      /**
+       * <code>OTHER_LABEL = 0;</code>
+       */
+      public static final int OTHER_LABEL_VALUE = 0;
+      /**
+       * <code>BUG = 1;</code>
+       */
+      public static final int BUG_VALUE = 1;
+      /**
+       * <code>ENHANCEMENT = 2;</code>
+       */
+      public static final int ENHANCEMENT_VALUE = 2;
+      /**
+       * <code>PROPOSAL = 3;</code>
+       */
+      public static final int PROPOSAL_VALUE = 3;
+      /**
+       * <code>TASK = 4;</code>
+       */
+      public static final int TASK_VALUE = 4;
+      /**
+       * <code>FEATURE = 5;</code>
+       */
+      public static final int FEATURE_VALUE = 5;
+      /**
+       * <code>SUPPORT = 6;</code>
+       */
+      public static final int SUPPORT_VALUE = 6;
+      /**
+       * <code>DISCUSSION = 7;</code>
+       */
+      public static final int DISCUSSION_VALUE = 7;
+      /**
+       * <code>DOCUMENTATION = 8;</code>
+       */
+      public static final int DOCUMENTATION_VALUE = 8;
+      /**
+       * <code>SUGGESTION = 9;</code>
+       */
+      public static final int SUGGESTION_VALUE = 9;
+      /**
+       * <code>QUESTION = 10;</code>
+       */
+      public static final int QUESTION_VALUE = 10;
+      /**
+       * <code>TEST = 11;</code>
+       */
+      public static final int TEST_VALUE = 11;
+
+
+      public final int getNumber() { return value; }
+
+      public static IssueLabel valueOf(int value) {
+        switch (value) {
+          case 0: return OTHER_LABEL;
+          case 1: return BUG;
+          case 2: return ENHANCEMENT;
+          case 3: return PROPOSAL;
+          case 4: return TASK;
+          case 5: return FEATURE;
+          case 6: return SUPPORT;
+          case 7: return DISCUSSION;
+          case 8: return DOCUMENTATION;
+          case 9: return SUGGESTION;
+          case 10: return QUESTION;
+          case 11: return TEST;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<IssueLabel>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<IssueLabel>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<IssueLabel>() {
+              public IssueLabel findValueByNumber(int number) {
+                return IssueLabel.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return boa.types.Issues.Issue.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final IssueLabel[] VALUES = values();
+
+      public static IssueLabel valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private IssueLabel(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:boa.types.Issue.IssueLabel)
+    }
+
+    /**
+     * Protobuf enum {@code boa.types.Issue.IssuePriority}
+     *
+     * <pre>
+     ** Describes the priority of issue 
+     * </pre>
+     */
+    public enum IssuePriority
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>OTHER_PRIORITY = 0;</code>
+       */
+      OTHER_PRIORITY(0, 0),
+      /**
+       * <code>TRIVIAL = 1;</code>
+       */
+      TRIVIAL(1, 1),
+      /**
+       * <code>MINOR = 2;</code>
+       */
+      MINOR(2, 2),
+      /**
+       * <code>MAJOR = 3;</code>
+       */
+      MAJOR(3, 3),
+      /**
+       * <code>CRITICAL = 4;</code>
+       */
+      CRITICAL(4, 4),
+      /**
+       * <code>BLOCKER = 5;</code>
+       */
+      BLOCKER(5, 5),
+      ;
+
+      /**
+       * <code>OTHER_PRIORITY = 0;</code>
+       */
+      public static final int OTHER_PRIORITY_VALUE = 0;
+      /**
+       * <code>TRIVIAL = 1;</code>
+       */
+      public static final int TRIVIAL_VALUE = 1;
+      /**
+       * <code>MINOR = 2;</code>
+       */
+      public static final int MINOR_VALUE = 2;
+      /**
+       * <code>MAJOR = 3;</code>
+       */
+      public static final int MAJOR_VALUE = 3;
+      /**
+       * <code>CRITICAL = 4;</code>
+       */
+      public static final int CRITICAL_VALUE = 4;
+      /**
+       * <code>BLOCKER = 5;</code>
+       */
+      public static final int BLOCKER_VALUE = 5;
+
+
+      public final int getNumber() { return value; }
+
+      public static IssuePriority valueOf(int value) {
+        switch (value) {
+          case 0: return OTHER_PRIORITY;
+          case 1: return TRIVIAL;
+          case 2: return MINOR;
+          case 3: return MAJOR;
+          case 4: return CRITICAL;
+          case 5: return BLOCKER;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<IssuePriority>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<IssuePriority>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<IssuePriority>() {
+              public IssuePriority findValueByNumber(int number) {
+                return IssuePriority.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return boa.types.Issues.Issue.getDescriptor().getEnumTypes().get(1);
+      }
+
+      private static final IssuePriority[] VALUES = values();
+
+      public static IssuePriority valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private IssuePriority(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:boa.types.Issue.IssuePriority)
+    }
+
+    /**
+     * Protobuf enum {@code boa.types.Issue.IssueStatus}
+     *
+     * <pre>
+     ** Describes the status of issue 
+     * </pre>
+     */
+    public enum IssueStatus
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>OTHER_STATUS = 0;</code>
+       */
+      OTHER_STATUS(0, 0),
+      /**
+       * <code>NEW = 1;</code>
+       */
+      NEW(1, 1),
+      /**
+       * <code>OPEN = 2;</code>
+       */
+      OPEN(2, 2),
+      /**
+       * <code>ON_HOLD = 3;</code>
+       */
+      ON_HOLD(3, 3),
+      /**
+       * <code>RESOLVED = 4;</code>
+       */
+      RESOLVED(4, 4),
+      /**
+       * <code>DUPLICATE = 5;</code>
+       */
+      DUPLICATE(5, 5),
+      /**
+       * <code>INVALID = 6;</code>
+       */
+      INVALID(6, 6),
+      /**
+       * <code>WONT_FIX = 7;</code>
+       */
+      WONT_FIX(7, 7),
+      /**
+       * <code>CLOSED = 8;</code>
+       */
+      CLOSED(8, 8),
+      /**
+       * <code>FIXED = 9;</code>
+       */
+      FIXED(9, 9),
+      /**
+       * <code>NOT_APPLICABLE = 10;</code>
+       */
+      NOT_APPLICABLE(10, 10),
+      /**
+       * <code>NOT_REPRODUCIBLE = 11;</code>
+       */
+      NOT_REPRODUCIBLE(11, 11),
+      /**
+       * <code>EXTERNAL = 12;</code>
+       */
+      EXTERNAL(12, 12),
+      /**
+       * <code>ANSWERED = 13;</code>
+       */
+      ANSWERED(13, 13),
+      ;
+
+      /**
+       * <code>OTHER_STATUS = 0;</code>
+       */
+      public static final int OTHER_STATUS_VALUE = 0;
+      /**
+       * <code>NEW = 1;</code>
+       */
+      public static final int NEW_VALUE = 1;
+      /**
+       * <code>OPEN = 2;</code>
+       */
+      public static final int OPEN_VALUE = 2;
+      /**
+       * <code>ON_HOLD = 3;</code>
+       */
+      public static final int ON_HOLD_VALUE = 3;
+      /**
+       * <code>RESOLVED = 4;</code>
+       */
+      public static final int RESOLVED_VALUE = 4;
+      /**
+       * <code>DUPLICATE = 5;</code>
+       */
+      public static final int DUPLICATE_VALUE = 5;
+      /**
+       * <code>INVALID = 6;</code>
+       */
+      public static final int INVALID_VALUE = 6;
+      /**
+       * <code>WONT_FIX = 7;</code>
+       */
+      public static final int WONT_FIX_VALUE = 7;
+      /**
+       * <code>CLOSED = 8;</code>
+       */
+      public static final int CLOSED_VALUE = 8;
+      /**
+       * <code>FIXED = 9;</code>
+       */
+      public static final int FIXED_VALUE = 9;
+      /**
+       * <code>NOT_APPLICABLE = 10;</code>
+       */
+      public static final int NOT_APPLICABLE_VALUE = 10;
+      /**
+       * <code>NOT_REPRODUCIBLE = 11;</code>
+       */
+      public static final int NOT_REPRODUCIBLE_VALUE = 11;
+      /**
+       * <code>EXTERNAL = 12;</code>
+       */
+      public static final int EXTERNAL_VALUE = 12;
+      /**
+       * <code>ANSWERED = 13;</code>
+       */
+      public static final int ANSWERED_VALUE = 13;
+
+
+      public final int getNumber() { return value; }
+
+      public static IssueStatus valueOf(int value) {
+        switch (value) {
+          case 0: return OTHER_STATUS;
+          case 1: return NEW;
+          case 2: return OPEN;
+          case 3: return ON_HOLD;
+          case 4: return RESOLVED;
+          case 5: return DUPLICATE;
+          case 6: return INVALID;
+          case 7: return WONT_FIX;
+          case 8: return CLOSED;
+          case 9: return FIXED;
+          case 10: return NOT_APPLICABLE;
+          case 11: return NOT_REPRODUCIBLE;
+          case 12: return EXTERNAL;
+          case 13: return ANSWERED;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<IssueStatus>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<IssueStatus>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<IssueStatus>() {
+              public IssueStatus findValueByNumber(int number) {
+                return IssueStatus.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return boa.types.Issues.Issue.getDescriptor().getEnumTypes().get(2);
+      }
+
+      private static final IssueStatus[] VALUES = values();
+
+      public static IssueStatus valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private IssueStatus(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:boa.types.Issue.IssueStatus)
+    }
+
     private int bitField0_;
     // required string id = 1;
     public static final int ID_FIELD_NUMBER = 1;
     private java.lang.Object id_;
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** The issue's id 
+     * </pre>
      */
     public boolean hasId() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** The issue's id 
+     * </pre>
      */
     public java.lang.String getId() {
       java.lang.Object ref = id_;
@@ -2068,6 +2950,10 @@ public final class Issues {
     }
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** The issue's id 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getIdBytes() {
@@ -2083,47 +2969,28 @@ public final class Issues {
       }
     }
 
-    // required string status = 2;
+    // required .boa.types.Issue.IssueStatus status = 2;
     public static final int STATUS_FIELD_NUMBER = 2;
-    private java.lang.Object status_;
+    private boa.types.Issues.Issue.IssueStatus status_;
     /**
-     * <code>required string status = 2;</code>
+     * <code>required .boa.types.Issue.IssueStatus status = 2;</code>
+     *
+     * <pre>
+     ** The issue' status i.e open, closed etc.. 
+     * </pre>
      */
     public boolean hasStatus() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required string status = 2;</code>
+     * <code>required .boa.types.Issue.IssueStatus status = 2;</code>
+     *
+     * <pre>
+     ** The issue' status i.e open, closed etc.. 
+     * </pre>
      */
-    public java.lang.String getStatus() {
-      java.lang.Object ref = status_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          status_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string status = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getStatusBytes() {
-      java.lang.Object ref = status_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        status_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public boa.types.Issues.Issue.IssueStatus getStatus() {
+      return status_;
     }
 
     // required .boa.types.Person author = 3;
@@ -2131,18 +2998,30 @@ public final class Issues {
     private boa.types.Shared.Person author_;
     /**
      * <code>required .boa.types.Person author = 3;</code>
+     *
+     * <pre>
+     ** The author of the issue 
+     * </pre>
      */
     public boolean hasAuthor() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>required .boa.types.Person author = 3;</code>
+     *
+     * <pre>
+     ** The author of the issue 
+     * </pre>
      */
     public boa.types.Shared.Person getAuthor() {
       return author_;
     }
     /**
      * <code>required .boa.types.Person author = 3;</code>
+     *
+     * <pre>
+     ** The author of the issue 
+     * </pre>
      */
     public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
       return author_;
@@ -2153,18 +3032,30 @@ public final class Issues {
     private boa.types.Shared.Person assignee_;
     /**
      * <code>optional .boa.types.Person assignee = 4;</code>
+     *
+     * <pre>
+     ** The primary assignee 
+     * </pre>
      */
     public boolean hasAssignee() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
      * <code>optional .boa.types.Person assignee = 4;</code>
+     *
+     * <pre>
+     ** The primary assignee 
+     * </pre>
      */
     public boa.types.Shared.Person getAssignee() {
       return assignee_;
     }
     /**
      * <code>optional .boa.types.Person assignee = 4;</code>
+     *
+     * <pre>
+     ** The primary assignee 
+     * </pre>
      */
     public boa.types.Shared.PersonOrBuilder getAssigneeOrBuilder() {
       return assignee_;
@@ -2175,12 +3066,20 @@ public final class Issues {
     private java.lang.Object summary_;
     /**
      * <code>required string summary = 5;</code>
+     *
+     * <pre>
+     ** The summary and or title of the issue 
+     * </pre>
      */
     public boolean hasSummary() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
      * <code>required string summary = 5;</code>
+     *
+     * <pre>
+     ** The summary and or title of the issue 
+     * </pre>
      */
     public java.lang.String getSummary() {
       java.lang.Object ref = summary_;
@@ -2198,6 +3097,10 @@ public final class Issues {
     }
     /**
      * <code>required string summary = 5;</code>
+     *
+     * <pre>
+     ** The summary and or title of the issue 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getSummaryBytes() {
@@ -2218,12 +3121,20 @@ public final class Issues {
     private java.lang.Object description_;
     /**
      * <code>required string description = 6;</code>
+     *
+     * <pre>
+     ** The description and or body of the issue 
+     * </pre>
      */
     public boolean hasDescription() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
      * <code>required string description = 6;</code>
+     *
+     * <pre>
+     ** The description and or body of the issue 
+     * </pre>
      */
     public java.lang.String getDescription() {
       java.lang.Object ref = description_;
@@ -2241,6 +3152,10 @@ public final class Issues {
     }
     /**
      * <code>required string description = 6;</code>
+     *
+     * <pre>
+     ** The description and or body of the issue 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getDescriptionBytes() {
@@ -2261,12 +3176,20 @@ public final class Issues {
     private long createdDate_;
     /**
      * <code>required uint64 created_date = 7;</code>
+     *
+     * <pre>
+     ** The created date 
+     * </pre>
      */
     public boolean hasCreatedDate() {
       return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
      * <code>required uint64 created_date = 7;</code>
+     *
+     * <pre>
+     ** The created date 
+     * </pre>
      */
     public long getCreatedDate() {
       return createdDate_;
@@ -2277,12 +3200,20 @@ public final class Issues {
     private long modifiedDate_;
     /**
      * <code>required uint64 modified_date = 8;</code>
+     *
+     * <pre>
+     ** The last modified date, aka update date 
+     * </pre>
      */
     public boolean hasModifiedDate() {
       return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     /**
      * <code>required uint64 modified_date = 8;</code>
+     *
+     * <pre>
+     ** The last modified date, aka update date 
+     * </pre>
      */
     public long getModifiedDate() {
       return modifiedDate_;
@@ -2293,12 +3224,20 @@ public final class Issues {
     private long completedDate_;
     /**
      * <code>optional uint64 completed_date = 9;</code>
+     *
+     * <pre>
+     ** The closed date 
+     * </pre>
      */
     public boolean hasCompletedDate() {
       return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     /**
      * <code>optional uint64 completed_date = 9;</code>
+     *
+     * <pre>
+     ** The closed date 
+     * </pre>
      */
     public long getCompletedDate() {
       return completedDate_;
@@ -2309,6 +3248,10 @@ public final class Issues {
     private com.google.protobuf.LazyStringList keywords_;
     /**
      * <code>repeated string keywords = 10;</code>
+     *
+     * <pre>
+     ** Keywords/tags 
+     * </pre>
      */
     public java.util.List<java.lang.String>
         getKeywordsList() {
@@ -2316,18 +3259,30 @@ public final class Issues {
     }
     /**
      * <code>repeated string keywords = 10;</code>
+     *
+     * <pre>
+     ** Keywords/tags 
+     * </pre>
      */
     public int getKeywordsCount() {
       return keywords_.size();
     }
     /**
      * <code>repeated string keywords = 10;</code>
+     *
+     * <pre>
+     ** Keywords/tags 
+     * </pre>
      */
     public java.lang.String getKeywords(int index) {
       return keywords_.get(index);
     }
     /**
      * <code>repeated string keywords = 10;</code>
+     *
+     * <pre>
+     ** Keywords/tags 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getKeywordsBytes(int index) {
@@ -2339,58 +3294,47 @@ public final class Issues {
     private int vote_;
     /**
      * <code>optional int32 vote = 11;</code>
+     *
+     * <pre>
+     ** Count of votes 
+     * </pre>
      */
     public boolean hasVote() {
       return ((bitField0_ & 0x00000200) == 0x00000200);
     }
     /**
      * <code>optional int32 vote = 11;</code>
+     *
+     * <pre>
+     ** Count of votes 
+     * </pre>
      */
     public int getVote() {
       return vote_;
     }
 
-    // optional string priority = 12;
+    // optional .boa.types.Issue.IssuePriority priority = 12;
     public static final int PRIORITY_FIELD_NUMBER = 12;
-    private java.lang.Object priority_;
+    private boa.types.Issues.Issue.IssuePriority priority_;
     /**
-     * <code>optional string priority = 12;</code>
+     * <code>optional .boa.types.Issue.IssuePriority priority = 12;</code>
+     *
+     * <pre>
+     ** The issue's priority 
+     * </pre>
      */
     public boolean hasPriority() {
       return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     /**
-     * <code>optional string priority = 12;</code>
+     * <code>optional .boa.types.Issue.IssuePriority priority = 12;</code>
+     *
+     * <pre>
+     ** The issue's priority 
+     * </pre>
      */
-    public java.lang.String getPriority() {
-      java.lang.Object ref = priority_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          priority_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string priority = 12;</code>
-     */
-    public com.google.protobuf.ByteString
-        getPriorityBytes() {
-      java.lang.Object ref = priority_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        priority_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public boa.types.Issues.Issue.IssuePriority getPriority() {
+      return priority_;
     }
 
     // repeated .boa.types.Attachment files = 13;
@@ -2398,12 +3342,20 @@ public final class Issues {
     private java.util.List<boa.types.Issues.Attachment> files_;
     /**
      * <code>repeated .boa.types.Attachment files = 13;</code>
+     *
+     * <pre>
+     ** Attachment files 
+     * </pre>
      */
     public java.util.List<boa.types.Issues.Attachment> getFilesList() {
       return files_;
     }
     /**
      * <code>repeated .boa.types.Attachment files = 13;</code>
+     *
+     * <pre>
+     ** Attachment files 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Issues.AttachmentOrBuilder> 
         getFilesOrBuilderList() {
@@ -2411,18 +3363,30 @@ public final class Issues {
     }
     /**
      * <code>repeated .boa.types.Attachment files = 13;</code>
+     *
+     * <pre>
+     ** Attachment files 
+     * </pre>
      */
     public int getFilesCount() {
       return files_.size();
     }
     /**
      * <code>repeated .boa.types.Attachment files = 13;</code>
+     *
+     * <pre>
+     ** Attachment files 
+     * </pre>
      */
     public boa.types.Issues.Attachment getFiles(int index) {
       return files_.get(index);
     }
     /**
      * <code>repeated .boa.types.Attachment files = 13;</code>
+     *
+     * <pre>
+     ** Attachment files 
+     * </pre>
      */
     public boa.types.Issues.AttachmentOrBuilder getFilesOrBuilder(
         int index) {
@@ -2436,20 +3400,7 @@ public final class Issues {
      * <code>repeated .boa.types.IssueComment comments = 14;</code>
      *
      * <pre>
-     *
-     *optional string component = 15;
-     *optional string resolution = 16;
-     *repeated string duplicated_by = 17;
-     *optional string duplicate_of = 18;
-     *optional string subcomponent = 19;
-     *optional string version = 20;
-     *optional string os = 21;
-     *optional string platform = 22;
-     *optional string milestone = 23;
-     *optional string depends_on = 24;
-     *optional string blocked = 25;
-     *optional string secrecy = 26;
-     *repeated IssueChange changes = 27;
+     ** The issue's comments 
      * </pre>
      */
     public java.util.List<boa.types.Issues.IssueComment> getCommentsList() {
@@ -2459,20 +3410,7 @@ public final class Issues {
      * <code>repeated .boa.types.IssueComment comments = 14;</code>
      *
      * <pre>
-     *
-     *optional string component = 15;
-     *optional string resolution = 16;
-     *repeated string duplicated_by = 17;
-     *optional string duplicate_of = 18;
-     *optional string subcomponent = 19;
-     *optional string version = 20;
-     *optional string os = 21;
-     *optional string platform = 22;
-     *optional string milestone = 23;
-     *optional string depends_on = 24;
-     *optional string blocked = 25;
-     *optional string secrecy = 26;
-     *repeated IssueChange changes = 27;
+     ** The issue's comments 
      * </pre>
      */
     public java.util.List<? extends boa.types.Issues.IssueCommentOrBuilder> 
@@ -2483,20 +3421,7 @@ public final class Issues {
      * <code>repeated .boa.types.IssueComment comments = 14;</code>
      *
      * <pre>
-     *
-     *optional string component = 15;
-     *optional string resolution = 16;
-     *repeated string duplicated_by = 17;
-     *optional string duplicate_of = 18;
-     *optional string subcomponent = 19;
-     *optional string version = 20;
-     *optional string os = 21;
-     *optional string platform = 22;
-     *optional string milestone = 23;
-     *optional string depends_on = 24;
-     *optional string blocked = 25;
-     *optional string secrecy = 26;
-     *repeated IssueChange changes = 27;
+     ** The issue's comments 
      * </pre>
      */
     public int getCommentsCount() {
@@ -2506,20 +3431,7 @@ public final class Issues {
      * <code>repeated .boa.types.IssueComment comments = 14;</code>
      *
      * <pre>
-     *
-     *optional string component = 15;
-     *optional string resolution = 16;
-     *repeated string duplicated_by = 17;
-     *optional string duplicate_of = 18;
-     *optional string subcomponent = 19;
-     *optional string version = 20;
-     *optional string os = 21;
-     *optional string platform = 22;
-     *optional string milestone = 23;
-     *optional string depends_on = 24;
-     *optional string blocked = 25;
-     *optional string secrecy = 26;
-     *repeated IssueChange changes = 27;
+     ** The issue's comments 
      * </pre>
      */
     public boa.types.Issues.IssueComment getComments(int index) {
@@ -2529,20 +3441,7 @@ public final class Issues {
      * <code>repeated .boa.types.IssueComment comments = 14;</code>
      *
      * <pre>
-     *
-     *optional string component = 15;
-     *optional string resolution = 16;
-     *repeated string duplicated_by = 17;
-     *optional string duplicate_of = 18;
-     *optional string subcomponent = 19;
-     *optional string version = 20;
-     *optional string os = 21;
-     *optional string platform = 22;
-     *optional string milestone = 23;
-     *optional string depends_on = 24;
-     *optional string blocked = 25;
-     *optional string secrecy = 26;
-     *repeated IssueChange changes = 27;
+     ** The issue's comments 
      * </pre>
      */
     public boa.types.Issues.IssueCommentOrBuilder getCommentsOrBuilder(
@@ -2550,9 +3449,444 @@ public final class Issues {
       return comments_.get(index);
     }
 
+    // optional string milestone = 23;
+    public static final int MILESTONE_FIELD_NUMBER = 23;
+    private java.lang.Object milestone_;
+    /**
+     * <code>optional string milestone = 23;</code>
+     *
+     * <pre>
+     ** The issues's associated milestone 
+     * </pre>
+     */
+    public boolean hasMilestone() {
+      return ((bitField0_ & 0x00000800) == 0x00000800);
+    }
+    /**
+     * <code>optional string milestone = 23;</code>
+     *
+     * <pre>
+     ** The issues's associated milestone 
+     * </pre>
+     */
+    public java.lang.String getMilestone() {
+      java.lang.Object ref = milestone_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          milestone_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string milestone = 23;</code>
+     *
+     * <pre>
+     ** The issues's associated milestone 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getMilestoneBytes() {
+      java.lang.Object ref = milestone_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        milestone_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional string blocked = 25;
+    public static final int BLOCKED_FIELD_NUMBER = 25;
+    private java.lang.Object blocked_;
+    /**
+     * <code>optional string blocked = 25;</code>
+     *
+     * <pre>
+     ** The issue's blocked or locked status 
+     * </pre>
+     */
+    public boolean hasBlocked() {
+      return ((bitField0_ & 0x00001000) == 0x00001000);
+    }
+    /**
+     * <code>optional string blocked = 25;</code>
+     *
+     * <pre>
+     ** The issue's blocked or locked status 
+     * </pre>
+     */
+    public java.lang.String getBlocked() {
+      java.lang.Object ref = blocked_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          blocked_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string blocked = 25;</code>
+     *
+     * <pre>
+     ** The issue's blocked or locked status 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getBlockedBytes() {
+      java.lang.Object ref = blocked_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        blocked_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional string pullUrl = 28;
+    public static final int PULLURL_FIELD_NUMBER = 28;
+    private java.lang.Object pullUrl_;
+    /**
+     * <code>optional string pullUrl = 28;</code>
+     *
+     * <pre>
+     ** The URL for the issue's associated pull request 
+     * </pre>
+     */
+    public boolean hasPullUrl() {
+      return ((bitField0_ & 0x00002000) == 0x00002000);
+    }
+    /**
+     * <code>optional string pullUrl = 28;</code>
+     *
+     * <pre>
+     ** The URL for the issue's associated pull request 
+     * </pre>
+     */
+    public java.lang.String getPullUrl() {
+      java.lang.Object ref = pullUrl_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          pullUrl_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string pullUrl = 28;</code>
+     *
+     * <pre>
+     ** The URL for the issue's associated pull request 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getPullUrlBytes() {
+      java.lang.Object ref = pullUrl_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        pullUrl_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // repeated .boa.types.Person assignees = 29;
+    public static final int ASSIGNEES_FIELD_NUMBER = 29;
+    private java.util.List<boa.types.Shared.Person> assignees_;
+    /**
+     * <code>repeated .boa.types.Person assignees = 29;</code>
+     *
+     * <pre>
+     ** List of assigned persons 
+     * </pre>
+     */
+    public java.util.List<boa.types.Shared.Person> getAssigneesList() {
+      return assignees_;
+    }
+    /**
+     * <code>repeated .boa.types.Person assignees = 29;</code>
+     *
+     * <pre>
+     ** List of assigned persons 
+     * </pre>
+     */
+    public java.util.List<? extends boa.types.Shared.PersonOrBuilder> 
+        getAssigneesOrBuilderList() {
+      return assignees_;
+    }
+    /**
+     * <code>repeated .boa.types.Person assignees = 29;</code>
+     *
+     * <pre>
+     ** List of assigned persons 
+     * </pre>
+     */
+    public int getAssigneesCount() {
+      return assignees_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Person assignees = 29;</code>
+     *
+     * <pre>
+     ** List of assigned persons 
+     * </pre>
+     */
+    public boa.types.Shared.Person getAssignees(int index) {
+      return assignees_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Person assignees = 29;</code>
+     *
+     * <pre>
+     ** List of assigned persons 
+     * </pre>
+     */
+    public boa.types.Shared.PersonOrBuilder getAssigneesOrBuilder(
+        int index) {
+      return assignees_.get(index);
+    }
+
+    // required uint32 number = 30;
+    public static final int NUMBER_FIELD_NUMBER = 30;
+    private int number_;
+    /**
+     * <code>required uint32 number = 30;</code>
+     *
+     * <pre>
+     ** The issue's number 
+     * </pre>
+     */
+    public boolean hasNumber() {
+      return ((bitField0_ & 0x00004000) == 0x00004000);
+    }
+    /**
+     * <code>required uint32 number = 30;</code>
+     *
+     * <pre>
+     ** The issue's number 
+     * </pre>
+     */
+    public int getNumber() {
+      return number_;
+    }
+
+    // repeated .boa.types.Issue.IssueLabel labels = 31;
+    public static final int LABELS_FIELD_NUMBER = 31;
+    private java.util.List<boa.types.Issues.Issue.IssueLabel> labels_;
+    /**
+     * <code>repeated .boa.types.Issue.IssueLabel labels = 31;</code>
+     *
+     * <pre>
+     ** The issue's labels 
+     * </pre>
+     */
+    public java.util.List<boa.types.Issues.Issue.IssueLabel> getLabelsList() {
+      return labels_;
+    }
+    /**
+     * <code>repeated .boa.types.Issue.IssueLabel labels = 31;</code>
+     *
+     * <pre>
+     ** The issue's labels 
+     * </pre>
+     */
+    public int getLabelsCount() {
+      return labels_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Issue.IssueLabel labels = 31;</code>
+     *
+     * <pre>
+     ** The issue's labels 
+     * </pre>
+     */
+    public boa.types.Issues.Issue.IssueLabel getLabels(int index) {
+      return labels_.get(index);
+    }
+
+    // optional string other_status = 32;
+    public static final int OTHER_STATUS_FIELD_NUMBER = 32;
+    private java.lang.Object otherStatus_;
+    /**
+     * <code>optional string other_status = 32;</code>
+     *
+     * <pre>
+     ** The issue' other status 
+     * </pre>
+     */
+    public boolean hasOtherStatus() {
+      return ((bitField0_ & 0x00008000) == 0x00008000);
+    }
+    /**
+     * <code>optional string other_status = 32;</code>
+     *
+     * <pre>
+     ** The issue' other status 
+     * </pre>
+     */
+    public java.lang.String getOtherStatus() {
+      java.lang.Object ref = otherStatus_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          otherStatus_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string other_status = 32;</code>
+     *
+     * <pre>
+     ** The issue' other status 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getOtherStatusBytes() {
+      java.lang.Object ref = otherStatus_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        otherStatus_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional string other_priority = 33;
+    public static final int OTHER_PRIORITY_FIELD_NUMBER = 33;
+    private java.lang.Object otherPriority_;
+    /**
+     * <code>optional string other_priority = 33;</code>
+     *
+     * <pre>
+     ** The issue's other priority 
+     * </pre>
+     */
+    public boolean hasOtherPriority() {
+      return ((bitField0_ & 0x00010000) == 0x00010000);
+    }
+    /**
+     * <code>optional string other_priority = 33;</code>
+     *
+     * <pre>
+     ** The issue's other priority 
+     * </pre>
+     */
+    public java.lang.String getOtherPriority() {
+      java.lang.Object ref = otherPriority_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          otherPriority_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string other_priority = 33;</code>
+     *
+     * <pre>
+     ** The issue's other priority 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getOtherPriorityBytes() {
+      java.lang.Object ref = otherPriority_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        otherPriority_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // repeated string other_labels = 34;
+    public static final int OTHER_LABELS_FIELD_NUMBER = 34;
+    private com.google.protobuf.LazyStringList otherLabels_;
+    /**
+     * <code>repeated string other_labels = 34;</code>
+     *
+     * <pre>
+     ** The issue's other labels 
+     * </pre>
+     */
+    public java.util.List<java.lang.String>
+        getOtherLabelsList() {
+      return otherLabels_;
+    }
+    /**
+     * <code>repeated string other_labels = 34;</code>
+     *
+     * <pre>
+     ** The issue's other labels 
+     * </pre>
+     */
+    public int getOtherLabelsCount() {
+      return otherLabels_.size();
+    }
+    /**
+     * <code>repeated string other_labels = 34;</code>
+     *
+     * <pre>
+     ** The issue's other labels 
+     * </pre>
+     */
+    public java.lang.String getOtherLabels(int index) {
+      return otherLabels_.get(index);
+    }
+    /**
+     * <code>repeated string other_labels = 34;</code>
+     *
+     * <pre>
+     ** The issue's other labels 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getOtherLabelsBytes(int index) {
+      return otherLabels_.getByteString(index);
+    }
+
     private void initFields() {
       id_ = "";
-      status_ = "";
+      status_ = boa.types.Issues.Issue.IssueStatus.OTHER_STATUS;
       author_ = boa.types.Shared.Person.getDefaultInstance();
       assignee_ = boa.types.Shared.Person.getDefaultInstance();
       summary_ = "";
@@ -2562,9 +3896,18 @@ public final class Issues {
       completedDate_ = 0L;
       keywords_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       vote_ = 0;
-      priority_ = "";
+      priority_ = boa.types.Issues.Issue.IssuePriority.OTHER_PRIORITY;
       files_ = java.util.Collections.emptyList();
       comments_ = java.util.Collections.emptyList();
+      milestone_ = "";
+      blocked_ = "";
+      pullUrl_ = "";
+      assignees_ = java.util.Collections.emptyList();
+      number_ = 0;
+      labels_ = java.util.Collections.emptyList();
+      otherStatus_ = "";
+      otherPriority_ = "";
+      otherLabels_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2599,6 +3942,10 @@ public final class Issues {
         memoizedIsInitialized = 0;
         return false;
       }
+      if (!hasNumber()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       if (!getAuthor().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
@@ -2621,6 +3968,12 @@ public final class Issues {
           return false;
         }
       }
+      for (int i = 0; i < getAssigneesCount(); i++) {
+        if (!getAssignees(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -2632,7 +3985,7 @@ public final class Issues {
         output.writeBytes(1, getIdBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getStatusBytes());
+        output.writeEnum(2, status_.getNumber());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeMessage(3, author_);
@@ -2662,13 +4015,40 @@ public final class Issues {
         output.writeInt32(11, vote_);
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        output.writeBytes(12, getPriorityBytes());
+        output.writeEnum(12, priority_.getNumber());
       }
       for (int i = 0; i < files_.size(); i++) {
         output.writeMessage(13, files_.get(i));
       }
       for (int i = 0; i < comments_.size(); i++) {
         output.writeMessage(14, comments_.get(i));
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        output.writeBytes(23, getMilestoneBytes());
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        output.writeBytes(25, getBlockedBytes());
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        output.writeBytes(28, getPullUrlBytes());
+      }
+      for (int i = 0; i < assignees_.size(); i++) {
+        output.writeMessage(29, assignees_.get(i));
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        output.writeUInt32(30, number_);
+      }
+      for (int i = 0; i < labels_.size(); i++) {
+        output.writeEnum(31, labels_.get(i).getNumber());
+      }
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        output.writeBytes(32, getOtherStatusBytes());
+      }
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        output.writeBytes(33, getOtherPriorityBytes());
+      }
+      for (int i = 0; i < otherLabels_.size(); i++) {
+        output.writeBytes(34, otherLabels_.getByteString(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -2685,7 +4065,7 @@ public final class Issues {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getStatusBytes());
+          .computeEnumSize(2, status_.getNumber());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
@@ -2730,7 +4110,7 @@ public final class Issues {
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(12, getPriorityBytes());
+          .computeEnumSize(12, priority_.getNumber());
       }
       for (int i = 0; i < files_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
@@ -2739,6 +4119,52 @@ public final class Issues {
       for (int i = 0; i < comments_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(14, comments_.get(i));
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(23, getMilestoneBytes());
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(25, getBlockedBytes());
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(28, getPullUrlBytes());
+      }
+      for (int i = 0; i < assignees_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(29, assignees_.get(i));
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(30, number_);
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < labels_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeEnumSizeNoTag(labels_.get(i).getNumber());
+        }
+        size += dataSize;
+        size += 2 * labels_.size();
+      }
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(32, getOtherStatusBytes());
+      }
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(33, getOtherPriorityBytes());
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < otherLabels_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(otherLabels_.getByteString(i));
+        }
+        size += dataSize;
+        size += 2 * getOtherLabelsList().size();
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2820,6 +4246,10 @@ public final class Issues {
     }
     /**
      * Protobuf type {@code boa.types.Issue}
+     *
+     * <pre>
+     ** An issue in the repository 
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -2852,6 +4282,7 @@ public final class Issues {
           getAssigneeFieldBuilder();
           getFilesFieldBuilder();
           getCommentsFieldBuilder();
+          getAssigneesFieldBuilder();
         }
       }
       private static Builder create() {
@@ -2862,7 +4293,7 @@ public final class Issues {
         super.clear();
         id_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        status_ = "";
+        status_ = boa.types.Issues.Issue.IssueStatus.OTHER_STATUS;
         bitField0_ = (bitField0_ & ~0x00000002);
         if (authorBuilder_ == null) {
           author_ = boa.types.Shared.Person.getDefaultInstance();
@@ -2890,7 +4321,7 @@ public final class Issues {
         bitField0_ = (bitField0_ & ~0x00000200);
         vote_ = 0;
         bitField0_ = (bitField0_ & ~0x00000400);
-        priority_ = "";
+        priority_ = boa.types.Issues.Issue.IssuePriority.OTHER_PRIORITY;
         bitField0_ = (bitField0_ & ~0x00000800);
         if (filesBuilder_ == null) {
           files_ = java.util.Collections.emptyList();
@@ -2904,6 +4335,28 @@ public final class Issues {
         } else {
           commentsBuilder_.clear();
         }
+        milestone_ = "";
+        bitField0_ = (bitField0_ & ~0x00004000);
+        blocked_ = "";
+        bitField0_ = (bitField0_ & ~0x00008000);
+        pullUrl_ = "";
+        bitField0_ = (bitField0_ & ~0x00010000);
+        if (assigneesBuilder_ == null) {
+          assignees_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00020000);
+        } else {
+          assigneesBuilder_.clear();
+        }
+        number_ = 0;
+        bitField0_ = (bitField0_ & ~0x00040000);
+        labels_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00080000);
+        otherStatus_ = "";
+        bitField0_ = (bitField0_ & ~0x00100000);
+        otherPriority_ = "";
+        bitField0_ = (bitField0_ & ~0x00200000);
+        otherLabels_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00400000);
         return this;
       }
 
@@ -3008,6 +4461,50 @@ public final class Issues {
         } else {
           result.comments_ = commentsBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
+          to_bitField0_ |= 0x00000800;
+        }
+        result.milestone_ = milestone_;
+        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
+          to_bitField0_ |= 0x00001000;
+        }
+        result.blocked_ = blocked_;
+        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
+          to_bitField0_ |= 0x00002000;
+        }
+        result.pullUrl_ = pullUrl_;
+        if (assigneesBuilder_ == null) {
+          if (((bitField0_ & 0x00020000) == 0x00020000)) {
+            assignees_ = java.util.Collections.unmodifiableList(assignees_);
+            bitField0_ = (bitField0_ & ~0x00020000);
+          }
+          result.assignees_ = assignees_;
+        } else {
+          result.assignees_ = assigneesBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
+          to_bitField0_ |= 0x00004000;
+        }
+        result.number_ = number_;
+        if (((bitField0_ & 0x00080000) == 0x00080000)) {
+          labels_ = java.util.Collections.unmodifiableList(labels_);
+          bitField0_ = (bitField0_ & ~0x00080000);
+        }
+        result.labels_ = labels_;
+        if (((from_bitField0_ & 0x00100000) == 0x00100000)) {
+          to_bitField0_ |= 0x00008000;
+        }
+        result.otherStatus_ = otherStatus_;
+        if (((from_bitField0_ & 0x00200000) == 0x00200000)) {
+          to_bitField0_ |= 0x00010000;
+        }
+        result.otherPriority_ = otherPriority_;
+        if (((bitField0_ & 0x00400000) == 0x00400000)) {
+          otherLabels_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              otherLabels_);
+          bitField0_ = (bitField0_ & ~0x00400000);
+        }
+        result.otherLabels_ = otherLabels_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3030,9 +4527,7 @@ public final class Issues {
           onChanged();
         }
         if (other.hasStatus()) {
-          bitField0_ |= 0x00000002;
-          status_ = other.status_;
-          onChanged();
+          setStatus(other.getStatus());
         }
         if (other.hasAuthor()) {
           mergeAuthor(other.getAuthor());
@@ -3073,9 +4568,7 @@ public final class Issues {
           setVote(other.getVote());
         }
         if (other.hasPriority()) {
-          bitField0_ |= 0x00000800;
-          priority_ = other.priority_;
-          onChanged();
+          setPriority(other.getPriority());
         }
         if (filesBuilder_ == null) {
           if (!other.files_.isEmpty()) {
@@ -3129,6 +4622,80 @@ public final class Issues {
             }
           }
         }
+        if (other.hasMilestone()) {
+          bitField0_ |= 0x00004000;
+          milestone_ = other.milestone_;
+          onChanged();
+        }
+        if (other.hasBlocked()) {
+          bitField0_ |= 0x00008000;
+          blocked_ = other.blocked_;
+          onChanged();
+        }
+        if (other.hasPullUrl()) {
+          bitField0_ |= 0x00010000;
+          pullUrl_ = other.pullUrl_;
+          onChanged();
+        }
+        if (assigneesBuilder_ == null) {
+          if (!other.assignees_.isEmpty()) {
+            if (assignees_.isEmpty()) {
+              assignees_ = other.assignees_;
+              bitField0_ = (bitField0_ & ~0x00020000);
+            } else {
+              ensureAssigneesIsMutable();
+              assignees_.addAll(other.assignees_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.assignees_.isEmpty()) {
+            if (assigneesBuilder_.isEmpty()) {
+              assigneesBuilder_.dispose();
+              assigneesBuilder_ = null;
+              assignees_ = other.assignees_;
+              bitField0_ = (bitField0_ & ~0x00020000);
+              assigneesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getAssigneesFieldBuilder() : null;
+            } else {
+              assigneesBuilder_.addAllMessages(other.assignees_);
+            }
+          }
+        }
+        if (other.hasNumber()) {
+          setNumber(other.getNumber());
+        }
+        if (!other.labels_.isEmpty()) {
+          if (labels_.isEmpty()) {
+            labels_ = other.labels_;
+            bitField0_ = (bitField0_ & ~0x00080000);
+          } else {
+            ensureLabelsIsMutable();
+            labels_.addAll(other.labels_);
+          }
+          onChanged();
+        }
+        if (other.hasOtherStatus()) {
+          bitField0_ |= 0x00100000;
+          otherStatus_ = other.otherStatus_;
+          onChanged();
+        }
+        if (other.hasOtherPriority()) {
+          bitField0_ |= 0x00200000;
+          otherPriority_ = other.otherPriority_;
+          onChanged();
+        }
+        if (!other.otherLabels_.isEmpty()) {
+          if (otherLabels_.isEmpty()) {
+            otherLabels_ = other.otherLabels_;
+            bitField0_ = (bitField0_ & ~0x00400000);
+          } else {
+            ensureOtherLabelsIsMutable();
+            otherLabels_.addAll(other.otherLabels_);
+          }
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -3162,6 +4729,10 @@ public final class Issues {
           
           return false;
         }
+        if (!hasNumber()) {
+          
+          return false;
+        }
         if (!getAuthor().isInitialized()) {
           
           return false;
@@ -3180,6 +4751,12 @@ public final class Issues {
         }
         for (int i = 0; i < getCommentsCount(); i++) {
           if (!getComments(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getAssigneesCount(); i++) {
+          if (!getAssignees(i).isInitialized()) {
             
             return false;
           }
@@ -3210,12 +4787,20 @@ public final class Issues {
       private java.lang.Object id_ = "";
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** The issue's id 
+       * </pre>
        */
       public boolean hasId() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** The issue's id 
+       * </pre>
        */
       public java.lang.String getId() {
         java.lang.Object ref = id_;
@@ -3230,6 +4815,10 @@ public final class Issues {
       }
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** The issue's id 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getIdBytes() {
@@ -3246,6 +4835,10 @@ public final class Issues {
       }
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** The issue's id 
+       * </pre>
        */
       public Builder setId(
           java.lang.String value) {
@@ -3259,6 +4852,10 @@ public final class Issues {
       }
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** The issue's id 
+       * </pre>
        */
       public Builder clearId() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -3268,6 +4865,10 @@ public final class Issues {
       }
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** The issue's id 
+       * </pre>
        */
       public Builder setIdBytes(
           com.google.protobuf.ByteString value) {
@@ -3280,76 +4881,54 @@ public final class Issues {
         return this;
       }
 
-      // required string status = 2;
-      private java.lang.Object status_ = "";
+      // required .boa.types.Issue.IssueStatus status = 2;
+      private boa.types.Issues.Issue.IssueStatus status_ = boa.types.Issues.Issue.IssueStatus.OTHER_STATUS;
       /**
-       * <code>required string status = 2;</code>
+       * <code>required .boa.types.Issue.IssueStatus status = 2;</code>
+       *
+       * <pre>
+       ** The issue' status i.e open, closed etc.. 
+       * </pre>
        */
       public boolean hasStatus() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required string status = 2;</code>
+       * <code>required .boa.types.Issue.IssueStatus status = 2;</code>
+       *
+       * <pre>
+       ** The issue' status i.e open, closed etc.. 
+       * </pre>
        */
-      public java.lang.String getStatus() {
-        java.lang.Object ref = status_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          status_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public boa.types.Issues.Issue.IssueStatus getStatus() {
+        return status_;
       }
       /**
-       * <code>required string status = 2;</code>
+       * <code>required .boa.types.Issue.IssueStatus status = 2;</code>
+       *
+       * <pre>
+       ** The issue' status i.e open, closed etc.. 
+       * </pre>
        */
-      public com.google.protobuf.ByteString
-          getStatusBytes() {
-        java.lang.Object ref = status_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          status_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string status = 2;</code>
-       */
-      public Builder setStatus(
-          java.lang.String value) {
+      public Builder setStatus(boa.types.Issues.Issue.IssueStatus value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
         status_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string status = 2;</code>
+       * <code>required .boa.types.Issue.IssueStatus status = 2;</code>
+       *
+       * <pre>
+       ** The issue' status i.e open, closed etc.. 
+       * </pre>
        */
       public Builder clearStatus() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        status_ = getDefaultInstance().getStatus();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string status = 2;</code>
-       */
-      public Builder setStatusBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        status_ = value;
+        status_ = boa.types.Issues.Issue.IssueStatus.OTHER_STATUS;
         onChanged();
         return this;
       }
@@ -3360,12 +4939,20 @@ public final class Issues {
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> authorBuilder_;
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The author of the issue 
+       * </pre>
        */
       public boolean hasAuthor() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The author of the issue 
+       * </pre>
        */
       public boa.types.Shared.Person getAuthor() {
         if (authorBuilder_ == null) {
@@ -3376,6 +4963,10 @@ public final class Issues {
       }
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The author of the issue 
+       * </pre>
        */
       public Builder setAuthor(boa.types.Shared.Person value) {
         if (authorBuilder_ == null) {
@@ -3392,6 +4983,10 @@ public final class Issues {
       }
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The author of the issue 
+       * </pre>
        */
       public Builder setAuthor(
           boa.types.Shared.Person.Builder builderForValue) {
@@ -3406,6 +5001,10 @@ public final class Issues {
       }
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The author of the issue 
+       * </pre>
        */
       public Builder mergeAuthor(boa.types.Shared.Person value) {
         if (authorBuilder_ == null) {
@@ -3425,6 +5024,10 @@ public final class Issues {
       }
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The author of the issue 
+       * </pre>
        */
       public Builder clearAuthor() {
         if (authorBuilder_ == null) {
@@ -3438,6 +5041,10 @@ public final class Issues {
       }
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The author of the issue 
+       * </pre>
        */
       public boa.types.Shared.Person.Builder getAuthorBuilder() {
         bitField0_ |= 0x00000004;
@@ -3446,6 +5053,10 @@ public final class Issues {
       }
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The author of the issue 
+       * </pre>
        */
       public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
         if (authorBuilder_ != null) {
@@ -3456,6 +5067,10 @@ public final class Issues {
       }
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The author of the issue 
+       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> 
@@ -3477,12 +5092,20 @@ public final class Issues {
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> assigneeBuilder_;
       /**
        * <code>optional .boa.types.Person assignee = 4;</code>
+       *
+       * <pre>
+       ** The primary assignee 
+       * </pre>
        */
       public boolean hasAssignee() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
        * <code>optional .boa.types.Person assignee = 4;</code>
+       *
+       * <pre>
+       ** The primary assignee 
+       * </pre>
        */
       public boa.types.Shared.Person getAssignee() {
         if (assigneeBuilder_ == null) {
@@ -3493,6 +5116,10 @@ public final class Issues {
       }
       /**
        * <code>optional .boa.types.Person assignee = 4;</code>
+       *
+       * <pre>
+       ** The primary assignee 
+       * </pre>
        */
       public Builder setAssignee(boa.types.Shared.Person value) {
         if (assigneeBuilder_ == null) {
@@ -3509,6 +5136,10 @@ public final class Issues {
       }
       /**
        * <code>optional .boa.types.Person assignee = 4;</code>
+       *
+       * <pre>
+       ** The primary assignee 
+       * </pre>
        */
       public Builder setAssignee(
           boa.types.Shared.Person.Builder builderForValue) {
@@ -3523,6 +5154,10 @@ public final class Issues {
       }
       /**
        * <code>optional .boa.types.Person assignee = 4;</code>
+       *
+       * <pre>
+       ** The primary assignee 
+       * </pre>
        */
       public Builder mergeAssignee(boa.types.Shared.Person value) {
         if (assigneeBuilder_ == null) {
@@ -3542,6 +5177,10 @@ public final class Issues {
       }
       /**
        * <code>optional .boa.types.Person assignee = 4;</code>
+       *
+       * <pre>
+       ** The primary assignee 
+       * </pre>
        */
       public Builder clearAssignee() {
         if (assigneeBuilder_ == null) {
@@ -3555,6 +5194,10 @@ public final class Issues {
       }
       /**
        * <code>optional .boa.types.Person assignee = 4;</code>
+       *
+       * <pre>
+       ** The primary assignee 
+       * </pre>
        */
       public boa.types.Shared.Person.Builder getAssigneeBuilder() {
         bitField0_ |= 0x00000008;
@@ -3563,6 +5206,10 @@ public final class Issues {
       }
       /**
        * <code>optional .boa.types.Person assignee = 4;</code>
+       *
+       * <pre>
+       ** The primary assignee 
+       * </pre>
        */
       public boa.types.Shared.PersonOrBuilder getAssigneeOrBuilder() {
         if (assigneeBuilder_ != null) {
@@ -3573,6 +5220,10 @@ public final class Issues {
       }
       /**
        * <code>optional .boa.types.Person assignee = 4;</code>
+       *
+       * <pre>
+       ** The primary assignee 
+       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> 
@@ -3592,12 +5243,20 @@ public final class Issues {
       private java.lang.Object summary_ = "";
       /**
        * <code>required string summary = 5;</code>
+       *
+       * <pre>
+       ** The summary and or title of the issue 
+       * </pre>
        */
       public boolean hasSummary() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
        * <code>required string summary = 5;</code>
+       *
+       * <pre>
+       ** The summary and or title of the issue 
+       * </pre>
        */
       public java.lang.String getSummary() {
         java.lang.Object ref = summary_;
@@ -3612,6 +5271,10 @@ public final class Issues {
       }
       /**
        * <code>required string summary = 5;</code>
+       *
+       * <pre>
+       ** The summary and or title of the issue 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getSummaryBytes() {
@@ -3628,6 +5291,10 @@ public final class Issues {
       }
       /**
        * <code>required string summary = 5;</code>
+       *
+       * <pre>
+       ** The summary and or title of the issue 
+       * </pre>
        */
       public Builder setSummary(
           java.lang.String value) {
@@ -3641,6 +5308,10 @@ public final class Issues {
       }
       /**
        * <code>required string summary = 5;</code>
+       *
+       * <pre>
+       ** The summary and or title of the issue 
+       * </pre>
        */
       public Builder clearSummary() {
         bitField0_ = (bitField0_ & ~0x00000010);
@@ -3650,6 +5321,10 @@ public final class Issues {
       }
       /**
        * <code>required string summary = 5;</code>
+       *
+       * <pre>
+       ** The summary and or title of the issue 
+       * </pre>
        */
       public Builder setSummaryBytes(
           com.google.protobuf.ByteString value) {
@@ -3666,12 +5341,20 @@ public final class Issues {
       private java.lang.Object description_ = "";
       /**
        * <code>required string description = 6;</code>
+       *
+       * <pre>
+       ** The description and or body of the issue 
+       * </pre>
        */
       public boolean hasDescription() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
        * <code>required string description = 6;</code>
+       *
+       * <pre>
+       ** The description and or body of the issue 
+       * </pre>
        */
       public java.lang.String getDescription() {
         java.lang.Object ref = description_;
@@ -3686,6 +5369,10 @@ public final class Issues {
       }
       /**
        * <code>required string description = 6;</code>
+       *
+       * <pre>
+       ** The description and or body of the issue 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getDescriptionBytes() {
@@ -3702,6 +5389,10 @@ public final class Issues {
       }
       /**
        * <code>required string description = 6;</code>
+       *
+       * <pre>
+       ** The description and or body of the issue 
+       * </pre>
        */
       public Builder setDescription(
           java.lang.String value) {
@@ -3715,6 +5406,10 @@ public final class Issues {
       }
       /**
        * <code>required string description = 6;</code>
+       *
+       * <pre>
+       ** The description and or body of the issue 
+       * </pre>
        */
       public Builder clearDescription() {
         bitField0_ = (bitField0_ & ~0x00000020);
@@ -3724,6 +5419,10 @@ public final class Issues {
       }
       /**
        * <code>required string description = 6;</code>
+       *
+       * <pre>
+       ** The description and or body of the issue 
+       * </pre>
        */
       public Builder setDescriptionBytes(
           com.google.protobuf.ByteString value) {
@@ -3740,18 +5439,30 @@ public final class Issues {
       private long createdDate_ ;
       /**
        * <code>required uint64 created_date = 7;</code>
+       *
+       * <pre>
+       ** The created date 
+       * </pre>
        */
       public boolean hasCreatedDate() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
        * <code>required uint64 created_date = 7;</code>
+       *
+       * <pre>
+       ** The created date 
+       * </pre>
        */
       public long getCreatedDate() {
         return createdDate_;
       }
       /**
        * <code>required uint64 created_date = 7;</code>
+       *
+       * <pre>
+       ** The created date 
+       * </pre>
        */
       public Builder setCreatedDate(long value) {
         bitField0_ |= 0x00000040;
@@ -3761,6 +5472,10 @@ public final class Issues {
       }
       /**
        * <code>required uint64 created_date = 7;</code>
+       *
+       * <pre>
+       ** The created date 
+       * </pre>
        */
       public Builder clearCreatedDate() {
         bitField0_ = (bitField0_ & ~0x00000040);
@@ -3773,18 +5488,30 @@ public final class Issues {
       private long modifiedDate_ ;
       /**
        * <code>required uint64 modified_date = 8;</code>
+       *
+       * <pre>
+       ** The last modified date, aka update date 
+       * </pre>
        */
       public boolean hasModifiedDate() {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       /**
        * <code>required uint64 modified_date = 8;</code>
+       *
+       * <pre>
+       ** The last modified date, aka update date 
+       * </pre>
        */
       public long getModifiedDate() {
         return modifiedDate_;
       }
       /**
        * <code>required uint64 modified_date = 8;</code>
+       *
+       * <pre>
+       ** The last modified date, aka update date 
+       * </pre>
        */
       public Builder setModifiedDate(long value) {
         bitField0_ |= 0x00000080;
@@ -3794,6 +5521,10 @@ public final class Issues {
       }
       /**
        * <code>required uint64 modified_date = 8;</code>
+       *
+       * <pre>
+       ** The last modified date, aka update date 
+       * </pre>
        */
       public Builder clearModifiedDate() {
         bitField0_ = (bitField0_ & ~0x00000080);
@@ -3806,18 +5537,30 @@ public final class Issues {
       private long completedDate_ ;
       /**
        * <code>optional uint64 completed_date = 9;</code>
+       *
+       * <pre>
+       ** The closed date 
+       * </pre>
        */
       public boolean hasCompletedDate() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
        * <code>optional uint64 completed_date = 9;</code>
+       *
+       * <pre>
+       ** The closed date 
+       * </pre>
        */
       public long getCompletedDate() {
         return completedDate_;
       }
       /**
        * <code>optional uint64 completed_date = 9;</code>
+       *
+       * <pre>
+       ** The closed date 
+       * </pre>
        */
       public Builder setCompletedDate(long value) {
         bitField0_ |= 0x00000100;
@@ -3827,6 +5570,10 @@ public final class Issues {
       }
       /**
        * <code>optional uint64 completed_date = 9;</code>
+       *
+       * <pre>
+       ** The closed date 
+       * </pre>
        */
       public Builder clearCompletedDate() {
         bitField0_ = (bitField0_ & ~0x00000100);
@@ -3845,6 +5592,10 @@ public final class Issues {
       }
       /**
        * <code>repeated string keywords = 10;</code>
+       *
+       * <pre>
+       ** Keywords/tags 
+       * </pre>
        */
       public java.util.List<java.lang.String>
           getKeywordsList() {
@@ -3852,18 +5603,30 @@ public final class Issues {
       }
       /**
        * <code>repeated string keywords = 10;</code>
+       *
+       * <pre>
+       ** Keywords/tags 
+       * </pre>
        */
       public int getKeywordsCount() {
         return keywords_.size();
       }
       /**
        * <code>repeated string keywords = 10;</code>
+       *
+       * <pre>
+       ** Keywords/tags 
+       * </pre>
        */
       public java.lang.String getKeywords(int index) {
         return keywords_.get(index);
       }
       /**
        * <code>repeated string keywords = 10;</code>
+       *
+       * <pre>
+       ** Keywords/tags 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getKeywordsBytes(int index) {
@@ -3871,6 +5634,10 @@ public final class Issues {
       }
       /**
        * <code>repeated string keywords = 10;</code>
+       *
+       * <pre>
+       ** Keywords/tags 
+       * </pre>
        */
       public Builder setKeywords(
           int index, java.lang.String value) {
@@ -3884,6 +5651,10 @@ public final class Issues {
       }
       /**
        * <code>repeated string keywords = 10;</code>
+       *
+       * <pre>
+       ** Keywords/tags 
+       * </pre>
        */
       public Builder addKeywords(
           java.lang.String value) {
@@ -3897,6 +5668,10 @@ public final class Issues {
       }
       /**
        * <code>repeated string keywords = 10;</code>
+       *
+       * <pre>
+       ** Keywords/tags 
+       * </pre>
        */
       public Builder addAllKeywords(
           java.lang.Iterable<java.lang.String> values) {
@@ -3907,6 +5682,10 @@ public final class Issues {
       }
       /**
        * <code>repeated string keywords = 10;</code>
+       *
+       * <pre>
+       ** Keywords/tags 
+       * </pre>
        */
       public Builder clearKeywords() {
         keywords_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -3916,6 +5695,10 @@ public final class Issues {
       }
       /**
        * <code>repeated string keywords = 10;</code>
+       *
+       * <pre>
+       ** Keywords/tags 
+       * </pre>
        */
       public Builder addKeywordsBytes(
           com.google.protobuf.ByteString value) {
@@ -3932,18 +5715,30 @@ public final class Issues {
       private int vote_ ;
       /**
        * <code>optional int32 vote = 11;</code>
+       *
+       * <pre>
+       ** Count of votes 
+       * </pre>
        */
       public boolean hasVote() {
         return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
        * <code>optional int32 vote = 11;</code>
+       *
+       * <pre>
+       ** Count of votes 
+       * </pre>
        */
       public int getVote() {
         return vote_;
       }
       /**
        * <code>optional int32 vote = 11;</code>
+       *
+       * <pre>
+       ** Count of votes 
+       * </pre>
        */
       public Builder setVote(int value) {
         bitField0_ |= 0x00000400;
@@ -3953,6 +5748,10 @@ public final class Issues {
       }
       /**
        * <code>optional int32 vote = 11;</code>
+       *
+       * <pre>
+       ** Count of votes 
+       * </pre>
        */
       public Builder clearVote() {
         bitField0_ = (bitField0_ & ~0x00000400);
@@ -3961,76 +5760,54 @@ public final class Issues {
         return this;
       }
 
-      // optional string priority = 12;
-      private java.lang.Object priority_ = "";
+      // optional .boa.types.Issue.IssuePriority priority = 12;
+      private boa.types.Issues.Issue.IssuePriority priority_ = boa.types.Issues.Issue.IssuePriority.OTHER_PRIORITY;
       /**
-       * <code>optional string priority = 12;</code>
+       * <code>optional .boa.types.Issue.IssuePriority priority = 12;</code>
+       *
+       * <pre>
+       ** The issue's priority 
+       * </pre>
        */
       public boolean hasPriority() {
         return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       /**
-       * <code>optional string priority = 12;</code>
+       * <code>optional .boa.types.Issue.IssuePriority priority = 12;</code>
+       *
+       * <pre>
+       ** The issue's priority 
+       * </pre>
        */
-      public java.lang.String getPriority() {
-        java.lang.Object ref = priority_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          priority_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public boa.types.Issues.Issue.IssuePriority getPriority() {
+        return priority_;
       }
       /**
-       * <code>optional string priority = 12;</code>
+       * <code>optional .boa.types.Issue.IssuePriority priority = 12;</code>
+       *
+       * <pre>
+       ** The issue's priority 
+       * </pre>
        */
-      public com.google.protobuf.ByteString
-          getPriorityBytes() {
-        java.lang.Object ref = priority_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          priority_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string priority = 12;</code>
-       */
-      public Builder setPriority(
-          java.lang.String value) {
+      public Builder setPriority(boa.types.Issues.Issue.IssuePriority value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000800;
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000800;
         priority_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string priority = 12;</code>
+       * <code>optional .boa.types.Issue.IssuePriority priority = 12;</code>
+       *
+       * <pre>
+       ** The issue's priority 
+       * </pre>
        */
       public Builder clearPriority() {
         bitField0_ = (bitField0_ & ~0x00000800);
-        priority_ = getDefaultInstance().getPriority();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string priority = 12;</code>
-       */
-      public Builder setPriorityBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000800;
-        priority_ = value;
+        priority_ = boa.types.Issues.Issue.IssuePriority.OTHER_PRIORITY;
         onChanged();
         return this;
       }
@@ -4050,6 +5827,10 @@ public final class Issues {
 
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public java.util.List<boa.types.Issues.Attachment> getFilesList() {
         if (filesBuilder_ == null) {
@@ -4060,6 +5841,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public int getFilesCount() {
         if (filesBuilder_ == null) {
@@ -4070,6 +5855,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public boa.types.Issues.Attachment getFiles(int index) {
         if (filesBuilder_ == null) {
@@ -4080,6 +5869,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public Builder setFiles(
           int index, boa.types.Issues.Attachment value) {
@@ -4097,6 +5890,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public Builder setFiles(
           int index, boa.types.Issues.Attachment.Builder builderForValue) {
@@ -4111,6 +5908,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public Builder addFiles(boa.types.Issues.Attachment value) {
         if (filesBuilder_ == null) {
@@ -4127,6 +5928,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public Builder addFiles(
           int index, boa.types.Issues.Attachment value) {
@@ -4144,6 +5949,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public Builder addFiles(
           boa.types.Issues.Attachment.Builder builderForValue) {
@@ -4158,6 +5967,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public Builder addFiles(
           int index, boa.types.Issues.Attachment.Builder builderForValue) {
@@ -4172,6 +5985,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public Builder addAllFiles(
           java.lang.Iterable<? extends boa.types.Issues.Attachment> values) {
@@ -4186,6 +6003,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public Builder clearFiles() {
         if (filesBuilder_ == null) {
@@ -4199,6 +6020,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public Builder removeFiles(int index) {
         if (filesBuilder_ == null) {
@@ -4212,6 +6037,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public boa.types.Issues.Attachment.Builder getFilesBuilder(
           int index) {
@@ -4219,6 +6048,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public boa.types.Issues.AttachmentOrBuilder getFilesOrBuilder(
           int index) {
@@ -4229,6 +6062,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Issues.AttachmentOrBuilder> 
            getFilesOrBuilderList() {
@@ -4240,6 +6077,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public boa.types.Issues.Attachment.Builder addFilesBuilder() {
         return getFilesFieldBuilder().addBuilder(
@@ -4247,6 +6088,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public boa.types.Issues.Attachment.Builder addFilesBuilder(
           int index) {
@@ -4255,6 +6100,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 13;</code>
+       *
+       * <pre>
+       ** Attachment files 
+       * </pre>
        */
       public java.util.List<boa.types.Issues.Attachment.Builder> 
            getFilesBuilderList() {
@@ -4292,20 +6141,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public java.util.List<boa.types.Issues.IssueComment> getCommentsList() {
@@ -4319,20 +6155,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public int getCommentsCount() {
@@ -4346,20 +6169,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public boa.types.Issues.IssueComment getComments(int index) {
@@ -4373,20 +6183,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public Builder setComments(
@@ -4407,20 +6204,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public Builder setComments(
@@ -4438,20 +6222,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public Builder addComments(boa.types.Issues.IssueComment value) {
@@ -4471,20 +6242,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public Builder addComments(
@@ -4505,20 +6263,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public Builder addComments(
@@ -4536,20 +6281,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public Builder addComments(
@@ -4567,20 +6299,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public Builder addAllComments(
@@ -4598,20 +6317,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public Builder clearComments() {
@@ -4628,20 +6334,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public Builder removeComments(int index) {
@@ -4658,20 +6351,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public boa.types.Issues.IssueComment.Builder getCommentsBuilder(
@@ -4682,20 +6362,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public boa.types.Issues.IssueCommentOrBuilder getCommentsOrBuilder(
@@ -4709,20 +6376,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public java.util.List<? extends boa.types.Issues.IssueCommentOrBuilder> 
@@ -4737,20 +6391,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public boa.types.Issues.IssueComment.Builder addCommentsBuilder() {
@@ -4761,20 +6402,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public boa.types.Issues.IssueComment.Builder addCommentsBuilder(
@@ -4786,20 +6414,7 @@ public final class Issues {
        * <code>repeated .boa.types.IssueComment comments = 14;</code>
        *
        * <pre>
-       *
-       *optional string component = 15;
-       *optional string resolution = 16;
-       *repeated string duplicated_by = 17;
-       *optional string duplicate_of = 18;
-       *optional string subcomponent = 19;
-       *optional string version = 20;
-       *optional string os = 21;
-       *optional string platform = 22;
-       *optional string milestone = 23;
-       *optional string depends_on = 24;
-       *optional string blocked = 25;
-       *optional string secrecy = 26;
-       *repeated IssueChange changes = 27;
+       ** The issue's comments 
        * </pre>
        */
       public java.util.List<boa.types.Issues.IssueComment.Builder> 
@@ -4819,6 +6434,1086 @@ public final class Issues {
           comments_ = null;
         }
         return commentsBuilder_;
+      }
+
+      // optional string milestone = 23;
+      private java.lang.Object milestone_ = "";
+      /**
+       * <code>optional string milestone = 23;</code>
+       *
+       * <pre>
+       ** The issues's associated milestone 
+       * </pre>
+       */
+      public boolean hasMilestone() {
+        return ((bitField0_ & 0x00004000) == 0x00004000);
+      }
+      /**
+       * <code>optional string milestone = 23;</code>
+       *
+       * <pre>
+       ** The issues's associated milestone 
+       * </pre>
+       */
+      public java.lang.String getMilestone() {
+        java.lang.Object ref = milestone_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          milestone_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string milestone = 23;</code>
+       *
+       * <pre>
+       ** The issues's associated milestone 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getMilestoneBytes() {
+        java.lang.Object ref = milestone_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          milestone_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string milestone = 23;</code>
+       *
+       * <pre>
+       ** The issues's associated milestone 
+       * </pre>
+       */
+      public Builder setMilestone(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00004000;
+        milestone_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string milestone = 23;</code>
+       *
+       * <pre>
+       ** The issues's associated milestone 
+       * </pre>
+       */
+      public Builder clearMilestone() {
+        bitField0_ = (bitField0_ & ~0x00004000);
+        milestone_ = getDefaultInstance().getMilestone();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string milestone = 23;</code>
+       *
+       * <pre>
+       ** The issues's associated milestone 
+       * </pre>
+       */
+      public Builder setMilestoneBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00004000;
+        milestone_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional string blocked = 25;
+      private java.lang.Object blocked_ = "";
+      /**
+       * <code>optional string blocked = 25;</code>
+       *
+       * <pre>
+       ** The issue's blocked or locked status 
+       * </pre>
+       */
+      public boolean hasBlocked() {
+        return ((bitField0_ & 0x00008000) == 0x00008000);
+      }
+      /**
+       * <code>optional string blocked = 25;</code>
+       *
+       * <pre>
+       ** The issue's blocked or locked status 
+       * </pre>
+       */
+      public java.lang.String getBlocked() {
+        java.lang.Object ref = blocked_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          blocked_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string blocked = 25;</code>
+       *
+       * <pre>
+       ** The issue's blocked or locked status 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getBlockedBytes() {
+        java.lang.Object ref = blocked_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          blocked_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string blocked = 25;</code>
+       *
+       * <pre>
+       ** The issue's blocked or locked status 
+       * </pre>
+       */
+      public Builder setBlocked(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00008000;
+        blocked_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string blocked = 25;</code>
+       *
+       * <pre>
+       ** The issue's blocked or locked status 
+       * </pre>
+       */
+      public Builder clearBlocked() {
+        bitField0_ = (bitField0_ & ~0x00008000);
+        blocked_ = getDefaultInstance().getBlocked();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string blocked = 25;</code>
+       *
+       * <pre>
+       ** The issue's blocked or locked status 
+       * </pre>
+       */
+      public Builder setBlockedBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00008000;
+        blocked_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional string pullUrl = 28;
+      private java.lang.Object pullUrl_ = "";
+      /**
+       * <code>optional string pullUrl = 28;</code>
+       *
+       * <pre>
+       ** The URL for the issue's associated pull request 
+       * </pre>
+       */
+      public boolean hasPullUrl() {
+        return ((bitField0_ & 0x00010000) == 0x00010000);
+      }
+      /**
+       * <code>optional string pullUrl = 28;</code>
+       *
+       * <pre>
+       ** The URL for the issue's associated pull request 
+       * </pre>
+       */
+      public java.lang.String getPullUrl() {
+        java.lang.Object ref = pullUrl_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          pullUrl_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string pullUrl = 28;</code>
+       *
+       * <pre>
+       ** The URL for the issue's associated pull request 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getPullUrlBytes() {
+        java.lang.Object ref = pullUrl_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          pullUrl_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string pullUrl = 28;</code>
+       *
+       * <pre>
+       ** The URL for the issue's associated pull request 
+       * </pre>
+       */
+      public Builder setPullUrl(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00010000;
+        pullUrl_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string pullUrl = 28;</code>
+       *
+       * <pre>
+       ** The URL for the issue's associated pull request 
+       * </pre>
+       */
+      public Builder clearPullUrl() {
+        bitField0_ = (bitField0_ & ~0x00010000);
+        pullUrl_ = getDefaultInstance().getPullUrl();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string pullUrl = 28;</code>
+       *
+       * <pre>
+       ** The URL for the issue's associated pull request 
+       * </pre>
+       */
+      public Builder setPullUrlBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00010000;
+        pullUrl_ = value;
+        onChanged();
+        return this;
+      }
+
+      // repeated .boa.types.Person assignees = 29;
+      private java.util.List<boa.types.Shared.Person> assignees_ =
+        java.util.Collections.emptyList();
+      private void ensureAssigneesIsMutable() {
+        if (!((bitField0_ & 0x00020000) == 0x00020000)) {
+          assignees_ = new java.util.ArrayList<boa.types.Shared.Person>(assignees_);
+          bitField0_ |= 0x00020000;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> assigneesBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public java.util.List<boa.types.Shared.Person> getAssigneesList() {
+        if (assigneesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(assignees_);
+        } else {
+          return assigneesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public int getAssigneesCount() {
+        if (assigneesBuilder_ == null) {
+          return assignees_.size();
+        } else {
+          return assigneesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public boa.types.Shared.Person getAssignees(int index) {
+        if (assigneesBuilder_ == null) {
+          return assignees_.get(index);
+        } else {
+          return assigneesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public Builder setAssignees(
+          int index, boa.types.Shared.Person value) {
+        if (assigneesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureAssigneesIsMutable();
+          assignees_.set(index, value);
+          onChanged();
+        } else {
+          assigneesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public Builder setAssignees(
+          int index, boa.types.Shared.Person.Builder builderForValue) {
+        if (assigneesBuilder_ == null) {
+          ensureAssigneesIsMutable();
+          assignees_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          assigneesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public Builder addAssignees(boa.types.Shared.Person value) {
+        if (assigneesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureAssigneesIsMutable();
+          assignees_.add(value);
+          onChanged();
+        } else {
+          assigneesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public Builder addAssignees(
+          int index, boa.types.Shared.Person value) {
+        if (assigneesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureAssigneesIsMutable();
+          assignees_.add(index, value);
+          onChanged();
+        } else {
+          assigneesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public Builder addAssignees(
+          boa.types.Shared.Person.Builder builderForValue) {
+        if (assigneesBuilder_ == null) {
+          ensureAssigneesIsMutable();
+          assignees_.add(builderForValue.build());
+          onChanged();
+        } else {
+          assigneesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public Builder addAssignees(
+          int index, boa.types.Shared.Person.Builder builderForValue) {
+        if (assigneesBuilder_ == null) {
+          ensureAssigneesIsMutable();
+          assignees_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          assigneesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public Builder addAllAssignees(
+          java.lang.Iterable<? extends boa.types.Shared.Person> values) {
+        if (assigneesBuilder_ == null) {
+          ensureAssigneesIsMutable();
+          super.addAll(values, assignees_);
+          onChanged();
+        } else {
+          assigneesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public Builder clearAssignees() {
+        if (assigneesBuilder_ == null) {
+          assignees_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00020000);
+          onChanged();
+        } else {
+          assigneesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public Builder removeAssignees(int index) {
+        if (assigneesBuilder_ == null) {
+          ensureAssigneesIsMutable();
+          assignees_.remove(index);
+          onChanged();
+        } else {
+          assigneesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public boa.types.Shared.Person.Builder getAssigneesBuilder(
+          int index) {
+        return getAssigneesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public boa.types.Shared.PersonOrBuilder getAssigneesOrBuilder(
+          int index) {
+        if (assigneesBuilder_ == null) {
+          return assignees_.get(index);  } else {
+          return assigneesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public java.util.List<? extends boa.types.Shared.PersonOrBuilder> 
+           getAssigneesOrBuilderList() {
+        if (assigneesBuilder_ != null) {
+          return assigneesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(assignees_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public boa.types.Shared.Person.Builder addAssigneesBuilder() {
+        return getAssigneesFieldBuilder().addBuilder(
+            boa.types.Shared.Person.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public boa.types.Shared.Person.Builder addAssigneesBuilder(
+          int index) {
+        return getAssigneesFieldBuilder().addBuilder(
+            index, boa.types.Shared.Person.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Person assignees = 29;</code>
+       *
+       * <pre>
+       ** List of assigned persons 
+       * </pre>
+       */
+      public java.util.List<boa.types.Shared.Person.Builder> 
+           getAssigneesBuilderList() {
+        return getAssigneesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> 
+          getAssigneesFieldBuilder() {
+        if (assigneesBuilder_ == null) {
+          assigneesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder>(
+                  assignees_,
+                  ((bitField0_ & 0x00020000) == 0x00020000),
+                  getParentForChildren(),
+                  isClean());
+          assignees_ = null;
+        }
+        return assigneesBuilder_;
+      }
+
+      // required uint32 number = 30;
+      private int number_ ;
+      /**
+       * <code>required uint32 number = 30;</code>
+       *
+       * <pre>
+       ** The issue's number 
+       * </pre>
+       */
+      public boolean hasNumber() {
+        return ((bitField0_ & 0x00040000) == 0x00040000);
+      }
+      /**
+       * <code>required uint32 number = 30;</code>
+       *
+       * <pre>
+       ** The issue's number 
+       * </pre>
+       */
+      public int getNumber() {
+        return number_;
+      }
+      /**
+       * <code>required uint32 number = 30;</code>
+       *
+       * <pre>
+       ** The issue's number 
+       * </pre>
+       */
+      public Builder setNumber(int value) {
+        bitField0_ |= 0x00040000;
+        number_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required uint32 number = 30;</code>
+       *
+       * <pre>
+       ** The issue's number 
+       * </pre>
+       */
+      public Builder clearNumber() {
+        bitField0_ = (bitField0_ & ~0x00040000);
+        number_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // repeated .boa.types.Issue.IssueLabel labels = 31;
+      private java.util.List<boa.types.Issues.Issue.IssueLabel> labels_ =
+        java.util.Collections.emptyList();
+      private void ensureLabelsIsMutable() {
+        if (!((bitField0_ & 0x00080000) == 0x00080000)) {
+          labels_ = new java.util.ArrayList<boa.types.Issues.Issue.IssueLabel>(labels_);
+          bitField0_ |= 0x00080000;
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Issue.IssueLabel labels = 31;</code>
+       *
+       * <pre>
+       ** The issue's labels 
+       * </pre>
+       */
+      public java.util.List<boa.types.Issues.Issue.IssueLabel> getLabelsList() {
+        return java.util.Collections.unmodifiableList(labels_);
+      }
+      /**
+       * <code>repeated .boa.types.Issue.IssueLabel labels = 31;</code>
+       *
+       * <pre>
+       ** The issue's labels 
+       * </pre>
+       */
+      public int getLabelsCount() {
+        return labels_.size();
+      }
+      /**
+       * <code>repeated .boa.types.Issue.IssueLabel labels = 31;</code>
+       *
+       * <pre>
+       ** The issue's labels 
+       * </pre>
+       */
+      public boa.types.Issues.Issue.IssueLabel getLabels(int index) {
+        return labels_.get(index);
+      }
+      /**
+       * <code>repeated .boa.types.Issue.IssueLabel labels = 31;</code>
+       *
+       * <pre>
+       ** The issue's labels 
+       * </pre>
+       */
+      public Builder setLabels(
+          int index, boa.types.Issues.Issue.IssueLabel value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureLabelsIsMutable();
+        labels_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Issue.IssueLabel labels = 31;</code>
+       *
+       * <pre>
+       ** The issue's labels 
+       * </pre>
+       */
+      public Builder addLabels(boa.types.Issues.Issue.IssueLabel value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureLabelsIsMutable();
+        labels_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Issue.IssueLabel labels = 31;</code>
+       *
+       * <pre>
+       ** The issue's labels 
+       * </pre>
+       */
+      public Builder addAllLabels(
+          java.lang.Iterable<? extends boa.types.Issues.Issue.IssueLabel> values) {
+        ensureLabelsIsMutable();
+        super.addAll(values, labels_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Issue.IssueLabel labels = 31;</code>
+       *
+       * <pre>
+       ** The issue's labels 
+       * </pre>
+       */
+      public Builder clearLabels() {
+        labels_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00080000);
+        onChanged();
+        return this;
+      }
+
+      // optional string other_status = 32;
+      private java.lang.Object otherStatus_ = "";
+      /**
+       * <code>optional string other_status = 32;</code>
+       *
+       * <pre>
+       ** The issue' other status 
+       * </pre>
+       */
+      public boolean hasOtherStatus() {
+        return ((bitField0_ & 0x00100000) == 0x00100000);
+      }
+      /**
+       * <code>optional string other_status = 32;</code>
+       *
+       * <pre>
+       ** The issue' other status 
+       * </pre>
+       */
+      public java.lang.String getOtherStatus() {
+        java.lang.Object ref = otherStatus_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          otherStatus_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string other_status = 32;</code>
+       *
+       * <pre>
+       ** The issue' other status 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getOtherStatusBytes() {
+        java.lang.Object ref = otherStatus_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          otherStatus_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string other_status = 32;</code>
+       *
+       * <pre>
+       ** The issue' other status 
+       * </pre>
+       */
+      public Builder setOtherStatus(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00100000;
+        otherStatus_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string other_status = 32;</code>
+       *
+       * <pre>
+       ** The issue' other status 
+       * </pre>
+       */
+      public Builder clearOtherStatus() {
+        bitField0_ = (bitField0_ & ~0x00100000);
+        otherStatus_ = getDefaultInstance().getOtherStatus();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string other_status = 32;</code>
+       *
+       * <pre>
+       ** The issue' other status 
+       * </pre>
+       */
+      public Builder setOtherStatusBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00100000;
+        otherStatus_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional string other_priority = 33;
+      private java.lang.Object otherPriority_ = "";
+      /**
+       * <code>optional string other_priority = 33;</code>
+       *
+       * <pre>
+       ** The issue's other priority 
+       * </pre>
+       */
+      public boolean hasOtherPriority() {
+        return ((bitField0_ & 0x00200000) == 0x00200000);
+      }
+      /**
+       * <code>optional string other_priority = 33;</code>
+       *
+       * <pre>
+       ** The issue's other priority 
+       * </pre>
+       */
+      public java.lang.String getOtherPriority() {
+        java.lang.Object ref = otherPriority_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          otherPriority_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string other_priority = 33;</code>
+       *
+       * <pre>
+       ** The issue's other priority 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getOtherPriorityBytes() {
+        java.lang.Object ref = otherPriority_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          otherPriority_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string other_priority = 33;</code>
+       *
+       * <pre>
+       ** The issue's other priority 
+       * </pre>
+       */
+      public Builder setOtherPriority(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00200000;
+        otherPriority_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string other_priority = 33;</code>
+       *
+       * <pre>
+       ** The issue's other priority 
+       * </pre>
+       */
+      public Builder clearOtherPriority() {
+        bitField0_ = (bitField0_ & ~0x00200000);
+        otherPriority_ = getDefaultInstance().getOtherPriority();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string other_priority = 33;</code>
+       *
+       * <pre>
+       ** The issue's other priority 
+       * </pre>
+       */
+      public Builder setOtherPriorityBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00200000;
+        otherPriority_ = value;
+        onChanged();
+        return this;
+      }
+
+      // repeated string other_labels = 34;
+      private com.google.protobuf.LazyStringList otherLabels_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureOtherLabelsIsMutable() {
+        if (!((bitField0_ & 0x00400000) == 0x00400000)) {
+          otherLabels_ = new com.google.protobuf.LazyStringArrayList(otherLabels_);
+          bitField0_ |= 0x00400000;
+         }
+      }
+      /**
+       * <code>repeated string other_labels = 34;</code>
+       *
+       * <pre>
+       ** The issue's other labels 
+       * </pre>
+       */
+      public java.util.List<java.lang.String>
+          getOtherLabelsList() {
+        return java.util.Collections.unmodifiableList(otherLabels_);
+      }
+      /**
+       * <code>repeated string other_labels = 34;</code>
+       *
+       * <pre>
+       ** The issue's other labels 
+       * </pre>
+       */
+      public int getOtherLabelsCount() {
+        return otherLabels_.size();
+      }
+      /**
+       * <code>repeated string other_labels = 34;</code>
+       *
+       * <pre>
+       ** The issue's other labels 
+       * </pre>
+       */
+      public java.lang.String getOtherLabels(int index) {
+        return otherLabels_.get(index);
+      }
+      /**
+       * <code>repeated string other_labels = 34;</code>
+       *
+       * <pre>
+       ** The issue's other labels 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getOtherLabelsBytes(int index) {
+        return otherLabels_.getByteString(index);
+      }
+      /**
+       * <code>repeated string other_labels = 34;</code>
+       *
+       * <pre>
+       ** The issue's other labels 
+       * </pre>
+       */
+      public Builder setOtherLabels(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureOtherLabelsIsMutable();
+        otherLabels_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string other_labels = 34;</code>
+       *
+       * <pre>
+       ** The issue's other labels 
+       * </pre>
+       */
+      public Builder addOtherLabels(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureOtherLabelsIsMutable();
+        otherLabels_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string other_labels = 34;</code>
+       *
+       * <pre>
+       ** The issue's other labels 
+       * </pre>
+       */
+      public Builder addAllOtherLabels(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureOtherLabelsIsMutable();
+        super.addAll(values, otherLabels_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string other_labels = 34;</code>
+       *
+       * <pre>
+       ** The issue's other labels 
+       * </pre>
+       */
+      public Builder clearOtherLabels() {
+        otherLabels_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00400000);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string other_labels = 34;</code>
+       *
+       * <pre>
+       ** The issue's other labels 
+       * </pre>
+       */
+      public Builder addOtherLabelsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureOtherLabelsIsMutable();
+        otherLabels_.add(value);
+        onChanged();
+        return this;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Issue)
@@ -6003,14 +8698,26 @@ public final class Issues {
     // required string id = 1;
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** The comment's id 
+     * </pre>
      */
     boolean hasId();
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** The comment's id 
+     * </pre>
      */
     java.lang.String getId();
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** The comment's id 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getIdBytes();
@@ -6018,38 +8725,70 @@ public final class Issues {
     // required uint64 date = 2;
     /**
      * <code>required uint64 date = 2;</code>
+     *
+     * <pre>
+     ** The comment's creation date 
+     * </pre>
      */
     boolean hasDate();
     /**
      * <code>required uint64 date = 2;</code>
+     *
+     * <pre>
+     ** The comment's creation date 
+     * </pre>
      */
     long getDate();
 
     // required .boa.types.Person author = 3;
     /**
      * <code>required .boa.types.Person author = 3;</code>
+     *
+     * <pre>
+     ** The comment's author 
+     * </pre>
      */
     boolean hasAuthor();
     /**
      * <code>required .boa.types.Person author = 3;</code>
+     *
+     * <pre>
+     ** The comment's author 
+     * </pre>
      */
     boa.types.Shared.Person getAuthor();
     /**
      * <code>required .boa.types.Person author = 3;</code>
+     *
+     * <pre>
+     ** The comment's author 
+     * </pre>
      */
     boa.types.Shared.PersonOrBuilder getAuthorOrBuilder();
 
     // required string description = 4;
     /**
      * <code>required string description = 4;</code>
+     *
+     * <pre>
+     ** The description or body of the comment 
+     * </pre>
      */
     boolean hasDescription();
     /**
      * <code>required string description = 4;</code>
+     *
+     * <pre>
+     ** The description or body of the comment 
+     * </pre>
      */
     java.lang.String getDescription();
     /**
      * <code>required string description = 4;</code>
+     *
+     * <pre>
+     ** The description or body of the comment 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getDescriptionBytes();
@@ -6057,30 +8796,54 @@ public final class Issues {
     // repeated .boa.types.Attachment files = 5;
     /**
      * <code>repeated .boa.types.Attachment files = 5;</code>
+     *
+     * <pre>
+     ** A list of any attached files 
+     * </pre>
      */
     java.util.List<boa.types.Issues.Attachment> 
         getFilesList();
     /**
      * <code>repeated .boa.types.Attachment files = 5;</code>
+     *
+     * <pre>
+     ** A list of any attached files 
+     * </pre>
      */
     boa.types.Issues.Attachment getFiles(int index);
     /**
      * <code>repeated .boa.types.Attachment files = 5;</code>
+     *
+     * <pre>
+     ** A list of any attached files 
+     * </pre>
      */
     int getFilesCount();
     /**
      * <code>repeated .boa.types.Attachment files = 5;</code>
+     *
+     * <pre>
+     ** A list of any attached files 
+     * </pre>
      */
     java.util.List<? extends boa.types.Issues.AttachmentOrBuilder> 
         getFilesOrBuilderList();
     /**
      * <code>repeated .boa.types.Attachment files = 5;</code>
+     *
+     * <pre>
+     ** A list of any attached files 
+     * </pre>
      */
     boa.types.Issues.AttachmentOrBuilder getFilesOrBuilder(
         int index);
   }
   /**
    * Protobuf type {@code boa.types.IssueComment}
+   *
+   * <pre>
+   ** An issue comment 
+   * </pre>
    */
   public static final class IssueComment extends
       com.google.protobuf.GeneratedMessage
@@ -6214,12 +8977,20 @@ public final class Issues {
     private java.lang.Object id_;
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** The comment's id 
+     * </pre>
      */
     public boolean hasId() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** The comment's id 
+     * </pre>
      */
     public java.lang.String getId() {
       java.lang.Object ref = id_;
@@ -6237,6 +9008,10 @@ public final class Issues {
     }
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** The comment's id 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getIdBytes() {
@@ -6257,12 +9032,20 @@ public final class Issues {
     private long date_;
     /**
      * <code>required uint64 date = 2;</code>
+     *
+     * <pre>
+     ** The comment's creation date 
+     * </pre>
      */
     public boolean hasDate() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>required uint64 date = 2;</code>
+     *
+     * <pre>
+     ** The comment's creation date 
+     * </pre>
      */
     public long getDate() {
       return date_;
@@ -6273,18 +9056,30 @@ public final class Issues {
     private boa.types.Shared.Person author_;
     /**
      * <code>required .boa.types.Person author = 3;</code>
+     *
+     * <pre>
+     ** The comment's author 
+     * </pre>
      */
     public boolean hasAuthor() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>required .boa.types.Person author = 3;</code>
+     *
+     * <pre>
+     ** The comment's author 
+     * </pre>
      */
     public boa.types.Shared.Person getAuthor() {
       return author_;
     }
     /**
      * <code>required .boa.types.Person author = 3;</code>
+     *
+     * <pre>
+     ** The comment's author 
+     * </pre>
      */
     public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
       return author_;
@@ -6295,12 +9090,20 @@ public final class Issues {
     private java.lang.Object description_;
     /**
      * <code>required string description = 4;</code>
+     *
+     * <pre>
+     ** The description or body of the comment 
+     * </pre>
      */
     public boolean hasDescription() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
      * <code>required string description = 4;</code>
+     *
+     * <pre>
+     ** The description or body of the comment 
+     * </pre>
      */
     public java.lang.String getDescription() {
       java.lang.Object ref = description_;
@@ -6318,6 +9121,10 @@ public final class Issues {
     }
     /**
      * <code>required string description = 4;</code>
+     *
+     * <pre>
+     ** The description or body of the comment 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getDescriptionBytes() {
@@ -6338,12 +9145,20 @@ public final class Issues {
     private java.util.List<boa.types.Issues.Attachment> files_;
     /**
      * <code>repeated .boa.types.Attachment files = 5;</code>
+     *
+     * <pre>
+     ** A list of any attached files 
+     * </pre>
      */
     public java.util.List<boa.types.Issues.Attachment> getFilesList() {
       return files_;
     }
     /**
      * <code>repeated .boa.types.Attachment files = 5;</code>
+     *
+     * <pre>
+     ** A list of any attached files 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Issues.AttachmentOrBuilder> 
         getFilesOrBuilderList() {
@@ -6351,18 +9166,30 @@ public final class Issues {
     }
     /**
      * <code>repeated .boa.types.Attachment files = 5;</code>
+     *
+     * <pre>
+     ** A list of any attached files 
+     * </pre>
      */
     public int getFilesCount() {
       return files_.size();
     }
     /**
      * <code>repeated .boa.types.Attachment files = 5;</code>
+     *
+     * <pre>
+     ** A list of any attached files 
+     * </pre>
      */
     public boa.types.Issues.Attachment getFiles(int index) {
       return files_.get(index);
     }
     /**
      * <code>repeated .boa.types.Attachment files = 5;</code>
+     *
+     * <pre>
+     ** A list of any attached files 
+     * </pre>
      */
     public boa.types.Issues.AttachmentOrBuilder getFilesOrBuilder(
         int index) {
@@ -6538,6 +9365,10 @@ public final class Issues {
     }
     /**
      * Protobuf type {@code boa.types.IssueComment}
+     *
+     * <pre>
+     ** An issue comment 
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -6766,12 +9597,20 @@ public final class Issues {
       private java.lang.Object id_ = "";
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** The comment's id 
+       * </pre>
        */
       public boolean hasId() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** The comment's id 
+       * </pre>
        */
       public java.lang.String getId() {
         java.lang.Object ref = id_;
@@ -6786,6 +9625,10 @@ public final class Issues {
       }
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** The comment's id 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getIdBytes() {
@@ -6802,6 +9645,10 @@ public final class Issues {
       }
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** The comment's id 
+       * </pre>
        */
       public Builder setId(
           java.lang.String value) {
@@ -6815,6 +9662,10 @@ public final class Issues {
       }
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** The comment's id 
+       * </pre>
        */
       public Builder clearId() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -6824,6 +9675,10 @@ public final class Issues {
       }
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** The comment's id 
+       * </pre>
        */
       public Builder setIdBytes(
           com.google.protobuf.ByteString value) {
@@ -6840,18 +9695,30 @@ public final class Issues {
       private long date_ ;
       /**
        * <code>required uint64 date = 2;</code>
+       *
+       * <pre>
+       ** The comment's creation date 
+       * </pre>
        */
       public boolean hasDate() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
        * <code>required uint64 date = 2;</code>
+       *
+       * <pre>
+       ** The comment's creation date 
+       * </pre>
        */
       public long getDate() {
         return date_;
       }
       /**
        * <code>required uint64 date = 2;</code>
+       *
+       * <pre>
+       ** The comment's creation date 
+       * </pre>
        */
       public Builder setDate(long value) {
         bitField0_ |= 0x00000002;
@@ -6861,6 +9728,10 @@ public final class Issues {
       }
       /**
        * <code>required uint64 date = 2;</code>
+       *
+       * <pre>
+       ** The comment's creation date 
+       * </pre>
        */
       public Builder clearDate() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -6875,12 +9746,20 @@ public final class Issues {
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> authorBuilder_;
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The comment's author 
+       * </pre>
        */
       public boolean hasAuthor() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The comment's author 
+       * </pre>
        */
       public boa.types.Shared.Person getAuthor() {
         if (authorBuilder_ == null) {
@@ -6891,6 +9770,10 @@ public final class Issues {
       }
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The comment's author 
+       * </pre>
        */
       public Builder setAuthor(boa.types.Shared.Person value) {
         if (authorBuilder_ == null) {
@@ -6907,6 +9790,10 @@ public final class Issues {
       }
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The comment's author 
+       * </pre>
        */
       public Builder setAuthor(
           boa.types.Shared.Person.Builder builderForValue) {
@@ -6921,6 +9808,10 @@ public final class Issues {
       }
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The comment's author 
+       * </pre>
        */
       public Builder mergeAuthor(boa.types.Shared.Person value) {
         if (authorBuilder_ == null) {
@@ -6940,6 +9831,10 @@ public final class Issues {
       }
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The comment's author 
+       * </pre>
        */
       public Builder clearAuthor() {
         if (authorBuilder_ == null) {
@@ -6953,6 +9848,10 @@ public final class Issues {
       }
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The comment's author 
+       * </pre>
        */
       public boa.types.Shared.Person.Builder getAuthorBuilder() {
         bitField0_ |= 0x00000004;
@@ -6961,6 +9860,10 @@ public final class Issues {
       }
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The comment's author 
+       * </pre>
        */
       public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
         if (authorBuilder_ != null) {
@@ -6971,6 +9874,10 @@ public final class Issues {
       }
       /**
        * <code>required .boa.types.Person author = 3;</code>
+       *
+       * <pre>
+       ** The comment's author 
+       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> 
@@ -6990,12 +9897,20 @@ public final class Issues {
       private java.lang.Object description_ = "";
       /**
        * <code>required string description = 4;</code>
+       *
+       * <pre>
+       ** The description or body of the comment 
+       * </pre>
        */
       public boolean hasDescription() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
        * <code>required string description = 4;</code>
+       *
+       * <pre>
+       ** The description or body of the comment 
+       * </pre>
        */
       public java.lang.String getDescription() {
         java.lang.Object ref = description_;
@@ -7010,6 +9925,10 @@ public final class Issues {
       }
       /**
        * <code>required string description = 4;</code>
+       *
+       * <pre>
+       ** The description or body of the comment 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getDescriptionBytes() {
@@ -7026,6 +9945,10 @@ public final class Issues {
       }
       /**
        * <code>required string description = 4;</code>
+       *
+       * <pre>
+       ** The description or body of the comment 
+       * </pre>
        */
       public Builder setDescription(
           java.lang.String value) {
@@ -7039,6 +9962,10 @@ public final class Issues {
       }
       /**
        * <code>required string description = 4;</code>
+       *
+       * <pre>
+       ** The description or body of the comment 
+       * </pre>
        */
       public Builder clearDescription() {
         bitField0_ = (bitField0_ & ~0x00000008);
@@ -7048,6 +9975,10 @@ public final class Issues {
       }
       /**
        * <code>required string description = 4;</code>
+       *
+       * <pre>
+       ** The description or body of the comment 
+       * </pre>
        */
       public Builder setDescriptionBytes(
           com.google.protobuf.ByteString value) {
@@ -7075,6 +10006,10 @@ public final class Issues {
 
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public java.util.List<boa.types.Issues.Attachment> getFilesList() {
         if (filesBuilder_ == null) {
@@ -7085,6 +10020,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public int getFilesCount() {
         if (filesBuilder_ == null) {
@@ -7095,6 +10034,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public boa.types.Issues.Attachment getFiles(int index) {
         if (filesBuilder_ == null) {
@@ -7105,6 +10048,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public Builder setFiles(
           int index, boa.types.Issues.Attachment value) {
@@ -7122,6 +10069,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public Builder setFiles(
           int index, boa.types.Issues.Attachment.Builder builderForValue) {
@@ -7136,6 +10087,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public Builder addFiles(boa.types.Issues.Attachment value) {
         if (filesBuilder_ == null) {
@@ -7152,6 +10107,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public Builder addFiles(
           int index, boa.types.Issues.Attachment value) {
@@ -7169,6 +10128,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public Builder addFiles(
           boa.types.Issues.Attachment.Builder builderForValue) {
@@ -7183,6 +10146,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public Builder addFiles(
           int index, boa.types.Issues.Attachment.Builder builderForValue) {
@@ -7197,6 +10164,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public Builder addAllFiles(
           java.lang.Iterable<? extends boa.types.Issues.Attachment> values) {
@@ -7211,6 +10182,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public Builder clearFiles() {
         if (filesBuilder_ == null) {
@@ -7224,6 +10199,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public Builder removeFiles(int index) {
         if (filesBuilder_ == null) {
@@ -7237,6 +10216,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public boa.types.Issues.Attachment.Builder getFilesBuilder(
           int index) {
@@ -7244,6 +10227,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public boa.types.Issues.AttachmentOrBuilder getFilesOrBuilder(
           int index) {
@@ -7254,6 +10241,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Issues.AttachmentOrBuilder> 
            getFilesOrBuilderList() {
@@ -7265,6 +10256,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public boa.types.Issues.Attachment.Builder addFilesBuilder() {
         return getFilesFieldBuilder().addBuilder(
@@ -7272,6 +10267,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public boa.types.Issues.Attachment.Builder addFilesBuilder(
           int index) {
@@ -7280,6 +10279,10 @@ public final class Issues {
       }
       /**
        * <code>repeated .boa.types.Attachment files = 5;</code>
+       *
+       * <pre>
+       ** A list of any attached files 
+       * </pre>
        */
       public java.util.List<boa.types.Issues.Attachment.Builder> 
            getFilesBuilderList() {
@@ -8775,31 +11778,48 @@ public final class Issues {
   static {
     java.lang.String[] descriptorData = {
       "\n\014issues.proto\022\tboa.types\032\014shared.proto\"" +
-      "\251\001\n\017IssueRepository\022\013\n\003url\030\001 \002(\t\0222\n\004kind" +
-      "\030\002 \002(\0162$.boa.types.IssueRepository.Issue" +
-      "Kind\022\013\n\003key\030\003 \002(\t\"H\n\tIssueKind\022\t\n\005OTHER\020" +
-      "\000\022\010\n\004BUGS\020\001\022\014\n\010FEATURES\020\002\022\013\n\007SUPPORT\020\003\022\013" +
-      "\n\007PATCHES\020\004\".\n\nIssuesRoot\022 \n\006issues\030\001 \003(" +
-      "\0132\020.boa.types.Issue\"\331\002\n\005Issue\022\n\n\002id\030\001 \002(" +
-      "\t\022\016\n\006status\030\002 \002(\t\022!\n\006author\030\003 \002(\0132\021.boa." +
-      "types.Person\022#\n\010assignee\030\004 \001(\0132\021.boa.typ" +
-      "es.Person\022\017\n\007summary\030\005 \002(\t\022\023\n\013descriptio",
-      "n\030\006 \002(\t\022\024\n\014created_date\030\007 \002(\004\022\025\n\rmodifie" +
-      "d_date\030\010 \002(\004\022\026\n\016completed_date\030\t \001(\004\022\020\n\010" +
-      "keywords\030\n \003(\t\022\014\n\004vote\030\013 \001(\005\022\020\n\010priority" +
-      "\030\014 \001(\t\022$\n\005files\030\r \003(\0132\025.boa.types.Attach" +
-      "ment\022)\n\010comments\030\016 \003(\0132\027.boa.types.Issue" +
-      "Comment\"\177\n\nAttachment\022\013\n\003url\030\001 \002(\t\022\020\n\010fi" +
-      "lename\030\002 \002(\t\022\014\n\004size\030\003 \001(\004\022\014\n\004date\030\004 \001(\004" +
-      "\022!\n\006author\030\005 \001(\0132\021.boa.types.Person\022\023\n\013d" +
-      "escription\030\006 \001(\t\"\206\001\n\014IssueComment\022\n\n\002id\030" +
-      "\001 \002(\t\022\014\n\004date\030\002 \002(\004\022!\n\006author\030\003 \002(\0132\021.bo",
-      "a.types.Person\022\023\n\013description\030\004 \002(\t\022$\n\005f" +
-      "iles\030\005 \003(\0132\025.boa.types.Attachment\"\223\001\n\013Is" +
-      "sueChange\022\n\n\002id\030\001 \002(\t\022\014\n\004what\030\002 \002(\t\022\014\n\004d" +
-      "ate\030\003 \002(\004\022!\n\006author\030\004 \002(\0132\021.boa.types.Pe" +
-      "rson\022\021\n\told_value\030\005 \002(\t\022\021\n\tnew_value\030\006 \002" +
-      "(\t\022\023\n\013description\030\007 \001(\tB\002H\001"
+      "9\n\017IssueRepository\022\013\n\003url\030\001 \002(\t\022\014\n\004name\030" +
+      "\002 \001(\t\022\013\n\003key\030\003 \002(\t\".\n\nIssuesRoot\022 \n\006issu" +
+      "es\030\001 \003(\0132\020.boa.types.Issue\"\360\010\n\005Issue\022\n\n\002" +
+      "id\030\001 \002(\t\022,\n\006status\030\002 \002(\0162\034.boa.types.Iss" +
+      "ue.IssueStatus\022!\n\006author\030\003 \002(\0132\021.boa.typ" +
+      "es.Person\022#\n\010assignee\030\004 \001(\0132\021.boa.types." +
+      "Person\022\017\n\007summary\030\005 \002(\t\022\023\n\013description\030\006" +
+      " \002(\t\022\024\n\014created_date\030\007 \002(\004\022\025\n\rmodified_d" +
+      "ate\030\010 \002(\004\022\026\n\016completed_date\030\t \001(\004\022\020\n\010key",
+      "words\030\n \003(\t\022\014\n\004vote\030\013 \001(\005\0220\n\010priority\030\014 " +
+      "\001(\0162\036.boa.types.Issue.IssuePriority\022$\n\005f" +
+      "iles\030\r \003(\0132\025.boa.types.Attachment\022)\n\010com" +
+      "ments\030\016 \003(\0132\027.boa.types.IssueComment\022\021\n\t" +
+      "milestone\030\027 \001(\t\022\017\n\007blocked\030\031 \001(\t\022\017\n\007pull" +
+      "Url\030\034 \001(\t\022$\n\tassignees\030\035 \003(\0132\021.boa.types" +
+      ".Person\022\016\n\006number\030\036 \002(\r\022+\n\006labels\030\037 \003(\0162" +
+      "\033.boa.types.Issue.IssueLabel\022\024\n\014other_st" +
+      "atus\030  \001(\t\022\026\n\016other_priority\030! \001(\t\022\024\n\014ot" +
+      "her_labels\030\" \003(\t\"\270\001\n\nIssueLabel\022\017\n\013OTHER",
+      "_LABEL\020\000\022\007\n\003BUG\020\001\022\017\n\013ENHANCEMENT\020\002\022\014\n\010PR" +
+      "OPOSAL\020\003\022\010\n\004TASK\020\004\022\013\n\007FEATURE\020\005\022\013\n\007SUPPO" +
+      "RT\020\006\022\016\n\nDISCUSSION\020\007\022\021\n\rDOCUMENTATION\020\010\022" +
+      "\016\n\nSUGGESTION\020\t\022\014\n\010QUESTION\020\n\022\010\n\004TEST\020\013\032" +
+      "\002\020\001\"e\n\rIssuePriority\022\022\n\016OTHER_PRIORITY\020\000" +
+      "\022\013\n\007TRIVIAL\020\001\022\t\n\005MINOR\020\002\022\t\n\005MAJOR\020\003\022\014\n\010C" +
+      "RITICAL\020\004\022\013\n\007BLOCKER\020\005\032\002\020\001\"\330\001\n\013IssueStat" +
+      "us\022\020\n\014OTHER_STATUS\020\000\022\007\n\003NEW\020\001\022\010\n\004OPEN\020\002\022" +
+      "\013\n\007ON_HOLD\020\003\022\014\n\010RESOLVED\020\004\022\r\n\tDUPLICATE\020" +
+      "\005\022\013\n\007INVALID\020\006\022\014\n\010WONT_FIX\020\007\022\n\n\006CLOSED\020\010",
+      "\022\t\n\005FIXED\020\t\022\022\n\016NOT_APPLICABLE\020\n\022\024\n\020NOT_R" +
+      "EPRODUCIBLE\020\013\022\014\n\010EXTERNAL\020\014\022\014\n\010ANSWERED\020" +
+      "\r\032\002\020\001\"\177\n\nAttachment\022\013\n\003url\030\001 \002(\t\022\020\n\010file" +
+      "name\030\002 \002(\t\022\014\n\004size\030\003 \001(\004\022\014\n\004date\030\004 \001(\004\022!" +
+      "\n\006author\030\005 \001(\0132\021.boa.types.Person\022\023\n\013des" +
+      "cription\030\006 \001(\t\"\206\001\n\014IssueComment\022\n\n\002id\030\001 " +
+      "\002(\t\022\014\n\004date\030\002 \002(\004\022!\n\006author\030\003 \002(\0132\021.boa." +
+      "types.Person\022\023\n\013description\030\004 \002(\t\022$\n\005fil" +
+      "es\030\005 \003(\0132\025.boa.types.Attachment\"\223\001\n\013Issu" +
+      "eChange\022\n\n\002id\030\001 \002(\t\022\014\n\004what\030\002 \002(\t\022\014\n\004dat",
+      "e\030\003 \002(\004\022!\n\006author\030\004 \002(\0132\021.boa.types.Pers" +
+      "on\022\021\n\told_value\030\005 \002(\t\022\021\n\tnew_value\030\006 \002(\t" +
+      "\022\023\n\013description\030\007 \001(\tB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -8811,7 +11831,7 @@ public final class Issues {
           internal_static_boa_types_IssueRepository_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_IssueRepository_descriptor,
-              new java.lang.String[] { "Url", "Kind", "Key", });
+              new java.lang.String[] { "Url", "Name", "Key", });
           internal_static_boa_types_IssuesRoot_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_boa_types_IssuesRoot_fieldAccessorTable = new
@@ -8823,7 +11843,7 @@ public final class Issues {
           internal_static_boa_types_Issue_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Issue_descriptor,
-              new java.lang.String[] { "Id", "Status", "Author", "Assignee", "Summary", "Description", "CreatedDate", "ModifiedDate", "CompletedDate", "Keywords", "Vote", "Priority", "Files", "Comments", });
+              new java.lang.String[] { "Id", "Status", "Author", "Assignee", "Summary", "Description", "CreatedDate", "ModifiedDate", "CompletedDate", "Keywords", "Vote", "Priority", "Files", "Comments", "Milestone", "Blocked", "PullUrl", "Assignees", "Number", "Labels", "OtherStatus", "OtherPriority", "OtherLabels", });
           internal_static_boa_types_Attachment_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_boa_types_Attachment_fieldAccessorTable = new

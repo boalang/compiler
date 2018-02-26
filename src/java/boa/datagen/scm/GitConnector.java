@@ -26,6 +26,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -64,6 +65,7 @@ public class GitConnector extends AbstractConnector {
 
 	@Override
 	public void close() {
+		revwalk.close();
 		repository.close();
 	}
 
@@ -90,6 +92,7 @@ public class GitConnector extends AbstractConnector {
 
 	@Override
 	protected void setRevisions() {
+		RevWalk temprevwalk = new RevWalk(repository);
 		try {
 			revwalk.reset();
 			revwalk.markStart(revwalk.parseCommit(repository.resolve(Constants.HEAD)));
@@ -99,24 +102,29 @@ public class GitConnector extends AbstractConnector {
 			
 			revisions.clear();
 			revisionMap = new HashMap<String, Integer>();
-
+			
 			for (final RevCommit rc: revwalk) {
-				final GitCommit gc = new GitCommit(repository, this);
+				final GitCommit gc = new GitCommit(this, repository, temprevwalk);
 
 				gc.setId(rc.getName());
-				gc.setAuthor(rc.getAuthorIdent().getName());
-				gc.setCommitter(rc.getCommitterIdent().getName());
+				PersonIdent author = rc.getAuthorIdent(), committer = rc.getCommitterIdent();
+				if (author != null)
+					gc.setAuthor(author.getName(), null, author.getEmailAddress());
+				gc.setCommitter(committer.getName(), null, committer.getEmailAddress());
 				gc.setDate(new Date(((long) rc.getCommitTime()) * 1000));
 				gc.setMessage(rc.getFullMessage());
 				
 				gc.getChangeFiles(this.revisionMap, rc);
-
+				
 				revisionMap.put(gc.id, revisions.size());
 				revisions.add(gc);
 			}
 		} catch (final IOException e) {
 			if (debug)
 				System.err.println("Git Error getting parsing HEAD commit for " + path + ". " + e.getMessage());
+		} finally {
+			temprevwalk.dispose();
+			temprevwalk.close();
 		}
 	}
 
