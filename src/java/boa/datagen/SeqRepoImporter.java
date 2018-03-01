@@ -328,8 +328,9 @@ public class SeqRepoImporter {
 
 				projBuilder.setCodeRepositories(i, repoBuilder);
 				if (!cache) {
-					System.out.println("deleting cloned repo" + gitRootPath + "/" + name);
-					File cloned = new File(gitRootPath + "/" + name);
+					String nameArr[] = name.split("/");
+					System.out.println("deleting cloned repo" + gitRootPath + "/" + nameArr[0]);
+					File cloned = new File(gitRootPath + "/" + nameArr[0]);
 					if (cloned.exists()) {
 						org.apache.commons.io.FileUtils.deleteQuietly(cloned);
 					}
