@@ -83,10 +83,12 @@ public class BoaGenerator {
 				e.printStackTrace();
 			}
 		}
+		/*
 		if (cl.hasOption("cache"))
 			clear(true);
 		else
 			clear(false);
+			*/
 	}
 
 	private static final void printHelp(Options options, String message) {
@@ -161,6 +163,9 @@ public class BoaGenerator {
 		if (cl.hasOption("debugparse")) {
 			DefaultProperties.DEBUGPARSE = true;
 		}
+		if (cl.hasOption("cache")) {
+			DefaultProperties.CACHE = true;
+		}
 		if (cl.hasOption("libs")) {
 			DefaultProperties.CLASSPATH_ROOT = cl.getOptionValue("libs");
 		}
@@ -177,6 +182,7 @@ public class BoaGenerator {
 		if (inputDirectory.exists())
 			org.apache.commons.io.FileUtils.deleteQuietly(inputDirectory);
 	}
+	
 
 	private static void getGithubMetadata(String inputPath, String username, String password, String targetUser,
 			String targetRepo) {

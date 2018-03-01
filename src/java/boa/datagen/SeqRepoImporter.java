@@ -59,8 +59,10 @@ import boa.datagen.util.Properties;
  */
 public class SeqRepoImporter {
 	private final static boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
+	private final static boolean cache = Properties.getBoolean("cache", DefaultProperties.CACHE);
 
-	private static File jsonCacheDir = new File(Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH));
+	private static File jsonCacheDir = new File(
+			Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH));
 	private final static File gitRootPath = new File(
 			Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
 
@@ -71,32 +73,35 @@ public class SeqRepoImporter {
 	private static FileSystem fileSystem = null;
 	private static String base = null;
 
-	private final static int poolSize = Integer.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
+	private final static int poolSize = Integer
+			.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
 	private final static AtomicInteger numOfProcessedProjects = new AtomicInteger(0);
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		conf = new Configuration();
 		// currently using the cachejson location as tempCache
 		// conf.set("fs.default.name", "hdfs://boa-njt/");
-		// conf.set("fs.default.name", Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH));
+		// conf.set("fs.default.name",
+		// Properties.getProperty("gh.json.cache.path",
+		// DefaultProperties.GH_JSON_CACHE_PATH));
 		fileSystem = FileSystem.get(conf);
 		base = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
 
 		buildCacheOfProjects();
 		getProcessedProjects();
 
-		Thread [] workers = new Thread[poolSize];
-		for (int i = 0; i < poolSize; i++){
+		Thread[] workers = new Thread[poolSize];
+		for (int i = 0; i < poolSize; i++) {
 			workers[i] = new Thread(new ImportTask(i));
 			workers[i].start();
 		}
-		
-		for(Thread t :workers){
-			while(t.isAlive()){
+
+		for (Thread t : workers) {
+			while (t.isAlive()) {
 				Thread.sleep(1000);
 			}
 		}
-			
+
 	}
 
 	private static void getProcessedProjects() throws IOException {
@@ -122,7 +127,8 @@ public class SeqRepoImporter {
 				}
 			}
 		}
-//		System.out.println("Got processed projects: " + processedProjectIds.size());
+		// System.out.println("Got processed projects: " +
+		// processedProjectIds.size());
 	}
 
 	private static void buildCacheOfProjects() {
@@ -130,7 +136,8 @@ public class SeqRepoImporter {
 		for (File file : jsonCacheDir.listFiles()) {
 			if (file.getName().endsWith("buf-map")) {
 				@SuppressWarnings("unchecked")
-				HashMap<String, byte[]> repos = (HashMap<String, byte[]>) FileIO.readObjectFromFile(file.getAbsolutePath());
+				HashMap<String, byte[]> repos = (HashMap<String, byte[]>) FileIO
+						.readObjectFromFile(file.getAbsolutePath());
 				for (String key : repos.keySet()) {
 					byte[] bs = repos.get(key);
 					if (poolSize > 1)
@@ -152,7 +159,7 @@ public class SeqRepoImporter {
 		if (debug)
 			System.out.println("Got cached projects: " + cacheOfProjects.size());
 	}
-	
+
 	public static class ImportTask implements Runnable {
 		private static final int MAX_COUNTER = 10000;
 		private int id;
@@ -169,15 +176,19 @@ public class SeqRepoImporter {
 			suffix = "-" + id + "-" + time + ".seq";
 			while (true) {
 				try {
-					projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/projects" + suffix), Text.class, BytesWritable.class);
-					astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/ast" + suffix), LongWritable.class, BytesWritable.class);
-					contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/source" + suffix), LongWritable.class, BytesWritable.class);
+					projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/projects" + suffix),
+							Text.class, BytesWritable.class);
+					astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/ast" + suffix),
+							LongWritable.class, BytesWritable.class);
+					contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/source" + suffix),
+							LongWritable.class, BytesWritable.class);
 					break;
 				} catch (Throwable t) {
 					t.printStackTrace();
 					try {
 						Thread.sleep(1000);
-					} catch (InterruptedException e) {}
+					} catch (InterruptedException e) {
+					}
 				}
 			}
 		}
@@ -230,7 +241,8 @@ public class SeqRepoImporter {
 					final String name = cachedProject.getName();
 
 					if (debug)
-						System.out.println("Processing " + (pid+1) + " / " + cacheOfProjects.size() + " " + cachedProject.getId() + " " + name);
+						System.out.println("Processing " + (pid + 1) + " / " + cacheOfProjects.size() + " "
+								+ cachedProject.getId() + " " + name);
 
 					Project project = storeRepository(cachedProject, 0);
 
@@ -286,7 +298,7 @@ public class SeqRepoImporter {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (org.eclipse.jgit.api.errors.JGitInternalException e) {
-					//e.printStackTrace();
+					// e.printStackTrace();
 				}
 			}
 
@@ -297,7 +309,8 @@ public class SeqRepoImporter {
 				conn = new GitConnector(gitDir.getAbsolutePath());
 				final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
 				for (final Revision rev : conn.getCommits(true, astWriter, contentWriter)) {
-					// if (debug) System.out.println("Storing '" + name + "' revision: " + rev.getId());
+					// if (debug) System.out.println("Storing '" + name + "'
+					// revision: " + rev.getId());
 					// build new rev w/ no namespaces
 					final Revision.Builder revBuilder = Revision.newBuilder(rev);
 					repoBuilder.addRevisions(revBuilder);
@@ -306,7 +319,7 @@ public class SeqRepoImporter {
 					if (debug)
 						System.out.println("Build head snapshot");
 					repoBuilder.setHead(conn.getHeadCommitOffset());
-					repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[]{"java"}, astWriter));
+					repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[] { "java" }, astWriter));
 				}
 				repoBuilder.addAllBranches(conn.getBranchIndices());
 				repoBuilder.addAllBranchNames(conn.getBranchNames());
@@ -314,6 +327,13 @@ public class SeqRepoImporter {
 				repoBuilder.addAllTagNames(conn.getTagNames());
 
 				projBuilder.setCodeRepositories(i, repoBuilder);
+				if (!cache) {
+					System.out.println("deleting cloned repo" + gitRootPath + "/" + name);
+					File cloned = new File(gitRootPath + "/" + name);
+					if (cloned.exists()) {
+						org.apache.commons.io.FileUtils.deleteQuietly(cloned);
+					}
+				}
 				return projBuilder.build();
 			} catch (final Throwable e) {
 				printError(e, "unknown error");

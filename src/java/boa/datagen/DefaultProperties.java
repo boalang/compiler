@@ -26,7 +26,7 @@ public class DefaultProperties {
 	public static final String NUM_THREADS = "1";
 //	public static final String MAX_COMMITS = "10000";
 
-	public static boolean DEBUG = false, DEBUGPARSE = false;
+	public static boolean DEBUG = false, DEBUGPARSE = false, CACHE = false;
 
 	// HBase tables
 	public static final String HBASE_PROJECTS_TABLE = "projects";
