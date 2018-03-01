@@ -2824,6 +2824,8 @@ public class Java7Visitor extends ASTVisitor {
 			return typeName((PrimitiveType)t);
 		if (t.isQualifiedType())
 			return typeName((QualifiedType)t);
+		if (t.isNameQualifiedType())
+			return typeName((NameQualifiedType)t);
 		if (t.isIntersectionType())
 			return typeName((IntersectionType)t);
 		if (t.isUnionType())
@@ -2853,6 +2855,11 @@ public class Java7Visitor extends ASTVisitor {
 	protected String typeName(final PrimitiveType t) {
 		return t.getPrimitiveTypeCode().toString();
 	}
+
+	protected String typeName(final NameQualifiedType t) {
+		return t.getQualifier().getFullyQualifiedName() + "." + t.getName().getFullyQualifiedName();
+	}
+	
 
 	protected String typeName(final QualifiedType t) {
 		return typeName(t.getQualifier()) + "." + t.getName().getFullyQualifiedName();
