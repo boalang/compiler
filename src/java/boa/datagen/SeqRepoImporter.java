@@ -245,7 +245,12 @@ public class SeqRepoImporter {
 								+ cachedProject.getId() + " " + name);
 
 					Project project = storeRepository(cachedProject, 0);
-
+					
+					if (!cache) {
+						CloneRemover remover = new CloneRemover(project.getName());
+						new Thread(remover).start();
+					}
+					
 					if (debug)
 						System.out.println("Putting in sequence file: " + project.getId());
 
@@ -327,14 +332,6 @@ public class SeqRepoImporter {
 				repoBuilder.addAllTagNames(conn.getTagNames());
 
 				projBuilder.setCodeRepositories(i, repoBuilder);
-				if (!cache) {
-					String nameArr[] = name.split("/");
-					System.out.println("deleting cloned repo" + gitRootPath + "/" + nameArr[0]);
-					File cloned = new File(gitRootPath + "/" + nameArr[0]);
-					if (cloned.exists()) {
-						org.apache.commons.io.FileUtils.deleteQuietly(cloned);
-					}
-				}
 				return projBuilder.build();
 			} catch (final Throwable e) {
 				printError(e, "unknown error");
@@ -352,12 +349,31 @@ public class SeqRepoImporter {
 		}
 	}
 
-	private static void printError(final Throwable e, final String message) {
+	public static void printError(final Throwable e, final String message) {
 		System.err.println("ERR: " + message);
 		if (debug) {
 			e.printStackTrace();
 			// System.exit(-1);
 		} else
 			System.err.println(e.getMessage());
+	}
+
+	private static class CloneRemover implements Runnable {
+		private String name;
+
+		private CloneRemover(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public void run() {
+			String nameArr[] = name.split("/");
+			System.out.println("deleting cloned repo" + gitRootPath + "/" + nameArr[0]);
+			File cloned = new File(gitRootPath + "/" + nameArr[0]);
+			if (cloned.exists()) {
+				org.apache.commons.io.FileUtils.deleteQuietly(cloned);
+			}
+		}
+
 	}
 }
