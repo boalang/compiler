@@ -274,8 +274,7 @@ public class SeqRepoImporter {
 			File gitDir = new File(gitRootPath + "/" + name);
 
 			if (!cache && gitDir.exists()) {
-				CloneRemover remover = new CloneRemover(gitRootPath + "/" + project.getName());
-				new Thread(remover).start();
+				new Thread(new FileIO.DirectoryRemover(gitRootPath + "/" + project.getName())).start();
 			}
 
 			if (!RepositoryCache.FileKey.isGitRepository(gitDir, FS.DETECTED)) {
@@ -336,8 +335,7 @@ public class SeqRepoImporter {
 					}
 				}
 				if (!cache) {
-					CloneRemover remover = new CloneRemover(gitRootPath + "/" + project.getName());
-					new Thread(remover).start();
+					new Thread(new FileIO.DirectoryRemover(gitRootPath + "/" + project.getName())).start();
 				}
 			}
 
@@ -352,23 +350,5 @@ public class SeqRepoImporter {
 			// System.exit(-1);
 		} else
 			System.err.println(e.getMessage());
-	}
-
-	private static class CloneRemover implements Runnable {
-		private String path;
-
-		private CloneRemover(String path) {
-			this.path = path;
-		}
-
-		@Override
-		public void run() {
-			System.out.println("Deleting cloned repo " + path );
-			File file = new File(gitRootPath + "/" + path);
-			if (file.exists()) {
-				org.apache.commons.io.FileUtils.deleteQuietly(file);
-			}
-		}
-
 	}
 }

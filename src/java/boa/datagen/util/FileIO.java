@@ -196,4 +196,22 @@ public class FileIO {
 		sc.close();
 		return sb.toString();
 	}
+
+	public static class DirectoryRemover implements Runnable {
+		private String path;
+
+		public DirectoryRemover(String path) {
+			this.path = path;
+		}
+
+		@Override
+		public void run() {
+			System.out.println("Deleting cloned repo " + path );
+			File file = new File(path);
+			if (file.exists()) {
+				org.apache.commons.io.FileUtils.deleteQuietly(file);
+			}
+		}
+
+	}
 }
