@@ -45,7 +45,7 @@ public class SeqProjectCombiner {
 //		conf.set("fs.default.name", "hdfs://boa-njt/");
 		FileSystem fileSystem = FileSystem.get(conf);
 //		String base = conf.get("fs.default.name", "");
-		String base = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
+		String base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 		
 		
 		HashMap<String, String> sources = new HashMap<String, String>();

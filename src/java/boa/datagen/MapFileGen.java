@@ -32,7 +32,7 @@ import boa.datagen.util.Properties;
  */
 public class MapFileGen {
 //	private final static String SEQ_FILE_PATH = Properties.getProperty("seq.file.path", "");
-	private final static String SEQ_FILE_PATH = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
+	private final static String SEQ_FILE_PATH = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 	public static void main(String[] args) throws Exception {
 		System.out.println("generating data and index file");
 		if (SEQ_FILE_PATH.isEmpty()) {

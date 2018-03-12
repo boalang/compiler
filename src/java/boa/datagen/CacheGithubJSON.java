@@ -14,7 +14,7 @@ import boa.types.Toplevel.Project;
 
 public class CacheGithubJSON {
 	final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
-	final static String jsonCachePath = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
+	final static String jsonCachePath = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 	
 	public static void main(String[] args) {
 		HashMap<String, byte[]> repos = new HashMap<String, byte[]>();

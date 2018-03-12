@@ -61,10 +61,8 @@ public class SeqRepoImporter {
 	private final static boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	private final static boolean cache = Properties.getBoolean("cache", DefaultProperties.CACHE);
 
-	private static File jsonCacheDir = new File(
-			Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH));
-	private final static File gitRootPath = new File(
-			Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
+	private static File jsonCacheDir = new File(Properties.getProperty("output.path", DefaultProperties.OUTPUT));
+	private final static File gitRootPath = new File(Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
 
 	private final static ArrayList<byte[]> cacheOfProjects = new ArrayList<byte[]>();
 	private final static HashSet<String> processedProjectIds = new HashSet<String>();
@@ -85,7 +83,7 @@ public class SeqRepoImporter {
 		// Properties.getProperty("gh.json.cache.path",
 		// DefaultProperties.GH_JSON_CACHE_PATH));
 		fileSystem = FileSystem.get(conf);
-		base = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
+		base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 
 		buildCacheOfProjects();
 		getProcessedProjects();

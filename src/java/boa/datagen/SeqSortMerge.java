@@ -39,7 +39,7 @@ import org.apache.hadoop.io.Text;
  */
 public class SeqSortMerge {
 //	private static String base = "hdfs://boa-njt/";
-	private static String base = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
+	private static String base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 	private static Configuration conf = new Configuration();
 	private static final int NUM_FILES = 15;
 	

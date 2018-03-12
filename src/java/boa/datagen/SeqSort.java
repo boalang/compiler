@@ -128,7 +128,7 @@ public class SeqSort<K,V> extends Configured implements Tool {
 		Configuration conf = new Configuration();
 //		String base = "hdfs://boa-njt/";
 //		conf.set("fs.default.name", base);
-		String base = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
+		String base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 		FileSystem fs = FileSystem.get(conf);
 		
 		String inPath = "/tmprepcache/";

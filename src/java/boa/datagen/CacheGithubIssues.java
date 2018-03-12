@@ -24,8 +24,7 @@ import boa.types.Issues.IssuesRoot;
 
 public class CacheGithubIssues {
 	final static String jsonPath = Properties.getProperty("gh.issue.path", DefaultProperties.GH_ISSUE_PATH);
-	final static String jsonCachePath = Properties.getProperty("gh.json.cache.path",
-			DefaultProperties.GH_JSON_CACHE_PATH);
+	final static String jsonCachePath = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 	private static Configuration conf;
 	private static FileSystem fileSystem;
 	private static String suffix = "";

@@ -72,11 +72,10 @@ public class BoaGenerator {
 				e.printStackTrace();
 			}
 		} else { // when user provides local repo and does not have json files
-			File output = new File(DefaultProperties.GH_JSON_CACHE_PATH);
+			File output = new File(DefaultProperties.OUTPUT);
 			if (!output.exists())
 				output.mkdirs();
-			LocalGitSequenceGenerator.localGitSequenceGenerate(DefaultProperties.GH_GIT_PATH,
-					DefaultProperties.GH_JSON_CACHE_PATH);
+			LocalGitSequenceGenerator.localGitSequenceGenerate(DefaultProperties.GH_GIT_PATH, DefaultProperties.OUTPUT);
 			try {
 				MapFileGen.main(args);
 			} catch (Exception e) {
@@ -117,15 +116,15 @@ public class BoaGenerator {
 	private static void handleCmdOptions(CommandLine cl, Options options, final String[] args) {
 		if (cl.hasOption("inputJson") && cl.hasOption("inputRepo") && cl.hasOption("output")) {
 			DefaultProperties.GH_JSON_PATH = cl.getOptionValue("inputJson");
-			DefaultProperties.GH_JSON_CACHE_PATH = cl.getOptionValue("output");
+			DefaultProperties.OUTPUT = cl.getOptionValue("output");
 			// DefaultProperties.GH_GIT_PATH = GH_JSON_CACHE_PATH + "/github";
 			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("inputRepo");
 		} else if (cl.hasOption("inputJson") && cl.hasOption("output")) {
 			DefaultProperties.GH_JSON_PATH = cl.getOptionValue("inputJson");
-			DefaultProperties.GH_JSON_CACHE_PATH = cl.getOptionValue("output");
+			DefaultProperties.OUTPUT = cl.getOptionValue("output");
 			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("output");
 		} else if (cl.hasOption("inputRepo") && cl.hasOption("output")) {
-			DefaultProperties.GH_JSON_CACHE_PATH = cl.getOptionValue("output");
+			DefaultProperties.OUTPUT = cl.getOptionValue("output");
 			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("inputRepo");
 			jsonAvailable = false;
 		} else if (cl.hasOption("user") && cl.hasOption("password") && cl.hasOption("targetUser")
@@ -141,7 +140,7 @@ public class BoaGenerator {
 
 				// output directory
 				final String GH_JSON_CACHE_PATH = cl.getOptionValue("output");
-				DefaultProperties.GH_JSON_CACHE_PATH = GH_JSON_CACHE_PATH;
+				DefaultProperties.OUTPUT = GH_JSON_CACHE_PATH;
 				DefaultProperties.GH_GIT_PATH = GH_JSON_CACHE_PATH + "/github";
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -169,7 +168,7 @@ public class BoaGenerator {
 
 	//
 	private static void clear() {
-		File inputDirectory = new File(DefaultProperties.GH_JSON_CACHE_PATH + "/buf-map");
+		File inputDirectory = new File(DefaultProperties.OUTPUT + "/buf-map");
 		if (inputDirectory.exists())
 			org.apache.commons.io.FileUtils.deleteQuietly(inputDirectory);
 	}
