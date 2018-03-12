@@ -83,12 +83,8 @@ public class BoaGenerator {
 				e.printStackTrace();
 			}
 		}
-		/*
-		if (cl.hasOption("cache"))
-			clear(true);
-		else
-			clear(false);
-			*/
+		
+		clear();
 	}
 
 	private static final void printHelp(Options options, String message) {
@@ -172,12 +168,7 @@ public class BoaGenerator {
 	}
 
 	//
-	private static void clear(boolean cache) {
-		if (!cache) {
-			File clonedCode = new File(DefaultProperties.GH_GIT_PATH);
-			if (clonedCode.exists())
-				org.apache.commons.io.FileUtils.deleteQuietly(clonedCode);
-		}
+	private static void clear() {
 		File inputDirectory = new File(DefaultProperties.GH_JSON_CACHE_PATH + "/buf-map");
 		if (inputDirectory.exists())
 			org.apache.commons.io.FileUtils.deleteQuietly(inputDirectory);

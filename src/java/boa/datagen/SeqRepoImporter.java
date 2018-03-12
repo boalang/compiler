@@ -127,8 +127,7 @@ public class SeqRepoImporter {
 				}
 			}
 		}
-		// System.out.println("Got processed projects: " +
-		// processedProjectIds.size());
+		// System.out.println("Got processed projects: " + processedProjectIds.size());
 	}
 
 	private static void buildCacheOfProjects() {
@@ -246,11 +245,6 @@ public class SeqRepoImporter {
 
 					Project project = storeRepository(cachedProject, 0);
 					
-					if (!cache) {
-						CloneRemover remover = new CloneRemover(project.getName());
-						new Thread(remover).start();
-					}
-					
 					if (debug)
 						System.out.println("Putting in sequence file: " + project.getId());
 
@@ -281,13 +275,13 @@ public class SeqRepoImporter {
 			final String name = project.getName();
 			File gitDir = new File(gitRootPath + "/" + name);
 
-			// make sure the given directory exists else create a new one
-			if (!gitDir.exists()) {
-				gitDir.mkdirs();
+			if (!cache && gitDir.exists()) {
+				CloneRemover remover = new CloneRemover(gitRootPath + "/" + project.getName());
+				new Thread(remover).start();
 			}
 
 			if (!RepositoryCache.FileKey.isGitRepository(gitDir, FS.DETECTED)) {
-				String[] args = { repo.getUrl(), gitRootPath + "/" + name };
+				String[] args = { repo.getUrl(), gitDir.getAbsolutePath() };
 				try {
 					RepositoryCloner.clone(args);
 				} catch (InvalidRemoteException e) {
@@ -343,6 +337,10 @@ public class SeqRepoImporter {
 						printError(e, "Cannot close Git connector to " + gitDir.getAbsolutePath());
 					}
 				}
+				if (!cache) {
+					CloneRemover remover = new CloneRemover(gitRootPath + "/" + project.getName());
+					new Thread(remover).start();
+				}
 			}
 
 			return project;
@@ -359,19 +357,18 @@ public class SeqRepoImporter {
 	}
 
 	private static class CloneRemover implements Runnable {
-		private String name;
+		private String path;
 
-		private CloneRemover(String name) {
-			this.name = name;
+		private CloneRemover(String path) {
+			this.path = path;
 		}
 
 		@Override
 		public void run() {
-			String nameArr[] = name.split("/");
-			System.out.println("deleting cloned repo" + gitRootPath + "/" + nameArr[0]);
-			File cloned = new File(gitRootPath + "/" + nameArr[0]);
-			if (cloned.exists()) {
-				org.apache.commons.io.FileUtils.deleteQuietly(cloned);
+			System.out.println("Deleting cloned repo " + path );
+			File file = new File(gitRootPath + "/" + path);
+			if (file.exists()) {
+				org.apache.commons.io.FileUtils.deleteQuietly(file);
 			}
 		}
 
