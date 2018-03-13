@@ -112,7 +112,7 @@ public class SeqRepoImporter {
 						processedProjectIds.add(key.toString());
 					}
 					r.close();
-				} catch (EOFException e) {
+				} catch (IOException e) {
 					if (r != null)
 						r.close();
 //					printError(e, "EOF Exception in " + file.getPath().getName());
