@@ -60,7 +60,7 @@ public class MapFileGen {
 			FileStatus[] files = fs.listStatus(path);
 			for (FileStatus file : files) {
 				path = file.getPath();
-				if (fs.isFile(path) && path.getName().startsWith("ast") && path.getName().endsWith(".seq")) {
+				if (fs.isFile(path) && path.getName().equals("ast.seq")) {
 					Path dataCrc = new Path(file.getPath().getParent(), "." + MapFile.DATA_FILE_NAME + ".crc");
 					Path indexCrc = new Path(file.getPath().getParent(), "." + MapFile.INDEX_FILE_NAME + ".crc");
 					while (fs.exists(dataCrc))

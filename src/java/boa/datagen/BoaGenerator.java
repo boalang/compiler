@@ -63,9 +63,7 @@ public class BoaGenerator {
 				e.printStackTrace();
 			}
 
-			// SeqProjectCombiner.main(args);
-			// SeqSort.main(args);
-			// SeqSortMerge.main(args);
+			SeqCombiner.main(args);
 			try {
 				MapFileGen.main(args);
 			} catch (Exception e) {

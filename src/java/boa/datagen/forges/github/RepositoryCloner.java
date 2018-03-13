@@ -1,16 +1,11 @@
 package boa.datagen.forges.github;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.util.Scanner;
 
+import java.io.File;
+import java.io.IOException;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.TransportException;
-import org.eclipse.jgit.transport.CredentialsProvider;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 
 /**
@@ -46,28 +41,4 @@ public class RepositoryCloner {
 		}
 	}
 
-	public static void main(String[] args)
-			throws IOException, InvalidRemoteException, TransportException, GitAPIException {
-		String input = args[0];
-		String output = args[1];
-		File dir = new File(input);
-		int totalFiles = dir.listFiles().length;
-		final int MAX_NUM_THREADS = 4;
-		int shareSize = totalFiles / MAX_NUM_THREADS;
-		int start = 0;
-		int end = 0;
-		int i;
-		for (i = 0; i < MAX_NUM_THREADS - 1; i++) {
-			start = end;
-			end = start + shareSize;
-			String recovery = output + "/revovery/" + i;
-			RepositoryClonerWorker worker = new RepositoryClonerWorker(output, input, recovery, start, end);
-			new Thread(worker).start();
-		}
-		start = end;
-		end = totalFiles;
-		String recovery = output + "/revovery/" + i;
-		RepositoryClonerWorker worker = new RepositoryClonerWorker(output, input, recovery, start, end);
-		new Thread(worker).start();
-	}
 }

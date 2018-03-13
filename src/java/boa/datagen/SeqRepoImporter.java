@@ -20,7 +20,6 @@ package boa.datagen;
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,9 +33,6 @@ import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.InvalidRemoteException;
-import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.lib.RepositoryCache;
 import org.eclipse.jgit.util.FS;
 
@@ -79,12 +75,10 @@ public class SeqRepoImporter {
 		conf = new Configuration();
 		// currently using the cachejson location as tempCache
 		// conf.set("fs.default.name", "hdfs://boa-njt/");
-		// conf.set("fs.default.name",
-		// Properties.getProperty("gh.json.cache.path",
-		// DefaultProperties.GH_JSON_CACHE_PATH));
+		// conf.set("fs.default.name", Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH));
 		fileSystem = FileSystem.get(conf);
 		base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
-
+		
 		buildCacheOfProjects();
 		getProcessedProjects();
 
@@ -92,6 +86,7 @@ public class SeqRepoImporter {
 		for (int i = 0; i < poolSize; i++) {
 			workers[i] = new Thread(new ImportTask(i));
 			workers[i].start();
+			Thread.sleep(10);
 		}
 
 		for (Thread t : workers) {
@@ -99,29 +94,32 @@ public class SeqRepoImporter {
 				Thread.sleep(1000);
 			}
 		}
-
 	}
-
+	
 	private static void getProcessedProjects() throws IOException {
 
 		FileStatus[] files = fileSystem.listStatus(new Path(base));
-		String hostname = InetAddress.getLocalHost().getHostName();
 		for (int i = 0; i < files.length; i++) {
 			FileStatus file = files[i];
-			String prefix = "projects-" + hostname + "-";
+			String prefix = "projects-";
 			String name = file.getPath().getName();
-			int index1 = name.indexOf(prefix);
-			if (index1 > -1) {
+			if (name.startsWith(prefix)) {
+				SequenceFile.Reader r = null;
 				try {
-					SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, file.getPath(), conf);
+					r = new SequenceFile.Reader(fileSystem, file.getPath(), conf);
 					final Text key = new Text();
 					while (r.next(key)) {
 						processedProjectIds.add(key.toString());
 					}
 					r.close();
 				} catch (EOFException e) {
-					printError(e, "EOF Exception in " + file.getPath().getName());
-					fileSystem.delete(file.getPath(), false);
+					if (r != null)
+						r.close();
+//					printError(e, "EOF Exception in " + file.getPath().getName());
+					String suffix = name.substring(prefix.length());
+					for (int j = 0; j < files.length; j++)
+						if (files[j].getPath().getName().endsWith(suffix))
+							fileSystem.delete(files[j].getPath(), false);
 				}
 			}
 		}
@@ -158,18 +156,18 @@ public class SeqRepoImporter {
 	}
 
 	public static class ImportTask implements Runnable {
-		private static final int MAX_COUNTER = 10000;
+		private static final int MAX_COUNTER = 1000;
 		private int id;
 		private int counter = 0;
 		private String suffix;
-		SequenceFile.Writer projectWriter, astWriter, contentWriter;
+		private SequenceFile.Writer projectWriter, astWriter, contentWriter;
 
 		public ImportTask(int id) throws IOException {
 			this.id = id;
 		}
 
 		public void openWriters() {
-			long time = System.currentTimeMillis() / 1000;
+			long time = System.currentTimeMillis();
 			suffix = "-" + id + "-" + time + ".seq";
 			while (true) {
 				try {
@@ -200,8 +198,6 @@ public class SeqRepoImporter {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 					}
-					fileSystem.delete(new Path(new Path(base), "." + "projects" + suffix + ".crc"), false);
-					fileSystem.delete(new Path(new Path(base), "." + "ast" + suffix + ".crc"), false);
 					break;
 				} catch (Throwable t) {
 					t.printStackTrace();
@@ -272,29 +268,17 @@ public class SeqRepoImporter {
 
 			final String name = project.getName();
 			File gitDir = new File(gitRootPath + "/" + name);
-
-			if (!cache && gitDir.exists()) {
-				new Thread(new FileIO.DirectoryRemover(gitRootPath + "/" + project.getName())).start();
+			
+			if (!cache) {
+				org.apache.commons.io.FileUtils.deleteQuietly(new File(gitRootPath + "/" + project.getName()));
 			}
 
 			if (!RepositoryCache.FileKey.isGitRepository(gitDir, FS.DETECTED)) {
 				String[] args = { repo.getUrl(), gitDir.getAbsolutePath() };
 				try {
 					RepositoryCloner.clone(args);
-				} catch (InvalidRemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (TransportException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (GitAPIException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (org.eclipse.jgit.api.errors.JGitInternalException e) {
-					// e.printStackTrace();
+				} catch (Throwable t) {
+					return project;
 				}
 			}
 
