@@ -44,6 +44,8 @@ import org.eclipse.jgit.treewalk.TreeWalk;
  * @author josephb
  */
 public class GitConnector extends AbstractConnector {
+	public static long maxTime = 0;
+	public static String commitId = "";
 
 	private Repository repository;
 	private Git git;
@@ -111,7 +113,12 @@ public class GitConnector extends AbstractConnector {
 				revisions.clear();
 			revisionMap = new HashMap<String, Integer>();
 			
+			int i = 0;
+			maxTime = 0;
 			for (final RevCommit rc: revwalk) {
+				i++;
+				long startTime = System.currentTimeMillis();
+				
 				final GitCommit gc = new GitCommit(this, repository, temprevwalk);
 				
 				gc.setId(rc.getName());
@@ -126,7 +133,18 @@ public class GitConnector extends AbstractConnector {
 				
 				revisionMap.put(gc.id, revisions.size());
 				revisions.add(gc);
+				
+				if (debug) {
+					long endTime = System.currentTimeMillis();
+					long time = endTime - startTime;
+					if (time > maxTime) {
+						System.out.println("Max time " + (time / 1000) + " parsing metadata commit " + i + " " + rc.getName());
+						maxTime = time;
+						commitId = rc.getName();
+					}
+				}
 			}
+			System.out.println("Process metadata of all commits");
 			
 			RevCommit head = revwalk.parseCommit(repository.resolve(Constants.HEAD));
 			headCommitOffset = revisionMap.get(head.getName());

@@ -25,7 +25,6 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.Stack;
 import org.apache.maven.model.Model;
@@ -45,7 +44,6 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.NullOutputStream;
 
-import boa.datagen.dependencies.DependencyMangementUtil;
 import boa.datagen.dependencies.GradleFile;
 import boa.datagen.dependencies.PomFile;
 import boa.datagen.util.FileIO;

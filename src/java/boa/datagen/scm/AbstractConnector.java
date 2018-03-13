@@ -388,19 +388,23 @@ public abstract class AbstractConnector implements AutoCloseable {
 			revisions = new ArrayList<AbstractCommit>();
 			setRevisions();
 		}
+		maxTime = 0;
 		final List<Revision> revs = new ArrayList<Revision>();
 		for (int i = 0; i < revisions.size(); i++) {
 			long startTime = System.currentTimeMillis();
 			final AbstractCommit rev = revisions.get(i);
-			if (debug)
-				System.out.println("Commit " + (i+1) + " to protobuf: " + rev.id);
+//			if (debug)
+//				System.out.println("Commit " + (i+1) + " to protobuf: " + rev.id);
 			revs.add(rev.asProtobuf(parse, astWriter, contentWriter));
-			long endTime = System.currentTimeMillis();
-			long time = endTime - startTime;
-			if (time > maxTime) {
-				System.out.println("Max time " + (time / 1000) + " at commit " + rev.id);
-				maxTime = time;
-				commitId = rev.id;
+			
+			if (debug) {
+				long endTime = System.currentTimeMillis();
+				long time = endTime - startTime;
+				if (time > maxTime) {
+					System.out.println("Max time " + (time / 1000) + " writing to protobuf commit " + (i+1)  + " " + rev.id);
+					maxTime = time;
+					commitId = rev.id;
+				}
 			}
 		}
 
