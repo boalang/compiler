@@ -100,6 +100,7 @@ public class BoaGenerator {
 	private static void addOptions(Options options) {
 		options.addOption("inputJson", "json", true, ".json files for metadata");
 		options.addOption("inputRepo", "json", true, "cloned repo path");
+		options.addOption("threads", "threads", true, "number of threads");
 		options.addOption("output", "json", true, "directory where output is desired");
 		options.addOption("user", "json", true, "github username to authenticate");
 		options.addOption("password", "json", true, "github password to authenticate.");
@@ -149,6 +150,9 @@ public class BoaGenerator {
 		} else {
 			System.err.println("User must specify the path of the repository. Please see --remote and --local options");
 			printHelp(options);
+		}
+		if (cl.hasOption("threads")) {
+			DefaultProperties.NUM_THREADS = cl.getOptionValue("threads");
 		}
 		if (cl.hasOption("debug")) {
 			DefaultProperties.DEBUG = true;
