@@ -2897,6 +2897,14 @@ public class Java7Visitor extends ASTVisitor {
 	}
 
 	//////////////////////////////////////////////////////////////
+	// Unsupported node types
+	
+	@Override
+	public boolean visit(LambdaExpression node) {
+		throw new UnsupportedOperationException("visited unsupported node " + node.getClass().getSimpleName());
+	}
+	
+	//////////////////////////////////////////////////////////////
 	// Unused node types
 	
 	@Override
