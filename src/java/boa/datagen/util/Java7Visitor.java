@@ -471,6 +471,11 @@ public class Java7Visitor extends ASTVisitor {
 				((AnnotationTypeMemberDeclaration)d).accept(this);
 				for (boa.types.Ast.Method m : methods.pop())
 					b.addMethods(m);
+			} else if (d instanceof MethodDeclaration) {
+				methods.push(new ArrayList<boa.types.Ast.Method>());
+				((MethodDeclaration)d).accept(this);
+				for (boa.types.Ast.Method m : methods.pop())
+					b.addMethods(m);
 			} else {
 				declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 				((BodyDeclaration)d).accept(this);
