@@ -102,6 +102,7 @@ public class BoaGenerator {
 		options.addOption("inputRepo", "json", true, "cloned repo path");
 		options.addOption("threads", "threads", true, "number of threads");
 		options.addOption("projects", "projects", true, "maximum number of projects per sequence file");
+		options.addOption("libs", "libs", true, "directory to store libraries");
 		options.addOption("output", "json", true, "directory where output is desired");
 		options.addOption("user", "json", true, "github username to authenticate");
 		options.addOption("password", "json", true, "github password to authenticate.");
