@@ -156,7 +156,6 @@ public class SeqRepoImporter {
 	}
 
 	public static class ImportTask implements Runnable {
-		private static final int MAX_COUNTER = 1000;
 		private int id;
 		private int counter = 0;
 		private String suffix;
@@ -249,7 +248,7 @@ public class SeqRepoImporter {
 						e.printStackTrace();
 					}
 					counter++;
-					if (counter >= MAX_COUNTER) {
+					if (counter >= Integer.parseInt(DefaultProperties.MAX_PROJECTS)) {
 						closeWriters();
 						openWriters();
 						counter = 0;

@@ -24,6 +24,7 @@ import java.io.File;
  */
 public class DefaultProperties {
 	public static String NUM_THREADS = "1";
+	public static String MAX_PROJECTS = "1000";
 //	public static final String MAX_COMMITS = "10000";
 
 	public static boolean DEBUG = false, DEBUGPARSE = false, CACHE = false;

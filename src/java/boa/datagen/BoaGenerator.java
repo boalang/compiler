@@ -101,6 +101,7 @@ public class BoaGenerator {
 		options.addOption("inputJson", "json", true, ".json files for metadata");
 		options.addOption("inputRepo", "json", true, "cloned repo path");
 		options.addOption("threads", "threads", true, "number of threads");
+		options.addOption("projects", "projects", true, "maximum number of projects per sequence file");
 		options.addOption("output", "json", true, "directory where output is desired");
 		options.addOption("user", "json", true, "github username to authenticate");
 		options.addOption("password", "json", true, "github password to authenticate.");
@@ -153,6 +154,9 @@ public class BoaGenerator {
 		}
 		if (cl.hasOption("threads")) {
 			DefaultProperties.NUM_THREADS = cl.getOptionValue("threads");
+		}
+		if (cl.hasOption("projects")) {
+			DefaultProperties.MAX_PROJECTS = cl.getOptionValue("projects");
 		}
 		if (cl.hasOption("debug")) {
 			DefaultProperties.DEBUG = true;
