@@ -19,6 +19,8 @@ package boa.functions;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.Stack;
 
 import org.apache.hadoop.conf.Configuration;
@@ -460,72 +462,72 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "isannot", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isAnnot(final Expression e) throws Exception {
-        return e.getKind() == ExpressionKind.ANNOTATION;
+		return e.getKind() == ExpressionKind.ANNOTATION;
 	}
 
 	@FunctionSpec(name = "ismarkerannot", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isMarkerAnnot(final Expression e) throws Exception {
-        return e.getKind() == ExpressionKind.ANNOTATION; // FIXME
+		return e.getKind() == ExpressionKind.ANNOTATION; // FIXME
 	}
 
 	@FunctionSpec(name = "isnormalannot", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isNormalAnnot(final Expression e) throws Exception {
-        return e.getKind() == ExpressionKind.ANNOTATION; // FIXME
+		return e.getKind() == ExpressionKind.ANNOTATION; // FIXME
 	}
 
 	@FunctionSpec(name = "issinglememberannot", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isSingleMemberAnnot(final Expression e) throws Exception {
-        return e.getKind() == ExpressionKind.ANNOTATION; // FIXME
+		return e.getKind() == ExpressionKind.ANNOTATION; // FIXME
 	}
 
 	@FunctionSpec(name = "isinfix", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isInfix(final Expression e) throws Exception {
-        return e.getExpressionsCount() > 1;
+		return e.getExpressionsCount() > 1;
 	}
 
 	@FunctionSpec(name = "isprefix", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isPrefix(final Expression e) throws Exception {
-        return !e.getIsPostfix() && e.getExpressionsCount() == 1;
+		return !e.getIsPostfix() && e.getExpressionsCount() == 1;
 	}
 
 	@FunctionSpec(name = "ispostfix", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isPostfix(final Expression e) throws Exception {
-        return e.getIsPostfix() && e.getExpressionsCount() == 1;
+		return e.getIsPostfix() && e.getExpressionsCount() == 1;
 	}
 
 	@FunctionSpec(name = "ismethod", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isMethod(final Expression e) throws Exception {
-        return e.getKind() == ExpressionKind.METHODCALL && !e.getMethod().startsWith("super.");
+		return e.getKind() == ExpressionKind.METHODCALL && !e.getMethod().startsWith("super.");
 	}
 
 	@FunctionSpec(name = "issupermethod", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isSuperMethod(final Expression e) throws Exception {
-        return e.getKind() == ExpressionKind.METHODCALL && e.getMethod().startsWith("super.");
+		return e.getKind() == ExpressionKind.METHODCALL && e.getMethod().startsWith("super.");
 	}
 
 	@FunctionSpec(name = "ismethodref", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isMethodRef(final Expression e) throws Exception {
-        return e.getKind() == ExpressionKind.METHOD_REFERENCE;
+		return e.getKind() == ExpressionKind.METHOD_REFERENCE;
 	}
 
 	@FunctionSpec(name = "iscreationref", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isCreationRef(final Expression e) throws Exception {
-        return e.getKind() == ExpressionKind.METHOD_REFERENCE && "new".equals(e.getMethod());
+		return e.getKind() == ExpressionKind.METHOD_REFERENCE && "new".equals(e.getMethod());
 	}
 
 	@FunctionSpec(name = "isexpref", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isExpRef(final Expression e) throws Exception {
-        return e.getKind() == ExpressionKind.METHOD_REFERENCE && e.getExpressionsCount() > 0;
+		return e.getKind() == ExpressionKind.METHOD_REFERENCE && e.getExpressionsCount() > 0;
 	}
 
 	@FunctionSpec(name = "issuperref", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isSuperRef(final Expression e) throws Exception {
-        return e.getKind() == ExpressionKind.METHOD_REFERENCE && e.hasLiteral() && e.getLiteral().endsWith("super");
+		return e.getKind() == ExpressionKind.METHOD_REFERENCE && e.hasLiteral() && e.getLiteral().endsWith("super");
 	}
 
 	@FunctionSpec(name = "istyperef", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isTypeRef(final Expression e) throws Exception {
-        return e.getKind() == ExpressionKind.METHOD_REFERENCE && e.hasNewType() && !"new".equals(e.getMethod());
+		return e.getKind() == ExpressionKind.METHOD_REFERENCE && e.hasNewType() && !"new".equals(e.getMethod());
 	}
 
 	///////////////////////////////
@@ -543,6 +545,15 @@ public class BoaAstIntrinsics {
 	public static boolean isNumberLit(final Expression e) throws Exception {
 		return isIntLit(e) || isFloatLit(e);
 	}
+
+	private static Matcher[] intLitMatchers = {
+		Pattern.compile("^[0-9][lL]?$").matcher(""),
+		Pattern.compile("^[1-9][0-9]([0-9_]*[0-9])?[lL]?$").matcher(""),
+		Pattern.compile("^[1-9][_]+[0-9]([0-9_]*[0-9])?[lL]?$").matcher(""),
+		Pattern.compile("^0[xX][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[lL]?$").matcher(""),
+		Pattern.compile("^0[_]*[0-7]([0-7_]*[0-7])?[lL]?$").matcher(""),
+		Pattern.compile("^0[bB][01]([01_]*[01])?[lL]?$").matcher("")
+	};
 
 	/**
 	 * Returns <code>true</code> if the expression <code>e</code> is of kind
@@ -575,13 +586,21 @@ public class BoaAstIntrinsics {
 	public static boolean isIntLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
-		if (e.getLiteral().matches("^[0-9][lL]?$")) return true;
-		if (e.getLiteral().matches("^[1-9][0-9]([0-9_]*[0-9])?[lL]?$")) return true;
-		if (e.getLiteral().matches("^[1-9][_]+[0-9]([0-9_]*[0-9])?[lL]?$")) return true;
-		if (e.getLiteral().matches("^0[xX][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[lL]?$")) return true;
-		if (e.getLiteral().matches("^0[_]*[0-7]([0-7_]*[0-7])?[lL]?$")) return true;
-		return e.getLiteral().matches("^0[bB][01]([01_]*[01])?[lL]?$");
+		final String lit = e.getLiteral();
+		for (int i = 0; i < intLitMatchers.length; i++)
+			if (intLitMatchers[i].reset(lit).find())
+				return true;
+		return false;
 	}
+
+	private static Matcher[] floatLitMatchers = {
+		Pattern.compile("^[0-9]([0-9_]*[0-9])?\\.([0-9]([0-9_]*[0-9])?)?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$").matcher(""),
+		Pattern.compile("^\\.[0-9]([0-9_]*[0-9])?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$").matcher(""),
+		Pattern.compile("^[0-9]([0-9_]*[0-9])?[eE][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$").matcher(""),
+		Pattern.compile("^[0-9]([0-9_]*[0-9])?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]$").matcher(""),
+		Pattern.compile("^0[Xx][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?\\.?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$").matcher(""),
+		Pattern.compile("^0[Xx]([0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?)?\\.[0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$").matcher("")
+	};
 
 	/**
 	 * Returns <code>true</code> if the expression <code>e</code> is of kind
@@ -607,12 +626,11 @@ public class BoaAstIntrinsics {
 	public static boolean isFloatLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
-		if (e.getLiteral().matches("^[0-9]([0-9_]*[0-9])?\\.([0-9]([0-9_]*[0-9])?)?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$")) return true;
-		if (e.getLiteral().matches("^\\.[0-9]([0-9_]*[0-9])?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$")) return true;
-		if (e.getLiteral().matches("^[0-9]([0-9_]*[0-9])?[eE][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$")) return true;
-		if (e.getLiteral().matches("^[0-9]([0-9_]*[0-9])?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]$")) return true;
-		if (e.getLiteral().matches("^0[Xx][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?\\.?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$")) return true;
-		return e.getLiteral().matches("^0[Xx]([0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?)?\\.[0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$");
+		final String lit = e.getLiteral();
+		for (int i = 0; i < floatLitMatchers.length; i++)
+			if (floatLitMatchers[i].reset(lit).find())
+				return true;
+		return false;
 	}
 
 	/**
