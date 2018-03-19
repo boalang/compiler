@@ -37,19 +37,12 @@ import boa.types.Ast.*;
  * @author rdyer
  */
 public class BoaIntrinsics {
-	private final static String[] fixingRegex = {
-		"\\bfix(s|es|ing|ed)?\\b",
-		"\\b(error|bug|issue)(s)?\\b",
-		//"\\b(bug|issue|fix)(s)?\\b\\s*(#)?\\s*[0-9]+",
-		//"\\b(bug|issue|fix)\\b\\s*id(s)?\\s*(=)?\\s*[0-9]+"
+	private final static Matcher[] fixingMatchers = {
+		Pattern.compile("\\bfix(s|es|ing|ed)?\\b").matcher(""),
+		Pattern.compile("\\b(error|bug|issue)(s)?\\b").matcher(""),
+		//Pattern.compile("\\b(bug|issue|fix)(s)?\\b\\s*(#)?\\s*[0-9]+").matcher(""),
+		//Pattern.compile("\\b(bug|issue|fix)\\b\\s*id(s)?\\s*(=)?\\s*[0-9]+").matcher(""),
 	};
-
-	private final static List<Matcher> fixingMatchers = new ArrayList<Matcher>();
-
-	static {
-		for (final String s : BoaIntrinsics.fixingRegex)
-			fixingMatchers.add(Pattern.compile(s).matcher(""));
-	}
 
 	/**
 	 * Is a Revision's log message indicating it is a fixing revision?

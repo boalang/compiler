@@ -546,13 +546,13 @@ public class BoaAstIntrinsics {
 		return isIntLit(e) || isFloatLit(e);
 	}
 
-	private static Matcher[] intLitMatchers = {
+	private final static Matcher[] intLitMatchers = {
 		Pattern.compile("^[0-9][lL]?$").matcher(""),
 		Pattern.compile("^[1-9][0-9]([0-9_]*[0-9])?[lL]?$").matcher(""),
 		Pattern.compile("^[1-9][_]+[0-9]([0-9_]*[0-9])?[lL]?$").matcher(""),
 		Pattern.compile("^0[xX][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[lL]?$").matcher(""),
 		Pattern.compile("^0[_]*[0-7]([0-7_]*[0-7])?[lL]?$").matcher(""),
-		Pattern.compile("^0[bB][01]([01_]*[01])?[lL]?$").matcher("")
+		Pattern.compile("^0[bB][01]([01_]*[01])?[lL]?$").matcher(""),
 	};
 
 	/**
@@ -587,19 +587,19 @@ public class BoaAstIntrinsics {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
 		final String lit = e.getLiteral();
-		for (int i = 0; i < intLitMatchers.length; i++)
-			if (intLitMatchers[i].reset(lit).find())
+		for (final Matcher m : intLitMatchers)
+			if (m.reset(lit).find())
 				return true;
 		return false;
 	}
 
-	private static Matcher[] floatLitMatchers = {
+	private final static Matcher[] floatLitMatchers = {
 		Pattern.compile("^[0-9]([0-9_]*[0-9])?\\.([0-9]([0-9_]*[0-9])?)?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$").matcher(""),
 		Pattern.compile("^\\.[0-9]([0-9_]*[0-9])?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$").matcher(""),
 		Pattern.compile("^[0-9]([0-9_]*[0-9])?[eE][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$").matcher(""),
 		Pattern.compile("^[0-9]([0-9_]*[0-9])?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]$").matcher(""),
 		Pattern.compile("^0[Xx][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?\\.?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$").matcher(""),
-		Pattern.compile("^0[Xx]([0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?)?\\.[0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$").matcher("")
+		Pattern.compile("^0[Xx]([0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?)?\\.[0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$").matcher(""),
 	};
 
 	/**
@@ -627,8 +627,8 @@ public class BoaAstIntrinsics {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
 		final String lit = e.getLiteral();
-		for (int i = 0; i < floatLitMatchers.length; i++)
-			if (floatLitMatchers[i].reset(lit).find())
+		for (final Matcher m : floatLitMatchers)
+			if (m.reset(lit).find())
 				return true;
 		return false;
 	}
