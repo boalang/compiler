@@ -340,24 +340,6 @@
 	</target>
 
 
-	<!-- documentation -->
-	<target name="gen-doc">
-		<apply executable="protoc" failonerror="true" verbose="true">
-			<arg value="--proto_path=${basedir}" />
-			<arg value="--proto_path=${src.proto}" />
-			<arg value="--proto_path=/usr/local/Cellar/protobuf/2.5.0/include/" />
-			<arg value="--plugin=protoc-gen-doc=../protoc-gen-doc/protoc-gen-doc" />
-			<targetfile prefix="--doc_out=boa," suffix=":../www/docs/" />
-			<fileset dir="${src.proto}" includes="toplevel.proto" />
-			<fileset dir="${src.proto}" includes="code.proto" />
-			<fileset dir="${src.proto}" includes="diff.proto" />
-			<fileset dir="${basedir}" includes="ast.proto" />
-			<fileset dir="${src.proto}" includes="shared.proto" />
-			<mapper type="glob" from="*.proto" to="../../../../*.inc" />
-		</apply>
-	</target>
-
-
 	<!-- packaging -->
 	<target name="package" depends="package-runtime,package-compiler" description="Package both the compiler and runtime JARs." />
 
