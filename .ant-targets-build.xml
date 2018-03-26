@@ -9,7 +9,6 @@ compile
 compile-parser
 compile-protobuf
 dump-java
-gen-doc
 java-to-boa
 package
 package-compiler
