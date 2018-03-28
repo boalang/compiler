@@ -21,13 +21,13 @@ public class CDG {
     }
 
     /**
-     * Constructs a post-dominator tree for a given control flow graph
+     * Constructs a post-dominator tree for the given control flow graph
      *
      * @param cfg control flow graph
      * @return
      * @throws Exception
      */
-    private Map<Integer, Set<CFGNode>> postDominator(CFG cfg) throws Exception {
+    private Map<Integer, Set<CFGNode>> postDominator(final CFG cfg) throws Exception {
         final BoaAbstractTraversal pDom = new BoaAbstractTraversal<HashSet<CFGNode>>(true, true) {
 
             protected Set<CFGNode> preTraverse(final CFGNode node) throws Exception {
