@@ -132,8 +132,9 @@ public class RepoMetadata {
 			this.homepage = "";
 		if (jsonProject.has(GIT_SUMMARY_PAGE)) {
 			this.summaryPage = jsonProject.get(GIT_SUMMARY_PAGE).getAsString();
-		}
-		if (jsonProject.has(GIT_CREATE)) {
+		}else
+			this.summaryPage = "https://github.com/" + name;
+		if (jsonProject.has(GIT_CREATE) && !jsonProject.get(GIT_CREATE).isJsonNull()) {
 			String time = jsonProject.get(GIT_CREATE).getAsString();
 			this.created_timestamp = getTimeStamp(time); // project.setCreatedDate(timestamp
 															// * 1000000);
