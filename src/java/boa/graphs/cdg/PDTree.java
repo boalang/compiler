@@ -55,7 +55,7 @@ public class PDTree {
      * @throws Exception
      */
     private Map<CFGNode, Set<CFGNode>> computePostDominator(final CFG cfg) throws Exception {
-        Set<CFGNode> nodeids = cfg.getNodes();
+        final Set<CFGNode> nodeids = cfg.getNodes();
 
         final BoaAbstractTraversal pdom = new BoaAbstractTraversal<Set<CFGNode>>(true, true) {
 
@@ -157,7 +157,7 @@ public class PDTree {
             TreeNode src = getNode(ipdom);
             TreeNode dest = getNode(n);
 
-            src.getChildren().add(dest);
+            src.addChild(dest);
             dest.setParent(src);
 
             if (src.getId() == stopid)

@@ -13,7 +13,7 @@ public class TreeNode implements Comparable<TreeNode> {
     private Statement stmt;
     private Expression expr;
 
-    private List<TreeNode> children = new ArrayList<>();
+    private Set<TreeNode> children = new HashSet<TreeNode>();
 
     public TreeNode(CFGNode node) {
         this.id = node.getId();
@@ -47,6 +47,10 @@ public class TreeNode implements Comparable<TreeNode> {
         this.expr = expr;
     }
 
+    public void addChild(TreeNode node) {
+        children.add(node);
+    }
+
     //Getters
     public TreeNode getParent() {
         return parent;
@@ -68,7 +72,7 @@ public class TreeNode implements Comparable<TreeNode> {
         return expr;
     }
 
-    public List<TreeNode> getChildren() {
+    public Set<TreeNode> getChildren() {
         return children;
     }
 
