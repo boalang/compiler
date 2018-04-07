@@ -12,22 +12,22 @@ import boa.runtime.BoaAbstractFixP;
 import boa.runtime.BoaAbstractTraversal;
 import boa.types.Graph;
 
-public class PDTree {
+public class DTree {
 
     private Method md;
     private String class_name;
     private TreeNode rootNode;
     private Set<TreeNode> nodes = new HashSet<TreeNode>();;
 
-    public PDTree(final CFG cfg) throws Exception {
+    public DTree(final CFG cfg) throws Exception {
         this.md = cfg.md;
         this.class_name = cfg.class_name;
-        Map<CFGNode, Set<CFGNode>> pdom = computePostDominator(cfg);
-        Map<CFGNode, CFGNode> ipdom = computeImmediatePostDominator(pdom);
-        buildPDomTree(ipdom, cfg.getNodes().size());
+        Map<CFGNode, Set<CFGNode>> dom = computeDominator(cfg);
+        Map<CFGNode, CFGNode> idom = computeImmediateDominator(dom);
+        buildDomTree(idom, cfg.getNodes().size());
     }
 
-    public PDTree(final Method method) throws Exception {
+    public DTree(final Method method) throws Exception {
         this(new CFG(method));
     }
 
@@ -63,38 +63,38 @@ public class PDTree {
     }
 
     /**
-     * Computes post-dominators for each node in the control flow graph
+     * Computes dominators for each node in the control flow graph
      *
      * @param cfg control flow graph
-     * @return map of node and corresponding set of post-dominator nodes
+     * @return map of node and corresponding set of dominator nodes
      * @throws Exception
      */
-    private Map<CFGNode, Set<CFGNode>> computePostDominator(final CFG cfg) throws Exception {
+    private Map<CFGNode, Set<CFGNode>> computeDominator(final CFG cfg) throws Exception {
         final Set<CFGNode> nodeids = cfg.getNodes();
 
-        final BoaAbstractTraversal pdom = new BoaAbstractTraversal<Set<CFGNode>>(true, true) {
+        final BoaAbstractTraversal dom = new BoaAbstractTraversal<Set<CFGNode>>(true, true) {
 
             protected Set<CFGNode> preTraverse(final CFGNode node) throws Exception {
-                Set<CFGNode> currentPDom = new HashSet<CFGNode>();
+                Set<CFGNode> currentDom = new HashSet<CFGNode>();
 
-                if (node.getId() != (nodeids.size() - 1))
-                    currentPDom = nodeids;
+                if (node.getId() == 0)
+                    currentDom = nodeids;
 
                 if ((getValue(node) != null))
-                    currentPDom = getValue(node);
+                    currentDom = getValue(node);
 
-                for (CFGNode successor : node.getSuccessorsList()) {
-                    if (successor != null) {
-                        Set<CFGNode> succPDom = getValue(successor);
-                        if (succPDom != null)
-                            currentPDom.retainAll(succPDom);
+                for (CFGNode predecessor : node.getPredecessorsList()) {
+                    if (predecessor != null) {
+                        Set<CFGNode> predDom = getValue(predecessor);
+                        if (predDom != null)
+                            currentDom.retainAll(predDom);
                     }
                 }
 
                 if (node != null)
-                    currentPDom.add(node);
+                    currentDom.add(node);
 
-                return currentPDom;
+                return currentDom;
             }
 
             @Override
@@ -121,61 +121,61 @@ public class PDTree {
             }
         };
 
-        pdom.traverse(cfg, Graph.Traversal.TraversalDirection.FORWARD, Graph.Traversal.TraversalKind.REVERSEPOSTORDER, fixp);
+        dom.traverse(cfg, Graph.Traversal.TraversalDirection.FORWARD, Graph.Traversal.TraversalKind.REVERSEPOSTORDER, fixp);
 
-        return pdom.outputMapObj;
+        return dom.outputMapObj;
     }
 
     /**
-     * Computes immediate post-dominator for each node
+     * Computes immediate dominator for each node
      *
-     * @param pdom map of nodes and corresponding post-dominators
-     * @return map of nodes and corresponding immediate post-dominator
+     * @param dom map of nodes and corresponding dominators
+     * @return map of nodes and corresponding immediate dominator
      */
-    private Map<CFGNode, CFGNode> computeImmediatePostDominator(final Map<CFGNode, Set<CFGNode>> pdom) {
+    private Map<CFGNode, CFGNode> computeImmediateDominator(final Map<CFGNode, Set<CFGNode>> dom) {
         //Inefficient implementation: t-complexity = O(n^3)
-        //To find ipdom, we check each pdom of a node to see if it is post dominating any other
-        //node. Each node should have atmost one ip-dom (last node has no immediate post dominator)
-        Map<CFGNode, CFGNode> ipdom = new HashMap<CFGNode, CFGNode>();
-        for (CFGNode n : pdom.keySet()) {
-            for (CFGNode pd1 : pdom.get(n)) {
+        //To find idom, we check each dom of a node to see if it is dominating any other
+        //node. Each node should have atmost one i-dom (first node has no immediate dominator)
+        Map<CFGNode, CFGNode> idom = new HashMap<CFGNode, CFGNode>();
+        for (CFGNode n : dom.keySet()) {
+            for (CFGNode pd1 : dom.get(n)) {
                 boolean isIPDom = true;
-                for (CFGNode pd2 : pdom.get(n)) {
+                for (CFGNode pd2 : dom.get(n)) {
                     if (!pd1.equals(pd2))
-                        if ((pdom.get(pd2)).contains(pd1)) {
+                        if ((dom.get(pd2)).contains(pd1)) {
                             isIPDom = false;
                             break;
                         }
                 }
                 if (isIPDom) {
-                    ipdom.put(n, pd1);
+                    idom.put(n, pd1);
                     break;
                 }
             }
         }
 
-        return ipdom;
+        return idom;
     }
 
     /**
-     * Builds a post dominator tree using nodes and their immediate post-dominators
+     * Builds a dominator tree using nodes and their immediate dominators
      *
-     * @param ipdoms map of nodes and their immediate post-dominators
+     * @param idomMap map of nodes and their immediate dominators
      * @param stopid id of the stop node of the control graph
      */
-    private void buildPDomTree(final Map<CFGNode, CFGNode> ipdoms, int stopid) {
-        //Create an edge between ipdom and corresponding node.
-        //Since each node can have only one ipdom, the resulting graph will form a tree
-        for (CFGNode n : ipdoms.keySet()) {
-            CFGNode ipdom = ipdoms.get(n);
+    private void buildDomTree(final Map<CFGNode, CFGNode> idomMap, int stopid) {
+        //Create an edge between idom and corresponding node.
+        //Since each node can have only one idom, the resulting graph will form a tree
+        for (CFGNode n : idomMap.keySet()) {
+            CFGNode idom = idomMap.get(n);
 
-            TreeNode src = getNode(ipdom);
+            TreeNode src = getNode(idom);
             TreeNode dest = getNode(n);
 
             src.addChild(dest);
             dest.setParent(src);
 
-            if (src.getId() == stopid)
+            if (src.getId() == 0)
                 rootNode = src;
         }
 
