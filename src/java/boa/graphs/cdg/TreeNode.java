@@ -1,9 +1,11 @@
 package boa.graphs.cdg;
 
-import boa.types.Ast.*;
-import boa.graphs.cfg.CFGNode;
+import java.util.HashSet;
+import java.util.Set;
 
-import java.util.*;
+import boa.types.Ast.Statement;
+import boa.types.Ast.Expression;
+import boa.graphs.cfg.CFGNode;
 
 public class TreeNode implements Comparable<TreeNode> {
 

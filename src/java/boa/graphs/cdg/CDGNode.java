@@ -1,10 +1,11 @@
 package boa.graphs.cdg;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.List;
 
-import boa.graphs.cfg.CFGNode;
-import boa.types.Ast.*;
-
-import java.util.*;
+import boa.types.Ast.Statement;
+import boa.types.Ast.Expression;
 
 public class CDGNode implements Comparable<CDGNode> {
 

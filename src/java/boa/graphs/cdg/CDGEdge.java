@@ -1,6 +1,5 @@
 package boa.graphs.cdg;
 
-
 public class CDGEdge {
 
     private CDGNode src;

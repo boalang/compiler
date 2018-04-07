@@ -1,20 +1,27 @@
 package boa.graphs.cdg;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Map;
+
+import boa.types.Ast.Method;
 import boa.graphs.cfg.CFG;
 import boa.graphs.cfg.CFGNode;
 import boa.runtime.BoaAbstractFixP;
 import boa.runtime.BoaAbstractTraversal;
-import boa.types.Ast.*;
 import boa.types.Graph;
-
-import java.util.*;
 
 public class PDTree {
 
+    private Method md;
+    private String class_name;
     private TreeNode rootNode;
     private Set<TreeNode> nodes = new HashSet<TreeNode>();;
 
     public PDTree(final CFG cfg) throws Exception {
+        this.md = cfg.md;
+        this.class_name = cfg.class_name;
         Map<CFGNode, Set<CFGNode>> pdom = computePostDominator(cfg);
         Map<CFGNode, CFGNode> ipdom = computeImmediatePostDominator(pdom);
         buildPDomTree(ipdom, cfg.getNodes().size());
@@ -25,6 +32,14 @@ public class PDTree {
     }
 
     //Getters
+    private Method getMd() {
+        return md;
+    }
+
+    private String getClass_name() {
+        return class_name;
+    }
+
     public Set<TreeNode> getNodes() {
         return nodes;
     }

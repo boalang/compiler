@@ -1,12 +1,15 @@
 package boa.graphs.cdg;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Map;
+
 import boa.graphs.cfg.CFG;
 import boa.graphs.cfg.CFGEdge;
 import boa.graphs.cfg.CFGNode;
-import boa.types.Ast.*;
+import boa.types.Ast.Method;
 import boa.types.Control;
-
-import java.util.*;
 
 public class CDG {
 
@@ -44,7 +47,7 @@ public class CDG {
     }
 
     /**
-     * Constructs a Control Dependence Graph for a given post dominator tree
+     * Builds a Control Dependence Graph using the post dominator tree and control edges
      *
      * @param pdTree post dominator tree
      * @param cfg control flow graph
