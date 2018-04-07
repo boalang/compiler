@@ -8,6 +8,8 @@ import java.util.Map;
 import boa.graphs.cfg.CFG;
 import boa.graphs.cfg.CFGEdge;
 import boa.graphs.cfg.CFGNode;
+import boa.graphs.trees.PDTree;
+import boa.graphs.trees.TreeNode;
 import boa.types.Ast.Method;
 import boa.types.Control;
 

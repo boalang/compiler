@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
 
+import boa.graphs.trees.TreeNode;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Expression;
 
