@@ -11,11 +11,10 @@ import java.util.*;
 
 public class PDTree {
 
-    private Set<TreeNode> nodes;
-    private TreeNode entryNode;
+    private TreeNode rootNode;
+    private Set<TreeNode> nodes = new HashSet<TreeNode>();;
 
-    public PDTree(CFG cfg) throws Exception {
-        nodes = new HashSet<TreeNode>();
+    public PDTree(final CFG cfg) throws Exception {
         Map<CFGNode, Set<CFGNode>> pdom = computePostDominator(cfg);
         Map<CFGNode, CFGNode> ipdom = computeImmediatePostDominator(pdom);
         buildPDomTree(ipdom, cfg.getNodes().size());
@@ -26,12 +25,26 @@ public class PDTree {
     }
 
     //Getters
-    private Set<TreeNode> getNodes() {
+    public Set<TreeNode> getNodes() {
         return nodes;
     }
 
-    private TreeNode getEntryNode() {
-        return entryNode;
+    public TreeNode getRootNode() {
+        return rootNode;
+    }
+
+    /**
+     * Gives tree node if the id exists, null otherwise
+     *
+     * @param id
+     * @return tree nodes
+     */
+    public TreeNode getNode(int id) {
+        for (TreeNode node: nodes) {
+            if (node.getId() == id)
+                return node;
+        }
+        return null;
     }
 
     /**
@@ -104,7 +117,7 @@ public class PDTree {
      * @param pdom map of nodes and corresponding post-dominators
      * @return map of nodes and corresponding immediate post-dominator
      */
-    private Map<CFGNode, CFGNode> computeImmediatePostDominator(Map<CFGNode, Set<CFGNode>> pdom) {
+    private Map<CFGNode, CFGNode> computeImmediatePostDominator(final Map<CFGNode, Set<CFGNode>> pdom) {
         //Inefficient implementation: t-complexity = O(n^3)
         //To find ipdom, we check each pdom of a node to see if it is post dominating any other
         //node. Each node should have atmost one ip-dom (last node has no immediate post dominator)
@@ -135,7 +148,7 @@ public class PDTree {
      * @param ipdoms map of nodes and their immediate post-dominators
      * @param stopid id of the stop node of the control graph
      */
-    private void buildPDomTree(Map<CFGNode, CFGNode> ipdoms, int stopid) {
+    private void buildPDomTree(final Map<CFGNode, CFGNode> ipdoms, int stopid) {
         //Create an edge between ipdom and corresponding node.
         //Since each node can have only one ipdom, the resulting graph will form a tree
         for (CFGNode n : ipdoms.keySet()) {
@@ -148,17 +161,21 @@ public class PDTree {
             dest.setParent(src);
 
             if (src.getId() == stopid)
-                entryNode = src;
+                rootNode = src;
         }
+
+        TreeNode entry = new TreeNode(stopid+1);
+        entry.setParent(rootNode);
+
     }
 
     /**
      * Checks if a node already exists and returns it, otherwise returns a new node.
      *
-     * @param cfgNode
+     * @param cfgNode a control flow graph node
      * @return a new tree node or an existing tree node
      */
-    private TreeNode getNode(CFGNode cfgNode) {
+    private TreeNode getNode(final CFGNode cfgNode) {
         TreeNode node = new TreeNode(cfgNode);
         if (nodes.contains(node)) {
             for (TreeNode n : nodes) {
