@@ -19,6 +19,7 @@ package boa.functions;
 
 import java.util.*;
 
+import boa.graphs.cdg.CDG;
 import boa.graphs.cfg.CFG;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
@@ -33,11 +34,22 @@ import boa.types.Control.CFGNode;
  * @author rramu
  * @author rdyer
  * @author hungc
+ * @author marafat
  */
 public class BoaGraphIntrinsics {
 	@FunctionSpec(name = "getcfg", returnType = "CFG", formalParameters = { "Method" })
 	public static CFG getcfg(final Method method) {
 		return new CFG(method);
+	}
+
+	@FunctionSpec(name = "getcdg", returnType = "CDG", formalParameters = { "Method" })
+	public static CDG getcdg(final Method method) throws Exception {
+		return new CDG(method);
+	}
+
+	@FunctionSpec(name = "getcdg", returnType = "CDG", formalParameters = { "CFG" })
+	public static CDG getcdg(final CFG cfg) throws Exception {
+		return new CDG(cfg);
 	}
 
 	@FunctionSpec(name = "get_nodes_with_definition", returnType = "set of string", formalParameters = { "CFGNode" })
