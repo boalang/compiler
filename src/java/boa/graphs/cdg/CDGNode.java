@@ -18,7 +18,7 @@ public class CDGNode implements Comparable<CDGNode> {
     private List<CDGNode> successors = new java.util.ArrayList<CDGNode>();
     private List<CDGNode> predecessors = new java.util.ArrayList<CDGNode>();
 
-    public CDGNode(TreeNode node) {
+    public CDGNode(final TreeNode node) {
         this.id = node.getId();
         this.pid = node.getPid();
         this.stmt = node.getStmt();
@@ -34,31 +34,31 @@ public class CDGNode implements Comparable<CDGNode> {
         this.id = id;
     }
 
-    public void setPid(String pid) {
+    public void setPid(final String pid) {
         this.pid = pid;
     }
 
-    public void setStmt(Statement stmt) {
+    public void setStmt(final Statement stmt) {
         this.stmt = stmt;
     }
 
-    public void setExpr(Expression expr) {
+    public void setExpr(final Expression expr) {
         this.expr = expr;
     }
 
-    public void addSuccessor(CDGNode node) {
+    public void addSuccessor(final CDGNode node) {
         successors.add(node);
     }
 
-    public void addPredecessor(CDGNode node) {
+    public void addPredecessor(final CDGNode node) {
         predecessors.add(node);
     }
 
-    public void addInEdges(CDGEdge edge) {
+    public void addInEdges(final CDGEdge edge) {
         inEdges.add(edge);
     }
 
-    public void addOutEdges(CDGEdge edge) {
+    public void addOutEdges(final CDGEdge edge) {
         inEdges.add(edge);
     }
 
@@ -101,7 +101,7 @@ public class CDGNode implements Comparable<CDGNode> {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 

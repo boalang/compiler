@@ -27,7 +27,7 @@ public class TreeNode implements Comparable<TreeNode> {
     }
 
     //Setters
-    public void setParent(TreeNode parent) {
+    public void setParent(final TreeNode parent) {
         this.parent = parent;
     }
 
@@ -35,19 +35,19 @@ public class TreeNode implements Comparable<TreeNode> {
         this.id = id;
     }
 
-    public void setPid(String pid) {
+    public void setPid(final String pid) {
         this.pid = pid;
     }
 
-    public void setStmt(Statement stmt) {
+    public void setStmt(final Statement stmt) {
         this.stmt = stmt;
     }
 
-    public void setExpr(Expression expr) {
+    public void setExpr(final Expression expr) {
         this.expr = expr;
     }
 
-    public void addChild(TreeNode node) {
+    public void addChild(final TreeNode node) {
         children.add(node);
     }
 

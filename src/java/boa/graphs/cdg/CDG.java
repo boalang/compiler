@@ -49,7 +49,7 @@ public class CDG {
      * @param pdTree post dominator tree
      * @param cfg control flow graph
      */
-    private void constructCDG(PDTree pdTree, CFG cfg) {
+    private void constructCDG(final PDTree pdTree, final CFG cfg) {
         Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
         for (CFGNode n: cfg.getNodes()) {
             if (n.getKind() == Control.CFGNode.CFGNodeType.CONTROL)
@@ -89,7 +89,7 @@ public class CDG {
      * @param treeNode a post dominator tree node
      * @return a new tree node or an existing tree node
      */
-    private CDGNode getNode(TreeNode treeNode) {
+    private CDGNode getNode(final TreeNode treeNode) {
         CDGNode node = new CDGNode(treeNode);
         if (nodes.contains(node)) {
             for (CDGNode n : nodes) {

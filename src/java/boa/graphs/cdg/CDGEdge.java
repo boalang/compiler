@@ -7,27 +7,27 @@ public class CDGEdge {
     private CDGNode dest;
     private String label;
 
-    public CDGEdge(CDGNode src, CDGNode dest) {
+    public CDGEdge(final CDGNode src, final CDGNode dest) {
         this.src = src;
         this.dest = dest;
     }
 
-    public CDGEdge(CDGNode src, CDGNode dest, String label) {
+    public CDGEdge(final CDGNode src, final CDGNode dest, final String label) {
         this.src = src;
         this.dest = dest;
         this.label = label;
     }
 
     //Setters
-    public void setSrc(CDGNode src) {
+    public void setSrc(final CDGNode src) {
         this.src = src;
     }
 
-    public void setDest(CDGNode dest) {
+    public void setDest(final CDGNode dest) {
         this.dest = dest;
     }
 
-    public void setLabel(String label) {
+    public void setLabel(final String label) {
         this.label = label;
     }
 
@@ -45,7 +45,7 @@ public class CDGEdge {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
