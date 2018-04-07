@@ -1,37 +1,29 @@
 package boa.graphs.cdg;
 
+import boa.types.Ast.*;
 import boa.graphs.cfg.CFGNode;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class TreeNode implements Comparable<TreeNode> {
 
     private TreeNode parent;
     private int id;
-    private CFGNode node;
+    private String pid;
+    private Statement stmt;
+    private Expression expr;
+
     private List<TreeNode> children = new ArrayList<>();
 
     public TreeNode(CFGNode node) {
         this.id = node.getId();
-        this.node = node;
+        this.pid = node.getPid();
+        this.stmt = node.getStmt();
+        this.expr = node.getExpr();
     }
 
-    //Getters
-    public TreeNode getParent() {
-        return parent;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public CFGNode getNode() {
-        return node;
-    }
-
-    public List<TreeNode> getChildren() {
-        return children;
+    public TreeNode(int id) {
+        this.id = id;
     }
 
     //Setters
@@ -43,13 +35,50 @@ public class TreeNode implements Comparable<TreeNode> {
         this.id = id;
     }
 
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
+
+    public void setStmt(Statement stmt) {
+        this.stmt = stmt;
+    }
+
+    public void setExpr(Expression expr) {
+        this.expr = expr;
+    }
+
+    //Getters
+    public TreeNode getParent() {
+        return parent;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getPid() {
+        return pid;
+    }
+
+    public Statement getStmt() {
+        return stmt;
+    }
+
+    public Expression getExpr() {
+        return expr;
+    }
+
+    public List<TreeNode> getChildren() {
+        return children;
+    }
+
     @Override
     public int compareTo(final TreeNode node) {
         return node.id - this.id;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
