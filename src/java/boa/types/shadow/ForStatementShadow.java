@@ -1,3 +1,4 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
  * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
@@ -16,90 +17,100 @@
  */
 package boa.types.shadow;
 
-import boa.compiler.ast.Call;
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
-import boa.types.BoaInt;
-import boa.types.BoaProtoList;
-import boa.types.BoaShadowType;
-import boa.types.proto.enums.StatementKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
-
-import boa.compiler.ast.statements.IfStatement;
-import boa.compiler.ast.statements.Block;
 
 /**
- * A shadow type for ForStatement.
- * 
+ * A shadow type for Statement.
+ *
  * @author rdyer
  * @author kaushin
  */
-public class ForStatementShadow extends BoaShadowType  {
-	/**
-	 * Construct a {@link ForStatementShadow}.
-	 */
-	public ForStatementShadow() {
-		super(new StatementProtoTuple());
+public class ForStatementShadow extends boa.types.BoaShadowType  {
+    /**
+     * Construct a {@link ForStatementShadow}.
+     */
+    public ForStatementShadow() {
+        super(new boa.types.proto.StatementProtoTuple());
 
-		addShadow("initializers", new BoaProtoList(new ExpressionProtoTuple()));
-		addShadow("expression", new ExpressionProtoTuple());
-		addShadow("updates", new BoaProtoList(new ExpressionProtoTuple()));
-		addShadow("body", new StatementProtoTuple());
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
-
-		if ("initializers".equals(name)) {
-			// ${0}.initializations
-			return ASTFactory.createSelector( "initializations", new BoaProtoList(new ExpressionProtoTuple()), env);
-		}
-
-		if ("expression".equals(name)) {
-			// ${0}.expression
-			return ASTFactory.createSelector( "expression", new ExpressionProtoTuple(),env);
-		}
-
-		if ("updates".equals(name)) {
-			// ${0}.updates
-			return ASTFactory.createSelector( "updates", new BoaProtoList(new ExpressionProtoTuple()),  env);
-		}
-
-		if ("body".equals(name)) {
-			// ${0}.statements[0]
-			 return ASTFactory.createFactor("statements",ASTFactory.createIntLiteral(0),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
-
-		}
-
-		throw new RuntimeException("invalid shadow field: " + name);
-	}
-
-	 /** {@inheritDoc} */
-    @Override
-    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
-        // if (isnormalfor(${0})) b;
-         final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new StatementProtoTuple());
-
-        return new IfStatement(ASTFactory.createCallExpr("isnormalfor", env, new StatementProtoTuple(), tree), b);
+        addShadow("initializations", new boa.types.BoaProtoList(new boa.types.proto.ExpressionProtoTuple()));
+        addShadow("condition", new boa.types.proto.ExpressionProtoTuple());
+        addShadow("updates", new boa.types.BoaProtoList(new boa.types.proto.ExpressionProtoTuple()));
+        addShadow("body", new boa.types.proto.StatementProtoTuple());
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public boolean assigns(final boa.types.BoaType that) {
+        if (that instanceof boa.types.BoaShadowType)
+            return shadowedType.assigns(that);
+
+        if (!super.assigns(that))
+            return false;
+
+        return this.getClass() == that.getClass();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Node lookupCodegen(final String name, final Factor fact, final SymbolTable env) {
+        if ("initializations".equals(name)) return ASTFactory.createSelector("expressions_1", new boa.types.BoaProtoList(new boa.types.BoaProtoList(new boa.types.proto.ExpressionProtoTuple())), env);
+        if ("condition".equals(name)) return ASTFactory.createSelector("expression_1", new boa.types.proto.ExpressionProtoTuple(), env);
+        if ("updates".equals(name)) return ASTFactory.createSelector("expressions_2", new boa.types.BoaProtoList(new boa.types.BoaProtoList(new boa.types.proto.ExpressionProtoTuple())), env);
+        if ("body".equals(name)) return ASTFactory.createSelector("statement_1", new boa.types.proto.StatementProtoTuple(), env);
+
+        throw new RuntimeException("invalid shadow field '" + name + "' in shadow type ForStatementShadow");
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Expression getKindExpression(final SymbolTable env) {
+        return getKindExpression("StatementKind", "FOR", new boa.types.proto.enums.StatementKindProtoMap(), env);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        final List<Expression> l = new ArrayList<Expression>();
 
 
-	/** {@inheritDoc} */
-	@Override
-	public Expression getKindExpression(final SymbolTable env) {
-		return getKindExpression("StatementKind", "FOR", new StatementKindProtoMap(), env);
-	}
+        return l;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "ForStatement";
-	}
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public boa.types.Ast.Statement flattenMessage(final boa.types.Ast.Statement.ForStatement m) {
+        final boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+        b.setKind(boa.types.Ast.Statement.StatementKind.FOR);
+        for (int i = 0; i < m.getInitializationsCount(); i++) b.addExpressions1(m.getInitializations(i));
+        b.setExpression1(m.getCondition());
+        for (int i = 0; i < m.getUpdatesCount(); i++) b.addExpressions2(m.getUpdates(i));
+        b.setStatement1(m.getBody());
+        return b.build();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "ForStatement";
+    }
 }

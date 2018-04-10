@@ -1,4 +1,5 @@
 package boa.types;
+
 option optimize_for = SPEED;
 
 /** A unique person's information */

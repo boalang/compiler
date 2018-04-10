@@ -1,3 +1,4 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
  * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
@@ -16,77 +17,89 @@
  */
 package boa.types.shadow;
 
-import boa.compiler.ast.Call;
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
-import boa.types.BoaInt;
-import boa.types.BoaString;
-import boa.types.BoaProtoList;
-import boa.types.BoaShadowType;
-import boa.types.proto.enums.ExpressionKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
-
-import boa.compiler.ast.statements.IfStatement;
-import boa.compiler.ast.statements.Block;
 
 /**
- * A shadow type for StringLiteral.
- * 
+ * A shadow type for Expression.
+ *
  * @author rdyer
  * @author kaushin
  */
-public class StringLiteralShadow extends BoaShadowType  {
+public class StringLiteralShadow extends boa.types.BoaShadowType  {
     /**
      * Construct a {@link StringLiteralShadow}.
      */
     public StringLiteralShadow() {
-        super(new ExpressionProtoTuple());
+        super(new boa.types.proto.ExpressionProtoTuple());
 
-        addShadow("escaped_value", new BoaString());
-        addShadow("literal_value", new BoaString());
-        
+        addShadow("escaped_value", new boa.types.BoaString());
+        addShadow("literal_value", new boa.types.BoaString());
     }
 
     /** {@inheritDoc} */
     @Override
-	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
+    public boolean assigns(final boa.types.BoaType that) {
+        if (that instanceof boa.types.BoaShadowType)
+            return shadowedType.assigns(that);
 
-        if ("escaped_value".equals(name)) {
-            // ${0}.literal
+        if (!super.assigns(that))
+            return false;
 
-            return ASTFactory.createSelector("literal",  new BoaString(), env);     
-        }
-
-        if ("literal_value".equals(name)) {
-            // TODO 
-
-            return ASTFactory.createSelector( "literal",  new BoaString(), env);     
-        }
-
-
-        throw new RuntimeException("invalid shadow field: " + name);
+        return this.getClass() == that.getClass();
     }
-
-   
 
     /** {@inheritDoc} */
     @Override
-    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
-        // if (funcName(${0})) b;
-        final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
+    public Node lookupCodegen(final String name, final Factor fact, final SymbolTable env) {
+        if ("escaped_value".equals(name)) return ASTFactory.createSelector("string_1", new boa.types.BoaString(), env);
+        if ("literal_value".equals(name)) return ASTFactory.createSelector("string_2", new boa.types.BoaString(), env);
 
-        return new IfStatement(ASTFactory.createCallExpr("isstringlit", env, new ExpressionProtoTuple(), tree), b);
-    }  
+        throw new RuntimeException("invalid shadow field '" + name + "' in shadow type StringLiteralShadow");
+    }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "LITERAL", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "LITERAL", new boa.types.proto.enums.ExpressionKindProtoMap(), env);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        return getManytoOne(env, b, "isstringlit", new boa.types.proto.ExpressionProtoTuple());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        final List<Expression> l = new ArrayList<Expression>();
+
+
+        return l;
+    }
+
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public boa.types.Ast.Expression flattenMessage(final boa.types.Ast.Expression.StringLiteral m) {
+        final boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+        b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
+        b.setString1(m.getEscapedValue());
+        b.setString2(m.getLiteralValue());
+        return b.build();
     }
 
     /** {@inheritDoc} */

@@ -1,3 +1,4 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
  * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
@@ -16,58 +17,89 @@
  */
 package boa.types.shadow;
 
-import boa.compiler.ast.Call;
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
-import boa.types.BoaInt;
-import boa.types.BoaProtoList;
-import boa.types.BoaShadowType;
-import boa.types.proto.enums.StatementKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
 
 /**
- * A shadow type for WhileStatement.
- * 
+ * A shadow type for Statement.
+ *
  * @author rdyer
  * @author kaushin
  */
-public class WhileStatementShadow extends BoaShadowType  {
+public class WhileStatementShadow extends boa.types.BoaShadowType  {
     /**
      * Construct a {@link WhileStatementShadow}.
      */
     public WhileStatementShadow() {
-        super(new StatementProtoTuple());
+        super(new boa.types.proto.StatementProtoTuple());
 
-        addShadow("expression", new ExpressionProtoTuple());
-        addShadow("body", new StatementProtoTuple());
+        addShadow("condition", new boa.types.proto.ExpressionProtoTuple());
+        addShadow("body", new boa.types.proto.StatementProtoTuple());
     }
 
     /** {@inheritDoc} */
     @Override
-	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
+    public boolean assigns(final boa.types.BoaType that) {
+        if (that instanceof boa.types.BoaShadowType)
+            return shadowedType.assigns(that);
 
-        if ("expression".equals(name)) {
-            // ${0}.expression
-            return ASTFactory.createSelector( "expression", new ExpressionProtoTuple(), env);
-        }
+        if (!super.assigns(that))
+            return false;
 
-        if ("body".equals(name)) {
-            // ${0}.statements[0]
-            return ASTFactory.createFactor("statements",ASTFactory.createIntLiteral(0),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
-        }
+        return this.getClass() == that.getClass();
+    }
 
-        throw new RuntimeException("invalid shadow field: " + name);
+    /** {@inheritDoc} */
+    @Override
+    public Node lookupCodegen(final String name, final Factor fact, final SymbolTable env) {
+        if ("condition".equals(name)) return ASTFactory.createSelector("expression_1", new boa.types.proto.ExpressionProtoTuple(), env);
+        if ("body".equals(name)) return ASTFactory.createSelector("statement_1", new boa.types.proto.StatementProtoTuple(), env);
+
+        throw new RuntimeException("invalid shadow field '" + name + "' in shadow type WhileStatementShadow");
     }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("StatementKind", "WHILE", new StatementKindProtoMap(), env);
+        return getKindExpression("StatementKind", "WHILE", new boa.types.proto.enums.StatementKindProtoMap(), env);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        final List<Expression> l = new ArrayList<Expression>();
+
+
+        return l;
+    }
+
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public boa.types.Ast.Statement flattenMessage(final boa.types.Ast.Statement.WhileStatement m) {
+        final boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+        b.setKind(boa.types.Ast.Statement.StatementKind.WHILE);
+        b.setExpression1(m.getCondition());
+        b.setStatement1(m.getBody());
+        return b.build();
     }
 
     /** {@inheritDoc} */

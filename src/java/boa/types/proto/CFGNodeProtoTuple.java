@@ -1,6 +1,8 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,70 +23,41 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaProtoTuple;
-import boa.types.BoaProtoList;
-import boa.types.BoaString;
-import boa.types.BoaType;
-import boa.types.BoaInt;
-import boa.types.BoaSet;
-import boa.types.proto.enums.CFGNodeTypeProtoMap;
-
 /**
  * A {@link CFGNodeProtoTuple}.
- * 
- * @author rramu
+ *
+ * @author rdyer
  */
-public class CFGNodeProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+public class CFGNodeProtoTuple extends boa.types.BoaProtoTuple {
+    private final static List<boa.types.BoaType> members = new ArrayList<boa.types.BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int count = 0;
 
-		names.put("kind", counter++);
-		members.add(new CFGNodeTypeProtoMap());
+        names.put("id", count++);
+        members.add(new boa.types.BoaInt());
 
-		names.put("id", counter++);
-		members.add(new BoaInt());
+        names.put("kind", count++);
+        members.add(new boa.types.proto.enums.CFGNodeTypeProtoMap());
 
-		names.put("name", counter++);
-		members.add(new BoaString());
+        names.put("statement", count++);
+        members.add(new boa.types.proto.StatementProtoTuple());
 
-		names.put("stmt", counter++);
-		members.add(new StatementProtoTuple());
+        names.put("expression", count++);
+        members.add(new boa.types.proto.ExpressionProtoTuple());
+    }
 
-		names.put("expr", counter++);
-		members.add(new ExpressionProtoTuple());
+    /**
+     * Construct a {@link CFGNodeProtoTuple}.
+     */
+    public CFGNodeProtoTuple() {
+        super(members, names);
+    }
 
-		names.put("rhs", counter++);
-		members.add(new ExpressionProtoTuple());
-
-		names.put("useVariables", counter++);
-		members.add(new BoaSet(new BoaString()));
-
-		names.put("defVariables", counter++);
-		members.add(new BoaString());
-
-		names.put("defUse", counter++);
-		members.add(new BoaSet(new BoaString()));
-
-		names.put("predecessors", counter++);
-		members.add(new BoaProtoList(new CFGNodeProtoTuple()));
-
-		names.put("successors", counter++);
-		members.add(new BoaProtoList(new CFGNodeProtoTuple()));
-	}
-
-	/**
-	 * Construct a {@link CFGNodeProtoTuple}.
-	 */
-	public CFGNodeProtoTuple() {
-		super(members, names);
-	}
-
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.graphs.cfg.CFGNode";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Control.CFGNode";
+    }
 }

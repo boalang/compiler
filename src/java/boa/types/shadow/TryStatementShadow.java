@@ -1,3 +1,4 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
  * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
@@ -16,84 +17,95 @@
  */
 package boa.types.shadow;
 
-import boa.compiler.ast.Call;
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
-import boa.types.BoaInt;
-import boa.types.BoaProtoList;
-import boa.types.BoaShadowType;
-import boa.types.proto.enums.StatementKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
-
 
 /**
- * A shadow type for TryStatement.
- * 
+ * A shadow type for Statement.
+ *
  * @author rdyer
  * @author kaushin
  */
-public class TryStatementShadow extends BoaShadowType  {
+public class TryStatementShadow extends boa.types.BoaShadowType  {
     /**
      * Construct a {@link TryStatementShadow}.
      */
     public TryStatementShadow() {
-        super(new StatementProtoTuple());
+        super(new boa.types.proto.StatementProtoTuple());
 
-        
-        addShadow("body", new BoaProtoList(new StatementProtoTuple()));
-        addShadow("finallyblock", new StatementProtoTuple());
-        addShadow("catchclauses", new StatementProtoTuple());
-        addShadow("resources", new BoaProtoList(new ExpressionProtoTuple()));
+        addShadow("body", new boa.types.proto.StatementProtoTuple());
+        addShadow("catches", new boa.types.BoaProtoList(new boa.types.proto.StatementProtoTuple()));
+        addShadow("finally", new boa.types.proto.StatementProtoTuple());
+        addShadow("resources", new boa.types.BoaProtoList(new boa.types.proto.ExpressionProtoTuple()));
     }
 
     /** {@inheritDoc} */
     @Override
-	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
+    public boolean assigns(final boa.types.BoaType that) {
+        if (that instanceof boa.types.BoaShadowType)
+            return shadowedType.assigns(that);
 
-        if ("catchclauses".equals(name)) {
-           
-            // ${0}.statements
-            node.addOp(ASTFactory.createSelector("statements", new BoaProtoList(new StatementProtoTuple()), env));
-             final Expression tree = ASTFactory.createFactorExpr(node);
-            tree.type = new BoaProtoList(new StatementProtoTuple());
-            tree.env = env;
-            
-            // splice(${0}.statements, 1, ...)
-			return ASTFactory.createCallFactor("subList", env, new BoaProtoList(new StatementProtoTuple()), tree, ASTFactory.createIntLiteral(2), ASTFactory.createIntLiteral(-1));
+        if (!super.assigns(that))
+            return false;
 
-            }
+        return this.getClass() == that.getClass();
+    }
 
-        if ("finallyblock".equals(name)) {
-            // TODO len(${0}.statements) > 1 ? (${0}.statements[len(${0}.statements) - 1].kind == StatementKind.CATCH ? ${0}.statements[len(${0}.statements) - 1] : null) : null
-            return null;
-        }
+    /** {@inheritDoc} */
+    @Override
+    public Node lookupCodegen(final String name, final Factor fact, final SymbolTable env) {
+        if ("body".equals(name)) return ASTFactory.createSelector("statement_1", new boa.types.proto.StatementProtoTuple(), env);
+        if ("catches".equals(name)) return ASTFactory.createSelector("statements_1", new boa.types.BoaProtoList(new boa.types.BoaProtoList(new boa.types.proto.StatementProtoTuple())), env);
+        if ("finally".equals(name)) return ASTFactory.createSelector("statement_2", new boa.types.proto.StatementProtoTuple(), env);
+        if ("resources".equals(name)) return ASTFactory.createSelector("expressions_1", new boa.types.BoaProtoList(new boa.types.BoaProtoList(new boa.types.proto.ExpressionProtoTuple())), env);
 
-        if ("body".equals(name)) {
-            // ${0}.statements
-            return ASTFactory.createSelector( "statements", new BoaProtoList(new StatementProtoTuple()),  env);
-            
-        }
-
-        if ("resources".equals(name)) {
-            // ${0}.initializations
-            return ASTFactory.createSelector("initializations",  new BoaProtoList(new ExpressionProtoTuple()),   env);
-            
-            
-        }
-
-
-        throw new RuntimeException("invalid shadow field: " + name);
+        throw new RuntimeException("invalid shadow field '" + name + "' in shadow type TryStatementShadow");
     }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("StatementKind", "TRY", new StatementKindProtoMap(), env);
+        return getKindExpression("StatementKind", "TRY", new boa.types.proto.enums.StatementKindProtoMap(), env);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        final List<Expression> l = new ArrayList<Expression>();
+
+
+        return l;
+    }
+
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public boa.types.Ast.Statement flattenMessage(final boa.types.Ast.Statement.TryStatement m) {
+        final boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+        b.setKind(boa.types.Ast.Statement.StatementKind.TRY);
+        b.setStatement1(m.getBody());
+        for (int i = 0; i < m.getCatchesCount(); i++) b.addStatements1(m.getCatches(i));
+        if (m.hasFinally()) b.setStatement2(m.getFinally());
+        for (int i = 0; i < m.getResourcesCount(); i++) b.addExpressions1(m.getResources(i));
+        return b.build();
     }
 
     /** {@inheritDoc} */

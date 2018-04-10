@@ -38,6 +38,7 @@ import boa.datagen.DefaultProperties;
 import boa.types.Ast.*;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Statement.StatementKind;
+import boa.types.Ast.Modifier.ModifierKind;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -460,49 +461,49 @@ public class BoaAstIntrinsics {
 		return getSnapshot(cr, Long.MAX_VALUE, new String[0]);
 	}
 
-	@FunctionSpec(name = "isannot", returnType = "bool", formalParameters = { "Expression" })
-	public static boolean isAnnot(final Expression e) throws Exception {
-		return e.getKind() == ExpressionKind.ANNOTATION;
+	@FunctionSpec(name = "isannot", returnType = "bool", formalParameters = { "Modifier" })
+	public static boolean isAnnot(final Modifier m) throws Exception {
+        return m.getKind() == ModifierKind.ANNOTATION;
 	}
 
-	@FunctionSpec(name = "ismarkerannot", returnType = "bool", formalParameters = { "Expression" })
-	public static boolean isMarkerAnnot(final Expression e) throws Exception {
-		return e.getKind() == ExpressionKind.ANNOTATION; // FIXME
+	@FunctionSpec(name = "ismarkerannot", returnType = "bool", formalParameters = { "Modifier" })
+	public static boolean isMarkerAnnot(final Modifier m) throws Exception {
+        return m.getKind() == ModifierKind.ANNOTATION && !isNormalAnnot(m) && !isSingleMemberAnnot(m);
 	}
 
-	@FunctionSpec(name = "isnormalannot", returnType = "bool", formalParameters = { "Expression" })
-	public static boolean isNormalAnnot(final Expression e) throws Exception {
-		return e.getKind() == ExpressionKind.ANNOTATION; // FIXME
+	@FunctionSpec(name = "isnormalannot", returnType = "bool", formalParameters = { "Modifier" })
+	public static boolean isNormalAnnot(final Modifier m) throws Exception {
+        return m.getKind() == ModifierKind.ANNOTATION && m.getExpressions1Count() > 0;
 	}
 
-	@FunctionSpec(name = "issinglememberannot", returnType = "bool", formalParameters = { "Expression" })
-	public static boolean isSingleMemberAnnot(final Expression e) throws Exception {
-		return e.getKind() == ExpressionKind.ANNOTATION; // FIXME
+	@FunctionSpec(name = "issinglememberannot", returnType = "bool", formalParameters = { "Modifier" })
+	public static boolean isSingleMemberAnnot(final Modifier m) throws Exception {
+        return m.getKind() == ModifierKind.ANNOTATION && m.hasExpression1();
 	}
 
 	@FunctionSpec(name = "isinfix", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isInfix(final Expression e) throws Exception {
-		return e.getExpressionsCount() > 1;
+        return e.hasExpression2();
 	}
 
 	@FunctionSpec(name = "isprefix", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isPrefix(final Expression e) throws Exception {
-		return !e.getIsPostfix() && e.getExpressionsCount() == 1;
+        return !e.getBool1() && !e.hasExpression2();
 	}
 
 	@FunctionSpec(name = "ispostfix", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isPostfix(final Expression e) throws Exception {
-		return e.getIsPostfix() && e.getExpressionsCount() == 1;
+        return e.getBool1() && !e.hasExpression2();
 	}
 
 	@FunctionSpec(name = "ismethod", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isMethod(final Expression e) throws Exception {
-		return e.getKind() == ExpressionKind.METHODCALL && !e.getMethod().startsWith("super.");
+        return e.getKind() == ExpressionKind.METHODCALL; // && !e.getMethod().startsWith("super."); // FIXME shadows
 	}
 
 	@FunctionSpec(name = "issupermethod", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isSuperMethod(final Expression e) throws Exception {
-		return e.getKind() == ExpressionKind.METHODCALL && e.getMethod().startsWith("super.");
+        return e.getKind() == ExpressionKind.METHODCALL; // && e.getMethod().startsWith("super."); // FIXME shadows
 	}
 
 	@FunctionSpec(name = "ismethodref", returnType = "bool", formalParameters = { "Expression" })
@@ -512,22 +513,22 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "iscreationref", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isCreationRef(final Expression e) throws Exception {
-		return e.getKind() == ExpressionKind.METHOD_REFERENCE && "new".equals(e.getMethod());
+		return e.getKind() == ExpressionKind.METHOD_REFERENCE; // && "new".equals(e.getMethod()); // FIXME shadows
 	}
 
 	@FunctionSpec(name = "isexpref", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isExpRef(final Expression e) throws Exception {
-		return e.getKind() == ExpressionKind.METHOD_REFERENCE && e.getExpressionsCount() > 0;
+		return e.getKind() == ExpressionKind.METHOD_REFERENCE && e.getExpressions1Count() > 0;
 	}
 
 	@FunctionSpec(name = "issuperref", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isSuperRef(final Expression e) throws Exception {
-		return e.getKind() == ExpressionKind.METHOD_REFERENCE && e.hasLiteral() && e.getLiteral().endsWith("super");
+		return e.getKind() == ExpressionKind.METHOD_REFERENCE && e.hasString1() && e.getString1().endsWith("super");
 	}
 
 	@FunctionSpec(name = "istyperef", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isTypeRef(final Expression e) throws Exception {
-		return e.getKind() == ExpressionKind.METHOD_REFERENCE && e.hasNewType() && !"new".equals(e.getMethod());
+		return e.getKind() == ExpressionKind.METHOD_REFERENCE; // && e.hasNewType() && !"new".equals(e.getMethod()); // FIXME shadows
 	}
 
 	///////////////////////////////
@@ -585,8 +586,8 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "isintlit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isIntLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
-		if (!e.hasLiteral()) return false;
-		final String lit = e.getLiteral();
+		if (!e.hasString1()) return false;
+		final String lit = e.getString1();
 		for (final Matcher m : intLitMatchers)
 			if (m.reset(lit).find())
 				return true;
@@ -625,8 +626,8 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "isfloatlit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isFloatLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
-		if (!e.hasLiteral()) return false;
-		final String lit = e.getLiteral();
+		if (!e.hasString1()) return false;
+		final String lit = e.getString1();
 		for (final Matcher m : floatLitMatchers)
 			if (m.reset(lit).find())
 				return true;
@@ -643,8 +644,7 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "ischarlit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isCharLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
-		if (!e.hasLiteral()) return false;
-		return e.getLiteral().startsWith("'");
+		return e.hasInt321();
 	}
 
 	/**
@@ -657,8 +657,8 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "isstringlit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isStringLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
-		if (!e.hasLiteral()) return false;
-		return e.getLiteral().startsWith("\"");
+		if (!e.hasString1()) return false;
+		return e.getString1().startsWith("\"");
 	}
 
 	/**
@@ -671,8 +671,8 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "istypelit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isTypeLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
-		if (!e.hasLiteral()) return false;
-		return e.getLiteral().toLowerCase().endsWith(".class");
+		if (!e.hasString1()) return false;
+		return e.getString1().toLowerCase().endsWith(".class");
 	}
 
 	/**
@@ -685,8 +685,8 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "isthislit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isThisLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
-		if (!e.hasLiteral()) return false;
-		return e.getLiteral().equalsIgnoreCase("this") || e.getLiteral().toLowerCase().endsWith(".this");
+		if (!e.hasString1()) return false;
+		return e.getString1().equalsIgnoreCase("this") || e.getString1().toLowerCase().endsWith(".this");
 	}
 
 	/**
@@ -699,8 +699,8 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "isboollit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isBoolLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
-		if (!e.hasLiteral()) return false;
-		return e.getLiteral().equalsIgnoreCase("true") || e.getLiteral().equalsIgnoreCase("false");
+		if (!e.hasString1()) return false;
+		return e.getString1().equalsIgnoreCase("true") || e.getString1().equalsIgnoreCase("false");
 	}
 
 	/**
@@ -713,8 +713,8 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "isnulllit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isNullLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
-		if (!e.hasLiteral()) return false;
-		return e.getLiteral().equalsIgnoreCase("null");
+		if (!e.hasString1()) return false;
+		return e.getString1().equalsIgnoreCase("null");
 	}
 
 	/**
@@ -726,19 +726,19 @@ public class BoaAstIntrinsics {
 	 */
 	@FunctionSpec(name = "isliteral", returnType = "bool", formalParameters = { "Expression", "string" })
 	public static boolean isLiteral(final Expression e, final String lit) throws Exception {
-		return e.getKind() == ExpressionKind.LITERAL && e.hasLiteral() && e.getLiteral().equals(lit);
+		return e.getKind() == ExpressionKind.LITERAL && e.getString1().equals(lit);
 	}
 
 	@FunctionSpec(name = "isnormalfor", returnType = "bool", formalParameters = { "Statement" })
 	public static boolean isNormalFor(final Statement s) throws Exception {
 		if (s.getKind() != StatementKind.FOR) return false;
-		return !s.hasVariableDeclaration();
+		return !s.hasVariable1();
 	}
 
 	@FunctionSpec(name = "isenhancedfor", returnType = "bool", formalParameters = { "Statement" })
 	public static boolean isEnhancedFor(final Statement s) throws Exception {
 		if (s.getKind() != StatementKind.FOR) return false;
-		return s.hasVariableDeclaration();
+		return s.hasVariable1();
 	}
 
 	//////////////////////////////
@@ -747,9 +747,9 @@ public class BoaAstIntrinsics {
 
 	private static class AnnotationCollectingVisitor extends BoaCollectingVisitor<String,Long> {
 		@Override
-		protected boolean preVisit(Modifier node) {
+		protected boolean preVisit(final Modifier node) {
 			if (node.getKind() == Modifier.ModifierKind.ANNOTATION) {
-				final String name = BoaAstIntrinsics.type_name(node.getAnnotationName());
+				final String name = BoaAstIntrinsics.type_name(node.getString1());
 				final long count = map.containsKey(name) ? map.get(name) : 0;
 				map.put(name, count + 1);
 			}

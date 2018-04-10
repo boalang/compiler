@@ -1,3 +1,4 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
  * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
@@ -16,68 +17,91 @@
  */
 package boa.types.shadow;
 
-import boa.compiler.ast.Call;
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
-import boa.types.BoaInt;
-import boa.types.BoaString;
-import boa.types.BoaProtoList;
-import boa.types.BoaShadowType;
-import boa.types.proto.enums.ExpressionKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
-
-import boa.compiler.ast.statements.IfStatement;
-import boa.compiler.ast.statements.Block;
 
 /**
- * A shadow type for Annotation.
- * 
+ * A shadow type for Modifier.
+ *
  * @author rdyer
  * @author kaushin
  */
-public class AnnotationShadow extends BoaShadowType  {
+public class AnnotationShadow extends boa.types.BoaShadowType  {
     /**
      * Construct a {@link AnnotationShadow}.
      */
     public AnnotationShadow() {
-        super(new ExpressionProtoTuple());
+        super(new boa.types.proto.ModifierProtoTuple());
 
-        
+        addShadow("type_name", new boa.types.BoaString());
     }
 
     /** {@inheritDoc} */
     @Override
-	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
-       
+    public boolean assigns(final boa.types.BoaType that) {
+        if (that instanceof boa.types.BoaShadowType)
+            return shadowedType.assigns(that);
 
-        throw new RuntimeException("invalid shadow field: " + name);
+        if (!super.assigns(that))
+            return false;
+
+        return this.getClass() == that.getClass();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Node lookupCodegen(final String name, final Factor fact, final SymbolTable env) {
+        if ("type_name".equals(name)) return ASTFactory.createSelector("string_1", new boa.types.BoaString(), env);
+
+        throw new RuntimeException("invalid shadow field '" + name + "' in shadow type AnnotationShadow");
     }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "LITERAL", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ModifierKind", "ANNOTATION", new boa.types.proto.enums.ModifierKindProtoMap(), env);
     }
 
-    
-    public IfStatement getManytoOne(final SymbolTable env ,Block b,String funcName) {
-       
-        // if(isboollit(${0})) b;
-         final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
-
-        return  new IfStatement(ASTFactory.createCallExpr(funcName, env, new ExpressionProtoTuple(), tree),b);
-        
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        return getManytoOne(env, b, "isannot", new boa.types.proto.ModifierProtoTuple());
     }
 
-     /** {@inheritDoc} */
+    /** {@inheritDoc} */
+    @Override
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        final List<Expression> l = new ArrayList<Expression>();
+
+
+        return l;
+    }
+
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public boa.types.Ast.Modifier flattenMessage(final boa.types.Ast.Modifier.Annotation m) {
+        final boa.types.Ast.Modifier.Builder b = boa.types.Ast.Modifier.newBuilder();
+        b.setKind(boa.types.Ast.Modifier.ModifierKind.ANNOTATION);
+        b.setString1(m.getTypeName());
+        return b.build();
+    }
+
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "Annotation";
     }
-    
 }

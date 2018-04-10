@@ -1,6 +1,8 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,44 +23,44 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaInt;
-import boa.types.BoaProtoTuple;
-import boa.types.BoaString;
-import boa.types.BoaType;
-import boa.types.proto.enums.CommentKindProtoMap;
-
 /**
  * A {@link CommentProtoTuple}.
- * 
+ *
  * @author rdyer
  */
-public class CommentProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+public class CommentProtoTuple extends boa.types.BoaProtoTuple {
+    private final static List<boa.types.BoaType> members = new ArrayList<boa.types.BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int count = 0;
+    static {
+        int count = 0;
 
-		names.put("kind", count++);
-		members.add(new CommentKindProtoMap());
+        names.put("kind", count++);
+        members.add(new boa.types.proto.enums.CommentKindProtoMap());
 
-		names.put("value", count++);
-		members.add(new BoaString());
+        names.put("string_1", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("start_line", count++);
-		members.add(new BoaInt());
-	}
+        names.put("positioninfo_1", count++);
+        members.add(new boa.types.proto.PositionInfoProtoTuple());
 
-	/**
-	 * Construct a {@link CommentProtoTuple}.
-	 */
-	public CommentProtoTuple() {
-		super(members, names);
-	}
+        names.put("structural_change_kind", count++);
+        members.add(new boa.types.proto.enums.ChangeKindProtoMap());
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Ast.Comment";
-	}
+        names.put("label_change_kind", count++);
+        members.add(new boa.types.proto.enums.ChangeKindProtoMap());
+    }
+
+    /**
+     * Construct a {@link CommentProtoTuple}.
+     */
+    public CommentProtoTuple() {
+        super(members, names);
+    }
+
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Ast.Comment";
+    }
 }

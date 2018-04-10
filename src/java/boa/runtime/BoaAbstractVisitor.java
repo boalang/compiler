@@ -323,73 +323,96 @@ public abstract class BoaAbstractVisitor {
 	}
 	public final void visit(final Statement node) throws Exception {
 		if (preVisit(node)) {
-			final List<Statement> statementsList = node.getStatementsList();
-			final int statementsSize = statementsList.size();
-			for (int i = 0; i < statementsSize; i++)
-				visit(statementsList.get(i));
+            if (node.hasStatement1())
+                visit(node.getStatement1());
+            if (node.hasStatement2())
+                visit(node.getStatement2());
 
-			final List<Expression> initsList = node.getInitializationsList();
-			final int initsSize = initsList.size();
-			for (int i = 0; i < initsSize; i++)
-				visit(initsList.get(i));
+			final List<Statement> statements1List = node.getStatements1List();
+			final int statements1Size = statements1List.size();
+			for (int i = 0; i < statements1Size; i++)
+				visit(statements1List.get(i));
+			final List<Statement> statements2List = node.getStatements2List();
+			final int statements2Size = statements2List.size();
+			for (int i = 0; i < statements2Size; i++)
+				visit(statements2List.get(i));
 
-			if (node.hasCondition())
-				visit(node.getCondition());
+            if (node.hasExpression1())
+                visit(node.getExpression1());
+            if (node.hasExpression2())
+                visit(node.getExpression2());
 
-			final List<Expression> updatesList = node.getUpdatesList();
-			final int updatesSize = updatesList.size();
-			for (int i = 0; i < updatesSize; i++)
-				visit(updatesList.get(i));
+			final List<Expression> exps1List = node.getExpressions1List();
+			final int exps1Size = exps1List.size();
+			for (int i = 0; i < exps1Size; i++)
+				visit(exps1List.get(i));
+			final List<Expression> exps2List = node.getExpressions2List();
+			final int exps2Size = exps2List.size();
+			for (int i = 0; i < exps2Size; i++)
+				visit(exps2List.get(i));
 
-			if (node.hasVariableDeclaration())
-				visit(node.getVariableDeclaration());
+            if (node.hasVariable1())
+                visit(node.getVariable1());
 
-			if (node.hasTypeDeclaration())
-				visit(node.getTypeDeclaration());
-
-			if (node.hasExpression())
-				visit(node.getExpression());
+            if (node.hasDeclaration1())
+                visit(node.getDeclaration1());
 
 			postVisit(node);
 		}
 	}
 	public final void visit(final Expression node) throws Exception {
 		if (preVisit(node)) {
-			final List<Expression> expressionsList = node.getExpressionsList();
-			final int expressionsSize = expressionsList.size();
-			for (int i = 0; i < expressionsSize; i++)
-				visit(expressionsList.get(i));
+            if (node.hasExpression1())
+                visit(node.getExpression1());
+            if (node.hasExpression2())
+                visit(node.getExpression2());
+            if (node.hasExpression3())
+                visit(node.getExpression3());
 
-			final List<Variable> varDeclsList = node.getVariableDeclsList();
-			final int varDeclsSize = varDeclsList.size();
-			for (int i = 0; i < varDeclsSize; i++)
-				visit(varDeclsList.get(i));
+			final List<Expression> expressions1List = node.getExpressions1List();
+			final int expressions1Size = expressions1List.size();
+			for (int i = 0; i < expressions1Size; i++)
+				visit(expressions1List.get(i));
 
-			if (node.hasNewType())
-				visit(node.getNewType());
+            if (node.hasType1())
+                visit(node.getType1());
 
-			final List<Type> genericParametersList = node.getGenericParametersList();
-			final int genericParametersSize = genericParametersList.size();
-			for (int i = 0; i < genericParametersSize; i++)
-				visit(genericParametersList.get(i));
+			final List<Type> types1List = node.getTypes1List();
+			final int types1Size = types1List.size();
+			for (int i = 0; i < types1Size; i++)
+				visit(types1List.get(i));
 
-			final List<Expression> methodArgsList = node.getMethodArgsList();
-			final int methodArgsSize = methodArgsList.size();
-			for (int i = 0; i < methodArgsSize; i++)
-				visit(methodArgsList.get(i));
+            if (node.hasDeclaration1())
+                visit(node.getDeclaration1());
 
-			if (node.hasAnonDeclaration())
-				visit(node.getAnonDeclaration());
+			final List<Variable> variables1List = node.getVariables1List();
+			final int variables1Size = variables1List.size();
+			for (int i = 0; i < variables1Size; i++)
+				visit(variables1List.get(i));
+
+            if (node.hasStatement1())
+                visit(node.getStatement1());
+
+			final List<Modifier> modifiers1List = node.getModifiers1List();
+			final int modifiers1Size = modifiers1List.size();
+			for (int i = 0; i < modifiers1Size; i++)
+				visit(modifiers1List.get(i));
+
+            if (node.hasModifier1())
+                visit(node.getModifier1());
 
 			postVisit(node);
 		}
 	}
 	public final void visit(final Modifier node) throws Exception {
 		if (preVisit(node)) {
-			final List<Expression> annotationValuesList = node.getAnnotationValuesList();
-			final int annotationValuesSize = annotationValuesList.size();
-			for (int i = 0; i < annotationValuesSize; i++)
-				visit(annotationValuesList.get(i));
+            if (node.hasExpression1())
+                visit(node.getExpression1());
+
+			final List<Expression> expressions1List = node.getExpressions1List();
+			final int expressions1Size = expressions1List.size();
+			for (int i = 0; i < expressions1Size; i++)
+				visit(expressions1List.get(i));
 
 			postVisit(node);
 		}

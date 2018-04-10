@@ -1,6 +1,8 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,37 +23,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaProtoTuple;
-import boa.types.BoaType;
-import boa.types.proto.enums.CFGEdgeLabelProtoMap;
-
 /**
  * A {@link CFGEdgeProtoTuple}.
- * 
- * @author rramu
+ *
+ * @author rdyer
  */
-public class CFGEdgeProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+public class CFGEdgeProtoTuple extends boa.types.BoaProtoTuple {
+    private final static List<boa.types.BoaType> members = new ArrayList<boa.types.BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int count = 0;
 
-		names.put("label", counter++);
-		members.add(new CFGEdgeLabelProtoMap());
+        names.put("label", count++);
+        members.add(new boa.types.proto.enums.CFGEdgeLabelProtoMap());
+    }
 
-	}
+    /**
+     * Construct a {@link CFGEdgeProtoTuple}.
+     */
+    public CFGEdgeProtoTuple() {
+        super(members, names);
+    }
 
-	/**
-	 * Construct a {@link CFGEdgeProtoTuple}.
-	 */
-	public CFGEdgeProtoTuple() {
-		super(members, names);
-	}
-
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Control.CFGEdge";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Control.CFGEdge";
+    }
 }

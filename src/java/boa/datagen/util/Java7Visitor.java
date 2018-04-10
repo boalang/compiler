@@ -23,6 +23,7 @@ import java.util.*;
 import org.eclipse.jdt.core.dom.*;
 
 import boa.types.Ast.*;
+import boa.types.Ast.Comment.PositionInfo;
 
 /**
  * @author rdyer
@@ -120,9 +121,9 @@ public class Java7Visitor extends ASTVisitor {
 	public boolean visit(BlockComment node) {
 		boa.types.Ast.Comment.Builder b = boa.types.Ast.Comment.newBuilder();
 		buildPosition(node);
-		b.setPosition(pos.build());
+		b.setPositioninfo1(pos.build());
 		b.setKind(boa.types.Ast.Comment.CommentKind.BLOCK);
-		b.setValue(src.substring(node.getStartPosition(), node.getStartPosition() + node.getLength()));
+		b.setString1(src.substring(node.getStartPosition(), node.getStartPosition() + node.getLength()));
 		comments.add(b.build());
 		return false;
 	}
@@ -131,9 +132,9 @@ public class Java7Visitor extends ASTVisitor {
 	public boolean visit(LineComment node) {
 		boa.types.Ast.Comment.Builder b = boa.types.Ast.Comment.newBuilder();
 		buildPosition(node);
-		b.setPosition(pos.build());
+		b.setPositioninfo1(pos.build());
 		b.setKind(boa.types.Ast.Comment.CommentKind.LINE);
-		b.setValue(src.substring(node.getStartPosition(), node.getStartPosition() + node.getLength()));
+		b.setString1(src.substring(node.getStartPosition(), node.getStartPosition() + node.getLength()));
 		comments.add(b.build());
 		return false;
 	}
@@ -142,13 +143,14 @@ public class Java7Visitor extends ASTVisitor {
 	public boolean visit(Javadoc node) {
 		boa.types.Ast.Comment.Builder b = boa.types.Ast.Comment.newBuilder();
 		buildPosition(node);
-		b.setPosition(pos.build());
+		b.setPositioninfo1(pos.build());
 		b.setKind(boa.types.Ast.Comment.CommentKind.DOC);
-		b.setValue(src.substring(node.getStartPosition(), node.getStartPosition() + node.getLength()));
+		b.setString1(src.substring(node.getStartPosition(), node.getStartPosition() + node.getLength()));
 		comments.add(b.build());
 		return false;
 	}
 
+/* FIXME shadows
 	//////////////////////////////////////////////////////////////
 	// Type Declarations
 
@@ -1644,4 +1646,5 @@ public class Java7Visitor extends ASTVisitor {
 	public boolean visit(TextElement node) {
 		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
+	*/
 }

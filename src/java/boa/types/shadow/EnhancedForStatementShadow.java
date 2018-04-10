@@ -1,3 +1,4 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
  * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
@@ -16,78 +17,92 @@
  */
 package boa.types.shadow;
 
-import boa.compiler.ast.Call;
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
-import boa.types.BoaInt;
-import boa.types.BoaProtoList;
-import boa.types.BoaShadowType;
-import boa.types.proto.enums.StatementKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
-
-import boa.compiler.ast.statements.IfStatement;
-import boa.compiler.ast.statements.Block;
 
 /**
- * A shadow type for EnhancedForStatement.
- * 
+ * A shadow type for Statement.
+ *
  * @author rdyer
  * @author kaushin
  */
-public class EnhancedForStatementShadow extends BoaShadowType  {
+public class EnhancedForStatementShadow extends boa.types.BoaShadowType  {
     /**
      * Construct a {@link EnhancedForStatementShadow}.
      */
     public EnhancedForStatementShadow() {
-        super(new StatementProtoTuple());
+        super(new boa.types.proto.StatementProtoTuple());
 
-        addShadow("parameter", new BoaProtoList(new ExpressionProtoTuple()));
-        addShadow("expression", new ExpressionProtoTuple());
-        addShadow("body", new StatementProtoTuple());
+        addShadow("expression", new boa.types.proto.ExpressionProtoTuple());
+        addShadow("variable_declaration", new boa.types.proto.VariableProtoTuple());
+        addShadow("body", new boa.types.proto.StatementProtoTuple());
     }
 
     /** {@inheritDoc} */
     @Override
-	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
+    public boolean assigns(final boa.types.BoaType that) {
+        if (that instanceof boa.types.BoaShadowType)
+            return shadowedType.assigns(that);
 
-        if ("parameter".equals(name)) {
-            // TODO ? ${0}.variable_declaration
-            return ASTFactory.createSelector( "variable_declaration", new BoaProtoList(new ExpressionProtoTuple()), env);
-        }
+        if (!super.assigns(that))
+            return false;
 
-        if ("expression".equals(name)) {
-            // ${0}.expression
-            return ASTFactory.createSelector( "expression", new ExpressionProtoTuple(), env);
-        }
-
-        if ("body".equals(name)) {
-            // ${0}.statements[0]
-            return ASTFactory.createFactor("statements",ASTFactory.createIntLiteral(0),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
-
-        }
-
-        throw new RuntimeException("invalid shadow field: " + name);
+        return this.getClass() == that.getClass();
     }
 
-     /** {@inheritDoc} */
+    /** {@inheritDoc} */
     @Override
-    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
-        // if (funcName(${0})) b;
-         final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new StatementProtoTuple());
+    public Node lookupCodegen(final String name, final Factor fact, final SymbolTable env) {
+        if ("expression".equals(name)) return ASTFactory.createSelector("expression_1", new boa.types.proto.ExpressionProtoTuple(), env);
+        if ("variable_declaration".equals(name)) return ASTFactory.createSelector("variable_1", new boa.types.proto.VariableProtoTuple(), env);
+        if ("body".equals(name)) return ASTFactory.createSelector("statement_1", new boa.types.proto.StatementProtoTuple(), env);
 
-        return new IfStatement(ASTFactory.createCallExpr("isenhancedfor", env, new StatementProtoTuple(), tree), b);
+        throw new RuntimeException("invalid shadow field '" + name + "' in shadow type EnhancedForStatementShadow");
     }
-
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("StatementKind", "FOR", new StatementKindProtoMap(), env);
+        return getKindExpression("StatementKind", "FOR", new boa.types.proto.enums.StatementKindProtoMap(), env);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        final List<Expression> l = new ArrayList<Expression>();
+
+
+        return l;
+    }
+
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public boa.types.Ast.Statement flattenMessage(final boa.types.Ast.Statement.EnhancedForStatement m) {
+        final boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+        b.setKind(boa.types.Ast.Statement.StatementKind.FOR);
+        b.setExpression1(m.getExpression());
+        b.setVariable1(m.getVariableDeclaration());
+        b.setStatement1(m.getBody());
+        return b.build();
     }
 
     /** {@inheritDoc} */

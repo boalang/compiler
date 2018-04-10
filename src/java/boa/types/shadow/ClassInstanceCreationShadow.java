@@ -1,3 +1,4 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
  * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
@@ -16,75 +17,98 @@
  */
 package boa.types.shadow;
 
-import boa.compiler.ast.Call;
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
-import boa.types.BoaInt;
-import boa.types.BoaProtoList;
-import boa.types.BoaShadowType;
-import boa.types.proto.enums.ExpressionKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
-import boa.types.proto.TypeProtoTuple;
+
 /**
- * A shadow type for ClassInstanceCreation.
- * 
+ * A shadow type for Expression.
+ *
  * @author rdyer
  * @author kaushin
  */
-public class ClassInstanceCreationShadow extends BoaShadowType  {
+public class ClassInstanceCreationShadow extends boa.types.BoaShadowType  {
     /**
      * Construct a {@link ClassInstanceCreationShadow}.
      */
     public ClassInstanceCreationShadow() {
-        super(new ExpressionProtoTuple());
+        super(new boa.types.proto.ExpressionProtoTuple());
 
-
-        addShadow("expression", new ExpressionProtoTuple());
-        addShadow("arguments",  new BoaProtoList(new ExpressionProtoTuple()));
-        addShadow("anonymous_class_declaration", new ExpressionProtoTuple());
-        addShadow("get_type", new TypeProtoTuple());
+        addShadow("new_type", new boa.types.proto.TypeProtoTuple());
+        addShadow("expression", new boa.types.proto.ExpressionProtoTuple());
+        addShadow("arguments", new boa.types.BoaProtoList(new boa.types.proto.ExpressionProtoTuple()));
+        addShadow("type_arguments", new boa.types.BoaProtoList(new boa.types.proto.TypeProtoTuple()));
+        addShadow("anonymous_class_decl", new boa.types.proto.DeclarationProtoTuple());
     }
 
     /** {@inheritDoc} */
     @Override
-	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
+    public boolean assigns(final boa.types.BoaType that) {
+        if (that instanceof boa.types.BoaShadowType)
+            return shadowedType.assigns(that);
 
-        if ("expression".equals(name)) {
-            // ${0}.expressions[0]
+        if (!super.assigns(that))
+            return false;
 
-            return ASTFactory.createFactor("expressions",ASTFactory.createIntLiteral(0),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
+        return this.getClass() == that.getClass();
+    }
 
-        }
+    /** {@inheritDoc} */
+    @Override
+    public Node lookupCodegen(final String name, final Factor fact, final SymbolTable env) {
+        if ("new_type".equals(name)) return ASTFactory.createSelector("type_1", new boa.types.proto.TypeProtoTuple(), env);
+        if ("expression".equals(name)) return ASTFactory.createSelector("expression_1", new boa.types.proto.ExpressionProtoTuple(), env);
+        if ("arguments".equals(name)) return ASTFactory.createSelector("expressions_1", new boa.types.BoaProtoList(new boa.types.BoaProtoList(new boa.types.proto.ExpressionProtoTuple())), env);
+        if ("type_arguments".equals(name)) return ASTFactory.createSelector("types_1", new boa.types.BoaProtoList(new boa.types.BoaProtoList(new boa.types.proto.TypeProtoTuple())), env);
+        if ("anonymous_class_decl".equals(name)) return ASTFactory.createSelector("declaration_1", new boa.types.proto.DeclarationProtoTuple(), env);
 
-        if ("arguments".equals(name)) {
-            // ${0}.expressions[1]
-           
-            return ASTFactory.createFactor("expressions",ASTFactory.createIntLiteral(1),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
-        }
-
-        if ("anonymous_class_declaration".equals(name)) {
-            // ${0}.anon_declaration
-           
-             return ASTFactory.createSelector( "anon_declaration", new ExpressionProtoTuple(), env);
-        }
-
-        if ("get_type".equals(name)) {
-            // ${0}.new_type
-            return ASTFactory.createSelector( "new_type", new TypeProtoTuple(), env);
-        }
-
-        throw new RuntimeException("invalid shadow field: " + name);
+        throw new RuntimeException("invalid shadow field '" + name + "' in shadow type ClassInstanceCreationShadow");
     }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "NEW", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "NEW", new boa.types.proto.enums.ExpressionKindProtoMap(), env);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        final List<Expression> l = new ArrayList<Expression>();
+
+
+        return l;
+    }
+
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public boa.types.Ast.Expression flattenMessage(final boa.types.Ast.Expression.ClassInstanceCreation m) {
+        final boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+        b.setKind(boa.types.Ast.Expression.ExpressionKind.NEW);
+        b.setType1(m.getNewType());
+        if (m.hasExpression()) b.setExpression1(m.getExpression());
+        for (int i = 0; i < m.getArgumentsCount(); i++) b.addExpressions1(m.getArguments(i));
+        for (int i = 0; i < m.getTypeArgumentsCount(); i++) b.addTypes1(m.getTypeArguments(i));
+        if (m.hasAnonymousClassDecl()) b.setDeclaration1(m.getAnonymousClassDecl());
+        return b.build();
     }
 
     /** {@inheritDoc} */

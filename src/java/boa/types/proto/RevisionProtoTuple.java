@@ -1,6 +1,8 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,60 +23,53 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaInt;
-import boa.types.BoaProtoList;
-import boa.types.BoaProtoTuple;
-import boa.types.BoaString;
-import boa.types.BoaTime;
-import boa.types.BoaType;
-
 /**
  * A {@link RevisionProtoTuple}.
- * 
+ *
  * @author rdyer
  */
-public class RevisionProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+public class RevisionProtoTuple extends boa.types.BoaProtoTuple {
+    private final static List<boa.types.BoaType> members = new ArrayList<boa.types.BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int count = 0;
 
-		names.put("id", counter++);
-		members.add(new BoaString());
+        names.put("id", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("author", counter++);
-		members.add(new PersonProtoTuple());
+        names.put("author", count++);
+        members.add(new boa.types.proto.PersonProtoTuple());
 
-		names.put("committer", counter++);
-		members.add(new PersonProtoTuple());
+        names.put("committer", count++);
+        members.add(new boa.types.proto.PersonProtoTuple());
 
-		names.put("commit_date", counter++);
-		members.add(new BoaTime());
+        names.put("commit_date", count++);
+        members.add(new boa.types.BoaInt());
 
-		names.put("log", counter++);
-		members.add(new BoaString());
+        names.put("log", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("files", counter++);
-		members.add(new BoaProtoList(new ChangedFileProtoTuple()));
+        names.put("files", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.proto.ChangedFileProtoTuple()));
 
-		names.put("parents", counter++);
-		members.add(new BoaProtoList(new BoaInt()));
+        names.put("parents", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.BoaInt()));
 
-		names.put("children", counter++);
-		members.add(new BoaProtoList(new BoaInt()));
-	}
+        names.put("children", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.BoaInt()));
+    }
 
-	/**
-	 * Construct a {@link RevisionProtoTuple}.
-	 */
-	public RevisionProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a {@link RevisionProtoTuple}.
+     */
+    public RevisionProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Code.Revision";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Code.Revision";
+    }
 }

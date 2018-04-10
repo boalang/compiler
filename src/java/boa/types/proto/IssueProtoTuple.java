@@ -1,6 +1,8 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,112 +23,98 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaInt;
-import boa.types.BoaProtoList;
-import boa.types.BoaProtoTuple;
-import boa.types.BoaString;
-import boa.types.BoaTime;
-import boa.types.BoaType;
-import boa.types.proto.enums.IssueLabelProtoMap;
-import boa.types.proto.enums.IssuePriorityProtoMap;
-import boa.types.proto.enums.IssueStatusProtoMap;
-
 /**
  * A {@link IssueProtoTuple}.
- * 
+ *
  * @author rdyer
  */
-public class IssueProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+public class IssueProtoTuple extends boa.types.BoaProtoTuple {
+    private final static List<boa.types.BoaType> members = new ArrayList<boa.types.BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int count = 0;
 
-		names.put("id", counter++);
-		members.add(new BoaString());
+        names.put("id", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("status", counter++);
-		members.add(new IssueStatusProtoMap());
+        names.put("status", count++);
+        members.add(new boa.types.proto.enums.IssueStatusProtoMap());
 
-		names.put("author", counter++);
-		members.add(new PersonProtoTuple());
+        names.put("author", count++);
+        members.add(new boa.types.proto.PersonProtoTuple());
 
-		names.put("assignee", counter++);
-		members.add(new PersonProtoTuple());
+        names.put("assignee", count++);
+        members.add(new boa.types.proto.PersonProtoTuple());
 
-		names.put("summary", counter++);
-		members.add(new BoaString());
+        names.put("summary", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("description", counter++);
-		members.add(new BoaString());
+        names.put("description", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("created_date", counter++);
-		members.add(new BoaTime());
+        names.put("created_date", count++);
+        members.add(new boa.types.BoaInt());
 
-		names.put("modified_date", counter++);
-		members.add(new BoaTime());
+        names.put("modified_date", count++);
+        members.add(new boa.types.BoaInt());
 
-		names.put("completed_date", counter++);
-		members.add(new BoaTime());
+        names.put("completed_date", count++);
+        members.add(new boa.types.BoaInt());
 
-		names.put("keywords", counter++);
-		members.add(new BoaProtoList(new BoaString()));
+        names.put("keywords", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.BoaString()));
 
-		names.put("vote", counter++);
-		members.add(new BoaInt());
+        names.put("vote", count++);
+        members.add(new boa.types.BoaInt());
 
-		names.put("priority", counter++);
-		members.add(new IssuePriorityProtoMap());
+        names.put("priority", count++);
+        members.add(new boa.types.proto.enums.IssuePriorityProtoMap());
 
-		names.put("files", counter++);
-		members.add(new BoaProtoList(new AttachmentProtoTuple()));
+        names.put("files", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.proto.AttachmentProtoTuple()));
 
-		names.put("comments", counter++);
-		members.add(new BoaProtoList(new IssueCommentProtoTuple()));
+        names.put("comments", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.proto.IssueCommentProtoTuple()));
 
-		/** The issues's associated milestone */
-//		optional string milestone = 23;
-		//optional string depends_on = 24;
-		/** The issue's blocked or locked status */
-//		optional string blocked = 25;
-		/*
-		optional string secrecy = 26;
-		repeated IssueChange changes = 27;
-		 */
+        names.put("milestone", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("pullUrl", counter++);
-		members.add(new BoaString());
+        names.put("blocked", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("assignees", counter++);
-		members.add(new BoaProtoList(new PersonProtoTuple()));
+        names.put("pullUrl", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("number", counter++);
-		members.add(new BoaInt());
+        names.put("assignees", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.proto.PersonProtoTuple()));
 
-		names.put("labels", counter++);
-		members.add(new BoaProtoList(new IssueLabelProtoMap()));
+        names.put("number", count++);
+        members.add(new boa.types.BoaInt());
 
-		names.put("other_status", counter++);
-		members.add(new BoaString());
+        names.put("labels", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.proto.enums.IssueLabelProtoMap()));
 
-		names.put("other_priority", counter++);
-		members.add(new BoaString());
+        names.put("other_status", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("other_labels", counter++);
-		members.add(new BoaProtoList(new IssueLabelProtoMap()));
-	}
+        names.put("other_priority", count++);
+        members.add(new boa.types.BoaString());
 
-	/**
-	 * Construct a IssueProtoTuple.
-	 */
-	public IssueProtoTuple() {
-		super(members, names);
-	}
+        names.put("other_labels", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.BoaString()));
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Issues.Issue";
-	}
+    /**
+     * Construct a {@link IssueProtoTuple}.
+     */
+    public IssueProtoTuple() {
+        super(members, names);
+    }
+
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Issues.Issue";
+    }
 }

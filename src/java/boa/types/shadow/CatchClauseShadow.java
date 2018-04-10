@@ -1,3 +1,4 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
  * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
@@ -16,109 +17,89 @@
  */
 package boa.types.shadow;
 
-import boa.compiler.ast.Call;
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
-import boa.compiler.ast.Selector;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
-import boa.types.BoaInt;
-import boa.types.BoaProtoList;
-import boa.types.BoaShadowType;
-import boa.types.proto.enums.StatementKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
-import boa.types.proto.VariableProtoTuple;
-import boa.types.proto.TypeProtoTuple;
-
 
 /**
- * A shadow type for CatchClause.
- * 
+ * A shadow type for Statement.
+ *
  * @author rdyer
  * @author kaushin
  */
-public class CatchClauseShadow extends BoaShadowType  {
+public class CatchClauseShadow extends boa.types.BoaShadowType  {
     /**
      * Construct a {@link CatchClauseShadow}.
      */
     public CatchClauseShadow() {
-        super(new StatementProtoTuple());
+        super(new boa.types.proto.StatementProtoTuple());
 
-        
-        addShadow("body", new BoaProtoList(new StatementProtoTuple()));
-        addShadow("exception", new VariableProtoTuple());
-        addShadow("variable_type", new TypeProtoTuple());
-        
+        addShadow("exception", new boa.types.proto.VariableProtoTuple());
+        addShadow("body", new boa.types.BoaProtoList(new boa.types.proto.StatementProtoTuple()));
     }
 
     /** {@inheritDoc} */
     @Override
-	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
+    public boolean assigns(final boa.types.BoaType that) {
+        if (that instanceof boa.types.BoaShadowType)
+            return shadowedType.assigns(that);
 
-        if ("exception".equals(name)) {
-            
-           // ${0}.variable_declaration.initializer
-            final Selector s1 = new Selector(ASTFactory.createIdentifier("variable_declaration", env));
-            final Selector s2 = new Selector(ASTFactory.createIdentifier("initializer", env));
-            final Factor f = new Factor(null).addOp(s1);
-            f.addOp(s2);
-            
+        if (!super.assigns(that))
+            return false;
 
-            s1.env = s2.env  = f.env = env;
+        return this.getClass() == that.getClass();
+    }
 
-           // s1.type = new ExpressionProtoTuple();
-            //s2.type = new VariableProtoTuple();
-            s1.type = new BoaProtoList(new VariableProtoTuple());
-            s2.type = new BoaProtoList(new VariableProtoTuple());
-           
-            f.type  = new VariableProtoTuple();
+    /** {@inheritDoc} */
+    @Override
+    public Node lookupCodegen(final String name, final Factor fact, final SymbolTable env) {
+        if ("exception".equals(name)) return ASTFactory.createSelector("variable_1", new boa.types.proto.VariableProtoTuple(), env);
+        if ("body".equals(name)) return ASTFactory.createSelector("statements_1", new boa.types.BoaProtoList(new boa.types.BoaProtoList(new boa.types.proto.StatementProtoTuple())), env);
 
-            return f;
-
-        }
-
-        if ("variable_type".equals(name)) {
-            
-           // ${0}.variable_declaration.initializer
-            final Selector s1 = new Selector(ASTFactory.createIdentifier("variable_declaration", env));
-            final Selector s2 = new Selector(ASTFactory.createIdentifier("variable_type", env));
-            final Factor f = new Factor(null).addOp(s1);
-            f.addOp(s2);
-            
-
-            s1.env = s2.env  = f.env = env;
-
-           // s1.type = new ExpressionProtoTuple();
-            //s2.type = new VariableProtoTuple();
-            s1.type = new BoaProtoList(new VariableProtoTuple());
-            s2.type = new BoaProtoList(new TypeProtoTuple());
-           
-            f.type  = new TypeProtoTuple();
-
-            return f;
-
-        }
-
-
-
-        if ("body".equals(name)) {
-            // ${0}.statements
-            return ASTFactory.createSelector( "statements", new BoaProtoList(new StatementProtoTuple()), env);
-            
-            
-        }
-
-
-        throw new RuntimeException("invalid shadow field: " + name);
+        throw new RuntimeException("invalid shadow field '" + name + "' in shadow type CatchClauseShadow");
     }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("StatementKind", "CATCH", new StatementKindProtoMap(), env);
+        return getKindExpression("StatementKind", "CATCH", new boa.types.proto.enums.StatementKindProtoMap(), env);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        final List<Expression> l = new ArrayList<Expression>();
+
+
+        return l;
+    }
+
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public boa.types.Ast.Statement flattenMessage(final boa.types.Ast.Statement.CatchClause m) {
+        final boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+        b.setKind(boa.types.Ast.Statement.StatementKind.CATCH);
+        b.setVariable1(m.getException());
+        for (int i = 0; i < m.getBodyCount(); i++) b.addStatements1(m.getBody(i));
+        return b.build();
     }
 
     /** {@inheritDoc} */

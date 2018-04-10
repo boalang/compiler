@@ -1,6 +1,8 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,57 +23,50 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaInt;
-import boa.types.BoaProtoList;
-import boa.types.BoaProtoTuple;
-import boa.types.BoaString;
-import boa.types.BoaType;
-import boa.types.proto.enums.RepositoryKindProtoMap;
-
 /**
- * A {@link BoaProtoTuple}.
- * 
+ * A {@link CodeRepositoryProtoTuple}.
+ *
  * @author rdyer
  */
-public class CodeRepositoryProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+public class CodeRepositoryProtoTuple extends boa.types.BoaProtoTuple {
+    private final static List<boa.types.BoaType> members = new ArrayList<boa.types.BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int count = 0;
 
-		names.put("url", counter++);
-		members.add(new BoaString());
+        names.put("url", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("kind", counter++);
-		members.add(new RepositoryKindProtoMap());
+        names.put("kind", count++);
+        members.add(new boa.types.proto.enums.RepositoryKindProtoMap());
 
-		names.put("revisions", counter++);
-		members.add(new BoaProtoList(new RevisionProtoTuple()));
+        names.put("revisions", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.proto.RevisionProtoTuple()));
 
-		names.put("branches", counter++);
-		members.add(new BoaProtoList(new BoaInt()));
+        names.put("branches", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.BoaInt()));
 
-		names.put("branch_names", counter++);
-		members.add(new BoaProtoList(new BoaString()));
+        names.put("branch_names", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.BoaString()));
 
-		names.put("tags", counter++);
-		members.add(new BoaProtoList(new BoaInt()));
+        names.put("tags", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.BoaInt()));
 
-		names.put("tag_names", counter++);
-		members.add(new BoaProtoList(new BoaString()));
-	}
+        names.put("tag_names", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.BoaString()));
+    }
 
-	/**
-	 * Construct a ProjectProtoTuple.
-	 */
-	public CodeRepositoryProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a {@link CodeRepositoryProtoTuple}.
+     */
+    public CodeRepositoryProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Code.CodeRepository";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Code.CodeRepository";
+    }
 }

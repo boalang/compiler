@@ -1,6 +1,8 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,40 +23,41 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaProtoList;
-import boa.types.BoaProtoTuple;
-import boa.types.BoaString;
-import boa.types.BoaType;
-
 /**
  * A {@link ASTRootProtoTuple}.
- * 
+ *
  * @author rdyer
  */
-public class ASTRootProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+public class ASTRootProtoTuple extends boa.types.BoaProtoTuple {
+    private final static List<boa.types.BoaType> members = new ArrayList<boa.types.BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int count = 0;
 
-		names.put("namespaces", counter++);
-		members.add(new BoaProtoList(new NamespaceProtoTuple()));
+        names.put("namespaces", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.proto.NamespaceProtoTuple()));
 
-		names.put("imports", counter++);
-		members.add(new BoaProtoList(new BoaString()));
-	}
+        names.put("imports", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.BoaString()));
 
-	/**
-	 * Construct a {@link ASTRootProtoTuple}.
-	 */
-	public ASTRootProtoTuple() {
-		super(members, names);
-	}
+        names.put("structural_change_kind", count++);
+        members.add(new boa.types.proto.enums.ChangeKindProtoMap());
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Ast.ASTRoot";
-	}
+        names.put("label_change_kind", count++);
+        members.add(new boa.types.proto.enums.ChangeKindProtoMap());
+    }
+
+    /**
+     * Construct a {@link ASTRootProtoTuple}.
+     */
+    public ASTRootProtoTuple() {
+        super(members, names);
+    }
+
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Ast.ASTRoot";
+    }
 }

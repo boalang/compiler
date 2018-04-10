@@ -34,7 +34,7 @@ public class Java8Visitor extends Java7Visitor {
 	}
 
 	// Field/Method Declarations
-
+/* FIXME shadows
 	@Override
 	public boolean visit(MethodDeclaration node) {
 		List<boa.types.Ast.Method> list = methods.peek();
@@ -287,6 +287,7 @@ public class Java8Visitor extends Java7Visitor {
 			name += "[]";
 		return name;
 	}
+*/
 
 	/*
 	 * FIXME

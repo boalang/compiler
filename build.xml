@@ -1,8 +1,9 @@
 <?xml version="1.0" ?>
 <project name="boa" default="package">
 	<!-- paths -->
-	<property name="src.proto" location="src/proto" />
-	<property name="dst.proto" location="src/compiled-proto" />
+	<property name="proto.src" location="src/proto" />
+	<property name="proto.dst" location="src/compiled-proto" />
+	<property name="proto.include" location="/usr/local/Cellar/protobuf/2.5.0/include/" />
 
 	<!-- Java version -->
 	<property name="ant.build.javac.source" value="1.6" />
@@ -62,20 +63,20 @@
 
 	<!-- do a dependency check -->
 	<target name="-check-deps">
-		<depend srcdir="src/test;src/compiled-proto;${src.paths};${src.parser.paths}" destdir="build/classes" cache="build/depcache" closure="yes" />
+		<depend srcdir="src/test;${proto.dst};${src.paths};${src.parser.paths}" destdir="build/classes" cache="build/depcache" closure="yes" />
 	</target>
 
 	<!-- Protocol Buffers schemas -->
 	<target name="-check-protobuf">
 		<condition property="protobuf.uptodate">
 			<and>
-				<uptodate srcfile="src/proto/ast.proto" targetfile="src/compiled-proto/boa/types/Ast.java" />
-				<uptodate srcfile="src/proto/code.proto" targetfile="src/compiled-proto/boa/types/Code.java" />
-				<uptodate srcfile="src/proto/diff.proto" targetfile="src/compiled-proto/boa/types/Diff.java" />
-				<uptodate srcfile="src/proto/hidden.proto" targetfile="src/compiled-proto/boa/types/Hidden.java" />
-				<uptodate srcfile="src/proto/issues.proto" targetfile="src/compiled-proto/boa/types/Issues.java" />
-				<uptodate srcfile="src/proto/shared.proto" targetfile="src/compiled-proto/boa/types/Shared.java" />
-				<uptodate srcfile="src/proto/toplevel.proto" targetfile="src/compiled-proto/boa/types/Toplevel.java" />
+				<uptodate srcfile="src/proto/ast.proto" targetfile="${proto.dst}/boa/types/Ast.java" />
+				<uptodate srcfile="src/proto/code.proto" targetfile="${proto.dst}/boa/types/Code.java" />
+				<uptodate srcfile="src/proto/diff.proto" targetfile="${proto.dst}/boa/types/Diff.java" />
+				<uptodate srcfile="src/proto/hidden.proto" targetfile="${proto.dst}/boa/types/Hidden.java" />
+				<uptodate srcfile="src/proto/issues.proto" targetfile="${proto.dst}/boa/types/Issues.java" />
+				<uptodate srcfile="src/proto/shared.proto" targetfile="${proto.dst}/boa/types/Shared.java" />
+				<uptodate srcfile="src/proto/toplevel.proto" targetfile="${proto.dst}/boa/types/Toplevel.java" />
 			</and>
 		</condition>
 	</target>
@@ -83,15 +84,15 @@
 	<target name="-translate-protobuf" depends="-check-protobuf" unless="protobuf.uptodate">
 		<echo level="error" message="Translating Protocol Buffer files to Java" />
 		<apply executable="protoc" parallel="true">
-			<arg value="--proto_path=${src.proto}" />
-			<arg value="--proto_path=/usr/local/Cellar/protobuf/2.5.0/include/" />
-			<arg value="--java_out=src/compiled-proto" />
-			<fileset dir="${src.proto}" includes="*.proto" />
+			<arg value="--proto_path=${proto.src}" />
+			<arg value="--proto_path=${proto.include}" />
+			<arg value="--java_out=${proto.dst}" />
+			<fileset dir="${proto.src}" includes="*.proto" />
 		</apply>
 	</target>
 
 	<target name="compile-protobuf" depends="-init,-translate-protobuf,-check-deps" description="Compiles the generated protobuf code.">
-		<javac includeantruntime="true" srcdir="src/compiled-proto" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
+		<javac includeantruntime="true" srcdir="${proto.dst}" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
 			<classpath refid="project.class.path" />
 		</javac>
 	</target>
@@ -106,6 +107,16 @@
 				</patternset>
 			</fileset>
 		</delete>
+	</target>
+
+	<target name="translate-shadows" depends="-init">
+		<apply executable="protoc" parallel="false">
+			<arg value="--proto_path=${proto.src}" />
+			<arg value="--proto_path=${proto.include}" />
+			<arg value="--plugin=protoc-gen-test=autogen.py" />
+			<arg value="--test_out=src/java" />
+			<fileset dir="${proto.src}" includes="*.proto" />
+		</apply>
 	</target>
 
 
@@ -345,16 +356,15 @@
 	<!-- documentation -->
 	<target name="gen-doc">
 		<apply executable="protoc" failonerror="true" verbose="true">
-			<arg value="--proto_path=${basedir}" />
-			<arg value="--proto_path=${src.proto}" />
-			<arg value="--proto_path=/usr/local/Cellar/protobuf/2.5.0/include/" />
+			<arg value="--proto_path=${proto.src}" />
+			<arg value="--proto_path=${proto.include}" />
 			<arg value="--plugin=protoc-gen-doc=../protoc-gen-doc/protoc-gen-doc" />
 			<targetfile prefix="--doc_out=boa," suffix=":../www/docs/" />
-			<fileset dir="${src.proto}" includes="toplevel.proto" />
-			<fileset dir="${src.proto}" includes="code.proto" />
-			<fileset dir="${src.proto}" includes="diff.proto" />
-			<fileset dir="${basedir}" includes="ast.proto" />
-			<fileset dir="${src.proto}" includes="shared.proto" />
+			<fileset dir="${proto.src}" includes="toplevel.proto" />
+			<fileset dir="${proto.src}" includes="code.proto" />
+			<fileset dir="${proto.src}" includes="diff.proto" />
+			<fileset dir="${proto.src}" includes="ast.proto" />
+			<fileset dir="${proto.src}" includes="shared.proto" />
 			<mapper type="glob" from="*.proto" to="../../../../*.inc" />
 		</apply>
 	</target>

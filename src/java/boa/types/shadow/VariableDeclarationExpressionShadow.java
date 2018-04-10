@@ -1,3 +1,4 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
  * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
@@ -16,122 +17,92 @@
  */
 package boa.types.shadow;
 
-import boa.compiler.ast.Call;
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
-import boa.compiler.ast.Selector;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
-import boa.types.BoaInt;
-import boa.types.BoaProtoList;
-import boa.types.BoaShadowType;
-import boa.types.proto.enums.ExpressionKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
-import boa.types.proto.VariableProtoTuple;
-import boa.types.proto.ModifierProtoTuple;
-import boa.types.proto.TypeProtoTuple;
 
 /**
- * A shadow type for VariableDeclarationExpression.
- * 
+ * A shadow type for Expression.
+ *
  * @author rdyer
  * @author kaushin
  */
-public class VariableDeclarationExpressionShadow extends BoaShadowType  {
+public class VariableDeclarationExpressionShadow extends boa.types.BoaShadowType  {
     /**
      * Construct a {@link VariableDeclarationExpressionShadow}.
      */
     public VariableDeclarationExpressionShadow() {
-        super(new ExpressionProtoTuple());
+        super(new boa.types.proto.ExpressionProtoTuple());
 
-        
-        addShadow("fragments",new BoaProtoList(new VariableProtoTuple()));
-        addShadow("modifiers", new BoaProtoList(new ModifierProtoTuple()));
-        addShadow("type", new TypeProtoTuple());
+        addShadow("modifiers", new boa.types.BoaProtoList(new boa.types.proto.ModifierProtoTuple()));
+        addShadow("new_type", new boa.types.proto.TypeProtoTuple());
+        addShadow("fragments", new boa.types.BoaProtoList(new boa.types.proto.VariableProtoTuple()));
     }
 
     /** {@inheritDoc} */
     @Override
-	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
+    public boolean assigns(final boa.types.BoaType that) {
+        if (that instanceof boa.types.BoaShadowType)
+            return shadowedType.assigns(that);
 
-      
-        if ("fragments".equals(name)) {
-            // ${0}. $0.expression.variable_decls
-             final Selector s1 = new Selector(ASTFactory.createIdentifier("expression", env));
-            final Selector s2 = new Selector(ASTFactory.createIdentifier("variable_decls", env));
-            final Factor f = new Factor(null).addOp(s1);
-            f.addOp(s2);
-            
-            s1.env = s2.env  = f.env = env;
+        if (!super.assigns(that))
+            return false;
 
-           // s1.type = new ExpressionProtoTuple();
-            //s2.type = new VariableProtoTuple();
-            s1.type = new BoaProtoList(new VariableProtoTuple());
-            s2.type = new BoaProtoList(new VariableProtoTuple());
-           
-            f.type  = new BoaProtoList(new VariableProtoTuple());
+        return this.getClass() == that.getClass();
+    }
 
-            return f;
+    /** {@inheritDoc} */
+    @Override
+    public Node lookupCodegen(final String name, final Factor fact, final SymbolTable env) {
+        if ("modifiers".equals(name)) return ASTFactory.createSelector("modifiers_1", new boa.types.BoaProtoList(new boa.types.BoaProtoList(new boa.types.proto.ModifierProtoTuple())), env);
+        if ("new_type".equals(name)) return ASTFactory.createSelector("type_1", new boa.types.proto.TypeProtoTuple(), env);
+        if ("fragments".equals(name)) return ASTFactory.createSelector("variables_1", new boa.types.BoaProtoList(new boa.types.BoaProtoList(new boa.types.proto.VariableProtoTuple())), env);
 
-
-        }                            
-                      
-        if ("modifiers".equals(name)) {
-            // ${0}.expression.variable_decls[0].modifiers 
-            final Selector s1 = new Selector(ASTFactory.createIdentifier("expression", env));
-            final Selector s2 = new Selector(ASTFactory.createIdentifier("variable_decls", env));
-            final Selector s3 = new Selector(ASTFactory.createIdentifier("modifiers", env));
-            final Factor f = new Factor(null).addOp(s1);
-            f.addOp(s2);
-            f.addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
-            f.addOp(s3);
-            
-            s1.env = s2.env = s3.env = f.env = env;
-
-           // s1.type = new ExpressionProtoTuple();
-           // s2.type = new VariableProtoTuple();
-           // s3.type = new ModifierProtoTuple()
-            s1.type = new BoaProtoList(new ModifierProtoTuple());
-            s2.type = new BoaProtoList(new ModifierProtoTuple());
-            s3.type = new BoaProtoList(new ModifierProtoTuple());
-            
-            f.type =  new BoaProtoList(new ModifierProtoTuple());
-
-            return f;
-        }
-           
-        if ("type".equals(name)) {
-            // ${0}.$0.expression.variable_decls[0].variable_type
-           
-            final Selector s1 = new Selector(ASTFactory.createIdentifier("expression", env));
-            final Selector s2 = new Selector(ASTFactory.createIdentifier("variable_decls", env));
-            final Selector s3 = new Selector(ASTFactory.createIdentifier("variable_type", env));
-            final Factor f = new Factor(null).addOp(s1);
-            f.addOp(s2);
-            f.addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
-            f.addOp(s3);
-            
-            s1.env = s2.env = s3.env = f.env = env;
-
-            s1.type = new TypeProtoTuple();
-            s2.type = new TypeProtoTuple();
-            s3.type = new TypeProtoTuple();
-            
-            f.type = new TypeProtoTuple();
-            return f;
-
-        }
-
-        throw new RuntimeException("invalid shadow field: " + name);
+        throw new RuntimeException("invalid shadow field '" + name + "' in shadow type VariableDeclarationExpressionShadow");
     }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "VARDECL", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "VARDECL", new boa.types.proto.enums.ExpressionKindProtoMap(), env);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        final List<Expression> l = new ArrayList<Expression>();
+
+
+        return l;
+    }
+
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public boa.types.Ast.Expression flattenMessage(final boa.types.Ast.Expression.VariableDeclarationExpression m) {
+        final boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+        b.setKind(boa.types.Ast.Expression.ExpressionKind.VARDECL);
+        for (int i = 0; i < m.getModifiersCount(); i++) b.addModifiers1(m.getModifiers(i));
+        b.setType1(m.getNewType());
+        for (int i = 0; i < m.getFragmentsCount(); i++) b.addVariables1(m.getFragments(i));
+        return b.build();
     }
 
     /** {@inheritDoc} */

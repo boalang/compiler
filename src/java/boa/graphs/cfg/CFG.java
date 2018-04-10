@@ -315,6 +315,7 @@ public class CFG {
 	}
 
 	public void astToCFG() {
+/* FIXME shadows
 		if (md.getStatementsCount() > 0) {
 			CFGNode startNode = new CFGNode("START", CFGNode.TYPE_ENTRY,
 					"START", "START");
@@ -348,8 +349,10 @@ public class CFG {
 			}
 			this.orderedNodes = order();
 		}
+*/
 	}
 
+/* FIXME shadows
 	private CFG traverse(CFGNode cfgNode, Expression root) {
 		CFG graph = new CFG();
 		switch (root.getKind().getNumber()) {
@@ -412,12 +415,11 @@ public class CFG {
 		case ExpressionKind.TYPECOMPARE_VALUE:
 		case ExpressionKind.VARACCESS_VALUE:
 		case ExpressionKind.VARDECL_VALUE:
-			/*
-			 * final List<Expression> expressionsList =
-			 * root.getExpressionsList(); final int expressionsSize =
-			 * expressionsList.size(); for (int i = 0; i < expressionsSize; i++)
-			 * { graph.mergeSeq(traverse(cfgNode, expressionsList.get(i))); }
-			 */
+			//final List<Expression> expressionsList =
+			//root.getExpressionsList(); final int expressionsSize =
+			//expressionsList.size(); for (int i = 0; i < expressionsSize; i++)
+			//{ graph.mergeSeq(traverse(cfgNode, expressionsList.get(i))); }
+			//
 			CFGNode bNode = new CFGNode(root.getKind().name(),
 					CFGNode.TYPE_OTHER, "", root.getKind().name());
 			bNode.setAstNode(root);
@@ -461,18 +463,14 @@ public class CFG {
 			return traverse_labeled(cfgNode, root);
 		case StatementKind.SWITCH_VALUE:
 			return traverse_switch(cfgNode, root);
-			/*
-			 * case StatementKind.CASE_VALUE: return traverse_;
-			 */
+		//case StatementKind.CASE_VALUE: return traverse_;
 		case StatementKind.TRY_VALUE:
 			return traverse_try(cfgNode, root);
 		case StatementKind.THROW_VALUE:
 			return traverse_throw(cfgNode, root);
 		case StatementKind.CATCH_VALUE:
 			return traverse_catch(cfgNode, root);
-			/*
-			 * case StatementKind.EMPTY_VALUE: break;
-			 */
+		//case StatementKind.EMPTY_VALUE: break;
 		case StatementKind.ASSERT_VALUE:
 		case StatementKind.TYPEDECL_VALUE:
 		case StatementKind.OTHER_VALUE:
@@ -574,9 +572,9 @@ public class CFG {
 	private CFG traverse_if(CFGNode cfgNode, Statement root) {
 		this.isBranchPresent = true;
 		CFG graph = new CFG();
-		/*
-		 * assumption node 0 is conditional node
-		 */
+		//
+		// assumption node 0 is conditional node
+		//
 		if (root.getExpression() != null) {
 			graph.mergeSeq(traverse(cfgNode, root.getExpression()));
 		}
@@ -605,9 +603,9 @@ public class CFG {
 	private CFG traverse_conditional(CFGNode cfgNode, Expression root) {
 		this.isBranchPresent = true;
 		CFG graph = new CFG();
-		/*
-		 * assumption node 0 is conditional node
-		 */
+		//
+		//assumption node 0 is conditional node
+		//
 		if (root.getExpressionsCount() == 3) {
 			graph.mergeSeq(traverse(cfgNode, root.getExpressions(0)));
 		}
@@ -876,6 +874,7 @@ public class CFG {
 			graph.mergeSeq(traverse(aNode, root.getStatements(i)));
 		return graph;
 	}
+*/
 
 	public final void postorder(final CFGNode node, java.util.HashMap<Integer,String> nodeVisitStatus, CFGNode[] results) throws Exception {
 		nodeVisitStatus.put(node.getId(),"visited");

@@ -1,3 +1,4 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
  * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
@@ -16,75 +17,97 @@
  */
 package boa.types.shadow;
 
-import boa.compiler.ast.Call;
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
-import boa.types.BoaInt;
-import boa.types.BoaProtoList;
-import boa.types.BoaShadowType;
-import boa.types.proto.enums.StatementKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
 
 /**
- * A shadow type for IfStatement.
- * 
+ * A shadow type for Statement.
+ *
  * @author rdyer
  * @author kaushin
  */
-public class IfStatementShadow extends BoaShadowType  {
-	/**
-	 * Construct a {@link IfStatementShadow}.
-	 */
-	public IfStatementShadow() {
-		super(new StatementProtoTuple());
+public class IfStatementShadow extends boa.types.BoaShadowType  {
+    /**
+     * Construct a {@link IfStatementShadow}.
+     */
+    public IfStatementShadow() {
+        super(new boa.types.proto.StatementProtoTuple());
 
-		addShadow("expression", new ExpressionProtoTuple());
-		addShadow("then_statement", new StatementProtoTuple());
-		addShadow("else_statement", new StatementProtoTuple());
-	}
+        addShadow("expression", new boa.types.proto.ExpressionProtoTuple());
+        addShadow("then_statement", new boa.types.proto.StatementProtoTuple());
+        addShadow("else_statement", new boa.types.proto.StatementProtoTuple());
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
+    /** {@inheritDoc} */
+    @Override
+    public boolean assigns(final boa.types.BoaType that) {
+        if (that instanceof boa.types.BoaShadowType)
+            return shadowedType.assigns(that);
 
-		if ("expression".equals(name)) {
-			// ${0}.expression
-			return ASTFactory.createSelector("expression", new ExpressionProtoTuple(), env);
-		}
+        if (!super.assigns(that))
+            return false;
 
-		if ("then_statement".equals(name)) {
-			// ${0}.statements[0]
-			return ASTFactory.createFactor("statements",ASTFactory.createIntLiteral(0),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
-		}
+        return this.getClass() == that.getClass();
+    }
 
-		if ("else_statement".equals(name)) {
-			// ${0}.statements
-            node.addOp(ASTFactory.createSelector("statements", new BoaProtoList(new StatementProtoTuple()), env));
-            final Expression tree = ASTFactory.createFactorExpr(node);
-            tree.type = new BoaProtoList(new StatementProtoTuple());
-            tree.env = env;
+    /** {@inheritDoc} */
+    @Override
+    public Node lookupCodegen(final String name, final Factor fact, final SymbolTable env) {
+        if ("expression".equals(name)) return ASTFactory.createSelector("expression_1", new boa.types.proto.ExpressionProtoTuple(), env);
+        if ("then_statement".equals(name)) return ASTFactory.createSelector("statement_1", new boa.types.proto.StatementProtoTuple(), env);
+        if ("else_statement".equals(name)) return ASTFactory.createSelector("statement_2", new boa.types.proto.StatementProtoTuple(), env);
 
-			// (${0}.statements.size() <= 1 ? (boa.types.Ast.Statement)null : ${0}.statements[1])
-			return ASTFactory.createCallFactor("safeget", env, new StatementProtoTuple(), tree, ASTFactory.createIntLiteral(1), ASTFactory.createStringLiteral("boa.types.Ast.Statement"));
-		}
+        throw new RuntimeException("invalid shadow field '" + name + "' in shadow type IfStatementShadow");
+    }
 
-		throw new RuntimeException("invalid shadow field: " + name);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public Expression getKindExpression(final SymbolTable env) {
+        return getKindExpression("StatementKind", "IF", new boa.types.proto.enums.StatementKindProtoMap(), env);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Expression getKindExpression(final SymbolTable env) {
-		return getKindExpression("StatementKind", "IF", new StatementKindProtoMap(), env);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        return null;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "IfStatement";
-	}
+    /** {@inheritDoc} */
+    @Override
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        final List<Expression> l = new ArrayList<Expression>();
+
+
+        return l;
+    }
+
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public boa.types.Ast.Statement flattenMessage(final boa.types.Ast.Statement.IfStatement m) {
+        final boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+        b.setKind(boa.types.Ast.Statement.StatementKind.IF);
+        b.setExpression1(m.getExpression());
+        b.setStatement1(m.getThenStatement());
+        if (m.hasElseStatement()) b.setStatement2(m.getElseStatement());
+        return b.build();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "IfStatement";
+    }
 }

@@ -24,10 +24,10 @@ import java.util.Stack;
 
 import org.eclipse.wst.jsdt.core.dom.*;
 
+import boa.types.Ast.Comment.PositionInfo;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Method;
 import boa.types.Ast.Namespace;
-import boa.types.Ast.PositionInfo;
 import boa.types.Ast.Statement.StatementKind;
 import boa.types.Ast.Type;
 import boa.types.Ast.TypeKind;
@@ -164,6 +164,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 		return false;
 	}
 
+/* FIXME shadows
 	@Override
 	public boolean visit(BlockComment node) {
 		boa.types.Ast.Comment.Builder b = boa.types.Ast.Comment.newBuilder();
@@ -1377,6 +1378,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 		expressions.push(eb.build());
 		return false;
 	}
+*/
 
 	//////////////////////////////////////////////////////////////
 	// Utility methods

@@ -1,6 +1,8 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,50 +23,44 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaProtoList;
-import boa.types.BoaProtoTuple;
-import boa.types.BoaString;
-import boa.types.BoaTime;
-import boa.types.BoaType;
-
 /**
  * A {@link IssueCommentProtoTuple}.
- * 
+ *
  * @author rdyer
  */
-public class IssueCommentProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+public class IssueCommentProtoTuple extends boa.types.BoaProtoTuple {
+    private final static List<boa.types.BoaType> members = new ArrayList<boa.types.BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int count = 0;
 
-		names.put("id", counter++);
-		members.add(new BoaString());
+        names.put("id", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("date", counter++);
-		members.add(new BoaTime());
+        names.put("date", count++);
+        members.add(new boa.types.BoaInt());
 
-		names.put("author", counter++);
-		members.add(new PersonProtoTuple());
+        names.put("author", count++);
+        members.add(new boa.types.proto.PersonProtoTuple());
 
-		names.put("description", counter++);
-		members.add(new BoaString());
+        names.put("description", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("files", counter++);
-		members.add(new BoaProtoList(new AttachmentProtoTuple()));
-	}
+        names.put("files", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.proto.AttachmentProtoTuple()));
+    }
 
-	/**
-	 * Construct a IssueCommentProtoTuple.
-	 */
-	public IssueCommentProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a {@link IssueCommentProtoTuple}.
+     */
+    public IssueCommentProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Issues.IssueComment";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Issues.IssueComment";
+    }
 }

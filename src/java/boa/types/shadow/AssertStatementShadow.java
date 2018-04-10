@@ -1,3 +1,4 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
  * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
@@ -16,58 +17,89 @@
  */
 package boa.types.shadow;
 
-import boa.compiler.ast.Call;
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
-import boa.types.BoaInt;
-import boa.types.BoaProtoList;
-import boa.types.BoaShadowType;
-import boa.types.proto.enums.StatementKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
 
 /**
- * A shadow type for AssertStatement.
- * 
+ * A shadow type for Statement.
+ *
  * @author rdyer
  * @author kaushin
  */
-public class AssertStatementShadow extends BoaShadowType  {
+public class AssertStatementShadow extends boa.types.BoaShadowType  {
     /**
      * Construct a {@link AssertStatementShadow}.
      */
     public AssertStatementShadow() {
-        super(new StatementProtoTuple());
+        super(new boa.types.proto.StatementProtoTuple());
 
-        addShadow("expression", new ExpressionProtoTuple());
-        addShadow("message", new ExpressionProtoTuple());
+        addShadow("condition", new boa.types.proto.ExpressionProtoTuple());
+        addShadow("expression", new boa.types.proto.ExpressionProtoTuple());
     }
 
     /** {@inheritDoc} */
     @Override
-	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
+    public boolean assigns(final boa.types.BoaType that) {
+        if (that instanceof boa.types.BoaShadowType)
+            return shadowedType.assigns(that);
 
-        if ("expression".equals(name)) {
-            // ${0}.condition
-            return ASTFactory.createSelector( "condition", new ExpressionProtoTuple(), env);
-        }
+        if (!super.assigns(that))
+            return false;
 
-        if ("message".equals(name)) {
-            // ${0}.expression
-            return ASTFactory.createSelector( "expression", new ExpressionProtoTuple(), env);
-        }
+        return this.getClass() == that.getClass();
+    }
 
-        throw new RuntimeException("invalid shadow field: " + name);
+    /** {@inheritDoc} */
+    @Override
+    public Node lookupCodegen(final String name, final Factor fact, final SymbolTable env) {
+        if ("condition".equals(name)) return ASTFactory.createSelector("expression_1", new boa.types.proto.ExpressionProtoTuple(), env);
+        if ("expression".equals(name)) return ASTFactory.createSelector("expression_2", new boa.types.proto.ExpressionProtoTuple(), env);
+
+        throw new RuntimeException("invalid shadow field '" + name + "' in shadow type AssertStatementShadow");
     }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("StatementKind", "ASSERT", new StatementKindProtoMap(), env);
+        return getKindExpression("StatementKind", "ASSERT", new boa.types.proto.enums.StatementKindProtoMap(), env);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        final List<Expression> l = new ArrayList<Expression>();
+
+
+        return l;
+    }
+
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public boa.types.Ast.Statement flattenMessage(final boa.types.Ast.Statement.AssertStatement m) {
+        final boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+        b.setKind(boa.types.Ast.Statement.StatementKind.ASSERT);
+        b.setExpression1(m.getCondition());
+        if (m.hasExpression()) b.setExpression2(m.getExpression());
+        return b.build();
     }
 
     /** {@inheritDoc} */

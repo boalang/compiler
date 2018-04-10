@@ -25,3 +25,4 @@ test-parser
 test-shadow
 test-traversal
 test-typecheck
+translate-shadows

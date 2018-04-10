@@ -1,6 +1,8 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,53 +23,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaProtoTuple;
-import boa.types.BoaString;
-import boa.types.BoaSet;
-import boa.types.BoaType;
-import boa.types.BoaBool;
-
 /**
  * A {@link CFGProtoTuple}.
- * 
- * @author rramu
+ *
+ * @author rdyer
  */
-public class CFGProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+public class CFGProtoTuple extends boa.types.BoaProtoTuple {
+    private final static List<boa.types.BoaType> members = new ArrayList<boa.types.BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int count = 0;
 
-		names.put("nodes", counter++);
-		members.add(new BoaSet(new CFGNodeProtoTuple()));
+        names.put("nodes", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.proto.CFGNodeProtoTuple()));
 
-		names.put("isBranchPresent", counter++);
-		members.add(new BoaBool());
+        names.put("edges", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.proto.CFGEdgeProtoTuple()));
+    }
 
-		names.put("isLoopPresent", counter++);
-		members.add(new BoaBool());
+    /**
+     * Construct a {@link CFGProtoTuple}.
+     */
+    public CFGProtoTuple() {
+        super(members, names);
+    }
 
-		names.put("nestedBranchPresent", counter++);
-		members.add(new BoaBool());
-
-		names.put("md", counter++);
-		members.add(new MethodProtoTuple());
-
-		names.put("class_name", counter++);
-		members.add(new BoaString());
-	}
-
-	/**
-	 * Construct a {@link CFGhProtoTuple}.
-	 */
-	public CFGProtoTuple() {
-		super(members, names);
-	}
-
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.graphs.cfg.CFG";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Control.CFG";
+    }
 }

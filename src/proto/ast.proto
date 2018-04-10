@@ -1,159 +1,156 @@
 package boa.types;
 
 import "shared.proto";
+import "hidden.proto";
 
 option optimize_for = SPEED;
 
 /** @exclude Container class that holds all comments for a file */
 message CommentsRoot {
+	/** The list of all comments */
 	repeated Comment comments = 1;
 }
 
 /** Container class that holds a file's parsed AST */
 message ASTRoot {
 	/** The top-level namespaces in the file */
-	repeated Namespace namespaces = 1;
+	repeated Namespace namespaces              = 1;
 	/** The imported namespaces and types */
-	repeated string imports = 2;
+	repeated string imports                    = 2;
 	/** @exclude */
-	repeated string names = 3;
+	repeated string names                      = 3 [(boa.types.hidden) = true];
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
 	optional ChangeKind structural_change_kind = 4;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 5;
+	optional ChangeKind label_change_kind      = 5;
 }
 
 /** A namespace (aka, package) in a source file */
 message Namespace {
 	/** The name of the namespace */
-	required string name = 1;
+	required string name                       = 1;
 	/** Any modifiers/annotations on the namespace */
-	repeated Modifier modifiers = 2;
+	repeated Modifier modifiers                = 2;
 	/** Declarations contained in this namespace */
-	repeated Declaration declarations = 3;
+	repeated Declaration declarations          = 3;
 	/** Statements contained in this namespace */
-	repeated Statement statements = 4;
+	repeated Statement statements              = 4;
 	/** Methods contained in this namespace */
-	repeated Method methods = 5;
+	repeated Method methods                    = 5;
 	/** Expressions contained in this namespace */
-	repeated Expression expressions = 6;
+	repeated Expression expressions            = 6;
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
 	optional ChangeKind structural_change_kind = 7;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 8;
+	optional ChangeKind label_change_kind      = 8;
 }
 
 /** A type declaration, such as a class or interface */
 message Declaration {
 	/** The name of this declaration */
-	required string name = 1;
+	required string name                       = 1;
 	/** The kind of this declaration */
-	required TypeKind kind = 2;
+	required TypeKind kind                     = 2;
 	/** The modifiers/annotations on this declaration */
-	repeated Modifier modifiers = 3;
+	repeated Modifier modifiers                = 3;
 	/** Any generic parameters to this declaration */
-	repeated Type generic_parameters = 4;
+	repeated Type generic_parameters           = 4;
 	/** The explicitly named parent type(s) of this declaration */
-	repeated Type parents = 5;
+	repeated Type parents                      = 5;
 	/** The methods in the declaration */
-	repeated Method methods = 6;
+	repeated Method methods                    = 6;
 	/** The fields in the declaration */
-	repeated Variable fields = 7;
+	repeated Variable fields                   = 7;
 	/** Any nested declarations */
-	repeated Declaration nested_declarations = 8;
-	/** @exclude TODO */
-	repeated Comment comments = 9;
+	repeated Declaration nested_declarations   = 8;
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 10;
+	optional ChangeKind structural_change_kind = 9;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 11;
+	optional ChangeKind label_change_kind      = 10;
 }
 
 /** The kinds of types in an AST */
 enum TypeKind {
 	option allow_alias = true;
 	/** Any other kind of Type */
-	OTHER = 0;
+	OTHER       = 0;
+
 	/** A class type */
-	CLASS = 1;
+	CLASS       = 1;
 	/** An interface type */
-	INTERFACE = 2;
+	INTERFACE   = 2;
 	/** An anonymous type */
-	ANONYMOUS = 3;
+	ANONYMOUS   = 3;
 	/** @exclude */
-	ANON = 3;
+	ANON        = 3;
 	/** A C-style struct */
-	STRUCT = 4;
+	STRUCT      = 4;
 	/** An enumerated type */
-	ENUM = 5;
+	ENUM        = 5;
 	/** @exclude */
 	ENUMERATION = 5;
 	/** An annotation type */
-	ANNOTATION = 6;
+	ANNOTATION  = 6;
 	/** A delegate type */
-	DELEGATE = 7;
+	DELEGATE    = 7;
 	/** A generic type */
-	GENERIC = 8;
+	GENERIC     = 8;
 }
 
 /** A type in an AST */
 message Type {
 	/** The name of the type */
-	required string name = 1;
+	required string name                       = 1;
 	/** The kind of the type */
-	required TypeKind kind = 2;
+	required TypeKind kind                     = 2;
 	/** @exclude */
-	optional string id = 4;
+	optional string id                         = 3;
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 5;
+	optional ChangeKind structural_change_kind = 4;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 6;
+	optional ChangeKind label_change_kind      = 5;
 }
 
 /** A method declaration */
 message Method {
 	/** The name of the method */
-	optional string name = 1;
+	optional string name                       = 1;
 	/** A list of all modifiers on the variable */
-	repeated Modifier modifiers = 2;
+	repeated Modifier modifiers                = 2;
 	/** The type returned from the method; if the method returns nothing, this type will be void */
-	required Type return_type = 3;
+	required Type return_type                  = 3;
 	/** The list of generic parameters for this method */
-	repeated Type generic_parameters = 4;
+	repeated Type generic_parameters           = 4;
 	/** The arguments the method takes */
-	repeated Variable arguments = 5;
+	repeated Variable arguments                = 5;
 	/** The list of exceptions thrown by this method */
-	repeated Type exception_types = 6;
+	repeated Type exception_types              = 6;
 	/**
 	  * The statements in the method body. Note that most methods (in C-like
 	  * languages, such as Java) contain a single statement of type BLOCK, which
 	  * contains the list of statements within it!
 	  */
-	repeated Statement statements = 7;
-	/** @exclude TODO */
-	repeated Comment comments = 8;
+	repeated Statement statements              = 7;
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 9;
+	optional ChangeKind structural_change_kind = 8;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 10;
+	optional ChangeKind label_change_kind      = 9;
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */
 message Variable {
 	/** The name of the variable */
-	required string name = 1;
+	required string name                       = 1;
 	/** The type of the variable */
-	required Type variable_type = 2;
+	required Type variable_type                = 2;
 	/** A list of all modifiers on the variable */
-	repeated Modifier modifiers = 3;
+	repeated Modifier modifiers                = 3;
 	/** If the variable has an initial assignment, the expression is stored here */
-	optional Expression initializer = 4;
-	/** @exclude TODO */
-	repeated Comment comments = 5;
+	optional Expression initializer            = 4;
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 6;
+	optional ChangeKind structural_change_kind = 5;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 7;
+	optional ChangeKind label_change_kind      = 6;
 }
 
 /** A single statement */
@@ -162,46 +159,232 @@ message Statement {
 	enum StatementKind {
 		option allow_alias = true;
 		/** Any other statement */
-		OTHER = 0;
-		BLOCK = 1;
-		TYPEDECL = 2;
-		EXPRESSION = 3;
+		OTHER        =  0;
+
+		/** An assert statement */
+		ASSERT       =  1;
+		/** A block statement */
+		BLOCK        =  2;
+		/** A break statement */
+		BREAK        =  3;
+		/** A case statement inside a switch */
+		CASE         =  4;
+		/** A catch block */
+		CATCH        =  5;
+		/** A continue statement */
+		CONTINUE     =  6;
+		/** A do-while statement */
+		DO           =  7;
+		/** An empty statement (i.e., a semi-colon) */
+		EMPTY        =  8;
+		/** An expression being treated as a statement */
+		EXPRESSION   =  9;
 		/** @exclude */
-		EXPR = 3;
-		SYNCHRONIZED = 4;
+		EXPR         =  9;
+		/** A standard 3-part for loop */
+		FOR          = 10;
+		/** An if/else statement */
+		IF           = 11;
+		/** A labeled statement */
+		LABEL        = 12;
+		/** A return statement */
+		RETURN       = 13;
+		/** A switch statement */
+		SWITCH       = 14;
+		/** A synchronized statement */
+		SYNCHRONIZED = 15;
 		/** @exclude */
-		SYNC = 4;
-		RETURN = 5;
-		FOR = 6;
-		DO = 7;
-		WHILE = 8;
-		IF = 9;
-		ASSERT = 10;
-		BREAK = 11;
-		CONTINUE = 12;
-		LABEL = 13;
-		SWITCH = 14;
-		CASE = 15;
-		TRY = 16;
-		THROW = 17;
-		CATCH = 18;
-		EMPTY = 19;
+		SYNC         = 15;
+		/** A throw statement */
+		THROW        = 16;
+		/** A try statement */
+		TRY          = 17;
+		/** A type declaration statement */
+		TYPEDECL     = 18;
+		/** A while loop */
+		WHILE        = 19;
 	}
+
 	/** The kind of statement */
-	required StatementKind kind = 1;
-	/** @exclude TODO */
-	repeated Comment comments = 2;
-	repeated Statement statements = 3;
-	repeated Expression initializations = 4;
-	optional Expression condition = 5;
-	repeated Expression updates = 6;
-	optional Variable variable_declaration = 7;
-	optional Declaration type_declaration = 8;
-	optional Expression expression = 9;
+	required StatementKind kind          = 1;
+
+	/** @exclude */
+	optional Statement     statement_1   = 2;
+	/** @exclude */
+	optional Statement     statement_2   = 3;
+
+	/** @exclude */
+	repeated Statement     statements_1  = 4;
+	/** @exclude */
+	repeated Statement     statements_2  = 5;
+
+	/** @exclude */
+	optional Expression    expression_1  = 6;
+	/** @exclude */
+	optional Expression    expression_2  = 7;
+
+	/** @exclude */
+	repeated Expression    expressions_1 = 8;
+	/** @exclude */
+	repeated Expression    expressions_2 = 9;
+
+	/** @exclude */
+	optional Variable      variable_1    = 10;
+
+	/** @exclude */
+	optional Declaration   declaration_1 = 11;
+
+	/** @exclude */
+	optional bool          bool_1        = 12 [default = false];
+
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 10;
+	optional ChangeKind structural_change_kind = 13;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 11;
+	optional ChangeKind label_change_kind      = 14;
+
+	// missing statements:
+	//  ConstructorInvocation (modeled as ExprStmt w/ MethodCall expr)
+	//  SuperConstructorInvocation (modeled as ExprStmt w/ MethodCall expr)
+	//  VariableDeclarationStatement (modeled as ExprStmt w/ VarDecl expr)
+
+	message AssertStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = ASSERT];
+		required Expression    condition   = 2;
+		optional Expression    expression  = 3;
+	}
+
+	message Block {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = BLOCK];
+		repeated Statement     statements  = 2;
+	}
+
+	message BreakStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = BREAK];
+		//optional Expression.VarAccessExpression label = 2 [(boa.types.alias) = "expression_1"]; FIXME
+		optional Expression    label       = 2;
+	}
+
+	message CatchClause {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = CATCH];
+		required Variable      exception   = 2;
+		repeated Statement     body        = 3;
+	}
+
+	message ContinueStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = CONTINUE];
+		//optional Expression.VarAccessExpression label = 2 [(boa.types.alias) = "expression_1"]; FIXME
+		optional Expression    label       = 2;
+	}
+
+	message DoStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = DO];
+		required Expression    condition   = 2;
+		required Statement     body        = 3;
+	}
+
+	message EmptyStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = EMPTY];
+	}
+
+	message EnhancedForStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind       = 1 [default = FOR];
+		required Expression expression           = 2;
+		required Variable   variable_declaration = 3;
+		required Statement  body                 = 4;
+	}
+
+	message ExpressionStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = EXPR];
+		required Expression    expression  = 2;
+	}
+
+	message ForStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind  = 1 [default = FOR];
+		repeated Expression initializations = 2;
+		required Expression condition       = 3;
+		repeated Expression updates         = 4;
+		required Statement  body            = 5;
+	}
+
+	message IfStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = IF];
+		required Expression expression     = 2;
+		required Statement  then_statement = 3;
+		optional Statement  else_statement = 4;
+	}
+
+	message LabeledStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = LABEL];
+		required Expression    label       = 2;
+		required Statement     statement   = 3;
+	}
+
+	message ReturnStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = RETURN];
+		optional Expression    expression  = 2;
+	}
+
+	message SwitchCase {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = CASE];
+		required Expression    expression  = 2;
+		optional bool          is_default  = 3 [default = false];
+	}
+
+	message SwitchStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = SWITCH];
+		required Expression    expression  = 2;
+		repeated Statement     statements  = 3;
+	}
+
+	message SynchronizedStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = SYNC];
+		required Expression    expression  = 2;
+		required Statement     body        = 3;
+	}
+
+	message ThrowStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = THROW];
+		required Expression    expression  = 2;
+	}
+
+	message TryStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = TRY];
+		required Statement     body        = 2;
+		repeated Statement     catches     = 3;
+		optional Statement     finally     = 4;
+		repeated Expression    resources   = 5;
+	}
+
+	message TypeDeclarationStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = TYPEDECL];
+		required Declaration   new_type    = 2;
+	}
+
+	message WhileStatement {
+		/** @exclude */
+		optional StatementKind shadow_kind = 1 [default = WHILE];
+		required Expression    condition   = 2;
+		required Statement     body        = 3;
+	}
 }
 
 /** A single expression */
@@ -209,84 +392,543 @@ message Expression {
 	/** The kind of expression */
 	enum ExpressionKind {
 		/** Any other expression */
-		OTHER = 0;
-		LITERAL = 1;
-		VARACCESS = 2;
-		VARDECL = 3;
-		METHODCALL = 4;
-		CAST = 5;
-		ARRAYINDEX = 6;
-		ARRAYINIT = 7;
-		TYPECOMPARE = 8;
-		NEW = 9;
-		NEWARRAY = 10;
-		OP_ADD = 11;
-		OP_SUB = 12;
-		OP_MULT = 13;
-		OP_DIV = 14;
-		OP_MOD = 15;
-		OP_INC = 16;
-		OP_DEC = 17;
-		BIT_LSHIFT = 18;
-		BIT_RSHIFT = 19;
-		BIT_UNSIGNEDRSHIFT = 20;
-		BIT_AND = 21;
-		BIT_OR = 22;
-		BIT_NOT = 23;
-		BIT_XOR = 24;
-		LOGICAL_NOT = 25;
-		LOGICAL_AND = 26;
-		LOGICAL_OR = 27;
-		EQ = 28;
-		NEQ = 29;
-		LT = 30;
-		GT = 31;
-		LTEQ = 32;
-		GTEQ = 33;
-		CONDITIONAL = 34;
-		NULLCOALESCE = 35;
-		ASSIGN = 36;
-		ASSIGN_ADD = 37;
-		ASSIGN_SUB = 38;
-		ASSIGN_MULT = 39;
-		ASSIGN_DIV = 40;
-		ASSIGN_MOD = 41;
-		ASSIGN_BITXOR = 42;
-		ASSIGN_BITAND = 43;
-		ASSIGN_BITOR = 44;
-		ASSIGN_LSHIFT = 45;
-		ASSIGN_RSHIFT = 46;
+		OTHER                 = 0;
+
+		LITERAL               = 1;
+		VARACCESS             = 2;
+		VARDECL               = 3;
+		METHODCALL            = 4;
+		CAST                  = 5;
+		ARRAYINDEX            = 6;
+		ARRAYINIT             = 7;
+		TYPECOMPARE           = 8;
+		NEW                   = 9;
+		NEWARRAY              = 10;
+		OP_ADD                = 11;
+		OP_SUB                = 12;
+		OP_MULT               = 13;
+		OP_DIV                = 14;
+		OP_MOD                = 15;
+		OP_INC                = 16;
+		OP_DEC                = 17;
+		BIT_LSHIFT            = 18;
+		BIT_RSHIFT            = 19;
+		BIT_UNSIGNEDRSHIFT    = 20;
+		BIT_AND               = 21;
+		BIT_OR                = 22;
+		BIT_NOT               = 23;
+		BIT_XOR               = 24;
+		LOGICAL_NOT           = 25;
+		LOGICAL_AND           = 26;
+		LOGICAL_OR            = 27;
+		EQ                    = 28;
+		NEQ                   = 29;
+		LT                    = 30;
+		GT                    = 31;
+		LTEQ                  = 32;
+		GTEQ                  = 33;
+		CONDITIONAL           = 34;
+		NULLCOALESCE          = 35;
+		ASSIGN                = 36;
+		ASSIGN_ADD            = 37;
+		ASSIGN_SUB            = 38;
+		ASSIGN_MULT           = 39;
+		ASSIGN_DIV            = 40;
+		ASSIGN_MOD            = 41;
+		ASSIGN_BITXOR         = 42;
+		ASSIGN_BITAND         = 43;
+		ASSIGN_BITOR          = 44;
+		ASSIGN_LSHIFT         = 45;
+		ASSIGN_RSHIFT         = 46;
 		ASSIGN_UNSIGNEDRSHIFT = 47;
-		ANNOTATION = 48;
-		PAREN = 49;
+		ANNOTATION            = 48;
+		PAREN                 = 49;
 		/** @exclude TODO */
-		METHOD_REFERENCE = 50;
+		METHOD_REFERENCE      = 50;
 		/** @exclude TODO */
-		LAMBDA = 51;
+		LAMBDA                = 51;
 		/** @exclude TODO */
-		ANON_METHOD = 52;
+		ANON_METHOD           = 52;
 	}
+
 	/** The kind of expression */
-	required ExpressionKind kind = 1;
-	repeated Expression expressions = 2;
-	repeated Variable variable_decls = 3;
-	optional Type new_type = 4;
-	repeated Type generic_parameters = 5;
-	optional bool is_postfix = 6;
-	optional string literal = 7;
-	optional string variable = 8;
-	optional string method = 9;
-	repeated Expression method_args = 10;
-	optional Declaration anon_declaration = 11;
-	optional Modifier annotation = 12;
+	required ExpressionKind kind       = 1;
+
 	/** @exclude */
-	optional Method lambda = 13;
+	optional string string_1           = 2;
 	/** @exclude */
-	optional bool no_parens = 14;
+	optional string string_2           = 3;
+
+	/** @exclude */
+	optional Expression expression_1   = 4;
+	/** @exclude */
+	optional Expression expression_2   = 5;
+	/** @exclude */
+	optional Expression expression_3   = 6;
+
+	/** @exclude */
+	repeated Expression expressions_1  = 7;
+
+	/** @exclude */
+	optional Type type_1               = 8;
+
+	/** @exclude */
+	repeated Type types_1              = 9;
+
+	/** @exclude */
+	optional Declaration declaration_1 = 10;
+
+	/** @exclude */
+	optional bool bool_1               = 11;
+
+	/** @exclude */
+	optional int32 int32_1             = 12;
+
+	/** @exclude */
+	repeated Variable variables_1      = 13;
+
+	/** @exclude */
+	optional Statement statement_1     = 14;
+
+	/** @exclude */
+	repeated Modifier modifiers_1      = 15;
+
+	/** @exclude */
+	repeated string strings_1          = 16;
+
+	/** @exclude */
+	optional Modifier modifier_1       = 17;
+
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 15;
+	optional ChangeKind structural_change_kind = 18;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 16;
+	optional ChangeKind label_change_kind      = 19;
+
+	/** An annotation expression */
+	message AnnotationExpression {
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = ANNOTATION];
+		/** The annotation */
+		required Modifier       annotation  = 2; // FIXME
+	}
+
+	/** An array access expression */
+	message ArrayAccess {
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = ARRAYINDEX];
+		/** The array expression */
+		required Expression array           = 2;
+		/** The index expression */
+		required Expression index           = 3;
+	}
+
+	/** An array creation expression */
+	message ArrayCreation {
+		/** @exclude */
+		optional ExpressionKind shadow_kind   = 1 [default = NEWARRAY];
+		/** The array type */
+		required Type             new_type    = 2;
+		/** The dimension expressions */
+		repeated Expression       dimensions  = 3;
+		/** The array initializer, if any */
+		//optional ArrayInitializer initializer = 4 [(boa.types.alias) = "statement_1"]; FIXME
+		optional Expression initializer = 4;
+	}
+
+	/** An array initializer expression */
+	message ArrayInitializer {
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = ARRAYINIT];
+		/** The expressions in the initializer */
+		repeated Expression expressions     = 2;
+	}
+
+	/** Any kind of assignment expression */
+	message Assignment {
+		/** @exclude */
+		optional ExpressionKind shadow_kind_1  =  1 [default = ASSIGN];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_2  =  2 [default = ASSIGN_ADD];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_3  =  3 [default = ASSIGN_SUB];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_4  =  4 [default = ASSIGN_MULT];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_5  =  5 [default = ASSIGN_DIV];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_6  =  6 [default = ASSIGN_MOD];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_7  =  7 [default = ASSIGN_BITXOR];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_8  =  8 [default = ASSIGN_BITAND];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_9  =  9 [default = ASSIGN_BITOR];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_10 = 10 [default = ASSIGN_LSHIFT];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_11 = 11 [default = ASSIGN_RSHIFT];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_12 = 12 [default = ASSIGN_UNSIGNEDRSHIFT];
+
+		/** The left hand side of the assignment */
+		required Expression     left_hand_side  = 13;
+		/** The right hand side of the assignment */
+		required Expression     right_hand_side = 14;
+		/** The assignment operator */
+		required ExpressionKind operator        = 15 [(boa.types.alias) = "kind"];
+	}
+
+	/** A boolean literal */
+	message BooleanLiteral {
+		option (boa.types.kind_func) = "isboollit"; 
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = LITERAL];
+		/** The boolean literal value */
+		required bool boolean_value = 2;
+	}
+
+	/** A type cast */
+	message CastExpression {
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = CAST];
+		/** The expression being cast */
+		required Expression expression = 2;
+		/** The type being cast to */
+		required Type       new_type   = 3;
+	}
+
+	/** A character literal */
+	message CharacterLiteral {
+		option (boa.types.kind_func) = "ischarlit"; 
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = LITERAL];
+		/** The string value of the literal */
+		required string escaped_value = 2;
+		/** The value of the literal, converted to an int */
+		required int32  char_value    = 3;
+	}
+
+	/** A class instance creation */
+	message ClassInstanceCreation {
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = NEW];
+		/** The type being instantiated */
+		required Type        new_type             = 2;
+		/** The qualifier expression */
+		optional Expression  expression           = 3;
+		/** The constructor arguments */
+		repeated Expression  arguments            = 4;
+		/** The generic type arguments */
+		repeated Type        type_arguments       = 5;
+		/** The anonymous class declaration being instantiated */
+		optional Declaration anonymous_class_decl = 6;
+	}
+
+	/** A conditional expression (ternary operator) */
+	message ConditionalExpression {
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = CONDITIONAL];
+		/** The conditional expression */
+		required Expression expression      = 2;
+		/** The then/true expression */
+		required Expression then_expression = 3;
+		/** The else/false expression */
+		required Expression else_expression = 4;
+	}
+
+	/** An infix expression */
+	message InfixExpression {
+		option (boa.types.kind_func) = "isinfix"; 
+		/** @exclude */
+		optional ExpressionKind shadow_kind_1  =  1 [default = OP_ADD];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_2  =  2 [default = BIT_AND];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_3  =  3 [default = LOGICAL_AND];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_4  =  4 [default = LOGICAL_OR];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_5  =  5 [default = OP_DIV];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_6  =  6 [default = EQ];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_7  =  7 [default = GT];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_8  =  8 [default = GTEQ];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_9  =  9 [default = BIT_LSHIFT];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_10 = 10 [default = LT];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_11 = 11 [default = LTEQ];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_12 = 12 [default = OP_SUB];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_13 = 13 [default = NEQ];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_14 = 14 [default = BIT_OR];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_15 = 15 [default = OP_MOD];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_16 = 16 [default = BIT_RSHIFT];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_17 = 17 [default = BIT_UNSIGNEDRSHIFT];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_18 = 18 [default = OP_MULT];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_19 = 19 [default = BIT_XOR];
+
+		/** The left operand */
+		required Expression     left_operand      = 20;
+		/** The right operand */
+		required Expression     right_operand     = 21;
+		/** Any additional operands */
+		repeated Expression     extended_operands = 22;
+		/** The operator */
+		required ExpressionKind operator          = 23 [(boa.types.alias) = "kind"];
+	}
+
+	/** An instanceof type test */
+	message InstanceofExpression {
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = TYPECOMPARE];
+		/** The expression being tested */
+		required Expression left_operand    = 2;
+		/** The type to test for */
+		required Type       right_operand   = 3;
+	}
+
+	/** A lambda expression */
+	message LambdaExpression {
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = LAMBDA];
+		/** Whether parentheses around the parameters are present or not */
+		required bool      has_parentheses  = 2;
+		/** The formal parameters - note, the type may or may not be present */
+		repeated Variable  parameters       = 3;
+		/** The body of the lambda */
+		required Statement body             = 4;
+	}
+
+	/** A method invocation */
+	message MethodInvocation {
+		option (boa.types.kind_func) = "ismethod"; 
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = METHODCALL];
+		/** The expression */
+		optional Expression expression      = 2;
+		/** The generic type arguments */
+		repeated Type       type_arguments  = 3;
+		/** The name of the method invoked */
+		required string     name            = 4;
+		/** The arguments of the method invocation */
+		repeated Expression arguments       = 5;
+	}
+
+	/** A method reference */
+	message MethodReference {
+		option (boa.types.kind_func) = "ismethodref"; 
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = METHOD_REFERENCE];
+		/** The type arguments of the method reference */
+		repeated Type type_arguments        = 2;
+
+		/** A creation method reference */
+		message CreationReference {
+			option (boa.types.kind_func) = "iscreationref"; 
+			/** @exclude */
+			optional ExpressionKind shadow_kind = 1 [default = METHOD_REFERENCE];
+			/** The type arguments of the method reference */
+			repeated Type type_arguments        = 2;
+			/** The type referenced */
+			required Type new_type              = 3;
+		}
+
+		/** An expression method reference */
+		message ExpressionMethodReference {
+			option (boa.types.kind_func) = "isexpref"; 
+			/** @exclude */
+			optional ExpressionKind shadow_kind = 1 [default = METHOD_REFERENCE];
+			/** The type arguments of the method reference */
+			repeated Type       type_arguments  = 2;
+			/** The expression */
+			required Expression expression      = 3;
+			/** The method name */
+			required string     name            = 4;
+		}
+
+		/** A super method reference */
+		message SuperMethodReference {
+			option (boa.types.kind_func) = "issuperref"; 
+			/** @exclude */
+			optional ExpressionKind shadow_kind    = 1 [default = METHOD_REFERENCE];
+			/** The type arguments of the method reference */
+			repeated Type           type_arguments = 2;
+			/** The qualifier */
+			//optional VarAccessExpression qualifier      = 3 [(boa.types.alias) = "expression_1"]; FIXME
+			optional string         qualifier      = 3;
+			/** The method name */
+			required string         name           = 4;
+		}
+
+		/** A type method reference */
+		message TypeMethodReference {
+			option (boa.types.kind_func) = "istyperef"; 
+			/** @exclude */
+			optional ExpressionKind shadow_kind = 1 [default = METHOD_REFERENCE];
+			/** The type arguments of the method reference */
+			repeated Type   type_arguments      = 2;
+			/** The type referenced */
+			required Type   new_type            = 3;
+			/** The method name */
+			required string name                = 4;
+		}
+	}
+
+	/** A null coalescing expression */
+	message NullCoalesceExpression {
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = NULLCOALESCE];
+		/** The left hand operand */
+		required Expression lhs             = 2;
+		/** The right hand operand */
+		required Expression rhs             = 3;
+	}
+
+	/** A null literal */
+	message NullLiteral {
+		option (boa.types.kind_func) = "isnulllit"; 
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = LITERAL];
+	}
+
+	/** A number literal */
+	message NumberLiteral {
+		option (boa.types.kind_func) = "isintlit"; 
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = LITERAL];
+		/** The string token of the literal */
+		required string token               = 2;
+	}
+
+	/** A parenthesized expression */
+	message ParenthesizedExpression {
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = PAREN];
+		/** The sub-expression */
+		required Expression expression      = 2;
+	}
+
+	/** A postfix expression */
+	message PostfixExpression {
+		option (boa.types.kind_func) = "ispostfix"; 
+		/** @exclude */
+		optional ExpressionKind shadow_kind_1 = 1 [default = OP_INC];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_2 = 2 [default = OP_DEC];
+
+		/** The operand */
+		required Expression     operand       = 3;
+		/** The operator */
+		required ExpressionKind operator      = 4 [(boa.types.alias) = "kind"];
+	}
+
+	/** A prefix expression */
+	message PrefixExpression {
+		option (boa.types.kind_func) = "isprefix"; 
+		/** @exclude */
+		optional ExpressionKind shadow_kind_1 = 1 [default = OP_DEC];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_2 = 2 [default = OP_INC];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_3 = 3 [default = OP_ADD];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_4 = 4 [default = OP_SUB];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_5 = 5 [default = BIT_NOT];
+		/** @exclude */
+		optional ExpressionKind shadow_kind_6 = 6 [default = LOGICAL_NOT];
+
+		/** The operand */
+		required Expression     operand       = 7;
+		/** The operator */
+		required ExpressionKind operator      = 8 [(boa.types.alias) = "kind"];
+	}
+
+	/** A string literal */
+	message StringLiteral {
+		option (boa.types.kind_func) = "isstringlit"; 
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = LITERAL];
+		/** The token value */
+		required string escaped_value       = 2;
+		/** The string literal value */
+		required string literal_value       = 3;
+	}
+
+	/** A "super" method invocation */
+	message SuperMethodInvocation {
+		option (boa.types.kind_func) = "issupermethod"; 
+		/** @exclude */
+		optional ExpressionKind shadow_kind         = 1 [default = METHODCALL];
+		/** The qualifier */
+		//optional VarAccessExpression qualifier      = 2 [(boa.types.alias) = "expression_1"]; FIXME
+		optional Expression qualifier      = 2;
+		/** The generic type arguments */
+		repeated Type                type_arguments = 3;
+		/** The name of the method invoked */
+		required string              name           = 4;
+		/** The arguments of the method invocation */
+		repeated Expression          arguments      = 5;
+	}
+
+	/** A this literal expression */
+	message ThisExpression {
+		option (boa.types.kind_func) = "isthislit"; 
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = LITERAL];
+		/** The class name qualifier, if any */
+		optional string         qualifier   = 2;
+	}
+
+	/** A type literal */
+	message TypeLiteral {
+		option (boa.types.kind_func) = "istypelit"; 
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = LITERAL];
+		/** The literal token value */
+		required string type_lit            = 2;
+	}
+
+	/** A variable declaration expression */
+	message VariableDeclarationExpression {
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = VARDECL];
+		/** The base modifiers declared */
+		repeated Modifier modifiers         = 2;
+		/** The base type declared */
+		required Type     new_type          = 3;
+		/** The list of variable fragments */
+		repeated Variable fragments         = 4;
+	}
+
+/*
+FIXME
+SuperFieldAccess
+FieldAccess
+Name
+	QualifiedName
+	SimpleName - Identifier
+*/
+	/** A variable access expression */
+	message VarAccessExpression {
+		/** @exclude */
+		optional ExpressionKind shadow_kind = 1 [default = VARACCESS];
+		/** The identifier of what is being accessed */
+		required string     identifier      = 2;
+        /** For fields, the qualifier */
+        optional Expression qualifier       = 3;
+	}
 }
 
 /** A single modifier */
@@ -295,104 +937,217 @@ message Modifier {
 	enum ModifierKind {
 		option allow_alias = true;
 		/** Any other modifier - the value is in the <a href="#Modifier">Modifier</a>'s <code>other</code> attribute */
-		OTHER = 0;
-		/** A <a href="#Visibility">Visibility</a> modifier - the value is in the <a href="#Modifier">Modifier</a>'s <code>visibility</code> attribute */
-		VISIBILITY = 1;
+		OTHER        = 0;
+
 		/** An annotation modifier */
-		ANNOTATION = 2;
+		ANNOTATION   = 1;
 		/** A final modifier */
-		FINAL = 3;
+		FINAL        = 2;
 		/** A static modifier */
-		STATIC = 4;
+		STATIC       = 3;
 		/** A synchronized modifier */
-		SYNCHRONIZED = 5;
+		SYNCHRONIZED = 4;
 		/** @exclude */
-		SYNC = 5;
+		SYNC         = 4;
 		/** An abstract modifier */
-		ABSTRACT = 6;
-	}
-	/** A visibility modifier */
-	enum Visibility {
-		option allow_alias = true;
+		ABSTRACT     = 5;
+
 		/** A public modifier */
-		PUBLIC = 1;
+		PUBLIC       = 6;
 		/** A private modifier */
-		PRIVATE = 2;
+		PRIVATE      = 7;
 		/** A protected modifier */
-		PROTECTED = 3;
-		/** A namespace (aka, default, aka package) visibility modifier */
-		NAMESPACE = 4;
-		/** @exclude */
-		PACKAGE = 4;
-		/** @exclude */
-		DEFAULT = 4;
+		PROTECTED    = 8;
+		/** An internal modifier */
+		INTERNAL     = 9;
 	}
+
 	/** The kind of modifier */
-	required ModifierKind kind = 1;
-	/** A kind of visibility modifier */
-	optional Visibility visibility = 2;
-	/** If the <code>kind</code> is <code>ANNOTATION</code>, then the name of the annotation */
-	optional string annotation_name = 3;
-	/** If the <code>kind</code> is <code>ANNOTATION</code>, then a list of all members explicitly assigned values */
-	repeated string annotation_members = 4;
-	/** If the <code>kind</code> is <code>ANNOTATION</code>, then a list of all values that were assigned to members */
-	repeated Expression annotation_values = 5;
-	/** If the <code>kind</code> is <code>OTHER</code>, the modifier string from the source code */
-	optional string other = 6;
+	required ModifierKind   kind             = 1;
+
+    /** @exclude */
+    optional string         string_1         = 2;
+
+    /** @exclude */
+    repeated string         strings_1        = 3;
+
+    /** @exclude */
+    repeated Expression     expressions_1    = 4;
+
+    /** @exclude */
+    optional Expression     expression_1     = 5;
+
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 7;
+	optional ChangeKind structural_change_kind = 6;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 8;
+	optional ChangeKind label_change_kind      = 7;
+
+	/** A normal modifier */
+	message NormalModifier {
+		/** @exclude */
+		optional ModifierKind shadow_kind_1 = 1 [default = OTHER];
+		/** @exclude */
+		optional ModifierKind shadow_kind_2 = 2 [default = FINAL];
+		/** @exclude */
+		optional ModifierKind shadow_kind_3 = 3 [default = STATIC];
+		/** @exclude */
+		optional ModifierKind shadow_kind_4 = 4 [default = SYNCHRONIZED];
+		/** @exclude */
+		optional ModifierKind shadow_kind_5 = 5 [default = ABSTRACT];
+        /* The kind of modifier */
+		required ModifierKind kind          = 6 [(boa.types.alias) = "kind"];
+        /** If kind is OTHER, the modifier */
+        optional string other = 7;
+    }
+
+	/** A visibility modifier */
+	message VisibilityModifier {
+		/** @exclude */
+		optional ModifierKind shadow_kind_1 = 1 [default = PUBLIC];
+		/** @exclude */
+		optional ModifierKind shadow_kind_2 = 2 [default = PRIVATE];
+		/** @exclude */
+		optional ModifierKind shadow_kind_3 = 3 [default = PROTECTED];
+		/** @exclude */
+		optional ModifierKind shadow_kind_4 = 4 [default = INTERNAL];
+        /* The kind of visibility modifier */
+		required ModifierKind kind          = 6 [(boa.types.alias) = "kind"];
+    }
+
+	/** An annotation */
+	message Annotation {
+		option (boa.types.kind_func) = "isannot"; 
+		/** @exclude */
+		optional ModifierKind shadow_kind = 1 [default = ANNOTATION];
+		/** The name of the annotation type */
+		required string       type_name   = 2;
+
+		/** A marker annotation with no values */
+		message MarkerAnnotation {
+			option (boa.types.kind_func) = "ismarkerannot"; 
+			/** @exclude */
+			optional ModifierKind shadow_kind = 1 [default = ANNOTATION];
+			/** The name of the annotation type */
+			required string       type_name   = 2;
+		}
+
+		/** A normal annotation */
+		message NormalAnnotation {
+			option (boa.types.kind_func) = "isnormalannot"; 
+			/** @exclude */
+			optional ModifierKind shadow_kind = 1 [default = ANNOTATION];
+			/** The name of the annotation type */
+			required string       type_name   = 2;
+			/** The names of members */
+			repeated string       names       = 3;
+			/** The values of members */
+			repeated Expression   values      = 4;;
+		}
+
+		/** An annotation with a single member value */
+		message SingleMemberAnnotation {
+			option (boa.types.kind_func) = "issinglememberannot"; 
+			/** @exclude */
+			optional ModifierKind shadow_kind = 1 [default = ANNOTATION];
+			/** The name of the annotation type */
+			required string       type_name   = 2;
+			/** The annotation value */
+			required Expression   value       = 3;
+		}
+	}
 }
 
 /** @exclude A single comment */
 message Comment {
+	/** @exclude Position information for a node */
+	message PositionInfo {
+		/** The starting position of the element, in characters from the start of the file */
+		required int32 start_pos  = 1;
+
+		/** The length of the element, in characters */
+		required int32 length     = 2;
+
+		/** The starting line of the element, in lines from the start of the file */
+		required int32 start_line = 3;
+		/** The starting column of the element, in characters from the start of the line */
+		required int32 start_col  = 4;
+
+		/** The ending line of the element, in lines from the start of the file */
+		required int32 end_line   = 5;
+		/** The ending column of the element, in characters from the start of the line */
+		required int32 end_col    = 6;
+	}
+
 	/** @exclude The kind of comment */
 	enum CommentKind {
 		option allow_alias = true;
 		/** Any other kind of comment */
-		OTHER = 0;
+		OTHER         = 0;
 
 		/** A line comment */
-		LINE = 1;
+		LINE          = 1;
 		/** A block comment */
-		BLOCK = 2;
+		BLOCK         = 2;
 		/** A documentation comment */
-		DOC = 3;
+		DOC           = 3;
 		/** @exclude */
 		DOCUMENTATION = 3;
 		/** A specification comment */
-		SPEC = 4;
+		SPEC          = 4;
 		/** @exclude */
 		SPECIFICATION = 4;
 	}
+
 	/** The kind of comment */
-	required CommentKind kind = 1;
-	/** The value of the comment */
-	required string value = 2;
-	/** Position information for the comment */
-	required PositionInfo position = 3;
+	required CommentKind  kind           = 1;
+
+	/** @exclude */
+	required string       string_1       = 2;
+	/** @exclude */
+	required PositionInfo positioninfo_1 = 3;
+
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
 	optional ChangeKind structural_change_kind = 4;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 5;
-}
+	optional ChangeKind label_change_kind      = 5;
 
-/** @exclude Position information for a node */
-message PositionInfo {
-	/** The starting position of the element, in characters from the start of the file */
-	required int32 start_pos  = 1;
+	/** @exclude A single line comment */
+	message LineComment {
+		/** @exclude */
+		optional CommentKind shadow_kind = 1 [default = LINE];
+		/** The value of the comment */
+		required string       value      = 2;
+		/** Position information for the comment */
+		required PositionInfo position   = 3;
+	}
 
-	/** The length of the element, in characters */
-	required int32 length     = 2;
+	/** @exclude A single block comment */
+	message BlockComment {
+		/** @exclude */
+		optional CommentKind shadow_kind = 1 [default = BLOCK];
+		/** The value of the comment */
+		required string       value      = 2;
+		/** Position information for the comment */
+		required PositionInfo position   = 3;
+	}
 
-	/** The starting line of the element, in lines from the start of the file */
-	required int32 start_line = 3;
-	/** The starting column of the element, in characters from the start of the line */
-	required int32 start_col  = 4;
+	/** @exclude A single documentation comment */
+	message DocComment {
+		/** @exclude */
+		optional CommentKind shadow_kind = 1 [default = DOC];
+		/** The value of the comment */
+		required string       value      = 2;
+		/** Position information for the comment */
+		required PositionInfo position   = 3;
+	}
 
-	/** The ending line of the element, in lines from the start of the file */
-	required int32 end_line   = 5;
-	/** The ending column of the element, in characters from the start of the line */
-	required int32 end_col    = 6;
+	/** @exclude A single specification comment */
+	message SpecificationComment {
+		/** @exclude */
+		optional CommentKind shadow_kind = 1 [default = SPEC];
+		/** The value of the comment */
+		required string       value      = 2;
+		/** Position information for the comment */
+		required PositionInfo position   = 3;
+	}
 }

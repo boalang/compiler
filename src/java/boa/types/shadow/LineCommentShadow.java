@@ -1,3 +1,4 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
  * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
@@ -16,52 +17,89 @@
  */
 package boa.types.shadow;
 
-import boa.compiler.ast.Call;
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
-import boa.types.BoaInt;
-import boa.types.BoaString;
-import boa.types.BoaProtoList;
-import boa.types.BoaShadowType;
-import boa.types.proto.enums.CommentKindProtoMap;
-import boa.types.proto.CommentProtoTuple;
-import boa.types.proto.StatementProtoTuple;
 
 /**
- * A shadow type for LineComment.
- * 
+ * A shadow type for Comment.
+ *
  * @author rdyer
  * @author kaushin
  */
-public class LineCommentShadow extends BoaShadowType  {
+public class LineCommentShadow extends boa.types.BoaShadowType  {
     /**
      * Construct a {@link LineCommentShadow}.
      */
     public LineCommentShadow() {
-        super(new CommentProtoTuple());
+        super(new boa.types.proto.CommentProtoTuple());
 
-       
-        
+        addShadow("value", new boa.types.BoaString());
+        addShadow("position", new boa.types.proto.PositionInfoProtoTuple());
     }
 
     /** {@inheritDoc} */
     @Override
-	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
+    public boolean assigns(final boa.types.BoaType that) {
+        if (that instanceof boa.types.BoaShadowType)
+            return shadowedType.assigns(that);
 
-       
+        if (!super.assigns(that))
+            return false;
 
+        return this.getClass() == that.getClass();
+    }
 
-        throw new RuntimeException("invalid shadow field: " + name);
+    /** {@inheritDoc} */
+    @Override
+    public Node lookupCodegen(final String name, final Factor fact, final SymbolTable env) {
+        if ("value".equals(name)) return ASTFactory.createSelector("string_1", new boa.types.BoaString(), env);
+        if ("position".equals(name)) return ASTFactory.createSelector("positioninfo_1", new boa.types.proto.PositionInfoProtoTuple(), env);
+
+        throw new RuntimeException("invalid shadow field '" + name + "' in shadow type LineCommentShadow");
     }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("CommentKind", "LINE", new CommentKindProtoMap(), env);
+        return getKindExpression("CommentKind", "LINE", new boa.types.proto.enums.CommentKindProtoMap(), env);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        final List<Expression> l = new ArrayList<Expression>();
+
+
+        return l;
+    }
+
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public boa.types.Ast.Comment flattenMessage(final boa.types.Ast.Comment.LineComment m) {
+        final boa.types.Ast.Comment.Builder b = boa.types.Ast.Comment.newBuilder();
+        b.setKind(boa.types.Ast.Comment.CommentKind.LINE);
+        b.setString1(m.getValue());
+        b.setPositioninfo1(m.getPosition());
+        return b.build();
     }
 
     /** {@inheritDoc} */

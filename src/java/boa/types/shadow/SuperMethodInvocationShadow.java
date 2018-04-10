@@ -1,3 +1,4 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
  * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
@@ -16,72 +17,95 @@
  */
 package boa.types.shadow;
 
-import boa.compiler.ast.Call;
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
-import boa.types.BoaInt;
-import boa.types.BoaString;
-import boa.types.BoaProtoList;
-import boa.types.BoaShadowType;
-import boa.types.proto.enums.ExpressionKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
-import boa.types.proto.TypeProtoTuple;
+
 /**
- * A shadow type for SuperMethodInvocation.
- * 
+ * A shadow type for Expression.
+ *
  * @author rdyer
  * @author kaushin
  */
-public class SuperMethodInvocationShadow extends BoaShadowType  {
+public class SuperMethodInvocationShadow extends boa.types.BoaShadowType  {
     /**
      * Construct a {@link SuperMethodInvocationShadow}.
      */
     public SuperMethodInvocationShadow() {
-        super(new ExpressionProtoTuple());
+        super(new boa.types.proto.ExpressionProtoTuple());
 
-
-        addShadow("qualifier", new ExpressionProtoTuple());
-        addShadow("arguments",  new BoaProtoList(new ExpressionProtoTuple()));
-        addShadow("type_infer", new ExpressionProtoTuple());
-        addShadow("name", new BoaString());
+        addShadow("qualifier", new boa.types.proto.ExpressionProtoTuple());
+        addShadow("type_arguments", new boa.types.BoaProtoList(new boa.types.proto.TypeProtoTuple()));
+        addShadow("name", new boa.types.BoaString());
+        addShadow("arguments", new boa.types.BoaProtoList(new boa.types.proto.ExpressionProtoTuple()));
     }
 
     /** {@inheritDoc} */
     @Override
-	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
-        if ("qualifier".equals(name)) {
-            // TODO
-            return null;
-        }
+    public boolean assigns(final boa.types.BoaType that) {
+        if (that instanceof boa.types.BoaShadowType)
+            return shadowedType.assigns(that);
 
-        if ("arguments".equals(name)) {
-            // ${0}.expressions[1]
-            return ASTFactory.createFactor("expressions",ASTFactory.createIntLiteral(1),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
-        }
+        if (!super.assigns(that))
+            return false;
 
-        if ("type_infer".equals(name)) {
-            // TODO
-           
-             return null;
-        }
+        return this.getClass() == that.getClass();
+    }
 
-        if ("name".equals(name)) {
-            // ${0}.method
-            return ASTFactory.createSelector( "method", new BoaString(),  env);
-        }
+    /** {@inheritDoc} */
+    @Override
+    public Node lookupCodegen(final String name, final Factor fact, final SymbolTable env) {
+        if ("qualifier".equals(name)) return ASTFactory.createSelector("expression_1", new boa.types.proto.ExpressionProtoTuple(), env);
+        if ("type_arguments".equals(name)) return ASTFactory.createSelector("types_1", new boa.types.BoaProtoList(new boa.types.BoaProtoList(new boa.types.proto.TypeProtoTuple())), env);
+        if ("name".equals(name)) return ASTFactory.createSelector("string_1", new boa.types.BoaString(), env);
+        if ("arguments".equals(name)) return ASTFactory.createSelector("expressions_1", new boa.types.BoaProtoList(new boa.types.BoaProtoList(new boa.types.proto.ExpressionProtoTuple())), env);
 
-        throw new RuntimeException("invalid shadow field: " + name);
+        throw new RuntimeException("invalid shadow field '" + name + "' in shadow type SuperMethodInvocationShadow");
     }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "METHODCALL", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "METHODCALL", new boa.types.proto.enums.ExpressionKindProtoMap(), env);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        return getManytoOne(env, b, "issupermethod", new boa.types.proto.ExpressionProtoTuple());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        final List<Expression> l = new ArrayList<Expression>();
+
+
+        return l;
+    }
+
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public boa.types.Ast.Expression flattenMessage(final boa.types.Ast.Expression.SuperMethodInvocation m) {
+        final boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+        b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
+        if (m.hasQualifier()) b.setExpression1(m.getQualifier());
+        for (int i = 0; i < m.getTypeArgumentsCount(); i++) b.addTypes1(m.getTypeArguments(i));
+        b.setString1(m.getName());
+        for (int i = 0; i < m.getArgumentsCount(); i++) b.addExpressions1(m.getArguments(i));
+        return b.build();
     }
 
     /** {@inheritDoc} */

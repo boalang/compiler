@@ -1,6 +1,8 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,54 +23,50 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaProtoList;
-import boa.types.BoaProtoTuple;
-import boa.types.BoaString;
-import boa.types.BoaType;
-import boa.types.proto.enums.ModifierKindProtoMap;
-import boa.types.proto.enums.VisibilityProtoMap;
-
 /**
  * A {@link ModifierProtoTuple}.
- * 
+ *
  * @author rdyer
  */
-public class ModifierProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+public class ModifierProtoTuple extends boa.types.BoaProtoTuple {
+    private final static List<boa.types.BoaType> members = new ArrayList<boa.types.BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int count = 0;
 
-		names.put("kind", counter++);
-		members.add(new ModifierKindProtoMap());
+        names.put("kind", count++);
+        members.add(new boa.types.proto.enums.ModifierKindProtoMap());
 
-		names.put("visibility", counter++);
-		members.add(new VisibilityProtoMap());
+        names.put("string_1", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("annotation_name", counter++);
-		members.add(new BoaString());
+        names.put("strings_1", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.BoaString()));
 
-		names.put("annotation_members", counter++);
-		members.add(new BoaProtoList(new BoaString()));
+        names.put("expressions_1", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.proto.ExpressionProtoTuple()));
 
-		names.put("annotation_values", counter++);
-		members.add(new BoaProtoList(new ExpressionProtoTuple()));
+        names.put("expression_1", count++);
+        members.add(new boa.types.proto.ExpressionProtoTuple());
 
-		names.put("other", counter++);
-		members.add(new BoaString());
-	}
+        names.put("structural_change_kind", count++);
+        members.add(new boa.types.proto.enums.ChangeKindProtoMap());
 
-	/**
-	 * Construct a {@link ModifierProtoTuple}.
-	 */
-	public ModifierProtoTuple() {
-		super(members, names);
-	}
+        names.put("label_change_kind", count++);
+        members.add(new boa.types.proto.enums.ChangeKindProtoMap());
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Ast.Modifier";
-	}
+    /**
+     * Construct a {@link ModifierProtoTuple}.
+     */
+    public ModifierProtoTuple() {
+        super(members, names);
+    }
+
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Ast.Modifier";
+    }
 }

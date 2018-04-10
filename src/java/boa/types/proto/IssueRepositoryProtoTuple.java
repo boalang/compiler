@@ -1,6 +1,8 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,40 +23,38 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaProtoTuple;
-import boa.types.BoaString;
-import boa.types.BoaType;
-import boa.types.proto.enums.IssueLabelProtoMap;
-
 /**
- * A {@link BoaProtoTuple}.
- * 
+ * A {@link IssueRepositoryProtoTuple}.
+ *
  * @author rdyer
  */
-public class IssueRepositoryProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+public class IssueRepositoryProtoTuple extends boa.types.BoaProtoTuple {
+    private final static List<boa.types.BoaType> members = new ArrayList<boa.types.BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int count = 0;
 
-		names.put("url", counter++);
-		members.add(new BoaString());
+        names.put("url", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("name", counter++);
-		members.add(new BoaString());
-	}
+        names.put("name", count++);
+        members.add(new boa.types.BoaString());
 
-	/**
-	 * Construct a IssueRepositoryProtoTuple.
-	 */
-	public IssueRepositoryProtoTuple() {
-		super(members, names);
-	}
+        names.put("key", count++);
+        members.add(new boa.types.BoaString());
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Issues.IssueRepository";
-	}
+    /**
+     * Construct a {@link IssueRepositoryProtoTuple}.
+     */
+    public IssueRepositoryProtoTuple() {
+        super(members, names);
+    }
+
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Issues.IssueRepository";
+    }
 }

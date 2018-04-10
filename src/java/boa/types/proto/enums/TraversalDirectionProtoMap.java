@@ -1,6 +1,8 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +20,15 @@ package boa.types.proto.enums;
 
 import com.google.protobuf.ProtocolMessageEnum;
 
-import boa.types.BoaProtoMap;
-
 /**
  * A {@link TraversalDirectionProtoMap}.
- * 
- * @author rramu
+ *
+ * @author rdyer
  */
-public class TraversalDirectionProtoMap extends BoaProtoMap {
-	/** {@inheritDoc} */
-	@Override
-	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-		return boa.types.Graph.Traversal.TraversalDirection.class;
-	}
+public class TraversalDirectionProtoMap extends boa.types.BoaProtoMap {
+    /** {@inheritDoc} */
+    @Override
+    protected Class<? extends ProtocolMessageEnum> getEnumClass() {
+        return boa.types.Graph.Traversal.TraversalDirection.class;
+    }
 }

@@ -1,3 +1,4 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
  * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
@@ -16,58 +17,97 @@
  */
 package boa.types.shadow;
 
-import boa.compiler.ast.Call;
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
-import boa.types.BoaInt;
-import boa.types.BoaString;
-import boa.types.BoaProtoList;
-import boa.types.BoaShadowType;
-import boa.types.proto.enums.ExpressionKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
-
-import boa.compiler.ast.statements.IfStatement;
-import boa.compiler.ast.statements.Block;
 
 /**
- * A shadow type for NormalAnnotation.
- * 
+ * A shadow type for Modifier.
+ *
  * @author rdyer
  * @author kaushin
  */
-public class NormalAnnotationShadow extends AnnotationShadow  {
+public class NormalAnnotationShadow extends boa.types.BoaShadowType  {
     /**
      * Construct a {@link NormalAnnotationShadow}.
      */
     public NormalAnnotationShadow() {
-        super();
+        super(new boa.types.proto.ModifierProtoTuple());
+
+        addShadow("type_name", new boa.types.BoaString());
+        addShadow("names", new boa.types.BoaProtoList(new boa.types.BoaString()));
+        addShadow("values", new boa.types.BoaProtoList(new boa.types.proto.ExpressionProtoTuple()));
     }
 
     /** {@inheritDoc} */
     @Override
-	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
-       
-        throw new RuntimeException("invalid shadow field: " + name);
+    public boolean assigns(final boa.types.BoaType that) {
+        if (that instanceof boa.types.BoaShadowType)
+            return shadowedType.assigns(that);
+
+        if (!super.assigns(that))
+            return false;
+
+        return this.getClass() == that.getClass();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Node lookupCodegen(final String name, final Factor fact, final SymbolTable env) {
+        if ("type_name".equals(name)) return ASTFactory.createSelector("string_1", new boa.types.BoaString(), env);
+        if ("names".equals(name)) return ASTFactory.createSelector("strings_1", new boa.types.BoaProtoList(new boa.types.BoaProtoList(new boa.types.BoaString())), env);
+        if ("values".equals(name)) return ASTFactory.createSelector("expressions_1", new boa.types.BoaProtoList(new boa.types.BoaProtoList(new boa.types.proto.ExpressionProtoTuple())), env);
+
+        throw new RuntimeException("invalid shadow field '" + name + "' in shadow type NormalAnnotationShadow");
     }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "ANNOTATION", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ModifierKind", "ANNOTATION", new boa.types.proto.enums.ModifierKindProtoMap(), env);
     }
 
-     /** {@inheritDoc} */
+    /** {@inheritDoc} */
     @Override
-    public IfStatement getManytoOne(final SymbolTable env ,Block b) {
-       
-        // if(isboollit(${0})) b;
-        return getManytoOne( env , b, "isstringlit");
-        
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        return getManytoOne(env, b, "isnormalannot", new boa.types.proto.ModifierProtoTuple());
     }
-    
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        final List<Expression> l = new ArrayList<Expression>();
+
+
+        return l;
+    }
+
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public boa.types.Ast.Modifier flattenMessage(final boa.types.Ast.Modifier.Annotation.NormalAnnotation m) {
+        final boa.types.Ast.Modifier.Builder b = boa.types.Ast.Modifier.newBuilder();
+        b.setKind(boa.types.Ast.Modifier.ModifierKind.ANNOTATION);
+        b.setString1(m.getTypeName());
+        for (int i = 0; i < m.getNamesCount(); i++) b.addStrings1(m.getNames(i));
+        for (int i = 0; i < m.getValuesCount(); i++) b.addExpressions1(m.getValues(i));
+        return b.build();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "NormalAnnotation";
+    }
 }

@@ -1,6 +1,8 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,72 +23,86 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaBool;
-import boa.types.BoaProtoList;
-import boa.types.BoaProtoTuple;
-import boa.types.BoaString;
-import boa.types.BoaType;
-import boa.types.proto.enums.ExpressionKindProtoMap;
-
 /**
  * A {@link ExpressionProtoTuple}.
- * 
+ *
  * @author rdyer
  */
-public class ExpressionProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+public class ExpressionProtoTuple extends boa.types.BoaProtoTuple {
+    private final static List<boa.types.BoaType> members = new ArrayList<boa.types.BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int count = 0;
 
-		names.put("kind", counter++);
-		members.add(new ExpressionKindProtoMap());
+        names.put("kind", count++);
+        members.add(new boa.types.proto.enums.ExpressionKindProtoMap());
 
-		names.put("expressions", counter++);
-		members.add(new BoaProtoList(new ExpressionProtoTuple()));
+        names.put("string_1", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("variable_decls", counter++);
-		members.add(new BoaProtoList(new VariableProtoTuple()));
+        names.put("string_2", count++);
+        members.add(new boa.types.BoaString());
 
-		names.put("new_type", counter++);
-		members.add(new TypeProtoTuple());
+        names.put("expression_1", count++);
+        members.add(new boa.types.proto.ExpressionProtoTuple());
 
-		names.put("generic_parameters", counter++);
-		members.add(new BoaProtoList(new TypeProtoTuple()));
+        names.put("expression_2", count++);
+        members.add(new boa.types.proto.ExpressionProtoTuple());
 
-		names.put("is_postfix", counter++);
-		members.add(new BoaBool());
+        names.put("expression_3", count++);
+        members.add(new boa.types.proto.ExpressionProtoTuple());
 
-		names.put("literal", counter++);
-		members.add(new BoaString());
+        names.put("expressions_1", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.proto.ExpressionProtoTuple()));
 
-		names.put("variable", counter++);
-		members.add(new BoaString());
+        names.put("type_1", count++);
+        members.add(new boa.types.proto.TypeProtoTuple());
 
-		names.put("method", counter++);
-		members.add(new BoaString());
+        names.put("types_1", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.proto.TypeProtoTuple()));
 
-		names.put("method_args", counter++);
-		members.add(new BoaProtoList(new ExpressionProtoTuple()));
+        names.put("declaration_1", count++);
+        members.add(new boa.types.proto.DeclarationProtoTuple());
 
-		names.put("anon_declaration", counter++);
-		members.add(new DeclarationProtoTuple());
+        names.put("bool_1", count++);
+        members.add(new boa.types.BoaBool());
 
-		names.put("annotation", counter++);
-		members.add(new ModifierProtoTuple());
-	}
+        names.put("int32_1", count++);
+        members.add(new boa.types.BoaInt());
 
-	/**
-	 * Construct a {@link ExpressionProtoTuple}.
-	 */
-	public ExpressionProtoTuple() {
-		super(members, names);
-	}
+        names.put("variables_1", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.proto.VariableProtoTuple()));
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Ast.Expression";
-	}
+        names.put("statement_1", count++);
+        members.add(new boa.types.proto.StatementProtoTuple());
+
+        names.put("modifiers_1", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.proto.ModifierProtoTuple()));
+
+        names.put("strings_1", count++);
+        members.add(new boa.types.BoaProtoList(new boa.types.BoaString()));
+
+        names.put("modifier_1", count++);
+        members.add(new boa.types.proto.ModifierProtoTuple());
+
+        names.put("structural_change_kind", count++);
+        members.add(new boa.types.proto.enums.ChangeKindProtoMap());
+
+        names.put("label_change_kind", count++);
+        members.add(new boa.types.proto.enums.ChangeKindProtoMap());
+    }
+
+    /**
+     * Construct a {@link ExpressionProtoTuple}.
+     */
+    public ExpressionProtoTuple() {
+        super(members, names);
+    }
+
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Ast.Expression";
+    }
 }

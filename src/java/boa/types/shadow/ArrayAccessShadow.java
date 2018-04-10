@@ -1,3 +1,4 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
  * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
@@ -16,58 +17,89 @@
  */
 package boa.types.shadow;
 
-import boa.compiler.ast.Call;
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
-import boa.types.BoaInt;
-import boa.types.BoaProtoList;
-import boa.types.BoaShadowType;
-import boa.types.proto.enums.ExpressionKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
 
 /**
- * A shadow type for ArrayAccess.
+ * A shadow type for Expression.
  *
  * @author rdyer
  * @author kaushin
  */
-public class ArrayAccessShadow extends BoaShadowType  {
+public class ArrayAccessShadow extends boa.types.BoaShadowType  {
     /**
      * Construct a {@link ArrayAccessShadow}.
      */
     public ArrayAccessShadow() {
-        super(new ExpressionProtoTuple());
+        super(new boa.types.proto.ExpressionProtoTuple());
 
-        addShadow("array", new ExpressionProtoTuple());
-        addShadow("index", new ExpressionProtoTuple());
+        addShadow("array", new boa.types.proto.ExpressionProtoTuple());
+        addShadow("index", new boa.types.proto.ExpressionProtoTuple());
     }
 
     /** {@inheritDoc} */
     @Override
-	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
+    public boolean assigns(final boa.types.BoaType that) {
+        if (that instanceof boa.types.BoaShadowType)
+            return shadowedType.assigns(that);
 
-        if ("array".equals(name)) {
-            // ${0}.expressions[0]
-            return ASTFactory.createFactor("expressions",ASTFactory.createIntLiteral(0),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
-        }
+        if (!super.assigns(that))
+            return false;
 
-        if ("index".equals(name)) {
-            // ${0}.expressions[1]
-            return ASTFactory.createFactor("expressions",ASTFactory.createIntLiteral(1),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
-        }
+        return this.getClass() == that.getClass();
+    }
 
-        throw new RuntimeException("invalid shadow field: " + name);
+    /** {@inheritDoc} */
+    @Override
+    public Node lookupCodegen(final String name, final Factor fact, final SymbolTable env) {
+        if ("array".equals(name)) return ASTFactory.createSelector("expression_1", new boa.types.proto.ExpressionProtoTuple(), env);
+        if ("index".equals(name)) return ASTFactory.createSelector("expression_2", new boa.types.proto.ExpressionProtoTuple(), env);
+
+        throw new RuntimeException("invalid shadow field '" + name + "' in shadow type ArrayAccessShadow");
     }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "ARRAYINDEX", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "ARRAYINDEX", new boa.types.proto.enums.ExpressionKindProtoMap(), env);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        final List<Expression> l = new ArrayList<Expression>();
+
+
+        return l;
+    }
+
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public boa.types.Ast.Expression flattenMessage(final boa.types.Ast.Expression.ArrayAccess m) {
+        final boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+        b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYINDEX);
+        b.setExpression1(m.getArray());
+        b.setExpression2(m.getIndex());
+        return b.build();
     }
 
     /** {@inheritDoc} */

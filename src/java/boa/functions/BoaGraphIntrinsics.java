@@ -39,6 +39,7 @@ public class BoaGraphIntrinsics {
 		return cfg;
 	}
 
+/* FIXME shadows
 	@FunctionSpec(name = "get_nodes_with_definition", returnType = "set of string", formalParameters = { "CFGNode" })
 	public static HashSet<String> getNodesWithDefinition(final CFGNode node) {
 		final HashSet<String> vardef = new HashSet<String>();
@@ -128,4 +129,5 @@ public class BoaGraphIntrinsics {
 			traverseExpr(varused, vardecls.getInitializer());
 		}
 	}
+*/
 }

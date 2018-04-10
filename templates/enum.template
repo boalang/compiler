@@ -1,6 +1,8 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package boa.types.proto.enums;
+package ${pkg}.proto.enums;
 
 import com.google.protobuf.ProtocolMessageEnum;
 
-import boa.types.BoaProtoMap;
-
 /**
- * A {@link VisibilityProtoMap}.
- * 
+ * A {@link ${name}ProtoMap}.
+ *
  * @author rdyer
  */
-public class VisibilityProtoMap extends BoaProtoMap {
-	/** {@inheritDoc} */
-	@Override
-	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-		return boa.types.Ast.Modifier.Visibility.class;
-	}
+public class ${name}ProtoMap extends ${pkg2}.BoaProtoMap {
+    /** {@inheritDoc} */
+    @Override
+    protected Class<? extends ProtocolMessageEnum> getEnumClass() {
+        return ${fqname}.class;
+    }
 }

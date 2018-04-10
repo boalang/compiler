@@ -1,3 +1,4 @@
+// NOTE: This file was automatically generated - DO NOT EDIT
 /*
  * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
@@ -16,92 +17,95 @@
  */
 package boa.types.shadow;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import boa.compiler.ast.Call;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
-import boa.types.BoaInt;
-import boa.types.BoaProtoList;
-import boa.types.BoaShadowType;
-import boa.types.proto.enums.ExpressionKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
-import boa.types.proto.TypeProtoTuple;
 
-import boa.compiler.ast.statements.IfStatement;
-import boa.compiler.ast.statements.Block;
 /**
- * A shadow type for PrefixExpression.
- * 
+ * A shadow type for Expression.
+ *
  * @author rdyer
  * @author kaushin
  */
-public class PrefixExpressionShadow extends BoaShadowType  {
+public class PrefixExpressionShadow extends boa.types.BoaShadowType  {
     /**
      * Construct a {@link PrefixExpressionShadow}.
      */
     public PrefixExpressionShadow() {
-        super(new ExpressionProtoTuple());
+        super(new boa.types.proto.ExpressionProtoTuple());
 
-        addShadow("operand", new ExpressionProtoTuple());
-        addShadow("operator", new ExpressionKindProtoMap());
+        addShadow("operand", new boa.types.proto.ExpressionProtoTuple());
+        addShadow("operator", new boa.types.proto.enums.ExpressionKindProtoMap());
     }
 
     /** {@inheritDoc} */
     @Override
-	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
+    public boolean assigns(final boa.types.BoaType that) {
+        if (that instanceof boa.types.BoaShadowType)
+            return shadowedType.assigns(that);
 
-        if ("operand".equals(name)) {
-            // ${0}.expressions[0]
-            return ASTFactory.createFactor("expressions",ASTFactory.createIntLiteral(0),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
-        }
+        if (!super.assigns(that))
+            return false;
 
-        if ("operator".equals(name)) {
-            // ${0}.kind
-            return ASTFactory.createSelector("kind", new ExpressionKindProtoMap(), env);
-        }
+        return this.getClass() == that.getClass();
+    }
 
-        throw new RuntimeException("invalid shadow field: " + name);
+    /** {@inheritDoc} */
+    @Override
+    public Node lookupCodegen(final String name, final Factor fact, final SymbolTable env) {
+        if ("operand".equals(name)) return ASTFactory.createSelector("expression_1", new boa.types.proto.ExpressionProtoTuple(), env);
+        if ("operator".equals(name)) return ASTFactory.createSelector("kind", new boa.types.proto.enums.ExpressionKindProtoMap(), env);
+
+        throw new RuntimeException("invalid shadow field '" + name + "' in shadow type PrefixExpressionShadow");
     }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "IT_XOR", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "OP_DEC", new boa.types.proto.enums.ExpressionKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */
     @Override
-    public IfStatement getManytoOne(final SymbolTable env ,Block b) {
-       
-        // if(isboollit(${0})) b;
-        final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
-
-
-        IfStatement ifstmt = new IfStatement(ASTFactory.createCallExpr("isprefix", env, new ExpressionProtoTuple(), tree),b);
-        return ifstmt ;   
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        return getManytoOne(env, b, "isprefix", new boa.types.proto.ExpressionProtoTuple());
     }
-
-  
 
     /** {@inheritDoc} */
     @Override
     public List<Expression> getOneToMany(final SymbolTable env) {
-        List<Expression> prefixList = new ArrayList<Expression>(); 
-               
-        prefixList.add(getKindExpression("ExpressionKind", "BIT_NOT", new ExpressionKindProtoMap(), env));
-        prefixList.add(getKindExpression("ExpressionKind", "OP_DEC", new ExpressionKindProtoMap(), env));
-        prefixList.add(getKindExpression("ExpressionKind", "OP_INC", new ExpressionKindProtoMap(), env));
-        prefixList.add(getKindExpression("ExpressionKind", "OP_SUB", new ExpressionKindProtoMap(), env));
-        prefixList.add(getKindExpression("ExpressionKind", "LOGICAL_NOT", new ExpressionKindProtoMap(), env));
-        prefixList.add(getKindExpression("ExpressionKind", "OP_ADD", new ExpressionKindProtoMap(), env));
-                
-        return prefixList;  
+        final List<Expression> l = new ArrayList<Expression>();
+
+        l.add(getKindExpression("ExpressionKind", "OP_DEC", new boa.types.proto.enums.ExpressionKindProtoMap(), env));
+        l.add(getKindExpression("ExpressionKind", "OP_INC", new boa.types.proto.enums.ExpressionKindProtoMap(), env));
+        l.add(getKindExpression("ExpressionKind", "OP_ADD", new boa.types.proto.enums.ExpressionKindProtoMap(), env));
+        l.add(getKindExpression("ExpressionKind", "OP_SUB", new boa.types.proto.enums.ExpressionKindProtoMap(), env));
+        l.add(getKindExpression("ExpressionKind", "BIT_NOT", new boa.types.proto.enums.ExpressionKindProtoMap(), env));
+        l.add(getKindExpression("ExpressionKind", "LOGICAL_NOT", new boa.types.proto.enums.ExpressionKindProtoMap(), env));
+
+        return l;
+    }
+
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public boa.types.Ast.Expression flattenMessage(final boa.types.Ast.Expression.PrefixExpression m) {
+        final boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+        b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_DEC);
+        b.setExpression1(m.getOperand());
+        b.setKind(m.getOperator());
+        return b.build();
     }
 
     /** {@inheritDoc} */

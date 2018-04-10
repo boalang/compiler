@@ -352,6 +352,7 @@ public class CFGNode implements Comparable<CFGNode> {
 		}
 	}
 
+/* FIXME shadows
 	public String processDef() {
 		String defVar="";
 		if(this.expr!=null) {
@@ -421,6 +422,7 @@ public class CFGNode implements Comparable<CFGNode> {
 			traverseExpr(useVar, vardecls.getInitializer());			
 		}
 	}
+*/
 
 	public String toString() {
 		return ""+getId();
