@@ -18,9 +18,6 @@
 package boa.datagen;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -34,10 +31,8 @@ import org.apache.hadoop.io.Text;
 import com.google.protobuf.CodedInputStream;
 
 import boa.datagen.util.Properties;
-import boa.types.Ast.ASTRoot;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
-import boa.types.Code.RevisionOrBuilder;
 import boa.types.Diff.ChangedFile;
 import boa.types.Toplevel.Project;
 
@@ -99,11 +94,7 @@ public class SeqCombiner {
 			value = new BytesWritable();
 			try {
 				while (r.next(longKey, value)) {
-					CodedInputStream cis = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
-					cis.setRecursionLimit(Integer.MAX_VALUE);
-					ASTRoot ast = ASTRoot.parseFrom(cis);
-					ASTRoot.Builder ab = ASTRoot.newBuilder(ast);
-					astWriter.append(new LongWritable(longKey.get()), new BytesWritable(ab.build().toByteArray()));
+					astWriter.append(new LongWritable(longKey.get()), value);
 				}
 			} catch (Exception e) {
 				System.err.println(name);
