@@ -81,7 +81,7 @@ public class SeqCombiner {
 							}
 						}
 					}
-					projectWriter.append(new Text(textKey), new BytesWritable(pb.build().toByteArray()));
+					projectWriter.append(textKey, new BytesWritable(pb.build().toByteArray()));
 				}
 			} catch (Exception e) {
 				System.err.println(name);
@@ -94,7 +94,7 @@ public class SeqCombiner {
 			value = new BytesWritable();
 			try {
 				while (r.next(longKey, value)) {
-					astWriter.append(new LongWritable(longKey.get()), value);
+					astWriter.append(longKey, value);
 				}
 			} catch (Exception e) {
 				System.err.println(name);
