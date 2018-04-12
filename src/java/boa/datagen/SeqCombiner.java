@@ -94,7 +94,7 @@ public class SeqCombiner {
 			value = new BytesWritable();
 			try {
 				while (r.next(longKey, value)) {
-					astWriter.append(longKey, value);
+					astWriter.append(new LongWritable(longKey.get() + len), value);
 				}
 			} catch (Exception e) {
 				System.err.println(name);
