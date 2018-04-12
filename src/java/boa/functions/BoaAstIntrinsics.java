@@ -25,6 +25,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.MapFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper.Context;
@@ -96,7 +97,7 @@ public class BoaAstIntrinsics {
 
 		try {
 			final BytesWritable value = new BytesWritable();
-			if (map.get(new Text(f.getKey()), value) == null) {
+			if (map.get(new LongWritable(f.getKey()), value) == null) {
 				context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
 			} else {
 				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
