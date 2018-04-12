@@ -91,14 +91,12 @@ public class BoaAstIntrinsics {
 
 		context.getCounter(ASTCOUNTER.GETS_ATTEMPTED).increment(1);
 
-		final String rowName = f.getKey() + "!!" + f.getName();
-
 		if (map == null)
 			openMap();
 
 		try {
 			final BytesWritable value = new BytesWritable();
-			if (map.get(new Text(rowName), value) == null) {
+			if (map.get(new Text(f.getKey()), value) == null) {
 				context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
 			} else {
 				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
@@ -122,7 +120,7 @@ public class BoaAstIntrinsics {
 			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
 		}
 
-		System.err.println("error with ast: " + rowName);
+		System.err.println("error with ast: " + f.getKey());
 		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
 		return emptyAst;
 	}
