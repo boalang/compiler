@@ -34,6 +34,7 @@ import org.apache.hadoop.io.Text;
 import com.google.protobuf.CodedInputStream;
 
 import boa.datagen.util.Properties;
+import boa.types.Ast.ASTRoot;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Code.RevisionOrBuilder;
@@ -98,7 +99,11 @@ public class SeqCombiner {
 			value = new BytesWritable();
 			try {
 				while (r.next(longKey, value)) {
-					astWriter.append(new LongWritable(longKey.get()), new BytesWritable(value.getBytes()));
+					CodedInputStream cis = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+					cis.setRecursionLimit(Integer.MAX_VALUE);
+					ASTRoot ast = ASTRoot.parseFrom(cis);
+					ASTRoot.Builder ab = ASTRoot.newBuilder(ast);
+					astWriter.append(new LongWritable(longKey.get()), new BytesWritable(ab.build().toByteArray()));
 				}
 			} catch (Exception e) {
 				System.err.println(name);
