@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018, Robert Dyer, Mohd Arafat
+ *                 and Bowling Green State University
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package boa.graphs.cdg;
 
 import java.util.HashSet;
@@ -8,10 +24,13 @@ import boa.graphs.trees.TreeNode;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Expression;
 
+/**
+ * @author marafat
+ */
+
 public class CDGNode implements Comparable<CDGNode> {
 
     private int id;
-    private String pid;
     private Statement stmt;
     private Expression expr;
 
@@ -22,7 +41,6 @@ public class CDGNode implements Comparable<CDGNode> {
 
     public CDGNode(final TreeNode node) {
         this.id = node.getId();
-        this.pid = node.getPid();
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
     }
@@ -34,10 +52,6 @@ public class CDGNode implements Comparable<CDGNode> {
     //Setters
     public void setId(int id) {
         this.id = id;
-    }
-
-    public void setPid(final String pid) {
-        this.pid = pid;
     }
 
     public void setStmt(final Statement stmt) {
@@ -67,10 +81,6 @@ public class CDGNode implements Comparable<CDGNode> {
     //Getters
     public int getId() {
         return id;
-    }
-
-    public String getPid() {
-        return pid;
     }
 
     public Statement getStmt() {
