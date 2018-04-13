@@ -160,12 +160,8 @@ public class GitCommit extends AbstractCommit {
 		try {
 			model = xpp3Reader.read(new ByteArrayInputStream(content.getBytes()));
 		} catch (IOException e1) {
-			if (debug)
-				e1.printStackTrace();
 			return paths;
 		} catch (XmlPullParserException e1) {
-			if (debug)
-				e1.printStackTrace();
 			return paths;
 		}
 		PomFile pf = new PomFile(path, model.getId(), model.getParent() != null ? model.getParent().getId() : null,
