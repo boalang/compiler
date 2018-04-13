@@ -2905,6 +2905,26 @@ public class Java7Visitor extends ASTVisitor {
 	// Unsupported node types
 	
 	@Override
+	public boolean visit(CreationReference node) {
+		throw new UnsupportedOperationException("visited unsupported node " + node.getClass().getSimpleName());
+	}
+	
+	@Override
+	public boolean visit(ExpressionMethodReference node) {
+		throw new UnsupportedOperationException("visited unsupported node " + node.getClass().getSimpleName());
+	}
+	
+	@Override
+	public boolean visit(SuperMethodReference node) {
+		throw new UnsupportedOperationException("visited unsupported node " + node.getClass().getSimpleName());
+	}
+	
+	@Override
+	public boolean visit(TypeMethodReference node) {
+		throw new UnsupportedOperationException("visited unsupported node " + node.getClass().getSimpleName());
+	}
+	
+	@Override
 	public boolean visit(LambdaExpression node) {
 		throw new UnsupportedOperationException("visited unsupported node " + node.getClass().getSimpleName());
 	}
@@ -2931,9 +2951,19 @@ public class Java7Visitor extends ASTVisitor {
 	public boolean visit(QualifiedType node) {
 		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
+	
+	@Override
+	public boolean visit(NameQualifiedType node) {
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
+	}
 
 	@Override
 	public boolean visit(SimpleType node) {
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
+	}
+	
+	@Override
+	public boolean visit(IntersectionType node) {
 		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
