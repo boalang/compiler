@@ -35,14 +35,10 @@ import boa.types.Control;
 
 public class CDG {
 
-    private Method md;
-    private String class_name;
     private CDGNode entryNode;
     private Set<CDGNode> nodes = new HashSet<CDGNode>();
 
     public CDG(final CFG cfg) throws Exception {
-        this.md = cfg.md;
-        this.class_name = cfg.class_name;
         PDTree pdTree = new PDTree(cfg);
         constructCDG(pdTree, cfg);
     }
@@ -52,14 +48,6 @@ public class CDG {
     }
 
     //Getters
-    private Method getMd() {
-        return md;
-    }
-
-    private String getClass_name() {
-        return class_name;
-    }
-
     public CDGNode getEntryNode() {
         return entryNode;
     }
@@ -115,13 +103,15 @@ public class CDG {
      * @return a new tree node or an existing tree node
      */
     private CDGNode getNode(final TreeNode treeNode) {
-        CDGNode node = new CDGNode(treeNode);
+        CDGNode node = new CDGNode(treeNode.getId());
         if (nodes.contains(node)) {
             for (CDGNode n : nodes) {
                 if (n == node)
                     return n;
             }
         }
+        node.setStmt(treeNode.getStmt());
+        node.setExpr(treeNode.getExpr());
         nodes.add(node);
 
         return node;
