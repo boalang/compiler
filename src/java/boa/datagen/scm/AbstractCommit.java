@@ -663,16 +663,13 @@ public abstract class AbstractCommit {
 		while (!pq.isEmpty()) {
 			commitId = pq.poll();
 			AbstractCommit commit = connector.revisions.get(commitId);
-			boolean found = false;
-			for (int i = 0; i < commit.changedFiles.size(); i++) {
+			Integer i = commit.fileNameIndices.get(path);
+			if (i != null) {
 				ChangedFile.Builder cfb = commit.changedFiles.get(i);
-				if (cfb.getName().equals(path) && cfb.getChange() != ChangeKind.DELETED) {
+				if (cfb.getChange() != ChangeKind.DELETED) {
 					l.add(new int[] { i, commitId });
-					found = true;
-					break;
 				}
-			}
-			if (!found && commit.parentIndices != null) {
+			} else if (commit.parentIndices != null) {
 				for (int parentId : commit.parentIndices) {
 					if (!queuedCommitIds.contains(parentId)) {
 						pq.offer(parentId);
@@ -680,6 +677,10 @@ public abstract class AbstractCommit {
 					}
 				}
 			}
+		}
+		if (l.isEmpty()) {
+			System.err.println("Cannot find previous version!");
+			System.exit(-1);
 		}
 		return l;
 	}
