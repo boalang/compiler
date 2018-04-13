@@ -17,7 +17,6 @@
 
 package boa.datagen;
 
-import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,9 +32,6 @@ import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
-import org.eclipse.jgit.lib.RepositoryCache;
-import org.eclipse.jgit.util.FS;
-
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import boa.datagen.forges.github.RepositoryCloner;
@@ -272,13 +268,11 @@ public class SeqRepoImporter {
 				org.apache.commons.io.FileUtils.deleteQuietly(new File(gitRootPath + "/" + project.getName()));
 			}
 
-			if (!RepositoryCache.FileKey.isGitRepository(gitDir, FS.DETECTED)) {
-				String[] args = { repo.getUrl(), gitDir.getAbsolutePath() };
-				try {
-					RepositoryCloner.clone(args);
-				} catch (Throwable t) {
-					return project;
-				}
+			String[] args = { repo.getUrl(), gitDir.getAbsolutePath() };
+			try {
+				RepositoryCloner.clone(args);
+			} catch (Throwable t) {
+				return project;
 			}
 
 			if (debug)

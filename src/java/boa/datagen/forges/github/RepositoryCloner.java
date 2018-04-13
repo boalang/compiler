@@ -15,20 +15,16 @@ import org.eclipse.jgit.api.errors.TransportException;
  */
 public class RepositoryCloner {
 
-	private static String REMOTE_URL = "";
-	// private HttpURLConnection connection = null;
-
 	public static void clone(String[] args)
 			throws IOException, InvalidRemoteException, TransportException, GitAPIException {
 		// prepare a new folder for the cloned repository
 		String localPath = args[1];
 		String url = args[0];
-		REMOTE_URL = url;
 		File localGitDir = new File(localPath + "/.git");
 		// then clone
 		Git result = null;
 		try {
-			result = Git.cloneRepository().setURI(REMOTE_URL).setBare(true).setDirectory(localGitDir).call();
+			result = Git.cloneRepository().setURI(url).setBare(true).setDirectory(localGitDir).call();
 			// Note: the call() returns an opened repository already which needs
 			// to be closed to avoid file handle leaks!
 			// workaround for
