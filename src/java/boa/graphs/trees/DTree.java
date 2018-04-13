@@ -26,7 +26,7 @@ import boa.graphs.cfg.CFG;
 import boa.graphs.cfg.CFGNode;
 import boa.runtime.BoaAbstractFixP;
 import boa.runtime.BoaAbstractTraversal;
-import boa.types.Graph;
+import boa.types.Graph.Traversal.*;
 
 /**
  * @author marafat
@@ -34,14 +34,10 @@ import boa.types.Graph;
 
 public class DTree {
 
-    private Method md;
-    private String class_name;
     private TreeNode rootNode;
     private Set<TreeNode> nodes = new HashSet<TreeNode>();;
 
     public DTree(final CFG cfg) throws Exception {
-        this.md = cfg.md;
-        this.class_name = cfg.class_name;
         Map<CFGNode, Set<CFGNode>> dom = computeDominator(cfg);
         Map<CFGNode, CFGNode> idom = computeImmediateDominator(dom);
         buildDomTree(idom, cfg.getNodes().size());
@@ -52,14 +48,6 @@ public class DTree {
     }
 
     //Getters
-    private Method getMd() {
-        return md;
-    }
-
-    private String getClass_name() {
-        return class_name;
-    }
-
     public Set<TreeNode> getNodes() {
         return nodes;
     }
@@ -69,7 +57,7 @@ public class DTree {
     }
 
     /**
-     * Gives tree node if the id exists, null otherwise
+     * Gives the tree node if the id exists, null otherwise
      *
      * @param id
      * @return tree nodes
@@ -141,9 +129,9 @@ public class DTree {
             }
         };
 
-        dom.traverse(cfg, Graph.Traversal.TraversalDirection.FORWARD, Graph.Traversal.TraversalKind.REVERSEPOSTORDER, fixp);
+        dom.traverse(cfg, TraversalDirection.FORWARD, TraversalKind.REVERSEPOSTORDER, fixp);
 
-        return dom.outputMapObj;
+        return dom.outputMapObj; //FIXME: fix the return type
     }
 
     /**
@@ -180,14 +168,14 @@ public class DTree {
     /**
      * Builds a dominator tree using nodes and their immediate dominators
      *
-     * @param idomMap map of nodes and their immediate dominators
+     * @param idoms map of nodes and their immediate dominators
      * @param stopid id of the stop node of the control graph
      */
-    private void buildDomTree(final Map<CFGNode, CFGNode> idomMap, int stopid) {
+    private void buildDomTree(final Map<CFGNode, CFGNode> idoms, int stopid) {
         //Create an edge between idom and corresponding node.
         //Since each node can have only one idom, the resulting graph will form a tree
-        for (CFGNode n : idomMap.keySet()) {
-            CFGNode idom = idomMap.get(n);
+        for (CFGNode n : idoms.keySet()) {
+            CFGNode idom = idoms.get(n);
 
             TreeNode src = getNode(idom);
             TreeNode dest = getNode(n);
@@ -211,13 +199,15 @@ public class DTree {
      * @return a new tree node or an existing tree node
      */
     private TreeNode getNode(final CFGNode cfgNode) {
-        TreeNode node = new TreeNode(cfgNode);
+        TreeNode node = new TreeNode(cfgNode.getId());
         if (nodes.contains(node)) {
             for (TreeNode n : nodes) {
                 if (n == node)
                     return n;
             }
         }
+        node.setStmt(cfgNode.getStmt());
+        node.setExpr(cfgNode.getExpr());
         nodes.add(node);
 
         return node;

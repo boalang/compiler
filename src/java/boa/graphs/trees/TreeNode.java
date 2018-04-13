@@ -31,7 +31,6 @@ public class TreeNode implements Comparable<TreeNode> {
 
     private TreeNode parent;
     private int id;
-    private String pid;
     private Statement stmt;
     private Expression expr;
 
@@ -39,7 +38,6 @@ public class TreeNode implements Comparable<TreeNode> {
 
     public TreeNode(CFGNode node) {
         this.id = node.getId();
-        this.pid = node.getPid();
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
     }
@@ -55,10 +53,6 @@ public class TreeNode implements Comparable<TreeNode> {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public void setPid(final String pid) {
-        this.pid = pid;
     }
 
     public void setStmt(final Statement stmt) {
@@ -80,10 +74,6 @@ public class TreeNode implements Comparable<TreeNode> {
 
     public int getId() {
         return id;
-    }
-
-    public String getPid() {
-        return pid;
     }
 
     public Statement getStmt() {

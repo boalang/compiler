@@ -26,7 +26,7 @@ import boa.graphs.cfg.CFG;
 import boa.graphs.cfg.CFGNode;
 import boa.runtime.BoaAbstractFixP;
 import boa.runtime.BoaAbstractTraversal;
-import boa.types.Graph;
+import boa.types.Graph.Traversal.*;
 
 /**
  * @author marafat
@@ -34,14 +34,10 @@ import boa.types.Graph;
 
 public class PDTree {
 
-    private Method md;
-    private String class_name;
     private TreeNode rootNode;
     private Set<TreeNode> nodes = new HashSet<TreeNode>();;
 
     public PDTree(final CFG cfg) throws Exception {
-        this.md = cfg.md;
-        this.class_name = cfg.class_name;
         Map<CFGNode, Set<CFGNode>> pdom = computePostDominator(cfg);
         Map<CFGNode, CFGNode> ipdom = computeImmediatePostDominator(pdom);
         buildPDomTree(ipdom, cfg.getNodes().size());
@@ -52,14 +48,6 @@ public class PDTree {
     }
 
     //Getters
-    private Method getMd() {
-        return md;
-    }
-
-    private String getClass_name() {
-        return class_name;
-    }
-
     public Set<TreeNode> getNodes() {
         return nodes;
     }
@@ -69,7 +57,7 @@ public class PDTree {
     }
 
     /**
-     * Gives tree node if the id exists, null otherwise
+     * Gives the tree node if the id exists, null otherwise
      *
      * @param id
      * @return tree nodes
@@ -141,9 +129,9 @@ public class PDTree {
             }
         };
 
-        pdom.traverse(cfg, Graph.Traversal.TraversalDirection.FORWARD, Graph.Traversal.TraversalKind.REVERSEPOSTORDER, fixp);
+        pdom.traverse(cfg, TraversalDirection.FORWARD, TraversalKind.REVERSEPOSTORDER, fixp);
 
-        return pdom.outputMapObj;
+        return pdom.outputMapObj; //FIXME: fix the return type
     }
 
     /**
@@ -211,13 +199,15 @@ public class PDTree {
      * @return a new tree node or an existing tree node
      */
     private TreeNode getNode(final CFGNode cfgNode) {
-        TreeNode node = new TreeNode(cfgNode);
+        TreeNode node = new TreeNode(cfgNode.getId());
         if (nodes.contains(node)) {
             for (TreeNode n : nodes) {
                 if (n == node)
                     return n;
             }
         }
+        node.setStmt(cfgNode.getStmt());
+        node.setExpr(cfgNode.getExpr());
         nodes.add(node);
 
         return node;
