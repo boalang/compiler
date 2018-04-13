@@ -156,18 +156,12 @@ public abstract class AbstractConnector implements AutoCloseable {
 				}
 				
 				String content = fileContents.get(sourceFilePath);
-				Java7Visitor visitor = null;
-				if (cf.getKind() == FileKind.SOURCE_JAVA_JLS8)
-					visitor = new Java8Visitor(content, declarationFile, declarationNode);
-				else
-					visitor = new Java7Visitor(content, declarationFile, declarationNode);
+				Java8Visitor visitor = new Java8Visitor(content, declarationFile, declarationNode);
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				try {
 					ast.addNamespaces(visitor.getNamespaces(cu));
 					/*for (final Comment c : visitor.getComments())
 						comments.addComments(c);*/
-				} catch (final UnsupportedOperationException e) {
-					continue;
 				} catch (final Throwable e) {
 					System.err.println("Error visiting " + sourceFilePath + " when parsing head snapshot!!!");
 					e.printStackTrace();
