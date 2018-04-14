@@ -41,6 +41,10 @@ public class CDG {
     public CDG(final CFG cfg) throws Exception {
         PDTree pdTree = new PDTree(cfg);
         constructCDG(pdTree, cfg);
+        CDGNode startNode = getNode(0);
+        entryNode.getSuccessors().remove(startNode);
+        nodes.remove(startNode);
+        entryNode.setId(0);
     }
 
     public CDG(final Method method) throws Exception {
@@ -54,6 +58,20 @@ public class CDG {
 
     public Set<CDGNode> getNodes() {
         return nodes;
+    }
+
+    /**
+     * Returns the node for the given node id, otherwise returns null
+     *
+     * @param id node id
+     * @return
+     */
+    public CDGNode getNode(int id) {
+        for (CDGNode n: nodes)
+            if (n.getId() == id)
+                return n;
+
+        return null;
     }
 
     /**
