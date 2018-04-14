@@ -39,6 +39,7 @@ public class PDG {
     public PDG(final CDG cdg, final DDG ddg) {
         addCDG(cdg);
         addDDGEdges(ddg);
+        entryNode = getNode(0);
     }
 
     public PDG(final CFG cfg) throws Exception {
