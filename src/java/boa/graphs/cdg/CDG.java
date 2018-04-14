@@ -106,7 +106,7 @@ public class CDG {
         CDGNode node = new CDGNode(treeNode.getId());
         if (nodes.contains(node)) {
             for (CDGNode n : nodes) {
-                if (n == node)
+                if (n.equals(node))
                     return n;
             }
         }
