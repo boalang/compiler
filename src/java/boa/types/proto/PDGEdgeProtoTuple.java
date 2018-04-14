@@ -16,54 +16,49 @@
  */
 package boa.types.proto;
 
+import boa.types.BoaProtoTuple;
+import boa.types.BoaString;
+import boa.types.BoaType;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaProtoTuple;
-import boa.types.BoaProtoList;
-import boa.types.BoaType;
-import boa.types.BoaInt;
-
 /**
- * A {@link CDGNodeProtoTuple}.
+ * A {@link PDGEdgeProtoTuple}.
  *
  * @author marafat
  */
-public class CDGNodeProtoTuple extends BoaProtoTuple {
+public class PDGEdgeProtoTuple extends BoaProtoTuple {
     private final static List<BoaType> members = new ArrayList<BoaType>();
     private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
     static {
         int counter = 0;
 
-        names.put("id", counter++);
-        members.add(new BoaInt());
+        names.put("src", counter++);
+        members.add(new BoaString());
 
-        names.put("stmt", counter++);
-        members.add(new StatementProtoTuple());
+        names.put("dest", counter++);
+        members.add(new PDGNodeProtoTuple());
 
-        names.put("expr", counter++);
-        members.add(new ExpressionProtoTuple());
+        names.put("label", counter++);
+        members.add(new PDGNodeProtoTuple());
 
-        names.put("successors", counter++);
-        members.add(new BoaProtoList(new CDGNodeProtoTuple()));
-
-        names.put("predecessors", counter++);
-        members.add(new BoaProtoList(new CDGNodeProtoTuple()));
+        //TODO: add edge type
     }
 
     /**
-     * Construct a {@link CDGNodeProtoTuple}.
+     * Construct a {@link PDGEdgeProtoTuple}.
      */
-    public CDGNodeProtoTuple() {
+    public PDGEdgeProtoTuple() {
         super(members, names);
     }
 
     /** @{inheritDoc} */
     @Override
     public String toJavaType() {
-        return "boa.graphs.cdg.CDGNode";
+        return "boa.types.pdg.PDGEdge";
     }
 }

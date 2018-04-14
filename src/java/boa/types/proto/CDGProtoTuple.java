@@ -32,22 +32,14 @@ import boa.types.BoaSet;
  * @author marafat
  */
 public class CDGProtoTuple extends BoaProtoTuple {
-
     private final static List<BoaType> members = new ArrayList<BoaType>();
     private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
     static {
         int counter = 0;
 
-        names.put("md", counter++);
-        members.add(new MethodProtoTuple());
-
-        names.put("class_name", counter++);
-        members.add(new BoaString());
-
         names.put("nodes", counter++);
         members.add(new BoaSet(new CDGNodeProtoTuple()));
-
     }
 
     /**

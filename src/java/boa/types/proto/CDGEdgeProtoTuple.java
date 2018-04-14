@@ -31,7 +31,6 @@ import boa.types.BoaType;
  * @author marafat
  */
 public class CDGEdgeProtoTuple extends BoaProtoTuple {
-
     private final static List<BoaType> members = new ArrayList<BoaType>();
     private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
@@ -46,7 +45,6 @@ public class CDGEdgeProtoTuple extends BoaProtoTuple {
 
         names.put("label", counter++);
         members.add(new CDGNodeProtoTuple());
-
     }
 
     /**
