@@ -48,12 +48,12 @@ public class DTree {
     }
 
     //Getters
-    public Set<TreeNode> getNodes() {
-        return nodes;
-    }
-
     public TreeNode getRootNode() {
         return rootNode;
+    }
+
+    public Set<TreeNode> getNodes() {
+        return nodes;
     }
 
     /**
