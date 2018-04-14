@@ -37,6 +37,7 @@ import boa.compiler.ast.Operand;
  * @author anthonyu
  * @author rdyer
  * @author rramu
+ * @author marafat
  */
 public class SymbolTable {
 	private static HashMap<String, Class<?>> aggregators;
@@ -101,6 +102,15 @@ public class SymbolTable {
 			new CDGProtoTuple(),
 			new CDGNodeProtoTuple(),
 			new CDGEdgeProtoTuple(),
+			new DDGProtoTuple(),
+			new DDGNodeProtoTuple(),
+			new DDGEdgeProtoTuple(),
+			new PDGProtoTuple(),
+			new PDGNodeProtoTuple(),
+			new PDGEdgeProtoTuple(),
+			new DTreeProtoTuple(),
+			new PDTreeProtoTuple(),
+			new TreeNodeProtoTuple(),
 			new ChangedFileProtoTuple(),
 			new CodeRepositoryProtoTuple(),
 			new CommentProtoTuple(),
