@@ -21,6 +21,8 @@ import java.util.*;
 
 import boa.graphs.cdg.CDG;
 import boa.graphs.cfg.CFG;
+import boa.graphs.ddg.DDG;
+import boa.graphs.pdg.PDG;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Method;
@@ -50,6 +52,21 @@ public class BoaGraphIntrinsics {
 	@FunctionSpec(name = "getcdg", returnType = "CDG", formalParameters = { "CFG" })
 	public static CDG getcdg(final CFG cfg) throws Exception {
 		return new CDG(cfg);
+	}
+
+	@FunctionSpec(name = "getpdg", returnType = "PDG", formalParameters = { "Method" })
+	public static PDG getpdg(final Method method) throws Exception {
+		return new PDG(method);
+	}
+
+	@FunctionSpec(name = "getpdg", returnType = "PDG", formalParameters = { "CFG" })
+	public static PDG getpdg(final CFG cfg) throws Exception {
+		return new PDG(cfg);
+	}
+
+	@FunctionSpec(name = "getpdg", returnType = "PDG", formalParameters = { "CDG", "DDG" })
+	public static PDG getpdg(final CDG cdg, final DDG ddg) throws Exception {
+		return new PDG(cdg, ddg);
 	}
 
 	@FunctionSpec(name = "get_nodes_with_definition", returnType = "set of string", formalParameters = { "CFGNode" })
