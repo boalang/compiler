@@ -57,7 +57,7 @@ public class DDG {
     public Set<DDGNode> getDefNodes(final String var) {
         Set<DDGNode> defNodes = new HashSet<DDGNode>();
         for (DDGNode n: defUseChain.keySet()) {
-            if (n.getDefVariables().equals(var))
+            if (n.getDefVariable().equals(var))
                 defNodes.add(n);
         }
 

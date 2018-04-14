@@ -60,12 +60,12 @@ public class DDGNode implements Comparable<DDGNode> {
         this.expr = expr;
     }
 
-    public void setDefVariables(final String defVariables) {
+    public void setDefVariable(final String defVariables) {
         this.defVariables = defVariables;
     }
 
-    public void setUseVariables(final HashSet<String> useVariables) {
-        this.useVariables = useVariables;
+    public void addUseVariable(final String useVariables) {
+        this.useVariables.add(useVariables);
     }
 
     //Getters
@@ -81,7 +81,7 @@ public class DDGNode implements Comparable<DDGNode> {
         return expr;
     }
 
-    public String getDefVariables() {
+    public String getDefVariable() {
         return defVariables;
     }
 
