@@ -248,4 +248,65 @@ public class BoaGraphIntrinsics {
 
 		return str.toString();
 	}
+
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CDG" })
+	public static String cdgToDot(final CDG cdg) {
+		return cdgToDot(cdg, "");
+	}
+
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CDG", "string" })
+	public static String cdgToDot(final CDG cdg, final String label) {
+		final StringBuilder str = new StringBuilder();
+		str.append("digraph {\n");
+		if (label.length() > 0) {
+			str.append("\tlabelloc=\"t\"\n");
+			str.append("\tlabel=\"" + dotEscape(label) + "\"\n");
+		}
+
+		for (final boa.graphs.cdg.CDGNode n : cdg.getNodes()) {
+			final String shape = "shape=ellipse";
+
+			if (n.hasStmt())
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
+			else if (n.hasExpr())
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
+			//else if (n.getKind() == boa.types.Control.CDGNode.CDGNodeType.ENTRY)
+			//	str.append("\t" + n.getId() + "[" + shape + ",label=\"" + n.getName() + "\"]\n");
+			else
+				str.append("\t" + n.getId() + "[" + shape + "]\n");
+		}
+
+		final boa.runtime.BoaAbstractTraversal printGraph = new boa.runtime.BoaAbstractTraversal<Object>(false, false) {
+			protected Object preTraverse(final boa.graphs.cdg.CDGNode node) throws Exception {
+				final java.util.Set<boa.graphs.cdg.CDGEdge> edges = node.getOutEdges();
+				for (final boa.graphs.cdg.CDGEdge e : node.getOutEdges()) {
+					str.append("\t" + node.getId() + " -> " + e.getDest().getId());
+					if (!(e.getLabel() == null || e.getLabel().equals(".") || e.getLabel().equals("")))
+						str.append(" [label=\"" + dotEscape(e.getLabel()) + "\"]");
+					str.append("\n");
+				}
+				return null;
+			}
+
+			@Override
+			public void traverse(final boa.graphs.cdg.CDGNode node, boolean flag) throws Exception {
+				if (flag) {
+					currentResult = preTraverse(node);
+					outputMapObj.put(node.getId(), currentResult);
+				} else {
+					outputMapObj.put(node.getId(), preTraverse(node));
+				}
+			}
+		};
+
+		try {
+			printGraph.traverse(cdg, boa.types.Graph.Traversal.TraversalDirection.FORWARD, boa.types.Graph.Traversal.TraversalKind.DFS);
+		} catch (final Exception e) {
+			// do nothing
+		}
+
+		str.append("}");
+
+		return str.toString();
+	}
 }

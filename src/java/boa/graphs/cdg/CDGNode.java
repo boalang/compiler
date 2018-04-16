@@ -58,9 +58,17 @@ public class CDGNode implements Comparable<CDGNode> {
         this.stmt = stmt;
     }
 
+	public boolean hasStmt() {
+		return this.stmt != null;
+	}
+
     public void setExpr(final Expression expr) {
         this.expr = expr;
     }
+
+	public boolean hasExpr() {
+		return this.expr != null;
+	}
 
     public void addSuccessor(final CDGNode node) {
         successors.add(node);
