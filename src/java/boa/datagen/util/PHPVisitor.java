@@ -146,7 +146,10 @@ public class PHPVisitor extends AbstractVisitor {
 	public boolean visit(NamespaceDeclaration node) {
 		Namespace.Builder nb = Namespace.newBuilder();
 		List<boa.types.Ast.Namespace> list = namespaces.peek();
-		nb.setName(node.getName().getName());
+		if (node.getName() != null)
+			nb.setName(node.getName().getName());
+		else
+			nb.setName("");
 		namespaces.push(new ArrayList<boa.types.Ast.Namespace>());
 		methods.push(new ArrayList<boa.types.Ast.Method>());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
@@ -699,7 +702,6 @@ public class PHPVisitor extends AbstractVisitor {
 		org.eclipse.php.internal.core.ast.nodes.Variable[] variableNames = node.getVariableNames();
 		org.eclipse.php.internal.core.ast.nodes.Expression[] initialValues = node.getInitialValues();
 		int mod = node.getModifier();
-		node.getModifierString();
 		for (int i = 0; i < node.getVariableNames().length; i++) {
 			Variable.Builder b = Variable.newBuilder();
 			if ((mod & Modifiers.AccPublic) != 0) {
@@ -1753,9 +1755,11 @@ public class PHPVisitor extends AbstractVisitor {
 		b.setKind(ExpressionKind.TRAIT_PRECEDENCE);
 		node.getMethodReference().accept(this);
 		b.addExpressions(expressions.pop());
-		for (NamespaceName n : node.getTrList()) {
-			n.accept(this);
-			b.addExpressions(expressions.pop());
+		if (node.getTrList() != null) {
+			for (NamespaceName n : node.getTrList()) {
+				n.accept(this);
+				b.addExpressions(expressions.pop());
+			}
 		}
 		expressions.push(b.build());
 		return false;
@@ -1775,11 +1779,13 @@ public class PHPVisitor extends AbstractVisitor {
 	public boolean visit(TraitUseStatement node) {
 		Statement.Builder b = Statement.newBuilder();
 		b.setKind(StatementKind.TRAIT_USE);
-		for (NamespaceName n : node.getTraitList())
-			b.addNames(n.getName());
+		if (node.getTraitList() != null)
+			for (NamespaceName n : node.getTraitList())
+				b.addNames(n.getName());
 		statements.push(new ArrayList<Statement>());
-		for (TraitStatement ts : node.getTsList())
-			ts.accept(this);
+		if (node.getTsList() != null)
+			for (TraitStatement ts : node.getTsList())
+				ts.accept(this);
 		for (Statement s : statements.pop())
 			b.addStatements(s);
 		statements.peek().add(b.build());
