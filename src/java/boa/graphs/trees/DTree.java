@@ -38,8 +38,8 @@ public class DTree {
     private Set<TreeNode> nodes = new HashSet<TreeNode>();;
 
     public DTree(final CFG cfg) throws Exception {
-        Map<CFGNode, Set<CFGNode>> dom = computeDominator(cfg);
-        Map<CFGNode, CFGNode> idom = computeImmediateDominator(dom);
+        Map<Integer, Set<CFGNode>> dom = computeDominator(cfg);
+        Map<CFGNode, CFGNode> idom = computeImmediateDominator(dom, cfg);
         buildDomTree(idom, cfg.getNodes().size());
     }
 
@@ -57,10 +57,10 @@ public class DTree {
     }
 
     /**
-     * Gives the tree node if the id exists, null otherwise
+     * Returns the tree node if the id exists, null otherwise
      *
      * @param id
-     * @return tree nodes
+     * @return tree node
      */
     public TreeNode getNode(int id) {
         for (TreeNode node: nodes) {
@@ -77,7 +77,7 @@ public class DTree {
      * @return map of node and corresponding set of dominator nodes
      * @throws Exception
      */
-    private Map<CFGNode, Set<CFGNode>> computeDominator(final CFG cfg) throws Exception {
+    private Map<Integer, Set<CFGNode>> computeDominator(final CFG cfg) throws Exception {
         final Set<CFGNode> nodeids = cfg.getNodes();
 
         final BoaAbstractTraversal dom = new BoaAbstractTraversal<Set<CFGNode>>(true, true) {
@@ -140,23 +140,23 @@ public class DTree {
      * @param dom map of nodes and corresponding dominators
      * @return map of nodes and corresponding immediate dominator
      */
-    private Map<CFGNode, CFGNode> computeImmediateDominator(final Map<CFGNode, Set<CFGNode>> dom) {
+    private Map<CFGNode, CFGNode> computeImmediateDominator(final Map<Integer, Set<CFGNode>> dom, final CFG cfg) {
         //Inefficient implementation: t-complexity = O(n^3)
         //To find idom, we check each dom of a node to see if it is dominating any other
         //node. Each node should have atmost one i-dom (first node has no immediate dominator)
         Map<CFGNode, CFGNode> idom = new HashMap<CFGNode, CFGNode>();
-        for (CFGNode n : dom.keySet()) {
-            for (CFGNode pd1 : dom.get(n)) {
+        for (Integer nid : dom.keySet()) {
+            for (CFGNode pd1 : dom.get(nid)) {
                 boolean isIPDom = true;
-                for (CFGNode pd2 : dom.get(n)) {
+                for (CFGNode pd2 : dom.get(nid)) {
                     if (!pd1.equals(pd2))
-                        if ((dom.get(pd2)).contains(pd1)) {
+                        if ((dom.get(pd2.getId())).contains(pd1)) {
                             isIPDom = false;
                             break;
                         }
                 }
                 if (isIPDom) {
-                    idom.put(n, pd1);
+                    idom.put(cfg.getNode(nid), pd1);
                     break;
                 }
             }

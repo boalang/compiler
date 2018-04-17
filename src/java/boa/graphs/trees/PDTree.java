@@ -38,8 +38,8 @@ public class PDTree {
     private Set<TreeNode> nodes = new HashSet<TreeNode>();;
 
     public PDTree(final CFG cfg) throws Exception {
-        Map<CFGNode, Set<CFGNode>> pdom = computePostDominator(cfg);
-        Map<CFGNode, CFGNode> ipdom = computeImmediatePostDominator(pdom);
+        Map<Integer, Set<CFGNode>> pdom = computePostDominator(cfg);
+        Map<CFGNode, CFGNode> ipdom = computeImmediatePostDominator(pdom, cfg);
         buildPDomTree(ipdom, cfg.getNodes().size());
     }
 
@@ -77,7 +77,7 @@ public class PDTree {
      * @return map of node and corresponding set of post-dominator nodes
      * @throws Exception
      */
-    private Map<CFGNode, Set<CFGNode>> computePostDominator(final CFG cfg) throws Exception {
+    private Map<Integer, Set<CFGNode>> computePostDominator(final CFG cfg) throws Exception {
         final Set<CFGNode> nodeids = cfg.getNodes();
 
         final BoaAbstractTraversal pdom = new BoaAbstractTraversal<Set<CFGNode>>(true, true) {
@@ -140,23 +140,23 @@ public class PDTree {
      * @param pdom map of nodes and corresponding post-dominators
      * @return map of nodes and corresponding immediate post-dominator
      */
-    private Map<CFGNode, CFGNode> computeImmediatePostDominator(final Map<CFGNode, Set<CFGNode>> pdom) {
+    private Map<CFGNode, CFGNode> computeImmediatePostDominator(final Map<Integer, Set<CFGNode>> pdom, final CFG cfg) {
         //Inefficient implementation: t-complexity = O(n^3)
         //To find ipdom, we check each pdom of a node to see if it is post dominating any other
         //node. Each node should have atmost one ip-dom (last node has no immediate post dominator)
         Map<CFGNode, CFGNode> ipdom = new HashMap<CFGNode, CFGNode>();
-        for (CFGNode n : pdom.keySet()) {
-            for (CFGNode pd1 : pdom.get(n)) {
+        for (Integer nid : pdom.keySet()) {
+            for (CFGNode pd1 : pdom.get(nid)) {
                 boolean isIPDom = true;
-                for (CFGNode pd2 : pdom.get(n)) {
+                for (CFGNode pd2 : pdom.get(nid)) {
                     if (!pd1.equals(pd2))
-                        if ((pdom.get(pd2)).contains(pd1)) {
+                        if ((pdom.get(pd2.getId())).contains(pd1)) {
                             isIPDom = false;
                             break;
                         }
                 }
                 if (isIPDom) {
-                    ipdom.put(n, pd1);
+                    ipdom.put(cfg.getNode(nid), pd1);
                     break;
                 }
             }

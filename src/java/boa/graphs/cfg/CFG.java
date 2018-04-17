@@ -114,6 +114,20 @@ public class CFG {
 		return exitNode;
 	}
 
+	/**
+	 * Returns the CFG node if the id exists, null otherwise
+	 *
+	 * @param id
+	 * @return CFG node
+	 */
+	public CFGNode getNode(int id) {
+		for (CFGNode node: nodes) {
+			if (node.getId() == id)
+				return node;
+		}
+		return null;
+	}
+
 	public void addNode(final CFGNode node) {
 		if (!nodes.contains(node)) {
 			outs.add(node);
