@@ -40,7 +40,7 @@ public class PDTree {
     public PDTree(final CFG cfg) throws Exception {
         Map<Integer, Set<CFGNode>> pdom = computePostDominator(cfg);
         Map<CFGNode, CFGNode> ipdom = computeImmediatePostDominator(pdom, cfg);
-        buildPDomTree(ipdom, cfg.getNodes().size());
+        buildPDomTree(ipdom, cfg.getNodes().size()-1);
     }
 
     public PDTree(final Method method) throws Exception {
@@ -59,7 +59,7 @@ public class PDTree {
     /**
      * Gives the tree node if the id exists, null otherwise
      *
-     * @param id
+     * @param id node id
      * @return tree nodes
      */
     public TreeNode getNode(int id) {
@@ -78,15 +78,16 @@ public class PDTree {
      * @throws Exception
      */
     private Map<Integer, Set<CFGNode>> computePostDominator(final CFG cfg) throws Exception {
-        final Set<CFGNode> nodeids = cfg.getNodes();
+        final Set<CFGNode> cfgnodes = cfg.getNodes();
+        int stopid = cfgnodes.size() - 1;
 
         final BoaAbstractTraversal pdom = new BoaAbstractTraversal<Set<CFGNode>>(true, true) {
 
             protected Set<CFGNode> preTraverse(final CFGNode node) throws Exception {
                 Set<CFGNode> currentPDom = new HashSet<CFGNode>();
 
-                if (node.getId() != (nodeids.size() - 1))
-                    currentPDom = nodeids;
+                if (node.getId() != (stopid))
+                    currentPDom = new HashSet<CFGNode>(cfgnodes);
 
                 if ((getValue(node) != null))
                     currentPDom = getValue(node);
@@ -99,8 +100,7 @@ public class PDTree {
                     }
                 }
 
-                if (node != null)
-                    currentPDom.add(node);
+                currentPDom.add(node);
 
                 return currentPDom;
             }
@@ -129,7 +129,13 @@ public class PDTree {
             }
         };
 
-        pdom.traverse(cfg, TraversalDirection.FORWARD, TraversalKind.REVERSEPOSTORDER, fixp);
+        pdom.traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.DFS, fixp);
+
+        //remove self node id from each p-dom set because no node can post-dominate itself
+        for (int nid: (Set<Integer>) pdom.outputMapObj.keySet()) {
+            CFGNode node = cfg.getNode(nid);
+            ((Map<Integer, Set<Integer>>)pdom.outputMapObj).get(nid).remove(node);
+        }
 
         return pdom.outputMapObj; //FIXME: fix the return type
     }
@@ -149,7 +155,7 @@ public class PDTree {
             for (CFGNode pd1 : pdom.get(nid)) {
                 boolean isIPDom = true;
                 for (CFGNode pd2 : pdom.get(nid)) {
-                    if (!pd1.equals(pd2))
+                    if (pd1.getId() != pd2.getId())
                         if ((pdom.get(pd2.getId())).contains(pd1)) {
                             isIPDom = false;
                             break;
@@ -186,10 +192,10 @@ public class PDTree {
             if (src.getId() == stopid)
                 rootNode = src;
         }
-
         TreeNode entry = new TreeNode(stopid+1);
         entry.setParent(rootNode);
         rootNode.addChild(entry);
+        nodes.add(entry);
     }
 
     /**
@@ -202,7 +208,7 @@ public class PDTree {
         TreeNode node = new TreeNode(cfgNode.getId());
         if (nodes.contains(node)) {
             for (TreeNode n : nodes) {
-                if (n == node)
+                if (n.equals(node))
                     return n;
             }
         }

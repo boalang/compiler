@@ -59,7 +59,7 @@ public class DTree {
     /**
      * Returns the tree node if the id exists, null otherwise
      *
-     * @param id
+     * @param id node id
      * @return tree node
      */
     public TreeNode getNode(int id) {
@@ -78,15 +78,15 @@ public class DTree {
      * @throws Exception
      */
     private Map<Integer, Set<CFGNode>> computeDominator(final CFG cfg) throws Exception {
-        final Set<CFGNode> nodeids = cfg.getNodes();
+        final Set<CFGNode> cfgnodes = cfg.getNodes();
 
         final BoaAbstractTraversal dom = new BoaAbstractTraversal<Set<CFGNode>>(true, true) {
 
             protected Set<CFGNode> preTraverse(final CFGNode node) throws Exception {
                 Set<CFGNode> currentDom = new HashSet<CFGNode>();
 
-                if (node.getId() == 0)
-                    currentDom = nodeids;
+                if (node.getId() != 0)
+                    currentDom = new HashSet<CFGNode>(cfgnodes);
 
                 if ((getValue(node) != null))
                     currentDom = getValue(node);
@@ -99,8 +99,7 @@ public class DTree {
                     }
                 }
 
-                if (node != null)
-                    currentDom.add(node);
+                currentDom.add(node);
 
                 return currentDom;
             }
@@ -186,10 +185,10 @@ public class DTree {
             if (src.getId() == 0)
                 rootNode = src;
         }
-
         TreeNode entry = new TreeNode(stopid+1);
         entry.setParent(rootNode);
         rootNode.addChild(entry);
+        nodes.add(entry);
     }
 
     /**
@@ -202,7 +201,7 @@ public class DTree {
         TreeNode node = new TreeNode(cfgNode.getId());
         if (nodes.contains(node)) {
             for (TreeNode n : nodes) {
-                if (n == node)
+                if (n.equals(node))
                     return n;
             }
         }
