@@ -83,7 +83,7 @@ public class CDGNode implements Comparable<CDGNode> {
     }
 
     public void addOutEdges(final CDGEdge edge) {
-        inEdges.add(edge);
+        outEdges.add(edge);
     }
 
     //Getters

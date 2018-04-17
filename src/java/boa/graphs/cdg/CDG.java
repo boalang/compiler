@@ -42,7 +42,9 @@ public class CDG {
         PDTree pdTree = new PDTree(cfg);
         constructCDG(pdTree, cfg);
         CDGNode startNode = getNode(0);
+        CDGEdge firstEdge = new CDGEdge(getNode(cfg.getNodes().size()), startNode, "T");
         entryNode.getSuccessors().remove(startNode);
+        entryNode.getOutEdges().remove(firstEdge);
         nodes.remove(startNode);
         entryNode.setId(0);
     }
@@ -85,7 +87,10 @@ public class CDG {
         for (CFGNode n: cfg.getNodes()) {
             if (n.getKind() == Control.CFGNode.CFGNodeType.CONTROL)
             for (CFGEdge e: n.outEdges)
-                controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, e.label());
+                if (e.label().equals("."))
+                    controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, "F");
+                else
+                    controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, e.label());
         }
         controlEdges.put(new Integer[]{cfg.getNodes().size(), 0}, "T");
 
@@ -95,7 +100,7 @@ public class CDG {
             TreeNode src = pdTree.getNode(enodes[0]);
             TreeNode dest = pdTree.getNode(enodes[1]);
             TreeNode srcParent = pdTree.getNode(enodes[0]).getParent();
-            CDGNode source = new CDGNode(src);
+            CDGNode source = getNode(src);
 
             while (!srcParent.equals(dest)) {
                 CDGNode destination = getNode(dest);
