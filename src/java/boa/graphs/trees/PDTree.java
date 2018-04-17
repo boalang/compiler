@@ -79,7 +79,7 @@ public class PDTree {
      */
     private Map<Integer, Set<CFGNode>> computePostDominator(final CFG cfg) throws Exception {
         final Set<CFGNode> cfgnodes = cfg.getNodes();
-        int stopid = cfgnodes.size() - 1;
+        final int stopid = cfgnodes.size() - 1;
 
         final BoaAbstractTraversal pdom = new BoaAbstractTraversal<Set<CFGNode>>(true, true) {
 
