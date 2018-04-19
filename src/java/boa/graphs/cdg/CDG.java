@@ -41,6 +41,7 @@ public class CDG {
     public CDG(final CFG cfg) throws Exception {
         PDTree pdTree = new PDTree(cfg);
         constructCDG(pdTree, cfg);
+        //remove start node and replace it with entry
         CDGNode startNode = getNode(0);
         CDGEdge firstEdge = new CDGEdge(getNode(cfg.getNodes().size()), startNode, "T");
         entryNode.getSuccessors().remove(startNode);

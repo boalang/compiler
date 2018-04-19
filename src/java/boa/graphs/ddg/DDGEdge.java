@@ -32,6 +32,12 @@ public class DDGEdge {
         this.label = label;
     }
 
+    public DDGEdge(DDGNode src, DDGNode dest) {
+        this.src = src;
+        this.dest = dest;
+        this.label = ".";
+    }
+
     //Setters
     public void setSrc(final DDGNode src) {
         this.src = src;

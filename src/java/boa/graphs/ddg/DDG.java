@@ -33,12 +33,14 @@ import java.util.*;
 public class DDG {
 
     private DDGNode entryNode;
-    private Map<DDGNode, Set<DDGNode>> defUseChain;
+    private Set<DDGNode> nodes = new HashSet<DDGNode>();
+    private Map<DDGNode, Set<DDGNode>> defUseChain = new HashMap<DDGNode, Set<DDGNode>>();
     private Map<DDGNode, Set<DDGNode>> useDefChain; //TODO: needs reaching-def analysis
 
     public DDG(final CFG cfg) throws Exception {
-        Map<CFGNode, InOut> liveVars = getLiveVariables(cfg);
-        formDefUseChains(liveVars);
+        Map<Integer, InOut> liveVars = getLiveVariables(cfg);
+        formDefUseChains(liveVars, cfg);
+        constructDDG(liveVars.keySet());
     }
 
     public DDG(final Method m) throws Exception {
@@ -54,6 +56,12 @@ public class DDG {
         return defUseChain.get(node);
     }
 
+    /**
+     * Returns all the def nodes for the given variable
+     *
+     * @param var variable
+     * @return definition nodes
+     */
     public Set<DDGNode> getDefNodes(final String var) {
         Set<DDGNode> defNodes = new HashSet<DDGNode>();
         for (DDGNode n: defUseChain.keySet()) {
@@ -65,13 +73,27 @@ public class DDG {
     }
 
     /**
+     * Returns the node for the given node id, otherwise returns null
+     *
+     * @param id node id
+     * @return
+     */
+    public DDGNode getNode(int id) {
+        for (DDGNode n: nodes)
+            if (n.getId() == id)
+                return n;
+
+        return null;
+    }
+
+    /**
      * computes in and out variables for each node
      *
      * @param cfg control flow graph
      * @return map of nodes and in, out variables
      * @throws Exception
      */
-    private HashMap<CFGNode, InOut> getLiveVariables(final CFG cfg) throws Exception {
+    private HashMap<Integer, InOut> getLiveVariables(final CFG cfg) throws Exception {
         BoaAbstractTraversal liveVar = new BoaAbstractTraversal<InOut>(true, true) {
             
             protected InOut preTraverse(final CFGNode node) throws Exception {
@@ -81,19 +103,24 @@ public class DDG {
                     currentNode = getValue(node);
                 }
 
+                //out = Union in[node.successor]
                 for (CFGNode s: node.getSuccessorsList()) {
                     InOut succ = getValue(s);
                     if (succ != null)
                         currentNode.out.addAll(succ.in);
                 }
 
-                if (node.defVariables != null) {
-                    currentNode.out.remove(new Pair(node.defVariables, node));
-                    Set<Pair> useVars = new HashSet<Pair>();
-                    for (String var: node.useVariables)
-                        useVars.add(new Pair(var, node));
-                    currentNode.in = BoaIntrinsics.set_union(useVars, currentNode.out);
-                }
+                //out - def
+                Set<Pair> currentDiff = new HashSet<Pair>(currentNode.out);
+                if (!node.getDefVariables().equals(""))
+                    for (Pair p: currentNode.out)
+                        if (p.var.equals(node.getDefVariables()))
+                            currentDiff.remove(p);
+
+                //out = use Union (out - def)
+                for (String var: node.getUseVariables())
+                    currentNode.in.add(new Pair(var, node));
+                currentNode.in.addAll(currentDiff);
 
                 return currentNode;
             }
@@ -111,19 +138,21 @@ public class DDG {
 
         BoaAbstractFixP fixp = new boa.runtime.BoaAbstractFixP() {
 
-            public boolean invoke1(final InOut curr, final InOut prev) throws Exception {
-                return BoaIntrinsics.set_difference(curr.in, prev.in).size() == 0;
+            public boolean invoke1(final InOut current, final InOut previous) throws Exception {
+                InOut curr = new InOut(current);
+                curr.in.removeAll(previous.in);
+                return curr.in.size() == 0;
             }
 
             @Override
-            public boolean invoke(Object curr, Object prev) throws Exception{
-                return invoke1((InOut) curr, (InOut) prev);
+            public boolean invoke(Object current, Object previous) throws Exception{
+                return invoke1((InOut) current, (InOut) previous);
             }
         };
 
         liveVar.traverse(cfg , Traversal.TraversalDirection.BACKWARD, Traversal.TraversalKind.POSTORDER, fixp);
 
-        return liveVar.outputMapObj; //FIXME: fix the return type
+        return liveVar.outputMapObj;
     }
 
     /**
@@ -131,21 +160,74 @@ public class DDG {
      *
      * @param liveVar map of nodes and their in and out variables
      */
-    private void formDefUseChains(final Map<CFGNode, InOut> liveVar) {
+    private void formDefUseChains(final Map<Integer, InOut> liveVar, CFG cfg) {
         //match def variable of the node with the out variable. If the match occurs form a def-use mapping
-        for (CFGNode n: liveVar.keySet()) {
-            for (Pair p: liveVar.get(n).out) {
-                if (n.defVariables != null) {
-                    if (n.defVariables.equals(p.var)) {
-                        DDGNode defNode = new DDGNode(n);
-                        DDGNode useNode = new DDGNode(p.node);
-                        if (!defUseChain.containsKey(defNode))
-                            defUseChain.put(defNode, new HashSet<DDGNode>());
-                        defUseChain.get(defNode).add(useNode);
+        for (Integer nid: liveVar.keySet()) {
+            CFGNode n = cfg.getNode(nid);
+            DDGNode defNode = getNode(n);
+            if (nid != 0) {
+                for (Pair p : liveVar.get(nid).out) {
+                    if (!n.getDefVariables().equals("")) {
+                        if (n.getDefVariables().equals(p.var)) {
+                            DDGNode useNode = getNode(p.node);
+                            if (!defUseChain.containsKey(defNode))
+                                defUseChain.put(defNode, new HashSet<DDGNode>());
+                            defUseChain.get(defNode).add(useNode);
+                            //connect nodes for constructing the graph
+                            defNode.addSuccessor(useNode);
+                            useNode.addPredecessor(defNode);
+                            DDGEdge edge = new DDGEdge(defNode, useNode, p.var);
+                            defNode.addOutEdge(edge);
+                            useNode.addinEdge(edge);
+                        }
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Connects the disconnected nodes to form the DDG graph
+     *
+     * @param nodeids set of all node ids of the graph
+     */
+    private void constructDDG(Set<Integer> nodeids) {
+        entryNode = getNode(0);
+        for (int i: nodeids) {
+            if (i != 0) {
+                DDGNode dest = getNode(i);
+                if (dest.getPredecessors().size() == 0) {
+                    entryNode.addSuccessor(dest);
+                    dest.addPredecessor(entryNode);
+                    DDGEdge edge = new DDGEdge(entryNode, dest);
+                    entryNode.addOutEdge(edge);
+                    dest.addinEdge(edge);
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks if a node already exists and returns it, otherwise returns a new node.
+     *
+     * @param cfgNode a post dominator tree node
+     * @return a new DDG node or an existing DDG node
+     */
+    private DDGNode getNode(final CFGNode cfgNode) {
+        DDGNode node = new DDGNode(cfgNode.getId());
+        if (nodes.contains(node)) {
+            for (DDGNode n : nodes) {
+                if (n.equals(node))
+                    return n;
+            }
+        }
+        node.setStmt(cfgNode.getStmt());
+        node.setExpr(cfgNode.getExpr());
+        node.setDefVariable(cfgNode.getDefVariables());
+        node.setUseVariables(cfgNode.getUseVariables());
+        nodes.add(node);
+
+        return node;
     }
 
     //Holds in and out pairs for each node
@@ -158,14 +240,14 @@ public class DDG {
             out = new HashSet<Pair>();
         }
 
-        InOut(final HashSet<Pair> out, final HashSet<Pair> in){
-            this.out = out;
+        InOut(final HashSet<Pair> in, final HashSet<Pair> out){
             this.in = in;
+            this.out = out;
         }
 
-        InOut(final InOut tmp){
-            this.out = tmp.out;
-            this.in = tmp.in;
+        InOut(final InOut inout){
+            this.in = new HashSet<Pair>(inout.in);
+            this.out = new HashSet<Pair>(inout.out);
         }
 
         public InOut clone() {
@@ -186,18 +268,21 @@ public class DDG {
         }
 
         @Override
-        public boolean equals(final Object o) {
+        public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
             Pair pair = (Pair) o;
 
-            return var.equals(pair.var);
+            if (!var.equals(pair.var)) return false;
+            return node.getId() == pair.node.getId();
         }
 
         @Override
         public int hashCode() {
-            return var.hashCode();
+            int result = var.hashCode();
+            result = 31 * result + node.hashCode();
+            return result;
         }
     }
 

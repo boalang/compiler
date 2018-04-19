@@ -19,7 +19,10 @@ package boa.graphs.ddg;
 import boa.graphs.cfg.CFGNode;
 import boa.types.Ast;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author marafat
@@ -32,12 +35,12 @@ public class DDGNode implements Comparable<DDGNode> {
     private Ast.Expression expr;
 
     private String defVariables;
-    private HashSet<String> useVariables = new HashSet<String>();
+    private Set<String> useVariables = new HashSet<String>();
 
-//    private Set<CDGEdge> inEdges = new HashSet<CDGEdge>();
-//    private Set<CDGEdge> outEdges = new HashSet<CDGEdge>();
-//    private List<CDGNode> successors = new java.util.ArrayList<CDGNode>();
-//    private List<CDGNode> predecessors = new java.util.ArrayList<CDGNode>();
+    private Set<DDGEdge> inEdges = new HashSet<DDGEdge>();
+    private Set<DDGEdge> outEdges = new HashSet<DDGEdge>();
+    private List<DDGNode> successors = new ArrayList<DDGNode>();
+    private List<DDGNode> predecessors = new ArrayList<DDGNode>();
 
     public DDGNode(final CFGNode node) {
         this.id = node.getId();
@@ -45,6 +48,10 @@ public class DDGNode implements Comparable<DDGNode> {
         this.expr = node.getExpr();
         this.defVariables = node.defVariables;
         this.useVariables = node.useVariables;
+    }
+
+    public DDGNode(int id) {
+        this.id = id;
     }
 
     //Setters
@@ -64,8 +71,28 @@ public class DDGNode implements Comparable<DDGNode> {
         this.defVariables = defVariables;
     }
 
+    public void setUseVariables(final Set<String> useVariables) {
+        this.useVariables = useVariables;
+    }
+
     public void addUseVariable(final String useVariables) {
         this.useVariables.add(useVariables);
+    }
+
+    public void addOutEdge(DDGEdge edge) {
+        outEdges.add(edge);
+    }
+
+    public void addinEdge(DDGEdge edge) {
+        inEdges.add(edge);
+    }
+
+    public void addSuccessor(DDGNode node) {
+        successors.add(node);
+    }
+
+    public void addPredecessor(DDGNode node) {
+        predecessors.add(node);
     }
 
     //Getters
@@ -85,8 +112,24 @@ public class DDGNode implements Comparable<DDGNode> {
         return defVariables;
     }
 
-    public HashSet<String> getUseVariables() {
+    public Set<String> getUseVariables() {
         return useVariables;
+    }
+
+    public Set<DDGEdge> getInEdges() {
+        return inEdges;
+    }
+
+    public Set<DDGEdge> getOutEdges() {
+        return outEdges;
+    }
+
+    public List<DDGNode> getSuccessors() {
+        return successors;
+    }
+
+    public List<DDGNode> getPredecessors() {
+        return predecessors;
     }
 
     @Override
