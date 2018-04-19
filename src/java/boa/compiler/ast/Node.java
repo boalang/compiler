@@ -19,7 +19,7 @@ package boa.compiler.ast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 
 import boa.compiler.SymbolTable;
 import boa.compiler.ast.expressions.Expression;
@@ -110,6 +110,6 @@ public abstract class Node {
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		final PrintStream ps = new PrintStream(baos);
 		this.accept(new PrettyPrintVisitor(ps));
-		return new String(baos.toByteArray(), StandardCharsets.UTF_8);
+		return new String(baos.toByteArray(), Charset.forName("UTF-8"));
 	}
 }
