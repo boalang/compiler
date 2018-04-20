@@ -25,6 +25,7 @@ import boa.types.BoaProtoTuple;
 import boa.types.BoaProtoList;
 import boa.types.BoaType;
 import boa.types.BoaInt;
+import boa.types.proto.enums.CDGNodeTypeProtoMap;
 
 /**
  * A {@link CDGNodeProtoTuple}.
@@ -37,6 +38,9 @@ public class CDGNodeProtoTuple extends BoaProtoTuple {
 
     static {
         int counter = 0;
+
+        names.put("kind", counter++);
+        members.add(new CDGNodeTypeProtoMap());
 
         names.put("id", counter++);
         members.add(new BoaInt());

@@ -19,6 +19,7 @@ package boa.types.proto;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.PDGEdgeTypeProtoMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +38,9 @@ public class PDGEdgeProtoTuple extends BoaProtoTuple {
     static {
         int counter = 0;
 
+        names.put("kind", counter++);
+        members.add(new PDGEdgeTypeProtoMap());
+
         names.put("src", counter++);
         members.add(new BoaString());
 
@@ -45,8 +49,6 @@ public class PDGEdgeProtoTuple extends BoaProtoTuple {
 
         names.put("label", counter++);
         members.add(new PDGNodeProtoTuple());
-
-        //TODO: add edge type
     }
 
     /**

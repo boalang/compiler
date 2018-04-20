@@ -20,6 +20,7 @@ import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaType;
+import boa.types.proto.enums.PDGNodeTypeProtoMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +38,9 @@ public class PDGNodeProtoTuple extends BoaProtoTuple {
 
     static {
         int counter = 0;
+
+        names.put("kind", counter++);
+        members.add(new PDGNodeTypeProtoMap());
 
         names.put("id", counter++);
         members.add(new BoaInt());
