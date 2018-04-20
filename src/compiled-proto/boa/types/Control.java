@@ -2925,6 +2925,10314 @@ public final class Control {
     // @@protoc_insertion_point(class_scope:boa.types.CFGEdge)
   }
 
+  public interface CDGOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // repeated .boa.types.CDGNode nodes = 1;
+    /**
+     * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+     */
+    java.util.List<boa.types.Control.CDGNode> 
+        getNodesList();
+    /**
+     * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+     */
+    boa.types.Control.CDGNode getNodes(int index);
+    /**
+     * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+     */
+    int getNodesCount();
+    /**
+     * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+     */
+    java.util.List<? extends boa.types.Control.CDGNodeOrBuilder> 
+        getNodesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+     */
+    boa.types.Control.CDGNodeOrBuilder getNodesOrBuilder(
+        int index);
+
+    // repeated .boa.types.CDGEdge edges = 2;
+    /**
+     * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+     */
+    java.util.List<boa.types.Control.CDGEdge> 
+        getEdgesList();
+    /**
+     * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+     */
+    boa.types.Control.CDGEdge getEdges(int index);
+    /**
+     * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+     */
+    int getEdgesCount();
+    /**
+     * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+     */
+    java.util.List<? extends boa.types.Control.CDGEdgeOrBuilder> 
+        getEdgesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+     */
+    boa.types.Control.CDGEdgeOrBuilder getEdgesOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code boa.types.CDG}
+   */
+  public static final class CDG extends
+      com.google.protobuf.GeneratedMessage
+      implements CDGOrBuilder {
+    // Use CDG.newBuilder() to construct.
+    private CDG(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private CDG(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final CDG defaultInstance;
+    public static CDG getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public CDG getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private CDG(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                nodes_ = new java.util.ArrayList<boa.types.Control.CDGNode>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              nodes_.add(input.readMessage(boa.types.Control.CDGNode.PARSER, extensionRegistry));
+              break;
+            }
+            case 18: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                edges_ = new java.util.ArrayList<boa.types.Control.CDGEdge>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              edges_.add(input.readMessage(boa.types.Control.CDGEdge.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          nodes_ = java.util.Collections.unmodifiableList(nodes_);
+        }
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          edges_ = java.util.Collections.unmodifiableList(edges_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Control.internal_static_boa_types_CDG_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Control.internal_static_boa_types_CDG_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Control.CDG.class, boa.types.Control.CDG.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<CDG> PARSER =
+        new com.google.protobuf.AbstractParser<CDG>() {
+      public CDG parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new CDG(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<CDG> getParserForType() {
+      return PARSER;
+    }
+
+    // repeated .boa.types.CDGNode nodes = 1;
+    public static final int NODES_FIELD_NUMBER = 1;
+    private java.util.List<boa.types.Control.CDGNode> nodes_;
+    /**
+     * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+     */
+    public java.util.List<boa.types.Control.CDGNode> getNodesList() {
+      return nodes_;
+    }
+    /**
+     * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+     */
+    public java.util.List<? extends boa.types.Control.CDGNodeOrBuilder> 
+        getNodesOrBuilderList() {
+      return nodes_;
+    }
+    /**
+     * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+     */
+    public int getNodesCount() {
+      return nodes_.size();
+    }
+    /**
+     * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+     */
+    public boa.types.Control.CDGNode getNodes(int index) {
+      return nodes_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+     */
+    public boa.types.Control.CDGNodeOrBuilder getNodesOrBuilder(
+        int index) {
+      return nodes_.get(index);
+    }
+
+    // repeated .boa.types.CDGEdge edges = 2;
+    public static final int EDGES_FIELD_NUMBER = 2;
+    private java.util.List<boa.types.Control.CDGEdge> edges_;
+    /**
+     * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+     */
+    public java.util.List<boa.types.Control.CDGEdge> getEdgesList() {
+      return edges_;
+    }
+    /**
+     * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+     */
+    public java.util.List<? extends boa.types.Control.CDGEdgeOrBuilder> 
+        getEdgesOrBuilderList() {
+      return edges_;
+    }
+    /**
+     * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+     */
+    public int getEdgesCount() {
+      return edges_.size();
+    }
+    /**
+     * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+     */
+    public boa.types.Control.CDGEdge getEdges(int index) {
+      return edges_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+     */
+    public boa.types.Control.CDGEdgeOrBuilder getEdgesOrBuilder(
+        int index) {
+      return edges_.get(index);
+    }
+
+    private void initFields() {
+      nodes_ = java.util.Collections.emptyList();
+      edges_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      for (int i = 0; i < getNodesCount(); i++) {
+        if (!getNodes(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getEdgesCount(); i++) {
+        if (!getEdges(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < nodes_.size(); i++) {
+        output.writeMessage(1, nodes_.get(i));
+      }
+      for (int i = 0; i < edges_.size(); i++) {
+        output.writeMessage(2, edges_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < nodes_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, nodes_.get(i));
+      }
+      for (int i = 0; i < edges_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, edges_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Control.CDG parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.CDG parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.CDG parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.CDG parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.CDG parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.CDG parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.CDG parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Control.CDG parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.CDG parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.CDG parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Control.CDG prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.CDG}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Control.CDGOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Control.internal_static_boa_types_CDG_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Control.internal_static_boa_types_CDG_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Control.CDG.class, boa.types.Control.CDG.Builder.class);
+      }
+
+      // Construct using boa.types.Control.CDG.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getNodesFieldBuilder();
+          getEdgesFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        if (nodesBuilder_ == null) {
+          nodes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          nodesBuilder_.clear();
+        }
+        if (edgesBuilder_ == null) {
+          edges_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+        } else {
+          edgesBuilder_.clear();
+        }
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Control.internal_static_boa_types_CDG_descriptor;
+      }
+
+      public boa.types.Control.CDG getDefaultInstanceForType() {
+        return boa.types.Control.CDG.getDefaultInstance();
+      }
+
+      public boa.types.Control.CDG build() {
+        boa.types.Control.CDG result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Control.CDG buildPartial() {
+        boa.types.Control.CDG result = new boa.types.Control.CDG(this);
+        int from_bitField0_ = bitField0_;
+        if (nodesBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            nodes_ = java.util.Collections.unmodifiableList(nodes_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.nodes_ = nodes_;
+        } else {
+          result.nodes_ = nodesBuilder_.build();
+        }
+        if (edgesBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+            edges_ = java.util.Collections.unmodifiableList(edges_);
+            bitField0_ = (bitField0_ & ~0x00000002);
+          }
+          result.edges_ = edges_;
+        } else {
+          result.edges_ = edgesBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Control.CDG) {
+          return mergeFrom((boa.types.Control.CDG)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Control.CDG other) {
+        if (other == boa.types.Control.CDG.getDefaultInstance()) return this;
+        if (nodesBuilder_ == null) {
+          if (!other.nodes_.isEmpty()) {
+            if (nodes_.isEmpty()) {
+              nodes_ = other.nodes_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureNodesIsMutable();
+              nodes_.addAll(other.nodes_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.nodes_.isEmpty()) {
+            if (nodesBuilder_.isEmpty()) {
+              nodesBuilder_.dispose();
+              nodesBuilder_ = null;
+              nodes_ = other.nodes_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              nodesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getNodesFieldBuilder() : null;
+            } else {
+              nodesBuilder_.addAllMessages(other.nodes_);
+            }
+          }
+        }
+        if (edgesBuilder_ == null) {
+          if (!other.edges_.isEmpty()) {
+            if (edges_.isEmpty()) {
+              edges_ = other.edges_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+            } else {
+              ensureEdgesIsMutable();
+              edges_.addAll(other.edges_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.edges_.isEmpty()) {
+            if (edgesBuilder_.isEmpty()) {
+              edgesBuilder_.dispose();
+              edgesBuilder_ = null;
+              edges_ = other.edges_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+              edgesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getEdgesFieldBuilder() : null;
+            } else {
+              edgesBuilder_.addAllMessages(other.edges_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        for (int i = 0; i < getNodesCount(); i++) {
+          if (!getNodes(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getEdgesCount(); i++) {
+          if (!getEdges(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Control.CDG parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Control.CDG) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // repeated .boa.types.CDGNode nodes = 1;
+      private java.util.List<boa.types.Control.CDGNode> nodes_ =
+        java.util.Collections.emptyList();
+      private void ensureNodesIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          nodes_ = new java.util.ArrayList<boa.types.Control.CDGNode>(nodes_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Control.CDGNode, boa.types.Control.CDGNode.Builder, boa.types.Control.CDGNodeOrBuilder> nodesBuilder_;
+
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public java.util.List<boa.types.Control.CDGNode> getNodesList() {
+        if (nodesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(nodes_);
+        } else {
+          return nodesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public int getNodesCount() {
+        if (nodesBuilder_ == null) {
+          return nodes_.size();
+        } else {
+          return nodesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public boa.types.Control.CDGNode getNodes(int index) {
+        if (nodesBuilder_ == null) {
+          return nodes_.get(index);
+        } else {
+          return nodesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public Builder setNodes(
+          int index, boa.types.Control.CDGNode value) {
+        if (nodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNodesIsMutable();
+          nodes_.set(index, value);
+          onChanged();
+        } else {
+          nodesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public Builder setNodes(
+          int index, boa.types.Control.CDGNode.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          nodesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public Builder addNodes(boa.types.Control.CDGNode value) {
+        if (nodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNodesIsMutable();
+          nodes_.add(value);
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public Builder addNodes(
+          int index, boa.types.Control.CDGNode value) {
+        if (nodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNodesIsMutable();
+          nodes_.add(index, value);
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public Builder addNodes(
+          boa.types.Control.CDGNode.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.add(builderForValue.build());
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public Builder addNodes(
+          int index, boa.types.Control.CDGNode.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public Builder addAllNodes(
+          java.lang.Iterable<? extends boa.types.Control.CDGNode> values) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          super.addAll(values, nodes_);
+          onChanged();
+        } else {
+          nodesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public Builder clearNodes() {
+        if (nodesBuilder_ == null) {
+          nodes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          nodesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public Builder removeNodes(int index) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.remove(index);
+          onChanged();
+        } else {
+          nodesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public boa.types.Control.CDGNode.Builder getNodesBuilder(
+          int index) {
+        return getNodesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public boa.types.Control.CDGNodeOrBuilder getNodesOrBuilder(
+          int index) {
+        if (nodesBuilder_ == null) {
+          return nodes_.get(index);  } else {
+          return nodesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public java.util.List<? extends boa.types.Control.CDGNodeOrBuilder> 
+           getNodesOrBuilderList() {
+        if (nodesBuilder_ != null) {
+          return nodesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(nodes_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public boa.types.Control.CDGNode.Builder addNodesBuilder() {
+        return getNodesFieldBuilder().addBuilder(
+            boa.types.Control.CDGNode.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public boa.types.Control.CDGNode.Builder addNodesBuilder(
+          int index) {
+        return getNodesFieldBuilder().addBuilder(
+            index, boa.types.Control.CDGNode.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.CDGNode nodes = 1;</code>
+       */
+      public java.util.List<boa.types.Control.CDGNode.Builder> 
+           getNodesBuilderList() {
+        return getNodesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Control.CDGNode, boa.types.Control.CDGNode.Builder, boa.types.Control.CDGNodeOrBuilder> 
+          getNodesFieldBuilder() {
+        if (nodesBuilder_ == null) {
+          nodesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Control.CDGNode, boa.types.Control.CDGNode.Builder, boa.types.Control.CDGNodeOrBuilder>(
+                  nodes_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          nodes_ = null;
+        }
+        return nodesBuilder_;
+      }
+
+      // repeated .boa.types.CDGEdge edges = 2;
+      private java.util.List<boa.types.Control.CDGEdge> edges_ =
+        java.util.Collections.emptyList();
+      private void ensureEdgesIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          edges_ = new java.util.ArrayList<boa.types.Control.CDGEdge>(edges_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Control.CDGEdge, boa.types.Control.CDGEdge.Builder, boa.types.Control.CDGEdgeOrBuilder> edgesBuilder_;
+
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public java.util.List<boa.types.Control.CDGEdge> getEdgesList() {
+        if (edgesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(edges_);
+        } else {
+          return edgesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public int getEdgesCount() {
+        if (edgesBuilder_ == null) {
+          return edges_.size();
+        } else {
+          return edgesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public boa.types.Control.CDGEdge getEdges(int index) {
+        if (edgesBuilder_ == null) {
+          return edges_.get(index);
+        } else {
+          return edgesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public Builder setEdges(
+          int index, boa.types.Control.CDGEdge value) {
+        if (edgesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEdgesIsMutable();
+          edges_.set(index, value);
+          onChanged();
+        } else {
+          edgesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public Builder setEdges(
+          int index, boa.types.Control.CDGEdge.Builder builderForValue) {
+        if (edgesBuilder_ == null) {
+          ensureEdgesIsMutable();
+          edges_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          edgesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public Builder addEdges(boa.types.Control.CDGEdge value) {
+        if (edgesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEdgesIsMutable();
+          edges_.add(value);
+          onChanged();
+        } else {
+          edgesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public Builder addEdges(
+          int index, boa.types.Control.CDGEdge value) {
+        if (edgesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEdgesIsMutable();
+          edges_.add(index, value);
+          onChanged();
+        } else {
+          edgesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public Builder addEdges(
+          boa.types.Control.CDGEdge.Builder builderForValue) {
+        if (edgesBuilder_ == null) {
+          ensureEdgesIsMutable();
+          edges_.add(builderForValue.build());
+          onChanged();
+        } else {
+          edgesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public Builder addEdges(
+          int index, boa.types.Control.CDGEdge.Builder builderForValue) {
+        if (edgesBuilder_ == null) {
+          ensureEdgesIsMutable();
+          edges_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          edgesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public Builder addAllEdges(
+          java.lang.Iterable<? extends boa.types.Control.CDGEdge> values) {
+        if (edgesBuilder_ == null) {
+          ensureEdgesIsMutable();
+          super.addAll(values, edges_);
+          onChanged();
+        } else {
+          edgesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public Builder clearEdges() {
+        if (edgesBuilder_ == null) {
+          edges_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+          onChanged();
+        } else {
+          edgesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public Builder removeEdges(int index) {
+        if (edgesBuilder_ == null) {
+          ensureEdgesIsMutable();
+          edges_.remove(index);
+          onChanged();
+        } else {
+          edgesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public boa.types.Control.CDGEdge.Builder getEdgesBuilder(
+          int index) {
+        return getEdgesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public boa.types.Control.CDGEdgeOrBuilder getEdgesOrBuilder(
+          int index) {
+        if (edgesBuilder_ == null) {
+          return edges_.get(index);  } else {
+          return edgesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public java.util.List<? extends boa.types.Control.CDGEdgeOrBuilder> 
+           getEdgesOrBuilderList() {
+        if (edgesBuilder_ != null) {
+          return edgesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(edges_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public boa.types.Control.CDGEdge.Builder addEdgesBuilder() {
+        return getEdgesFieldBuilder().addBuilder(
+            boa.types.Control.CDGEdge.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public boa.types.Control.CDGEdge.Builder addEdgesBuilder(
+          int index) {
+        return getEdgesFieldBuilder().addBuilder(
+            index, boa.types.Control.CDGEdge.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.CDGEdge edges = 2;</code>
+       */
+      public java.util.List<boa.types.Control.CDGEdge.Builder> 
+           getEdgesBuilderList() {
+        return getEdgesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Control.CDGEdge, boa.types.Control.CDGEdge.Builder, boa.types.Control.CDGEdgeOrBuilder> 
+          getEdgesFieldBuilder() {
+        if (edgesBuilder_ == null) {
+          edgesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Control.CDGEdge, boa.types.Control.CDGEdge.Builder, boa.types.Control.CDGEdgeOrBuilder>(
+                  edges_,
+                  ((bitField0_ & 0x00000002) == 0x00000002),
+                  getParentForChildren(),
+                  isClean());
+          edges_ = null;
+        }
+        return edgesBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.CDG)
+    }
+
+    static {
+      defaultInstance = new CDG(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.CDG)
+  }
+
+  public interface CDGNodeOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required int32 id = 1;
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    boolean hasId();
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    int getId();
+
+    // required .boa.types.CDGNode.CDGNodeType kind = 2;
+    /**
+     * <code>required .boa.types.CDGNode.CDGNodeType kind = 2;</code>
+     */
+    boolean hasKind();
+    /**
+     * <code>required .boa.types.CDGNode.CDGNodeType kind = 2;</code>
+     */
+    boa.types.Control.CDGNode.CDGNodeType getKind();
+
+    // optional .boa.types.Statement statement = 3;
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    boolean hasStatement();
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    boa.types.Ast.Statement getStatement();
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    boa.types.Ast.StatementOrBuilder getStatementOrBuilder();
+
+    // optional .boa.types.Expression expression = 4;
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    boolean hasExpression();
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    boa.types.Ast.Expression getExpression();
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder();
+  }
+  /**
+   * Protobuf type {@code boa.types.CDGNode}
+   */
+  public static final class CDGNode extends
+      com.google.protobuf.GeneratedMessage
+      implements CDGNodeOrBuilder {
+    // Use CDGNode.newBuilder() to construct.
+    private CDGNode(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private CDGNode(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final CDGNode defaultInstance;
+    public static CDGNode getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public CDGNode getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private CDGNode(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              id_ = input.readInt32();
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              boa.types.Control.CDGNode.CDGNodeType value = boa.types.Control.CDGNode.CDGNodeType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                kind_ = value;
+              }
+              break;
+            }
+            case 26: {
+              boa.types.Ast.Statement.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = statement_.toBuilder();
+              }
+              statement_ = input.readMessage(boa.types.Ast.Statement.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(statement_);
+                statement_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
+              break;
+            }
+            case 34: {
+              boa.types.Ast.Expression.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+                subBuilder = expression_.toBuilder();
+              }
+              expression_ = input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(expression_);
+                expression_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000008;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Control.internal_static_boa_types_CDGNode_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Control.internal_static_boa_types_CDGNode_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Control.CDGNode.class, boa.types.Control.CDGNode.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<CDGNode> PARSER =
+        new com.google.protobuf.AbstractParser<CDGNode>() {
+      public CDGNode parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new CDGNode(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<CDGNode> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code boa.types.CDGNode.CDGNodeType}
+     */
+    public enum CDGNodeType
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>ENTRY = 1;</code>
+       */
+      ENTRY(0, 1),
+      /**
+       * <code>OTHER = 2;</code>
+       */
+      OTHER(1, 2),
+      /**
+       * <code>METHOD = 3;</code>
+       */
+      METHOD(2, 3),
+      /**
+       * <code>CONTROL = 4;</code>
+       */
+      CONTROL(3, 4),
+      ;
+
+      /**
+       * <code>ENTRY = 1;</code>
+       */
+      public static final int ENTRY_VALUE = 1;
+      /**
+       * <code>OTHER = 2;</code>
+       */
+      public static final int OTHER_VALUE = 2;
+      /**
+       * <code>METHOD = 3;</code>
+       */
+      public static final int METHOD_VALUE = 3;
+      /**
+       * <code>CONTROL = 4;</code>
+       */
+      public static final int CONTROL_VALUE = 4;
+
+
+      public final int getNumber() { return value; }
+
+      public static CDGNodeType valueOf(int value) {
+        switch (value) {
+          case 1: return ENTRY;
+          case 2: return OTHER;
+          case 3: return METHOD;
+          case 4: return CONTROL;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<CDGNodeType>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<CDGNodeType>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<CDGNodeType>() {
+              public CDGNodeType findValueByNumber(int number) {
+                return CDGNodeType.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return boa.types.Control.CDGNode.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final CDGNodeType[] VALUES = values();
+
+      public static CDGNodeType valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private CDGNodeType(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:boa.types.CDGNode.CDGNodeType)
+    }
+
+    private int bitField0_;
+    // required int32 id = 1;
+    public static final int ID_FIELD_NUMBER = 1;
+    private int id_;
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    public boolean hasId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    public int getId() {
+      return id_;
+    }
+
+    // required .boa.types.CDGNode.CDGNodeType kind = 2;
+    public static final int KIND_FIELD_NUMBER = 2;
+    private boa.types.Control.CDGNode.CDGNodeType kind_;
+    /**
+     * <code>required .boa.types.CDGNode.CDGNodeType kind = 2;</code>
+     */
+    public boolean hasKind() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required .boa.types.CDGNode.CDGNodeType kind = 2;</code>
+     */
+    public boa.types.Control.CDGNode.CDGNodeType getKind() {
+      return kind_;
+    }
+
+    // optional .boa.types.Statement statement = 3;
+    public static final int STATEMENT_FIELD_NUMBER = 3;
+    private boa.types.Ast.Statement statement_;
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    public boolean hasStatement() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    public boa.types.Ast.Statement getStatement() {
+      return statement_;
+    }
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    public boa.types.Ast.StatementOrBuilder getStatementOrBuilder() {
+      return statement_;
+    }
+
+    // optional .boa.types.Expression expression = 4;
+    public static final int EXPRESSION_FIELD_NUMBER = 4;
+    private boa.types.Ast.Expression expression_;
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    public boolean hasExpression() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    public boa.types.Ast.Expression getExpression() {
+      return expression_;
+    }
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    public boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder() {
+      return expression_;
+    }
+
+    private void initFields() {
+      id_ = 0;
+      kind_ = boa.types.Control.CDGNode.CDGNodeType.ENTRY;
+      statement_ = boa.types.Ast.Statement.getDefaultInstance();
+      expression_ = boa.types.Ast.Expression.getDefaultInstance();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasKind()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (hasStatement()) {
+        if (!getStatement().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasExpression()) {
+        if (!getExpression().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeEnum(2, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(3, statement_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeMessage(4, expression_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, statement_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, expression_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Control.CDGNode parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.CDGNode parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.CDGNode parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.CDGNode parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.CDGNode parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.CDGNode parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.CDGNode parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Control.CDGNode parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.CDGNode parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.CDGNode parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Control.CDGNode prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.CDGNode}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Control.CDGNodeOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Control.internal_static_boa_types_CDGNode_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Control.internal_static_boa_types_CDGNode_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Control.CDGNode.class, boa.types.Control.CDGNode.Builder.class);
+      }
+
+      // Construct using boa.types.Control.CDGNode.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getStatementFieldBuilder();
+          getExpressionFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        id_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        kind_ = boa.types.Control.CDGNode.CDGNodeType.ENTRY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        if (statementBuilder_ == null) {
+          statement_ = boa.types.Ast.Statement.getDefaultInstance();
+        } else {
+          statementBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        if (expressionBuilder_ == null) {
+          expression_ = boa.types.Ast.Expression.getDefaultInstance();
+        } else {
+          expressionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Control.internal_static_boa_types_CDGNode_descriptor;
+      }
+
+      public boa.types.Control.CDGNode getDefaultInstanceForType() {
+        return boa.types.Control.CDGNode.getDefaultInstance();
+      }
+
+      public boa.types.Control.CDGNode build() {
+        boa.types.Control.CDGNode result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Control.CDGNode buildPartial() {
+        boa.types.Control.CDGNode result = new boa.types.Control.CDGNode(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.id_ = id_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.kind_ = kind_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (statementBuilder_ == null) {
+          result.statement_ = statement_;
+        } else {
+          result.statement_ = statementBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        if (expressionBuilder_ == null) {
+          result.expression_ = expression_;
+        } else {
+          result.expression_ = expressionBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Control.CDGNode) {
+          return mergeFrom((boa.types.Control.CDGNode)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Control.CDGNode other) {
+        if (other == boa.types.Control.CDGNode.getDefaultInstance()) return this;
+        if (other.hasId()) {
+          setId(other.getId());
+        }
+        if (other.hasKind()) {
+          setKind(other.getKind());
+        }
+        if (other.hasStatement()) {
+          mergeStatement(other.getStatement());
+        }
+        if (other.hasExpression()) {
+          mergeExpression(other.getExpression());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasId()) {
+          
+          return false;
+        }
+        if (!hasKind()) {
+          
+          return false;
+        }
+        if (hasStatement()) {
+          if (!getStatement().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasExpression()) {
+          if (!getExpression().isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Control.CDGNode parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Control.CDGNode) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required int32 id = 1;
+      private int id_ ;
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public boolean hasId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public int getId() {
+        return id_;
+      }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public Builder setId(int value) {
+        bitField0_ |= 0x00000001;
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public Builder clearId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        id_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // required .boa.types.CDGNode.CDGNodeType kind = 2;
+      private boa.types.Control.CDGNode.CDGNodeType kind_ = boa.types.Control.CDGNode.CDGNodeType.ENTRY;
+      /**
+       * <code>required .boa.types.CDGNode.CDGNodeType kind = 2;</code>
+       */
+      public boolean hasKind() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required .boa.types.CDGNode.CDGNodeType kind = 2;</code>
+       */
+      public boa.types.Control.CDGNode.CDGNodeType getKind() {
+        return kind_;
+      }
+      /**
+       * <code>required .boa.types.CDGNode.CDGNodeType kind = 2;</code>
+       */
+      public Builder setKind(boa.types.Control.CDGNode.CDGNodeType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
+        kind_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .boa.types.CDGNode.CDGNodeType kind = 2;</code>
+       */
+      public Builder clearKind() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        kind_ = boa.types.Control.CDGNode.CDGNodeType.ENTRY;
+        onChanged();
+        return this;
+      }
+
+      // optional .boa.types.Statement statement = 3;
+      private boa.types.Ast.Statement statement_ = boa.types.Ast.Statement.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> statementBuilder_;
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public boolean hasStatement() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public boa.types.Ast.Statement getStatement() {
+        if (statementBuilder_ == null) {
+          return statement_;
+        } else {
+          return statementBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public Builder setStatement(boa.types.Ast.Statement value) {
+        if (statementBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          statement_ = value;
+          onChanged();
+        } else {
+          statementBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public Builder setStatement(
+          boa.types.Ast.Statement.Builder builderForValue) {
+        if (statementBuilder_ == null) {
+          statement_ = builderForValue.build();
+          onChanged();
+        } else {
+          statementBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public Builder mergeStatement(boa.types.Ast.Statement value) {
+        if (statementBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              statement_ != boa.types.Ast.Statement.getDefaultInstance()) {
+            statement_ =
+              boa.types.Ast.Statement.newBuilder(statement_).mergeFrom(value).buildPartial();
+          } else {
+            statement_ = value;
+          }
+          onChanged();
+        } else {
+          statementBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public Builder clearStatement() {
+        if (statementBuilder_ == null) {
+          statement_ = boa.types.Ast.Statement.getDefaultInstance();
+          onChanged();
+        } else {
+          statementBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public boa.types.Ast.Statement.Builder getStatementBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getStatementFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public boa.types.Ast.StatementOrBuilder getStatementOrBuilder() {
+        if (statementBuilder_ != null) {
+          return statementBuilder_.getMessageOrBuilder();
+        } else {
+          return statement_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> 
+          getStatementFieldBuilder() {
+        if (statementBuilder_ == null) {
+          statementBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder>(
+                  statement_,
+                  getParentForChildren(),
+                  isClean());
+          statement_ = null;
+        }
+        return statementBuilder_;
+      }
+
+      // optional .boa.types.Expression expression = 4;
+      private boa.types.Ast.Expression expression_ = boa.types.Ast.Expression.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> expressionBuilder_;
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public boolean hasExpression() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public boa.types.Ast.Expression getExpression() {
+        if (expressionBuilder_ == null) {
+          return expression_;
+        } else {
+          return expressionBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public Builder setExpression(boa.types.Ast.Expression value) {
+        if (expressionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          expression_ = value;
+          onChanged();
+        } else {
+          expressionBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public Builder setExpression(
+          boa.types.Ast.Expression.Builder builderForValue) {
+        if (expressionBuilder_ == null) {
+          expression_ = builderForValue.build();
+          onChanged();
+        } else {
+          expressionBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public Builder mergeExpression(boa.types.Ast.Expression value) {
+        if (expressionBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              expression_ != boa.types.Ast.Expression.getDefaultInstance()) {
+            expression_ =
+              boa.types.Ast.Expression.newBuilder(expression_).mergeFrom(value).buildPartial();
+          } else {
+            expression_ = value;
+          }
+          onChanged();
+        } else {
+          expressionBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public Builder clearExpression() {
+        if (expressionBuilder_ == null) {
+          expression_ = boa.types.Ast.Expression.getDefaultInstance();
+          onChanged();
+        } else {
+          expressionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public boa.types.Ast.Expression.Builder getExpressionBuilder() {
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return getExpressionFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder() {
+        if (expressionBuilder_ != null) {
+          return expressionBuilder_.getMessageOrBuilder();
+        } else {
+          return expression_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
+          getExpressionFieldBuilder() {
+        if (expressionBuilder_ == null) {
+          expressionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder>(
+                  expression_,
+                  getParentForChildren(),
+                  isClean());
+          expression_ = null;
+        }
+        return expressionBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.CDGNode)
+    }
+
+    static {
+      defaultInstance = new CDGNode(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.CDGNode)
+  }
+
+  public interface CDGEdgeOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required .boa.types.CDGEdge.CDGEdgeLabel label = 1;
+    /**
+     * <code>required .boa.types.CDGEdge.CDGEdgeLabel label = 1;</code>
+     */
+    boolean hasLabel();
+    /**
+     * <code>required .boa.types.CDGEdge.CDGEdgeLabel label = 1;</code>
+     */
+    boa.types.Control.CDGEdge.CDGEdgeLabel getLabel();
+  }
+  /**
+   * Protobuf type {@code boa.types.CDGEdge}
+   */
+  public static final class CDGEdge extends
+      com.google.protobuf.GeneratedMessage
+      implements CDGEdgeOrBuilder {
+    // Use CDGEdge.newBuilder() to construct.
+    private CDGEdge(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private CDGEdge(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final CDGEdge defaultInstance;
+    public static CDGEdge getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public CDGEdge getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private CDGEdge(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              int rawValue = input.readEnum();
+              boa.types.Control.CDGEdge.CDGEdgeLabel value = boa.types.Control.CDGEdge.CDGEdgeLabel.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                label_ = value;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Control.internal_static_boa_types_CDGEdge_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Control.internal_static_boa_types_CDGEdge_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Control.CDGEdge.class, boa.types.Control.CDGEdge.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<CDGEdge> PARSER =
+        new com.google.protobuf.AbstractParser<CDGEdge>() {
+      public CDGEdge parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new CDGEdge(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<CDGEdge> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code boa.types.CDGEdge.CDGEdgeLabel}
+     */
+    public enum CDGEdgeLabel
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>NIL = 1;</code>
+       */
+      NIL(0, 1),
+      /**
+       * <code>TRUE = 2;</code>
+       */
+      TRUE(1, 2),
+      /**
+       * <code>FALSE = 3;</code>
+       */
+      FALSE(2, 3),
+      ;
+
+      /**
+       * <code>NIL = 1;</code>
+       */
+      public static final int NIL_VALUE = 1;
+      /**
+       * <code>TRUE = 2;</code>
+       */
+      public static final int TRUE_VALUE = 2;
+      /**
+       * <code>FALSE = 3;</code>
+       */
+      public static final int FALSE_VALUE = 3;
+
+
+      public final int getNumber() { return value; }
+
+      public static CDGEdgeLabel valueOf(int value) {
+        switch (value) {
+          case 1: return NIL;
+          case 2: return TRUE;
+          case 3: return FALSE;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<CDGEdgeLabel>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<CDGEdgeLabel>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<CDGEdgeLabel>() {
+              public CDGEdgeLabel findValueByNumber(int number) {
+                return CDGEdgeLabel.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return boa.types.Control.CDGEdge.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final CDGEdgeLabel[] VALUES = values();
+
+      public static CDGEdgeLabel valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private CDGEdgeLabel(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:boa.types.CDGEdge.CDGEdgeLabel)
+    }
+
+    private int bitField0_;
+    // required .boa.types.CDGEdge.CDGEdgeLabel label = 1;
+    public static final int LABEL_FIELD_NUMBER = 1;
+    private boa.types.Control.CDGEdge.CDGEdgeLabel label_;
+    /**
+     * <code>required .boa.types.CDGEdge.CDGEdgeLabel label = 1;</code>
+     */
+    public boolean hasLabel() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required .boa.types.CDGEdge.CDGEdgeLabel label = 1;</code>
+     */
+    public boa.types.Control.CDGEdge.CDGEdgeLabel getLabel() {
+      return label_;
+    }
+
+    private void initFields() {
+      label_ = boa.types.Control.CDGEdge.CDGEdgeLabel.NIL;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasLabel()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeEnum(1, label_.getNumber());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, label_.getNumber());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Control.CDGEdge parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.CDGEdge parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.CDGEdge parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.CDGEdge parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.CDGEdge parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.CDGEdge parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.CDGEdge parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Control.CDGEdge parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.CDGEdge parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.CDGEdge parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Control.CDGEdge prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.CDGEdge}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Control.CDGEdgeOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Control.internal_static_boa_types_CDGEdge_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Control.internal_static_boa_types_CDGEdge_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Control.CDGEdge.class, boa.types.Control.CDGEdge.Builder.class);
+      }
+
+      // Construct using boa.types.Control.CDGEdge.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        label_ = boa.types.Control.CDGEdge.CDGEdgeLabel.NIL;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Control.internal_static_boa_types_CDGEdge_descriptor;
+      }
+
+      public boa.types.Control.CDGEdge getDefaultInstanceForType() {
+        return boa.types.Control.CDGEdge.getDefaultInstance();
+      }
+
+      public boa.types.Control.CDGEdge build() {
+        boa.types.Control.CDGEdge result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Control.CDGEdge buildPartial() {
+        boa.types.Control.CDGEdge result = new boa.types.Control.CDGEdge(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.label_ = label_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Control.CDGEdge) {
+          return mergeFrom((boa.types.Control.CDGEdge)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Control.CDGEdge other) {
+        if (other == boa.types.Control.CDGEdge.getDefaultInstance()) return this;
+        if (other.hasLabel()) {
+          setLabel(other.getLabel());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasLabel()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Control.CDGEdge parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Control.CDGEdge) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required .boa.types.CDGEdge.CDGEdgeLabel label = 1;
+      private boa.types.Control.CDGEdge.CDGEdgeLabel label_ = boa.types.Control.CDGEdge.CDGEdgeLabel.NIL;
+      /**
+       * <code>required .boa.types.CDGEdge.CDGEdgeLabel label = 1;</code>
+       */
+      public boolean hasLabel() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .boa.types.CDGEdge.CDGEdgeLabel label = 1;</code>
+       */
+      public boa.types.Control.CDGEdge.CDGEdgeLabel getLabel() {
+        return label_;
+      }
+      /**
+       * <code>required .boa.types.CDGEdge.CDGEdgeLabel label = 1;</code>
+       */
+      public Builder setLabel(boa.types.Control.CDGEdge.CDGEdgeLabel value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000001;
+        label_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .boa.types.CDGEdge.CDGEdgeLabel label = 1;</code>
+       */
+      public Builder clearLabel() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        label_ = boa.types.Control.CDGEdge.CDGEdgeLabel.NIL;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.CDGEdge)
+    }
+
+    static {
+      defaultInstance = new CDGEdge(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.CDGEdge)
+  }
+
+  public interface DDGOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // repeated .boa.types.DDGNode nodes = 1;
+    /**
+     * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+     */
+    java.util.List<boa.types.Control.DDGNode> 
+        getNodesList();
+    /**
+     * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+     */
+    boa.types.Control.DDGNode getNodes(int index);
+    /**
+     * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+     */
+    int getNodesCount();
+    /**
+     * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+     */
+    java.util.List<? extends boa.types.Control.DDGNodeOrBuilder> 
+        getNodesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+     */
+    boa.types.Control.DDGNodeOrBuilder getNodesOrBuilder(
+        int index);
+
+    // repeated .boa.types.DDGEdge edges = 2;
+    /**
+     * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+     */
+    java.util.List<boa.types.Control.DDGEdge> 
+        getEdgesList();
+    /**
+     * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+     */
+    boa.types.Control.DDGEdge getEdges(int index);
+    /**
+     * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+     */
+    int getEdgesCount();
+    /**
+     * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+     */
+    java.util.List<? extends boa.types.Control.DDGEdgeOrBuilder> 
+        getEdgesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+     */
+    boa.types.Control.DDGEdgeOrBuilder getEdgesOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code boa.types.DDG}
+   */
+  public static final class DDG extends
+      com.google.protobuf.GeneratedMessage
+      implements DDGOrBuilder {
+    // Use DDG.newBuilder() to construct.
+    private DDG(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private DDG(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final DDG defaultInstance;
+    public static DDG getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public DDG getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private DDG(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                nodes_ = new java.util.ArrayList<boa.types.Control.DDGNode>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              nodes_.add(input.readMessage(boa.types.Control.DDGNode.PARSER, extensionRegistry));
+              break;
+            }
+            case 18: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                edges_ = new java.util.ArrayList<boa.types.Control.DDGEdge>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              edges_.add(input.readMessage(boa.types.Control.DDGEdge.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          nodes_ = java.util.Collections.unmodifiableList(nodes_);
+        }
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          edges_ = java.util.Collections.unmodifiableList(edges_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Control.internal_static_boa_types_DDG_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Control.internal_static_boa_types_DDG_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Control.DDG.class, boa.types.Control.DDG.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<DDG> PARSER =
+        new com.google.protobuf.AbstractParser<DDG>() {
+      public DDG parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new DDG(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<DDG> getParserForType() {
+      return PARSER;
+    }
+
+    // repeated .boa.types.DDGNode nodes = 1;
+    public static final int NODES_FIELD_NUMBER = 1;
+    private java.util.List<boa.types.Control.DDGNode> nodes_;
+    /**
+     * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+     */
+    public java.util.List<boa.types.Control.DDGNode> getNodesList() {
+      return nodes_;
+    }
+    /**
+     * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+     */
+    public java.util.List<? extends boa.types.Control.DDGNodeOrBuilder> 
+        getNodesOrBuilderList() {
+      return nodes_;
+    }
+    /**
+     * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+     */
+    public int getNodesCount() {
+      return nodes_.size();
+    }
+    /**
+     * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+     */
+    public boa.types.Control.DDGNode getNodes(int index) {
+      return nodes_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+     */
+    public boa.types.Control.DDGNodeOrBuilder getNodesOrBuilder(
+        int index) {
+      return nodes_.get(index);
+    }
+
+    // repeated .boa.types.DDGEdge edges = 2;
+    public static final int EDGES_FIELD_NUMBER = 2;
+    private java.util.List<boa.types.Control.DDGEdge> edges_;
+    /**
+     * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+     */
+    public java.util.List<boa.types.Control.DDGEdge> getEdgesList() {
+      return edges_;
+    }
+    /**
+     * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+     */
+    public java.util.List<? extends boa.types.Control.DDGEdgeOrBuilder> 
+        getEdgesOrBuilderList() {
+      return edges_;
+    }
+    /**
+     * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+     */
+    public int getEdgesCount() {
+      return edges_.size();
+    }
+    /**
+     * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+     */
+    public boa.types.Control.DDGEdge getEdges(int index) {
+      return edges_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+     */
+    public boa.types.Control.DDGEdgeOrBuilder getEdgesOrBuilder(
+        int index) {
+      return edges_.get(index);
+    }
+
+    private void initFields() {
+      nodes_ = java.util.Collections.emptyList();
+      edges_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      for (int i = 0; i < getNodesCount(); i++) {
+        if (!getNodes(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getEdgesCount(); i++) {
+        if (!getEdges(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < nodes_.size(); i++) {
+        output.writeMessage(1, nodes_.get(i));
+      }
+      for (int i = 0; i < edges_.size(); i++) {
+        output.writeMessage(2, edges_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < nodes_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, nodes_.get(i));
+      }
+      for (int i = 0; i < edges_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, edges_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Control.DDG parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.DDG parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.DDG parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.DDG parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.DDG parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.DDG parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.DDG parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Control.DDG parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.DDG parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.DDG parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Control.DDG prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.DDG}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Control.DDGOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Control.internal_static_boa_types_DDG_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Control.internal_static_boa_types_DDG_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Control.DDG.class, boa.types.Control.DDG.Builder.class);
+      }
+
+      // Construct using boa.types.Control.DDG.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getNodesFieldBuilder();
+          getEdgesFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        if (nodesBuilder_ == null) {
+          nodes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          nodesBuilder_.clear();
+        }
+        if (edgesBuilder_ == null) {
+          edges_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+        } else {
+          edgesBuilder_.clear();
+        }
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Control.internal_static_boa_types_DDG_descriptor;
+      }
+
+      public boa.types.Control.DDG getDefaultInstanceForType() {
+        return boa.types.Control.DDG.getDefaultInstance();
+      }
+
+      public boa.types.Control.DDG build() {
+        boa.types.Control.DDG result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Control.DDG buildPartial() {
+        boa.types.Control.DDG result = new boa.types.Control.DDG(this);
+        int from_bitField0_ = bitField0_;
+        if (nodesBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            nodes_ = java.util.Collections.unmodifiableList(nodes_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.nodes_ = nodes_;
+        } else {
+          result.nodes_ = nodesBuilder_.build();
+        }
+        if (edgesBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+            edges_ = java.util.Collections.unmodifiableList(edges_);
+            bitField0_ = (bitField0_ & ~0x00000002);
+          }
+          result.edges_ = edges_;
+        } else {
+          result.edges_ = edgesBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Control.DDG) {
+          return mergeFrom((boa.types.Control.DDG)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Control.DDG other) {
+        if (other == boa.types.Control.DDG.getDefaultInstance()) return this;
+        if (nodesBuilder_ == null) {
+          if (!other.nodes_.isEmpty()) {
+            if (nodes_.isEmpty()) {
+              nodes_ = other.nodes_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureNodesIsMutable();
+              nodes_.addAll(other.nodes_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.nodes_.isEmpty()) {
+            if (nodesBuilder_.isEmpty()) {
+              nodesBuilder_.dispose();
+              nodesBuilder_ = null;
+              nodes_ = other.nodes_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              nodesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getNodesFieldBuilder() : null;
+            } else {
+              nodesBuilder_.addAllMessages(other.nodes_);
+            }
+          }
+        }
+        if (edgesBuilder_ == null) {
+          if (!other.edges_.isEmpty()) {
+            if (edges_.isEmpty()) {
+              edges_ = other.edges_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+            } else {
+              ensureEdgesIsMutable();
+              edges_.addAll(other.edges_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.edges_.isEmpty()) {
+            if (edgesBuilder_.isEmpty()) {
+              edgesBuilder_.dispose();
+              edgesBuilder_ = null;
+              edges_ = other.edges_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+              edgesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getEdgesFieldBuilder() : null;
+            } else {
+              edgesBuilder_.addAllMessages(other.edges_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        for (int i = 0; i < getNodesCount(); i++) {
+          if (!getNodes(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getEdgesCount(); i++) {
+          if (!getEdges(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Control.DDG parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Control.DDG) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // repeated .boa.types.DDGNode nodes = 1;
+      private java.util.List<boa.types.Control.DDGNode> nodes_ =
+        java.util.Collections.emptyList();
+      private void ensureNodesIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          nodes_ = new java.util.ArrayList<boa.types.Control.DDGNode>(nodes_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Control.DDGNode, boa.types.Control.DDGNode.Builder, boa.types.Control.DDGNodeOrBuilder> nodesBuilder_;
+
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public java.util.List<boa.types.Control.DDGNode> getNodesList() {
+        if (nodesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(nodes_);
+        } else {
+          return nodesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public int getNodesCount() {
+        if (nodesBuilder_ == null) {
+          return nodes_.size();
+        } else {
+          return nodesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public boa.types.Control.DDGNode getNodes(int index) {
+        if (nodesBuilder_ == null) {
+          return nodes_.get(index);
+        } else {
+          return nodesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public Builder setNodes(
+          int index, boa.types.Control.DDGNode value) {
+        if (nodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNodesIsMutable();
+          nodes_.set(index, value);
+          onChanged();
+        } else {
+          nodesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public Builder setNodes(
+          int index, boa.types.Control.DDGNode.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          nodesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public Builder addNodes(boa.types.Control.DDGNode value) {
+        if (nodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNodesIsMutable();
+          nodes_.add(value);
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public Builder addNodes(
+          int index, boa.types.Control.DDGNode value) {
+        if (nodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNodesIsMutable();
+          nodes_.add(index, value);
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public Builder addNodes(
+          boa.types.Control.DDGNode.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.add(builderForValue.build());
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public Builder addNodes(
+          int index, boa.types.Control.DDGNode.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public Builder addAllNodes(
+          java.lang.Iterable<? extends boa.types.Control.DDGNode> values) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          super.addAll(values, nodes_);
+          onChanged();
+        } else {
+          nodesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public Builder clearNodes() {
+        if (nodesBuilder_ == null) {
+          nodes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          nodesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public Builder removeNodes(int index) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.remove(index);
+          onChanged();
+        } else {
+          nodesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public boa.types.Control.DDGNode.Builder getNodesBuilder(
+          int index) {
+        return getNodesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public boa.types.Control.DDGNodeOrBuilder getNodesOrBuilder(
+          int index) {
+        if (nodesBuilder_ == null) {
+          return nodes_.get(index);  } else {
+          return nodesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public java.util.List<? extends boa.types.Control.DDGNodeOrBuilder> 
+           getNodesOrBuilderList() {
+        if (nodesBuilder_ != null) {
+          return nodesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(nodes_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public boa.types.Control.DDGNode.Builder addNodesBuilder() {
+        return getNodesFieldBuilder().addBuilder(
+            boa.types.Control.DDGNode.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public boa.types.Control.DDGNode.Builder addNodesBuilder(
+          int index) {
+        return getNodesFieldBuilder().addBuilder(
+            index, boa.types.Control.DDGNode.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.DDGNode nodes = 1;</code>
+       */
+      public java.util.List<boa.types.Control.DDGNode.Builder> 
+           getNodesBuilderList() {
+        return getNodesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Control.DDGNode, boa.types.Control.DDGNode.Builder, boa.types.Control.DDGNodeOrBuilder> 
+          getNodesFieldBuilder() {
+        if (nodesBuilder_ == null) {
+          nodesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Control.DDGNode, boa.types.Control.DDGNode.Builder, boa.types.Control.DDGNodeOrBuilder>(
+                  nodes_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          nodes_ = null;
+        }
+        return nodesBuilder_;
+      }
+
+      // repeated .boa.types.DDGEdge edges = 2;
+      private java.util.List<boa.types.Control.DDGEdge> edges_ =
+        java.util.Collections.emptyList();
+      private void ensureEdgesIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          edges_ = new java.util.ArrayList<boa.types.Control.DDGEdge>(edges_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Control.DDGEdge, boa.types.Control.DDGEdge.Builder, boa.types.Control.DDGEdgeOrBuilder> edgesBuilder_;
+
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public java.util.List<boa.types.Control.DDGEdge> getEdgesList() {
+        if (edgesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(edges_);
+        } else {
+          return edgesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public int getEdgesCount() {
+        if (edgesBuilder_ == null) {
+          return edges_.size();
+        } else {
+          return edgesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public boa.types.Control.DDGEdge getEdges(int index) {
+        if (edgesBuilder_ == null) {
+          return edges_.get(index);
+        } else {
+          return edgesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public Builder setEdges(
+          int index, boa.types.Control.DDGEdge value) {
+        if (edgesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEdgesIsMutable();
+          edges_.set(index, value);
+          onChanged();
+        } else {
+          edgesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public Builder setEdges(
+          int index, boa.types.Control.DDGEdge.Builder builderForValue) {
+        if (edgesBuilder_ == null) {
+          ensureEdgesIsMutable();
+          edges_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          edgesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public Builder addEdges(boa.types.Control.DDGEdge value) {
+        if (edgesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEdgesIsMutable();
+          edges_.add(value);
+          onChanged();
+        } else {
+          edgesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public Builder addEdges(
+          int index, boa.types.Control.DDGEdge value) {
+        if (edgesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEdgesIsMutable();
+          edges_.add(index, value);
+          onChanged();
+        } else {
+          edgesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public Builder addEdges(
+          boa.types.Control.DDGEdge.Builder builderForValue) {
+        if (edgesBuilder_ == null) {
+          ensureEdgesIsMutable();
+          edges_.add(builderForValue.build());
+          onChanged();
+        } else {
+          edgesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public Builder addEdges(
+          int index, boa.types.Control.DDGEdge.Builder builderForValue) {
+        if (edgesBuilder_ == null) {
+          ensureEdgesIsMutable();
+          edges_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          edgesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public Builder addAllEdges(
+          java.lang.Iterable<? extends boa.types.Control.DDGEdge> values) {
+        if (edgesBuilder_ == null) {
+          ensureEdgesIsMutable();
+          super.addAll(values, edges_);
+          onChanged();
+        } else {
+          edgesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public Builder clearEdges() {
+        if (edgesBuilder_ == null) {
+          edges_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+          onChanged();
+        } else {
+          edgesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public Builder removeEdges(int index) {
+        if (edgesBuilder_ == null) {
+          ensureEdgesIsMutable();
+          edges_.remove(index);
+          onChanged();
+        } else {
+          edgesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public boa.types.Control.DDGEdge.Builder getEdgesBuilder(
+          int index) {
+        return getEdgesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public boa.types.Control.DDGEdgeOrBuilder getEdgesOrBuilder(
+          int index) {
+        if (edgesBuilder_ == null) {
+          return edges_.get(index);  } else {
+          return edgesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public java.util.List<? extends boa.types.Control.DDGEdgeOrBuilder> 
+           getEdgesOrBuilderList() {
+        if (edgesBuilder_ != null) {
+          return edgesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(edges_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public boa.types.Control.DDGEdge.Builder addEdgesBuilder() {
+        return getEdgesFieldBuilder().addBuilder(
+            boa.types.Control.DDGEdge.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public boa.types.Control.DDGEdge.Builder addEdgesBuilder(
+          int index) {
+        return getEdgesFieldBuilder().addBuilder(
+            index, boa.types.Control.DDGEdge.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.DDGEdge edges = 2;</code>
+       */
+      public java.util.List<boa.types.Control.DDGEdge.Builder> 
+           getEdgesBuilderList() {
+        return getEdgesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Control.DDGEdge, boa.types.Control.DDGEdge.Builder, boa.types.Control.DDGEdgeOrBuilder> 
+          getEdgesFieldBuilder() {
+        if (edgesBuilder_ == null) {
+          edgesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Control.DDGEdge, boa.types.Control.DDGEdge.Builder, boa.types.Control.DDGEdgeOrBuilder>(
+                  edges_,
+                  ((bitField0_ & 0x00000002) == 0x00000002),
+                  getParentForChildren(),
+                  isClean());
+          edges_ = null;
+        }
+        return edgesBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.DDG)
+    }
+
+    static {
+      defaultInstance = new DDG(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.DDG)
+  }
+
+  public interface DDGNodeOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required int32 id = 1;
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    boolean hasId();
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    int getId();
+
+    // required .boa.types.DDGNode.DDGNodeType kind = 2;
+    /**
+     * <code>required .boa.types.DDGNode.DDGNodeType kind = 2;</code>
+     */
+    boolean hasKind();
+    /**
+     * <code>required .boa.types.DDGNode.DDGNodeType kind = 2;</code>
+     */
+    boa.types.Control.DDGNode.DDGNodeType getKind();
+
+    // optional .boa.types.Statement statement = 3;
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    boolean hasStatement();
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    boa.types.Ast.Statement getStatement();
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    boa.types.Ast.StatementOrBuilder getStatementOrBuilder();
+
+    // optional .boa.types.Expression expression = 4;
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    boolean hasExpression();
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    boa.types.Ast.Expression getExpression();
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder();
+  }
+  /**
+   * Protobuf type {@code boa.types.DDGNode}
+   */
+  public static final class DDGNode extends
+      com.google.protobuf.GeneratedMessage
+      implements DDGNodeOrBuilder {
+    // Use DDGNode.newBuilder() to construct.
+    private DDGNode(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private DDGNode(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final DDGNode defaultInstance;
+    public static DDGNode getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public DDGNode getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private DDGNode(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              id_ = input.readInt32();
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              boa.types.Control.DDGNode.DDGNodeType value = boa.types.Control.DDGNode.DDGNodeType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                kind_ = value;
+              }
+              break;
+            }
+            case 26: {
+              boa.types.Ast.Statement.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = statement_.toBuilder();
+              }
+              statement_ = input.readMessage(boa.types.Ast.Statement.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(statement_);
+                statement_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
+              break;
+            }
+            case 34: {
+              boa.types.Ast.Expression.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+                subBuilder = expression_.toBuilder();
+              }
+              expression_ = input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(expression_);
+                expression_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000008;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Control.internal_static_boa_types_DDGNode_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Control.internal_static_boa_types_DDGNode_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Control.DDGNode.class, boa.types.Control.DDGNode.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<DDGNode> PARSER =
+        new com.google.protobuf.AbstractParser<DDGNode>() {
+      public DDGNode parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new DDGNode(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<DDGNode> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code boa.types.DDGNode.DDGNodeType}
+     */
+    public enum DDGNodeType
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>ENTRY = 1;</code>
+       */
+      ENTRY(0, 1),
+      /**
+       * <code>OTHER = 2;</code>
+       */
+      OTHER(1, 2),
+      /**
+       * <code>METHOD = 3;</code>
+       */
+      METHOD(2, 3),
+      /**
+       * <code>CONTROL = 4;</code>
+       */
+      CONTROL(3, 4),
+      ;
+
+      /**
+       * <code>ENTRY = 1;</code>
+       */
+      public static final int ENTRY_VALUE = 1;
+      /**
+       * <code>OTHER = 2;</code>
+       */
+      public static final int OTHER_VALUE = 2;
+      /**
+       * <code>METHOD = 3;</code>
+       */
+      public static final int METHOD_VALUE = 3;
+      /**
+       * <code>CONTROL = 4;</code>
+       */
+      public static final int CONTROL_VALUE = 4;
+
+
+      public final int getNumber() { return value; }
+
+      public static DDGNodeType valueOf(int value) {
+        switch (value) {
+          case 1: return ENTRY;
+          case 2: return OTHER;
+          case 3: return METHOD;
+          case 4: return CONTROL;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<DDGNodeType>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<DDGNodeType>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<DDGNodeType>() {
+              public DDGNodeType findValueByNumber(int number) {
+                return DDGNodeType.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return boa.types.Control.DDGNode.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final DDGNodeType[] VALUES = values();
+
+      public static DDGNodeType valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private DDGNodeType(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:boa.types.DDGNode.DDGNodeType)
+    }
+
+    private int bitField0_;
+    // required int32 id = 1;
+    public static final int ID_FIELD_NUMBER = 1;
+    private int id_;
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    public boolean hasId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    public int getId() {
+      return id_;
+    }
+
+    // required .boa.types.DDGNode.DDGNodeType kind = 2;
+    public static final int KIND_FIELD_NUMBER = 2;
+    private boa.types.Control.DDGNode.DDGNodeType kind_;
+    /**
+     * <code>required .boa.types.DDGNode.DDGNodeType kind = 2;</code>
+     */
+    public boolean hasKind() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required .boa.types.DDGNode.DDGNodeType kind = 2;</code>
+     */
+    public boa.types.Control.DDGNode.DDGNodeType getKind() {
+      return kind_;
+    }
+
+    // optional .boa.types.Statement statement = 3;
+    public static final int STATEMENT_FIELD_NUMBER = 3;
+    private boa.types.Ast.Statement statement_;
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    public boolean hasStatement() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    public boa.types.Ast.Statement getStatement() {
+      return statement_;
+    }
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    public boa.types.Ast.StatementOrBuilder getStatementOrBuilder() {
+      return statement_;
+    }
+
+    // optional .boa.types.Expression expression = 4;
+    public static final int EXPRESSION_FIELD_NUMBER = 4;
+    private boa.types.Ast.Expression expression_;
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    public boolean hasExpression() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    public boa.types.Ast.Expression getExpression() {
+      return expression_;
+    }
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    public boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder() {
+      return expression_;
+    }
+
+    private void initFields() {
+      id_ = 0;
+      kind_ = boa.types.Control.DDGNode.DDGNodeType.ENTRY;
+      statement_ = boa.types.Ast.Statement.getDefaultInstance();
+      expression_ = boa.types.Ast.Expression.getDefaultInstance();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasKind()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (hasStatement()) {
+        if (!getStatement().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasExpression()) {
+        if (!getExpression().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeEnum(2, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(3, statement_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeMessage(4, expression_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, statement_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, expression_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Control.DDGNode parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.DDGNode parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.DDGNode parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.DDGNode parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.DDGNode parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.DDGNode parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.DDGNode parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Control.DDGNode parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.DDGNode parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.DDGNode parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Control.DDGNode prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.DDGNode}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Control.DDGNodeOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Control.internal_static_boa_types_DDGNode_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Control.internal_static_boa_types_DDGNode_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Control.DDGNode.class, boa.types.Control.DDGNode.Builder.class);
+      }
+
+      // Construct using boa.types.Control.DDGNode.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getStatementFieldBuilder();
+          getExpressionFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        id_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        kind_ = boa.types.Control.DDGNode.DDGNodeType.ENTRY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        if (statementBuilder_ == null) {
+          statement_ = boa.types.Ast.Statement.getDefaultInstance();
+        } else {
+          statementBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        if (expressionBuilder_ == null) {
+          expression_ = boa.types.Ast.Expression.getDefaultInstance();
+        } else {
+          expressionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Control.internal_static_boa_types_DDGNode_descriptor;
+      }
+
+      public boa.types.Control.DDGNode getDefaultInstanceForType() {
+        return boa.types.Control.DDGNode.getDefaultInstance();
+      }
+
+      public boa.types.Control.DDGNode build() {
+        boa.types.Control.DDGNode result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Control.DDGNode buildPartial() {
+        boa.types.Control.DDGNode result = new boa.types.Control.DDGNode(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.id_ = id_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.kind_ = kind_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (statementBuilder_ == null) {
+          result.statement_ = statement_;
+        } else {
+          result.statement_ = statementBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        if (expressionBuilder_ == null) {
+          result.expression_ = expression_;
+        } else {
+          result.expression_ = expressionBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Control.DDGNode) {
+          return mergeFrom((boa.types.Control.DDGNode)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Control.DDGNode other) {
+        if (other == boa.types.Control.DDGNode.getDefaultInstance()) return this;
+        if (other.hasId()) {
+          setId(other.getId());
+        }
+        if (other.hasKind()) {
+          setKind(other.getKind());
+        }
+        if (other.hasStatement()) {
+          mergeStatement(other.getStatement());
+        }
+        if (other.hasExpression()) {
+          mergeExpression(other.getExpression());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasId()) {
+          
+          return false;
+        }
+        if (!hasKind()) {
+          
+          return false;
+        }
+        if (hasStatement()) {
+          if (!getStatement().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasExpression()) {
+          if (!getExpression().isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Control.DDGNode parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Control.DDGNode) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required int32 id = 1;
+      private int id_ ;
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public boolean hasId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public int getId() {
+        return id_;
+      }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public Builder setId(int value) {
+        bitField0_ |= 0x00000001;
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public Builder clearId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        id_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // required .boa.types.DDGNode.DDGNodeType kind = 2;
+      private boa.types.Control.DDGNode.DDGNodeType kind_ = boa.types.Control.DDGNode.DDGNodeType.ENTRY;
+      /**
+       * <code>required .boa.types.DDGNode.DDGNodeType kind = 2;</code>
+       */
+      public boolean hasKind() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required .boa.types.DDGNode.DDGNodeType kind = 2;</code>
+       */
+      public boa.types.Control.DDGNode.DDGNodeType getKind() {
+        return kind_;
+      }
+      /**
+       * <code>required .boa.types.DDGNode.DDGNodeType kind = 2;</code>
+       */
+      public Builder setKind(boa.types.Control.DDGNode.DDGNodeType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
+        kind_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .boa.types.DDGNode.DDGNodeType kind = 2;</code>
+       */
+      public Builder clearKind() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        kind_ = boa.types.Control.DDGNode.DDGNodeType.ENTRY;
+        onChanged();
+        return this;
+      }
+
+      // optional .boa.types.Statement statement = 3;
+      private boa.types.Ast.Statement statement_ = boa.types.Ast.Statement.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> statementBuilder_;
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public boolean hasStatement() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public boa.types.Ast.Statement getStatement() {
+        if (statementBuilder_ == null) {
+          return statement_;
+        } else {
+          return statementBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public Builder setStatement(boa.types.Ast.Statement value) {
+        if (statementBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          statement_ = value;
+          onChanged();
+        } else {
+          statementBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public Builder setStatement(
+          boa.types.Ast.Statement.Builder builderForValue) {
+        if (statementBuilder_ == null) {
+          statement_ = builderForValue.build();
+          onChanged();
+        } else {
+          statementBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public Builder mergeStatement(boa.types.Ast.Statement value) {
+        if (statementBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              statement_ != boa.types.Ast.Statement.getDefaultInstance()) {
+            statement_ =
+              boa.types.Ast.Statement.newBuilder(statement_).mergeFrom(value).buildPartial();
+          } else {
+            statement_ = value;
+          }
+          onChanged();
+        } else {
+          statementBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public Builder clearStatement() {
+        if (statementBuilder_ == null) {
+          statement_ = boa.types.Ast.Statement.getDefaultInstance();
+          onChanged();
+        } else {
+          statementBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public boa.types.Ast.Statement.Builder getStatementBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getStatementFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public boa.types.Ast.StatementOrBuilder getStatementOrBuilder() {
+        if (statementBuilder_ != null) {
+          return statementBuilder_.getMessageOrBuilder();
+        } else {
+          return statement_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> 
+          getStatementFieldBuilder() {
+        if (statementBuilder_ == null) {
+          statementBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder>(
+                  statement_,
+                  getParentForChildren(),
+                  isClean());
+          statement_ = null;
+        }
+        return statementBuilder_;
+      }
+
+      // optional .boa.types.Expression expression = 4;
+      private boa.types.Ast.Expression expression_ = boa.types.Ast.Expression.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> expressionBuilder_;
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public boolean hasExpression() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public boa.types.Ast.Expression getExpression() {
+        if (expressionBuilder_ == null) {
+          return expression_;
+        } else {
+          return expressionBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public Builder setExpression(boa.types.Ast.Expression value) {
+        if (expressionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          expression_ = value;
+          onChanged();
+        } else {
+          expressionBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public Builder setExpression(
+          boa.types.Ast.Expression.Builder builderForValue) {
+        if (expressionBuilder_ == null) {
+          expression_ = builderForValue.build();
+          onChanged();
+        } else {
+          expressionBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public Builder mergeExpression(boa.types.Ast.Expression value) {
+        if (expressionBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              expression_ != boa.types.Ast.Expression.getDefaultInstance()) {
+            expression_ =
+              boa.types.Ast.Expression.newBuilder(expression_).mergeFrom(value).buildPartial();
+          } else {
+            expression_ = value;
+          }
+          onChanged();
+        } else {
+          expressionBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public Builder clearExpression() {
+        if (expressionBuilder_ == null) {
+          expression_ = boa.types.Ast.Expression.getDefaultInstance();
+          onChanged();
+        } else {
+          expressionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public boa.types.Ast.Expression.Builder getExpressionBuilder() {
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return getExpressionFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder() {
+        if (expressionBuilder_ != null) {
+          return expressionBuilder_.getMessageOrBuilder();
+        } else {
+          return expression_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
+          getExpressionFieldBuilder() {
+        if (expressionBuilder_ == null) {
+          expressionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder>(
+                  expression_,
+                  getParentForChildren(),
+                  isClean());
+          expression_ = null;
+        }
+        return expressionBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.DDGNode)
+    }
+
+    static {
+      defaultInstance = new DDGNode(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.DDGNode)
+  }
+
+  public interface DDGEdgeOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required .boa.types.DDGEdge.DDGEdgeLabel label = 1;
+    /**
+     * <code>required .boa.types.DDGEdge.DDGEdgeLabel label = 1;</code>
+     */
+    boolean hasLabel();
+    /**
+     * <code>required .boa.types.DDGEdge.DDGEdgeLabel label = 1;</code>
+     */
+    boa.types.Control.DDGEdge.DDGEdgeLabel getLabel();
+  }
+  /**
+   * Protobuf type {@code boa.types.DDGEdge}
+   */
+  public static final class DDGEdge extends
+      com.google.protobuf.GeneratedMessage
+      implements DDGEdgeOrBuilder {
+    // Use DDGEdge.newBuilder() to construct.
+    private DDGEdge(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private DDGEdge(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final DDGEdge defaultInstance;
+    public static DDGEdge getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public DDGEdge getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private DDGEdge(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              int rawValue = input.readEnum();
+              boa.types.Control.DDGEdge.DDGEdgeLabel value = boa.types.Control.DDGEdge.DDGEdgeLabel.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                label_ = value;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Control.internal_static_boa_types_DDGEdge_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Control.internal_static_boa_types_DDGEdge_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Control.DDGEdge.class, boa.types.Control.DDGEdge.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<DDGEdge> PARSER =
+        new com.google.protobuf.AbstractParser<DDGEdge>() {
+      public DDGEdge parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new DDGEdge(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<DDGEdge> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code boa.types.DDGEdge.DDGEdgeLabel}
+     */
+    public enum DDGEdgeLabel
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>NIL = 1;</code>
+       */
+      NIL(0, 1),
+      /**
+       * <code>VARDEF = 2;</code>
+       *
+       * <pre>
+       * variable definition edge.
+       * </pre>
+       */
+      VARDEF(1, 2),
+      ;
+
+      /**
+       * <code>NIL = 1;</code>
+       */
+      public static final int NIL_VALUE = 1;
+      /**
+       * <code>VARDEF = 2;</code>
+       *
+       * <pre>
+       * variable definition edge.
+       * </pre>
+       */
+      public static final int VARDEF_VALUE = 2;
+
+
+      public final int getNumber() { return value; }
+
+      public static DDGEdgeLabel valueOf(int value) {
+        switch (value) {
+          case 1: return NIL;
+          case 2: return VARDEF;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<DDGEdgeLabel>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<DDGEdgeLabel>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<DDGEdgeLabel>() {
+              public DDGEdgeLabel findValueByNumber(int number) {
+                return DDGEdgeLabel.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return boa.types.Control.DDGEdge.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final DDGEdgeLabel[] VALUES = values();
+
+      public static DDGEdgeLabel valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private DDGEdgeLabel(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:boa.types.DDGEdge.DDGEdgeLabel)
+    }
+
+    private int bitField0_;
+    // required .boa.types.DDGEdge.DDGEdgeLabel label = 1;
+    public static final int LABEL_FIELD_NUMBER = 1;
+    private boa.types.Control.DDGEdge.DDGEdgeLabel label_;
+    /**
+     * <code>required .boa.types.DDGEdge.DDGEdgeLabel label = 1;</code>
+     */
+    public boolean hasLabel() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required .boa.types.DDGEdge.DDGEdgeLabel label = 1;</code>
+     */
+    public boa.types.Control.DDGEdge.DDGEdgeLabel getLabel() {
+      return label_;
+    }
+
+    private void initFields() {
+      label_ = boa.types.Control.DDGEdge.DDGEdgeLabel.NIL;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasLabel()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeEnum(1, label_.getNumber());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, label_.getNumber());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Control.DDGEdge parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.DDGEdge parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.DDGEdge parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.DDGEdge parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.DDGEdge parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.DDGEdge parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.DDGEdge parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Control.DDGEdge parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.DDGEdge parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.DDGEdge parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Control.DDGEdge prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.DDGEdge}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Control.DDGEdgeOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Control.internal_static_boa_types_DDGEdge_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Control.internal_static_boa_types_DDGEdge_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Control.DDGEdge.class, boa.types.Control.DDGEdge.Builder.class);
+      }
+
+      // Construct using boa.types.Control.DDGEdge.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        label_ = boa.types.Control.DDGEdge.DDGEdgeLabel.NIL;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Control.internal_static_boa_types_DDGEdge_descriptor;
+      }
+
+      public boa.types.Control.DDGEdge getDefaultInstanceForType() {
+        return boa.types.Control.DDGEdge.getDefaultInstance();
+      }
+
+      public boa.types.Control.DDGEdge build() {
+        boa.types.Control.DDGEdge result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Control.DDGEdge buildPartial() {
+        boa.types.Control.DDGEdge result = new boa.types.Control.DDGEdge(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.label_ = label_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Control.DDGEdge) {
+          return mergeFrom((boa.types.Control.DDGEdge)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Control.DDGEdge other) {
+        if (other == boa.types.Control.DDGEdge.getDefaultInstance()) return this;
+        if (other.hasLabel()) {
+          setLabel(other.getLabel());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasLabel()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Control.DDGEdge parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Control.DDGEdge) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required .boa.types.DDGEdge.DDGEdgeLabel label = 1;
+      private boa.types.Control.DDGEdge.DDGEdgeLabel label_ = boa.types.Control.DDGEdge.DDGEdgeLabel.NIL;
+      /**
+       * <code>required .boa.types.DDGEdge.DDGEdgeLabel label = 1;</code>
+       */
+      public boolean hasLabel() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .boa.types.DDGEdge.DDGEdgeLabel label = 1;</code>
+       */
+      public boa.types.Control.DDGEdge.DDGEdgeLabel getLabel() {
+        return label_;
+      }
+      /**
+       * <code>required .boa.types.DDGEdge.DDGEdgeLabel label = 1;</code>
+       */
+      public Builder setLabel(boa.types.Control.DDGEdge.DDGEdgeLabel value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000001;
+        label_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .boa.types.DDGEdge.DDGEdgeLabel label = 1;</code>
+       */
+      public Builder clearLabel() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        label_ = boa.types.Control.DDGEdge.DDGEdgeLabel.NIL;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.DDGEdge)
+    }
+
+    static {
+      defaultInstance = new DDGEdge(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.DDGEdge)
+  }
+
+  public interface PDGOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // repeated .boa.types.PDGNode nodes = 1;
+    /**
+     * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+     */
+    java.util.List<boa.types.Control.PDGNode> 
+        getNodesList();
+    /**
+     * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+     */
+    boa.types.Control.PDGNode getNodes(int index);
+    /**
+     * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+     */
+    int getNodesCount();
+    /**
+     * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+     */
+    java.util.List<? extends boa.types.Control.PDGNodeOrBuilder> 
+        getNodesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+     */
+    boa.types.Control.PDGNodeOrBuilder getNodesOrBuilder(
+        int index);
+
+    // repeated .boa.types.PDGEdge edges = 2;
+    /**
+     * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+     */
+    java.util.List<boa.types.Control.PDGEdge> 
+        getEdgesList();
+    /**
+     * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+     */
+    boa.types.Control.PDGEdge getEdges(int index);
+    /**
+     * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+     */
+    int getEdgesCount();
+    /**
+     * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+     */
+    java.util.List<? extends boa.types.Control.PDGEdgeOrBuilder> 
+        getEdgesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+     */
+    boa.types.Control.PDGEdgeOrBuilder getEdgesOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code boa.types.PDG}
+   */
+  public static final class PDG extends
+      com.google.protobuf.GeneratedMessage
+      implements PDGOrBuilder {
+    // Use PDG.newBuilder() to construct.
+    private PDG(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private PDG(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final PDG defaultInstance;
+    public static PDG getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public PDG getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private PDG(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                nodes_ = new java.util.ArrayList<boa.types.Control.PDGNode>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              nodes_.add(input.readMessage(boa.types.Control.PDGNode.PARSER, extensionRegistry));
+              break;
+            }
+            case 18: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                edges_ = new java.util.ArrayList<boa.types.Control.PDGEdge>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              edges_.add(input.readMessage(boa.types.Control.PDGEdge.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          nodes_ = java.util.Collections.unmodifiableList(nodes_);
+        }
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          edges_ = java.util.Collections.unmodifiableList(edges_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Control.internal_static_boa_types_PDG_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Control.internal_static_boa_types_PDG_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Control.PDG.class, boa.types.Control.PDG.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<PDG> PARSER =
+        new com.google.protobuf.AbstractParser<PDG>() {
+      public PDG parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new PDG(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<PDG> getParserForType() {
+      return PARSER;
+    }
+
+    // repeated .boa.types.PDGNode nodes = 1;
+    public static final int NODES_FIELD_NUMBER = 1;
+    private java.util.List<boa.types.Control.PDGNode> nodes_;
+    /**
+     * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+     */
+    public java.util.List<boa.types.Control.PDGNode> getNodesList() {
+      return nodes_;
+    }
+    /**
+     * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+     */
+    public java.util.List<? extends boa.types.Control.PDGNodeOrBuilder> 
+        getNodesOrBuilderList() {
+      return nodes_;
+    }
+    /**
+     * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+     */
+    public int getNodesCount() {
+      return nodes_.size();
+    }
+    /**
+     * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+     */
+    public boa.types.Control.PDGNode getNodes(int index) {
+      return nodes_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+     */
+    public boa.types.Control.PDGNodeOrBuilder getNodesOrBuilder(
+        int index) {
+      return nodes_.get(index);
+    }
+
+    // repeated .boa.types.PDGEdge edges = 2;
+    public static final int EDGES_FIELD_NUMBER = 2;
+    private java.util.List<boa.types.Control.PDGEdge> edges_;
+    /**
+     * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+     */
+    public java.util.List<boa.types.Control.PDGEdge> getEdgesList() {
+      return edges_;
+    }
+    /**
+     * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+     */
+    public java.util.List<? extends boa.types.Control.PDGEdgeOrBuilder> 
+        getEdgesOrBuilderList() {
+      return edges_;
+    }
+    /**
+     * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+     */
+    public int getEdgesCount() {
+      return edges_.size();
+    }
+    /**
+     * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+     */
+    public boa.types.Control.PDGEdge getEdges(int index) {
+      return edges_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+     */
+    public boa.types.Control.PDGEdgeOrBuilder getEdgesOrBuilder(
+        int index) {
+      return edges_.get(index);
+    }
+
+    private void initFields() {
+      nodes_ = java.util.Collections.emptyList();
+      edges_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      for (int i = 0; i < getNodesCount(); i++) {
+        if (!getNodes(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getEdgesCount(); i++) {
+        if (!getEdges(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < nodes_.size(); i++) {
+        output.writeMessage(1, nodes_.get(i));
+      }
+      for (int i = 0; i < edges_.size(); i++) {
+        output.writeMessage(2, edges_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < nodes_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, nodes_.get(i));
+      }
+      for (int i = 0; i < edges_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, edges_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Control.PDG parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.PDG parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.PDG parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.PDG parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.PDG parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.PDG parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.PDG parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Control.PDG parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.PDG parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.PDG parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Control.PDG prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.PDG}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Control.PDGOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Control.internal_static_boa_types_PDG_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Control.internal_static_boa_types_PDG_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Control.PDG.class, boa.types.Control.PDG.Builder.class);
+      }
+
+      // Construct using boa.types.Control.PDG.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getNodesFieldBuilder();
+          getEdgesFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        if (nodesBuilder_ == null) {
+          nodes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          nodesBuilder_.clear();
+        }
+        if (edgesBuilder_ == null) {
+          edges_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+        } else {
+          edgesBuilder_.clear();
+        }
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Control.internal_static_boa_types_PDG_descriptor;
+      }
+
+      public boa.types.Control.PDG getDefaultInstanceForType() {
+        return boa.types.Control.PDG.getDefaultInstance();
+      }
+
+      public boa.types.Control.PDG build() {
+        boa.types.Control.PDG result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Control.PDG buildPartial() {
+        boa.types.Control.PDG result = new boa.types.Control.PDG(this);
+        int from_bitField0_ = bitField0_;
+        if (nodesBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            nodes_ = java.util.Collections.unmodifiableList(nodes_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.nodes_ = nodes_;
+        } else {
+          result.nodes_ = nodesBuilder_.build();
+        }
+        if (edgesBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+            edges_ = java.util.Collections.unmodifiableList(edges_);
+            bitField0_ = (bitField0_ & ~0x00000002);
+          }
+          result.edges_ = edges_;
+        } else {
+          result.edges_ = edgesBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Control.PDG) {
+          return mergeFrom((boa.types.Control.PDG)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Control.PDG other) {
+        if (other == boa.types.Control.PDG.getDefaultInstance()) return this;
+        if (nodesBuilder_ == null) {
+          if (!other.nodes_.isEmpty()) {
+            if (nodes_.isEmpty()) {
+              nodes_ = other.nodes_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureNodesIsMutable();
+              nodes_.addAll(other.nodes_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.nodes_.isEmpty()) {
+            if (nodesBuilder_.isEmpty()) {
+              nodesBuilder_.dispose();
+              nodesBuilder_ = null;
+              nodes_ = other.nodes_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              nodesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getNodesFieldBuilder() : null;
+            } else {
+              nodesBuilder_.addAllMessages(other.nodes_);
+            }
+          }
+        }
+        if (edgesBuilder_ == null) {
+          if (!other.edges_.isEmpty()) {
+            if (edges_.isEmpty()) {
+              edges_ = other.edges_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+            } else {
+              ensureEdgesIsMutable();
+              edges_.addAll(other.edges_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.edges_.isEmpty()) {
+            if (edgesBuilder_.isEmpty()) {
+              edgesBuilder_.dispose();
+              edgesBuilder_ = null;
+              edges_ = other.edges_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+              edgesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getEdgesFieldBuilder() : null;
+            } else {
+              edgesBuilder_.addAllMessages(other.edges_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        for (int i = 0; i < getNodesCount(); i++) {
+          if (!getNodes(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getEdgesCount(); i++) {
+          if (!getEdges(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Control.PDG parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Control.PDG) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // repeated .boa.types.PDGNode nodes = 1;
+      private java.util.List<boa.types.Control.PDGNode> nodes_ =
+        java.util.Collections.emptyList();
+      private void ensureNodesIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          nodes_ = new java.util.ArrayList<boa.types.Control.PDGNode>(nodes_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Control.PDGNode, boa.types.Control.PDGNode.Builder, boa.types.Control.PDGNodeOrBuilder> nodesBuilder_;
+
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public java.util.List<boa.types.Control.PDGNode> getNodesList() {
+        if (nodesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(nodes_);
+        } else {
+          return nodesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public int getNodesCount() {
+        if (nodesBuilder_ == null) {
+          return nodes_.size();
+        } else {
+          return nodesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public boa.types.Control.PDGNode getNodes(int index) {
+        if (nodesBuilder_ == null) {
+          return nodes_.get(index);
+        } else {
+          return nodesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public Builder setNodes(
+          int index, boa.types.Control.PDGNode value) {
+        if (nodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNodesIsMutable();
+          nodes_.set(index, value);
+          onChanged();
+        } else {
+          nodesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public Builder setNodes(
+          int index, boa.types.Control.PDGNode.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          nodesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public Builder addNodes(boa.types.Control.PDGNode value) {
+        if (nodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNodesIsMutable();
+          nodes_.add(value);
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public Builder addNodes(
+          int index, boa.types.Control.PDGNode value) {
+        if (nodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNodesIsMutable();
+          nodes_.add(index, value);
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public Builder addNodes(
+          boa.types.Control.PDGNode.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.add(builderForValue.build());
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public Builder addNodes(
+          int index, boa.types.Control.PDGNode.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public Builder addAllNodes(
+          java.lang.Iterable<? extends boa.types.Control.PDGNode> values) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          super.addAll(values, nodes_);
+          onChanged();
+        } else {
+          nodesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public Builder clearNodes() {
+        if (nodesBuilder_ == null) {
+          nodes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          nodesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public Builder removeNodes(int index) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.remove(index);
+          onChanged();
+        } else {
+          nodesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public boa.types.Control.PDGNode.Builder getNodesBuilder(
+          int index) {
+        return getNodesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public boa.types.Control.PDGNodeOrBuilder getNodesOrBuilder(
+          int index) {
+        if (nodesBuilder_ == null) {
+          return nodes_.get(index);  } else {
+          return nodesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public java.util.List<? extends boa.types.Control.PDGNodeOrBuilder> 
+           getNodesOrBuilderList() {
+        if (nodesBuilder_ != null) {
+          return nodesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(nodes_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public boa.types.Control.PDGNode.Builder addNodesBuilder() {
+        return getNodesFieldBuilder().addBuilder(
+            boa.types.Control.PDGNode.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public boa.types.Control.PDGNode.Builder addNodesBuilder(
+          int index) {
+        return getNodesFieldBuilder().addBuilder(
+            index, boa.types.Control.PDGNode.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.PDGNode nodes = 1;</code>
+       */
+      public java.util.List<boa.types.Control.PDGNode.Builder> 
+           getNodesBuilderList() {
+        return getNodesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Control.PDGNode, boa.types.Control.PDGNode.Builder, boa.types.Control.PDGNodeOrBuilder> 
+          getNodesFieldBuilder() {
+        if (nodesBuilder_ == null) {
+          nodesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Control.PDGNode, boa.types.Control.PDGNode.Builder, boa.types.Control.PDGNodeOrBuilder>(
+                  nodes_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          nodes_ = null;
+        }
+        return nodesBuilder_;
+      }
+
+      // repeated .boa.types.PDGEdge edges = 2;
+      private java.util.List<boa.types.Control.PDGEdge> edges_ =
+        java.util.Collections.emptyList();
+      private void ensureEdgesIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          edges_ = new java.util.ArrayList<boa.types.Control.PDGEdge>(edges_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Control.PDGEdge, boa.types.Control.PDGEdge.Builder, boa.types.Control.PDGEdgeOrBuilder> edgesBuilder_;
+
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public java.util.List<boa.types.Control.PDGEdge> getEdgesList() {
+        if (edgesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(edges_);
+        } else {
+          return edgesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public int getEdgesCount() {
+        if (edgesBuilder_ == null) {
+          return edges_.size();
+        } else {
+          return edgesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public boa.types.Control.PDGEdge getEdges(int index) {
+        if (edgesBuilder_ == null) {
+          return edges_.get(index);
+        } else {
+          return edgesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public Builder setEdges(
+          int index, boa.types.Control.PDGEdge value) {
+        if (edgesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEdgesIsMutable();
+          edges_.set(index, value);
+          onChanged();
+        } else {
+          edgesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public Builder setEdges(
+          int index, boa.types.Control.PDGEdge.Builder builderForValue) {
+        if (edgesBuilder_ == null) {
+          ensureEdgesIsMutable();
+          edges_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          edgesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public Builder addEdges(boa.types.Control.PDGEdge value) {
+        if (edgesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEdgesIsMutable();
+          edges_.add(value);
+          onChanged();
+        } else {
+          edgesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public Builder addEdges(
+          int index, boa.types.Control.PDGEdge value) {
+        if (edgesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEdgesIsMutable();
+          edges_.add(index, value);
+          onChanged();
+        } else {
+          edgesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public Builder addEdges(
+          boa.types.Control.PDGEdge.Builder builderForValue) {
+        if (edgesBuilder_ == null) {
+          ensureEdgesIsMutable();
+          edges_.add(builderForValue.build());
+          onChanged();
+        } else {
+          edgesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public Builder addEdges(
+          int index, boa.types.Control.PDGEdge.Builder builderForValue) {
+        if (edgesBuilder_ == null) {
+          ensureEdgesIsMutable();
+          edges_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          edgesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public Builder addAllEdges(
+          java.lang.Iterable<? extends boa.types.Control.PDGEdge> values) {
+        if (edgesBuilder_ == null) {
+          ensureEdgesIsMutable();
+          super.addAll(values, edges_);
+          onChanged();
+        } else {
+          edgesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public Builder clearEdges() {
+        if (edgesBuilder_ == null) {
+          edges_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+          onChanged();
+        } else {
+          edgesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public Builder removeEdges(int index) {
+        if (edgesBuilder_ == null) {
+          ensureEdgesIsMutable();
+          edges_.remove(index);
+          onChanged();
+        } else {
+          edgesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public boa.types.Control.PDGEdge.Builder getEdgesBuilder(
+          int index) {
+        return getEdgesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public boa.types.Control.PDGEdgeOrBuilder getEdgesOrBuilder(
+          int index) {
+        if (edgesBuilder_ == null) {
+          return edges_.get(index);  } else {
+          return edgesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public java.util.List<? extends boa.types.Control.PDGEdgeOrBuilder> 
+           getEdgesOrBuilderList() {
+        if (edgesBuilder_ != null) {
+          return edgesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(edges_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public boa.types.Control.PDGEdge.Builder addEdgesBuilder() {
+        return getEdgesFieldBuilder().addBuilder(
+            boa.types.Control.PDGEdge.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public boa.types.Control.PDGEdge.Builder addEdgesBuilder(
+          int index) {
+        return getEdgesFieldBuilder().addBuilder(
+            index, boa.types.Control.PDGEdge.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.PDGEdge edges = 2;</code>
+       */
+      public java.util.List<boa.types.Control.PDGEdge.Builder> 
+           getEdgesBuilderList() {
+        return getEdgesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Control.PDGEdge, boa.types.Control.PDGEdge.Builder, boa.types.Control.PDGEdgeOrBuilder> 
+          getEdgesFieldBuilder() {
+        if (edgesBuilder_ == null) {
+          edgesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Control.PDGEdge, boa.types.Control.PDGEdge.Builder, boa.types.Control.PDGEdgeOrBuilder>(
+                  edges_,
+                  ((bitField0_ & 0x00000002) == 0x00000002),
+                  getParentForChildren(),
+                  isClean());
+          edges_ = null;
+        }
+        return edgesBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.PDG)
+    }
+
+    static {
+      defaultInstance = new PDG(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.PDG)
+  }
+
+  public interface PDGNodeOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required int32 id = 1;
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    boolean hasId();
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    int getId();
+
+    // required .boa.types.PDGNode.PDGNodeType kind = 2;
+    /**
+     * <code>required .boa.types.PDGNode.PDGNodeType kind = 2;</code>
+     */
+    boolean hasKind();
+    /**
+     * <code>required .boa.types.PDGNode.PDGNodeType kind = 2;</code>
+     */
+    boa.types.Control.PDGNode.PDGNodeType getKind();
+
+    // optional .boa.types.Statement statement = 3;
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    boolean hasStatement();
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    boa.types.Ast.Statement getStatement();
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    boa.types.Ast.StatementOrBuilder getStatementOrBuilder();
+
+    // optional .boa.types.Expression expression = 4;
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    boolean hasExpression();
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    boa.types.Ast.Expression getExpression();
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder();
+  }
+  /**
+   * Protobuf type {@code boa.types.PDGNode}
+   */
+  public static final class PDGNode extends
+      com.google.protobuf.GeneratedMessage
+      implements PDGNodeOrBuilder {
+    // Use PDGNode.newBuilder() to construct.
+    private PDGNode(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private PDGNode(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final PDGNode defaultInstance;
+    public static PDGNode getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public PDGNode getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private PDGNode(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              id_ = input.readInt32();
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              boa.types.Control.PDGNode.PDGNodeType value = boa.types.Control.PDGNode.PDGNodeType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                kind_ = value;
+              }
+              break;
+            }
+            case 26: {
+              boa.types.Ast.Statement.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = statement_.toBuilder();
+              }
+              statement_ = input.readMessage(boa.types.Ast.Statement.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(statement_);
+                statement_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
+              break;
+            }
+            case 34: {
+              boa.types.Ast.Expression.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+                subBuilder = expression_.toBuilder();
+              }
+              expression_ = input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(expression_);
+                expression_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000008;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Control.internal_static_boa_types_PDGNode_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Control.internal_static_boa_types_PDGNode_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Control.PDGNode.class, boa.types.Control.PDGNode.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<PDGNode> PARSER =
+        new com.google.protobuf.AbstractParser<PDGNode>() {
+      public PDGNode parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new PDGNode(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<PDGNode> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code boa.types.PDGNode.PDGNodeType}
+     */
+    public enum PDGNodeType
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>ENTRY = 1;</code>
+       */
+      ENTRY(0, 1),
+      /**
+       * <code>OTHER = 2;</code>
+       */
+      OTHER(1, 2),
+      /**
+       * <code>METHOD = 3;</code>
+       */
+      METHOD(2, 3),
+      /**
+       * <code>CONTROL = 4;</code>
+       */
+      CONTROL(3, 4),
+      ;
+
+      /**
+       * <code>ENTRY = 1;</code>
+       */
+      public static final int ENTRY_VALUE = 1;
+      /**
+       * <code>OTHER = 2;</code>
+       */
+      public static final int OTHER_VALUE = 2;
+      /**
+       * <code>METHOD = 3;</code>
+       */
+      public static final int METHOD_VALUE = 3;
+      /**
+       * <code>CONTROL = 4;</code>
+       */
+      public static final int CONTROL_VALUE = 4;
+
+
+      public final int getNumber() { return value; }
+
+      public static PDGNodeType valueOf(int value) {
+        switch (value) {
+          case 1: return ENTRY;
+          case 2: return OTHER;
+          case 3: return METHOD;
+          case 4: return CONTROL;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<PDGNodeType>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<PDGNodeType>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<PDGNodeType>() {
+              public PDGNodeType findValueByNumber(int number) {
+                return PDGNodeType.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return boa.types.Control.PDGNode.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final PDGNodeType[] VALUES = values();
+
+      public static PDGNodeType valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private PDGNodeType(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:boa.types.PDGNode.PDGNodeType)
+    }
+
+    private int bitField0_;
+    // required int32 id = 1;
+    public static final int ID_FIELD_NUMBER = 1;
+    private int id_;
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    public boolean hasId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    public int getId() {
+      return id_;
+    }
+
+    // required .boa.types.PDGNode.PDGNodeType kind = 2;
+    public static final int KIND_FIELD_NUMBER = 2;
+    private boa.types.Control.PDGNode.PDGNodeType kind_;
+    /**
+     * <code>required .boa.types.PDGNode.PDGNodeType kind = 2;</code>
+     */
+    public boolean hasKind() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required .boa.types.PDGNode.PDGNodeType kind = 2;</code>
+     */
+    public boa.types.Control.PDGNode.PDGNodeType getKind() {
+      return kind_;
+    }
+
+    // optional .boa.types.Statement statement = 3;
+    public static final int STATEMENT_FIELD_NUMBER = 3;
+    private boa.types.Ast.Statement statement_;
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    public boolean hasStatement() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    public boa.types.Ast.Statement getStatement() {
+      return statement_;
+    }
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    public boa.types.Ast.StatementOrBuilder getStatementOrBuilder() {
+      return statement_;
+    }
+
+    // optional .boa.types.Expression expression = 4;
+    public static final int EXPRESSION_FIELD_NUMBER = 4;
+    private boa.types.Ast.Expression expression_;
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    public boolean hasExpression() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    public boa.types.Ast.Expression getExpression() {
+      return expression_;
+    }
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    public boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder() {
+      return expression_;
+    }
+
+    private void initFields() {
+      id_ = 0;
+      kind_ = boa.types.Control.PDGNode.PDGNodeType.ENTRY;
+      statement_ = boa.types.Ast.Statement.getDefaultInstance();
+      expression_ = boa.types.Ast.Expression.getDefaultInstance();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasKind()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (hasStatement()) {
+        if (!getStatement().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasExpression()) {
+        if (!getExpression().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeEnum(2, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(3, statement_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeMessage(4, expression_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, statement_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, expression_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Control.PDGNode parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.PDGNode parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.PDGNode parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.PDGNode parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.PDGNode parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.PDGNode parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.PDGNode parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Control.PDGNode parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.PDGNode parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.PDGNode parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Control.PDGNode prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.PDGNode}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Control.PDGNodeOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Control.internal_static_boa_types_PDGNode_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Control.internal_static_boa_types_PDGNode_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Control.PDGNode.class, boa.types.Control.PDGNode.Builder.class);
+      }
+
+      // Construct using boa.types.Control.PDGNode.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getStatementFieldBuilder();
+          getExpressionFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        id_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        kind_ = boa.types.Control.PDGNode.PDGNodeType.ENTRY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        if (statementBuilder_ == null) {
+          statement_ = boa.types.Ast.Statement.getDefaultInstance();
+        } else {
+          statementBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        if (expressionBuilder_ == null) {
+          expression_ = boa.types.Ast.Expression.getDefaultInstance();
+        } else {
+          expressionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Control.internal_static_boa_types_PDGNode_descriptor;
+      }
+
+      public boa.types.Control.PDGNode getDefaultInstanceForType() {
+        return boa.types.Control.PDGNode.getDefaultInstance();
+      }
+
+      public boa.types.Control.PDGNode build() {
+        boa.types.Control.PDGNode result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Control.PDGNode buildPartial() {
+        boa.types.Control.PDGNode result = new boa.types.Control.PDGNode(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.id_ = id_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.kind_ = kind_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (statementBuilder_ == null) {
+          result.statement_ = statement_;
+        } else {
+          result.statement_ = statementBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        if (expressionBuilder_ == null) {
+          result.expression_ = expression_;
+        } else {
+          result.expression_ = expressionBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Control.PDGNode) {
+          return mergeFrom((boa.types.Control.PDGNode)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Control.PDGNode other) {
+        if (other == boa.types.Control.PDGNode.getDefaultInstance()) return this;
+        if (other.hasId()) {
+          setId(other.getId());
+        }
+        if (other.hasKind()) {
+          setKind(other.getKind());
+        }
+        if (other.hasStatement()) {
+          mergeStatement(other.getStatement());
+        }
+        if (other.hasExpression()) {
+          mergeExpression(other.getExpression());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasId()) {
+          
+          return false;
+        }
+        if (!hasKind()) {
+          
+          return false;
+        }
+        if (hasStatement()) {
+          if (!getStatement().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasExpression()) {
+          if (!getExpression().isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Control.PDGNode parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Control.PDGNode) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required int32 id = 1;
+      private int id_ ;
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public boolean hasId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public int getId() {
+        return id_;
+      }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public Builder setId(int value) {
+        bitField0_ |= 0x00000001;
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public Builder clearId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        id_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // required .boa.types.PDGNode.PDGNodeType kind = 2;
+      private boa.types.Control.PDGNode.PDGNodeType kind_ = boa.types.Control.PDGNode.PDGNodeType.ENTRY;
+      /**
+       * <code>required .boa.types.PDGNode.PDGNodeType kind = 2;</code>
+       */
+      public boolean hasKind() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required .boa.types.PDGNode.PDGNodeType kind = 2;</code>
+       */
+      public boa.types.Control.PDGNode.PDGNodeType getKind() {
+        return kind_;
+      }
+      /**
+       * <code>required .boa.types.PDGNode.PDGNodeType kind = 2;</code>
+       */
+      public Builder setKind(boa.types.Control.PDGNode.PDGNodeType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
+        kind_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .boa.types.PDGNode.PDGNodeType kind = 2;</code>
+       */
+      public Builder clearKind() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        kind_ = boa.types.Control.PDGNode.PDGNodeType.ENTRY;
+        onChanged();
+        return this;
+      }
+
+      // optional .boa.types.Statement statement = 3;
+      private boa.types.Ast.Statement statement_ = boa.types.Ast.Statement.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> statementBuilder_;
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public boolean hasStatement() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public boa.types.Ast.Statement getStatement() {
+        if (statementBuilder_ == null) {
+          return statement_;
+        } else {
+          return statementBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public Builder setStatement(boa.types.Ast.Statement value) {
+        if (statementBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          statement_ = value;
+          onChanged();
+        } else {
+          statementBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public Builder setStatement(
+          boa.types.Ast.Statement.Builder builderForValue) {
+        if (statementBuilder_ == null) {
+          statement_ = builderForValue.build();
+          onChanged();
+        } else {
+          statementBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public Builder mergeStatement(boa.types.Ast.Statement value) {
+        if (statementBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              statement_ != boa.types.Ast.Statement.getDefaultInstance()) {
+            statement_ =
+              boa.types.Ast.Statement.newBuilder(statement_).mergeFrom(value).buildPartial();
+          } else {
+            statement_ = value;
+          }
+          onChanged();
+        } else {
+          statementBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public Builder clearStatement() {
+        if (statementBuilder_ == null) {
+          statement_ = boa.types.Ast.Statement.getDefaultInstance();
+          onChanged();
+        } else {
+          statementBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public boa.types.Ast.Statement.Builder getStatementBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getStatementFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public boa.types.Ast.StatementOrBuilder getStatementOrBuilder() {
+        if (statementBuilder_ != null) {
+          return statementBuilder_.getMessageOrBuilder();
+        } else {
+          return statement_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> 
+          getStatementFieldBuilder() {
+        if (statementBuilder_ == null) {
+          statementBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder>(
+                  statement_,
+                  getParentForChildren(),
+                  isClean());
+          statement_ = null;
+        }
+        return statementBuilder_;
+      }
+
+      // optional .boa.types.Expression expression = 4;
+      private boa.types.Ast.Expression expression_ = boa.types.Ast.Expression.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> expressionBuilder_;
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public boolean hasExpression() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public boa.types.Ast.Expression getExpression() {
+        if (expressionBuilder_ == null) {
+          return expression_;
+        } else {
+          return expressionBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public Builder setExpression(boa.types.Ast.Expression value) {
+        if (expressionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          expression_ = value;
+          onChanged();
+        } else {
+          expressionBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public Builder setExpression(
+          boa.types.Ast.Expression.Builder builderForValue) {
+        if (expressionBuilder_ == null) {
+          expression_ = builderForValue.build();
+          onChanged();
+        } else {
+          expressionBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public Builder mergeExpression(boa.types.Ast.Expression value) {
+        if (expressionBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              expression_ != boa.types.Ast.Expression.getDefaultInstance()) {
+            expression_ =
+              boa.types.Ast.Expression.newBuilder(expression_).mergeFrom(value).buildPartial();
+          } else {
+            expression_ = value;
+          }
+          onChanged();
+        } else {
+          expressionBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public Builder clearExpression() {
+        if (expressionBuilder_ == null) {
+          expression_ = boa.types.Ast.Expression.getDefaultInstance();
+          onChanged();
+        } else {
+          expressionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public boa.types.Ast.Expression.Builder getExpressionBuilder() {
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return getExpressionFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder() {
+        if (expressionBuilder_ != null) {
+          return expressionBuilder_.getMessageOrBuilder();
+        } else {
+          return expression_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
+          getExpressionFieldBuilder() {
+        if (expressionBuilder_ == null) {
+          expressionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder>(
+                  expression_,
+                  getParentForChildren(),
+                  isClean());
+          expression_ = null;
+        }
+        return expressionBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.PDGNode)
+    }
+
+    static {
+      defaultInstance = new PDGNode(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.PDGNode)
+  }
+
+  public interface PDGEdgeOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required .boa.types.PDGEdge.PDGEdgeType kind = 1;
+    /**
+     * <code>required .boa.types.PDGEdge.PDGEdgeType kind = 1;</code>
+     */
+    boolean hasKind();
+    /**
+     * <code>required .boa.types.PDGEdge.PDGEdgeType kind = 1;</code>
+     */
+    boa.types.Control.PDGEdge.PDGEdgeType getKind();
+
+    // required .boa.types.PDGEdge.PDGEdgeLabel label = 2;
+    /**
+     * <code>required .boa.types.PDGEdge.PDGEdgeLabel label = 2;</code>
+     */
+    boolean hasLabel();
+    /**
+     * <code>required .boa.types.PDGEdge.PDGEdgeLabel label = 2;</code>
+     */
+    boa.types.Control.PDGEdge.PDGEdgeLabel getLabel();
+  }
+  /**
+   * Protobuf type {@code boa.types.PDGEdge}
+   */
+  public static final class PDGEdge extends
+      com.google.protobuf.GeneratedMessage
+      implements PDGEdgeOrBuilder {
+    // Use PDGEdge.newBuilder() to construct.
+    private PDGEdge(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private PDGEdge(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final PDGEdge defaultInstance;
+    public static PDGEdge getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public PDGEdge getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private PDGEdge(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              int rawValue = input.readEnum();
+              boa.types.Control.PDGEdge.PDGEdgeType value = boa.types.Control.PDGEdge.PDGEdgeType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                kind_ = value;
+              }
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              boa.types.Control.PDGEdge.PDGEdgeLabel value = boa.types.Control.PDGEdge.PDGEdgeLabel.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                label_ = value;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Control.internal_static_boa_types_PDGEdge_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Control.internal_static_boa_types_PDGEdge_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Control.PDGEdge.class, boa.types.Control.PDGEdge.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<PDGEdge> PARSER =
+        new com.google.protobuf.AbstractParser<PDGEdge>() {
+      public PDGEdge parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new PDGEdge(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<PDGEdge> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code boa.types.PDGEdge.PDGEdgeType}
+     */
+    public enum PDGEdgeType
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>CONTROL = 1;</code>
+       *
+       * <pre>
+       * control dependency edge edges.
+       * </pre>
+       */
+      CONTROL(0, 1),
+      /**
+       * <code>DATA = 2;</code>
+       *
+       * <pre>
+       * data dependency edge.
+       * </pre>
+       */
+      DATA(1, 2),
+      ;
+
+      /**
+       * <code>CONTROL = 1;</code>
+       *
+       * <pre>
+       * control dependency edge edges.
+       * </pre>
+       */
+      public static final int CONTROL_VALUE = 1;
+      /**
+       * <code>DATA = 2;</code>
+       *
+       * <pre>
+       * data dependency edge.
+       * </pre>
+       */
+      public static final int DATA_VALUE = 2;
+
+
+      public final int getNumber() { return value; }
+
+      public static PDGEdgeType valueOf(int value) {
+        switch (value) {
+          case 1: return CONTROL;
+          case 2: return DATA;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<PDGEdgeType>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<PDGEdgeType>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<PDGEdgeType>() {
+              public PDGEdgeType findValueByNumber(int number) {
+                return PDGEdgeType.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return boa.types.Control.PDGEdge.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final PDGEdgeType[] VALUES = values();
+
+      public static PDGEdgeType valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private PDGEdgeType(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:boa.types.PDGEdge.PDGEdgeType)
+    }
+
+    /**
+     * Protobuf enum {@code boa.types.PDGEdge.PDGEdgeLabel}
+     */
+    public enum PDGEdgeLabel
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>NIL = 1;</code>
+       */
+      NIL(0, 1),
+      /**
+       * <code>TRUE = 2;</code>
+       */
+      TRUE(1, 2),
+      /**
+       * <code>FALSE = 3;</code>
+       */
+      FALSE(2, 3),
+      /**
+       * <code>VARDEF = 4;</code>
+       */
+      VARDEF(3, 4),
+      ;
+
+      /**
+       * <code>NIL = 1;</code>
+       */
+      public static final int NIL_VALUE = 1;
+      /**
+       * <code>TRUE = 2;</code>
+       */
+      public static final int TRUE_VALUE = 2;
+      /**
+       * <code>FALSE = 3;</code>
+       */
+      public static final int FALSE_VALUE = 3;
+      /**
+       * <code>VARDEF = 4;</code>
+       */
+      public static final int VARDEF_VALUE = 4;
+
+
+      public final int getNumber() { return value; }
+
+      public static PDGEdgeLabel valueOf(int value) {
+        switch (value) {
+          case 1: return NIL;
+          case 2: return TRUE;
+          case 3: return FALSE;
+          case 4: return VARDEF;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<PDGEdgeLabel>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<PDGEdgeLabel>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<PDGEdgeLabel>() {
+              public PDGEdgeLabel findValueByNumber(int number) {
+                return PDGEdgeLabel.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return boa.types.Control.PDGEdge.getDescriptor().getEnumTypes().get(1);
+      }
+
+      private static final PDGEdgeLabel[] VALUES = values();
+
+      public static PDGEdgeLabel valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private PDGEdgeLabel(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:boa.types.PDGEdge.PDGEdgeLabel)
+    }
+
+    private int bitField0_;
+    // required .boa.types.PDGEdge.PDGEdgeType kind = 1;
+    public static final int KIND_FIELD_NUMBER = 1;
+    private boa.types.Control.PDGEdge.PDGEdgeType kind_;
+    /**
+     * <code>required .boa.types.PDGEdge.PDGEdgeType kind = 1;</code>
+     */
+    public boolean hasKind() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required .boa.types.PDGEdge.PDGEdgeType kind = 1;</code>
+     */
+    public boa.types.Control.PDGEdge.PDGEdgeType getKind() {
+      return kind_;
+    }
+
+    // required .boa.types.PDGEdge.PDGEdgeLabel label = 2;
+    public static final int LABEL_FIELD_NUMBER = 2;
+    private boa.types.Control.PDGEdge.PDGEdgeLabel label_;
+    /**
+     * <code>required .boa.types.PDGEdge.PDGEdgeLabel label = 2;</code>
+     */
+    public boolean hasLabel() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required .boa.types.PDGEdge.PDGEdgeLabel label = 2;</code>
+     */
+    public boa.types.Control.PDGEdge.PDGEdgeLabel getLabel() {
+      return label_;
+    }
+
+    private void initFields() {
+      kind_ = boa.types.Control.PDGEdge.PDGEdgeType.CONTROL;
+      label_ = boa.types.Control.PDGEdge.PDGEdgeLabel.NIL;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasKind()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasLabel()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeEnum(1, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeEnum(2, label_.getNumber());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, label_.getNumber());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Control.PDGEdge parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.PDGEdge parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.PDGEdge parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.PDGEdge parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.PDGEdge parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.PDGEdge parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.PDGEdge parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Control.PDGEdge parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.PDGEdge parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.PDGEdge parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Control.PDGEdge prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.PDGEdge}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Control.PDGEdgeOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Control.internal_static_boa_types_PDGEdge_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Control.internal_static_boa_types_PDGEdge_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Control.PDGEdge.class, boa.types.Control.PDGEdge.Builder.class);
+      }
+
+      // Construct using boa.types.Control.PDGEdge.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        kind_ = boa.types.Control.PDGEdge.PDGEdgeType.CONTROL;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        label_ = boa.types.Control.PDGEdge.PDGEdgeLabel.NIL;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Control.internal_static_boa_types_PDGEdge_descriptor;
+      }
+
+      public boa.types.Control.PDGEdge getDefaultInstanceForType() {
+        return boa.types.Control.PDGEdge.getDefaultInstance();
+      }
+
+      public boa.types.Control.PDGEdge build() {
+        boa.types.Control.PDGEdge result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Control.PDGEdge buildPartial() {
+        boa.types.Control.PDGEdge result = new boa.types.Control.PDGEdge(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.kind_ = kind_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.label_ = label_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Control.PDGEdge) {
+          return mergeFrom((boa.types.Control.PDGEdge)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Control.PDGEdge other) {
+        if (other == boa.types.Control.PDGEdge.getDefaultInstance()) return this;
+        if (other.hasKind()) {
+          setKind(other.getKind());
+        }
+        if (other.hasLabel()) {
+          setLabel(other.getLabel());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasKind()) {
+          
+          return false;
+        }
+        if (!hasLabel()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Control.PDGEdge parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Control.PDGEdge) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required .boa.types.PDGEdge.PDGEdgeType kind = 1;
+      private boa.types.Control.PDGEdge.PDGEdgeType kind_ = boa.types.Control.PDGEdge.PDGEdgeType.CONTROL;
+      /**
+       * <code>required .boa.types.PDGEdge.PDGEdgeType kind = 1;</code>
+       */
+      public boolean hasKind() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .boa.types.PDGEdge.PDGEdgeType kind = 1;</code>
+       */
+      public boa.types.Control.PDGEdge.PDGEdgeType getKind() {
+        return kind_;
+      }
+      /**
+       * <code>required .boa.types.PDGEdge.PDGEdgeType kind = 1;</code>
+       */
+      public Builder setKind(boa.types.Control.PDGEdge.PDGEdgeType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000001;
+        kind_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .boa.types.PDGEdge.PDGEdgeType kind = 1;</code>
+       */
+      public Builder clearKind() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        kind_ = boa.types.Control.PDGEdge.PDGEdgeType.CONTROL;
+        onChanged();
+        return this;
+      }
+
+      // required .boa.types.PDGEdge.PDGEdgeLabel label = 2;
+      private boa.types.Control.PDGEdge.PDGEdgeLabel label_ = boa.types.Control.PDGEdge.PDGEdgeLabel.NIL;
+      /**
+       * <code>required .boa.types.PDGEdge.PDGEdgeLabel label = 2;</code>
+       */
+      public boolean hasLabel() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required .boa.types.PDGEdge.PDGEdgeLabel label = 2;</code>
+       */
+      public boa.types.Control.PDGEdge.PDGEdgeLabel getLabel() {
+        return label_;
+      }
+      /**
+       * <code>required .boa.types.PDGEdge.PDGEdgeLabel label = 2;</code>
+       */
+      public Builder setLabel(boa.types.Control.PDGEdge.PDGEdgeLabel value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
+        label_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .boa.types.PDGEdge.PDGEdgeLabel label = 2;</code>
+       */
+      public Builder clearLabel() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        label_ = boa.types.Control.PDGEdge.PDGEdgeLabel.NIL;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.PDGEdge)
+    }
+
+    static {
+      defaultInstance = new PDGEdge(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.PDGEdge)
+  }
+
+  public interface DTreeOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // repeated .boa.types.TreeNode nodes = 1;
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    java.util.List<boa.types.Control.TreeNode> 
+        getNodesList();
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    boa.types.Control.TreeNode getNodes(int index);
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    int getNodesCount();
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    java.util.List<? extends boa.types.Control.TreeNodeOrBuilder> 
+        getNodesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    boa.types.Control.TreeNodeOrBuilder getNodesOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code boa.types.DTree}
+   */
+  public static final class DTree extends
+      com.google.protobuf.GeneratedMessage
+      implements DTreeOrBuilder {
+    // Use DTree.newBuilder() to construct.
+    private DTree(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private DTree(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final DTree defaultInstance;
+    public static DTree getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public DTree getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private DTree(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                nodes_ = new java.util.ArrayList<boa.types.Control.TreeNode>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              nodes_.add(input.readMessage(boa.types.Control.TreeNode.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          nodes_ = java.util.Collections.unmodifiableList(nodes_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Control.internal_static_boa_types_DTree_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Control.internal_static_boa_types_DTree_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Control.DTree.class, boa.types.Control.DTree.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<DTree> PARSER =
+        new com.google.protobuf.AbstractParser<DTree>() {
+      public DTree parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new DTree(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<DTree> getParserForType() {
+      return PARSER;
+    }
+
+    // repeated .boa.types.TreeNode nodes = 1;
+    public static final int NODES_FIELD_NUMBER = 1;
+    private java.util.List<boa.types.Control.TreeNode> nodes_;
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    public java.util.List<boa.types.Control.TreeNode> getNodesList() {
+      return nodes_;
+    }
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    public java.util.List<? extends boa.types.Control.TreeNodeOrBuilder> 
+        getNodesOrBuilderList() {
+      return nodes_;
+    }
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    public int getNodesCount() {
+      return nodes_.size();
+    }
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    public boa.types.Control.TreeNode getNodes(int index) {
+      return nodes_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    public boa.types.Control.TreeNodeOrBuilder getNodesOrBuilder(
+        int index) {
+      return nodes_.get(index);
+    }
+
+    private void initFields() {
+      nodes_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      for (int i = 0; i < getNodesCount(); i++) {
+        if (!getNodes(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < nodes_.size(); i++) {
+        output.writeMessage(1, nodes_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < nodes_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, nodes_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Control.DTree parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.DTree parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.DTree parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.DTree parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.DTree parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.DTree parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.DTree parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Control.DTree parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.DTree parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.DTree parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Control.DTree prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.DTree}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Control.DTreeOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Control.internal_static_boa_types_DTree_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Control.internal_static_boa_types_DTree_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Control.DTree.class, boa.types.Control.DTree.Builder.class);
+      }
+
+      // Construct using boa.types.Control.DTree.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getNodesFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        if (nodesBuilder_ == null) {
+          nodes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          nodesBuilder_.clear();
+        }
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Control.internal_static_boa_types_DTree_descriptor;
+      }
+
+      public boa.types.Control.DTree getDefaultInstanceForType() {
+        return boa.types.Control.DTree.getDefaultInstance();
+      }
+
+      public boa.types.Control.DTree build() {
+        boa.types.Control.DTree result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Control.DTree buildPartial() {
+        boa.types.Control.DTree result = new boa.types.Control.DTree(this);
+        int from_bitField0_ = bitField0_;
+        if (nodesBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            nodes_ = java.util.Collections.unmodifiableList(nodes_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.nodes_ = nodes_;
+        } else {
+          result.nodes_ = nodesBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Control.DTree) {
+          return mergeFrom((boa.types.Control.DTree)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Control.DTree other) {
+        if (other == boa.types.Control.DTree.getDefaultInstance()) return this;
+        if (nodesBuilder_ == null) {
+          if (!other.nodes_.isEmpty()) {
+            if (nodes_.isEmpty()) {
+              nodes_ = other.nodes_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureNodesIsMutable();
+              nodes_.addAll(other.nodes_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.nodes_.isEmpty()) {
+            if (nodesBuilder_.isEmpty()) {
+              nodesBuilder_.dispose();
+              nodesBuilder_ = null;
+              nodes_ = other.nodes_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              nodesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getNodesFieldBuilder() : null;
+            } else {
+              nodesBuilder_.addAllMessages(other.nodes_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        for (int i = 0; i < getNodesCount(); i++) {
+          if (!getNodes(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Control.DTree parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Control.DTree) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // repeated .boa.types.TreeNode nodes = 1;
+      private java.util.List<boa.types.Control.TreeNode> nodes_ =
+        java.util.Collections.emptyList();
+      private void ensureNodesIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          nodes_ = new java.util.ArrayList<boa.types.Control.TreeNode>(nodes_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Control.TreeNode, boa.types.Control.TreeNode.Builder, boa.types.Control.TreeNodeOrBuilder> nodesBuilder_;
+
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public java.util.List<boa.types.Control.TreeNode> getNodesList() {
+        if (nodesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(nodes_);
+        } else {
+          return nodesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public int getNodesCount() {
+        if (nodesBuilder_ == null) {
+          return nodes_.size();
+        } else {
+          return nodesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public boa.types.Control.TreeNode getNodes(int index) {
+        if (nodesBuilder_ == null) {
+          return nodes_.get(index);
+        } else {
+          return nodesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder setNodes(
+          int index, boa.types.Control.TreeNode value) {
+        if (nodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNodesIsMutable();
+          nodes_.set(index, value);
+          onChanged();
+        } else {
+          nodesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder setNodes(
+          int index, boa.types.Control.TreeNode.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          nodesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder addNodes(boa.types.Control.TreeNode value) {
+        if (nodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNodesIsMutable();
+          nodes_.add(value);
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder addNodes(
+          int index, boa.types.Control.TreeNode value) {
+        if (nodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNodesIsMutable();
+          nodes_.add(index, value);
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder addNodes(
+          boa.types.Control.TreeNode.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.add(builderForValue.build());
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder addNodes(
+          int index, boa.types.Control.TreeNode.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder addAllNodes(
+          java.lang.Iterable<? extends boa.types.Control.TreeNode> values) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          super.addAll(values, nodes_);
+          onChanged();
+        } else {
+          nodesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder clearNodes() {
+        if (nodesBuilder_ == null) {
+          nodes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          nodesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder removeNodes(int index) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.remove(index);
+          onChanged();
+        } else {
+          nodesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public boa.types.Control.TreeNode.Builder getNodesBuilder(
+          int index) {
+        return getNodesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public boa.types.Control.TreeNodeOrBuilder getNodesOrBuilder(
+          int index) {
+        if (nodesBuilder_ == null) {
+          return nodes_.get(index);  } else {
+          return nodesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public java.util.List<? extends boa.types.Control.TreeNodeOrBuilder> 
+           getNodesOrBuilderList() {
+        if (nodesBuilder_ != null) {
+          return nodesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(nodes_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public boa.types.Control.TreeNode.Builder addNodesBuilder() {
+        return getNodesFieldBuilder().addBuilder(
+            boa.types.Control.TreeNode.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public boa.types.Control.TreeNode.Builder addNodesBuilder(
+          int index) {
+        return getNodesFieldBuilder().addBuilder(
+            index, boa.types.Control.TreeNode.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public java.util.List<boa.types.Control.TreeNode.Builder> 
+           getNodesBuilderList() {
+        return getNodesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Control.TreeNode, boa.types.Control.TreeNode.Builder, boa.types.Control.TreeNodeOrBuilder> 
+          getNodesFieldBuilder() {
+        if (nodesBuilder_ == null) {
+          nodesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Control.TreeNode, boa.types.Control.TreeNode.Builder, boa.types.Control.TreeNodeOrBuilder>(
+                  nodes_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          nodes_ = null;
+        }
+        return nodesBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.DTree)
+    }
+
+    static {
+      defaultInstance = new DTree(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.DTree)
+  }
+
+  public interface PDTreeOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // repeated .boa.types.TreeNode nodes = 1;
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    java.util.List<boa.types.Control.TreeNode> 
+        getNodesList();
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    boa.types.Control.TreeNode getNodes(int index);
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    int getNodesCount();
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    java.util.List<? extends boa.types.Control.TreeNodeOrBuilder> 
+        getNodesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    boa.types.Control.TreeNodeOrBuilder getNodesOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code boa.types.PDTree}
+   */
+  public static final class PDTree extends
+      com.google.protobuf.GeneratedMessage
+      implements PDTreeOrBuilder {
+    // Use PDTree.newBuilder() to construct.
+    private PDTree(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private PDTree(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final PDTree defaultInstance;
+    public static PDTree getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public PDTree getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private PDTree(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                nodes_ = new java.util.ArrayList<boa.types.Control.TreeNode>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              nodes_.add(input.readMessage(boa.types.Control.TreeNode.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          nodes_ = java.util.Collections.unmodifiableList(nodes_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Control.internal_static_boa_types_PDTree_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Control.internal_static_boa_types_PDTree_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Control.PDTree.class, boa.types.Control.PDTree.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<PDTree> PARSER =
+        new com.google.protobuf.AbstractParser<PDTree>() {
+      public PDTree parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new PDTree(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<PDTree> getParserForType() {
+      return PARSER;
+    }
+
+    // repeated .boa.types.TreeNode nodes = 1;
+    public static final int NODES_FIELD_NUMBER = 1;
+    private java.util.List<boa.types.Control.TreeNode> nodes_;
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    public java.util.List<boa.types.Control.TreeNode> getNodesList() {
+      return nodes_;
+    }
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    public java.util.List<? extends boa.types.Control.TreeNodeOrBuilder> 
+        getNodesOrBuilderList() {
+      return nodes_;
+    }
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    public int getNodesCount() {
+      return nodes_.size();
+    }
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    public boa.types.Control.TreeNode getNodes(int index) {
+      return nodes_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+     */
+    public boa.types.Control.TreeNodeOrBuilder getNodesOrBuilder(
+        int index) {
+      return nodes_.get(index);
+    }
+
+    private void initFields() {
+      nodes_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      for (int i = 0; i < getNodesCount(); i++) {
+        if (!getNodes(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < nodes_.size(); i++) {
+        output.writeMessage(1, nodes_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < nodes_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, nodes_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Control.PDTree parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.PDTree parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.PDTree parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.PDTree parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.PDTree parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.PDTree parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.PDTree parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Control.PDTree parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.PDTree parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.PDTree parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Control.PDTree prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.PDTree}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Control.PDTreeOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Control.internal_static_boa_types_PDTree_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Control.internal_static_boa_types_PDTree_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Control.PDTree.class, boa.types.Control.PDTree.Builder.class);
+      }
+
+      // Construct using boa.types.Control.PDTree.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getNodesFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        if (nodesBuilder_ == null) {
+          nodes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          nodesBuilder_.clear();
+        }
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Control.internal_static_boa_types_PDTree_descriptor;
+      }
+
+      public boa.types.Control.PDTree getDefaultInstanceForType() {
+        return boa.types.Control.PDTree.getDefaultInstance();
+      }
+
+      public boa.types.Control.PDTree build() {
+        boa.types.Control.PDTree result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Control.PDTree buildPartial() {
+        boa.types.Control.PDTree result = new boa.types.Control.PDTree(this);
+        int from_bitField0_ = bitField0_;
+        if (nodesBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            nodes_ = java.util.Collections.unmodifiableList(nodes_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.nodes_ = nodes_;
+        } else {
+          result.nodes_ = nodesBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Control.PDTree) {
+          return mergeFrom((boa.types.Control.PDTree)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Control.PDTree other) {
+        if (other == boa.types.Control.PDTree.getDefaultInstance()) return this;
+        if (nodesBuilder_ == null) {
+          if (!other.nodes_.isEmpty()) {
+            if (nodes_.isEmpty()) {
+              nodes_ = other.nodes_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureNodesIsMutable();
+              nodes_.addAll(other.nodes_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.nodes_.isEmpty()) {
+            if (nodesBuilder_.isEmpty()) {
+              nodesBuilder_.dispose();
+              nodesBuilder_ = null;
+              nodes_ = other.nodes_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              nodesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getNodesFieldBuilder() : null;
+            } else {
+              nodesBuilder_.addAllMessages(other.nodes_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        for (int i = 0; i < getNodesCount(); i++) {
+          if (!getNodes(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Control.PDTree parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Control.PDTree) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // repeated .boa.types.TreeNode nodes = 1;
+      private java.util.List<boa.types.Control.TreeNode> nodes_ =
+        java.util.Collections.emptyList();
+      private void ensureNodesIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          nodes_ = new java.util.ArrayList<boa.types.Control.TreeNode>(nodes_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Control.TreeNode, boa.types.Control.TreeNode.Builder, boa.types.Control.TreeNodeOrBuilder> nodesBuilder_;
+
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public java.util.List<boa.types.Control.TreeNode> getNodesList() {
+        if (nodesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(nodes_);
+        } else {
+          return nodesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public int getNodesCount() {
+        if (nodesBuilder_ == null) {
+          return nodes_.size();
+        } else {
+          return nodesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public boa.types.Control.TreeNode getNodes(int index) {
+        if (nodesBuilder_ == null) {
+          return nodes_.get(index);
+        } else {
+          return nodesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder setNodes(
+          int index, boa.types.Control.TreeNode value) {
+        if (nodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNodesIsMutable();
+          nodes_.set(index, value);
+          onChanged();
+        } else {
+          nodesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder setNodes(
+          int index, boa.types.Control.TreeNode.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          nodesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder addNodes(boa.types.Control.TreeNode value) {
+        if (nodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNodesIsMutable();
+          nodes_.add(value);
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder addNodes(
+          int index, boa.types.Control.TreeNode value) {
+        if (nodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNodesIsMutable();
+          nodes_.add(index, value);
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder addNodes(
+          boa.types.Control.TreeNode.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.add(builderForValue.build());
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder addNodes(
+          int index, boa.types.Control.TreeNode.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          nodesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder addAllNodes(
+          java.lang.Iterable<? extends boa.types.Control.TreeNode> values) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          super.addAll(values, nodes_);
+          onChanged();
+        } else {
+          nodesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder clearNodes() {
+        if (nodesBuilder_ == null) {
+          nodes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          nodesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public Builder removeNodes(int index) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.remove(index);
+          onChanged();
+        } else {
+          nodesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public boa.types.Control.TreeNode.Builder getNodesBuilder(
+          int index) {
+        return getNodesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public boa.types.Control.TreeNodeOrBuilder getNodesOrBuilder(
+          int index) {
+        if (nodesBuilder_ == null) {
+          return nodes_.get(index);  } else {
+          return nodesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public java.util.List<? extends boa.types.Control.TreeNodeOrBuilder> 
+           getNodesOrBuilderList() {
+        if (nodesBuilder_ != null) {
+          return nodesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(nodes_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public boa.types.Control.TreeNode.Builder addNodesBuilder() {
+        return getNodesFieldBuilder().addBuilder(
+            boa.types.Control.TreeNode.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public boa.types.Control.TreeNode.Builder addNodesBuilder(
+          int index) {
+        return getNodesFieldBuilder().addBuilder(
+            index, boa.types.Control.TreeNode.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.TreeNode nodes = 1;</code>
+       */
+      public java.util.List<boa.types.Control.TreeNode.Builder> 
+           getNodesBuilderList() {
+        return getNodesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Control.TreeNode, boa.types.Control.TreeNode.Builder, boa.types.Control.TreeNodeOrBuilder> 
+          getNodesFieldBuilder() {
+        if (nodesBuilder_ == null) {
+          nodesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Control.TreeNode, boa.types.Control.TreeNode.Builder, boa.types.Control.TreeNodeOrBuilder>(
+                  nodes_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          nodes_ = null;
+        }
+        return nodesBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.PDTree)
+    }
+
+    static {
+      defaultInstance = new PDTree(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.PDTree)
+  }
+
+  public interface TreeNodeOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required int32 id = 1;
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    boolean hasId();
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    int getId();
+
+    // required .boa.types.TreeNode.TreeNodeType kind = 2;
+    /**
+     * <code>required .boa.types.TreeNode.TreeNodeType kind = 2;</code>
+     */
+    boolean hasKind();
+    /**
+     * <code>required .boa.types.TreeNode.TreeNodeType kind = 2;</code>
+     */
+    boa.types.Control.TreeNode.TreeNodeType getKind();
+
+    // optional .boa.types.Statement statement = 3;
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    boolean hasStatement();
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    boa.types.Ast.Statement getStatement();
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    boa.types.Ast.StatementOrBuilder getStatementOrBuilder();
+
+    // optional .boa.types.Expression expression = 4;
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    boolean hasExpression();
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    boa.types.Ast.Expression getExpression();
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder();
+  }
+  /**
+   * Protobuf type {@code boa.types.TreeNode}
+   */
+  public static final class TreeNode extends
+      com.google.protobuf.GeneratedMessage
+      implements TreeNodeOrBuilder {
+    // Use TreeNode.newBuilder() to construct.
+    private TreeNode(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private TreeNode(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final TreeNode defaultInstance;
+    public static TreeNode getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public TreeNode getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private TreeNode(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              id_ = input.readInt32();
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              boa.types.Control.TreeNode.TreeNodeType value = boa.types.Control.TreeNode.TreeNodeType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                kind_ = value;
+              }
+              break;
+            }
+            case 26: {
+              boa.types.Ast.Statement.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = statement_.toBuilder();
+              }
+              statement_ = input.readMessage(boa.types.Ast.Statement.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(statement_);
+                statement_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
+              break;
+            }
+            case 34: {
+              boa.types.Ast.Expression.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+                subBuilder = expression_.toBuilder();
+              }
+              expression_ = input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(expression_);
+                expression_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000008;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Control.internal_static_boa_types_TreeNode_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Control.internal_static_boa_types_TreeNode_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Control.TreeNode.class, boa.types.Control.TreeNode.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<TreeNode> PARSER =
+        new com.google.protobuf.AbstractParser<TreeNode>() {
+      public TreeNode parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new TreeNode(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<TreeNode> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code boa.types.TreeNode.TreeNodeType}
+     */
+    public enum TreeNodeType
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>ENTRY = 1;</code>
+       */
+      ENTRY(0, 1),
+      /**
+       * <code>OTHER = 2;</code>
+       */
+      OTHER(1, 2),
+      /**
+       * <code>METHOD = 3;</code>
+       */
+      METHOD(2, 3),
+      /**
+       * <code>CONTROL = 4;</code>
+       */
+      CONTROL(3, 4),
+      ;
+
+      /**
+       * <code>ENTRY = 1;</code>
+       */
+      public static final int ENTRY_VALUE = 1;
+      /**
+       * <code>OTHER = 2;</code>
+       */
+      public static final int OTHER_VALUE = 2;
+      /**
+       * <code>METHOD = 3;</code>
+       */
+      public static final int METHOD_VALUE = 3;
+      /**
+       * <code>CONTROL = 4;</code>
+       */
+      public static final int CONTROL_VALUE = 4;
+
+
+      public final int getNumber() { return value; }
+
+      public static TreeNodeType valueOf(int value) {
+        switch (value) {
+          case 1: return ENTRY;
+          case 2: return OTHER;
+          case 3: return METHOD;
+          case 4: return CONTROL;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<TreeNodeType>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<TreeNodeType>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<TreeNodeType>() {
+              public TreeNodeType findValueByNumber(int number) {
+                return TreeNodeType.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return boa.types.Control.TreeNode.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final TreeNodeType[] VALUES = values();
+
+      public static TreeNodeType valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private TreeNodeType(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:boa.types.TreeNode.TreeNodeType)
+    }
+
+    private int bitField0_;
+    // required int32 id = 1;
+    public static final int ID_FIELD_NUMBER = 1;
+    private int id_;
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    public boolean hasId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    public int getId() {
+      return id_;
+    }
+
+    // required .boa.types.TreeNode.TreeNodeType kind = 2;
+    public static final int KIND_FIELD_NUMBER = 2;
+    private boa.types.Control.TreeNode.TreeNodeType kind_;
+    /**
+     * <code>required .boa.types.TreeNode.TreeNodeType kind = 2;</code>
+     */
+    public boolean hasKind() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required .boa.types.TreeNode.TreeNodeType kind = 2;</code>
+     */
+    public boa.types.Control.TreeNode.TreeNodeType getKind() {
+      return kind_;
+    }
+
+    // optional .boa.types.Statement statement = 3;
+    public static final int STATEMENT_FIELD_NUMBER = 3;
+    private boa.types.Ast.Statement statement_;
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    public boolean hasStatement() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    public boa.types.Ast.Statement getStatement() {
+      return statement_;
+    }
+    /**
+     * <code>optional .boa.types.Statement statement = 3;</code>
+     */
+    public boa.types.Ast.StatementOrBuilder getStatementOrBuilder() {
+      return statement_;
+    }
+
+    // optional .boa.types.Expression expression = 4;
+    public static final int EXPRESSION_FIELD_NUMBER = 4;
+    private boa.types.Ast.Expression expression_;
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    public boolean hasExpression() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    public boa.types.Ast.Expression getExpression() {
+      return expression_;
+    }
+    /**
+     * <code>optional .boa.types.Expression expression = 4;</code>
+     */
+    public boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder() {
+      return expression_;
+    }
+
+    private void initFields() {
+      id_ = 0;
+      kind_ = boa.types.Control.TreeNode.TreeNodeType.ENTRY;
+      statement_ = boa.types.Ast.Statement.getDefaultInstance();
+      expression_ = boa.types.Ast.Expression.getDefaultInstance();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasKind()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (hasStatement()) {
+        if (!getStatement().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasExpression()) {
+        if (!getExpression().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeEnum(2, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(3, statement_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeMessage(4, expression_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, statement_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, expression_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Control.TreeNode parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.TreeNode parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.TreeNode parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Control.TreeNode parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Control.TreeNode parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.TreeNode parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.TreeNode parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Control.TreeNode parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Control.TreeNode parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Control.TreeNode parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Control.TreeNode prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.TreeNode}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Control.TreeNodeOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Control.internal_static_boa_types_TreeNode_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Control.internal_static_boa_types_TreeNode_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Control.TreeNode.class, boa.types.Control.TreeNode.Builder.class);
+      }
+
+      // Construct using boa.types.Control.TreeNode.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getStatementFieldBuilder();
+          getExpressionFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        id_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        kind_ = boa.types.Control.TreeNode.TreeNodeType.ENTRY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        if (statementBuilder_ == null) {
+          statement_ = boa.types.Ast.Statement.getDefaultInstance();
+        } else {
+          statementBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        if (expressionBuilder_ == null) {
+          expression_ = boa.types.Ast.Expression.getDefaultInstance();
+        } else {
+          expressionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Control.internal_static_boa_types_TreeNode_descriptor;
+      }
+
+      public boa.types.Control.TreeNode getDefaultInstanceForType() {
+        return boa.types.Control.TreeNode.getDefaultInstance();
+      }
+
+      public boa.types.Control.TreeNode build() {
+        boa.types.Control.TreeNode result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Control.TreeNode buildPartial() {
+        boa.types.Control.TreeNode result = new boa.types.Control.TreeNode(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.id_ = id_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.kind_ = kind_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (statementBuilder_ == null) {
+          result.statement_ = statement_;
+        } else {
+          result.statement_ = statementBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        if (expressionBuilder_ == null) {
+          result.expression_ = expression_;
+        } else {
+          result.expression_ = expressionBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Control.TreeNode) {
+          return mergeFrom((boa.types.Control.TreeNode)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Control.TreeNode other) {
+        if (other == boa.types.Control.TreeNode.getDefaultInstance()) return this;
+        if (other.hasId()) {
+          setId(other.getId());
+        }
+        if (other.hasKind()) {
+          setKind(other.getKind());
+        }
+        if (other.hasStatement()) {
+          mergeStatement(other.getStatement());
+        }
+        if (other.hasExpression()) {
+          mergeExpression(other.getExpression());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasId()) {
+          
+          return false;
+        }
+        if (!hasKind()) {
+          
+          return false;
+        }
+        if (hasStatement()) {
+          if (!getStatement().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasExpression()) {
+          if (!getExpression().isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Control.TreeNode parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Control.TreeNode) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required int32 id = 1;
+      private int id_ ;
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public boolean hasId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public int getId() {
+        return id_;
+      }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public Builder setId(int value) {
+        bitField0_ |= 0x00000001;
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public Builder clearId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        id_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // required .boa.types.TreeNode.TreeNodeType kind = 2;
+      private boa.types.Control.TreeNode.TreeNodeType kind_ = boa.types.Control.TreeNode.TreeNodeType.ENTRY;
+      /**
+       * <code>required .boa.types.TreeNode.TreeNodeType kind = 2;</code>
+       */
+      public boolean hasKind() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required .boa.types.TreeNode.TreeNodeType kind = 2;</code>
+       */
+      public boa.types.Control.TreeNode.TreeNodeType getKind() {
+        return kind_;
+      }
+      /**
+       * <code>required .boa.types.TreeNode.TreeNodeType kind = 2;</code>
+       */
+      public Builder setKind(boa.types.Control.TreeNode.TreeNodeType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
+        kind_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .boa.types.TreeNode.TreeNodeType kind = 2;</code>
+       */
+      public Builder clearKind() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        kind_ = boa.types.Control.TreeNode.TreeNodeType.ENTRY;
+        onChanged();
+        return this;
+      }
+
+      // optional .boa.types.Statement statement = 3;
+      private boa.types.Ast.Statement statement_ = boa.types.Ast.Statement.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> statementBuilder_;
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public boolean hasStatement() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public boa.types.Ast.Statement getStatement() {
+        if (statementBuilder_ == null) {
+          return statement_;
+        } else {
+          return statementBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public Builder setStatement(boa.types.Ast.Statement value) {
+        if (statementBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          statement_ = value;
+          onChanged();
+        } else {
+          statementBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public Builder setStatement(
+          boa.types.Ast.Statement.Builder builderForValue) {
+        if (statementBuilder_ == null) {
+          statement_ = builderForValue.build();
+          onChanged();
+        } else {
+          statementBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public Builder mergeStatement(boa.types.Ast.Statement value) {
+        if (statementBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              statement_ != boa.types.Ast.Statement.getDefaultInstance()) {
+            statement_ =
+              boa.types.Ast.Statement.newBuilder(statement_).mergeFrom(value).buildPartial();
+          } else {
+            statement_ = value;
+          }
+          onChanged();
+        } else {
+          statementBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public Builder clearStatement() {
+        if (statementBuilder_ == null) {
+          statement_ = boa.types.Ast.Statement.getDefaultInstance();
+          onChanged();
+        } else {
+          statementBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public boa.types.Ast.Statement.Builder getStatementBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getStatementFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      public boa.types.Ast.StatementOrBuilder getStatementOrBuilder() {
+        if (statementBuilder_ != null) {
+          return statementBuilder_.getMessageOrBuilder();
+        } else {
+          return statement_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Statement statement = 3;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> 
+          getStatementFieldBuilder() {
+        if (statementBuilder_ == null) {
+          statementBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder>(
+                  statement_,
+                  getParentForChildren(),
+                  isClean());
+          statement_ = null;
+        }
+        return statementBuilder_;
+      }
+
+      // optional .boa.types.Expression expression = 4;
+      private boa.types.Ast.Expression expression_ = boa.types.Ast.Expression.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> expressionBuilder_;
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public boolean hasExpression() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public boa.types.Ast.Expression getExpression() {
+        if (expressionBuilder_ == null) {
+          return expression_;
+        } else {
+          return expressionBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public Builder setExpression(boa.types.Ast.Expression value) {
+        if (expressionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          expression_ = value;
+          onChanged();
+        } else {
+          expressionBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public Builder setExpression(
+          boa.types.Ast.Expression.Builder builderForValue) {
+        if (expressionBuilder_ == null) {
+          expression_ = builderForValue.build();
+          onChanged();
+        } else {
+          expressionBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public Builder mergeExpression(boa.types.Ast.Expression value) {
+        if (expressionBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              expression_ != boa.types.Ast.Expression.getDefaultInstance()) {
+            expression_ =
+              boa.types.Ast.Expression.newBuilder(expression_).mergeFrom(value).buildPartial();
+          } else {
+            expression_ = value;
+          }
+          onChanged();
+        } else {
+          expressionBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public Builder clearExpression() {
+        if (expressionBuilder_ == null) {
+          expression_ = boa.types.Ast.Expression.getDefaultInstance();
+          onChanged();
+        } else {
+          expressionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public boa.types.Ast.Expression.Builder getExpressionBuilder() {
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return getExpressionFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      public boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder() {
+        if (expressionBuilder_ != null) {
+          return expressionBuilder_.getMessageOrBuilder();
+        } else {
+          return expression_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression expression = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
+          getExpressionFieldBuilder() {
+        if (expressionBuilder_ == null) {
+          expressionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder>(
+                  expression_,
+                  getParentForChildren(),
+                  isClean());
+          expression_ = null;
+        }
+        return expressionBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.TreeNode)
+    }
+
+    static {
+      defaultInstance = new TreeNode(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.TreeNode)
+  }
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_boa_types_CFG_descriptor;
   private static
@@ -2940,6 +13248,66 @@ public final class Control {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_boa_types_CFGEdge_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_CDG_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_CDG_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_CDGNode_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_CDGNode_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_CDGEdge_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_CDGEdge_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_DDG_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_DDG_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_DDGNode_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_DDGNode_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_DDGEdge_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_DDGEdge_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_PDG_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_PDG_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_PDGNode_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_PDGNode_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_PDGEdge_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_PDGEdge_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_DTree_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_DTree_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_PDTree_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_PDTree_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_TreeNode_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_TreeNode_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -2960,8 +13328,47 @@ public final class Control {
       "\007CONTROL\020\004\"\220\001\n\007CFGEdge\022.\n\005label\030\001 \002(\0162\037." +
       "boa.types.CFGEdge.CFGEdgeLabel\"U\n\014CFGEdg",
       "eLabel\022\007\n\003NIL\020\001\022\013\n\007DEFAULT\020\002\022\010\n\004TRUE\020\003\022\t" +
-      "\n\005FALSE\020\004\022\014\n\010BACKEDGE\020\005\022\014\n\010EXITEDGE\020\006B\002H" +
-      "\001"
+      "\n\005FALSE\020\004\022\014\n\010BACKEDGE\020\005\022\014\n\010EXITEDGE\020\006\"K\n" +
+      "\003CDG\022!\n\005nodes\030\001 \003(\0132\022.boa.types.CDGNode\022" +
+      "!\n\005edges\030\002 \003(\0132\022.boa.types.CDGEdge\"\325\001\n\007C" +
+      "DGNode\022\n\n\002id\030\001 \002(\005\022,\n\004kind\030\002 \002(\0162\036.boa.t" +
+      "ypes.CDGNode.CDGNodeType\022\'\n\tstatement\030\003 " +
+      "\001(\0132\024.boa.types.Statement\022)\n\nexpression\030" +
+      "\004 \001(\0132\025.boa.types.Expression\"<\n\013CDGNodeT" +
+      "ype\022\t\n\005ENTRY\020\001\022\t\n\005OTHER\020\002\022\n\n\006METHOD\020\003\022\013\n" +
+      "\007CONTROL\020\004\"g\n\007CDGEdge\022.\n\005label\030\001 \002(\0162\037.b",
+      "oa.types.CDGEdge.CDGEdgeLabel\",\n\014CDGEdge" +
+      "Label\022\007\n\003NIL\020\001\022\010\n\004TRUE\020\002\022\t\n\005FALSE\020\003\"K\n\003D" +
+      "DG\022!\n\005nodes\030\001 \003(\0132\022.boa.types.DDGNode\022!\n" +
+      "\005edges\030\002 \003(\0132\022.boa.types.DDGEdge\"\325\001\n\007DDG" +
+      "Node\022\n\n\002id\030\001 \002(\005\022,\n\004kind\030\002 \002(\0162\036.boa.typ" +
+      "es.DDGNode.DDGNodeType\022\'\n\tstatement\030\003 \001(" +
+      "\0132\024.boa.types.Statement\022)\n\nexpression\030\004 " +
+      "\001(\0132\025.boa.types.Expression\"<\n\013DDGNodeTyp" +
+      "e\022\t\n\005ENTRY\020\001\022\t\n\005OTHER\020\002\022\n\n\006METHOD\020\003\022\013\n\007C" +
+      "ONTROL\020\004\"^\n\007DDGEdge\022.\n\005label\030\001 \002(\0162\037.boa",
+      ".types.DDGEdge.DDGEdgeLabel\"#\n\014DDGEdgeLa" +
+      "bel\022\007\n\003NIL\020\001\022\n\n\006VARDEF\020\002\"K\n\003PDG\022!\n\005nodes" +
+      "\030\001 \003(\0132\022.boa.types.PDGNode\022!\n\005edges\030\002 \003(" +
+      "\0132\022.boa.types.PDGEdge\"\325\001\n\007PDGNode\022\n\n\002id\030" +
+      "\001 \002(\005\022,\n\004kind\030\002 \002(\0162\036.boa.types.PDGNode." +
+      "PDGNodeType\022\'\n\tstatement\030\003 \001(\0132\024.boa.typ" +
+      "es.Statement\022)\n\nexpression\030\004 \001(\0132\025.boa.t" +
+      "ypes.Expression\"<\n\013PDGNodeType\022\t\n\005ENTRY\020" +
+      "\001\022\t\n\005OTHER\020\002\022\n\n\006METHOD\020\003\022\013\n\007CONTROL\020\004\"\307\001" +
+      "\n\007PDGEdge\022,\n\004kind\030\001 \002(\0162\036.boa.types.PDGE",
+      "dge.PDGEdgeType\022.\n\005label\030\002 \002(\0162\037.boa.typ" +
+      "es.PDGEdge.PDGEdgeLabel\"$\n\013PDGEdgeType\022\013" +
+      "\n\007CONTROL\020\001\022\010\n\004DATA\020\002\"8\n\014PDGEdgeLabel\022\007\n" +
+      "\003NIL\020\001\022\010\n\004TRUE\020\002\022\t\n\005FALSE\020\003\022\n\n\006VARDEF\020\004\"" +
+      "+\n\005DTree\022\"\n\005nodes\030\001 \003(\0132\023.boa.types.Tree" +
+      "Node\",\n\006PDTree\022\"\n\005nodes\030\001 \003(\0132\023.boa.type" +
+      "s.TreeNode\"\331\001\n\010TreeNode\022\n\n\002id\030\001 \002(\005\022.\n\004k" +
+      "ind\030\002 \002(\0162 .boa.types.TreeNode.TreeNodeT" +
+      "ype\022\'\n\tstatement\030\003 \001(\0132\024.boa.types.State" +
+      "ment\022)\n\nexpression\030\004 \001(\0132\025.boa.types.Exp",
+      "ression\"=\n\014TreeNodeType\022\t\n\005ENTRY\020\001\022\t\n\005OT" +
+      "HER\020\002\022\n\n\006METHOD\020\003\022\013\n\007CONTROL\020\004B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2986,6 +13393,78 @@ public final class Control {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_CFGEdge_descriptor,
               new java.lang.String[] { "Label", });
+          internal_static_boa_types_CDG_descriptor =
+            getDescriptor().getMessageTypes().get(3);
+          internal_static_boa_types_CDG_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_CDG_descriptor,
+              new java.lang.String[] { "Nodes", "Edges", });
+          internal_static_boa_types_CDGNode_descriptor =
+            getDescriptor().getMessageTypes().get(4);
+          internal_static_boa_types_CDGNode_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_CDGNode_descriptor,
+              new java.lang.String[] { "Id", "Kind", "Statement", "Expression", });
+          internal_static_boa_types_CDGEdge_descriptor =
+            getDescriptor().getMessageTypes().get(5);
+          internal_static_boa_types_CDGEdge_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_CDGEdge_descriptor,
+              new java.lang.String[] { "Label", });
+          internal_static_boa_types_DDG_descriptor =
+            getDescriptor().getMessageTypes().get(6);
+          internal_static_boa_types_DDG_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_DDG_descriptor,
+              new java.lang.String[] { "Nodes", "Edges", });
+          internal_static_boa_types_DDGNode_descriptor =
+            getDescriptor().getMessageTypes().get(7);
+          internal_static_boa_types_DDGNode_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_DDGNode_descriptor,
+              new java.lang.String[] { "Id", "Kind", "Statement", "Expression", });
+          internal_static_boa_types_DDGEdge_descriptor =
+            getDescriptor().getMessageTypes().get(8);
+          internal_static_boa_types_DDGEdge_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_DDGEdge_descriptor,
+              new java.lang.String[] { "Label", });
+          internal_static_boa_types_PDG_descriptor =
+            getDescriptor().getMessageTypes().get(9);
+          internal_static_boa_types_PDG_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_PDG_descriptor,
+              new java.lang.String[] { "Nodes", "Edges", });
+          internal_static_boa_types_PDGNode_descriptor =
+            getDescriptor().getMessageTypes().get(10);
+          internal_static_boa_types_PDGNode_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_PDGNode_descriptor,
+              new java.lang.String[] { "Id", "Kind", "Statement", "Expression", });
+          internal_static_boa_types_PDGEdge_descriptor =
+            getDescriptor().getMessageTypes().get(11);
+          internal_static_boa_types_PDGEdge_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_PDGEdge_descriptor,
+              new java.lang.String[] { "Kind", "Label", });
+          internal_static_boa_types_DTree_descriptor =
+            getDescriptor().getMessageTypes().get(12);
+          internal_static_boa_types_DTree_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_DTree_descriptor,
+              new java.lang.String[] { "Nodes", });
+          internal_static_boa_types_PDTree_descriptor =
+            getDescriptor().getMessageTypes().get(13);
+          internal_static_boa_types_PDTree_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_PDTree_descriptor,
+              new java.lang.String[] { "Nodes", });
+          internal_static_boa_types_TreeNode_descriptor =
+            getDescriptor().getMessageTypes().get(14);
+          internal_static_boa_types_TreeNode_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_TreeNode_descriptor,
+              new java.lang.String[] { "Id", "Kind", "Statement", "Expression", });
           return null;
         }
       };
