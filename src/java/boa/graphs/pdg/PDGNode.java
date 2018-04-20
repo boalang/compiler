@@ -18,11 +18,17 @@ package boa.graphs.pdg;
 
 import boa.graphs.cdg.CDGNode;
 import boa.types.Ast.*;
+import boa.types.Control;
+import boa.types.Control.PDGNode.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
+ * Program Dependence Graph builder node
+ *
  * @author marafat
  */
 
@@ -31,9 +37,10 @@ public class PDGNode implements Comparable<PDGNode> {
     private int id;
     private Statement stmt;
     private Expression expr;
+    private PDGNodeType kind = PDGNodeType.OTHER;
 
-    private Set<PDGNode> successors = new HashSet<PDGNode>();
-    private Set<PDGNode> predecessors = new HashSet<PDGNode>();
+    private List<PDGNode> successors = new ArrayList<PDGNode>();
+    private List<PDGNode> predecessors = new ArrayList<PDGNode>();
     private Set<PDGEdge> inEdges = new HashSet<PDGEdge>();
     private Set<PDGEdge> outEdges = new HashSet<PDGEdge>();
 
@@ -41,13 +48,14 @@ public class PDGNode implements Comparable<PDGNode> {
         this.id = node.getId();
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
+        this.kind = convertKind(node.getKind());
     }
 
     public PDGNode(int id) {
         this.id = id;
     }
 
-    //Setters
+    // Setters
     public void setId(int id) {
         this.id = id;
     }
@@ -60,6 +68,14 @@ public class PDGNode implements Comparable<PDGNode> {
         this.expr = expr;
     }
 
+    public void setKind(final PDGNodeType kind) {
+        this.kind = kind;
+    }
+
+    public void setKind(final Control.CDGNode.CDGNodeType kind) {
+        this.kind = convertKind(kind);
+    }
+
     public void addInEdge(final PDGEdge inEdges) {
         this.inEdges.add(inEdges);
     }
@@ -69,11 +85,13 @@ public class PDGNode implements Comparable<PDGNode> {
     }
 
     public void addSuccessor(final PDGNode node) {
-        successors.add(node);
+        if (!successors.contains(node))
+            successors.add(node);
     }
 
     public void addPredecessor(final PDGNode node) {
-        predecessors.add(node);
+        if (!predecessors.contains(node))
+            predecessors.add(node);
     }
 
     //Getters
@@ -81,12 +99,22 @@ public class PDGNode implements Comparable<PDGNode> {
         return id;
     }
 
+    public boolean hasStmt() { return this.stmt != null; }
+
     public Statement getStmt() {
         return stmt;
     }
 
+    public boolean hasExpr() {
+        return this.expr != null;
+    }
+
     public Expression getExpr() {
         return expr;
+    }
+
+    public PDGNodeType getKind() {
+        return kind;
     }
 
     public Set<PDGEdge> getInEdges() {
@@ -97,13 +125,35 @@ public class PDGNode implements Comparable<PDGNode> {
         return outEdges;
     }
 
-    public Set<PDGNode> getSuccessors() {
+    public List<PDGNode> getSuccessors() {
         return successors;
     }
 
-    public Set<PDGNode> getPredecessors() {
+    public List<PDGNode> getPredecessors() {
         return predecessors;
     }
+
+    /**
+     * Gives back equivalent PDG node type
+     *
+     * @param type CDG node type
+     * @return PDGNodeType
+     */
+    public PDGNodeType convertKind(final Control.CDGNode.CDGNodeType type) {
+        switch(type) {
+            case ENTRY:
+                return PDGNodeType.ENTRY;
+            case OTHER:
+                return PDGNodeType.OTHER;
+            case METHOD:
+                return PDGNodeType.METHOD;
+            case CONTROL:
+                return PDGNodeType.CONTROL;
+        }
+
+        return null;
+    }
+
 
     @Override
     public int compareTo(final PDGNode node) {

@@ -16,7 +16,11 @@
  */
 package boa.graphs.cdg;
 
+import boa.types.Control;
+
 /**
+ * Control Dependence Graph builder edge
+ *
  * @author marafat
  */
 
@@ -24,7 +28,7 @@ public class CDGEdge {
 
     private CDGNode src;
     private CDGNode dest;
-    private String label;
+    private String label = ".";
 
     public CDGEdge(final CDGNode src, final CDGNode dest) {
         this.src = src;
@@ -37,7 +41,7 @@ public class CDGEdge {
         this.label = label;
     }
 
-    //Setters
+    // Setters
     public void setSrc(final CDGNode src) {
         this.src = src;
     }
@@ -50,7 +54,7 @@ public class CDGEdge {
         this.label = label;
     }
 
-    //Getters
+    // Getters
     public CDGNode getSrc() {
         return src;
     }
@@ -61,6 +65,32 @@ public class CDGEdge {
 
     public String getLabel() {
         return label;
+    }
+
+    /**
+     * CDG Edge builder
+     *
+     * @return
+     */
+    public boa.types.Control.CDGEdge.Builder newBuilder() {
+        final boa.types.Control.CDGEdge.Builder eb = boa.types.Control.CDGEdge.newBuilder();
+        eb.setLabel(CDGEdge.getLabel(this.label));
+        return eb;
+    }
+
+    /**
+     * Gives back label type
+     *
+     * @param label edge label
+     * @return label type
+     */
+    public static Control.CDGEdge.CDGEdgeLabel getLabel(final String label) {
+        if (label.equals("T"))
+            return Control.CDGEdge.CDGEdgeLabel.TRUE;
+        else if (label.equals("F"))
+            return Control.CDGEdge.CDGEdgeLabel.FALSE;
+        else
+            return Control.CDGEdge.CDGEdgeLabel.NIL;
     }
 
     @Override

@@ -54,6 +54,16 @@ public class BoaGraphIntrinsics {
 		return new CDG(cfg);
 	}
 
+	@FunctionSpec(name = "getddg", returnType = "DDG", formalParameters = { "Method" })
+	public static DDG getddg(final Method method) throws Exception {
+		return new DDG(method);
+	}
+
+	@FunctionSpec(name = "getddg", returnType = "DDG", formalParameters = { "CFG" })
+	public static DDG getddg(final CFG cfg) throws Exception {
+		return new DDG(cfg);
+	}
+
 	@FunctionSpec(name = "getpdg", returnType = "PDG", formalParameters = { "Method" })
 	public static PDG getpdg(final Method method) throws Exception {
 		return new PDG(method);
@@ -301,6 +311,128 @@ public class BoaGraphIntrinsics {
 
 		try {
 			printGraph.traverse(cdg, boa.types.Graph.Traversal.TraversalDirection.FORWARD, boa.types.Graph.Traversal.TraversalKind.DFS);
+		} catch (final Exception e) {
+			// do nothing
+		}
+
+		str.append("}");
+
+		return str.toString();
+	}
+
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "DDG" })
+	public static String cdgToDot(final DDG ddg) {
+		return ddgToDot(ddg, "");
+	}
+
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "DDG", "string" })
+	public static String ddgToDot(final DDG ddg, final String label) {
+		final StringBuilder str = new StringBuilder();
+		str.append("digraph {\n");
+		if (label.length() > 0) {
+			str.append("\tlabelloc=\"t\"\n");
+			str.append("\tlabel=\"" + dotEscape(label) + "\"\n");
+		}
+
+		for (final boa.graphs.ddg.DDGNode n : ddg.getNodes()) {
+			final String shape = "shape=ellipse";
+
+			if (n.hasStmt())
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
+			else if (n.hasExpr())
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
+				//else if (n.getKind() == boa.types.Control.CDGNode.CDGNodeType.ENTRY)
+				//	str.append("\t" + n.getId() + "[" + shape + ",label=\"" + n.getName() + "\"]\n");
+			else
+				str.append("\t" + n.getId() + "[" + shape + "]\n");
+		}
+
+		final boa.runtime.BoaAbstractTraversal printGraph = new boa.runtime.BoaAbstractTraversal<Object>(false, false) {
+			protected Object preTraverse(final boa.graphs.ddg.DDGNode node) throws Exception {
+				final java.util.Set<boa.graphs.ddg.DDGEdge> edges = node.getOutEdges();
+				for (final boa.graphs.ddg.DDGEdge e : node.getOutEdges()) {
+					str.append("\t" + node.getId() + " -> " + e.getDest().getId());
+					if (!(e.getLabel() == null || e.getLabel().equals(".") || e.getLabel().equals("")))
+						str.append(" [label=\"" + dotEscape(e.getLabel()) + "\"]");
+					str.append("\n");
+				}
+				return null;
+			}
+
+			@Override
+			public void traverse(final boa.graphs.ddg.DDGNode node, boolean flag) throws Exception {
+				if (flag) {
+					currentResult = preTraverse(node);
+					outputMapObj.put(node.getId(), currentResult);
+				} else {
+					outputMapObj.put(node.getId(), preTraverse(node));
+				}
+			}
+		};
+
+		try {
+			printGraph.traverse(ddg, boa.types.Graph.Traversal.TraversalDirection.FORWARD, boa.types.Graph.Traversal.TraversalKind.DFS);
+		} catch (final Exception e) {
+			// do nothing
+		}
+
+		str.append("}");
+
+		return str.toString();
+	}
+
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "PDG" })
+	public static String pdgToDot(final PDG pdg) {
+		return pdgToDot(pdg, "");
+	}
+
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "PDG", "string" })
+	public static String pdgToDot(final PDG pdg, final String label) {
+		final StringBuilder str = new StringBuilder();
+		str.append("digraph {\n");
+		if (label.length() > 0) {
+			str.append("\tlabelloc=\"t\"\n");
+			str.append("\tlabel=\"" + dotEscape(label) + "\"\n");
+		}
+
+		for (final boa.graphs.pdg.PDGNode n : pdg.getNodes()) {
+			final String shape = "shape=ellipse";
+
+			if (n.hasStmt())
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
+			else if (n.hasExpr())
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
+				//else if (n.getKind() == boa.types.Control.CDGNode.CDGNodeType.ENTRY)
+				//	str.append("\t" + n.getId() + "[" + shape + ",label=\"" + n.getName() + "\"]\n");
+			else
+				str.append("\t" + n.getId() + "[" + shape + "]\n");
+		}
+
+		final boa.runtime.BoaAbstractTraversal printGraph = new boa.runtime.BoaAbstractTraversal<Object>(false, false) {
+			protected Object preTraverse(final boa.graphs.pdg.PDGNode node) throws Exception {
+				final java.util.Set<boa.graphs.pdg.PDGEdge> edges = node.getOutEdges();
+				for (final boa.graphs.pdg.PDGEdge e : node.getOutEdges()) {
+					str.append("\t" + node.getId() + " -> " + e.getDest().getId());
+					if (!(e.getLabel() == null || e.getLabel().equals(".") || e.getLabel().equals("")))
+						str.append(" [label=\"" + dotEscape(e.getKind() + ":" + e.getLabel()) + "\"]");
+					str.append("\n");
+				}
+				return null;
+			}
+
+			@Override
+			public void traverse(final boa.graphs.pdg.PDGNode node, boolean flag) throws Exception {
+				if (flag) {
+					currentResult = preTraverse(node);
+					outputMapObj.put(node.getId(), currentResult);
+				} else {
+					outputMapObj.put(node.getId(), preTraverse(node));
+				}
+			}
+		};
+
+		try {
+			printGraph.traverse(pdg, boa.types.Graph.Traversal.TraversalDirection.FORWARD, boa.types.Graph.Traversal.TraversalKind.DFS);
 		} catch (final Exception e) {
 			// do nothing
 		}

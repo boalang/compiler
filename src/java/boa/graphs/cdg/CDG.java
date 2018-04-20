@@ -30,6 +30,8 @@ import boa.types.Ast.Method;
 import boa.types.Control;
 
 /**
+ * Control Dependence Graph builder
+ *
  * @author marafat
  */
 
@@ -41,20 +43,13 @@ public class CDG {
     public CDG(final CFG cfg) throws Exception {
         PDTree pdTree = new PDTree(cfg);
         constructCDG(pdTree, cfg);
-        //remove start node and replace it with entry
-        CDGNode startNode = getNode(0);
-        CDGEdge firstEdge = new CDGEdge(getNode(cfg.getNodes().size()), startNode, "T");
-        entryNode.getSuccessors().remove(startNode);
-        entryNode.getOutEdges().remove(firstEdge);
-        nodes.remove(startNode);
-        entryNode.setId(0);
     }
 
     public CDG(final Method method) throws Exception {
         this(new CFG(method));
     }
 
-    //Getters
+    // Getters
     public CDGNode getEntryNode() {
         return entryNode;
     }
@@ -64,10 +59,10 @@ public class CDG {
     }
 
     /**
-     * Returns the node for the given node id, otherwise returns null
+     * Gives back the node for the given node id, otherwise null
      *
      * @param id node id
-     * @return
+     * @return CDGNode
      */
     public CDGNode getNode(int id) {
         for (CDGNode n: nodes)
@@ -118,6 +113,14 @@ public class CDG {
                     entryNode = source;
             }
         }
+
+        // remove start node and replace it with entry
+        CDGNode startNode = getNode(0);
+        CDGEdge firstEdge = new CDGEdge(getNode(cfg.getNodes().size()), startNode, "T");
+        entryNode.getSuccessors().remove(startNode);
+        entryNode.getOutEdges().remove(firstEdge);
+        nodes.remove(startNode);
+        entryNode.setId(0);
     }
 
     /**
@@ -136,6 +139,7 @@ public class CDG {
         }
         node.setStmt(treeNode.getStmt());
         node.setExpr(treeNode.getExpr());
+        node.setKind(treeNode.getKind());
         nodes.add(node);
 
         return node;

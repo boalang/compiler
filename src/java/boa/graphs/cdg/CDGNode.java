@@ -16,6 +16,7 @@
  */
 package boa.graphs.cdg;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
@@ -23,8 +24,12 @@ import java.util.List;
 import boa.graphs.trees.TreeNode;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Expression;
+import boa.types.Control;
+import boa.types.Control.CDGNode.*;
 
 /**
+ * Control Dependence Graph builder node
+ *
  * @author marafat
  */
 
@@ -33,23 +38,25 @@ public class CDGNode implements Comparable<CDGNode> {
     private int id;
     private Statement stmt;
     private Expression expr;
+    private CDGNodeType kind = CDGNodeType.OTHER;
 
+    private List<CDGNode> successors = new ArrayList<CDGNode>();
+    private List<CDGNode> predecessors = new ArrayList<CDGNode>();
     private Set<CDGEdge> inEdges = new HashSet<CDGEdge>();
     private Set<CDGEdge> outEdges = new HashSet<CDGEdge>();
-    private List<CDGNode> successors = new java.util.ArrayList<CDGNode>();
-    private List<CDGNode> predecessors = new java.util.ArrayList<CDGNode>();
 
     public CDGNode(final TreeNode node) {
         this.id = node.getId();
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
+        this.kind = convertKind(node.getKind());
     }
 
     public CDGNode(int id) {
         this.id = id;
     }
 
-    //Setters
+    // Setters
     public void setId(int id) {
         this.id = id;
     }
@@ -58,17 +65,17 @@ public class CDGNode implements Comparable<CDGNode> {
         this.stmt = stmt;
     }
 
-	public boolean hasStmt() {
-		return this.stmt != null;
-	}
-
     public void setExpr(final Expression expr) {
         this.expr = expr;
     }
 
-	public boolean hasExpr() {
-		return this.expr != null;
-	}
+    public void setKind(final CDGNodeType kind) {
+        this.kind = kind;
+    }
+
+    public void setKind(final Control.TreeNode.TreeNodeType kind) {
+        this.kind = convertKind(kind);
+    }
 
     public void addSuccessor(final CDGNode node) {
         successors.add(node);
@@ -86,13 +93,19 @@ public class CDGNode implements Comparable<CDGNode> {
         outEdges.add(edge);
     }
 
-    //Getters
+    // Getters
     public int getId() {
         return id;
     }
 
+    public boolean hasStmt() { return this.stmt != null; }
+
     public Statement getStmt() {
         return stmt;
+    }
+
+    public boolean hasExpr() {
+        return this.expr != null;
     }
 
     public Expression getExpr() {
@@ -107,12 +120,37 @@ public class CDGNode implements Comparable<CDGNode> {
         return outEdges;
     }
 
+    public CDGNodeType getKind() {
+        return kind;
+    }
+
     public List<CDGNode> getSuccessors() {
         return successors;
     }
 
     public List<CDGNode> getPredecessors() {
         return predecessors;
+    }
+
+    /**
+     * Gives back equivalent CDG node type
+     *
+     * @param type Tree node type
+     * @return CDGNodeType
+     */
+    public CDGNodeType convertKind(final Control.TreeNode.TreeNodeType type) {
+        switch(type) {
+            case ENTRY:
+                return CDGNodeType.ENTRY;
+            case OTHER:
+                return CDGNodeType.OTHER;
+            case METHOD:
+                return CDGNodeType.METHOD;
+            case CONTROL:
+                return CDGNodeType.CONTROL;
+        }
+
+        return null;
     }
 
     @Override

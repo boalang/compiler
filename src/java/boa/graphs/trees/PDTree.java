@@ -29,6 +29,8 @@ import boa.runtime.BoaAbstractTraversal;
 import boa.types.Graph.Traversal.*;
 
 /**
+ * Post Dominator Tree builder
+ *
  * @author marafat
  */
 
@@ -47,7 +49,7 @@ public class PDTree {
         this(new CFG(method));
     }
 
-    //Getters
+    // Getters
     public TreeNode getRootNode() {
         return rootNode;
     }
@@ -57,7 +59,7 @@ public class PDTree {
     }
 
     /**
-     * Gives the tree node if the id exists, null otherwise
+     * Gives back the tree node if the id exists, null otherwise
      *
      * @param id node id
      * @return tree nodes
@@ -131,13 +133,13 @@ public class PDTree {
 
         pdom.traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.DFS, fixp);
 
-        //remove self node id from each p-dom set because no node can post-dominate itself
+        // remove self node id from each p-dom set because no node can post-dominate itself
         for (int nid: (Set<Integer>) pdom.outputMapObj.keySet()) {
             CFGNode node = cfg.getNode(nid);
             ((Map<Integer, Set<Integer>>)pdom.outputMapObj).get(nid).remove(node);
         }
 
-        return pdom.outputMapObj; //FIXME: fix the return type
+        return pdom.outputMapObj;
     }
 
     /**
@@ -147,9 +149,10 @@ public class PDTree {
      * @return map of nodes and corresponding immediate post-dominator
      */
     private Map<CFGNode, CFGNode> computeImmediatePostDominator(final Map<Integer, Set<CFGNode>> pdom, final CFG cfg) {
-        //Inefficient implementation: t-complexity = O(n^3)
-        //To find ipdom, we check each pdom of a node to see if it is post dominating any other
-        //node. Each node should have atmost one ip-dom (last node has no immediate post dominator)
+        // inefficient implementation: t-complexity = O(n^3)
+        /* To find ipdom, we check each pdom of a node to see if it is post dominating any other
+         * node. Each node should have atmost one ip-dom (last node has no immediate post dominator)
+         */
         Map<CFGNode, CFGNode> ipdom = new HashMap<CFGNode, CFGNode>();
         for (Integer nid : pdom.keySet()) {
             for (CFGNode pd1 : pdom.get(nid)) {
@@ -178,8 +181,9 @@ public class PDTree {
      * @param stopid id of the stop node of the control graph
      */
     private void buildPDomTree(final Map<CFGNode, CFGNode> ipdoms, int stopid) {
-        //Create an edge between ipdom and corresponding node.
-        //Since each node can have only one ipdom, the resulting graph will form a tree
+        /* Create an edge between ipdom and corresponding node.
+         * Since each node can have only one ipdom, the resulting graph will form a tree
+         */
         for (CFGNode n : ipdoms.keySet()) {
             CFGNode ipdom = ipdoms.get(n);
 
@@ -214,6 +218,7 @@ public class PDTree {
         }
         node.setStmt(cfgNode.getStmt());
         node.setExpr(cfgNode.getExpr());
+        node.setKind(cfgNode.getKind());
         nodes.add(node);
 
         return node;

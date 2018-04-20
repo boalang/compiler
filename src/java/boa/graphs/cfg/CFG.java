@@ -38,6 +38,7 @@ import boa.types.Control.CFGNode.CFGNodeType;
  *
  * @author ganeshau
  * @author rdyer
+ * @author marafat
  */
 public class CFG {
 	public Method md;
@@ -115,7 +116,7 @@ public class CFG {
 	}
 
 	/**
-	 * Returns the CFG node if the id exists, null otherwise
+	 * Returns the CFG node if id exists, null otherwise
 	 *
 	 * @param id
 	 * @return CFG node

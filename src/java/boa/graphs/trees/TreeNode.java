@@ -22,8 +22,12 @@ import java.util.Set;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Expression;
 import boa.graphs.cfg.CFGNode;
+import boa.types.Control;
+import boa.types.Control.TreeNode.*;
 
 /**
+ * Tree builder node
+ *
  * @author marafat
  */
 
@@ -33,6 +37,7 @@ public class TreeNode implements Comparable<TreeNode> {
     private int id;
     private Statement stmt;
     private Expression expr;
+    private TreeNodeType kind = TreeNodeType.OTHER;
 
     private Set<TreeNode> children = new HashSet<TreeNode>();
 
@@ -40,13 +45,14 @@ public class TreeNode implements Comparable<TreeNode> {
         this.id = node.getId();
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
+        this.kind = convertKind(node.getKind());
     }
 
     public TreeNode(int id) {
         this.id = id;
     }
 
-    //Setters
+    // Setters
     public void setParent(final TreeNode parent) {
         this.parent = parent;
     }
@@ -63,11 +69,19 @@ public class TreeNode implements Comparable<TreeNode> {
         this.expr = expr;
     }
 
+    public void setKind(final TreeNodeType kind) {
+        this.kind = kind;
+    }
+
+    public void setKind(final Control.CFGNode.CFGNodeType kind) {
+        this.kind = convertKind(kind);
+    }
+
     public void addChild(final TreeNode node) {
         children.add(node);
     }
 
-    //Getters
+    // Getters
     public TreeNode getParent() {
         return parent;
     }
@@ -84,8 +98,33 @@ public class TreeNode implements Comparable<TreeNode> {
         return expr;
     }
 
+    public TreeNodeType getKind() {
+        return kind;
+    }
+
     public Set<TreeNode> getChildren() {
         return children;
+    }
+
+    /**
+     * Gives back equivalent Tree node type
+     *
+     * @param type CFG node type
+     * @return TreeNodeType
+     */
+    public TreeNodeType convertKind(final Control.CFGNode.CFGNodeType type) {
+        switch(type) {
+            case ENTRY:
+                return TreeNodeType.ENTRY;
+            case OTHER:
+                return TreeNodeType.OTHER;
+            case METHOD:
+                return TreeNodeType.METHOD;
+            case CONTROL:
+                return TreeNodeType.CONTROL;
+        }
+
+        return null;
     }
 
     @Override

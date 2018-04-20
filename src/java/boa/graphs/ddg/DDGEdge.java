@@ -16,7 +16,11 @@
  */
 package boa.graphs.ddg;
 
+import boa.types.Control;
+
 /**
+ * Data Dependence Graph builder edge
+ *
  * @author marafat
  */
 
@@ -24,7 +28,7 @@ public class DDGEdge {
 
     private DDGNode src;
     private DDGNode dest;
-    private String label; //name of the variable for def and use
+    private String label = "."; // name of the variable for def and use
 
     public DDGEdge(DDGNode src, DDGNode dest, String label) {
         this.src = src;
@@ -35,10 +39,9 @@ public class DDGEdge {
     public DDGEdge(DDGNode src, DDGNode dest) {
         this.src = src;
         this.dest = dest;
-        this.label = ".";
     }
 
-    //Setters
+    // Setters
     public void setSrc(final DDGNode src) {
         this.src = src;
     }
@@ -51,7 +54,7 @@ public class DDGEdge {
         this.label = label;
     }
 
-    //Getters
+    // Getters
     public DDGNode getSrc() {
         return src;
     }
@@ -62,6 +65,30 @@ public class DDGEdge {
 
     public String getLabel() {
         return label;
+    }
+
+    /**
+     * DDG Edge builder
+     *
+     * @return
+     */
+    public boa.types.Control.DDGEdge.Builder newBuilder() {
+        final boa.types.Control.DDGEdge.Builder eb = boa.types.Control.DDGEdge.newBuilder();
+        eb.setLabel(DDGEdge.getLabel(this.label));
+        return eb;
+    }
+
+    /**
+     * Gives back label type
+     *
+     * @param label edge label
+     * @return label type
+     */
+    public static Control.DDGEdge.DDGEdgeLabel getLabel(final String label) {
+        if (!label.equals("."))
+            return Control.DDGEdge.DDGEdgeLabel.VARDEF;
+        else
+            return Control.DDGEdge.DDGEdgeLabel.NIL;
     }
 
     @Override

@@ -18,6 +18,8 @@ package boa.graphs.ddg;
 
 import boa.graphs.cfg.CFGNode;
 import boa.types.Ast;
+import boa.types.Control;
+import boa.types.Control.DDGNode.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,6 +27,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Data Dependence Graph builder node
+ *
  * @author marafat
  */
 
@@ -33,8 +37,9 @@ public class DDGNode implements Comparable<DDGNode> {
     private int id;
     private Ast.Statement stmt;
     private Ast.Expression expr;
+    private DDGNodeType kind = DDGNodeType.OTHER;
 
-    private String defVariables;
+    private String defVariable;
     private Set<String> useVariables = new HashSet<String>();
 
     private Set<DDGEdge> inEdges = new HashSet<DDGEdge>();
@@ -46,7 +51,8 @@ public class DDGNode implements Comparable<DDGNode> {
         this.id = node.getId();
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
-        this.defVariables = node.defVariables;
+        this.kind = convertKind(node.getKind());
+        this.defVariable = node.defVariables;
         this.useVariables = node.useVariables;
     }
 
@@ -54,7 +60,7 @@ public class DDGNode implements Comparable<DDGNode> {
         this.id = id;
     }
 
-    //Setters
+    // Setters
     public void setId(int id) {
         this.id = id;
     }
@@ -68,40 +74,54 @@ public class DDGNode implements Comparable<DDGNode> {
     }
 
     public void setDefVariable(final String defVariables) {
-        this.defVariables = defVariables;
+        this.defVariable = defVariables;
     }
 
     public void setUseVariables(final Set<String> useVariables) {
         this.useVariables = useVariables;
     }
 
+    public void setKind(final DDGNodeType kind) {
+        this.kind = kind;
+    }
+
+    public void setKind(final Control.CFGNode.CFGNodeType kind) {
+        this.kind = convertKind(kind);
+    }
+
     public void addUseVariable(final String useVariables) {
         this.useVariables.add(useVariables);
     }
 
-    public void addOutEdge(DDGEdge edge) {
+    public void addOutEdge(final DDGEdge edge) {
         outEdges.add(edge);
     }
 
-    public void addinEdge(DDGEdge edge) {
+    public void addinEdge(final DDGEdge edge) {
         inEdges.add(edge);
     }
 
-    public void addSuccessor(DDGNode node) {
+    public void addSuccessor(final DDGNode node) {
         successors.add(node);
     }
 
-    public void addPredecessor(DDGNode node) {
+    public void addPredecessor(final DDGNode node) {
         predecessors.add(node);
     }
 
-    //Getters
+    // Getters
     public int getId() {
         return id;
     }
 
+    public boolean hasStmt() { return this.stmt != null; }
+
     public Ast.Statement getStmt() {
         return stmt;
+    }
+
+    public boolean hasExpr() {
+        return this.expr != null;
     }
 
     public Ast.Expression getExpr() {
@@ -109,11 +129,15 @@ public class DDGNode implements Comparable<DDGNode> {
     }
 
     public String getDefVariable() {
-        return defVariables;
+        return defVariable;
     }
 
     public Set<String> getUseVariables() {
         return useVariables;
+    }
+
+    public DDGNodeType getKind() {
+        return kind;
     }
 
     public Set<DDGEdge> getInEdges() {
@@ -130,6 +154,27 @@ public class DDGNode implements Comparable<DDGNode> {
 
     public List<DDGNode> getPredecessors() {
         return predecessors;
+    }
+
+    /**
+     * Gives back equivalent DDG node type
+     *
+     * @param type CFG node type
+     * @return DDGNodeType
+     */
+    public DDGNodeType convertKind(final Control.CFGNode.CFGNodeType type) {
+        switch(type) {
+            case ENTRY:
+                return DDGNodeType.ENTRY;
+            case OTHER:
+                return DDGNodeType.OTHER;
+            case METHOD:
+                return DDGNodeType.METHOD;
+            case CONTROL:
+                return DDGNodeType.CONTROL;
+        }
+
+        return null;
     }
 
     @Override

@@ -29,6 +29,8 @@ import boa.runtime.BoaAbstractTraversal;
 import boa.types.Graph.Traversal.*;
 
 /**
+ * Dominator Tree builder
+ *
  * @author marafat
  */
 
@@ -47,7 +49,7 @@ public class DTree {
         this(new CFG(method));
     }
 
-    //Getters
+    // Getters
     public TreeNode getRootNode() {
         return rootNode;
     }
@@ -57,7 +59,7 @@ public class DTree {
     }
 
     /**
-     * Returns the tree node if the id exists, null otherwise
+     * Gives back the tree node if the id exists, null otherwise
      *
      * @param id node id
      * @return tree node
@@ -130,7 +132,7 @@ public class DTree {
 
         dom.traverse(cfg, TraversalDirection.FORWARD, TraversalKind.REVERSEPOSTORDER, fixp);
 
-        return dom.outputMapObj; //FIXME: fix the return type
+        return dom.outputMapObj;
     }
 
     /**
@@ -140,9 +142,10 @@ public class DTree {
      * @return map of nodes and corresponding immediate dominator
      */
     private Map<CFGNode, CFGNode> computeImmediateDominator(final Map<Integer, Set<CFGNode>> dom, final CFG cfg) {
-        //Inefficient implementation: t-complexity = O(n^3)
-        //To find idom, we check each dom of a node to see if it is dominating any other
-        //node. Each node should have atmost one i-dom (first node has no immediate dominator)
+        // inefficient implementation: t-complexity = O(n^3)
+        /* To find idom, we check each dom of a node to see if it is dominating any other
+         * node. Each node should have atmost one i-dom (first node has no immediate dominator)
+         */
         Map<CFGNode, CFGNode> idom = new HashMap<CFGNode, CFGNode>();
         for (Integer nid : dom.keySet()) {
             for (CFGNode pd1 : dom.get(nid)) {
@@ -171,8 +174,9 @@ public class DTree {
      * @param stopid id of the stop node of the control graph
      */
     private void buildDomTree(final Map<CFGNode, CFGNode> idoms, int stopid) {
-        //Create an edge between idom and corresponding node.
-        //Since each node can have only one idom, the resulting graph will form a tree
+        /* Create an edge between idom and corresponding node.
+         * Since each node can have only one idom, the resulting graph will form a tree
+         */
         for (CFGNode n : idoms.keySet()) {
             CFGNode idom = idoms.get(n);
 
@@ -207,6 +211,7 @@ public class DTree {
         }
         node.setStmt(cfgNode.getStmt());
         node.setExpr(cfgNode.getExpr());
+        node.setKind(cfgNode.getKind());
         nodes.add(node);
 
         return node;

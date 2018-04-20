@@ -16,7 +16,6 @@
  */
 package boa.graphs.ddg;
 
-import boa.functions.BoaIntrinsics;
 import boa.graphs.cfg.CFG;
 import boa.graphs.cfg.CFGNode;
 import boa.runtime.BoaAbstractFixP;
@@ -27,6 +26,8 @@ import boa.types.Ast.*;
 import java.util.*;
 
 /**
+ * Data Dependence Graph builder
+ *
  * @author marafat
  */
 
@@ -44,10 +45,14 @@ public class DDG {
     }
 
     public DDG(final Method m) throws Exception {
-        this(new CFG());
+        this(new CFG(m));
     }
 
-    //Getters
+    // Getters
+    public DDGNode getEntryNode() { return  entryNode; }
+
+    public Set<DDGNode> getNodes() { return nodes; }
+
     public Map<DDGNode, Set<DDGNode>> getDefUseChain() {
         return defUseChain;
     }
@@ -57,7 +62,7 @@ public class DDG {
     }
 
     /**
-     * Returns all the def nodes for the given variable
+     * Gives back all the def nodes for the given variable
      *
      * @param var variable
      * @return definition nodes
@@ -73,10 +78,10 @@ public class DDG {
     }
 
     /**
-     * Returns the node for the given node id, otherwise returns null
+     * Gives back the node for the given node id, otherwise returns null
      *
      * @param id node id
-     * @return
+     * @return DDGNode
      */
     public DDGNode getNode(int id) {
         for (DDGNode n: nodes)
@@ -87,7 +92,7 @@ public class DDG {
     }
 
     /**
-     * computes in and out variables for each node
+     * Computes in and out variables for each node
      *
      * @param cfg control flow graph
      * @return map of nodes and in, out variables
@@ -103,21 +108,21 @@ public class DDG {
                     currentNode = getValue(node);
                 }
 
-                //out = Union in[node.successor]
+                // out = Union in[node.successor]
                 for (CFGNode s: node.getSuccessorsList()) {
                     InOut succ = getValue(s);
                     if (succ != null)
                         currentNode.out.addAll(succ.in);
                 }
 
-                //out - def
+                // out - def
                 Set<Pair> currentDiff = new HashSet<Pair>(currentNode.out);
                 if (!node.getDefVariables().equals(""))
                     for (Pair p: currentNode.out)
                         if (p.var.equals(node.getDefVariables()))
                             currentDiff.remove(p);
 
-                //out = use Union (out - def)
+                // out = use Union (out - def)
                 for (String var: node.getUseVariables())
                     currentNode.in.add(new Pair(var, node));
                 currentNode.in.addAll(currentDiff);
@@ -173,7 +178,7 @@ public class DDG {
                             if (!defUseChain.containsKey(defNode))
                                 defUseChain.put(defNode, new HashSet<DDGNode>());
                             defUseChain.get(defNode).add(useNode);
-                            //connect nodes for constructing the graph
+                            // connect nodes for constructing the graph
                             defNode.addSuccessor(useNode);
                             useNode.addPredecessor(defNode);
                             DDGEdge edge = new DDGEdge(defNode, useNode, p.var);
@@ -225,12 +230,13 @@ public class DDG {
         node.setExpr(cfgNode.getExpr());
         node.setDefVariable(cfgNode.getDefVariables());
         node.setUseVariables(cfgNode.getUseVariables());
+        node.setKind(cfgNode.getKind());
         nodes.add(node);
 
         return node;
     }
 
-    //Holds in and out pairs for each node
+    // Holds in and out pairs for each node
     private class InOut {
         Set<Pair> in;
         Set<Pair> out;
@@ -255,7 +261,7 @@ public class DDG {
         }
     }
 
-    //(var, useNode) pair: use nodes are needed to construct def-use chains
+    // (Var, Usenode) pair: use nodes are needed to construct def-use chains
     private class Pair {
         String var;
         CFGNode node;
@@ -268,7 +274,7 @@ public class DDG {
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 

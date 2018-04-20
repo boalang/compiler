@@ -23,11 +23,14 @@ import boa.graphs.cfg.CFG;
 import boa.graphs.ddg.DDG;
 import boa.graphs.ddg.DDGNode;
 import boa.types.Ast.*;
+import boa.types.Control;
 
 import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Program Dependence Graph builder
+ *
  * @author marafat
  */
 
@@ -50,7 +53,7 @@ public class PDG {
         this(new CFG(m));
     }
 
-    //Getters
+    // Getters
     public PDGNode getEntryNode() {
         return entryNode;
     }
@@ -60,7 +63,7 @@ public class PDG {
     }
 
     /**
-     * Returns the node for the given node id, otherwise returns null
+     * Gives back the node for the given node id, otherwise returns null
      *
      * @param id node id
      * @return
@@ -89,11 +92,11 @@ public class PDG {
             for (CDGNode s: n.getSuccessors())
                 node.addSuccessor(getNode(s.getId()));
             for (CDGNode p: n.getPredecessors())
-                node.addSuccessor(getNode(p.getId()));
+                node.addPredecessor(getNode(p.getId()));
             for (CDGEdge ie: n.getInEdges())
-                node.addInEdge(new PDGEdge(getNode(ie.getSrc().getId()), getNode(ie.getDest().getId()), ie.getLabel(), PDGEdge.PDGEdgeType.ControlEdge));
+                node.addInEdge(new PDGEdge(getNode(ie.getSrc().getId()), getNode(ie.getDest().getId()), ie.getLabel(), Control.PDGEdge.PDGEdgeType.CONTROL));
             for (CDGEdge oe: n.getOutEdges())
-                node.addOutEdge(new PDGEdge(getNode(oe.getSrc().getId()), getNode(oe.getDest().getId()), oe.getLabel(), PDGEdge.PDGEdgeType.ControlEdge));
+                node.addOutEdge(new PDGEdge(getNode(oe.getSrc().getId()), getNode(oe.getDest().getId()), oe.getLabel(), Control.PDGEdge.PDGEdgeType.CONTROL));
         }
 
     }
@@ -110,7 +113,7 @@ public class PDG {
                 PDGNode dest = getNode(d.getId());
                 src.addSuccessor(dest);
                 dest.addPredecessor(src);
-                PDGEdge e = new PDGEdge(src, dest, s.getDefVariable(), PDGEdge.PDGEdgeType.DataEdge);
+                PDGEdge e = new PDGEdge(src, dest, s.getDefVariable(), Control.PDGEdge.PDGEdgeType.DATA);
                 src.addOutEdge(e);
                 dest.addInEdge(e);
             }
