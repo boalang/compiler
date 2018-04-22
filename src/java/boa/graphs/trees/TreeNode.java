@@ -39,6 +39,9 @@ public class TreeNode implements Comparable<TreeNode> {
     private Expression expr;
     private TreeNodeType kind = TreeNodeType.OTHER;
 
+    private String defVariable;
+    private Set<String> useVariables = new HashSet<String>();
+
     private Set<TreeNode> children = new HashSet<TreeNode>();
 
     public TreeNode(CFGNode node) {
@@ -46,6 +49,8 @@ public class TreeNode implements Comparable<TreeNode> {
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
         this.kind = convertKind(node.getKind());
+        this.defVariable = node.getDefVariables();
+        this.useVariables = node.getUseVariables();
     }
 
     public TreeNode(int id) {
@@ -69,8 +74,26 @@ public class TreeNode implements Comparable<TreeNode> {
         this.expr = expr;
     }
 
-    public void setKind(final TreeNodeType kind) {
-        this.kind = kind;
+    public void setKind(final TreeNodeType kind) { this.kind = kind; }
+
+    public String getDefVariable() {
+        return defVariable;
+    }
+
+    public Set<String> getUseVariables() {
+        return useVariables;
+    }
+
+    public void setDefVariable(final String defVariables) {
+        this.defVariable = defVariables;
+    }
+
+    public void setUseVariables(final Set<String> useVariables) {
+        this.useVariables = useVariables;
+    }
+
+    public void addUseVariable(final String useVariables) {
+        this.useVariables.add(useVariables);
     }
 
     public void setKind(final Control.CFGNode.CFGNodeType kind) {

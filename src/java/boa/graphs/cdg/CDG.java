@@ -82,7 +82,7 @@ public class CDG {
         Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
         for (CFGNode n: cfg.getNodes()) {
             if (n.getKind() == Control.CFGNode.CFGNodeType.CONTROL)
-            for (CFGEdge e: n.outEdges)
+            for (CFGEdge e: n.getOutEdges())
                 if (e.label().equals("."))
                     controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, "F");
                 else
@@ -140,6 +140,8 @@ public class CDG {
         node.setStmt(treeNode.getStmt());
         node.setExpr(treeNode.getExpr());
         node.setKind(treeNode.getKind());
+        node.setDefVariable(treeNode.getDefVariable());
+        node.setUseVariables(treeNode.getUseVariables());
         nodes.add(node);
 
         return node;

@@ -39,6 +39,9 @@ public class PDGNode implements Comparable<PDGNode> {
     private Expression expr;
     private PDGNodeType kind = PDGNodeType.OTHER;
 
+    private String defVariable;
+    private Set<String> useVariables = new HashSet<String>();
+
     private List<PDGNode> successors = new ArrayList<PDGNode>();
     private List<PDGNode> predecessors = new ArrayList<PDGNode>();
     private Set<PDGEdge> inEdges = new HashSet<PDGEdge>();
@@ -49,6 +52,8 @@ public class PDGNode implements Comparable<PDGNode> {
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
         this.kind = convertKind(node.getKind());
+        this.defVariable = node.getDefVariable();
+        this.useVariables = node.getUseVariables();
     }
 
     public PDGNode(int id) {
@@ -74,6 +79,18 @@ public class PDGNode implements Comparable<PDGNode> {
 
     public void setKind(final Control.CDGNode.CDGNodeType kind) {
         this.kind = convertKind(kind);
+    }
+
+    public void setDefVariable(final String defVariables) {
+        this.defVariable = defVariables;
+    }
+
+    public void setUseVariables(final Set<String> useVariables) {
+        this.useVariables = useVariables;
+    }
+
+    public void addUseVariable(final String useVariables) {
+        this.useVariables.add(useVariables);
     }
 
     public void addInEdge(final PDGEdge inEdges) {
@@ -115,6 +132,14 @@ public class PDGNode implements Comparable<PDGNode> {
 
     public PDGNodeType getKind() {
         return kind;
+    }
+
+    public String getDefVariable() {
+        return defVariable;
+    }
+
+    public Set<String> getUseVariables() {
+        return useVariables;
     }
 
     public Set<PDGEdge> getInEdges() {

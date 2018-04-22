@@ -40,6 +40,9 @@ public class CDGNode implements Comparable<CDGNode> {
     private Expression expr;
     private CDGNodeType kind = CDGNodeType.OTHER;
 
+    private String defVariable;
+    private Set<String> useVariables = new HashSet<String>();
+
     private List<CDGNode> successors = new ArrayList<CDGNode>();
     private List<CDGNode> predecessors = new ArrayList<CDGNode>();
     private Set<CDGEdge> inEdges = new HashSet<CDGEdge>();
@@ -50,6 +53,8 @@ public class CDGNode implements Comparable<CDGNode> {
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
         this.kind = convertKind(node.getKind());
+        this.defVariable = node.getDefVariable();
+        this.useVariables = node.getUseVariables();
     }
 
     public CDGNode(int id) {
@@ -75,6 +80,18 @@ public class CDGNode implements Comparable<CDGNode> {
 
     public void setKind(final Control.TreeNode.TreeNodeType kind) {
         this.kind = convertKind(kind);
+    }
+
+    public void setDefVariable(final String defVariables) {
+        this.defVariable = defVariables;
+    }
+
+    public void setUseVariables(final Set<String> useVariables) {
+        this.useVariables = useVariables;
+    }
+
+    public void addUseVariable(final String useVariables) {
+        this.useVariables.add(useVariables);
     }
 
     public void addSuccessor(final CDGNode node) {
@@ -122,6 +139,14 @@ public class CDGNode implements Comparable<CDGNode> {
 
     public CDGNodeType getKind() {
         return kind;
+    }
+
+    public String getDefVariable() {
+        return defVariable;
+    }
+
+    public Set<String> getUseVariables() {
+        return useVariables;
     }
 
     public List<CDGNode> getSuccessors() {

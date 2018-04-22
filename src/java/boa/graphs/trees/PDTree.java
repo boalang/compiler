@@ -219,6 +219,8 @@ public class PDTree {
         node.setStmt(cfgNode.getStmt());
         node.setExpr(cfgNode.getExpr());
         node.setKind(cfgNode.getKind());
+        node.setDefVariable(cfgNode.getDefVariables());
+        node.setUseVariables(cfgNode.getUseVariables());
         nodes.add(node);
 
         return node;

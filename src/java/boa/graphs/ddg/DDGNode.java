@@ -52,8 +52,8 @@ public class DDGNode implements Comparable<DDGNode> {
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
         this.kind = convertKind(node.getKind());
-        this.defVariable = node.defVariables;
-        this.useVariables = node.useVariables;
+        this.defVariable = node.getDefVariables();
+        this.useVariables = node.getUseVariables();
     }
 
     public DDGNode(int id) {
