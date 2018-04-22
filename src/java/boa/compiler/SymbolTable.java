@@ -111,6 +111,7 @@ public class SymbolTable {
 			new DTreeProtoTuple(),
 			new PDTreeProtoTuple(),
 			new TreeNodeProtoTuple(),
+			new CFGSlicerProtoTuple(),
 			new ChangedFileProtoTuple(),
 			new CodeRepositoryProtoTuple(),
 			new CommentProtoTuple(),

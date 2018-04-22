@@ -17,68 +17,163 @@
 package boa.graphs.slicers;
 
 import boa.compiler.ast.statements.Statement;
-import boa.graphs.cdg.CDG;
-import boa.graphs.cdg.CDGNode;
 import boa.graphs.cfg.CFG;
+import boa.graphs.cfg.CFGEdge;
 import boa.graphs.cfg.CFGNode;
+import boa.graphs.trees.PDTree;
+import boa.graphs.trees.TreeNode;
 import boa.runtime.BoaAbstractFixP;
 import boa.runtime.BoaAbstractTraversal;
-import boa.types.Ast;
+import boa.types.Ast.*;
+import boa.types.Control;
 import boa.types.Graph.Traversal.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
+ * A forward slicer based on CFG
+ *
  * @author marafat
  */
 
 public class CFGSlicer {
 
-    public CFGSlicer() {}
+    private Statement[] slice;
 
-//    public void getSlice(CFG cfg) throws Exception {
-//        CDG cdg = new CDG(cfg);
-//        BoaAbstractTraversal slice = new BoaAbstractTraversal<Set<Statement>>(true, true) {
-//
-//            protected Set<Statement> preTraverse(final CFGNode node) throws Exception {
-//                String def = node.getDefVariables();
-//                Set<String> use = node.getUseVariables();
-//                Set<Integer> infl = new HashSet<Integer>();
-//
-//                if (node.getStmt() != null) {
-//                    if (node.getStmt().getKind() == Ast.Statement.StatementKind.IF) {
-//                        CDGNode cn = cdg.getNode(node.getId());
-//                        for (CDGNode n: cn.getSuccessors())
-//                            infl.add(n.getId());
-//                    }
-//                }
-//
-//            }
-//
-//            @Override
-//            public void traverse(final CFGNode node, boolean flag) throws Exception {
-//                if (flag) {
-//                    currentResult = preTraverse(node);
-//                    outputMapObj.put(node.getId(), currentResult);
-//                } else
-//                    outputMapObj.put(node.getId(), preTraverse(node));
-//            }
-//        };
-//
-//        BoaAbstractFixP fixp = new BoaAbstractFixP() {
-//            boolean invoke1(final Set<Statement> current, final Set<Statement> previous) throws Exception {
-//                Set<Statement> curr = new HashSet<Statement>(current);
-//                curr.removeAll(previous);
-//                return curr.size() == 0;
-//            }
-//
-//            @Override
-//            public boolean invoke(Object current, Object previous) throws Exception {
-//                return invoke1((HashSet<Statement>) current, (HashSet<Statement>) previous);
-//            }
-//        };
-//
-//        slice.traverse(cfg, TraversalDirection.FORWARD, TraversalKind.REVERSEPOSTORDER, fixp);
-//    }
+    public CFGSlicer(Method m, String[] slicingVar) throws Exception {
+        getSlice(new CFG(m), Arrays.asList(slicingVar));
+    }
+
+    public CFGSlicer(Method m, Variable[] slicingVar) throws Exception {
+        List<String> sliceVar = new ArrayList<String>();
+        for (Variable v: slicingVar)
+            sliceVar.add(v.getName());
+        getSlice(new CFG(m), sliceVar);
+    }
+
+    public CFGSlicer(Method m) throws Exception {
+        List<String> sliceVar = new ArrayList<String>();
+        for (Variable v: m.getArgumentsList())
+            sliceVar.add(v.getName());
+        getSlice(new CFG(m), sliceVar);
+    }
+
+    /**
+     * Compute slice of a method based on the given slicing variables
+     *
+     * @param cfg control flow graph
+     * @param slicingVar variable to be used for method slicing
+     * @throws Exception
+     */
+    private void getSlice(final CFG cfg, final List<String> slicingVar) throws Exception {
+
+        final Set<CFGNode> sliceNodes = new HashSet<CFGNode>();
+        final Set<CFGNode> branchNodes = new HashSet<CFGNode>();
+        final Map<Integer, Set<Integer>> infl = getInfluence(new PDTree(cfg), cfg);
+
+        BoaAbstractTraversal slice = new BoaAbstractTraversal<Set<String>>(true, true) {
+
+            protected void preTraverse(final CFGNode node) throws Exception {
+                Set<String> relevantVar;
+
+                if (node.getId() == 0) {
+                    relevantVar = new HashSet<String>(slicingVar);
+                } else {
+                    relevantVar = new HashSet<String>(outputMapObj.get(node.getId()));
+                }
+
+                for (CFGNode succ: node.getSuccessorsList()) {
+                    Set<String> ref = new HashSet<String>(succ.getUseVariables());
+                    ref.retainAll(relevantVar);
+
+                    if (!outputMapObj.containsKey(succ.getId()))
+                        outputMapObj.put(succ.getId(), new HashSet<String>());
+
+                    if (ref.size() != 0) {
+                        if (!succ.getDefVariables().equals("")) {
+                            outputMapObj.get(succ.getId()).add(succ.getDefVariables());
+                            Set<String> diff = new HashSet<String>(relevantVar);
+                            diff.removeAll(succ.getUseVariables());
+                            outputMapObj.get(succ.getId()).addAll(diff);
+                        }
+                        else
+                            outputMapObj.get(succ.getId()).addAll(relevantVar);
+                        sliceNodes.add(succ);
+                    }
+                    else
+                        outputMapObj.get(succ.getId()).addAll(relevantVar);
+
+                    if (sliceNodes.contains(succ))
+                        branchNodes.addAll(getInflBranches(succ.getId()));
+                }
+
+            }
+
+            private Set<CFGNode> getInflBranches(int nodeid) {
+                Set<CFGNode> inflBNodes = new HashSet<CFGNode> ();
+                for (int i: infl.keySet()) {
+                    if (infl.get(i).contains(nodeid))
+                        inflBNodes.add(cfg.getNode(i));
+                }
+
+                return inflBNodes;
+            }
+
+            @Override
+            public void traverse(final CFGNode node, boolean flag) throws Exception {
+                preTraverse(node);
+            }
+        };
+
+        BoaAbstractFixP fixp = new BoaAbstractFixP() {
+            boolean invoke1(final Set<String> current, final Set<String> previous) throws Exception {
+                Set<String> curr = new HashSet<String>(current);
+                curr.removeAll(previous);
+                return curr.size() == 0;
+            }
+
+            @Override
+            public boolean invoke(Object current, Object previous) throws Exception {
+                return invoke1((HashSet<String>) current, (HashSet<String>) previous);
+            }
+        };
+
+        slice.traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, fixp);
+
+        sliceNodes.addAll(branchNodes);
+    }
+
+    /**
+     * Gives back the map of control nodes and dependent nodes.
+     *
+     * @param pdTree post dominator tree
+     * @param cfg control flow graph
+     * @return map of control nodes and dependent nodes
+     */
+    private Map<Integer, Set<Integer>> getInfluence(final PDTree pdTree, final CFG cfg) {
+        Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
+        for (CFGNode n : cfg.getNodes()) {
+            if (n.getKind() == Control.CFGNode.CFGNodeType.CONTROL)
+                for (CFGEdge e : n.outEdges)
+                    if (e.label().equals("."))
+                        controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, "F");
+                    else
+                        controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, e.label());
+        }
+
+        Map<Integer, Set<Integer>> contolDependentMap = new HashMap<Integer, Set<Integer>>();
+
+        for (Integer[] enodes : controlEdges.keySet()) {
+            TreeNode srcParent = pdTree.getNode(enodes[0]).getParent();
+            TreeNode destination = pdTree.getNode(enodes[1]);
+            contolDependentMap.put(enodes[0],new HashSet<Integer>());
+            while (!srcParent.equals(destination)) {
+                contolDependentMap.get(enodes[0]).add(destination.getId());
+                destination = destination.getParent();
+            }
+        }
+
+        return contolDependentMap;
+    }
+
 }
