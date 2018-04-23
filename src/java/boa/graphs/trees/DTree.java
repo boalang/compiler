@@ -45,8 +45,12 @@ public class DTree {
         buildDomTree(idom, cfg.getNodes().size());
     }
 
+    public DTree(final Method method, boolean paramAsStatement) throws Exception {
+        this(new CFG(method, paramAsStatement));
+    }
+
     public DTree(final Method method) throws Exception {
-        this(new CFG(method));
+        this(new CFG(method, false));
     }
 
     // Getters

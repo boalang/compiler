@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import boa.functions.BoaAstIntrinsics;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Method;
 import boa.types.Ast.Statement;
@@ -55,6 +56,7 @@ public class CFG {
 
 	private boolean isLoopPresent = false;
 	private boolean isBranchPresent = false;
+	private boolean paramAsStatement = false;
 
 	int count = 0;
 
@@ -65,6 +67,13 @@ public class CFG {
 	public CFG(final Method method, final String cls_name) {
 		this.md = method;
 		this.class_name = cls_name;
+		astToCFG();
+	}
+
+	public CFG(final Method method, boolean paramAsStatement) {
+		this.md = method;
+		this.class_name = "this";
+		this.paramAsStatement = paramAsStatement;
 		astToCFG();
 	}
 
@@ -312,6 +321,22 @@ public class CFG {
 		this.returns.clear();
 	}
 
+	public Statement getStatement() {
+		Statement.Builder stm = Statement.newBuilder();
+		stm.setKind(StatementKind.BLOCK);
+
+		for (Variable v: md.getArgumentsList()) { //FIXME: assign proper type values
+			Expression exp = BoaAstIntrinsics.parseexpression(v.getName() + "= 1");
+			Statement.Builder stm1 = Statement.newBuilder();
+			stm1.setKind(StatementKind.EXPRESSION);
+			stm1.setExpression(exp);
+			stm.addStatements(stm1);
+		}
+		stm.addAllStatements(md.getStatementsList());
+
+		return stm.build();
+	}
+
 	public boolean isEmpty() {
 		return this.nodes.isEmpty();
 	}
@@ -322,7 +347,12 @@ public class CFG {
 			final CFGNode startNode = new CFGNode("ENTRY", CFGNodeType.ENTRY,
 					"ENTRY", "ENTRY");
 			mergeSeq(startNode);
-			mergeSeq(traverse(startNode, md.getStatementsList().get(0)));
+			if (paramAsStatement) {
+				Statement stm = getStatement();
+				mergeSeq(traverse(startNode, stm));
+			}
+			else
+				mergeSeq(traverse(startNode, md.getStatementsList().get(0)));
 
             adjustReturnNodes();
             final CFGNode endNode = new CFGNode("EXIT", CFGNodeType.ENTRY, "EXIT",

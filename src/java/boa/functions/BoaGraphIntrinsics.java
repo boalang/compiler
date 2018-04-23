@@ -24,6 +24,7 @@ import boa.graphs.cfg.CFG;
 import boa.graphs.ddg.DDG;
 import boa.graphs.pdg.PDG;
 import boa.graphs.slicers.CFGSlicer;
+import boa.graphs.slicers.PDGSlicer;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Method;
@@ -83,6 +84,11 @@ public class BoaGraphIntrinsics {
 	@FunctionSpec(name = "getcfgslice", returnType = "CFGSlicer", formalParameters = { "Method" })
 	public static CFGSlicer getcfgslice(final Method method) throws Exception {
 		return new CFGSlicer(method);
+	}
+
+	@FunctionSpec(name = "getpdgslice", returnType = "PDGSlicer", formalParameters = { "Method" })
+	public static PDGSlicer getpdgslice(final Method method) throws Exception {
+		return new PDGSlicer(method);
 	}
 
 	@FunctionSpec(name = "get_nodes_with_definition", returnType = "set of string", formalParameters = { "CFGNode" })

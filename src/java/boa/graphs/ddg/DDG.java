@@ -44,8 +44,12 @@ public class DDG {
         constructDDG(liveVars.keySet());
     }
 
+    public DDG(final Method m, boolean paramAsStatement) throws Exception {
+        this(new CFG(m, paramAsStatement));
+    }
+
     public DDG(final Method m) throws Exception {
-        this(new CFG(m));
+        this(new CFG(m, false));
     }
 
     // Getters

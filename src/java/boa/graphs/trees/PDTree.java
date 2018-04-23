@@ -45,8 +45,12 @@ public class PDTree {
         buildPDomTree(ipdom, cfg.getNodes().size()-1);
     }
 
+    public PDTree(final Method method, boolean paramAsStatement) throws Exception {
+        this(new CFG(method, paramAsStatement));
+    }
+
     public PDTree(final Method method) throws Exception {
-        this(new CFG(method));
+        this(new CFG(method, false));
     }
 
     // Getters

@@ -45,8 +45,12 @@ public class CDG {
         constructCDG(pdTree, cfg);
     }
 
+    public CDG(final Method method, boolean paramAsStatement) throws Exception {
+        this(new CFG(method, paramAsStatement));
+    }
+
     public CDG(final Method method) throws Exception {
-        this(new CFG(method));
+        this(new CFG(method, false));
     }
 
     // Getters
