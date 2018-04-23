@@ -286,8 +286,8 @@ public class BoaGraphIntrinsics {
 				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
 			else if (n.hasExpr())
 				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
-			//else if (n.getKind() == boa.types.Control.CDGNode.CDGNodeType.ENTRY)
-			//	str.append("\t" + n.getId() + "[" + shape + ",label=\"" + n.getName() + "\"]\n");
+			else if (n.getKind() == boa.types.Control.CDGNode.CDGNodeType.ENTRY)
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "ENTRY" + "\"]\n");
 			else
 				str.append("\t" + n.getId() + "[" + shape + "]\n");
 		}
@@ -347,8 +347,8 @@ public class BoaGraphIntrinsics {
 				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
 			else if (n.hasExpr())
 				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
-				//else if (n.getKind() == boa.types.Control.CDGNode.CDGNodeType.ENTRY)
-				//	str.append("\t" + n.getId() + "[" + shape + ",label=\"" + n.getName() + "\"]\n");
+			else if (n.getKind() == boa.types.Control.DDGNode.DDGNodeType.ENTRY)
+					str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "ENTRY" + "\"]\n");
 			else
 				str.append("\t" + n.getId() + "[" + shape + "]\n");
 		}
@@ -408,8 +408,8 @@ public class BoaGraphIntrinsics {
 				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
 			else if (n.hasExpr())
 				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
-				//else if (n.getKind() == boa.types.Control.CDGNode.CDGNodeType.ENTRY)
-				//	str.append("\t" + n.getId() + "[" + shape + ",label=\"" + n.getName() + "\"]\n");
+			else if (n.getKind() == boa.types.Control.PDGNode.PDGNodeType.ENTRY)
+					str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "ENTRY" + "\"]\n");
 			else
 				str.append("\t" + n.getId() + "[" + shape + "]\n");
 		}

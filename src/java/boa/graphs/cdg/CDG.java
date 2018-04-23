@@ -108,17 +108,16 @@ public class CDG {
                 destination.addInEdges(edge);
 
                 dest = dest.getParent();
-
-                if (source.getId() == graphSize-1)
-                    entryNode = source;
             }
         }
 
         // remove start node and replace it with entry
         CDGNode startNode = getNode(0);
-        CDGEdge firstEdge = new CDGEdge(getNode(cfg.getNodes().size()), startNode, "T");
+        entryNode = getNode(graphSize - 1);
+        entryNode.setKind(startNode.getKind());
+        CDGEdge startEdge = new CDGEdge(getNode(cfg.getNodes().size()), startNode, "T");
         entryNode.getSuccessors().remove(startNode);
-        entryNode.getOutEdges().remove(firstEdge);
+        entryNode.getOutEdges().remove(startEdge);
         nodes.remove(startNode);
         entryNode.setId(0);
     }

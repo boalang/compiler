@@ -166,7 +166,8 @@ public class CFGSlicer {
         for (Integer[] enodes : controlEdges.keySet()) {
             TreeNode srcParent = pdTree.getNode(enodes[0]).getParent();
             TreeNode destination = pdTree.getNode(enodes[1]);
-            contolDependentMap.put(enodes[0],new HashSet<Integer>());
+            if (!contolDependentMap.containsKey(enodes[0]))
+                contolDependentMap.put(enodes[0],new HashSet<Integer>());
             while (!srcParent.equals(destination)) {
                 contolDependentMap.get(enodes[0]).add(destination.getId());
                 destination = destination.getParent();

@@ -156,6 +156,7 @@ public class DDG {
         };
 
         liveVar.traverse(cfg , Traversal.TraversalDirection.BACKWARD, Traversal.TraversalKind.POSTORDER, fixp);
+        liveVar.outputMapObj.remove(cfg.getNodes().size()-1);
 
         return liveVar.outputMapObj;
     }
@@ -201,7 +202,8 @@ public class DDG {
         for (int i: nodeids) {
             if (i != 0) {
                 DDGNode dest = getNode(i);
-                if (dest.getPredecessors().size() == 0) {
+                if (dest.getPredecessors().size() == 0 ||
+                        (dest.getPredecessors().size() == 1 && dest.getPredecessors().get(0).equals(dest))) {
                     entryNode.addSuccessor(dest);
                     dest.addPredecessor(entryNode);
                     DDGEdge edge = new DDGEdge(entryNode, dest);
