@@ -69,7 +69,7 @@ public class PDGSlicer {
     }
 
     /**
-     * Traverse the pdg to collect the slices
+     * Traverse the pdg to collect the nodes
      *
      * @param pdg program dependence graph
      */
