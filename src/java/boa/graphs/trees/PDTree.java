@@ -37,7 +37,7 @@ import boa.types.Graph.Traversal.*;
 public class PDTree {
 
     private TreeNode rootNode;
-    private Set<TreeNode> nodes = new HashSet<TreeNode>();;
+    private HashSet<TreeNode> nodes = new HashSet<TreeNode>();;
 
     public PDTree(final CFG cfg) throws Exception {
         Map<Integer, Set<CFGNode>> pdom = computePostDominator(cfg);
@@ -58,7 +58,7 @@ public class PDTree {
         return rootNode;
     }
 
-    public Set<TreeNode> getNodes() {
+    public HashSet<TreeNode> getNodes() {
         return nodes;
     }
 

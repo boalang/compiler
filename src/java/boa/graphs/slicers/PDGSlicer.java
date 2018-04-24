@@ -31,40 +31,40 @@ import java.util.*;
 
 public class PDGSlicer {
 
-    private Set<PDGNode> entryNodes = new HashSet<PDGNode>();
-    private Set<PDGNode> slice = new HashSet<PDGNode>();
+    public ArrayList<PDGNode> entrynodes = new ArrayList<PDGNode>();
+    private HashSet<PDGNode> slice = new HashSet<PDGNode>();
 
     public PDGSlicer(Method m, PDGNode n) throws Exception {
-        entryNodes.add(n);
+        entrynodes.add(n);
         getSlice(new PDG(m, true));
     }
 
     public PDGSlicer(Method m, PDGNode[] n) throws Exception {
-        entryNodes.addAll(Arrays.asList(n));
+        entrynodes.addAll(Arrays.asList(n));
         getSlice(new PDG(m, true));
     }
 
     public PDGSlicer(Method m, int nid) throws Exception {
         PDG pdg = new PDG(m, true);
         PDGNode n = pdg.getNode(nid);
-        entryNodes.add(n);
+        entrynodes.add(n);
         getSlice(pdg);
     }
 
     public PDGSlicer(Method m, Integer[] nids) throws Exception {
         PDG pdg = new PDG(m, true);
         for (Integer i: nids) {
-            entryNodes.add(pdg.getNode(i));
+            entrynodes.add(pdg.getNode(i));
         }
         getSlice(pdg);
     }
 
     // Getters
-    public Set<PDGNode> getEntryNodes() {
-        return entryNodes;
+    public ArrayList<PDGNode> getEntrynodesList() {
+        return entrynodes;
     }
 
-    public Set<PDGNode> getSlice() {
+    public HashSet<PDGNode> getSlice() {
         return slice;
     }
 
@@ -75,7 +75,7 @@ public class PDGSlicer {
      */
     private void getSlice(PDG pdg) {
         Stack<PDGNode> nodes = new Stack<PDGNode>();
-        nodes.addAll(entryNodes);
+        nodes.addAll(entrynodes);
 
         while (nodes.size() != 0) {
             PDGNode node = nodes.pop();

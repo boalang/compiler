@@ -16,7 +16,9 @@
  */
 package boa.graphs.trees;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import boa.types.Ast.Statement;
@@ -40,9 +42,9 @@ public class TreeNode implements Comparable<TreeNode> {
     private TreeNodeType kind = TreeNodeType.OTHER;
 
     private String defVariable;
-    private Set<String> useVariables = new HashSet<String>();
+    private HashSet<String> useVariables = new HashSet<String>();
 
-    private Set<TreeNode> children = new HashSet<TreeNode>();
+    private ArrayList<TreeNode> children = new ArrayList<TreeNode>();
 
     public TreeNode(CFGNode node) {
         this.id = node.getId();
@@ -80,7 +82,7 @@ public class TreeNode implements Comparable<TreeNode> {
         return defVariable;
     }
 
-    public Set<String> getUseVariables() {
+    public HashSet<String> getUseVariables() {
         return useVariables;
     }
 
@@ -88,7 +90,7 @@ public class TreeNode implements Comparable<TreeNode> {
         this.defVariable = defVariables;
     }
 
-    public void setUseVariables(final Set<String> useVariables) {
+    public void setUseVariables(final HashSet<String> useVariables) {
         this.useVariables = useVariables;
     }
 
@@ -101,7 +103,8 @@ public class TreeNode implements Comparable<TreeNode> {
     }
 
     public void addChild(final TreeNode node) {
-        children.add(node);
+        if (!children.contains(node))
+            children.add(node);
     }
 
     // Getters
@@ -125,7 +128,7 @@ public class TreeNode implements Comparable<TreeNode> {
         return kind;
     }
 
-    public Set<TreeNode> getChildren() {
+    public ArrayList<TreeNode> getChildren() {
         return children;
     }
 

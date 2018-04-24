@@ -41,12 +41,12 @@ public class CDGNode implements Comparable<CDGNode> {
     private CDGNodeType kind = CDGNodeType.OTHER;
 
     private String defVariable;
-    private Set<String> useVariables = new HashSet<String>();
+    private HashSet<String> useVariables = new HashSet<String>();
 
-    private List<CDGNode> successors = new ArrayList<CDGNode>();
-    private List<CDGNode> predecessors = new ArrayList<CDGNode>();
-    private Set<CDGEdge> inEdges = new HashSet<CDGEdge>();
-    private Set<CDGEdge> outEdges = new HashSet<CDGEdge>();
+    private ArrayList<CDGNode> successors = new ArrayList<CDGNode>();
+    private ArrayList<CDGNode> predecessors = new ArrayList<CDGNode>();
+    private HashSet<CDGEdge> inEdges = new HashSet<CDGEdge>();
+    private HashSet<CDGEdge> outEdges = new HashSet<CDGEdge>();
 
     public CDGNode(final TreeNode node) {
         this.id = node.getId();
@@ -86,7 +86,7 @@ public class CDGNode implements Comparable<CDGNode> {
         this.defVariable = defVariables;
     }
 
-    public void setUseVariables(final Set<String> useVariables) {
+    public void setUseVariables(final HashSet<String> useVariables) {
         this.useVariables = useVariables;
     }
 
@@ -145,7 +145,7 @@ public class CDGNode implements Comparable<CDGNode> {
         return defVariable;
     }
 
-    public Set<String> getUseVariables() {
+    public HashSet<String> getUseVariables() {
         return useVariables;
     }
 

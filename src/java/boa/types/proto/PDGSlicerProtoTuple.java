@@ -35,8 +35,11 @@ public class PDGSlicerProtoTuple extends BoaProtoTuple {
     static {
         int counter = 0;
 
+        names.put("entrynodes", counter++);
+        members.add(new BoaProtoList(new PDGNodeProtoTuple()));
+
         names.put("slice", counter++);
-        members.add(new BoaArray(new StatementProtoTuple()));
+        members.add(new BoaProtoList(new PDGNodeProtoTuple()));
     }
 
     /**

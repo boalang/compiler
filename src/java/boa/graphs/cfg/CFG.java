@@ -347,10 +347,8 @@ public class CFG {
 			final CFGNode startNode = new CFGNode("ENTRY", CFGNodeType.ENTRY,
 					"ENTRY", "ENTRY");
 			mergeSeq(startNode);
-			if (paramAsStatement) {
-				Statement stm = getStatement();
-				mergeSeq(traverse(startNode, stm));
-			}
+			if (paramAsStatement)
+				mergeSeq(traverse(startNode, getStatement()));
 			else
 				mergeSeq(traverse(startNode, md.getStatementsList().get(0)));
 

@@ -40,12 +40,12 @@ public class DDGNode implements Comparable<DDGNode> {
     private DDGNodeType kind = DDGNodeType.OTHER;
 
     private String defVariable;
-    private Set<String> useVariables = new HashSet<String>();
+    private HashSet<String> useVariables = new HashSet<String>();
 
-    private Set<DDGEdge> inEdges = new HashSet<DDGEdge>();
-    private Set<DDGEdge> outEdges = new HashSet<DDGEdge>();
-    private List<DDGNode> successors = new ArrayList<DDGNode>();
-    private List<DDGNode> predecessors = new ArrayList<DDGNode>();
+    private HashSet<DDGEdge> inEdges = new HashSet<DDGEdge>();
+    private HashSet<DDGEdge> outEdges = new HashSet<DDGEdge>();
+    private ArrayList<DDGNode> successors = new ArrayList<DDGNode>();
+    private ArrayList<DDGNode> predecessors = new ArrayList<DDGNode>();
 
     public DDGNode(final CFGNode node) {
         this.id = node.getId();
@@ -77,7 +77,7 @@ public class DDGNode implements Comparable<DDGNode> {
         this.defVariable = defVariables;
     }
 
-    public void setUseVariables(final Set<String> useVariables) {
+    public void setUseVariables(final HashSet<String> useVariables) {
         this.useVariables = useVariables;
     }
 

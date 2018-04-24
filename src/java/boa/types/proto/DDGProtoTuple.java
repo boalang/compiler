@@ -38,7 +38,7 @@ public class DDGProtoTuple extends BoaProtoTuple {
     static {
         int counter = 0;
 
-        names.put("defUseNodes", counter++); //FIXME: name
+        names.put("defUseNodes", counter++);
         members.add(new BoaMap(new DDGNodeProtoTuple(), new BoaSet(new DDGNodeProtoTuple())));
     }
 

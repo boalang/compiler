@@ -38,7 +38,7 @@ import boa.types.Control;
 public class CDG {
 
     private CDGNode entryNode;
-    private Set<CDGNode> nodes = new HashSet<CDGNode>();
+    private HashSet<CDGNode> nodes = new HashSet<CDGNode>();
 
     public CDG(final CFG cfg) throws Exception {
         PDTree pdTree = new PDTree(cfg);
@@ -58,7 +58,7 @@ public class CDG {
         return entryNode;
     }
 
-    public Set<CDGNode> getNodes() {
+    public HashSet<CDGNode> getNodes() {
         return nodes;
     }
 

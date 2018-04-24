@@ -40,12 +40,12 @@ public class PDGNode implements Comparable<PDGNode> {
     private PDGNodeType kind = PDGNodeType.OTHER;
 
     private String defVariable;
-    private Set<String> useVariables = new HashSet<String>();
+    private HashSet<String> useVariables = new HashSet<String>();
 
-    private List<PDGNode> successors = new ArrayList<PDGNode>();
-    private List<PDGNode> predecessors = new ArrayList<PDGNode>();
-    private Set<PDGEdge> inEdges = new HashSet<PDGEdge>();
-    private Set<PDGEdge> outEdges = new HashSet<PDGEdge>();
+    private ArrayList<PDGNode> successors = new ArrayList<PDGNode>();
+    private ArrayList<PDGNode> predecessors = new ArrayList<PDGNode>();
+    private HashSet<PDGEdge> inEdges = new HashSet<PDGEdge>();
+    private HashSet<PDGEdge> outEdges = new HashSet<PDGEdge>();
 
     public PDGNode(final CDGNode node) {
         this.id = node.getId();
@@ -85,7 +85,7 @@ public class PDGNode implements Comparable<PDGNode> {
         this.defVariable = defVariables;
     }
 
-    public void setUseVariables(final Set<String> useVariables) {
+    public void setUseVariables(final HashSet<String> useVariables) {
         this.useVariables = useVariables;
     }
 

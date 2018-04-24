@@ -19,6 +19,7 @@ package boa.types.proto;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.PDGEdgeLabelProtoMap;
 import boa.types.proto.enums.PDGEdgeTypeProtoMap;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class PDGEdgeProtoTuple extends BoaProtoTuple {
         members.add(new PDGNodeProtoTuple());
 
         names.put("label", counter++);
-        members.add(new PDGNodeProtoTuple());
+        members.add(new PDGEdgeLabelProtoMap());
     }
 
     /**

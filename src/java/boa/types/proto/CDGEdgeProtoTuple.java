@@ -24,6 +24,7 @@ import java.util.Map;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.CFGEdgeLabelProtoMap;
 
 /**
  * A {@link CDGEdgeProtoTuple}.
@@ -44,7 +45,7 @@ public class CDGEdgeProtoTuple extends BoaProtoTuple {
         members.add(new CDGNodeProtoTuple());
 
         names.put("label", counter++);
-        members.add(new CDGNodeProtoTuple());
+        members.add(new CFGEdgeLabelProtoMap());
     }
 
     /**

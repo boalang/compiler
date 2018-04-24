@@ -34,9 +34,9 @@ import java.util.*;
 public class DDG {
 
     private DDGNode entryNode;
-    private Set<DDGNode> nodes = new HashSet<DDGNode>();
-    private Map<DDGNode, Set<DDGNode>> defUseChain = new HashMap<DDGNode, Set<DDGNode>>();
-    private Map<DDGNode, Set<DDGNode>> useDefChain; //TODO: needs reaching-def analysis
+    private HashSet<DDGNode> nodes = new HashSet<DDGNode>();
+    private HashMap<DDGNode, Set<DDGNode>> defUseChain = new HashMap<DDGNode, Set<DDGNode>>();
+    private HashMap<DDGNode, Set<DDGNode>> useDefChain; //TODO: needs reaching-def analysis
 
     public DDG(final CFG cfg) throws Exception {
         Map<Integer, InOut> liveVars = getLiveVariables(cfg);
@@ -55,9 +55,9 @@ public class DDG {
     // Getters
     public DDGNode getEntryNode() { return  entryNode; }
 
-    public Set<DDGNode> getNodes() { return nodes; }
+    public HashSet<DDGNode> getNodes() { return nodes; }
 
-    public Map<DDGNode, Set<DDGNode>> getDefUseChain() {
+    public HashMap<DDGNode, Set<DDGNode>> getDefUseChain() {
         return defUseChain;
     }
 

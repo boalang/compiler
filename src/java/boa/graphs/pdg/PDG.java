@@ -37,7 +37,7 @@ import java.util.Set;
 public class PDG {
 
     private PDGNode entryNode;
-    private Set<PDGNode> nodes = new HashSet<PDGNode>();
+    private HashSet<PDGNode> nodes = new HashSet<PDGNode>();
 
     public PDG(final CDG cdg, final DDG ddg) {
         addCDG(cdg);
@@ -62,7 +62,7 @@ public class PDG {
         return entryNode;
     }
 
-    public Set<PDGNode> getNodes() {
+    public HashSet<PDGNode> getNodes() {
         return nodes;
     }
 
