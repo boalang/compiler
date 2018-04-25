@@ -81,12 +81,12 @@ public class BoaGraphIntrinsics {
 		return new PDG(cdg, ddg);
 	}
 
-	@FunctionSpec(name = "getcfgslice", returnType = "CFGSlicer", formalParameters = { "Method" })
-	public static CFGSlicer getcfgslice(final Method method) throws Exception {
-		return new CFGSlicer(method);
+	@FunctionSpec(name = "getcfgslice", returnType = "CFGSlicer", formalParameters = { "Method", "int" })
+	public static CFGSlicer getcfgslice(final Method method, Long id) throws Exception {
+		return new CFGSlicer(method, (int)(long) id);
 	}
 
-	@FunctionSpec(name = "getpdgslice", returnType = "PDGSlicer", formalParameters = { "Method",  "int"})
+	@FunctionSpec(name = "getpdgslice", returnType = "PDGSlicer", formalParameters = { "Method",  "int" })
 	public static PDGSlicer getpdgslice(final Method method, Long id) throws Exception {
 		return new PDGSlicer(method, (int)(long) id);
 	}

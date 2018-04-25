@@ -126,7 +126,7 @@ public class DDG {
                         if (p.var.equals(node.getDefVariables()))
                             currentDiff.remove(p);
 
-                // out = use Union (out - def)
+                // in = use Union (out - def)
                 for (String var: node.getUseVariables())
                     currentNode.in.add(new Pair(var, node));
                 currentNode.in.addAll(currentDiff);

@@ -38,28 +38,36 @@ import java.util.*;
 
 public class CFGSlicer {
 
-    private List<CFGNode> slice = new ArrayList<CFGNode>();
+    private ArrayList<CFGNode> slice = new ArrayList<CFGNode>();
 
-    public CFGSlicer(Method m, String[] slicingVar) throws Exception {
-        getSlice(new CFG(m), Arrays.asList(slicingVar));
+    public CFGSlicer(Method m, CFGNode n) throws Exception {
+        List<CFGNode> entrynodes = new ArrayList<CFGNode>();
+        entrynodes.add(n);
+        getSlice(new CFG(m, true), entrynodes);
     }
 
-    public CFGSlicer(Method m, Variable[] slicingVar) throws Exception {
-        List<String> sliceVar = new ArrayList<String>();
-        for (Variable v: slicingVar)
-            sliceVar.add(v.getName());
-        getSlice(new CFG(m), sliceVar);
+    public CFGSlicer(Method m, CFGNode[] n) throws Exception {
+        List<CFGNode> entrynodes = new ArrayList<CFGNode>(Arrays.asList(n));
+        getSlice(new CFG(m, true), entrynodes);
     }
 
-    public CFGSlicer(Method m) throws Exception {
-        List<String> sliceVar = new ArrayList<String>();
-        for (Variable v: m.getArgumentsList())
-            sliceVar.add(v.getName());
-        getSlice(new CFG(m), sliceVar);
+    public CFGSlicer(Method m, int nid) throws Exception {
+        List<CFGNode> entrynodes = new ArrayList<CFGNode>();
+        CFG cfg = new CFG(m, true);
+        entrynodes.add(cfg.getNode(nid));
+        getSlice(cfg, entrynodes);
     }
 
+    public CFGSlicer(Method m, Integer[] nids) throws Exception {
+        List<CFGNode> entrynodes = new ArrayList<CFGNode>();
+        CFG cfg = new CFG(m, true);
+        for (Integer i: nids) {
+            entrynodes.add(cfg.getNode(i));
+        }
+        getSlice(cfg, entrynodes);
+    }
     // Getter
-    private List<CFGNode> getSlice() {
+    private ArrayList<CFGNode> getSlice() {
         return slice;
     }
 
@@ -67,61 +75,73 @@ public class CFGSlicer {
      * Compute slice of a method based on the given slicing variables
      *
      * @param cfg control flow graph
-     * @param slicingVar variable to be used for method slicing
+     * @param slicingNodes variable to be used for method slicing
      * @throws Exception
      */
-    private void getSlice(final CFG cfg, final List<String> slicingVar) throws Exception {
+    private void getSlice(final CFG cfg, final List<CFGNode> slicingNodes) throws Exception {
 
-        final Set<CFGNode> slicedNodes = new HashSet<CFGNode>();
+        final Set<CFGNode> inSlice = new HashSet<CFGNode>(slicingNodes);
         final Set<CFGNode> controlInflNodes = new HashSet<CFGNode>();
         final Map<Integer, Set<CFGNode>> infl = getInfluence(new PDTree(cfg), cfg);
 
         BoaAbstractTraversal slicer = new BoaAbstractTraversal<Set<String>>(true, true) {
 
-            protected void preTraverse(final CFGNode node) throws Exception {
-                Set<String> relevantVar;
+            protected Set<String> preTraverse(final CFGNode node) throws Exception {
+                Set<String> gen = new HashSet<String>();
+                Set<String> kill = new HashSet<String>();
+                Set<String> in = new HashSet<String>();
+                Set<String> out = new HashSet<String>();
 
-                if (node.getId() == 0) {
-                    relevantVar = new HashSet<String>(slicingVar);
-                } else {
-                    relevantVar = new HashSet<String>(outputMapObj.get(node.getId()));
+                // in(n) = \/(pred) out(pred)
+                for (CFGNode p: node.getPredecessorsList()) {
+                    Set<String> pred = getValue(p);
+                    if (pred != null)
+                        in.addAll(pred);
                 }
 
-                for (CFGNode succ: node.getSuccessorsList()) {
-                    Set<String> ref = new HashSet<String>(succ.getUseVariables());
-                    ref.retainAll(relevantVar);
+                // gen(n) = def(n) and (ref(n) /\ in(n) != {} or inSlice(n))
+                Set<String> refIn = new HashSet<String>(node.getUseVariables());
+                refIn.retainAll(in);
+                if (refIn.size() != 0 || inSlice.contains(node))
+                    if (node.getDefVariables() != null)
+                        gen.add(node.getDefVariables());
 
-                    if (!outputMapObj.containsKey(succ.getId()))
-                        outputMapObj.put(succ.getId(), new HashSet<String>());
+                // kill(n) = def(n)
+                if (node.getDefVariables() != null)
+                    kill.add(node.getDefVariables());
 
-                    if (ref.size() != 0) {
-                        if (!succ.getDefVariables().equals("")) {
-                            outputMapObj.get(succ.getId()).add(succ.getDefVariables());
-                            Set<String> diff = new HashSet<String>(relevantVar);
-                            diff.removeAll(succ.getUseVariables());
-                            outputMapObj.get(succ.getId()).addAll(diff);
-                        }
-                        else
-                            outputMapObj.get(succ.getId()).addAll(relevantVar);
-                        slicedNodes.add(succ);
-                    }
-                    else
-                        outputMapObj.get(succ.getId()).addAll(relevantVar);
+                // out(n) = gen(n) \/ (in(n) - kill(n))
+                out.addAll(in);
+                out.removeAll(kill);
+                out.addAll(gen);
 
-                    if (slicedNodes.contains(succ) && succ.getKind() == Control.CFGNode.CFGNodeType.CONTROL)
-                        controlInflNodes.addAll(infl.get(succ.getId()));
-                }
+                // inSlice(n) if ref(n) /\ out(n) != {}
+                Set<String> refOut = new HashSet<String>(node.getUseVariables());
+                refOut.retainAll(out);
+                if (refOut.size() != 0)
+                    inSlice.add(node);
 
+                // m -> infl(n)
+                if (inSlice.contains(node) && node.getKind() == Control.CFGNode.CFGNodeType.CONTROL)
+                    controlInflNodes.addAll(infl.get(node.getId()));
+
+                return out;
             }
 
             @Override
             public void traverse(final CFGNode node, boolean flag) throws Exception {
-                preTraverse(node);
+                if(flag) {
+                    currentResult = new HashSet<String>(preTraverse(node));
+                    outputMapObj.put(node.getId(), new HashSet<String>(currentResult));
+                }
+                else
+                    outputMapObj.put(node.getId(), new HashSet<String>(preTraverse(node)));
             }
         };
 
         BoaAbstractFixP fixp = new BoaAbstractFixP() {
-            boolean invoke1(final Set<String> current, final Set<String> previous) throws Exception {
+
+            public boolean invoke1(final Set<String> current, final Set<String> previous) throws Exception {
                 Set<String> curr = new HashSet<String>(current);
                 curr.removeAll(previous);
                 return curr.size() == 0;
@@ -135,8 +155,8 @@ public class CFGSlicer {
 
         slicer.traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, fixp);
 
-        slicedNodes.addAll(controlInflNodes);
-        slice.addAll(slicedNodes);
+        inSlice.addAll(controlInflNodes);
+        slice.addAll(inSlice);
         Collections.sort(slice);
     }
 
