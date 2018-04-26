@@ -106,13 +106,13 @@ public class CDG {
         int graphSize = pdTree.getNodes().size();
 
         for (Integer[] enodes: controlEdges.keySet()) {
-            TreeNode src = pdTree.getNode(enodes[0]);
-            TreeNode dest = pdTree.getNode(enodes[1]);
-            TreeNode srcParent = pdTree.getNode(enodes[0]).getParent();
-            CDGNode source = getNode(src);
+            try {
+                TreeNode src = pdTree.getNode(enodes[0]);
+                TreeNode dest = pdTree.getNode(enodes[1]);
+                TreeNode srcParent = pdTree.getNode(enodes[0]).getParent();
+                CDGNode source = getNode(src);
 
-            while (!srcParent.equals(dest)) {
-                try {
+                while (!srcParent.equals(dest)) {
                     CDGNode destination = getNode(dest);
                     source.addSuccessor(destination);
                     destination.addPredecessor(source);
@@ -123,12 +123,12 @@ public class CDG {
 
                     dest = dest.getParent();
                 }
-                catch (Exception e) {
-                    System.out.println("CDG1 " + enodes[0] + " : " + enodes[1]);
-                    System.out.println("CDG2 " + cfg.getNodes().size() + " : " + pdTree.getNodes().size());
-                    System.out.println("CDG3 " + cfg.md.getName());
-                    System.out.println(BoaAstIntrinsics.prettyprint(md));
-                }
+            }
+            catch (Exception e) {
+                System.out.println("CDG1 " + enodes[0] + " : " + enodes[1]);
+                System.out.println("CDG2 " + cfg.getNodes().size() + " : " + pdTree.getNodes().size());
+                System.out.println("CDG3 " + cfg.md.getName());
+                System.out.println(BoaAstIntrinsics.prettyprint(md));
             }
         }
 
