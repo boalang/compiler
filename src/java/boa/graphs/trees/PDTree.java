@@ -196,10 +196,8 @@ public class PDTree {
 
             src.addChild(dest);
             dest.setParent(src);
-
-            if (src.getId() == stopid)
-                rootNode = src;
         }
+        rootNode = getNode(stopid);
         TreeNode entry = new TreeNode(stopid+1);
         entry.setParent(rootNode);
         rootNode.addChild(entry);

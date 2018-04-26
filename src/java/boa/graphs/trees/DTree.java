@@ -189,10 +189,8 @@ public class DTree {
 
             src.addChild(dest);
             dest.setParent(src);
-
-            if (src.getId() == 0)
-                rootNode = src;
         }
+        rootNode = getNode(0);
         TreeNode entry = new TreeNode(stopid+1);
         entry.setParent(rootNode);
         rootNode.addChild(entry);

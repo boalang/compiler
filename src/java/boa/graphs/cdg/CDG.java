@@ -86,11 +86,11 @@ public class CDG {
         Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
         for (CFGNode n: cfg.getNodes()) {
             if (n.getKind() == Control.CFGNode.CFGNodeType.CONTROL)
-            for (CFGEdge e: n.getOutEdges())
-                if (e.label().equals("."))
-                    controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, "F");
-                else
-                    controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, e.label());
+                for (CFGEdge e: n.getOutEdges())
+                    if (e.label().equals("."))
+                        controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, "F");
+                    else
+                        controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, e.label());
         }
         controlEdges.put(new Integer[]{cfg.getNodes().size(), 0}, "T");
 
@@ -99,6 +99,12 @@ public class CDG {
         for (Integer[] enodes: controlEdges.keySet()) {
             TreeNode src = pdTree.getNode(enodes[0]);
             TreeNode dest = pdTree.getNode(enodes[1]);
+            // DEBUG
+            if (dest == null) {
+                System.err.println("CDG1 " + enodes[0] + " : " + enodes[1]);
+                System.err.println("CDG2 " + cfg.getNodes().size() + " : " + pdTree.getNodes().size());
+            }
+            // DEBUG
             TreeNode srcParent = pdTree.getNode(enodes[0]).getParent();
             CDGNode source = getNode(src);
 
