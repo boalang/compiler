@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Map;
 
+import boa.functions.BoaAstIntrinsics;
 import boa.types.Ast.Method;
 import boa.graphs.cfg.CFG;
 import boa.graphs.cfg.CFGNode;
@@ -199,17 +200,17 @@ public class PDTree {
             src.addChild(dest);
             dest.setParent(src);
         }
-        rootNode = getNode(stopid);
-        // DEBUG
-        if (rootNode == null) {
-            System.err.println("PDTree1 " + stopid + " : " + nodes.size());
-            System.err.println("PDTree1 " + md.getName());
+        try {
+            rootNode = getNode(stopid);
+            TreeNode entry = new TreeNode(stopid + 1);
+            entry.setParent(rootNode);
+            rootNode.addChild(entry);
+            nodes.add(entry);
         }
-        //DEBUG
-        TreeNode entry = new TreeNode(stopid+1);
-        entry.setParent(rootNode);
-        rootNode.addChild(entry);
-        nodes.add(entry);
+        catch (Exception e) {
+            System.err.println("PDTree1 " + stopid + " : " + nodes.size());
+            BoaAstIntrinsics.prettyprint(md);
+        }
     }
 
     /**

@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Map;
 
+import boa.functions.BoaAstIntrinsics;
 import boa.graphs.cfg.CFG;
 import boa.graphs.cfg.CFGEdge;
 import boa.graphs.cfg.CFGNode;
@@ -37,10 +38,12 @@ import boa.types.Control;
 
 public class CDG {
 
+    private Method md;
     private CDGNode entryNode;
     private HashSet<CDGNode> nodes = new HashSet<CDGNode>();
 
     public CDG(final CFG cfg) throws Exception {
+        this.md = cfg.md;
         PDTree pdTree = new PDTree(cfg);
         constructCDG(pdTree, cfg);
     }
@@ -103,22 +106,23 @@ public class CDG {
             CDGNode source = getNode(src);
 
             while (!srcParent.equals(dest)) {
-                // DEBUG
-                if (dest == null) {
+                try {
+                    CDGNode destination = getNode(dest);
+                    source.addSuccessor(destination);
+                    destination.addPredecessor(source);
+
+                    CDGEdge edge = new CDGEdge(source, destination, controlEdges.get(enodes));
+                    source.addOutEdges(edge);
+                    destination.addInEdges(edge);
+
+                    dest = dest.getParent();
+                }
+                catch (Exception e) {
                     System.err.println("CDG1 " + enodes[0] + " : " + enodes[1]);
                     System.err.println("CDG2 " + cfg.getNodes().size() + " : " + pdTree.getNodes().size());
                     System.err.println("CDG3 " + cfg.md.getName());
+                    BoaAstIntrinsics.prettyprint(md);
                 }
-                // DEBUG
-                CDGNode destination = getNode(dest);
-                source.addSuccessor(destination);
-                destination.addPredecessor(source);
-
-                CDGEdge edge = new CDGEdge(source, destination, controlEdges.get(enodes));
-                source.addOutEdges(edge);
-                destination.addInEdges(edge);
-
-                dest = dest.getParent();
             }
         }
 
