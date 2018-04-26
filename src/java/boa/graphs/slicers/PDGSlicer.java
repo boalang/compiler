@@ -35,8 +35,10 @@ public class PDGSlicer {
     private HashSet<PDGNode> slice = new HashSet<PDGNode>();
 
     public PDGSlicer(Method m, PDGNode n) throws Exception {
-        entrynodes.add(n);
-        getSlice(new PDG(m, true));
+        if (n != null) {
+            entrynodes.add(n);
+            getSlice(new PDG(m, true));
+        }
     }
 
     public PDGSlicer(Method m, PDGNode[] n) throws Exception {
@@ -46,15 +48,19 @@ public class PDGSlicer {
 
     public PDGSlicer(Method m, int nid) throws Exception {
         PDG pdg = new PDG(m, true);
-        PDGNode n = pdg.getNode(nid);
-        entrynodes.add(n);
-        getSlice(pdg);
+        PDGNode node = pdg.getNode(nid);
+        if (node != null) {
+            entrynodes.add(node);
+            getSlice(pdg);
+        }
     }
 
     public PDGSlicer(Method m, Integer[] nids) throws Exception {
         PDG pdg = new PDG(m, true);
         for (Integer i: nids) {
-            entrynodes.add(pdg.getNode(i));
+            PDGNode node = pdg.getNode(i);
+            if (node != null)
+                entrynodes.add(node);
         }
         getSlice(pdg);
     }

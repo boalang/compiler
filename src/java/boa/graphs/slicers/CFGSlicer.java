@@ -41,9 +41,11 @@ public class CFGSlicer {
     private ArrayList<CFGNode> slice = new ArrayList<CFGNode>();
 
     public CFGSlicer(Method m, CFGNode n) throws Exception {
-        List<CFGNode> entrynodes = new ArrayList<CFGNode>();
-        entrynodes.add(n);
-        getSlice(new CFG(m, true), entrynodes);
+        if (n != null) {
+            List<CFGNode> entrynodes = new ArrayList<CFGNode>();
+            entrynodes.add(n);
+            getSlice(new CFG(m, true), entrynodes);
+        }
     }
 
     public CFGSlicer(Method m, CFGNode[] n) throws Exception {
@@ -54,17 +56,23 @@ public class CFGSlicer {
     public CFGSlicer(Method m, int nid) throws Exception {
         List<CFGNode> entrynodes = new ArrayList<CFGNode>();
         CFG cfg = new CFG(m, true);
-        entrynodes.add(cfg.getNode(nid));
-        getSlice(cfg, entrynodes);
+        CFGNode node = cfg.getNode(nid);
+        if (node != null) {
+            entrynodes.add(node);
+            getSlice(cfg, entrynodes);
+        }
     }
 
     public CFGSlicer(Method m, Integer[] nids) throws Exception {
         List<CFGNode> entrynodes = new ArrayList<CFGNode>();
         CFG cfg = new CFG(m, true);
         for (Integer i: nids) {
-            entrynodes.add(cfg.getNode(i));
+            CFGNode node = cfg.getNode(i);
+            if (node != null)
+                entrynodes.add(cfg.getNode(i));
         }
-        getSlice(cfg, entrynodes);
+        if (entrynodes.size() > 0)
+            getSlice(cfg, entrynodes);
     }
     // Getter
     private ArrayList<CFGNode> getSlice() {

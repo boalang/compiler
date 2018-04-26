@@ -33,15 +33,19 @@ import java.util.*;
 
 public class DDG {
 
+    private Method md;
     private DDGNode entryNode;
     private HashSet<DDGNode> nodes = new HashSet<DDGNode>();
     private HashMap<DDGNode, Set<DDGNode>> defUseChain = new HashMap<DDGNode, Set<DDGNode>>();
     private HashMap<DDGNode, Set<DDGNode>> useDefChain; //TODO: needs reaching-def analysis
 
     public DDG(final CFG cfg) throws Exception {
-        Map<Integer, InOut> liveVars = getLiveVariables(cfg);
-        formDefUseChains(liveVars, cfg);
-        constructDDG(liveVars.keySet());
+        this.md = md;
+        if (cfg.getNodes().size() > 0) {
+            Map<Integer, InOut> liveVars = getLiveVariables(cfg);
+            formDefUseChains(liveVars, cfg);
+            constructDDG(liveVars.keySet());
+        }
     }
 
     public DDG(final Method m, boolean paramAsStatement) throws Exception {
@@ -53,6 +57,10 @@ public class DDG {
     }
 
     // Getters
+    public Method getMethod() {
+        return md;
+    }
+
     public DDGNode getEntryNode() { return  entryNode; }
 
     public HashSet<DDGNode> getNodes() { return nodes; }

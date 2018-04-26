@@ -44,8 +44,10 @@ public class CDG {
 
     public CDG(final CFG cfg) throws Exception {
         this.md = cfg.md;
-        PDTree pdTree = new PDTree(cfg);
-        constructCDG(pdTree, cfg);
+        if (cfg.getNodes().size() > 0) {
+            PDTree pdTree = new PDTree(cfg);
+            constructCDG(pdTree, cfg);
+        }
     }
 
     public CDG(final Method method, boolean paramAsStatement) throws Exception {
@@ -57,6 +59,10 @@ public class CDG {
     }
 
     // Getters
+    public Method getMethod() {
+        return md;
+    }
+
     public CDGNode getEntryNode() {
         return entryNode;
     }

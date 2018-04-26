@@ -36,13 +36,17 @@ import java.util.Set;
 
 public class PDG {
 
+    private Method md;
     private PDGNode entryNode;
     private HashSet<PDGNode> nodes = new HashSet<PDGNode>();
 
     public PDG(final CDG cdg, final DDG ddg) {
-        addCDG(cdg);
-        addDDGEdges(ddg);
-        entryNode = getNode(0);
+        this.md = cdg.getMethod();
+        if (cdg.getNodes().size() > 0) {
+            addCDG(cdg);
+            addDDGEdges(ddg);
+            entryNode = getNode(0);
+        }
     }
 
     public PDG(final CFG cfg) throws Exception {
@@ -58,6 +62,10 @@ public class PDG {
     }
 
     // Getters
+    private Method getMd() {
+        return md;
+    }
+
     public PDGNode getEntryNode() {
         return entryNode;
     }

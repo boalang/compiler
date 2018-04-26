@@ -43,9 +43,11 @@ public class PDTree {
 
     public PDTree(final CFG cfg) throws Exception {
         this.md = cfg.md;
-        Map<Integer, Set<CFGNode>> pdom = computePostDominator(cfg);
-        Map<CFGNode, CFGNode> ipdom = computeImmediatePostDominator(pdom, cfg);
-        buildPDomTree(ipdom, cfg.getNodes().size()-1);
+        if (cfg.getNodes().size() > 0) {
+            Map<Integer, Set<CFGNode>> pdom = computePostDominator(cfg);
+            Map<CFGNode, CFGNode> ipdom = computeImmediatePostDominator(pdom, cfg);
+            buildPDomTree(ipdom, cfg.getNodes().size() - 1);
+        }
     }
 
     public PDTree(final Method method, boolean paramAsStatement) throws Exception {
@@ -57,6 +59,10 @@ public class PDTree {
     }
 
     // Getters
+    public Method getMethod() {
+        return md;
+    }
+
     public TreeNode getRootNode() {
         return rootNode;
     }

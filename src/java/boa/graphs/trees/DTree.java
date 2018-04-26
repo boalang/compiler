@@ -36,13 +36,17 @@ import boa.types.Graph.Traversal.*;
 
 public class DTree {
 
+    private Method md;
     private TreeNode rootNode;
     private HashSet<TreeNode> nodes = new HashSet<TreeNode>();;
 
     public DTree(final CFG cfg) throws Exception {
-        Map<Integer, Set<CFGNode>> dom = computeDominator(cfg);
-        Map<CFGNode, CFGNode> idom = computeImmediateDominator(dom, cfg);
-        buildDomTree(idom, cfg.getNodes().size());
+        this.md = cfg.md;
+        if (cfg.getNodes().size() > 0) {
+            Map<Integer, Set<CFGNode>> dom = computeDominator(cfg);
+            Map<CFGNode, CFGNode> idom = computeImmediateDominator(dom, cfg);
+            buildDomTree(idom, cfg.getNodes().size());
+        }
     }
 
     public DTree(final Method method, boolean paramAsStatement) throws Exception {
@@ -54,6 +58,8 @@ public class DTree {
     }
 
     // Getters
+    public Method getMethod() { return md; }
+
     public TreeNode getRootNode() {
         return rootNode;
     }
