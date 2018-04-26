@@ -105,8 +105,8 @@ public class CDG {
 
         int graphSize = pdTree.getNodes().size();
 
-        for (Integer[] enodes: controlEdges.keySet()) {
-            try {
+        try {
+            for (Integer[] enodes : controlEdges.keySet()) {
                 TreeNode src = pdTree.getNode(enodes[0]);
                 TreeNode dest = pdTree.getNode(enodes[1]);
                 TreeNode srcParent = pdTree.getNode(enodes[0]).getParent();
@@ -124,23 +124,20 @@ public class CDG {
                     dest = dest.getParent();
                 }
             }
-            catch (Exception e) {
-                System.out.println("CDG1 " + enodes[0] + " : " + enodes[1]);
-                System.out.println("CDG2 " + cfg.getNodes().size() + " : " + pdTree.getNodes().size());
-                System.out.println("CDG3 " + cfg.md.getName());
-                System.out.println(BoaAstIntrinsics.prettyprint(md));
-            }
-        }
 
-        // remove start node and replace it with entry
-        CDGNode startNode = getNode(0);
-        entryNode = getNode(graphSize - 1);
-        entryNode.setKind(startNode.getKind());
-        CDGEdge startEdge = new CDGEdge(getNode(cfg.getNodes().size()), startNode, "T");
-        entryNode.getSuccessors().remove(startNode);
-        entryNode.getOutEdges().remove(startEdge);
-        nodes.remove(startNode);
-        entryNode.setId(0);
+            // remove start node and replace it with entry
+            CDGNode startNode = getNode(0);
+            entryNode = getNode(graphSize - 1);
+            entryNode.setKind(startNode.getKind());
+            CDGEdge startEdge = new CDGEdge(getNode(cfg.getNodes().size()), startNode, "T");
+            entryNode.getSuccessors().remove(startNode);
+            entryNode.getOutEdges().remove(startEdge);
+            nodes.remove(startNode);
+            entryNode.setId(0);
+        }
+        catch (Exception e) {
+            System.out.println(BoaAstIntrinsics.prettyprint(md));
+        }
     }
 
     /**
