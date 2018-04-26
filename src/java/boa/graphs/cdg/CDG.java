@@ -118,10 +118,10 @@ public class CDG {
                     dest = dest.getParent();
                 }
                 catch (Exception e) {
-                    System.err.println("CDG1 " + enodes[0] + " : " + enodes[1]);
-                    System.err.println("CDG2 " + cfg.getNodes().size() + " : " + pdTree.getNodes().size());
-                    System.err.println("CDG3 " + cfg.md.getName());
-                    BoaAstIntrinsics.prettyprint(md);
+                    System.out.println("CDG1 " + enodes[0] + " : " + enodes[1]);
+                    System.out.println("CDG2 " + cfg.getNodes().size() + " : " + pdTree.getNodes().size());
+                    System.out.println("CDG3 " + cfg.md.getName());
+                    System.out.println(BoaAstIntrinsics.prettyprint(md));
                 }
             }
         }

@@ -208,8 +208,8 @@ public class PDTree {
             nodes.add(entry);
         }
         catch (Exception e) {
-            System.err.println("PDTree1 " + stopid + " : " + nodes.size());
-            BoaAstIntrinsics.prettyprint(md);
+            System.out.println("PDTree1 " + stopid + " : " + nodes.size());
+            System.out.println(BoaAstIntrinsics.prettyprint(md));
         }
     }
 
