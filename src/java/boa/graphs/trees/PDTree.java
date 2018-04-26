@@ -43,6 +43,9 @@ public class PDTree {
         Map<Integer, Set<CFGNode>> pdom = computePostDominator(cfg);
         Map<CFGNode, CFGNode> ipdom = computeImmediatePostDominator(pdom, cfg);
         buildPDomTree(ipdom, cfg.getNodes().size()-1);
+        //DEBUG
+        System.err.println("PDTree1 " + cfg.md.getName());
+        //DEBUG
     }
 
     public PDTree(final Method method, boolean paramAsStatement) throws Exception {
@@ -198,6 +201,12 @@ public class PDTree {
             dest.setParent(src);
         }
         rootNode = getNode(stopid);
+        // DEBUG
+        if (rootNode == null) {
+            System.err.println("PDTree1 " + stopid + " : " + nodes.size());
+            return;
+        }
+        //DEBUG
         TreeNode entry = new TreeNode(stopid+1);
         entry.setParent(rootNode);
         rootNode.addChild(entry);
