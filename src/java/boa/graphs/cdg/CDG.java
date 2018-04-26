@@ -99,16 +99,17 @@ public class CDG {
         for (Integer[] enodes: controlEdges.keySet()) {
             TreeNode src = pdTree.getNode(enodes[0]);
             TreeNode dest = pdTree.getNode(enodes[1]);
-            // DEBUG
-            if (dest == null) {
-                System.err.println("CDG1 " + enodes[0] + " : " + enodes[1]);
-                System.err.println("CDG2 " + cfg.getNodes().size() + " : " + pdTree.getNodes().size());
-            }
-            // DEBUG
             TreeNode srcParent = pdTree.getNode(enodes[0]).getParent();
             CDGNode source = getNode(src);
 
             while (!srcParent.equals(dest)) {
+                // DEBUG
+                if (dest == null) {
+                    System.err.println("CDG1 " + enodes[0] + " : " + enodes[1]);
+                    System.err.println("CDG2 " + cfg.getNodes().size() + " : " + pdTree.getNodes().size());
+                    System.err.println("CDG3 " + cfg.md.getName());
+                }
+                // DEBUG
                 CDGNode destination = getNode(dest);
                 source.addSuccessor(destination);
                 destination.addPredecessor(source);

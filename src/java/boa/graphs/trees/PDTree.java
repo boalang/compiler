@@ -36,16 +36,15 @@ import boa.types.Graph.Traversal.*;
 
 public class PDTree {
 
+    private Method md;
     private TreeNode rootNode;
     private HashSet<TreeNode> nodes = new HashSet<TreeNode>();;
 
     public PDTree(final CFG cfg) throws Exception {
+        this.md = cfg.md;
         Map<Integer, Set<CFGNode>> pdom = computePostDominator(cfg);
         Map<CFGNode, CFGNode> ipdom = computeImmediatePostDominator(pdom, cfg);
         buildPDomTree(ipdom, cfg.getNodes().size()-1);
-        //DEBUG
-        System.err.println("PDTree1 " + cfg.md.getName());
-        //DEBUG
     }
 
     public PDTree(final Method method, boolean paramAsStatement) throws Exception {
@@ -204,7 +203,7 @@ public class PDTree {
         // DEBUG
         if (rootNode == null) {
             System.err.println("PDTree1 " + stopid + " : " + nodes.size());
-            return;
+            System.err.println("PDTree1 " + md.getName());
         }
         //DEBUG
         TreeNode entry = new TreeNode(stopid+1);
