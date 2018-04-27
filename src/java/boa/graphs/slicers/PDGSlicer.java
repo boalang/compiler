@@ -62,7 +62,8 @@ public class PDGSlicer {
             if (node != null)
                 entrynodes.add(node);
         }
-        getSlice(pdg);
+        if (entrynodes.size() > 0)
+            getSlice(pdg);
     }
 
     // Getters

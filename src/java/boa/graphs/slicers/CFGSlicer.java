@@ -95,8 +95,7 @@ public class CFGSlicer {
         BoaAbstractTraversal slicer = new BoaAbstractTraversal<Set<String>>(true, true) {
 
             protected Set<String> preTraverse(final CFGNode node) throws Exception {
-                Set<String> gen = new HashSet<String>();
-                Set<String> kill = new HashSet<String>();
+                String gen = null;
                 Set<String> in = new HashSet<String>();
                 Set<String> out = new HashSet<String>();
 
@@ -112,16 +111,16 @@ public class CFGSlicer {
                 refIn.retainAll(in);
                 if (refIn.size() != 0 || inSlice.contains(node))
                     if (node.getDefVariables() != null)
-                        gen.add(node.getDefVariables());
+                        gen = node.getDefVariables();
 
                 // kill(n) = def(n)
-                if (node.getDefVariables() != null)
-                    kill.add(node.getDefVariables());
 
                 // out(n) = gen(n) \/ (in(n) - kill(n))
                 out.addAll(in);
-                out.removeAll(kill);
-                out.addAll(gen);
+                if (node.getDefVariables() != null)
+                    out.remove(node.getDefVariables());
+                if (gen != null)
+                    out.add(gen);
 
                 // inSlice(n) if ref(n) /\ out(n) != {}
                 Set<String> refOut = new HashSet<String>(node.getUseVariables());
@@ -139,11 +138,11 @@ public class CFGSlicer {
             @Override
             public void traverse(final CFGNode node, boolean flag) throws Exception {
                 if(flag) {
-                    currentResult = new HashSet<String>(preTraverse(node));
+                    currentResult = preTraverse(node); // remove new object creation
                     outputMapObj.put(node.getId(), new HashSet<String>(currentResult));
                 }
                 else
-                    outputMapObj.put(node.getId(), new HashSet<String>(preTraverse(node)));
+                    outputMapObj.put(node.getId(), preTraverse(node)); // remove new object creation
             }
         };
 

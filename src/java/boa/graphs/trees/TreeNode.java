@@ -35,8 +35,8 @@ import boa.types.Control.TreeNode.*;
 
 public class TreeNode implements Comparable<TreeNode> {
 
-    private TreeNode parent;
     private int id;
+    private TreeNode parent;
     private Statement stmt;
     private Expression expr;
     private TreeNodeType kind = TreeNodeType.OTHER;
@@ -171,5 +171,10 @@ public class TreeNode implements Comparable<TreeNode> {
     @Override
     public int hashCode() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "" + id;
     }
 }

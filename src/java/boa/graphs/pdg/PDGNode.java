@@ -199,4 +199,9 @@ public class PDGNode implements Comparable<PDGNode> {
     public int hashCode() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "" + id;
+    }
 }

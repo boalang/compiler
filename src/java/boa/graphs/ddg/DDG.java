@@ -114,11 +114,12 @@ public class DDG {
         BoaAbstractTraversal liveVar = new BoaAbstractTraversal<InOut>(true, true) {
             
             protected InOut preTraverse(final CFGNode node) throws Exception {
-                InOut currentNode = new InOut();
+                InOut currentNode;
 
-                if ((getValue(node) != null)) {
+                if ((getValue(node) != null))
                     currentNode = getValue(node);
-                }
+                else
+                    currentNode = new InOut();
 
                 // out = Union in[node.successor]
                 for (CFGNode s: node.getSuccessorsList()) {
@@ -145,20 +146,20 @@ public class DDG {
             @Override
             public void traverse(final CFGNode node, boolean flag) throws Exception {
                 if(flag) {
-                    currentResult = new InOut(preTraverse(node));
+                    currentResult = preTraverse(node); // remove new InOut()
                     outputMapObj.put(node.getId(), new InOut(currentResult));
                 }
                 else
-                    outputMapObj.put(node.getId(), new InOut(preTraverse(node)));
+                    outputMapObj.put(node.getId(), preTraverse(node)); // remove new InOut()
             }
         };
 
         BoaAbstractFixP fixp = new boa.runtime.BoaAbstractFixP() {
 
             public boolean invoke1(final InOut current, final InOut previous) throws Exception {
-                InOut curr = new InOut(current);
-                curr.in.removeAll(previous.in);
-                return curr.in.size() == 0;
+                Set<Pair> curr = new HashSet<Pair>(current.in);
+                curr.removeAll(previous.in);
+                return curr.size() == 0;
             }
 
             @Override
@@ -233,21 +234,13 @@ public class DDG {
      * @return a new DDG node or an existing DDG node
      */
     private DDGNode getNode(final CFGNode cfgNode) {
-        DDGNode node = new DDGNode(cfgNode.getId());
-        if (nodes.contains(node)) {
-            for (DDGNode n : nodes) {
-                if (n.equals(node))
-                    return n;
-            }
-        }
-        node.setStmt(cfgNode.getStmt());
-        node.setExpr(cfgNode.getExpr());
-        node.setDefVariable(cfgNode.getDefVariables());
-        node.setUseVariables(cfgNode.getUseVariables());
-        node.setKind(cfgNode.getKind());
-        nodes.add(node);
+        DDGNode node = getNode(cfgNode.getId());
+        if (node != null)
+            return node;
 
-        return node;
+        DDGNode newNode = new DDGNode(cfgNode);
+        nodes.add(newNode);
+        return newNode;
     }
 
     // Holds in and out pairs for each node

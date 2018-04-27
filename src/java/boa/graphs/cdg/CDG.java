@@ -101,16 +101,14 @@ public class CDG {
                     else
                         controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, e.label());
         }
+        // entry -> start
         controlEdges.put(new Integer[]{cfg.getNodes().size(), 0}, "T");
-
-        int graphSize = pdTree.getNodes().size();
 
         try {
             for (Integer[] enodes : controlEdges.keySet()) {
-                TreeNode src = pdTree.getNode(enodes[0]);
-                TreeNode dest = pdTree.getNode(enodes[1]);
+                CDGNode source = getNode(pdTree.getNode(enodes[0]));
                 TreeNode srcParent = pdTree.getNode(enodes[0]).getParent();
-                CDGNode source = getNode(src);
+                TreeNode dest = pdTree.getNode(enodes[1]);
 
                 while (!srcParent.equals(dest)) {
                     CDGNode destination = getNode(dest);
@@ -118,8 +116,8 @@ public class CDG {
                     destination.addPredecessor(source);
 
                     CDGEdge edge = new CDGEdge(source, destination, controlEdges.get(enodes));
-                    source.addOutEdges(edge);
-                    destination.addInEdges(edge);
+                    source.addOutEdge(edge);
+                    destination.addInEdge(edge);
 
                     dest = dest.getParent();
                 }
@@ -127,12 +125,12 @@ public class CDG {
 
             // remove start node and replace it with entry
             CDGNode startNode = getNode(0);
-            entryNode = getNode(graphSize - 1);
-            entryNode.setKind(startNode.getKind());
-            CDGEdge startEdge = new CDGEdge(getNode(cfg.getNodes().size()), startNode, "T");
+            entryNode = getNode(cfg.getNodes().size()); // entryNode = exitid + 1
+            CDGEdge startEdge = entryNode.getOutEdge(startNode);
             entryNode.getSuccessors().remove(startNode);
             entryNode.getOutEdges().remove(startEdge);
             nodes.remove(startNode);
+            entryNode.setKind(Control.CDGNode.CDGNodeType.ENTRY);
             entryNode.setId(0);
         }
         catch (Exception e) {
@@ -147,20 +145,12 @@ public class CDG {
      * @return a new tree node or an existing tree node
      */
     private CDGNode getNode(final TreeNode treeNode) {
-        CDGNode node = new CDGNode(treeNode.getId());
-        if (nodes.contains(node)) {
-            for (CDGNode n : nodes) {
-                if (n.equals(node))
-                    return n;
-            }
-        }
-        node.setStmt(treeNode.getStmt());
-        node.setExpr(treeNode.getExpr());
-        node.setKind(treeNode.getKind());
-        node.setDefVariable(treeNode.getDefVariable());
-        node.setUseVariables(treeNode.getUseVariables());
-        nodes.add(node);
+        CDGNode node = getNode(treeNode.getId());
+        if (node != null)
+            return node;
 
-        return node;
+        CDGNode newNode = new CDGNode(treeNode);
+        nodes.add(newNode);
+        return newNode;
     }
 }

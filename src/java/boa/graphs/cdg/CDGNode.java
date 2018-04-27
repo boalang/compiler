@@ -102,11 +102,11 @@ public class CDGNode implements Comparable<CDGNode> {
         predecessors.add(node);
     }
 
-    public void addInEdges(final CDGEdge edge) {
+    public void addInEdge(final CDGEdge edge) {
         inEdges.add(edge);
     }
 
-    public void addOutEdges(final CDGEdge edge) {
+    public void addOutEdge(final CDGEdge edge) {
         outEdges.add(edge);
     }
 
@@ -133,8 +133,24 @@ public class CDGNode implements Comparable<CDGNode> {
         return inEdges;
     }
 
+    public CDGEdge getInEdge(final CDGNode node) {
+        for (final CDGEdge e : this.inEdges) {
+            if (e.getSrc().equals(node))
+                return e;
+        }
+        return null;
+    }
+
     public Set<CDGEdge> getOutEdges() {
         return outEdges;
+    }
+
+    public CDGEdge getOutEdge(final CDGNode node) {
+        for (final CDGEdge e : this.outEdges) {
+            if (e.getDest().equals(node))
+                return e;
+        }
+        return null;
     }
 
     public CDGNodeType getKind() {
@@ -196,5 +212,10 @@ public class CDGNode implements Comparable<CDGNode> {
     @Override
     public int hashCode() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "" + id;
     }
 }

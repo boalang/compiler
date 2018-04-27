@@ -102,7 +102,7 @@ public class PDTree {
                 Set<CFGNode> currentPDom = new HashSet<CFGNode>();
 
                 if (node.getId() != (stopid))
-                    currentPDom = new HashSet<CFGNode>(cfgnodes);
+                    currentPDom.addAll(cfgnodes);
 
                 if ((getValue(node) != null))
                     currentPDom = getValue(node);
@@ -206,17 +206,12 @@ public class PDTree {
             src.addChild(dest);
             dest.setParent(src);
         }
-        try {
-            rootNode = getNode(stopid);
-            TreeNode entry = new TreeNode(stopid + 1);
-            entry.setParent(rootNode);
-            rootNode.addChild(entry);
-            nodes.add(entry);
-        }
-        catch (Exception e) {
-            System.out.println("PDTree1 " + stopid + " : " + nodes.size());
-            System.out.println(BoaAstIntrinsics.prettyprint(md));
-        }
+
+        rootNode = getNode(stopid);
+        TreeNode entry = new TreeNode(stopid + 1);
+        entry.setParent(rootNode);
+        rootNode.addChild(entry);
+        nodes.add(entry);
     }
 
     /**
@@ -226,21 +221,13 @@ public class PDTree {
      * @return a new tree node or an existing tree node
      */
     private TreeNode getNode(final CFGNode cfgNode) {
-        TreeNode node = new TreeNode(cfgNode.getId());
-        if (nodes.contains(node)) {
-            for (TreeNode n : nodes) {
-                if (n.equals(node))
-                    return n;
-            }
-        }
-        node.setStmt(cfgNode.getStmt());
-        node.setExpr(cfgNode.getExpr());
-        node.setKind(cfgNode.getKind());
-        node.setDefVariable(cfgNode.getDefVariables());
-        node.setUseVariables(cfgNode.getUseVariables());
-        nodes.add(node);
+        TreeNode node = getNode(cfgNode.getId());
+        if (node != null)
+            return node;
 
-        return node;
+        TreeNode newNode = new TreeNode(cfgNode);
+        nodes.add(newNode);
+        return newNode;
     }
 
 }

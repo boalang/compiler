@@ -144,8 +144,24 @@ public class DDGNode implements Comparable<DDGNode> {
         return inEdges;
     }
 
+    public DDGEdge getInEdge(final DDGNode node) {
+        for (final DDGEdge e : this.inEdges) {
+            if (e.getSrc().equals(node))
+                return e;
+        }
+        return null;
+    }
+
     public Set<DDGEdge> getOutEdges() {
         return outEdges;
+    }
+
+    public DDGEdge getOutEdge(final DDGNode node) {
+        for (final DDGEdge e : this.outEdges) {
+            if (e.getDest().equals(node))
+                return e;
+        }
+        return null;
     }
 
     public List<DDGNode> getSuccessors() {
@@ -195,5 +211,10 @@ public class DDGNode implements Comparable<DDGNode> {
     @Override
     public int hashCode() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "" + id;
     }
 }

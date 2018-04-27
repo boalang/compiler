@@ -98,14 +98,14 @@ public class DTree {
                 Set<CFGNode> currentDom = new HashSet<CFGNode>();
 
                 if (node.getId() != 0)
-                    currentDom = new HashSet<CFGNode>(cfgnodes);
+                    currentDom.addAll(cfgnodes);
 
                 if ((getValue(node) != null))
                     currentDom = getValue(node);
 
-                for (CFGNode predecessor : node.getPredecessorsList()) {
-                    if (predecessor != null) {
-                        Set<CFGNode> predDom = getValue(predecessor);
+                for (CFGNode pred : node.getPredecessorsList()) {
+                    if (pred != null) {
+                        Set<CFGNode> predDom = getValue(pred);
                         if (predDom != null)
                             currentDom.retainAll(predDom);
                     }
@@ -196,6 +196,7 @@ public class DTree {
             src.addChild(dest);
             dest.setParent(src);
         }
+
         rootNode = getNode(0);
         TreeNode entry = new TreeNode(stopid+1);
         entry.setParent(rootNode);
@@ -210,21 +211,13 @@ public class DTree {
      * @return a new tree node or an existing tree node
      */
     private TreeNode getNode(final CFGNode cfgNode) {
-        TreeNode node = new TreeNode(cfgNode.getId());
-        if (nodes.contains(node)) {
-            for (TreeNode n : nodes) {
-                if (n.equals(node))
-                    return n;
-            }
-        }
-        node.setStmt(cfgNode.getStmt());
-        node.setExpr(cfgNode.getExpr());
-        node.setKind(cfgNode.getKind());
-        node.setDefVariable(cfgNode.getDefVariables());
-        node.setUseVariables(cfgNode.getUseVariables());
-        nodes.add(node);
+        TreeNode node = getNode(cfgNode.getId());
+        if (node != null)
+            return node;
 
-        return node;
+        TreeNode newNode = new TreeNode(cfgNode);
+        nodes.add(newNode);
+        return newNode;
     }
 
 }
