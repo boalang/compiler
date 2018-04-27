@@ -197,21 +197,26 @@ public class PDTree {
         /* Create an edge between ipdom and corresponding node.
          * Since each node can have only one ipdom, the resulting graph will form a tree
          */
-        for (CFGNode n : ipdoms.keySet()) {
-            CFGNode ipdom = ipdoms.get(n);
+        try {
+            for (CFGNode n : ipdoms.keySet()) {
+                CFGNode ipdom = ipdoms.get(n);
 
-            TreeNode src = getNode(ipdom);
-            TreeNode dest = getNode(n);
+                TreeNode src = getNode(ipdom);
+                TreeNode dest = getNode(n);
 
-            src.addChild(dest);
-            dest.setParent(src);
+                src.addChild(dest);
+                dest.setParent(src);
+            }
+
+            rootNode = getNode(stopid);
+            TreeNode entry = new TreeNode(stopid + 1);
+            entry.setParent(rootNode);
+            rootNode.addChild(entry);
+            nodes.add(entry);
         }
-
-        rootNode = getNode(stopid);
-        TreeNode entry = new TreeNode(stopid + 1);
-        entry.setParent(rootNode);
-        rootNode.addChild(entry);
-        nodes.add(entry);
+        catch (Exception e) {
+            System.out.println(BoaAstIntrinsics.prettyprint(md));
+        }
     }
 
     /**
