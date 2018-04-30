@@ -18,7 +18,6 @@
 package boa.datagen;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
@@ -41,48 +40,9 @@ public class MapFileGen {
 		}
 		Configuration conf = new Configuration();
 		FileSystem fs = FileSystem.get(conf);
-		Path path = new Path(SEQ_FILE_PATH);
-		String name = path.getName();
-		if (fs.isFile(path)) {
-			if (path.getName().equals(MapFile.DATA_FILE_NAME)) {
-				MapFile.fix(fs, path.getParent(), LongWritable.class, BytesWritable.class, false, conf);
-			}
-			else {
-				Path dataFile = new Path(path.getParent(), MapFile.DATA_FILE_NAME);
-				fs.rename(path, dataFile);
-				Path dir = new Path(path.getParent(), name);
-				fs.mkdirs(dir);
-				fs.rename(dataFile, new Path(dir, dataFile.getName()));
-				MapFile.fix(fs, dir, LongWritable.class, BytesWritable.class, false, conf);
-			}
-		}
-		else {
-			FileStatus[] files = fs.listStatus(path);
-			for (FileStatus file : files) {
-				path = file.getPath();
-				if (fs.isFile(path) && path.getName().equals("ast.seq")) {
-					Path dataCrc = new Path(file.getPath().getParent(), "." + MapFile.DATA_FILE_NAME + ".crc");
-					Path indexCrc = new Path(file.getPath().getParent(), "." + MapFile.INDEX_FILE_NAME + ".crc");
-					while (fs.exists(dataCrc))
-						fs.delete(dataCrc, false);
-					while (fs.exists(indexCrc))
-						fs.delete(indexCrc, false);
-					Path dataFile = new Path(path.getParent(), MapFile.DATA_FILE_NAME);
-					Path indexFile = new Path(path.getParent(), MapFile.INDEX_FILE_NAME);
-					while (fs.exists(dataFile))
-						fs.delete(dataFile, false);
-					while (fs.exists(indexFile))
-						fs.delete(indexFile, false);
-					fs.rename(path, dataFile);
-					System.out.println("fixing data file");
-					MapFile.fix(fs, dataFile.getParent(), LongWritable.class, BytesWritable.class, false, conf);
-					while (fs.exists(dataCrc))
-						fs.delete(dataCrc, false);
-					while (fs.exists(indexCrc))
-						fs.delete(indexCrc, false);
-					break;
-				}
-			}
+		for (String name : new String[]{"ast", "commit"}) {
+			Path dataFile = new Path(SEQ_FILE_PATH + "/" + name + "/" + MapFile.DATA_FILE_NAME);
+			MapFile.fix(fs, dataFile.getParent(), LongWritable.class, BytesWritable.class, false, conf);
 		}
 		fs.close();
 	}

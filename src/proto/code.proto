@@ -47,6 +47,8 @@ message CodeRepository {
 	required int32 head = 8;
 	/** @exclude The snapshot at the head commit */
 	repeated ChangedFile head_snapshot = 9;
+	/** Keys of the revisions stored in the commit sequence file */
+	repeated int64 revision_keys = 10;
 }
 
 /** A single revision inside a CodeRepository */

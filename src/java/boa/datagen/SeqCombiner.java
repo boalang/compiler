@@ -48,21 +48,22 @@ public class SeqCombiner {
 		FileSystem fileSystem = FileSystem.get(conf);
 		String base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 
-		SequenceFile.Writer projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base+ "/projects.seq"), Text.class, BytesWritable.class);
-		SequenceFile.Writer astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base+ "/ast.seq"), LongWritable.class, BytesWritable.class);
+		SequenceFile.Writer projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/projects.seq"), Text.class, BytesWritable.class);
+		SequenceFile.Writer astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/ast/data"), LongWritable.class, BytesWritable.class);
+		SequenceFile.Writer commitWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/commit/data"), LongWritable.class, BytesWritable.class);
 		
-		FileStatus[] files = fileSystem.listStatus(new Path(base), new PathFilter() {
+		FileStatus[] files = fileSystem.listStatus(new Path(base + "/project"), new PathFilter() {
 			
 			@Override
 			public boolean accept(Path path) {
 				String name = path.getName();
-				return name.startsWith("projects-") && name.endsWith(".seq") && name.substring("projects-".length()).contains("-");
+				return name.endsWith(".seq") && name.contains("-");
 			}
 		});
 		for (int i = 0; i < files.length; i++) {
 			FileStatus file = files[i];
 			String name = file.getPath().getName();
-			long len = astWriter.getLength();
+			long astWriterLen = astWriter.getLength(), commitWriterLen = commitWriter.getLength();
 			System.out.println("Reading file " + (i+1) + " in " + files.length + ": " + name);
 			SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, file.getPath(), conf);
 			Text textKey = new Text();
@@ -72,12 +73,18 @@ public class SeqCombiner {
 					Project p = Project.parseFrom(CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
 					Project.Builder pb = Project.newBuilder(p);
 					for (CodeRepository.Builder crb : pb.getCodeRepositoriesBuilderList()) {
-						for (Revision.Builder rb : crb.getRevisionsBuilderList()) {
-							for (ChangedFile.Builder cfb : rb.getFilesBuilderList()) {
-								cfb.setKey(len + cfb.getKey());
-								long mappedKey = cfb.getMappedKey();
-								if (mappedKey != -1)
-									cfb.setMappedKey(len + mappedKey);
+						if (crb.getRevisionsCount() > 0) {
+							for (Revision.Builder rb : crb.getRevisionsBuilderList()) {
+								for (ChangedFile.Builder cfb : rb.getFilesBuilderList()) {
+									cfb.setKey(astWriterLen + cfb.getKey());
+									long mappedKey = cfb.getMappedKey();
+									if (mappedKey != -1)
+										cfb.setMappedKey(astWriterLen + mappedKey);
+								}
+							}
+						} else {
+							for (int j = 0; j < crb.getRevisionKeysCount(); j++) {
+								crb.setRevisionKeys(j, commitWriterLen + crb.getRevisionKeys(j));
 							}
 						}
 					}
@@ -89,24 +96,33 @@ public class SeqCombiner {
 			} finally {
 				r.close();
 			}
-			r = new SequenceFile.Reader(fileSystem, new Path(file.getPath().getParent(), "ast-" + name.substring("projects-".length())), conf);
-			LongWritable longKey = new LongWritable();
-			value = new BytesWritable();
-			try {
-				while (r.next(longKey, value)) {
-					astWriter.append(new LongWritable(longKey.get() + len), value);
-				}
-			} catch (Exception e) {
-				System.err.println(name);
-				e.printStackTrace();
-			} finally {
-				r.close();
-			} 
+			readAndAppend(conf, fileSystem, astWriter, base + "/ast/" + name, astWriterLen);
+			readAndAppend(conf, fileSystem, commitWriter, base + "/commit/" + name, commitWriterLen);
 		}
 		projectWriter.close();
 		astWriter.close();
+		commitWriter.close();
 		
 		fileSystem.close();
+	}
+
+	public static void readAndAppend(Configuration conf, FileSystem fileSystem, SequenceFile.Writer astWriter,
+			String fileName, long len) throws IOException {
+		SequenceFile.Reader r;
+		BytesWritable value;
+		r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
+		LongWritable longKey = new LongWritable();
+		value = new BytesWritable();
+		try {
+			while (r.next(longKey, value)) {
+				astWriter.append(new LongWritable(longKey.get() + len), value);
+			}
+		} catch (Exception e) {
+			System.err.println(fileName);
+			e.printStackTrace();
+		} finally {
+			r.close();
+		}
 	}
 
 }

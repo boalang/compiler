@@ -93,13 +93,11 @@ public class SeqRepoImporter {
 	}
 	
 	private static void getProcessedProjects() throws IOException {
-
-		FileStatus[] files = fileSystem.listStatus(new Path(base));
+		FileStatus[] files = fileSystem.listStatus(new Path(base + "/project"));
 		for (int i = 0; i < files.length; i++) {
 			FileStatus file = files[i];
-			String prefix = "projects-";
 			String name = file.getPath().getName();
-			if (name.startsWith(prefix)) {
+			if (name.endsWith(".seq")) {
 				SequenceFile.Reader r = null;
 				try {
 					r = new SequenceFile.Reader(fileSystem, file.getPath(), conf);
@@ -111,11 +109,8 @@ public class SeqRepoImporter {
 				} catch (IOException e) {
 					if (r != null)
 						r.close();
-//					printError(e, "EOF Exception in " + file.getPath().getName());
-					String suffix = name.substring(prefix.length());
-					for (int j = 0; j < files.length; j++)
-						if (files[j].getPath().getName().endsWith(suffix))
-							fileSystem.delete(files[j].getPath(), false);
+					for (String dir : new String[]{"ast", "commit", "source"})
+						fileSystem.delete(new Path(base + "/" + dir + "/" + name), false);
 				}
 			}
 		}
@@ -155,7 +150,8 @@ public class SeqRepoImporter {
 		private int id;
 		private int counter = 0;
 		private String suffix;
-		private SequenceFile.Writer projectWriter, astWriter, contentWriter;
+		private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
+		private long commitWriterLen = 0;
 
 		public ImportTask(int id) throws IOException {
 			this.id = id;
@@ -163,14 +159,16 @@ public class SeqRepoImporter {
 
 		public void openWriters() {
 			long time = System.currentTimeMillis();
-			suffix = "-" + id + "-" + time + ".seq";
+			suffix = id + "-" + time + ".seq";
 			while (true) {
 				try {
-					projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/projects" + suffix),
+					projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/project/" + suffix),
 							Text.class, BytesWritable.class);
-					astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/ast" + suffix),
+					astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/ast/" + suffix),
 							LongWritable.class, BytesWritable.class);
-					contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/source" + suffix),
+					commitWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/commit/" + suffix),
+							LongWritable.class, BytesWritable.class);
+					contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/source/" + suffix),
 							LongWritable.class, BytesWritable.class);
 					break;
 				} catch (Throwable t) {
@@ -188,6 +186,7 @@ public class SeqRepoImporter {
 				try {
 					projectWriter.close();
 					astWriter.close();
+					commitWriter.close();
 					contentWriter.close();
 					try {
 						Thread.sleep(1000);
@@ -238,10 +237,24 @@ public class SeqRepoImporter {
 						System.out.println("Putting in sequence file: " + project.getId());
 
 					// store the project metadata
-					try {
-						projectWriter.append(new Text(project.getId()), new BytesWritable(project.toByteArray()));
-					} catch (IOException e) {
-						e.printStackTrace();
+					BytesWritable bw = new BytesWritable(project.toByteArray());
+					if (bw.getLength() < Integer.MAX_VALUE / 3) {
+						try {
+							projectWriter.append(new Text(project.getId()), bw);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					} else {
+						Project.Builder pb = Project.newBuilder(project);
+						for (CodeRepository.Builder cb : pb.getCodeRepositoriesBuilderList()) {
+							for (Revision.Builder rb : cb.getRevisionsBuilderList()) {
+								cb.addRevisionKeys(commitWriterLen);
+								bw = new BytesWritable(rb.build().toByteArray());
+								commitWriter.append(new LongWritable(commitWriterLen), bw);
+								commitWriterLen += bw.getLength();
+							}
+							cb.clearRevisions();
+						}
 					}
 					counter++;
 					if (counter >= Integer.parseInt(DefaultProperties.MAX_PROJECTS)) {
@@ -282,8 +295,6 @@ public class SeqRepoImporter {
 				conn = new GitConnector(gitDir.getAbsolutePath());
 				final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
 				for (final Revision rev : conn.getCommits(true, astWriter, contentWriter)) {
-					// if (debug) System.out.println("Storing '" + name + "'
-					// revision: " + rev.getId());
 					// build new rev w/ no namespaces
 					final Revision.Builder revBuilder = Revision.newBuilder(rev);
 					repoBuilder.addRevisions(revBuilder);
