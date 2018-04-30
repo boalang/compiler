@@ -16,6 +16,7 @@
  */
 package boa.graphs.pdg;
 
+import boa.functions.BoaAstIntrinsics;
 import boa.graphs.cdg.CDG;
 import boa.graphs.cdg.CDGEdge;
 import boa.graphs.cdg.CDGNode;
@@ -25,7 +26,10 @@ import boa.graphs.ddg.DDGNode;
 import boa.types.Ast.*;
 import boa.types.Control;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Program Dependence Graph builder
@@ -118,16 +122,20 @@ public class PDG {
      * @param ddg data dependency graph
      */
     private void addDDGEdges(final DDG ddg) {
-        for (DDGNode s: ddg.getDefUseChain().keySet()) {
-            PDGNode src = getNode(s.getId());
-            for (DDGNode d: ddg.getUseNodes(s)) {
-                PDGNode dest = getNode(d.getId());
-                src.addSuccessor(dest);
-                dest.addPredecessor(src);
-                PDGEdge e = new PDGEdge(src, dest, s.getDefVariable(), Control.PDGEdge.PDGEdgeType.DATA);
-                src.addOutEdge(e);
-                dest.addInEdge(e);
+        try {
+            for (Map.Entry<DDGNode, Set<DDGNode>> entry : ddg.getDefUseChain().entrySet()) {
+                PDGNode src = getNode(entry.getKey().getId());
+                for (DDGNode d : entry.getValue()) {
+                    PDGNode dest = getNode(d.getId());
+                    src.addSuccessor(dest);
+                    dest.addPredecessor(src);
+                    PDGEdge e = new PDGEdge(src, dest, entry.getKey().getDefVariable(), Control.PDGEdge.PDGEdgeType.DATA);
+                    src.addOutEdge(e);
+                    dest.addInEdge(e);
+                }
             }
+        } catch (Exception e) {
+            System.out.println(BoaAstIntrinsics.prettyprint(md));
         }
     }
 
