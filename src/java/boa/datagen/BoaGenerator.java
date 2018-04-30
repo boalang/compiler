@@ -64,11 +64,11 @@ public class BoaGenerator {
 			}
 
 			SeqCombiner.main(args);
-			try {
-				MapFileGen.main(args);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+//			try {
+//				MapFileGen.main(args);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
 		} else { // when user provides local repo and does not have json files
 			File output = new File(DefaultProperties.OUTPUT);
 			if (!output.exists())
