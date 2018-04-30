@@ -26,6 +26,7 @@ import org.apache.hadoop.fs.PathFilter;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
+import org.apache.hadoop.io.SequenceFile.CompressionType;
 import org.apache.hadoop.io.Text;
 
 import com.google.protobuf.CodedInputStream;
@@ -48,9 +49,9 @@ public class SeqCombiner {
 		FileSystem fileSystem = FileSystem.get(conf);
 		String base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 
-		SequenceFile.Writer projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/projects.seq"), Text.class, BytesWritable.class);
-		SequenceFile.Writer astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/ast/data"), LongWritable.class, BytesWritable.class);
-		SequenceFile.Writer commitWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/commit/data"), LongWritable.class, BytesWritable.class);
+		SequenceFile.Writer projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/projects.seq"), Text.class, BytesWritable.class, CompressionType.NONE);
+		SequenceFile.Writer astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/ast/data"), LongWritable.class, BytesWritable.class, CompressionType.NONE);
+		SequenceFile.Writer commitWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/commit/data"), LongWritable.class, BytesWritable.class, CompressionType.NONE);
 		
 		FileStatus[] files = fileSystem.listStatus(new Path(base + "/project"), new PathFilter() {
 			
