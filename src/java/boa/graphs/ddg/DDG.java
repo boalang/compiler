@@ -37,10 +37,10 @@ public class DDG {
     private DDGNode entryNode;
     private HashSet<DDGNode> nodes = new HashSet<DDGNode>();
     private HashMap<DDGNode, Set<DDGNode>> defUseChain = new HashMap<DDGNode, Set<DDGNode>>();
-    private HashMap<DDGNode, Set<DDGNode>> useDefChain; //TODO: needs reaching-def analysis
+    //private HashMap<DDGNode, Set<DDGNode>> useDefChain; //TODO: needs reaching-def analysis
 
     public DDG(final CFG cfg) throws Exception {
-        this.md = md;
+        this.md = cfg.md;
         if (cfg.getNodes().size() > 0) {
             Map<Integer, InOut> liveVars = getLiveVariables(cfg);
             formDefUseChains(liveVars, cfg);
@@ -146,11 +146,11 @@ public class DDG {
             @Override
             public void traverse(final CFGNode node, boolean flag) throws Exception {
                 if(flag) {
-                    currentResult = preTraverse(node); // remove new InOut()
+                    currentResult = preTraverse(node);
                     outputMapObj.put(node.getId(), new InOut(currentResult));
                 }
                 else
-                    outputMapObj.put(node.getId(), preTraverse(node)); // remove new InOut()
+                    outputMapObj.put(node.getId(), preTraverse(node));
             }
         };
 
@@ -175,17 +175,17 @@ public class DDG {
     }
 
     /**
-     * Constructs def-use chains for data flow between variables
+     * Constructs def-use chains to establish data flow between nodes
      *
      * @param liveVar map of nodes and their in and out variables
      */
     private void formDefUseChains(final Map<Integer, InOut> liveVar, CFG cfg) {
         //match def variable of the node with the out variable. If the match occurs form a def-use mapping
-        for (Integer nid: liveVar.keySet()) {
-            CFGNode n = cfg.getNode(nid);
+        for (Map.Entry<Integer, InOut> entry: liveVar.entrySet()) {
+            CFGNode n = cfg.getNode(entry.getKey());
             DDGNode defNode = getNode(n);
-            if (nid != 0) {
-                for (Pair p : liveVar.get(nid).out) {
+            if (entry.getKey() != 0) {
+                for (Pair p : entry.getValue().out) {
                     if (!n.getDefVariables().equals("")) {
                         if (n.getDefVariables().equals(p.var)) {
                             DDGNode useNode = getNode(p.node);
@@ -211,6 +211,7 @@ public class DDG {
      * @param nodeids set of all node ids of the graph
      */
     private void constructDDG(Set<Integer> nodeids) {
+        // all nodes without parents are connected to entryNode
         entryNode = getNode(0);
         for (int i: nodeids) {
             if (i != 0) {
@@ -287,8 +288,7 @@ public class DDG {
 
             Pair pair = (Pair) o;
 
-            if (!var.equals(pair.var)) return false;
-            return node.getId() == pair.node.getId();
+            return var.equals(pair.var) && node.getId() == pair.node.getId();
         }
 
         @Override

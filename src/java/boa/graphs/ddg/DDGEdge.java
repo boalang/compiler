@@ -98,9 +98,7 @@ public class DDGEdge {
 
         DDGEdge ddgEdge = (DDGEdge) o;
 
-        if (!src.equals(ddgEdge.src)) return false;
-        if (!dest.equals(ddgEdge.dest)) return false;
-        return label.equals(ddgEdge.label);
+        return src.equals(ddgEdge.src) && dest.equals(ddgEdge.dest) && label.equals(ddgEdge.label);
     }
 
     @Override

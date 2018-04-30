@@ -72,7 +72,7 @@ public class CFGEdge {
 	public void setSrc(final CFGNode node) {
 		if (this.dest.getInNodes().contains(node)) {
 			delete();
-			final CFGEdge e = (CFGEdge)this.dest.getInEdge(node);
+			final CFGEdge e = (CFGEdge)this.dest.getInEdge(node); //FIXME: redundant cast
 			e.setLabel(".");
 		} else {
 			this.src = node;
@@ -87,7 +87,7 @@ public class CFGEdge {
 	public void setDest(final CFGNode node) {
 		if (this.src.getOutNodes().contains(node)) {
 			delete();
-			final CFGEdge e = (CFGEdge)this.src.getOutEdge(node);
+			final CFGEdge e = (CFGEdge)this.src.getOutEdge(node); //FIXME: redundant cast
 			e.setLabel(".");
 		} else {
 			this.dest = node;

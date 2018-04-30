@@ -16,7 +16,6 @@
  */
 package boa.graphs.slicers;
 
-import boa.compiler.ast.statements.Statement;
 import boa.graphs.cfg.CFG;
 import boa.graphs.cfg.CFGEdge;
 import boa.graphs.cfg.CFGNode;
@@ -75,7 +74,7 @@ public class CFGSlicer {
             getSlice(cfg, entrynodes);
     }
     // Getter
-    private ArrayList<CFGNode> getSlice() {
+    public ArrayList<CFGNode> getSlice() {
         return slice;
     }
 

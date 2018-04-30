@@ -26,7 +26,6 @@ import boa.types.Ast.*;
 import boa.types.Control;
 
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Program Dependence Graph builder

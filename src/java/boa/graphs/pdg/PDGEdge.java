@@ -114,10 +114,8 @@ public class PDGEdge {
 
         PDGEdge pdgEdge = (PDGEdge) o;
 
-        if (!src.equals(pdgEdge.src)) return false;
-        if (!dest.equals(pdgEdge.dest)) return false;
-        if (!label.equals(pdgEdge.label)) return false;
-        return kind == pdgEdge.kind;
+        return src.equals(pdgEdge.src) && dest.equals(pdgEdge.dest) &&
+                label.equals(pdgEdge.label) && kind == pdgEdge.kind;
     }
 
     @Override

@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Map;
 
+import boa.functions.BoaAstIntrinsics;
 import boa.types.Ast.Method;
 import boa.graphs.cfg.CFG;
 import boa.graphs.cfg.CFGNode;
@@ -38,7 +39,7 @@ public class DTree {
 
     private Method md;
     private TreeNode rootNode;
-    private HashSet<TreeNode> nodes = new HashSet<TreeNode>();;
+    private HashSet<TreeNode> nodes = new HashSet<TreeNode>();
 
     public DTree(final CFG cfg) throws Exception {
         this.md = cfg.md;
@@ -69,7 +70,33 @@ public class DTree {
     }
 
     /**
-     * Gives back the tree node if the id exists, null otherwise
+     * Returns the immediate dominator of the given node
+     *
+     * @param node whose immediate dominator is requested
+     * @return parent TreeNode
+     */
+    public TreeNode getImmediateDominator(TreeNode node) {
+        for (TreeNode n: nodes)
+            if (n.equals(node))
+                return n.getParent();
+        return null;
+    }
+
+    /**
+     * Returns the immediate dominator for the given node id
+     *
+     * @param nodeid of the node whose immediate dominator is requested
+     * @return parent TreeNode
+     */
+    public TreeNode getImmediateDominator(int nodeid) {
+        for (TreeNode n: nodes)
+            if (n.getId() == nodeid)
+                return n.getParent();
+        return null;
+    }
+
+    /**
+     * Gives back the node for the given node id, otherwise returns null
      *
      * @param id node id
      * @return tree node
@@ -157,10 +184,10 @@ public class DTree {
          * node. Each node should have atmost one i-dom (first node has no immediate dominator)
          */
         Map<CFGNode, CFGNode> idom = new HashMap<CFGNode, CFGNode>();
-        for (Integer nid : dom.keySet()) {
-            for (CFGNode pd1 : dom.get(nid)) {
+        for (Map.Entry<Integer, Set<CFGNode>> entry : dom.entrySet()) {
+            for (CFGNode pd1 : entry.getValue()) {
                 boolean isIPDom = true;
-                for (CFGNode pd2 : dom.get(nid)) {
+                for (CFGNode pd2 : entry.getValue()) {
                     if (!pd1.equals(pd2))
                         if ((dom.get(pd2.getId())).contains(pd1)) {
                             isIPDom = false;
@@ -168,7 +195,7 @@ public class DTree {
                         }
                 }
                 if (isIPDom) {
-                    idom.put(cfg.getNode(nid), pd1);
+                    idom.put(cfg.getNode(entry.getKey()), pd1);
                     break;
                 }
             }
@@ -187,21 +214,25 @@ public class DTree {
         /* Create an edge between idom and corresponding node.
          * Since each node can have only one idom, the resulting graph will form a tree
          */
-        for (CFGNode n : idoms.keySet()) {
-            CFGNode idom = idoms.get(n);
+        try {
+            for (Map.Entry<CFGNode, CFGNode> entry : idoms.entrySet()) {
+                CFGNode idom = entry.getValue();
 
-            TreeNode src = getNode(idom);
-            TreeNode dest = getNode(n);
+                TreeNode src = getNode(idom);
+                TreeNode dest = getNode(entry.getKey());
 
-            src.addChild(dest);
-            dest.setParent(src);
+                src.addChild(dest);
+                dest.setParent(src);
+            }
+
+            rootNode = getNode(0);
+            TreeNode entry = new TreeNode(stopid + 1);
+            entry.setParent(rootNode);
+            rootNode.addChild(entry);
+            nodes.add(entry);
+        } catch (Exception e) {
+            System.out.println(BoaAstIntrinsics.prettyprint(md));
         }
-
-        rootNode = getNode(0);
-        TreeNode entry = new TreeNode(stopid+1);
-        entry.setParent(rootNode);
-        rootNode.addChild(entry);
-        nodes.add(entry);
     }
 
     /**

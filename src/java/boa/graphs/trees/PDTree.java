@@ -39,7 +39,7 @@ public class PDTree {
 
     private Method md;
     private TreeNode rootNode;
-    private HashSet<TreeNode> nodes = new HashSet<TreeNode>();;
+    private HashSet<TreeNode> nodes = new HashSet<TreeNode>();
 
     public PDTree(final CFG cfg) throws Exception {
         this.md = cfg.md;
@@ -72,7 +72,33 @@ public class PDTree {
     }
 
     /**
-     * Gives back the tree node if the id exists, null otherwise
+     * Returns the immediate post-dominator of the given node
+     *
+     * @param node whose immediate post-dominator is requested
+     * @return parent TreeNode
+     */
+    public TreeNode getImmediatePostDominator(TreeNode node) {
+        for (TreeNode n: nodes)
+            if (n.equals(node))
+                return n.getParent();
+        return null;
+    }
+
+    /**
+     * Returns the immediate post-dominator for the given node id
+     *
+     * @param nodeid of the node whose immediate post-dominator is requested
+     * @return parent TreeNode
+     */
+    public TreeNode getImmediatePostDominator(int nodeid) {
+        for (TreeNode n: nodes)
+            if (n.getId() == nodeid)
+                return n.getParent();
+        return null;
+    }
+
+    /**
+     * Gives back the node for the given node id, otherwise returns null
      *
      * @param id node id
      * @return tree nodes
@@ -149,7 +175,7 @@ public class PDTree {
         // remove self node id from each p-dom set because no node can post-dominate itself
         for (int nid: (Set<Integer>) pdom.outputMapObj.keySet()) {
             CFGNode node = cfg.getNode(nid);
-            ((Map<Integer, Set<Integer>>)pdom.outputMapObj).get(nid).remove(node);
+            ((Map<Integer, Set<CFGNode>>)pdom.outputMapObj).get(nid).remove(node);
         }
 
         return pdom.outputMapObj;
@@ -167,10 +193,10 @@ public class PDTree {
          * node. Each node should have atmost one ip-dom (last node has no immediate post dominator)
          */
         Map<CFGNode, CFGNode> ipdom = new HashMap<CFGNode, CFGNode>();
-        for (Integer nid : pdom.keySet()) {
-            for (CFGNode pd1 : pdom.get(nid)) {
+        for (Map.Entry<Integer, Set<CFGNode>> entry : pdom.entrySet()) {
+            for (CFGNode pd1 : entry.getValue()) {
                 boolean isIPDom = true;
-                for (CFGNode pd2 : pdom.get(nid)) {
+                for (CFGNode pd2 : entry.getValue()) {
                     if (pd1.getId() != pd2.getId())
                         if ((pdom.get(pd2.getId())).contains(pd1)) {
                             isIPDom = false;
@@ -178,7 +204,7 @@ public class PDTree {
                         }
                 }
                 if (isIPDom) {
-                    ipdom.put(cfg.getNode(nid), pd1);
+                    ipdom.put(cfg.getNode(entry.getKey()), pd1);
                     break;
                 }
             }
@@ -198,11 +224,11 @@ public class PDTree {
          * Since each node can have only one ipdom, the resulting graph will form a tree
          */
         try {
-            for (CFGNode n : ipdoms.keySet()) {
-                CFGNode ipdom = ipdoms.get(n);
+            for (Map.Entry<CFGNode, CFGNode> entry : ipdoms.entrySet()) {
+                CFGNode ipdom = entry.getValue();
 
                 TreeNode src = getNode(ipdom);
-                TreeNode dest = getNode(n);
+                TreeNode dest = getNode(entry.getKey());
 
                 src.addChild(dest);
                 dest.setParent(src);
@@ -213,8 +239,7 @@ public class PDTree {
             entry.setParent(rootNode);
             rootNode.addChild(entry);
             nodes.add(entry);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(BoaAstIntrinsics.prettyprint(md));
         }
     }

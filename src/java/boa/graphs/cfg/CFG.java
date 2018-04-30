@@ -28,7 +28,6 @@ import boa.types.Ast.Method;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Statement.StatementKind;
-import boa.types.Ast.Type;
 import boa.types.Ast.Variable;
 import boa.types.Control.CFG.Builder;
 import boa.types.Control.CFGEdge.CFGEdgeLabel;
@@ -516,7 +515,7 @@ public class CFG {
 		if (root.getVariable() != null && !root.getVariable().equals("")) {
 			final Variable pNode = root.getVariableDecls(0); // TODO:check for
 														// multiple var_decls
-			nObjectname = pNode.getName().toString();
+			nObjectname = pNode.getName().toString(); //FIXME: Redundant toString()
 		} else if ((root.getExpressionsCount() > 0)
 				&& root.getExpressions(0).getKind() == ExpressionKind.ASSIGN) {
 			final Expression ex = root.getExpressions(0);
@@ -583,7 +582,7 @@ public class CFG {
 	private CFG traverse_super(final CFGNode cfgNode, final Expression root) {
 		final CFG graph = new CFG();
 		CFGNode aNode = null;
-		final Expression mcall = root;
+		final Expression mcall = root; //FIXME: mcall redundant
 		aNode = new CFGNode(mcall.getMethod(), CFGNodeType.METHOD, class_name,
 				"super", mcall.getExpressionsCount());
 		aNode.setAstNode(root);
@@ -662,7 +661,7 @@ public class CFG {
 		for (int i = 0; i < root.getStatementsCount(); i++) {
 			final Statement s = root.getStatements(i);
 			if (s.getKind() == StatementKind.CASE) {
-				if (breakBranch != null) {
+				if (breakBranch != null) { //FIXME: Empty IF
 					//graph.mergeABranch(breakBranch, node);
 					//graph.getOuts().remove(node);
 				}
@@ -863,7 +862,7 @@ public class CFG {
 		branch.setPid((cfgNode == null) ? "." : cfgNode.getPid()
 				+ cfgNode.getId() + ".");
 		graph.mergeSeq(branch);
-		boolean trueNotEmpty = false, falseNotEmpty = false;
+		boolean trueNotEmpty = false, falseNotEmpty = false; //FIXME: never used
 		if (root.getStatementsCount() > 0) {
 			graph.mergeABranch(traverse(branch, root.getStatements(0)), branch, "T");
 			trueNotEmpty = true;
@@ -948,10 +947,10 @@ public class CFG {
 
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("List of nodes:" + nodes.size() + "\r\n");
+		sb.append("List of nodes:" + nodes.size() + "\r\n"); //FIXME: Why concatenate, use append
 		final CFGNode[] mynodes = sortNodes();
 		for (final CFGNode node : mynodes) {
-			sb.append("node " + node.getId() + " \t " + node.getMethod()
+			sb.append("node " + node.getId() + " \t " + node.getMethod() //FIXME: Why concatenate, use append
 					+ "\r\n");
 		}
 		int numEdges = 0;
@@ -959,12 +958,12 @@ public class CFG {
 		for (final CFGNode node : mynodes) {
 			for (final CFGEdge edge : node.getOutEdges()) {
 				final CFGNode anoNode = edge.getDest();
-				sb.append("node " + node.getId() + " --> node "
+				sb.append("node " + node.getId() + " --> node "  //FIXME: Why concatenate, use append
 						+ anoNode.getId() + "\r\n");
 				numEdges++;
 			}
 		}
-		sb.append("Total " + numEdges + " edges" + "\r\n");
+		sb.append("Total " + numEdges + " edges" + "\r\n"); //FIXME: Why concatenate, use append
 		return sb.toString();
 	}
 

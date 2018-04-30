@@ -18,8 +18,6 @@ package boa.graphs.trees;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import boa.types.Ast.Statement;
 import boa.types.Ast.Expression;

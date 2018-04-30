@@ -100,9 +100,7 @@ public class CDGEdge {
 
         CDGEdge cdgEdge = (CDGEdge) o;
 
-        if (!src.equals(cdgEdge.src)) return false;
-        if (!dest.equals(cdgEdge.dest)) return false;
-        return label.equals(cdgEdge.label);
+        return src.equals(cdgEdge.src) && dest.equals(cdgEdge.dest) && label.equals(cdgEdge.label);
     }
 
     @Override

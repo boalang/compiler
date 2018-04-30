@@ -19,7 +19,6 @@ package boa.graphs.slicers;
 import boa.graphs.pdg.PDG;
 import boa.graphs.pdg.PDGNode;
 import boa.types.Ast.*;
-import org.apache.hadoop.io.nativeio.NativeIO;
 
 import java.util.*;
 

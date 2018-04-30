@@ -18,7 +18,6 @@ package boa.graphs.cdg;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Map;
 
 import boa.functions.BoaAstIntrinsics;
@@ -72,7 +71,7 @@ public class CDG {
     }
 
     /**
-     * Gives back the node for the given node id, otherwise null
+     * Gives back the node for the given node id, otherwise returns null
      *
      * @param id node id
      * @return CDGNode
@@ -86,12 +85,13 @@ public class CDG {
     }
 
     /**
-     * Builds a Control Dependence Graph using the post dominator tree and control edges
+     * Builds a Control Dependence Graph using the post dominator tree and control edges from cfg
      *
      * @param pdTree post dominator tree
      * @param cfg control flow graph
      */
     private void constructCDG(final PDTree pdTree, final CFG cfg) {
+        // store source and desination of control nodes with label
         Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
         for (CFGNode n: cfg.getNodes()) {
             if (n.getKind() == Control.CFGNode.CFGNodeType.CONTROL)
@@ -105,17 +105,17 @@ public class CDG {
         controlEdges.put(new Integer[]{cfg.getNodes().size(), 0}, "T");
 
         try {
-            for (Integer[] enodes : controlEdges.keySet()) {
-                CDGNode source = getNode(pdTree.getNode(enodes[0]));
-                TreeNode srcParent = pdTree.getNode(enodes[0]).getParent();
-                TreeNode dest = pdTree.getNode(enodes[1]);
+            for (Map.Entry<Integer[], String> entry : controlEdges.entrySet()) {
+                CDGNode source = getNode(pdTree.getNode(entry.getKey()[0]));
+                TreeNode srcParent = pdTree.getNode(entry.getKey()[0]).getParent();
+                TreeNode dest = pdTree.getNode(entry.getKey()[1]);
 
                 while (!srcParent.equals(dest)) {
                     CDGNode destination = getNode(dest);
                     source.addSuccessor(destination);
                     destination.addPredecessor(source);
 
-                    CDGEdge edge = new CDGEdge(source, destination, controlEdges.get(enodes));
+                    CDGEdge edge = new CDGEdge(source, destination, entry.getValue());
                     source.addOutEdge(edge);
                     destination.addInEdge(edge);
 
