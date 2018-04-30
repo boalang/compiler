@@ -31,6 +31,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
+import org.apache.hadoop.io.SequenceFile.CompressionType;
 import org.apache.hadoop.io.Text;
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -163,13 +164,13 @@ public class SeqRepoImporter {
 			while (true) {
 				try {
 					projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/project/" + suffix),
-							Text.class, BytesWritable.class);
+							Text.class, BytesWritable.class, CompressionType.BLOCK);
 					astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/ast/" + suffix),
-							LongWritable.class, BytesWritable.class);
+							LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
 					commitWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/commit/" + suffix),
-							LongWritable.class, BytesWritable.class);
+							LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
 					contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/source/" + suffix),
-							LongWritable.class, BytesWritable.class);
+							LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
 					break;
 				} catch (Throwable t) {
 					t.printStackTrace();

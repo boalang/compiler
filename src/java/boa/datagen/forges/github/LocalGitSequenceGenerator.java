@@ -10,6 +10,7 @@ import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.SequenceFile.CompressionType;
 
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -45,9 +46,9 @@ public class LocalGitSequenceGenerator {
 	private static void openWriters(String outputPath) {
 		while (true) {
 			try {
-				projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(outputPath + "/projects.seq"), Text.class, BytesWritable.class);
-				astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(outputPath + "/ast.seq"), LongWritable.class, BytesWritable.class);
-				contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(outputPath + "/sources.seq"), LongWritable.class, BytesWritable.class);
+				projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(outputPath + "/projects.seq"), Text.class, BytesWritable.class, CompressionType.BLOCK);
+				astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(outputPath + "/ast.seq"), LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
+				contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(outputPath + "/sources.seq"), LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
 				break;
 			} catch (Throwable t) {
 				t.printStackTrace();

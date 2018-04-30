@@ -56,16 +56,16 @@ public class BoaGenerator {
 		 */
 
 		if (jsonAvailable) {
-			CacheGithubJSON.main(args);
+			CacheGithubJSON.main(new String[0]);
 			try {
-				SeqRepoImporter.main(args);
+				SeqRepoImporter.main(new String[0]);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 
-			SeqCombiner.main(args);
+			SeqCombiner.main(new String[0]);
 //			try {
-//				MapFileGen.main(args);
+//				MapFileGen.main(new String[0]);
 //			} catch (Exception e) {
 //				e.printStackTrace();
 //			}
@@ -75,7 +75,7 @@ public class BoaGenerator {
 				output.mkdirs();
 			LocalGitSequenceGenerator.localGitSequenceGenerate(DefaultProperties.GH_GIT_PATH, DefaultProperties.OUTPUT);
 			try {
-				MapFileGen.main(args);
+				MapFileGen.main(new String[0]);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

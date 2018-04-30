@@ -29,6 +29,11 @@ import org.apache.hadoop.io.MapFile;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.compress.BZip2Codec;
+import org.apache.hadoop.io.compress.CompressionCodec;
+import org.apache.hadoop.io.compress.DefaultCodec;
+import org.apache.hadoop.io.compress.GzipCodec;
+import org.apache.hadoop.io.compress.SnappyCodec;
 
 import com.google.protobuf.CodedInputStream;
 
@@ -45,14 +50,30 @@ import boa.types.Toplevel.Project;
 public class SeqCombiner {
 
 	public static void main(String[] args) throws IOException {
+		CompressionType compressionType = CompressionType.BLOCK;
+		CompressionCodec compressionCode = new DefaultCodec();
 		Configuration conf = new Configuration();
 //		conf.set("fs.default.name", "hdfs://boa-njt/");
 		FileSystem fileSystem = FileSystem.get(conf);
 		String base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
-
-		SequenceFile.Writer projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/projects.seq"), Text.class, BytesWritable.class, CompressionType.NONE);
-		MapFile.Writer astWriter = new MapFile.Writer(conf, fileSystem, base + "/ast", LongWritable.class, BytesWritable.class, CompressionType.NONE);
-		MapFile.Writer commitWriter = new MapFile.Writer(conf, fileSystem, base + "/commit", LongWritable.class, BytesWritable.class, CompressionType.NONE);
+		
+		if (args.length > 0) {
+			base = args[0];
+		}
+		if (args.length > 1) {
+			if (args[1].toLowerCase().equals("d"))
+				compressionCode = new DefaultCodec();
+			else if (args[1].toLowerCase().equals("g"))
+				compressionCode = new GzipCodec();
+			else if (args[1].toLowerCase().equals("b"))
+				compressionCode = new BZip2Codec();
+			else if (args[1].toLowerCase().equals("s"))
+				compressionCode = new SnappyCodec();
+		}
+		
+		SequenceFile.Writer projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/projects.seq"), Text.class, BytesWritable.class, compressionType, compressionCode);
+		MapFile.Writer astWriter = new MapFile.Writer(conf, fileSystem, base + "/ast", LongWritable.class, BytesWritable.class, compressionType, compressionCode, null);
+		MapFile.Writer commitWriter = new MapFile.Writer(conf, fileSystem, base + "/commit", LongWritable.class, BytesWritable.class, compressionType, compressionCode, null);
 		
 		FileStatus[] files = fileSystem.listStatus(new Path(base + "/project"), new PathFilter() {
 			
