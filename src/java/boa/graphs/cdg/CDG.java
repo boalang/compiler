@@ -54,7 +54,7 @@ public class CDG {
     }
 
     public CDG(final Method method) throws Exception {
-        this(new CFG(method, false));
+        this(new CFG(method));
     }
 
     // Getters

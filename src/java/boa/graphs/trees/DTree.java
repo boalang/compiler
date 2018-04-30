@@ -55,7 +55,7 @@ public class DTree {
     }
 
     public DTree(final Method method) throws Exception {
-        this(new CFG(method, false));
+        this(new CFG(method));
     }
 
     // Getters

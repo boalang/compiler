@@ -48,12 +48,12 @@ public class DDG {
         }
     }
 
-    public DDG(final Method m, boolean paramAsStatement) throws Exception {
-        this(new CFG(m, paramAsStatement));
+    public DDG(final Method method, boolean paramAsStatement) throws Exception {
+        this(new CFG(method, paramAsStatement));
     }
 
-    public DDG(final Method m) throws Exception {
-        this(new CFG(m, false));
+    public DDG(final Method method) throws Exception {
+        this(new CFG(method));
     }
 
     // Getters

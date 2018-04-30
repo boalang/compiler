@@ -56,12 +56,12 @@ public class PDG {
         this(new CDG(cfg), new DDG(cfg));
     }
 
-    public PDG(final Method m, boolean paramAsStatement) throws Exception {
-        this(new CFG(m, paramAsStatement));
+    public PDG(final Method method, boolean paramAsStatement) throws Exception {
+        this(new CFG(method, paramAsStatement));
     }
 
-    public PDG(final Method m) throws Exception {
-        this(new CFG(m, false));
+    public PDG(final Method method) throws Exception {
+        this(new CFG(method));
     }
 
     // Getters
