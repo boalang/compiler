@@ -16,6 +16,7 @@
  */
 package boa.graphs.slicers;
 
+import boa.functions.BoaAstIntrinsics;
 import boa.graphs.pdg.PDG;
 import boa.graphs.pdg.PDGEdge;
 import boa.graphs.pdg.PDGNode;
@@ -33,6 +34,7 @@ import static boa.functions.BoaAstIntrinsics.prettyprint;
 
 public class PDGSlicer {
 
+    private Method md;
     public ArrayList<PDGNode> entrynodes = new ArrayList<PDGNode>();
     private HashSet<PDGNode> slice = new HashSet<PDGNode>();
     private boolean normalize = false;
@@ -40,6 +42,7 @@ public class PDGSlicer {
 
     // Constructors
     public PDGSlicer(Method method, PDGNode n) throws Exception {
+        this.md = method;
         if (n != null) {
             entrynodes.add(n);
             getSlice(new PDG(method, true));
@@ -48,12 +51,14 @@ public class PDGSlicer {
     }
 
     public PDGSlicer(Method method, PDGNode[] n) throws Exception {
+        this.md = method;
         entrynodes.addAll(Arrays.asList(n));
         getSlice(new PDG(method, true));
         Collections.sort(entrynodes, new PDGNodeComparator());
     }
 
     public PDGSlicer(Method method, int nid, boolean normalize) throws Exception {
+        this.md = method;
         this.normalize = normalize;
         PDG pdg = new PDG(method, true);
         PDGNode node = pdg.getNode(nid);
@@ -69,6 +74,7 @@ public class PDGSlicer {
     }
 
     public PDGSlicer(Method method, Integer[] nids, boolean normalize) throws Exception {
+        this.md = method;
         this.normalize = normalize;
         PDG pdg = new PDG(method, true);
         for (Integer i: nids) {
@@ -108,40 +114,44 @@ public class PDGSlicer {
         Map<String, String> normalizedVars = new HashMap<String, String>();
         StringBuilder sb = new StringBuilder();
         int varCount = 1;
-        while (nodes.size() != 0) {
-            PDGNode node = nodes.pop();
-            // store normalized name mappings of def and use variables at this node
-            // replace use and def variables in the node with their normalized names
-            if (normalize) {
-                // def variable
-                if (node.getDefVariable() != null) {
-                    if (!normalizedVars.containsKey(node.getDefVariable())) {
-                        normalizedVars.put(node.getDefVariable(), "var$" + varCount);
-                        varCount++;
-                    }
-                    node.setDefVariable(normalizedVars.get(node.getDefVariable())); //FIXME: create a clone of the node and then set
-                }
-                // use variables
-                HashSet<String> useVars = new HashSet<String>();
-                for (String dVar : node.getUseVariables()) {
-                    if (dVar != null) {
-                        if (!normalizedVars.containsKey(dVar)) {
-                            normalizedVars.put(dVar, "var$" + varCount); //FIXME: use string builder
+        try {
+            while (nodes.size() != 0) {
+                PDGNode node = nodes.pop();
+                // store normalized name mappings of def and use variables at this node
+                // replace use and def variables in the node with their normalized names
+                if (normalize) {
+                    // def variable
+                    if (node.getDefVariable() != null) {
+                        if (!normalizedVars.containsKey(node.getDefVariable())) {
+                            normalizedVars.put(node.getDefVariable(), "var$" + varCount);
                             varCount++;
                         }
-                        useVars.add(normalizedVars.get(dVar));
+                        node.setDefVariable(normalizedVars.get(node.getDefVariable())); //FIXME: create a clone of the node and then set
                     }
+                    // use variables
+                    HashSet<String> useVars = new HashSet<String>();
+                    for (String dVar : node.getUseVariables()) {
+                        if (dVar != null) {
+                            if (!normalizedVars.containsKey(dVar)) {
+                                normalizedVars.put(dVar, "var$" + varCount); //FIXME: use string builder
+                                varCount++;
+                            }
+                            useVars.add(normalizedVars.get(dVar));
+                        }
+                    }
+                    node.setUseVariables(useVars);
+                    Expression exp = normalizeExpression(node.getExpr(), normalizedVars);
+                    node.setExpr(exp); //FIXME: create a clone of the node and then set
                 }
-                node.setUseVariables(useVars);
-                Expression exp = normalizeExpression(node.getExpr(), normalizedVars);
-                node.setExpr(exp); //FIXME: create a clone of the node and then set
+                sb.append(node.getExpr());
+                slice.add(node);
+                Collections.sort(node.getSuccessors(), new PDGNodeComparator());
+                for (PDGNode succ : node.getSuccessors())
+                    if (!slice.contains(succ))
+                        nodes.push(succ);
             }
-            sb.append(node.getExpr());
-            slice.add(node);
-            Collections.sort(node.getSuccessors(), new PDGNodeComparator());
-            for (PDGNode succ: node.getSuccessors())
-                if (!slice.contains(succ))
-                    nodes.push(succ);
+        } catch (Exception e) {
+            System.out.println(prettyprint(md));
         }
 
         hashcode = sb.toString().hashCode();
