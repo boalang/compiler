@@ -91,6 +91,11 @@ public class BoaGraphIntrinsics {
 		return new PDGSlicer(method, (int)(long) id);
 	}
 
+	@FunctionSpec(name = "getpdgslice", returnType = "PDGSlicer", formalParameters = { "Method",  "int", "bool" })
+	public static PDGSlicer getpdgslice(final Method method, Long id, boolean normalize) throws Exception {
+		return new PDGSlicer(method, (int)(long) id, normalize);
+	}
+
 	@FunctionSpec(name = "get_nodes_with_definition", returnType = "set of string", formalParameters = { "CFGNode" })
 	public static HashSet<String> getNodesWithDefinition(final CFGNode node) {
 		final HashSet<String> vardef = new HashSet<String>();

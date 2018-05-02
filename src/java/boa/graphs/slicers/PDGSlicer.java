@@ -17,10 +17,13 @@
 package boa.graphs.slicers;
 
 import boa.graphs.pdg.PDG;
+import boa.graphs.pdg.PDGEdge;
 import boa.graphs.pdg.PDGNode;
 import boa.types.Ast.*;
 
 import java.util.*;
+
+import static boa.functions.BoaAstIntrinsics.prettyprint;
 
 /**
  * A forward slicer based on PDG
@@ -33,17 +36,21 @@ public class PDGSlicer {
     public ArrayList<PDGNode> entrynodes = new ArrayList<PDGNode>();
     private HashSet<PDGNode> slice = new HashSet<PDGNode>();
     private boolean normalize = false;
+    int hashcode = -1;
 
+    // Constructors
     public PDGSlicer(Method method, PDGNode n) throws Exception {
         if (n != null) {
             entrynodes.add(n);
             getSlice(new PDG(method, true));
+            Collections.sort(entrynodes, new PDGNodeComparator());
         }
     }
 
     public PDGSlicer(Method method, PDGNode[] n) throws Exception {
         entrynodes.addAll(Arrays.asList(n));
         getSlice(new PDG(method, true));
+        Collections.sort(entrynodes, new PDGNodeComparator());
     }
 
     public PDGSlicer(Method method, int nid, boolean normalize) throws Exception {
@@ -53,11 +60,12 @@ public class PDGSlicer {
         if (node != null) {
             entrynodes.add(node);
             getSlice(pdg);
+            Collections.sort(entrynodes, new PDGNodeComparator());
         }
     }
 
     public PDGSlicer(Method method, int nid) throws Exception {
-        this(method, nid, true);
+        this(method, nid, false);
     }
 
     public PDGSlicer(Method method, Integer[] nids, boolean normalize) throws Exception {
@@ -68,12 +76,14 @@ public class PDGSlicer {
             if (node != null)
                 entrynodes.add(node);
         }
-        if (entrynodes.size() > 0)
+        if (entrynodes.size() > 0) {
             getSlice(pdg);
+            Collections.sort(entrynodes, new PDGNodeComparator());
+        }
     }
 
     public PDGSlicer(Method method, Integer[] nids) throws Exception {
-        this(method, nids, true);
+        this(method, nids, false);
     }
 
     // Getters
@@ -94,15 +104,16 @@ public class PDGSlicer {
      */
     private void getSlice(PDG pdg) {
         Stack<PDGNode> nodes = new Stack<PDGNode>();
-        Map<String, String> normalizedVars = new HashMap<String, String>();
         nodes.addAll(entrynodes);
+        Map<String, String> normalizedVars = new HashMap<String, String>();
+        StringBuilder sb = new StringBuilder();
         int varCount = 1;
         while (nodes.size() != 0) {
             PDGNode node = nodes.pop();
             // store normalized name mappings of def and use variables at this node
-            // replace use and def variables with their normalized names
+            // replace use and def variables in the node with their normalized names
             if (normalize) {
-                // def variables
+                // def variable
                 if (node.getDefVariable() != null) {
                     if (!normalizedVars.containsKey(node.getDefVariable())) {
                         normalizedVars.put(node.getDefVariable(), "var$" + varCount);
@@ -125,12 +136,15 @@ public class PDGSlicer {
                 Expression exp = normalizeExpression(node.getExpr(), normalizedVars);
                 node.setExpr(exp); //FIXME: create a clone of the node and then set
             }
-
+            sb.append(node.getExpr());
             slice.add(node);
+            Collections.sort(node.getSuccessors(), new PDGNodeComparator());
             for (PDGNode succ: node.getSuccessors())
                 if (!slice.contains(succ))
                     nodes.push(succ);
         }
+
+        hashcode = sb.toString().hashCode();
     }
 
     /**
@@ -219,7 +233,8 @@ public class PDGSlicer {
         }
     }
 
-    // Copied from BoaNormalFormintrincics. put all such methods in BoaNormalFormintrinsics in a class as static factories
+    // Copied from BoaNormalFormintrincics.
+    // TODO: Put all such methods in BoaNormalFormintrinsics as static factories in a new class
     /**
      * Creates a new prefix/postfix/infix expression.
      *
@@ -250,5 +265,66 @@ public class PDGSlicer {
         exp.setVariable(var);
 
         return exp.build();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PDGSlicer pdgSlicer = (PDGSlicer) o;
+
+        Stack<PDGNode> nodes1 = new Stack<PDGNode>();
+        Stack<PDGNode> nodes2 = new Stack<PDGNode>();
+        Set<PDGNode> visited1 = new HashSet<PDGNode>();
+        Set<PDGNode> visited2 = new HashSet<PDGNode>();
+        nodes1.addAll(entrynodes);
+        nodes2.addAll(pdgSlicer.entrynodes);
+
+        while (nodes1.size() != 0) {
+            if (nodes1.size() != nodes2.size())
+                return false;
+            PDGNode node1 = nodes1.pop();
+            PDGNode node2 = nodes2.pop();
+            if (!node1.getExpr().equals(node2.getExpr())) // use string comparisons??
+                return false;
+            if (node1.getOutEdges().size() != node2.getOutEdges().size())
+                return false;
+
+            visited1.add(node1);
+            visited2.add(node2);
+            Collections.sort(node1.getSuccessors(), new PDGNodeComparator()); // bcoz Java-6
+            Collections.sort(node2.getSuccessors(), new PDGNodeComparator()); // bcoz Java-6
+
+            for (int i = 0; i < node1.getSuccessors().size(); i++) {
+                List<PDGEdge> outEdges1 = node1.getOutEdges(node1.getSuccessors().get(i));
+                List<PDGEdge> outEdges2 = node2.getOutEdges(node2.getSuccessors().get(i));
+                if (outEdges1.size() != outEdges2.size())
+                    return false;
+                for (int j = 0; j < outEdges1.size(); j++) {
+                    if (outEdges1.get(j).getKind() != outEdges2.get(j).getKind() ||
+                            !outEdges1.get(j).getLabel().equals(outEdges2.get(j).getLabel()))
+                        return false;
+                }
+
+                if (!visited1.contains(node1.getSuccessors().get(i)))
+                    nodes1.push(node1.getSuccessors().get(i));
+                if (!visited2.contains(node2.getSuccessors().get(i)))
+                    nodes2.push(node2.getSuccessors().get(i));
+            }
+
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return hashcode;
+    }
+
+    public static class PDGNodeComparator implements Comparator<PDGNode> {
+        public int compare(final PDGNode n1, final PDGNode n2) {
+            return prettyprint(n1.getExpr()).compareTo(prettyprint(n2.getExpr()));
+        }
     }
 }

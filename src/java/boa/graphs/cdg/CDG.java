@@ -91,7 +91,7 @@ public class CDG {
      * @param cfg control flow graph
      */
     private void constructCDG(final PDTree pdTree, final CFG cfg) {
-        // store source and desination of control nodes with label
+        // store source and desination of control edges with label
         Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
         for (CFGNode n: cfg.getNodes()) {
             if (n.getKind() == Control.CFGNode.CFGNodeType.CONTROL)

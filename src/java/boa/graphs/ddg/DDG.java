@@ -180,7 +180,7 @@ public class DDG {
      * @param liveVar map of nodes and their in and out variables
      */
     private void formDefUseChains(final Map<Integer, InOut> liveVar, CFG cfg) {
-        //match def variable of the node with the out variable. If the match occurs form a def-use mapping
+        // match def variable of the node with the out variable. If the match occurs form a def-use mapping
         for (Map.Entry<Integer, InOut> entry: liveVar.entrySet()) {
             CFGNode n = cfg.getNode(entry.getKey());
             DDGNode defNode = getNode(n);

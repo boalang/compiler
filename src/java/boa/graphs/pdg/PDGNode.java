@@ -150,6 +150,25 @@ public class PDGNode implements Comparable<PDGNode> {
         return outEdges;
     }
 
+    /**
+     * Returns list of out edges with control edge at the first spot. There can be at max. two edges, one control
+     * and one data
+     *
+     * @param node destination node
+     * @return list of out edges
+     */
+    public List<PDGEdge> getOutEdges(PDGNode node) {
+        List<PDGEdge> edges = new ArrayList<PDGEdge>();
+        for (PDGEdge e: outEdges) {
+            if (e.getDest().equals(node))
+                if (e.getKind() == Control.PDGEdge.PDGEdgeType.CONTROL)
+                    edges.add(0, e);
+                else
+                    edges.add(e);
+        }
+        return  edges;
+    }
+
     public List<PDGNode> getSuccessors() {
         return successors;
     }
