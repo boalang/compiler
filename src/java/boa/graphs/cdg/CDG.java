@@ -90,7 +90,7 @@ public class CDG {
      * @param pdTree post dominator tree
      * @param cfg control flow graph
      */
-    private void constructCDG(final PDTree pdTree, final CFG cfg) {
+    private void constructCDG(final PDTree pdTree, final CFG cfg) throws Exception {
         // store source and desination of control edges with label
         Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
         for (CFGNode n: cfg.getNodes()) {

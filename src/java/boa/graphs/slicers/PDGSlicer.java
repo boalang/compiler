@@ -108,7 +108,7 @@ public class PDGSlicer {
      *
      * @param pdg program dependence graph
      */
-    private void getSlice(PDG pdg) {
+    private void getSlice(PDG pdg) throws Exception {
         Stack<PDGNode> nodes = new Stack<PDGNode>();
         nodes.addAll(entrynodes);
         Map<String, String> normalizedVars = new HashMap<String, String>();

@@ -202,7 +202,7 @@ public class PDTree {
      * @param ipdoms map of nodes and their immediate post-dominators
      * @param stopid id of the stop node of the control graph
      */
-    private void buildPDomTree(final Map<CFGNode, CFGNode> ipdoms, int stopid) {
+    private void buildPDomTree(final Map<CFGNode, CFGNode> ipdoms, int stopid) throws Exception {
         /* Create an edge between ipdom and corresponding node.
          * Since each node can have only one ipdom, the resulting graph will form a tree
          */
