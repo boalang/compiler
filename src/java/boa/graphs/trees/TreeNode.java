@@ -114,8 +114,14 @@ public class TreeNode implements Comparable<TreeNode> {
         return id;
     }
 
+    public boolean hasStmt() { return this.stmt != null; }
+
     public Statement getStmt() {
         return stmt;
+    }
+
+    public boolean hasExpr() {
+        return this.expr != null;
     }
 
     public Expression getExpr() {

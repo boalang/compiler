@@ -16,10 +16,7 @@
  */
 package boa.graphs.trees;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Map;
+import java.util.*;
 
 import boa.functions.BoaAstIntrinsics;
 import boa.types.Ast.Method;
@@ -44,7 +41,7 @@ public class PDTree {
     public PDTree(final CFG cfg) throws Exception {
         this.md = cfg.md;
         if (cfg.getNodes().size() > 0) {
-            Map<Integer, Set<CFGNode>> pdom = computePostDominator(cfg);
+            Map<CFGNode, Set<CFGNode>> pdom = computePostDomonitors(cfg);
             Map<CFGNode, CFGNode> ipdom = computeImmediatePostDominator(pdom, cfg);
             buildPDomTree(ipdom, cfg.getNodes().size() - 1);
         }
@@ -118,67 +115,53 @@ public class PDTree {
      * @return map of node and corresponding set of post-dominator nodes
      * @throws Exception
      */
-    private Map<Integer, Set<CFGNode>> computePostDominator(final CFG cfg) throws Exception {
-        final Set<CFGNode> cfgnodes = cfg.getNodes();
-        final int stopid = cfgnodes.size() - 1;
-
-        final BoaAbstractTraversal pdom = new BoaAbstractTraversal<Set<CFGNode>>(true, true) {
-
-            protected Set<CFGNode> preTraverse(final CFGNode node) throws Exception {
-                Set<CFGNode> currentPDom = new HashSet<CFGNode>();
-
-                if (node.getId() != (stopid))
-                    currentPDom.addAll(cfgnodes);
-
-                if ((getValue(node) != null))
-                    currentPDom = getValue(node);
-
-                for (CFGNode successor : node.getSuccessorsList()) {
-                    if (successor != null) {
-                        Set<CFGNode> succPDom = getValue(successor);
-                        if (succPDom != null)
-                            currentPDom.retainAll(succPDom);
-                    }
-                }
-
-                currentPDom.add(node);
-
-                return currentPDom;
-            }
-
-            @Override
-            public void traverse(final CFGNode node, boolean flag) throws Exception {
-                if (flag) {
-                    currentResult = preTraverse(node);
-                    outputMapObj.put(node.getId(), currentResult);
-                } else
-                    outputMapObj.put(node.getId(), preTraverse(node));
-            }
-
-        };
-
-        BoaAbstractFixP fixp = new BoaAbstractFixP() {
-            boolean invoke1(final Set<CFGNode> current, final Set<CFGNode> previous) throws Exception {
-                Set<CFGNode> curr = new HashSet<CFGNode>(current);
-                curr.removeAll(previous);
-                return curr.size() == 0;
-            }
-
-            @Override
-            public boolean invoke(Object current, Object previous) throws Exception {
-                return invoke1((HashSet<CFGNode>) current, (HashSet<CFGNode>) previous);
-            }
-        };
-
-        pdom.traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.DFS, fixp);
-
-        // remove self node id from each p-dom set because no node can post-dominate itself
-        for (int nid: (Set<Integer>) pdom.outputMapObj.keySet()) {
-            CFGNode node = cfg.getNode(nid);
-            ((Map<Integer, Set<CFGNode>>)pdom.outputMapObj).get(nid).remove(node);
+    private Map<CFGNode, Set<CFGNode>> computePostDomonitors(final CFG cfg) throws Exception {
+        Map<CFGNode, Set<CFGNode>> pDomMap = new HashMap<CFGNode, Set<CFGNode>>();
+        int stopid = cfg.getNodes().size()-1;
+        for (CFGNode n: cfg.getNodes()) { // initialize
+            if (n.getId() == stopid)
+                pDomMap.put(n, new HashSet<CFGNode>(Collections.singletonList(n)));
+            else
+                pDomMap.put(n, cfg.getNodes());
         }
 
-        return pdom.outputMapObj;
+        boolean saturation = false;
+        while (!saturation) { // iterate untill the fix point is reached
+            Map<CFGNode, Set<CFGNode>> currentPDomMap = new HashMap<CFGNode, Set<CFGNode>>();
+            int changeCount = 0;
+            for (CFGNode n: cfg.getNodes()) {
+                Set<CFGNode> currentPDom = new HashSet<CFGNode>();
+
+                // Intersection[succ(node)]
+                boolean first = true;
+                for (CFGNode succ: n.getSuccessorsList()) {
+                    if (first) {
+                        currentPDom.addAll(pDomMap.get(succ));
+                        first = false;
+                        continue;
+                    }
+                    currentPDom.retainAll(pDomMap.get(succ));
+                }
+                // D[n] = {n} Union (Intersection[succ[node]])
+                currentPDom.add(n);
+
+                Set<CFGNode> diff = new HashSet<CFGNode>(pDomMap.get(n));
+                diff.removeAll(currentPDom);
+                if (diff.size() > 0)
+                    changeCount++;
+                currentPDomMap.put(n, currentPDom);
+            }
+            if (changeCount == 0)
+                saturation = true;
+            else
+                pDomMap = currentPDomMap;
+        }
+
+        // strict post-dominators
+        for (CFGNode n: pDomMap.keySet())
+            pDomMap.get(n).remove(n);
+
+        return pDomMap;
     }
 
     /**
@@ -187,24 +170,24 @@ public class PDTree {
      * @param pdom map of nodes and corresponding post-dominators
      * @return map of nodes and corresponding immediate post-dominator
      */
-    private Map<CFGNode, CFGNode> computeImmediatePostDominator(final Map<Integer, Set<CFGNode>> pdom, final CFG cfg) {
+    private Map<CFGNode, CFGNode> computeImmediatePostDominator(final Map<CFGNode, Set<CFGNode>> pdom, final CFG cfg) {
         // inefficient implementation: t-complexity = O(n^3)
         /* To find ipdom, we check each pdom of a node to see if it is post dominating any other
          * node. Each node should have atmost one ip-dom (last node has no immediate post dominator)
          */
         Map<CFGNode, CFGNode> ipdom = new HashMap<CFGNode, CFGNode>();
-        for (Map.Entry<Integer, Set<CFGNode>> entry : pdom.entrySet()) {
+        for (Map.Entry<CFGNode, Set<CFGNode>> entry : pdom.entrySet()) {
             for (CFGNode pd1 : entry.getValue()) {
                 boolean isIPDom = true;
                 for (CFGNode pd2 : entry.getValue()) {
                     if (pd1.getId() != pd2.getId())
-                        if ((pdom.get(pd2.getId())).contains(pd1)) {
+                        if ((pdom.get(pd2)).contains(pd1)) {
                             isIPDom = false;
                             break;
                         }
                 }
                 if (isIPDom) {
-                    ipdom.put(cfg.getNode(entry.getKey()), pd1);
+                    ipdom.put(entry.getKey(), pd1);
                     break;
                 }
             }
@@ -239,8 +222,10 @@ public class PDTree {
             entry.setParent(rootNode);
             rootNode.addChild(entry);
             nodes.add(entry);
+
         } catch (Exception e) {
             System.out.println(BoaAstIntrinsics.prettyprint(md));
+            throw e;
         }
     }
 

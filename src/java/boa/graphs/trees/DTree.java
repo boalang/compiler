@@ -16,10 +16,7 @@
  */
 package boa.graphs.trees;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Map;
+import java.util.*;
 
 import boa.functions.BoaAstIntrinsics;
 import boa.types.Ast.Method;
@@ -44,7 +41,7 @@ public class DTree {
     public DTree(final CFG cfg) throws Exception {
         this.md = cfg.md;
         if (cfg.getNodes().size() > 0) {
-            Map<Integer, Set<CFGNode>> dom = computeDominator(cfg);
+            Map<CFGNode, Set<CFGNode>> dom = computeDominators(cfg);
             Map<CFGNode, CFGNode> idom = computeImmediateDominator(dom, cfg);
             buildDomTree(idom, cfg.getNodes().size());
         }
@@ -116,60 +113,52 @@ public class DTree {
      * @return map of node and corresponding set of dominator nodes
      * @throws Exception
      */
-    private Map<Integer, Set<CFGNode>> computeDominator(final CFG cfg) throws Exception {
-        final Set<CFGNode> cfgnodes = cfg.getNodes();
+    private Map<CFGNode, Set<CFGNode>> computeDominators(final CFG cfg) throws Exception {
+        Map<CFGNode, Set<CFGNode>> pDomMap = new HashMap<CFGNode, Set<CFGNode>>();
+        for (CFGNode n: cfg.getNodes()) { // initialize
+            if (n.getId() == 0)
+                pDomMap.put(n, new HashSet<CFGNode>(Collections.singletonList(n)));
+            else
+                pDomMap.put(n, cfg.getNodes());
+        }
 
-        final BoaAbstractTraversal dom = new BoaAbstractTraversal<Set<CFGNode>>(true, true) {
+        boolean saturation = false;
+        while (!saturation) { // iterate untill the fix point is reached
+            Map<CFGNode, Set<CFGNode>> currentPDomMap = new HashMap<CFGNode, Set<CFGNode>>();
+            int changeCount = 0;
+            for (CFGNode n: cfg.getNodes()) {
+                Set<CFGNode> currentPDom = new HashSet<CFGNode>();
 
-            protected Set<CFGNode> preTraverse(final CFGNode node) throws Exception {
-                Set<CFGNode> currentDom = new HashSet<CFGNode>();
-
-                if (node.getId() != 0)
-                    currentDom.addAll(cfgnodes);
-
-                if ((getValue(node) != null))
-                    currentDom = getValue(node);
-
-                for (CFGNode pred : node.getPredecessorsList()) {
-                    if (pred != null) {
-                        Set<CFGNode> predDom = getValue(pred);
-                        if (predDom != null)
-                            currentDom.retainAll(predDom);
+                // Intersection[pred(node)]
+                boolean first = true;
+                for (CFGNode pred: n.getPredecessorsList()) {
+                    if (first) {
+                        currentPDom.addAll(pDomMap.get(pred));
+                        first = false;
+                        continue;
                     }
+                    currentPDom.retainAll(pDomMap.get(pred));
                 }
+                // D[n] = {n} Union (Intersection[pred[node]])
+                currentPDom.add(n);
 
-                currentDom.add(node);
-
-                return currentDom;
+                Set<CFGNode> diff = new HashSet<CFGNode>(pDomMap.get(n));
+                diff.removeAll(currentPDom);
+                if (diff.size() > 0)
+                    changeCount++;
+                currentPDomMap.put(n, currentPDom);
             }
+            if (changeCount == 0)
+                saturation = true;
+            else
+                pDomMap = currentPDomMap;
+        }
 
-            @Override
-            public void traverse(final CFGNode node, boolean flag) throws Exception {
-                if (flag) {
-                    currentResult = preTraverse(node);
-                    outputMapObj.put(node.getId(), currentResult);
-                } else
-                    outputMapObj.put(node.getId(), preTraverse(node));
-            }
+        // strict dominators
+        for (CFGNode n: pDomMap.keySet())
+            pDomMap.get(n).remove(n);
 
-        };
-
-        BoaAbstractFixP fixp = new BoaAbstractFixP() {
-            boolean invoke1(final Set<CFGNode> current, final Set<CFGNode> previous) throws Exception {
-                Set<CFGNode> curr = new HashSet<CFGNode>(current);
-                curr.removeAll(previous);
-                return curr.size() == 0;
-            }
-
-            @Override
-            public boolean invoke(Object current, Object previous) throws Exception {
-                return invoke1((HashSet<CFGNode>) current, (HashSet<CFGNode>) previous);
-            }
-        };
-
-        dom.traverse(cfg, TraversalDirection.FORWARD, TraversalKind.REVERSEPOSTORDER, fixp);
-
-        return dom.outputMapObj;
+        return pDomMap;
     }
 
     /**
@@ -178,24 +167,24 @@ public class DTree {
      * @param dom map of nodes and corresponding dominators
      * @return map of nodes and corresponding immediate dominator
      */
-    private Map<CFGNode, CFGNode> computeImmediateDominator(final Map<Integer, Set<CFGNode>> dom, final CFG cfg) {
+    private Map<CFGNode, CFGNode> computeImmediateDominator(final Map<CFGNode, Set<CFGNode>> dom, final CFG cfg) {
         // inefficient implementation: t-complexity = O(n^3)
         /* To find idom, we check each dom of a node to see if it is dominating any other
          * node. Each node should have atmost one i-dom (first node has no immediate dominator)
          */
         Map<CFGNode, CFGNode> idom = new HashMap<CFGNode, CFGNode>();
-        for (Map.Entry<Integer, Set<CFGNode>> entry : dom.entrySet()) {
+        for (Map.Entry<CFGNode, Set<CFGNode>> entry : dom.entrySet()) {
             for (CFGNode pd1 : entry.getValue()) {
                 boolean isIPDom = true;
                 for (CFGNode pd2 : entry.getValue()) {
-                    if (!pd1.equals(pd2))
-                        if ((dom.get(pd2.getId())).contains(pd1)) {
+                    if (pd1.getId() != pd2.getId())
+                        if ((dom.get(pd2)).contains(pd1)) {
                             isIPDom = false;
                             break;
                         }
                 }
                 if (isIPDom) {
-                    idom.put(cfg.getNode(entry.getKey()), pd1);
+                    idom.put(entry.getKey(), pd1);
                     break;
                 }
             }
@@ -230,6 +219,7 @@ public class DTree {
             entry.setParent(rootNode);
             rootNode.addChild(entry);
             nodes.add(entry);
+
         } catch (Exception e) {
             System.out.println(BoaAstIntrinsics.prettyprint(md));
         }

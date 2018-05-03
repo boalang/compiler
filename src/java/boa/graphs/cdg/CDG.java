@@ -101,7 +101,7 @@ public class CDG {
                     else
                         controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, e.label());
         }
-        // entry -> start
+        // entry ---> start
         controlEdges.put(new Integer[]{cfg.getNodes().size(), 0}, "T");
 
         try {
@@ -132,9 +132,10 @@ public class CDG {
             nodes.remove(startNode);
             entryNode.setKind(Control.CDGNode.CDGNodeType.ENTRY);
             entryNode.setId(0);
-        }
-        catch (Exception e) {
+
+        } catch (Exception e) {
             System.out.println(BoaAstIntrinsics.prettyprint(md));
+            throw e;
         }
     }
 

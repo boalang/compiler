@@ -152,6 +152,7 @@ public class PDGSlicer {
             }
         } catch (Exception e) {
             System.out.println(prettyprint(md));
+            throw e;
         }
 
         hashcode = sb.toString().hashCode();
