@@ -145,13 +145,19 @@ public class CDG {
      * @param treeNode a post dominator tree node
      * @return a new tree node or an existing tree node
      */
-    private CDGNode getNode(final TreeNode treeNode) {
-        CDGNode node = getNode(treeNode.getId());
-        if (node != null)
-            return node;
+    private CDGNode getNode(final TreeNode treeNode) throws Exception {
+        try {
+            CDGNode node = getNode(treeNode.getId());
+            if (node != null)
+                return node;
 
-        CDGNode newNode = new CDGNode(treeNode);
-        nodes.add(newNode);
-        return newNode;
+            CDGNode newNode = new CDGNode(treeNode);
+            nodes.add(newNode);
+            return newNode;
+
+        } catch (Exception e) {
+            System.out.println(BoaAstIntrinsics.prettyprint(md));
+            throw e;
+        }
     }
 }
