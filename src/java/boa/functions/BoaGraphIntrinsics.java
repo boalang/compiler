@@ -25,6 +25,7 @@ import boa.graphs.ddg.DDG;
 import boa.graphs.pdg.PDG;
 import boa.graphs.slicers.CFGSlicer;
 import boa.graphs.slicers.PDGSlicer;
+import boa.graphs.trees.PDTree;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Method;
@@ -44,6 +45,11 @@ public class BoaGraphIntrinsics {
 	@FunctionSpec(name = "getcfg", returnType = "CFG", formalParameters = { "Method" })
 	public static CFG getcfg(final Method method) {
 		return new CFG(method);
+	}
+
+	@FunctionSpec(name = "getpdtree", returnType = "PDTree", formalParameters = { "Method" })
+	public static PDTree getpdtree(final Method method) throws Exception {
+		return new PDTree(method);
 	}
 
 	@FunctionSpec(name = "getcdg", returnType = "CDG", formalParameters = { "Method" })
@@ -193,6 +199,8 @@ public class BoaGraphIntrinsics {
 		return escaped;
 	}
 
+	// Graph Visualizers
+
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CFG" })
 	public static String cfgToDot(final CFG cfg) {
 		return cfgToDot(cfg, "");
@@ -233,11 +241,11 @@ public class BoaGraphIntrinsics {
 			}
 
 			if (n.hasStmt())
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
 			else if (n.hasExpr())
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
 			else if (n.getKind() == boa.types.Control.CFGNode.CFGNodeType.ENTRY)
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + n.getName() + "\"]\n");
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + n.getName() + "\"]\n");
 			else
 				str.append("\t" + n.getId() + "[" + shape + "]\n");
 		}
@@ -294,11 +302,11 @@ public class BoaGraphIntrinsics {
 			final String shape = "shape=ellipse";
 
 			if (n.hasStmt())
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
 			else if (n.hasExpr())
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
 			else if (n.getKind() == boa.types.Control.CDGNode.CDGNodeType.ENTRY)
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "ENTRY" + "\"]\n");
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + "ENTRY" + "\"]\n");
 			else
 				str.append("\t" + n.getId() + "[" + shape + "]\n");
 		}
@@ -355,11 +363,11 @@ public class BoaGraphIntrinsics {
 			final String shape = "shape=ellipse";
 
 			if (n.hasStmt())
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
 			else if (n.hasExpr())
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
 			else if (n.getKind() == boa.types.Control.DDGNode.DDGNodeType.ENTRY)
-					str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "ENTRY" + "\"]\n");
+					str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + "ENTRY" + "\"]\n");
 			else
 				str.append("\t" + n.getId() + "[" + shape + "]\n");
 		}
@@ -416,11 +424,11 @@ public class BoaGraphIntrinsics {
 			final String shape = "shape=ellipse";
 
 			if (n.hasStmt())
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
 			else if (n.hasExpr())
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
 			else if (n.getKind() == boa.types.Control.PDGNode.PDGNodeType.ENTRY)
-					str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "ENTRY" + "\"]\n");
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + "ENTRY" + "\"]\n");
 			else
 				str.append("\t" + n.getId() + "[" + shape + "]\n");
 		}
@@ -450,6 +458,68 @@ public class BoaGraphIntrinsics {
 
 		try {
 			printGraph.traverse(pdg, boa.types.Graph.Traversal.TraversalDirection.FORWARD, boa.types.Graph.Traversal.TraversalKind.DFS);
+		} catch (final Exception e) {
+			// do nothing
+		}
+
+		str.append("}");
+
+		return str.toString();
+	}
+
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "PDTree" })
+	public static String pdtreeToDot(final PDTree pdtree) {
+		return pdtreeToDot(pdtree, "");
+	}
+
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "PDTree", "string" })
+	public static String pdtreeToDot(final PDTree pdtree, final String label) {
+		final StringBuilder str = new StringBuilder();
+		str.append("digraph {\n");
+		if (label.length() > 0) {
+			str.append("\tlabelloc=\"t\"\n");
+			str.append("\tlabel=\"" + dotEscape(label) + "\"\n");
+		}
+
+		for (final boa.graphs.trees.TreeNode n : pdtree.getNodes()) {
+			final String shape = "shape=ellipse";
+
+			if (n.hasStmt())
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
+			else if (n.hasExpr())
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
+			else if (n.getId() == 0)
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + "START" + "\"]\n");
+			else if (n.getId() == pdtree.getNodes().size()-2)
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + "STOP" + "\"]\n");
+			else if (n.getId() == pdtree.getNodes().size()-1)
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + "ENTRY" + "\"]\n");
+			else
+				str.append("\t" + n.getId() + "[" + shape + "]\n");
+		}
+
+		final boa.runtime.BoaAbstractTraversal printGraph = new boa.runtime.BoaAbstractTraversal<Object>(false, false) {
+			protected Object preTraverse(final boa.graphs.trees.TreeNode node) throws Exception {
+				for (final boa.graphs.trees.TreeNode n : node.getChildren()) {
+					str.append("\t" + node.getId() + " -> " + n.getId());
+					str.append("\n");
+				}
+				return null;
+			}
+
+			@Override
+			public void traverse(final boa.graphs.trees.TreeNode node, boolean flag) throws Exception {
+				if (flag) {
+					currentResult = preTraverse(node);
+					outputMapObj.put(node.getId(), currentResult);
+				} else {
+					outputMapObj.put(node.getId(), preTraverse(node));
+				}
+			}
+		};
+
+		try {
+			printGraph.traverse(pdtree, boa.types.Graph.Traversal.TraversalDirection.FORWARD, boa.types.Graph.Traversal.TraversalKind.DFS);
 		} catch (final Exception e) {
 			// do nothing
 		}

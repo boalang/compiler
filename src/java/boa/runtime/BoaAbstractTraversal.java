@@ -24,6 +24,8 @@ import boa.graphs.ddg.DDG;
 import boa.graphs.ddg.DDGNode;
 import boa.graphs.pdg.PDG;
 import boa.graphs.pdg.PDGNode;
+import boa.graphs.trees.PDTree;
+import boa.graphs.trees.TreeNode;
 import boa.types.Graph.*;
 import boa.graphs.cfg.*;
 import boa.graphs.cdg.*;
@@ -91,8 +93,27 @@ public abstract class BoaAbstractTraversal<T1> {
 		return defaultPreTraverse();
 	}
 
+	protected boolean preTraverse(final PDTree tree) throws Exception {
+		return defaultPreTraverse();
+	}
+
 	public final void traverse(final CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind, final String str) throws Exception {
 		traverse(cfg, direction, kind);
+	}
+
+	public final void dfsForward(final TreeNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+		final Stack<TreeNode> s = new Stack<TreeNode>();
+		s.push(node);
+		while (!s.isEmpty()) {
+			final TreeNode n = s.pop();
+			if (!visitedNodes.contains(n.getId())) {
+				traverse(n, false);
+				visitedNodes.add(n.getId());
+				for (int i = n.getChildren().size() - 1; i >= 0; i--) {
+					s.push(n.getChildren().get(i));
+				}
+			}
+		}
 	}
 
 	public final void dfsForward(final PDGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
@@ -882,5 +903,102 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public void traverse(final PDGNode node, boolean flag) throws Exception {
+	}
+
+	public final void traverse(final boa.graphs.trees.PDTree tree, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		try {
+			if (preTraverse(tree)) {
+				if (outputMapObj == null) {
+					outputMapObj = new java.util.HashMap<Integer, T1>();
+				}
+				if (tree.getNodes().size() != 0) {
+					final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+					//final CDGNode[] nl = cdg.sortNodes();
+					switch (kind) {
+						case DFS:
+							switch (direction) {
+								case FORWARD:
+									dfsForward(tree.getRootNode(), visitedNodes);
+									break;
+								default:
+									//case BACKWARD:
+									//dfsBackward(cdg.getExitNode(), visitedNodes);
+									break;
+							}
+							break;
+/*
+						case POSTORDER:
+							postorderBackward(cdg.getEntryNode(), visitedNodes);
+							break;
+						case REVERSEPOSTORDER:
+							postorderForward(cdg.getExitNode(), visitedNodes);
+							break;
+						case WORKLIST_POSTORDER:
+							switch (direction) {
+								case FORWARD:
+									Stack<CDGNode> stack = new Stack<CDGNode>();
+									populateWithReversePostorder(cdg.getEntryNode(), visitedNodes, stack);
+									worklistReversePostorderWithoutFixp(stack, kind);
+									break;
+								default:
+								case BACKWARD:
+									Queue<CDGNode> queue = new LinkedList<CDGNode>();
+									populateWithPostorder(cdg.getEntryNode(), visitedNodes, queue);
+									worklistPostorderWithoutFixp(queue, kind);
+									break;
+							}
+							break;
+						case WORKLIST_REVERSEPOSTORDER:
+							switch (direction) {
+								case FORWARD:
+									final Queue<CDGNode> queue = new LinkedList<CDGNode>();
+									populateWithPostorder(cdg.getEntryNode(), visitedNodes, queue);
+									worklistPostorderWithoutFixp(queue, kind);
+									break;
+								default:
+								case BACKWARD:
+									final Stack<CDGNode> stack = new Stack<CDGNode>();
+									populateWithReversePostorder(cdg.getEntryNode(), visitedNodes, stack);
+									worklistReversePostorderWithoutFixp(stack, kind);
+									break;
+							}
+							break;
+						case ITERATIVE:
+							switch (direction) {
+								case FORWARD:
+									for (int i = 0; i < nl.length; i++) {
+										traverse(nl[i], false);
+									}
+									break;
+								default:
+								case BACKWARD:
+									for (int i = nl.length - 1; i >= 0; i--) {
+										traverse(nl[i], false);
+									}
+									break;
+							}
+							break;
+						case RANDOM:
+							for (final CDGNode n : cdg.getNodes()) {
+								traverse(n, false);
+							}
+							break;
+						case HYBRID:
+							for (int i = 0; i < nl.length; i++) {
+								traverse(nl[i], false);
+							}
+							break;
+*/
+						default:
+							break;
+					}
+				}
+			}
+		} catch (final java.lang.StackOverflowError e) {
+			return;
+		}
+	}
+
+	public void traverse(final TreeNode node, boolean flag) throws Exception {
 	}
 }
