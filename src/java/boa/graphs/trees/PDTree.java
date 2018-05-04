@@ -52,7 +52,7 @@ public class PDTree {
         if (cfg.getNodes().size() > 0) {
             Map<CFGNode, Set<CFGNode>> pdom = computePostDomonitors(cfg);
             Map<CFGNode, CFGNode> ipdom = computeImmediatePostDominator(pdom, cfg);
-            buildPDomTree(ipdom, cfg.getNodes().size() - 1);
+            buildPDomTree(ipdom);
         }
     }
 
@@ -85,8 +85,7 @@ public class PDTree {
      */
     public void addEntryNode() {
         if (!isEntryNode) {
-            rootNode = getNode(nodes.size());
-            TreeNode entry = new TreeNode(nodes.size() + 1);
+            TreeNode entry = new TreeNode(nodes.size());
             entry.setParent(rootNode);
             rootNode.addChild(entry);
             nodes.add(entry);
@@ -255,9 +254,8 @@ public class PDTree {
      * Builds a post dominator tree using nodes and their immediate post-dominators
      *
      * @param ipdoms map of nodes and their immediate post-dominators
-     * @param stopid id of the stop node of the control graph
      */
-    private void buildPDomTree(final Map<CFGNode, CFGNode> ipdoms, int stopid) throws Exception {
+    private void buildPDomTree(final Map<CFGNode, CFGNode> ipdoms) throws Exception {
         /* Create an edge between ipdom and corresponding node.
          * Since each node can have only one ipdom, the resulting graph will form a tree
          */
@@ -269,6 +267,8 @@ public class PDTree {
                 src.addChild(dest);
                 dest.setParent(src);
             }
+
+            rootNode = getNode(nodes.size()-1);
 
         } catch (Exception e) {
             System.out.println(BoaAstIntrinsics.prettyprint(md));

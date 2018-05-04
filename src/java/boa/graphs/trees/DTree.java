@@ -52,7 +52,7 @@ public class DTree {
         if (cfg.getNodes().size() > 0) {
             Map<CFGNode, Set<CFGNode>> dom = computeDominators(cfg);
             Map<CFGNode, CFGNode> idom = computeImmediateDominator(dom, cfg);
-            buildDomTree(idom, cfg.getNodes().size());
+            buildDomTree(idom);
         }
     }
 
@@ -85,8 +85,7 @@ public class DTree {
      */
     public void addEntryNode() {
         if (!isEntryNode) {
-            rootNode = getNode(0);
-            TreeNode entry = new TreeNode(nodes.size() + 1);
+            TreeNode entry = new TreeNode(nodes.size());
             entry.setParent(rootNode);
             rootNode.addChild(entry);
             nodes.add(entry);
@@ -252,9 +251,8 @@ public class DTree {
      * Builds a dominator tree using nodes and their immediate dominators
      *
      * @param idoms map of nodes and their immediate dominators
-     * @param stopid id of the stop node of the control graph
      */
-    private void buildDomTree(final Map<CFGNode, CFGNode> idoms, int stopid) {
+    private void buildDomTree(final Map<CFGNode, CFGNode> idoms) {
         /* Create an edge between idom and corresponding node.
          * Since each node can have only one idom, the resulting graph will form a tree
          */
@@ -266,6 +264,8 @@ public class DTree {
                 src.addChild(dest);
                 dest.setParent(src);
             }
+
+            rootNode = getNode(0);
 
         } catch (Exception e) {
             System.out.println(BoaAstIntrinsics.prettyprint(md));
