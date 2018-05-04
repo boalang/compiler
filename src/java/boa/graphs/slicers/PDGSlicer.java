@@ -104,7 +104,7 @@ public class PDGSlicer {
     public void sliceHash() {}
 
     /**
-     * Traverse the pdg to collect the nodes
+     * Traverse the pdg to collect sliced nodes. Also calculates hashcode of the slice
      *
      * @param pdg program dependence graph
      */
@@ -145,6 +145,7 @@ public class PDGSlicer {
                 }
                 sb.append(node.getExpr());
                 slice.add(node);
+                // for hashcode
                 Collections.sort(node.getSuccessors(), new PDGNodeComparator());
                 for (PDGNode succ : node.getSuccessors())
                     if (!slice.contains(succ))
@@ -159,11 +160,11 @@ public class PDGSlicer {
     }
 
     /**
-     * Normalize the name in the given expression
+     * Returns the normalized expression
      *
      * @param exp expression to be normalized
      * @param normalizedVars mapping of original names with normalized names in the expression
-     * @return
+     * @return the normalized expression
      */
     private Expression normalizeExpression(final Expression exp, final Map<String, String> normalizedVars) {
         final List<Expression> convertedExpression = new ArrayList<Expression>();

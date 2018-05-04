@@ -28,7 +28,7 @@ import boa.types.Control;
 import boa.types.Control.CDGNode.*;
 
 /**
- * Control Dependence Graph builder node
+ * Control Dependence Graph node
  *
  * @author marafat
  */
@@ -48,6 +48,14 @@ public class CDGNode implements Comparable<CDGNode> {
     private HashSet<CDGEdge> inEdges = new HashSet<CDGEdge>();
     private HashSet<CDGEdge> outEdges = new HashSet<CDGEdge>();
 
+    // Constructors
+
+    /**
+     * Constructs a CDG node.
+     *
+     * @param node Tree node
+     */
+
     public CDGNode(final TreeNode node) {
         this.id = node.getId();
         this.stmt = node.getStmt();
@@ -57,6 +65,11 @@ public class CDGNode implements Comparable<CDGNode> {
         this.useVariables = node.getUseVariables();
     }
 
+    /**
+     * Constructs a CDG node.
+     *
+     * @param id node id. Uses default values for remaining fields
+     */
     public CDGNode(int id) {
         this.id = id;
     }
@@ -133,26 +146,6 @@ public class CDGNode implements Comparable<CDGNode> {
         return inEdges;
     }
 
-    public CDGEdge getInEdge(final CDGNode node) {
-        for (final CDGEdge e : this.inEdges) {
-            if (e.getSrc().equals(node))
-                return e;
-        }
-        return null;
-    }
-
-    public Set<CDGEdge> getOutEdges() {
-        return outEdges;
-    }
-
-    public CDGEdge getOutEdge(final CDGNode node) {
-        for (final CDGEdge e : this.outEdges) {
-            if (e.getDest().equals(node))
-                return e;
-        }
-        return null;
-    }
-
     public CDGNodeType getKind() {
         return kind;
     }
@@ -173,11 +166,31 @@ public class CDGNode implements Comparable<CDGNode> {
         return predecessors;
     }
 
+    public Set<CDGEdge> getOutEdges() {
+        return outEdges;
+    }
+
+    public CDGEdge getInEdge(final CDGNode node) {
+        for (final CDGEdge e : this.inEdges) {
+            if (e.getSrc().equals(node))
+                return e;
+        }
+        return null;
+    }
+
+    public CDGEdge getOutEdge(final CDGNode node) {
+        for (final CDGEdge e : this.outEdges) {
+            if (e.getDest().equals(node))
+                return e;
+        }
+        return null;
+    }
+
     /**
-     * Gives back equivalent CDG node type
+     * Returns equivalent CDG node type for the given Tree node type
      *
      * @param type Tree node type
-     * @return CDGNodeType
+     * @return CDG node type for the given Tree node type
      */
     public CDGNodeType convertKind(final Control.TreeNode.TreeNodeType type) {
         switch(type) {

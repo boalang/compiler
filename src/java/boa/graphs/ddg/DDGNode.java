@@ -47,6 +47,13 @@ public class DDGNode implements Comparable<DDGNode> {
     private ArrayList<DDGNode> successors = new ArrayList<DDGNode>();
     private ArrayList<DDGNode> predecessors = new ArrayList<DDGNode>();
 
+    // Constructors
+
+    /**
+     * Constructs a DDG node.
+     *
+     * @param node control flow graph node
+     */
     public DDGNode(final CFGNode node) {
         this.id = node.getId();
         this.stmt = node.getStmt();
@@ -56,6 +63,11 @@ public class DDGNode implements Comparable<DDGNode> {
         this.useVariables = node.getUseVariables();
     }
 
+    /**
+     * Constructs a CDG node.
+     *
+     * @param id node id. Uses default values for remaining fields
+     */
     public DDGNode(int id) {
         this.id = id;
     }
@@ -144,24 +156,8 @@ public class DDGNode implements Comparable<DDGNode> {
         return inEdges;
     }
 
-    public DDGEdge getInEdge(final DDGNode node) {
-        for (final DDGEdge e : this.inEdges) {
-            if (e.getSrc().equals(node))
-                return e;
-        }
-        return null;
-    }
-
     public Set<DDGEdge> getOutEdges() {
         return outEdges;
-    }
-
-    public DDGEdge getOutEdge(final DDGNode node) {
-        for (final DDGEdge e : this.outEdges) {
-            if (e.getDest().equals(node))
-                return e;
-        }
-        return null;
     }
 
     public List<DDGNode> getSuccessors() {
@@ -172,11 +168,27 @@ public class DDGNode implements Comparable<DDGNode> {
         return predecessors;
     }
 
+    public DDGEdge getInEdge(final DDGNode node) {
+        for (final DDGEdge e : this.inEdges) {
+            if (e.getSrc().equals(node))
+                return e;
+        }
+        return null;
+    }
+
+    public DDGEdge getOutEdge(final DDGNode node) {
+        for (final DDGEdge e : this.outEdges) {
+            if (e.getDest().equals(node))
+                return e;
+        }
+        return null;
+    }
+
     /**
-     * Gives back equivalent DDG node type
+     * Returns equivalent DDG node type for the given CFG node type
      *
      * @param type CFG node type
-     * @return DDGNodeType
+     * @return DDG node type for the given CFG node type
      */
     public DDGNodeType convertKind(final Control.CFGNode.CFGNodeType type) {
         switch(type) {

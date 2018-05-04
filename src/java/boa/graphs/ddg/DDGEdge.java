@@ -19,7 +19,7 @@ package boa.graphs.ddg;
 import boa.types.Control;
 
 /**
- * Data Dependence Graph builder edge
+ * Data Dependence Graph edge
  *
  * @author marafat
  */
@@ -30,12 +30,27 @@ public class DDGEdge {
     private DDGNode dest;
     private String label = "."; // name of the variable for def and use
 
+    // Constructors
+
+    /**
+     * Constructs a DDG edge
+     *
+     * @param src starting node of the edge
+     * @param dest destination node of the edge
+     * @param label label of the edge
+     */
     public DDGEdge(DDGNode src, DDGNode dest, String label) {
         this.src = src;
         this.dest = dest;
         this.label = label;
     }
 
+    /**
+     * Constructs a DDG edge
+     *
+     * @param src starting node of the edge
+     * @param dest destination node of the edge
+     */
     public DDGEdge(DDGNode src, DDGNode dest) {
         this.src = src;
         this.dest = dest;
@@ -70,7 +85,7 @@ public class DDGEdge {
     /**
      * DDG Edge builder
      *
-     * @return
+     * @return a DDG edge builder
      */
     public boa.types.Control.DDGEdge.Builder newBuilder() {
         final boa.types.Control.DDGEdge.Builder eb = boa.types.Control.DDGEdge.newBuilder();
@@ -79,7 +94,7 @@ public class DDGEdge {
     }
 
     /**
-     * Gives back label type
+     * Returns the label type
      *
      * @param label edge label
      * @return label type

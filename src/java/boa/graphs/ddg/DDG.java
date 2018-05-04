@@ -39,6 +39,14 @@ public class DDG {
     private HashMap<DDGNode, Set<DDGNode>> defUseChain = new HashMap<DDGNode, Set<DDGNode>>();
     //private HashMap<DDGNode, Set<DDGNode>> useDefChain; //TODO: needs reaching-def analysis
 
+    // Constructors
+
+    /**
+     * Constructs a data dependence graph
+     *
+     * @param cfg control flow graph
+     * @throws Exception if DDG construction fails
+     */
     public DDG(final CFG cfg) throws Exception {
         this.md = cfg.md;
         if (cfg.getNodes().size() > 0) {
@@ -48,28 +56,63 @@ public class DDG {
         }
     }
 
-    public DDG(final Method method, boolean paramAsStatement) throws Exception {
-        this(new CFG(method, paramAsStatement));
+    /**
+     * Constructs a data dependence graph
+     *
+     * @param md method whose DDG is to be built
+     * @param paramAsStatement if true, inserts parameters as assign statements at the
+     *                         begining of control flow graph. Default is set to false
+     * @throws Exception if DDG construction fails
+     */
+    public DDG(final Method md, boolean paramAsStatement) throws Exception {
+        this(new CFG(md, paramAsStatement));
     }
 
-    public DDG(final Method method) throws Exception {
-        this(new CFG(method));
+    /**
+     * Constructs a data dependence graph
+     *
+     * @param md method whose DDG is to be built
+     * @throws Exception if DDG construction fails
+     */
+    public DDG(final Method md) throws Exception {
+        this(new CFG(md));
     }
 
     // Getters
+
+    /**
+     * Returns the method whose DDG is built
+     *
+     * @return the method whose DDG is built
+     */
     public Method getMethod() {
         return md;
     }
 
+    /**
+     * Returns the entry node to the graph
+     *
+     * @return the entry node to the graph
+     */
     public DDGNode getEntryNode() { return  entryNode; }
 
+    /**
+     * Returns the set of all the nodes in the graph
+     *
+     * @return the set of all the nodes in the graph
+     */
     public HashSet<DDGNode> getNodes() { return nodes; }
 
+    /**
+     * Returns the map of definiton-use chains
+     *
+     * @return the map of definiton-use chains
+     */
     public HashMap<DDGNode, Set<DDGNode>> getDefUseChain() {
         return defUseChain;
     }
 
-    public Set<DDGNode> getUseNodes(final DDGNode node) {
+    private Set<DDGNode> getUseNodes(final DDGNode node) {
         return defUseChain.get(node);
     }
 
@@ -90,7 +133,7 @@ public class DDG {
     }
 
     /**
-     * Gives back the node for the given node id, otherwise returns null
+     * Returns the DDG node for the given node id. If not found then returns null
      *
      * @param id node id
      * @return DDGNode
@@ -104,10 +147,10 @@ public class DDG {
     }
 
     /**
-     * Computes in and out variables for each node
+     * Computes and returns a map of in and out variables for each node
      *
      * @param cfg control flow graph
-     * @return map of nodes and in, out variables
+     * @return map of in and out variables for each node
      * @throws Exception
      */
     private HashMap<Integer, InOut> getLiveVariables(final CFG cfg) throws Exception {
@@ -175,7 +218,7 @@ public class DDG {
     }
 
     /**
-     * Constructs def-use chains to establish data flow between nodes
+     * Forms def-use chains to establish data flow between nodes
      *
      * @param liveVar map of nodes and their in and out variables
      */
@@ -211,7 +254,7 @@ public class DDG {
      * @param nodeids set of all node ids of the graph
      */
     private void constructDDG(Set<Integer> nodeids) {
-        // all nodes without parents are connected to entryNode
+        // any node without parent is connected to entryNode
         entryNode = getNode(0);
         for (int i: nodeids) {
             if (i != 0) {
@@ -229,10 +272,10 @@ public class DDG {
     }
 
     /**
-     * Checks if a node already exists and returns it, otherwise returns a new node.
+     * Returns the existing DDG node for the given Tree node. If not found then returns a new node
      *
-     * @param cfgNode a post dominator tree node
-     * @return a new DDG node or an existing DDG node
+     * @param cfgNode control flow graph node
+     * @return the existing DDG node for the given Tree node. If not found then returns a new node
      */
     private DDGNode getNode(final CFGNode cfgNode) {
         DDGNode node = getNode(cfgNode.getId());
@@ -269,7 +312,7 @@ public class DDG {
         }
     }
 
-    // (Var, Usenode) pair: use nodes are needed to construct def-use chains
+    // (Var, Usenode) pairs: use nodes are needed to construct def-use chains
     private class Pair {
         String var;
         CFGNode node;

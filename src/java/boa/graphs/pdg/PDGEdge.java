@@ -20,7 +20,7 @@ import boa.types.Control;
 import boa.types.Control.PDGEdge.*;
 
 /**
- * Program Dependence Graph builder edge
+ * Program Dependence Graph edge
  *
  * @author marafat
  */
@@ -32,6 +32,16 @@ public class PDGEdge {
     private String label; // name of the variable for data edge, T or F for Control Edge
     private PDGEdgeType kind;
 
+    // Constructors
+
+    /**
+     * Constructs a PDG edge
+     *
+     * @param src starting node of the edge
+     * @param dest destination node of the edge
+     * @param label label of the edge
+     * @param kind kind of the edge i.e Control or Data
+     */
     public PDGEdge(PDGNode src, PDGNode dest, String label, PDGEdgeType kind) {
         this.src = src;
         this.dest = dest;
@@ -76,7 +86,7 @@ public class PDGEdge {
     /**
      * PDG Edge builder
      *
-     * @return
+     * @return a DDG edge builder
      */
     public boa.types.Control.PDGEdge.Builder newBuilder() {
         final boa.types.Control.PDGEdge.Builder eb = boa.types.Control.PDGEdge.newBuilder();
@@ -85,7 +95,7 @@ public class PDGEdge {
     }
 
     /**
-     * Gives back label type
+     * Returns the label type
      *
      * @param label edge label
      * @return label type

@@ -39,6 +39,7 @@ public class CFGSlicer {
 
     private ArrayList<CFGNode> slice = new ArrayList<CFGNode>();
 
+    // Constructors
     public CFGSlicer(Method m, CFGNode n) throws Exception {
         if (n != null) {
             List<CFGNode> entrynodes = new ArrayList<CFGNode>();
@@ -79,7 +80,7 @@ public class CFGSlicer {
     }
 
     /**
-     * Compute slice of a method based on the given slicing variables
+     * Computes slice of the method based on the given slicing variables
      *
      * @param cfg control flow graph
      * @param slicingNodes variable to be used for method slicing
@@ -167,7 +168,7 @@ public class CFGSlicer {
     }
 
     /**
-     * Gives back the map of control nodes and dependent nodes.
+     * Returns the map of control nodes and dependent nodes.
      *
      * @param pdTree post dominator tree
      * @param cfg control flow graph

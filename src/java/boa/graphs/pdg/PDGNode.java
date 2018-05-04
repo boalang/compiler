@@ -47,6 +47,13 @@ public class PDGNode implements Comparable<PDGNode> {
     private HashSet<PDGEdge> inEdges = new HashSet<PDGEdge>();
     private HashSet<PDGEdge> outEdges = new HashSet<PDGEdge>();
 
+    // Constructors
+
+    /**
+     * Constructs a PDG node.
+     *
+     * @param node control dependence graph node
+     */
     public PDGNode(final CDGNode node) {
         this.id = node.getId();
         this.stmt = node.getStmt();
@@ -56,6 +63,11 @@ public class PDGNode implements Comparable<PDGNode> {
         this.useVariables = node.getUseVariables();
     }
 
+    /**
+     * Constructs a PDG node
+     *
+     * @param id node id. Uses default values for remaining fields
+     */
     public PDGNode(int id) {
         this.id = id;
     }
@@ -150,9 +162,17 @@ public class PDGNode implements Comparable<PDGNode> {
         return outEdges;
     }
 
+    public List<PDGNode> getSuccessors() {
+        return successors;
+    }
+
+    public List<PDGNode> getPredecessors() {
+        return predecessors;
+    }
+
     /**
-     * Returns list of out edges with control edge at the first spot. There can be at max. two edges, one control
-     * and one data
+     * Returns list of out edges with control edge at the first location.
+     * There can be at max two edges, one control and one data
      *
      * @param node destination node
      * @return list of out edges
@@ -169,19 +189,11 @@ public class PDGNode implements Comparable<PDGNode> {
         return  edges;
     }
 
-    public List<PDGNode> getSuccessors() {
-        return successors;
-    }
-
-    public List<PDGNode> getPredecessors() {
-        return predecessors;
-    }
-
     /**
-     * Gives back equivalent PDG node type
+     * Returns equivalent PDG node type for the given CDG node type
      *
      * @param type CDG node type
-     * @return PDGNodeType
+     * @return PDG node type for the given CDG node type
      */
     public PDGNodeType convertKind(final Control.CDGNode.CDGNodeType type) {
         switch(type) {
@@ -197,7 +209,6 @@ public class PDGNode implements Comparable<PDGNode> {
 
         return null;
     }
-
 
     @Override
     public int compareTo(final PDGNode node) {

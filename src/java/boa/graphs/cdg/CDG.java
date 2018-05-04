@@ -41,40 +41,79 @@ public class CDG {
     private CDGNode entryNode;
     private HashSet<CDGNode> nodes = new HashSet<CDGNode>();
 
+    // Constructors
+
+    /**
+     * Constructs a control dependence graph
+     *
+     * @param cfg control flow graph
+     * @throws Exception if CDG construction fails
+     */
     public CDG(final CFG cfg) throws Exception {
         this.md = cfg.md;
         if (cfg.getNodes().size() > 0) {
             PDTree pdTree = new PDTree(cfg);
+            pdTree.addEntryNode();
             constructCDG(pdTree, cfg);
         }
     }
 
-    public CDG(final Method method, boolean paramAsStatement) throws Exception {
-        this(new CFG(method, paramAsStatement));
+    /**
+     * Constructs a control dependence graph
+     *
+     * @param md method whose CDG is to be built
+     * @param paramAsStatement if true, inserts parameters as assign statements at the
+     *                         begining of control flow graph. Default is set to false
+     * @throws Exception if CDG construction fails
+     */
+    public CDG(final Method md, boolean paramAsStatement) throws Exception {
+        this(new CFG(md, paramAsStatement));
     }
 
-    public CDG(final Method method) throws Exception {
-        this(new CFG(method));
+    /**
+     * Constructs a control dependence graph
+     *
+     * @param md method whose CDG is to be built
+     * @throws Exception if CDG construction fails
+     */
+    public CDG(final Method md) throws Exception {
+        this(new CFG(md, false));
     }
 
     // Getters
+
+    /**
+     * Returns the method whose CDG is built
+     *
+     * @return the method whose CDG is built
+     */
     public Method getMethod() {
         return md;
     }
 
+    /**
+     * Returns the entry node to the graph
+     *
+     * @return the entry node to the graph
+     */
     public CDGNode getEntryNode() {
         return entryNode;
     }
 
+    /**
+     * Returns the set of all the nodes in the graph
+     *
+     * @return the set of all the nodes in the graph
+     */
     public HashSet<CDGNode> getNodes() {
         return nodes;
     }
 
     /**
-     * Gives back the node for the given node id, otherwise returns null
+     * Returns the CDG node for the given node id. If not found then returns null
      *
      * @param id node id
-     * @return CDGNode
+     * @return the CDG node for the given node id. If not found then returns null
      */
     public CDGNode getNode(int id) {
         for (CDGNode n: nodes)
@@ -85,7 +124,7 @@ public class CDG {
     }
 
     /**
-     * Builds a Control Dependence Graph using the post dominator tree and control edges from cfg
+     * Builds a control dependence graph using the post dominator tree and control edges from CFG
      *
      * @param pdTree post dominator tree
      * @param cfg control flow graph
@@ -101,9 +140,10 @@ public class CDG {
                     else
                         controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, e.label());
         }
-        // entry ---> start
+        // add the edge: entry ---> start
         controlEdges.put(new Integer[]{cfg.getNodes().size(), 0}, "T");
 
+        // for the given edge A ---> B, traverse from node B to the parent of node A
         try {
             for (Map.Entry<Integer[], String> entry : controlEdges.entrySet()) {
                 CDGNode source = getNode(pdTree.getNode(entry.getKey()[0]));
@@ -140,10 +180,10 @@ public class CDG {
     }
 
     /**
-     * Checks if a node already exists and returns it, otherwise returns a new node.
+     * Returns the existing CDG node for the given Tree node. If not found then returns a new node
      *
-     * @param treeNode a post dominator tree node
-     * @return a new tree node or an existing tree node
+     * @param treeNode post dominator tree node
+     * @return the existing CDG node for the given Tree node. If not found then returns a new node
      */
     private CDGNode getNode(final TreeNode treeNode) throws Exception {
         try {

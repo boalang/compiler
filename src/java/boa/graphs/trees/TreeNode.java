@@ -26,7 +26,7 @@ import boa.types.Control;
 import boa.types.Control.TreeNode.*;
 
 /**
- * Tree builder node
+ * Tree node
  *
  * @author marafat
  */
@@ -44,6 +44,13 @@ public class TreeNode implements Comparable<TreeNode> {
 
     private ArrayList<TreeNode> children = new ArrayList<TreeNode>();
 
+    // Constructors
+
+    /**
+     * Constructs a tree node.
+     *
+     * @param node CFG node
+     */
     public TreeNode(CFGNode node) {
         this.id = node.getId();
         this.stmt = node.getStmt();
@@ -53,6 +60,11 @@ public class TreeNode implements Comparable<TreeNode> {
         this.useVariables = node.getUseVariables();
     }
 
+    /**
+     * Constructs a tree node.
+     *
+     * @param id node id. Uses default values for remaining fields
+     */
     public TreeNode(int id) {
         this.id = id;
     }
@@ -137,10 +149,10 @@ public class TreeNode implements Comparable<TreeNode> {
     }
 
     /**
-     * Gives back equivalent Tree node type
+     * Returns equivalent tree node type for the given CFG node type
      *
      * @param type CFG node type
-     * @return TreeNodeType
+     * @return tree node type for the given CFG node type
      */
     public TreeNodeType convertKind(final Control.CFGNode.CFGNodeType type) {
         switch(type) {

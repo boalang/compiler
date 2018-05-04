@@ -37,7 +37,16 @@ public class DTree {
     private Method md;
     private TreeNode rootNode;
     private HashSet<TreeNode> nodes = new HashSet<TreeNode>();
+    private boolean isEntryNode = false; // as specified in ferrante-1987 paper on PDG
 
+    // Constructors
+
+    /**
+     * Constructs a dominator tree
+     *
+     * @param cfg control flow graph
+     * @throws Exception if tree construction fails
+     */
     public DTree(final CFG cfg) throws Exception {
         this.md = cfg.md;
         if (cfg.getNodes().size() > 0) {
@@ -47,21 +56,67 @@ public class DTree {
         }
     }
 
-    public DTree(final Method method, boolean paramAsStatement) throws Exception {
-        this(new CFG(method, paramAsStatement));
+    /**
+     * Constructs a dominator tree
+     *
+     * @param md method whose dominator tree is to be built
+     * @param paramAsStatement if true, inserts parameters as assign statements at the
+     *                         begining of control flow graph. Default is set to false
+     * @throws Exception if tree construction fails
+     */
+    public DTree(final Method md, boolean paramAsStatement) throws Exception {
+        this(new CFG(md, paramAsStatement));
     }
 
-    public DTree(final Method method) throws Exception {
-        this(new CFG(method));
+    /**
+     * Constructs a dominator tree
+     *
+     * @param md method whose dominator tree is to be built
+     * @throws Exception if tree construction fails
+     */
+    public DTree(final Method md) throws Exception {
+        this(new CFG(md));
+    }
+
+    // Setters
+
+    /**
+     * Augments tree with entry node
+     */
+    public void addEntryNode() {
+        if (!isEntryNode) {
+            rootNode = getNode(0);
+            TreeNode entry = new TreeNode(nodes.size() + 1);
+            entry.setParent(rootNode);
+            rootNode.addChild(entry);
+            nodes.add(entry);
+            isEntryNode = true;
+        }
     }
 
     // Getters
+
+    /**
+     * Returns the method whose dominator tree is built
+     *
+     * @return the method whose dominator tree is built
+     */
     public Method getMethod() { return md; }
 
+    /**
+     * Returns the root node of the tree
+     *
+     * @return the root node of the tree
+     */
     public TreeNode getRootNode() {
         return rootNode;
     }
 
+    /**
+     * Returns the set of all the nodes in the tree
+     *
+     * @return the set of all the nodes in the tree
+     */
     public HashSet<TreeNode> getNodes() {
         return nodes;
     }
@@ -70,7 +125,7 @@ public class DTree {
      * Returns the immediate dominator of the given node
      *
      * @param node whose immediate dominator is requested
-     * @return parent TreeNode
+     * @return the immediate dominator of the given node
      */
     public TreeNode getImmediateDominator(TreeNode node) {
         for (TreeNode n: nodes)
@@ -83,7 +138,7 @@ public class DTree {
      * Returns the immediate dominator for the given node id
      *
      * @param nodeid of the node whose immediate dominator is requested
-     * @return parent TreeNode
+     * @return the immediate dominator for the given node id
      */
     public TreeNode getImmediateDominator(int nodeid) {
         for (TreeNode n: nodes)
@@ -93,10 +148,10 @@ public class DTree {
     }
 
     /**
-     * Gives back the node for the given node id, otherwise returns null
+     * Returns the tree node for the given node id. If not found then returns null
      *
      * @param id node id
-     * @return tree node
+     * @return the tree node for the given node id. If not found then returns null
      */
     public TreeNode getNode(int id) {
         for (TreeNode node: nodes) {
@@ -107,10 +162,10 @@ public class DTree {
     }
 
     /**
-     * Computes dominators for each node in the control flow graph
+     * Computes and returns map of dominators for each node in the control flow graph
      *
      * @param cfg control flow graph
-     * @return map of node and corresponding set of dominator nodes
+     * @return map of nodes and corresponding set of dominator nodes
      * @throws Exception
      */
     private Map<CFGNode, Set<CFGNode>> computeDominators(final CFG cfg) throws Exception {
@@ -162,10 +217,10 @@ public class DTree {
     }
 
     /**
-     * Computes immediate dominator for each node
+     * Computes and returns map of nodes and corresponding immediate dominators
      *
      * @param dom map of nodes and corresponding dominators
-     * @return map of nodes and corresponding immediate dominator
+     * @return map of nodes and corresponding immediate dominators
      */
     private Map<CFGNode, CFGNode> computeImmediateDominator(final Map<CFGNode, Set<CFGNode>> dom, final CFG cfg) {
         // inefficient implementation: t-complexity = O(n^3)
@@ -205,20 +260,12 @@ public class DTree {
          */
         try {
             for (Map.Entry<CFGNode, CFGNode> entry : idoms.entrySet()) {
-                CFGNode idom = entry.getValue();
-
-                TreeNode src = getNode(idom);
+                TreeNode src = getNode(entry.getValue());
                 TreeNode dest = getNode(entry.getKey());
 
                 src.addChild(dest);
                 dest.setParent(src);
             }
-
-            rootNode = getNode(0);
-            TreeNode entry = new TreeNode(stopid + 1);
-            entry.setParent(rootNode);
-            rootNode.addChild(entry);
-            nodes.add(entry);
 
         } catch (Exception e) {
             System.out.println(BoaAstIntrinsics.prettyprint(md));
@@ -226,10 +273,10 @@ public class DTree {
     }
 
     /**
-     * Checks if a node already exists and returns it, otherwise returns a new node.
+     * Returns the existing tree node for the given CFG node. If not found then returns a new node
      *
-     * @param cfgNode a control flow graph node
-     * @return a new tree node or an existing tree node
+     * @param cfgNode control flow graph node
+     * @return the existing tree node for the given CFG node. If not found then returns a new node
      */
     private TreeNode getNode(final CFGNode cfgNode) {
         TreeNode node = getNode(cfgNode.getId());

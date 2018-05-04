@@ -43,6 +43,14 @@ public class PDG {
     private PDGNode entryNode;
     private HashSet<PDGNode> nodes = new HashSet<PDGNode>();
 
+    // Constructors
+
+    /**
+     * Constructs a program dependence graph
+     *
+     * @param cdg control dependence graph
+     * @param ddg data dependence graph
+     */
     public PDG(final CDG cdg, final DDG ddg) {
         this.md = cdg.getMethod();
         if (cdg.getNodes().size() > 0) {
@@ -52,33 +60,69 @@ public class PDG {
         }
     }
 
+    /**
+     * Constructs a program dependence graph.
+     *
+     * @param cfg control flow graph
+     * @throws Exception if PDG construction fails
+     */
     public PDG(final CFG cfg) throws Exception {
         this(new CDG(cfg), new DDG(cfg));
     }
 
-    public PDG(final Method method, boolean paramAsStatement) throws Exception {
-        this(new CFG(method, paramAsStatement));
+    /**
+     * Constructs a program dependence graph
+     *
+     * @param md method whose PDG is to be built
+     * @param paramAsStatement if true, inserts parameters as assign statements at the
+     *                         begining of control flow graph. Default is set to false
+     * @throws Exception if PDG construction fails
+     */
+    public PDG(final Method md, boolean paramAsStatement) throws Exception {
+        this(new CFG(md, paramAsStatement));
     }
 
-    public PDG(final Method method) throws Exception {
-        this(new CFG(method));
+    /**
+     * Constructs a program dependence graph
+     *
+     * @param md method whose PDG is to be built
+     * @throws Exception if PDG construction fails
+     */
+    public PDG(final Method md) throws Exception {
+        this(new CFG(md));
     }
 
     // Getters
-    private Method getMd() {
+
+    /**
+     * Returns the method whose PDG is built
+     *
+     * @return the method whose PDG is built
+     */
+    private Method getMethod() {
         return md;
     }
 
+    /**
+     * Returns the entry node to the graph
+     *
+     * @return the entry node to the graph
+     */
     public PDGNode getEntryNode() {
         return entryNode;
     }
 
+    /**
+     * Returns the set of all the nodes in the graph
+     *
+     * @return the set of all the nodes in the graph
+     */
     public HashSet<PDGNode> getNodes() {
         return nodes;
     }
 
     /**
-     * Gives back the node for the given node id, otherwise returns null
+     * Returns the PDG node for the given node id. If not found then returns null
      *
      * @param id node id
      * @return
@@ -92,7 +136,7 @@ public class PDG {
     }
 
     /**
-     * Adds CDG nodes and edges to PDG
+     * Adds CDG nodes and edges to program dependence graph
      *
      * @param cdg control dependence graph
      */

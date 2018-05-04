@@ -37,7 +37,16 @@ public class PDTree {
     private Method md;
     private TreeNode rootNode;
     private HashSet<TreeNode> nodes = new HashSet<TreeNode>();
+    private boolean isEntryNode = false; // as specified in ferrante-1987 paper on PDG
 
+    // Constructors
+
+    /**
+     * Constructs a post-dominator tree
+     *
+     * @param cfg control flow graph
+     * @throws Exception if tree construction fails
+     */
     public PDTree(final CFG cfg) throws Exception {
         this.md = cfg.md;
         if (cfg.getNodes().size() > 0) {
@@ -47,23 +56,69 @@ public class PDTree {
         }
     }
 
-    public PDTree(final Method method, boolean paramAsStatement) throws Exception {
-        this(new CFG(method, paramAsStatement));
+    /**
+     * Constructs a post-dominator tree
+     *
+     * @param md method whose post-dominator tree is to be built
+     * @param paramAsStatement if true, inserts parameters as assign statements at the
+     *                         begining of control flow graph. Default is set to false
+     * @throws Exception if tree construction fails
+     */
+    public PDTree(final Method md, boolean paramAsStatement) throws Exception {
+        this(new CFG(md, paramAsStatement));
     }
 
-    public PDTree(final Method method) throws Exception {
-        this(new CFG(method));
+    /**
+     * Constructs a post-dominator tree
+     *
+     * @param md method whose post-dominator tree is to be built
+     * @throws Exception if tree construction fails
+     */
+    public PDTree(final Method md) throws Exception {
+        this(new CFG(md));
+    }
+
+    // Setters
+
+    /**
+     * Augments tree with entry node
+     */
+    public void addEntryNode() {
+        if (!isEntryNode) {
+            rootNode = getNode(nodes.size());
+            TreeNode entry = new TreeNode(nodes.size() + 1);
+            entry.setParent(rootNode);
+            rootNode.addChild(entry);
+            nodes.add(entry);
+            isEntryNode = true;
+        }
     }
 
     // Getters
+
+    /**
+     * Returns the method whose post-dominator tree is built
+     *
+     * @return the method whose post-dominator tree is built
+     */
     public Method getMethod() {
         return md;
     }
 
+    /**
+     * Returns the root node of the tree
+     *
+     * @return the root node of the tree
+     */
     public TreeNode getRootNode() {
         return rootNode;
     }
 
+    /**
+     * Returns the set of all the nodes in the tree
+     *
+     * @return the set of all the nodes in the tree
+     */
     public HashSet<TreeNode> getNodes() {
         return nodes;
     }
@@ -72,7 +127,7 @@ public class PDTree {
      * Returns the immediate post-dominator of the given node
      *
      * @param node whose immediate post-dominator is requested
-     * @return parent TreeNode
+     * @return the immediate post-dominator of the given node
      */
     public TreeNode getImmediatePostDominator(TreeNode node) {
         for (TreeNode n: nodes)
@@ -85,7 +140,7 @@ public class PDTree {
      * Returns the immediate post-dominator for the given node id
      *
      * @param nodeid of the node whose immediate post-dominator is requested
-     * @return parent TreeNode
+     * @return the immediate post-dominator of the given node
      */
     public TreeNode getImmediatePostDominator(int nodeid) {
         for (TreeNode n: nodes)
@@ -95,10 +150,10 @@ public class PDTree {
     }
 
     /**
-     * Gives back the node for the given node id, otherwise returns null
+     * Returns the tree node for the given node id. If not found then returns null
      *
      * @param id node id
-     * @return tree nodes
+     * @return the tree node for the given node id. If not found then returns null
      */
     public TreeNode getNode(int id) {
         for (TreeNode node: nodes) {
@@ -109,10 +164,10 @@ public class PDTree {
     }
 
     /**
-     * Computes post-dominators for each node in the control flow graph
+     * Computes and returns map of post-dominators for each node in the control flow graph
      *
      * @param cfg control flow graph
-     * @return map of node and corresponding set of post-dominator nodes
+     * @return map of nodes and corresponding set of post-dominator nodes
      * @throws Exception
      */
     private Map<CFGNode, Set<CFGNode>> computePostDomonitors(final CFG cfg) throws Exception {
@@ -165,10 +220,10 @@ public class PDTree {
     }
 
     /**
-     * Computes immediate post-dominator for each node
+     * Computes and returns map of nodes and corresponding immediate post-dominators
      *
      * @param pdom map of nodes and corresponding post-dominators
-     * @return map of nodes and corresponding immediate post-dominator
+     * @return map of nodes and corresponding immediate post-dominators
      */
     private Map<CFGNode, CFGNode> computeImmediatePostDominator(final Map<CFGNode, Set<CFGNode>> pdom, final CFG cfg) {
         // inefficient implementation: t-complexity = O(n^3)
@@ -208,20 +263,12 @@ public class PDTree {
          */
         try {
             for (Map.Entry<CFGNode, CFGNode> entry : ipdoms.entrySet()) {
-                CFGNode ipdom = entry.getValue();
-
-                TreeNode src = getNode(ipdom);
+                TreeNode src = getNode(entry.getValue());
                 TreeNode dest = getNode(entry.getKey());
 
                 src.addChild(dest);
                 dest.setParent(src);
             }
-
-            rootNode = getNode(stopid);
-            TreeNode entry = new TreeNode(stopid + 1);
-            entry.setParent(rootNode);
-            rootNode.addChild(entry);
-            nodes.add(entry);
 
         } catch (Exception e) {
             System.out.println(BoaAstIntrinsics.prettyprint(md));
@@ -230,10 +277,10 @@ public class PDTree {
     }
 
     /**
-     * Checks if a node already exists and returns it, otherwise returns a new node.
+     * Returns the existing tree node for the given CFG node. If not found then returns a new node
      *
-     * @param cfgNode a control flow graph node
-     * @return a new tree node or an existing tree node
+     * @param cfgNode control flow graph node
+     * @return the existing tree node for the given CFG node. If not found then returns a new node
      */
     private TreeNode getNode(final CFGNode cfgNode) {
         TreeNode node = getNode(cfgNode.getId());
