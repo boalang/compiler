@@ -115,7 +115,7 @@ public class CDG {
      * @param id node id
      * @return the CDG node for the given node id. If not found then returns null
      */
-    public CDGNode getNode(int id) {
+    public CDGNode getNode(int id) { // sort and do b-search
         for (CDGNode n: nodes)
             if (n.getId() == id)
                 return n;

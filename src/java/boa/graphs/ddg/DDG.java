@@ -153,68 +153,65 @@ public class DDG {
      * @return map of in and out variables for each node
      * @throws Exception
      */
-    private HashMap<Integer, InOut> getLiveVariables(final CFG cfg) throws Exception {
-        BoaAbstractTraversal liveVar = new BoaAbstractTraversal<InOut>(true, true) {
-            
-            protected InOut preTraverse(final CFGNode node) throws Exception {
-                InOut currentNode;
+    private Map<Integer, InOut> getLiveVariables(final CFG cfg) throws Exception {
+        Map<Integer, InOut> liveVars = new HashMap<Integer, InOut>();
+        for (CFGNode n: cfg.getNodes())
+            liveVars.put(n.getId(), new InOut());
 
-                if ((getValue(node) != null))
-                    currentNode = getValue(node);
-                else
-                    currentNode = new InOut();
+        Map<Integer, InOut> currentLiveVars = new HashMap<Integer, InOut>();
+        int stopid = cfg.getNodes().size() - 1;
+        boolean saturated = false;
+
+        while (!saturated) {
+            int changeCount = 0;
+
+            for (CFGNode node: cfg.getNodes()) {
+                InOut nodeLiveVars = new InOut(liveVars.get(node.getId()));
 
                 // out = Union in[node.successor]
-                for (CFGNode s: node.getSuccessorsList()) {
-                    InOut succ = getValue(s);
-                    if (succ != null)
-                        currentNode.out.addAll(succ.in);
-                }
+                for (CFGNode s: node.getSuccessorsList())
+                    nodeLiveVars.out.addAll(liveVars.get(s.getId()).in);
 
                 // out - def
-                Set<Pair> currentDiff = new HashSet<Pair>(currentNode.out);
+                Set<Pair> diff = new HashSet<Pair>(nodeLiveVars.out);
                 if (!node.getDefVariables().equals(""))
-                    for (Pair p: currentNode.out)
+                    for (Pair p: nodeLiveVars.out)
                         if (p.var.equals(node.getDefVariables()))
-                            currentDiff.remove(p);
+                            diff.remove(p);
 
                 // in = use Union (out - def)
                 for (String var: node.getUseVariables())
-                    currentNode.in.add(new Pair(var, node));
-                currentNode.in.addAll(currentDiff);
+                    nodeLiveVars.in.add(new Pair(var, node));
+                nodeLiveVars.in.addAll(diff);
 
-                return currentNode;
+                // check if node's "in" has changed
+                diff.clear();
+                diff.addAll(nodeLiveVars.in);
+                diff.removeAll(liveVars.get(node.getId()).in);
+                if (diff.size() > 0)
+                    changeCount++;
+
+                // check if node's "out" has changed
+                diff.clear();
+                diff.addAll(nodeLiveVars.out);
+                diff.removeAll(liveVars.get(node.getId()).out);
+                if (diff.size() > 0)
+                    changeCount++;
+
+                currentLiveVars.put(node.getId(), nodeLiveVars);
             }
 
-            @Override
-            public void traverse(final CFGNode node, boolean flag) throws Exception {
-                if(flag) {
-                    currentResult = preTraverse(node);
-                    outputMapObj.put(node.getId(), new InOut(currentResult));
-                }
-                else
-                    outputMapObj.put(node.getId(), preTraverse(node));
+            if (changeCount == 0)
+                saturated = true;
+            else {
+                liveVars.clear();
+                liveVars.putAll(currentLiveVars);
+                currentLiveVars.clear();
             }
-        };
+        }
 
-        BoaAbstractFixP fixp = new boa.runtime.BoaAbstractFixP() {
-
-            public boolean invoke1(final InOut current, final InOut previous) throws Exception {
-                Set<Pair> curr = new HashSet<Pair>(current.in);
-                curr.removeAll(previous.in);
-                return curr.size() == 0;
-            }
-
-            @Override
-            public boolean invoke(Object current, Object previous) throws Exception{
-                return invoke1((InOut) current, (InOut) previous);
-            }
-        };
-
-        liveVar.traverse(cfg , Traversal.TraversalDirection.BACKWARD, Traversal.TraversalKind.POSTORDER, fixp);
-        liveVar.outputMapObj.remove(cfg.getNodes().size()-1);
-
-        return liveVar.outputMapObj;
+        liveVars.remove(stopid);
+        return liveVars;
     }
 
     /**

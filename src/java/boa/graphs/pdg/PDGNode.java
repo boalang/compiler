@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Program Dependence Graph builder node
+ * Program Dependence Graph node
  *
  * @author marafat
  */
@@ -218,7 +218,7 @@ public class PDGNode implements Comparable<PDGNode> {
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof PDGNode)) return false;
 
         PDGNode pdgNode = (PDGNode) o;
 

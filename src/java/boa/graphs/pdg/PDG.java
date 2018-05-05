@@ -89,7 +89,7 @@ public class PDG {
      * @throws Exception if PDG construction fails
      */
     public PDG(final Method md) throws Exception {
-        this(new CFG(md));
+        this(new CFG(md, false));
     }
 
     // Getters

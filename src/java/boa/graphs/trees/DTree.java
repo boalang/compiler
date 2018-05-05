@@ -176,9 +176,9 @@ public class DTree {
                 pDomMap.put(n, cfg.getNodes());
         }
 
-        boolean saturation = false;
-        while (!saturation) { // iterate untill the fix point is reached
-            Map<CFGNode, Set<CFGNode>> currentPDomMap = new HashMap<CFGNode, Set<CFGNode>>();
+        Map<CFGNode, Set<CFGNode>> currentPDomMap = new HashMap<CFGNode, Set<CFGNode>>();
+        boolean saturated = false;
+        while (!saturated) { // iterate untill the fix point is reached
             int changeCount = 0;
             for (CFGNode n: cfg.getNodes()) {
                 Set<CFGNode> currentPDom = new HashSet<CFGNode>();
@@ -202,13 +202,17 @@ public class DTree {
                     changeCount++;
                 currentPDomMap.put(n, currentPDom);
             }
+
             if (changeCount == 0)
-                saturation = true;
-            else
-                pDomMap = currentPDomMap;
+                saturated = true;
+            else {
+                pDomMap.clear();
+                pDomMap.putAll(currentPDomMap);
+                currentPDomMap.clear();
+            }
         }
 
-        // strict dominators
+        // strict dominance
         for (CFGNode n: pDomMap.keySet())
             pDomMap.get(n).remove(n);
 

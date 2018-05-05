@@ -35,10 +35,10 @@ import static boa.functions.BoaAstIntrinsics.prettyprint;
 public class PDGSlicer {
 
     private Method md;
-    public ArrayList<PDGNode> entrynodes = new ArrayList<PDGNode>();
+    private ArrayList<PDGNode> entrynodes = new ArrayList<PDGNode>();
     private HashSet<PDGNode> slice = new HashSet<PDGNode>();
     private boolean normalize = false;
-    int hashcode = -1;
+    private int hashcode = -1;
 
     // Constructors
     public PDGSlicer(Method method, PDGNode n) throws Exception {
@@ -46,7 +46,6 @@ public class PDGSlicer {
         if (n != null) {
             entrynodes.add(n);
             getSlice(new PDG(method, true));
-            Collections.sort(entrynodes, new PDGNodeComparator());
         }
     }
 
@@ -54,7 +53,6 @@ public class PDGSlicer {
         this.md = method;
         entrynodes.addAll(Arrays.asList(n));
         getSlice(new PDG(method, true));
-        Collections.sort(entrynodes, new PDGNodeComparator());
     }
 
     public PDGSlicer(Method method, int nid, boolean normalize) throws Exception {
@@ -65,7 +63,6 @@ public class PDGSlicer {
         if (node != null) {
             entrynodes.add(node);
             getSlice(pdg);
-            Collections.sort(entrynodes, new PDGNodeComparator());
         }
     }
 
@@ -84,7 +81,6 @@ public class PDGSlicer {
         }
         if (entrynodes.size() > 0) {
             getSlice(pdg);
-            Collections.sort(entrynodes, new PDGNodeComparator());
         }
     }
 
@@ -112,7 +108,6 @@ public class PDGSlicer {
         Stack<PDGNode> nodes = new Stack<PDGNode>();
         nodes.addAll(entrynodes);
         Map<String, String> normalizedVars = new HashMap<String, String>();
-        StringBuilder sb = new StringBuilder();
         int varCount = 1;
         try {
             while (nodes.size() != 0) {
@@ -143,10 +138,8 @@ public class PDGSlicer {
                     Expression exp = normalizeExpression(node.getExpr(), normalizedVars);
                     node.setExpr(exp); //FIXME: create a clone of the node and then set
                 }
-                sb.append(node.getExpr());
                 slice.add(node);
-                // for hashcode
-                Collections.sort(node.getSuccessors(), new PDGNodeComparator());
+
                 for (PDGNode succ : node.getSuccessors())
                     if (!slice.contains(succ))
                         nodes.push(succ);
@@ -156,7 +149,7 @@ public class PDGSlicer {
             throw e;
         }
 
-        hashcode = sb.toString().hashCode();
+        calculateHash();
     }
 
     /**
@@ -245,6 +238,33 @@ public class PDGSlicer {
         }
     }
 
+    /**
+     * Computes hash code of the slice for caching purpose
+     */
+    private void calculateHash() {
+        Collections.sort(entrynodes, new PDGNodeComparator());
+
+        Stack<PDGNode> nodes = new Stack<PDGNode>();
+        nodes.addAll(entrynodes);
+        Set<PDGNode> visited = new HashSet<PDGNode>();
+        StringBuilder sb = new StringBuilder();
+
+        while (nodes.size() != 0) {
+            PDGNode node = nodes.pop();
+            sb.append(prettyprint(node.getExpr()));
+
+            visited.add(node);
+            Collections.sort(node.getSuccessors(), new PDGNodeComparator());
+
+            for (PDGNode succ : node.getSuccessors())
+                if (!visited.contains(succ))
+                    nodes.push(succ);
+
+        }
+
+        hashcode = sb.toString().hashCode();
+    }
+
     // Copied from BoaNormalFormintrincics.
     // TODO: Put all such methods in BoaNormalFormintrinsics as static factories in a new class
     /**
@@ -290,7 +310,7 @@ public class PDGSlicer {
         Set<PDGNode> visited1 = new HashSet<PDGNode>();
         Set<PDGNode> visited2 = new HashSet<PDGNode>();
         nodes1.addAll(entrynodes);
-        nodes2.addAll(pdgSlicer.entrynodes);
+        nodes2.addAll(pdgSlicer.getEntrynodesList());
 
         while (nodes1.size() != 0) {
             if (nodes1.size() != nodes2.size())
@@ -304,8 +324,8 @@ public class PDGSlicer {
 
             visited1.add(node1);
             visited2.add(node2);
-            Collections.sort(node1.getSuccessors(), new PDGNodeComparator()); // bcoz Java-6
-            Collections.sort(node2.getSuccessors(), new PDGNodeComparator()); // bcoz Java-6
+            //Collections.sort(node1.getSuccessors(), new PDGNodeComparator()); // TODO: remove
+            //Collections.sort(node2.getSuccessors(), new PDGNodeComparator()); // TODO: remove
 
             for (int i = 0; i < node1.getSuccessors().size(); i++) {
                 List<PDGEdge> outEdges1 = node1.getOutEdges(node1.getSuccessors().get(i));
