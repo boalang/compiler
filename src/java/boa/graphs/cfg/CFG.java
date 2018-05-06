@@ -798,7 +798,7 @@ public class CFG {
 		final CFGNode node = new CFGNode(label, CFGNodeType.OTHER, "<GOTO>", label);
 		node.setAstNode(root);
 		graph.addBreakNode(node);
-		//graph.getOuts().add(node);
+		graph.getOuts().add(node);
 		return graph;
 	}
 
