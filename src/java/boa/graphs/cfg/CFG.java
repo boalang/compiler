@@ -655,16 +655,17 @@ public class CFG {
 		graph.mergeSeq(node);
 		CFG subgraph = null;
 		Statement sc = null;
+		boolean hasdefault = false;
 		for (int i = 0; i < root.getStatementsCount(); i++) {
 			final Statement s = root.getStatements(i);
 			if (s.getKind() == StatementKind.CASE) {
+				if (!s.hasExpression())
+					hasdefault = true;
 				if (subgraph != null) {
 					if (sc.hasExpression())
 						graph.mergeABranch(subgraph, node, sc.getExpression().toString());
 					else
 						graph.mergeABranch(subgraph, node);
-					if (!sc.hasExpression() && !subgraph.isEmpty())
-						graph.getOuts().remove(node);
 				}
 				subgraph = new CFG();
 				sc = s;
@@ -677,7 +678,7 @@ public class CFG {
 			else
 				graph.mergeABranch(subgraph, node);
 		}
-		if (sc != null && !sc.hasExpression() && !subgraph.isEmpty())
+		if (hasdefault)
 			graph.getOuts().remove(node);
 		graph.adjustBreakNodes("");
 		return graph;
