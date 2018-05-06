@@ -661,16 +661,31 @@ public class CFG {
 			if (s.getKind() == StatementKind.CASE) {
 				if (!s.hasExpression())
 					hasdefault = true;
-				if (subgraph != null) {
-					if (sc.hasExpression())
-						graph.mergeABranch(subgraph, node, sc.getExpression().toString());
-					else
-						graph.mergeABranch(subgraph, node);
+
+				if (i == 0 || root.getStatements(i-1).getKind() == StatementKind.BREAK) {
+					if (subgraph != null) {
+						if (sc.hasExpression())
+							graph.mergeABranch(subgraph, node, sc.getExpression().toString());
+						else
+							graph.mergeABranch(subgraph, node);
+					}
+					subgraph = new CFG();
+					subgraph.mergeSeq(traverse(node, s));
 				}
-				subgraph = new CFG();
+				else {
+					CFG old_subgrapg = subgraph;
+					subgraph = new CFG();
+					subgraph.mergeSeq(traverse(node, s));
+					if (sc.hasExpression())
+						subgraph.mergeABranch(old_subgrapg, node, sc.getExpression().toString());
+					else
+						subgraph.mergeABranch(old_subgrapg, node);
+				}
 				sc = s;
+
 			}
-			subgraph.mergeSeq(traverse(node, s));
+			else
+				subgraph.mergeSeq(traverse(node, s));
 		}
 		if (subgraph != null) {
 			if (sc.hasExpression())
