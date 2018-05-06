@@ -60,7 +60,7 @@ public class CFG {
 	int count = 0;
 
 	public CFG(final Method method) {
-        this(method, "this");
+		this(method, "this");
 	}
 
 	public CFG(final Method method, final String cls_name) {
@@ -351,11 +351,11 @@ public class CFG {
 			else
 				mergeSeq(traverse(startNode, md.getStatementsList().get(0)));
 
-            adjustReturnNodes();
-            final CFGNode endNode = new CFGNode("EXIT", CFGNodeType.ENTRY, "EXIT",
-                    "EXIT");
-            mergeSeq(endNode);
-            this.exitNode = endNode;
+			adjustReturnNodes();
+			final CFGNode endNode = new CFGNode("EXIT", CFGNodeType.ENTRY, "EXIT",
+					"EXIT");
+			mergeSeq(endNode);
+			this.exitNode = endNode;
 
 			this.entryNode = startNode;
 			for (final CFGNode node : this.nodes) {
@@ -502,7 +502,7 @@ public class CFG {
 			aNode.setAstNode(root);
 			graph.mergeSeq(aNode);
 			return graph;
-        case EMPTY:
+		case EMPTY:
 		default:
 			break;
 		}
@@ -649,47 +649,35 @@ public class CFG {
 	private CFG traverse_switch(final CFGNode cfgNode, final Statement root) {
 		this.isBranchPresent = true;
 		final CFG graph = new CFG();
-		final CFGNode node = new CFGNode(root.getExpression().toString(),
-				CFGNodeType.CONTROL, "SWITCH", "SWITCH");
+		final CFGNode node = new CFGNode(root.getExpression().toString(), CFGNodeType.CONTROL, "SWITCH", "SWITCH");
 		node.setAstNode(root.getExpression());
-		node.setPid((cfgNode == null) ? "." : cfgNode.getPid()
-				+ cfgNode.getId() + ".");
+		node.setPid((cfgNode == null) ? "." : cfgNode.getPid()+ cfgNode.getId() + ".");
 		graph.mergeSeq(node);
 		CFG subgraph = null;
 		Statement sc = null;
-		CFG breakBranch = null;
 		for (int i = 0; i < root.getStatementsCount(); i++) {
 			final Statement s = root.getStatements(i);
 			if (s.getKind() == StatementKind.CASE) {
-				if (breakBranch != null) { //FIXME: Empty IF
-					//graph.mergeABranch(breakBranch, node);
-					//graph.getOuts().remove(node);
-				}
 				if (subgraph != null) {
-					if (sc.getExpression() != null)
-						graph.mergeABranch(subgraph, node, sc.getExpression()
-								.toString());
+					if (sc.hasExpression())
+						graph.mergeABranch(subgraph, node, sc.getExpression().toString());
 					else
 						graph.mergeABranch(subgraph, node);
-					if ((sc.getExpression() == null) && !subgraph.isEmpty())
+					if (!sc.hasExpression() && !subgraph.isEmpty())
 						graph.getOuts().remove(node);
 				}
 				subgraph = new CFG();
 				sc = s;
-				subgraph.mergeSeq(traverse(node, s));
-			} else {
-				breakBranch = traverse(node, s);
-				subgraph.mergeSeq(breakBranch);
 			}
+			subgraph.mergeSeq(traverse(node, s));
 		}
 		if (subgraph != null) {
-			if (sc.getExpression() != null)
-				graph.mergeABranch(subgraph, node, sc.getExpression()
-						.toString());
+			if (sc.hasExpression())
+				graph.mergeABranch(subgraph, node, sc.getExpression().toString());
 			else
 				graph.mergeABranch(subgraph, node);
 		}
-		if (sc != null && (sc.getExpression() == null) && !subgraph.isEmpty())
+		if (sc != null && !sc.hasExpression() && !subgraph.isEmpty())
 			graph.getOuts().remove(node);
 		graph.adjustBreakNodes("");
 		return graph;
@@ -831,8 +819,8 @@ public class CFG {
 	private CFG traverse_throw(final CFGNode cfgNode, final Statement root) {
 		this.isBranchPresent = true;
 		final CFG graph = new CFG();
-        // FIXME what if its "throw new m(a(), x());"?
-		/*if (root.getExpression() != null)
+		// FIXME what if its "throw new m(a(), x());"?
+		/*if (root.hasExpression())
 			graph.mergeSeq(traverse(cfgNode, root.getExpression()));
 		*/
 		final CFGNode node = new CFGNode("END[throw]", CFGNodeType.OTHER, "END[throw]",
@@ -844,8 +832,8 @@ public class CFG {
 
 	private CFG traverse_return(final CFGNode cfgNode, final Statement root) {
 		final CFG graph = new CFG();
-        // FIXME what if its "return m();"?
-		/*if (root.getExpression() != null)
+		// FIXME what if its "return m();"?
+		/*if (root.hasExpression())
 			graph.mergeSeq(traverse(cfgNode, root.getExpression()));
 		*/
 		final CFGNode node = new CFGNode("END[return]", CFGNodeType.OTHER, "END[return]",
