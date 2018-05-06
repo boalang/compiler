@@ -17,6 +17,7 @@
 package boa.graphs.slicers;
 
 import boa.functions.BoaAstIntrinsics;
+import boa.graphs.cfg.CFGEdge;
 import boa.graphs.pdg.PDG;
 import boa.graphs.pdg.PDGEdge;
 import boa.graphs.pdg.PDGNode;
@@ -137,6 +138,11 @@ public class PDGSlicer {
                     node.setUseVariables(useVars);
                     Expression exp = normalizeExpression(node.getExpr(), normalizedVars);
                     node.setExpr(exp); //FIXME: create a clone of the node and then set
+
+                    for (PDGEdge e: node.getOutEdges()) {
+                        String label = e.getLabel();
+                        e.setLabel(normalizedVars.get(label));
+                    }
                 }
                 slice.add(node);
 
@@ -302,7 +308,7 @@ public class PDGSlicer {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof PDGSlicer)) return false;
         PDGSlicer pdgSlicer = (PDGSlicer) o;
 
         Stack<PDGNode> nodes1 = new Stack<PDGNode>();
