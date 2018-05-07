@@ -29,7 +29,7 @@ public class PDGEdge {
 
     private PDGNode src;
     private PDGNode dest;
-    private String label; // name of the variable for data edge, T or F for Control Edge
+    private String label; // name of the variable for Data Edge, T or F for Control Edge
     private PDGEdgeType kind;
 
     // Constructors
@@ -120,7 +120,7 @@ public class PDGEdge {
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof PDGEdge)) return false;
 
         PDGEdge pdgEdge = (PDGEdge) o;
 

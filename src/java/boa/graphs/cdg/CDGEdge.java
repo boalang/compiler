@@ -111,7 +111,7 @@ public class CDGEdge {
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof CDGEdge)) return false;
 
         CDGEdge cdgEdge = (CDGEdge) o;
 

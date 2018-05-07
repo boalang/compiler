@@ -55,7 +55,6 @@ public class CDGNode implements Comparable<CDGNode> {
      *
      * @param node Tree node
      */
-
     public CDGNode(final TreeNode node) {
         this.id = node.getId();
         this.stmt = node.getStmt();

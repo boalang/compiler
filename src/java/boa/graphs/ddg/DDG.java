@@ -18,9 +18,6 @@ package boa.graphs.ddg;
 
 import boa.graphs.cfg.CFG;
 import boa.graphs.cfg.CFGNode;
-import boa.runtime.BoaAbstractFixP;
-import boa.runtime.BoaAbstractTraversal;
-import boa.types.Graph.Traversal;
 import boa.types.Ast.*;
 
 import java.util.*;
@@ -153,7 +150,8 @@ public class DDG {
      * @return map of in and out variables for each node
      * @throws Exception
      */
-    private Map<Integer, InOut> getLiveVariables(final CFG cfg) throws Exception {
+    private Map<Integer, InOut> getLiveVariables(final CFG cfg) {
+        // initialize
         Map<Integer, InOut> liveVars = new HashMap<Integer, InOut>();
         for (CFGNode n: cfg.getNodes())
             liveVars.put(n.getId(), new InOut());
@@ -162,7 +160,7 @@ public class DDG {
         int stopid = cfg.getNodes().size() - 1;
         boolean saturated = false;
 
-        while (!saturated) {
+        while (!saturated) { // fix point iteration
             int changeCount = 0;
 
             for (CFGNode node: cfg.getNodes()) {

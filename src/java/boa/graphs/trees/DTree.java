@@ -22,9 +22,6 @@ import boa.functions.BoaAstIntrinsics;
 import boa.types.Ast.Method;
 import boa.graphs.cfg.CFG;
 import boa.graphs.cfg.CFGNode;
-import boa.runtime.BoaAbstractFixP;
-import boa.runtime.BoaAbstractTraversal;
-import boa.types.Graph.Traversal.*;
 
 /**
  * Dominator Tree builder
@@ -167,9 +164,10 @@ public class DTree {
      * @return map of nodes and corresponding set of dominator nodes
      * @throws Exception
      */
-    private Map<CFGNode, Set<CFGNode>> computeDominators(final CFG cfg) throws Exception {
+    private Map<CFGNode, Set<CFGNode>> computeDominators(final CFG cfg) {
         Map<CFGNode, Set<CFGNode>> pDomMap = new HashMap<CFGNode, Set<CFGNode>>();
-        for (CFGNode n: cfg.getNodes()) { // initialize
+        // initialize
+        for (CFGNode n: cfg.getNodes()) {
             if (n.getId() == 0)
                 pDomMap.put(n, new HashSet<CFGNode>(Collections.singletonList(n)));
             else
@@ -178,7 +176,7 @@ public class DTree {
 
         Map<CFGNode, Set<CFGNode>> currentPDomMap = new HashMap<CFGNode, Set<CFGNode>>();
         boolean saturated = false;
-        while (!saturated) { // iterate untill the fix point is reached
+        while (!saturated) { // fix point iteration
             int changeCount = 0;
             for (CFGNode n: cfg.getNodes()) {
                 Set<CFGNode> currentPDom = new HashSet<CFGNode>();
