@@ -16,8 +16,6 @@
  */
 package boa.graphs.slicers;
 
-import boa.functions.BoaAstIntrinsics;
-import boa.graphs.cfg.CFGEdge;
 import boa.graphs.pdg.PDG;
 import boa.graphs.pdg.PDGEdge;
 import boa.graphs.pdg.PDGNode;
@@ -98,10 +96,8 @@ public class PDGSlicer {
         return slice;
     }
 
-    public void sliceHash() {}
-
     /**
-     * Traverse the pdg to collect sliced nodes. Also calculates hashcode of the slice
+     * Traverse the pdg to collect sliced nodes.
      *
      * @param pdg program dependence graph
      */
@@ -110,6 +106,9 @@ public class PDGSlicer {
         nodes.addAll(entrynodes);
         Map<String, String> normalizedVars = new HashMap<String, String>();
         int varCount = 1;
+        // traverse and collect sliced nodes
+        // if normalization is enabled then normalize node expressioin
+        // also update use and def variables for each node
         try {
             while (nodes.size() != 0) {
                 PDGNode node = nodes.pop();
@@ -144,8 +143,9 @@ public class PDGSlicer {
                         e.setLabel(normalizedVars.get(label));
                     }
                 }
-                slice.add(node);
 
+                slice.add(node);
+                // if successor has not been visited, add it
                 for (PDGNode succ : node.getSuccessors())
                     if (!slice.contains(succ))
                         nodes.push(succ);
@@ -155,6 +155,7 @@ public class PDGSlicer {
             throw e;
         }
 
+        // compute and cache hash
         calculateHash();
     }
 
@@ -360,6 +361,9 @@ public class PDGSlicer {
         return hashcode;
     }
 
+    /**
+     * Comparator for node expressions
+     */
     public static class PDGNodeComparator implements Comparator<PDGNode> {
         public int compare(final PDGNode n1, final PDGNode n2) {
             return prettyprint(n1.getExpr()).compareTo(prettyprint(n2.getExpr()));

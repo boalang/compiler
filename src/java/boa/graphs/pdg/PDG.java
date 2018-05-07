@@ -26,7 +26,6 @@ import boa.graphs.ddg.DDGNode;
 import boa.types.Ast.*;
 import boa.types.Control;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -166,6 +165,7 @@ public class PDG {
      * @param ddg data dependency graph
      */
     private void addDDGEdges(final DDG ddg) {
+        // all the nodes and control edges have already added. Only adds data edges
         try {
             for (Map.Entry<DDGNode, Set<DDGNode>> entry : ddg.getDefUseChain().entrySet()) {
                 PDGNode src = getNode(entry.getKey().getId());

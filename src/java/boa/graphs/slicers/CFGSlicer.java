@@ -74,7 +74,8 @@ public class CFGSlicer {
         if (entrynodes.size() > 0)
             getSlice(cfg, entrynodes);
     }
-    // Getter
+
+    // Getters
     public ArrayList<CFGNode> getSlice() {
         return slice;
     }
@@ -92,14 +93,12 @@ public class CFGSlicer {
         final Set<CFGNode> controlInflNodes = new HashSet<CFGNode>();
         final Map<Integer, Set<CFGNode>> infl = getInfluence(new PDTree(cfg), cfg);
 
+        // TODO: get rid of the traversal
         BoaAbstractTraversal slicer = new BoaAbstractTraversal<Set<String>>(true, true) {
 
             protected Set<String> preTraverse(final CFGNode node) throws Exception {
-                String gen = null;
-                Set<String> in = new HashSet<String>();
-                Set<String> out = new HashSet<String>();
-
                 // in(n) = \/(pred) out(pred)
+                Set<String> in = new HashSet<String>();
                 for (CFGNode p: node.getPredecessorsList()) {
                     Set<String> pred = getValue(p);
                     if (pred != null)
@@ -107,6 +106,7 @@ public class CFGSlicer {
                 }
 
                 // gen(n) = def(n) and (ref(n) /\ in(n) != {} or inSlice(n))
+                String gen = null;
                 Set<String> refIn = new HashSet<String>(node.getUseVariables());
                 refIn.retainAll(in);
                 if (refIn.size() != 0 || inSlice.contains(node))
@@ -114,9 +114,10 @@ public class CFGSlicer {
                         gen = node.getDefVariables();
 
                 // kill(n) = def(n)
+                // use def directly
 
                 // out(n) = gen(n) \/ (in(n) - kill(n))
-                out.addAll(in);
+                Set<String> out = new HashSet<String>(in);
                 if (node.getDefVariables() != null)
                     out.remove(node.getDefVariables());
                 if (gen != null)
@@ -138,17 +139,17 @@ public class CFGSlicer {
             @Override
             public void traverse(final CFGNode node, boolean flag) throws Exception {
                 if(flag) {
-                    currentResult = preTraverse(node); // remove new object creation
+                    currentResult = preTraverse(node);
                     outputMapObj.put(node.getId(), new HashSet<String>(currentResult));
                 }
                 else
-                    outputMapObj.put(node.getId(), preTraverse(node)); // remove new object creation
+                    outputMapObj.put(node.getId(), preTraverse(node));
             }
         };
 
         BoaAbstractFixP fixp = new BoaAbstractFixP() {
 
-            public boolean invoke1(final Set<String> current, final Set<String> previous) throws Exception {
+            public boolean invoke1(final Set<String> current, final Set<String> previous) {
                 Set<String> curr = new HashSet<String>(current);
                 curr.removeAll(previous);
                 return curr.size() == 0;
@@ -175,6 +176,7 @@ public class CFGSlicer {
      * @return map of control nodes and dependent nodes
      */
     private Map<Integer, Set<CFGNode>> getInfluence(final PDTree pdTree, final CFG cfg) {
+        // store source and desination of control edges with label
         Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
         for (CFGNode n : cfg.getNodes()) {
             if (n.getKind() == Control.CFGNode.CFGNodeType.CONTROL)
@@ -185,6 +187,7 @@ public class CFGSlicer {
                         controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, e.label());
         }
 
+        // add the edge: entry ---> start
         Map<Integer, Set<CFGNode>> contolDependentMap = new HashMap<Integer, Set<CFGNode>>();
 
         for (Integer[] enodes : controlEdges.keySet()) {

@@ -53,7 +53,7 @@ public class PreconditionAggregator extends Aggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		//data expected format: "no_of_args:pid:fq_clientmethodname:precondition"
+		// data expected format: "no_of_args:pid:fq_clientmethodname:precondition"
 		final String[] sData = data.split(":", 4);
 
 		if (Integer.parseInt(sData[0]) > this.args)
@@ -146,7 +146,7 @@ public class PreconditionAggregator extends Aggregator {
 	 * Merges preconditions with implications
 	 *
 	 * @param precondMP inferred Preconditions
-	 * @return map of precondition with precondition with implication merged
+	 * @return map of precondition with "precondition with implication" merged
 	 */
 
 	private Map<Expression, Set<String>> mergeConditionsWithImplication(final Map<Expression, Set<String>> precondMP) {
@@ -179,7 +179,7 @@ public class PreconditionAggregator extends Aggregator {
 	}
 
 	/**
-	 * Removes specific preconditions like equality
+	 * Removes specific preconditions like equality which occur too frequently
 	 *
 	 * @param precondMP map of preconditions after inference step
 	 * @return map of preconditons with specific preconditions removed
@@ -297,7 +297,7 @@ public class PreconditionAggregator extends Aggregator {
 	}
 
 	/**
-	 * Generates all possible combinations of arguments and reciever
+	 * Generates all possible combinations of arguments and reciever: k = 2^(args+1) - 1
 	 *
 	 * @return set of all combinations of arguments
 	 */
