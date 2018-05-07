@@ -661,31 +661,16 @@ public class CFG {
 			if (s.getKind() == StatementKind.CASE) {
 				if (!s.hasExpression())
 					hasdefault = true;
-
-				if (i == 0 || root.getStatements(i-1).getKind() == StatementKind.BREAK) {
-					if (subgraph != null) {
-						if (sc.hasExpression())
-							graph.mergeABranch(subgraph, node, sc.getExpression().toString());
-						else
-							graph.mergeABranch(subgraph, node);
-					}
-					subgraph = new CFG();
-					subgraph.mergeSeq(traverse(node, s));
-				}
-				else {
-					CFG old_subgrapg = subgraph;
-					subgraph = new CFG();
-					subgraph.mergeSeq(traverse(node, s));
+				if (subgraph != null) {
 					if (sc.hasExpression())
-						subgraph.mergeABranch(old_subgrapg, node, sc.getExpression().toString());
+						graph.mergeABranch(subgraph, node, sc.getExpression().toString());
 					else
-						subgraph.mergeABranch(old_subgrapg, node);
+						graph.mergeABranch(subgraph, node);
 				}
+				subgraph = new CFG();
 				sc = s;
-
 			}
-			else
-				subgraph.mergeSeq(traverse(node, s));
+			subgraph.mergeSeq(traverse(node, s));
 		}
 		if (subgraph != null) {
 			if (sc.hasExpression())
@@ -814,7 +799,7 @@ public class CFG {
 		final CFGNode node = new CFGNode(label, CFGNodeType.OTHER, "<GOTO>", label);
 		node.setAstNode(root);
 		graph.addBreakNode(node);
-		graph.getOuts().add(node);
+		//graph.getOuts().add(node);
 		return graph;
 	}
 
