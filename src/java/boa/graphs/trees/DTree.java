@@ -254,7 +254,7 @@ public class DTree {
      *
      * @param idoms map of nodes and their immediate dominators
      */
-    private void buildDomTree(final Map<CFGNode, CFGNode> idoms) {
+    private void buildDomTree(final Map<CFGNode, CFGNode> idoms) throws Exception {
         /* Create an edge between idom and corresponding node.
          * Since each node can have only one idom, the resulting graph will form a tree
          */
@@ -271,6 +271,7 @@ public class DTree {
 
         } catch (Exception e) {
             System.out.println(BoaAstIntrinsics.prettyprint(md));
+            throw e;
         }
     }
 

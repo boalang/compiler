@@ -257,7 +257,7 @@ public class PDTree {
      *
      * @param ipdoms map of nodes and their immediate post-dominators
      */
-    private void buildPDomTree(final Map<CFGNode, CFGNode> ipdoms) {
+    private void buildPDomTree(final Map<CFGNode, CFGNode> ipdoms) throws Exception {
         /* Create an edge between ipdom and corresponding node.
          * Since each node can have only one ipdom, the resulting graph will form a tree
          */

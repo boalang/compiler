@@ -185,7 +185,7 @@ public class CDG {
      * @param treeNode post dominator tree node
      * @return the existing CDG node for the given Tree node. If not found then returns a new node
      */
-    private CDGNode getNode(final TreeNode treeNode) {
+    private CDGNode getNode(final TreeNode treeNode) throws Exception {
         try {
             CDGNode node = getNode(treeNode.getId());
             if (node != null)

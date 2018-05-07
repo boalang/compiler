@@ -101,7 +101,7 @@ public class PDGSlicer {
      *
      * @param pdg program dependence graph
      */
-    private void getSlice(PDG pdg) {
+    private void getSlice(PDG pdg) throws Exception {
         Stack<PDGNode> nodes = new Stack<PDGNode>();
         nodes.addAll(entrynodes);
         Map<String, String> normalizedVars = new HashMap<String, String>();
@@ -143,7 +143,7 @@ public class PDGSlicer {
                         e.setLabel(normalizedVars.get(label));
                     }
                 }
-                
+
                 slice.add(node);
                 // if successor has not been visited, add it
                 for (PDGNode succ : node.getSuccessors())
