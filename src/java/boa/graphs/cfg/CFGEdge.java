@@ -24,13 +24,18 @@ import boa.types.Control.CFGNode.CFGNodeType;
  *
  * @author ganeshau
  */
-public class CFGEdge {
+public class CFGEdge implements Comparable<CFGEdge> {
 	public static long numOfEdges = 0;
 
 	private long id;
 	private CFGNode src;
 	private CFGNode dest;
 	private String label = ".";
+
+	@Override
+	public int compareTo(final CFGEdge edge) {
+		return this.dest.getId() - edge.dest.getId();
+	}
 
 	public CFGEdge(final long id, final CFGNode src, final CFGNode dest) {
 		this.id = id;

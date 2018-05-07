@@ -1,0 +1,13 @@
+digraph {
+	0[shape=ellipse,label="[0] ENTRY"]
+	1[shape=diamond,label="[1] true"]
+	2[shape=diamond,label="[2] x"]
+	3[shape=box,label="[3] break;"]
+	4[shape=ellipse,label="[4] EXIT"]
+	0 -> 1
+	1 -> 2 [label="T"]
+	1 -> 4
+	2 -> 1 [label="B"]
+	2 -> 3 [label="T"]
+	3 -> 4
+}

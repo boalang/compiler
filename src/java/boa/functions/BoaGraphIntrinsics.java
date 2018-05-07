@@ -222,7 +222,7 @@ public class BoaGraphIntrinsics {
 			str.append("\tlabel=\"" + dotEscape(label) + "\"\n");
 		}
 
-		for (final boa.graphs.cfg.CFGNode n : cfg.getNodes()) {
+		for (final boa.graphs.cfg.CFGNode n : cfg.sortNodes()) {
 			final String shape;
 			switch (n.getKind()) {
 				case CONTROL:
@@ -252,8 +252,9 @@ public class BoaGraphIntrinsics {
 
 		final boa.runtime.BoaAbstractTraversal printGraph = new boa.runtime.BoaAbstractTraversal<Object>(false, false) {
 			protected Object preTraverse(final boa.graphs.cfg.CFGNode node) throws Exception {
-				final java.util.Set<boa.graphs.cfg.CFGEdge> edges = node.getOutEdges();
-				for (final boa.graphs.cfg.CFGEdge e : node.getOutEdges()) {
+				final java.util.List<boa.graphs.cfg.CFGEdge> edges = new ArrayList<boa.graphs.cfg.CFGEdge>(node.getOutEdges());
+                Collections.sort(edges);
+				for (final boa.graphs.cfg.CFGEdge e : edges) {
 					str.append("\t" + node.getId() + " -> " + e.getDest().getId());
 					if (!(e.label() == null || e.label().equals(".") || e.label().equals("")))
 						str.append(" [label=\"" + dotEscape(e.label()) + "\"]");
