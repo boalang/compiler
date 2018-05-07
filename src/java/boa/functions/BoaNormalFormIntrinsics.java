@@ -54,7 +54,7 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * Replaces api arguments in an expression with symbolic names
+	 * Replaces api arguments in the given expression with symbolic names
 	 *
 	 * @param e predicate expression
 	 * @param reciever api receiver
@@ -587,7 +587,7 @@ public class BoaNormalFormIntrinsics {
 						}
 
 					}
-					//if((Byte)o[1] == 0)
+					// if((Byte)o[1] == 0)
 					if(o[1].equals('n'))
 						num.add((Expression) o[0]);
 					else
@@ -668,7 +668,7 @@ public class BoaNormalFormIntrinsics {
 			case OP_ADD:
 			case OP_SUB:
 			case PAREN:
-				//These cases will not execute once the expression is fully siimplified
+				// these cases will not execute once the expression is fully siimplified
 				final Object[] oo = {normalize(expr), type};
 				result.add(oo);
 				break;
