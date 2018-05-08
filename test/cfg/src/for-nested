@@ -1,0 +1,10 @@
+public class C {
+    public void m() {
+        for (int i = 0; i < 5; i++) {
+            System.out.println("hi");
+			for (int j = 0; j < 5; j++) {
+				System.out.println("hello");
+			}
+        }
+    }
+}

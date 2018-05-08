@@ -283,7 +283,7 @@ public class DDG {
     }
 
     // Holds in and out pairs for each node
-    private class InOut {
+    private static class InOut {
         Set<Pair> in;
         Set<Pair> out;
 
@@ -308,7 +308,7 @@ public class DDG {
     }
 
     // (Var, Usenode) pairs: use nodes are needed to construct def-use chains
-    private class Pair {
+    private static class Pair {
         String var;
         CFGNode node;
 
