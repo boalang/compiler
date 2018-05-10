@@ -168,13 +168,20 @@ public class PDTree {
      */
     private Map<CFGNode, Set<CFGNode>> computePostDomonitors(final CFG cfg) {
         Map<CFGNode, Set<CFGNode>> pDomMap = new HashMap<CFGNode, Set<CFGNode>>();
-        int stopid = cfg.getNodes().size()-1;
+        int stopid = cfg.getNodes().size() - 1;
         // initialize
-        for (CFGNode n: cfg.getNodes()) {
-            if (n.getId() == stopid)
-                pDomMap.put(n, new HashSet<CFGNode>(Collections.singletonList(n)));
-            else
-                pDomMap.put(n, cfg.getNodes());
+        if (cfg.getNodes().size() > 2) {
+            for (CFGNode n : cfg.getNodes()) {
+                if (n.getId() == stopid)
+                    pDomMap.put(n, new HashSet<CFGNode>(Collections.singletonList(n)));
+                else
+                    pDomMap.put(n, cfg.getNodes());
+            }
+        }
+        else {
+            CFGNode stopNode = cfg.getNode(1);
+            pDomMap.put(cfg.getNode(0), new HashSet<CFGNode>(cfg.getNodes()));
+            pDomMap.put(stopNode, new HashSet<CFGNode>(Collections.singletonList(stopNode)));
         }
 
         Map<CFGNode, Set<CFGNode>> currentPDomMap = new HashMap<CFGNode, Set<CFGNode>>();

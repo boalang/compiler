@@ -167,11 +167,18 @@ public class DTree {
     private Map<CFGNode, Set<CFGNode>> computeDominators(final CFG cfg) {
         Map<CFGNode, Set<CFGNode>> pDomMap = new HashMap<CFGNode, Set<CFGNode>>();
         // initialize
-        for (CFGNode n: cfg.getNodes()) {
-            if (n.getId() == 0)
-                pDomMap.put(n, new HashSet<CFGNode>(Collections.singletonList(n)));
-            else
-                pDomMap.put(n, cfg.getNodes());
+        if (cfg.getNodes().size() > 2) {
+            for (CFGNode n : cfg.getNodes()) {
+                if (n.getId() == 0)
+                    pDomMap.put(n, new HashSet<CFGNode>(Collections.singletonList(n)));
+                else
+                    pDomMap.put(n, cfg.getNodes());
+            }
+        }
+        else {
+            CFGNode startNode = cfg.getNode(0);
+            pDomMap.put(startNode, new HashSet<CFGNode>(Collections.singletonList(startNode)));
+            pDomMap.put(cfg.getNode(1), new HashSet<CFGNode>(cfg.getNodes()));
         }
 
         Map<CFGNode, Set<CFGNode>> currentPDomMap = new HashMap<CFGNode, Set<CFGNode>>();

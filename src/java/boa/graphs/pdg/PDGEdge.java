@@ -29,7 +29,7 @@ public class PDGEdge {
 
     private PDGNode src;
     private PDGNode dest;
-    private String label; // name of the variable for Data Edge, T or F for Control Edge
+    private String label; // name of the variable for Data Edge, T or F or switch label for Control Edge
     private PDGEdgeType kind;
 
     // Constructors
