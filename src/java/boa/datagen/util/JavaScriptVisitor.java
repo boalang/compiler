@@ -667,7 +667,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LOOP);
 		node.getIterator().visit(this);
 		b.addExpressions(expressions.pop());
-		node.getIteratedObject();
+		node.getIteratedObject().visit(this);;
 		b.addExpressions(expressions.pop());
 		expressions.push(b.build());
 		return false;
