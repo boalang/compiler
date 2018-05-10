@@ -2,6 +2,7 @@ package boa.datagen.forges.github;
 
 import java.io.File;
 import java.io.IOException;
+
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
@@ -23,6 +24,9 @@ public class RepositoryCloner {
 		File localGitDir = new File(localPath + "/.git");
 		// then clone
 		Git result = null;
+		
+	
+		java.lang.System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
 		try {
 			result = Git.cloneRepository().setURI(url).setBare(true).setDirectory(localGitDir).call();
 			// Note: the call() returns an opened repository already which needs
@@ -31,6 +35,7 @@ public class RepositoryCloner {
 			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
 			result.getRepository().close();
 		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			if (result != null && result.getRepository() != null)
 				result.getRepository().close();
