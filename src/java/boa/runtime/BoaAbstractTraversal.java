@@ -16,8 +16,10 @@
  */
 package boa.runtime;
 
-import java.util.Queue;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 
 import boa.graphs.ddg.DDG;
@@ -169,8 +171,10 @@ public abstract class BoaAbstractTraversal<T1> {
 			if (!visitedNodes.contains(n.getId())) {
 				traverse(n, false);
 				visitedNodes.add(n.getId());
-				for (int i = n.getSuccessorsList().size() - 1; i >= 0; i--) {
-					s.push(n.getSuccessorsList().get(i));
+                List<CFGNode> succ = n.getSuccessorsList();
+                Collections.sort(succ);
+				for (int i = succ.size() - 1; i >= 0; i--) {
+					s.push(succ.get(i));
 				}
 			}
 		}
