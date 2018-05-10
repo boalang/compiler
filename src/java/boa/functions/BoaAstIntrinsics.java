@@ -1337,7 +1337,7 @@ public class BoaAstIntrinsics {
 				if (m.getAnnotationMembersCount() > 0) s += "(";
 				for (int i = 0; i < m.getAnnotationMembersCount(); i++) {
 					if (i > 0) s += ", ";
-					s += m.getAnnotationMembers(i) + " = " + m.getAnnotationValues(i);
+					s += m.getAnnotationMembers(i) + " = " + prettyprint(m.getAnnotationValues(i));
 				}
 				if (m.getAnnotationMembersCount() > 0) s += ")";
 				return s;
