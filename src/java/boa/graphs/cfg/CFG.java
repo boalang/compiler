@@ -659,18 +659,27 @@ public class CFG {
 		for (int i = 0; i < root.getStatementsCount(); i++) {
 			final Statement s = root.getStatements(i);
 			if (s.getKind() == StatementKind.CASE) {
+				final CFG lastsub = subgraph;
+				subgraph = new CFG();
+				subgraph.mergeSeq(traverse(node, s));
+				if (lastsub != null) {
+					for (final CFGNode out : lastsub.outs) {
+						for (final CFGNode in : subgraph.ins) {
+							new CFGEdge(out, in);
+						}
+					}
+					lastsub.outs.clear();
+					if (sc.hasExpression())
+						graph.mergeABranch(lastsub, node, sc.getExpression().toString());
+					else
+						graph.mergeABranch(lastsub, node);
+				}
+				sc = s;
 				if (!s.hasExpression())
 					hasdefault = true;
-				if (subgraph != null) {
-					if (sc.hasExpression())
-						graph.mergeABranch(subgraph, node, sc.getExpression().toString());
-					else
-						graph.mergeABranch(subgraph, node);
-				}
-				subgraph = new CFG();
-				sc = s;
+			} else {
+				subgraph.mergeSeq(traverse(node, s));
 			}
-			subgraph.mergeSeq(traverse(node, s));
 		}
 		if (subgraph != null) {
 			if (sc.hasExpression())

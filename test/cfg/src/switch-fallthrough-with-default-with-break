@@ -1,0 +1,11 @@
+public class C {
+    public void m() {
+        switch (fallThroughWithDefaultWithBreak) {
+            case 1:
+                break;
+            case 2:
+            default:
+                break;
+        }
+    }
+}
