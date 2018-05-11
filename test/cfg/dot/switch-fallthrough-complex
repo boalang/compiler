@@ -1,4 +1,5 @@
 digraph {
+	{ rank = sink; 8; }
 	0[shape=ellipse,label="[0] ENTRY"]
 	1[shape=diamond,label="[1] fallThroughComplex"]
 	2[shape=box,label="[2] case 1:"]
