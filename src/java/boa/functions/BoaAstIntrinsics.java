@@ -1058,7 +1058,7 @@ public class BoaAstIntrinsics {
 				}
 				s += " ";
 				for (int i = 0; i < stmt.getStatementsCount(); i++) {
-					if (stmt.getStatements(i).getKind() != Statement.StatementKind.CATCH)
+					if (i > 0 && stmt.getStatements(i).getKind() != Statement.StatementKind.CATCH)
 						s += indent() + "finally ";
 					s += prettyprint(stmt.getStatements(i)) + "\n";
 				}
