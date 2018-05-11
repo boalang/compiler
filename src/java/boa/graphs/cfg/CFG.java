@@ -176,7 +176,7 @@ public class CFG {
 		// merge Edges
 		for (final CFGNode aNode : outs) {
 			for (final CFGNode anoNode : target.ins) {
-				new CFGEdge(aNode, anoNode);
+				createNewEdge(aNode, anoNode);
 			}
 		}
 
@@ -210,7 +210,7 @@ public class CFG {
 		ins.remove(branch);
 		for (final CFGNode aNode : outs) {
 			if (!aNode.equals(branch)) {
-				new CFGEdge(aNode, branch);
+				createNewEdge(aNode, branch);
 			}
 		}
 
@@ -238,7 +238,7 @@ public class CFG {
 		// merge Edges
 		for (final CFGNode aNode : saveOuts) {
 			for (final CFGNode anoNode : target.ins) {
-				new CFGEdge(aNode, anoNode);
+				createNewEdge(aNode, anoNode);
 			}
 		}
 		outs.addAll(target.outs);
@@ -630,7 +630,7 @@ public class CFG {
 				if (lastsub != null) {
 					for (final CFGNode out : lastsub.outs) {
 						for (final CFGNode in : subgraph.ins) {
-							new CFGEdge(out, in);
+							createNewEdge(out, in);
 						}
 					}
 					lastsub.outs.clear();
