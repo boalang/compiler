@@ -449,13 +449,13 @@ public class CFG {
 		case RETURN:
 			return traverse_return(cfgNode, root);
 		case FOR:
-			return traverse_for (cfgNode, root);
+			return traverse_for(cfgNode, root);
 		case DO:
 			return traverse_do(cfgNode, root);
 		case WHILE:
 			return traverse_while(cfgNode, root);
 		case IF:
-			return traverse_if (cfgNode, root);
+			return traverse_if(cfgNode, root);
 		case BREAK:
 			return traverse_break(cfgNode, root);
 		case CASE:
@@ -824,7 +824,8 @@ public class CFG {
 		}
 		// All catch statements are considered false branches.
 		Statement finallyBlock = null;
-		for (final Statement stmt : root.getStatementsList()) {
+		for (int i = 1; i < root.getStatementsCount(); i++) {
+			final Statement stmt = root.getStatements(i);
 			if (finallyBlock == null && stmt.getKind() == StatementKind.BLOCK) {
 				finallyBlock = stmt;
 			} else {
