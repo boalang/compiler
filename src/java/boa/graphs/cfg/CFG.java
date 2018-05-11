@@ -607,13 +607,17 @@ public class CFG {
 		boolean trueNotEmpty = false, falseNotEmpty = false;
 		if (root.getStatementsCount() > 0) { // Then
 			final CFG trueBranch = traverse(branch, root.getStatements(0));
-			graph.mergeABranch(trueBranch, branch, "T");
-			trueNotEmpty = true;
+			if (trueBranch.getNodes().size() > 0) {
+				graph.mergeABranch(trueBranch, branch, "T");
+				trueNotEmpty = true;
+			}
 		}
 		if (root.getStatementsCount() > 1) { // Else
 			final CFG falseBranch = traverse(branch, root.getStatements(1));
-			graph.mergeABranch(falseBranch, branch, "F");
-			falseNotEmpty = true;
+			if (falseBranch.getNodes().size() > 0) {
+				graph.mergeABranch(falseBranch, branch, "F");
+				falseNotEmpty = true;
+			}
 		}
 		if (trueNotEmpty && falseNotEmpty)
 			graph.getOuts().remove(branch);
