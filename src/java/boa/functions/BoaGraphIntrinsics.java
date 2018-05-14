@@ -215,6 +215,7 @@ public class BoaGraphIntrinsics {
 
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CFG", "string" })
 	public static String cfgToDot(final CFG cfg, final String label) {
+		if (cfg.getNodes().size() == 0) return "";
 		final StringBuilder str = new StringBuilder();
 		str.append("digraph {\n");
 		str.append("\t{ rank = sink; " + (cfg.getNodes().size() - 1) + "; }\n");
@@ -254,7 +255,7 @@ public class BoaGraphIntrinsics {
 		final boa.runtime.BoaAbstractTraversal printGraph = new boa.runtime.BoaAbstractTraversal<Object>(false, false) {
 			protected Object preTraverse(final boa.graphs.cfg.CFGNode node) throws Exception {
 				final java.util.List<boa.graphs.cfg.CFGEdge> edges = new ArrayList<boa.graphs.cfg.CFGEdge>(node.getOutEdges());
-                Collections.sort(edges);
+				Collections.sort(edges);
 				for (final boa.graphs.cfg.CFGEdge e : edges) {
 					str.append("\t" + node.getId() + " -> " + e.getDest().getId());
 					if (!(e.label() == null || e.label().equals(".") || e.label().equals("")))
@@ -293,6 +294,7 @@ public class BoaGraphIntrinsics {
 
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CDG", "string" })
 	public static String cdgToDot(final CDG cdg, final String label) {
+		if (cdg.getNodes().size() == 0) return "";
 		final StringBuilder str = new StringBuilder();
 		str.append("digraph {\n");
 		if (label.length() > 0) {
@@ -354,6 +356,7 @@ public class BoaGraphIntrinsics {
 
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "DDG", "string" })
 	public static String ddgToDot(final DDG ddg, final String label) {
+		if (ddg.getNodes().size() == 0) return "";
 		final StringBuilder str = new StringBuilder();
 		str.append("digraph {\n");
 		if (label.length() > 0) {
@@ -415,6 +418,7 @@ public class BoaGraphIntrinsics {
 
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "PDG", "string" })
 	public static String pdgToDot(final PDG pdg, final String label) {
+		if (pdg.getNodes().size() == 0) return "";
 		final StringBuilder str = new StringBuilder();
 		str.append("digraph {\n");
 		if (label.length() > 0) {
@@ -476,6 +480,7 @@ public class BoaGraphIntrinsics {
 
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "PDTree", "string" })
 	public static String pdtreeToDot(final PDTree pdtree, final String label) {
+		if (pdtree.getNodes().size() == 0) return "";
 		final StringBuilder str = new StringBuilder();
 		str.append("digraph {\n");
 		if (label.length() > 0) {
