@@ -48,8 +48,8 @@ public class PDG {
      * @param ddg data dependence graph
      */
     public PDG(final CDG cdg, final DDG ddg) {
-        this.md = cdg.getMethod();
         if (cdg.getNodes().size() > 0) {
+            this.md = cdg.getMethod();
             addCDG(cdg);
             addDDGEdges(ddg);
             entryNode = getNode(0);

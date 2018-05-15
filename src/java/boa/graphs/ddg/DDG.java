@@ -42,8 +42,8 @@ public class DDG {
      * @throws Exception if DDG construction fails
      */
     public DDG(final CFG cfg) throws Exception {
-        this.md = cfg.md;
         if (cfg != null && cfg.getNodes().size() > 0) {
+            this.md = cfg.md;
             final Map<Integer, InOut> liveVars = getLiveVariables(cfg);
             formDefUseChains(liveVars, cfg);
             constructDDG(liveVars.keySet());
