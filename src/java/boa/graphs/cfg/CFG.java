@@ -17,6 +17,7 @@
  */
 package boa.graphs.cfg;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -56,8 +57,6 @@ public class CFG {
 	private boolean isLoopPresent = false;
 	private boolean isBranchPresent = false;
 	private boolean paramAsStatement = false;
-
-	int count = 0;
 
 	public CFG(final Method method) {
 		this(method, "this");
@@ -290,7 +289,7 @@ public class CFG {
 	}
 
 	public void adjustBreakNodes(final String id) {
-		for (final CFGNode node : new HashSet<CFGNode>(this.breaks)) {
+		for (final CFGNode node : new ArrayList<CFGNode>(this.breaks)) {
 			if (node.getObjectName().equals(id)) {
 				this.outs.add(node);
 				this.breaks.remove(node);
@@ -662,7 +661,7 @@ public class CFG {
 		return graph;
 	}
 
-	private CFG traverse_for (final CFGNode cfgNode, final Statement root) {
+	private CFG traverse_for(final CFGNode cfgNode, final Statement root) {
 		this.isLoopPresent = true;
 		final CFG graph = new CFG();
 		// enhanced for
@@ -757,7 +756,7 @@ public class CFG {
 		}
 		final CFGNode node = new CFGNode(label, CFGNodeType.OTHER, "Case", label);
 		node.setAstNode(root);
-		graph.addBreakNode(node);
+		graph.mergeSeq(node);
 		graph.getOuts().add(node);
 		return graph;
 	}
@@ -867,14 +866,13 @@ public class CFG {
 	}
 
 	public final void postorder(final CFGNode node, final java.util.Set<Integer> visitedNodes, final CFGNode[] results) throws Exception {
+		results[visitedNodes.size()] = node;
 		visitedNodes.add(node.getId());
 		for (final CFGNode succ : node.getSuccessorsList()) {
 			if (!visitedNodes.contains(succ.getId())) {
 				postorder(succ, visitedNodes, results);
 			}
 		}
-		results[count] = node;
-		count++;
 	}
 
 	public CFGNode[] order() {
