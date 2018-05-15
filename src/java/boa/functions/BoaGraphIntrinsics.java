@@ -44,7 +44,7 @@ import boa.types.Control.CFGNode;
 public class BoaGraphIntrinsics {
 	@FunctionSpec(name = "getcfg", returnType = "CFG", formalParameters = { "Method" })
 	public static CFG getcfg(final Method method) {
-		return new CFG(method);
+		return new CFG(method).get();
 	}
 
 	@FunctionSpec(name = "getpdtree", returnType = "PDTree", formalParameters = { "Method" })

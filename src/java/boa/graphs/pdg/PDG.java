@@ -34,15 +34,12 @@ import java.util.Set;
  * Program Dependence Graph builder
  *
  * @author marafat
+ * @author rdyer
  */
-
 public class PDG {
-
     private Method md;
     private PDGNode entryNode;
-    private HashSet<PDGNode> nodes = new HashSet<PDGNode>();
-
-    // Constructors
+    private final HashSet<PDGNode> nodes = new HashSet<PDGNode>();
 
     /**
      * Constructs a program dependence graph
@@ -77,8 +74,8 @@ public class PDG {
      *                         begining of control flow graph. Default is set to false
      * @throws Exception if PDG construction fails
      */
-    public PDG(final Method md, boolean paramAsStatement) throws Exception {
-        this(new CFG(md, paramAsStatement));
+    public PDG(final Method md, final boolean paramAsStatement) throws Exception {
+        this(new CFG(md, paramAsStatement).get());
     }
 
     /**
@@ -88,7 +85,7 @@ public class PDG {
      * @throws Exception if PDG construction fails
      */
     public PDG(final Method md) throws Exception {
-        this(new CFG(md, false));
+        this(new CFG(md, false).get());
     }
 
     // Getters
@@ -126,8 +123,8 @@ public class PDG {
      * @param id node id
      * @return
      */
-    public PDGNode getNode(int id) {
-        for (PDGNode n: nodes)
+    public PDGNode getNode(final int id) {
+        for (final PDGNode n : nodes)
             if (n.getId() == id)
                 return n;
 
@@ -140,23 +137,21 @@ public class PDG {
      * @param cdg control dependence graph
      */
     private void addCDG(final CDG cdg) {
-        for (CDGNode n: cdg.getNodes()) {
-            PDGNode node = new PDGNode(n);
-            nodes.add(node);
+        for (final CDGNode n : cdg.getNodes()) {
+            nodes.add(new PDGNode(n));
         }
 
-        for (CDGNode n: cdg.getNodes()) {
-            PDGNode node = getNode(n.getId());
-            for (CDGNode s: n.getSuccessors())
+        for (final CDGNode n : cdg.getNodes()) {
+            final PDGNode node = getNode(n.getId());
+            for (final CDGNode s : n.getSuccessors())
                 node.addSuccessor(getNode(s.getId()));
-            for (CDGNode p: n.getPredecessors())
+            for (final CDGNode p : n.getPredecessors())
                 node.addPredecessor(getNode(p.getId()));
-            for (CDGEdge ie: n.getInEdges())
+            for (final CDGEdge ie : n.getInEdges())
                 node.addInEdge(new PDGEdge(getNode(ie.getSrc().getId()), getNode(ie.getDest().getId()), ie.getLabel(), Control.PDGEdge.PDGEdgeType.CONTROL));
-            for (CDGEdge oe: n.getOutEdges())
+            for (final CDGEdge oe : n.getOutEdges())
                 node.addOutEdge(new PDGEdge(getNode(oe.getSrc().getId()), getNode(oe.getDest().getId()), oe.getLabel(), Control.PDGEdge.PDGEdgeType.CONTROL));
         }
-
     }
 
     /**
@@ -167,20 +162,19 @@ public class PDG {
     private void addDDGEdges(final DDG ddg) {
         // all the nodes and control edges have already added. Only adds data edges
         try {
-            for (Map.Entry<DDGNode, Set<DDGNode>> entry : ddg.getDefUseChain().entrySet()) {
-                PDGNode src = getNode(entry.getKey().getId());
-                for (DDGNode d : entry.getValue()) {
-                    PDGNode dest = getNode(d.getId());
+            for (final Map.Entry<DDGNode, Set<DDGNode>> entry : ddg.getDefUseChain().entrySet()) {
+                final PDGNode src = getNode(entry.getKey().getId());
+                for (final DDGNode d : entry.getValue()) {
+                    final PDGNode dest = getNode(d.getId());
                     src.addSuccessor(dest);
                     dest.addPredecessor(src);
-                    PDGEdge e = new PDGEdge(src, dest, entry.getKey().getDefVariable(), Control.PDGEdge.PDGEdgeType.DATA);
+                    final PDGEdge e = new PDGEdge(src, dest, entry.getKey().getDefVariable(), Control.PDGEdge.PDGEdgeType.DATA);
                     src.addOutEdge(e);
                     dest.addInEdge(e);
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println(BoaAstIntrinsics.prettyprint(md));
         }
     }
-
 }

@@ -33,49 +33,60 @@ import java.util.*;
  * A forward slicer based on CFG
  *
  * @author marafat
+ * @author rdyer
  */
-
 public class CFGSlicer {
-
-    private ArrayList<CFGNode> slice = new ArrayList<CFGNode>();
+    private final ArrayList<CFGNode> slice = new ArrayList<CFGNode>();
 
     // Constructors
-    public CFGSlicer(Method m, CFGNode n) throws Exception {
+    public CFGSlicer(final Method m, final CFGNode n) throws Exception {
         if (n != null) {
-            List<CFGNode> entrynodes = new ArrayList<CFGNode>();
+            final CFG cfg = new CFG(m, true).get();
+            if (cfg == null) return;
+
+            final List<CFGNode> entrynodes = new ArrayList<CFGNode>();
             entrynodes.add(n);
-            getSlice(new CFG(m, true), entrynodes);
+            getSlice(cfg, entrynodes);
         }
     }
 
-    public CFGSlicer(Method m, CFGNode[] n) throws Exception {
-        List<CFGNode> entrynodes = new ArrayList<CFGNode>(Arrays.asList(n));
-        getSlice(new CFG(m, true), entrynodes);
+    public CFGSlicer(final Method m, final CFGNode[] n) throws Exception {
+        final CFG cfg = new CFG(m, true).get();
+        if (cfg == null) return;
+
+        final List<CFGNode> entrynodes = new ArrayList<CFGNode>(Arrays.asList(n));
+        getSlice(cfg, entrynodes);
     }
 
-    public CFGSlicer(Method m, int nid) throws Exception {
-        List<CFGNode> entrynodes = new ArrayList<CFGNode>();
-        CFG cfg = new CFG(m, true);
-        CFGNode node = cfg.getNode(nid);
+    public CFGSlicer(final Method m, final int nid) throws Exception {
+        final CFG cfg = new CFG(m, true).get();
+        if (cfg == null) return;
+
+        final List<CFGNode> entrynodes = new ArrayList<CFGNode>();
+        final CFGNode node = cfg.getNode(nid);
+
         if (node != null) {
             entrynodes.add(node);
             getSlice(cfg, entrynodes);
         }
     }
 
-    public CFGSlicer(Method m, Integer[] nids) throws Exception {
-        List<CFGNode> entrynodes = new ArrayList<CFGNode>();
-        CFG cfg = new CFG(m, true);
-        for (Integer i: nids) {
-            CFGNode node = cfg.getNode(i);
-            if (node != null)
+    public CFGSlicer(final Method m, final Integer[] nids) throws Exception {
+        final CFG cfg = new CFG(m, true).get();
+        if (cfg == null) return;
+
+        final List<CFGNode> entrynodes = new ArrayList<CFGNode>();
+        for (final Integer i : nids) {
+            final CFGNode node = cfg.getNode(i);
+            if (node != null) {
                 entrynodes.add(cfg.getNode(i));
+            }
         }
-        if (entrynodes.size() > 0)
+        if (entrynodes.size() > 0) {
             getSlice(cfg, entrynodes);
+        }
     }
 
-    // Getters
     public ArrayList<CFGNode> getSlice() {
         return slice;
     }
@@ -88,26 +99,26 @@ public class CFGSlicer {
      * @throws Exception
      */
     private void getSlice(final CFG cfg, final List<CFGNode> slicingNodes) throws Exception {
+        if (slicingNodes.size() == 0) return;
 
         final Set<CFGNode> inSlice = new HashSet<CFGNode>(slicingNodes);
         final Set<CFGNode> controlInflNodes = new HashSet<CFGNode>();
         final Map<Integer, Set<CFGNode>> infl = getInfluence(new PDTree(cfg), cfg);
 
         // TODO: get rid of the traversal
-        BoaAbstractTraversal slicer = new BoaAbstractTraversal<Set<String>>(true, true) {
-
+        final BoaAbstractTraversal slicer = new BoaAbstractTraversal<Set<String>>(true, true) {
             protected Set<String> preTraverse(final CFGNode node) throws Exception {
                 // in(n) = \/(pred) out(pred)
-                Set<String> in = new HashSet<String>();
-                for (CFGNode p: node.getPredecessorsList()) {
-                    Set<String> pred = getValue(p);
+                final Set<String> in = new HashSet<String>();
+                for (final CFGNode p : node.getPredecessorsList()) {
+                    final Set<String> pred = getValue(p);
                     if (pred != null)
                         in.addAll(pred);
                 }
 
                 // gen(n) = def(n) and (ref(n) /\ in(n) != {} or inSlice(n))
                 String gen = null;
-                Set<String> refIn = new HashSet<String>(node.getUseVariables());
+                final Set<String> refIn = new HashSet<String>(node.getUseVariables());
                 refIn.retainAll(in);
                 if (refIn.size() != 0 || inSlice.contains(node))
                     if (node.getDefVariables() != null)
@@ -117,14 +128,14 @@ public class CFGSlicer {
                 // use def directly
 
                 // out(n) = gen(n) \/ (in(n) - kill(n))
-                Set<String> out = new HashSet<String>(in);
+                final Set<String> out = new HashSet<String>(in);
                 if (node.getDefVariables() != null)
                     out.remove(node.getDefVariables());
                 if (gen != null)
                     out.add(gen);
 
                 // inSlice(n) if ref(n) /\ out(n) != {}
-                Set<String> refOut = new HashSet<String>(node.getUseVariables());
+                final Set<String> refOut = new HashSet<String>(node.getUseVariables());
                 refOut.retainAll(out);
                 if (refOut.size() != 0)
                     inSlice.add(node);
@@ -138,17 +149,16 @@ public class CFGSlicer {
 
             @Override
             public void traverse(final CFGNode node, boolean flag) throws Exception {
-                if(flag) {
+                if (flag) {
                     currentResult = preTraverse(node);
                     outputMapObj.put(node.getId(), new HashSet<String>(currentResult));
-                }
-                else
+                } else {
                     outputMapObj.put(node.getId(), preTraverse(node));
+                }
             }
         };
 
-        BoaAbstractFixP fixp = new BoaAbstractFixP() {
-
+        final BoaAbstractFixP fixp = new BoaAbstractFixP() {
             public boolean invoke1(final Set<String> current, final Set<String> previous) {
                 Set<String> curr = new HashSet<String>(current);
                 curr.removeAll(previous);
@@ -156,7 +166,7 @@ public class CFGSlicer {
             }
 
             @Override
-            public boolean invoke(Object current, Object previous) throws Exception {
+            public boolean invoke(final Object current, final Object previous) throws Exception {
                 return invoke1((HashSet<String>) current, (HashSet<String>) previous);
             }
         };
@@ -177,10 +187,10 @@ public class CFGSlicer {
      */
     private Map<Integer, Set<CFGNode>> getInfluence(final PDTree pdTree, final CFG cfg) {
         // store source and desination of control edges with label
-        Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
-        for (CFGNode n : cfg.getNodes()) {
+        final Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
+        for (final CFGNode n : cfg.getNodes()) {
             if (n.getKind() == Control.CFGNode.CFGNodeType.CONTROL)
-                for (CFGEdge e : n.outEdges)
+                for (final CFGEdge e : n.outEdges)
                     if (e.label().equals("."))
                         controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, "F");
                     else
@@ -188,13 +198,13 @@ public class CFGSlicer {
         }
 
         // add the edge: entry ---> start
-        Map<Integer, Set<CFGNode>> contolDependentMap = new HashMap<Integer, Set<CFGNode>>();
+        final Map<Integer, Set<CFGNode>> contolDependentMap = new HashMap<Integer, Set<CFGNode>>();
 
-        for (Integer[] enodes : controlEdges.keySet()) {
-            TreeNode srcParent = pdTree.getNode(enodes[0]).getParent();
+        for (final Integer[] enodes : controlEdges.keySet()) {
+            final TreeNode srcParent = pdTree.getNode(enodes[0]).getParent();
             TreeNode destination = pdTree.getNode(enodes[1]);
             if (!contolDependentMap.containsKey(enodes[0]))
-                contolDependentMap.put(enodes[0],new HashSet<CFGNode>());
+                contolDependentMap.put(enodes[0], new HashSet<CFGNode>());
             while (!srcParent.equals(destination)) {
                 contolDependentMap.get(enodes[0]).add(cfg.getNode(destination.getId()));
                 destination = destination.getParent();
@@ -203,5 +213,4 @@ public class CFGSlicer {
 
         return contolDependentMap;
     }
-
 }

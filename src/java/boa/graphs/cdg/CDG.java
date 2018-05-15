@@ -33,15 +33,12 @@ import boa.types.Control;
  * Control Dependence Graph builder
  *
  * @author marafat
+ * @author rdyer
  */
-
 public class CDG {
-
     private Method md;
     private CDGNode entryNode;
-    private HashSet<CDGNode> nodes = new HashSet<CDGNode>();
-
-    // Constructors
+    private final HashSet<CDGNode> nodes = new HashSet<CDGNode>();
 
     /**
      * Constructs a control dependence graph
@@ -51,8 +48,8 @@ public class CDG {
      */
     public CDG(final CFG cfg) throws Exception {
         this.md = cfg.md;
-        if (cfg.getNodes().size() > 0) {
-            PDTree pdTree = new PDTree(cfg);
+        if (cfg != null && cfg.getNodes().size() > 0) {
+            final PDTree pdTree = new PDTree(cfg);
             pdTree.addEntryNode();
             constructCDG(pdTree, cfg);
         }
@@ -67,7 +64,7 @@ public class CDG {
      * @throws Exception if CDG construction fails
      */
     public CDG(final Method md, boolean paramAsStatement) throws Exception {
-        this(new CFG(md, paramAsStatement));
+        this(new CFG(md, paramAsStatement).get());
     }
 
     /**
@@ -77,10 +74,8 @@ public class CDG {
      * @throws Exception if CDG construction fails
      */
     public CDG(final Method md) throws Exception {
-        this(new CFG(md, false));
+        this(new CFG(md, false).get());
     }
-
-    // Getters
 
     /**
      * Returns the method whose CDG is built
@@ -115,8 +110,8 @@ public class CDG {
      * @param id node id
      * @return the CDG node for the given node id. If not found then returns null
      */
-    public CDGNode getNode(int id) { // sort and do b-search
-        for (CDGNode n: nodes)
+    public CDGNode getNode(final int id) { // sort and do b-search
+        for (final CDGNode n : nodes)
             if (n.getId() == id)
                 return n;
 
@@ -131,10 +126,10 @@ public class CDG {
      */
     private void constructCDG(final PDTree pdTree, final CFG cfg) throws Exception {
         // store source and desination of control edges with label
-        Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
-        for (CFGNode n: cfg.getNodes()) {
+        final Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
+        for (final CFGNode n : cfg.getNodes()) {
             if (n.getKind() == Control.CFGNode.CFGNodeType.CONTROL)
-                for (CFGEdge e: n.getOutEdges())
+                for (final CFGEdge e : n.getOutEdges())
                     if (e.label().equals("."))
                         controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, "F");
                     else
@@ -145,17 +140,17 @@ public class CDG {
 
         // for the given edge A ---> B, traverse from node B to the parent of node A
         try {
-            for (Map.Entry<Integer[], String> entry : controlEdges.entrySet()) {
-                CDGNode source = getNode(pdTree.getNode(entry.getKey()[0]));
-                TreeNode srcParent = pdTree.getNode(entry.getKey()[0]).getParent();
+            for (final Map.Entry<Integer[], String> entry : controlEdges.entrySet()) {
+                final CDGNode source = getNode(pdTree.getNode(entry.getKey()[0]));
+                final TreeNode srcParent = pdTree.getNode(entry.getKey()[0]).getParent();
                 TreeNode dest = pdTree.getNode(entry.getKey()[1]);
 
                 while (!srcParent.equals(dest)) {
-                    CDGNode destination = getNode(dest);
+                    final CDGNode destination = getNode(dest);
                     source.addSuccessor(destination);
                     destination.addPredecessor(source);
 
-                    CDGEdge edge = new CDGEdge(source, destination, entry.getValue());
+                    final CDGEdge edge = new CDGEdge(source, destination, entry.getValue());
                     source.addOutEdge(edge);
                     destination.addInEdge(edge);
 
@@ -164,16 +159,16 @@ public class CDG {
             }
 
             // remove start node and replace it with entry
-            CDGNode startNode = getNode(0);
+            final CDGNode startNode = getNode(0);
             entryNode = getNode(cfg.getNodes().size()); // entryNode = exitid + 1
-            CDGEdge startEdge = entryNode.getOutEdge(startNode);
+            final CDGEdge startEdge = entryNode.getOutEdge(startNode);
             entryNode.getSuccessors().remove(startNode);
             entryNode.getOutEdges().remove(startEdge);
             nodes.remove(startNode);
             entryNode.setKind(Control.CDGNode.CDGNodeType.ENTRY);
             entryNode.setId(0);
 
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println(BoaAstIntrinsics.prettyprint(md));
             throw e;
         }
@@ -187,15 +182,14 @@ public class CDG {
      */
     private CDGNode getNode(final TreeNode treeNode) throws Exception {
         try {
-            CDGNode node = getNode(treeNode.getId());
+            final CDGNode node = getNode(treeNode.getId());
             if (node != null)
                 return node;
 
-            CDGNode newNode = new CDGNode(treeNode);
+            final CDGNode newNode = new CDGNode(treeNode);
             nodes.add(newNode);
             return newNode;
-
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println(BoaAstIntrinsics.prettyprint(md));
             throw e;
         }

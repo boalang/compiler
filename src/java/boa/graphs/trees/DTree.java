@@ -27,16 +27,13 @@ import boa.graphs.cfg.CFGNode;
  * Dominator Tree builder
  *
  * @author marafat
+ * @author rdyer
  */
-
 public class DTree {
-
     private Method md;
     private TreeNode rootNode;
-    private HashSet<TreeNode> nodes = new HashSet<TreeNode>();
+    private final HashSet<TreeNode> nodes = new HashSet<TreeNode>();
     private boolean isEntryNode = false; // as specified in ferrante-1987 paper on PDG
-
-    // Constructors
 
     /**
      * Constructs a dominator tree
@@ -46,9 +43,9 @@ public class DTree {
      */
     public DTree(final CFG cfg) throws Exception {
         this.md = cfg.md;
-        if (cfg.getNodes().size() > 0) {
-            Map<CFGNode, Set<CFGNode>> dom = computeDominators(cfg);
-            Map<CFGNode, CFGNode> idom = computeImmediateDominator(dom, cfg);
+        if (cfg != null && cfg.getNodes().size() > 0) {
+            final Map<CFGNode, Set<CFGNode>> dom = computeDominators(cfg);
+            final Map<CFGNode, CFGNode> idom = computeImmediateDominator(dom, cfg);
             buildDomTree(idom);
         }
     }
@@ -62,7 +59,7 @@ public class DTree {
      * @throws Exception if tree construction fails
      */
     public DTree(final Method md, boolean paramAsStatement) throws Exception {
-        this(new CFG(md, paramAsStatement));
+        this(new CFG(md, paramAsStatement).get());
     }
 
     /**
@@ -72,25 +69,21 @@ public class DTree {
      * @throws Exception if tree construction fails
      */
     public DTree(final Method md) throws Exception {
-        this(new CFG(md));
+        this(new CFG(md).get());
     }
-
-    // Setters
 
     /**
      * Augments tree with entry node
      */
     public void addEntryNode() {
         if (!isEntryNode) {
-            TreeNode entry = new TreeNode(nodes.size());
+            final TreeNode entry = new TreeNode(nodes.size());
             entry.setParent(rootNode);
             rootNode.addChild(entry);
             nodes.add(entry);
             isEntryNode = true;
         }
     }
-
-    // Getters
 
     /**
      * Returns the method whose dominator tree is built
@@ -123,8 +116,8 @@ public class DTree {
      * @param node whose immediate dominator is requested
      * @return the immediate dominator of the given node
      */
-    public TreeNode getImmediateDominator(TreeNode node) {
-        for (TreeNode n: nodes)
+    public TreeNode getImmediateDominator(final TreeNode node) {
+        for (final TreeNode n : nodes)
             if (n.equals(node))
                 return n.getParent();
         return null;
@@ -136,8 +129,8 @@ public class DTree {
      * @param nodeid of the node whose immediate dominator is requested
      * @return the immediate dominator for the given node id
      */
-    public TreeNode getImmediateDominator(int nodeid) {
-        for (TreeNode n: nodes)
+    public TreeNode getImmediateDominator(final int nodeid) {
+        for (final TreeNode n : nodes)
             if (n.getId() == nodeid)
                 return n.getParent();
         return null;
@@ -149,8 +142,8 @@ public class DTree {
      * @param id node id
      * @return the tree node for the given node id. If not found then returns null
      */
-    public TreeNode getNode(int id) {
-        for (TreeNode node: nodes) {
+    public TreeNode getNode(final int id) {
+        for (final TreeNode node : nodes) {
             if (node.getId() == id)
                 return node;
         }
@@ -165,32 +158,32 @@ public class DTree {
      * @throws Exception
      */
     private Map<CFGNode, Set<CFGNode>> computeDominators(final CFG cfg) {
-        Map<CFGNode, Set<CFGNode>> pDomMap = new HashMap<CFGNode, Set<CFGNode>>();
+        final Map<CFGNode, Set<CFGNode>> pDomMap = new HashMap<CFGNode, Set<CFGNode>>();
+
         // initialize
         if (cfg.getNodes().size() > 2) {
-            for (CFGNode n : cfg.getNodes()) {
+            for (final CFGNode n : cfg.getNodes()) {
                 if (n.getId() == 0)
                     pDomMap.put(n, new HashSet<CFGNode>(Collections.singletonList(n)));
                 else
                     pDomMap.put(n, cfg.getNodes());
             }
-        }
-        else {
-            CFGNode startNode = cfg.getNode(0);
+        } else {
+            final CFGNode startNode = cfg.getNode(0);
             pDomMap.put(startNode, new HashSet<CFGNode>(Collections.singletonList(startNode)));
             pDomMap.put(cfg.getNode(1), new HashSet<CFGNode>(cfg.getNodes()));
         }
 
-        Map<CFGNode, Set<CFGNode>> currentPDomMap = new HashMap<CFGNode, Set<CFGNode>>();
+        final Map<CFGNode, Set<CFGNode>> currentPDomMap = new HashMap<CFGNode, Set<CFGNode>>();
         boolean saturated = false;
         while (!saturated) { // fix point iteration
             int changeCount = 0;
-            for (CFGNode n: cfg.getNodes()) {
-                Set<CFGNode> currentPDom = new HashSet<CFGNode>();
+            for (final CFGNode n : cfg.getNodes()) {
+                final Set<CFGNode> currentPDom = new HashSet<CFGNode>();
 
                 // Intersection[pred(node)]
                 boolean first = true;
-                for (CFGNode pred: n.getPredecessorsList()) {
+                for (final CFGNode pred : n.getPredecessorsList()) {
                     if (first) {
                         currentPDom.addAll(pDomMap.get(pred));
                         first = false;
@@ -201,16 +194,16 @@ public class DTree {
                 // D[n] = {n} Union (Intersection[pred[node]])
                 currentPDom.add(n);
 
-                Set<CFGNode> diff = new HashSet<CFGNode>(pDomMap.get(n));
+                final Set<CFGNode> diff = new HashSet<CFGNode>(pDomMap.get(n));
                 diff.removeAll(currentPDom);
                 if (diff.size() > 0)
                     changeCount++;
                 currentPDomMap.put(n, currentPDom);
             }
 
-            if (changeCount == 0)
+            if (changeCount == 0) {
                 saturated = true;
-            else {
+            } else {
                 pDomMap.clear();
                 pDomMap.putAll(currentPDomMap);
                 currentPDomMap.clear();
@@ -218,7 +211,7 @@ public class DTree {
         }
 
         // strict dominance
-        for (CFGNode n: pDomMap.keySet())
+        for (final CFGNode n : pDomMap.keySet())
             pDomMap.get(n).remove(n);
 
         return pDomMap;
@@ -232,14 +225,15 @@ public class DTree {
      */
     private Map<CFGNode, CFGNode> computeImmediateDominator(final Map<CFGNode, Set<CFGNode>> dom, final CFG cfg) {
         // inefficient implementation: t-complexity = O(n^3)
-        /* To find idom, we check each dom of a node to see if it is dominating any other
+        /*
+         * To find idom, we check each dom of a node to see if it is dominating any other
          * node. Each node should have atmost one i-dom (first node has no immediate dominator)
          */
-        Map<CFGNode, CFGNode> idom = new HashMap<CFGNode, CFGNode>();
-        for (Map.Entry<CFGNode, Set<CFGNode>> entry : dom.entrySet()) {
-            for (CFGNode pd1 : entry.getValue()) {
+        final Map<CFGNode, CFGNode> idom = new HashMap<CFGNode, CFGNode>();
+        for (final Map.Entry<CFGNode, Set<CFGNode>> entry : dom.entrySet()) {
+            for (final CFGNode pd1 : entry.getValue()) {
                 boolean isIPDom = true;
-                for (CFGNode pd2 : entry.getValue()) {
+                for (final CFGNode pd2 : entry.getValue()) {
                     if (pd1.getId() != pd2.getId())
                         if ((dom.get(pd2)).contains(pd1)) {
                             isIPDom = false;
@@ -262,13 +256,14 @@ public class DTree {
      * @param idoms map of nodes and their immediate dominators
      */
     private void buildDomTree(final Map<CFGNode, CFGNode> idoms) throws Exception {
-        /* Create an edge between idom and corresponding node.
+        /*
+         * Create an edge between idom and corresponding node.
          * Since each node can have only one idom, the resulting graph will form a tree
          */
         try {
-            for (Map.Entry<CFGNode, CFGNode> entry : idoms.entrySet()) {
-                TreeNode src = getNode(entry.getValue());
-                TreeNode dest = getNode(entry.getKey());
+            for (final Map.Entry<CFGNode, CFGNode> entry : idoms.entrySet()) {
+                final TreeNode src = getNode(entry.getValue());
+                final TreeNode dest = getNode(entry.getKey());
 
                 src.addChild(dest);
                 dest.setParent(src);
@@ -276,7 +271,7 @@ public class DTree {
 
             rootNode = getNode(0);
 
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println(BoaAstIntrinsics.prettyprint(md));
             throw e;
         }
@@ -289,13 +284,12 @@ public class DTree {
      * @return the existing tree node for the given CFG node. If not found then returns a new node
      */
     private TreeNode getNode(final CFGNode cfgNode) {
-        TreeNode node = getNode(cfgNode.getId());
+        final TreeNode node = getNode(cfgNode.getId());
         if (node != null)
             return node;
 
-        TreeNode newNode = new TreeNode(cfgNode);
+        final TreeNode newNode = new TreeNode(cfgNode);
         nodes.add(newNode);
         return newNode;
     }
-
 }

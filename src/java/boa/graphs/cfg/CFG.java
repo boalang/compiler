@@ -66,14 +66,12 @@ public class CFG {
 	public CFG(final Method method, final String cls_name) {
 		this.md = method;
 		this.class_name = cls_name;
-		astToCFG();
 	}
 
 	public CFG(final Method method, boolean paramAsStatement) {
 		this.md = method;
 		this.class_name = "this";
 		this.paramAsStatement = paramAsStatement;
-		astToCFG();
 	}
 
 	public CFG() {
@@ -325,7 +323,7 @@ public class CFG {
 		return this.nodes.isEmpty();
 	}
 
-	private void astToCFG() {
+	public CFG get() {
 		if (md.getStatementsCount() > 0) {
 			CFGNode.numOfNodes = -1;
 			final CFGNode startNode = new CFGNode("ENTRY", CFGNodeType.ENTRY, "ENTRY", "ENTRY");
@@ -356,7 +354,13 @@ public class CFG {
 				node.setSuccessors(node.getOutNodes());
 				node.setPredecessors(node.getInNodes());
 			}
+
+			// if this happens, the original AST was invalid
+			if (returns.size() > 0 || breaks.size() > 0) {
+				return null;
+			}
 		}
+		return this;
 	}
 
 	private CFG traverse(final CFGNode cfgNode, final Expression root) {

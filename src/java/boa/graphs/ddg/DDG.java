@@ -26,17 +26,14 @@ import java.util.*;
  * Data Dependence Graph builder
  *
  * @author marafat
+ * @author rdyer
  */
-
 public class DDG {
-
     private Method md;
     private DDGNode entryNode;
-    private HashSet<DDGNode> nodes = new HashSet<DDGNode>();
-    private HashMap<DDGNode, Set<DDGNode>> defUseChain = new HashMap<DDGNode, Set<DDGNode>>();
+    private final HashSet<DDGNode> nodes = new HashSet<DDGNode>();
+    private final HashMap<DDGNode, Set<DDGNode>> defUseChain = new HashMap<DDGNode, Set<DDGNode>>();
     //private HashMap<DDGNode, Set<DDGNode>> useDefChain; //TODO: needs reaching-def analysis
-
-    // Constructors
 
     /**
      * Constructs a data dependence graph
@@ -46,8 +43,8 @@ public class DDG {
      */
     public DDG(final CFG cfg) throws Exception {
         this.md = cfg.md;
-        if (cfg.getNodes().size() > 0) {
-            Map<Integer, InOut> liveVars = getLiveVariables(cfg);
+        if (cfg != null && cfg.getNodes().size() > 0) {
+            final Map<Integer, InOut> liveVars = getLiveVariables(cfg);
             formDefUseChains(liveVars, cfg);
             constructDDG(liveVars.keySet());
         }
@@ -62,7 +59,7 @@ public class DDG {
      * @throws Exception if DDG construction fails
      */
     public DDG(final Method md, boolean paramAsStatement) throws Exception {
-        this(new CFG(md, paramAsStatement));
+        this(new CFG(md, paramAsStatement).get());
     }
 
     /**
@@ -72,10 +69,8 @@ public class DDG {
      * @throws Exception if DDG construction fails
      */
     public DDG(final Method md) throws Exception {
-        this(new CFG(md));
+        this(new CFG(md).get());
     }
-
-    // Getters
 
     /**
      * Returns the method whose DDG is built
@@ -120,8 +115,8 @@ public class DDG {
      * @return definition nodes
      */
     public Set<DDGNode> getDefNodes(final String var) {
-        Set<DDGNode> defNodes = new HashSet<DDGNode>();
-        for (DDGNode n: defUseChain.keySet()) {
+        final Set<DDGNode> defNodes = new HashSet<DDGNode>();
+        for (final DDGNode n : defUseChain.keySet()) {
             if (n.getDefVariable().equals(var))
                 defNodes.add(n);
         }
@@ -135,8 +130,8 @@ public class DDG {
      * @param id node id
      * @return DDGNode
      */
-    public DDGNode getNode(int id) {
-        for (DDGNode n: nodes)
+    public DDGNode getNode(final int id) {
+        for (final DDGNode n : nodes)
             if (n.getId() == id)
                 return n;
 
@@ -152,33 +147,33 @@ public class DDG {
      */
     private Map<Integer, InOut> getLiveVariables(final CFG cfg) {
         // initialize
-        Map<Integer, InOut> liveVars = new HashMap<Integer, InOut>();
-        for (CFGNode n: cfg.getNodes())
+        final Map<Integer, InOut> liveVars = new HashMap<Integer, InOut>();
+        for (final CFGNode n : cfg.getNodes())
             liveVars.put(n.getId(), new InOut());
 
-        Map<Integer, InOut> currentLiveVars = new HashMap<Integer, InOut>();
-        int stopid = cfg.getNodes().size() - 1;
+        final Map<Integer, InOut> currentLiveVars = new HashMap<Integer, InOut>();
+        final int stopid = cfg.getNodes().size() - 1;
         boolean saturated = false;
 
         while (!saturated) { // fix point iteration
             int changeCount = 0;
 
-            for (CFGNode node: cfg.getNodes()) {
-                InOut nodeLiveVars = new InOut(liveVars.get(node.getId()));
+            for (final CFGNode node : cfg.getNodes()) {
+                final InOut nodeLiveVars = new InOut(liveVars.get(node.getId()));
 
                 // out = Union in[node.successor]
-                for (CFGNode s: node.getSuccessorsList())
+                for (final CFGNode s : node.getSuccessorsList())
                     nodeLiveVars.out.addAll(liveVars.get(s.getId()).in);
 
                 // out - def
-                Set<Pair> diff = new HashSet<Pair>(nodeLiveVars.out);
+                final Set<Pair> diff = new HashSet<Pair>(nodeLiveVars.out);
                 if (!node.getDefVariables().equals(""))
-                    for (Pair p: nodeLiveVars.out)
+                    for (final Pair p : nodeLiveVars.out)
                         if (p.var.equals(node.getDefVariables()))
                             diff.remove(p);
 
                 // in = use Union (out - def)
-                for (String var: node.getUseVariables())
+                for (final String var : node.getUseVariables())
                     nodeLiveVars.in.add(new Pair(var, node));
                 nodeLiveVars.in.addAll(diff);
 
@@ -199,9 +194,9 @@ public class DDG {
                 currentLiveVars.put(node.getId(), nodeLiveVars);
             }
 
-            if (changeCount == 0)
+            if (changeCount == 0) {
                 saturated = true;
-            else {
+            } else {
                 liveVars.clear();
                 liveVars.putAll(currentLiveVars);
                 currentLiveVars.clear();
@@ -219,21 +214,21 @@ public class DDG {
      */
     private void formDefUseChains(final Map<Integer, InOut> liveVar, CFG cfg) {
         // match def variable of the node with the out variable. If the match occurs form a def-use mapping
-        for (Map.Entry<Integer, InOut> entry: liveVar.entrySet()) {
-            CFGNode n = cfg.getNode(entry.getKey());
-            DDGNode defNode = getNode(n);
+        for (final Map.Entry<Integer, InOut> entry: liveVar.entrySet()) {
+            final CFGNode n = cfg.getNode(entry.getKey());
+            final DDGNode defNode = getNode(n);
             if (entry.getKey() != 0) {
-                for (Pair p : entry.getValue().out) {
+                for (final Pair p : entry.getValue().out) {
                     if (!n.getDefVariables().equals("")) {
                         if (n.getDefVariables().equals(p.var)) {
-                            DDGNode useNode = getNode(p.node);
+                            final DDGNode useNode = getNode(p.node);
                             if (!defUseChain.containsKey(defNode))
                                 defUseChain.put(defNode, new HashSet<DDGNode>());
                             defUseChain.get(defNode).add(useNode);
                             // connect nodes for constructing the graph
                             defNode.addSuccessor(useNode);
                             useNode.addPredecessor(defNode);
-                            DDGEdge edge = new DDGEdge(defNode, useNode, p.var);
+                            final DDGEdge edge = new DDGEdge(defNode, useNode, p.var);
                             defNode.addOutEdge(edge);
                             useNode.addinEdge(edge);
                         }
@@ -248,17 +243,17 @@ public class DDG {
      *
      * @param nodeids set of all node ids of the graph
      */
-    private void constructDDG(Set<Integer> nodeids) {
+    private void constructDDG(final Set<Integer> nodeids) {
         // any node without parent is connected to entryNode
         entryNode = getNode(0);
-        for (int i: nodeids) {
+        for (final int i : nodeids) {
             if (i != 0) {
-                DDGNode dest = getNode(i);
+                final DDGNode dest = getNode(i);
                 if (dest.getPredecessors().size() == 0 ||
                         (dest.getPredecessors().size() == 1 && dest.getPredecessors().get(0).equals(dest))) {
                     entryNode.addSuccessor(dest);
                     dest.addPredecessor(entryNode);
-                    DDGEdge edge = new DDGEdge(entryNode, dest);
+                    final DDGEdge edge = new DDGEdge(entryNode, dest);
                     entryNode.addOutEdge(edge);
                     dest.addinEdge(edge);
                 }
@@ -273,11 +268,11 @@ public class DDG {
      * @return the existing DDG node for the given Tree node. If not found then returns a new node
      */
     private DDGNode getNode(final CFGNode cfgNode) {
-        DDGNode node = getNode(cfgNode.getId());
+        final DDGNode node = getNode(cfgNode.getId());
         if (node != null)
             return node;
 
-        DDGNode newNode = new DDGNode(cfgNode);
+        final DDGNode newNode = new DDGNode(cfgNode);
         nodes.add(newNode);
         return newNode;
     }
@@ -324,7 +319,7 @@ public class DDG {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
-            Pair pair = (Pair) o;
+            final Pair pair = (Pair) o;
 
             return var.equals(pair.var) && node.getId() == pair.node.getId();
         }
@@ -336,5 +331,4 @@ public class DDG {
             return result;
         }
     }
-
 }
