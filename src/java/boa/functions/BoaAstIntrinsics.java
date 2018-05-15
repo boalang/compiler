@@ -127,14 +127,7 @@ public class BoaAstIntrinsics {
 			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
 		}
 
-        boolean seek = false;
-        try {
-            seek = map.seek(new Text(rowName));
-        } catch (Exception e) {
-			e.printStackTrace();
-            System.err.println("error seek: " + rowName);
-        }
-		System.err.println("error with ast: " + rowName + " - seek: " + seek);
+		System.err.println("error with ast: " + rowName);
 		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
 		return emptyAst;
 	}
@@ -495,12 +488,12 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "isprefix", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isPrefix(final Expression e) throws Exception {
-        return !e.getBool1() && !e.hasExpression2();
+        return !e.hasBool1() && !e.hasExpression2();
 	}
 
 	@FunctionSpec(name = "ispostfix", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isPostfix(final Expression e) throws Exception {
-        return e.getBool1() && !e.hasExpression2();
+        return e.hasBool1() && !e.hasExpression2();
 	}
 
 	@FunctionSpec(name = "ismethod", returnType = "bool", formalParameters = { "Expression" })
