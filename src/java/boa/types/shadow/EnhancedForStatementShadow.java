@@ -78,7 +78,7 @@ public class EnhancedForStatementShadow extends boa.types.BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public IfStatement getManytoOne(final SymbolTable env, final Block b) {
-        return null;
+        return getManytoOne(env, b, "isenhancedfor", new boa.types.proto.StatementProtoTuple());
     }
 
     /** {@inheritDoc} */

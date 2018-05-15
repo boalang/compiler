@@ -80,7 +80,7 @@ public class ForStatementShadow extends boa.types.BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public IfStatement getManytoOne(final SymbolTable env, final Block b) {
-        return null;
+        return getManytoOne(env, b, "isnormalfor", new boa.types.proto.StatementProtoTuple());
     }
 
     /** {@inheritDoc} */

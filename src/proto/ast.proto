@@ -294,6 +294,7 @@ message Statement {
 	}
 
 	message EnhancedForStatement {
+		option (boa.types.kind_func) = "isenhancedfor";
 		/** @exclude */
 		optional StatementKind shadow_kind       = 1 [default = FOR];
 		required Expression expression           = 2;
@@ -308,6 +309,7 @@ message Statement {
 	}
 
 	message ForStatement {
+		option (boa.types.kind_func) = "isnormalfor";
 		/** @exclude */
 		optional StatementKind shadow_kind  = 1 [default = FOR];
 		repeated Expression initializations = 2;
@@ -580,7 +582,7 @@ message Expression {
 
 	/** A boolean literal */
 	message BooleanLiteral {
-		option (boa.types.kind_func) = "isboollit"; 
+		option (boa.types.kind_func) = "isboollit";
 		/** @exclude */
 		optional ExpressionKind shadow_kind = 1 [default = LITERAL];
 		/** The boolean literal value */
@@ -599,7 +601,7 @@ message Expression {
 
 	/** A character literal */
 	message CharacterLiteral {
-		option (boa.types.kind_func) = "ischarlit"; 
+		option (boa.types.kind_func) = "ischarlit";
 		/** @exclude */
 		optional ExpressionKind shadow_kind = 1 [default = LITERAL];
 		/** The string value of the literal */
@@ -638,7 +640,7 @@ message Expression {
 
 	/** An infix expression */
 	message InfixExpression {
-		option (boa.types.kind_func) = "isinfix"; 
+		option (boa.types.kind_func) = "isinfix";
 		/** @exclude */
 		optional ExpressionKind shadow_kind_1  =  1 [default = OP_ADD];
 		/** @exclude */
@@ -712,7 +714,7 @@ message Expression {
 
 	/** A method invocation */
 	message MethodInvocation {
-		option (boa.types.kind_func) = "ismethod"; 
+		option (boa.types.kind_func) = "ismethod";
 		/** @exclude */
 		optional ExpressionKind shadow_kind = 1 [default = METHODCALL];
 		/** The expression */
@@ -727,7 +729,7 @@ message Expression {
 
 	/** A method reference */
 	message MethodReference {
-		option (boa.types.kind_func) = "ismethodref"; 
+		option (boa.types.kind_func) = "ismethodref";
 		/** @exclude */
 		optional ExpressionKind shadow_kind = 1 [default = METHOD_REFERENCE];
 		/** The type arguments of the method reference */
@@ -735,7 +737,7 @@ message Expression {
 
 		/** A creation method reference */
 		message CreationReference {
-			option (boa.types.kind_func) = "iscreationref"; 
+			option (boa.types.kind_func) = "iscreationref";
 			/** @exclude */
 			optional ExpressionKind shadow_kind = 1 [default = METHOD_REFERENCE];
 			/** The type arguments of the method reference */
@@ -746,7 +748,7 @@ message Expression {
 
 		/** An expression method reference */
 		message ExpressionMethodReference {
-			option (boa.types.kind_func) = "isexpref"; 
+			option (boa.types.kind_func) = "isexpref";
 			/** @exclude */
 			optional ExpressionKind shadow_kind = 1 [default = METHOD_REFERENCE];
 			/** The type arguments of the method reference */
@@ -759,7 +761,7 @@ message Expression {
 
 		/** A super method reference */
 		message SuperMethodReference {
-			option (boa.types.kind_func) = "issuperref"; 
+			option (boa.types.kind_func) = "issuperref";
 			/** @exclude */
 			optional ExpressionKind shadow_kind    = 1 [default = METHOD_REFERENCE];
 			/** The type arguments of the method reference */
@@ -773,7 +775,7 @@ message Expression {
 
 		/** A type method reference */
 		message TypeMethodReference {
-			option (boa.types.kind_func) = "istyperef"; 
+			option (boa.types.kind_func) = "istyperef";
 			/** @exclude */
 			optional ExpressionKind shadow_kind = 1 [default = METHOD_REFERENCE];
 			/** The type arguments of the method reference */
@@ -797,14 +799,14 @@ message Expression {
 
 	/** A null literal */
 	message NullLiteral {
-		option (boa.types.kind_func) = "isnulllit"; 
+		option (boa.types.kind_func) = "isnulllit";
 		/** @exclude */
 		optional ExpressionKind shadow_kind = 1 [default = LITERAL];
 	}
 
 	/** A number literal */
 	message NumberLiteral {
-		option (boa.types.kind_func) = "isintlit"; 
+		option (boa.types.kind_func) = "isnumberlit";
 		/** @exclude */
 		optional ExpressionKind shadow_kind = 1 [default = LITERAL];
 		/** The string token of the literal */
@@ -821,7 +823,7 @@ message Expression {
 
 	/** A postfix expression */
 	message PostfixExpression {
-		option (boa.types.kind_func) = "ispostfix"; 
+		option (boa.types.kind_func) = "ispostfix";
 		/** @exclude */
 		optional ExpressionKind shadow_kind_1 = 1 [default = OP_INC];
 		/** @exclude */
@@ -835,7 +837,7 @@ message Expression {
 
 	/** A prefix expression */
 	message PrefixExpression {
-		option (boa.types.kind_func) = "isprefix"; 
+		option (boa.types.kind_func) = "isprefix";
 		/** @exclude */
 		optional ExpressionKind shadow_kind_1 = 1 [default = OP_DEC];
 		/** @exclude */
@@ -857,7 +859,7 @@ message Expression {
 
 	/** A string literal */
 	message StringLiteral {
-		option (boa.types.kind_func) = "isstringlit"; 
+		option (boa.types.kind_func) = "isstringlit";
 		/** @exclude */
 		optional ExpressionKind shadow_kind = 1 [default = LITERAL];
 		/** The token value */
@@ -868,7 +870,7 @@ message Expression {
 
 	/** A "super" method invocation */
 	message SuperMethodInvocation {
-		option (boa.types.kind_func) = "issupermethod"; 
+		option (boa.types.kind_func) = "issupermethod";
 		/** @exclude */
 		optional ExpressionKind shadow_kind         = 1 [default = METHODCALL];
 		/** The qualifier */
@@ -884,7 +886,7 @@ message Expression {
 
 	/** A this literal expression */
 	message ThisExpression {
-		option (boa.types.kind_func) = "isthislit"; 
+		option (boa.types.kind_func) = "isthislit";
 		/** @exclude */
 		optional ExpressionKind shadow_kind = 1 [default = LITERAL];
 		/** The class name qualifier, if any */
@@ -893,7 +895,7 @@ message Expression {
 
 	/** A type literal */
 	message TypeLiteral {
-		option (boa.types.kind_func) = "istypelit"; 
+		option (boa.types.kind_func) = "istypelit";
 		/** @exclude */
 		optional ExpressionKind shadow_kind = 1 [default = LITERAL];
 		/** The literal token value */
@@ -1016,7 +1018,7 @@ message Modifier {
 
 	/** An annotation */
 	message Annotation {
-		option (boa.types.kind_func) = "isannot"; 
+		option (boa.types.kind_func) = "isannot";
 		/** @exclude */
 		optional ModifierKind shadow_kind = 1 [default = ANNOTATION];
 		/** The name of the annotation type */
@@ -1024,7 +1026,7 @@ message Modifier {
 
 		/** A marker annotation with no values */
 		message MarkerAnnotation {
-			option (boa.types.kind_func) = "ismarkerannot"; 
+			option (boa.types.kind_func) = "ismarkerannot";
 			/** @exclude */
 			optional ModifierKind shadow_kind = 1 [default = ANNOTATION];
 			/** The name of the annotation type */
@@ -1033,7 +1035,7 @@ message Modifier {
 
 		/** A normal annotation */
 		message NormalAnnotation {
-			option (boa.types.kind_func) = "isnormalannot"; 
+			option (boa.types.kind_func) = "isnormalannot";
 			/** @exclude */
 			optional ModifierKind shadow_kind = 1 [default = ANNOTATION];
 			/** The name of the annotation type */
@@ -1046,7 +1048,7 @@ message Modifier {
 
 		/** An annotation with a single member value */
 		message SingleMemberAnnotation {
-			option (boa.types.kind_func) = "issinglememberannot"; 
+			option (boa.types.kind_func) = "issinglememberannot";
 			/** @exclude */
 			optional ModifierKind shadow_kind = 1 [default = ANNOTATION];
 			/** The name of the annotation type */

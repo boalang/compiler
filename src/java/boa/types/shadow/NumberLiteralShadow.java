@@ -74,7 +74,7 @@ public class NumberLiteralShadow extends boa.types.BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public IfStatement getManytoOne(final SymbolTable env, final Block b) {
-        return getManytoOne(env, b, "isintlit", new boa.types.proto.ExpressionProtoTuple());
+        return getManytoOne(env, b, "isnumberlit", new boa.types.proto.ExpressionProtoTuple());
     }
 
     /** {@inheritDoc} */

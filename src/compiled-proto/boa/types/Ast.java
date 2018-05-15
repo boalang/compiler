@@ -97463,7 +97463,7 @@ public final class Ast {
       "initializer\030\004 \001(\0132\025.boa.types.Expression" +
       "\0225\n\026structural_change_kind\030\005 \001(\0162\025.boa.t" +
       "ypes.ChangeKind\0220\n\021label_change_kind\030\006 \001" +
-      "(\0162\025.boa.types.ChangeKind\"\344\037\n\tStatement\022" +
+      "(\0162\025.boa.types.ChangeKind\"\210 \n\tStatement\022" +
       "0\n\004kind\030\001 \002(\0162\".boa.types.Statement.Stat" +
       "ementKind\022)\n\013statement_1\030\002 \001(\0132\024.boa.typ" +
       "es.Statement\022)\n\013statement_2\030\003 \001(\0132\024.boa.",
@@ -97502,389 +97502,390 @@ public final class Ast {
       " \002(\0132\025.boa.types.Expression\022\"\n\004body\030\003 \002(" +
       "\0132\024.boa.types.Statement\032P\n\016EmptyStatemen" +
       "t\022>\n\013shadow_kind\030\001 \001(\0162\".boa.types.State" +
-      "ment.StatementKind:\005EMPTY\032\326\001\n\024EnhancedFo" +
+      "ment.StatementKind:\005EMPTY\032\351\001\n\024EnhancedFo" +
       "rStatement\022<\n\013shadow_kind\030\001 \001(\0162\".boa.ty" +
       "pes.Statement.StatementKind:\003FOR\022)\n\nexpr" +
       "ession\030\002 \002(\0132\025.boa.types.Expression\0221\n\024v" +
       "ariable_declaration\030\003 \002(\0132\023.boa.types.Va",
       "riable\022\"\n\004body\030\004 \002(\0132\024.boa.types.Stateme" +
-      "nt\032\177\n\023ExpressionStatement\022=\n\013shadow_kind" +
-      "\030\001 \001(\0162\".boa.types.Statement.StatementKi" +
-      "nd:\004EXPR\022)\n\nexpression\030\002 \002(\0132\025.boa.types" +
-      ".Expression\032\362\001\n\014ForStatement\022<\n\013shadow_k" +
+      "nt:\021\212\265\030\risenhancedfor\032\177\n\023ExpressionState" +
+      "ment\022=\n\013shadow_kind\030\001 \001(\0162\".boa.types.St" +
+      "atement.StatementKind:\004EXPR\022)\n\nexpressio" +
+      "n\030\002 \002(\0132\025.boa.types.Expression\032\203\002\n\014ForSt" +
+      "atement\022<\n\013shadow_kind\030\001 \001(\0162\".boa.types" +
+      ".Statement.StatementKind:\003FOR\022.\n\017initial" +
+      "izations\030\002 \003(\0132\025.boa.types.Expression\022(\n" +
+      "\tcondition\030\003 \002(\0132\025.boa.types.Expression\022" +
+      "&\n\007updates\030\004 \003(\0132\025.boa.types.Expression\022",
+      "\"\n\004body\030\005 \002(\0132\024.boa.types.Statement:\017\212\265\030" +
+      "\013isnormalfor\032\321\001\n\013IfStatement\022;\n\013shadow_k" +
       "ind\030\001 \001(\0162\".boa.types.Statement.Statemen" +
-      "tKind:\003FOR\022.\n\017initializations\030\002 \003(\0132\025.bo" +
-      "a.types.Expression\022(\n\tcondition\030\003 \002(\0132\025." +
-      "boa.types.Expression\022&\n\007updates\030\004 \003(\0132\025." +
-      "boa.types.Expression\022\"\n\004body\030\005 \002(\0132\024.boa",
-      ".types.Statement\032\321\001\n\013IfStatement\022;\n\013shad" +
-      "ow_kind\030\001 \001(\0162\".boa.types.Statement.Stat" +
-      "ementKind:\002IF\022)\n\nexpression\030\002 \002(\0132\025.boa." +
-      "types.Expression\022,\n\016then_statement\030\003 \002(\013" +
-      "2\024.boa.types.Statement\022,\n\016else_statement" +
-      "\030\004 \001(\0132\024.boa.types.Statement\032\241\001\n\020Labeled" +
-      "Statement\022>\n\013shadow_kind\030\001 \001(\0162\".boa.typ" +
-      "es.Statement.StatementKind:\005LABEL\022$\n\005lab" +
-      "el\030\002 \002(\0132\025.boa.types.Expression\022\'\n\tstate" +
-      "ment\030\003 \002(\0132\024.boa.types.Statement\032}\n\017Retu",
-      "rnStatement\022?\n\013shadow_kind\030\001 \001(\0162\".boa.t" +
-      "ypes.Statement.StatementKind:\006RETURN\022)\n\n" +
-      "expression\030\002 \001(\0132\025.boa.types.Expression\032" +
-      "\221\001\n\nSwitchCase\022=\n\013shadow_kind\030\001 \001(\0162\".bo" +
-      "a.types.Statement.StatementKind:\004CASE\022)\n" +
-      "\nexpression\030\002 \002(\0132\025.boa.types.Expression" +
-      "\022\031\n\nis_default\030\003 \001(\010:\005false\032\247\001\n\017SwitchSt" +
+      "tKind:\002IF\022)\n\nexpression\030\002 \002(\0132\025.boa.type" +
+      "s.Expression\022,\n\016then_statement\030\003 \002(\0132\024.b" +
+      "oa.types.Statement\022,\n\016else_statement\030\004 \001" +
+      "(\0132\024.boa.types.Statement\032\241\001\n\020LabeledStat" +
+      "ement\022>\n\013shadow_kind\030\001 \001(\0162\".boa.types.S" +
+      "tatement.StatementKind:\005LABEL\022$\n\005label\030\002" +
+      " \002(\0132\025.boa.types.Expression\022\'\n\tstatement",
+      "\030\003 \002(\0132\024.boa.types.Statement\032}\n\017ReturnSt" +
       "atement\022?\n\013shadow_kind\030\001 \001(\0162\".boa.types" +
-      ".Statement.StatementKind:\006SWITCH\022)\n\nexpr" +
-      "ession\030\002 \002(\0132\025.boa.types.Expression\022(\n\ns",
-      "tatements\030\003 \003(\0132\024.boa.types.Statement\032\245\001" +
-      "\n\025SynchronizedStatement\022=\n\013shadow_kind\030\001" +
+      ".Statement.StatementKind:\006RETURN\022)\n\nexpr" +
+      "ession\030\002 \001(\0132\025.boa.types.Expression\032\221\001\n\n" +
+      "SwitchCase\022=\n\013shadow_kind\030\001 \001(\0162\".boa.ty" +
+      "pes.Statement.StatementKind:\004CASE\022)\n\nexp" +
+      "ression\030\002 \002(\0132\025.boa.types.Expression\022\031\n\n" +
+      "is_default\030\003 \001(\010:\005false\032\247\001\n\017SwitchStatem" +
+      "ent\022?\n\013shadow_kind\030\001 \001(\0162\".boa.types.Sta" +
+      "tement.StatementKind:\006SWITCH\022)\n\nexpressi",
+      "on\030\002 \002(\0132\025.boa.types.Expression\022(\n\nstate" +
+      "ments\030\003 \003(\0132\024.boa.types.Statement\032\245\001\n\025Sy" +
+      "nchronizedStatement\022=\n\013shadow_kind\030\001 \001(\016" +
+      "2\".boa.types.Statement.StatementKind:\004SY" +
+      "NC\022)\n\nexpression\030\002 \002(\0132\025.boa.types.Expre" +
+      "ssion\022\"\n\004body\030\003 \002(\0132\024.boa.types.Statemen" +
+      "t\032{\n\016ThrowStatement\022>\n\013shadow_kind\030\001 \001(\016" +
+      "2\".boa.types.Statement.StatementKind:\005TH" +
+      "ROW\022)\n\nexpression\030\002 \002(\0132\025.boa.types.Expr" +
+      "ession\032\350\001\n\014TryStatement\022<\n\013shadow_kind\030\001",
       " \001(\0162\".boa.types.Statement.StatementKind" +
-      ":\004SYNC\022)\n\nexpression\030\002 \002(\0132\025.boa.types.E" +
-      "xpression\022\"\n\004body\030\003 \002(\0132\024.boa.types.Stat" +
-      "ement\032{\n\016ThrowStatement\022>\n\013shadow_kind\030\001" +
-      " \001(\0162\".boa.types.Statement.StatementKind" +
-      ":\005THROW\022)\n\nexpression\030\002 \002(\0132\025.boa.types." +
-      "Expression\032\350\001\n\014TryStatement\022<\n\013shadow_ki" +
-      "nd\030\001 \001(\0162\".boa.types.Statement.Statement",
-      "Kind:\003TRY\022\"\n\004body\030\002 \002(\0132\024.boa.types.Stat" +
-      "ement\022%\n\007catches\030\003 \003(\0132\024.boa.types.State" +
-      "ment\022%\n\007finally\030\004 \001(\0132\024.boa.types.Statem" +
-      "ent\022(\n\tresources\030\005 \003(\0132\025.boa.types.Expre" +
-      "ssion\032\207\001\n\030TypeDeclarationStatement\022A\n\013sh" +
-      "adow_kind\030\001 \001(\0162\".boa.types.Statement.St" +
-      "atementKind:\010TYPEDECL\022(\n\010new_type\030\002 \002(\0132" +
-      "\026.boa.types.Declaration\032\236\001\n\016WhileStateme" +
-      "nt\022>\n\013shadow_kind\030\001 \001(\0162\".boa.types.Stat" +
-      "ement.StatementKind:\005WHILE\022(\n\tcondition\030",
-      "\002 \002(\0132\025.boa.types.Expression\022\"\n\004body\030\003 \002" +
-      "(\0132\024.boa.types.Statement\"\215\002\n\rStatementKi" +
-      "nd\022\t\n\005OTHER\020\000\022\n\n\006ASSERT\020\001\022\t\n\005BLOCK\020\002\022\t\n\005" +
-      "BREAK\020\003\022\010\n\004CASE\020\004\022\t\n\005CATCH\020\005\022\014\n\010CONTINUE" +
-      "\020\006\022\006\n\002DO\020\007\022\t\n\005EMPTY\020\010\022\016\n\nEXPRESSION\020\t\022\010\n" +
-      "\004EXPR\020\t\022\007\n\003FOR\020\n\022\006\n\002IF\020\013\022\t\n\005LABEL\020\014\022\n\n\006R" +
-      "ETURN\020\r\022\n\n\006SWITCH\020\016\022\020\n\014SYNCHRONIZED\020\017\022\010\n" +
-      "\004SYNC\020\017\022\t\n\005THROW\020\020\022\007\n\003TRY\020\021\022\014\n\010TYPEDECL\020" +
-      "\022\022\t\n\005WHILE\020\023\032\002\020\001\"\214L\n\nExpression\0222\n\004kind\030" +
-      "\001 \002(\0162$.boa.types.Expression.ExpressionK",
-      "ind\022\020\n\010string_1\030\002 \001(\t\022\020\n\010string_2\030\003 \001(\t\022" +
-      "+\n\014expression_1\030\004 \001(\0132\025.boa.types.Expres" +
-      "sion\022+\n\014expression_2\030\005 \001(\0132\025.boa.types.E" +
-      "xpression\022+\n\014expression_3\030\006 \001(\0132\025.boa.ty" +
-      "pes.Expression\022,\n\rexpressions_1\030\007 \003(\0132\025." +
-      "boa.types.Expression\022\037\n\006type_1\030\010 \001(\0132\017.b" +
-      "oa.types.Type\022 \n\007types_1\030\t \003(\0132\017.boa.typ" +
-      "es.Type\022-\n\rdeclaration_1\030\n \001(\0132\026.boa.typ" +
-      "es.Declaration\022\016\n\006bool_1\030\013 \001(\010\022\017\n\007int32_" +
-      "1\030\014 \001(\005\022(\n\013variables_1\030\r \003(\0132\023.boa.types",
-      ".Variable\022)\n\013statement_1\030\016 \001(\0132\024.boa.typ" +
-      "es.Statement\022(\n\013modifiers_1\030\017 \003(\0132\023.boa." +
-      "types.Modifier\022\021\n\tstrings_1\030\020 \003(\t\022\'\n\nmod" +
-      "ifier_1\030\021 \001(\0132\023.boa.types.Modifier\0225\n\026st" +
-      "ructural_change_kind\030\022 \001(\0162\025.boa.types.C" +
-      "hangeKind\0220\n\021label_change_kind\030\023 \001(\0162\025.b" +
-      "oa.types.ChangeKind\032\206\001\n\024AnnotationExpres" +
-      "sion\022E\n\013shadow_kind\030\001 \001(\0162$.boa.types.Ex" +
-      "pression.ExpressionKind:\nANNOTATION\022\'\n\na" +
-      "nnotation\030\002 \002(\0132\023.boa.types.Modifier\032\240\001\n",
-      "\013ArrayAccess\022E\n\013shadow_kind\030\001 \001(\0162$.boa." +
-      "types.Expression.ExpressionKind:\nARRAYIN" +
-      "DEX\022$\n\005array\030\002 \002(\0132\025.boa.types.Expressio" +
-      "n\022$\n\005index\030\003 \002(\0132\025.boa.types.Expression\032" +
-      "\316\001\n\rArrayCreation\022C\n\013shadow_kind\030\001 \001(\0162$" +
-      ".boa.types.Expression.ExpressionKind:\010NE" +
-      "WARRAY\022!\n\010new_type\030\002 \002(\0132\017.boa.types.Typ" +
-      "e\022)\n\ndimensions\030\003 \003(\0132\025.boa.types.Expres" +
-      "sion\022*\n\013initializer\030\004 \001(\0132\025.boa.types.Ex" +
-      "pression\032\204\001\n\020ArrayInitializer\022D\n\013shadow_",
-      "kind\030\001 \001(\0162$.boa.types.Expression.Expres" +
-      "sionKind:\tARRAYINIT\022*\n\013expressions\030\002 \003(\013" +
-      "2\025.boa.types.Expression\032\262\010\n\nAssignment\022C" +
-      "\n\rshadow_kind_1\030\001 \001(\0162$.boa.types.Expres" +
-      "sion.ExpressionKind:\006ASSIGN\022G\n\rshadow_ki" +
-      "nd_2\030\002 \001(\0162$.boa.types.Expression.Expres" +
-      "sionKind:\nASSIGN_ADD\022G\n\rshadow_kind_3\030\003 " +
-      "\001(\0162$.boa.types.Expression.ExpressionKin" +
-      "d:\nASSIGN_SUB\022H\n\rshadow_kind_4\030\004 \001(\0162$.b" +
-      "oa.types.Expression.ExpressionKind:\013ASSI",
-      "GN_MULT\022G\n\rshadow_kind_5\030\005 \001(\0162$.boa.typ" +
-      "es.Expression.ExpressionKind:\nASSIGN_DIV" +
-      "\022G\n\rshadow_kind_6\030\006 \001(\0162$.boa.types.Expr" +
-      "ession.ExpressionKind:\nASSIGN_MOD\022J\n\rsha" +
-      "dow_kind_7\030\007 \001(\0162$.boa.types.Expression." +
-      "ExpressionKind:\rASSIGN_BITXOR\022J\n\rshadow_" +
-      "kind_8\030\010 \001(\0162$.boa.types.Expression.Expr" +
-      "essionKind:\rASSIGN_BITAND\022I\n\rshadow_kind" +
-      "_9\030\t \001(\0162$.boa.types.Expression.Expressi" +
-      "onKind:\014ASSIGN_BITOR\022K\n\016shadow_kind_10\030\n",
-      " \001(\0162$.boa.types.Expression.ExpressionKi" +
-      "nd:\rASSIGN_LSHIFT\022K\n\016shadow_kind_11\030\013 \001(" +
-      "\0162$.boa.types.Expression.ExpressionKind:" +
-      "\rASSIGN_RSHIFT\022S\n\016shadow_kind_12\030\014 \001(\0162$" +
-      ".boa.types.Expression.ExpressionKind:\025AS" +
-      "SIGN_UNSIGNEDRSHIFT\022-\n\016left_hand_side\030\r " +
-      "\002(\0132\025.boa.types.Expression\022.\n\017right_hand" +
-      "_side\030\016 \002(\0132\025.boa.types.Expression\022@\n\010op" +
-      "erator\030\017 \002(\0162$.boa.types.Expression.Expr" +
-      "essionKindB\010\222\265\030\004kind\032z\n\016BooleanLiteral\022B",
-      "\n\013shadow_kind\030\001 \001(\0162$.boa.types.Expressi" +
-      "on.ExpressionKind:\007LITERAL\022\025\n\rboolean_va" +
-      "lue\030\002 \002(\010:\r\212\265\030\tisboollit\032\237\001\n\016CastExpress" +
-      "ion\022?\n\013shadow_kind\030\001 \001(\0162$.boa.types.Exp" +
-      "ression.ExpressionKind:\004CAST\022)\n\nexpressi" +
-      "on\030\002 \002(\0132\025.boa.types.Expression\022!\n\010new_t" +
-      "ype\030\003 \002(\0132\017.boa.types.Type\032\220\001\n\020Character" +
-      "Literal\022B\n\013shadow_kind\030\001 \001(\0162$.boa.types" +
-      ".Expression.ExpressionKind:\007LITERAL\022\025\n\re" +
-      "scaped_value\030\002 \002(\t\022\022\n\nchar_value\030\003 \002(\005:\r",
-      "\212\265\030\tischarlit\032\256\002\n\025ClassInstanceCreation\022" +
-      ">\n\013shadow_kind\030\001 \001(\0162$.boa.types.Express" +
-      "ion.ExpressionKind:\003NEW\022!\n\010new_type\030\002 \002(" +
-      "\0132\017.boa.types.Type\022)\n\nexpression\030\003 \001(\0132\025" +
-      ".boa.types.Expression\022(\n\targuments\030\004 \003(\013" +
-      "2\025.boa.types.Expression\022\'\n\016type_argument" +
-      "s\030\005 \003(\0132\017.boa.types.Type\0224\n\024anonymous_cl" +
-      "ass_decl\030\006 \001(\0132\026.boa.types.Declaration\032\352" +
-      "\001\n\025ConditionalExpression\022F\n\013shadow_kind\030" +
-      "\001 \001(\0162$.boa.types.Expression.ExpressionK",
-      "ind:\013CONDITIONAL\022)\n\nexpression\030\002 \002(\0132\025.b" +
-      "oa.types.Expression\022.\n\017then_expression\030\003" +
-      " \002(\0132\025.boa.types.Expression\022.\n\017else_expr" +
-      "ession\030\004 \002(\0132\025.boa.types.Expression\032\243\014\n\017" +
-      "InfixExpression\022C\n\rshadow_kind_1\030\001 \001(\0162$" +
-      ".boa.types.Expression.ExpressionKind:\006OP" +
-      "_ADD\022D\n\rshadow_kind_2\030\002 \001(\0162$.boa.types." +
-      "Expression.ExpressionKind:\007BIT_AND\022H\n\rsh" +
-      "adow_kind_3\030\003 \001(\0162$.boa.types.Expression" +
-      ".ExpressionKind:\013LOGICAL_AND\022G\n\rshadow_k",
-      "ind_4\030\004 \001(\0162$.boa.types.Expression.Expre" +
-      "ssionKind:\nLOGICAL_OR\022C\n\rshadow_kind_5\030\005" +
-      " \001(\0162$.boa.types.Expression.ExpressionKi" +
-      "nd:\006OP_DIV\022?\n\rshadow_kind_6\030\006 \001(\0162$.boa." +
-      "types.Expression.ExpressionKind:\002EQ\022?\n\rs" +
-      "hadow_kind_7\030\007 \001(\0162$.boa.types.Expressio" +
-      "n.ExpressionKind:\002GT\022A\n\rshadow_kind_8\030\010 " +
-      "\001(\0162$.boa.types.Expression.ExpressionKin" +
-      "d:\004GTEQ\022G\n\rshadow_kind_9\030\t \001(\0162$.boa.typ" +
-      "es.Expression.ExpressionKind:\nBIT_LSHIFT",
-      "\022@\n\016shadow_kind_10\030\n \001(\0162$.boa.types.Exp" +
-      "ression.ExpressionKind:\002LT\022B\n\016shadow_kin" +
-      "d_11\030\013 \001(\0162$.boa.types.Expression.Expres" +
-      "sionKind:\004LTEQ\022D\n\016shadow_kind_12\030\014 \001(\0162$" +
-      ".boa.types.Expression.ExpressionKind:\006OP" +
-      "_SUB\022A\n\016shadow_kind_13\030\r \001(\0162$.boa.types" +
-      ".Expression.ExpressionKind:\003NEQ\022D\n\016shado" +
-      "w_kind_14\030\016 \001(\0162$.boa.types.Expression.E" +
-      "xpressionKind:\006BIT_OR\022D\n\016shadow_kind_15\030" +
-      "\017 \001(\0162$.boa.types.Expression.ExpressionK",
-      "ind:\006OP_MOD\022H\n\016shadow_kind_16\030\020 \001(\0162$.bo" +
-      "a.types.Expression.ExpressionKind:\nBIT_R" +
-      "SHIFT\022P\n\016shadow_kind_17\030\021 \001(\0162$.boa.type" +
-      "s.Expression.ExpressionKind:\022BIT_UNSIGNE" +
-      "DRSHIFT\022E\n\016shadow_kind_18\030\022 \001(\0162$.boa.ty" +
-      "pes.Expression.ExpressionKind:\007OP_MULT\022E" +
-      "\n\016shadow_kind_19\030\023 \001(\0162$.boa.types.Expre" +
-      "ssion.ExpressionKind:\007BIT_XOR\022+\n\014left_op" +
-      "erand\030\024 \002(\0132\025.boa.types.Expression\022,\n\rri" +
-      "ght_operand\030\025 \002(\0132\025.boa.types.Expression",
-      "\0220\n\021extended_operands\030\026 \003(\0132\025.boa.types." +
-      "Expression\022@\n\010operator\030\027 \002(\0162$.boa.types" +
-      ".Expression.ExpressionKindB\010\222\265\030\004kind:\013\212\265" +
-      "\030\007isinfix\032\263\001\n\024InstanceofExpression\022F\n\013sh" +
+      ":\003TRY\022\"\n\004body\030\002 \002(\0132\024.boa.types.Statemen" +
+      "t\022%\n\007catches\030\003 \003(\0132\024.boa.types.Statement" +
+      "\022%\n\007finally\030\004 \001(\0132\024.boa.types.Statement\022" +
+      "(\n\tresources\030\005 \003(\0132\025.boa.types.Expressio" +
+      "n\032\207\001\n\030TypeDeclarationStatement\022A\n\013shadow" +
+      "_kind\030\001 \001(\0162\".boa.types.Statement.Statem" +
+      "entKind:\010TYPEDECL\022(\n\010new_type\030\002 \002(\0132\026.bo" +
+      "a.types.Declaration\032\236\001\n\016WhileStatement\022>" +
+      "\n\013shadow_kind\030\001 \001(\0162\".boa.types.Statemen",
+      "t.StatementKind:\005WHILE\022(\n\tcondition\030\002 \002(" +
+      "\0132\025.boa.types.Expression\022\"\n\004body\030\003 \002(\0132\024" +
+      ".boa.types.Statement\"\215\002\n\rStatementKind\022\t" +
+      "\n\005OTHER\020\000\022\n\n\006ASSERT\020\001\022\t\n\005BLOCK\020\002\022\t\n\005BREA" +
+      "K\020\003\022\010\n\004CASE\020\004\022\t\n\005CATCH\020\005\022\014\n\010CONTINUE\020\006\022\006" +
+      "\n\002DO\020\007\022\t\n\005EMPTY\020\010\022\016\n\nEXPRESSION\020\t\022\010\n\004EXP" +
+      "R\020\t\022\007\n\003FOR\020\n\022\006\n\002IF\020\013\022\t\n\005LABEL\020\014\022\n\n\006RETUR" +
+      "N\020\r\022\n\n\006SWITCH\020\016\022\020\n\014SYNCHRONIZED\020\017\022\010\n\004SYN" +
+      "C\020\017\022\t\n\005THROW\020\020\022\007\n\003TRY\020\021\022\014\n\010TYPEDECL\020\022\022\t\n" +
+      "\005WHILE\020\023\032\002\020\001\"\217L\n\nExpression\0222\n\004kind\030\001 \002(",
+      "\0162$.boa.types.Expression.ExpressionKind\022" +
+      "\020\n\010string_1\030\002 \001(\t\022\020\n\010string_2\030\003 \001(\t\022+\n\014e" +
+      "xpression_1\030\004 \001(\0132\025.boa.types.Expression" +
+      "\022+\n\014expression_2\030\005 \001(\0132\025.boa.types.Expre" +
+      "ssion\022+\n\014expression_3\030\006 \001(\0132\025.boa.types." +
+      "Expression\022,\n\rexpressions_1\030\007 \003(\0132\025.boa." +
+      "types.Expression\022\037\n\006type_1\030\010 \001(\0132\017.boa.t" +
+      "ypes.Type\022 \n\007types_1\030\t \003(\0132\017.boa.types.T" +
+      "ype\022-\n\rdeclaration_1\030\n \001(\0132\026.boa.types.D" +
+      "eclaration\022\016\n\006bool_1\030\013 \001(\010\022\017\n\007int32_1\030\014 ",
+      "\001(\005\022(\n\013variables_1\030\r \003(\0132\023.boa.types.Var" +
+      "iable\022)\n\013statement_1\030\016 \001(\0132\024.boa.types.S" +
+      "tatement\022(\n\013modifiers_1\030\017 \003(\0132\023.boa.type" +
+      "s.Modifier\022\021\n\tstrings_1\030\020 \003(\t\022\'\n\nmodifie" +
+      "r_1\030\021 \001(\0132\023.boa.types.Modifier\0225\n\026struct" +
+      "ural_change_kind\030\022 \001(\0162\025.boa.types.Chang" +
+      "eKind\0220\n\021label_change_kind\030\023 \001(\0162\025.boa.t" +
+      "ypes.ChangeKind\032\206\001\n\024AnnotationExpression" +
+      "\022E\n\013shadow_kind\030\001 \001(\0162$.boa.types.Expres" +
+      "sion.ExpressionKind:\nANNOTATION\022\'\n\nannot",
+      "ation\030\002 \002(\0132\023.boa.types.Modifier\032\240\001\n\013Arr" +
+      "ayAccess\022E\n\013shadow_kind\030\001 \001(\0162$.boa.type" +
+      "s.Expression.ExpressionKind:\nARRAYINDEX\022" +
+      "$\n\005array\030\002 \002(\0132\025.boa.types.Expression\022$\n" +
+      "\005index\030\003 \002(\0132\025.boa.types.Expression\032\316\001\n\r" +
+      "ArrayCreation\022C\n\013shadow_kind\030\001 \001(\0162$.boa" +
+      ".types.Expression.ExpressionKind:\010NEWARR" +
+      "AY\022!\n\010new_type\030\002 \002(\0132\017.boa.types.Type\022)\n" +
+      "\ndimensions\030\003 \003(\0132\025.boa.types.Expression" +
+      "\022*\n\013initializer\030\004 \001(\0132\025.boa.types.Expres",
+      "sion\032\204\001\n\020ArrayInitializer\022D\n\013shadow_kind" +
+      "\030\001 \001(\0162$.boa.types.Expression.Expression" +
+      "Kind:\tARRAYINIT\022*\n\013expressions\030\002 \003(\0132\025.b" +
+      "oa.types.Expression\032\262\010\n\nAssignment\022C\n\rsh" +
+      "adow_kind_1\030\001 \001(\0162$.boa.types.Expression" +
+      ".ExpressionKind:\006ASSIGN\022G\n\rshadow_kind_2" +
+      "\030\002 \001(\0162$.boa.types.Expression.Expression" +
+      "Kind:\nASSIGN_ADD\022G\n\rshadow_kind_3\030\003 \001(\0162" +
+      "$.boa.types.Expression.ExpressionKind:\nA" +
+      "SSIGN_SUB\022H\n\rshadow_kind_4\030\004 \001(\0162$.boa.t",
+      "ypes.Expression.ExpressionKind:\013ASSIGN_M" +
+      "ULT\022G\n\rshadow_kind_5\030\005 \001(\0162$.boa.types.E" +
+      "xpression.ExpressionKind:\nASSIGN_DIV\022G\n\r" +
+      "shadow_kind_6\030\006 \001(\0162$.boa.types.Expressi" +
+      "on.ExpressionKind:\nASSIGN_MOD\022J\n\rshadow_" +
+      "kind_7\030\007 \001(\0162$.boa.types.Expression.Expr" +
+      "essionKind:\rASSIGN_BITXOR\022J\n\rshadow_kind" +
+      "_8\030\010 \001(\0162$.boa.types.Expression.Expressi" +
+      "onKind:\rASSIGN_BITAND\022I\n\rshadow_kind_9\030\t" +
+      " \001(\0162$.boa.types.Expression.ExpressionKi",
+      "nd:\014ASSIGN_BITOR\022K\n\016shadow_kind_10\030\n \001(\016" +
+      "2$.boa.types.Expression.ExpressionKind:\r" +
+      "ASSIGN_LSHIFT\022K\n\016shadow_kind_11\030\013 \001(\0162$." +
+      "boa.types.Expression.ExpressionKind:\rASS" +
+      "IGN_RSHIFT\022S\n\016shadow_kind_12\030\014 \001(\0162$.boa" +
+      ".types.Expression.ExpressionKind:\025ASSIGN" +
+      "_UNSIGNEDRSHIFT\022-\n\016left_hand_side\030\r \002(\0132" +
+      "\025.boa.types.Expression\022.\n\017right_hand_sid" +
+      "e\030\016 \002(\0132\025.boa.types.Expression\022@\n\010operat" +
+      "or\030\017 \002(\0162$.boa.types.Expression.Expressi",
+      "onKindB\010\222\265\030\004kind\032z\n\016BooleanLiteral\022B\n\013sh" +
       "adow_kind\030\001 \001(\0162$.boa.types.Expression.E" +
-      "xpressionKind:\013TYPECOMPARE\022+\n\014left_opera" +
-      "nd\030\002 \002(\0132\025.boa.types.Expression\022&\n\rright" +
-      "_operand\030\003 \002(\0132\017.boa.types.Type\032\273\001\n\020Lamb" +
-      "daExpression\022A\n\013shadow_kind\030\001 \001(\0162$.boa." +
-      "types.Expression.ExpressionKind:\006LAMBDA\022",
-      "\027\n\017has_parentheses\030\002 \002(\010\022\'\n\nparameters\030\003" +
-      " \003(\0132\023.boa.types.Variable\022\"\n\004body\030\004 \002(\0132" +
-      "\024.boa.types.Statement\032\363\001\n\020MethodInvocati" +
-      "on\022E\n\013shadow_kind\030\001 \001(\0162$.boa.types.Expr" +
-      "ession.ExpressionKind:\nMETHODCALL\022)\n\nexp" +
-      "ression\030\002 \001(\0132\025.boa.types.Expression\022\'\n\016" +
-      "type_arguments\030\003 \003(\0132\017.boa.types.Type\022\014\n" +
-      "\004name\030\004 \002(\t\022(\n\targuments\030\005 \003(\0132\025.boa.typ" +
-      "es.Expression:\014\212\265\030\010ismethod\032\303\007\n\017MethodRe" +
-      "ference\022K\n\013shadow_kind\030\001 \001(\0162$.boa.types",
-      ".Expression.ExpressionKind:\020METHOD_REFER" +
-      "ENCE\022\'\n\016type_arguments\030\002 \003(\0132\017.boa.types" +
-      ".Type\032\277\001\n\021CreationReference\022K\n\013shadow_ki" +
-      "nd\030\001 \001(\0162$.boa.types.Expression.Expressi" +
-      "onKind:\020METHOD_REFERENCE\022\'\n\016type_argumen" +
-      "ts\030\002 \003(\0132\017.boa.types.Type\022!\n\010new_type\030\003 " +
-      "\002(\0132\017.boa.types.Type:\021\212\265\030\riscreationref\032" +
-      "\330\001\n\031ExpressionMethodReference\022K\n\013shadow_" +
-      "kind\030\001 \001(\0162$.boa.types.Expression.Expres" +
-      "sionKind:\020METHOD_REFERENCE\022\'\n\016type_argum",
-      "ents\030\002 \003(\0132\017.boa.types.Type\022)\n\nexpressio" +
-      "n\030\003 \002(\0132\025.boa.types.Expression\022\014\n\004name\030\004" +
-      " \002(\t:\014\212\265\030\010isexpref\032\275\001\n\024SuperMethodRefere" +
+      "xpressionKind:\007LITERAL\022\025\n\rboolean_value\030" +
+      "\002 \002(\010:\r\212\265\030\tisboollit\032\237\001\n\016CastExpression\022" +
+      "?\n\013shadow_kind\030\001 \001(\0162$.boa.types.Express" +
+      "ion.ExpressionKind:\004CAST\022)\n\nexpression\030\002" +
+      " \002(\0132\025.boa.types.Expression\022!\n\010new_type\030" +
+      "\003 \002(\0132\017.boa.types.Type\032\220\001\n\020CharacterLite" +
+      "ral\022B\n\013shadow_kind\030\001 \001(\0162$.boa.types.Exp" +
+      "ression.ExpressionKind:\007LITERAL\022\025\n\rescap",
+      "ed_value\030\002 \002(\t\022\022\n\nchar_value\030\003 \002(\005:\r\212\265\030\t" +
+      "ischarlit\032\256\002\n\025ClassInstanceCreation\022>\n\013s" +
+      "hadow_kind\030\001 \001(\0162$.boa.types.Expression." +
+      "ExpressionKind:\003NEW\022!\n\010new_type\030\002 \002(\0132\017." +
+      "boa.types.Type\022)\n\nexpression\030\003 \001(\0132\025.boa" +
+      ".types.Expression\022(\n\targuments\030\004 \003(\0132\025.b" +
+      "oa.types.Expression\022\'\n\016type_arguments\030\005 " +
+      "\003(\0132\017.boa.types.Type\0224\n\024anonymous_class_" +
+      "decl\030\006 \001(\0132\026.boa.types.Declaration\032\352\001\n\025C" +
+      "onditionalExpression\022F\n\013shadow_kind\030\001 \001(",
+      "\0162$.boa.types.Expression.ExpressionKind:" +
+      "\013CONDITIONAL\022)\n\nexpression\030\002 \002(\0132\025.boa.t" +
+      "ypes.Expression\022.\n\017then_expression\030\003 \002(\013" +
+      "2\025.boa.types.Expression\022.\n\017else_expressi" +
+      "on\030\004 \002(\0132\025.boa.types.Expression\032\243\014\n\017Infi" +
+      "xExpression\022C\n\rshadow_kind_1\030\001 \001(\0162$.boa" +
+      ".types.Expression.ExpressionKind:\006OP_ADD" +
+      "\022D\n\rshadow_kind_2\030\002 \001(\0162$.boa.types.Expr" +
+      "ession.ExpressionKind:\007BIT_AND\022H\n\rshadow" +
+      "_kind_3\030\003 \001(\0162$.boa.types.Expression.Exp",
+      "ressionKind:\013LOGICAL_AND\022G\n\rshadow_kind_" +
+      "4\030\004 \001(\0162$.boa.types.Expression.Expressio" +
+      "nKind:\nLOGICAL_OR\022C\n\rshadow_kind_5\030\005 \001(\016" +
+      "2$.boa.types.Expression.ExpressionKind:\006" +
+      "OP_DIV\022?\n\rshadow_kind_6\030\006 \001(\0162$.boa.type" +
+      "s.Expression.ExpressionKind:\002EQ\022?\n\rshado" +
+      "w_kind_7\030\007 \001(\0162$.boa.types.Expression.Ex" +
+      "pressionKind:\002GT\022A\n\rshadow_kind_8\030\010 \001(\0162" +
+      "$.boa.types.Expression.ExpressionKind:\004G" +
+      "TEQ\022G\n\rshadow_kind_9\030\t \001(\0162$.boa.types.E",
+      "xpression.ExpressionKind:\nBIT_LSHIFT\022@\n\016" +
+      "shadow_kind_10\030\n \001(\0162$.boa.types.Express" +
+      "ion.ExpressionKind:\002LT\022B\n\016shadow_kind_11" +
+      "\030\013 \001(\0162$.boa.types.Expression.Expression" +
+      "Kind:\004LTEQ\022D\n\016shadow_kind_12\030\014 \001(\0162$.boa" +
+      ".types.Expression.ExpressionKind:\006OP_SUB" +
+      "\022A\n\016shadow_kind_13\030\r \001(\0162$.boa.types.Exp" +
+      "ression.ExpressionKind:\003NEQ\022D\n\016shadow_ki" +
+      "nd_14\030\016 \001(\0162$.boa.types.Expression.Expre" +
+      "ssionKind:\006BIT_OR\022D\n\016shadow_kind_15\030\017 \001(",
+      "\0162$.boa.types.Expression.ExpressionKind:" +
+      "\006OP_MOD\022H\n\016shadow_kind_16\030\020 \001(\0162$.boa.ty" +
+      "pes.Expression.ExpressionKind:\nBIT_RSHIF" +
+      "T\022P\n\016shadow_kind_17\030\021 \001(\0162$.boa.types.Ex" +
+      "pression.ExpressionKind:\022BIT_UNSIGNEDRSH" +
+      "IFT\022E\n\016shadow_kind_18\030\022 \001(\0162$.boa.types." +
+      "Expression.ExpressionKind:\007OP_MULT\022E\n\016sh" +
+      "adow_kind_19\030\023 \001(\0162$.boa.types.Expressio" +
+      "n.ExpressionKind:\007BIT_XOR\022+\n\014left_operan" +
+      "d\030\024 \002(\0132\025.boa.types.Expression\022,\n\rright_",
+      "operand\030\025 \002(\0132\025.boa.types.Expression\0220\n\021" +
+      "extended_operands\030\026 \003(\0132\025.boa.types.Expr" +
+      "ession\022@\n\010operator\030\027 \002(\0162$.boa.types.Exp" +
+      "ression.ExpressionKindB\010\222\265\030\004kind:\013\212\265\030\007is" +
+      "infix\032\263\001\n\024InstanceofExpression\022F\n\013shadow" +
+      "_kind\030\001 \001(\0162$.boa.types.Expression.Expre" +
+      "ssionKind:\013TYPECOMPARE\022+\n\014left_operand\030\002" +
+      " \002(\0132\025.boa.types.Expression\022&\n\rright_ope" +
+      "rand\030\003 \002(\0132\017.boa.types.Type\032\273\001\n\020LambdaEx" +
+      "pression\022A\n\013shadow_kind\030\001 \001(\0162$.boa.type",
+      "s.Expression.ExpressionKind:\006LAMBDA\022\027\n\017h" +
+      "as_parentheses\030\002 \002(\010\022\'\n\nparameters\030\003 \003(\013" +
+      "2\023.boa.types.Variable\022\"\n\004body\030\004 \002(\0132\024.bo" +
+      "a.types.Statement\032\363\001\n\020MethodInvocation\022E" +
+      "\n\013shadow_kind\030\001 \001(\0162$.boa.types.Expressi" +
+      "on.ExpressionKind:\nMETHODCALL\022)\n\nexpress" +
+      "ion\030\002 \001(\0132\025.boa.types.Expression\022\'\n\016type" +
+      "_arguments\030\003 \003(\0132\017.boa.types.Type\022\014\n\004nam" +
+      "e\030\004 \002(\t\022(\n\targuments\030\005 \003(\0132\025.boa.types.E" +
+      "xpression:\014\212\265\030\010ismethod\032\303\007\n\017MethodRefere",
       "nce\022K\n\013shadow_kind\030\001 \001(\0162$.boa.types.Exp" +
       "ression.ExpressionKind:\020METHOD_REFERENCE" +
       "\022\'\n\016type_arguments\030\002 \003(\0132\017.boa.types.Typ" +
-      "e\022\021\n\tqualifier\030\003 \001(\t\022\014\n\004name\030\004 \002(\t:\016\212\265\030\n" +
-      "issuperref\032\313\001\n\023TypeMethodReference\022K\n\013sh" +
-      "adow_kind\030\001 \001(\0162$.boa.types.Expression.E" +
-      "xpressionKind:\020METHOD_REFERENCE\022\'\n\016type_",
-      "arguments\030\002 \003(\0132\017.boa.types.Type\022!\n\010new_" +
-      "type\030\003 \002(\0132\017.boa.types.Type\022\014\n\004name\030\004 \002(" +
-      "\t:\r\212\265\030\tistyperef:\017\212\265\030\013ismethodref\032\251\001\n\026Nu" +
-      "llCoalesceExpression\022G\n\013shadow_kind\030\001 \001(" +
-      "\0162$.boa.types.Expression.ExpressionKind:" +
-      "\014NULLCOALESCE\022\"\n\003lhs\030\002 \002(\0132\025.boa.types.E" +
-      "xpression\022\"\n\003rhs\030\003 \002(\0132\025.boa.types.Expre" +
-      "ssion\032`\n\013NullLiteral\022B\n\013shadow_kind\030\001 \001(" +
-      "\0162$.boa.types.Expression.ExpressionKind:" +
-      "\007LITERAL:\r\212\265\030\tisnulllit\032p\n\rNumberLiteral",
-      "\022B\n\013shadow_kind\030\001 \001(\0162$.boa.types.Expres" +
-      "sion.ExpressionKind:\007LITERAL\022\r\n\005token\030\002 " +
-      "\002(\t:\014\212\265\030\010isintlit\032\206\001\n\027ParenthesizedExpre" +
-      "ssion\022@\n\013shadow_kind\030\001 \001(\0162$.boa.types.E" +
-      "xpression.ExpressionKind:\005PAREN\022)\n\nexpre" +
-      "ssion\030\002 \002(\0132\025.boa.types.Expression\032\226\002\n\021P" +
-      "ostfixExpression\022C\n\rshadow_kind_1\030\001 \001(\0162" +
-      "$.boa.types.Expression.ExpressionKind:\006O" +
-      "P_INC\022C\n\rshadow_kind_2\030\002 \001(\0162$.boa.types" +
-      ".Expression.ExpressionKind:\006OP_DEC\022&\n\007op",
-      "erand\030\003 \002(\0132\025.boa.types.Expression\022@\n\010op" +
-      "erator\030\004 \002(\0162$.boa.types.Expression.Expr" +
-      "essionKindB\010\222\265\030\004kind:\r\212\265\030\tispostfix\032\256\004\n\020" +
-      "PrefixExpression\022C\n\rshadow_kind_1\030\001 \001(\0162" +
-      "$.boa.types.Expression.ExpressionKind:\006O" +
-      "P_DEC\022C\n\rshadow_kind_2\030\002 \001(\0162$.boa.types" +
-      ".Expression.ExpressionKind:\006OP_INC\022C\n\rsh" +
-      "adow_kind_3\030\003 \001(\0162$.boa.types.Expression" +
-      ".ExpressionKind:\006OP_ADD\022C\n\rshadow_kind_4" +
-      "\030\004 \001(\0162$.boa.types.Expression.Expression",
-      "Kind:\006OP_SUB\022D\n\rshadow_kind_5\030\005 \001(\0162$.bo" +
-      "a.types.Expression.ExpressionKind:\007BIT_N" +
-      "OT\022H\n\rshadow_kind_6\030\006 \001(\0162$.boa.types.Ex" +
-      "pression.ExpressionKind:\013LOGICAL_NOT\022&\n\007" +
-      "operand\030\007 \002(\0132\025.boa.types.Expression\022@\n\010" +
-      "operator\030\010 \002(\0162$.boa.types.Expression.Ex" +
-      "pressionKindB\010\222\265\030\004kind:\014\212\265\030\010isprefix\032\222\001\n" +
-      "\rStringLiteral\022B\n\013shadow_kind\030\001 \001(\0162$.bo" +
+      "e\032\277\001\n\021CreationReference\022K\n\013shadow_kind\030\001" +
+      " \001(\0162$.boa.types.Expression.ExpressionKi" +
+      "nd:\020METHOD_REFERENCE\022\'\n\016type_arguments\030\002" +
+      " \003(\0132\017.boa.types.Type\022!\n\010new_type\030\003 \002(\0132" +
+      "\017.boa.types.Type:\021\212\265\030\riscreationref\032\330\001\n\031" +
+      "ExpressionMethodReference\022K\n\013shadow_kind" +
+      "\030\001 \001(\0162$.boa.types.Expression.Expression",
+      "Kind:\020METHOD_REFERENCE\022\'\n\016type_arguments" +
+      "\030\002 \003(\0132\017.boa.types.Type\022)\n\nexpression\030\003 " +
+      "\002(\0132\025.boa.types.Expression\022\014\n\004name\030\004 \002(\t" +
+      ":\014\212\265\030\010isexpref\032\275\001\n\024SuperMethodReference\022" +
+      "K\n\013shadow_kind\030\001 \001(\0162$.boa.types.Express" +
+      "ion.ExpressionKind:\020METHOD_REFERENCE\022\'\n\016" +
+      "type_arguments\030\002 \003(\0132\017.boa.types.Type\022\021\n" +
+      "\tqualifier\030\003 \001(\t\022\014\n\004name\030\004 \002(\t:\016\212\265\030\nissu" +
+      "perref\032\313\001\n\023TypeMethodReference\022K\n\013shadow" +
+      "_kind\030\001 \001(\0162$.boa.types.Expression.Expre",
+      "ssionKind:\020METHOD_REFERENCE\022\'\n\016type_argu" +
+      "ments\030\002 \003(\0132\017.boa.types.Type\022!\n\010new_type" +
+      "\030\003 \002(\0132\017.boa.types.Type\022\014\n\004name\030\004 \002(\t:\r\212" +
+      "\265\030\tistyperef:\017\212\265\030\013ismethodref\032\251\001\n\026NullCo" +
+      "alesceExpression\022G\n\013shadow_kind\030\001 \001(\0162$." +
+      "boa.types.Expression.ExpressionKind:\014NUL" +
+      "LCOALESCE\022\"\n\003lhs\030\002 \002(\0132\025.boa.types.Expre" +
+      "ssion\022\"\n\003rhs\030\003 \002(\0132\025.boa.types.Expressio" +
+      "n\032`\n\013NullLiteral\022B\n\013shadow_kind\030\001 \001(\0162$." +
+      "boa.types.Expression.ExpressionKind:\007LIT",
+      "ERAL:\r\212\265\030\tisnulllit\032s\n\rNumberLiteral\022B\n\013" +
+      "shadow_kind\030\001 \001(\0162$.boa.types.Expression" +
+      ".ExpressionKind:\007LITERAL\022\r\n\005token\030\002 \002(\t:" +
+      "\017\212\265\030\013isnumberlit\032\206\001\n\027ParenthesizedExpres" +
+      "sion\022@\n\013shadow_kind\030\001 \001(\0162$.boa.types.Ex" +
+      "pression.ExpressionKind:\005PAREN\022)\n\nexpres" +
+      "sion\030\002 \002(\0132\025.boa.types.Expression\032\226\002\n\021Po" +
+      "stfixExpression\022C\n\rshadow_kind_1\030\001 \001(\0162$" +
+      ".boa.types.Expression.ExpressionKind:\006OP" +
+      "_INC\022C\n\rshadow_kind_2\030\002 \001(\0162$.boa.types.",
+      "Expression.ExpressionKind:\006OP_DEC\022&\n\007ope" +
+      "rand\030\003 \002(\0132\025.boa.types.Expression\022@\n\010ope" +
+      "rator\030\004 \002(\0162$.boa.types.Expression.Expre" +
+      "ssionKindB\010\222\265\030\004kind:\r\212\265\030\tispostfix\032\256\004\n\020P" +
+      "refixExpression\022C\n\rshadow_kind_1\030\001 \001(\0162$" +
+      ".boa.types.Expression.ExpressionKind:\006OP" +
+      "_DEC\022C\n\rshadow_kind_2\030\002 \001(\0162$.boa.types." +
+      "Expression.ExpressionKind:\006OP_INC\022C\n\rsha" +
+      "dow_kind_3\030\003 \001(\0162$.boa.types.Expression." +
+      "ExpressionKind:\006OP_ADD\022C\n\rshadow_kind_4\030",
+      "\004 \001(\0162$.boa.types.Expression.ExpressionK" +
+      "ind:\006OP_SUB\022D\n\rshadow_kind_5\030\005 \001(\0162$.boa" +
+      ".types.Expression.ExpressionKind:\007BIT_NO" +
+      "T\022H\n\rshadow_kind_6\030\006 \001(\0162$.boa.types.Exp" +
+      "ression.ExpressionKind:\013LOGICAL_NOT\022&\n\007o" +
+      "perand\030\007 \002(\0132\025.boa.types.Expression\022@\n\010o" +
+      "perator\030\010 \002(\0162$.boa.types.Expression.Exp" +
+      "ressionKindB\010\222\265\030\004kind:\014\212\265\030\010isprefix\032\222\001\n\r" +
+      "StringLiteral\022B\n\013shadow_kind\030\001 \001(\0162$.boa" +
+      ".types.Expression.ExpressionKind:\007LITERA",
+      "L\022\025\n\rescaped_value\030\002 \002(\t\022\025\n\rliteral_valu" +
+      "e\030\003 \002(\t:\017\212\265\030\013isstringlit\032\374\001\n\025SuperMethod" +
+      "Invocation\022E\n\013shadow_kind\030\001 \001(\0162$.boa.ty" +
+      "pes.Expression.ExpressionKind:\nMETHODCAL" +
+      "L\022(\n\tqualifier\030\002 \001(\0132\025.boa.types.Express" +
+      "ion\022\'\n\016type_arguments\030\003 \003(\0132\017.boa.types." +
+      "Type\022\014\n\004name\030\004 \002(\t\022(\n\targuments\030\005 \003(\0132\025." +
+      "boa.types.Expression:\021\212\265\030\rissupermethod\032" +
+      "v\n\016ThisExpression\022B\n\013shadow_kind\030\001 \001(\0162$" +
+      ".boa.types.Expression.ExpressionKind:\007LI",
+      "TERAL\022\021\n\tqualifier\030\002 \001(\t:\r\212\265\030\tisthislit\032" +
+      "r\n\013TypeLiteral\022B\n\013shadow_kind\030\001 \001(\0162$.bo" +
       "a.types.Expression.ExpressionKind:\007LITER" +
-      "AL\022\025\n\rescaped_value\030\002 \002(\t\022\025\n\rliteral_val",
-      "ue\030\003 \002(\t:\017\212\265\030\013isstringlit\032\374\001\n\025SuperMetho" +
-      "dInvocation\022E\n\013shadow_kind\030\001 \001(\0162$.boa.t" +
-      "ypes.Expression.ExpressionKind:\nMETHODCA" +
-      "LL\022(\n\tqualifier\030\002 \001(\0132\025.boa.types.Expres" +
-      "sion\022\'\n\016type_arguments\030\003 \003(\0132\017.boa.types" +
-      ".Type\022\014\n\004name\030\004 \002(\t\022(\n\targuments\030\005 \003(\0132\025" +
-      ".boa.types.Expression:\021\212\265\030\rissupermethod" +
-      "\032v\n\016ThisExpression\022B\n\013shadow_kind\030\001 \001(\0162" +
-      "$.boa.types.Expression.ExpressionKind:\007L" +
-      "ITERAL\022\021\n\tqualifier\030\002 \001(\t:\r\212\265\030\tisthislit",
-      "\032r\n\013TypeLiteral\022B\n\013shadow_kind\030\001 \001(\0162$.b" +
-      "oa.types.Expression.ExpressionKind:\007LITE" +
-      "RAL\022\020\n\010type_lit\030\002 \002(\t:\r\212\265\030\tistypelit\032\326\001\n" +
-      "\035VariableDeclarationExpression\022B\n\013shadow" +
-      "_kind\030\001 \001(\0162$.boa.types.Expression.Expre" +
-      "ssionKind:\007VARDECL\022&\n\tmodifiers\030\002 \003(\0132\023." +
-      "boa.types.Modifier\022!\n\010new_type\030\003 \002(\0132\017.b" +
-      "oa.types.Type\022&\n\tfragments\030\004 \003(\0132\023.boa.t" +
-      "ypes.Variable\032\231\001\n\023VarAccessExpression\022D\n" +
-      "\013shadow_kind\030\001 \001(\0162$.boa.types.Expressio",
-      "n.ExpressionKind:\tVARACCESS\022\022\n\nidentifie" +
-      "r\030\002 \002(\t\022(\n\tqualifier\030\003 \001(\0132\025.boa.types.E" +
-      "xpression\"\223\006\n\016ExpressionKind\022\t\n\005OTHER\020\000\022" +
-      "\013\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003" +
-      "\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX" +
-      "\020\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NE" +
-      "W\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020" +
-      "\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n" +
-      "\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016" +
-      "\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013",
-      "\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007" +
-      "BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGICAL_AN" +
-      "D\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002" +
-      "LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013COND" +
-      "ITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022" +
-      "\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIG" +
-      "N_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)" +
-      "\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020" +
-      "\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rA" +
-      "SSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020",
-      "/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022\024\n\020METHOD_R" +
-      "EFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANON_METHOD\0204\"" +
-      "\237\016\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa.types.M" +
-      "odifier.ModifierKind\022\020\n\010string_1\030\002 \001(\t\022\021" +
-      "\n\tstrings_1\030\003 \003(\t\022,\n\rexpressions_1\030\004 \003(\013" +
-      "2\025.boa.types.Expression\022+\n\014expression_1\030" +
-      "\005 \001(\0132\025.boa.types.Expression\0225\n\026structur" +
-      "al_change_kind\030\006 \001(\0162\025.boa.types.ChangeK" +
-      "ind\0220\n\021label_change_kind\030\007 \001(\0162\025.boa.typ" +
-      "es.ChangeKind\032\244\003\n\016NormalModifier\022>\n\rshad",
-      "ow_kind_1\030\001 \001(\0162 .boa.types.Modifier.Mod" +
-      "ifierKind:\005OTHER\022>\n\rshadow_kind_2\030\002 \001(\0162" +
-      " .boa.types.Modifier.ModifierKind:\005FINAL" +
-      "\022?\n\rshadow_kind_3\030\003 \001(\0162 .boa.types.Modi" +
-      "fier.ModifierKind:\006STATIC\022E\n\rshadow_kind" +
-      "_4\030\004 \001(\0162 .boa.types.Modifier.ModifierKi" +
-      "nd:\014SYNCHRONIZED\022A\n\rshadow_kind_5\030\005 \001(\0162" +
-      " .boa.types.Modifier.ModifierKind:\010ABSTR" +
-      "ACT\0228\n\004kind\030\006 \002(\0162 .boa.types.Modifier.M" +
-      "odifierKindB\010\222\265\030\004kind\022\r\n\005other\030\007 \001(\t\032\330\002\n",
-      "\022VisibilityModifier\022?\n\rshadow_kind_1\030\001 \001" +
-      "(\0162 .boa.types.Modifier.ModifierKind:\006PU" +
-      "BLIC\022@\n\rshadow_kind_2\030\002 \001(\0162 .boa.types." +
-      "Modifier.ModifierKind:\007PRIVATE\022B\n\rshadow" +
-      "_kind_3\030\003 \001(\0162 .boa.types.Modifier.Modif" +
-      "ierKind:\tPROTECTED\022A\n\rshadow_kind_4\030\004 \001(" +
-      "\0162 .boa.types.Modifier.ModifierKind:\010INT" +
-      "ERNAL\0228\n\004kind\030\006 \002(\0162 .boa.types.Modifier" +
-      ".ModifierKindB\010\222\265\030\004kind\032\320\004\n\nAnnotation\022A" +
-      "\n\013shadow_kind\030\001 \001(\0162 .boa.types.Modifier",
-      ".ModifierKind:\nANNOTATION\022\021\n\ttype_name\030\002" +
-      " \002(\t\032{\n\020MarkerAnnotation\022A\n\013shadow_kind\030" +
-      "\001 \001(\0162 .boa.types.Modifier.ModifierKind:" +
-      "\nANNOTATION\022\021\n\ttype_name\030\002 \002(\t:\021\212\265\030\risma" +
-      "rkerannot\032\261\001\n\020NormalAnnotation\022A\n\013shadow" +
-      "_kind\030\001 \001(\0162 .boa.types.Modifier.Modifie" +
-      "rKind:\nANNOTATION\022\021\n\ttype_name\030\002 \002(\t\022\r\n\005" +
-      "names\030\003 \003(\t\022%\n\006values\030\004 \003(\0132\025.boa.types." +
-      "Expression:\021\212\265\030\risnormalannot\032\255\001\n\026Single" +
-      "MemberAnnotation\022A\n\013shadow_kind\030\001 \001(\0162 .",
-      "boa.types.Modifier.ModifierKind:\nANNOTAT" +
-      "ION\022\021\n\ttype_name\030\002 \002(\t\022$\n\005value\030\003 \002(\0132\025." +
-      "boa.types.Expression:\027\212\265\030\023issinglemember" +
-      "annot:\013\212\265\030\007isannot\"\244\001\n\014ModifierKind\022\t\n\005O" +
-      "THER\020\000\022\016\n\nANNOTATION\020\001\022\t\n\005FINAL\020\002\022\n\n\006STA" +
-      "TIC\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SYNC\020\004\022\014\n\010ABS" +
-      "TRACT\020\005\022\n\n\006PUBLIC\020\006\022\013\n\007PRIVATE\020\007\022\r\n\tPROT" +
-      "ECTED\020\010\022\014\n\010INTERNAL\020\t\032\002\020\001\"\221\010\n\007Comment\022,\n" +
-      "\004kind\030\001 \002(\0162\036.boa.types.Comment.CommentK" +
-      "ind\022\020\n\010string_1\030\002 \002(\t\0227\n\016positioninfo_1\030",
-      "\003 \002(\0132\037.boa.types.Comment.PositionInfo\0225" +
-      "\n\026structural_change_kind\030\004 \001(\0162\025.boa.typ" +
-      "es.ChangeKind\0220\n\021label_change_kind\030\005 \001(\016" +
-      "2\025.boa.types.ChangeKind\032{\n\014PositionInfo\022" +
-      "\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nst" +
-      "art_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end" +
-      "_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005\032\212\001\n\013LineCom" +
-      "ment\0229\n\013shadow_kind\030\001 \001(\0162\036.boa.types.Co" +
-      "mment.CommentKind:\004LINE\022\r\n\005value\030\002 \002(\t\0221" +
-      "\n\010position\030\003 \002(\0132\037.boa.types.Comment.Pos",
-      "itionInfo\032\214\001\n\014BlockComment\022:\n\013shadow_kin" +
-      "d\030\001 \001(\0162\036.boa.types.Comment.CommentKind:" +
-      "\005BLOCK\022\r\n\005value\030\002 \002(\t\0221\n\010position\030\003 \002(\0132" +
-      "\037.boa.types.Comment.PositionInfo\032\210\001\n\nDoc" +
-      "Comment\0228\n\013shadow_kind\030\001 \001(\0162\036.boa.types" +
-      ".Comment.CommentKind:\003DOC\022\r\n\005value\030\002 \002(\t" +
-      "\0221\n\010position\030\003 \002(\0132\037.boa.types.Comment.P" +
-      "ositionInfo\032\223\001\n\024SpecificationComment\0229\n\013" +
-      "shadow_kind\030\001 \001(\0162\036.boa.types.Comment.Co" +
-      "mmentKind:\004SPEC\022\r\n\005value\030\002 \002(\t\0221\n\010positi",
-      "on\030\003 \002(\0132\037.boa.types.Comment.PositionInf" +
-      "o\"j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n" +
-      "\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004" +
-      "SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001*\236\001\n\010TypeKi" +
-      "nd\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022" +
-      "\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004" +
-      "ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022" +
-      "\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
+      "AL\022\020\n\010type_lit\030\002 \002(\t:\r\212\265\030\tistypelit\032\326\001\n\035" +
+      "VariableDeclarationExpression\022B\n\013shadow_" +
+      "kind\030\001 \001(\0162$.boa.types.Expression.Expres" +
+      "sionKind:\007VARDECL\022&\n\tmodifiers\030\002 \003(\0132\023.b" +
+      "oa.types.Modifier\022!\n\010new_type\030\003 \002(\0132\017.bo" +
+      "a.types.Type\022&\n\tfragments\030\004 \003(\0132\023.boa.ty" +
+      "pes.Variable\032\231\001\n\023VarAccessExpression\022D\n\013",
+      "shadow_kind\030\001 \001(\0162$.boa.types.Expression" +
+      ".ExpressionKind:\tVARACCESS\022\022\n\nidentifier" +
+      "\030\002 \002(\t\022(\n\tqualifier\030\003 \001(\0132\025.boa.types.Ex" +
+      "pression\"\223\006\n\016ExpressionKind\022\t\n\005OTHER\020\000\022\013" +
+      "\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022" +
+      "\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020" +
+      "\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW" +
+      "\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014" +
+      "\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n" +
+      "\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n",
+      "\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n" +
+      "\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007B" +
+      "IT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGICAL_AND" +
+      "\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002L" +
+      "T\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDI" +
+      "TIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016" +
+      "\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN" +
+      "_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)\022" +
+      "\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n" +
+      "\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rAS",
+      "SIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/" +
+      "\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022\024\n\020METHOD_RE" +
+      "FERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANON_METHOD\0204\"\237" +
+      "\016\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa.types.Mo" +
+      "difier.ModifierKind\022\020\n\010string_1\030\002 \001(\t\022\021\n" +
+      "\tstrings_1\030\003 \003(\t\022,\n\rexpressions_1\030\004 \003(\0132" +
+      "\025.boa.types.Expression\022+\n\014expression_1\030\005" +
+      " \001(\0132\025.boa.types.Expression\0225\n\026structura" +
+      "l_change_kind\030\006 \001(\0162\025.boa.types.ChangeKi" +
+      "nd\0220\n\021label_change_kind\030\007 \001(\0162\025.boa.type",
+      "s.ChangeKind\032\244\003\n\016NormalModifier\022>\n\rshado" +
+      "w_kind_1\030\001 \001(\0162 .boa.types.Modifier.Modi" +
+      "fierKind:\005OTHER\022>\n\rshadow_kind_2\030\002 \001(\0162 " +
+      ".boa.types.Modifier.ModifierKind:\005FINAL\022" +
+      "?\n\rshadow_kind_3\030\003 \001(\0162 .boa.types.Modif" +
+      "ier.ModifierKind:\006STATIC\022E\n\rshadow_kind_" +
+      "4\030\004 \001(\0162 .boa.types.Modifier.ModifierKin" +
+      "d:\014SYNCHRONIZED\022A\n\rshadow_kind_5\030\005 \001(\0162 " +
+      ".boa.types.Modifier.ModifierKind:\010ABSTRA" +
+      "CT\0228\n\004kind\030\006 \002(\0162 .boa.types.Modifier.Mo",
+      "difierKindB\010\222\265\030\004kind\022\r\n\005other\030\007 \001(\t\032\330\002\n\022" +
+      "VisibilityModifier\022?\n\rshadow_kind_1\030\001 \001(" +
+      "\0162 .boa.types.Modifier.ModifierKind:\006PUB" +
+      "LIC\022@\n\rshadow_kind_2\030\002 \001(\0162 .boa.types.M" +
+      "odifier.ModifierKind:\007PRIVATE\022B\n\rshadow_" +
+      "kind_3\030\003 \001(\0162 .boa.types.Modifier.Modifi" +
+      "erKind:\tPROTECTED\022A\n\rshadow_kind_4\030\004 \001(\016" +
+      "2 .boa.types.Modifier.ModifierKind:\010INTE" +
+      "RNAL\0228\n\004kind\030\006 \002(\0162 .boa.types.Modifier." +
+      "ModifierKindB\010\222\265\030\004kind\032\320\004\n\nAnnotation\022A\n",
+      "\013shadow_kind\030\001 \001(\0162 .boa.types.Modifier." +
+      "ModifierKind:\nANNOTATION\022\021\n\ttype_name\030\002 " +
+      "\002(\t\032{\n\020MarkerAnnotation\022A\n\013shadow_kind\030\001" +
+      " \001(\0162 .boa.types.Modifier.ModifierKind:\n" +
+      "ANNOTATION\022\021\n\ttype_name\030\002 \002(\t:\021\212\265\030\rismar" +
+      "kerannot\032\261\001\n\020NormalAnnotation\022A\n\013shadow_" +
+      "kind\030\001 \001(\0162 .boa.types.Modifier.Modifier" +
+      "Kind:\nANNOTATION\022\021\n\ttype_name\030\002 \002(\t\022\r\n\005n" +
+      "ames\030\003 \003(\t\022%\n\006values\030\004 \003(\0132\025.boa.types.E" +
+      "xpression:\021\212\265\030\risnormalannot\032\255\001\n\026SingleM",
+      "emberAnnotation\022A\n\013shadow_kind\030\001 \001(\0162 .b" +
+      "oa.types.Modifier.ModifierKind:\nANNOTATI" +
+      "ON\022\021\n\ttype_name\030\002 \002(\t\022$\n\005value\030\003 \002(\0132\025.b" +
+      "oa.types.Expression:\027\212\265\030\023issinglemembera" +
+      "nnot:\013\212\265\030\007isannot\"\244\001\n\014ModifierKind\022\t\n\005OT" +
+      "HER\020\000\022\016\n\nANNOTATION\020\001\022\t\n\005FINAL\020\002\022\n\n\006STAT" +
+      "IC\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SYNC\020\004\022\014\n\010ABST" +
+      "RACT\020\005\022\n\n\006PUBLIC\020\006\022\013\n\007PRIVATE\020\007\022\r\n\tPROTE" +
+      "CTED\020\010\022\014\n\010INTERNAL\020\t\032\002\020\001\"\221\010\n\007Comment\022,\n\004" +
+      "kind\030\001 \002(\0162\036.boa.types.Comment.CommentKi",
+      "nd\022\020\n\010string_1\030\002 \002(\t\0227\n\016positioninfo_1\030\003" +
+      " \002(\0132\037.boa.types.Comment.PositionInfo\0225\n" +
+      "\026structural_change_kind\030\004 \001(\0162\025.boa.type" +
+      "s.ChangeKind\0220\n\021label_change_kind\030\005 \001(\0162" +
+      "\025.boa.types.ChangeKind\032{\n\014PositionInfo\022\021" +
+      "\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nsta" +
+      "rt_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_" +
+      "line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005\032\212\001\n\013LineComm" +
+      "ent\0229\n\013shadow_kind\030\001 \001(\0162\036.boa.types.Com" +
+      "ment.CommentKind:\004LINE\022\r\n\005value\030\002 \002(\t\0221\n",
+      "\010position\030\003 \002(\0132\037.boa.types.Comment.Posi" +
+      "tionInfo\032\214\001\n\014BlockComment\022:\n\013shadow_kind" +
+      "\030\001 \001(\0162\036.boa.types.Comment.CommentKind:\005" +
+      "BLOCK\022\r\n\005value\030\002 \002(\t\0221\n\010position\030\003 \002(\0132\037" +
+      ".boa.types.Comment.PositionInfo\032\210\001\n\nDocC" +
+      "omment\0228\n\013shadow_kind\030\001 \001(\0162\036.boa.types." +
+      "Comment.CommentKind:\003DOC\022\r\n\005value\030\002 \002(\t\022" +
+      "1\n\010position\030\003 \002(\0132\037.boa.types.Comment.Po" +
+      "sitionInfo\032\223\001\n\024SpecificationComment\0229\n\013s" +
+      "hadow_kind\030\001 \001(\0162\036.boa.types.Comment.Com",
+      "mentKind:\004SPEC\022\r\n\005value\030\002 \002(\t\0221\n\010positio" +
+      "n\030\003 \002(\0132\037.boa.types.Comment.PositionInfo" +
+      "\"j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005" +
+      "BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004S" +
+      "PEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001*\236\001\n\010TypeKin" +
+      "d\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r" +
+      "\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004E" +
+      "NUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014" +
+      "\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -98332,6 +98333,8 @@ public final class Ast {
           com.google.protobuf.ExtensionRegistry registry =
             com.google.protobuf.ExtensionRegistry.newInstance();
           registry.add(boa.types.Hidden.hidden);
+          registry.add(boa.types.Hidden.kindFunc);
+          registry.add(boa.types.Hidden.kindFunc);
           registry.add(boa.types.Hidden.alias);
           registry.add(boa.types.Hidden.kindFunc);
           registry.add(boa.types.Hidden.kindFunc);
