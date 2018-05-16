@@ -224,7 +224,8 @@ public class BoaGraphIntrinsics {
 			str.append("\tlabel=\"" + dotEscape(label) + "\"\n");
 		}
 
-		for (final boa.graphs.cfg.CFGNode n : cfg.sortNodes()) {
+		final boa.graphs.cfg.CFGNode[] sorted = cfg.sortNodes();
+		for (final boa.graphs.cfg.CFGNode n : sorted) {
 			final String shape;
 			switch (n.getKind()) {
 				case CONTROL:
@@ -252,29 +253,15 @@ public class BoaGraphIntrinsics {
 				str.append("\t" + n.getId() + "[" + shape + "]\n");
 		}
 
-		final boa.runtime.BoaAbstractTraversal printGraph = new boa.runtime.BoaAbstractTraversal<Object>(false, false) {
-			protected Object preTraverse(final boa.graphs.cfg.CFGNode node) throws Exception {
-				final java.util.List<boa.graphs.cfg.CFGEdge> edges = new ArrayList<boa.graphs.cfg.CFGEdge>(node.getOutEdges());
-				Collections.sort(edges);
-				for (final boa.graphs.cfg.CFGEdge e : edges) {
-					str.append("\t" + node.getId() + " -> " + e.getDest().getId());
-					if (!(e.label() == null || e.label().equals(".") || e.label().equals("")))
-						str.append(" [label=\"" + dotEscape(e.label()) + "\"]");
-					str.append("\n");
-				}
-				return null;
+		for (final boa.graphs.cfg.CFGNode n : sorted) {
+			final java.util.List<boa.graphs.cfg.CFGEdge> edges = new ArrayList<boa.graphs.cfg.CFGEdge>(n.getOutEdges());
+			Collections.sort(edges);
+			for (final boa.graphs.cfg.CFGEdge e : edges) {
+				str.append("\t" + n.getId() + " -> " + e.getDest().getId());
+				if (!(e.label() == null || e.label().equals(".") || e.label().equals("")))
+					str.append(" [label=\"" + dotEscape(e.label()) + "\"]");
+				str.append("\n");
 			}
-
-			@Override
-			public void traverse(final boa.graphs.cfg.CFGNode node, boolean flag) throws Exception {
-				preTraverse(node);
-			}
-		};
-
-		try {
-			printGraph.traverse(cfg, boa.types.Graph.Traversal.TraversalDirection.BACKWARD, boa.types.Graph.Traversal.TraversalKind.DFS);
-		} catch (final Exception e) {
-			// do nothing
 		}
 
 		str.append("}");

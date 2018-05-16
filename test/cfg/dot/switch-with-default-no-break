@@ -9,7 +9,7 @@ digraph {
 	0 -> 1
 	1 -> 2 [label="kind: LITERAL\lliteral: \"1\"\l"]
 	1 -> 4
-	4 -> 5
 	2 -> 3
 	3 -> 5
+	4 -> 5
 }

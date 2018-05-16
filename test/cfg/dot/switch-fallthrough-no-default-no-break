@@ -12,8 +12,8 @@ digraph {
 	1 -> 4 [label="kind: LITERAL\lliteral: \"2\"\l"]
 	1 -> 5 [label="kind: LITERAL\lliteral: \"3\"\l"]
 	1 -> 6
-	5 -> 6
-	4 -> 5
 	2 -> 3
 	3 -> 6
+	4 -> 5
+	5 -> 6
 }

@@ -188,8 +188,10 @@ public abstract class BoaAbstractTraversal<T1> {
 			if (!visitedNodes.contains(n.getId())) {
 				traverse(n, false);
 				visitedNodes.add(n.getId());
-				for (int i = n.getPredecessorsList().size() - 1; i >= 0; i--) {
-					s.push(n.getPredecessorsList().get(i));
+                List<CFGNode> preds = n.getPredecessorsList();
+                Collections.sort(preds);
+				for (int i = preds.size() - 1; i >= 0; i--) {
+					s.push(preds.get(i));
 				}
 			}
 		}

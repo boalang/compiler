@@ -10,7 +10,7 @@ digraph {
 	1 -> 2 [label="kind: LITERAL\lliteral: \"1\"\l"]
 	1 -> 4 [label="kind: LITERAL\lliteral: \"2\"\l"]
 	1 -> 5
-	4 -> 5
 	2 -> 3
 	3 -> 5
+	4 -> 5
 }
