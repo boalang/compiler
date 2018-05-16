@@ -1,5 +1,6 @@
 /*
- * Copyright 2017, Hridesh Rajan, Ganesha Upadhyaya
+ * Copyright 2018, Hridesh Rajan, Ganesha Upadhyaya, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +29,7 @@ import boa.types.Control.CFGNode.CFGNodeType;
  * Control flow graph builder node
  *
  * @author ganeshau
+ * @author rdyer
  */
 public class CFGNode implements Comparable<CFGNode> {
 	public static int numOfNodes = -1;
@@ -314,7 +316,7 @@ public class CFGNode implements Comparable<CFGNode> {
 	}
 
 	public CFGNodeType getKind() {
-        return this.kind;
+		return this.kind;
 	}
 
 	public String processDef() {
@@ -383,6 +385,6 @@ public class CFGNode implements Comparable<CFGNode> {
 	}
 
 	public String toString() {
-		return "" + getId();
+		return "node " + getId();
 	}
 }

@@ -1,5 +1,6 @@
 /*
- * Copyright 2017, Hridesh Rajan, Ganesha Upadhyaya
+ * Copyright 2018, Hridesh Rajan, Ganesha Upadhyaya, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +24,7 @@ import boa.types.Control.CFGNode.CFGNodeType;
  * Control flow graph builder edge
  *
  * @author ganeshau
+ * @author rdyer
  */
 public class CFGEdge implements Comparable<CFGEdge> {
 	public static long numOfEdges = 0;
@@ -141,5 +143,18 @@ public class CFGEdge implements Comparable<CFGEdge> {
 		} else {
 			return CFGEdgeLabel.NIL;
 		}
+	}
+
+	public String toString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(src.toString());
+		sb.append(" --> ");
+		sb.append(dest.toString());
+		if (!".".equals(label)) {
+			sb.append(" [");
+			sb.append(label);
+			sb.append("]");
+		}
+		return sb.toString();
 	}
 }

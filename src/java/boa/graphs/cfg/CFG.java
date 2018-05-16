@@ -185,18 +185,18 @@ public class CFG {
 		returns.addAll(target.returns);
 	}
 
-	public void createNewEdge(final CFGNode node, final CFGNode anoNode) {
-		createNewEdge(node, anoNode, null);
+	public void createNewEdge(final CFGNode src, final CFGNode dest) {
+		createNewEdge(src, dest, null);
 	}
 
-	public void createNewEdge(final CFGNode node, final CFGNode anoNode, final String label) {
-		if (node.getOutNodes().contains(anoNode))
+	public void createNewEdge(final CFGNode src, final CFGNode dest, final String label) {
+		if (src.getOutNodes().contains(dest))
 			return;
 
 		if (label == null)
-			new CFGEdge(node, anoNode);
+			new CFGEdge(src, dest);
 		else
-			new CFGEdge(node, anoNode, label);
+			new CFGEdge(src, dest, label);
 	}
 
 	public void mergeSeq(final CFGNode branch) {
@@ -664,8 +664,10 @@ public class CFG {
 	private CFG traverse_for(final CFGNode cfgNode, final Statement root) {
 		this.isLoopPresent = true;
 		final CFG graph = new CFG();
-		// enhanced for
+
+		// initializations
 		if (root.hasVariableDeclaration()) {
+			// enhanced for
 			final CFGNode bNode = new CFGNode("VARDECL", CFGNodeType.OTHER, "", "VARDECL");
 			final boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 			eb.setKind(boa.types.Ast.Expression.ExpressionKind.VARDECL);
@@ -673,24 +675,30 @@ public class CFG {
 			bNode.setAstNode(eb.build());
 			graph.mergeSeq(bNode);
 		} else {
+			// normal for
 			for (final Expression e : root.getInitializationsList()) {
 				graph.mergeSeq(traverse(cfgNode, e));
 			}
 		}
 
+		// condition
 		final CFGNode control = new CFGNode("FOR", CFGNodeType.CONTROL, "FOR", "FOR");
 		control.setAstNode(root.getExpression());
 		control.setPid((cfgNode == null) ? "." : cfgNode.getPid() + cfgNode.getId() + ".");
-
 		graph.mergeSeq(control);
-		final CFG branch = traverse(control, root.getStatements(0));
+
+		// body
+		final CFG body = traverse(control, root.getStatements(0));
+
+		// updates
 		for (final Expression e : root.getUpdatesList()) {
-			branch.mergeSeq(traverse(cfgNode, e));
+			final CFG update = traverse(cfgNode, e);
+			body.mergeSeq(update);
 		}
 
-		branch.adjustBreakNodes("[CONTINUE]");
-		graph.mergeABranch(branch, control, "T");
-		graph.addBackEdges(branch, control, "B");
+		body.adjustBreakNodes("[CONTINUE]");
+		graph.mergeABranch(body, control, "T");
+		graph.addBackEdges(body, control, "B");
 
 		graph.getOuts().clear();
 		graph.adjustBreakNodes("[BREAK]");
@@ -887,6 +895,20 @@ public class CFG {
 		return null;
 	}
 
+	public CFGNode[] nodes() {
+		try {
+			final CFGNode[] results = new CFGNode[nodes.size()];
+			int i = 0;
+			for (final CFGNode node : nodes) {
+				results[i++] = node;
+			}
+			return results;
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public CFGNode[] sortNodes() {
 		try {
 			final CFGNode[] results = new CFGNode[nodes.size()];
@@ -902,33 +924,60 @@ public class CFG {
 
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("List of nodes:");
+		sb.append("ins: ");
+		sb.append(ins.size());
+		sb.append("\n");
+		for (final CFGNode node : ins) {
+			sb.append(node.toString());
+			sb.append("\n");
+		}
+		sb.append("\n");
+		sb.append("outs: ");
+		sb.append(outs.size());
+		sb.append("\n");
+		for (final CFGNode node : outs) {
+			sb.append(node.toString());
+			sb.append("\n");
+		}
+		sb.append("\n");
+		sb.append("breaks: ");
+		sb.append(breaks.size());
+		sb.append("\n");
+		for (final CFGNode node : breaks) {
+			sb.append(node.toString());
+			sb.append("\n");
+		}
+		sb.append("\n");
+		sb.append("returns: ");
+		sb.append(returns.size());
+		sb.append("\n");
+		for (final CFGNode node : returns) {
+			sb.append(node.toString());
+			sb.append("\n");
+		}
+		sb.append("\n");
+		sb.append("\n\nList of nodes:");
 		sb.append(nodes.size());
-		sb.append("\r\n");
-		final CFGNode[] mynodes = sortNodes();
+		sb.append("\n");
+		final CFGNode[] mynodes = nodes();
 		for (final CFGNode node : mynodes) {
-			sb.append("node ");
-			sb.append(node.getId());
-			sb.append(" \t ");
+			sb.append(node.toString());
+			sb.append("\t");
 			sb.append(node.getMethod());
-			sb.append("\r\n");
+			sb.append("\n");
 		}
 		int numEdges = 0;
-		sb.append("List of edges:\r\n");
+		sb.append("\nList of edges:\n");
 		for (final CFGNode node : mynodes) {
 			for (final CFGEdge edge : node.getOutEdges()) {
-				final CFGNode anoNode = edge.getDest();
-				sb.append("node ");
-				sb.append(node.getId());
-				sb.append(" --> node ");
-				sb.append(anoNode.getId());
-				sb.append("\r\n");
+				sb.append(edge.toString());
+				sb.append("\n");
 				numEdges++;
 			}
 		}
 		sb.append("Total ");
 		sb.append(numEdges);
-		sb.append(" edges\r\n");
+		sb.append(" edges\n");
 		return sb.toString();
 	}
 

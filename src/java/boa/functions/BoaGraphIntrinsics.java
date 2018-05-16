@@ -267,17 +267,12 @@ public class BoaGraphIntrinsics {
 
 			@Override
 			public void traverse(final boa.graphs.cfg.CFGNode node, boolean flag) throws Exception {
-				if (flag) {
-					currentResult = preTraverse(node);
-					outputMapObj.put(node.getId(), currentResult);
-				} else {
-					outputMapObj.put(node.getId(), preTraverse(node));
-				}
+				preTraverse(node);
 			}
 		};
 
 		try {
-			printGraph.traverse(cfg, boa.types.Graph.Traversal.TraversalDirection.FORWARD, boa.types.Graph.Traversal.TraversalKind.DFS);
+			printGraph.traverse(cfg, boa.types.Graph.Traversal.TraversalDirection.BACKWARD, boa.types.Graph.Traversal.TraversalKind.DFS);
 		} catch (final Exception e) {
 			// do nothing
 		}
