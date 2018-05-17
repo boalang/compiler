@@ -45,14 +45,14 @@ public class CFG {
 	public Method md;
 	public String class_name;
 
-	protected HashSet<CFGNode> nodes = new HashSet<CFGNode>();
+	protected final HashSet<CFGNode> nodes = new HashSet<CFGNode>();
 	private CFGNode entryNode;
 	private CFGNode exitNode;
 
-	private HashSet<CFGNode> outs = new HashSet<CFGNode>();
-	private HashSet<CFGNode> ins = new HashSet<CFGNode>();
-	private HashSet<CFGNode> breaks = new HashSet<CFGNode>();
-	private HashSet<CFGNode> returns = new HashSet<CFGNode>();
+	private final HashSet<CFGNode> outs = new HashSet<CFGNode>();
+	private final HashSet<CFGNode> ins = new HashSet<CFGNode>();
+	private final HashSet<CFGNode> breaks = new HashSet<CFGNode>();
+	private final HashSet<CFGNode> returns = new HashSet<CFGNode>();
 
 	private boolean isLoopPresent = false;
 	private boolean isBranchPresent = false;
@@ -311,7 +311,7 @@ public class CFG {
 			final Statement.Builder stm1 = Statement.newBuilder();
 			stm1.setKind(StatementKind.EXPRESSION);
 			stm1.setExpression(exp);
-			stm.addStatements(stm1);
+			stm.addStatements(stm1.build());
 		}
 		stm.addAllStatements(md.getStatementsList());
 
@@ -377,52 +377,7 @@ public class CFG {
 			return traverse_call(cfgNode, root);
 		case NEW:
 			return traverse_instance(cfgNode, root);
-		case NEQ:
-		case EQ:
-		case GT:
-		case GTEQ:
-		case LITERAL:
-		case LOGICAL_AND:
-		case LOGICAL_NOT:
-		case LOGICAL_OR:
-		case LT:
-		case LTEQ:
-		case ANNOTATION:
-		case ARRAYINDEX:
-		case ARRAYINIT:
-		case ASSIGN_ADD:
-		case ASSIGN_BITAND:
-		case ASSIGN_BITOR:
-		case ASSIGN_BITXOR:
-		case ASSIGN_DIV:
-		case ASSIGN_LSHIFT:
-		case ASSIGN_MOD:
-		case ASSIGN_MULT:
-		case ASSIGN_RSHIFT:
-		case ASSIGN_SUB:
-		case ASSIGN_UNSIGNEDRSHIFT:
-		case ASSIGN:
-		case BIT_AND:
-		case BIT_LSHIFT:
-		case BIT_NOT:
-		case BIT_OR:
-		case BIT_RSHIFT:
-		case BIT_UNSIGNEDRSHIFT:
-		case BIT_XOR:
-		case CAST:
-		case NEWARRAY:
-		case NULLCOALESCE:
-		case OP_ADD:
-		case OP_DEC:
-		case OP_DIV:
-		case OP_INC:
-		case OP_MOD:
-		case OP_MULT:
-		case OP_SUB:
-		case OTHER:
-		case TYPECOMPARE:
-		case VARACCESS:
-		case VARDECL:
+		default:
 			/*
 			 * final List<Expression> expressionsList =
 			 * root.getExpressionsList(); final int expressionsSize =
@@ -432,8 +387,6 @@ public class CFG {
 			final CFGNode bNode = new CFGNode(root.getKind().name(), CFGNodeType.OTHER, "", root.getKind().name());
 			bNode.setAstNode(root);
 			graph.mergeSeq(bNode);
-			return graph;
-		default:
 			return graph;
 		}
 	}
@@ -482,7 +435,6 @@ public class CFG {
 			aNode.setAstNode(root);
 			graph.mergeSeq(aNode);
 			return graph;
-		case EMPTY:
 		default:
 			return graph;
 		}
@@ -491,9 +443,9 @@ public class CFG {
 	private CFG traverse_instance(final CFGNode cfgNode, final Expression root) {
 		final CFG graph = new CFG();
 		String nObjectname;
-		if (root.getVariable() != null && !root.getVariable().equals("")) {
+		if (root.hasVariable() && !root.getVariable().isEmpty()) {
 			final Variable pNode = root.getVariableDecls(0); // TODO check for multiple var_decls
-			nObjectname = pNode.getName().toString(); //FIXME Redundant toString()
+			nObjectname = pNode.getName();
 		} else if ((root.getExpressionsCount() > 0) && root.getExpressions(0).getKind() == ExpressionKind.ASSIGN) {
 			final Expression ex = root.getExpressions(0);
 			if (ex.getKind() == ExpressionKind.VARACCESS) {
@@ -508,7 +460,7 @@ public class CFG {
 		final String type_str;
 		if (root.getVariableDeclsCount() > 0) {
 			type_str = String.valueOf(root.getVariableDecls(0).getVariableType().getName());
-		} else if (root.getNewType() != null) {
+		} else if (root.hasNewType()) {
 			type_str = String.valueOf(root.getNewType().getName());
 		} else {
 			type_str = "";
@@ -593,7 +545,7 @@ public class CFG {
 		final CFGNode branch = new CFGNode("IF", CFGNodeType.CONTROL, "IF", "IF");
 		branch.setAstNode(root);
 		branch.setPid((cfgNode == null) ? "." : cfgNode.getPid() + cfgNode.getId() + ".");
-		graph.mergeSeq(branch); // TODO check if the expressions index is right
+		graph.mergeSeq(branch);
 
 		boolean trueNotEmpty = false, falseNotEmpty = false;
 		if (root.getExpressionsCount() > 0) { // Then
@@ -758,10 +710,12 @@ public class CFG {
 	private CFG traverse_case(final CFGNode cfgNode, final Statement root) {
 		final CFG graph = new CFG();
 		final String label;
-		if (root.getKind().name() == null) {
-			label = "";
+		if (!root.hasExpression()) {
+			label = "default";
+		} else if (root.getExpression().hasLiteral()) {
+			label = root.getExpression().getLiteral();
 		} else {
-			label = root.getKind().name();
+			label = root.getExpression().getVariable();
 		}
 		final CFGNode node = new CFGNode(label, CFGNodeType.OTHER, "Case", label);
 		node.setAstNode(root);
