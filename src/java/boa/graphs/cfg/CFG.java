@@ -690,13 +690,14 @@ public class CFG {
 		// body
 		final CFG body = traverse(control, root.getStatements(0));
 
+		body.adjustBreakNodes("[CONTINUE]");
+
 		// updates
 		for (final Expression e : root.getUpdatesList()) {
 			final CFG update = traverse(cfgNode, e);
 			body.mergeSeq(update);
 		}
 
-		body.adjustBreakNodes("[CONTINUE]");
 		graph.mergeABranch(body, control, "T");
 		graph.addBackEdges(body, control, "B");
 
