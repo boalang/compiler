@@ -1,0 +1,10 @@
+digraph {
+	{ rank = sink; 3; }
+	0[shape=ellipse,label="[0] ENTRY"]
+	1[shape=diamond,label="[1] try {\l}\lfinally {\l	System.err.println(\"finally\");\l}\l"]
+	2[shape=parallelogram,label="[2] System.err.println(\"finally\")"]
+	3[shape=ellipse,label="[3] EXIT"]
+	0 -> 1
+	1 -> 2
+	2 -> 3
+}
