@@ -690,13 +690,14 @@ public class CFG {
 		// body
 		final CFG body = traverse(control, root.getStatements(0));
 
+		body.adjustBreakNodes("[CONTINUE]");
+
 		// updates
 		for (final Expression e : root.getUpdatesList()) {
 			final CFG update = traverse(cfgNode, e);
 			body.mergeSeq(update);
 		}
 
-		body.adjustBreakNodes("[CONTINUE]");
 		graph.mergeABranch(body, control, "T");
 		graph.addBackEdges(body, control, "B");
 
@@ -828,12 +829,19 @@ public class CFG {
 		branch.setAstNode(root);
 		branch.setPid((cfgNode == null) ? "." : cfgNode.getPid() + cfgNode.getId() + ".");
 		graph.mergeSeq(branch);
-		boolean trueNotEmpty = false, falseNotEmpty = false; //FIXME never used
+
+		boolean hasBody = false;
 		if (root.getStatementsCount() > 0) {
-			graph.mergeABranch(traverse(branch, root.getStatements(0)), branch, "T");
-			trueNotEmpty = true;
+			final CFG body = traverse(branch, root.getStatements(0));
+			if (body.nodes.size() > 0) {
+				graph.mergeABranch(body, branch, "T");
+				hasBody = true;
+			} else {
+				graph.outs.add(branch);
+			}
 		}
-		// All catch statements are considered false branches.
+
+		// all catch statements are considered false branches
 		Statement finallyBlock = null;
 		for (int i = 1; i < root.getStatementsCount(); i++) {
 			final Statement stmt = root.getStatements(i);
@@ -841,10 +849,12 @@ public class CFG {
 				finallyBlock = stmt;
 			} else {
 				graph.mergeABranch(traverse(branch, stmt), branch, "F");
-				falseNotEmpty = true;
 			}
 		}
-		graph.getOuts().remove(branch);
+
+		if (hasBody)
+			graph.getOuts().remove(branch);
+
 		if (finallyBlock != null) {
 			graph.adjustReturnNodes();
 			graph.mergeSeq(traverse(cfgNode, finallyBlock));
