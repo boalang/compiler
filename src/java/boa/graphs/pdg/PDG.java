@@ -95,7 +95,7 @@ public class PDG {
      *
      * @return the method whose PDG is built
      */
-    private Method getMethod() {
+    public Method getMethod() {
         return md;
     }
 

@@ -43,16 +43,18 @@ public class PDGSlicer {
     private int hashcode = -1;
 
     // Constructors
-    public PDGSlicer(Method method, PDGNode n) throws Exception {
+    public PDGSlicer(Method method, PDGNode n, boolean normalize) throws Exception {
         this.md = method;
+        this.normalize = normalize;
         if (n != null) {
             entrynodes.add(n);
             getSlice(new PDG(method, true));
         }
     }
 
-    public PDGSlicer(Method method, PDGNode[] n) throws Exception {
+    public PDGSlicer(Method method, PDGNode[] n, boolean normalize) throws Exception {
         this.md = method;
+        this.normalize = normalize;
         entrynodes.addAll(Arrays.asList(n));
         getSlice(new PDG(method, true));
     }
@@ -66,10 +68,6 @@ public class PDGSlicer {
             entrynodes.add(node);
             getSlice(pdg);
         }
-    }
-
-    public PDGSlicer(Method method, int nid) throws Exception {
-        this(method, nid, false);
     }
 
     public PDGSlicer(Method method, Integer[] nids, boolean normalize) throws Exception {
@@ -86,9 +84,29 @@ public class PDGSlicer {
         }
     }
 
-    public PDGSlicer(Method method, Integer[] nids) throws Exception {
-        this(method, nids, false);
+    public PDGSlicer(PDG pdg, int nid, boolean normalize) throws Exception {
+        this.md = pdg.getMethod();
+        this.normalize = normalize;
+        PDGNode node = pdg.getNode(nid);
+        if (node != null) {
+            entrynodes.add(node);
+            getSlice(pdg);
+        }
     }
+
+    public PDGSlicer(PDG pdg, Integer[] nids, boolean normalize) throws Exception {
+        this.md = pdg.getMethod();
+        this.normalize = normalize;
+        for (Integer i: nids) {
+            PDGNode node = pdg.getNode(i);
+            if (node != null)
+                entrynodes.add(node);
+        }
+        if (entrynodes.size() > 0) {
+            getSlice(pdg);
+        }
+    }
+
 
     // Getters
     public ArrayList<PDGNode> getEntrynodesList() {

@@ -77,14 +77,9 @@ public class BoaGraphIntrinsics {
 		return new PDG(method);
 	}
 
-	@FunctionSpec(name = "getpdg", returnType = "PDG", formalParameters = { "CFG" })
-	public static PDG getpdg(final CFG cfg) throws Exception {
-		return new PDG(cfg);
-	}
-
-	@FunctionSpec(name = "getpdg", returnType = "PDG", formalParameters = { "CDG", "DDG" })
-	public static PDG getpdg(final CDG cdg, final DDG ddg) throws Exception {
-		return new PDG(cdg, ddg);
+	@FunctionSpec(name = "getpdg", returnType = "PDG", formalParameters = { "Method", "bool" })
+	public static PDG getpdg(final Method method, boolean paramAsStatement) throws Exception {
+		return new PDG(method, paramAsStatement);
 	}
 
 	@FunctionSpec(name = "getcfgslice", returnType = "CFGSlicer", formalParameters = { "Method", "int" })
@@ -92,9 +87,9 @@ public class BoaGraphIntrinsics {
 		return new CFGSlicer(method, (int)(long) id);
 	}
 
-	@FunctionSpec(name = "getpdgslice", returnType = "PDGSlicer", formalParameters = { "Method",  "int" })
-	public static PDGSlicer getpdgslice(final Method method, Long id) throws Exception {
-		return new PDGSlicer(method, (int)(long) id);
+	@FunctionSpec(name = "getpdgslice", returnType = "PDGSlicer", formalParameters = { "PDG",  "int", "bool" })
+	public static PDGSlicer getpdgslice(final PDG pdg, Long id, boolean normalize) throws Exception {
+		return new PDGSlicer(pdg, (int)(long) id, normalize);
 	}
 
 	@FunctionSpec(name = "getpdgslice", returnType = "PDGSlicer", formalParameters = { "Method",  "int", "bool" })
