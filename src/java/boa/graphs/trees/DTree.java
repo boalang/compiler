@@ -42,8 +42,8 @@ public class DTree {
      * @throws Exception if tree construction fails
      */
     public DTree(final CFG cfg) throws Exception {
-        this.md = cfg.md;
         if (cfg != null && cfg.getNodes().size() > 0) {
+            this.md = cfg.md;
             final Map<CFGNode, Set<CFGNode>> dom = computeDominators(cfg);
             final Map<CFGNode, CFGNode> idom = computeImmediateDominator(dom, cfg);
             buildDomTree(idom);
