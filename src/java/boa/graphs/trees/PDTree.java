@@ -227,7 +227,6 @@ public class PDTree {
      * @return map of nodes and corresponding immediate post-dominators
      */
     private Map<CFGNode, CFGNode> computeImmediatePostDominator(final Map<CFGNode, Set<CFGNode>> pdom, final CFG cfg) {
-        // inefficient implementation: t-complexity = O(n^3)
         /*
          * To find ipdom, we check each pdom of a node to see if it is post dominating any other
          * node. Each node should have atmost one ip-dom (last node has no immediate post dominator)

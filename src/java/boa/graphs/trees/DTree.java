@@ -224,7 +224,6 @@ public class DTree {
      * @return map of nodes and corresponding immediate dominators
      */
     private Map<CFGNode, CFGNode> computeImmediateDominator(final Map<CFGNode, Set<CFGNode>> dom, final CFG cfg) {
-        // inefficient implementation: t-complexity = O(n^3)
         /*
          * To find idom, we check each dom of a node to see if it is dominating any other
          * node. Each node should have atmost one i-dom (first node has no immediate dominator)
