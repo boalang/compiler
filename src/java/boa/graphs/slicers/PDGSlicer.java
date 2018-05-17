@@ -21,6 +21,9 @@ import boa.graphs.pdg.PDGEdge;
 import boa.graphs.pdg.PDGNode;
 import boa.types.Ast.*;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 import static boa.functions.BoaAstIntrinsics.prettyprint;
@@ -97,6 +100,46 @@ public class PDGSlicer {
     }
 
     /**
+     * Returns cryptographic hash of the slice
+     *
+     * @param algorithm name of the cryptographic hashing algorithm
+     * @return cryptographic hash of the slice
+     */
+    public String getCryptHash(String algorithm) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        Collections.sort(entrynodes, new PDGNodeComparator());
+
+        Stack<PDGNode> nodes = new Stack<PDGNode>();
+        nodes.addAll(entrynodes);
+        Set<PDGNode> visited = new HashSet<PDGNode>();
+        StringBuilder sb = new StringBuilder();
+
+        while (nodes.size() != 0) {
+            PDGNode node = nodes.pop();
+            sb.append(prettyprint(node.getExpr()));
+            visited.add(node);
+
+            for (PDGNode succ : node.getSuccessors()) {
+                List<PDGEdge> edges = node.getOutEdges(succ);
+                for (PDGEdge e: edges)
+                    sb.append(e.getKind()).append(e.getLabel());
+
+                if (!visited.contains(succ))
+                    nodes.push(succ);
+            }
+
+        }
+
+        MessageDigest md = MessageDigest.getInstance(algorithm);
+        byte[] hcBytes = md.digest(sb.toString().getBytes("UTF-8"));
+
+        StringBuilder sBDigest = new StringBuilder();
+        for (byte b: hcBytes)
+            sBDigest.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+
+        return sBDigest.toString();
+    }
+
+    /**
      * Traverse the pdg to collect sliced nodes.
      *
      * @param pdg program dependence graph
@@ -121,22 +164,22 @@ public class PDGSlicer {
                             normalizedVars.put(node.getDefVariable(), "var$" + varCount);
                             varCount++;
                         }
-                        node.setDefVariable(normalizedVars.get(node.getDefVariable())); //FIXME: create a clone of the node and then set
+                        node.setDefVariable(normalizedVars.get(node.getDefVariable())); // FIXME: create a clone of the node and then set
                     }
                     // use variables
                     HashSet<String> useVars = new HashSet<String>();
                     for (String dVar : node.getUseVariables()) {
                         if (dVar != null) {
                             if (!normalizedVars.containsKey(dVar)) {
-                                normalizedVars.put(dVar, "var$" + varCount); //FIXME: use string builder
+                                normalizedVars.put(dVar, "var$" + varCount); // FIXME: use string builder
                                 varCount++;
                             }
                             useVars.add(normalizedVars.get(dVar));
                         }
                     }
                     node.setUseVariables(useVars);
-                    Expression exp = normalizeExpression(node.getExpr(), normalizedVars);
-                    node.setExpr(exp); //FIXME: create a clone of the node and then set
+                    if (node.getExpr() != null)
+                        node.setExpr(normalizeExpression(node.getExpr(), normalizedVars)); // FIXME: create a clone of the node and then set
 
                     for (PDGEdge e: node.getOutEdges()) {
                         String label = e.getLabel();
@@ -331,8 +374,6 @@ public class PDGSlicer {
 
             visited1.add(node1);
             visited2.add(node2);
-            //Collections.sort(node1.getSuccessors(), new PDGNodeComparator()); // TODO: remove
-            //Collections.sort(node2.getSuccessors(), new PDGNodeComparator()); // TODO: remove
 
             for (int i = 0; i < node1.getSuccessors().size(); i++) {
                 List<PDGEdge> outEdges1 = node1.getOutEdges(node1.getSuccessors().get(i));
