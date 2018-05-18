@@ -20,7 +20,6 @@ import boa.graphs.pdg.PDG;
 import boa.graphs.pdg.PDGEdge;
 import boa.graphs.pdg.PDGNode;
 import boa.types.Ast.*;
-import boa.types.Control;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -180,7 +179,7 @@ public class PDGSlicer {
                 // replace use and def variables in the node with their normalized names
                 if (normalize) {
                     // def variable
-                    if (!node.getDefVariable().equals("")) {
+                    if (node.getDefVariable() != null) {
                         if (!normalizedVars.containsKey(node.getDefVariable())) {
                             normalizedVars.put(node.getDefVariable(), "var$" + varCount);
                             varCount++;
