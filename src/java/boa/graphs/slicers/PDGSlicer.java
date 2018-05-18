@@ -38,14 +38,14 @@ import static boa.functions.BoaNormalFormIntrinsics.normalizeExpression;
 
 public class PDGSlicer {
 
-    private Method md;
-    private ArrayList<PDGNode> entrynodes = new ArrayList<PDGNode>();
-    private HashSet<PDGNode> slice = new HashSet<PDGNode>();
+    private final Method md;
+    private final ArrayList<PDGNode> entrynodes = new ArrayList<PDGNode>();
+    private final HashSet<PDGNode> slice = new HashSet<PDGNode>();
     private boolean normalize = false;
     private int hashcode = -1;
 
     // Constructors
-    public PDGSlicer(Method method, PDGNode n, boolean normalize) throws Exception {
+    public PDGSlicer(final Method method, final PDGNode n, final boolean normalize) throws Exception {
         this.md = method;
         this.normalize = normalize;
         if (n != null) {
@@ -54,30 +54,30 @@ public class PDGSlicer {
         }
     }
 
-    public PDGSlicer(Method method, PDGNode[] n, boolean normalize) throws Exception {
+    public PDGSlicer(final Method method, final PDGNode[] n, final boolean normalize) throws Exception {
         this.md = method;
         this.normalize = normalize;
         entrynodes.addAll(Arrays.asList(n));
         getSlice(new PDG(method, true));
     }
 
-    public PDGSlicer(Method method, int nid, boolean normalize) throws Exception {
+    public PDGSlicer(final Method method, final int nid, final boolean normalize) throws Exception {
         this.md = method;
         this.normalize = normalize;
-        PDG pdg = new PDG(method, true);
-        PDGNode node = pdg.getNode(nid);
+        final PDG pdg = new PDG(method, true);
+        final PDGNode node = pdg.getNode(nid);
         if (node != null) {
             entrynodes.add(node);
             getSlice(pdg);
         }
     }
 
-    public PDGSlicer(Method method, Integer[] nids, boolean normalize) throws Exception {
+    public PDGSlicer(final Method method, final Integer[] nids, final boolean normalize) throws Exception {
         this.md = method;
         this.normalize = normalize;
-        PDG pdg = new PDG(method, true);
+        final PDG pdg = new PDG(method, true);
         for (Integer i: nids) {
-            PDGNode node = pdg.getNode(i);
+            final PDGNode node = pdg.getNode(i);
             if (node != null)
                 entrynodes.add(node);
         }
@@ -86,21 +86,21 @@ public class PDGSlicer {
         }
     }
 
-    public PDGSlicer(PDG pdg, int nid, boolean normalize) throws Exception {
+    public PDGSlicer(final PDG pdg, final int nid, final boolean normalize) throws Exception {
         this.md = pdg.getMethod();
         this.normalize = normalize;
-        PDGNode node = pdg.getNode(nid);
+        final PDGNode node = pdg.getNode(nid);
         if (node != null) {
             entrynodes.add(node);
             getSlice(pdg);
         }
     }
 
-    public PDGSlicer(PDG pdg, Integer[] nids, boolean normalize) throws Exception {
+    public PDGSlicer(final PDG pdg, final Integer[] nids, final boolean normalize) throws Exception {
         this.md = pdg.getMethod();
         this.normalize = normalize;
-        for (Integer i: nids) {
-            PDGNode node = pdg.getNode(i);
+        for (final Integer i: nids) {
+            final PDGNode node = pdg.getNode(i);
             if (node != null)
                 entrynodes.add(node);
         }
@@ -124,38 +124,36 @@ public class PDGSlicer {
      * @param algorithm name of the cryptographic hashing algorithm
      * @return cryptographic hash of the slice
      */
-    public String getCryptHash(String algorithm) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        Collections.sort(entrynodes, new PDGNodeComparator());
-
-        Stack<PDGNode> nodes = new Stack<PDGNode>();
+    public String getCryptHash(final String algorithm) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        //Collections.sort(entrynodes);
+        final Stack<PDGNode> nodes = new Stack<PDGNode>();
         nodes.addAll(entrynodes);
-        Set<PDGNode> visited = new LinkedHashSet<PDGNode>();
-        StringBuilder sb = new StringBuilder();
+        final Set<PDGNode> visited = new LinkedHashSet<PDGNode>();
+        final StringBuilder sb = new StringBuilder();
 
         while (nodes.size() != 0) {
-            PDGNode node = nodes.pop();
+            final PDGNode node = nodes.pop();
             if (node.getStmt() != null)
                 sb.append(prettyprint(node.getStmt()));
             if (node.getExpr() != null)
                 sb.append(prettyprint(node.getExpr()));
             visited.add(node);
 
-            for (PDGNode succ : node.getSuccessors()) {
-                List<PDGEdge> edges = node.getOutEdges(succ);
+            for (final PDGNode succ : node.getSuccessors()) {
+                final List<PDGEdge> edges = node.getOutEdges(succ);
                 for (PDGEdge e: edges)
                     sb.append(e.getKind()).append(e.getLabel());
 
                 if (!visited.contains(succ))
                     nodes.push(succ);
             }
-
         }
 
-        MessageDigest md = MessageDigest.getInstance(algorithm);
-        byte[] hcBytes = md.digest(sb.toString().getBytes("UTF-8"));
+        final MessageDigest md = MessageDigest.getInstance(algorithm);
+        final byte[] hcBytes = md.digest(sb.toString().getBytes("UTF-8"));
 
-        StringBuilder sBDigest = new StringBuilder();
-        for (byte b: hcBytes)
+        final StringBuilder sBDigest = new StringBuilder();
+        for (final byte b: hcBytes)
             sBDigest.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
 
         return sBDigest.toString();
@@ -166,17 +164,18 @@ public class PDGSlicer {
      *
      * @param pdg program dependence graph
      */
-    private void getSlice(PDG pdg) throws Exception {
-        Stack<PDGNode> nodes = new Stack<PDGNode>();
+    private void getSlice(final PDG pdg) throws Exception {
+        final Stack<PDGNode> nodes = new Stack<PDGNode>();
         nodes.addAll(entrynodes);
-        Map<String, String> normalizedVars = new HashMap<String, String>();
+        final Map<String, String> normalizedVars = new HashMap<String, String>();
+        final StringBuilder sb = new StringBuilder(); // for hashcode caching
         int varCount = 1;
         // traverse and collect sliced nodes
         // if normalization is enabled then normalize node expressioin
         // also update use and def variables for each node
         try {
             while (nodes.size() != 0) {
-                PDGNode node = nodes.pop();
+                final PDGNode node = nodes.pop();
                 // store normalized name mappings of def and use variables at this node
                 // replace use and def variables in the node with their normalized names
                 if (normalize) {
@@ -189,8 +188,8 @@ public class PDGSlicer {
                         node.setDefVariable(normalizedVars.get(node.getDefVariable())); // FIXME: create a clone of the node and then set
                     }
                     // use variables
-                    HashSet<String> useVars = new HashSet<String>();
-                    for (String dVar : node.getUseVariables()) {
+                    final HashSet<String> useVars = new HashSet<String>();
+                    for (final String dVar : node.getUseVariables()) {
                         if (dVar != null) {
                             if (!normalizedVars.containsKey(dVar)) {
                                 normalizedVars.put(dVar, "var$" + varCount); // FIXME: use string builder
@@ -203,16 +202,18 @@ public class PDGSlicer {
                     if (node.hasExpr())
                         node.setExpr(normalizeExpression(node.getExpr(), normalizedVars)); // FIXME: create a clone of the node and then set
 
-                    for (PDGEdge e: node.getOutEdges()) {
-                        String label = normalizedVars.get(e.getLabel());
+                    for (final PDGEdge e: node.getOutEdges()) {
+                        final String label = normalizedVars.get(e.getLabel());
                         if (label != null)
                             e.setLabel(label);
                     }
                 }
 
                 slice.add(node);
+                sb.append(node.getExpr()); // for hashcode caching
                 // if successor has not been visited, add it
-                for (PDGNode succ : node.getSuccessors())
+                Collections.sort(node.getSuccessors());
+                for (final PDGNode succ : node.getSuccessors())
                     if (!slice.contains(succ))
                         nodes.push(succ);
             }
@@ -222,56 +223,29 @@ public class PDGSlicer {
         }
 
         // compute and cache hash
-        calculateHash();
-
-    }
-
-    /**
-     * Computes hash code of the slice for caching purpose
-     */
-    private void calculateHash() {
-        Collections.sort(entrynodes, new PDGNodeComparator());
-
-        Stack<PDGNode> nodes = new Stack<PDGNode>();
-        nodes.addAll(entrynodes);
-        Set<PDGNode> visited = new HashSet<PDGNode>();
-        StringBuilder sb = new StringBuilder();
-
-        while (nodes.size() != 0) {
-            PDGNode node = nodes.pop();
-            sb.append(prettyprint(node.getExpr()));
-
-            visited.add(node);
-            Collections.sort(node.getSuccessors(), new PDGNodeComparator());
-
-            for (PDGNode succ : node.getSuccessors())
-                if (!visited.contains(succ))
-                    nodes.push(succ);
-
-        }
-
         hashcode = sb.toString().hashCode();
+
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof PDGSlicer)) return false;
-        PDGSlicer pdgSlicer = (PDGSlicer) o;
+        final PDGSlicer pdgSlicer = (PDGSlicer) o;
 
-        Stack<PDGNode> nodes1 = new Stack<PDGNode>();
-        Stack<PDGNode> nodes2 = new Stack<PDGNode>();
-        Set<PDGNode> visited1 = new HashSet<PDGNode>();
-        Set<PDGNode> visited2 = new HashSet<PDGNode>();
+        final Stack<PDGNode> nodes1 = new Stack<PDGNode>();
+        final Stack<PDGNode> nodes2 = new Stack<PDGNode>();
+        final Set<PDGNode> visited1 = new HashSet<PDGNode>();
+        final Set<PDGNode> visited2 = new HashSet<PDGNode>();
         nodes1.addAll(entrynodes);
         nodes2.addAll(pdgSlicer.getEntrynodesList());
 
         while (nodes1.size() != 0) {
             if (nodes1.size() != nodes2.size())
                 return false;
-            PDGNode node1 = nodes1.pop();
-            PDGNode node2 = nodes2.pop();
-            if (!node1.getExpr().equals(node2.getExpr())) // use string comparisons??
+            final PDGNode node1 = nodes1.pop();
+            final PDGNode node2 = nodes2.pop();
+            if (!node1.getExpr().equals(node2.getExpr())) // use string comparisons?? prettyprint
                 return false;
             if (node1.getOutEdges().size() != node2.getOutEdges().size())
                 return false;
@@ -280,8 +254,8 @@ public class PDGSlicer {
             visited2.add(node2);
 
             for (int i = 0; i < node1.getSuccessors().size(); i++) {
-                List<PDGEdge> outEdges1 = node1.getOutEdges(node1.getSuccessors().get(i));
-                List<PDGEdge> outEdges2 = node2.getOutEdges(node2.getSuccessors().get(i));
+                final List<PDGEdge> outEdges1 = node1.getOutEdges(node1.getSuccessors().get(i));
+                final List<PDGEdge> outEdges2 = node2.getOutEdges(node2.getSuccessors().get(i));
                 if (outEdges1.size() != outEdges2.size())
                     return false;
                 for (int j = 0; j < outEdges1.size(); j++) {
@@ -306,29 +280,4 @@ public class PDGSlicer {
         return hashcode;
     }
 
-    /**
-     * Comparator for node expressions
-     */
-    public static class PDGNodeComparator implements Comparator<PDGNode> {
-        public int compare(final PDGNode n1, final PDGNode n2) {
-            if (n1.hasExpr() && n2.hasExpr())
-                return prettyprint(n1.getExpr()).compareTo(prettyprint(n2.getExpr()));
-            if (n1.hasStmt() && n2.hasStmt())
-                return prettyprint(n1.getStmt()).compareTo(prettyprint(n2.getStmt()));
-            if (n1.hasExpr() || n2.hasExpr()) {
-                if (n1.hasExpr())
-                    return 0;
-                if (n2.hasExpr())
-                    return -1;
-            }
-            if (n1.hasStmt() || n2.hasStmt()) {
-                if (n1.hasStmt())
-                    return 0;
-                if (n2.hasStmt())
-                    return -1;
-            }
-
-            return 1;
-        }
-    }
 }
