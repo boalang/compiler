@@ -1814,7 +1814,7 @@ public class BoaNormalFormIntrinsics {
 	 * @param exps the operands
 	 * @return the new expression
 	 */
-	private static Expression createExpression(final ExpressionKind kind, final Expression... exps) {
+	public static Expression createExpression(final ExpressionKind kind, final Expression... exps) {
 		final Expression.Builder b = Expression.newBuilder();
 
 		b.setKind(kind);
@@ -1830,7 +1830,7 @@ public class BoaNormalFormIntrinsics {
 	 * @param lit the literal value
 	 * @return a new literal expression
 	 */
-	private static Expression createLiteral(final String lit) {
+	public static Expression createLiteral(final String lit) {
 		// handle negative number literals properly
 		if (lit.startsWith("-"))
 			return createExpression(ExpressionKind.OP_SUB, createLiteral(lit.substring(1)));
@@ -1849,7 +1849,7 @@ public class BoaNormalFormIntrinsics {
 	 * @param var the variable name
 	 * @return a new variable access expression
 	 */
-	private static Expression createVariable(final String var) {
+	public static Expression createVariable(final String var) {
 		final Expression.Builder exp = Expression.newBuilder();
 
 		exp.setKind(ExpressionKind.VARACCESS);
@@ -1857,4 +1857,92 @@ public class BoaNormalFormIntrinsics {
 
 		return exp.build();
 	}
+
+
+	/**
+	 * Returns the normalized expression given the normalized variable map
+	 *
+	 * @param exp expression to be normalized
+	 * @param normalizedVars mapping of original names with normalized names in the expression
+	 * @return the normalized expression
+	 */
+	public static Expression normalizeExpression(final Expression exp, final Map<String, String> normalizedVars) {
+		final List<Expression> convertedExpression = new ArrayList<Expression>();
+		for (final Expression sub : exp.getExpressionsList())
+			convertedExpression.add(normalizeExpression(sub, normalizedVars));
+
+		switch (exp.getKind()) {
+			case VARACCESS:
+				if (normalizedVars.containsKey(exp.getVariable()))
+					return createVariable(normalizedVars.get(exp.getVariable()));
+				else
+					return exp;
+
+			case METHODCALL:
+				final Expression.Builder bm = Expression.newBuilder(exp);
+
+				for(int i = 0; i < convertedExpression.size(); i++) {
+					bm.setExpressions(i, convertedExpression.get(i));
+				}
+
+				for(int i = 0; i < exp.getMethodArgsList().size(); i++) {
+					Expression mArgs = normalizeExpression(exp.getMethodArgs(i), normalizedVars);
+					bm.setMethodArgs(i, mArgs);
+				}
+
+				return bm.build();
+
+			case EQ:
+			case NEQ:
+			case GT:
+			case LT:
+			case GTEQ:
+			case LTEQ:
+			case LOGICAL_AND:
+			case LOGICAL_OR:
+			case LOGICAL_NOT:
+			case PAREN:
+			case NEW:
+			case ASSIGN:
+			case OP_ADD:
+			case OP_SUB:
+			case OP_MULT:
+			case OP_DIV:
+			case OP_MOD:
+			case OP_DEC:
+			case OP_INC:
+			case ARRAYINDEX:
+				return createExpression(exp.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()]));
+
+			//TODO: Handle if needed
+			case NEWARRAY:
+			case ARRAYINIT:
+			case ASSIGN_ADD:
+			case ASSIGN_BITAND:
+			case ASSIGN_BITOR:
+			case ASSIGN_BITXOR:
+			case ASSIGN_DIV:
+			case ASSIGN_LSHIFT:
+			case ASSIGN_MOD:
+			case ASSIGN_MULT:
+			case ASSIGN_RSHIFT:
+			case ASSIGN_SUB:
+			case ASSIGN_UNSIGNEDRSHIFT:
+			case BIT_AND:
+			case BIT_LSHIFT:
+			case BIT_NOT:
+			case BIT_OR:
+			case BIT_RSHIFT:
+			case BIT_UNSIGNEDRSHIFT:
+			case BIT_XOR:
+			case CAST:
+			case CONDITIONAL:
+			case NULLCOALESCE:
+
+			case LITERAL:
+			default:
+				return exp;
+		}
+	}
+
 }

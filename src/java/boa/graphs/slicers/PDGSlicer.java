@@ -20,6 +20,7 @@ import boa.graphs.pdg.PDG;
 import boa.graphs.pdg.PDGEdge;
 import boa.graphs.pdg.PDGNode;
 import boa.types.Ast.*;
+import boa.types.Control;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -27,6 +28,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 import static boa.functions.BoaAstIntrinsics.prettyprint;
+import static boa.functions.BoaNormalFormIntrinsics.normalizeExpression;
 
 /**
  * A forward slicer based on PDG
@@ -107,7 +109,6 @@ public class PDGSlicer {
         }
     }
 
-
     // Getters
     public ArrayList<PDGNode> getEntrynodesList() {
         return entrynodes;
@@ -128,12 +129,15 @@ public class PDGSlicer {
 
         Stack<PDGNode> nodes = new Stack<PDGNode>();
         nodes.addAll(entrynodes);
-        Set<PDGNode> visited = new HashSet<PDGNode>();
+        Set<PDGNode> visited = new LinkedHashSet<PDGNode>();
         StringBuilder sb = new StringBuilder();
 
         while (nodes.size() != 0) {
             PDGNode node = nodes.pop();
-            sb.append(prettyprint(node.getExpr()));
+            if (node.getStmt() != null)
+                sb.append(prettyprint(node.getStmt()));
+            if (node.getExpr() != null)
+                sb.append(prettyprint(node.getExpr()));
             visited.add(node);
 
             for (PDGNode succ : node.getSuccessors()) {
@@ -177,7 +181,7 @@ public class PDGSlicer {
                 // replace use and def variables in the node with their normalized names
                 if (normalize) {
                     // def variable
-                    if (node.getDefVariable() != null) {
+                    if (!node.getDefVariable().equals("")) {
                         if (!normalizedVars.containsKey(node.getDefVariable())) {
                             normalizedVars.put(node.getDefVariable(), "var$" + varCount);
                             varCount++;
@@ -196,12 +200,13 @@ public class PDGSlicer {
                         }
                     }
                     node.setUseVariables(useVars);
-                    if (node.getExpr() != null)
+                    if (node.hasExpr())
                         node.setExpr(normalizeExpression(node.getExpr(), normalizedVars)); // FIXME: create a clone of the node and then set
 
                     for (PDGEdge e: node.getOutEdges()) {
-                        String label = e.getLabel();
-                        e.setLabel(normalizedVars.get(label));
+                        String label = normalizedVars.get(e.getLabel());
+                        if (label != null)
+                            e.setLabel(label);
                     }
                 }
 
@@ -218,92 +223,7 @@ public class PDGSlicer {
 
         // compute and cache hash
         calculateHash();
-    }
 
-    /**
-     * Returns the normalized expression
-     *
-     * @param exp expression to be normalized
-     * @param normalizedVars mapping of original names with normalized names in the expression
-     * @return the normalized expression
-     */
-    private Expression normalizeExpression(final Expression exp, final Map<String, String> normalizedVars) {
-        final List<Expression> convertedExpression = new ArrayList<Expression>();
-        for (final Expression sub : exp.getExpressionsList())
-            convertedExpression.add(normalizeExpression(sub, normalizedVars));
-
-        switch (exp.getKind()) {
-            case VARACCESS:
-                if (normalizedVars.containsKey(exp.getVariable()))
-                    return createVariable(normalizedVars.get(exp.getVariable()));
-                else
-                    return exp;
-
-            case METHODCALL:
-                final Expression.Builder bm = Expression.newBuilder(exp);
-
-                for(int i = 0; i < convertedExpression.size(); i++) {
-                    bm.setExpressions(i, convertedExpression.get(i));
-                }
-
-                for(int i = 0; i < exp.getMethodArgsList().size(); i++) {
-                    Expression mArgs = normalizeExpression(exp.getMethodArgs(i), normalizedVars);
-                    bm.setMethodArgs(i, mArgs);
-                }
-
-                return bm.build();
-
-            case EQ:
-            case NEQ:
-            case GT:
-            case LT:
-            case GTEQ:
-            case LTEQ:
-            case LOGICAL_AND:
-            case LOGICAL_OR:
-            case LOGICAL_NOT:
-            case PAREN:
-            case NEW:
-            case ASSIGN:
-            case OP_ADD:
-            case OP_SUB:
-            case OP_MULT:
-            case OP_DIV:
-            case OP_MOD:
-            case OP_DEC:
-            case OP_INC:
-            case ARRAYINDEX:
-                return createExpression(exp.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()]));
-
-            //TODO: Handle if needed
-            case NEWARRAY:
-            case ARRAYINIT:
-            case ASSIGN_ADD:
-            case ASSIGN_BITAND:
-            case ASSIGN_BITOR:
-            case ASSIGN_BITXOR:
-            case ASSIGN_DIV:
-            case ASSIGN_LSHIFT:
-            case ASSIGN_MOD:
-            case ASSIGN_MULT:
-            case ASSIGN_RSHIFT:
-            case ASSIGN_SUB:
-            case ASSIGN_UNSIGNEDRSHIFT:
-            case BIT_AND:
-            case BIT_LSHIFT:
-            case BIT_NOT:
-            case BIT_OR:
-            case BIT_RSHIFT:
-            case BIT_UNSIGNEDRSHIFT:
-            case BIT_XOR:
-            case CAST:
-            case CONDITIONAL:
-            case NULLCOALESCE:
-
-            case LITERAL:
-            default:
-                return exp;
-        }
     }
 
     /**
@@ -331,40 +251,6 @@ public class PDGSlicer {
         }
 
         hashcode = sb.toString().hashCode();
-    }
-
-    // Copied from BoaNormalFormintrincics.
-    // TODO: Put all such methods in BoaNormalFormintrinsics as static factories in a new class
-    /**
-     * Creates a new prefix/postfix/infix expression.
-     *
-     * @param kind the kind of the expression
-     * @param exps the operands
-     * @return the new expression
-     */
-    private static Expression createExpression(final Expression.ExpressionKind kind, final Expression... exps) {
-        final Expression.Builder b = Expression.newBuilder();
-
-        b.setKind(kind);
-        for (final Expression e : exps)
-            b.addExpressions(Expression.newBuilder(e).build());
-
-        return b.build();
-    }
-
-    /**
-     * Creates a new variable access expression.
-     *
-     * @param var the variable name
-     * @return a new variable access expression
-     */
-    private static Expression createVariable(final String var) {
-        final Expression.Builder exp = Expression.newBuilder();
-
-        exp.setKind(Expression.ExpressionKind.VARACCESS);
-        exp.setVariable(var);
-
-        return exp.build();
     }
 
     @Override
@@ -425,7 +311,24 @@ public class PDGSlicer {
      */
     public static class PDGNodeComparator implements Comparator<PDGNode> {
         public int compare(final PDGNode n1, final PDGNode n2) {
-            return prettyprint(n1.getExpr()).compareTo(prettyprint(n2.getExpr()));
+            if (n1.hasExpr() && n2.hasExpr())
+                return prettyprint(n1.getExpr()).compareTo(prettyprint(n2.getExpr()));
+            if (n1.hasStmt() && n2.hasStmt())
+                return prettyprint(n1.getStmt()).compareTo(prettyprint(n2.getStmt()));
+            if (n1.hasExpr() || n2.hasExpr()) {
+                if (n1.hasExpr())
+                    return 0;
+                if (n2.hasExpr())
+                    return -1;
+            }
+            if (n1.hasStmt() || n2.hasStmt()) {
+                if (n1.hasStmt())
+                    return 0;
+                if (n2.hasStmt())
+                    return -1;
+            }
+
+            return 1;
         }
     }
 }
