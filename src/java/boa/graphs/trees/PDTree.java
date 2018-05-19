@@ -43,7 +43,7 @@ public class PDTree {
      */
     public PDTree(final CFG cfg) throws Exception {
         if (cfg != null && cfg.getNodes().size() > 0) {
-            this.md = cfg.md;
+            this.md = cfg.getMd();
             final Map<CFGNode, Set<CFGNode>> pdom = computePostDomonitors(cfg);
             final Map<CFGNode, CFGNode> ipdom = computeImmediatePostDominator(pdom, cfg);
             buildPDomTree(ipdom);

@@ -42,21 +42,21 @@ import boa.types.Control.CFGNode.CFGNodeType;
  * @author marafat
  */
 public class CFG {
-	public Method md;
-	public String class_name;
+	protected Method md;
+	protected String class_name;
 
 	protected final HashSet<CFGNode> nodes = new HashSet<CFGNode>();
-	private CFGNode entryNode;
-	private CFGNode exitNode;
+	protected CFGNode entryNode;
+	protected CFGNode exitNode;
 
-	private final HashSet<CFGNode> outs = new HashSet<CFGNode>();
-	private final HashSet<CFGNode> ins = new HashSet<CFGNode>();
-	private final HashSet<CFGNode> breaks = new HashSet<CFGNode>();
-	private final HashSet<CFGNode> returns = new HashSet<CFGNode>();
+	protected final HashSet<CFGNode> outs = new HashSet<CFGNode>();
+	protected final HashSet<CFGNode> ins = new HashSet<CFGNode>();
+	protected final HashSet<CFGNode> breaks = new HashSet<CFGNode>();
+	protected final HashSet<CFGNode> returns = new HashSet<CFGNode>();
 
-	private boolean isLoopPresent = false;
-	private boolean isBranchPresent = false;
-	private boolean paramAsStatement = false;
+	protected boolean isLoopPresent = false;
+	protected boolean isBranchPresent = false;
+	protected boolean paramAsStatement = false;
 
 	public CFG(final Method method) {
 		this(method, "this");
@@ -86,14 +86,6 @@ public class CFG {
 
 	public boolean getIsBranchPresent() {
 		return isBranchPresent;
-	}
-
-	public void setIsLoopPresent(final boolean isLoopPresent) {
-		this.isLoopPresent = isLoopPresent;
-	}
-
-	public void setIsBranchPresent(final boolean isBranchPresent) {
-		this.isBranchPresent = isBranchPresent;
 	}
 
 	public String getClass_name() {
@@ -134,7 +126,7 @@ public class CFG {
 		return null;
 	}
 
-	public void addNode(final CFGNode node) {
+	protected void addNode(final CFGNode node) {
 		if (nodes.contains(node))
 			return;
 		outs.add(node);
@@ -142,7 +134,7 @@ public class CFG {
 		ins.add(node);
 	}
 
-	public void removeNode(final CFGNode node) {
+	protected void removeNode(final CFGNode node) {
 		if (!nodes.contains(node))
 			return;
 		nodes.remove(node);
@@ -153,7 +145,7 @@ public class CFG {
 	/*
 	 * merge two graph together merge outs with target's ins update outs and ins
 	 */
-	public void mergeSeq(final CFG target) {
+	protected void mergeSeq(final CFG target) {
 		// ignore empty graph
 		if (target.getNodes().size() == 0)
 			return;
@@ -185,11 +177,11 @@ public class CFG {
 		returns.addAll(target.returns);
 	}
 
-	public void createNewEdge(final CFGNode src, final CFGNode dest) {
+	protected void createNewEdge(final CFGNode src, final CFGNode dest) {
 		createNewEdge(src, dest, null);
 	}
 
-	public void createNewEdge(final CFGNode src, final CFGNode dest, final String label) {
+	protected void createNewEdge(final CFGNode src, final CFGNode dest, final String label) {
 		if (src.getOutNodes().contains(dest))
 			return;
 
@@ -199,7 +191,7 @@ public class CFG {
 			new CFGEdge(src, dest, label);
 	}
 
-	public void mergeSeq(final CFGNode branch) {
+	protected void mergeSeq(final CFGNode branch) {
 		this.addNode(branch);
 		/*
 		 * branch will not be considered ins node except the input graph is size 0
@@ -217,7 +209,7 @@ public class CFG {
 		outs.add(branch);
 	}
 
-	public void mergeBranches(final CFG target, final HashSet<CFGNode> saveOuts) {
+	protected void mergeBranches(final CFG target, final HashSet<CFGNode> saveOuts) {
 		if (target.getNodes().size() == 0)
 			return;
 
@@ -241,11 +233,11 @@ public class CFG {
 		outs.addAll(target.outs);
 	}
 
-	public void mergeABranch(final CFG target, final CFGNode branch) {
+	protected void mergeABranch(final CFG target, final CFGNode branch) {
 		mergeABranch(target, branch, null);
 	}
 
-	public void mergeABranch(final CFG target, final CFGNode branch, final String label) {
+	protected void mergeABranch(final CFG target, final CFGNode branch, final String label) {
 		// merge Node
 		if (target.getNodes().size() == 0)
 			return;
@@ -262,33 +254,33 @@ public class CFG {
 		returns.addAll(target.returns);
 	}
 
-	public void addBackEdges(final CFG target, final CFGNode branch, final String label) {
+	protected void addBackEdges(final CFG target, final CFGNode branch, final String label) {
 		for (final CFGNode aNode : target.outs) {
 			createNewEdge(aNode, branch, label);
 		}
 	}
 
-	public void addBreakNode(final String identifier) {
+	protected void addBreakNode(final String identifier) {
 		addBreakNode(new CFGNode(identifier, CFGNodeType.OTHER, "<GOTO>", identifier));
 	}
 
-	public void addBreakNode(final CFGNode node) {
+	protected void addBreakNode(final CFGNode node) {
 		this.mergeSeq(node);
 		this.outs.remove(node);
 		this.breaks.add(node);
 	}
 
-	public void addReturnNode() {
+	protected void addReturnNode() {
 		addReturnNode(new CFGNode("END[return]", CFGNodeType.OTHER, "END[return]", "END[return]"));
 	}
 
-	public void addReturnNode(final CFGNode node) {
+	protected void addReturnNode(final CFGNode node) {
 		this.mergeSeq(node);
 		this.outs.remove(node);
 		this.returns.add(node);
 	}
 
-	public void adjustBreakNodes(final String id) {
+	protected void adjustBreakNodes(final String id) {
 		for (final CFGNode node : new ArrayList<CFGNode>(this.breaks)) {
 			if (node.getObjectName().equals(id)) {
 				this.outs.add(node);
@@ -297,12 +289,12 @@ public class CFG {
 		}
 	}
 
-	public void adjustReturnNodes() {
+	protected void adjustReturnNodes() {
 		this.outs.addAll(this.returns);
 		this.returns.clear();
 	}
 
-	public Statement getStatement() {
+	protected Statement getStatement() {
 		final Statement.Builder stm = Statement.newBuilder();
 		stm.setKind(StatementKind.BLOCK);
 
@@ -837,7 +829,7 @@ public class CFG {
 		return graph;
 	}
 
-	public final void postorder(final CFGNode node, final java.util.Set<Integer> visitedNodes, final CFGNode[] results) throws Exception {
+	protected final void postorder(final CFGNode node, final java.util.Set<Integer> visitedNodes, final CFGNode[] results) throws Exception {
 		results[visitedNodes.size()] = node;
 		visitedNodes.add(node.getId());
 		for (final CFGNode succ : node.getSuccessorsList()) {
@@ -852,20 +844,6 @@ public class CFG {
 			final CFGNode[] results = new CFGNode[nodes.size()];
 			final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
 			postorder(this.getEntryNode(), visitedNodes, results);
-			return results;
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public CFGNode[] nodes() {
-		try {
-			final CFGNode[] results = new CFGNode[nodes.size()];
-			int i = 0;
-			for (final CFGNode node : nodes) {
-				results[i++] = node;
-			}
 			return results;
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -923,7 +901,7 @@ public class CFG {
 		sb.append("\n\nList of nodes:");
 		sb.append(nodes.size());
 		sb.append("\n");
-		final CFGNode[] mynodes = nodes();
+		final CFGNode[] mynodes = nodes.toArray(new CFGNode[nodes.size()]);
 		for (final CFGNode node : mynodes) {
 			sb.append(node.toString());
 			sb.append("\t");
@@ -946,19 +924,20 @@ public class CFG {
 	}
 
 	public Builder newBuilder() {
-		final int size = nodes.size();
+		final CFGNode[] sortedNodes = sortNodes();
+		final int size = sortedNodes.length;
+
 		final Builder b = boa.types.Control.CFG.newBuilder();
 
-		for (final CFGNode n : nodes) {
-			b.addNodes(n.newBuilder());
+		for (final CFGNode n : sortedNodes) {
+			b.addNodes(n.newBuilder().build());
 		}
 
-		final CFGNode[] sortedNodes = sortNodes();
 		final Map<Integer, CFGEdgeLabel> edgeLabels = new HashMap<Integer, CFGEdgeLabel>();
 		for (final CFGNode node : sortedNodes) {
 			for (final CFGEdge edge : node.getOutEdges()) {
-				final CFGNode anoNode = edge.getDest();
-				final int index = node.getId() * size + anoNode.getId();
+				final CFGNode dest = edge.getDest();
+				final int index = node.getId() * size + dest.getId();
 				edgeLabels.put(index, CFGEdge.getLabel(edge.label()));
 			}
 		}

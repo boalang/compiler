@@ -43,7 +43,7 @@ public class DDG {
      */
     public DDG(final CFG cfg) throws Exception {
         if (cfg != null && cfg.getNodes().size() > 0) {
-            this.md = cfg.md;
+            this.md = cfg.getMd();
             final Map<Integer, InOut> liveVars = getLiveVariables(cfg);
             formDefUseChains(liveVars, cfg);
             constructDDG(liveVars.keySet());
