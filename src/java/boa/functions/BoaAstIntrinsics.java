@@ -488,12 +488,12 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "isprefix", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isPrefix(final Expression e) throws Exception {
-        return !e.hasBool1() && !e.hasExpression2();
+        return !e.hasExpression2() && !e.hasBool1();
 	}
 
 	@FunctionSpec(name = "ispostfix", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isPostfix(final Expression e) throws Exception {
-        return e.hasBool1() && !e.hasExpression2();
+        return !e.hasExpression2() && e.hasBool1();
 	}
 
 	@FunctionSpec(name = "ismethod", returnType = "bool", formalParameters = { "Expression" })
@@ -587,6 +587,8 @@ public class BoaAstIntrinsics {
 	public static boolean isIntLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
 		if (!e.hasString1()) return false;
+		if (e.hasString2()) return false;
+		if (e.hasInt321()) return false;
 		final String lit = e.getString1();
 		for (final Matcher m : intLitMatchers)
 			if (m.reset(lit).find())
@@ -627,6 +629,8 @@ public class BoaAstIntrinsics {
 	public static boolean isFloatLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
 		if (!e.hasString1()) return false;
+		if (e.hasString2()) return false;
+		if (e.hasInt321()) return false;
 		final String lit = e.getString1();
 		for (final Matcher m : floatLitMatchers)
 			if (m.reset(lit).find())
@@ -657,8 +661,8 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "isstringlit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isStringLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
-		if (!e.hasString1()) return false;
-		return e.getString1().startsWith("\"");
+		if (!e.hasString2()) return false;
+		return e.getString2().startsWith("\"");
 	}
 
 	/**
@@ -672,6 +676,7 @@ public class BoaAstIntrinsics {
 	public static boolean isTypeLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
 		if (!e.hasString1()) return false;
+		if (e.hasString2()) return false;
 		return e.getString1().toLowerCase().endsWith(".class");
 	}
 
@@ -686,7 +691,7 @@ public class BoaAstIntrinsics {
 	public static boolean isThisLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
 		if (!e.hasString1()) return false;
-		return e.getString1().equalsIgnoreCase("this") || e.getString1().toLowerCase().endsWith(".this");
+		return e.getString1().equalsIgnoreCase("this");
 	}
 
 	/**
@@ -699,8 +704,8 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "isboollit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isBoolLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
-		if (!e.hasString1()) return false;
-		return e.getString1().equalsIgnoreCase("true") || e.getString1().equalsIgnoreCase("false");
+		if (e.hasString1()) return false;
+		return e.hasBool1();
 	}
 
 	/**
@@ -713,8 +718,9 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "isnulllit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isNullLit(final Expression e) throws Exception {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
-		if (!e.hasString1()) return false;
-		return e.getString1().equalsIgnoreCase("null");
+		if (e.hasString2()) return false;
+		if (e.hasInt321()) return false;
+		return !e.hasString1();
 	}
 
 	/**
