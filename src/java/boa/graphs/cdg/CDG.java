@@ -48,7 +48,7 @@ public class CDG {
      */
     public CDG(final CFG cfg) throws Exception {
         if (cfg != null && cfg.getNodes().size() > 0) {
-            this.md = cfg.md;
+            this.md = cfg.getMd();
             final PDTree pdTree = new PDTree(cfg);
             pdTree.addEntryNode();
             constructCDG(pdTree, cfg);
