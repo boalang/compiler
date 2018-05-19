@@ -46,7 +46,7 @@ public class CDGEdge {
     }
 
     /**
-     * Constructs a CDG edge. Uses default label
+     * Constructs a CDG edge. Uses default label "."
      *
      * @param src starting node of the edge
      * @param dest destination node of the edge

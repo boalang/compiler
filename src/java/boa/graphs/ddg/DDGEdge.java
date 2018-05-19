@@ -46,7 +46,7 @@ public class DDGEdge {
     }
 
     /**
-     * Constructs a DDG edge
+     * Constructs a DDG edge. Uses default label
      *
      * @param src starting node of the edge
      * @param dest destination node of the edge

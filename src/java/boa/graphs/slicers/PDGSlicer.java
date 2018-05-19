@@ -44,26 +44,51 @@ public class PDGSlicer {
     private int hashcode = -1;
 
     // Constructors
-    public PDGSlicer(final Method method, final PDGNode n, final boolean normalize) throws Exception {
-        this.md = method;
+
+    /**
+     * Constructs a PDGSlicer instance for the given PDGNode
+     *
+     * @param md method
+     * @param node PDGNode
+     * @param normalize if true expression of each node is normalized
+     * @throws Exception
+     */
+    public PDGSlicer(final Method md, final PDGNode node, final boolean normalize) throws Exception {
+        this.md = md;
         this.normalize = normalize;
-        if (n != null) {
-            entrynodes.add(n);
-            getSlice(new PDG(method, true));
+        if (node != null) {
+            entrynodes.add(node);
+            getSlice(new PDG(md, true));
         }
     }
 
-    public PDGSlicer(final Method method, final PDGNode[] n, final boolean normalize) throws Exception {
-        this.md = method;
+    /**
+     * Constructs a PDGSlicer instance for the given array of PDGNodes
+     *
+     * @param md method
+     * @param nodes array of PDGNodes
+     * @param normalize if true expression of each node is normalized
+     * @throws Exception
+     */
+    public PDGSlicer(final Method md, final PDGNode[] nodes, final boolean normalize) throws Exception {
+        this.md = md;
         this.normalize = normalize;
-        entrynodes.addAll(Arrays.asList(n));
-        getSlice(new PDG(method, true));
+        entrynodes.addAll(Arrays.asList(nodes));
+        getSlice(new PDG(md, true));
     }
 
-    public PDGSlicer(final Method method, final int nid, final boolean normalize) throws Exception {
-        this.md = method;
+    /**
+     * Constructs a PDGSlicer instance for the given PDGNode id
+     *
+     * @param md method
+     * @param nid node id of the PDGNode
+     * @param normalize if true expression of each node is normalized
+     * @throws Exception
+     */
+    public PDGSlicer(final Method md, final int nid, final boolean normalize) throws Exception {
+        this.md = md;
         this.normalize = normalize;
-        final PDG pdg = new PDG(method, true);
+        final PDG pdg = new PDG(md, true);
         final PDGNode node = pdg.getNode(nid);
         if (node != null) {
             entrynodes.add(node);
@@ -71,10 +96,18 @@ public class PDGSlicer {
         }
     }
 
-    public PDGSlicer(final Method method, final Integer[] nids, final boolean normalize) throws Exception {
-        this.md = method;
+    /**
+     * Constructs a PDGSlicer instance for the given array of PDGNode ids
+     *
+     * @param md method
+     * @param nids array of PDGNode ids
+     * @param normalize if true expression of each node is normalized
+     * @throws Exception
+     */
+    public PDGSlicer(final Method md, final Integer[] nids, final boolean normalize) throws Exception {
+        this.md = md;
         this.normalize = normalize;
-        final PDG pdg = new PDG(method, true);
+        final PDG pdg = new PDG(md, true);
         for (Integer i: nids) {
             final PDGNode node = pdg.getNode(i);
             if (node != null)
@@ -85,6 +118,14 @@ public class PDGSlicer {
         }
     }
 
+    /**
+     * Constructs a PDGSlicer instance for the given PDG graph and PDGNode id
+     *
+     * @param pdg PDG graph
+     * @param nid PDGNode id
+     * @param normalize if true expression of each node is normalized
+     * @throws Exception
+     */
     public PDGSlicer(final PDG pdg, final int nid, final boolean normalize) throws Exception {
         this.md = pdg.getMethod();
         this.normalize = normalize;
@@ -95,6 +136,14 @@ public class PDGSlicer {
         }
     }
 
+    /**
+     * Constructs a PDGSlicer instance for the given PDG graph and array of PDGNode ids
+     *
+     * @param pdg PDG graph
+     * @param nids array of PDGNode ids
+     * @param normalize if true expression of each node is normalized
+     * @throws Exception
+     */
     public PDGSlicer(final PDG pdg, final Integer[] nids, final boolean normalize) throws Exception {
         this.md = pdg.getMethod();
         this.normalize = normalize;
@@ -109,11 +158,17 @@ public class PDGSlicer {
     }
 
     // Getters
+
+    /**
+     * Returns the list of starting nodes of the slice
+     *
+     * @return the list of starting nodes of the slice
+     */
     public ArrayList<PDGNode> getEntrynodesList() {
         return entrynodes;
     }
 
-    public HashSet<PDGNode> getSlice() {
+    private HashSet<PDGNode> getSlice() {
         return slice;
     }
 
@@ -127,7 +182,7 @@ public class PDGSlicer {
         //Collections.sort(entrynodes);
         final Stack<PDGNode> nodes = new Stack<PDGNode>();
         nodes.addAll(entrynodes);
-        final Set<PDGNode> visited = new LinkedHashSet<PDGNode>();
+        final Set<PDGNode> visited = new HashSet<PDGNode>();
         final StringBuilder sb = new StringBuilder();
 
         while (nodes.size() != 0) {
@@ -159,7 +214,8 @@ public class PDGSlicer {
     }
 
     /**
-     * Traverse the pdg to collect sliced nodes.
+     * Traverse the pdg to collect sliced nodes. Normalizes expression of each node if normalize is
+     * true. Computes hash of the slice and caches it
      *
      * @param pdg program dependence graph
      */
