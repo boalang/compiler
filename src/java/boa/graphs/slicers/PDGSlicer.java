@@ -41,7 +41,7 @@ public class PDGSlicer {
     private final ArrayList<PDGNode> entrynodes = new ArrayList<PDGNode>();
     private final HashSet<PDGNode> slice = new HashSet<PDGNode>();
     private boolean normalize = false;
-    private int hashcode = -1;
+    private int hashcode = -1; // FIXME: can it be negative
 
     // Constructors
 
@@ -58,7 +58,7 @@ public class PDGSlicer {
         this.normalize = normalize;
         if (node != null) {
             entrynodes.add(node);
-            getSlice(new PDG(md, true));
+            traverse();
         }
     }
 
@@ -74,7 +74,7 @@ public class PDGSlicer {
         this.md = md;
         this.normalize = normalize;
         entrynodes.addAll(Arrays.asList(nodes));
-        getSlice(new PDG(md, true));
+        traverse();
     }
 
     /**
@@ -92,7 +92,7 @@ public class PDGSlicer {
         final PDGNode node = pdg.getNode(nid);
         if (node != null) {
             entrynodes.add(node);
-            getSlice(pdg);
+            traverse();
         }
     }
 
@@ -114,7 +114,7 @@ public class PDGSlicer {
                 entrynodes.add(node);
         }
         if (entrynodes.size() > 0) {
-            getSlice(pdg);
+            traverse();
         }
     }
 
@@ -132,7 +132,7 @@ public class PDGSlicer {
         final PDGNode node = pdg.getNode(nid);
         if (node != null) {
             entrynodes.add(node);
-            getSlice(pdg);
+            traverse();
         }
     }
 
@@ -153,7 +153,7 @@ public class PDGSlicer {
                 entrynodes.add(node);
         }
         if (entrynodes.size() > 0) {
-            getSlice(pdg);
+            traverse();
         }
     }
 
@@ -168,7 +168,7 @@ public class PDGSlicer {
         return entrynodes;
     }
 
-    private HashSet<PDGNode> getSlice() {
+    public HashSet<PDGNode> getSlice() {
         return slice;
     }
 
@@ -214,12 +214,10 @@ public class PDGSlicer {
     }
 
     /**
-     * Traverse the pdg to collect sliced nodes. Normalizes expression of each node if normalize is
+     * Traverse the slice to collect sliced nodes. Normalizes expression of each node if normalize is
      * true. Computes hash of the slice and caches it
-     *
-     * @param pdg program dependence graph
      */
-    private void getSlice(final PDG pdg) throws Exception {
+    private void traverse() throws Exception {
         final Stack<PDGNode> nodes = new Stack<PDGNode>();
         nodes.addAll(entrynodes);
         final Map<String, String> normalizedVars = new HashMap<String, String>();
@@ -235,7 +233,7 @@ public class PDGSlicer {
                 // replace use and def variables in the node with their normalized names
                 if (normalize) {
                     // def variable
-                    if (node.getDefVariable() != null) {
+                    if (node.getDefVariable() != null && !node.getDefVariable().equals("")) {
                         if (!normalizedVars.containsKey(node.getDefVariable())) {
                             normalizedVars.put(node.getDefVariable(), "var$" + varCount);
                             varCount++;
@@ -269,7 +267,7 @@ public class PDGSlicer {
                 // if successor has not been visited, add it
                 Collections.sort(node.getSuccessors());
                 for (final PDGNode succ : node.getSuccessors())
-                    if (!slice.contains(succ))
+                    if (!slice.contains(succ) && !nodes.contains(succ))
                         nodes.push(succ);
             }
         } catch (Exception e) {

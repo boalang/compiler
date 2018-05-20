@@ -18,6 +18,7 @@ package boa.functions;
 
 import java.util.*;
 
+import boa.types.Ast;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Expression;
 
@@ -1872,6 +1873,17 @@ public class BoaNormalFormIntrinsics {
 			convertedExpression.add(normalizeExpression(sub, normalizedVars));
 
 		switch (exp.getKind()) {
+			case VARDECL:
+				Expression.Builder eb = Expression.newBuilder(exp);
+				Ast.Variable v = exp.getVariableDecls(0);
+				Ast.Variable.Builder vb = Ast.Variable.newBuilder(v);
+				if (normalizedVars.containsKey(v.getName()))
+					vb.setName(normalizedVars.get(v.getName()));
+				if (v.getInitializer().getExpressionsList().size() != 0)
+					vb.setInitializer(normalizeExpression(v.getInitializer(), normalizedVars));
+				eb.setVariableDecls(0, vb.build());
+				return eb.build();
+
 			case VARACCESS:
 				if (normalizedVars.containsKey(exp.getVariable()))
 					return createVariable(normalizedVars.get(exp.getVariable()));
@@ -1881,18 +1893,30 @@ public class BoaNormalFormIntrinsics {
 			case METHODCALL:
 				final Expression.Builder bm = Expression.newBuilder(exp);
 
-				for(int i = 0; i < convertedExpression.size(); i++) {
+				for (int i = 0; i < convertedExpression.size(); i++) {
 					bm.setExpressions(i, convertedExpression.get(i));
 				}
 
-				for(int i = 0; i < exp.getMethodArgsList().size(); i++) {
+				for (int i = 0; i < exp.getMethodArgsList().size(); i++) {
 					Expression mArgs = normalizeExpression(exp.getMethodArgs(i), normalizedVars);
 					bm.setMethodArgs(i, mArgs);
 				}
 
 				return bm.build();
 
-			case EQ:
+			case NEW:
+            case NEWARRAY:
+			case ARRAYINIT:
+			case ARRAYINDEX:
+				final Expression.Builder bn = Expression.newBuilder(exp);
+
+				for (int i = 0; i < convertedExpression.size(); i++) {
+					bn.setExpressions(i, convertedExpression.get(i));
+				}
+
+				return bn.build();
+
+            case EQ:
 			case NEQ:
 			case GT:
 			case LT:
@@ -1901,32 +1925,17 @@ public class BoaNormalFormIntrinsics {
 			case LOGICAL_AND:
 			case LOGICAL_OR:
 			case LOGICAL_NOT:
-			case PAREN:
-			case NEW:
 			case ASSIGN:
-			case OP_ADD:
-			case OP_SUB:
-			case OP_MULT:
-			case OP_DIV:
-			case OP_MOD:
-			case OP_DEC:
-			case OP_INC:
-			case ARRAYINDEX:
-				return createExpression(exp.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()]));
-
-			//TODO: Handle if needed
-			case NEWARRAY:
-			case ARRAYINIT:
 			case ASSIGN_ADD:
+			case ASSIGN_SUB:
+			case ASSIGN_DIV:
+			case ASSIGN_MULT:
+			case ASSIGN_MOD:
 			case ASSIGN_BITAND:
 			case ASSIGN_BITOR:
 			case ASSIGN_BITXOR:
-			case ASSIGN_DIV:
 			case ASSIGN_LSHIFT:
-			case ASSIGN_MOD:
-			case ASSIGN_MULT:
 			case ASSIGN_RSHIFT:
-			case ASSIGN_SUB:
 			case ASSIGN_UNSIGNEDRSHIFT:
 			case BIT_AND:
 			case BIT_LSHIFT:
@@ -1935,9 +1944,18 @@ public class BoaNormalFormIntrinsics {
 			case BIT_RSHIFT:
 			case BIT_UNSIGNEDRSHIFT:
 			case BIT_XOR:
+			case PAREN:
+			case OP_ADD:
+			case OP_SUB:
+			case OP_MULT:
+			case OP_DIV:
+			case OP_MOD:
+			case OP_DEC:
+			case OP_INC:
 			case CAST:
 			case CONDITIONAL:
 			case NULLCOALESCE:
+				return createExpression(exp.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()]));
 
 			case LITERAL:
 			default:
