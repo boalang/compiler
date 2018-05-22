@@ -275,12 +275,23 @@ public class PDGSlicer {
                 return false;
             final PDGNode node1 = nodes1.pop();
             final PDGNode node2 = nodes2.pop();
+            // compare statements
+            if ((node1.getStmt() == null  && node2.getStmt() != null) ||
+                    (node1.getStmt() != null  && node2.getStmt() == null))
+                return false;
+            if (node1.getStmt() != null && node2.getStmt() != null &&
+                    !node1.getStmt().equals(node2.getStmt())) // use string comparisons?? prettyprint
+                return false;
+
+            // compare expressions
             if ((node1.getExpr() == null  && node2.getExpr() != null) ||
                     (node1.getExpr() != null  && node2.getExpr() == null))
                 return false;
             if (node1.getExpr() != null && node2.getExpr() != null &&
                     !node1.getExpr().equals(node2.getExpr())) // use string comparisons?? prettyprint
                 return false;
+
+            // compare out edges
             if (node1.getOutEdges().size() != node2.getOutEdges().size())
                 return false;
 
