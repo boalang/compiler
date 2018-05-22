@@ -538,8 +538,8 @@ public class BoaGraphIntrinsics {
 				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + "START" + "\"]\n");
 			else if (n.getId() == pdtree.getNodes().size()-1)
 				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + "STOP" + "\"]\n");
-			else if (n.getId() == pdtree.getNodes().size())
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + "ENTRY" + "\"]\n");
+			//else if (n.getId() == pdtree.getNodes().size())
+			//	str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + "ENTRY" + "\"]\n");
 			else
 				str.append("\t" + n.getId() + "[" + shape + "]\n");
 		}

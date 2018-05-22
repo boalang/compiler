@@ -41,7 +41,7 @@ public class PDGSlicer {
     private final ArrayList<PDGNode> entrynodes = new ArrayList<PDGNode>();
     private final HashSet<PDGNode> slice = new HashSet<PDGNode>();
     private boolean normalize = false;
-    private int hashcode = -1; // FIXME: can it be negative
+    private int hashcode = 0;
 
     // Constructors
 
@@ -179,32 +179,9 @@ public class PDGSlicer {
      * @return cryptographic hash of the slice
      */
     public String getCryptHash(final String algorithm) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        //Collections.sort(entrynodes);
-        final Stack<PDGNode> nodes = new Stack<PDGNode>();
-        nodes.addAll(entrynodes);
-        final Set<PDGNode> visited = new HashSet<PDGNode>();
-        final StringBuilder sb = new StringBuilder();
-
-        while (nodes.size() != 0) {
-            final PDGNode node = nodes.pop();
-            if (node.getStmt() != null)
-                sb.append(prettyprint(node.getStmt()));
-            if (node.getExpr() != null)
-                sb.append(prettyprint(node.getExpr()));
-            visited.add(node);
-
-            for (final PDGNode succ : node.getSuccessors()) {
-                final List<PDGEdge> edges = node.getOutEdges(succ);
-                for (PDGEdge e: edges)
-                    sb.append(e.getKind()).append(e.getLabel());
-
-                if (!visited.contains(succ))
-                    nodes.push(succ);
-            }
-        }
-
+        final String pdgString = this.toString();
         final MessageDigest md = MessageDigest.getInstance(algorithm);
-        final byte[] hcBytes = md.digest(sb.toString().getBytes("UTF-8"));
+        final byte[] hcBytes = md.digest(pdgString.getBytes("UTF-8"));
 
         final StringBuilder sBDigest = new StringBuilder();
         for (final byte b: hcBytes)
@@ -331,6 +308,34 @@ public class PDGSlicer {
     @Override
     public int hashCode() {
         return hashcode;
+    }
+
+    @Override
+    public String toString() {
+        // TODO: Improve the string returned
+        final Stack<PDGNode> nodes = new Stack<PDGNode>();
+        nodes.addAll(entrynodes);
+        final Set<PDGNode> visited = new HashSet<PDGNode>();
+        final StringBuilder sb = new StringBuilder();
+
+        while (nodes.size() != 0) {
+            final PDGNode node = nodes.pop();
+            if (node.getStmt() != null)
+                sb.append(prettyprint(node.getStmt()));
+            if (node.getExpr() != null)
+                sb.append(prettyprint(node.getExpr()));
+            visited.add(node);
+
+            for (final PDGNode succ : node.getSuccessors()) {
+                final List<PDGEdge> edges = node.getOutEdges(succ);
+                for (PDGEdge e: edges)
+                    sb.append(e.getKind()).append(e.getLabel());
+
+                if (!visited.contains(succ))
+                    nodes.push(succ);
+            }
+        }
+        return sb.toString();
     }
 
 }
