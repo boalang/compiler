@@ -1557,6 +1557,8 @@ public class BoaNormalFormIntrinsics {
 		switch (e.getKind()) {
 			case LOGICAL_NOT:
 				final Expression inner = simplify(e.getExpressions(0));
+				if (inner.equals(trueLit)) return Expression.newBuilder(falseLit).build();
+				if (inner.equals(falseLit)) return Expression.newBuilder(trueLit).build();
 				// remove double negation
 				if (inner.getKind() == ExpressionKind.LOGICAL_NOT)
 					return inner.getExpressions(0);

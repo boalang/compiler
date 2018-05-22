@@ -43,6 +43,8 @@ public class TestNormalForm {
 			{ "((a < b || !b) || (a < b && a) || !b || !a) && a < b", "a < b", "a < b", "a < b", "a < b" },
 			{ "(!a || b) && a", "a && b", "a && b", "a && b", "a && b" },
 			{ "!(!a)", "a", "a", "a", "a" },
+			{ "!(!a || a)", "false", "false", "false", "false" },
+			{ "!(!a && a)", "true", "true", "true", "true" },
 			{ "!(!a && !a)", "a", "a", "a", "a" },
 			{ "(!a && a) || a", "a", "a", "a", "a" },
 			{ "a", "a", "a", "a", "a" },
