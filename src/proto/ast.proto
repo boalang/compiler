@@ -21,6 +21,8 @@ message ASTRoot {
 	optional int32 mapped_node = 6;
 	/** */
 	optional int32 key = 7;
+	/**The top-level document of an html, css, or xml DOM*/
+	optional Document document = 8;
 }
 
 /** A namespace (aka, package) in a source file */

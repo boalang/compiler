@@ -1145,6 +1145,32 @@ public final class Ast {
      * </pre>
      */
     int getKey();
+
+    // optional .boa.types.Document document = 8;
+    /**
+     * <code>optional .boa.types.Document document = 8;</code>
+     *
+     * <pre>
+     **The top-level document of an html, css, or xml DOM
+     * </pre>
+     */
+    boolean hasDocument();
+    /**
+     * <code>optional .boa.types.Document document = 8;</code>
+     *
+     * <pre>
+     **The top-level document of an html, css, or xml DOM
+     * </pre>
+     */
+    boa.types.Ast.Document getDocument();
+    /**
+     * <code>optional .boa.types.Document document = 8;</code>
+     *
+     * <pre>
+     **The top-level document of an html, css, or xml DOM
+     * </pre>
+     */
+    boa.types.Ast.DocumentOrBuilder getDocumentOrBuilder();
   }
   /**
    * Protobuf type {@code boa.types.ASTRoot}
@@ -1236,6 +1262,19 @@ public final class Ast {
             case 56: {
               bitField0_ |= 0x00000004;
               key_ = input.readInt32();
+              break;
+            }
+            case 66: {
+              boa.types.Ast.Document.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+                subBuilder = document_.toBuilder();
+              }
+              document_ = input.readMessage(boa.types.Ast.Document.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(document_);
+                document_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000008;
               break;
             }
           }
@@ -1458,12 +1497,47 @@ public final class Ast {
       return key_;
     }
 
+    // optional .boa.types.Document document = 8;
+    public static final int DOCUMENT_FIELD_NUMBER = 8;
+    private boa.types.Ast.Document document_;
+    /**
+     * <code>optional .boa.types.Document document = 8;</code>
+     *
+     * <pre>
+     **The top-level document of an html, css, or xml DOM
+     * </pre>
+     */
+    public boolean hasDocument() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional .boa.types.Document document = 8;</code>
+     *
+     * <pre>
+     **The top-level document of an html, css, or xml DOM
+     * </pre>
+     */
+    public boa.types.Ast.Document getDocument() {
+      return document_;
+    }
+    /**
+     * <code>optional .boa.types.Document document = 8;</code>
+     *
+     * <pre>
+     **The top-level document of an html, css, or xml DOM
+     * </pre>
+     */
+    public boa.types.Ast.DocumentOrBuilder getDocumentOrBuilder() {
+      return document_;
+    }
+
     private void initFields() {
       namespaces_ = java.util.Collections.emptyList();
       names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       mappedNode_ = 0;
       key_ = 0;
+      document_ = boa.types.Ast.Document.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1472,6 +1546,12 @@ public final class Ast {
 
       for (int i = 0; i < getNamespacesCount(); i++) {
         if (!getNamespaces(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasDocument()) {
+        if (!getDocument().isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -1497,6 +1577,9 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeInt32(7, key_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeMessage(8, document_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1531,6 +1614,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(7, key_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(8, document_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1645,6 +1732,7 @@ public final class Ast {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getNamespacesFieldBuilder();
+          getDocumentFieldBuilder();
         }
       }
       private static Builder create() {
@@ -1667,6 +1755,12 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000008);
         key_ = 0;
         bitField0_ = (bitField0_ & ~0x00000010);
+        if (documentBuilder_ == null) {
+          document_ = boa.types.Ast.Document.getDefaultInstance();
+        } else {
+          documentBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -1722,6 +1816,14 @@ public final class Ast {
           to_bitField0_ |= 0x00000004;
         }
         result.key_ = key_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        if (documentBuilder_ == null) {
+          result.document_ = document_;
+        } else {
+          result.document_ = documentBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1783,6 +1885,9 @@ public final class Ast {
         if (other.hasKey()) {
           setKey(other.getKey());
         }
+        if (other.hasDocument()) {
+          mergeDocument(other.getDocument());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -1790,6 +1895,12 @@ public final class Ast {
       public final boolean isInitialized() {
         for (int i = 0; i < getNamespacesCount(); i++) {
           if (!getNamespaces(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasDocument()) {
+          if (!getDocument().isInitialized()) {
             
             return false;
           }
@@ -2405,6 +2516,159 @@ public final class Ast {
         key_ = 0;
         onChanged();
         return this;
+      }
+
+      // optional .boa.types.Document document = 8;
+      private boa.types.Ast.Document document_ = boa.types.Ast.Document.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Document, boa.types.Ast.Document.Builder, boa.types.Ast.DocumentOrBuilder> documentBuilder_;
+      /**
+       * <code>optional .boa.types.Document document = 8;</code>
+       *
+       * <pre>
+       **The top-level document of an html, css, or xml DOM
+       * </pre>
+       */
+      public boolean hasDocument() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional .boa.types.Document document = 8;</code>
+       *
+       * <pre>
+       **The top-level document of an html, css, or xml DOM
+       * </pre>
+       */
+      public boa.types.Ast.Document getDocument() {
+        if (documentBuilder_ == null) {
+          return document_;
+        } else {
+          return documentBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Document document = 8;</code>
+       *
+       * <pre>
+       **The top-level document of an html, css, or xml DOM
+       * </pre>
+       */
+      public Builder setDocument(boa.types.Ast.Document value) {
+        if (documentBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          document_ = value;
+          onChanged();
+        } else {
+          documentBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Document document = 8;</code>
+       *
+       * <pre>
+       **The top-level document of an html, css, or xml DOM
+       * </pre>
+       */
+      public Builder setDocument(
+          boa.types.Ast.Document.Builder builderForValue) {
+        if (documentBuilder_ == null) {
+          document_ = builderForValue.build();
+          onChanged();
+        } else {
+          documentBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Document document = 8;</code>
+       *
+       * <pre>
+       **The top-level document of an html, css, or xml DOM
+       * </pre>
+       */
+      public Builder mergeDocument(boa.types.Ast.Document value) {
+        if (documentBuilder_ == null) {
+          if (((bitField0_ & 0x00000020) == 0x00000020) &&
+              document_ != boa.types.Ast.Document.getDefaultInstance()) {
+            document_ =
+              boa.types.Ast.Document.newBuilder(document_).mergeFrom(value).buildPartial();
+          } else {
+            document_ = value;
+          }
+          onChanged();
+        } else {
+          documentBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Document document = 8;</code>
+       *
+       * <pre>
+       **The top-level document of an html, css, or xml DOM
+       * </pre>
+       */
+      public Builder clearDocument() {
+        if (documentBuilder_ == null) {
+          document_ = boa.types.Ast.Document.getDefaultInstance();
+          onChanged();
+        } else {
+          documentBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000020);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Document document = 8;</code>
+       *
+       * <pre>
+       **The top-level document of an html, css, or xml DOM
+       * </pre>
+       */
+      public boa.types.Ast.Document.Builder getDocumentBuilder() {
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return getDocumentFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Document document = 8;</code>
+       *
+       * <pre>
+       **The top-level document of an html, css, or xml DOM
+       * </pre>
+       */
+      public boa.types.Ast.DocumentOrBuilder getDocumentOrBuilder() {
+        if (documentBuilder_ != null) {
+          return documentBuilder_.getMessageOrBuilder();
+        } else {
+          return document_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Document document = 8;</code>
+       *
+       * <pre>
+       **The top-level document of an html, css, or xml DOM
+       * </pre>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Document, boa.types.Ast.Document.Builder, boa.types.Ast.DocumentOrBuilder> 
+          getDocumentFieldBuilder() {
+        if (documentBuilder_ == null) {
+          documentBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Document, boa.types.Ast.Document.Builder, boa.types.Ast.DocumentOrBuilder>(
+                  document_,
+                  getParentForChildren(),
+                  isClean());
+          document_ = null;
+        }
+        return documentBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.ASTRoot)
@@ -44431,204 +44695,205 @@ public final class Ast {
     java.lang.String[] descriptorData = {
       "\n\tast.proto\022\tboa.types\032\014shared.proto\"4\n\014" +
       "CommentsRoot\022$\n\010comments\030\001 \003(\0132\022.boa.typ" +
-      "es.Comment\"\220\001\n\007ASTRoot\022(\n\nnamespaces\030\001 \003" +
+      "es.Comment\"\267\001\n\007ASTRoot\022(\n\nnamespaces\030\001 \003" +
       "(\0132\024.boa.types.Namespace\022\r\n\005names\030\003 \003(\t\022" +
       "*\n\013change_kind\030\004 \001(\0162\025.boa.types.ChangeK" +
-      "ind\022\023\n\013mapped_node\030\006 \001(\005\022\013\n\003key\030\007 \001(\005\"\232\003" +
-      "\n\tNamespace\022\014\n\004name\030\001 \002(\t\022&\n\tmodifiers\030\002" +
-      " \003(\0132\023.boa.types.Modifier\022,\n\014declaration" +
-      "s\030\003 \003(\0132\026.boa.types.Declaration\022(\n\nstate" +
-      "ments\030\004 \003(\0132\024.boa.types.Statement\022\"\n\007met",
-      "hods\030\005 \003(\0132\021.boa.types.Method\022*\n\013express" +
-      "ions\030\006 \003(\0132\025.boa.types.Expression\022*\n\013cha" +
-      "nge_kind\030\007 \001(\0162\025.boa.types.ChangeKind\022\023\n" +
-      "\013mapped_node\030\t \001(\005\022\013\n\003key\030\n \001(\005\022(\n\nnames" +
-      "paces\030\013 \003(\0132\024.boa.types.Namespace\022\017\n\007imp" +
-      "orts\030\014 \003(\t\022&\n\tvariables\030\r \003(\0132\023.boa.type" +
-      "s.Variable\"\207\004\n\013Declaration\022\014\n\004name\030\001 \002(\t" +
-      "\022!\n\004kind\030\002 \002(\0162\023.boa.types.TypeKind\022&\n\tm" +
-      "odifiers\030\003 \003(\0132\023.boa.types.Modifier\022+\n\022g" +
-      "eneric_parameters\030\004 \003(\0132\017.boa.types.Type",
-      "\022 \n\007parents\030\005 \003(\0132\017.boa.types.Type\022\"\n\007me" +
-      "thods\030\006 \003(\0132\021.boa.types.Method\022#\n\006fields" +
-      "\030\007 \003(\0132\023.boa.types.Variable\0223\n\023nested_de" +
-      "clarations\030\010 \003(\0132\026.boa.types.Declaration" +
-      "\022$\n\010comments\030\t \003(\0132\022.boa.types.Comment\022*" +
-      "\n\013change_kind\030\n \001(\0162\025.boa.types.ChangeKi" +
-      "nd\022\023\n\013mapped_node\030\014 \001(\005\022\013\n\003key\030\r \001(\005\022\034\n\024" +
-      "fully_qualified_name\030\016 \001(\t\022\026\n\016declaring_" +
-      "type\030\017 \001(\005\022(\n\nstatements\030\020 \003(\0132\024.boa.typ" +
-      "es.Statement\"\214\002\n\004Type\022\014\n\004name\030\001 \001(\t\022\034\n\024f",
-      "ully_qualified_name\030\002 \001(\t\022!\n\004kind\030\003 \002(\0162" +
-      "\023.boa.types.TypeKind\022\n\n\002id\030\004 \001(\t\022*\n\013chan" +
-      "ge_kind\030\005 \001(\0162\025.boa.types.ChangeKind\022\023\n\013" +
-      "mapped_node\030\007 \001(\005\022\030\n\020declaration_file\030\010 " +
-      "\001(\005\022\023\n\013declaration\030\t \001(\005\022\013\n\003key\030\n \001(\005\022,\n" +
-      "\rcomputed_name\030\016 \001(\0132\025.boa.types.Express" +
-      "ion\"\307\003\n\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tmodifier" +
-      "s\030\002 \003(\0132\023.boa.types.Modifier\022$\n\013return_t" +
-      "ype\030\003 \001(\0132\017.boa.types.Type\022+\n\022generic_pa" +
-      "rameters\030\004 \003(\0132\017.boa.types.Type\022&\n\targum",
-      "ents\030\005 \003(\0132\023.boa.types.Variable\022(\n\017excep" +
-      "tion_types\030\006 \003(\0132\017.boa.types.Type\022(\n\nsta" +
-      "tements\030\007 \003(\0132\024.boa.types.Statement\022$\n\010c" +
-      "omments\030\010 \003(\0132\022.boa.types.Comment\022*\n\013cha" +
-      "nge_kind\030\t \001(\0162\025.boa.types.ChangeKind\022\023\n" +
-      "\013mapped_node\030\013 \001(\005\022\013\n\003key\030\014 \001(\005\022\026\n\016decla" +
-      "ring_type\030\r \001(\005\022,\n\rcomputed_name\030\016 \001(\0132\025" +
-      ".boa.types.Expression\"\343\002\n\010Variable\022\014\n\004na" +
-      "me\030\001 \001(\t\022&\n\rvariable_type\030\002 \001(\0132\017.boa.ty" +
-      "pes.Type\022&\n\tmodifiers\030\003 \003(\0132\023.boa.types.",
-      "Modifier\022*\n\013initializer\030\004 \001(\0132\025.boa.type" +
-      "s.Expression\022$\n\010comments\030\005 \003(\0132\022.boa.typ" +
-      "es.Comment\022*\n\013change_kind\030\006 \001(\0162\025.boa.ty" +
-      "pes.ChangeKind\022\023\n\013mapped_node\030\010 \001(\005\022\013\n\003k" +
-      "ey\030\t \001(\005\022\026\n\016declaring_type\030\n \001(\005\022,\n\rcomp" +
-      "uted_name\030\013 \001(\0132\025.boa.types.Expression\022\023" +
-      "\n\013dollar_sign\030\014 \001(\010\"\320\t\n\tStatement\0220\n\004kin" +
-      "d\030\001 \002(\0162\".boa.types.Statement.StatementK" +
-      "ind\022$\n\010comments\030\002 \003(\0132\022.boa.types.Commen" +
-      "t\022(\n\nstatements\030\003 \003(\0132\024.boa.types.Statem",
-      "ent\022.\n\017initializations\030\004 \003(\0132\025.boa.types" +
-      ".Expression\022)\n\nconditions\030\005 \003(\0132\025.boa.ty" +
-      "pes.Expression\022&\n\007updates\030\006 \003(\0132\025.boa.ty" +
-      "pes.Expression\0221\n\024variable_declaration\030\007" +
-      " \001(\0132\023.boa.types.Variable\0220\n\020type_declar" +
-      "ation\030\010 \001(\0132\026.boa.types.Declaration\022)\n\ne" +
-      "xpression\030\t \001(\0132\025.boa.types.Expression\022*" +
-      "\n\013expressions\030\n \003(\0132\025.boa.types.Expressi" +
-      "on\022*\n\013change_kind\030\013 \001(\0162\025.boa.types.Chan" +
-      "geKind\022\023\n\013mapped_node\030\014 \001(\005\022\013\n\003key\030\r \001(\005",
-      "\022\"\n\007methods\030\016 \003(\0132\021.boa.types.Method\0222\n\025" +
-      "variable_declarations\030\017 \003(\0132\023.boa.types." +
-      "Variable\0221\n\021type_declarations\030\020 \003(\0132\026.bo" +
-      "a.types.Declaration\022\r\n\005names\030\021 \003(\t\"\231\004\n\rS" +
-      "tatementKind\022\t\n\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\014\n\010TY" +
-      "PEDECL\020\002\022\016\n\nEXPRESSION\020\003\022\010\n\004EXPR\020\003\022\020\n\014SY" +
-      "NCHRONIZED\020\004\022\010\n\004SYNC\020\004\022\n\n\006RETURN\020\005\022\007\n\003FO" +
-      "R\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010\022\006\n\002IF\020\t\022\n\n\006ASSERT" +
-      "\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020\014\022\t\n\005LABEL\020\r\022\n" +
-      "\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021",
-      "\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\022\013\n\007FINALLY\020\024\022\014\n\010D" +
-      "EBUGGER\020\025\022\013\n\007DEFAULT\020\026\022\013\n\007FOREACH\020\027\022\t\n\005F" +
-      "ORIN\020\030\022\010\n\004WITH\020\031\022\t\n\005SCOPE\020\032\022\013\n\007DECLARE\020\033" +
-      "\022\n\n\006GLOBAL\020\034\022\010\n\004GOTO\020\035\022\017\n\013INLINE_HTML\020\036\022" +
-      "\n\n\006STATIC\020\037\022\010\n\004ECHO\020 \022\021\n\rUSE_NAMESPACE\020!" +
-      "\022\020\n\014USE_CONSTANT\020\"\022\020\n\014USE_FUNCTION\020#\022\017\n\013" +
-      "TRAIT_ALIAS\020$\022\024\n\020TRAIT_PRECEDENCE\020%\022\r\n\tT" +
-      "RAIT_USE\020&\032\002\020\001\"\367\022\n\nExpression\0222\n\004kind\030\001 " +
-      "\002(\0162$.boa.types.Expression.ExpressionKin" +
-      "d\022*\n\013expressions\030\002 \003(\0132\025.boa.types.Expre",
-      "ssion\022+\n\016variable_decls\030\003 \003(\0132\023.boa.type" +
-      "s.Variable\022!\n\010new_type\030\004 \001(\0132\017.boa.types" +
-      ".Type\022+\n\022generic_parameters\030\005 \003(\0132\017.boa." +
-      "types.Type\022\022\n\nis_postfix\030\006 \001(\010\022\017\n\007litera" +
-      "l\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006method\030\t \001(" +
-      "\t\022*\n\013method_args\030\n \003(\0132\025.boa.types.Expre" +
-      "ssion\0220\n\020anon_declaration\030\013 \001(\0132\026.boa.ty" +
-      "pes.Declaration\022\'\n\nannotation\030\014 \001(\0132\023.bo" +
-      "a.types.Modifier\022\021\n\tno_parens\030\016 \001(\010\022*\n\013c" +
-      "hange_kind\030\017 \001(\0162\025.boa.types.ChangeKind\022",
-      "\023\n\013mapped_node\030\021 \001(\005\022\013\n\003key\030\022 \001(\005\022\'\n\016dec" +
-      "laring_type\030\023 \001(\0132\017.boa.types.Type\022$\n\013re" +
-      "turn_type\030\024 \001(\0132\017.boa.types.Type\022\"\n\007meth" +
-      "ods\030\025 \003(\0132\021.boa.types.Method\022(\n\nstatemen" +
-      "ts\030\026 \003(\0132\024.boa.types.Statement\022\030\n\020is_mem" +
-      "ber_access\030\027 \001(\010\022\023\n\013dollar_sign\030\030 \001(\010\022.\n" +
-      "\017computed_method\030\031 \001(\0132\025.boa.types.Expre" +
-      "ssion\022\021\n\tis_static\030\032 \001(\010\022\020\n\010has_from\030\033 \001" +
-      "(\010\022 \n\005trait\030\034 \001(\0132\021.boa.types.Method\"\231\014\n" +
-      "\016ExpressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022",
-      "\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCAL" +
-      "L\020\004\022\010\n\004CAST\020\005\022\017\n\013ARRAYACCESS\020\006\022\r\n\tARRAYI" +
-      "NIT\020\007\022\020\n\014ARRAYLITERAL\020\007\022\017\n\013TYPECOMPARE\020\010" +
-      "\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006O" +
-      "P_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_M" +
-      "OD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHI" +
-      "FT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDRSHI" +
-      "FT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT" +
-      "\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGI" +
-      "CAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ",
-      "\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017" +
-      "\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASS" +
-      "IGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n" +
-      "\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN" +
-      "_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_BITA" +
-      "ND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSHIFT\020" +
-      "-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGNEDR" +
-      "SHIFT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022\024\n\020ME" +
-      "THOD_REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANON_MET" +
-      "HOD\0204\022\t\n\005YIELD\0205\022\027\n\023ARRAY_COMPREHENSION\020",
-      "6\022\t\n\005EMPTY\0207\022\010\n\004SHEQ\0208\022\t\n\005SHNEQ\0209\022\020\n\014XML" +
-      "_DOTQUERY\020:\022\022\n\016OBJECT_LITERAL\020;\022\016\n\nMETHO" +
-      "DDECL\020<\022\010\n\004LOOP\020=\022\r\n\tGENERATOR\020>\022\017\n\013XML_" +
-      "LITERAL\020?\022\022\n\016XML_EXPRESSION\020@\022\023\n\017XML_PRO" +
-      "PERTYREF\020A\022\021\n\rXML_MEMBERREF\020B\022\013\n\007XML_DOT" +
-      "\020C\022\016\n\nXML_DOTDOT\020D\022\006\n\002IN\020E\022\n\n\006TYPEOF\020F\022\021" +
-      "\n\rREGEXPLITERAL\020G\022\n\n\006DELETE\020H\022\010\n\004VOID\020I\022" +
-      "\023\n\017HASHTABLEACCESS\020J\022\020\n\014ARRAYELEMENT\020K\022\r" +
-      "\n\tOP_CONCAT\020L\022\n\n\006OP_POW\020M\022\021\n\rASSIGN_CONC" +
-      "AT\020N\022\016\n\nASSIGN_POW\020O\022\014\n\010BACKTICK\020P\022\r\n\tID",
-      "ENTICAL\020Q\022\020\n\014NOTIDENTICAL\020R\022\016\n\nSTRING_AN" +
-      "D\020S\022\r\n\tSTRING_OR\020T\022\016\n\nSTRING_XOR\020U\022\030\n\024OP" +
-      "_THREE_WAY_COMPARE\020V\022\r\n\tOP_UNPACK\020W\022\t\n\005Q" +
-      "UOTE\020X\022\020\n\014IGNORE_ERROR\020Y\022\013\n\007REQUIRE\020Z\022\020\n" +
-      "\014REQUIRE_ONCE\020[\022\013\n\007INCLUDE\020\\\022\020\n\014INCLUDE_" +
-      "ONCE\020]\022\010\n\004LIST\020^\022\r\n\tREFERENCE\020_\022\016\n\nREFLE" +
-      "CTION\020`\022\t\n\005CLONE\020a\022\017\n\013TRAIT_ALIAS\020b\022\024\n\020T" +
-      "RAIT_PRECEDENCE\020c\022\021\n\rNAMESPACENAME\020d\032\002\020\001" +
-      "\"\233\005\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa.types." +
-      "Modifier.ModifierKind\0222\n\nvisibility\030\002 \001(",
-      "\0162\036.boa.types.Modifier.Visibility\022\027\n\017ann" +
-      "otation_name\030\003 \001(\t\022\032\n\022annotation_members" +
-      "\030\004 \003(\t\0220\n\021annotation_values\030\005 \003(\0132\025.boa." +
-      "types.Expression\022\r\n\005other\030\006 \001(\t\022*\n\013chang" +
-      "e_kind\030\007 \001(\0162\025.boa.types.ChangeKind\022\023\n\013m" +
-      "apped_node\030\t \001(\005\022\013\n\003key\030\n \001(\005\022(\n\005scope\030\013" +
-      " \001(\0162\031.boa.types.Modifier.Scope\"\257\001\n\014Modi" +
-      "fierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nA" +
-      "NNOTATION\020\002\022\t\n\005FINAL\020\003\022\014\n\010CONSTANT\020\003\022\n\n\006" +
-      "STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010",
-      "ABSTRACT\020\006\022\t\n\005SCOPE\020\007\022\n\n\006GETTER\020\010\022\n\n\006SET" +
-      "TER\020\t\032\002\020\001\"a\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007P" +
-      "RIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013" +
-      "\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020\004\032\002\020\001\"(\n\005Scope\022\007\n" +
-      "\003VAR\020\001\022\007\n\003LET\020\002\022\t\n\005CONST\020\003\032\002\020\001\"\253\002\n\007Comme" +
-      "nt\022,\n\004kind\030\001 \002(\0162\036.boa.types.Comment.Com" +
-      "mentKind\022\r\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(" +
-      "\0132\027.boa.types.PositionInfo\022*\n\013change_kin" +
-      "d\030\004 \001(\0162\025.boa.types.ChangeKind\022\023\n\013mapped" +
-      "_node\030\006 \001(\005\022\013\n\003key\030\007 \001(\005\"j\n\013CommentKind\022",
-      "\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003" +
-      "\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFI" +
-      "CATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_po" +
-      "s\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 " +
-      "\002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005" +
-      "\022\017\n\007end_col\030\006 \002(\005\"\233\001\n\010Document\022\r\n\005title\030" +
-      "\001 \001(\t\022$\n\010elements\030\002 \003(\0132\022.boa.types.Elem" +
-      "ent\022$\n\010doc_type\030\003 \001(\0132\022.boa.types.Elemen" +
-      "t\0224\n\026processing_instruction\030\013 \003(\0132\024.boa." +
-      "types.Attribute\"\273\004\n\007Element\022\013\n\003tag\030\001 \002(\t",
-      "\022,\n\004kind\030\002 \002(\0162\036.boa.types.Element.Eleme" +
-      "ntKind\022$\n\010elements\030\003 \003(\0132\022.boa.types.Ele" +
-      "ment\022\014\n\004text\030\004 \003(\t\022\014\n\004data\030\005 \003(\t\022(\n\nattr" +
-      "ibutes\030\006 \003(\0132\024.boa.types.Attribute\022$\n\006sc" +
-      "ript\030\007 \001(\0132\024.boa.types.Namespace\022!\n\003php\030" +
-      "\010 \001(\0132\024.boa.types.Namespace\022%\n\010var_decl\030" +
-      "\t \003(\0132\023.boa.types.Variable\022\r\n\005title\030\n \001(" +
-      "\t\0224\n\026processing_instruction\030\013 \003(\0132\024.boa." +
-      "types.Attribute\"\323\001\n\013ElementKind\022\t\n\005OTHER" +
-      "\020\000\022\t\n\005BLOCK\020\001\022\013\n\007IN_LINE\020\002\022\010\n\004FORM\020\003\022\014\n\010",
-      "DOC_TYPE\020\004\022\017\n\013STYLE_SHEET\020\005\022\r\n\tPAGE_RULE" +
-      "\020\006\022\016\n\nSTYLE_RULE\020\007\022\022\n\016FONT_FACE_RULE\020\010\022\016" +
-      "\n\nMEDIA_RULE\020\t\022\017\n\013MEDIA_QUERY\020\n\022\017\n\013IMPOR" +
-      "T_RULE\020\013\022\017\n\013XML_ELEMENT\020\014\032\002\020\001\"\'\n\tAttribu" +
-      "te\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t*\303\001\n\010TypeK" +
-      "ind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002" +
-      "\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n" +
-      "\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006" +
-      "\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005TRAIT\020\t\022\r" +
-      "\n\tPRIMITIVE\020\n\022\t\n\005ARRAY\020\013\032\002\020\001B\002H\001"
+      "ind\022\023\n\013mapped_node\030\006 \001(\005\022\013\n\003key\030\007 \001(\005\022%\n" +
+      "\010document\030\010 \001(\0132\023.boa.types.Document\"\232\003\n" +
+      "\tNamespace\022\014\n\004name\030\001 \002(\t\022&\n\tmodifiers\030\002 " +
+      "\003(\0132\023.boa.types.Modifier\022,\n\014declarations" +
+      "\030\003 \003(\0132\026.boa.types.Declaration\022(\n\nstatem",
+      "ents\030\004 \003(\0132\024.boa.types.Statement\022\"\n\007meth" +
+      "ods\030\005 \003(\0132\021.boa.types.Method\022*\n\013expressi" +
+      "ons\030\006 \003(\0132\025.boa.types.Expression\022*\n\013chan" +
+      "ge_kind\030\007 \001(\0162\025.boa.types.ChangeKind\022\023\n\013" +
+      "mapped_node\030\t \001(\005\022\013\n\003key\030\n \001(\005\022(\n\nnamesp" +
+      "aces\030\013 \003(\0132\024.boa.types.Namespace\022\017\n\007impo" +
+      "rts\030\014 \003(\t\022&\n\tvariables\030\r \003(\0132\023.boa.types" +
+      ".Variable\"\207\004\n\013Declaration\022\014\n\004name\030\001 \002(\t\022" +
+      "!\n\004kind\030\002 \002(\0162\023.boa.types.TypeKind\022&\n\tmo" +
+      "difiers\030\003 \003(\0132\023.boa.types.Modifier\022+\n\022ge",
+      "neric_parameters\030\004 \003(\0132\017.boa.types.Type\022" +
+      " \n\007parents\030\005 \003(\0132\017.boa.types.Type\022\"\n\007met" +
+      "hods\030\006 \003(\0132\021.boa.types.Method\022#\n\006fields\030" +
+      "\007 \003(\0132\023.boa.types.Variable\0223\n\023nested_dec" +
+      "larations\030\010 \003(\0132\026.boa.types.Declaration\022" +
+      "$\n\010comments\030\t \003(\0132\022.boa.types.Comment\022*\n" +
+      "\013change_kind\030\n \001(\0162\025.boa.types.ChangeKin" +
+      "d\022\023\n\013mapped_node\030\014 \001(\005\022\013\n\003key\030\r \001(\005\022\034\n\024f" +
+      "ully_qualified_name\030\016 \001(\t\022\026\n\016declaring_t" +
+      "ype\030\017 \001(\005\022(\n\nstatements\030\020 \003(\0132\024.boa.type",
+      "s.Statement\"\214\002\n\004Type\022\014\n\004name\030\001 \001(\t\022\034\n\024fu" +
+      "lly_qualified_name\030\002 \001(\t\022!\n\004kind\030\003 \002(\0162\023" +
+      ".boa.types.TypeKind\022\n\n\002id\030\004 \001(\t\022*\n\013chang" +
+      "e_kind\030\005 \001(\0162\025.boa.types.ChangeKind\022\023\n\013m" +
+      "apped_node\030\007 \001(\005\022\030\n\020declaration_file\030\010 \001" +
+      "(\005\022\023\n\013declaration\030\t \001(\005\022\013\n\003key\030\n \001(\005\022,\n\r" +
+      "computed_name\030\016 \001(\0132\025.boa.types.Expressi" +
+      "on\"\307\003\n\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tmodifiers" +
+      "\030\002 \003(\0132\023.boa.types.Modifier\022$\n\013return_ty" +
+      "pe\030\003 \001(\0132\017.boa.types.Type\022+\n\022generic_par",
+      "ameters\030\004 \003(\0132\017.boa.types.Type\022&\n\targume" +
+      "nts\030\005 \003(\0132\023.boa.types.Variable\022(\n\017except" +
+      "ion_types\030\006 \003(\0132\017.boa.types.Type\022(\n\nstat" +
+      "ements\030\007 \003(\0132\024.boa.types.Statement\022$\n\010co" +
+      "mments\030\010 \003(\0132\022.boa.types.Comment\022*\n\013chan" +
+      "ge_kind\030\t \001(\0162\025.boa.types.ChangeKind\022\023\n\013" +
+      "mapped_node\030\013 \001(\005\022\013\n\003key\030\014 \001(\005\022\026\n\016declar" +
+      "ing_type\030\r \001(\005\022,\n\rcomputed_name\030\016 \001(\0132\025." +
+      "boa.types.Expression\"\343\002\n\010Variable\022\014\n\004nam" +
+      "e\030\001 \001(\t\022&\n\rvariable_type\030\002 \001(\0132\017.boa.typ",
+      "es.Type\022&\n\tmodifiers\030\003 \003(\0132\023.boa.types.M" +
+      "odifier\022*\n\013initializer\030\004 \001(\0132\025.boa.types" +
+      ".Expression\022$\n\010comments\030\005 \003(\0132\022.boa.type" +
+      "s.Comment\022*\n\013change_kind\030\006 \001(\0162\025.boa.typ" +
+      "es.ChangeKind\022\023\n\013mapped_node\030\010 \001(\005\022\013\n\003ke" +
+      "y\030\t \001(\005\022\026\n\016declaring_type\030\n \001(\005\022,\n\rcompu" +
+      "ted_name\030\013 \001(\0132\025.boa.types.Expression\022\023\n" +
+      "\013dollar_sign\030\014 \001(\010\"\320\t\n\tStatement\0220\n\004kind" +
+      "\030\001 \002(\0162\".boa.types.Statement.StatementKi" +
+      "nd\022$\n\010comments\030\002 \003(\0132\022.boa.types.Comment",
+      "\022(\n\nstatements\030\003 \003(\0132\024.boa.types.Stateme" +
+      "nt\022.\n\017initializations\030\004 \003(\0132\025.boa.types." +
+      "Expression\022)\n\nconditions\030\005 \003(\0132\025.boa.typ" +
+      "es.Expression\022&\n\007updates\030\006 \003(\0132\025.boa.typ" +
+      "es.Expression\0221\n\024variable_declaration\030\007 " +
+      "\001(\0132\023.boa.types.Variable\0220\n\020type_declara" +
+      "tion\030\010 \001(\0132\026.boa.types.Declaration\022)\n\nex" +
+      "pression\030\t \001(\0132\025.boa.types.Expression\022*\n" +
+      "\013expressions\030\n \003(\0132\025.boa.types.Expressio" +
+      "n\022*\n\013change_kind\030\013 \001(\0162\025.boa.types.Chang",
+      "eKind\022\023\n\013mapped_node\030\014 \001(\005\022\013\n\003key\030\r \001(\005\022" +
+      "\"\n\007methods\030\016 \003(\0132\021.boa.types.Method\0222\n\025v" +
+      "ariable_declarations\030\017 \003(\0132\023.boa.types.V" +
+      "ariable\0221\n\021type_declarations\030\020 \003(\0132\026.boa" +
+      ".types.Declaration\022\r\n\005names\030\021 \003(\t\"\231\004\n\rSt" +
+      "atementKind\022\t\n\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\014\n\010TYP" +
+      "EDECL\020\002\022\016\n\nEXPRESSION\020\003\022\010\n\004EXPR\020\003\022\020\n\014SYN" +
+      "CHRONIZED\020\004\022\010\n\004SYNC\020\004\022\n\n\006RETURN\020\005\022\007\n\003FOR" +
+      "\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010\022\006\n\002IF\020\t\022\n\n\006ASSERT\020" +
+      "\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020\014\022\t\n\005LABEL\020\r\022\n\n",
+      "\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021\022" +
+      "\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\022\013\n\007FINALLY\020\024\022\014\n\010DE" +
+      "BUGGER\020\025\022\013\n\007DEFAULT\020\026\022\013\n\007FOREACH\020\027\022\t\n\005FO" +
+      "RIN\020\030\022\010\n\004WITH\020\031\022\t\n\005SCOPE\020\032\022\013\n\007DECLARE\020\033\022" +
+      "\n\n\006GLOBAL\020\034\022\010\n\004GOTO\020\035\022\017\n\013INLINE_HTML\020\036\022\n" +
+      "\n\006STATIC\020\037\022\010\n\004ECHO\020 \022\021\n\rUSE_NAMESPACE\020!\022" +
+      "\020\n\014USE_CONSTANT\020\"\022\020\n\014USE_FUNCTION\020#\022\017\n\013T" +
+      "RAIT_ALIAS\020$\022\024\n\020TRAIT_PRECEDENCE\020%\022\r\n\tTR" +
+      "AIT_USE\020&\032\002\020\001\"\367\022\n\nExpression\0222\n\004kind\030\001 \002" +
+      "(\0162$.boa.types.Expression.ExpressionKind",
+      "\022*\n\013expressions\030\002 \003(\0132\025.boa.types.Expres" +
+      "sion\022+\n\016variable_decls\030\003 \003(\0132\023.boa.types" +
+      ".Variable\022!\n\010new_type\030\004 \001(\0132\017.boa.types." +
+      "Type\022+\n\022generic_parameters\030\005 \003(\0132\017.boa.t" +
+      "ypes.Type\022\022\n\nis_postfix\030\006 \001(\010\022\017\n\007literal" +
+      "\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006method\030\t \001(\t" +
+      "\022*\n\013method_args\030\n \003(\0132\025.boa.types.Expres" +
+      "sion\0220\n\020anon_declaration\030\013 \001(\0132\026.boa.typ" +
+      "es.Declaration\022\'\n\nannotation\030\014 \001(\0132\023.boa" +
+      ".types.Modifier\022\021\n\tno_parens\030\016 \001(\010\022*\n\013ch",
+      "ange_kind\030\017 \001(\0162\025.boa.types.ChangeKind\022\023" +
+      "\n\013mapped_node\030\021 \001(\005\022\013\n\003key\030\022 \001(\005\022\'\n\016decl" +
+      "aring_type\030\023 \001(\0132\017.boa.types.Type\022$\n\013ret" +
+      "urn_type\030\024 \001(\0132\017.boa.types.Type\022\"\n\007metho" +
+      "ds\030\025 \003(\0132\021.boa.types.Method\022(\n\nstatement" +
+      "s\030\026 \003(\0132\024.boa.types.Statement\022\030\n\020is_memb" +
+      "er_access\030\027 \001(\010\022\023\n\013dollar_sign\030\030 \001(\010\022.\n\017" +
+      "computed_method\030\031 \001(\0132\025.boa.types.Expres" +
+      "sion\022\021\n\tis_static\030\032 \001(\010\022\020\n\010has_from\030\033 \001(" +
+      "\010\022 \n\005trait\030\034 \001(\0132\021.boa.types.Method\"\231\014\n\016",
+      "ExpressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r" +
+      "\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCALL" +
+      "\020\004\022\010\n\004CAST\020\005\022\017\n\013ARRAYACCESS\020\006\022\r\n\tARRAYIN" +
+      "IT\020\007\022\020\n\014ARRAYLITERAL\020\007\022\017\n\013TYPECOMPARE\020\010\022" +
+      "\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP" +
+      "_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MO" +
+      "D\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIF" +
+      "T\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDRSHIF" +
+      "T\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020" +
+      "\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGIC",
+      "AL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020" +
+      "\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n" +
+      "\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASSI" +
+      "GN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013" +
+      "ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN_" +
+      "MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_BITAN" +
+      "D\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSHIFT\020-" +
+      "\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGNEDRS" +
+      "HIFT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022\024\n\020MET" +
+      "HOD_REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANON_METH",
+      "OD\0204\022\t\n\005YIELD\0205\022\027\n\023ARRAY_COMPREHENSION\0206" +
+      "\022\t\n\005EMPTY\0207\022\010\n\004SHEQ\0208\022\t\n\005SHNEQ\0209\022\020\n\014XML_" +
+      "DOTQUERY\020:\022\022\n\016OBJECT_LITERAL\020;\022\016\n\nMETHOD" +
+      "DECL\020<\022\010\n\004LOOP\020=\022\r\n\tGENERATOR\020>\022\017\n\013XML_L" +
+      "ITERAL\020?\022\022\n\016XML_EXPRESSION\020@\022\023\n\017XML_PROP" +
+      "ERTYREF\020A\022\021\n\rXML_MEMBERREF\020B\022\013\n\007XML_DOT\020" +
+      "C\022\016\n\nXML_DOTDOT\020D\022\006\n\002IN\020E\022\n\n\006TYPEOF\020F\022\021\n" +
+      "\rREGEXPLITERAL\020G\022\n\n\006DELETE\020H\022\010\n\004VOID\020I\022\023" +
+      "\n\017HASHTABLEACCESS\020J\022\020\n\014ARRAYELEMENT\020K\022\r\n" +
+      "\tOP_CONCAT\020L\022\n\n\006OP_POW\020M\022\021\n\rASSIGN_CONCA",
+      "T\020N\022\016\n\nASSIGN_POW\020O\022\014\n\010BACKTICK\020P\022\r\n\tIDE" +
+      "NTICAL\020Q\022\020\n\014NOTIDENTICAL\020R\022\016\n\nSTRING_AND" +
+      "\020S\022\r\n\tSTRING_OR\020T\022\016\n\nSTRING_XOR\020U\022\030\n\024OP_" +
+      "THREE_WAY_COMPARE\020V\022\r\n\tOP_UNPACK\020W\022\t\n\005QU" +
+      "OTE\020X\022\020\n\014IGNORE_ERROR\020Y\022\013\n\007REQUIRE\020Z\022\020\n\014" +
+      "REQUIRE_ONCE\020[\022\013\n\007INCLUDE\020\\\022\020\n\014INCLUDE_O" +
+      "NCE\020]\022\010\n\004LIST\020^\022\r\n\tREFERENCE\020_\022\016\n\nREFLEC" +
+      "TION\020`\022\t\n\005CLONE\020a\022\017\n\013TRAIT_ALIAS\020b\022\024\n\020TR" +
+      "AIT_PRECEDENCE\020c\022\021\n\rNAMESPACENAME\020d\032\002\020\001\"" +
+      "\233\005\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa.types.M",
+      "odifier.ModifierKind\0222\n\nvisibility\030\002 \001(\016" +
+      "2\036.boa.types.Modifier.Visibility\022\027\n\017anno" +
+      "tation_name\030\003 \001(\t\022\032\n\022annotation_members\030" +
+      "\004 \003(\t\0220\n\021annotation_values\030\005 \003(\0132\025.boa.t" +
+      "ypes.Expression\022\r\n\005other\030\006 \001(\t\022*\n\013change" +
+      "_kind\030\007 \001(\0162\025.boa.types.ChangeKind\022\023\n\013ma" +
+      "pped_node\030\t \001(\005\022\013\n\003key\030\n \001(\005\022(\n\005scope\030\013 " +
+      "\001(\0162\031.boa.types.Modifier.Scope\"\257\001\n\014Modif" +
+      "ierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nAN" +
+      "NOTATION\020\002\022\t\n\005FINAL\020\003\022\014\n\010CONSTANT\020\003\022\n\n\006S",
+      "TATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010A" +
+      "BSTRACT\020\006\022\t\n\005SCOPE\020\007\022\n\n\006GETTER\020\010\022\n\n\006SETT" +
+      "ER\020\t\032\002\020\001\"a\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007PR" +
+      "IVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n" +
+      "\007PACKAGE\020\004\022\013\n\007DEFAULT\020\004\032\002\020\001\"(\n\005Scope\022\007\n\003" +
+      "VAR\020\001\022\007\n\003LET\020\002\022\t\n\005CONST\020\003\032\002\020\001\"\253\002\n\007Commen" +
+      "t\022,\n\004kind\030\001 \002(\0162\036.boa.types.Comment.Comm" +
+      "entKind\022\r\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\013" +
+      "2\027.boa.types.PositionInfo\022*\n\013change_kind" +
+      "\030\004 \001(\0162\025.boa.types.ChangeKind\022\023\n\013mapped_",
+      "node\030\006 \001(\005\022\013\n\003key\030\007 \001(\005\"j\n\013CommentKind\022\t" +
+      "\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022" +
+      "\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFIC" +
+      "ATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos" +
+      "\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002" +
+      "(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022" +
+      "\017\n\007end_col\030\006 \002(\005\"\233\001\n\010Document\022\r\n\005title\030\001" +
+      " \001(\t\022$\n\010elements\030\002 \003(\0132\022.boa.types.Eleme" +
+      "nt\022$\n\010doc_type\030\003 \001(\0132\022.boa.types.Element" +
+      "\0224\n\026processing_instruction\030\013 \003(\0132\024.boa.t",
+      "ypes.Attribute\"\273\004\n\007Element\022\013\n\003tag\030\001 \002(\t\022" +
+      ",\n\004kind\030\002 \002(\0162\036.boa.types.Element.Elemen" +
+      "tKind\022$\n\010elements\030\003 \003(\0132\022.boa.types.Elem" +
+      "ent\022\014\n\004text\030\004 \003(\t\022\014\n\004data\030\005 \003(\t\022(\n\nattri" +
+      "butes\030\006 \003(\0132\024.boa.types.Attribute\022$\n\006scr" +
+      "ipt\030\007 \001(\0132\024.boa.types.Namespace\022!\n\003php\030\010" +
+      " \001(\0132\024.boa.types.Namespace\022%\n\010var_decl\030\t" +
+      " \003(\0132\023.boa.types.Variable\022\r\n\005title\030\n \001(\t" +
+      "\0224\n\026processing_instruction\030\013 \003(\0132\024.boa.t" +
+      "ypes.Attribute\"\323\001\n\013ElementKind\022\t\n\005OTHER\020",
+      "\000\022\t\n\005BLOCK\020\001\022\013\n\007IN_LINE\020\002\022\010\n\004FORM\020\003\022\014\n\010D" +
+      "OC_TYPE\020\004\022\017\n\013STYLE_SHEET\020\005\022\r\n\tPAGE_RULE\020" +
+      "\006\022\016\n\nSTYLE_RULE\020\007\022\022\n\016FONT_FACE_RULE\020\010\022\016\n" +
+      "\nMEDIA_RULE\020\t\022\017\n\013MEDIA_QUERY\020\n\022\017\n\013IMPORT" +
+      "_RULE\020\013\022\017\n\013XML_ELEMENT\020\014\032\002\020\001\"\'\n\tAttribut" +
+      "e\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t*\303\001\n\010TypeKi" +
+      "nd\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022" +
+      "\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004" +
+      "ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022" +
+      "\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005TRAIT\020\t\022\r\n",
+      "\tPRIMITIVE\020\n\022\t\n\005ARRAY\020\013\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -44646,7 +44911,7 @@ public final class Ast {
           internal_static_boa_types_ASTRoot_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ASTRoot_descriptor,
-              new java.lang.String[] { "Namespaces", "Names", "ChangeKind", "MappedNode", "Key", });
+              new java.lang.String[] { "Namespaces", "Names", "ChangeKind", "MappedNode", "Key", "Document", });
           internal_static_boa_types_Namespace_descriptor =
             getDescriptor().getMessageTypes().get(2);
           internal_static_boa_types_Namespace_fieldAccessorTable = new

@@ -24,13 +24,20 @@ import java.util.*;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile.Writer;
+import org.dom4j.dom.DOMDocument;
+import org.dom4j.io.SAXReader;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.php.internal.core.PHPVersion;
 import org.eclipse.php.internal.core.ast.nodes.Program;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ast.AstRoot;
+import org.w3c.css.sac.InputSource;
+
+import com.steadystate.css.dom.CSSStyleSheetImpl;
 
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.Revision;
@@ -43,12 +50,15 @@ import boa.datagen.DefaultProperties;
 import boa.datagen.dependencies.PomFile;
 import boa.datagen.treed.TreedConstants;
 import boa.datagen.treed.TreedMapper;
+import boa.datagen.util.CssVisitor;
 import boa.datagen.util.FileIO;
+import boa.datagen.util.HtmlVisitor;
 import boa.datagen.util.JavaScriptErrorCheckVisitor;
 import boa.datagen.util.JavaScriptVisitor;
 import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
+import boa.datagen.util.XMLVisitor;
 import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.Java8Visitor;
 import boa.datagen.util.JavaASTUtil;
@@ -60,7 +70,8 @@ import boa.datagen.util.JavaErrorCheckVisitor;
 public abstract class AbstractCommit {
 	protected static final boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	protected static final boolean debugparse = Properties.getBoolean("debugparse", DefaultProperties.DEBUGPARSE);
-	protected static final boolean STORE_ASCII_PRINTABLE_CONTENTS = Properties.getBoolean("ascii", DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
+	protected static final boolean STORE_ASCII_PRINTABLE_CONTENTS = Properties.getBoolean("ascii",
+			DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
 
 	protected AbstractConnector connector;
 
@@ -167,7 +178,7 @@ public abstract class AbstractCommit {
 			revision.setLog(message);
 		else
 			revision.setLog("");
-		
+
 		if (this.parentIndices != null)
 			for (int parentIndex : this.parentIndices)
 				revision.addParents(parentIndex);
@@ -186,7 +197,8 @@ public abstract class AbstractCommit {
 	}
 
 	@SuppressWarnings("deprecation")
-	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse, final Writer astWriter, final Writer contentWriter) {
+	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse, final Writer astWriter,
+			final Writer contentWriter) {
 		long len = -1;
 		try {
 			len = astWriter.getLength();
@@ -268,11 +280,14 @@ public abstract class AbstractCommit {
 								fb.setKind(FileKind.SOURCE_JS_ES7);
 								if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_7, false, astWriter)) {
 									if (debugparse)
-										System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
+										System.err
+												.println("Found ES3 parse error in: revision " + id + ": file " + path);
 									fb.setKind(FileKind.SOURCE_JS_ES8);
-									if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_8, false, astWriter)) {
+									if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_8, false,
+											astWriter)) {
 										if (debugparse)
-											System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
+											System.err.println(
+													"Found ES4 parse error in: revision " + id + ": file " + path);
 										fb.setKind(FileKind.SOURCE_JS_ERROR);
 										// try {
 										// astWriter.append(new
@@ -295,7 +310,7 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted ES2: revision " + id + ": file " + path);
 			} else if (debugparse)
 				System.err.println("Accepted ES1: revision " + id + ": file " + path);
-		} else if (lowerPath.endsWith(".php") && parse){
+		} else if (lowerPath.endsWith(".php") && parse) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_PHP5);
@@ -321,11 +336,13 @@ public abstract class AbstractCommit {
 								fb.setKind(FileKind.SOURCE_PHP7_0);
 								if (!parsePHPFile(path, fb, content, PHPVersion.PHP7_0, false, astWriter)) {
 									if (debugparse)
-										System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
+										System.err
+												.println("Found ES3 parse error in: revision " + id + ": file " + path);
 									fb.setKind(FileKind.SOURCE_PHP7_1);
 									if (!parsePHPFile(path, fb, content, PHPVersion.PHP7_1, false, astWriter)) {
 										if (debugparse)
-											System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
+											System.err.println(
+													"Found ES4 parse error in: revision " + id + ": file " + path);
 										fb.setKind(FileKind.SOURCE_PHP_ERROR);
 										// try {
 										// astWriter.append(new
@@ -348,17 +365,48 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted PHP5_3: revision " + id + ": file " + path);
 			} else if (debugparse)
 				System.err.println("Accepted PHP5: revision " + id + ": file " + path);
-		}/* else {
+		} else if (lowerPath.endsWith(".html") && parse) {
 			final String content = getFileContents(path);
-			if (STORE_ASCII_PRINTABLE_CONTENTS && StringUtils.isAsciiPrintable(content)) {
-				try {
-					fb.setKey(contentWriter.getLength());
-					contentWriter.append(new LongWritable(contentWriter.getLength()), new BytesWritable(content.getBytes()));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}*/
+
+			fb.setKind(FileKind.Source_HTML);
+			if (!HTMLParse(path, fb, content, false, astWriter)) {
+				if (debugparse)
+					System.err.println("Found an HTML parse error in : revision " + id + ": file " + path);
+				fb.setKind(FileKind.SOURCE_HTML_ERROR);
+
+			} else if (debugparse)
+				System.err.println("Accepted HTML: revisison " + id + ": file " + path);
+		} else if (lowerPath.endsWith(".xml") && parse) {
+			final String content = getFileContents(path);
+
+			fb.setKind(FileKind.Source_XML);
+			if (!XMLParse(path, fb, content, false, astWriter)) {
+				if (debugparse)
+					System.err.println("Found an XML parse error in : revision " + id + ": file " + path);
+				fb.setKind(FileKind.SOURCE_XML_ERROR);
+			}else if (debugparse)
+				System.err.println("Accepted XML: revisison " + id + ": file " + path);
+		} else if (lowerPath.endsWith(".css") && parse) {
+			final String content = getFileContents(path);
+
+			fb.setKind(FileKind.Source_CSS);
+			if (!CSSParse(path, fb, content, false, astWriter)) {
+				if (debugparse)
+					System.err.println("Found an CSS parse error in : revision " + id + ": file " + path);
+				fb.setKind(FileKind.SOURCE_CSS_ERROR);
+			}else if (debugparse)
+				System.err.println("Accepted CSS: revisison " + id + ": file " + path);
+		}
+
+		/*
+		 * else { final String content = getFileContents(path); if
+		 * (STORE_ASCII_PRINTABLE_CONTENTS &&
+		 * StringUtils.isAsciiPrintable(content)) { try {
+		 * fb.setKey(contentWriter.getLength()); contentWriter.append(new
+		 * LongWritable(contentWriter.getLength()), new
+		 * BytesWritable(content.getBytes())); } catch (IOException e) {
+		 * e.printStackTrace(); } } }
+		 */
 		try {
 			if (astWriter.getLength() > len) {
 				fb.setKey(len);
@@ -372,14 +420,118 @@ public abstract class AbstractCommit {
 		return fb;
 	}
 
+	private boolean HTMLParse(String path, Builder fb, String content, boolean b, Writer astWriter) {
+		Document doc;
+		HtmlVisitor visitor = new HtmlVisitor();
+		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+		try {
+			doc = Jsoup.parse(content);
+		} catch (Exception e) {
+			if (debug) {
+				System.err.println("Error parsing HTML file: " + path);
+				e.printStackTrace();
+			}
+			return false;
+		}
+		try {
+			ast.setDocument(visitor.getDocument(doc));
+		} catch (final UnsupportedOperationException e) {
+			return false;
+		} catch (final Throwable e) {
+			if (debug)
+				System.err.println("Error visiting HTML file: " + path);
+			e.printStackTrace();
+			// System.exit(-1);
+			return false;
+		}
+		try {
+			// System.out.println("writing=" + count + "\t" + path);
+			astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+
+	private boolean XMLParse(String path, Builder fb, String content, boolean b, Writer astWriter) {
+		org.dom4j.Document doc;
+		XMLVisitor visitor = new XMLVisitor();
+		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+		try {
+			org.dom4j.dom.DOMDocumentFactory di = new org.dom4j.dom.DOMDocumentFactory();
+			SAXReader reader = new SAXReader(di);
+			doc = reader.read(content);
+		} catch (Exception e) {
+			if (debug) {
+				System.err.println("Error parsing HTML file: " + path);
+				e.printStackTrace();
+			}
+			return false;
+		}
+		try {
+			ast.setDocument(visitor.getDocument((DOMDocument) doc));
+		} catch (final UnsupportedOperationException e) {
+			return false;
+		} catch (final Throwable e) {
+			if (debug)
+				System.err.println("Error visiting HTML file: " + path);
+			e.printStackTrace();
+			// System.exit(-1);
+			return false;
+		}
+		try {
+			// System.out.println("writing=" + count + "\t" + path);
+			astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+
+	private boolean CSSParse(String path, Builder fb, String content, boolean b, Writer astWriter) {
+		com.steadystate.css.dom.CSSStyleSheetImpl sSheet = null;
+		CssVisitor visitor = new CssVisitor();
+		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+		try {
+			com.steadystate.css.parser.CSSOMParser parser = new com.steadystate.css.parser.CSSOMParser();
+			InputSource source = new InputSource(new StringReader(content));
+			sSheet = (CSSStyleSheetImpl) parser.parseStyleSheet(source, null, null);
+		} catch (Exception e) {
+			if (debug) {
+				System.err.println("Error parsing HTML file: " + path);
+				e.printStackTrace();
+			}
+			return false;
+		}
+		try {
+			ast.setDocument(visitor.getDocument(sSheet));
+		} catch (final UnsupportedOperationException e) {
+			return false;
+		} catch (final Throwable e) {
+			if (debug)
+				System.err.println("Error visiting HTML file: " + path);
+			e.printStackTrace();
+			// System.exit(-1);
+			return false;
+		}
+		try {
+			// System.out.println("writing=" + count + "\t" + path);
+			astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
 	private boolean parsePHPFile(final String path, final ChangedFile.Builder fb, final String content,
 			final PHPVersion astLevel, final boolean storeOnError, Writer astWriter) {
-		org.eclipse.php.internal.core.ast.nodes.ASTParser parser = org.eclipse.php.internal.core.ast.nodes.ASTParser.newParser(astLevel);
+		org.eclipse.php.internal.core.ast.nodes.ASTParser parser = org.eclipse.php.internal.core.ast.nodes.ASTParser
+				.newParser(astLevel);
 		Program cu = null;
 		try {
 			parser.setSource(content.toCharArray());
 			cu = parser.createAST(null);
-			if(cu == null)
+			if (cu == null)
 				return false;
 		} catch (Exception e) {
 			if (debug)
@@ -501,7 +653,8 @@ public abstract class AbstractCommit {
 
 			if (!errorCheck.hasError || storeOnError) {
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
-				// final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
+				// final CommentsRoot.Builder comments =
+				// CommentsRoot.newBuilder();
 				final Java7Visitor visitor;
 				if (astLevel == AST.JLS8)
 					visitor = new Java8Visitor(content);
@@ -526,10 +679,11 @@ public abstract class AbstractCommit {
 					System.exit(-1);
 					return false;
 				}
-				
+
 				ASTRoot.Builder preAst = null;
 				CompilationUnit preCu = null;
-				if (fb.getChange() == ChangeKind.MODIFIED && this.parentIndices.length == 1 && fb.getPreviousIndicesCount() == 1) {
+				if (fb.getChange() == ChangeKind.MODIFIED && this.parentIndices.length == 1
+						&& fb.getPreviousIndicesCount() == 1) {
 					AbstractCommit previousCommit = this.connector.revisions.get(fb.getPreviousVersions(0));
 					ChangedFile.Builder pcf = previousCommit.changedFiles.get(fb.getPreviousIndices(0));
 					String previousFilePath = pcf.getName();
@@ -562,7 +716,7 @@ public abstract class AbstractCommit {
 						}
 					}
 				}
-				
+
 				Integer index = (Integer) cu.getProperty(Java7Visitor.PROPERTY_INDEX);
 				if (index != null) {
 					ast.setKey(index);
@@ -573,7 +727,7 @@ public abstract class AbstractCommit {
 						ast.setMappedNode((Integer) preCu.getProperty(TreedConstants.PROPERTY_INDEX));
 					}
 				}
-				
+
 				long len = astWriter.getLength();
 				try {
 					astWriter.append(new LongWritable(len), new BytesWritable(ast.build().toByteArray()));

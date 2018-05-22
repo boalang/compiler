@@ -104,6 +104,27 @@ message ChangedFile {
 		SOURCE_PHP7_1 = 407;
 		/** @exclude */
 		PHP_ERROR = 400;
+		
+		/** The file represents an HTML source file that had a parse error */
+		SOURCE_HTML_ERROR = 500;
+		/** The file represents an HTML source file that parsed without error */
+		Source_HTML = 501;
+		/** @exclude */
+		HTML_ERROR = 500;
+		
+		/** The file represents an XML source file that had a parse error */
+		SOURCE_XML_ERROR = 600;
+		/** The file represents an HTML source file that parsed without error */
+		Source_XML = 601;
+		/** @exclude */
+		XML_ERROR = 600;
+		
+		/** The file represents an CSS source file that had a parse error */
+		SOURCE_CSS_ERROR = 700;
+		/** The file represents an CSS source file that parsed without error */
+		Source_CSS = 701;
+		/** @exclude */
+		CSS_ERROR = 700;
 	}
 	/** The kind of change for this file */
 	required ChangeKind change = 1;

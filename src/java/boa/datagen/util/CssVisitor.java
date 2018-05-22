@@ -8,6 +8,7 @@ import com.steadystate.css.dom.*;
 import com.steadystate.css.parser.media.MediaQuery;
 
 import boa.types.Ast;
+import boa.types.Ast.Document;
 import boa.types.Ast.Element;
 
 public class CssVisitor {
@@ -22,6 +23,12 @@ public class CssVisitor {
 
 	}
 
+	public Ast.Document getDocument(com.steadystate.css.dom.CSSStyleSheetImpl node) {
+		Ast.Document.Builder db = Document.newBuilder();
+		db.addElements(getStyleSheet(node));
+		return db.build();
+	}
+	
 	public Ast.Element getStyleSheet(com.steadystate.css.dom.CSSStyleSheetImpl node) {
 		this.root = node;
 		elements.push(new ArrayList<Element>());
