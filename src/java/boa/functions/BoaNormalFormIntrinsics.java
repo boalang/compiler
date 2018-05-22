@@ -1555,6 +1555,13 @@ public class BoaNormalFormIntrinsics {
 	@FunctionSpec(name = "simplify", returnType = "Expression", formalParameters = { "Expression" })
 	public static Expression simplify(final Expression e) {
 		switch (e.getKind()) {
+			case LOGICAL_NOT:
+				final Expression inner = simplify(e.getExpressions(0));
+				// remove double negation
+				if (inner.getKind() == ExpressionKind.LOGICAL_NOT)
+					return inner.getExpressions(0);
+				return createExpression(e.getKind(), inner);
+
 			case LOGICAL_AND:
 			case LOGICAL_OR:
 				final List<Expression> exps = new ArrayList<Expression>();

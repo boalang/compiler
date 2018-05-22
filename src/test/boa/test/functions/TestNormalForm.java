@@ -42,7 +42,8 @@ public class TestNormalForm {
 		return Arrays.asList(new String[][] {
 			{ "((a < b || !b) || (a < b && a) || !b || !a) && a < b", "a < b", "a < b", "a < b", "a < b" },
 			{ "(!a || b) && a", "a && b", "a && b", "a && b", "a && b" },
-			{ "!(!a)", "!(!a)", "a", "a", "a" },
+			{ "!(!a)", "a", "a", "a", "a" },
+			{ "!(!a && !a)", "a", "a", "a", "a" },
 			{ "(!a && a) || a", "a", "a", "a", "a" },
 			{ "a", "a", "a", "a", "a" },
 			{ "(!a && b) || a", "a || b", "a || b", "a || b", "a || b" },
