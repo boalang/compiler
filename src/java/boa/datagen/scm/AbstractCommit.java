@@ -441,7 +441,7 @@ public abstract class AbstractCommit {
 			if (debug)
 				System.err.println("Error visiting HTML file: " + path);
 			e.printStackTrace();
-			// System.exit(-1);
+			System.exit(-1);
 			return false;
 		}
 		try {
@@ -476,7 +476,7 @@ public abstract class AbstractCommit {
 			if (debug)
 				System.err.println("Error visiting HTML file: " + path);
 			e.printStackTrace();
-			// System.exit(-1);
+			System.exit(-1);
 			return false;
 		}
 		try {
@@ -511,7 +511,7 @@ public abstract class AbstractCommit {
 			if (debug)
 				System.err.println("Error visiting HTML file: " + path);
 			e.printStackTrace();
-			// System.exit(-1);
+			System.exit(-1);
 			return false;
 		}
 		try {
