@@ -365,7 +365,7 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted PHP5_3: revision " + id + ": file " + path);
 			} else if (debugparse)
 				System.err.println("Accepted PHP5: revision " + id + ": file " + path);
-		} else if (lowerPath.endsWith(".html") && parse) {
+		}/* else if (lowerPath.endsWith(".html") && parse) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.Source_HTML);
