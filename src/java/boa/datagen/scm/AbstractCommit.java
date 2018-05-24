@@ -650,7 +650,7 @@ public abstract class AbstractCommit {
 			
 			try {
 				cu = (CompilationUnit) parser.createAST(null);
-			} catch(java.lang.IllegalArgumentException e) {
+			} catch(Throwable e) {
 				return false;
 			}
 
