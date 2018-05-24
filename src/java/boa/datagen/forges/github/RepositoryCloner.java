@@ -24,44 +24,22 @@ public class RepositoryCloner {
 		File localGitDir = new File(localPath + "/.git");
 		// then clone
 		Git result = null;
-		int low = 1;
-		int high = 1000;
-		Random r = new Random();
-		int pow = 1;
 
 		java.lang.System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
-		boolean success = false;
-		int trys = 0;
-	//	while (success) {
-			try {
-				success = true;
-				result = Git.cloneRepository().setURI(url).setBare(true).setDirectory(localGitDir).call();
-				// Note: the call() returns an opened repository already which
-				// needs
-				// to be closed to avoid file handle leaks!
-				// workaround for
-				// https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
+		try {
+			result = Git.cloneRepository().setURI(url).setBare(true).setDirectory(localGitDir).call();
+			// Note: the call() returns an opened repository already which
+			// needs
+			// to be closed to avoid file handle leaks!
+			// workaround for
+			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
+			result.getRepository().close();
+		} catch (Exception e) {
+			System.err.println("Error cloning " + url);
+			e.printStackTrace();
+		} finally {
+			if (result != null && result.getRepository() != null)
 				result.getRepository().close();
-			} catch (Exception e) {
-				/*
-				if (e.getMessage().contains("Authentication is required but no CredentialsProvider")) {
-					continue;
-				}
-				if (trys < 5) {
-					try {
-						pow *= 2;
-						Thread.sleep(((int) Math.round(pow * 1000) + (r.nextInt(high - low) + low)));
-						success = false;
-					} catch (InterruptedException ie) {
-						// ie.printStackTrace();
-					}
-				} */
-				// e.printStackTrace();
-			} finally {
-
-				if (result != null && result.getRepository() != null)
-					result.getRepository().close();
-			}
 		}
-//	}
+	}
 }
