@@ -16,8 +16,15 @@
  */
 package boa.functions;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
+import boa.graphs.pdg.PDG;
+import boa.graphs.pdg.PDGEdge;
+import boa.graphs.pdg.PDGNode;
+import boa.graphs.slicers.PDGSlicer;
 import boa.types.Ast;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Expression;
@@ -1970,6 +1977,79 @@ public class BoaNormalFormIntrinsics {
 			default:
 				return exp;
 		}
+	}
+
+	/**
+	 * Returns cryptographic hash of the pdg using the given algorithm
+	 *
+	 * @param pdg PDG graph
+	 * @param algorithm name of the cryptographic hashing algorithm
+	 * @return cryptographic hash of the pdg using the given algorithm
+	 * @throws NoSuchAlgorithmException if the given cryptographic algorithm is not supported by JVM
+	 * @throws UnsupportedEncodingException if the character encoding used is not supported by JVM
+	 */
+	@FunctionSpec(name = "getcrypthash", returnType = "string", formalParameters = { "PDG", "string" })
+	public static String getCryptHash(PDG pdg, String algorithm) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+		final Stack<PDGNode> nodes = new Stack<PDGNode>();
+		nodes.add(pdg.getEntryNode());
+		return getCryptHash(nodes, algorithm);
+	}
+
+	/**
+	 * Returns cryptographic hash of the slice using the given algorithm
+	 *
+	 * @param pdgslice slice of the PDG graph
+	 * @param algorithm name of the cryptographic hashing algorithm
+	 * @return cryptographic hash of the slice using the given algorithm
+	 * @throws UnsupportedEncodingException
+	 * @throws NoSuchAlgorithmException
+	 */
+	@FunctionSpec(name = "getcrypthash", returnType = "string", formalParameters = { "PDGSlicer", "string" })
+	public static String getCryptHash(PDGSlicer pdgslice, String algorithm) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+		final Stack<PDGNode> nodes = new Stack<PDGNode>();
+		nodes.addAll(pdgslice.getEntrynodesList());
+		return getCryptHash(nodes, algorithm);
+	}
+
+	/**
+	 * Returns cryptographic hash for the given pdg nodes
+	 *
+	 * @param nodes stack of pdg nodes
+	 * @param algorithm name of the cryptographic hashing algorithm
+	 * @return cryptographic hash for the given stack of pdg nodes
+	 * @throws NoSuchAlgorithmException if the given cryptographic algorithm is not supported by JVM
+	 * @throws UnsupportedEncodingException if the character encoding used is not supported by JVM
+	 */
+	private static String getCryptHash(Stack<PDGNode> nodes, String algorithm) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+		final Set<PDGNode> visited = new HashSet<PDGNode>();
+		final StringBuilder sb = new StringBuilder();
+
+		while (nodes.size() != 0) {
+			final PDGNode node = nodes.pop();
+			if (node.getStmt() != null)
+				sb.append(prettyprint(node.getStmt()));
+			if (node.getExpr() != null)
+				sb.append(prettyprint(node.getExpr()));
+			visited.add(node);
+
+			for (final PDGNode succ : node.getSuccessors()) {
+				final List<PDGEdge> edges = node.getOutEdges(succ);
+				for (PDGEdge e: edges)
+					sb.append(e.getKind()).append(e.getLabel());
+
+				if (!visited.contains(succ))
+					nodes.push(succ);
+			}
+		}
+
+		final MessageDigest md = MessageDigest.getInstance(algorithm);
+		final byte[] hcBytes = md.digest(sb.toString().getBytes("UTF-8"));
+
+		final StringBuilder sBDigest = new StringBuilder();
+		for (final byte b: hcBytes)
+			sBDigest.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+
+		return sBDigest.toString();
 	}
 
 }

@@ -168,26 +168,13 @@ public class PDGSlicer {
         return entrynodes;
     }
 
+    /**
+     * Returns all the nodes in the slice
+     *
+     * @return all the nodes in the slice
+     */
     public HashSet<PDGNode> getSlice() {
         return slice;
-    }
-
-    /**
-     * Returns cryptographic hash of the slice
-     *
-     * @param algorithm name of the cryptographic hashing algorithm
-     * @return cryptographic hash of the slice
-     */
-    public String getCryptHash(final String algorithm) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        final String pdgString = this.toString();
-        final MessageDigest md = MessageDigest.getInstance(algorithm);
-        final byte[] hcBytes = md.digest(pdgString.getBytes("UTF-8"));
-
-        final StringBuilder sBDigest = new StringBuilder();
-        for (final byte b: hcBytes)
-            sBDigest.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
-
-        return sBDigest.toString();
     }
 
     /**
@@ -201,7 +188,7 @@ public class PDGSlicer {
         final StringBuilder sb = new StringBuilder(); // for hashcode caching
         int varCount = 1;
         // traverse and collect sliced nodes
-        // if normalization is enabled then normalize node expressioin
+        // if normalization is enabled then normalize node expression
         // also update use and def variables for each node
         try {
             while (nodes.size() != 0) {
@@ -215,7 +202,7 @@ public class PDGSlicer {
                             normalizedVars.put(node.getDefVariable(), "var$" + varCount);
                             varCount++;
                         }
-                        node.setDefVariable(normalizedVars.get(node.getDefVariable())); // FIXME: create a clone of the node and then set
+                        node.setDefVariable(normalizedVars.get(node.getDefVariable()));
                     }
                     // use variables
                     final HashSet<String> useVars = new HashSet<String>();
@@ -230,7 +217,7 @@ public class PDGSlicer {
                     }
                     node.setUseVariables(useVars);
                     if (node.hasExpr())
-                        node.setExpr(normalizeExpression(node.getExpr(), normalizedVars)); // FIXME: create a clone of the node and then set
+                        node.setExpr(normalizeExpression(node.getExpr(), normalizedVars));
 
                     for (final PDGEdge e: node.getOutEdges()) {
                         final String label = normalizedVars.get(e.getLabel());
@@ -323,34 +310,6 @@ public class PDGSlicer {
     @Override
     public int hashCode() {
         return hashcode;
-    }
-
-    @Override
-    public String toString() {
-        // TODO: Improve the string returned
-        final Stack<PDGNode> nodes = new Stack<PDGNode>();
-        nodes.addAll(entrynodes);
-        final Set<PDGNode> visited = new HashSet<PDGNode>();
-        final StringBuilder sb = new StringBuilder();
-
-        while (nodes.size() != 0) {
-            final PDGNode node = nodes.pop();
-            if (node.getStmt() != null)
-                sb.append(prettyprint(node.getStmt()));
-            if (node.getExpr() != null)
-                sb.append(prettyprint(node.getExpr()));
-            visited.add(node);
-
-            for (final PDGNode succ : node.getSuccessors()) {
-                final List<PDGEdge> edges = node.getOutEdges(succ);
-                for (PDGEdge e: edges)
-                    sb.append(e.getKind()).append(e.getLabel());
-
-                if (!visited.contains(succ))
-                    nodes.push(succ);
-            }
-        }
-        return sb.toString();
     }
 
 }

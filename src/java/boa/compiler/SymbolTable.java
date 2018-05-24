@@ -188,7 +188,7 @@ public class SymbolTable {
 
 		// graph functions
 		globalFunctions.addFunction("getoutedge", new BoaFunction(new CFGEdgeProtoTuple(), new BoaType[] { new CFGNodeProtoTuple(), new CFGNodeProtoTuple() }, "${0}.getOutEdge(${1}).newBuilder().build()"));
-		globalFunctions.addFunction("getcrypthash", new BoaFunction(new BoaString(), new BoaType[] { new PDGSlicerProtoTuple(), new BoaString() }, "${0}.getCryptHash(${1})"));
+		globalFunctions.addFunction("normalize", new BoaFunction(new PDGProtoTuple(), new BoaType[] { new PDGProtoTuple() }, "${0}.normalize()"));
 
 		// map functions
 		globalFunctions.addFunction("haskey", new BoaFunction(new BoaBool(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")), new BoaTypeVar("K") }, "${0}.containsKey(${1})"));

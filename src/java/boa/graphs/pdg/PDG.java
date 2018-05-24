@@ -26,9 +26,13 @@ import boa.graphs.ddg.DDGNode;
 import boa.types.Ast.*;
 import boa.types.Control;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
+
+import static boa.functions.BoaAstIntrinsics.prettyprint;
+import static boa.functions.BoaNormalFormIntrinsics.normalizeExpression;
 
 /**
  * Program Dependence Graph builder
@@ -129,6 +133,66 @@ public class PDG {
                 return n;
 
         return null;
+    }
+
+    /**
+     * normalize the expression for each PDGNode
+     */
+    public void normalize() throws Exception {
+        if (entryNode == null)
+            return;
+        final Stack<PDGNode> nodes = new Stack<PDGNode>();
+        nodes.add(entryNode);
+        Set<PDGNode> visited = new HashSet<PDGNode>();
+        final Map<String, String> normalizedVars = new HashMap<String, String>();
+        int varCount = 1;
+        // if normalization is enabled then normalize node expression
+        // also update use and def variables for each node
+        try {
+            while (nodes.size() != 0) {
+                final PDGNode node = nodes.pop();
+                // store normalized name mappings of def and use variables at this node
+                // replace use and def variables in the node with their normalized names
+                // def variable
+                if (node.getDefVariable() != null && !node.getDefVariable().equals("")) {
+                    if (!normalizedVars.containsKey(node.getDefVariable())) {
+                        normalizedVars.put(node.getDefVariable(), "var$" + varCount);
+                        varCount++;
+                    }
+                    node.setDefVariable(normalizedVars.get(node.getDefVariable()));
+                }
+                // use variables
+                final HashSet<String> useVars = new HashSet<String>();
+                for (final String dVar : node.getUseVariables()) {
+                    if (dVar != null) {
+                        if (!normalizedVars.containsKey(dVar)) {
+                            normalizedVars.put(dVar, "var$" + varCount);
+                            varCount++;
+                        }
+                        useVars.add(normalizedVars.get(dVar));
+                    }
+                }
+                node.setUseVariables(useVars);
+                if (node.hasExpr())
+                    node.setExpr(normalizeExpression(node.getExpr(), normalizedVars));
+
+                for (final PDGEdge e: node.getOutEdges()) {
+                    final String label = normalizedVars.get(e.getLabel());
+                    if (label != null)
+                        e.setLabel(label);
+                }
+
+                visited.add(node);
+                // if successor has not been visited, add it
+                Collections.sort(node.getSuccessors());
+                for (final PDGNode succ : node.getSuccessors())
+                    if (!visited.contains(succ) && !nodes.contains(succ))
+                        nodes.push(succ);
+            }
+        } catch (Exception e) {
+            System.out.println(prettyprint(md));
+            throw e;
+        }
     }
 
     /**
