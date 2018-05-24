@@ -26,9 +26,6 @@ import boa.graphs.ddg.DDGNode;
 import boa.types.Ast.*;
 import boa.types.Control;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 import static boa.functions.BoaAstIntrinsics.prettyprint;

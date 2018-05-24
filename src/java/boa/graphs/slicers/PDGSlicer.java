@@ -21,9 +21,6 @@ import boa.graphs.pdg.PDGEdge;
 import boa.graphs.pdg.PDGNode;
 import boa.types.Ast.*;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 import static boa.functions.BoaAstIntrinsics.prettyprint;
