@@ -32,7 +32,7 @@ public class RepositoryCloner {
 		java.lang.System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
 		boolean success = false;
 		int trys = 0;
-		while (success)
+		while (success) {
 			try {
 				success = true;
 				result = Git.cloneRepository().setURI(url).setBare(true).setDirectory(localGitDir).call();
@@ -48,7 +48,7 @@ public class RepositoryCloner {
 				}
 				if (trys < 5) {
 					try {
-						pow *=2;
+						pow *= 2;
 						Thread.sleep(((int) Math.round(pow * 1000) + (r.nextInt(high - low) + low)));
 						success = false;
 					} catch (InterruptedException ie) {
@@ -61,5 +61,6 @@ public class RepositoryCloner {
 				if (result != null && result.getRepository() != null)
 					result.getRepository().close();
 			}
+		}
 	}
 }
