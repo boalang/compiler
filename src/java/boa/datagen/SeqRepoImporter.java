@@ -256,6 +256,11 @@ public class SeqRepoImporter {
 							}
 							cb.clearRevisions();
 						}
+						try {
+							projectWriter.append(new Text(pb.getId()), pb.build().toByteArray());
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
 					counter++;
 					if (counter >= Integer.parseInt(DefaultProperties.MAX_PROJECTS)) {
