@@ -32,7 +32,7 @@ public class RepositoryCloner {
 		java.lang.System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
 		boolean success = false;
 		int trys = 0;
-		while (success) {
+	//	while (success) {
 			try {
 				success = true;
 				result = Git.cloneRepository().setURI(url).setBare(true).setDirectory(localGitDir).call();
@@ -43,6 +43,7 @@ public class RepositoryCloner {
 				// https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
 				result.getRepository().close();
 			} catch (Exception e) {
+				/*
 				if (e.getMessage().contains("Authentication is required but no CredentialsProvider")) {
 					continue;
 				}
@@ -54,7 +55,7 @@ public class RepositoryCloner {
 					} catch (InterruptedException ie) {
 						// ie.printStackTrace();
 					}
-				}
+				} */
 				// e.printStackTrace();
 			} finally {
 
@@ -62,5 +63,5 @@ public class RepositoryCloner {
 					result.getRepository().close();
 			}
 		}
-	}
+//	}
 }
