@@ -107,6 +107,8 @@ public abstract class AbstractConnector implements AutoCloseable {
 				} else
 					i++;
 			}
+			if (changedFiles.isEmpty())
+				return snapshot;
 			final String[] paths = changedFiles.keySet().toArray(new String[0]);
 			final String[] classpaths = buildClassPaths(commitOffset, fileContents, snapshot, commits);
 			final Map<String, CompilationUnit> cus = new HashMap<String, CompilationUnit>();
