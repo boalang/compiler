@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import boa.types.Ast.Expression;
+import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Statement;
 import boa.types.Control.CFGNode.Builder;
 import boa.types.Control.CFGNode.CFGNodeType;
@@ -322,7 +323,7 @@ public class CFGNode implements Comparable<CFGNode> {
 	public String processDef() {
 		String defVar = "";
 		if (this.expr != null) {
-			if (this.expr.getKind().toString().equals("VARDECL")) {
+			if (this.expr.getKind() == ExpressionKind.VARDECL) {
 				final String[] strComponents = this.expr.getVariableDeclsList().get(0).getName().split("\\.");
 				if (strComponents.length > 1) {
 					defVar = strComponents[strComponents.length - 2];
@@ -330,7 +331,7 @@ public class CFGNode implements Comparable<CFGNode> {
 					defVar = strComponents[0];
 				}
 			}
-			if (this.expr.getKind().toString().equals("ASSIGN")) {
+			if (this.expr.getKind() == ExpressionKind.ASSIGN) {
 				final String[] strComponents = this.expr.getExpressionsList().get(0).getVariable().split("\\.");
 				if (strComponents.length > 1) {
 					defVar = strComponents[strComponents.length - 2];
@@ -345,7 +346,7 @@ public class CFGNode implements Comparable<CFGNode> {
 	public HashSet<String> processUse() {
 		final HashSet<String> useVar = new HashSet<String>();
 		if (this.expr != null) {
-			if (this.expr.getKind().toString().equals("ASSIGN")) {
+			if (this.expr.getKind() == ExpressionKind.ASSIGN) {
 				traverseExpr(useVar, this.rhs);
 			} else {
 				traverseExpr(useVar, this.expr);
