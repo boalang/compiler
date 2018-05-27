@@ -450,7 +450,7 @@ public class TestNormalForm {
 			{ "a || b && c || d", "(b && c) || a || d", "(b && c) || a || d", "(a || b || d) && (a || c || d)", "(b && c) || a || d"}, // The parentheses has to be added for simplify and nnf
 			{ "(a || b) && c || d", "(a || b) && c || d", "(a || b) && c || d", "(a || b || d) && (c || d)", "(a && c) || (b && c) || d"},
 			{ "(a || b) && (c || d)", "(a || b) && (c || d)", "(a || b) && (c || d)", "(a || b) && (c || d)", "(a && c) || (a && d) || (b && c) || (b && d)"},
-			//{ "(a || b && c) || d", "(b && c) || a || d)", "(b && c) || a || d", "(a || b || d) && (a || c || d)", "(b && c) || a || d"},
+			{ "(a || b && c) || d", "(b && c) || a || d", "(b && c) || a || d", "(a || b || d) && (a || c || d)", "(b && c) || a || d"}, // the parentheses have to be added in simplify
 			{ "a || (b && c || d)", "(b && c) || a || d", "(b && c) || a || d", "(a || b || d) && (a || c || d)", "(b && c) || a || d"},
 			{ "!(a || b && c) || d", "!(b && c || a) || d", "(!a && (!b || !c)) || d", "(!a || d) && (!b || !c || d)", "(!a && !b) || (!a && !c) || d"},
 			{ "a || !(b && c || d)", "!(b && c || d) || a", "(!d && (!b || !c)) || a", "(!b || !c || a) && (!d || a)", "(!b && !d) || (!c && !d) || a"}, //reverse order in simplify??
