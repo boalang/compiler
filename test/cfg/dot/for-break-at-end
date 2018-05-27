@@ -1,4 +1,5 @@
 digraph {
+	{ rank = source; 0; }
 	{ rank = sink; 5; }
 	0[shape=ellipse,label="[0] ENTRY"]
 	1[shape=box,label="[1] int i = 0"]

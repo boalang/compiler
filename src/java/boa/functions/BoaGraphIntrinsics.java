@@ -213,6 +213,7 @@ public class BoaGraphIntrinsics {
 		if (cfg == null || cfg.getNodes().size() == 0) return "";
 		final StringBuilder str = new StringBuilder();
 		str.append("digraph {\n");
+		str.append("\t{ rank = source; 0; }\n");
 		str.append("\t{ rank = sink; " + (cfg.getNodes().size() - 1) + "; }\n");
 		if (label.length() > 0) {
 			str.append("\tlabelloc=\"t\"\n");
