@@ -328,7 +328,7 @@ public class BoaGraphIntrinsics {
 	}
 
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "DDG" })
-	public static String cdgToDot(final DDG ddg) {
+	public static String ddgToDot(final DDG ddg) {
 		return ddgToDot(ddg, "");
 	}
 
