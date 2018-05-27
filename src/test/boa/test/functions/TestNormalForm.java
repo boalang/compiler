@@ -450,7 +450,7 @@ public class TestNormalForm {
 			{ "a || b && c || d", "(b && c) || a || d", "(b && c) || a || d", "(a || b || d) && (a || c || d)", "(b && c) || a || d"}, // The parentheses has to be added for simplify and nnf
 			{ "(a || b) && c || d", "(a || b) && c || d", "(a || b) && c || d", "(a || b || d) && (c || d)", "(a && c) || (b && c) || d"},
 			{ "(a || b) && (c || d)", "(a || b) && (c || d)", "(a || b) && (c || d)", "(a || b) && (c || d)", "(a && c) || (a && d) || (b && c) || (b && d)"},
-			//{ "(a || b && c) || d)", "(b && c) || a || d)", "(b && c) || a || d", "(a || b || d) && (a || c || d)", "(b && c) || a || d"},
+			//{ "(a || b && c) || d", "(b && c) || a || d)", "(b && c) || a || d", "(a || b || d) && (a || c || d)", "(b && c) || a || d"},
 			{ "a || (b && c || d)", "(b && c) || a || d", "(b && c) || a || d", "(a || b || d) && (a || c || d)", "(b && c) || a || d"},
 			{ "!(a || b && c) || d", "!(b && c || a) || d", "(!a && (!b || !c)) || d", "(!a || d) && (!b || !c || d)", "(!a && !b) || (!a && !c) || d"},
 			{ "a || !(b && c || d)", "!(b && c || d) || a", "(!d && (!b || !c)) || a", "(!b || !c || a) && (!d || a)", "(!b && !d) || (!c && !d) || a"}, //reverse order in simplify??
@@ -459,7 +459,7 @@ public class TestNormalForm {
 			{ "(a && b|| c) && d", "(a && b || c) && d", "(a && b || c) && d", "(a || c) && (b || c) && d", "(a && b && d) || (c && d)"},
 			{ "a && (b || c && d)", "(c && d || b) && a", "(c && d || b) && a", "(b || c) && (b || d) && a", "a && b || a && c && d"},
 			{ "a && !(b || c) && d", "!(b || c) && a && d", "!b && !c && a && d", "!b && !c && a && d", "!b && !c && a && d"},
-			//{ "!(a && b || c) && d", "!(a && b || c) && d", "((!a || !b) && !c) && d", "(!a || !b) && !c && d", "!a && !c && d || !b && !c && d"},
+			{ "!(a && b || c) && d", "!(a && b || c) && d", "!c && (!a || !b) && d", "!c && (!a || !b) && d", "!a && !c && d || !b && !c && d"}, // reverse order in nnf & cnf??
 			{ "a && !(b || c && d)", "!(c && d || b) && a", "!b && (!c || !d) && a", "!b && (!c || !d) && a", "!b && !c && a || !b && !d && a"}
 		});
 	}
