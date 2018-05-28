@@ -188,7 +188,7 @@ public class BoaGraphIntrinsics {
 	}
 
 	private static String dotEscape(final String s) {
-		final String escaped = s.replaceAll("\\\\", "\\\\\\\\").replaceAll("\"", "\\\\\"").replaceAll("\n", "\\\\l").replaceAll("\r", "\\\\l");
+		final String escaped = s.replace("\\", "\\\\").replace("\"", "\\\"").replace("\r", "\\l").replace("\n", "\\l");
 		if (escaped.indexOf("\\l") != -1 && !escaped.endsWith("\\l"))
 			return escaped + "\\l";
 		return escaped;
@@ -214,10 +214,14 @@ public class BoaGraphIntrinsics {
 		final StringBuilder str = new StringBuilder();
 		str.append("digraph {\n");
 		str.append("\t{ rank = source; 0; }\n");
-		str.append("\t{ rank = sink; " + (cfg.getNodes().size() - 1) + "; }\n");
+		str.append("\t{ rank = sink; ");
+		str.append(String.valueOf(cfg.getNodes().size() - 1));
+		str.append("; }\n");
 		if (label.length() > 0) {
 			str.append("\tlabelloc=\"t\"\n");
-			str.append("\tlabel=\"" + dotEscape(label) + "\"\n");
+			str.append("\tlabel=\"");
+			str.append(dotEscape(label));
+			str.append("\"\n");
 		}
 
 		final boa.graphs.cfg.CFGNode[] sorted = cfg.sortNodes();
@@ -239,23 +243,46 @@ public class BoaGraphIntrinsics {
 					break;
 			}
 
-			if (n.hasStmt())
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
-			else if (n.hasExpr())
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
-			else if (n.getKind() == boa.types.Control.CFGNode.CFGNodeType.ENTRY)
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + n.getName() + "\"]\n");
-			else
-				str.append("\t" + n.getId() + "[" + shape + "]\n");
+			str.append("\t");
+			str.append(n.getId());
+			str.append("[");
+			str.append(shape);
+			if (n.hasStmt()) {
+				str.append(",label=\"[");
+				str.append(n.getId());
+				str.append("] ");
+				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())));
+				str.append("\"]\n");
+			} else if (n.hasExpr()) {
+				str.append(",label=\"[");
+				str.append(n.getId());
+				str.append("] ");
+				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
+				str.append("\"]\n");
+			} else if (n.getKind() == boa.types.Control.CFGNode.CFGNodeType.ENTRY) {
+				str.append(",label=\"[");
+				str.append(n.getId());
+				str.append("] ");
+				str.append(n.getName());
+				str.append("\"]\n");
+			} else {
+				str.append("]\n");
+			}
 		}
 
 		for (final boa.graphs.cfg.CFGNode n : sorted) {
 			final java.util.List<boa.graphs.cfg.CFGEdge> edges = new ArrayList<boa.graphs.cfg.CFGEdge>(n.getOutEdges());
 			Collections.sort(edges);
 			for (final boa.graphs.cfg.CFGEdge e : edges) {
-				str.append("\t" + n.getId() + " -> " + e.getDest().getId());
-				if (!(e.label() == null || e.label().equals(".") || e.label().equals("")))
-					str.append(" [label=\"" + dotEscape(e.label()) + "\"]");
+				str.append("\t");
+				str.append(n.getId());
+				str.append(" -> ");
+				str.append(e.getDest().getId());
+				if (e.label() != null && !e.label().isEmpty() && !e.label().equals(".")) {
+					str.append(" [label=\"");
+					str.append(dotEscape(e.label()));
+					str.append("\"]");
+				}
 				str.append("\n");
 			}
 		}
@@ -337,31 +364,52 @@ public class BoaGraphIntrinsics {
 		if (ddg == null || ddg.getNodes().size() == 0) return "";
 		final StringBuilder str = new StringBuilder();
 		str.append("digraph {\n");
+		str.append("\t{ rank = source; 0; }\n");
 		if (label.length() > 0) {
 			str.append("\tlabelloc=\"t\"\n");
-			str.append("\tlabel=\"" + dotEscape(label) + "\"\n");
+			str.append("\tlabel=\"");
+			str.append(dotEscape(label));
+			str.append("\"\n");
 		}
 
 		for (final boa.graphs.ddg.DDGNode n : ddg.getNodes()) {
-			final String shape = "shape=ellipse";
-
-			if (n.hasStmt())
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
-			else if (n.hasExpr())
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
-			else if (n.getKind() == boa.types.Control.DDGNode.DDGNodeType.ENTRY)
-					str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + "ENTRY" + "\"]\n");
-			else
-				str.append("\t" + n.getId() + "[" + shape + "]\n");
+			str.append("\t");
+			str.append(n.getId());
+			str.append("[shape=ellipse");
+			if (n.hasStmt()) {
+				str.append(",label=\"[");
+				str.append(n.getId());
+				str.append("] ");
+				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())));
+				str.append("\"]\n");
+			} else if (n.hasExpr()) {
+				str.append(",label=\"[");
+				str.append(n.getId());
+				str.append("] ");
+				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
+				str.append("\"]\n");
+			} else if (n.getKind() == boa.types.Control.DDGNode.DDGNodeType.ENTRY) {
+				str.append(",label=\"[");
+				str.append(n.getId());
+				str.append("] ENTRY\"]\n");
+			} else {
+				str.append("]\n");
+			}
 		}
 
 		final boa.runtime.BoaAbstractTraversal printGraph = new boa.runtime.BoaAbstractTraversal<Object>(false, false) {
 			protected Object preTraverse(final boa.graphs.ddg.DDGNode node) throws Exception {
 				final java.util.Set<boa.graphs.ddg.DDGEdge> edges = node.getOutEdges();
 				for (final boa.graphs.ddg.DDGEdge e : node.getOutEdges()) {
-					str.append("\t" + node.getId() + " -> " + e.getDest().getId());
-					if (!(e.getLabel() == null || e.getLabel().equals(".") || e.getLabel().equals("")))
-						str.append(" [label=\"" + dotEscape(e.getLabel()) + "\"]");
+					str.append("\t");
+					str.append(node.getId());
+					str.append(" -> ");
+					str.append(e.getDest().getId());
+					if (e.getLabel() != null && !e.getLabel().isEmpty() && !e.getLabel().equals(".")) {
+						str.append(" [label=\"");
+						str.append(dotEscape(e.getLabel()));
+						str.append("\"]");
+					}
 					str.append("\n");
 				}
 				return null;
