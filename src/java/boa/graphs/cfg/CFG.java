@@ -336,7 +336,7 @@ public class CFG {
 						if (node.getExpr().getVariableDecls(0).hasInitializer()) {
 							node.setRhs(node.getExpr().getVariableDecls(0).getInitializer());
 						}
-					} else if (node.getExpr().getKind() == ExpressionKind.ASSIGN) {
+					} else if (node.getExpr().getKind().toString().startsWith("ASSIGN")) {
 						node.setRhs(node.getExpr().getExpressions(1));
 					}
 				}

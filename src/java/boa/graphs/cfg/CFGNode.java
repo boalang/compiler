@@ -330,8 +330,16 @@ public class CFGNode implements Comparable<CFGNode> {
 				} else {
 					defVar = strComponents[0];
 				}
-			}
-			if (this.expr.getKind() == ExpressionKind.ASSIGN) {
+			} else if (this.expr.getKind() == ExpressionKind.OP_INC || this.expr.getKind() == ExpressionKind.OP_DEC) {
+				if (this.expr.getExpressionsList().get(0).hasVariable()) {
+					final String[] strComponents = this.expr.getExpressionsList().get(0).getVariable().split("\\.");
+					if (strComponents.length > 1) {
+						defVar = strComponents[strComponents.length - 2];
+					} else {
+						defVar = strComponents[0];
+					}
+				}
+			} else if (this.expr.getKind().toString().startsWith("ASSIGN")) {
 				final String[] strComponents = this.expr.getExpressionsList().get(0).getVariable().split("\\.");
 				if (strComponents.length > 1) {
 					defVar = strComponents[strComponents.length - 2];
@@ -347,15 +355,15 @@ public class CFGNode implements Comparable<CFGNode> {
 		final HashSet<String> useVar = new HashSet<String>();
 		if (this.expr != null) {
 			if (this.expr.getKind() == ExpressionKind.ASSIGN) {
-				traverseExpr(useVar, this.rhs);
+				processUse(useVar, this.rhs);
 			} else {
-				traverseExpr(useVar, this.expr);
+				processUse(useVar, this.expr);
 			}
 		}
 		return useVar;
 	}
 
-	public static void traverseExpr(final HashSet<String> useVar, final boa.types.Ast.Expression expr) {
+	protected static void processUse(final HashSet<String> useVar, final boa.types.Ast.Expression expr) {
 		if (expr.hasVariable()) {
 			if (expr.getExpressionsList().size() != 0) {
 				useVar.add("this");
@@ -369,19 +377,19 @@ public class CFGNode implements Comparable<CFGNode> {
 			}
 		}
 		for (final boa.types.Ast.Expression exprs : expr.getExpressionsList()) {
-			traverseExpr(useVar, exprs);
+			processUse(useVar, exprs);
 		}
 		for (final boa.types.Ast.Variable vardecls : expr.getVariableDeclsList()) {
-			traverseVarDecls(useVar, vardecls);
+			processUse(useVar, vardecls);
 		}
 		for (final boa.types.Ast.Expression methodexpr : expr.getMethodArgsList()) {
-			traverseExpr(useVar, methodexpr);
+			processUse(useVar, methodexpr);
 		}
 	}
 
-	public static void traverseVarDecls(final HashSet<String> useVar, final boa.types.Ast.Variable vardecls) {
+	protected static void processUse(final HashSet<String> useVar, final boa.types.Ast.Variable vardecls) {
 		if (vardecls.hasInitializer()) {
-			traverseExpr(useVar, vardecls.getInitializer());
+			processUse(useVar, vardecls.getInitializer());
 		}
 	}
 
