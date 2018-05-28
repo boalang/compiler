@@ -1,0 +1,7 @@
+public class C {
+    public int m() {
+        int x = 1;
+        System.out.println("hi");
+        return x;
+    }
+}
