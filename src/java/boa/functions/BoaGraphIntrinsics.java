@@ -372,7 +372,8 @@ public class BoaGraphIntrinsics {
 			str.append("\"\n");
 		}
 
-		for (final boa.graphs.ddg.DDGNode n : ddg.getNodes()) {
+		final boa.graphs.ddg.DDGNode[] sorted = ddg.sortNodes();
+		for (final boa.graphs.ddg.DDGNode n : sorted) {
 			str.append("\t");
 			str.append(n.getId());
 			str.append("[shape=ellipse");
@@ -399,37 +400,27 @@ public class BoaGraphIntrinsics {
 
 		final boa.runtime.BoaAbstractTraversal printGraph = new boa.runtime.BoaAbstractTraversal<Object>(false, false) {
 			protected Object preTraverse(final boa.graphs.ddg.DDGNode node) throws Exception {
-				final java.util.Set<boa.graphs.ddg.DDGEdge> edges = node.getOutEdges();
 				for (final boa.graphs.ddg.DDGEdge e : node.getOutEdges()) {
-					str.append("\t");
-					str.append(node.getId());
-					str.append(" -> ");
-					str.append(e.getDest().getId());
-					if (e.getLabel() != null && !e.getLabel().isEmpty() && !e.getLabel().equals(".")) {
-						str.append(" [label=\"");
-						str.append(dotEscape(e.getLabel()));
-						str.append("\"]");
-					}
-					str.append("\n");
 				}
 				return null;
 			}
-
-			@Override
-			public void traverse(final boa.graphs.ddg.DDGNode node, boolean flag) throws Exception {
-				if (flag) {
-					currentResult = preTraverse(node);
-					outputMapObj.put(node.getId(), currentResult);
-				} else {
-					outputMapObj.put(node.getId(), preTraverse(node));
-				}
-			}
 		};
 
-		try {
-			printGraph.traverse(ddg, boa.types.Graph.Traversal.TraversalDirection.FORWARD, boa.types.Graph.Traversal.TraversalKind.DFS);
-		} catch (final Exception e) {
-			// do nothing
+		for (final boa.graphs.ddg.DDGNode n : sorted) {
+			final java.util.List<boa.graphs.ddg.DDGEdge> edges = new ArrayList<boa.graphs.ddg.DDGEdge>(n.getOutEdges());
+			Collections.sort(edges);
+			for (final boa.graphs.ddg.DDGEdge e : edges) {
+				str.append("\t");
+				str.append(n.getId());
+				str.append(" -> ");
+				str.append(e.getDest().getId());
+				if (e.getLabel() != null && !e.getLabel().isEmpty() && !e.getLabel().equals(".")) {
+					str.append(" [label=\"");
+					str.append(dotEscape(e.getLabel()));
+					str.append("\"]");
+				}
+				str.append("\n");
+			}
 		}
 
 		str.append("}");

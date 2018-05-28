@@ -95,6 +95,19 @@ public class DDG {
      */
     public HashSet<DDGNode> getNodes() { return nodes; }
 
+	public DDGNode[] sortNodes() {
+		try {
+			final DDGNode[] results = new DDGNode[nodes.size()];
+			for (final DDGNode node : nodes) {
+				results[node.getId()] = node;
+			}
+			return results;
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
     /**
      * Returns the map of definiton-use chains
      *

@@ -22,15 +22,17 @@ import boa.types.Control;
  * Data Dependence Graph edge
  *
  * @author marafat
+ * @author rdyer
  */
-
-public class DDGEdge {
-
+public class DDGEdge implements Comparable<DDGEdge> {
     private DDGNode src;
     private DDGNode dest;
     private String label = "."; // name of the variable for def and use
 
-    // Constructors
+    @Override
+    public int compareTo(final DDGEdge edge) {
+        return this.dest.getId() - edge.dest.getId();
+    }
 
     /**
      * Constructs a DDG edge
@@ -39,7 +41,7 @@ public class DDGEdge {
      * @param dest destination node of the edge
      * @param label label of the edge
      */
-    public DDGEdge(DDGNode src, DDGNode dest, String label) {
+    public DDGEdge(final DDGNode src, final DDGNode dest, final String label) {
         this.src = src;
         this.dest = dest;
         this.label = label;
@@ -51,12 +53,11 @@ public class DDGEdge {
      * @param src starting node of the edge
      * @param dest destination node of the edge
      */
-    public DDGEdge(DDGNode src, DDGNode dest) {
+    public DDGEdge(final DDGNode src, final DDGNode dest) {
         this.src = src;
         this.dest = dest;
     }
 
-    // Setters
     public void setSrc(final DDGNode src) {
         this.src = src;
     }
@@ -69,7 +70,6 @@ public class DDGEdge {
         this.label = label;
     }
 
-    // Getters
     public DDGNode getSrc() {
         return src;
     }
@@ -102,8 +102,7 @@ public class DDGEdge {
     public static Control.DDGEdge.DDGEdgeLabel getLabel(final String label) {
         if (!label.equals("."))
             return Control.DDGEdge.DDGEdgeLabel.VARDEF;
-        else
-            return Control.DDGEdge.DDGEdgeLabel.NIL;
+        return Control.DDGEdge.DDGEdgeLabel.NIL;
     }
 
     @Override
@@ -111,7 +110,7 @@ public class DDGEdge {
         if (this == o) return true;
         if (!(o instanceof DDGEdge)) return false;
 
-        DDGEdge ddgEdge = (DDGEdge) o;
+        final DDGEdge ddgEdge = (DDGEdge) o;
 
         return src.equals(ddgEdge.src) && dest.equals(ddgEdge.dest) && label.equals(ddgEdge.label);
     }
