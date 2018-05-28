@@ -765,6 +765,8 @@ public class CFG {
 		*/
 		final CFGNode node = new CFGNode("END[return]", CFGNodeType.OTHER, "END[return]", "END[return]");
 		node.setAstNode(root);
+		if (root.hasExpression())
+			node.setAstNode(root.getExpression());
 		graph.addReturnNode(node);
 		return graph;
 	}
