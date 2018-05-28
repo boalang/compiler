@@ -17,8 +17,10 @@
  */
 package boa.graphs.cfg;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
@@ -46,19 +48,17 @@ public class CFGNode implements Comparable<CFGNode> {
 	private Statement stmt;
 	private Expression expr;
 
-	private Expression rhs;
+	private static final HashMap<String, Integer> idOfLabel = new HashMap<String, Integer>();
+	private static final HashMap<Integer, String> labelOfID = new HashMap<Integer, String>();
 
-	public static HashMap<String, Integer> idOfLabel = new HashMap<String, Integer>();
-	public static HashMap<Integer, String> labelOfID = new HashMap<Integer, String>();
+	private final HashSet<CFGEdge> inEdges = new HashSet<CFGEdge>();
+	private final HashSet<CFGEdge> outEdges = new HashSet<CFGEdge>();
 
-	public HashSet<CFGEdge> inEdges = new HashSet<CFGEdge>();
-	public HashSet<CFGEdge> outEdges = new HashSet<CFGEdge>();
+	private List<CFGNode> predecessors;
+	private List<CFGNode> successors;
 
-	public java.util.ArrayList<CFGNode> predecessors = new java.util.ArrayList<CFGNode>();
-	public java.util.ArrayList<CFGNode> successors = new java.util.ArrayList<CFGNode>();
-
-	public HashSet<String> useVariables = new HashSet<String>();
-	public String defVariables;
+	private HashSet<String> useVariables;
+	private String defVariables;
 
 	@Override
 	public int compareTo(final CFGNode node) {
@@ -72,8 +72,7 @@ public class CFGNode implements Comparable<CFGNode> {
 	public CFGNode(final CFGNode tmp) {
 	}
 
-	public CFGNode(final String methodName, final CFGNodeType kind, final String className,
-			final String objectName) {
+	public CFGNode(final String methodName, final CFGNodeType kind, final String className, final String objectName) {
 		this.id = ++numOfNodes;
 		this.methodId = convertLabel(methodName);
 		this.kind = kind;
@@ -112,38 +111,16 @@ public class CFGNode implements Comparable<CFGNode> {
 		return this.stmt;
 	}
 
-	public HashSet<String> getDefUse() {
-		final HashSet<String> defUse = new HashSet<String>(this.useVariables);
-		defUse.add(defVariables);
-		return defUse;
-	}
-
 	public boolean hasStmt() {
 		return this.stmt != null;
-	}
-
-	public boolean hasDefVariables() {
-		return this.defVariables != null;
 	}
 
 	public Expression getExpr() {
 		return this.expr;
 	}
 
-	public Expression getRhs() {
-		return this.rhs;
-	}
-
-	public void setRhs(final Expression rhs) {
-		this.rhs = rhs;
-	}
-
 	public boolean hasExpr() {
 		return this.expr != null;
-	}
-
-	public boolean hasRhs() {
-		return this.rhs != null;
 	}
 
 	public static int convertLabel(final String label) {
@@ -172,14 +149,6 @@ public class CFGNode implements Comparable<CFGNode> {
 		return this.parameters;
 	}
 
-	public void setUseVariables(final HashSet<String> useVariables) {
-		this.useVariables = useVariables;
-	}
-
-	public void setDefVariables(final String defVariables) {
-		this.defVariables = defVariables;
-	}
-
 	public int getClassNameId() {
 		return this.classNameId;
 	}
@@ -197,10 +166,14 @@ public class CFGNode implements Comparable<CFGNode> {
 	}
 
 	public HashSet<String> getUseVariables() {
+		if (this.useVariables == null)
+			processUse();
 		return this.useVariables;
 	}
 
 	public String getDefVariables() {
+		if (this.defVariables == null)
+			processDef();
 		return this.defVariables;
 	}
 
@@ -220,34 +193,24 @@ public class CFGNode implements Comparable<CFGNode> {
 		return this.outEdges;
 	}
 
-	public java.util.ArrayList<CFGNode> getPredecessorsList() {
-		return this.predecessors;
+	public List<CFGNode> getPredecessorsList() {
+		if (predecessors == null) {
+			final HashSet<CFGNode> nodes = new HashSet<CFGNode>();
+			for (final CFGEdge e : this.inEdges)
+				nodes.add(e.getSrc());
+			predecessors = new ArrayList<CFGNode>(nodes);
+		}
+		return predecessors;
 	}
 
-	public java.util.ArrayList<CFGNode> getSuccessorsList() {
-		return this.successors;
-	}
-
-	public void setPredecessors(final java.util.ArrayList<CFGNode> predecessors) {
-		this.predecessors = predecessors;
-	}
-
-	public void setSuccessors(final java.util.ArrayList<CFGNode> successors) {
-		this.successors = successors;
-	}
-
-	public java.util.ArrayList<CFGNode> getInNodes() {
-		final HashSet<CFGNode> nodes = new HashSet<CFGNode>();
-		for (final CFGEdge e : this.inEdges)
-			nodes.add(e.getSrc());
-		return new java.util.ArrayList<CFGNode>(nodes);
-	}
-
-	public java.util.ArrayList<CFGNode> getOutNodes() {
-		final HashSet<CFGNode> nodes = new HashSet<CFGNode>();
-		for (final CFGEdge e : this.outEdges)
-			nodes.add(e.getDest());
-		return new java.util.ArrayList<CFGNode>(nodes);
+	public List<CFGNode> getSuccessorsList() {
+		if (successors == null) {
+			final HashSet<CFGNode> nodes = new HashSet<CFGNode>();
+			for (final CFGEdge e : this.outEdges)
+				nodes.add(e.getDest());
+			successors = new ArrayList<CFGNode>(nodes);
+		}
+		return successors;
 	}
 
 	public CFGEdge getOutEdge(final CFGNode node) {
@@ -266,12 +229,12 @@ public class CFGNode implements Comparable<CFGNode> {
 		return null;
 	}
 
-	public String getPid() {
-		return this.pid;
-	}
-
 	public String getMethod() {
 		return CFGNode.labelOfID.get(this.methodId);
+	}
+
+	public String getPid() {
+		return this.pid;
 	}
 
 	public void setPid(final String pid) {
@@ -280,10 +243,12 @@ public class CFGNode implements Comparable<CFGNode> {
 
 	public void addInEdge(final CFGEdge edge) {
 		this.inEdges.add(edge);
+		predecessors = null;
 	}
 
 	public void addOutEdge(final CFGEdge edge) {
 		this.outEdges.add(edge);
+		successors = null;
 	}
 
 	public void setAstNode(final Statement stmt) {
@@ -320,7 +285,7 @@ public class CFGNode implements Comparable<CFGNode> {
 		return this.kind;
 	}
 
-	public String processDef() {
+	private void processDef() {
 		String defVar = "";
 		if (this.expr != null) {
 			if (this.expr.getKind() == ExpressionKind.VARDECL) {
@@ -348,19 +313,19 @@ public class CFGNode implements Comparable<CFGNode> {
 				}
 			}
 		}
-		return defVar;
+		this.defVariables = defVar;
 	}
 
-	public HashSet<String> processUse() {
+	private void processUse() {
 		final HashSet<String> useVar = new HashSet<String>();
 		if (this.expr != null) {
 			if (this.expr.getKind() == ExpressionKind.ASSIGN) {
-				processUse(useVar, this.rhs);
+				processUse(useVar, this.expr.getExpressions(1));
 			} else {
 				processUse(useVar, this.expr);
 			}
 		}
-		return useVar;
+		this.useVariables = useVar;
 	}
 
 	protected static void processUse(final HashSet<String> useVar, final boa.types.Ast.Expression expr) {

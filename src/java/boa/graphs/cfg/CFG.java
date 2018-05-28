@@ -182,7 +182,7 @@ public class CFG {
 	}
 
 	protected void createNewEdge(final CFGNode src, final CFGNode dest, final String label) {
-		if (src.getOutNodes().contains(dest))
+		if (src.getSuccessorsList().contains(dest))
 			return;
 
 		if (label == null)
@@ -330,21 +330,6 @@ public class CFG {
 			this.exitNode = endNode;
 
 			this.entryNode = startNode;
-			for (final CFGNode node : this.nodes) {
-				if (node.hasExpr()) {
-					if (node.getExpr().getKind() == ExpressionKind.VARDECL) {
-						if (node.getExpr().getVariableDecls(0).hasInitializer()) {
-							node.setRhs(node.getExpr().getVariableDecls(0).getInitializer());
-						}
-					} else if (node.getExpr().getKind().toString().startsWith("ASSIGN")) {
-						node.setRhs(node.getExpr().getExpressions(1));
-					}
-				}
-				node.setDefVariables(node.processDef());
-				node.setUseVariables(node.processUse());
-				node.setSuccessors(node.getOutNodes());
-				node.setPredecessors(node.getInNodes());
-			}
 
 			// if this happens, the original AST was invalid
 			if (returns.size() > 0 || breaks.size() > 0) {

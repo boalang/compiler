@@ -190,7 +190,7 @@ public class CFGSlicer {
         final Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
         for (final CFGNode n : cfg.getNodes()) {
             if (n.getKind() == Control.CFGNode.CFGNodeType.CONTROL)
-                for (final CFGEdge e : n.outEdges)
+                for (final CFGEdge e : n.getOutEdges())
                     if (e.label().equals("."))
                         controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, "F");
                     else

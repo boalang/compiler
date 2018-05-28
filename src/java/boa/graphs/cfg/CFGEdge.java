@@ -77,7 +77,7 @@ public class CFGEdge implements Comparable<CFGEdge> {
 	}
 
 	public void setSrc(final CFGNode node) {
-		if (this.dest.getInNodes().contains(node)) {
+		if (this.dest.getPredecessorsList().contains(node)) {
 			delete();
 			final CFGEdge e = (CFGEdge)this.dest.getInEdge(node); //FIXME: redundant cast
 			e.setLabel(".");
@@ -92,7 +92,7 @@ public class CFGEdge implements Comparable<CFGEdge> {
 	}
 
 	public void setDest(final CFGNode node) {
-		if (this.src.getOutNodes().contains(node)) {
+		if (this.src.getSuccessorsList().contains(node)) {
 			delete();
 			final CFGEdge e = (CFGEdge)this.src.getOutEdge(node); //FIXME: redundant cast
 			e.setLabel(".");
