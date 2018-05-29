@@ -173,7 +173,7 @@ public class PDG {
                 node.setUseVariables(useVars);
                 if (node.hasStmt())
                     node.setStmt(normalizeStatement(node.getStmt(), normalizedVars));
-                else if (node.hasExpr())
+                if (node.hasExpr())
                     node.setExpr(normalizeExpression(node.getExpr(), normalizedVars));
 
                 for (final PDGEdge e: node.getOutEdges()) {
