@@ -27,7 +27,9 @@ import boa.graphs.pdg.PDGNode;
 import boa.graphs.slicers.PDGSlicer;
 import boa.types.Ast;
 import boa.types.Ast.Expression.ExpressionKind;
+import boa.types.Ast.Statement.StatementKind;
 import boa.types.Ast.Expression;
+import boa.types.Ast.Statement;
 
 import static boa.functions.BoaAstIntrinsics.prettyprint;
 
@@ -1842,6 +1844,23 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
+	 * Creates a new statement.
+	 *
+	 * @param kind the kind of the statement
+	 * @param stmts the operands
+	 * @return the new statement
+	 */
+	public static Statement createStatement(final StatementKind kind, final Statement... stmts) {
+		final Statement.Builder b = Statement.newBuilder();
+
+		b.setKind(kind);
+		for (final Statement e : stmts)
+			b.addStatements(Statement.newBuilder(e).build());
+
+		return b.build();
+	}
+
+	/**
 	 * Creates a new literal expression.
 	 *
 	 * @param lit the literal value
@@ -1873,110 +1892,6 @@ public class BoaNormalFormIntrinsics {
 		exp.setVariable(var);
 
 		return exp.build();
-	}
-
-
-	/**
-	 * Returns the normalized expression given the normalized variable map
-	 *
-	 * @param exp expression to be normalized
-	 * @param normalizedVars mapping of original names with normalized names in the expression
-	 * @return the normalized expression
-	 */
-	public static Expression normalizeExpression(final Expression exp, final Map<String, String> normalizedVars) {
-		final List<Expression> convertedExpression = new ArrayList<Expression>();
-		for (final Expression sub : exp.getExpressionsList())
-			convertedExpression.add(normalizeExpression(sub, normalizedVars));
-
-		switch (exp.getKind()) {
-			case VARDECL:
-				Expression.Builder eb = Expression.newBuilder(exp);
-				Ast.Variable v = exp.getVariableDecls(0);
-				Ast.Variable.Builder vb = Ast.Variable.newBuilder(v);
-				if (normalizedVars.containsKey(v.getName()))
-					vb.setName(normalizedVars.get(v.getName()));
-				if (v.getInitializer().getExpressionsList().size() != 0)
-					vb.setInitializer(normalizeExpression(v.getInitializer(), normalizedVars));
-				eb.setVariableDecls(0, vb.build());
-				return eb.build();
-
-			case VARACCESS:
-				if (normalizedVars.containsKey(exp.getVariable()))
-					return createVariable(normalizedVars.get(exp.getVariable()));
-				else
-					return exp;
-
-			case METHODCALL:
-				final Expression.Builder bm = Expression.newBuilder(exp);
-
-				for (int i = 0; i < convertedExpression.size(); i++) {
-					bm.setExpressions(i, convertedExpression.get(i));
-				}
-
-				for (int i = 0; i < exp.getMethodArgsList().size(); i++) {
-					Expression mArgs = normalizeExpression(exp.getMethodArgs(i), normalizedVars);
-					bm.setMethodArgs(i, mArgs);
-				}
-
-				return bm.build();
-
-			case NEW:
-            case NEWARRAY:
-			case ARRAYINIT:
-			case ARRAYINDEX:
-				final Expression.Builder bn = Expression.newBuilder(exp);
-
-				for (int i = 0; i < convertedExpression.size(); i++) {
-					bn.setExpressions(i, convertedExpression.get(i));
-				}
-
-				return bn.build();
-
-            case EQ:
-			case NEQ:
-			case GT:
-			case LT:
-			case GTEQ:
-			case LTEQ:
-			case LOGICAL_AND:
-			case LOGICAL_OR:
-			case LOGICAL_NOT:
-			case ASSIGN:
-			case ASSIGN_ADD:
-			case ASSIGN_SUB:
-			case ASSIGN_DIV:
-			case ASSIGN_MULT:
-			case ASSIGN_MOD:
-			case ASSIGN_BITAND:
-			case ASSIGN_BITOR:
-			case ASSIGN_BITXOR:
-			case ASSIGN_LSHIFT:
-			case ASSIGN_RSHIFT:
-			case ASSIGN_UNSIGNEDRSHIFT:
-			case BIT_AND:
-			case BIT_LSHIFT:
-			case BIT_NOT:
-			case BIT_OR:
-			case BIT_RSHIFT:
-			case BIT_UNSIGNEDRSHIFT:
-			case BIT_XOR:
-			case PAREN:
-			case OP_ADD:
-			case OP_SUB:
-			case OP_MULT:
-			case OP_DIV:
-			case OP_MOD:
-			case OP_DEC:
-			case OP_INC:
-			case CAST:
-			case CONDITIONAL:
-			case NULLCOALESCE:
-				return createExpression(exp.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()]));
-
-			case LITERAL:
-			default:
-				return exp;
-		}
 	}
 
 	/**
@@ -2050,6 +1965,146 @@ public class BoaNormalFormIntrinsics {
 			sBDigest.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
 
 		return sBDigest.toString();
+	}
+
+	public static Statement normalizeStatement(final Statement stmt, final Map<String, String> normalizedVars) {
+		final List<Statement> convertedStatement = new ArrayList<Statement>();
+		for (final Statement sub : stmt.getStatementsList())
+			convertedStatement.add(normalizeStatement(sub, normalizedVars));
+
+		switch (stmt.getKind()) {
+			case RETURN:
+				final Expression exp = normalizeExpression(stmt.getExpression(), normalizedVars);
+				final Statement.Builder sb = Statement.newBuilder(stmt);
+				sb.setKind(stmt.getKind());
+				sb.setExpression(exp);
+				return sb.build();
+
+			case OTHER:
+			case BLOCK:
+			case TYPEDECL:
+			case SYNCHRONIZED:
+			case EXPRESSION:
+			case FOR:
+			case DO:
+			case WHILE:
+			case IF:
+			case ASSERT:
+			case BREAK:
+			case CONTINUE:
+			case LABEL:
+			case SWITCH:
+			case CASE:
+			case TRY:
+			case THROW:
+			case CATCH:
+			case EMPTY:
+			default:
+				return createStatement(stmt.getKind(), convertedStatement.toArray(new Statement[convertedStatement.size()]));
+		}
+	}
+
+	/**
+	 * Returns the normalized expression given the normalized variable map
+	 *
+	 * @param exp expression to be normalized
+	 * @param normalizedVars mapping of original names with normalized names in the expression
+	 * @return the normalized expression
+	 */
+	public static Expression normalizeExpression(final Expression exp, final Map<String, String> normalizedVars) {
+		final List<Expression> convertedExpression = new ArrayList<Expression>();
+		for (final Expression sub : exp.getExpressionsList())
+			convertedExpression.add(normalizeExpression(sub, normalizedVars));
+
+		switch (exp.getKind()) {
+			case VARDECL:
+				Expression.Builder eb = Expression.newBuilder(exp);
+				Ast.Variable v = exp.getVariableDecls(0);
+				Ast.Variable.Builder vb = Ast.Variable.newBuilder(v);
+				if (normalizedVars.containsKey(v.getName()))
+					vb.setName(normalizedVars.get(v.getName()));
+				if (v.getInitializer().getExpressionsList().size() != 0)
+					vb.setInitializer(normalizeExpression(v.getInitializer(), normalizedVars));
+				eb.setVariableDecls(0, vb.build());
+				return eb.build();
+
+			case VARACCESS:
+				if (normalizedVars.containsKey(exp.getVariable()))
+					return createVariable(normalizedVars.get(exp.getVariable()));
+				else
+					return exp;
+
+			case METHODCALL:
+				final Expression.Builder bm = Expression.newBuilder(exp);
+
+				for (int i = 0; i < convertedExpression.size(); i++) {
+					bm.setExpressions(i, convertedExpression.get(i));
+				}
+
+				for (int i = 0; i < exp.getMethodArgsList().size(); i++) {
+					Expression mArgs = normalizeExpression(exp.getMethodArgs(i), normalizedVars);
+					bm.setMethodArgs(i, mArgs);
+				}
+
+				return bm.build();
+
+			case NEW:
+			case NEWARRAY:
+			case ARRAYINIT:
+			case ARRAYINDEX:
+				final Expression.Builder bn = Expression.newBuilder(exp);
+
+				for (int i = 0; i < convertedExpression.size(); i++) {
+					bn.setExpressions(i, convertedExpression.get(i));
+				}
+
+				return bn.build();
+
+			case EQ:
+			case NEQ:
+			case GT:
+			case LT:
+			case GTEQ:
+			case LTEQ:
+			case LOGICAL_AND:
+			case LOGICAL_OR:
+			case LOGICAL_NOT:
+			case ASSIGN:
+			case ASSIGN_ADD:
+			case ASSIGN_SUB:
+			case ASSIGN_DIV:
+			case ASSIGN_MULT:
+			case ASSIGN_MOD:
+			case ASSIGN_BITAND:
+			case ASSIGN_BITOR:
+			case ASSIGN_BITXOR:
+			case ASSIGN_LSHIFT:
+			case ASSIGN_RSHIFT:
+			case ASSIGN_UNSIGNEDRSHIFT:
+			case BIT_AND:
+			case BIT_LSHIFT:
+			case BIT_NOT:
+			case BIT_OR:
+			case BIT_RSHIFT:
+			case BIT_UNSIGNEDRSHIFT:
+			case BIT_XOR:
+			case PAREN:
+			case OP_ADD:
+			case OP_SUB:
+			case OP_MULT:
+			case OP_DIV:
+			case OP_MOD:
+			case OP_DEC:
+			case OP_INC:
+			case CAST:
+			case CONDITIONAL:
+			case NULLCOALESCE:
+				return createExpression(exp.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()]));
+
+			case LITERAL:
+			default:
+				return exp;
+		}
 	}
 
 }

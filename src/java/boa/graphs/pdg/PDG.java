@@ -30,6 +30,7 @@ import java.util.*;
 
 import static boa.functions.BoaAstIntrinsics.prettyprint;
 import static boa.functions.BoaNormalFormIntrinsics.normalizeExpression;
+import static boa.functions.BoaNormalFormIntrinsics.normalizeStatement;
 
 /**
  * Program Dependence Graph builder
@@ -170,7 +171,9 @@ public class PDG {
                     }
                 }
                 node.setUseVariables(useVars);
-                if (node.hasExpr())
+                if (node.hasStmt())
+                    node.setStmt(normalizeStatement(node.getStmt(), normalizedVars));
+                else if (node.hasExpr())
                     node.setExpr(normalizeExpression(node.getExpr(), normalizedVars));
 
                 for (final PDGEdge e: node.getOutEdges()) {

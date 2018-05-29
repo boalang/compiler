@@ -25,6 +25,7 @@ import java.util.*;
 
 import static boa.functions.BoaAstIntrinsics.prettyprint;
 import static boa.functions.BoaNormalFormIntrinsics.normalizeExpression;
+import static boa.functions.BoaNormalFormIntrinsics.normalizeStatement;
 
 /**
  * A forward slicer based on PDG
@@ -213,7 +214,9 @@ public class PDGSlicer {
                         }
                     }
                     node.setUseVariables(useVars);
-                    if (node.hasExpr())
+                    if (node.hasStmt())
+                        node.setStmt(normalizeStatement(node.getStmt(), normalizedVars));
+                    else if (node.hasExpr())
                         node.setExpr(normalizeExpression(node.getExpr(), normalizedVars));
 
                     for (final PDGEdge e: node.getOutEdges()) {
