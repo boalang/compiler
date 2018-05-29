@@ -297,6 +297,13 @@ public class BoaGraphIntrinsics {
 		return cdgToDot(cdg, "");
 	}
 
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CDG", "bool" })
+	public static String cdgToDot(final CDG cdg, final boolean showMethod) {
+		if (showMethod)
+			return cdgToDot(cdg, boa.functions.BoaAstIntrinsics.prettyprint(cdg.getMethod()));
+		return cdgToDot(cdg, "");
+	}
+
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CDG", "string" })
 	public static String cdgToDot(final CDG cdg, final String label) {
 		if (cdg == null || cdg.getNodes().size() == 0) return "";
@@ -356,6 +363,13 @@ public class BoaGraphIntrinsics {
 
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "DDG" })
 	public static String ddgToDot(final DDG ddg) {
+		return ddgToDot(ddg, "");
+	}
+
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "DDG", "bool" })
+	public static String ddgToDot(final DDG ddg, final boolean showMethod) {
+		if (showMethod)
+			return ddgToDot(ddg, boa.functions.BoaAstIntrinsics.prettyprint(ddg.getMethod()));
 		return ddgToDot(ddg, "");
 	}
 
@@ -433,6 +447,13 @@ public class BoaGraphIntrinsics {
 		return pdgToDot(pdg, "");
 	}
 
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "PDG", "bool" })
+	public static String pdgToDot(final PDG pdg, final boolean showMethod) {
+		if (showMethod)
+			return pdgToDot(pdg, boa.functions.BoaAstIntrinsics.prettyprint(pdg.getMethod()));
+		return pdgToDot(pdg, "");
+	}
+
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "PDG", "string" })
 	public static String pdgToDot(final PDG pdg, final String label) {
 		if (pdg == null || pdg.getNodes().size() == 0) return "";
@@ -495,6 +516,13 @@ public class BoaGraphIntrinsics {
 		return pdgslicerToDot(pdgslicer, "");
 	}
 
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "PDGSlicer", "bool" })
+	public static String pdgToDot(final PDGSlicer pdgslicer, final boolean showMethod) {
+		if (showMethod)
+			return pdgslicerToDot(pdgslicer, boa.functions.BoaAstIntrinsics.prettyprint(pdgslicer.getMethod()));
+		return pdgslicerToDot(pdgslicer, "");
+	}
+
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "PDGSlicer", "string" })
 	public static String pdgslicerToDot(final PDGSlicer pdgslicer, final String label) {
 		if (pdgslicer == null || pdgslicer.getSlice().size() == 0) return "";
@@ -554,6 +582,13 @@ public class BoaGraphIntrinsics {
 
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "PDTree" })
 	public static String pdtreeToDot(final PDTree pdtree) {
+		return pdtreeToDot(pdtree, "");
+	}
+
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "PDTree", "bool" })
+	public static String pdtreeToDot(final PDTree pdtree, final boolean showMethod) {
+		if (showMethod)
+			return pdtreeToDot(pdtree, boa.functions.BoaAstIntrinsics.prettyprint(pdtree.getMethod()));
 		return pdtreeToDot(pdtree, "");
 	}
 
