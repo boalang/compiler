@@ -22,15 +22,17 @@ import boa.types.Control;
  * Control Dependence Graph edge
  *
  * @author marafat
+ * @author rdyer
  */
-
-public class CDGEdge {
-
+public class CDGEdge implements Comparable<CDGEdge> {
     private CDGNode src;
     private CDGNode dest;
     private String label = ".";
 
-    // Constructors
+	@Override
+	public int compareTo(final CDGEdge edge) {
+		return this.dest.getId() - edge.dest.getId();
+	}
 
     /**
      * Constructs a CDG edge
@@ -56,7 +58,6 @@ public class CDGEdge {
         this.dest = dest;
     }
 
-    // Setters
     public void setSrc(final CDGNode src) {
         this.src = src;
     }
@@ -69,7 +70,6 @@ public class CDGEdge {
         this.label = label;
     }
 
-    // Getters
     public CDGNode getSrc() {
         return src;
     }

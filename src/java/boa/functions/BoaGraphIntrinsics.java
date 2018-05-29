@@ -212,6 +212,7 @@ public class BoaGraphIntrinsics {
 	public static String cfgToDot(final CFG cfg, final String label) {
 		if (cfg == null || cfg.getNodes().size() == 0) return "";
 		final StringBuilder str = new StringBuilder();
+		final StringBuilder str2 = new StringBuilder();
 		str.append("digraph {\n");
 		str.append("\t{ rank = source; 0; }\n");
 		str.append("\t{ rank = sink; ");
@@ -268,25 +269,24 @@ public class BoaGraphIntrinsics {
 			} else {
 				str.append("]\n");
 			}
-		}
 
-		for (final boa.graphs.cfg.CFGNode n : sorted) {
 			final java.util.List<boa.graphs.cfg.CFGEdge> edges = new ArrayList<boa.graphs.cfg.CFGEdge>(n.getOutEdges());
 			Collections.sort(edges);
 			for (final boa.graphs.cfg.CFGEdge e : edges) {
-				str.append("\t");
-				str.append(n.getId());
-				str.append(" -> ");
-				str.append(e.getDest().getId());
+				str2.append("\t");
+				str2.append(n.getId());
+				str2.append(" -> ");
+				str2.append(e.getDest().getId());
 				if (e.label() != null && !e.label().isEmpty() && !e.label().equals(".")) {
-					str.append(" [label=\"");
-					str.append(dotEscape(e.label()));
-					str.append("\"]");
+					str2.append(" [label=\"");
+					str2.append(dotEscape(e.label()));
+					str2.append("\"]");
 				}
-				str.append("\n");
+				str2.append("\n");
 			}
 		}
 
+        str.append(str2);
 		str.append("}");
 
 		return str.toString();
@@ -308,54 +308,56 @@ public class BoaGraphIntrinsics {
 	public static String cdgToDot(final CDG cdg, final String label) {
 		if (cdg == null || cdg.getNodes().size() == 0) return "";
 		final StringBuilder str = new StringBuilder();
+		final StringBuilder str2 = new StringBuilder();
 		str.append("digraph {\n");
+		str.append("\t{ rank = source; 0; }\n");
 		if (label.length() > 0) {
 			str.append("\tlabelloc=\"t\"\n");
-			str.append("\tlabel=\"" + dotEscape(label) + "\"\n");
+			str.append("\tlabel=\"");
+			str.append(dotEscape(label));
+			str.append("\"\n");
 		}
 
 		for (final boa.graphs.cdg.CDGNode n : cdg.getNodes()) {
-			final String shape = "shape=ellipse";
+			str.append("\t" + n.getId() + "[shape=ellipse");
 
-			if (n.hasStmt())
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
-			else if (n.hasExpr())
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
-			else if (n.getKind() == boa.types.Control.CDGNode.CDGNodeType.ENTRY)
-				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + "[" + n.getId() + "] " + "ENTRY" + "\"]\n");
-			else
-				str.append("\t" + n.getId() + "[" + shape + "]\n");
-		}
-
-		final boa.runtime.BoaAbstractTraversal printGraph = new boa.runtime.BoaAbstractTraversal<Object>(false, false) {
-			protected Object preTraverse(final boa.graphs.cdg.CDGNode node) throws Exception {
-				final java.util.Set<boa.graphs.cdg.CDGEdge> edges = node.getOutEdges();
-				for (final boa.graphs.cdg.CDGEdge e : node.getOutEdges()) {
-					str.append("\t" + node.getId() + " -> " + e.getDest().getId());
-					if (!(e.getLabel() == null || e.getLabel().equals(".") || e.getLabel().equals("")))
-						str.append(" [label=\"" + dotEscape(e.getLabel()) + "\"]");
-					str.append("\n");
-				}
-				return null;
+			if (n.hasStmt()) {
+				str.append(",label=\"[");
+				str.append(n.getId());
+				str.append("] ");
+				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())));
+				str.append("\"]\n");
+			} else if (n.hasExpr()) {
+				str.append(",label=\"[");
+				str.append(n.getId());
+				str.append("] ");
+				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
+				str.append("\"]\n");
+			} else if (n.getKind() == boa.types.Control.CDGNode.CDGNodeType.ENTRY) {
+				str.append(",label=\"[");
+				str.append(n.getId());
+				str.append("] ENTRY\"]\n");
+			} else {
+				str.append("]\n");
 			}
 
-			@Override
-			public void traverse(final boa.graphs.cdg.CDGNode node, boolean flag) throws Exception {
-				if (flag) {
-					currentResult = preTraverse(node);
-					outputMapObj.put(node.getId(), currentResult);
-				} else {
-					outputMapObj.put(node.getId(), preTraverse(node));
+			final java.util.List<boa.graphs.cdg.CDGEdge> edges = new ArrayList<boa.graphs.cdg.CDGEdge>(n.getOutEdges());
+			Collections.sort(edges);
+			for (final boa.graphs.cdg.CDGEdge e : edges) {
+				str2.append("\t");
+				str2.append(n.getId());
+				str2.append(" -> ");
+				str2.append(e.getDest().getId());
+				if (!(e.getLabel() == null || e.getLabel().equals(".") || e.getLabel().equals(""))) {
+					str2.append(" [label=\"");
+					str2.append(dotEscape(e.getLabel()));
+					str2.append("\"]");
 				}
+				str2.append("\n");
 			}
-		};
-
-		try {
-			printGraph.traverse(cdg, boa.types.Graph.Traversal.TraversalDirection.FORWARD, boa.types.Graph.Traversal.TraversalKind.DFS);
-		} catch (final Exception e) {
-			// do nothing
 		}
 
+		str.append(str2);
 		str.append("}");
 
 		return str.toString();
