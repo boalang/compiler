@@ -18,19 +18,31 @@ public class CacheGithubJSON {
 	
 	public static void main(String[] args) {
 		HashMap<String, byte[]> repos = new HashMap<String, byte[]>();
-		File dir = new File(jsonPath + "/repos");
+		File dir = new File(jsonPath);
 		for (File file : dir.listFiles()) {
 			if (file.getName().endsWith(".json")) {
 				String content = FileIO.readFileContents(file);
 				Gson parser = new Gson();
-				JsonArray repoArray = parser.fromJson(content, JsonElement.class).getAsJsonArray();
+				
+				JsonArray repoArray = null;
+				try{
+					repoArray = parser.fromJson(content, JsonElement.class).getAsJsonArray();
+				}catch(Exception e){
+					System.err.println("error proccessing page: " + file.getPath());
+					e.printStackTrace();
+				}
 				for (int i = 0; i < repoArray.size(); i++) {
 					RepoMetadata repo = new RepoMetadata(repoArray.get(i).getAsJsonObject());
 					if (repo.id != null && repo.name != null) {
+						try{
 						Project protobufRepo = repo.toBoaMetaDataProtobuf();
 						// System.out.println(jRepo.toString());
 						repos.put(repo.id, protobufRepo.toByteArray());
-						System.out.println(repos.size() + ": " + repo.id + " " + repo.name);
+						}catch(Exception e){
+							System.err.println("error proccessing page: " + file.getPath());
+							e.printStackTrace();
+						}
+						System.out.println(file.getPath() + ": " + repos.size() + ": " + repo.id + " " + repo.name);
 					}
 				}
 			}
