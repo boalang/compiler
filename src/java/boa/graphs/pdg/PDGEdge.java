@@ -23,16 +23,18 @@ import boa.types.Control.PDGEdge.*;
  * Program Dependence Graph edge
  *
  * @author marafat
+ * @author rdyer
  */
-
-public class PDGEdge {
-
+public class PDGEdge implements Comparable<PDGEdge> {
     private PDGNode src;
     private PDGNode dest;
     private String label; // name of the variable for Data Edge, T or F or switch label for Control Edge
     private PDGEdgeType kind;
 
-    // Constructors
+	@Override
+	public int compareTo(final PDGEdge edge) {
+		return this.dest.getId() - edge.dest.getId();
+	}
 
     /**
      * Constructs a PDG edge
@@ -49,7 +51,6 @@ public class PDGEdge {
         this.kind = kind;
     }
 
-    // Setters
     public void setSrc(final PDGNode src) {
         this.src = src;
     }
@@ -66,7 +67,6 @@ public class PDGEdge {
         this.kind = kind;
     }
 
-    // Getters
     public PDGNode getSrc() {
         return src;
     }
