@@ -31,17 +31,14 @@ import static boa.functions.BoaNormalFormIntrinsics.normalizeStatement;
  * A forward slicer based on PDG
  *
  * @author marafat
+ * @author rdyer
  */
-
 public class PDGSlicer {
-
     private final Method md;
     private final ArrayList<PDGNode> entrynodes = new ArrayList<PDGNode>();
     private final HashSet<PDGNode> slice = new HashSet<PDGNode>();
     private boolean normalize = false;
     private int hashcode = 0;
-
-    // Constructors
 
     /**
      * Constructs a PDGSlicer instance for the given PDGNode
@@ -155,8 +152,6 @@ public class PDGSlicer {
         }
     }
 
-    // Getters
-
     /**
      * Returns the list of starting nodes of the slice
      *
@@ -173,6 +168,10 @@ public class PDGSlicer {
      */
     public HashSet<PDGNode> getSlice() {
         return slice;
+    }
+
+    public Method getMethod() {
+        return md;
     }
 
     /**
@@ -311,5 +310,4 @@ public class PDGSlicer {
     public int hashCode() {
         return hashcode;
     }
-
 }
