@@ -1967,6 +1967,13 @@ public class BoaNormalFormIntrinsics {
 		return sBDigest.toString();
 	}
 
+	/**
+	 * Returns the normalized statement given the normalized variable map
+	 *
+	 * @param stmt statement to be normalized
+	 * @param normalizedVars mapping of original names with normalized names in the expression
+	 * @return the normalized statement
+	 */
 	public static Statement normalizeStatement(final Statement stmt, final Map<String, String> normalizedVars) {
 		final List<Statement> convertedStatement = new ArrayList<Statement>();
 		for (final Statement sub : stmt.getStatementsList())
