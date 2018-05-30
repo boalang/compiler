@@ -239,6 +239,22 @@ public class TestReduce {
 			{ "foo(x + 3, 2 + 1)", "foo(3 + x, 3)" },
 			{ "3 + foo(2 + 1) - 1", "3 + foo(3) - 1" }, // FIXME should be 2 + foo(3)
 
+			{ "foo(x + 1 + 1, y + 2 + 2)", "foo(2 + x, 4 + y)" },
+			{ "foo(1 + x + 1, 2 + y + 2)", "foo(2 + x, 4 + y)" },
+			{ "foo(1 + 1 + x, 2 + 2 + y)", "foo(2 + x, 4 + y)" },
+			{ "foo(x + 1 - 1, y + 2 - 2)", "foo(1 + x - 1, 2 + y - 2)" }, // FIXME should be "foo(x, y)"
+			{ "foo(x - 1 + 1, y - 2 + 2)", "foo(1 + (x - 1), 2 + (y - 2))" }, // FIXME should be "foo(x, y)"
+
+			{ "foo() + 1 + 1", "2 + foo()" },
+			{ "1 + foo() + 1", "2 + foo()" },
+			{ "1 + 1 + foo()", "2 + foo()" },
+			{ "foo() + 1 - 1", "1 + foo() - 1" }, // FIXME should be "foo()"
+			{ "foo() - 1 + 1", "1 + (foo() - 1)" }, // FIXME should be "foo()"
+			{ "1 + foo() - 1", "1 + foo() - 1" }, // FIXME should be "foo()"
+			{ "-1 + foo() + 1", "foo()" },
+			{ "1 - 1 + foo()", "foo()" },
+			{ "-1 + 1 + foo()", "foo()" },
+
 			// complex expressions, multiple operators etc
 			{ "-5 * -x", "5 * x" },
 			{ "-y * -5 * -x", "-5 * y * x" },
@@ -272,6 +288,18 @@ public class TestReduce {
 			{ "5 + m(a).x * 0", "5" },
 			{ "5 + m(a, b).x / -1", "5 + m(a, b).x / -1" }, // FIXME should be 5 - m(a, b).x
 			{ "(5 + m(1 + 2, b).x) / -1", "(5 + m(3, b).x) / -1" }, // FIXME should be 5 - m(3, b).x
+
+			{ "x / 0", "x / 0" }, // FIXME
+			{ "x + 2 * 2", "4 + x" },
+			{ "x * 2 + 2", "2 + 2 * x" },
+			{ "x - 2 * 2", "x - 4" },
+			{ "x * 2 - 2", "2 * x - 2" },
+			{ "x + 6 / 3", "2 + x" },
+			{ "x / 3 + 6", "6 + x / 3" },
+
+			{ "1 + -x + 2 + 3", "6 + -x" },
+			{ "1 + -x + 2 - 4", "3 + -x - 4" }, // FIXME should be "-x - 1"
+			{ "1 + -x - 4 + 2", "2 + (1 + -x - 4)" }, // FIXME shoulde be "-x - 1"
 		});
 	}
 
