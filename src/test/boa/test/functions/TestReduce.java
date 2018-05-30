@@ -180,6 +180,30 @@ public class TestReduce {
 			{ "x / 1", "x" },
 			{ "x / 1 / 1 / 1", "x" },
 
+			{ "x + 1 - 1", "1 + x - 1" }, // FIXME should be "x"
+			{ "1 + x - 1", "1 + x - 1" }, // FIXME shoule be "x"
+			{ "1 - 1 + x", "x" }, 
+			{ "-x + 1 - 1", "1 + -x - 1" }, // FIXME should be "-x"
+			{ "1 + -x - 1", "1 + -x - 1" }, // FIXME should be "-x"
+			{ "1 - 1 + -x", "-x" },
+			{ "x * 2 / 2", "2 * x / 2" }, // FIXME should be "x"
+			{ "2 * x / 2", "2 * x / 2" }, // FIXME should be "x"
+			{ "2 / 2 * x", "x" },
+			{ "-x * 2 / 2", "2 * -x / 2" }, // FIXME should be "-x"
+			{ "2 * -x / 2", "2 * -x / 2" }, // FIXME should be "-x"
+			{ "2 / 2 * -x", "-x" },
+
+			{ "x / x * x", "x" },
+			{ "x * x / x", "x * x / x" }, // FIXME should be "x"
+			// FIXME
+			// { "-x * x / x", "-x" },
+			// { "x * -x / x", "-x" },
+			// { "x * x / -x", "-x" },
+			// { "-x * -x / x", "x" },
+			// { "-x * x / -x", "x" },
+			// { "x * -x / -x", "x" },
+			// { "-x * -x / -x", "-x"},
+
 			// elimination
 			{ "0 * x", "0" },
 			{ "x * 0", "0" },
@@ -187,6 +211,29 @@ public class TestReduce {
 			{ "(1 - 1) * x", "0" },
 			{ "x - x", "0" },
 			{ "x / x", "1" },
+
+			{ "x * 0 * 0", "0" },
+			{ "0 * x * 0", "0" },
+			{ "0 * 0 * x", "0" },
+			{ "-x * 0 * 0", "0" },
+			{ "0 * -x * 0", "0" },
+			{ "0 * 0 * -x", "0" },
+			{ "x * x * 0", "0" },
+			{ "x * 0 * x", "0" },
+			{ "0 * x * x", "0" },
+			{ "x + x - x - x", "2 * x - 2 * x" }, // FIXME should be "0"
+			{ "x - x + x - x", "0" },
+			{ "x - x - x + x", "-x + x" }, // FIXME should be "0"
+			{ "-x - x + x + x", "-x - x + 2 * x" }, // FIXME should be "0"
+			{ "-x + x - x + x", "-x + x - x + x" }, // FIXME should be "0"
+			{ "-x + x + x - x", "-x + 2 * x - x" }, // FIXME should be "0"
+			{ "x * x / x / x", "x * x / x / x" }, // FIXME should be "1"
+			{ "x / x * x / x", "1" },
+			{ "x / x / x * x", "1 / x * x" }, // FIXME should be "1"
+			{ "-x / x * x / x", "-x / x * x / x" }, // FIXME should be "-1"
+			{ "x / -x * x / x", "x / -x * x / x" }, // FIXME should be "-1"
+			{ "x / x * -x / x", "-x / x" }, // FIXME should be "-1"
+			{ "x / x * x / -x", "x / -x" }, // FIXME should be "-1"
 
 			// with methods 
 			{ "foo(x + 3, 2 + 1)", "foo(3 + x, 3)" },
