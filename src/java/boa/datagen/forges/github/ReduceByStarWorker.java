@@ -21,8 +21,10 @@ public class ReduceByStarWorker implements Runnable {
 	final static int RECORDS_PER_FILE = 100;
 	THashSet<Integer> ids = GitHubReduceByStars.ids;
 	private boolean available = true;
-	
-	public boolean isAvailable() { return available; }
+
+	public boolean isAvailable() {
+		return available;
+	}
 
 	public ReduceByStarWorker(String repoPath, String output, TokenList tokenList) {
 		this.output = output;
@@ -34,60 +36,68 @@ public class ReduceByStarWorker implements Runnable {
 	public void downloadRepoMetaDataForRepoIn() {
 		Token tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
 		File[] files = new File(this.input).listFiles();
-			File repoFile = files[index];
-			
-			if (!repoFile.getPath().contains(".json")) {
-				System.err.println(repoFile + " isn't a json");
-				return;
-			} 
-			String content = FileIO.readFileContents(repoFile);
-			Gson parser = new Gson();
-			JsonArray repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();
-			MetadataCacher mc = null;
-			int size = repos.size();
-			for (int j = 0; j < size; j++) {
-				JsonObject repo = repos.get(j).getAsJsonObject();
-				String name = repo.get("full_name").getAsString();
-				int id = repo.get("id").getAsInt();
-				boolean fork = repo.get("fork").getAsBoolean();
-				if (fork)
+		File repoFile = files[index];
+
+		if (!repoFile.getPath().contains(".json")) {
+			System.err.println(repoFile + " isn't a json");
+			return;
+		}
+		String content = FileIO.readFileContents(repoFile);
+		Gson parser = new Gson();
+		JsonArray repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();
+		MetadataCacher mc = null;
+		int size = repos.size();
+		for (int j = 0; j < size; j++) {
+			JsonObject repo = repos.get(j).getAsJsonObject();
+			String name = repo.get("full_name").getAsString();
+			int id = repo.get("id").getAsInt();
+			boolean fork = repo.get("fork").getAsBoolean();
+			if (fork)
+				continue;
+			if (ids.contains(id))
+				continue;
+
+			String repourl = this.repo_url_header + name;
+
+			if (tok.getNumberOfRemainingLimit() <= 0) {
+				tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
+			}
+			mc = new MetadataCacher(repourl, tok.getUserName(), tok.getToken());
+			boolean authnticationResult = mc.authenticate();
+			if (authnticationResult) {
+				mc.getResponse();
+				String pageContent = mc.getContent();
+				JsonObject repository = parser.fromJson(pageContent, JsonElement.class).getAsJsonObject();
+				int stars = repository.get("stargazers_count").getAsInt();
+				if (stars <= 0)
 					continue;
-				if (ids.contains(id))
+				mc = new MetadataCacher(repourl + "/contributors", tok.getUserName(), tok.getToken());
+				pageContent = mc.getContent();
+				JsonArray contributorsList = parser.fromJson(pageContent, JsonElement.class).getAsJsonArray();
+				int contributors = contributorsList.size();
+				if (contributors < 2)
 					continue;
-				String repourl = this.repo_url_header + name;
-				if (tok.getNumberOfRemainingLimit() <= 0) {
-					tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
-				}
-				mc = new MetadataCacher(repourl, tok.getUserName(), tok.getToken());
-				boolean authnticationResult = mc.authenticate();
-				if (authnticationResult) {
-					mc.getResponse();
-					String pageContent = mc.getContent();
-					JsonObject repository = parser.fromJson(pageContent, JsonElement.class).getAsJsonObject();
-					int stars = repository.get("stargazers_count").getAsInt();
-					if (stars <= 0)
-						continue;
-					repo.addProperty("stargazers_count", stars);
-					String created = repository.get("created_at").getAsString();
-					repo.addProperty("created_at", created);
-					addRepo(output, repo);
-					tok.setLastResponseCode(mc.getResponseCode());
+				repo.addProperty("stargazers_count", stars);
+				String created = repository.get("created_at").getAsString();
+				repo.addProperty("created_at", created);
+				addRepo(output, repo);
+				tok.setLastResponseCode(mc.getResponseCode());
+				tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
+				tok.setResetTime(mc.getLimitResetTime());
+			} else {
+				final int responsecode = mc.getResponseCode();
+				System.err.println("authentication error " + responsecode + " " + name);
+				mc = new MetadataCacher("https://api.github.com/repositories", tok.getUserName(), tok.getToken());
+				if (mc.authenticate()) {
 					tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
-					tok.setResetTime(mc.getLimitResetTime());
 				} else {
-					final int responsecode = mc.getResponseCode();
-					System.err.println("authentication error " + responsecode + " " + name);
-					mc = new MetadataCacher("https://api.github.com/repositories", tok.getUserName(), tok.getToken());
-					if (mc.authenticate()) {
-						tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
-					} else {
-						System.out.println("token: " + tok.getId() + " exhausted");
-						tok.setnumberOfRemainingLimit(0);
-						j--;
-					}
+					System.out.println("token: " + tok.getId() + " exhausted");
+					tok.setnumberOfRemainingLimit(0);
+					j--;
 				}
 			}
-		
+		}
+
 	}
 
 	private void addRepo(String output, JsonObject repo) {
@@ -130,13 +140,13 @@ public class ReduceByStarWorker implements Runnable {
 		this.downloadRepoMetaDataForRepoIn();
 		this.available = true;
 	}
-	
+
 	public void closeWorker() {
 		this.writeRemainingRepos(output);
 	}
 
 	public void setIndex(int i) {
 		this.index = i;
-		
+
 	}
 }
