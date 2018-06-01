@@ -71,12 +71,17 @@ public class ReduceByStarWorker implements Runnable {
 				int stars = repository.get("stargazers_count").getAsInt();
 				if (stars <= 0)
 					continue;
-				mc = new MetadataCacher(repourl + "/contributors", tok.getUserName(), tok.getToken());
-				pageContent = mc.getContent();
-				JsonArray contributorsList = parser.fromJson(pageContent, JsonElement.class).getAsJsonArray();
-				int contributors = contributorsList.size();
-				if (contributors < 2)
-					continue;
+				String contrUrl = repourl + "/contributors";
+				mc = new MetadataCacher(contrUrl , tok.getUserName(), tok.getToken());
+				authnticationResult = mc.authenticate();
+				if (authnticationResult) {
+					mc.getResponse();
+					pageContent = mc.getContent();
+					JsonArray contributorsList = parser.fromJson(pageContent, JsonElement.class).getAsJsonArray();
+					int contributors = contributorsList.size();
+					if (contributors < 2)
+						continue;
+				}
 				repo.addProperty("stargazers_count", stars);
 				String created = repository.get("created_at").getAsString();
 				repo.addProperty("created_at", created);
