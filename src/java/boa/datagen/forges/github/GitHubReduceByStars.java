@@ -12,25 +12,23 @@ import com.google.gson.JsonObject;
 import boa.datagen.util.FileIO;
 import gnu.trove.set.hash.THashSet;
 
-
-
 public class GitHubReduceByStars {
-	
+
 	public final String inPutDir;
 	public final String outPutDir;
 	public final String tokenFile;
 	public final static int MAX_NUM_THREADS = 5;
 	public static THashSet<Integer> ids = new THashSet<Integer>();
-	
+
 	public GitHubReduceByStars(String input, String output, String tokenFile) {
 		this.inPutDir = input;
 		this.outPutDir = output;
 		this.tokenFile = tokenFile;
-		File outputDir = new File(output + "/scala");
+		File outputDir = new File(output);
 		if (!outputDir.exists()) {
 			outputDir.mkdirs();
 		} else {
-			addNames(output + "/scala");
+			addNames(output);
 		}
 	}
 
@@ -44,23 +42,45 @@ public class GitHubReduceByStars {
 	}
 
 	public void orchastrate(int totalFiles) {
-		int shareSize = totalFiles / MAX_NUM_THREADS;
-		int start = 0;
-		int end = 0;
 		int i;
 		TokenList tokens = new TokenList(this.tokenFile);
-		for (i = 0; i < MAX_NUM_THREADS - 1; i++) {
-			start = end + 1;
-			end = start + shareSize;
-			LanguageDownloadWorker worker = new LanguageDownloadWorker(this.inPutDir, this.outPutDir, tokens,
-					start, end, i);
-			new Thread(worker).start();
+		ReduceByStarWorker workers[] = new ReduceByStarWorker[MAX_NUM_THREADS];
+		for (i = 0; i < MAX_NUM_THREADS; i++) {
+			ReduceByStarWorker worker = new ReduceByStarWorker(this.inPutDir, this.outPutDir, tokens);
+			workers[i] = worker;
 		}
-		start = end + 1;
-		end = totalFiles;
-		LanguageDownloadWorker worker = new LanguageDownloadWorker(this.inPutDir, this.outPutDir, tokens, start,
-				end, i);
-		new Thread(worker).start();
+		File[] files = new File(this.inPutDir).listFiles();
+		for (i = 0; i < files.length; i++) {
+			boolean assigned = false;
+			while (!assigned) {
+				for (int j = 0; j < MAX_NUM_THREADS; j++) {
+					if (workers[j].isAvailable()) {
+						System.out.println("Assigning " + i +" to thread " + j);
+						workers[j].setIndex(i);
+						new Thread(workers[j]).start();
+						assigned = true;
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						break;
+					}
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		
+		for (i = 0; i< MAX_NUM_THREADS; i++) {
+			workers[i].closeWorker();
+		}
+
 	}
 
 	private void addNames(String filePath) {
@@ -72,7 +92,7 @@ public class GitHubReduceByStars {
 		JsonArray repos;
 		JsonObject repo;
 		for (int i = 0; i < files.length; i++) {
-			if(!(files[i].toString().contains(".json"))){
+			if (!(files[i].toString().contains(".json"))) {
 				System.out.println("skipping " + files[i].toString());
 				continue;
 			}
