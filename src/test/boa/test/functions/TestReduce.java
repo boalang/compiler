@@ -300,6 +300,12 @@ public class TestReduce {
 			{ "1 + -x + 2 + 3", "6 + -x" },
 			{ "1 + -x + 2 - 4", "3 + -x - 4" }, // FIXME should be "-x - 1"
 			{ "1 + -x - 4 + 2", "2 + (1 + -x - 4)" }, // FIXME shoulde be "-x - 1"
+			{ "5 + (x + 3) + x + 2 - 3", "10 + 2 * x - 3" }, // FIXME should be "7 + 2 * x"
+			{ "5 + (x + 3) + x - 2 + 3", "3 + ((8 + 2 * x) - 2)" }, // FIXME should be "9 + 2 * x"
+			{ "5 + (x + 3) + x * 2 - 3", "8 + x + 2 * x - 3" }, // FIXME should be "5 + 3 * x"
+			{ "5 + (x + 3) - x + 2 - 3", "2 + ((8 + x) - x) - 3" }, // FIXME should be "7"
+			{ "5 + (x + 3) + x + 2 * 3", "14 + 2 * x" },
+			{ "5 + (x + 3) + x - 2 * 3", "8 + 2 * x - 6" }, // FIXME should be "2 + 2 * x"
 		});
 	}
 
