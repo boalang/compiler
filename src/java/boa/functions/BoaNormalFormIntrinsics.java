@@ -1904,7 +1904,7 @@ public class BoaNormalFormIntrinsics {
 	 * @throws UnsupportedEncodingException if the character encoding used is not supported by JVM
 	 */
 	@FunctionSpec(name = "getcrypthash", returnType = "string", formalParameters = { "PDG", "string" })
-	public static String getCryptHash(PDG pdg, String algorithm) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+	public static String getCryptHash(final PDG pdg, final String algorithm) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 		final Stack<PDGNode> nodes = new Stack<PDGNode>();
 		nodes.add(pdg.getEntryNode());
 		return getCryptHash(nodes, algorithm);
@@ -1920,7 +1920,7 @@ public class BoaNormalFormIntrinsics {
 	 * @throws NoSuchAlgorithmException
 	 */
 	@FunctionSpec(name = "getcrypthash", returnType = "string", formalParameters = { "PDGSlicer", "string" })
-	public static String getCryptHash(PDGSlicer pdgslice, String algorithm) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+	public static String getCryptHash(final PDGSlicer pdgslice, final String algorithm) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 		final Stack<PDGNode> nodes = new Stack<PDGNode>();
 		nodes.addAll(pdgslice.getEntrynodesList());
 		return getCryptHash(nodes, algorithm);
@@ -1935,7 +1935,7 @@ public class BoaNormalFormIntrinsics {
 	 * @throws NoSuchAlgorithmException if the given cryptographic algorithm is not supported by JVM
 	 * @throws UnsupportedEncodingException if the character encoding used is not supported by JVM
 	 */
-	private static String getCryptHash(Stack<PDGNode> nodes, String algorithm) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	private static String getCryptHash(final Stack<PDGNode> nodes, final String algorithm) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		final Set<PDGNode> visited = new HashSet<PDGNode>();
 		final StringBuilder sb = new StringBuilder();
 
@@ -2007,7 +2007,8 @@ public class BoaNormalFormIntrinsics {
 			case CATCH:
 			case EMPTY:
 			default:
-				return createStatement(stmt.getKind(), convertedStatement.toArray(new Statement[convertedStatement.size()]));
+				return stmt;
+				//return createStatement(stmt.getKind(), convertedStatement.toArray(new Statement[convertedStatement.size()]));
 		}
 	}
 
@@ -2025,9 +2026,9 @@ public class BoaNormalFormIntrinsics {
 
 		switch (exp.getKind()) {
 			case VARDECL:
-				Expression.Builder eb = Expression.newBuilder(exp);
-				Ast.Variable v = exp.getVariableDecls(0);
-				Ast.Variable.Builder vb = Ast.Variable.newBuilder(v);
+				final Expression.Builder eb = Expression.newBuilder(exp);
+				final Ast.Variable v = exp.getVariableDecls(0);
+				final Ast.Variable.Builder vb = Ast.Variable.newBuilder(v);
 				if (normalizedVars.containsKey(v.getName()))
 					vb.setName(normalizedVars.get(v.getName()));
 				if (v.getInitializer().getExpressionsList().size() != 0)
