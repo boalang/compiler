@@ -1906,7 +1906,8 @@ public class BoaNormalFormIntrinsics {
 	@FunctionSpec(name = "getcrypthash", returnType = "string", formalParameters = { "PDG", "string" })
 	public static String getCryptHash(final PDG pdg, final String algorithm) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 		final Stack<PDGNode> nodes = new Stack<PDGNode>();
-		nodes.add(pdg.getEntryNode());
+		if (pdg.getEntryNode() != null)
+			nodes.add(pdg.getEntryNode());
 		return getCryptHash(nodes, algorithm);
 	}
 
