@@ -42,6 +42,8 @@ public class PDG {
     private Method md;
     private PDGNode entryNode;
     private final HashSet<PDGNode> nodes = new HashSet<PDGNode>();
+    private boolean normalize = false;
+    private int hashcode;
 
     /**
      * Constructs a program dependence graph
@@ -137,61 +139,64 @@ public class PDG {
      * normalize the expression for each PDGNode
      */
     public void normalize() throws Exception {
-        if (entryNode == null)
-            return;
-        final Stack<PDGNode> nodes = new Stack<PDGNode>();
-        nodes.add(entryNode);
-        Set<PDGNode> visited = new HashSet<PDGNode>();
-        final Map<String, String> normalizedVars = new HashMap<String, String>();
-        int varCount = 1;
-        // if normalization is enabled then normalize node expression
-        // also update use and def variables for each node
-        try {
-            while (nodes.size() != 0) {
-                final PDGNode node = nodes.pop();
-                // store normalized name mappings of def and use variables at this node
-                // replace use and def variables in the node with their normalized names
-                // def variable
-                if (node.getDefVariable() != null && !node.getDefVariable().equals("")) {
-                    if (!normalizedVars.containsKey(node.getDefVariable())) {
-                        normalizedVars.put(node.getDefVariable(), "var$" + varCount);
-                        varCount++;
-                    }
-                    node.setDefVariable(normalizedVars.get(node.getDefVariable()));
-                }
-                // use variables
-                final HashSet<String> useVars = new HashSet<String>();
-                for (final String dVar : node.getUseVariables()) {
-                    if (dVar != null) {
-                        if (!normalizedVars.containsKey(dVar)) {
-                            normalizedVars.put(dVar, "var$" + varCount);
+        if (!normalize) {
+            normalize = true;
+            if (entryNode == null)
+                return;
+            final Stack<PDGNode> nodes = new Stack<PDGNode>();
+            nodes.add(entryNode);
+            final Set<PDGNode> visited = new HashSet<PDGNode>();
+            final Map<String, String> normalizedVars = new HashMap<String, String>();
+            int varCount = 1;
+            // if normalization is enabled then normalize node expression
+            // also update use and def variables for each node
+            try {
+                while (nodes.size() != 0) {
+                    final PDGNode node = nodes.pop();
+                    // store normalized name mappings of def and use variables at this node
+                    // replace use and def variables in the node with their normalized names
+                    // def variable
+                    if (node.getDefVariable() != null && !node.getDefVariable().equals("")) {
+                        if (!normalizedVars.containsKey(node.getDefVariable())) {
+                            normalizedVars.put(node.getDefVariable(), "var$" + varCount);
                             varCount++;
                         }
-                        useVars.add(normalizedVars.get(dVar));
+                        node.setDefVariable(normalizedVars.get(node.getDefVariable()));
                     }
-                }
-                node.setUseVariables(useVars);
-                if (node.hasStmt())
-                    node.setStmt(normalizeStatement(node.getStmt(), normalizedVars));
-                if (node.hasExpr())
-                    node.setExpr(normalizeExpression(node.getExpr(), normalizedVars));
+                    // use variables
+                    final HashSet<String> useVars = new HashSet<String>();
+                    for (final String dVar : node.getUseVariables()) {
+                        if (dVar != null) {
+                            if (!normalizedVars.containsKey(dVar)) {
+                                normalizedVars.put(dVar, "var$" + varCount);
+                                varCount++;
+                            }
+                            useVars.add(normalizedVars.get(dVar));
+                        }
+                    }
+                    node.setUseVariables(useVars);
+                    if (node.hasStmt())
+                        node.setStmt(normalizeStatement(node.getStmt(), normalizedVars));
+                    if (node.hasExpr())
+                        node.setExpr(normalizeExpression(node.getExpr(), normalizedVars));
 
-                for (final PDGEdge e: node.getOutEdges()) {
-                    final String label = normalizedVars.get(e.getLabel());
-                    if (label != null)
-                        e.setLabel(label);
-                }
+                    for (final PDGEdge e : node.getOutEdges()) {
+                        final String label = normalizedVars.get(e.getLabel());
+                        if (label != null)
+                            e.setLabel(label);
+                    }
 
-                visited.add(node);
-                // if successor has not been visited, add it
-                Collections.sort(node.getSuccessors());
-                for (final PDGNode succ : node.getSuccessors())
-                    if (!visited.contains(succ) && !nodes.contains(succ))
-                        nodes.push(succ);
+                    visited.add(node);
+                    // if successor has not been visited, add it
+                    Collections.sort(node.getSuccessors());
+                    for (final PDGNode succ : node.getSuccessors())
+                        if (!visited.contains(succ) && !nodes.contains(succ))
+                            nodes.push(succ);
+                }
+            } catch (Exception e) {
+                System.out.println(prettyprint(md));
+                throw e;
             }
-        } catch (Exception e) {
-            System.out.println(prettyprint(md));
-            throw e;
         }
     }
 
@@ -240,5 +245,95 @@ public class PDG {
         } catch (final Exception e) {
             System.out.println(BoaAstIntrinsics.prettyprint(md));
         }
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PDG)) return false;
+        final PDG pdgSlicer = (PDG) o;
+
+        final Stack<PDGNode> nodes1 = new Stack<PDGNode>();
+        final Stack<PDGNode> nodes2 = new Stack<PDGNode>();
+        final Set<PDGNode> visited1 = new HashSet<PDGNode>();
+        final Set<PDGNode> visited2 = new HashSet<PDGNode>();
+        nodes1.add(entryNode);
+        nodes2.add(pdgSlicer.getEntryNode());
+
+        while (nodes1.size() != 0) {
+            if (nodes1.size() != nodes2.size())
+                return false;
+            final PDGNode node1 = nodes1.pop();
+            final PDGNode node2 = nodes2.pop();
+            // compare statements
+            if ((node1.getStmt() == null  && node2.getStmt() != null) ||
+                    (node1.getStmt() != null  && node2.getStmt() == null))
+                return false;
+            if (node1.getStmt() != null && node2.getStmt() != null &&
+                    !node1.getStmt().equals(node2.getStmt())) // use string comparisons?? prettyprint
+                return false;
+
+            // compare expressions
+            if ((node1.getExpr() == null  && node2.getExpr() != null) ||
+                    (node1.getExpr() != null  && node2.getExpr() == null))
+                return false;
+            if (node1.getExpr() != null && node2.getExpr() != null &&
+                    !node1.getExpr().equals(node2.getExpr())) // use string comparisons?? prettyprint
+                return false;
+
+            // compare out edges
+            if (node1.getOutEdges().size() != node2.getOutEdges().size())
+                return false;
+
+            visited1.add(node1);
+            visited2.add(node2);
+
+            for (int i = 0; i < node1.getSuccessors().size(); i++) {
+                final List<PDGEdge> outEdges1 = node1.getOutEdges(node1.getSuccessors().get(i));
+                final List<PDGEdge> outEdges2 = node2.getOutEdges(node2.getSuccessors().get(i));
+                if (outEdges1.size() != outEdges2.size())
+                    return false;
+                for (int j = 0; j < outEdges1.size(); j++) {
+                    if (outEdges1.get(j).getKind() != outEdges2.get(j).getKind() ||
+                            !outEdges1.get(j).getLabel().equals(outEdges2.get(j).getLabel()))
+                        return false;
+                }
+
+                if (!visited1.contains(node1.getSuccessors().get(i)))
+                    nodes1.push(node1.getSuccessors().get(i));
+                if (!visited2.contains(node2.getSuccessors().get(i)))
+                    nodes2.push(node2.getSuccessors().get(i));
+            }
+
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        /*
+         * Some strings may have zero hashcode due to integer overflow.
+         * For those strings hashcode will be recalculated everytime hashcode is
+         * requested but the general contract for the hashCode() method will still hold.
+         */
+        if (hashcode == 0) {
+            final Stack<PDGNode> nodes = new Stack<PDGNode>();
+            nodes.add(entryNode);
+            final Set<PDGNode> visited = new HashSet<PDGNode>();
+            final StringBuilder sb = new StringBuilder();
+            while (nodes.size() != 0) {
+                final PDGNode node = nodes.pop();
+                visited.add(node);
+                sb.append(node.getExpr());
+                Collections.sort(node.getSuccessors());
+                for (final PDGNode succ : node.getSuccessors())
+                    if (!visited.contains(succ) && !nodes.contains(succ))
+                        nodes.push(succ);
+            }
+            // compute and cache hash
+            hashcode = sb.toString().hashCode();
+        }
+        return hashcode;
     }
 }

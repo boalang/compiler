@@ -35,7 +35,7 @@ import static boa.functions.BoaNormalFormIntrinsics.normalizeStatement;
  */
 public class PDGSlicer {
     private final Method md;
-    private final ArrayList<PDGNode> entrynodes = new ArrayList<PDGNode>();
+    private final ArrayList<PDGNode> entryNodes = new ArrayList<PDGNode>();
     private final HashSet<PDGNode> slice = new HashSet<PDGNode>();
     private boolean normalize = false;
     private int hashcode = 0;
@@ -52,7 +52,7 @@ public class PDGSlicer {
         this.md = md;
         this.normalize = normalize;
         if (node != null) {
-            entrynodes.add(node);
+            entryNodes.add(node);
             traverse();
         }
     }
@@ -68,7 +68,7 @@ public class PDGSlicer {
     public PDGSlicer(final Method md, final PDGNode[] nodes, final boolean normalize) throws Exception {
         this.md = md;
         this.normalize = normalize;
-        entrynodes.addAll(Arrays.asList(nodes));
+        entryNodes.addAll(Arrays.asList(nodes));
         traverse();
     }
 
@@ -83,10 +83,10 @@ public class PDGSlicer {
     public PDGSlicer(final Method md, final int nid, final boolean normalize) throws Exception {
         this.md = md;
         this.normalize = normalize;
-        final PDG pdg = new PDG(md, true);
+        final PDG pdg = new PDG(md, false);
         final PDGNode node = pdg.getNode(nid);
         if (node != null) {
-            entrynodes.add(node);
+            entryNodes.add(node);
             traverse();
         }
     }
@@ -102,13 +102,13 @@ public class PDGSlicer {
     public PDGSlicer(final Method md, final Integer[] nids, final boolean normalize) throws Exception {
         this.md = md;
         this.normalize = normalize;
-        final PDG pdg = new PDG(md, true);
+        final PDG pdg = new PDG(md, false);
         for (Integer i: nids) {
             final PDGNode node = pdg.getNode(i);
             if (node != null)
-                entrynodes.add(node);
+                entryNodes.add(node);
         }
-        if (entrynodes.size() > 0) {
+        if (entryNodes.size() > 0) {
             traverse();
         }
     }
@@ -126,7 +126,7 @@ public class PDGSlicer {
         this.normalize = normalize;
         final PDGNode node = pdg.getNode(nid);
         if (node != null) {
-            entrynodes.add(node);
+            entryNodes.add(node);
             traverse();
         }
     }
@@ -145,9 +145,9 @@ public class PDGSlicer {
         for (final Integer i: nids) {
             final PDGNode node = pdg.getNode(i);
             if (node != null)
-                entrynodes.add(node);
+                entryNodes.add(node);
         }
-        if (entrynodes.size() > 0) {
+        if (entryNodes.size() > 0) {
             traverse();
         }
     }
@@ -158,7 +158,7 @@ public class PDGSlicer {
      * @return the list of starting nodes of the slice
      */
     public ArrayList<PDGNode> getEntrynodesList() {
-        return entrynodes;
+        return entryNodes;
     }
 
     /**
@@ -180,7 +180,7 @@ public class PDGSlicer {
      */
     private void traverse() throws Exception {
         final Stack<PDGNode> nodes = new Stack<PDGNode>();
-        nodes.addAll(entrynodes);
+        nodes.addAll(entryNodes);
         final Map<String, String> normalizedVars = new HashMap<String, String>();
         final StringBuilder sb = new StringBuilder(); // for hashcode caching
         int varCount = 1;
@@ -253,7 +253,7 @@ public class PDGSlicer {
         final Stack<PDGNode> nodes2 = new Stack<PDGNode>();
         final Set<PDGNode> visited1 = new HashSet<PDGNode>();
         final Set<PDGNode> visited2 = new HashSet<PDGNode>();
-        nodes1.addAll(entrynodes);
+        nodes1.addAll(entryNodes);
         nodes2.addAll(pdgSlicer.getEntrynodesList());
 
         while (nodes1.size() != 0) {
