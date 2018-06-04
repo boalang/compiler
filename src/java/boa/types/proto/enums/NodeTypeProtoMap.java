@@ -1,6 +1,6 @@
 /*
- * Copyright 2018, Robert Dyer, Mohd Arafat
- *                 and Bowling Green State University
+ * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,19 @@
  */
 package boa.types.proto.enums;
 
-import boa.types.BoaProtoMap;
 import com.google.protobuf.ProtocolMessageEnum;
 
+import boa.types.BoaProtoMap;
+
 /**
- * A {@link PDGNodeTypeProtoMap}.
- *
- * @author marafat
+ * A {@link NodeTypeProtoMap}.
+ * 
+ * @author rramu
  */
-
-public class PDGNodeTypeProtoMap extends BoaProtoMap {
-    /** {@inheritDoc} */
-    @Override
-    protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-        return boa.types.Control.PDGNode.PDGNodeType.class;
-    }
-
+public class NodeTypeProtoMap extends BoaProtoMap {
+	/** {@inheritDoc} */
+	@Override
+	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
+		return boa.types.Control.Node.NodeType.class;
+	}
 }

@@ -212,14 +212,10 @@ public class PDG {
 
         for (final CDGNode n : cdg.getNodes()) {
             final PDGNode node = getNode(n.getId());
-            for (final CDGNode s : n.getSuccessors())
-                node.addSuccessor(getNode(s.getId()));
-            for (final CDGNode p : n.getPredecessors())
-                node.addPredecessor(getNode(p.getId()));
             for (final CDGEdge ie : n.getInEdges())
-                node.addInEdge(new PDGEdge(getNode(ie.getSrc().getId()), getNode(ie.getDest().getId()), ie.getLabel(), Control.PDGEdge.PDGEdgeType.CONTROL));
+                node.addInEdge(new PDGEdge(getNode(ie.getSrc().getId()), getNode(ie.getDest().getId()), ie.getLabel(), Control.Edge.EdgeType.CONTROL));
             for (final CDGEdge oe : n.getOutEdges())
-                node.addOutEdge(new PDGEdge(getNode(oe.getSrc().getId()), getNode(oe.getDest().getId()), oe.getLabel(), Control.PDGEdge.PDGEdgeType.CONTROL));
+                node.addOutEdge(new PDGEdge(getNode(oe.getSrc().getId()), getNode(oe.getDest().getId()), oe.getLabel(), Control.Edge.EdgeType.CONTROL));
         }
     }
 
@@ -235,11 +231,7 @@ public class PDG {
                 final PDGNode src = getNode(entry.getKey().getId());
                 for (final DDGNode d : entry.getValue()) {
                     final PDGNode dest = getNode(d.getId());
-                    src.addSuccessor(dest);
-                    dest.addPredecessor(src);
-                    final PDGEdge e = new PDGEdge(src, dest, entry.getKey().getDefVariable(), Control.PDGEdge.PDGEdgeType.DATA);
-                    src.addOutEdge(e);
-                    dest.addInEdge(e);
+                    new PDGEdge(src, dest, entry.getKey().getDefVariable(), Control.Edge.EdgeType.DATA);
                 }
             }
         } catch (final Exception e) {

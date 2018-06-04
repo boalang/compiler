@@ -20,16 +20,16 @@ import boa.types.BoaProtoMap;
 import com.google.protobuf.ProtocolMessageEnum;
 
 /**
- * A {@link DDGEdgeLabelProtoMap}.
+ * A {@link EdgeTypeProtoMap}.
  *
  * @author marafat
  */
 
-public class DDGEdgeLabelProtoMap extends BoaProtoMap {
+public class EdgeTypeProtoMap extends BoaProtoMap {
     /** {@inheritDoc} */
     @Override
     protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-        return boa.types.Control.DDGEdge.DDGEdgeLabel.class;
+        return boa.types.Control.Edge.EdgeType.class;
     }
 
 }

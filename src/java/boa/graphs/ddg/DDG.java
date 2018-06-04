@@ -175,7 +175,7 @@ public class DDG {
                 final InOut nodeLiveVars = new InOut(liveVars.get(node.getId()));
 
                 // out = Union in[node.successor]
-                for (final CFGNode s : node.getSuccessorsList())
+                for (final CFGNode s : node.getSuccessors())
                     nodeLiveVars.out.addAll(liveVars.get(s.getId()).in);
 
                 // out - def
@@ -239,11 +239,7 @@ public class DDG {
                                 defUseChain.put(defNode, new HashSet<DDGNode>());
                             defUseChain.get(defNode).add(useNode);
                             // connect nodes for constructing the graph
-                            defNode.addSuccessor(useNode);
-                            useNode.addPredecessor(defNode);
-                            final DDGEdge edge = new DDGEdge(defNode, useNode, p.var);
-                            defNode.addOutEdge(edge);
-                            useNode.addinEdge(edge);
+                            new DDGEdge(defNode, useNode, p.var);
                         }
                     }
                 }
@@ -264,11 +260,7 @@ public class DDG {
                 final DDGNode dest = getNode(i);
                 if (dest.getPredecessors().size() == 0 ||
                         (dest.getPredecessors().size() == 1 && dest.getPredecessors().get(0).equals(dest))) {
-                    entryNode.addSuccessor(dest);
-                    dest.addPredecessor(entryNode);
-                    final DDGEdge edge = new DDGEdge(entryNode, dest);
-                    entryNode.addOutEdge(edge);
-                    dest.addinEdge(edge);
+                    new DDGEdge(entryNode, dest);
                 }
             }
         }

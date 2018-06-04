@@ -33,7 +33,7 @@ public class PDTree {
     private Method md;
     private TreeNode rootNode;
     private final HashSet<TreeNode> nodes = new HashSet<TreeNode>();
-    private boolean isEntryNode = false; // as specified in ferrante-1987 paper on PDG
+    private boolean hasEntryNode = false; // as specified in ferrante-1987 paper on PDG
 
     /**
      * Constructs a post-dominator tree
@@ -76,12 +76,12 @@ public class PDTree {
      * Augments tree with entry node
      */
     public void addEntryNode() {
-        if (!isEntryNode) {
+        if (!hasEntryNode) {
             final TreeNode entry = new TreeNode(nodes.size());
             entry.setParent(rootNode);
             rootNode.addChild(entry);
             nodes.add(entry);
-            isEntryNode = true;
+            hasEntryNode = true;
         }
     }
 
@@ -186,7 +186,7 @@ public class PDTree {
 
                 // Intersection[succ(node)]
                 boolean first = true;
-                for (final CFGNode succ: n.getSuccessorsList()) {
+                for (final CFGNode succ: n.getSuccessors()) {
                     if (first) {
                         currentPDom.addAll(pDomMap.get(succ));
                         first = false;

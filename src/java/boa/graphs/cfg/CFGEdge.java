@@ -17,8 +17,8 @@
  */
 package boa.graphs.cfg;
 
-import boa.types.Control.CFGEdge.CFGEdgeLabel;
-import boa.types.Control.CFGNode.CFGNodeType;
+import boa.graphs.Edge;
+import boa.types.Control.Node.NodeType;
 
 /**
  * Control flow graph builder edge
@@ -26,28 +26,11 @@ import boa.types.Control.CFGNode.CFGNodeType;
  * @author ganeshau
  * @author rdyer
  */
-public class CFGEdge implements Comparable<CFGEdge> {
-	public static long numOfEdges = 0;
+public class CFGEdge extends Edge<CFGNode, CFGEdge> {
+	public CFGEdge(final CFGNode src, final CFGNode dest) {
+        super(src, dest);
 
-	private long id;
-	private CFGNode src;
-	private CFGNode dest;
-	private String label = ".";
-
-	@Override
-	public int compareTo(final CFGEdge edge) {
-		return this.dest.getId() - edge.dest.getId();
-	}
-
-	public CFGEdge(final long id, final CFGNode src, final CFGNode dest) {
-		this.id = id;
-		this.src = src;
-		this.dest = dest;
-
-		this.src.addOutEdge(this);
-		this.dest.addInEdge(this);
-
-		if (this.src.getKind() == CFGNodeType.CONTROL) {
+		if (this.src.getKind() == NodeType.CONTROL) {
 			if (this.src.hasFalseBranch()) {
 				this.label = "T";
 			} else {
@@ -58,103 +41,9 @@ public class CFGEdge implements Comparable<CFGEdge> {
 		}
 	}
 
-	public CFGEdge(final long id, final CFGNode src, final CFGNode dest, final String label) {
-		this(id, src, dest);
-
-		this.label = label;
-	}
-
-	public CFGEdge(final CFGNode src, final CFGNode dest) {
-		this(++numOfEdges, src, dest);
-	}
-
 	public CFGEdge(final CFGNode src, final CFGNode dest, final String label) {
-		this(++numOfEdges, src, dest, label);
-	}
+		this(src, dest);
 
-	public CFGNode getSrc() {
-		return src;
-	}
-
-	public void setSrc(final CFGNode node) {
-		if (this.dest.getPredecessorsList().contains(node)) {
-			delete();
-			final CFGEdge e = (CFGEdge)this.dest.getInEdge(node); //FIXME: redundant cast
-			e.setLabel(".");
-		} else {
-			this.src = node;
-			node.addOutEdge(this);
-		}
-	}
-
-	public CFGNode getDest() {
-		return this.dest;
-	}
-
-	public void setDest(final CFGNode node) {
-		if (this.src.getSuccessorsList().contains(node)) {
-			delete();
-			final CFGEdge e = (CFGEdge)this.src.getOutEdge(node); //FIXME: redundant cast
-			e.setLabel(".");
-		} else {
-			this.dest = node;
-			node.addInEdge(this);
-		}
-	}
-
-	public long getId() {
-		return this.id;
-	}
-
-	public void setId(final long id) {
-		this.id = id;
-	}
-
-	public String label() {
-		return this.label;
-	}
-
-	public void setLabel(final String label) {
 		this.label = label;
-	}
-
-	private void delete() {
-		this.src.getOutEdges().remove(this);
-		this.dest.getInEdges().remove(this);
-	}
-
-	public boa.types.Control.CFGEdge.Builder newBuilder() {
-		final boa.types.Control.CFGEdge.Builder eb = boa.types.Control.CFGEdge.newBuilder();
-		eb.setLabel(CFGEdge.getLabel(this.label));
-		return eb;
-	}
-
-	public static CFGEdgeLabel getLabel(final String label) {
-		if (label.equals(".")) {
-			return CFGEdgeLabel.DEFAULT;
-		} else if (label.equals("T")) {
-			return CFGEdgeLabel.TRUE;
-		} else if (label.equals("F")) {
-			return CFGEdgeLabel.FALSE;
-		} else if (label.equals("B")) {
-			return CFGEdgeLabel.BACKEDGE;
-		} else if (label.equals("E")) {
-			return CFGEdgeLabel.EXITEDGE;
-		} else {
-			return CFGEdgeLabel.NIL;
-		}
-	}
-
-	public String toString() {
-		final StringBuilder sb = new StringBuilder();
-		sb.append(src.toString());
-		sb.append(" --> ");
-		sb.append(dest.toString());
-		if (!".".equals(label)) {
-			sb.append(" [");
-			sb.append(label);
-			sb.append("]");
-		}
-		return sb.toString();
 	}
 }

@@ -30,7 +30,7 @@ import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Method;
 import boa.types.Ast.Variable;
-import boa.types.Control.CFGNode;
+import boa.types.Control.Node;
 
 /**
  * Boa functions for working with control flow graphs.
@@ -97,8 +97,8 @@ public class BoaGraphIntrinsics {
 		return new PDGSlicer(method, (int)(long) id, normalize);
 	}
 
-	@FunctionSpec(name = "get_nodes_with_definition", returnType = "set of string", formalParameters = { "CFGNode" })
-	public static HashSet<String> getNodesWithDefinition(final CFGNode node) {
+	@FunctionSpec(name = "get_nodes_with_definition", returnType = "set of string", formalParameters = { "Node" })
+	public static HashSet<String> getNodesWithDefinition(final Node node) {
 		final HashSet<String> vardef = new HashSet<String>();
 		if (node.getExpression() != null) {
 			if (node.getExpression().getKind() == ExpressionKind.VARDECL || node.getExpression().getKind() == ExpressionKind.ASSIGN) {
@@ -108,8 +108,8 @@ public class BoaGraphIntrinsics {
 		return vardef;
 	}
 
-	@FunctionSpec(name = "get_variable_killed", returnType = "set of string", formalParameters = {"CFG", "CFGNode" })
-	public static HashSet<String> getVariableKilled(final boa.types.Control.CFG cfg, final CFGNode node) {
+	@FunctionSpec(name = "get_variable_killed", returnType = "set of string", formalParameters = {"CFG", "Node" })
+	public static HashSet<String> getVariableKilled(final boa.types.Control.Graph cfg, final Node node) {
 		final HashSet<String> varkilled = new HashSet<String>();
 		String vardef = "";
 
@@ -124,7 +124,7 @@ public class BoaGraphIntrinsics {
 				return varkilled;
 			}
 
-			for (final CFGNode tnode : cfg.getNodesList()) {
+			for (final Node tnode : cfg.getNodesList()) {
 				if (tnode.getExpression() != null && tnode.getId() != node.getId()) {
 					if (tnode.getExpression().getKind() == ExpressionKind.VARDECL) {
 						if (tnode.getExpression().getVariableDeclsList().get(0).getName().equals(vardef)) {
@@ -143,8 +143,8 @@ public class BoaGraphIntrinsics {
 		return varkilled;
 	}
 
-	@FunctionSpec(name = "get_variable_def", returnType = "set of string", formalParameters = { "CFGNode" })
-	public static HashSet<String> getVariableDef(final CFGNode node) {
+	@FunctionSpec(name = "get_variable_def", returnType = "set of string", formalParameters = { "Node" })
+	public static HashSet<String> getVariableDef(final Node node) {
 		final HashSet<String> vardef = new HashSet<String>();
 		if (node.getExpression() != null) {
 			if (node.getExpression().getKind() == ExpressionKind.VARDECL) {
@@ -157,8 +157,8 @@ public class BoaGraphIntrinsics {
 		return vardef;
 	}
 
-	@FunctionSpec(name = "get_variable_used", returnType = "set of string", formalParameters = { "CFGNode" })
-	public static HashSet<String> getVariableUsed(final CFGNode node) {
+	@FunctionSpec(name = "get_variable_used", returnType = "set of string", formalParameters = { "Node" })
+	public static HashSet<String> getVariableUsed(final Node node) {
 		final HashSet<String> varused = new HashSet<String>();
 		if (node.getExpression() != null) {
 			traverseExpr(varused,node.getExpression());
@@ -257,7 +257,7 @@ public class BoaGraphIntrinsics {
 				str.append("] ");
 				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
 				str.append("\"]\n");
-			} else if (n.getKind() == boa.types.Control.CFGNode.CFGNodeType.ENTRY) {
+			} else if (n.getKind() == boa.types.Control.Node.NodeType.ENTRY) {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
@@ -269,14 +269,14 @@ public class BoaGraphIntrinsics {
 
 			final java.util.List<boa.graphs.cfg.CFGEdge> edges = new ArrayList<boa.graphs.cfg.CFGEdge>(n.getOutEdges());
 			Collections.sort(edges);
-			for (final boa.graphs.cfg.CFGEdge e : edges) {
+			for (final boa.graphs.Edge e : edges) {
 				str2.append("\t");
 				str2.append(n.getId());
 				str2.append(" -> ");
 				str2.append(e.getDest().getId());
-				if (e.label() != null && !e.label().isEmpty() && !e.label().equals(".")) {
+				if (e.getLabel() != null && !e.getLabel().isEmpty() && !e.getLabel().equals(".")) {
 					str2.append(" [label=\"");
-					str2.append(dotEscape(e.label()));
+					str2.append(dotEscape(e.getLabel()));
 					str2.append("\"]");
 				}
 				str2.append("\n");
@@ -331,7 +331,7 @@ public class BoaGraphIntrinsics {
 				str.append("] ");
 				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
 				str.append("\"]\n");
-			} else if (n.getKind() == boa.types.Control.CDGNode.CDGNodeType.ENTRY) {
+			} else if (n.getKind() == boa.types.Control.Node.NodeType.ENTRY) {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ENTRY\"]\n");
@@ -404,7 +404,7 @@ public class BoaGraphIntrinsics {
 				str.append("] ");
 				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
 				str.append("\"]\n");
-			} else if (n.getKind() == boa.types.Control.DDGNode.DDGNodeType.ENTRY) {
+			} else if (n.getKind() == boa.types.Control.Node.NodeType.ENTRY) {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ENTRY\"]\n");
@@ -475,7 +475,7 @@ public class BoaGraphIntrinsics {
 				str.append("] ");
 				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
 				str.append("\"]\n");
-			} else if (n.getKind() == boa.types.Control.PDGNode.PDGNodeType.ENTRY) {
+			} else if (n.getKind() == boa.types.Control.Node.NodeType.ENTRY) {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ENTRY\"]\n");
@@ -548,7 +548,7 @@ public class BoaGraphIntrinsics {
 				str.append("] ");
 				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
 				str.append("\"]\n");
-			} else if (n.getKind() == boa.types.Control.PDGNode.PDGNodeType.ENTRY) {
+			} else if (n.getKind() == boa.types.Control.Node.NodeType.ENTRY) {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ENTRY\"]\n");

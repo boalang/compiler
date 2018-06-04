@@ -191,7 +191,7 @@ public abstract class BoaAbstractTraversal<T1> {
 			if (!visitedNodes.contains(n.getId())) {
 				traverse(n, false);
 				visitedNodes.add(n.getId());
-                List<CFGNode> succ = n.getSuccessorsList();
+                List<CFGNode> succ = n.getSuccessors();
                 Collections.sort(succ);
 				for (int i = succ.size() - 1; i >= 0; i--) {
 					s.push(succ.get(i));
@@ -208,7 +208,7 @@ public abstract class BoaAbstractTraversal<T1> {
 			if (!visitedNodes.contains(n.getId())) {
 				traverse(n, false);
 				visitedNodes.add(n.getId());
-                List<CFGNode> preds = n.getPredecessorsList();
+                List<CFGNode> preds = n.getPredecessors();
                 Collections.sort(preds);
 				for (int i = preds.size() - 1; i >= 0; i--) {
 					s.push(preds.get(i));
@@ -220,7 +220,7 @@ public abstract class BoaAbstractTraversal<T1> {
 	public final void postorderBackward(final CFGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
 		// FIXME remove recursion
 		visitedNodes.add(node.getId());
-		for (final CFGNode succ : node.getSuccessorsList()) {
+		for (final CFGNode succ : node.getSuccessors()) {
 			if (!visitedNodes.contains(succ.getId())) {
 				postorderBackward(succ, visitedNodes);
 			}
@@ -231,7 +231,7 @@ public abstract class BoaAbstractTraversal<T1> {
 	public final void postorderForward(final CFGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
 		// FIXME remove recursion
 		visitedNodes.add(node.getId());
-		for (final CFGNode pred : node.getPredecessorsList()) {
+		for (final CFGNode pred : node.getPredecessors()) {
 			if (!visitedNodes.contains(pred.getId())) {
 				postorderForward(pred, visitedNodes);
 			}
@@ -242,7 +242,7 @@ public abstract class BoaAbstractTraversal<T1> {
 	public final void populateWithPostorder(final CFGNode node, java.util.Set<Integer> visitedNodes, Queue<CFGNode> queue) throws Exception {
 		// FIXME remove recursion
 		visitedNodes.add(node.getId());
-		for (final CFGNode succ : node.getSuccessorsList()) {
+		for (final CFGNode succ : node.getSuccessors()) {
 			if (!visitedNodes.contains(succ.getId())) {
 				populateWithPostorder(succ, visitedNodes, queue);
 			}
@@ -253,7 +253,7 @@ public abstract class BoaAbstractTraversal<T1> {
 	public final void populateWithReversePostorder(final CFGNode node, java.util.Set<Integer> visitedNodes, Stack<CFGNode> stack) throws Exception {
 		// FIXME remove recursion
 		visitedNodes.add(node.getId());
-		for (final CFGNode succ : node.getSuccessorsList()) {
+		for (final CFGNode succ : node.getSuccessors()) {
 			if (!visitedNodes.contains(succ.getId())) {
 				populateWithReversePostorder(succ, visitedNodes, stack);
 			}
@@ -280,7 +280,7 @@ public abstract class BoaAbstractTraversal<T1> {
 				}
 			}
 			if (!fixpFlag) {
-				for (final CFGNode succ : node.getSuccessorsList()) {
+				for (final CFGNode succ : node.getSuccessors()) {
 					if (!stack.contains(succ))
 						stack.push(succ);
 				}
@@ -302,7 +302,7 @@ public abstract class BoaAbstractTraversal<T1> {
 				}
 			}
 			if (!fixpFlag) {
-				for (final CFGNode succ : node.getPredecessorsList()) {
+				for (final CFGNode succ : node.getPredecessors()) {
 					if (!stack.contains(succ))
 						stack.push(succ);
 				}
@@ -317,7 +317,7 @@ public abstract class BoaAbstractTraversal<T1> {
 			traverse(node, true);
 			final boolean fixpFlag = true;
 			if (!fixpFlag) {
-				for (final CFGNode succ : node.getSuccessorsList()) {
+				for (final CFGNode succ : node.getSuccessors()) {
 					if (!stack.contains(succ))
 						stack.push(succ);
 				}
@@ -331,7 +331,7 @@ public abstract class BoaAbstractTraversal<T1> {
 			traverse(node, true);
 			final boolean fixpFlag = true;
 			if (!fixpFlag) {
-				for (final CFGNode pred : node.getPredecessorsList()) {
+				for (final CFGNode pred : node.getPredecessors()) {
 					if (!queue.contains(pred))
 						queue.add(pred);
 				}
@@ -352,7 +352,7 @@ public abstract class BoaAbstractTraversal<T1> {
 				}
 			}
 			if (!fixpFlag) {
-				for (final CFGNode pred : node.getPredecessorsList()) {
+				for (final CFGNode pred : node.getPredecessors()) {
 					if (!queue.contains(pred))
 						queue.add(pred);
 				}
@@ -374,7 +374,7 @@ public abstract class BoaAbstractTraversal<T1> {
 				}
 			}
 			if (!fixpFlag) {
-				for (final CFGNode pred : node.getSuccessorsList()) {
+				for (final CFGNode pred : node.getSuccessors()) {
 					if (!queue.contains(pred))
 						queue.add(pred);
 				}

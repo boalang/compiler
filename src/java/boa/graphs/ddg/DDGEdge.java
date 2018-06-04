@@ -16,6 +16,8 @@
  */
 package boa.graphs.ddg;
 
+import boa.graphs.Edge;
+import boa.graphs.Node;
 import boa.types.Control;
 
 /**
@@ -24,16 +26,7 @@ import boa.types.Control;
  * @author marafat
  * @author rdyer
  */
-public class DDGEdge implements Comparable<DDGEdge> {
-    private DDGNode src;
-    private DDGNode dest;
-    private String label = "."; // name of the variable for def and use
-
-    @Override
-    public int compareTo(final DDGEdge edge) {
-        return this.dest.getId() - edge.dest.getId();
-    }
-
+public class DDGEdge extends Edge<DDGNode, DDGEdge> {
     /**
      * Constructs a DDG edge
      *
@@ -42,9 +35,7 @@ public class DDGEdge implements Comparable<DDGEdge> {
      * @param label label of the edge
      */
     public DDGEdge(final DDGNode src, final DDGNode dest, final String label) {
-        this.src = src;
-        this.dest = dest;
-        this.label = label;
+        super(src, dest, label);
     }
 
     /**
@@ -54,43 +45,7 @@ public class DDGEdge implements Comparable<DDGEdge> {
      * @param dest destination node of the edge
      */
     public DDGEdge(final DDGNode src, final DDGNode dest) {
-        this.src = src;
-        this.dest = dest;
-    }
-
-    public void setSrc(final DDGNode src) {
-        this.src = src;
-    }
-
-    public void setDest(final DDGNode dest) {
-        this.dest = dest;
-    }
-
-    public void setLabel(final String label) {
-        this.label = label;
-    }
-
-    public DDGNode getSrc() {
-        return src;
-    }
-
-    public DDGNode getDest() {
-        return dest;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    /**
-     * DDG Edge builder
-     *
-     * @return a DDG edge builder
-     */
-    public boa.types.Control.DDGEdge.Builder newBuilder() {
-        final boa.types.Control.DDGEdge.Builder eb = boa.types.Control.DDGEdge.newBuilder();
-        eb.setLabel(DDGEdge.getLabel(this.label));
-        return eb;
+        super(src, dest);
     }
 
     /**
@@ -99,27 +54,9 @@ public class DDGEdge implements Comparable<DDGEdge> {
      * @param label edge label
      * @return label type
      */
-    public static Control.DDGEdge.DDGEdgeLabel getLabel(final String label) {
+    public static Control.Edge.EdgeLabel getLabel(final String label) {
         if (!label.equals("."))
-            return Control.DDGEdge.DDGEdgeLabel.VARDEF;
-        return Control.DDGEdge.DDGEdgeLabel.NIL;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (!(o instanceof DDGEdge)) return false;
-
-        final DDGEdge ddgEdge = (DDGEdge) o;
-
-        return src.equals(ddgEdge.src) && dest.equals(ddgEdge.dest) && label.equals(ddgEdge.label);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = src.hashCode();
-        result = 31 * result + dest.hashCode();
-        result = 31 * result + label.hashCode();
-        return result;
+            return Control.Edge.EdgeLabel.VARDEF;
+        return Control.Edge.EdgeLabel.NIL;
     }
 }

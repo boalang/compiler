@@ -38,7 +38,6 @@ import java.util.*;
 public class CFGSlicer {
     private final ArrayList<CFGNode> slice = new ArrayList<CFGNode>();
 
-    // Constructors
     public CFGSlicer(final Method m, final CFGNode n) throws Exception {
         if (n != null) {
             final CFG cfg = new CFG(m, true).get();
@@ -110,7 +109,7 @@ public class CFGSlicer {
             protected Set<String> preTraverse(final CFGNode node) throws Exception {
                 // in(n) = \/(pred) out(pred)
                 final Set<String> in = new HashSet<String>();
-                for (final CFGNode p : node.getPredecessorsList()) {
+                for (final CFGNode p : node.getPredecessors()) {
                     final Set<String> pred = getValue(p);
                     if (pred != null)
                         in.addAll(pred);
@@ -141,7 +140,7 @@ public class CFGSlicer {
                     inSlice.add(node);
 
                 // m -> infl(n)
-                if (inSlice.contains(node) && node.getKind() == Control.CFGNode.CFGNodeType.CONTROL)
+                if (inSlice.contains(node) && node.getKind() == Control.Node.NodeType.CONTROL)
                     controlInflNodes.addAll(infl.get(node.getId()));
 
                 return out;
@@ -160,12 +159,13 @@ public class CFGSlicer {
 
         final BoaAbstractFixP fixp = new BoaAbstractFixP() {
             public boolean invoke1(final Set<String> current, final Set<String> previous) {
-                Set<String> curr = new HashSet<String>(current);
+                final Set<String> curr = new HashSet<String>(current);
                 curr.removeAll(previous);
                 return curr.size() == 0;
             }
 
             @Override
+            @SuppressWarnings({"unchecked"})
             public boolean invoke(final Object current, final Object previous) throws Exception {
                 return invoke1((HashSet<String>) current, (HashSet<String>) previous);
             }
@@ -189,12 +189,12 @@ public class CFGSlicer {
         // store source and desination of control edges with label
         final Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
         for (final CFGNode n : cfg.getNodes()) {
-            if (n.getKind() == Control.CFGNode.CFGNodeType.CONTROL)
+            if (n.getKind() == Control.Node.NodeType.CONTROL)
                 for (final CFGEdge e : n.getOutEdges())
-                    if (e.label().equals("."))
+                    if (e.getLabel().equals("."))
                         controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, "F");
                     else
-                        controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, e.label());
+                        controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, e.getLabel());
         }
 
         // add the edge: entry ---> start

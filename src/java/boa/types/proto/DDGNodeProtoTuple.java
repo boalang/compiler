@@ -17,7 +17,7 @@
 package boa.types.proto;
 
 import boa.types.*;
-import boa.types.proto.enums.DDGNodeTypeProtoMap;
+import boa.types.proto.enums.NodeTypeProtoMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +38,7 @@ public class DDGNodeProtoTuple extends BoaProtoTuple {
         int counter = 0;
 
         names.put("kind", counter++);
-        members.add(new DDGNodeTypeProtoMap());
+        members.add(new NodeTypeProtoMap());
 
         names.put("id", counter++);
         members.add(new BoaInt());

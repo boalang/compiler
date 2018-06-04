@@ -1,6 +1,6 @@
 /*
- * Copyright 2018, Robert Dyer, Mohd Arafat
- *                 and Bowling Green State University
+ * Copyright 2018, Robert Dyer,
+ *                 Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package boa.types.proto.enums;
+package boa.graphs.trees;
 
-import boa.types.BoaProtoMap;
-import com.google.protobuf.ProtocolMessageEnum;
+import boa.graphs.Edge;
 
 /**
- * A {@link CDGEdgeLabelProtoMap}.
+ * A tree edge
  *
- * @author marafat
+ * @author rdyer
  */
-
-public class CDGEdgeLabelProtoMap extends BoaProtoMap {
-    /** {@inheritDoc} */
-    @Override
-    protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-        return boa.types.Control.CDGEdge.CDGEdgeLabel.class;
-    }
-
+public class TreeEdge extends Edge<TreeNode, TreeEdge> {
 }

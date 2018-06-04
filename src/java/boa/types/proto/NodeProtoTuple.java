@@ -22,36 +22,60 @@ import java.util.List;
 import java.util.Map;
 
 import boa.types.BoaProtoTuple;
+import boa.types.BoaProtoList;
+import boa.types.BoaString;
 import boa.types.BoaType;
-import boa.types.proto.enums.EdgeLabelProtoMap;
+import boa.types.BoaInt;
+import boa.types.BoaSet;
+import boa.types.proto.enums.NodeTypeProtoMap;
 
 /**
- * A {@link CFGEdgeProtoTuple}.
+ * A {@link NodeProtoTuple}.
  * 
  * @author rramu
  */
-public class CFGEdgeProtoTuple extends BoaProtoTuple {
+public class NodeProtoTuple extends BoaProtoTuple {
 	private final static List<BoaType> members = new ArrayList<BoaType>();
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
 		int counter = 0;
 
-		names.put("label", counter++);
-		members.add(new EdgeLabelProtoMap());
+		names.put("kind", counter++);
+		members.add(new NodeTypeProtoMap());
 
+		names.put("id", counter++);
+		members.add(new BoaInt());
+
+		names.put("name", counter++);
+		members.add(new BoaString());
+
+		names.put("stmt", counter++);
+		members.add(new StatementProtoTuple());
+
+		names.put("expr", counter++);
+		members.add(new ExpressionProtoTuple());
+
+		names.put("rhs", counter++);
+		members.add(new ExpressionProtoTuple());
+
+		names.put("predecessors", counter++);
+		members.add(new BoaProtoList(new NodeProtoTuple()));
+
+		names.put("successors", counter++);
+		members.add(new BoaProtoList(new NodeProtoTuple()));
 	}
 
 	/**
-	 * Construct a {@link CFGEdgeProtoTuple}.
+	 * Construct a {@link NodeProtoTuple}.
 	 */
-	public CFGEdgeProtoTuple() {
+	public NodeProtoTuple() {
 		super(members, names);
 	}
 
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.Control.Edge";
+		return "boa.types.Control.Node";
 	}
 }

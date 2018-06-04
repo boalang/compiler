@@ -183,7 +183,7 @@ public class DTree {
 
                 // Intersection[pred(node)]
                 boolean first = true;
-                for (final CFGNode pred : n.getPredecessorsList()) {
+                for (final CFGNode pred : n.getPredecessors()) {
                     if (first) {
                         currentPDom.addAll(pDomMap.get(pred));
                         first = false;

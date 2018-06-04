@@ -18,44 +18,38 @@ package boa.graphs.trees;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import boa.graphs.cfg.CFGNode;
+import boa.graphs.Edge;
+import boa.graphs.Node;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Expression;
-import boa.graphs.cfg.CFGNode;
-import boa.types.Control;
-import boa.types.Control.TreeNode.*;
 
 /**
  * Tree node
  *
  * @author marafat
  */
-
-public class TreeNode implements Comparable<TreeNode> {
-
-    private int id;
+public class TreeNode extends Node<TreeNode, TreeEdge> {
     private TreeNode parent;
-    private Statement stmt;
-    private Expression expr;
-    private TreeNodeType kind = TreeNodeType.OTHER;
 
     private String defVariable;
-    private HashSet<String> useVariables = new HashSet<String>();
+    private HashSet<String> useVariables;
 
-    private ArrayList<TreeNode> children = new ArrayList<TreeNode>();
-
-    // Constructors
+    private final ArrayList<TreeNode> children = new ArrayList<TreeNode>();
 
     /**
      * Constructs a tree node.
      *
      * @param node CFG node
      */
-    public TreeNode(CFGNode node) {
+    public TreeNode(final CFGNode node) {
         this.id = node.getId();
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
-        this.kind = convertKind(node.getKind());
+        this.kind = node.getKind();
         this.defVariable = node.getDefVariables();
         this.useVariables = node.getUseVariables();
     }
@@ -65,34 +59,24 @@ public class TreeNode implements Comparable<TreeNode> {
      *
      * @param id node id. Uses default values for remaining fields
      */
-    public TreeNode(int id) {
+    public TreeNode(final int id) {
         this.id = id;
+        this.useVariables = new HashSet<String>();
     }
 
-    // Setters
+    public TreeNode getParent() {
+        return parent;
+    }
+
     public void setParent(final TreeNode parent) {
         this.parent = parent;
     }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setStmt(final Statement stmt) {
-        this.stmt = stmt;
-    }
-
-    public void setExpr(final Expression expr) {
-        this.expr = expr;
-    }
-
-    public void setKind(final TreeNodeType kind) { this.kind = kind; }
 
     public String getDefVariable() {
         return defVariable;
     }
 
-    public HashSet<String> getUseVariables() {
+    public Set<String> getUseVariables() {
         return useVariables;
     }
 
@@ -108,85 +92,13 @@ public class TreeNode implements Comparable<TreeNode> {
         this.useVariables.add(useVariables);
     }
 
-    public void setKind(final Control.CFGNode.CFGNodeType kind) {
-        this.kind = convertKind(kind);
-    }
-
     public void addChild(final TreeNode node) {
         if (!children.contains(node))
             children.add(node);
     }
 
-    // Getters
-    public TreeNode getParent() {
-        return parent;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public boolean hasStmt() { return this.stmt != null; }
-
-    public Statement getStmt() {
-        return stmt;
-    }
-
-    public boolean hasExpr() {
-        return this.expr != null;
-    }
-
-    public Expression getExpr() {
-        return expr;
-    }
-
-    public TreeNodeType getKind() {
-        return kind;
-    }
-
-    public ArrayList<TreeNode> getChildren() {
+    public List<TreeNode> getChildren() {
         return children;
-    }
-
-    /**
-     * Returns equivalent tree node type for the given CFG node type
-     *
-     * @param type CFG node type
-     * @return tree node type for the given CFG node type
-     */
-    public TreeNodeType convertKind(final Control.CFGNode.CFGNodeType type) {
-        switch(type) {
-            case ENTRY:
-                return TreeNodeType.ENTRY;
-            case OTHER:
-                return TreeNodeType.OTHER;
-            case METHOD:
-                return TreeNodeType.METHOD;
-            case CONTROL:
-                return TreeNodeType.CONTROL;
-        }
-
-        return null;
-    }
-
-    @Override
-    public int compareTo(final TreeNode node) {
-        return node.id - this.id;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TreeNode)) return false;
-
-        TreeNode treeNode = (TreeNode) o;
-
-        return id == treeNode.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return id;
     }
 
     @Override

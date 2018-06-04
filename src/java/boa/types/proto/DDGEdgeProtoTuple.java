@@ -19,7 +19,7 @@ package boa.types.proto;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
-import boa.types.proto.enums.DDGEdgeLabelProtoMap;
+import boa.types.proto.enums.EdgeLabelProtoMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +45,7 @@ public class DDGEdgeProtoTuple extends BoaProtoTuple{
         members.add(new DDGNodeProtoTuple());
 
         names.put("label", counter++);
-        members.add(new DDGEdgeLabelProtoMap());
+        members.add(new EdgeLabelProtoMap());
     }
 
     /**

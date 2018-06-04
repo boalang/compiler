@@ -4,141 +4,47 @@ import "ast.proto";
 
 option optimize_for = SPEED;
 
-message CFG {
-	repeated CFGNode nodes = 1;
-	repeated CFGEdge edges = 2; // n x n matrix stored as 1D-array
-}
-
-message CFGNode {
-	// nodetypes are intended to characterize analyses
-	enum CFGNodeType {
+message Node {
+	enum NodeType {
 		ENTRY = 1; // indicates start and end nodes
 		OTHER = 2; // sequential
 		METHOD = 3; // method calls, leading to external cfg
 		CONTROL = 4; // evaluates predicate
 	}
 	required int32 id = 1;
-	required CFGNodeType kind = 2;
+	required NodeType kind = 2;
 	optional Statement statement = 3; // nodes are created for statements and their expressions as well
   	optional Expression expression = 4; // optional because these fields will not be stored.
 }
 
-message CFGEdge {
-	enum CFGEdgeLabel {
+message Edge {
+	enum EdgeLabel {
 		NIL = 1; // no edge
 		DEFAULT = 2; // sequential
 		TRUE = 3; // true branch
 		FALSE = 4; // false branch
 		BACKEDGE = 5; // loop backedge
 		EXITEDGE = 6; // loop exitedge
+		VARDEF = 7; // variable definition edge.
 	}
-	required CFGEdgeLabel label = 1;
-}
-
-message CDG {
-    repeated CDGNode nodes = 1;
-    repeated CDGEdge edges = 2;
-}
-
-message CDGNode {
-    enum CDGNodeType {
-        ENTRY = 1;
-        OTHER = 2;
-        METHOD = 3;
-        CONTROL = 4;
-    }
-    required int32 id = 1;
-    required CDGNodeType kind = 2;
-    optional Statement statement = 3;
-    optional Expression expression = 4;
-}
-
-message CDGEdge {
-	enum CDGEdgeLabel {
-		NIL = 1;
-		TRUE = 2;
-		FALSE = 3;
-	}
-	required CDGEdgeLabel label = 1;
-}
-
-message DDG {
-    repeated DDGNode nodes = 1;
-    repeated DDGEdge edges = 2;
-}
-
-message DDGNode {
-    enum DDGNodeType {
-        ENTRY = 1;
-        OTHER = 2;
-        METHOD = 3;
-        CONTROL = 4;
-    }
-    required int32 id = 1;
-    required DDGNodeType kind = 2;
-    optional Statement statement = 3;
-    optional Expression expression = 4;
-}
-
-message DDGEdge {
-	enum DDGEdgeLabel {
-		NIL = 1;
-		VARDEF = 2; // variable definition edge.
-	}
-	required DDGEdgeLabel label = 1;
-}
-
-message PDG {
-    repeated PDGNode nodes = 1;
-    repeated PDGEdge edges = 2;
-}
-
-message PDGNode {
-    enum PDGNodeType {
-        ENTRY = 1;
-        OTHER = 2;
-        METHOD = 3;
-        CONTROL = 4;
-    }
-    required int32 id = 1;
-    required PDGNodeType kind = 2;
-    optional Statement statement = 3;
-    optional Expression expression = 4;
-}
-
-message PDGEdge {
-	enum PDGEdgeType {
+	required EdgeLabel label = 1;
+	enum EdgeType {
 		CONTROL = 1; // control dependency edge edges.
 		DATA = 2; // data dependency edge.
 	}
-	enum PDGEdgeLabel {
-    	NIL = 1;
-    	TRUE = 2;
-    	FALSE = 3;
-    	VARDEF = 4;
+	optional EdgeType kind = 2;
+}
+
+message Graph {
+    enum GraphKind {
+        CFG = 1;
+        CDG = 2;
+        DDG = 3;
+        PDG = 4;
+        DTREE = 5;
+        PDTREE = 6;
     }
-	required PDGEdgeType kind = 1;
-	required PDGEdgeLabel label = 2;
+    required GraphKind kind = 1;
+	repeated Node nodes = 2;
+	repeated Edge edges = 3; // n x n matrix stored as 1D-array
 }
-
-message DTree {
-	repeated TreeNode nodes = 1;
-}
-
-message PDTree {
-	repeated TreeNode nodes = 1;
-}
-
-message TreeNode {
-	enum TreeNodeType {
-		ENTRY = 1;
-		OTHER = 2;
-		METHOD = 3;
-		CONTROL = 4;
-	}
-	required int32 id = 1;
-	required TreeNodeType kind = 2;
-	optional Statement statement = 3;
-	optional Expression expression = 4;
-}
-

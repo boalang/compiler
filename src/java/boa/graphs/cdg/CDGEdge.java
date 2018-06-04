@@ -16,7 +16,8 @@
  */
 package boa.graphs.cdg;
 
-import boa.types.Control;
+import boa.graphs.Edge;
+import boa.graphs.Node;
 
 /**
  * Control Dependence Graph edge
@@ -24,16 +25,7 @@ import boa.types.Control;
  * @author marafat
  * @author rdyer
  */
-public class CDGEdge implements Comparable<CDGEdge> {
-    private CDGNode src;
-    private CDGNode dest;
-    private String label = ".";
-
-	@Override
-	public int compareTo(final CDGEdge edge) {
-		return this.dest.getId() - edge.dest.getId();
-	}
-
+public class CDGEdge extends Edge<CDGNode, CDGEdge> {
     /**
      * Constructs a CDG edge
      *
@@ -42,55 +34,7 @@ public class CDGEdge implements Comparable<CDGEdge> {
      * @param label label of the edge
      */
     public CDGEdge(final CDGNode src, final CDGNode dest, final String label) {
-        this.src = src;
-        this.dest = dest;
-        this.label = label;
-    }
-
-    /**
-     * Constructs a CDG edge. Uses default label "."
-     *
-     * @param src starting node of the edge
-     * @param dest destination node of the edge
-     */
-    public CDGEdge(final CDGNode src, final CDGNode dest) {
-        this.src = src;
-        this.dest = dest;
-    }
-
-    public void setSrc(final CDGNode src) {
-        this.src = src;
-    }
-
-    public void setDest(final CDGNode dest) {
-        this.dest = dest;
-    }
-
-    public void setLabel(final String label) {
-        this.label = label;
-    }
-
-    public CDGNode getSrc() {
-        return src;
-    }
-
-    public CDGNode getDest() {
-        return dest;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    /**
-     * CDG Edge builder
-     *
-     * @return a CDG edge builder
-     */
-    public boa.types.Control.CDGEdge.Builder newBuilder() {
-        final boa.types.Control.CDGEdge.Builder eb = boa.types.Control.CDGEdge.newBuilder();
-        eb.setLabel(CDGEdge.getLabel(this.label));
-        return eb;
+        super(src, dest, label);
     }
 
     /**
@@ -99,30 +43,11 @@ public class CDGEdge implements Comparable<CDGEdge> {
      * @param label edge label
      * @return the label type
      */
-    public static Control.CDGEdge.CDGEdgeLabel getLabel(final String label) {
+    public static boa.types.Control.Edge.EdgeLabel convertLabel(final String label) {
         if (label.equals("T"))
-            return Control.CDGEdge.CDGEdgeLabel.TRUE;
-        else if (label.equals("F"))
-            return Control.CDGEdge.CDGEdgeLabel.FALSE;
-        else
-            return Control.CDGEdge.CDGEdgeLabel.NIL;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CDGEdge)) return false;
-
-        CDGEdge cdgEdge = (CDGEdge) o;
-
-        return src.equals(cdgEdge.src) && dest.equals(cdgEdge.dest) && label.equals(cdgEdge.label);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = src.hashCode();
-        result = 31 * result + dest.hashCode();
-        result = 31 * result + label.hashCode();
-        return result;
+            return boa.types.Control.Edge.EdgeLabel.TRUE;
+        if (label.equals("F"))
+            return boa.types.Control.Edge.EdgeLabel.FALSE;
+        return boa.types.Control.Edge.EdgeLabel.NIL;
     }
 }

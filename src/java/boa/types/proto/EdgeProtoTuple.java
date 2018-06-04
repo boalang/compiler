@@ -26,11 +26,11 @@ import boa.types.BoaType;
 import boa.types.proto.enums.EdgeLabelProtoMap;
 
 /**
- * A {@link CFGEdgeProtoTuple}.
+ * A {@link EdgeProtoTuple}.
  * 
  * @author rramu
  */
-public class CFGEdgeProtoTuple extends BoaProtoTuple {
+public class EdgeProtoTuple extends BoaProtoTuple {
 	private final static List<BoaType> members = new ArrayList<BoaType>();
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
@@ -43,9 +43,9 @@ public class CFGEdgeProtoTuple extends BoaProtoTuple {
 	}
 
 	/**
-	 * Construct a {@link CFGEdgeProtoTuple}.
+	 * Construct a {@link EdgeProtoTuple}.
 	 */
-	public CFGEdgeProtoTuple() {
+	public EdgeProtoTuple() {
 		super(members, names);
 	}
 

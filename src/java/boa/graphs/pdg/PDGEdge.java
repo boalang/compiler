@@ -16,8 +16,9 @@
  */
 package boa.graphs.pdg;
 
-import boa.types.Control;
-import boa.types.Control.PDGEdge.*;
+import boa.graphs.Edge;
+import boa.graphs.Node;
+import boa.types.Control.Edge.*;
 
 /**
  * Program Dependence Graph edge
@@ -25,16 +26,8 @@ import boa.types.Control.PDGEdge.*;
  * @author marafat
  * @author rdyer
  */
-public class PDGEdge implements Comparable<PDGEdge> {
-    private PDGNode src;
-    private PDGNode dest;
-    private String label; // name of the variable for Data Edge, T or F or switch label for Control Edge
-    private PDGEdgeType kind;
-
-	@Override
-	public int compareTo(final PDGEdge edge) {
-		return this.dest.getId() - edge.dest.getId();
-	}
+public class PDGEdge extends Edge<PDGNode, PDGEdge> {
+    private EdgeType kind;
 
     /**
      * Constructs a PDG edge
@@ -44,42 +37,21 @@ public class PDGEdge implements Comparable<PDGEdge> {
      * @param label label of the edge
      * @param kind kind of the edge i.e Control or Data
      */
-    public PDGEdge(PDGNode src, PDGNode dest, String label, PDGEdgeType kind) {
-        this.src = src;
-        this.dest = dest;
-        this.label = label;
+    public PDGEdge(final PDGNode src, final PDGNode dest, final String label, final EdgeType kind) {
+		this.src = src;
+		this.dest = dest;
+		this.label = label;
+        this.kind = kind;
+
+		this.src.addOutEdge(this);
+		this.dest.addInEdge(this);
+    }
+
+    public void setKind(final EdgeType kind) {
         this.kind = kind;
     }
 
-    public void setSrc(final PDGNode src) {
-        this.src = src;
-    }
-
-    public void setDest(final PDGNode dest) {
-        this.dest = dest;
-    }
-
-    public void setLabel(final String label) {
-        this.label = label;
-    }
-
-    public void setKind(final PDGEdgeType kind) {
-        this.kind = kind;
-    }
-
-    public PDGNode getSrc() {
-        return src;
-    }
-
-    public PDGNode getDest() {
-        return dest;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public PDGEdgeType getKind() {
+    public EdgeType getKind() {
         return kind;
     }
 
@@ -88,8 +60,8 @@ public class PDGEdge implements Comparable<PDGEdge> {
      *
      * @return a DDG edge builder
      */
-    public boa.types.Control.PDGEdge.Builder newBuilder() {
-        final boa.types.Control.PDGEdge.Builder eb = boa.types.Control.PDGEdge.newBuilder();
+    public boa.types.Control.Edge.Builder newBuilder() {
+        final boa.types.Control.Edge.Builder eb = super.newBuilder();
         eb.setLabel(PDGEdge.getLabel(this.kind, this.label));
         return eb;
     }
@@ -100,39 +72,33 @@ public class PDGEdge implements Comparable<PDGEdge> {
      * @param label edge label
      * @return label type
      */
-    public static Control.PDGEdge.PDGEdgeLabel getLabel(final PDGEdgeType type, final String label) {
-        if (type == PDGEdgeType.CONTROL) {
+    public static EdgeLabel getLabel(final EdgeType type, final String label) {
+        if (type == EdgeType.CONTROL) {
             if (label.equals("T"))
-                return Control.PDGEdge.PDGEdgeLabel.TRUE;
-            else if (label.equals("F"))
-                return Control.PDGEdge.PDGEdgeLabel.FALSE;
-            else
-                return Control.PDGEdge.PDGEdgeLabel.NIL;
-        } else if (type == PDGEdgeType.DATA) {
+                return EdgeLabel.TRUE;
+            if (label.equals("F"))
+                return EdgeLabel.FALSE;
+        } else if (type == EdgeType.DATA) {
             if (label != null)
-                return PDGEdgeLabel.VARDEF;
-            else
-                return PDGEdgeLabel.NIL;
-        } else
-            return PDGEdgeLabel.NIL;
+                return EdgeLabel.VARDEF;
+        }
+        return EdgeLabel.NIL;
     }
 
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
+        if (!super.equals(o)) return false;
         if (!(o instanceof PDGEdge)) return false;
 
-        PDGEdge pdgEdge = (PDGEdge) o;
+        final PDGEdge pdgEdge = (PDGEdge) o;
 
-        return src.equals(pdgEdge.src) && dest.equals(pdgEdge.dest) &&
-                label.equals(pdgEdge.label) && kind == pdgEdge.kind;
+        return kind == pdgEdge.kind;
     }
 
     @Override
     public int hashCode() {
-        int result = src.hashCode();
-        result = 31 * result + dest.hashCode();
-        result = 31 * result + label.hashCode();
+        int result = super.hashCode();
         result = 31 * result + kind.hashCode();
         return result;
     }
