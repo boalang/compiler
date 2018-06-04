@@ -97,6 +97,14 @@ public abstract class Node<N extends Node<N, E>, E extends Edge<N, E>> implement
 		return this.outEdges;
 	}
 
+	public List<N> getPredecessorsList() {
+		return getPredecessors();
+	}
+
+	public List<N> getSuccessorsList() {
+		return getSuccessors();
+	}
+
 	public List<N> getPredecessors() {
 		final Set<N> nodes = new HashSet<N>();
 		for (final E e : this.inEdges)
@@ -137,21 +145,21 @@ public abstract class Node<N extends Node<N, E>, E extends Edge<N, E>> implement
 			this.outEdges.add(edge);
 	}
 
-    public void removeOutEdge(final E edge) {
-        this.outEdges.remove(edge);
-    }
+	public void removeOutEdge(final E edge) {
+		this.outEdges.remove(edge);
+	}
 
-    public void removeInEdge(final E edge) {
-        this.inEdges.remove(edge);
-    }
+	public void removeInEdge(final E edge) {
+		this.inEdges.remove(edge);
+	}
 
-    public void delete() {
-        final List<E> edges = new ArrayList<E>();
-        edges.addAll(inEdges);
-        edges.addAll(outEdges);
-        for (final Edge e : edges)
-            e.delete();
-    }
+	public void delete() {
+		final List<E> edges = new ArrayList<E>();
+		edges.addAll(inEdges);
+		edges.addAll(outEdges);
+		for (final Edge e : edges)
+			e.delete();
+	}
 
 	public String getPid() {
 		return this.pid;
@@ -192,26 +200,26 @@ public abstract class Node<N extends Node<N, E>, E extends Edge<N, E>> implement
 		return b;
 	}
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Node)) return false;
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Node)) return false;
 
-        final Node n = (Node) o;
+		final Node n = (Node) o;
 
-        return id == n.id;
-    }
+		return id == n.id;
+	}
 
-    private int hash = -1;
+	private int hash = -1;
 
-    @Override
-    public int hashCode() {
-        if (hash == -1) {
-            hash = 1;
-            hash = hash * 31 + id;
-        }
-        return hash;
-    }
+	@Override
+	public int hashCode() {
+		if (hash == -1) {
+			hash = 1;
+			hash = hash * 31 + id;
+		}
+		return hash;
+	}
 
 	public String toString() {
 		return "node " + getId();
