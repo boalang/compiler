@@ -291,6 +291,8 @@ public class SeqRepoImporter {
 			try {
 				RepositoryCloner.clone(args);
 			} catch (Throwable t) {
+				System.err.println("Error cloning " + repo.getUrl());
+				t.printStackTrace();
 				return project;
 			}
 
