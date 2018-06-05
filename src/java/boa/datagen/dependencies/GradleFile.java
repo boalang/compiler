@@ -100,6 +100,8 @@ public class GradleFile {
 						}
 						if (values.length == 2)
 							values = new String[]{values[0], values[1], "null"};
+						else if (values.length == 1)
+							values = new String[]{values[0], "null", "null"};
 						if (values[0] == null || values[0].contains("$") || values[0].contains("@")
 								|| values[1] == null || values[1].contains("$") || values[1].contains("@") 
 								|| values[2] == null || values[2].contains("$") || values[2].contains("@")) {
