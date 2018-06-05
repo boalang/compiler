@@ -219,7 +219,7 @@ public class SeqRepoImporter {
 						cachedProject = Project.parseFrom(bs);
 						if (processedProjectIds.contains(cachedProject.getId()))
 							continue;
-					} catch (InvalidProtocolBufferException e) {
+					} catch (InvalidProtocolBufferException e) {  
 						e.printStackTrace();
 						continue;
 					}
@@ -283,9 +283,9 @@ public class SeqRepoImporter {
 			final String name = project.getName();
 			File gitDir = new File(gitRootPath + "/" + name);
 			
-			if (!cache) {
-				org.apache.commons.io.FileUtils.deleteQuietly(new File(gitRootPath + "/" + project.getName()));
-			}
+			if (project.getForked())// || !(project.getProgrammingLanguagesList().contains("Java") || project.getProgrammingLanguagesList().contains("JavaScript") ||  project.getProgrammingLanguagesList().contains("PHP")))
+				return project;
+			
 
 			String[] args = { repo.getUrl(), gitDir.getAbsolutePath() };
 			try {
@@ -319,13 +319,13 @@ public class SeqRepoImporter {
 				projBuilder.setCodeRepositories(i, repoBuilder);
 				return projBuilder.build();
 			} catch (final Throwable e) {
-				printError(e, "unknown error");
+				printError(e, "unknown error", project.getName());
 			} finally {
 				if (conn != null) {
 					try {
 						conn.close();
 					} catch (Exception e) {
-						printError(e, "Cannot close Git connector to " + gitDir.getAbsolutePath());
+						printError(e, "Cannot close Git connector to " + gitDir.getAbsolutePath(), project.getName());
 					}
 				}
 				if (!cache) {
@@ -337,8 +337,8 @@ public class SeqRepoImporter {
 		}
 	}
 
-	public static void printError(final Throwable e, final String message) {
-		System.err.println("ERR: " + message);
+	public static void printError(final Throwable e, final String message, String name) {
+		System.err.println("ERR: " + message + " proccessing: " + name);
 		if (debug) {
 			e.printStackTrace();
 			// System.exit(-1);

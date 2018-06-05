@@ -34,7 +34,7 @@ public class CacheGithubJSON {
 				for (int i = 0; i < repoArray.size(); i++) {
 					RepoMetadata repo = new RepoMetadata(repoArray.get(i).getAsJsonObject());
 					//JsonObject rp = repoArray.get(i).getAsJsonObject();
-					if (repo.id != null && repo.name != null && repoArray.get(i).getAsJsonObject().get("fork").getAsBoolean() == false) {
+					if (repo.id != null && repo.name != null) {
 						try{
 						Project protobufRepo = repo.toBoaMetaDataProtobuf();
 						// System.out.println(jRepo.toString());
