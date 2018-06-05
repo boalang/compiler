@@ -26,7 +26,7 @@ public class RepositoryCloner {
 		Git result = null;
 
 		java.lang.System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
-	//	try {
+		try {
 			result = Git.cloneRepository().setURI(url).setBare(true).setDirectory(localGitDir).call();
 			// Note: the call() returns an opened repository already which
 			// needs
@@ -38,9 +38,10 @@ public class RepositoryCloner {
 		} catch (Exception e) {
 			System.err.println("Error cloning " + url);
 			e.printStackTrace();
+			*/
 		} finally {
 			if (result != null && result.getRepository() != null)
 				result.getRepository().close();
-		} */
+		} 
 	}
 }
