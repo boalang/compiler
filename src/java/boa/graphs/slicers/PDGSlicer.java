@@ -232,7 +232,11 @@ public class PDGSlicer {
                 }
 
                 slice.add(node);
-                sb.append(node.getExpr()); // for hashcode caching
+                // for hashcode caching
+                if (node.hasExpr())
+                    sb.append(node.getExpr());
+                if (node.hasStmt())
+                    sb.append(node.getStmt());
                 // if successor has not been visited, add it
                 Collections.sort(node.getSuccessors());
                 for (final PDGNode succ : node.getSuccessors())

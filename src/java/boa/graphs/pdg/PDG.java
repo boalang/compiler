@@ -330,7 +330,10 @@ public class PDG {
             while (nodes.size() != 0) {
                 final PDGNode node = nodes.pop();
                 visited.add(node);
-                sb.append(node.getExpr());
+                if (node.hasExpr())
+                    sb.append(node.getExpr());
+                if (node.hasStmt())
+                    sb.append(node.getStmt());
                 Collections.sort(node.getSuccessors());
                 for (final PDGNode succ : node.getSuccessors())
                     if (!visited.contains(succ) && !nodes.contains(succ))
