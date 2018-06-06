@@ -141,7 +141,7 @@ public class CDG {
     private void constructCDG(final PDTree pdTree, final CFG cfg) throws Exception {
         // store source and desination of control edges with label
         final Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
-        for (final CFGNode n : cfg.getNodes()) {
+        for (final CFGNode n : cfg.sortNodes()) {
             if (n.getKind() == Control.Node.NodeType.CONTROL)
                 for (final CFGEdge e : n.getOutEdges())
                     if (e.getLabel().equals("."))
