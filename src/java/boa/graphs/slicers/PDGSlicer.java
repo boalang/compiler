@@ -20,6 +20,7 @@ import boa.graphs.pdg.PDG;
 import boa.graphs.pdg.PDGEdge;
 import boa.graphs.pdg.PDGNode;
 import boa.types.Ast.*;
+import boa.types.Control;
 
 import java.util.*;
 
@@ -186,6 +187,19 @@ public class PDGSlicer {
      */
     public int getTotalNodes() {
         return slice.size();
+    }
+
+    /**
+     * Returns the total control nodes in the slice
+     *
+     * @return the total control nodes in the slice
+     */
+    public int getTotalControlNodes() {
+        int totalControlNodes = 0;
+        for (PDGNode node: slice)
+            if (node.getKind() == Control.Node.NodeType.CONTROL)
+                totalControlNodes = totalControlNodes + 1;
+        return totalControlNodes;
     }
 
     /**

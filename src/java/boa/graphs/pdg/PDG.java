@@ -131,6 +131,19 @@ public class PDG {
     }
 
     /**
+     * Returns the total control nodes in the graph
+     *
+     * @return the total control nodes in the graph
+     */
+    public int getTotalControlNodes() {
+        int totalControlNodes = 0;
+        for (PDGNode node: nodes)
+            if (node.getKind() == Control.Node.NodeType.CONTROL)
+                totalControlNodes = totalControlNodes + 1;
+        return totalControlNodes;
+    }
+
+    /**
      * Returns the total edges in the graph
      *
      * @return the total edges in the graph
