@@ -153,6 +153,15 @@ public class PDGSlicer {
     }
 
     /**
+     * Returns the method whose PDG is built
+     *
+     * @return the method whose PDG is built
+     */
+    public Method getMethod() {
+        return md;
+    }
+
+    /**
      * Returns the list of starting nodes of the slice
      *
      * @return the list of starting nodes of the slice
@@ -170,14 +179,36 @@ public class PDGSlicer {
         return slice;
     }
 
+    /**
+     * Returns the total nodes in the slice
+     *
+     * @return the total nodes in the slice
+     */
+    public int getTotalNodes() {
+        return slice.size();
+    }
+
+    /**
+     * Returns the total edges in the slice
+     *
+     * @return the total edges in the slice
+     */
+    public int getTotalEdges() {
+        int totalEdges = 0;
+        for (PDGNode node: slice)
+            totalEdges = totalEdges + node.getOutEdges().size();
+        return totalEdges;
+    }
+
+    /**
+     * Returns the set of slice nodes sorted by node ids
+     *
+     * @return the set of slice nodes sorted by node ids
+     */
     public List<PDGNode> getSortedSlice() {
         final List<PDGNode> sorted = new ArrayList<PDGNode>(slice);
         Collections.sort(sorted);
         return sorted;
-    }
-
-    public Method getMethod() {
-        return md;
     }
 
     /**
@@ -272,18 +303,18 @@ public class PDGSlicer {
             final PDGNode node1 = nodes1.pop();
             final PDGNode node2 = nodes2.pop();
             // compare statements
-            if ((node1.getStmt() == null  && node2.getStmt() != null) ||
-                    (node1.getStmt() != null  && node2.getStmt() == null))
+            if ((!node1.hasStmt() && node2.hasStmt()) ||
+                    (node1.hasStmt() && !node2.hasStmt()))
                 return false;
-            if (node1.getStmt() != null && node2.getStmt() != null &&
+            if (node1.hasStmt() && node2.hasStmt() &&
                     !node1.getStmt().equals(node2.getStmt())) // use string comparisons?? prettyprint
                 return false;
 
             // compare expressions
-            if ((node1.getExpr() == null  && node2.getExpr() != null) ||
-                    (node1.getExpr() != null  && node2.getExpr() == null))
+            if ((!node1.hasExpr() && node2.hasStmt()) ||
+                    (node1.hasExpr() && !node2.hasExpr()))
                 return false;
-            if (node1.getExpr() != null && node2.getExpr() != null &&
+            if (node1.hasExpr() && node2.hasExpr() &&
                     !node1.getExpr().equals(node2.getExpr())) // use string comparisons?? prettyprint
                 return false;
 

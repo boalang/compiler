@@ -121,6 +121,27 @@ public class PDG {
         return nodes;
     }
 
+    /**
+     * Returns the total nodes in the graph
+     *
+     * @return the total nodes in the graph
+     */
+    public int getTotalNodes() {
+        return nodes.size();
+    }
+
+    /**
+     * Returns the total edges in the graph
+     *
+     * @return the total edges in the graph
+     */
+    public int getTotalEdges() {
+        int totalEdges = 0;
+        for (PDGNode node: nodes)
+            totalEdges = totalEdges + node.getOutEdges().size();
+        return totalEdges;
+    }
+
 	public PDGNode[] sortNodes() {
 		try {
 			final PDGNode[] results = new PDGNode[nodes.size()];
@@ -256,60 +277,66 @@ public class PDG {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof PDG)) return false;
-        final PDG pdgSlicer = (PDG) o;
+        final PDG pdg = (PDG) o;
+        if (entryNode == null || pdg.getEntryNode() == null)
+            return false;
 
         final Stack<PDGNode> nodes1 = new Stack<PDGNode>();
         final Stack<PDGNode> nodes2 = new Stack<PDGNode>();
         final Set<PDGNode> visited1 = new HashSet<PDGNode>();
         final Set<PDGNode> visited2 = new HashSet<PDGNode>();
         nodes1.add(entryNode);
-        nodes2.add(pdgSlicer.getEntryNode());
+        nodes2.add(pdg.getEntryNode());
 
-        while (nodes1.size() != 0) {
-            if (nodes1.size() != nodes2.size())
-                return false;
-            final PDGNode node1 = nodes1.pop();
-            final PDGNode node2 = nodes2.pop();
-            // compare statements
-            if ((node1.getStmt() == null  && node2.getStmt() != null) ||
-                    (node1.getStmt() != null  && node2.getStmt() == null))
-                return false;
-            if (node1.getStmt() != null && node2.getStmt() != null &&
-                    !node1.getStmt().equals(node2.getStmt())) // use string comparisons?? prettyprint
-                return false;
-
-            // compare expressions
-            if ((node1.getExpr() == null  && node2.getExpr() != null) ||
-                    (node1.getExpr() != null  && node2.getExpr() == null))
-                return false;
-            if (node1.getExpr() != null && node2.getExpr() != null &&
-                    !node1.getExpr().equals(node2.getExpr())) // use string comparisons?? prettyprint
-                return false;
-
-            // compare out edges
-            if (node1.getOutEdges().size() != node2.getOutEdges().size())
-                return false;
-
-            visited1.add(node1);
-            visited2.add(node2);
-
-            for (int i = 0; i < node1.getSuccessors().size(); i++) {
-                final List<PDGEdge> outEdges1 = node1.getOutEdges(node1.getSuccessors().get(i));
-                final List<PDGEdge> outEdges2 = node2.getOutEdges(node2.getSuccessors().get(i));
-                if (outEdges1.size() != outEdges2.size())
+        try {
+            while (nodes1.size() != 0) {
+                if (nodes1.size() != nodes2.size())
                     return false;
-                for (int j = 0; j < outEdges1.size(); j++) {
-                    if (outEdges1.get(j).getKind() != outEdges2.get(j).getKind() ||
-                            !outEdges1.get(j).getLabel().equals(outEdges2.get(j).getLabel()))
+                final PDGNode node1 = nodes1.pop();
+                final PDGNode node2 = nodes2.pop();
+                // compare statements
+                if ((!node1.hasStmt() && node2.hasStmt()) ||
+                        (node1.hasStmt() && !node2.hasStmt()))
+                    return false;
+                if (node1.hasStmt() && node2.hasStmt() &&
+                        !node1.getStmt().equals(node2.getStmt())) // use string comparisons?? prettyprint
+                    return false;
+
+                // compare expressions
+                if ((!node1.hasExpr() && node2.hasStmt()) ||
+                        (node1.hasExpr() && !node2.hasExpr()))
+                    return false;
+                if (node1.hasExpr() && node2.hasExpr() &&
+                        !node1.getExpr().equals(node2.getExpr())) // use string comparisons?? prettyprint
+                    return false;
+
+                // compare out edges
+                if (node1.getOutEdges().size() != node2.getOutEdges().size())
+                    return false;
+
+                visited1.add(node1);
+                visited2.add(node2);
+
+                for (int i = 0; i < node1.getSuccessors().size(); i++) {
+                    final List<PDGEdge> outEdges1 = node1.getOutEdges(node1.getSuccessors().get(i));
+                    final List<PDGEdge> outEdges2 = node2.getOutEdges(node2.getSuccessors().get(i));
+                    if (outEdges1.size() != outEdges2.size())
                         return false;
+                    for (int j = 0; j < outEdges1.size(); j++) {
+                        if (outEdges1.get(j).getKind() != outEdges2.get(j).getKind() ||
+                                !outEdges1.get(j).getLabel().equals(outEdges2.get(j).getLabel()))
+                            return false;
+                    }
+
+                    if (!visited1.contains(node1.getSuccessors().get(i)))
+                        nodes1.push(node1.getSuccessors().get(i));
+                    if (!visited2.contains(node2.getSuccessors().get(i)))
+                        nodes2.push(node2.getSuccessors().get(i));
                 }
 
-                if (!visited1.contains(node1.getSuccessors().get(i)))
-                    nodes1.push(node1.getSuccessors().get(i));
-                if (!visited2.contains(node2.getSuccessors().get(i)))
-                    nodes2.push(node2.getSuccessors().get(i));
             }
-
+        } catch (Exception e) {
+            BoaAstIntrinsics.prettyprint(md);
         }
 
         return true;
@@ -322,7 +349,7 @@ public class PDG {
          * For those strings hashcode will be recalculated everytime hashcode is
          * requested but the general contract for the hashCode() method will still hold.
          */
-        if (hashcode == 0) {
+        if (hashcode == 0 && entryNode != null) {
             final Stack<PDGNode> nodes = new Stack<PDGNode>();
             nodes.add(entryNode);
             final Set<PDGNode> visited = new HashSet<PDGNode>();
@@ -342,6 +369,7 @@ public class PDG {
             // compute and cache hash
             hashcode = sb.toString().hashCode();
         }
+
         return hashcode;
     }
 }
