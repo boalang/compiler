@@ -112,6 +112,19 @@ public class PDTree {
         return nodes;
     }
 
+	public TreeNode[] sortNodes() {
+		try {
+			final TreeNode[] results = new TreeNode[nodes.size()];
+			for (final TreeNode node : nodes) {
+				results[node.getId()] = node;
+			}
+			return results;
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
     /**
      * Returns the immediate post-dominator of the given node
      *

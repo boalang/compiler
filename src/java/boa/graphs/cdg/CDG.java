@@ -105,6 +105,19 @@ public class CDG {
         return nodes;
     }
 
+	public CDGNode[] sortNodes() {
+		try {
+			final CDGNode[] results = new CDGNode[nodes.size()];
+			for (final CDGNode node : nodes) {
+				results[node.getId()] = node;
+			}
+			return results;
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
     /**
      * Returns the CDG node for the given node id. If not found then returns null
      *

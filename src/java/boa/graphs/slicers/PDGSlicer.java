@@ -170,6 +170,12 @@ public class PDGSlicer {
         return slice;
     }
 
+    public List<PDGNode> getSortedSlice() {
+        final List<PDGNode> sorted = new ArrayList<PDGNode>(slice);
+        Collections.sort(sorted);
+        return sorted;
+    }
+
     public Method getMethod() {
         return md;
     }

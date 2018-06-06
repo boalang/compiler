@@ -225,8 +225,7 @@ public class BoaGraphIntrinsics {
 			str.append("\"\n");
 		}
 
-		final boa.graphs.cfg.CFGNode[] sorted = cfg.sortNodes();
-		for (final boa.graphs.cfg.CFGNode n : sorted) {
+		for (final boa.graphs.cfg.CFGNode n : cfg.sortNodes()) {
 			str.append("\t");
 			str.append(n.getId());
 			str.append("[");
@@ -315,7 +314,7 @@ public class BoaGraphIntrinsics {
 			str.append("\"\n");
 		}
 
-		for (final boa.graphs.cdg.CDGNode n : cdg.getNodes()) {
+		for (final boa.graphs.cdg.CDGNode n : cdg.sortNodes()) {
 			str.append("\t");
 			str.append(n.getId());
 			str.append("[shape=ellipse");
@@ -387,8 +386,7 @@ public class BoaGraphIntrinsics {
 			str.append("\"\n");
 		}
 
-		final boa.graphs.ddg.DDGNode[] sorted = ddg.sortNodes();
-		for (final boa.graphs.ddg.DDGNode n : sorted) {
+		for (final boa.graphs.ddg.DDGNode n : ddg.sortNodes()) {
 			str.append("\t");
 			str.append(n.getId());
 			str.append("[shape=ellipse");
@@ -459,8 +457,7 @@ public class BoaGraphIntrinsics {
 			str.append("\"\n");
 		}
 
-		final boa.graphs.pdg.PDGNode[] sorted = pdg.sortNodes();
-		for (final boa.graphs.pdg.PDGNode n : sorted) {
+		for (final boa.graphs.pdg.PDGNode n : pdg.sortNodes()) {
 			str.append("\t");
 			str.append(n.getId());
 			str.append("[shape=ellipse");
@@ -533,7 +530,7 @@ public class BoaGraphIntrinsics {
 			str.append("\"\n");
 		}
 
-		for (final boa.graphs.pdg.PDGNode n : pdgslicer.getSlice()) {
+		for (final boa.graphs.pdg.PDGNode n : pdgslicer.getSortedSlice()) {
 			str.append("\t");
 			str.append(n.getId());
 			str.append("[shape=ellipse");
@@ -606,7 +603,7 @@ public class BoaGraphIntrinsics {
 			str.append("\"\n");
 		}
 
-		for (final boa.graphs.trees.TreeNode n : pdtree.getNodes()) {
+		for (final boa.graphs.trees.TreeNode n : pdtree.sortNodes()) {
 			str.append("\t");
 			str.append(n.getId());
 			str.append("[shape=ellipse");
