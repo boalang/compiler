@@ -16,8 +16,12 @@
  */
 package boa.graphs.cdg;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -140,14 +144,17 @@ public class CDG {
      */
     private void constructCDG(final PDTree pdTree, final CFG cfg) throws Exception {
         // store source and desination of control edges with label
-        final Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
+        final Map<Integer[], String> controlEdges = new LinkedHashMap<Integer[], String>();
         for (final CFGNode n : cfg.sortNodes()) {
-            if (n.getKind() == Control.Node.NodeType.CONTROL)
-                for (final CFGEdge e : n.getOutEdges())
+            if (n.getKind() == Control.Node.NodeType.CONTROL) {
+                final List<CFGEdge> edges = new ArrayList<CFGEdge>(n.getOutEdges());
+                Collections.sort(edges);
+                for (final CFGEdge e : edges)
                     if (e.getLabel().equals("."))
                         controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, "F");
                     else
                         controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, e.getLabel());
+            }
         }
 
         // add the edge: entry ---> start
