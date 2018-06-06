@@ -459,7 +459,8 @@ public class BoaGraphIntrinsics {
 			str.append("\"\n");
 		}
 
-		for (final boa.graphs.pdg.PDGNode n : pdg.getNodes()) {
+		final boa.graphs.pdg.PDGNode[] sorted = pdg.sortNodes();
+		for (final boa.graphs.pdg.PDGNode n : sorted) {
 			str.append("\t");
 			str.append(n.getId());
 			str.append("[shape=ellipse");

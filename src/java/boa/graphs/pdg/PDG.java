@@ -121,6 +121,19 @@ public class PDG {
         return nodes;
     }
 
+	public PDGNode[] sortNodes() {
+		try {
+			final PDGNode[] results = new PDGNode[nodes.size()];
+			for (final PDGNode node : nodes) {
+				results[node.getId()] = node;
+			}
+			return results;
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
     /**
      * Returns the PDG node for the given node id. If not found then returns null
      *
