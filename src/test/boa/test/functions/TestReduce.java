@@ -224,8 +224,8 @@ public class TestReduce {
 			{ "x + x - x - x", "2 * x - 2 * x" }, // FIXME should be "0"
 			{ "x - x + x - x", "0" },
 			{ "x - x - x + x", "-x + x" }, // FIXME should be "0"
-			{ "-x - x + x + x", "-x - x + 2 * x" }, // FIXME should be "0"
-			{ "-x + x - x + x", "-x + x - x + x" }, // FIXME should be "0"
+			{ "-x - x + x + x", "2 * -x + 2 * x" }, // FIXME should be "0"
+			{ "-x + x - x + x", "2 * -x + 2 * x" }, // FIXME should be "0"
 			{ "-x + x + x - x", "-x + 2 * x - x" }, // FIXME should be "0"
 			{ "x * x / x / x", "x * x / x / x" }, // FIXME should be "1"
 			{ "x / x * x / x", "1" },
@@ -243,13 +243,13 @@ public class TestReduce {
 			{ "foo(1 + x + 1, 2 + y + 2)", "foo(2 + x, 4 + y)" },
 			{ "foo(1 + 1 + x, 2 + 2 + y)", "foo(2 + x, 4 + y)" },
 			{ "foo(x + 1 - 1, y + 2 - 2)", "foo(1 + x - 1, 2 + y - 2)" }, // FIXME should be "foo(x, y)"
-			{ "foo(x - 1 + 1, y - 2 + 2)", "foo(1 + (x - 1), 2 + (y - 2))" }, // FIXME should be "foo(x, y)"
+			{ "foo(x - 1 + 1, y - 2 + 2)", "foo(x, y)" },
 
 			{ "foo() + 1 + 1", "2 + foo()" },
 			{ "1 + foo() + 1", "2 + foo()" },
 			{ "1 + 1 + foo()", "2 + foo()" },
 			{ "foo() + 1 - 1", "1 + foo() - 1" }, // FIXME should be "foo()"
-			{ "foo() - 1 + 1", "1 + (foo() - 1)" }, // FIXME should be "foo()"
+			{ "foo() - 1 + 1", "foo()" },
 			{ "1 + foo() - 1", "1 + foo() - 1" }, // FIXME should be "foo()"
 			{ "-1 + foo() + 1", "foo()" },
 			{ "1 - 1 + foo()", "foo()" },
@@ -274,14 +274,14 @@ public class TestReduce {
 			{ "5.0 + a.length * (3.5 - 2)", "5.0 + 1.5 * a.length" },
 			{ "5 + x + 3 + x", "8 + 2 * x" },
 			{ "5 + (x + 3) + x", "8 + 2 * x" },
-			{ "5 - (x - 3) - x", "3 + (5 - 2 * x)" }, // FIXME should be 8 + 2 * x
+			{ "5 - (x - 3) - x", "8 + -2 * x" },
 			{ "(x - 3) - x", "-3" },
 			{ "5.0 + +3.5 - -2 * a.length", "8.5 + 2 * a.length" },
 			{ "(5.0 + 3.5) - -2 * a.length", "8.5 + 2 * a.length" },
 			//{ "5.0 + 3.5 - -2 * a.length + x", "8.5 + 2 * a.length + x" }, // FIXME when parsed, the answer isnt flattened but should be
 			{ "5.0 + 3.5 - (-2 * a.length + x)", "8.5 - (-2 * a.length + x)" }, // FIXME should be 8.5 + 2 * a.length - x
 			{ "5.0 + 3.5 - -2 * (a.length + x)", "8.5 + 2 * (a.length + x)" },
-			{ "5 - m(a) + 0", "5 - m(a)" },
+			{ "5 - m(a) + 0", "5 + -m(a)" }, // FIXME
 			{ "5 - -m(a) - 0", "5 + m(a)" },
 			{ "5 + +m(a) - 0", "5 + m(a)" },
 			{ "5 + m() + -0", "5 + m()" },
@@ -298,14 +298,17 @@ public class TestReduce {
 			{ "x / 3 + 6", "6 + x / 3" },
 
 			{ "1 + -x + 2 + 3", "6 + -x" },
-			{ "1 + -x + 2 - 4", "3 + -x - 4" }, // FIXME should be "-x - 1"
-			{ "1 + -x - 4 + 2", "2 + (1 + -x - 4)" }, // FIXME shoulde be "-x - 1"
+			{ "1 + -x + 2 - 4", "(3 + -x) - 4" }, // FIXME shoulde be "-1 + -x"
+			{ "1 + -x - 4 + 2", "-1 + -x" },
 			{ "5 + (x + 3) + x + 2 - 3", "10 + 2 * x - 3" }, // FIXME should be "7 + 2 * x"
-			{ "5 + (x + 3) + x - 2 + 3", "3 + ((8 + 2 * x) - 2)" }, // FIXME should be "9 + 2 * x"
+			{ "5 + (x + 3) + x - 2 + 3", "9 + 2 * x" },
 			{ "5 + (x + 3) + x * 2 - 3", "8 + x + 2 * x - 3" }, // FIXME should be "5 + 3 * x"
-			{ "5 + (x + 3) - x + 2 - 3", "2 + ((8 + x) - x) - 3" }, // FIXME should be "7"
+			{ "5 + (x + 3) - x + 2 - 3", "(10 + x + -x) - 3" }, // FIXME should be "7"
 			{ "5 + (x + 3) + x + 2 * 3", "14 + 2 * x" },
 			{ "5 + (x + 3) + x - 2 * 3", "8 + 2 * x - 6" }, // FIXME should be "2 + 2 * x"
+			{ "2 + ((8 + x) - x) + 3", "13 + x + -x" }, // FIXME should be "13"
+			{ "1 - 2 * x - 3 + -2", "-4 + (-2 * x)" },
+			{ "x + -x", "x + -x" }, // FIXME should be "0"
 		});
 	}
 

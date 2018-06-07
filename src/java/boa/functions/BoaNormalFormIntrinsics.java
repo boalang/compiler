@@ -850,6 +850,21 @@ public class BoaNormalFormIntrinsics {
 					return ((Long)o).longValue();
 				}
 
+				// bring children up if the child node is an sub
+				for (int i = 0; i < results.size(); i++)
+					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_SUB) {
+						final Expression subExp = (Expression)results.get(i);
+						if (subExp.getExpressionsCount() > 1) {
+							results.remove(i);
+							for (int j = 0; j < subExp.getExpressionsCount(); j++){
+								if (j == 0)
+									results.add(i + j, internalReduce(subExp.getExpressions(j)));
+								else
+									results.add(i + j, internalReduce(createExpression(ExpressionKind.OP_SUB, subExp.getExpressions(j))));
+							}
+						}
+					}
+
 				// bring children up if the child node is an add
 				for (int i = 0; i < results.size(); i++)
 					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_ADD) {
