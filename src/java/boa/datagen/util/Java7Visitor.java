@@ -606,7 +606,14 @@ public class Java7Visitor extends ASTVisitor {
 		if (itb.getTypeDeclaration() != null)
 			itb = itb.getTypeDeclaration();
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-		tb.setName(itb.getName());
+		String name = "";
+		try {
+			name = itb.getName();
+		} catch (Exception e) {
+			System.err.println("Error getting type name while visiting java file" );
+			e.printStackTrace();
+		}
+		tb.setName(name); //itb.getName());
 		if (itb.isClass())
 			tb.setKind(boa.types.Ast.TypeKind.CLASS);
 		else if (itb.isInterface())
