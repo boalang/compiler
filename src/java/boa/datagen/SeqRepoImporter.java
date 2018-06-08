@@ -283,7 +283,7 @@ public class SeqRepoImporter {
 			final String name = project.getName();
 			File gitDir = new File(gitRootPath + "/" + name);
 			
-			if (project.getForked())// || !(project.getProgrammingLanguagesList().contains("Java") || project.getProgrammingLanguagesList().contains("JavaScript") ||  project.getProgrammingLanguagesList().contains("PHP")))
+			if (project.getForked() || !(project.getProgrammingLanguagesList().contains("Java") || project.getProgrammingLanguagesList().contains("JavaScript") ||  project.getProgrammingLanguagesList().contains("PHP")))
 				return project;
 			
 
