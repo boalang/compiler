@@ -147,6 +147,8 @@ public abstract class AbstractConnector implements AutoCloseable {
 			for (i = 0; i < paths.length; i++) {
 				String sourceFilePath = paths[i];
 				CompilationUnit cu = cus.get(sourceFilePath);
+				if (cu == null)
+					continue;
 				ChangedFile cf = changedFiles.get(sourceFilePath);
 				ChangedFile.Builder fb = ChangedFile.newBuilder(cf);
 				fb.setAst(false);
@@ -248,6 +250,8 @@ public abstract class AbstractConnector implements AutoCloseable {
 			final int fileIndex = startFileIndex + i;
 			String path = paths[i];
 			CompilationUnit cu = cus.get(path);
+			if (cu == null)
+				continue;
 			cu.accept(new ASTVisitor() {
 				private int index = 1;
 				@Override
