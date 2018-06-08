@@ -68,13 +68,15 @@ public abstract class AbstractConnector implements AutoCloseable {
 	protected List<Integer> branchIndices = new ArrayList<Integer>(), tagIndices = new ArrayList<Integer>();
 	protected HashMap<String, Integer> nameIndices = new HashMap<String, Integer>();
 	protected Map<String, Integer> revisionMap = new HashMap<String, Integer>();
+	protected String projectName;
 	protected int headCommitOffset = -1;
 
 	public int getHeadCommitOffset() {
 		return this.headCommitOffset;
 	}
 
-	public List<ChangedFile> buildHeadSnapshot(final String[] languages, final SequenceFile.Writer astWriter) {
+	public List<ChangedFile> buildHeadSnapshot(final String[] languages, final SequenceFile.Writer astWriter, String projectName) {
+		this.projectName = projectName;
 		return buildSnapshot(headCommitOffset, languages, astWriter);
 	}
 	
@@ -165,7 +167,8 @@ public abstract class AbstractConnector implements AutoCloseable {
 					/*for (final Comment c : visitor.getComments())
 						comments.addComments(c);*/
 				} catch (final Throwable e) {
-					System.err.println("Error visiting " + sourceFilePath + " when parsing head snapshot!!!");
+					System.err.println("Error visiting " + sourceFilePath + " from " + projectName +" when parsing head snapshot!!!");
+					
 					e.printStackTrace();
 					System.exit(-1);
 					continue;
@@ -387,7 +390,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 		for (int i = 0; i < revisions.size(); i++) {
 			long startTime = System.currentTimeMillis();
 			final AbstractCommit rev = revisions.get(i);
-			revs.add(rev.asProtobuf(parse, astWriter, contentWriter));
+			revs.add(rev.asProtobuf(parse, astWriter, contentWriter, projectName));
 			
 			if (debug) {
 				long endTime = System.currentTimeMillis();

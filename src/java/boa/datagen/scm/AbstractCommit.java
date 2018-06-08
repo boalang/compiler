@@ -74,6 +74,7 @@ public abstract class AbstractCommit {
 			DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
 
 	protected AbstractConnector connector;
+	protected String projectName;
 
 	protected AbstractCommit(AbstractConnector cnn) {
 		this.connector = cnn;
@@ -158,9 +159,10 @@ public abstract class AbstractCommit {
 			HashMap<String, String> globalProperties, HashMap<String, String> globalManagedDependencies,
 			Stack<PomFile> parentPomFiles);
 
-	public Revision asProtobuf(final boolean parse, final Writer astWriter, final Writer contentWriter) {
+	public Revision asProtobuf(final boolean parse, final Writer astWriter, final Writer contentWriter, String projectName) {
 		final Revision.Builder revision = Revision.newBuilder();
 		revision.setId(id);
+		this.projectName = projectName;
 
 		if (this.author != null) {
 			final Person author = Person.newBuilder(this.author).build();
@@ -535,7 +537,7 @@ public abstract class AbstractCommit {
 				return false;
 		} catch (Exception e) {
 			if (debug)
-				System.err.println("Error parsing PHP file: " + path);
+				System.err.println("Error parsing PHP file: " + path + " from: " + projectName);
 			// e.printStackTrace();
 			return false;
 		}
@@ -601,7 +603,7 @@ public abstract class AbstractCommit {
 					return false;
 				} catch (final Throwable e) {
 					if (debug)
-						System.err.println("Error visiting JS file: " + path);
+						System.err.println("Error visiting JS file: " + path  + " from: " + projectName);
 					e.printStackTrace();
 					System.exit(-1);
 					return false;
@@ -674,7 +676,7 @@ public abstract class AbstractCommit {
 					 */
 				} catch (final UnsupportedOperationException e) {
 					if (debugparse) {
-						System.err.println("Error visiting Java file: " + path);
+						System.err.println("Error visiting Java file: " + path  + " from: " + projectName);
 						e.printStackTrace();
 					}
 					return false;
@@ -839,7 +841,7 @@ public abstract class AbstractCommit {
 			}
 		}
 		if (l.isEmpty()) {
-			System.err.println("Cannot find previous version!");
+			System.err.println("Cannot find previous version! from: " + projectName);
 			System.exit(-1);
 		}
 		return l;

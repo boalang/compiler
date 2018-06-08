@@ -311,7 +311,7 @@ public class SeqRepoImporter {
 					if (debug)
 						System.out.println("Build head snapshot");
 					repoBuilder.setHead(conn.getHeadCommitOffset());
-					repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[] { "java" }, astWriter));
+					repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[] { "java" }, astWriter, project.getName()));
 				}
 				repoBuilder.addAllBranches(conn.getBranchIndices());
 				repoBuilder.addAllBranchNames(conn.getBranchNames());

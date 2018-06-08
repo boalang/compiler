@@ -102,7 +102,7 @@ public class TestBuildSnapshot {
 		GitConnector gc = new GitConnector(gitDir.getAbsolutePath());
 		gc.setRevisions();
 		System.out.println("Finish processing commits");
-		List<ChangedFile> snapshot1 = gc.buildHeadSnapshot(new String[]{"java"}, null);
+		List<ChangedFile> snapshot1 = gc.buildHeadSnapshot(new String[]{"java"}, null, "");
 		System.out.println("Finish building head snapshot");
 		List<String> snapshot2 = gc.getSnapshot(Constants.HEAD);
 		gc.close();
