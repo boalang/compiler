@@ -91,11 +91,11 @@ public class LocalGitSequenceGenerator {
 		
 		AbstractConnector conn = null;
 		try {
-			conn = new GitConnector(gitDir.getAbsolutePath());
+			conn = new GitConnector(gitDir.getAbsolutePath(), "");
 			final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
 			repoBuilder.setUrl(path);
 			repoBuilder.setKind(RepositoryKind.GIT);
-			for (final Revision rev : conn.getCommits(true, astWriter, contentWriter)) {
+			for (final Revision rev : conn.getCommits(true, astWriter, contentWriter, "")) {
 				final Revision.Builder revBuilder = Revision.newBuilder(rev);
 				repoBuilder.addRevisions(revBuilder);
 			}

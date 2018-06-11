@@ -49,7 +49,8 @@ public class GitConnector extends AbstractConnector {
 	private Git git;
 	private RevWalk revwalk;
 
-	public GitConnector(final String path) {
+	public GitConnector(final String path, String projectName) {
+		this.projectName = projectName;
 		try {
 			this.path = path;
 			this.repository = new FileRepositoryBuilder()
@@ -120,7 +121,8 @@ public class GitConnector extends AbstractConnector {
 				final GitCommit gc = new GitCommit(this, repository, temprevwalk);
 				
 				gc.setId(rc.getName());
-				PersonIdent author = rc.getAuthorIdent(), committer = rc.getCommitterIdent();
+				PersonIdent author = rc.getAuthorIdent(),
+						committer = rc.getCommitterIdent();
 				if (author != null)
 					gc.setAuthor(author.getName(), null, author.getEmailAddress());
 				gc.setCommitter(committer.getName(), null, committer.getEmailAddress());

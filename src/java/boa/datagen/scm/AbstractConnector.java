@@ -384,7 +384,8 @@ public abstract class AbstractConnector implements AutoCloseable {
 		return tagIndices;
 	}
 	
-	public List<Revision> getCommits(final boolean parse, final Writer astWriter, final Writer contentWriter) {
+	public List<Revision> getCommits(final boolean parse, final Writer astWriter, final Writer contentWriter, String projectName) {
+		this.projectName = projectName;
 		if (revisions == null) {
 			revisions = new ArrayList<AbstractCommit>();
 			setRevisions();

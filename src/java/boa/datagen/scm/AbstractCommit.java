@@ -551,7 +551,7 @@ public abstract class AbstractCommit {
 				return false;
 			} catch (final Throwable e) {
 				if (debug)
-					System.err.println("Error visiting PHP file: " + path);
+					System.err.println("Error visiting PHP file: " + path + " from: " + projectName);
 				e.printStackTrace();
 				System.exit(-1);
 				return false;
