@@ -32,7 +32,7 @@ public class TestBuildSnapshot {
 			System.out.println("Repo: " + repoName);
 			File gitDir = new File("dataset/repos/" + repoName);
 			RepositoryCloner.clone(new String[]{"https://github.com/" + repoName + ".git", gitDir.getAbsolutePath()});
-			GitConnector gc = new GitConnector(gitDir.getAbsolutePath());
+			GitConnector gc = new GitConnector(gitDir.getAbsolutePath(), repoName);
 			gc.setRevisions();
 			System.out.println("Finish processing commits");
 			List<ChangedFile> snapshot1 = new ArrayList<ChangedFile>();
@@ -99,7 +99,7 @@ public class TestBuildSnapshot {
 //		File gitDir = new File("F:\\testrepos\\repos-test\\hoan\\test1");
 		if (!gitDir.exists())
 			return;
-		GitConnector gc = new GitConnector(gitDir.getAbsolutePath());
+		GitConnector gc = new GitConnector(gitDir.getAbsolutePath(), "condoia");
 		gc.setRevisions();
 		System.out.println("Finish processing commits");
 		List<ChangedFile> snapshot1 = gc.buildHeadSnapshot(new String[]{"java"}, null, "");
