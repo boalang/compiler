@@ -95,18 +95,18 @@ public class DDG {
      */
     public HashSet<DDGNode> getNodes() { return nodes; }
 
-	public DDGNode[] sortNodes() {
-		try {
-			final DDGNode[] results = new DDGNode[nodes.size()];
-			for (final DDGNode node : nodes) {
-				results[node.getId()] = node;
-			}
-			return results;
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+    public DDGNode[] sortNodes() {
+        try {
+            final DDGNode[] results = new DDGNode[nodes.size()];
+            for (final DDGNode node : nodes) {
+                results[node.getId()] = node;
+            }
+            return results;
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * Returns the map of definiton-use chains
@@ -159,64 +159,87 @@ public class DDG {
      * @throws Exception
      */
     private Map<Integer, InOut> getLiveVariables(final CFG cfg) {
-        // initialize
-        final Map<Integer, InOut> liveVars = new HashMap<Integer, InOut>();
-        for (final CFGNode n : cfg.getNodes())
-            liveVars.put(n.getId(), new InOut());
+        Map<Integer, BitSet> liveVarsIn = new HashMap<Integer, BitSet>();
+        Map<Integer, BitSet> currentLiveVarsIn = new HashMap<Integer, BitSet>();
+        Map<Integer, BitSet> liveVarsOut = new HashMap<Integer, BitSet>();
+        Map<Integer, BitSet> currentLiveVarsOut = new HashMap<Integer, BitSet>();
 
-        final Map<Integer, InOut> currentLiveVars = new HashMap<Integer, InOut>();
-        final int stopid = cfg.getNodes().size() - 1;
-        boolean saturated = false;
+        final CFGNode[] cfgNodes = cfg.reverseSortNodes();
+        final Map<CFGNode, List<CFGNode>> successors = new HashMap<CFGNode, List<CFGNode>>();
+        final Map<Integer, BitSet> nodeUsePairs = new HashMap<Integer, BitSet>();
+        final Map<Integer, Pair> pairMap = new HashMap<Integer, Pair>();
 
-        while (!saturated) { // fix point iteration
-            int changeCount = 0;
+        for (final CFGNode n : cfgNodes) {
+            liveVarsIn.put(n.getId(), new BitSet());
+            liveVarsOut.put(n.getId(), new BitSet());
+            successors.put(n, n.getSuccessors());
 
-            for (final CFGNode node : cfg.getNodes()) {
-                final InOut nodeLiveVars = new InOut(liveVars.get(node.getId()));
-
-                // out = Union in[node.successor]
-                for (final CFGNode s : node.getSuccessors())
-                    nodeLiveVars.out.addAll(liveVars.get(s.getId()).in);
-
-                // out - def
-                final Set<Pair> diff = new HashSet<Pair>(nodeLiveVars.out);
-                if (!node.getDefVariables().equals(""))
-                    for (final Pair p : nodeLiveVars.out)
-                        if (p.var.equals(node.getDefVariables()))
-                            diff.remove(p);
-
-                // in = use Union (out - def)
-                for (final String var : node.getUseVariables())
-                    nodeLiveVars.in.add(new Pair(var, node));
-                nodeLiveVars.in.addAll(diff);
-
-                // check if node's "in" has changed
-                diff.clear();
-                diff.addAll(nodeLiveVars.in);
-                diff.removeAll(liveVars.get(node.getId()).in);
-                if (diff.size() > 0)
-                    changeCount++;
-
-                // check if node's "out" has changed
-                diff.clear();
-                diff.addAll(nodeLiveVars.out);
-                diff.removeAll(liveVars.get(node.getId()).out);
-                if (diff.size() > 0)
-                    changeCount++;
-
-                currentLiveVars.put(node.getId(), nodeLiveVars);
+            // cache Pair's of use variables for every node
+            final BitSet l = new BitSet();
+            for (final String var : n.getUseVariables()) {
+                final Pair p = new Pair(var, n);
+                l.set(pairMap.size());
+                pairMap.put(pairMap.size(), p);
             }
-
-            if (changeCount == 0) {
-                saturated = true;
-            } else {
-                liveVars.clear();
-                liveVars.putAll(currentLiveVars);
-                currentLiveVars.clear();
-            }
+            nodeUsePairs.put(n.getId(), l);
         }
 
-        liveVars.remove(stopid);
+        while (true) { // fix point iteration
+            boolean changed = false;
+
+            for (final CFGNode node : cfgNodes) {
+                final BitSet nodeLiveVarsIn = (BitSet)liveVarsIn.get(node.getId()).clone();
+                final BitSet nodeLiveVarsOut = (BitSet)liveVarsOut.get(node.getId()).clone();
+
+                // out = Union in[node.successor]
+                for (final CFGNode s : successors.get(node))
+                    nodeLiveVarsOut.or(liveVarsIn.get(s.getId()));
+
+                // out - def
+                final BitSet diff = (BitSet)nodeLiveVarsOut.clone();
+                if (!node.getDefVariables().equals(""))
+                    for (int p = 0; p < nodeLiveVarsOut.size(); p++)
+                        if (nodeLiveVarsOut.get(p))
+                            if (pairMap.get(p).var.equals(node.getDefVariables()))
+                                diff.clear(p);
+
+                // in = use Union (out - def)
+                nodeLiveVarsIn.or(nodeUsePairs.get(node.getId()));
+                nodeLiveVarsIn.or(diff);
+
+                // check if node's "in" or "out" have changed
+                if (!nodeLiveVarsIn.equals(liveVarsIn.get(node.getId())) || !nodeLiveVarsOut.equals(liveVarsOut.get(node.getId())))
+                    changed = true;
+
+                currentLiveVarsIn.put(node.getId(), nodeLiveVarsIn);
+                currentLiveVarsOut.put(node.getId(), nodeLiveVarsOut);
+            }
+
+            if (!changed)
+                break;
+
+            liveVarsIn = currentLiveVarsIn;
+            currentLiveVarsIn = new HashMap<Integer, BitSet>();
+            liveVarsOut = currentLiveVarsOut;
+            currentLiveVarsOut = new HashMap<Integer, BitSet>();
+        }
+
+        liveVarsIn.remove(cfg.getNodes().size() - 1);
+        liveVarsOut.remove(cfg.getNodes().size() - 1);
+
+        final Map<Integer, InOut> liveVars = new HashMap<Integer, InOut>();
+        for (final Integer i : liveVarsIn.keySet()) {
+            final Set<Pair> ins = new LinkedHashSet<Pair>();
+            final Set<Pair> outs = new LinkedHashSet<Pair>();
+            for (int j = 0; j < liveVarsIn.get(i).size(); j++)
+                if (liveVarsIn.get(i).get(j))
+                    ins.add(pairMap.get(j));
+            for (int j = 0; j < liveVarsOut.get(i).size(); j++)
+                if (liveVarsOut.get(i).get(j))
+                    outs.add(pairMap.get(j));
+            liveVars.put(i, new InOut(ins, outs));
+        }
+
         return liveVars;
     }
 
@@ -283,7 +306,7 @@ public class DDG {
     }
 
     /**
-     * Holds in and out pairs for each node
+     * Holds in and out sets for each node
      */
     private static class InOut {
         Set<Pair> in;
@@ -294,7 +317,7 @@ public class DDG {
             out = new HashSet<Pair>();
         }
 
-        InOut(final HashSet<Pair> in, final HashSet<Pair> out){
+        InOut(final Set<Pair> in, final Set<Pair> out){
             this.in = in;
             this.out = out;
         }
@@ -302,10 +325,6 @@ public class DDG {
         InOut(final InOut inout){
             this.in = new HashSet<Pair>(inout.in);
             this.out = new HashSet<Pair>(inout.out);
-        }
-
-        public InOut clone() {
-            return new InOut(this);
         }
     }
 
@@ -316,8 +335,6 @@ public class DDG {
         String var;
         CFGNode node;
 
-        Pair() {}
-
         Pair(final String var, final CFGNode node) {
             this.var = var;
             this.node = node;
@@ -326,18 +343,22 @@ public class DDG {
         @Override
         public boolean equals(final Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (o == null || !(o instanceof Pair)) return false;
 
             final Pair pair = (Pair) o;
 
             return var.equals(pair.var) && node.getId() == pair.node.getId();
         }
 
+        private int hash = -1;
+
         @Override
         public int hashCode() {
-            int result = var.hashCode();
-            result = 31 * result + node.hashCode();
-            return result;
+            if (hash == -1) {
+                hash = var.hashCode();
+                hash = 31 * hash + node.hashCode();
+            }
+            return hash;
         }
     }
 }
