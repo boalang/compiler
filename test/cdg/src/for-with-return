@@ -1,0 +1,8 @@
+public class C {
+    public int m() {
+        for (int i = 0; i < 5; i++) {
+            return 5;
+        }
+        return 2;
+    }
+}

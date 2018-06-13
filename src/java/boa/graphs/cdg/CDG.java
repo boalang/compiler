@@ -109,18 +109,18 @@ public class CDG {
         return nodes;
     }
 
-	public CDGNode[] sortNodes() {
-		try {
-			final CDGNode[] results = new CDGNode[nodes.size()];
-			for (final CDGNode node : nodes) {
-				results[node.getId()] = node;
-			}
-			return results;
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+    public CDGNode[] sortNodes() {
+        try {
+            final CDGNode[] results = new CDGNode[nodes.size()];
+            for (final CDGNode node : nodes) {
+                results[node.getId()] = node;
+            }
+            return results;
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * Returns the CDG node for the given node id. If not found then returns null
@@ -143,6 +143,10 @@ public class CDG {
      * @param cfg control flow graph
      */
     private void constructCDG(final PDTree pdTree, final CFG cfg) throws Exception {
+        for (final TreeNode n : pdTree.getNodes())
+            if (n.getId() < pdTree.getNodes().size() - 2)
+                getNode(n);
+
         // store source and desination of control edges with label
         final Map<Integer[], String> controlEdges = new LinkedHashMap<Integer[], String>();
         for (final CFGNode n : cfg.sortNodes()) {
