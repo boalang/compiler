@@ -838,6 +838,19 @@ public class CFG {
 		return null;
 	}
 
+	public CFGNode[] reverseSortNodes() {
+		try {
+			final CFGNode[] results = new CFGNode[nodes.size()];
+			for (final CFGNode node : nodes) {
+				results[nodes.size() - 1 - node.getId()] = node;
+			}
+			return results;
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public CFGNode[] sortNodes() {
 		try {
 			final CFGNode[] results = new CFGNode[nodes.size()];

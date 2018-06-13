@@ -173,64 +173,86 @@ public class PDTree {
      * @throws Exception
      */
     private Map<CFGNode, Set<CFGNode>> computePostDomonitors(final CFG cfg) {
-        final Map<CFGNode, Set<CFGNode>> pDomMap = new HashMap<CFGNode, Set<CFGNode>>();
-        final int stopid = cfg.getNodes().size() - 1;
+        final CFGNode[] cfgNodes = cfg.reverseSortNodes();
+        final Map<CFGNode, List<CFGNode>> successors = new HashMap<CFGNode, List<CFGNode>>();
+
+        Map<CFGNode, BitSet> pDomMap = new HashMap<CFGNode, BitSet>();
+        Map<CFGNode, BitSet> currentPDomMap = new HashMap<CFGNode, BitSet>();
 
         // initialize
-        if (cfg.getNodes().size() > 2) {
-            for (final CFGNode n : cfg.getNodes()) {
-                if (n.getId() == stopid)
-                    pDomMap.put(n, new HashSet<CFGNode>(Collections.singletonList(n)));
-                else
-                    pDomMap.put(n, cfg.getNodes());
-            }
-        } else {
-            final CFGNode stopNode = cfg.getNode(1);
-            pDomMap.put(cfg.getNode(0), new HashSet<CFGNode>(cfg.getNodes()));
-            pDomMap.put(stopNode, new HashSet<CFGNode>(Collections.singletonList(stopNode)));
+        final BitSet allBits = new BitSet();
+        for (final CFGNode n : cfg.getNodes()) {
+            allBits.set(n.getId());
         }
 
-        final Map<CFGNode, Set<CFGNode>> currentPDomMap = new HashMap<CFGNode, Set<CFGNode>>();
-        boolean saturated = false;
-        while (!saturated) { // fix point iteration
-            int changeCount = 0;
+        if (cfg.getNodes().size() > 2) {
+            final int stopid = cfg.getNodes().size() - 1;
+
             for (final CFGNode n : cfg.getNodes()) {
-                final Set<CFGNode> currentPDom = new HashSet<CFGNode>();
+                if (n.getId() == stopid) {
+                    pDomMap.put(n, new BitSet());
+                    pDomMap.get(n).set(n.getId());
+                } else {
+                    pDomMap.put(n, (BitSet)allBits.clone());
+                }
+
+                successors.put(n, n.getSuccessors());
+            }
+        } else {
+            pDomMap.put(cfg.getNode(0), (BitSet)allBits.clone());
+
+            final CFGNode stopNode = cfg.getNode(1);
+            pDomMap.put(stopNode, new BitSet());
+            pDomMap.get(stopNode).set(stopNode.getId());
+
+            successors.put(cfg.getNode(0), cfg.getNode(0).getSuccessors());
+            successors.put(stopNode, stopNode.getSuccessors());
+        }
+
+        while (true) { // fix point iteration
+            boolean changed = false;
+
+            for (final CFGNode n : cfgNodes) {
+                BitSet currentPDom = null;
 
                 // Intersection[succ(node)]
-                boolean first = true;
-                for (final CFGNode succ: n.getSuccessors()) {
-                    if (first) {
-                        currentPDom.addAll(pDomMap.get(succ));
-                        first = false;
+                for (final CFGNode succ : successors.get(n)) {
+                    if (currentPDom == null) {
+                        currentPDom = (BitSet)pDomMap.get(succ).clone();
                         continue;
                     }
-                    currentPDom.retainAll(pDomMap.get(succ));
+                    currentPDom.and(pDomMap.get(succ));
+                    if (currentPDom.isEmpty())
+                        break;
                 }
                 // D[n] = {n} Union (Intersection[succ[node]])
-                currentPDom.add(n);
+                if (currentPDom == null) currentPDom = new BitSet();
+                currentPDom.set(n.getId());
 
-                final Set<CFGNode> diff = new HashSet<CFGNode>(pDomMap.get(n));
-                diff.removeAll(currentPDom);
-                if (diff.size() > 0)
-                    changeCount++;
+                if (!pDomMap.get(n).equals(currentPDom))
+                    changed = true;
                 currentPDomMap.put(n, currentPDom);
             }
 
-            if (changeCount == 0) {
-                saturated = true;
-            } else {
-                pDomMap.clear();
-                pDomMap.putAll(currentPDomMap);
-                currentPDomMap.clear();
-            }
+            if (!changed)
+                break;
+
+            pDomMap = currentPDomMap;
+            currentPDomMap = new HashMap<CFGNode, BitSet>();
         }
 
-        // strict post-dominance
-        for (final CFGNode n : pDomMap.keySet())
-            pDomMap.get(n).remove(n);
+        final Map<CFGNode, Set<CFGNode>> results = new LinkedHashMap<CFGNode, Set<CFGNode>>();
+        for (final CFGNode n : cfgNodes) {
+            final Set<CFGNode> set = new LinkedHashSet<CFGNode>();
+            final BitSet curMap = pDomMap.get(n);
+            for (final CFGNode n2 : cfgNodes)
+                // ensure strict post-dominance
+                if (n.getId() != n2.getId() && curMap.get(n2.getId()))
+                    set.add(n2);
+            results.put(n, set);
+        }
 
-        return pDomMap;
+        return results;
     }
 
     /**
