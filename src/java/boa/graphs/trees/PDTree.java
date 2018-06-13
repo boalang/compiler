@@ -44,7 +44,7 @@ public class PDTree {
     public PDTree(final CFG cfg) throws Exception {
         if (cfg != null && cfg.getNodes().size() > 0) {
             this.md = cfg.getMd();
-            final Map<CFGNode, Set<CFGNode>> pdom = computePostDomonitors(cfg);
+            final Map<CFGNode, BitSet> pdom = computePostDomonitors(cfg);
             final Map<CFGNode, CFGNode> ipdom = computeImmediatePostDominator(pdom, cfg);
             buildPDomTree(ipdom);
         }
@@ -172,7 +172,7 @@ public class PDTree {
      * @return map of nodes and corresponding set of post-dominator nodes
      * @throws Exception
      */
-    private Map<CFGNode, Set<CFGNode>> computePostDomonitors(final CFG cfg) {
+    private Map<CFGNode, BitSet> computePostDomonitors(final CFG cfg) {
         final CFGNode[] cfgNodes = cfg.reverseSortNodes();
         final Map<CFGNode, List<CFGNode>> successors = new HashMap<CFGNode, List<CFGNode>>();
 
@@ -241,18 +241,13 @@ public class PDTree {
             currentPDomMap = new HashMap<CFGNode, BitSet>();
         }
 
-        final Map<CFGNode, Set<CFGNode>> results = new LinkedHashMap<CFGNode, Set<CFGNode>>();
+        // ensure strict post-dominance
         for (final CFGNode n : cfgNodes) {
-            final Set<CFGNode> set = new LinkedHashSet<CFGNode>();
             final BitSet curMap = pDomMap.get(n);
-            for (final CFGNode n2 : cfgNodes)
-                // ensure strict post-dominance
-                if (n.getId() != n2.getId() && curMap.get(n2.getId()))
-                    set.add(n2);
-            results.put(n, set);
+            curMap.clear(n.getId());
         }
 
-        return results;
+        return pDomMap;
     }
 
     /**
@@ -261,24 +256,25 @@ public class PDTree {
      * @param pdom map of nodes and corresponding post-dominators
      * @return map of nodes and corresponding immediate post-dominators
      */
-    private Map<CFGNode, CFGNode> computeImmediatePostDominator(final Map<CFGNode, Set<CFGNode>> pdom, final CFG cfg) {
-        /*
-         * To find ipdom, we check each pdom of a node to see if it is post dominating any other
-         * node. Each node should have atmost one ip-dom (last node has no immediate post dominator)
-         */
+    private Map<CFGNode, CFGNode> computeImmediatePostDominator(final Map<CFGNode, BitSet> pdom, final CFG cfg) {
         final Map<CFGNode, CFGNode> ipdom = new HashMap<CFGNode, CFGNode>();
-        for (final Map.Entry<CFGNode, Set<CFGNode>> entry : pdom.entrySet()) {
-            for (final CFGNode pd1 : entry.getValue()) {
+
+        // To find ipdom, we check each pdom of a node to see if it is post dominating any other
+        // node. Each node should have at most one ip-dom (last node has no immediate post dominator)
+        for (final Map.Entry<CFGNode, BitSet> entry : pdom.entrySet()) {
+            BitSet bs1 = entry.getValue();
+            for (int pd1 = 0; pd1 < bs1.size(); pd1++) {
+                if (!bs1.get(pd1)) continue;
                 boolean isIPDom = true;
-                for (final CFGNode pd2 : entry.getValue()) {
-                    if (pd1.getId() != pd2.getId())
-                        if ((pdom.get(pd2)).contains(pd1)) {
-                            isIPDom = false;
-                            break;
-                        }
+                for (int pd2 = 0; pd2 < bs1.size(); pd2++) {
+                    if (!bs1.get(pd2) || pd1 == pd2) continue;
+                    if (pdom.containsKey(pd2) && pdom.get(pd2).get(pd1)) {
+                        isIPDom = false;
+                        break;
+                    }
                 }
                 if (isIPDom) {
-                    ipdom.put(entry.getKey(), pd1);
+                    ipdom.put(entry.getKey(), cfg.getNode(pd1));
                     break;
                 }
             }
