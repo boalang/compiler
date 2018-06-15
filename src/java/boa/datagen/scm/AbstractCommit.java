@@ -69,6 +69,7 @@ import boa.datagen.util.JavaErrorCheckVisitor;
  */
 public abstract class AbstractCommit {
 	protected static final boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
+	protected static final boolean treeDif = Properties.getBoolean("treeDif", DefaultProperties.TREEDIF);
 	protected static final boolean debugparse = Properties.getBoolean("debugparse", DefaultProperties.DEBUGPARSE);
 	protected static final boolean STORE_ASCII_PRINTABLE_CONTENTS = Properties.getBoolean("ascii",
 			DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
@@ -688,8 +689,10 @@ public abstract class AbstractCommit {
 					return false;
 				}
 
+				
 				ASTRoot.Builder preAst = null;
 				CompilationUnit preCu = null;
+				if ( treeDif) {
 				if (fb.getChange() == ChangeKind.MODIFIED && this.parentIndices.length == 1
 						&& fb.getPreviousIndicesCount() == 1) {
 					AbstractCommit previousCommit = this.connector.revisions.get(fb.getPreviousVersions(0));
@@ -723,8 +726,9 @@ public abstract class AbstractCommit {
 							preCu = null;
 						}
 					}
+				} 
 				}
-
+				
 				Integer index = (Integer) cu.getProperty(Java7Visitor.PROPERTY_INDEX);
 				if (index != null) {
 					ast.setKey(index);
