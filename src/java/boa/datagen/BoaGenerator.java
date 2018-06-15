@@ -26,6 +26,7 @@ import org.apache.commons.cli.PosixParser;
 
 import boa.datagen.forges.github.GetGithubRepoByUser;
 import boa.datagen.forges.github.LocalGitSequenceGenerator;
+import boa.datagen.forges.github.MetaDataMaster;
 
 /**
  * The main entry point for Boa tools for generating datasets.
@@ -35,6 +36,7 @@ import boa.datagen.forges.github.LocalGitSequenceGenerator;
  */
 public class BoaGenerator {
 	private static boolean jsonAvailable = true;
+	private static boolean tokenAvailable = false;
 
 	public static void main(final String[] args) throws IOException {
 		final Options options = new Options();
@@ -69,6 +71,11 @@ public class BoaGenerator {
 //			} catch (Exception e) {
 //				e.printStackTrace();
 //			}
+		}else if (tokenAvailable){ // when user provides local repo and does not have json files
+			MetaDataMaster mdm = new MetaDataMaster();
+			mdm.downloadRepoNames(DefaultProperties.TOKEN, DefaultProperties.OUTPUT);
+			
+			SeqCombiner.main(new String[0]);
 		} else { // when user provides local repo and does not have json files
 			File output = new File(DefaultProperties.OUTPUT);
 			if (!output.exists())
@@ -99,6 +106,7 @@ public class BoaGenerator {
 
 	private static void addOptions(Options options) {
 		options.addOption("inputJson", "json", true, ".json files for metadata");
+		options.addOption("inputToken", "token", true, "token file");
 		options.addOption("inputRepo", "json", true, "cloned repo path");
 		options.addOption("threads", "threads", true, "number of threads");
 		options.addOption("projects", "projects", true, "maximum number of projects per sequence file");
@@ -124,6 +132,13 @@ public class BoaGenerator {
 			DefaultProperties.GH_JSON_PATH = cl.getOptionValue("inputJson");
 			DefaultProperties.OUTPUT = cl.getOptionValue("output");
 			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("output");
+		}else if (cl.hasOption("inputToken") && cl.hasOption("inputRepo") && cl.hasOption("output")) {
+			DefaultProperties.TOKEN = cl.getOptionValue("inputToken");
+			DefaultProperties.OUTPUT = cl.getOptionValue("output");
+			// DefaultProperties.GH_GIT_PATH = GH_JSON_CACHE_PATH + "/github";
+			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("inputRepo");
+			jsonAvailable = false;
+			tokenAvailable = true;
 		} else if (cl.hasOption("inputRepo") && cl.hasOption("output")) {
 			DefaultProperties.OUTPUT = cl.getOptionValue("output");
 			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("inputRepo");
