@@ -29,7 +29,7 @@ public class RepositoryCloner {
 		String localpaths = args[1];
 		String url = args[0];
 		REMOTE_URL = url;
-		File localPath = new File(localpaths);
+		File localPath = new File(localpaths + "/.git");
 		if (!localPath.exists())
 			localPath.mkdir();
 		else 
@@ -38,14 +38,13 @@ public class RepositoryCloner {
 		Git result = null;
 		try {
 			result = Git.cloneRepository().setURI(REMOTE_URL).setBare(true).setDirectory(localPath).call();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
 			// Note: the call() returns an opened repository already which needs
 			// to be closed to avoid file handle leaks!
 			// workaround for
 			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
-			result.getRepository().close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
 			if (result != null && result.getRepository() != null)
 				result.getRepository().close();
 		}

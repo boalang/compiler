@@ -35,7 +35,6 @@ import boa.datagen.forges.github.LocalGitSequenceGenerator;
  */
 public class BoaGenerator {
 	public static boolean jsonAvailable = true;
-	public static boolean localCloning = false;
 
 	public static void main(final String[] args) throws IOException {
 		final Options options = new Options();
@@ -121,7 +120,6 @@ public class BoaGenerator {
 			DefaultProperties.GH_JSON_CACHE_PATH = cl.getOptionValue("output");
 			// DefaultProperties.GH_GIT_PATH = GH_JSON_CACHE_PATH + "/github";
 			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("inputRepo");
-			localCloning = true;
 		} else if (cl.hasOption("inputJson") && cl.hasOption("output")) {
 			DefaultProperties.GH_JSON_PATH = cl.getOptionValue("inputJson");
 			DefaultProperties.GH_JSON_CACHE_PATH = cl.getOptionValue("output");
@@ -130,7 +128,6 @@ public class BoaGenerator {
 			DefaultProperties.GH_JSON_CACHE_PATH = cl.getOptionValue("output");
 			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("inputRepo");
 			jsonAvailable = false;
-			localCloning = true;
 		} else if (cl.hasOption("user") && cl.hasOption("password") && cl.hasOption("targetUser")
 				&& cl.hasOption("targetRepo") && cl.hasOption("output")) {
 			try {
