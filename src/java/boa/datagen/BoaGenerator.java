@@ -67,7 +67,7 @@ public class BoaGenerator {
 //			 SeqSort.main(args);
 //			 SeqSortMerge.main(args);
 			try {
-				DataSeqSort.main(new String[]{DefaultProperties.GH_JSON_CACHE_PATH});
+				ASTSeqSort.main(new String[]{DefaultProperties.GH_JSON_CACHE_PATH});
 				MapFileGen.main(args);
 			} catch (Exception e) {
 				e.printStackTrace();

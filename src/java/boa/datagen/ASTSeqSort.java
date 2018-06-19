@@ -39,33 +39,28 @@ import boa.types.Ast.ASTRoot;
  * @author hoan
  * 
  */
-public class DataSeqSort {
+public class ASTSeqSort {
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 		FileSystem fs = FileSystem.get(conf);
 		
 		String inPath = args[0];
-		Map<Text, BytesWritable> map = new HashMap<Text, BytesWritable>();
-		SequenceFile.Reader reader = new SequenceFile.Reader(fs, new Path(inPath + "/data"), conf);
+		Map<String, BytesWritable> map = new HashMap<String, BytesWritable>();
+		SequenceFile.Reader reader = new SequenceFile.Reader(fs, new Path(inPath + "/ast.seq"), conf);
 		Text key = new Text();
 		BytesWritable val = new BytesWritable();
 		while (reader.next(key, val)) {
-			map.put(key, new BytesWritable(val.getBytes()));
+			map.put(key.toString(), new BytesWritable(val.getBytes()));
 		}
 		reader.close();
 		
-		List<Text> list = new ArrayList<Text>(map.keySet());
-		Collections.sort(list, new Comparator<Text>() {
-			@Override
-			public int compare(Text t1, Text t2) {
-				return t1.compareTo(t2);
-			}
-		});
+		List<String> list = new ArrayList<String>(map.keySet());
+		Collections.sort(list);
 		
-		SequenceFile.Writer w = SequenceFile.createWriter(fs, conf, new Path(inPath + "/data.sorted"), Text.class, BytesWritable.class);
-		for (Text k : list) {
-			w.append(k, map.get(k));
+		SequenceFile.Writer w = SequenceFile.createWriter(fs, conf, new Path(inPath + "/ast.seq"), Text.class, BytesWritable.class);
+		for (String k : list) {
+			w.append(new Text(k), map.get(k));
 		}
 		w.close();
 	}
