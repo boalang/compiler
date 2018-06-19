@@ -51,7 +51,11 @@ public class ASTSeqSort {
 		Text key = new Text();
 		BytesWritable val = new BytesWritable();
 		while (reader.next(key, val)) {
-			map.put(key.toString(), new BytesWritable(val.getBytes()));
+			CodedInputStream cis = CodedInputStream.newInstance(val.getBytes(), 0, val.getLength());
+			cis.setRecursionLimit(Integer.MAX_VALUE);
+			ASTRoot ast = ASTRoot.parseFrom(cis);	
+			ASTRoot.Builder ab = ASTRoot.newBuilder(ast);	
+			map.put(key.toString(), new BytesWritable(ab.build().toByteArray()));
 		}
 		reader.close();
 		
