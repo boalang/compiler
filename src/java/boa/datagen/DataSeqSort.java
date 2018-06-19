@@ -31,6 +31,10 @@ import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 
+import com.google.protobuf.CodedInputStream;
+
+import boa.types.Ast.ASTRoot;
+
 /**
  * @author hoan
  * 
@@ -47,7 +51,11 @@ public class DataSeqSort {
 		Text key = new Text();
 		BytesWritable val = new BytesWritable();
 		while (reader.next(key, val)) {
-			map.put(key, val);
+			CodedInputStream cis = CodedInputStream.newInstance(val.getBytes(), 0, val.getLength());
+			cis.setRecursionLimit(Integer.MAX_VALUE);	
+			ASTRoot ast = ASTRoot.parseFrom(cis);
+			ASTRoot.Builder ab = ASTRoot.newBuilder(ast);	
+			map.put(key, new BytesWritable(ab.build().toByteArray()));
 		}
 		reader.close();
 		
