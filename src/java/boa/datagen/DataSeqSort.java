@@ -17,125 +17,52 @@
 
 package boa.datagen;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
-import org.apache.hadoop.io.SequenceFile.CompressionType;
+import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.compress.SnappyCodec;
-import org.apache.hadoop.mapred.*;
-import org.apache.hadoop.mapred.lib.IdentityMapper;
-import org.apache.hadoop.mapred.lib.IdentityReducer;
-import org.apache.hadoop.util.Tool;
-import org.apache.hadoop.util.ToolRunner;
-
-import boa.datagen.util.FileIO;
-import boa.datagen.util.Properties;
 
 /**
  * @author hoan
  * 
  */
-public class DataSeqSort<K,V> extends Configured implements Tool {
-	private String inPath = "", outPath = "";
-	private RunningJob jobResult = null;
-
-	public DataSeqSort(String inPath, String outPath) {
-		this.inPath = inPath;
-		this.outPath = outPath;
-	}
-
-	static int printUsage() {
-		System.out.println("sort [-m <maps>] [-r <reduces>] " +
-				"[-inFormat <input format class>] " +
-				"[-outFormat <output format class>] " + 
-				"[-outKey <output key class>] " +
-				"[-outValue <output value class>] " +
-				"[-totalOrder <pcnt> <num samples> <max splits>] " +
-				"<input> <output>");
-		ToolRunner.printGenericCommandUsage(System.out);
-		return -1;
-	}
-
-	/**
-	 * The main driver for sort program.
-	 * Invoke this method to submit the map/reduce job.
-	 * @throws IOException When there is communication problems with the 
-	 *                     job tracker.
-	 */
-	@Override
-	public int run(String[] args) throws Exception {
-		System.out.println(inPath);
-
-		JobConf jobConf = new JobConf(getConf(), DataSeqSort.class);
-		jobConf.setJobName("sorter");
-
-		jobConf.setMapperClass(IdentityMapper.class);        
-		jobConf.setReducerClass(IdentityReducer.class);
-
-		JobClient client = new JobClient(jobConf);
-		ClusterStatus cluster = client.getClusterStatus();
-		int num_reduces = (int) (cluster.getMaxReduceTasks() * 0.9);
-		String sort_reduces = jobConf.get("test.sort.reduces_per_host");
-		if (sort_reduces != null) {
-			num_reduces = cluster.getTaskTrackers() * 
-					Integer.parseInt(sort_reduces);
-		}
-
-		// Set user-supplied (possibly default) job configs
-		jobConf.setNumReduceTasks(num_reduces);
-
-		jobConf.setInputFormat(SequenceFileInputFormat.class);
-		jobConf.setOutputFormat(SequenceFileOutputFormat.class);
-
-		jobConf.setOutputKeyClass(Text.class);
-		jobConf.setOutputValueClass(BytesWritable.class);
-		
-		SequenceFileOutputFormat.setCompressOutput(jobConf, true);
-		SequenceFileOutputFormat.setOutputCompressorClass(jobConf, SnappyCodec.class);
-		SequenceFileOutputFormat.setOutputCompressionType(jobConf, CompressionType.BLOCK);
-		
-		// Make sure there are exactly 2 parameters left.
-		FileInputFormat.setInputPaths(jobConf, inPath);
-		FileOutputFormat.setOutputPath(jobConf, new Path(outPath));
-		
-		System.out.println("Running on " +
-				cluster.getTaskTrackers() +
-				" nodes to sort from " + 
-				FileInputFormat.getInputPaths(jobConf)[0] + " into " +
-				FileOutputFormat.getOutputPath(jobConf) +
-				" with " + num_reduces + " reduces.");
-		Date startTime = new Date();
-		System.out.println("Job started: " + startTime);
-		jobResult = JobClient.runJob(jobConf);
-		Date end_time = new Date();
-		System.out.println("Job ended: " + end_time);
-		System.out.println("The job took " + 
-				(end_time.getTime() - startTime.getTime()) /1000 + " seconds.");
-		return 0;
-	}
-
-
+public class DataSeqSort {
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 		FileSystem fs = FileSystem.get(conf);
+		
 		String inPath = args[0];
-		ToolRunner.run(new Configuration(), new DataSeqSort(inPath + "/data", inPath + "/data.sorted"), null);
-	}
-
-	/**
-	 * Get the last job that was run using this instance.
-	 * @return the results of the last job that was run
-	 */
-	public RunningJob getResult() {
-		return jobResult;
+		Map<Text, BytesWritable> map = new HashMap<Text, BytesWritable>();
+		SequenceFile.Reader reader = new SequenceFile.Reader(fs, new Path(inPath + "/data"), conf);
+		Text key = new Text();
+		BytesWritable val = new BytesWritable();
+		while (reader.next(key, val)) {
+			map.put(key, val);
+		}
+		reader.close();
+		
+		List<Text> list = new ArrayList<Text>(map.keySet());
+		Collections.sort(list, new Comparator<Text>() {
+			@Override
+			public int compare(Text t1, Text t2) {
+				return t1.compareTo(t2);
+			}
+		});
+		
+		SequenceFile.Writer w = SequenceFile.createWriter(fs, conf, new Path(inPath + "/data.sorted"), Text.class, BytesWritable.class);
+		for (Text k : list) {
+			w.append(k, map.get(k));
+		}
+		w.close();
 	}
 }
