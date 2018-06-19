@@ -13,7 +13,7 @@ cfg: CFG;
 #temporary variable string
 str: set of string;
 str1: set of set of string;
-upsafe : set of int;
+upsafe : set of string; ## upsafe : set of ups int;	
 flag := false;
 
 node_expr := visitor {
@@ -133,7 +133,7 @@ upsafety := traversal(node: CFGNode) {
 			}
 		}
 		if(flag) {
-			add(upsafe, int(node.id));
+			add(upsafe, string(node.id)); ## add(upsafe, int(node.id));
 		}
 	}
 };

@@ -7,8 +7,8 @@ type T_inout= {in: set of string, out: set of string, dummy1:int};
 cfg: CFG;
 
 # current visiting cfg node
-dead_nodes : set of int;
-prev_dead : set of int;
+dead_nodes : set of string; ## changed from int to string
+prev_dead : set of string; ## changed from int to string
 genset : set of string;
 killset : set of string;
 
@@ -23,7 +23,7 @@ live := traversal(node: CFGNode): T_inout {
 	out_set : set of string;
 	cur_val : T_inout = {in_set, out_set, 0};
 	succs := node.successors;
-	if(!contains(dead_nodes, int(node.id))) {
+	if(!contains(dead_nodes, string(node.id))) { ## cast node.id to string
 		if(def(getvalue(node))) {
 			cur_val = getvalue(node);
 		}
@@ -35,7 +35,7 @@ live := traversal(node: CFGNode): T_inout {
 		}
 	}
 	cur_val.in = clone(cur_val.out);
-	if(!contains(dead_nodes, int(node.id))) {
+	if(!contains(dead_nodes, string(node.id))) { ## ## cast node.id to string
 		gen_kill := getvalue(node, init);
 		remove(cur_val.in, gen_kill.kill);
 		cur_val.in = union(gen_kill.gen, cur_val.in);
@@ -48,7 +48,7 @@ deadTraversal := traversal(node: CFGNode) {
 		cur_val := getvalue(node, live);
 		if(def(cur_val)) {
 			if(!contains(cur_val.out, node.defVariables)) {
-				add(dead_nodes, int(node.id));
+				add(dead_nodes, string(node.id)); ## cast node.id to string
 			}
 		}
 	}

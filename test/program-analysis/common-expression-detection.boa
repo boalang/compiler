@@ -2,9 +2,9 @@ m: output collection[int] of string;
 
 p: Project = input;
 
-type T = {gen: set of string, id: int};
+type T = {gen: set of string, id: string}; ## changed id from int to string
 # program analysis output
-type T1 = {in: set of set of string, out: set of set of string, id1 : int};
+type T1 = {in: set of set of string, out: set of set of string, id1 : string}; ## changed id1 from int to string
 
 #all expression set
 allExprset: set of set of string;
@@ -54,12 +54,12 @@ allExprTraversal := traversal(node: CFGNode): T {
 	cur_val : T;
 	init_set : set of string;
 	str = init_set;
-	cur_val = {str, -1};
+	cur_val = {str, "-1"}; ## changed from -1 to "-1"
 	if(def(node.expr)) {
 		visit(node.expr, node_expr);
 		if(len(str)!=0) {
 			add(allExprset, clone(str));
-			cur_val = {clone(str), int(node.id)};
+			cur_val = {clone(str), string(node.id)}; ## cast node.id to string
 		}
 	}
 	if(def(node.stmt)) {
@@ -67,7 +67,7 @@ allExprTraversal := traversal(node: CFGNode): T {
 			visit(node.stmt.expression, node_expr);
 			if(len(str)!=0) {
 				add(allExprset, clone(str));
-				cur_val = {clone(str), int(node.id)};
+				cur_val = {clone(str), string(node.id)};  ## cast node.id to string
 			}
 		}
 		if(def(node.stmt.initializations)) {
@@ -75,7 +75,7 @@ allExprTraversal := traversal(node: CFGNode): T {
 				visit(node.stmt.initializations[i], node_expr);
 				if(len(str)!=0) {
 					add(allExprset, clone(str));
-					cur_val = {clone(str), int(node.id)};
+					cur_val = {clone(str), string(node.id)};  ## cast node.id to string
 				}
 			}
 		}
@@ -103,10 +103,10 @@ avail_expr := traversal(node: CFGNode): T1 {
 	out_set : set of set of string;
 	cur_value : T1;
 	if(node.id==0) {
-		cur_value = {in_set, out_set, -1};
+		cur_value = {in_set, out_set, "-1"}; ## changed from -1 to "-1"
 	}
 	else
-		cur_value = {clone(allExprset), clone(allExprset), -1};
+		cur_value = {clone(allExprset), clone(allExprset), "-1"}; ## changed from -1 to "-1"
 	if(def(getvalue(node))) {
 		cur_value = getvalue(node);
 	}
@@ -127,11 +127,11 @@ avail_expr := traversal(node: CFGNode): T1 {
 	cur_value.out = difference(cur_value.out, killset);
 	if(def(genkill)) {
 		if(contains(cur_value.out, genkill.gen)) {
-			cur_value.id1 = int(pred_id);
+			cur_value.id1 = string(pred_id); ## cast pred_id to string
 		}
 		else {
 			add(cur_value.out, genkill.gen);
-			cur_value.id1 = int(node.id);
+			cur_value.id1 = string(node.id); ## cast node.id to string
 		}
 	}
 	return cur_value;

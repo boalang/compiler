@@ -6,10 +6,10 @@ type T1= {gen: string, kill: string};
 # cfg of the current method
 cfg: CFG;
 
-type Tloop = {start : int, end : int, use : set of string};
+type Tloop = {start : string, end : string, use : set of string}; ## changed the type of start and end from int to string
 
 loops : set of Tloop;
-codemotion : set of int;
+codemotion : set of string; ## 	codemotion : set of cod int;
 flag := false;
 
 cfg_def := traversal(node: CFGNode) : T1 {
@@ -60,13 +60,13 @@ fixp1 := fixp(curr, prev: T) : bool {
 # traversal that gets all variable uses in a method
 init := traversal(node: CFGNode){
 	init_set : set of string;
-	cur_val : Tloop = {-1, -1, init_set};
+	cur_val : Tloop = {string(-1), string(-1), init_set}; ## cur_val : Tloop = {-1, -1, init_set};
 	if(node.name == "WHILE" || node.name == "FOR") {
 		succs := node.successors;
 		foreach(i:int;def(succs[i])) {
 			if(succs[i].id > node.id + 1) {
-				cur_val.start= int(node.id);
-				cur_val.end= int(succs[i].id);
+				cur_val.start= string(node.id); ## cur_val.start= int(node.id);
+				cur_val.end= string(succs[i].id); ## cur_val.end= int(succs[i].id);
 				cur_val.use = node.useVariables;
 				add(loops, cur_val);
 			}		
@@ -79,7 +79,7 @@ loop_invariant := traversal(node: CFGNode) {
 	loop := values(loops);
 	foreach(i:int;def(loop[i])) {
 		flag = false;
-		if(node.id > loop[i].start && node.id < loop[i].end) {
+		if(node.id > int(loop[i].start) && node.id < int(loop[i].end)) { ## if(node.id > loop[i].start && node.id < loop[i].end) {
 			if(len(node.useVariables)!=0) {
 				cur_val := getvalue(node, cfg_reach_def);
 				if(def(cur_val)) {
@@ -89,7 +89,7 @@ loop_invariant := traversal(node: CFGNode) {
 					foreach(k:int;def(cout[k])) {
 						str_array:=splitall(cout[k],"@");
 						if(str_array[0]==uv[j]) {
-							if(int(str_array[1]) > loop[i].start) {
+							if(int(str_array[1]) > int(loop[i].start)) { ## _array[1]) > loop[i].start) {
 								flag = true;
 								break;
 							}
@@ -99,7 +99,7 @@ loop_invariant := traversal(node: CFGNode) {
 				}
 			}
 			if(!flag) {
-				add(codemotion, int(node.id));
+				add(codemotion, string(node.id)); ## add(codemotion, int(node.id));
 			}
 		}
 	}

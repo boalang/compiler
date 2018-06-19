@@ -2,7 +2,7 @@ m: output collection[int] of string;
 p: Project = input;
 
 type T= {gen : string, kill : string};
-type T1= {in : set of string, out : set of string, dummy : int};
+type T1= {in : set of string, out : set of string, dummy : string}; ## changed dummy int to string
 cfg : CFG;
 
 local : set of string;
@@ -50,7 +50,7 @@ alias := traversal(node: CFGNode) : T1 {
 	in_set : set of string;
 	out_set : set of string;
 	cur_val : T1;
-	cur_val = {in_set, out_set, 0};
+	cur_val = {in_set, out_set, string(0)}; ## cur_val = {in_set, out_set, 0};
 	preds := node.predecessors;
 	foreach(i:int;def(preds[i])) {	
 		pred := getvalue(preds[i]);
@@ -61,15 +61,19 @@ alias := traversal(node: CFGNode) : T1 {
 	genkill := getvalue(node, init);
 	if(genkill.gen!="") {
 		str_array:=splitall(genkill.gen,"@");
-		if(str_array[1]!="var")
+		if(len(str_array) > 1) { ## added this precondition because was getting array-out-bound exception
+			if(str_array[1]!="var")
 			add(cur_val.out, genkill.gen);
+		}
 		else {
 			tmp_out:=values(cur_val.out);
 			foreach(i:int;def(tmp_out[i])) {
 				tmp1:=clone(tmp_out[i]);
 				str_array1:=splitall(tmp1,"@");
-				if(str_array1[0] == str_array[2]) {
+				if (len(str_array) > 2) { ## added this precondition because was getting array-out-bound exception
+					if(str_array1[0] == str_array[2]) {
 					add(cur_val.out, str_array[0]+"@"+str_array1[1]);
+				}
 				}
 			}
 		}

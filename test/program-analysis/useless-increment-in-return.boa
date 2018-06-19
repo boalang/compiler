@@ -4,7 +4,7 @@ p: Project = input;
 # cfg of the current method
 cfg: CFG;
 
-invalid : set of int;
+invalid : set of string; ## invalid : set of int;
 local : set of string;
 
 find_local := traversal(node: CFGNode) {
@@ -26,7 +26,7 @@ init := traversal(node: CFGNode){
 			if(def(node.stmt.expression)) {
 				if(node.stmt.expression.kind == ExpressionKind.OP_INC) {
 					if(contains(local, node.stmt.expression.expressions[0].variable))
-						add(invalid, int(node.id));
+						add(invalid, string(node.id)); ## add(invalid, int(node.id));
 				}
 			}
 		}

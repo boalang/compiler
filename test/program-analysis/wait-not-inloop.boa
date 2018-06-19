@@ -2,7 +2,7 @@ m: output collection[int] of string;
 p: Project = input;
 
 # program analysis output
-type Tloop = {start : int, end : int, use : set of string};
+type Tloop = {start : string, end : string, use : set of string}; ## 	type Tloop = {start : ty int, end : int, use : set of string};
 
 # cfg of the current method
 cfg: CFG;
@@ -13,13 +13,13 @@ waitnotinloop : set of string;
 
 init := traversal(node: CFGNode){
 	init_set : set of string;
-	cur_val : Tloop = {-1, -1, init_set};
+	cur_val : Tloop = {string(-1), string(-1), init_set}; ## cur_val : Tloop = {-1, -1, init_set};
 	if(node.name == "WHILE" || node.name == "FOR") {
 		succs := node.successors;
 		foreach(i:int;def(succs[i])) {
 			if(succs[i].id > node.id + 1) {
-				cur_val.start= int(node.id);
-				cur_val.end= int(succs[i].id);
+				cur_val.start= string(node.id); ## cur_val.start= int(node.id);
+				cur_val.end= string(succs[i].id); ## cur_val.end= int(succs[i].id);
 				cur_val.use = node.useVariables;
 				add(loops, cur_val);
 			}		
@@ -35,7 +35,7 @@ evisitor := visitor {
 					flag = false;
 					temp := values(loops);
 					foreach(i:int;def(temp[i])) {
-						if(cur_id > temp[i].start && cur_id < temp[i].end) {
+						if(cur_id > int(temp[i].start) && cur_id < int(temp[i].end)) { ## if(cur_id > temp[i].start && cur_id < temp[i].end) {
 							flag = true;
 							break;
 						}
