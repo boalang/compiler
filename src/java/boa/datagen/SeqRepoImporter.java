@@ -286,6 +286,9 @@ public class SeqRepoImporter {
 			if (project.getForked() || !(project.getProgrammingLanguagesList().contains("Java") || project.getProgrammingLanguagesList().contains("JavaScript") ||  project.getProgrammingLanguagesList().contains("PHP")))
 				return project;
 			
+			//If repository is already cloned delete then re-clone, this should only happen during recover
+			FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitRootPath + "/" + project.getName());
+			filecheck.run();
 
 			String[] args = { repo.getUrl(), gitDir.getAbsolutePath() };
 			try {
