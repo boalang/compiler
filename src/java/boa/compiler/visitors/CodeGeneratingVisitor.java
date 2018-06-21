@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Ramanathan Ramu,
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Ramanathan Ramu, Che Shian Hung
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -43,6 +43,7 @@ import boa.types.*;
  * @author rdyer
  * @author ankuraga
  * @author rramu
+ * @author hungc
  */
 public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/**
@@ -1053,6 +1054,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		st.add("lhs", lhs);
+		st.add("operator", n.getOp());
 		st.add("rhs", rhs);
 
 		code.add(st.render());
@@ -1374,6 +1376,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		final ST st = stg.getInstanceOf("Assignment");
+		st.add("operator", "=");
 		st.add("lhs", "___" + n.getId().getToken());
 
 		if (!n.hasInitializer()) {

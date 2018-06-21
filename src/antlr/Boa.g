@@ -257,7 +257,7 @@ assignmentStatement returns [AssignmentStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: f=factor EQUALS e=expression { isSemicolon(); $ast = new AssignmentStatement($f.ast, $e.ast); }
+	: f=factor op=(EQUALS | PLUSEQ | MINUSEQ | STAREQ | DIVEQ | ONEOREQ | XOREQ | MODEQ | ONEANDEQ | RSHIFTEQ | LSHIFTEQ) e=expression { isSemicolon(); $ast = new AssignmentStatement($f.ast, $op.text, $e.ast); }
 	;
 
 block returns [Block ast]
@@ -749,6 +749,16 @@ MOD    : '%';
 RSHIFT : '>>';
 NEG    : '~';
 INV    : '!';
+PLUSEQ : '+=';
+MINUSEQ: '-=';
+STAREQ : '*=';
+DIVEQ  : '/=';
+ONEOREQ: '|=';
+XOREQ  : '^=';
+MODEQ  : '%=';
+ONEANDEQ:'&=';
+RSHIFTEQ:'>>=';
+LSHIFTEQ:'<<=';
 
 //
 // other

@@ -1,0 +1,5 @@
+a: output collection of int;
+
+b := 1;
+b <<= 2;
+a << b; 

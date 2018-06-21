@@ -141,7 +141,7 @@ emptyStatement
 	;
 
 assignmentStatement
-	: factor EQUALS expression { isSemiColon(); }
+	: factor (EQUALS | PLUSEQ | MINUSEQ | STAREQ | DIVEQ | ONEOREQ | XOREQ | MODEQ | ONEANDEQ | RSHIFTEQ | LSHIFTEQ) expression { isSemiColon(); }
 	;
 
 block
@@ -480,6 +480,16 @@ MOD    : '%';
 RSHIFT : '>>';
 NEG    : '~';
 INV    : '!';
+PLUSEQ : '+=';
+MINUSEQ: '-=';
+STAREQ : '*=';
+DIVEQ  : '/=';
+ONEOREQ: '|=';
+XOREQ  : '^=';
+MODEQ  : '%=';
+ONEANDEQ:'&=';
+RSHIFTEQ:'>>=';
+LSHIFTEQ:'<<=';
 
 //
 // other
