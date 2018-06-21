@@ -362,10 +362,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			final List<BoaType> types = check(n.getExprs(), env);
 
 			if (!(checkTupleArray(types) == true)) {
-				final BoaType t = types.get(0);
-				if (!(t instanceof BoaScalar) && !(t instanceof BoaTuple))
-					throw new TypeCheckException(n.getExprs(), "non-scalar/non-tuple type '" + t + "' can not be used in arrays");
-				n.type = new BoaArray(t);
+				n.type = new BoaArray(types.get(0));
 			} else {
 				n.type = new BoaTuple(types);
 			}
@@ -1313,11 +1310,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		n.env = st;
 		n.getValue().accept(this, st);
-		final BoaType t = n.getValue().type;
-		if (!(t instanceof BoaScalar))
-			if (!(t instanceof BoaTuple))
-				throw new TypeCheckException(n.getValue(), "non-scalar/non-tuple type '" + t + "' can not be used in arrays");
-		n.type = new BoaArray(t);
+		n.type = new BoaArray(n.getValue().type);
 	}
 
 	/** {@inheritDoc} */

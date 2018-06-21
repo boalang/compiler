@@ -784,7 +784,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (t instanceof BoaArray && ((BoaArray)t).getType() instanceof BoaEnum) {
                 st.add("type", "Object[] ");
 			} else {
-                st.add("type", t.toJavaType());
+                st.add("type", t.toJavaType().replaceAll("<(.*)>", ""));
             }
 
 			st.add("exprlist", code.removeLast());
@@ -1825,7 +1825,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		n.getValue().accept(this);
 		n.env.setNeedsBoxing(boxing);
 
-		st.add("type", code.removeLast());
+		st.add("type", code.removeLast().replaceAll("<(.*)>", ""));
 
 		code.add(st.render());
 	}
@@ -1990,14 +1990,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (replaced.contains("${K}") || replaced.contains("${V}")) {
 			if (args.size() == 1 && args.get(0).type instanceof BoaMap) {
 				final BoaMap m = (BoaMap)args.get(0).type;
-				replaced = replaced.replace("${K}", m.getIndexType().toBoxedJavaType());
-				replaced = replaced.replace("${V}", m.getType().toBoxedJavaType());
+				replaced = replaced.replace("${K}", nonScalarTypeTransform(m.getIndexType(), m.getIndexType().toBoxedJavaType()));
+				replaced = replaced.replace("${V}", nonScalarTypeTransform(m.getType(), m.getType().toBoxedJavaType()));
 			} else if (args.size() == 1 && args.get(0).type instanceof BoaStack) {
 				final BoaStack s = (BoaStack)args.get(0).type;
-				replaced = replaced.replace("${V}", s.getType().toBoxedJavaType());
+				replaced = replaced.replace("${V}", nonScalarTypeTransform(s.getType(), s.getType().toBoxedJavaType()));
 			} else if (args.size() == 1 && args.get(0).type instanceof BoaSet) {
 				final BoaSet s = (BoaSet)args.get(0).type;
-				replaced = replaced.replace("${V}", s.getType().toBoxedJavaType());
+				replaced = replaced.replace("${V}", nonScalarTypeTransform(s.getType(), s.getType().toBoxedJavaType()));
 			}
 		}
 
@@ -2005,6 +2005,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			replaced = replaced.replace("${" + i + "}", parameters[i]);
 
 		return replaced;
+	}
+
+	private static String nonScalarTypeTransform(final BoaType type, String typeStr) {
+		if (type instanceof BoaArray)
+			return typeStr.replace("[]", "[0]");
+		if (type instanceof BoaSet || type instanceof BoaStack || type instanceof BoaMap)
+			return typeStr.replaceAll("<(.*)>", "");
+		return typeStr;
 	}
 
 	protected static String camelCase(final String string) {
