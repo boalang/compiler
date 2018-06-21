@@ -349,7 +349,8 @@ characterLiteral
 	;
 
 stringLiteral
-	: StringLiteral
+	: MultilineStringLiteral
+	| StringLiteral
 	| RegexLiteral
 	;
 
@@ -450,6 +451,7 @@ DOLLAR      : '$';
 EQUALS      : '=';
 EMIT        : '<<';
 RIGHT_ARROW : '->';
+ML_STRING   : '"""';
 
 //
 // literals
@@ -521,6 +523,10 @@ RegexLiteral
 fragment
 RegexCharacter
 	: ~[`\n\r]
+	;
+
+MultilineStringLiteral
+	: ML_STRING (StringCharacter | ["\n\r])*? ML_STRING
 	;
 
 StringLiteral
