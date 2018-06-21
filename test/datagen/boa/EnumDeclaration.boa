@@ -1,0 +1,14 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "myEnum",
+               "kind": "ENUM",
+               "fully_qualified_name": "myEnum"
+            }
+         ]
+      }
+   ]
+}

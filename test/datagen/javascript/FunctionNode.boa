@@ -1,0 +1,38 @@
+namespaces {
+  name: ""
+  methods {
+    name: "myFunction"
+    statements {
+      kind: BLOCK
+      statements {
+        kind: EXPRESSION
+        expression {
+          kind: ASSIGN
+          expressions {
+            kind: VARACCESS
+            expressions {
+              kind: METHODCALL
+              expressions {
+                kind: VARACCESS
+                variable: "document"
+              }
+              method: "getElementById"
+              method_args {
+                kind: LITERAL
+                literal: "demo"
+              }
+            }
+            expressions {
+              kind: VARACCESS
+              variable: "innerHTML"
+            }
+          }
+          expressions {
+            kind: LITERAL
+            literal: "Hello World!"
+          }
+        }
+      }
+    }
+  }
+}

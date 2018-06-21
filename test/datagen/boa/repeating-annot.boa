@@ -33,7 +33,8 @@
                         }
                      ]
                   }
-               ]
+               ],
+               "fully_qualified_name": "C"
             }
          ]
       }

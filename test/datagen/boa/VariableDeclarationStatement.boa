@@ -1,0 +1,15 @@
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "VARDECL",
+      "variable_decls": [
+         {
+            "name": "x",
+            "variable_type": {
+               "name": "int",
+               "kind": "PRIMITIVE"
+            }
+         }
+      ]
+   }
+}

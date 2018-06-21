@@ -17,17 +17,20 @@
 
 package boa.datagen.util;
 
-import org.eclipse.wst.jsdt.core.dom.ASTNode;
-import org.eclipse.wst.jsdt.core.dom.ASTVisitor;
+import org.mozilla.javascript.Token;
+import org.mozilla.javascript.ast.AstNode;
+import org.mozilla.javascript.ast.NodeVisitor;
 
 /**
  * @author rdyer
  */
-public class JavaScriptErrorCheckVisitor extends ASTVisitor {
+public class JavaScriptErrorCheckVisitor implements NodeVisitor {
 	public boolean hasError = false;
 
-	public boolean preVisit2(ASTNode node) {
-		if ((node.getFlags() & ASTNode.MALFORMED) != 0)
+
+	@Override
+	public boolean visit(AstNode node) {
+		if (node.getType() == Token.ERROR)
 			hasError = true;
 		return !hasError;
 	}

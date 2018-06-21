@@ -1,0 +1,46 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: METHODCALL
+      expressions {
+        kind: VARACCESS
+        variable: "console"
+      }
+      method: "log"
+      method_args {
+        kind: SHEQ
+        expressions {
+          kind: LITERAL
+          literal: "this"
+        }
+        expressions {
+          kind: VARACCESS
+          variable: "window"
+        }
+      }
+    }
+  }
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: ASSIGN
+      expressions {
+        kind: VARACCESS
+        expressions {
+          kind: LITERAL
+          literal: "this"
+        }
+        expressions {
+          kind: VARACCESS
+          variable: "b"
+        }
+      }
+      expressions {
+        kind: LITERAL
+        literal: "MDN"
+      }
+    }
+  }
+}

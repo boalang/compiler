@@ -19,11 +19,15 @@ package boa.datagen.scm;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.PersonIdent;
@@ -33,23 +37,20 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevSort;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.treewalk.TreeWalk;
 
 /**
  * @author rdyer
  * @author josephb
  */
 public class GitConnector extends AbstractConnector {
-	private static final boolean debug = boa.datagen.util.Properties.getBoolean("debug", boa.datagen.DefaultProperties.DEBUG);
-
-	private String path;
 
 	private Repository repository;
 	private Git git;
 	private RevWalk revwalk;
 
-	private String lastCommitId = null;
-
-	public GitConnector(final String path) {
+	public GitConnector(final String path, String projectName) {
+		this.projectName = projectName;
 		try {
 			this.path = path;
 			this.repository = new FileRepositoryBuilder()
@@ -68,56 +69,22 @@ public class GitConnector extends AbstractConnector {
 		revwalk.close();
 		repository.close();
 	}
-
-	@Override
-	public String getLastCommitId() {
-		if (lastCommitId == null) {
-			revwalk.reset();
-
-			try {
-				revwalk.markStart(revwalk.parseCommit(repository.resolve(Constants.HEAD)));
-				revwalk.sort(RevSort.COMMIT_TIME_DESC);
-				lastCommitId = revwalk.next().getId().toString();
-			} catch (final Exception e) {
-				if (debug)
-					System.err.println("Git Error getting last commit for " + path + ". " + e.getMessage());
-			}
-		}
-		return lastCommitId;
-	}
-
-	@Override
-	public void setLastSeenCommitId(final String id) {
-	}
-
-	@Override
-	protected void setRevisions() {
+	
+	public void countChangedFiles(List<String> commits, Map<String, Integer> counts) {
 		RevWalk temprevwalk = new RevWalk(repository);
 		try {
 			revwalk.reset();
-			revwalk.markStart(revwalk.parseCommit(repository.resolve(Constants.HEAD)));
+			Set<RevCommit> heads = getHeads();
+			revwalk.markStart(heads);
 			revwalk.sort(RevSort.TOPO, true);
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
-			
-			revisions.clear();
-			revisionMap = new HashMap<String, Integer>();
-			
 			for (final RevCommit rc: revwalk) {
 				final GitCommit gc = new GitCommit(this, repository, temprevwalk);
-
-				gc.setId(rc.getName());
-				PersonIdent author = rc.getAuthorIdent(), committer = rc.getCommitterIdent();
-				if (author != null)
-					gc.setAuthor(author.getName(), null, author.getEmailAddress());
-				gc.setCommitter(committer.getName(), null, committer.getEmailAddress());
-				gc.setDate(new Date(((long) rc.getCommitTime()) * 1000));
-				gc.setMessage(rc.getFullMessage());
-				
-				gc.getChangeFiles(this.revisionMap, rc);
-				
-				revisionMap.put(gc.id, revisions.size());
-				revisions.add(gc);
+				System.out.println(rc.getName());
+				commits.add(rc.getName());
+				int count = gc.countChangedFiles(rc);
+				counts.put(rc.getName(), count);
 			}
 		} catch (final IOException e) {
 			if (debug)
@@ -129,11 +96,93 @@ public class GitConnector extends AbstractConnector {
 	}
 
 	@Override
-	public void getTags(final List<String> names, final List<String> commits) {
+	public void setRevisions() {
+		RevWalk temprevwalk = new RevWalk(repository);
+		try {
+			revwalk.reset();
+			Set<RevCommit> heads = getHeads();
+			revwalk.markStart(heads);
+			revwalk.sort(RevSort.TOPO, true);
+			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
+			revwalk.sort(RevSort.REVERSE, true);
+			
+			if (revisions == null)
+				revisions = new ArrayList<AbstractCommit>(); 
+			else
+				revisions.clear();
+			revisionMap = new HashMap<String, Integer>();
+			
+			int i = 0;
+			long maxTime = 1000;
+			for (final RevCommit rc: revwalk) {
+				i++;
+				long startTime = System.currentTimeMillis();
+				
+				final GitCommit gc = new GitCommit(this, repository, temprevwalk);
+				
+				gc.setId(rc.getName());
+				PersonIdent author = rc.getAuthorIdent(),
+						committer = rc.getCommitterIdent();
+				if (author != null)
+					gc.setAuthor(author.getName(), null, author.getEmailAddress());
+				gc.setCommitter(committer.getName(), null, committer.getEmailAddress());
+				gc.setDate(new Date(((long) rc.getCommitTime()) * 1000));
+				gc.setMessage(rc.getFullMessage());
+				
+				gc.getChangeFiles(rc);
+				
+				revisionMap.put(gc.id, revisions.size());
+				revisions.add(gc);
+				
+				if (debug) {
+					long endTime = System.currentTimeMillis();
+					long time = endTime - startTime;
+					if (time > maxTime) {
+						System.out.println("Max time " + (time / 1000) + " parsing metadata commit " + i + " " + rc.getName());
+						maxTime = time;
+					}
+				}
+			}
+			System.out.println("Process metadata of all commits");
+			
+			RevCommit head = revwalk.parseCommit(repository.resolve(Constants.HEAD));
+			headCommitOffset = revisionMap.get(head.getName());
+			getBranches();
+			getTags();
+		} catch (final IOException e) {
+			if (debug)
+				System.err.println("Git Error getting parsing HEAD commit for " + path + ". " + e.getMessage());
+		} finally {
+			temprevwalk.dispose();
+			temprevwalk.close();
+		}
+	}
+
+	private Set<RevCommit> getHeads() {
+		Set<RevCommit> heads = new HashSet<RevCommit>();
+		try {
+			for (final Ref ref : git.branchList().call()) {
+				heads.add(revwalk.parseCommit(repository.resolve(ref.getName())));
+			}
+		} catch (final GitAPIException e) {
+			if (debug)
+				System.err.println("Git Error reading heads: " + e.getMessage());
+		}catch (final IOException e) {
+			if (debug)
+				System.err.println("Git Error reading heads: " + e.getMessage());
+		}
+		return heads;
+	}
+
+	@Override
+	public void getTags() {
 		try {
 			for (final Ref ref : git.tagList().call()) {
-				names.add(ref.getName());
-				commits.add(ref.getObjectId().getName());
+				Integer index = revisionMap.get(ref.getObjectId().getName());
+				if (index == null)
+					continue; // TODO JGit returns wrong commit id
+				tagNames.add(ref.getName());
+				tagIndices.add(index);
 			}
 		} catch (final GitAPIException e) {
 			if (debug)
@@ -142,15 +191,37 @@ public class GitConnector extends AbstractConnector {
 	}
 
 	@Override
-	public void getBranches(final List<String> names, final List<String> commits) {
+	public void getBranches() {
 		try {
-			for (final Ref ref : git.branchList().setListMode(ListMode.REMOTE).call()) {
-				names.add(ref.getName());
-				commits.add(ref.getObjectId().getName());
+			for (final Ref ref : git.branchList().call()) {
+				Integer index = revisionMap.get(ref.getObjectId().getName());
+				branchNames.add(ref.getName());
+				branchIndices.add(index);
 			}
 		} catch (final GitAPIException e) {
 			if (debug)
 				System.err.println("Git Error reading branches: " + e.getMessage());
 		}
+	}
+
+	public List<String> getSnapshot(String commit) {
+		ArrayList<String> snapshot = new ArrayList<String>();
+		TreeWalk tw = new TreeWalk(repository);
+		tw.reset();
+		try {
+			RevCommit rc = revwalk.parseCommit(repository.resolve(commit));
+			tw.addTree(rc.getTree());
+			tw.setRecursive(true);
+			while (tw.next()) {
+				if (!tw.isSubtree()) {
+					String path = tw.getPathString();
+					snapshot.add(path);
+				}
+			}
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
+		tw.close();
+		return snapshot;
 	}
 }

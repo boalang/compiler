@@ -1,0 +1,23 @@
+namespaces {
+  name: ""
+  statements {
+    kind: LABEL
+    statements {
+      kind: EXPRESSION
+      expression {
+        kind: VARDECL
+        variable_decls {
+          name: "x"
+          modifiers {
+            kind: SCOPE
+            scope: VAR
+          }
+        }
+      }
+    }
+    expressions {
+      kind: LITERAL
+      literal: "loop1"
+    }
+  }
+}

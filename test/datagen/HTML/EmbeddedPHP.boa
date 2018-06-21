@@ -1,0 +1,33 @@
+title: ""
+elements {
+  tag: "html"
+  kind: BLOCK
+  elements {
+    tag: "head"
+    kind: BLOCK
+  }
+  elements {
+    tag: "body"
+    kind: BLOCK
+    text: " Hello, today is "
+    text: ". "
+    atributes {
+      key: "class"
+      value: "page_bg"
+    }
+    php {
+      name: ""
+      statements {
+        kind: OTHER
+        initializations {
+          kind: METHODCALL
+          method: "date"
+          method_args {
+            kind: LITERAL
+            literal: "\'l, F jS, Y\'"
+          }
+        }
+      }
+    }
+  }
+}

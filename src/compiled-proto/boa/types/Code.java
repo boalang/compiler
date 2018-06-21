@@ -224,6 +224,95 @@ public final class Code {
      */
     com.google.protobuf.ByteString
         getTagNamesBytes(int index);
+
+    // required int32 head = 8;
+    /**
+     * <code>required int32 head = 8;</code>
+     *
+     * <pre>
+     ** @exclude The offset of the head commit 
+     * </pre>
+     */
+    boolean hasHead();
+    /**
+     * <code>required int32 head = 8;</code>
+     *
+     * <pre>
+     ** @exclude The offset of the head commit 
+     * </pre>
+     */
+    int getHead();
+
+    // repeated .boa.types.ChangedFile head_snapshot = 9;
+    /**
+     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+     *
+     * <pre>
+     ** @exclude The snapshot at the head commit 
+     * </pre>
+     */
+    java.util.List<boa.types.Diff.ChangedFile> 
+        getHeadSnapshotList();
+    /**
+     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+     *
+     * <pre>
+     ** @exclude The snapshot at the head commit 
+     * </pre>
+     */
+    boa.types.Diff.ChangedFile getHeadSnapshot(int index);
+    /**
+     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+     *
+     * <pre>
+     ** @exclude The snapshot at the head commit 
+     * </pre>
+     */
+    int getHeadSnapshotCount();
+    /**
+     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+     *
+     * <pre>
+     ** @exclude The snapshot at the head commit 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Diff.ChangedFileOrBuilder> 
+        getHeadSnapshotOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+     *
+     * <pre>
+     ** @exclude The snapshot at the head commit 
+     * </pre>
+     */
+    boa.types.Diff.ChangedFileOrBuilder getHeadSnapshotOrBuilder(
+        int index);
+
+    // repeated int64 revision_keys = 10;
+    /**
+     * <code>repeated int64 revision_keys = 10;</code>
+     *
+     * <pre>
+     ** Keys of the revisions stored in the commit sequence file 
+     * </pre>
+     */
+    java.util.List<java.lang.Long> getRevisionKeysList();
+    /**
+     * <code>repeated int64 revision_keys = 10;</code>
+     *
+     * <pre>
+     ** Keys of the revisions stored in the commit sequence file 
+     * </pre>
+     */
+    int getRevisionKeysCount();
+    /**
+     * <code>repeated int64 revision_keys = 10;</code>
+     *
+     * <pre>
+     ** Keys of the revisions stored in the commit sequence file 
+     * </pre>
+     */
+    long getRevisionKeys(int index);
   }
   /**
    * Protobuf type {@code boa.types.CodeRepository}
@@ -362,6 +451,40 @@ public final class Code {
               tagNames_.add(input.readBytes());
               break;
             }
+            case 64: {
+              bitField0_ |= 0x00000004;
+              head_ = input.readInt32();
+              break;
+            }
+            case 74: {
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+                headSnapshot_ = new java.util.ArrayList<boa.types.Diff.ChangedFile>();
+                mutable_bitField0_ |= 0x00000100;
+              }
+              headSnapshot_.add(input.readMessage(boa.types.Diff.ChangedFile.PARSER, extensionRegistry));
+              break;
+            }
+            case 80: {
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+                revisionKeys_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00000200;
+              }
+              revisionKeys_.add(input.readInt64());
+              break;
+            }
+            case 82: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200) && input.getBytesUntilLimit() > 0) {
+                revisionKeys_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00000200;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                revisionKeys_.add(input.readInt64());
+              }
+              input.popLimit(limit);
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -384,6 +507,12 @@ public final class Code {
         }
         if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
           tagNames_ = new com.google.protobuf.UnmodifiableLazyStringList(tagNames_);
+        }
+        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+          headSnapshot_ = java.util.Collections.unmodifiableList(headSnapshot_);
+        }
+        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+          revisionKeys_ = java.util.Collections.unmodifiableList(revisionKeys_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -934,6 +1063,121 @@ public final class Code {
       return tagNames_.getByteString(index);
     }
 
+    // required int32 head = 8;
+    public static final int HEAD_FIELD_NUMBER = 8;
+    private int head_;
+    /**
+     * <code>required int32 head = 8;</code>
+     *
+     * <pre>
+     ** @exclude The offset of the head commit 
+     * </pre>
+     */
+    public boolean hasHead() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required int32 head = 8;</code>
+     *
+     * <pre>
+     ** @exclude The offset of the head commit 
+     * </pre>
+     */
+    public int getHead() {
+      return head_;
+    }
+
+    // repeated .boa.types.ChangedFile head_snapshot = 9;
+    public static final int HEAD_SNAPSHOT_FIELD_NUMBER = 9;
+    private java.util.List<boa.types.Diff.ChangedFile> headSnapshot_;
+    /**
+     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+     *
+     * <pre>
+     ** @exclude The snapshot at the head commit 
+     * </pre>
+     */
+    public java.util.List<boa.types.Diff.ChangedFile> getHeadSnapshotList() {
+      return headSnapshot_;
+    }
+    /**
+     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+     *
+     * <pre>
+     ** @exclude The snapshot at the head commit 
+     * </pre>
+     */
+    public java.util.List<? extends boa.types.Diff.ChangedFileOrBuilder> 
+        getHeadSnapshotOrBuilderList() {
+      return headSnapshot_;
+    }
+    /**
+     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+     *
+     * <pre>
+     ** @exclude The snapshot at the head commit 
+     * </pre>
+     */
+    public int getHeadSnapshotCount() {
+      return headSnapshot_.size();
+    }
+    /**
+     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+     *
+     * <pre>
+     ** @exclude The snapshot at the head commit 
+     * </pre>
+     */
+    public boa.types.Diff.ChangedFile getHeadSnapshot(int index) {
+      return headSnapshot_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+     *
+     * <pre>
+     ** @exclude The snapshot at the head commit 
+     * </pre>
+     */
+    public boa.types.Diff.ChangedFileOrBuilder getHeadSnapshotOrBuilder(
+        int index) {
+      return headSnapshot_.get(index);
+    }
+
+    // repeated int64 revision_keys = 10;
+    public static final int REVISION_KEYS_FIELD_NUMBER = 10;
+    private java.util.List<java.lang.Long> revisionKeys_;
+    /**
+     * <code>repeated int64 revision_keys = 10;</code>
+     *
+     * <pre>
+     ** Keys of the revisions stored in the commit sequence file 
+     * </pre>
+     */
+    public java.util.List<java.lang.Long>
+        getRevisionKeysList() {
+      return revisionKeys_;
+    }
+    /**
+     * <code>repeated int64 revision_keys = 10;</code>
+     *
+     * <pre>
+     ** Keys of the revisions stored in the commit sequence file 
+     * </pre>
+     */
+    public int getRevisionKeysCount() {
+      return revisionKeys_.size();
+    }
+    /**
+     * <code>repeated int64 revision_keys = 10;</code>
+     *
+     * <pre>
+     ** Keys of the revisions stored in the commit sequence file 
+     * </pre>
+     */
+    public long getRevisionKeys(int index) {
+      return revisionKeys_.get(index);
+    }
+
     private void initFields() {
       url_ = "";
       kind_ = boa.types.Code.CodeRepository.RepositoryKind.OTHER;
@@ -942,6 +1186,9 @@ public final class Code {
       branchNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       tags_ = java.util.Collections.emptyList();
       tagNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      head_ = 0;
+      headSnapshot_ = java.util.Collections.emptyList();
+      revisionKeys_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -956,8 +1203,18 @@ public final class Code {
         memoizedIsInitialized = 0;
         return false;
       }
+      if (!hasHead()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       for (int i = 0; i < getRevisionsCount(); i++) {
         if (!getRevisions(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getHeadSnapshotCount(); i++) {
+        if (!getHeadSnapshot(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -989,6 +1246,15 @@ public final class Code {
       }
       for (int i = 0; i < tagNames_.size(); i++) {
         output.writeBytes(7, tagNames_.getByteString(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(8, head_);
+      }
+      for (int i = 0; i < headSnapshot_.size(); i++) {
+        output.writeMessage(9, headSnapshot_.get(i));
+      }
+      for (int i = 0; i < revisionKeys_.size(); i++) {
+        output.writeInt64(10, revisionKeys_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -1046,6 +1312,23 @@ public final class Code {
         }
         size += dataSize;
         size += 1 * getTagNamesList().size();
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(8, head_);
+      }
+      for (int i = 0; i < headSnapshot_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(9, headSnapshot_.get(i));
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < revisionKeys_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt64SizeNoTag(revisionKeys_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getRevisionKeysList().size();
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1160,6 +1443,7 @@ public final class Code {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getRevisionsFieldBuilder();
+          getHeadSnapshotFieldBuilder();
         }
       }
       private static Builder create() {
@@ -1186,6 +1470,16 @@ public final class Code {
         bitField0_ = (bitField0_ & ~0x00000020);
         tagNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000040);
+        head_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        if (headSnapshotBuilder_ == null) {
+          headSnapshot_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000100);
+        } else {
+          headSnapshotBuilder_.clear();
+        }
+        revisionKeys_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -1253,6 +1547,24 @@ public final class Code {
           bitField0_ = (bitField0_ & ~0x00000040);
         }
         result.tagNames_ = tagNames_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.head_ = head_;
+        if (headSnapshotBuilder_ == null) {
+          if (((bitField0_ & 0x00000100) == 0x00000100)) {
+            headSnapshot_ = java.util.Collections.unmodifiableList(headSnapshot_);
+            bitField0_ = (bitField0_ & ~0x00000100);
+          }
+          result.headSnapshot_ = headSnapshot_;
+        } else {
+          result.headSnapshot_ = headSnapshotBuilder_.build();
+        }
+        if (((bitField0_ & 0x00000200) == 0x00000200)) {
+          revisionKeys_ = java.util.Collections.unmodifiableList(revisionKeys_);
+          bitField0_ = (bitField0_ & ~0x00000200);
+        }
+        result.revisionKeys_ = revisionKeys_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1343,6 +1655,45 @@ public final class Code {
           }
           onChanged();
         }
+        if (other.hasHead()) {
+          setHead(other.getHead());
+        }
+        if (headSnapshotBuilder_ == null) {
+          if (!other.headSnapshot_.isEmpty()) {
+            if (headSnapshot_.isEmpty()) {
+              headSnapshot_ = other.headSnapshot_;
+              bitField0_ = (bitField0_ & ~0x00000100);
+            } else {
+              ensureHeadSnapshotIsMutable();
+              headSnapshot_.addAll(other.headSnapshot_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.headSnapshot_.isEmpty()) {
+            if (headSnapshotBuilder_.isEmpty()) {
+              headSnapshotBuilder_.dispose();
+              headSnapshotBuilder_ = null;
+              headSnapshot_ = other.headSnapshot_;
+              bitField0_ = (bitField0_ & ~0x00000100);
+              headSnapshotBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getHeadSnapshotFieldBuilder() : null;
+            } else {
+              headSnapshotBuilder_.addAllMessages(other.headSnapshot_);
+            }
+          }
+        }
+        if (!other.revisionKeys_.isEmpty()) {
+          if (revisionKeys_.isEmpty()) {
+            revisionKeys_ = other.revisionKeys_;
+            bitField0_ = (bitField0_ & ~0x00000200);
+          } else {
+            ensureRevisionKeysIsMutable();
+            revisionKeys_.addAll(other.revisionKeys_);
+          }
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -1356,8 +1707,18 @@ public final class Code {
           
           return false;
         }
+        if (!hasHead()) {
+          
+          return false;
+        }
         for (int i = 0; i < getRevisionsCount(); i++) {
           if (!getRevisions(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getHeadSnapshotCount(); i++) {
+          if (!getHeadSnapshot(i).isInitialized()) {
             
             return false;
           }
@@ -2288,6 +2649,461 @@ public final class Code {
   }
   ensureTagNamesIsMutable();
         tagNames_.add(value);
+        onChanged();
+        return this;
+      }
+
+      // required int32 head = 8;
+      private int head_ ;
+      /**
+       * <code>required int32 head = 8;</code>
+       *
+       * <pre>
+       ** @exclude The offset of the head commit 
+       * </pre>
+       */
+      public boolean hasHead() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>required int32 head = 8;</code>
+       *
+       * <pre>
+       ** @exclude The offset of the head commit 
+       * </pre>
+       */
+      public int getHead() {
+        return head_;
+      }
+      /**
+       * <code>required int32 head = 8;</code>
+       *
+       * <pre>
+       ** @exclude The offset of the head commit 
+       * </pre>
+       */
+      public Builder setHead(int value) {
+        bitField0_ |= 0x00000080;
+        head_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 head = 8;</code>
+       *
+       * <pre>
+       ** @exclude The offset of the head commit 
+       * </pre>
+       */
+      public Builder clearHead() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        head_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // repeated .boa.types.ChangedFile head_snapshot = 9;
+      private java.util.List<boa.types.Diff.ChangedFile> headSnapshot_ =
+        java.util.Collections.emptyList();
+      private void ensureHeadSnapshotIsMutable() {
+        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
+          headSnapshot_ = new java.util.ArrayList<boa.types.Diff.ChangedFile>(headSnapshot_);
+          bitField0_ |= 0x00000100;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Diff.ChangedFile, boa.types.Diff.ChangedFile.Builder, boa.types.Diff.ChangedFileOrBuilder> headSnapshotBuilder_;
+
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public java.util.List<boa.types.Diff.ChangedFile> getHeadSnapshotList() {
+        if (headSnapshotBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(headSnapshot_);
+        } else {
+          return headSnapshotBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public int getHeadSnapshotCount() {
+        if (headSnapshotBuilder_ == null) {
+          return headSnapshot_.size();
+        } else {
+          return headSnapshotBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public boa.types.Diff.ChangedFile getHeadSnapshot(int index) {
+        if (headSnapshotBuilder_ == null) {
+          return headSnapshot_.get(index);
+        } else {
+          return headSnapshotBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public Builder setHeadSnapshot(
+          int index, boa.types.Diff.ChangedFile value) {
+        if (headSnapshotBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureHeadSnapshotIsMutable();
+          headSnapshot_.set(index, value);
+          onChanged();
+        } else {
+          headSnapshotBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public Builder setHeadSnapshot(
+          int index, boa.types.Diff.ChangedFile.Builder builderForValue) {
+        if (headSnapshotBuilder_ == null) {
+          ensureHeadSnapshotIsMutable();
+          headSnapshot_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          headSnapshotBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public Builder addHeadSnapshot(boa.types.Diff.ChangedFile value) {
+        if (headSnapshotBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureHeadSnapshotIsMutable();
+          headSnapshot_.add(value);
+          onChanged();
+        } else {
+          headSnapshotBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public Builder addHeadSnapshot(
+          int index, boa.types.Diff.ChangedFile value) {
+        if (headSnapshotBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureHeadSnapshotIsMutable();
+          headSnapshot_.add(index, value);
+          onChanged();
+        } else {
+          headSnapshotBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public Builder addHeadSnapshot(
+          boa.types.Diff.ChangedFile.Builder builderForValue) {
+        if (headSnapshotBuilder_ == null) {
+          ensureHeadSnapshotIsMutable();
+          headSnapshot_.add(builderForValue.build());
+          onChanged();
+        } else {
+          headSnapshotBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public Builder addHeadSnapshot(
+          int index, boa.types.Diff.ChangedFile.Builder builderForValue) {
+        if (headSnapshotBuilder_ == null) {
+          ensureHeadSnapshotIsMutable();
+          headSnapshot_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          headSnapshotBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public Builder addAllHeadSnapshot(
+          java.lang.Iterable<? extends boa.types.Diff.ChangedFile> values) {
+        if (headSnapshotBuilder_ == null) {
+          ensureHeadSnapshotIsMutable();
+          super.addAll(values, headSnapshot_);
+          onChanged();
+        } else {
+          headSnapshotBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public Builder clearHeadSnapshot() {
+        if (headSnapshotBuilder_ == null) {
+          headSnapshot_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000100);
+          onChanged();
+        } else {
+          headSnapshotBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public Builder removeHeadSnapshot(int index) {
+        if (headSnapshotBuilder_ == null) {
+          ensureHeadSnapshotIsMutable();
+          headSnapshot_.remove(index);
+          onChanged();
+        } else {
+          headSnapshotBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public boa.types.Diff.ChangedFile.Builder getHeadSnapshotBuilder(
+          int index) {
+        return getHeadSnapshotFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public boa.types.Diff.ChangedFileOrBuilder getHeadSnapshotOrBuilder(
+          int index) {
+        if (headSnapshotBuilder_ == null) {
+          return headSnapshot_.get(index);  } else {
+          return headSnapshotBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public java.util.List<? extends boa.types.Diff.ChangedFileOrBuilder> 
+           getHeadSnapshotOrBuilderList() {
+        if (headSnapshotBuilder_ != null) {
+          return headSnapshotBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(headSnapshot_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public boa.types.Diff.ChangedFile.Builder addHeadSnapshotBuilder() {
+        return getHeadSnapshotFieldBuilder().addBuilder(
+            boa.types.Diff.ChangedFile.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public boa.types.Diff.ChangedFile.Builder addHeadSnapshotBuilder(
+          int index) {
+        return getHeadSnapshotFieldBuilder().addBuilder(
+            index, boa.types.Diff.ChangedFile.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
+       *
+       * <pre>
+       ** @exclude The snapshot at the head commit 
+       * </pre>
+       */
+      public java.util.List<boa.types.Diff.ChangedFile.Builder> 
+           getHeadSnapshotBuilderList() {
+        return getHeadSnapshotFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Diff.ChangedFile, boa.types.Diff.ChangedFile.Builder, boa.types.Diff.ChangedFileOrBuilder> 
+          getHeadSnapshotFieldBuilder() {
+        if (headSnapshotBuilder_ == null) {
+          headSnapshotBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Diff.ChangedFile, boa.types.Diff.ChangedFile.Builder, boa.types.Diff.ChangedFileOrBuilder>(
+                  headSnapshot_,
+                  ((bitField0_ & 0x00000100) == 0x00000100),
+                  getParentForChildren(),
+                  isClean());
+          headSnapshot_ = null;
+        }
+        return headSnapshotBuilder_;
+      }
+
+      // repeated int64 revision_keys = 10;
+      private java.util.List<java.lang.Long> revisionKeys_ = java.util.Collections.emptyList();
+      private void ensureRevisionKeysIsMutable() {
+        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
+          revisionKeys_ = new java.util.ArrayList<java.lang.Long>(revisionKeys_);
+          bitField0_ |= 0x00000200;
+         }
+      }
+      /**
+       * <code>repeated int64 revision_keys = 10;</code>
+       *
+       * <pre>
+       ** Keys of the revisions stored in the commit sequence file 
+       * </pre>
+       */
+      public java.util.List<java.lang.Long>
+          getRevisionKeysList() {
+        return java.util.Collections.unmodifiableList(revisionKeys_);
+      }
+      /**
+       * <code>repeated int64 revision_keys = 10;</code>
+       *
+       * <pre>
+       ** Keys of the revisions stored in the commit sequence file 
+       * </pre>
+       */
+      public int getRevisionKeysCount() {
+        return revisionKeys_.size();
+      }
+      /**
+       * <code>repeated int64 revision_keys = 10;</code>
+       *
+       * <pre>
+       ** Keys of the revisions stored in the commit sequence file 
+       * </pre>
+       */
+      public long getRevisionKeys(int index) {
+        return revisionKeys_.get(index);
+      }
+      /**
+       * <code>repeated int64 revision_keys = 10;</code>
+       *
+       * <pre>
+       ** Keys of the revisions stored in the commit sequence file 
+       * </pre>
+       */
+      public Builder setRevisionKeys(
+          int index, long value) {
+        ensureRevisionKeysIsMutable();
+        revisionKeys_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int64 revision_keys = 10;</code>
+       *
+       * <pre>
+       ** Keys of the revisions stored in the commit sequence file 
+       * </pre>
+       */
+      public Builder addRevisionKeys(long value) {
+        ensureRevisionKeysIsMutable();
+        revisionKeys_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int64 revision_keys = 10;</code>
+       *
+       * <pre>
+       ** Keys of the revisions stored in the commit sequence file 
+       * </pre>
+       */
+      public Builder addAllRevisionKeys(
+          java.lang.Iterable<? extends java.lang.Long> values) {
+        ensureRevisionKeysIsMutable();
+        super.addAll(values, revisionKeys_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int64 revision_keys = 10;</code>
+       *
+       * <pre>
+       ** Keys of the revisions stored in the commit sequence file 
+       * </pre>
+       */
+      public Builder clearRevisionKeys() {
+        revisionKeys_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000200);
         onChanged();
         return this;
       }
@@ -4627,20 +5443,22 @@ public final class Code {
   static {
     java.lang.String[] descriptorData = {
       "\n\ncode.proto\022\tboa.types\032\ndiff.proto\032\014sha" +
-      "red.proto\"\276\002\n\016CodeRepository\022\013\n\003url\030\001 \002(" +
+      "red.proto\"\222\003\n\016CodeRepository\022\013\n\003url\030\001 \002(" +
       "\t\0226\n\004kind\030\002 \002(\0162(.boa.types.CodeReposito" +
       "ry.RepositoryKind\022&\n\trevisions\030\003 \003(\0132\023.b" +
       "oa.types.Revision\022\020\n\010branches\030\004 \003(\005\022\024\n\014b" +
       "ranch_names\030\005 \003(\t\022\014\n\004tags\030\006 \003(\005\022\021\n\ttag_n" +
-      "ames\030\007 \003(\t\"v\n\016RepositoryKind\022\t\n\005OTHER\020\000\022" +
-      "\007\n\003SVN\020\001\022\016\n\nSUBVERSION\020\001\022\007\n\003CVS\020\002\022\007\n\003GIT" +
-      "\020\003\022\006\n\002HG\020\004\022\r\n\tMERCURIAL\020\004\022\007\n\003BZR\020\005\022\n\n\006BA" +
-      "ZAAR\020\005\032\002\020\001\"\313\001\n\010Revision\022\n\n\002id\030\001 \002(\t\022!\n\006a",
-      "uthor\030\002 \001(\0132\021.boa.types.Person\022$\n\tcommit" +
-      "ter\030\003 \002(\0132\021.boa.types.Person\022\023\n\013commit_d" +
-      "ate\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022%\n\005files\030\006 \003(\0132\026." +
-      "boa.types.ChangedFile\022\017\n\007parents\030\007 \003(\005\022\020" +
-      "\n\010children\030\010 \003(\005B\002H\001"
+      "ames\030\007 \003(\t\022\014\n\004head\030\010 \002(\005\022-\n\rhead_snapsho" +
+      "t\030\t \003(\0132\026.boa.types.ChangedFile\022\025\n\rrevis" +
+      "ion_keys\030\n \003(\003\"v\n\016RepositoryKind\022\t\n\005OTHE" +
+      "R\020\000\022\007\n\003SVN\020\001\022\016\n\nSUBVERSION\020\001\022\007\n\003CVS\020\002\022\007\n",
+      "\003GIT\020\003\022\006\n\002HG\020\004\022\r\n\tMERCURIAL\020\004\022\007\n\003BZR\020\005\022\n" +
+      "\n\006BAZAAR\020\005\032\002\020\001\"\313\001\n\010Revision\022\n\n\002id\030\001 \002(\t\022" +
+      "!\n\006author\030\002 \001(\0132\021.boa.types.Person\022$\n\tco" +
+      "mmitter\030\003 \002(\0132\021.boa.types.Person\022\023\n\013comm" +
+      "it_date\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022%\n\005files\030\006 \003(" +
+      "\0132\026.boa.types.ChangedFile\022\017\n\007parents\030\007 \003" +
+      "(\005\022\020\n\010children\030\010 \003(\005B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4652,7 +5470,7 @@ public final class Code {
           internal_static_boa_types_CodeRepository_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_CodeRepository_descriptor,
-              new java.lang.String[] { "Url", "Kind", "Revisions", "Branches", "BranchNames", "Tags", "TagNames", });
+              new java.lang.String[] { "Url", "Kind", "Revisions", "Branches", "BranchNames", "Tags", "TagNames", "Head", "HeadSnapshot", "RevisionKeys", });
           internal_static_boa_types_Revision_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_boa_types_Revision_fieldAccessorTable = new

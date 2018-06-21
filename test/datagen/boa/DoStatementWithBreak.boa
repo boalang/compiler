@@ -1,0 +1,19 @@
+{
+   "kind": "DO",
+   "statements": [
+      {
+         "kind": "BLOCK",
+         "statements": [
+            {
+               "kind": "BREAK"
+            }
+         ]
+      }
+   ],
+   "conditions": [
+      {
+         "kind": "LITERAL",
+         "literal": "true"
+      }
+   ]
+}

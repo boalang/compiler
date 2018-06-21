@@ -12,6 +12,15 @@
             },
             "method": "new"
          }
-      ]
+      ],
+      "declaring_type": {
+         "name": "t",
+         "fully_qualified_name": "t",
+         "kind": "CLASS"
+      },
+      "return_type": {
+         "name": "void",
+         "kind": "PRIMITIVE"
+      }
    }
 }
