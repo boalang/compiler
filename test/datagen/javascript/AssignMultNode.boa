@@ -1,0 +1,17 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: ASSIGN_MULT
+      expressions {
+        kind: VARACCESS
+        variable: "text"
+      }
+      expressions {
+        kind: VARACCESS
+        variable: "i"
+      }
+    }
+  }
+}

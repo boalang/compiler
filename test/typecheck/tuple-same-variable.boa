@@ -1,0 +1,6 @@
+a := 1;
+
+type foo = {a: float, b: float, c: bool};
+type bar = {a: int, c: float};
+
+b := true;

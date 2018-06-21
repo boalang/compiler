@@ -9,39 +9,30 @@
          },
          {
             "kind": "LAMBDA",
-            "lambda": {
-               "return_type": {
-                  "name": "",
-                  "kind": "OTHER"
-               },
-               "arguments": [
-                  {
-                     "name": "x",
-                     "variable_type": {
-                        "name": "int",
-                        "kind": "OTHER"
+            "expressions": [
+               {
+                  "kind": "OP_ADD",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "x"
+                     },
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "y"
                      }
+                  ]
+               }
+            ],
+            "variable_decls": [
+               {
+                  "name": "x",
+                  "variable_type": {
+                     "name": "int",
+                     "kind": "PRIMITIVE"
                   }
-               ],
-               "statements": [
-                  {
-                     "kind": "EXPRESSION",
-                     "expression": {
-                        "kind": "OP_ADD",
-                        "expressions": [
-                           {
-                              "kind": "VARACCESS",
-                              "variable": "x"
-                           },
-                           {
-                              "kind": "VARACCESS",
-                              "variable": "x"
-                           }
-                        ]
-                     }
-                  }
-               ]
-            }
+               }
+            ]
          }
       ]
    }

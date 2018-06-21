@@ -1,0 +1,22 @@
+{
+   "kind": "FOREACH",
+   "statements": [
+      {
+         "kind": "BLOCK"
+      }
+   ],
+   "variable_declaration": {
+      "name": "x",
+      "variable_type": {
+         "name": "int",
+         "kind": "PRIMITIVE"
+      }
+   },
+   "expression": {
+      "kind": "VARACCESS",
+      "variable": "intList"
+   }
+},
+{
+   "kind": "EMPTY"
+}

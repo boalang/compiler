@@ -1,0 +1,19 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: VARDECL
+      variable_decls {
+        name: "x"
+        modifiers {
+          kind: FINAL
+        }
+        initializer {
+          kind: LITERAL
+          literal: "5"
+        }
+      }
+    }
+  }
+}

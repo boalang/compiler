@@ -1,0 +1,6 @@
+namespaces {
+  name: ""
+  statements {
+    kind: DEBUGGER
+  }
+}

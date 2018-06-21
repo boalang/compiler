@@ -1,0 +1,18 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: ASSIGN_CONCAT
+      expressions {
+        kind: VARACCESS
+        variable: "a"
+        dollar_sign: true
+      }
+      expressions {
+        kind: LITERAL
+        literal: "\"World!\""
+      }
+    }
+  }
+}

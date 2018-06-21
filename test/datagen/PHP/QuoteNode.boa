@@ -1,0 +1,31 @@
+namespaces {
+  name: ""
+  statements {
+    kind: ECHO
+    expressions {
+      kind: QUOTE
+      expressions {
+        kind: LITERAL
+        literal: "Hi, my name is "
+      }
+      expressions {
+        kind: VARACCESS
+        variable: "name"
+        dollar_sign: true
+      }
+      expressions {
+        kind: LITERAL
+        literal: " and I am "
+      }
+      expressions {
+        kind: VARACCESS
+        variable: "age"
+        dollar_sign: true
+      }
+      expressions {
+        kind: LITERAL
+        literal: " years old."
+      }
+    }
+  }
+}

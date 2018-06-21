@@ -1,0 +1,13 @@
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "OP_DEC",
+      "expressions": [
+         {
+            "kind": "VARACCESS",
+            "variable": "i"
+         }
+      ],
+      "is_postfix": true
+   }
+}

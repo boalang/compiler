@@ -1,0 +1,21 @@
+namespaces {
+  name: ""
+  declarations {
+    name: "myClass"
+    kind: CLASS
+    methods {
+      name: "myFunction"
+      modifiers {
+        kind: VISIBILITY
+        visibility: PUBLIC
+      }
+      return_type {
+        name: ""
+        kind: OTHER
+      }
+      statements {
+        kind: BLOCK
+      }
+    }
+  }
+}

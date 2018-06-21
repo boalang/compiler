@@ -69,12 +69,62 @@ message ChangedFile {
 		
 		/** The file represents a JavaScript source file that had a parse error */
 		SOURCE_JS_ERROR = 300;
+		/** The file represents a JavaScript source file that parsed without error as ES1 */
+		SOURCE_JS_ES1 = 301;
+		/** The file represents a JavaScript source file that parsed without error as ES2 */
+		SOURCE_JS_ES2 = 302;
 		/** The file represents a JavaScript source file that parsed without error as ES3 */
-		SOURCE_JS_ES3 = 301;
-		/** The file represents a JavaScript source file that parsed without error as ES4 */
-		SOURCE_JS_ES4 = 302;
+		SOURCE_JS_ES3 = 303;
+		/** The file represents a JavaScript source file that parsed without error as ES5 */
+		SOURCE_JS_ES5 = 304;
+		/** The file represents a JavaScript source file that parsed without error as ES6 */
+		SOURCE_JS_ES6 = 305;
+		/** The file represents a JavaScript source file that parsed without error as ES7 */
+		SOURCE_JS_ES7 = 306;
+		/** The file represents a JavaScript source file that parsed without error as ES8 */
+		SOURCE_JS_ES8 = 307;
 		/** @exclude */
 		JS_ERROR = 300;
+		
+		/** The file represents a PHP source file that had a parse error */
+		SOURCE_PHP_ERROR = 400;
+		/** The file represents a PHP source file that parsed without error as ES1 */
+		SOURCE_PHP5 = 401;
+		/** The file represents a PHP source file that parsed without error as ES2 */
+		SOURCE_PHP5_3 = 402;
+		/** The file represents a PHP source file that parsed without error as ES3 */
+		SOURCE_PHP5_4 = 403;
+		/** The file represents a PHP source file that parsed without error as ES5 */
+		SOURCE_PHP5_5 = 404;
+		/** The file represents a PHP source file that parsed without error as ES6 */
+		SOURCE_PHP5_6 = 405;
+		/** The file represents a PHP source file that parsed without error as ES7 */
+		SOURCE_PHP7_0 = 406;
+		/** The file represents a PHP source file that parsed without error as ES8 */
+		SOURCE_PHP7_1 = 407;
+		/** @exclude */
+		PHP_ERROR = 400;
+		
+		/** The file represents an HTML source file that had a parse error */
+		SOURCE_HTML_ERROR = 500;
+		/** The file represents an HTML source file that parsed without error */
+		Source_HTML = 501;
+		/** @exclude */
+		HTML_ERROR = 500;
+		
+		/** The file represents an XML source file that had a parse error */
+		SOURCE_XML_ERROR = 600;
+		/** The file represents an HTML source file that parsed without error */
+		Source_XML = 601;
+		/** @exclude */
+		XML_ERROR = 600;
+		
+		/** The file represents an CSS source file that had a parse error */
+		SOURCE_CSS_ERROR = 700;
+		/** The file represents an CSS source file that parsed without error */
+		Source_CSS = 701;
+		/** @exclude */
+		CSS_ERROR = 700;
 	}
 	/** The kind of change for this file */
 	required ChangeKind change = 1;
@@ -83,9 +133,9 @@ message ChangedFile {
 	/** The full name and path of the file */
 	required string name = 3;
 	/** @exclude */
-	required string key = 4;
-	/** @exclude */
-	optional ASTRoot ast = 5;
+	required uint64 key = 4;
+	/** @exclude Indicates if this file has a corresponding parsed AST or not */
+	required bool ast = 5;
 	/** @exclude */
 	optional CommentsRoot comments = 6;
 	/** @exclude The kinds of changes of this this compared to the corresponding parent commits */
@@ -93,5 +143,7 @@ message ChangedFile {
 	/** @exclude The indices of the corresponding parent commits in the list of all commits */
 	repeated int32 previous_versions = 8;
 	/** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits */
-	repeated int32 previous_index = 9;
+	repeated int32 previous_indices = 9;
+	/** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version */
+	optional uint64 mapped_key = 10;
 }

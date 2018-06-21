@@ -1,0 +1,30 @@
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "ASSIGN",
+      "expressions": [
+         {
+            "kind": "VARACCESS",
+            "variable": "z"
+         },
+         {
+            "kind": "PAREN",
+            "expressions": [
+               {
+                  "kind": "OP_ADD",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "x"
+                     },
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "y"
+                     }
+                  ]
+               }
+            ]
+         }
+      ]
+   }
+}

@@ -43,6 +43,12 @@ message CodeRepository {
 	repeated int32 tags = 6;
 	/** @exclude The names of all tags */
 	repeated string tag_names = 7;
+	/** @exclude The offset of the head commit */
+	required int32 head = 8;
+	/** @exclude The snapshot at the head commit */
+	repeated ChangedFile head_snapshot = 9;
+	/** Keys of the revisions stored in the commit sequence file */
+	repeated int64 revision_keys = 10;
 }
 
 /** A single revision inside a CodeRepository */

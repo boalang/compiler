@@ -120,4 +120,9 @@ public class TestTypecheckBad extends BaseTest {
 	public void assignFuncNoRet() throws IOException {
 		typecheck(load(badDir + "assign-func-no-ret.boa"), "functions without a return type can not be used as initializers");
 	}
+
+	@Test
+	public void tupleRedecl() throws IOException {
+		typecheck(load(badDir + "tuple-redecl.boa"), "variable 'a' already declared as 'float'");
+	}
 }

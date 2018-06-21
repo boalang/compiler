@@ -1,0 +1,14 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: REFLECTION
+      expressions {
+        kind: VARACCESS
+        variable: "x"
+        dollar_sign: true
+      }
+    }
+  }
+}

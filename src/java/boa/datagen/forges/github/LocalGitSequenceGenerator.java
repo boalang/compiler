@@ -7,8 +7,10 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.SequenceFile.CompressionType;
 
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -20,10 +22,9 @@ import boa.datagen.scm.GitConnector;
 
 public class LocalGitSequenceGenerator {
 
-	private static SequenceFile.Writer projectWriter, astWriter;
+	private static SequenceFile.Writer projectWriter, astWriter, contentWriter;
 	private static Configuration conf = null;
 	private static FileSystem fileSystem = null;
-	private final static String keyDelim = "!!";
 
 	public LocalGitSequenceGenerator() {
 		// TODO Auto-generated constructor stub
@@ -45,11 +46,9 @@ public class LocalGitSequenceGenerator {
 	private static void openWriters(String outputPath) {
 		while (true) {
 			try {
-				projectWriter = SequenceFile.createWriter(fileSystem, conf,
-						new Path(outputPath+"/projects.seq"), Text.class,
-						BytesWritable.class);
-				astWriter = SequenceFile.createWriter(fileSystem, conf,
-						new Path(outputPath+"/ast.seq"), Text.class, BytesWritable.class);
+				projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(outputPath + "/projects.seq"), Text.class, BytesWritable.class, CompressionType.BLOCK);
+				astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(outputPath + "/ast.seq"), LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
+				contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(outputPath + "/sources.seq"), LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
 				break;
 			} catch (Throwable t) {
 				t.printStackTrace();
@@ -66,6 +65,7 @@ public class LocalGitSequenceGenerator {
 			try {
 				projectWriter.close();
 				astWriter.close();
+				contentWriter.close();
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -91,15 +91,21 @@ public class LocalGitSequenceGenerator {
 		
 		AbstractConnector conn = null;
 		try {
-			conn = new GitConnector(gitDir.getAbsolutePath());
+			conn = new GitConnector(gitDir.getAbsolutePath(), "");
 			final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
 			repoBuilder.setUrl(path);
 			repoBuilder.setKind(RepositoryKind.GIT);
-			final String repoKey = "g:" + path + keyDelim + path;
-			for (final Revision rev : conn.getCommits(true, astWriter, repoKey, keyDelim)) {
+			for (final Revision rev : conn.getCommits(true, astWriter, contentWriter, "")) {
 				final Revision.Builder revBuilder = Revision.newBuilder(rev);
 				repoBuilder.addRevisions(revBuilder);
 			}
+			if (repoBuilder.getRevisionsCount() > 0)
+				repoBuilder.setHead(conn.getHeadCommitOffset());
+			repoBuilder.addAllBranches(conn.getBranchIndices());
+			repoBuilder.addAllBranchNames(conn.getBranchNames());
+			repoBuilder.addAllTags(conn.getTagIndices());
+			repoBuilder.addAllTagNames(conn.getTagNames());
+			
 			projBuilder.addCodeRepositories(repoBuilder);
 		} catch (final Exception e) {
 			e.printStackTrace();

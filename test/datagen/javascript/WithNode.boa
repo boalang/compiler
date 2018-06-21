@@ -1,0 +1,28 @@
+namespaces {
+  name: ""
+  statements {
+    kind: WITH
+    statements {
+      kind: SCOPE
+      statements {
+        kind: EXPRESSION
+        expression {
+          kind: METHODCALL
+          expressions {
+            kind: VARACCESS
+            variable: "console"
+          }
+          method: "log"
+          method_args {
+            kind: VARACCESS
+            variable: "x"
+          }
+        }
+      }
+    }
+    expression {
+      kind: VARACCESS
+      variable: "o"
+    }
+  }
+}

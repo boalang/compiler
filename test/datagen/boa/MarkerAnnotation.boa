@@ -1,0 +1,24 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "MarkerAnnotation",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "MyAnnotation"
+                  },
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PUBLIC"
+                  }
+               ],
+               "fully_qualified_name": "MarkerAnnotation"
+            }
+         ]
+      }
+   ]
+}

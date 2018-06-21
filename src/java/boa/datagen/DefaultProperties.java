@@ -17,13 +17,17 @@
 
 package boa.datagen;
 
+import java.io.File;
+
 /**
  * @author rdyer
  */
 public class DefaultProperties {
-	public static final boolean DEBUG = false;
-	public static final String NUM_THREADS = "1";
-	public static final String MAX_COMMITS = "10000";
+	public static String NUM_THREADS = "1";
+	public static String MAX_PROJECTS = "1000";
+//	public static final String MAX_COMMITS = "10000";
+
+	public static boolean DEBUG = false, DEBUGPARSE = false, CACHE = false, TREEDIF = false;
 
 	// HBase tables
 	public static final String HBASE_PROJECTS_TABLE = "projects";
@@ -57,12 +61,35 @@ public class DefaultProperties {
 	
 	// GitHub paths
 	public static  String GH_JSON_PATH = "repos-metadata-Boa-upto1213";
-	public static  String GH_JSON_CACHE_PATH = "json_cache";
-//	public static final String GH_GIT_PATH = "github/repositories";
 	public static String GH_GIT_PATH = "";
+	public static String GH_ISSUE_PATH = "";
 	public static final String GH_TICKETS_PATH = "tickets";
+	public static  String TOKEN = null;
+	
+	public static String CLASSPATH_ROOT = getClasspathRoot();
+	public static  String OUTPUT = "output";
+	
+	public static boolean STORE_ASCII_PRINTABLE_CONTENTS = true;
 
 	public static String localDataPath = null;
 	public static String localIssuePath = null;
 	public static String localCommentPath = null;
+	
+	@SuppressWarnings("unused")
+	private static String getRoot() {
+		File dir = new File(System.getProperty("user.dir"));
+		while (dir.getParentFile() != null)
+			dir = dir.getParentFile();
+		return dir.getAbsolutePath();
+	}
+
+	private static String getClasspathRoot() {
+		// String path = getRoot() + "/libs";
+		String path = System.getProperty("user.dir");
+		File dir = new File(path).getParentFile();
+		dir = new File(dir, "libs");
+		if (!dir.exists())
+			dir.mkdirs();
+		return dir.getAbsolutePath();
+	}
 }

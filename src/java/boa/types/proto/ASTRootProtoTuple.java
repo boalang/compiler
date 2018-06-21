@@ -21,10 +21,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.ChangeKindProtoMap;
 
 /**
  * A {@link ASTRootProtoTuple}.
@@ -40,9 +42,18 @@ public class ASTRootProtoTuple extends BoaProtoTuple {
 
 		names.put("namespaces", counter++);
 		members.add(new BoaProtoList(new NamespaceProtoTuple()));
-
-		names.put("imports", counter++);
+		
+		names.put("names", counter++);
 		members.add(new BoaProtoList(new BoaString()));
+		
+		names.put("change_kind", counter++);
+		members.add(new ChangeKindProtoMap());
+		
+		names.put("mapped_node", counter++);
+		members.add(new BoaInt());
+		
+		names.put("key", counter++);
+		members.add(new BoaInt());
 	}
 
 	/**

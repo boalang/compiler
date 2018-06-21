@@ -33,7 +33,7 @@ visit(p, visitor {
 		stop;
 	}
 
-	before n: ASTRoot ->
+	before n: Namespace ->
 		foreach (i: int; !usesConcurrent && def(n.imports[i]))
 			exists (j: int; match(patterns[j], n.imports[i]))
 				usesConcurrent = true;

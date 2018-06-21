@@ -17,6 +17,8 @@
  */
 package boa.test.datagen;
 
+import boa.test.datagen.java.Java8BaseTest;
+
 /*
  * @author rdyer
  */
