@@ -25,27 +25,28 @@ public class IssueDownloadWorker implements Runnable {
 		this.to = to;
 	}
 	
-	public void downLoadIssues(int from, int to) {
+	public void downLoadIssues() {
 		File[] files = new File(IN_PATH).listFiles();
 		GitHubIssuesDownloader issue = new GitHubIssuesDownloader();
-		for (int i = from; i < files.length; i++){
+		for (int i = from; i < to; i++){
 			String content = FileIO.readFileContents(files[i]);
 			Gson parser = new Gson();
 			JsonArray repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();
 			for (int j = 0; j < repos.size(); i++) {
 				JsonObject repo = repos.get(i).getAsJsonObject();
 				String name = repo.get("full_name").getAsString();
+				String id = repo.get("id").getAsString();
 				String[] fullName = name.split("/");
 				String projName = fullName[1];
-				if ((new File(OUT_PATH + "/" + projName +"-issues.json")).exists())
+				if ((new File(OUT_PATH + "/" + id +"-issues.json")).exists())
 					continue;
-				issue.IssueDownloader(name, OUT_PATH, TOKEN_PATH);
+				issue.issueDownloader(name, id, OUT_PATH, TOKEN_PATH);
 			}
 		}
 	}
 	
 	@Override
 	public void run() {
-		downLoadIssues(from,to);
+		downLoadIssues();
 	}
 }

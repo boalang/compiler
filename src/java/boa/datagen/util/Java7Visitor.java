@@ -22,21 +22,26 @@ import java.util.*;
 
 import org.eclipse.jdt.core.dom.*;
 
+import boa.datagen.treed.TreedConstants;
 import boa.types.Ast.*;
+import boa.types.Ast.Type;
+import boa.types.Shared.ChangeKind;
+
+import static boa.datagen.util.JavaASTUtil.getFullyQualifiedName;
 
 /**
  * @author rdyer
  */
 public class Java7Visitor extends ASTVisitor {
-	protected HashMap<String, Integer> nameIndices;
+	public static final String PROPERTY_INDEX = "i";
 	
 	protected CompilationUnit root = null;
 	protected PositionInfo.Builder pos = null;
 	protected String src = null;
+	protected Map<String, Integer> declarationFile, declarationNode;
 
 	protected Namespace.Builder b = Namespace.newBuilder();
 	protected List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
-	protected List<String> imports = new ArrayList<String>();
 	protected Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
 	protected Stack<boa.types.Ast.Modifier> modifiers = new Stack<boa.types.Ast.Modifier>();
 	protected Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
@@ -44,10 +49,15 @@ public class Java7Visitor extends ASTVisitor {
 	protected Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
 	protected Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
 
-	public Java7Visitor(String src, HashMap<String, Integer> nameIndices) {
+	public Java7Visitor(String src) {
 		super();
 		this.src = src;
-		this.nameIndices = nameIndices;
+	}
+
+	public Java7Visitor(String src, Map<String, Integer> declarationFile, Map<String, Integer> declarationNode) {
+		this(src);
+		this.declarationFile = declarationFile;
+		this.declarationNode = declarationNode;
 	}
 
 	public Namespace getNamespaces(CompilationUnit node) {
@@ -58,10 +68,6 @@ public class Java7Visitor extends ASTVisitor {
 
 	public List<boa.types.Ast.Comment> getComments() {
 		return comments;
-	}
-
-	public List<String> getImports() {
-		return imports;
 	}
 
 /*
@@ -94,6 +100,17 @@ public class Java7Visitor extends ASTVisitor {
 				((Annotation)a).accept(this);
 				b.addModifiers(modifiers.pop());
 			}
+			Integer index = (Integer) pkg.getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				b.setKey(index);
+				ChangeKind status = (ChangeKind) pkg.getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					b.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) pkg.getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 		}
 		for (Object i : node.imports()) {
 			ImportDeclaration id = (ImportDeclaration)i;
@@ -103,7 +120,7 @@ public class Java7Visitor extends ASTVisitor {
 			imp += id.getName().getFullyQualifiedName();
 			if (id.isOnDemand())
 				imp += ".*";
-			imports.add(imp);
+			b.addImports(imp);
 		}
 		for (Object t : node.types()) {
 			declarations.push(new ArrayList<boa.types.Ast.Declaration>());
@@ -119,6 +136,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(BlockComment node) {
 		boa.types.Ast.Comment.Builder b = boa.types.Ast.Comment.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		buildPosition(node);
 		b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Comment.CommentKind.BLOCK);
@@ -130,6 +158,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(LineComment node) {
 		boa.types.Ast.Comment.Builder b = boa.types.Ast.Comment.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		buildPosition(node);
 		b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Comment.CommentKind.LINE);
@@ -141,6 +180,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(Javadoc node) {
 		boa.types.Ast.Comment.Builder b = boa.types.Ast.Comment.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		buildPosition(node);
 		b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Comment.CommentKind.DOC);
@@ -155,7 +205,20 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(TypeDeclaration node) {
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
-		b.setName(node.getName().getFullyQualifiedName());
+		b.setName(node.getName().getIdentifier());
+		b.setFullyQualifiedName(getFullyQualifiedName(node));
+		setDeclaringClass(b, node.resolveBinding());
+		Integer key = (Integer) node.getProperty(PROPERTY_INDEX);
+		if (key != null) {
+			b.setKey(key);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		if (node.isInterface())
 			b.setKind(boa.types.Ast.TypeKind.INTERFACE);
 		else
@@ -180,18 +243,54 @@ public class Java7Visitor extends ASTVisitor {
 				name = name + " extends " + bounds;
 			tb.setName(name);
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
+			setTypeBinding(tb, ((TypeParameter) t).getName());
+			Integer index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			b.addGenericParameters(tb.build());
 		}
 		if (node.getSuperclassType() != null) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			tb.setName(typeName(node.getSuperclassType()));
 			tb.setKind(boa.types.Ast.TypeKind.CLASS);
+			setTypeBinding(tb, node.getSuperclassType());
+			Integer index = (Integer) node.getSuperclassType().getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) node.getSuperclassType().getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) node.getSuperclassType().getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			b.addParents(tb.build());
 		}
 		for (Object t : node.superInterfaceTypes()) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			tb.setName(typeName((org.eclipse.jdt.core.dom.Type)t));
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.INTERFACE);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			Integer index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			b.addParents(tb.build());
 		}
 		for (Object d : node.bodyDeclarations()) {
@@ -226,6 +325,18 @@ public class Java7Visitor extends ASTVisitor {
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
 		b.setName("");
 		b.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
+//		b.setFullyQualifiedName(getFullyQualifiedName(node));
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		for (Object d : node.bodyDeclarations()) {
 			if (d instanceof FieldDeclaration) {
 				fields.push(new ArrayList<boa.types.Ast.Variable>());
@@ -256,15 +367,40 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(EnumDeclaration node) {
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
-		b.setName(node.getName().getFullyQualifiedName());
+		b.setName(node.getName().getIdentifier());
 		b.setKind(boa.types.Ast.TypeKind.ENUM);
+		b.setFullyQualifiedName(getFullyQualifiedName(node));
+		setDeclaringClass(b, node.resolveBinding());
+		Integer key = (Integer) node.getProperty(PROPERTY_INDEX);
+		if (key != null) {
+			b.setKey(key);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		for (Object c : node.enumConstants()) {
 			// TODO EnumConstantDeclaration
 		}
 		for (Object t : node.superInterfaceTypes()) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			tb.setName(typeName((org.eclipse.jdt.core.dom.Type)t));
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.INTERFACE);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			Integer index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			b.addParents(tb.build());
 		}
 		for (Object d : node.bodyDeclarations()) {
@@ -299,6 +435,19 @@ public class Java7Visitor extends ASTVisitor {
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
 		b.setName(node.getName().getFullyQualifiedName());
 		b.setKind(boa.types.Ast.TypeKind.ANNOTATION);
+		b.setFullyQualifiedName(getFullyQualifiedName(node));
+		setDeclaringClass(b, node.resolveBinding());
+		Integer key = (Integer) node.getProperty(PROPERTY_INDEX);
+		if (key != null) {
+			b.setKey(key);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		for (Object m : node.modifiers()) {
 			if (((IExtendedModifier)m).isAnnotation())
 				((Annotation)m).accept(this);
@@ -322,6 +471,11 @@ public class Java7Visitor extends ASTVisitor {
 				((AnnotationTypeMemberDeclaration)d).accept(this);
 				for (boa.types.Ast.Method m : methods.pop())
 					b.addMethods(m);
+			} else if (d instanceof MethodDeclaration) {
+				methods.push(new ArrayList<boa.types.Ast.Method>());
+				((MethodDeclaration)d).accept(this);
+				for (boa.types.Ast.Method m : methods.pop())
+					b.addMethods(m);
 			} else {
 				declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 				((BodyDeclaration)d).accept(this);
@@ -334,12 +488,180 @@ public class Java7Visitor extends ASTVisitor {
 	}
 
 	//////////////////////////////////////////////////////////////
+	// Utilities
+
+	protected void setDeclaringClass(Declaration.Builder db, ITypeBinding binding) {
+		if (declarationNode == null || binding == null)
+			return;
+		ITypeBinding tb = binding.getDeclaringClass();
+		if (tb != null) {
+			if (tb.getTypeDeclaration() != null)
+				tb = tb.getTypeDeclaration();
+			String key = tb.getKey();
+			Integer index = declarationNode.get(key);
+			if (index != null)
+				db.setDeclaringType(index);
+		}
+	}
+
+	protected void setDeclaringClass(Method.Builder b, IMethodBinding binding) {
+		if (declarationNode == null || binding == null)
+			return;
+		ITypeBinding tb = binding.getDeclaringClass();
+		if (tb == null)
+			return;
+		if (tb.getTypeDeclaration() != null)
+			tb = tb.getTypeDeclaration();
+		String key = tb.getKey();
+		Integer index = declarationNode.get(key);
+		if (index != null)
+			b.setDeclaringType(index);
+	}
+
+	protected void setDeclaringClass(Variable.Builder b, IVariableBinding binding) {
+		if (declarationNode == null || binding == null)
+			return;
+		ITypeBinding tb = binding.getDeclaringClass();
+		if (tb == null)
+			return;
+		if (tb.getTypeDeclaration() != null)
+			tb = tb.getTypeDeclaration();
+		String key = tb.getKey();
+		Integer index = declarationNode.get(key);
+		if (index != null)
+			b.setDeclaringType(index);
+	}
+
+	protected void setTypeBinding(boa.types.Ast.Type.Builder b, org.eclipse.jdt.core.dom.Type type) {
+		ITypeBinding tb = type.resolveBinding();
+		if (tb != null) {
+			if (tb.getTypeDeclaration() != null)
+				tb = tb.getTypeDeclaration();
+			if (tb.isClass())
+				b.setKind(boa.types.Ast.TypeKind.CLASS);
+			else if (tb.isInterface())
+				b.setKind(boa.types.Ast.TypeKind.INTERFACE);
+			else if (tb.isEnum())
+				b.setKind(boa.types.Ast.TypeKind.ENUM);
+			else if (tb.isAnnotation())
+				b.setKind(boa.types.Ast.TypeKind.ANNOTATION);
+			else if (tb.isAnonymous())
+				b.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
+			else if (tb.isPrimitive())
+				b.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
+			else if (tb.isArray())
+				b.setKind(boa.types.Ast.TypeKind.ARRAY);
+			else 
+				b.setKind(boa.types.Ast.TypeKind.OTHER);
+			if (!tb.isPrimitive()) {
+				b.setFullyQualifiedName(tb.getQualifiedName());
+				if (declarationFile != null && !tb.isArray()) {
+					String key = tb.getKey();
+					Integer index = declarationFile.get(key);
+					if (index != null) {
+						b.setDeclarationFile(index);
+						b.setDeclaration(declarationNode.get(key));
+					}
+				}
+			}
+		}
+	}
+
+	protected void setTypeBinding(boa.types.Ast.Type.Builder b, org.eclipse.jdt.core.dom.Expression e) {
+		ITypeBinding tb = e.resolveTypeBinding();
+		if (tb != null) {
+			if (tb.getTypeDeclaration() != null)
+				tb = tb.getTypeDeclaration();
+			if (tb.isClass())
+				b.setKind(boa.types.Ast.TypeKind.CLASS);
+			else if (tb.isInterface())
+				b.setKind(boa.types.Ast.TypeKind.INTERFACE);
+			else if (tb.isEnum())
+				b.setKind(boa.types.Ast.TypeKind.ENUM);
+			else if (tb.isAnnotation())
+				b.setKind(boa.types.Ast.TypeKind.ANNOTATION);
+			else if (tb.isAnonymous())
+				b.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
+			else if (tb.isPrimitive())
+				b.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
+			else if (tb.isArray())
+				b.setKind(boa.types.Ast.TypeKind.ARRAY);
+			else 
+				b.setKind(boa.types.Ast.TypeKind.OTHER);
+			if (!tb.isPrimitive()) {
+				b.setFullyQualifiedName(tb.getQualifiedName());
+				if (declarationFile != null && !tb.isArray()) {
+					String key = tb.getKey();
+					Integer index = declarationFile.get(key);
+					if (index != null) {
+						b.setDeclarationFile(index);
+						b.setDeclaration(declarationNode.get(key));
+					}
+				}
+			}
+		}
+	}
+
+	protected Type buildType(ITypeBinding itb) {
+		if (itb.getTypeDeclaration() != null)
+			itb = itb.getTypeDeclaration();
+		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+		String name = "";
+		try {
+			name = itb.getName();
+		} catch (Exception e) {
+			System.err.println("Error getting type name while visiting java file" );
+			e.printStackTrace();
+		}
+		tb.setName(name); //itb.getName());
+		if (itb.isClass())
+			tb.setKind(boa.types.Ast.TypeKind.CLASS);
+		else if (itb.isInterface())
+			tb.setKind(boa.types.Ast.TypeKind.INTERFACE);
+		else if (itb.isEnum())
+			tb.setKind(boa.types.Ast.TypeKind.ENUM);
+		else if (itb.isAnnotation())
+			tb.setKind(boa.types.Ast.TypeKind.ANNOTATION);
+		else if (itb.isAnonymous())
+			tb.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
+		else if (itb.isPrimitive())
+			tb.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
+		else if (itb.isArray())
+			tb.setKind(boa.types.Ast.TypeKind.ARRAY);
+		else 
+			tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		if (!itb.isPrimitive()) {
+			tb.setFullyQualifiedName(itb.getQualifiedName());
+			if (declarationFile != null && !itb.isArray()) {
+				String key = itb.getKey();
+				Integer index = declarationFile.get(key);
+				if (index != null) {
+					tb.setDeclarationFile(index);
+					tb.setDeclaration(declarationNode.get(key));
+				}
+			}
+		}
+		return tb.build();
+	}
+
+	//////////////////////////////////////////////////////////////
 	// Field/Method Declarations
 
 	@Override
 	public boolean visit(MethodDeclaration node) {
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		if (node.isConstructor())
 			b.setName("<init>");
 		else
@@ -358,10 +680,22 @@ public class Java7Visitor extends ASTVisitor {
 				name += "[]";
 			tb.setName(name);
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
+			setTypeBinding(tb, node.getReturnType2());
+			index = (Integer) node.getReturnType2().getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) node.getReturnType2().getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) node.getReturnType2().getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			b.setReturnType(tb.build());
 		} else {
 			tb.setName("void");
-			tb.setKind(boa.types.Ast.TypeKind.OTHER);
+			tb.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
 			b.setReturnType(tb.build());
 		}
 		for (Object t : node.typeParameters()) {
@@ -377,11 +711,34 @@ public class Java7Visitor extends ASTVisitor {
 				name = name + " extends " + bounds;
 			tp.setName(name);
 			tp.setKind(boa.types.Ast.TypeKind.GENERIC);
+			setTypeBinding(tp, ((TypeParameter)t).getName());
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tp.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tp.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tp.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			b.addGenericParameters(tp.build());
 		}
 		for (Object o : node.parameters()) {
 			SingleVariableDeclaration ex = (SingleVariableDeclaration)o;
 			Variable.Builder vb = Variable.newBuilder();
+			index = (Integer) ex.getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				vb.setKey(index);
+				ChangeKind status = (ChangeKind) ex.getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					vb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ex.getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						vb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			vb.setName(ex.getName().getFullyQualifiedName());
 			for (Object m : ex.modifiers()) {
 				if (((IExtendedModifier)m).isAnnotation())
@@ -398,6 +755,18 @@ public class Java7Visitor extends ASTVisitor {
 				name += "...";
 			tp.setName(name);
 			tp.setKind(boa.types.Ast.TypeKind.OTHER);
+			setTypeBinding(tp, ex.getType());
+			index = (Integer) ex.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tp.setKey(index);
+				ChangeKind status = (ChangeKind) ex.getType().getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tp.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ex.getType().getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tp.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			vb.setVariableType(tp.build());
 			if (ex.getInitializer() != null) {
 				ex.getInitializer().accept(this);
@@ -405,11 +774,23 @@ public class Java7Visitor extends ASTVisitor {
 			}
 			b.addArguments(vb.build());
 		}
-		for (Object o : node.thrownExceptions()) {
-				boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
-				tp.setName(((Name)o).getFullyQualifiedName());
-				tp.setKind(boa.types.Ast.TypeKind.CLASS);
-				b.addExceptionTypes(tp.build());
+		for (Object o : node.thrownExceptionTypes()) {
+			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
+			tp.setName(typeName((org.eclipse.jdt.core.dom.Type) o));
+			tp.setKind(boa.types.Ast.TypeKind.CLASS);
+			setTypeBinding(tp, (org.eclipse.jdt.core.dom.Type) o);
+			index = (Integer) ((ASTNode) o).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tp.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) o).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tp.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) o).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tp.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
+			b.addExceptionTypes(tp.build());
 		}
 		if (node.getBody() != null) {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
@@ -417,6 +798,7 @@ public class Java7Visitor extends ASTVisitor {
 			for (boa.types.Ast.Statement s : statements.pop())
 				b.addStatements(s);
 		}
+		setDeclaringClass(b, node.resolveBinding());
 		list.add(b.build());
 		return false;
 	}
@@ -425,6 +807,17 @@ public class Java7Visitor extends ASTVisitor {
 	public boolean visit(AnnotationTypeMemberDeclaration node) {
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setName(node.getName().getFullyQualifiedName());
 		for (Object m : node.modifiers()) {
 			if (((IExtendedModifier)m).isAnnotation())
@@ -436,14 +829,31 @@ public class Java7Visitor extends ASTVisitor {
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(typeName(node.getType()));
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		setTypeBinding(tb, node.getType());
+		index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			tb.setKey(index);
+			ChangeKind status = (ChangeKind) node.getType().getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				tb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getType().getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setReturnType(tb.build());
 		if (node.getDefault() != null) {
-			boa.types.Ast.Statement.Builder sb = boa.types.Ast.Statement.newBuilder();
-			sb.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
-			node.getDefault().accept(this);
-			sb.setExpression(expressions.pop());
-			b.addStatements(sb.build());
+			if (node.getDefault() instanceof Annotation) {
+				// FIXME
+			} else {
+				boa.types.Ast.Statement.Builder sb = boa.types.Ast.Statement.newBuilder();
+				sb.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
+				node.getDefault().accept(this);
+				sb.setExpression(expressions.pop());
+				b.addStatements(sb.build());
+			}
 		}
+		setDeclaringClass(b, node.resolveBinding());
 		list.add(b.build());
 		return false;
 	}
@@ -454,6 +864,17 @@ public class Java7Visitor extends ASTVisitor {
 		for (Object o : node.fragments()) {
 			VariableDeclarationFragment f = (VariableDeclarationFragment)o;
 			Variable.Builder b = Variable.newBuilder();
+			Integer index = (Integer) f.getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				b.setKey(index);
+				ChangeKind status = (ChangeKind) f.getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					b.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) f.getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			b.setName(f.getName().getFullyQualifiedName());
 			for (Object m : node.modifiers()) {
 				if (((IExtendedModifier)m).isAnnotation())
@@ -468,11 +889,24 @@ public class Java7Visitor extends ASTVisitor {
 				name += "[]";
 			tb.setName(name);
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
+			setTypeBinding(tb, node.getType());
+			index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) node.getType().getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) node.getType().getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			b.setVariableType(tb.build());
 			if (f.getInitializer() != null) {
 				f.getInitializer().accept(this);
 				b.setInitializer(expressions.pop());
 			}
+			setDeclaringClass(b, f.resolveBinding());
 			list.add(b.build());
 		}
 		return false;
@@ -483,6 +917,17 @@ public class Java7Visitor extends ASTVisitor {
 
 	protected boa.types.Ast.Modifier.Builder getAnnotationBuilder(Annotation node) {
 		boa.types.Ast.Modifier.Builder b = boa.types.Ast.Modifier.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setKind(boa.types.Ast.Modifier.ModifierKind.ANNOTATION);
 		b.setAnnotationName(node.getTypeName().getFullyQualifiedName());
 		return b;
@@ -536,6 +981,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(org.eclipse.jdt.core.dom.Modifier node) {
 		boa.types.Ast.Modifier.Builder b = boa.types.Ast.Modifier.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		if (node.isFinal())
 			b.setKind(boa.types.Ast.Modifier.ModifierKind.FINAL);
 		else if (node.isAbstract())
@@ -567,10 +1023,21 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(AssertStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.ASSERT);
 		node.getExpression().accept(this);
-		b.setCondition(expressions.pop());
+		b.addConditions(expressions.pop());
 		if (node.getMessage() != null) {
 			node.getMessage().accept(this);
 			b.setExpression(expressions.pop());
@@ -582,6 +1049,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(Block node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
 		for (Object s : node.statements()) {
@@ -597,10 +1075,32 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(BreakStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BREAK);
 		if (node.getLabel() != null) {
 			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+			index = (Integer) node.getLabel().getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				eb.setKey(index);
+				ChangeKind status = (ChangeKind) node.getLabel().getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					eb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) node.getLabel().getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						eb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			eb.setLiteral(node.getLabel().getFullyQualifiedName());
 			eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 			b.setExpression(eb.build());
@@ -612,10 +1112,32 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(CatchClause node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.CATCH);
 		SingleVariableDeclaration ex = node.getException();
 		Variable.Builder vb = Variable.newBuilder();
+		index = (Integer) ex.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			vb.setKey(index);
+			ChangeKind status = (ChangeKind) ex.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				vb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) ex.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					vb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		vb.setName(ex.getName().getFullyQualifiedName());
 		for (Object m : ex.modifiers()) {
 			if (((IExtendedModifier)m).isAnnotation())
@@ -629,7 +1151,19 @@ public class Java7Visitor extends ASTVisitor {
 		for (int i = 0; i < ex.getExtraDimensions(); i++)
 			name += "[]";
 		tb.setName(name);
-		tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		tb.setKind(boa.types.Ast.TypeKind.CLASS);
+		setTypeBinding(tb, ex.getType());
+		index = (Integer) ex.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			tb.setKey(index);
+			ChangeKind status = (ChangeKind) ex.getType().getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				tb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) ex.getType().getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		vb.setVariableType(tb.build());
 		if (ex.getInitializer() != null) {
 			ex.getInitializer().accept(this);
@@ -651,6 +1185,24 @@ public class Java7Visitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			eb.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				eb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					eb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		if (node.resolveConstructorBinding() != null) {
+			IMethodBinding mb = node.resolveConstructorBinding();
+			if (mb.getReturnType() != null)
+				eb.setReturnType(buildType(mb.getReturnType()));
+			if (mb.getDeclaringClass() != null)
+				eb.setDeclaringType(buildType(mb.getDeclaringClass()));
+		}
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 		eb.setMethod("<init>");
 		for (Object a : node.arguments()) {
@@ -659,8 +1211,20 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		for (Object t : node.typeArguments()) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			tb.setName(typeName((org.eclipse.jdt.core.dom.Type)t));
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			eb.addGenericParameters(tb.build());
 		}
 		b.setExpression(eb.build());
@@ -671,10 +1235,32 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ContinueStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.CONTINUE);
 		if (node.getLabel() != null) {
 			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+			index = (Integer) node.getLabel().getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				eb.setKey(index);
+				ChangeKind status = (ChangeKind) node.getLabel().getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					eb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) node.getLabel().getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						eb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			eb.setLiteral(node.getLabel().getFullyQualifiedName());
 			eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 			b.setExpression(eb.build());
@@ -686,10 +1272,21 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(DoStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.DO);
 		node.getExpression().accept(this);
-		b.setExpression(expressions.pop());
+		b.addConditions(expressions.pop());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().accept(this);
 		for (boa.types.Ast.Statement s : statements.pop())
@@ -701,6 +1298,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(EmptyStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EMPTY);
 		list.add(b.build());
@@ -710,10 +1318,32 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(EnhancedForStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.FOR);
+		b.setKind(boa.types.Ast.Statement.StatementKind.FOREACH);
 		SingleVariableDeclaration ex = node.getParameter();
 		Variable.Builder vb = Variable.newBuilder();
+		index = (Integer) ex.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			vb.setKey(index);
+			ChangeKind status = (ChangeKind) ex.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				vb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) ex.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					vb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		vb.setName(ex.getName().getFullyQualifiedName());
 		for (Object m : ex.modifiers()) {
 			if (((IExtendedModifier)m).isAnnotation())
@@ -728,6 +1358,18 @@ public class Java7Visitor extends ASTVisitor {
 			name += "[]";
 		tb.setName(name);
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		setTypeBinding(tb, ex.getType());
+		index = (Integer) ex.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			tb.setKey(index);
+			ChangeKind status = (ChangeKind) ex.getType().getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				tb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) ex.getType().getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		vb.setVariableType(tb.build());
 		if (ex.getInitializer() != null) {
 			ex.getInitializer().accept(this);
@@ -747,6 +1389,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ExpressionStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		node.getExpression().accept(this);
@@ -758,6 +1411,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ForStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.FOR);
 		for (Object e : node.initializers()) {
@@ -770,7 +1434,7 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
-			b.setExpression(expressions.pop());
+			b.addConditions(expressions.pop());
 		}
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().accept(this);
@@ -783,10 +1447,21 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(IfStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.IF);
 		node.getExpression().accept(this);
-		b.setExpression(expressions.pop());
+		b.addConditions(expressions.pop());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getThenStatement().accept(this);
 		for (boa.types.Ast.Statement s : statements.pop())
@@ -805,6 +1480,17 @@ public class Java7Visitor extends ASTVisitor {
 	public boolean visit(Initializer node) {
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setName("<clinit>");
 		for (Object m : node.modifiers()) {
 			if (((IExtendedModifier)m).isAnnotation())
@@ -815,7 +1501,7 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName("void");
-		tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		tb.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
 		b.setReturnType(tb.build());
 		if (node.getBody() != null) {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
@@ -830,6 +1516,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(LabeledStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.LABEL);
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
@@ -837,6 +1534,17 @@ public class Java7Visitor extends ASTVisitor {
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		index = (Integer) node.getLabel().getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			eb.setKey(index);
+			ChangeKind status = (ChangeKind) node.getLabel().getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				eb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getLabel().getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					eb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		eb.setLiteral(node.getLabel().getFullyQualifiedName());
 		b.setExpression(eb.build());
@@ -847,6 +1555,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ReturnStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.RETURN);
 		if (node.getExpression() != null) {
@@ -863,6 +1582,24 @@ public class Java7Visitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			eb.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				eb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					eb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		if (node.resolveConstructorBinding() != null) {
+			IMethodBinding mb = node.resolveConstructorBinding();
+			if (mb.getReturnType() != null)
+				eb.setReturnType(buildType(mb.getReturnType()));
+			if (mb.getDeclaringClass() != null)
+				eb.setDeclaringType(buildType(mb.getDeclaringClass()));
+		}
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 		eb.setMethod("super");
 		if (node.getExpression() != null) {
@@ -875,8 +1612,20 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		for (Object t : node.typeArguments()) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			tb.setName(typeName((org.eclipse.jdt.core.dom.Type)t));
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			eb.addGenericParameters(tb.build());
 		}
 		b.setExpression(eb.build());
@@ -887,8 +1636,22 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(SwitchCase node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.CASE);
+		if (node.isDefault())
+			b.setKind(boa.types.Ast.Statement.StatementKind.DEFAULT);
+		else
+			b.setKind(boa.types.Ast.Statement.StatementKind.CASE);
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
 			b.setExpression(expressions.pop());
@@ -900,6 +1663,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(SwitchStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.SWITCH);
 		node.getExpression().accept(this);
@@ -916,6 +1690,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(SynchronizedStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.SYNCHRONIZED);
 		node.getExpression().accept(this);
@@ -932,6 +1717,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ThrowStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.THROW);
 		node.getExpression().accept(this);
@@ -943,6 +1739,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(TryStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.TRY);
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
@@ -950,7 +1757,7 @@ public class Java7Visitor extends ASTVisitor {
 		for (Object c : node.catchClauses())
 			((CatchClause)c).accept(this);
 		if (node.getFinally() != null)
-			node.getFinally().accept(this);
+			visitFinally(node.getFinally());
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
 		if (node.resources() != null)
@@ -962,9 +1769,43 @@ public class Java7Visitor extends ASTVisitor {
 		return false;
 	}
 
+	private void visitFinally(Block node) {
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		final List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.FINALLY);
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		for (final Object s : node.statements())
+			((org.eclipse.jdt.core.dom.Statement)s).accept(this);
+		for (boa.types.Ast.Statement st : statements.pop())
+			b.addStatements(st);
+		list.add(b.build());
+	}
+
 	@Override
 	public boolean visit(TypeDeclarationStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.TYPEDECL);
 		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
@@ -981,10 +1822,32 @@ public class Java7Visitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			eb.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				eb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					eb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.VARDECL);
 		for (Object o : node.fragments()) {
 			VariableDeclarationFragment f = (VariableDeclarationFragment)o;
 			Variable.Builder vb = Variable.newBuilder();
+			index = (Integer) f.getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				vb.setKey(index);
+				ChangeKind status = (ChangeKind) f.getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					vb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) f.getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						vb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			vb.setName(f.getName().getFullyQualifiedName());
 			for (Object m : node.modifiers()) {
 				if (((IExtendedModifier)m).isAnnotation())
@@ -999,6 +1862,18 @@ public class Java7Visitor extends ASTVisitor {
 				name += "[]";
 			tb.setName(name);
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
+			setTypeBinding(tb, node.getType());
+			index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) node.getType().getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) node.getType().getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			vb.setVariableType(tb.build());
 			if (f.getInitializer() != null) {
 				f.getInitializer().accept(this);
@@ -1014,10 +1889,21 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(WhileStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.WHILE);
 		node.getExpression().accept(this);
-		b.setExpression(expressions.pop());
+		b.addConditions(expressions.pop());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().accept(this);
 		for (boa.types.Ast.Statement s : statements.pop())
@@ -1032,7 +1918,21 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ArrayAccess node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYINDEX);
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		if (node.resolveTypeBinding() != null) {
+			b.setReturnType(buildType(node.resolveTypeBinding()));
+		}
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYACCESS);
 		node.getArray().accept(this);
 		b.addExpressions(expressions.pop());
 		node.getIndex().accept(this);
@@ -1044,10 +1944,36 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ArrayCreation node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		if (node.resolveTypeBinding() != null) {
+			b.setReturnType(buildType(node.resolveTypeBinding()));
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEWARRAY);
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(typeName(node.getType()));
-		tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		tb.setKind(boa.types.Ast.TypeKind.ARRAY);
+		setTypeBinding(tb, node.getType());
+		index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			tb.setKey(index);
+			ChangeKind status = (ChangeKind) node.getType().getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				tb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getType().getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setNewType(tb.build());
 		for (Object e : node.dimensions()) {
 			((org.eclipse.jdt.core.dom.Expression)e).accept(this);
@@ -1064,6 +1990,20 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ArrayInitializer node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		if (node.resolveTypeBinding() != null) {
+			b.setReturnType(buildType(node.resolveTypeBinding()));
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYINIT);
 		for (Object e : node.expressions()) {
 			((org.eclipse.jdt.core.dom.Expression)e).accept(this);
@@ -1083,6 +2023,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(Assignment node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		node.getLeftHandSide().accept(this);
 		b.addExpressions(expressions.pop());
 		node.getRightHandSide().accept(this);
@@ -1118,6 +2069,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(BooleanLiteral node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		if (node.booleanValue())
 			b.setLiteral("true");
@@ -1130,10 +2092,33 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(CastExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.CAST);
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(typeName(node.getType()));
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		setTypeBinding(tb, node.getType());
+		index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			tb.setKey(index);
+			ChangeKind status = (ChangeKind) node.getType().getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				tb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getType().getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setNewType(tb.build());
 		node.getExpression().accept(this);
 		b.addExpressions(expressions.pop());
@@ -1144,6 +2129,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(CharacterLiteral node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		b.setLiteral(node.getEscapedValue());
 		expressions.push(b.build());
@@ -1153,15 +2149,50 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ClassInstanceCreation node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEW);
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(typeName(node.getType()));
 		tb.setKind(boa.types.Ast.TypeKind.CLASS);
+		setTypeBinding(tb, node.getType());
+		index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			tb.setKey(index);
+			ChangeKind status = (ChangeKind) node.getType().getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				tb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getType().getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setNewType(tb.build());
 		for (Object t : node.typeArguments()) {
 			boa.types.Ast.Type.Builder gtb = boa.types.Ast.Type.newBuilder();
-			gtb.setName(typeName((org.eclipse.jdt.core.dom.Type)t));
+			gtb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			gtb.setKind(boa.types.Ast.TypeKind.GENERIC);
+			setTypeBinding(gtb, (org.eclipse.jdt.core.dom.Type) t);
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				gtb.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					gtb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						gtb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			b.addGenericParameters(gtb.build());
 		}
 		if (node.getExpression() != null) {
@@ -1170,7 +2201,7 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		for (Object a : node.arguments()) {
 			((org.eclipse.jdt.core.dom.Expression)a).accept(this);
-			b.addExpressions(expressions.pop());
+			b.addMethodArgs(expressions.pop());
 		}
 		if (node.getAnonymousClassDeclaration() != null) {
 			declarations.push(new ArrayList<boa.types.Ast.Declaration>());
@@ -1185,6 +2216,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ConditionalExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.CONDITIONAL);
 		node.getExpression().accept(this);
 		b.addExpressions(expressions.pop());
@@ -1199,7 +2241,26 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(FieldAccess node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		if (node.resolveFieldBinding() != null) {
+			IVariableBinding vb = node.resolveFieldBinding();
+			if (vb.getType() != null)
+				b.setReturnType(buildType(vb.getType()));
+			if (vb.getDeclaringClass() != null)
+				b.setDeclaringType(buildType(vb.getDeclaringClass()));
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
+		b.setIsMemberAccess(true);
 		node.getExpression().accept(this);
 		b.addExpressions(expressions.pop());
 		b.setVariable(node.getName().getFullyQualifiedName());
@@ -1210,6 +2271,29 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(SimpleName node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		if (node.resolveBinding() != null) {
+			if (node.resolveBinding() instanceof IVariableBinding) {
+				IVariableBinding vb = (IVariableBinding) node.resolveBinding();
+				if (vb.isField())
+					b.setIsMemberAccess(true);
+				if(vb.getType() != null)
+					b.setReturnType(buildType(vb.getType()));
+				if (vb.getDeclaringClass() != null)
+					b.setDeclaringType(buildType(vb.getDeclaringClass()));
+			} else
+				b.setReturnType(buildType(node.resolveTypeBinding()));
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
 		b.setVariable(node.getFullyQualifiedName());
 		expressions.push(b.build());
@@ -1219,7 +2303,28 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(QualifiedName node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		if (node.resolveBinding() != null && node.resolveBinding() instanceof IVariableBinding) {
+			IVariableBinding vb = (IVariableBinding) node.resolveBinding();
+			if (vb.getType() != null)
+				b.setReturnType(buildType(vb.getType()));
+			if (vb.getDeclaringClass() != null)
+				b.setDeclaringType(buildType(vb.getDeclaringClass()));
+		} else if (node.resolveTypeBinding() != null) {
+			b.setReturnType(buildType(node.resolveTypeBinding()));
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
+		b.setIsMemberAccess(true);
 		b.setVariable(node.getFullyQualifiedName());
 		expressions.push(b.build());
 		return false;
@@ -1228,6 +2333,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(InfixExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		if (node.getOperator() == InfixExpression.Operator.AND)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_AND);
 		else if (node.getOperator() == InfixExpression.Operator.CONDITIONAL_AND)
@@ -1281,12 +2397,35 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(InstanceofExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.TYPECOMPARE);
 		node.getLeftOperand().accept(this);
 		b.addExpressions(expressions.pop());
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(typeName(node.getRightOperand()));
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		setTypeBinding(tb, node.getRightOperand());
+		index = (Integer) node.getRightOperand().getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			tb.setKey(index);
+			ChangeKind status = (ChangeKind) node.getRightOperand().getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				tb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getRightOperand().getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setNewType(tb.build());
 		expressions.push(b.build());
 		return false;
@@ -1295,6 +2434,24 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(MethodInvocation node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		if (node.resolveMethodBinding() != null) {
+			IMethodBinding mb = node.resolveMethodBinding();
+			if (mb.getReturnType() != null)
+				b.setReturnType(buildType(mb.getReturnType()));
+			if (mb.getDeclaringClass() != null)
+				b.setDeclaringType(buildType(mb.getDeclaringClass()));
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 		b.setMethod(node.getName().getFullyQualifiedName());
 		if (node.getExpression() != null) {
@@ -1307,8 +2464,20 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		for (Object t : node.typeArguments()) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			tb.setName(typeName((org.eclipse.jdt.core.dom.Type)t));
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			b.addGenericParameters(tb.build());
 		}
 		expressions.push(b.build());
@@ -1318,6 +2487,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(NullLiteral node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		b.setLiteral("null");
 		expressions.push(b.build());
@@ -1327,6 +2507,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(NumberLiteral node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		b.setLiteral(node.getToken());
 		expressions.push(b.build());
@@ -1336,16 +2527,38 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ParenthesizedExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.PAREN);
 		node.getExpression().accept(this);
 		b.addExpressions(expressions.pop());
 		expressions.push(b.build());
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean visit(PostfixExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		if (node.getOperator() == PostfixExpression.Operator.DECREMENT)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_DEC);
 		else if (node.getOperator() == PostfixExpression.Operator.INCREMENT)
@@ -1360,6 +2573,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(PrefixExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		if (node.getOperator() == PrefixExpression.Operator.DECREMENT)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_DEC);
 		else if (node.getOperator() == PrefixExpression.Operator.INCREMENT)
@@ -1381,6 +2605,17 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(StringLiteral node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		b.setLiteral(node.getEscapedValue());
 		expressions.push(b.build());
@@ -1390,11 +2625,34 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(SuperFieldAccess node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		if (node.resolveFieldBinding() != null) {
+			IVariableBinding vb = node.resolveFieldBinding();
+			if (vb.getType() != null)
+				b.setReturnType(buildType(vb.getType()));
+			if (vb.getDeclaringClass() != null)
+				b.setDeclaringType(buildType(vb.getDeclaringClass()));
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
-		String name = "super." + node.getName().getFullyQualifiedName();
+		b.setIsMemberAccess(true);
+		String name = "super";
 		if (node.getQualifier() != null)
 			name = node.getQualifier().getFullyQualifiedName() + "." + name;
-		b.setVariable(name);
+		boa.types.Ast.Expression.Builder qb = boa.types.Ast.Expression.newBuilder();
+		qb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
+		qb.setLiteral(name);
+		b.addExpressions(qb);
+		b.setVariable(node.getName().getFullyQualifiedName());
 		expressions.push(b.build());
 		return false;
 	}
@@ -1402,6 +2660,24 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(SuperMethodInvocation node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		if (node.resolveMethodBinding() != null) {
+			IMethodBinding mb = node.resolveMethodBinding();
+			if (mb.getReturnType() != null)
+				b.setReturnType(buildType(mb.getReturnType()));
+			if (mb.getDeclaringClass() != null)
+				b.setDeclaringType(buildType(mb.getDeclaringClass()));
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 		String name = "super." + node.getName().getFullyQualifiedName();
 		if (node.getQualifier() != null)
@@ -1413,8 +2689,20 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		for (Object t : node.typeArguments()) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			tb.setName(typeName((org.eclipse.jdt.core.dom.Type)t));
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			b.addGenericParameters(tb.build());
 		}
 		expressions.push(b.build());
@@ -1424,6 +2712,20 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ThisExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		if (node.resolveTypeBinding() != null) {
+			b.setReturnType(buildType(node.resolveTypeBinding()));
+		}
 		String name = "";
 		if (node.getQualifier() != null)
 			name += node.getQualifier().getFullyQualifiedName() + ".";
@@ -1436,6 +2738,20 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(TypeLiteral node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		if (node.resolveTypeBinding() != null) {
+			b.setReturnType(buildType(node.resolveTypeBinding()));
+		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		b.setLiteral(typeName(node.getType()) + ".class");
 		expressions.push(b.build());
@@ -1445,10 +2761,32 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(VariableDeclarationExpression node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			eb.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				eb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					eb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.VARDECL);
 		for (Object o : node.fragments()) {
 			VariableDeclarationFragment f = (VariableDeclarationFragment)o;
 			Variable.Builder b = Variable.newBuilder();
+			index = (Integer) f.getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				b.setKey(index);
+				ChangeKind status = (ChangeKind) f.getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					b.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) f.getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			b.setName(f.getName().getFullyQualifiedName());
 			for (Object m : node.modifiers()) {
 				if (((IExtendedModifier)m).isAnnotation())
@@ -1463,6 +2801,18 @@ public class Java7Visitor extends ASTVisitor {
 				name += "[]";
 			tb.setName(name);
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
+			setTypeBinding(tb, node.getType());
+			index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) node.getType().getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) node.getType().getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				}
+			}
 			b.setVariableType(tb.build());
 			if (f.getInitializer() != null) {
 				f.getInitializer().accept(this);
@@ -1486,6 +2836,8 @@ public class Java7Visitor extends ASTVisitor {
 			return typeName((PrimitiveType)t);
 		if (t.isQualifiedType())
 			return typeName((QualifiedType)t);
+		if (t.isNameQualifiedType())
+			return typeName((NameQualifiedType)t);
 		if (t.isIntersectionType())
 			return typeName((IntersectionType)t);
 		if (t.isUnionType())
@@ -1496,7 +2848,11 @@ public class Java7Visitor extends ASTVisitor {
 	}
 
 	protected String typeName(final ArrayType t) {
-		return typeName(t.getComponentType()) + "[]";
+		StringBuilder sb = new StringBuilder();
+		sb.append(typeName(t.getElementType()));
+		for (int i = 0; i < t.getDimensions(); i++)
+			sb.append("[]");
+		return sb.toString();
 	}
 
 	protected String typeName(final ParameterizedType t) {
@@ -1511,6 +2867,11 @@ public class Java7Visitor extends ASTVisitor {
 	protected String typeName(final PrimitiveType t) {
 		return t.getPrimitiveTypeCode().toString();
 	}
+
+	protected String typeName(final NameQualifiedType t) {
+		return t.getQualifier().getFullyQualifiedName() + "." + t.getName().getFullyQualifiedName();
+	}
+	
 
 	protected String typeName(final QualifiedType t) {
 		return typeName(t.getQualifier()) + "." + t.getName().getFullyQualifiedName();
@@ -1548,6 +2909,34 @@ public class Java7Visitor extends ASTVisitor {
 	}
 
 	//////////////////////////////////////////////////////////////
+	// Unsupported node types
+	
+	@Override
+	public boolean visit(CreationReference node) {
+		throw new UnsupportedOperationException("visited unsupported node " + node.getClass().getSimpleName());
+	}
+	
+	@Override
+	public boolean visit(ExpressionMethodReference node) {
+		throw new UnsupportedOperationException("visited unsupported node " + node.getClass().getSimpleName());
+	}
+	
+	@Override
+	public boolean visit(SuperMethodReference node) {
+		throw new UnsupportedOperationException("visited unsupported node " + node.getClass().getSimpleName());
+	}
+	
+	@Override
+	public boolean visit(TypeMethodReference node) {
+		throw new UnsupportedOperationException("visited unsupported node " + node.getClass().getSimpleName());
+	}
+	
+	@Override
+	public boolean visit(LambdaExpression node) {
+		throw new UnsupportedOperationException("visited unsupported node " + node.getClass().getSimpleName());
+	}
+	
+	//////////////////////////////////////////////////////////////
 	// Unused node types
 	
 	@Override
@@ -1569,9 +2958,19 @@ public class Java7Visitor extends ASTVisitor {
 	public boolean visit(QualifiedType node) {
 		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
+	
+	@Override
+	public boolean visit(NameQualifiedType node) {
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
+	}
 
 	@Override
 	public boolean visit(SimpleType node) {
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
+	}
+	
+	@Override
+	public boolean visit(IntersectionType node) {
 		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 

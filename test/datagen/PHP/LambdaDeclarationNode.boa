@@ -1,0 +1,15 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: LAMBDA
+      variable_decls {
+        name: "name"
+      }
+      statements {
+        kind: BLOCK
+      }
+    }
+  }
+}

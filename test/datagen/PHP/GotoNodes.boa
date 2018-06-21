@@ -1,0 +1,17 @@
+namespaces {
+  name: ""
+  statements {
+    kind: GOTO
+    expression {
+      kind: LITERAL
+      literal: "here"
+    }
+  }
+  statements {
+    kind: LABEL
+    expression {
+      kind: LITERAL
+      literal: "here"
+    }
+  }
+}

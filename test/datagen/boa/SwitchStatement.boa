@@ -1,0 +1,10 @@
+{
+   "kind": "SWITCH",
+   "expression": {
+      "kind": "VARACCESS",
+      "variable": "x"
+   }
+},
+{
+   "kind": "EMPTY"
+}

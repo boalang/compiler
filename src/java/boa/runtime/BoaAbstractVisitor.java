@@ -333,8 +333,10 @@ public abstract class BoaAbstractVisitor {
 			for (int i = 0; i < initsSize; i++)
 				visit(initsList.get(i));
 
-			if (node.hasCondition())
-				visit(node.getCondition());
+			final List<Expression> conditionsList = node.getConditionsList();
+			final int conditionsSize = conditionsList.size();
+			for (int i = 0; i < conditionsSize; i++)
+				visit(conditionsList.get(i));
 
 			final List<Expression> updatesList = node.getUpdatesList();
 			final int updatesSize = updatesList.size();

@@ -6,3 +6,5 @@ output/
 /bin/
 /.classpath
 /.project
+/.settings/
+/junitvmwatcher*.properties

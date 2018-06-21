@@ -1,0 +1,23 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: VARDECL
+      variable_decls {
+        name: "el"
+        modifiers {
+          kind: SCOPE
+          scope: VAR
+        }
+        initializer {
+          kind: XML_LITERAL
+          expressions {
+            kind: XML_LITERAL
+            literal: "<foo>bar<baz/></foo>"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+   "kind": "RETURN",
+   "expression": {
+      "kind": "CONDITIONAL",
+      "expressions": [
+         {
+            "kind": "PAREN",
+            "expressions": [
+               {
+                  "kind": "GT",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "a"
+                     },
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "b"
+                     }
+                  ]
+               }
+            ]
+         },
+         {
+            "kind": "VARACCESS",
+            "variable": "a"
+         },
+         {
+            "kind": "VARACCESS",
+            "variable": "b"
+         }
+      ]
+   }
+}

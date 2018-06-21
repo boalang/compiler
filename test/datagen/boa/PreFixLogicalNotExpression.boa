@@ -1,0 +1,21 @@
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "ASSIGN",
+      "expressions": [
+         {
+            "kind": "VARACCESS",
+            "variable": "y"
+         },
+         {
+            "kind": "LOGICAL_NOT",
+            "expressions": [
+               {
+                  "kind": "VARACCESS",
+                  "variable": "x"
+               }
+            ]
+         }
+      ]
+   }
+}

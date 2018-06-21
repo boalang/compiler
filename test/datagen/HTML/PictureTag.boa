@@ -1,0 +1,73 @@
+title: ""
+elements {
+  tag: "html"
+  kind: BLOCK
+  elements {
+    tag: "head"
+    kind: BLOCK
+  }
+  elements {
+    tag: "body"
+    kind: BLOCK
+    elements {
+      tag: "picture"
+      kind: IN_LINE
+      elements {
+        tag: "source"
+        kind: IN_LINE
+        atributes {
+          key: "media"
+          value: "(min-width: 650px)"
+        }
+        atributes {
+          key: "srcset"
+          value: "img_pink_flowers.jpg"
+        }
+      }
+      elements {
+        tag: "source"
+        kind: IN_LINE
+        atributes {
+          key: "media"
+          value: "(min-width: 465px)"
+        }
+        atributes {
+          key: "srcset"
+          value: "img_white_flower.jpg"
+        }
+      }
+      elements {
+        tag: "img"
+        kind: IN_LINE
+        atributes {
+          key: "src"
+          value: "img_orange_flowers.jpg"
+        }
+        atributes {
+          key: "alt"
+          value: "Flowers"
+        }
+        atributes {
+          key: "style"
+          value: "width:auto;"
+        }
+      }
+    }
+  }
+}
+doc_type {
+  tag: "!DOCTYPE"
+  kind: DOC_TYPE
+  atributes {
+    key: "name"
+    value: "html"
+  }
+  atributes {
+    key: "publicId"
+    value: ""
+  }
+  atributes {
+    key: "systemId"
+    value: ""
+  }
+}
