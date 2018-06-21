@@ -595,7 +595,14 @@ public class Java7Visitor extends ASTVisitor {
 			else 
 				b.setKind(boa.types.Ast.TypeKind.OTHER);
 			if (!tb.isPrimitive()) {
-				b.setFullyQualifiedName(tb.getQualifiedName());
+				String name = "";
+				try {
+					name = tb.getName();
+				} catch (Exception ex) {
+					System.err.println("Error getting type name while visiting java file" );
+					ex.printStackTrace();
+				}
+				b.setFullyQualifiedName(name);
 				if (declarationFile != null && !tb.isArray()) {
 					String key = tb.getKey();
 					Integer index = declarationFile.get(key);
