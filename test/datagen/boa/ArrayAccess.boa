@@ -1,0 +1,69 @@
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "VARDECL",
+      "variable_decls": [
+         {
+            "name": "x",
+            "variable_type": {
+               "name": "int[]",
+               "fully_qualified_name": "int[]",
+               "kind": "ARRAY"
+            },
+            "initializer": {
+               "kind": "NEWARRAY",
+               "expressions": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "3"
+                  }
+               ],
+               "new_type": {
+                  "name": "int[]",
+                  "fully_qualified_name": "int[]",
+                  "kind": "ARRAY"
+               },
+               "return_type": {
+                  "name": "int[]",
+                  "fully_qualified_name": "int[]",
+                  "kind": "ARRAY"
+               }
+            }
+         }
+      ]
+   }
+},
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "ASSIGN",
+      "expressions": [
+         {
+            "kind": "ARRAYACCESS",
+            "expressions": [
+               {
+                  "kind": "VARACCESS",
+                  "variable": "x",
+                  "return_type": {
+                     "name": "int[]",
+                     "fully_qualified_name": "int[]",
+                     "kind": "ARRAY"
+                  }
+               },
+               {
+                  "kind": "LITERAL",
+                  "literal": "2"
+               }
+            ],
+            "return_type": {
+               "name": "int",
+               "kind": "PRIMITIVE"
+            }
+         },
+         {
+            "kind": "LITERAL",
+            "literal": "5"
+         }
+      ]
+   }
+}

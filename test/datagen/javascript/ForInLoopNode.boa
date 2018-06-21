@@ -1,0 +1,44 @@
+namespaces {
+  name: ""
+  statements {
+    kind: FORIN
+    statements {
+      kind: SCOPE
+      statements {
+        kind: EXPRESSION
+        expression {
+          kind: ASSIGN_ADD
+          expressions {
+            kind: VARACCESS
+            variable: "text"
+          }
+          expressions {
+            kind: ARRAYACCESS
+            expressions {
+              kind: VARACCESS
+              variable: "person"
+            }
+            expressions {
+              kind: VARACCESS
+              variable: "x"
+            }
+          }
+        }
+      }
+    }
+    initializations {
+      kind: VARDECL
+      variable_decls {
+        name: "x"
+        modifiers {
+          kind: SCOPE
+          scope: VAR
+        }
+      }
+    }
+    expression {
+      kind: VARACCESS
+      variable: "person"
+    }
+  }
+}

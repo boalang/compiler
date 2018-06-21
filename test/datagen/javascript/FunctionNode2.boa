@@ -1,0 +1,37 @@
+namespaces {
+  name: ""
+  methods {
+    name: "add"
+    arguments {
+      name: "y"
+      modifiers {
+        kind: SCOPE
+        scope: LET
+      }
+    }
+    arguments {
+      name: "z"
+      modifiers {
+        kind: SCOPE
+        scope: LET
+      }
+    }
+    statements {
+      kind: BLOCK
+      statements {
+        kind: RETURN
+        expression {
+          kind: OP_ADD
+          expressions {
+            kind: VARACCESS
+            variable: "y"
+          }
+          expressions {
+            kind: VARACCESS
+            variable: "z"
+          }
+        }
+      }
+    }
+  }
+}

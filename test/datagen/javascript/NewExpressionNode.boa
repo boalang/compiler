@@ -1,0 +1,25 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: NEW
+      new_type {
+        name: "Car"
+        kind: OTHER
+      }
+      method_args {
+        kind: LITERAL
+        literal: "Eagle"
+      }
+      method_args {
+        kind: LITERAL
+        literal: "Talon TSi"
+      }
+      method_args {
+        kind: LITERAL
+        literal: "1993.0"
+      }
+    }
+  }
+}

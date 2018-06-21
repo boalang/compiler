@@ -1,0 +1,17 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: ARRAYACCESS
+      expressions {
+        kind: VARACCESS
+        variable: "i"
+      }
+      expressions {
+        kind: LITERAL
+        literal: "3.0"
+      }
+    }
+  }
+}

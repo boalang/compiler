@@ -1,0 +1,10 @@
+namespaces {
+  name: ""
+  statements {
+    kind: INLINE_HTML
+    expression {
+      kind: LITERAL
+      literal: "<h1> this is inline html </h1>"
+    }
+  }
+}

@@ -20,11 +20,11 @@ package boa.test.compiler;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
@@ -320,16 +320,30 @@ public abstract class BaseTest {
 	//
 
 	protected String load(final String fileName) throws IOException {
-		BufferedInputStream in = null;
+		final StringBuilder sb = new StringBuilder();
+		BufferedReader br = null;
+		FileReader fr = null;
 		try {
-			in = new BufferedInputStream(new FileInputStream(fileName));
-			final byte[] bytes = new byte[(int) new File(fileName).length()];
-			in.read(bytes);
-			return new String(bytes);
+			fr = new FileReader(fileName);
+			br = new BufferedReader(fr);
+			String line;
+			while ((line = br.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		} finally {
-			if (in != null)
-				in.close();
+			try {
+				if (br != null)
+					br.close();
+				if (fr != null)
+					fr.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+
 		}
+		return sb.toString();
 	}
 
 	protected final void delete(final File f) throws IOException {

@@ -38,8 +38,7 @@ public class LanguageDownloadWorker implements Runnable {
 	final static int RECORDS_PER_FILE = 100;
 	final int startFileNumber;
 	final int endFileNumber;
-	THashSet<String> names = GithubLanguageDownloadMaster.names;
-	String namesFilePath = "";
+	THashSet<Integer> ids = GithubLanguageDownloadMaster.ids;
 
 	public LanguageDownloadWorker(String repoPath, String output, TokenList tokenList, int start, int end, int index) {
 		this.output = output;
@@ -61,7 +60,6 @@ public class LanguageDownloadWorker implements Runnable {
 		String fileFooter = ".json";
 		int pageNumber = from;
 		Token tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
-		// File namesFile = new File(namesFilePath);
 		while (pageNumber <= to) {
 			File repoFile = new File(fileHeader + pageNumber + fileFooter);
 			String content = FileIO.readFileContents(repoFile);
@@ -72,8 +70,8 @@ public class LanguageDownloadWorker implements Runnable {
 			for (int i = 0; i < size; i++) {
 				JsonObject repo = repos.get(i).getAsJsonObject();
 				String name = repo.get("full_name").getAsString();
-				if (names.contains(name)) {
-					names.remove(name);
+				if (ids.contains(name)) {
+					ids.remove(name);
 					continue;
 				}
 				String langurl = this.language_url_header + name + this.language_url_footer;
@@ -113,7 +111,7 @@ public class LanguageDownloadWorker implements Runnable {
 
 	private void addRepoInReleventLangList(String pageContent, String output, JsonObject repo) {
 		File fileToWriteJson = null;
-		if (pageContent.contains("\"Java\":")) {
+		if (pageContent.toLowerCase().contains("\"java\":")) {
 			this.javarepos.add(repo);
 			if (this.javarepos.size() % RECORDS_PER_FILE == 0) {
 				fileToWriteJson = new File(output + "/java/Thread-" + Thread.currentThread().getId() + "-page-" + javaCounter + ".json");
@@ -126,7 +124,7 @@ public class LanguageDownloadWorker implements Runnable {
 				System.out.println(Thread.currentThread().getId() + " java " + javaCounter++);
 				this.javarepos = new JsonArray();
 			}
-		} else if (pageContent.contains("\"JavaScript\":")) {
+		} else if (pageContent.toLowerCase().contains("\"javascript\":")) {
 			this.jsrepos.add(repo);
 			if (this.jsrepos.size() % RECORDS_PER_FILE == 0) {
 				fileToWriteJson = new File(output + "/js/Thread-" + Thread.currentThread().getId() + "-page-" + jsCounter + ".json");
@@ -140,7 +138,7 @@ public class LanguageDownloadWorker implements Runnable {
 				System.out.println(Thread.currentThread().getId() + " js " + jsCounter++);
 				this.jsrepos = new JsonArray();
 			}
-		} else if (pageContent.contains("\"PhP\":")) {
+		} else if (pageContent.toLowerCase().contains("\"php\":")) {
 			this.phprepos.add(repo);
 			if (this.phprepos.size() % RECORDS_PER_FILE == 0) {
 				fileToWriteJson = new File(output + "/php/Thread-" + Thread.currentThread().getId() + "-page-" + phpCounter + ".json");
@@ -154,7 +152,7 @@ public class LanguageDownloadWorker implements Runnable {
 				System.out.println(Thread.currentThread().getId() + " php " + phpCounter++);
 				this.phprepos = new JsonArray();
 			}
-		} else if (pageContent.contains("\"Scala\":")) {
+		} else if (pageContent.toLowerCase().contains("\"scala\":")) {
 			this.scalarepos.add(repo);
 			if (this.scalarepos.size() % RECORDS_PER_FILE == 0) {
 				fileToWriteJson = new File(output + "/scala/Thread-" + Thread.currentThread().getId() + "-page-" + scalaCounter + ".json");

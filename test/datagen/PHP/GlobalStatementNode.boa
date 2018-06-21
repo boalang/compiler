@@ -1,0 +1,13 @@
+namespaces {
+  name: ""
+  statements {
+    kind: GLOBAL
+    expression {
+      kind: VARDECL
+      variable_decls {
+        name: "a"
+        dollar_sign: true
+      }
+    }
+  }
+}

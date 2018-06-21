@@ -1,0 +1,12 @@
+{
+   "kind": "LABEL",
+   "statements": [
+      {
+         "kind": "EMPTY"
+      }
+   ],
+   "expression": {
+      "kind": "LITERAL",
+      "literal": "Label"
+   }
+}

@@ -1,0 +1,30 @@
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "VARDECL",
+      "variable_decls": [
+         {
+            "name": "x",
+            "variable_type": {
+               "name": "String",
+               "fully_qualified_name": "java.lang.String",
+               "kind": "CLASS"
+            },
+            "initializer": {
+               "kind": "CAST",
+               "expressions": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "5"
+                  }
+               ],
+               "new_type": {
+                  "name": "String",
+                  "fully_qualified_name": "java.lang.String",
+                  "kind": "CLASS"
+               }
+            }
+         }
+      ]
+   }
+}

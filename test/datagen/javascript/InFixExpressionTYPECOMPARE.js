@@ -1,0 +1,1 @@
+j instanceof i;

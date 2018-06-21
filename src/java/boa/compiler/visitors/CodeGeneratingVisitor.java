@@ -262,6 +262,37 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		/** {@inheritDoc} */
 		@Override
+		public void visit(final Composite n) {
+			super.visit(n);
+
+			if (n.type instanceof BoaTuple) {
+				final String name = ((BoaTuple)n.type).toJavaType();
+				if (tuples.contains(name))
+					return;
+				tuples.add(name);
+
+				final ST st = stg.getInstanceOf("TupleType");
+
+				final List<String> fields = new ArrayList<String>();
+				final List<String> types = new ArrayList<String>();
+
+				int counter = 0;
+				for (final Expression e : n.getExprs()) {
+					fields.add("f" + counter);
+					types.add(e.type.toBoxedJavaType());
+					counter++;
+				}
+
+				st.add("name", name);
+				st.add("fields", fields);
+				st.add("types", types);
+
+				code.add(st.render());
+			}
+		}
+
+		/** {@inheritDoc} */
+		@Override
 		public void visit(final TupleType n) {
 			final String name = ((BoaTuple)n.type).toJavaType();
 			if (tuples.contains(name))

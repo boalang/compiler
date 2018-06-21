@@ -1,0 +1,39 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: ASSIGN
+      expressions {
+        kind: VARACCESS
+        variable: "array"
+        dollar_sign: true
+      }
+      expressions {
+        kind: NEWARRAY
+        expressions {
+          kind: ARRAYELEMENT
+          expressions {
+            kind: LITERAL
+            literal: "\"foo\""
+          }
+          expressions {
+            kind: LITERAL
+            literal: "\"bar\""
+          }
+        }
+        expressions {
+          kind: ARRAYELEMENT
+          expressions {
+            kind: LITERAL
+            literal: "\"bar\""
+          }
+          expressions {
+            kind: LITERAL
+            literal: "\"foo\""
+          }
+        }
+      }
+    }
+  }
+}

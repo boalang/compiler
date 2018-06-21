@@ -1,0 +1,17 @@
+{
+   "kind": "IF",
+   "statements": [
+      {
+         "kind": "BLOCK"
+      }
+   ],
+   "conditions": [
+      {
+         "kind": "LITERAL",
+         "literal": "true"
+      }
+   ]
+},
+{
+   "kind": "EMPTY"
+}

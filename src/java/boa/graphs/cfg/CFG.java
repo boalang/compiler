@@ -377,7 +377,8 @@ public class CFG {
 		case ExpressionKind.LT_VALUE:
 		case ExpressionKind.LTEQ_VALUE:
 		case ExpressionKind.ANNOTATION_VALUE:
-		case ExpressionKind.ARRAYINDEX_VALUE:
+		case ExpressionKind.ARRAYACCESS_VALUE:
+		case ExpressionKind.HASHTABLEACCESS_VALUE:
 		case ExpressionKind.ARRAYINIT_VALUE:
 		case ExpressionKind.ASSIGN_ADD_VALUE:
 		case ExpressionKind.ASSIGN_BITAND_VALUE:

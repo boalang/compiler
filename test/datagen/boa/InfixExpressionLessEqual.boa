@@ -1,0 +1,25 @@
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "ASSIGN",
+      "expressions": [
+         {
+            "kind": "VARACCESS",
+            "variable": "z"
+         },
+         {
+            "kind": "LTEQ",
+            "expressions": [
+               {
+                  "kind": "VARACCESS",
+                  "variable": "x"
+               },
+               {
+                  "kind": "VARACCESS",
+                  "variable": "y"
+               }
+            ]
+         }
+      ]
+   }
+}

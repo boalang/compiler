@@ -1,0 +1,22 @@
+namespaces {
+  name: ""
+  statements {
+    kind: TRY
+    statements {
+      kind: SCOPE
+    }
+    statements {
+      kind: CATCH
+      statements {
+        kind: BLOCK
+      }
+      variable_declaration {
+        name: "err"
+        modifiers {
+          kind: SCOPE
+          scope: LET
+        }
+      }
+    }
+  }
+}

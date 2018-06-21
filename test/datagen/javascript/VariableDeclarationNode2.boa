@@ -1,0 +1,31 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: VARDECL
+      variable_decls {
+        name: "x"
+        modifiers {
+          kind: SCOPE
+          scope: VAR
+        }
+        initializer {
+          kind: LITERAL
+          literal: "10.0"
+        }
+      }
+      variable_decls {
+        name: "y"
+        modifiers {
+          kind: SCOPE
+          scope: VAR
+        }
+        initializer {
+          kind: LITERAL
+          literal: "5.0"
+        }
+      }
+    }
+  }
+}

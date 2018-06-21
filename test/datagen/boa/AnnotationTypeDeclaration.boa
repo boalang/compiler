@@ -1,0 +1,14 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "ClassPreamble",
+               "kind": "ANNOTATION",
+               "fully_qualified_name": "ClassPreamble"
+            }
+         ]
+      }
+   ]
+}

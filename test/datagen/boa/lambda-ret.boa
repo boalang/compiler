@@ -11,51 +11,45 @@
             },
             "initializer": {
                "kind": "LAMBDA",
-               "lambda": {
-                  "return_type": {
-                     "name": "",
-                     "kind": "OTHER"
+               "variable_decls": [
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "int",
+                        "kind": "PRIMITIVE"
+                     }
                   },
-                  "arguments": [
-                     {
-                        "name": "a",
-                        "variable_type": {
-                           "name": "int",
-                           "kind": "OTHER"
-                        }
-                     },
-                     {
-                        "name": "b",
-                        "variable_type": {
-                           "name": "int",
-                           "kind": "OTHER"
-                        }
+                  {
+                     "name": "b",
+                     "variable_type": {
+                        "name": "int",
+                        "kind": "PRIMITIVE"
                      }
-                  ],
-                  "statements": [
-                     {
-                        "kind": "BLOCK",
-                        "statements": [
-                           {
-                              "kind": "RETURN",
-                              "expression": {
-                                 "kind": "OP_MULT",
-                                 "expressions": [
-                                    {
-                                       "kind": "VARACCESS",
-                                       "variable": "a"
-                                    },
-                                    {
-                                       "kind": "VARACCESS",
-                                       "variable": "b"
-                                    }
-                                 ]
-                              }
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "RETURN",
+                           "expression": {
+                              "kind": "OP_MULT",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "a"
+                                 },
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "b"
+                                 }
+                              ]
                            }
-                        ]
-                     }
-                  ]
-               }
+                        }
+                     ]
+                  }
+               ]
             }
          }
       ]

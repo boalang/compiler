@@ -7,25 +7,16 @@
             "name": "x",
             "variable_type": {
                "name": "int",
-               "kind": "OTHER"
+               "kind": "PRIMITIVE"
             },
             "initializer": {
                "kind": "LAMBDA",
-               "lambda": {
-                  "return_type": {
-                     "name": "",
-                     "kind": "OTHER"
-                  },
-                  "statements": [
-                     {
-                        "kind": "EXPRESSION",
-                        "expression": {
-                           "kind": "METHODCALL",
-                           "method": "m"
-                        }
-                     }
-                  ]
-               }
+               "expressions": [
+                  {
+                     "kind": "METHODCALL",
+                     "method": "m"
+                  }
+               ]
             }
          }
       ]
