@@ -1,0 +1,25 @@
+o: output sum of int;
+o << 1;
+
+s1 := """This is
+a multi-line
+string""";
+
+s2 := """This is a single line 'multiline' string.""";
+s3 := """This is a single line "multiline" string.""";
+
+s4 := """This is a
+multi line
+'multiline' string.""";
+s5 := """This is a
+multi line
+"multiline"" string.""";
+
+f := function(s: string) : string {
+    return s + """a multi-line
+string""";
+};
+
+s6 := f("""passing
+multi-line
+"string" to function""");
