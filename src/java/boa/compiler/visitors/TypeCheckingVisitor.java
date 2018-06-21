@@ -1459,11 +1459,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	@Override
 	public void visit(final TupleType n, final SymbolTable env) {
 		n.env = env;
+		final SymbolTable e = new SymbolTable();
 
 		final List<BoaType> types = new ArrayList<BoaType>();
 
 		for (final Component c : n.getMembers()) {
-			c.accept(this, env);
+			c.accept(this, e);
 			types.add(c.type);
 		}
 
