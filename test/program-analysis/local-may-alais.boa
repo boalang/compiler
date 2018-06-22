@@ -13,13 +13,18 @@ initPhase := traversal(node: CFGNode) : T {
 	if(node.defVariables!="")
 		cur_val.kill = node.defVariables;
 	if(def(node.expr)) {
-		if(node.expr.kind == ExpressionKind.VARDECL || node.expr.kind == ExpressionKind.ASSIGN) {
-			if(def(node.rhs)) {
-				if(node.rhs.kind == ExpressionKind.VARACCESS) {
-					cur_val.gen = node.rhs.variable;
-				}
-			}
-		}
+        rhs: Expression;
+		if(node.expr.kind == ExpressionKind.VARDECL && def(node.expr.variable_decls[0].initializer)) {
+            rhs = node.expr.variable_decls[0].initializer;
+        }
+		if(node.expr.kind == ExpressionKind.ASSIGN) {
+            rhs = node.expr.expressions[1];
+        }
+        if(def(rhs)) {
+            if(rhs.kind == ExpressionKind.VARACCESS) {
+                cur_val.gen = rhs.variable;
+            }
+        }
 	}
 	return cur_val;
 };

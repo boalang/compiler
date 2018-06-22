@@ -56,17 +56,11 @@ public class CFGNodeProtoTuple extends BoaProtoTuple {
 		names.put("expr", counter++);
 		members.add(new ExpressionProtoTuple());
 
-		names.put("rhs", counter++);
-		members.add(new ExpressionProtoTuple());
-
 		names.put("useVariables", counter++);
 		members.add(new BoaSet(new BoaString()));
 
 		names.put("defVariables", counter++);
 		members.add(new BoaString());
-
-		names.put("defUse", counter++);
-		members.add(new BoaSet(new BoaString()));
 
 		names.put("predecessors", counter++);
 		members.add(new BoaProtoList(new CFGNodeProtoTuple()));
