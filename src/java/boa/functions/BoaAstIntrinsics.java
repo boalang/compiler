@@ -720,6 +720,7 @@ public class BoaAstIntrinsics {
 		if (e.getKind() != ExpressionKind.LITERAL) return false;
 		if (e.hasString2()) return false;
 		if (e.hasInt321()) return false;
+		if (e.hasBool1()) return false;
 		return !e.hasString1();
 	}
 
