@@ -66,7 +66,8 @@ public class SeqRepoImporter {
 
 	private final static int poolSize = Integer
 			.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
-	private final static AtomicInteger numOfProcessedProjects = new AtomicInteger(0);
+	private static AtomicInteger numOfProcessedProjects = new AtomicInteger(0);
+	private static int processedProjects = 0;
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		conf = new Configuration();
@@ -76,9 +77,11 @@ public class SeqRepoImporter {
 		fileSystem = FileSystem.get(conf);
 		base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 		
-		buildCacheOfProjects();
+		
 		getProcessedProjects();
-
+		buildCacheOfProjects();
+		numOfProcessedProjects = new AtomicInteger(0);
+		
 		Thread[] workers = new Thread[poolSize];
 		for (int i = 0; i < poolSize; i++) {
 			workers[i] = new Thread(new ImportTask(i));
@@ -115,7 +118,8 @@ public class SeqRepoImporter {
 				}
 			}
 		}
-		// System.out.println("Got processed projects: " + processedProjectIds.size());
+		processedProjects = processedProjectIds.size();
+		 System.out.println("Got processed projects: " + processedProjectIds.size());
 	}
 
 	private static void buildCacheOfProjects() {
@@ -127,9 +131,9 @@ public class SeqRepoImporter {
 						.readObjectFromFile(file.getAbsolutePath());
 				for (String key : repos.keySet()) {
 					byte[] bs = repos.get(key);
-					if (poolSize > 1)
+				/*	if (poolSize > 1)
 						cacheOfProjects.add(bs);
-					else {
+					else { */
 						try {
 							Project p = Project.parseFrom(bs);
 							if (processedProjectIds.contains(p.getId()))
@@ -138,7 +142,7 @@ public class SeqRepoImporter {
 						} catch (InvalidProtocolBufferException e) {
 							e.printStackTrace();
 						}
-					}
+				//	}
 				}
 				repos.clear();
 			}
@@ -229,7 +233,7 @@ public class SeqRepoImporter {
 					final String name = cachedProject.getName();
 
 					if (debug)
-						System.out.println("Processing " + (pid + 1) + " / " + cacheOfProjects.size() + " "
+						System.out.println("Processing " + (pid + 1 + processedProjects) + " / " + (cacheOfProjects.size() + processedProjects) + " "
 								+ cachedProject.getId() + " " + name);
 
 					Project project = storeRepository(cachedProject, 0);
