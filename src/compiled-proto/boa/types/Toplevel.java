@@ -763,7 +763,7 @@ public final class Toplevel {
      * <code>repeated int32 programming_languages_locs = 25;</code>
      *
      * <pre>
-     ** The number of lines of code for each language *
+     ** The number of bytes of code for each language *
      * </pre>
      */
     java.util.List<java.lang.Integer> getProgrammingLanguagesLocsList();
@@ -771,7 +771,7 @@ public final class Toplevel {
      * <code>repeated int32 programming_languages_locs = 25;</code>
      *
      * <pre>
-     ** The number of lines of code for each language *
+     ** The number of bytes of code for each language *
      * </pre>
      */
     int getProgrammingLanguagesLocsCount();
@@ -779,10 +779,28 @@ public final class Toplevel {
      * <code>repeated int32 programming_languages_locs = 25;</code>
      *
      * <pre>
-     ** The number of lines of code for each language *
+     ** The number of bytes of code for each language *
      * </pre>
      */
     int getProgrammingLanguagesLocs(int index);
+
+    // optional int32 size = 26;
+    /**
+     * <code>optional int32 size = 26;</code>
+     *
+     * <pre>
+     ** The size of the repository in bytes of code *
+     * </pre>
+     */
+    boolean hasSize();
+    /**
+     * <code>optional int32 size = 26;</code>
+     *
+     * <pre>
+     ** The size of the repository in bytes of code *
+     * </pre>
+     */
+    int getSize();
   }
   /**
    * Protobuf type {@code boa.types.Project}
@@ -1023,6 +1041,11 @@ public final class Toplevel {
                 programmingLanguagesLocs_.add(input.readInt32());
               }
               input.popLimit(limit);
+              break;
+            }
+            case 208: {
+              bitField0_ |= 0x00000800;
+              size_ = input.readInt32();
               break;
             }
           }
@@ -2358,7 +2381,7 @@ public final class Toplevel {
      * <code>repeated int32 programming_languages_locs = 25;</code>
      *
      * <pre>
-     ** The number of lines of code for each language *
+     ** The number of bytes of code for each language *
      * </pre>
      */
     public java.util.List<java.lang.Integer>
@@ -2369,7 +2392,7 @@ public final class Toplevel {
      * <code>repeated int32 programming_languages_locs = 25;</code>
      *
      * <pre>
-     ** The number of lines of code for each language *
+     ** The number of bytes of code for each language *
      * </pre>
      */
     public int getProgrammingLanguagesLocsCount() {
@@ -2379,11 +2402,35 @@ public final class Toplevel {
      * <code>repeated int32 programming_languages_locs = 25;</code>
      *
      * <pre>
-     ** The number of lines of code for each language *
+     ** The number of bytes of code for each language *
      * </pre>
      */
     public int getProgrammingLanguagesLocs(int index) {
       return programmingLanguagesLocs_.get(index);
+    }
+
+    // optional int32 size = 26;
+    public static final int SIZE_FIELD_NUMBER = 26;
+    private int size_;
+    /**
+     * <code>optional int32 size = 26;</code>
+     *
+     * <pre>
+     ** The size of the repository in bytes of code *
+     * </pre>
+     */
+    public boolean hasSize() {
+      return ((bitField0_ & 0x00000800) == 0x00000800);
+    }
+    /**
+     * <code>optional int32 size = 26;</code>
+     *
+     * <pre>
+     ** The size of the repository in bytes of code *
+     * </pre>
+     */
+    public int getSize() {
+      return size_;
     }
 
     private void initFields() {
@@ -2412,6 +2459,7 @@ public final class Toplevel {
       forks_ = 0;
       stars_ = 0;
       programmingLanguagesLocs_ = java.util.Collections.emptyList();
+      size_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2539,6 +2587,9 @@ public final class Toplevel {
       }
       for (int i = 0; i < programmingLanguagesLocs_.size(); i++) {
         output.writeInt32(25, programmingLanguagesLocs_.get(i));
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        output.writeInt32(26, size_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -2698,6 +2749,10 @@ public final class Toplevel {
         }
         size += dataSize;
         size += 2 * getProgrammingLanguagesLocsList().size();
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(26, size_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2889,6 +2944,8 @@ public final class Toplevel {
         bitField0_ = (bitField0_ & ~0x00800000);
         programmingLanguagesLocs_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x01000000);
+        size_ = 0;
+        bitField0_ = (bitField0_ & ~0x02000000);
         return this;
       }
 
@@ -3056,6 +3113,10 @@ public final class Toplevel {
           bitField0_ = (bitField0_ & ~0x01000000);
         }
         result.programmingLanguagesLocs_ = programmingLanguagesLocs_;
+        if (((from_bitField0_ & 0x02000000) == 0x02000000)) {
+          to_bitField0_ |= 0x00000800;
+        }
+        result.size_ = size_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3318,6 +3379,9 @@ public final class Toplevel {
             programmingLanguagesLocs_.addAll(other.programmingLanguagesLocs_);
           }
           onChanged();
+        }
+        if (other.hasSize()) {
+          setSize(other.getSize());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -6594,7 +6658,7 @@ public final class Toplevel {
        * <code>repeated int32 programming_languages_locs = 25;</code>
        *
        * <pre>
-       ** The number of lines of code for each language *
+       ** The number of bytes of code for each language *
        * </pre>
        */
       public java.util.List<java.lang.Integer>
@@ -6605,7 +6669,7 @@ public final class Toplevel {
        * <code>repeated int32 programming_languages_locs = 25;</code>
        *
        * <pre>
-       ** The number of lines of code for each language *
+       ** The number of bytes of code for each language *
        * </pre>
        */
       public int getProgrammingLanguagesLocsCount() {
@@ -6615,7 +6679,7 @@ public final class Toplevel {
        * <code>repeated int32 programming_languages_locs = 25;</code>
        *
        * <pre>
-       ** The number of lines of code for each language *
+       ** The number of bytes of code for each language *
        * </pre>
        */
       public int getProgrammingLanguagesLocs(int index) {
@@ -6625,7 +6689,7 @@ public final class Toplevel {
        * <code>repeated int32 programming_languages_locs = 25;</code>
        *
        * <pre>
-       ** The number of lines of code for each language *
+       ** The number of bytes of code for each language *
        * </pre>
        */
       public Builder setProgrammingLanguagesLocs(
@@ -6639,7 +6703,7 @@ public final class Toplevel {
        * <code>repeated int32 programming_languages_locs = 25;</code>
        *
        * <pre>
-       ** The number of lines of code for each language *
+       ** The number of bytes of code for each language *
        * </pre>
        */
       public Builder addProgrammingLanguagesLocs(int value) {
@@ -6652,7 +6716,7 @@ public final class Toplevel {
        * <code>repeated int32 programming_languages_locs = 25;</code>
        *
        * <pre>
-       ** The number of lines of code for each language *
+       ** The number of bytes of code for each language *
        * </pre>
        */
       public Builder addAllProgrammingLanguagesLocs(
@@ -6666,12 +6730,61 @@ public final class Toplevel {
        * <code>repeated int32 programming_languages_locs = 25;</code>
        *
        * <pre>
-       ** The number of lines of code for each language *
+       ** The number of bytes of code for each language *
        * </pre>
        */
       public Builder clearProgrammingLanguagesLocs() {
         programmingLanguagesLocs_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x01000000);
+        onChanged();
+        return this;
+      }
+
+      // optional int32 size = 26;
+      private int size_ ;
+      /**
+       * <code>optional int32 size = 26;</code>
+       *
+       * <pre>
+       ** The size of the repository in bytes of code *
+       * </pre>
+       */
+      public boolean hasSize() {
+        return ((bitField0_ & 0x02000000) == 0x02000000);
+      }
+      /**
+       * <code>optional int32 size = 26;</code>
+       *
+       * <pre>
+       ** The size of the repository in bytes of code *
+       * </pre>
+       */
+      public int getSize() {
+        return size_;
+      }
+      /**
+       * <code>optional int32 size = 26;</code>
+       *
+       * <pre>
+       ** The size of the repository in bytes of code *
+       * </pre>
+       */
+      public Builder setSize(int value) {
+        bitField0_ |= 0x02000000;
+        size_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 size = 26;</code>
+       *
+       * <pre>
+       ** The size of the repository in bytes of code *
+       * </pre>
+       */
+      public Builder clearSize() {
+        bitField0_ = (bitField0_ & ~0x02000000);
+        size_ = 0;
         onChanged();
         return this;
       }
@@ -6702,7 +6815,7 @@ public final class Toplevel {
   static {
     java.lang.String[] descriptorData = {
       "\n\016toplevel.proto\022\tboa.types\032\014shared.prot" +
-      "o\032\ncode.proto\032\014issues.proto\"\346\005\n\007Project\022" +
+      "o\032\ncode.proto\032\014issues.proto\"\364\005\n\007Project\022" +
       "\n\n\002id\030\001 \002(\t\022\014\n\004name\030\002 \002(\t\022\023\n\013project_url" +
       "\030\003 \002(\t\022\024\n\014homepage_url\030\004 \001(\t\022\024\n\014created_" +
       "date\030\005 \001(\004\022\023\n\013description\030\006 \001(\t\022\031\n\021opera" +
@@ -6718,10 +6831,10 @@ public final class Toplevel {
       "\032.boa.types.IssueRepository\022*\n\004kind\030\025 \002(" +
       "\0162\034.boa.types.Project.ForgeKind\022\016\n\006forke" +
       "d\030\026 \001(\010\022\r\n\005forks\030\027 \001(\005\022\r\n\005stars\030\030 \001(\005\022\"\n" +
-      "\032programming_languages_locs\030\031 \003(\005\"a\n\tFor" +
-      "geKind\022\t\n\005OTHER\020\000\022\017\n\013SOURCEFORGE\020\001\022\006\n\002SF" +
-      "\020\001\022\n\n\006GITHUB\020\002\022\006\n\002GH\020\002\022\n\n\006APACHE\020\003\022\014\n\010QU",
-      "ALITAS\020\004\032\002\020\001B\002H\001"
+      "\032programming_languages_locs\030\031 \003(\005\022\014\n\004siz" +
+      "e\030\032 \001(\005\"a\n\tForgeKind\022\t\n\005OTHER\020\000\022\017\n\013SOURC" +
+      "EFORGE\020\001\022\006\n\002SF\020\001\022\n\n\006GITHUB\020\002\022\006\n\002GH\020\002\022\n\n\006",
+      "APACHE\020\003\022\014\n\010QUALITAS\020\004\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -6733,7 +6846,7 @@ public final class Toplevel {
           internal_static_boa_types_Project_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Project_descriptor,
-              new java.lang.String[] { "Id", "Name", "ProjectUrl", "HomepageUrl", "CreatedDate", "Description", "OperatingSystems", "ProgrammingLanguages", "Databases", "Licenses", "Interfaces", "Audiences", "Topics", "Status", "Translations", "Donations", "Maintainers", "Developers", "CodeRepositories", "IssueRepositories", "Kind", "Forked", "Forks", "Stars", "ProgrammingLanguagesLocs", });
+              new java.lang.String[] { "Id", "Name", "ProjectUrl", "HomepageUrl", "CreatedDate", "Description", "OperatingSystems", "ProgrammingLanguages", "Databases", "Licenses", "Interfaces", "Audiences", "Topics", "Status", "Translations", "Donations", "Maintainers", "Developers", "CodeRepositories", "IssueRepositories", "Kind", "Forked", "Forks", "Stars", "ProgrammingLanguagesLocs", "Size", });
           return null;
         }
       };

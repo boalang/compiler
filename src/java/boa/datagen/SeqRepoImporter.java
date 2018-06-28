@@ -55,7 +55,8 @@ public class SeqRepoImporter {
 	private final static boolean cache = Properties.getBoolean("cache", DefaultProperties.CACHE);
 
 	private static File jsonCacheDir = new File(Properties.getProperty("output.path", DefaultProperties.OUTPUT));
-	private final static File gitRootPath = new File(Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
+	private final static File gitRootPath = new File(
+			Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
 
 	private final static ArrayList<byte[]> cacheOfProjects = new ArrayList<byte[]>();
 	private final static HashSet<String> processedProjectIds = new HashSet<String>();
@@ -73,15 +74,16 @@ public class SeqRepoImporter {
 		conf = new Configuration();
 		// currently using the cachejson location as tempCache
 		// conf.set("fs.default.name", "hdfs://boa-njt/");
-		// conf.set("fs.default.name", Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH));
+		// conf.set("fs.default.name",
+		// Properties.getProperty("gh.json.cache.path",
+		// DefaultProperties.GH_JSON_CACHE_PATH));
 		fileSystem = FileSystem.get(conf);
 		base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
-		
-		
+
 		getProcessedProjects();
 		buildCacheOfProjects();
 		numOfProcessedProjects = new AtomicInteger(0);
-		
+
 		Thread[] workers = new Thread[poolSize];
 		for (int i = 0; i < poolSize; i++) {
 			workers[i] = new Thread(new ImportTask(i));
@@ -95,7 +97,7 @@ public class SeqRepoImporter {
 			}
 		}
 	}
-	
+
 	private static void getProcessedProjects() throws IOException {
 		FileStatus[] files = fileSystem.listStatus(new Path(base + "/project"));
 		for (int i = 0; i < files.length; i++) {
@@ -113,13 +115,13 @@ public class SeqRepoImporter {
 				} catch (IOException e) {
 					if (r != null)
 						r.close();
-					for (String dir : new String[]{"ast", "commit", "source"})
+					for (String dir : new String[] { "ast", "commit", "source" })
 						fileSystem.delete(new Path(base + "/" + dir + "/" + name), false);
 				}
 			}
 		}
 		processedProjects = processedProjectIds.size();
-		 System.out.println("Got processed projects: " + processedProjectIds.size());
+		System.out.println("Got processed projects: " + processedProjectIds.size());
 	}
 
 	private static void buildCacheOfProjects() {
@@ -131,18 +133,18 @@ public class SeqRepoImporter {
 						.readObjectFromFile(file.getAbsolutePath());
 				for (String key : repos.keySet()) {
 					byte[] bs = repos.get(key);
-				/*	if (poolSize > 1)
+					/*
+					 * if (poolSize > 1) cacheOfProjects.add(bs); else {
+					 */
+					try {
+						Project p = Project.parseFrom(bs);
+						if (processedProjectIds.contains(p.getId()))
+							continue;
 						cacheOfProjects.add(bs);
-					else { */
-						try {
-							Project p = Project.parseFrom(bs);
-							if (processedProjectIds.contains(p.getId()))
-								continue;
-							cacheOfProjects.add(bs);
-						} catch (InvalidProtocolBufferException e) {
-							e.printStackTrace();
-						}
-				//	}
+					} catch (InvalidProtocolBufferException e) {
+						e.printStackTrace();
+					}
+					// }
 				}
 				repos.clear();
 			}
@@ -223,7 +225,7 @@ public class SeqRepoImporter {
 						cachedProject = Project.parseFrom(bs);
 						if (processedProjectIds.contains(cachedProject.getId()))
 							continue;
-					} catch (InvalidProtocolBufferException e) {  
+					} catch (InvalidProtocolBufferException e) {
 						e.printStackTrace();
 						continue;
 					}
@@ -233,11 +235,12 @@ public class SeqRepoImporter {
 					final String name = cachedProject.getName();
 
 					if (debug)
-						System.out.println("Processing " + (pid + 1 + processedProjects) + " / " + (cacheOfProjects.size() + processedProjects) + " "
-								+ cachedProject.getId() + " " + name);
+						System.out.println("Processing " + (pid + 1 + processedProjects) + " / "
+								+ (cacheOfProjects.size() + processedProjects) + " " + cachedProject.getId() + " "
+								+ name);
 
 					Project project = storeRepository(cachedProject, 0);
-					
+
 					if (debug)
 						System.out.println("Putting in sequence file: " + project.getId());
 
@@ -286,11 +289,15 @@ public class SeqRepoImporter {
 
 			final String name = project.getName();
 			File gitDir = new File(gitRootPath + "/" + name);
-			
-			if (project.getForked() || !(project.getProgrammingLanguagesList().contains("Java") || project.getProgrammingLanguagesList().contains("JavaScript") ||  project.getProgrammingLanguagesList().contains("PHP")))
+
+			if (project.getForked() || !(project.getProgrammingLanguagesList().contains("Java")
+					|| project.getProgrammingLanguagesList().contains("JavaScript")
+					|| project.getProgrammingLanguagesList().contains("PHP")) 
+					|| project.getStars() < 2 || project.getSize() < 100 )
 				return project;
-			
-			//If repository is already cloned delete then re-clone, this should only happen during recover
+
+			// If repository is already cloned delete then re-clone, this should
+			// only happen during recover
 			FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitRootPath + "/" + project.getName());
 			filecheck.run();
 
@@ -318,7 +325,8 @@ public class SeqRepoImporter {
 					if (debug)
 						System.out.println("Build head snapshot");
 					repoBuilder.setHead(conn.getHeadCommitOffset());
-					repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[] { "java" }, astWriter, project.getName()));
+					repoBuilder.addAllHeadSnapshot(
+							conn.buildHeadSnapshot(new String[] { "java" }, astWriter, project.getName()));
 				}
 				repoBuilder.addAllBranches(conn.getBranchIndices());
 				repoBuilder.addAllBranchNames(conn.getBranchNames());
