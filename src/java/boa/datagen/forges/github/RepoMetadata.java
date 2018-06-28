@@ -65,6 +65,7 @@ public class RepoMetadata {
 	private static final String GIT_GIT_REPO = "clone_url";
 	
 	private static final String GIT_STARS = "stargazers_count";
+	private static final String GIT_SIZE = "size";
 	private static final String GIT_FORKED = "fork";
 	private static final String GIT_FORKS = "forks_count"; 
 	/* other git fields
@@ -108,10 +109,12 @@ public class RepoMetadata {
 	private String trackers;
 	private String svnRepository;
 	private String gitRepository;
+	
 
 	private boolean fork = false;
 	private int forks = -1;
 	private int stars = -1;
+	private int size = -1;
 	
 	
 	public RepoMetadata(JsonObject jsonProject) {
@@ -169,6 +172,9 @@ public class RepoMetadata {
 		}
 		if (jsonProject.has(GIT_STARS)){
 			this.stars = jsonProject.get(GIT_STARS).getAsInt();
+		}
+		if (jsonProject.has(GIT_SIZE)){
+			this.size = jsonProject.get(GIT_SIZE).getAsInt();
 		}
         /*if (jsonProject.has("databases")) {
 	    	JSONArray jsonDBs = jsonProject.getJSONArray("databases");
