@@ -1,6 +1,6 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2018, Robert Dyer,
+ *                 Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package boa.types.proto.enums;
+package boa.graphs.trees;
 
-import com.google.protobuf.ProtocolMessageEnum;
-
-import boa.types.BoaProtoMap;
+import boa.graphs.Edge;
 
 /**
- * A {@link CFGNodeTypeProtoMap}.
- * 
- * @author rramu
+ * A tree edge
+ *
+ * @author rdyer
  */
-public class CFGNodeTypeProtoMap extends BoaProtoMap {
-	/** {@inheritDoc} */
-	@Override
-	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-		return boa.types.Control.CFGNode.CFGNodeType.class;
-	}
+public class TreeEdge extends Edge<TreeNode, TreeEdge> {
 }

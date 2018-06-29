@@ -1,0 +1,9 @@
+public class C {
+    void emptyFalseBranch() {
+        if (testEmptyFalse) {
+            System.out.println("hi");
+        } else {
+        }
+        System.out.println("after");
+    }
+}
