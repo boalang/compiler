@@ -1,0 +1,8 @@
+public class C {
+    public void m() {
+        while (true) {
+            if (x)
+                break;
+        }
+    }
+}

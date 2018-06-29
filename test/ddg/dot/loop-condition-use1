@@ -1,0 +1,17 @@
+digraph {
+	{ rank = source; 0; }
+	0[shape=ellipse,label="[0] ENTRY"]
+	1[shape=ellipse,label="[1] int x = 1"]
+	2[shape=ellipse,label="[2] x < 10"]
+	3[shape=ellipse,label="[3] System.out.println(\"loop\")"]
+	4[shape=ellipse,label="[4] x = x + 1"]
+	5[shape=ellipse,label="[5] System.out.println(\"x = \" + x)"]
+	0 -> 1
+	0 -> 3
+	1 -> 2 [label="x"]
+	1 -> 4 [label="x"]
+	1 -> 5 [label="x"]
+	4 -> 2 [label="x"]
+	4 -> 4 [label="x"]
+	4 -> 5 [label="x"]
+}

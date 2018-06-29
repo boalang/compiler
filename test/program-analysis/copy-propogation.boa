@@ -1,0 +1,107 @@
+p: Project = input;
+m: output collection[int] of string;
+
+# program analysis output
+type T= {in: set of string, out: set of string, dummy : int};
+type T1= {gen: string, kill: string};
+# cfg of the current method
+cfg: CFG;
+
+# generated values set
+genset: set of string;
+
+# new value
+vardef: string;
+
+# killed values 
+killset: set of string;
+
+cfg_def := traversal(node: CFGNode) : T1 {
+	cur_val : T1 = {"",""};
+	if(node.defVariables!="") {
+		cur_val.gen = node.defVariables+"@"+string(node.id);
+		cur_val.kill = node.defVariables;
+	}
+	return cur_val;
+};
+
+cfg_reach_def := traversal(n: CFGNode): T {
+	preds := n.predecessors;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T = {in_set, out_set, 0};
+	if(def(getvalue(n))) {
+		cur_val = getvalue(n);
+	}
+	foreach(i:int;def(preds[i])) {	
+		pred := getvalue(preds[i]);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	cur_val.out = clone(cur_val.in);
+	genkill := getvalue(n, cfg_def);
+	if(genkill.kill!="") {
+		tmp_out:=values(cur_val.out);
+		foreach(i:int;def(tmp_out[i])) {
+			tmp1:=clone(tmp_out[i]);
+			str_array:=splitall(tmp1,"@");
+			if(str_array[0] == genkill.kill) {
+				remove(cur_val.out, tmp1);
+			}
+		}
+		add(cur_val.out, genkill.gen);
+	}
+	return cur_val;
+};
+
+copy_prop := traversal(n: CFGNode) : set of T1 {
+	out1 : set of T1;
+	cur_val := getvalue(n, cfg_reach_def);
+	if(def(cur_val)) {
+	uv := values(n.useVariables);
+	foreach(i:int;def(uv[i])) {
+		tmp_in:=values(cur_val.in);
+		foreach(j:int;def(tmp_in[j])) {
+			str_array:=splitall(tmp_in[j],"@");
+			if(str_array[0] == uv[i]) {
+				val : T1 = {uv[i], tmp_in[j]};
+				add(out1, val);
+			}
+		}
+	}
+	}
+	return out1;
+};
+
+result := traversal(node: CFGNode) {
+	r:= getvalue(node, cfg_reach_def);
+	if(def(r)) {
+		m[node.id] << string(r.out);
+	}
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T) : bool {
+	if (len(difference(curr.out, prev.out)) == 0)
+		return true;	
+	return false;
+};
+
+reach_def := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		clear(cfg_def);clear(cfg_reach_def);clear(copy_prop);
+		cfg = getcfg(node);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, cfg_def);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, cfg_reach_def, fixp1);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, copy_prop);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, result);
+	}
+};
+
+visit(p, reach_def);

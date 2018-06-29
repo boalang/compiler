@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2016, Hridesh Rajan, Robert Dyer, Ramanathan Ramu
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,31 +16,49 @@
  */
 package boa.runtime;
 
-import java.util.Queue;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 
+import boa.graphs.ddg.DDG;
+import boa.graphs.ddg.DDGNode;
+import boa.graphs.pdg.PDG;
+import boa.graphs.pdg.PDGNode;
+import boa.graphs.slicers.PDGSlicer;
+import boa.graphs.trees.PDTree;
+import boa.graphs.trees.TreeNode;
 import boa.types.Graph.*;
 import boa.graphs.cfg.*;
+import boa.graphs.cdg.*;
 
 /**
  * Boa abstract graph traversal.
  *
  * @author rramu
  */
-
 public abstract class BoaAbstractTraversal<T1> {
-	public java.util.HashMap<Integer,T1> outputMapObj;
-	public java.util.HashMap<Integer,T1> prevOutputMapObj;
+	public java.util.HashMap<Integer, T1> outputMapObj;
+	public java.util.HashMap<Integer, T1> prevOutputMapObj;
 	public T1 currentResult;
+
+	boolean isLoopSensitive = false;
+	boolean isFlowSensitive = false;
+
+	public BoaAbstractTraversal(boolean isFlowSensitive, boolean isLoopSensitive) {
+		this.isFlowSensitive = isFlowSensitive;
+		this.isLoopSensitive = isLoopSensitive;
+	}
 
 	public T1 getValue(final CFGNode node) throws Exception {
 		return (T1)outputMapObj.get(node.getId());
 	}
+
 	public void clear() {
-		if(outputMapObj!=null)
+		if (outputMapObj != null)
 			outputMapObj.clear();
-		if(prevOutputMapObj!=null)
+		if (prevOutputMapObj != null)
 			prevOutputMapObj.clear();
 	}
 
@@ -54,7 +72,7 @@ public abstract class BoaAbstractTraversal<T1> {
 
 	protected boolean preTraverse(final CFG cfg) throws Exception {
 		return defaultPreTraverse();
-	}	
+	}
 
 	protected void defaultPostTraverse() throws Exception { }
 
@@ -66,114 +84,204 @@ public abstract class BoaAbstractTraversal<T1> {
 		defaultPostTraverse();
 	}
 
+	protected boolean preTraverse(final CDG cdg) throws Exception {
+		return defaultPreTraverse();
+	}
+
+	protected boolean preTraverse(final DDG ddg) throws Exception {
+		return defaultPreTraverse();
+	}
+
+	protected boolean preTraverse(final PDG pdg) throws Exception {
+		return defaultPreTraverse();
+	}
+
+	protected boolean preTraverse(final PDGSlicer pdgslicer) throws Exception {
+		return defaultPreTraverse();
+	}
+
+	protected boolean preTraverse(final PDTree tree) throws Exception {
+		return defaultPreTraverse();
+	}
+
 	public final void traverse(final CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind, final String str) throws Exception {
 		traverse(cfg, direction, kind);
 	}
 
-	public final void dfsForward(final CFGNode node, java.util.HashMap<Integer,String> nodeVisitStatus) throws Exception {
-		try {
-			traverse(node, false);
-			nodeVisitStatus.put(node.getId(),"visited");
-			for (CFGNode succ : node.getSuccessorsList()) {
-			    if (nodeVisitStatus.get(succ.getId()).equals("unvisited")) {
-				dfsForward(succ, nodeVisitStatus);
-			    }
+	public final void dfsForward(final TreeNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+		final Stack<TreeNode> s = new Stack<TreeNode>();
+		s.push(node);
+		while (!s.isEmpty()) {
+			final TreeNode n = s.pop();
+			if (!visitedNodes.contains(n.getId())) {
+				traverse(n, false);
+				visitedNodes.add(n.getId());
+				for (int i = n.getChildren().size() - 1; i >= 0; i--) {
+					s.push(n.getChildren().get(i));
+				}
 			}
-		} catch(Exception e) {
-			return;
 		}
 	}
 
-	public final void dfsBackward(final CFGNode node, java.util.HashMap<Integer,String> nodeVisitStatus) throws Exception {
+	public final void dfsForward(final PDGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+		final Stack<PDGNode> s = new Stack<PDGNode>();
+		s.push(node);
+		while (!s.isEmpty()) {
+			final PDGNode n = s.pop();
+			if (!visitedNodes.contains(n.getId())) {
+				traverse(n, false);
+				visitedNodes.add(n.getId());
+				for (int i = n.getSuccessors().size() - 1; i >= 0; i--) {
+					s.push(n.getSuccessors().get(i));
+				}
+			}
+		}
+	}
+
+	public final void dfsForward(final List<PDGNode> nodes, java.util.Set<Integer> visitedNodes) throws Exception {
+		final Stack<PDGNode> s = new Stack<PDGNode>();
+		s.addAll(nodes);
+		while (!s.isEmpty()) {
+			final PDGNode n = s.pop();
+			if (!visitedNodes.contains(n.getId())) {
+				traverse(n, false);
+				visitedNodes.add(n.getId());
+				for (int i = n.getSuccessors().size() - 1; i >= 0; i--) {
+					s.push(n.getSuccessors().get(i));
+				}
+			}
+		}
+	}
+
+	public final void dfsForward(final CDGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+		final Stack<CDGNode> s = new Stack<CDGNode>();
+		s.push(node);
+		while (!s.isEmpty()) {
+			final CDGNode n = s.pop();
+			if (!visitedNodes.contains(n.getId())) {
+				traverse(n, false);
+				visitedNodes.add(n.getId());
+				for (int i = n.getSuccessors().size() - 1; i >= 0; i--) {
+					s.push(n.getSuccessors().get(i));
+				}
+			}
+		}
+	}
+
+	public final void dfsForward(final DDGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+		final Stack<DDGNode> s = new Stack<DDGNode>();
+		s.push(node);
+		while (!s.isEmpty()) {
+			final DDGNode n = s.pop();
+			if (!visitedNodes.contains(n.getId())) {
+				traverse(n, false);
+				visitedNodes.add(n.getId());
+				for (int i = n.getSuccessors().size() - 1; i >= 0; i--) {
+					s.push(n.getSuccessors().get(i));
+				}
+			}
+		}
+	}
+
+	public final void dfsForward(final CFGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+		final Stack<CFGNode> s = new Stack<CFGNode>();
+		s.push(node);
+		while (!s.isEmpty()) {
+			final CFGNode n = s.pop();
+			if (!visitedNodes.contains(n.getId())) {
+				traverse(n, false);
+				visitedNodes.add(n.getId());
+                List<CFGNode> succ = n.getSuccessors();
+                Collections.sort(succ);
+				for (int i = succ.size() - 1; i >= 0; i--) {
+					s.push(succ.get(i));
+				}
+			}
+		}
+	}
+
+	public final void dfsBackward(final CFGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+		final Stack<CFGNode> s = new Stack<CFGNode>();
+		s.push(node);
+		while (!s.isEmpty()) {
+			final CFGNode n = s.pop();
+			if (!visitedNodes.contains(n.getId())) {
+				traverse(n, false);
+				visitedNodes.add(n.getId());
+                List<CFGNode> preds = n.getPredecessors();
+                Collections.sort(preds);
+				for (int i = preds.size() - 1; i >= 0; i--) {
+					s.push(preds.get(i));
+				}
+			}
+		}
+	}
+
+	public final void postorderBackward(final CFGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+		// FIXME remove recursion
+		visitedNodes.add(node.getId());
+		for (final CFGNode succ : node.getSuccessors()) {
+			if (!visitedNodes.contains(succ.getId())) {
+				postorderBackward(succ, visitedNodes);
+			}
+		}
 		traverse(node, false);
-		nodeVisitStatus.put(node.getId(),"visited");
-		for (CFGNode pred : node.getPredecessorsList()) {
-		    if (nodeVisitStatus.get(pred.getId()).equals("unvisited")) {
-			dfsBackward(pred, nodeVisitStatus);
-		    }
-		}
 	}
 
-	public final void postorderBackward(final CFGNode node, java.util.HashMap<Integer,String> nodeVisitStatus) throws Exception {
-		nodeVisitStatus.put(node.getId(),"visited");
-		for (CFGNode succ : node.getSuccessorsList()) {
-		    if (nodeVisitStatus.get(succ.getId()).equals("unvisited")) {
-			postorderBackward(succ, nodeVisitStatus);
-		    }
+	public final void postorderForward(final CFGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+		// FIXME remove recursion
+		visitedNodes.add(node.getId());
+		for (final CFGNode pred : node.getPredecessors()) {
+			if (!visitedNodes.contains(pred.getId())) {
+				postorderForward(pred, visitedNodes);
+			}
 		}
 		traverse(node, false);
 	}
 
-	public final void postorderForward(final CFGNode node, java.util.HashMap<Integer,String> nodeVisitStatus) throws Exception {
-		nodeVisitStatus.put(node.getId(),"visited");
-		for (CFGNode pred : node.getPredecessorsList()) {
-		    if (nodeVisitStatus.get(pred.getId()).equals("unvisited")) {
-			postorderForward(pred, nodeVisitStatus);
-		    }
-		}
-		traverse(node, false);
-	}
-
-	public final void populateWithPostorder(final CFGNode node, java.util.HashMap<Integer,String> nodeVisitStatus, Queue<CFGNode> queue) throws Exception {
-		nodeVisitStatus.put(node.getId(),"visited");
-		for (CFGNode succ : node.getSuccessorsList()) {
-		    if (nodeVisitStatus.get(succ.getId()).equals("unvisited")) {
-			populateWithPostorder(succ, nodeVisitStatus, queue);
-		    }
+	public final void populateWithPostorder(final CFGNode node, java.util.Set<Integer> visitedNodes, Queue<CFGNode> queue) throws Exception {
+		// FIXME remove recursion
+		visitedNodes.add(node.getId());
+		for (final CFGNode succ : node.getSuccessors()) {
+			if (!visitedNodes.contains(succ.getId())) {
+				populateWithPostorder(succ, visitedNodes, queue);
+			}
 		}
 		queue.offer(node);
 	}
 
-	public final void populateWithReversePostorder(final CFGNode node, java.util.HashMap<Integer,String> nodeVisitStatus, Stack<CFGNode> stack) throws Exception {
-		nodeVisitStatus.put(node.getId(),"visited");
-		for (CFGNode succ : node.getSuccessorsList()) {
-		    if (nodeVisitStatus.get(succ.getId()).equals("unvisited")) {
-			populateWithReversePostorder(succ, nodeVisitStatus, stack);
-		    }
+	public final void populateWithReversePostorder(final CFGNode node, java.util.Set<Integer> visitedNodes, Stack<CFGNode> stack) throws Exception {
+		// FIXME remove recursion
+		visitedNodes.add(node.getId());
+		for (final CFGNode succ : node.getSuccessors()) {
+			if (!visitedNodes.contains(succ.getId())) {
+				populateWithReversePostorder(succ, visitedNodes, stack);
+			}
 		}
 		stack.push(node);
 	}
-	public final void worklistReversePostorderForward(Stack<CFGNode> stack, final BoaAbstractFixP fixp, final Traversal.TraversalKind kind) throws Exception {
+
+	public final void worklistReversePostorderForward(final Stack<CFGNode> stack, final BoaAbstractFixP fixp, final Traversal.TraversalKind kind) throws Exception {
 		int nodeCount = 0;
-		while(!stack.isEmpty()) {
-			CFGNode node = stack.pop();
+		while (!stack.isEmpty()) {
+			final CFGNode node = stack.pop();
 			traverse(node, true);
 			nodeCount++;
-			if(nodeCount > 3500) {
+			// FIXME why is this here?
+			if (nodeCount > 3500) {
 				return;
 			}
-			boolean curFlag=outputMapObj.containsKey(node.getId());
+			final boolean curFlag = outputMapObj.containsKey(node.getId());
 			boolean fixpFlag = false;
-			if(curFlag) {
-				boolean prevFlag=prevOutputMapObj.containsKey(node.getId());
-				if(curFlag && prevFlag) { 
-					fixpFlag = fixp.invoke((T1)outputMapObj.get(node.getId()),(T1)prevOutputMapObj.get(node.getId()));
+			if (curFlag) {
+				final boolean prevFlag = prevOutputMapObj.containsKey(node.getId());
+				if (curFlag && prevFlag) {
+					fixpFlag = fixp.invoke((T1)outputMapObj.get(node.getId()), (T1)prevOutputMapObj.get(node.getId()));
 				}
 			}
-			if(!fixpFlag) {
-				for (CFGNode succ : node.getSuccessorsList()) {
-					if(!stack.contains(succ))
-						stack.push(succ);
-				}
-			}
-			prevOutputMapObj.put(node.getId(), currentResult);
-		}
-	}
-	public final void worklistReversePostorderBackward(Stack<CFGNode> stack, final BoaAbstractFixP fixp, final Traversal.TraversalKind kind) throws Exception {
-		while(!stack.isEmpty()) {
-			CFGNode node = stack.pop();
-			traverse(node, true);
-			boolean curFlag=outputMapObj.containsKey(node.getId());
-			boolean fixpFlag = false;
-			if(curFlag) {
-				boolean prevFlag=prevOutputMapObj.containsKey(node.getId());
-				if(curFlag && prevFlag) { 
-					fixpFlag = fixp.invoke((T1)outputMapObj.get(node.getId()),(T1)prevOutputMapObj.get(node.getId()));
-				}
-			}
-			if(!fixpFlag) {
-				for (CFGNode succ : node.getPredecessorsList()) {
-					if(!stack.contains(succ))
+			if (!fixpFlag) {
+				for (final CFGNode succ : node.getSuccessors()) {
+					if (!stack.contains(succ))
 						stack.push(succ);
 				}
 			}
@@ -181,13 +289,35 @@ public abstract class BoaAbstractTraversal<T1> {
 		}
 	}
 
-	public final void worklistReversePostorderWithoutFixp(Stack<CFGNode> stack, final Traversal.TraversalKind kind) throws Exception {
+	public final void worklistReversePostorderBackward(final Stack<CFGNode> stack, final BoaAbstractFixP fixp, final Traversal.TraversalKind kind) throws Exception {
 		while (!stack.isEmpty()) {
-			CFGNode node = stack.pop();
+			final CFGNode node = stack.pop();
 			traverse(node, true);
-			boolean fixpFlag = true;
+			final boolean curFlag = outputMapObj.containsKey(node.getId());
+			boolean fixpFlag = false;
+			if (curFlag) {
+				final boolean prevFlag = prevOutputMapObj.containsKey(node.getId());
+				if (curFlag && prevFlag) {
+					fixpFlag = fixp.invoke((T1)outputMapObj.get(node.getId()), (T1)prevOutputMapObj.get(node.getId()));
+				}
+			}
 			if (!fixpFlag) {
-				for (CFGNode succ : node.getSuccessorsList()) {
+				for (final CFGNode succ : node.getPredecessors()) {
+					if (!stack.contains(succ))
+						stack.push(succ);
+				}
+			}
+			prevOutputMapObj.put(node.getId(), currentResult);
+		}
+	}
+
+	public final void worklistReversePostorderWithoutFixp(final Stack<CFGNode> stack, final Traversal.TraversalKind kind) throws Exception {
+		while (!stack.isEmpty()) {
+			final CFGNode node = stack.pop();
+			traverse(node, true);
+			final boolean fixpFlag = true;
+			if (!fixpFlag) {
+				for (final CFGNode succ : node.getSuccessors()) {
 					if (!stack.contains(succ))
 						stack.push(succ);
 				}
@@ -195,13 +325,13 @@ public abstract class BoaAbstractTraversal<T1> {
 		}
 	}
 
-	public final void worklistPostorderWithoutFixp(Queue<CFGNode> queue, final Traversal.TraversalKind kind) throws Exception {
+	public final void worklistPostorderWithoutFixp(final Queue<CFGNode> queue, final Traversal.TraversalKind kind) throws Exception {
 		while (!queue.isEmpty()) {
-			CFGNode node = queue.remove();
+			final CFGNode node = queue.remove();
 			traverse(node, true);
-			boolean fixpFlag = true;
+			final boolean fixpFlag = true;
 			if (!fixpFlag) {
-				for (CFGNode pred : node.getPredecessorsList()) {
+				for (final CFGNode pred : node.getPredecessors()) {
 					if (!queue.contains(pred))
 						queue.add(pred);
 				}
@@ -209,125 +339,201 @@ public abstract class BoaAbstractTraversal<T1> {
 		}
 	}
 
-	public final void worklistPostorderBackward(Queue<CFGNode> queue, final BoaAbstractFixP fixp, final Traversal.TraversalKind kind) throws Exception {
+	public final void worklistPostorderBackward(final Queue<CFGNode> queue, final BoaAbstractFixP fixp, final Traversal.TraversalKind kind) throws Exception {
 		while (!queue.isEmpty()) {
-				CFGNode node = queue.remove();
-				traverse(node, true);
-				boolean curFlag=outputMapObj.containsKey(node.getId());
-				boolean fixpFlag = false;
-				if (curFlag) {
-					boolean prevFlag=prevOutputMapObj.containsKey(node.getId());
-					if (curFlag && prevFlag) { 
-						fixpFlag = fixp.invoke((T1)outputMapObj.get(node.getId()),(T1)prevOutputMapObj.get(node.getId()));
-					}
+			final CFGNode node = queue.remove();
+			traverse(node, true);
+			final boolean curFlag = outputMapObj.containsKey(node.getId());
+			boolean fixpFlag = false;
+			if (curFlag) {
+				final boolean prevFlag = prevOutputMapObj.containsKey(node.getId());
+				if (curFlag && prevFlag) {
+					fixpFlag = fixp.invoke((T1)outputMapObj.get(node.getId()), (T1)prevOutputMapObj.get(node.getId()));
 				}
-				if (!fixpFlag) {
-					for (CFGNode pred : node.getPredecessorsList()) {
-						if (!queue.contains(pred))
-							queue.add(pred);
-					}
+			}
+			if (!fixpFlag) {
+				for (final CFGNode pred : node.getPredecessors()) {
+					if (!queue.contains(pred))
+						queue.add(pred);
 				}
-				prevOutputMapObj.put(node.getId(), currentResult);
-				//prevOutputMapObj = new java.util.HashMap<Integer,T1>(outputMapObj);
+			}
+			prevOutputMapObj.put(node.getId(), currentResult);
 		}
 	}
 
-	public final void worklistPostorderForward(Queue<CFGNode> queue, final BoaAbstractFixP fixp, final Traversal.TraversalKind kind) throws Exception {
+	public final void worklistPostorderForward(final Queue<CFGNode> queue, final BoaAbstractFixP fixp, final Traversal.TraversalKind kind) throws Exception {
 		while (!queue.isEmpty()) {
-				CFGNode node = queue.remove();
-				traverse(node, true);
-				boolean curFlag=outputMapObj.containsKey(node.getId());
-				boolean fixpFlag = false;
-				if (curFlag) {
-					boolean prevFlag=prevOutputMapObj.containsKey(node.getId());
-					if (curFlag && prevFlag) { 
-						fixpFlag = fixp.invoke((T1)outputMapObj.get(node.getId()),(T1)prevOutputMapObj.get(node.getId()));
-					}
+			final CFGNode node = queue.remove();
+			traverse(node, true);
+			final boolean curFlag = outputMapObj.containsKey(node.getId());
+			boolean fixpFlag = false;
+			if (curFlag) {
+				final boolean prevFlag = prevOutputMapObj.containsKey(node.getId());
+				if (curFlag && prevFlag) {
+					fixpFlag = fixp.invoke((T1)outputMapObj.get(node.getId()), (T1)prevOutputMapObj.get(node.getId()));
 				}
-				if (!fixpFlag) {
-					for (CFGNode pred : node.getSuccessorsList()) {
-						if (!queue.contains(pred))
-							queue.add(pred);
-					}
+			}
+			if (!fixpFlag) {
+				for (final CFGNode pred : node.getSuccessors()) {
+					if (!queue.contains(pred))
+						queue.add(pred);
 				}
-				prevOutputMapObj.put(node.getId(), currentResult);
-				//prevOutputMapObj = new java.util.HashMap<Integer,T1>(outputMapObj);
+			}
+			prevOutputMapObj.put(node.getId(), currentResult);
 		}
 	}
 
 	public final void traverse(final boa.graphs.cfg.CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind, final BoaAbstractFixP fixp) throws Exception {
 		try {
-			if (outputMapObj==null) {
-				outputMapObj = new java.util.HashMap<Integer,T1>();
+			if (outputMapObj == null) {
+				outputMapObj = new java.util.HashMap<Integer, T1>();
 			}
-			switch(kind.getNumber()) {
-				case 1 :
-				case 2 :
-				case 3 :
-				case 6 :
-				case 7 :
+			switch (kind) {
+				case DFS:
+				case POSTORDER:
+				case REVERSEPOSTORDER:
+				case ITERATIVE:
+				case RANDOM:
 					boolean fixpFlag;
 					do {
-						prevOutputMapObj = new java.util.HashMap<Integer,T1>(outputMapObj);
+						prevOutputMapObj = new java.util.HashMap<Integer, T1>(outputMapObj);
 						traverse(cfg, direction, kind);
-						fixpFlag=true;
-						java.util.HashSet<CFGNode> nl=cfg.getNodes();
-						for (CFGNode node : nl) {
-							boolean curFlag=outputMapObj.containsKey(node.getId());
+						fixpFlag = true;
+						final java.util.HashSet<CFGNode> nl = cfg.getNodes();
+						for (final CFGNode node : nl) {
+							boolean curFlag = outputMapObj.containsKey(node.getId());
+							boolean prevFlag = prevOutputMapObj.containsKey(node.getId());
 							if (curFlag) {
-								if (outputMapObj.containsKey(node.getId()) && prevOutputMapObj.containsKey(node.getId())) { 
-									fixpFlag = fixpFlag && fixp.invoke((T1)outputMapObj.get(node.getId()),(T1)prevOutputMapObj.get(node.getId()));
+								if (outputMapObj.containsKey(node.getId()) && prevOutputMapObj.containsKey(node.getId())) {
+									fixpFlag = fixpFlag && fixp.invoke((T1)outputMapObj.get(node.getId()), (T1)prevOutputMapObj.get(node.getId()));
 								} else {
-									fixpFlag = false; break;
+									fixpFlag = false;
+									break;
 								}
 							}
 						}
-					} while(!fixpFlag);
+					} while (!fixpFlag);
 					break;
-				case 4:
-				case 5:
-					prevOutputMapObj = new java.util.HashMap<Integer,T1>();
+				case WORKLIST_POSTORDER:
+				case WORKLIST_REVERSEPOSTORDER:
+					prevOutputMapObj = new java.util.HashMap<Integer, T1>();
 					traverseWithFixp(cfg, direction, kind, fixp);
 					break;
-				default : break;
+				case HYBRID:
+					prevOutputMapObj = new java.util.HashMap<Integer, T1>();
+					final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+					final CFGNode[] nl = cfg.sortNodes();
+					if (nl.length != 0) {
+						if (this.isFlowSensitive) {
+							if (this.isLoopSensitive) {
+								switch (direction) {
+									case BACKWARD:
+										if (cfg.getIsLoopPresent()) {
+											final Queue<CFGNode> queue = new LinkedList<CFGNode>();
+											populateWithPostorder(cfg.getEntryNode(), visitedNodes, queue);
+											worklistPostorderBackward(queue, fixp, kind);
+										} else if (cfg.getIsBranchPresent()) {
+											postorderBackward(cfg.getEntryNode(), visitedNodes);
+										} else {
+											for (int i = nl.length - 1; i >= 0; i--) {
+												traverse(nl[i], false);
+											}
+										}
+										break;
+									case FORWARD:
+										if (cfg.getIsLoopPresent()) {
+											final Stack<CFGNode> stack = new Stack<CFGNode>();
+											populateWithReversePostorder(cfg.getEntryNode(), visitedNodes, stack);
+											worklistReversePostorderForward(stack, fixp, kind);
+										} else if (cfg.getIsBranchPresent()) {
+											postorderForward(cfg.getExitNode(), visitedNodes);
+										} else {
+											for (int i = 0; i < nl.length; i++) {
+												traverse(nl[i], false);
+											}
+										}
+										break;
+									default:
+										break;
+								}
+							} else {
+								switch (direction) {
+									case BACKWARD:
+										if (cfg.getIsLoopPresent()) {
+											final Queue<CFGNode> queue = new LinkedList<CFGNode>();
+											populateWithPostorder(cfg.getEntryNode(), visitedNodes, queue);
+											while (!queue.isEmpty()) {
+												traverse(queue.remove(), false);
+											}
+										} else if (cfg.getIsBranchPresent()) {
+											postorderBackward(cfg.getEntryNode(), visitedNodes);
+										} else {
+											for (int i = nl.length - 1; i >= 0; i--) {
+												traverse(nl[i], false);
+											}
+										}
+										break;
+									case FORWARD:
+										if (cfg.getIsLoopPresent()) {
+											final Stack<CFGNode> stack = new Stack<CFGNode>();
+											populateWithReversePostorder(cfg.getEntryNode(), visitedNodes, stack);
+											while (!stack.isEmpty()) {
+												traverse(stack.pop(), false);
+											}
+										} else if (cfg.getIsBranchPresent()) {
+											postorderForward(cfg.getExitNode(), visitedNodes);
+										} else {
+											for (int i = 0; i < nl.length; i++) {
+												traverse(nl[i], false);
+											}
+										}
+										break;
+									default:
+										break;
+								}
+							}
+						}
+					}
+					break;
+				default:
+					break;
 			}
-		} catch(Exception e) {return;}
+		} catch (final java.lang.StackOverflowError e) {
+			return;
+		}
 	}
 
 	public final void traverseWithFixp(final CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind, final BoaAbstractFixP fixp) throws Exception {
-		if (preTraverse(cfg)) {			
-			if(outputMapObj==null) {
-				outputMapObj = new java.util.HashMap<Integer,T1>();
+		if (preTraverse(cfg)) {
+			if (outputMapObj==null) {
+				outputMapObj = new java.util.HashMap<Integer, T1>();
 			}
-			if(cfg.getNodes().size() != 0) {
-				java.util.HashMap<Integer,String> nodeVisitStatus=new java.util.HashMap<Integer,String>();
-				for(CFGNode nl : cfg.getNodes()) {
-					nodeVisitStatus.put(nl.getId(),"unvisited");
-				}
-				switch(kind.getNumber()) {
-					case 4 :
-						Queue<CFGNode> queue=new LinkedList<CFGNode>();
-						populateWithPostorder(cfg.getEntryNode(), nodeVisitStatus, queue);
-						switch(direction.getNumber()) {
-							case 1: 
+			if (cfg.getNodes().size() != 0) {
+				final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+				switch (kind) {
+					case WORKLIST_POSTORDER:
+						Queue<CFGNode> queue = new LinkedList<CFGNode>();
+						populateWithPostorder(cfg.getEntryNode(), visitedNodes, queue);
+						switch (direction) {
+							case BACKWARD:
 								worklistPostorderBackward(queue, fixp, kind);
 								break;
 
-							case 2 : 
+							case FORWARD:
 								worklistPostorderForward(queue, fixp, kind);
 								break;
 							default : break;
 						}
 						break;
-					case 5 :
-						Stack<CFGNode> stack=new Stack<CFGNode>();
-						populateWithReversePostorder(cfg.getEntryNode(), nodeVisitStatus, stack);
-						switch(direction.getNumber()) {
-							case 1: 
+					case WORKLIST_REVERSEPOSTORDER:
+						Stack<CFGNode> stack = new Stack<CFGNode>();
+						populateWithReversePostorder(cfg.getEntryNode(), visitedNodes, stack);
+						switch (direction) {
+							case BACKWARD:
 								worklistReversePostorderBackward(stack, fixp, kind);
 								break;
 
-							case 2 : 
+							case FORWARD:
 								worklistReversePostorderForward(stack, fixp, kind);
 								break;
 							default : break;
@@ -335,85 +541,584 @@ public abstract class BoaAbstractTraversal<T1> {
 						break;
 					default : break;
 				}
-			}		
+			}
 		}
 	}
 
 	public final void traverse(final boa.graphs.cfg.CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
 		try {
-			if (preTraverse(cfg)) {			
-				if(outputMapObj==null) {
-					outputMapObj = new java.util.HashMap<Integer,T1>();
+			if (preTraverse(cfg)) {
+				if (outputMapObj == null) {
+					outputMapObj = new java.util.HashMap<Integer, T1>();
 				}
-				if(cfg.getNodes().size()!=0) {
-					java.util.HashMap<Integer,String> nodeVisitStatus=new java.util.HashMap<Integer,String>();
-					CFGNode[] nl = cfg.sortNodes();
-					for(int i=0;i<nl.length;i++) {
-						nodeVisitStatus.put(nl[i].getId(),"unvisited");
-					}
-					switch(kind.getNumber()) {
-						case 1:
-							if(direction.getNumber()==2) {
-								dfsForward(cfg.getEntryNode(), nodeVisitStatus);
-							}
-							else {
-								dfsBackward(cfg.getExitNode(), nodeVisitStatus);
-							}
-							break;
-						case 2:
-							postorderBackward(cfg.getEntryNode(), nodeVisitStatus);						
-							break;
-						case 3:
-							postorderForward(cfg.getExitNode(), nodeVisitStatus);						
-							break;
-						case 4:
-							if(direction.getNumber()==2) {
-								Stack<CFGNode> stack=new Stack<CFGNode>();
-								populateWithReversePostorder(cfg.getEntryNode(), nodeVisitStatus, stack);
-								worklistReversePostorderWithoutFixp(stack, kind);
-							}
-							else {
-								Queue<CFGNode> queue=new LinkedList<CFGNode>();
-								populateWithPostorder(cfg.getEntryNode(), nodeVisitStatus, queue);
-								worklistPostorderWithoutFixp(queue, kind);
+				if (cfg.getNodes().size() != 0) {
+					final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+					final CFGNode[] nl = cfg.sortNodes();
+					switch (kind) {
+						case DFS:
+							switch (direction) {
+								case FORWARD:
+									dfsForward(cfg.getEntryNode(), visitedNodes);
+									break;
+								default:
+								case BACKWARD:
+									dfsBackward(cfg.getExitNode(), visitedNodes);
+									break;
 							}
 							break;
-						case 5:
-							if(direction.getNumber()==2) {
-								Queue<CFGNode> queue=new LinkedList<CFGNode>();
-								populateWithPostorder(cfg.getEntryNode(), nodeVisitStatus, queue);
-								worklistPostorderWithoutFixp(queue, kind);
-							}
-							else {
-								Stack<CFGNode> stack=new Stack<CFGNode>();
-								populateWithReversePostorder(cfg.getEntryNode(), nodeVisitStatus, stack);
-								worklistReversePostorderWithoutFixp(stack, kind);
+						case POSTORDER:
+							postorderBackward(cfg.getEntryNode(), visitedNodes);
+							break;
+						case REVERSEPOSTORDER:
+							postorderForward(cfg.getExitNode(), visitedNodes);
+							break;
+						case WORKLIST_POSTORDER:
+							switch (direction) {
+								case FORWARD:
+									Stack<CFGNode> stack = new Stack<CFGNode>();
+									populateWithReversePostorder(cfg.getEntryNode(), visitedNodes, stack);
+									worklistReversePostorderWithoutFixp(stack, kind);
+									break;
+								default:
+								case BACKWARD:
+									Queue<CFGNode> queue = new LinkedList<CFGNode>();
+									populateWithPostorder(cfg.getEntryNode(), visitedNodes, queue);
+									worklistPostorderWithoutFixp(queue, kind);
+									break;
 							}
 							break;
-						case 6:
-							if(direction.getNumber()==2) {
-								for(int i=0;i<nl.length;i++) {
-									traverse(nl[i], false);					
-								}
-							}
-							else {
-								for(int i=nl.length-1;i>=0;i--) {
-									traverse(nl[i], false);					
-								}
-							}
-							break;
-						case 7:
-							for(CFGNode n : cfg.getNodes()) {
-								traverse(n, false);					
+						case WORKLIST_REVERSEPOSTORDER:
+							switch (direction) {
+								case FORWARD:
+									final Queue<CFGNode> queue = new LinkedList<CFGNode>();
+									populateWithPostorder(cfg.getEntryNode(), visitedNodes, queue);
+									worklistPostorderWithoutFixp(queue, kind);
+									break;
+								default:
+								case BACKWARD:
+									final Stack<CFGNode> stack = new Stack<CFGNode>();
+									populateWithReversePostorder(cfg.getEntryNode(), visitedNodes, stack);
+									worklistReversePostorderWithoutFixp(stack, kind);
+									break;
 							}
 							break;
-						default:break;
+						case ITERATIVE:
+							switch (direction) {
+								case FORWARD:
+									for (int i = 0; i < nl.length; i++) {
+										traverse(nl[i], false);
+									}
+									break;
+								default:
+								case BACKWARD:
+									for (int i = nl.length - 1; i >= 0; i--) {
+										traverse(nl[i], false);
+									}
+									break;
+							}
+							break;
+						case RANDOM:
+							for (final CFGNode n : cfg.getNodes()) {
+								traverse(n, false);
+							}
+							break;
+						case HYBRID:
+							for (int i = 0; i < nl.length; i++) {
+								traverse(nl[i], false);
+							}
+							break;
+						default:
+							break;
 					}
 				}
 			}
-		} catch(Exception e) {return;}
+		} catch (final java.lang.StackOverflowError e) {
+			return;
+		}
 	}
 
 	public void traverse(final CFGNode node, boolean flag) throws Exception {
+	}
+
+	public final void traverse(final boa.graphs.cdg.CDG cdg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		try {
+			if (preTraverse(cdg)) {
+				if (outputMapObj == null) {
+					outputMapObj = new java.util.HashMap<Integer, T1>();
+				}
+				if (cdg.getNodes().size() != 0) {
+					final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+					//final CDGNode[] nl = cdg.sortNodes();
+					switch (kind) {
+						case DFS:
+							switch (direction) {
+								case FORWARD:
+									dfsForward(cdg.getEntryNode(), visitedNodes);
+									break;
+								default:
+								//case BACKWARD:
+									//dfsBackward(cdg.getExitNode(), visitedNodes);
+									break;
+							}
+							break;
+/*
+						case POSTORDER:
+							postorderBackward(cdg.getEntryNode(), visitedNodes);
+							break;
+						case REVERSEPOSTORDER:
+							postorderForward(cdg.getExitNode(), visitedNodes);
+							break;
+						case WORKLIST_POSTORDER:
+							switch (direction) {
+								case FORWARD:
+									Stack<CDGNode> stack = new Stack<CDGNode>();
+									populateWithReversePostorder(cdg.getEntryNode(), visitedNodes, stack);
+									worklistReversePostorderWithoutFixp(stack, kind);
+									break;
+								default:
+								case BACKWARD:
+									Queue<CDGNode> queue = new LinkedList<CDGNode>();
+									populateWithPostorder(cdg.getEntryNode(), visitedNodes, queue);
+									worklistPostorderWithoutFixp(queue, kind);
+									break;
+							}
+							break;
+						case WORKLIST_REVERSEPOSTORDER:
+							switch (direction) {
+								case FORWARD:
+									final Queue<CDGNode> queue = new LinkedList<CDGNode>();
+									populateWithPostorder(cdg.getEntryNode(), visitedNodes, queue);
+									worklistPostorderWithoutFixp(queue, kind);
+									break;
+								default:
+								case BACKWARD:
+									final Stack<CDGNode> stack = new Stack<CDGNode>();
+									populateWithReversePostorder(cdg.getEntryNode(), visitedNodes, stack);
+									worklistReversePostorderWithoutFixp(stack, kind);
+									break;
+							}
+							break;
+						case ITERATIVE:
+							switch (direction) {
+								case FORWARD:
+									for (int i = 0; i < nl.length; i++) {
+										traverse(nl[i], false);
+									}
+									break;
+								default:
+								case BACKWARD:
+									for (int i = nl.length - 1; i >= 0; i--) {
+										traverse(nl[i], false);
+									}
+									break;
+							}
+							break;
+						case RANDOM:
+							for (final CDGNode n : cdg.getNodes()) {
+								traverse(n, false);
+							}
+							break;
+						case HYBRID:
+							for (int i = 0; i < nl.length; i++) {
+								traverse(nl[i], false);
+							}
+							break;
+*/
+						default:
+							break;
+					}
+				}
+			}
+		} catch (final java.lang.StackOverflowError e) {
+			return;
+		}
+	}
+
+	public void traverse(final CDGNode node, boolean flag) throws Exception {
+	}
+
+	public final void traverse(final boa.graphs.ddg.DDG ddg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		try {
+			if (preTraverse(ddg)) {
+				if (outputMapObj == null) {
+					outputMapObj = new java.util.HashMap<Integer, T1>();
+				}
+				if (ddg.getNodes().size() != 0) {
+					final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+					//final CDGNode[] nl = cdg.sortNodes();
+					switch (kind) {
+						case DFS:
+							switch (direction) {
+								case FORWARD:
+									dfsForward(ddg.getEntryNode(), visitedNodes);
+									break;
+								default:
+									//case BACKWARD:
+									//dfsBackward(cdg.getExitNode(), visitedNodes);
+									break;
+							}
+							break;
+/*
+						case POSTORDER:
+							postorderBackward(cdg.getEntryNode(), visitedNodes);
+							break;
+						case REVERSEPOSTORDER:
+							postorderForward(cdg.getExitNode(), visitedNodes);
+							break;
+						case WORKLIST_POSTORDER:
+							switch (direction) {
+								case FORWARD:
+									Stack<CDGNode> stack = new Stack<CDGNode>();
+									populateWithReversePostorder(cdg.getEntryNode(), visitedNodes, stack);
+									worklistReversePostorderWithoutFixp(stack, kind);
+									break;
+								default:
+								case BACKWARD:
+									Queue<CDGNode> queue = new LinkedList<CDGNode>();
+									populateWithPostorder(cdg.getEntryNode(), visitedNodes, queue);
+									worklistPostorderWithoutFixp(queue, kind);
+									break;
+							}
+							break;
+						case WORKLIST_REVERSEPOSTORDER:
+							switch (direction) {
+								case FORWARD:
+									final Queue<CDGNode> queue = new LinkedList<CDGNode>();
+									populateWithPostorder(cdg.getEntryNode(), visitedNodes, queue);
+									worklistPostorderWithoutFixp(queue, kind);
+									break;
+								default:
+								case BACKWARD:
+									final Stack<CDGNode> stack = new Stack<CDGNode>();
+									populateWithReversePostorder(cdg.getEntryNode(), visitedNodes, stack);
+									worklistReversePostorderWithoutFixp(stack, kind);
+									break;
+							}
+							break;
+						case ITERATIVE:
+							switch (direction) {
+								case FORWARD:
+									for (int i = 0; i < nl.length; i++) {
+										traverse(nl[i], false);
+									}
+									break;
+								default:
+								case BACKWARD:
+									for (int i = nl.length - 1; i >= 0; i--) {
+										traverse(nl[i], false);
+									}
+									break;
+							}
+							break;
+						case RANDOM:
+							for (final CDGNode n : cdg.getNodes()) {
+								traverse(n, false);
+							}
+							break;
+						case HYBRID:
+							for (int i = 0; i < nl.length; i++) {
+								traverse(nl[i], false);
+							}
+							break;
+*/
+						default:
+							break;
+					}
+				}
+			}
+		} catch (final java.lang.StackOverflowError e) {
+			return;
+		}
+	}
+
+	public void traverse(final DDGNode node, boolean flag) throws Exception {
+	}
+
+	public final void traverse(final boa.graphs.pdg.PDG pdg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		try {
+			if (preTraverse(pdg)) {
+				if (outputMapObj == null) {
+					outputMapObj = new java.util.HashMap<Integer, T1>();
+				}
+				if (pdg.getNodes().size() != 0) {
+					final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+					//final CDGNode[] nl = cdg.sortNodes();
+					switch (kind) {
+						case DFS:
+							switch (direction) {
+								case FORWARD:
+									dfsForward(pdg.getEntryNode(), visitedNodes);
+									break;
+								default:
+									//case BACKWARD:
+									//dfsBackward(cdg.getExitNode(), visitedNodes);
+									break;
+							}
+							break;
+/*
+						case POSTORDER:
+							postorderBackward(cdg.getEntryNode(), visitedNodes);
+							break;
+						case REVERSEPOSTORDER:
+							postorderForward(cdg.getExitNode(), visitedNodes);
+							break;
+						case WORKLIST_POSTORDER:
+							switch (direction) {
+								case FORWARD:
+									Stack<CDGNode> stack = new Stack<CDGNode>();
+									populateWithReversePostorder(cdg.getEntryNode(), visitedNodes, stack);
+									worklistReversePostorderWithoutFixp(stack, kind);
+									break;
+								default:
+								case BACKWARD:
+									Queue<CDGNode> queue = new LinkedList<CDGNode>();
+									populateWithPostorder(cdg.getEntryNode(), visitedNodes, queue);
+									worklistPostorderWithoutFixp(queue, kind);
+									break;
+							}
+							break;
+						case WORKLIST_REVERSEPOSTORDER:
+							switch (direction) {
+								case FORWARD:
+									final Queue<CDGNode> queue = new LinkedList<CDGNode>();
+									populateWithPostorder(cdg.getEntryNode(), visitedNodes, queue);
+									worklistPostorderWithoutFixp(queue, kind);
+									break;
+								default:
+								case BACKWARD:
+									final Stack<CDGNode> stack = new Stack<CDGNode>();
+									populateWithReversePostorder(cdg.getEntryNode(), visitedNodes, stack);
+									worklistReversePostorderWithoutFixp(stack, kind);
+									break;
+							}
+							break;
+						case ITERATIVE:
+							switch (direction) {
+								case FORWARD:
+									for (int i = 0; i < nl.length; i++) {
+										traverse(nl[i], false);
+									}
+									break;
+								default:
+								case BACKWARD:
+									for (int i = nl.length - 1; i >= 0; i--) {
+										traverse(nl[i], false);
+									}
+									break;
+							}
+							break;
+						case RANDOM:
+							for (final CDGNode n : cdg.getNodes()) {
+								traverse(n, false);
+							}
+							break;
+						case HYBRID:
+							for (int i = 0; i < nl.length; i++) {
+								traverse(nl[i], false);
+							}
+							break;
+*/
+						default:
+							break;
+					}
+				}
+			}
+		} catch (final java.lang.StackOverflowError e) {
+			return;
+		}
+	}
+
+	public void traverse(final PDGNode node, boolean flag) throws Exception {
+	}
+
+	public final void traverse(final boa.graphs.slicers.PDGSlicer pdgslicer, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		try {
+			if (preTraverse(pdgslicer)) {
+				if (outputMapObj == null) {
+					outputMapObj = new java.util.HashMap<Integer, T1>();
+				}
+				if (pdgslicer.getSlice().size() != 0) {
+					final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+					//final CDGNode[] nl = cdg.sortNodes();
+					switch (kind) {
+						case DFS:
+							switch (direction) {
+								case FORWARD:
+									dfsForward(pdgslicer.getEntrynodesList(), visitedNodes);
+									break;
+								default:
+									//case BACKWARD:
+									//dfsBackward(cdg.getExitNode(), visitedNodes);
+									break;
+							}
+							break;
+/*
+						case POSTORDER:
+							postorderBackward(cdg.getEntryNode(), visitedNodes);
+							break;
+						case REVERSEPOSTORDER:
+							postorderForward(cdg.getExitNode(), visitedNodes);
+							break;
+						case WORKLIST_POSTORDER:
+							switch (direction) {
+								case FORWARD:
+									Stack<CDGNode> stack = new Stack<CDGNode>();
+									populateWithReversePostorder(cdg.getEntryNode(), visitedNodes, stack);
+									worklistReversePostorderWithoutFixp(stack, kind);
+									break;
+								default:
+								case BACKWARD:
+									Queue<CDGNode> queue = new LinkedList<CDGNode>();
+									populateWithPostorder(cdg.getEntryNode(), visitedNodes, queue);
+									worklistPostorderWithoutFixp(queue, kind);
+									break;
+							}
+							break;
+						case WORKLIST_REVERSEPOSTORDER:
+							switch (direction) {
+								case FORWARD:
+									final Queue<CDGNode> queue = new LinkedList<CDGNode>();
+									populateWithPostorder(cdg.getEntryNode(), visitedNodes, queue);
+									worklistPostorderWithoutFixp(queue, kind);
+									break;
+								default:
+								case BACKWARD:
+									final Stack<CDGNode> stack = new Stack<CDGNode>();
+									populateWithReversePostorder(cdg.getEntryNode(), visitedNodes, stack);
+									worklistReversePostorderWithoutFixp(stack, kind);
+									break;
+							}
+							break;
+						case ITERATIVE:
+							switch (direction) {
+								case FORWARD:
+									for (int i = 0; i < nl.length; i++) {
+										traverse(nl[i], false);
+									}
+									break;
+								default:
+								case BACKWARD:
+									for (int i = nl.length - 1; i >= 0; i--) {
+										traverse(nl[i], false);
+									}
+									break;
+							}
+							break;
+						case RANDOM:
+							for (final CDGNode n : cdg.getNodes()) {
+								traverse(n, false);
+							}
+							break;
+						case HYBRID:
+							for (int i = 0; i < nl.length; i++) {
+								traverse(nl[i], false);
+							}
+							break;
+*/
+						default:
+							break;
+					}
+				}
+			}
+		} catch (final java.lang.StackOverflowError e) {
+			return;
+		}
+	}
+
+	public final void traverse(final boa.graphs.trees.PDTree tree, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		try {
+			if (preTraverse(tree)) {
+				if (outputMapObj == null) {
+					outputMapObj = new java.util.HashMap<Integer, T1>();
+				}
+				if (tree.getNodes().size() != 0) {
+					final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+					//final CDGNode[] nl = cdg.sortNodes();
+					switch (kind) {
+						case DFS:
+							switch (direction) {
+								case FORWARD:
+									dfsForward(tree.getRootNode(), visitedNodes);
+									break;
+								default:
+									//case BACKWARD:
+									//dfsBackward(cdg.getExitNode(), visitedNodes);
+									break;
+							}
+							break;
+/*
+						case POSTORDER:
+							postorderBackward(cdg.getEntryNode(), visitedNodes);
+							break;
+						case REVERSEPOSTORDER:
+							postorderForward(cdg.getExitNode(), visitedNodes);
+							break;
+						case WORKLIST_POSTORDER:
+							switch (direction) {
+								case FORWARD:
+									Stack<CDGNode> stack = new Stack<CDGNode>();
+									populateWithReversePostorder(cdg.getEntryNode(), visitedNodes, stack);
+									worklistReversePostorderWithoutFixp(stack, kind);
+									break;
+								default:
+								case BACKWARD:
+									Queue<CDGNode> queue = new LinkedList<CDGNode>();
+									populateWithPostorder(cdg.getEntryNode(), visitedNodes, queue);
+									worklistPostorderWithoutFixp(queue, kind);
+									break;
+							}
+							break;
+						case WORKLIST_REVERSEPOSTORDER:
+							switch (direction) {
+								case FORWARD:
+									final Queue<CDGNode> queue = new LinkedList<CDGNode>();
+									populateWithPostorder(cdg.getEntryNode(), visitedNodes, queue);
+									worklistPostorderWithoutFixp(queue, kind);
+									break;
+								default:
+								case BACKWARD:
+									final Stack<CDGNode> stack = new Stack<CDGNode>();
+									populateWithReversePostorder(cdg.getEntryNode(), visitedNodes, stack);
+									worklistReversePostorderWithoutFixp(stack, kind);
+									break;
+							}
+							break;
+						case ITERATIVE:
+							switch (direction) {
+								case FORWARD:
+									for (int i = 0; i < nl.length; i++) {
+										traverse(nl[i], false);
+									}
+									break;
+								default:
+								case BACKWARD:
+									for (int i = nl.length - 1; i >= 0; i--) {
+										traverse(nl[i], false);
+									}
+									break;
+							}
+							break;
+						case RANDOM:
+							for (final CDGNode n : cdg.getNodes()) {
+								traverse(n, false);
+							}
+							break;
+						case HYBRID:
+							for (int i = 0; i < nl.length; i++) {
+								traverse(nl[i], false);
+							}
+							break;
+*/
+						default:
+							break;
+					}
+				}
+			}
+		} catch (final java.lang.StackOverflowError e) {
+			return;
+		}
+	}
+
+	public void traverse(final TreeNode node, boolean flag) throws Exception {
 	}
 }

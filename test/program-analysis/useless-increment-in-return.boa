@@ -1,0 +1,54 @@
+m: output collection[int] of string;
+p: Project = input;
+
+# cfg of the current method
+cfg: CFG;
+
+invalid : set of int;
+local : set of string;
+
+find_local := traversal(node: CFGNode) {
+	if(def(node.expr)) {
+		if(node.expr.kind == ExpressionKind.VARDECL) {
+			if(def(node.expr.variable_decls[0].initializer)) {
+				add(local, node.defVariables);
+			}
+		}
+		else if (node.expr.kind == ExpressionKind.ASSIGN) {
+			add(local, node.defVariables);
+		}
+	}
+};
+
+init := traversal(node: CFGNode){
+	if(def(node.stmt)) {
+		if(node.stmt.kind == StatementKind.RETURN) {
+			if(def(node.stmt.expression)) {
+				if(node.stmt.expression.kind == ExpressionKind.OP_INC) {
+					if(contains(local, node.stmt.expression.expressions[0].variable))
+						add(invalid, int(node.id));
+				}
+			}
+		}
+	}
+};
+
+q_all := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		if(node.name=="dead2") {
+		cfg = getcfg(node);
+		clear(invalid);			
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, find_local);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, init);	
+		m[1] << string(invalid);
+		}
+	}
+};
+
+visit(p, q_all);

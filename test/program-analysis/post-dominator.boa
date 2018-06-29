@@ -1,0 +1,84 @@
+m: output collection[string][int] of string;
+
+p: Project = input;
+# program analysis output
+type T= {dom: set of string, dummy : int};
+	
+# cfg of the current method
+cfg: CFG;
+
+#set of all cfgnode ids
+cfgnode_ids:set of string;
+
+method_name : string;
+
+exitId : int;
+
+# traversal to collect all cfgnode ids
+allnode_ids := traversal(node: CFGNode) : string {
+	add(cfgnode_ids, string(node.id));
+	return string(node.id);
+};
+
+# traversal that constructs post dominator set of cfg node
+cfg_dom := traversal(node: CFGNode): T {
+	cur_value : T;
+	if(node.id==exitId) {
+		self_dom:set of string;
+		cur_value = {self_dom, 0};
+	}
+	else
+		cur_value = {cfgnode_ids, 0};
+	if(def(getvalue(node))) {
+		cur_value = getvalue(node);
+	}
+	start_dom:set of string;
+	add(start_dom, string(node.id));
+	preds:=node.successors;
+	foreach(i:int;def(preds[i])) {
+		pred_value := getvalue(preds[i]);
+		if(def(pred_value)) {
+			cur_value.dom = intersect(cur_value.dom,pred_value.dom);
+		}
+	}	
+	gen_kill := getvalue(node, allnode_ids);
+	if(def(gen_kill)) {
+		add(cur_value.dom, gen_kill);
+	}
+	return cur_value;
+};
+
+result := traversal(node: CFGNode) {
+	r:= getvalue(node, cfg_dom);
+	if(def(r)) {
+		m[method_name][node.id] << string(r.dom);
+	}
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T) : bool {
+ 	if (len(difference(curr.dom, prev.dom)) == 0)
+ 		return true;	
+ 	return false;
+};
+
+q_all := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+
+	before node: Method -> {
+		clear(allnode_ids);clear(cfgnode_ids);clear(cfg_dom);
+
+		cfg = getcfg(node);
+		exitId = len(cfg.nodes) - 1;
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, allnode_ids);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, cfg_dom, fixp1);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, result);
+	}
+};
+
+visit(p, q_all);

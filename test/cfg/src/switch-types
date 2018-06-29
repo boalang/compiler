@@ -1,0 +1,25 @@
+public class C {
+    public void m() {
+        switch (i) {
+            case 1:
+            default:
+                break;
+        }
+        switch (ch) {
+            case 'a':
+            default:
+                break;
+        }
+        switch (str) {
+            case "str":
+            default:
+                break;
+        }
+        switch (e) {
+            case VAL1:
+            case VAL2:
+            default:
+                break;
+        }
+    }
+}
