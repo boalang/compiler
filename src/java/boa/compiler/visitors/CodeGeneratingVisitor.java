@@ -36,6 +36,7 @@ import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 import boa.types.*;
+import boa.compiler.visitors.analysis.*;
 
 /**
  *
@@ -50,8 +51,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 *
 	 * @author anthonyu
 	 */
-	String identifier="";
-	String traversalNodeIdentifier="";
+	String identifier = "";
+	boolean flowSensitive = false;
+	boolean loopSensitive = false;
+	HashMap<String, Boolean> traversalMap = new HashMap<String, Boolean>();
+	String lastVarDecl;
 
 	protected class AggregatorDescription {
 		protected String aggregator;
@@ -425,30 +429,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 *
 	 * @author rdyer
 	 */
-	protected class IdentifierFindingVisitor extends AbstractVisitorNoArgNoRet {
-		protected final Set<String> names = new HashSet<String>();
-
-		public Set<String> getNames() {
-			return names;
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		protected void initialize() {
-			names.clear();
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void visit(final Identifier n) {
-			names.add(n.getToken());
-		}
-	}
-
-	/**
-	 *
-	 * @author rdyer
-	 */
 	protected class IndexeeFindingVisitor extends AbstractVisitorNoReturn<String> {
 		protected Factor firstFactor;
 		protected Node lastFactor;
@@ -497,42 +477,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 		}
 	}
-
-	/**
-	 * Finds if the expression is a Call.
-	 *
-	 * @author rdyer
-	 */
-	protected class CallFindingVisitor extends AbstractVisitorNoArgNoRet {
-		protected boolean isCall;
-
-		public boolean isCall() {
-			return isCall;
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void initialize() {
-			super.initialize();
-			isCall = false;
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void visit(final Factor n) {
-			for (final Node node : n.getOps()) {
-				isCall = false;
-				node.accept(this);
-			}
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void visit(final Call n) {
-			isCall = true;
-		}
-	}
-
 
 	protected final IdentifierFindingVisitor idFinder = new IdentifierFindingVisitor();
 	protected final IndexeeFindingVisitor indexeeFinder = new IndexeeFindingVisitor();
@@ -649,6 +593,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			for (final Expression e : n.getArgs()) {
 				e.accept(this);
 				parts.add(code.removeLast());
+			}
+
+			if (funcName.equals("traverse") && parts.size() > 3) {
+				if (parts.get(2).equals("boa.types.Graph.Traversal.TraversalKind.HYBRID") && !traversalMap.get(parts.get(3).trim()))
+					parts.set(2, "boa.types.Graph.Traversal.TraversalKind.RANDOM");
 			}
 
 			final String s = expand(f.getMacro(), n.getArgs(), parts.toArray(new String[]{}));
@@ -1378,6 +1327,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final ST st = stg.getInstanceOf("Assignment");
 		st.add("operator", "=");
 		st.add("lhs", "___" + n.getId().getToken());
+		lastVarDecl = "___" + n.getId().getToken();	
 
 		if (!n.hasInitializer()) {
 			if (lhsType instanceof BoaProtoMap ||
@@ -1514,27 +1464,32 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TraverseStatement n) {
+		String traverseVar = lastVarDecl;
+
 		final ST st = stg.getInstanceOf("TraverseClause");
 
 		final BoaFunction funcType = ((BoaFunction) n.type);
 		final List<String> body = new ArrayList<String>();
 		String types = "";
-		traversalNodeIdentifier="";
+		String traversalNodeIdentifier = "";
+		Identifier traversalId = null;
+
 		if (n.hasWildcard()) {
 			st.add("name", "defaultPreTraverse");
 		} else if (n.hasComponent()) {
 			final Component c = n.getComponent();
-			traversalNodeIdentifier = "___"+c.getIdentifier().getToken();
-
+			traversalNodeIdentifier = "___" + c.getIdentifier().getToken();
+			traversalId = c.getIdentifier();
 			n.env.set(traversalNodeIdentifier, c.getType().type);
 			types = c.getType().type.toJavaType();
 
 			st.add("name", "preTraverse");
 		}
+
 		if (!(funcType.getType() instanceof BoaAny))
 			st.add("ret", funcType.getType().toBoxedJavaType());
 
-		if(n.hasBody()) {
+		if (n.hasBody()) {
 			if (n.getBody() instanceof Block) {
 				for (final Node b : ((Block)n.getBody()).getStatements()) {
 					b.accept(this);
@@ -1545,6 +1500,26 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				body.add(code.removeLast());
 			}
 		}
+
+		final CFGBuildingVisitor cfgBuilder = new CFGBuildingVisitor();
+		n.accept(cfgBuilder);
+		final CreateNodeId createNodeId = new CreateNodeId();
+		createNodeId.start(cfgBuilder);
+
+		final LocalMayAliasAnalysis localMayAliasAnalysis = new LocalMayAliasAnalysis();
+		final HashSet<Identifier> aliastSet = localMayAliasAnalysis.start(cfgBuilder, traversalId);
+		
+		final DataFlowSensitivityAnalysis dataFlowSensitivityAnalysis = new DataFlowSensitivityAnalysis();
+		dataFlowSensitivityAnalysis.start(cfgBuilder, aliastSet);
+		flowSensitive = dataFlowSensitivityAnalysis.isFlowSensitive();
+
+		if (flowSensitive) {
+			final LoopSensitivityAnalysis loopSensitivityAnalysis = new LoopSensitivityAnalysis();
+			loopSensitivityAnalysis.start(cfgBuilder, aliastSet);
+			loopSensitive = loopSensitivityAnalysis.isLoopSensitive();
+		}
+
+		traversalMap.put(traverseVar, flowSensitive);
 
 		st.add("body", body);
 
@@ -1709,7 +1684,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		final List<String> body = new ArrayList<String>();
 		for (final Node node : n.getBody().getStatements()) {
-			if(node instanceof TraverseStatement) {
+			if (node instanceof TraverseStatement) {
 				if (!(((BoaFunction) node.type).getType() instanceof BoaAny)) {
 					st.add("T", ((BoaFunction) node.type).getType().toBoxedJavaType());
 				}
@@ -1721,6 +1696,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			body.add(code.removeLast());
 		}
 		st.add("body", body);
+		st.add("flowSensitive", flowSensitive);
+		st.add("loopSensitive", loopSensitive);
 
 		code.add(st.render());
 	}

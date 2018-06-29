@@ -19,6 +19,7 @@ q_all := visitor {
 		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST_REVERSEPOSTORDER, init);
 		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.ITERATIVE, init);
 		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.RANDOM, init);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, init);
 	}
 };
 

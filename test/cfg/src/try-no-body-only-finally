@@ -1,0 +1,9 @@
+public class C {
+    public void m() {
+        try {
+            // empty
+        } finally {
+            System.err.println("finally");
+        }
+    }
+}

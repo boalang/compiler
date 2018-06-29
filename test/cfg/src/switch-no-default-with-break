@@ -1,0 +1,10 @@
+public class C {
+    public void m() {
+        switch (noDefaultWithBreak) {
+            case 1:
+                break;
+            case 2:
+                break;
+        }
+    }
+}
