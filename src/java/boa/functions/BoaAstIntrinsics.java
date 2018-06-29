@@ -81,13 +81,7 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "ChangedFile" })
 	public static ASTRoot getast(final ChangedFile f) {
-		// since we know only certain kinds have ASTs, filter before looking up
-		final ChangedFile.FileKind kind = f.getKind();
-		if (kind != ChangedFile.FileKind.SOURCE_JAVA_ERROR
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS2
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS3
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS8)
+		if (!f.getAst())
 			return emptyAst;
 
 		context.getCounter(ASTCOUNTER.GETS_ATTEMPTED).increment(1);
@@ -661,6 +655,7 @@ public class BoaAstIntrinsics {
 		return genericsCollectingVisitor.map;
 	}
 
+	@SuppressWarnings("unused")
 	private static void parseGenericType(final String name, final HashMap<String,Long> counts) {
 		if (!name.contains("<") || name.startsWith("<"))
 			return;
