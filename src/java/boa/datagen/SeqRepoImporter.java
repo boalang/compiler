@@ -158,7 +158,7 @@ public class SeqRepoImporter {
 		private int counter = 0;
 		private String suffix;
 		private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
-		private long commitWriterLen = 0;
+		private long astWriterLen = 0, commitWriterLen = 0, contentWriterLen = 0;
 
 		public ImportTask(int id) throws IOException {
 			this.id = id;
@@ -293,7 +293,8 @@ public class SeqRepoImporter {
 			if (project.getForked() || !(project.getProgrammingLanguagesList().contains("Java")
 					|| project.getProgrammingLanguagesList().contains("JavaScript")
 					|| project.getProgrammingLanguagesList().contains("PHP")) 
-					|| project.getStars() < 2 || project.getSize() < 100 )
+//					|| project.getStars() < 2 || project.getSize() < 100
+					)
 				return project;
 
 			// If repository is already cloned delete then re-clone, this should
@@ -314,9 +315,9 @@ public class SeqRepoImporter {
 				System.out.println("Has repository: " + name);
 			AbstractConnector conn = null;
 			try {
-				conn = new GitConnector(gitDir.getAbsolutePath(), project.getName());
+				conn = new GitConnector(gitDir.getAbsolutePath(), project.getName(), astWriter, astWriterLen, contentWriter, contentWriterLen);
 				final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
-				for (final Revision rev : conn.getCommits(true, astWriter, contentWriter, project.getName())) {
+				for (final Revision rev : conn.getCommits(true, project.getName())) {
 					// build new rev w/ no namespaces
 					final Revision.Builder revBuilder = Revision.newBuilder(rev);
 					repoBuilder.addRevisions(revBuilder);
@@ -326,7 +327,7 @@ public class SeqRepoImporter {
 						System.out.println("Build head snapshot");
 					repoBuilder.setHead(conn.getHeadCommitOffset());
 					repoBuilder.addAllHeadSnapshot(
-							conn.buildHeadSnapshot(new String[] { "java" }, astWriter, project.getName()));
+							conn.buildHeadSnapshot(new String[] { "java" }, project.getName()));
 				}
 				repoBuilder.addAllBranches(conn.getBranchIndices());
 				repoBuilder.addAllBranchNames(conn.getBranchNames());
@@ -339,6 +340,8 @@ public class SeqRepoImporter {
 				printError(e, "unknown error", project.getName());
 			} finally {
 				if (conn != null) {
+					this.astWriterLen = conn.getAstWriterLen();
+					this.contentWriterLen = conn.getContentWriterLen();
 					try {
 						conn.close();
 					} catch (Exception e) {

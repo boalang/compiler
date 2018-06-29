@@ -32,7 +32,6 @@ import java.util.Stack;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
-import org.apache.hadoop.io.SequenceFile.Writer;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -51,7 +50,6 @@ import boa.datagen.util.Java8Visitor;
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
-import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 
 /**
@@ -70,17 +68,27 @@ public abstract class AbstractConnector implements AutoCloseable {
 	protected Map<String, Integer> revisionMap = new HashMap<String, Integer>();
 	protected String projectName;
 	protected int headCommitOffset = -1;
+	protected SequenceFile.Writer astWriter, contentWriter;
+	protected long astWriterLen = 0, contentWriterLen = 0;
+
+	public long getAstWriterLen() {
+		return astWriterLen;
+	}
+
+	public long getContentWriterLen() {
+		return contentWriterLen;
+	}
 
 	public int getHeadCommitOffset() {
 		return this.headCommitOffset;
 	}
 
-	public List<ChangedFile> buildHeadSnapshot(final String[] languages, final SequenceFile.Writer astWriter, String projectName) {
+	public List<ChangedFile> buildHeadSnapshot(final String[] languages, String projectName) {
 		this.projectName = projectName;
-		return buildSnapshot(headCommitOffset, languages, astWriter);
+		return buildSnapshot(headCommitOffset, languages);
 	}
 	
-	public List<ChangedFile> buildSnapshot(final int commitOffset, final String[] languages, final SequenceFile.Writer astWriter) {
+	public List<ChangedFile> buildSnapshot(final int commitOffset, final String[] languages) {
 		final List<ChangedFile> snapshot = new ArrayList<ChangedFile>();
 		final Map<String, AbstractCommit> commits = new HashMap<String, AbstractCommit>();
 		getSnapshot(commitOffset, snapshot, commits);
@@ -156,9 +164,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 				
 				long len = -1;
 				if (astWriter != null) {
-					try {
-						len = astWriter.getLength();
-					} catch (IOException e1) {}
+					len = astWriterLen;
 				}
 				
 				String content = fileContents.get(sourceFilePath);
@@ -177,17 +183,17 @@ public abstract class AbstractConnector implements AutoCloseable {
 				}
 				if (astWriter != null && len > -1) {
 					try {
-						astWriter.append(new LongWritable(len), new BytesWritable(ast.build().toByteArray()));
+						BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+						astWriter.append(new LongWritable(astWriterLen), bw);
+						astWriterLen += bw.getLength();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
-				try {
-					if (astWriter != null && astWriter.getLength() > len) {
-						fb.setKey(len);
-						fb.setAst(true);
-					}
-				} catch (IOException e) {}
+				if (astWriter != null && astWriterLen > len) {
+					fb.setKey(len);
+					fb.setAst(true);
+				}
 				snapshot.add(fb.build());
 			}
 		}
@@ -384,7 +390,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 		return tagIndices;
 	}
 	
-	public List<Revision> getCommits(final boolean parse, final Writer astWriter, final Writer contentWriter, String projectName) {
+	public List<Revision> getCommits(final boolean parse, String projectName) {
 		this.projectName = projectName;
 		if (revisions == null) {
 			revisions = new ArrayList<AbstractCommit>();
@@ -395,7 +401,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 		for (int i = 0; i < revisions.size(); i++) {
 			long startTime = System.currentTimeMillis();
 			final AbstractCommit rev = revisions.get(i);
-			revs.add(rev.asProtobuf(parse, astWriter, contentWriter, projectName));
+			revs.add(rev.asProtobuf(parse, projectName));
 			
 			if (debug) {
 				long endTime = System.currentTimeMillis();

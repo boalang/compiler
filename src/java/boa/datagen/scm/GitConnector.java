@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.hadoop.io.SequenceFile.Writer;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
@@ -62,6 +63,14 @@ public class GitConnector extends AbstractConnector {
 			if (debug)
 				System.err.println("Git Error connecting to " + path + ". " + e.getMessage());
 		}
+	}
+
+	public GitConnector(String path, String projectName, Writer astWriter, long astWriterLen, Writer contentWriter, long contentWriterLen) {
+		this(path, projectName);
+		this.astWriter = astWriter;
+		this.contentWriter = contentWriter;
+		this.astWriterLen = astWriterLen;
+		this.contentWriterLen = contentWriterLen;
 	}
 
 	@Override

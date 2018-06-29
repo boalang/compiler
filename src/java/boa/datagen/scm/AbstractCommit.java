@@ -160,7 +160,7 @@ public abstract class AbstractCommit {
 			HashMap<String, String> globalProperties, HashMap<String, String> globalManagedDependencies,
 			Stack<PomFile> parentPomFiles);
 
-	public Revision asProtobuf(final boolean parse, final Writer astWriter, final Writer contentWriter, String projectName) {
+	public Revision asProtobuf(final boolean parse, String projectName) {
 		final Revision.Builder revision = Revision.newBuilder();
 		revision.setId(id);
 		this.projectName = projectName;
@@ -192,7 +192,7 @@ public abstract class AbstractCommit {
 				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles
 						.get(cfb.getPreviousIndices(0)).getKind());
 			} else
-				processChangeFile(cfb, parse, astWriter, contentWriter);
+				processChangeFile(cfb, parse);
 			revision.addFiles(cfb.build());
 		}
 
@@ -200,15 +200,8 @@ public abstract class AbstractCommit {
 	}
 
 	@SuppressWarnings("deprecation")
-	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse, final Writer astWriter,
-			final Writer contentWriter) {
-		long len = -1;
-		try {
-			len = astWriter.getLength();
-		} catch (IOException e1) {
-			if (debug)
-				System.err.println("Error getting length of sequence file writer!!!");
-		}
+	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse) {
+		long len = connector.astWriterLen;
 		String path = fb.getName();
 		fb.setKind(FileKind.OTHER);
 
@@ -223,22 +216,22 @@ public abstract class AbstractCommit {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JAVA_JLS2);
-			if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_4, AST.JLS2, false, astWriter)) {
+			if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_4, AST.JLS2, false)) {
 				if (debugparse)
 					System.err.println("Found JLS2 parse error in: revision " + id + ": file " + path);
 
 				fb.setKind(FileKind.SOURCE_JAVA_JLS3);
-				if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_5, AST.JLS3, false, astWriter)) {
+				if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_5, AST.JLS3, false)) {
 					if (debugparse)
 						System.err.println("Found JLS3 parse error in: revision " + id + ": file " + path);
 
 					fb.setKind(FileKind.SOURCE_JAVA_JLS4);
-					if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_7, AST.JLS4, false, astWriter)) {
+					if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_7, AST.JLS4, false)) {
 						if (debugparse)
 							System.err.println("Found JLS4 parse error in: revision " + id + ": file " + path);
 
 						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
-						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false, astWriter)) {
+						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false)) {
 							if (debugparse)
 								System.err.println("Found JLS8 parse error in: revision " + id + ": file " + path);
 
@@ -261,33 +254,32 @@ public abstract class AbstractCommit {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JS_ES1);
-			if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_1, false, astWriter)) {
+			if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_1, false)) {
 				if (debugparse)
 					System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 				fb.setKind(FileKind.SOURCE_JS_ES2);
-				if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_2, false, astWriter)) {
+				if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_2, false)) {
 					if (debugparse)
 						System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 					fb.setKind(FileKind.SOURCE_JS_ES3);
-					if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_3, false, astWriter)) {
+					if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_3, false)) {
 						if (debugparse)
 							System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 						fb.setKind(FileKind.SOURCE_JS_ES5);
-						if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_5, false, astWriter)) {
+						if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_5, false)) {
 							if (debugparse)
 								System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
 							fb.setKind(FileKind.SOURCE_JS_ES6);
-							if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_6, false, astWriter)) {
+							if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_6, false)) {
 								if (debugparse)
 									System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
 								fb.setKind(FileKind.SOURCE_JS_ES7);
-								if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_7, false, astWriter)) {
+								if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_7, false)) {
 									if (debugparse)
 										System.err
 												.println("Found ES3 parse error in: revision " + id + ": file " + path);
 									fb.setKind(FileKind.SOURCE_JS_ES8);
-									if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_8, false,
-											astWriter)) {
+									if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_8, false)) {
 										if (debugparse)
 											System.err.println(
 													"Found ES4 parse error in: revision " + id + ": file " + path);
@@ -317,32 +309,32 @@ public abstract class AbstractCommit {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_PHP5);
-			if (!parsePHPFile(path, fb, content, PHPVersion.PHP5, false, astWriter)) {
+			if (!parsePHPFile(path, fb, content, PHPVersion.PHP5, false)) {
 				if (debugparse)
 					System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 				fb.setKind(FileKind.SOURCE_PHP5_3);
-				if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_3, false, astWriter)) {
+				if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_3, false)) {
 					if (debugparse)
 						System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 					fb.setKind(FileKind.SOURCE_PHP5_4);
-					if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_4, false, astWriter)) {
+					if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_4, false)) {
 						if (debugparse)
 							System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 						fb.setKind(FileKind.SOURCE_PHP5_5);
-						if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_5, false, astWriter)) {
+						if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_5, false)) {
 							if (debugparse)
 								System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
 							fb.setKind(FileKind.SOURCE_PHP5_6);
-							if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_6, false, astWriter)) {
+							if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_6, false)) {
 								if (debugparse)
 									System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
 								fb.setKind(FileKind.SOURCE_PHP7_0);
-								if (!parsePHPFile(path, fb, content, PHPVersion.PHP7_0, false, astWriter)) {
+								if (!parsePHPFile(path, fb, content, PHPVersion.PHP7_0, false)) {
 									if (debugparse)
 										System.err
 												.println("Found ES3 parse error in: revision " + id + ": file " + path);
 									fb.setKind(FileKind.SOURCE_PHP7_1);
-									if (!parsePHPFile(path, fb, content, PHPVersion.PHP7_1, false, astWriter)) {
+									if (!parsePHPFile(path, fb, content, PHPVersion.PHP7_1, false)) {
 										if (debugparse)
 											System.err.println(
 													"Found ES4 parse error in: revision " + id + ": file " + path);
@@ -399,25 +391,24 @@ public abstract class AbstractCommit {
 				fb.setKind(FileKind.SOURCE_CSS_ERROR);
 			}else if (debugparse)
 				System.err.println("Accepted CSS: revisison " + id + ": file " + path);
-		}
-
-		/*
-		 * else { final String content = getFileContents(path); if
-		 * (STORE_ASCII_PRINTABLE_CONTENTS &&
-		 * StringUtils.isAsciiPrintable(content)) { try {
-		 * fb.setKey(contentWriter.getLength()); contentWriter.append(new
-		 * LongWritable(contentWriter.getLength()), new
-		 * BytesWritable(content.getBytes())); } catch (IOException e) {
-		 * e.printStackTrace(); } } }
-		 */
-		try {
-			if (astWriter.getLength() > len) {
-				fb.setKey(len);
-				fb.setAst(true);
+		}*/
+		/*else {
+			final String content = getFileContents(path);
+			if (STORE_ASCII_PRINTABLE_CONTENTS && StringUtils.isAsciiPrintable(content)) {
+				try {
+					fb.setKey(connector.contentWriterLen);
+					BytesWritable bw = new BytesWritable(content.getBytes());
+					connector.contentWriter.append(new LongWritable(connector.contentWriterLen), bw);
+					connector.contentWriterLen += bw.getLength();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
-		} catch (IOException e) {
-			if (debug)
-				System.err.println("Error getting length of sequence file writer!!!");
+		}*/
+		 
+		if (connector.astWriterLen > len) {
+			fb.setKey(len);
+			fb.setAst(true);
 		}
 
 		return fb;
@@ -449,7 +440,9 @@ public abstract class AbstractCommit {
 		}
 		try {
 			// System.out.println("writing=" + count + "\t" + path);
-			astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
+			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+			connector.astWriterLen += bw.getLength();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -484,7 +477,9 @@ public abstract class AbstractCommit {
 		}
 		try {
 			// System.out.println("writing=" + count + "\t" + path);
-			astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
+			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+			connector.astWriterLen += bw.getLength();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -519,7 +514,9 @@ public abstract class AbstractCommit {
 		}
 		try {
 			// System.out.println("writing=" + count + "\t" + path);
-			astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
+			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+			connector.astWriterLen += bw.getLength();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -527,7 +524,7 @@ public abstract class AbstractCommit {
 	}
 	
 	private boolean parsePHPFile(final String path, final ChangedFile.Builder fb, final String content,
-			final PHPVersion astLevel, final boolean storeOnError, Writer astWriter) {
+			final PHPVersion astLevel, final boolean storeOnError) {
 		org.eclipse.php.internal.core.ast.nodes.ASTParser parser = org.eclipse.php.internal.core.ast.nodes.ASTParser
 				.newParser(astLevel);
 		Program cu = null;
@@ -559,7 +556,9 @@ public abstract class AbstractCommit {
 			}
 			try {
 				// System.out.println("writing=" + count + "\t" + path);
-				astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
+				BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+				connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+				connector.astWriterLen += bw.getLength();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -568,7 +567,7 @@ public abstract class AbstractCommit {
 	}
 
 	private boolean parseJavaScriptFile(final String path, final ChangedFile.Builder fb, final String content,
-			final int astLevel, final boolean storeOnError, Writer astWriter) {
+			final int astLevel, final boolean storeOnError) {
 		try {
 			// System.out.println("parsing=" + (++count) + "\t" + path);
 			CompilerEnvirons cp = new CompilerEnvirons();
@@ -612,8 +611,9 @@ public abstract class AbstractCommit {
 
 				try {
 					// System.out.println("writing=" + count + "\t" + path);
-					astWriter.append(new LongWritable(astWriter.getLength()),
-							new BytesWritable(ast.build().toByteArray()));
+					BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+					connector.astWriterLen += bw.getLength();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -638,7 +638,7 @@ public abstract class AbstractCommit {
 	}
 
 	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content,
-			final String compliance, final int astLevel, final boolean storeOnError, Writer astWriter) {
+			final String compliance, final int astLevel, final boolean storeOnError) {
 		try {
 			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(astLevel);
 			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
@@ -740,25 +740,29 @@ public abstract class AbstractCommit {
 					}
 				}
 
-				long len = astWriter.getLength();
+				long len = connector.astWriterLen;
 				try {
-					astWriter.append(new LongWritable(len), new BytesWritable(ast.build().toByteArray()));
+					BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+					connector.astWriterLen += bw.getLength();
 				} catch (IOException e) {
 					if (debug)
 						e.printStackTrace();
 					len = Long.MAX_VALUE;
 				}
-				long plen = astWriter.getLength();
+				long plen = connector.astWriterLen;
 				if (preAst != null && plen > len) {
 					try {
-						astWriter.append(new LongWritable(plen), new BytesWritable(preAst.build().toByteArray()));
+						BytesWritable bw = new BytesWritable(preAst.build().toByteArray());
+						connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+						connector.astWriterLen += bw.getLength();
 					} catch (IOException e) {
 						if (debug)
 							e.printStackTrace();
 						plen = Long.MAX_VALUE;
 					}
 				}
-				if (preAst != null && astWriter.getLength() > plen)
+				if (preAst != null && connector.astWriterLen > plen)
 					fb.setMappedKey(plen);
 				else
 					fb.setMappedKey(-1);

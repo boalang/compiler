@@ -297,7 +297,7 @@ public class MetaDataWorker implements Runnable {
 		try {
 			conn = new GitConnector(gitDir.getAbsolutePath(), project.getName());
 			final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
-			for (final Revision rev : conn.getCommits(true, astWriter, contentWriter, project.getName())) {
+			for (final Revision rev : conn.getCommits(true, project.getName())) {
 				// build new rev w/ no namespaces
 				final Revision.Builder revBuilder = Revision.newBuilder(rev);
 				repoBuilder.addRevisions(revBuilder);
@@ -306,7 +306,7 @@ public class MetaDataWorker implements Runnable {
 				if (debug)
 					System.out.println("Build head snapshot");
 				repoBuilder.setHead(conn.getHeadCommitOffset());
-				repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[] { "java" }, astWriter, project.getName()));
+				repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[] { "java" }, project.getName()));
 			}
 			repoBuilder.addAllBranches(conn.getBranchIndices());
 			repoBuilder.addAllBranchNames(conn.getBranchNames());
