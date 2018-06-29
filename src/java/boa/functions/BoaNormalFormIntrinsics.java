@@ -115,7 +115,7 @@ public class BoaNormalFormIntrinsics {
 
 			case OP_DEC:
 			case OP_INC:
-			case ARRAYINDEX:
+			case ARRAYACCESS:
 				final Expression.Builder b = Expression.newBuilder(e);
 
 				for(int i = 0; i < convertedExpression.size(); i++) {
@@ -283,7 +283,7 @@ public class BoaNormalFormIntrinsics {
 			case NULLCOALESCE:
 			case OP_DEC:
 			case OP_INC:
-			case ARRAYINDEX:
+			case ARRAYACCESS:
 
 			case METHODCALL:
 			case LITERAL:
@@ -1266,7 +1266,7 @@ public class BoaNormalFormIntrinsics {
 			case ASSIGN_RSHIFT:
 			case ASSIGN_SUB:
 			case ASSIGN_UNSIGNEDRSHIFT:
-			case ARRAYINDEX:
+			case ARRAYACCESS:
 			case ARRAYINIT:
 			case BIT_AND:
 			case BIT_LSHIFT:
@@ -1780,8 +1780,8 @@ public class BoaNormalFormIntrinsics {
 	@FunctionSpec(name = "cnf", returnType = "Expression", formalParameters = { "Expression" })
 	public static Expression cnf(final Expression e) {
 		// push the ORs down into ANDs
-		// (B ⋀ C) ⋁ A -> (B ⋁ A) ⋀ (C ⋁ A)
-		// A ⋁ (B ⋀ C) -> (A ⋁ B) ⋀ (A ⋁ C)
+		// (B â‹€ C) â‹� A -> (B â‹� A) â‹€ (C â‹� A)
+		// A â‹� (B â‹€ C) -> (A â‹� B) â‹€ (A â‹� C)
 		return simplify(normalform(nnf(e), ExpressionKind.LOGICAL_OR, ExpressionKind.LOGICAL_AND));
 	}
 
@@ -2118,7 +2118,7 @@ public class BoaNormalFormIntrinsics {
 			case NEW:
 			case NEWARRAY:
 			case ARRAYINIT:
-			case ARRAYINDEX:
+			case ARRAYACCESS:
 				final Expression.Builder bn = Expression.newBuilder(exp);
 
 				for (int i = 0; i < convertedExpression.size(); i++) {
