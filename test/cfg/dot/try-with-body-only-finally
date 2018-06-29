@@ -1,13 +1,15 @@
 digraph {
 	{ rank = source; 0; }
-	{ rank = sink; 4; }
+	{ rank = sink; 5; }
 	0[shape=ellipse,label="[0] ENTRY"]
 	1[shape=diamond,label="[1] try {\l	System.err.println(\"body\");\l}\lfinally {\l	System.err.println(\"finally\");\l}\l"]
 	2[shape=parallelogram,label="[2] System.err.println(\"body\")"]
-	3[shape=parallelogram,label="[3] System.err.println(\"finally\")"]
-	4[shape=ellipse,label="[4] EXIT"]
+	3[shape=box,label="[3] finally {\l	System.err.println(\"finally\");\l}\l"]
+	4[shape=parallelogram,label="[4] System.err.println(\"finally\")"]
+	5[shape=ellipse,label="[5] EXIT"]
 	0 -> 1
 	1 -> 2 [label="T"]
 	2 -> 3
 	3 -> 4
+	4 -> 5
 }

@@ -995,8 +995,9 @@ public class BoaAstIntrinsics {
 				return prettyprint(stmt.getExpression()) + ": " + prettyprint(stmt.getStatements(0));
 
 			case CASE:
-				if (stmt.hasExpression())
-					return "case " + prettyprint(stmt.getExpression()) + ":";
+				return "case " + prettyprint(stmt.getExpression()) + ":";
+
+			case DEFAULT:
 				return "default:";
 
 			case EXPRESSION:
@@ -1025,6 +1026,15 @@ public class BoaAstIntrinsics {
 				s += indent() + "}";
 				return s;
 
+			case FINALLY:
+				s += indent() + "finally {\n";
+				indent++;
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				indent--;
+				s += indent() + "}";
+				return s;
+
 			case TRY:
 				s += "try";
 				if (stmt.getInitializationsCount() > 0) {
@@ -1038,8 +1048,6 @@ public class BoaAstIntrinsics {
 				}
 				s += " ";
 				for (int i = 0; i < stmt.getStatementsCount(); i++) {
-					if (i > 0 && stmt.getStatements(i).getKind() != Statement.StatementKind.CATCH)
-						s += indent() + "finally ";
 					s += prettyprint(stmt.getStatements(i)) + "\n";
 				}
 				return s;
@@ -1047,14 +1055,14 @@ public class BoaAstIntrinsics {
 			case FOR:
 				s += "for (";
 				if (stmt.hasVariableDeclaration()) {
-					s += prettyprint(stmt.getVariableDeclaration()) + " : " + prettyprint(stmt.getExpression());
+					s += prettyprint(stmt.getVariableDeclaration()) + " : " + prettyprint(stmt.getConditions(0));
 				} else {
 					for (int i = 0; i < stmt.getInitializationsCount(); i++) {
 						if (i > 0)
 							s += ", ";
 						s += prettyprint(stmt.getInitializations(i));
 					}
-					s += "; " + prettyprint(stmt.getExpression()) + "; ";
+					s += "; " + prettyprint(stmt.getConditions(0)) + "; ";
 					for (int i = 0; i < stmt.getUpdatesCount(); i++) {
 						if (i > 0)
 							s += ", ";
@@ -1073,11 +1081,11 @@ public class BoaAstIntrinsics {
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
 				indent--;
-				s += indent() + "while (" + prettyprint(stmt.getExpression()) + ");";
+				s += indent() + "while (" + prettyprint(stmt.getConditions(0)) + ");";
 				return s;
 
 			case WHILE:
-				s += "while (" + prettyprint(stmt.getExpression()) + ") {\n";
+				s += "while (" + prettyprint(stmt.getConditions(0)) + ") {\n";
 				indent++;
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
@@ -1086,7 +1094,7 @@ public class BoaAstIntrinsics {
 				return s;
 
 			case IF:
-				s += "if (" + prettyprint(stmt.getExpression()) + ")\n";
+				s += "if (" + prettyprint(stmt.getConditions(0)) + ")\n";
 				indent++;
 				s += indent() + prettyprint(stmt.getStatements(0)) + "\n";
 				indent--;
@@ -1099,7 +1107,7 @@ public class BoaAstIntrinsics {
 				return s;
 
 			case SWITCH:
-				s += "switch (" + prettyprint(stmt.getExpression()) + ") {";
+				s += "switch (" + prettyprint(stmt.getConditions(0)) + ") {";
 				indent++;
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
@@ -1108,7 +1116,7 @@ public class BoaAstIntrinsics {
 				return s;
 
 			case THROW:
-				return "throw " + prettyprint(stmt.getExpression()) + ";";
+				return "throw " + prettyprint(stmt.getConditions(0)) + ";";
 
 			default: return s;
 		}

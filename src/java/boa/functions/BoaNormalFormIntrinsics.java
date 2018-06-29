@@ -2061,9 +2061,11 @@ public class BoaNormalFormIntrinsics {
 			case LABEL:
 			case SWITCH:
 			case CASE:
+			case DEFAULT:
 			case TRY:
 			case THROW:
 			case CATCH:
+			case FINALLY:
 			case EMPTY:
 			default:
 				return stmt;
