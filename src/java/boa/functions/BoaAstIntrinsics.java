@@ -753,25 +753,8 @@ public class BoaAstIntrinsics {
 
 		String s = "";
 
-		// FIXME temporary fix for Java, so package is printed before imports
-		if (r.getNamespacesCount() == 1) {
-			final Namespace n = r.getNamespaces(0);
-			if (n.getName().length() > 0) {
-				if (n.getModifiersCount() > 0)
-					s += prettyprint(n.getModifiersList()) + " ";
-				s += "package " + n.getName() + ";\n";
-			}
-		}
-
-		for (final String i : r.getImportsList())
-			s += indent() + "import " + i + "\n";
-		// FIXME temporary fix for Java, so package is printed before imports
-		if (r.getNamespacesCount() == 1)
-			for (final Declaration d : r.getNamespaces(0).getDeclarationsList())
-				s += prettyprint(d);
-		else
-			for (final Namespace n : r.getNamespacesList())
-				s += prettyprint(n);
+		for (final Namespace n : r.getNamespacesList())
+			s += prettyprint(n);
 
 		return s;
 	}
@@ -780,13 +763,16 @@ public class BoaAstIntrinsics {
 	public static String prettyprint(final Namespace n) {
 		if (n == null) return "";
 
-		String s = indent();
+		String s = "";
 
 		if (n.getName().length() > 0) {
 			if (n.getModifiersCount() > 0)
 				s += prettyprint(n.getModifiersList()) + " ";
-			s += "package " + n.getName() + ";\n";
+			s += indent() + "package " + n.getName() + ";\n";
 		}
+
+		for (final String i : n.getImportsList())
+			s += indent() + "import " + i + "\n";
 
 		for (final Declaration d : n.getDeclarationsList())
 			s += prettyprint(d);
@@ -999,7 +985,7 @@ public class BoaAstIntrinsics {
 
 			case ASSERT:
 				s += "assert ";
-				s += prettyprint(stmt.getCondition());
+				s += prettyprint(stmt.getConditions(0));
 				if (stmt.hasExpression())
 					s += " " + prettyprint(stmt.getExpression());
 				s += ";";
@@ -1009,8 +995,9 @@ public class BoaAstIntrinsics {
 				return prettyprint(stmt.getExpression()) + ": " + prettyprint(stmt.getStatements(0));
 
 			case CASE:
-				if (stmt.hasExpression())
-					return "case " + prettyprint(stmt.getExpression()) + ":";
+				return "case " + prettyprint(stmt.getExpression()) + ":";
+
+			case DEFAULT:
 				return "default:";
 
 			case EXPRESSION:
@@ -1039,6 +1026,15 @@ public class BoaAstIntrinsics {
 				s += indent() + "}";
 				return s;
 
+			case FINALLY:
+				s += indent() + "finally {\n";
+				indent++;
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				indent--;
+				s += indent() + "}";
+				return s;
+
 			case TRY:
 				s += "try";
 				if (stmt.getInitializationsCount() > 0) {
@@ -1052,8 +1048,6 @@ public class BoaAstIntrinsics {
 				}
 				s += " ";
 				for (int i = 0; i < stmt.getStatementsCount(); i++) {
-					if (i > 0 && stmt.getStatements(i).getKind() != Statement.StatementKind.CATCH)
-						s += indent() + "finally ";
 					s += prettyprint(stmt.getStatements(i)) + "\n";
 				}
 				return s;
@@ -1061,14 +1055,14 @@ public class BoaAstIntrinsics {
 			case FOR:
 				s += "for (";
 				if (stmt.hasVariableDeclaration()) {
-					s += prettyprint(stmt.getVariableDeclaration()) + " : " + prettyprint(stmt.getExpression());
+					s += prettyprint(stmt.getVariableDeclaration()) + " : " + prettyprint(stmt.getConditions(0));
 				} else {
 					for (int i = 0; i < stmt.getInitializationsCount(); i++) {
 						if (i > 0)
 							s += ", ";
 						s += prettyprint(stmt.getInitializations(i));
 					}
-					s += "; " + prettyprint(stmt.getExpression()) + "; ";
+					s += "; " + prettyprint(stmt.getConditions(0)) + "; ";
 					for (int i = 0; i < stmt.getUpdatesCount(); i++) {
 						if (i > 0)
 							s += ", ";
@@ -1087,11 +1081,11 @@ public class BoaAstIntrinsics {
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
 				indent--;
-				s += indent() + "while (" + prettyprint(stmt.getExpression()) + ");";
+				s += indent() + "while (" + prettyprint(stmt.getConditions(0)) + ");";
 				return s;
 
 			case WHILE:
-				s += "while (" + prettyprint(stmt.getExpression()) + ") {\n";
+				s += "while (" + prettyprint(stmt.getConditions(0)) + ") {\n";
 				indent++;
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
@@ -1100,7 +1094,7 @@ public class BoaAstIntrinsics {
 				return s;
 
 			case IF:
-				s += "if (" + prettyprint(stmt.getExpression()) + ")\n";
+				s += "if (" + prettyprint(stmt.getConditions(0)) + ")\n";
 				indent++;
 				s += indent() + prettyprint(stmt.getStatements(0)) + "\n";
 				indent--;
@@ -1113,7 +1107,7 @@ public class BoaAstIntrinsics {
 				return s;
 
 			case SWITCH:
-				s += "switch (" + prettyprint(stmt.getExpression()) + ") {";
+				s += "switch (" + prettyprint(stmt.getConditions(0)) + ") {";
 				indent++;
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
@@ -1122,7 +1116,7 @@ public class BoaAstIntrinsics {
 				return s;
 
 			case THROW:
-				return "throw " + prettyprint(stmt.getExpression()) + ";";
+				return "throw " + prettyprint(stmt.getConditions(0)) + ";";
 
 			default: return s;
 		}
@@ -1252,7 +1246,7 @@ public class BoaAstIntrinsics {
 					s += prettyprint(e.getAnonDeclaration());
 				return s;
 
-			case ARRAYINDEX:
+			case ARRAYACCESS:
 				return prettyprint(e.getExpressions(0)) + "[" + prettyprint(e.getExpressions(1)) + "]";
 
 			case ARRAYINIT:
@@ -1367,7 +1361,7 @@ public class BoaAstIntrinsics {
 
 		try {
 			final org.eclipse.jdt.core.dom.Expression e = (org.eclipse.jdt.core.dom.Expression) parser.createAST(null);
-			final Java8Visitor visitor = new Java8Visitor(s, null);
+			final Java8Visitor visitor = new Java8Visitor(s);
 			e.accept(visitor);
 			return visitor.getExpression();
 		} catch (final Exception e) {
@@ -1403,10 +1397,8 @@ public class BoaAstIntrinsics {
 			cu.accept(errorCheck);
 
 			if (!errorCheck.hasError) {
-				final Java8Visitor visitor = new Java8Visitor(s, null);
+				final Java8Visitor visitor = new Java8Visitor(s);
 				ast.addNamespaces(visitor.getNamespaces(cu));
-				for (final String i : visitor.getImports())
-					ast.addImports(i);
 			}
 		} catch (final Exception e) {
 			// do nothing

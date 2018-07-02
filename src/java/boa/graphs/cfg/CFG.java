@@ -393,6 +393,8 @@ public class CFG {
 			return traverse_break(cfgNode, root);
 		case CASE:
 			return traverse_case(cfgNode, root);
+		case DEFAULT:
+			return traverse_case(cfgNode, root);
 		case CONTINUE:
 			return traverse_continue(cfgNode, root);
 		case LABEL:
@@ -405,6 +407,8 @@ public class CFG {
 			return traverse_throw(cfgNode, root);
 		case CATCH:
 			return traverse_catch(cfgNode, root);
+		case FINALLY:
+			return traverse_finally(cfgNode, root);
 		case ASSERT:
 		case TYPEDECL:
 		case OTHER:
@@ -491,7 +495,7 @@ public class CFG {
 		final CFG graph = new CFG();
 
 		final CFGNode branch = new CFGNode("IF", NodeType.CONTROL, "IF", "IF");
-		branch.setAstNode(root.getExpression());
+		branch.setAstNode(root.getConditions(0));
 		branch.setPid((cfgNode == null) ? "." : cfgNode.getPid() + cfgNode.getId() + ".");
 		graph.mergeSeq(branch);
 
@@ -555,7 +559,7 @@ public class CFG {
 		Statement sc = null;
 		boolean hasdefault = false;
 		for (final Statement s : root.getStatementsList()) {
-			if (s.getKind() == StatementKind.CASE) {
+			if (s.getKind() == StatementKind.CASE || s.getKind() == StatementKind.DEFAULT) {
 				final CFG lastsub = subgraph;
 				subgraph = new CFG();
 				subgraph.mergeSeq(traverse(node, s));
@@ -572,7 +576,7 @@ public class CFG {
 						graph.mergeABranch(lastsub, node);
 				}
 				sc = s;
-				if (!s.hasExpression())
+				if (s.getKind() == StatementKind.DEFAULT)
 					hasdefault = true;
 			} else {
 				subgraph.mergeSeq(traverse(node, s));
@@ -612,7 +616,7 @@ public class CFG {
 
 		// condition
 		final CFGNode control = new CFGNode("FOR", NodeType.CONTROL, "FOR", "FOR");
-		control.setAstNode(root.getExpression());
+		control.setAstNode(root.getConditions(0));
 		control.setPid((cfgNode == null) ? "." : cfgNode.getPid() + cfgNode.getId() + ".");
 		graph.mergeSeq(control);
 
@@ -641,7 +645,7 @@ public class CFG {
 		this.isLoopPresent = true;
 		final CFG graph = new CFG();
 		final CFGNode control = new CFGNode("WHILE", NodeType.CONTROL, "WHILE", "WHILE");
-		control.setAstNode(root.getExpression());
+		control.setAstNode(root.getConditions(0));
 		control.setPid((cfgNode == null) ? "." : cfgNode.getPid() + cfgNode.getId() + ".");
 		graph.mergeSeq(control);
 
@@ -662,7 +666,7 @@ public class CFG {
 		final CFG graph = new CFG();
 
 		final CFGNode control = new CFGNode("DO", NodeType.CONTROL, "DO", "DO");
-		control.setAstNode(root.getExpression());
+		control.setAstNode(root.getConditions(0));
 		control.setPid((cfgNode == null) ? "." : cfgNode.getPid() + cfgNode.getId() + ".");
 		graph.mergeSeq(control);
 
@@ -687,7 +691,7 @@ public class CFG {
 	private CFG traverse_case(final CFGNode cfgNode, final Statement root) {
 		final CFG graph = new CFG();
 		final String label;
-		if (!root.hasExpression()) {
+		if (root.getKind() == StatementKind.DEFAULT) {
 			label = "default";
 		} else if (root.getExpression().hasLiteral()) {
 			label = root.getExpression().getLiteral();
@@ -778,7 +782,7 @@ public class CFG {
 		Statement finallyBlock = null;
 		for (int i = 1; i < root.getStatementsCount(); i++) {
 			final Statement stmt = root.getStatements(i);
-			if (finallyBlock == null && stmt.getKind() == StatementKind.BLOCK) {
+			if (finallyBlock == null && stmt.getKind() == StatementKind.FINALLY) {
 				finallyBlock = stmt;
 			} else {
 				graph.mergeABranch(traverse(branch, stmt), branch, "F");
@@ -798,6 +802,16 @@ public class CFG {
 	private CFG traverse_catch(final CFGNode cfgNode, final Statement root) {
 		final CFG graph = new CFG();
 		final CFGNode aNode = new CFGNode("CATCH", NodeType.OTHER, "CATCH", "CATCH");
+		aNode.setAstNode(root);
+		graph.mergeSeq(aNode);
+		for (final Statement stmt : root.getStatementsList())
+			graph.mergeSeq(traverse(cfgNode, stmt));
+		return graph;
+	}
+
+	private CFG traverse_finally(final CFGNode cfgNode, final Statement root) {
+		final CFG graph = new CFG();
+		final CFGNode aNode = new CFGNode("FINALLY", NodeType.OTHER, "FINALLY", "FINALLY");
 		aNode.setAstNode(root);
 		graph.mergeSeq(aNode);
 		for (final Statement stmt : root.getStatementsList())

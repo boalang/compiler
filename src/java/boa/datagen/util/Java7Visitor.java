@@ -70,6 +70,10 @@ public class Java7Visitor extends ASTVisitor {
 		return comments;
 	}
 
+    public boa.types.Ast.Expression getExpression() {
+        return expressions.pop();
+    }
+
 /*
 	// builds a Position message for every node and stores in the field pos
 	public void preVisit(ASTNode node) {
