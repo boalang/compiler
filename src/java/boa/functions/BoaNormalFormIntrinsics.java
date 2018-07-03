@@ -26,6 +26,7 @@ import boa.graphs.pdg.PDGEdge;
 import boa.graphs.pdg.PDGNode;
 import boa.graphs.slicers.PDGSlicer;
 import boa.types.Ast;
+import boa.types.Ast.Expression.Builder;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Statement.StatementKind;
 import boa.types.Ast.Expression;
@@ -1620,6 +1621,28 @@ public class BoaNormalFormIntrinsics {
 	@FunctionSpec(name = "simplify", returnType = "Expression", formalParameters = { "Expression" })
 	public static Expression simplify(final Expression e) {
 		switch (e.getKind()) {
+			case PAREN:
+				Expression sub = simplify(e.getExpressions(0));
+				switch (sub.getKind()) {
+					case PAREN:
+						return sub;
+					case LOGICAL_NOT:
+						return sub;
+					case ARRAYACCESS:
+						return sub;
+					case ARRAYELEMENT:
+						return sub;
+					case ARRAYINIT:
+						return sub;
+					case LITERAL:
+						return sub;
+					case METHODCALL:
+						return sub;
+					case VARACCESS:
+						return sub;
+					default:
+						return createExpression(e.getKind(), sub);
+				}
 			case LOGICAL_NOT:
 				final Expression inner = simplify(e.getExpressions(0));
 				if (inner.equals(trueLit)) return Expression.newBuilder(falseLit).build();
@@ -1646,6 +1669,13 @@ public class BoaNormalFormIntrinsics {
 							if (!processExpression(e3, exps, seen, e.getKind()))
 								break OUTER;
 						}
+					} else if (e2.getKind() == ExpressionKind.PAREN && e2.getExpressions(0).getKind() == e.getKind()) {
+						for (int j = 0; j < e2.getExpressions(0).getExpressionsCount(); j++) {
+							final Expression e3 = simplify(e2.getExpressions(0).getExpressions(j));
+
+							if (!processExpression(e3, exps, seen, e.getKind()))
+								break OUTER;
+						}
 					} else {
 						if (!processExpression(e2, exps, seen, e.getKind()))
 							break OUTER;
@@ -1664,20 +1694,20 @@ public class BoaNormalFormIntrinsics {
 				for (int i = 0; i < exps.size(); i++) {
 					final Expression exp = exps.get(i);
 
-					if (exp.getKind() == ExpressionKind.LOGICAL_AND || exp.getKind() == ExpressionKind.LOGICAL_OR)
+					if (getKind(exp) == ExpressionKind.LOGICAL_AND || getKind(exp) == ExpressionKind.LOGICAL_OR)
 						for (int j = 0; j < exps.size(); j++) {
 							final Expression exp2 = exps.get(j);
 
-							if (i == j || exp2.getKind() != exp.getKind())
+							if (i == j || getKind(exp2) != getKind(exp))
 								continue;
 
 							final TreeSet<Expression> s1 = new TreeSet<Expression>(comparator);
-							s1.addAll(exp.getExpressionsList());
-							s1.removeAll(exp2.getExpressionsList());
+							s1.addAll(getExpressionsList(exp));
+							s1.removeAll(getExpressionsList(exp2));
 
 							final TreeSet<Expression> s2 = new TreeSet<Expression>(comparator);
-							s2.addAll(exp2.getExpressionsList());
-							s2.removeAll(exp.getExpressionsList());
+							s2.addAll(getExpressionsList(exp2));
+							s2.removeAll(getExpressionsList(exp));
 
 							if (s1.size() != 1 || s2.size() != 1)
 								continue;
@@ -1685,25 +1715,25 @@ public class BoaNormalFormIntrinsics {
 							final Expression e1 = s1.first();
 							final Expression e2 = s2.first();
 
-							if (e1.getKind() == ExpressionKind.LOGICAL_NOT && e2.getKind() != ExpressionKind.LOGICAL_NOT) {
+							if (getKind(e1) == ExpressionKind.LOGICAL_NOT && getKind(e2) != ExpressionKind.LOGICAL_NOT) {
 								if (e1.getExpressions(0).equals(e2)) {
 									final Expression.Builder b1 = Expression.newBuilder(exp);
-									b1.getExpressionsList().remove(e1);
+									getExpressionsList(b1).remove(e1);
 									exps.set(i, b1.build());
 
 									final Expression.Builder b2 = Expression.newBuilder(exp2);
-									b2.getExpressionsList().remove(e2);
+									getExpressionsList(b2).remove(e2);
 									exps.set(j, b2.build());
 								}
 							}
-							else if (e1.getKind() != ExpressionKind.LOGICAL_NOT && e2.getKind() == ExpressionKind.LOGICAL_NOT) {
+							else if (getKind(e1) != ExpressionKind.LOGICAL_NOT && getKind(e2) == ExpressionKind.LOGICAL_NOT) {
 								if (e2.getExpressions(0).equals(e1)) {
 									final Expression.Builder b1 = Expression.newBuilder(exp);
-									b1.getExpressionsList().remove(e1);
+									getExpressionsList(b1).remove(e1);
 									exps.set(i, b1.build());
 
 									final Expression.Builder b2 = Expression.newBuilder(exp2);
-									b2.getExpressionsList().remove(e2);
+									getExpressionsList(b2).remove(e2);
 									exps.set(j, b2.build());
 								}
 							}
@@ -1713,26 +1743,26 @@ public class BoaNormalFormIntrinsics {
 				for (int i = 0; i < exps.size(); i++) {
 					final Expression exp = exps.get(i);
 
-					if (exp.getKind() != ExpressionKind.LOGICAL_AND && exp.getKind() != ExpressionKind.LOGICAL_OR)
+					if (getKind(exp) != ExpressionKind.LOGICAL_AND && getKind(exp) != ExpressionKind.LOGICAL_OR)
 						for (int j = 0; j < exps.size(); j++) {
 							final Expression exp2 = exps.get(j);
 
-							if (i == j || exp.getKind() == exp2.getKind())
+							if (i == j || getKind(exp) == getKind(exp2))
 								continue;
-							if (exp2.getKind() != ExpressionKind.LOGICAL_AND && exp2.getKind() != ExpressionKind.LOGICAL_OR)
+							if (getKind(exp2) != ExpressionKind.LOGICAL_AND && getKind(exp2) != ExpressionKind.LOGICAL_OR)
 								continue;
 
 							// absorption
 							// a && (a || b) = a
 							// a || (a && b) = a
-							if (exp2.getExpressionsList().contains(exp)) {
+							if (getExpressionsList(exp2).contains(exp)) {
 								exps.remove(j);
 								j--;
 								continue;
 							}
 
 							final Expression negExp;
-							if (exp.getKind() == ExpressionKind.LOGICAL_NOT)
+							if (getKind(exp) == ExpressionKind.LOGICAL_NOT)
 								negExp = exp.getExpressions(0);
 							else
 								negExp = createExpression(ExpressionKind.LOGICAL_NOT, exp);
@@ -1740,11 +1770,11 @@ public class BoaNormalFormIntrinsics {
 							// negative absorption
 							// a && (!a || b || c) = a && (b || c)
 							// a || (!a && b && c) = a || (b && c)
-							if (exp2.getExpressionsList().contains(negExp)) {
+							if (getExpressionsList(exp2).contains(negExp)) {
 								final Expression.Builder b = Expression.newBuilder(exp2);
-								b.removeExpressions(b.getExpressionsList().indexOf(negExp));
-								if (b.getExpressionsList().size() == 1)
-									exps.set(j, b.getExpressionsList().get(0));
+								removeExpression(b, getExpressionsList(b).indexOf(negExp));
+								if (getExpressionsList(b).size() == 1)
+									exps.set(j, getExpressionsList(b).get(0));
 								else
 									exps.set(j, b.build());
 							}
@@ -1771,6 +1801,31 @@ public class BoaNormalFormIntrinsics {
 		}
 	}
 
+	private static void removeExpression(Builder b, int index) {
+		if (b.getKind() == ExpressionKind.PAREN)
+			removeExpression(b.getExpressionsBuilder(0), index);
+		else
+			b.removeExpressions(index);
+	}
+
+	private static List<Expression> getExpressionsList(Builder exp) {
+		if (exp.getKind() == ExpressionKind.PAREN)
+			return getExpressionsList(exp.getExpressionsBuilder(0));
+		return exp.getExpressionsList();
+	}
+
+	private static List<Expression> getExpressionsList(Expression exp) {
+		if (exp.getKind() == ExpressionKind.PAREN)
+			return getExpressionsList(exp.getExpressions(0));
+		return exp.getExpressionsList();
+	}
+
+	private static ExpressionKind getKind(Expression exp) {
+		if (exp.getKind() == ExpressionKind.PAREN)
+			return getKind(exp.getExpressions(0));
+		return exp.getKind();
+	}
+
 	/**
 	 * Computes the conjunctive normal form of an expression and then simplifies the result.
 	 *
@@ -1780,8 +1835,8 @@ public class BoaNormalFormIntrinsics {
 	@FunctionSpec(name = "cnf", returnType = "Expression", formalParameters = { "Expression" })
 	public static Expression cnf(final Expression e) {
 		// push the ORs down into ANDs
-		// (B â‹€ C) â‹� A -> (B â‹� A) â‹€ (C â‹� A)
-		// A â‹� (B â‹€ C) -> (A â‹� B) â‹€ (A â‹� C)
+		// (B ^ C) v A -> (B v A) ^ (C v A)
+		// A v (B ^ C) -> (A v B) ^ (A v C)
 		return simplify(normalform(nnf(e), ExpressionKind.LOGICAL_OR, ExpressionKind.LOGICAL_AND));
 	}
 
