@@ -49,11 +49,10 @@ public class TestNormalForm {
 			{ "(!a && a) || a", "a", "a", "a", "a" },
 			{ "a", "a", "a", "a", "a" },
 			{ "(!a && b) || a", "a || b", "a || b", "a || b", "a || b" },
-			// FIXME seems the JDT parser only puts 2 operands per operator?
 			{ "(a < b && b) && a", "a && a < b && b", "a && a < b && b", "a && a < b && b", "a && a < b && b" },
 			{ "(!(a < b) || b) && a", "(!(a < b) || b) && a", "(a >= b || b) && a", "(a >= b || b) && a", "(a && a >= b) || (a && b)" },
 			{ "!(!(a < b) || b)", "!(!(a < b) || b)", "!b && a < b", "!b && a < b", "!b && a < b" },
-			{ "(!(a < b) && b) || a", "(!(a < b) && b) || a", "(a >= b && b) || a", "(a || a >= b) && (a || b)", "(a >= b && b) || a" },
+			{ "(!(a < b) && b) || a", "!(a < b) && b || a", "a >= b && b || a", "(a || a >= b) && (a || b)", "a >= b && b || a" },
 			{ "!(a < b) || b", "!(a < b) || b", "a >= b || b", "a >= b || b", "a >= b || b" },
 
 			{ "(a)", "a", "a", "a", "a"},
@@ -447,13 +446,13 @@ public class TestNormalForm {
 			{ "c && !(a || b)", "!(a || b) && c", "!a && !b && c", "!a && !b && c", "!a && !b && c"},
 			{ "c && !(b || a)", "!(a || b) && c", "!a && !b && c", "!a && !b && c", "!a && !b && c"},
 
-			{ "a || b && c || d", "b && c || a || d", "(b && c) || a || d", "(a || b || d) && (a || c || d)", "(b && c) || a || d"}, // The parentheses has to be added for simplify and nnf
+			{ "a || b && c || d", "b && c || a || d", "b && c || a || d", "(a || b || d) && (a || c || d)", "b && c || a || d"},
 			{ "(a || b) && c || d", "(a || b) && c || d", "(a || b) && c || d", "(a || b || d) && (c || d)", "(a && c) || (b && c) || d"},
 			{ "(a || b) && (c || d)", "(a || b) && (c || d)", "(a || b) && (c || d)", "(a || b) && (c || d)", "(a && c) || (a && d) || (b && c) || (b && d)"},
-			{ "(a || b && c) || d", "b && c || a || d", "(b && c) || a || d", "(a || b || d) && (a || c || d)", "(b && c) || a || d"}, // the parentheses have to be added in simplify
-			{ "a || (b && c || d)", "b && c || a || d", "(b && c) || a || d", "(a || b || d) && (a || c || d)", "(b && c) || a || d"},
-			{ "!(a || b && c) || d", "!(b && c || a) || d", "(!a && (!b || !c)) || d", "(!a || d) && (!b || !c || d)", "(!a && !b) || (!a && !c) || d"},
-			{ "a || !(b && c || d)", "!(b && c || d) || a", "(!d && (!b || !c)) || a", "(!b || !c || a) && (!d || a)", "(!b && !d) || (!c && !d) || a"}, //reverse order in simplify??
+			{ "(a || b && c) || d", "b && c || a || d", "b && c || a || d", "(a || b || d) && (a || c || d)", "b && c || a || d"},
+			{ "a || (b && c || d)", "b && c || a || d", "b && c || a || d", "(a || b || d) && (a || c || d)", "b && c || a || d"},
+			{ "!(a || b && c) || d", "!(b && c || a) || d", "!a && (!b || !c) || d", "(!a || d) && (!b || !c || d)", "(!a && !b) || !a && !c || d"},
+			{ "a || !(b && c || d)", "!(b && c || d) || a", "!d && (!b || !c) || a", "(!b || !c || a) && (!d || a)", "(!b && !d) || !c && !d || a"}, //reverse order in simplify??
 			{ "a && b || c && d", "a && b || c && d", "a && b || c && d", "(a || c) && (a || d) && (b || c) && (b || d)", "a && b || c && d"},
 			{ "a && (b || c) && d", "(b || c) && a && d", "(b || c) && a && d", "(b || c) && a && d", "(a && b && d) || (a && c && d)"},
 			{ "(a && b|| c) && d", "(a && b || c) && d", "(a && b || c) && d", "(a || c) && (b || c) && d", "(a && b && d) || (c && d)"},
