@@ -1941,6 +1941,8 @@ public class BoaNormalFormIntrinsics {
 	 * @return the normalized expression
 	 */
 	private static Expression normalform(final Expression e, final ExpressionKind distributedOp, final ExpressionKind innerOp) {
+		if (e.getKind() == ExpressionKind.PAREN)
+			return normalform(e.getExpressions(0), distributedOp, innerOp);
 		// just an atom, return it
 		if (e.getKind() != innerOp && e.getKind() != distributedOp)
 			return e;
