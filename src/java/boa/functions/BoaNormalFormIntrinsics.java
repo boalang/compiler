@@ -1457,7 +1457,7 @@ public class BoaNormalFormIntrinsics {
 	 */
 	@FunctionSpec(name = "nnf", returnType = "Expression", formalParameters = { "Expression" })
 	public static Expression nnf(final Expression e) {
-		return simplify(internalNNF(e));
+		return simplify(internalNNF(e), null);
 	}
 
 	/**
@@ -1620,31 +1620,26 @@ public class BoaNormalFormIntrinsics {
 	 */
 	@FunctionSpec(name = "simplify", returnType = "Expression", formalParameters = { "Expression" })
 	public static Expression simplify(final Expression e) {
+		if (e.getKind() == ExpressionKind.PAREN)
+			return simplify(e.getExpressions(0));
+		return simplify(e, null);
+	}
+	
+	public static Expression simplify(final Expression e, final ExpressionKind parentKind) {
 		switch (e.getKind()) {
 			case PAREN:
-				Expression sub = simplify(e.getExpressions(0));
-				switch (sub.getKind()) {
-					case PAREN:
-						return sub;
-					case LOGICAL_NOT:
-						return sub;
-					case ARRAYACCESS:
-						return sub;
-					case ARRAYELEMENT:
-						return sub;
-					case ARRAYINIT:
-						return sub;
-					case LITERAL:
-						return sub;
-					case METHODCALL:
-						return sub;
-					case VARACCESS:
-						return sub;
-					default:
+				Expression sub = simplify(e.getExpressions(0), parentKind);
+				if (parentKind == null) {
+					if (checkPriority(ExpressionKind.PAREN, sub.getKind()) > 0)
 						return createExpression(e.getKind(), sub);
+					return sub;
+				} else {
+					if (checkPriority(parentKind, sub.getKind()) > 0)
+						return createExpression(e.getKind(), sub);
+					return sub;
 				}
 			case LOGICAL_NOT:
-				final Expression inner = simplify(e.getExpressions(0));
+				final Expression inner = simplify(e.getExpressions(0), e.getKind());
 				if (inner.equals(trueLit)) return Expression.newBuilder(falseLit).build();
 				if (inner.equals(falseLit)) return Expression.newBuilder(trueLit).build();
 				// remove double negation
@@ -1660,18 +1655,18 @@ public class BoaNormalFormIntrinsics {
 				// recurse in and simplify inner expressions
 				OUTER:
 				for (int i = 0; i < e.getExpressionsCount(); i++) {
-					final Expression e2 = simplify(e.getExpressions(i));
+					final Expression e2 = simplify(e.getExpressions(i), e.getKind());
 
 					if (e2.getKind() == e.getKind()) {
 						for (int j = 0; j < e2.getExpressionsCount(); j++) {
-							final Expression e3 = simplify(e2.getExpressions(j));
+							final Expression e3 = simplify(e2.getExpressions(j), e.getKind());
 
 							if (!processExpression(e3, exps, seen, e.getKind()))
 								break OUTER;
 						}
 					} else if (e2.getKind() == ExpressionKind.PAREN && e2.getExpressions(0).getKind() == e.getKind()) {
 						for (int j = 0; j < e2.getExpressions(0).getExpressionsCount(); j++) {
-							final Expression e3 = simplify(e2.getExpressions(0).getExpressions(j));
+							final Expression e3 = simplify(e2.getExpressions(0).getExpressions(j), e.getKind());
 
 							if (!processExpression(e3, exps, seen, e.getKind()))
 								break OUTER;
@@ -1801,6 +1796,75 @@ public class BoaNormalFormIntrinsics {
 		}
 	}
 
+	private static int checkPriority(ExpressionKind parentKind, ExpressionKind subKind) {
+		if (parentKind == ExpressionKind.PAREN)
+			return 0;
+		if (parentKind == subKind)
+			return 0;
+		if (subKind == ExpressionKind.PAREN
+				|| subKind == ExpressionKind.LOGICAL_NOT
+				|| subKind == ExpressionKind.ARRAYACCESS
+				|| subKind == ExpressionKind.ARRAYELEMENT
+				|| subKind == ExpressionKind.ARRAYINIT
+				|| subKind == ExpressionKind.LITERAL
+				|| subKind == ExpressionKind.METHODCALL
+				|| subKind == ExpressionKind.VARACCESS
+				)
+			return -1;
+		int priority1 = getPriority(parentKind), priority2 = getPriority(subKind);
+		if (priority1 >= 0 && priority2 >= 0)
+			return priority2 - priority1;
+		return 1;
+	}
+
+	private static int getPriority(ExpressionKind kind) {
+		switch (kind) {
+		case ARRAY_COMPREHENSION:
+		case ARRAYACCESS:
+		case ARRAYELEMENT:
+		case ARRAYINIT:
+		case LOGICAL_NOT:
+		case LITERAL:
+		case METHODCALL:
+		case VARACCESS:
+		case BIT_NOT:
+		case CONDITIONAL:
+			return 0;
+		case OP_DEC: 
+		case OP_INC:
+			return 0;
+		case OP_ADD: return 12;
+		case OP_CONCAT: return 12;
+		case OP_DIV: return 11;
+		case OP_MOD: return 11;
+		case OP_MULT: return 11;
+		case OP_POW: return 11;
+		case OP_SUB:  return 12;
+		case OP_THREE_WAY_COMPARE:
+		case OP_UNPACK:
+			return 10;
+		case BIT_AND:
+		case BIT_LSHIFT:
+		case BIT_OR:
+		case BIT_RSHIFT:
+		case BIT_UNSIGNEDRSHIFT:
+		case BIT_XOR:
+			return 20;
+		case EQ:
+		case GT:
+		case GTEQ:
+		case LT:
+		case LTEQ:
+		case NEQ:
+			return 30;
+		case LOGICAL_AND:
+			return 40;
+		case LOGICAL_OR:
+			return 41;
+		default: return -1;
+		}
+	}
+
 	private static void removeExpression(Builder b, int index) {
 		if (b.getKind() == ExpressionKind.PAREN)
 			removeExpression(b.getExpressionsBuilder(0), index);
@@ -1837,7 +1901,7 @@ public class BoaNormalFormIntrinsics {
 		// push the ORs down into ANDs
 		// (B ^ C) v A -> (B v A) ^ (C v A)
 		// A v (B ^ C) -> (A v B) ^ (A v C)
-		return simplify(normalform(nnf(e), ExpressionKind.LOGICAL_OR, ExpressionKind.LOGICAL_AND));
+		return simplify(normalform(nnf(e), ExpressionKind.LOGICAL_OR, ExpressionKind.LOGICAL_AND), ExpressionKind.LOGICAL_AND);
 	}
 
 	/**
@@ -1851,7 +1915,7 @@ public class BoaNormalFormIntrinsics {
 		// push the ANDs down into ORs
 		// (B v C) ^ A -> (B ^ A) v (C ^ A)
 		// A ^ (B v C) -> (A ^ B) v (A ^ C)
-		return simplify(normalform(nnf(e), ExpressionKind.LOGICAL_AND, ExpressionKind.LOGICAL_OR));
+		return simplify(normalform(nnf(e), ExpressionKind.LOGICAL_AND, ExpressionKind.LOGICAL_OR), ExpressionKind.LOGICAL_OR);
 	}
 
 	/**
@@ -1948,9 +2012,12 @@ public class BoaNormalFormIntrinsics {
 		final Expression.Builder b = Expression.newBuilder();
 
 		b.setKind(kind);
-		for (final Expression e : exps)
-			b.addExpressions(Expression.newBuilder(e).build());
-
+		for (final Expression e : exps) {
+			if (checkPriority(kind, e.getKind()) > 0)
+				b.addExpressions(Expression.newBuilder(createExpression(ExpressionKind.PAREN, e)).build());
+			else 
+				b.addExpressions(Expression.newBuilder(e).build());
+		}
 		return b.build();
 	}
 
