@@ -141,8 +141,8 @@ public class TestReduce {
 			{ "- - - -x", "x" },
 
 			{ "x + 5.0 + 1", "6.0 + x" },
-			{ "-x + 5.0 - 1", "4.0 + -x" }, // FIXME should be "4.0 - x"
-			{ "-x + 1 - 5", "-4 + -x" }, // FIXME should be "-4 - x"
+			{ "-x + 5.0 - 1", "4.0 + (-x)" }, // FIXME should be "4.0 - x"
+			{ "-x + 1 - 5", "-4 + (-x)" }, // FIXME should be "-4 - x"
 			{ "x * 5.0 * 1", "5.0 * x" },
 			{ "x / 10.0 * 5", "5 * (x / 10.0)" }, // FIXME should be "x / 2.0"
 
@@ -189,8 +189,8 @@ public class TestReduce {
 			{ "x * 2 / 2", "2 * x / 2" }, // FIXME should be "x"
 			{ "2 * x / 2", "2 * x / 2" }, // FIXME should be "x"
 			{ "2 / 2 * x", "x" },
-			{ "-x * 2 / 2", "2 * -x / 2" }, // FIXME should be "-x"
-			{ "2 * -x / 2", "2 * -x / 2" }, // FIXME should be "-x"
+			{ "-x * 2 / 2", "2 * (-x) / 2" }, // FIXME should be "-x"
+			{ "2 * -x / 2", "2 * (-x) / 2" }, // FIXME should be "-x"
 			{ "2 / 2 * -x", "-x" },
 
 			{ "x / x * x", "x" },
@@ -224,16 +224,16 @@ public class TestReduce {
 			{ "x + x - x - x", "2 * x - 2 * x" }, // FIXME should be "0"
 			{ "x - x + x - x", "0" },
 			{ "x - x - x + x", "-x + x" }, // FIXME should be "0"
-			{ "-x - x + x + x", "2 * -x + 2 * x" }, // FIXME should be "0"
-			{ "-x + x - x + x", "2 * -x + 2 * x" }, // FIXME should be "0"
-			{ "-x + x + x - x", "2 * -x + 2 * x" }, // FIXME should be "0"
+			{ "-x - x + x + x", "2 * (-x) + 2 * x" }, // FIXME should be "0"
+			{ "-x + x - x + x", "2 * (-x) + 2 * x" }, // FIXME should be "0"
+			{ "-x + x + x - x", "2 * (-x) + 2 * x" }, // FIXME should be "0"
 			{ "x * x / x / x", "x * x / x / x" }, // FIXME should be "1"
 			{ "x / x * x / x", "1" },
 			{ "x / x / x * x", "1 / x * x" }, // FIXME should be "1"
-			{ "-x / x * x / x", "-x / x * x / x" }, // FIXME should be "-1"
-			{ "x / -x * x / x", "x / -x * x / x" }, // FIXME should be "-1"
-			{ "x / x * -x / x", "-x / x" }, // FIXME should be "-1"
-			{ "x / x * x / -x", "x / -x" }, // FIXME should be "-1"
+			{ "-x / x * x / x", "(-x) / x * x / x" }, // FIXME should be "-1"
+			{ "x / -x * x / x", "x / (-x) * x / x" }, // FIXME should be "-1"
+			{ "x / x * -x / x", "(-x) / x" }, // FIXME should be "-1"
+			{ "x / x * x / -x", "x / (-x)" }, // FIXME should be "-1"
 
 			// with methods 
 			{ "foo(x + 3, 2 + 1)", "foo(3 + x, 3)" },
@@ -257,11 +257,11 @@ public class TestReduce {
 
 			// complex expressions, multiple operators etc
 			{ "-5 * -x", "5 * x" },
-			{ "-y * -5 * -x", "-5 * y * x" },
+			{ "-y * -5 * -x", "(-5) * y * x" },
 			{ "-2 * -y * -5 * -x", "10 * y * x" },
 			{ "5 - 3 + 2", "4" },
 			{ "5 - (3 + 2)", "0" },
-			{ "5.0 / x / 5 * 10.0 * x", "(10.0 * (1.0 / x)) * x" }, // FIXME should be 10
+			{ "5.0 / x / 5 * 10.0 * x", "10.0 * (1.0 / x) * x" }, // FIXME should be 10
 			{ "-5 * (5 - 10) + 1", "26" },
 			{ "-5 * (5 - 5) + 1", "1" },
 			{ "-5 / (3 + 2) + 1", "0" },
@@ -274,20 +274,20 @@ public class TestReduce {
 			{ "5.0 + a.length * (3.5 - 2)", "5.0 + 1.5 * a.length" },
 			{ "5 + x + 3 + x", "8 + 2 * x" },
 			{ "5 + (x + 3) + x", "8 + 2 * x" },
-			{ "5 - (x - 3) - x", "8 + -2 * x" },
+			{ "5 - (x - 3) - x", "8 + (-2) * x" },
 			{ "(x - 3) - x", "-3" },
 			{ "5.0 + +3.5 - -2 * a.length", "8.5 + 2 * a.length" },
 			{ "(5.0 + 3.5) - -2 * a.length", "8.5 + 2 * a.length" },
 			//{ "5.0 + 3.5 - -2 * a.length + x", "8.5 + 2 * a.length + x" }, // FIXME when parsed, the answer isnt flattened but should be
-			{ "5.0 + 3.5 - (-2 * a.length + x)", "8.5 + (2 * a.length) + -x" }, // FIXME should be 8.5 + 2 * a.length - x
+			{ "5.0 + 3.5 - (-2 * a.length + x)", "8.5 + 2 * a.length + (-x)" }, // FIXME should be 8.5 + 2 * a.length - x
 			{ "5.0 + 3.5 - -2 * (a.length + x)", "8.5 + 2 * (a.length + x)" },
-			{ "5 - m(a) + 0", "5 + -m(a)" }, // FIXME
+			{ "5 - m(a) + 0", "5 + (-m(a))" }, // FIXME
 			{ "5 - -m(a) - 0", "5 + m(a)" },
 			{ "5 + +m(a) - 0", "5 + m(a)" },
 			{ "5 + m() + -0", "5 + m()" },
 			{ "5 + m(a).x * 0", "5" },
-			{ "5 + m(a, b).x / -1", "5 + m(a, b).x / -1" }, // FIXME should be 5 - m(a, b).x
-			{ "(5 + m(1 + 2, b).x) / -1", "(5 + m(3, b).x) / -1" }, // FIXME should be 5 - m(3, b).x
+			{ "5 + m(a, b).x / -1", "5 + m(a, b).x / (-1)" }, // FIXME should be 5 - m(a, b).x
+			{ "(5 + m(1 + 2, b).x) / -1", "(5 + m(3, b).x) / (-1)" }, // FIXME should be 5 - m(3, b).x
 
 			{ "x / 0", "x / 0" }, // FIXME
 			{ "x + 2 * 2", "4 + x" },
@@ -297,19 +297,20 @@ public class TestReduce {
 			{ "x + 6 / 3", "2 + x" },
 			{ "x / 3 + 6", "6 + x / 3" },
 
-			{ "1 + -x + 2 + 3", "6 + -x" },
-			{ "1 + -x + 2 - 4", "-1 + -x" }, // FIXME shoulde be "-1 - x"
-			{ "1 + -x - 4 + 2", "-1 + -x" },
+			{ "1 + -x + 2 + 3", "6 + (-x)" },
+			{ "1 + -x + 2 - 4", "-1 + (-x)" }, // FIXME shoulde be "-1 - x"
+			{ "1 + -x - 4 + 2", "-1 + (-x)" },
 			{ "5 + (x + 3) + x + 2 - 3", "7 + 2 * x" },
 			{ "5 + (x + 3) + x - 2 + 3", "9 + 2 * x" },
 			{ "5 + (x + 3) + x * 2 - 3", "5 + x + 2 * x" }, // FIXME should be "5 + 3 * x"
-			{ "5 + (x + 3) - x + 2 - 3", "7 + x + -x" }, // FIXME should be "7"
+			{ "5 + (x + 3) - x + 2 - 3", "7 + x + (-x)" }, // FIXME should be "7"
 			{ "5 + (x + 3) + x + 2 * 3", "14 + 2 * x" },
 			{ "5 + (x + 3) + x - 2 * 3", "2 + 2 * x" }, // FIXME should be "2 + 2 * x"
-			{ "2 + ((8 + x) - x) + 3", "13 + x + -x" }, // FIXME should be "13"
-			{ "1 - 2 * x - 3 + -2", "-4 + (-2 * x)" },
-			{ "((8 + x) - x)", "8 + x + -x" }, // FIXME should be "8"
-			{ "8 - -x - 2 * x", "8 + (-2 * x) + x" }, //FIXME should be "8 - x"
+			{ "2 + ((8 + x) - x) + 3", "13 + x + (-x)" }, // FIXME should be "13"
+			{ "1 - 2 * x - 3 + -2", "-4 + (-2) * x" },
+			{ "((8 + x) - x)", "8 + x + (-x)" }, // FIXME should be "8"
+			{ "8 - -x - 2 * x", "8 + (-2) * x + x" }, //FIXME should be "8 - x"
+//			{ "x * ((-y) / z)", "x * (-y / z)"},
 		});
 	}
 
