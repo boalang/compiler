@@ -76,9 +76,9 @@ public class TestNormalize {
                 {"0 > b + a", "a + b < 0"},
                 {"b / a > 5", "b / a > 5"},
                 {"a / b / c", "a * c / b"},
-                {"2 / (b + a)", "2 / a + b"},
+                {"2 / (b + a)", "2 / (a + b)"},
                 {"rcv$.charAt(0) == 0xfeff", "rcv$.charAt(0) == 65279"},
-                {"2 * (b + a)", "2 * a + b"},
+                {"2 * (b + a)", "2 * (a + b)"},
                 {"b[1] + 5 == --a", "--a - b[1] == 5"},
                 {"-a + c <= b", "a + b - c >= 0"},
                 {"-a + c <= -func()", "a - c - func() >= 0"},
@@ -92,7 +92,7 @@ public class TestNormalize {
                 {"a * -b  +  c > 1", "a * b - c < -1"},
                 {"a / -b  +  c > 1", "a / b - c < -1"},
                 {"3 > 5 + a * -b", "a * b > 2"},
-                {"c * -2 / -(b - a)", "-2 * c / a - b"},
+                {"c * -2 / -(b - a)", "-2 * c / (a - b)"},
                 {"a * -b  +  c > func()", "a * b - c + func() < 0"},
                 {"a / -b  +  c > func()", "a / b - c + func() < 0"},
                 {"b * -func()  +  a > 3 ", "a - b * func() > 3"},
@@ -103,8 +103,8 @@ public class TestNormalize {
                 {"3 / b * 2 > -a ", "6 / b + a > 0"},
                 //size = 5
                 {"a * c / 2 * d * b", "a * b * c * d / 2"},
-                {"a*2/(c*(b+c*(x+y/2)))", "2 * a / b + c * x + y / 2 * c"},
-                {"c*(d-b)/((a-b)*3)", "-b + d * c / 3 * a - b"},
+                {"a*2/(c*(b+c*(x+y/2)))", "2 * a / ((b + c * (x + y / 2)) * c)"},
+                {"c*(d-b)/((a-b)*3)", "(-b + d) * c / (3 * (a - b))"},
                 //{"-(b-a)*-3*(1+2)*(x[0]-func()*3)/((b+a)*-2*(x-y-3)+2+b*a)", " "},
                 //{"-(b-a)*3*(1+2)*(-x[0]+func()*3)/((b+a)*-2*(x-y-3)+2+b*a)", " "}
         });
