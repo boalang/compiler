@@ -606,10 +606,18 @@ public class BoaNormalFormIntrinsics {
 				}
 
 				Expression sortExpr;
-				final Expression numerator = createExpression(ExpressionKind.OP_MULT, num.toArray(new Expression[num.size()]));
+				Expression numerator = null;
+				if (num.size() == 1)
+					numerator = num.get(0);
+				else
+					numerator = createExpression(ExpressionKind.OP_MULT, num.toArray(new Expression[num.size()]));
 
 				if(den.size() != 0) {
-					final Expression denominator = createExpression(ExpressionKind.OP_MULT, den.toArray(new Expression[den.size()]));
+					Expression denominator = null;
+					if (den.size() == 1)
+						denominator = den.get(0);
+					else
+						denominator = createExpression(ExpressionKind.OP_MULT, den.toArray(new Expression[den.size()]));
 					sortExpr = createExpression(ExpressionKind.OP_DIV, numerator, denominator);
 				}
 				else
