@@ -1821,6 +1821,10 @@ public class BoaNormalFormIntrinsics {
 				return priority2 - priority1;
 			if (pos == 0 || priority1 == 0)
 				return 0;
+			if (parentKind == ExpressionKind.OP_ADD && subKind == ExpressionKind.OP_SUB)
+				return 0;
+//			if (parentKind == ExpressionKind.OP_MULT && subKind == ExpressionKind.OP_DIV)
+//				return 0;
 //			String name = parentKind.toString();
 //			if (name.startsWith("BIT_") || name.startsWith("OP_"))
 //				return 1;
