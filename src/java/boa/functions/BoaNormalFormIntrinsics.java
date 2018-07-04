@@ -1629,15 +1629,9 @@ public class BoaNormalFormIntrinsics {
 		switch (e.getKind()) {
 			case PAREN:
 				Expression sub = simplify(e.getExpressions(0), parentKind, pos);
-				if (parentKind == null) {
-					if (checkPriority(ExpressionKind.PAREN, sub.getKind(), pos) > 0)
-						return createExpression(e.getKind(), sub);
-					return sub;
-				} else {
-					if (checkPriority(parentKind, sub.getKind(), pos) > 0)
-						return createExpression(e.getKind(), sub);
-					return sub;
-				}
+				if (checkPriority(parentKind, sub, pos) > 0)
+					return createExpression(e.getKind(), sub);
+				return sub;
 				
 			case LOGICAL_NOT:
 				final Expression inner = simplify(e.getExpressions(0), e.getKind(), 0);
@@ -1797,9 +1791,12 @@ public class BoaNormalFormIntrinsics {
 		}
 	}
 
-	private static int checkPriority(ExpressionKind parentKind, ExpressionKind subKind, int pos) {
+	private static int checkPriority(ExpressionKind parentKind, Expression sub, int pos) {
+		if (parentKind == null)
+			return -1;
 		if (parentKind == ExpressionKind.PAREN)
 			return 0;
+		ExpressionKind subKind = sub.getKind();
 		if (parentKind == subKind)
 			return 0;
 		int priority2 = getPriority(subKind);
@@ -2018,7 +2015,7 @@ public class BoaNormalFormIntrinsics {
 		b.setKind(kind);
 		for (int i = 0; i < exps.length; i++) {
 			final Expression e = exps[i];
-			if (checkPriority(kind, e.getKind(), i) > 0)
+			if (checkPriority(kind, e, i) > 0)
 				b.addExpressions(Expression.newBuilder(createExpression(ExpressionKind.PAREN, e)).build());
 			else 
 				b.addExpressions(Expression.newBuilder(e).build());
