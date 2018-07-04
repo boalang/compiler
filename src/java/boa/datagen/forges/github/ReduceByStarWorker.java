@@ -52,16 +52,18 @@ public class ReduceByStarWorker implements Runnable {
 		int size = repos.size();
 		for (int j = 0; j < size; j++) {
 			JsonObject repo = repos.get(j).getAsJsonObject();
+			int id = repo.get("id").getAsInt();
+			if (ids.contains(id))
+				continue;
+			
 			String name = repo.get("full_name").getAsString();
 			boolean fork = repo.get("fork").getAsBoolean();
 			ArrayList<String> languages = new ArrayList<String>();
-			if (repo.has("language_list")) {
-				System.out.println(repo.get("language_list").toString());
-			}
-			// JsonObject ll = repo.get("language_list").getAsJsonObject();
+			
 			for (Entry<String, JsonElement> je : repo.get("language_list").getAsJsonObject().entrySet()) {
 				languages.add(je.getKey());
 			}
+			
 			if (fork || !(languages.contains("Java") || languages.contains("JavaScript")
 					|| languages.contains("PHP"))) {
 				addRepo(output, repo);
@@ -120,7 +122,7 @@ public class ReduceByStarWorker implements Runnable {
 			fileToWriteJson = new File(
 					output + "/Thread-" + Thread.currentThread().getId() + "-page-" + javaCounter + ".json");
 			while (fileToWriteJson.exists()) {
-				System.out.println("file scala/thread-" + Thread.currentThread().getId() + "-page-" + javaCounter
+				System.out.println("file /thread-" + Thread.currentThread().getId() + "-page-" + javaCounter
 						+ " arleady exist");
 				javaCounter++;
 				fileToWriteJson = new File(
