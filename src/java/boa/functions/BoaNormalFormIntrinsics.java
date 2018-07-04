@@ -1638,6 +1638,7 @@ public class BoaNormalFormIntrinsics {
 						return createExpression(e.getKind(), sub);
 					return sub;
 				}
+				
 			case LOGICAL_NOT:
 				final Expression inner = simplify(e.getExpressions(0), e.getKind(), 0);
 				if (inner.equals(trueLit)) return Expression.newBuilder(falseLit).build();
@@ -1801,17 +1802,10 @@ public class BoaNormalFormIntrinsics {
 			return 0;
 		if (parentKind == subKind)
 			return 0;
-		if (subKind == ExpressionKind.PAREN
-				|| subKind == ExpressionKind.LOGICAL_NOT
-				|| subKind == ExpressionKind.ARRAYACCESS
-				|| subKind == ExpressionKind.ARRAYELEMENT
-				|| subKind == ExpressionKind.ARRAYINIT
-				|| subKind == ExpressionKind.LITERAL
-				|| subKind == ExpressionKind.METHODCALL
-				|| subKind == ExpressionKind.VARACCESS
-				)
+		int priority2 = getPriority(subKind);
+		if (priority2 == 0)
 			return -1;
-		int priority1 = getPriority(parentKind), priority2 = getPriority(subKind);
+		int priority1 = getPriority(parentKind);
 		if (priority1 >= 0 && priority2 >= 0) {
 			if (priority1 != priority2)
 				return priority2 - priority1;
@@ -1834,6 +1828,7 @@ public class BoaNormalFormIntrinsics {
 		case LITERAL:
 		case METHODCALL:
 		case VARACCESS:
+		case PAREN:
 		case BIT_NOT:
 		case CONDITIONAL:
 			return 0;
