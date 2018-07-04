@@ -1800,6 +1800,9 @@ public class BoaNormalFormIntrinsics {
 		if (parentKind == subKind)
 			return 0;
 		int priority2 = getPriority(subKind);
+		String name = subKind.toString();
+		if (name.startsWith("OP_") && sub.getExpressionsCount() == 1)
+			priority2 = 0;
 		if (priority2 == 0)
 			return -1;
 		int priority1 = getPriority(parentKind);
@@ -1808,9 +1811,9 @@ public class BoaNormalFormIntrinsics {
 				return priority2 - priority1;
 			if (pos == 0 || priority1 == 0)
 				return 0;
-			String name = parentKind.toString();
-			if (name.startsWith("BIT_") || name.startsWith("OP_"))
-				return 1;
+//			String name = parentKind.toString();
+//			if (name.startsWith("BIT_") || name.startsWith("OP_"))
+//				return 1;
 		}
 		return 1;
 	}
