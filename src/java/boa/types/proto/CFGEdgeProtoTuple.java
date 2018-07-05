@@ -23,7 +23,7 @@ import java.util.Map;
 
 import boa.types.BoaProtoTuple;
 import boa.types.BoaType;
-import boa.types.proto.enums.CFGEdgeLabelProtoMap;
+import boa.types.proto.enums.EdgeLabelProtoMap;
 
 /**
  * A {@link CFGEdgeProtoTuple}.
@@ -38,7 +38,7 @@ public class CFGEdgeProtoTuple extends BoaProtoTuple {
 		int counter = 0;
 
 		names.put("label", counter++);
-		members.add(new CFGEdgeLabelProtoMap());
+		members.add(new EdgeLabelProtoMap());
 
 	}
 
@@ -52,6 +52,6 @@ public class CFGEdgeProtoTuple extends BoaProtoTuple {
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.Control.CFGEdge";
+		return "boa.types.Control.Edge";
 	}
 }

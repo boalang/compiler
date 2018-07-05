@@ -71,7 +71,7 @@ public class BoaGenerator {
 //			} catch (Exception e) {
 //				e.printStackTrace();
 //			}
-		}else if (tokenAvailable){ // when user provides local repo and does not have json files
+		} else if (tokenAvailable) { // when user provides local repo and does not have json files
 			MetaDataMaster mdm = new MetaDataMaster();
 			mdm.downloadRepoNames(DefaultProperties.TOKEN, DefaultProperties.OUTPUT);
 			

@@ -1,0 +1,10 @@
+digraph {
+	{ rank = source; 0; }
+	0[shape=ellipse,label="[0] ENTRY"]
+	1[shape=ellipse,label="[1] int x = 1"]
+	2[shape=ellipse,label="[2] System.out.println(\"hi\")"]
+	3[shape=ellipse,label="[3] return x;"]
+	0 -> 1
+	0 -> 2
+	1 -> 3 [label="x"]
+}

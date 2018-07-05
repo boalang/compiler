@@ -21,5 +21,6 @@ test-inhattr
 test-knowngood
 test-lexer
 test-parser
+test-program-analysis
 test-traversal
 test-typecheck

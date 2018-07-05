@@ -1,0 +1,78 @@
+m: output collection[int] of string;
+
+p: Project = input;
+
+# program analysis output
+type T_gen_kill= {gen: set of string, kill: string, dummy : int};
+type T_inout= {in: set of string, out: set of string, dummy1 : string};
+
+# cfg of the current method
+cfg: CFG;
+
+genset : set of string;
+killset : set of string;
+
+
+# traversal that gets all variable uses in a method
+init := traversal(node: CFGNode): T_gen_kill {
+	cur_value : T_gen_kill;
+	cur_value = {node.useVariables, node.defVariables, 0};
+	return cur_value;
+};
+
+# cfg live variable analysis
+live := traversal(node: CFGNode): T_inout {
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T_inout;
+	cur_val = {in_set, out_set, ""};
+	if(def(getvalue(node))) {
+		cur_val = getvalue(node);
+	}
+	succs:=node.successors;
+	foreach(i:int;def(succs[i])) {
+		succ := getvalue(succs[i]);
+		if(def(succ)) {
+			cur_val.out = union(cur_val.out,succ.in);
+		}
+	}
+	gen_kill := getvalue(node, init);
+	if(def(gen_kill)) {
+	remove(cur_val.out, gen_kill.kill);
+	cur_val.in = union(gen_kill.gen, cur_val.out);
+	}
+	return cur_val;
+};
+
+result := traversal(node: CFGNode) {
+	r:= getvalue(node, live);
+	if(def(r)) {
+		m[node.id] << string(r.in);
+	}
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T_inout) : bool {
+	if (len(difference(curr.in, prev.in)) == 0)
+		return true;	
+	return false;
+};
+
+q_all := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		clear(init);clear(live);
+		cfg = getcfg(node);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, init);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, live, fixp1);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, result);
+	}
+};
+
+visit(p, q_all);
+

@@ -24,6 +24,7 @@ import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
 import boa.types.BoaType;
 
+import java.util.List;
 /**
  * 
  * @author rdyer
@@ -31,7 +32,17 @@ import boa.types.BoaType;
  */
 public abstract class Node {
 	protected Node parent;
+	public int nodeId;
+	/* The following fields are added to represent the edges of
+     	* the control flow graph. */
+    	public List<Node> predecessors;
+	public List<Node> successors;
 
+	// The following fields are building the control flow graph.
+	public List<Node> startNodes;
+	public List<Node> endNodes;
+	public List<Node> exitNodes;
+		
 	public Node getParent() {
 		return parent;
 	}
