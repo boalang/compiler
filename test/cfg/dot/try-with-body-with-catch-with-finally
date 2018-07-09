@@ -1,13 +1,14 @@
 digraph {
 	{ rank = source; 0; }
-	{ rank = sink; 6; }
+	{ rank = sink; 7; }
 	0[shape=ellipse,label="[0] ENTRY"]
 	1[shape=diamond,label="[1] try {\l	System.out.println(\"body\");\l}\lcatch (Exception e) {\l	System.out.println(\"catch\");\l}\lfinally {\l	System.out.println(\"finally\");\l}\l"]
 	2[shape=parallelogram,label="[2] System.out.println(\"body\")"]
 	3[shape=box,label="[3] catch (Exception e) {\l	System.out.println(\"catch\");\l}\l"]
 	4[shape=parallelogram,label="[4] System.out.println(\"catch\")"]
-	5[shape=parallelogram,label="[5] System.out.println(\"finally\")"]
-	6[shape=ellipse,label="[6] EXIT"]
+	5[shape=box,label="[5] finally {\l	System.out.println(\"finally\");\l}\l"]
+	6[shape=parallelogram,label="[6] System.out.println(\"finally\")"]
+	7[shape=ellipse,label="[7] EXIT"]
 	0 -> 1
 	1 -> 2 [label="T"]
 	1 -> 3 [label="F"]
@@ -15,4 +16,5 @@ digraph {
 	3 -> 4
 	4 -> 5
 	5 -> 6
+	6 -> 7
 }

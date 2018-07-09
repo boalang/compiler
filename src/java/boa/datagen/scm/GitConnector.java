@@ -89,7 +89,7 @@ public class GitConnector extends AbstractConnector {
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
 			for (final RevCommit rc: revwalk) {
-				final GitCommit gc = new GitCommit(this, repository, temprevwalk);
+				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName);
 				System.out.println(rc.getName());
 				commits.add(rc.getName());
 				int count = gc.countChangedFiles(rc);
@@ -127,7 +127,7 @@ public class GitConnector extends AbstractConnector {
 				i++;
 				long startTime = System.currentTimeMillis();
 				
-				final GitCommit gc = new GitCommit(this, repository, temprevwalk);
+				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName);
 				
 				gc.setId(rc.getName());
 				PersonIdent author = rc.getAuthorIdent(),
@@ -147,12 +147,12 @@ public class GitConnector extends AbstractConnector {
 					long endTime = System.currentTimeMillis();
 					long time = endTime - startTime;
 					if (time > maxTime) {
-						System.out.println("Max time " + (time / 1000) + " parsing metadata commit " + i + " " + rc.getName());
+						System.out.println(Thread.currentThread().getId() + " Max time " + (time / 1000) + " parsing metadata commit " + i + " " + rc.getName());
 						maxTime = time;
 					}
 				}
 			}
-			System.out.println("Process metadata of all commits");
+			System.out.println(Thread.currentThread().getId() + " Process metadata of all commits");
 			
 			RevCommit head = revwalk.parseCommit(repository.resolve(Constants.HEAD));
 			headCommitOffset = revisionMap.get(head.getName());

@@ -18,9 +18,16 @@
 package boa.functions;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.Stack;
 
 import org.apache.hadoop.conf.Configuration;
@@ -438,13 +445,155 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time", "string..." })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp, final String... kinds) throws Exception {
-		snapshot.initialize(timestamp, kinds).visit(cr);
-		return snapshot.map.values().toArray(new ChangedFile[0]);
+//		snapshot.initialize(timestamp, kinds).visit(cr);
+//		return snapshot.map.values().toArray(new ChangedFile[0]);
+		if (cr.getRevisionsCount() == 0)
+			return new ChangedFile[0];
+		int revisionOffset = getRevision(cr, timestamp);
+		return getSnapshot(cr, revisionOffset, kinds);
+	}
+
+	private static ChangedFile[] getSnapshot(final CodeRepository cr, final int commitOffset, final String... kinds) {
+		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
+		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>(); 
+		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
+			@Override
+			public int compare(Integer i1, Integer i2) {
+				return i2 - i1;
+			}
+		});
+		List<Revision> revisions = cr.getRevisionsList();
+		Set<Integer> queuedCommitIds = new HashSet<Integer>();
+		pq.offer(commitOffset);
+		queuedCommitIds.add(commitOffset);
+		while (!pq.isEmpty()) {
+			int offset = pq.poll();
+			Revision commit = revisions.get(offset);
+			for (ChangedFile cf : commit.getFilesList()) {
+				ChangeKind ck = cf.getChange();
+				switch (ck) {
+				case ADDED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						if (isIncluded(cf, kinds))
+							snapshot.add(cf);
+					}
+					break;
+				case COPIED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						if (isIncluded(cf, kinds))
+							snapshot.add(cf);
+					}
+					break;
+				case DELETED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName()))
+						dels.add(cf.getName());
+					break;
+				case MERGED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						if (isIncluded(cf, kinds))
+							snapshot.add(cf);
+					}
+					for (int i = 0; i < cf.getPreviousIndicesCount(); i++) {
+						if (cf.getChanges(i) != ChangeKind.ADDED) {
+							ChangedFile pcf = revisions.get(cf.getPreviousVersions(i)).getFiles(cf.getPreviousIndices(i));
+							ChangeKind pck = cf.getChanges(i);
+							if (!adds.contains(pcf.getName()) && !dels.contains(pcf.getName()) && (pck == ChangeKind.DELETED || pck == ChangeKind.RENAMED))
+								dels.add(pcf.getName());
+						}
+					}
+					break;
+				case RENAMED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						if (isIncluded(cf, kinds))
+							snapshot.add(cf);
+					}
+					for (int i = 0; i < cf.getPreviousIndicesCount(); i++) {
+						ChangedFile pcf = revisions.get(cf.getPreviousVersions(i)).getFiles(cf.getPreviousIndices(i));
+						if (!adds.contains(pcf.getName()) && !dels.contains(pcf.getName()))
+							dels.add(pcf.getName());
+					}
+					break;
+				default:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						if (isIncluded(cf, kinds))
+							snapshot.add(cf);
+					}
+					break;
+				}
+			}
+			for (int p : commit.getParentsList()) {
+				if (!queuedCommitIds.contains(p)) {
+					pq.offer(p);
+					queuedCommitIds.add(p);
+				}
+			}
+		}
+		return snapshot.toArray(new ChangedFile[0]);
+	}
+
+	private static boolean isIncluded(ChangedFile cf, String[] kinds) {
+		if (kinds != null) {
+			final String kindName = cf.getKind().name();
+			for (final String kind : kinds)
+				if (kindName.startsWith(kind)) {
+					return true;
+				}
+		}
+		return false;
+	}
+
+	private static int getRevision(final CodeRepository cr, final long timestamp) {
+		Revision.Builder rb = Revision.newBuilder();
+		Person.Builder pb = Person.newBuilder();
+		pb.setUsername("");
+		rb.setCommitDate(timestamp);
+		rb.setCommitter(pb);
+		rb.setId("");
+		rb.setLog("");
+		int index = Collections.binarySearch(cr.getRevisionsList(), rb.build(), new Comparator<Revision>() {
+			@Override
+			public int compare(Revision r1, Revision r2) {
+				return (int) (r1.getCommitDate() - r2.getCommitDate());
+			}
+		});
+		if (index < 0)
+			index = -index - 1;
+		return index;
+	}
+	
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String id) {
+		return getSnapshot(cr, id, new String[0]);
+	}
+	
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String id, final String... kinds) {
+		if (cr.getRevisionsCount() == 0)
+			return new ChangedFile[0];
+		int revisionOffset = getRevision(cr, id);
+		return getSnapshot(cr, revisionOffset, kinds);
+	}
+	
+	private static int getRevision(final CodeRepository cr, final String id) {
+		for (int i = 0; i < cr.getRevisionsCount(); i++) {
+			if (cr.getRevisions(i).getId().equals(id))
+				return i;
+		}
+		return -1;
 	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string..." })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String... kinds) throws Exception {
-		return getSnapshot(cr, Long.MAX_VALUE, kinds);
+//		return getSnapshot(cr, Long.MAX_VALUE, kinds);
+		List<ChangedFile> files = new ArrayList<ChangedFile>();
+		for (ChangedFile file : cr.getHeadSnapshotList()) {
+			if (isIncluded(file, kinds))
+				files.add(file);
+		}
+		return files.toArray(new ChangedFile[0]);
 	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time" })
@@ -454,7 +603,8 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository" })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr) throws Exception {
-		return getSnapshot(cr, Long.MAX_VALUE, new String[0]);
+//		return getSnapshot(cr, Long.MAX_VALUE, new String[0]);
+		return cr.getHeadSnapshotList().toArray(new ChangedFile[0]);
 	}
 
 	///////////////////////////////
@@ -753,25 +903,8 @@ public class BoaAstIntrinsics {
 
 		String s = "";
 
-		// FIXME temporary fix for Java, so package is printed before imports
-		if (r.getNamespacesCount() == 1) {
-			final Namespace n = r.getNamespaces(0);
-			if (n.getName().length() > 0) {
-				if (n.getModifiersCount() > 0)
-					s += prettyprint(n.getModifiersList()) + " ";
-				s += "package " + n.getName() + ";\n";
-			}
-		}
-
-		for (final String i : r.getImportsList())
-			s += indent() + "import " + i + "\n";
-		// FIXME temporary fix for Java, so package is printed before imports
-		if (r.getNamespacesCount() == 1)
-			for (final Declaration d : r.getNamespaces(0).getDeclarationsList())
-				s += prettyprint(d);
-		else
-			for (final Namespace n : r.getNamespacesList())
-				s += prettyprint(n);
+		for (final Namespace n : r.getNamespacesList())
+			s += prettyprint(n);
 
 		return s;
 	}
@@ -780,13 +913,16 @@ public class BoaAstIntrinsics {
 	public static String prettyprint(final Namespace n) {
 		if (n == null) return "";
 
-		String s = indent();
+		String s = "";
 
 		if (n.getName().length() > 0) {
 			if (n.getModifiersCount() > 0)
 				s += prettyprint(n.getModifiersList()) + " ";
-			s += "package " + n.getName() + ";\n";
+			s += indent() + "package " + n.getName() + ";\n";
 		}
+
+		for (final String i : n.getImportsList())
+			s += indent() + "import " + i + "\n";
 
 		for (final Declaration d : n.getDeclarationsList())
 			s += prettyprint(d);
@@ -999,7 +1135,7 @@ public class BoaAstIntrinsics {
 
 			case ASSERT:
 				s += "assert ";
-				s += prettyprint(stmt.getCondition());
+				s += prettyprint(stmt.getConditions(0));
 				if (stmt.hasExpression())
 					s += " " + prettyprint(stmt.getExpression());
 				s += ";";
@@ -1009,8 +1145,9 @@ public class BoaAstIntrinsics {
 				return prettyprint(stmt.getExpression()) + ": " + prettyprint(stmt.getStatements(0));
 
 			case CASE:
-				if (stmt.hasExpression())
-					return "case " + prettyprint(stmt.getExpression()) + ":";
+				return "case " + prettyprint(stmt.getExpression()) + ":";
+
+			case DEFAULT:
 				return "default:";
 
 			case EXPRESSION:
@@ -1039,6 +1176,15 @@ public class BoaAstIntrinsics {
 				s += indent() + "}";
 				return s;
 
+			case FINALLY:
+				s += indent() + "finally {\n";
+				indent++;
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				indent--;
+				s += indent() + "}";
+				return s;
+
 			case TRY:
 				s += "try";
 				if (stmt.getInitializationsCount() > 0) {
@@ -1052,8 +1198,6 @@ public class BoaAstIntrinsics {
 				}
 				s += " ";
 				for (int i = 0; i < stmt.getStatementsCount(); i++) {
-					if (i > 0 && stmt.getStatements(i).getKind() != Statement.StatementKind.CATCH)
-						s += indent() + "finally ";
 					s += prettyprint(stmt.getStatements(i)) + "\n";
 				}
 				return s;
@@ -1061,14 +1205,14 @@ public class BoaAstIntrinsics {
 			case FOR:
 				s += "for (";
 				if (stmt.hasVariableDeclaration()) {
-					s += prettyprint(stmt.getVariableDeclaration()) + " : " + prettyprint(stmt.getExpression());
+					s += prettyprint(stmt.getVariableDeclaration()) + " : " + prettyprint(stmt.getConditions(0));
 				} else {
 					for (int i = 0; i < stmt.getInitializationsCount(); i++) {
 						if (i > 0)
 							s += ", ";
 						s += prettyprint(stmt.getInitializations(i));
 					}
-					s += "; " + prettyprint(stmt.getExpression()) + "; ";
+					s += "; " + prettyprint(stmt.getConditions(0)) + "; ";
 					for (int i = 0; i < stmt.getUpdatesCount(); i++) {
 						if (i > 0)
 							s += ", ";
@@ -1087,11 +1231,11 @@ public class BoaAstIntrinsics {
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
 				indent--;
-				s += indent() + "while (" + prettyprint(stmt.getExpression()) + ");";
+				s += indent() + "while (" + prettyprint(stmt.getConditions(0)) + ");";
 				return s;
 
 			case WHILE:
-				s += "while (" + prettyprint(stmt.getExpression()) + ") {\n";
+				s += "while (" + prettyprint(stmt.getConditions(0)) + ") {\n";
 				indent++;
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
@@ -1100,7 +1244,7 @@ public class BoaAstIntrinsics {
 				return s;
 
 			case IF:
-				s += "if (" + prettyprint(stmt.getExpression()) + ")\n";
+				s += "if (" + prettyprint(stmt.getConditions(0)) + ")\n";
 				indent++;
 				s += indent() + prettyprint(stmt.getStatements(0)) + "\n";
 				indent--;
@@ -1113,7 +1257,7 @@ public class BoaAstIntrinsics {
 				return s;
 
 			case SWITCH:
-				s += "switch (" + prettyprint(stmt.getExpression()) + ") {";
+				s += "switch (" + prettyprint(stmt.getConditions(0)) + ") {";
 				indent++;
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
@@ -1122,7 +1266,7 @@ public class BoaAstIntrinsics {
 				return s;
 
 			case THROW:
-				return "throw " + prettyprint(stmt.getExpression()) + ";";
+				return "throw " + prettyprint(stmt.getConditions(0)) + ";";
 
 			default: return s;
 		}
@@ -1252,7 +1396,7 @@ public class BoaAstIntrinsics {
 					s += prettyprint(e.getAnonDeclaration());
 				return s;
 
-			case ARRAYINDEX:
+			case ARRAYACCESS:
 				return prettyprint(e.getExpressions(0)) + "[" + prettyprint(e.getExpressions(1)) + "]";
 
 			case ARRAYINIT:
@@ -1367,7 +1511,7 @@ public class BoaAstIntrinsics {
 
 		try {
 			final org.eclipse.jdt.core.dom.Expression e = (org.eclipse.jdt.core.dom.Expression) parser.createAST(null);
-			final Java8Visitor visitor = new Java8Visitor(s, null);
+			final Java8Visitor visitor = new Java8Visitor(s);
 			e.accept(visitor);
 			return visitor.getExpression();
 		} catch (final Exception e) {
@@ -1403,10 +1547,8 @@ public class BoaAstIntrinsics {
 			cu.accept(errorCheck);
 
 			if (!errorCheck.hasError) {
-				final Java8Visitor visitor = new Java8Visitor(s, null);
+				final Java8Visitor visitor = new Java8Visitor(s);
 				ast.addNamespaces(visitor.getNamespaces(cu));
-				for (final String i : visitor.getImports())
-					ast.addImports(i);
 			}
 		} catch (final Exception e) {
 			// do nothing
