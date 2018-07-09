@@ -407,7 +407,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 				long endTime = System.currentTimeMillis();
 				long time = endTime - startTime;
 				if (time > maxTime) {
-					System.out.println("Max time " + (time / 1000) + " writing to protobuf commit " + (i+1)  + " " + rev.id);
+					System.out.println(Thread.currentThread().getId() + " Max time " + (time / 1000) + " writing to protobuf commit " + (i+1)  + " " + rev.id);
 					maxTime = time;
 				}
 			}

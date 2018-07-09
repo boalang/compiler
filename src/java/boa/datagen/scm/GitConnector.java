@@ -147,12 +147,12 @@ public class GitConnector extends AbstractConnector {
 					long endTime = System.currentTimeMillis();
 					long time = endTime - startTime;
 					if (time > maxTime) {
-						System.out.println("Max time " + (time / 1000) + " parsing metadata commit " + i + " " + rc.getName());
+						System.out.println(Thread.currentThread().getId() + " Max time " + (time / 1000) + " parsing metadata commit " + i + " " + rc.getName());
 						maxTime = time;
 					}
 				}
 			}
-			System.out.println("Process metadata of all commits");
+			System.out.println(Thread.currentThread().getId() + " Process metadata of all commits");
 			
 			RevCommit head = revwalk.parseCommit(repository.resolve(Constants.HEAD));
 			headCommitOffset = revisionMap.get(head.getName());

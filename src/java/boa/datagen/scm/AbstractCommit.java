@@ -665,12 +665,17 @@ public abstract class AbstractCommit {
 				// final CommentsRoot.Builder comments =
 				// CommentsRoot.newBuilder();
 				final Java7Visitor visitor;
+				
 				if (astLevel == AST.JLS8)
 					visitor = new Java8Visitor(content);
 				else
 					visitor = new Java7Visitor(content);
 				try {
+					if(debug)
+						System.out.println(Thread.currentThread().getId() + " Visiting java file");
 					ast.addNamespaces(visitor.getNamespaces(cu));
+					if(debug)
+						System.out.println(Thread.currentThread().getId() + " Done visiting java file");
 					/*
 					 * for (final Comment c : visitor.getComments())
 					 * comments.addComments(c);
@@ -692,41 +697,41 @@ public abstract class AbstractCommit {
 				
 				ASTRoot.Builder preAst = null;
 				CompilationUnit preCu = null;
-				if ( treeDif) {
-				if (fb.getChange() == ChangeKind.MODIFIED && this.parentIndices.length == 1
-						&& fb.getPreviousIndicesCount() == 1) {
-					AbstractCommit previousCommit = this.connector.revisions.get(fb.getPreviousVersions(0));
-					ChangedFile.Builder pcf = previousCommit.changedFiles.get(fb.getPreviousIndices(0));
-					String previousFilePath = pcf.getName();
-					String previousContent = previousCommit.getFileContents(previousFilePath);
-					FileKind fileKind = pcf.getKind();
-					org.eclipse.jdt.core.dom.ASTParser previuousParser = JavaASTUtil.buildParser(fileKind);
-					if (previuousParser != null) {
-						try {
-							previuousParser.setSource(previousContent.toCharArray());
-							preCu = (CompilationUnit) previuousParser.createAST(null);
-							TreedMapper tm = new TreedMapper(preCu, cu);
-							tm.map();
-							preAst = ASTRoot.newBuilder();
-							Integer index = (Integer) preCu.getProperty(Java7Visitor.PROPERTY_INDEX);
-							if (index != null)
-								preAst.setKey(index);
-							ChangeKind status = (ChangeKind) preCu.getProperty(TreedConstants.PROPERTY_STATUS);
-							if (status != null)
-								preAst.setChangeKind(status);
-							preAst.setMappedNode((Integer) cu.getProperty(TreedConstants.PROPERTY_INDEX));
-							final Java7Visitor preVisitor;
-							if (preCu.getAST().apiLevel() == AST.JLS8)
-								preVisitor = new Java8Visitor(previousContent);
-							else
-								preVisitor = new Java7Visitor(previousContent);
-							preAst.addNamespaces(preVisitor.getNamespaces(preCu));
-						} catch (Throwable e) {
-							preAst = null;
-							preCu = null;
+				if (treeDif) {
+					if (fb.getChange() == ChangeKind.MODIFIED && this.parentIndices.length == 1
+							&& fb.getPreviousIndicesCount() == 1) {
+						AbstractCommit previousCommit = this.connector.revisions.get(fb.getPreviousVersions(0));
+						ChangedFile.Builder pcf = previousCommit.changedFiles.get(fb.getPreviousIndices(0));
+						String previousFilePath = pcf.getName();
+						String previousContent = previousCommit.getFileContents(previousFilePath);
+						FileKind fileKind = pcf.getKind();
+						org.eclipse.jdt.core.dom.ASTParser previuousParser = JavaASTUtil.buildParser(fileKind);
+						if (previuousParser != null) {
+							try {
+								previuousParser.setSource(previousContent.toCharArray());
+								preCu = (CompilationUnit) previuousParser.createAST(null);
+								TreedMapper tm = new TreedMapper(preCu, cu);
+								tm.map();
+								preAst = ASTRoot.newBuilder();
+								Integer index = (Integer) preCu.getProperty(Java7Visitor.PROPERTY_INDEX);
+								if (index != null)
+									preAst.setKey(index);
+								ChangeKind status = (ChangeKind) preCu.getProperty(TreedConstants.PROPERTY_STATUS);
+								if (status != null)
+									preAst.setChangeKind(status);
+								preAst.setMappedNode((Integer) cu.getProperty(TreedConstants.PROPERTY_INDEX));
+								final Java7Visitor preVisitor;
+								if (preCu.getAST().apiLevel() == AST.JLS8)
+									preVisitor = new Java8Visitor(previousContent);
+								else
+									preVisitor = new Java7Visitor(previousContent);
+								preAst.addNamespaces(preVisitor.getNamespaces(preCu));
+							} catch (Throwable e) {
+								preAst = null;
+								preCu = null;
+							}
 						}
 					}
-				} 
 				}
 				
 				Integer index = (Integer) cu.getProperty(Java7Visitor.PROPERTY_INDEX);
