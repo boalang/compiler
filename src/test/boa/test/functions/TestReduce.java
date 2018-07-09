@@ -261,7 +261,7 @@ public class TestReduce {
 			{ "-2 * -y * -5 * -x", "10 * y * x" },
 			{ "5 - 3 + 2", "4" },
 			{ "5 - (3 + 2)", "0" },
-			{ "5.0 / x / 5 * 10.0 * x", "(10.0 * (1.0 / x)) * x" }, // FIXME should be 10
+			{ "5.0 / x / 5 * 10.0 * x", "10.0 * (1.0 / x) * x" }, // FIXME should be 10
 			{ "-5 * (5 - 10) + 1", "26" },
 			{ "-5 * (5 - 5) + 1", "1" },
 			{ "-5 / (3 + 2) + 1", "0" },
@@ -279,7 +279,7 @@ public class TestReduce {
 			{ "5.0 + +3.5 - -2 * a.length", "8.5 + 2 * a.length" },
 			{ "(5.0 + 3.5) - -2 * a.length", "8.5 + 2 * a.length" },
 			//{ "5.0 + 3.5 - -2 * a.length + x", "8.5 + 2 * a.length + x" }, // FIXME when parsed, the answer isnt flattened but should be
-			{ "5.0 + 3.5 - (-2 * a.length + x)", "8.5 + (2 * a.length) + -x" }, // FIXME should be 8.5 + 2 * a.length - x
+			{ "5.0 + 3.5 - (-2 * a.length + x)", "8.5 + 2 * a.length + -x" }, // FIXME should be 8.5 + 2 * a.length - x
 			{ "5.0 + 3.5 - -2 * (a.length + x)", "8.5 + 2 * (a.length + x)" },
 			{ "5 - m(a) + 0", "5 + -m(a)" }, // FIXME
 			{ "5 - -m(a) - 0", "5 + m(a)" },
@@ -307,9 +307,10 @@ public class TestReduce {
 			{ "5 + (x + 3) + x + 2 * 3", "14 + 2 * x" },
 			{ "5 + (x + 3) + x - 2 * 3", "2 + 2 * x" }, // FIXME should be "2 + 2 * x"
 			{ "2 + ((8 + x) - x) + 3", "13 + x + -x" }, // FIXME should be "13"
-			{ "1 - 2 * x - 3 + -2", "-4 + (-2 * x)" },
+			{ "1 - 2 * x - 3 + -2", "-4 + -2 * x" },
 			{ "((8 + x) - x)", "8 + x + -x" }, // FIXME should be "8"
-			{ "8 - -x - 2 * x", "8 + (-2 * x) + x" }, //FIXME should be "8 - x"
+			{ "8 - -x - 2 * x", "8 + -2 * x + x" }, //FIXME should be "8 - x"
+			{ "x * ((-y) / z)", "x * (-y / z)"},
 		});
 	}
 
