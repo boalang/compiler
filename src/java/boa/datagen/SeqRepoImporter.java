@@ -235,14 +235,14 @@ public class SeqRepoImporter {
 					final String name = cachedProject.getName();
 
 					if (debug)
-						System.out.println("Processing " + (pid + 1 + processedProjects) + " / "
+						System.out.println(Thread.currentThread().getId() + " Processing " + (pid + 1 + processedProjects) + " / "
 								+ (cacheOfProjects.size() + processedProjects) + " " + cachedProject.getId() + " "
 								+ name);
 
 					Project project = storeRepository(cachedProject, 0);
 
 					if (debug)
-						System.out.println("Putting in sequence file: " + project.getId());
+						System.out.println(Thread.currentThread().getId() + " Putting in sequence file: " + project.getId());
 
 					// store the project metadata
 					BytesWritable bw = new BytesWritable(project.toByteArray());
@@ -312,7 +312,7 @@ public class SeqRepoImporter {
 			}
 
 			if (debug)
-				System.out.println("Has repository: " + name);
+				System.out.println(Thread.currentThread().getId() + " Has repository: " + name);
 			AbstractConnector conn = null;
 			try {
 				conn = new GitConnector(gitDir.getAbsolutePath(), project.getName(), astWriter, astWriterLen, contentWriter, contentWriterLen);
@@ -324,7 +324,7 @@ public class SeqRepoImporter {
 				}
 				if (repoBuilder.getRevisionsCount() > 0) {
 					if (debug)
-						System.out.println("Build head snapshot");
+						System.out.println(Thread.currentThread().getId() + " Build head snapshot");
 					repoBuilder.setHead(conn.getHeadCommitOffset());
 					repoBuilder.addAllHeadSnapshot(
 							conn.buildHeadSnapshot(new String[] { "java" }, project.getName()));
