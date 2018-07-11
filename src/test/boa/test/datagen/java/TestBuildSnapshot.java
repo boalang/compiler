@@ -2,9 +2,11 @@ package boa.test.datagen.java;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,6 +23,7 @@ import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
 import org.eclipse.jgit.lib.Constants;
+import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -41,10 +44,12 @@ public class TestBuildSnapshot {
 	public void testBuildSnapshot() throws Exception {
 		DefaultProperties.DEBUG = true;
 		
-		String[] repoNames = new String[]{"candoia/candoia", "boalang/compiler", "junit-team/junit4"};
+		String[] repoNames = new String[]{"hyjorc1/my-example", "candoia/candoia", "boalang/compiler", "junit-team/junit4"};
 		for (String repoName : repoNames) {
 			System.out.println("Repo: " + repoName);
 			File gitDir = new File("dataset/repos/" + repoName);
+			FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
+			filecheck.run();
 			RepositoryCloner.clone(new String[]{"https://github.com/" + repoName + ".git", gitDir.getAbsolutePath()});
 			GitConnector gc = new GitConnector(gitDir.getAbsolutePath(), repoName);
 			gc.setRevisions();
@@ -142,65 +147,102 @@ public class TestBuildSnapshot {
 	@Test
 	public void testGetSnapshotFromProtobuf1() throws Exception {
 		DefaultProperties.DEBUG = true;
+		
+		CodeRepository cr = buildCodeRepository("boalang/test-datagen");
+
+		ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr, "8041f1281cf6b615861768631097e22127a1e32e", new String[]{"SOURCE_JAVA_JLS"});
+		String[] fileNames = new String[snapshot.length];
+		for (int i = 0; i < snapshot.length; i++)
+			fileNames[i] = snapshot[i].getName();
+		assertArrayEquals(new String[]{}, fileNames);
+		
+		snapshot = BoaAstIntrinsics.getSnapshot(cr, "269424473466542fad9c426f7edf7d10a742e2be", new String[]{"SOURCE_JAVA_JLS"});
+		fileNames = new String[snapshot.length];
+		for (int i = 0; i < snapshot.length; i++)
+			fileNames[i] = snapshot[i].getName();
+		assertArrayEquals(new String[]{"src/Foo.java"}, fileNames);
+		
+		snapshot = BoaAstIntrinsics.getSnapshot(cr, "5e9291c8e830754479bf836686734045faa5c021", new String[]{"SOURCE_JAVA_JLS"});
+		fileNames = new String[snapshot.length];
+		for (int i = 0; i < snapshot.length; i++)
+			fileNames[i] = snapshot[i].getName();
+		assertArrayEquals(new String[]{}, fileNames);
+		
+		snapshot = BoaAstIntrinsics.getSnapshot(cr, "06288fd7cf36415629e3eafdce2448a5406a8c1e", new String[]{"SOURCE_JAVA_JLS"});
+		fileNames = new String[snapshot.length];
+		for (int i = 0; i < snapshot.length; i++)
+			fileNames[i] = snapshot[i].getName();
+		assertArrayEquals(new String[]{}, fileNames);
+	}
+	
+	@Test
+	public void testGetSnapshotFromProtobuf2() throws Exception {
+		DefaultProperties.DEBUG = true;
+		
+		CodeRepository cr = buildCodeRepository("hyjorc1/my-example");
+
+		ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr);
+		String[] fileNames = new String[snapshot.length];
+		for (int i = 0; i < snapshot.length; i++)
+			fileNames[i] = snapshot[i].getName();
+//			assertArrayEquals(new String[]{}, fileNames);
+		
+		snapshot = BoaAstIntrinsics.getSnapshot(cr, "d7a4aced37af672f9a55238a47bb0e4974193ebe");
+		fileNames = new String[snapshot.length];
+		for (int i = 0; i < snapshot.length; i++)
+			fileNames[i] = snapshot[i].getName();
+		assertThat(fileNames, Matchers.hasItemInArray("src/org/birds/Bird.java"));
+		assertThat(fileNames, Matchers.not(Matchers.hasItemInArray("src/org/animals/Bird.java")));
+	}
+
+	private CodeRepository buildCodeRepository(String repoName) throws Exception {
 		fileSystem = FileSystem.get(conf);
 		
-		String[] repoNames = new String[]{"boalang/test-datagen"};
-		for (String repoName : repoNames) {
-			System.out.println("Repo: " + repoName);
-			File gitDir = new File("dataset/repos/" + repoName);
-			openWriters(gitDir.getAbsolutePath());
-			FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
-			filecheck.run();
-			String url = "https://github.com/" + repoName + ".git";
-			RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
-			GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName, astWriter, astWriterLen, contentWriter, contentWriterLen);
-			final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
-			repoBuilder.setKind(RepositoryKind.GIT);
-			repoBuilder.setUrl(url);
-			for (final Revision rev : conn.getCommits(true, repoName)) {
-				final Revision.Builder revBuilder = Revision.newBuilder(rev);
-				repoBuilder.addRevisions(revBuilder);
-			}
-			if (repoBuilder.getRevisionsCount() > 0) {
-				System.out.println("Build head snapshot");
-				repoBuilder.setHead(conn.getHeadCommitOffset());
-				repoBuilder.addAllHeadSnapshot(
-						conn.buildHeadSnapshot(new String[] { "java" }, repoName));
-			}
-			repoBuilder.addAllBranches(conn.getBranchIndices());
-			repoBuilder.addAllBranchNames(conn.getBranchNames());
-			repoBuilder.addAllTags(conn.getTagIndices());
-			repoBuilder.addAllTagNames(conn.getTagNames());
-			
-			conn.close();
-			closeWriters();
-			new Thread(new FileIO.DirectoryRemover(gitDir.getAbsolutePath())).start();
-			
-			CodeRepository cr = repoBuilder.build();
-			ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr, "8041f1281cf6b615861768631097e22127a1e32e", new String[]{"SOURCE_JAVA_JLS"});
+		System.out.println("Repo: " + repoName);
+		File gitDir = new File("dataset/repos/" + repoName);
+		openWriters(gitDir.getAbsolutePath());
+		FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
+		filecheck.run();
+		String url = "https://github.com/" + repoName + ".git";
+		RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
+		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName, astWriter, astWriterLen, contentWriter, contentWriterLen);
+		final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
+		repoBuilder.setKind(RepositoryKind.GIT);
+		repoBuilder.setUrl(url);
+		for (final Revision rev : conn.getCommits(true, repoName)) {
+			final Revision.Builder revBuilder = Revision.newBuilder(rev);
+			repoBuilder.addRevisions(revBuilder);
+		}
+		if (repoBuilder.getRevisionsCount() > 0) {
+			System.out.println("Build head snapshot");
+			repoBuilder.setHead(conn.getHeadCommitOffset());
+			repoBuilder.addAllHeadSnapshot(
+					conn.buildHeadSnapshot(new String[] { "java" }, repoName));
+		}
+		repoBuilder.addAllBranches(conn.getBranchIndices());
+		repoBuilder.addAllBranchNames(conn.getBranchNames());
+		repoBuilder.addAllTags(conn.getTagIndices());
+		repoBuilder.addAllTagNames(conn.getTagNames());
+		
+		conn.close();
+		closeWriters();
+		
+		CodeRepository cr = repoBuilder.build();
+		
+		for (Revision rev : cr.getRevisionsList()) {
+			ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr, rev.getId());
 			String[] fileNames = new String[snapshot.length];
 			for (int i = 0; i < snapshot.length; i++)
 				fileNames[i] = snapshot[i].getName();
-			assertArrayEquals(new String[]{}, fileNames);
-			
-			snapshot = BoaAstIntrinsics.getSnapshot(cr, "269424473466542fad9c426f7edf7d10a742e2be", new String[]{"SOURCE_JAVA_JLS"});
-			fileNames = new String[snapshot.length];
-			for (int i = 0; i < snapshot.length; i++)
-				fileNames[i] = snapshot[i].getName();
-			assertArrayEquals(new String[]{"src/Foo.java"}, fileNames);
-			
-			snapshot = BoaAstIntrinsics.getSnapshot(cr, "5e9291c8e830754479bf836686734045faa5c021", new String[]{"SOURCE_JAVA_JLS"});
-			fileNames = new String[snapshot.length];
-			for (int i = 0; i < snapshot.length; i++)
-				fileNames[i] = snapshot[i].getName();
-			assertArrayEquals(new String[]{}, fileNames);
-			
-			snapshot = BoaAstIntrinsics.getSnapshot(cr, "06288fd7cf36415629e3eafdce2448a5406a8c1e", new String[]{"SOURCE_JAVA_JLS"});
-			fileNames = new String[snapshot.length];
-			for (int i = 0; i < snapshot.length; i++)
-				fileNames[i] = snapshot[i].getName();
-			assertArrayEquals(new String[]{}, fileNames);
+			Arrays.sort(fileNames);
+			String[] expectedFileNames = conn.getSnapshot(rev.getId()).toArray(new String[0]);
+			Arrays.sort(expectedFileNames);
+			assertArrayEquals(expectedFileNames, fileNames);
 		}
+		
+		new Thread(new FileIO.DirectoryRemover(gitDir.getAbsolutePath())).start();
+		
+		return cr;
 	}
 
 	public void openWriters(String base) {
