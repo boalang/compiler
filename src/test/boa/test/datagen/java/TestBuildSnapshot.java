@@ -1,6 +1,7 @@
 package boa.test.datagen.java;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,6 +12,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.SequenceFile;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.SequenceFile.CompressionType;
 import org.eclipse.jgit.lib.Constants;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,6 +28,11 @@ import boa.datagen.DefaultProperties;
 import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.AbstractCommit;
 import boa.datagen.scm.GitConnector;
+import boa.datagen.util.FileIO;
+import boa.functions.BoaAstIntrinsics;
+import boa.types.Code.CodeRepository;
+import boa.types.Code.CodeRepository.RepositoryKind;
+import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 
 public class TestBuildSnapshot {
@@ -117,6 +131,122 @@ public class TestBuildSnapshot {
 //		print(in2);
 		System.out.println(s1.size() + " " + s2.size() + " " + s.size() + " " + in2.size());
 		assertEquals(s2,  s1);
+	}
+
+	private static Configuration conf = new Configuration();
+	private static FileSystem fileSystem = null;
+	
+	private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
+	private long astWriterLen = 0, commitWriterLen = 0, contentWriterLen = 0;
+	
+	@Test
+	public void testGetSnapshotFromProtobuf1() throws Exception {
+		DefaultProperties.DEBUG = true;
+		fileSystem = FileSystem.get(conf);
+		
+		String[] repoNames = new String[]{"boalang/test-datagen"};
+		for (String repoName : repoNames) {
+			System.out.println("Repo: " + repoName);
+			File gitDir = new File("dataset/repos/" + repoName);
+			openWriters(gitDir.getAbsolutePath());
+			FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
+			filecheck.run();
+			String url = "https://github.com/" + repoName + ".git";
+			RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
+			GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName, astWriter, astWriterLen, contentWriter, contentWriterLen);
+			final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
+			repoBuilder.setKind(RepositoryKind.GIT);
+			repoBuilder.setUrl(url);
+			for (final Revision rev : conn.getCommits(true, repoName)) {
+				final Revision.Builder revBuilder = Revision.newBuilder(rev);
+				repoBuilder.addRevisions(revBuilder);
+			}
+			if (repoBuilder.getRevisionsCount() > 0) {
+				System.out.println("Build head snapshot");
+				repoBuilder.setHead(conn.getHeadCommitOffset());
+				repoBuilder.addAllHeadSnapshot(
+						conn.buildHeadSnapshot(new String[] { "java" }, repoName));
+			}
+			repoBuilder.addAllBranches(conn.getBranchIndices());
+			repoBuilder.addAllBranchNames(conn.getBranchNames());
+			repoBuilder.addAllTags(conn.getTagIndices());
+			repoBuilder.addAllTagNames(conn.getTagNames());
+			
+			conn.close();
+			closeWriters();
+			new Thread(new FileIO.DirectoryRemover(gitDir.getAbsolutePath())).start();
+			
+			CodeRepository cr = repoBuilder.build();
+			ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr, "8041f1281cf6b615861768631097e22127a1e32e", new String[]{"SOURCE_JAVA_JLS"});
+			String[] fileNames = new String[snapshot.length];
+			for (int i = 0; i < snapshot.length; i++)
+				fileNames[i] = snapshot[i].getName();
+			assertArrayEquals(new String[]{}, fileNames);
+			
+			snapshot = BoaAstIntrinsics.getSnapshot(cr, "269424473466542fad9c426f7edf7d10a742e2be", new String[]{"SOURCE_JAVA_JLS"});
+			fileNames = new String[snapshot.length];
+			for (int i = 0; i < snapshot.length; i++)
+				fileNames[i] = snapshot[i].getName();
+			assertArrayEquals(new String[]{"src/Foo.java"}, fileNames);
+			
+			snapshot = BoaAstIntrinsics.getSnapshot(cr, "5e9291c8e830754479bf836686734045faa5c021", new String[]{"SOURCE_JAVA_JLS"});
+			fileNames = new String[snapshot.length];
+			for (int i = 0; i < snapshot.length; i++)
+				fileNames[i] = snapshot[i].getName();
+			assertArrayEquals(new String[]{}, fileNames);
+			
+			snapshot = BoaAstIntrinsics.getSnapshot(cr, "06288fd7cf36415629e3eafdce2448a5406a8c1e", new String[]{"SOURCE_JAVA_JLS"});
+			fileNames = new String[snapshot.length];
+			for (int i = 0; i < snapshot.length; i++)
+				fileNames[i] = snapshot[i].getName();
+			assertArrayEquals(new String[]{}, fileNames);
+		}
+	}
+
+	public void openWriters(String base) {
+		long time = System.currentTimeMillis();
+		String suffix = time + ".seq";
+		while (true) {
+			try {
+				projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/project/" + suffix),
+						Text.class, BytesWritable.class, CompressionType.BLOCK);
+				astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/ast/" + suffix),
+						LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
+				commitWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/commit/" + suffix),
+						LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
+				contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/source/" + suffix),
+						LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
+				break;
+			} catch (Throwable t) {
+				t.printStackTrace();
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+				}
+			}
+		}
+	}
+
+	public void closeWriters() {
+		while (true) {
+			try {
+				projectWriter.close();
+				astWriter.close();
+				commitWriter.close();
+				contentWriter.close();
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+				}
+				break;
+			} catch (Throwable t) {
+				t.printStackTrace();
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+				}
+			}
+		}
 	}
 
 	public void print(Set<String> s, List<ChangedFile> snapshot, Map<String, AbstractCommit> commits) {
