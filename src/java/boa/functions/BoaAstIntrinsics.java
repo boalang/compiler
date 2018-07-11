@@ -537,13 +537,12 @@ public class BoaAstIntrinsics {
 	}
 
 	private static boolean isIncluded(ChangedFile cf, String[] kinds) {
-		if (kinds != null) {
-			final String kindName = cf.getKind().name();
-			for (final String kind : kinds)
-				if (kindName.startsWith(kind)) {
-					return true;
-				}
-		}
+		if (kinds == null || kinds.length == 0)
+			return true;
+		final String kindName = cf.getKind().name();
+		for (final String kind : kinds)
+			if (kindName.startsWith(kind))
+				return true;
 		return false;
 	}
 
