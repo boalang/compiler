@@ -453,7 +453,8 @@ public class BoaAstIntrinsics {
 		return getSnapshot(cr, revisionOffset, kinds);
 	}
 
-	private static ChangedFile[] getSnapshot(final CodeRepository cr, final int commitOffset, final String... kinds) {
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "int", "string..." })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final int commitOffset, final String... kinds) {
 		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
 		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>(); 
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
@@ -565,10 +566,12 @@ public class BoaAstIntrinsics {
 		return index;
 	}
 	
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string" })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String id) {
 		return getSnapshot(cr, id, new String[0]);
 	}
 	
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string", "string..." })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String id, final String... kinds) {
 		if (cr.getRevisionsCount() == 0)
 			return new ChangedFile[0];
