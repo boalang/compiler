@@ -155,10 +155,9 @@ public class TestBuildSnapshot {
 			repoBuilder.addRevisions(revBuilder);
 		}
 		if (repoBuilder.getRevisionsCount() > 0) {
-			System.out.println("Build head snapshot");
+//			System.out.println("Build head snapshot");
 			repoBuilder.setHead(conn.getHeadCommitOffset());
-			repoBuilder.addAllHeadSnapshot(
-					conn.buildHeadSnapshot(new String[] { "java" }, repoName));
+			repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[] { "java" }, repoName));
 		}
 		repoBuilder.addAllBranches(conn.getBranchIndices());
 		repoBuilder.addAllBranchNames(conn.getBranchNames());
@@ -170,12 +169,12 @@ public class TestBuildSnapshot {
 		List<ChangedFile> snapshot1 = new ArrayList<ChangedFile>();
 		Map<String, AbstractCommit> commits = new HashMap<String, AbstractCommit>();
 		conn.getSnapshot(conn.getHeadCommitOffset(), snapshot1, commits);
-		System.out.println("Finish building head snapshot");
+//		System.out.println("Finish building head snapshot");
 		List<String> snapshot2 = conn.getSnapshot(Constants.HEAD);
 		Set<String> s1 = new HashSet<String>(), s2 = new HashSet<String>(snapshot2);
 		for (ChangedFile cf : snapshot1)
 			s1.add(cf.getName());
-		System.out.println("Test head snapshot");
+//		System.out.println("Test head snapshot");
 		assertEquals(s2, s1);
 
 		for (int i = conn.getRevisions().size()-1; i >= 0; i--) {
@@ -187,7 +186,7 @@ public class TestBuildSnapshot {
 			s2 = new HashSet<String>(snapshot2);
 			for (ChangedFile cf : snapshot1)
 				s1.add(cf.getName());
-			System.out.println("Test snapshot at " + commit.getId());
+//			System.out.println("Test snapshot at " + commit.getId());
 			assertEquals(s2, s1);
 		}
 		
@@ -201,7 +200,7 @@ public class TestBuildSnapshot {
 			Arrays.sort(fileNames);
 			String[] expectedFileNames = conn.getSnapshot(Constants.HEAD).toArray(new String[0]);
 			Arrays.sort(expectedFileNames);
-			System.out.println("Test head snapshot");
+//			System.out.println("Test head snapshot");
 			assertArrayEquals(expectedFileNames, fileNames);
 		}
 		
@@ -213,7 +212,7 @@ public class TestBuildSnapshot {
 			Arrays.sort(fileNames);
 			String[] expectedFileNames = conn.getSnapshot(rev.getId()).toArray(new String[0]);
 			Arrays.sort(expectedFileNames);
-			System.out.println("Test snapshot at " + rev.getId());
+//			System.out.println("Test snapshot at " + rev.getId());
 			assertArrayEquals(expectedFileNames, fileNames);
 		}
 		
