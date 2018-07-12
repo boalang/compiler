@@ -222,7 +222,7 @@ public class Java7Visitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.TypeKind.CLASS);
 		if (node.getAST().apiLevel() == AST.JLS2) {
 			b.addAllModifiers(buildModifiers(node.getModifiers()));
-		} {
+		} else {
 			for (Object m : node.modifiers()) {
 				if (((IExtendedModifier)m).isAnnotation())
 					((Annotation)m).accept(this);
@@ -816,14 +816,14 @@ public class Java7Visitor extends ASTVisitor {
 					name += "[]";
 				tb.setName(name);
 				tb.setKind(boa.types.Ast.TypeKind.OTHER);
-				setTypeBinding(tb, node.getReturnType2());
-				index = (Integer) node.getReturnType2().getProperty(Java7Visitor.PROPERTY_INDEX);
+				setTypeBinding(tb, node.getReturnType());
+				index = (Integer) node.getReturnType().getProperty(Java7Visitor.PROPERTY_INDEX);
 				if (index != null) {
 					tb.setKey(index);
-					ChangeKind status = (ChangeKind) node.getReturnType2().getProperty(TreedConstants.PROPERTY_STATUS);
+					ChangeKind status = (ChangeKind) node.getReturnType().getProperty(TreedConstants.PROPERTY_STATUS);
 					if (status != null) {
 						tb.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) node.getReturnType2().getProperty(TreedConstants.PROPERTY_MAP);
+						ASTNode mappedNode = (ASTNode) node.getReturnType().getProperty(TreedConstants.PROPERTY_MAP);
 						if (mappedNode != null)
 							tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 					}
@@ -2062,7 +2062,7 @@ public class Java7Visitor extends ASTVisitor {
 		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 		if (node.getAST().apiLevel() == AST.JLS2)
 			node.getTypeDeclaration().accept(this);
-		if (node.getAST().apiLevel() >= AST.JLS3)
+		else
 			node.getDeclaration().accept(this);
 		for (boa.types.Ast.Declaration d : declarations.pop())
 			b.setTypeDeclaration(d);
