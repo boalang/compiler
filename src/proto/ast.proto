@@ -199,6 +199,7 @@ message Variable {
 	/** */
 	optional Expression computed_name = 11;
 	optional bool dollar_sign = 12;
+	repeated Expression expressions = 13;
 }
 
 /** A single statement */
