@@ -34756,10 +34756,18 @@ public final class Ast {
        * <code>NAMESPACE = 4;</code>
        *
        * <pre>
-       ** A namespace (aka, default, aka package) visibility modifier 
+       ** A namespace (aka package) visibility modifier 
        * </pre>
        */
       NAMESPACE(3, 4),
+      /**
+       * <code>DEFAULT = 5;</code>
+       *
+       * <pre>
+       ** A default visibility modifier 
+       * </pre>
+       */
+      DEFAULT(5, 5),
       ;
 
       /**
@@ -34770,14 +34778,6 @@ public final class Ast {
        * </pre>
        */
       public static final Visibility PACKAGE = NAMESPACE;
-      /**
-       * <code>DEFAULT = 4;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public static final Visibility DEFAULT = NAMESPACE;
       /**
        * <code>PUBLIC = 1;</code>
        *
@@ -34806,7 +34806,7 @@ public final class Ast {
        * <code>NAMESPACE = 4;</code>
        *
        * <pre>
-       ** A namespace (aka, default, aka package) visibility modifier 
+       ** A namespace (aka package) visibility modifier 
        * </pre>
        */
       public static final int NAMESPACE_VALUE = 4;
@@ -34819,13 +34819,13 @@ public final class Ast {
        */
       public static final int PACKAGE_VALUE = 4;
       /**
-       * <code>DEFAULT = 4;</code>
+       * <code>DEFAULT = 5;</code>
        *
        * <pre>
-       ** @exclude 
+       ** A default visibility modifier 
        * </pre>
        */
-      public static final int DEFAULT_VALUE = 4;
+      public static final int DEFAULT_VALUE = 5;
 
 
       public final int getNumber() { return value; }
@@ -34836,6 +34836,7 @@ public final class Ast {
           case 2: return PRIVATE;
           case 3: return PROTECTED;
           case 4: return NAMESPACE;
+          case 5: return DEFAULT;
           default: return null;
         }
       }
@@ -44926,7 +44927,7 @@ public final class Ast {
       "ER\020\t\022\n\n\006NATIVE\020\n\022\014\n\010STRICTFP\020\013\022\r\n\tTRANSI" +
       "ENT\020\014\022\014\n\010VOLATILE\020\r\032\002\020\001\"a\n\nVisibility\022\n\n" +
       "\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n" +
-      "\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020\004\032\002" +
+      "\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020\005\032\002" +
       "\020\001\"(\n\005Scope\022\007\n\003VAR\020\001\022\007\n\003LET\020\002\022\t\n\005CONST\020\003" +
       "\032\002\020\001\"\253\002\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.typ" +
       "es.Comment.CommentKind\022\r\n\005value\030\002 \002(\t\022)\n" +

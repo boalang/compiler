@@ -474,12 +474,12 @@ message Modifier {
 		PRIVATE = 2;
 		/** A protected modifier */
 		PROTECTED = 3;
-		/** A namespace (aka, default, aka package) visibility modifier */
+		/** A namespace (aka package) visibility modifier */
 		NAMESPACE = 4;
 		/** @exclude */
 		PACKAGE = 4;
-		/** @exclude */
-		DEFAULT = 4;
+		/** A default visibility modifier */
+		DEFAULT = 5;
 	}
 	/** A scope modifier */
 	enum Scope {

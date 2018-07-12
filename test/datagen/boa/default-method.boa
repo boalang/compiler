@@ -11,8 +11,8 @@
                      "name": "notRequired",
                      "modifiers": [
                         {
-                           "kind": "OTHER",
-                           "other": "default"
+                           "kind": "VISIBILITY",
+                           "visibility": "DEFAULT"
                         }
                      ],
                      "return_type": {
