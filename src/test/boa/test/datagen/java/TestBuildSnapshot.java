@@ -45,67 +45,8 @@ public class TestBuildSnapshot {
 		DefaultProperties.DEBUG = true;
 		
 		String[] repoNames = new String[]{"hyjorc1/my-example", "candoia/candoia", "boalang/compiler", "junit-team/junit4"};
-		for (String repoName : repoNames) {
-			System.out.println("Repo: " + repoName);
-			File gitDir = new File("dataset/repos/" + repoName);
-			FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
-			filecheck.run();
-			RepositoryCloner.clone(new String[]{"https://github.com/" + repoName, gitDir.getAbsolutePath()});
-			GitConnector gc = new GitConnector(gitDir.getAbsolutePath(), repoName);
-			gc.setRevisions();
-			System.out.println("Finish processing commits");
-			List<ChangedFile> snapshot1 = new ArrayList<ChangedFile>();
-			Map<String, AbstractCommit> commits = new HashMap<String, AbstractCommit>();
-			gc.getSnapshot(gc.getHeadCommitOffset(), snapshot1, commits);
-			System.out.println("Finish building head snapshot");
-			List<String> snapshot2 = gc.getSnapshot(Constants.HEAD);
-			Set<String> s1 = new HashSet<String>(), s2 = new HashSet<String>(snapshot2), s = new HashSet<String>(s2), in1 = new HashSet<String>(s1), in2 = new HashSet<String>(s2);
-			for (ChangedFile cf : snapshot1)
-				s1.add(cf.getName());
-			if (!s1.equals(s2)) {
-				s = new HashSet<String>(s2);
-				in1 = new HashSet<String>(s1);
-				in2 = new HashSet<String>(s2);
-//				print(s1);
-//				print(s2);
-				s.retainAll(s1);
-//				print(s);
-				in1.removeAll(s2);
-				print(in1, snapshot1, commits);
-				in2.removeAll(s1);
-				print(in2, new ArrayList<ChangedFile>(), commits);
-				System.out.println("Head: " + s1.size() + " " + s2.size() + " " + s.size() + " " + in1.size() + " " + in2.size());
-			} else 
-				System.out.println("Head: " + s1.size());
-			assertEquals(s2, s1);
-			for (int i = gc.getRevisions().size()-1; i >= 0; i--) {
-				AbstractCommit commit = gc.getRevisions().get(i);
-				snapshot1 = new ArrayList<ChangedFile>();
-				gc.getSnapshot(i, snapshot1, new HashMap<String, AbstractCommit>());
-				snapshot2 = gc.getSnapshot(commit.getId());
-				s1 = new HashSet<String>();
-				s2 = new HashSet<String>(snapshot2);
-				for (ChangedFile cf : snapshot1)
-					s1.add(cf.getName());
-				if (!s1.equals(s2)) {
-					s = new HashSet<String>(s2);
-					in1 = new HashSet<String>(s1);
-					in2 = new HashSet<String>(s2);
-//					print(s1);
-//					print(s2);
-					s.retainAll(s1);
-//					print(s);
-					in1.removeAll(s2);
-					print(in1, snapshot1, commits);
-					in2.removeAll(s1);
-					print(in2, new ArrayList<ChangedFile>(), commits);
-					System.out.println("Commit " + commit.getId() + ": " + s1.size() + " " + s2.size() + " " + s.size() + " " + in1.size() + " " + in2.size());
-				}/* else 
-					System.out.println("Commit " + commit.getId() + ": " + s1.size());*/
-				assertEquals(s2, s1);
-			}
-			gc.close();
-		}
+		for (String repoName : repoNames)
+			buildCodeRepository(repoName);
 	}
 	
 	@Ignore
@@ -224,10 +165,45 @@ public class TestBuildSnapshot {
 		repoBuilder.addAllTags(conn.getTagIndices());
 		repoBuilder.addAllTagNames(conn.getTagNames());
 		
-		conn.close();
 		closeWriters();
+
+		List<ChangedFile> snapshot1 = new ArrayList<ChangedFile>();
+		Map<String, AbstractCommit> commits = new HashMap<String, AbstractCommit>();
+		conn.getSnapshot(conn.getHeadCommitOffset(), snapshot1, commits);
+		System.out.println("Finish building head snapshot");
+		List<String> snapshot2 = conn.getSnapshot(Constants.HEAD);
+		Set<String> s1 = new HashSet<String>(), s2 = new HashSet<String>(snapshot2);
+		for (ChangedFile cf : snapshot1)
+			s1.add(cf.getName());
+		System.out.println("Test head snapshot");
+		assertEquals(s2, s1);
+
+		for (int i = conn.getRevisions().size()-1; i >= 0; i--) {
+			AbstractCommit commit = conn.getRevisions().get(i);
+			snapshot1 = new ArrayList<ChangedFile>();
+			conn.getSnapshot(i, snapshot1, new HashMap<String, AbstractCommit>());
+			snapshot2 = conn.getSnapshot(commit.getId());
+			s1 = new HashSet<String>();
+			s2 = new HashSet<String>(snapshot2);
+			for (ChangedFile cf : snapshot1)
+				s1.add(cf.getName());
+			System.out.println("Test snapshot at " + commit.getId());
+			assertEquals(s2, s1);
+		}
 		
 		CodeRepository cr = repoBuilder.build();
+		
+		{
+			ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr);
+			String[] fileNames = new String[snapshot.length];
+			for (int i = 0; i < snapshot.length; i++)
+				fileNames[i] = snapshot[i].getName();
+			Arrays.sort(fileNames);
+			String[] expectedFileNames = conn.getSnapshot(Constants.HEAD).toArray(new String[0]);
+			Arrays.sort(expectedFileNames);
+			System.out.println("Test head snapshot");
+			assertArrayEquals(expectedFileNames, fileNames);
+		}
 		
 		for (Revision rev : cr.getRevisionsList()) {
 			ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr, rev.getId());
@@ -237,10 +213,12 @@ public class TestBuildSnapshot {
 			Arrays.sort(fileNames);
 			String[] expectedFileNames = conn.getSnapshot(rev.getId()).toArray(new String[0]);
 			Arrays.sort(expectedFileNames);
+			System.out.println("Test snapshot at " + rev.getId());
 			assertArrayEquals(expectedFileNames, fileNames);
 		}
 		
 		new Thread(new FileIO.DirectoryRemover(gitDir.getAbsolutePath())).start();
+		conn.close();
 		
 		return cr;
 	}
