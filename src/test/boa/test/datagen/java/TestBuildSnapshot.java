@@ -50,7 +50,7 @@ public class TestBuildSnapshot {
 			File gitDir = new File("dataset/repos/" + repoName);
 			FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
 			filecheck.run();
-			RepositoryCloner.clone(new String[]{"https://github.com/" + repoName + ".git", gitDir.getAbsolutePath()});
+			RepositoryCloner.clone(new String[]{"https://github.com/" + repoName, gitDir.getAbsolutePath()});
 			GitConnector gc = new GitConnector(gitDir.getAbsolutePath(), repoName);
 			gc.setRevisions();
 			System.out.println("Finish processing commits");
