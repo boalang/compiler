@@ -671,11 +671,9 @@ public abstract class AbstractCommit {
 				else
 					visitor = new Java7Visitor(content);
 				try {
-					if(debug)
-						System.out.println(Thread.currentThread().getId() + " Visiting java file");
+					
 					ast.addNamespaces(visitor.getNamespaces(cu));
-					if(debug)
-						System.out.println(Thread.currentThread().getId() + " Done visiting java file");
+					
 					/*
 					 * for (final Comment c : visitor.getComments())
 					 * comments.addComments(c);

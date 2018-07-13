@@ -34476,6 +34476,38 @@ public final class Ast {
        * </pre>
        */
       SETTER(11, 9),
+      /**
+       * <code>NATIVE = 10;</code>
+       *
+       * <pre>
+       ** A native modifier 
+       * </pre>
+       */
+      NATIVE(12, 10),
+      /**
+       * <code>STRICTFP = 11;</code>
+       *
+       * <pre>
+       ** A strictfp modifier 
+       * </pre>
+       */
+      STRICTFP(13, 11),
+      /**
+       * <code>TRANSIENT = 12;</code>
+       *
+       * <pre>
+       ** A transient modifier 
+       * </pre>
+       */
+      TRANSIENT(14, 12),
+      /**
+       * <code>VOLATILE = 13;</code>
+       *
+       * <pre>
+       ** A volatile modifier 
+       * </pre>
+       */
+      VOLATILE(15, 13),
       ;
 
       /**
@@ -34582,6 +34614,38 @@ public final class Ast {
        * </pre>
        */
       public static final int SETTER_VALUE = 9;
+      /**
+       * <code>NATIVE = 10;</code>
+       *
+       * <pre>
+       ** A native modifier 
+       * </pre>
+       */
+      public static final int NATIVE_VALUE = 10;
+      /**
+       * <code>STRICTFP = 11;</code>
+       *
+       * <pre>
+       ** A strictfp modifier 
+       * </pre>
+       */
+      public static final int STRICTFP_VALUE = 11;
+      /**
+       * <code>TRANSIENT = 12;</code>
+       *
+       * <pre>
+       ** A transient modifier 
+       * </pre>
+       */
+      public static final int TRANSIENT_VALUE = 12;
+      /**
+       * <code>VOLATILE = 13;</code>
+       *
+       * <pre>
+       ** A volatile modifier 
+       * </pre>
+       */
+      public static final int VOLATILE_VALUE = 13;
 
 
       public final int getNumber() { return value; }
@@ -34598,6 +34662,10 @@ public final class Ast {
           case 7: return SCOPE;
           case 8: return GETTER;
           case 9: return SETTER;
+          case 10: return NATIVE;
+          case 11: return STRICTFP;
+          case 12: return TRANSIENT;
+          case 13: return VOLATILE;
           default: return null;
         }
       }
@@ -34628,7 +34696,7 @@ public final class Ast {
       }
 
       private static final ModifierKind[] VALUES = {
-        OTHER, VISIBILITY, ANNOTATION, FINAL, CONSTANT, STATIC, SYNCHRONIZED, SYNC, ABSTRACT, SCOPE, GETTER, SETTER, 
+        OTHER, VISIBILITY, ANNOTATION, FINAL, CONSTANT, STATIC, SYNCHRONIZED, SYNC, ABSTRACT, SCOPE, GETTER, SETTER, NATIVE, STRICTFP, TRANSIENT, VOLATILE, 
       };
 
       public static ModifierKind valueOf(
@@ -34688,10 +34756,18 @@ public final class Ast {
        * <code>NAMESPACE = 4;</code>
        *
        * <pre>
-       ** A namespace (aka, default, aka package) visibility modifier 
+       ** A namespace (aka package) visibility modifier 
        * </pre>
        */
       NAMESPACE(3, 4),
+      /**
+       * <code>DEFAULT = 5;</code>
+       *
+       * <pre>
+       ** A default visibility modifier 
+       * </pre>
+       */
+      DEFAULT(5, 5),
       ;
 
       /**
@@ -34702,14 +34778,6 @@ public final class Ast {
        * </pre>
        */
       public static final Visibility PACKAGE = NAMESPACE;
-      /**
-       * <code>DEFAULT = 4;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public static final Visibility DEFAULT = NAMESPACE;
       /**
        * <code>PUBLIC = 1;</code>
        *
@@ -34738,7 +34806,7 @@ public final class Ast {
        * <code>NAMESPACE = 4;</code>
        *
        * <pre>
-       ** A namespace (aka, default, aka package) visibility modifier 
+       ** A namespace (aka package) visibility modifier 
        * </pre>
        */
       public static final int NAMESPACE_VALUE = 4;
@@ -34751,13 +34819,13 @@ public final class Ast {
        */
       public static final int PACKAGE_VALUE = 4;
       /**
-       * <code>DEFAULT = 4;</code>
+       * <code>DEFAULT = 5;</code>
        *
        * <pre>
-       ** @exclude 
+       ** A default visibility modifier 
        * </pre>
        */
-      public static final int DEFAULT_VALUE = 4;
+      public static final int DEFAULT_VALUE = 5;
 
 
       public final int getNumber() { return value; }
@@ -34768,6 +34836,7 @@ public final class Ast {
           case 2: return PRIVATE;
           case 3: return PROTECTED;
           case 4: return NAMESPACE;
+          case 5: return DEFAULT;
           default: return null;
         }
       }
@@ -44842,7 +44911,7 @@ public final class Ast {
       "NCE\020]\022\010\n\004LIST\020^\022\r\n\tREFERENCE\020_\022\016\n\nREFLEC" +
       "TION\020`\022\t\n\005CLONE\020a\022\017\n\013TRAIT_ALIAS\020b\022\024\n\020TR" +
       "AIT_PRECEDENCE\020c\022\021\n\rNAMESPACENAME\020d\032\002\020\001\"" +
-      "\233\005\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa.types.M",
+      "\322\005\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa.types.M",
       "odifier.ModifierKind\0222\n\nvisibility\030\002 \001(\016" +
       "2\036.boa.types.Modifier.Visibility\022\027\n\017anno" +
       "tation_name\030\003 \001(\t\022\032\n\022annotation_members\030" +
@@ -44850,50 +44919,52 @@ public final class Ast {
       "ypes.Expression\022\r\n\005other\030\006 \001(\t\022*\n\013change" +
       "_kind\030\007 \001(\0162\025.boa.types.ChangeKind\022\023\n\013ma" +
       "pped_node\030\t \001(\005\022\013\n\003key\030\n \001(\005\022(\n\005scope\030\013 " +
-      "\001(\0162\031.boa.types.Modifier.Scope\"\257\001\n\014Modif" +
+      "\001(\0162\031.boa.types.Modifier.Scope\"\346\001\n\014Modif" +
       "ierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nAN" +
       "NOTATION\020\002\022\t\n\005FINAL\020\003\022\014\n\010CONSTANT\020\003\022\n\n\006S",
       "TATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010A" +
       "BSTRACT\020\006\022\t\n\005SCOPE\020\007\022\n\n\006GETTER\020\010\022\n\n\006SETT" +
-      "ER\020\t\032\002\020\001\"a\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007PR" +
-      "IVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n" +
-      "\007PACKAGE\020\004\022\013\n\007DEFAULT\020\004\032\002\020\001\"(\n\005Scope\022\007\n\003" +
-      "VAR\020\001\022\007\n\003LET\020\002\022\t\n\005CONST\020\003\032\002\020\001\"\253\002\n\007Commen" +
-      "t\022,\n\004kind\030\001 \002(\0162\036.boa.types.Comment.Comm" +
-      "entKind\022\r\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\013" +
-      "2\027.boa.types.PositionInfo\022*\n\013change_kind" +
-      "\030\004 \001(\0162\025.boa.types.ChangeKind\022\023\n\013mapped_",
-      "node\030\006 \001(\005\022\013\n\003key\030\007 \001(\005\"j\n\013CommentKind\022\t" +
-      "\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022" +
-      "\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFIC" +
-      "ATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos" +
-      "\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002" +
-      "(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022" +
-      "\017\n\007end_col\030\006 \002(\005\"\233\001\n\010Document\022\r\n\005title\030\001" +
-      " \001(\t\022$\n\010elements\030\002 \003(\0132\022.boa.types.Eleme" +
-      "nt\022$\n\010doc_type\030\003 \001(\0132\022.boa.types.Element" +
-      "\0224\n\026processing_instruction\030\013 \003(\0132\024.boa.t",
-      "ypes.Attribute\"\273\004\n\007Element\022\013\n\003tag\030\001 \002(\t\022" +
-      ",\n\004kind\030\002 \002(\0162\036.boa.types.Element.Elemen" +
-      "tKind\022$\n\010elements\030\003 \003(\0132\022.boa.types.Elem" +
-      "ent\022\014\n\004text\030\004 \003(\t\022\014\n\004data\030\005 \003(\t\022(\n\nattri" +
-      "butes\030\006 \003(\0132\024.boa.types.Attribute\022$\n\006scr" +
-      "ipt\030\007 \001(\0132\024.boa.types.Namespace\022!\n\003php\030\010" +
-      " \001(\0132\024.boa.types.Namespace\022%\n\010var_decl\030\t" +
-      " \003(\0132\023.boa.types.Variable\022\r\n\005title\030\n \001(\t" +
-      "\0224\n\026processing_instruction\030\013 \003(\0132\024.boa.t" +
-      "ypes.Attribute\"\323\001\n\013ElementKind\022\t\n\005OTHER\020",
-      "\000\022\t\n\005BLOCK\020\001\022\013\n\007IN_LINE\020\002\022\010\n\004FORM\020\003\022\014\n\010D" +
-      "OC_TYPE\020\004\022\017\n\013STYLE_SHEET\020\005\022\r\n\tPAGE_RULE\020" +
-      "\006\022\016\n\nSTYLE_RULE\020\007\022\022\n\016FONT_FACE_RULE\020\010\022\016\n" +
-      "\nMEDIA_RULE\020\t\022\017\n\013MEDIA_QUERY\020\n\022\017\n\013IMPORT" +
-      "_RULE\020\013\022\017\n\013XML_ELEMENT\020\014\032\002\020\001\"\'\n\tAttribut" +
-      "e\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t*\303\001\n\010TypeKi" +
-      "nd\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022" +
-      "\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004" +
-      "ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022" +
-      "\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005TRAIT\020\t\022\r\n",
-      "\tPRIMITIVE\020\n\022\t\n\005ARRAY\020\013\032\002\020\001B\002H\001"
+      "ER\020\t\022\n\n\006NATIVE\020\n\022\014\n\010STRICTFP\020\013\022\r\n\tTRANSI" +
+      "ENT\020\014\022\014\n\010VOLATILE\020\r\032\002\020\001\"a\n\nVisibility\022\n\n" +
+      "\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n" +
+      "\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020\005\032\002" +
+      "\020\001\"(\n\005Scope\022\007\n\003VAR\020\001\022\007\n\003LET\020\002\022\t\n\005CONST\020\003" +
+      "\032\002\020\001\"\253\002\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.typ" +
+      "es.Comment.CommentKind\022\r\n\005value\030\002 \002(\t\022)\n" +
+      "\010position\030\003 \002(\0132\027.boa.types.PositionInfo",
+      "\022*\n\013change_kind\030\004 \001(\0162\025.boa.types.Change" +
+      "Kind\022\023\n\013mapped_node\030\006 \001(\005\022\013\n\003key\030\007 \001(\005\"j" +
+      "\n\013CommentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BL" +
+      "OCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPE" +
+      "C\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014PositionIn" +
+      "fo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n" +
+      "\nstart_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010" +
+      "end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005\"\233\001\n\010Docu" +
+      "ment\022\r\n\005title\030\001 \001(\t\022$\n\010elements\030\002 \003(\0132\022." +
+      "boa.types.Element\022$\n\010doc_type\030\003 \001(\0132\022.bo",
+      "a.types.Element\0224\n\026processing_instructio" +
+      "n\030\013 \003(\0132\024.boa.types.Attribute\"\273\004\n\007Elemen" +
+      "t\022\013\n\003tag\030\001 \002(\t\022,\n\004kind\030\002 \002(\0162\036.boa.types" +
+      ".Element.ElementKind\022$\n\010elements\030\003 \003(\0132\022" +
+      ".boa.types.Element\022\014\n\004text\030\004 \003(\t\022\014\n\004data" +
+      "\030\005 \003(\t\022(\n\nattributes\030\006 \003(\0132\024.boa.types.A" +
+      "ttribute\022$\n\006script\030\007 \001(\0132\024.boa.types.Nam" +
+      "espace\022!\n\003php\030\010 \001(\0132\024.boa.types.Namespac" +
+      "e\022%\n\010var_decl\030\t \003(\0132\023.boa.types.Variable" +
+      "\022\r\n\005title\030\n \001(\t\0224\n\026processing_instructio",
+      "n\030\013 \003(\0132\024.boa.types.Attribute\"\323\001\n\013Elemen" +
+      "tKind\022\t\n\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\013\n\007IN_LINE\020\002" +
+      "\022\010\n\004FORM\020\003\022\014\n\010DOC_TYPE\020\004\022\017\n\013STYLE_SHEET\020" +
+      "\005\022\r\n\tPAGE_RULE\020\006\022\016\n\nSTYLE_RULE\020\007\022\022\n\016FONT" +
+      "_FACE_RULE\020\010\022\016\n\nMEDIA_RULE\020\t\022\017\n\013MEDIA_QU" +
+      "ERY\020\n\022\017\n\013IMPORT_RULE\020\013\022\017\n\013XML_ELEMENT\020\014\032" +
+      "\002\020\001\"\'\n\tAttribute\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002" +
+      " \002(\t*\303\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022" +
+      "\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022" +
+      "\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016",
+      "\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020" +
+      "\010\022\t\n\005TRAIT\020\t\022\r\n\tPRIMITIVE\020\n\022\t\n\005ARRAY\020\013\032\002" +
+      "\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

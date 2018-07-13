@@ -537,13 +537,12 @@ public class BoaAstIntrinsics {
 	}
 
 	private static boolean isIncluded(ChangedFile cf, String[] kinds) {
-		if (kinds != null) {
-			final String kindName = cf.getKind().name();
-			for (final String kind : kinds)
-				if (kindName.startsWith(kind)) {
-					return true;
-				}
-		}
+		if (kinds == null || kinds.length == 0)
+			return true;
+		final String kindName = cf.getKind().name();
+		for (final String kind : kinds)
+			if (kindName.startsWith(kind))
+				return true;
 		return false;
 	}
 
@@ -566,10 +565,12 @@ public class BoaAstIntrinsics {
 		return index;
 	}
 	
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string" })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String id) {
 		return getSnapshot(cr, id, new String[0]);
 	}
 	
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string", "string..." })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String id, final String... kinds) {
 		if (cr.getRevisionsCount() == 0)
 			return new ChangedFile[0];

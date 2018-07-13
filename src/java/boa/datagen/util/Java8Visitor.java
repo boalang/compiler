@@ -70,8 +70,8 @@ public class Java8Visitor extends Java7Visitor {
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		if (node.getReturnType2() != null) {
 			String name = typeName(node.getReturnType2());
-			// FIXME JLS8: Deprecated getExtraDimensions() and added extraDimensions()
-			for (int i = 0; i < node.getExtraDimensions(); i++)
+			// FIXME process extra dimensions in JLS 8
+			for (int i = 0; i < node.extraDimensions().size(); i++)
 				name += "[]";
 			tb.setName(name);
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
@@ -127,7 +127,7 @@ public class Java8Visitor extends Java7Visitor {
 			String name = typeName(node.getReceiverType());
 			if (node.getReceiverQualifier() != null) name = node.getReceiverQualifier().getFullyQualifiedName() + "." + name;
 			tp.setName(name);
-			tp.setKind(boa.types.Ast.TypeKind.OTHER); // FIXME change to receiver? or something?
+			tp.setKind(boa.types.Ast.TypeKind.OTHER);
 			setTypeBinding(tp, node.getReceiverType());
 			index = (Integer) node.getReceiverType().getProperty(Java7Visitor.PROPERTY_INDEX);
 			if (index != null) {
@@ -167,8 +167,8 @@ public class Java8Visitor extends Java7Visitor {
 			}
 			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
 			String name = typeName(ex.getType());
-			// FIXME JLS8: Deprecated getExtraDimensions() and added extraDimensions()
-			for (int i = 0; i < ex.getExtraDimensions(); i++)
+			// FIXME process extra dimensions in JLS 8
+			for (int i = 0; i < ex.extraDimensions().size(); i++)
 				name += "[]";
 			if (ex.isVarargs())
 				name += "...";
@@ -259,8 +259,8 @@ public class Java8Visitor extends Java7Visitor {
 				SingleVariableDeclaration svd = (SingleVariableDeclaration)o;
 				boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
 				String name = typeName(svd.getType());
-				// FIXME JLS8: Deprecated getExtraDimensions() and added extraDimensions()
-				for (int i = 0; i < svd.getExtraDimensions(); i++)
+				// FIXME process extra dimensions in JLS 8
+				for (int i = 0; i < svd.extraDimensions().size(); i++)
 					name += "[]";
 				if (svd.isVarargs())
 					name += "...";
