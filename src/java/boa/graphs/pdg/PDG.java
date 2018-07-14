@@ -203,42 +203,43 @@ public class PDG {
                     // store normalized name mappings of def and use variables at this node
                     // replace use and def variables in the node with their normalized names
                     // def variable
-                    if (node.getDefVariable() != null && !node.getDefVariable().equals("")) {
-                        if (!normalizedVars.containsKey(node.getDefVariable())) {
-                            normalizedVars.put(node.getDefVariable(), "var$" + varCount);
-                            varCount++;
-                        }
-                        node.setDefVariable(normalizedVars.get(node.getDefVariable()));
-                    }
-                    // use variables
-                    final HashSet<String> useVars = new HashSet<String>();
-                    for (final String dVar : node.getUseVariables()) {
-                        if (dVar != null) {
-                            if (!normalizedVars.containsKey(dVar)) {
-                                normalizedVars.put(dVar, "var$" + varCount);
+                    if (!visited.contains(node)) {
+                        if (node.getDefVariable() != null && !node.getDefVariable().equals("")) {
+                            if (!normalizedVars.containsKey(node.getDefVariable())) {
+                                normalizedVars.put(node.getDefVariable(), "var$" + varCount);
                                 varCount++;
                             }
-                            useVars.add(normalizedVars.get(dVar));
+                            node.setDefVariable(normalizedVars.get(node.getDefVariable()));
                         }
-                    }
-                    node.setUseVariables(useVars);
-                    if (node.hasStmt())
-                        node.setStmt(normalizeStatement(node.getStmt(), normalizedVars));
-                    if (node.hasExpr())
-                        node.setExpr(normalizeExpression(node.getExpr(), normalizedVars));
+                        // use variables
+                        final HashSet<String> useVars = new HashSet<String>();
+                        for (final String dVar : node.getUseVariables()) {
+                            if (dVar != null) {
+                                if (!normalizedVars.containsKey(dVar)) {
+                                    normalizedVars.put(dVar, "var$" + varCount);
+                                    varCount++;
+                                }
+                                useVars.add(normalizedVars.get(dVar));
+                            }
+                        }
+                        node.setUseVariables(useVars);
+                        if (node.hasStmt())
+                            node.setStmt(normalizeStatement(node.getStmt(), normalizedVars));
+                        if (node.hasExpr())
+                            node.setExpr(normalizeExpression(node.getExpr(), normalizedVars));
 
-                    for (final PDGEdge e : node.getOutEdges()) {
-                        final String label = normalizedVars.get(e.getLabel());
-                        if (label != null)
-                            e.setLabel(label);
-                    }
+                        for (final PDGEdge e : node.getOutEdges()) {
+                            final String label = normalizedVars.get(e.getLabel());
+                            if (label != null)
+                                e.setLabel(label);
+                        }
 
-                    visited.add(node);
-                    // if successor has not been visited, add it
-                    Collections.sort(node.getSuccessors());
-                    for (final PDGNode succ : node.getSuccessors())
-                        if (!visited.contains(succ) && !nodes.contains(succ))
-                            nodes.push(succ);
+                        visited.add(node);
+                        // if successor has not been visited, add it
+                        Collections.sort(node.getSuccessors());
+                        for (final PDGNode succ : node.getSuccessors())
+                                nodes.push(succ);
+                    }
                 }
             } catch (Exception e) {
                 System.out.println(prettyprint(md));
