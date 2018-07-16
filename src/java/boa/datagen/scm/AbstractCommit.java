@@ -642,7 +642,9 @@ public abstract class AbstractCommit {
 		try {
 			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(astLevel);
 			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
-			// parser.setResolveBindings(true);
+//			parser.setResolveBindings(true);
+//			parser.setUnitName(FileIO.getFileName(path));
+//			parser.setEnvironment(null, null, null, true);
 			parser.setSource(content.toCharArray());
 
 			final Map<?, ?> options = JavaCore.getOptions();
@@ -659,7 +661,7 @@ public abstract class AbstractCommit {
 
 			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
 			cu.accept(errorCheck);
-
+			
 			if (!errorCheck.hasError || storeOnError) {
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				// final CommentsRoot.Builder comments =
