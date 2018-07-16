@@ -76,7 +76,7 @@ public class Java7Visitor extends ASTVisitor {
     public boa.types.Ast.Expression getExpression() {
         return expressions.pop();
     }
-
+    
 /*
 	// builds a Position message for every node and stores in the field pos
 	public void preVisit(ASTNode node) {
@@ -92,9 +92,11 @@ public class Java7Visitor extends ASTVisitor {
 			b.setName("");
 		} else {
 			b.setName(pkg.getName().getFullyQualifiedName());
-			for (Object a : pkg.annotations()) {
-				((Annotation)a).accept(this);
-				b.addModifiers(modifiers.pop());
+			if (node.getAST().apiLevel() >= AST.JLS3) {
+				for (Object a : pkg.annotations()) {
+					((Annotation)a).accept(this);
+					b.addModifiers(modifiers.pop());
+				}
 			}
 			Integer index = (Integer) pkg.getProperty(Java7Visitor.PROPERTY_INDEX);
 			if (index != null) {
@@ -1882,8 +1884,11 @@ public class Java7Visitor extends ASTVisitor {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(SwitchCase node) {
+		if (node.getAST().apiLevel() < AST.JLS4 && node.getExpression() instanceof StringLiteral)
+			throw new UnsupportedOperationException("Switching on strings is not supported before Java 7 (JLS4)");
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
 		if (index != null) {
@@ -2423,13 +2428,16 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEW);
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-		if (node.getAST().apiLevel() == AST.JLS2)
+		if (node.getAST().apiLevel() == AST.JLS2) {
 			tb.setName(node.getName().getFullyQualifiedName());
-		else
+			setTypeBinding(tb, node.getName());
+			index = (Integer) node.getName().getProperty(Java7Visitor.PROPERTY_INDEX);
+		} else {
 			tb.setName(typeName(node.getType()));
+			setTypeBinding(tb, node.getType());
+			index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+		}
 		tb.setKind(boa.types.Ast.TypeKind.CLASS);
-		setTypeBinding(tb, node.getType());
-		index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
 		if (index != null) {
 			tb.setKey(index);
 			ChangeKind status = (ChangeKind) node.getType().getProperty(TreedConstants.PROPERTY_STATUS);
@@ -2789,8 +2797,13 @@ public class Java7Visitor extends ASTVisitor {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(NumberLiteral node) {
+		if (node.getAST().apiLevel() < AST.JLS4 && node.getToken().toLowerCase().startsWith("0b"))
+			throw new UnsupportedOperationException("Binary literals are not supported before Java 1.7 (JLS4)");
+		if (node.getAST().apiLevel() < AST.JLS4 && node.getToken().contains("_"))
+			throw new UnsupportedOperationException("Underscores in numeric literals are not supported before Java 1.7 (JLS4)");
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
 		if (index != null) {
