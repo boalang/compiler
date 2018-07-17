@@ -24,9 +24,10 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
 import org.eclipse.jgit.lib.Constants;
 import org.hamcrest.Matchers;
-import org.hamcrest.core.Is;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import boa.datagen.DefaultProperties;
 import boa.datagen.forges.github.RepositoryCloner;
@@ -40,32 +41,49 @@ import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 
 //FIXME assert, autoboxing, static imports, binary literals, underscore literals, unsafe varargs
+
+@RunWith(Parameterized.class)
 public class TestJLSVersion {
+
+    @Parameters(name = "{index}: {0}")
+    public static List<ChangedFile[]> data() throws Exception {
+    	List<ChangedFile[]> data = new ArrayList<ChangedFile[]>();
+		CodeRepository cr = buildCodeRepository("boalang/test-datagen");
+		String[][] commits = new String[][] {
+			{"e08e7534268f3635c5e069f27273f95722e2f839", "79"},
+		};
+		
+		for (String[] commit : commits) {
+			ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr, commit[0], new String[]{"SOURCE_JAVA_"});
+			assertThat(snapshot.length, Matchers.is(Integer.parseInt(commit[1])));
+			
+	    	for (ChangedFile cf : snapshot)
+	    		data.add(new ChangedFile[]{cf});
+		}
+    	return data;
+    }
+
+    private ChangedFile changedFile;
 	
 	private static Configuration conf = new Configuration();
 	private static FileSystem fileSystem = null;
 	
-	private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
-	private long astWriterLen = 0, commitWriterLen = 0, contentWriterLen = 0;
+	private static SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
+	private static long astWriterLen = 0, commitWriterLen = 0, contentWriterLen = 0;
+	
+	public TestJLSVersion(ChangedFile input) {
+		DefaultProperties.DEBUG = true;
+		this.changedFile = input;
+	}
 	
 	@Test
 	public void testJLSVersion() throws Exception {
-		DefaultProperties.DEBUG = true;
-		
-		CodeRepository cr = buildCodeRepository("boalang/test-datagen");
-		
-		ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr, "e08e7534268f3635c5e069f27273f95722e2f839", new String[]{"SOURCE_JAVA_"});
-		assertThat(snapshot.length, Matchers.is(59));
-		for (ChangedFile cf : snapshot) {
-			if (cf.getName().contains("AssertDemo"))
-				continue;
-			String kind = cf.getKind().name();
-			String version = kind.substring(kind.lastIndexOf('_') + 1);
-			assertThat(cf.getName(), Matchers.containsString("/" + version + "/"));
-		}
+		String kind = changedFile.getKind().name();
+		String version = kind.substring(kind.lastIndexOf('_') + 1);
+		assertThat(changedFile.getName(), Matchers.containsString("/" + version + "/"));
 	}
 	
-	private CodeRepository buildCodeRepository(String repoName) throws Exception {
+	private static CodeRepository buildCodeRepository(String repoName) throws Exception {
 		fileSystem = FileSystem.get(conf);
 		
 		System.out.println("Repo: " + repoName);
@@ -151,7 +169,7 @@ public class TestJLSVersion {
 		return cr;
 	}
 
-	public void openWriters(String base) {
+	public static void openWriters(String base) {
 		long time = System.currentTimeMillis();
 		String suffix = time + ".seq";
 		while (true) {
@@ -175,7 +193,7 @@ public class TestJLSVersion {
 		}
 	}
 
-	public void closeWriters() {
+	public static void closeWriters() {
 		while (true) {
 			try {
 				projectWriter.close();
