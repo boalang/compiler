@@ -213,6 +213,9 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.BINARY);
 		else if (lowerPath.endsWith(".java") && parse) {
 			final String content = getFileContents(path);
+			
+			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
+			parseJavaFile(path, fb, content, false);
 
 			fb.setKind(FileKind.SOURCE_JAVA_JLS2);
 			if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_4, AST.JLS2, false)) {
@@ -634,6 +637,137 @@ public abstract class AbstractCommit {
 				l.put(cf.getName(), processLOC(cf.getName()));
 
 		return l;
+	}
+
+	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
+		try {
+			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
+			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
+//			parser.setResolveBindings(true);
+//			parser.setUnitName(FileIO.getFileName(path));
+//			parser.setEnvironment(null, null, null, true);
+			parser.setSource(content.toCharArray());
+
+			final Map<?, ?> options = JavaCore.getOptions();
+			JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+			parser.setCompilerOptions(options);
+
+			final CompilationUnit cu;
+			
+			try {
+				cu = (CompilationUnit) parser.createAST(null);
+			} catch(Throwable e) {
+				return false;
+			}
+
+			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
+			cu.accept(errorCheck);
+			
+			if (!errorCheck.hasError || storeOnError) {
+				final ASTRoot.Builder ast = ASTRoot.newBuilder();
+				// final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
+				final JavaVisitor visitor = new JavaVisitor(content);
+				try {
+					
+					ast.addNamespaces(visitor.getNamespaces(cu));
+					
+//					for (final Comment c : visitor.getComments()) comments.addComments(c);
+					 
+				} catch (final Throwable e) {
+					if (debug) {
+						System.err.println("Error visiting Java file: " + path  + " from: " + projectName);
+						e.printStackTrace();
+					}
+					System.exit(-1);
+					return false;
+				}
+
+				
+				ASTRoot.Builder preAst = null;
+				CompilationUnit preCu = null;
+				if (treeDif) {
+					if (fb.getChange() == ChangeKind.MODIFIED && this.parentIndices.length == 1
+							&& fb.getPreviousIndicesCount() == 1) {
+						AbstractCommit previousCommit = this.connector.revisions.get(fb.getPreviousVersions(0));
+						ChangedFile.Builder pcf = previousCommit.changedFiles.get(fb.getPreviousIndices(0));
+						String previousFilePath = pcf.getName();
+						String previousContent = previousCommit.getFileContents(previousFilePath);
+						FileKind fileKind = pcf.getKind();
+						org.eclipse.jdt.core.dom.ASTParser previuousParser = JavaASTUtil.buildParser(fileKind);
+						if (previuousParser != null) {
+							try {
+								previuousParser.setSource(previousContent.toCharArray());
+								preCu = (CompilationUnit) previuousParser.createAST(null);
+								TreedMapper tm = new TreedMapper(preCu, cu);
+								tm.map();
+								preAst = ASTRoot.newBuilder();
+								Integer index = (Integer) preCu.getProperty(JavaVisitor.PROPERTY_INDEX);
+								if (index != null)
+									preAst.setKey(index);
+								ChangeKind status = (ChangeKind) preCu.getProperty(TreedConstants.PROPERTY_STATUS);
+								if (status != null)
+									preAst.setChangeKind(status);
+								preAst.setMappedNode((Integer) cu.getProperty(TreedConstants.PROPERTY_INDEX));
+								final JavaVisitor preVisitor;
+								if (preCu.getAST().apiLevel() == AST.JLS8)
+									preVisitor = new JavaVisitor(previousContent);
+								else
+									preVisitor = new JavaVisitor(previousContent);
+								preAst.addNamespaces(preVisitor.getNamespaces(preCu));
+							} catch (Throwable e) {
+								preAst = null;
+								preCu = null;
+							}
+						}
+					}
+				}
+				
+				Integer index = (Integer) cu.getProperty(JavaVisitor.PROPERTY_INDEX);
+				if (index != null) {
+					ast.setKey(index);
+					if (preCu != null) {
+						ChangeKind status = (ChangeKind) cu.getProperty(TreedConstants.PROPERTY_STATUS);
+						if (status != null)
+							ast.setChangeKind(status);
+						ast.setMappedNode((Integer) preCu.getProperty(TreedConstants.PROPERTY_INDEX));
+					}
+				}
+
+				long len = connector.astWriterLen;
+				try {
+					BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+					connector.astWriterLen += bw.getLength();
+				} catch (IOException e) {
+					if (debug)
+						e.printStackTrace();
+					len = Long.MAX_VALUE;
+				}
+				long plen = connector.astWriterLen;
+				if (preAst != null && plen > len) {
+					try {
+						BytesWritable bw = new BytesWritable(preAst.build().toByteArray());
+						connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+						connector.astWriterLen += bw.getLength();
+					} catch (IOException e) {
+						if (debug)
+							e.printStackTrace();
+						plen = Long.MAX_VALUE;
+					}
+				}
+				if (preAst != null && connector.astWriterLen > plen)
+					fb.setMappedKey(plen);
+				else
+					fb.setMappedKey(-1);
+				// fb.setComments(comments);
+			}
+
+			return !errorCheck.hasError;
+		} catch (final Throwable e) {
+			if (debug)
+				e.printStackTrace();
+			return false;
+		}
 	}
 
 	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content,

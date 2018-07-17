@@ -51,6 +51,13 @@ public class JavaVisitor extends ASTVisitor {
 	protected Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
 	protected Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
 	protected Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
+	
+	protected int astLevel = -1;
+
+	public void setAstLevel(int astLevel) {
+		if (this.astLevel < astLevel)
+			this.astLevel = astLevel;
+	}
 
 	public JavaVisitor(String src) {
 		super();
@@ -898,6 +905,8 @@ public class JavaVisitor extends ASTVisitor {
 			}
 		}
 		if (node.getReceiverType() != null) {
+			setAstLevel(AST.JLS8);
+			
 			Variable.Builder vb = Variable.newBuilder();
 			vb.setName("this");
 			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
@@ -3158,6 +3167,8 @@ public class JavaVisitor extends ASTVisitor {
 	// begin java 8
 	@Override
 	public boolean visit(LambdaExpression node) {
+		setAstLevel(AST.JLS8);
+		
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
 		if (index != null) {
@@ -3241,6 +3252,8 @@ public class JavaVisitor extends ASTVisitor {
 	
 	@Override
 	public boolean visit(CreationReference node) {
+		setAstLevel(AST.JLS8);
+		
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
 		if (index != null) {
@@ -3306,6 +3319,8 @@ public class JavaVisitor extends ASTVisitor {
 	
 	@Override
 	public boolean visit(ExpressionMethodReference node) {
+		setAstLevel(AST.JLS8);
+		
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
 		if (index != null) {
@@ -3357,6 +3372,8 @@ public class JavaVisitor extends ASTVisitor {
 	
 	@Override
 	public boolean visit(SuperMethodReference node) {
+		setAstLevel(AST.JLS8);
+		
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
 		if (index != null) {
@@ -3410,6 +3427,8 @@ public class JavaVisitor extends ASTVisitor {
 	
 	@Override
 	public boolean visit(TypeMethodReference node) {
+		setAstLevel(AST.JLS8);
+		
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
 		if (index != null) {
