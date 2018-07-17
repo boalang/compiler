@@ -55,12 +55,11 @@ import boa.datagen.util.FileIO;
 import boa.datagen.util.HtmlVisitor;
 import boa.datagen.util.JavaScriptErrorCheckVisitor;
 import boa.datagen.util.JavaScriptVisitor;
+import boa.datagen.util.JavaVisitor;
 import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.XMLVisitor;
-import boa.datagen.util.Java7Visitor;
-import boa.datagen.util.Java8Visitor;
 import boa.datagen.util.JavaASTUtil;
 import boa.datagen.util.JavaErrorCheckVisitor;
 
@@ -666,12 +665,7 @@ public abstract class AbstractCommit {
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				// final CommentsRoot.Builder comments =
 				// CommentsRoot.newBuilder();
-				final Java7Visitor visitor;
-				
-				if (astLevel == AST.JLS8)
-					visitor = new Java8Visitor(content);
-				else
-					visitor = new Java7Visitor(content);
+				final JavaVisitor visitor = new JavaVisitor(content);
 				try {
 					
 					ast.addNamespaces(visitor.getNamespaces(cu));
@@ -713,18 +707,18 @@ public abstract class AbstractCommit {
 								TreedMapper tm = new TreedMapper(preCu, cu);
 								tm.map();
 								preAst = ASTRoot.newBuilder();
-								Integer index = (Integer) preCu.getProperty(Java7Visitor.PROPERTY_INDEX);
+								Integer index = (Integer) preCu.getProperty(JavaVisitor.PROPERTY_INDEX);
 								if (index != null)
 									preAst.setKey(index);
 								ChangeKind status = (ChangeKind) preCu.getProperty(TreedConstants.PROPERTY_STATUS);
 								if (status != null)
 									preAst.setChangeKind(status);
 								preAst.setMappedNode((Integer) cu.getProperty(TreedConstants.PROPERTY_INDEX));
-								final Java7Visitor preVisitor;
+								final JavaVisitor preVisitor;
 								if (preCu.getAST().apiLevel() == AST.JLS8)
-									preVisitor = new Java8Visitor(previousContent);
+									preVisitor = new JavaVisitor(previousContent);
 								else
-									preVisitor = new Java7Visitor(previousContent);
+									preVisitor = new JavaVisitor(previousContent);
 								preAst.addNamespaces(preVisitor.getNamespaces(preCu));
 							} catch (Throwable e) {
 								preAst = null;
@@ -734,7 +728,7 @@ public abstract class AbstractCommit {
 					}
 				}
 				
-				Integer index = (Integer) cu.getProperty(Java7Visitor.PROPERTY_INDEX);
+				Integer index = (Integer) cu.getProperty(JavaVisitor.PROPERTY_INDEX);
 				if (index != null) {
 					ast.setKey(index);
 					if (preCu != null) {
