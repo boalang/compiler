@@ -198,7 +198,6 @@ public abstract class AbstractCommit {
 		return revision.build();
 	}
 
-	@SuppressWarnings("deprecation")
 	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse) {
 		long len = connector.astWriterLen;
 		String path = fb.getName();
@@ -216,42 +215,6 @@ public abstract class AbstractCommit {
 			
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 			parseJavaFile(path, fb, content, false);
-
-			fb.setKind(FileKind.SOURCE_JAVA_JLS2);
-			if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_4, AST.JLS2, false)) {
-				if (debugparse)
-					System.err.println("Found JLS2 parse error in: revision " + id + ": file " + path);
-
-				fb.setKind(FileKind.SOURCE_JAVA_JLS3);
-				if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_5, AST.JLS3, false)) {
-					if (debugparse)
-						System.err.println("Found JLS3 parse error in: revision " + id + ": file " + path);
-
-					fb.setKind(FileKind.SOURCE_JAVA_JLS4);
-					if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_7, AST.JLS4, false)) {
-						if (debugparse)
-							System.err.println("Found JLS4 parse error in: revision " + id + ": file " + path);
-
-						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
-						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false)) {
-							if (debugparse)
-								System.err.println("Found JLS8 parse error in: revision " + id + ": file " + path);
-
-							fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-							// try {
-							// astWriter.append(new LongWritable(len), new
-							// BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
-							// } catch (IOException e) {
-							// e.printStackTrace();
-							// }
-						} else if (debugparse)
-							System.err.println("Accepted JLS8: revision " + id + ": file " + path);
-					} else if (debugparse)
-						System.err.println("Accepted JLS4: revision " + id + ": file " + path);
-				} else if (debugparse)
-					System.err.println("Accepted JLS3: revision " + id + ": file " + path);
-			} else if (debugparse)
-				System.err.println("Accepted JLS2: revision " + id + ": file " + path);
 		} else if (lowerPath.endsWith(".js") && parse) {
 			final String content = getFileContents(path);
 
@@ -416,6 +379,7 @@ public abstract class AbstractCommit {
 		return fb;
 	}
 
+	@SuppressWarnings("unused")
 	private boolean HTMLParse(String path, Builder fb, String content, boolean b, Writer astWriter) {
 		Document doc;
 		HtmlVisitor visitor = new HtmlVisitor();
@@ -451,6 +415,7 @@ public abstract class AbstractCommit {
 		return true;
 	}
 
+	@SuppressWarnings("unused")
 	private boolean XMLParse(String path, Builder fb, String content, boolean b, Writer astWriter) {
 		org.dom4j.Document doc;
 		XMLVisitor visitor = new XMLVisitor();
@@ -488,6 +453,7 @@ public abstract class AbstractCommit {
 		return true;
 	}
 
+	@SuppressWarnings("unused")
 	private boolean CSSParse(String path, Builder fb, String content, boolean b, Writer astWriter) {
 		com.steadystate.css.dom.CSSStyleSheetImpl sSheet = null;
 		CssVisitor visitor = new CssVisitor();
@@ -681,7 +647,23 @@ public abstract class AbstractCommit {
 					System.exit(-1);
 					return false;
 				}
-
+				
+				switch (visitor.getAstLevel()) {
+					case JavaVisitor.JLS2:
+						fb.setKind(FileKind.SOURCE_JAVA_JLS2);
+						break;
+					case JavaVisitor.JLS3:
+						fb.setKind(FileKind.SOURCE_JAVA_JLS3);
+						break;
+					case JavaVisitor.JLS4:
+						fb.setKind(FileKind.SOURCE_JAVA_JLS4);
+						break;
+					case JavaVisitor.JLS8:
+						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
+						break;
+					default:
+						fb.setKind(FileKind.SOURCE_JAVA_ERROR);
+				}
 				
 				ASTRoot.Builder preAst = null;
 				CompilationUnit preCu = null;
@@ -770,6 +752,7 @@ public abstract class AbstractCommit {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content,
 			final String compliance, final int astLevel, final boolean storeOnError) {
 		try {
@@ -821,7 +804,6 @@ public abstract class AbstractCommit {
 					System.exit(-1);
 					return false;
 				}
-
 				
 				ASTRoot.Builder preAst = null;
 				CompilationUnit preCu = null;
@@ -901,6 +883,7 @@ public abstract class AbstractCommit {
 					fb.setMappedKey(-1);
 				// fb.setComments(comments);
 			}
+			
 
 			return !errorCheck.hasError;
 		} catch (final Exception e) {
