@@ -65,8 +65,8 @@ public class SeqRepoImporter {
 	private static FileSystem fileSystem = null;
 	private static String base = null;
 
-	private final static int poolSize = Integer
-			.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
+	private final static int poolSize = Integer.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
+	public static final int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer.MAX_VALUE / 4; // Integer.MAX_VALUE / 3
 	private static AtomicInteger numOfProcessedProjects = new AtomicInteger(0);
 	private static int processedProjects = 0;
 
@@ -246,7 +246,7 @@ public class SeqRepoImporter {
 
 					// store the project metadata
 					BytesWritable bw = new BytesWritable(project.toByteArray());
-					if (bw.getLength() < Integer.MAX_VALUE / 3) {
+					if (bw.getLength() < MAX_SIZE_FOR_PROJECT_WITH_COMMITS) {
 						try {
 							projectWriter.append(new Text(project.getId()), bw);
 						} catch (IOException e) {
