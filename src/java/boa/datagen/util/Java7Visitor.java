@@ -1110,17 +1110,15 @@ public class Java7Visitor extends ASTVisitor {
 			}
 		}
 		b.setName(node.getName().getIdentifier());
-		if (node.getAST().apiLevel() == AST.JLS2) {
-			b.addAllModifiers(buildModifiers(node.getModifiers()));
-		} else {
-			for (Object m : node.modifiers()) {
-				if (((IExtendedModifier) m).isAnnotation())
-					((Annotation) m).accept(this);
-				else
-					((org.eclipse.jdt.core.dom.Modifier) m).accept(this);
-				b.addModifiers(modifiers.pop());
-			}
+
+		for (Object m : node.modifiers()) {
+			if (((IExtendedModifier) m).isAnnotation())
+				((Annotation) m).accept(this);
+			else
+				((org.eclipse.jdt.core.dom.Modifier) m).accept(this);
+			b.addModifiers(modifiers.pop());
 		}
+
 		for (Object arg : node.arguments()) {
 			((org.eclipse.jdt.core.dom.Expression) arg).accept(this);
 			b.addExpressions(expressions.pop());
