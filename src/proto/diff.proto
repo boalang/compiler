@@ -24,23 +24,23 @@ message ChangedFile {
 		/** The file represents a Java source file that had a parse error */
 		SOURCE_JAVA_ERROR = 100;
 		/** The file represents a Java source file that parsed without error as JLS2 */
-		SOURCE_JAVA_JLS2 = 101;
+		SOURCE_JAVA_JLS2 = 102;
 		/** The file represents a Java source file that parsed without error as JLS3 */
-		SOURCE_JAVA_JLS3 = 102;
+		SOURCE_JAVA_JLS3 = 103;
 		/** The file represents a Java source file that parsed without error as JLS4 */
-		SOURCE_JAVA_JLS4 = 103;
+		SOURCE_JAVA_JLS4 = 104;
 		/** The file represents a Java source file that parsed without error as JLS8 */
-		SOURCE_JAVA_JLS8 = 104;
+		SOURCE_JAVA_JLS8 = 108;
 		/** @exclude */
 		JAVA_ERROR = 100;
 		/** @exclude */
-		JLS2 = 101;
+		JLS2 = 102;
 		/** @exclude */
-		JLS3 = 102;
+		JLS3 = 103;
 		/** @exclude */
-		JLS4 = 103;
+		JLS4 = 104;
 		/** @exclude */
-		JLS8 = 104;
+		JLS8 = 108;
 
 		/** @exclude TODO */
 		SOURCE_CS_ERROR = 200;

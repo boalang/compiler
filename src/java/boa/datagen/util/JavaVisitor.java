@@ -21,7 +21,6 @@ package boa.datagen.util;
 import java.util.*;
 
 import org.eclipse.jdt.core.dom.*;
-
 import boa.datagen.treed.TreedConstants;
 import boa.types.Ast.*;
 import boa.types.Ast.Modifier;
@@ -37,6 +36,8 @@ import static boa.datagen.util.JavaASTUtil.getFullyQualifiedName;
  */
 public class JavaVisitor extends ASTVisitor {
 	public static final String PROPERTY_INDEX = "i";
+	@SuppressWarnings("deprecation")
+	public static final int JLS1 = 1, JLS2 = AST.JLS2, JLS3 = AST.JLS3, JLS4 = AST.JLS4, JLS8 = AST.JLS8;
 	
 	protected CompilationUnit root = null;
 	protected PositionInfo.Builder pos = null;
@@ -52,7 +53,7 @@ public class JavaVisitor extends ASTVisitor {
 	protected Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
 	protected Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
 	
-	protected int astLevel = -1;
+	protected int astLevel = JLS1;
 
 	public void setAstLevel(int astLevel) {
 		if (this.astLevel < astLevel)
@@ -91,7 +92,6 @@ public class JavaVisitor extends ASTVisitor {
 	}
 */
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(CompilationUnit node) {
 		PackageDeclaration pkg = node.getPackage();
@@ -99,11 +99,11 @@ public class JavaVisitor extends ASTVisitor {
 			b.setName("");
 		} else {
 			b.setName(pkg.getName().getFullyQualifiedName());
-			if (node.getAST().apiLevel() >= AST.JLS3) {
-				for (Object a : pkg.annotations()) {
-					((Annotation)a).accept(this);
-					b.addModifiers(modifiers.pop());
-				}
+			if (!pkg.annotations().isEmpty() || pkg.getJavadoc() != null)
+				setAstLevel(JLS3);
+			for (Object a : pkg.annotations()) {
+				((Annotation)a).accept(this);
+				b.addModifiers(modifiers.pop());
 			}
 			Integer index = (Integer) pkg.getProperty(JavaVisitor.PROPERTY_INDEX);
 			if (index != null) {
@@ -120,8 +120,10 @@ public class JavaVisitor extends ASTVisitor {
 		for (Object i : node.imports()) {
 			ImportDeclaration id = (ImportDeclaration)i;
 			String imp = "";
-			if (node.getAST().apiLevel() > AST.JLS2 && id.isStatic())
+			if (id.isStatic()) {
+				setAstLevel(JLS3);
 				imp += "static ";
+			}
 			imp += id.getName().getFullyQualifiedName();
 			if (id.isOnDemand())
 				imp += ".*";
@@ -201,13 +203,59 @@ public class JavaVisitor extends ASTVisitor {
 		b.setKind(boa.types.Ast.Comment.CommentKind.DOC);
 		b.setValue(src.substring(node.getStartPosition(), node.getStartPosition() + node.getLength()));
 		comments.add(b.build());
+		for (Iterator<?> it = node.tags().iterator(); it.hasNext(); ) {
+			ASTNode e = (ASTNode) it.next();
+			e.accept(this);
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean visit(TagElement node) {
+		setAstLevel(JLS2);
+		
+		if (node.getTagName() != null) {
+			String name = node.getTagName();
+			if (name.equals("@literal") || name.equals("@code"))
+				setAstLevel(JLS3);
+		}
+		for (Iterator<?> it = node.fragments().iterator(); it.hasNext(); ) {
+			ASTNode e = (ASTNode) it.next();
+			e.accept(this);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean visit(MemberRef node) {
+		setAstLevel(JLS2);
+		
+		return false;
+	}
+	
+	@Override
+	public boolean visit(MethodRef node) {
+		setAstLevel(JLS2);
+		
+		for (Iterator<?> it = node.parameters().iterator(); it.hasNext(); ) {
+			MethodRefParameter e = (MethodRefParameter) it.next();
+			e.accept(this);
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean visit(MethodRefParameter node) {
+		typeName(node.getType());
+		if (node.isVarargs()) {
+			setAstLevel(JLS3);
+		}
 		return false;
 	}
 
 	//////////////////////////////////////////////////////////////
 	// Type Declarations
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(TypeDeclaration node) {
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
@@ -229,19 +277,14 @@ public class JavaVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.TypeKind.INTERFACE);
 		else
 			b.setKind(boa.types.Ast.TypeKind.CLASS);
-		if (node.getAST().apiLevel() == AST.JLS2) {
-			b.addAllModifiers(buildModifiers(node.getModifiers()));
-		} else {
-			for (Object m : node.modifiers()) {
-				if (((IExtendedModifier)m).isAnnotation())
-					((Annotation)m).accept(this);
-				else
-					((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-				b.addModifiers(modifiers.pop());
-			}
-		}
-		if (node.getAST().apiLevel() > AST.JLS2) {
+		b.addAllModifiers(node.modifiers());
+		if (!node.typeParameters().isEmpty()) {
+			setAstLevel(JLS3);
+			
 			for (Object t : node.typeParameters()) {
+				if (!((TypeParameter) t).modifiers().isEmpty())
+					setAstLevel(JLS8);
+				
 				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 				String name = ((TypeParameter)t).getName().getFullyQualifiedName();
 				String bounds = "";
@@ -269,80 +312,41 @@ public class JavaVisitor extends ASTVisitor {
 				b.addGenericParameters(tb.build());
 			}
 		}
-		if (node.getAST().apiLevel() == AST.JLS2) {
-			if (node.getSuperclass() != null) {
-				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-				tb.setName(node.getSuperclass().getFullyQualifiedName());
-				tb.setKind(boa.types.Ast.TypeKind.CLASS);
-				setTypeBinding(tb, node.getSuperclass());
-				Integer index = (Integer) node.getSuperclass().getProperty(JavaVisitor.PROPERTY_INDEX);
-				if (index != null) {
-					tb.setKey(index);
-					ChangeKind status = (ChangeKind) node.getSuperclass().getProperty(TreedConstants.PROPERTY_STATUS);
-					if (status != null) {
-						tb.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) node.getSuperclass().getProperty(TreedConstants.PROPERTY_MAP);
-						if (mappedNode != null)
-							tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
+		if (node.getSuperclassType() != null) {
+			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+			tb.setName(typeName(node.getSuperclassType()));
+			tb.setKind(boa.types.Ast.TypeKind.CLASS);
+			setTypeBinding(tb, node.getSuperclassType());
+			Integer index = (Integer) node.getSuperclassType().getProperty(JavaVisitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) node.getSuperclassType().getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) node.getSuperclassType().getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 				}
-				b.addParents(tb.build());
 			}
-			for (Object t : node.superInterfaces()) {
-				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-				tb.setName(((org.eclipse.jdt.core.dom.Name) t).getFullyQualifiedName());
-				tb.setKind(boa.types.Ast.TypeKind.INTERFACE);
-				setTypeBinding(tb, (org.eclipse.jdt.core.dom.Name) t);
-				Integer index = (Integer) ((ASTNode) t).getProperty(JavaVisitor.PROPERTY_INDEX);
-				if (index != null) {
-					tb.setKey(index);
-					ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
-					if (status != null) {
-						tb.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
-						if (mappedNode != null)
-							tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
+			b.addParents(tb.build());
+		}
+		for (Object t : node.superInterfaceTypes()) {
+			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
+			tb.setKind(boa.types.Ast.TypeKind.INTERFACE);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			Integer index = (Integer) ((ASTNode) t).getProperty(JavaVisitor.PROPERTY_INDEX);
+			if (index != null) {
+				tb.setKey(index);
+				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != null) {
+					tb.setChangeKind(status);
+					ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
+					if (mappedNode != null)
+						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 				}
-				b.addParents(tb.build());
 			}
-		} else {
-			if (node.getSuperclassType() != null) {
-				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-				tb.setName(typeName(node.getSuperclassType()));
-				tb.setKind(boa.types.Ast.TypeKind.CLASS);
-				setTypeBinding(tb, node.getSuperclassType());
-				Integer index = (Integer) node.getSuperclassType().getProperty(JavaVisitor.PROPERTY_INDEX);
-				if (index != null) {
-					tb.setKey(index);
-					ChangeKind status = (ChangeKind) node.getSuperclassType().getProperty(TreedConstants.PROPERTY_STATUS);
-					if (status != null) {
-						tb.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) node.getSuperclassType().getProperty(TreedConstants.PROPERTY_MAP);
-						if (mappedNode != null)
-							tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
-				}
-				b.addParents(tb.build());
-			}
-			for (Object t : node.superInterfaceTypes()) {
-				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-				tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
-				tb.setKind(boa.types.Ast.TypeKind.INTERFACE);
-				setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
-				Integer index = (Integer) ((ASTNode) t).getProperty(JavaVisitor.PROPERTY_INDEX);
-				if (index != null) {
-					tb.setKey(index);
-					ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
-					if (status != null) {
-						tb.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_MAP);
-						if (mappedNode != null)
-							tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
-				}
-				b.addParents(tb.build());
-			}
+			b.addParents(tb.build());
 		}
 		for (Object d : node.bodyDeclarations()) {
 			if (d instanceof FieldDeclaration) {
@@ -417,6 +421,8 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(EnumDeclaration node) {
+		setAstLevel(JLS3);
+		
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
 		b.setName(node.getName().getIdentifier());
 		b.setKind(boa.types.Ast.TypeKind.ENUM);
@@ -486,6 +492,8 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(AnnotationTypeDeclaration node) {
+		setAstLevel(JLS3);
+		
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
 		b.setName(node.getName().getFullyQualifiedName());
 		b.setKind(boa.types.Ast.TypeKind.ANNOTATION);
@@ -730,6 +738,19 @@ public class JavaVisitor extends ASTVisitor {
 		pos.setEndCol(root.getColumnNumber(start + length));
 	}
 
+	private List<Modifier> buildModifiers(List<?> modifiers) {
+		List<Modifier> ms = new ArrayList<Modifier>();
+		for (Object m : modifiers) {
+			if (((IExtendedModifier)m).isAnnotation()) {
+				setAstLevel(JLS3);
+				((Annotation)m).accept(this);
+			} else
+				((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
+			ms.add(this.modifiers.pop());
+		}
+		return ms;
+	}
+
 	private List<Modifier> buildModifiers(int modifiers) {
 		List<Modifier> ms = new ArrayList<Modifier>();
 
@@ -797,7 +818,6 @@ public class JavaVisitor extends ASTVisitor {
 	//////////////////////////////////////////////////////////////
 	// Field/Method Declarations
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(MethodDeclaration node) {
 		List<boa.types.Ast.Method> list = methods.peek();
@@ -819,64 +839,40 @@ public class JavaVisitor extends ASTVisitor {
 			b.setName(node.getName().getFullyQualifiedName());
 			
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			if (node.getAST().apiLevel() == AST.JLS2) {
-				String name = typeName(node.getReturnType());
+			if (node.getReturnType2() != null) {
+				String name = typeName(node.getReturnType2());
+				// FIXME process extra dimensions in JLS 8
+				visitDimensions(node.extraDimensions());
 				for (int i = 0; i < node.getExtraDimensions(); i++)
 					name += "[]";
 				tb.setName(name);
 				tb.setKind(boa.types.Ast.TypeKind.OTHER);
-				setTypeBinding(tb, node.getReturnType());
-				index = (Integer) node.getReturnType().getProperty(JavaVisitor.PROPERTY_INDEX);
+				setTypeBinding(tb, node.getReturnType2());
+				index = (Integer) node.getReturnType2().getProperty(JavaVisitor.PROPERTY_INDEX);
 				if (index != null) {
 					tb.setKey(index);
-					ChangeKind status = (ChangeKind) node.getReturnType().getProperty(TreedConstants.PROPERTY_STATUS);
+					ChangeKind status = (ChangeKind) node.getReturnType2().getProperty(TreedConstants.PROPERTY_STATUS);
 					if (status != null) {
 						tb.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) node.getReturnType().getProperty(TreedConstants.PROPERTY_MAP);
+						ASTNode mappedNode = (ASTNode) node.getReturnType2().getProperty(TreedConstants.PROPERTY_MAP);
 						if (mappedNode != null)
 							tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 					}
 				}
 			} else {
-				if (node.getReturnType2() != null) {
-					String name = typeName(node.getReturnType2());
-					// FIXME process extra dimensions in JLS 8
-					for (int i = 0; i < node.getExtraDimensions(); i++)
-						name += "[]";
-					tb.setName(name);
-					tb.setKind(boa.types.Ast.TypeKind.OTHER);
-					setTypeBinding(tb, node.getReturnType2());
-					index = (Integer) node.getReturnType2().getProperty(JavaVisitor.PROPERTY_INDEX);
-					if (index != null) {
-						tb.setKey(index);
-						ChangeKind status = (ChangeKind) node.getReturnType2().getProperty(TreedConstants.PROPERTY_STATUS);
-						if (status != null) {
-							tb.setChangeKind(status);
-							ASTNode mappedNode = (ASTNode) node.getReturnType2().getProperty(TreedConstants.PROPERTY_MAP);
-							if (mappedNode != null)
-								tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-						}
-					}
-				} else {
-					tb.setName("void");
-					tb.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
-				}
+				tb.setName("void");
+				tb.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
 			}
 			b.setReturnType(tb.build());
 		}
-		if (node.getAST().apiLevel() == AST.JLS2) {
-			b.addAllModifiers(buildModifiers(node.getModifiers()));
-		} else {
-			for (Object m : node.modifiers()) {
-				if (((IExtendedModifier)m).isAnnotation())
-					((Annotation)m).accept(this);
-				else
-					((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-				b.addModifiers(modifiers.pop());
-			}
-		}
-		if (node.getAST().apiLevel() > AST.JLS2) {
+		b.addAllModifiers(buildModifiers(node.modifiers()));
+		if (!node.typeParameters().isEmpty()) {
+			setAstLevel(JLS3);
+			
 			for (Object t : node.typeParameters()) {
+				if (!((TypeParameter) t).modifiers().isEmpty())
+					setAstLevel(JLS8);
+				
 				boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
 				String name = ((TypeParameter)t).getName().getFullyQualifiedName();
 				String bounds = "";
@@ -931,6 +927,11 @@ public class JavaVisitor extends ASTVisitor {
 		}
 		for (Object o : node.parameters()) {
 			SingleVariableDeclaration ex = (SingleVariableDeclaration)o;
+			if (ex.isVarargs()) {
+				setAstLevel(JLS3);
+				if (!ex.varargsAnnotations().isEmpty())
+					setAstLevel(JLS8);
+			}
 			Variable.Builder vb = Variable.newBuilder();
 			index = (Integer) ex.getProperty(JavaVisitor.PROPERTY_INDEX);
 			if (index != null) {
@@ -944,24 +945,17 @@ public class JavaVisitor extends ASTVisitor {
 				}
 			}
 			vb.setName(ex.getName().getFullyQualifiedName());
-			if (ex.getAST().apiLevel() == AST.JLS2) {
-				vb.addAllModifiers(buildModifiers(ex.getModifiers()));
-			} else {
-				for (Object m : ex.modifiers()) {
-					if (((IExtendedModifier)m).isAnnotation())
-						((Annotation)m).accept(this);
-					else
-						((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-					vb.addModifiers(modifiers.pop());
-				}
-			}
+			vb.addAllModifiers(buildModifiers(ex.modifiers()));
 			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
 			String name = typeName(ex.getType());
 			// FIXME process extra dimensions in JLS 8
+			visitDimensions(ex.extraDimensions());
 			for (int i = 0; i < ex.getExtraDimensions(); i++)
 				name += "[]";
-			if (ex.getAST().apiLevel() > AST.JLS2 && ex.isVarargs())
+			if (ex.isVarargs()) {
+				setAstLevel(JLS3);
 				name += "...";
+			}
 			tp.setName(name);
 			tp.setKind(boa.types.Ast.TypeKind.OTHER);
 			setTypeBinding(tp, ex.getType());
@@ -1014,6 +1008,8 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(AnnotationTypeMemberDeclaration node) {
+		setAstLevel(JLS3);
+		
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
 		Integer index = (Integer) node.getProperty(JavaVisitor.PROPERTY_INDEX);
@@ -1067,7 +1063,6 @@ public class JavaVisitor extends ASTVisitor {
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(FieldDeclaration node) {
 		List<boa.types.Ast.Variable> list = fields.peek();
@@ -1086,20 +1081,11 @@ public class JavaVisitor extends ASTVisitor {
 				}
 			}
 			b.setName(f.getName().getFullyQualifiedName());
-			if (node.getAST().apiLevel() == AST.JLS2) {
-				b.addAllModifiers(buildModifiers(node.getModifiers()));
-			} else {
-				for (Object m : node.modifiers()) {
-					if (((IExtendedModifier)m).isAnnotation())
-						((Annotation)m).accept(this);
-					else
-						((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-					b.addModifiers(modifiers.pop());
-				}
-			}
+			b.addAllModifiers(buildModifiers(node.modifiers()));
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			String name = typeName(node.getType());
 			// FIXME process extra dimensions in JLS 8
+			visitDimensions(f.extraDimensions());
 			for (int i = 0; i < f.getExtraDimensions(); i++)
 				name += "[]";
 			tb.setName(name);
@@ -1129,6 +1115,8 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(EnumConstantDeclaration node) {
+		setAstLevel(JLS3);
+		
 		List<boa.types.Ast.Variable> list = fields.peek();
 		Variable.Builder b = Variable.newBuilder();
 		Integer index = (Integer) node.getProperty(JavaVisitor.PROPERTY_INDEX);
@@ -1185,12 +1173,16 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(MarkerAnnotation node) {
+		setAstLevel(JLS3);
+		
 		modifiers.push(getAnnotationBuilder(node).build());
 		return false;
 	}
 
 	@Override
 	public boolean visit(SingleMemberAnnotation node) {
+		setAstLevel(JLS3);
+		
 		boa.types.Ast.Modifier.Builder b = getAnnotationBuilder(node);
 		node.getValue().accept(this);
 		if (expressions.empty()) {
@@ -1209,6 +1201,8 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(NormalAnnotation node) {
+		setAstLevel(JLS3);
+		
 		boa.types.Ast.Modifier.Builder b = getAnnotationBuilder(node);
 		for (Object v : node.values()) {
 			MemberValuePair pair = (MemberValuePair)v;
@@ -1277,12 +1271,21 @@ public class JavaVisitor extends ASTVisitor {
 		modifiers.push(b.build());
 		return false;
 	}
+	
+	@Override
+	public boolean visit(Dimension node) {
+		if (!node.annotations().isEmpty())
+			setAstLevel(JLS8);
+		return false;
+	}
 
 	//////////////////////////////////////////////////////////////
 	// Statements
 
 	@Override
 	public boolean visit(AssertStatement node) {
+		setAstLevel(JLS2);
+		
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		Integer index = (Integer) node.getProperty(JavaVisitor.PROPERTY_INDEX);
 		if (index != null) {
@@ -1370,7 +1373,6 @@ public class JavaVisitor extends ASTVisitor {
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(CatchClause node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
@@ -1388,6 +1390,11 @@ public class JavaVisitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.CATCH);
 		SingleVariableDeclaration ex = node.getException();
+		if (ex.isVarargs()) {
+			setAstLevel(JLS3);
+			if (!ex.varargsAnnotations().isEmpty())
+				setAstLevel(JLS8);
+		}
 		Variable.Builder vb = Variable.newBuilder();
 		index = (Integer) ex.getProperty(JavaVisitor.PROPERTY_INDEX);
 		if (index != null) {
@@ -1401,20 +1408,11 @@ public class JavaVisitor extends ASTVisitor {
 			}
 		}
 		vb.setName(ex.getName().getFullyQualifiedName());
-		if (ex.getAST().apiLevel() == AST.JLS2) {
-			vb.addAllModifiers(buildModifiers(ex.getModifiers()));
-		} else {
-			for (Object m : ex.modifiers()) {
-				if (((IExtendedModifier)m).isAnnotation())
-					((Annotation)m).accept(this);
-				else
-					((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-				vb.addModifiers(modifiers.pop());
-			}
-		}
+		vb.addAllModifiers(buildModifiers(ex.modifiers()));
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		String name = typeName(ex.getType());
 		// FIXME process extra dimensions in JLS 8
+		visitDimensions(ex.extraDimensions());
 		for (int i = 0; i < ex.getExtraDimensions(); i++)
 			name += "[]";
 		tb.setName(name);
@@ -1446,7 +1444,6 @@ public class JavaVisitor extends ASTVisitor {
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(ConstructorInvocation node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
@@ -1477,7 +1474,8 @@ public class JavaVisitor extends ASTVisitor {
 			((org.eclipse.jdt.core.dom.Expression)a).accept(this);
 			eb.addMethodArgs(expressions.pop());
 		}
-		if (node.getAST().apiLevel() > AST.JLS2) {
+		if (node.typeArguments() != null && !node.typeArguments().isEmpty()) {
+			setAstLevel(JLS3);
 			for (Object t : node.typeArguments()) {
 				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 				tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
@@ -1603,6 +1601,11 @@ public class JavaVisitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.FOREACH);
 		SingleVariableDeclaration ex = node.getParameter();
+		if (ex.isVarargs()) {
+			setAstLevel(JLS3);
+			if (!ex.varargsAnnotations().isEmpty())
+				setAstLevel(JLS8);
+		}
 		Variable.Builder vb = Variable.newBuilder();
 		index = (Integer) ex.getProperty(JavaVisitor.PROPERTY_INDEX);
 		if (index != null) {
@@ -1630,6 +1633,7 @@ public class JavaVisitor extends ASTVisitor {
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		String name = typeName(ex.getType());
 		// FIXME process extra dimensions in JLS 8
+		visitDimensions(ex.extraDimensions());
 		for (int i = 0; i < ex.getExtraDimensions(); i++)
 			name += "[]";
 		tb.setName(name);
@@ -1647,10 +1651,6 @@ public class JavaVisitor extends ASTVisitor {
 			}
 		}
 		vb.setVariableType(tb.build());
-		if (ex.getInitializer() != null) {
-			ex.getInitializer().accept(this);
-			vb.setInitializer(expressions.pop());
-		}
 		b.setVariableDeclaration(vb.build());
 		node.getExpression().accept(this);
 		b.setExpression(expressions.pop());
@@ -1752,7 +1752,6 @@ public class JavaVisitor extends ASTVisitor {
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(Initializer node) {
 		List<boa.types.Ast.Method> list = methods.peek();
@@ -1769,17 +1768,7 @@ public class JavaVisitor extends ASTVisitor {
 			}
 		}
 		b.setName("<clinit>");
-		if (node.getAST().apiLevel() == AST.JLS2) {
-			b.addAllModifiers(buildModifiers(node.getModifiers()));
-		} else {
-			for (Object m : node.modifiers()) {
-				if (((IExtendedModifier)m).isAnnotation())
-					((Annotation)m).accept(this);
-				else
-					((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-				b.addModifiers(modifiers.pop());
-			}
-		}
+		b.addAllModifiers(buildModifiers(node.modifiers()));
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName("void");
 		tb.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
@@ -1857,7 +1846,6 @@ public class JavaVisitor extends ASTVisitor {
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(SuperConstructorInvocation node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
@@ -1892,7 +1880,9 @@ public class JavaVisitor extends ASTVisitor {
 			((org.eclipse.jdt.core.dom.Expression)a).accept(this);
 			eb.addMethodArgs(expressions.pop());
 		}
-		if (node.getAST().apiLevel() > AST.JLS2) {
+		if (!node.typeArguments().isEmpty()) {
+			setAstLevel(JLS3);
+			
 			for (Object t : node.typeArguments()) {
 				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 				tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
@@ -1917,11 +1907,10 @@ public class JavaVisitor extends ASTVisitor {
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(SwitchCase node) {
-		if (node.getAST().apiLevel() < AST.JLS4 && node.getExpression() instanceof StringLiteral)
-			throw new UnsupportedOperationException("Switching on strings is not supported before Java 7 (JLS4)");
+		if (node.getExpression() instanceof StringLiteral)
+			setAstLevel(JLS4);
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		Integer index = (Integer) node.getProperty(JavaVisitor.PROPERTY_INDEX);
 		if (index != null) {
@@ -2023,7 +2012,6 @@ public class JavaVisitor extends ASTVisitor {
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(TryStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
@@ -2048,7 +2036,9 @@ public class JavaVisitor extends ASTVisitor {
 			visitFinally(node.getFinally());
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
-		if (node.getAST().apiLevel() >= AST.JLS4 && node.resources() != null)
+		if (!node.resources().isEmpty())
+			setAstLevel(JLS4);
+		
 			for (Object v : node.resources()) {
 				((VariableDeclarationExpression)v).accept(this);
 				b.addInitializations(expressions.pop());
@@ -2080,7 +2070,6 @@ public class JavaVisitor extends ASTVisitor {
 		list.add(b.build());
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(TypeDeclarationStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
@@ -2098,17 +2087,13 @@ public class JavaVisitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.TYPEDECL);
 		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
-		if (node.getAST().apiLevel() == AST.JLS2)
-			node.getTypeDeclaration().accept(this);
-		else
-			node.getDeclaration().accept(this);
+		node.getDeclaration().accept(this);
 		for (boa.types.Ast.Declaration d : declarations.pop())
 			b.setTypeDeclaration(d);
 		list.add(b.build());
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(VariableDeclarationStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
@@ -2142,20 +2127,11 @@ public class JavaVisitor extends ASTVisitor {
 				}
 			}
 			vb.setName(f.getName().getFullyQualifiedName());
-			if (node.getAST().apiLevel() == AST.JLS2) {
-				vb.addAllModifiers(buildModifiers(node.getModifiers()));
-			} else {
-				for (Object m : node.modifiers()) {
-					if (((IExtendedModifier)m).isAnnotation())
-						((Annotation)m).accept(this);
-					else
-						((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-					vb.addModifiers(modifiers.pop());
-				}
-			}
+			vb.addAllModifiers(node.modifiers());
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			String name = typeName(node.getType());
 			// FIXME process extra dimensions in JLS 8
+			visitDimensions(f.extraDimensions());
 			for (int i = 0; i < f.getExtraDimensions(); i++)
 				name += "[]";
 			tb.setName(name);
@@ -2306,6 +2282,7 @@ public class JavaVisitor extends ASTVisitor {
 		for (Object e : node.expressions()) {
 			((org.eclipse.jdt.core.dom.Expression)e).accept(this);
 			if (expressions.empty()) {
+				// FIXME is it only possible from JLS8
 				boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 				eb.setKind(boa.types.Ast.Expression.ExpressionKind.ANNOTATION);
 				eb.setAnnotation(modifiers.pop());
@@ -2444,7 +2421,6 @@ public class JavaVisitor extends ASTVisitor {
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(ClassInstanceCreation node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
@@ -2461,15 +2437,9 @@ public class JavaVisitor extends ASTVisitor {
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEW);
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-		if (node.getAST().apiLevel() == AST.JLS2) {
-			tb.setName(node.getName().getFullyQualifiedName());
-			setTypeBinding(tb, node.getName());
-			index = (Integer) node.getName().getProperty(JavaVisitor.PROPERTY_INDEX);
-		} else {
-			tb.setName(typeName(node.getType()));
-			setTypeBinding(tb, node.getType());
-			index = (Integer) node.getType().getProperty(JavaVisitor.PROPERTY_INDEX);
-		}
+		tb.setName(typeName(node.getType()));
+		setTypeBinding(tb, node.getType());
+		index = (Integer) node.getType().getProperty(JavaVisitor.PROPERTY_INDEX);
 		tb.setKind(boa.types.Ast.TypeKind.CLASS);
 		if (index != null) {
 			tb.setKey(index);
@@ -2482,7 +2452,8 @@ public class JavaVisitor extends ASTVisitor {
 			}
 		}
 		b.setNewType(tb.build());
-		if (node.getAST().apiLevel() > AST.JLS2) {
+		if (node.typeArguments() != null && !node.typeArguments().isEmpty()) {
+			setAstLevel(JLS3);
 			for (Object t : node.typeArguments()) {
 				boa.types.Ast.Type.Builder gtb = boa.types.Ast.Type.newBuilder();
 				gtb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
@@ -2754,7 +2725,6 @@ public class JavaVisitor extends ASTVisitor {
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(MethodInvocation node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
@@ -2786,7 +2756,9 @@ public class JavaVisitor extends ASTVisitor {
 			((org.eclipse.jdt.core.dom.Expression) a).accept(this);
 			b.addMethodArgs(expressions.pop());
 		}
-		if (node.getAST().apiLevel() > AST.JLS2) {
+		if (!node.typeArguments().isEmpty()) {
+			setAstLevel(JLS3);
+			
 			for (Object t : node.typeArguments()) {
 				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 				tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
@@ -2830,13 +2802,12 @@ public class JavaVisitor extends ASTVisitor {
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(NumberLiteral node) {
-		if (node.getAST().apiLevel() < AST.JLS4 && node.getToken().toLowerCase().startsWith("0b"))
-			throw new UnsupportedOperationException("Binary literals are not supported before Java 1.7 (JLS4)");
-		if (node.getAST().apiLevel() < AST.JLS4 && node.getToken().contains("_"))
-			throw new UnsupportedOperationException("Underscores in numeric literals are not supported before Java 1.7 (JLS4)");
+		if (node.getToken().toLowerCase().startsWith("0b"))
+			setAstLevel(JLS4);
+		if (node.getToken().contains("_"))
+			setAstLevel(JLS3);
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		Integer index = (Integer) node.getProperty(JavaVisitor.PROPERTY_INDEX);
 		if (index != null) {
@@ -2988,7 +2959,6 @@ public class JavaVisitor extends ASTVisitor {
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(SuperMethodInvocation node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
@@ -3019,7 +2989,9 @@ public class JavaVisitor extends ASTVisitor {
 			((org.eclipse.jdt.core.dom.Expression)a).accept(this);
 			b.addMethodArgs(expressions.pop());
 		}
-		if (node.getAST().apiLevel() > AST.JLS2) {
+		if (!node.typeArguments().isEmpty()) {
+			setAstLevel(JLS3);
+			
 			for (Object t : node.typeArguments()) {
 				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 				tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
@@ -3092,7 +3064,6 @@ public class JavaVisitor extends ASTVisitor {
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(VariableDeclarationExpression node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
@@ -3123,20 +3094,11 @@ public class JavaVisitor extends ASTVisitor {
 				}
 			}
 			b.setName(f.getName().getFullyQualifiedName());
-			if (node.getAST().apiLevel() == AST.JLS2) {
-				b.addAllModifiers(buildModifiers(node.getModifiers()));
-			} else {
-				for (Object m : node.modifiers()) {
-					if (((IExtendedModifier)m).isAnnotation())
-						((Annotation)m).accept(this);
-					else
-						((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
-					b.addModifiers(modifiers.pop());
-				}
-			}
+			b.addAllModifiers(node.modifiers());
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			String name = typeName(node.getType());
 			// FIXME process extra dimensions in JLS 8
+			visitDimensions(f.extraDimensions());
 			for (int i = 0; i < f.getExtraDimensions(); i++)
 				name += "[]";
 			tb.setName(name);
@@ -3201,9 +3163,15 @@ public class JavaVisitor extends ASTVisitor {
 			vb.setName(ex.getName().getFullyQualifiedName());
 			if (o instanceof SingleVariableDeclaration) {
 				SingleVariableDeclaration svd = (SingleVariableDeclaration)o;
+				if (svd.isVarargs()) {
+					setAstLevel(JLS3);
+					if (!svd.varargsAnnotations().isEmpty())
+						setAstLevel(JLS8);
+				}
 				boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
 				String name = typeName(svd.getType());
 				// FIXME process extra dimensions in JLS 8
+				visitDimensions(ex.extraDimensions());
 				for (int i = 0; i < svd.extraDimensions().size(); i++)
 					name += "[]";
 				if (svd.isVarargs())
@@ -3224,11 +3192,13 @@ public class JavaVisitor extends ASTVisitor {
 				}
 				vb.setVariableType(tp.build());
 			} else {
-				VariableDeclarationFragment vdf = (VariableDeclarationFragment)o;
+				VariableDeclarationFragment vdf = (VariableDeclarationFragment) o;
+				// FIXME
 				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 				tb.setName("");
 				tb.setKind(boa.types.Ast.TypeKind.OTHER);
 				setTypeBinding(tb, vdf.getName());
+				visitDimensions(vdf.extraDimensions());
 				vb.setVariableType(tb.build());
 			}
 			eb.addVariableDecls(vb.build());
@@ -3520,10 +3490,18 @@ public class JavaVisitor extends ASTVisitor {
 		// FIXME JLS8: Deprecated getDimensions() and added dimensions()
 		for (int i = 0; i < t.getDimensions(); i++)
 			name += "[]";
+		visitDimensions(t.dimensions());
 		return name;
 	}
 
+	private void visitDimensions(List<?> dimensions) {
+		for (Object d : dimensions)
+			((Dimension) d).accept(this);
+	}
+
 	protected String typeName(final ParameterizedType t) {
+		setAstLevel(JLS3);
+		
 		String name = "";
 		for (final Object o : t.typeArguments()) {
 			if (name.length() > 0) name += ", ";
@@ -3533,19 +3511,29 @@ public class JavaVisitor extends ASTVisitor {
 	}
 
 	protected String typeName(final PrimitiveType t) {
+		if (!t.annotations().isEmpty())
+			setAstLevel(JLS8);
+		
 		return t.getPrimitiveTypeCode().toString();
 	}
 
 	protected String typeName(final NameQualifiedType t) {
+		setAstLevel(JLS8);
+		
 		return t.getQualifier().getFullyQualifiedName() + "." + t.getName().getFullyQualifiedName();
 	}
 	
 
 	protected String typeName(final QualifiedType t) {
+		if (!t.annotations().isEmpty())
+			setAstLevel(JLS8);
+		
 		return typeName(t.getQualifier()) + "." + t.getName().getFullyQualifiedName();
 	}
 
 	protected String typeName(final IntersectionType t) {
+		setAstLevel(JLS8);
+		
 		String name = "";
 		for (final Object o : t.types()) {
 			if (name.length() > 0) name += " & ";
@@ -3555,6 +3543,8 @@ public class JavaVisitor extends ASTVisitor {
 	}
 
 	protected String typeName(final UnionType t) {
+		setAstLevel(JLS4);
+		
 		String name = "";
 		for (final Object o : t.types()) {
 			if (name.length() > 0) name += " | ";
@@ -3564,6 +3554,11 @@ public class JavaVisitor extends ASTVisitor {
 	}
 
 	protected String typeName(final WildcardType t) {
+		setAstLevel(JLS3);
+		
+		if (!t.annotations().isEmpty())
+			setAstLevel(JLS8);
+		
 		String name = "?";
 		if (t.getBound() != null) {
 			name += " " + (t.isUpperBound() ? "extends" : "super");
@@ -3573,6 +3568,9 @@ public class JavaVisitor extends ASTVisitor {
 	}
 
 	protected String typeName(final SimpleType t) {
+		if (!t.annotations().isEmpty())
+			setAstLevel(JLS8);
+		
 		return t.getName().getFullyQualifiedName();
 	}
 	
@@ -3640,11 +3638,6 @@ public class JavaVisitor extends ASTVisitor {
 	}
 
 	@Override
-	public boolean visit(MemberRef node) {
-		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
-	}
-
-	@Override
 	public boolean visit(MemberValuePair node) {
 		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
@@ -3656,21 +3649,6 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(VariableDeclarationFragment node) {
-		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
-	}
-	
-	@Override
-	public boolean visit(MethodRef node) {
-		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
-	}
-	
-	@Override
-	public boolean visit(MethodRefParameter node) {
-		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
-	}
-	
-	@Override
-	public boolean visit(TagElement node) {
 		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 	
