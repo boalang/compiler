@@ -76,25 +76,13 @@ public class Java7Visitor extends ASTVisitor {
     public boa.types.Ast.Expression getExpression() {
         return expressions.pop();
     }
-
+    
 /*
 	// builds a Position message for every node and stores in the field pos
 	public void preVisit(ASTNode node) {
 		buildPosition(node);
 	}
 */
-
-	protected void buildPosition(final ASTNode node) {
-		pos = PositionInfo.newBuilder();
-		int start = node.getStartPosition();
-		int length = node.getLength();
-		pos.setStartPos(start);
-		pos.setLength(length);
-		pos.setStartLine(root.getLineNumber(start));
-		pos.setStartCol(root.getColumnNumber(start));
-		pos.setEndLine(root.getLineNumber(start + length));
-		pos.setEndCol(root.getColumnNumber(start + length));
-	}
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -104,9 +92,11 @@ public class Java7Visitor extends ASTVisitor {
 			b.setName("");
 		} else {
 			b.setName(pkg.getName().getFullyQualifiedName());
-			for (Object a : pkg.annotations()) {
-				((Annotation)a).accept(this);
-				b.addModifiers(modifiers.pop());
+			if (node.getAST().apiLevel() >= AST.JLS3) {
+				for (Object a : pkg.annotations()) {
+					((Annotation)a).accept(this);
+					b.addModifiers(modifiers.pop());
+				}
 			}
 			Integer index = (Integer) pkg.getProperty(Java7Visitor.PROPERTY_INDEX);
 			if (index != null) {
@@ -234,7 +224,7 @@ public class Java7Visitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.TypeKind.CLASS);
 		if (node.getAST().apiLevel() == AST.JLS2) {
 			b.addAllModifiers(buildModifiers(node.getModifiers()));
-		} {
+		} else {
 			for (Object m : node.modifiers()) {
 				if (((IExtendedModifier)m).isAnnotation())
 					((Annotation)m).accept(this);
@@ -350,22 +340,22 @@ public class Java7Visitor extends ASTVisitor {
 		for (Object d : node.bodyDeclarations()) {
 			if (d instanceof FieldDeclaration) {
 				fields.push(new ArrayList<boa.types.Ast.Variable>());
-				((FieldDeclaration)d).accept(this);
+				((FieldDeclaration) d).accept(this);
 				for (boa.types.Ast.Variable v : fields.pop())
 					b.addFields(v);
 			} else if (d instanceof MethodDeclaration) {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
-				((MethodDeclaration)d).accept(this);
+				((MethodDeclaration) d).accept(this);
 				for (boa.types.Ast.Method m : methods.pop())
 					b.addMethods(m);
 			} else if (d instanceof Initializer) {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
-				((Initializer)d).accept(this);
+				((Initializer) d).accept(this);
 				for (boa.types.Ast.Method m : methods.pop())
 					b.addMethods(m);
 			} else {
 				declarations.push(new ArrayList<boa.types.Ast.Declaration>());
-				((BodyDeclaration)d).accept(this);
+				((BodyDeclaration) d).accept(this);
 				for (boa.types.Ast.Declaration nd : declarations.pop())
 					b.addNestedDeclarations(nd);
 			}
@@ -437,7 +427,10 @@ public class Java7Visitor extends ASTVisitor {
 			}
 		}
 		for (Object c : node.enumConstants()) {
-			// TODO EnumConstantDeclaration
+			fields.push(new ArrayList<boa.types.Ast.Variable>());
+			((EnumConstantDeclaration) c).accept(this);
+			for (boa.types.Ast.Variable v : fields.pop())
+				b.addFields(v);
 		}
 		for (Object t : node.superInterfaceTypes()) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
@@ -718,6 +711,82 @@ public class Java7Visitor extends ASTVisitor {
 		return tb.build();
 	}
 
+	protected void buildPosition(final ASTNode node) {
+		pos = PositionInfo.newBuilder();
+		int start = node.getStartPosition();
+		int length = node.getLength();
+		pos.setStartPos(start);
+		pos.setLength(length);
+		pos.setStartLine(root.getLineNumber(start));
+		pos.setStartCol(root.getColumnNumber(start));
+		pos.setEndLine(root.getLineNumber(start + length));
+		pos.setEndCol(root.getColumnNumber(start + length));
+	}
+
+	private List<Modifier> buildModifiers(int modifiers) {
+		List<Modifier> ms = new ArrayList<Modifier>();
+
+		if (org.eclipse.jdt.core.dom.Modifier.isPublic(modifiers)) {
+			Modifier.Builder mb = Modifier.newBuilder();
+			mb.setKind(ModifierKind.VISIBILITY);
+			mb.setVisibility(Visibility.PUBLIC);
+			ms.add(mb.build());
+		}
+		if (org.eclipse.jdt.core.dom.Modifier.isProtected(modifiers)) {
+			Modifier.Builder mb = Modifier.newBuilder();
+			mb.setKind(ModifierKind.VISIBILITY);
+			mb.setVisibility(Visibility.PROTECTED);
+			ms.add(mb.build());
+		}
+		if (org.eclipse.jdt.core.dom.Modifier.isPrivate(modifiers)) {
+			Modifier.Builder mb = Modifier.newBuilder();
+			mb.setKind(ModifierKind.VISIBILITY);
+			mb.setVisibility(Visibility.PRIVATE);
+			ms.add(mb.build());
+		}
+		if (org.eclipse.jdt.core.dom.Modifier.isStatic(modifiers)) {
+			Modifier.Builder mb = Modifier.newBuilder();
+			mb.setKind(ModifierKind.STATIC);
+			ms.add(mb.build());
+		}
+		if (org.eclipse.jdt.core.dom.Modifier.isAbstract(modifiers)) {
+			Modifier.Builder mb = Modifier.newBuilder();
+			mb.setKind(ModifierKind.ABSTRACT);
+			ms.add(mb.build());
+		}
+		if (org.eclipse.jdt.core.dom.Modifier.isFinal(modifiers)) {
+			Modifier.Builder mb = Modifier.newBuilder();
+			mb.setKind(ModifierKind.FINAL);
+			ms.add(mb.build());
+		}
+		if (org.eclipse.jdt.core.dom.Modifier.isSynchronized(modifiers)) {
+			Modifier.Builder mb = Modifier.newBuilder();
+			mb.setKind(ModifierKind.SYNCHRONIZED);
+			ms.add(mb.build());
+		}
+		if (org.eclipse.jdt.core.dom.Modifier.isVolatile(modifiers)) {
+			Modifier.Builder mb = Modifier.newBuilder();
+			mb.setKind(ModifierKind.VOLATILE);
+			ms.add(mb.build());
+		}
+		if (org.eclipse.jdt.core.dom.Modifier.isNative(modifiers)) {
+			Modifier.Builder mb = Modifier.newBuilder();
+			mb.setKind(ModifierKind.NATIVE);
+			ms.add(mb.build());
+		}
+		if (org.eclipse.jdt.core.dom.Modifier.isStrictfp(modifiers)) {
+			Modifier.Builder mb = Modifier.newBuilder();
+			mb.setKind(ModifierKind.STRICTFP);
+			ms.add(mb.build());
+		}
+		if (org.eclipse.jdt.core.dom.Modifier.isTransient(modifiers)) {
+			Modifier.Builder mb = Modifier.newBuilder();
+			mb.setKind(ModifierKind.TRANSIENT);
+			ms.add(mb.build());
+		}
+		return ms;
+	}
+
 	//////////////////////////////////////////////////////////////
 	// Field/Method Declarations
 
@@ -749,14 +818,14 @@ public class Java7Visitor extends ASTVisitor {
 					name += "[]";
 				tb.setName(name);
 				tb.setKind(boa.types.Ast.TypeKind.OTHER);
-				setTypeBinding(tb, node.getReturnType2());
-				index = (Integer) node.getReturnType2().getProperty(Java7Visitor.PROPERTY_INDEX);
+				setTypeBinding(tb, node.getReturnType());
+				index = (Integer) node.getReturnType().getProperty(Java7Visitor.PROPERTY_INDEX);
 				if (index != null) {
 					tb.setKey(index);
-					ChangeKind status = (ChangeKind) node.getReturnType2().getProperty(TreedConstants.PROPERTY_STATUS);
+					ChangeKind status = (ChangeKind) node.getReturnType().getProperty(TreedConstants.PROPERTY_STATUS);
 					if (status != null) {
 						tb.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) node.getReturnType2().getProperty(TreedConstants.PROPERTY_MAP);
+						ASTNode mappedNode = (ASTNode) node.getReturnType().getProperty(TreedConstants.PROPERTY_MAP);
 						if (mappedNode != null)
 							tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 					}
@@ -1025,72 +1094,43 @@ public class Java7Visitor extends ASTVisitor {
 		return false;
 	}
 
+	@Override
+	public boolean visit(EnumConstantDeclaration node) {
+		List<boa.types.Ast.Variable> list = fields.peek();
+		Variable.Builder b = Variable.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		b.setName(node.getName().getIdentifier());
+		for (Object m : node.modifiers()) {
+			if (((IExtendedModifier)m).isAnnotation())
+				((Annotation)m).accept(this);
+			else
+				((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
+			b.addModifiers(modifiers.pop());
+		}
+		for (Object arg : node.arguments()) {
+			((org.eclipse.jdt.core.dom.Expression) arg).accept(this);
+			b.addExpressions(expressions.pop());
+		}
+		if (node.getAnonymousClassDeclaration() != null) {
+			// FIXME skip anonymous class declaration
+		}
+		setDeclaringClass(b, node.resolveVariable());
+		list.add(b.build());
+		return false;
+	}
+
 	//////////////////////////////////////////////////////////////
 	// Modifiers and Annotations
-
-	private List<Modifier> buildModifiers(int modifiers) {
-		List<Modifier> ms = new ArrayList<Modifier>();
-
-		if (org.eclipse.jdt.core.dom.Modifier.isPublic(modifiers)) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(ModifierKind.VISIBILITY);
-			mb.setVisibility(Visibility.PUBLIC);
-			ms.add(mb.build());
-		}
-		if (org.eclipse.jdt.core.dom.Modifier.isProtected(modifiers)) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(ModifierKind.VISIBILITY);
-			mb.setVisibility(Visibility.PROTECTED);
-			ms.add(mb.build());
-		}
-		if (org.eclipse.jdt.core.dom.Modifier.isPrivate(modifiers)) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(ModifierKind.VISIBILITY);
-			mb.setVisibility(Visibility.PRIVATE);
-			ms.add(mb.build());
-		}
-		if (org.eclipse.jdt.core.dom.Modifier.isStatic(modifiers)) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(ModifierKind.STATIC);
-			ms.add(mb.build());
-		}
-		if (org.eclipse.jdt.core.dom.Modifier.isAbstract(modifiers)) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(ModifierKind.ABSTRACT);
-			ms.add(mb.build());
-		}
-		if (org.eclipse.jdt.core.dom.Modifier.isFinal(modifiers)) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(ModifierKind.FINAL);
-			ms.add(mb.build());
-		}
-		if (org.eclipse.jdt.core.dom.Modifier.isSynchronized(modifiers)) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(ModifierKind.SYNCHRONIZED);
-			ms.add(mb.build());
-		}
-		if (org.eclipse.jdt.core.dom.Modifier.isVolatile(modifiers)) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(ModifierKind.VOLATILE);
-			ms.add(mb.build());
-		}
-		if (org.eclipse.jdt.core.dom.Modifier.isNative(modifiers)) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(ModifierKind.NATIVE);
-			ms.add(mb.build());
-		}
-		if (org.eclipse.jdt.core.dom.Modifier.isStrictfp(modifiers)) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(ModifierKind.STRICTFP);
-			ms.add(mb.build());
-		}
-		if (org.eclipse.jdt.core.dom.Modifier.isTransient(modifiers)) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(ModifierKind.TRANSIENT);
-			ms.add(mb.build());
-		}
-		return ms;
-	}
 
 	protected boa.types.Ast.Modifier.Builder getAnnotationBuilder(Annotation node) {
 		boa.types.Ast.Modifier.Builder b = boa.types.Ast.Modifier.newBuilder();
@@ -1844,8 +1884,11 @@ public class Java7Visitor extends ASTVisitor {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(SwitchCase node) {
+		if (node.getAST().apiLevel() < AST.JLS4 && node.getExpression() instanceof StringLiteral)
+			throw new UnsupportedOperationException("Switching on strings is not supported before Java 7 (JLS4)");
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
 		if (index != null) {
@@ -2024,7 +2067,7 @@ public class Java7Visitor extends ASTVisitor {
 		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 		if (node.getAST().apiLevel() == AST.JLS2)
 			node.getTypeDeclaration().accept(this);
-		if (node.getAST().apiLevel() >= AST.JLS3)
+		else
 			node.getDeclaration().accept(this);
 		for (boa.types.Ast.Declaration d : declarations.pop())
 			b.setTypeDeclaration(d);
@@ -2385,13 +2428,16 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEW);
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-		if (node.getAST().apiLevel() == AST.JLS2)
+		if (node.getAST().apiLevel() == AST.JLS2) {
 			tb.setName(node.getName().getFullyQualifiedName());
-		else
+			setTypeBinding(tb, node.getName());
+			index = (Integer) node.getName().getProperty(Java7Visitor.PROPERTY_INDEX);
+		} else {
 			tb.setName(typeName(node.getType()));
+			setTypeBinding(tb, node.getType());
+			index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+		}
 		tb.setKind(boa.types.Ast.TypeKind.CLASS);
-		setTypeBinding(tb, node.getType());
-		index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
 		if (index != null) {
 			tb.setKey(index);
 			ChangeKind status = (ChangeKind) node.getType().getProperty(TreedConstants.PROPERTY_STATUS);
@@ -2704,7 +2750,7 @@ public class Java7Visitor extends ASTVisitor {
 			b.addExpressions(expressions.pop());
 		}
 		for (Object a : node.arguments()) {
-			((org.eclipse.jdt.core.dom.Expression)a).accept(this);
+			((org.eclipse.jdt.core.dom.Expression) a).accept(this);
 			b.addMethodArgs(expressions.pop());
 		}
 		if (node.getAST().apiLevel() > AST.JLS2) {
@@ -2751,8 +2797,13 @@ public class Java7Visitor extends ASTVisitor {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean visit(NumberLiteral node) {
+		if (node.getAST().apiLevel() < AST.JLS4 && node.getToken().toLowerCase().startsWith("0b"))
+			throw new UnsupportedOperationException("Binary literals are not supported before Java 1.7 (JLS4)");
+		if (node.getAST().apiLevel() < AST.JLS4 && node.getToken().contains("_"))
+			throw new UnsupportedOperationException("Underscores in numeric literals are not supported before Java 1.7 (JLS4)");
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
 		if (index != null) {
@@ -3242,11 +3293,6 @@ public class Java7Visitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(WildcardType node) {
-		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
-	}
-
-	@Override
-	public boolean visit(EnumConstantDeclaration node) {
 		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
