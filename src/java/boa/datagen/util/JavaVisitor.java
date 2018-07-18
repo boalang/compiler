@@ -752,6 +752,57 @@ public class JavaVisitor extends ASTVisitor {
 		return ms;
 	}
 	
+	private Variable.Builder build(SingleVariableDeclaration svd, TypeKind kind) {
+		Variable.Builder vb = Variable.newBuilder();
+		Integer index = (Integer) svd.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			vb.setKey(index);
+			ChangeKind status = (ChangeKind) svd.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				vb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) svd.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					vb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		vb.setName(svd.getName().getFullyQualifiedName());
+		if (svd.isVarargs()) {
+			setAstLevel(JLS3);
+			if (!svd.varargsAnnotations().isEmpty())
+				setAstLevel(JLS8);
+		}
+		vb.addAllModifiers(buildModifiers(svd.modifiers()));
+		boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
+		String name = typeName(svd.getType());
+		// FIXME process extra dimensions in JLS 8
+		visitDimensions(svd.extraDimensions());
+		for (int i = 0; i < svd.extraDimensions().size(); i++)
+			name += "[]";
+		if (svd.isVarargs())
+			name += "...";
+		tp.setName(name);
+		tp.setKind(kind);
+		setTypeBinding(tp, svd.getType());
+		index = (Integer) svd.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null) {
+			tp.setKey(index);
+			ChangeKind status = (ChangeKind) svd.getType().getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				tp.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) svd.getType().getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					tp.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		vb.setVariableType(tp.build());
+		if (svd.getInitializer() != null) {
+			svd.getInitializer().accept(this);
+			vb.setInitializer(expressions.pop());
+		}
+		
+		return vb;
+	}
+	
 	//////////////////////////////////////////////////////////////
 	// Field/Method Declarations
 
@@ -864,55 +915,7 @@ public class JavaVisitor extends ASTVisitor {
 		}
 		for (Object o : node.parameters()) {
 			SingleVariableDeclaration ex = (SingleVariableDeclaration)o;
-			if (ex.isVarargs()) {
-				setAstLevel(JLS3);
-				if (!ex.varargsAnnotations().isEmpty())
-					setAstLevel(JLS8);
-			}
-			Variable.Builder vb = Variable.newBuilder();
-			index = (Integer) ex.getProperty(JavaVisitor.PROPERTY_INDEX);
-			if (index != null) {
-				vb.setKey(index);
-				ChangeKind status = (ChangeKind) ex.getProperty(TreedConstants.PROPERTY_STATUS);
-				if (status != null) {
-					vb.setChangeKind(status);
-					ASTNode mappedNode = (ASTNode) ex.getProperty(TreedConstants.PROPERTY_MAP);
-					if (mappedNode != null)
-						vb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-				}
-			}
-			vb.setName(ex.getName().getFullyQualifiedName());
-			vb.addAllModifiers(buildModifiers(ex.modifiers()));
-			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
-			String name = typeName(ex.getType());
-			// FIXME process extra dimensions in JLS 8
-			visitDimensions(ex.extraDimensions());
-			for (int i = 0; i < ex.getExtraDimensions(); i++)
-				name += "[]";
-			if (ex.isVarargs()) {
-				setAstLevel(JLS3);
-				name += "...";
-			}
-			tp.setName(name);
-			tp.setKind(boa.types.Ast.TypeKind.OTHER);
-			setTypeBinding(tp, ex.getType());
-			index = (Integer) ex.getType().getProperty(JavaVisitor.PROPERTY_INDEX);
-			if (index != null) {
-				tp.setKey(index);
-				ChangeKind status = (ChangeKind) ex.getType().getProperty(TreedConstants.PROPERTY_STATUS);
-				if (status != null) {
-					tp.setChangeKind(status);
-					ASTNode mappedNode = (ASTNode) ex.getType().getProperty(TreedConstants.PROPERTY_MAP);
-					if (mappedNode != null)
-						tp.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-				}
-			}
-			vb.setVariableType(tp.build());
-			if (ex.getInitializer() != null) {
-				ex.getInitializer().accept(this);
-				vb.setInitializer(expressions.pop());
-			}
-			b.addArguments(vb.build());
+			b.addArguments(build(ex, TypeKind.OTHER));
 		}
 		for (Object o : node.thrownExceptionTypes()) {
 			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
@@ -999,49 +1002,53 @@ public class JavaVisitor extends ASTVisitor {
 		List<boa.types.Ast.Variable> list = fields.peek();
 		for (Object o : node.fragments()) {
 			VariableDeclarationFragment f = (VariableDeclarationFragment)o;
-			Variable.Builder b = Variable.newBuilder();
-			Integer index = (Integer) f.getProperty(JavaVisitor.PROPERTY_INDEX);
-			if (index != null) {
-				b.setKey(index);
-				ChangeKind status = (ChangeKind) f.getProperty(TreedConstants.PROPERTY_STATUS);
-				if (status != null) {
-					b.setChangeKind(status);
-					ASTNode mappedNode = (ASTNode) f.getProperty(TreedConstants.PROPERTY_MAP);
-					if (mappedNode != null)
-						b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-				}
-			}
-			b.setName(f.getName().getFullyQualifiedName());
-			b.addAllModifiers(buildModifiers(node.modifiers()));
-			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			String name = typeName(node.getType());
-			// FIXME process extra dimensions in JLS 8
-			visitDimensions(f.extraDimensions());
-			for (int i = 0; i < f.getExtraDimensions(); i++)
-				name += "[]";
-			tb.setName(name);
-			tb.setKind(boa.types.Ast.TypeKind.OTHER);
-			setTypeBinding(tb, node.getType());
-			index = (Integer) node.getType().getProperty(JavaVisitor.PROPERTY_INDEX);
-			if (index != null) {
-				tb.setKey(index);
-				ChangeKind status = (ChangeKind) node.getType().getProperty(TreedConstants.PROPERTY_STATUS);
-				if (status != null) {
-					tb.setChangeKind(status);
-					ASTNode mappedNode = (ASTNode) node.getType().getProperty(TreedConstants.PROPERTY_MAP);
-					if (mappedNode != null)
-						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-				}
-			}
-			b.setVariableType(tb.build());
-			if (f.getInitializer() != null) {
-				f.getInitializer().accept(this);
-				b.setInitializer(expressions.pop());
-			}
-			setDeclaringClass(b, f.resolveBinding());
-			list.add(b.build());
+			list.add(build(f, node.getType(), node.modifiers(), TypeKind.OTHER).build());
 		}
 		return false;
+	}
+
+	private Variable.Builder build(VariableDeclarationFragment f, org.eclipse.jdt.core.dom.Type type, List<?> modifiers, TypeKind kind) {
+		Variable.Builder b = Variable.newBuilder();
+		Integer index = (Integer) f.getProperty(JavaVisitor.PROPERTY_INDEX);
+		if (index != null) {
+			b.setKey(index);
+			ChangeKind status = (ChangeKind) f.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				b.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) f.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		b.setName(f.getName().getFullyQualifiedName());
+		b.addAllModifiers(buildModifiers(modifiers));
+		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+		String name = typeName(type);
+		// FIXME process extra dimensions in JLS 8
+		visitDimensions(f.extraDimensions());
+		for (int i = 0; i < f.getExtraDimensions(); i++)
+			name += "[]";
+		tb.setName(name);
+		tb.setKind(kind);
+		setTypeBinding(tb, type);
+		index = (Integer) type.getProperty(JavaVisitor.PROPERTY_INDEX);
+		if (index != null) {
+			tb.setKey(index);
+			ChangeKind status = (ChangeKind) type.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != null) {
+				tb.setChangeKind(status);
+				ASTNode mappedNode = (ASTNode) type.getProperty(TreedConstants.PROPERTY_MAP);
+				if (mappedNode != null)
+					tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+			}
+		}
+		b.setVariableType(tb.build());
+		if (f.getInitializer() != null) {
+			f.getInitializer().accept(this);
+			b.setInitializer(expressions.pop());
+		}
+		setDeclaringClass(b, f.resolveBinding());
+		return b;
 	}
 
 	@Override
@@ -1315,51 +1322,7 @@ public class JavaVisitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.CATCH);
 		SingleVariableDeclaration ex = node.getException();
-		if (ex.isVarargs()) {
-			setAstLevel(JLS3);
-			if (!ex.varargsAnnotations().isEmpty())
-				setAstLevel(JLS8);
-		}
-		Variable.Builder vb = Variable.newBuilder();
-		index = (Integer) ex.getProperty(JavaVisitor.PROPERTY_INDEX);
-		if (index != null) {
-			vb.setKey(index);
-			ChangeKind status = (ChangeKind) ex.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != null) {
-				vb.setChangeKind(status);
-				ASTNode mappedNode = (ASTNode) ex.getProperty(TreedConstants.PROPERTY_MAP);
-				if (mappedNode != null)
-					vb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-			}
-		}
-		vb.setName(ex.getName().getFullyQualifiedName());
-		vb.addAllModifiers(buildModifiers(ex.modifiers()));
-		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-		String name = typeName(ex.getType());
-		// FIXME process extra dimensions in JLS 8
-		visitDimensions(ex.extraDimensions());
-		for (int i = 0; i < ex.getExtraDimensions(); i++)
-			name += "[]";
-		tb.setName(name);
-		tb.setKind(boa.types.Ast.TypeKind.CLASS);
-		setTypeBinding(tb, ex.getType());
-		index = (Integer) ex.getType().getProperty(JavaVisitor.PROPERTY_INDEX);
-		if (index != null) {
-			tb.setKey(index);
-			ChangeKind status = (ChangeKind) ex.getType().getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != null) {
-				tb.setChangeKind(status);
-				ASTNode mappedNode = (ASTNode) ex.getType().getProperty(TreedConstants.PROPERTY_MAP);
-				if (mappedNode != null)
-					tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-			}
-		}
-		vb.setVariableType(tb.build());
-		if (ex.getInitializer() != null) {
-			ex.getInitializer().accept(this);
-			vb.setInitializer(expressions.pop());
-		}
-		b.setVariableDeclaration(vb.build());
+		b.setVariableDeclaration(build(ex, TypeKind.CLASS));
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		for (Object s : node.getBody().statements())
 			((org.eclipse.jdt.core.dom.Statement)s).accept(this);
@@ -1527,47 +1490,7 @@ public class JavaVisitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.FOREACH);
 		SingleVariableDeclaration ex = node.getParameter();
-		if (ex.isVarargs()) {
-			setAstLevel(JLS3);
-			if (!ex.varargsAnnotations().isEmpty())
-				setAstLevel(JLS8);
-		}
-		Variable.Builder vb = Variable.newBuilder();
-		index = (Integer) ex.getProperty(JavaVisitor.PROPERTY_INDEX);
-		if (index != null) {
-			vb.setKey(index);
-			ChangeKind status = (ChangeKind) ex.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != null) {
-				vb.setChangeKind(status);
-				ASTNode mappedNode = (ASTNode) ex.getProperty(TreedConstants.PROPERTY_MAP);
-				if (mappedNode != null)
-					vb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-			}
-		}
-		vb.setName(ex.getName().getFullyQualifiedName());
-		vb.addAllModifiers(buildModifiers(ex.modifiers()));
-		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-		String name = typeName(ex.getType());
-		// FIXME process extra dimensions in JLS 8
-		visitDimensions(ex.extraDimensions());
-		for (int i = 0; i < ex.getExtraDimensions(); i++)
-			name += "[]";
-		tb.setName(name);
-		tb.setKind(boa.types.Ast.TypeKind.OTHER);
-		setTypeBinding(tb, ex.getType());
-		index = (Integer) ex.getType().getProperty(JavaVisitor.PROPERTY_INDEX);
-		if (index != null) {
-			tb.setKey(index);
-			ChangeKind status = (ChangeKind) ex.getType().getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != null) {
-				tb.setChangeKind(status);
-				ASTNode mappedNode = (ASTNode) ex.getType().getProperty(TreedConstants.PROPERTY_MAP);
-				if (mappedNode != null)
-					tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-			}
-		}
-		vb.setVariableType(tb.build());
-		b.setVariableDeclaration(vb.build());
+		b.setVariableDeclaration(build(ex, TypeKind.OTHER));
 		node.getExpression().accept(this);
 		b.setExpression(expressions.pop());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
@@ -2029,47 +1952,8 @@ public class JavaVisitor extends ASTVisitor {
 		}
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.VARDECL);
 		for (Object o : node.fragments()) {
-			VariableDeclarationFragment f = (VariableDeclarationFragment)o;
-			Variable.Builder vb = Variable.newBuilder();
-			index = (Integer) f.getProperty(JavaVisitor.PROPERTY_INDEX);
-			if (index != null) {
-				vb.setKey(index);
-				ChangeKind status = (ChangeKind) f.getProperty(TreedConstants.PROPERTY_STATUS);
-				if (status != null) {
-					vb.setChangeKind(status);
-					ASTNode mappedNode = (ASTNode) f.getProperty(TreedConstants.PROPERTY_MAP);
-					if (mappedNode != null)
-						vb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-				}
-			}
-			vb.setName(f.getName().getFullyQualifiedName());
-			vb.addAllModifiers(buildModifiers(node.modifiers()));
-			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			String name = typeName(node.getType());
-			// FIXME process extra dimensions in JLS 8
-			visitDimensions(f.extraDimensions());
-			for (int i = 0; i < f.getExtraDimensions(); i++)
-				name += "[]";
-			tb.setName(name);
-			tb.setKind(boa.types.Ast.TypeKind.OTHER);
-			setTypeBinding(tb, node.getType());
-			index = (Integer) node.getType().getProperty(JavaVisitor.PROPERTY_INDEX);
-			if (index != null) {
-				tb.setKey(index);
-				ChangeKind status = (ChangeKind) node.getType().getProperty(TreedConstants.PROPERTY_STATUS);
-				if (status != null) {
-					tb.setChangeKind(status);
-					ASTNode mappedNode = (ASTNode) node.getType().getProperty(TreedConstants.PROPERTY_MAP);
-					if (mappedNode != null)
-						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-				}
-			}
-			vb.setVariableType(tb.build());
-			if (f.getInitializer() != null) {
-				f.getInitializer().accept(this);
-				vb.setInitializer(expressions.pop());
-			}
-			eb.addVariableDecls(vb.build());
+			VariableDeclarationFragment f = (VariableDeclarationFragment) o;
+			eb.addVariableDecls(build(f, node.getType(), node.modifiers(), TypeKind.OTHER));
 		}
 		b.setExpression(eb.build());
 		list.add(b.build());
@@ -2996,47 +2880,8 @@ public class JavaVisitor extends ASTVisitor {
 		}
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.VARDECL);
 		for (Object o : node.fragments()) {
-			VariableDeclarationFragment f = (VariableDeclarationFragment)o;
-			Variable.Builder b = Variable.newBuilder();
-			index = (Integer) f.getProperty(JavaVisitor.PROPERTY_INDEX);
-			if (index != null) {
-				b.setKey(index);
-				ChangeKind status = (ChangeKind) f.getProperty(TreedConstants.PROPERTY_STATUS);
-				if (status != null) {
-					b.setChangeKind(status);
-					ASTNode mappedNode = (ASTNode) f.getProperty(TreedConstants.PROPERTY_MAP);
-					if (mappedNode != null)
-						b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-				}
-			}
-			b.setName(f.getName().getFullyQualifiedName());
-			b.addAllModifiers(buildModifiers(node.modifiers()));
-			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			String name = typeName(node.getType());
-			// FIXME process extra dimensions in JLS 8
-			visitDimensions(f.extraDimensions());
-			for (int i = 0; i < f.getExtraDimensions(); i++)
-				name += "[]";
-			tb.setName(name);
-			tb.setKind(boa.types.Ast.TypeKind.OTHER);
-			setTypeBinding(tb, node.getType());
-			index = (Integer) node.getType().getProperty(JavaVisitor.PROPERTY_INDEX);
-			if (index != null) {
-				tb.setKey(index);
-				ChangeKind status = (ChangeKind) node.getType().getProperty(TreedConstants.PROPERTY_STATUS);
-				if (status != null) {
-					tb.setChangeKind(status);
-					ASTNode mappedNode = (ASTNode) node.getType().getProperty(TreedConstants.PROPERTY_MAP);
-					if (mappedNode != null)
-						tb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-				}
-			}
-			b.setVariableType(tb.build());
-			if (f.getInitializer() != null) {
-				f.getInitializer().accept(this);
-				b.setInitializer(expressions.pop());
-			}
-			eb.addVariableDecls(b.build());
+			VariableDeclarationFragment f = (VariableDeclarationFragment) o;
+			eb.addVariableDecls(build(f, node.getType(), node.modifiers(), TypeKind.OTHER));
 		}
 		expressions.push(eb.build());
 		return false;
@@ -3063,52 +2908,25 @@ public class JavaVisitor extends ASTVisitor {
         if (!node.hasParentheses())
             eb.setNoParens(true);
 		for (Object o : node.parameters()) {
-			VariableDeclaration ex = (VariableDeclaration)o;
-			Variable.Builder vb = Variable.newBuilder();
-			index = (Integer) ex.getProperty(Java7Visitor.PROPERTY_INDEX);
-			if (index != null) {
-				vb.setKey(index);
-				ChangeKind status = (ChangeKind) ex.getProperty(TreedConstants.PROPERTY_STATUS);
-				if (status != null) {
-					vb.setChangeKind(status);
-					ASTNode mappedNode = (ASTNode) ex.getProperty(TreedConstants.PROPERTY_MAP);
-					if (mappedNode != null)
-						vb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-				}
-			}
-			vb.setName(ex.getName().getFullyQualifiedName());
 			if (o instanceof SingleVariableDeclaration) {
 				SingleVariableDeclaration svd = (SingleVariableDeclaration)o;
-				if (svd.isVarargs()) {
-					setAstLevel(JLS3);
-					if (!svd.varargsAnnotations().isEmpty())
-						setAstLevel(JLS8);
-				}
-				boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
-				String name = typeName(svd.getType());
-				// FIXME process extra dimensions in JLS 8
-				visitDimensions(ex.extraDimensions());
-				for (int i = 0; i < svd.extraDimensions().size(); i++)
-					name += "[]";
-				if (svd.isVarargs())
-					name += "...";
-				tp.setName(name);
-				tp.setKind(boa.types.Ast.TypeKind.OTHER);
-				setTypeBinding(tp, svd.getType());
-				index = (Integer) svd.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
-				if (index != null) {
-					tp.setKey(index);
-					ChangeKind status = (ChangeKind) svd.getType().getProperty(TreedConstants.PROPERTY_STATUS);
-					if (status != null) {
-						tp.setChangeKind(status);
-						ASTNode mappedNode = (ASTNode) svd.getType().getProperty(TreedConstants.PROPERTY_MAP);
-						if (mappedNode != null)
-							tp.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
-				}
-				vb.setVariableType(tp.build());
+				Variable.Builder vb = build(svd, boa.types.Ast.TypeKind.OTHER);
+				eb.addVariableDecls(vb);
 			} else {
 				VariableDeclarationFragment vdf = (VariableDeclarationFragment) o;
+				Variable.Builder vb = Variable.newBuilder();
+				index = (Integer) vdf.getProperty(Java7Visitor.PROPERTY_INDEX);
+				if (index != null) {
+					vb.setKey(index);
+					ChangeKind status = (ChangeKind) vdf.getProperty(TreedConstants.PROPERTY_STATUS);
+					if (status != null) {
+						vb.setChangeKind(status);
+						ASTNode mappedNode = (ASTNode) vdf.getProperty(TreedConstants.PROPERTY_MAP);
+						if (mappedNode != null)
+							vb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+					}
+				}
+				vb.setName(vdf.getName().getFullyQualifiedName());
 				// FIXME
 				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 				tb.setName("");
@@ -3116,8 +2934,8 @@ public class JavaVisitor extends ASTVisitor {
 				setTypeBinding(tb, vdf.getName());
 				visitDimensions(vdf.extraDimensions());
 				vb.setVariableType(tb.build());
+				eb.addVariableDecls(vb);
 			}
-			eb.addVariableDecls(vb.build());
 		}
 		if (node.getBody() != null) {
 			if (node.getBody() instanceof org.eclipse.jdt.core.dom.Expression) {
