@@ -515,37 +515,37 @@ public final class Diff {
        */
       SOURCE_JAVA_ERROR(4, 100),
       /**
-       * <code>SOURCE_JAVA_JLS2 = 101;</code>
+       * <code>SOURCE_JAVA_JLS2 = 102;</code>
        *
        * <pre>
        ** The file represents a Java source file that parsed without error as JLS2 
        * </pre>
        */
-      SOURCE_JAVA_JLS2(5, 101),
+      SOURCE_JAVA_JLS2(5, 102),
       /**
-       * <code>SOURCE_JAVA_JLS3 = 102;</code>
+       * <code>SOURCE_JAVA_JLS3 = 103;</code>
        *
        * <pre>
        ** The file represents a Java source file that parsed without error as JLS3 
        * </pre>
        */
-      SOURCE_JAVA_JLS3(6, 102),
+      SOURCE_JAVA_JLS3(6, 103),
       /**
-       * <code>SOURCE_JAVA_JLS4 = 103;</code>
+       * <code>SOURCE_JAVA_JLS4 = 104;</code>
        *
        * <pre>
        ** The file represents a Java source file that parsed without error as JLS4 
        * </pre>
        */
-      SOURCE_JAVA_JLS4(7, 103),
+      SOURCE_JAVA_JLS4(7, 104),
       /**
-       * <code>SOURCE_JAVA_JLS8 = 104;</code>
+       * <code>SOURCE_JAVA_JLS8 = 108;</code>
        *
        * <pre>
        ** The file represents a Java source file that parsed without error as JLS8 
        * </pre>
        */
-      SOURCE_JAVA_JLS8(8, 104),
+      SOURCE_JAVA_JLS8(8, 108),
       /**
        * <code>SOURCE_CS_ERROR = 200;</code>
        *
@@ -781,7 +781,7 @@ public final class Diff {
        */
       public static final FileKind JAVA_ERROR = SOURCE_JAVA_ERROR;
       /**
-       * <code>JLS2 = 101;</code>
+       * <code>JLS2 = 102;</code>
        *
        * <pre>
        ** @exclude 
@@ -789,7 +789,7 @@ public final class Diff {
        */
       public static final FileKind JLS2 = SOURCE_JAVA_JLS2;
       /**
-       * <code>JLS3 = 102;</code>
+       * <code>JLS3 = 103;</code>
        *
        * <pre>
        ** @exclude 
@@ -797,7 +797,7 @@ public final class Diff {
        */
       public static final FileKind JLS3 = SOURCE_JAVA_JLS3;
       /**
-       * <code>JLS4 = 103;</code>
+       * <code>JLS4 = 104;</code>
        *
        * <pre>
        ** @exclude 
@@ -805,7 +805,7 @@ public final class Diff {
        */
       public static final FileKind JLS4 = SOURCE_JAVA_JLS4;
       /**
-       * <code>JLS8 = 104;</code>
+       * <code>JLS8 = 108;</code>
        *
        * <pre>
        ** @exclude 
@@ -941,37 +941,37 @@ public final class Diff {
        */
       public static final int SOURCE_JAVA_ERROR_VALUE = 100;
       /**
-       * <code>SOURCE_JAVA_JLS2 = 101;</code>
+       * <code>SOURCE_JAVA_JLS2 = 102;</code>
        *
        * <pre>
        ** The file represents a Java source file that parsed without error as JLS2 
        * </pre>
        */
-      public static final int SOURCE_JAVA_JLS2_VALUE = 101;
+      public static final int SOURCE_JAVA_JLS2_VALUE = 102;
       /**
-       * <code>SOURCE_JAVA_JLS3 = 102;</code>
+       * <code>SOURCE_JAVA_JLS3 = 103;</code>
        *
        * <pre>
        ** The file represents a Java source file that parsed without error as JLS3 
        * </pre>
        */
-      public static final int SOURCE_JAVA_JLS3_VALUE = 102;
+      public static final int SOURCE_JAVA_JLS3_VALUE = 103;
       /**
-       * <code>SOURCE_JAVA_JLS4 = 103;</code>
+       * <code>SOURCE_JAVA_JLS4 = 104;</code>
        *
        * <pre>
        ** The file represents a Java source file that parsed without error as JLS4 
        * </pre>
        */
-      public static final int SOURCE_JAVA_JLS4_VALUE = 103;
+      public static final int SOURCE_JAVA_JLS4_VALUE = 104;
       /**
-       * <code>SOURCE_JAVA_JLS8 = 104;</code>
+       * <code>SOURCE_JAVA_JLS8 = 108;</code>
        *
        * <pre>
        ** The file represents a Java source file that parsed without error as JLS8 
        * </pre>
        */
-      public static final int SOURCE_JAVA_JLS8_VALUE = 104;
+      public static final int SOURCE_JAVA_JLS8_VALUE = 108;
       /**
        * <code>JAVA_ERROR = 100;</code>
        *
@@ -981,37 +981,37 @@ public final class Diff {
        */
       public static final int JAVA_ERROR_VALUE = 100;
       /**
-       * <code>JLS2 = 101;</code>
+       * <code>JLS2 = 102;</code>
        *
        * <pre>
        ** @exclude 
        * </pre>
        */
-      public static final int JLS2_VALUE = 101;
+      public static final int JLS2_VALUE = 102;
       /**
-       * <code>JLS3 = 102;</code>
+       * <code>JLS3 = 103;</code>
        *
        * <pre>
        ** @exclude 
        * </pre>
        */
-      public static final int JLS3_VALUE = 102;
+      public static final int JLS3_VALUE = 103;
       /**
-       * <code>JLS4 = 103;</code>
+       * <code>JLS4 = 104;</code>
        *
        * <pre>
        ** @exclude 
        * </pre>
        */
-      public static final int JLS4_VALUE = 103;
+      public static final int JLS4_VALUE = 104;
       /**
-       * <code>JLS8 = 104;</code>
+       * <code>JLS8 = 108;</code>
        *
        * <pre>
        ** @exclude 
        * </pre>
        */
-      public static final int JLS8_VALUE = 104;
+      public static final int JLS8_VALUE = 108;
       /**
        * <code>SOURCE_CS_ERROR = 200;</code>
        *
@@ -1335,10 +1335,10 @@ public final class Diff {
           case 2: return TEXT;
           case 3: return XML;
           case 100: return SOURCE_JAVA_ERROR;
-          case 101: return SOURCE_JAVA_JLS2;
-          case 102: return SOURCE_JAVA_JLS3;
-          case 103: return SOURCE_JAVA_JLS4;
-          case 104: return SOURCE_JAVA_JLS8;
+          case 102: return SOURCE_JAVA_JLS2;
+          case 103: return SOURCE_JAVA_JLS3;
+          case 104: return SOURCE_JAVA_JLS4;
+          case 108: return SOURCE_JAVA_JLS8;
           case 200: return SOURCE_CS_ERROR;
           case 201: return SOURCE_CS_CS1;
           case 202: return SOURCE_CS_CS2;
@@ -3046,10 +3046,10 @@ public final class Diff {
       "\030\t \003(\005\022\022\n\nmapped_key\030\n \001(\004\"\247\007\n\010FileKind\022" +
       "\t\n\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020",
       "\003\022\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_JAVA_" +
-      "JLS2\020e\022\024\n\020SOURCE_JAVA_JLS3\020f\022\024\n\020SOURCE_J" +
-      "AVA_JLS4\020g\022\024\n\020SOURCE_JAVA_JLS8\020h\022\016\n\nJAVA" +
-      "_ERROR\020d\022\010\n\004JLS2\020e\022\010\n\004JLS3\020f\022\010\n\004JLS4\020g\022\010" +
-      "\n\004JLS8\020h\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rSOURCE" +
+      "JLS2\020f\022\024\n\020SOURCE_JAVA_JLS3\020g\022\024\n\020SOURCE_J" +
+      "AVA_JLS4\020h\022\024\n\020SOURCE_JAVA_JLS8\020l\022\016\n\nJAVA" +
+      "_ERROR\020d\022\010\n\004JLS2\020f\022\010\n\004JLS3\020g\022\010\n\004JLS4\020h\022\010" +
+      "\n\004JLS8\020l\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rSOURCE" +
       "_CS_CS1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\rSOURCE" +
       "_CS_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rSOURCE" +
       "_CS_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003C" +
