@@ -40,8 +40,10 @@ public class RepositoryCloner {
 			e.printStackTrace();
 			*/
 		} finally {
-			if (result != null && result.getRepository() != null)
+			if (result != null && result.getRepository() != null) {
+//				System.out.println("Cloned repo " + url);
 				result.getRepository().close();
+			}
 		} 
 	}
 }
