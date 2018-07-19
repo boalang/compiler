@@ -103,10 +103,9 @@ public class JavaVisitor extends ASTVisitor {
 			b.setName(pkg.getName().getFullyQualifiedName());
 			if (!pkg.annotations().isEmpty() || pkg.getJavadoc() != null)
 				setAstLevel(JLS3);
-			for (Object a : pkg.annotations()) {
-				((Annotation)a).accept(this);
-				b.addModifiers(modifiers.pop());
-			}
+			
+			b.addAllModifiers(visitAnnotationsList(pkg.annotations()));
+			
 			Integer index = (Integer) pkg.getProperty(JavaVisitor.PROPERTY_INDEX);
 			if (index != null) {
 				b.setKey(index);
@@ -741,13 +740,43 @@ public class JavaVisitor extends ASTVisitor {
 
 	private List<Modifier> buildModifiers(List<?> modifiers) {
 		List<Modifier> ms = new ArrayList<Modifier>();
+		Set<String> names = new HashSet<String>();
 		for (Object m : modifiers) {
 			if (((IExtendedModifier) m).isAnnotation()) {
 				setAstLevel(JLS3);
-				((Annotation) m).accept(this);
+				Annotation annot = (Annotation) m;
+				String name = annot.getTypeName().getFullyQualifiedName();
+				if (names.contains(name))
+					setAstLevel(JLS8);
+				else
+					names.add(name);
+				
+				annot.accept(this);
 			} else
 				((org.eclipse.jdt.core.dom.Modifier) m).accept(this);
 			ms.add(this.modifiers.pop());
+		}
+		return ms;
+	}
+	
+	private void visitTypeAnnotations(AnnotatableType t) {
+		if (!t.annotations().isEmpty())
+			setAstLevel(JLS8);
+//		visitAnnotationsList(node.annotations());
+	}
+	
+	private List<Modifier> visitAnnotationsList(List<?> annotations) {
+		List<Modifier> ms = new ArrayList<Modifier>();
+		Set<String> names = new HashSet<String>();
+		for (Object a : annotations) {
+			Annotation annot = (Annotation) a;
+			String name = annot.getTypeName().getFullyQualifiedName();
+			if (names.contains(name))
+				setAstLevel(JLS8);
+			else
+				names.add(name);
+			annot.accept(this);
+			ms.add(modifiers.pop());
 		}
 		return ms;
 	}
@@ -1106,6 +1135,9 @@ public class JavaVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(MarkerAnnotation node) {
 		setAstLevel(JLS3);
+		
+		if (node.getTypeName().getFullyQualifiedName().equals("SafeVarargs"))
+			setAstLevel(JLS4);
 		
 		modifiers.push(getAnnotationBuilder(node).build());
 		return false;
@@ -3250,8 +3282,7 @@ public class JavaVisitor extends ASTVisitor {
 	}
 
 	protected String typeName(final PrimitiveType t) {
-		if (!t.annotations().isEmpty())
-			setAstLevel(JLS8);
+		visitTypeAnnotations(t);
 		
 		return t.getPrimitiveTypeCode().toString();
 	}
@@ -3259,13 +3290,14 @@ public class JavaVisitor extends ASTVisitor {
 	protected String typeName(final NameQualifiedType t) {
 		setAstLevel(JLS8);
 		
+		visitTypeAnnotations(t);
+		
 		return t.getQualifier().getFullyQualifiedName() + "." + t.getName().getFullyQualifiedName();
 	}
 	
 
 	protected String typeName(final QualifiedType t) {
-		if (!t.annotations().isEmpty())
-			setAstLevel(JLS8);
+		visitTypeAnnotations(t);
 		
 		return typeName(t.getQualifier()) + "." + t.getName().getFullyQualifiedName();
 	}
@@ -3294,9 +3326,8 @@ public class JavaVisitor extends ASTVisitor {
 
 	protected String typeName(final WildcardType t) {
 		setAstLevel(JLS3);
-		
-		if (!t.annotations().isEmpty())
-			setAstLevel(JLS8);
+
+		visitTypeAnnotations(t);
 		
 		String name = "?";
 		if (t.getBound() != null) {
@@ -3307,15 +3338,14 @@ public class JavaVisitor extends ASTVisitor {
 	}
 
 	protected String typeName(final SimpleType t) {
-		if (!t.annotations().isEmpty())
-			setAstLevel(JLS8);
+		visitTypeAnnotations(t);
 		
 		return t.getName().getFullyQualifiedName();
 	}
 	
 	//////////////////////////////////////////////////////////////
 	// Unused node types
-	
+
 	@Override
 	public boolean visit(ArrayType node) {
 		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
