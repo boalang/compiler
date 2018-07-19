@@ -966,7 +966,7 @@ public abstract class AbstractCommit {
 		}
 		if (l.isEmpty()) {
 			System.err.println("Cannot find previous version! from: " + projectName);
-			System.exit(-1);
+	//		System.exit(-1);
 		}
 		return l;
 	}
