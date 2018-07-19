@@ -45,7 +45,7 @@ import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Declaration;
 import boa.types.Diff.ChangedFile;
 import boa.datagen.util.FileIO;
-import boa.datagen.util.Java7Visitor;
+import boa.datagen.util.JavaVisitor;
 import boa.datagen.util.ProtoMessageVisitor;
 import boa.test.compiler.BaseTest;
 import boa.test.datagen.ASTDumper;
@@ -55,10 +55,9 @@ import boa.test.datagen.UglyMathCommentsExtractor;
  * @author rdyer
  */
 public class Java7BaseTest extends BaseTest {
-	@SuppressWarnings("deprecation")
-	protected static int astLevel = AST.JLS4;
-	protected static String javaVersion = JavaCore.VERSION_1_7;
-	protected static Java7Visitor visitor = new Java7Visitor("");
+	protected static int astLevel = AST.JLS8;
+	protected static String javaVersion = JavaCore.VERSION_1_8;
+	protected static JavaVisitor visitor = new JavaVisitor("");
 
 	protected static void dumpJavaWrapped(final String content) {
 		dumpJava(getWrapped(content));

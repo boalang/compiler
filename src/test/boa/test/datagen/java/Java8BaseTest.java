@@ -20,7 +20,7 @@ package boa.test.datagen.java;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 
-import boa.datagen.util.Java8Visitor;
+import boa.datagen.util.JavaVisitor;
 
 /*
  * @author rdyer
@@ -29,7 +29,7 @@ public class Java8BaseTest extends Java7BaseTest {
 	private static void setJava8() {
 		astLevel = AST.JLS8;
 		javaVersion = JavaCore.VERSION_1_8;
-		visitor = new Java8Visitor("");
+		visitor = new JavaVisitor("");
 	}
 
 	public static void dumpJavaWrapped(final String content) {
