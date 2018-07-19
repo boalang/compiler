@@ -1178,6 +1178,8 @@ public class JavaVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Modifier.ModifierKind.VISIBILITY);
 			b.setVisibility(boa.types.Ast.Modifier.Visibility.PROTECTED);
 		} else if (node.isDefault()) {
+			setAstLevel(JLS8);
+			
 			b.setKind(boa.types.Ast.Modifier.ModifierKind.VISIBILITY);
 			b.setVisibility(boa.types.Ast.Modifier.Visibility.DEFAULT);
 		} else if (node.isAbstract())
@@ -3235,6 +3237,9 @@ public class JavaVisitor extends ASTVisitor {
 
 	protected String typeName(final ParameterizedType t) {
 		setAstLevel(JLS3);
+		
+		if (t.typeArguments().isEmpty())
+			setAstLevel(JLS4);
 		
 		String name = "";
 		for (final Object o : t.typeArguments()) {
