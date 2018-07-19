@@ -45,7 +45,7 @@ public class Java8Visitor extends Java7Visitor {
 	public boolean visit(MethodDeclaration node) {
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
-		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		Integer index = (Integer) node.getProperty(PROPERTY_INDEX);
 		if (index != null) {
 			b.setKey(index);
 			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
@@ -76,7 +76,7 @@ public class Java8Visitor extends Java7Visitor {
 			tb.setName(name);
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
 			setTypeBinding(tb, node.getReturnType2());
-			index = (Integer) node.getReturnType2().getProperty(Java7Visitor.PROPERTY_INDEX);
+			index = (Integer) node.getReturnType2().getProperty(PROPERTY_INDEX);
 			if (index != null) {
 				tb.setKey(index);
 				ChangeKind status = (ChangeKind) node.getReturnType2().getProperty(TreedConstants.PROPERTY_STATUS);
@@ -107,7 +107,7 @@ public class Java8Visitor extends Java7Visitor {
 			tp.setName(name);
 			tp.setKind(boa.types.Ast.TypeKind.GENERIC);
 			setTypeBinding(tp, ((TypeParameter)t).getName());
-			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			index = (Integer) ((ASTNode) t).getProperty(PROPERTY_INDEX);
 			if (index != null) {
 				tp.setKey(index);
 				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
@@ -129,7 +129,7 @@ public class Java8Visitor extends Java7Visitor {
 			tp.setName(name);
 			tp.setKind(boa.types.Ast.TypeKind.OTHER);
 			setTypeBinding(tp, node.getReceiverType());
-			index = (Integer) node.getReceiverType().getProperty(Java7Visitor.PROPERTY_INDEX);
+			index = (Integer) node.getReceiverType().getProperty(PROPERTY_INDEX);
 			if (index != null) {
 				tp.setKey(index);
 				ChangeKind status = (ChangeKind) node.getReceiverType().getProperty(TreedConstants.PROPERTY_STATUS);
@@ -146,7 +146,7 @@ public class Java8Visitor extends Java7Visitor {
 		for (Object o : node.parameters()) {
 			SingleVariableDeclaration ex = (SingleVariableDeclaration)o;
 			Variable.Builder vb = Variable.newBuilder();
-			index = (Integer) ex.getProperty(Java7Visitor.PROPERTY_INDEX);
+			index = (Integer) ex.getProperty(PROPERTY_INDEX);
 			if (index != null) {
 				vb.setKey(index);
 				ChangeKind status = (ChangeKind) ex.getProperty(TreedConstants.PROPERTY_STATUS);
@@ -175,7 +175,7 @@ public class Java8Visitor extends Java7Visitor {
 			tp.setName(name);
 			tp.setKind(boa.types.Ast.TypeKind.OTHER);
 			setTypeBinding(tp, ex.getType());
-			index = (Integer) ex.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+			index = (Integer) ex.getType().getProperty(PROPERTY_INDEX);
 			if (index != null) {
 				tp.setKey(index);
 				ChangeKind status = (ChangeKind) ex.getType().getProperty(TreedConstants.PROPERTY_STATUS);
@@ -198,7 +198,7 @@ public class Java8Visitor extends Java7Visitor {
 				tp.setName(typeName((org.eclipse.jdt.core.dom.Type) o));
 				tp.setKind(boa.types.Ast.TypeKind.CLASS);
 				setTypeBinding(tp, (org.eclipse.jdt.core.dom.Type) o);
-				index = (Integer) ((ASTNode) o).getProperty(Java7Visitor.PROPERTY_INDEX);
+				index = (Integer) ((ASTNode) o).getProperty(PROPERTY_INDEX);
 				if (index != null) {
 					tp.setKey(index);
 					ChangeKind status = (ChangeKind) ((ASTNode) o).getProperty(TreedConstants.PROPERTY_STATUS);
@@ -226,7 +226,7 @@ public class Java8Visitor extends Java7Visitor {
 	@Override
 	public boolean visit(LambdaExpression node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		Integer index = (Integer) node.getProperty(PROPERTY_INDEX);
 		if (index != null) {
 			eb.setKey(index);
 			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
@@ -243,7 +243,7 @@ public class Java8Visitor extends Java7Visitor {
 		for (Object o : node.parameters()) {
 			VariableDeclaration ex = (VariableDeclaration)o;
 			Variable.Builder vb = Variable.newBuilder();
-			index = (Integer) ex.getProperty(Java7Visitor.PROPERTY_INDEX);
+			index = (Integer) ex.getProperty(PROPERTY_INDEX);
 			if (index != null) {
 				vb.setKey(index);
 				ChangeKind status = (ChangeKind) ex.getProperty(TreedConstants.PROPERTY_STATUS);
@@ -267,7 +267,7 @@ public class Java8Visitor extends Java7Visitor {
 				tp.setName(name);
 				tp.setKind(boa.types.Ast.TypeKind.OTHER);
 				setTypeBinding(tp, svd.getType());
-				index = (Integer) svd.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+				index = (Integer) svd.getType().getProperty(PROPERTY_INDEX);
 				if (index != null) {
 					tp.setKey(index);
 					ChangeKind status = (ChangeKind) svd.getType().getProperty(TreedConstants.PROPERTY_STATUS);
@@ -309,7 +309,7 @@ public class Java8Visitor extends Java7Visitor {
 	@Override
 	public boolean visit(CreationReference node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		Integer index = (Integer) node.getProperty(PROPERTY_INDEX);
 		if (index != null) {
 			eb.setKey(index);
 			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
@@ -333,7 +333,7 @@ public class Java8Visitor extends Java7Visitor {
 		tb1.setName(typeName(node.getType()));
 		tb1.setKind(boa.types.Ast.TypeKind.OTHER);
 		setTypeBinding(tb1, node.getType());
-		index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+		index = (Integer) node.getType().getProperty(PROPERTY_INDEX);
 		if (index != null) {
 			tb1.setKey(index);
 			ChangeKind status = (ChangeKind) node.getType().getProperty(TreedConstants.PROPERTY_STATUS);
@@ -351,7 +351,7 @@ public class Java8Visitor extends Java7Visitor {
 			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
 			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
-			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			index = (Integer) ((ASTNode) t).getProperty(PROPERTY_INDEX);
 			if (index != null) {
 				tb.setKey(index);
 				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
@@ -374,7 +374,7 @@ public class Java8Visitor extends Java7Visitor {
 	@Override
 	public boolean visit(ExpressionMethodReference node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		Integer index = (Integer) node.getProperty(PROPERTY_INDEX);
 		if (index != null) {
 			eb.setKey(index);
 			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
@@ -402,7 +402,7 @@ public class Java8Visitor extends Java7Visitor {
 			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
 			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
-			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			index = (Integer) ((ASTNode) t).getProperty(PROPERTY_INDEX);
 			if (index != null) {
 				tb.setKey(index);
 				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
@@ -425,7 +425,7 @@ public class Java8Visitor extends Java7Visitor {
 	@Override
 	public boolean visit(SuperMethodReference node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		Integer index = (Integer) node.getProperty(PROPERTY_INDEX);
 		if (index != null) {
 			eb.setKey(index);
 			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
@@ -455,7 +455,7 @@ public class Java8Visitor extends Java7Visitor {
 			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
 			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
-			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			index = (Integer) ((ASTNode) t).getProperty(PROPERTY_INDEX);
 			if (index != null) {
 				tb.setKey(index);
 				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
@@ -478,7 +478,7 @@ public class Java8Visitor extends Java7Visitor {
 	@Override
 	public boolean visit(TypeMethodReference node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		Integer index = (Integer) node.getProperty(PROPERTY_INDEX);
 		if (index != null) {
 			eb.setKey(index);
 			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
@@ -502,7 +502,7 @@ public class Java8Visitor extends Java7Visitor {
 		tb1.setName(typeName(node.getType()));
 		tb1.setKind(boa.types.Ast.TypeKind.OTHER);
 		setTypeBinding(tb1, node.getType());
-		index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+		index = (Integer) node.getType().getProperty(PROPERTY_INDEX);
 		if (index != null) {
 			tb1.setKey(index);
 			ChangeKind status = (ChangeKind) node.getType().getProperty(TreedConstants.PROPERTY_STATUS);
@@ -520,7 +520,7 @@ public class Java8Visitor extends Java7Visitor {
 			tb.setName(typeName((org.eclipse.jdt.core.dom.Type)t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
 			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
-			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			index = (Integer) ((ASTNode) t).getProperty(PROPERTY_INDEX);
 			if (index != null) {
 				tb.setKey(index);
 				ChangeKind status = (ChangeKind) ((ASTNode) t).getProperty(TreedConstants.PROPERTY_STATUS);
