@@ -1137,7 +1137,8 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(MarkerAnnotation node) {
 		setAstLevel(JLS3);
 		
-		if (node.getTypeName().getFullyQualifiedName().equals("SafeVarargs"))
+		String name = node.getTypeName().getFullyQualifiedName();
+		if (name.equals("SafeVarargs") || name.equals("SuppressWarnings"))
 			setAstLevel(JLS4);
 		
 		modifiers.push(getAnnotationBuilder(node).build());
@@ -1147,6 +1148,10 @@ public class JavaVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(SingleMemberAnnotation node) {
 		setAstLevel(JLS3);
+		
+		String name = node.getTypeName().getFullyQualifiedName();
+		if (name.equals("SafeVarargs") || name.equals("SuppressWarnings"))
+			setAstLevel(JLS4);
 		
 		boa.types.Ast.Modifier.Builder b = getAnnotationBuilder(node);
 		node.getValue().accept(this);
@@ -1167,6 +1172,10 @@ public class JavaVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(NormalAnnotation node) {
 		setAstLevel(JLS3);
+		
+		String name = node.getTypeName().getFullyQualifiedName();
+		if (name.equals("SafeVarargs") || name.equals("SuppressWarnings"))
+			setAstLevel(JLS4);
 		
 		boa.types.Ast.Modifier.Builder b = getAnnotationBuilder(node);
 		for (Object v : node.values()) {
