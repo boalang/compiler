@@ -2609,7 +2609,7 @@ public class JavaVisitor extends ASTVisitor {
 		if (node.getToken().toLowerCase().startsWith("0b"))
 			setAstLevel(JLS4);
 		if (node.getToken().contains("_"))
-			setAstLevel(JLS3);
+			setAstLevel(JLS4);
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		Integer index = (Integer) node.getProperty(JavaVisitor.PROPERTY_INDEX);
 		if (index != null) {
