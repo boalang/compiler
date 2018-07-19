@@ -1111,10 +1111,10 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		b.setName(node.getName().getIdentifier());
 		for (Object m : node.modifiers()) {
-			if (((IExtendedModifier)m).isAnnotation())
-				((Annotation)m).accept(this);
+			if (((IExtendedModifier) m).isAnnotation())
+				((Annotation) m).accept(this);
 			else
-				((org.eclipse.jdt.core.dom.Modifier)m).accept(this);
+				((org.eclipse.jdt.core.dom.Modifier) m).accept(this);
 			b.addModifiers(modifiers.pop());
 		}
 		for (Object arg : node.arguments()) {

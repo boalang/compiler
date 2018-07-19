@@ -50,7 +50,7 @@ public class TestJLSVersion {
     	List<ChangedFile[]> data = new ArrayList<ChangedFile[]>();
 		CodeRepository cr = buildCodeRepository("boalang/test-datagen");
 		String[][] commits = new String[][] {
-			{"723d7cd3a6916be26a3e827fed52a6bc240ba0ea", "90"},
+			{"1104b4f2a853786944126bd1d59cc074ac8ee684", "63"},
 		};
 		
 		for (String[] commit : commits) {

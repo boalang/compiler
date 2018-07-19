@@ -778,6 +778,7 @@ public class JavaVisitor extends ASTVisitor {
 			annot.accept(this);
 			ms.add(modifiers.pop());
 		}
+		
 		return ms;
 	}
 	
