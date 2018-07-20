@@ -259,21 +259,22 @@ public class GitCommit extends AbstractCommit {
 				}
 				else if (diff.getChangeType() == ChangeType.DELETE) {
 					if (diff.getOldMode().getObjectType() == Constants.OBJ_BLOB) {
-						String path = diff.getOldPath();
-						ChangedFile.Builder cfb = getChangeFile(path);
-						if (cfb.getChange() == null || cfb.getChange() == ChangeKind.UNKNOWN)
-							cfb.setChange(ChangeKind.DELETED);
-						else if (cfb.getChange() != ChangeKind.DELETED)
-							cfb.setChange(ChangeKind.MERGED);
 						List<int[]> previousFiles = new ArrayList<int[]>();
-						path = getPreviousFiles(previousFiles, parent.getName(), diff.getOldPath());
-						cfb.setName(path);
-						for (int[] values : previousFiles) {
-							cfb.addChanges(ChangeKind.DELETED);
-							cfb.addPreviousIndices(values[0]);
-							cfb.addPreviousVersions(values[1]);
+						String path = getPreviousFiles(previousFiles, parent.getName(), diff.getOldPath());
+						if (path != null) {
+							ChangedFile.Builder cfb = getChangeFile(path);
+							if (cfb.getChange() == null || cfb.getChange() == ChangeKind.UNKNOWN)
+								cfb.setChange(ChangeKind.DELETED);
+							else if (cfb.getChange() != ChangeKind.DELETED)
+								cfb.setChange(ChangeKind.MERGED);
+							cfb.setName(path);
+							for (int[] values : previousFiles) {
+								cfb.addChanges(ChangeKind.DELETED);
+								cfb.addPreviousIndices(values[0]);
+								cfb.addPreviousVersions(values[1]);
+							}
+							filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
 						}
-						filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
 					}
 				}
 			}
@@ -285,14 +286,16 @@ public class GitCommit extends AbstractCommit {
 	}
 
 	private void getChangeFile(final RevCommit parent, final DiffEntry diff, final ChangeKind kind) {
+		List<int[]> previousFiles = new ArrayList<int[]>();
+		String p = getPreviousFiles(previousFiles, parent.getName(), diff.getOldPath());
+		if (p == null)
+			return;
 		String path = diff.getNewPath();
 		ChangedFile.Builder cfb = getChangeFile(path);
 		if (cfb.getChange() == null || cfb.getChange() == ChangeKind.UNKNOWN)
 			cfb.setChange(kind);
 		else if (cfb.getChange() != kind)
 			cfb.setChange(ChangeKind.MERGED);
-		List<int[]> previousFiles = new ArrayList<int[]>();
-		String p = getPreviousFiles(previousFiles, parent.getName(), diff.getOldPath());
 		int start = 0;
 		while (path.charAt(start) == '/')
 			start++;

@@ -120,31 +120,32 @@ public abstract class AbstractConnector implements AutoCloseable {
 			final String[] paths = changedFiles.keySet().toArray(new String[0]);
 			final String[] classpaths = buildClassPaths(commitOffset, fileContents, snapshot, commits);
 			final Map<String, CompilationUnit> cus = new HashMap<String, CompilationUnit>();
-			final FileASTRequestor r = new FileASTRequestor() {
-				@Override
-				public void acceptAST(String sourceFilePath, CompilationUnit cu) {
-					sourceFilePath = sourceFilePath.replace('\\', '/');
-					cus.put(sourceFilePath, cu);
-				}
-			};
-			@SuppressWarnings("rawtypes")
-			Map options = JavaCore.getOptions();
-			options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_8);
-			options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_8);
-			options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
-			ASTParser parser = ASTParser.newParser(AST.JLS8);
-			parser.setCompilerOptions(options);
-			parser.setEnvironment(
-					classpaths == null ? new String[0] : classpaths,
-					new String[]{}, 
-					new String[]{}, 
-					true);
-			parser.setResolveBindings(true);
-	//		parser.setBindingsRecovery(true);
 			try {
+				final FileASTRequestor r = new FileASTRequestor() {
+					@Override
+					public void acceptAST(String sourceFilePath, CompilationUnit cu) {
+						sourceFilePath = sourceFilePath.replace('\\', '/');
+						cus.put(sourceFilePath, cu);
+					}
+				};
+				@SuppressWarnings("rawtypes")
+				Map options = JavaCore.getOptions();
+				options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_8);
+				options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_8);
+				options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
+				ASTParser parser = ASTParser.newParser(AST.JLS8);
+				parser.setCompilerOptions(options);
+				parser.setEnvironment(
+						classpaths == null ? new String[0] : classpaths,
+						new String[]{}, 
+						new String[]{}, 
+						true);
+				parser.setResolveBindings(true);
+//				parser.setBindingsRecovery(true);
 				parser.createASTs(fileContents, paths, null, new String[0], r, null);
 			} catch (Exception e) {
-				return new ArrayList<ChangedFile>();
+				snapshot.addAll(changedFiles.values());
+				return snapshot;
 			}
 
 			final Map<String, Integer> declarationFile = new HashMap<String, Integer>(), declarationNode = new HashMap<String, Integer>();
@@ -152,10 +153,12 @@ public abstract class AbstractConnector implements AutoCloseable {
 			
 			for (i = 0; i < paths.length; i++) {
 				String sourceFilePath = paths[i];
-				CompilationUnit cu = cus.get(sourceFilePath);
-				if (cu == null)
-					continue;
 				ChangedFile cf = changedFiles.get(sourceFilePath);
+				CompilationUnit cu = cus.get(sourceFilePath);
+				if (cu == null) {
+					snapshot.add(cf);
+					continue;
+				}
 				ChangedFile.Builder fb = ChangedFile.newBuilder(cf);
 				fb.setAst(false);
 				fb.setKey(-1);
@@ -172,27 +175,20 @@ public abstract class AbstractConnector implements AutoCloseable {
 					ast.addNamespaces(visitor.getNamespaces(cu));
 					/*for (final Comment c : visitor.getComments())
 						comments.addComments(c);*/
-				} catch (final Throwable e) {
-					System.err.println("Error visiting " + sourceFilePath + " from " + projectName +" when parsing head snapshot!!!");
-					
-					e.printStackTrace();
-					System.exit(-1);
-					continue;
-				}
-				if (astWriter != null && len > -1) {
-					try {
+					if (astWriter != null && len > -1) {
 						BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 						astWriter.append(new LongWritable(astWriterLen), bw);
 						astWriterLen += bw.getLength();
-					} catch (IOException e) {
-						e.printStackTrace();
+						fb.setKey(len);
+						fb.setAst(true);
 					}
+				} catch (final Throwable e) {
+					System.err.println("Error visiting " + sourceFilePath + " from " + projectName +" when parsing head snapshot!!!");
+					e.printStackTrace();
+					System.exit(-1);
+				} finally {
+					snapshot.add(fb.build());
 				}
-				if (astWriter != null && astWriterLen > len) {
-					fb.setKey(len);
-					fb.setAst(true);
-				}
-				snapshot.add(fb.build());
 			}
 		}
 		return snapshot;
@@ -203,9 +199,11 @@ public abstract class AbstractConnector implements AutoCloseable {
 		for (ChangedFile cf : snapshot) {
 			if (cf.getName().endsWith(".jar")) {
 				AbstractCommit commit = commits.get(cf.getName());
-				String path = commit.writeFile(classpathRoot, cf.getName());
-				if (path != null)
-					paths.add(path);
+				try {
+					String path = commit.writeFile(classpathRoot, cf.getName());
+					if (path != null)
+						paths.add(path);
+				} catch (Throwable t) {}
 			}
 		}
 		HashSet<String> globalRepoLinks = new HashSet<String>(DependencyMangementUtil.repositoryLinks);
@@ -218,8 +216,10 @@ public abstract class AbstractConnector implements AutoCloseable {
 			String name = FileIO.getFileName(cf.getName());
 			if (name.equals("build.gradle")) {
 				AbstractCommit commit = commits.get(cf.getName());
-				Set<String> dependencies = commit.getGradleDependencies(classpathRoot, cf.getName());
-				paths.addAll(dependencies);
+				try {
+					Set<String> dependencies = commit.getGradleDependencies(classpathRoot, cf.getName());
+					paths.addAll(dependencies);
+				} catch (Throwable t) {}
 			} else if (name.equals("pom.xml")) {
 				String dir = cf.getName().substring(0, cf.getName().length() - name.length());
 				fileDir.put(cf, dir);
@@ -242,8 +242,10 @@ public abstract class AbstractConnector implements AutoCloseable {
 					parentPomFiles.pop();
 				}
 				AbstractCommit commit = commits.get(fileName);
-				Set<String> dependencies = commit.getPomDependencies(classpathRoot, fileName, globalRepoLinks, globalProperties, globalManagedDependencies, parentPomFiles);
-				paths.addAll(dependencies);
+				try {
+					Set<String> dependencies = commit.getPomDependencies(classpathRoot, fileName, globalRepoLinks, globalProperties, globalManagedDependencies, parentPomFiles);
+					paths.addAll(dependencies);
+				} catch (Throwable t) {}
 			}
 		}
 		return paths.toArray(new String[0]);
