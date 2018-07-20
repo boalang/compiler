@@ -63,7 +63,6 @@ public abstract class AbstractConnector implements AutoCloseable {
 	protected List<AbstractCommit> revisions = null;
 	protected List<String> branchNames = new ArrayList<String>(), tagNames = new ArrayList<String>();
 	protected List<Integer> branchIndices = new ArrayList<Integer>(), tagIndices = new ArrayList<Integer>();
-	protected HashMap<String, Integer> nameIndices = new HashMap<String, Integer>();
 	protected Map<String, Integer> revisionMap = new HashMap<String, Integer>();
 	protected String projectName;
 	protected int headCommitOffset = -1;

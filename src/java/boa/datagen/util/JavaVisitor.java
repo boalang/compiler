@@ -25,7 +25,6 @@ import boa.datagen.treed.TreedConstants;
 import boa.types.Ast.*;
 import boa.types.Ast.Modifier;
 import boa.types.Ast.Type;
-import boa.types.Ast.Modifier.ModifierKind;
 import boa.types.Shared.ChangeKind;
 
 import static boa.datagen.util.JavaASTUtil.getFullyQualifiedName;
@@ -367,7 +366,7 @@ public class JavaVisitor extends ASTVisitor {
 				for (boa.types.Ast.Method m : methods.pop()){
 					if (b.getKind().equals(boa.types.Ast.TypeKind.INTERFACE)) {
 						for (Modifier mod: m.getModifiersList()) {
-							if (mod.getKind().equals(ModifierKind.STATIC))
+							if (mod.getKind().equals(boa.types.Ast.Modifier.ModifierKind.STATIC))
 								setAstLevel(JLS8);
 						}
 					}
