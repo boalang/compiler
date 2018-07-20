@@ -25,6 +25,7 @@ import boa.datagen.treed.TreedConstants;
 import boa.types.Ast.*;
 import boa.types.Ast.Modifier;
 import boa.types.Ast.Type;
+import boa.types.Ast.Modifier.ModifierKind;
 import boa.types.Shared.ChangeKind;
 
 import static boa.datagen.util.JavaASTUtil.getFullyQualifiedName;
@@ -363,8 +364,16 @@ public class JavaVisitor extends ASTVisitor {
 			} else if (d instanceof MethodDeclaration) {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
 				((MethodDeclaration) d).accept(this);
-				for (boa.types.Ast.Method m : methods.pop())
+				for (boa.types.Ast.Method m : methods.pop()){
+					if (b.getKind().equals(boa.types.Ast.TypeKind.INTERFACE)) {
+						for (Modifier mod: m.getModifiersList()) {
+							if (mod.getKind().equals(ModifierKind.STATIC))
+								setAstLevel(JLS8);
+						}
+					}
+					
 					b.addMethods(m);
+				}
 			} else if (d instanceof Initializer) {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
 				((Initializer) d).accept(this);
@@ -750,7 +759,6 @@ public class JavaVisitor extends ASTVisitor {
 					setAstLevel(JLS8);
 				else
 					names.add(name);
-				
 				annot.accept(this);
 			} else
 				((org.eclipse.jdt.core.dom.Modifier) m).accept(this);
