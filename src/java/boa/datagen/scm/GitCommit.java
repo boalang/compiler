@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 import org.apache.maven.model.Model;
@@ -62,7 +63,7 @@ public class GitCommit extends AbstractCommit {
 	// the repository the commit lives in - should already be connected!
 	private Repository repository;
 	private RevWalk revwalk;
-	private HashMap<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
+	private Map<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
 
 	public GitCommit(final GitConnector cnn, final Repository repository, final RevWalk revwalk, String projectName) {
 		super(cnn);
