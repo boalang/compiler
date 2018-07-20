@@ -51,6 +51,7 @@ public class TestJLSVersion {
 		CodeRepository cr = buildCodeRepository("boalang/test-datagen");
 		String[][] commits = new String[][] {
 			{"15c9685cbd36edba1709637bb8f8c217c894bee6", "58"},
+			{"30e04b12074b7288b4d2cf166c5c7c98a243d1ee", "59"},
 		};
 		
 		for (String[] commit : commits) {

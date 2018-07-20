@@ -40,7 +40,7 @@ import boa.types.Code.CodeRepository.RepositoryKind;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 
-//FIXME assert, autoboxing, static imports, binary literals, underscore literals, unsafe varargs
+//FIXME autoboxing
 
 @RunWith(Parameterized.class)
 public class TestJLSVersionOfChangedFile {
@@ -51,6 +51,7 @@ public class TestJLSVersionOfChangedFile {
 		CodeRepository cr = buildCodeRepository("boalang/compiler");
 		String[][] commits = new String[][] {
 			{"3a1e352cc63f94058ddb38341531d347f121c29a", "58"},
+			{"b82810e725dbf8c7fde6e7fdc034c5676d270313", "1"},
 		};
 		
 		Map<String, Integer> map = new HashMap<String, Integer>();
