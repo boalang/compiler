@@ -187,8 +187,7 @@ public abstract class AbstractCommit {
 		for (ChangedFile.Builder cfb : changedFiles) {
 			if (cfb.getChange() == ChangeKind.DELETED || cfb.getChange() == ChangeKind.UNKNOWN) {
 				cfb.setKey(-1);
-				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles
-						.get(cfb.getPreviousIndices(0)).getKind());
+				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
 			} else
 				processChangeFile(cfb, parse);
 			revision.addFiles(cfb.build());
@@ -986,7 +985,8 @@ public abstract class AbstractCommit {
 		}
 		if (l.isEmpty()) {
 			System.err.println("Cannot find previous version! from: " + projectName);
-			System.exit(-1);
+//			System.exit(-1);
+			return null;
 		}
 		return path;
 	}
