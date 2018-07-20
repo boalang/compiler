@@ -19,7 +19,6 @@ package boa.functions;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -449,7 +448,7 @@ public class BoaAstIntrinsics {
 //		return snapshot.map.values().toArray(new ChangedFile[0]);
 		if (cr.getRevisionsCount() == 0)
 			return new ChangedFile[0];
-		int revisionOffset = getRevision(cr, timestamp);
+		int revisionOffset = BoaIntrinsics.getRevision(cr, timestamp);
 		return getSnapshot(cr, revisionOffset, kinds);
 	}
 
@@ -545,25 +544,6 @@ public class BoaAstIntrinsics {
 				return true;
 		return false;
 	}
-
-	private static int getRevision(final CodeRepository cr, final long timestamp) {
-		Revision.Builder rb = Revision.newBuilder();
-		Person.Builder pb = Person.newBuilder();
-		pb.setUsername("");
-		rb.setCommitDate(timestamp);
-		rb.setCommitter(pb);
-		rb.setId("");
-		rb.setLog("");
-		int index = Collections.binarySearch(cr.getRevisionsList(), rb.build(), new Comparator<Revision>() {
-			@Override
-			public int compare(Revision r1, Revision r2) {
-				return (int) (r1.getCommitDate() - r2.getCommitDate());
-			}
-		});
-		if (index < 0)
-			index = -index - 1;
-		return index;
-	}
 	
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string" })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String id) {
@@ -574,16 +554,8 @@ public class BoaAstIntrinsics {
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String id, final String... kinds) {
 		if (cr.getRevisionsCount() == 0)
 			return new ChangedFile[0];
-		int revisionOffset = getRevision(cr, id);
+		int revisionOffset = BoaIntrinsics.getRevision(cr, id);
 		return getSnapshot(cr, revisionOffset, kinds);
-	}
-	
-	private static int getRevision(final CodeRepository cr, final String id) {
-		for (int i = 0; i < cr.getRevisionsCount(); i++) {
-			if (cr.getRevisions(i).getId().equals(id))
-				return i;
-		}
-		return -1;
 	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string..." })

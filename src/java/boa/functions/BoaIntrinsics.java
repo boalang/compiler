@@ -18,6 +18,8 @@ package boa.functions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,6 +27,7 @@ import java.util.regex.Pattern;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
+import boa.types.Shared.Person;
 import boa.types.Toplevel.Project;
 
 /**
@@ -45,6 +48,33 @@ public class BoaIntrinsics {
 	static {
 		for (final String s : BoaIntrinsics.fixingRegex)
 			fixingMatchers.add(Pattern.compile(s).matcher(""));
+	}
+
+	static int getRevision(final CodeRepository cr, final long timestamp) {
+		Revision.Builder rb = Revision.newBuilder();
+		Person.Builder pb = Person.newBuilder();
+		pb.setUsername("");
+		rb.setCommitDate(timestamp);
+		rb.setCommitter(pb);
+		rb.setId("");
+		rb.setLog("");
+		int index = Collections.binarySearch(cr.getRevisionsList(), rb.build(), new Comparator<Revision>() {
+			@Override
+			public int compare(Revision r1, Revision r2) {
+				return (int) (r1.getCommitDate() - r2.getCommitDate());
+			}
+		});
+		if (index < 0)
+			index = -index - 1;
+		return index;
+	}
+	
+	static int getRevision(final CodeRepository cr, final String id) {
+		for (int i = 0; i < cr.getRevisionsCount(); i++) {
+			if (cr.getRevisions(i).getId().equals(id))
+				return i;
+		}
+		return -1;
 	}
 
 	/**
