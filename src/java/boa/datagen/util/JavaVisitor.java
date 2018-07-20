@@ -745,10 +745,16 @@ public class JavaVisitor extends ASTVisitor {
 			if (((IExtendedModifier) m).isAnnotation()) {
 				setAstLevel(JLS3);
 				((Annotation) m).accept(this);
+				Modifier a = this.modifiers.peek();
+				for (Modifier mod: ms) {
+					if (mod.getKind().equals(boa.types.Ast.Modifier.ModifierKind.ANNOTATION) && mod.getAnnotationName().equals(a.getAnnotationName()))
+							setAstLevel(JLS8);
+				}
 			} else
 				((org.eclipse.jdt.core.dom.Modifier) m).accept(this);
 			ms.add(this.modifiers.pop());
 		}
+		
 		return ms;
 	}
 	
