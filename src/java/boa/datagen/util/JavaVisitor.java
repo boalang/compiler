@@ -2421,7 +2421,7 @@ public class JavaVisitor extends ASTVisitor {
 					b.setReturnType(buildType(vb.getType()));
 				if (vb.getDeclaringClass() != null)
 					b.setDeclaringType(buildType(vb.getDeclaringClass()));
-			} else
+			} else if (node.resolveTypeBinding() != null)
 				b.setReturnType(buildType(node.resolveTypeBinding()));
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
