@@ -45,8 +45,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import boa.datagen.dependencies.DependencyMangementUtil;
 import boa.datagen.dependencies.PomFile;
 import boa.datagen.util.FileIO;
-import boa.datagen.util.Java7Visitor;
-import boa.datagen.util.Java8Visitor;
+import boa.datagen.util.JavaVisitor;
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -64,7 +63,6 @@ public abstract class AbstractConnector implements AutoCloseable {
 	protected List<AbstractCommit> revisions = null;
 	protected List<String> branchNames = new ArrayList<String>(), tagNames = new ArrayList<String>();
 	protected List<Integer> branchIndices = new ArrayList<Integer>(), tagIndices = new ArrayList<Integer>();
-	protected HashMap<String, Integer> nameIndices = new HashMap<String, Integer>();
 	protected Map<String, Integer> revisionMap = new HashMap<String, Integer>();
 	protected String projectName;
 	protected int headCommitOffset = -1;
@@ -168,7 +166,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 				}
 				
 				String content = fileContents.get(sourceFilePath);
-				Java8Visitor visitor = new Java8Visitor(content, declarationFile, declarationNode);
+				JavaVisitor visitor = new JavaVisitor(content, declarationFile, declarationNode);
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				try {
 					ast.addNamespaces(visitor.getNamespaces(cu));
@@ -262,7 +260,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 				private int index = 1;
 				@Override
 				public void preVisit(ASTNode node) {
-					node.setProperty(Java7Visitor.PROPERTY_INDEX, index++);
+					node.setProperty(JavaVisitor.PROPERTY_INDEX, index++);
 				}
 				
 				@Override
@@ -275,7 +273,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 								tb = tb.getTypeDeclaration();
 							String key = tb.getKey();
 							declarationFile.put(key, fileIndex);
-							declarationNode.put(key, (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX));
+							declarationNode.put(key, (Integer) node.getProperty(JavaVisitor.PROPERTY_INDEX));
 						}
 					}
 				}

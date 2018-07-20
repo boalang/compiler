@@ -22,9 +22,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 import org.apache.maven.model.Model;
@@ -61,7 +63,7 @@ public class GitCommit extends AbstractCommit {
 	// the repository the commit lives in - should already be connected!
 	private Repository repository;
 	private RevWalk revwalk;
-	private HashMap<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
+	private Map<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
 
 	public GitCommit(final GitConnector cnn, final Repository repository, final RevWalk revwalk, String projectName) {
 		super(cnn);
@@ -263,8 +265,9 @@ public class GitCommit extends AbstractCommit {
 							cfb.setChange(ChangeKind.DELETED);
 						else if (cfb.getChange() != ChangeKind.DELETED)
 							cfb.setChange(ChangeKind.MERGED);
+						List<int[]> previousFiles = new ArrayList<int[]>();
+						path = getPreviousFiles(previousFiles, parent.getName(), diff.getOldPath());
 						cfb.setName(path);
-						List<int[]> previousFiles = getPreviousFiles(parent.getName(), diff.getOldPath());
 						for (int[] values : previousFiles) {
 							cfb.addChanges(ChangeKind.DELETED);
 							cfb.addPreviousIndices(values[0]);
@@ -288,8 +291,14 @@ public class GitCommit extends AbstractCommit {
 			cfb.setChange(kind);
 		else if (cfb.getChange() != kind)
 			cfb.setChange(ChangeKind.MERGED);
+		List<int[]> previousFiles = new ArrayList<int[]>();
+		String p = getPreviousFiles(previousFiles, parent.getName(), diff.getOldPath());
+		int start = 0;
+		while (path.charAt(start) == '/')
+			start++;
+		if (start > 0)
+			path = p.substring(0, start) + path.substring(start);
 		cfb.setName(path);
-		List<int[]> previousFiles = getPreviousFiles(parent.getName(), diff.getOldPath());
 		for (int[] values : previousFiles) {
 			cfb.addChanges(kind);
 			cfb.addPreviousIndices(values[0]);
@@ -297,7 +306,7 @@ public class GitCommit extends AbstractCommit {
 		}
 		filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
 	}
-
+	
 	public int countChangedFiles(RevCommit rc) {
 		int count = 0;
 		if (rc.getParentCount() == 0) {

@@ -66,7 +66,7 @@ public class SeqRepoImporter {
 	private static String base = null;
 
 	private final static int poolSize = Integer.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
-	public static final int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer.MAX_VALUE / 4; // Integer.MAX_VALUE / 3
+	public static final int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer.MAX_VALUE / 16; // Integer.MAX_VALUE / 3
 	private static AtomicInteger numOfProcessedProjects = new AtomicInteger(0);
 	private static int processedProjects = 0;
 
@@ -326,8 +326,8 @@ public class SeqRepoImporter {
 					if (debug)
 						System.out.println(Thread.currentThread().getId() + " Build head snapshot");
 					repoBuilder.setHead(conn.getHeadCommitOffset());
-					repoBuilder.addAllHeadSnapshot(
-							conn.buildHeadSnapshot(new String[] { "java" }, project.getName()));
+					repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[] {}, project.getName()));
+//					repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[] { "java" }, project.getName()));
 				}
 				repoBuilder.addAllBranches(conn.getBranchIndices());
 				repoBuilder.addAllBranchNames(conn.getBranchNames());
