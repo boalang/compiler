@@ -117,30 +117,35 @@ public class BoaIntrinsics {
 	}
 
 	private static int getRevisionIndex(final CodeRepository cr, final long timestamp) {
-		Revision.Builder rb = Revision.newBuilder();
-		Person.Builder pb = Person.newBuilder();
-		pb.setUsername("");
-		rb.setCommitDate(timestamp);
-		rb.setCommitter(pb);
-		rb.setId("");
-		rb.setLog("");
-		int index = Collections.binarySearch(cr.getRevisionsList(), rb.build(), new Comparator<Revision>() {
-			@Override
-			public int compare(Revision r1, Revision r2) {
-				return (int) (r1.getCommitDate() - r2.getCommitDate());
-			}
-		});
-		if (index < 0)
-			index = -index - 1;
-		return index;
+		int low = 0;
+        int high = getRevisionsCount(cr) - 1;
+
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            Revision midRev = getRevision(cr, mid);
+            long cmp = midRev.getCommitDate() - timestamp;
+
+            if (cmp < 0)
+                low = mid + 1;
+            else if (cmp > 0)
+                high = mid - 1;
+            else
+                return mid; // key found: return index
+        }
+        return low;  // key not found: return low index
 	}
 	
 	private static int getRevisionIndex(final CodeRepository cr, final String id) {
-		for (int i = 0; i < cr.getRevisionsCount(); i++) {
-			if (cr.getRevisions(i).getId().equals(id))
+		for (int i = 0; i < getRevisionsCount(cr); i++) {
+			if (getRevision(cr, i).getId().equals(id))
 				return i;
 		}
 		return -1;
+	}
+
+	@FunctionSpec(name = "getrevisionscount", returnType = "int", formalParameters = { "CodeRepository" })
+	public static int getRevisionsCount(CodeRepository cr) {
+		return Math.max(cr.getRevisionKeysCount(), cr.getRevisionsCount());
 	}
 	
 	@FunctionSpec(name = "getrevision", returnType = "Revision", formalParameters = { "CodeRepository", "int" })
@@ -193,7 +198,7 @@ public class BoaIntrinsics {
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp, final String... kinds) throws Exception {
 //		snapshot.initialize(timestamp, kinds).visit(cr);
 //		return snapshot.map.values().toArray(new ChangedFile[0]);
-		if (cr.getRevisionsCount() == 0)
+		if (getRevisionsCount(cr) == 0)
 			return new ChangedFile[0];
 		int revisionOffset = getRevisionIndex(cr, timestamp);
 		return getSnapshot(cr, revisionOffset, kinds);
@@ -208,13 +213,12 @@ public class BoaIntrinsics {
 				return i2 - i1;
 			}
 		});
-		List<Revision> revisions = cr.getRevisionsList();
 		Set<Integer> queuedCommitIds = new HashSet<Integer>();
 		pq.offer(commitOffset);
 		queuedCommitIds.add(commitOffset);
 		while (!pq.isEmpty()) {
 			int offset = pq.poll();
-			Revision commit = revisions.get(offset);
+			Revision commit = getRevision(cr, offset);
 			for (ChangedFile cf : commit.getFilesList()) {
 				ChangeKind ck = cf.getChange();
 				switch (ck) {
@@ -305,7 +309,7 @@ public class BoaIntrinsics {
 	
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string", "string..." })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String id, final String... kinds) {
-		if (cr.getRevisionsCount() == 0)
+		if (getRevisionsCount(cr) == 0)
 			return new ChangedFile[0];
 		int revisionOffset = getRevisionIndex(cr, id);
 		return getSnapshot(cr, revisionOffset, kinds);
@@ -424,8 +428,8 @@ public class BoaIntrinsics {
 	 */
 	@FunctionSpec(name = "hasfiletype", returnType = "bool", formalParameters = { "CodeRepository", "string" })
 	public static boolean hasfile(final CodeRepository cr, final String ext) {
-		for (int i = 0; i < cr.getRevisionsCount(); i++)
-			if (hasfile(cr.getRevisions(i), ext))
+		for (int i = 0; i < getRevisionsCount(cr); i++)
+			if (hasfile(getRevision(cr, i), ext))
 				return true;
 		return false;
 	}

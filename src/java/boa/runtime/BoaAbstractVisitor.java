@@ -19,7 +19,7 @@ package boa.runtime;
 import java.util.List;
 
 import boa.functions.BoaAstIntrinsics;
-
+import boa.functions.BoaIntrinsics;
 import boa.types.Ast.*;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -178,10 +178,9 @@ public abstract class BoaAbstractVisitor {
 	}
 	public final void visit(final CodeRepository node) throws Exception {
 		if (preVisit(node)) {
-			final List<Revision> revisionsList = node.getRevisionsList();
-			final int revisionsSize = revisionsList.size();
+			final int revisionsSize = BoaIntrinsics.getRevisionsCount(node);
 			for (int i = 0; i < revisionsSize; i++)
-				visit(revisionsList.get(i));
+				visit(BoaIntrinsics.getRevision(node, i));
 
 			postVisit(node);
 		}
