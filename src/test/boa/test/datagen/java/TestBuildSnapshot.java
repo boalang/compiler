@@ -32,7 +32,7 @@ import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.AbstractCommit;
 import boa.datagen.scm.GitConnector;
 import boa.datagen.util.FileIO;
-import boa.functions.BoaAstIntrinsics;
+import boa.functions.BoaIntrinsics;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.CodeRepository.RepositoryKind;
 import boa.types.Code.Revision;
@@ -91,25 +91,25 @@ public class TestBuildSnapshot {
 		
 		CodeRepository cr = buildCodeRepository("boalang/test-datagen");
 
-		ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr, "8041f1281cf6b615861768631097e22127a1e32e", new String[]{"SOURCE_JAVA_JLS"});
+		ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr, "8041f1281cf6b615861768631097e22127a1e32e", new String[]{"SOURCE_JAVA_JLS"});
 		String[] fileNames = new String[snapshot.length];
 		for (int i = 0; i < snapshot.length; i++)
 			fileNames[i] = snapshot[i].getName();
 		assertArrayEquals(new String[]{}, fileNames);
 		
-		snapshot = BoaAstIntrinsics.getSnapshot(cr, "269424473466542fad9c426f7edf7d10a742e2be", new String[]{"SOURCE_JAVA_JLS"});
+		snapshot = BoaIntrinsics.getSnapshot(cr, "269424473466542fad9c426f7edf7d10a742e2be", new String[]{"SOURCE_JAVA_JLS"});
 		fileNames = new String[snapshot.length];
 		for (int i = 0; i < snapshot.length; i++)
 			fileNames[i] = snapshot[i].getName();
 		assertArrayEquals(new String[]{"src/Foo.java"}, fileNames);
 		
-		snapshot = BoaAstIntrinsics.getSnapshot(cr, "5e9291c8e830754479bf836686734045faa5c021", new String[]{"SOURCE_JAVA_JLS"});
+		snapshot = BoaIntrinsics.getSnapshot(cr, "5e9291c8e830754479bf836686734045faa5c021", new String[]{"SOURCE_JAVA_JLS"});
 		fileNames = new String[snapshot.length];
 		for (int i = 0; i < snapshot.length; i++)
 			fileNames[i] = snapshot[i].getName();
 		assertArrayEquals(new String[]{}, fileNames);
 		
-		snapshot = BoaAstIntrinsics.getSnapshot(cr, "06288fd7cf36415629e3eafdce2448a5406a8c1e", new String[]{"SOURCE_JAVA_JLS"});
+		snapshot = BoaIntrinsics.getSnapshot(cr, "06288fd7cf36415629e3eafdce2448a5406a8c1e", new String[]{"SOURCE_JAVA_JLS"});
 		fileNames = new String[snapshot.length];
 		for (int i = 0; i < snapshot.length; i++)
 			fileNames[i] = snapshot[i].getName();
@@ -122,13 +122,13 @@ public class TestBuildSnapshot {
 		
 		CodeRepository cr = buildCodeRepository("hyjorc1/my-example");
 
-		ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr);
+		ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr);
 		String[] fileNames = new String[snapshot.length];
 		for (int i = 0; i < snapshot.length; i++)
 			fileNames[i] = snapshot[i].getName();
 //			assertArrayEquals(new String[]{}, fileNames);
 		
-		snapshot = BoaAstIntrinsics.getSnapshot(cr, "d7a4aced37af672f9a55238a47bb0e4974193ebe");
+		snapshot = BoaIntrinsics.getSnapshot(cr, "d7a4aced37af672f9a55238a47bb0e4974193ebe");
 		fileNames = new String[snapshot.length];
 		for (int i = 0; i < snapshot.length; i++)
 			fileNames[i] = snapshot[i].getName();
@@ -193,7 +193,7 @@ public class TestBuildSnapshot {
 		CodeRepository cr = repoBuilder.build();
 		
 		{
-			ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr);
+			ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr);
 			String[] fileNames = new String[snapshot.length];
 			for (int i = 0; i < snapshot.length; i++)
 				fileNames[i] = snapshot[i].getName();
@@ -205,7 +205,7 @@ public class TestBuildSnapshot {
 		}
 		
 		for (Revision rev : cr.getRevisionsList()) {
-			ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr, rev.getId());
+			ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr, rev.getId());
 			String[] fileNames = new String[snapshot.length];
 			for (int i = 0; i < snapshot.length; i++)
 				fileNames[i] = snapshot[i].getName();

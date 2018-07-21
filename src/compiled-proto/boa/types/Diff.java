@@ -141,7 +141,7 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
+     ** The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     java.util.List<boa.types.Shared.ChangeKind> getChangesList();
@@ -149,7 +149,7 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
+     ** The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     int getChangesCount();
@@ -157,14 +157,50 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
+     ** The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     boa.types.Shared.ChangeKind getChanges(int index);
 
-    // repeated int32 previous_versions = 8;
+    // repeated string previous_names = 8;
     /**
-     * <code>repeated int32 previous_versions = 8;</code>
+     * <code>repeated string previous_names = 8;</code>
+     *
+     * <pre>
+     ** The kinds of changes of this this compared to the corresponding parent commits 
+     * </pre>
+     */
+    java.util.List<java.lang.String>
+    getPreviousNamesList();
+    /**
+     * <code>repeated string previous_names = 8;</code>
+     *
+     * <pre>
+     ** The kinds of changes of this this compared to the corresponding parent commits 
+     * </pre>
+     */
+    int getPreviousNamesCount();
+    /**
+     * <code>repeated string previous_names = 8;</code>
+     *
+     * <pre>
+     ** The kinds of changes of this this compared to the corresponding parent commits 
+     * </pre>
+     */
+    java.lang.String getPreviousNames(int index);
+    /**
+     * <code>repeated string previous_names = 8;</code>
+     *
+     * <pre>
+     ** The kinds of changes of this this compared to the corresponding parent commits 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getPreviousNamesBytes(int index);
+
+    // repeated int32 previous_versions = 9;
+    /**
+     * <code>repeated int32 previous_versions = 9;</code>
      *
      * <pre>
      ** @exclude The indices of the corresponding parent commits in the list of all commits 
@@ -172,7 +208,7 @@ public final class Diff {
      */
     java.util.List<java.lang.Integer> getPreviousVersionsList();
     /**
-     * <code>repeated int32 previous_versions = 8;</code>
+     * <code>repeated int32 previous_versions = 9;</code>
      *
      * <pre>
      ** @exclude The indices of the corresponding parent commits in the list of all commits 
@@ -180,7 +216,7 @@ public final class Diff {
      */
     int getPreviousVersionsCount();
     /**
-     * <code>repeated int32 previous_versions = 8;</code>
+     * <code>repeated int32 previous_versions = 9;</code>
      *
      * <pre>
      ** @exclude The indices of the corresponding parent commits in the list of all commits 
@@ -188,9 +224,9 @@ public final class Diff {
      */
     int getPreviousVersions(int index);
 
-    // repeated int32 previous_indices = 9;
+    // repeated int32 previous_indices = 10;
     /**
-     * <code>repeated int32 previous_indices = 9;</code>
+     * <code>repeated int32 previous_indices = 10;</code>
      *
      * <pre>
      ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
@@ -198,7 +234,7 @@ public final class Diff {
      */
     java.util.List<java.lang.Integer> getPreviousIndicesList();
     /**
-     * <code>repeated int32 previous_indices = 9;</code>
+     * <code>repeated int32 previous_indices = 10;</code>
      *
      * <pre>
      ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
@@ -206,7 +242,7 @@ public final class Diff {
      */
     int getPreviousIndicesCount();
     /**
-     * <code>repeated int32 previous_indices = 9;</code>
+     * <code>repeated int32 previous_indices = 10;</code>
      *
      * <pre>
      ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
@@ -214,9 +250,9 @@ public final class Diff {
      */
     int getPreviousIndices(int index);
 
-    // optional uint64 mapped_key = 10;
+    // optional uint64 mapped_key = 11;
     /**
-     * <code>optional uint64 mapped_key = 10;</code>
+     * <code>optional uint64 mapped_key = 11;</code>
      *
      * <pre>
      ** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version 
@@ -224,7 +260,7 @@ public final class Diff {
      */
     boolean hasMappedKey();
     /**
-     * <code>optional uint64 mapped_key = 10;</code>
+     * <code>optional uint64 mapped_key = 11;</code>
      *
      * <pre>
      ** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version 
@@ -370,20 +406,28 @@ public final class Diff {
               input.popLimit(oldLimit);
               break;
             }
-            case 64: {
+            case 66: {
               if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
-                previousVersions_ = new java.util.ArrayList<java.lang.Integer>();
+                previousNames_ = new com.google.protobuf.LazyStringArrayList();
                 mutable_bitField0_ |= 0x00000080;
+              }
+              previousNames_.add(input.readBytes());
+              break;
+            }
+            case 72: {
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+                previousVersions_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000100;
               }
               previousVersions_.add(input.readInt32());
               break;
             }
-            case 66: {
+            case 74: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100) && input.getBytesUntilLimit() > 0) {
                 previousVersions_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000080;
+                mutable_bitField0_ |= 0x00000100;
               }
               while (input.getBytesUntilLimit() > 0) {
                 previousVersions_.add(input.readInt32());
@@ -391,20 +435,20 @@ public final class Diff {
               input.popLimit(limit);
               break;
             }
-            case 72: {
-              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+            case 80: {
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
                 previousIndices_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000100;
+                mutable_bitField0_ |= 0x00000200;
               }
               previousIndices_.add(input.readInt32());
               break;
             }
-            case 74: {
+            case 82: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200) && input.getBytesUntilLimit() > 0) {
                 previousIndices_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000100;
+                mutable_bitField0_ |= 0x00000200;
               }
               while (input.getBytesUntilLimit() > 0) {
                 previousIndices_.add(input.readInt32());
@@ -412,7 +456,7 @@ public final class Diff {
               input.popLimit(limit);
               break;
             }
-            case 80: {
+            case 88: {
               bitField0_ |= 0x00000040;
               mappedKey_ = input.readUInt64();
               break;
@@ -429,9 +473,12 @@ public final class Diff {
           changes_ = java.util.Collections.unmodifiableList(changes_);
         }
         if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
-          previousVersions_ = java.util.Collections.unmodifiableList(previousVersions_);
+          previousNames_ = new com.google.protobuf.UnmodifiableLazyStringList(previousNames_);
         }
         if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+          previousVersions_ = java.util.Collections.unmodifiableList(previousVersions_);
+        }
+        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
           previousIndices_ = java.util.Collections.unmodifiableList(previousIndices_);
         }
         this.unknownFields = unknownFields.build();
@@ -1613,7 +1660,7 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
+     ** The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     public java.util.List<boa.types.Shared.ChangeKind> getChangesList() {
@@ -1623,7 +1670,7 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
+     ** The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     public int getChangesCount() {
@@ -1633,18 +1680,64 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
+     ** The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     public boa.types.Shared.ChangeKind getChanges(int index) {
       return changes_.get(index);
     }
 
-    // repeated int32 previous_versions = 8;
-    public static final int PREVIOUS_VERSIONS_FIELD_NUMBER = 8;
+    // repeated string previous_names = 8;
+    public static final int PREVIOUS_NAMES_FIELD_NUMBER = 8;
+    private com.google.protobuf.LazyStringList previousNames_;
+    /**
+     * <code>repeated string previous_names = 8;</code>
+     *
+     * <pre>
+     ** The kinds of changes of this this compared to the corresponding parent commits 
+     * </pre>
+     */
+    public java.util.List<java.lang.String>
+        getPreviousNamesList() {
+      return previousNames_;
+    }
+    /**
+     * <code>repeated string previous_names = 8;</code>
+     *
+     * <pre>
+     ** The kinds of changes of this this compared to the corresponding parent commits 
+     * </pre>
+     */
+    public int getPreviousNamesCount() {
+      return previousNames_.size();
+    }
+    /**
+     * <code>repeated string previous_names = 8;</code>
+     *
+     * <pre>
+     ** The kinds of changes of this this compared to the corresponding parent commits 
+     * </pre>
+     */
+    public java.lang.String getPreviousNames(int index) {
+      return previousNames_.get(index);
+    }
+    /**
+     * <code>repeated string previous_names = 8;</code>
+     *
+     * <pre>
+     ** The kinds of changes of this this compared to the corresponding parent commits 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getPreviousNamesBytes(int index) {
+      return previousNames_.getByteString(index);
+    }
+
+    // repeated int32 previous_versions = 9;
+    public static final int PREVIOUS_VERSIONS_FIELD_NUMBER = 9;
     private java.util.List<java.lang.Integer> previousVersions_;
     /**
-     * <code>repeated int32 previous_versions = 8;</code>
+     * <code>repeated int32 previous_versions = 9;</code>
      *
      * <pre>
      ** @exclude The indices of the corresponding parent commits in the list of all commits 
@@ -1655,7 +1748,7 @@ public final class Diff {
       return previousVersions_;
     }
     /**
-     * <code>repeated int32 previous_versions = 8;</code>
+     * <code>repeated int32 previous_versions = 9;</code>
      *
      * <pre>
      ** @exclude The indices of the corresponding parent commits in the list of all commits 
@@ -1665,7 +1758,7 @@ public final class Diff {
       return previousVersions_.size();
     }
     /**
-     * <code>repeated int32 previous_versions = 8;</code>
+     * <code>repeated int32 previous_versions = 9;</code>
      *
      * <pre>
      ** @exclude The indices of the corresponding parent commits in the list of all commits 
@@ -1675,11 +1768,11 @@ public final class Diff {
       return previousVersions_.get(index);
     }
 
-    // repeated int32 previous_indices = 9;
-    public static final int PREVIOUS_INDICES_FIELD_NUMBER = 9;
+    // repeated int32 previous_indices = 10;
+    public static final int PREVIOUS_INDICES_FIELD_NUMBER = 10;
     private java.util.List<java.lang.Integer> previousIndices_;
     /**
-     * <code>repeated int32 previous_indices = 9;</code>
+     * <code>repeated int32 previous_indices = 10;</code>
      *
      * <pre>
      ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
@@ -1690,7 +1783,7 @@ public final class Diff {
       return previousIndices_;
     }
     /**
-     * <code>repeated int32 previous_indices = 9;</code>
+     * <code>repeated int32 previous_indices = 10;</code>
      *
      * <pre>
      ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
@@ -1700,7 +1793,7 @@ public final class Diff {
       return previousIndices_.size();
     }
     /**
-     * <code>repeated int32 previous_indices = 9;</code>
+     * <code>repeated int32 previous_indices = 10;</code>
      *
      * <pre>
      ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
@@ -1710,11 +1803,11 @@ public final class Diff {
       return previousIndices_.get(index);
     }
 
-    // optional uint64 mapped_key = 10;
-    public static final int MAPPED_KEY_FIELD_NUMBER = 10;
+    // optional uint64 mapped_key = 11;
+    public static final int MAPPED_KEY_FIELD_NUMBER = 11;
     private long mappedKey_;
     /**
-     * <code>optional uint64 mapped_key = 10;</code>
+     * <code>optional uint64 mapped_key = 11;</code>
      *
      * <pre>
      ** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version 
@@ -1724,7 +1817,7 @@ public final class Diff {
       return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
-     * <code>optional uint64 mapped_key = 10;</code>
+     * <code>optional uint64 mapped_key = 11;</code>
      *
      * <pre>
      ** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version 
@@ -1742,6 +1835,7 @@ public final class Diff {
       ast_ = false;
       comments_ = boa.types.Ast.CommentsRoot.getDefaultInstance();
       changes_ = java.util.Collections.emptyList();
+      previousNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       previousVersions_ = java.util.Collections.emptyList();
       previousIndices_ = java.util.Collections.emptyList();
       mappedKey_ = 0L;
@@ -1805,14 +1899,17 @@ public final class Diff {
       for (int i = 0; i < changes_.size(); i++) {
         output.writeEnum(7, changes_.get(i).getNumber());
       }
+      for (int i = 0; i < previousNames_.size(); i++) {
+        output.writeBytes(8, previousNames_.getByteString(i));
+      }
       for (int i = 0; i < previousVersions_.size(); i++) {
-        output.writeInt32(8, previousVersions_.get(i));
+        output.writeInt32(9, previousVersions_.get(i));
       }
       for (int i = 0; i < previousIndices_.size(); i++) {
-        output.writeInt32(9, previousIndices_.get(i));
+        output.writeInt32(10, previousIndices_.get(i));
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeUInt64(10, mappedKey_);
+        output.writeUInt64(11, mappedKey_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1858,6 +1955,15 @@ public final class Diff {
       }
       {
         int dataSize = 0;
+        for (int i = 0; i < previousNames_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(previousNames_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getPreviousNamesList().size();
+      }
+      {
+        int dataSize = 0;
         for (int i = 0; i < previousVersions_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
             .computeInt32SizeNoTag(previousVersions_.get(i));
@@ -1876,7 +1982,7 @@ public final class Diff {
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(10, mappedKey_);
+          .computeUInt64Size(11, mappedKey_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2017,12 +2123,14 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000020);
         changes_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000040);
-        previousVersions_ = java.util.Collections.emptyList();
+        previousNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000080);
-        previousIndices_ = java.util.Collections.emptyList();
+        previousVersions_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000100);
-        mappedKey_ = 0L;
+        previousIndices_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000200);
+        mappedKey_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
 
@@ -2085,16 +2193,22 @@ public final class Diff {
         }
         result.changes_ = changes_;
         if (((bitField0_ & 0x00000080) == 0x00000080)) {
-          previousVersions_ = java.util.Collections.unmodifiableList(previousVersions_);
+          previousNames_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              previousNames_);
           bitField0_ = (bitField0_ & ~0x00000080);
         }
-        result.previousVersions_ = previousVersions_;
+        result.previousNames_ = previousNames_;
         if (((bitField0_ & 0x00000100) == 0x00000100)) {
-          previousIndices_ = java.util.Collections.unmodifiableList(previousIndices_);
+          previousVersions_ = java.util.Collections.unmodifiableList(previousVersions_);
           bitField0_ = (bitField0_ & ~0x00000100);
         }
+        result.previousVersions_ = previousVersions_;
+        if (((bitField0_ & 0x00000200) == 0x00000200)) {
+          previousIndices_ = java.util.Collections.unmodifiableList(previousIndices_);
+          bitField0_ = (bitField0_ & ~0x00000200);
+        }
         result.previousIndices_ = previousIndices_;
-        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
           to_bitField0_ |= 0x00000040;
         }
         result.mappedKey_ = mappedKey_;
@@ -2144,10 +2258,20 @@ public final class Diff {
           }
           onChanged();
         }
+        if (!other.previousNames_.isEmpty()) {
+          if (previousNames_.isEmpty()) {
+            previousNames_ = other.previousNames_;
+            bitField0_ = (bitField0_ & ~0x00000080);
+          } else {
+            ensurePreviousNamesIsMutable();
+            previousNames_.addAll(other.previousNames_);
+          }
+          onChanged();
+        }
         if (!other.previousVersions_.isEmpty()) {
           if (previousVersions_.isEmpty()) {
             previousVersions_ = other.previousVersions_;
-            bitField0_ = (bitField0_ & ~0x00000080);
+            bitField0_ = (bitField0_ & ~0x00000100);
           } else {
             ensurePreviousVersionsIsMutable();
             previousVersions_.addAll(other.previousVersions_);
@@ -2157,7 +2281,7 @@ public final class Diff {
         if (!other.previousIndices_.isEmpty()) {
           if (previousIndices_.isEmpty()) {
             previousIndices_ = other.previousIndices_;
-            bitField0_ = (bitField0_ & ~0x00000100);
+            bitField0_ = (bitField0_ & ~0x00000200);
           } else {
             ensurePreviousIndicesIsMutable();
             previousIndices_.addAll(other.previousIndices_);
@@ -2686,7 +2810,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
+       ** The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public java.util.List<boa.types.Shared.ChangeKind> getChangesList() {
@@ -2696,7 +2820,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
+       ** The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public int getChangesCount() {
@@ -2706,7 +2830,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
+       ** The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public boa.types.Shared.ChangeKind getChanges(int index) {
@@ -2716,7 +2840,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
+       ** The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public Builder setChanges(
@@ -2733,7 +2857,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
+       ** The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public Builder addChanges(boa.types.Shared.ChangeKind value) {
@@ -2749,7 +2873,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
+       ** The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public Builder addAllChanges(
@@ -2763,7 +2887,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
+       ** The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public Builder clearChanges() {
@@ -2773,16 +2897,145 @@ public final class Diff {
         return this;
       }
 
-      // repeated int32 previous_versions = 8;
-      private java.util.List<java.lang.Integer> previousVersions_ = java.util.Collections.emptyList();
-      private void ensurePreviousVersionsIsMutable() {
+      // repeated string previous_names = 8;
+      private com.google.protobuf.LazyStringList previousNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensurePreviousNamesIsMutable() {
         if (!((bitField0_ & 0x00000080) == 0x00000080)) {
-          previousVersions_ = new java.util.ArrayList<java.lang.Integer>(previousVersions_);
+          previousNames_ = new com.google.protobuf.LazyStringArrayList(previousNames_);
           bitField0_ |= 0x00000080;
          }
       }
       /**
-       * <code>repeated int32 previous_versions = 8;</code>
+       * <code>repeated string previous_names = 8;</code>
+       *
+       * <pre>
+       ** The kinds of changes of this this compared to the corresponding parent commits 
+       * </pre>
+       */
+      public java.util.List<java.lang.String>
+          getPreviousNamesList() {
+        return java.util.Collections.unmodifiableList(previousNames_);
+      }
+      /**
+       * <code>repeated string previous_names = 8;</code>
+       *
+       * <pre>
+       ** The kinds of changes of this this compared to the corresponding parent commits 
+       * </pre>
+       */
+      public int getPreviousNamesCount() {
+        return previousNames_.size();
+      }
+      /**
+       * <code>repeated string previous_names = 8;</code>
+       *
+       * <pre>
+       ** The kinds of changes of this this compared to the corresponding parent commits 
+       * </pre>
+       */
+      public java.lang.String getPreviousNames(int index) {
+        return previousNames_.get(index);
+      }
+      /**
+       * <code>repeated string previous_names = 8;</code>
+       *
+       * <pre>
+       ** The kinds of changes of this this compared to the corresponding parent commits 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getPreviousNamesBytes(int index) {
+        return previousNames_.getByteString(index);
+      }
+      /**
+       * <code>repeated string previous_names = 8;</code>
+       *
+       * <pre>
+       ** The kinds of changes of this this compared to the corresponding parent commits 
+       * </pre>
+       */
+      public Builder setPreviousNames(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensurePreviousNamesIsMutable();
+        previousNames_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string previous_names = 8;</code>
+       *
+       * <pre>
+       ** The kinds of changes of this this compared to the corresponding parent commits 
+       * </pre>
+       */
+      public Builder addPreviousNames(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensurePreviousNamesIsMutable();
+        previousNames_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string previous_names = 8;</code>
+       *
+       * <pre>
+       ** The kinds of changes of this this compared to the corresponding parent commits 
+       * </pre>
+       */
+      public Builder addAllPreviousNames(
+          java.lang.Iterable<java.lang.String> values) {
+        ensurePreviousNamesIsMutable();
+        super.addAll(values, previousNames_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string previous_names = 8;</code>
+       *
+       * <pre>
+       ** The kinds of changes of this this compared to the corresponding parent commits 
+       * </pre>
+       */
+      public Builder clearPreviousNames() {
+        previousNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string previous_names = 8;</code>
+       *
+       * <pre>
+       ** The kinds of changes of this this compared to the corresponding parent commits 
+       * </pre>
+       */
+      public Builder addPreviousNamesBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensurePreviousNamesIsMutable();
+        previousNames_.add(value);
+        onChanged();
+        return this;
+      }
+
+      // repeated int32 previous_versions = 9;
+      private java.util.List<java.lang.Integer> previousVersions_ = java.util.Collections.emptyList();
+      private void ensurePreviousVersionsIsMutable() {
+        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
+          previousVersions_ = new java.util.ArrayList<java.lang.Integer>(previousVersions_);
+          bitField0_ |= 0x00000100;
+         }
+      }
+      /**
+       * <code>repeated int32 previous_versions = 9;</code>
        *
        * <pre>
        ** @exclude The indices of the corresponding parent commits in the list of all commits 
@@ -2793,7 +3046,7 @@ public final class Diff {
         return java.util.Collections.unmodifiableList(previousVersions_);
       }
       /**
-       * <code>repeated int32 previous_versions = 8;</code>
+       * <code>repeated int32 previous_versions = 9;</code>
        *
        * <pre>
        ** @exclude The indices of the corresponding parent commits in the list of all commits 
@@ -2803,7 +3056,7 @@ public final class Diff {
         return previousVersions_.size();
       }
       /**
-       * <code>repeated int32 previous_versions = 8;</code>
+       * <code>repeated int32 previous_versions = 9;</code>
        *
        * <pre>
        ** @exclude The indices of the corresponding parent commits in the list of all commits 
@@ -2813,7 +3066,7 @@ public final class Diff {
         return previousVersions_.get(index);
       }
       /**
-       * <code>repeated int32 previous_versions = 8;</code>
+       * <code>repeated int32 previous_versions = 9;</code>
        *
        * <pre>
        ** @exclude The indices of the corresponding parent commits in the list of all commits 
@@ -2827,7 +3080,7 @@ public final class Diff {
         return this;
       }
       /**
-       * <code>repeated int32 previous_versions = 8;</code>
+       * <code>repeated int32 previous_versions = 9;</code>
        *
        * <pre>
        ** @exclude The indices of the corresponding parent commits in the list of all commits 
@@ -2840,7 +3093,7 @@ public final class Diff {
         return this;
       }
       /**
-       * <code>repeated int32 previous_versions = 8;</code>
+       * <code>repeated int32 previous_versions = 9;</code>
        *
        * <pre>
        ** @exclude The indices of the corresponding parent commits in the list of all commits 
@@ -2854,7 +3107,7 @@ public final class Diff {
         return this;
       }
       /**
-       * <code>repeated int32 previous_versions = 8;</code>
+       * <code>repeated int32 previous_versions = 9;</code>
        *
        * <pre>
        ** @exclude The indices of the corresponding parent commits in the list of all commits 
@@ -2862,21 +3115,21 @@ public final class Diff {
        */
       public Builder clearPreviousVersions() {
         previousVersions_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000100);
         onChanged();
         return this;
       }
 
-      // repeated int32 previous_indices = 9;
+      // repeated int32 previous_indices = 10;
       private java.util.List<java.lang.Integer> previousIndices_ = java.util.Collections.emptyList();
       private void ensurePreviousIndicesIsMutable() {
-        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
+        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
           previousIndices_ = new java.util.ArrayList<java.lang.Integer>(previousIndices_);
-          bitField0_ |= 0x00000100;
+          bitField0_ |= 0x00000200;
          }
       }
       /**
-       * <code>repeated int32 previous_indices = 9;</code>
+       * <code>repeated int32 previous_indices = 10;</code>
        *
        * <pre>
        ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
@@ -2887,7 +3140,7 @@ public final class Diff {
         return java.util.Collections.unmodifiableList(previousIndices_);
       }
       /**
-       * <code>repeated int32 previous_indices = 9;</code>
+       * <code>repeated int32 previous_indices = 10;</code>
        *
        * <pre>
        ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
@@ -2897,7 +3150,7 @@ public final class Diff {
         return previousIndices_.size();
       }
       /**
-       * <code>repeated int32 previous_indices = 9;</code>
+       * <code>repeated int32 previous_indices = 10;</code>
        *
        * <pre>
        ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
@@ -2907,7 +3160,7 @@ public final class Diff {
         return previousIndices_.get(index);
       }
       /**
-       * <code>repeated int32 previous_indices = 9;</code>
+       * <code>repeated int32 previous_indices = 10;</code>
        *
        * <pre>
        ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
@@ -2921,7 +3174,7 @@ public final class Diff {
         return this;
       }
       /**
-       * <code>repeated int32 previous_indices = 9;</code>
+       * <code>repeated int32 previous_indices = 10;</code>
        *
        * <pre>
        ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
@@ -2934,7 +3187,7 @@ public final class Diff {
         return this;
       }
       /**
-       * <code>repeated int32 previous_indices = 9;</code>
+       * <code>repeated int32 previous_indices = 10;</code>
        *
        * <pre>
        ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
@@ -2948,7 +3201,7 @@ public final class Diff {
         return this;
       }
       /**
-       * <code>repeated int32 previous_indices = 9;</code>
+       * <code>repeated int32 previous_indices = 10;</code>
        *
        * <pre>
        ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
@@ -2956,25 +3209,25 @@ public final class Diff {
        */
       public Builder clearPreviousIndices() {
         previousIndices_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000200);
         onChanged();
         return this;
       }
 
-      // optional uint64 mapped_key = 10;
+      // optional uint64 mapped_key = 11;
       private long mappedKey_ ;
       /**
-       * <code>optional uint64 mapped_key = 10;</code>
+       * <code>optional uint64 mapped_key = 11;</code>
        *
        * <pre>
        ** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version 
        * </pre>
        */
       public boolean hasMappedKey() {
-        return ((bitField0_ & 0x00000200) == 0x00000200);
+        return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
-       * <code>optional uint64 mapped_key = 10;</code>
+       * <code>optional uint64 mapped_key = 11;</code>
        *
        * <pre>
        ** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version 
@@ -2984,27 +3237,27 @@ public final class Diff {
         return mappedKey_;
       }
       /**
-       * <code>optional uint64 mapped_key = 10;</code>
+       * <code>optional uint64 mapped_key = 11;</code>
        *
        * <pre>
        ** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version 
        * </pre>
        */
       public Builder setMappedKey(long value) {
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000400;
         mappedKey_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional uint64 mapped_key = 10;</code>
+       * <code>optional uint64 mapped_key = 11;</code>
        *
        * <pre>
        ** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version 
        * </pre>
        */
       public Builder clearMappedKey() {
-        bitField0_ = (bitField0_ & ~0x00000200);
+        bitField0_ = (bitField0_ & ~0x00000400);
         mappedKey_ = 0L;
         onChanged();
         return this;
@@ -3036,38 +3289,38 @@ public final class Diff {
   static {
     java.lang.String[] descriptorData = {
       "\n\ndiff.proto\022\tboa.types\032\014shared.proto\032\ta" +
-      "st.proto\"\321\t\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
+      "st.proto\"\351\t\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
       "2\025.boa.types.ChangeKind\022-\n\004kind\030\002 \002(\0162\037." +
       "boa.types.ChangedFile.FileKind\022\014\n\004name\030\003" +
       " \002(\t\022\013\n\003key\030\004 \002(\004\022\013\n\003ast\030\005 \002(\010\022)\n\010commen" +
       "ts\030\006 \001(\0132\027.boa.types.CommentsRoot\022&\n\007cha" +
-      "nges\030\007 \003(\0162\025.boa.types.ChangeKind\022\031\n\021pre" +
-      "vious_versions\030\010 \003(\005\022\030\n\020previous_indices" +
-      "\030\t \003(\005\022\022\n\nmapped_key\030\n \001(\004\"\247\007\n\010FileKind\022" +
-      "\t\n\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020",
-      "\003\022\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_JAVA_" +
-      "JLS2\020f\022\024\n\020SOURCE_JAVA_JLS3\020g\022\024\n\020SOURCE_J" +
-      "AVA_JLS4\020h\022\024\n\020SOURCE_JAVA_JLS8\020l\022\016\n\nJAVA" +
-      "_ERROR\020d\022\010\n\004JLS2\020f\022\010\n\004JLS3\020g\022\010\n\004JLS4\020h\022\010" +
-      "\n\004JLS8\020l\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rSOURCE" +
-      "_CS_CS1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\rSOURCE" +
-      "_CS_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rSOURCE" +
-      "_CS_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003C" +
-      "S2\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001\022\024\n\017S" +
-      "OURCE_JS_ERROR\020\254\002\022\022\n\rSOURCE_JS_ES1\020\255\002\022\022\n",
-      "\rSOURCE_JS_ES2\020\256\002\022\022\n\rSOURCE_JS_ES3\020\257\002\022\022\n" +
-      "\rSOURCE_JS_ES5\020\260\002\022\022\n\rSOURCE_JS_ES6\020\261\002\022\022\n" +
-      "\rSOURCE_JS_ES7\020\262\002\022\022\n\rSOURCE_JS_ES8\020\263\002\022\r\n" +
-      "\010JS_ERROR\020\254\002\022\025\n\020SOURCE_PHP_ERROR\020\220\003\022\020\n\013S" +
-      "OURCE_PHP5\020\221\003\022\022\n\rSOURCE_PHP5_3\020\222\003\022\022\n\rSOU" +
-      "RCE_PHP5_4\020\223\003\022\022\n\rSOURCE_PHP5_5\020\224\003\022\022\n\rSOU" +
-      "RCE_PHP5_6\020\225\003\022\022\n\rSOURCE_PHP7_0\020\226\003\022\022\n\rSOU" +
-      "RCE_PHP7_1\020\227\003\022\016\n\tPHP_ERROR\020\220\003\022\026\n\021SOURCE_" +
-      "HTML_ERROR\020\364\003\022\020\n\013Source_HTML\020\365\003\022\017\n\nHTML_" +
-      "ERROR\020\364\003\022\025\n\020SOURCE_XML_ERROR\020\330\004\022\017\n\nSourc",
-      "e_XML\020\331\004\022\016\n\tXML_ERROR\020\330\004\022\025\n\020SOURCE_CSS_E" +
-      "RROR\020\274\005\022\017\n\nSource_CSS\020\275\005\022\016\n\tCSS_ERROR\020\274\005" +
-      "\032\002\020\001B\002H\001"
+      "nges\030\007 \003(\0162\025.boa.types.ChangeKind\022\026\n\016pre" +
+      "vious_names\030\010 \003(\t\022\031\n\021previous_versions\030\t" +
+      " \003(\005\022\030\n\020previous_indices\030\n \003(\005\022\022\n\nmapped" +
+      "_key\030\013 \001(\004\"\247\007\n\010FileKind\022\t\n\005OTHER\020\000\022\n\n\006BI",
+      "NARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020\003\022\025\n\021SOURCE_JAVA" +
+      "_ERROR\020d\022\024\n\020SOURCE_JAVA_JLS2\020f\022\024\n\020SOURCE" +
+      "_JAVA_JLS3\020g\022\024\n\020SOURCE_JAVA_JLS4\020h\022\024\n\020SO" +
+      "URCE_JAVA_JLS8\020l\022\016\n\nJAVA_ERROR\020d\022\010\n\004JLS2" +
+      "\020f\022\010\n\004JLS3\020g\022\010\n\004JLS4\020h\022\010\n\004JLS8\020l\022\024\n\017SOUR" +
+      "CE_CS_ERROR\020\310\001\022\022\n\rSOURCE_CS_CS1\020\311\001\022\022\n\rSO" +
+      "URCE_CS_CS2\020\312\001\022\022\n\rSOURCE_CS_CS3\020\313\001\022\022\n\rSO" +
+      "URCE_CS_CS4\020\314\001\022\022\n\rSOURCE_CS_CS5\020\315\001\022\r\n\010CS" +
+      "_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003CS2\020\312\001\022\010\n\003CS3\020\313\001\022" +
+      "\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001\022\024\n\017SOURCE_JS_ERROR\020\254",
+      "\002\022\022\n\rSOURCE_JS_ES1\020\255\002\022\022\n\rSOURCE_JS_ES2\020\256" +
+      "\002\022\022\n\rSOURCE_JS_ES3\020\257\002\022\022\n\rSOURCE_JS_ES5\020\260" +
+      "\002\022\022\n\rSOURCE_JS_ES6\020\261\002\022\022\n\rSOURCE_JS_ES7\020\262" +
+      "\002\022\022\n\rSOURCE_JS_ES8\020\263\002\022\r\n\010JS_ERROR\020\254\002\022\025\n\020" +
+      "SOURCE_PHP_ERROR\020\220\003\022\020\n\013SOURCE_PHP5\020\221\003\022\022\n" +
+      "\rSOURCE_PHP5_3\020\222\003\022\022\n\rSOURCE_PHP5_4\020\223\003\022\022\n" +
+      "\rSOURCE_PHP5_5\020\224\003\022\022\n\rSOURCE_PHP5_6\020\225\003\022\022\n" +
+      "\rSOURCE_PHP7_0\020\226\003\022\022\n\rSOURCE_PHP7_1\020\227\003\022\016\n" +
+      "\tPHP_ERROR\020\220\003\022\026\n\021SOURCE_HTML_ERROR\020\364\003\022\020\n" +
+      "\013Source_HTML\020\365\003\022\017\n\nHTML_ERROR\020\364\003\022\025\n\020SOUR",
+      "CE_XML_ERROR\020\330\004\022\017\n\nSource_XML\020\331\004\022\016\n\tXML_" +
+      "ERROR\020\330\004\022\025\n\020SOURCE_CSS_ERROR\020\274\005\022\017\n\nSourc" +
+      "e_CSS\020\275\005\022\016\n\tCSS_ERROR\020\274\005\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3079,7 +3332,7 @@ public final class Diff {
           internal_static_boa_types_ChangedFile_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedFile_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", "Comments", "Changes", "PreviousVersions", "PreviousIndices", "MappedKey", });
+              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", "Comments", "Changes", "PreviousNames", "PreviousVersions", "PreviousIndices", "MappedKey", });
           return null;
         }
       };

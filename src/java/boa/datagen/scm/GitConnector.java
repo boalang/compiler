@@ -147,6 +147,7 @@ public class GitConnector extends AbstractConnector {
 				} catch (Exception e) {}
 				
 				gc.getChangeFiles(rc);
+				gc.fileNameIndices.clear();
 				
 				revisionMap.put(gc.id, revisions.size());
 				revisions.add(gc);

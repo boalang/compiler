@@ -138,12 +138,14 @@ message ChangedFile {
 	required bool ast = 5;
 	/** @exclude */
 	optional CommentsRoot comments = 6;
-	/** @exclude The kinds of changes of this this compared to the corresponding parent commits */
+	/** The kinds of changes of this this compared to the corresponding parent commits */
 	repeated ChangeKind changes = 7;
+	/** The kinds of changes of this this compared to the corresponding parent commits */
+	repeated string previous_names = 8;
 	/** @exclude The indices of the corresponding parent commits in the list of all commits */
-	repeated int32 previous_versions = 8;
+	repeated int32 previous_versions = 9;
 	/** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits */
-	repeated int32 previous_indices = 9;
+	repeated int32 previous_indices = 10;
 	/** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version */
-	optional uint64 mapped_key = 10;
+	optional uint64 mapped_key = 11;
 }

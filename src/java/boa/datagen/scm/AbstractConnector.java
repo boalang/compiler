@@ -17,7 +17,6 @@
 
 package boa.datagen.scm;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -324,12 +323,16 @@ public abstract class AbstractConnector implements AutoCloseable {
 						snapshot.add(cf.build());
 						commits.put(cf.getName(), commit);
 					}
-					for (int i = 0; i < cf.getPreviousIndicesCount(); i++) {
+					for (int i = 0; i < cf.getChangesCount(); i++) {
 						if (cf.getChanges(i) != ChangeKind.ADDED) {
-							ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
 							ChangeKind pck = cf.getChanges(i);
-							if (!adds.contains(pcf.getName()) && !dels.contains(pcf.getName()) && (pck == ChangeKind.DELETED || pck == ChangeKind.RENAMED))
-								dels.add(pcf.getName());
+//							ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
+//							String name = pcf.getName();
+							String name = cf.getPreviousNames(i);
+							if (name.isEmpty())
+								name = cf.getName();
+							if (!adds.contains(name) && !dels.contains(name) && (pck == ChangeKind.DELETED || pck == ChangeKind.RENAMED))
+								dels.add(name);
 						}
 					}
 					break;
@@ -339,10 +342,12 @@ public abstract class AbstractConnector implements AutoCloseable {
 						snapshot.add(cf.build());
 						commits.put(cf.getName(), commit);
 					}
-					for (int i = 0; i < cf.getPreviousIndicesCount(); i++) {
-						ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
-						if (!adds.contains(pcf.getName()) && !dels.contains(pcf.getName()))
-							dels.add(pcf.getName());
+					for (int i = 0; i < cf.getChangesCount(); i++) {
+//						ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
+//						String name = pcf.getName();
+						String name = cf.getPreviousNames(i);
+						if (!adds.contains(name) && !dels.contains(name))
+							dels.add(name);
 					}
 					break;
 				default:

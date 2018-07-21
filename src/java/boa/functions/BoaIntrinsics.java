@@ -20,13 +20,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
+import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
 import boa.types.Toplevel.Project;
 
@@ -46,11 +51,11 @@ public class BoaIntrinsics {
 	private final static List<Matcher> fixingMatchers = new ArrayList<Matcher>();
 
 	static {
-		for (final String s : BoaIntrinsics.fixingRegex)
+		for (final String s : fixingRegex)
 			fixingMatchers.add(Pattern.compile(s).matcher(""));
 	}
 
-	static int getRevision(final CodeRepository cr, final long timestamp) {
+	private static int getRevision(final CodeRepository cr, final long timestamp) {
 		Revision.Builder rb = Revision.newBuilder();
 		Person.Builder pb = Person.newBuilder();
 		pb.setUsername("");
@@ -69,7 +74,7 @@ public class BoaIntrinsics {
 		return index;
 	}
 	
-	static int getRevision(final CodeRepository cr, final String id) {
+	private static int getRevision(final CodeRepository cr, final String id) {
 		for (int i = 0; i < cr.getRevisionsCount(); i++) {
 			if (cr.getRevisions(i).getId().equals(id))
 				return i;
@@ -77,6 +82,150 @@ public class BoaIntrinsics {
 		return -1;
 	}
 
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time", "string..." })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp, final String... kinds) throws Exception {
+//		snapshot.initialize(timestamp, kinds).visit(cr);
+//		return snapshot.map.values().toArray(new ChangedFile[0]);
+		if (cr.getRevisionsCount() == 0)
+			return new ChangedFile[0];
+		int revisionOffset = getRevision(cr, timestamp);
+		return getSnapshot(cr, revisionOffset, kinds);
+	}
+
+	private static ChangedFile[] getSnapshot(final CodeRepository cr, final int commitOffset, final String... kinds) {
+		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
+		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>(); 
+		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
+			@Override
+			public int compare(Integer i1, Integer i2) {
+				return i2 - i1;
+			}
+		});
+		List<Revision> revisions = cr.getRevisionsList();
+		Set<Integer> queuedCommitIds = new HashSet<Integer>();
+		pq.offer(commitOffset);
+		queuedCommitIds.add(commitOffset);
+		while (!pq.isEmpty()) {
+			int offset = pq.poll();
+			Revision commit = revisions.get(offset);
+			for (ChangedFile cf : commit.getFilesList()) {
+				ChangeKind ck = cf.getChange();
+				switch (ck) {
+				case ADDED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						if (isIncluded(cf, kinds))
+							snapshot.add(cf);
+					}
+					break;
+				case COPIED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						if (isIncluded(cf, kinds))
+							snapshot.add(cf);
+					}
+					break;
+				case DELETED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName()))
+						dels.add(cf.getName());
+					break;
+				case MERGED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						if (isIncluded(cf, kinds))
+							snapshot.add(cf);
+					}
+					for (int i = 0; i < cf.getChangesCount(); i++) {
+						if (cf.getChanges(i) != ChangeKind.ADDED) {
+							ChangeKind pck = cf.getChanges(i);
+//							ChangedFile pcf = revisions.get(cf.getPreviousVersions(i)).getFiles(cf.getPreviousIndices(i));
+//							String name = pcf.getName();
+							String name = cf.getPreviousNames(i);
+							if (name.isEmpty())
+								name = cf.getName();
+							if (!adds.contains(name) && !dels.contains(name) && (pck == ChangeKind.DELETED || pck == ChangeKind.RENAMED))
+								dels.add(name);
+						}
+					}
+					break;
+				case RENAMED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						if (isIncluded(cf, kinds))
+							snapshot.add(cf);
+					}
+					for (int i = 0; i < cf.getChangesCount(); i++) {
+//						ChangedFile pcf = revisions.get(cf.getPreviousVersions(i)).getFiles(cf.getPreviousIndices(i));
+//						String name = pcf.getName();
+						String name = cf.getPreviousNames(i);
+						if (!adds.contains(name) && !dels.contains(name))
+							dels.add(name);
+					}
+					break;
+				default:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						if (isIncluded(cf, kinds))
+							snapshot.add(cf);
+					}
+					break;
+				}
+			}
+			for (int p : commit.getParentsList()) {
+				if (!queuedCommitIds.contains(p)) {
+					pq.offer(p);
+					queuedCommitIds.add(p);
+				}
+			}
+		}
+		return snapshot.toArray(new ChangedFile[0]);
+	}
+
+	private static boolean isIncluded(ChangedFile cf, String[] kinds) {
+		if (kinds == null || kinds.length == 0)
+			return true;
+		final String kindName = cf.getKind().name();
+		for (final String kind : kinds)
+			if (kindName.startsWith(kind))
+				return true;
+		return false;
+	}
+	
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string" })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String id) {
+		return getSnapshot(cr, id, new String[0]);
+	}
+	
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string", "string..." })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String id, final String... kinds) {
+		if (cr.getRevisionsCount() == 0)
+			return new ChangedFile[0];
+		int revisionOffset = getRevision(cr, id);
+		return getSnapshot(cr, revisionOffset, kinds);
+	}
+
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string..." })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String... kinds) throws Exception {
+//		return getSnapshot(cr, Long.MAX_VALUE, kinds);
+		List<ChangedFile> files = new ArrayList<ChangedFile>();
+		for (ChangedFile file : cr.getHeadSnapshotList()) {
+			if (isIncluded(file, kinds))
+				files.add(file);
+		}
+		return files.toArray(new ChangedFile[0]);
+	}
+
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time" })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp) throws Exception {
+		return getSnapshot(cr, timestamp, new String[0]);
+	}
+
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository" })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr) throws Exception {
+//		return getSnapshot(cr, Long.MAX_VALUE, new String[0]);
+		return cr.getHeadSnapshotList().toArray(new ChangedFile[0]);
+	}
+	
 	/**
 	 * Is a Revision's log message indicating it is a fixing revision?
 	 * 
