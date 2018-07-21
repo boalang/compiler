@@ -69,7 +69,7 @@ public class BoaIntrinsics {
 		GETS_FAIL_BADLOC,
 	};
 
-	private static final Revision emptyRevision = Revision.newBuilder().build();
+	private static final Revision emptyRevision;
 	
 	private static MapFile.Reader commitMap;
 
@@ -78,6 +78,14 @@ public class BoaIntrinsics {
 	static {
 		for (final String s : fixingRegex)
 			fixingMatchers.add(Pattern.compile(s).matcher(""));
+		Revision.Builder rb = Revision.newBuilder();
+		rb.setCommitDate(0);
+		Person.Builder pb = Person.newBuilder();
+		pb.setUsername("");
+		rb.setCommitter(pb);
+		rb.setId("");
+		rb.setLog("");
+		emptyRevision = rb.build();
 	}
 
 	private static void openCommitMap() {
@@ -108,7 +116,7 @@ public class BoaIntrinsics {
 		closeCommitMap();
 	}
 
-	private static int getRevision(final CodeRepository cr, final long timestamp) {
+	private static int getRevisionIndex(final CodeRepository cr, final long timestamp) {
 		Revision.Builder rb = Revision.newBuilder();
 		Person.Builder pb = Person.newBuilder();
 		pb.setUsername("");
@@ -127,7 +135,7 @@ public class BoaIntrinsics {
 		return index;
 	}
 	
-	private static int getRevision(final CodeRepository cr, final String id) {
+	private static int getRevisionIndex(final CodeRepository cr, final String id) {
 		for (int i = 0; i < cr.getRevisionsCount(); i++) {
 			if (cr.getRevisions(i).getId().equals(id))
 				return i;
@@ -135,6 +143,7 @@ public class BoaIntrinsics {
 		return -1;
 	}
 	
+	@FunctionSpec(name = "getrevision", returnType = "Revision", formalParameters = { "CodeRepository", "int" })
 	public static Revision getRevision(final CodeRepository cr, final int index) {
 		if (cr.getRevisionKeysCount() > 0) {
 			long key = cr.getRevisionKeys(index);
@@ -186,7 +195,7 @@ public class BoaIntrinsics {
 //		return snapshot.map.values().toArray(new ChangedFile[0]);
 		if (cr.getRevisionsCount() == 0)
 			return new ChangedFile[0];
-		int revisionOffset = getRevision(cr, timestamp);
+		int revisionOffset = getRevisionIndex(cr, timestamp);
 		return getSnapshot(cr, revisionOffset, kinds);
 	}
 
@@ -298,7 +307,7 @@ public class BoaIntrinsics {
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String id, final String... kinds) {
 		if (cr.getRevisionsCount() == 0)
 			return new ChangedFile[0];
-		int revisionOffset = getRevision(cr, id);
+		int revisionOffset = getRevisionIndex(cr, id);
 		return getSnapshot(cr, revisionOffset, kinds);
 	}
 
