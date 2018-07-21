@@ -16,6 +16,7 @@
  */
 package boa.functions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,6 +28,17 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.MapFile;
+import org.apache.hadoop.mapreduce.Mapper.Context;
+
+import com.google.protobuf.CodedInputStream;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -48,11 +60,52 @@ public class BoaIntrinsics {
 		//"\\b(bug|issue|fix)\\b\\s*id(s)?\\s*(=)?\\s*[0-9]+"
 	};
 
+	public static enum COMMITCOUNTER {
+		GETS_ATTEMPTED,
+		GETS_SUCCEED,
+		GETS_FAILED,
+		GETS_FAIL_MISSING,
+		GETS_FAIL_BADPROTOBUF,
+		GETS_FAIL_BADLOC,
+	};
+
+	private static final Revision emptyRevision = Revision.newBuilder().build();
+	
+	private static MapFile.Reader commitMap;
+
 	private final static List<Matcher> fixingMatchers = new ArrayList<Matcher>();
 
 	static {
 		for (final String s : fixingRegex)
 			fixingMatchers.add(Pattern.compile(s).matcher(""));
+	}
+
+	private static void openCommitMap() {
+		try {
+			final Configuration conf = BoaAstIntrinsics.context.getConfiguration();
+			final FileSystem fs;
+			final Path p = new Path(BoaAstIntrinsics.context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+						new Path(conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("commit")));
+			fs = FileSystem.get(conf);
+			commitMap = new MapFile.Reader(fs, p.toString(), conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void closeCommitMap() {
+		if (commitMap != null)
+			try {
+				commitMap.close();
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		commitMap = null;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static void cleanup(final Context context) {
+		closeCommitMap();
 	}
 
 	private static int getRevision(final CodeRepository cr, final long timestamp) {
@@ -80,6 +133,51 @@ public class BoaIntrinsics {
 				return i;
 		}
 		return -1;
+	}
+	
+	public static Revision getRevision(final CodeRepository cr, final int index) {
+		if (cr.getRevisionKeysCount() > 0) {
+			long key = cr.getRevisionKeys(index);
+			return getRevision(key);
+		}
+		return cr.getRevisions(index);
+	}
+
+	private static Revision getRevision(long key) {
+		BoaAstIntrinsics.context.getCounter(COMMITCOUNTER.GETS_ATTEMPTED).increment(1);
+		
+		if (commitMap == null)
+			openCommitMap();
+		
+		try {
+			final BytesWritable value = new BytesWritable();
+			if (commitMap.get(new LongWritable(key), value) == null) {
+				BoaAstIntrinsics.context.getCounter(COMMITCOUNTER.GETS_FAIL_MISSING).increment(1);
+			} else {
+				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+				// defaults to 64, really big ASTs require more
+				_stream.setRecursionLimit(Integer.MAX_VALUE);
+				final Revision root = Revision.parseFrom(_stream);
+				BoaAstIntrinsics.context.getCounter(COMMITCOUNTER.GETS_SUCCEED).increment(1);
+				return root;
+			}
+		} catch (final InvalidProtocolBufferException e) {
+			e.printStackTrace();
+			BoaAstIntrinsics.context.getCounter(COMMITCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+		} catch (final IOException e) {
+			e.printStackTrace();
+			BoaAstIntrinsics.context.getCounter(COMMITCOUNTER.GETS_FAIL_MISSING).increment(1);
+		} catch (final RuntimeException e) {
+			e.printStackTrace();
+			BoaAstIntrinsics.context.getCounter(COMMITCOUNTER.GETS_FAIL_MISSING).increment(1);
+		} catch (final Error e) {
+			e.printStackTrace();
+			BoaAstIntrinsics.context.getCounter(COMMITCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+		}
+
+		System.err.println("error with revision: " + key);
+		BoaAstIntrinsics.context.getCounter(COMMITCOUNTER.GETS_FAILED).increment(1);
+		return emptyRevision;
 	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time", "string..." })
@@ -224,6 +322,46 @@ public class BoaIntrinsics {
 	public static ChangedFile[] getSnapshot(final CodeRepository cr) throws Exception {
 //		return getSnapshot(cr, Long.MAX_VALUE, new String[0]);
 		return cr.getHeadSnapshotList().toArray(new ChangedFile[0]);
+	}
+
+	@FunctionSpec(name = "getpreviousversion", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "ChangedFile" })
+	public static ChangedFile[] getPreviousVersion(final CodeRepository cr, final ChangedFile cf) throws Exception {
+		List<ChangedFile> l = new ArrayList<ChangedFile>();
+		for (int i = 0; i < cf.getChangesCount(); i++) {
+			int revisionIndex = cf.getPreviousVersions(i);
+			Set<Integer> queuedRevisionIds = new HashSet<Integer>();
+			PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
+				@Override
+				public int compare(Integer i1, Integer i2) {
+					return i2 - i1;
+				}
+			});
+			pq.offer(revisionIndex);
+			queuedRevisionIds.add(revisionIndex);
+			while (!pq.isEmpty()) {
+				revisionIndex = pq.poll();
+				Revision rev = getRevision(cr, revisionIndex);
+				int index = Collections.binarySearch(rev.getFilesList(), cf, new Comparator<ChangedFile>() {
+					@Override
+					public int compare(ChangedFile f1, ChangedFile f2) {
+						return f1.getName().compareTo(f2.getName());
+					}
+				});
+				if (index >= 0) {
+					ChangedFile ocf = rev.getFiles(index);
+					if (ocf.getChange() != ChangeKind.DELETED)
+						l.add(ocf);
+				} else {
+					for (int parentId : rev.getParentsList()) {
+						if (!queuedRevisionIds.contains(parentId)) {
+							pq.offer(parentId);
+							queuedRevisionIds.add(parentId);
+						}
+					}
+				}
+			}
+		}
+		return l.toArray(new ChangedFile[0]);
 	}
 	
 	/**

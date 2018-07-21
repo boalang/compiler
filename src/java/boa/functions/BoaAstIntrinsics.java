@@ -59,7 +59,7 @@ import boa.types.Toplevel.Project;
  */
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
-	private static Context context;
+	static Context context;
 	private static MapFile.Reader map, commentsMap, issuesMap;
 
 	public static enum ASTCOUNTER {
