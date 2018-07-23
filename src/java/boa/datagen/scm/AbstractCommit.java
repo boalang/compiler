@@ -88,6 +88,7 @@ public abstract class AbstractCommit {
 		Integer index = fileNameIndices.get(path);
 		if (index == null) {
 			cfb = ChangedFile.newBuilder();
+			cfb.setName(path);
 			cfb.setKind(FileKind.OTHER);
 			cfb.setKey(-1);
 			cfb.setAst(false);
@@ -185,10 +186,10 @@ public abstract class AbstractCommit {
 				revision.addParents(parentIndex);
 
 		for (ChangedFile.Builder cfb : changedFiles) {
+			cfb.setKind(FileKind.OTHER);
 			if (cfb.getChange() == ChangeKind.DELETED || cfb.getChange() == ChangeKind.UNKNOWN) {
 				cfb.setKey(-1);
-				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles
-						.get(cfb.getPreviousIndices(0)).getKind());
+//				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
 			} else
 				processChangeFile(cfb, parse);
 			revision.addFiles(cfb.build());
@@ -200,7 +201,6 @@ public abstract class AbstractCommit {
 	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse) {
 		long len = connector.astWriterLen;
 		String path = fb.getName();
-		fb.setKind(FileKind.OTHER);
 
 		final String lowerPath = path.toLowerCase();
 		if (lowerPath.endsWith(".txt"))
@@ -668,7 +668,7 @@ public abstract class AbstractCommit {
 				CompilationUnit preCu = null;
 				if (treeDif) {
 					if (fb.getChange() == ChangeKind.MODIFIED && this.parentIndices.length == 1
-							&& fb.getPreviousIndicesCount() == 1) {
+							&& fb.getChangesCount() == 1) {
 						AbstractCommit previousCommit = this.connector.revisions.get(fb.getPreviousVersions(0));
 						ChangedFile.Builder pcf = previousCommit.changedFiles.get(fb.getPreviousIndices(0));
 						String previousFilePath = pcf.getName();
@@ -808,7 +808,7 @@ public abstract class AbstractCommit {
 				CompilationUnit preCu = null;
 				if (treeDif) {
 					if (fb.getChange() == ChangeKind.MODIFIED && this.parentIndices.length == 1
-							&& fb.getPreviousIndicesCount() == 1) {
+							&& fb.getChangesCount() == 1) {
 						AbstractCommit previousCommit = this.connector.revisions.get(fb.getPreviousVersions(0));
 						ChangedFile.Builder pcf = previousCommit.changedFiles.get(fb.getPreviousIndices(0));
 						String previousFilePath = pcf.getName();
@@ -986,7 +986,8 @@ public abstract class AbstractCommit {
 		}
 		if (l.isEmpty()) {
 			System.err.println("Cannot find previous version! from: " + projectName);
-			System.exit(-1);
+//			System.exit(-1);
+			return null;
 		}
 		return path;
 	}

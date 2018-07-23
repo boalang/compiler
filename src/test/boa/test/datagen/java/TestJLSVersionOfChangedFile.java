@@ -34,7 +34,7 @@ import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.AbstractCommit;
 import boa.datagen.scm.GitConnector;
 import boa.datagen.util.FileIO;
-import boa.functions.BoaAstIntrinsics;
+import boa.functions.BoaIntrinsics;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.CodeRepository.RepositoryKind;
 import boa.types.Code.Revision;
@@ -150,7 +150,7 @@ public class TestJLSVersionOfChangedFile {
 		CodeRepository cr = repoBuilder.build();
 		
 		{
-			ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr);
+			ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr);
 			String[] fileNames = new String[snapshot.length];
 			for (int i = 0; i < snapshot.length; i++)
 				fileNames[i] = snapshot[i].getName();
@@ -162,7 +162,7 @@ public class TestJLSVersionOfChangedFile {
 		}
 		
 		for (Revision rev : cr.getRevisionsList()) {
-			ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr, rev.getId());
+			ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr, rev.getId());
 			String[] fileNames = new String[snapshot.length];
 			for (int i = 0; i < snapshot.length; i++)
 				fileNames[i] = snapshot[i].getName();

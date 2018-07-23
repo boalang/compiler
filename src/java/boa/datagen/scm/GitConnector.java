@@ -20,6 +20,8 @@ package boa.datagen.scm;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,6 +41,9 @@ import org.eclipse.jgit.revwalk.RevSort;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
+
+import boa.types.Diff.ChangedFile;
+import boa.types.Diff.ChangedFile.Builder;
 
 /**
  * @author rdyer
@@ -130,15 +135,30 @@ public class GitConnector extends AbstractConnector {
 				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName);
 				
 				gc.setId(rc.getName());
-				PersonIdent author = rc.getAuthorIdent(),
-						committer = rc.getCommitterIdent();
-				if (author != null)
-					gc.setAuthor(author.getName(), null, author.getEmailAddress());
-				gc.setCommitter(committer.getName(), null, committer.getEmailAddress());
+				try {
+					PersonIdent author = rc.getAuthorIdent();
+					if (author != null)
+						gc.setAuthor(author.getName(), null, author.getEmailAddress());
+				} catch (Exception e) {}
+				try {
+					PersonIdent committer = rc.getCommitterIdent();
+					gc.setCommitter(committer.getName(), null, committer.getEmailAddress());
+				} catch (Exception e) {
+					gc.setCommitter("", null, "");
+				}
 				gc.setDate(new Date(((long) rc.getCommitTime()) * 1000));
-				gc.setMessage(rc.getFullMessage());
+				try {
+					gc.setMessage(rc.getFullMessage());
+				} catch (Exception e) {}
 				
 				gc.getChangeFiles(rc);
+				gc.fileNameIndices.clear();
+				Collections.sort(gc.changedFiles, new Comparator<ChangedFile.Builder>() {
+					@Override
+					public int compare(Builder b1, Builder b2) {
+						return b1.getName().compareTo(b2.getName());
+					}
+				});
 				
 				revisionMap.put(gc.id, revisions.size());
 				revisions.add(gc);
