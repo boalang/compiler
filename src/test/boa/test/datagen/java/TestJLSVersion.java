@@ -34,7 +34,7 @@ import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.AbstractCommit;
 import boa.datagen.scm.GitConnector;
 import boa.datagen.util.FileIO;
-import boa.functions.BoaAstIntrinsics;
+import boa.functions.BoaIntrinsics;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.CodeRepository.RepositoryKind;
 import boa.types.Code.Revision;
@@ -55,7 +55,7 @@ public class TestJLSVersion {
 		};
 		
 		for (String[] commit : commits) {
-			ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr, commit[0], new String[]{"SOURCE_JAVA_"});
+			ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr, commit[0], new String[]{"SOURCE_JAVA_"});
 			assertThat(snapshot.length, Matchers.is(Integer.parseInt(commit[1])));
 			
 	    	for (ChangedFile cf : snapshot)
@@ -141,7 +141,7 @@ public class TestJLSVersion {
 		CodeRepository cr = repoBuilder.build();
 		
 		{
-			ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr);
+			ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr);
 			String[] fileNames = new String[snapshot.length];
 			for (int i = 0; i < snapshot.length; i++)
 				fileNames[i] = snapshot[i].getName();
@@ -153,7 +153,7 @@ public class TestJLSVersion {
 		}
 		
 		for (Revision rev : cr.getRevisionsList()) {
-			ChangedFile[] snapshot = BoaAstIntrinsics.getSnapshot(cr, rev.getId());
+			ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr, rev.getId());
 			String[] fileNames = new String[snapshot.length];
 			for (int i = 0; i < snapshot.length; i++)
 				fileNames[i] = snapshot[i].getName();
