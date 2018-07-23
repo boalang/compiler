@@ -299,7 +299,7 @@ public class TestBuildSnapshot {
 		byte[] bytes = val.getBytes();
 		Project project = Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
 		String repoName = project.getName();
-		File gitDir = new File("dataset/repos/" + repoName);
+		File gitDir = new File("dataset/repos" + repoName);
 		final CodeRepository cr = project.getCodeRepositories(0);
 		openWriters(gitDir.getAbsolutePath());
 		
@@ -334,6 +334,11 @@ public class TestBuildSnapshot {
 //			System.out.println("Test snapshot at " + rev.getId());
 			assertArrayEquals(expectedFileNames, fileNames);
 		}
+		
+		filecheck.run();
+		File dataFile = new File("dataset/temp_data" + repoName);
+		filecheck = new FileIO.DirectoryRemover(dataFile.getAbsolutePath());
+		filecheck.run();
 		conn.close();
 	}
 }
