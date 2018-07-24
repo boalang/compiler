@@ -281,10 +281,13 @@ public class TestBuildSnapshot {
 		System.out.println("==========================================");
 	}
 	
+	@Ignore
 	@Test
 	public void testBuildSnapshotFromSeq() throws Exception {
-		String[] args = {"-inputJson", "dataset/repos", "-inputRepo", "dataset/temp_repos",
-							"-output", "dataset/temp_data" };
+		String[] args = {	"-inputJson", "test/datagen/jsons", 
+							"-inputRepo", "dataset/repos",
+							"-output", "dataset/temp_data",
+							"-size", "1"};
 		BoaGenerator.main(args);
 		SequenceFile.Reader pr = null;
 		DefaultProperties.DEBUG = true;
@@ -299,16 +302,14 @@ public class TestBuildSnapshot {
 		byte[] bytes = val.getBytes();
 		Project project = Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
 		String repoName = project.getName();
-		File gitDir = new File("dataset/repos" + repoName);
+		File gitDir = new File("dataset/repos/" + repoName);
 		final CodeRepository cr = project.getCodeRepositories(0);
-		openWriters(gitDir.getAbsolutePath());
 		
 		FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
 		filecheck.run();
 		String url = "https://github.com/" + repoName + ".git";
 		RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
-		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName, astWriter, astWriterLen, contentWriter, contentWriterLen);
-		closeWriters();
+		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName);
 		
 		
 		{
@@ -319,24 +320,25 @@ public class TestBuildSnapshot {
 			Arrays.sort(fileNames);
 			String[] expectedFileNames = conn.getSnapshot(Constants.HEAD).toArray(new String[0]);
 			Arrays.sort(expectedFileNames);
-//			System.out.println("Test head snapshot");
+			System.out.println("Test head snapshot");
 			assertArrayEquals(expectedFileNames, fileNames);
 		}
 		
-		for (Revision rev : cr.getRevisionsList()) {
+		for (int i = 0; i < BoaIntrinsics.getRevisionsCount(cr); i++) {
+			Revision rev = BoaIntrinsics.getRevision(cr, i);
 			ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr, rev.getId());
 			String[] fileNames = new String[snapshot.length];
-			for (int i = 0; i < snapshot.length; i++)
-				fileNames[i] = snapshot[i].getName();
+			for (int j = 0; j < snapshot.length; j++)
+				fileNames[j] = snapshot[j].getName();
 			Arrays.sort(fileNames);
 			String[] expectedFileNames = conn.getSnapshot(rev.getId()).toArray(new String[0]);
 			Arrays.sort(expectedFileNames);
-//			System.out.println("Test snapshot at " + rev.getId());
+			System.out.println("Test snapshot at " + rev.getId());
 			assertArrayEquals(expectedFileNames, fileNames);
 		}
 		
 		filecheck.run();
-		File dataFile = new File("dataset/temp_data" + repoName);
+		File dataFile = new File("dataset/temp_data/");
 		filecheck = new FileIO.DirectoryRemover(dataFile.getAbsolutePath());
 		filecheck.run();
 		conn.close();

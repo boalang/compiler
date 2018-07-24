@@ -264,7 +264,7 @@ public class SeqRepoImporter {
 							cb.clearRevisions();
 						}
 						try {
-							projectWriter.append(new Text(pb.getId()), pb.build().toByteArray());
+							projectWriter.append(new Text(pb.getId()), new BytesWritable(pb.build().toByteArray()));
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
