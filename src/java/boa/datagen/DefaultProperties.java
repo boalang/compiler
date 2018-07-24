@@ -73,9 +73,6 @@ public class DefaultProperties {
 	public static boolean STORE_ASCII_PRINTABLE_CONTENTS = true;
 
 	public static String localDataPath = null;
-	public static String localCommitPath = null;
-	public static String localIssuePath = null;
-	public static String localCommentPath = null;
 	
 	@SuppressWarnings("unused")
 	private static String getRoot() {

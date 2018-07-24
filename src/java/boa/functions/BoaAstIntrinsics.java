@@ -275,7 +275,7 @@ public class BoaAstIntrinsics {
 			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
-				p = new Path(DefaultProperties.localDataPath);
+				p = new Path(DefaultProperties.localDataPath, "ast");
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
@@ -299,7 +299,7 @@ public class BoaAstIntrinsics {
 			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
-				p = new Path(DefaultProperties.localCommentPath);
+				p = new Path(DefaultProperties.localDataPath, "comments");
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
@@ -323,7 +323,7 @@ public class BoaAstIntrinsics {
 			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
-				p = new Path(DefaultProperties.localIssuePath);
+				p = new Path(DefaultProperties.localDataPath, "issues");
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
@@ -346,8 +346,8 @@ public class BoaAstIntrinsics {
 			final Configuration conf = context.getConfiguration();
 			final FileSystem fs;
 			final Path p;
-			if (DefaultProperties.localCommitPath != null) {
-				p = new Path(DefaultProperties.localCommitPath);
+			if (DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localDataPath, "commit");
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
