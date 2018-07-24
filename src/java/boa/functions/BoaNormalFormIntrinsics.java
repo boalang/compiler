@@ -1220,12 +1220,34 @@ public class BoaNormalFormIntrinsics {
 				}
 
 				if (results2.size() > 1) {
+					//check for dividing negative numbers
+					int count = 0;
+					for (int i = 1; i < results2.size(); i++) {
+						if (isNegative(results2.get(i))) {
+							results2.set(i, negate(results2.get(i)));
+							count++;
+						}
+					}
+					if (count % 2 == 1)
+						results2.set(0, negate(results2.get(0)));
+
 					// check for elimination
 					if (results2.get(0) instanceof Expression) {
-						int idx = results2.lastIndexOf(results2.get(0));
-						if (idx > 0) {
-							results2.remove(idx);
-							results2.set(0, 1L);
+						int idx;
+						if (isNegative(results2.get(0))) {
+							idx = results2.lastIndexOf(negate(results2.get(0)));
+							if (idx > 0) {
+								results2.remove(idx);
+								results2.set(0, 1L);
+								results2.set(0, negate(results2.get(0)));
+							}
+						}
+						else {
+							idx = results2.lastIndexOf(results2.get(0));
+							if (idx > 0) {
+								results2.remove(idx);
+								results2.set(0, 1L);
+							}
 						}
 					}
 

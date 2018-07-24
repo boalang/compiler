@@ -178,6 +178,7 @@ public class TestReduce {
 			{ "x * -1", "-x" },
 
 			{ "x / 1", "x" },
+			{ "x / -1", "-x"},
 			{ "x / 1 / 1 / 1", "x" },
 
 			{ "x + 1 - 1", "x" },
@@ -230,10 +231,11 @@ public class TestReduce {
 			{ "x * x / x / x", "x * x / x / x" }, // FIXME should be "1"
 			{ "x / x * x / x", "1" },
 			{ "x / x / x * x", "1 / x * x" }, // FIXME should be "1"
-			{ "-x / x * x / x", "-x / x * x / x" }, // FIXME should be "-1"
-			{ "x / -x * x / x", "x / -x * x / x" }, // FIXME should be "-1"
-			{ "x / x * -x / x", "-x / x" }, // FIXME should be "-1"
-			{ "x / x * x / -x", "x / -x" }, // FIXME should be "-1"
+			{ "-x / x * x / x", "-1" },
+			{ "x / -x * x / x", "-1" },
+			{ "x / x * -x / x", "-1" },
+			{ "x / x * x / -x", "-1" },
+			{ "x / -x", "-1" },
 
 			// with methods 
 			{ "foo(x + 3, 2 + 1)", "foo(3 + x, 3)" },
@@ -286,8 +288,8 @@ public class TestReduce {
 			{ "5 + +m(a) - 0", "5 + m(a)" },
 			{ "5 + m() + -0", "5 + m()" },
 			{ "5 + m(a).x * 0", "5" },
-			{ "5 + m(a, b).x / -1", "5 + m(a, b).x / -1" }, // FIXME should be 5 - m(a, b).x
-			{ "(5 + m(1 + 2, b).x) / -1", "(5 + m(3, b).x) / -1" }, // FIXME should be 5 - m(3, b).x
+			{ "5 + m(a, b).x / -1", "5 + -m(a, b).x" },
+			{ "(5 + m(1 + 2, b).x) / -1", "-5 - m(3, b).x" },
 
 			{ "x / 0", "x / 0" }, // FIXME
 			{ "x + 2 * 2", "4 + x" },
