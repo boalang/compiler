@@ -175,6 +175,12 @@ public class BoaGenerator {
 		if (cl.hasOption("projects")) {
 			DefaultProperties.MAX_PROJECTS = cl.getOptionValue("projects");
 		}
+		if (cl.hasOption("commits")) {
+			DefaultProperties.MAX_COMMITS = cl.getOptionValue("commits");
+		}
+		if (cl.hasOption("size")) {
+			DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS = cl.getOptionValue("size");
+		}
 		if (cl.hasOption("debug")) {
 			DefaultProperties.DEBUG = true;
 		}
