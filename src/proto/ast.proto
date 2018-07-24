@@ -199,6 +199,7 @@ message Variable {
 	/** */
 	optional Expression computed_name = 11;
 	optional bool dollar_sign = 12;
+	repeated Expression expressions = 13;
 }
 
 /** A single statement */
@@ -456,6 +457,14 @@ message Modifier {
 		GETTER = 8;
 		/** A modifier for setter */
 		SETTER = 9;
+		/** A native modifier */
+		NATIVE = 10;
+		/** A strictfp modifier */
+		STRICTFP = 11;
+		/** A transient modifier */
+		TRANSIENT = 12;
+		/** A volatile modifier */
+		VOLATILE = 13;
 	}
 	/** A visibility modifier */
 	enum Visibility {
@@ -466,12 +475,12 @@ message Modifier {
 		PRIVATE = 2;
 		/** A protected modifier */
 		PROTECTED = 3;
-		/** A namespace (aka, default, aka package) visibility modifier */
+		/** A namespace (aka package) visibility modifier */
 		NAMESPACE = 4;
 		/** @exclude */
 		PACKAGE = 4;
-		/** @exclude */
-		DEFAULT = 4;
+		/** A default visibility modifier */
+		DEFAULT = 5;
 	}
 	/** A scope modifier */
 	enum Scope {

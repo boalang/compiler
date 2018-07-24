@@ -18,16 +18,9 @@
 package boa.functions;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Set;
 import java.util.Stack;
 
 import org.apache.hadoop.conf.Configuration;
@@ -47,8 +40,8 @@ import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import boa.datagen.DefaultProperties;
-import boa.datagen.util.Java8Visitor;
 import boa.datagen.util.JavaErrorCheckVisitor;
+import boa.datagen.util.JavaVisitor;
 import boa.types.Ast.*;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -66,8 +59,31 @@ import boa.types.Toplevel.Project;
  */
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
-	private static Context context;
+	static Context context;
 	private static MapFile.Reader map, commentsMap, issuesMap;
+
+	private static final Revision emptyRevision;
+	static {
+		Revision.Builder rb = Revision.newBuilder();
+		rb.setCommitDate(0);
+		Person.Builder pb = Person.newBuilder();
+		pb.setUsername("");
+		rb.setCommitter(pb);
+		rb.setId("");
+		rb.setLog("");
+		emptyRevision = rb.build();
+	}
+	
+	private static MapFile.Reader commitMap;
+
+	public static enum COMMITCOUNTER {
+		GETS_ATTEMPTED,
+		GETS_SUCCEED,
+		GETS_FAILED,
+		GETS_FAIL_MISSING,
+		GETS_FAIL_BADPROTOBUF,
+		GETS_FAIL_BADLOC,
+	};
 
 	public static enum ASTCOUNTER {
 		GETS_ATTEMPTED,
@@ -133,6 +149,44 @@ public class BoaAstIntrinsics {
 		System.err.println("error with ast: " + f.getKey());
 		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
 		return emptyAst;
+	}
+
+	@SuppressWarnings("unchecked")
+	static Revision getRevision(long key) {
+		context.getCounter(COMMITCOUNTER.GETS_ATTEMPTED).increment(1);
+		
+		if (commitMap == null)
+			openCommitMap();
+		
+		try {
+			final BytesWritable value = new BytesWritable();
+			if (commitMap.get(new LongWritable(key), value) == null) {
+				context.getCounter(COMMITCOUNTER.GETS_FAIL_MISSING).increment(1);
+			} else {
+				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+				// defaults to 64, really big ASTs require more
+				_stream.setRecursionLimit(Integer.MAX_VALUE);
+				final Revision root = Revision.parseFrom(_stream);
+				context.getCounter(COMMITCOUNTER.GETS_SUCCEED).increment(1);
+				return root;
+			}
+		} catch (final InvalidProtocolBufferException e) {
+			e.printStackTrace();
+			context.getCounter(COMMITCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+		} catch (final IOException e) {
+			e.printStackTrace();
+			context.getCounter(COMMITCOUNTER.GETS_FAIL_MISSING).increment(1);
+		} catch (final RuntimeException e) {
+			e.printStackTrace();
+			context.getCounter(COMMITCOUNTER.GETS_FAIL_MISSING).increment(1);
+		} catch (final Error e) {
+			e.printStackTrace();
+			context.getCounter(COMMITCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+		}
+
+		System.err.println("error with revision: " + key);
+		context.getCounter(COMMITCOUNTER.GETS_FAILED).increment(1);
+		return emptyRevision;
 	}
 
 	/**
@@ -221,7 +275,7 @@ public class BoaAstIntrinsics {
 			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
-				p = new Path(DefaultProperties.localDataPath);
+				p = new Path(DefaultProperties.localDataPath, "ast");
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
@@ -245,7 +299,7 @@ public class BoaAstIntrinsics {
 			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
-				p = new Path(DefaultProperties.localCommentPath);
+				p = new Path(DefaultProperties.localDataPath, "comments");
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
@@ -269,7 +323,7 @@ public class BoaAstIntrinsics {
 			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
-				p = new Path(DefaultProperties.localIssuePath);
+				p = new Path(DefaultProperties.localDataPath, "issues");
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
@@ -287,11 +341,31 @@ public class BoaAstIntrinsics {
 		}
 	}
 
+	private static void openCommitMap() {
+		try {
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localDataPath, "commit");
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+						new Path(conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("commit")));
+				fs = FileSystem.get(conf);
+			}
+			commitMap = new MapFile.Reader(fs, p.toString(), conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	@SuppressWarnings("rawtypes")
 	public static void cleanup(final Context context) {
 		closeMap();
 		closeCommentMap();
 		closeIssuesMap();
+		closeCommitMap();
 	}
 
 	private static void closeMap() {
@@ -322,6 +396,16 @@ public class BoaAstIntrinsics {
 				e.printStackTrace();
 			}
 		issuesMap = null;
+	}
+
+	private static void closeCommitMap() {
+		if (commitMap != null)
+			try {
+				commitMap.close();
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		commitMap = null;
 	}
 
 	@FunctionSpec(name = "type_name", returnType = "string", formalParameters = { "string" })
@@ -442,170 +526,6 @@ public class BoaAstIntrinsics {
 	}
 
 	public final static SnapshotVisitor snapshot = new SnapshotVisitor();
-
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time", "string..." })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp, final String... kinds) throws Exception {
-//		snapshot.initialize(timestamp, kinds).visit(cr);
-//		return snapshot.map.values().toArray(new ChangedFile[0]);
-		if (cr.getRevisionsCount() == 0)
-			return new ChangedFile[0];
-		int revisionOffset = getRevision(cr, timestamp);
-		return getSnapshot(cr, revisionOffset, kinds);
-	}
-
-	private static ChangedFile[] getSnapshot(final CodeRepository cr, final int commitOffset, final String... kinds) {
-		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
-		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>(); 
-		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
-			@Override
-			public int compare(Integer i1, Integer i2) {
-				return i2 - i1;
-			}
-		});
-		List<Revision> revisions = cr.getRevisionsList();
-		Set<Integer> queuedCommitIds = new HashSet<Integer>();
-		pq.offer(commitOffset);
-		queuedCommitIds.add(commitOffset);
-		while (!pq.isEmpty()) {
-			int offset = pq.poll();
-			Revision commit = revisions.get(offset);
-			for (ChangedFile cf : commit.getFilesList()) {
-				ChangeKind ck = cf.getChange();
-				switch (ck) {
-				case ADDED:
-					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
-						adds.add(cf.getName());
-						if (isIncluded(cf, kinds))
-							snapshot.add(cf);
-					}
-					break;
-				case COPIED:
-					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
-						adds.add(cf.getName());
-						if (isIncluded(cf, kinds))
-							snapshot.add(cf);
-					}
-					break;
-				case DELETED:
-					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName()))
-						dels.add(cf.getName());
-					break;
-				case MERGED:
-					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
-						adds.add(cf.getName());
-						if (isIncluded(cf, kinds))
-							snapshot.add(cf);
-					}
-					for (int i = 0; i < cf.getPreviousIndicesCount(); i++) {
-						if (cf.getChanges(i) != ChangeKind.ADDED) {
-							ChangedFile pcf = revisions.get(cf.getPreviousVersions(i)).getFiles(cf.getPreviousIndices(i));
-							ChangeKind pck = cf.getChanges(i);
-							if (!adds.contains(pcf.getName()) && !dels.contains(pcf.getName()) && (pck == ChangeKind.DELETED || pck == ChangeKind.RENAMED))
-								dels.add(pcf.getName());
-						}
-					}
-					break;
-				case RENAMED:
-					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
-						adds.add(cf.getName());
-						if (isIncluded(cf, kinds))
-							snapshot.add(cf);
-					}
-					for (int i = 0; i < cf.getPreviousIndicesCount(); i++) {
-						ChangedFile pcf = revisions.get(cf.getPreviousVersions(i)).getFiles(cf.getPreviousIndices(i));
-						if (!adds.contains(pcf.getName()) && !dels.contains(pcf.getName()))
-							dels.add(pcf.getName());
-					}
-					break;
-				default:
-					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
-						adds.add(cf.getName());
-						if (isIncluded(cf, kinds))
-							snapshot.add(cf);
-					}
-					break;
-				}
-			}
-			for (int p : commit.getParentsList()) {
-				if (!queuedCommitIds.contains(p)) {
-					pq.offer(p);
-					queuedCommitIds.add(p);
-				}
-			}
-		}
-		return snapshot.toArray(new ChangedFile[0]);
-	}
-
-	private static boolean isIncluded(ChangedFile cf, String[] kinds) {
-		if (kinds != null) {
-			final String kindName = cf.getKind().name();
-			for (final String kind : kinds)
-				if (kindName.startsWith(kind)) {
-					return true;
-				}
-		}
-		return false;
-	}
-
-	private static int getRevision(final CodeRepository cr, final long timestamp) {
-		Revision.Builder rb = Revision.newBuilder();
-		Person.Builder pb = Person.newBuilder();
-		pb.setUsername("");
-		rb.setCommitDate(timestamp);
-		rb.setCommitter(pb);
-		rb.setId("");
-		rb.setLog("");
-		int index = Collections.binarySearch(cr.getRevisionsList(), rb.build(), new Comparator<Revision>() {
-			@Override
-			public int compare(Revision r1, Revision r2) {
-				return (int) (r1.getCommitDate() - r2.getCommitDate());
-			}
-		});
-		if (index < 0)
-			index = -index - 1;
-		return index;
-	}
-	
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String id) {
-		return getSnapshot(cr, id, new String[0]);
-	}
-	
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String id, final String... kinds) {
-		if (cr.getRevisionsCount() == 0)
-			return new ChangedFile[0];
-		int revisionOffset = getRevision(cr, id);
-		return getSnapshot(cr, revisionOffset, kinds);
-	}
-	
-	private static int getRevision(final CodeRepository cr, final String id) {
-		for (int i = 0; i < cr.getRevisionsCount(); i++) {
-			if (cr.getRevisions(i).getId().equals(id))
-				return i;
-		}
-		return -1;
-	}
-
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string..." })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String... kinds) throws Exception {
-//		return getSnapshot(cr, Long.MAX_VALUE, kinds);
-		List<ChangedFile> files = new ArrayList<ChangedFile>();
-		for (ChangedFile file : cr.getHeadSnapshotList()) {
-			if (isIncluded(file, kinds))
-				files.add(file);
-		}
-		return files.toArray(new ChangedFile[0]);
-	}
-
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time" })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp) throws Exception {
-		return getSnapshot(cr, timestamp, new String[0]);
-	}
-
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository" })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr) throws Exception {
-//		return getSnapshot(cr, Long.MAX_VALUE, new String[0]);
-		return cr.getHeadSnapshotList().toArray(new ChangedFile[0]);
-	}
 
 	///////////////////////////////
 	// Literal testing functions */
@@ -1511,7 +1431,7 @@ public class BoaAstIntrinsics {
 
 		try {
 			final org.eclipse.jdt.core.dom.Expression e = (org.eclipse.jdt.core.dom.Expression) parser.createAST(null);
-			final Java8Visitor visitor = new Java8Visitor(s);
+			final JavaVisitor visitor = new JavaVisitor(s);
 			e.accept(visitor);
 			return visitor.getExpression();
 		} catch (final Exception e) {
@@ -1547,7 +1467,7 @@ public class BoaAstIntrinsics {
 			cu.accept(errorCheck);
 
 			if (!errorCheck.hasError) {
-				final Java8Visitor visitor = new Java8Visitor(s);
+				final JavaVisitor visitor = new JavaVisitor(s);
 				ast.addNamespaces(visitor.getNamespaces(cu));
 			}
 		} catch (final Exception e) {

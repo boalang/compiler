@@ -20,6 +20,8 @@ package boa.datagen.scm;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,6 +41,9 @@ import org.eclipse.jgit.revwalk.RevSort;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
+
+import boa.types.Diff.ChangedFile;
+import boa.types.Diff.ChangedFile.Builder;
 
 /**
  * @author rdyer
@@ -89,7 +94,7 @@ public class GitConnector extends AbstractConnector {
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
 			for (final RevCommit rc: revwalk) {
-				final GitCommit gc = new GitCommit(this, repository, temprevwalk);
+				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName);
 				System.out.println(rc.getName());
 				commits.add(rc.getName());
 				int count = gc.countChangedFiles(rc);
@@ -127,18 +132,33 @@ public class GitConnector extends AbstractConnector {
 				i++;
 				long startTime = System.currentTimeMillis();
 				
-				final GitCommit gc = new GitCommit(this, repository, temprevwalk);
+				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName);
 				
 				gc.setId(rc.getName());
-				PersonIdent author = rc.getAuthorIdent(),
-						committer = rc.getCommitterIdent();
-				if (author != null)
-					gc.setAuthor(author.getName(), null, author.getEmailAddress());
-				gc.setCommitter(committer.getName(), null, committer.getEmailAddress());
+				try {
+					PersonIdent author = rc.getAuthorIdent();
+					if (author != null)
+						gc.setAuthor(author.getName(), null, author.getEmailAddress());
+				} catch (Exception e) {}
+				try {
+					PersonIdent committer = rc.getCommitterIdent();
+					gc.setCommitter(committer.getName(), null, committer.getEmailAddress());
+				} catch (Exception e) {
+					gc.setCommitter("", null, "");
+				}
 				gc.setDate(new Date(((long) rc.getCommitTime()) * 1000));
-				gc.setMessage(rc.getFullMessage());
+				try {
+					gc.setMessage(rc.getFullMessage());
+				} catch (Exception e) {}
 				
 				gc.getChangeFiles(rc);
+				gc.fileNameIndices.clear();
+				Collections.sort(gc.changedFiles, new Comparator<ChangedFile.Builder>() {
+					@Override
+					public int compare(Builder b1, Builder b2) {
+						return b1.getName().compareTo(b2.getName());
+					}
+				});
 				
 				revisionMap.put(gc.id, revisions.size());
 				revisions.add(gc);
@@ -147,12 +167,12 @@ public class GitConnector extends AbstractConnector {
 					long endTime = System.currentTimeMillis();
 					long time = endTime - startTime;
 					if (time > maxTime) {
-						System.out.println("Max time " + (time / 1000) + " parsing metadata commit " + i + " " + rc.getName());
+						System.out.println(Thread.currentThread().getId() + " Max time " + (time / 1000) + " parsing metadata commit " + i + " " + rc.getName());
 						maxTime = time;
 					}
 				}
 			}
-			System.out.println("Process metadata of all commits");
+			System.out.println(Thread.currentThread().getId() + " Process metadata of all commits");
 			
 			RevCommit head = revwalk.parseCommit(repository.resolve(Constants.HEAD));
 			headCommitOffset = revisionMap.get(head.getName());

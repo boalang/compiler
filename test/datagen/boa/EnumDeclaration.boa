@@ -6,6 +6,14 @@
             {
                "name": "myEnum",
                "kind": "ENUM",
+               "fields": [
+                  {
+                     "name": "ONE"
+                  },
+                  {
+                     "name": "TWO"
+                  }
+               ],
                "fully_qualified_name": "myEnum"
             }
          ]

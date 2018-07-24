@@ -24,23 +24,23 @@ message ChangedFile {
 		/** The file represents a Java source file that had a parse error */
 		SOURCE_JAVA_ERROR = 100;
 		/** The file represents a Java source file that parsed without error as JLS2 */
-		SOURCE_JAVA_JLS2 = 101;
+		SOURCE_JAVA_JLS2 = 102;
 		/** The file represents a Java source file that parsed without error as JLS3 */
-		SOURCE_JAVA_JLS3 = 102;
+		SOURCE_JAVA_JLS3 = 103;
 		/** The file represents a Java source file that parsed without error as JLS4 */
-		SOURCE_JAVA_JLS4 = 103;
+		SOURCE_JAVA_JLS4 = 104;
 		/** The file represents a Java source file that parsed without error as JLS8 */
-		SOURCE_JAVA_JLS8 = 104;
+		SOURCE_JAVA_JLS8 = 108;
 		/** @exclude */
 		JAVA_ERROR = 100;
 		/** @exclude */
-		JLS2 = 101;
+		JLS2 = 102;
 		/** @exclude */
-		JLS3 = 102;
+		JLS3 = 103;
 		/** @exclude */
-		JLS4 = 103;
+		JLS4 = 104;
 		/** @exclude */
-		JLS8 = 104;
+		JLS8 = 108;
 
 		/** @exclude TODO */
 		SOURCE_CS_ERROR = 200;
@@ -138,12 +138,14 @@ message ChangedFile {
 	required bool ast = 5;
 	/** @exclude */
 	optional CommentsRoot comments = 6;
-	/** @exclude The kinds of changes of this this compared to the corresponding parent commits */
+	/** The kinds of changes of this this compared to the corresponding parent commits */
 	repeated ChangeKind changes = 7;
+	/** The kinds of changes of this this compared to the corresponding parent commits */
+	repeated string previous_names = 8;
 	/** @exclude The indices of the corresponding parent commits in the list of all commits */
-	repeated int32 previous_versions = 8;
+	repeated int32 previous_versions = 9;
 	/** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits */
-	repeated int32 previous_indices = 9;
+	repeated int32 previous_indices = 10;
 	/** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version */
-	optional uint64 mapped_key = 10;
+	optional uint64 mapped_key = 11;
 }

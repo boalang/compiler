@@ -205,9 +205,9 @@ public class FileIO {
 
 		@Override
 		public void run() {
-			System.out.println("Deleting cloned repo " + path );
 			File file = new File(path);
 			if (file.exists()) {
+//				System.out.println("Deleting cloned repo " + path);
 				org.apache.commons.io.FileUtils.deleteQuietly(file);
 			}
 		}
