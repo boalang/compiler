@@ -1,0 +1,15 @@
+public class C {
+    public int m() {
+    	int c = 5;
+    	switch (c % 3) {
+    		case 0: 
+    		case 1:
+    				return 0;
+    				break;
+    		case 2:
+    		default:
+    				break;
+    	}
+    	return 1;
+    }
+}

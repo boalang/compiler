@@ -1,0 +1,17 @@
+digraph {
+	{ rank = source; 0; }
+	0[shape=ellipse,label="[0] ENTRY"]
+	1[shape=ellipse,label="[1] int count = 0"]
+	2[shape=ellipse,label="[2] true"]
+	3[shape=ellipse,label="[3] count == 10"]
+	4[shape=ellipse,label="[4] return 1;"]
+	5[shape=ellipse,label="[5] count++"]
+	6[shape=ellipse,label="[6] return 0;"]
+	0 -> 1 [label="T"]
+	0 -> 2 [label="T"]
+	2 -> 3 [label="T"]
+	2 -> 6 [label="F"]
+	3 -> 2 [label="F"]
+	3 -> 4 [label="T"]
+	3 -> 5 [label="F"]
+}

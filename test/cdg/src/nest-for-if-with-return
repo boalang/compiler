@@ -1,0 +1,11 @@
+public class C {
+    public int m() {
+        for (int i = 0; i < 5; i++) {
+            if (i == 3) return 3;
+            for (int j = 0; j < i; j++) {
+            	if (j == 4) return 4;
+            }
+        }
+        return 2;
+    }
+}
