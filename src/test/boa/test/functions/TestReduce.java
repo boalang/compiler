@@ -236,6 +236,10 @@ public class TestReduce {
 			{ "x / x * -x / x", "-1" },
 			{ "x / x * x / -x", "-1" },
 			{ "x / -x", "-1" },
+			{ "x / -1 / 1 / -1 / -1", "-x"},
+			{ "x / -1 / x / 1 / -1", "1"},
+			{ "x * -x * x * -x / x / x / -x / -x", "x * x * x * x / x / x / x / x"}, // FIXME should be "1"
+			{ "x * x * x * -x / x / x / -x / -x", "x * x * x * -x / x / x / x / x"}, // FIXME should be "-1"
 
 			// with methods 
 			{ "foo(x + 3, 2 + 1)", "foo(3 + x, 3)" },
