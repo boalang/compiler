@@ -284,6 +284,10 @@ public class TestBuildSnapshot {
 	@Ignore
 	@Test
 	public void testBuildSnapshotFromSeq() throws Exception {
+		File dataFile = new File("dataset/temp_data");
+		FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(dataFile.getAbsolutePath());
+		filecheck.run();
+		
 		String[] args = {	"-inputJson", "test/datagen/jsons", 
 							"-inputRepo", "dataset/repos",
 							"-output", "dataset/temp_data",
@@ -305,7 +309,7 @@ public class TestBuildSnapshot {
 		File gitDir = new File("dataset/repos/" + repoName);
 		final CodeRepository cr = project.getCodeRepositories(0);
 		
-		FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
+		filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
 		filecheck.run();
 		String url = "https://github.com/" + repoName + ".git";
 		RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
@@ -338,7 +342,6 @@ public class TestBuildSnapshot {
 		}
 		
 		filecheck.run();
-		File dataFile = new File("dataset/temp_data/");
 		filecheck = new FileIO.DirectoryRemover(dataFile.getAbsolutePath());
 		filecheck.run();
 		conn.close();
