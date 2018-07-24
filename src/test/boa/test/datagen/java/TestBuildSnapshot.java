@@ -281,6 +281,7 @@ public class TestBuildSnapshot {
 		System.out.println("==========================================");
 	}
 	
+	@Ignore
 	@Test
 	public void testBuildSnapshotFromSeq() throws Exception {
 		String[] args = {	"-inputJson", "test/datagen/jsons", 
