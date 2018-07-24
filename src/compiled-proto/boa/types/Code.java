@@ -3316,32 +3316,6 @@ public final class Code {
      * </pre>
      */
     int getParents(int index);
-
-    // repeated int32 children = 8;
-    /**
-     * <code>repeated int32 children = 8;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of any child commits 
-     * </pre>
-     */
-    java.util.List<java.lang.Integer> getChildrenList();
-    /**
-     * <code>repeated int32 children = 8;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of any child commits 
-     * </pre>
-     */
-    int getChildrenCount();
-    /**
-     * <code>repeated int32 children = 8;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of any child commits 
-     * </pre>
-     */
-    int getChildren(int index);
   }
   /**
    * Protobuf type {@code boa.types.Revision}
@@ -3468,27 +3442,6 @@ public final class Code {
               input.popLimit(limit);
               break;
             }
-            case 64: {
-              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
-                children_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000080;
-              }
-              children_.add(input.readInt32());
-              break;
-            }
-            case 66: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080) && input.getBytesUntilLimit() > 0) {
-                children_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000080;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                children_.add(input.readInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -3502,9 +3455,6 @@ public final class Code {
         }
         if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
           parents_ = java.util.Collections.unmodifiableList(parents_);
-        }
-        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
-          children_ = java.util.Collections.unmodifiableList(children_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -3831,41 +3781,6 @@ public final class Code {
       return parents_.get(index);
     }
 
-    // repeated int32 children = 8;
-    public static final int CHILDREN_FIELD_NUMBER = 8;
-    private java.util.List<java.lang.Integer> children_;
-    /**
-     * <code>repeated int32 children = 8;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of any child commits 
-     * </pre>
-     */
-    public java.util.List<java.lang.Integer>
-        getChildrenList() {
-      return children_;
-    }
-    /**
-     * <code>repeated int32 children = 8;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of any child commits 
-     * </pre>
-     */
-    public int getChildrenCount() {
-      return children_.size();
-    }
-    /**
-     * <code>repeated int32 children = 8;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of any child commits 
-     * </pre>
-     */
-    public int getChildren(int index) {
-      return children_.get(index);
-    }
-
     private void initFields() {
       id_ = "";
       author_ = boa.types.Shared.Person.getDefaultInstance();
@@ -3874,7 +3789,6 @@ public final class Code {
       log_ = "";
       files_ = java.util.Collections.emptyList();
       parents_ = java.util.Collections.emptyList();
-      children_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -3941,9 +3855,6 @@ public final class Code {
       for (int i = 0; i < parents_.size(); i++) {
         output.writeInt32(7, parents_.get(i));
       }
-      for (int i = 0; i < children_.size(); i++) {
-        output.writeInt32(8, children_.get(i));
-      }
       getUnknownFields().writeTo(output);
     }
 
@@ -3985,15 +3896,6 @@ public final class Code {
         }
         size += dataSize;
         size += 1 * getParentsList().size();
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < children_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(children_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getChildrenList().size();
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -4144,8 +4046,6 @@ public final class Code {
         }
         parents_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000040);
-        children_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
 
@@ -4216,11 +4116,6 @@ public final class Code {
           bitField0_ = (bitField0_ & ~0x00000040);
         }
         result.parents_ = parents_;
-        if (((bitField0_ & 0x00000080) == 0x00000080)) {
-          children_ = java.util.Collections.unmodifiableList(children_);
-          bitField0_ = (bitField0_ & ~0x00000080);
-        }
-        result.children_ = children_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -4289,16 +4184,6 @@ public final class Code {
           } else {
             ensureParentsIsMutable();
             parents_.addAll(other.parents_);
-          }
-          onChanged();
-        }
-        if (!other.children_.isEmpty()) {
-          if (children_.isEmpty()) {
-            children_ = other.children_;
-            bitField0_ = (bitField0_ & ~0x00000080);
-          } else {
-            ensureChildrenIsMutable();
-            children_.addAll(other.children_);
           }
           onChanged();
         }
@@ -5318,100 +5203,6 @@ public final class Code {
         return this;
       }
 
-      // repeated int32 children = 8;
-      private java.util.List<java.lang.Integer> children_ = java.util.Collections.emptyList();
-      private void ensureChildrenIsMutable() {
-        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
-          children_ = new java.util.ArrayList<java.lang.Integer>(children_);
-          bitField0_ |= 0x00000080;
-         }
-      }
-      /**
-       * <code>repeated int32 children = 8;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of any child commits 
-       * </pre>
-       */
-      public java.util.List<java.lang.Integer>
-          getChildrenList() {
-        return java.util.Collections.unmodifiableList(children_);
-      }
-      /**
-       * <code>repeated int32 children = 8;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of any child commits 
-       * </pre>
-       */
-      public int getChildrenCount() {
-        return children_.size();
-      }
-      /**
-       * <code>repeated int32 children = 8;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of any child commits 
-       * </pre>
-       */
-      public int getChildren(int index) {
-        return children_.get(index);
-      }
-      /**
-       * <code>repeated int32 children = 8;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of any child commits 
-       * </pre>
-       */
-      public Builder setChildren(
-          int index, int value) {
-        ensureChildrenIsMutable();
-        children_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 children = 8;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of any child commits 
-       * </pre>
-       */
-      public Builder addChildren(int value) {
-        ensureChildrenIsMutable();
-        children_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 children = 8;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of any child commits 
-       * </pre>
-       */
-      public Builder addAllChildren(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureChildrenIsMutable();
-        super.addAll(values, children_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 children = 8;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of any child commits 
-       * </pre>
-       */
-      public Builder clearChildren() {
-        children_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000080);
-        onChanged();
-        return this;
-      }
-
       // @@protoc_insertion_point(builder_scope:boa.types.Revision)
     }
 
@@ -5453,12 +5244,12 @@ public final class Code {
       "ion_keys\030\n \003(\003\"v\n\016RepositoryKind\022\t\n\005OTHE" +
       "R\020\000\022\007\n\003SVN\020\001\022\016\n\nSUBVERSION\020\001\022\007\n\003CVS\020\002\022\007\n",
       "\003GIT\020\003\022\006\n\002HG\020\004\022\r\n\tMERCURIAL\020\004\022\007\n\003BZR\020\005\022\n" +
-      "\n\006BAZAAR\020\005\032\002\020\001\"\313\001\n\010Revision\022\n\n\002id\030\001 \002(\t\022" +
+      "\n\006BAZAAR\020\005\032\002\020\001\"\271\001\n\010Revision\022\n\n\002id\030\001 \002(\t\022" +
       "!\n\006author\030\002 \001(\0132\021.boa.types.Person\022$\n\tco" +
       "mmitter\030\003 \002(\0132\021.boa.types.Person\022\023\n\013comm" +
       "it_date\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022%\n\005files\030\006 \003(" +
       "\0132\026.boa.types.ChangedFile\022\017\n\007parents\030\007 \003" +
-      "(\005\022\020\n\010children\030\010 \003(\005B\002H\001"
+      "(\005B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5476,7 +5267,7 @@ public final class Code {
           internal_static_boa_types_Revision_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Revision_descriptor,
-              new java.lang.String[] { "Id", "Author", "Committer", "CommitDate", "Log", "Files", "Parents", "Children", });
+              new java.lang.String[] { "Id", "Author", "Committer", "CommitDate", "Log", "Files", "Parents", });
           return null;
         }
       };
