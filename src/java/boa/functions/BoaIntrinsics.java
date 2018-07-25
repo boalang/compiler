@@ -119,6 +119,8 @@ public class BoaIntrinsics {
 		queuedCommitIds.add(commitOffset);
 		while (!pq.isEmpty()) {
 			int offset = pq.poll();
+			if (offset < 0)
+				continue;
 			Revision commit = getRevision(cr, offset);
 			for (ChangedFile cf : commit.getFilesList()) {
 				ChangeKind ck = cf.getChange();
