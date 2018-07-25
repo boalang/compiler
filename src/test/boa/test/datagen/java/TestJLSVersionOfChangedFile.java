@@ -162,7 +162,7 @@ public class TestJLSVersionOfChangedFile {
 		}
 		
 		for (Revision rev : cr.getRevisionsList()) {
-			ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr, rev.getId());
+			ChangedFile[] snapshot = BoaIntrinsics.getSnapshotById(cr, rev.getId());
 			String[] fileNames = new String[snapshot.length];
 			for (int i = 0; i < snapshot.length; i++)
 				fileNames[i] = snapshot[i].getName();

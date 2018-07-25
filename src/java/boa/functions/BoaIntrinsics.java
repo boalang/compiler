@@ -203,16 +203,18 @@ public class BoaIntrinsics {
 		return false;
 	}
 	
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string" })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String id) {
-		return getSnapshot(cr, id, new String[0]);
+//	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string" })
+	public static ChangedFile[] getSnapshotById(final CodeRepository cr, final String id) {
+		return getSnapshotById(cr, id, new String[0]);
 	}
 	
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string", "string..." })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String id, final String... kinds) {
+//	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string", "string..." })
+	public static ChangedFile[] getSnapshotById(final CodeRepository cr, final String id, final String... kinds) {
 		if (getRevisionsCount(cr) == 0)
 			return new ChangedFile[0];
 		int revisionOffset = getRevisionIndex(cr, id);
+		if (revisionOffset < 0)
+			return new ChangedFile[0];
 		return getSnapshot(cr, revisionOffset, kinds);
 	}
 
