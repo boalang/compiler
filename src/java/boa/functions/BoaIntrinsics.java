@@ -119,8 +119,6 @@ public class BoaIntrinsics {
 		queuedCommitIds.add(commitOffset);
 		while (!pq.isEmpty()) {
 			int offset = pq.poll();
-			if (offset < 0)
-				continue;
 			Revision commit = getRevision(cr, offset);
 			for (ChangedFile cf : commit.getFilesList()) {
 				ChangeKind ck = cf.getChange();
@@ -215,6 +213,8 @@ public class BoaIntrinsics {
 		if (getRevisionsCount(cr) == 0)
 			return new ChangedFile[0];
 		int revisionOffset = getRevisionIndex(cr, id);
+		if (revisionOffset < 0)
+			return new ChangedFile[0];
 		return getSnapshot(cr, revisionOffset, kinds);
 	}
 
