@@ -267,7 +267,7 @@ public class TestReduce {
 			{ "-2 * -y * -5 * -x", "10 * y * x" },
 			{ "5 - 3 + 2", "4" },
 			{ "5 - (3 + 2)", "0" },
-			{ "5.0 / x / 5 * 10.0 * x", "10.0 * (1.0 / x) * x" }, // FIXME should be 10
+			{ "5.0 / x / 5 * 10.0 * x", "10.0 * (1.0 / x) * x" }, // FIXME should be "10"
 			{ "-5 * (5 - 10) + 1", "26" },
 			{ "-5 * (5 - 5) + 1", "1" },
 			{ "-5 / (3 + 2) + 1", "0" },
@@ -280,19 +280,19 @@ public class TestReduce {
 			{ "5.0 + a.length * (3.5 - 2)", "5.0 + 1.5 * a.length" },
 			{ "5 + x + 3 + x", "8 + 2 * x" },
 			{ "5 + (x + 3) + x", "8 + 2 * x" },
-			{ "5 - (x - 3) - x", "8 + -2 * x" },
+			{ "5 - (x - 3) - x", "8 + -2 * x" }, // FIXME should be "8 - 2 * x"
 			{ "(x - 3) - x", "-3" },
 			{ "5.0 + +3.5 - -2 * a.length", "8.5 + 2 * a.length" },
 			{ "(5.0 + 3.5) - -2 * a.length", "8.5 + 2 * a.length" },
 			//{ "5.0 + 3.5 - -2 * a.length + x", "8.5 + 2 * a.length + x" }, // FIXME when parsed, the answer isnt flattened but should be
-			{ "5.0 + 3.5 - (-2 * a.length + x)", "8.5 + 2 * a.length + -x" }, // FIXME should be 8.5 + 2 * a.length - x
+			{ "5.0 + 3.5 - (-2 * a.length + x)", "8.5 + 2 * a.length + -x" }, // FIXME should be "8.5 + 2 * a.length - x"
 			{ "5.0 + 3.5 - -2 * (a.length + x)", "8.5 + 2 * (a.length + x)" },
-			{ "5 - m(a) + 0", "5 + -m(a)" }, // FIXME
+			{ "5 - m(a) + 0", "5 + -m(a)" }, // FIXME should be "5 - m(a)"
 			{ "5 - -m(a) - 0", "5 + m(a)" },
 			{ "5 + +m(a) - 0", "5 + m(a)" },
 			{ "5 + m() + -0", "5 + m()" },
 			{ "5 + m(a).x * 0", "5" },
-			{ "5 + m(a, b).x / -1", "5 + -m(a, b).x" },
+			{ "5 + m(a, b).x / -1", "5 + -m(a, b).x" }, // FIXME should be "5 - m(a, b).x"
 			{ "(5 + m(1 + 2, b).x) / -1", "-5 - m(3, b).x" },
 
 			{ "x / 0", "x / 0" }, // FIXME
@@ -303,7 +303,7 @@ public class TestReduce {
 			{ "x + 6 / 3", "2 + x" },
 			{ "x / 3 + 6", "6 + x / 3" },
 
-			{ "1 + -x + 2 + 3", "6 + -x" },
+			{ "1 + -x + 2 + 3", "6 + -x" }, // FIXME should be "6 - x"
 			{ "1 + -x + 2 - 4", "-1 + -x" }, // FIXME shoulde be "-1 - x"
 			{ "1 + -x - 4 + 2", "-1 + -x" },
 			{ "5 + (x + 3) + x + 2 - 3", "7 + 2 * x" },
