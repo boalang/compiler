@@ -5,6 +5,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,11 +19,17 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.eclipse.jgit.lib.Constants;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
@@ -37,6 +44,8 @@ import boa.datagen.scm.AbstractCommit;
 import boa.datagen.scm.GitConnector;
 import boa.datagen.util.FileIO;
 import boa.functions.BoaIntrinsics;
+import boa.test.datagen.SequenceFileReader.SequenceFileReaderReducer;
+import boa.test.datagen.SequenceFileReader.SequenceFileReaderMapper;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.CodeRepository.RepositoryKind;
 import boa.types.Code.Revision;
@@ -88,7 +97,7 @@ public class TestBuildSnapshot {
 	private static FileSystem fileSystem = null;
 	
 	private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
-	private long astWriterLen = 0, commitWriterLen = 0, contentWriterLen = 0;
+	private long astWriterLen = 0, contentWriterLen = 0;
 	
 	@Test
 	public void testGetSnapshotFromProtobuf1() throws Exception {
@@ -281,43 +290,41 @@ public class TestBuildSnapshot {
 		System.out.println("==========================================");
 	}
 	
-	@Ignore
 	@Test
 	public void testBuildSnapshotFromSeq() throws Exception {
-		File dataFile = new File("dataset/temp_data");
+		String dataPath = "dataset/temp_data";
+		File dataFile = new File(dataPath);
+		dataPath = dataFile.getAbsolutePath();
+		
+		DefaultProperties.DEBUG = true;
+		DefaultProperties.localDataPath = dataPath;
+		
 		FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(dataFile.getAbsolutePath());
 		filecheck.run();
 		
 		String[] args = {	"-inputJson", "test/datagen/jsons", 
 							"-inputRepo", "dataset/repos",
-							"-output", "dataset/temp_data",
+							"-output", dataPath,
 							"-size", "1"};
 		BoaGenerator.main(args);
-		SequenceFile.Reader pr = null;
-		DefaultProperties.DEBUG = true;
+		
 		fileSystem = FileSystem.get(conf);
-		Path projectPath = new Path("dataset/temp_data/projects.seq");
-		if (fileSystem.exists(projectPath)) {
-			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
-		}
+		Path projectPath = new Path(dataPath, "projects.seq");
+		SequenceFile.Reader pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
 		Writable key = new Text();
 		BytesWritable val = new BytesWritable();
-		pr.next(key, val);
-		byte[] bytes = val.getBytes();
-		Project project = Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
-		String repoName = project.getName();
-		File gitDir = new File("dataset/repos/" + repoName);
-		final CodeRepository cr = project.getCodeRepositories(0);
-		
-		filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
-		filecheck.run();
-		String url = "https://github.com/" + repoName + ".git";
-		RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
-		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName);
-		
-		
-		{
-			ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr);
+		while (pr.next(key, val)) {
+			byte[] bytes = val.getBytes();
+			Project project = Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
+			String repoName = project.getName();
+			File gitDir = new File("dataset/repos/" + repoName);
+			filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
+			filecheck.run();
+			String url = "https://github.com/" + repoName + ".git";
+			RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
+			GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName);
+			
+			ChangedFile[] snapshot = getSnapshot(dataPath, repoName, -1);
 			String[] fileNames = new String[snapshot.length];
 			for (int i = 0; i < snapshot.length; i++)
 				fileNames[i] = snapshot[i].getName();
@@ -326,27 +333,91 @@ public class TestBuildSnapshot {
 			Arrays.sort(expectedFileNames);
 			System.out.println("Test head snapshot");
 			assertArrayEquals(expectedFileNames, fileNames);
+			
+			List<String> commitIds = conn.logCommitIds();
+			for (int i = 0; i < commitIds.size(); i++) {
+				String cid = commitIds.get(i);
+				snapshot = getSnapshot(dataPath, repoName, i);
+				fileNames = new String[snapshot.length];
+				for (int j = 0; j < snapshot.length; j++)
+					fileNames[j] = snapshot[j].getName();
+				Arrays.sort(fileNames);
+				expectedFileNames = conn.getSnapshot(cid).toArray(new String[0]);
+				Arrays.sort(expectedFileNames);
+				System.out.println("Test snapshot at " + cid);
+				assertArrayEquals(expectedFileNames, fileNames);
+			}
+			
+			filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
+			filecheck.run();
+			conn.close();
 		}
+		pr.close();
 		
-		for (int i = 0; i < BoaIntrinsics.getRevisionsCount(cr); i++) {
-			Revision rev = BoaIntrinsics.getRevision(cr, i);
-			ChangedFile[] snapshot = BoaIntrinsics.getSnapshotById(cr, rev.getId());
-			String[] fileNames = new String[snapshot.length];
-			for (int j = 0; j < snapshot.length; j++)
-				fileNames[j] = snapshot[j].getName();
-			Arrays.sort(fileNames);
-			String[] expectedFileNames = conn.getSnapshot(rev.getId()).toArray(new String[0]);
-			Arrays.sort(expectedFileNames);
-			System.out.println("Test snapshot at " + rev.getId());
-			assertArrayEquals(expectedFileNames, fileNames);
-		}
+		filecheck = new FileIO.DirectoryRemover(dataPath);
+		filecheck.run();
+	}
+
+	public ChangedFile[] getSnapshot(String dataPath, String repoName, int index) throws Exception {
+		SequenceFileReader.repoName = repoName;
+		SequenceFileReader.index = index;
+		SequenceFileReader.snapshot = null;
 		
-		filecheck.run();
-		filecheck = new FileIO.DirectoryRemover(dataFile.getAbsolutePath());
-		filecheck.run();
-		conn.close();
+		Configuration conf = new Configuration();
+		Job job = new Job(conf, "read sequence file");
+		job.setJarByClass(SequenceFileReader.class);
+		job.setMapperClass(SequenceFileReaderMapper.class);
+		job.setCombinerClass(SequenceFileReaderReducer.class);
+		job.setReducerClass(SequenceFileReaderReducer.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(IntWritable.class);
+		job.setInputFormatClass(org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat.class);
+		FileInputFormat.addInputPath(job, new Path(dataPath, "projects.seq"));
+		FileOutputFormat.setOutputPath(job, new Path(dataPath));
+		boolean completed = job.waitForCompletion(true);
+		assertEquals(completed, true);
+		
+		return SequenceFileReader.snapshot;
 	}
 }
 
+class SequenceFileReader {
+	static String repoName;
+	static int index = -1;
+	static ChangedFile[] snapshot;
+
+	public static class SequenceFileReaderMapper extends Mapper<Text, BytesWritable, Text, ChangedFile[]> {
+
+		@Override
+		public void map(Text key, BytesWritable value, Context context) throws IOException, InterruptedException {
+			Project project = Project.parseFrom(CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
+			if (project.getName().equals(repoName)) {
+				for (CodeRepository cr : project.getCodeRepositoriesList()) {
+					try {
+						if (index == -1)
+							context.write(key, BoaIntrinsics.getSnapshot(cr));
+						else
+							context.write(key, BoaIntrinsics.getSnapshot(cr, index));
+					} catch (Exception e) {}
+				}
+			}
+		}
+	}
+
+	public static class SequenceFileReaderReducer extends Reducer<Text, ChangedFile[], Text, IntWritable> {
+
+		@Override
+		public void reduce(Text key, Iterable<ChangedFile[]> values, Context context)
+				throws IOException, InterruptedException {
+			int sum = 0;
+			for (ChangedFile[] val : values) {
+				sum ++;
+				snapshot = val;
+			}
+			assertThat(sum, Matchers.is(1));
+			context.write(key, new IntWritable(sum));
+		}
+	}
+}
 
 
