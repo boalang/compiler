@@ -962,6 +962,32 @@ public class BoaNormalFormIntrinsics {
 							else if (literalCount == 1) {
 								// FIXME for case like 3 * x * y
 							}
+							// for case like x * y
+							else {
+								negExp = false;
+								if (isNegative(subExp)) {
+									negExp = true;
+									subExp = (Expression)internalReduce((Expression)negate(subExp));
+								}
+								if (commonMap.containsKey(subExp)) {
+									ArrayList<Integer> ary = commonMap.get(subExp);
+									ary.add(i);
+									commonMap.put(subExp, ary);
+									if (negExp)
+										doubleCountMap.put(subExp, doubleCountMap.get(subExp) - 1.0);
+									else
+										doubleCountMap.put(subExp, doubleCountMap.get(subExp) + 1.0);
+								}
+								else {
+									ArrayList<Integer> ary = new ArrayList<Integer>();
+									ary.add(i);
+									commonMap.put(subExp, ary);
+									if (negExp)
+										doubleCountMap.put(subExp, -1.0);
+									else
+										doubleCountMap.put(subExp, 1.0);
+								}
+							}
 						}
 						// regular common terms, negative sign missing
 						else if (results2.get(i) instanceof Expression) {
@@ -1006,11 +1032,11 @@ public class BoaNormalFormIntrinsics {
 								if (doubleCountMap.get(o) == 1.0)
 									results2.add(o);
 								else if (doubleCountMap.get(o) == -1.0)
-									results2.add(createExpression(ExpressionKind.OP_SUB, o));
+									results2.add(negate(o));
 								else if (doubleCountMap.get(o) % 1 == 0)
-									results2.add(createExpression(ExpressionKind.OP_MULT, createLiteral("" + Integer.toString(doubleCountMap.get(o).intValue())), o));
+									results2.add(internalReduce(createExpression(ExpressionKind.OP_MULT, createLiteral("" + Integer.toString(doubleCountMap.get(o).intValue())), o)));
 								else
-									results2.add(createExpression(ExpressionKind.OP_MULT, createLiteral("" + Double.toString(doubleCountMap.get(o))), o));
+									results2.add(internalReduce(createExpression(ExpressionKind.OP_MULT, createLiteral("" + Double.toString(doubleCountMap.get(o))), o)));
 							}
 						}
 					}
@@ -1212,6 +1238,15 @@ public class BoaNormalFormIntrinsics {
 				dval = 1.0;
 				ival = 1L;
 
+				// bring children up if the child node is an mult
+				for (int i = 0; i < results.size(); i++)
+					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_MULT) {
+						final Expression subExp = (Expression)results.get(i);
+						results.remove(i);
+						for (int j = 0; j < subExp.getExpressionsCount(); j++)
+							results.add(i + j, internalReduce(subExp.getExpressions(j)));
+					}
+
 				// if multiple arguments, try to multiply them all together
 				for (Object o : results) {
 					if (o instanceof Expression)
@@ -1243,18 +1278,15 @@ public class BoaNormalFormIntrinsics {
 						results2.set(0, negate(results2.get(0)));
 					}
 
-					// only at most 1 term should remain negative
-					int lastNeg = -1;
+					// only the first term can remain negative
+					boolean positive = true;
 					for (int i = results2.size() - 1; i >= 0; i--)
 						if (isNegative(results2.get(i))) {
-							if (lastNeg != -1) {
-								results2.set(lastNeg, negate(results2.get(lastNeg)));
-								results2.set(i, negate(results2.get(i)));
-								lastNeg = -1;
-							} else {
-								lastNeg = i;
-							}
+							positive = !positive;
+							results2.set(i, negate(results2.get(i)));
 						}
+					if (!positive)
+						results2.set(0, negate(results2.get(0)));
 
 					// check for elimination
 					if (results2.get(0) instanceof Double && (Double)results2.get(0) == 0.0)

@@ -190,8 +190,8 @@ public class TestReduce {
 			{ "x * 2 / 2", "2 * x / 2" }, // FIXME should be "x"
 			{ "2 * x / 2", "2 * x / 2" }, // FIXME should be "x"
 			{ "2 / 2 * x", "x" },
-			{ "-x * 2 / 2", "2 * -x / 2" }, // FIXME should be "-x"
-			{ "2 * -x / 2", "2 * -x / 2" }, // FIXME should be "-x"
+			{ "-x * 2 / 2", "-2 * x / 2" }, // FIXME should be "-x"
+			{ "2 * -x / 2", "-2 * x / 2" }, // FIXME should be "-x"
 			{ "2 / 2 * -x", "-x" },
 
 			{ "x / x * x", "x" },
@@ -239,7 +239,7 @@ public class TestReduce {
 			{ "x / -1 / 1 / -1 / -1", "-x"},
 			{ "x / -1 / x / 1 / -1", "1"},
 			{ "x * -x * x * -x / x / x / -x / -x", "x * x * x * x / x / x / x / x"}, // FIXME should be "1"
-			{ "x * x * x * -x / x / x / -x / -x", "x * x * x * -x / x / x / x / x"}, // FIXME should be "-1"
+			{ "x * x * x * -x / x / x / -x / -x", "-x * x * x * x / x / x / x / x"}, // FIXME should be "-1"
 
 			// with methods 
 			{ "foo(x + 3, 2 + 1)", "foo(3 + x, 3)" },
@@ -334,6 +334,24 @@ public class TestReduce {
 			{ "((8 + x) - x)", "8" },
 			{ "8 - -x - 2 * x", "8 + -x" }, //FIXME should be "8 - x"
 			{ "x * ((-y) / z)", "x * (-y / z)"},
+			{ "x * y + x * y", "2 * x * y"},
+			{ "x * y + x * -y + -x * y + x * y", "0"},
+			{ "x * y + x * -y + -x * y + -x * y", "-2 * x * y"},
+			{ "2 * x * y + x * -y", "2 * x * y + -x * y"}, //FIXME should be "x * y"
+			{ "2 * x * y + -x * y", "2 * x * y + -x * y"}, //FIXME should be "x * y"
+			{ "x * y * z + x * -y * z + x * y * -z", "-x * y * z"},
+			{ "x * -y * z", "-x * y * z"},
+			{ "x * y * -z", "-x * y * z"},
+			{ "x * -y * -z", "x * y * z"},
+			{ "x * -y * -z * -a", "-x * y * z * a"},
+			{ "x * y + x * y - x * y + x * y", "2 * x * y"},
+			{ "x * y - x * y + x * y + x * y", "2 * x * y"},
+			{ "x * y - x * y - x * y + x * y", "0"},
+			{ "x * y + x * y + x * y - x * y", "3 * x * y - x * y"}, //FIXME should be "2 * x * y"
+			{ "x + 2 * 3 + 2 * 3", "12 + x"},
+			{ "x * (2 * x)", "2 * x * x"},
+			{ "-x * -y * -x", "-x * y * x"},
+			{ "-x * y * z + x * -y * z + x * y * -z", "-3 * x * y * z"},
 		});
 	}
 
