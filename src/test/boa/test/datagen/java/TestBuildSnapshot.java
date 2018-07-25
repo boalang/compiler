@@ -96,25 +96,25 @@ public class TestBuildSnapshot {
 		
 		CodeRepository cr = buildCodeRepository("boalang/test-datagen");
 
-		ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr, "8041f1281cf6b615861768631097e22127a1e32e", new String[]{"SOURCE_JAVA_JLS"});
+		ChangedFile[] snapshot = BoaIntrinsics.getSnapshotById(cr, "8041f1281cf6b615861768631097e22127a1e32e", new String[]{"SOURCE_JAVA_JLS"});
 		String[] fileNames = new String[snapshot.length];
 		for (int i = 0; i < snapshot.length; i++)
 			fileNames[i] = snapshot[i].getName();
 		assertArrayEquals(new String[]{}, fileNames);
 		
-		snapshot = BoaIntrinsics.getSnapshot(cr, "269424473466542fad9c426f7edf7d10a742e2be", new String[]{"SOURCE_JAVA_JLS"});
+		snapshot = BoaIntrinsics.getSnapshotById(cr, "269424473466542fad9c426f7edf7d10a742e2be", new String[]{"SOURCE_JAVA_JLS"});
 		fileNames = new String[snapshot.length];
 		for (int i = 0; i < snapshot.length; i++)
 			fileNames[i] = snapshot[i].getName();
 		assertArrayEquals(new String[]{"src/Foo.java"}, fileNames);
 		
-		snapshot = BoaIntrinsics.getSnapshot(cr, "5e9291c8e830754479bf836686734045faa5c021", new String[]{"SOURCE_JAVA_JLS"});
+		snapshot = BoaIntrinsics.getSnapshotById(cr, "5e9291c8e830754479bf836686734045faa5c021", new String[]{"SOURCE_JAVA_JLS"});
 		fileNames = new String[snapshot.length];
 		for (int i = 0; i < snapshot.length; i++)
 			fileNames[i] = snapshot[i].getName();
 		assertArrayEquals(new String[]{}, fileNames);
 		
-		snapshot = BoaIntrinsics.getSnapshot(cr, "06288fd7cf36415629e3eafdce2448a5406a8c1e", new String[]{"SOURCE_JAVA_JLS"});
+		snapshot = BoaIntrinsics.getSnapshotById(cr, "06288fd7cf36415629e3eafdce2448a5406a8c1e", new String[]{"SOURCE_JAVA_JLS"});
 		fileNames = new String[snapshot.length];
 		for (int i = 0; i < snapshot.length; i++)
 			fileNames[i] = snapshot[i].getName();
@@ -133,7 +133,7 @@ public class TestBuildSnapshot {
 			fileNames[i] = snapshot[i].getName();
 //			assertArrayEquals(new String[]{}, fileNames);
 		
-		snapshot = BoaIntrinsics.getSnapshot(cr, "d7a4aced37af672f9a55238a47bb0e4974193ebe");
+		snapshot = BoaIntrinsics.getSnapshotById(cr, "d7a4aced37af672f9a55238a47bb0e4974193ebe");
 		fileNames = new String[snapshot.length];
 		for (int i = 0; i < snapshot.length; i++)
 			fileNames[i] = snapshot[i].getName();
@@ -210,7 +210,7 @@ public class TestBuildSnapshot {
 		}
 		
 		for (Revision rev : cr.getRevisionsList()) {
-			ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr, rev.getId());
+			ChangedFile[] snapshot = BoaIntrinsics.getSnapshotById(cr, rev.getId());
 			String[] fileNames = new String[snapshot.length];
 			for (int i = 0; i < snapshot.length; i++)
 				fileNames[i] = snapshot[i].getName();
@@ -330,7 +330,7 @@ public class TestBuildSnapshot {
 		
 		for (int i = 0; i < BoaIntrinsics.getRevisionsCount(cr); i++) {
 			Revision rev = BoaIntrinsics.getRevision(cr, i);
-			ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr, rev.getId());
+			ChangedFile[] snapshot = BoaIntrinsics.getSnapshotById(cr, rev.getId());
 			String[] fileNames = new String[snapshot.length];
 			for (int j = 0; j < snapshot.length; j++)
 				fileNames[j] = snapshot[j].getName();
