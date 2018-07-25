@@ -62,6 +62,29 @@ public class BoaAstIntrinsics {
 	static Context context;
 	private static MapFile.Reader map, commentsMap, issuesMap;
 
+	private static final Revision emptyRevision;
+	static {
+		Revision.Builder rb = Revision.newBuilder();
+		rb.setCommitDate(0);
+		Person.Builder pb = Person.newBuilder();
+		pb.setUsername("");
+		rb.setCommitter(pb);
+		rb.setId("");
+		rb.setLog("");
+		emptyRevision = rb.build();
+	}
+	
+	private static MapFile.Reader commitMap;
+
+	public static enum COMMITCOUNTER {
+		GETS_ATTEMPTED,
+		GETS_SUCCEED,
+		GETS_FAILED,
+		GETS_FAIL_MISSING,
+		GETS_FAIL_BADPROTOBUF,
+		GETS_FAIL_BADLOC,
+	};
+
 	public static enum ASTCOUNTER {
 		GETS_ATTEMPTED,
 		GETS_SUCCEED,
@@ -126,6 +149,44 @@ public class BoaAstIntrinsics {
 		System.err.println("error with ast: " + f.getKey());
 		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
 		return emptyAst;
+	}
+
+	@SuppressWarnings("unchecked")
+	static Revision getRevision(long key) {
+		context.getCounter(COMMITCOUNTER.GETS_ATTEMPTED).increment(1);
+		
+		if (commitMap == null)
+			openCommitMap();
+		
+		try {
+			final BytesWritable value = new BytesWritable();
+			if (commitMap.get(new LongWritable(key), value) == null) {
+				context.getCounter(COMMITCOUNTER.GETS_FAIL_MISSING).increment(1);
+			} else {
+				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+				// defaults to 64, really big ASTs require more
+				_stream.setRecursionLimit(Integer.MAX_VALUE);
+				final Revision root = Revision.parseFrom(_stream);
+				context.getCounter(COMMITCOUNTER.GETS_SUCCEED).increment(1);
+				return root;
+			}
+		} catch (final InvalidProtocolBufferException e) {
+			e.printStackTrace();
+			context.getCounter(COMMITCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+		} catch (final IOException e) {
+			e.printStackTrace();
+			context.getCounter(COMMITCOUNTER.GETS_FAIL_MISSING).increment(1);
+		} catch (final RuntimeException e) {
+			e.printStackTrace();
+			context.getCounter(COMMITCOUNTER.GETS_FAIL_MISSING).increment(1);
+		} catch (final Error e) {
+			e.printStackTrace();
+			context.getCounter(COMMITCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+		}
+
+		System.err.println("error with revision: " + key);
+		context.getCounter(COMMITCOUNTER.GETS_FAILED).increment(1);
+		return emptyRevision;
 	}
 
 	/**
@@ -214,7 +275,7 @@ public class BoaAstIntrinsics {
 			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
-				p = new Path(DefaultProperties.localDataPath);
+				p = new Path(DefaultProperties.localDataPath, "ast");
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
@@ -238,7 +299,7 @@ public class BoaAstIntrinsics {
 			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
-				p = new Path(DefaultProperties.localCommentPath);
+				p = new Path(DefaultProperties.localDataPath, "comments");
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
@@ -262,7 +323,7 @@ public class BoaAstIntrinsics {
 			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
-				p = new Path(DefaultProperties.localIssuePath);
+				p = new Path(DefaultProperties.localDataPath, "issues");
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
@@ -280,11 +341,31 @@ public class BoaAstIntrinsics {
 		}
 	}
 
+	private static void openCommitMap() {
+		try {
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localDataPath, "commit");
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+						new Path(conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("commit")));
+				fs = FileSystem.get(conf);
+			}
+			commitMap = new MapFile.Reader(fs, p.toString(), conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	@SuppressWarnings("rawtypes")
 	public static void cleanup(final Context context) {
 		closeMap();
 		closeCommentMap();
 		closeIssuesMap();
+		closeCommitMap();
 	}
 
 	private static void closeMap() {
@@ -315,6 +396,16 @@ public class BoaAstIntrinsics {
 				e.printStackTrace();
 			}
 		issuesMap = null;
+	}
+
+	private static void closeCommitMap() {
+		if (commitMap != null)
+			try {
+				commitMap.close();
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		commitMap = null;
 	}
 
 	@FunctionSpec(name = "type_name", returnType = "string", formalParameters = { "string" })

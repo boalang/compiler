@@ -55,7 +55,7 @@ public class TestJLSVersion {
 		};
 		
 		for (String[] commit : commits) {
-			ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr, commit[0], new String[]{"SOURCE_JAVA_"});
+			ChangedFile[] snapshot = BoaIntrinsics.getSnapshotById(cr, commit[0], new String[]{"SOURCE_JAVA_"});
 			assertThat(snapshot.length, Matchers.is(Integer.parseInt(commit[1])));
 			
 	    	for (ChangedFile cf : snapshot)
@@ -153,7 +153,7 @@ public class TestJLSVersion {
 		}
 		
 		for (Revision rev : cr.getRevisionsList()) {
-			ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr, rev.getId());
+			ChangedFile[] snapshot = BoaIntrinsics.getSnapshotById(cr, rev.getId());
 			String[] fileNames = new String[snapshot.length];
 			for (int i = 0; i < snapshot.length; i++)
 				fileNames[i] = snapshot[i].getName();

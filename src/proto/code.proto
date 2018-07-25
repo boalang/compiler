@@ -67,6 +67,4 @@ message Revision {
 	repeated ChangedFile files = 6;
 	/** @exclude The offsets of any parent commits */
 	repeated int32 parents = 7;
-	/** @exclude The offsets of any child commits */
-	repeated int32 children = 8;
 }
