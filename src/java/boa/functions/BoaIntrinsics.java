@@ -104,6 +104,10 @@ public class BoaIntrinsics {
 		int revisionOffset = getRevisionIndex(cr, timestamp);
 		return getSnapshot(cr, revisionOffset, kinds);
 	}
+	
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final int commitOffset) {
+		return getSnapshot(cr, commitOffset, new String[0]);
+	}
 
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final int commitOffset, final String... kinds) {
 		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
