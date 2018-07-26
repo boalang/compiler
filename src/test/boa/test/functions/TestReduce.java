@@ -222,7 +222,7 @@ public class TestReduce {
 			{ "x * x * 0", "0" },
 			{ "x * 0 * x", "0" },
 			{ "0 * x * x", "0" },
-			{ "x + x - x - x", "2 * x - 2 * x" }, // FIXME should be "0"
+			{ "x + x - x - x", "0" },
 			{ "x - x + x - x", "0" },
 			{ "x - x - x + x", "0" },
 			{ "-x - x + x + x", "0" },
@@ -281,6 +281,7 @@ public class TestReduce {
 			{ "5 + x + 3 + x", "8 + 2 * x" },
 			{ "5 + (x + 3) + x", "8 + 2 * x" },
 			{ "5 - (x - 3) - x", "8 + -2 * x" }, // FIXME should be "8 - 2 * x"
+			{ "5 - 2 * x + 3", "8 + -2 * x" },
 			{ "(x - 3) - x", "-3" },
 			{ "5.0 + +3.5 - -2 * a.length", "8.5 + 2 * a.length" },
 			{ "(5.0 + 3.5) - -2 * a.length", "8.5 + 2 * a.length" },
@@ -348,12 +349,25 @@ public class TestReduce {
 			{ "x * -y * -z * -a", "-x * y * z * a"},
 			{ "x * y + x * y - x * y + x * y", "2 * x * y"},
 			{ "x * y - x * y + x * y + x * y", "2 * x * y"},
+			{ "2 * 3 * x + 2 * 4 * x", "14 * x"},
+			{ "2 * x * 3 + x * 4 * 2", "14 * x"},
+			{ "2 * -x * -y + 3 * x * -y", "-x * y"},
 			{ "x * y - x * y - x * y + x * y", "0"},
-			{ "x * y + x * y + x * y - x * y", "3 * x * y - x * y"}, //FIXME should be "2 * x * y"
+			{ "x * y + x * y + x * y - x * y", "2 * x * y"},
 			{ "x + 2 * 3 + 2 * 3", "12 + x"},
 			{ "x * (2 * x)", "2 * x * x"},
 			{ "-x * -y * -x", "-x * y * x"},
 			{ "-x * y * z + x * -y * z + x * y * -z", "-3 * x * y * z"},
+			{ "-2 * x + -3 * x", "-5 * x"},
+			{ "2 * x * y + -2 * x * y", "0"},
+
+			{ "2 * x * y - x * y - 3 * x * y", "-2 * x * y"},
+			{ "x - 3 * y - y", "x - 4 * y"},
+			{ "3 * y - x - y", "-x - -2 * y"}, //FIXME should be -x + 2 * y
+			{ "3 * y - y - x", "-x - -2 * y"}, //FIXME should be -x + 2 * y
+			{ "x + y - y - 2 * y + 3 * x", "-2 * y + 4 * x"}, // FIXME order?
+			{ "2.5 * x - 1.3 * x - 3 * x - y - z + 2 * y - y + 2 * z", "-1.8 * x + z"},
+
 		});
 	}
 

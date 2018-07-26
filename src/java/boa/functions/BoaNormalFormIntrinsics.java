@@ -932,7 +932,7 @@ public class BoaNormalFormIntrinsics {
 									literalIndex = j;
 								}
 								else if (subExp.getExpressions(j).getKind() == ExpressionKind.OP_SUB && ((Expression)subExp.getExpressions(j)).getExpressionsCount() == 1) {
-									negExp = true;
+									negExp = !negExp;
 									exp = (Expression)negate(subExp.getExpressions(j));
 								}
 								else
@@ -1201,22 +1201,225 @@ public class BoaNormalFormIntrinsics {
 					}
 
 					// group common terms
+					HashMap<Expression, ArrayList<Integer>> commonMap = new HashMap<Expression, ArrayList<Integer>>();
+					HashMap<Expression, Double> doubleCountMap = new HashMap<Expression, Double>();
 					for (int i = 0; i < results2.size(); i++) {
-						int count = 1;
-
-						for (int j = i + 1; j < results2.size(); j++)
-							if (results2.get(i).equals(results2.get(j)))
-								count++;
-
-						if (count > 1) {
-							lhs = results2.get(i);
-							while (results2.remove(lhs))
-								;
-							results2.add(i, createExpression(ExpressionKind.OP_MULT, createLiteral("" + count), (Expression)lhs));
+						// if Mult, like 2 * x
+						if ((results2.get(i) instanceof Expression && ((Expression)results2.get(i)).getKind() == ExpressionKind.OP_MULT)) {
+							Expression subExp = (Expression)results2.get(i);
+							int literalCount = 0;
+							int literalIndex = -1;
+							boolean negLiteral = false;
+							boolean negExp = false;
+							Expression literal = null;
+							Expression exp = null;
+							for (int j = 0; j < subExp.getExpressionsCount(); j++){
+								if (subExp.getExpressions(j).getKind() == ExpressionKind.LITERAL) {
+									literal = subExp.getExpressions(j);
+									literalCount++;
+									literalIndex = j;
+								}
+								else if (subExp.getExpressions(j).getKind() == ExpressionKind.OP_SUB && ((Expression)negate(subExp.getExpressions(j))).getKind() == ExpressionKind.LITERAL) {
+									literal = (Expression)negate(subExp.getExpressions(j));
+									negLiteral = true;
+									literalCount++;
+									literalIndex = j;
+								}
+								else if (subExp.getExpressions(j).getKind() == ExpressionKind.OP_SUB && ((Expression)subExp.getExpressions(j)).getExpressionsCount() == 1) {
+									negExp = !negExp;
+									exp = (Expression)negate(subExp.getExpressions(j));
+								}
+								else
+									exp = (Expression)subExp.getExpressions(j);
+							}
+							if (literalCount == 1) {
+								// for cases like 3 * x * y
+								if (subExp.getExpressionsCount() != 2) {
+									List<Object> tempExpList = new ArrayList<Object>();
+									for (int j = 0; j < subExp.getExpressionsCount(); j++) {
+										if (j != literalIndex)
+											tempExpList.add(subExp.getExpressions(j));
+									}
+									exp = createExpression(subExp.getKind(), convertArray(tempExpList));
+								}
+								if (commonMap.containsKey(exp)) {
+									ArrayList<Integer> ary = commonMap.get(exp);
+									ary.add(i);
+									commonMap.put(exp, ary);
+									if (i == 0) {
+										if (negLiteral || negExp && !(negLiteral && negExp))
+											doubleCountMap.put(exp, doubleCountMap.get(exp) - Double.parseDouble(literal.getLiteral()));
+										else
+											doubleCountMap.put(exp, doubleCountMap.get(exp) + Double.parseDouble(literal.getLiteral()));
+									}
+									else {
+										if (negLiteral || negExp && !(negLiteral && negExp))
+											doubleCountMap.put(exp, doubleCountMap.get(exp) + Double.parseDouble(literal.getLiteral()));
+										else
+											doubleCountMap.put(exp, doubleCountMap.get(exp) - Double.parseDouble(literal.getLiteral()));
+									}
+								}
+								else {
+									ArrayList<Integer> ary = new ArrayList<Integer>();
+									ary.add(i);
+									commonMap.put(exp, ary);
+									if (i == 0) {
+										if (negLiteral || negExp && !(negLiteral && negExp))
+											doubleCountMap.put(exp, Double.parseDouble(literal.getLiteral()) * -1);
+										else
+											doubleCountMap.put(exp, Double.parseDouble(literal.getLiteral()));
+									}
+									else {
+										if (negLiteral || negExp && !(negLiteral && negExp))
+											doubleCountMap.put(exp, Double.parseDouble(literal.getLiteral()));
+										else
+											doubleCountMap.put(exp, Double.parseDouble(literal.getLiteral()) * -1);
+									}
+								}
+							}
+							// for cases like x * y or x * y * z
+							else {
+								negExp = false;
+								if (isNegative(subExp)) {
+									negExp = true;
+									subExp = (Expression)internalReduce((Expression)negate(subExp));
+								}
+								if (commonMap.containsKey(subExp)) {
+									ArrayList<Integer> ary = commonMap.get(subExp);
+									ary.add(i);
+									commonMap.put(subExp, ary);
+									if (i == 0) {
+										if (negExp)
+											doubleCountMap.put(subExp, doubleCountMap.get(subExp) - 1.0);
+										else
+											doubleCountMap.put(subExp, doubleCountMap.get(subExp) + 1.0);
+									}
+									else {
+										if (negExp)
+											doubleCountMap.put(subExp, doubleCountMap.get(subExp) + 1.0);
+										else
+											doubleCountMap.put(subExp, doubleCountMap.get(subExp) - 1.0);
+									}
+								}
+								else {
+									ArrayList<Integer> ary = new ArrayList<Integer>();
+									ary.add(i);
+									commonMap.put(subExp, ary);
+									if (i == 0) {
+										if (negExp)
+											doubleCountMap.put(subExp, -1.0);
+										else
+											doubleCountMap.put(subExp, 1.0);
+									}
+									else {
+										if (negExp)
+											doubleCountMap.put(subExp, 1.0);
+										else
+											doubleCountMap.put(subExp, -1.0);
+									}
+								}
+							}
 						}
-
-						lhs = results2.get(0);
+						// regular common terms
+						else if (results2.get(i) instanceof Expression) {
+							boolean negExp = false;
+							Expression exp = (Expression)results2.get(i);
+							if (exp.getKind() == ExpressionKind.OP_SUB && exp.getExpressionsCount() == 1) {
+								negExp = true;
+								exp = (Expression)negate(exp);
+							}
+							if (commonMap.containsKey(exp)) {
+								ArrayList<Integer> ary = commonMap.get(exp);
+								ary.add(i);
+								commonMap.put(exp, ary);
+								if (i == 0) {
+									if (negExp)
+										doubleCountMap.put(exp, doubleCountMap.get(exp) - 1.0);
+									else
+										doubleCountMap.put(exp, doubleCountMap.get(exp) + 1.0);
+								}
+								else {
+									if (negExp)
+										doubleCountMap.put(exp, doubleCountMap.get(exp) + 1.0);
+									else
+										doubleCountMap.put(exp, doubleCountMap.get(exp) - 1.0);
+								}
+							}
+							else {
+								ArrayList<Integer> ary = new ArrayList<Integer>();
+								ary.add(i);
+								commonMap.put(exp, ary);
+								if (i == 0) {
+									if (negExp)
+										doubleCountMap.put(exp, -1.0);
+									else
+										doubleCountMap.put(exp, 1.0);
+								}
+								else {
+									if (negExp)
+										doubleCountMap.put(exp, 1.0);
+									else
+										doubleCountMap.put(exp, -1.0);
+								}
+							}
+						}
 					}
+
+					// record the repeated index and add common terms at the end
+					boolean[] repeat = new boolean[results2.size()];
+					for (ArrayList<Integer> ary: commonMap.values()) {
+						if (ary.size() > 1) {
+							// Expression o = entry.getKey();
+							// record index
+							for (Integer i : ary) {
+								repeat[i] = true;
+							}
+						}
+					}
+
+					// remove common terms
+					for (int i = repeat.length - 1; i >= 0; i--) {
+						if (repeat[i])
+							results2.remove(i);
+					}
+					if (results2.size() > 0 && repeat[0])
+						results2.set(0, negate(results2.get(0)));
+
+					// add common terms at the end
+					for (Map.Entry<Expression, ArrayList<Integer>> entry: commonMap.entrySet()) {
+						ArrayList<Integer> ary = entry.getValue();
+						if (ary.size() > 1) {
+							Expression o = entry.getKey();
+							if (doubleCountMap.get(o) != 0.0) {
+								if (results2.size() == 0) {
+									if (doubleCountMap.get(o) == 1.0)
+										results2.add(o);
+									else if (doubleCountMap.get(o) == -1.0)
+										results2.add(negate(o));
+									else if (doubleCountMap.get(o) % 1 == 0) {
+										results2.add(internalReduce(createExpression(ExpressionKind.OP_MULT, createLiteral("" + Integer.toString(doubleCountMap.get(o).intValue())), o)));
+									}
+									else
+										results2.add(internalReduce(createExpression(ExpressionKind.OP_MULT, createLiteral("" + Double.toString(doubleCountMap.get(o))), o)));
+								}
+								else {
+									if (doubleCountMap.get(o) == 1.0)
+										results2.add(negate(o));
+									else if (doubleCountMap.get(o) == -1.0)
+										results2.add(o);
+									else if (doubleCountMap.get(o) % 1 == 0) {
+										results2.add(negate(internalReduce(createExpression(ExpressionKind.OP_MULT, createLiteral("" + Integer.toString(doubleCountMap.get(o).intValue())), o))));
+									}
+									else
+										results2.add(negate(internalReduce(createExpression(ExpressionKind.OP_MULT, createLiteral("" + Double.toString(doubleCountMap.get(o))), o))));
+								}
+							}
+						}
+					}
+
+					// if no term left, put 0
+					if (results2.size() == 0)
+						results2.add(0);
 
 					// check for identity
 					if (lhs instanceof Number && ((Number)lhs).doubleValue() == 0.0 && results2.size() > 1) {
