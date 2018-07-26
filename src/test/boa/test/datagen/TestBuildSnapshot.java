@@ -43,6 +43,7 @@ import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.AbstractCommit;
 import boa.datagen.scm.GitConnector;
 import boa.datagen.util.FileIO;
+import boa.functions.BoaAstIntrinsics;
 import boa.functions.BoaIntrinsics;
 import boa.test.datagen.SequenceFileReader.SequenceFileReaderReducer;
 import boa.test.datagen.SequenceFileReader.SequenceFileReaderMapper;
@@ -339,8 +340,10 @@ public class TestBuildSnapshot {
 				String cid = commitIds.get(i);
 				snapshot = getSnapshot(dataPath, repoName, i);
 				fileNames = new String[snapshot.length];
-				for (int j = 0; j < snapshot.length; j++)
+				for (int j = 0; j < snapshot.length; j++) {
 					fileNames[j] = snapshot[j].getName();
+//					System.out.println(fileNames[j]);
+				}
 				Arrays.sort(fileNames);
 				expectedFileNames = conn.getSnapshot(cid).toArray(new String[0]);
 				Arrays.sort(expectedFileNames);
@@ -363,6 +366,10 @@ public class TestBuildSnapshot {
 		SequenceFileReader.index = index;
 		SequenceFileReader.snapshot = null;
 		
+		File outDir = new File("dataset/temp_output");
+		if (outDir.exists())
+			new FileIO.DirectoryRemover(outDir.getAbsolutePath()).run();
+		
 		Configuration conf = new Configuration();
 		Job job = new Job(conf, "read sequence file");
 		job.setJarByClass(SequenceFileReader.class);
@@ -373,9 +380,12 @@ public class TestBuildSnapshot {
 		job.setOutputValueClass(IntWritable.class);
 		job.setInputFormatClass(org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat.class);
 		FileInputFormat.addInputPath(job, new Path(dataPath, "projects.seq"));
-		FileOutputFormat.setOutputPath(job, new Path(dataPath));
+		FileOutputFormat.setOutputPath(job, new Path(outDir.getAbsolutePath()));
 		boolean completed = job.waitForCompletion(true);
 		assertEquals(completed, true);
+
+		if (outDir.exists())
+			new FileIO.DirectoryRemover(outDir.getAbsolutePath()).run();
 		
 		return SequenceFileReader.snapshot;
 	}
@@ -386,7 +396,14 @@ class SequenceFileReader {
 	static int index = -1;
 	static ChangedFile[] snapshot;
 
-	public static class SequenceFileReaderMapper extends Mapper<Text, BytesWritable, Text, ChangedFile[]> {
+	public static class SequenceFileReaderMapper extends Mapper<Text, BytesWritable, Text, IntWritable> {
+		
+		@Override
+		protected void setup(Mapper<Text, BytesWritable, Text, IntWritable>.Context context)
+				throws IOException, InterruptedException {
+			BoaAstIntrinsics.setup(context);
+			super.setup(context);
+		}
 
 		@Override
 		public void map(Text key, BytesWritable value, Context context) throws IOException, InterruptedException {
@@ -395,24 +412,33 @@ class SequenceFileReader {
 				for (CodeRepository cr : project.getCodeRepositoriesList()) {
 					try {
 						if (index == -1)
-							context.write(key, BoaIntrinsics.getSnapshot(cr));
+							snapshot = BoaIntrinsics.getSnapshot(cr);
 						else
-							context.write(key, BoaIntrinsics.getSnapshot(cr, index));
-					} catch (Exception e) {}
+							snapshot = BoaIntrinsics.getSnapshot(cr, index);
+						context.write(key, new IntWritable(1));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
+		
+		@Override
+		protected void cleanup(Mapper<Text, BytesWritable, Text, IntWritable>.Context context)
+				throws IOException, InterruptedException {
+			BoaAstIntrinsics.cleanup(context);
+			super.cleanup(context);
+		}
 	}
 
-	public static class SequenceFileReaderReducer extends Reducer<Text, ChangedFile[], Text, IntWritable> {
+	public static class SequenceFileReaderReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
 
 		@Override
-		public void reduce(Text key, Iterable<ChangedFile[]> values, Context context)
+		public void reduce(Text key, Iterable<IntWritable> values, Context context)
 				throws IOException, InterruptedException {
 			int sum = 0;
-			for (ChangedFile[] val : values) {
-				sum ++;
-				snapshot = val;
+			for (IntWritable val : values) {
+				sum += val.get();
 			}
 			assertThat(sum, Matchers.is(1));
 			context.write(key, new IntWritable(sum));
