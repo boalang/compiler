@@ -291,76 +291,6 @@ public class TestBuildSnapshot {
 		System.out.println("==========================================");
 	}
 	
-	@Test
-	public void testBuildSnapshotFromSeq() throws Exception {
-		String dataPath = "dataset/temp_data";
-		File dataFile = new File(dataPath);
-		dataPath = dataFile.getAbsolutePath();
-		
-		DefaultProperties.DEBUG = true;
-		DefaultProperties.localDataPath = dataPath;
-		
-		FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(dataFile.getAbsolutePath());
-		filecheck.run();
-		
-		String[] args = {	"-inputJson", "test/datagen/jsons", 
-							"-inputRepo", "dataset/repos",
-							"-output", dataPath,
-							"-size", "1"};
-		BoaGenerator.main(args);
-		
-		fileSystem = FileSystem.get(conf);
-		Path projectPath = new Path(dataPath, "projects.seq");
-		SequenceFile.Reader pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
-		Writable key = new Text();
-		BytesWritable val = new BytesWritable();
-		while (pr.next(key, val)) {
-			byte[] bytes = val.getBytes();
-			Project project = Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
-			String repoName = project.getName();
-			File gitDir = new File("dataset/repos/" + repoName);
-			filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
-			filecheck.run();
-			String url = "https://github.com/" + repoName + ".git";
-			RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
-			GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName);
-			
-			ChangedFile[] snapshot = getSnapshot(dataPath, repoName, -1);
-			String[] fileNames = new String[snapshot.length];
-			for (int i = 0; i < snapshot.length; i++)
-				fileNames[i] = snapshot[i].getName();
-			Arrays.sort(fileNames);
-			String[] expectedFileNames = conn.getSnapshot(Constants.HEAD).toArray(new String[0]);
-			Arrays.sort(expectedFileNames);
-			System.out.println("Test head snapshot");
-			assertArrayEquals(expectedFileNames, fileNames);
-			
-			List<String> commitIds = conn.logCommitIds();
-			for (int i = 0; i < commitIds.size(); i++) {
-				String cid = commitIds.get(i);
-				snapshot = getSnapshot(dataPath, repoName, i);
-				fileNames = new String[snapshot.length];
-				for (int j = 0; j < snapshot.length; j++) {
-					fileNames[j] = snapshot[j].getName();
-//					System.out.println(fileNames[j]);
-				}
-				Arrays.sort(fileNames);
-				expectedFileNames = conn.getSnapshot(cid).toArray(new String[0]);
-				Arrays.sort(expectedFileNames);
-				System.out.println("Test snapshot at " + cid);
-				assertArrayEquals(expectedFileNames, fileNames);
-			}
-			
-			filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
-			filecheck.run();
-			conn.close();
-		}
-		pr.close();
-		
-		filecheck = new FileIO.DirectoryRemover(dataPath);
-		filecheck.run();
-	}
-
 	public ChangedFile[] getSnapshot(String dataPath, String repoName, int index) throws Exception {
 		SequenceFileReader.repoName = repoName;
 		SequenceFileReader.index = index;
@@ -388,61 +318,6 @@ public class TestBuildSnapshot {
 			new FileIO.DirectoryRemover(outDir.getAbsolutePath()).run();
 		
 		return SequenceFileReader.snapshot;
-	}
-}
-
-class SequenceFileReader {
-	static String repoName;
-	static int index = -1;
-	static ChangedFile[] snapshot;
-
-	public static class SequenceFileReaderMapper extends Mapper<Text, BytesWritable, Text, IntWritable> {
-		
-		@Override
-		protected void setup(Mapper<Text, BytesWritable, Text, IntWritable>.Context context)
-				throws IOException, InterruptedException {
-			BoaAstIntrinsics.setup(context);
-			super.setup(context);
-		}
-
-		@Override
-		public void map(Text key, BytesWritable value, Context context) throws IOException, InterruptedException {
-			Project project = Project.parseFrom(CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
-			if (project.getName().equals(repoName)) {
-				for (CodeRepository cr : project.getCodeRepositoriesList()) {
-					try {
-						if (index == -1)
-							snapshot = BoaIntrinsics.getSnapshot(cr);
-						else
-							snapshot = BoaIntrinsics.getSnapshot(cr, index);
-						context.write(key, new IntWritable(1));
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		
-		@Override
-		protected void cleanup(Mapper<Text, BytesWritable, Text, IntWritable>.Context context)
-				throws IOException, InterruptedException {
-			BoaAstIntrinsics.cleanup(context);
-			super.cleanup(context);
-		}
-	}
-
-	public static class SequenceFileReaderReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
-
-		@Override
-		public void reduce(Text key, Iterable<IntWritable> values, Context context)
-				throws IOException, InterruptedException {
-			int sum = 0;
-			for (IntWritable val : values) {
-				sum += val.get();
-			}
-			assertThat(sum, Matchers.is(1));
-			context.write(key, new IntWritable(sum));
-		}
 	}
 }
 
