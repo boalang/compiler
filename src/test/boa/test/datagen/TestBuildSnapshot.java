@@ -44,7 +44,7 @@ public class TestBuildSnapshot {
 	public void testBuildSnapshot() throws Exception {
 		DefaultProperties.DEBUG = true;
 		
-		String[] repoNames = new String[]{"candoia/candoia", "boalang/compiler", "junit-team/junit4"};
+		String[] repoNames = new String[]{"eclipse/jgit", "boalang/compiler", "junit-team/junit4"};
 		for (String repoName : repoNames)
 			buildCodeRepository(repoName);
 	}
