@@ -860,9 +860,16 @@ public class BoaNormalFormIntrinsics {
 					return ((Long)o).longValue();
 				}
 
-				// bring children up if the child node is an sub
-				for (int i = 0; i < results.size(); i++)
-					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_SUB) {
+				for (int i = 0; i < results.size(); i++) {
+					// bring children up if the child node is an add
+					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_ADD) {
+						final Expression subExp = (Expression)results.get(i);
+						results.remove(i);
+						for (int j = 0; j < subExp.getExpressionsCount(); j++)
+							results.add(i + j, internalReduce(subExp.getExpressions(j)));
+					}
+					// bring children up if the child node is an sub
+					else if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_SUB) {
 						final Expression subExp = (Expression)results.get(i);
 						if (subExp.getExpressionsCount() > 1) {
 							results.remove(i);
@@ -874,15 +881,7 @@ public class BoaNormalFormIntrinsics {
 							}
 						}
 					}
-
-				// bring children up if the child node is an add
-				for (int i = 0; i < results.size(); i++)
-					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_ADD) {
-						final Expression subExp = (Expression)results.get(i);
-						results.remove(i);
-						for (int j = 0; j < subExp.getExpressionsCount(); j++)
-							results.add(i + j, internalReduce(subExp.getExpressions(j)));
-					}
+				}
 
 				// if multiple arguments, try to add them all together
 				for (final Object o : results) {
@@ -912,7 +911,9 @@ public class BoaNormalFormIntrinsics {
 					// group common terms
 					HashMap<Expression, ArrayList<Integer>> commonMap = new HashMap<Expression, ArrayList<Integer>>();
 					HashMap<Expression, Double> doubleCountMap = new HashMap<Expression, Double>();
-					for (int i = 0; i < results2.size(); i++) {
+					// skip the first term since the first term is always literal
+					for (int i = 1; i < results2.size(); i++) {
+						boolean noLiteral = false;
 						// if Mult, like 2 * x
 						if ((results2.get(i) instanceof Expression && ((Expression)results2.get(i)).getKind() == ExpressionKind.OP_MULT)) {
 							Expression subExp = (Expression)results2.get(i);
@@ -949,13 +950,13 @@ public class BoaNormalFormIntrinsics {
 										if (j != literalIndex)
 											tempExpList.add(subExp.getExpressions(j));
 									}
-									exp = createExpression(subExp.getKind(), convertArray(tempExpList));
+									exp = (Expression)internalReduce(createExpression(subExp.getKind(), convertArray(tempExpList)));
 								}
 								if (commonMap.containsKey(exp)) {
 									ArrayList<Integer> ary = commonMap.get(exp);
 									ary.add(i);
 									commonMap.put(exp, ary);
-									if (negLiteral || negExp && !(negLiteral && negExp))
+									if ((negLiteral || negExp) && !(negLiteral && negExp))
 										doubleCountMap.put(exp, doubleCountMap.get(exp) - Double.parseDouble(literal.getLiteral()));
 									else
 										doubleCountMap.put(exp, doubleCountMap.get(exp) + Double.parseDouble(literal.getLiteral()));
@@ -964,44 +965,21 @@ public class BoaNormalFormIntrinsics {
 									ArrayList<Integer> ary = new ArrayList<Integer>();
 									ary.add(i);
 									commonMap.put(exp, ary);
-									if (negLiteral || negExp && !(negLiteral && negExp))
+									if ((negLiteral || negExp) && !(negLiteral && negExp))
 										doubleCountMap.put(exp, Double.parseDouble(literal.getLiteral()) * -1);
 									else
 										doubleCountMap.put(exp, Double.parseDouble(literal.getLiteral()));
 								}
 							}
 							// for cases like x * y or x * y * z
-							else {
-								negExp = false;
-								if (isNegative(subExp)) {
-									negExp = true;
-									subExp = (Expression)internalReduce((Expression)negate(subExp));
-								}
-								if (commonMap.containsKey(subExp)) {
-									ArrayList<Integer> ary = commonMap.get(subExp);
-									ary.add(i);
-									commonMap.put(subExp, ary);
-									if (negExp)
-										doubleCountMap.put(subExp, doubleCountMap.get(subExp) - 1.0);
-									else
-										doubleCountMap.put(subExp, doubleCountMap.get(subExp) + 1.0);
-								}
-								else {
-									ArrayList<Integer> ary = new ArrayList<Integer>();
-									ary.add(i);
-									commonMap.put(subExp, ary);
-									if (negExp)
-										doubleCountMap.put(subExp, -1.0);
-									else
-										doubleCountMap.put(subExp, 1.0);
-								}
-							}
+							else
+								noLiteral = true;
 						}
 						// regular common terms
-						else if (results2.get(i) instanceof Expression) {
+						if (noLiteral || (results2.get(i) instanceof Expression && ((Expression)results2.get(i)).getKind() != ExpressionKind.OP_MULT)) {
 							boolean negExp = false;
-							Expression exp = (Expression)results2.get(i);
-							if (exp.getKind() == ExpressionKind.OP_SUB && exp.getExpressionsCount() == 1) {
+							Expression exp = (Expression)internalReduce((Expression)results2.get(i));
+							if (isNegative(exp)) {
 								negExp = true;
 								exp = (Expression)negate(exp);
 							}
