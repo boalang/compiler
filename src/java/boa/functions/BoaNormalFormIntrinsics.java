@@ -637,7 +637,7 @@ public class BoaNormalFormIntrinsics {
 
 			case LITERAL:
 				final List<Object[]> literalList = new ArrayList<Object[]>();
-				if (BoaAstIntrinsics.isStringLit(e)) {     // if it is a string expression, we don't want to process it
+				if (BoaAstIntrinsics.isStringLit(e)) { // if it is a string expression, we don't want to process it
 					literalList.add(new Object[] {true});
 					componentMap.put(-1, literalList);
 				} else {
@@ -830,6 +830,7 @@ public class BoaNormalFormIntrinsics {
 		Double dval = 0.0;
 		Long ival = 0L;
 		boolean first = true;
+		boolean isDouble = false;
 
 		switch (e.getKind()) {
 			// reduce both sides of the comparison
@@ -887,20 +888,22 @@ public class BoaNormalFormIntrinsics {
 				for (final Object o : results) {
 					if (o instanceof Expression)
 						results2.add(o);
-					else if (o instanceof Double)
+					else if (o instanceof Double) {
 						dval += ((Double)o).doubleValue();
+						isDouble = true;
+					}
 					else if (o instanceof Long)
 						ival += ((Long)o).longValue();
 				}
 
 				// both float and integer results, so merge them into float
-				if (dval != 0.0 && ival != 0L) {
+				if (isDouble) {
 					dval += ival;
 					ival = 0L;
 				}
 
-				if (dval != 0.0)
-					// after merging, add the one that remains to results
+				// after merging, add the one that remains to results
+				if (isDouble)
 					results2.add(0, dval);
 				else
 					results2.add(0, ival);
@@ -1082,365 +1085,10 @@ public class BoaNormalFormIntrinsics {
 					return -((Long)o).longValue();
 				}
 
-				// bring children up if the child node is a sub
-				for (int i = 0; i < results.size(); i++)
-					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_SUB) {
-						final Expression subExp = (Expression)results.get(i);
-						if (subExp.getExpressionsCount() > 1) {
-							results.remove(i);
-							for (int j = 0; j < subExp.getExpressionsCount(); j++)
-								if (i == 0 || j == 0)
-									results.add(i + j, internalReduce(subExp.getExpressions(j)));
-								else
-									results.add(i + j, negate(internalReduce(subExp.getExpressions(j))));
-						}
-					}
+				for (int i = 1; i < results.size(); i++)
+					results.set(i, negate(results.get(i)));
 
-				// bring parent down if the child node is an add
-				List<Object> results3 = new ArrayList<Object>();
-				boolean foundAdd = false;
-				for (int i = 0; i < results.size(); i++) {
-					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_ADD) {
-						foundAdd = true;
-						final Expression subExp = (Expression)results.get(i);
-						if (subExp.getExpressionsCount() > 1) {
-							for (int j = 0; j < subExp.getExpressionsCount(); j++){
-								if (i == 0)
-									results3.add(internalReduce(subExp.getExpressions(j)));
-								else
-									results3.add(internalReduce(negateExpression(subExp.getExpressions(j))));
-							}
-						}
-						else
-							if (i == 0){
-								if (results.get(i) instanceof Expression)
-									results3.add(internalReduce((Expression) results.get(i)));
-								else
-									results3.add(results.get(i));
-							}
-							else
-								results3.add(internalReduce(negateExpression(results.get(i))));
-					}
-					else {
-						if (i == 0){
-							if (results.get(i) instanceof Expression)
-								results3.add(internalReduce((Expression) results.get(i)));
-							else
-								results3.add(results.get(i));
-						}
-						else
-							results3.add(internalReduce(negateExpression(results.get(i))));
-					}
-				}
-				if (foundAdd)
-					return internalReduce(createExpression(ExpressionKind.OP_ADD, convertArray(results3)));
-				else
-					results3 = null;
-
-				final List<Object> adds = new ArrayList<Object>();
-
-				// if multiple arguments, try to subtract them all together
-				for (final Object o : results) {
-					if (!first && isNegative(o)) {
-						adds.add(negate(o));
-					} else {
-						if (o instanceof Expression) {
-							results2.add(o);
-						} else {
-							if (first) {
-								results2.add(o);
-							} else {
-								if (o instanceof Double)
-									dval += ((Double)o).doubleValue();
-								else
-									ival += ((Long)o).longValue();
-							}
-						}
-						first = false;
-					}
-				}
-
-				// both float and integer results, so merge them into float
-				if (dval != 0.0 && ival != 0L) {
-					dval += ival;
-					ival = 0L;
-				}
-
-				// if the first term is a number, perform subtraction on it
-				if (results2.get(0) instanceof Number) {
-					if (results2.get(0) instanceof Double) {
-						if (dval != 0.0)
-							results2.set(0, (Double)results2.get(0) - dval);
-						else
-							results2.set(0, (Double)results2.get(0) - ival);
-					} else {
-						if (dval != 0.0)
-							results2.set(0, (double)(Long)results2.get(0) - dval);
-						else
-							results2.set(0, (Long)results2.get(0) - ival);
-					}
-				} else {
-					// after merging, add the one that remains to results
-					if (dval != 0.0)
-						results2.add(dval);
-					else if (ival != 0L)
-						results2.add(ival);
-				}
-
-				if (results2.size() > 1) {
-					Object lhs = results2.get(0);
-
-					// check for elimination
-					if (lhs instanceof Expression) {
-						int idx = results2.lastIndexOf(lhs);
-						if (idx > 0) {
-							results2.remove(idx);
-							results2.set(0, 0L);
-							lhs = results2.get(0);
-						}
-					}
-
-					// group common terms
-					HashMap<Expression, ArrayList<Integer>> commonMap = new HashMap<Expression, ArrayList<Integer>>();
-					HashMap<Expression, Double> doubleCountMap = new HashMap<Expression, Double>();
-					for (int i = 0; i < results2.size(); i++) {
-						// if Mult, like 2 * x
-						if ((results2.get(i) instanceof Expression && ((Expression)results2.get(i)).getKind() == ExpressionKind.OP_MULT)) {
-							Expression subExp = (Expression)results2.get(i);
-							int literalCount = 0;
-							int literalIndex = -1;
-							boolean negLiteral = false;
-							boolean negExp = false;
-							Expression literal = null;
-							Expression exp = null;
-							for (int j = 0; j < subExp.getExpressionsCount(); j++){
-								if (subExp.getExpressions(j).getKind() == ExpressionKind.LITERAL) {
-									literal = subExp.getExpressions(j);
-									literalCount++;
-									literalIndex = j;
-								}
-								else if (subExp.getExpressions(j).getKind() == ExpressionKind.OP_SUB && ((Expression)negate(subExp.getExpressions(j))).getKind() == ExpressionKind.LITERAL) {
-									literal = (Expression)negate(subExp.getExpressions(j));
-									negLiteral = true;
-									literalCount++;
-									literalIndex = j;
-								}
-								else if (subExp.getExpressions(j).getKind() == ExpressionKind.OP_SUB && ((Expression)subExp.getExpressions(j)).getExpressionsCount() == 1) {
-									negExp = !negExp;
-									exp = (Expression)negate(subExp.getExpressions(j));
-								}
-								else
-									exp = (Expression)subExp.getExpressions(j);
-							}
-							if (literalCount == 1) {
-								// for cases like 3 * x * y
-								if (subExp.getExpressionsCount() != 2) {
-									List<Object> tempExpList = new ArrayList<Object>();
-									for (int j = 0; j < subExp.getExpressionsCount(); j++) {
-										if (j != literalIndex)
-											tempExpList.add(subExp.getExpressions(j));
-									}
-									exp = createExpression(subExp.getKind(), convertArray(tempExpList));
-								}
-								if (commonMap.containsKey(exp)) {
-									ArrayList<Integer> ary = commonMap.get(exp);
-									ary.add(i);
-									commonMap.put(exp, ary);
-									if (i == 0) {
-										if (negLiteral || negExp && !(negLiteral && negExp))
-											doubleCountMap.put(exp, doubleCountMap.get(exp) - Double.parseDouble(literal.getLiteral()));
-										else
-											doubleCountMap.put(exp, doubleCountMap.get(exp) + Double.parseDouble(literal.getLiteral()));
-									}
-									else {
-										if (negLiteral || negExp && !(negLiteral && negExp))
-											doubleCountMap.put(exp, doubleCountMap.get(exp) + Double.parseDouble(literal.getLiteral()));
-										else
-											doubleCountMap.put(exp, doubleCountMap.get(exp) - Double.parseDouble(literal.getLiteral()));
-									}
-								}
-								else {
-									ArrayList<Integer> ary = new ArrayList<Integer>();
-									ary.add(i);
-									commonMap.put(exp, ary);
-									if (i == 0) {
-										if (negLiteral || negExp && !(negLiteral && negExp))
-											doubleCountMap.put(exp, Double.parseDouble(literal.getLiteral()) * -1);
-										else
-											doubleCountMap.put(exp, Double.parseDouble(literal.getLiteral()));
-									}
-									else {
-										if (negLiteral || negExp && !(negLiteral && negExp))
-											doubleCountMap.put(exp, Double.parseDouble(literal.getLiteral()));
-										else
-											doubleCountMap.put(exp, Double.parseDouble(literal.getLiteral()) * -1);
-									}
-								}
-							}
-							// for cases like x * y or x * y * z
-							else {
-								negExp = false;
-								if (isNegative(subExp)) {
-									negExp = true;
-									subExp = (Expression)internalReduce((Expression)negate(subExp));
-								}
-								if (commonMap.containsKey(subExp)) {
-									ArrayList<Integer> ary = commonMap.get(subExp);
-									ary.add(i);
-									commonMap.put(subExp, ary);
-									if (i == 0) {
-										if (negExp)
-											doubleCountMap.put(subExp, doubleCountMap.get(subExp) - 1.0);
-										else
-											doubleCountMap.put(subExp, doubleCountMap.get(subExp) + 1.0);
-									}
-									else {
-										if (negExp)
-											doubleCountMap.put(subExp, doubleCountMap.get(subExp) + 1.0);
-										else
-											doubleCountMap.put(subExp, doubleCountMap.get(subExp) - 1.0);
-									}
-								}
-								else {
-									ArrayList<Integer> ary = new ArrayList<Integer>();
-									ary.add(i);
-									commonMap.put(subExp, ary);
-									if (i == 0) {
-										if (negExp)
-											doubleCountMap.put(subExp, -1.0);
-										else
-											doubleCountMap.put(subExp, 1.0);
-									}
-									else {
-										if (negExp)
-											doubleCountMap.put(subExp, 1.0);
-										else
-											doubleCountMap.put(subExp, -1.0);
-									}
-								}
-							}
-						}
-						// regular common terms
-						else if (results2.get(i) instanceof Expression) {
-							boolean negExp = false;
-							Expression exp = (Expression)results2.get(i);
-							if (exp.getKind() == ExpressionKind.OP_SUB && exp.getExpressionsCount() == 1) {
-								negExp = true;
-								exp = (Expression)negate(exp);
-							}
-							if (commonMap.containsKey(exp)) {
-								ArrayList<Integer> ary = commonMap.get(exp);
-								ary.add(i);
-								commonMap.put(exp, ary);
-								if (i == 0) {
-									if (negExp)
-										doubleCountMap.put(exp, doubleCountMap.get(exp) - 1.0);
-									else
-										doubleCountMap.put(exp, doubleCountMap.get(exp) + 1.0);
-								}
-								else {
-									if (negExp)
-										doubleCountMap.put(exp, doubleCountMap.get(exp) + 1.0);
-									else
-										doubleCountMap.put(exp, doubleCountMap.get(exp) - 1.0);
-								}
-							}
-							else {
-								ArrayList<Integer> ary = new ArrayList<Integer>();
-								ary.add(i);
-								commonMap.put(exp, ary);
-								if (i == 0) {
-									if (negExp)
-										doubleCountMap.put(exp, -1.0);
-									else
-										doubleCountMap.put(exp, 1.0);
-								}
-								else {
-									if (negExp)
-										doubleCountMap.put(exp, 1.0);
-									else
-										doubleCountMap.put(exp, -1.0);
-								}
-							}
-						}
-					}
-
-					// record the repeated index and add common terms at the end
-					boolean[] repeat = new boolean[results2.size()];
-					for (ArrayList<Integer> ary: commonMap.values()) {
-						if (ary.size() > 1) {
-							// Expression o = entry.getKey();
-							// record index
-							for (Integer i : ary) {
-								repeat[i] = true;
-							}
-						}
-					}
-
-					// remove common terms
-					for (int i = repeat.length - 1; i >= 0; i--) {
-						if (repeat[i])
-							results2.remove(i);
-					}
-					if (results2.size() > 0 && repeat[0])
-						results2.set(0, negate(results2.get(0)));
-
-					// add common terms at the end
-					for (Map.Entry<Expression, ArrayList<Integer>> entry: commonMap.entrySet()) {
-						ArrayList<Integer> ary = entry.getValue();
-						if (ary.size() > 1) {
-							Expression o = entry.getKey();
-							if (doubleCountMap.get(o) != 0.0) {
-								if (results2.size() == 0) {
-									if (doubleCountMap.get(o) == 1.0)
-										results2.add(o);
-									else if (doubleCountMap.get(o) == -1.0)
-										results2.add(negate(o));
-									else if (doubleCountMap.get(o) % 1 == 0) {
-										results2.add(internalReduce(createExpression(ExpressionKind.OP_MULT, createLiteral("" + Integer.toString(doubleCountMap.get(o).intValue())), o)));
-									}
-									else
-										results2.add(internalReduce(createExpression(ExpressionKind.OP_MULT, createLiteral("" + Double.toString(doubleCountMap.get(o))), o)));
-								}
-								else {
-									if (doubleCountMap.get(o) == 1.0)
-										results2.add(negate(o));
-									else if (doubleCountMap.get(o) == -1.0)
-										results2.add(o);
-									else if (doubleCountMap.get(o) % 1 == 0) {
-										results2.add(negate(internalReduce(createExpression(ExpressionKind.OP_MULT, createLiteral("" + Integer.toString(doubleCountMap.get(o).intValue())), o))));
-									}
-									else
-										results2.add(negate(internalReduce(createExpression(ExpressionKind.OP_MULT, createLiteral("" + Double.toString(doubleCountMap.get(o))), o))));
-								}
-							}
-						}
-					}
-
-					// if no term left, put 0
-					if (results2.size() == 0)
-						results2.add(0);
-
-					// check for identity
-					if (lhs instanceof Number && ((Number)lhs).doubleValue() == 0.0 && results2.size() > 1) {
-						results2.remove(0);
-						results2.set(0, negate(results2.get(0)));
-					}
-				}
-
-				// if it reduced to a single term, return just the term otherwise return the whole expression
-				Object result;
-				if (results2.size() == 1)
-					result = results2.get(0);
-				else
-					result = createExpression(e.getKind(), convertArray(results2));
-
-				if (adds.size() > 0) {
-					adds.add(0, result);
-					result = internalReduce(createExpression(ExpressionKind.OP_ADD, convertArray(adds)));
-				}
-
-				return result;
+				return internalReduce(createExpression(ExpressionKind.OP_ADD, convertArray(results)));
 
 			case OP_MULT:
 				dval = 1.0;
@@ -1521,9 +1169,10 @@ public class BoaNormalFormIntrinsics {
 						if (first) {
 							results2.add(o);
 						} else {
-							if (o instanceof Double)
+							if (o instanceof Double) {
 								dval *= ((Double)o).doubleValue();
-							else if (o instanceof Long)
+								isDouble = true;
+							} else if (o instanceof Long)
 								ival *= ((Long)o).longValue();
 						}
 					}
@@ -1531,7 +1180,7 @@ public class BoaNormalFormIntrinsics {
 				}
 
 				// both float and integer results, so merge them into float
-				if (dval != 1.0 && ival != 1L) {
+				if (isDouble) {
 					dval *= ival;
 					ival = 1L;
 				}
@@ -1548,11 +1197,11 @@ public class BoaNormalFormIntrinsics {
 						if (numerator instanceof Double)
 							results2.set(0, ((Double)numerator).doubleValue() / (double)ival);
 						else
-							results2.set(0, div((double)((Long)numerator).longValue(), (double)ival));
+							results2.set(0, ((Long)numerator).longValue() / ival);
 					}
 				} else {
 					// otherwise just add the new denominator
-					if (dval != 1.0)
+					if (isDouble)
 						results2.add(dval);
 					else
 						results2.add(ival);
@@ -1694,22 +1343,6 @@ public class BoaNormalFormIntrinsics {
 			if (arr.get(i) instanceof Number)
 				arr.set(i, createLiteral(arr.get(i).toString()));
 		return arr.toArray(new Expression[arr.size()]);
-	}
-
-	/**
-	 * Divides a number.
-	 * This method is used in place of actual division, only when both parts are doubles.
-	 * If the resulting division results in an integer value, it returns a long.
-	 *
-	 * @param num the numerator
-	 * @param denom the denominator
-	 * @return the result of dividing num by denom
-	 */
-	private static Object div(final double num, final double denom) {
-		final double result = num / denom;
-		if (result == (long)result)
-			return (long)result;
-		return result;
 	}
 
 	/**
