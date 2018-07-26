@@ -5,7 +5,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,39 +18,25 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.eclipse.jgit.lib.Constants;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.google.protobuf.CodedInputStream;
-
-import boa.datagen.BoaGenerator;
 import boa.datagen.DefaultProperties;
 import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.AbstractCommit;
 import boa.datagen.scm.GitConnector;
 import boa.datagen.util.FileIO;
-import boa.functions.BoaAstIntrinsics;
 import boa.functions.BoaIntrinsics;
-import boa.test.datagen.SequenceFileReader.SequenceFileReaderReducer;
-import boa.test.datagen.SequenceFileReader.SequenceFileReaderMapper;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.CodeRepository.RepositoryKind;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
-import boa.types.Toplevel.Project;
 
 public class TestBuildSnapshot {
 	
@@ -289,35 +274,6 @@ public class TestBuildSnapshot {
 		for (String f : l)
 			System.out.println(f + " " + commits.get(f).getId());
 		System.out.println("==========================================");
-	}
-	
-	public ChangedFile[] getSnapshot(String dataPath, String repoName, int index) throws Exception {
-		SequenceFileReader.repoName = repoName;
-		SequenceFileReader.index = index;
-		SequenceFileReader.snapshot = null;
-		
-		File outDir = new File("dataset/temp_output");
-		if (outDir.exists())
-			new FileIO.DirectoryRemover(outDir.getAbsolutePath()).run();
-		
-		Configuration conf = new Configuration();
-		Job job = new Job(conf, "read sequence file");
-		job.setJarByClass(SequenceFileReader.class);
-		job.setMapperClass(SequenceFileReaderMapper.class);
-		job.setCombinerClass(SequenceFileReaderReducer.class);
-		job.setReducerClass(SequenceFileReaderReducer.class);
-		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(IntWritable.class);
-		job.setInputFormatClass(org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat.class);
-		FileInputFormat.addInputPath(job, new Path(dataPath, "projects.seq"));
-		FileOutputFormat.setOutputPath(job, new Path(outDir.getAbsolutePath()));
-		boolean completed = job.waitForCompletion(true);
-		assertEquals(completed, true);
-
-		if (outDir.exists())
-			new FileIO.DirectoryRemover(outDir.getAbsolutePath()).run();
-		
-		return SequenceFileReader.snapshot;
 	}
 }
 

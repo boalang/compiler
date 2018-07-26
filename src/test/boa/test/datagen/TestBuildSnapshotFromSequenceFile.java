@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.hadoop.conf.Configuration;
@@ -24,6 +25,9 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.eclipse.jgit.lib.Constants;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import com.google.protobuf.CodedInputStream;
 
@@ -34,28 +38,23 @@ import boa.datagen.scm.GitConnector;
 import boa.datagen.util.FileIO;
 import boa.functions.BoaAstIntrinsics;
 import boa.functions.BoaIntrinsics;
-import boa.test.datagen.SequenceFileReader.SequenceFileReaderReducer;
-import boa.test.datagen.SequenceFileReader.SequenceFileReaderMapper;
 import boa.types.Code.CodeRepository;
 import boa.types.Diff.ChangedFile;
 import boa.types.Toplevel.Project;
 
+@RunWith(Parameterized.class)
 public class TestBuildSnapshotFromSequenceFile {
-
-	private static Configuration conf = new Configuration();
-	private static FileSystem fileSystem = null;
+	static String dataPath = "dataset/temp_data";
+	static File dataFile = new File(dataPath);
 	
-	@Test
-	public void testBuildSnapshotFromSeq() throws Exception {
-		String dataPath = "dataset/temp_data";
-		File dataFile = new File(dataPath);
-		dataPath = dataFile.getAbsolutePath();
+    @Parameters(name = "{index}: repo {0} commit {2}")
+    public static List<Object[]> data() throws Exception {
+    	dataPath = dataFile.getAbsolutePath();
+    	
+    	DefaultProperties.DEBUG = true;
+    	DefaultProperties.localDataPath = dataPath;
 		
-		DefaultProperties.DEBUG = true;
-		DefaultProperties.localDataPath = dataPath;
-		
-		FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(dataFile.getAbsolutePath());
-		filecheck.run();
+		new FileIO.DirectoryRemover(dataFile.getAbsolutePath()).run();
 		
 		String[] args = {	"-inputJson", "test/datagen/jsons", 
 							"-inputRepo", "dataset/repos",
@@ -63,7 +62,10 @@ public class TestBuildSnapshotFromSequenceFile {
 							"-size", "1"};
 		BoaGenerator.main(args);
 		
-		fileSystem = FileSystem.get(conf);
+    	List<Object[]> data = new ArrayList<Object[]>();
+    	
+		Configuration conf = new Configuration();
+		FileSystem fileSystem = FileSystem.get(conf);
 		Path projectPath = new Path(dataPath, "projects.seq");
 		SequenceFile.Reader pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
 		Writable key = new Text();
@@ -73,8 +75,7 @@ public class TestBuildSnapshotFromSequenceFile {
 			Project project = Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
 			String repoName = project.getName();
 			File gitDir = new File("dataset/repos/" + repoName);
-			filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
-			filecheck.run();
+			new FileIO.DirectoryRemover(gitDir.getAbsolutePath()).run();
 			String url = "https://github.com/" + repoName + ".git";
 			RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
 			GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName);
@@ -92,33 +93,52 @@ public class TestBuildSnapshotFromSequenceFile {
 			List<String> commitIds = conn.logCommitIds();
 			for (int i = 0; i < commitIds.size(); i++) {
 				String cid = commitIds.get(i);
-				snapshot = getSnapshot(dataPath, repoName, i);
-				fileNames = new String[snapshot.length];
-				for (int j = 0; j < snapshot.length; j++) {
-					fileNames[j] = snapshot[j].getName();
-//					System.out.println(fileNames[j]);
-				}
-				Arrays.sort(fileNames);
-				expectedFileNames = conn.getSnapshot(cid).toArray(new String[0]);
-				Arrays.sort(expectedFileNames);
-				System.out.println("Test snapshot at " + cid);
-				assertArrayEquals(expectedFileNames, fileNames);
+				data.add(new Object[] { repoName, i, cid });
 			}
-			
-			filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
-			filecheck.run();
 			conn.close();
 		}
 		pr.close();
-		
-		filecheck = new FileIO.DirectoryRemover(dataPath);
-		filecheck.run();
+    	
+    	return data;
+    }
+
+    private static String repoName;
+    private static int index;
+    private static String commitId;
+    
+	public TestBuildSnapshotFromSequenceFile(String repoName, int index, String commitId) {
+		super();
+		TestBuildSnapshotFromSequenceFile.repoName = repoName;
+		TestBuildSnapshotFromSequenceFile.index = index;
+		TestBuildSnapshotFromSequenceFile.commitId = commitId;
 	}
 
-	public ChangedFile[] getSnapshot(String dataPath, String repoName, int index) throws Exception {
-		SequenceFileReader.repoName = repoName;
-		SequenceFileReader.index = index;
-		SequenceFileReader.snapshot = null;
+	@Test
+	public void testBuildSnapshotFromSeq() throws Exception {
+		File gitDir = new File("dataset/repos/" + repoName);
+		new FileIO.DirectoryRemover(gitDir.getAbsolutePath()).run();
+		String url = "https://github.com/" + repoName + ".git";
+		RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
+		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName);
+		ChangedFile[] snapshot = getSnapshot(dataPath, repoName, index);
+		String[] fileNames = new String[snapshot.length];
+		for (int j = 0; j < snapshot.length; j++) {
+			fileNames[j] = snapshot[j].getName();
+//			System.out.println(fileNames[j]);
+		}
+		Arrays.sort(fileNames);
+		String[] expectedFileNames = conn.getSnapshot(commitId).toArray(new String[0]);
+		Arrays.sort(expectedFileNames);
+		System.out.println("Test snapshot at " + commitId);
+		assertArrayEquals(expectedFileNames, fileNames);
+		new FileIO.DirectoryRemover(gitDir.getAbsolutePath()).run();
+		conn.close();
+	}
+
+	public static ChangedFile[] getSnapshot(String dataPath, String repoName, int index) throws Exception {
+		TestBuildSnapshotFromSequenceFile.repoName = repoName;
+		TestBuildSnapshotFromSequenceFile.index = index;
+		TestBuildSnapshotFromSequenceFile.snapshot = null;
 		
 		File outDir = new File("dataset/temp_output");
 		if (outDir.exists())
@@ -126,7 +146,7 @@ public class TestBuildSnapshotFromSequenceFile {
 		
 		Configuration conf = new Configuration();
 		Job job = new Job(conf, "read sequence file");
-		job.setJarByClass(SequenceFileReader.class);
+		job.setJarByClass(TestBuildSnapshotFromSequenceFile.class);
 		job.setMapperClass(SequenceFileReaderMapper.class);
 		job.setCombinerClass(SequenceFileReaderReducer.class);
 		job.setReducerClass(SequenceFileReaderReducer.class);
@@ -141,13 +161,9 @@ public class TestBuildSnapshotFromSequenceFile {
 		if (outDir.exists())
 			new FileIO.DirectoryRemover(outDir.getAbsolutePath()).run();
 		
-		return SequenceFileReader.snapshot;
+		return snapshot;
 	}
-}
 
-class SequenceFileReader {
-	static String repoName;
-	static int index = -1;
 	static ChangedFile[] snapshot;
 
 	public static class SequenceFileReaderMapper extends Mapper<Text, BytesWritable, Text, IntWritable> {
@@ -198,6 +214,5 @@ class SequenceFileReader {
 			context.write(key, new IntWritable(sum));
 		}
 	}
+	
 }
-
-
