@@ -1,4 +1,4 @@
-package boa.test.datagen.java;
+package boa.test.datagen;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
@@ -21,16 +21,12 @@ import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
 import org.eclipse.jgit.lib.Constants;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.google.protobuf.CodedInputStream;
-
-import boa.datagen.BoaGenerator;
 import boa.datagen.DefaultProperties;
 import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.AbstractCommit;
@@ -41,7 +37,6 @@ import boa.types.Code.CodeRepository;
 import boa.types.Code.CodeRepository.RepositoryKind;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
-import boa.types.Toplevel.Project;
 
 public class TestBuildSnapshot {
 	
@@ -88,7 +83,7 @@ public class TestBuildSnapshot {
 	private static FileSystem fileSystem = null;
 	
 	private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
-	private long astWriterLen = 0, commitWriterLen = 0, contentWriterLen = 0;
+	private long astWriterLen = 0, contentWriterLen = 0;
 	
 	@Test
 	public void testGetSnapshotFromProtobuf1() throws Exception {
@@ -280,73 +275,6 @@ public class TestBuildSnapshot {
 			System.out.println(f + " " + commits.get(f).getId());
 		System.out.println("==========================================");
 	}
-	
-	@Ignore
-	@Test
-	public void testBuildSnapshotFromSeq() throws Exception {
-		File dataFile = new File("dataset/temp_data");
-		FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(dataFile.getAbsolutePath());
-		filecheck.run();
-		
-		String[] args = {	"-inputJson", "test/datagen/jsons", 
-							"-inputRepo", "dataset/repos",
-							"-output", "dataset/temp_data",
-							"-size", "1"};
-		BoaGenerator.main(args);
-		SequenceFile.Reader pr = null;
-		DefaultProperties.DEBUG = true;
-		fileSystem = FileSystem.get(conf);
-		Path projectPath = new Path("dataset/temp_data/projects.seq");
-		if (fileSystem.exists(projectPath)) {
-			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
-		}
-		Writable key = new Text();
-		BytesWritable val = new BytesWritable();
-		pr.next(key, val);
-		byte[] bytes = val.getBytes();
-		Project project = Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
-		String repoName = project.getName();
-		File gitDir = new File("dataset/repos/" + repoName);
-		final CodeRepository cr = project.getCodeRepositories(0);
-		
-		filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
-		filecheck.run();
-		String url = "https://github.com/" + repoName + ".git";
-		RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
-		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName);
-		
-		
-		{
-			ChangedFile[] snapshot = BoaIntrinsics.getSnapshot(cr);
-			String[] fileNames = new String[snapshot.length];
-			for (int i = 0; i < snapshot.length; i++)
-				fileNames[i] = snapshot[i].getName();
-			Arrays.sort(fileNames);
-			String[] expectedFileNames = conn.getSnapshot(Constants.HEAD).toArray(new String[0]);
-			Arrays.sort(expectedFileNames);
-			System.out.println("Test head snapshot");
-			assertArrayEquals(expectedFileNames, fileNames);
-		}
-		
-		for (int i = 0; i < BoaIntrinsics.getRevisionsCount(cr); i++) {
-			Revision rev = BoaIntrinsics.getRevision(cr, i);
-			ChangedFile[] snapshot = BoaIntrinsics.getSnapshotById(cr, rev.getId());
-			String[] fileNames = new String[snapshot.length];
-			for (int j = 0; j < snapshot.length; j++)
-				fileNames[j] = snapshot[j].getName();
-			Arrays.sort(fileNames);
-			String[] expectedFileNames = conn.getSnapshot(rev.getId()).toArray(new String[0]);
-			Arrays.sort(expectedFileNames);
-			System.out.println("Test snapshot at " + rev.getId());
-			assertArrayEquals(expectedFileNames, fileNames);
-		}
-		
-		filecheck.run();
-		filecheck = new FileIO.DirectoryRemover(dataFile.getAbsolutePath());
-		filecheck.run();
-		conn.close();
-	}
 }
-
 
 

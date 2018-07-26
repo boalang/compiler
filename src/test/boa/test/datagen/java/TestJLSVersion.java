@@ -40,7 +40,7 @@ import boa.types.Code.CodeRepository.RepositoryKind;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 
-//FIXME assert, autoboxing, static imports, binary literals, underscore literals, unsafe varargs
+//FIXME autoboxing
 
 @RunWith(Parameterized.class)
 public class TestJLSVersion {
@@ -70,7 +70,7 @@ public class TestJLSVersion {
 	private static FileSystem fileSystem = null;
 	
 	private static SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
-	private static long astWriterLen = 0, commitWriterLen = 0, contentWriterLen = 0;
+	private static long astWriterLen = 0, contentWriterLen = 0;
 	
 	public TestJLSVersion(ChangedFile input) {
 		DefaultProperties.DEBUG = true;
