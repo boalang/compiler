@@ -40,7 +40,7 @@ import boa.types.Code.CodeRepository.RepositoryKind;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 
-//FIXME assert, autoboxing, static imports, binary literals, underscore literals, unsafe varargs
+//FIXME autoboxing
 
 @RunWith(Parameterized.class)
 public class TestJLSVersion {
