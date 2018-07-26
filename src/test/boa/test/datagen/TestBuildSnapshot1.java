@@ -10,7 +10,7 @@ public class TestBuildSnapshot1 {
 	public void testBuildSnapshot() throws Exception {
 		DefaultProperties.DEBUG = true;
 		
-		String[] repoNames = new String[]{"iluwatar/java-design-patterns"};
+		String[] repoNames = new String[]{"google/gson"};
 		for (String repoName : repoNames)
 			TestBuildSnapshot.buildCodeRepository(repoName);
 	}
