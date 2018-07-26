@@ -337,8 +337,10 @@ public class TestReduce {
 			{ "x * y + x * y", "2 * x * y"},
 			{ "x * y + x * -y + -x * y + x * y", "0"},
 			{ "x * y + x * -y + -x * y + -x * y", "-2 * x * y"},
-			{ "2 * x * y + x * -y", "2 * x * y + -x * y"}, //FIXME should be "x * y"
-			{ "2 * x * y + -x * y", "2 * x * y + -x * y"}, //FIXME should be "x * y"
+			{ "2 * x * y + x * -y", "x * y"},
+			{ "2 * x * y + -x * y", "x * y"},
+			{ "2 * x * y + -2 * x * y", "0"},
+			{ "2 * x * y + -x * y + 2 * x * -y", "-x * y"},
 			{ "x * y * z + x * -y * z + x * y * -z", "-x * y * z"},
 			{ "x * -y * z", "-x * y * z"},
 			{ "x * y * -z", "-x * y * z"},

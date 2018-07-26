@@ -938,8 +938,16 @@ public class BoaNormalFormIntrinsics {
 								else
 									exp = (Expression)subExp.getExpressions(j);
 							}
-
-							if (literalCount == 1 && subExp.getExpressionsCount() == 2) {
+							if (literalCount == 1) {
+								// for cases like 3 * x * y
+								if (subExp.getExpressionsCount() != 2) {
+									List<Object> tempExpList = new ArrayList<Object>();
+									for (int j = 0; j < subExp.getExpressionsCount(); j++) {
+										if (j != literalIndex)
+											tempExpList.add(subExp.getExpressions(j));
+									}
+									exp = createExpression(subExp.getKind(), convertArray(tempExpList));
+								}
 								if (commonMap.containsKey(exp)) {
 									ArrayList<Integer> ary = commonMap.get(exp);
 									ary.add(i);
@@ -959,10 +967,7 @@ public class BoaNormalFormIntrinsics {
 										doubleCountMap.put(exp, Double.parseDouble(literal.getLiteral()));
 								}
 							}
-							else if (literalCount == 1) {
-								// FIXME for case like 3 * x * y
-							}
-							// for case like x * y
+							// for cases like x * y or x * y * z
 							else {
 								negExp = false;
 								if (isNegative(subExp)) {
@@ -989,7 +994,7 @@ public class BoaNormalFormIntrinsics {
 								}
 							}
 						}
-						// regular common terms, negative sign missing
+						// regular common terms
 						else if (results2.get(i) instanceof Expression) {
 							boolean negExp = false;
 							Expression exp = (Expression)results2.get(i);
