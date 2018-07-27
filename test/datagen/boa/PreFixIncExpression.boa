@@ -1,12 +1,14 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "OP_INC",
-      "expressions": [
-         {
-            "kind": "VARACCESS",
-            "variable": "x"
-         }
-      ]
-   }
+   "expressions": [
+      {
+         "kind": "OP_INC",
+         "expressions": [
+            {
+               "kind": "VARACCESS",
+               "variable": "x"
+            }
+         ]
+      }
+   ]
 }

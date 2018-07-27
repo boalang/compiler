@@ -1,25 +1,27 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "ASSIGN",
-      "expressions": [
-         {
-            "kind": "VARACCESS",
-            "variable": "z"
-         },
-         {
-            "kind": "OP_SUB",
-            "expressions": [
-               {
-                  "kind": "VARACCESS",
-                  "variable": "x"
-               },
-               {
-                  "kind": "VARACCESS",
-                  "variable": "y"
-               }
-            ]
-         }
-      ]
-   }
+   "expressions": [
+      {
+         "kind": "ASSIGN",
+         "expressions": [
+            {
+               "kind": "VARACCESS",
+               "variable": "z"
+            },
+            {
+               "kind": "OP_SUB",
+               "expressions": [
+                  {
+                     "kind": "VARACCESS",
+                     "variable": "x"
+                  },
+                  {
+                     "kind": "VARACCESS",
+                     "variable": "y"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
 }

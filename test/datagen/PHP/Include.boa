@@ -2,7 +2,7 @@ namespaces {
   name: ""
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: INCLUDE
       expressions {
         kind: LITERAL
@@ -12,7 +12,7 @@ namespaces {
   }
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: REQUIRE
       expressions {
         kind: LITERAL
@@ -22,7 +22,7 @@ namespaces {
   }
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: INCLUDE_ONCE
       expressions {
         kind: LITERAL
@@ -32,7 +32,7 @@ namespaces {
   }
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: REQUIRE_ONCE
       expressions {
         kind: LITERAL

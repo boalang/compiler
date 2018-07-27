@@ -1,39 +1,41 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "ASSIGN_ADD",
-      "expressions": [
-         {
-            "kind": "VARACCESS",
-            "variable": "x"
-         },
-         {
-            "kind": "LAMBDA",
-            "expressions": [
-               {
-                  "kind": "OP_ADD",
-                  "expressions": [
-                     {
-                        "kind": "VARACCESS",
-                        "variable": "x"
-                     },
-                     {
-                        "kind": "VARACCESS",
-                        "variable": "y"
-                     }
-                  ]
-               }
-            ],
-            "variable_decls": [
-               {
-                  "name": "x",
-                  "variable_type": {
-                     "name": "int",
-                     "kind": "PRIMITIVE"
+   "expressions": [
+      {
+         "kind": "ASSIGN_ADD",
+         "expressions": [
+            {
+               "kind": "VARACCESS",
+               "variable": "x"
+            },
+            {
+               "kind": "LAMBDA",
+               "expressions": [
+                  {
+                     "kind": "OP_ADD",
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "x"
+                        },
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "y"
+                        }
+                     ]
                   }
-               }
-            ]
-         }
-      ]
-   }
+               ],
+               "variable_decls": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "int",
+                        "kind": "PRIMITIVE"
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
 }

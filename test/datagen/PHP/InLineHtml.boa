@@ -2,7 +2,7 @@ namespaces {
   name: ""
   statements {
     kind: INLINE_HTML
-    expression {
+    expressions {
       kind: LITERAL
       literal: "<h1> this is inline html </h1>"
     }

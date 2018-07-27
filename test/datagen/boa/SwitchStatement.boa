@@ -1,9 +1,11 @@
 {
    "kind": "SWITCH",
-   "expression": {
-      "kind": "VARACCESS",
-      "variable": "x"
-   }
+   "expressions": [
+      {
+         "kind": "VARACCESS",
+         "variable": "x"
+      }
+   ]
 },
 {
    "kind": "EMPTY"

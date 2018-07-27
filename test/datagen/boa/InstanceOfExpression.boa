@@ -1,25 +1,27 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "ASSIGN",
-      "expressions": [
-         {
-            "kind": "VARACCESS",
-            "variable": "z"
-         },
-         {
-            "kind": "TYPECOMPARE",
-            "expressions": [
-               {
-                  "kind": "VARACCESS",
-                  "variable": "x"
+   "expressions": [
+      {
+         "kind": "ASSIGN",
+         "expressions": [
+            {
+               "kind": "VARACCESS",
+               "variable": "z"
+            },
+            {
+               "kind": "TYPECOMPARE",
+               "expressions": [
+                  {
+                     "kind": "VARACCESS",
+                     "variable": "x"
+                  }
+               ],
+               "new_type": {
+                  "name": "y",
+                  "kind": "OTHER"
                }
-            ],
-            "new_type": {
-               "name": "y",
-               "kind": "OTHER"
             }
-         }
-      ]
-   }
+         ]
+      }
+   ]
 }

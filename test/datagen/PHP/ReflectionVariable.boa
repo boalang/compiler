@@ -2,9 +2,9 @@ namespaces {
   name: ""
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: REFLECTION
-      expressions {
+      computed_variable {
         kind: VARACCESS
         variable: "x"
         dollar_sign: true

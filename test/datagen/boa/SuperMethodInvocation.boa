@@ -1,7 +1,9 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "METHODCALL",
-      "method": "super.method"
-   }
+   "expressions": [
+      {
+         "kind": "METHODCALL",
+         "method": "super.method"
+      }
+   ]
 }

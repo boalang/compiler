@@ -1,7 +1,9 @@
 {
    "kind": "RETURN",
-   "expression": {
-      "kind": "LITERAL",
-      "literal": "4"
-   }
+   "expressions": [
+      {
+         "kind": "LITERAL",
+         "literal": "4"
+      }
+   ]
 }

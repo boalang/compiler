@@ -1,49 +1,51 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "VARDECL",
-      "variable_decls": [
-         {
-            "name": "division",
-            "variable_type": {
-               "name": "MathOperation",
-               "kind": "OTHER"
-            },
-            "initializer": {
-               "kind": "LAMBDA",
-               "expressions": [
-                  {
-                     "kind": "OP_DIV",
-                     "expressions": [
-                        {
-                           "kind": "VARACCESS",
-                           "variable": "a"
-                        },
-                        {
-                           "kind": "VARACCESS",
-                           "variable": "b"
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "division",
+               "variable_type": {
+                  "name": "MathOperation",
+                  "kind": "OTHER"
+               },
+               "initializer": {
+                  "kind": "LAMBDA",
+                  "expressions": [
+                     {
+                        "kind": "OP_DIV",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "a"
+                           },
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "b"
+                           }
+                        ]
+                     }
+                  ],
+                  "variable_decls": [
+                     {
+                        "name": "a",
+                        "variable_type": {
+                           "name": "int",
+                           "kind": "PRIMITIVE"
                         }
-                     ]
-                  }
-               ],
-               "variable_decls": [
-                  {
-                     "name": "a",
-                     "variable_type": {
-                        "name": "int",
-                        "kind": "PRIMITIVE"
+                     },
+                     {
+                        "name": "b",
+                        "variable_type": {
+                           "name": "int",
+                           "kind": "PRIMITIVE"
+                        }
                      }
-                  },
-                  {
-                     "name": "b",
-                     "variable_type": {
-                        "name": "int",
-                        "kind": "PRIMITIVE"
-                     }
-                  }
-               ]
+                  ]
+               }
             }
-         }
-      ]
-   }
+         ]
+      }
+   ]
 }

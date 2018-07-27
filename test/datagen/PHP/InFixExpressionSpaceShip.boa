@@ -2,7 +2,7 @@ namespaces {
   name: ""
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: OP_THREE_WAY_COMPARE
       expressions {
         kind: LITERAL

@@ -1,11 +1,13 @@
 {
    "kind": "THROW",
-   "expression": {
-      "kind": "NEW",
-      "new_type": {
-         "name": "RuntimeException",
-         "fully_qualified_name": "java.lang.RuntimeException",
-         "kind": "CLASS"
+   "expressions": [
+      {
+         "kind": "NEW",
+         "new_type": {
+            "name": "RuntimeException",
+            "fully_qualified_name": "java.lang.RuntimeException",
+            "kind": "CLASS"
+         }
       }
-   }
+   ]
 }
