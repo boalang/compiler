@@ -7,7 +7,7 @@ namespaces {
       kind: TRAIT_USE
       statements {
         kind: TRAIT_PRECEDENCE
-        expression {
+        expressions {
           kind: TRAIT_PRECEDENCE
           expressions {
             kind: METHOD_REFERENCE
@@ -25,7 +25,7 @@ namespaces {
       }
       statements {
         kind: TRAIT_PRECEDENCE
-        expression {
+        expressions {
           kind: TRAIT_PRECEDENCE
           expressions {
             kind: METHOD_REFERENCE
