@@ -809,10 +809,8 @@ public class BoaNormalFormIntrinsics {
 	@FunctionSpec(name = "reduce", returnType = "Expression", formalParameters = { "Expression" })
 	public static Expression reduce(final Expression e) throws Exception {
 		Object o = internalReduce(e);
-		if (o instanceof Expression) {
-			o = finalReduce((Expression)o);
-			return (Expression)o;
-		}
+		if (o instanceof Expression)
+			return finalReduce((Expression)o);
 		return createLiteral(o.toString());
 	}
 
@@ -842,7 +840,7 @@ public class BoaNormalFormIntrinsics {
 			case LT:
 			case GTEQ:
 			case LTEQ:
-				Expression[] results1 = new Expression[results.size()] ;
+				final Expression[] results1 = new Expression[results.size()] ;
 				for(int i = 0; i < results.size(); i++) {
 					if (results.get(i) instanceof Long || results.get(i) instanceof Double)
 						results1[i] = createLiteral(results.get(i).toString());
@@ -857,44 +855,44 @@ public class BoaNormalFormIntrinsics {
 					final Object o = results.get(0);
 					if (o instanceof Expression)
 						return internalReduce(e.getExpressions(0));
-					if (o instanceof Double)
-						return ((Double)o).doubleValue();
-					return ((Long)o).longValue();
+					return o;
 				}
 
+				// bring children up if the child node is an ADD or SUB
 				for (int i = 0; i < results.size(); i++) {
-					// bring children up if the child node is an add
-					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_ADD) {
+					if (results.get(i) instanceof Expression) {
 						final Expression subExp = (Expression)results.get(i);
-						results.remove(i);
-						for (int j = 0; j < subExp.getExpressionsCount(); j++)
-							results.add(i + j, internalReduce(subExp.getExpressions(j)));
-					}
-					// bring children up if the child node is an sub
-					else if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_SUB) {
-						final Expression subExp = (Expression)results.get(i);
-						if (subExp.getExpressionsCount() > 1) {
-							results.remove(i);
-							for (int j = 0; j < subExp.getExpressionsCount(); j++){
-								if (j == 0)
+						switch (((Expression)results.get(i)).getKind()) {
+							case OP_ADD:
+								results.remove(i);
+								for (int j = 0; j < subExp.getExpressionsCount(); j++)
 									results.add(i + j, internalReduce(subExp.getExpressions(j)));
-								else
-									results.add(i + j, internalReduce(negateExpression(subExp.getExpressions(j))));
-							}
+								break;
+							case OP_SUB:
+								if (subExp.getExpressionsCount() > 1) {
+									results.remove(i);
+
+									results.add(i, internalReduce(subExp.getExpressions(0)));
+									for (int j = 1; j < subExp.getExpressionsCount(); j++)
+										results.add(i + j, internalReduce(negateExpression(subExp.getExpressions(j))));
+								}
+								break;
+							default:
+								break;
 						}
 					}
 				}
 
 				// if multiple arguments, try to add them all together
 				for (final Object o : results) {
-					if (o instanceof Expression)
+					if (o instanceof Expression) {
 						results2.add(o);
-					else if (o instanceof Double) {
+					} else if (o instanceof Double) {
 						dval += ((Double)o).doubleValue();
 						isDouble = true;
-					}
-					else if (o instanceof Long)
+					} else if (o instanceof Long) {
 						ival += ((Long)o).longValue();
+					}
 				}
 
 				// both float and integer results, so merge them into float
@@ -913,12 +911,14 @@ public class BoaNormalFormIntrinsics {
 					// group common terms
 					final Map<Expression, ArrayList<Integer>> commonMap = new LinkedHashMap<Expression, ArrayList<Integer>>();
 					final Map<Expression, Double> doubleCountMap = new LinkedHashMap<Expression, Double>();
+
 					// skip the first term since the first term is always literal
 					for (int i = 1; i < results2.size(); i++) {
 						boolean noLiteral = false;
+
 						// if Mult, like 2 * x
 						if ((results2.get(i) instanceof Expression && ((Expression)results2.get(i)).getKind() == ExpressionKind.OP_MULT)) {
-							Expression subExp = (Expression)results2.get(i);
+							final Expression subExp = (Expression)results2.get(i);
 							int literalCount = 0;
 							int literalIndex = -1;
 							boolean negLiteral = false;
@@ -930,24 +930,22 @@ public class BoaNormalFormIntrinsics {
 									literal = subExp.getExpressions(j);
 									literalCount++;
 									literalIndex = j;
-								}
-								else if (subExp.getExpressions(j).getKind() == ExpressionKind.OP_SUB && ((Expression)negate(subExp.getExpressions(j))).getKind() == ExpressionKind.LITERAL) {
+								} else if (subExp.getExpressions(j).getKind() == ExpressionKind.OP_SUB && ((Expression)negate(subExp.getExpressions(j))).getKind() == ExpressionKind.LITERAL) {
 									literal = (Expression)negate(subExp.getExpressions(j));
 									negLiteral = true;
 									literalCount++;
 									literalIndex = j;
-								}
-								else if (subExp.getExpressions(j).getKind() == ExpressionKind.OP_SUB && ((Expression)subExp.getExpressions(j)).getExpressionsCount() == 1) {
+								} else if (subExp.getExpressions(j).getKind() == ExpressionKind.OP_SUB && ((Expression)subExp.getExpressions(j)).getExpressionsCount() == 1) {
 									negExp = !negExp;
 									exp = (Expression)negate(subExp.getExpressions(j));
-								}
-								else
+								} else {
 									exp = (Expression)subExp.getExpressions(j);
+								}
 							}
 							if (literalCount == 1) {
 								// for cases like 3 * x * y
 								if (subExp.getExpressionsCount() != 2) {
-									List<Object> tempExpList = new ArrayList<Object>();
+									final List<Object> tempExpList = new ArrayList<Object>();
 									for (int j = 0; j < subExp.getExpressionsCount(); j++) {
 										if (j != literalIndex)
 											tempExpList.add(subExp.getExpressions(j));
@@ -955,16 +953,15 @@ public class BoaNormalFormIntrinsics {
 									exp = (Expression)internalReduce(createExpression(subExp.getKind(), convertArray(tempExpList)));
 								}
 								if (commonMap.containsKey(exp)) {
-									ArrayList<Integer> ary = commonMap.get(exp);
+									final ArrayList<Integer> ary = commonMap.get(exp);
 									ary.add(i);
 									commonMap.put(exp, ary);
 									if ((negLiteral || negExp) && !(negLiteral && negExp))
 										doubleCountMap.put(exp, doubleCountMap.get(exp) - Double.parseDouble(literal.getLiteral()));
 									else
 										doubleCountMap.put(exp, doubleCountMap.get(exp) + Double.parseDouble(literal.getLiteral()));
-								}
-								else {
-									ArrayList<Integer> ary = new ArrayList<Integer>();
+								} else {
+									final ArrayList<Integer> ary = new ArrayList<Integer>();
 									ary.add(i);
 									commonMap.put(exp, ary);
 									if ((negLiteral || negExp) && !(negLiteral && negExp))
@@ -974,19 +971,23 @@ public class BoaNormalFormIntrinsics {
 								}
 							}
 							// for cases like x * y or x * y * z
-							else
+							else {
 								noLiteral = true;
+							}
 						}
+
 						// regular common terms
 						if (noLiteral || (results2.get(i) instanceof Expression && ((Expression)results2.get(i)).getKind() != ExpressionKind.OP_MULT)) {
 							boolean negExp = false;
 							Expression exp = (Expression)internalReduce((Expression)results2.get(i));
+
 							if (isNegative(exp)) {
 								negExp = true;
 								exp = (Expression)negate(exp);
 							}
+
 							if (commonMap.containsKey(exp)) {
-								ArrayList<Integer> ary = commonMap.get(exp);
+								final ArrayList<Integer> ary = commonMap.get(exp);
 								ary.add(i);
 								commonMap.put(exp, ary);
 								if (negExp)
@@ -995,7 +996,7 @@ public class BoaNormalFormIntrinsics {
 									doubleCountMap.put(exp, doubleCountMap.get(exp) + 1.0);
 							}
 							else {
-								ArrayList<Integer> ary = new ArrayList<Integer>();
+								final ArrayList<Integer> ary = new ArrayList<Integer>();
 								ary.add(i);
 								commonMap.put(exp, ary);
 								if (negExp)
@@ -1008,14 +1009,17 @@ public class BoaNormalFormIntrinsics {
 
 					// record the repeated index and add common terms at the end
 					boolean[] repeat = new boolean[results2.size()];
-					for (Map.Entry<Expression, ArrayList<Integer>> entry: commonMap.entrySet()) {
-						ArrayList<Integer> ary = entry.getValue();
+
+					for (final Map.Entry<Expression, ArrayList<Integer>> entry : commonMap.entrySet()) {
+						final ArrayList<Integer> ary = entry.getValue();
+
 						if (ary.size() > 1) {
-							Expression o = entry.getKey();
+							final Expression o = entry.getKey();
+
 							// record index
-							for (Integer i : ary) {
+							for (final Integer i : ary)
 								repeat[i] = true;
-							}
+
 							if (doubleCountMap.get(o) != 0.0) {
 								if (doubleCountMap.get(o) == 1.0)
 									results2.add(o);
@@ -1030,10 +1034,9 @@ public class BoaNormalFormIntrinsics {
 					}
 
 					// remove common terms
-					for (int i = repeat.length - 1; i >= 0; i--) {
+					for (int i = repeat.length - 1; i >= 0; i--)
 						if (repeat[i])
 							results2.remove(i);
-					}
 
 					// check for identity
 					if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == 0.0 && results2.size() > 1)
@@ -1058,11 +1061,7 @@ public class BoaNormalFormIntrinsics {
 						return neg;
 					}
 
-					if (o instanceof Expression)
-						return negate(o);
-					if (o instanceof Double)
-						return -((Double)o).doubleValue();
-					return -((Long)o).longValue();
+					return negate(o);
 				}
 
 				// for 2+ term cases, we convert to an OP_ADD with each RHS term negated
@@ -1110,9 +1109,9 @@ public class BoaNormalFormIntrinsics {
 
 				if (results2.size() > 1) {
 					// check for identity
-					if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == 1.0)
+					if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == 1.0) {
 						results2.remove(0);
-					else if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == -1.0) {
+					} else if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == -1.0) {
 						results2.remove(0);
 						results2.set(0, negate(results2.get(0)));
 					}
@@ -1130,7 +1129,7 @@ public class BoaNormalFormIntrinsics {
 					// check for elimination
 					if (results2.get(0) instanceof Double && (Double)results2.get(0) == 0.0)
 						return 0.0;
-					else if (results2.get(0) instanceof Long && (Long)results2.get(0) == 0L)
+					if (results2.get(0) instanceof Long && (Long)results2.get(0) == 0L)
 						return 0L;
 				}
 
@@ -1155,8 +1154,9 @@ public class BoaNormalFormIntrinsics {
 							if (o instanceof Double) {
 								dval *= ((Double)o).doubleValue();
 								isDouble = true;
-							} else if (o instanceof Long)
+							} else if (o instanceof Long) {
 								ival *= ((Long)o).longValue();
+							}
 						}
 					}
 					first = false;
@@ -1315,27 +1315,29 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * Attempts to reduce an expression, simplifying wherever possible.
+	 * Fixes the expression to remove cases like "x + -y", converting them to the proper "x - y" form.
 	 *
 	 * @param e the expression to reduce
-	 * @return the reduced form of the expression, either as a Number or a complex Expression
+	 * @return the reduced form of the expression
 	 */
-	private static Object finalReduce(final Expression e) throws Exception {
+	private static Expression finalReduce(final Expression e) throws Exception {
+		if (e.getExpressionsCount() == 1)
+			return e;
+
 		final List<Object> results = new ArrayList<Object>();
 		for (final Expression sub : e.getExpressionsList())
 			results.add(sub);
+
 		switch (e.getKind()) {
 			case OP_ADD:
-				if (results.size() == 1)
-					return e;
-
 				// resove all + - issues (3 + -x)
-				List<Object> negResult = new ArrayList<Object>();
+				final List<Object> negResult = new ArrayList<Object>();
 				for (int i = results.size() - 1; i >= 0; i--) {
 					if (i == 0 &&
 						((Expression)results.get(i)).getKind() == ExpressionKind.OP_SUB &&
 						((Expression)results.get(i)).getExpressions(0).getKind() == ExpressionKind.LITERAL)
 						break;
+
 					if (isNegative(results.get(i))) {
 						negResult.add(0, negate(results.get(i)));
 						results.remove(i);
@@ -1353,11 +1355,11 @@ public class BoaNormalFormIntrinsics {
 					return createExpression(ExpressionKind.OP_SUB, convertArray(negResult));
 				}
 
-				// return the original expression
-				return e;
+				break;
 			default:
 				break;
 		}
+
 		return e;
 	}
 
@@ -1656,7 +1658,7 @@ public class BoaNormalFormIntrinsics {
 			return simplify(e.getExpressions(0));
 		return simplify(e, null, 0);
 	}
-	
+
 	public static Expression simplify(final Expression e, final ExpressionKind parentKind, final int pos) {
 		switch (e.getKind()) {
 			case PAREN:
@@ -1664,7 +1666,7 @@ public class BoaNormalFormIntrinsics {
 				if (checkPriority(parentKind, sub, pos) > 0)
 					return createExpression(e.getKind(), sub);
 				return sub;
-				
+
 			case LOGICAL_NOT:
 				final Expression inner = simplify(e.getExpressions(0), e.getKind(), 0);
 				if (inner.equals(trueLit)) return Expression.newBuilder(falseLit).build();
@@ -1834,7 +1836,7 @@ public class BoaNormalFormIntrinsics {
 		int priority2 = getPriority(subKind);
 //		String name = subKind.toString();
 //		if (name.startsWith("OP_") && sub.getExpressionsCount() == 1)
-		if (sub.getExpressionsCount() == 1 
+		if (sub.getExpressionsCount() == 1
 				&& (subKind == ExpressionKind.OP_ADD || subKind == ExpressionKind.OP_SUB))
 			priority2 = 0;
 		if (priority2 == 0)
@@ -1870,7 +1872,7 @@ public class BoaNormalFormIntrinsics {
 		case BIT_NOT:
 		case CONDITIONAL:
 			return 0;
-		case OP_DEC: 
+		case OP_DEC:
 		case OP_INC:
 			return 0;
 		case OP_ADD: return 12;
@@ -2058,7 +2060,7 @@ public class BoaNormalFormIntrinsics {
 			final Expression e = exps[i];
 			if (checkPriority(kind, e, i) > 0)
 				b.addExpressions(Expression.newBuilder(createExpression(ExpressionKind.PAREN, e)).build());
-			else 
+			else
 				b.addExpressions(Expression.newBuilder(e).build());
 		}
 		return b.build();
