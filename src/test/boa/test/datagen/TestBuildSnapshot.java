@@ -40,15 +40,6 @@ import boa.types.Diff.ChangedFile;
 
 public class TestBuildSnapshot {
 	
-	@Test
-	public void testBuildSnapshot() throws Exception {
-		DefaultProperties.DEBUG = true;
-		
-		String[] repoNames = new String[]{"candoia/candoia", "boalang/compiler", "junit-team/junit4"};
-		for (String repoName : repoNames)
-			buildCodeRepository(repoName);
-	}
-	
 	@Ignore
 	@Test
 	public void testBuildSnapshotWithTypes() throws Exception {
@@ -82,8 +73,8 @@ public class TestBuildSnapshot {
 	private static Configuration conf = new Configuration();
 	private static FileSystem fileSystem = null;
 	
-	private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
-	private long astWriterLen = 0, contentWriterLen = 0;
+	private static SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
+	private static long astWriterLen = 0, contentWriterLen = 0;
 	
 	@Test
 	public void testGetSnapshotFromProtobuf1() throws Exception {
@@ -136,7 +127,7 @@ public class TestBuildSnapshot {
 		assertThat(fileNames, Matchers.not(Matchers.hasItemInArray("src/org/animals/Bird.java")));
 	}
 
-	private CodeRepository buildCodeRepository(String repoName) throws Exception {
+	static CodeRepository buildCodeRepository(String repoName) throws Exception {
 		fileSystem = FileSystem.get(conf);
 		
 		System.out.println("Repo: " + repoName);
@@ -222,7 +213,7 @@ public class TestBuildSnapshot {
 		return cr;
 	}
 
-	public void openWriters(String base) {
+	public static void openWriters(String base) {
 		long time = System.currentTimeMillis();
 		String suffix = time + ".seq";
 		while (true) {
@@ -246,7 +237,7 @@ public class TestBuildSnapshot {
 		}
 	}
 
-	public void closeWriters() {
+	public static void closeWriters() {
 		while (true) {
 			try {
 				projectWriter.close();

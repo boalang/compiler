@@ -116,9 +116,10 @@ public class TestBuildSnapshotFromSequenceFile {
 	@Test
 	public void testBuildSnapshotFromSeq() throws Exception {
 		File gitDir = new File("dataset/repos/" + repoName);
-		new FileIO.DirectoryRemover(gitDir.getAbsolutePath()).run();
-		String url = "https://github.com/" + repoName + ".git";
-		RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
+		if (!gitDir.exists()) {
+			String url = "https://github.com/" + repoName + ".git";
+			RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
+		}
 		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName);
 		ChangedFile[] snapshot = getSnapshot(dataPath, repoName, index);
 		String[] fileNames = new String[snapshot.length];
@@ -131,7 +132,6 @@ public class TestBuildSnapshotFromSequenceFile {
 		Arrays.sort(expectedFileNames);
 		System.out.println("Test snapshot at " + commitId);
 		assertArrayEquals(expectedFileNames, fileNames);
-		new FileIO.DirectoryRemover(gitDir.getAbsolutePath()).run();
 		conn.close();
 	}
 

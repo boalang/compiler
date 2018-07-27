@@ -153,12 +153,6 @@ public class GitConnector extends AbstractConnector {
 				
 				gc.getChangeFiles(rc);
 				gc.fileNameIndices.clear();
-				Collections.sort(gc.changedFiles, new Comparator<ChangedFile.Builder>() {
-					@Override
-					public int compare(Builder b1, Builder b2) {
-						return b1.getName().compareTo(b2.getName());
-					}
-				});
 				
 				revisionMap.put(gc.id, revisions.size());
 				revisions.add(gc);

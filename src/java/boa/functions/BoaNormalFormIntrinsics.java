@@ -2179,12 +2179,12 @@ public class BoaNormalFormIntrinsics {
 
 		switch (stmt.getKind()) {
 			case RETURN:
-				final Expression exp = stmt.getExpression();
+				final Expression exp = stmt.getExpressions(0);
 				if (!exp.isInitialized())
 					return stmt;
 				final Statement.Builder sb = Statement.newBuilder(stmt);
 				sb.setKind(stmt.getKind());
-				sb.setExpression(normalizeExpression(stmt.getExpression(), normalizedVars));
+				sb.addExpressions(normalizeExpression(stmt.getExpressions(0), normalizedVars));
 				return sb.build();
 
 			case OTHER:

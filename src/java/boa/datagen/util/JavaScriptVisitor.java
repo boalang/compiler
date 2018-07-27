@@ -137,7 +137,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		if (node.isStatement()) {
 			Statement.Builder sb = Statement.newBuilder();
 			sb.setKind(StatementKind.EXPRESSION);
-			sb.setExpression(eb.build());
+			sb.addExpressions(eb.build());
 			statements.peek().add(sb.build());
 		} else {
 			expressions.push(eb.build());
@@ -156,7 +156,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		if (node.getType() == Token.LET) {
 			Statement.Builder sb = boa.types.Ast.Statement.newBuilder();
 			sb.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
-			sb.setExpression(eb.build());
+			sb.addExpressions(eb.build());
 			if (node.getBody() != null) {
 				if (node.getBody() instanceof FunctionNode) {
 					methods.push(new ArrayList<boa.types.Ast.Method>());
@@ -214,7 +214,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 				node.getMemberExprNode().visit(this);
 				Statement.Builder sb = Statement.newBuilder();
 				sb.setKind(Statement.StatementKind.EXPRESSION);
-				sb.setExpression(expressions.pop());
+				sb.addExpressions(expressions.pop());
 				b.addStatements(sb.build());
 			}
 		} else {
@@ -267,7 +267,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 			eb.setKind(ExpressionKind.LITERAL);
 			eb.setLiteral(node.getBreakLabel().getIdentifier());
-			b.setExpression(eb.build());
+			b.addExpressions(eb.build());
 		}
 		list.add(b.build());
 		return false;
@@ -304,7 +304,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 			eb.setKind(ExpressionKind.LITERAL);
 			eb.setLiteral(node.getLabel().getIdentifier());
-			b.setExpression(eb.build());
+			b.addExpressions(eb.build());
 		}
 		list.add(b.build());
 		return false;
@@ -369,7 +369,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		node.getIterator().visit(this);
 		s.addInitializations(expressions.pop());
 		node.getIteratedObject().visit(this);
-		s.setExpression(expressions.pop());
+		s.addExpressions(expressions.pop());
 		list.add(s.build());
 		return false;
 	}
@@ -429,7 +429,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		node.getExpression().visit(this);
-		b.setExpression(expressions.pop());
+		b.addExpressions(expressions.pop());
 		list.add(b.build());
 		return false;
 	}
@@ -439,7 +439,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.WITH);
 		node.getExpression().visit(this);
-		b.setExpression(expressions.pop());
+		b.addExpressions(expressions.pop());
 		if (node.getStatement() instanceof FunctionNode) {
 			methods.push(new ArrayList<boa.types.Ast.Method>());
 			((FunctionNode) node.getStatement()).setFunctionType(FunctionNode.FUNCTION_STATEMENT);
@@ -524,7 +524,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		b.setKind(boa.types.Ast.Statement.StatementKind.RETURN);
 		if (node.getReturnValue() != null) {
 			node.getReturnValue().visit(this);
-			b.setExpression(expressions.pop());
+			b.addExpressions(expressions.pop());
 		}
 		list.add(b.build());
 		return false;
@@ -538,7 +538,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		else {
 			b.setKind(boa.types.Ast.Statement.StatementKind.CASE);
 			node.getExpression().visit(this);
-			b.setExpression(expressions.pop());
+			b.addExpressions(expressions.pop());
 		}
 		if (node.getStatements() != null) {
 			methods.push(new ArrayList<boa.types.Ast.Method>());
@@ -562,7 +562,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.SWITCH);
 		node.getExpression().visit(this);
-		b.setExpression(expressions.pop());
+		b.addExpressions(expressions.pop());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		for (SwitchCase c : node.getCases())
 			c.visit(this);
@@ -577,7 +577,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.THROW);
 		node.getExpression().visit(this);
-		b.setExpression(expressions.pop());
+		b.addExpressions(expressions.pop());
 		list.add(b.build());
 		return false;
 	}

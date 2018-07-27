@@ -294,7 +294,7 @@ public class PHPVisitor extends AbstractVisitor {
 		b.setKind(boa.types.Ast.Statement.StatementKind.BREAK);
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
-			b.setExpression(expressions.pop());
+			b.addExpressions(expressions.pop());
 		}
 		list.add(b.build());
 		return false;
@@ -415,7 +415,7 @@ public class PHPVisitor extends AbstractVisitor {
 			}
 			eb.addVariableDecls(vb);
 		}
-		b.setExpression(eb.build());
+		b.addExpressions(eb.build());
 		list.add(b.build());
 		return false;
 	}
@@ -615,7 +615,7 @@ public class PHPVisitor extends AbstractVisitor {
 		b.setKind(boa.types.Ast.Statement.StatementKind.CONTINUE);
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
-			b.setExpression(expressions.pop());
+			b.addExpressions(expressions.pop());
 		}
 		list.add(b.build());
 		return false;
@@ -698,7 +698,7 @@ public class PHPVisitor extends AbstractVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		node.getExpression().accept(this);
-		b.setExpression(expressions.pop());
+		b.addExpressions(expressions.pop());
 		list.add(b.build());
 		return false;
 	}
@@ -938,7 +938,7 @@ public class PHPVisitor extends AbstractVisitor {
 			}
 			eb.addVariableDecls(vb.build());
 		}
-		b.setExpression(eb.build());
+		b.addExpressions(eb.build());
 		list.add(b.build());
 		return false;
 	}
@@ -950,7 +950,7 @@ public class PHPVisitor extends AbstractVisitor {
 		Expression.Builder eb = Expression.newBuilder();
 		eb.setKind(ExpressionKind.LITERAL);
 		eb.setLiteral(node.getName().getName());
-		b.setExpression(eb.build());
+		b.addExpressions(eb.build());
 		statements.peek().add(b.build());
 		return false;
 	}
@@ -963,7 +963,7 @@ public class PHPVisitor extends AbstractVisitor {
 		Expression.Builder eb = Expression.newBuilder();
 		eb.setKind(Expression.ExpressionKind.LITERAL);
 		eb.setLiteral(node.getLabel().getName());
-		b.setExpression(eb.build());
+		b.addExpressions(eb.build());
 		list.add(b.build());
 		return false;
 	}
@@ -1105,7 +1105,7 @@ public class PHPVisitor extends AbstractVisitor {
 		Expression.Builder eb = Expression.newBuilder();
 		eb.setKind(Expression.ExpressionKind.LITERAL);
 		eb.setLiteral(source);
-		b.setExpression(eb.build());
+		b.addExpressions(eb.build());
 		list.add(b.build());
 		return false;
 	}
@@ -1369,7 +1369,7 @@ public class PHPVisitor extends AbstractVisitor {
 			b.setVariable(((Identifier) node.getName()).getName());
 		else {
 			node.getName().accept(this);
-			b.addExpressions(expressions.pop());
+			b.setComputedVariable(expressions.pop());
 		}
 		expressions.push(b.build());
 		return false;
@@ -1382,7 +1382,7 @@ public class PHPVisitor extends AbstractVisitor {
 		b.setKind(boa.types.Ast.Statement.StatementKind.RETURN);
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
-			b.setExpression(expressions.pop());
+			b.addExpressions(expressions.pop());
 		}
 		list.add(b.build());
 		return false;
@@ -1459,7 +1459,7 @@ public class PHPVisitor extends AbstractVisitor {
 			b.setVariable(((Identifier) node.getField().getName()).getName());
 		else {
 			node.getField().accept(this);
-			b.addExpressions(expressions.pop());
+			b.setComputedVariable(expressions.pop());
 		}
 		expressions.push(b.build());
 		return false;
@@ -1525,7 +1525,7 @@ public class PHPVisitor extends AbstractVisitor {
 			b.setKind(boa.types.Ast.Statement.StatementKind.CASE);
 		if (node.getValue() != null) {
 			node.getValue().accept(this);
-			b.setExpression(expressions.pop());
+			b.addExpressions(expressions.pop());
 		}
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		methods.push(new ArrayList<Method>());
@@ -1546,7 +1546,7 @@ public class PHPVisitor extends AbstractVisitor {
 		b.setKind(boa.types.Ast.Statement.StatementKind.SWITCH);
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
-			b.setExpression(expressions.pop());
+			b.addExpressions(expressions.pop());
 		}
 		methods.push(new ArrayList<Method>());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
@@ -1565,7 +1565,7 @@ public class PHPVisitor extends AbstractVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.THROW);
 		node.getExpression().accept(this);
-		b.setExpression(expressions.pop());
+		b.addExpressions(expressions.pop());
 		list.add(b.build());
 		return false;
 	}
@@ -1630,7 +1630,7 @@ public class PHPVisitor extends AbstractVisitor {
 			b.setVariable(((Identifier) node.getName()).getName());
 		else {
 			node.getName().accept(this);
-			b.addExpressions(expressions.pop());
+			b.setComputedVariable(expressions.pop());
 		}
 		expressions.push(b.build());
 		return false;
@@ -1731,7 +1731,7 @@ public class PHPVisitor extends AbstractVisitor {
 		Statement.Builder b = Statement.newBuilder();
 		b.setKind(StatementKind.TRAIT_ALIAS);
 		node.getAlias().accept(this);
-		b.setExpression(expressions.pop());
+		b.addExpressions(expressions.pop());
 		statements.peek().add(b.build());
 		return false;
 	}
@@ -1798,7 +1798,7 @@ public class PHPVisitor extends AbstractVisitor {
 		Statement.Builder b = Statement.newBuilder();
 		b.setKind(StatementKind.TRAIT_PRECEDENCE);
 		node.getPrecedence().accept(this);
-		b.setExpression(expressions.pop());
+		b.addExpressions(expressions.pop());
 		statements.peek().add(b.build());
 		return false;
 	}

@@ -1025,7 +1025,7 @@ public class JavaVisitor extends ASTVisitor {
 				boa.types.Ast.Statement.Builder sb = boa.types.Ast.Statement.newBuilder();
 				sb.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 				node.getDefault().accept(this);
-				sb.setExpression(expressions.pop());
+				sb.addExpressions(expressions.pop());
 				b.addStatements(sb.build());
 			}
 		}
@@ -1287,7 +1287,7 @@ public class JavaVisitor extends ASTVisitor {
 		b.addConditions(expressions.pop());
 		if (node.getMessage() != null) {
 			node.getMessage().accept(this);
-			b.setExpression(expressions.pop());
+			b.addExpressions(expressions.pop());
 		}
 		list.add(b.build());
 		return false;
@@ -1350,7 +1350,7 @@ public class JavaVisitor extends ASTVisitor {
 			}
 			eb.setLiteral(node.getLabel().getFullyQualifiedName());
 			eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
-			b.setExpression(eb.build());
+			b.addExpressions(eb.build());
 		}
 		list.add(b.build());
 		return false;
@@ -1434,7 +1434,7 @@ public class JavaVisitor extends ASTVisitor {
 				eb.addGenericParameters(tb.build());
 			}
 		}
-		b.setExpression(eb.build());
+		b.addExpressions(eb.build());
 		list.add(b.build());
 		return false;
 	}
@@ -1470,7 +1470,7 @@ public class JavaVisitor extends ASTVisitor {
 			}
 			eb.setLiteral(node.getLabel().getFullyQualifiedName());
 			eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
-			b.setExpression(eb.build());
+			b.addExpressions(eb.build());
 		}
 		list.add(b.build());
 		return false;
@@ -1543,7 +1543,7 @@ public class JavaVisitor extends ASTVisitor {
 		SingleVariableDeclaration ex = node.getParameter();
 		b.setVariableDeclaration(build(ex, TypeKind.OTHER));
 		node.getExpression().accept(this);
-		b.setExpression(expressions.pop());
+		b.addExpressions(expressions.pop());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().accept(this);
 		for (boa.types.Ast.Statement s : statements.pop())
@@ -1569,7 +1569,7 @@ public class JavaVisitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		node.getExpression().accept(this);
-		b.setExpression(expressions.pop());
+		b.addExpressions(expressions.pop());
 		list.add(b.build());
 		return false;
 	}
@@ -1707,7 +1707,7 @@ public class JavaVisitor extends ASTVisitor {
 		}
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		eb.setLiteral(node.getLabel().getFullyQualifiedName());
-		b.setExpression(eb.build());
+		b.addExpressions(eb.build());
 		list.add(b.build());
 		return false;
 	}
@@ -1730,7 +1730,7 @@ public class JavaVisitor extends ASTVisitor {
 		b.setKind(boa.types.Ast.Statement.StatementKind.RETURN);
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
-			b.setExpression(expressions.pop());
+			b.addExpressions(expressions.pop());
 		}
 		list.add(b.build());
 		return false;
@@ -1792,7 +1792,7 @@ public class JavaVisitor extends ASTVisitor {
 				eb.addGenericParameters(tb.build());
 			}
 		}
-		b.setExpression(eb.build());
+		b.addExpressions(eb.build());
 		list.add(b.build());
 		return false;
 	}
@@ -1820,7 +1820,7 @@ public class JavaVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Statement.StatementKind.CASE);
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
-			b.setExpression(expressions.pop());
+			b.addExpressions(expressions.pop());
 		}
 		list.add(b.build());
 		return false;
@@ -1843,7 +1843,7 @@ public class JavaVisitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.SWITCH);
 		node.getExpression().accept(this);
-		b.setExpression(expressions.pop());
+		b.addExpressions(expressions.pop());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		for (Object s : node.statements())
 			((org.eclipse.jdt.core.dom.Statement)s).accept(this);
@@ -1870,7 +1870,7 @@ public class JavaVisitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.SYNCHRONIZED);
 		node.getExpression().accept(this);
-		b.setExpression(expressions.pop());
+		b.addExpressions(expressions.pop());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		for (Object s : node.getBody().statements())
 			((org.eclipse.jdt.core.dom.Statement)s).accept(this);
@@ -1897,7 +1897,7 @@ public class JavaVisitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.THROW);
 		node.getExpression().accept(this);
-		b.setExpression(expressions.pop());
+		b.addExpressions(expressions.pop());
 		list.add(b.build());
 		return false;
 	}
@@ -2006,7 +2006,7 @@ public class JavaVisitor extends ASTVisitor {
 			VariableDeclarationFragment f = (VariableDeclarationFragment) o;
 			eb.addVariableDecls(build(f, node.getType(), node.modifiers(), TypeKind.OTHER));
 		}
-		b.setExpression(eb.build());
+		b.addExpressions(eb.build());
 		list.add(b.build());
 		return false;
 	}
