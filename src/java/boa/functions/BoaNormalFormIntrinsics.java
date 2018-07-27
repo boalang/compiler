@@ -1320,7 +1320,7 @@ public class BoaNormalFormIntrinsics {
 	private static Object finalReduce(final Expression e) throws Exception {
 		final List<Object> results = new ArrayList<Object>();
 		for (final Expression sub : e.getExpressionsList())
-			results.add(internalReduce(sub));
+			results.add(sub);
 		switch (e.getKind()) {
 			case OP_ADD:
 				if (results.size() == 1)
@@ -1329,6 +1329,10 @@ public class BoaNormalFormIntrinsics {
 				// resove all + - issues (3 + -x)
 				List<Object> negResult = new ArrayList<Object>();
 				for (int i = results.size() - 1; i >= 0; i--) {
+					if (i == 0 &&
+						((Expression)results.get(i)).getKind() == ExpressionKind.OP_SUB &&
+						((Expression)results.get(i)).getExpressions(0).getKind() == ExpressionKind.LITERAL)
+						break;
 					if (isNegative(results.get(i))) {
 						negResult.add(0, negate(results.get(i)));
 						results.remove(i);
