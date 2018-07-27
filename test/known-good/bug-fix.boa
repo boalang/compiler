@@ -32,10 +32,11 @@ visit(p, visitor {
 	}
 	before node: Statement ->
 		if (node.kind == StatementKind.IF)
-			visit(node.expression, visitor {
-				before node: Expression ->
-					if (node.kind == ExpressionKind.EQ || node.kind == ExpressionKind.NEQ)
-						exists (i: int; isliteral(node.expressions[i], "null"))
-							count++;
-			});
+			foreach(j: int; def(node.conditions[j]))
+				visit(node.conditions[j], visitor {
+					before node: Expression ->
+						if (node.kind == ExpressionKind.EQ || node.kind == ExpressionKind.NEQ)
+							exists (i: int; isliteral(node.expressions[i], "null"))
+								count++;
+				});
 });
