@@ -911,8 +911,8 @@ public class BoaNormalFormIntrinsics {
 
 				if (results2.size() > 1) {
 					// group common terms
-					HashMap<Expression, ArrayList<Integer>> commonMap = new HashMap<Expression, ArrayList<Integer>>();
-					HashMap<Expression, Double> doubleCountMap = new HashMap<Expression, Double>();
+					final Map<Expression, ArrayList<Integer>> commonMap = new LinkedHashMap<Expression, ArrayList<Integer>>();
+					final Map<Expression, Double> doubleCountMap = new LinkedHashMap<Expression, Double>();
 					// skip the first term since the first term is always literal
 					for (int i = 1; i < results2.size(); i++) {
 						boolean noLiteral = false;
@@ -1065,9 +1065,12 @@ public class BoaNormalFormIntrinsics {
 					return -((Long)o).longValue();
 				}
 
+				// for 2+ term cases, we convert to an OP_ADD with each RHS term negated
+				// e.g., x - 2 - y becomes x + -2 + -y
 				for (int i = 1; i < results.size(); i++)
 					results.set(i, negate(results.get(i)));
 
+				// then we reduce the new OP_ADD
 				return internalReduce(createExpression(ExpressionKind.OP_ADD, convertArray(results)));
 
 			case OP_MULT:
@@ -1704,7 +1707,7 @@ public class BoaNormalFormIntrinsics {
 				// identity
 				// a || false = a
 				if      (e.getKind() == ExpressionKind.LOGICAL_OR)  while (exps.remove(falseLit)) ;
-					// a && true  = a
+				// a && true  = a
 				else if (e.getKind() == ExpressionKind.LOGICAL_AND) while (exps.remove(trueLit)) ;
 
 				// elimination

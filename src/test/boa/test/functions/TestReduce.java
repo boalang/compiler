@@ -374,8 +374,8 @@ public class TestReduce {
 			{ "3 * y - y - x", "2 * y - x"},
 			{ "x + y - y - 2 * y + 3 * x", "4 * x - 2 * y"},
 			{ "2.5 * x - 1.3 * x - 3 * x - y - z + 2 * y - y + 2 * z", "z - 1.8 * x"},
-			{ "x + 2 * x + 2 * (x * y) + (x * 2) * y", "4 * x * y + 3 * x"}, // FIXME order?
-			{ "x + 2 * x + 2 * (y * x) + (x * 2) * y + y * (x * 2)", "2 * x * y + 4 * y * x + 3 * x"}, // FIXME should be "6 * x * y + 3 * x"
+			{ "x + 2 * x + 2 * (x * y) + (x * 2) * y", "3 * x + 4 * x * y"}, // FIXME order?
+			{ "x + 2 * x + 2 * (y * x) + (x * 2) * y + y * (x * 2)", "2 * x * y + 3 * x + 4 * y * x"}, // FIXME should be "6 * x * y + 3 * x"
 			{ "x * y", "x * y"},
 			{ "y * x", "y * x"}, // FIXME should be "x * y"
 			{ "x - y + x - z - 0.5 * x", "1.5 * x - y - z"},
