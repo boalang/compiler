@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Robert Dyer, Mohd Arafat
+ * Copyright 2018, Robert Dyer, Mohd Arafat
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,13 +35,14 @@ import boa.types.Ast.Expression;
  * Test expression normalization
  *
  * @author marafat
+ * @author rdyer
  */
 @RunWith(Parameterized.class)
 public class TestNormalize {
-    @Parameters
+    @Parameters(name = "{index}][{0} = {1}")
     public static Collection<String[]> expressions() {
         return Arrays.asList(new String[][]{
-                //size = 1
+                // size = 1
                 {"a * 10 / -2 > 3 ", "10 * a / 2 < -3"},
                 {"1", "1"},
                 {"a", "a"},
@@ -49,7 +50,8 @@ public class TestNormalize {
                 {"++a", "++a"},
                 {"a[1]", "a[1]"},
                 {"a.func()", "a.func()"},
-                //size = 2
+
+                // size = 2
                 {"b.func() + a", "a + b.func()"},
                 {"b.func() - a", "-a + b.func()"},
                 {"-(a-b)", "-a + b"},
@@ -64,7 +66,8 @@ public class TestNormalize {
                 {"a[1] == true", "a[1] == true"},
                 {"a[1] != ++b", "++b - a[1] != 0"},
                 {"a-- <= func()", "a-- - func() <= 0"},
-                //size = 3
+
+                // size = 3
                 {"b.func() - a - 3", "-a + b.func() - 3"},
                 {"a + 1 > 0", "a > -1"},
                 {"-a + 1 > 0", "a < 1"},
@@ -75,7 +78,7 @@ public class TestNormalize {
                 {"-a + 1 > b", "a + b < 1"},
                 {"0 > b + a", "a + b < 0"},
                 {"b / a > 5", "b / a > 5"},
-                {"a / b / c", "a * c / b"},
+                {"a / b / c", "a / (b * c)"},
                 {"2 / (b + a)", "2 / (a + b)"},
                 {"rcv$.charAt(0) == 0xfeff", "rcv$.charAt(0) == 65279"},
                 {"2 * (b + a)", "2 * (a + b)"},
@@ -84,7 +87,8 @@ public class TestNormalize {
                 {"-a + c <= -func()", "a - c - func() >= 0"},
                 {"a++ - func() >= b", "a++ - b - func() >= 0"},
                 {"--b - a[1] <= func()", "--b - a[1] - func() <= 0"},
-                //size = 4
+
+                // size = 4
                 {"++c + b.func() - a-- - 3", "++c - a-- + b.func() - 3"},
                 {"1 - b[1]*a++ > 3", "a++ * b[1] < -2"},
                 {"b * c * a > 1", "a * b * c > 1"},
@@ -101,7 +105,8 @@ public class TestNormalize {
                 {"3 * 10 / -2 > -a ", "a > 15"},
                 {"3 * -10 / -2 > -a ", "a > -15"},
                 {"3 / b * 2 > -a ", "2 * (3 / b) + a > 0"},
-                //size = 5
+
+                // size = 5
                 {"a * c / 2 * d * b", "a * b * c * d / 2"},
                 {"a*2/(c*(b+c*(x+y/2)))", "2 * a / ((b + c * (x + y / 2)) * c)"},
                 {"c*(d-b)/((a-b)*3)", "(-b + d) * c / (3 * (a - b))"},

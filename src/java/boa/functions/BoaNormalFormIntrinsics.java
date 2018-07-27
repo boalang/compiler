@@ -671,33 +671,29 @@ public class BoaNormalFormIntrinsics {
 
 		switch (expr.getKind()) {
 			case OP_MULT:
-				for(final Expression e: expr.getExpressionsList())
+				for (final Expression e : expr.getExpressionsList())
 					result.addAll(seperateNumDenom(e, type));
 				break;
 
 			case OP_DIV:
-				for(int i = 0; i < expr.getExpressionsCount(); i++) {
-					if(i % 2 == 0)
-						result.addAll(seperateNumDenom(expr.getExpressions(i), 'n'));
-					else
-						result.addAll(seperateNumDenom(expr.getExpressions(i), 'd'));
-				}
+				result.addAll(seperateNumDenom(expr.getExpressions(0), 'n'));
+				for (int i = 1; i < expr.getExpressionsCount(); i++)
+					result.addAll(seperateNumDenom(expr.getExpressions(i), 'd'));
 				break;
 
 			case OP_ADD:
 			case OP_SUB:
 			case PAREN:
 				// these cases will not execute once the expression is fully siimplified
-				final Object[] oo = {normalize(expr), type};
-				result.add(oo);
+				result.add(new Object[] {normalize(expr), type});
 				break;
 
 			default:
-				final Object[] o = {expr, type};
-				result.add(o);
+				result.add(new Object[] {expr, type});
+				break;
 		}
 
-		return  result;
+		return result;
 	}
 
 	/**
