@@ -422,10 +422,11 @@ message Expression {
 	repeated Statement statements = 22;
 	optional bool is_member_access = 23;
 	optional bool dollar_sign = 24;
-	optional Expression computed_method = 25;
-	optional bool is_static = 26;
-	optional bool has_from = 27;
-	optional Method trait = 28;
+	optional Expression computed_variable = 25;
+	optional Expression computed_method = 26;
+	optional bool is_static = 27;
+	optional bool has_from = 28;
+	optional Method trait = 29;
 }
 
 /** A single modifier */

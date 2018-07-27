@@ -1369,7 +1369,7 @@ public class PHPVisitor extends AbstractVisitor {
 			b.setVariable(((Identifier) node.getName()).getName());
 		else {
 			node.getName().accept(this);
-			b.addExpressions(expressions.pop());
+			b.setComputedVariable(expressions.pop());
 		}
 		expressions.push(b.build());
 		return false;
@@ -1459,7 +1459,7 @@ public class PHPVisitor extends AbstractVisitor {
 			b.setVariable(((Identifier) node.getField().getName()).getName());
 		else {
 			node.getField().accept(this);
-			b.addExpressions(expressions.pop());
+			b.setComputedVariable(expressions.pop());
 		}
 		expressions.push(b.build());
 		return false;
@@ -1630,7 +1630,7 @@ public class PHPVisitor extends AbstractVisitor {
 			b.setVariable(((Identifier) node.getName()).getName());
 		else {
 			node.getName().accept(this);
-			b.addExpressions(expressions.pop());
+			b.setComputedVariable(expressions.pop());
 		}
 		expressions.push(b.build());
 		return false;
