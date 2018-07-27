@@ -1,23 +1,25 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "METHODCALL",
-      "method": "m",
-      "method_args": [
-         {
-            "kind": "METHOD_REFERENCE",
-            "literal": "super",
-            "method": "sayHello"
+   "expressions": [
+      {
+         "kind": "METHODCALL",
+         "method": "m",
+         "method_args": [
+            {
+               "kind": "METHOD_REFERENCE",
+               "literal": "super",
+               "method": "sayHello"
+            }
+         ],
+         "declaring_type": {
+            "name": "t",
+            "fully_qualified_name": "t",
+            "kind": "CLASS"
+         },
+         "return_type": {
+            "name": "void",
+            "kind": "PRIMITIVE"
          }
-      ],
-      "declaring_type": {
-         "name": "t",
-         "fully_qualified_name": "t",
-         "kind": "CLASS"
-      },
-      "return_type": {
-         "name": "void",
-         "kind": "PRIMITIVE"
       }
-   }
+   ]
 }

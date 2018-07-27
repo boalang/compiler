@@ -1,17 +1,19 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "ASSIGN",
-      "expressions": [
-         {
-            "kind": "VARACCESS",
-            "variable": "x"
-         },
-         {
-            "kind": "VARACCESS",
-            "variable": "MyClass.x",
-            "is_member_access": true
-         }
-      ]
-   }
+   "expressions": [
+      {
+         "kind": "ASSIGN",
+         "expressions": [
+            {
+               "kind": "VARACCESS",
+               "variable": "x"
+            },
+            {
+               "kind": "VARACCESS",
+               "variable": "MyClass.x",
+               "is_member_access": true
+            }
+         ]
+      }
+   ]
 }

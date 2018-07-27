@@ -3,16 +3,20 @@
    "statements": [
       {
          "kind": "CASE",
-         "expression": {
-            "kind": "LITERAL",
-            "literal": "1"
-         }
+         "expressions": [
+            {
+               "kind": "LITERAL",
+               "literal": "1"
+            }
+         ]
       }
    ],
-   "expression": {
-      "kind": "VARACCESS",
-      "variable": "x"
-   }
+   "expressions": [
+      {
+         "kind": "VARACCESS",
+         "variable": "x"
+      }
+   ]
 },
 {
    "kind": "EMPTY"

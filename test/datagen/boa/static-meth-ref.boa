@@ -1,28 +1,30 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "METHODCALL",
-      "method": "m",
-      "method_args": [
-         {
-            "kind": "METHOD_REFERENCE",
-            "expressions": [
-               {
-                  "kind": "VARACCESS",
-                  "variable": "Person"
-               }
-            ],
-            "method": "compareByAge"
+   "expressions": [
+      {
+         "kind": "METHODCALL",
+         "method": "m",
+         "method_args": [
+            {
+               "kind": "METHOD_REFERENCE",
+               "expressions": [
+                  {
+                     "kind": "VARACCESS",
+                     "variable": "Person"
+                  }
+               ],
+               "method": "compareByAge"
+            }
+         ],
+         "declaring_type": {
+            "name": "t",
+            "fully_qualified_name": "t",
+            "kind": "CLASS"
+         },
+         "return_type": {
+            "name": "void",
+            "kind": "PRIMITIVE"
          }
-      ],
-      "declaring_type": {
-         "name": "t",
-         "fully_qualified_name": "t",
-         "kind": "CLASS"
-      },
-      "return_type": {
-         "name": "void",
-         "kind": "PRIMITIVE"
       }
-   }
+   ]
 }
