@@ -1,4 +1,4 @@
-AddedNullCheck: output collection[string] of int;
+AddedNullCheck: output sum of int;
 p: Project = input;
 
 cur_rev: Revision;
@@ -19,10 +19,7 @@ visit(p, visitor {
 			visit(getast(node));
 
 			if (count > last)
-				if (repo.kind == RepositoryKind.CVS)
-					AddedNullCheck[format("%s/viewvc%s?view=diff&diff_format=h&r1=text&tr1=%d&r2=text&tr2=%d", repo.url, substring(node.name, 6), cur_rev.id, (int(cur_rev.id) - 1))] << (count - last);
-				else
-					AddedNullCheck[format("%s%s?view=diff&diff_format=h&r1=%d&r2=%d", strreplace(repo.url, "svnroot", "viewvc", true), node.name, cur_rev.id, (int(cur_rev.id) - 1))] << (count - last);
+					AddedNullCheck << 1;
 		}
 		if (node.change != ChangeKind.DELETED)
 			files[node.name] = node;
