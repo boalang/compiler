@@ -2,7 +2,7 @@ namespaces {
   name: ""
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: VARDECL
       variable_decls {
         name: "text"
@@ -19,7 +19,7 @@ namespaces {
   }
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: VARDECL
       variable_decls {
         name: "i"
@@ -36,7 +36,7 @@ namespaces {
       kind: SCOPE
       statements {
         kind: EXPRESSION
-        expression {
+        expressions {
           kind: ASSIGN_ADD
           expressions {
             kind: VARACCESS

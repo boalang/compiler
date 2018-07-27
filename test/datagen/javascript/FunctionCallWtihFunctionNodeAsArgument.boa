@@ -2,7 +2,7 @@ namespaces {
   name: ""
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: VARDECL
       variable_decls {
         name: "p"
@@ -45,7 +45,7 @@ namespaces {
   }
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: VARDECL
       variable_decls {
         name: "m"
@@ -75,7 +75,7 @@ namespaces {
                 kind: BLOCK
                 statements {
                   kind: RETURN
-                  expression {
+                  expressions {
                     kind: OP_ADD
                     expressions {
                       kind: VARACCESS

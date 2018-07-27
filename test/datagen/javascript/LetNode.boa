@@ -5,7 +5,7 @@ namespaces {
     statements {
       kind: BLOCK
     }
-    expression {
+    expressions {
       kind: VARDECL
       variable_decls {
         name: "x"

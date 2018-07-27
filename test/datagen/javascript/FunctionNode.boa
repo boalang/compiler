@@ -6,7 +6,7 @@ namespaces {
       kind: BLOCK
       statements {
         kind: EXPRESSION
-        expression {
+        expressions {
           kind: ASSIGN
           expressions {
             kind: VARACCESS

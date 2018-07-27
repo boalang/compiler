@@ -2,7 +2,7 @@ namespaces {
   name: ""
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: ASSIGN_ADD
       expressions {
         kind: VARACCESS
