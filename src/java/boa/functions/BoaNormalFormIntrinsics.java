@@ -808,9 +808,11 @@ public class BoaNormalFormIntrinsics {
 	 */
 	@FunctionSpec(name = "reduce", returnType = "Expression", formalParameters = { "Expression" })
 	public static Expression reduce(final Expression e) throws Exception {
-		final Object o = internalReduce(e);
-		if (o instanceof Expression)
+		Object o = internalReduce(e);
+		if (o instanceof Expression) {
+			o = finalReduce((Expression)o);
 			return (Expression)o;
+		}
 		return createLiteral(o.toString());
 	}
 
@@ -1307,6 +1309,49 @@ public class BoaNormalFormIntrinsics {
 				}
 				return b.build();
 		}
+	}
+
+	/**
+	 * Attempts to reduce an expression, simplifying wherever possible.
+	 *
+	 * @param e the expression to reduce
+	 * @return the reduced form of the expression, either as a Number or a complex Expression
+	 */
+	private static Object finalReduce(final Expression e) throws Exception {
+		final List<Object> results = new ArrayList<Object>();
+		for (final Expression sub : e.getExpressionsList())
+			results.add(internalReduce(sub));
+		switch (e.getKind()) {
+			case OP_ADD:
+				if (results.size() == 1)
+					return e;
+
+				// resove all + - issues (3 + -x)
+				List<Object> negResult = new ArrayList<Object>();
+				for (int i = results.size() - 1; i >= 0; i--) {
+					if (isNegative(results.get(i))) {
+						negResult.add(0, negate(results.get(i)));
+						results.remove(i);
+					}
+				}
+
+				// append the neg terms to the end and return whole as OP_SUB
+				if (negResult.size() > 0) {
+					if (results.size() == 0)
+						negResult.set(0, negate(negResult.get(0)));
+					else if (results.size() == 1)
+						negResult.add(0, results.get(0));
+					else
+						negResult.add(0, createExpression(e.getKind(), convertArray(results)));
+					return createExpression(ExpressionKind.OP_SUB, convertArray(negResult));
+				}
+
+				// return the original expression
+				return e;
+			default:
+				break;
+		}
+		return e;
 	}
 
 	/**
