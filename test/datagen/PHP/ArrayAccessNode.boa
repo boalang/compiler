@@ -2,7 +2,7 @@ namespaces {
   name: ""
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: ARRAYACCESS
       expressions {
         kind: VARACCESS
@@ -17,7 +17,7 @@ namespaces {
   }
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: ARRAYACCESS
       expressions {
         kind: VARACCESS
@@ -32,7 +32,7 @@ namespaces {
   }
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: ARRAYACCESS
       expressions {
         kind: ARRAYACCESS

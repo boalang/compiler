@@ -153,12 +153,6 @@ public class GitConnector extends AbstractConnector {
 				
 				gc.getChangeFiles(rc);
 				gc.fileNameIndices.clear();
-				Collections.sort(gc.changedFiles, new Comparator<ChangedFile.Builder>() {
-					@Override
-					public int compare(Builder b1, Builder b2) {
-						return b1.getName().compareTo(b2.getName());
-					}
-				});
 				
 				revisionMap.put(gc.id, revisions.size());
 				revisions.add(gc);
@@ -252,5 +246,27 @@ public class GitConnector extends AbstractConnector {
 		}
 		tw.close();
 		return snapshot;
+	}
+	
+	public List<String> logCommitIds() {
+		List<String> commits = new ArrayList<String>();
+		RevWalk temprevwalk = new RevWalk(repository);
+		try {
+			revwalk.reset();
+			Set<RevCommit> heads = getHeads();
+			revwalk.markStart(heads);
+			revwalk.sort(RevSort.TOPO, true);
+			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
+			revwalk.sort(RevSort.REVERSE, true);
+			
+			for (final RevCommit rc: revwalk)
+				commits.add(rc.getName());
+		} catch (final IOException e) {
+			e.printStackTrace();
+		} finally {
+			temprevwalk.dispose();
+			temprevwalk.close();
+		}
+		return commits;
 	}
 }

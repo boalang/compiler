@@ -4,7 +4,7 @@ namespaces {
     kind: LABEL
     statements {
       kind: EXPRESSION
-      expression {
+      expressions {
         kind: VARDECL
         variable_decls {
           name: "x"

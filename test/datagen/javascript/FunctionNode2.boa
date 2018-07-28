@@ -20,7 +20,7 @@ namespaces {
       kind: BLOCK
       statements {
         kind: RETURN
-        expression {
+        expressions {
           kind: OP_ADD
           expressions {
             kind: VARACCESS

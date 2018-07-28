@@ -1,42 +1,44 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "VARDECL",
-      "variable_decls": [
-         {
-            "name": "x",
-            "variable_type": {
-               "name": "int[]",
-               "fully_qualified_name": "int[]",
-               "kind": "ARRAY"
-            },
-            "initializer": {
-               "kind": "ARRAYINIT",
-               "expressions": [
-                  {
-                     "kind": "LITERAL",
-                     "literal": "0"
-                  },
-                  {
-                     "kind": "LITERAL",
-                     "literal": "1"
-                  },
-                  {
-                     "kind": "LITERAL",
-                     "literal": "2"
-                  },
-                  {
-                     "kind": "LITERAL",
-                     "literal": "3"
-                  }
-               ],
-               "return_type": {
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "x",
+               "variable_type": {
                   "name": "int[]",
                   "fully_qualified_name": "int[]",
                   "kind": "ARRAY"
+               },
+               "initializer": {
+                  "kind": "ARRAYINIT",
+                  "expressions": [
+                     {
+                        "kind": "LITERAL",
+                        "literal": "0"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "2"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "3"
+                     }
+                  ],
+                  "return_type": {
+                     "name": "int[]",
+                     "fully_qualified_name": "int[]",
+                     "kind": "ARRAY"
+                  }
                }
             }
-         }
-      ]
-   }
+         ]
+      }
+   ]
 }

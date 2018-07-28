@@ -2,7 +2,7 @@ namespaces {
   name: ""
   statements {
     kind: THROW
-    expression {
+    expressions {
       kind: LITERAL
       literal: "throw example"
     }

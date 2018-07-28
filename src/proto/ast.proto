@@ -262,18 +262,17 @@ message Statement {
 	repeated Expression updates = 6;
 	optional Variable variable_declaration = 7;
 	optional Declaration type_declaration = 8;
-	optional Expression expression = 9;
-	repeated Expression expressions = 10;
+	repeated Expression expressions = 9;
 	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
-	optional ChangeKind change_kind = 11;
+	optional ChangeKind change_kind = 10;
 	/** the key of the mapped node in the previous version */
-	optional int32 mapped_node = 12;
+	optional int32 mapped_node = 11;
 	/** */
-	optional int32 key = 13;
-	repeated Method methods = 14;
-	repeated Variable variable_declarations = 15;
-	repeated Declaration type_declarations = 16;
-	repeated string names = 17;
+	optional int32 key = 12;
+	repeated Method methods = 13;
+	repeated Variable variable_declarations = 14;
+	repeated Declaration type_declarations = 15;
+	repeated string names = 16;
 }
 
 /** A single expression */
@@ -423,10 +422,11 @@ message Expression {
 	repeated Statement statements = 22;
 	optional bool is_member_access = 23;
 	optional bool dollar_sign = 24;
-	optional Expression computed_method = 25;
-	optional bool is_static = 26;
-	optional bool has_from = 27;
-	optional Method trait = 28;
+	optional Expression computed_variable = 25;
+	optional Expression computed_method = 26;
+	optional bool is_static = 27;
+	optional bool has_from = 28;
+	optional Method trait = 29;
 }
 
 /** A single modifier */

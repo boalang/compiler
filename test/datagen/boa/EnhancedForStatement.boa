@@ -12,10 +12,12 @@
          "kind": "PRIMITIVE"
       }
    },
-   "expression": {
-      "kind": "VARACCESS",
-      "variable": "intList"
-   }
+   "expressions": [
+      {
+         "kind": "VARACCESS",
+         "variable": "intList"
+      }
+   ]
 },
 {
    "kind": "EMPTY"

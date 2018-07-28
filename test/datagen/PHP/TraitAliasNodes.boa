@@ -7,7 +7,7 @@ namespaces {
       kind: TRAIT_USE
       statements {
         kind: TRAIT_ALIAS
-        expression {
+        expressions {
           kind: TRAIT_ALIAS
           method: "thing"
           trait {

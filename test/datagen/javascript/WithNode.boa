@@ -6,7 +6,7 @@ namespaces {
       kind: SCOPE
       statements {
         kind: EXPRESSION
-        expression {
+        expressions {
           kind: METHODCALL
           expressions {
             kind: VARACCESS
@@ -20,7 +20,7 @@ namespaces {
         }
       }
     }
-    expression {
+    expressions {
       kind: VARACCESS
       variable: "o"
     }

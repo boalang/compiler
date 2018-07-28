@@ -1,9 +1,11 @@
 {
    "kind": "SYNCHRONIZED",
-   "expression": {
-      "kind": "VARACCESS",
-      "variable": "y"
-   }
+   "expressions": [
+      {
+         "kind": "VARACCESS",
+         "variable": "y"
+      }
+   ]
 },
 {
    "kind": "EMPTY"

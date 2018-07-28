@@ -2,7 +2,7 @@ namespaces {
   name: ""
   statements {
     kind: GLOBAL
-    expression {
+    expressions {
       kind: VARDECL
       variable_decls {
         name: "a"
