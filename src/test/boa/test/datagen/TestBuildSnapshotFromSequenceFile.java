@@ -184,7 +184,7 @@ public class TestBuildSnapshotFromSequenceFile {
 						if (index == -1)
 							snapshot = BoaIntrinsics.getSnapshot(cr);
 						else
-							snapshot = BoaIntrinsics.getSnapshot(cr, index);
+							snapshot = BoaIntrinsics.getSnapshotByIndex(cr, index);
 						context.write(key, new IntWritable(1));
 					} catch (Exception e) {
 						e.printStackTrace();

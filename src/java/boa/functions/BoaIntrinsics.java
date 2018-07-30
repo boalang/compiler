@@ -102,14 +102,16 @@ public class BoaIntrinsics {
 		if (getRevisionsCount(cr) == 0)
 			return new ChangedFile[0];
 		int revisionOffset = getRevisionIndex(cr, timestamp);
-		return getSnapshot(cr, revisionOffset, kinds);
+		return getSnapshotByIndex(cr, revisionOffset, kinds);
 	}
 	
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final int commitOffset) {
-		return getSnapshot(cr, commitOffset, new String[0]);
+	@FunctionSpec(name = "getsnapshotbyindex", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "int"})
+	public static ChangedFile[] getSnapshotByIndex(final CodeRepository cr, final int commitOffset) {
+		return getSnapshotByIndex(cr, commitOffset, new String[0]);
 	}
 
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final int commitOffset, final String... kinds) {
+	@FunctionSpec(name = "getsnapshotbyindex", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "int", "string..." })
+	public static ChangedFile[] getSnapshotByIndex(final CodeRepository cr, final int commitOffset, final String... kinds) {
 		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
 		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>(); 
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
@@ -207,19 +209,19 @@ public class BoaIntrinsics {
 		return false;
 	}
 	
-//	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string" })
+	@FunctionSpec(name = "getsnapshotbyid", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string" })
 	public static ChangedFile[] getSnapshotById(final CodeRepository cr, final String id) {
 		return getSnapshotById(cr, id, new String[0]);
 	}
 	
-//	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string", "string..." })
+	@FunctionSpec(name = "getsnapshotbyid", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string", "string..." })
 	public static ChangedFile[] getSnapshotById(final CodeRepository cr, final String id, final String... kinds) {
 		if (getRevisionsCount(cr) == 0)
 			return new ChangedFile[0];
 		int revisionOffset = getRevisionIndex(cr, id);
 		if (revisionOffset < 0)
 			return new ChangedFile[0];
-		return getSnapshot(cr, revisionOffset, kinds);
+		return getSnapshotByIndex(cr, revisionOffset, kinds);
 	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string..." })
