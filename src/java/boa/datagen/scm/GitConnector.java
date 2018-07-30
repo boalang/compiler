@@ -128,14 +128,13 @@ public class GitConnector extends AbstractConnector {
 			int i = 0;
 			long maxTime = 1000;
 			int count = 0;
-			for (@SuppressWarnings("unused") RevCommit rc : revwalk)
-				count ++;
-			if (count > MaxCommit){
-				System.err.println(projectName + " has " + count + " commits exceeding Max_Commit size of " + MaxCommit);
-				return;
-			}
 			for (final RevCommit rc: revwalk) {
 				i++;
+				count ++;
+				if (count > MaxCommit){
+					System.err.println(projectName + " has " + count + " commits exceeding Max_Commit size of " + MaxCommit);
+					return;
+				}
 				long startTime = System.currentTimeMillis();
 				
 				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName);
