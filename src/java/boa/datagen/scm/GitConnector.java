@@ -20,8 +20,6 @@ package boa.datagen.scm;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -42,8 +40,8 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
 
-import boa.types.Diff.ChangedFile;
-import boa.types.Diff.ChangedFile.Builder;
+import boa.datagen.DefaultProperties;
+
 
 /**
  * @author rdyer
@@ -51,6 +49,7 @@ import boa.types.Diff.ChangedFile.Builder;
  */
 public class GitConnector extends AbstractConnector {
 
+	private static final int MaxCommit = Integer.valueOf(DefaultProperties.MAX_COMMITS);
 	private Repository repository;
 	private Git git;
 	private RevWalk revwalk;
@@ -128,6 +127,13 @@ public class GitConnector extends AbstractConnector {
 			
 			int i = 0;
 			long maxTime = 1000;
+			int count = 0;
+			for (@SuppressWarnings("unused") RevCommit rc : revwalk)
+				count ++;
+			if (count > MaxCommit){
+				System.err.println(projectName + " has " + count + " commits exceeding Max_Commit size of " + MaxCommit);
+				return;
+			}
 			for (final RevCommit rc: revwalk) {
 				i++;
 				long startTime = System.currentTimeMillis();
