@@ -28,7 +28,7 @@ public class DefaultProperties {
 	public static String MAX_COMMITS = "100000";
 	
 	public static String MAX_SIZE_FOR_PROJECT_WITH_COMMITS = String.valueOf(Integer.MAX_VALUE / 16); // Integer.MAX_VALUE / 3
-	public static boolean DEBUG = false, DEBUGPARSE = false, CACHE = false, TREEDIF = false;
+	public static boolean DEBUG = false, DEBUGPARSE = false, CACHE = false;
 
 	// HBase tables
 	public static final String HBASE_PROJECTS_TABLE = "projects";

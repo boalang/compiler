@@ -100,9 +100,6 @@ public class SeqCombiner {
 							for (Revision.Builder rb : crb.getRevisionsBuilderList()) {
 								for (ChangedFile.Builder cfb : rb.getFilesBuilderList()) {
 									cfb.setKey(lastAstWriterKey + cfb.getKey());
-									long mappedKey = cfb.getMappedKey();
-									if (mappedKey != -1)
-										cfb.setMappedKey(lastAstWriterKey + mappedKey);
 								}
 							}
 						} else {
