@@ -526,11 +526,8 @@ public abstract class AbstractCommit {
 				BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 				connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 				connector.astWriterLen += bw.getLength();
-			}  catch (Exception e) {
-				if (debug) {
-					System.err.println("ast write error with " + projectName);
-					e.printStackTrace();
-				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 		return !errorCheck.hasError;
@@ -584,11 +581,8 @@ public abstract class AbstractCommit {
 					BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 					connector.astWriterLen += bw.getLength();
-				}  catch (Exception e) {
-					if (debug) {
-						System.err.println("ast write error with " + projectName);
-						e.printStackTrace();
-					}
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 				// fb.setComments(comments);
 			}
@@ -736,11 +730,9 @@ public abstract class AbstractCommit {
 						BytesWritable bw = new BytesWritable(preAst.build().toByteArray());
 						connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 						connector.astWriterLen += bw.getLength();
-					} catch (Exception e) {
-						if (debug) {
-							System.err.println("ast write error with "  + projectName);
+					} catch (IOException e) {
+						if (debug)
 							e.printStackTrace();
-						}
 						plen = Long.MAX_VALUE;
 					}
 				}
