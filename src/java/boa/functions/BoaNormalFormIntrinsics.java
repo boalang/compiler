@@ -1080,23 +1080,25 @@ public class BoaNormalFormIntrinsics {
 					}
 
 				// if multiple arguments, try to multiply them all together
-				for (Object o : results) {
-					if (o instanceof Expression)
+				for (final Object o : results) {
+					if (o instanceof Expression) {
 						results2.add(o);
-					else if (o instanceof Double)
+					} else if (o instanceof Double) {
 						dval *= ((Double)o).doubleValue();
-					else if (o instanceof Long)
+						isDouble = true;
+					} else if (o instanceof Long) {
 						ival *= ((Long)o).longValue();
+					}
 				}
 
 				// both float and integer results, so merge them into float
-				if (dval != 1.0 && ival != 1L) {
+				if (isDouble) {
 					dval *= ival;
 					ival = 1L;
 				}
 
 				// after merging, add the one that remains to results
-				if (dval != 1.0)
+				if (isDouble)
 					results2.add(0, dval);
 				else
 					results2.add(0, ival);
@@ -1117,8 +1119,6 @@ public class BoaNormalFormIntrinsics {
 							positive = !positive;
 							results2.set(i, negate(results2.get(i)));
 						}
-					if (!positive)
-						results2.set(0, negate(results2.get(0)));
 
 					// check for elimination
 					if (results2.get(0) instanceof Double && (Double)results2.get(0) == 0.0)
@@ -1129,74 +1129,77 @@ public class BoaNormalFormIntrinsics {
 					// simplify terms and literal
 					dval = 1.0;
 					ival = 1L;
-					boolean negative = isNegative(results2.get(0));
-					boolean hasNumLiteral = negative ? negate(results2.get(0)) instanceof Number : results2.get(0) instanceof Number;
-					if (negative) results2.set(0, negate(results2.get(0)));
+
+					boolean negative = !positive;
+					boolean hasNumLiteral = results2.get(0) instanceof Number;
 					boolean[] cancelTerms = new boolean[results2.size()];
-					Map<Expression, ArrayList<Integer>> numMap = new LinkedHashMap<Expression, ArrayList<Integer>>();
-					Map<Expression, ArrayList<Integer>> denMap = new LinkedHashMap<Expression, ArrayList<Integer>>();
-					for (int i = 0; i < results2.size(); i++) {
-						if (results2.get(i) instanceof Expression) {
-							Expression subExp = (Expression)results2.get(i);
-							// if the term is like 1 / x or 1 / 2
-							if (subExp.getKind() == ExpressionKind.OP_DIV && subExp.getExpressions(0).getKind() == ExpressionKind.LITERAL) {
-								// if denominator is a number (1 / 2)
-								if (subExp.getExpressions(1).getKind() == ExpressionKind.LITERAL) {
-									Object literal = internalReduce(subExp.getExpressions(1));
-									if (literal instanceof Double)
-										dval *= ((Double)literal).doubleValue();
-									else
-										ival *= ((Long)literal).longValue();
-									cancelTerms[i] = true;
-								// if regular denominator term
+
+					final Map<Expression, List<Integer>> numMap = new LinkedHashMap<Expression, List<Integer>>();
+					final Map<Expression, List<Integer>> denMap = new LinkedHashMap<Expression, List<Integer>>();
+
+					for (int i = hasNumLiteral ? 1 : 0; i < results2.size(); i++) {
+						final Expression subExp = (Expression)results2.get(i);
+
+						// if the term is like 1 / x or 1 / 2
+						if (subExp.getKind() == ExpressionKind.OP_DIV && subExp.getExpressions(0).getKind() == ExpressionKind.LITERAL) {
+							// if denominator is a number (1 / 2)
+							if (subExp.getExpressions(1).getKind() == ExpressionKind.LITERAL) {
+								final Object literal = internalReduce(subExp.getExpressions(1));
+								if (literal instanceof Double) {
+									dval *= ((Double)literal).doubleValue();
+									isDouble = true;
 								} else {
-									// if able to cancel
-									Expression subExp2 = subExp.getExpressions(1);
-									if (numMap.containsKey(subExp2)) {
-										ArrayList<Integer> aryList = numMap.get(subExp2);
-										cancelTerms[aryList.get(0)] = true;
-										cancelTerms[i] = true;
-										aryList.remove(0);
-										if (aryList.size() > 0)
-											numMap.put(subExp2, aryList);
-										else
-											numMap.remove(subExp2);
-									} else {
-										if (denMap.containsKey(subExp2)) {
-											ArrayList<Integer> aryList = denMap.get(subExp2);
-											aryList.add(i);
-											denMap.put(subExp2, aryList);
-										} else {
-											ArrayList<Integer> aryList = new ArrayList<Integer>();
-											aryList.add(i);
-											denMap.put(subExp2, aryList);
-										}
-									}
+									ival *= ((Long)literal).longValue();
 								}
-							// if regular term like x or y
+								cancelTerms[i] = true;
+							// if regular denominator term
 							} else {
 								// if able to cancel
-								if (results2.get(i) instanceof Expression) {
-									Expression subExp2 = (Expression) results2.get(i);
+								final Expression subExp2 = subExp.getExpressions(1);
+								if (numMap.containsKey(subExp2)) {
+									final List<Integer> aryList = numMap.get(subExp2);
+									cancelTerms[aryList.get(0)] = true;
+									cancelTerms[i] = true;
+									aryList.remove(0);
+									if (aryList.size() > 0)
+										numMap.put(subExp2, aryList);
+									else
+										numMap.remove(subExp2);
+								} else {
 									if (denMap.containsKey(subExp2)) {
-										ArrayList<Integer> aryList = denMap.get(subExp2);
-										cancelTerms[aryList.get(0)] = true;
-										cancelTerms[i] = true;
-										aryList.remove(0);
-										if (aryList.size() > 0)
-											denMap.put(subExp, aryList);
-										else
-											denMap.remove(subExp2);
+										final List<Integer> aryList = denMap.get(subExp2);
+										aryList.add(i);
+										denMap.put(subExp2, aryList);
 									} else {
-										if (numMap.containsKey(subExp2)) {
-											ArrayList<Integer> aryList = numMap.get(subExp2);
-											aryList.add(i);
-											numMap.put(subExp2, aryList);
-										} else {
-											ArrayList<Integer> aryList = new ArrayList<Integer>();
-											aryList.add(i);
-											numMap.put(subExp2, aryList);
-										}
+										final List<Integer> aryList = new ArrayList<Integer>();
+										aryList.add(i);
+										denMap.put(subExp2, aryList);
+									}
+								}
+							}
+						// if regular term like x or y
+						} else {
+							// if able to cancel
+							if (results2.get(i) instanceof Expression) {
+								final Expression subExp2 = (Expression) results2.get(i);
+								if (denMap.containsKey(subExp2)) {
+									final List<Integer> aryList = denMap.get(subExp2);
+									cancelTerms[aryList.get(0)] = true;
+									cancelTerms[i] = true;
+									aryList.remove(0);
+									if (aryList.size() > 0)
+										denMap.put(subExp, aryList);
+									else
+										denMap.remove(subExp2);
+								} else {
+									if (numMap.containsKey(subExp2)) {
+										final List<Integer> aryList = numMap.get(subExp2);
+										aryList.add(i);
+										numMap.put(subExp2, aryList);
+									} else {
+										final List<Integer> aryList = new ArrayList<Integer>();
+										aryList.add(i);
+										numMap.put(subExp2, aryList);
 									}
 								}
 							}
@@ -1207,13 +1210,13 @@ public class BoaNormalFormIntrinsics {
 						if (cancelTerms[i])
 							results2.remove(i);
 
-					if (dval != 1.0 && ival != 1L) {
+					if (isDouble) {
 						dval *= ival;
 						ival = 1L;
 					}
 
-					if (hasNumLiteral && (dval != 1.0 || ival != 1)) {
-						Object numLiteral = results2.get(0);
+					if (hasNumLiteral && (dval != 1.0 || ival != 1L)) {
+						final Object numLiteral = results2.get(0);
 						Number num = null;
 						if (dval != 1.0)
 							num = ((Number)numLiteral).doubleValue() / dval;
@@ -1228,20 +1231,24 @@ public class BoaNormalFormIntrinsics {
 					} else {
 						if (dval != 1.0)
 							results2.add(createExpression(ExpressionKind.OP_DIV, createLiteral("1"), createLiteral("" + dval)));
-						else if (ival != 1)
+						else if (ival != 1L)
 							results2.add(createExpression(ExpressionKind.OP_DIV, createLiteral("1"), createLiteral("" + ival)));
 					}
 
-					if (results2.size() == 0)
-						return negative ? negate(1L) : 1L;
+					if (results2.size() == 0) {
+						if (isDouble)
+							return negative ? -1.0 : 1.0;
+						return negative ? -1L : 1L;
+					}
 
 					if (results2.size() > 0 && negative) {
 						if (results2.get(0) instanceof Expression && ((Expression)results2.get(0)).getKind() == ExpressionKind.OP_DIV) {
 							b = Expression.newBuilder((Expression)results2.get(0));
 							b.setExpressions(0, (Expression)negate(b.getExpressions(0)));
 							results2.set(0, b.build());
-						} else
+						} else {
 							results2.set(0, negate(results2.get(0)));
+						}
 					}
 				}
 
@@ -1251,16 +1258,10 @@ public class BoaNormalFormIntrinsics {
 				return createExpression(e.getKind(), convertArray(results2));
 
 			case OP_DIV:
-				if (results.size() == 2 &&
-					!(results.get(0) instanceof Expression)
-					&& (!(results.get(1) instanceof Expression)
-						||((Expression)results.get(1)).getKind()
-						!= ExpressionKind.OP_MULT)) {
-					if (results.get(0) instanceof Double && ((Double)results.get(0)).doubleValue() == 1.0)
-						return e;
-					else if (results.get(0) instanceof Long && ((Long)results.get(0)).longValue() == 1L)
-						return e;
-				}
+				if (results.size() == 2 && !(results.get(0) instanceof Expression))
+					if (((Number)results.get(0)).doubleValue() == 1.0 || ((Number)results.get(0)).doubleValue() == -1.0)
+						if (!(results.get(1) instanceof Expression) || ((Expression)results.get(1)).getKind() != ExpressionKind.OP_MULT)
+							return e;
 
 				int count = 0;
 				for (int i = 1; i < results.size(); i++) {
@@ -1434,7 +1435,7 @@ public class BoaNormalFormIntrinsics {
 
 				// simplify denominatorList
 				if (denominatorList.size() > 1) {
-					Object multDiv = internalReduce(createExpression(ExpressionKind.OP_MULT, convertArray(denominatorList)));
+					final Object multDiv = internalReduce(createExpression(ExpressionKind.OP_MULT, convertArray(denominatorList)));
 					denominatorList.clear();
 					if (multDiv instanceof Expression)
 						for (final Expression sub : ((Expression)multDiv).getExpressionsList())
@@ -1457,18 +1458,19 @@ public class BoaNormalFormIntrinsics {
 					else {
 						if (results.size() == 0)
 							results.add(createLiteral("1"));
-						Object multDiv = createExpression(ExpressionKind.OP_MULT, convertArray(denominatorList));
+						final Object multDiv = createExpression(ExpressionKind.OP_MULT, convertArray(denominatorList));
 						if (results.size() == 1) {
 							results.add(multDiv);
 							return createExpression(ExpressionKind.OP_DIV, convertArray(results));
 						} else {
-							Expression mult = createExpression(e.getKind(), convertArray(results));
+							final Expression mult = createExpression(e.getKind(), convertArray(results));
 							return createExpression(ExpressionKind.OP_DIV, mult, (Expression)multDiv);
 						}
 
 					}
 				}
 				break;
+
 			case OP_DIV:
 				int count = 0;
 				for (int i = 1; i < results.size(); i++) {
@@ -1480,6 +1482,7 @@ public class BoaNormalFormIntrinsics {
 				if (count % 2 == 1)
 					results.set(0, negate(results.get(0)));
 				return createExpression(e.getKind(), convertArray(results));
+
 			default:
 				break;
 		}
