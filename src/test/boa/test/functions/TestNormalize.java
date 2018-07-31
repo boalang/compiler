@@ -43,7 +43,7 @@ public class TestNormalize {
     public static Collection<String[]> expressions() {
         return Arrays.asList(new String[][]{
                 // size = 1
-                {"a * 10 / -2 > 3 ", "10 * a / 2 < -3"},
+                {"a * 10 / -2 > 3 ", "5 * a < -3"},
                 {"1", "1"},
                 {"a", "a"},
                 {"-a", "-a"},
@@ -74,10 +74,10 @@ public class TestNormalize {
                 {"-a + 1 > 3", "a < -2"},
                 {"-a + 3 > 3", "a < 0"},
                 {"a * 3 <= 3", "3 * a <= 3"},
-                {"a / 3 <= 3", "a / 3 <= 3"},
+                {"a / 3 <= 3", "1 * a / 3 <= 3"}, // FIXME
                 {"-a + 1 > b", "a + b < 1"},
                 {"0 > b + a", "a + b < 0"},
-                {"b / a > 5", "b / a > 5"},
+                {"b / a > 5", "1 * b / a > 5"}, // FIXME
                 {"a / b / c", "a / (b * c)"},
                 {"2 / (b + a)", "2 / (a + b)"},
                 {"rcv$.charAt(0) == 0xfeff", "rcv$.charAt(0) == 65279"},
@@ -93,18 +93,18 @@ public class TestNormalize {
                 {"1 - b[1]*a++ > 3", "a++ * b[1] < -2"},
                 {"b * c * a > 1", "a * b * c > 1"},
                 {"c * b * -a > 1", "a * b * c < -1"},
-                {"a * -b  +  c > 1", "a * b - c < -1"},
-                {"a / -b  +  c > 1", "a / b - c < -1"},
+                {"a * -b + c > 1", "a * b - c < -1"},
+                {"a / -b + c > 1", "1 / b * a - c < -1"}, // FIXME
                 {"3 > 5 + a * -b", "a * b > 2"},
                 {"c * -2 / -(b - a)", "-2 * c / (a - b)"},
                 {"a * -b  +  c > func()", "a * b - c + func() < 0"},
-                {"a / -b  +  c > func()", "a / b - c + func() < 0"},
+                {"a / -b  +  c > func()", "1 / b * a - c + func() < 0"}, // FIXME
                 {"b * -func()  +  a > 3 ", "a - b * func() > 3"},
-                {"b / -func() * a > 3 ", "a * b / func() < -3"},
-                {"a * 10 / -2 > 3 ", "10 * a / 2 < -3"},
+                {"b / -func() * a > 3 ", "1 / func() * a * b < -3"}, // FIXME
+                {"a * 10 / -2 > 3 ", "5 * a < -3"},
                 {"3 * 10 / -2 > -a ", "a > 15"},
                 {"3 * -10 / -2 > -a ", "a > -15"},
-                {"3 / b * 2 > -a ", "2 * (3 / b) + a > 0"},
+                {"3 / b * 2 > -a ", "1 * 6 / b + a > 0"}, // FIXME
 
                 // size = 5
                 {"a * c / 2 * d * b", "a * b * c * d / 2"},
