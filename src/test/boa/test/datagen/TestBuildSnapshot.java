@@ -196,14 +196,22 @@ public class TestBuildSnapshot {
 		}
 		
 		for (Revision rev : cr.getRevisionsList()) {
+//			System.out.println("Test snapshot at " + rev.getId());
+			String[] expectedFileNames = conn.getSnapshot(rev.getId()).toArray(new String[0]);
+			Arrays.sort(expectedFileNames);
+			
 			ChangedFile[] snapshot = BoaIntrinsics.getSnapshotById(cr, rev.getId());
 			String[] fileNames = new String[snapshot.length];
 			for (int i = 0; i < snapshot.length; i++)
 				fileNames[i] = snapshot[i].getName();
 			Arrays.sort(fileNames);
-			String[] expectedFileNames = conn.getSnapshot(rev.getId()).toArray(new String[0]);
-			Arrays.sort(expectedFileNames);
-//			System.out.println("Test snapshot at " + rev.getId());
+			assertArrayEquals(expectedFileNames, fileNames);
+			
+			snapshot = BoaIntrinsics.getSnapshot(cr, rev);
+			fileNames = new String[snapshot.length];
+			for (int i = 0; i < snapshot.length; i++)
+				fileNames[i] = snapshot[i].getName();
+			Arrays.sort(fileNames);
 			assertArrayEquals(expectedFileNames, fileNames);
 		}
 		
