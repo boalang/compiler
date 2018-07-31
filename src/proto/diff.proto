@@ -146,6 +146,4 @@ message ChangedFile {
 	repeated int32 previous_versions = 9;
 	/** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits */
 	repeated int32 previous_indices = 10;
-	/** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version */
-	optional uint64 mapped_key = 11;
 }

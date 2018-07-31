@@ -46,8 +46,8 @@ import boa.types.Diff.ChangedFile;
 public class TestJLSVersionOfChangedFile {
 
     @Parameters(name = "{index}: {0}")
-    public static List<ChangedFile[]> data() throws Exception {
-    	List<ChangedFile[]> data = new ArrayList<ChangedFile[]>();
+    public static List<Object[]> data() throws Exception {
+    	List<Object[]> data = new ArrayList<Object[]>();
 		CodeRepository cr = buildCodeRepository("boalang/compiler");
 		String[][] commits = new String[][] {
 			{"3a1e352cc63f94058ddb38341531d347f121c29a", "58"},
@@ -67,12 +67,13 @@ public class TestJLSVersionOfChangedFile {
 				assertThat(snapshot.size(), Matchers.is(Integer.parseInt(commit[1])));
 				
 		    	for (ChangedFile cf : snapshot)
-		    		data.add(new ChangedFile[]{cf});
+		    		data.add(new Object[]{cf.getName(), cf});
 			}
 		}
     	return data;
     }
-
+    
+    private String name;
     private ChangedFile changedFile;
 	
 	private static Configuration conf = new Configuration();
@@ -81,8 +82,9 @@ public class TestJLSVersionOfChangedFile {
 	private static SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
 	private static long astWriterLen = 0, contentWriterLen = 0;
 	
-	public TestJLSVersionOfChangedFile(ChangedFile input) {
+	public TestJLSVersionOfChangedFile(String name, ChangedFile input) {
 		DefaultProperties.DEBUG = true;
+		this.name = name;
 		this.changedFile = input;
 	}
 	
