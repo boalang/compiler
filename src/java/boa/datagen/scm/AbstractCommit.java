@@ -48,8 +48,6 @@ import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
 import boa.datagen.DefaultProperties;
 import boa.datagen.dependencies.PomFile;
-import boa.datagen.treed.TreedConstants;
-import boa.datagen.treed.TreedMapper;
 import boa.datagen.util.CssVisitor;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.HtmlVisitor;
@@ -60,7 +58,6 @@ import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.XMLVisitor;
-import boa.datagen.util.JavaASTUtil;
 import boa.datagen.util.JavaErrorCheckVisitor;
 
 /**
@@ -652,9 +649,11 @@ public abstract class AbstractCommit {
 					BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 					connector.astWriterLen += bw.getLength();
-				} catch (IOException e) {
-					if (debug)
+				} catch (Exception e) {
+					if (debug) {
+						System.err.println("ast write error on project " + projectName);
 						e.printStackTrace();
+					}
 				}
 				// fb.setComments(comments);
 			}
