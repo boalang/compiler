@@ -158,7 +158,7 @@ public class SeqRepoImporter {
 		private int counter = 0;
 		private String suffix;
 		private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
-		private long astWriterLen = 0, commitWriterLen = 0, contentWriterLen = 0;
+		private long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
 
 		public ImportTask(int id) throws IOException {
 			this.id = id;

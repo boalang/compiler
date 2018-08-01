@@ -71,7 +71,7 @@ public class TestJLSVersion {
 	private static FileSystem fileSystem = null;
 	
 	private static SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
-	private static long astWriterLen = 0, contentWriterLen = 0;
+	private static long astWriterLen = 1, contentWriterLen = 1;
 	
 	public TestJLSVersion(String name, ChangedFile input) {
 		DefaultProperties.DEBUG = true;

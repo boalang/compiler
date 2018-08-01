@@ -66,7 +66,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 	protected String projectName;
 	protected int headCommitOffset = -1;
 	protected SequenceFile.Writer astWriter, contentWriter;
-	protected long astWriterLen = 0, contentWriterLen = 0;
+	protected long astWriterLen = 1, contentWriterLen = 1;
 
 	public long getAstWriterLen() {
 		return astWriterLen;
@@ -160,7 +160,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 				}
 				ChangedFile.Builder fb = ChangedFile.newBuilder(cf);
 				fb.setAst(false);
-				fb.setKey(-1);
+				fb.setKey(0);
 				
 				long len = -1;
 				if (astWriter != null) {
