@@ -90,7 +90,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 		final Map<String, AbstractCommit> commits = new HashMap<String, AbstractCommit>();
 		getSnapshot(commitOffset, snapshot, commits);
 		
-		if (languages == null || languages.length == 0)
+		if (languages == null)
 			return snapshot;
 		
 		boolean hasJava = false;
