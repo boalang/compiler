@@ -649,11 +649,10 @@ public abstract class AbstractCommit {
 					BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 					connector.astWriterLen += bw.getLength();
-				} catch (Exception e) {
-					if (debug) {
-						System.err.println("ast write error on project " + projectName);
+				} catch (IOException e) {
+					if (debug) 
 						e.printStackTrace();
-					}
+					
 				}
 				// fb.setComments(comments);
 			}
