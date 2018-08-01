@@ -48,8 +48,6 @@ import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
 import boa.datagen.DefaultProperties;
 import boa.datagen.dependencies.PomFile;
-import boa.datagen.treed.TreedConstants;
-import boa.datagen.treed.TreedMapper;
 import boa.datagen.util.CssVisitor;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.HtmlVisitor;
@@ -60,7 +58,6 @@ import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.XMLVisitor;
-import boa.datagen.util.JavaASTUtil;
 import boa.datagen.util.JavaErrorCheckVisitor;
 
 /**
@@ -89,7 +86,7 @@ public abstract class AbstractCommit {
 			cfb = ChangedFile.newBuilder();
 			cfb.setName(path);
 			cfb.setKind(FileKind.OTHER);
-			cfb.setKey(-1);
+			cfb.setKey(0);
 			cfb.setAst(false);
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
@@ -187,7 +184,7 @@ public abstract class AbstractCommit {
 		for (ChangedFile.Builder cfb : changedFiles) {
 			cfb.setKind(FileKind.OTHER);
 			if (cfb.getChange() == ChangeKind.DELETED || cfb.getChange() == ChangeKind.UNKNOWN) {
-				cfb.setKey(-1);
+				cfb.setKey(0);
 //				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
 			} else
 				processChangeFile(cfb, parse);
