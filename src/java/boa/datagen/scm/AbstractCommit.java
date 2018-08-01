@@ -207,7 +207,6 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.BINARY);
 		else if (lowerPath.endsWith(".java") && parse) {
 			final String content = getFileContents(path);
-			
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 			parseJavaFile(path, fb, content, false);
 		} else if (lowerPath.endsWith(".js") && parse) {
@@ -244,13 +243,6 @@ public abstract class AbstractCommit {
 											System.err.println(
 													"Found ES4 parse error in: revision " + id + ": file " + path);
 										fb.setKind(FileKind.SOURCE_JS_ERROR);
-										// try {
-										// astWriter.append(new
-										// LongWritable(len), new
-										// BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
-										// } catch (IOException e) {
-										// e.printStackTrace();
-										// }
 									} else if (debugparse)
 										System.err.println("Accepted ES8: revision " + id + ": file " + path);
 								} else if (debugparse)
@@ -299,13 +291,6 @@ public abstract class AbstractCommit {
 											System.err.println(
 													"Found ES4 parse error in: revision " + id + ": file " + path);
 										fb.setKind(FileKind.SOURCE_PHP_ERROR);
-										// try {
-										// astWriter.append(new
-										// LongWritable(len), new
-										// BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
-										// } catch (IOException e) {
-										// e.printStackTrace();
-										// }
 									} else if (debugparse)
 										System.err.println("Accepted PHP7_1: revision " + id + ": file " + path);
 								} else if (debugparse)
