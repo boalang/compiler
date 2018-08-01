@@ -4,24 +4,33 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.MapFile;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.Message;
+
 import boa.datagen.util.ProtoMessageVisitor;
+import boa.functions.BoaIntrinsics;
 import boa.test.datagen.java.Java8BaseTest;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Declaration;
 import boa.types.Code.CodeRepository;
+import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
+import boa.types.Shared.Person;
 import boa.types.Toplevel.Project;
 
 public class TestSequenceFile extends Java8BaseTest {
@@ -37,6 +46,132 @@ public class TestSequenceFile extends Java8BaseTest {
 			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
 			ar = new SequenceFile.Reader(fileSystem, dataPath, conf);
 		}
+	}
+	
+	@Test
+	public void projectSeqTest1() throws IOException {
+		String path = "T:/boa/dataset-Qualitas";
+		openMaps(path);
+		fileSystem = FileSystem.get(conf);
+		Path projectPath = new Path(path + "/projects.seq"), dataPath = new Path(path + "/ast/data");
+		if (fileSystem.exists(projectPath) && fileSystem.exists(dataPath)) {
+			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
+			ar = new SequenceFile.Reader(fileSystem, dataPath, conf);
+		}
+		Set<Long> cfKeys = new HashSet<Long>(), astKeys = new HashSet<Long>();
+		Writable key = new Text();
+		BytesWritable val = new BytesWritable();
+		while (pr.next(key, val)) {
+			byte[] bytes = val.getBytes();
+			Project project = Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
+			for (CodeRepository cr : project.getCodeRepositoriesList()) {
+				for (int i = 0; i < BoaIntrinsics.getRevisionsCount(cr); i++) {
+					Revision rev = getRevision(cr, i);
+					for (ChangedFile cf : rev.getFilesList()) {
+						if (cf.getAst()) {
+							System.out.println(project.getName());
+							System.out.println(rev.getId());
+							System.out.println(cf);
+							assertThat(cfKeys.contains(cf.getKey()), Matchers.is(false));
+							cfKeys.add(cf.getKey());
+						}
+					}
+				}
+			}
+		}
+		LongWritable lkey = new LongWritable();
+		while (ar.next(lkey, val)) {
+			assertThat(astKeys.contains(lkey.get()), Matchers.is(false));
+			astKeys.add(lkey.get());
+		}
+		Set<Long> inter = new HashSet<Long>(astKeys);
+		inter.retainAll(cfKeys);
+		
+		System.out.println("In ASTs: " + astKeys.size());
+		astKeys.removeAll(inter);
+		System.out.println(astKeys.size());
+//		for (Long k : astKeys)
+//			System.out.println(k + " ");
+		System.out.println("In changed files: " + cfKeys.size());
+		cfKeys.removeAll(inter);
+		System.out.println(cfKeys.size());
+//		for (Long k : cfKeys)
+//			System.out.println(k + " ");
+//		assertThat(cfKeys, Matchers.is(astKeys));
+		
+		pr.close();
+		ar.close();
+		closeMaps();
+	}
+
+	private static final Revision emptyRevision;
+	
+	static {
+		Revision.Builder rb = Revision.newBuilder();
+		rb.setCommitDate(0);
+		Person.Builder pb = Person.newBuilder();
+		pb.setUsername("");
+		rb.setCommitter(pb);
+		rb.setId("");
+		rb.setLog("");
+		emptyRevision = rb.build();
+	}
+	
+	public static Revision getRevision(final CodeRepository cr, final int index) {
+		if (cr.getRevisionKeysCount() > 0) {
+			long key = cr.getRevisionKeys(index);
+			return getRevision(key);
+		}
+		return cr.getRevisions(index);
+	}
+	
+	static Revision getRevision(long key) {
+		try {
+			final BytesWritable value = new BytesWritable();
+			if (commitMap.get(new LongWritable(key), value) != null) {
+				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+				// defaults to 64, really big ASTs require more
+				_stream.setRecursionLimit(Integer.MAX_VALUE);
+				final Revision root = Revision.parseFrom(_stream);
+				return root;
+			}
+		} catch (final Exception e) {
+			e.printStackTrace();
+		} catch (final Error e) {
+			e.printStackTrace();
+		}
+
+		System.err.println("error with revision: " + key);
+		return emptyRevision;
+	}
+	
+	private static MapFile.Reader commitMap, astMap;
+
+	private static void openMaps(String path) {
+		try {
+			final Configuration conf = new Configuration();
+			final FileSystem fs;
+			fs = FileSystem.getLocal(conf);
+			astMap = new MapFile.Reader(fs, new Path(path + "/ast").toString(), conf);
+			commitMap = new MapFile.Reader(fs, new Path(path + "/commit").toString(), conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void closeMaps() {
+		closeMap(astMap);
+		closeMap(commitMap);
+	}
+	
+	private static void closeMap(MapFile.Reader map) {
+		if (map != null)
+			try {
+				map.close();
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		map = null;
 	}
 	
 	@Test

@@ -86,7 +86,7 @@ public abstract class AbstractCommit {
 			cfb = ChangedFile.newBuilder();
 			cfb.setName(path);
 			cfb.setKind(FileKind.OTHER);
-			cfb.setKey(-1);
+			cfb.setKey(0);
 			cfb.setAst(false);
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
@@ -184,7 +184,7 @@ public abstract class AbstractCommit {
 		for (ChangedFile.Builder cfb : changedFiles) {
 			cfb.setKind(FileKind.OTHER);
 			if (cfb.getChange() == ChangeKind.DELETED || cfb.getChange() == ChangeKind.UNKNOWN) {
-				cfb.setKey(-1);
+				cfb.setKey(0);
 //				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
 			} else
 				processChangeFile(cfb, parse);
