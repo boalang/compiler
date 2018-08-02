@@ -109,7 +109,7 @@ public class TestJLSVersionOfChangedFile {
 		final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
 		repoBuilder.setKind(RepositoryKind.GIT);
 		repoBuilder.setUrl(url);
-		for (final Revision rev : conn.getCommits(true, repoName)) {
+		for (final Revision rev : conn.getCommits(repoName)) {
 			final Revision.Builder revBuilder = Revision.newBuilder(rev);
 			repoBuilder.addRevisions(revBuilder);
 		}

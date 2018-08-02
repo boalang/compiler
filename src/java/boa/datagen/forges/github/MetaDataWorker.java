@@ -297,7 +297,7 @@ public class MetaDataWorker implements Runnable {
 		try {
 			conn = new GitConnector(gitDir.getAbsolutePath(), project.getName());
 			final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
-			for (final Revision rev : conn.getCommits(true, project.getName())) {
+			for (final Revision rev : conn.getCommits(project.getName())) {
 				// build new rev w/ no namespaces
 				final Revision.Builder revBuilder = Revision.newBuilder(rev);
 				repoBuilder.addRevisions(revBuilder);

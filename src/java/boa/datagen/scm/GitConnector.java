@@ -41,6 +41,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
 
 import boa.datagen.DefaultProperties;
+import boa.types.Code.Revision;
 
 
 /**
@@ -132,7 +133,7 @@ public class GitConnector extends AbstractConnector {
 				commitList.add(rc);
 				if (commitList.size() > MAX_COMMITS) {
 					System.err.println(projectName + " exceeded Max_Commit size of " + MAX_COMMITS);
-					return;
+//					return;
 				}
 			}
 				
@@ -163,7 +164,11 @@ public class GitConnector extends AbstractConnector {
 				gc.fileNameIndices.clear();
 				
 				revisionMap.put(gc.id, revisions.size());
-				revisions.add(gc);
+				
+				if (commitList.size() > MAX_COMMITS) {
+					Revision rev = gc.asProtobuf(projectName);
+				} else
+					revisions.add(gc);
 				
 				if (debug) {
 					long endTime = System.currentTimeMillis();
