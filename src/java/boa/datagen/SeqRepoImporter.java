@@ -46,7 +46,7 @@ import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Toplevel.Project;
 
-public class SeqRepoImporterJson {
+public class SeqRepoImporter {
 	private final static boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	private final static boolean cache = Properties.getBoolean("cache", DefaultProperties.CACHE);
 
