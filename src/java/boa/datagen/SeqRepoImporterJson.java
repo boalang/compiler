@@ -1,11 +1,25 @@
+/*
+ * Copyright 2015, Hridesh Rajan, Robert Dyer, Hoan Nguyen
+ *                 and Iowa State University of Science and Technology
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package boa.datagen;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -35,8 +49,7 @@ public class SeqRepoImporterJson {
 	private final static boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	private final static boolean cache = Properties.getBoolean("cache", DefaultProperties.CACHE);
 
-	private final static File gitRootPath = new File(
-			Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
+	private final static File gitRootPath = new File(Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
 
 	private final static HashSet<String> processedProjectIds = new HashSet<String>();
 
@@ -44,11 +57,8 @@ public class SeqRepoImporterJson {
 	private static FileSystem fileSystem = null;
 	private static String base = null;
 
-	private final static int poolSize = Integer
-			.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
-	public static final int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer
-			.valueOf(DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS);
-	// private static int processedProjects = 0;
+	private final static int poolSize = Integer.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
+	public static final int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer.valueOf(DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS);
 	final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
 	final static String jsonCachePath = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 

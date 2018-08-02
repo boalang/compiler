@@ -37,7 +37,6 @@ import boa.datagen.forges.github.MetaDataMaster;
 public class BoaGenerator {
 	private static boolean jsonAvailable = true;
 	private static boolean tokenAvailable = false;
-	private static boolean cacheJson = false;
 
 	public static void main(final String[] args) throws IOException {
 		final Options options = new Options();
@@ -54,33 +53,18 @@ public class BoaGenerator {
 		BoaGenerator.handleCmdOptions(cl, options, args);
 
 		/*
-		 * 1. if user provides local json files 2. if user provides username and
-		 * password in both the cases json files are going to be available
+		 * 1. if user provides local json files 
+		 * 2. if user provides username and password 
+		 * in both the cases json files are going to be available
 		 */
 
 		if (jsonAvailable) {
-			if (cacheJson) {
-				try {
-					SeqRepoImporterJson.main(new String[0]);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-
-			} else {
-				CacheGithubJSON.main(new String[0]);
-				try {
-					SeqRepoImporterJson.main(new String[0]);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+			try {
+				SeqRepoImporterJson.main(new String[0]);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-
 			SeqCombiner.main(new String[0]);
-			// try {
-			// MapFileGen.main(new String[0]);
-			// } catch (Exception e) {
-			// e.printStackTrace();
-			// }
 		} else if (tokenAvailable) { // when user provides local repo and does
 										// not have json files
 			MetaDataMaster mdm = new MetaDataMaster();
@@ -133,7 +117,6 @@ public class BoaGenerator {
 		options.addOption("cache", "json", false, "enable if you want to delete the cloned code for user.");
 		options.addOption("debug", "json", false, "enable for debug mode.");
 		options.addOption("debugparse", "json", false, "enable for debug mode when parsing source files.");
-		options.addOption("cacheJson", "cacheJson", false, "enable to process one project at a time.");
 		options.addOption("help", "help", true, "help");
 	}
 
@@ -197,9 +180,6 @@ public class BoaGenerator {
 		}
 		if (cl.hasOption("debug")) {
 			DefaultProperties.DEBUG = true;
-		}
-		if (cl.hasOption("cacheJson")) {
-			cacheJson = true;
 		}
 		if (cl.hasOption("debugparse")) {
 			DefaultProperties.DEBUGPARSE = true;
