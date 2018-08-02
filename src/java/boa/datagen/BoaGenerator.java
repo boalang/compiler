@@ -69,7 +69,7 @@ public class BoaGenerator {
 			} else {
 				CacheGithubJSON.main(new String[0]);
 				try {
-					SeqRepoImporter.main(new String[0]);
+					SeqRepoImporterJson.main(new String[0]);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
