@@ -162,7 +162,7 @@ public class SeqRepoImporterJson {
 		private int counter = 0;
 		private String suffix;
 		private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
-		private long astWriterLen = 0, commitWriterLen = 0, contentWriterLen = 0;
+		private long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
 		private boolean ready = true;
 		byte[] bs;
 
