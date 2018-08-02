@@ -62,7 +62,8 @@ public class SeqRepoImporterJson {
 	public static final int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer.valueOf(DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS);
 	final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
 	final static String jsonCachePath = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
-
+	private static boolean done = false;
+	
 	public static void main(String[] args) throws IOException, InterruptedException {
 
 		conf = new Configuration();
@@ -70,12 +71,12 @@ public class SeqRepoImporterJson {
 		base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 		
 		getProcessedProjects();
-		ImportTask[] workers = new ImportTask[poolSize];
 
+		ImportTask[] workers = new ImportTask[poolSize];
 		for (int i = 0; i < poolSize; i++) {
-			ImportTask worker = new ImportTask(i);
-			workers[i] = worker;
-			workers[i].openWriters();
+			workers[i] = new ImportTask(i);
+			new Thread(workers[i]).start();
+			Thread.sleep(10);
 		}
 
 		File dir = new File(jsonPath);
@@ -104,7 +105,7 @@ public class SeqRepoImporterJson {
 								for (int j = 0; j < poolSize; j++) {
 									if (workers[j].isReady()) {
 										workers[j].setProject(protobufRepo.toByteArray());
-										new Thread(workers[j]).start();
+										workers[j].ready = false;
 										assigned = true;
 										break;
 									}
@@ -120,11 +121,13 @@ public class SeqRepoImporterJson {
 				}
 			}
 		}
-
+		done = true;
+		Thread.sleep(100);
+		// wait for workers to close writers
 		for (ImportTask worker : workers) {
-			while (!worker.isReady())
+			while (!worker.isReady()){
 				Thread.sleep(100);
-			worker.closeWriters();
+			}
 		}
 	}
 
@@ -223,71 +226,87 @@ public class SeqRepoImporterJson {
 
 		@Override
 		public void run() {
-			this.ready = false;
-
-			try {
-				Project cachedProject = null;
+			openWriters();
+			while (true) {
+				while (this.ready) {
+					if (done)
+						break;
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				if (done)
+					break;
 				try {
-					cachedProject = Project.parseFrom(bs);
-					if (processedProjectIds.contains(cachedProject.getId())) {
+					Project cachedProject = null;
+					try {
+						cachedProject = Project.parseFrom(bs);
+						if (processedProjectIds.contains(cachedProject.getId())) {
+							this.ready = true;
+							return;
+						}
+					} catch (InvalidProtocolBufferException e) {
+						e.printStackTrace();
 						this.ready = true;
 						return;
 					}
-				} catch (InvalidProtocolBufferException e) {
-					e.printStackTrace();
-					this.ready = true;
-					return;
-				}
-				bs = null;
+					bs = null;
 
-				final String name = cachedProject.getName();
+					final String name = cachedProject.getName();
 
-				if (debug)
-					System.out.println(
-							Thread.currentThread().getId() + " Processing " + cachedProject.getId() + " " + name);
+					if (debug)
+						System.out.println(
+								Thread.currentThread().getId() + " Processing " + cachedProject.getId() + " " + name);
 
-				Project project = storeRepository(cachedProject, 0);
+					Project project = storeRepository(cachedProject, 0);
 
-				if (debug)
-					System.out
-							.println(Thread.currentThread().getId() + " Putting in sequence file: " + project.getId());
+					if (debug)
+						System.out.println(
+								Thread.currentThread().getId() + " Putting in sequence file: " + project.getId());
 
-				// store the project metadata
-				BytesWritable bw = new BytesWritable(project.toByteArray());
-				if (bw.getLength() < MAX_SIZE_FOR_PROJECT_WITH_COMMITS) {
-					try {
-						projectWriter.append(new Text(project.getId()), bw);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				} else {
-					Project.Builder pb = Project.newBuilder(project);
-					for (CodeRepository.Builder cb : pb.getCodeRepositoriesBuilderList()) {
-						for (Revision.Builder rb : cb.getRevisionsBuilderList()) {
-							cb.addRevisionKeys(commitWriterLen);
-							bw = new BytesWritable(rb.build().toByteArray());
-							commitWriter.append(new LongWritable(commitWriterLen), bw);
-							commitWriterLen += bw.getLength();
+					// store the project metadata
+					BytesWritable bw = new BytesWritable(project.toByteArray());
+					if (bw.getLength() < MAX_SIZE_FOR_PROJECT_WITH_COMMITS) {
+						try {
+							projectWriter.append(new Text(project.getId()), bw);
+						} catch (IOException e) {
+							e.printStackTrace();
 						}
-						cb.clearRevisions();
+					} else {
+						Project.Builder pb = Project.newBuilder(project);
+						for (CodeRepository.Builder cb : pb.getCodeRepositoriesBuilderList()) {
+							for (Revision.Builder rb : cb.getRevisionsBuilderList()) {
+								cb.addRevisionKeys(commitWriterLen);
+								bw = new BytesWritable(rb.build().toByteArray());
+								commitWriter.append(new LongWritable(commitWriterLen), bw);
+								commitWriterLen += bw.getLength();
+							}
+							cb.clearRevisions();
+						}
+						try {
+							projectWriter.append(new Text(pb.getId()), new BytesWritable(pb.build().toByteArray()));
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
-					try {
-						projectWriter.append(new Text(pb.getId()), new BytesWritable(pb.build().toByteArray()));
-					} catch (IOException e) {
-						e.printStackTrace();
+					counter++;
+					if (counter >= Integer.parseInt(DefaultProperties.MAX_PROJECTS)) {
+						closeWriters();
+						openWriters();
+						counter = 0;
 					}
+				} catch (Throwable e) {
+					e.printStackTrace();
 				}
-				counter++;
-				if (counter >= Integer.parseInt(DefaultProperties.MAX_PROJECTS)) {
-					closeWriters();
-					openWriters();
-					counter = 0;
-				}
-			} catch (Throwable e) {
-				e.printStackTrace();
+				this.ready = true;
+				if (done)
+					break;
 			}
+			this.ready = false;
+			closeWriters();
 			this.ready = true;
-			System.out.println(this.id + " counter " + counter);
 		}
 
 		private Project storeRepository(final Project project, final int i) {
