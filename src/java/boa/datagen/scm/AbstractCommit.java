@@ -650,8 +650,9 @@ public abstract class AbstractCommit {
 					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 					connector.astWriterLen += bw.getLength();
 				} catch (IOException e) {
-					if (debug)
+					if (debug) 
 						e.printStackTrace();
+					
 				}
 				// fb.setComments(comments);
 			}

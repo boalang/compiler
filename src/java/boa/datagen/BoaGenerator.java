@@ -37,6 +37,7 @@ import boa.datagen.forges.github.MetaDataMaster;
 public class BoaGenerator {
 	private static boolean jsonAvailable = true;
 	private static boolean tokenAvailable = false;
+	private static boolean cacheJson = false;
 
 	public static void main(final String[] args) throws IOException {
 		final Options options = new Options();
@@ -58,23 +59,33 @@ public class BoaGenerator {
 		 */
 
 		if (jsonAvailable) {
-			CacheGithubJSON.main(new String[0]);
-			try {
-				SeqRepoImporter.main(new String[0]);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			if (cacheJson) {
+				try {
+					SeqRepoImporterJson.main(new String[0]);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+			} else {
+				CacheGithubJSON.main(new String[0]);
+				try {
+					SeqRepoImporter.main(new String[0]);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 
 			SeqCombiner.main(new String[0]);
-//			try {
-//				MapFileGen.main(new String[0]);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-		} else if (tokenAvailable) { // when user provides local repo and does not have json files
+			// try {
+			// MapFileGen.main(new String[0]);
+			// } catch (Exception e) {
+			// e.printStackTrace();
+			// }
+		} else if (tokenAvailable) { // when user provides local repo and does
+										// not have json files
 			MetaDataMaster mdm = new MetaDataMaster();
 			mdm.downloadRepoNames(DefaultProperties.TOKEN, DefaultProperties.OUTPUT);
-			
+
 			SeqCombiner.main(new String[0]);
 		} else { // when user provides local repo and does not have json files
 			File output = new File(DefaultProperties.OUTPUT);
@@ -87,7 +98,7 @@ public class BoaGenerator {
 				e.printStackTrace();
 			}
 		}
-		
+
 		clear();
 	}
 
@@ -110,7 +121,8 @@ public class BoaGenerator {
 		options.addOption("inputRepo", "json", true, "cloned repo path");
 		options.addOption("threads", "threads", true, "number of threads");
 		options.addOption("projects", "projects", true, "maximum number of projects per sequence file");
-		options.addOption("commits", "commits", true, "maximum number of commits of a project to be stored in the project object");
+		options.addOption("commits", "commits", true,
+				"maximum number of commits of a project to be stored in the project object");
 		options.addOption("size", "size", true, "maximum size of a project object to be stored");
 		options.addOption("libs", "libs", true, "directory to store libraries");
 		options.addOption("output", "json", true, "directory where output is desired");
@@ -121,6 +133,7 @@ public class BoaGenerator {
 		options.addOption("cache", "json", false, "enable if you want to delete the cloned code for user.");
 		options.addOption("debug", "json", false, "enable for debug mode.");
 		options.addOption("debugparse", "json", false, "enable for debug mode when parsing source files.");
+		options.addOption("cacheJson", "cacheJson", false, "enable to process one project at a time.");
 		options.addOption("help", "help", true, "help");
 	}
 
@@ -134,7 +147,7 @@ public class BoaGenerator {
 			DefaultProperties.GH_JSON_PATH = cl.getOptionValue("inputJson");
 			DefaultProperties.OUTPUT = cl.getOptionValue("output");
 			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("output");
-		}else if (cl.hasOption("inputToken") && cl.hasOption("inputRepo") && cl.hasOption("output")) {
+		} else if (cl.hasOption("inputToken") && cl.hasOption("inputRepo") && cl.hasOption("output")) {
 			DefaultProperties.TOKEN = cl.getOptionValue("inputToken");
 			DefaultProperties.OUTPUT = cl.getOptionValue("output");
 			// DefaultProperties.GH_GIT_PATH = GH_JSON_CACHE_PATH + "/github";
@@ -185,6 +198,9 @@ public class BoaGenerator {
 		if (cl.hasOption("debug")) {
 			DefaultProperties.DEBUG = true;
 		}
+		if (cl.hasOption("cacheJson")) {
+			cacheJson = true;
+		}
 		if (cl.hasOption("debugparse")) {
 			DefaultProperties.DEBUGPARSE = true;
 		}
@@ -202,7 +218,6 @@ public class BoaGenerator {
 		if (inputDirectory.exists())
 			org.apache.commons.io.FileUtils.deleteQuietly(inputDirectory);
 	}
-	
 
 	private static void getGithubMetadata(String inputPath, String username, String password, String targetUser,
 			String targetRepo) {
