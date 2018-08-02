@@ -94,7 +94,6 @@ public class SeqRepoImporterJson {
 										workers[j].setProject(protobufRepo.toByteArray());
 										new Thread(workers[j]).start();
 										assigned = true;
-										Thread.sleep(10);
 										break;
 									}
 								}
