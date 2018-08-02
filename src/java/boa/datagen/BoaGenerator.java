@@ -60,7 +60,7 @@ public class BoaGenerator {
 
 		if (jsonAvailable) {
 			try {
-				SeqRepoImporterJson.main(new String[0]);
+				SeqRepoImporter.main(new String[0]);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
