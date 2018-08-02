@@ -33,6 +33,7 @@ import org.apache.hadoop.io.SequenceFile.CompressionType;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import boa.datagen.forges.github.RepoMetadata;
@@ -89,10 +90,11 @@ public class SeqRepoImporterJson {
 				} catch (Exception e) {
 					System.err.println("error proccessing page: " + file.getPath());
 					e.printStackTrace();
+					continue;
 				}
 				for (int i = 0; i < repoArray.size(); i++) {
-					RepoMetadata repo = new RepoMetadata(repoArray.get(i).getAsJsonObject());
-					// JsonObject rp = repoArray.get(i).getAsJsonObject();
+					JsonObject rp = repoArray.get(i).getAsJsonObject();
+					RepoMetadata repo = new RepoMetadata(rp);
 					if (repo.id != null && repo.name != null) {
 						try {
 							Project protobufRepo = repo.toBoaMetaDataProtobuf();
@@ -104,7 +106,6 @@ public class SeqRepoImporterJson {
 										workers[j].setProject(protobufRepo.toByteArray());
 										new Thread(workers[j]).start();
 										assigned = true;
-										Thread.sleep(10);
 										break;
 									}
 								}
