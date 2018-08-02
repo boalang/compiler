@@ -41,6 +41,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
 
 import boa.datagen.DefaultProperties;
+import boa.types.Code.Revision;
 
 
 /**
@@ -49,7 +50,7 @@ import boa.datagen.DefaultProperties;
  */
 public class GitConnector extends AbstractConnector {
 
-	private static final int MaxCommit = Integer.valueOf(DefaultProperties.MAX_COMMITS);
+	private static final int MAX_COMMITS = Integer.valueOf(DefaultProperties.MAX_COMMITS);
 	private Repository repository;
 	private Git git;
 	private RevWalk revwalk;
@@ -130,8 +131,8 @@ public class GitConnector extends AbstractConnector {
 			List<RevCommit> commitList = new ArrayList<RevCommit>();
 			for (RevCommit rc : revwalk) {
 				commitList.add(rc);
-				if (commitList.size() > MaxCommit) {
-					System.err.println(projectName + " exceeded Max_Commit size of " + MaxCommit);
+				if (commitList.size() > MAX_COMMITS) {
+					System.err.println(projectName + " exceeded Max_Commit size of " + MAX_COMMITS);
 					return;
 				}
 			}
@@ -163,6 +164,7 @@ public class GitConnector extends AbstractConnector {
 				gc.fileNameIndices.clear();
 				
 				revisionMap.put(gc.id, revisions.size());
+				
 				revisions.add(gc);
 				
 				if (debug) {

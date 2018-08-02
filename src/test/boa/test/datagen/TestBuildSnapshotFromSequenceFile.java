@@ -59,7 +59,8 @@ public class TestBuildSnapshotFromSequenceFile {
 		String[] args = {	"-inputJson", "test/datagen/jsons", 
 							"-inputRepo", "dataset/repos",
 							"-output", dataPath,
-							"-size", "1"};
+							"-size", "1",
+							"-threads", "2"};
 		BoaGenerator.main(args);
 		
     	List<Object[]> data = new ArrayList<Object[]>();

@@ -2,6 +2,8 @@ package boa.test.datagen;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,6 +24,9 @@ import org.junit.Test;
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.Message;
 
+import boa.datagen.BoaGenerator;
+import boa.datagen.DefaultProperties;
+import boa.datagen.util.FileIO;
 import boa.datagen.util.ProtoMessageVisitor;
 import boa.functions.BoaIntrinsics;
 import boa.test.datagen.java.Java8BaseTest;
@@ -50,7 +55,22 @@ public class TestSequenceFile extends Java8BaseTest {
 	
 	@Test
 	public void projectSeqTest1() throws IOException {
-		String path = "T:/boa/dataset-Qualitas";
+		String path = "dataset/temp_data";
+		File dataFile = new File(path);
+    	path = dataFile.getAbsolutePath();
+    	
+//    	DefaultProperties.DEBUG = true;
+    	DefaultProperties.localDataPath = path;
+		
+		new FileIO.DirectoryRemover(dataFile.getAbsolutePath()).run();
+		
+		String[] args = {	"-inputJson", "test/datagen/jsons", 
+							"-inputRepo", "dataset/repos",
+							"-output", path,
+							"-size", "1",
+							"-threads", "2"};
+		BoaGenerator.main(args);
+		
 		openMaps(path);
 		fileSystem = FileSystem.get(conf);
 		Path projectPath = new Path(path + "/projects.seq"), dataPath = new Path(path + "/ast/data");
@@ -69,9 +89,11 @@ public class TestSequenceFile extends Java8BaseTest {
 					Revision rev = getRevision(cr, i);
 					for (ChangedFile cf : rev.getFilesList()) {
 						if (cf.getAst()) {
-							System.out.println(project.getName());
-							System.out.println(rev.getId());
-							System.out.println(cf);
+							if (DefaultProperties.DEBUG) {
+								System.out.println(project.getName());
+								System.out.println(rev.getId());
+								System.out.println(cf);
+							}
 							assertThat(cfKeys.contains(cf.getKey()), Matchers.is(false));
 							cfKeys.add(cf.getKey());
 						}
@@ -84,24 +106,29 @@ public class TestSequenceFile extends Java8BaseTest {
 			assertThat(astKeys.contains(lkey.get()), Matchers.is(false));
 			astKeys.add(lkey.get());
 		}
-		Set<Long> inter = new HashSet<Long>(astKeys);
-		inter.retainAll(cfKeys);
 		
-		System.out.println("In ASTs: " + astKeys.size());
-		astKeys.removeAll(inter);
-		System.out.println(astKeys.size());
-//		for (Long k : astKeys)
-//			System.out.println(k + " ");
-		System.out.println("In changed files: " + cfKeys.size());
-		cfKeys.removeAll(inter);
-		System.out.println(cfKeys.size());
-//		for (Long k : cfKeys)
-//			System.out.println(k + " ");
-//		assertThat(cfKeys, Matchers.is(astKeys));
+		if (DefaultProperties.DEBUG) {
+			Set<Long> inter = new HashSet<Long>(astKeys);
+			inter.retainAll(cfKeys);
+			
+			System.out.println("In ASTs: " + astKeys.size());
+			astKeys.removeAll(inter);
+			System.out.println(astKeys.size());
+	//		for (Long k : astKeys)
+	//			System.out.println(k + " ");
+			System.out.println("In changed files: " + cfKeys.size());
+			cfKeys.removeAll(inter);
+			System.out.println(cfKeys.size());
+	//		for (Long k : cfKeys)
+	//			System.out.println(k + " ");
+		}
+		assertThat(cfKeys, Matchers.is(astKeys));
 		
 		pr.close();
 		ar.close();
 		closeMaps();
+		
+		new FileIO.DirectoryRemover(dataFile.getAbsolutePath()).run();
 	}
 
 	private static final Revision emptyRevision;

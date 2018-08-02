@@ -395,7 +395,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 		return tagIndices;
 	}
 	
-	public List<Revision> getCommits(final boolean parse, String projectName) {
+	public List<Revision> getCommits(final String projectName) {
 		this.projectName = projectName;
 		if (revisions == null) {
 			revisions = new ArrayList<AbstractCommit>();
@@ -406,7 +406,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 		for (int i = 0; i < revisions.size(); i++) {
 			long startTime = System.currentTimeMillis();
 			final AbstractCommit rev = revisions.get(i);
-			revs.add(rev.asProtobuf(parse, projectName));
+			revs.add(rev.asProtobuf(projectName));
 			
 			if (debug) {
 				long endTime = System.currentTimeMillis();

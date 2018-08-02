@@ -155,7 +155,7 @@ public abstract class AbstractCommit {
 			HashMap<String, String> globalProperties, HashMap<String, String> globalManagedDependencies,
 			Stack<PomFile> parentPomFiles);
 
-	public Revision asProtobuf(final boolean parse, String projectName) {
+	public Revision asProtobuf(final String projectName) {
 		final Revision.Builder revision = Revision.newBuilder();
 		revision.setId(id);
 		this.projectName = projectName;
@@ -187,14 +187,14 @@ public abstract class AbstractCommit {
 				cfb.setKey(0);
 //				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
 			} else
-				processChangeFile(cfb, parse);
+				processChangeFile(cfb);
 			revision.addFiles(cfb.build());
 		}
 
 		return revision.build();
 	}
 
-	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse) {
+	private Builder processChangeFile(final ChangedFile.Builder fb) {
 		long len = connector.astWriterLen;
 		String path = fb.getName();
 
@@ -205,11 +205,11 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.XML);
 		else if (lowerPath.endsWith(".jar") || lowerPath.endsWith(".class"))
 			fb.setKind(FileKind.BINARY);
-		else if (lowerPath.endsWith(".java") && parse) {
+		else if (lowerPath.endsWith(".java")) {
 			final String content = getFileContents(path);
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 			parseJavaFile(path, fb, content, false);
-		} else if (lowerPath.endsWith(".js") && parse) {
+		} else if (lowerPath.endsWith(".js")) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JS_ES1);
@@ -257,7 +257,7 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted ES2: revision " + id + ": file " + path);
 			} else if (debugparse)
 				System.err.println("Accepted ES1: revision " + id + ": file " + path);
-		} else if (lowerPath.endsWith(".php") && parse) {
+		} else if (lowerPath.endsWith(".php")) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_PHP5);
