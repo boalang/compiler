@@ -53,23 +53,18 @@ public class BoaGenerator {
 		BoaGenerator.handleCmdOptions(cl, options, args);
 
 		/*
-		 * 1. if user provides local json files 2. if user provides username and
-		 * password in both the cases json files are going to be available
+		 * 1. if user provides local json files 
+		 * 2. if user provides username and password 
+		 * in both the cases json files are going to be available
 		 */
 
 		if (jsonAvailable) {
-			// CacheGithubJSON.main(new String[0]);
 			try {
 				SeqRepoImporterJson.main(new String[0]);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			SeqCombiner.main(new String[0]);
-			// try {
-			// MapFileGen.main(new String[0]);
-			// } catch (Exception e) {
-			// e.printStackTrace();
-			// }
 		} else if (tokenAvailable) { // when user provides local repo and does
 										// not have json files
 			MetaDataMaster mdm = new MetaDataMaster();
