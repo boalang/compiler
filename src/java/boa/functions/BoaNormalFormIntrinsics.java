@@ -1520,6 +1520,7 @@ public class BoaNormalFormIntrinsics {
 		switch (e.getKind()) {
 			case OP_SUB:
 				return e.getExpressionsCount() == 1;
+			case OP_DIV:
 			case OP_MULT:
 				for (int i = 0; i < e.getExpressionsCount(); i++)
 					if (isNegative(e.getExpressions(i)))
@@ -1650,6 +1651,7 @@ public class BoaNormalFormIntrinsics {
 				b.setExpressions(0, negateExpression(e.getExpressions(0)));
 				return b.build();
 
+			case OP_DIV:
 			case OP_MULT:
 				// find first negative term - if none, use the first term
 				int i = 0;

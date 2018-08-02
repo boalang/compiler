@@ -241,6 +241,8 @@ public class TestReduce {
 			{ "x / -1 / x / 1 / -1", "1"},
 			{ "x * -x * x * -x / x / x / -x / -x", "1"},
 			{ "x * x * x * -x / x / x / -x / -x", "-1"},
+			{ "1 / -x / x / -x * x * x * -x", "-1"},
+			{ "1 / x / x / -x * x * x * -x", "1"},
 
 			// with methods 
 			{ "foo(x + 3, 2 + 1)", "foo(3 + x, 3)" },
@@ -413,6 +415,9 @@ public class TestReduce {
 
 			{ "3 / b * 2", "6 / b"},
 			{ "a / -b", "-a / b"},
+			{ "2 / x * y / x", "2 * y / (x * x)"},
+			{ "2 / x * (3 / x) * (4 / x)", "24 / (x * x * x)"},
+			{ "2 / x * (3 / x) * (-4 / x)", "-24 / (x * x * x)"},
 		});
 	}
 
