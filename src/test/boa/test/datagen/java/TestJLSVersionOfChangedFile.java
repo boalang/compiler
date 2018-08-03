@@ -80,7 +80,7 @@ public class TestJLSVersionOfChangedFile {
 	private static FileSystem fileSystem = null;
 	
 	private static SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
-	private static long astWriterLen = 1, contentWriterLen = 1;
+	private static long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
 	
 	public TestJLSVersionOfChangedFile(String name, ChangedFile input) {
 		DefaultProperties.DEBUG = true;
@@ -105,18 +105,18 @@ public class TestJLSVersionOfChangedFile {
 		filecheck.run();
 		String url = "https://github.com/" + repoName + ".git";
 		RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
-		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName, astWriter, astWriterLen, contentWriter, contentWriterLen);
+		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName, astWriter, astWriterLen, commitWriter, commitWriterLen, contentWriter, contentWriterLen);
 		final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
 		repoBuilder.setKind(RepositoryKind.GIT);
 		repoBuilder.setUrl(url);
-		for (final Revision rev : conn.getCommits(repoName)) {
-			final Revision.Builder revBuilder = Revision.newBuilder(rev);
+		for (final Object rev : conn.getRevisions(repoName)) {
+			final Revision.Builder revBuilder = Revision.newBuilder((Revision) rev);
 			repoBuilder.addRevisions(revBuilder);
 		}
 		if (repoBuilder.getRevisionsCount() > 0) {
 //			System.out.println("Build head snapshot");
 			repoBuilder.setHead(conn.getHeadCommitOffset());
-			repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[] { "java" }, repoName));
+			repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot());
 		}
 		repoBuilder.addAllBranches(conn.getBranchIndices());
 		repoBuilder.addAllBranchNames(conn.getBranchNames());
@@ -126,8 +126,7 @@ public class TestJLSVersionOfChangedFile {
 		closeWriters();
 
 		List<ChangedFile> snapshot1 = new ArrayList<ChangedFile>();
-		Map<String, AbstractCommit> commits = new HashMap<String, AbstractCommit>();
-		conn.getSnapshot(conn.getHeadCommitOffset(), snapshot1, commits);
+		conn.getSnapshot(conn.getHeadCommitOffset(), snapshot1);
 //		System.out.println("Finish building head snapshot");
 		List<String> snapshot2 = conn.getSnapshot(Constants.HEAD);
 		Set<String> s1 = new HashSet<String>(), s2 = new HashSet<String>(snapshot2);
@@ -137,9 +136,9 @@ public class TestJLSVersionOfChangedFile {
 		assertEquals(s2, s1);
 
 		for (int i = conn.getRevisions().size()-1; i >= 0; i--) {
-			AbstractCommit commit = conn.getRevisions().get(i);
+			AbstractCommit commit = (AbstractCommit) conn.getRevisions().get(i);
 			snapshot1 = new ArrayList<ChangedFile>();
-			conn.getSnapshot(i, snapshot1, new HashMap<String, AbstractCommit>());
+			conn.getSnapshot(i, snapshot1);
 			snapshot2 = conn.getSnapshot(commit.getId());
 			s1 = new HashSet<String>();
 			s2 = new HashSet<String>(snapshot2);

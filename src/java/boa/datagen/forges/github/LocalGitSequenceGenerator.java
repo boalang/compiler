@@ -95,8 +95,8 @@ public class LocalGitSequenceGenerator {
 			final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
 			repoBuilder.setUrl(path);
 			repoBuilder.setKind(RepositoryKind.GIT);
-			for (final Revision rev : conn.getCommits("")) {
-				final Revision.Builder revBuilder = Revision.newBuilder(rev);
+			for (final Object rev : conn.getRevisions("")) {
+				final Revision.Builder revBuilder = Revision.newBuilder((Revision) rev);
 				repoBuilder.addRevisions(revBuilder);
 			}
 			if (repoBuilder.getRevisionsCount() > 0)

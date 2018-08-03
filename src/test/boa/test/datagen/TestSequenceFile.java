@@ -67,7 +67,7 @@ public class TestSequenceFile extends Java8BaseTest {
 		String[] args = {	"-inputJson", "test/datagen/jsons", 
 							"-inputRepo", "dataset/repos",
 							"-output", path,
-							"-size", "1",
+							"-commits", "1",
 							"-threads", "2"};
 		BoaGenerator.main(args);
 		
@@ -97,6 +97,16 @@ public class TestSequenceFile extends Java8BaseTest {
 							assertThat(cfKeys.contains(cf.getKey()), Matchers.is(false));
 							cfKeys.add(cf.getKey());
 						}
+					}
+				}
+				for (ChangedFile cf : cr.getHeadSnapshotList()) {
+					if (cf.getAst()) {
+						if (DefaultProperties.DEBUG) {
+							System.out.println(project.getName());
+							System.out.println(cf);
+						}
+						assertThat(cfKeys.contains(cf.getKey()), Matchers.is(false));
+						cfKeys.add(cf.getKey());
 					}
 				}
 			}

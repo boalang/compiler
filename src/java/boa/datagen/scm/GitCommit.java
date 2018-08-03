@@ -62,7 +62,7 @@ public class GitCommit extends AbstractCommit {
 	// the repository the commit lives in - should already be connected!
 	private Repository repository;
 	private RevWalk revwalk;
-	private Map<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
+	Map<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
 
 	public GitCommit(final GitConnector cnn, final Repository repository, final RevWalk revwalk, String projectName) {
 		super(cnn);

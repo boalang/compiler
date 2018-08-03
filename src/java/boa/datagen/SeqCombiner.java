@@ -109,6 +109,11 @@ public class SeqCombiner {
 								crb.setRevisionKeys(j, lastCommitWriterKey + crb.getRevisionKeys(j));
 							}
 						}
+						for (ChangedFile.Builder cfb : crb.getHeadSnapshotBuilderList()) {
+							long key = cfb.getKey();
+							if (key > 0)
+								cfb.setKey(lastAstWriterKey + key);
+						}
 					}
 					projectWriter.append(textKey, new BytesWritable(pb.build().toByteArray()));
 				}

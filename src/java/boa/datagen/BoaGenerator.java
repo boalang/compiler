@@ -105,9 +105,7 @@ public class BoaGenerator {
 		options.addOption("inputRepo", "json", true, "cloned repo path");
 		options.addOption("threads", "threads", true, "number of threads");
 		options.addOption("projects", "projects", true, "maximum number of projects per sequence file");
-		options.addOption("commits", "commits", true,
-				"maximum number of commits of a project to be stored in the project object");
-		options.addOption("size", "size", true, "maximum size of a project object to be stored");
+		options.addOption("commits", "commits", true, "maximum number of commits of a project to be stored in the project object");
 		options.addOption("libs", "libs", true, "directory to store libraries");
 		options.addOption("output", "json", true, "directory where output is desired");
 		options.addOption("user", "json", true, "github username to authenticate");
@@ -174,9 +172,6 @@ public class BoaGenerator {
 		}
 		if (cl.hasOption("commits")) {
 			DefaultProperties.MAX_COMMITS = cl.getOptionValue("commits");
-		}
-		if (cl.hasOption("size")) {
-			DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS = cl.getOptionValue("size");
 		}
 		if (cl.hasOption("debug")) {
 			DefaultProperties.DEBUG = true;
