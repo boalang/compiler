@@ -131,7 +131,7 @@ public class TestBuildSnapshotFromSequenceFile {
 		Arrays.sort(fileNames);
 		String[] expectedFileNames = conn.getSnapshot(commitId).toArray(new String[0]);
 		Arrays.sort(expectedFileNames);
-		System.out.println("Test snapshot at " + commitId);
+//		System.out.println("Test snapshot at " + commitId);
 		assertArrayEquals(expectedFileNames, fileNames);
 		conn.close();
 	}

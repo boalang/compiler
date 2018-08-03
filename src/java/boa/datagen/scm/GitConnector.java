@@ -166,16 +166,19 @@ public class GitConnector extends AbstractConnector {
 				gc.getChangeFiles(rc);
 				gc.fileNameIndices.clear();
 				
-				revisionMap.put(gc.id, revisions.size());
-				
-				if (commitList.size() > MAX_COMMITS){
+				if (commitList.size() > MAX_COMMITS) {
+					revisionMap.put(gc.id, revisionKeys.size());
+					
 					Revision revision = gc.asProtobuf(projectName);
 					revisionKeys.add(commitWriterLen);
 					BytesWritable bw = new BytesWritable(revision.toByteArray());
 					commitWriter.append(new LongWritable(commitWriterLen), bw);
 					commitWriterLen += bw.getLength();
-				} else
+				} else {
+					revisionMap.put(gc.id, revisions.size());
+					
 					revisions.add(gc);
+				}
 				
 				if (debug) {
 					long endTime = System.currentTimeMillis();
