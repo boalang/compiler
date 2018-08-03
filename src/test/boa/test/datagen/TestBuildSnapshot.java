@@ -8,7 +8,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +52,7 @@ public class TestBuildSnapshot {
 		GitConnector gc = new GitConnector(gitDir.getAbsolutePath(), "condoia");
 		gc.setRevisions();
 		System.out.println("Finish processing commits");
-		List<ChangedFile> snapshot1 = gc.buildHeadSnapshot(new String[]{"java"}, "");
+		List<ChangedFile> snapshot1 = gc.buildHeadSnapshot();
 		System.out.println("Finish building head snapshot");
 		List<String> snapshot2 = gc.getSnapshot(Constants.HEAD);
 		gc.close();
@@ -74,7 +73,7 @@ public class TestBuildSnapshot {
 	private static FileSystem fileSystem = null;
 	
 	private static SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
-	private static long astWriterLen = 1, contentWriterLen = 1;
+	private static long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
 	
 	@Test
 	public void testGetSnapshotFromProtobuf1() throws Exception {
@@ -137,18 +136,18 @@ public class TestBuildSnapshot {
 		filecheck.run();
 		String url = "https://github.com/" + repoName + ".git";
 		RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
-		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName, astWriter, astWriterLen, contentWriter, contentWriterLen);
+		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName, astWriter, astWriterLen, commitWriter, commitWriterLen, contentWriter, contentWriterLen);
 		final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
 		repoBuilder.setKind(RepositoryKind.GIT);
 		repoBuilder.setUrl(url);
-		for (final Revision rev : conn.getCommits(repoName)) {
-			final Revision.Builder revBuilder = Revision.newBuilder(rev);
+		for (final Object rev : conn.getCommits(repoName)) {
+			final Revision.Builder revBuilder = Revision.newBuilder((Revision) rev);
 			repoBuilder.addRevisions(revBuilder);
 		}
 		if (repoBuilder.getRevisionsCount() > 0) {
 //			System.out.println("Build head snapshot");
 			repoBuilder.setHead(conn.getHeadCommitOffset());
-			repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[] { "java" }, repoName));
+			repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot());
 		}
 		repoBuilder.addAllBranches(conn.getBranchIndices());
 		repoBuilder.addAllBranchNames(conn.getBranchNames());
@@ -158,8 +157,7 @@ public class TestBuildSnapshot {
 		closeWriters();
 
 		List<ChangedFile> snapshot1 = new ArrayList<ChangedFile>();
-		Map<String, AbstractCommit> commits = new HashMap<String, AbstractCommit>();
-		conn.getSnapshot(conn.getHeadCommitOffset(), snapshot1, commits);
+		conn.getSnapshot(conn.getHeadCommitOffset(), snapshot1);
 //		System.out.println("Finish building head snapshot");
 		List<String> snapshot2 = conn.getSnapshot(Constants.HEAD);
 		Set<String> s1 = new HashSet<String>(), s2 = new HashSet<String>(snapshot2);
@@ -169,9 +167,9 @@ public class TestBuildSnapshot {
 		assertEquals(s2, s1);
 
 		for (int i = conn.getRevisions().size()-1; i >= 0; i--) {
-			AbstractCommit commit = conn.getRevisions().get(i);
+			AbstractCommit commit = (AbstractCommit) conn.getRevisions().get(i);
 			snapshot1 = new ArrayList<ChangedFile>();
-			conn.getSnapshot(i, snapshot1, new HashMap<String, AbstractCommit>());
+			conn.getSnapshot(i, snapshot1);
 			snapshot2 = conn.getSnapshot(commit.getId());
 			s1 = new HashSet<String>();
 			s2 = new HashSet<String>(snapshot2);

@@ -20,6 +20,8 @@ package boa.datagen;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -255,30 +257,11 @@ public class SeqRepoImporter {
 						System.out.println(
 								Thread.currentThread().getId() + " Putting in sequence file: " + project.getId());
 
-					// store the project metadata
 					BytesWritable bw = new BytesWritable(project.toByteArray());
-					if (bw.getLength() < MAX_SIZE_FOR_PROJECT_WITH_COMMITS) {
-						try {
-							projectWriter.append(new Text(project.getId()), bw);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					} else {
-						Project.Builder pb = Project.newBuilder(project);
-						for (CodeRepository.Builder cb : pb.getCodeRepositoriesBuilderList()) {
-							for (Revision.Builder rb : cb.getRevisionsBuilderList()) {
-								cb.addRevisionKeys(commitWriterLen);
-								bw = new BytesWritable(rb.build().toByteArray());
-								commitWriter.append(new LongWritable(commitWriterLen), bw);
-								commitWriterLen += bw.getLength();
-							}
-							cb.clearRevisions();
-						}
-						try {
-							projectWriter.append(new Text(pb.getId()), new BytesWritable(pb.build().toByteArray()));
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+					try {
+						projectWriter.append(new Text(project.getId()), bw);
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
 					counter++;
 					if (counter >= Integer.parseInt(DefaultProperties.MAX_PROJECTS)) {
@@ -326,19 +309,24 @@ public class SeqRepoImporter {
 				System.out.println(Thread.currentThread().getId() + " Has repository: " + name);
 			AbstractConnector conn = null;
 			try {
-				conn = new GitConnector(gitDir.getAbsolutePath(), project.getName(), astWriter, astWriterLen,
+				conn = new GitConnector(gitDir.getAbsolutePath(), project.getName(), astWriter, astWriterLen, commitWriter, commitWriterLen,
 						contentWriter, contentWriterLen);
 				final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
-				for (final Revision rev : conn.getCommits(project.getName())) {
-					// build new rev w/ no namespaces
-					final Revision.Builder revBuilder = Revision.newBuilder(rev);
-					repoBuilder.addRevisions(revBuilder);
-				}
-				if (repoBuilder.getRevisionsCount() > 0) {
+				List<Object> revisions = conn.getCommits(project.getName());
+				if (!revisions.isEmpty()) {
+					if (revisions.get(0) instanceof Revision) {
+						for (final Object rev : revisions) {
+							final Revision.Builder revBuilder = Revision.newBuilder((Revision) rev);
+							repoBuilder.addRevisions(revBuilder);
+						}
+					} else {
+						for (final Object rev : revisions)
+							repoBuilder.addRevisionKeys((long) rev);
+					}
 					if (debug)
 						System.out.println(Thread.currentThread().getId() + " Build head snapshot");
 					repoBuilder.setHead(conn.getHeadCommitOffset());
-					repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[] {}, project.getName()));
+					repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot());
 				}
 				repoBuilder.addAllBranches(conn.getBranchIndices());
 				repoBuilder.addAllBranchNames(conn.getBranchNames());

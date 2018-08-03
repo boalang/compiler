@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile.Writer;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -42,6 +44,9 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 
 import boa.datagen.DefaultProperties;
 import boa.types.Code.Revision;
+import boa.types.Diff.ChangedFile;
+import boa.types.Diff.ChangedFile.FileKind;
+import boa.types.Shared.ChangeKind;
 
 
 /**
@@ -70,11 +75,13 @@ public class GitConnector extends AbstractConnector {
 		}
 	}
 
-	public GitConnector(String path, String projectName, Writer astWriter, long astWriterLen, Writer contentWriter, long contentWriterLen) {
+	public GitConnector(String path, String projectName, Writer astWriter, long astWriterLen, Writer commitWriter, long commitWriterLen, Writer contentWriter, long contentWriterLen) {
 		this(path, projectName);
 		this.astWriter = astWriter;
 		this.contentWriter = contentWriter;
 		this.astWriterLen = astWriterLen;
+		this.commitWriter = commitWriter;
+		this.commitWriterLen = commitWriterLen;
 		this.contentWriterLen = contentWriterLen;
 	}
 
@@ -121,7 +128,7 @@ public class GitConnector extends AbstractConnector {
 			revwalk.sort(RevSort.REVERSE, true);
 			
 			if (revisions == null)
-				revisions = new ArrayList<AbstractCommit>(); 
+				revisions = new ArrayList<Object>(); 
 			else
 				revisions.clear();
 			revisionMap = new HashMap<String, Integer>();
@@ -131,10 +138,10 @@ public class GitConnector extends AbstractConnector {
 			List<RevCommit> commitList = new ArrayList<RevCommit>();
 			for (RevCommit rc : revwalk) {
 				commitList.add(rc);
-				if (commitList.size() > MAX_COMMITS) {
-					System.err.println(projectName + " exceeded Max_Commit size of " + MAX_COMMITS);
-					return;
-				}
+			}
+			if (commitList.size() > MAX_COMMITS) {
+				System.err.println(projectName + " exceeded Max_Commit size of " + MAX_COMMITS);
+//				return;
 			}
 				
 			for (final RevCommit rc: commitList) {
@@ -165,7 +172,14 @@ public class GitConnector extends AbstractConnector {
 				
 				revisionMap.put(gc.id, revisions.size());
 				
-				revisions.add(gc);
+				if (commitList.size() > MAX_COMMITS){
+					Revision revision = gc.asProtobuf(projectName);
+					revisions.add(commitWriterLen);
+					BytesWritable bw = new BytesWritable(revision.toByteArray());
+					commitWriter.append(new LongWritable(commitWriterLen), bw);
+					commitWriterLen += bw.getLength();
+				} else
+					revisions.add(gc);
 				
 				if (debug) {
 					long endTime = System.currentTimeMillis();
@@ -235,6 +249,37 @@ public class GitConnector extends AbstractConnector {
 			if (debug)
 				System.err.println("Git Error reading branches: " + e.getMessage());
 		}
+	}
+
+	@Override
+	public List<ChangedFile> buildHeadSnapshot() {
+		final List<ChangedFile> snapshot = new ArrayList<ChangedFile>();
+		TreeWalk tw = new TreeWalk(repository);
+		tw.reset();
+		try {
+			RevCommit rc = revwalk.parseCommit(repository.resolve(Constants.HEAD));
+			tw.addTree(rc.getTree());
+			tw.setRecursive(true);
+			while (tw.next()) {
+				if (!tw.isSubtree()) {
+					String path = tw.getPathString();
+					ChangedFile.Builder cfb = ChangedFile.newBuilder();
+					cfb.setChange(ChangeKind.UNKNOWN);
+					cfb.setName(path);
+					cfb.setKind(FileKind.OTHER);
+					cfb.setKey(0);
+					cfb.setAst(false);
+					GitCommit gc = new GitCommit(this, repository, revwalk, projectName);
+					gc.processChangeFile(cfb);
+					snapshot.add(cfb.build());
+				}
+			}
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+		tw.close();
+		
+		return snapshot;
 	}
 
 	public List<String> getSnapshot(String commit) {

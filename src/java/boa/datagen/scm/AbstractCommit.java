@@ -194,7 +194,7 @@ public abstract class AbstractCommit {
 		return revision.build();
 	}
 
-	private Builder processChangeFile(final ChangedFile.Builder fb) {
+	Builder processChangeFile(final ChangedFile.Builder fb) {
 		long len = connector.astWriterLen;
 		String path = fb.getName();
 
@@ -705,64 +705,5 @@ public abstract class AbstractCommit {
 
 		return loc;
 	}
-
-	protected String getPreviousFiles(List<int[]> l, String parentName, String path) {
-		int start = 0;
-		while (path.charAt(start) == '/')
-			start++;
-		if (start > 0) {
-			int commitIndex = connector.revisionMap.get(parentName);
-			List<ChangedFile> snapshot = new ArrayList<ChangedFile>();
-			Map<String, AbstractCommit> commits = new HashMap<String, AbstractCommit>();
-			connector.getSnapshot(commitIndex, snapshot, commits);
-			for (ChangedFile cf : snapshot) {
-				String name = cf.getName();
-				if (name.substring(start).equals(path.substring(start))) {
-					path = name;
-					AbstractCommit preCommit = commits.get(cf.getName());
-					int preCommitIndex = connector.revisionMap.get(preCommit.id);
-					int preIndex = preCommit.fileNameIndices.get(name);
-					l.add(new int[] { preIndex, preCommitIndex });
-					
-					break;
-				}
-			}
-		} else {
-			int commitIndex = connector.revisionMap.get(parentName);
-			Set<Integer> queuedCommitIds = new HashSet<Integer>();
-			PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
-				@Override
-				public int compare(Integer i1, Integer i2) {
-					return i2 - i1;
-				}
-			});
-			pq.offer(commitIndex);
-			queuedCommitIds.add(commitIndex);
-			while (!pq.isEmpty()) {
-				commitIndex = pq.poll();
-				AbstractCommit commit = connector.revisions.get(commitIndex);
-				Integer i = commit.fileNameIndices.get(path);
-				if (i != null) {
-					ChangedFile.Builder cfb = commit.changedFiles.get(i);
-					if (cfb.getChange() != ChangeKind.DELETED) {
-						l.add(new int[] { i, commitIndex });
-					}
-				} else if (commit.parentIndices != null) {
-					for (int parentId : commit.parentIndices) {
-						if (!queuedCommitIds.contains(parentId)) {
-							pq.offer(parentId);
-							queuedCommitIds.add(parentId);
-						}
-					}
-				}
-			}
-		}
-		if (l.isEmpty()) {
-			System.err.println("Cannot find previous version! from: " + projectName);
-//			System.exit(-1);
-			return null;
-		}
-		return path;
-	}
-
+	
 }
