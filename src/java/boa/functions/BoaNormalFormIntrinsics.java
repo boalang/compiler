@@ -1104,12 +1104,21 @@ public class BoaNormalFormIntrinsics {
 					results2.add(0, ival);
 
 				if (results2.size() > 1) {
+					// check for elimination
+					if (results2.get(0) instanceof Double && (Double)results2.get(0) == 0.0)
+						return 0.0;
+					if (results2.get(0) instanceof Long && (Long)results2.get(0) == 0L)
+						return 0L;
+
 					// check for identity
+					boolean hasNumLiteral = true;
 					if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == 1.0) {
 						results2.remove(0);
+						hasNumLiteral = false;
 					} else if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == -1.0) {
 						results2.remove(0);
 						results2.set(0, negate(results2.get(0)));
+						hasNumLiteral = false;
 					}
 
 					// only the first term can remain negative
@@ -1120,18 +1129,10 @@ public class BoaNormalFormIntrinsics {
 							results2.set(i, negate(results2.get(i)));
 						}
 
-					// check for elimination
-					if (results2.get(0) instanceof Double && (Double)results2.get(0) == 0.0)
-						return 0.0;
-					if (results2.get(0) instanceof Long && (Long)results2.get(0) == 0L)
-						return 0L;
-
 					// simplify terms and literal
 					dval = 1.0;
 					ival = 1L;
 
-					boolean negative = !positive;
-					boolean hasNumLiteral = results2.get(0) instanceof Number;
 					boolean[] cancelTerms = new boolean[results2.size()];
 
 					final Map<Expression, List<Integer>> numMap = new LinkedHashMap<Expression, List<Integer>>();
@@ -1161,20 +1162,12 @@ public class BoaNormalFormIntrinsics {
 									cancelTerms[aryList.get(0)] = true;
 									cancelTerms[i] = true;
 									aryList.remove(0);
-									if (aryList.size() > 0)
-										numMap.put(subExp2, aryList);
-									else
+									if (aryList.size() == 0)
 										numMap.remove(subExp2);
 								} else {
-									if (denMap.containsKey(subExp2)) {
-										final List<Integer> aryList = denMap.get(subExp2);
-										aryList.add(i);
-										denMap.put(subExp2, aryList);
-									} else {
-										final List<Integer> aryList = new ArrayList<Integer>();
-										aryList.add(i);
-										denMap.put(subExp2, aryList);
-									}
+									if (!denMap.containsKey(subExp2))
+										denMap.put(subExp2, new ArrayList<Integer>());
+									denMap.get(subExp2).add(i);
 								}
 							}
 						// if regular term like x or y
@@ -1187,20 +1180,12 @@ public class BoaNormalFormIntrinsics {
 									cancelTerms[aryList.get(0)] = true;
 									cancelTerms[i] = true;
 									aryList.remove(0);
-									if (aryList.size() > 0)
-										denMap.put(subExp, aryList);
-									else
+									if (aryList.size() == 0)
 										denMap.remove(subExp2);
 								} else {
-									if (numMap.containsKey(subExp2)) {
-										final List<Integer> aryList = numMap.get(subExp2);
-										aryList.add(i);
-										numMap.put(subExp2, aryList);
-									} else {
-										final List<Integer> aryList = new ArrayList<Integer>();
-										aryList.add(i);
-										numMap.put(subExp2, aryList);
-									}
+									if (!numMap.containsKey(subExp2))
+										numMap.put(subExp2, new ArrayList<Integer>());
+									numMap.get(subExp2).add(i);
 								}
 							}
 						}
@@ -1224,9 +1209,12 @@ public class BoaNormalFormIntrinsics {
 							num = ((Number)numLiteral).doubleValue() / ival.doubleValue();
 						else
 							num = ((Number)numLiteral).longValue() / ival;
-						if (num.doubleValue() == 1.0)
+						if (num.doubleValue() == 1.0) {
 							results2.remove(0);
-						else
+							if (isDouble)
+								for (int i = 0; i < results2.size(); i++)
+									results2.set(i, toDouble(results2.get(i)));
+						} else
 							results2.set(0, num);
 					} else {
 						if (dval != 1.0)
@@ -1237,11 +1225,11 @@ public class BoaNormalFormIntrinsics {
 
 					if (results2.size() == 0) {
 						if (isDouble)
-							return negative ? -1.0 : 1.0;
-						return negative ? -1L : 1L;
+							return positive ? 1.0 : -1.0;
+						return positive ? 1L : -1L;
 					}
 
-					if (results2.size() > 0 && negative) {
+					if (results2.size() > 0 && !positive) {
 						if (results2.get(0) instanceof Expression && ((Expression)results2.get(0)).getKind() == ExpressionKind.OP_DIV) {
 							b = Expression.newBuilder((Expression)results2.get(0));
 							b.setExpressions(0, (Expression)negate(b.getExpressions(0)));
@@ -1365,113 +1353,133 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
+	 * Converts literals in an expression into doubles.
+	 */
+	private static Object toDouble(final Object o) {
+		if (o instanceof Number)
+			return ((Number)o).doubleValue();
+
+		final Expression.Builder b = Expression.newBuilder((Expression)o);
+		for (int i = 0; i < b.getExpressionsCount(); i++) {
+			final Expression sub = b.getExpressions(i);
+			if (sub.getKind() == ExpressionKind.LITERAL)
+				b.setExpressions(i, createLiteral("" + Double.parseDouble(sub.getLiteral())));
+			else
+				b.setExpressions(i, (Expression)toDouble(sub));
+		}
+
+		return b.build();
+	}
+
+	/**
 	 * takes an OP_ADD or OP_SUB expression to factor out the common terms
 	 *
 	 * @param e the expression to factor
 	 * @return the factored form of the expression
 	 */
 	private static Expression factor(final Expression e) throws Exception {
+		if (e.getKind() != ExpressionKind.OP_ADD && e.getKind() != ExpressionKind.OP_SUB)
+			return e;
+
 		final List<Object> results = new ArrayList<Object>();
 		for (final Expression sub : e.getExpressionsList())
 			results.add(sub);
 
-		switch (e.getKind()) {
-			case OP_ADD:
-			case OP_SUB:
-				final Map<Expression, Integer> commonTermMap = new LinkedHashMap<Expression, Integer>();
-				final List<Object> commonResults = new ArrayList<Object>();
-				boolean allNegative = true;
-				boolean[] negativeList = new boolean[results.size()];
+		final Map<Expression, Integer> commonTermMap = new LinkedHashMap<Expression, Integer>();
+		final List<Object> commonResults = new ArrayList<Object>();
+		boolean allNegative = true;
+		final boolean[] negativeList = new boolean[results.size()];
 
-				// get first terms
-				for (int i = 0; i < ((Expression)results.get(0)).getExpressionsCount(); i++) {
-					Expression exp = ((Expression)results.get(0)).getExpressions(i);
-					if (i == 0 && isNegative(exp)) {
-						results.set(0, negate(results.get(0)));
-						exp = (Expression)negate(exp);
-						negativeList[0] = true;
-					}
-					if (commonTermMap.containsKey(exp))
-						commonTermMap.put(exp, commonTermMap.get(exp) + 1);
-					else
-						commonTermMap.put(exp, 1);
-				}
+		// get first terms
+		for (int i = 0; i < ((Expression)results.get(0)).getExpressionsCount(); i++) {
+			Expression exp = ((Expression)results.get(0)).getExpressions(i);
+			if (i == 0 && isNegative(exp)) {
+				results.set(0, negate(results.get(0)));
+				exp = (Expression)negate(exp);
+				negativeList[0] = true;
+			}
 
-				// scan through results list and get the common terms
-				for (int i = 1; i < results.size(); i++) {
-					final Map<Expression, Integer> tempMap = new LinkedHashMap<Expression, Integer>();
-					for (int j = 0; j < ((Expression)results.get(i)).getExpressionsCount(); j++) {
-						Expression exp = ((Expression)results.get(i)).getExpressions(j);
-						if (j == 0 && isNegative(exp)) {
-							results.set(i, negate(results.get(i)));
-							exp = (Expression)negate(exp);
-							negativeList[i] = true;
-						}
-						if (commonTermMap.containsKey(exp)) {
-							if (tempMap.containsKey(exp))
-								tempMap.put(exp, tempMap.get(exp) + 1);
-							else
-								tempMap.put(exp, 1);
-							if (commonTermMap.get(exp) == 1)
-								commonTermMap.remove(exp);
-							else
-								commonTermMap.put(exp, commonTermMap.get(exp) - 1);
-						}
-					}
-					if (tempMap.size() == 0)
-						return e;
-					else {
-						commonTermMap.clear();
-						commonTermMap.putAll(tempMap);
-					}
-				}
-
-				// see if all terms are negative
-				for (int i = 0; i < results.size(); i++) {
-					if (!negativeList[i]) {
-						allNegative = false;
-						break;
-					}
-				}
-
-				// remove the common terms
-				for (int i = 0; i < results.size(); i++) {
-					final Map<Expression, Integer> tempMap = new LinkedHashMap<Expression, Integer>(commonTermMap);
-					final Expression.Builder b = Expression.newBuilder((Expression)results.get(i));
-					for (int j = ((Expression)results.get(i)).getExpressionsCount() - 1; j >= 0; j--) {
-						final Expression subExp = ((Expression)results.get(i)).getExpressions(j);
-						if (tempMap.containsKey(subExp)) {
-							b.removeExpressions(j);
-							if (tempMap.get(subExp) == 1)
-								tempMap.remove(subExp);
-							else tempMap.put(subExp, tempMap.get(subExp) - 1);
-						}
-					}
-					if (b.getExpressionsCount() == 0)
-						b.addExpressions(createLiteral("1"));
-					results.set(i, b.build());
-					if (!allNegative && negativeList[i] && b.getExpressionsCount() != 0)
-						results.set(i, negate(results.get(i)));
-				}
-
-				// create common terms' expression
-				for (Map.Entry<Expression, Integer> entry : commonTermMap.entrySet()) {
-					for (int i = 0; i < entry.getValue(); i++) {
-						commonResults.add(entry.getKey());
-					}
-				}
-				//negate the first term is all negative
-				if (allNegative) commonResults.set(0, negate(commonResults.get(0)));
-
-				Object e2 = internalReduce(createExpression(e.getKind(), convertArray(results)));
-				if (e2 instanceof Expression)
-					e2 = finalReduce((Expression)e2);
-				// return final expression
-				return createExpression(ExpressionKind.OP_MULT, createExpression(ExpressionKind.OP_MULT, convertArray(commonResults)), (Expression)e2);
-			default:
-				break;
+			if (commonTermMap.containsKey(exp))
+				commonTermMap.put(exp, commonTermMap.get(exp) + 1);
+			else
+				commonTermMap.put(exp, 1);
 		}
-		return e;
+
+		// scan through results list and get the common terms
+		for (int i = 1; i < results.size(); i++) {
+			final Map<Expression, Integer> tempMap = new LinkedHashMap<Expression, Integer>();
+			for (int j = 0; j < ((Expression)results.get(i)).getExpressionsCount(); j++) {
+				Expression exp = ((Expression)results.get(i)).getExpressions(j);
+				if (j == 0 && isNegative(exp)) {
+					results.set(i, negate(results.get(i)));
+					exp = (Expression)negate(exp);
+					negativeList[i] = true;
+				}
+				if (commonTermMap.containsKey(exp)) {
+					if (tempMap.containsKey(exp))
+						tempMap.put(exp, tempMap.get(exp) + 1);
+					else
+						tempMap.put(exp, 1);
+
+					if (commonTermMap.get(exp) == 1)
+						commonTermMap.remove(exp);
+					else
+						commonTermMap.put(exp, commonTermMap.get(exp) - 1);
+				}
+			}
+
+			if (tempMap.size() == 0)
+				return e;
+
+			commonTermMap.clear();
+			commonTermMap.putAll(tempMap);
+		}
+
+		// see if all terms are negative
+		for (int i = 0; i < results.size(); i++) {
+			if (!negativeList[i]) {
+				allNegative = false;
+				break;
+			}
+		}
+
+		// remove the common terms
+		for (int i = 0; i < results.size(); i++) {
+			final Map<Expression, Integer> tempMap = new LinkedHashMap<Expression, Integer>(commonTermMap);
+			final Expression.Builder b = Expression.newBuilder((Expression)results.get(i));
+			for (int j = ((Expression)results.get(i)).getExpressionsCount() - 1; j >= 0; j--) {
+				final Expression subExp = ((Expression)results.get(i)).getExpressions(j);
+				if (tempMap.containsKey(subExp)) {
+					b.removeExpressions(j);
+					if (tempMap.get(subExp) == 1)
+						tempMap.remove(subExp);
+					else
+						tempMap.put(subExp, tempMap.get(subExp) - 1);
+				}
+			}
+			if (b.getExpressionsCount() == 0)
+				b.addExpressions(createLiteral("1"));
+			results.set(i, b.build());
+			if (!allNegative && negativeList[i] && b.getExpressionsCount() != 0)
+				results.set(i, negate(results.get(i)));
+		}
+
+		// create common terms' expression
+		for (final Map.Entry<Expression, Integer> entry : commonTermMap.entrySet()) {
+			for (int i = 0; i < entry.getValue(); i++) {
+				commonResults.add(entry.getKey());
+			}
+		}
+
+		// negate the first term is all negative
+		if (allNegative)
+			commonResults.set(0, negate(commonResults.get(0)));
+
+		Object e2 = internalReduce(createExpression(e.getKind(), convertArray(results)));
+		if (e2 instanceof Expression)
+			e2 = finalReduce((Expression)e2);
+		// return final expression
+		return createExpression(ExpressionKind.OP_MULT, createExpression(ExpressionKind.OP_MULT, convertArray(commonResults)), (Expression)e2);
 	}
 
 	/**
@@ -1665,72 +1673,65 @@ public class BoaNormalFormIntrinsics {
 	 * @return an Object representing the inverse form of o
 	 */
 	private static Object inverse(final Object o) {
-		// if o is a number
-		if (!(o instanceof Expression)) {
-			// if o is 1
-			if (o instanceof Double && (((Double)o).doubleValue() == 1.0 || ((Double)o).doubleValue() == -1.0))
+		if (o instanceof Number) {
+			// if o is 1 or -1
+			if (((Number)o).doubleValue() == 1.0 || ((Number)o).doubleValue() == -1.0)
 				return o;
-			else if (o instanceof Long && (((Long)o).longValue() == 1 || ((Long)o).longValue() == -1))
-				return o;
-			//create fraction
-			else {
-				return createExpression(ExpressionKind.OP_DIV, createLiteral("1"), createLiteral("" + o));
-			}
+
+			// create fraction
+			return createExpression(ExpressionKind.OP_DIV, createLiteral("1"), createLiteral("" + o));
 		}
-		// if o is an Expression
-		else {
-			// if o is literal
-			final Expression e = (Expression)o;
-			final Expression.Builder b = Expression.newBuilder(e);
-			switch (e.getKind()) {
-				case OP_ADD:
-				case OP_SUB:
-					// if literal 1
-					if (e.getExpressionsCount() == 1 &&
-						e.getExpressions(0).getKind() == ExpressionKind.LITERAL) {
-						if (Double.parseDouble(e.getExpressions(0).getLiteral()) == 1.0)
-							return o;
-						else if (Double.parseDouble(e.getExpressions(0).getLiteral()) == -1.0)
-							return negate(createLiteral("1.0"));
-					}
-					break;
-				case OP_MULT:
-					// inverse each term
-					for (int i = 0; i < e.getExpressionsCount(); i++) {
-						b.setExpressions(i, (Expression)inverse(e.getExpressions(i)));
-					}
-					return b.build();
-				case OP_DIV:
-					// if first term is 1 or -1
-					Expression first = e.getExpressions(0);
-					boolean negative = isNegative(first);
-					if (negative) first = (Expression)negate(first);
-					if (first.getKind() == ExpressionKind.LITERAL && (first.getLiteral() == "1" || first.getLiteral() == "1.0")) {
-						// if only 1 denominator, return denominator
-						if (e.getExpressionsCount() == 2)
-							return negative ? negate(e.getExpressions(1)) : e.getExpressions(1);
-						// if more than 1 denominator, return mult
-						else {
-							b.removeExpressions(0);
-							b.setKind(ExpressionKind.OP_MULT);
-							return negative ? negate(b.build()) : b.build();
-						}
-					}
-					// inverse the first term and mult the rest
-					b.setExpressions(0, (Expression)inverse(b.getExpressions(0)));
+
+		final Expression e = (Expression)o;
+		final Expression.Builder b = Expression.newBuilder(e);
+		switch (e.getKind()) {
+			case OP_ADD:
+			case OP_SUB:
+				// if literal 1 or -1
+				if (e.getExpressionsCount() == 1 && e.getExpressions(0).getKind() == ExpressionKind.LITERAL)
+					if (Double.parseDouble(e.getExpressions(0).getLiteral()) == 1.0 || Double.parseDouble(e.getExpressions(0).getLiteral()) == -1.0)
+						return o;
+				break;
+
+			case OP_MULT:
+				// inverse each term
+				for (int i = 0; i < e.getExpressionsCount(); i++)
+					b.setExpressions(i, (Expression)inverse(e.getExpressions(i)));
+				return b.build();
+
+			case OP_DIV:
+				// if first term is 1 or -1
+				final boolean negative = isNegative(e.getExpressions(0));
+				final Expression first = negative ? (Expression)negate(e.getExpressions(0)) : e.getExpressions(0);
+
+				if (first.getKind() == ExpressionKind.LITERAL && (first.getLiteral() == "1" || first.getLiteral() == "1.0")) {
+					// if only 1 denominator, return denominator
+					if (e.getExpressionsCount() == 2)
+						return negative ? negate(e.getExpressions(1)) : e.getExpressions(1);
+
+					// if more than 1 denominator, return mult
+					b.removeExpressions(0);
 					b.setKind(ExpressionKind.OP_MULT);
-					return b.build();
-				case LITERAL:
-					// if literal 1
-					if (e.getLiteral().equals("1"))
-						return e;
-					break;
-				case PAREN:
-					return inverse(e.getExpressions(0));
-				default:
-					break;
-			}
+					return negative ? negate(b.build()) : b.build();
+				}
+
+				// inverse the first term and mult the rest
+				b.setExpressions(0, (Expression)inverse(b.getExpressions(0)));
+				b.setKind(ExpressionKind.OP_MULT);
+				return b.build();
+
+			case LITERAL:
+				if (Double.parseDouble(e.getLiteral()) == 1.0 || Double.parseDouble(e.getLiteral()) == -1.0)
+					return e;
+				break;
+
+			case PAREN:
+				return inverse(e.getExpressions(0));
+
+			default:
+				break;
 		}
+
 		return createExpression(ExpressionKind.OP_DIV, createLiteral("1"), (Expression)o);
 	}
 
