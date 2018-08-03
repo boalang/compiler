@@ -6,7 +6,7 @@ namespaces {
       kind: BLOCK
       statements {
         kind: EXPRESSION
-        expression {
+        expressions {
           kind: VARDECL
           variable_decls {
             name: "index"
@@ -25,7 +25,7 @@ namespaces {
         kind: WHILE
         statements {
           kind: EXPRESSION
-          expression {
+          expressions {
             kind: YIELD
             expressions {
               kind: OP_INC

@@ -10,7 +10,7 @@ namespaces {
       kind: BLOCK
       statements {
         kind: EXPRESSION
-        expression {
+        expressions {
           kind: YIELD
         }
       }

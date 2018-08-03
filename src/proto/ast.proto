@@ -15,14 +15,10 @@ message ASTRoot {
 	repeated Namespace namespaces = 1;
 	/** @exclude */
 	repeated string names = 3;
-	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
-	optional ChangeKind change_kind = 4;
-	/** the key of the mapped node in the previous version */
-	optional int32 mapped_node = 6;
 	/** */
-	optional int32 key = 7;
+	optional int32 key = 4;
 	/**The top-level document of an html, css, or xml DOM*/
-	optional Document document = 8;
+	optional Document document = 5;
 }
 
 /** A namespace (aka, package) in a source file */
@@ -39,10 +35,6 @@ message Namespace {
 	repeated Method methods = 5;
 	/** Expressions contained in this namespace */
 	repeated Expression expressions = 6;
-	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
-	optional ChangeKind change_kind = 7;
-	/** the key of the mapped node in the previous version */
-	optional int32 mapped_node = 9;
 	/** */
 	optional int32 key = 10;
 	/** The nested namespaces */
@@ -72,10 +64,6 @@ message Declaration {
 	repeated Declaration nested_declarations = 8;
 	/** @exclude TODO */
 	repeated Comment comments = 9;
-	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
-	optional ChangeKind change_kind = 10;
-	/** the key of the mapped node in the previous version */
-	optional int32 mapped_node = 12;
 	/** */
 	optional int32 key = 13;
 	/** The fully qualified name of this type/interface */
@@ -129,10 +117,6 @@ message Type {
 	required TypeKind kind = 3;
 	/** @exclude */
 	optional string id = 4;
-	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
-	optional ChangeKind change_kind = 5;
-	/** the key of the mapped node in the previous version */
-	optional int32 mapped_node = 7;
 	/** the index of the file (in the list of files in the snapshot) containing the declaration of this type */
 	optional int32 declaration_file = 8;
 	/** the key of the node containing the declaration of this type in the AST of the file */
@@ -164,10 +148,6 @@ message Method {
 	repeated Statement statements = 7;
 	/** @exclude TODO */
 	repeated Comment comments = 8;
-	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
-	optional ChangeKind change_kind = 9;
-	/** the key of the mapped node in the previous version */
-	optional int32 mapped_node = 11;
 	/** */
 	optional int32 key = 12;
 	/** The key of the type declaration declaring this method in the same AST */
@@ -188,10 +168,6 @@ message Variable {
 	optional Expression initializer = 4;
 	/** @exclude TODO */
 	repeated Comment comments = 5;
-	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
-	optional ChangeKind change_kind = 6;
-	/** the key of the mapped node in the previous version */
-	optional int32 mapped_node = 8;
 	/** */
 	optional int32 key = 9;
 	/** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable */
@@ -262,18 +238,13 @@ message Statement {
 	repeated Expression updates = 6;
 	optional Variable variable_declaration = 7;
 	optional Declaration type_declaration = 8;
-	optional Expression expression = 9;
-	repeated Expression expressions = 10;
-	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
-	optional ChangeKind change_kind = 11;
-	/** the key of the mapped node in the previous version */
-	optional int32 mapped_node = 12;
+	repeated Expression expressions = 9;
 	/** */
-	optional int32 key = 13;
-	repeated Method methods = 14;
-	repeated Variable variable_declarations = 15;
-	repeated Declaration type_declarations = 16;
-	repeated string names = 17;
+	optional int32 key = 12;
+	repeated Method methods = 13;
+	repeated Variable variable_declarations = 14;
+	repeated Declaration type_declarations = 15;
+	repeated string names = 16;
 }
 
 /** A single expression */
@@ -407,10 +378,6 @@ message Expression {
 	/** 13 used to be lambda */
 	/** @exclude */
 	optional bool no_parens = 14;
-	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
-	optional ChangeKind change_kind = 15;
-	/** the key of the mapped node in the previous version */
-	optional int32 mapped_node = 17;
 	/** */
 	optional int32 key = 18;
 	/** The type declaring this method call or field access */
@@ -423,10 +390,11 @@ message Expression {
 	repeated Statement statements = 22;
 	optional bool is_member_access = 23;
 	optional bool dollar_sign = 24;
-	optional Expression computed_method = 25;
-	optional bool is_static = 26;
-	optional bool has_from = 27;
-	optional Method trait = 28;
+	optional Expression computed_variable = 25;
+	optional Expression computed_method = 26;
+	optional bool is_static = 27;
+	optional bool has_from = 28;
+	optional Method trait = 29;
 }
 
 /** A single modifier */
@@ -504,10 +472,6 @@ message Modifier {
 	repeated Expression annotation_values = 5;
 	/** If the <code>kind</code> is <code>OTHER</code>, the modifier string from the source code */
 	optional string other = 6;
-	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
-	optional ChangeKind change_kind = 7;
-	/** the key of the mapped node in the previous version */
-	optional int32 mapped_node = 9;
 	/** */
 	optional int32 key = 10;
 	/** */
@@ -530,10 +494,6 @@ message Comment {
 	required CommentKind kind = 1;
 	required string value = 2;
 	required PositionInfo position = 3;
-	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
-	optional ChangeKind change_kind = 4;
-	/** the key of the mapped node in the previous version */
-	optional int32 mapped_node = 6;
 	/** */
 	optional int32 key = 7;
 }

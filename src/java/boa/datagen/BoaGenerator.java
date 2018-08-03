@@ -53,28 +53,23 @@ public class BoaGenerator {
 		BoaGenerator.handleCmdOptions(cl, options, args);
 
 		/*
-		 * 1. if user provides local json files 2. if user provides username and
-		 * password in both the cases json files are going to be available
+		 * 1. if user provides local json files 
+		 * 2. if user provides username and password 
+		 * in both the cases json files are going to be available
 		 */
 
 		if (jsonAvailable) {
-			CacheGithubJSON.main(new String[0]);
 			try {
 				SeqRepoImporter.main(new String[0]);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-
 			SeqCombiner.main(new String[0]);
-//			try {
-//				MapFileGen.main(new String[0]);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-		} else if (tokenAvailable) { // when user provides local repo and does not have json files
+		} else if (tokenAvailable) { // when user provides local repo and does
+										// not have json files
 			MetaDataMaster mdm = new MetaDataMaster();
 			mdm.downloadRepoNames(DefaultProperties.TOKEN, DefaultProperties.OUTPUT);
-			
+
 			SeqCombiner.main(new String[0]);
 		} else { // when user provides local repo and does not have json files
 			File output = new File(DefaultProperties.OUTPUT);
@@ -87,7 +82,7 @@ public class BoaGenerator {
 				e.printStackTrace();
 			}
 		}
-		
+
 		clear();
 	}
 
@@ -111,7 +106,6 @@ public class BoaGenerator {
 		options.addOption("threads", "threads", true, "number of threads");
 		options.addOption("projects", "projects", true, "maximum number of projects per sequence file");
 		options.addOption("commits", "commits", true, "maximum number of commits of a project to be stored in the project object");
-		options.addOption("size", "size", true, "maximum size of a project object to be stored");
 		options.addOption("libs", "libs", true, "directory to store libraries");
 		options.addOption("output", "json", true, "directory where output is desired");
 		options.addOption("user", "json", true, "github username to authenticate");
@@ -120,7 +114,6 @@ public class BoaGenerator {
 		options.addOption("targetRepo", "json", true, "name of the target repository");
 		options.addOption("cache", "json", false, "enable if you want to delete the cloned code for user.");
 		options.addOption("debug", "json", false, "enable for debug mode.");
-		options.addOption("treeDiff", "json", false, "enable for tree differencing.");
 		options.addOption("debugparse", "json", false, "enable for debug mode when parsing source files.");
 		options.addOption("help", "help", true, "help");
 	}
@@ -135,7 +128,7 @@ public class BoaGenerator {
 			DefaultProperties.GH_JSON_PATH = cl.getOptionValue("inputJson");
 			DefaultProperties.OUTPUT = cl.getOptionValue("output");
 			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("output");
-		}else if (cl.hasOption("inputToken") && cl.hasOption("inputRepo") && cl.hasOption("output")) {
+		} else if (cl.hasOption("inputToken") && cl.hasOption("inputRepo") && cl.hasOption("output")) {
 			DefaultProperties.TOKEN = cl.getOptionValue("inputToken");
 			DefaultProperties.OUTPUT = cl.getOptionValue("output");
 			// DefaultProperties.GH_GIT_PATH = GH_JSON_CACHE_PATH + "/github";
@@ -180,9 +173,6 @@ public class BoaGenerator {
 		if (cl.hasOption("commits")) {
 			DefaultProperties.MAX_COMMITS = cl.getOptionValue("commits");
 		}
-		if (cl.hasOption("size")) {
-			DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS = cl.getOptionValue("size");
-		}
 		if (cl.hasOption("debug")) {
 			DefaultProperties.DEBUG = true;
 		}
@@ -195,9 +185,6 @@ public class BoaGenerator {
 		if (cl.hasOption("libs")) {
 			DefaultProperties.CLASSPATH_ROOT = cl.getOptionValue("libs");
 		}
-		if (cl.hasOption("treeDif")){
-			DefaultProperties.TREEDIF = true;
-		}
 	}
 
 	//
@@ -206,7 +193,6 @@ public class BoaGenerator {
 		if (inputDirectory.exists())
 			org.apache.commons.io.FileUtils.deleteQuietly(inputDirectory);
 	}
-	
 
 	private static void getGithubMetadata(String inputPath, String username, String password, String targetUser,
 			String targetRepo) {

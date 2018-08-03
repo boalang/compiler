@@ -2,7 +2,7 @@ namespaces {
   name: ""
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: VARDECL
       variable_decls {
         name: "x"
@@ -15,7 +15,7 @@ namespaces {
   }
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: VARDECL
       variable_decls {
         name: "y"
@@ -28,7 +28,7 @@ namespaces {
   }
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: VARDECL
       variable_decls {
         name: "z"

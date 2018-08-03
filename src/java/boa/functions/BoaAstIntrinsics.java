@@ -146,7 +146,7 @@ public class BoaAstIntrinsics {
 			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
 		}
 
-		System.err.println("error with ast: " + f.getKey());
+		System.err.println("error with ast: " + f.getKey() + " from " + f.getName());
 		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
 		return emptyAst;
 	}
@@ -1036,42 +1036,42 @@ public class BoaAstIntrinsics {
 
 			case RETURN:
 				s += "return";
-				if (stmt.hasExpression())
-					s += " " + prettyprint(stmt.getExpression());
+				if (stmt.getExpressionsCount() > 0)
+					s += " " + prettyprint(stmt.getExpressions(0));
 				s += ";";
 				return s;
 			case BREAK:
 				s += "break";
-				if (stmt.hasExpression())
-					s += " " + prettyprint(stmt.getExpression());
+				if (stmt.getExpressionsCount() > 0)
+					s += " " + prettyprint(stmt.getExpressions(0));
 				s += ";";
 				return s;
 			case CONTINUE:
 				s += "continue";
-				if (stmt.hasExpression())
-					s += " " + prettyprint(stmt.getExpression());
+				if (stmt.getExpressionsCount() > 0)
+					s += " " + prettyprint(stmt.getExpressions(0));
 				s += ";";
 				return s;
 
 			case ASSERT:
 				s += "assert ";
 				s += prettyprint(stmt.getConditions(0));
-				if (stmt.hasExpression())
-					s += " " + prettyprint(stmt.getExpression());
+				if (stmt.getExpressionsCount() > 0)
+					s += " " + prettyprint(stmt.getExpressions(0));
 				s += ";";
 				return s;
 
 			case LABEL:
-				return prettyprint(stmt.getExpression()) + ": " + prettyprint(stmt.getStatements(0));
+				return prettyprint(stmt.getExpressions(0)) + ": " + prettyprint(stmt.getStatements(0));
 
 			case CASE:
-				return "case " + prettyprint(stmt.getExpression()) + ":";
+				return "case " + prettyprint(stmt.getExpressions(0)) + ":";
 
 			case DEFAULT:
 				return "default:";
 
 			case EXPRESSION:
-				return prettyprint(stmt.getExpression()) + ";";
+				return prettyprint(stmt.getExpressions(0)) + ";";
 
 			case TYPEDECL:
 				return prettyprint(stmt.getTypeDeclaration());

@@ -48,8 +48,6 @@ import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
 import boa.datagen.DefaultProperties;
 import boa.datagen.dependencies.PomFile;
-import boa.datagen.treed.TreedConstants;
-import boa.datagen.treed.TreedMapper;
 import boa.datagen.util.CssVisitor;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.HtmlVisitor;
@@ -60,7 +58,6 @@ import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.XMLVisitor;
-import boa.datagen.util.JavaASTUtil;
 import boa.datagen.util.JavaErrorCheckVisitor;
 
 /**
@@ -68,7 +65,6 @@ import boa.datagen.util.JavaErrorCheckVisitor;
  */
 public abstract class AbstractCommit {
 	protected static final boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
-	protected static final boolean treeDif = Properties.getBoolean("treeDif", DefaultProperties.TREEDIF);
 	protected static final boolean debugparse = Properties.getBoolean("debugparse", DefaultProperties.DEBUGPARSE);
 	protected static final boolean STORE_ASCII_PRINTABLE_CONTENTS = Properties.getBoolean("ascii", DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
 
@@ -90,7 +86,7 @@ public abstract class AbstractCommit {
 			cfb = ChangedFile.newBuilder();
 			cfb.setName(path);
 			cfb.setKind(FileKind.OTHER);
-			cfb.setKey(-1);
+			cfb.setKey(0);
 			cfb.setAst(false);
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
@@ -159,7 +155,7 @@ public abstract class AbstractCommit {
 			HashMap<String, String> globalProperties, HashMap<String, String> globalManagedDependencies,
 			Stack<PomFile> parentPomFiles);
 
-	public Revision asProtobuf(final boolean parse, String projectName) {
+	public Revision asProtobuf(final String projectName) {
 		final Revision.Builder revision = Revision.newBuilder();
 		revision.setId(id);
 		this.projectName = projectName;
@@ -188,17 +184,17 @@ public abstract class AbstractCommit {
 		for (ChangedFile.Builder cfb : changedFiles) {
 			cfb.setKind(FileKind.OTHER);
 			if (cfb.getChange() == ChangeKind.DELETED || cfb.getChange() == ChangeKind.UNKNOWN) {
-				cfb.setKey(-1);
+				cfb.setKey(0);
 //				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
 			} else
-				processChangeFile(cfb, parse);
+				processChangeFile(cfb);
 			revision.addFiles(cfb.build());
 		}
 
 		return revision.build();
 	}
 
-	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse) {
+	Builder processChangeFile(final ChangedFile.Builder fb) {
 		long len = connector.astWriterLen;
 		String path = fb.getName();
 
@@ -209,12 +205,11 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.XML);
 		else if (lowerPath.endsWith(".jar") || lowerPath.endsWith(".class"))
 			fb.setKind(FileKind.BINARY);
-		else if (lowerPath.endsWith(".java") && parse) {
+		else if (lowerPath.endsWith(".java")) {
 			final String content = getFileContents(path);
-			
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 			parseJavaFile(path, fb, content, false);
-		} else if (lowerPath.endsWith(".js") && parse) {
+		} else if (lowerPath.endsWith(".js")) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JS_ES1);
@@ -248,13 +243,6 @@ public abstract class AbstractCommit {
 											System.err.println(
 													"Found ES4 parse error in: revision " + id + ": file " + path);
 										fb.setKind(FileKind.SOURCE_JS_ERROR);
-										// try {
-										// astWriter.append(new
-										// LongWritable(len), new
-										// BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
-										// } catch (IOException e) {
-										// e.printStackTrace();
-										// }
 									} else if (debugparse)
 										System.err.println("Accepted ES8: revision " + id + ": file " + path);
 								} else if (debugparse)
@@ -269,7 +257,7 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted ES2: revision " + id + ": file " + path);
 			} else if (debugparse)
 				System.err.println("Accepted ES1: revision " + id + ": file " + path);
-		} else if (lowerPath.endsWith(".php") && parse) {
+		} else if (lowerPath.endsWith(".php")) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_PHP5);
@@ -303,13 +291,6 @@ public abstract class AbstractCommit {
 											System.err.println(
 													"Found ES4 parse error in: revision " + id + ": file " + path);
 										fb.setKind(FileKind.SOURCE_PHP_ERROR);
-										// try {
-										// astWriter.append(new
-										// LongWritable(len), new
-										// BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
-										// } catch (IOException e) {
-										// e.printStackTrace();
-										// }
 									} else if (debugparse)
 										System.err.println("Accepted PHP7_1: revision " + id + ": file " + path);
 								} else if (debugparse)
@@ -663,83 +644,16 @@ public abstract class AbstractCommit {
 					default:
 						fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 				}
-				
-				ASTRoot.Builder preAst = null;
-				CompilationUnit preCu = null;
-				if (treeDif) {
-					if (fb.getChange() == ChangeKind.MODIFIED && this.parentIndices.length == 1
-							&& fb.getChangesCount() == 1) {
-						AbstractCommit previousCommit = this.connector.revisions.get(fb.getPreviousVersions(0));
-						ChangedFile.Builder pcf = previousCommit.changedFiles.get(fb.getPreviousIndices(0));
-						String previousFilePath = pcf.getName();
-						String previousContent = previousCommit.getFileContents(previousFilePath);
-						FileKind fileKind = pcf.getKind();
-						org.eclipse.jdt.core.dom.ASTParser previuousParser = JavaASTUtil.buildParser(fileKind);
-						if (previuousParser != null) {
-							try {
-								previuousParser.setSource(previousContent.toCharArray());
-								preCu = (CompilationUnit) previuousParser.createAST(null);
-								TreedMapper tm = new TreedMapper(preCu, cu);
-								tm.map();
-								preAst = ASTRoot.newBuilder();
-								Integer index = (Integer) preCu.getProperty(JavaVisitor.PROPERTY_INDEX);
-								if (index != null)
-									preAst.setKey(index);
-								ChangeKind status = (ChangeKind) preCu.getProperty(TreedConstants.PROPERTY_STATUS);
-								if (status != null)
-									preAst.setChangeKind(status);
-								preAst.setMappedNode((Integer) cu.getProperty(TreedConstants.PROPERTY_INDEX));
-								final JavaVisitor preVisitor;
-								if (preCu.getAST().apiLevel() == AST.JLS8)
-									preVisitor = new JavaVisitor(previousContent);
-								else
-									preVisitor = new JavaVisitor(previousContent);
-								preAst.addNamespaces(preVisitor.getNamespaces(preCu));
-							} catch (Throwable e) {
-								preAst = null;
-								preCu = null;
-							}
-						}
-					}
-				}
-				
-				Integer index = (Integer) cu.getProperty(JavaVisitor.PROPERTY_INDEX);
-				if (index != null) {
-					ast.setKey(index);
-					if (preCu != null) {
-						ChangeKind status = (ChangeKind) cu.getProperty(TreedConstants.PROPERTY_STATUS);
-						if (status != null)
-							ast.setChangeKind(status);
-						ast.setMappedNode((Integer) preCu.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
-				}
 
-				long len = connector.astWriterLen;
 				try {
 					BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 					connector.astWriterLen += bw.getLength();
 				} catch (IOException e) {
-					if (debug)
+					if (debug) 
 						e.printStackTrace();
-					len = Long.MAX_VALUE;
+					
 				}
-				long plen = connector.astWriterLen;
-				if (preAst != null && plen > len) {
-					try {
-						BytesWritable bw = new BytesWritable(preAst.build().toByteArray());
-						connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
-						connector.astWriterLen += bw.getLength();
-					} catch (IOException e) {
-						if (debug)
-							e.printStackTrace();
-						plen = Long.MAX_VALUE;
-					}
-				}
-				if (preAst != null && connector.astWriterLen > plen)
-					fb.setMappedKey(plen);
-				else
-					fb.setMappedKey(-1);
 				// fb.setComments(comments);
 			}
 
@@ -750,148 +664,7 @@ public abstract class AbstractCommit {
 			return false;
 		}
 	}
-
-	@SuppressWarnings("unused")
-	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content,
-			final String compliance, final int astLevel, final boolean storeOnError) {
-		try {
-			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(astLevel);
-			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
-//			parser.setResolveBindings(true);
-//			parser.setUnitName(FileIO.getFileName(path));
-//			parser.setEnvironment(null, null, null, true);
-			parser.setSource(content.toCharArray());
-
-			final Map<?, ?> options = JavaCore.getOptions();
-			JavaCore.setComplianceOptions(compliance, options);
-			parser.setCompilerOptions(options);
-
-			final CompilationUnit cu;
-			
-			try {
-				cu = (CompilationUnit) parser.createAST(null);
-			} catch(Throwable e) {
-				return false;
-			}
-
-			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
-			cu.accept(errorCheck);
-			
-			if (!errorCheck.hasError || storeOnError) {
-				final ASTRoot.Builder ast = ASTRoot.newBuilder();
-				// final CommentsRoot.Builder comments =
-				// CommentsRoot.newBuilder();
-				final JavaVisitor visitor = new JavaVisitor(content);
-				try {
-					
-					ast.addNamespaces(visitor.getNamespaces(cu));
-					
-					/*
-					 * for (final Comment c : visitor.getComments())
-					 * comments.addComments(c);
-					 */
-				} catch (final UnsupportedOperationException e) {
-					if (debugparse) {
-						System.err.println("Error visiting Java file: " + path  + " from: " + projectName);
-						e.printStackTrace();
-					}
-					return false;
-				} catch (final Throwable e) {
-					if (debug)
-						System.err.println("Error visiting Java file: " + path);
-					e.printStackTrace();
-					System.exit(-1);
-					return false;
-				}
-				
-				ASTRoot.Builder preAst = null;
-				CompilationUnit preCu = null;
-				if (treeDif) {
-					if (fb.getChange() == ChangeKind.MODIFIED && this.parentIndices.length == 1
-							&& fb.getChangesCount() == 1) {
-						AbstractCommit previousCommit = this.connector.revisions.get(fb.getPreviousVersions(0));
-						ChangedFile.Builder pcf = previousCommit.changedFiles.get(fb.getPreviousIndices(0));
-						String previousFilePath = pcf.getName();
-						String previousContent = previousCommit.getFileContents(previousFilePath);
-						FileKind fileKind = pcf.getKind();
-						org.eclipse.jdt.core.dom.ASTParser previuousParser = JavaASTUtil.buildParser(fileKind);
-						if (previuousParser != null) {
-							try {
-								previuousParser.setSource(previousContent.toCharArray());
-								preCu = (CompilationUnit) previuousParser.createAST(null);
-								TreedMapper tm = new TreedMapper(preCu, cu);
-								tm.map();
-								preAst = ASTRoot.newBuilder();
-								Integer index = (Integer) preCu.getProperty(JavaVisitor.PROPERTY_INDEX);
-								if (index != null)
-									preAst.setKey(index);
-								ChangeKind status = (ChangeKind) preCu.getProperty(TreedConstants.PROPERTY_STATUS);
-								if (status != null)
-									preAst.setChangeKind(status);
-								preAst.setMappedNode((Integer) cu.getProperty(TreedConstants.PROPERTY_INDEX));
-								final JavaVisitor preVisitor;
-								if (preCu.getAST().apiLevel() == AST.JLS8)
-									preVisitor = new JavaVisitor(previousContent);
-								else
-									preVisitor = new JavaVisitor(previousContent);
-								preAst.addNamespaces(preVisitor.getNamespaces(preCu));
-							} catch (Throwable e) {
-								preAst = null;
-								preCu = null;
-							}
-						}
-					}
-				}
-				
-				Integer index = (Integer) cu.getProperty(JavaVisitor.PROPERTY_INDEX);
-				if (index != null) {
-					ast.setKey(index);
-					if (preCu != null) {
-						ChangeKind status = (ChangeKind) cu.getProperty(TreedConstants.PROPERTY_STATUS);
-						if (status != null)
-							ast.setChangeKind(status);
-						ast.setMappedNode((Integer) preCu.getProperty(TreedConstants.PROPERTY_INDEX));
-					}
-				}
-
-				long len = connector.astWriterLen;
-				try {
-					BytesWritable bw = new BytesWritable(ast.build().toByteArray());
-					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
-					connector.astWriterLen += bw.getLength();
-				} catch (IOException e) {
-					if (debug)
-						e.printStackTrace();
-					len = Long.MAX_VALUE;
-				}
-				long plen = connector.astWriterLen;
-				if (preAst != null && plen > len) {
-					try {
-						BytesWritable bw = new BytesWritable(preAst.build().toByteArray());
-						connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
-						connector.astWriterLen += bw.getLength();
-					} catch (IOException e) {
-						if (debug)
-							e.printStackTrace();
-						plen = Long.MAX_VALUE;
-					}
-				}
-				if (preAst != null && connector.astWriterLen > plen)
-					fb.setMappedKey(plen);
-				else
-					fb.setMappedKey(-1);
-				// fb.setComments(comments);
-			}
-			
-
-			return !errorCheck.hasError;
-		} catch (final Exception e) {
-			if (debug)
-				e.printStackTrace();
-			return false;
-		}
-	}
-
+	
 	protected String processLOC(final String path) {
 		String loc = "";
 
@@ -932,64 +705,5 @@ public abstract class AbstractCommit {
 
 		return loc;
 	}
-
-	protected String getPreviousFiles(List<int[]> l, String parentName, String path) {
-		int start = 0;
-		while (path.charAt(start) == '/')
-			start++;
-		if (start > 0) {
-			int commitIndex = connector.revisionMap.get(parentName);
-			List<ChangedFile> snapshot = new ArrayList<ChangedFile>();
-			Map<String, AbstractCommit> commits = new HashMap<String, AbstractCommit>();
-			connector.getSnapshot(commitIndex, snapshot, commits);
-			for (ChangedFile cf : snapshot) {
-				String name = cf.getName();
-				if (name.substring(start).equals(path.substring(start))) {
-					path = name;
-					AbstractCommit preCommit = commits.get(cf.getName());
-					int preCommitIndex = connector.revisionMap.get(preCommit.id);
-					int preIndex = preCommit.fileNameIndices.get(name);
-					l.add(new int[] { preIndex, preCommitIndex });
-					
-					break;
-				}
-			}
-		} else {
-			int commitIndex = connector.revisionMap.get(parentName);
-			Set<Integer> queuedCommitIds = new HashSet<Integer>();
-			PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
-				@Override
-				public int compare(Integer i1, Integer i2) {
-					return i2 - i1;
-				}
-			});
-			pq.offer(commitIndex);
-			queuedCommitIds.add(commitIndex);
-			while (!pq.isEmpty()) {
-				commitIndex = pq.poll();
-				AbstractCommit commit = connector.revisions.get(commitIndex);
-				Integer i = commit.fileNameIndices.get(path);
-				if (i != null) {
-					ChangedFile.Builder cfb = commit.changedFiles.get(i);
-					if (cfb.getChange() != ChangeKind.DELETED) {
-						l.add(new int[] { i, commitIndex });
-					}
-				} else if (commit.parentIndices != null) {
-					for (int parentId : commit.parentIndices) {
-						if (!queuedCommitIds.contains(parentId)) {
-							pq.offer(parentId);
-							queuedCommitIds.add(parentId);
-						}
-					}
-				}
-			}
-		}
-		if (l.isEmpty()) {
-			System.err.println("Cannot find previous version! from: " + projectName);
-//			System.exit(-1);
-			return null;
-		}
-		return path;
-	}
-
+	
 }

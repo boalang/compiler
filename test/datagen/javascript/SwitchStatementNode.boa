@@ -6,7 +6,7 @@ namespaces {
       kind: CASE
       statements {
         kind: EXPRESSION
-        expression {
+        expressions {
           kind: METHODCALL
           expressions {
             kind: VARACCESS
@@ -22,14 +22,14 @@ namespaces {
       statements {
         kind: BREAK
       }
-      expression {
+      expressions {
         kind: LITERAL
         literal: "Oranges"
       }
     }
     statements {
       kind: CASE
-      expression {
+      expressions {
         kind: LITERAL
         literal: "Mangoes"
       }
@@ -38,7 +38,7 @@ namespaces {
       kind: CASE
       statements {
         kind: EXPRESSION
-        expression {
+        expressions {
           kind: METHODCALL
           expressions {
             kind: VARACCESS
@@ -54,7 +54,7 @@ namespaces {
       statements {
         kind: BREAK
       }
-      expression {
+      expressions {
         kind: LITERAL
         literal: "Papayas"
       }
@@ -63,7 +63,7 @@ namespaces {
       kind: DEFAULT
       statements {
         kind: EXPRESSION
-        expression {
+        expressions {
           kind: METHODCALL
           expressions {
             kind: VARACCESS
@@ -91,7 +91,7 @@ namespaces {
         }
       }
     }
-    expression {
+    expressions {
       kind: VARACCESS
       variable: "expr"
     }

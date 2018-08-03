@@ -99,16 +99,20 @@ public class SeqCombiner {
 						if (crb.getRevisionsCount() > 0) {
 							for (Revision.Builder rb : crb.getRevisionsBuilderList()) {
 								for (ChangedFile.Builder cfb : rb.getFilesBuilderList()) {
-									cfb.setKey(lastAstWriterKey + cfb.getKey());
-									long mappedKey = cfb.getMappedKey();
-									if (mappedKey != -1)
-										cfb.setMappedKey(lastAstWriterKey + mappedKey);
+									long key = cfb.getKey();
+									if (key > 0)
+										cfb.setKey(lastAstWriterKey + key);
 								}
 							}
 						} else {
 							for (int j = 0; j < crb.getRevisionKeysCount(); j++) {
 								crb.setRevisionKeys(j, lastCommitWriterKey + crb.getRevisionKeys(j));
 							}
+						}
+						for (ChangedFile.Builder cfb : crb.getHeadSnapshotBuilderList()) {
+							long key = cfb.getKey();
+							if (key > 0)
+								cfb.setKey(lastAstWriterKey + key);
 						}
 					}
 					projectWriter.append(textKey, new BytesWritable(pb.build().toByteArray()));
@@ -119,8 +123,8 @@ public class SeqCombiner {
 			} finally {
 				r.close();
 			}
-			lastAstWriterKey = readAndAppend(conf, fileSystem, astWriter, base + "/ast/" + name, lastAstWriterKey);
-			lastCommitWriterKey = readAndAppend(conf, fileSystem, commitWriter, base + "/commit/" + name, lastCommitWriterKey);
+			lastCommitWriterKey = readAndAppendCommit(conf, fileSystem, commitWriter, base + "/commit/" + name, lastAstWriterKey, lastCommitWriterKey);
+			lastAstWriterKey = readAndAppendAst(conf, fileSystem, astWriter, base + "/ast/" + name, lastAstWriterKey);
 		}
 		projectWriter.close();
 		astWriter.close();
@@ -129,7 +133,33 @@ public class SeqCombiner {
 		fileSystem.close();
 	}
 
-	public static long readAndAppend(Configuration conf, FileSystem fileSystem, MapFile.Writer astWriter, String fileName, long lastKey) throws IOException {
+	public static long readAndAppendCommit(Configuration conf, FileSystem fileSystem, MapFile.Writer astWriter, String fileName, long lastAstKey, long lastCommitKey) throws IOException {
+		long newLastKey = lastCommitKey;
+		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
+		LongWritable longKey = new LongWritable();
+		BytesWritable value = new BytesWritable();
+		try {
+			while (r.next(longKey, value)) {
+				newLastKey = longKey.get() + lastCommitKey;
+				Revision rev = Revision.parseFrom(CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
+				Revision.Builder rb = Revision.newBuilder(rev);
+				for (ChangedFile.Builder cfb : rb.getFilesBuilderList()) {
+					long key = cfb.getKey();
+					if (key > 0)
+						cfb.setKey(lastAstKey + key);
+				}
+				astWriter.append(new LongWritable(newLastKey), new BytesWritable(rb.build().toByteArray()));
+			}
+		} catch (Exception e) {
+			System.err.println(fileName);
+			e.printStackTrace();
+		} finally {
+			r.close();
+		}
+		return newLastKey;
+	}
+
+	public static long readAndAppendAst(Configuration conf, FileSystem fileSystem, MapFile.Writer astWriter, String fileName, long lastKey) throws IOException {
 		long newLastKey = lastKey;
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
 		LongWritable longKey = new LongWritable();

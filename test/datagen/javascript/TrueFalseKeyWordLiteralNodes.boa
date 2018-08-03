@@ -2,14 +2,14 @@ namespaces {
   name: ""
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: LITERAL
       literal: "true"
     }
   }
   statements {
     kind: EXPRESSION
-    expression {
+    expressions {
       kind: LITERAL
       literal: "false"
     }

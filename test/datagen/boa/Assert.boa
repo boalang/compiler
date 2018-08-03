@@ -39,8 +39,10 @@
          ]
       }
    ],
-   "expression": {
-      "kind": "LITERAL",
-      "literal": "\"list variable is null or empty\""
-   }
+   "expressions": [
+      {
+         "kind": "LITERAL",
+         "literal": "\"list variable is null or empty\""
+      }
+   ]
 }

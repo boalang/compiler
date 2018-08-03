@@ -6,7 +6,7 @@ namespaces {
       kind: SCOPE
       statements {
         kind: EXPRESSION
-        expression {
+        expressions {
           kind: ASSIGN_ADD
           expressions {
             kind: VARACCESS
@@ -27,7 +27,7 @@ namespaces {
       }
       statements {
         kind: EXPRESSION
-        expression {
+        expressions {
           kind: OP_INC
           expressions {
             kind: VARACCESS

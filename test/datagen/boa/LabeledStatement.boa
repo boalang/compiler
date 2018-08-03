@@ -5,8 +5,10 @@
          "kind": "EMPTY"
       }
    ],
-   "expression": {
-      "kind": "LITERAL",
-      "literal": "Label"
-   }
+   "expressions": [
+      {
+         "kind": "LITERAL",
+         "literal": "Label"
+      }
+   ]
 }

@@ -1,19 +1,21 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "VARDECL",
-      "variable_decls": [
-         {
-            "name": "x",
-            "variable_type": {
-               "name": "boolean",
-               "kind": "PRIMITIVE"
-            },
-            "initializer": {
-               "kind": "LITERAL",
-               "literal": "true"
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "x",
+               "variable_type": {
+                  "name": "boolean",
+                  "kind": "PRIMITIVE"
+               },
+               "initializer": {
+                  "kind": "LITERAL",
+                  "literal": "true"
+               }
             }
-         }
-      ]
-   }
+         ]
+      }
+   ]
 }

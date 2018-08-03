@@ -1,49 +1,51 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "VARDECL",
-      "variable_decls": [
-         {
-            "name": "subtraction",
-            "variable_type": {
-               "name": "MathOperation",
-               "kind": "OTHER"
-            },
-            "initializer": {
-               "kind": "LAMBDA",
-               "expressions": [
-                  {
-                     "kind": "OP_SUB",
-                     "expressions": [
-                        {
-                           "kind": "VARACCESS",
-                           "variable": "a"
-                        },
-                        {
-                           "kind": "VARACCESS",
-                           "variable": "b"
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "subtraction",
+               "variable_type": {
+                  "name": "MathOperation",
+                  "kind": "OTHER"
+               },
+               "initializer": {
+                  "kind": "LAMBDA",
+                  "expressions": [
+                     {
+                        "kind": "OP_SUB",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "a"
+                           },
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "b"
+                           }
+                        ]
+                     }
+                  ],
+                  "variable_decls": [
+                     {
+                        "name": "a",
+                        "variable_type": {
+                           "name": "",
+                           "kind": "OTHER"
                         }
-                     ]
-                  }
-               ],
-               "variable_decls": [
-                  {
-                     "name": "a",
-                     "variable_type": {
-                        "name": "",
-                        "kind": "OTHER"
+                     },
+                     {
+                        "name": "b",
+                        "variable_type": {
+                           "name": "",
+                           "kind": "OTHER"
+                        }
                      }
-                  },
-                  {
-                     "name": "b",
-                     "variable_type": {
-                        "name": "",
-                        "kind": "OTHER"
-                     }
-                  }
-               ]
+                  ]
+               }
             }
-         }
-      ]
-   }
+         ]
+      }
+   ]
 }

@@ -2,14 +2,14 @@ namespaces {
   name: ""
   statements {
     kind: GOTO
-    expression {
+    expressions {
       kind: LITERAL
       literal: "here"
     }
   }
   statements {
     kind: LABEL
-    expression {
+    expressions {
       kind: LITERAL
       literal: "here"
     }
