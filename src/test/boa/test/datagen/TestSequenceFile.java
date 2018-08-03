@@ -99,6 +99,16 @@ public class TestSequenceFile extends Java8BaseTest {
 						}
 					}
 				}
+				for (ChangedFile cf : cr.getHeadSnapshotList()) {
+					if (cf.getAst()) {
+						if (DefaultProperties.DEBUG) {
+							System.out.println(project.getName());
+							System.out.println(cf);
+						}
+						assertThat(cfKeys.contains(cf.getKey()), Matchers.is(false));
+						cfKeys.add(cf.getKey());
+					}
+				}
 			}
 		}
 		LongWritable lkey = new LongWritable();
