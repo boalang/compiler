@@ -52,6 +52,7 @@ public class RepoMetadata {
 	private static final String GIT_DESCRIPTION = "description";
 	private static final String GIT_OS = "os";
 	private static final String GIT_PROGRAMMING_LANGUAGES = "language_list";
+	private static final String GIT_PROGRAMMING_LANGUAGE = "language";
 	private static final String GIT_DATABASES = null;
 	private static final String GIT_LICENSES = null;
 	private static final String GIT_TOPICS = null;
@@ -109,6 +110,7 @@ public class RepoMetadata {
 	private String trackers;
 	private String svnRepository;
 	private String gitRepository;
+	private String mainLanguage;
 	
 
 	private boolean fork = false;
@@ -141,6 +143,9 @@ public class RepoMetadata {
 			String time = jsonProject.get(GIT_CREATE).getAsString();
 			this.created_timestamp = getTimeStamp(time); // project.setCreatedDate(timestamp
 															// * 1000000);
+		}
+		if (jsonProject.has(mainLanguage)) {
+			this.mainLanguage = jsonProject.get(GIT_PROGRAMMING_LANGUAGE).getAsString();
 		}
 		if (jsonProject.has(GIT_DESCRIPTION) && !jsonProject.get(GIT_DESCRIPTION).isJsonNull())
 			this.description = jsonProject.get(GIT_DESCRIPTION).getAsString();
@@ -371,6 +376,7 @@ public class RepoMetadata {
 		project.setForked(fork);
 		project.setForks(forks);
 		project.setStars(stars);
+		project.setMainLanguage(mainLanguage);
 		if (programmingLanguages != null) {
 			ArrayList<String> langs = new ArrayList<String>();
 			ArrayList<Integer> langLoc = new ArrayList<Integer>();
@@ -382,7 +388,7 @@ public class RepoMetadata {
 				project.addAllProgrammingLanguages(langs);
 				project.addAllProgrammingLanguagesLocs(langLoc);
 			}
-		}
+		} 
 		if (gitRepository != null) {
 			CodeRepository.Builder cr = CodeRepository.newBuilder();
 			cr.setUrl(gitRepository);
