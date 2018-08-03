@@ -36,8 +36,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.protobuf.InvalidProtocolBufferException;
-
 import boa.datagen.forges.github.RepoMetadata;
 import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.AbstractConnector;
@@ -61,7 +59,6 @@ public class SeqRepoImporter {
 	private static String base = null;
 
 	private final static int poolSize = Integer.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
-	public static final int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer.valueOf(DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS);
 	final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
 	final static String jsonCachePath = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 	private static boolean done = false;
@@ -312,7 +309,7 @@ public class SeqRepoImporter {
 				conn = new GitConnector(gitDir.getAbsolutePath(), project.getName(), astWriter, astWriterLen, commitWriter, commitWriterLen,
 						contentWriter, contentWriterLen);
 				final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
-				List<Object> revisions = conn.getCommits(project.getName());
+				List<Object> revisions = conn.getRevisions(project.getName());
 				if (!revisions.isEmpty()) {
 					if (revisions.get(0) instanceof Revision) {
 						for (final Object rev : revisions) {
@@ -321,7 +318,7 @@ public class SeqRepoImporter {
 						}
 					} else {
 						for (final Object rev : revisions)
-							repoBuilder.addRevisionKeys((long) rev);
+							repoBuilder.addRevisionKeys((Long) rev);
 					}
 					if (debug)
 						System.out.println(Thread.currentThread().getId() + " Build head snapshot");

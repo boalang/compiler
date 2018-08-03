@@ -67,7 +67,7 @@ public class TestSequenceFile extends Java8BaseTest {
 		String[] args = {	"-inputJson", "test/datagen/jsons", 
 							"-inputRepo", "dataset/repos",
 							"-output", path,
-							"-size", "1",
+							"-commits", "1",
 							"-threads", "2"};
 		BoaGenerator.main(args);
 		

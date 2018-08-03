@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 import org.apache.hadoop.io.SequenceFile;
-import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 
@@ -39,7 +38,8 @@ public abstract class AbstractConnector implements AutoCloseable {
 	protected static final String classpathRoot = boa.datagen.util.Properties.getProperty("libs", boa.datagen.DefaultProperties.CLASSPATH_ROOT);
 
 	protected String path;
-	protected List<Object> revisions = null;
+	protected List<AbstractCommit> revisions = new ArrayList<AbstractCommit>();
+	protected List<Long> revisionKeys = new ArrayList<Long>();
 	protected List<String> branchNames = new ArrayList<String>(), tagNames = new ArrayList<String>();
 	protected List<Integer> branchIndices = new ArrayList<Integer>(), tagIndices = new ArrayList<Integer>();
 	protected Map<String, Integer> revisionMap = new HashMap<String, Integer>();
@@ -61,11 +61,9 @@ public abstract class AbstractConnector implements AutoCloseable {
 	}
 
 	public List<ChangedFile> buildHeadSnapshot() {
-		if (revisions.get(headCommitOffset) instanceof AbstractCommit)
+		if (!revisions.isEmpty())
 			return buildSnapshot(headCommitOffset);
-		if (this instanceof GitConnector)
-			return ((GitConnector) this).buildHeadSnapshot();
-		return null;
+		return ((GitConnector) this).buildHeadSnapshot();
 	}
 	
 	public List<ChangedFile> buildSnapshot(final int commitOffset) {
@@ -87,7 +85,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 		queuedCommitIds.add(commitOffset);
 		while (!pq.isEmpty()) {
 			int offset = pq.poll();
-			AbstractCommit commit = (AbstractCommit) revisions.get(offset);
+			AbstractCommit commit = revisions.get(offset);
 			for (ChangedFile.Builder cf : commit.changedFiles) {
 				ChangeKind ck = cf.getChange();
 				switch (ck) {
@@ -158,7 +156,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 	
 	public abstract void setRevisions();
 
-	public List<Object> getRevisions() {
+	public List<AbstractCommit> getRevisions() {
 		return revisions;
 	}
 
@@ -182,35 +180,31 @@ public abstract class AbstractConnector implements AutoCloseable {
 		return tagIndices;
 	}
 	
-	public List<Object> getCommits(final String projectName) {
+	public List<Object> getRevisions(final String projectName) {
 		this.projectName = projectName;
-		if (revisions == null) {
-			revisions = new ArrayList<Object>();
-			setRevisions();
-		}
+		
+		setRevisions();
+		
 		long maxTime = 1000;
 		final List<Object> revs = new ArrayList<Object>();
 		if (!revisions.isEmpty()) {
-			if (revisions.get(0) instanceof AbstractCommit) {
-				for (int i = 0; i < revisions.size(); i++) {
-					long startTime = System.currentTimeMillis();
-					final AbstractCommit rev = (AbstractCommit) revisions.get(i);
-					revs.add(rev.asProtobuf(projectName));
-					
-					if (debug) {
-						long endTime = System.currentTimeMillis();
-						long time = endTime - startTime;
-						if (time > maxTime) {
-							System.out.println(Thread.currentThread().getId() + " Max time " + (time / 1000) + " writing to protobuf commit " + (i+1)  + " " + rev.id);
-							maxTime = time;
-						}
+			for (int i = 0; i < revisions.size(); i++) {
+				long startTime = System.currentTimeMillis();
+				final AbstractCommit rev = revisions.get(i);
+				revs.add(rev.asProtobuf(projectName));
+				
+				if (debug) {
+					long endTime = System.currentTimeMillis();
+					long time = endTime - startTime;
+					if (time > maxTime) {
+						System.out.println(Thread.currentThread().getId() + " Max time " + (time / 1000) + " writing to protobuf commit " + (i+1)  + " " + rev.id);
+						maxTime = time;
 					}
 				}
 			}
-			else {
-				revs.addAll(revisions);
-			}
 		}
+		if (!revisionKeys.isEmpty())
+			revs.addAll(revisionKeys);
 		return revs;
 	}
 

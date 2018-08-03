@@ -140,7 +140,7 @@ public class TestBuildSnapshot {
 		final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
 		repoBuilder.setKind(RepositoryKind.GIT);
 		repoBuilder.setUrl(url);
-		for (final Object rev : conn.getCommits(repoName)) {
+		for (final Object rev : conn.getRevisions(repoName)) {
 			final Revision.Builder revBuilder = Revision.newBuilder((Revision) rev);
 			repoBuilder.addRevisions(revBuilder);
 		}

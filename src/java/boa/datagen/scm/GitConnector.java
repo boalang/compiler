@@ -127,10 +127,6 @@ public class GitConnector extends AbstractConnector {
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
 			
-			if (revisions == null)
-				revisions = new ArrayList<Object>(); 
-			else
-				revisions.clear();
 			revisionMap = new HashMap<String, Integer>();
 			
 			int i = 0;
@@ -174,7 +170,7 @@ public class GitConnector extends AbstractConnector {
 				
 				if (commitList.size() > MAX_COMMITS){
 					Revision revision = gc.asProtobuf(projectName);
-					revisions.add(commitWriterLen);
+					revisionKeys.add(commitWriterLen);
 					BytesWritable bw = new BytesWritable(revision.toByteArray());
 					commitWriter.append(new LongWritable(commitWriterLen), bw);
 					commitWriterLen += bw.getLength();
@@ -270,6 +266,7 @@ public class GitConnector extends AbstractConnector {
 					cfb.setKey(0);
 					cfb.setAst(false);
 					GitCommit gc = new GitCommit(this, repository, revwalk, projectName);
+					gc.filePathGitObjectIds.put(path, tw.getObjectId(0));
 					gc.processChangeFile(cfb);
 					snapshot.add(cfb.build());
 				}
