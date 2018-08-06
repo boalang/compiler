@@ -80,6 +80,41 @@ public class TestQueries {
 		assertEquals(expected, actual);
 	}
 
+	@Test
+	public void testAnnot_names() {
+		try {
+			Process p = Runtime.getRuntime().exec("./boa.sh -e "
+					+ "-i /Users/roberts/git/compiler/test/known-good/annot-names.boa "
+					+ "-d /Users/roberts/git/compiler/test/datagen/test_datagen "
+					+ "-o /Users/roberts/git/compiler/test/datagen/annot_names_output");
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String s = null;
+			 while ((s = stdInput.readLine()) != null) {
+	                System.out.println(s);
+	            }
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String expected = "AnnotUse[FunctionalInterface] = 3\n"
+				+ "AnnotUse[Override] = 11\n"
+				+ "AnnotUse[Retention] = 1\n"
+				+ "AnnotUse[SafeVarargs] = 1\n"
+				+ "AnnotUse[SuppressWarnings] = 1\n"
+				+ "AnnotUse[Target] = 2\n"
+				+ "AnnotUse[ThreadSafe] = 1\n"
+				+ "AnnotUse[ToDo] = 17\n";
+		File outputDir = new File("/Users/roberts/git/compiler/test/datagen/annot_names_output");
+		String actual = getResults(outputDir);// evaluator.getResults();
+		try {
+			FileUtils.deleteDirectory(outputDir);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertEquals(expected, actual);
+	}
+	
 	public String getResults(File outputDir) {
 		for (final File f : outputDir.listFiles()) {
 			if (f.getName().startsWith("part")) {
