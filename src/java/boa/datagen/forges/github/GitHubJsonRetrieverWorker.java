@@ -2,12 +2,10 @@ package boa.datagen.forges.github;
 
 import java.io.File;
 import java.util.ArrayList;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import boa.datagen.util.FileIO;
 import gnu.trove.set.hash.THashSet;
 
@@ -21,7 +19,7 @@ public class GitHubJsonRetrieverWorker implements Runnable {
 	private String language_url_footer = "/languages";
 	int javaCounter = 1;
 	final static int RECORDS_PER_FILE = 100;
-	THashSet<Integer> ids = GitHubReduceByStars.ids;
+	THashSet<Integer> ids = GitHubJsonRetriever.ids;
 	File repoFile;
 	private boolean available = true;
 	private ArrayList<String> names;

@@ -1,19 +1,15 @@
 package boa.datagen.forges.github;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Map.Entry;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import boa.datagen.util.FileIO;
 import gnu.trove.set.hash.THashSet;
 
-public class ReduceByStarWorker implements Runnable {
-	int index;
+public class GitHubRepoDownloaderWorker implements Runnable {
+	File repoFile;
 	private TokenList tokens;
 	private final String output;
 	private final String input;
@@ -22,14 +18,14 @@ public class ReduceByStarWorker implements Runnable {
 	String stateFile = "";
 	int javaCounter = 1;
 	final static int RECORDS_PER_FILE = 100;
-	THashSet<Integer> ids = GitHubReduceByStars.ids;
+	THashSet<Integer> ids = GitHubRepoDownloader.ids;
 	private boolean available = true;
 
 	public boolean isAvailable() {
 		return available;
 	}
 
-	public ReduceByStarWorker(String repoPath, String output, TokenList tokenList) {
+	public GitHubRepoDownloaderWorker(String repoPath, String output, TokenList tokenList) {
 		this.output = output;
 		this.tokens = tokenList;
 		this.input = repoPath;
@@ -38,9 +34,6 @@ public class ReduceByStarWorker implements Runnable {
 
 	public void downloadRepoMetaDataForRepoIn() {
 		Token tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
-		File[] files = new File(this.input).listFiles();
-		File repoFile = files[index];
-
 		if (!repoFile.getPath().contains(".json")) {
 			System.err.println(repoFile + " isn't a json");
 			return;
@@ -55,21 +48,7 @@ public class ReduceByStarWorker implements Runnable {
 			int id = repo.get("id").getAsInt();
 			if (ids.contains(id))
 				continue;
-			
 			String name = repo.get("full_name").getAsString();
-			boolean fork = repo.get("fork").getAsBoolean();
-			ArrayList<String> languages = new ArrayList<String>();
-			
-			for (Entry<String, JsonElement> je : repo.get("language_list").getAsJsonObject().entrySet()) {
-				languages.add(je.getKey());
-			}
-			
-			if (fork || !(languages.contains("Java") || languages.contains("JavaScript")
-					|| languages.contains("PHP"))) {
-				addRepo(output, repo);
-				continue;
-			}
-
 			String repourl = this.repo_url_header + name;
 			if (tok.getNumberOfRemainingLimit() <= 0) {
 				tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
@@ -80,22 +59,7 @@ public class ReduceByStarWorker implements Runnable {
 				mc.getResponse();
 				String pageContent = mc.getContent();
 				JsonObject repository = parser.fromJson(pageContent, JsonElement.class).getAsJsonObject();
-				int stars = repository.get("stargazers_count").getAsInt();
-				int repoSize = repository.get("size").getAsInt();
-				/**
-				 * String contrUrl = repourl + "/contributors"; mc = new
-				 * MetadataCacher(contrUrl , tok.getUserName(), tok.getToken());
-				 * authnticationResult = mc.authenticate(); if
-				 * (authnticationResult) { mc.getResponse(); pageContent =
-				 * mc.getContent(); JsonArray contributorsList =
-				 * parser.fromJson(pageContent,
-				 * JsonElement.class).getAsJsonArray(); int contributors =
-				 * contributorsList.size(); if (contributors < 2) continue; }
-				 **/
-				repo.addProperty("size", repoSize);
-				if (!repo.has("stargazers_count"))
-					repo.addProperty("stargazers_count", stars);
-				addRepo(output, repo);
+				addRepo(output, repository);
 				tok.setLastResponseCode(mc.getResponseCode());
 				tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
 				tok.setResetTime(mc.getLimitResetTime());
@@ -151,17 +115,35 @@ public class ReduceByStarWorker implements Runnable {
 
 	@Override
 	public void run() {
-		this.available = false;
-		this.downloadRepoMetaDataForRepoIn();
-		this.available = true;
+		while (true) {
+			while (this.available) {
+				if (GitHubRepoDownloader.done)
+					break;
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			if (GitHubRepoDownloader.done)
+				break;
+			this.downloadRepoMetaDataForRepoIn();
+			this.available = true;
+			
+		}
+		writeRemainingRepos(output);
 	}
 
 	public void closeWorker() {
 		this.writeRemainingRepos(output);
 	}
 
-	public void setIndex(int i) {
-		this.index = i;
+	public void availableFalse() {
+		this.available = false;
+	}
+	
+	public void setFile(File file) {
+		this.repoFile = file;
 
 	}
 }

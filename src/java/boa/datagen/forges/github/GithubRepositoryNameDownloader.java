@@ -5,11 +5,9 @@ import boa.datagen.util.FileIO;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 
 /**
@@ -78,30 +76,7 @@ public class GithubRepositoryNameDownloader {
 				if (!pageContent.isEmpty()) {
 					pageNumber++;
 					JsonArray repos = parser.fromJson(pageContent, JsonElement.class).getAsJsonArray();
-					JsonArray reducedRepos = new JsonArray();
-					for (int i = 0; i < repos.size(); i++) {
-						JsonObject repo = repos.get(i).getAsJsonObject();
-						String name = repo.get("full_name").getAsString();
-						String shortName = repo.get("name").getAsString();
-						String idNum = repo.get("id").getAsString();
-						String fork = repo.get("fork").getAsString();
-						String homePage = repo.get("homepage").getAsString();
-						String html_url = repo.get("html_url").getAsString();
-						String description = repo.get("description").getAsString();
-						JsonObject owner = repo.get("owner").getAsJsonObject();
-						repo = new JsonObject();
-						repo.addProperty("id", idNum);
-						repo.addProperty("full_name", name);
-						repo.addProperty("name", shortName);
-						repo.add("owner", owner);
-						repo.addProperty("fork", fork);
-						repo.addProperty("homepage", homePage);
-						repo.addProperty("html_url", html_url);
-						repo.addProperty("description", description);
-						reducedRepos.add(repo);
-					}
-					FileIO.writeFileContents(new File(outDir + "/page-" + pageNumber + ".json"),
-							reducedRepos.getAsString());
+					FileIO.writeFileContents(new File(outDir + "/page-" + pageNumber + ".json"), repos.toString());
 					id = getLastId(pageContent);
 				}
 				numOfRemainingRequests--;
