@@ -22,9 +22,9 @@ public class TestQueries {
 	public void testBugFix() {
 		try {
 			Process p = Runtime.getRuntime().exec("./boa.sh -e "
-					+ "-i /Users/roberts/git/compiler/test/known-good/bug-fix.boa "
-					+ "-d /Users/roberts/git/compiler/test/datagen/test_datagen "
-					+ "-o /Users/roberts/git/compiler/test/datagen/Bug-fix_output");
+					+ "-i test/known-good/bug-fix.boa "
+					+ "-d test/datagen/test_datagen "
+					+ "-o test/datagen/Bug-fix_output");
 			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			String s = null;
 			 while ((s = stdInput.readLine()) != null) {
@@ -34,12 +34,11 @@ public class TestQueries {
 			e1.printStackTrace();
 		}
 		String expected = "AddedNullCheck[] = 1\n";
-		File outputDir = new File("/Users/roberts/git/compiler/test/datagen/Bug-fix_output");
+		File outputDir = new File("test/datagen/Bug-fix_output");
 		String actual = getResults(outputDir);// evaluator.getResults();
 		try {
 			FileUtils.deleteDirectory(outputDir);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		assertEquals(expected, actual);
@@ -49,9 +48,9 @@ public class TestQueries {
 	public void testq20() {
 		try {
 			Process p = Runtime.getRuntime().exec("./boa.sh -e "
-					+ "-i /Users/roberts/git/compiler/test/known-good/q20.boa "
-					+ "-d /Users/roberts/git/compiler/test/datagen/test_datagen "
-					+ "-o /Users/roberts/git/compiler/test/datagen/q20_output");
+					+ "-i test/known-good/q20.boa "
+					+ "-d test/datagen/test_datagen "
+					+ "-o test/datagen/q20_output");
 			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			String s = null;
 			 while ((s = stdInput.readLine()) != null) {
@@ -69,7 +68,7 @@ public class TestQueries {
 				+ "VolatileMean[] = 0.0136986301369863\n"
 				+ "VolatileMin[] = 140492550, 0.0\n"
 				+ "VolatileTotal[] = 1\n";
-		File outputDir = new File("/Users/roberts/git/compiler/test/datagen/q20_output");
+		File outputDir = new File("test/datagen/q20_output");
 		String actual = getResults(outputDir);// evaluator.getResults();
 		try {
 			FileUtils.deleteDirectory(outputDir);
@@ -84,9 +83,9 @@ public class TestQueries {
 	public void testAnnot_names() {
 		try {
 			Process p = Runtime.getRuntime().exec("./boa.sh -e "
-					+ "-i /Users/roberts/git/compiler/test/known-good/annot-names.boa "
-					+ "-d /Users/roberts/git/compiler/test/datagen/test_datagen "
-					+ "-o /Users/roberts/git/compiler/test/datagen/annot_names_output");
+					+ "-i test/known-good/annot-names.boa "
+					+ "-d test/datagen/test_datagen "
+					+ "-o test/datagen/annot_names_output");
 			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			String s = null;
 			 while ((s = stdInput.readLine()) != null) {
@@ -104,7 +103,7 @@ public class TestQueries {
 				+ "AnnotUse[Target] = 2\n"
 				+ "AnnotUse[ThreadSafe] = 1\n"
 				+ "AnnotUse[ToDo] = 17\n";
-		File outputDir = new File("/Users/roberts/git/compiler/test/datagen/annot_names_output");
+		File outputDir = new File("test/datagen/annot_names_output");
 		String actual = getResults(outputDir);// evaluator.getResults();
 		try {
 			FileUtils.deleteDirectory(outputDir);
