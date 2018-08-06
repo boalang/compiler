@@ -2,8 +2,6 @@ package boa.datagen.forges.github;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
-
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
