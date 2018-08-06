@@ -10,18 +10,29 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 
 public class TestQueries {
 
 	@Test
 	public void testBugFix() {
-		String[] args = { "-i", "/Users/roberts/git/compiler/test/known-good/bug-fix.boa", 
-				"-d", "/Users/roberts/git/compiler/test/datagen/test_datagen",
-				"-o", "/Users/roberts/git/compiler/test/datagen/Bug-fix_output" };
-		BoaEvaluator.main(args);
+		try {
+			Process p = Runtime.getRuntime().exec("./boa.sh -e "
+					+ "-i /Users/roberts/git/compiler/test/known-good/bug-fix.boa "
+					+ "-d /Users/roberts/git/compiler/test/datagen/test_datagen "
+					+ "-o /Users/roberts/git/compiler/test/datagen/Bug-fix_output");
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String s = null;
+			 while ((s = stdInput.readLine()) != null) {
+	                System.out.println(s);
+	            }
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		String expected = "AddedNullCheck[] = 1\n";
 		File outputDir = new File("/Users/roberts/git/compiler/test/datagen/Bug-fix_output");
 		String actual = getResults(outputDir);// evaluator.getResults();
@@ -36,10 +47,20 @@ public class TestQueries {
 	
 	@Test
 	public void testq20() {
-		String[] args = { "-i", "/Users/roberts/git/compiler/test/known-good/q20.boa", 
-				"-d","/Users/roberts/git/compiler/test/datagen/test_datagen", 
-				"-o","/Users/roberts/git/compiler/test/datagen/q20_output" };
-		BoaEvaluator.main(args);
+		try {
+			Process p = Runtime.getRuntime().exec("./boa.sh -e "
+					+ "-i /Users/roberts/git/compiler/test/known-good/q20.boa "
+					+ "-d /Users/roberts/git/compiler/test/datagen/test_datagen "
+					+ "-o /Users/roberts/git/compiler/test/datagen/q20_output");
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String s = null;
+			 while ((s = stdInput.readLine()) != null) {
+	                System.out.println(s);
+	            }
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		String expected = "TransientMax[] = 140492550, 3.0\n"
 				+ "TransientMean[] = 0.0410958904109589\n"
 				+ "TransientMin[] = 140492550, 0.0\n"
