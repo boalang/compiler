@@ -5,7 +5,16 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import boa.datagen.util.FileIO;
+import gnu.trove.set.hash.THashSet;
+
 public class GitHubJsonRetriever {
+	public static THashSet<Integer> ids;
 	private final int MAX_NUM_THREADS = 5;
 	private String InputFile;
 	private String TokenFile;
@@ -19,6 +28,8 @@ public class GitHubJsonRetriever {
 		File outDir = new File(OutPutDir);
 		if(!outDir.exists())
 			outDir.mkdirs();
+		else 
+			addNames(output);
 	}
 
 	public static void main(String[] args) {
@@ -89,6 +100,29 @@ public class GitHubJsonRetriever {
 				}
 			}
 			workers[i].writeRemainingRepos(OutPutDir);
+		}
+	}
+	
+	private void addNames(String filePath) {
+		System.out.println("adding " + filePath + " to names");
+		File dir = new File(filePath);
+		File[] files = dir.listFiles();
+		String content;
+		Gson parser = new Gson();
+		JsonArray repos;
+		JsonObject repo;
+		for (int i = 0; i < files.length; i++) {
+			if (!(files[i].toString().contains(".json"))) {
+				System.out.println("skipping " + files[i].toString());
+				continue;
+			}
+			System.out.println("proccessing page " + files[i].getName());
+			content = FileIO.readFileContents(files[i]);
+			repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();
+			for (JsonElement repoE : repos) {
+				repo = repoE.getAsJsonObject();
+				ids.add(repo.get("id").getAsInt());
+			}
 		}
 	}
 }
