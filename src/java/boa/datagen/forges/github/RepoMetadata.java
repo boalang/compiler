@@ -144,7 +144,7 @@ public class RepoMetadata {
 			this.created_timestamp = getTimeStamp(time); // project.setCreatedDate(timestamp
 															// * 1000000);
 		}
-		if (jsonProject.has(mainLanguage)) {
+		if (jsonProject.has(GIT_PROGRAMMING_LANGUAGE)) {
 			this.mainLanguage = jsonProject.get(GIT_PROGRAMMING_LANGUAGE).getAsString();
 		}
 		if (jsonProject.has(GIT_DESCRIPTION) && !jsonProject.get(GIT_DESCRIPTION).isJsonNull())
