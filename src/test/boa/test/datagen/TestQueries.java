@@ -151,6 +151,42 @@ public class TestQueries {
 	}
 	
 	@Test
+	public void testAssert() {
+		try {
+			Process p = Runtime.getRuntime().exec("./boa.sh -e "
+					+ "-i test/known-good/assert.boa "
+					+ "-d test/datagen/test_datagen "
+					+ "-o test/datagen/assert_output");
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String s = null;
+			 while ((s = stdInput.readLine()) != null) {
+	                System.out.println(s);
+	            }
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String expected = "USES[https://github.com/boalang/test-datagen][src/JLS2/AssertDemo/v1/AssertDemo.java][1531520725000000] = 1\n"
+				+ "USES[https://github.com/boalang/test-datagen][src/JLS2/AssertDemo/v2/AssertDemo.java][1531520725000000] = 1\n"
+				+ "USES[https://github.com/boalang/test-datagen][src/JLS2/AssertDemo/v3/AssertDemo.java][1531520725000000] = 1\n"
+				+ "USES[https://github.com/boalang/test-datagen][src/JLS2/AssertDemo/v3/AssertDemo.java][1532028844000000] = 1\n"
+				+ "USES[https://github.com/boalang/test-datagen][src/JLS2/AssertDemo/v3/AssertDemo.java][1532032882000000] = 1\n"
+				+ "USES[https://github.com/boalang/test-datagen][src/JLS2/AssertDemo/v4/AssertDemo.java][1531520725000000] = 1\n"
+				+ "USES[https://github.com/boalang/test-datagen][src/JLS2/AssertDemo/v4/AssertDemo.java][1532029015000000] = 1\n"
+				+ "USES[https://github.com/boalang/test-datagen][src/JLS2/AssertDemo/v4/AssertDemo.java][1532032882000000] = 1\n"
+				+ "USES[https://github.com/boalang/test-datagen][src/JLS3/TEDemo/v1/TEDemo.java][1531520725000000] = 1\n";
+		File outputDir = new File("test/datagen/assert_output");
+		String actual = getResults(outputDir);// evaluator.getResults();
+		try {
+			FileUtils.deleteDirectory(outputDir);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertEquals(expected, actual);
+	}
+	
+	@Test
 	public void testAnnotations_use() {
 		try {
 			Process p = Runtime.getRuntime().exec("./boa.sh -e "
