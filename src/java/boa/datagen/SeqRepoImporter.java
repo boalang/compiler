@@ -283,16 +283,8 @@ public class SeqRepoImporter {
 
 			final String name = project.getName();
 			File gitDir = new File(gitRootPath + "/" + name);
-
-			if (project.getForked() 
-					|| !(project.getProgrammingLanguagesList().contains("Java")
-							|| project.getProgrammingLanguagesList().contains("JavaScript")
-							|| project.getProgrammingLanguagesList().contains("PHP")
-							|| project.getMainLanguage().equals("Java")
-							|| project.getMainLanguage().equals("JavaScript")
-							|| project.getMainLanguage().equals("PHP"))
-					// || project.getStars() < 2 || project.getSize() < 100
-					)
+			
+			if (isFiltered(project))
 				return project;
 
 			// If repository is already cloned delete then re-clone, this should
@@ -358,6 +350,24 @@ public class SeqRepoImporter {
 			}
 
 			return project;
+		}
+
+		private boolean isFiltered(Project project) {
+			if (project.getForked())
+				return true;
+			if (project.getStars() < 2 && project.getSize() < 100)
+				return true;
+			if (project.getProgrammingLanguagesList().contains("Java")
+					|| project.getProgrammingLanguagesList().contains("JavaScript")
+					|| project.getProgrammingLanguagesList().contains("PHP"))
+				return false;
+			String lang = project.getMainLanguage();
+			if (lang != null
+					&& (lang.equals("Java")
+						|| lang.equals("JavaScript")
+						|| lang.equals("PHP")))
+				return false;
+			return true;
 		}
 	}
 

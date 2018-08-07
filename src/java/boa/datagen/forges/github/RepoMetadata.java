@@ -380,6 +380,7 @@ public class RepoMetadata {
 		project.setForked(fork);
 		project.setForks(forks);
 		project.setStars(stars);
+		project.setMainLanguage(mainLanguage);
 		if (programmingLanguages != null) {
 			ArrayList<String> langs = new ArrayList<String>();
 			ArrayList<Integer> langLoc = new ArrayList<Integer>();
