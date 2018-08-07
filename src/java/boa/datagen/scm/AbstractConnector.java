@@ -52,6 +52,10 @@ public abstract class AbstractConnector implements AutoCloseable {
 		return astWriterLen;
 	}
 
+	public long getCommitWriterLen() {
+		return commitWriterLen;
+	}
+
 	public long getContentWriterLen() {
 		return contentWriterLen;
 	}
