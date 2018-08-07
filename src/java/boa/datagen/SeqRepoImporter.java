@@ -284,11 +284,15 @@ public class SeqRepoImporter {
 			final String name = project.getName();
 			File gitDir = new File(gitRootPath + "/" + name);
 
-			if (project.getForked() || !(project.getProgrammingLanguagesList().contains("Java")
-					|| project.getProgrammingLanguagesList().contains("JavaScript")
-					|| project.getProgrammingLanguagesList().contains("PHP"))
-			// || project.getStars() < 2 || project.getSize() < 100
-			)
+			if (project.getForked() 
+					|| !(project.getProgrammingLanguagesList().contains("Java")
+							|| project.getProgrammingLanguagesList().contains("JavaScript")
+							|| project.getProgrammingLanguagesList().contains("PHP")
+							|| project.getMainLanguage().equals("Java")
+							|| project.getMainLanguage().equals("JavaScript")
+							|| project.getMainLanguage().equals("PHP"))
+					// || project.getStars() < 2 || project.getSize() < 100
+					)
 				return project;
 
 			// If repository is already cloned delete then re-clone, this should
