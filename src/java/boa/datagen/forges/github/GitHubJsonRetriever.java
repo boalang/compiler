@@ -60,33 +60,30 @@ public class GitHubJsonRetriever {
 			threads[i] = new Thread(worker);
 			threads[i].start();
 		}
-		int i = 0;
+		
 
-		while (i < namesList.size()) {
+		for (int i = 0;i < namesList.size(); i++) {
 			ArrayList<String> names = new ArrayList<String>();
-			for (int k = 0; k < 200 && i < namesList.size(); k++, i++) {
-				names.add(namesList.get(i));
-			}
+			String name = namesList.get(i);
 			boolean nAssigned = true;
 			while (nAssigned) {
 				for (int j = 0; j < MAX_NUM_THREADS; j++) {
 					if (workers[j].isReady()) {
-						workers[j].setName(namesList.get(i));
-						new Thread(workers[j]).start();
+						workers[j].setName(name);
+						System.out.println("Assigning " + name + " to " + j);
 						workers[j].readyFalse();
 						nAssigned = false;
 						break;
 					}
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+				}
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
-			done = true;
 		}
-		
+		done = true;
 		for (Thread thread : threads){
 			while (thread.isAlive()){
 				try {

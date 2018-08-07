@@ -72,6 +72,16 @@ public class GitHubJsonRetrieverWorker implements Runnable {
 			String pageContent = mc.getContent();
 			JsonObject languages = parser.fromJson(pageContent, JsonElement.class).getAsJsonObject();
 			repository.add("language_list", languages);
+		} else if (!authnticationResult) {
+			final int responsecode = mc.getResponseCode();
+			System.err.println("authentication error " + responsecode + " " + name);
+			mc = new MetadataCacher("https://api.github.com/repositories", tok.getUserName(), tok.getToken());
+			if (mc.authenticate()) {
+				tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
+			} else {
+				System.out.println("token: " + tok.getId() + " exhausted");
+				tok.setnumberOfRemainingLimit(0);
+			}
 		}
 		if (repository != null) {
 			addRepo(output, repository);
