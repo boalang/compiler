@@ -355,8 +355,8 @@ public class SeqRepoImporter {
 		private boolean isFiltered(Project project) {
 			if (project.getForked())
 				return true;
-			if (project.getStars() < 2 && project.getSize() < 100)
-				return true;
+//			if (project.getStars() < 2 && project.getSize() < 100)
+//				return true;
 			if (project.getProgrammingLanguagesList().contains("Java")
 					|| project.getProgrammingLanguagesList().contains("JavaScript")
 					|| project.getProgrammingLanguagesList().contains("PHP"))
