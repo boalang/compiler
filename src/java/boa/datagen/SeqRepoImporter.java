@@ -195,6 +195,9 @@ public class SeqRepoImporter {
 							LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
 					contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/source/" + suffix),
 							LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
+					astWriterLen = 1;
+					commitWriterLen = 1;
+					contentWriterLen = 1;
 					break;
 				} catch (Throwable t) {
 					t.printStackTrace();
@@ -337,6 +340,7 @@ public class SeqRepoImporter {
 			} finally {
 				if (conn != null) {
 					this.astWriterLen = conn.getAstWriterLen();
+					this.commitWriterLen = conn.getCommitWriterLen();
 					this.contentWriterLen = conn.getContentWriterLen();
 					try {
 						conn.close();
