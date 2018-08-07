@@ -25,19 +25,7 @@ public class DuplicateRepoRemover {
 		File dir = new File(args[0]);
 		File[] files = dir.listFiles();
 		int totalFiles = files.length;
-		int numThreads = 3;
-		int from = 0, to = 0;
-		int shareSize = totalFiles / numThreads;
-
-		DuplicateRepoRemover dp = new DuplicateRepoRemover(args[1]);
-		for (int i = 0; i < numThreads - 1; i++) {
-			System.out.println(i);
-				from = to;
-				to = from + shareSize;
-				DuplicateRepoWorker worker = new DuplicateRepoWorker(args[0], args[1], from, to);
-				new Thread(worker).start();
-		}
-		from = to;
+		int from = 0, 
 		to = totalFiles;
 		DuplicateRepoWorker worker = new DuplicateRepoWorker(args[0], args[1], from, to);
 		new Thread(worker).start();
