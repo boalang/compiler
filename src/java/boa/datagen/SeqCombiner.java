@@ -133,7 +133,7 @@ public class SeqCombiner {
 		fileSystem.close();
 	}
 
-	public static long readAndAppendCommit(Configuration conf, FileSystem fileSystem, MapFile.Writer astWriter, String fileName, long lastAstKey, long lastCommitKey) throws IOException {
+	public static long readAndAppendCommit(Configuration conf, FileSystem fileSystem, MapFile.Writer writer, String fileName, long lastAstKey, long lastCommitKey) throws IOException {
 		long newLastKey = lastCommitKey;
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
 		LongWritable longKey = new LongWritable();
@@ -148,7 +148,7 @@ public class SeqCombiner {
 					if (key > 0)
 						cfb.setKey(lastAstKey + key);
 				}
-				astWriter.append(new LongWritable(newLastKey), new BytesWritable(rb.build().toByteArray()));
+				writer.append(new LongWritable(newLastKey), new BytesWritable(rb.build().toByteArray()));
 			}
 		} catch (Exception e) {
 			System.err.println(fileName);
@@ -159,7 +159,7 @@ public class SeqCombiner {
 		return newLastKey;
 	}
 
-	public static long readAndAppendAst(Configuration conf, FileSystem fileSystem, MapFile.Writer astWriter, String fileName, long lastKey) throws IOException {
+	public static long readAndAppendAst(Configuration conf, FileSystem fileSystem, MapFile.Writer writer, String fileName, long lastKey) throws IOException {
 		long newLastKey = lastKey;
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
 		LongWritable longKey = new LongWritable();
@@ -167,7 +167,7 @@ public class SeqCombiner {
 		try {
 			while (r.next(longKey, value)) {
 				newLastKey = longKey.get() + lastKey;
-				astWriter.append(new LongWritable(newLastKey), value);
+				writer.append(new LongWritable(newLastKey), value);
 			}
 		} catch (Exception e) {
 			System.err.println(fileName);

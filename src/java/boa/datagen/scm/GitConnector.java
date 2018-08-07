@@ -78,9 +78,9 @@ public class GitConnector extends AbstractConnector {
 	public GitConnector(String path, String projectName, Writer astWriter, long astWriterLen, Writer commitWriter, long commitWriterLen, Writer contentWriter, long contentWriterLen) {
 		this(path, projectName);
 		this.astWriter = astWriter;
+		this.commitWriter = commitWriter;
 		this.contentWriter = contentWriter;
 		this.astWriterLen = astWriterLen;
-		this.commitWriter = commitWriter;
 		this.commitWriterLen = commitWriterLen;
 		this.contentWriterLen = contentWriterLen;
 	}
