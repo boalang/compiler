@@ -410,6 +410,90 @@ public class TestQueries {
 		assertEquals(expected, actual);
 	}
 	
+	@Test
+	public void testYearCreated() {
+		try {
+			Process p = Runtime.getRuntime().exec("./boa.sh -e "
+					+ "-i test/known-good/catAp3.boa "
+					+ "-d test/datagen/test_datagen "
+					+ "-o test/datagen/catAp3_output");
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String s = null;
+			 while ((s = stdInput.readLine()) != null) {
+	                System.out.println(s);
+	            }
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String expected = "counts[2018] = 1\n";
+		File outputDir = new File("test/datagen/catAp3_output");
+		String actual = getResults(outputDir);// evaluator.getResults();
+		try {
+			FileUtils.deleteDirectory(outputDir);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testYearJavaAdded() {
+		try {
+			Process p = Runtime.getRuntime().exec("./boa.sh -e "
+					+ "-i test/known-good/catAp4.boa "
+					+ "-d test/datagen/test_datagen "
+					+ "-o test/datagen/catAp4_output");
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String s = null;
+			 while ((s = stdInput.readLine()) != null) {
+	                System.out.println(s);
+	            }
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String expected = "counts[2018] = 1\n";
+		File outputDir = new File("test/datagen/catAp4_output");
+		String actual = getResults(outputDir);// evaluator.getResults();
+		try {
+			FileUtils.deleteDirectory(outputDir);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testNumberOfRevisions() {
+		try {
+			Process p = Runtime.getRuntime().exec("./boa.sh -e "
+					+ "-i test/known-good/catBp1.boa "
+					+ "-d test/datagen/test_datagen "
+					+ "-o test/datagen/catBp1_output");
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String s = null;
+			 while ((s = stdInput.readLine()) != null) {
+	                System.out.println(s);
+	            }
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String expected = "counts[] = 49\n";
+		File outputDir = new File("test/datagen/catBp1_output");
+		String actual = getResults(outputDir);// evaluator.getResults();
+		try {
+			FileUtils.deleteDirectory(outputDir);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertEquals(expected, actual);
+	}
+	
 	public String getResults(File outputDir) {
 		for (final File f : outputDir.listFiles()) {
 			if (f.getName().startsWith("part")) {
