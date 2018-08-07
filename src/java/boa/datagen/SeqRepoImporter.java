@@ -90,17 +90,17 @@ public class SeqRepoImporter {
 				try {
 					repoArray = parser.fromJson(content, JsonElement.class).getAsJsonArray();
 				} catch (Exception e) {
-					System.err.println("error proccessing page: " + file.getPath());
+					System.err.println("Error proccessing page: " + file.getPath());
 					e.printStackTrace();
 					continue;
 				}
 				for (int i = 0; i < repoArray.size(); i++) {
-					JsonObject rp = repoArray.get(i).getAsJsonObject();
-					RepoMetadata repo = new RepoMetadata(rp);
-					if (repo.id != null && repo.name != null && !processedProjectIds.contains(repo.id)) {
-						try {
+					try {
+						JsonObject rp = repoArray.get(i).getAsJsonObject();
+						RepoMetadata repo = new RepoMetadata(rp);
+						if (repo.id != null && repo.name != null && !processedProjectIds.contains(repo.id)) {
 							Project protobufRepo = repo.toBoaMetaDataProtobuf();
-						
+
 							// System.out.println(jRepo.toString());
 							boolean assigned = false;
 							while (!assigned) {
@@ -114,11 +114,11 @@ public class SeqRepoImporter {
 								}
 								Thread.sleep(10);
 							}
-						} catch (Exception e) {
-							System.err.println("error proccessing page: " + file.getPath());
-							e.printStackTrace();
+							System.out.println(file.getPath() + ": " + i + ": " + repo.id + " " + repo.name);
 						}
-						System.out.println(file.getPath() + ": " + i + ": " + repo.id + " " + repo.name);
+					} catch (Exception e) {
+						System.err.println("Error proccessing item " + i + " of page " + file.getPath());
+						e.printStackTrace();
 					}
 				}
 			}
