@@ -13,6 +13,7 @@ import gnu.trove.set.hash.THashSet;
 
 public class GitHubJsonRetriever {
 	public static THashSet<Integer> ids;
+	public static boolean done;
 	private final int MAX_NUM_THREADS = 5;
 	private String InputFile;
 	private String TokenFile;
@@ -52,10 +53,12 @@ public class GitHubJsonRetriever {
 	public void orchastrate() {
 		TokenList tokens = new TokenList(this.TokenFile);
 		GitHubJsonRetrieverWorker workers[] = new GitHubJsonRetrieverWorker[MAX_NUM_THREADS];
-
+		Thread[] threads = new Thread[MAX_NUM_THREADS];
 		for (int i = 0; i < MAX_NUM_THREADS; i++) {
 			GitHubJsonRetrieverWorker worker = new GitHubJsonRetrieverWorker(this.OutPutDir, tokens, i);
 			workers[i] = worker;
+			threads[i] = new Thread(worker);
+			threads[i].start();
 		}
 		int i = 0;
 
@@ -68,36 +71,30 @@ public class GitHubJsonRetriever {
 			while (nAssigned) {
 				for (int j = 0; j < MAX_NUM_THREADS; j++) {
 					if (workers[j].isReady()) {
-						workers[j].setName(names);
+						workers[j].setName(namesList.get(i));
 						new Thread(workers[j]).start();
+						workers[j].readyFalse();
 						nAssigned = false;
-						try {
-							Thread.sleep(10);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
 						break;
 					}
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 			}
+			done = true;
 		}
-		for (i = 0; i < MAX_NUM_THREADS; i++){
-			while (!workers[i].isReady()){
+		
+		for (Thread thread : threads){
+			while (thread.isAlive()){
 				try {
-					Thread.sleep(10);
+					Thread.sleep(100);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			workers[i].writeRemainingRepos(OutPutDir);
 		}
 	}
 	
