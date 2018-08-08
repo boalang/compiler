@@ -32,8 +32,7 @@
 		<dirset dir="build/classes">
 			<include name="**"/>
 		</dirset>
-		<dirset dir="compile">
-		</dirset>
+		 <mkdir dir="compile"/>
 	</path>
 
 	<path id="test.class.path">
