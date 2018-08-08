@@ -22,7 +22,7 @@ public class GitHubJsonRetrieverWorker implements Runnable {
 	THashSet<Integer> ids = GitHubJsonRetriever.ids;
 	File repoFile;
 	private boolean available = true;
-	private ArrayList<String> names;
+	private String name;
 	private final int index;
 
 	public GitHubJsonRetrieverWorker(String output, TokenList tokenList, int i) {
@@ -32,22 +32,20 @@ public class GitHubJsonRetrieverWorker implements Runnable {
 		this.index = i;
 	}
 
-	public boolean isReady() {
-		return available;
-	}
+	public boolean isReady() {return available;}
 
+	public void readyFalse() {this.available = false;}
+	
 	public void downloadRepoMetaDataForRepoIn() {
 		Token tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
 		Gson parser = new Gson();
 		MetadataCacher mc = null;
 		JsonObject repository = null;
-		for (int i = 0; i < names.size(); i++) {
-			String name = names.get(i);
-			String repourl = this.repo_url_header + name;
-			String languageurl = repourl + language_url_footer;
-			if (tok.getNumberOfRemainingLimit() <= 0) {
-				tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
-			}
+		String repourl = this.repo_url_header + name;
+		String languageurl = repourl + language_url_footer;
+		if (tok.getNumberOfRemainingLimit() <= 0)
+			tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
+		while (true) {
 			mc = new MetadataCacher(repourl, tok.getUserName(), tok.getToken());
 			boolean authnticationResult = mc.authenticate();
 			if (authnticationResult) {
@@ -57,6 +55,7 @@ public class GitHubJsonRetrieverWorker implements Runnable {
 				tok.setLastResponseCode(mc.getResponseCode());
 				tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
 				tok.setResetTime(mc.getLimitResetTime());
+				break;
 			} else {
 				final int responsecode = mc.getResponseCode();
 				System.err.println("authentication error " + responsecode + " " + name);
@@ -66,19 +65,34 @@ public class GitHubJsonRetrieverWorker implements Runnable {
 				} else {
 					System.out.println("token: " + tok.getId() + " exhausted");
 					tok.setnumberOfRemainingLimit(0);
+					break;
 				}
 			}
-			mc = new MetadataCacher(languageurl, tok.getUserName(), tok.getToken());
-			authnticationResult = mc.authenticate();
-			if (authnticationResult && repository != null) {
-				mc.getResponse();
-				String pageContent = mc.getContent();
-				JsonObject languages = parser.fromJson(pageContent, JsonElement.class).getAsJsonObject();
-				repository.add("language_list", languages);
+		}
+		if (repository != null) {
+			while (true) {
+				mc = new MetadataCacher(languageurl, tok.getUserName(), tok.getToken());
+				boolean authnticationResult = mc.authenticate();
+				if (authnticationResult) {
+					mc.getResponse();
+					String pageContent = mc.getContent();
+					JsonObject languages = parser.fromJson(pageContent, JsonElement.class).getAsJsonObject();
+					repository.add("language_list", languages);
+					break;
+				}
+				final int responsecode = mc.getResponseCode();
+				System.err.println("authentication error getting languages " + responsecode + " " + name);
+				mc = new MetadataCacher("https://api.github.com/repositories", tok.getUserName(), tok.getToken());
+				if (mc.authenticate()) {
+					tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
+					continue;
+				} else {
+					System.out.println("token: " + tok.getId() + " exhausted");
+					tok.setnumberOfRemainingLimit(0);
+					break;
+				}
 			}
-			if (repository != null) {
-				addRepo(output, repository);
-			}
+			addRepo(output, repository);
 		}
 	}
 
@@ -118,12 +132,25 @@ public class GitHubJsonRetrieverWorker implements Runnable {
 
 	@Override
 	public void run() {
-		this.available = false;
-		this.downloadRepoMetaDataForRepoIn();
-		this.available = true;
+		while (true) {
+			while (this.available) {
+				if (GitHubJsonRetriever.done)
+					break;
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			if (GitHubJsonRetriever.done)
+				break;
+			this.downloadRepoMetaDataForRepoIn();
+			this.available = true;
+		}
+		writeRemainingRepos(output);
 	}
 
-	public void setName(ArrayList<String> names) {
-		this.names = names;
+	public void setName(String names) {
+		this.name = names;
 	}
 }
