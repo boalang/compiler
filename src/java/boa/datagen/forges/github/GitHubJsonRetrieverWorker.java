@@ -45,45 +45,53 @@ public class GitHubJsonRetrieverWorker implements Runnable {
 		String languageurl = repourl + language_url_footer;
 		if (tok.getNumberOfRemainingLimit() <= 0)
 			tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
-		mc = new MetadataCacher(repourl, tok.getUserName(), tok.getToken());
-		boolean authnticationResult = mc.authenticate();
-		if (authnticationResult) {
-			mc.getResponse();
-			String pageContent = mc.getContent();
-			repository = parser.fromJson(pageContent, JsonElement.class).getAsJsonObject();
-			tok.setLastResponseCode(mc.getResponseCode());
-			tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
-			tok.setResetTime(mc.getLimitResetTime());
-		} else {
-			final int responsecode = mc.getResponseCode();
-			System.err.println("authentication error " + responsecode + " " + name);
-			mc = new MetadataCacher("https://api.github.com/repositories", tok.getUserName(), tok.getToken());
-			if (mc.authenticate()) {
+		while (true) {
+			mc = new MetadataCacher(repourl, tok.getUserName(), tok.getToken());
+			boolean authnticationResult = mc.authenticate();
+			if (authnticationResult) {
+				mc.getResponse();
+				String pageContent = mc.getContent();
+				repository = parser.fromJson(pageContent, JsonElement.class).getAsJsonObject();
+				tok.setLastResponseCode(mc.getResponseCode());
 				tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
+				tok.setResetTime(mc.getLimitResetTime());
+				break;
 			} else {
-				System.out.println("token: " + tok.getId() + " exhausted");
-				tok.setnumberOfRemainingLimit(0);
-			}
-		}
-		mc = new MetadataCacher(languageurl, tok.getUserName(), tok.getToken());
-		authnticationResult = mc.authenticate();
-		if (authnticationResult && repository != null) {
-			mc.getResponse();
-			String pageContent = mc.getContent();
-			JsonObject languages = parser.fromJson(pageContent, JsonElement.class).getAsJsonObject();
-			repository.add("language_list", languages);
-		} else if (!authnticationResult) {
-			final int responsecode = mc.getResponseCode();
-			System.err.println("authentication error " + responsecode + " " + name);
-			mc = new MetadataCacher("https://api.github.com/repositories", tok.getUserName(), tok.getToken());
-			if (mc.authenticate()) {
-				tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
-			} else {
-				System.out.println("token: " + tok.getId() + " exhausted");
-				tok.setnumberOfRemainingLimit(0);
+				final int responsecode = mc.getResponseCode();
+				System.err.println("authentication error " + responsecode + " " + name);
+				mc = new MetadataCacher("https://api.github.com/repositories", tok.getUserName(), tok.getToken());
+				if (mc.authenticate()) {
+					tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
+				} else {
+					System.out.println("token: " + tok.getId() + " exhausted");
+					tok.setnumberOfRemainingLimit(0);
+					break;
+				}
 			}
 		}
 		if (repository != null) {
+			while (true) {
+				mc = new MetadataCacher(languageurl, tok.getUserName(), tok.getToken());
+				boolean authnticationResult = mc.authenticate();
+				if (authnticationResult) {
+					mc.getResponse();
+					String pageContent = mc.getContent();
+					JsonObject languages = parser.fromJson(pageContent, JsonElement.class).getAsJsonObject();
+					repository.add("language_list", languages);
+					break;
+				}
+				final int responsecode = mc.getResponseCode();
+				System.err.println("authentication error getting languages " + responsecode + " " + name);
+				mc = new MetadataCacher("https://api.github.com/repositories", tok.getUserName(), tok.getToken());
+				if (mc.authenticate()) {
+					tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
+					continue;
+				} else {
+					System.out.println("token: " + tok.getId() + " exhausted");
+					tok.setnumberOfRemainingLimit(0);
+					break;
+				}
+			}
 			addRepo(output, repository);
 		}
 	}
