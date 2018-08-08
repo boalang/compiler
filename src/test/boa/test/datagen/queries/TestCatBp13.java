@@ -2,7 +2,7 @@ package boa.test.datagen.queries;
 
 import org.junit.Test;
 
-public class TestCatBp13 extends TestQueries {
+public class TestCatBp13 extends QueryTest {
 	
 	@Test
 	public void testcatBp13() {

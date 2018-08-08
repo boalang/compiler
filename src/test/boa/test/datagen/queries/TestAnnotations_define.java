@@ -2,7 +2,7 @@ package boa.test.datagen.queries;
 
 import org.junit.Test;
 
-public class TestAnnotations_define extends TestQueries {
+public class TestAnnotations_define extends QueryTest {
 	
 	@Test
 	public void testAnnotations_define() {

@@ -2,7 +2,7 @@ package boa.test.datagen.queries;
 
 import org.junit.Test;
 
-public class TestNumberOfRevisions extends TestQueries {
+public class TestNumberOfRevisions extends QueryTest {
 
 	@Test
 	public void testNumberOfRevisions() {

@@ -2,7 +2,7 @@ package boa.test.datagen.queries;
 
 import org.junit.Test;
 
-public class TestAssert extends TestQueries {
+public class TestAssert extends QueryTest {
 
 	@Test
 	public void testAssert() {

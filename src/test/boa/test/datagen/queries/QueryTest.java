@@ -13,7 +13,8 @@ import java.io.File;
 import java.io.IOException;
 
 
-public class TestQueries {
+public abstract class QueryTest {
+	
 	@Before
 	public void prep() {
 		File outputDir = new File("test/datagen/temp_output");

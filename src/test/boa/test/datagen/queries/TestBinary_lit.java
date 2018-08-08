@@ -2,7 +2,7 @@ package boa.test.datagen.queries;
 
 import org.junit.Test;
 
-public class TestBinary_lit extends TestQueries{
+public class TestBinary_lit extends QueryTest{
 	
 	@Test
 	public void testBinary_lit() {

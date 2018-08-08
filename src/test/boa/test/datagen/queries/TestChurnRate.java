@@ -2,7 +2,7 @@ package boa.test.datagen.queries;
 
 import org.junit.Test;
 
-public class TestChurnRate extends TestQueries {
+public class TestChurnRate extends QueryTest {
 	
 	@Test
 	public void testChurnRate() {

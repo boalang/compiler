@@ -2,7 +2,7 @@ package boa.test.datagen.queries;
 
 import org.junit.Test;
 
-public class TestBugFix extends TestQueries {
+public class TestBugFix extends QueryTest {
 	
 	@Test
 	public void testBugFix() {
