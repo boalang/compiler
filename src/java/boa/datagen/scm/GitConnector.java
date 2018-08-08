@@ -136,7 +136,7 @@ public class GitConnector extends AbstractConnector {
 				commitList.add(rc);
 			}
 			if (commitList.size() > MAX_COMMITS) {
-				System.err.println(projectName + " exceeded Max_Commit size of " + MAX_COMMITS);
+				System.err.println(projectName + " has " + commitList.size() + " commits " + " exceeding the maximum commit size of " + MAX_COMMITS);
 //				return;
 			}
 				
