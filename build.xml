@@ -32,6 +32,7 @@
 		<dirset dir="build/classes">
 			<include name="**"/>
 		</dirset>
+		<dirset dir="./compile" />
 	</path>
 
 	<path id="test.class.path">
@@ -59,6 +60,7 @@
 		<mkdir dir="build/depcache" />
 		<mkdir dir="build/tests" />
 		<mkdir dir="dist" />
+		<mkdir dir="./compile" />
 	</target>
 
 	<!-- do a dependency check -->
@@ -173,15 +175,13 @@
 		</delete>
 	</target>
 
-
-	<!-- testing -->
+	
 	<target name="test" depends="-compile-tests, package" description="Run all unit tests.">
 		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
 				<fileset dir="build/tests">
-					<mkdir dir="compile"/>
 			<!--		<include name="boa/test/compiler/Test*.class" /> -->
 			<!--		<include name="boa/test/functions/Test*.class" /> -->
 					<include name="boa/test/datagen/queries/Test*.class" />  
