@@ -175,7 +175,7 @@
 
 
 	<!-- testing -->
-	<target name="test" depends="-compile-tests" description="Run all unit tests.">
+	<target name="test" depends="-compile-tests, package" description="Run all unit tests.">
 		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<batchtest>
