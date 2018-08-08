@@ -308,8 +308,10 @@ public class TestQueries {
 					+ "-d test/datagen/test_datagen "
 					+ "-o test/datagen/temp_output");
 			p.waitFor();
-		} catch (IOException | InterruptedException e1) {
+		} catch (IOException e1) {
 			e1.printStackTrace();
+		} catch (InterruptedException e2) {
+			e2.printStackTrace();
 		}
 		File outputDir = new File("test/datagen/temp_output");
 		String actual = getResults(outputDir);
