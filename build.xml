@@ -32,7 +32,6 @@
 		<dirset dir="build/classes">
 			<include name="**"/>
 		</dirset>
-		<dirset dir="./compile" />
 	</path>
 
 	<path id="test.class.path">
@@ -40,6 +39,7 @@
 		<dirset dir="build/tests">
 			<include name="**"/>
 		</dirset>
+		<dirset dir="./compile" />
 	</path>
 
 	<path id="src.paths">
@@ -182,7 +182,7 @@
 			<batchtest>
 				<formatter type="plain" usefile="false" />
 				<fileset dir="build/tests">
-			<!--		<include name="boa/test/compiler/Test*.class" /> -->
+					<include name="boa/test/compiler/Test*.class" /> 
 			<!--		<include name="boa/test/functions/Test*.class" /> -->
 					<include name="boa/test/datagen/queries/Test*.class" />  
 			<!--		<include name="boa/test/datagen/java/Test*.class" /> -->
