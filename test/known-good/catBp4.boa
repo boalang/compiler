@@ -4,5 +4,5 @@ p: Project = input;
 
 exists (i: int; match(`^java$`, lowercase(p.programming_languages[i])))
 	foreach (j: int; p.code_repositories[j].kind == RepositoryKind.GIT)
-		exists (k: int; yearof(p.code_repositories[j].revisions[k].commit_date) == 2011)
+		exists (k: int; yearof(p.code_repositories[j].revisions[k].commit_date) == 2018)
 			counts << 1;
