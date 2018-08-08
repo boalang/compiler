@@ -308,11 +308,6 @@ public class TestQueries {
 					+ "-d test/datagen/test_datagen "
 					+ "-o test/datagen/temp_output");
 			p.waitFor();
-			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			String s = null;
-			 while ((s = stdInput.readLine()) != null) {
-	                System.out.println(s);
-	            }
 		} catch (IOException | InterruptedException e1) {
 			e1.printStackTrace();
 		}
