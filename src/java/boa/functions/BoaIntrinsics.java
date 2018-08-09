@@ -280,6 +280,13 @@ public class BoaIntrinsics {
 	public static ChangedFile[] getPreviousVersion(final CodeRepository cr, final ChangedFile cf) throws Exception {
 		List<ChangedFile> l = new ArrayList<ChangedFile>();
 		for (int i = 0; i < cf.getChangesCount(); i++) {
+			ChangeKind kind = cf.getChanges(i);
+			if (kind == ChangeKind.ADDED || kind == ChangeKind.COPIED)
+				continue;
+			ChangedFile.Builder fb = ChangedFile.newBuilder(cf);
+			if (!cf.getPreviousNames(i).isEmpty())
+				fb.setName(cf.getPreviousNames(i));
+			ChangedFile key = fb.build();
 			int revisionIndex = cf.getPreviousVersions(i);
 			Set<Integer> queuedRevisionIds = new HashSet<Integer>();
 			PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
@@ -293,7 +300,7 @@ public class BoaIntrinsics {
 			while (!pq.isEmpty()) {
 				revisionIndex = pq.poll();
 				Revision rev = getRevision(cr, revisionIndex);
-				int index = Collections.binarySearch(rev.getFilesList(), cf, new Comparator<ChangedFile>() {
+				int index = Collections.binarySearch(rev.getFilesList(), key, new Comparator<ChangedFile>() {
 					@Override
 					public int compare(ChangedFile f1, ChangedFile f2) {
 						return f1.getName().compareTo(f2.getName());
