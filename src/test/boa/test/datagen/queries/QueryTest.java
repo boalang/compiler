@@ -2,8 +2,6 @@ package boa.test.datagen.queries;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
-import org.junit.Test;
-
 import boa.datagen.util.FileIO;
 import boa.evaluator.BoaEvaluator;
 

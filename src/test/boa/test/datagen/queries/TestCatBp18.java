@@ -1,10 +1,6 @@
 package boa.test.datagen.queries;
 
-import java.io.File;
-
 import org.junit.Test;
-
-import boa.datagen.util.FileIO;
 
 public class TestCatBp18 extends QueryTest {
 	
