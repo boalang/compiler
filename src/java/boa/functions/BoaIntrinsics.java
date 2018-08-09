@@ -107,11 +107,15 @@ public class BoaIntrinsics {
 	
 	@FunctionSpec(name = "getsnapshotbyindex", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "int"})
 	public static ChangedFile[] getSnapshotByIndex(final CodeRepository cr, final int commitOffset) {
+		if (commitOffset == cr.getHead())
+			return getSnapshot(cr);
 		return getSnapshotByIndex(cr, commitOffset, new String[0]);
 	}
 
 	@FunctionSpec(name = "getsnapshotbyindex", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "int", "string..." })
 	public static ChangedFile[] getSnapshotByIndex(final CodeRepository cr, final int commitOffset, final String... kinds) {
+		if (commitOffset == cr.getHead())
+			return getSnapshot(cr, kinds);
 		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
 		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>(); 
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
@@ -255,7 +259,7 @@ public class BoaIntrinsics {
 	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string..." })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String... kinds) throws Exception {
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String... kinds) {
 //		return getSnapshot(cr, Long.MAX_VALUE, kinds);
 		List<ChangedFile> files = new ArrayList<ChangedFile>();
 		for (ChangedFile file : cr.getHeadSnapshotList()) {
@@ -271,7 +275,7 @@ public class BoaIntrinsics {
 	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository" })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr) throws Exception {
+	public static ChangedFile[] getSnapshot(final CodeRepository cr) {
 //		return getSnapshot(cr, Long.MAX_VALUE, new String[0]);
 		return cr.getHeadSnapshotList().toArray(new ChangedFile[0]);
 	}

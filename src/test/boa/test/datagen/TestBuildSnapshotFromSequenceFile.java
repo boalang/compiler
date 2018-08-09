@@ -81,15 +81,15 @@ public class TestBuildSnapshotFromSequenceFile {
 			RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
 			GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName);
 			
-			ChangedFile[] snapshot = getSnapshot(dataPath, repoName, -1);
-			String[] fileNames = new String[snapshot.length];
-			for (int i = 0; i < snapshot.length; i++)
-				fileNames[i] = snapshot[i].getName();
-			Arrays.sort(fileNames);
-			String[] expectedFileNames = conn.getSnapshot(Constants.HEAD).toArray(new String[0]);
-			Arrays.sort(expectedFileNames);
-			System.out.println("Test head snapshot");
-			assertArrayEquals(expectedFileNames, fileNames);
+//			ChangedFile[] snapshot = getSnapshot(dataPath, repoName, -1);
+//			String[] fileNames = new String[snapshot.length];
+//			for (int i = 0; i < snapshot.length; i++)
+//				fileNames[i] = snapshot[i].getName();
+//			Arrays.sort(fileNames);
+//			String[] expectedFileNames = conn.getSnapshot(Constants.HEAD).toArray(new String[0]);
+//			Arrays.sort(expectedFileNames);
+//			System.out.println("Test head snapshot");
+//			assertArrayEquals(expectedFileNames, fileNames);
 			
 			List<String> commitIds = conn.logCommitIds();
 			for (int i = 0; i < commitIds.size(); i++) {
