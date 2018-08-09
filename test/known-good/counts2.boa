@@ -13,6 +13,7 @@ JavaErrorFiles: output sum of int;
 JLS2Files: output sum of int;
 JLS3Files: output sum of int;
 JLS4Files: output sum of int;
+JLS8Files: output sum of int;
 AstNodes: output sum of int;
 ErrorAstNodes: output sum of int;
 
@@ -43,7 +44,8 @@ foreach (i: int; def(p.code_repositories[i])) {
 
                 if (rev.files[k].kind == FileKind.SOURCE_JAVA_JLS2
                         || rev.files[k].kind == FileKind.SOURCE_JAVA_JLS3
-                        || rev.files[k].kind == FileKind.SOURCE_JAVA_JLS4) {
+                        || rev.files[k].kind == FileKind.SOURCE_JAVA_JLS4
+                        || rev.files[k].kind == FileKind.SOURCE_JAVA_JLS8) {
                     javaProjectEmpty = false;
 
                     JavaSnapshots << 1;
@@ -71,7 +73,9 @@ JavaFiles << len(javaPaths);
 keyset := keys(pathKinds);
 foreach (i: int; def(keyset[i])) {
     k := pathKinds[keyset[i]];
-    if (k == FileKind.SOURCE_JAVA_JLS4)
+    if (k == FileKind.SOURCE_JAVA_JLS8)
+        JLS8Files << 1;
+    else if (k == FileKind.SOURCE_JAVA_JLS4)
         JLS4Files << 1;
     else if (k == FileKind.SOURCE_JAVA_JLS3)
         JLS3Files << 1;
