@@ -48,11 +48,12 @@ public class GetReposByLanguage {
 		
 		@Override
 		public void run() {
-			HashSet<String> names = new HashSet<>();
-			String time = "2018-09-18T01:01:01Z";
+	//		HashSet<String> names = new HashSet<>();
+			String time = "2018-08-18T01:01:01Z";
 			Gson parser = new Gson();
 			
 			while (true){
+				String pushedName = "";
 				Token tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
 				String url = "https://api.github.com/search/repositories?q=language:" + language +"+stars:>1+pushed:<=" + time + "&sort=updated&order=desc&per_page=100";
 				System.out.println(url);
@@ -78,10 +79,11 @@ public class GetReposByLanguage {
 			        	JsonObject item = items.get(j).getAsJsonObject();
 			        	this.addRepo(item);
 			        	String name = item.get("full_name").getAsString();
-			        	names.add(name);
+			        //	names.add(name);
 			        	String pushed = item.get("pushed_at").getAsString();
-			        	if (pushed.compareTo(time) < 0)
+			        	if (pushed.compareTo(time) < 0){
 			        		time = pushed;
+			        	}
 			        }
 		        }
 		        int count = json.get("total_count").getAsInt();
@@ -100,10 +102,10 @@ public class GetReposByLanguage {
 				}
 			}
 			writeRemainingRepos();
-			StringBuilder sb = new StringBuilder();
-	    	for (String name : names)
-	    		sb.append(name + "\n");
-	        FileIO.writeFileContents(new File( outDir + "names/names.txt"), sb.toString());
+		//	StringBuilder sb = new StringBuilder();
+	    //	for (String name : names)
+	    //		sb.append(name + "\n");
+	    //    FileIO.writeFileContents(new File( outDir + "names/names.txt"), sb.toString());
 		} 
 		
 		private void addRepo(JsonObject repo) {
