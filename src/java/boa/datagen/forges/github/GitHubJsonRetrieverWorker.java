@@ -1,7 +1,6 @@
 package boa.datagen.forges.github;
 
 import java.io.File;
-import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -43,9 +42,9 @@ public class GitHubJsonRetrieverWorker implements Runnable {
 		JsonObject repository = null;
 		String repourl = this.repo_url_header + name;
 		String languageurl = repourl + language_url_footer;
-		if (tok.getNumberOfRemainingLimit() <= 0)
-			tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
 		while (true) {
+			if (tok.getNumberOfRemainingLimit() <= 0)
+				tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
 			mc = new MetadataCacher(repourl, tok.getUserName(), tok.getToken());
 			boolean authnticationResult = mc.authenticate();
 			if (authnticationResult) {
@@ -71,6 +70,8 @@ public class GitHubJsonRetrieverWorker implements Runnable {
 		}
 		if (repository != null) {
 			while (true) {
+				if (tok.getNumberOfRemainingLimit() <= 0)
+					tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
 				mc = new MetadataCacher(languageurl, tok.getUserName(), tok.getToken());
 				boolean authnticationResult = mc.authenticate();
 				if (authnticationResult) {
@@ -103,7 +104,7 @@ public class GitHubJsonRetrieverWorker implements Runnable {
 			fileToWriteJson = new File(
 					output + "/Thread-" + this.index + "-page-" + javaCounter + ".json");
 			while (fileToWriteJson.exists()) {
-				System.out.println("file scala/thread-" + this.index + "-page-" + javaCounter
+				System.out.println("file thread-" + this.index + "-page-" + javaCounter
 						+ " arleady exist");
 				javaCounter++;
 				fileToWriteJson = new File(
