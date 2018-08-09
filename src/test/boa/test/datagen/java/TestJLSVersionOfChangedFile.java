@@ -46,8 +46,8 @@ import boa.types.Diff.ChangedFile;
 public class TestJLSVersionOfChangedFile {
 
     @Parameters(name = "{index}: {0}")
-    public static List<ChangedFile[]> data() throws Exception {
-    	List<ChangedFile[]> data = new ArrayList<ChangedFile[]>();
+    public static List<Object[]> data() throws Exception {
+    	List<Object[]> data = new ArrayList<Object[]>();
 		CodeRepository cr = buildCodeRepository("boalang/compiler");
 		String[][] commits = new String[][] {
 			{"3a1e352cc63f94058ddb38341531d347f121c29a", "58"},
@@ -67,22 +67,24 @@ public class TestJLSVersionOfChangedFile {
 				assertThat(snapshot.size(), Matchers.is(Integer.parseInt(commit[1])));
 				
 		    	for (ChangedFile cf : snapshot)
-		    		data.add(new ChangedFile[]{cf});
+		    		data.add(new Object[]{cf.getName(), cf});
 			}
 		}
     	return data;
     }
-
+    
+    private String name;
     private ChangedFile changedFile;
 	
 	private static Configuration conf = new Configuration();
 	private static FileSystem fileSystem = null;
 	
 	private static SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
-	private static long astWriterLen = 0, contentWriterLen = 0;
+	private static long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
 	
-	public TestJLSVersionOfChangedFile(ChangedFile input) {
+	public TestJLSVersionOfChangedFile(String name, ChangedFile input) {
 		DefaultProperties.DEBUG = true;
+		this.name = name;
 		this.changedFile = input;
 	}
 	
@@ -103,18 +105,18 @@ public class TestJLSVersionOfChangedFile {
 		filecheck.run();
 		String url = "https://github.com/" + repoName + ".git";
 		RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
-		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName, astWriter, astWriterLen, contentWriter, contentWriterLen);
+		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName, astWriter, astWriterLen, commitWriter, commitWriterLen, contentWriter, contentWriterLen);
 		final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
 		repoBuilder.setKind(RepositoryKind.GIT);
 		repoBuilder.setUrl(url);
-		for (final Revision rev : conn.getCommits(true, repoName)) {
-			final Revision.Builder revBuilder = Revision.newBuilder(rev);
+		for (final Object rev : conn.getRevisions(repoName)) {
+			final Revision.Builder revBuilder = Revision.newBuilder((Revision) rev);
 			repoBuilder.addRevisions(revBuilder);
 		}
 		if (repoBuilder.getRevisionsCount() > 0) {
 //			System.out.println("Build head snapshot");
 			repoBuilder.setHead(conn.getHeadCommitOffset());
-			repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[] { "java" }, repoName));
+			repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot());
 		}
 		repoBuilder.addAllBranches(conn.getBranchIndices());
 		repoBuilder.addAllBranchNames(conn.getBranchNames());
@@ -124,8 +126,7 @@ public class TestJLSVersionOfChangedFile {
 		closeWriters();
 
 		List<ChangedFile> snapshot1 = new ArrayList<ChangedFile>();
-		Map<String, AbstractCommit> commits = new HashMap<String, AbstractCommit>();
-		conn.getSnapshot(conn.getHeadCommitOffset(), snapshot1, commits);
+		conn.getSnapshot(conn.getHeadCommitOffset(), snapshot1);
 //		System.out.println("Finish building head snapshot");
 		List<String> snapshot2 = conn.getSnapshot(Constants.HEAD);
 		Set<String> s1 = new HashSet<String>(), s2 = new HashSet<String>(snapshot2);
@@ -135,9 +136,9 @@ public class TestJLSVersionOfChangedFile {
 		assertEquals(s2, s1);
 
 		for (int i = conn.getRevisions().size()-1; i >= 0; i--) {
-			AbstractCommit commit = conn.getRevisions().get(i);
+			AbstractCommit commit = (AbstractCommit) conn.getRevisions().get(i);
 			snapshot1 = new ArrayList<ChangedFile>();
-			conn.getSnapshot(i, snapshot1, new HashMap<String, AbstractCommit>());
+			conn.getSnapshot(i, snapshot1);
 			snapshot2 = conn.getSnapshot(commit.getId());
 			s1 = new HashSet<String>();
 			s2 = new HashSet<String>(snapshot2);

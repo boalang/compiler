@@ -1,8 +1,8 @@
-# Counting the number of active Java projects with SVN
+# Counting the number of active Java projects with GIT
 counts: output sum of int;
 p: Project = input;
 
 exists (i: int; match(`^java$`, lowercase(p.programming_languages[i])))
-	foreach (j: int; p.code_repositories[j].kind == RepositoryKind.SVN)
-		exists (k: int; yearof(p.code_repositories[j].revisions[k].commit_date) == 2011)
+	foreach (j: int; p.code_repositories[j].kind == RepositoryKind.GIT)
+		exists (k: int; yearof(p.code_repositories[j].revisions[k].commit_date) == 2018)
 			counts << 1;

@@ -39,6 +39,7 @@
 		<dirset dir="build/tests">
 			<include name="**"/>
 		</dirset>
+		<dirset dir="./compile" />
 	</path>
 
 	<path id="src.paths">
@@ -59,6 +60,7 @@
 		<mkdir dir="build/depcache" />
 		<mkdir dir="build/tests" />
 		<mkdir dir="dist" />
+		<mkdir dir="./compile" />
 	</target>
 
 	<!-- do a dependency check -->
@@ -83,7 +85,7 @@
 
 	<target name="-translate-protobuf" depends="-check-protobuf" unless="protobuf.uptodate">
 		<echo level="error" message="Translating Protocol Buffer files to Java" />
-		<apply executable="protoc" parallel="true">
+		 <apply executable="protoc" parallel="true"> 
 			<arg value="--proto_path=${src.proto}" />
 			<arg value="--java_out=src/compiled-proto" />
 			<srcfile />
@@ -173,20 +175,20 @@
 		</delete>
 	</target>
 
-
-	<!-- testing -->
-	<target name="test" depends="-compile-tests" description="Run all unit tests.">
+	
+	<target name="test" depends="-compile-tests, package" description="Run all unit tests.">
 		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
 				<fileset dir="build/tests">
-					<include name="boa/test/compiler/Test*.class" />
-					<include name="boa/test/functions/Test*.class" />
+					<include name="boa/test/compiler/Test*.class" /> 
+					<include name="boa/test/functions/Test*.class" /> 
 					<include name="boa/test/datagen/Test*.class" />
-					<include name="boa/test/datagen/java/Test*.class" />
-					<include name="boa/test/datagen/js/Test*.class" />
-					<include name="boa/test/datagen/php/Test*.class" />
+					<include name="boa/test/datagen/queries/Test*.class" />
+					<include name="boa/test/datagen/java/Test*.class" /> 
+					<include name="boa/test/datagen/js/Test*.class" />  
+					<include name="boa/test/datagen/php/Test*.class" />  
 					<exclude name="**/*$*.class" />
 				</fileset>
 			</batchtest>

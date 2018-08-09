@@ -78,4 +78,5 @@ message Project {
 	repeated int32 programming_languages_locs = 25;
 	/** The size of the repository in bytes of code **/
 	optional int32 size = 26;
+	optional string main_language = 27;
 }

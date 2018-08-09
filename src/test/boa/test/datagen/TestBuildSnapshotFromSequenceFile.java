@@ -59,7 +59,8 @@ public class TestBuildSnapshotFromSequenceFile {
 		String[] args = {	"-inputJson", "test/datagen/jsons", 
 							"-inputRepo", "dataset/repos",
 							"-output", dataPath,
-							"-size", "1"};
+							"-commits", "1",
+							"-threads", "2"};
 		BoaGenerator.main(args);
 		
     	List<Object[]> data = new ArrayList<Object[]>();
@@ -130,7 +131,7 @@ public class TestBuildSnapshotFromSequenceFile {
 		Arrays.sort(fileNames);
 		String[] expectedFileNames = conn.getSnapshot(commitId).toArray(new String[0]);
 		Arrays.sort(expectedFileNames);
-		System.out.println("Test snapshot at " + commitId);
+//		System.out.println("Test snapshot at " + commitId);
 		assertArrayEquals(expectedFileNames, fileNames);
 		conn.close();
 	}
@@ -184,7 +185,7 @@ public class TestBuildSnapshotFromSequenceFile {
 						if (index == -1)
 							snapshot = BoaIntrinsics.getSnapshot(cr);
 						else
-							snapshot = BoaIntrinsics.getSnapshot(cr, index);
+							snapshot = BoaIntrinsics.getSnapshotByIndex(cr, index);
 						context.write(key, new IntWritable(1));
 					} catch (Exception e) {
 						e.printStackTrace();

@@ -62,7 +62,7 @@ public class GitCommit extends AbstractCommit {
 	// the repository the commit lives in - should already be connected!
 	private Repository repository;
 	private RevWalk revwalk;
-	private Map<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
+	Map<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
 
 	public GitCommit(final GitConnector cnn, final Repository repository, final RevWalk revwalk, String projectName) {
 		super(cnn);
@@ -191,7 +191,7 @@ public class GitCommit extends AbstractCommit {
 						cfb.setChange(ChangeKind.ADDED);
 						cfb.setName(path);
 						cfb.setKind(FileKind.OTHER);
-						cfb.setKey(-1);
+						cfb.setKey(0);
 						cfb.setAst(false);
 						fileNameIndices.put(path, changedFiles.size());
 						changedFiles.add(cfb);

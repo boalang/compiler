@@ -146,7 +146,7 @@ public class BoaAstIntrinsics {
 			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
 		}
 
-		System.err.println("error with ast: " + f.getKey());
+		System.err.println("error with ast: " + f.getKey() + " from " + f.getName());
 		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
 		return emptyAst;
 	}

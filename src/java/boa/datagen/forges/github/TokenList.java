@@ -4,7 +4,6 @@ import boa.datagen.util.FileIO;
 
 import java.io.File;
 import java.util.PriorityQueue;
-import java.util.concurrent.PriorityBlockingQueue;
 
 public class TokenList {
 	private int lastUsedToken = 0;

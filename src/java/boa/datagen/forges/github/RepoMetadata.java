@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.CodeRepository.RepositoryKind;
@@ -52,6 +53,7 @@ public class RepoMetadata {
 	private static final String GIT_DESCRIPTION = "description";
 	private static final String GIT_OS = "os";
 	private static final String GIT_PROGRAMMING_LANGUAGES = "language_list";
+	private static final String GIT_PROGRAMMING_LANGUAGE = "language";
 	private static final String GIT_DATABASES = null;
 	private static final String GIT_LICENSES = null;
 	private static final String GIT_TOPICS = null;
@@ -109,6 +111,7 @@ public class RepoMetadata {
 	private String trackers;
 	private String svnRepository;
 	private String gitRepository;
+	private String mainLanguage;
 	
 
 	private boolean fork = false;
@@ -122,28 +125,56 @@ public class RepoMetadata {
 	}
 
 	public void build(JsonObject jsonProject) {
-		if (jsonProject.has(GIT_ID))
-			this.id = jsonProject.get(GIT_ID).getAsString();
-		if (jsonProject.has(GIT_NAME))
-			this.name = jsonProject.get(GIT_NAME).getAsString();
-			this.gitRepository = "https://github.com/" + jsonProject.get(GIT_NAME).getAsString() + ".git";
-		if (jsonProject.has(GIT_SHORT_DESCRIPTION))
-			this.shortDescription = jsonProject.get(GIT_SHORT_DESCRIPTION).getAsString();
-		if (jsonProject.has(GIT_HOME_PAGE) && !jsonProject.get(GIT_HOME_PAGE).isJsonNull()) {
-			this.homepage = jsonProject.get(GIT_HOME_PAGE).getAsString();
-		}else
+		if (jsonProject.has(GIT_ID)) {
+			JsonElement e = jsonProject.get(GIT_ID);
+			if (!e.isJsonNull())
+				this.id = e.getAsString();
+		}
+		if (jsonProject.has(GIT_NAME)) {
+			JsonElement e = jsonProject.get(GIT_NAME);
+			if (!e.isJsonNull()) {
+				this.name = e.getAsString();
+				this.gitRepository = "https://github.com/" + e.getAsString() + ".git";
+			}
+		}
+		if (jsonProject.has(GIT_SHORT_DESCRIPTION)) {
+			JsonElement e = jsonProject.get(GIT_SHORT_DESCRIPTION);
+			if (!e.isJsonNull())
+				this.shortDescription = e.getAsString();
+		}
+		if (jsonProject.has(GIT_HOME_PAGE)) {
+			JsonElement e = jsonProject.get(GIT_HOME_PAGE);
+			if (!e.isJsonNull())
+				this.homepage = e.getAsString();
+			else
+				this.homepage = "";
+		} else
 			this.homepage = "";
 		if (jsonProject.has(GIT_SUMMARY_PAGE)) {
-			this.summaryPage = jsonProject.get(GIT_SUMMARY_PAGE).getAsString();
-		}else
+			JsonElement e = jsonProject.get(GIT_SUMMARY_PAGE);
+			if (!e.isJsonNull())
+				this.summaryPage = jsonProject.get(GIT_SUMMARY_PAGE).getAsString();
+			else
+				this.summaryPage = "https://github.com/" + name;
+		} else
 			this.summaryPage = "https://github.com/" + name;
-		if (jsonProject.has(GIT_CREATE) && !jsonProject.get(GIT_CREATE).isJsonNull()) {
-			String time = jsonProject.get(GIT_CREATE).getAsString();
-			this.created_timestamp = getTimeStamp(time); // project.setCreatedDate(timestamp
-															// * 1000000);
+		if (jsonProject.has(GIT_CREATE)) {
+			JsonElement e = jsonProject.get(GIT_CREATE);
+			if (!e.isJsonNull()) {
+				String time = e.getAsString();
+				this.created_timestamp = getTimeStamp(time);
+			}
 		}
-		if (jsonProject.has(GIT_DESCRIPTION) && !jsonProject.get(GIT_DESCRIPTION).isJsonNull())
-			this.description = jsonProject.get(GIT_DESCRIPTION).getAsString();
+		if (jsonProject.has(GIT_PROGRAMMING_LANGUAGE)) {
+			JsonElement e = jsonProject.get(GIT_PROGRAMMING_LANGUAGE);
+			if (!e.isJsonNull())
+				this.mainLanguage = e.getAsString();
+		}
+		if (jsonProject.has(GIT_DESCRIPTION)) {
+			JsonElement e = jsonProject.get(GIT_DESCRIPTION);
+			if (!e.isJsonNull())
+				this.description = e.getAsString();
+		}
         /*if (jsonProject.has("os")) {
 	    	JSONArray jsonOSes = jsonProject.getJSONArray("os");
 			if (jsonOSes != null && jsonOSes.isArray())
@@ -153,28 +184,39 @@ public class RepoMetadata {
 			}
 	    }*/
 		if (jsonProject.has(GIT_PROGRAMMING_LANGUAGES)) {
-			JsonObject langList = jsonProject.get(GIT_PROGRAMMING_LANGUAGES).getAsJsonObject();
-			int size = langList.entrySet().size();
-			this.programmingLanguages = new String[size];
-			this.programmingLanguagesLOC = new int[size];
-			int i = 0;
-			for (Entry<String, JsonElement> entry : langList.entrySet()) {
-			    programmingLanguages[i] = entry.getKey();
-				programmingLanguagesLOC[i]  = entry.getValue().getAsInt();
-			    i++;
+			JsonElement e = jsonProject.get(GIT_PROGRAMMING_LANGUAGES);
+			if (e.isJsonObject()) {
+				JsonObject langList = e.getAsJsonObject();
+				int size = langList.entrySet().size();
+				this.programmingLanguages = new String[size];
+				this.programmingLanguagesLOC = new int[size];
+				int i = 0;
+				for (Entry<String, JsonElement> entry : langList.entrySet()) {
+				    programmingLanguages[i] = entry.getKey();
+					programmingLanguagesLOC[i]  = entry.getValue().getAsInt();
+				    i++;
+				}
 			}
 		}
-		if (jsonProject.has(GIT_FORKED)){
-			this.fork = jsonProject.get(GIT_FORKED).getAsBoolean();
+		if (jsonProject.has(GIT_FORKED)) {
+			JsonElement e = jsonProject.get(GIT_FORKED);
+			if (!e.isJsonNull())
+				this.fork = e.getAsBoolean();
 		}
-		if (jsonProject.has(GIT_FORKS)){
-			this.forks = jsonProject.get(GIT_FORKS).getAsInt();
+		if (jsonProject.has(GIT_FORKS)) {
+			JsonElement e = jsonProject.get(GIT_FORKS);
+			if (!e.isJsonNull())
+				this.forks = e.getAsInt();
 		}
-		if (jsonProject.has(GIT_STARS)){
-			this.stars = jsonProject.get(GIT_STARS).getAsInt();
+		if (jsonProject.has(GIT_STARS)) {
+			JsonElement e = jsonProject.get(GIT_STARS);
+			if (!e.isJsonNull())
+				this.stars = e.getAsInt();
 		}
-		if (jsonProject.has(GIT_SIZE)){
-			this.size = jsonProject.get(GIT_SIZE).getAsInt();
+		if (jsonProject.has(GIT_SIZE)) {
+			JsonElement e = jsonProject.get(GIT_SIZE);
+			if (!e.isJsonNull())
+				this.size = e.getAsInt();
 		}
         /*if (jsonProject.has("databases")) {
 	    	JSONArray jsonDBs = jsonProject.getJSONArray("databases");
@@ -309,7 +351,9 @@ public class RepoMetadata {
 				project.addAllBugRepositories(bugs);
 	    }*/
 		if (jsonProject.has(GIT_GIT_REPO)) {
-			this.gitRepository = jsonProject.get(GIT_GIT_REPO).getAsString();
+			JsonElement e = jsonProject.get(GIT_GIT_REPO);
+			if (!e.isJsonNull())
+				this.gitRepository = e.getAsString();
 		}
 	}
 
@@ -336,6 +380,8 @@ public class RepoMetadata {
 		project.setForked(fork);
 		project.setForks(forks);
 		project.setStars(stars);
+		if (mainLanguage != null)
+			project.setMainLanguage(mainLanguage);
 		if (programmingLanguages != null) {
 			ArrayList<String> langs = new ArrayList<String>();
 			ArrayList<Integer> langLoc = new ArrayList<Integer>();
@@ -371,6 +417,8 @@ public class RepoMetadata {
 		project.setForked(fork);
 		project.setForks(forks);
 		project.setStars(stars);
+		if (mainLanguage != null)
+			project.setMainLanguage(mainLanguage);
 		if (programmingLanguages != null) {
 			ArrayList<String> langs = new ArrayList<String>();
 			ArrayList<Integer> langLoc = new ArrayList<Integer>();
@@ -382,7 +430,7 @@ public class RepoMetadata {
 				project.addAllProgrammingLanguages(langs);
 				project.addAllProgrammingLanguagesLocs(langLoc);
 			}
-		}
+		} 
 		if (gitRepository != null) {
 			CodeRepository.Builder cr = CodeRepository.newBuilder();
 			cr.setUrl(gitRepository);
