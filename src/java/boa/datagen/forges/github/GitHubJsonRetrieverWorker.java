@@ -62,10 +62,10 @@ public class GitHubJsonRetrieverWorker implements Runnable {
 				mc = new MetadataCacher("https://api.github.com/repositories", tok.getUserName(), tok.getToken());
 				if (mc.authenticate()) {
 					tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
+					break;
 				} else {
 					System.out.println("token: " + tok.getId() + " exhausted");
 					tok.setnumberOfRemainingLimit(0);
-					break;
 				}
 			}
 		}
@@ -85,11 +85,11 @@ public class GitHubJsonRetrieverWorker implements Runnable {
 				mc = new MetadataCacher("https://api.github.com/repositories", tok.getUserName(), tok.getToken());
 				if (mc.authenticate()) {
 					tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
-					continue;
+					break;
 				} else {
 					System.out.println("token: " + tok.getId() + " exhausted");
 					tok.setnumberOfRemainingLimit(0);
-					break;
+					continue;
 				}
 			}
 			addRepo(output, repository);
