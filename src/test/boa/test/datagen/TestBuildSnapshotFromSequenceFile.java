@@ -161,7 +161,7 @@ public class TestBuildSnapshotFromSequenceFile {
 		job.setInputFormatClass(org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat.class);
 		FileInputFormat.addInputPath(job, new Path(dataPath, "projects.seq"));
 		FileOutputFormat.setOutputPath(job, new Path(outDir.getAbsolutePath()));
-		boolean completed = job.waitForCompletion(true);
+		boolean completed = job.waitForCompletion(false);
 		assertEquals(completed, true);
 
 		if (outDir.exists())
