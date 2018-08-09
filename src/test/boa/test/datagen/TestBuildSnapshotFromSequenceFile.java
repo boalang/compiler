@@ -94,12 +94,11 @@ public class TestBuildSnapshotFromSequenceFile {
 //			assertArrayEquals(expectedFileNames, fileNames);
 			
 			List<String> commitIds = conn.logCommitIds();
-			Random rand = new Random();
 			for (int i = 0; i < commitIds.size(); i++) {
-				if (rand.nextBoolean())
-					continue;
-				String cid = commitIds.get(i);
-				data.add(new Object[] { repoName, i, cid });
+				if (isSampled()) {
+					String cid = commitIds.get(i);
+					data.add(new Object[] { repoName, i, cid });
+				}
 			}
 			conn.close();
 		}
@@ -107,8 +106,13 @@ public class TestBuildSnapshotFromSequenceFile {
     	
     	return data;
     }
+    
+    private static Random rand = new Random();
+    private static boolean isSampled() {
+		return rand.nextInt(8) == 0;
+	}
 
-    private static String repoName;
+	private static String repoName;
     private static int index;
     private static String commitId;
     
