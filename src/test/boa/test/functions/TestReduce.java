@@ -304,7 +304,7 @@ public class TestReduce {
 			{ "(5.0 + 3.5) - -2 * a.length", "8.5 + 2 * a.length" },
 			{ "5.0 + 3.5 - -2 * a.length + x", "8.5 + 2 * a.length + x" },
 			{ "5.0 + 3.5 - (-2 * a.length + x)", "8.5 + 2 * a.length - x" },
-			{ "5.0 + 3.5 - -2 * (a.length + x)", "8.5 + 2 * (a.length + x)" },
+			{ "5.0 + 3.5 - -2 * (a.length + x)", "8.5 + 2 * a.length + 2 * x" },
 			{ "5 - m(a) + 0", "5 - m(a)" },
 			{ "5 - -m(a) - 0", "5 + m(a)" },
 			{ "5 + +m(a) - 0", "5 + m(a)" },
@@ -393,9 +393,8 @@ public class TestReduce {
 			{ "y * x", "y * x"}, // FIXME should be "x * y"
 			{ "x - y + x - z - 0.5 * x", "1.5 * x - y - z"},
 			{ "x - z + x - y - 0.5 * x", "1.5 * x - z - y"}, // FIXME should be "1.5 * x - y - z"
-
-			{ "x + 2 * (x + y) - y", "x + 2 * (x + y) - y"}, // FIXME should be "3 * x + y"
-			{ "2 * (x + y)", "2 * (x + y)"}, // FIXME should be "2 * x + 2 * y"
+			{ "x + 2 * (x + y) - y", "3 * x + y"},
+			{ "2 * (x + y)", "2 * x + 2 * y"},
 
 			{ "y / 2 / 2", "y / 4"},
 			{ "3 * x / y / 2", "x / y"},
@@ -441,12 +440,12 @@ public class TestReduce {
 			{ "(2 * x * y + -x * z * y + x * y) / x / y", "3 - z"},
 			{ "(2 * x * y - -x * z * y + 2 * x * y) / x / y", "4 + z"},
 			{ "(2 * x * y - 2 * -x * z * y + 2 * x * y) / x / y", "4 + 2 * z"},
-			{ "(2 * x * y - 2 * -x * z * y + 2 * x * y) / y", "x * (4 + 2 * z)"},
+			{ "(2 * x * y - 2 * -x * z * y + 2 * x * y) / y", "4 * x + 2 * x * z"},
 			{ "(x * x * x - y * y * x * x + x * x) / x / x", "1 + x - y * y"},
 			{ "(x * x * x - y * y * x * x + x * x) / (x * x)", "1 + x - y * y"},
-			{ "(x * x * x - y * y * x * x + x * x) / x", "x * (1 + x + -y * y)"},
-			{ "(x * a / y + x / y - x * x / y) / x", "(1 + a - x) / y"},
-			{ "(x * a / y + x / -y - x * x / y) / x", "(-1 + a - x) / y"},
+			{ "(x * x * x - y * y * x * x + x * x) / x", "x + x * x - x * y * y"},
+			{ "(x * a / y + x / y - x * x / y) / x", "1 / y + a / y - x / y"},
+			{ "(x * a / y + x / -y - x * x / y) / x", "a / y  - 1 / y - x / y"},
 
 			{ "x / (2 * x + x * z)", "1 / (2 + z)"},
 			{ "x / (2 * x + x * -z)", "1 / (2 - z)"},
@@ -455,6 +454,20 @@ public class TestReduce {
 			{ "x / (2 * x - -x * z)", "1/ (2 + z)"},
 			{ "x / (2 * x - -x * z)", "1 / (2 + z)"},
 
+			{ "(x * a / y + x / -y - x * x / y) / x", "a / y - 1 / y - x / y"},
+			{ "2 * (x + y - z) + 3 - 2 * y", "3 + 2 * x - 2 * z"},
+			{ "(x * a / y + x / -y - x * x / y) / x", "a / y - 1 / y - x / y"},
+			{ "c * (d - b) / ((a - b) * 3)", "c * d / (3 * a - 3 * b) - b * c / (3 * a - 3 * b)"},
+
+			{ "(a + b) * (a + b)", "a * a + b * b + 2 * a * b"},
+			{ "(a + b) * (a - b)", "a * a - b * b"},
+			{ "(a - b) * (a + b)", "a * a - b * b"},
+			{ "(a + b) * (a + b) * (a + b)", "a * a * a + b * b * b + 3 * a * a * b + 3 * a * b * b"},
+			{ "(a + 1) * (a + 1)", "1 + a * a + 2 * a"},
+			{ "(a + 1) * (a - 1)", "-1 + a * a"},
+			{ "(a - 1) * (a + 1)", "-1 + a * a"},
+			{ "(a - 1) * (a - 1)", "1 + a * a - 2 * a"},
+			{ "(x + y + z) * (x + y)", "x * x + y * y + x * z + y * z + 2 * x * y"},
 		});
 	}
 
