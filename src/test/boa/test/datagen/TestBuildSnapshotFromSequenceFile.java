@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -81,20 +83,22 @@ public class TestBuildSnapshotFromSequenceFile {
 			RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
 			GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName);
 			
-			ChangedFile[] snapshot = getSnapshot(dataPath, repoName, -1);
-			String[] fileNames = new String[snapshot.length];
-			for (int i = 0; i < snapshot.length; i++)
-				fileNames[i] = snapshot[i].getName();
-			Arrays.sort(fileNames);
-			String[] expectedFileNames = conn.getSnapshot(Constants.HEAD).toArray(new String[0]);
-			Arrays.sort(expectedFileNames);
-			System.out.println("Test head snapshot");
-			assertArrayEquals(expectedFileNames, fileNames);
+//			ChangedFile[] snapshot = getSnapshot(dataPath, repoName, -1);
+//			String[] fileNames = new String[snapshot.length];
+//			for (int i = 0; i < snapshot.length; i++)
+//				fileNames[i] = snapshot[i].getName();
+//			Arrays.sort(fileNames);
+//			String[] expectedFileNames = conn.getSnapshot(Constants.HEAD).toArray(new String[0]);
+//			Arrays.sort(expectedFileNames);
+//			System.out.println("Test head snapshot");
+//			assertArrayEquals(expectedFileNames, fileNames);
 			
 			List<String> commitIds = conn.logCommitIds();
 			for (int i = 0; i < commitIds.size(); i++) {
-				String cid = commitIds.get(i);
-				data.add(new Object[] { repoName, i, cid });
+				if (isSampled()) {
+					String cid = commitIds.get(i);
+					data.add(new Object[] { repoName, i, cid });
+				}
 			}
 			conn.close();
 		}
@@ -102,8 +106,13 @@ public class TestBuildSnapshotFromSequenceFile {
     	
     	return data;
     }
+    
+    private static Random rand = new Random();
+    private static boolean isSampled() {
+		return rand.nextInt(8) == 0;
+	}
 
-    private static String repoName;
+	private static String repoName;
     private static int index;
     private static String commitId;
     
@@ -156,7 +165,7 @@ public class TestBuildSnapshotFromSequenceFile {
 		job.setInputFormatClass(org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat.class);
 		FileInputFormat.addInputPath(job, new Path(dataPath, "projects.seq"));
 		FileOutputFormat.setOutputPath(job, new Path(outDir.getAbsolutePath()));
-		boolean completed = job.waitForCompletion(true);
+		boolean completed = job.waitForCompletion(false);
 		assertEquals(completed, true);
 
 		if (outDir.exists())

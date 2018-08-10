@@ -107,11 +107,15 @@ public class BoaIntrinsics {
 	
 	@FunctionSpec(name = "getsnapshotbyindex", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "int"})
 	public static ChangedFile[] getSnapshotByIndex(final CodeRepository cr, final int commitOffset) {
+		if (commitOffset == cr.getHead())
+			return getSnapshot(cr);
 		return getSnapshotByIndex(cr, commitOffset, new String[0]);
 	}
 
 	@FunctionSpec(name = "getsnapshotbyindex", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "int", "string..." })
 	public static ChangedFile[] getSnapshotByIndex(final CodeRepository cr, final int commitOffset, final String... kinds) {
+		if (commitOffset == cr.getHead())
+			return getSnapshot(cr, kinds);
 		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
 		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>(); 
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
@@ -255,7 +259,7 @@ public class BoaIntrinsics {
 	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string..." })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String... kinds) throws Exception {
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String... kinds) {
 //		return getSnapshot(cr, Long.MAX_VALUE, kinds);
 		List<ChangedFile> files = new ArrayList<ChangedFile>();
 		for (ChangedFile file : cr.getHeadSnapshotList()) {
@@ -271,7 +275,7 @@ public class BoaIntrinsics {
 	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository" })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr) throws Exception {
+	public static ChangedFile[] getSnapshot(final CodeRepository cr) {
 //		return getSnapshot(cr, Long.MAX_VALUE, new String[0]);
 		return cr.getHeadSnapshotList().toArray(new ChangedFile[0]);
 	}
@@ -280,6 +284,13 @@ public class BoaIntrinsics {
 	public static ChangedFile[] getPreviousVersion(final CodeRepository cr, final ChangedFile cf) throws Exception {
 		List<ChangedFile> l = new ArrayList<ChangedFile>();
 		for (int i = 0; i < cf.getChangesCount(); i++) {
+			ChangeKind kind = cf.getChanges(i);
+			if (kind == ChangeKind.ADDED || kind == ChangeKind.COPIED)
+				continue;
+			ChangedFile.Builder fb = ChangedFile.newBuilder(cf);
+			if (!cf.getPreviousNames(i).isEmpty())
+				fb.setName(cf.getPreviousNames(i));
+			ChangedFile key = fb.build();
 			int revisionIndex = cf.getPreviousVersions(i);
 			Set<Integer> queuedRevisionIds = new HashSet<Integer>();
 			PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
@@ -293,7 +304,7 @@ public class BoaIntrinsics {
 			while (!pq.isEmpty()) {
 				revisionIndex = pq.poll();
 				Revision rev = getRevision(cr, revisionIndex);
-				int index = Collections.binarySearch(rev.getFilesList(), cf, new Comparator<ChangedFile>() {
+				int index = Collections.binarySearch(rev.getFilesList(), key, new Comparator<ChangedFile>() {
 					@Override
 					public int compare(ChangedFile f1, ChangedFile f2) {
 						return f1.getName().compareTo(f2.getName());
