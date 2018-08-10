@@ -42,11 +42,16 @@ public class GitHubJsonRetriever {
 		try {
 			sc = new Scanner(new File(InputFile));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		while (sc.hasNextLine())
-			namesList.add(sc.nextLine());
+		while (sc.hasNextLine()) {
+			String url = sc.nextLine();
+			String[] split = url.split(" ");
+			String name = split[0];
+			System.out.println(name);
+			namesList.add(name);
+		}
+		sc.close();
 		System.out.println(namesList.size() + " names");
 	}
 
@@ -63,7 +68,6 @@ public class GitHubJsonRetriever {
 		
 
 		for (int i = 0;i < namesList.size(); i++) {
-			ArrayList<String> names = new ArrayList<String>();
 			String name = namesList.get(i);
 			boolean nAssigned = true;
 			while (nAssigned) {
