@@ -468,6 +468,21 @@ public class TestReduce {
 			{ "(a - 1) * (a + 1)", "-1 + a * a"},
 			{ "(a - 1) * (a - 1)", "1 + a * a - 2 * a"},
 			{ "(x + y + z) * (x + y)", "x * x + y * y + x * z + y * z + 2 * x * y"},
+
+			{"++a", "++a"},
+			{"a[1]", "a[1]"},
+			{"a.func()", "a.func()"},
+			{"b.func() + a", "b.func() + a"}, // FIXME should be "a + b.func()"
+			{"b.func() - a", "b.func() - a"},
+			{"-(a-b)", "-a - -b"}, // FIXME should be "b - a"
+			{"(-a-b)", "-a - b"},
+			{"a + 1", "1 + a"},
+			{"b.func() - a - 3", "-3 + b.func() - a"},
+			{"a / b / c", "a / (b * c)"},
+			{"2 / (b + a)", "2 / (a + b)"},
+			{"2 * (b + a)", "2 * b + 2 * a"}, // FIXME should be "2 * a + 2 * b"
+			{"++c + b.func() - a-- - 3", "-3 + ++c + b.func() - a--"},
+			{"c * -2 / -(b - a)", "-2 * c / (-b - -a)"}, // FIXME should be "-2 * c / (a - b)"
 		});
 	}
 
