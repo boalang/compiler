@@ -43,36 +43,7 @@ public class DuplicateRepoWorker implements Runnable {
 					continue;
 				}
 				names.add(name);
-				int id = repo.get("id").getAsInt();
-				JsonObject owner = repo.get("owner").getAsJsonObject();
-				String created_at = null;
-				if (repo.has("created_at"))
-					created_at = repo.get("created_at").getAsString();
-				boolean fork = repo.get("fork").getAsBoolean();
-				String description = null;
-				if (!repo.get("description").isJsonNull())
-					description = repo.get("description").getAsString();
-				JsonObject langList = new JsonObject();
-				if (repo.has("language_list")){
-					if(!repo.get("language_list").isJsonObject()){
-						String brokenList = repo.get("language_list").getAsString();
-						brokenList = brokenList.replace("\\", "");
-						repo.remove("language_list");
-						repo.addProperty("language_list", brokenList);
-					}
-					if (repo.get("language_list").isJsonObject())
-						langList = repo.get("language_list").getAsJsonObject();
-				}
-				
-				JsonObject reducedRepo = new JsonObject();
-				reducedRepo.addProperty("id", id);
-				reducedRepo.addProperty("full_name", name);
-				reducedRepo.add("owner", owner);
-				reducedRepo.addProperty("created_at", created_at);
-				reducedRepo.addProperty("fork", fork);
-				reducedRepo.addProperty("description", description);
-				reducedRepo.add("language_list", langList);
-				this.addRepo(reducedRepo);
+				this.addRepo(repo);
 			}
 			System.out.println(Thread.currentThread().getId() + " processing: " + i);
 		}
