@@ -570,6 +570,27 @@ public class TestReduce {
 
 			{"2 * (c * b * a + b + c + a)", "2 * a + 2 * a * b * c + 2 * b + 2 * c"},
 
+			// sorting - division
+			{"a * b * c / d / e / f", "a * b * c / (d * e * f)"},
+			{"a * c * b / d / f / e", "a * b * c / (d * e * f)"},
+			{"b * a * c / e / d / f", "a * b * c / (d * e * f)"},
+			{"b * c * a / e / f / d", "a * b * c / (d * e * f)"},
+			{"c * a * b / f / d / e", "a * b * c / (d * e * f)"},
+			{"c * b * a / f / e / d", "a * b * c / (d * e * f)"},
+
+			{"-c * b * a / f / e / d", "-a * b * c / (d * e * f)"},
+			{"c * -b * a / f / e / d", "-a * b * c / (d * e * f)"},
+			{"c * b * -a / f / e / d", "-a * b * c / (d * e * f)"},
+			{"c * b * a / -f / e / d", "-a * b * c / (d * e * f)"},
+			{"c * b * a / f / -e / d", "-a * b * c / (d * e * f)"},
+			{"c * b * a / f / e / -d", "-a * b * c / (d * e * f)"},
+
+			{"f * e * d / c / b / a", "d * e * f / (a * b * c)"},
+			{"c * -b * -a / f / -e / -d", "a * b * c / (d * e * f)"},
+			{"c * -b * -a / -f / -e / -d", "-a * b * c / (d * e * f)"},
+
+			{"c * b / a * f / e * d", "b * c * d * f/ (a * e)"},
+
 
 		});
 	}
