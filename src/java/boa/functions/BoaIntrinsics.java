@@ -87,12 +87,12 @@ public class BoaIntrinsics {
 	}
 	
 	@FunctionSpec(name = "getrevision", returnType = "Revision", formalParameters = { "CodeRepository", "int" })
-	public static Revision getRevision(final CodeRepository cr, final int index) {
+	public static Revision getRevision(final CodeRepository cr, final long index) {
 		if (cr.getRevisionKeysCount() > 0) {
-			long key = cr.getRevisionKeys(index);
+			long key = cr.getRevisionKeys((int) index);
 			return BoaAstIntrinsics.getRevision(key);
 		}
-		return cr.getRevisions(index);
+		return cr.getRevisions((int) index);
 	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time", "string..." })
@@ -106,14 +106,14 @@ public class BoaIntrinsics {
 	}
 	
 	@FunctionSpec(name = "getsnapshotbyindex", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "int"})
-	public static ChangedFile[] getSnapshotByIndex(final CodeRepository cr, final int commitOffset) {
+	public static ChangedFile[] getSnapshotByIndex(final CodeRepository cr, final long commitOffset) {
 		if (commitOffset == cr.getHead())
 			return getSnapshot(cr);
 		return getSnapshotByIndex(cr, commitOffset, new String[0]);
 	}
 
 	@FunctionSpec(name = "getsnapshotbyindex", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "int", "string..." })
-	public static ChangedFile[] getSnapshotByIndex(final CodeRepository cr, final int commitOffset, final String... kinds) {
+	public static ChangedFile[] getSnapshotByIndex(final CodeRepository cr, final long commitOffset, final String... kinds) {
 		if (commitOffset == cr.getHead())
 			return getSnapshot(cr, kinds);
 		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
@@ -125,8 +125,8 @@ public class BoaIntrinsics {
 			}
 		});
 		Set<Integer> queuedCommitIds = new HashSet<Integer>();
-		pq.offer(commitOffset);
-		queuedCommitIds.add(commitOffset);
+		pq.offer((int) commitOffset);
+		queuedCommitIds.add((int) commitOffset);
 		while (!pq.isEmpty()) {
 			int offset = pq.poll();
 			Revision commit = getRevision(cr, offset);
