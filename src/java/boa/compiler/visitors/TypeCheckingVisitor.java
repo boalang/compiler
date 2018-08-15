@@ -30,6 +30,7 @@ import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 import boa.compiler.transforms.VisitorDesugar;
 import boa.types.*;
+import boa.types.proto.CodeRepositoryProtoTuple;
 
 /**
  * Prescan the program and check that all variables are consistently typed.
@@ -497,7 +498,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		} else if (type instanceof BoaTuple) {
 			if (!((BoaTuple) type).hasMember(selector))
 				throw new TypeCheckException(n.getId(), "'" + type + "' has no member named '" + selector + "'");
-
+			
+			if (type instanceof CodeRepositoryProtoTuple && selector.equals("revisions")) {
+				throw new TypeCheckException(n.getId(), "Accessing " + "'" + selector + "' of '" + type + "' is prohibited! "
+						+ "Use functions 'getrevisionscount(CodeRepository)' and 'getrevision(CodeRepository, int)' instead! "
+						+ "E.g., revision := getrevision(cr, 0); or for (i := 0; i < getrevisionscount(cr); i++) revision := getrevision(cr, i);");
+			}
+			
 			type = ((BoaTuple) type).getMember(selector);
 			if (type instanceof BoaName)
 				type = ((BoaName) type).getType();
