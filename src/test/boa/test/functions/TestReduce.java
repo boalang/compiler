@@ -486,6 +486,91 @@ public class TestReduce {
 			{"2 * (b + a)", "2 * a + 2 * b"},
 			{"++c + b.func() - a-- - 3", "-3 + ++c + b.func() - a--"},
 			{"c * -2 / -(b - a)", "-2 * c / (a - b)"},
+
+			// sorting - all plus
+			{"a + b + c", "a + b + c"},
+			{"a + c + b", "a + b + c"},
+			{"b + a + c", "a + b + c"},
+			{"b + c + a", "a + b + c"},
+			{"c + a + b", "a + b + c"},
+			{"c + b + a", "a + b + c"},
+
+			// sorting - with negative terms
+			{"-a + b + c", "b + c - a"},
+			{"-a + c + b", "b + c - a"},
+			{"a - b + c", "a + c - b"},
+			{"a - c + b", "a + b - c"},
+			{"a + b - c", "a + b - c"},
+			{"a + c - b", "a + c - b"},
+			{"-a - b + c", "c - a - b"},
+			{"-a - c + b", "b - a - c"},
+			{"-a + b - c", "b - a - c"},
+			{"-a + c - b", "c - a - b"},
+
+			{"-c + b + a", "a + b - c"},
+			{"-c + a + b", "a + b - c"},
+			{"c - b + a", "a + c - b"},
+			{"c - a + b", "b + c - a"},
+			{"c + b - a", "b + c - a"},
+			{"c + a - b", "a + c - b"},
+			{"-c - b + a", "a - b - c"},
+			{"-c - a + b", "b - a - c"},
+			{"-c + b - a", "b - a - c"},
+			{"-c + a - b", "a - b - c"},
+
+			// sorting - positive mult only
+			{"a * b * c", "a * b * c"},
+			{"a * c * b", "a * b * c"},
+			{"b * a * c", "a * b * c"},
+			{"b * c * a", "a * b * c"},
+			{"c * a * b", "a * b * c"},
+			{"c * b * a", "a * b * c"},
+
+			{"2 * c * b * a", "2 * a * b * c"},
+			{"c * 2 * b * a", "2 * a * b * c"},
+			{"c * b * 2 * a", "2 * a * b * c"},
+			{"c * b * a * 2", "2 * a * b * c"},
+
+			// sorting - mult with negative terms
+			{"-a * b * c", "-a * b * c"},
+			{"a * -b * c", "-a * b * c"},
+			{"a * b * -c", "-a * b * c"},
+			{"-a * -b * c", "a * b * c"},
+			{"-a * b * -c", "a * b * c"},
+			{"a * -b * -c", "a * b * c"},
+			{"-a * -b * -c", "-a * b * c"},
+
+			{"-c * b * a", "-a * b * c"},
+			{"c * -b * a", "-a * b * c"},
+			{"c * b * -a", "-a * b * c"},
+			{"-c * -b * a", "a * b * c"},
+			{"-c * b * -a", "a * b * c"},
+			{"c * -b * -a", "a * b * c"},
+			{"-c * -b * -a", "-a * b * c"},
+
+			{"2 * -c * -b * -a", "-2 * a * b * c"},
+			{"-c * 2 * -b * -a", "-2 * a * b * c"},
+			{"-c * -b * 2 * -a", "-2 * a * b * c"},
+			{"-c * -b * -a * 2", "-2 * a * b * c"},
+			{"-2 * -c * -b * -a", "2 * a * b * c"},
+			{"-c * -2 * -b * -a", "2 * a * b * c"},
+			{"-c * -b * -2 * -a", "2 * a * b * c"},
+			{"-c * -b * -a * -2", "2 * a * b * c"},
+
+			// sorting - plus mult terms
+			{"a * b * c + b + c + a", "a + a * b * c + b + c"},
+			{"a * c * b + b + c + a", "a + a * b * c + b + c"},
+			{"b * a * c + b + c + a", "a + a * b * c + b + c"},
+			{"b * c * a + b + c + a", "a + a * b * c + b + c"},
+			{"b * a * c + b + c + a", "a + a * b * c + b + c"},
+			{"c * a * b + b + c + a", "a + a * b * c + b + c"},
+			{"c * b * a + b + c + a", "a + a * b * c + b + c"},
+			{"a + a * b * c + c + b", "a + a * b * c + b + c"},
+			{"a + b + a * b * c + c", "a + a * b * c + b + c"},
+
+			{"2 * (c * b * a + b + c + a)", "2 * a + 2 * a * b * c + 2 * b + 2 * c"},
+
+
 		});
 	}
 
