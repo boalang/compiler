@@ -278,8 +278,8 @@ public class TestReduce {
 
 			// complex expressions, multiple operators etc
 			{ "-5 * -x", "5 * x" },
-			{ "-y * -5 * -x", "-5 * y * x" },
-			{ "-2 * -y * -5 * -x", "10 * y * x" },
+			{ "-y * -5 * -x", "-5 * x * y" },
+			{ "-2 * -y * -5 * -x", "10 * x * y" },
 			{ "5 - 3 + 2", "4" },
 			{ "5 - (3 + 2)", "0" },
 			{ "5.0 / x / 5 * 10.0 * x", "10.0" },
@@ -365,7 +365,7 @@ public class TestReduce {
 			{ "x * -y * z", "-x * y * z"},
 			{ "x * y * -z", "-x * y * z"},
 			{ "x * -y * -z", "x * y * z"},
-			{ "x * -y * -z * -a", "-x * y * z * a"},
+			{ "x * -y * -z * -a", "-a * x * y * z"},
 			{ "x * y + x * y - x * y + x * y", "2 * x * y"},
 			{ "x * y - x * y + x * y + x * y", "2 * x * y"},
 			{ "2 * 3 * x + 2 * 4 * x", "14 * x"},
@@ -375,7 +375,7 @@ public class TestReduce {
 			{ "x * y + x * y + x * y - x * y", "2 * x * y"},
 			{ "x + 2 * 3 + 2 * 3", "12 + x"},
 			{ "x * (2 * x)", "2 * x * x"},
-			{ "-x * -y * -x", "-x * y * x"},
+			{ "-x * -y * -x", "-x * x * y"},
 			{ "-x * y * z + x * -y * z + x * y * -z", "-3 * x * y * z"},
 			{ "-2 * x + -3 * x", "-5 * x"},
 			{ "2 * x * y + -2 * x * y", "0"},
@@ -388,11 +388,11 @@ public class TestReduce {
 			{ "x + y - y - 2 * y + 3 * x", "4 * x - 2 * y"},
 			{ "2.5 * x - 1.3 * x - 3 * x - y - z + 2 * y - y + 2 * z", "z - 1.8 * x"},
 			{ "x + 2 * x + 2 * (x * y) + (x * 2) * y", "3 * x + 4 * x * y"},
-			{ "x + 2 * x + 2 * (y * x) + (x * 2) * y + y * (x * 2)", "2 * x * y + 3 * x + 4 * y * x"}, // FIXME should be "6 * x * y + 3 * x"
+			{ "x + 2 * x + 2 * (y * x) + (x * 2) * y + y * (x * 2)", "3 * x + 6 * x * y"},
 			{ "x * y", "x * y"},
-			{ "y * x", "y * x"}, // FIXME should be "x * y"
+			{ "y * x", "x * y"},
 			{ "x - y + x - z - 0.5 * x", "1.5 * x - y - z"},
-			{ "x - z + x - y - 0.5 * x", "1.5 * x - z - y"}, // FIXME should be "1.5 * x - y - z"
+			{ "x - z + x - y - 0.5 * x", "1.5 * x - y - z"},
 			{ "x + 2 * (x + y) - y", "3 * x + y"},
 			{ "2 * (x + y)", "2 * x + 2 * y"},
 
@@ -440,11 +440,13 @@ public class TestReduce {
 			{ "(2 * x * y + -x * z * y + x * y) / x / y", "3 - z"},
 			{ "(2 * x * y - -x * z * y + 2 * x * y) / x / y", "4 + z"},
 			{ "(2 * x * y - 2 * -x * z * y + 2 * x * y) / x / y", "4 + 2 * z"},
-			{ "(2 * x * y - 2 * -x * z * y + 2 * x * y) / y", "4 * x + 2 * x * z"},
+			{ "(2 * x * y - 2 * -x * z * y + 2 * x * y) / y", "2 * x * z + 4 * x"},
 			{ "(x * x * x - y * y * x * x + x * x) / x / x", "1 + x - y * y"},
 			{ "(x * x * x - y * y * x * x + x * x) / (x * x)", "1 + x - y * y"},
 			{ "(x * x * x - y * y * x * x + x * x) / x", "x + x * x - x * y * y"},
 			{ "(x * a / y + x / y - x * x / y) / x", "1 / y + a / y - x / y"},
+			{ "a / y + 1 / y", "1 / y + a / y"},
+			{ "1 / y + a / y", "1 / y + a / y"},
 			{ "(x * a / y + x / -y - x * x / y) / x", "a / y  - 1 / y - x / y"},
 
 			{ "x / (2 * x + x * z)", "1 / (2 + z)"},
@@ -459,30 +461,31 @@ public class TestReduce {
 			{ "(x * a / y + x / -y - x * x / y) / x", "a / y - 1 / y - x / y"},
 			{ "c * (d - b) / ((a - b) * 3)", "c * d / (3 * a - 3 * b) - b * c / (3 * a - 3 * b)"},
 
-			{ "(a + b) * (a + b)", "a * a + b * b + 2 * a * b"},
+			{ "(a + b) * (a + b)", "2 * a * b + a * a + b * b"},
 			{ "(a + b) * (a - b)", "a * a - b * b"},
 			{ "(a - b) * (a + b)", "a * a - b * b"},
-			{ "(a + b) * (a + b) * (a + b)", "a * a * a + b * b * b + 3 * a * a * b + 3 * a * b * b"},
-			{ "(a + 1) * (a + 1)", "1 + a * a + 2 * a"},
+			{ "(a + b) * (a + b) * (a + b)", "3 * a * a * b + 3 * a * b * b + a * a * a + b * b * b"},
+			{ "(a + 1) * (a + 1)", "1 + 2 * a + a * a"},
 			{ "(a + 1) * (a - 1)", "-1 + a * a"},
 			{ "(a - 1) * (a + 1)", "-1 + a * a"},
 			{ "(a - 1) * (a - 1)", "1 + a * a - 2 * a"},
-			{ "(x + y + z) * (x + y)", "x * x + y * y + x * z + y * z + 2 * x * y"},
+			{ "(x + y + z) * (x + y)", "2 * x * y + x * x + x * z + y * y + y * z"},
 
 			{"++a", "++a"},
 			{"a[1]", "a[1]"},
 			{"a.func()", "a.func()"},
-			{"b.func() + a", "b.func() + a"}, // FIXME should be "a + b.func()"
+			{"b.func() + a", "a + b.func()"},
 			{"b.func() - a", "b.func() - a"},
-			{"-(a-b)", "-a - -b"}, // FIXME should be "b - a"
+			{"-(a - b)", "b - a"},
+			{"-(a - b + 2) + x - 3", "-5 + b + x - a"},
 			{"(-a-b)", "-a - b"},
 			{"a + 1", "1 + a"},
 			{"b.func() - a - 3", "-3 + b.func() - a"},
 			{"a / b / c", "a / (b * c)"},
 			{"2 / (b + a)", "2 / (a + b)"},
-			{"2 * (b + a)", "2 * b + 2 * a"}, // FIXME should be "2 * a + 2 * b"
+			{"2 * (b + a)", "2 * a + 2 * b"},
 			{"++c + b.func() - a-- - 3", "-3 + ++c + b.func() - a--"},
-			{"c * -2 / -(b - a)", "-2 * c / (-b - -a)"}, // FIXME should be "-2 * c / (a - b)"
+			{"c * -2 / -(b - a)", "-2 * c / (a - b)"},
 		});
 	}
 

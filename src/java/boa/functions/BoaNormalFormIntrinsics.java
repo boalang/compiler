@@ -1054,6 +1054,18 @@ public class BoaNormalFormIntrinsics {
 				return createExpression(e.getKind(), convertArray(results2));
 
 			case OP_SUB:
+				// if sub kind is add
+				if (results.size() == 1 &&
+					results.get(0) instanceof Expression &&
+					((Expression)results.get(0)).getKind() == ExpressionKind.OP_ADD) {
+					Expression subExp = (Expression)results.get(0);
+					List<Object> results3 = new ArrayList<Object>();
+					for (int i = 0; i < subExp.getExpressionsCount(); i++) {
+						results3.add(negate(subExp.getExpressions(i)));
+					}
+					return createExpression(ExpressionKind.OP_ADD, convertArray(results3));
+				}
+
 				// handle cases like '-x' or '-3'
 				if (results.size() == 1) {
 					final Object o = results.get(0);
@@ -1715,16 +1727,23 @@ public class BoaNormalFormIntrinsics {
 		final List<Object> results = new ArrayList<Object>();
 		for (final Expression sub : e.getExpressionsList())
 			results.add(sub);
-
 		switch (e.getKind()) {
 			case OP_ADD:
 				// resolve all + - issues (3 + -x)
+				boolean hasLiteral = false;
 				final List<Object> negResult = new ArrayList<Object>();
 				for (int i = results.size() - 1; i >= 0; i--) {
+					if (results.get(i) instanceof Expression)
+						results.set(i, finalReduce((Expression)results.get(i)));
+					// if the first term is literal
 					if (i == 0 &&
 						((Expression)results.get(i)).getKind() == ExpressionKind.OP_SUB &&
-						((Expression)results.get(i)).getExpressions(0).getKind() == ExpressionKind.LITERAL)
+						((Expression)results.get(i)).getExpressions(0).getKind() == ExpressionKind.LITERAL) {
+						hasLiteral = true;
 						break;
+					}
+					if (i == 0 && ((Expression)results.get(i)).getKind() == ExpressionKind.LITERAL)
+						hasLiteral = true;
 
 					if (isNegative(results.get(i))) {
 						negResult.add(0, negate(results.get(i)));
@@ -1732,21 +1751,41 @@ public class BoaNormalFormIntrinsics {
 					}
 				}
 
+				Object tempLiteral = null;
+				if (hasLiteral) {
+					tempLiteral = results.get(0);
+					results.remove(0);
+				}
+				// sort results
+				if (results.size() > 1) {
+					Object tempE = internalReduce(sort(createExpression(ExpressionKind.OP_ADD, convertArray(results))));
+					results.clear();
+					for (final Expression sub : ((Expression)tempE).getExpressionsList()) {
+						results.add(finalReduce(sub));
+					}
+				}
+				if (hasLiteral)
+					results.add(0, tempLiteral);
+
 				// append the neg terms to the end and return whole as OP_SUB
 				if (negResult.size() > 0) {
+					// sort negResults
+					if (negResult.size() != 1) {
+						Object tempE = internalReduce(sort(createExpression(ExpressionKind.OP_ADD, convertArray(negResult))));
+						negResult.clear();
+						for (final Expression sub : ((Expression)tempE).getExpressionsList()) {
+							negResult.add(finalReduce(sub));
+						}
+					}
 					if (results.size() == 0)
 						negResult.set(0, negate(negResult.get(0)));
 					else if (results.size() == 1)
 						negResult.add(0, results.get(0));
 					else
 						negResult.add(0, createExpression(e.getKind(), convertArray(results)));
-					for (int i = 0; i < negResult.size(); i++)
-						negResult.set(i, finalReduce((Expression)negResult.get(i)));
 					return createExpression(ExpressionKind.OP_SUB, convertArray(negResult));
 				}
-				for (int i = 0; i < results.size(); i++) {
-					results.set(i, finalReduce((Expression)results.get(i)));
-				}
+
 				return createExpression(e.getKind(), convertArray(results));
 
 			case OP_MULT:
@@ -1776,16 +1815,36 @@ public class BoaNormalFormIntrinsics {
 				}
 				// if there are new numerators
 				if (numeratorList.size() > 0)
-					for (Object o : numeratorList)
+					for (Object o : numeratorList) {
 						results.add(o);
+					}
+
+				// sort numeratorList
+				if (results.size() > 1) {
+					Object tempE = internalReduce(sort(createExpression(ExpressionKind.OP_MULT, convertArray(results))));
+					results.clear();
+
+					for (final Expression sub : ((Expression)tempE).getExpressionsList()) {
+						results.add(sub);
+					}
+				}
 
 				// simplify denominatorList
 				if (denominatorList.size() > 1) {
+					// sort numeratorList
+					if (denominatorList.size() > 1) {
+						Object tempE = internalReduce(sort(createExpression(ExpressionKind.OP_MULT, convertArray(denominatorList))));
+						denominatorList.clear();
+						for (final Expression sub : ((Expression)tempE).getExpressionsList()) {
+							denominatorList.add(sub);
+						}
+					}
 					final Object multDiv = internalReduce(createExpression(ExpressionKind.OP_MULT, convertArray(denominatorList)));
 					denominatorList.clear();
 					if (multDiv instanceof Expression)
-						for (final Expression sub : ((Expression)multDiv).getExpressionsList())
+						for (final Expression sub : ((Expression)multDiv).getExpressionsList()) {
 							denominatorList.add(sub);
+						}
 					else
 						denominatorList.add(createLiteral("" + multDiv));
 				}
@@ -1812,10 +1871,10 @@ public class BoaNormalFormIntrinsics {
 							final Expression mult = createExpression(e.getKind(), convertArray(results));
 							return createExpression(ExpressionKind.OP_DIV, mult, (Expression)multDiv);
 						}
-
 					}
 				}
-				break;
+				else
+					return createExpression(e.getKind(), convertArray(results));
 
 			case OP_DIV:
 				int count = 0;
