@@ -16,7 +16,7 @@ visit(input, visitor {
 			stop;
 	before s: Statement -> stop;
 	before n: CodeRepository->
-		if (len(n.revisions) == 0)
+		if (getrevisionscount(n) == 0)
 			o << 1;
 		else
 			stop;

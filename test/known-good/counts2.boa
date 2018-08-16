@@ -28,10 +28,10 @@ projectEmpty := true;
 javaProjectEmpty := true;
 
 foreach (i: int; def(p.code_repositories[i])) {
-    Revisions << len(p.code_repositories[i].revisions);
+    Revisions << getrevisionscount(p.code_repositories[i]);
 
-    foreach (j: int; def(p.code_repositories[i].revisions[j])) {
-        rev := p.code_repositories[i].revisions[j];
+    for (j:= 0; j < getrevisionscount(p.code_repositories[i]); j++) {
+        rev := getrevision(p.code_repositories[i], j);
 
         foreach (k: int; def(rev.files[k])) {
             projectEmpty = false;

@@ -3,5 +3,6 @@ counts: output mean of int;
 p: Project = input;
 
 foreach (i: int; def(p.code_repositories[i]))
-	foreach (j: int; def(p.code_repositories[i].revisions[j]))
-		counts << len(p.code_repositories[i].revisions[j].files);
+	for (j := 0; j < getrevisionscount(p.code_repositories[i]) ; j++)
+		counts << len(getrevision(p.code_repositories[i],j).files);
+

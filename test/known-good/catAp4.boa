@@ -7,7 +7,11 @@ HasJavaFile := function(rev: Revision): bool {
 		return true;
 	return false;
 };
-
-foreach (i: int; def(p.code_repositories[i]))
-	exists (j: int; HasJavaFile(p.code_repositories[i].revisions[j]))
-		counts[yearof(p.code_repositories[i].revisions[j].commit_date)] << 1;
+j:= 0;
+foreach (i: int; def(p.code_repositories[i])) {
+	for (; j < getrevisionscount(p.code_repositories[i]); j++) 
+		if (HasJavaFile(getrevision(p.code_repositories[i], j)))
+			break;
+	if (j < getrevisionscount(p.code_repositories[i]))
+		counts[yearof(getrevision(p.code_repositories[i], j).commit_date)] << 1;
+}
