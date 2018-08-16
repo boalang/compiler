@@ -1769,9 +1769,13 @@ public class BoaNormalFormIntrinsics {
 				if (results.size() > 1) {
 					Object tempE = internalReduce(sort(createExpression(ExpressionKind.OP_ADD, convertArray(results))));
 					results.clear();
-					for (final Expression sub : ((Expression)tempE).getExpressionsList()) {
-						results.add(finalReduce(sub));
-					}
+					// FIXME should sort and simplify the mult terms in internalReduce
+					if (tempE instanceof Expression && ((Expression)tempE).getKind() == ExpressionKind.OP_MULT)
+						results.add(finalReduce((Expression)tempE));
+					else
+						for (final Expression sub : ((Expression)tempE).getExpressionsList()) {
+							results.add(finalReduce(sub));
+						}
 				}
 				if (hasLiteral)
 					results.add(0, tempLiteral);
@@ -1795,6 +1799,8 @@ public class BoaNormalFormIntrinsics {
 					return createExpression(ExpressionKind.OP_SUB, convertArray(negResult));
 				}
 
+				if (results.size() == 1 && results.get(0) instanceof Expression)
+					return (Expression)results.get(0);
 				return createExpression(e.getKind(), convertArray(results));
 
 			case OP_MULT:
