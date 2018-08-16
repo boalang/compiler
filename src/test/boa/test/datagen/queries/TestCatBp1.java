@@ -2,10 +2,10 @@ package boa.test.datagen.queries;
 
 import org.junit.Test;
 
-public class TestNumberOfRevisions extends QueryTest {
+public class TestCatBp1 extends QueryTest {
 
 	@Test
-	public void testNumberOfRevisions() {
+	public void testCatBp1() {
 		String expected = "counts[] = 49\n";
 		queryTest("test/known-good/catBp1.boa", expected);
 	}

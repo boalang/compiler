@@ -4,4 +4,4 @@ p: Project = input;
 
 exists (i: int; match(`^java$`, lowercase(p.programming_languages[i])))
 	foreach (j: int; p.code_repositories[j].kind == RepositoryKind.GIT)
-		counts << len(p.code_repositories[j].revisions);
+		counts << getrevisionscount(p.code_repositories[j]);
