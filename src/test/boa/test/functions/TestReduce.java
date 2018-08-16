@@ -591,6 +591,15 @@ public class TestReduce {
 
 			{"c * b / a * f / e * d", "b * c * d * f/ (a * e)"},
 
+			// ++ / --
+			{"++a + a + b", "++a + a + b"},
+			{"c + ++a + a + b", "++a + a + b + c"},
+			{"c - ++a - a + b", "b + c - ++a - a"},
+			{"--a + a + b", "--a + a + b"},
+			{"c + --a + a + b", "--a + a + b + c"},
+			{"c - --a - a + b", "b + c - --a - a"},
+			// {"++a * --a + --a * ++a", "2 * ++a * --a"},
+			// {"x * y + y * x", "2 * x * y"},
 
 		});
 	}

@@ -1126,6 +1126,13 @@ public class BoaNormalFormIntrinsics {
 				else
 					results2.add(0, ival);
 
+				// sort terms
+				// Object tempE = sort(createExpression(e.getKind(), convertArray(results)));
+				// results.clear();
+				// for (final Expression sub : ((Expression)tempE).getExpressionsList()) {
+				// 	results.add(sub);
+				// }
+
 				if (results2.size() > 1) {
 					// check for elimination
 					if (results2.get(0) instanceof Double && (Double)results2.get(0) == 0.0)
@@ -1548,6 +1555,7 @@ public class BoaNormalFormIntrinsics {
 						((Expression)((Expression)results.get(i)).getExpressions(0)).getKind() != ExpressionKind.OP_MULT)))
 						results.set(i, factorAll((Expression)results.get(i)));
 				}
+				return createExpression(e.getKind(), convertArray(results));
 
 			case OP_MULT:
 				boolean hasDiv = false;
@@ -1576,8 +1584,9 @@ public class BoaNormalFormIntrinsics {
 						else
 							results.set(i, factor((Expression)results.get(i)));
 					}
-					return createExpression(e.getKind(), convertArray(results));
 				}
+
+				return createExpression(e.getKind(), convertArray(results));
 
 			case OP_DIV:
 				for (int i = 0; i < results.size(); i++) {
