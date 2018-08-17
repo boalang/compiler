@@ -9,9 +9,9 @@ public class TestFields extends QueryTest {
 		String expected = "MeanInstanceFields[] = 0.0\n"
 				+ "MeanPrivateFields[] = 0.0\n"
 				+ "MeanStaticFields[] = 0.0\n"
-				+ "NoFieldClasses[] = 60\n"
-				+ "TotalClasses[] = 73\n"
-				+ "TotalInstanceFields[] = 17\n"
+				+ "NoFieldClasses[] = 62\n"
+				+ "TotalClasses[] = 77\n"
+				+ "TotalInstanceFields[] = 21\n"
 				+ "TotalStaticFields[] = 5\n";
 		queryTest("test/known-good/fields.boa", expected);
 	}

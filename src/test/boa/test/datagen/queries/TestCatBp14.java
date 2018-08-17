@@ -6,7 +6,7 @@ public class TestCatBp14 extends QueryTest {
 	
 	@Test
 	public void testCatBp14() {
-		String expected = "counts[] = 5.530612244897959\n";
+		String expected = "counts[] = 6.018867924528302\n";
 		queryTest("test/known-good/catBp14.boa", expected);
 	}
 	

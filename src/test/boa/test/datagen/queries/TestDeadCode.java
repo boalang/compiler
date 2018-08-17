@@ -10,7 +10,7 @@ public class TestDeadCode extends QueryTest {
 				+ "   \"change\": \"UNKNOWN\",\n"
 				+ "   \"kind\": \"SOURCE_JAVA_JLS4\",\n"
 				+ "   \"name\": \"src/JLS4/UnsafeVarargsDemo/UnsafeVarargsDemo.java\",\n"
-				+ "   \"key\": 128141,\n"
+				+ "   \"key\": 142653,\n"
 				+ "   \"ast\": true\n"
 				+ "} - unsafe, 1.0\n";
 		queryTest("test/known-good/dead-code.boa", expected);
