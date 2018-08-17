@@ -7,8 +7,9 @@ HasJavaFile := function(rev: Revision): bool {
 		return true;
 	return false;
 };
-j:= 0;
+
 foreach (i: int; def(p.code_repositories[i])) {
+	j:= 0;
 	for (; j < getrevisionscount(p.code_repositories[i]); j++) 
 		if (HasJavaFile(getrevision(p.code_repositories[i], j)))
 			break;
