@@ -68,12 +68,6 @@ public class DeclarationProtoTuple extends BoaProtoTuple {
 		names.put("comments", counter++);
 		members.add(new BoaProtoList(new CommentProtoTuple()));
 		
-		names.put("change_kind", counter++);
-		members.add(new ChangeKindProtoMap());
-		
-		names.put("mapped_node", counter++);
-		members.add(new BoaInt());
-		
 		names.put("key", counter++);
 		members.add(new BoaInt());
 		

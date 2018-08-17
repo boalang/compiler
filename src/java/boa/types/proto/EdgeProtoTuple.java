@@ -39,6 +39,9 @@ public class EdgeProtoTuple extends BoaProtoTuple {
 
 		names.put("label", counter++);
 		members.add(new EdgeLabelProtoMap());
+		
+		names.put("label", counter++);
+		members.add(new EdgeLabelProtoMap());
 
 	}
 

@@ -58,12 +58,6 @@ public class NamespaceProtoTuple extends BoaProtoTuple {
 		names.put("expressions", counter++);
 		members.add(new BoaProtoList(new ExpressionProtoTuple()));
 		
-		names.put("change_kind", counter++);
-		members.add(new ChangeKindProtoMap());
-		
-		names.put("mapped_node", counter++);
-		members.add(new BoaInt());
-		
 		names.put("key", counter++);
 		members.add(new BoaInt());
 		

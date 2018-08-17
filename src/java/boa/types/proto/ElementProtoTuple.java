@@ -45,6 +45,9 @@ public class ElementProtoTuple extends BoaProtoTuple {
 		names.put("var_decl", counter++);
 		members.add(new BoaProtoList(new VariableProtoTuple()));
 		
+		names.put("title", counter++);
+		members.add(new BoaString());
+		
 		names.put("processing_instruction", counter++);
 		members.add(new BoaProtoList(new AttributeProtoTuple()));
 	}
