@@ -46,17 +46,11 @@ public class TypeProtoTuple extends BoaProtoTuple {
 		names.put("kind", counter++);
 		members.add(new TypeKindProtoMap());
 
-		names.put("qualified_name", counter++);
+		names.put("fully_qualified_name", counter++);
 		members.add(new BoaString());
 		
 		names.put("id", counter++);
 		members.add(new BoaString());
-		
-		names.put("change_kind", counter++);
-		members.add(new ChangeKindProtoMap());
-		
-		names.put("mapped_node", counter++);
-		members.add(new BoaInt());
 		
 		names.put("declaration_file", counter++);
 		members.add(new BoaInt());

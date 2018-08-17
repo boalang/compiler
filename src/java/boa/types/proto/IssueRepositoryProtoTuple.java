@@ -43,6 +43,9 @@ public class IssueRepositoryProtoTuple extends BoaProtoTuple {
 
 		names.put("name", counter++);
 		members.add(new BoaString());
+		
+		names.put("key", counter++);
+		members.add(new BoaString());
 	}
 
 	/**

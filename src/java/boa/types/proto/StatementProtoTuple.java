@@ -65,17 +65,8 @@ public class StatementProtoTuple extends BoaProtoTuple {
 		names.put("type_declaration", counter++);
 		members.add(new DeclarationProtoTuple());
 
-		names.put("expression", counter++);
-		members.add(new ExpressionProtoTuple());
-		
 		names.put("expressions", counter++);
 		members.add(new BoaProtoList(new ExpressionProtoTuple()));
-		
-		names.put("change_kind", counter++);
-		members.add(new ChangeKindProtoMap());
-		
-		names.put("mapped_node", counter++);
-		members.add(new BoaInt());
 		
 		names.put("key", counter++);
 		members.add(new BoaInt());
