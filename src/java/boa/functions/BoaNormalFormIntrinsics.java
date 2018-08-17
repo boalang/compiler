@@ -315,19 +315,17 @@ public class BoaNormalFormIntrinsics {
 	 */
 	@FunctionSpec(name = "normalize", returnType = "Expression", formalParameters = { "Expression" })
 	public static Expression normalize(final Expression e) throws Exception {
-		Expression expRed;
-		Expression expMov = e;
+		Expression exp = e;
 		Expression previous = e;
 
 		for (int i = 0; i < 5; i++) {	// maximum iteration allowed = 5. Ideally should not exceed 2
-			expRed = reduce(expMov);	// reduce Expression. reduce is required before move
-			expMov = move(expRed);		// move Variables to the left and literals to the right.
-			if (expMov.equals(previous))
+			exp = move(reduce(exp));	// reduce Expression. reduce is required before move
+			if (exp.equals(previous))
 				break;
-			previous = expMov;
+			previous = exp;
 		}
 
-		return sort(expMov);			// sort the left side of the final expression
+		return sort(exp);			// sort the left side of the final expression
 	}
 
 	/**
@@ -847,14 +845,13 @@ public class BoaNormalFormIntrinsics {
 			case LT:
 			case GTEQ:
 			case LTEQ:
-				final Expression[] results1 = new Expression[results.size()] ;
 				for(int i = 0; i < results.size(); i++) {
 					if (results.get(i) instanceof Long || results.get(i) instanceof Double)
-						results1[i] = createLiteral(results.get(i).toString());
+						results.set(i, createLiteral(results.get(i).toString()));
 					else
-						results1[i] = (Expression)results.get(i);
+						results.set(i, reduce((Expression)results.get(i)));
 				}
-				return createExpression(e.getKind(), results1);
+				return createExpression(e.getKind(), convertArray(results));
 
 			case OP_ADD:
 				// handle cases like '+x' or '+3'
