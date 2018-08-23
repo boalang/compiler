@@ -325,7 +325,123 @@ public class BoaNormalFormIntrinsics {
 			previous = exp;
 		}
 
-		return sort(exp);			// sort the left side of the final expression
+		return factorLiteral(sort(exp));// sort the left side of the final expression and factor the literals
+	}
+
+	/**
+	 * factor the literals in the first term if there is any
+	 *
+	 * @param e the expression to be factored
+	 * @return factored form
+	 * @throws Exception
+	 */
+	private static Expression factorLiteral(final Expression e) throws Exception {
+		switch (e.getKind()) {
+			// comparison operators
+			case EQ:
+			case NEQ:
+			case GT:
+			case LT:
+			case GTEQ:
+			case LTEQ:
+				boolean isNumerator = true;
+				Expression literal = null;
+				Expression firstTerm = null;
+				if (e.getExpressions(0).getKind() == ExpressionKind.OP_ADD ||
+					e.getExpressions(0).getKind() == ExpressionKind.OP_SUB) {
+					firstTerm = e.getExpressions(0).getExpressions(0);
+					while (firstTerm.getKind() == ExpressionKind.OP_ADD || firstTerm.getKind() == ExpressionKind.OP_SUB)
+						firstTerm = firstTerm.getExpressions(0);
+				}
+				else {
+					firstTerm = e.getExpressions(0);
+					if (firstTerm.getExpressionsCount() == 0)
+						return e;
+				}
+
+				literal = getLiteralFromExp(firstTerm);
+				if (literal == null)
+					return e;
+
+				Expression lhs = null;
+				Expression rhs = null;
+				if (literal.getKind() == ExpressionKind.OP_DIV) {
+					lhs = reduce(createExpression(ExpressionKind.OP_MULT, e.getExpressions(0), literal.getExpressions(1)));
+					rhs = reduce(createExpression(ExpressionKind.OP_MULT, e.getExpressions(1), literal.getExpressions(1)));
+					if (literal.getExpressions(0).getLiteral() != "1") {
+						lhs = reduce(createExpression(ExpressionKind.OP_DIV, lhs, literal.getExpressions(0)));
+						rhs = reduce(createExpression(ExpressionKind.OP_DIV, rhs, literal.getExpressions(0)));
+					}
+				}
+				else {
+					lhs = reduce(createExpression(ExpressionKind.OP_DIV, e.getExpressions(0), literal));
+					rhs = reduce(createExpression(ExpressionKind.OP_DIV, e.getExpressions(1), literal));
+				}
+				return createExpression(e.getKind(), lhs, rhs);
+
+			default:
+				return e;
+		}
+	}
+
+	/**
+	* get the literal expression from a div or mult expression, assuming the literal is always at front
+	* @param div or mult expression
+	* @return return the literal expression if there is any
+	*         , else return null (exclude the literal "1" in the first term of div)
+	*/
+	private static Expression getLiteralFromExp(final Expression e) {
+		if (e.getKind() != ExpressionKind.OP_MULT && e.getKind() != ExpressionKind.OP_DIV) {
+			return null;
+		}
+		Expression literal = null;
+		if (e.getKind() == ExpressionKind.OP_MULT &&
+			e.getExpressions(0).getKind() == ExpressionKind.LITERAL)
+			literal = e.getExpressions(0);
+		else if (e.getKind() == ExpressionKind.OP_DIV){
+			Expression numer = null;
+			Expression denom = null;
+			// if 2 / x
+			if (e.getExpressions(0).getKind() == ExpressionKind.LITERAL &&
+				e.getExpressions(0).getLiteral() != "1")
+				numer = e.getExpressions(0);
+			// if 2 * x / y
+			else if (e.getExpressions(0).getKind() == ExpressionKind.OP_MULT &&
+				e.getExpressions(0).getExpressions(0).getKind() == ExpressionKind.LITERAL)
+				numer = e.getExpressions(0).getExpressions(0);
+			// if x / 2 or 3 * x / 2
+			if (e.getExpressions(1).getKind() == ExpressionKind.LITERAL)
+				denom = e.getExpressions(1);
+			// if x / (2 * y) or 3 * x / (2 * y)
+			else if (e.getExpressions(1).getExpressionsCount() > 0 &&
+				e.getExpressions(1).getExpressions(0).getKind() == ExpressionKind.OP_MULT &&
+				e.getExpressions(1).getExpressions(0).getExpressions(0).getKind() == ExpressionKind.LITERAL)
+				denom = e.getExpressions(1).getExpressions(0).getExpressions(0);
+
+			if (denom == null)
+				literal = numer;
+			else if (numer == null)
+				literal = createExpression(ExpressionKind.OP_DIV, createLiteral("1"), denom);
+			else
+				literal = createExpression(ExpressionKind.OP_DIV, numer, denom);
+		}
+		return literal;
+	}
+
+	/**
+	* Divies a number.
+	* This method is used in place of actual division, only when both parts are doubles.
+	* If the resulting division results in an integer value, it returns a long.
+	*
+	* @param num the numerator
+	* @param denom the denominator
+	* @return the result of dividing num by denom
+	*/
+	private static Object div(final double num, final double denom) {
+		final double result = num / denom;
+		if (result == (long)result)
+			return (long) result;
+		return result;
 	}
 
 	/**
@@ -777,7 +893,12 @@ public class BoaNormalFormIntrinsics {
 	// Comparator for sorting array list
 	private static class ExpressionArrayComparator implements Comparator<Object[]> {
 		public int compare(final Object[] e1, final Object[] e2) {
-			return prettyprint((Expression)e1[0]).compareTo(prettyprint((Expression)e2[0]));
+			String s1 = prettyprint((Expression)e1[0]).replaceAll("[^a-zA-Z\\+\\-()]", "");
+			String s2 = prettyprint((Expression)e2[0]).replaceAll("[^a-zA-Z\\+\\-()]", "");
+			if (!s1.equals("") && !s2.equals(""))
+				return s1.compareTo(s2);
+			else
+				return prettyprint((Expression)e1[0]).compareTo(prettyprint((Expression)e2[0]));
 		}
 	}
 
@@ -1123,13 +1244,6 @@ public class BoaNormalFormIntrinsics {
 				else
 					results2.add(0, ival);
 
-				// sort terms
-				// Object tempE = sort(createExpression(e.getKind(), convertArray(results)));
-				// results.clear();
-				// for (final Expression sub : ((Expression)tempE).getExpressionsList()) {
-				// 	results.add(sub);
-				// }
-
 				if (results2.size() > 1) {
 					// check for elimination
 					if (results2.get(0) instanceof Double && (Double)results2.get(0) == 0.0)
@@ -1139,10 +1253,10 @@ public class BoaNormalFormIntrinsics {
 
 					// check for identity
 					boolean hasNumLiteral = true;
-					if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == 1.0) {
+					if (results2.get(0) instanceof Number && results2.get(0) instanceof Long && (Long)results2.get(0) == 1L) {
 						results2.remove(0);
 						hasNumLiteral = false;
-					} else if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == -1.0) {
+					} else if (results2.get(0) instanceof Number && results2.get(0) instanceof Long && (Long)results2.get(0) == -1L) {
 						results2.remove(0);
 						results2.set(0, negate(results2.get(0)));
 						hasNumLiteral = false;
@@ -1159,6 +1273,7 @@ public class BoaNormalFormIntrinsics {
 					// simplify terms and literal
 					dval = 1.0;
 					ival = 1L;
+					isDouble = false;
 
 					boolean[] cancelTerms = new boolean[results2.size()];
 
@@ -1227,23 +1342,33 @@ public class BoaNormalFormIntrinsics {
 						ival = 1L;
 					}
 
+					boolean divLiteral = hasNumLiteral ? false : true;
 					if (hasNumLiteral && (dval != 1.0 || ival != 1L)) {
 						final Object numLiteral = results2.get(0);
 						Number num = null;
-						if (dval != 1.0)
-							num = ((Number)numLiteral).doubleValue() / dval;
-						else if (numLiteral instanceof Double)
-							num = ((Number)numLiteral).doubleValue() / ival.doubleValue();
+						if (isDouble)
+							num = (Number)div(((Number)numLiteral).doubleValue(), dval);
 						else
-							num = ((Number)numLiteral).longValue() / ival;
-						if (num.doubleValue() == 1.0) {
-							results2.remove(0);
-							if (isDouble)
-								for (int i = 0; i < results2.size(); i++)
-									results2.set(i, toDouble(results2.get(i)));
-						} else
-							results2.set(0, num);
-					} else {
+							num = (Number)div(((Number)numLiteral).doubleValue(), (double)ival);
+
+						if ((Number)numLiteral instanceof Double)
+							isDouble = true;
+
+						if (num instanceof Long) {
+							if ((Long)num == 1L) {
+								results2.remove(0);
+								if (isDouble)
+									results2.add(0, (double) 1.0);
+							}
+							else if (isDouble || numLiteral instanceof Double)
+								results2.set(0, num.doubleValue());
+							else
+								results2.set(0, num);
+						}
+						else
+							divLiteral = true;
+					}
+					if (divLiteral) {
 						if (dval != 1.0)
 							results2.add(createExpression(ExpressionKind.OP_DIV, createLiteral("1"), createLiteral("" + dval)));
 						else if (ival != 1L)
@@ -1254,6 +1379,17 @@ public class BoaNormalFormIntrinsics {
 						if (isDouble)
 							return positive ? 1.0 : -1.0;
 						return positive ? 1L : -1L;
+					}
+					else if (results2.size() > 1 && results2.get(0) instanceof Double && (Double)results2.get(0) == 1.0) {
+						boolean hasOtherKind = false;;
+						for (int i = 1; i < results2.size(); i++) {
+							if (((Expression)results2.get(i)).getKind() != ExpressionKind.VARACCESS) {
+								hasOtherKind = true;
+								break;
+							}
+						}
+						if (!hasOtherKind)
+							results2.remove(0);
 					}
 
 					if (results2.size() > 0 && !positive) {
@@ -1290,7 +1426,6 @@ public class BoaNormalFormIntrinsics {
 
 				if (count % 2 == 1)
 					results.set(0, negate(results.get(0)));
-
 				return internalReduce(createExpression(ExpressionKind.OP_MULT, convertArray(results)));
 
 			// literals are converted to numbers, if possible
