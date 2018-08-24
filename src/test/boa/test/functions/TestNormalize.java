@@ -184,7 +184,7 @@ public class TestNormalize {
 
                 {"x * y / x < 2", "y < 2"},
                 {"x * y * x / y < 2", "x * x < 2"},
-                {"x * y * (a + b) / (x * (a + b)) < 2", "a * y / (a + b) + b * y / (a + b) < 2"}, // FIXME should be "y < 2"
+                {"x * y * (a + b) / (x * (a + b)) < 2", "y < 2"},
 
                 {"2 * a + 3 * (d + a - 3 - 2 * (c + d + a - 2)) < 2 * (a + b + 3 + c)", "a + 2 * b / 3 + 8 * c / 3 + d > -1"},
                 {"2 * a + 3 * (d + a - 3) < 2 * (a + b + 3 + c)", "a + d - 2 * b / 3 - 2 * c / 3 < 5"},
@@ -226,8 +226,6 @@ public class TestNormalize {
                 {"b / a > 5", "b / a > 5"},
 
                 {"1 * a < 2", "a < 2"},
-
-                // TODO add test cases for ordering
         });
     }
 

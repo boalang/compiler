@@ -603,8 +603,10 @@ public class TestReduce {
 			{"x * y + y * x", "2 * x * y"},
 
 			{"2 * a + 3 * (d + a - 3)", "-9 + 5 * a + 3 * d"},
-			{"x * y * (a + b) / x / (a + b)", "a * y / (a + b) + b * y / (a + b)"}, // FIXME should be "y"
-			{"x * y * (a + b) / (x * (a + b))", "a * y / (a + b) + b * y / (a + b)"}, // FIXME should be "y"
+			{"x * y * (a + b) / x / (a + b)", "y"},
+			{"x * (1 + y) / (1 + y)", "x"},
+			{"x * y / y", "x"},
+			{"x * y * (a + b) / (x * (a + b))", "y"},
 			{"2 * x / 3", " 2 * x / 3"},
 		});
 	}

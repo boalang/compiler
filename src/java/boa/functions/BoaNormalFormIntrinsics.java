@@ -1298,7 +1298,9 @@ public class BoaNormalFormIntrinsics {
 							// if regular denominator term
 							} else {
 								// if able to cancel
-								final Expression subExp2 = subExp.getExpressions(1);
+								Expression subExp2 = subExp.getExpressions(1);
+								if (subExp2.getKind() == ExpressionKind.PAREN)
+									subExp2 = subExp2.getExpressions(0);
 								if (numMap.containsKey(subExp2)) {
 									final List<Integer> aryList = numMap.get(subExp2);
 									cancelTerms[aryList.get(0)] = true;
@@ -1613,6 +1615,8 @@ public class BoaNormalFormIntrinsics {
 					divHasAdd = true;
 				}
 				divResults.add(sub.getExpressions(1));
+				if (sub.getExpressions(1).getKind() == ExpressionKind.PAREN)
+					divResults.set(divResults.size() - 1, ((Expression)divResults.get(divResults.size() - 1)).getExpressions(0));
 			}
 			else
 				results.add(sub);
