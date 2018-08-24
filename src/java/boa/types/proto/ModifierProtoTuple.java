@@ -61,12 +61,6 @@ public class ModifierProtoTuple extends BoaProtoTuple {
 		names.put("other", counter++);
 		members.add(new BoaString());
 		
-		names.put("change_kind", counter++);
-		members.add(new ChangeKindProtoMap());
-		
-		names.put("mapped_node", counter++);
-		members.add(new BoaInt());
-		
 		names.put("key", counter++);
 		members.add(new BoaInt());
 		

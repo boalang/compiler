@@ -2,7 +2,14 @@
 counts: output sum of int;
 p: Project = input;
 
+
 exists (i: int; match(`^java$`, lowercase(p.programming_languages[i])))
-	foreach (j: int; p.code_repositories[j].kind == RepositoryKind.GIT)
-		exists (k: int; yearof(p.code_repositories[j].revisions[k].commit_date) == 2018)
+	foreach (j: int; p.code_repositories[j].kind == RepositoryKind.GIT){
+	k:= 0;
+		for (; k < getrevisionscount(p.code_repositories[j]); k++)
+			if (yearof(getrevision(p.code_repositories[j], k).commit_date) == 2018)
+				break;
+		if (k< getrevisionscount(p.code_repositories[j]))
 			counts << 1;
+	}
+		

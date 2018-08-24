@@ -49,12 +49,6 @@ public class CommentProtoTuple extends BoaProtoTuple {
 		names.put("position", count++);
 		members.add(new PositionInfoProtoTuple());
 		
-		names.put("change_kind", count++);
-		members.add(new ChangeKindProtoMap());
-		
-		names.put("mapped_node", count++);
-		members.add(new BoaInt());
-		
 		names.put("key", count++);
 		members.add(new BoaInt());
 	}

@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import boa.types.BoaBool;
+import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
@@ -52,6 +54,18 @@ public class VariableProtoTuple extends BoaProtoTuple {
 
 		names.put("comments", counter++);
 		members.add(new BoaProtoList(new CommentProtoTuple()));
+		
+		names.put("key", counter++);
+		members.add(new BoaInt());
+		
+		names.put("declaring_type", counter++);
+		members.add(new BoaInt());
+		
+		names.put("dollar_sign", counter++);
+		members.add(new BoaBool());
+		
+		names.put("expressions", counter++);
+		members.add(new BoaProtoList(new ExpressionProtoTuple()));
 	}
 
 	/**

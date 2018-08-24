@@ -46,14 +46,11 @@ public class ASTRootProtoTuple extends BoaProtoTuple {
 		names.put("names", counter++);
 		members.add(new BoaProtoList(new BoaString()));
 		
-		names.put("change_kind", counter++);
-		members.add(new ChangeKindProtoMap());
-		
-		names.put("mapped_node", counter++);
-		members.add(new BoaInt());
-		
 		names.put("key", counter++);
 		members.add(new BoaInt());
+		
+		names.put("document", counter++);
+		members.add(new DocumentProtoTuple());
 	}
 
 	/**

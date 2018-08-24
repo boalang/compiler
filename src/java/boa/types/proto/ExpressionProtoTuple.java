@@ -81,12 +81,6 @@ public class ExpressionProtoTuple extends BoaProtoTuple {
 		names.put("no_parens", counter++);
 		members.add(new BoaBool());
 		
-		names.put("change_kind", counter++);
-		members.add(new ChangeKindProtoMap());
-		
-		names.put("mapped_node", counter++);
-		members.add(new BoaInt());
-		
 		names.put("key", counter++);
 		members.add(new BoaInt());
 		
@@ -107,6 +101,9 @@ public class ExpressionProtoTuple extends BoaProtoTuple {
 		
 		names.put("dolar_sign", counter++);
 		members.add(new BoaBool());
+		
+		names.put("computed_variable", counter++);
+		members.add(new ExpressionProtoTuple());
 		
 		names.put("computed_method", counter++);
 		members.add(new ExpressionProtoTuple());

@@ -59,6 +59,7 @@ public class SeqRepoImporter {
 	private static String base = null;
 
 	private final static int poolSize = Integer.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
+	public static final int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer.valueOf(DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS);
 	final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
 	final static String jsonCachePath = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 	private static boolean done = false;
@@ -258,10 +259,29 @@ public class SeqRepoImporter {
 								Thread.currentThread().getId() + " Putting in sequence file: " + project.getId());
 
 					BytesWritable bw = new BytesWritable(project.toByteArray());
-					try {
-						projectWriter.append(new Text(project.getId()), bw);
-					} catch (IOException e) {
-						e.printStackTrace();
+					if (bw.getLength() <= MAX_SIZE_FOR_PROJECT_WITH_COMMITS 
+							|| (project.getCodeRepositoriesCount() > 0 && project.getCodeRepositories(0).getRevisionKeysCount() > 0)) {
+						try {
+							projectWriter.append(new Text(project.getId()), bw);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					} else {
+						Project.Builder pb = Project.newBuilder(project);
+						for (CodeRepository.Builder cb : pb.getCodeRepositoriesBuilderList()) {
+							for (Revision.Builder rb : cb.getRevisionsBuilderList()) {
+								cb.addRevisionKeys(commitWriterLen);
+								bw = new BytesWritable(rb.build().toByteArray());
+								commitWriter.append(new LongWritable(commitWriterLen), bw);
+								commitWriterLen += bw.getLength();
+							}
+							cb.clearRevisions();
+						}
+						try {
+							projectWriter.append(new Text(pb.getId()), new BytesWritable(pb.build().toByteArray()));
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
 					counter++;
 					if (counter >= Integer.parseInt(DefaultProperties.MAX_PROJECTS)) {

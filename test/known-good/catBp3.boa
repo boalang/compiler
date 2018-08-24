@@ -4,5 +4,7 @@ p: Project = input;
 
 exists (i: int; match(`^java$`, lowercase(p.programming_languages[i])))
 	foreach (j: int; p.code_repositories[j].kind == RepositoryKind.GIT)
-		foreach (k: int; isfixingrevision(p.code_repositories[j].revisions[k].log))
-			counts << 1;
+		for (k:= 0; k < getrevisionscount(p.code_repositories[j]); k++) 
+			if (isfixingrevision(getrevision(p.code_repositories[j], k).log))
+				counts << 1;
+		

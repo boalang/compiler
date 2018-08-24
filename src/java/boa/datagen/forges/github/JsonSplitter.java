@@ -34,8 +34,8 @@ public class JsonSplitter {
 				continue;
 			int index = i % Num_Threads;
 			File file = new File(outDir + index + "/" + files[i].getName());
-			String content = FileIO.readFileContents(file);
-			System.out.println("processing " + file.getName());
+			String content = FileIO.readFileContents(files[i]);
+			System.out.println("processing " + i + "/" + files.length + " " +file.getName());
 			FileIO.writeFileContents(file, content);
 		}
 	}

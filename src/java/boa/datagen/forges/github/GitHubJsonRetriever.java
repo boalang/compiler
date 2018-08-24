@@ -42,11 +42,11 @@ public class GitHubJsonRetriever {
 		try {
 			sc = new Scanner(new File(InputFile));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		while (sc.hasNextLine())
+		while (sc.hasNextLine()) 
 			namesList.add(sc.nextLine());
+		sc.close();
 		System.out.println(namesList.size() + " names");
 	}
 

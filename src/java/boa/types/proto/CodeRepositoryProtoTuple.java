@@ -66,6 +66,9 @@ public class CodeRepositoryProtoTuple extends BoaProtoTuple {
 		
 		names.put("head_snapshot", counter++);
 		members.add(new BoaProtoList(new ChangedFileProtoTuple()));
+		
+		names.put("revision_keys", counter++);
+		members.add(new BoaProtoList(new BoaInt()));
 	}
 
 	/**
