@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Robert Dyer, Mohd Arafat
+ * Copyright 2017, Robert Dyer, Mohd Arafat, Che Shian Hung
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
