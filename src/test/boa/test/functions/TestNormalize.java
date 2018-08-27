@@ -36,6 +36,7 @@ import boa.types.Ast.Expression;
  *
  * @author marafat
  * @author rdyer
+ * @author cheshianhung
  */
 @RunWith(Parameterized.class)
 public class TestNormalize {

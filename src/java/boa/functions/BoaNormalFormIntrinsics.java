@@ -39,6 +39,7 @@ import static boa.functions.BoaAstIntrinsics.prettyprint;
  *
  * @author marafat
  * @author rdyer
+ * @author cheshianhung
  */
 public class BoaNormalFormIntrinsics {
 	/**
@@ -2220,6 +2221,7 @@ public class BoaNormalFormIntrinsics {
 	 * Uses pretty printing and string comparison.
 	 *
 	 * @author rdyer
+	 * @author cheshianhung
 	 */
 	public static class ExpressionComparator implements Comparator<Expression> {
 		public int compare(final Expression e1, final Expression e2) {
