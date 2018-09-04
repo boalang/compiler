@@ -18,7 +18,6 @@ import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -41,18 +40,22 @@ import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.GitConnector;
 import boa.types.Diff.ChangedFile;
 
-public class Testq12 extends QueryTest {
+public class TestQ13 extends QueryTest {
 	static Map<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
 	protected static final ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
 	private static Repository repository;
 	private static RevWalk revwalk;
 
 	@Test
-	public void testQ12() throws MissingObjectException, IncorrectObjectTypeException, IOException {
+	public void testQ10() throws MissingObjectException, IncorrectObjectTypeException, IOException {
 		int methods = 0;
 		int methodsMax = 0;
 		int methodsMin = Integer.MAX_VALUE;
 		int projectId = 140492550;
+		int interfacesWM = 0;
+		int interfaces = 0;
+		int interfacesMax = 0;
+		int interfacesMin = Integer.MAX_VALUE;
 		File gitDir = new File("test/datagen/boalang/repos/boalang/test-datagen");
 		if (!gitDir.exists()) {
 			String url = "https://github.com/boalang/test-datagen.git";
@@ -81,7 +84,7 @@ public class Testq12 extends QueryTest {
 		System.out.println("Finish building head snapshot");
 		List<String> snapshot2 = gc.getSnapshot(Constants.HEAD);
 		gc.close();
-		Set<String> s1 = new HashSet<String>();
+		Set<String> s1 = new HashSet<String>(), s2 = new HashSet<String>(snapshot2);
 		for (ChangedFile cf : snapshot1)
 			s1.add(cf.getName());
 
@@ -106,7 +109,7 @@ public class Testq12 extends QueryTest {
 			}
 			tw.close();
 		}
-		int files = 0;
+		
 		for (String path : snapshot2) {
 			ObjectId oi = filePathGitObjectIds.get(path);
 			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
@@ -125,7 +128,7 @@ public class Testq12 extends QueryTest {
 				cu = (CompilationUnit) parser.createAST(null);
 			} catch (Throwable e) {
 			}
-			JavaStaticMethodCheckVisitor visitor = new JavaStaticMethodCheckVisitor();
+			JavaInterfaceCheckVisitor visitor = new JavaInterfaceCheckVisitor();
 			cu.accept(visitor);
 			int methodCount = visitor.methods;
 			methods += methodCount;
@@ -133,15 +136,19 @@ public class Testq12 extends QueryTest {
 				methodsMax = visitor.maxMethods;
 			if (methodCount > 0 && methodsMin > visitor.minMethods)
 				methodsMin = visitor.minMethods;
-			files += visitor.classes;
+			interfacesWM += visitor.interfacesWithMethods;
+			interfaces += visitor.interfaces;
 		}
 		// System.out.println("files " + files);
-		double mean = (double) methods / files;
-		expected += "StaticMethodsMax[] = " + projectId + ", " + (double) methodsMax 
-				+ "\nStaticMethodsMean[] = " + mean
-				+ "\nStaticMethodsMin[] = " + projectId + ", " + (double) methodsMin 
-				+ "\nStaticMethodsTotal[] = " + methods + "\n";
-		queryTest("test/known-good/q12.boa", expected);
+		double mean = (double) methods / interfacesWM;
+		expected += "InterfaceMax[] = " + projectId + ", " + (double)interfaces
+					+ "\nInterfaceMean[] = " + (double)interfaces 
+					+ "\nInterfaceMin[] = " + projectId +  ", " + (double)interfaces
+					+ "\nInterfaceTotal[] = " + interfaces 
+					+ "\nMethodsInterfaceMax[] = " + projectId + ", " + (double) methodsMax + "\nMethodsInterfaceMean[] = "
+					+ mean + "\nMethodsInterfaceMin[] = " + projectId + ", " + (double) methodsMin
+					+ "\nMethodsInterfaceTotal[] = " + methods + "\n";
+		queryTest("test/known-good/q13.boa", expected);
 	}
 
 	private static Set<RevCommit> getHeads() {
@@ -154,7 +161,6 @@ public class Testq12 extends QueryTest {
 		} catch (final GitAPIException e) {
 		} catch (final IOException e) {
 		}
-		git.close();
 		return heads;
 	}
 
@@ -168,54 +174,49 @@ public class Testq12 extends QueryTest {
 		return buffer.toString();
 	}
 
-	public class JavaStaticMethodCheckVisitor extends ASTVisitor {
+	public class JavaInterfaceCheckVisitor extends ASTVisitor {
 		public int methods = 0;
 		public int methods2 = 0;
-		public int classes = 0;
+		public int interfacesWithMethods = 0;
+		public int interfaces = 0;
 		public int maxMethods = 0;
 		public int minMethods = Integer.MAX_VALUE;
 		private Stack<Integer> methodsStack = new Stack<Integer>();
 
 		@Override
 		public boolean preVisit2(ASTNode node) {
-			if (node instanceof EnumDeclaration
-					|| node instanceof TypeDeclaration && ((TypeDeclaration) node).isInterface())
-				return false;
-			if (node instanceof TypeDeclaration || node instanceof AnonymousClassDeclaration) {
+			if (node instanceof TypeDeclaration && ((TypeDeclaration) node).isInterface()) {
 				methodsStack.push(methods2);
 				methods2 = 0;
+				interfaces++;
+				return true;
+			}
+			if (node instanceof TypeDeclaration || node instanceof AnonymousClassDeclaration
+					|| node instanceof EnumDeclaration) {
+				return false;
 			}
 			return true;
 		}
 
 		@Override
-		public void endVisit(AnonymousClassDeclaration node) {
-				classes++;
-			if (maxMethods < methods2)
-				maxMethods = methods2;
-			if (minMethods > methods2)
-				minMethods = methods2;
-			methods2 = methodsStack.pop();
-		}
-
-		@Override
 		public void endVisit(TypeDeclaration node) {
-			if (node.isInterface())
+			if (node.isInterface()) {
+				if (methods2 > 0) {
+					interfacesWithMethods++;
+				}
+				if (maxMethods < methods2)
+					maxMethods = methods2;
+				if (minMethods > methods2)
+					minMethods = methods2;
+				methods2 = methodsStack.pop();
+			} else
 				return;
-				classes++;
-			if (maxMethods < methods2)
-				maxMethods = methods2;
-			if (minMethods > methods2)
-				minMethods = methods2;
-			methods2 = methodsStack.pop();
 		}
 
 		@Override
 		public boolean visit(MethodDeclaration node) {
-			if ((node.getModifiers() & Modifier.STATIC) > 0 && !node.getName().toString().equals("main")) {
-				methods++;
-				methods2++;
-			}
+			methods++;
+			methods2++;
 			return true;
 		}
 	}
