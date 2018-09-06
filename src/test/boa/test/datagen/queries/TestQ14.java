@@ -8,17 +8,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
-
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
@@ -40,22 +34,19 @@ import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.GitConnector;
 import boa.types.Diff.ChangedFile;
 
-public class TestQ13 extends QueryTest {
+public class TestQ14 extends QueryTest {
 	static Map<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
 	protected static final ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
 	private static Repository repository;
 	private static RevWalk revwalk;
 
 	@Test
-	public void testQ13() throws MissingObjectException, IncorrectObjectTypeException, IOException {
-		int methods = 0;
-		int methodsMax = 0;
-		int methodsMin = Integer.MAX_VALUE;
+	public void testQ14() throws MissingObjectException, IncorrectObjectTypeException, IOException {
+		int arity = 0;
+		int arityMax = 0;
+		int arityMin = Integer.MAX_VALUE;
 		int projectId = 140492550;
-		int interfacesWM = 0;
-		int interfaces = 0;
-		int interfacesMax = 0;
-		int interfacesMin = Integer.MAX_VALUE;
+		int methods = 0;
 		File gitDir = new File("test/datagen/boalang/repos/boalang/test-datagen");
 		if (!gitDir.exists()) {
 			String url = "https://github.com/boalang/test-datagen.git";
@@ -84,7 +75,8 @@ public class TestQ13 extends QueryTest {
 		System.out.println("Finish building head snapshot");
 		List<String> snapshot2 = gc.getSnapshot(Constants.HEAD);
 		gc.close();
-		Set<String> s1 = new HashSet<String>(), s2 = new HashSet<String>(snapshot2);
+		Set<String> s1 = new HashSet<String>();
+		new HashSet<String>(snapshot2);
 		for (ChangedFile cf : snapshot1)
 			s1.add(cf.getName());
 
@@ -128,27 +120,23 @@ public class TestQ13 extends QueryTest {
 				cu = (CompilationUnit) parser.createAST(null);
 			} catch (Throwable e) {
 			}
-			JavaInterfaceCheckVisitor visitor = new JavaInterfaceCheckVisitor();
+			JavaArityCheckVisitor visitor = new JavaArityCheckVisitor();
 			cu.accept(visitor);
-			int methodCount = visitor.methods;
-			methods += methodCount;
-			if (methodsMax < visitor.maxMethods)
-				methodsMax = visitor.maxMethods;
-			if (methodCount > 0 && methodsMin > visitor.minMethods)
-				methodsMin = visitor.minMethods;
-			interfacesWM += visitor.interfacesWithMethods;
-			interfaces += visitor.interfaces;
+			int arityCount = visitor.arity;
+			arity += arityCount;
+			if (arityMax < visitor.maxArity)
+				arityMax = visitor.maxArity;
+			if (arityCount > 0 && arityMin > visitor.minArity)
+				arityMin = visitor.minArity;
+			methods += visitor.methods;
 		}
 		// System.out.println("files " + files);
-		double mean = (double) methods / interfacesWM;
-		expected += "InterfaceMax[] = " + projectId + ", " + (double)interfaces
-					+ "\nInterfaceMean[] = " + (double)interfaces 
-					+ "\nInterfaceMin[] = " + projectId +  ", " + (double)interfaces
-					+ "\nInterfaceTotal[] = " + interfaces 
-					+ "\nMethodsInterfaceMax[] = " + projectId + ", " + (double) methodsMax + "\nMethodsInterfaceMean[] = "
-					+ mean + "\nMethodsInterfaceMin[] = " + projectId + ", " + (double) methodsMin
-					+ "\nMethodsInterfaceTotal[] = " + methods + "\n";
-		queryTest("test/known-good/q13.boa", expected);
+		double mean = (double) arity / methods;
+		expected +=  "ArityMax[] = " + projectId + ", " + (double) arityMax 
+					+ "\nArityMean[] = " + mean 
+					+ "\nArityMin[] = " + projectId + ", " + (double) arityMin
+					+ "\nArityTotal[] = " + arity + "\n";
+		queryTest("test/known-good/q14.boa", expected);
 	}
 
 	private static Set<RevCommit> getHeads() {
@@ -174,49 +162,25 @@ public class TestQ13 extends QueryTest {
 		return buffer.toString();
 	}
 
-	public class JavaInterfaceCheckVisitor extends ASTVisitor {
+	public class JavaArityCheckVisitor extends ASTVisitor {
+		public int arity = 0;
+		public int arity2 = 0;
 		public int methods = 0;
-		public int methods2 = 0;
-		public int interfacesWithMethods = 0;
 		public int interfaces = 0;
-		public int maxMethods = 0;
-		public int minMethods = Integer.MAX_VALUE;
-		private Stack<Integer> methodsStack = new Stack<Integer>();
-
-		@Override
-		public boolean preVisit2(ASTNode node) {
-			if (node instanceof TypeDeclaration && ((TypeDeclaration) node).isInterface()) {
-				methodsStack.push(methods2);
-				methods2 = 0;
-				interfaces++;
-				return true;
-			}
-			if (node instanceof TypeDeclaration || node instanceof AnonymousClassDeclaration
-					|| node instanceof EnumDeclaration) {
-				return false;
-			}
-			return true;
-		}
-
-		@Override
-		public void endVisit(TypeDeclaration node) {
-			if (node.isInterface()) {
-				if (methods2 > 0) {
-					interfacesWithMethods++;
-				}
-				if (maxMethods < methods2)
-					maxMethods = methods2;
-				if (minMethods > methods2)
-					minMethods = methods2;
-				methods2 = methodsStack.pop();
-			} else
-				return;
-		}
+		public int maxArity = 0;
+		public int minArity = Integer.MAX_VALUE;
 
 		@Override
 		public boolean visit(MethodDeclaration node) {
-			methods++;
-			methods2++;
+			int arityCurValue = node.parameters().size();
+			arity += arityCurValue;
+			if (arityCurValue > 0) {
+				methods ++;
+				if (maxArity < arityCurValue)
+					maxArity = arityCurValue;
+				if (minArity > arityCurValue)
+					minArity = arityCurValue;
+			}
 			return true;
 		}
 	}

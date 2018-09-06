@@ -40,43 +40,41 @@ import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.GitConnector;
 import boa.types.Diff.ChangedFile;
 
-public class TestQ13 extends QueryTest {
+public class TestQ15 extends QueryTest {
 	static Map<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
 	protected static final ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
 	private static Repository repository;
 	private static RevWalk revwalk;
-
+	
 	@Test
-	public void testQ13() throws MissingObjectException, IncorrectObjectTypeException, IOException {
+	public void testQ15 () throws MissingObjectException, IncorrectObjectTypeException, IOException {
 		int methods = 0;
 		int methodsMax = 0;
 		int methodsMin = Integer.MAX_VALUE;
 		int projectId = 140492550;
-		int interfacesWM = 0;
-		int interfaces = 0;
-		int interfacesMax = 0;
-		int interfacesMin = Integer.MAX_VALUE;
 		File gitDir = new File("test/datagen/boalang/repos/boalang/test-datagen");
 		if (!gitDir.exists()) {
 			String url = "https://github.com/boalang/test-datagen.git";
-			try {
-				RepositoryCloner.clone(new String[] { url, gitDir.getAbsolutePath() });
-			} catch (InvalidRemoteException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (TransportException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (GitAPIException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+		try {
+			RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
+		} catch (InvalidRemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (TransportException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (GitAPIException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
 		}
-		repository = new FileRepositoryBuilder().setGitDir(new File(gitDir + "/.git")).build();
-
+		repository = new FileRepositoryBuilder()
+				.setGitDir(new File(gitDir + "/.git"))
+				.build();
+		
 		GitConnector gc = new GitConnector(gitDir.getAbsolutePath(), "test-datagen");
 		gc.setRevisions();
 		System.out.println("Finish processing commits");
@@ -84,7 +82,7 @@ public class TestQ13 extends QueryTest {
 		System.out.println("Finish building head snapshot");
 		List<String> snapshot2 = gc.getSnapshot(Constants.HEAD);
 		gc.close();
-		Set<String> s1 = new HashSet<String>(), s2 = new HashSet<String>(snapshot2);
+		Set<String> s1 = new HashSet<String>();
 		for (ChangedFile cf : snapshot1)
 			s1.add(cf.getName());
 
@@ -102,55 +100,52 @@ public class TestQ13 extends QueryTest {
 			try {
 				tw.addTree(rc.getTree());
 				tw.setRecursive(true);
-				while (tw.next())
-					if (!tw.isSubtree())
+				while (tw.next()) 
+					if (!tw.isSubtree()) 
 						filePathGitObjectIds.put(tw.getPathString(), tw.getObjectId(0));
 			} catch (IOException e) {
 			}
 			tw.close();
 		}
-		
-		for (String path : snapshot2) {
-			ObjectId oi = filePathGitObjectIds.get(path);
-			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
-			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
-			final String content = getFileContents(oi);
+			int files = 0;
+			for (String path: snapshot2) {
+				ObjectId oi = filePathGitObjectIds.get(path);
+				final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser
+						.newParser(AST.JLS8);
+				parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
+				final String content = getFileContents(oi);
 
-			parser.setSource(content.toCharArray());
+				parser.setSource(content.toCharArray());
 
-			final Map<?, ?> options = JavaCore.getOptions();
-			JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
-			parser.setCompilerOptions(options);
+				final Map<?, ?> options = JavaCore.getOptions();
+				JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+				parser.setCompilerOptions(options);
 
-			CompilationUnit cu = null;
+				CompilationUnit cu = null;
 
-			try {
-				cu = (CompilationUnit) parser.createAST(null);
-			} catch (Throwable e) {
+				try {
+					cu = (CompilationUnit) parser.createAST(null);
+				} catch (Throwable e) {
+				}
+				JavaVoidMethodCheckVisitor visitor = new JavaVoidMethodCheckVisitor();
+				cu.accept(visitor);
+				 int methodCount = visitor.methods;
+				methods += methodCount;
+				if (methodsMax < visitor.maxMethods)
+					methodsMax = visitor.maxMethods;
+				if (methodCount > 0 && methodsMin > visitor.minMethods)
+					methodsMin = visitor.minMethods;
+				files += visitor.classes;
 			}
-			JavaInterfaceCheckVisitor visitor = new JavaInterfaceCheckVisitor();
-			cu.accept(visitor);
-			int methodCount = visitor.methods;
-			methods += methodCount;
-			if (methodsMax < visitor.maxMethods)
-				methodsMax = visitor.maxMethods;
-			if (methodCount > 0 && methodsMin > visitor.minMethods)
-				methodsMin = visitor.minMethods;
-			interfacesWM += visitor.interfacesWithMethods;
-			interfaces += visitor.interfaces;
-		}
-		// System.out.println("files " + files);
-		double mean = (double) methods / interfacesWM;
-		expected += "InterfaceMax[] = " + projectId + ", " + (double)interfaces
-					+ "\nInterfaceMean[] = " + (double)interfaces 
-					+ "\nInterfaceMin[] = " + projectId +  ", " + (double)interfaces
-					+ "\nInterfaceTotal[] = " + interfaces 
-					+ "\nMethodsInterfaceMax[] = " + projectId + ", " + (double) methodsMax + "\nMethodsInterfaceMean[] = "
-					+ mean + "\nMethodsInterfaceMin[] = " + projectId + ", " + (double) methodsMin
-					+ "\nMethodsInterfaceTotal[] = " + methods + "\n";
-		queryTest("test/known-good/q13.boa", expected);
+	//	System.out.println("files " + files);
+		double mean = (double)methods /files;
+		expected += "VoidMethodsMax[] = " + projectId + ", " + (double)methodsMax 
+					+ "\nVoidMethodsMean[] = " + mean 
+					+ "\nVoidMethodsMin[] = " + projectId + ", " + (double)methodsMin 
+					+ "\nVoidMethodsTotal[] = " +  methods + "\n";
+		queryTest("test/known-good/q15.boa", expected);
 	}
-
+	
 	private static Set<RevCommit> getHeads() {
 		Git git = new Git(repository);
 		Set<RevCommit> heads = new HashSet<RevCommit>();
@@ -159,13 +154,14 @@ public class TestQ13 extends QueryTest {
 				heads.add(revwalk.parseCommit(repository.resolve(ref.getName())));
 			}
 		} catch (final GitAPIException e) {
-		} catch (final IOException e) {
+		}catch (final IOException e) {
 		}
+		git.close();
 		return heads;
 	}
-
+	
 	protected static String getFileContents(final ObjectId fileid) {
-		// ObjectId fileid = filePathGitObjectIds.get(path);
+		//ObjectId fileid = filePathGitObjectIds.get(path);
 		try {
 			buffer.reset();
 			buffer.write(repository.open(fileid, Constants.OBJ_BLOB).getCachedBytes());
@@ -173,50 +169,60 @@ public class TestQ13 extends QueryTest {
 		}
 		return buffer.toString();
 	}
-
-	public class JavaInterfaceCheckVisitor extends ASTVisitor {
+	
+	public class JavaVoidMethodCheckVisitor extends ASTVisitor {
 		public int methods = 0;
 		public int methods2 = 0;
-		public int interfacesWithMethods = 0;
-		public int interfaces = 0;
+		public int classes = 0;
 		public int maxMethods = 0;
 		public int minMethods = Integer.MAX_VALUE;
 		private Stack<Integer> methodsStack = new Stack<Integer>();
-
+		
 		@Override
 		public boolean preVisit2(ASTNode node) {
-			if (node instanceof TypeDeclaration && ((TypeDeclaration) node).isInterface()) {
+			if (node instanceof EnumDeclaration|| node instanceof TypeDeclaration && ((TypeDeclaration) node).isInterface())
+				return false;
+			if (node instanceof TypeDeclaration || node instanceof AnonymousClassDeclaration){
 				methodsStack.push(methods2);
 				methods2 = 0;
-				interfaces++;
-				return true;
-			}
-			if (node instanceof TypeDeclaration || node instanceof AnonymousClassDeclaration
-					|| node instanceof EnumDeclaration) {
-				return false;
 			}
 			return true;
 		}
-
+		
 		@Override
-		public void endVisit(TypeDeclaration node) {
-			if (node.isInterface()) {
-				if (methods2 > 0) {
-					interfacesWithMethods++;
-				}
+		public void endVisit(AnonymousClassDeclaration node) {
+			if (methods2 > 0) {
+				classes ++;
 				if (maxMethods < methods2)
 					maxMethods = methods2;
 				if (minMethods > methods2)
 					minMethods = methods2;
-				methods2 = methodsStack.pop();
-			} else
-				return;
+			}
+			
+			methods2 = methodsStack.pop();
 		}
-
+		
+		@Override
+		public void endVisit(TypeDeclaration node) {
+			if (node.isInterface())
+				return;
+			if (methods2 > 0) {
+				classes ++;
+				if (maxMethods < methods2)
+					maxMethods = methods2;
+				if (minMethods > methods2)
+					minMethods = methods2;
+			}
+			methods2 = methodsStack.pop();
+		}
+		
 		@Override
 		public boolean visit(MethodDeclaration node) {
-			methods++;
-			methods2++;
+			org.eclipse.jdt.core.dom.Type type = node.getReturnType2();
+			if (type instanceof org.eclipse.jdt.core.dom.PrimitiveType && ((org.eclipse.jdt.core.dom.PrimitiveType) type).getPrimitiveTypeCode().toString().equals("void")) {
+				methods++;
+				methods2++;
+			}
 			return true;
 		}
 	}
