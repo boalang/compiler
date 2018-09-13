@@ -3,6 +3,7 @@ package boa.test.datagen.queries;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -41,20 +43,17 @@ import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.GitConnector;
 import boa.types.Diff.ChangedFile;
 
-public class TestQ20 extends QueryTest {
+public class TestQ21 extends QueryTest {
 	static Map<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
 	protected static final ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
 	private static Repository repository;
 	private static RevWalk revwalk;
 	
 	@Test
-	public void testQ20 () throws MissingObjectException, IncorrectObjectTypeException, IOException {
-		int transientKW = 0;
-		int transientMax = 0;
-		int transientMin = Integer.MAX_VALUE;
-		int volatileKW = 0;
-		int volatileMax = 0;
-		int volatileMin = Integer.MAX_VALUE;
+	public void testQ21 () throws MissingObjectException, IncorrectObjectTypeException, IOException {
+		int fields = 0;
+		int methodsMax = 0;
+		int methodsMin = Integer.MAX_VALUE;
 		int projectId = 140492550;
 		File gitDir = new File("test/datagen/boalang/repos/boalang/test-datagen");
 		if (!gitDir.exists()) {
@@ -133,32 +132,21 @@ public class TestQ20 extends QueryTest {
 				}
 				JavaStaticFieldCheckVisitor visitor = new JavaStaticFieldCheckVisitor();
 				cu.accept(visitor);
-				int transientCount = visitor.transientKW;
-				transientKW += transientCount;
-				if (transientMax < visitor.maxTransient)
-					transientMax = visitor.maxTransient;
-				if (transientMin > visitor.minTransient)
-					transientMin = visitor.minTransient;
-				int volatileCount = visitor.volatileKW;
-				volatileKW += volatileCount;
-				if (volatileMax < visitor.maxVolatile)
-					volatileMax = visitor.maxVolatile;
-				if (volatileMin > visitor.minVolatile)
-					volatileMin = visitor.minVolatile;
+				 int FieldCount = visitor.fields;
+				fields += FieldCount;
+				if (methodsMax < visitor.maxFields)
+					methodsMax = visitor.maxFields;
+				if (FieldCount > 0 && methodsMin > visitor.minFields)
+					methodsMin = visitor.minFields;
 				files += visitor.classes;
 			}
 	//	System.out.println("files " + files);
-		double transientMean = (double)transientKW /files;
-		double volatileMean = (double)volatileKW /files;
-		expected += "TransientMax[] = " + projectId + ", " + (double)transientMax 
-					+ "\nTransientMean[] = " + transientMean 
-					+ "\nTransientMin[] = " + projectId + ", " + (double)transientMin 
-					+ "\nTransientTotal[] = " +  transientKW + "\n"
-					+ "VolatileMax[] = " + projectId + ", " + (double)volatileMax 
-					+ "\nVolatileMean[] = " + volatileMean 
-					+ "\nVolatileMin[] = " + projectId + ", " + (double)volatileMin 
-					+ "\nVolatileTotal[] = " +  volatileKW + "\n";;
-		queryTest("test/known-good/q20.boa", expected);
+		double mean = (double)fields /files;
+		expected += "StaticFieldMax[] = " + projectId + ", " + (double)methodsMax 
+					+ "\nStaticFieldMean[] = " + mean 
+					+ "\nStaticFieldMin[] = " + projectId + ", " + (double)methodsMin 
+					+ "\nStaticFieldTotal[] = " +  fields + "\n";
+		queryTest("test/known-good/q21.boa", expected);
 	}
 	
 	private static Set<RevCommit> getHeads() {
@@ -186,17 +174,12 @@ public class TestQ20 extends QueryTest {
 	}
 	
 	public class JavaStaticFieldCheckVisitor extends ASTVisitor {
-		public int transientKW = 0;
-		public int transient2 = 0;
+		public int fields = 0;
+		public int fieds2 = 0;
 		public int classes = 0;
-		public int maxTransient = 0;
-		public int minTransient = Integer.MAX_VALUE;
-		public int volatileKW = 0;
-		public int volatile2 = 0;
-		public int maxVolatile = 0;
-		public int minVolatile = Integer.MAX_VALUE;
-		private Stack<Integer> transientStack = new Stack<Integer>();
-		private Stack<Integer> volatileStack = new Stack<Integer>();
+		public int maxFields = 0;
+		public int minFields = Integer.MAX_VALUE;
+		private Stack<Integer> fieldsStack = new Stack<Integer>();
 		
 		@Override
 		public boolean preVisit2(ASTNode node) {
@@ -205,10 +188,8 @@ public class TestQ20 extends QueryTest {
 			}
 			if (node instanceof TypeDeclaration || node instanceof AnonymousClassDeclaration) {
 				classes++;
-				transientStack.push(transient2);
-				transient2 = 0;
-				volatileStack.push(transient2);
-				volatile2 = 0;
+				fieldsStack.push(fieds2);
+				fieds2 = 0;
 			}
 			return true;
 		}
@@ -244,49 +225,33 @@ public class TestQ20 extends QueryTest {
 		
 		@Override
 		public void endVisit(AnonymousClassDeclaration node) {
-			if (maxTransient < transient2)
-				maxTransient = transient2;
-			if (minTransient > transient2)
-				minTransient = transient2;
-			transient2 = transientStack.pop();
-			if (maxVolatile < volatile2)
-				maxVolatile = volatile2;
-			if (minVolatile > volatile2)
-				minVolatile = volatile2;
-			volatile2 = volatileStack.pop();
+			if (maxFields < fieds2)
+				maxFields = fieds2;
+			if (minFields > fieds2)
+				minFields = fieds2;
+			fieds2 = fieldsStack.pop();
 		}
 
 		@Override
 		public void endVisit(TypeDeclaration node) {
 			if (node.isInterface())
 				return;
-			if (maxTransient < transient2)
-				maxTransient = transient2;
-			if (minTransient > transient2)
-				minTransient = transient2;
-			transient2 = transientStack.pop();
-			if (maxVolatile < volatile2)
-				maxVolatile = volatile2;
-			if (minVolatile > volatile2)
-				minVolatile = volatile2;
-			volatile2 = volatileStack.pop();
+			if (maxFields < fieds2)
+				maxFields = fieds2;
+			if (minFields > fieds2)
+				minFields = fieds2;
+			fieds2 = fieldsStack.pop();
 		}
 		
 		@Override
 		public boolean visit(FieldDeclaration node) {
 			for (Object m : node.modifiers()) {
-				if (((org.eclipse.jdt.core.dom.Modifier) m).isTransient()) {
-					transientKW++;
-					transient2++;
-				}
-				if (((org.eclipse.jdt.core.dom.Modifier) m).isVolatile()) {
-					volatileKW++;
-					volatile2++;
+				if (((org.eclipse.jdt.core.dom.Modifier) m).isStatic()) {
+					fields++;
+					fieds2++;
 				}
 			}
 			return false;
 		}
 	}
-	
-	
 }
