@@ -163,7 +163,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 
 				while (length < MAX_OUTPUT && (numBytes = in.read(b)) > 0) {
 					length += numBytes;
-                    output += new String(b, 0, numBytes < MAX_OUTPUT ? numBytes : MAX_OUTPUT);
+					output += new String(b, 0, numBytes < MAX_OUTPUT ? numBytes : MAX_OUTPUT);
 
 					this.context.progress();
 				}
