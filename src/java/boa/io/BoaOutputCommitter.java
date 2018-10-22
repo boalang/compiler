@@ -71,7 +71,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 			switch (event.getTaskStatus()) {
 				case SUCCEEDED:
 					break;
-                default:
+				default:
 					diag += "Diagnostics for: " + event.getTaskTrackerHttp() + "\n";
 					for (final String s : job.getTaskDiagnostics(event.getTaskAttemptId()))
 						diag += s + "\n";
@@ -139,10 +139,12 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 
 			int partNum = 0;
 
-			final byte[] b = new byte[64 * 1024 * 1024];
-			long length = 0;
-			boolean hasWebResult = false;
+			final int MAX_OUTPUT = 64 * 1024 - 1;
+			final byte[] b = new byte[MAX_OUTPUT];
+			int length = 0;
+			String output = "";
 
+			// ensure the reducer class is initialized in the cleanup task
 			context.getReducerClass().newInstance();
 
 			while (true) {
@@ -159,28 +161,18 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 
 				int numBytes = 0;
 
-				while ((numBytes = in.read(b)) > 0) {
-					if (!hasWebResult) {
-						hasWebResult = true;
-
-						try {
-							ps = con.prepareStatement("UPDATE boa_output SET web_result=?, hash=MD5(web_result) WHERE id=" + jobId);
-							int webSize = 64 * 1024 - 1;
-							ps.setString(1, new String(b, 0, numBytes < webSize ? numBytes : webSize));
-							ps.executeUpdate();
-						} finally {
-							try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
-						}
-					}
+				while (length < MAX_OUTPUT && (numBytes = in.read(b)) > 0) {
 					length += numBytes;
+                    output += new String(b, 0, numBytes < MAX_OUTPUT ? numBytes : MAX_OUTPUT);
 
 					this.context.progress();
 				}
 			}
 
 			try {
-				ps = con.prepareStatement("UPDATE boa_output SET length=? WHERE id=" + jobId);
+				ps = con.prepareStatement("UPDATE boa_output SET length=?, web_result=?, hash=MD5(web_result) WHERE id=" + jobId);
 				ps.setLong(1, length);
+				ps.setString(2, output.substring(0, length < MAX_OUTPUT ? length : MAX_OUTPUT));
 				ps.executeUpdate();
 			} finally {
 				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }

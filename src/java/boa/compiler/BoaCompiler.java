@@ -241,15 +241,16 @@ public class BoaCompiler extends BoaMain {
 
 			final ST st = AbstractCodeGeneratingVisitor.stg.getInstanceOf("Program");
 
-			List<String> variableNames = new ArrayList<String>();
+			final List<String> variableNames = new ArrayList<String>();
 			String outputVariableNames = "";
-			for (String s : CodeGeneratingVisitor.reduceAggregatorStrings) {
-				s = s.substring(s.lastIndexOf(':') + 1, s.lastIndexOf('\"'));
-				variableNames.add(s);
-			}
+			for (final String s : CodeGeneratingVisitor.reduceAggregatorStrings)
+				variableNames.add(s.substring(s.lastIndexOf(':') + 1, s.lastIndexOf('\"')));
 			Collections.sort(variableNames);
-			for (String s : variableNames)
-				outputVariableNames += (outputVariableNames.length() == 0 ? "" : ",") + "\"" + s + "\"";
+			for (final String s : variableNames) {
+				if (outputVariableNames.length() > 0)
+					outputVariableNames += ", ";
+				outputVariableNames += "\"" + s + "\"";
+            }
 
 			st.add("name", className);
 			st.add("numreducers", inputFiles.size());
