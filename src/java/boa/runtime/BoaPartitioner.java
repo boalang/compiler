@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer, Che Shian Hung
  *                 and Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +27,28 @@ import boa.io.EmitValue;
  * keys from each job to its own reducer.
  * 
  * @author rdyer
+ * @author hungc
  */
 public class BoaPartitioner extends Partitioner<EmitKey, EmitValue> {
+	private static String[] outputVariableNames = new String[0];
+
 	public int getPartition(final EmitKey key, final EmitValue value, final int num) {
-		return key.getId() % num;
+		return getPartitionForVariable(key.getName());
+	}
+
+	public static void setVariableNames(final String[] names) {
+		outputVariableNames = names;
+	}
+
+	public static String getVariableFromPartition(int pIndex) {
+		return outputVariableNames[pIndex];
+	}
+
+	public static int getPartitionForVariable(final String s) {
+		for (int i = 0; i < outputVariableNames.length; i++){
+			if (outputVariableNames[i].equals(s))
+				return i;
+		}
+		return 0;
 	}
 }

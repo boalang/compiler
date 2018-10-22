@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Neha Bhide
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Neha Bhide, Che Shian Hung
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
+import java.util.Collections;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
@@ -82,6 +83,7 @@ import boa.parser.BoaLexer;
  * @author anthonyu
  * @author rdyer
  * @author nbhide
+ * @author hungc
  */
 public class BoaCompiler extends BoaMain {
 	
@@ -239,6 +241,16 @@ public class BoaCompiler extends BoaMain {
 
 			final ST st = AbstractCodeGeneratingVisitor.stg.getInstanceOf("Program");
 
+			List<String> variableNames = new ArrayList<String>();
+			String outputVariableNames = "";
+			for (String s : CodeGeneratingVisitor.reduceAggregatorStrings) {
+				s = s.substring(s.lastIndexOf(':') + 1, s.lastIndexOf('\"'));
+				variableNames.add(s);
+			}
+			Collections.sort(variableNames);
+			for (String s : variableNames)
+				outputVariableNames += (outputVariableNames.length() == 0 ? "" : ",") + "\"" + s + "\"";
+
 			st.add("name", className);
 			st.add("numreducers", inputFiles.size());
 			st.add("jobs", jobs);
@@ -247,6 +259,7 @@ public class BoaCompiler extends BoaMain {
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
 			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
 			st.add("seeds", seeds);
+			st.add("outputVariableNames", outputVariableNames);
 			if (DefaultProperties.localDataPath != null) {
 				st.add("isLocal", true);
 			}
