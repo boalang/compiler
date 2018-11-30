@@ -108,14 +108,14 @@ public class BoaGenerator {
 		options.addOption("commits", "commits", true, "maximum number of commits of a project to be stored in the project object");
 		options.addOption("size", "size", true, "maximum size of a project object to be stored");
 		options.addOption("libs", "libs", true, "directory to store libraries");
-		options.addOption("output", "json", true, "directory where output is desired");
-		options.addOption("user", "json", true, "github username to authenticate");
-		options.addOption("password", "json", true, "github password to authenticate.");
-		options.addOption("targetUser", "json", true, "username of target repository");
-		options.addOption("targetRepo", "json", true, "name of the target repository");
-		options.addOption("cache", "json", false, "enable if you want to delete the cloned code for user.");
-		options.addOption("debug", "json", false, "enable for debug mode.");
-		options.addOption("debugparse", "json", false, "enable for debug mode when parsing source files.");
+		options.addOption("output", "output", true, "directory where output is desired");
+		options.addOption("user", "user", true, "github username to authenticate");
+		options.addOption("password", "password", true, "github password to authenticate.");
+		options.addOption("targetUser", "targetUser", true, "username of target repository");
+		options.addOption("targetRepo", "targetRepo", true, "name of the target repository");
+		options.addOption("cache", "cache", false, "enable if you want to delete the cloned code for user.");
+		options.addOption("debug", "debug", false, "enable for debug mode.");
+		options.addOption("debugparse", "debugparse", false, "enable for debug mode when parsing source files.");
 		options.addOption("help", "help", true, "help");
 	}
 
