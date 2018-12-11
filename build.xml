@@ -85,7 +85,7 @@
 
 	<target name="-translate-protobuf" depends="-check-protobuf" unless="protobuf.uptodate">
 		<echo level="error" message="Translating Protocol Buffer files to Java" />
-		 <apply executable="protoc" parallel="true"> 
+		 <apply executable="/Users/hoan/workspace/boa-compiler/protoc" parallel="true"> 
 			<arg value="--proto_path=${src.proto}" />
 			<arg value="--java_out=src/compiled-proto" />
 			<srcfile />
@@ -184,7 +184,7 @@
 				<fileset dir="build/tests">
 					<include name="boa/test/compiler/Test*.class" /> 
 					<include name="boa/test/functions/Test*.class" /> 
-					<include name="boa/test/datagen/Test*.class" />
+					<!--include name="boa/test/datagen/Test*.class" /-->
 					<include name="boa/test/datagen/queries/Test*.class" />
 					<include name="boa/test/datagen/java/Test*.class" /> 
 					<include name="boa/test/datagen/js/Test*.class" />  
