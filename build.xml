@@ -185,7 +185,7 @@
 					<include name="boa/test/compiler/Test*.class" /> 
 					<include name="boa/test/functions/Test*.class" /> 
 					<!--include name="boa/test/datagen/Test*.class" /-->
-					<include name="boa/test/datagen/queries/Test*.class" />
+					<!--include name="boa/test/datagen/queries/Test*.class" /-->
 					<include name="boa/test/datagen/java/Test*.class" /> 
 					<include name="boa/test/datagen/js/Test*.class" />  
 					<include name="boa/test/datagen/php/Test*.class" />  
