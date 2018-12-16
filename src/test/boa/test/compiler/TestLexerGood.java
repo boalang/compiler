@@ -85,8 +85,8 @@ public class TestLexerGood extends BaseTest {
 	@Test
 	public void identifierLiterals() throws IOException {
 		lex(load(rootDir + "identifier-lit.boa"),
-			new int[] { BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.EOF },
-			new String[] { "valid_", "valid0", "valid0_", "Valid_0_valid", "<EOF>" });
+			new int[] { BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.EOF },
+			new String[] { "valid_", "valid0", "valid0_", "Valid_0_valid", "_valid", "_val_id", "<EOF>" });
 	}
 
 	@Test

@@ -882,8 +882,17 @@ TimeLiteral
 //
 
 Identifier
-	: [a-zA-Z] [a-zA-Z0-9_]*
+	: WILDCARD? [a-zA-Z] [a-zA-Z0-9_]*
 	;
+
+//
+// views
+//
+
+VIEW 		: 'view';
+TABLE 		: 'table';
+JTABLE		: 'J' DecimalNumeral DIV Identifier;
+ATTABLE 	: '@' Identifier DIV Identifier DIV Identifier;
 
 //
 // whitespace and comments

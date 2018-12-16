@@ -55,6 +55,7 @@ type
 	| setType
 	| enumType
 	| identifier
+	| tableType
 	;
 
 component
@@ -115,6 +116,10 @@ visitorType
 traversalType
 	: TRAVERSAL
 	;
+
+tableType
+	: TABLE (LBRACKET component RBRACKET)* OF LBRACKET component RBRACKET
+    ;
 
 statement
 	: block
@@ -210,6 +215,10 @@ switchCase
 foreachStatement
 	: FOREACH LPAREN identifier COLON type SEMICOLON expression RPAREN programStatement
 	;
+
+foreachViewStatement
+    : FOREACH LPAREN identifier RSHIFT identifier RPAREN programStatement
+    ;
 
 existsStatement
 	: EXISTS LPAREN identifier COLON type SEMICOLON expression RPAREN programStatement
@@ -395,6 +404,15 @@ stringLiteral
 timeLiteral
 	: TimeLiteral
 	;
+
+table
+	: JTABLE
+	| ATTABLE
+	;
+
+subView
+    : VIEW identifier LBRACE program RBRACE
+    ;
 
 
 ////////////
@@ -613,8 +631,17 @@ TimeLiteral
 //
 
 Identifier
-	: [a-zA-Z] [a-zA-Z0-9_]*
+	: WILDCARD? [a-zA-Z] [a-zA-Z0-9_]*
 	;
+
+//
+// views
+//
+
+VIEW 		: 'view';
+TABLE 		: 'table';
+JTABLE		: 'J' DecimalNumeral DIV identifier;
+ATTABLE 	: '@' identifier DIV identifier DIV identifier;
 
 //
 // whitespace and comments

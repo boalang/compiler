@@ -38,6 +38,6 @@ public class TestLexerBad extends BaseTest {
 		lex(load(badDir + "bad-comment.boa"),
 			new int[] { BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.EOF },
 			new String[] { "bad", "comment", "<EOF>" },
-			new String[] { "1,0: token recognition error at: '@'" });
+			new String[] { "1,0: token recognition error at: '@ '" });
 	}
 }
