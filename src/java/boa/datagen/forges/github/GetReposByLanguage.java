@@ -13,8 +13,13 @@ import boa.datagen.util.FileIO;
 public class GetReposByLanguage {
 	
 	public static void main(String[] args) {
-		String[] languages = {"java", "javascript", "php"};
 		TokenList tokens = new TokenList(args[0]);
+		String[] languages = {"java"};
+		if (args.length > 1) {
+			languages = new String[args.length - 1];
+			for (int i = 1; i < args.length; i++)
+				languages[i-1] = args[i];
+		}
 		Thread[] workers = new Thread[languages.length];
 		for (int i =0; i < languages.length; i++) {
 			workers[i] = new Thread(new Worker(i,languages[i],args[1], tokens));
