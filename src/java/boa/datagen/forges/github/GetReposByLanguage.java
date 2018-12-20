@@ -16,15 +16,15 @@ public class GetReposByLanguage {
 	public static void main(String[] args) {
 		TokenList tokens = new TokenList(args[0]);
 		String outDir = args[1];
-		String[] languages = {"java"};
+		String[] languages = { "java" };
 		if (args.length > 2) {
 			languages = new String[args.length - 2];
 			for (int i = 2; i < args.length; i++)
-				languages[i-2] = args[i];
+				languages[i - 2] = args[i];
 		}
 		Thread[] workers = new Thread[languages.length];
-		for (int i =0; i < languages.length; i++) {
-			workers[i] = new Thread(new Worker(i,languages[i], outDir, tokens));
+		for (int i = 0; i < languages.length; i++) {
+			workers[i] = new Thread(new Worker(i, languages[i], outDir, tokens));
 			workers[i].start();
 		}
 		for (Thread thread : workers)
