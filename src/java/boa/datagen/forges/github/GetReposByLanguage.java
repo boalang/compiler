@@ -1,8 +1,6 @@
 package boa.datagen.forges.github;
 
 import java.io.File;
-import java.util.HashSet;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -14,15 +12,16 @@ public class GetReposByLanguage {
 	
 	public static void main(String[] args) {
 		TokenList tokens = new TokenList(args[0]);
+		String outDir = args[1];
 		String[] languages = {"java"};
-		if (args.length > 1) {
-			languages = new String[args.length - 1];
-			for (int i = 1; i < args.length; i++)
-				languages[i-1] = args[i];
+		if (args.length > 2) {
+			languages = new String[args.length - 2];
+			for (int i = 2; i < args.length; i++)
+				languages[i-2] = args[i];
 		}
 		Thread[] workers = new Thread[languages.length];
 		for (int i =0; i < languages.length; i++) {
-			workers[i] = new Thread(new Worker(i,languages[i],args[1], tokens));
+			workers[i] = new Thread(new Worker(i,languages[i], outDir, tokens));
 			workers[i].start();
 		}
 		for (Thread thread : workers)
@@ -53,12 +52,10 @@ public class GetReposByLanguage {
 		
 		@Override
 		public void run() {
-	//		HashSet<String> names = new HashSet<>();
-			String time = "2018-08-18T01:01:01Z";
+			String time = "2018-12-21T01:01:01Z";
 			Gson parser = new Gson();
 			
 			while (true){
-				String pushedName = "";
 				Token tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
 				String url = "https://api.github.com/search/repositories?q=language:" + language +"+stars:>1+pushed:<=" + time + "&sort=updated&order=desc&per_page=100";
 				System.out.println(url);
@@ -83,8 +80,6 @@ public class GetReposByLanguage {
 			        for (int j = 0; j < items.size(); j++) {
 			        	JsonObject item = items.get(j).getAsJsonObject();
 			        	this.addRepo(item);
-			        	String name = item.get("full_name").getAsString();
-			        //	names.add(name);
 			        	String pushed = item.get("pushed_at").getAsString();
 			        	if (pushed.compareTo(time) < 0){
 			        		time = pushed;
