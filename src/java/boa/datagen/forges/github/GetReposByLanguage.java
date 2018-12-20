@@ -1,6 +1,9 @@
 package boa.datagen.forges.github;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -52,7 +55,14 @@ public class GetReposByLanguage {
 		
 		@Override
 		public void run() {
-			String time = "2018-12-21T01:01:01Z";
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(new Date());
+			cal.add(Calendar.DATE, 1);
+			int year = cal.get(Calendar.YEAR);
+			int month = cal.get(Calendar.MONTH) + 1; // month starts from 0
+			int day = cal.get(Calendar.DAY_OF_MONTH);
+//			String time = "2018-12-21T01:01:01Z";
+			String time = year + "-" + month + "-" + day + "T23:59:59Z";
 			Gson parser = new Gson();
 			
 			while (true){
