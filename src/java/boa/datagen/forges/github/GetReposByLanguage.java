@@ -112,10 +112,6 @@ public class GetReposByLanguage {
 				}
 			}
 			writeRemainingRepos();
-		//	StringBuilder sb = new StringBuilder();
-	    //	for (String name : names)
-	    //		sb.append(name + "\n");
-	    //    FileIO.writeFileContents(new File( outDir + "names/names.txt"), sb.toString());
 		} 
 		
 		private void addRepo(JsonObject repo) {
@@ -125,11 +121,9 @@ public class GetReposByLanguage {
 				fileToWriteJson = new File(
 						outDir + "/Thread-" + this.id + "-page-" + counter + ".json");
 				while (fileToWriteJson.exists()) {
-					System.out.println("file scala/thread-" + this.id + "-page-" + counter
-							+ " arleady exist");
+					System.out.println(fileToWriteJson.getAbsolutePath() + " arleady exist");
 					counter++;
-					fileToWriteJson = new File(
-							outDir + "/Thread-" + this.id + "-page-" + counter + ".json");
+					fileToWriteJson = new File(outDir + "/Thread-" + this.id + "-page-" + counter + ".json");
 				}
 				FileIO.writeFileContents(fileToWriteJson, this.repos.toString());
 				System.out.println(Thread.currentThread().getId() + " " + counter++);
