@@ -190,6 +190,12 @@ public abstract class AbstractVisitorNoArgNoRet {
 		n.getBody().accept(this);
 	}
 
+	public void visit(final ForeachViewStatement n) {
+		n.getTableIdentifier().accept(this);
+		n.getRowIdentifier().accept(this);
+		n.getBody().accept(this);
+	}
+
 	public void visit(final ForStatement n) {
 		if (n.hasInit())
 			n.getInit().accept(this);
@@ -409,5 +415,19 @@ public abstract class AbstractVisitorNoArgNoRet {
 	}
 
 	public void visit(final FixPType n) {
+	}
+
+	public void visit(final TableType n) {
+		for (final Component c : n.getIndices())
+			c.accept(this);
+		n.getType().accept(this);
+	}
+
+	public void visit(final Table n) {
+	}
+
+	public void visit(final SubView n) {
+		n.getId().accept(this);
+		n.getProgram().accept(this);
 	}
 }

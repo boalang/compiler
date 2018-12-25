@@ -183,6 +183,12 @@ public abstract class AbstractVisitorNoReturn<ArgTypeT> {
 		n.getBody().accept(this, arg);
 	}
 
+	public void visit(final ForeachViewStatement n, final ArgTypeT arg) {
+		n.getTableIdentifier().accept(this, arg);
+		n.getRowIdentifier().accept(this, arg);
+		n.getBody().accept(this, arg);
+	}
+
 	public void visit(final ForStatement n, final ArgTypeT arg) {
 		if (n.hasInit())
 			n.getInit().accept(this, arg);
@@ -401,5 +407,19 @@ public abstract class AbstractVisitorNoReturn<ArgTypeT> {
 	}
 
 	public void visit(final FixPType n, final ArgTypeT arg) {
+	}
+
+	public void visit(final TableType n, final ArgTypeT arg) {
+		for (final Component c : n.getIndices())
+			c.accept(this, arg);
+		n.getType().accept(this, arg);
+	}
+
+	public void visit(final Table n, final ArgTypeT arg) {
+	}
+
+	public void visit(final SubView n, final ArgTypeT arg) {
+		n.getId().accept(this, arg);
+		n.getProgram().accept(this, arg);
 	}
 }

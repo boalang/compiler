@@ -408,6 +408,7 @@ timeLiteral
 table
 	: JTABLE
 	| ATTABLE
+	| SUBVIEWTABLE
 	;
 
 subView
@@ -642,6 +643,7 @@ VIEW 		: 'view';
 TABLE 		: 'table';
 JTABLE		: 'J' DecimalNumeral DIV identifier;
 ATTABLE 	: '@' identifier DIV identifier DIV identifier;
+SUBVIEWTABLE: identifier DIV identifier;
 
 //
 // whitespace and comments

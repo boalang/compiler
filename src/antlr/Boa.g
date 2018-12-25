@@ -70,6 +70,7 @@ program returns [Program ast]
 programStatement returns [Statement ast]
 	: d=declaration { $ast = $d.ast; }
 	| s=statement   { $ast = $s.ast; }
+	| sv=subView 	{ $ast = $sv.ast; }
 	;
 
 declaration returns [Statement ast]
@@ -111,6 +112,7 @@ type returns [AbstractType ast]
 	| s=stackType    { $ast = $s.ast; }
 	| set=setType    { $ast = $set.ast; }
 	| e=enumType     { $ast = $e.ast; }
+	| tt=tableType 	 { $ast = $tt.ast; }
 	| id=identifier  { $ast = $id.ast; }
 	;
 
@@ -224,6 +226,16 @@ traversalType returns [TraversalType ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: t=TRAVERSAL { $ast = new TraversalType(); }
+	;
+
+tableType returns [TableType ast]
+	locals [int l, int c]
+	@init {
+		$l = getStartLine(); $c = getStartColumn();
+		$ast = new TableType();
+	}
+	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
+	: TABLE (LBRACKET m=component RBRACKET { $ast.addIndice($m.ast); })* OF LBRACKET m=component RBRACKET { $ast.setType($m.ast); }
 	;
 
 statement returns [Statement ast]
@@ -374,6 +386,13 @@ foreachStatement returns [ForeachStatement ast]
 	: FOREACH LPAREN id=identifier COLON t=type SEMICOLON e=expression RPAREN s=programStatement { $ast = new ForeachStatement((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn), $e.ast, $s.ast);}
 	;
 
+foreachViewStatement returns [ForeachViewStatement ast]
+	locals [int l, int c]
+	@init { $l = getStartLine(); $c = getStartColumn(); }
+	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
+	: FOREACH LPAREN tid=identifier RSHIFT rid=identifier RPAREN s=programStatement { $ast = new ForeachViewStatement($tid.ast, $rid.ast, $s.ast); }
+	;
+
 existsStatement returns [ExistsStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
@@ -519,6 +538,7 @@ operand returns [Operand ast]
 	| DOLLAR                                       // TODO
 	| pe=parenExpression                           { $ast = $pe.ast; }
 	| id=identifier                                { $ast = $id.ast; }
+	| tb=table									   { $ast = $tb.ast; }
 	;
 
 unaryFactor returns [UnaryFactor ast]
@@ -626,6 +646,7 @@ identifier returns [Identifier ast]
 	| lit=BEFORE   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=AFTER    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=STOP     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=TABLE     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	;
 
 integerLiteral returns [IntegerLiteral ast]
@@ -663,6 +684,22 @@ timeLiteral returns [TimeLiteral ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: lit=TimeLiteral { $ast = new TimeLiteral($lit.text); }
+	;
+
+table returns [Table ast]
+	locals [int l, int c]
+	@init { $l = getStartLine(); $c = getStartColumn(); }
+	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
+	: t=JTABLE {$ast = new Table($t.text); }
+	| t=ATTABLE {$ast = new Table($t.text); }
+	| t=SUBVIEWTABLE {$ast = new Table($t.text); }
+	;
+
+subView returns [SubView ast]
+	locals [int l, int c]
+	@init { $l = getStartLine(); $c = getStartColumn(); }
+	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
+	: VIEW id=identifier LBRACE p=program RBRACE { $ast = new SubView($id.ast, $p.ast); }
 	;
 
 
@@ -893,6 +930,7 @@ VIEW 		: 'view';
 TABLE 		: 'table';
 JTABLE		: 'J' DecimalNumeral DIV Identifier;
 ATTABLE 	: '@' Identifier DIV Identifier DIV Identifier;
+SUBVIEWTABLE: Identifier DIV Identifier;
 
 //
 // whitespace and comments
