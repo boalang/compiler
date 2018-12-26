@@ -15,8 +15,8 @@
  */
 package boa.compiler.ast.statements;
 
-import boa.compiler.ast.Program;
 import boa.compiler.ast.Identifier;
+import boa.compiler.ast.statements.Block;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
@@ -28,23 +28,23 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  */
 public class SubView extends Statement {
 	protected Identifier id;
-	protected Program p;
+	protected Block b;
 
 	public Identifier getId() {
 		return id;
 	}
 
-	public Program getProgram() {
-		return p;
+	public Block getBlock() {
+		return b;
 	}
 
-	public SubView (final Identifier id, final Program p) {
+	public SubView (final Identifier id, final Block b) {
 		if (id != null)
 			id.setParent(this);
-		if (p != null)
-			p.setParent(this);
+		if (b != null)
+			b.setParent(this);
 		this.id = id;
-		this.p = p;
+		this.b = b;
 	}
 
 	/** {@inheritDoc} */
@@ -66,7 +66,7 @@ public class SubView extends Statement {
 	}
 
 	public SubView clone() {
-		final SubView sv = new SubView(id.clone(), p.clone());
+		final SubView sv = new SubView(id.clone(), b.clone());
 		copyFieldsTo(sv);
 		return sv;
 	}

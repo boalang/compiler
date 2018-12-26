@@ -70,13 +70,13 @@ program returns [Program ast]
 programStatement returns [Statement ast]
 	: d=declaration { $ast = $d.ast; }
 	| s=statement   { $ast = $s.ast; }
-	| sv=subView 	{ $ast = $sv.ast; }
 	;
 
 declaration returns [Statement ast]
 	: t=typeDeclaration           { $ast = $t.ast; }
 	| s=staticVariableDeclaration { $ast = $s.ast; }
 	| v=variableDeclaration       { $ast = $v.ast; }
+	| sv=subView 				  { $ast = $sv.ast; }
 	;
 
 typeDeclaration returns [TypeDecl ast]
@@ -386,13 +386,6 @@ foreachStatement returns [ForeachStatement ast]
 	: FOREACH LPAREN id=identifier COLON t=type SEMICOLON e=expression RPAREN s=programStatement { $ast = new ForeachStatement((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn), $e.ast, $s.ast);}
 	;
 
-foreachViewStatement returns [ForeachViewStatement ast]
-	locals [int l, int c]
-	@init { $l = getStartLine(); $c = getStartColumn(); }
-	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: FOREACH LPAREN tid=identifier RSHIFT rid=identifier RPAREN s=programStatement { $ast = new ForeachViewStatement($tid.ast, $rid.ast, $s.ast); }
-	;
-
 existsStatement returns [ExistsStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
@@ -699,7 +692,7 @@ subView returns [SubView ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: VIEW id=identifier LBRACE p=program RBRACE { $ast = new SubView($id.ast, $p.ast); }
+	: VIEW id=identifier b=block { $ast = new SubView($id.ast, $b.ast); }
 	;
 
 
@@ -915,22 +908,22 @@ TimeLiteral
 	;
 
 //
+// views
+//
+
+VIEW 		: 'view';
+TABLE 		: 'table';
+JTABLE		: 'J' DecimalNumeral (DIV Identifier)+;
+ATTABLE 	: '@' Identifier DIV Identifier (DIV Identifier)+;
+SUBVIEWTABLE: Identifier (DIV Identifier)+;
+
+//
 // identifiers
 //
 
 Identifier
 	: WILDCARD? [a-zA-Z] [a-zA-Z0-9_]*
 	;
-
-//
-// views
-//
-
-VIEW 		: 'view';
-TABLE 		: 'table';
-JTABLE		: 'J' DecimalNumeral DIV Identifier;
-ATTABLE 	: '@' Identifier DIV Identifier DIV Identifier;
-SUBVIEWTABLE: Identifier DIV Identifier;
 
 //
 // whitespace and comments

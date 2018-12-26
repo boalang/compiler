@@ -28,6 +28,7 @@ declaration
 	: typeDeclaration
 	| staticVariableDeclaration
 	| variableDeclaration
+	| subView
 	;
 
 typeDeclaration
@@ -216,10 +217,6 @@ foreachStatement
 	: FOREACH LPAREN identifier COLON type SEMICOLON expression RPAREN programStatement
 	;
 
-foreachViewStatement
-    : FOREACH LPAREN identifier RSHIFT identifier RPAREN programStatement
-    ;
-
 existsStatement
 	: EXISTS LPAREN identifier COLON type SEMICOLON expression RPAREN programStatement
 	;
@@ -310,6 +307,7 @@ operand
 	| DOLLAR
 	| parenExpression
 	| identifier
+	| table
 	;
 
 unaryFactor
@@ -412,7 +410,7 @@ table
 	;
 
 subView
-    : VIEW identifier LBRACE program RBRACE
+    : VIEW identifier BLOCK
     ;
 
 
@@ -628,22 +626,22 @@ TimeLiteral
 	;
 
 //
+// views
+//
+
+VIEW 		: 'view';
+TABLE 		: 'table';
+JTABLE		: 'J' DecimalNumeral (DIV Identifier)+;
+ATTABLE 	: '@' Identifier DIV Identifier (DIV Identifier)+;
+SUBVIEWTABLE: Identifier (DIV Identifier)+;
+
+//
 // identifiers
 //
 
 Identifier
 	: WILDCARD? [a-zA-Z] [a-zA-Z0-9_]*
 	;
-
-//
-// views
-//
-
-VIEW 		: 'view';
-TABLE 		: 'table';
-JTABLE		: 'J' DecimalNumeral DIV identifier;
-ATTABLE 	: '@' identifier DIV identifier DIV identifier;
-SUBVIEWTABLE: identifier DIV identifier;
 
 //
 // whitespace and comments

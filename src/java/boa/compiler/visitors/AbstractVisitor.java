@@ -209,13 +209,6 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 		return null;
 	}
 
-	public ReturnTypeT visit(final ForeachViewStatement n, final ArgTypeT arg) {
-		n.getTableIdentifier().accept(this, arg);
-		n.getRowIdentifier().accept(this, arg);
-		n.getBody().accept(this, arg);
-		return null;
-	}
-
 	public ReturnTypeT visit(final ForStatement n, final ArgTypeT arg) {
 		if (n.hasInit())
 			n.getInit().accept(this, arg);
@@ -486,7 +479,7 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 
 	public ReturnTypeT visit(final SubView n, final ArgTypeT arg) {
 		n.getId().accept(this, arg);
-		n.getProgram().accept(this, arg);
+		n.getBlock().accept(this, arg);
 		return null;
 	}
 }
