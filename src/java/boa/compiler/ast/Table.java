@@ -15,6 +15,9 @@
  */
 package boa.compiler.ast;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
@@ -25,76 +28,87 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hungc
  */
 public class Table extends Operand {
-	protected String jobName;
+	protected Integer jobNum;
 	protected String userName;
-	protected String tagName;
+	protected String viewName;
 	protected String outputName;
-	protected String subViewId;
+	protected List<String> subViews;
 
-	public String getJobName () {
-		return jobName;
+	public Integer getJobNum () {
+		return jobNum;
 	}
 
 	public String getUserName () {
 		return userName;
 	}
 
-	public String getTagName () {
-		return tagName;
+	public String getViewName () {
+		return viewName;
 	}
 
 	public String getOutputName () {
 		return outputName;
 	}
 
-	public String getSubViewId () {
-		return subViewId;
+	public List<String> getSubViews () {
+		return subViews;
+	}
+
+	public void addSubView(String sv) {
+		if (subViews == null)
+			subViews = new ArrayList<String>();
+		subViews.add(sv);
 	}
 
 	public Table (final String s) {
 		if (s != null) {
 			String[] ary = s.split("/");
+			outputName = ary[ary.length - 1];
+			subViews = new ArrayList<String>();
 			switch (s.charAt(0)) {
 				case 'J':
-				jobName = ary[0].substring(1);
-				outputName = ary[1];
+				jobNum = Integer.parseInt(ary[0].substring(1));
 				userName = null;
-				tagName = null;
-				subViewId = null;
+				viewName = null;
+				for (int i = 1; i < ary.length - 1; i++) {
+					subViews.add(ary[i]);
+				}
 				break;
 
 				case '@':
 				userName = ary[0].substring(1);
-				tagName = ary[1];
-				outputName = ary[2];
-				jobName = null;
-				subViewId = null;
+				viewName = ary[1];
+				jobNum = null;
+				for (int i = 2; i < ary.length - 1; i++) {
+					subViews.add(ary[i]);
+				}
 				break;
 
 				default:
-				subViewId = ary[0];
-				outputName = ary[1];
-				jobName = null;
+				viewName = ary[0];
+				jobNum = null;
 				userName = null;
-				tagName = null;
+				for (int i = 1; i < ary.length - 1; i++) {
+					subViews.add(ary[i]);
+				}
 				break;
 			}
 		}
 		else  {
-			this.jobName = null;
+			this.jobNum = null;
 			this.userName = null;
-			this.tagName = null;
+			this.viewName = null;
 			this.outputName = null;
-			this.subViewId = null;
+			this.subViews = null;
 		}
 	}
 
-	public Table (final String jobName, final String userName, final String tagName, final String outputName, final String subViewId) {
-		this.jobName = jobName;
+	public Table (final Integer jobNum, final String userName, final String viewName, final String outputName, final List<String> subViews) {
+		this.jobNum = jobNum;
 		this.userName = userName;
-		this.tagName = tagName;
+		this.viewName = viewName;
 		this.outputName = outputName;
-		this.subViewId = subViewId;
+		this.subViews = subViews;
 	}
 
 	/** {@inheritDoc} */
@@ -116,7 +130,10 @@ public class Table extends Operand {
 	}
 
 	public Table clone() {
-		final Table p = new Table(jobName, userName, tagName, outputName, subViewId);
+		final Table p = new Table(new Integer(jobNum), userName, viewName, outputName, null);
+		for (String sv : subViews) {
+			p.addSubView(sv);
+		}
 		copyFieldsTo(p);
 		return p;
 	}

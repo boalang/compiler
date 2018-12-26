@@ -922,7 +922,7 @@ SUBVIEWTABLE: Identifier (DIV Identifier)+;
 //
 
 Identifier
-	: WILDCARD? [a-zA-Z] [a-zA-Z0-9_]*
+	: '_'? [a-zA-Z] [a-zA-Z0-9_]*
 	;
 
 //
