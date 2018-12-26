@@ -131,7 +131,7 @@ public abstract class BaseTest {
 			}
 			assertEquals("wrong number of tokens", ids.length, t.size());
 			for (int i = 0; i < t.size(); i++)
-				assertEquals("wrong token type", ids[i], t.get(i).getType());
+				assertEquals("wrong token type", BoaLexer.VOCABULARY.getDisplayName(ids[i]), BoaLexer.VOCABULARY.getDisplayName(t.get(i).getType()));
 		}
 
 		if (strings.length > 0) {

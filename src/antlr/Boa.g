@@ -235,7 +235,7 @@ tableType returns [TableType ast]
 		$ast = new TableType();
 	}
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: TABLE (LBRACKET m=component RBRACKET { $ast.addIndice($m.ast); })* OF LBRACKET m=component RBRACKET { $ast.setType($m.ast); }
+	: TABLE (LBRACKET m=component RBRACKET { $ast.addIndice($m.ast); })* OF m=component { $ast.setType($m.ast); }
 	;
 
 statement returns [Statement ast]
@@ -524,7 +524,7 @@ operand returns [Operand ast]
 	| fp=floatingPointLiteral                      { $ast = $fp.ast; }
 	| comp=composite                               { $ast = $comp.ast; }
 	| fe=functionExpression                        { $ast = $fe.ast; }
-	| fixpe=fixpExpression                        { $ast = $fixpe.ast; }
+	| fixpe=fixpExpression                         { $ast = $fixpe.ast; }
 	| v=visitorExpression                          { $ast = $v.ast; }
 	| tr=traversalExpression                       { $ast = $tr.ast; }
 	| uf=unaryFactor                               { $ast = $uf.ast; }
@@ -633,13 +633,14 @@ identifier returns [Identifier ast]
 	| lit=DEFAULT  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=CONTINUE { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FUNCTION { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
-	| lit=FIXP { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=FIXP     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=VISITOR  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
-	| lit=TRAVERSAL  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=TRAVERSAL{ notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=BEFORE   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=AFTER    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=STOP     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
-	| lit=TABLE     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=TABLE    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=VIEW     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	;
 
 integerLiteral returns [IntegerLiteral ast]
@@ -683,9 +684,7 @@ table returns [Table ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: t=JTABLE {$ast = new Table($t.text); }
-	| t=ATTABLE {$ast = new Table($t.text); }
-	| t=SUBVIEWTABLE {$ast = new Table($t.text); }
+	: t=VIEWTABLE {$ast = new Table($t.text); }
 	;
 
 subView returns [SubView ast]
@@ -913,9 +912,10 @@ TimeLiteral
 
 VIEW 		: 'view';
 TABLE 		: 'table';
-JTABLE		: 'J' DecimalNumeral (DIV Identifier)+;
-ATTABLE 	: '@' Identifier DIV Identifier (DIV Identifier)+;
-SUBVIEWTABLE: Identifier (DIV Identifier)+;
+VIEWTABLE	: 'J' DecimalNumeral (DIV Identifier)+
+            | '@' Identifier DIV Identifier (DIV Identifier)+
+            | Identifier (DIV Identifier)+
+            ;
 
 //
 // identifiers

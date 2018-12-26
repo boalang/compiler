@@ -119,7 +119,7 @@ traversalType
 	;
 
 tableType
-	: TABLE (LBRACKET component RBRACKET)* OF LBRACKET component RBRACKET
+	: TABLE (LBRACKET component RBRACKET)* OF component
     ;
 
 statement
@@ -379,6 +379,8 @@ identifier
 	| lit=BEFORE   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=AFTER    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=STOP     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=TABLE    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=VIEW     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	;
 
 integerLiteral
@@ -404,9 +406,7 @@ timeLiteral
 	;
 
 table
-	: JTABLE
-	| ATTABLE
-	| SUBVIEWTABLE
+	: VIEWTABLE
 	;
 
 subView
@@ -631,9 +631,10 @@ TimeLiteral
 
 VIEW 		: 'view';
 TABLE 		: 'table';
-JTABLE		: 'J' DecimalNumeral (DIV Identifier)+;
-ATTABLE 	: '@' Identifier DIV Identifier (DIV Identifier)+;
-SUBVIEWTABLE: Identifier (DIV Identifier)+;
+VIEWTABLE	: 'J' DecimalNumeral (DIV Identifier)+
+			| '@' Identifier DIV Identifier (DIV Identifier)+
+			| Identifier (DIV Identifier)+
+			;
 
 //
 // identifiers

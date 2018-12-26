@@ -1,0 +1,17 @@
+view
+table
+
+# views by job number
+J0/o
+J12345/o
+J29843238948/o
+
+# views by username/view name
+@rdyer/v/o
+@rdyer/v/sv/o
+@rdyer/v/sv/sv/sv/sv/sv/o
+
+# subviews
+v/o
+v/sv/o
+v/sv/sv/sv/sv/sv/o

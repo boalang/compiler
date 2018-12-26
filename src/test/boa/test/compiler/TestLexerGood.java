@@ -95,4 +95,11 @@ public class TestLexerGood extends BaseTest {
 			new int[] { BoaLexer.TimeLiteral, BoaLexer.TimeLiteral, BoaLexer.TimeLiteral, BoaLexer.TimeLiteral, BoaLexer.EOF },
 			new String[] { "0t", "1000000T", "T\"Wed Feb  4 16:26:41 PST 2004\"", "T\"Tue Jun  5 10:43:07 America/Los_Angeles 2007\"", "<EOF>" });
 	}
+
+	@Test
+	public void views() throws IOException {
+		lex(load(rootDir + "views.boa"),
+			new int[] { BoaLexer.VIEW, BoaLexer.TABLE, BoaLexer.VIEWTABLE, BoaLexer.VIEWTABLE, BoaLexer.VIEWTABLE, BoaLexer.VIEWTABLE, BoaLexer.VIEWTABLE, BoaLexer.VIEWTABLE, BoaLexer.VIEWTABLE, BoaLexer.VIEWTABLE, BoaLexer.VIEWTABLE, BoaLexer.EOF },
+			new String[] { "view", "table", "J0/o", "J12345/o", "J29843238948/o", "@rdyer/v/o", "@rdyer/v/sv/o", "@rdyer/v/sv/sv/sv/sv/sv/o", "v/o", "v/sv/o", "v/sv/sv/sv/sv/sv/o", "<EOF>" });
+	}
 }
