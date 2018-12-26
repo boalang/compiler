@@ -25,57 +25,57 @@ import java.util.List;
  * @author anthonyu
  * @author rdyer
  */
-public class BoaTable extends BoaType {
+public class BoaOutputType extends BoaType {
 	private BoaType type;
 	private List<BoaScalar> indexTypes;
 	private BoaScalar weightType;
 	private boolean canOmitWeight;
 
 	/**
-	 * Construct a BoaTable.
+	 * Construct a BoaOutputType.
 	 * 
 	 * @param types
 	 *            A {@link List} of {@link BoaType} representing the types of
-	 *            this BoaTable
+	 *            this BoaOutputType
 	 */
-	public BoaTable(final BoaType type) {
+	public BoaOutputType(final BoaType type) {
 		this(type, null, null, false);
 	}
 
 	/**
-	 * Construct a BoaTable.
+	 * Construct a BoaOutputType.
 	 * 
 	 * @param type
-	 *            A {@link BoaType} representing the type of this BoaTable
+	 *            A {@link BoaType} representing the type of this BoaOutputType
 	 * 
 	 * @param subscripts
 	 *            A {@link List} of {@link String} containing the names of the
-	 *            subscripts of this BoaTable
+	 *            subscripts of this BoaOutputType
 	 * 
 	 * @param indexTypes
 	 *            A {@link List} of {@link BoaScalar} representing the index
-	 *            types of this BoaTable
+	 *            types of this BoaOutputType
 	 */
-	public BoaTable(final BoaType type, final List<BoaScalar> indexTypes) {
+	public BoaOutputType(final BoaType type, final List<BoaScalar> indexTypes) {
 		this(type, indexTypes, null, false);
 	}
 
 	/**
-	 * Construct a BoaTable.
+	 * Construct a BoaOutputType.
 	 * 
 	 * @param type
-	 *            A {@link BoaType} representing the type of this BoaTable
+	 *            A {@link BoaType} representing the type of this BoaOutputType
 	 * 
 	 * @param indexTypes
 	 *            A {@link List} of {@link BoaScalar} representing the index
-	 *            types of this BoaTable
+	 *            types of this BoaOutputType
 	 * 
 	 * @param weightType
 	 *            A {@link BoaScalar} representing the weight type of this
-	 *            BoaTable
+	 *            BoaOutputType
 	 * 
 	 */
-	public BoaTable(final BoaType type, final List<BoaScalar> indexTypes, final BoaScalar weightType, final boolean canOmitWeight) {
+	public BoaOutputType(final BoaType type, final List<BoaScalar> indexTypes, final BoaScalar weightType, final boolean canOmitWeight) {
 		this.type = type;
 		this.indexTypes = indexTypes;
 		this.weightType = weightType;
@@ -237,7 +237,7 @@ public class BoaTable extends BoaType {
 			return false;
 		if (this.getClass() != obj.getClass())
 			return false;
-		final BoaTable other = (BoaTable) obj;
+		final BoaOutputType other = (BoaOutputType) obj;
 		if (this.indexTypes == null) {
 			if (other.indexTypes != null)
 				return false;

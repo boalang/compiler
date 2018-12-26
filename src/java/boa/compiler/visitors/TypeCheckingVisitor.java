@@ -643,10 +643,10 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		if (type == null)
 			throw new TypeCheckException(n.getId(), "emitting to undeclared output variable '" + id + "'");
-		if (!(type instanceof BoaTable))
+		if (!(type instanceof BoaOutputType))
 			throw new TypeCheckException(n.getId(), "emitting to non-output variable '" + id + "'");
 
-		final BoaTable t = (BoaTable) type;
+		final BoaOutputType t = (BoaOutputType) type;
 
 		if (n.getIndicesSize() != t.countIndices())
 			throw new TypeCheckException(n.getId(), "output variable '" + id + "': incorrect number of indices for '" + id + "': required " + t.countIndices() + ", found " + n.getIndicesSize());
@@ -1381,7 +1381,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if (n.getArgsSize() > 0 && annotation.formalParameters().length == 0)
 			throw new TypeCheckException(n.getArgs(), "output aggregator '" + n.getId().getToken() + "' takes no arguments");
 
-		n.type = new BoaTable(type, indexTypes, tweight, annotation.canOmitWeight());
+		n.type = new BoaOutputType(type, indexTypes, tweight, annotation.canOmitWeight());
 
 		n.env = env;
 		env.set(n.getId().getToken(), n.type);

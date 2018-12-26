@@ -181,7 +181,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		/** {@inheritDoc} */
 		@Override
 		public void visit(final VarDeclStatement n) {
-			if (n.type instanceof BoaTable)
+			if (n.type instanceof BoaOutputType)
 				return;
 
 			final ST st = stg.getInstanceOf("VarDecl");
@@ -1319,7 +1319,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			lhsType = null;
 		}
 
-		if (type instanceof BoaTable) {
+		if (type instanceof BoaOutputType) {
 			code.add("");
 			return;
 		}
@@ -1877,7 +1877,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		final String aggregator = n.getId().getToken();
 
-		final BoaTable t = (BoaTable) n.env.get(id);
+		final BoaOutputType t = (BoaOutputType) n.env.get(id);
 
 		if (n.getArgsSize() > 0) {
 			n.getArg(0).accept(this);
