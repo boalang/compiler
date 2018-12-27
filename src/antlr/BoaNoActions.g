@@ -49,9 +49,9 @@ type
 	| tupleType
 	| outputType
 	| functionType
-	| fixp=fixpType
+	| fixpType
 	| visitorType
-	| tr=traversalType
+	| traversalType
 	| stackType
 	| setType
 	| enumType
@@ -422,39 +422,39 @@ subView
 // keywords
 //
 
-OF       : 'of';
-IF       : 'if';
-DO       : 'do';
-MAP      : 'map';
-STACK    : 'stack';
-SET      : 'set';
-FOR      : 'for';
-FOREACH  : 'foreach';
-IFALL    : 'ifall';
-EXISTS   : 'exists';
-NOT      : 'not';
-TYPE     : 'type';
-ELSE     : 'else';
-CASE     : 'case';
-OUTPUT   : 'output';
-FORMAT   : 'format';
-WHILE    : 'while';
-BREAK    : 'break';
-ARRAY    : 'array';
-STATIC   : 'static';
-SWITCH   : 'switch';
-RETURN   : 'return';
-WEIGHT   : 'weight';
-DEFAULT  : 'default';
-CONTINUE : 'continue';
-FUNCTION : 'function';
-FIXP : 'fixp';
-VISITOR  : 'visitor';
-TRAVERSAL  : 'traversal';
-BEFORE   : 'before';
-AFTER    : 'after';
-STOP     : 'stop';
-ENUM 	 : 'enum';
+OF        : 'of';
+IF        : 'if';
+DO        : 'do';
+MAP       : 'map';
+STACK     : 'stack';
+SET       : 'set';
+FOR       : 'for';
+FOREACH   : 'foreach';
+IFALL     : 'ifall';
+EXISTS    : 'exists';
+NOT       : 'not';
+TYPE      : 'type';
+ELSE      : 'else';
+CASE      : 'case';
+OUTPUT    : 'output';
+FORMAT    : 'format';
+WHILE     : 'while';
+BREAK     : 'break';
+ARRAY     : 'array';
+STATIC    : 'static';
+SWITCH    : 'switch';
+RETURN    : 'return';
+WEIGHT    : 'weight';
+DEFAULT   : 'default';
+CONTINUE  : 'continue';
+FUNCTION  : 'function';
+FIXP      : 'fixp';
+VISITOR   : 'visitor';
+TRAVERSAL : 'traversal';
+BEFORE    : 'before';
+AFTER     : 'after';
+STOP      : 'stop';
+ENUM      : 'enum';
 
 //
 // separators
@@ -629,8 +629,8 @@ TimeLiteral
 // views
 //
 
-VIEW 		: 'view';
-TABLE 		: 'table';
+VIEW        : 'view';
+TABLE       : 'table';
 VIEWTABLE	: 'J' DecimalNumeral (DIV Identifier)+
 			| '@' Identifier DIV Identifier (DIV Identifier)+
 			| Identifier (DIV Identifier)+

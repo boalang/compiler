@@ -76,7 +76,7 @@ declaration returns [Statement ast]
 	: t=typeDeclaration           { $ast = $t.ast; }
 	| s=staticVariableDeclaration { $ast = $s.ast; }
 	| v=variableDeclaration       { $ast = $v.ast; }
-	| sv=subView 				  { $ast = $sv.ast; }
+	| sv=subView                  { $ast = $sv.ast; }
 	;
 
 typeDeclaration returns [TypeDecl ast]
@@ -101,19 +101,19 @@ variableDeclaration returns [VarDeclStatement ast]
 	;
 
 type returns [AbstractType ast]
-	: a=arrayType    { $ast = $a.ast; }
-	| m=mapType      { $ast = $m.ast; }
-	| t=tupleType    { $ast = $t.ast; }
-	| o=outputType   { $ast = $o.ast; }
-	| f=functionType { $ast = $f.ast; }
-	| fixp=fixpType  { $ast = $fixp.ast; }
-	| v=visitorType  { $ast = $v.ast; }
-	| tr=traversalType  { $ast = $tr.ast; }
-	| s=stackType    { $ast = $s.ast; }
-	| set=setType    { $ast = $set.ast; }
-	| e=enumType     { $ast = $e.ast; }
-	| tt=tableType 	 { $ast = $tt.ast; }
-	| id=identifier  { $ast = $id.ast; }
+	: a=arrayType      { $ast = $a.ast; }
+	| m=mapType        { $ast = $m.ast; }
+	| t=tupleType      { $ast = $t.ast; }
+	| o=outputType     { $ast = $o.ast; }
+	| f=functionType   { $ast = $f.ast; }
+	| fixp=fixpType    { $ast = $fixp.ast; }
+	| v=visitorType    { $ast = $v.ast; }
+	| tr=traversalType { $ast = $tr.ast; }
+	| s=stackType      { $ast = $s.ast; }
+	| set=setType      { $ast = $set.ast; }
+	| e=enumType       { $ast = $e.ast; }
+	| tt=tableType     { $ast = $tt.ast; }
+	| id=identifier    { $ast = $id.ast; }
 	;
 
 component returns [Component ast]
@@ -207,6 +207,7 @@ functionType returns [FunctionType ast]
 	: FUNCTION LPAREN (id=identifier COLON t=type { $ast.addArg((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn)); } (COMMA id=identifier COLON t=type { $ast.addArg((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn)); })*)? RPAREN (COLON t=type { $ast.setType($t.ast); })?
 	| FUNCTION LPAREN ((id=identifier COLON t=type { $ast.addArg((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn)); } | identifier { notifyErrorListeners("function arguments require an identifier and type"); }) (COMMA id=identifier COLON t=type { $ast.addArg((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn)); } | COMMA identifier { notifyErrorListeners("function arguments require an identifier and type"); })*)? RPAREN (COLON t=type { $ast.setType($t.ast); })?
 	;
+
 fixpType returns [FixPType ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
@@ -517,21 +518,21 @@ call returns [Call ast]
 	;
 
 operand returns [Operand ast]
-	: s=stringLiteral                              { $ast = $s.ast; }
-	| c=characterLiteral                           { $ast = $c.ast; }
-	| t=timeLiteral                                { $ast = $t.ast; }
-	| i=integerLiteral                             { $ast = $i.ast; }
-	| fp=floatingPointLiteral                      { $ast = $fp.ast; }
-	| comp=composite                               { $ast = $comp.ast; }
-	| fe=functionExpression                        { $ast = $fe.ast; }
-	| fixpe=fixpExpression                         { $ast = $fixpe.ast; }
-	| v=visitorExpression                          { $ast = $v.ast; }
-	| tr=traversalExpression                       { $ast = $tr.ast; }
-	| uf=unaryFactor                               { $ast = $uf.ast; }
-	| DOLLAR                                       // TODO
-	| pe=parenExpression                           { $ast = $pe.ast; }
-	| id=identifier                                { $ast = $id.ast; }
-	| tb=table									   { $ast = $tb.ast; }
+	: s=stringLiteral         { $ast = $s.ast; }
+	| c=characterLiteral      { $ast = $c.ast; }
+	| t=timeLiteral           { $ast = $t.ast; }
+	| i=integerLiteral        { $ast = $i.ast; }
+	| fp=floatingPointLiteral { $ast = $fp.ast; }
+	| comp=composite          { $ast = $comp.ast; }
+	| fe=functionExpression   { $ast = $fe.ast; }
+	| fixpe=fixpExpression    { $ast = $fixpe.ast; }
+	| v=visitorExpression     { $ast = $v.ast; }
+	| tr=traversalExpression  { $ast = $tr.ast; }
+	| uf=unaryFactor          { $ast = $uf.ast; }
+	| DOLLAR                  // TODO
+	| pe=parenExpression      { $ast = $pe.ast; }
+	| id=identifier           { $ast = $id.ast; }
+	| tb=table                { $ast = $tb.ast; }
 	;
 
 unaryFactor returns [UnaryFactor ast]
@@ -910,12 +911,12 @@ TimeLiteral
 // views
 //
 
-VIEW 		: 'view';
-TABLE 		: 'table';
+VIEW        : 'view';
+TABLE       : 'table';
 VIEWTABLE	: 'J' DecimalNumeral (DIV Identifier)+
-            | '@' Identifier DIV Identifier (DIV Identifier)+
-            | Identifier (DIV Identifier)+
-            ;
+			| '@' Identifier DIV Identifier (DIV Identifier)+
+			| Identifier (DIV Identifier)+
+			;
 
 //
 // identifiers
