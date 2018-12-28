@@ -114,7 +114,8 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	}
 
 	public ReturnTypeT visit(final Index n, final ArgTypeT arg) {
-		n.getStart().accept(this, arg);
+		if (n.hasStart())
+			n.getStart().accept(this, arg);
 		if (n.hasEnd())
 			n.getEnd().accept(this, arg);
 		return null;

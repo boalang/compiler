@@ -111,7 +111,8 @@ public abstract class AbstractVisitorNoArgNoRet {
 	}
 
 	public void visit(final Index n) {
-		n.getStart().accept(this);
+		if (n.hasStart())
+			n.getStart().accept(this);
 		if (n.hasEnd())
 			n.getEnd().accept(this);
 	}

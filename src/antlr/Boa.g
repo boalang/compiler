@@ -507,7 +507,7 @@ index returns [Index ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: LBRACKET s=expression { $ast = new Index($s.ast); } (COLON end=expression { $ast.setEnd($end.ast); })? RBRACKET
+	: LBRACKET (WILDCARD { $ast = new Index(); } | (s=expression { $ast = new Index($s.ast); } (COLON end=expression { $ast.setEnd($end.ast); })?)) RBRACKET
 	;
 
 call returns [Call ast]

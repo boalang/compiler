@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014, Hridesh Rajan, Robert Dyer, Che Shian Hung
+ *                 Iowa State University of Science and Technology,
+ *				   and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * 
  * @author rdyer
  * @author hridesh
+ * @author hungc
  */
 public class Index extends Node {
 	protected Expression start;
@@ -39,6 +41,10 @@ public class Index extends Node {
 		this.start = start;
 	}
 
+	public boolean hasStart() {
+		return start != null;
+	}
+
 	public boolean hasEnd() {
 		return end != null;
 	}
@@ -50,6 +56,10 @@ public class Index extends Node {
 	public void setEnd(final Expression end) {
 		end.setParent(this);
 		this.end = end;
+	}
+
+	public Index() {
+		this(null, null);
 	}
 
 	public Index (final Expression start) {
@@ -84,11 +94,11 @@ public class Index extends Node {
 	}
 
 	public Index clone() {
-		final Index i;
+		final Index i = new Index();
+		if (hasStart())
+			i.setStart(start.clone());
 		if (hasEnd())
-			i = new Index(start.clone(), end.clone());
-		else
-			i = new Index(start.clone());
+			i.setEnd(end.clone());
 		copyFieldsTo(i);
 		return i;
 	}
