@@ -81,7 +81,8 @@ public class SeqRepoImporter {
 			threads[i].start();
 			Thread.sleep(10);
 		}
-
+		
+		int counter = 0;
 		File dir = new File(jsonPath);
 		for (File file : dir.listFiles()) {
 			if (file.getName().endsWith(".json")) {
@@ -114,9 +115,9 @@ public class SeqRepoImporter {
 										break;
 									}
 								}
-								Thread.sleep(10);
+								Thread.sleep(100);
 							}
-							System.out.println(file.getPath() + ": " + i + ": " + repo.id + " " + repo.name);
+							System.out.println((++counter) + ": " + file.getPath() + ": " + i + ": " + repo.id + " " + repo.name);
 						}
 					} catch (Exception e) {
 						System.err.println("Error proccessing item " + i + " of page " + file.getPath());
