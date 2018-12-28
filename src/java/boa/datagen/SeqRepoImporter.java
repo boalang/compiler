@@ -164,7 +164,7 @@ public class SeqRepoImporter {
 
 	public static class ImportTask implements Runnable {
 		private int id;
-		private int counter = 0;
+		private int counter = 0, allCounter = 0;
 		private String suffix;
 		private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
 		private long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
@@ -252,7 +252,7 @@ public class SeqRepoImporter {
 
 					if (debug)
 						System.out.println(
-								Thread.currentThread().getId() + " Processing " + project.getId() + " " + name);
+								Thread.currentThread().getId() + " Processing " + (allCounter+1) + " project " + project.getId() + " " + name);
 					project = storeRepository(project, 0);
 					if (debug)
 						System.out.println(
@@ -284,6 +284,7 @@ public class SeqRepoImporter {
 						}
 					}
 					counter++;
+					allCounter++;
 					if (counter >= Integer.parseInt(DefaultProperties.MAX_PROJECTS)) {
 						closeWriters();
 						openWriters();
@@ -339,11 +340,12 @@ public class SeqRepoImporter {
 						for (final Object rev : revisions)
 							repoBuilder.addRevisionKeys((Long) rev);
 					}
-					if (debug)
-						System.out.println(Thread.currentThread().getId() + " Build head snapshot");
-					repoBuilder.setHead(conn.getHeadCommitOffset());
-					repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot());
 				}
+				if (debug)
+					System.out.println(Thread.currentThread().getId() + " Build head snapshot");
+				repoBuilder.setHead(conn.getHeadCommitOffset());
+				repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot());
+				
 				repoBuilder.addAllBranches(conn.getBranchIndices());
 				repoBuilder.addAllBranchNames(conn.getBranchNames());
 				repoBuilder.addAllTags(conn.getTagIndices());
