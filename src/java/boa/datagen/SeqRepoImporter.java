@@ -62,6 +62,7 @@ public class SeqRepoImporter {
 	public static final int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer.valueOf(DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS);
 	final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
 	final static String jsonCachePath = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
+	final static boolean STORE_COMMITS = DefaultProperties.STORE_COMMITS;
 	private static boolean done = false;
 	
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -329,16 +330,18 @@ public class SeqRepoImporter {
 				conn = new GitConnector(gitDir.getAbsolutePath(), project.getName(), astWriter, astWriterLen, commitWriter, commitWriterLen,
 						contentWriter, contentWriterLen);
 				final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
-				List<Object> revisions = conn.getRevisions(project.getName());
-				if (!revisions.isEmpty()) {
-					if (revisions.get(0) instanceof Revision) {
-						for (final Object rev : revisions) {
-							final Revision.Builder revBuilder = Revision.newBuilder((Revision) rev);
-							repoBuilder.addRevisions(revBuilder);
+				if (STORE_COMMITS) {
+					List<Object> revisions = conn.getRevisions(project.getName());
+					if (!revisions.isEmpty()) {
+						if (revisions.get(0) instanceof Revision) {
+							for (final Object rev : revisions) {
+								final Revision.Builder revBuilder = Revision.newBuilder((Revision) rev);
+								repoBuilder.addRevisions(revBuilder);
+							}
+						} else {
+							for (final Object rev : revisions)
+								repoBuilder.addRevisionKeys((Long) rev);
 						}
-					} else {
-						for (final Object rev : revisions)
-							repoBuilder.addRevisionKeys((Long) rev);
 					}
 				}
 				if (debug)

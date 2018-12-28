@@ -189,6 +189,8 @@ public class BoaGenerator {
 		if (cl.hasOption("libs")) {
 			DefaultProperties.CLASSPATH_ROOT = cl.getOptionValue("libs");
 		}
+		if (cl.hasOption("nocommits"))
+			DefaultProperties.STORE_COMMITS = false;
 	}
 
 	//

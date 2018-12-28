@@ -70,7 +70,7 @@ public class DefaultProperties {
 	public static String CLASSPATH_ROOT = getClasspathRoot();
 	public static  String OUTPUT = "output";
 	
-	public static boolean STORE_ASCII_PRINTABLE_CONTENTS = true;
+	public static boolean STORE_ASCII_PRINTABLE_CONTENTS = true, STORE_COMMITS = true;
 
 	public static String localDataPath = null;
 	
