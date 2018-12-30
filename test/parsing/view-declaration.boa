@@ -1,3 +1,21 @@
+view view1 {
+	o: output sum of int;
+
+	v4: table[pid: string][string][a: float][b: float][c: float] of avg: string = J12345/ProjectChurnRates/churn/o1/o2/o3;
+
+	v5: table[string][string][float][float][float] of string = J12345/ProjectChurnRates/churn/o1/o2/o3;
+
+	while(v1 >> r1) {
+		o << 0;
+	}
+}
+
+view view2 {
+	o: output sum of int;
+
+	o << 0;
+}
+
 o: output sum of int;
 
 v1: table of avg: float;
@@ -10,6 +28,8 @@ v3 := @rdyer/ProjectChurnRates/churn/o/o/o;
 v4: table[pid: string][string][a: float][b: float][c: float] of avg: string = J12345/ProjectChurnRates/churn/o1/o2/o3;
 
 v5: table[string][string][float][float][float] of string = J12345/ProjectChurnRates/churn/o1/o2/o3;
+
+v6 := view1/o;
 
 #r1: v1._row;
 v1 >> r1;
@@ -27,3 +47,9 @@ v8 := v2["12345"];
 v9 := v2["12345"]["67890"];
 
 v10 := v5["12345"][_][_][2][_]["1234"];
+
+view view3 {
+	o: output sum[string][float] of int;
+
+	o["123"][123] << 0;
+}
