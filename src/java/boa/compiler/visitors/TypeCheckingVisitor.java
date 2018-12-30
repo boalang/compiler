@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Che Shian Hung
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -39,6 +39,7 @@ import boa.types.proto.CodeRepositoryProtoTuple;
  * @author rdyer
  * @author ankuraga
  * @author rramu
+ * @author hungc
  */
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	BoaType lastRetType;
@@ -457,21 +458,23 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Index n, final SymbolTable env) {
-		n.env = env;
+		if (n.hasStart()) {
+			n.env = env;
 
-		n.getStart().accept(this, env);
-		n.type = n.getStart().type;
+			n.getStart().accept(this, env);
+			n.type = n.getStart().type;
 
-		if (n.getStart().type == null)
-			throw new RuntimeException();
+			if (n.getStart().type == null)
+				throw new RuntimeException();
 
-		if (n.hasEnd()) {
-			if (!(n.getStart().type instanceof BoaInt))
-				throw new TypeCheckException(n.getStart(), "invalid type '" + n.getStart().type + "' for slice expression");
+			if (n.hasEnd()) {
+				if (!(n.getStart().type instanceof BoaInt))
+					throw new TypeCheckException(n.getStart(), "invalid type '" + n.getStart().type + "' for slice expression");
 
-			n.getEnd().accept(this, env);
-			if (!(n.getEnd().type instanceof BoaInt))
-				throw new TypeCheckException(n.getEnd(), "invalid type '" + n.getEnd().type + "' for slice expression");
+				n.getEnd().accept(this, env);
+				if (!(n.getEnd().type instanceof BoaInt))
+					throw new TypeCheckException(n.getEnd(), "invalid type '" + n.getEnd().type + "' for slice expression");
+			}
 		}
 	}
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Hridesh Rajan, Robert Dyer
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, Che Shian Hung
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -23,10 +23,11 @@ import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 
-/*
+/**
  * A debugging visitor class that pretty prints the Boa AST.
  *
  * @author rdyer
+ * @author hungc
  */
 public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	private int indent = 0;
@@ -136,13 +137,15 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Index n) {
-		System.out.print("[");
-		n.getStart().accept(this);
-		if (n.hasEnd()) {
-			System.out.print(" : ");
-			n.getEnd().accept(this);
+		if (n.hasStart()) {
+			System.out.print("[");
+			n.getStart().accept(this);
+			if (n.hasEnd()) {
+				System.out.print(" : ");
+				n.getEnd().accept(this);
+			}
+			System.out.print("]");
 		}
-		System.out.print("]");
 	}
 
 	/** {@inheritDoc} */

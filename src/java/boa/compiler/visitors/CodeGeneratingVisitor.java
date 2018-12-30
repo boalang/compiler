@@ -835,41 +835,43 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Index n) {
-		this.idFinder.start(n.getStart());
-		if (idFinder.getNames().contains(this.skipIndex)) {
-			abortGeneration = true;
-			code.add("");
-			return;
+		if (n.hasStart()) {
+			this.idFinder.start(n.getStart());
+			if (idFinder.getNames().contains(this.skipIndex)) {
+				abortGeneration = true;
+				code.add("");
+				return;
+			}
+
+			final ST st = stg.getInstanceOf("Index");
+
+			final BoaType t = n.env.getOperandType();
+			if (t instanceof BoaMap) {
+				n.env.setOperandType(((BoaMap) t).getType());
+				st.add("map", true);
+			} else if (t instanceof BoaProtoList) {
+				n.env.setOperandType(((BoaProtoList) t).getType());
+				st.add("map", true);
+			} else if (t instanceof BoaArray) {
+				n.env.setOperandType(((BoaArray) t).getType());
+			}
+
+			st.add("operand", "");
+
+			final BoaType indexType = n.getStart().type;
+			n.getStart().accept(this);
+			if (indexType instanceof BoaInt && !(t instanceof BoaMap))
+				st.add("index", "(int)(" + code.removeLast() + ")");
+			else
+				st.add("index", code.removeLast());
+
+			if (n.hasEnd()) {
+				n.getEnd().accept(this);
+				st.add("slice", code.removeLast());
+			}
+
+			code.add(st.render());
 		}
-
-		final ST st = stg.getInstanceOf("Index");
-
-		final BoaType t = n.env.getOperandType();
-		if (t instanceof BoaMap) {
-			n.env.setOperandType(((BoaMap) t).getType());
-			st.add("map", true);
-		} else if (t instanceof BoaProtoList) {
-			n.env.setOperandType(((BoaProtoList) t).getType());
-			st.add("map", true);
-		} else if (t instanceof BoaArray) {
-			n.env.setOperandType(((BoaArray) t).getType());
-		}
-
-		st.add("operand", "");
-
-		final BoaType indexType = n.getStart().type;
-		n.getStart().accept(this);
-		if (indexType instanceof BoaInt && !(t instanceof BoaMap))
-			st.add("index", "(int)(" + code.removeLast() + ")");
-		else
-			st.add("index", code.removeLast());
-
-		if (n.hasEnd()) {
-			n.getEnd().accept(this);
-			st.add("slice", code.removeLast());
-		}
-
-		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */

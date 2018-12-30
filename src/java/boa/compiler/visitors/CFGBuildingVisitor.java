@@ -1,6 +1,7 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer,
- *                 and Iowa State University of Science and Technology
+ * Copyright 2016, Hridesh Rajan, Robert Dyer, Che Shian Hung
+ *                 , Iowa State University of Science and Technology
+ *				   , and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,6 +82,7 @@ import boa.compiler.ast.types.TupleType;
 
 /**
  * @author ganeshau
+ * @author hungc
  */
 public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	private int id = 0;
@@ -1227,33 +1229,35 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Index n) {
-		Expression lhs = n.getStart();
+		if (n.hasStart()) {
+			Expression lhs = n.getStart();
 
-		// fill the start/end/exit nodes
-		lhs.accept(this);
+			// fill the start/end/exit nodes
+			lhs.accept(this);
 
-		if (n.hasEnd()) {
-			Expression rhs = n.getEnd();
-			List<Node> currentStartNodes = this.currentStartNodes;
-			rhs.accept(this);
+			if (n.hasEnd()) {
+				Expression rhs = n.getEnd();
+				List<Node> currentStartNodes = this.currentStartNodes;
+				rhs.accept(this);
 
-			currentEndNodes = new ArrayList<Node>(1);
-			currentEndNodes.add(n);
+				currentEndNodes = new ArrayList<Node>(1);
+				currentEndNodes.add(n);
 
-			this.currentStartNodes = currentStartNodes;
-			addNode(n);
+				this.currentStartNodes = currentStartNodes;
+				addNode(n);
 
-			// connect the nodes
-			connectStartNodesToEndNodesOf(rhs, lhs);
-			connectToEndNodesOf(rhs, n);
-		} else {
-			currentEndNodes = new ArrayList<Node>(1);
-			currentEndNodes.add(n);
+				// connect the nodes
+				connectStartNodesToEndNodesOf(rhs, lhs);
+				connectToEndNodesOf(rhs, n);
+			} else {
+				currentEndNodes = new ArrayList<Node>(1);
+				currentEndNodes.add(n);
 
-			addNode(n);
+				addNode(n);
 
-			// connect the nodes
-			connectToEndNodesOf(lhs, n);
+				// connect the nodes
+				connectToEndNodesOf(lhs, n);
+			}
 		}
 	}
 
