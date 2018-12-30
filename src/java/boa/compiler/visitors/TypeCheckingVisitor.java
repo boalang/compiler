@@ -458,9 +458,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Index n, final SymbolTable env) {
-		if (n.hasStart()) {
-			n.env = env;
+		n.env = env;
 
+		if (n.hasStart()) {
 			n.getStart().accept(this, env);
 			n.type = n.getStart().type;
 
