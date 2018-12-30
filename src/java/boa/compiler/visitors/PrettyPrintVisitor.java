@@ -137,15 +137,14 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Index n) {
-		if (n.hasStart()) {
-			System.out.print("[");
+		System.out.print("[");
+		if (n.hasStart())
 			n.getStart().accept(this);
-			if (n.hasEnd()) {
-				System.out.print(" : ");
-				n.getEnd().accept(this);
-			}
-			System.out.print("]");
+		if (n.hasEnd()) {
+			System.out.print(" : ");
+			n.getEnd().accept(this);
 		}
+		System.out.print("]");
 	}
 
 	/** {@inheritDoc} */
