@@ -445,14 +445,34 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final Identifier n, final SymbolTable env) {
 		n.env = env;
 
-		if (env.hasType(n.getToken()))
-			n.type = SymbolTable.getType(n.getToken());
-		else
-			try {
-				n.type = env.get(n.getToken());
-			} catch (final RuntimeException e) {
-				throw new TypeCheckException(n, "invalid identifier '" + n.getToken() + "'", e);
-			}
+		if (n.getToken().charAt(0) == '_') {
+			if (n.getParent() instanceof Selector && 
+				n.getParent().getParent() instanceof Factor && 
+				((Factor)n.getParent().getParent()).getOperand() instanceof Table) {
+				String s = n.getToken();
+
+				if (!s.equals("_row")) {
+					if (s.charAt(1) != 'c')
+						throw new TypeCheckException(n, "invalid selector '" + n.getToken() + "'");
+
+					try {
+						Integer.parseInt(s.substring(2));
+					} catch (NumberFormatException e) {
+						throw new TypeCheckException(n, "invalid selector '" + n.getToken() + "'", e);
+					}
+				}
+			} else
+				throw new TypeCheckException(n, "invalid identifier '" + n.getToken() + "'");
+		} else {
+			if (env.hasType(n.getToken()))
+				n.type = SymbolTable.getType(n.getToken());
+			else
+				try {
+					n.type = env.get(n.getToken());
+				} catch (final RuntimeException e) {
+					throw new TypeCheckException(n, "invalid identifier '" + n.getToken() + "'", e);
+				}
+		}
 	}
 
 	/** {@inheritDoc} */
