@@ -27,8 +27,6 @@ import java.util.List;
 public class BoaTable extends BoaType {
 	private BoaType type;
 	private List<BoaScalar> indexTypes;
-	// private BoaScalar weightType;
-	// private boolean canOmitWeight;
 
 	/**
 	 * Construct a BoaTable.

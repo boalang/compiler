@@ -1516,6 +1516,39 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.type = new BoaFixP();
 	}
 
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final TableType n, final SymbolTable env) {
+		SymbolTable st;
+
+		try {
+			st = env.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+
+		n.env = st;
+
+		List<BoaScalar> indexTypes = null;
+		if (n.getIndicesSize() > 0) {
+			indexTypes = new ArrayList<BoaScalar>();
+
+			for (final Component c : n.getIndices()) {
+				c.accept(this, st);
+
+				if (!(c.type instanceof BoaScalar))
+					throw new TypeCheckException(c, "incorrect type '" + c.type + "' for index");
+
+				indexTypes.add((BoaScalar) c.type);
+			}
+		}
+
+		n.getType().accept(this, st);
+		final BoaType type = n.getType().type;
+
+		n.type = new BoaTable(type, indexTypes);
+	}
+
 	protected List<BoaType> check(final Call c, final SymbolTable env) {
 		if (c.getArgsSize() > 0)
 			return this.check(c.getArgs(), env);
