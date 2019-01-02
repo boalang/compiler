@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Che Shian Hung
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -30,6 +30,7 @@ import boa.functions.FunctionSpec;
 import boa.types.*;
 import boa.types.proto.*;
 import boa.types.proto.enums.*;
+import boa.compiler.ast.Program;
 
 import boa.compiler.ast.Operand;
 
@@ -38,6 +39,7 @@ import boa.compiler.ast.Operand;
  * @author rdyer
  * @author rramu
  * @author marafat
+ * @author hungc
  */
 public class SymbolTable {
 	private static HashMap<String, Class<?>> aggregators;
@@ -45,6 +47,7 @@ public class SymbolTable {
 	private static Map<String, BoaType> idmap;
 	private static final Map<String, BoaType> globals;
 	private static FunctionTrie globalFunctions;
+	private static Map<String, Program> views;
 
 	private FunctionTrie functions;
 	private Map<String, BoaType> locals;
@@ -341,6 +344,8 @@ public class SymbolTable {
 
 		globalFunctions.addFunction("max", new BoaFunction(new BoaString(), new BoaType[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) > 0 ? ${0} : ${1})"));
 		globalFunctions.addFunction("min", new BoaFunction(new BoaString(), new BoaType[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) < 0 ? ${0} : ${1})"));
+
+		views = new HashMap<String, Program>();
 	}
 
 	public SymbolTable() {
@@ -695,6 +700,18 @@ public class SymbolTable {
 
 	public boolean getShadowing() {
 		return this.shadowing;
+	}
+
+	public void addView(final String viewName, final Program p) {
+		views.put(viewName, p);
+	}
+
+	public boolean hasView(final String viewName) {
+		return views.containsKey(viewName);
+	}
+
+	public Program getView(final String viewName) {
+		return views.get(viewName);
 	}
 
 	@Override

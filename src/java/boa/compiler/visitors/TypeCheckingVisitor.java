@@ -582,6 +582,38 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.type = n.getFactor().type;
 	}
 
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final Table n, final SymbolTable env) {
+		n.env = env;
+		//TODO pull the view type
+
+		n.type = new BoaTable(); //TODO add members in BoaTable
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final SubView n, final SymbolTable env) {
+		n.env = env;
+
+		String viewName = n.getId().getToken();
+
+		final SymbolTable e = new SymbolTable();
+		n.getBlock().accept(this, e);
+
+		if (env.hasView(viewName))
+			throw new TypeCheckException(n.getId(), "name conflict: view '" + viewName + "' already exists");
+
+		final Program p = new Program();
+		p.jobName = viewName;
+		for (final Statement s : n.getBlock().getStatements())
+			p.addStatement(s);
+
+		env.addView(viewName, p);
+
+		n.getId().accept(this, env);
+	}
+
 	//
 	// statements
 	//

@@ -29,11 +29,17 @@ public class BoaTable extends BoaType {
 	private List<BoaScalar> indexTypes;
 
 	/**
+	 * Construct an empty BoaTable.
+	 */
+	public BoaTable() {
+		this(null, null);
+	}
+
+	/**
 	 * Construct a BoaTable.
 	 * 
 	 * @param types
-	 *            A {@link List} of {@link BoaType} representing the types of
-	 *            this BoaTable
+	 *            A {@link BoaType} representing the type of this BoaTable
 	 */
 	public BoaTable(final BoaType type) {
 		this(type, null);
