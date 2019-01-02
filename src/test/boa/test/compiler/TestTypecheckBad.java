@@ -115,4 +115,24 @@ public class TestTypecheckBad extends BaseTest {
 	public void badViews() throws IOException {
 		typecheck(load(badDir + "bad-views.boa"), "subview 'bad' undefined");
 	}
+
+	@Test
+	public void badIdentifier1() throws IOException {
+		typecheck(load(badDir + "bad-identifier1.boa"), "invalid identifier '_abc'");
+	}
+
+	@Test
+	public void badIdentifier2() throws IOException {
+		typecheck(load(badDir + "bad-identifier2.boa"), "invalid identifier '_s'");
+	}
+
+	@Test
+	public void badIdentifier3() throws IOException {
+		typecheck(load(badDir + "bad-identifier3.boa"), "invalid identifier '_f'");
+	}
+
+	@Test
+	public void badIdentifier4() throws IOException {
+		typecheck(load(badDir + "bad-identifier4.boa"), "invalid identifier '_abc'");
+	}
 }
