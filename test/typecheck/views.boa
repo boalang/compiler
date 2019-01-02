@@ -1,0 +1,25 @@
+view subv {
+	o: output sum of int;
+
+#	v4: table[pid: string][string][a: float][b: float][c: float] of avg: string = J12345/ProjectChurnRates/churn/o1/o2/o3;
+
+#	v5: table[string][string][float][float][float] of string = J12345/ProjectChurnRates/churn/o1/o2/o3;
+
+	o << 0;
+}
+
+v1: table[year: int][projectID: string][fileName: string] of temp:int;
+# TODO pull the view type
+#v1 = @hungc/ComplicateOutput/output;
+
+v2 := subv/o;
+
+# TODO fix parser
+#r: v1._row;
+
+v1._row;
+v2._row;
+
+c := v1._c0;
+c = v1._c1;
+c = v1._c100;

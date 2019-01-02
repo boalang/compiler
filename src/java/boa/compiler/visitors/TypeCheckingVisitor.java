@@ -536,7 +536,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				throw new TypeCheckException(n.getId(), "'" + type + "' has no member named '" + selector + "'");
 			type = ((BoaEnum) type).getMember(selector);
 		}
-		else {
+		else if (!(type instanceof BoaTable)) {
 			throw new TypeCheckException(n, "invalid operand type '" + type + "' for member selection");
 		}
 
@@ -586,7 +586,23 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	@Override
 	public void visit(final Table n, final SymbolTable env) {
 		n.env = env;
-		//TODO pull the view type
+
+		//TODO pull the view type to create BoaTable
+		// subview
+		if (n.getJobNum() == null && n.getUserName() == null) {
+			if (!env.hasView(n.getViewName())) {
+				throw new TypeCheckException(n, "subview '" + n.getViewName() + "' undefined");
+			}
+			//TODO pull the output vairiables
+		}
+		// Job number
+		else if (n.getUserName() == null) {
+
+		}
+		// username & view name
+		else {
+
+		}
 
 		n.type = new BoaTable(); //TODO add members in BoaTable
 	}
@@ -610,8 +626,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			p.addStatement(s);
 
 		env.addView(viewName, p);
-
-		n.getId().accept(this, env);
 	}
 
 	//

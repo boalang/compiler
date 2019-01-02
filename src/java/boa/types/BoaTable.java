@@ -97,6 +97,12 @@ public class BoaTable extends BoaType {
 		return this.indexTypes.get(position);
 	}
 
+	/** {@inheritDoc} */
+	@Override
+	public boolean assigns(final BoaType that) {
+		return this.equals(that);
+	}
+
 	/**
 	 * Returns whether this table will accept an emit of those types.
 	 * 

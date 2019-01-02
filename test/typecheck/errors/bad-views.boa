@@ -1,0 +1,7 @@
+view subv {
+	o: output sum of int;
+
+	o << 0;
+}
+
+v := bad/o;

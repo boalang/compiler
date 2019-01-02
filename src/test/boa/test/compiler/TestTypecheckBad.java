@@ -110,4 +110,9 @@ public class TestTypecheckBad extends BaseTest {
 	public void tupleRedecl() throws IOException {
 		typecheck(load(badDir + "tuple-redecl.boa"), "variable 'a' already declared as 'float'");
 	}
+
+	@Test
+	public void badViews() throws IOException {
+		typecheck(load(badDir + "bad-views.boa"), "subview 'bad' undefined");
+	}
 }
