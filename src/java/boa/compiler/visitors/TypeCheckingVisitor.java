@@ -587,13 +587,20 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final Table n, final SymbolTable env) {
 		n.env = env;
 
-		//TODO pull the view type to create BoaTable
-		// subview
+		BoaOutputType bot = null;
+
 		if (n.getJobNum() == null && n.getUserName() == null) {
-			if (!env.hasView(n.getViewName())) {
+			if (!env.hasView(n.getViewName()))
 				throw new TypeCheckException(n, "subview '" + n.getViewName() + "' undefined");
-			}
-			//TODO pull the output vairiables
+
+			Program p = env.getView(n.getViewName());
+			SymbolTable st = p.env;
+			BoaType bt = st.get(n.getOutputName());
+
+			if(!(bt instanceof BoaOutputType))
+				throw new TypeCheckException(n, "output variable '" + n.getOutputName() + "' not found in subview '" + n.getViewName() + "'");
+
+			bot = (BoaOutputType) bt;
 		}
 		// Job number
 		else if (n.getUserName() == null) {
@@ -601,10 +608,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 		// username & view name
 		else {
-
+			// get BoaOutputType
 		}
 
-		n.type = new BoaTable(); //TODO add members in BoaTable
+		if (bot != null) //TODO remove this null checkd
+			n.type = new BoaTable(bot.getType(), bot.getIndexTypes());
+		else
+			n.type = new BoaTable();
 	}
 
 	/** {@inheritDoc} */
@@ -617,10 +627,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		final SymbolTable e = new SymbolTable();
 		n.getBlock().accept(this, e);
 
+		if (env.hasType(viewName) || env.hasGlobal(viewName) || env.hasLocal(viewName)) {
+			throw new TypeCheckException(n.getId(), "name conflict: identifier name '" + viewName + "' already exists");
+		}
+
 		if (env.hasView(viewName))
 			throw new TypeCheckException(n.getId(), "name conflict: view '" + viewName + "' already exists");
 
 		final Program p = new Program();
+		p.env = n.getBlock().env;
 		p.jobName = viewName;
 		for (final Statement s : n.getBlock().getStatements())
 			p.addStatement(s);

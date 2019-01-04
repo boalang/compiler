@@ -1,0 +1,8 @@
+view sv {
+	o: output sum of int;
+	s := 2;
+
+	o << 0;
+}
+
+v := sv/s;

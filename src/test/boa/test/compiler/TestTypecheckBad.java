@@ -113,26 +113,16 @@ public class TestTypecheckBad extends BaseTest {
 
 	@Test
 	public void badViews() throws IOException {
-		typecheck(load(badDir + "bad-views.boa"), "subview 'bad' undefined");
+		typecheck(load(badDir + "bad-views1.boa"), "subview 'bad' undefined");
+		typecheck(load(badDir + "bad-views2.boa"), "name conflict: identifier name 'subv' already exists");
+		typecheck(load(badDir + "bad-views3.boa"), "output variable 's' not found in subview 'sv'");
 	}
 
 	@Test
-	public void badIdentifier1() throws IOException {
+	public void badIdentifier() throws IOException {
 		typecheck(load(badDir + "bad-identifier1.boa"), "invalid identifier '_abc'");
-	}
-
-	@Test
-	public void badIdentifier2() throws IOException {
 		typecheck(load(badDir + "bad-identifier2.boa"), "invalid identifier '_s'");
-	}
-
-	@Test
-	public void badIdentifier3() throws IOException {
 		typecheck(load(badDir + "bad-identifier3.boa"), "invalid identifier '_f'");
-	}
-
-	@Test
-	public void badIdentifier4() throws IOException {
 		typecheck(load(badDir + "bad-identifier4.boa"), "invalid identifier '_abc'");
 	}
 }
