@@ -1,5 +1,6 @@
 view subv {
 	o: output sum of int;
+	o2: output sum [string][string] of int;
 
 #	v4: table[pid: string][string][a: float][b: float][c: float] of avg: string = J12345/ProjectChurnRates/churn/o1/o2/o3;
 
@@ -17,12 +18,19 @@ v2 := subv/o;
 v2._row;
 c1 := v2._c0;
 
+v3: table[first: string][second: string] of third:int = subv/o2;
+
 # TODO fix parser
 #r: v1._row;
 
-#v1._row;
-#v2._row;
+v1._row;
+v2._row;
 
 c2 := v1._c0;
-#c = v1._c1;
-#c = v1._c100;
+#c2 = v1._c1;
+#c2 = v1._c100;
+
+c3 := v1.year;
+c4 := v1.projectID;
+c5 := v1.fileName;
+c6 := v1.temp;

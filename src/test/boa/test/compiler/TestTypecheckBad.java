@@ -121,6 +121,7 @@ public class TestTypecheckBad extends BaseTest {
 		typecheck(load(badDir + "bad-views6.boa"), "invalid selector '_c123f'");
 		typecheck(load(badDir + "bad-views7.boa"), "table column out of bound");
 		typecheck(load(badDir + "bad-views8.boa"), "table column out of bound");
+		typecheck(load(badDir + "bad-views9.boa"), "'table happy:int[count:string, year:string]' has no member named 'bomb'");
 	}
 
 	@Test

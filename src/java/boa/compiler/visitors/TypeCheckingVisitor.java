@@ -511,7 +511,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						Integer i = Integer.parseInt(selector.substring(2));
 
 						if (i == 0)
-							n.type = new BoaTable(((BoaTable)type).getType(), null);
+							n.type = new BoaTable(((BoaTable)type).getType());
 						else if (((BoaTable)type).getIndexTypes() == null || i < 0 || i > ((BoaTable)type).getIndexTypes().size())
 							throw new TypeCheckException(n, "table column out of bound");
 						else
@@ -523,7 +523,17 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					}
 				}
 			} else {
-				//TODO accessing prenamed type, such as year, count...
+				if (((BoaTable)type).hasTypeName(selector)) {
+					int index = ((BoaTable)type).getTypeNameIndex(selector);
+
+					if (index == -1)
+						n.type = new BoaTable(((BoaTable)type).getType());
+					else
+						n.type = new BoaTable(((BoaTable)type).getIndex(index));
+
+					return;
+				} else
+					throw new TypeCheckException(n, "'" + type + "' has no member named '" + selector + "'");
 			}
 		}
 

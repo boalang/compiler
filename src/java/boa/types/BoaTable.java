@@ -17,6 +17,8 @@
 package boa.types;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * A {@link BoaType} representing an aggregator that can be emitted to.
@@ -27,6 +29,7 @@ import java.util.List;
 public class BoaTable extends BoaType {
 	private BoaType type;
 	private List<BoaScalar> indexTypes;
+	private Map<String, Integer> names;
 
 	/**
 	 * Construct an empty BoaTable.
@@ -58,6 +61,43 @@ public class BoaTable extends BoaType {
 	public BoaTable(final BoaType type, final List<BoaScalar> indexTypes) {
 		this.type = type;
 		this.indexTypes = indexTypes;
+
+		names = new HashMap<String, Integer>();
+		if (indexTypes != null) {
+			for (int i = 0; i < indexTypes.size(); i++) {
+				BoaType bt = indexTypes.get(i);
+				if (bt instanceof BoaName) {
+					names.put(((BoaName)bt).getId(), i);
+				}
+			}
+		}
+		if (type != null && type instanceof BoaName) { //TODO remove this null check after finishing typeChecking
+			names.put(((BoaName)type).getId(), -1);
+		}
+	}
+
+	/**
+	 *
+	 * @param name
+	 *            A {@link String} containing the name of the type
+	 *
+	 * @return true if a name exists in this type with the given name
+	 */
+	public boolean hasTypeName(final String name) {
+		return this.names.containsKey(name);
+	}
+
+	/**
+	 * Return the index number of the type identified by a given name.
+	 *
+	 * @param name
+	 *            A {@link String} containing the name of the type
+	 *
+	 * @return A {@link BoaType} representing the type of the BoaType
+	 *
+	 */
+	public int getTypeNameIndex(final String name) {
+		return this.names.get(name);
 	}
 
 	/**
@@ -100,7 +140,31 @@ public class BoaTable extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
-		return this.equals(that);
+		if (!(that instanceof BoaTable))
+			return false;
+
+		BoaTable bt = (BoaTable) that;
+
+		BoaType thatType = bt.getType();
+		if (!type.assigns(thatType))
+			return false;
+
+		List<BoaScalar> thatIndexTypes = bt.getIndexTypes();
+		if (indexTypes == null && thatIndexTypes == null)
+			return true;
+
+		if (indexTypes != null && thatIndexTypes != null) {
+			if (indexTypes.size() != thatIndexTypes.size())
+				return false;
+
+			for (int i = 0; i < indexTypes.size(); i++)
+				if (!indexTypes.get(i).assigns(thatIndexTypes.get(i)))
+					return false;
+		}
+		else
+			return false;
+
+		return true;
 	}
 
 	/**

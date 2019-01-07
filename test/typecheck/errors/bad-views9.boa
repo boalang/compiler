@@ -1,0 +1,10 @@
+view sv7 {
+	o: output sum[string][string] of int;
+	s := 2;
+
+	o["a"]["b"] << 0;
+}
+
+v : table [count:string][year: string] of happy: int = sv7/o;
+
+c := v.bomb;
