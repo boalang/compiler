@@ -1,0 +1,10 @@
+view sv6 {
+	o: output sum[string][string] of int;
+	s := 2;
+
+	o["a"]["b"] << 0;
+}
+
+v := sv6/o;
+
+c := v._c3;

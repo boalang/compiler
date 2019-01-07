@@ -1,0 +1,10 @@
+view sv3 {
+	o: output sum of int;
+	s := 2;
+
+	o << 0;
+}
+
+v := sv3/o;
+
+c := v._f;

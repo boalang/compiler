@@ -1,0 +1,10 @@
+view sv5 {
+	o: output sum of int;
+	s := 2;
+
+	o << 0;
+}
+
+v := sv5/o;
+
+c := v._c1;

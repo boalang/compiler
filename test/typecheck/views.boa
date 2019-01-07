@@ -14,12 +14,15 @@ v1: table[year: int][projectID: string][fileName: string] of temp:int;
 
 v2 := subv/o;
 
+v2._row;
+c1 := v2._c0;
+
 # TODO fix parser
 #r: v1._row;
 
-v1._row;
-v2._row;
+#v1._row;
+#v2._row;
 
-c := v1._c0;
-c = v1._c1;
-c = v1._c100;
+c2 := v1._c0;
+#c = v1._c1;
+#c = v1._c100;

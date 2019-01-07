@@ -116,6 +116,11 @@ public class TestTypecheckBad extends BaseTest {
 		typecheck(load(badDir + "bad-views1.boa"), "subview 'bad' undefined");
 		typecheck(load(badDir + "bad-views2.boa"), "name conflict: identifier name 'subv' already exists");
 		typecheck(load(badDir + "bad-views3.boa"), "output variable 's' not found in subview 'sv'");
+		typecheck(load(badDir + "bad-views4.boa"), "invalid selector '_c'");
+		typecheck(load(badDir + "bad-views5.boa"), "invalid selector '_f'");
+		typecheck(load(badDir + "bad-views6.boa"), "invalid selector '_c123f'");
+		typecheck(load(badDir + "bad-views7.boa"), "table column out of bound");
+		typecheck(load(badDir + "bad-views8.boa"), "table column out of bound");
 	}
 
 	@Test

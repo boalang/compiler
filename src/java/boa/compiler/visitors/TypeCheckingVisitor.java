@@ -445,34 +445,17 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final Identifier n, final SymbolTable env) {
 		n.env = env;
 
-		if (n.getToken().charAt(0) == '_') {
-			if (n.getParent() instanceof Selector && 
-				n.getParent().getParent() instanceof Factor && 
-				((Factor)n.getParent().getParent()).getOperand() instanceof Table) {
-				String s = n.getToken();
+		if (n.getToken().charAt(0) == '_')
+			throw new TypeCheckException(n, "invalid identifier '" + n.getToken() + "'");
 
-				if (!s.equals("_row")) {
-					if (s.charAt(1) != 'c')
-						throw new TypeCheckException(n, "invalid selector '" + n.getToken() + "'");
-
-					try {
-						Integer.parseInt(s.substring(2));
-					} catch (NumberFormatException e) {
-						throw new TypeCheckException(n, "invalid selector '" + n.getToken() + "'", e);
-					}
-				}
-			} else
-				throw new TypeCheckException(n, "invalid identifier '" + n.getToken() + "'");
-		} else {
-			if (env.hasType(n.getToken()))
-				n.type = SymbolTable.getType(n.getToken());
-			else
-				try {
-					n.type = env.get(n.getToken());
-				} catch (final RuntimeException e) {
-					throw new TypeCheckException(n, "invalid identifier '" + n.getToken() + "'", e);
-				}
-		}
+		if (env.hasType(n.getToken()))
+			n.type = SymbolTable.getType(n.getToken());
+		else
+			try {
+				n.type = env.get(n.getToken());
+			} catch (final RuntimeException e) {
+				throw new TypeCheckException(n, "invalid identifier '" + n.getToken() + "'", e);
+			}
 	}
 
 	/** {@inheritDoc} */
@@ -514,6 +497,35 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		final String selector = n.getId().getToken();
 		BoaType type = env.getOperandType();
+
+		if (type instanceof BoaTable) {
+			// TODO after reading types correctly, uncomment this
+			// if (((BoaTable)type).getType() != null) {
+			// 	throw new TypeCheckException(n, "undefined TableType null");
+			// }
+			if (selector.charAt(0) == '_') {
+				if (!selector.equals("_row")) {
+					if (selector.charAt(1) != 'c')
+						throw new TypeCheckException(n, "invalid selector '" + selector + "'");
+					try {
+						Integer i = Integer.parseInt(selector.substring(2));
+
+						if (i == 0)
+							n.type = new BoaTable(((BoaTable)type).getType(), null);
+						else if (((BoaTable)type).getIndexTypes() == null || i < 0 || i > ((BoaTable)type).getIndexTypes().size())
+							throw new TypeCheckException(n, "table column out of bound");
+						else
+							n.type = new BoaTable(((BoaTable)type).getIndex(i - 1));
+
+						return;
+					} catch (NumberFormatException e) {
+						throw new TypeCheckException(n, "invalid selector '" + selector + "'", e);
+					}
+				}
+			} else {
+				//TODO accessing prenamed type, such as year, count...
+			}
+		}
 
 		if (type instanceof BoaProtoMap) {
 			if (!((BoaProtoMap) type).hasAttribute(selector))
@@ -604,7 +616,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 		// Job number
 		else if (n.getUserName() == null) {
-
+			// get BoaOutputType
 		}
 		// username & view name
 		else {
