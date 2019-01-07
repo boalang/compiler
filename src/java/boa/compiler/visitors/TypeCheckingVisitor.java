@@ -500,7 +500,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		if (type instanceof BoaTable) {
 			// TODO after reading types correctly, uncomment this
-			// if (((BoaTable)type).getType() != null) {
+			// if (((BoaTable)type).getType() == null) {
 			// 	throw new TypeCheckException(n, "undefined TableType null");
 			// }
 			if (selector.charAt(0) == '_') {
