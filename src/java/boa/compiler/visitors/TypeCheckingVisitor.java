@@ -516,11 +516,18 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							throw new TypeCheckException(n, "table column out of bound");
 						else
 							n.type = new BoaTable(((BoaTable)type).getIndex(i - 1));
-
-						return;
 					} catch (NumberFormatException e) {
 						throw new TypeCheckException(n, "invalid selector '" + selector + "'", e);
 					}
+				} else {
+					List<BoaType> newTypes = new ArrayList<BoaType>();
+
+					if (((BoaTable)type).getIndexTypes() != null)
+						for(BoaType bt : ((BoaTable)type).getIndexTypes())
+							newTypes.add(bt);
+
+					newTypes.add(((BoaTable)type).getType());
+					n.type = new BoaTuple(newTypes);
 				}
 			} else {
 				if (((BoaTable)type).hasTypeName(selector)) {
@@ -530,11 +537,10 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						n.type = new BoaTable(((BoaTable)type).getType());
 					else
 						n.type = new BoaTable(((BoaTable)type).getIndex(index));
-
-					return;
 				} else
 					throw new TypeCheckException(n, "'" + type + "' has no member named '" + selector + "'");
 			}
+			return;
 		}
 
 		if (type instanceof BoaProtoMap) {

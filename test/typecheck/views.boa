@@ -23,8 +23,11 @@ v3: table[first: string][second: string] of third:int = subv/o2;
 # TODO fix parser
 #r: v1._row;
 
-v1._row;
+#TODO should change to 'temp: v1._row'
+temp := v1._row;
 v2._row;
+
+y := temp.year + 3;
 
 c2 := v1._c0;
 #c2 = v1._c1;
