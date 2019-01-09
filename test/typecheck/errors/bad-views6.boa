@@ -7,4 +7,4 @@ view sv4 {
 
 v := sv4/o;
 
-c := v._c123f;
+c := v._123f;

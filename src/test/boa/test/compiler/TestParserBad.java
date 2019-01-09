@@ -65,6 +65,12 @@ public class TestParserBad extends BaseTest {
 	}
 
 	@Test
+	public void viewNoColumnNumber() throws IOException {
+		parse(load(badDir + "bad-views4.boa"),
+			new String[] { "10,7: no viable alternative at input '_'" });
+	}
+
+	@Test
 	public void outputVarEquals() throws IOException {
 		parse(load(badDir + "output-var-equals.boa"),
 			new String[] { "1,5: error: output variable declarations should not include '='" });

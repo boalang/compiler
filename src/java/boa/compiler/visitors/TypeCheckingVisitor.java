@@ -505,17 +505,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			// }
 			if (selector.charAt(0) == '_') {
 				if (!selector.equals("_row")) {
-					if (selector.charAt(1) != 'c')
-						throw new TypeCheckException(n, "invalid selector '" + selector + "'");
 					try {
-						Integer i = Integer.parseInt(selector.substring(2));
+						Integer i = Integer.parseInt(selector.substring(1));
 
-						if (i == 0)
+						if (i == 1)
 							n.type = new BoaTable(((BoaTable)type).getType());
-						else if (((BoaTable)type).getIndexTypes() == null || i < 0 || i > ((BoaTable)type).getIndexTypes().size())
+						else if (((BoaTable)type).getIndexTypes() == null || i < 1 || i > ((BoaTable)type).getIndexTypes().size() + 1)
 							throw new TypeCheckException(n, "table column out of bound");
 						else
-							n.type = new BoaTable(((BoaTable)type).getIndex(i - 1));
+							n.type = new BoaTable(((BoaTable)type).getIndex(i - 2));
 					} catch (NumberFormatException e) {
 						throw new TypeCheckException(n, "invalid selector '" + selector + "'", e);
 					}

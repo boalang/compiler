@@ -7,4 +7,4 @@ view sv6 {
 
 v := sv6/o;
 
-c := v._c3;
+c := v._4;

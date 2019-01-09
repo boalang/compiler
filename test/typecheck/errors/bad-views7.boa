@@ -7,4 +7,4 @@ view sv5 {
 
 v := sv5/o;
 
-c := v._c1;
+c := v._2;
