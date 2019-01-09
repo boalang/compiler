@@ -45,7 +45,7 @@ public class BoaTuple extends BoaType {
 			BoaType t = this.members.get(i);
 			if (t instanceof BoaName)
 				this.names.put(((BoaName) t).getId(), i);
-			this.names.put("f" + i, i);
+			this.names.put("_" + i, i);
 		}
 	}
 

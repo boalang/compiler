@@ -130,5 +130,7 @@ public class TestTypecheckBad extends BaseTest {
 		typecheck(load(badDir + "bad-identifier2.boa"), "invalid identifier '_s'");
 		typecheck(load(badDir + "bad-identifier3.boa"), "invalid identifier '_f'");
 		typecheck(load(badDir + "bad-identifier4.boa"), "invalid identifier '_abc'");
+		typecheck(load(badDir + "bad-identifier5.boa"), "invalid identifier '_0'");
+		typecheck(load(badDir + "bad-identifier6.boa"), "invalid identifier '_0abc'");
 	}
 }

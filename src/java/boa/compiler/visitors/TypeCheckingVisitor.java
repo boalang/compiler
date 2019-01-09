@@ -445,7 +445,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final Identifier n, final SymbolTable env) {
 		n.env = env;
 
-		if (n.getToken().charAt(0) == '_')
+		if (n.getToken().charAt(0) == '_' && !n.getToken().equals("_UNUSED"))
 			throw new TypeCheckException(n, "invalid identifier '" + n.getToken() + "'");
 
 		if (env.hasType(n.getToken()))

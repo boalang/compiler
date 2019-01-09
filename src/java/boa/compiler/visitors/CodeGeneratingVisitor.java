@@ -283,7 +283,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 				int counter = 0;
 				for (final Expression e : n.getExprs()) {
-					fields.add("f" + counter);
+					fields.add("_" + counter);
 					types.add(e.type.toBoxedJavaType());
 					counter++;
 				}
@@ -320,11 +320,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			int fieldCount = 0;
 			for (final Component c : members) {
-				if (c.hasIdentifier()) {
-					fields.add(c.getIdentifier().getToken());
-				} else {
-					fields.add("f" + fieldCount);
-				}
+				fields.add("_" + fieldCount);
 				fieldCount++;
 				types.add(c.getType().type.toBoxedJavaType());
 			}
@@ -906,7 +902,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (opType instanceof BoaTuple) {
 				final BoaTuple tuple = (BoaTuple) opType;
 				n.env.setOperandType(tuple.getMember(member));
-				code.add(".___" + tuple.getMemberName(member));
+				code.add(".____" + tuple.getMemberIndex(member));
 				return;
 			}
 
