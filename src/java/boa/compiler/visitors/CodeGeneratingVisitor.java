@@ -281,7 +281,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				final List<String> fields = new ArrayList<String>();
 				final List<String> types = new ArrayList<String>();
 
-				int counter = 0;
+				int counter = 1;
 				for (final Expression e : n.getExprs()) {
 					fields.add("_" + counter);
 					types.add(e.type.toBoxedJavaType());
@@ -318,7 +318,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final List<String> fields = new ArrayList<String>();
 			final List<String> types = new ArrayList<String>();
 
-			int fieldCount = 0;
+			int fieldCount = 1;
 			for (final Component c : members) {
 				fields.add("_" + fieldCount);
 				fieldCount++;

@@ -6,15 +6,15 @@ tup1.i = 9;
 tup1.b = true;
 
 # access by position
-tup1._0 = 3;
-tup1._1 = "foo";
-tup1._2 = false;
+tup1._1 = 3;
+tup1._2 = "foo";
+tup1._3 = false;
 
 # tuples without declaring explicit type
 tup2 := { 5, false };
 
-tup2._0 = 3;
-tup2._1 = true;
+tup2._1 = 3;
+tup2._2 = true;
 
 # structurally similar tuple, different names
 type t2 = { i2: int, s: string, b2: bool };

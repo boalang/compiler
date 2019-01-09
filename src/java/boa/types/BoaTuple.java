@@ -45,7 +45,7 @@ public class BoaTuple extends BoaType {
 			BoaType t = this.members.get(i);
 			if (t instanceof BoaName)
 				this.names.put(((BoaName) t).getId(), i);
-			this.names.put("_" + i, i);
+			this.names.put("_" + (i + 1), i);
 		}
 	}
 
@@ -112,7 +112,7 @@ public class BoaTuple extends BoaType {
 	 * 
 	 */
 	public BoaType getMember(final int index) {
-		return this.members.get(index);
+		return this.members.get(index - 1);
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class BoaTuple extends BoaType {
 	}
 
 	public int getMemberIndex(final String member) {
-		return this.names.get(member);
+		return this.names.get(member) + 1;
 	}
 
 	public String getMemberName(final String member) {

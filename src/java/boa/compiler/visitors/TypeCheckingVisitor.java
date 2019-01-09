@@ -547,8 +547,11 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			if (!((BoaProtoMap) type).hasAttribute(selector))
 				throw new TypeCheckException(n.getId(), type + " has no member named '" + selector + "'");
 		} else if (type instanceof BoaTuple) {
-			if (!((BoaTuple) type).hasMember(selector))
+			if (!((BoaTuple) type).hasMember(selector)) {
+				if (selector.startsWith("_"))
+					throw new TypeCheckException(n.getId(), "invalid element number " + selector + " for tuple '" + type + "' - element numbers start at _1");
 				throw new TypeCheckException(n.getId(), "'" + type + "' has no member named '" + selector + "'");
+			}
 			
 			if (type instanceof CodeRepositoryProtoTuple && selector.equals("revisions")) {
 				throw new TypeCheckException(n.getId(), "Accessing " + "'" + selector + "' of '" + type + "' is prohibited! "

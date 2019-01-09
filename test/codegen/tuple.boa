@@ -24,20 +24,20 @@ tup2.s = "bar";
 tup2.b2 = false;
 
 # access by position
-tup1._0 = 3;
-tup1._1 = "foo";
-tup1._2 = false;
+tup1._1 = 3;
+tup1._2 = "foo";
+tup1._3 = false;
 
-tup2._0 = 3;
-tup2._1 = "foo";
-tup2._2 = false;
+tup2._1 = 3;
+tup2._2 = "foo";
+tup2._3 = false;
 
-tup3._0 = 3;
-tup3._1 = "foo";
-tup3._2 = false;
+tup3._1 = 3;
+tup3._2 = "foo";
+tup3._3 = false;
 
-tup4._0 = 3;
-tup4._1 = true;
+tup4._1 = 3;
+tup4._2 = true;
 
 
 # assignment
