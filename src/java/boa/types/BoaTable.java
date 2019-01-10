@@ -17,6 +17,7 @@
 package boa.types;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -30,6 +31,7 @@ public class BoaTable extends BoaType {
 	private BoaType type;
 	private List<BoaScalar> indexTypes;
 	private Map<String, Integer> names;
+	private List<Object> filter;
 
 	/**
 	 * Construct an empty BoaTable.
@@ -61,6 +63,7 @@ public class BoaTable extends BoaType {
 	public BoaTable(final BoaType type, final List<BoaScalar> indexTypes) {
 		this.type = type;
 		this.indexTypes = indexTypes;
+		this.filter = null;
 
 		names = new HashMap<String, Integer>();
 		if (indexTypes != null) {
@@ -219,6 +222,25 @@ public class BoaTable extends BoaType {
 	 */
 	public void setIndexTypes(final List<BoaScalar> indexTypes) {
 		this.indexTypes = indexTypes;
+	}
+
+	public boolean hasFilter() {
+		return filter != null;
+	}
+
+	public List<Object> getFilter() {
+		return filter;
+	}
+
+	public void addToFilter(Object o) {
+		if (filter == null) {
+			filter = new ArrayList<Object>();
+		}
+		filter.add(o);
+	}
+
+	public void setFilter(List<Object> f) {
+		filter = f;
 	}
 
 	/** {@inheritDoc} */

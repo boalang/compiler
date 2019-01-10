@@ -121,6 +121,10 @@ public class TestTypecheckBad extends BaseTest {
 		typecheck(load(badDir + "bad-views7.boa"), "table column out of bound");
 		typecheck(load(badDir + "bad-views8.boa"), "table column out of bound");
 		typecheck(load(badDir + "bad-views9.boa"), "'table happy:int[count:string, year:string]' has no member named 'bomb'");
+		typecheck(load(badDir + "bad-views10.boa"), "invalid index type 'int' for indexing into 'table happy:int[count:string, year:string]'");
+		typecheck(load(badDir + "bad-views11.boa"), "table column out of bound");
+		typecheck(load(badDir + "bad-views12.boa"), "invalid index type 'string' for indexing into 'table happy:int[count:string, year:string]'");
+		typecheck(load(badDir + "bad-views13.boa"), "table column out of bound");
 	}
 
 	@Test

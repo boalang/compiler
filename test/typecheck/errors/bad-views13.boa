@@ -1,0 +1,13 @@
+view sv11 {
+	o: output sum[string][string] of int;
+	s := 2;
+
+	o["a"]["b"] << 0;
+}
+
+v : table [count:string][year: string] of happy: int = sv11/o;
+
+st1 := v["abc"];
+st2 := st1["def"];
+st3 := st2[4];
+st4 := st3["bad"];
