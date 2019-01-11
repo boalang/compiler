@@ -59,6 +59,7 @@ import boa.compiler.visitors.CodeGeneratingVisitor;
 import boa.compiler.visitors.PrettyPrintVisitor;
 import boa.compiler.visitors.TaskClassifyingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
+import boa.compiler.visitors.ViewFindingVisitor;
 import boa.compiler.listeners.BoaErrorListener;
 import boa.compiler.listeners.LexerErrorListener;
 import boa.compiler.listeners.ParserErrorListener;
@@ -159,6 +160,7 @@ public class BoaCompiler extends BoaMain {
 					final BoaErrorListener parserErrorListener = new ParserErrorListener();
 					final Start p = parse(tokens, parser, parserErrorListener);
 					if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
+					if (cl.hasOption("view")) new ViewFindingVisitor().start(p);
 
 					final String jobName = "" + i;
 
@@ -380,6 +382,7 @@ public class BoaCompiler extends BoaMain {
 		options.addOption("ast2", "ast-transformed", false, "print the AST after transformations, before code generation (debug)");
 		options.addOption("pp", "pretty-print", false, "pretty print the AST before code generation (debug)");
 		options.addOption("cd", "compilation-dir", true, "directory to store all generated files");
+		options.addOption("view", "find-view", false, "print all referenced view names");
 
 		final CommandLine cl;
 		try {
