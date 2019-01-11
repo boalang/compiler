@@ -28,17 +28,11 @@ import java.util.ArrayList;
  * @author hungc
  */
 public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
-	protected List<Integer> jobNums;
-
-	public List<Integer> getJobs() {
-		return jobNums;
-	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void initialize() {
 		super.initialize();
-		jobNums = new ArrayList<Integer>();
 	}
 
 	/** {@inheritDoc} */

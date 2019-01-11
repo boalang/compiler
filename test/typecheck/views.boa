@@ -9,6 +9,20 @@ view subv {
 	o << 0;
 }
 
+view subv2 {
+	o: output sum of int;
+	o2: output sum [string][string] of int;
+
+	view subv3 {
+		o: output sum of int;
+		o2: output sum [string][string] of int;
+
+		o << 0;
+	}
+
+	o << 0;
+}
+
 v1: table[year: int][projectID: string][fileName: string] of temp:int;
 # TODO pull the view type
 #v1 = @hungc/ComplicateOutput/output;
