@@ -160,7 +160,10 @@ public class BoaCompiler extends BoaMain {
 					final BoaErrorListener parserErrorListener = new ParserErrorListener();
 					final Start p = parse(tokens, parser, parserErrorListener);
 					if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
-					if (cl.hasOption("view")) new ViewFindingVisitor().start(p);
+					if (cl.hasOption("views")) {
+						new ViewFindingVisitor().start(p);
+						System.exit(0);
+					}
 
 					final String jobName = "" + i;
 
@@ -382,7 +385,7 @@ public class BoaCompiler extends BoaMain {
 		options.addOption("ast2", "ast-transformed", false, "print the AST after transformations, before code generation (debug)");
 		options.addOption("pp", "pretty-print", false, "pretty print the AST before code generation (debug)");
 		options.addOption("cd", "compilation-dir", true, "directory to store all generated files");
-		options.addOption("view", "find-view", false, "print all referenced view names");
+		options.addOption("views", "find-external-views", false, "print all referenced external view names");
 
 		final CommandLine cl;
 		try {
