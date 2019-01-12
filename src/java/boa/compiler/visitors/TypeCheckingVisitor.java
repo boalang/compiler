@@ -416,6 +416,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 									newFilter.add(o);
 								((BoaTable)temp).setFilter(newFilter);
 							}
+							((BoaTable)temp).setParent((BoaTable)type);
 							n.getOperand().type = temp;
 							type = temp;
 						}

@@ -32,6 +32,7 @@ public class BoaTable extends BoaType {
 	private List<BoaScalar> indexTypes;
 	private Map<String, Integer> names;
 	private List<Object> filter;
+	private BoaTable parent;
 
 	/**
 	 * Construct an empty BoaTable.
@@ -64,6 +65,7 @@ public class BoaTable extends BoaType {
 		this.type = type;
 		this.indexTypes = indexTypes;
 		this.filter = null;
+		this.parent = null;
 
 		names = new HashMap<String, Integer>();
 		if (indexTypes != null) {
@@ -241,6 +243,18 @@ public class BoaTable extends BoaType {
 
 	public void setFilter(List<Object> f) {
 		filter = f;
+	}
+
+	public void setParent(BoaTable p) {
+		this.parent = p;
+	}
+
+	public boolean hasParent() {
+		return this.parent != null;
+	}
+
+	public BoaTable getParent() {
+		return this.parent;
 	}
 
 	/** {@inheritDoc} */
