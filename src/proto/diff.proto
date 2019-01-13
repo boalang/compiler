@@ -125,6 +125,11 @@ message ChangedFile {
 		Source_CSS = 701;
 		/** @exclude */
 		CSS_ERROR = 700;
+		
+		SOURCE_PY_ERROR = 800;
+		SOURCE_PY = 801;
+		SOURCE_PY_2 = 802;
+		SOURCE_PY_3 = 803;
 	}
 	/** The kind of change for this file */
 	required ChangeKind change = 1;
