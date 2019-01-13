@@ -211,9 +211,12 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 			parseJavaFile(path, fb, content, false);
 		} 
+		// Python AST generation will be handled here
 		else if(lowerPath.endsWith(".py")) {
 			final String content = getFileContents(path);
+			System.out.println(path);
 			fb.setKind(FileKind.SOURCE_PY_ERROR);
+			parsePythonFile(path, fb, content, false);
 		}
 		else if (lowerPath.endsWith(".js")) {
 			final String content = getFileContents(path);
@@ -520,6 +523,10 @@ public abstract class AbstractCommit {
 		return !errorCheck.hasError;
 	}
 
+	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
+		System.out.println("Reached Py Parse file");
+		return false;
+	}
 	private boolean parseJavaScriptFile(final String path, final ChangedFile.Builder fb, final String content,
 			final int astLevel, final boolean storeOnError) {
 		try {

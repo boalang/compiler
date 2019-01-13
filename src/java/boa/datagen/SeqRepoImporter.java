@@ -385,12 +385,14 @@ public class SeqRepoImporter {
 //				return true;
 			if (project.getProgrammingLanguagesList().contains("Java")
 					|| project.getProgrammingLanguagesList().contains("JavaScript")
+					|| project.getProgrammingLanguagesList().contains("Python")
 					|| project.getProgrammingLanguagesList().contains("PHP"))
 				return false;
 			String lang = project.getMainLanguage();
 			if (lang != null
 					&& (lang.equals("Java")
 						|| lang.equals("JavaScript")
+						|| lang.equals("Python")
 						|| lang.equals("PHP")))
 				return false;
 			return true;
