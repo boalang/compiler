@@ -194,6 +194,7 @@ public abstract class AbstractCommit {
 		return revision.build();
 	}
 
+	
 	Builder processChangeFile(final ChangedFile.Builder fb) {
 		long len = connector.astWriterLen;
 		String path = fb.getName();
@@ -209,7 +210,12 @@ public abstract class AbstractCommit {
 			final String content = getFileContents(path);
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 			parseJavaFile(path, fb, content, false);
-		} else if (lowerPath.endsWith(".js")) {
+		} 
+		else if(lowerPath.endsWith(".py")) {
+			final String content = getFileContents(path);
+			fb.setKind(FileKind.SOURCE_PY_ERROR);
+		}
+		else if (lowerPath.endsWith(".js")) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JS_ES1);
