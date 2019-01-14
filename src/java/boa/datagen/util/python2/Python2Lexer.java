@@ -1,9 +1,8 @@
-// Generated from Python2.g4 by ANTLR 4.7.2
+// Generated from Python2.g4 by ANTLR 4.5
 
 	//package parser;
-    //import Python2Parser;
-    //import antlr4.Token.CommonToken;
 package boa.datagen.util.python2;
+
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
@@ -15,7 +14,7 @@ import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class Python2Lexer extends Lexer {
-	static { RuntimeMetaData.checkVersion("4.7.2", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.5", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -33,59 +32,46 @@ public class Python2Lexer extends Lexer {
 		T__66=67, T__67=68, T__68=69, NAME=70, NUMBER=71, STRING=72, LINENDING=73, 
 		WHITESPACE=74, COMMENT=75, OPEN_PAREN=76, CLOSE_PAREN=77, OPEN_BRACE=78, 
 		CLOSE_BRACE=79, OPEN_BRACKET=80, CLOSE_BRACKET=81, UNKNOWN=82;
-	public static String[] channelNames = {
-		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
-	};
-
 	public static String[] modeNames = {
 		"DEFAULT_MODE"
 	};
 
-	private static String[] makeRuleNames() {
-		return new String[] {
-			"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8", 
-			"T__9", "T__10", "T__11", "T__12", "T__13", "T__14", "T__15", "T__16", 
-			"T__17", "T__18", "T__19", "T__20", "T__21", "T__22", "T__23", "T__24", 
-			"T__25", "T__26", "T__27", "T__28", "T__29", "T__30", "T__31", "T__32", 
-			"T__33", "T__34", "T__35", "T__36", "T__37", "T__38", "T__39", "T__40", 
-			"T__41", "T__42", "T__43", "T__44", "T__45", "T__46", "T__47", "T__48", 
-			"T__49", "T__50", "T__51", "T__52", "T__53", "T__54", "T__55", "T__56", 
-			"T__57", "T__58", "T__59", "T__60", "T__61", "T__62", "T__63", "T__64", 
-			"T__65", "T__66", "T__67", "T__68", "NAME", "NUMBER", "STRING", "LINENDING", 
-			"WHITESPACE", "COMMENT", "OPEN_PAREN", "CLOSE_PAREN", "OPEN_BRACE", "CLOSE_BRACE", 
-			"OPEN_BRACKET", "CLOSE_BRACKET", "UNKNOWN"
-		};
-	}
-	public static final String[] ruleNames = makeRuleNames();
+	public static final String[] ruleNames = {
+		"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8", 
+		"T__9", "T__10", "T__11", "T__12", "T__13", "T__14", "T__15", "T__16", 
+		"T__17", "T__18", "T__19", "T__20", "T__21", "T__22", "T__23", "T__24", 
+		"T__25", "T__26", "T__27", "T__28", "T__29", "T__30", "T__31", "T__32", 
+		"T__33", "T__34", "T__35", "T__36", "T__37", "T__38", "T__39", "T__40", 
+		"T__41", "T__42", "T__43", "T__44", "T__45", "T__46", "T__47", "T__48", 
+		"T__49", "T__50", "T__51", "T__52", "T__53", "T__54", "T__55", "T__56", 
+		"T__57", "T__58", "T__59", "T__60", "T__61", "T__62", "T__63", "T__64", 
+		"T__65", "T__66", "T__67", "T__68", "NAME", "NUMBER", "STRING", "LINENDING", 
+		"WHITESPACE", "COMMENT", "OPEN_PAREN", "CLOSE_PAREN", "OPEN_BRACE", "CLOSE_BRACE", 
+		"OPEN_BRACKET", "CLOSE_BRACKET", "UNKNOWN"
+	};
 
-	private static String[] makeLiteralNames() {
-		return new String[] {
-			null, "'@'", "'def'", "':'", "'='", "','", "'*'", "'**'", "';'", "'+='", 
-			"'-='", "'*='", "'/='", "'%='", "'&='", "'|='", "'^='", "'<<='", "'>>='", 
-			"'**='", "'//='", "'>>'", "'del'", "'pass'", "'break'", "'continue'", 
-			"'return'", "'raise'", "'import'", "'from'", "'.'", "'as'", "'global'", 
-			"'exec'", "'in'", "'assert'", "'if'", "'elif'", "'else'", "'while'", 
-			"'for'", "'try'", "'finally'", "'with'", "'except'", "'lambda'", "'or'", 
-			"'and'", "'not'", "'<'", "'>'", "'=='", "'>='", "'<='", "'<>'", "'!='", 
-			"'is'", "'|'", "'^'", "'&'", "'<<'", "'+'", "'-'", "'/'", "'%'", "'//'", 
-			"'~'", "'`'", "'class'", "'yield'", null, null, null, null, null, null, 
-			"'('", "')'", "'{'", "'}'", "'['", "']'"
-		};
-	}
-	private static final String[] _LITERAL_NAMES = makeLiteralNames();
-	private static String[] makeSymbolicNames() {
-		return new String[] {
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, "NAME", "NUMBER", 
-			"STRING", "LINENDING", "WHITESPACE", "COMMENT", "OPEN_PAREN", "CLOSE_PAREN", 
-			"OPEN_BRACE", "CLOSE_BRACE", "OPEN_BRACKET", "CLOSE_BRACKET", "UNKNOWN"
-		};
-	}
-	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
+	private static final String[] _LITERAL_NAMES = {
+		null, "'@'", "'def'", "':'", "'='", "','", "'*'", "'**'", "';'", "'+='", 
+		"'-='", "'*='", "'/='", "'%='", "'&='", "'|='", "'^='", "'<<='", "'>>='", 
+		"'**='", "'//='", "'>>'", "'del'", "'pass'", "'break'", "'continue'", 
+		"'return'", "'raise'", "'import'", "'from'", "'.'", "'as'", "'global'", 
+		"'exec'", "'in'", "'assert'", "'if'", "'elif'", "'else'", "'while'", "'for'", 
+		"'try'", "'finally'", "'with'", "'except'", "'lambda'", "'or'", "'and'", 
+		"'not'", "'<'", "'>'", "'=='", "'>='", "'<='", "'<>'", "'!='", "'is'", 
+		"'|'", "'^'", "'&'", "'<<'", "'+'", "'-'", "'/'", "'%'", "'//'", "'~'", 
+		"'`'", "'class'", "'yield'", null, null, null, null, null, null, "'('", 
+		"')'", "'{'", "'}'", "'['", "']'"
+	};
+	private static final String[] _SYMBOLIC_NAMES = {
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, "NAME", "NUMBER", 
+		"STRING", "LINENDING", "WHITESPACE", "COMMENT", "OPEN_PAREN", "CLOSE_PAREN", 
+		"OPEN_BRACE", "CLOSE_BRACE", "OPEN_BRACKET", "CLOSE_BRACKET", "UNKNOWN"
+	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**
@@ -121,8 +107,8 @@ public class Python2Lexer extends Lexer {
 
 
 	  
-	    private java.util.Queue<Token> _tokens = new java.util.LinkedList<>();
-	    private java.util.Stack<Integer> _indents = new java.util.Stack<>();
+	    private java.util.Queue<Token> _tokens = new java.util.LinkedList<Token>();
+	    private java.util.Stack<Integer> _indents = new java.util.Stack<Integer>();
 	    private int _openBRCount = 0;
 	    private int _tokenStartColumn = 0;
 	    private boolean _suppressNewlines = false;
@@ -206,9 +192,6 @@ public class Python2Lexer extends Lexer {
 	@Override
 	public String getSerializedATN() { return _serializedATN; }
 
-	//@Override
-	public String[] getChannelNames() { return channelNames; }
-
 	@Override
 	public String[] getModeNames() { return modeNames; }
 
@@ -260,7 +243,7 @@ public class Python2Lexer extends Lexer {
 			        this._suppressNewlines = true;
 			    }
 			    int la = this._input.LA(1);
-			    java.util.Set<Integer> set = new java.util.HashSet<>();
+			    java.util.Set<Integer> set = new java.util.HashSet<Integer>();
 			    set.add((int)'\r');
 			    set.add((int)'\n');
 			    set.add((int)'#');
@@ -281,7 +264,7 @@ public class Python2Lexer extends Lexer {
 			if (this._tokenStartCharPositionInLine == 0 && this._openBRCount == 0
 			    && !this._lineContinuation) {
 			    int la = this._input.LA(1);
-			    java.util.Set<Integer> set = new java.util.HashSet<>();
+			    java.util.Set<Integer> set = new java.util.HashSet<Integer>();
 			    set.add((int)'\r');
 			    set.add((int)'\n');
 			    set.add((int)'#');
@@ -357,7 +340,7 @@ public class Python2Lexer extends Lexer {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2T\u02b3\b\1\4\2\t"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\2T\u02b3\b\1\4\2\t"+
 		"\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -407,18 +390,18 @@ public class Python2Lexer extends Lexer {
 		"M\u0099N\u009bO\u009dP\u009fQ\u00a1R\u00a3S\u00a5T\3\2\26\5\2C\\aac|\6"+
 		"\2\62;C\\aac|\4\2ZZzz\5\2\62;CHch\4\2NNnn\4\2GGgg\4\2--//\3\2\62;\4\2"+
 		"QQqq\3\2\629\4\2DDdd\3\2\62\63\4\2LLll\6\2DDWWddww\4\2TTtt\4\2\13\13\""+
-		"\"\6\2\f\f\17\17))^^\6\2\f\f\17\17$$^^\3\2^^\4\2\f\f\17\17\2\u02ee\2\3"+
-		"\3\2\2\2\2\5\3\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2\2\2\r\3\2\2\2"+
-		"\2\17\3\2\2\2\2\21\3\2\2\2\2\23\3\2\2\2\2\25\3\2\2\2\2\27\3\2\2\2\2\31"+
-		"\3\2\2\2\2\33\3\2\2\2\2\35\3\2\2\2\2\37\3\2\2\2\2!\3\2\2\2\2#\3\2\2\2"+
-		"\2%\3\2\2\2\2\'\3\2\2\2\2)\3\2\2\2\2+\3\2\2\2\2-\3\2\2\2\2/\3\2\2\2\2"+
-		"\61\3\2\2\2\2\63\3\2\2\2\2\65\3\2\2\2\2\67\3\2\2\2\29\3\2\2\2\2;\3\2\2"+
-		"\2\2=\3\2\2\2\2?\3\2\2\2\2A\3\2\2\2\2C\3\2\2\2\2E\3\2\2\2\2G\3\2\2\2\2"+
-		"I\3\2\2\2\2K\3\2\2\2\2M\3\2\2\2\2O\3\2\2\2\2Q\3\2\2\2\2S\3\2\2\2\2U\3"+
-		"\2\2\2\2W\3\2\2\2\2Y\3\2\2\2\2[\3\2\2\2\2]\3\2\2\2\2_\3\2\2\2\2a\3\2\2"+
-		"\2\2c\3\2\2\2\2e\3\2\2\2\2g\3\2\2\2\2i\3\2\2\2\2k\3\2\2\2\2m\3\2\2\2\2"+
-		"o\3\2\2\2\2q\3\2\2\2\2s\3\2\2\2\2u\3\2\2\2\2w\3\2\2\2\2y\3\2\2\2\2{\3"+
-		"\2\2\2\2}\3\2\2\2\2\177\3\2\2\2\2\u0081\3\2\2\2\2\u0083\3\2\2\2\2\u0085"+
+		"\"\6\2\f\f\17\17))^^\6\2\f\f\17\17$$^^\3\2^^\4\2\f\f\17\17\u02ee\2\3\3"+
+		"\2\2\2\2\5\3\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2\2\2\r\3\2\2\2\2"+
+		"\17\3\2\2\2\2\21\3\2\2\2\2\23\3\2\2\2\2\25\3\2\2\2\2\27\3\2\2\2\2\31\3"+
+		"\2\2\2\2\33\3\2\2\2\2\35\3\2\2\2\2\37\3\2\2\2\2!\3\2\2\2\2#\3\2\2\2\2"+
+		"%\3\2\2\2\2\'\3\2\2\2\2)\3\2\2\2\2+\3\2\2\2\2-\3\2\2\2\2/\3\2\2\2\2\61"+
+		"\3\2\2\2\2\63\3\2\2\2\2\65\3\2\2\2\2\67\3\2\2\2\29\3\2\2\2\2;\3\2\2\2"+
+		"\2=\3\2\2\2\2?\3\2\2\2\2A\3\2\2\2\2C\3\2\2\2\2E\3\2\2\2\2G\3\2\2\2\2I"+
+		"\3\2\2\2\2K\3\2\2\2\2M\3\2\2\2\2O\3\2\2\2\2Q\3\2\2\2\2S\3\2\2\2\2U\3\2"+
+		"\2\2\2W\3\2\2\2\2Y\3\2\2\2\2[\3\2\2\2\2]\3\2\2\2\2_\3\2\2\2\2a\3\2\2\2"+
+		"\2c\3\2\2\2\2e\3\2\2\2\2g\3\2\2\2\2i\3\2\2\2\2k\3\2\2\2\2m\3\2\2\2\2o"+
+		"\3\2\2\2\2q\3\2\2\2\2s\3\2\2\2\2u\3\2\2\2\2w\3\2\2\2\2y\3\2\2\2\2{\3\2"+
+		"\2\2\2}\3\2\2\2\2\177\3\2\2\2\2\u0081\3\2\2\2\2\u0083\3\2\2\2\2\u0085"+
 		"\3\2\2\2\2\u0087\3\2\2\2\2\u0089\3\2\2\2\2\u008b\3\2\2\2\2\u008d\3\2\2"+
 		"\2\2\u008f\3\2\2\2\2\u0091\3\2\2\2\2\u0093\3\2\2\2\2\u0095\3\2\2\2\2\u0097"+
 		"\3\2\2\2\2\u0099\3\2\2\2\2\u009b\3\2\2\2\2\u009d\3\2\2\2\2\u009f\3\2\2"+

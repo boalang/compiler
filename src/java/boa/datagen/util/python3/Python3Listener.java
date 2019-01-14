@@ -1,7 +1,7 @@
-// Generated from Python3.g4 by ANTLR 4.7.2
+// Generated from Python3.g4 by ANTLR 4.5
 
 package boa.datagen.util.python3;
-
+import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -139,6 +139,16 @@ public interface Python3Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVfpdef(Python3Parser.VfpdefContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#calldef}.
+	 * @param ctx the parse tree
+	 */
+	void enterCalldef(Python3Parser.CalldefContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#calldef}.
+	 * @param ctx the parse tree
+	 */
+	void exitCalldef(Python3Parser.CalldefContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link Python3Parser#stmt}.
 	 * @param ctx the parse tree

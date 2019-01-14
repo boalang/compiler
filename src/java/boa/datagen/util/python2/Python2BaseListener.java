@@ -1,7 +1,8 @@
-// Generated from Python2.g4 by ANTLR 4.7.2
-
+// Generated from Python2.g4 by ANTLR 4.5
 package boa.datagen.util.python2;
+
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 

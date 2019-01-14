@@ -58,6 +58,8 @@ import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.XMLVisitor;
+import boa.datagen.util.python2.Python2Visitor;
+import boa.datagen.util.python3.Python3Visitor;
 import boa.datagen.util.JavaErrorCheckVisitor;
 
 /**
@@ -525,6 +527,32 @@ public abstract class AbstractCommit {
 
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
 		System.out.println("Reached Py Parse file");
+		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+		try {
+			Python3Visitor visitor = new Python3Visitor();
+			fb.setKind(FileKind.SOURCE_PY_3);
+			visitor.visit(content);
+			ast.addNamespaces(visitor.getNamespaces());
+		}catch (Exception e1) {
+			e1.printStackTrace();
+			System.out.println(e1.getMessage());
+			try {
+				Python2Visitor visitor = new Python2Visitor();
+				fb.setKind(FileKind.SOURCE_PY_2);
+				visitor.visit(content);
+			}
+			catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		try {
+			// System.out.println("writing=" + count + "\t" + path);
+			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+			connector.astWriterLen += bw.getLength();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 	private boolean parseJavaScriptFile(final String path, final ChangedFile.Builder fb, final String content,

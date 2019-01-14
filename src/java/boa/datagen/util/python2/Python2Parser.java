@@ -1,6 +1,7 @@
-// Generated from Python2.g4 by ANTLR 4.7.2
+// Generated from Python2.g4 by ANTLR 4.5
 
 package boa.datagen.util.python2;
+
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class Python2Parser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.7.2", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.5", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -54,56 +55,47 @@ public class Python2Parser extends Parser {
 		RULE_classdef = 73, RULE_arglist = 74, RULE_argument = 75, RULE_list_iter = 76, 
 		RULE_list_for = 77, RULE_list_if = 78, RULE_comp_iter = 79, RULE_comp_for = 80, 
 		RULE_comp_if = 81, RULE_testlist1 = 82, RULE_encoding_decl = 83, RULE_yield_expr = 84;
-	private static String[] makeRuleNames() {
-		return new String[] {
-			"single_input", "file_input", "eval_input", "decorator", "decorators", 
-			"decorated", "funcdef", "parameters", "varargslist", "fpdef", "fplist", 
-			"stmt", "simple_stmt", "small_stmt", "expr_stmt", "augassign", "print_stmt", 
-			"del_stmt", "pass_stmt", "flow_stmt", "break_stmt", "continue_stmt", 
-			"return_stmt", "yield_stmt", "raise_stmt", "import_stmt", "import_name", 
-			"import_from", "import_as_name", "dotted_as_name", "import_as_names", 
-			"dotted_as_names", "dotted_name", "global_stmt", "exec_stmt", "assert_stmt", 
-			"compound_stmt", "if_stmt", "while_stmt", "for_stmt", "try_stmt", "with_stmt", 
-			"with_item", "except_clause", "suite", "testlist_safe", "old_test", "old_lambdef", 
-			"test", "or_test", "and_test", "not_test", "comparison", "comp_op", "expr", 
-			"xor_expr", "and_expr", "shift_expr", "arith_expr", "term", "factor", 
-			"power", "atom", "listmaker", "testlist_comp", "lambdef", "trailer", 
-			"subscriptlist", "subscript", "sliceop", "exprlist", "testlist", "dictorsetmaker", 
-			"classdef", "arglist", "argument", "list_iter", "list_for", "list_if", 
-			"comp_iter", "comp_for", "comp_if", "testlist1", "encoding_decl", "yield_expr"
-		};
-	}
-	public static final String[] ruleNames = makeRuleNames();
+	public static final String[] ruleNames = {
+		"single_input", "file_input", "eval_input", "decorator", "decorators", 
+		"decorated", "funcdef", "parameters", "varargslist", "fpdef", "fplist", 
+		"stmt", "simple_stmt", "small_stmt", "expr_stmt", "augassign", "print_stmt", 
+		"del_stmt", "pass_stmt", "flow_stmt", "break_stmt", "continue_stmt", "return_stmt", 
+		"yield_stmt", "raise_stmt", "import_stmt", "import_name", "import_from", 
+		"import_as_name", "dotted_as_name", "import_as_names", "dotted_as_names", 
+		"dotted_name", "global_stmt", "exec_stmt", "assert_stmt", "compound_stmt", 
+		"if_stmt", "while_stmt", "for_stmt", "try_stmt", "with_stmt", "with_item", 
+		"except_clause", "suite", "testlist_safe", "old_test", "old_lambdef", 
+		"test", "or_test", "and_test", "not_test", "comparison", "comp_op", "expr", 
+		"xor_expr", "and_expr", "shift_expr", "arith_expr", "term", "factor", 
+		"power", "atom", "listmaker", "testlist_comp", "lambdef", "trailer", "subscriptlist", 
+		"subscript", "sliceop", "exprlist", "testlist", "dictorsetmaker", "classdef", 
+		"arglist", "argument", "list_iter", "list_for", "list_if", "comp_iter", 
+		"comp_for", "comp_if", "testlist1", "encoding_decl", "yield_expr"
+	};
 
-	private static String[] makeLiteralNames() {
-		return new String[] {
-			null, "'@'", "'def'", "':'", "'='", "','", "'*'", "'**'", "';'", "'+='", 
-			"'-='", "'*='", "'/='", "'%='", "'&='", "'|='", "'^='", "'<<='", "'>>='", 
-			"'**='", "'//='", "'>>'", "'del'", "'pass'", "'break'", "'continue'", 
-			"'return'", "'raise'", "'import'", "'from'", "'.'", "'as'", "'global'", 
-			"'exec'", "'in'", "'assert'", "'if'", "'elif'", "'else'", "'while'", 
-			"'for'", "'try'", "'finally'", "'with'", "'except'", "'lambda'", "'or'", 
-			"'and'", "'not'", "'<'", "'>'", "'=='", "'>='", "'<='", "'<>'", "'!='", 
-			"'is'", "'|'", "'^'", "'&'", "'<<'", "'+'", "'-'", "'/'", "'%'", "'//'", 
-			"'~'", "'`'", "'class'", "'yield'", null, null, null, null, null, null, 
-			"'('", "')'", "'{'", "'}'", "'['", "']'"
-		};
-	}
-	private static final String[] _LITERAL_NAMES = makeLiteralNames();
-	private static String[] makeSymbolicNames() {
-		return new String[] {
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, "NAME", "NUMBER", 
-			"STRING", "LINENDING", "WHITESPACE", "COMMENT", "OPEN_PAREN", "CLOSE_PAREN", 
-			"OPEN_BRACE", "CLOSE_BRACE", "OPEN_BRACKET", "CLOSE_BRACKET", "UNKNOWN", 
-			"INDENT", "DEDENT", "NEWLINE", "ENDMARKER"
-		};
-	}
-	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
+	private static final String[] _LITERAL_NAMES = {
+		null, "'@'", "'def'", "':'", "'='", "','", "'*'", "'**'", "';'", "'+='", 
+		"'-='", "'*='", "'/='", "'%='", "'&='", "'|='", "'^='", "'<<='", "'>>='", 
+		"'**='", "'//='", "'>>'", "'del'", "'pass'", "'break'", "'continue'", 
+		"'return'", "'raise'", "'import'", "'from'", "'.'", "'as'", "'global'", 
+		"'exec'", "'in'", "'assert'", "'if'", "'elif'", "'else'", "'while'", "'for'", 
+		"'try'", "'finally'", "'with'", "'except'", "'lambda'", "'or'", "'and'", 
+		"'not'", "'<'", "'>'", "'=='", "'>='", "'<='", "'<>'", "'!='", "'is'", 
+		"'|'", "'^'", "'&'", "'<<'", "'+'", "'-'", "'/'", "'%'", "'//'", "'~'", 
+		"'`'", "'class'", "'yield'", null, null, null, null, null, null, "'('", 
+		"')'", "'{'", "'}'", "'['", "']'"
+	};
+	private static final String[] _SYMBOLIC_NAMES = {
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, "NAME", "NUMBER", 
+		"STRING", "LINENDING", "WHITESPACE", "COMMENT", "OPEN_PAREN", "CLOSE_PAREN", 
+		"OPEN_BRACE", "CLOSE_BRACE", "OPEN_BRACKET", "CLOSE_BRACKET", "UNKNOWN", 
+		"INDENT", "DEDENT", "NEWLINE", "ENDMARKER"
+	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**
@@ -153,7 +145,6 @@ public class Python2Parser extends Parser {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
-
 	public static class Single_inputContext extends ParserRuleContext {
 		public TerminalNode NEWLINE() { return getToken(Python2Parser.NEWLINE, 0); }
 		public Simple_stmtContext simple_stmt() {
@@ -181,7 +172,6 @@ public class Python2Parser extends Parser {
 		enterRule(_localctx, 0, RULE_single_input);
 		try {
 			setState(175);
-			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
@@ -259,7 +249,6 @@ public class Python2Parser extends Parser {
 				if ( _alt==1 ) {
 					{
 					setState(179);
-					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
 					case 1:
 						{
@@ -361,8 +350,6 @@ public class Python2Parser extends Parser {
 			return getRuleContext(Dotted_nameContext.class,0);
 		}
 		public TerminalNode NEWLINE() { return getToken(Python2Parser.NEWLINE, 0); }
-		public TerminalNode OPEN_PAREN() { return getToken(Python2Parser.OPEN_PAREN, 0); }
-		public TerminalNode CLOSE_PAREN() { return getToken(Python2Parser.CLOSE_PAREN, 0); }
 		public ArglistContext arglist() {
 			return getRuleContext(ArglistContext.class,0);
 		}
@@ -392,14 +379,12 @@ public class Python2Parser extends Parser {
 			setState(196);
 			dotted_name();
 			setState(202);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==OPEN_PAREN) {
 				{
 				setState(197);
 				match(OPEN_PAREN);
 				setState(199);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__5) | (1L << T__6) | (1L << T__29) | (1L << T__44) | (1L << T__47) | (1L << T__60) | (1L << T__61))) != 0) || ((((_la - 66)) & ~0x3f) == 0 && ((1L << (_la - 66)) & ((1L << (T__65 - 66)) | (1L << (T__66 - 66)) | (1L << (NAME - 66)) | (1L << (NUMBER - 66)) | (1L << (STRING - 66)) | (1L << (OPEN_PAREN - 66)) | (1L << (OPEN_BRACE - 66)) | (1L << (OPEN_BRACKET - 66)))) != 0)) {
 					{
@@ -516,7 +501,6 @@ public class Python2Parser extends Parser {
 			setState(211);
 			decorators();
 			setState(214);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__67:
 				{
@@ -598,8 +582,6 @@ public class Python2Parser extends Parser {
 	}
 
 	public static class ParametersContext extends ParserRuleContext {
-		public TerminalNode OPEN_PAREN() { return getToken(Python2Parser.OPEN_PAREN, 0); }
-		public TerminalNode CLOSE_PAREN() { return getToken(Python2Parser.CLOSE_PAREN, 0); }
 		public VarargslistContext varargslist() {
 			return getRuleContext(VarargslistContext.class,0);
 		}
@@ -627,7 +609,6 @@ public class Python2Parser extends Parser {
 			setState(222);
 			match(OPEN_PAREN);
 			setState(224);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__5 || _la==T__6 || _la==NAME || _la==OPEN_PAREN) {
 				{
@@ -691,7 +672,6 @@ public class Python2Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(270);
-			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,17,_ctx) ) {
 			case 1:
 				{
@@ -704,7 +684,6 @@ public class Python2Parser extends Parser {
 					setState(228);
 					fpdef();
 					setState(231);
-					_errHandler.sync(this);
 					_la = _input.LA(1);
 					if (_la==T__3) {
 						{
@@ -724,7 +703,6 @@ public class Python2Parser extends Parser {
 					_la = _input.LA(1);
 				}
 				setState(249);
-				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case T__5:
 					{
@@ -733,7 +711,6 @@ public class Python2Parser extends Parser {
 					setState(241);
 					match(NAME);
 					setState(245);
-					_errHandler.sync(this);
 					_la = _input.LA(1);
 					if (_la==T__4) {
 						{
@@ -766,7 +743,6 @@ public class Python2Parser extends Parser {
 				setState(251);
 				fpdef();
 				setState(254);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==T__3) {
 					{
@@ -789,7 +765,6 @@ public class Python2Parser extends Parser {
 						setState(257);
 						fpdef();
 						setState(260);
-						_errHandler.sync(this);
 						_la = _input.LA(1);
 						if (_la==T__3) {
 							{
@@ -808,7 +783,6 @@ public class Python2Parser extends Parser {
 					_alt = getInterpreter().adaptivePredict(_input,15,_ctx);
 				}
 				setState(268);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==T__4) {
 					{
@@ -835,11 +809,9 @@ public class Python2Parser extends Parser {
 
 	public static class FpdefContext extends ParserRuleContext {
 		public TerminalNode NAME() { return getToken(Python2Parser.NAME, 0); }
-		public TerminalNode OPEN_PAREN() { return getToken(Python2Parser.OPEN_PAREN, 0); }
 		public FplistContext fplist() {
 			return getRuleContext(FplistContext.class,0);
 		}
-		public TerminalNode CLOSE_PAREN() { return getToken(Python2Parser.CLOSE_PAREN, 0); }
 		public FpdefContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -859,7 +831,6 @@ public class Python2Parser extends Parser {
 		enterRule(_localctx, 18, RULE_fpdef);
 		try {
 			setState(277);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case NAME:
 				enterOuterAlt(_localctx, 1);
@@ -944,7 +915,6 @@ public class Python2Parser extends Parser {
 				_alt = getInterpreter().adaptivePredict(_input,19,_ctx);
 			}
 			setState(288);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__4) {
 				{
@@ -992,7 +962,6 @@ public class Python2Parser extends Parser {
 		enterRule(_localctx, 22, RULE_stmt);
 		try {
 			setState(292);
-			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,21,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
@@ -1072,7 +1041,6 @@ public class Python2Parser extends Parser {
 				_alt = getInterpreter().adaptivePredict(_input,22,_ctx);
 			}
 			setState(303);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__7) {
 				{
@@ -1145,7 +1113,6 @@ public class Python2Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(316);
-			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,24,_ctx) ) {
 			case 1:
 				{
@@ -1255,7 +1222,6 @@ public class Python2Parser extends Parser {
 			setState(318);
 			testlist();
 			setState(334);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__8:
 			case T__9:
@@ -1273,7 +1239,6 @@ public class Python2Parser extends Parser {
 				setState(319);
 				augassign();
 				setState(322);
-				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case T__68:
 					{
@@ -1317,7 +1282,6 @@ public class Python2Parser extends Parser {
 					setState(324);
 					match(T__3);
 					setState(327);
-					_errHandler.sync(this);
 					switch (_input.LA(1)) {
 					case T__68:
 						{
@@ -1396,10 +1360,7 @@ public class Python2Parser extends Parser {
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__8) | (1L << T__9) | (1L << T__10) | (1L << T__11) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << T__17) | (1L << T__18) | (1L << T__19))) != 0)) ) {
 			_errHandler.recoverInline(this);
-			}
-			else {
-				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-				_errHandler.reportMatch(this);
+			} else {
 				consume();
 			}
 			}
@@ -1450,7 +1411,6 @@ public class Python2Parser extends Parser {
 			setState(339);
 			match(NAME);
 			setState(366);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__7:
 			case T__29:
@@ -1469,7 +1429,6 @@ public class Python2Parser extends Parser {
 			case NEWLINE:
 				{
 				setState(351);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (((((_la - 30)) & ~0x3f) == 0 && ((1L << (_la - 30)) & ((1L << (T__29 - 30)) | (1L << (T__44 - 30)) | (1L << (T__47 - 30)) | (1L << (T__60 - 30)) | (1L << (T__61 - 30)) | (1L << (T__65 - 30)) | (1L << (T__66 - 30)) | (1L << (NAME - 30)) | (1L << (NUMBER - 30)) | (1L << (STRING - 30)) | (1L << (OPEN_PAREN - 30)) | (1L << (OPEN_BRACE - 30)) | (1L << (OPEN_BRACKET - 30)))) != 0)) {
 					{
@@ -1494,7 +1453,6 @@ public class Python2Parser extends Parser {
 						_alt = getInterpreter().adaptivePredict(_input,29,_ctx);
 					}
 					setState(349);
-					_errHandler.sync(this);
 					_la = _input.LA(1);
 					if (_la==T__4) {
 						{
@@ -1515,7 +1473,6 @@ public class Python2Parser extends Parser {
 				setState(354);
 				test();
 				setState(364);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==T__4) {
 					{
@@ -1542,7 +1499,6 @@ public class Python2Parser extends Parser {
 						_alt = getInterpreter().adaptivePredict(_input,32,_ctx);
 					} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 					setState(362);
-					_errHandler.sync(this);
 					_la = _input.LA(1);
 					if (_la==T__4) {
 						{
@@ -1684,7 +1640,6 @@ public class Python2Parser extends Parser {
 		enterRule(_localctx, 38, RULE_flow_stmt);
 		try {
 			setState(378);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__23:
 				enterOuterAlt(_localctx, 1);
@@ -1836,7 +1791,6 @@ public class Python2Parser extends Parser {
 			setState(384);
 			match(T__25);
 			setState(386);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (((((_la - 30)) & ~0x3f) == 0 && ((1L << (_la - 30)) & ((1L << (T__29 - 30)) | (1L << (T__44 - 30)) | (1L << (T__47 - 30)) | (1L << (T__60 - 30)) | (1L << (T__61 - 30)) | (1L << (T__65 - 30)) | (1L << (T__66 - 30)) | (1L << (NAME - 30)) | (1L << (NUMBER - 30)) | (1L << (STRING - 30)) | (1L << (OPEN_PAREN - 30)) | (1L << (OPEN_BRACE - 30)) | (1L << (OPEN_BRACKET - 30)))) != 0)) {
 				{
@@ -1928,14 +1882,12 @@ public class Python2Parser extends Parser {
 			setState(390);
 			match(T__26);
 			setState(400);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (((((_la - 30)) & ~0x3f) == 0 && ((1L << (_la - 30)) & ((1L << (T__29 - 30)) | (1L << (T__44 - 30)) | (1L << (T__47 - 30)) | (1L << (T__60 - 30)) | (1L << (T__61 - 30)) | (1L << (T__65 - 30)) | (1L << (T__66 - 30)) | (1L << (NAME - 30)) | (1L << (NUMBER - 30)) | (1L << (STRING - 30)) | (1L << (OPEN_PAREN - 30)) | (1L << (OPEN_BRACE - 30)) | (1L << (OPEN_BRACKET - 30)))) != 0)) {
 				{
 				setState(391);
 				test();
 				setState(398);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==T__4) {
 					{
@@ -1944,7 +1896,6 @@ public class Python2Parser extends Parser {
 					setState(393);
 					test();
 					setState(396);
-					_errHandler.sync(this);
 					_la = _input.LA(1);
 					if (_la==T__4) {
 						{
@@ -2000,7 +1951,6 @@ public class Python2Parser extends Parser {
 		enterRule(_localctx, 50, RULE_import_stmt);
 		try {
 			setState(404);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__27:
 				enterOuterAlt(_localctx, 1);
@@ -2076,11 +2026,9 @@ public class Python2Parser extends Parser {
 		public Dotted_nameContext dotted_name() {
 			return getRuleContext(Dotted_nameContext.class,0);
 		}
-		public TerminalNode OPEN_PAREN() { return getToken(Python2Parser.OPEN_PAREN, 0); }
 		public Import_as_namesContext import_as_names() {
 			return getRuleContext(Import_as_namesContext.class,0);
 		}
-		public TerminalNode CLOSE_PAREN() { return getToken(Python2Parser.CLOSE_PAREN, 0); }
 		public Import_fromContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2106,7 +2054,6 @@ public class Python2Parser extends Parser {
 			setState(409);
 			match(T__28);
 			setState(422);
-			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,44,_ctx) ) {
 			case 1:
 				{
@@ -2150,7 +2097,6 @@ public class Python2Parser extends Parser {
 			setState(424);
 			match(T__27);
 			setState(431);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__5:
 				{
@@ -2220,7 +2166,6 @@ public class Python2Parser extends Parser {
 			setState(433);
 			match(NAME);
 			setState(436);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__30) {
 				{
@@ -2273,7 +2218,6 @@ public class Python2Parser extends Parser {
 			setState(438);
 			dotted_name();
 			setState(441);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__30) {
 				{
@@ -2347,7 +2291,6 @@ public class Python2Parser extends Parser {
 				_alt = getInterpreter().adaptivePredict(_input,48,_ctx);
 			}
 			setState(452);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__4) {
 				{
@@ -2580,7 +2523,6 @@ public class Python2Parser extends Parser {
 			setState(480);
 			expr();
 			setState(487);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__33) {
 				{
@@ -2589,7 +2531,6 @@ public class Python2Parser extends Parser {
 				setState(482);
 				test();
 				setState(485);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==T__4) {
 					{
@@ -2649,7 +2590,6 @@ public class Python2Parser extends Parser {
 			setState(490);
 			test();
 			setState(493);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__4) {
 				{
@@ -2717,7 +2657,6 @@ public class Python2Parser extends Parser {
 		enterRule(_localctx, 72, RULE_compound_stmt);
 		try {
 			setState(503);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__35:
 				enterOuterAlt(_localctx, 1);
@@ -2855,7 +2794,6 @@ public class Python2Parser extends Parser {
 				_alt = getInterpreter().adaptivePredict(_input,57,_ctx);
 			}
 			setState(522);
-			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,58,_ctx) ) {
 			case 1:
 				{
@@ -2920,7 +2858,6 @@ public class Python2Parser extends Parser {
 			setState(527);
 			suite();
 			setState(531);
-			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,59,_ctx) ) {
 			case 1:
 				{
@@ -2992,7 +2929,6 @@ public class Python2Parser extends Parser {
 			setState(538);
 			suite();
 			setState(542);
-			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,60,_ctx) ) {
 			case 1:
 				{
@@ -3060,7 +2996,6 @@ public class Python2Parser extends Parser {
 			setState(546);
 			suite();
 			setState(568);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__43:
 				{
@@ -3089,7 +3024,6 @@ public class Python2Parser extends Parser {
 					_alt = getInterpreter().adaptivePredict(_input,61,_ctx);
 				} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 				setState(558);
-				_errHandler.sync(this);
 				switch ( getInterpreter().adaptivePredict(_input,62,_ctx) ) {
 				case 1:
 					{
@@ -3103,7 +3037,6 @@ public class Python2Parser extends Parser {
 					break;
 				}
 				setState(563);
-				_errHandler.sync(this);
 				switch ( getInterpreter().adaptivePredict(_input,63,_ctx) ) {
 				case 1:
 					{
@@ -3244,7 +3177,6 @@ public class Python2Parser extends Parser {
 			setState(582);
 			test();
 			setState(585);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__30) {
 				{
@@ -3299,14 +3231,12 @@ public class Python2Parser extends Parser {
 			setState(587);
 			match(T__43);
 			setState(593);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (((((_la - 30)) & ~0x3f) == 0 && ((1L << (_la - 30)) & ((1L << (T__29 - 30)) | (1L << (T__44 - 30)) | (1L << (T__47 - 30)) | (1L << (T__60 - 30)) | (1L << (T__61 - 30)) | (1L << (T__65 - 30)) | (1L << (T__66 - 30)) | (1L << (NAME - 30)) | (1L << (NUMBER - 30)) | (1L << (STRING - 30)) | (1L << (OPEN_PAREN - 30)) | (1L << (OPEN_BRACE - 30)) | (1L << (OPEN_BRACKET - 30)))) != 0)) {
 				{
 				setState(588);
 				test();
 				setState(591);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==T__4 || _la==T__30) {
 					{
@@ -3314,10 +3244,7 @@ public class Python2Parser extends Parser {
 					_la = _input.LA(1);
 					if ( !(_la==T__4 || _la==T__30) ) {
 					_errHandler.recoverInline(this);
-					}
-					else {
-						if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-						_errHandler.reportMatch(this);
+					} else {
 						consume();
 					}
 					setState(590);
@@ -3374,7 +3301,6 @@ public class Python2Parser extends Parser {
 		try {
 			int _alt;
 			setState(605);
-			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,70,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
@@ -3459,7 +3385,6 @@ public class Python2Parser extends Parser {
 			setState(607);
 			old_test();
 			setState(617);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__4) {
 				{
@@ -3486,7 +3411,6 @@ public class Python2Parser extends Parser {
 					_alt = getInterpreter().adaptivePredict(_input,71,_ctx);
 				} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 				setState(615);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==T__4) {
 					{
@@ -3537,7 +3461,6 @@ public class Python2Parser extends Parser {
 		enterRule(_localctx, 92, RULE_old_test);
 		try {
 			setState(621);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__29:
 			case T__47:
@@ -3610,7 +3533,6 @@ public class Python2Parser extends Parser {
 			setState(623);
 			match(T__44);
 			setState(625);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__5 || _la==T__6 || _la==NAME || _la==OPEN_PAREN) {
 				{
@@ -3669,7 +3591,6 @@ public class Python2Parser extends Parser {
 		int _la;
 		try {
 			setState(639);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__29:
 			case T__47:
@@ -3688,7 +3609,6 @@ public class Python2Parser extends Parser {
 				setState(630);
 				or_test();
 				setState(636);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==T__35) {
 					{
@@ -3871,7 +3791,6 @@ public class Python2Parser extends Parser {
 		enterRule(_localctx, 102, RULE_not_test);
 		try {
 			setState(660);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__47:
 				enterOuterAlt(_localctx, 1);
@@ -3999,7 +3918,6 @@ public class Python2Parser extends Parser {
 		enterRule(_localctx, 106, RULE_comp_op);
 		try {
 			setState(684);
-			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,82,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
@@ -4312,10 +4230,7 @@ public class Python2Parser extends Parser {
 				_la = _input.LA(1);
 				if ( !(_la==T__20 || _la==T__59) ) {
 				_errHandler.recoverInline(this);
-				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
+				} else {
 					consume();
 				}
 				setState(712);
@@ -4379,10 +4294,7 @@ public class Python2Parser extends Parser {
 				_la = _input.LA(1);
 				if ( !(_la==T__60 || _la==T__61) ) {
 				_errHandler.recoverInline(this);
-				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
+				} else {
 					consume();
 				}
 				setState(720);
@@ -4446,10 +4358,7 @@ public class Python2Parser extends Parser {
 				_la = _input.LA(1);
 				if ( !(((((_la - 6)) & ~0x3f) == 0 && ((1L << (_la - 6)) & ((1L << (T__5 - 6)) | (1L << (T__62 - 6)) | (1L << (T__63 - 6)) | (1L << (T__64 - 6)))) != 0)) ) {
 				_errHandler.recoverInline(this);
-				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
+				} else {
 					consume();
 				}
 				setState(728);
@@ -4500,7 +4409,6 @@ public class Python2Parser extends Parser {
 		int _la;
 		try {
 			setState(737);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__60:
 			case T__61:
@@ -4511,10 +4419,7 @@ public class Python2Parser extends Parser {
 				_la = _input.LA(1);
 				if ( !(((((_la - 61)) & ~0x3f) == 0 && ((1L << (_la - 61)) & ((1L << (T__60 - 61)) | (1L << (T__61 - 61)) | (1L << (T__65 - 61)))) != 0)) ) {
 				_errHandler.recoverInline(this);
-				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
+				} else {
 					consume();
 				}
 				setState(735);
@@ -4601,7 +4506,6 @@ public class Python2Parser extends Parser {
 				_la = _input.LA(1);
 			}
 			setState(748);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__6) {
 				{
@@ -4626,12 +4530,6 @@ public class Python2Parser extends Parser {
 	}
 
 	public static class AtomContext extends ParserRuleContext {
-		public TerminalNode OPEN_PAREN() { return getToken(Python2Parser.OPEN_PAREN, 0); }
-		public TerminalNode CLOSE_PAREN() { return getToken(Python2Parser.CLOSE_PAREN, 0); }
-		public TerminalNode OPEN_BRACKET() { return getToken(Python2Parser.OPEN_BRACKET, 0); }
-		public TerminalNode CLOSE_BRACKET() { return getToken(Python2Parser.CLOSE_BRACKET, 0); }
-		public TerminalNode OPEN_BRACE() { return getToken(Python2Parser.OPEN_BRACE, 0); }
-		public TerminalNode CLOSE_BRACE() { return getToken(Python2Parser.CLOSE_BRACE, 0); }
 		public Testlist1Context testlist1() {
 			return getRuleContext(Testlist1Context.class,0);
 		}
@@ -4675,14 +4573,12 @@ public class Python2Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(780);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case OPEN_PAREN:
 				{
 				setState(750);
 				match(OPEN_PAREN);
 				setState(753);
-				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case T__68:
 					{
@@ -4711,7 +4607,7 @@ public class Python2Parser extends Parser {
 				case CLOSE_PAREN:
 					break;
 				default:
-					break;
+					throw new NoViableAltException(this);
 				}
 				setState(755);
 				match(CLOSE_PAREN);
@@ -4722,7 +4618,6 @@ public class Python2Parser extends Parser {
 				setState(756);
 				match(OPEN_BRACKET);
 				setState(758);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (((((_la - 30)) & ~0x3f) == 0 && ((1L << (_la - 30)) & ((1L << (T__29 - 30)) | (1L << (T__44 - 30)) | (1L << (T__47 - 30)) | (1L << (T__60 - 30)) | (1L << (T__61 - 30)) | (1L << (T__65 - 30)) | (1L << (T__66 - 30)) | (1L << (NAME - 30)) | (1L << (NUMBER - 30)) | (1L << (STRING - 30)) | (1L << (OPEN_PAREN - 30)) | (1L << (OPEN_BRACE - 30)) | (1L << (OPEN_BRACKET - 30)))) != 0)) {
 					{
@@ -4740,7 +4635,6 @@ public class Python2Parser extends Parser {
 				setState(761);
 				match(OPEN_BRACE);
 				setState(763);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (((((_la - 30)) & ~0x3f) == 0 && ((1L << (_la - 30)) & ((1L << (T__29 - 30)) | (1L << (T__44 - 30)) | (1L << (T__47 - 30)) | (1L << (T__60 - 30)) | (1L << (T__61 - 30)) | (1L << (T__65 - 30)) | (1L << (T__66 - 30)) | (1L << (NAME - 30)) | (1L << (NUMBER - 30)) | (1L << (STRING - 30)) | (1L << (OPEN_PAREN - 30)) | (1L << (OPEN_BRACE - 30)) | (1L << (OPEN_BRACKET - 30)))) != 0)) {
 					{
@@ -4854,7 +4748,6 @@ public class Python2Parser extends Parser {
 			setState(782);
 			test();
 			setState(794);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__39:
 				{
@@ -4884,7 +4777,6 @@ public class Python2Parser extends Parser {
 					_alt = getInterpreter().adaptivePredict(_input,97,_ctx);
 				}
 				setState(792);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==T__4) {
 					{
@@ -4946,7 +4838,6 @@ public class Python2Parser extends Parser {
 			setState(796);
 			test();
 			setState(808);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__39:
 				{
@@ -4976,7 +4867,6 @@ public class Python2Parser extends Parser {
 					_alt = getInterpreter().adaptivePredict(_input,100,_ctx);
 				}
 				setState(806);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==T__4) {
 					{
@@ -5034,7 +4924,6 @@ public class Python2Parser extends Parser {
 			setState(810);
 			match(T__44);
 			setState(812);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__5 || _la==T__6 || _la==NAME || _la==OPEN_PAREN) {
 				{
@@ -5061,16 +4950,12 @@ public class Python2Parser extends Parser {
 	}
 
 	public static class TrailerContext extends ParserRuleContext {
-		public TerminalNode OPEN_PAREN() { return getToken(Python2Parser.OPEN_PAREN, 0); }
-		public TerminalNode CLOSE_PAREN() { return getToken(Python2Parser.CLOSE_PAREN, 0); }
 		public ArglistContext arglist() {
 			return getRuleContext(ArglistContext.class,0);
 		}
-		public TerminalNode OPEN_BRACKET() { return getToken(Python2Parser.OPEN_BRACKET, 0); }
 		public SubscriptlistContext subscriptlist() {
 			return getRuleContext(SubscriptlistContext.class,0);
 		}
-		public TerminalNode CLOSE_BRACKET() { return getToken(Python2Parser.CLOSE_BRACKET, 0); }
 		public TerminalNode NAME() { return getToken(Python2Parser.NAME, 0); }
 		public TrailerContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -5092,7 +4977,6 @@ public class Python2Parser extends Parser {
 		int _la;
 		try {
 			setState(828);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case OPEN_PAREN:
 				enterOuterAlt(_localctx, 1);
@@ -5100,7 +4984,6 @@ public class Python2Parser extends Parser {
 				setState(817);
 				match(OPEN_PAREN);
 				setState(819);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__5) | (1L << T__6) | (1L << T__29) | (1L << T__44) | (1L << T__47) | (1L << T__60) | (1L << T__61))) != 0) || ((((_la - 66)) & ~0x3f) == 0 && ((1L << (_la - 66)) & ((1L << (T__65 - 66)) | (1L << (T__66 - 66)) | (1L << (NAME - 66)) | (1L << (NUMBER - 66)) | (1L << (STRING - 66)) | (1L << (OPEN_PAREN - 66)) | (1L << (OPEN_BRACE - 66)) | (1L << (OPEN_BRACKET - 66)))) != 0)) {
 					{
@@ -5198,7 +5081,6 @@ public class Python2Parser extends Parser {
 				_alt = getInterpreter().adaptivePredict(_input,106,_ctx);
 			}
 			setState(839);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__4) {
 				{
@@ -5250,7 +5132,6 @@ public class Python2Parser extends Parser {
 		int _la;
 		try {
 			setState(855);
-			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,111,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
@@ -5274,7 +5155,6 @@ public class Python2Parser extends Parser {
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(846);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (((((_la - 30)) & ~0x3f) == 0 && ((1L << (_la - 30)) & ((1L << (T__29 - 30)) | (1L << (T__44 - 30)) | (1L << (T__47 - 30)) | (1L << (T__60 - 30)) | (1L << (T__61 - 30)) | (1L << (T__65 - 30)) | (1L << (T__66 - 30)) | (1L << (NAME - 30)) | (1L << (NUMBER - 30)) | (1L << (STRING - 30)) | (1L << (OPEN_PAREN - 30)) | (1L << (OPEN_BRACE - 30)) | (1L << (OPEN_BRACKET - 30)))) != 0)) {
 					{
@@ -5286,7 +5166,6 @@ public class Python2Parser extends Parser {
 				setState(848);
 				match(T__2);
 				setState(850);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (((((_la - 30)) & ~0x3f) == 0 && ((1L << (_la - 30)) & ((1L << (T__29 - 30)) | (1L << (T__44 - 30)) | (1L << (T__47 - 30)) | (1L << (T__60 - 30)) | (1L << (T__61 - 30)) | (1L << (T__65 - 30)) | (1L << (T__66 - 30)) | (1L << (NAME - 30)) | (1L << (NUMBER - 30)) | (1L << (STRING - 30)) | (1L << (OPEN_PAREN - 30)) | (1L << (OPEN_BRACE - 30)) | (1L << (OPEN_BRACKET - 30)))) != 0)) {
 					{
@@ -5296,7 +5175,6 @@ public class Python2Parser extends Parser {
 				}
 
 				setState(853);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==T__2) {
 					{
@@ -5348,7 +5226,6 @@ public class Python2Parser extends Parser {
 			setState(857);
 			match(T__2);
 			setState(859);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (((((_la - 30)) & ~0x3f) == 0 && ((1L << (_la - 30)) & ((1L << (T__29 - 30)) | (1L << (T__44 - 30)) | (1L << (T__47 - 30)) | (1L << (T__60 - 30)) | (1L << (T__61 - 30)) | (1L << (T__65 - 30)) | (1L << (T__66 - 30)) | (1L << (NAME - 30)) | (1L << (NUMBER - 30)) | (1L << (STRING - 30)) | (1L << (OPEN_PAREN - 30)) | (1L << (OPEN_BRACE - 30)) | (1L << (OPEN_BRACKET - 30)))) != 0)) {
 				{
@@ -5420,7 +5297,6 @@ public class Python2Parser extends Parser {
 				_alt = getInterpreter().adaptivePredict(_input,113,_ctx);
 			}
 			setState(870);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__4) {
 				{
@@ -5492,7 +5368,6 @@ public class Python2Parser extends Parser {
 				_alt = getInterpreter().adaptivePredict(_input,115,_ctx);
 			}
 			setState(881);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__4) {
 				{
@@ -5547,7 +5422,6 @@ public class Python2Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(916);
-			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,123,_ctx) ) {
 			case 1:
 				{
@@ -5559,7 +5433,6 @@ public class Python2Parser extends Parser {
 				setState(885);
 				test();
 				setState(900);
-				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case T__39:
 					{
@@ -5593,7 +5466,6 @@ public class Python2Parser extends Parser {
 						_alt = getInterpreter().adaptivePredict(_input,117,_ctx);
 					}
 					setState(898);
-					_errHandler.sync(this);
 					_la = _input.LA(1);
 					if (_la==T__4) {
 						{
@@ -5616,7 +5488,6 @@ public class Python2Parser extends Parser {
 				setState(902);
 				test();
 				setState(914);
-				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case T__39:
 					{
@@ -5646,7 +5517,6 @@ public class Python2Parser extends Parser {
 						_alt = getInterpreter().adaptivePredict(_input,120,_ctx);
 					}
 					setState(912);
-					_errHandler.sync(this);
 					_la = _input.LA(1);
 					if (_la==T__4) {
 						{
@@ -5682,8 +5552,6 @@ public class Python2Parser extends Parser {
 		public SuiteContext suite() {
 			return getRuleContext(SuiteContext.class,0);
 		}
-		public TerminalNode OPEN_PAREN() { return getToken(Python2Parser.OPEN_PAREN, 0); }
-		public TerminalNode CLOSE_PAREN() { return getToken(Python2Parser.CLOSE_PAREN, 0); }
 		public TestlistContext testlist() {
 			return getRuleContext(TestlistContext.class,0);
 		}
@@ -5713,14 +5581,12 @@ public class Python2Parser extends Parser {
 			setState(919);
 			match(NAME);
 			setState(925);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==OPEN_PAREN) {
 				{
 				setState(920);
 				match(OPEN_PAREN);
 				setState(922);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (((((_la - 30)) & ~0x3f) == 0 && ((1L << (_la - 30)) & ((1L << (T__29 - 30)) | (1L << (T__44 - 30)) | (1L << (T__47 - 30)) | (1L << (T__60 - 30)) | (1L << (T__61 - 30)) | (1L << (T__65 - 30)) | (1L << (T__66 - 30)) | (1L << (NAME - 30)) | (1L << (NUMBER - 30)) | (1L << (STRING - 30)) | (1L << (OPEN_PAREN - 30)) | (1L << (OPEN_BRACE - 30)) | (1L << (OPEN_BRACKET - 30)))) != 0)) {
 					{
@@ -5805,7 +5671,6 @@ public class Python2Parser extends Parser {
 				_alt = getInterpreter().adaptivePredict(_input,126,_ctx);
 			}
 			setState(958);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__29:
 			case T__44:
@@ -5824,7 +5689,6 @@ public class Python2Parser extends Parser {
 				setState(938);
 				argument();
 				setState(940);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==T__4) {
 					{
@@ -5860,7 +5724,6 @@ public class Python2Parser extends Parser {
 					_alt = getInterpreter().adaptivePredict(_input,128,_ctx);
 				}
 				setState(954);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==T__4) {
 					{
@@ -5929,7 +5792,6 @@ public class Python2Parser extends Parser {
 		int _la;
 		try {
 			setState(968);
-			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,132,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
@@ -5937,7 +5799,6 @@ public class Python2Parser extends Parser {
 				setState(960);
 				test();
 				setState(962);
-				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==T__39) {
 					{
@@ -5998,7 +5859,6 @@ public class Python2Parser extends Parser {
 		enterRule(_localctx, 152, RULE_list_iter);
 		try {
 			setState(972);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__39:
 				enterOuterAlt(_localctx, 1);
@@ -6069,7 +5929,6 @@ public class Python2Parser extends Parser {
 			setState(977);
 			testlist_safe();
 			setState(979);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__35 || _la==T__39) {
 				{
@@ -6124,7 +5983,6 @@ public class Python2Parser extends Parser {
 			setState(982);
 			old_test();
 			setState(984);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__35 || _la==T__39) {
 				{
@@ -6172,7 +6030,6 @@ public class Python2Parser extends Parser {
 		enterRule(_localctx, 158, RULE_comp_iter);
 		try {
 			setState(988);
-			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__39:
 				enterOuterAlt(_localctx, 1);
@@ -6243,7 +6100,6 @@ public class Python2Parser extends Parser {
 			setState(993);
 			or_test();
 			setState(995);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__35 || _la==T__39) {
 				{
@@ -6298,7 +6154,6 @@ public class Python2Parser extends Parser {
 			setState(998);
 			old_test();
 			setState(1000);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__35 || _la==T__39) {
 				{
@@ -6444,7 +6299,6 @@ public class Python2Parser extends Parser {
 			setState(1012);
 			match(T__68);
 			setState(1014);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__28) {
 				{
@@ -6454,7 +6308,6 @@ public class Python2Parser extends Parser {
 			}
 
 			setState(1017);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (((((_la - 30)) & ~0x3f) == 0 && ((1L << (_la - 30)) & ((1L << (T__29 - 30)) | (1L << (T__44 - 30)) | (1L << (T__47 - 30)) | (1L << (T__60 - 30)) | (1L << (T__61 - 30)) | (1L << (T__65 - 30)) | (1L << (T__66 - 30)) | (1L << (NAME - 30)) | (1L << (NUMBER - 30)) | (1L << (STRING - 30)) | (1L << (OPEN_PAREN - 30)) | (1L << (OPEN_BRACE - 30)) | (1L << (OPEN_BRACKET - 30)))) != 0)) {
 				{
@@ -6492,7 +6345,7 @@ public class Python2Parser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3X\u03fe\4\2\t\2\4"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3X\u03fe\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -6568,10 +6421,10 @@ public class Python2Parser extends Parser {
 		"VXZ\\^`bdfhjlnprtvxz|~\u0080\u0082\u0084\u0086\u0088\u008a\u008c\u008e"+
 		"\u0090\u0092\u0094\u0096\u0098\u009a\u009c\u009e\u00a0\u00a2\u00a4\u00a6"+
 		"\u00a8\u00aa\2\b\3\2\13\26\4\2\7\7!!\4\2\27\27>>\3\2?@\4\2\b\bAC\4\2?"+
-		"@DD\2\u045b\2\u00b1\3\2\2\2\4\u00b7\3\2\2\2\6\u00bc\3\2\2\2\b\u00c5\3"+
-		"\2\2\2\n\u00d1\3\2\2\2\f\u00d5\3\2\2\2\16\u00da\3\2\2\2\20\u00e0\3\2\2"+
-		"\2\22\u0110\3\2\2\2\24\u0117\3\2\2\2\26\u0119\3\2\2\2\30\u0126\3\2\2\2"+
-		"\32\u0128\3\2\2\2\34\u013e\3\2\2\2\36\u0140\3\2\2\2 \u0152\3\2\2\2\"\u0154"+
+		"@DD\u045b\2\u00b1\3\2\2\2\4\u00b7\3\2\2\2\6\u00bc\3\2\2\2\b\u00c5\3\2"+
+		"\2\2\n\u00d1\3\2\2\2\f\u00d5\3\2\2\2\16\u00da\3\2\2\2\20\u00e0\3\2\2\2"+
+		"\22\u0110\3\2\2\2\24\u0117\3\2\2\2\26\u0119\3\2\2\2\30\u0126\3\2\2\2\32"+
+		"\u0128\3\2\2\2\34\u013e\3\2\2\2\36\u0140\3\2\2\2 \u0152\3\2\2\2\"\u0154"+
 		"\3\2\2\2$\u0172\3\2\2\2&\u0175\3\2\2\2(\u017c\3\2\2\2*\u017e\3\2\2\2,"+
 		"\u0180\3\2\2\2.\u0182\3\2\2\2\60\u0186\3\2\2\2\62\u0188\3\2\2\2\64\u0196"+
 		"\3\2\2\2\66\u0198\3\2\2\28\u019b\3\2\2\2:\u01b3\3\2\2\2<\u01b8\3\2\2\2"+
