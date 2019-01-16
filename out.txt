@@ -1,0 +1,4971 @@
+next project
+namespaces {
+  name: ""
+  declarations {
+    name: "Bootstrapper"
+    kind: CLASS
+    modifiers {
+      kind: VISIBILITY
+      visibility: PUBLIC
+    }
+    methods {
+      name: "main"
+      modifiers {
+        kind: VISIBILITY
+        visibility: PUBLIC
+      }
+      modifiers {
+        kind: STATIC
+      }
+      return_type {
+        name: "void"
+        kind: OTHER
+      }
+      arguments {
+        name: "args"
+        variable_type {
+          name: "String[]"
+          kind: OTHER
+        }
+      }
+      exception_types {
+        name: "Exception"
+        kind: CLASS
+      }
+      statements {
+        kind: BLOCK
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: VARDECL
+            variable_decls {
+              name: "bootstrapper"
+              variable_type {
+                name: "Bootstrapper"
+                kind: OTHER
+              }
+              initializer {
+                kind: NEW
+                new_type {
+                  name: "Bootstrapper"
+                  kind: CLASS
+                }
+              }
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: METHODCALL
+            expressions {
+              kind: VARACCESS
+              variable: "bootstrapper"
+            }
+            method: "execute"
+            method_args {
+              kind: VARACCESS
+              variable: "args"
+            }
+          }
+        }
+      }
+    }
+    methods {
+      name: "execute"
+      modifiers {
+        kind: VISIBILITY
+        visibility: PUBLIC
+      }
+      return_type {
+        name: "void"
+        kind: OTHER
+      }
+      arguments {
+        name: "args"
+        variable_type {
+          name: "String[]"
+          kind: OTHER
+        }
+      }
+      exception_types {
+        name: "Exception"
+        kind: CLASS
+      }
+      statements {
+        kind: BLOCK
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: VARDECL
+            variable_decls {
+              name: "basedir"
+              variable_type {
+                name: "String"
+                kind: OTHER
+              }
+              initializer {
+                kind: ARRAYACCESS
+                expressions {
+                  kind: VARACCESS
+                  variable: "args"
+                }
+                expressions {
+                  kind: LITERAL
+                  literal: "0"
+                }
+              }
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: VARDECL
+            variable_decls {
+              name: "properties"
+              variable_type {
+                name: "Properties"
+                kind: OTHER
+              }
+              initializer {
+                kind: METHODCALL
+                method: "loadProperties"
+                method_args {
+                  kind: NEW
+                  new_type {
+                    name: "File"
+                    kind: CLASS
+                  }
+                  method_args {
+                    kind: METHODCALL
+                    expressions {
+                      kind: VARACCESS
+                      variable: "System"
+                    }
+                    method: "getProperty"
+                    method_args {
+                      kind: LITERAL
+                      literal: "\"user.home\""
+                    }
+                  }
+                  method_args {
+                    kind: LITERAL
+                    literal: "\"build.properties\""
+                  }
+                }
+              }
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: ASSIGN
+            expressions {
+              kind: VARACCESS
+              variable: "baseUrl"
+            }
+            expressions {
+              kind: METHODCALL
+              expressions {
+                kind: VARACCESS
+                variable: "properties"
+              }
+              method: "getProperty"
+              method_args {
+                kind: LITERAL
+                literal: "\"maven.repo.remote\""
+              }
+            }
+          }
+        }
+        statements {
+          kind: IF
+          statements {
+            kind: BLOCK
+            statements {
+              kind: EXPRESSION
+              expressions {
+                kind: ASSIGN
+                expressions {
+                  kind: VARACCESS
+                  variable: "baseUrl"
+                }
+                expressions {
+                  kind: LITERAL
+                  literal: "\"http://www.ibiblio.org/maven/\""
+                }
+              }
+            }
+          }
+          conditions {
+            kind: EQ
+            expressions {
+              kind: VARACCESS
+              variable: "baseUrl"
+            }
+            expressions {
+              kind: LITERAL
+              literal: "null"
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: VARDECL
+            variable_decls {
+              name: "mavenRepoLocalProperty"
+              variable_type {
+                name: "String"
+                kind: OTHER
+              }
+              initializer {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "properties"
+                }
+                method: "getProperty"
+                method_args {
+                  kind: LITERAL
+                  literal: "\"maven.repo.local\""
+                }
+              }
+            }
+          }
+        }
+        statements {
+          kind: IF
+          statements {
+            kind: BLOCK
+            statements {
+              kind: EXPRESSION
+              expressions {
+                kind: ASSIGN
+                expressions {
+                  kind: VARACCESS
+                  variable: "mavenRepoLocalProperty"
+                }
+                expressions {
+                  kind: OP_ADD
+                  expressions {
+                    kind: METHODCALL
+                    expressions {
+                      kind: VARACCESS
+                      variable: "System"
+                    }
+                    method: "getProperty"
+                    method_args {
+                      kind: LITERAL
+                      literal: "\"user.home\""
+                    }
+                  }
+                  expressions {
+                    kind: LITERAL
+                    literal: "\"/maven/repository\""
+                  }
+                }
+              }
+            }
+          }
+          conditions {
+            kind: EQ
+            expressions {
+              kind: VARACCESS
+              variable: "mavenRepoLocalProperty"
+            }
+            expressions {
+              kind: LITERAL
+              literal: "null"
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: ASSIGN
+            expressions {
+              kind: VARACCESS
+              variable: "mavenRepoLocal"
+            }
+            expressions {
+              kind: NEW
+              new_type {
+                name: "File"
+                kind: CLASS
+              }
+              method_args {
+                kind: VARACCESS
+                variable: "mavenRepoLocalProperty"
+              }
+            }
+          }
+        }
+        statements {
+          kind: IF
+          statements {
+            kind: BLOCK
+            statements {
+              kind: IF
+              statements {
+                kind: BLOCK
+                statements {
+                  kind: EXPRESSION
+                  expressions {
+                    kind: METHODCALL
+                    expressions {
+                      kind: VARACCESS
+                      variable: "System.err"
+                      is_member_access: true
+                    }
+                    method: "println"
+                    method_args {
+                      kind: OP_ADD
+                      expressions {
+                        kind: LITERAL
+                        literal: "\"Cannot create the specified maven.repo.local: \""
+                      }
+                      expressions {
+                        kind: VARACCESS
+                        variable: "mavenRepoLocal"
+                      }
+                    }
+                  }
+                }
+                statements {
+                  kind: EXPRESSION
+                  expressions {
+                    kind: METHODCALL
+                    expressions {
+                      kind: VARACCESS
+                      variable: "System"
+                    }
+                    method: "exit"
+                    method_args {
+                      kind: LITERAL
+                      literal: "1"
+                    }
+                  }
+                }
+              }
+              conditions {
+                kind: LOGICAL_NOT
+                expressions {
+                  kind: METHODCALL
+                  expressions {
+                    kind: VARACCESS
+                    variable: "mavenRepoLocal"
+                  }
+                  method: "mkdirs"
+                }
+              }
+            }
+          }
+          conditions {
+            kind: LOGICAL_NOT
+            expressions {
+              kind: METHODCALL
+              expressions {
+                kind: VARACCESS
+                variable: "mavenRepoLocal"
+              }
+              method: "exists"
+            }
+          }
+        }
+        statements {
+          kind: IF
+          statements {
+            kind: BLOCK
+            statements {
+              kind: EXPRESSION
+              expressions {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "System.err"
+                  is_member_access: true
+                }
+                method: "println"
+                method_args {
+                  kind: OP_ADD
+                  expressions {
+                    kind: LITERAL
+                    literal: "\"Can\'t write to \""
+                  }
+                  expressions {
+                    kind: METHODCALL
+                    expressions {
+                      kind: VARACCESS
+                      variable: "mavenRepoLocal"
+                    }
+                    method: "getAbsolutePath"
+                  }
+                }
+              }
+            }
+            statements {
+              kind: EXPRESSION
+              expressions {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "System"
+                }
+                method: "exit"
+                method_args {
+                  kind: LITERAL
+                  literal: "1"
+                }
+              }
+            }
+          }
+          conditions {
+            kind: LOGICAL_NOT
+            expressions {
+              kind: METHODCALL
+              expressions {
+                kind: VARACCESS
+                variable: "mavenRepoLocal"
+              }
+              method: "canWrite"
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: METHODCALL
+            expressions {
+              kind: VARACCESS
+              variable: "System.out"
+              is_member_access: true
+            }
+            method: "println"
+            method_args {
+              kind: OP_ADD
+              expressions {
+                kind: LITERAL
+                literal: "\"Using the following for your maven.repo.local: \""
+              }
+              expressions {
+                kind: VARACCESS
+                variable: "mavenRepoLocal"
+              }
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: ASSIGN
+            expressions {
+              kind: VARACCESS
+              variable: "bootstrapPomParser"
+            }
+            expressions {
+              kind: NEW
+              new_type {
+                name: "BootstrapPomParser"
+                kind: CLASS
+              }
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: METHODCALL
+            expressions {
+              kind: VARACCESS
+              variable: "bootstrapPomParser"
+            }
+            method: "parse"
+            method_args {
+              kind: NEW
+              new_type {
+                name: "File"
+                kind: CLASS
+              }
+              method_args {
+                kind: LITERAL
+                literal: "\"project.xml\""
+              }
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: ASSIGN
+            expressions {
+              kind: VARACCESS
+              variable: "dependencies"
+            }
+            expressions {
+              kind: METHODCALL
+              expressions {
+                kind: VARACCESS
+                variable: "bootstrapPomParser"
+              }
+              method: "getDependencies"
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: VARDECL
+            variable_decls {
+              name: "list"
+              variable_type {
+                name: "List"
+                kind: OTHER
+              }
+              initializer {
+                kind: NEW
+                new_type {
+                  name: "ArrayList"
+                  kind: CLASS
+                }
+              }
+            }
+          }
+        }
+        statements {
+          kind: FOR
+          statements {
+            kind: BLOCK
+            statements {
+              kind: EXPRESSION
+              expressions {
+                kind: VARDECL
+                variable_decls {
+                  name: "d"
+                  variable_type {
+                    name: "Dependency"
+                    kind: OTHER
+                  }
+                  initializer {
+                    kind: CAST
+                    expressions {
+                      kind: METHODCALL
+                      expressions {
+                        kind: VARACCESS
+                        variable: "i"
+                      }
+                      method: "next"
+                    }
+                    new_type {
+                      name: "Dependency"
+                      kind: OTHER
+                    }
+                  }
+                }
+              }
+            }
+            statements {
+              kind: EXPRESSION
+              expressions {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "list"
+                }
+                method: "add"
+                method_args {
+                  kind: METHODCALL
+                  method: "getArtifactPath"
+                  method_args {
+                    kind: VARACCESS
+                    variable: "d"
+                  }
+                  method_args {
+                    kind: LITERAL
+                    literal: "\"/\""
+                  }
+                }
+              }
+            }
+          }
+          initializations {
+            kind: VARDECL
+            variable_decls {
+              name: "i"
+              variable_type {
+                name: "Iterator"
+                kind: OTHER
+              }
+              initializer {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "dependencies"
+                }
+                method: "iterator"
+              }
+            }
+          }
+          conditions {
+            kind: METHODCALL
+            expressions {
+              kind: VARACCESS
+              variable: "i"
+            }
+            method: "hasNext"
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: METHODCALL
+            method: "downloadDependencies"
+            method_args {
+              kind: VARACCESS
+              variable: "list"
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: VARDECL
+            variable_decls {
+              name: "classPath"
+              variable_type {
+                name: "StringBuffer"
+                kind: OTHER
+              }
+              initializer {
+                kind: NEW
+                new_type {
+                  name: "StringBuffer"
+                  kind: CLASS
+                }
+              }
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: VARDECL
+            variable_decls {
+              name: "libs"
+              variable_type {
+                name: "StringBuffer"
+                kind: OTHER
+              }
+              initializer {
+                kind: NEW
+                new_type {
+                  name: "StringBuffer"
+                  kind: CLASS
+                }
+              }
+            }
+          }
+        }
+        statements {
+          kind: FOR
+          statements {
+            kind: BLOCK
+            statements {
+              kind: EXPRESSION
+              expressions {
+                kind: VARDECL
+                variable_decls {
+                  name: "d"
+                  variable_type {
+                    name: "Dependency"
+                    kind: OTHER
+                  }
+                  initializer {
+                    kind: CAST
+                    expressions {
+                      kind: METHODCALL
+                      expressions {
+                        kind: VARACCESS
+                        variable: "i"
+                      }
+                      method: "next"
+                    }
+                    new_type {
+                      name: "Dependency"
+                      kind: OTHER
+                    }
+                  }
+                }
+              }
+            }
+            statements {
+              kind: EXPRESSION
+              expressions {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "classPath"
+                }
+                method: "append"
+                method_args {
+                  kind: OP_ADD
+                  expressions {
+                    kind: VARACCESS
+                    variable: "mavenRepoLocal"
+                  }
+                  expressions {
+                    kind: LITERAL
+                    literal: "\"/\""
+                  }
+                  expressions {
+                    kind: METHODCALL
+                    method: "getArtifactPath"
+                    method_args {
+                      kind: VARACCESS
+                      variable: "d"
+                    }
+                    method_args {
+                      kind: LITERAL
+                      literal: "\"/\""
+                    }
+                  }
+                  expressions {
+                    kind: LITERAL
+                    literal: "\":\""
+                  }
+                }
+              }
+            }
+            statements {
+              kind: EXPRESSION
+              expressions {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "libs"
+                }
+                method: "append"
+                method_args {
+                  kind: OP_ADD
+                  expressions {
+                    kind: VARACCESS
+                    variable: "mavenRepoLocal"
+                  }
+                  expressions {
+                    kind: LITERAL
+                    literal: "\"/\""
+                  }
+                  expressions {
+                    kind: METHODCALL
+                    method: "getArtifactPath"
+                    method_args {
+                      kind: VARACCESS
+                      variable: "d"
+                    }
+                    method_args {
+                      kind: LITERAL
+                      literal: "\"/\""
+                    }
+                  }
+                  expressions {
+                    kind: LITERAL
+                    literal: "\"\\n\""
+                  }
+                }
+              }
+            }
+          }
+          initializations {
+            kind: VARDECL
+            variable_decls {
+              name: "i"
+              variable_type {
+                name: "Iterator"
+                kind: OTHER
+              }
+              initializer {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "dependencies"
+                }
+                method: "iterator"
+              }
+            }
+          }
+          conditions {
+            kind: METHODCALL
+            expressions {
+              kind: VARACCESS
+              variable: "i"
+            }
+            method: "hasNext"
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: VARDECL
+            variable_decls {
+              name: "writer"
+              variable_type {
+                name: "FileWriter"
+                kind: OTHER
+              }
+              initializer {
+                kind: NEW
+                new_type {
+                  name: "FileWriter"
+                  kind: CLASS
+                }
+                method_args {
+                  kind: LITERAL
+                  literal: "\"bootstrap.classpath\""
+                }
+              }
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: METHODCALL
+            expressions {
+              kind: VARACCESS
+              variable: "writer"
+            }
+            method: "write"
+            method_args {
+              kind: METHODCALL
+              expressions {
+                kind: VARACCESS
+                variable: "classPath"
+              }
+              method: "toString"
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: METHODCALL
+            expressions {
+              kind: VARACCESS
+              variable: "writer"
+            }
+            method: "close"
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: ASSIGN
+            expressions {
+              kind: VARACCESS
+              variable: "writer"
+            }
+            expressions {
+              kind: NEW
+              new_type {
+                name: "FileWriter"
+                kind: CLASS
+              }
+              method_args {
+                kind: LITERAL
+                literal: "\"bootstrap.libs\""
+              }
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: METHODCALL
+            expressions {
+              kind: VARACCESS
+              variable: "writer"
+            }
+            method: "write"
+            method_args {
+              kind: METHODCALL
+              expressions {
+                kind: VARACCESS
+                variable: "libs"
+              }
+              method: "toString"
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: METHODCALL
+            expressions {
+              kind: VARACCESS
+              variable: "writer"
+            }
+            method: "close"
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: ASSIGN
+            expressions {
+              kind: VARACCESS
+              variable: "resources"
+            }
+            expressions {
+              kind: METHODCALL
+              expressions {
+                kind: VARACCESS
+                variable: "bootstrapPomParser"
+              }
+              method: "getResources"
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: VARDECL
+            variable_decls {
+              name: "res"
+              variable_type {
+                name: "StringBuffer"
+                kind: OTHER
+              }
+              initializer {
+                kind: NEW
+                new_type {
+                  name: "StringBuffer"
+                  kind: CLASS
+                }
+              }
+            }
+          }
+        }
+        statements {
+          kind: FOR
+          statements {
+            kind: BLOCK
+            statements {
+              kind: EXPRESSION
+              expressions {
+                kind: VARDECL
+                variable_decls {
+                  name: "r"
+                  variable_type {
+                    name: "Resource"
+                    kind: OTHER
+                  }
+                  initializer {
+                    kind: CAST
+                    expressions {
+                      kind: METHODCALL
+                      expressions {
+                        kind: VARACCESS
+                        variable: "i"
+                      }
+                      method: "next"
+                    }
+                    new_type {
+                      name: "Resource"
+                      kind: OTHER
+                    }
+                  }
+                }
+              }
+            }
+            statements {
+              kind: IF
+              statements {
+                kind: BLOCK
+                statements {
+                  kind: CONTINUE
+                }
+              }
+              conditions {
+                kind: EQ
+                expressions {
+                  kind: VARACCESS
+                  variable: "r"
+                }
+                expressions {
+                  kind: LITERAL
+                  literal: "null"
+                }
+              }
+            }
+            statements {
+              kind: EXPRESSION
+              expressions {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "res"
+                }
+                method: "append"
+                method_args {
+                  kind: METHODCALL
+                  expressions {
+                    kind: VARACCESS
+                    variable: "r"
+                  }
+                  method: "getDirectory"
+                }
+              }
+            }
+            statements {
+              kind: IF
+              statements {
+                kind: BLOCK
+                statements {
+                  kind: EXPRESSION
+                  expressions {
+                    kind: METHODCALL
+                    expressions {
+                      kind: METHODCALL
+                      expressions {
+                        kind: VARACCESS
+                        variable: "res"
+                      }
+                      method: "append"
+                      method_args {
+                        kind: LITERAL
+                        literal: "\",\""
+                      }
+                    }
+                    method: "append"
+                    method_args {
+                      kind: METHODCALL
+                      expressions {
+                        kind: VARACCESS
+                        variable: "r"
+                      }
+                      method: "getTargetPath"
+                    }
+                  }
+                }
+              }
+              conditions {
+                kind: NEQ
+                expressions {
+                  kind: METHODCALL
+                  expressions {
+                    kind: VARACCESS
+                    variable: "r"
+                  }
+                  method: "getTargetPath"
+                }
+                expressions {
+                  kind: LITERAL
+                  literal: "null"
+                }
+              }
+            }
+            statements {
+              kind: EXPRESSION
+              expressions {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "res"
+                }
+                method: "append"
+                method_args {
+                  kind: LITERAL
+                  literal: "\"@\""
+                }
+              }
+            }
+            statements {
+              kind: EXPRESSION
+              expressions {
+                kind: VARDECL
+                variable_decls {
+                  name: "size"
+                  variable_type {
+                    name: "int"
+                    kind: OTHER
+                  }
+                  initializer {
+                    kind: METHODCALL
+                    expressions {
+                      kind: METHODCALL
+                      expressions {
+                        kind: VARACCESS
+                        variable: "r"
+                      }
+                      method: "getIncludes"
+                    }
+                    method: "size"
+                  }
+                }
+              }
+            }
+            statements {
+              kind: FOR
+              statements {
+                kind: BLOCK
+                statements {
+                  kind: EXPRESSION
+                  expressions {
+                    kind: VARDECL
+                    variable_decls {
+                      name: "include"
+                      variable_type {
+                        name: "String"
+                        kind: OTHER
+                      }
+                      initializer {
+                        kind: CAST
+                        expressions {
+                          kind: METHODCALL
+                          expressions {
+                            kind: METHODCALL
+                            expressions {
+                              kind: VARACCESS
+                              variable: "r"
+                            }
+                            method: "getIncludes"
+                          }
+                          method: "get"
+                          method_args {
+                            kind: VARACCESS
+                            variable: "j"
+                          }
+                        }
+                        new_type {
+                          name: "String"
+                          kind: OTHER
+                        }
+                      }
+                    }
+                  }
+                }
+                statements {
+                  kind: IF
+                  statements {
+                    kind: BLOCK
+                    statements {
+                      kind: EXPRESSION
+                      expressions {
+                        kind: ASSIGN
+                        expressions {
+                          kind: VARACCESS
+                          variable: "include"
+                        }
+                        expressions {
+                          kind: METHODCALL
+                          expressions {
+                            kind: VARACCESS
+                            variable: "include"
+                          }
+                          method: "substring"
+                          method_args {
+                            kind: LITERAL
+                            literal: "3"
+                          }
+                        }
+                      }
+                    }
+                  }
+                  conditions {
+                    kind: METHODCALL
+                    expressions {
+                      kind: VARACCESS
+                      variable: "include"
+                    }
+                    method: "startsWith"
+                    method_args {
+                      kind: LITERAL
+                      literal: "\"**/\""
+                    }
+                  }
+                }
+                statements {
+                  kind: EXPRESSION
+                  expressions {
+                    kind: METHODCALL
+                    expressions {
+                      kind: METHODCALL
+                      expressions {
+                        kind: METHODCALL
+                        expressions {
+                          kind: VARACCESS
+                          variable: "res"
+                        }
+                        method: "append"
+                        method_args {
+                          kind: LITERAL
+                          literal: "\"\'\""
+                        }
+                      }
+                      method: "append"
+                      method_args {
+                        kind: VARACCESS
+                        variable: "include"
+                      }
+                    }
+                    method: "append"
+                    method_args {
+                      kind: LITERAL
+                      literal: "\"\'\""
+                    }
+                  }
+                }
+                statements {
+                  kind: IF
+                  statements {
+                    kind: BLOCK
+                    statements {
+                      kind: EXPRESSION
+                      expressions {
+                        kind: METHODCALL
+                        expressions {
+                          kind: VARACCESS
+                          variable: "res"
+                        }
+                        method: "append"
+                        method_args {
+                          kind: LITERAL
+                          literal: "\",\""
+                        }
+                      }
+                    }
+                  }
+                  conditions {
+                    kind: NEQ
+                    expressions {
+                      kind: VARACCESS
+                      variable: "j"
+                    }
+                    expressions {
+                      kind: OP_SUB
+                      expressions {
+                        kind: VARACCESS
+                        variable: "size"
+                      }
+                      expressions {
+                        kind: LITERAL
+                        literal: "1"
+                      }
+                    }
+                  }
+                }
+              }
+              initializations {
+                kind: VARDECL
+                variable_decls {
+                  name: "j"
+                  variable_type {
+                    name: "int"
+                    kind: OTHER
+                  }
+                  initializer {
+                    kind: LITERAL
+                    literal: "0"
+                  }
+                }
+              }
+              conditions {
+                kind: LT
+                expressions {
+                  kind: VARACCESS
+                  variable: "j"
+                }
+                expressions {
+                  kind: VARACCESS
+                  variable: "size"
+                }
+              }
+              updates {
+                kind: OP_INC
+                expressions {
+                  kind: VARACCESS
+                  variable: "j"
+                }
+                is_postfix: true
+              }
+            }
+            statements {
+              kind: EXPRESSION
+              expressions {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "res"
+                }
+                method: "append"
+                method_args {
+                  kind: LITERAL
+                  literal: "\"\\n\""
+                }
+              }
+            }
+          }
+          initializations {
+            kind: VARDECL
+            variable_decls {
+              name: "i"
+              variable_type {
+                name: "Iterator"
+                kind: OTHER
+              }
+              initializer {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "resources"
+                }
+                method: "iterator"
+              }
+            }
+          }
+          conditions {
+            kind: METHODCALL
+            expressions {
+              kind: VARACCESS
+              variable: "i"
+            }
+            method: "hasNext"
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: ASSIGN
+            expressions {
+              kind: VARACCESS
+              variable: "writer"
+            }
+            expressions {
+              kind: NEW
+              new_type {
+                name: "FileWriter"
+                kind: CLASS
+              }
+              method_args {
+                kind: LITERAL
+                literal: "\"bootstrap.resources\""
+              }
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: METHODCALL
+            expressions {
+              kind: VARACCESS
+              variable: "writer"
+            }
+            method: "write"
+            method_args {
+              kind: METHODCALL
+              expressions {
+                kind: VARACCESS
+                variable: "res"
+              }
+              method: "toString"
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: METHODCALL
+            expressions {
+              kind: VARACCESS
+              variable: "writer"
+            }
+            method: "close"
+          }
+        }
+      }
+    }
+    methods {
+      name: "getArtifactPath"
+      modifiers {
+        kind: VISIBILITY
+        visibility: PRIVATE
+      }
+      return_type {
+        name: "String"
+        kind: OTHER
+      }
+      arguments {
+        name: "d"
+        variable_type {
+          name: "Dependency"
+          kind: OTHER
+        }
+      }
+      arguments {
+        name: "pathSeparator"
+        variable_type {
+          name: "String"
+          kind: OTHER
+        }
+      }
+      statements {
+        kind: BLOCK
+        statements {
+          kind: RETURN
+          expressions {
+            kind: OP_ADD
+            expressions {
+              kind: METHODCALL
+              expressions {
+                kind: VARACCESS
+                variable: "d"
+              }
+              method: "getArtifactDirectory"
+            }
+            expressions {
+              kind: VARACCESS
+              variable: "pathSeparator"
+            }
+            expressions {
+              kind: LITERAL
+              literal: "\"jars\""
+            }
+            expressions {
+              kind: VARACCESS
+              variable: "pathSeparator"
+            }
+            expressions {
+              kind: METHODCALL
+              expressions {
+                kind: VARACCESS
+                variable: "d"
+              }
+              method: "getArtifact"
+            }
+          }
+        }
+      }
+    }
+    methods {
+      name: "downloadDependencies"
+      modifiers {
+        kind: VISIBILITY
+        visibility: PRIVATE
+      }
+      return_type {
+        name: "void"
+        kind: OTHER
+      }
+      arguments {
+        name: "files"
+        variable_type {
+          name: "List"
+          kind: OTHER
+        }
+      }
+      exception_types {
+        name: "Exception"
+        kind: CLASS
+      }
+      statements {
+        kind: BLOCK
+        statements {
+          kind: FOR
+          statements {
+            kind: BLOCK
+            statements {
+              kind: TRY
+              statements {
+                kind: BLOCK
+                statements {
+                  kind: EXPRESSION
+                  expressions {
+                    kind: VARDECL
+                    variable_decls {
+                      name: "file"
+                      variable_type {
+                        name: "String"
+                        kind: OTHER
+                      }
+                      initializer {
+                        kind: CAST
+                        expressions {
+                          kind: METHODCALL
+                          expressions {
+                            kind: VARACCESS
+                            variable: "j"
+                          }
+                          method: "next"
+                        }
+                        new_type {
+                          name: "String"
+                          kind: OTHER
+                        }
+                      }
+                    }
+                  }
+                }
+                statements {
+                  kind: EXPRESSION
+                  expressions {
+                    kind: VARDECL
+                    variable_decls {
+                      name: "destinationFile"
+                      variable_type {
+                        name: "File"
+                        kind: OTHER
+                      }
+                      initializer {
+                        kind: NEW
+                        new_type {
+                          name: "File"
+                          kind: CLASS
+                        }
+                        method_args {
+                          kind: VARACCESS
+                          variable: "mavenRepoLocal"
+                        }
+                        method_args {
+                          kind: VARACCESS
+                          variable: "file"
+                        }
+                      }
+                    }
+                  }
+                }
+                statements {
+                  kind: EXPRESSION
+                  expressions {
+                    kind: VARDECL
+                    variable_decls {
+                      name: "directory"
+                      variable_type {
+                        name: "File"
+                        kind: OTHER
+                      }
+                      initializer {
+                        kind: METHODCALL
+                        expressions {
+                          kind: VARACCESS
+                          variable: "destinationFile"
+                        }
+                        method: "getParentFile"
+                      }
+                    }
+                  }
+                }
+                statements {
+                  kind: IF
+                  statements {
+                    kind: BLOCK
+                    statements {
+                      kind: EXPRESSION
+                      expressions {
+                        kind: METHODCALL
+                        expressions {
+                          kind: VARACCESS
+                          variable: "directory"
+                        }
+                        method: "mkdirs"
+                      }
+                    }
+                  }
+                  conditions {
+                    kind: EQ
+                    expressions {
+                      kind: METHODCALL
+                      expressions {
+                        kind: VARACCESS
+                        variable: "directory"
+                      }
+                      method: "exists"
+                    }
+                    expressions {
+                      kind: LITERAL
+                      literal: "false"
+                    }
+                  }
+                }
+                statements {
+                  kind: IF
+                  statements {
+                    kind: BLOCK
+                    statements {
+                      kind: CONTINUE
+                    }
+                  }
+                  conditions {
+                    kind: METHODCALL
+                    expressions {
+                      kind: VARACCESS
+                      variable: "destinationFile"
+                    }
+                    method: "exists"
+                  }
+                }
+                statements {
+                  kind: EXPRESSION
+                  expressions {
+                    kind: METHODCALL
+                    method: "log"
+                    method_args {
+                      kind: OP_ADD
+                      expressions {
+                        kind: LITERAL
+                        literal: "\"Downloading dependency: \""
+                      }
+                      expressions {
+                        kind: VARACCESS
+                        variable: "baseUrl"
+                      }
+                      expressions {
+                        kind: VARACCESS
+                        variable: "file"
+                      }
+                    }
+                  }
+                }
+                statements {
+                  kind: EXPRESSION
+                  expressions {
+                    kind: VARDECL
+                    variable_decls {
+                      name: "numRetries"
+                      variable_type {
+                        name: "int"
+                        kind: OTHER
+                      }
+                      initializer {
+                        kind: LITERAL
+                        literal: "3"
+                      }
+                    }
+                  }
+                }
+                statements {
+                  kind: WHILE
+                  statements {
+                    kind: BLOCK
+                    statements {
+                      kind: TRY
+                      statements {
+                        kind: BLOCK
+                        statements {
+                          kind: EXPRESSION
+                          expressions {
+                            kind: METHODCALL
+                            expressions {
+                              kind: VARACCESS
+                              variable: "HttpUtils"
+                            }
+                            method: "getFile"
+                            method_args {
+                              kind: OP_ADD
+                              expressions {
+                                kind: VARACCESS
+                                variable: "baseUrl"
+                              }
+                              expressions {
+                                kind: VARACCESS
+                                variable: "file"
+                              }
+                            }
+                            method_args {
+                              kind: VARACCESS
+                              variable: "destinationFile"
+                            }
+                            method_args {
+                              kind: VARACCESS
+                              variable: "ignoreErrors"
+                            }
+                            method_args {
+                              kind: VARACCESS
+                              variable: "useTimestamp"
+                            }
+                            method_args {
+                              kind: VARACCESS
+                              variable: "proxyHost"
+                            }
+                            method_args {
+                              kind: VARACCESS
+                              variable: "proxyPort"
+                            }
+                            method_args {
+                              kind: VARACCESS
+                              variable: "proxyUserName"
+                            }
+                            method_args {
+                              kind: VARACCESS
+                              variable: "proxyPassword"
+                            }
+                          }
+                        }
+                        statements {
+                          kind: BREAK
+                        }
+                      }
+                      statements {
+                        kind: CATCH
+                        statements {
+                          kind: EXPRESSION
+                          expressions {
+                            kind: OP_DEC
+                            expressions {
+                              kind: VARACCESS
+                              variable: "numRetries"
+                            }
+                            is_postfix: true
+                          }
+                        }
+                        statements {
+                          kind: CONTINUE
+                        }
+                        variable_declaration {
+                          name: "e"
+                          variable_type {
+                            name: "Exception"
+                            kind: CLASS
+                          }
+                        }
+                      }
+                    }
+                  }
+                  conditions {
+                    kind: GTEQ
+                    expressions {
+                      kind: VARACCESS
+                      variable: "numRetries"
+                    }
+                    expressions {
+                      kind: LITERAL
+                      literal: "0"
+                    }
+                  }
+                }
+                statements {
+                  kind: IF
+                  statements {
+                    kind: BLOCK
+                    statements {
+                      kind: THROW
+                      expressions {
+                        kind: NEW
+                        new_type {
+                          name: "Exception"
+                          kind: CLASS
+                        }
+                        method_args {
+                          kind: OP_ADD
+                          expressions {
+                            kind: LITERAL
+                            literal: "\"Failed to download \""
+                          }
+                          expressions {
+                            kind: VARACCESS
+                            variable: "baseUrl"
+                          }
+                          expressions {
+                            kind: VARACCESS
+                            variable: "file"
+                          }
+                        }
+                      }
+                    }
+                  }
+                  conditions {
+                    kind: LOGICAL_NOT
+                    expressions {
+                      kind: METHODCALL
+                      expressions {
+                        kind: VARACCESS
+                        variable: "destinationFile"
+                      }
+                      method: "exists"
+                    }
+                  }
+                }
+              }
+              statements {
+                kind: CATCH
+                statements {
+                  kind: THROW
+                  expressions {
+                    kind: NEW
+                    new_type {
+                      name: "Exception"
+                      kind: CLASS
+                    }
+                    method_args {
+                      kind: VARACCESS
+                      variable: "e"
+                    }
+                  }
+                }
+                variable_declaration {
+                  name: "e"
+                  variable_type {
+                    name: "Exception"
+                    kind: CLASS
+                  }
+                }
+              }
+            }
+          }
+          initializations {
+            kind: VARDECL
+            variable_decls {
+              name: "j"
+              variable_type {
+                name: "Iterator"
+                kind: OTHER
+              }
+              initializer {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "files"
+                }
+                method: "iterator"
+              }
+            }
+          }
+          conditions {
+            kind: METHODCALL
+            expressions {
+              kind: VARACCESS
+              variable: "j"
+            }
+            method: "hasNext"
+          }
+        }
+      }
+    }
+    methods {
+      name: "log"
+      modifiers {
+        kind: VISIBILITY
+        visibility: PRIVATE
+      }
+      return_type {
+        name: "void"
+        kind: OTHER
+      }
+      arguments {
+        name: "message"
+        variable_type {
+          name: "String"
+          kind: OTHER
+        }
+      }
+      statements {
+        kind: BLOCK
+        statements {
+          kind: EXPRESSION
+          expressions {
+            kind: METHODCALL
+            expressions {
+              kind: VARACCESS
+              variable: "System.out"
+              is_member_access: true
+            }
+            method: "println"
+            method_args {
+              kind: VARACCESS
+              variable: "message"
+            }
+          }
+        }
+      }
+    }
+    methods {
+      name: "loadProperties"
+      modifiers {
+        kind: VISIBILITY
+        visibility: PRIVATE
+      }
+      return_type {
+        name: "Properties"
+        kind: OTHER
+      }
+      arguments {
+        name: "file"
+        variable_type {
+          name: "File"
+          kind: OTHER
+        }
+      }
+      statements {
+        kind: BLOCK
+        statements {
+          kind: TRY
+          statements {
+            kind: BLOCK
+            statements {
+              kind: RETURN
+              expressions {
+                kind: METHODCALL
+                method: "loadProperties"
+                method_args {
+                  kind: NEW
+                  new_type {
+                    name: "FileInputStream"
+                    kind: CLASS
+                  }
+                  method_args {
+                    kind: VARACCESS
+                    variable: "file"
+                  }
+                }
+              }
+            }
+          }
+          statements {
+            kind: CATCH
+            variable_declaration {
+              name: "e"
+              variable_type {
+                name: "Exception"
+                kind: CLASS
+              }
+            }
+          }
+        }
+        statements {
+          kind: RETURN
+          expressions {
+            kind: LITERAL
+            literal: "null"
+          }
+        }
+      }
+    }
+    methods {
+      name: "loadProperties"
+      modifiers {
+        kind: VISIBILITY
+        visibility: PRIVATE
+      }
+      modifiers {
+        kind: STATIC
+      }
+      return_type {
+        name: "Properties"
+        kind: OTHER
+      }
+      arguments {
+        name: "is"
+        variable_type {
+          name: "InputStream"
+          kind: OTHER
+        }
+      }
+      statements {
+        kind: BLOCK
+        statements {
+          kind: TRY
+          statements {
+            kind: BLOCK
+            statements {
+              kind: EXPRESSION
+              expressions {
+                kind: VARDECL
+                variable_decls {
+                  name: "properties"
+                  variable_type {
+                    name: "Properties"
+                    kind: OTHER
+                  }
+                  initializer {
+                    kind: NEW
+                    new_type {
+                      name: "Properties"
+                      kind: CLASS
+                    }
+                  }
+                }
+              }
+            }
+            statements {
+              kind: IF
+              statements {
+                kind: BLOCK
+                statements {
+                  kind: EXPRESSION
+                  expressions {
+                    kind: METHODCALL
+                    expressions {
+                      kind: VARACCESS
+                      variable: "properties"
+                    }
+                    method: "load"
+                    method_args {
+                      kind: VARACCESS
+                      variable: "is"
+                    }
+                  }
+                }
+              }
+              conditions {
+                kind: NEQ
+                expressions {
+                  kind: VARACCESS
+                  variable: "is"
+                }
+                expressions {
+                  kind: LITERAL
+                  literal: "null"
+                }
+              }
+            }
+            statements {
+              kind: RETURN
+              expressions {
+                kind: VARACCESS
+                variable: "properties"
+              }
+            }
+          }
+          statements {
+            kind: CATCH
+            variable_declaration {
+              name: "e"
+              variable_type {
+                name: "IOException"
+                kind: CLASS
+              }
+            }
+          }
+          statements {
+            kind: FINALLY
+            statements {
+              kind: TRY
+              statements {
+                kind: BLOCK
+                statements {
+                  kind: IF
+                  statements {
+                    kind: BLOCK
+                    statements {
+                      kind: EXPRESSION
+                      expressions {
+                        kind: METHODCALL
+                        expressions {
+                          kind: VARACCESS
+                          variable: "is"
+                        }
+                        method: "close"
+                      }
+                    }
+                  }
+                  conditions {
+                    kind: NEQ
+                    expressions {
+                      kind: VARACCESS
+                      variable: "is"
+                    }
+                    expressions {
+                      kind: LITERAL
+                      literal: "null"
+                    }
+                  }
+                }
+              }
+              statements {
+                kind: CATCH
+                variable_declaration {
+                  name: "e"
+                  variable_type {
+                    name: "IOException"
+                    kind: CLASS
+                  }
+                }
+              }
+            }
+          }
+        }
+        statements {
+          kind: RETURN
+          expressions {
+            kind: LITERAL
+            literal: "null"
+          }
+        }
+      }
+    }
+    fields {
+      name: "bootstrapPomParser"
+      variable_type {
+        name: "BootstrapPomParser"
+        kind: OTHER
+      }
+      modifiers {
+        kind: VISIBILITY
+        visibility: PRIVATE
+      }
+    }
+    fields {
+      name: "dependencies"
+      variable_type {
+        name: "List"
+        kind: OTHER
+      }
+      modifiers {
+        kind: VISIBILITY
+        visibility: PRIVATE
+      }
+    }
+    fields {
+      name: "resources"
+      variable_type {
+        name: "List"
+        kind: OTHER
+      }
+      modifiers {
+        kind: VISIBILITY
+        visibility: PRIVATE
+      }
+    }
+    fields {
+      name: "mavenRepoLocal"
+      variable_type {
+        name: "File"
+        kind: OTHER
+      }
+      modifiers {
+        kind: VISIBILITY
+        visibility: PRIVATE
+      }
+    }
+    fields {
+      name: "useTimestamp"
+      variable_type {
+        name: "boolean"
+        kind: OTHER
+      }
+      modifiers {
+        kind: VISIBILITY
+        visibility: PRIVATE
+      }
+      initializer {
+        kind: LITERAL
+        literal: "true"
+      }
+    }
+    fields {
+      name: "ignoreErrors"
+      variable_type {
+        name: "boolean"
+        kind: OTHER
+      }
+      modifiers {
+        kind: VISIBILITY
+        visibility: PRIVATE
+      }
+      initializer {
+        kind: LITERAL
+        literal: "true"
+      }
+    }
+    fields {
+      name: "baseUrl"
+      variable_type {
+        name: "String"
+        kind: OTHER
+      }
+      modifiers {
+        kind: VISIBILITY
+        visibility: PRIVATE
+      }
+    }
+    fields {
+      name: "proxyHost"
+      variable_type {
+        name: "String"
+        kind: OTHER
+      }
+      modifiers {
+        kind: VISIBILITY
+        visibility: PRIVATE
+      }
+    }
+    fields {
+      name: "proxyPort"
+      variable_type {
+        name: "String"
+        kind: OTHER
+      }
+      modifiers {
+        kind: VISIBILITY
+        visibility: PRIVATE
+      }
+    }
+    fields {
+      name: "proxyUserName"
+      variable_type {
+        name: "String"
+        kind: OTHER
+      }
+      modifiers {
+        kind: VISIBILITY
+        visibility: PRIVATE
+      }
+    }
+    fields {
+      name: "proxyPassword"
+      variable_type {
+        name: "String"
+        kind: OTHER
+      }
+      modifiers {
+        kind: VISIBILITY
+        visibility: PRIVATE
+      }
+    }
+    nested_declarations {
+      name: "BootstrapPomParser"
+      kind: CLASS
+      modifiers {
+        kind: STATIC
+      }
+      parents {
+        name: "DefaultHandler"
+        kind: CLASS
+      }
+      methods {
+        name: "getDependencies"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "List"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: RETURN
+            expressions {
+              kind: VARACCESS
+              variable: "dependencies"
+            }
+          }
+        }
+      }
+      methods {
+        name: "getResources"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "List"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: RETURN
+            expressions {
+              kind: VARACCESS
+              variable: "resources"
+            }
+          }
+        }
+      }
+      methods {
+        name: "parse"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "file"
+          variable_type {
+            name: "File"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: ASSIGN
+              expressions {
+                kind: VARACCESS
+                expressions {
+                  kind: LITERAL
+                  literal: "this"
+                }
+                variable: "file"
+                is_member_access: true
+              }
+              expressions {
+                kind: VARACCESS
+                variable: "file"
+              }
+            }
+          }
+          statements {
+            kind: TRY
+            statements {
+              kind: BLOCK
+              statements {
+                kind: EXPRESSION
+                expressions {
+                  kind: ASSIGN
+                  expressions {
+                    kind: VARACCESS
+                    variable: "saxFactory"
+                  }
+                  expressions {
+                    kind: METHODCALL
+                    expressions {
+                      kind: VARACCESS
+                      variable: "SAXParserFactory"
+                    }
+                    method: "newInstance"
+                  }
+                }
+              }
+              statements {
+                kind: EXPRESSION
+                expressions {
+                  kind: VARDECL
+                  variable_decls {
+                    name: "parser"
+                    variable_type {
+                      name: "SAXParser"
+                      kind: OTHER
+                    }
+                    initializer {
+                      kind: METHODCALL
+                      expressions {
+                        kind: VARACCESS
+                        variable: "saxFactory"
+                      }
+                      method: "newSAXParser"
+                    }
+                  }
+                }
+              }
+              statements {
+                kind: EXPRESSION
+                expressions {
+                  kind: VARDECL
+                  variable_decls {
+                    name: "is"
+                    variable_type {
+                      name: "InputSource"
+                      kind: OTHER
+                    }
+                    initializer {
+                      kind: NEW
+                      new_type {
+                        name: "InputSource"
+                        kind: CLASS
+                      }
+                      method_args {
+                        kind: NEW
+                        new_type {
+                          name: "FileInputStream"
+                          kind: CLASS
+                        }
+                        method_args {
+                          kind: VARACCESS
+                          variable: "file"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              statements {
+                kind: EXPRESSION
+                expressions {
+                  kind: METHODCALL
+                  expressions {
+                    kind: VARACCESS
+                    variable: "parser"
+                  }
+                  method: "parse"
+                  method_args {
+                    kind: VARACCESS
+                    variable: "is"
+                  }
+                  method_args {
+                    kind: LITERAL
+                    literal: "this"
+                  }
+                }
+              }
+            }
+            statements {
+              kind: CATCH
+              statements {
+                kind: EXPRESSION
+                expressions {
+                  kind: METHODCALL
+                  expressions {
+                    kind: VARACCESS
+                    variable: "e"
+                  }
+                  method: "printStackTrace"
+                }
+              }
+              variable_declaration {
+                name: "e"
+                variable_type {
+                  name: "Exception"
+                  kind: CLASS
+                }
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "startElement"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "uri"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        arguments {
+          name: "localName"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        arguments {
+          name: "rawName"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        arguments {
+          name: "attributes"
+          variable_type {
+            name: "Attributes"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: IF
+            statements {
+              kind: BLOCK
+              statements {
+                kind: RETURN
+              }
+            }
+            statements {
+              kind: IF
+              statements {
+                kind: BLOCK
+                statements {
+                  kind: EXPRESSION
+                  expressions {
+                    kind: ASSIGN
+                    expressions {
+                      kind: VARACCESS
+                      variable: "insideUnitTest"
+                    }
+                    expressions {
+                      kind: LITERAL
+                      literal: "true"
+                    }
+                  }
+                }
+              }
+              statements {
+                kind: IF
+                statements {
+                  kind: BLOCK
+                  statements {
+                    kind: EXPRESSION
+                    expressions {
+                      kind: ASSIGN
+                      expressions {
+                        kind: VARACCESS
+                        variable: "currentDependency"
+                      }
+                      expressions {
+                        kind: NEW
+                        new_type {
+                          name: "Dependency"
+                          kind: CLASS
+                        }
+                      }
+                    }
+                  }
+                  statements {
+                    kind: EXPRESSION
+                    expressions {
+                      kind: ASSIGN
+                      expressions {
+                        kind: VARACCESS
+                        variable: "insideDependency"
+                      }
+                      expressions {
+                        kind: LITERAL
+                        literal: "true"
+                      }
+                    }
+                  }
+                }
+                statements {
+                  kind: IF
+                  statements {
+                    kind: BLOCK
+                    statements {
+                      kind: EXPRESSION
+                      expressions {
+                        kind: ASSIGN
+                        expressions {
+                          kind: VARACCESS
+                          variable: "currentResource"
+                        }
+                        expressions {
+                          kind: NEW
+                          new_type {
+                            name: "Resource"
+                            kind: CLASS
+                          }
+                        }
+                      }
+                    }
+                    statements {
+                      kind: EXPRESSION
+                      expressions {
+                        kind: ASSIGN
+                        expressions {
+                          kind: VARACCESS
+                          variable: "insideResource"
+                        }
+                        expressions {
+                          kind: LITERAL
+                          literal: "true"
+                        }
+                      }
+                    }
+                  }
+                  conditions {
+                    kind: METHODCALL
+                    expressions {
+                      kind: VARACCESS
+                      variable: "rawName"
+                    }
+                    method: "equals"
+                    method_args {
+                      kind: LITERAL
+                      literal: "\"resource\""
+                    }
+                  }
+                }
+                conditions {
+                  kind: METHODCALL
+                  expressions {
+                    kind: VARACCESS
+                    variable: "rawName"
+                  }
+                  method: "equals"
+                  method_args {
+                    kind: LITERAL
+                    literal: "\"dependency\""
+                  }
+                }
+              }
+              conditions {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "rawName"
+                }
+                method: "equals"
+                method_args {
+                  kind: LITERAL
+                  literal: "\"unitTest\""
+                }
+              }
+            }
+            conditions {
+              kind: VARACCESS
+              variable: "insideUnitTest"
+            }
+          }
+        }
+      }
+      methods {
+        name: "characters"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "buffer"
+          variable_type {
+            name: "char[]"
+            kind: OTHER
+          }
+        }
+        arguments {
+          name: "start"
+          variable_type {
+            name: "int"
+            kind: OTHER
+          }
+        }
+        arguments {
+          name: "length"
+          variable_type {
+            name: "int"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: METHODCALL
+              expressions {
+                kind: VARACCESS
+                variable: "bodyText"
+              }
+              method: "append"
+              method_args {
+                kind: VARACCESS
+                variable: "buffer"
+              }
+              method_args {
+                kind: VARACCESS
+                variable: "start"
+              }
+              method_args {
+                kind: VARACCESS
+                variable: "length"
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "getBodyText"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+        return_type {
+          name: "String"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: RETURN
+            expressions {
+              kind: METHODCALL
+              expressions {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "bodyText"
+                }
+                method: "toString"
+              }
+              method: "trim"
+            }
+          }
+        }
+      }
+      methods {
+        name: "endElement"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "uri"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        arguments {
+          name: "localName"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        arguments {
+          name: "rawName"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: IF
+            statements {
+              kind: BLOCK
+              statements {
+                kind: EXPRESSION
+                expressions {
+                  kind: VARDECL
+                  variable_decls {
+                    name: "extend"
+                    variable_type {
+                      name: "String"
+                      kind: OTHER
+                    }
+                    initializer {
+                      kind: METHODCALL
+                      method: "getBodyText"
+                    }
+                  }
+                }
+              }
+              statements {
+                kind: EXPRESSION
+                expressions {
+                  kind: VARDECL
+                  variable_decls {
+                    name: "f"
+                    variable_type {
+                      name: "File"
+                      kind: OTHER
+                    }
+                    initializer {
+                      kind: NEW
+                      new_type {
+                        name: "File"
+                        kind: CLASS
+                      }
+                      method_args {
+                        kind: METHODCALL
+                        expressions {
+                          kind: VARACCESS
+                          variable: "file"
+                        }
+                        method: "getParentFile"
+                      }
+                      method_args {
+                        kind: VARACCESS
+                        variable: "extend"
+                      }
+                    }
+                  }
+                }
+              }
+              statements {
+                kind: EXPRESSION
+                expressions {
+                  kind: VARDECL
+                  variable_decls {
+                    name: "p"
+                    variable_type {
+                      name: "BootstrapPomParser"
+                      kind: OTHER
+                    }
+                    initializer {
+                      kind: NEW
+                      new_type {
+                        name: "BootstrapPomParser"
+                        kind: CLASS
+                      }
+                    }
+                  }
+                }
+              }
+              statements {
+                kind: EXPRESSION
+                expressions {
+                  kind: METHODCALL
+                  expressions {
+                    kind: VARACCESS
+                    variable: "p"
+                  }
+                  method: "parse"
+                  method_args {
+                    kind: VARACCESS
+                    variable: "f"
+                  }
+                }
+              }
+              statements {
+                kind: EXPRESSION
+                expressions {
+                  kind: METHODCALL
+                  expressions {
+                    kind: VARACCESS
+                    variable: "dependencies"
+                  }
+                  method: "addAll"
+                  method_args {
+                    kind: METHODCALL
+                    expressions {
+                      kind: VARACCESS
+                      variable: "p"
+                    }
+                    method: "getDependencies"
+                  }
+                }
+              }
+              statements {
+                kind: EXPRESSION
+                expressions {
+                  kind: METHODCALL
+                  expressions {
+                    kind: VARACCESS
+                    variable: "resources"
+                  }
+                  method: "addAll"
+                  method_args {
+                    kind: METHODCALL
+                    expressions {
+                      kind: VARACCESS
+                      variable: "p"
+                    }
+                    method: "getResources"
+                  }
+                }
+              }
+            }
+            statements {
+              kind: IF
+              statements {
+                kind: BLOCK
+                statements {
+                  kind: EXPRESSION
+                  expressions {
+                    kind: ASSIGN
+                    expressions {
+                      kind: VARACCESS
+                      variable: "insideUnitTest"
+                    }
+                    expressions {
+                      kind: LITERAL
+                      literal: "false"
+                    }
+                  }
+                }
+              }
+              statements {
+                kind: IF
+                statements {
+                  kind: BLOCK
+                  statements {
+                    kind: EXPRESSION
+                    expressions {
+                      kind: METHODCALL
+                      expressions {
+                        kind: VARACCESS
+                        variable: "dependencies"
+                      }
+                      method: "add"
+                      method_args {
+                        kind: VARACCESS
+                        variable: "currentDependency"
+                      }
+                    }
+                  }
+                  statements {
+                    kind: EXPRESSION
+                    expressions {
+                      kind: ASSIGN
+                      expressions {
+                        kind: VARACCESS
+                        variable: "insideDependency"
+                      }
+                      expressions {
+                        kind: LITERAL
+                        literal: "false"
+                      }
+                    }
+                  }
+                }
+                statements {
+                  kind: IF
+                  statements {
+                    kind: BLOCK
+                    statements {
+                      kind: EXPRESSION
+                      expressions {
+                        kind: METHODCALL
+                        expressions {
+                          kind: VARACCESS
+                          variable: "resources"
+                        }
+                        method: "add"
+                        method_args {
+                          kind: VARACCESS
+                          variable: "currentResource"
+                        }
+                      }
+                    }
+                    statements {
+                      kind: EXPRESSION
+                      expressions {
+                        kind: ASSIGN
+                        expressions {
+                          kind: VARACCESS
+                          variable: "insideResource"
+                        }
+                        expressions {
+                          kind: LITERAL
+                          literal: "false"
+                        }
+                      }
+                    }
+                  }
+                  statements {
+                    kind: IF
+                    statements {
+                      kind: BLOCK
+                      statements {
+                        kind: IF
+                        statements {
+                          kind: BLOCK
+                          statements {
+                            kind: EXPRESSION
+                            expressions {
+                              kind: METHODCALL
+                              expressions {
+                                kind: VARACCESS
+                                variable: "currentDependency"
+                              }
+                              method: "setId"
+                              method_args {
+                                kind: METHODCALL
+                                method: "getBodyText"
+                              }
+                            }
+                          }
+                        }
+                        statements {
+                          kind: IF
+                          statements {
+                            kind: BLOCK
+                            statements {
+                              kind: EXPRESSION
+                              expressions {
+                                kind: METHODCALL
+                                expressions {
+                                  kind: VARACCESS
+                                  variable: "currentDependency"
+                                }
+                                method: "setVersion"
+                                method_args {
+                                  kind: METHODCALL
+                                  method: "getBodyText"
+                                }
+                              }
+                            }
+                          }
+                          statements {
+                            kind: IF
+                            statements {
+                              kind: BLOCK
+                              statements {
+                                kind: EXPRESSION
+                                expressions {
+                                  kind: METHODCALL
+                                  expressions {
+                                    kind: VARACCESS
+                                    variable: "currentDependency"
+                                  }
+                                  method: "setJar"
+                                  method_args {
+                                    kind: METHODCALL
+                                    method: "getBodyText"
+                                  }
+                                }
+                              }
+                            }
+                            statements {
+                              kind: IF
+                              statements {
+                                kind: BLOCK
+                                statements {
+                                  kind: EXPRESSION
+                                  expressions {
+                                    kind: METHODCALL
+                                    expressions {
+                                      kind: VARACCESS
+                                      variable: "currentDependency"
+                                    }
+                                    method: "setType"
+                                    method_args {
+                                      kind: METHODCALL
+                                      method: "getBodyText"
+                                    }
+                                  }
+                                }
+                              }
+                              statements {
+                                kind: IF
+                                statements {
+                                  kind: BLOCK
+                                  statements {
+                                    kind: EXPRESSION
+                                    expressions {
+                                      kind: METHODCALL
+                                      expressions {
+                                        kind: VARACCESS
+                                        variable: "currentDependency"
+                                      }
+                                      method: "setGroupId"
+                                      method_args {
+                                        kind: METHODCALL
+                                        method: "getBodyText"
+                                      }
+                                    }
+                                  }
+                                }
+                                statements {
+                                  kind: IF
+                                  statements {
+                                    kind: BLOCK
+                                    statements {
+                                      kind: EXPRESSION
+                                      expressions {
+                                        kind: METHODCALL
+                                        expressions {
+                                          kind: VARACCESS
+                                          variable: "currentDependency"
+                                        }
+                                        method: "setArtifactId"
+                                        method_args {
+                                          kind: METHODCALL
+                                          method: "getBodyText"
+                                        }
+                                      }
+                                    }
+                                  }
+                                  conditions {
+                                    kind: METHODCALL
+                                    expressions {
+                                      kind: VARACCESS
+                                      variable: "rawName"
+                                    }
+                                    method: "equals"
+                                    method_args {
+                                      kind: LITERAL
+                                      literal: "\"artifactId\""
+                                    }
+                                  }
+                                }
+                                conditions {
+                                  kind: METHODCALL
+                                  expressions {
+                                    kind: VARACCESS
+                                    variable: "rawName"
+                                  }
+                                  method: "equals"
+                                  method_args {
+                                    kind: LITERAL
+                                    literal: "\"groupId\""
+                                  }
+                                }
+                              }
+                              conditions {
+                                kind: METHODCALL
+                                expressions {
+                                  kind: VARACCESS
+                                  variable: "rawName"
+                                }
+                                method: "equals"
+                                method_args {
+                                  kind: LITERAL
+                                  literal: "\"type\""
+                                }
+                              }
+                            }
+                            conditions {
+                              kind: METHODCALL
+                              expressions {
+                                kind: VARACCESS
+                                variable: "rawName"
+                              }
+                              method: "equals"
+                              method_args {
+                                kind: LITERAL
+                                literal: "\"jar\""
+                              }
+                            }
+                          }
+                          conditions {
+                            kind: METHODCALL
+                            expressions {
+                              kind: VARACCESS
+                              variable: "rawName"
+                            }
+                            method: "equals"
+                            method_args {
+                              kind: LITERAL
+                              literal: "\"version\""
+                            }
+                          }
+                        }
+                        conditions {
+                          kind: METHODCALL
+                          expressions {
+                            kind: VARACCESS
+                            variable: "rawName"
+                          }
+                          method: "equals"
+                          method_args {
+                            kind: LITERAL
+                            literal: "\"id\""
+                          }
+                        }
+                      }
+                    }
+                    statements {
+                      kind: IF
+                      statements {
+                        kind: BLOCK
+                        statements {
+                          kind: IF
+                          statements {
+                            kind: BLOCK
+                            statements {
+                              kind: EXPRESSION
+                              expressions {
+                                kind: METHODCALL
+                                expressions {
+                                  kind: VARACCESS
+                                  variable: "currentResource"
+                                }
+                                method: "setDirectory"
+                                method_args {
+                                  kind: METHODCALL
+                                  method: "getBodyText"
+                                }
+                              }
+                            }
+                          }
+                          statements {
+                            kind: IF
+                            statements {
+                              kind: BLOCK
+                              statements {
+                                kind: EXPRESSION
+                                expressions {
+                                  kind: METHODCALL
+                                  expressions {
+                                    kind: VARACCESS
+                                    variable: "currentResource"
+                                  }
+                                  method: "setTargetPath"
+                                  method_args {
+                                    kind: METHODCALL
+                                    method: "getBodyText"
+                                  }
+                                }
+                              }
+                            }
+                            statements {
+                              kind: IF
+                              statements {
+                                kind: BLOCK
+                                statements {
+                                  kind: EXPRESSION
+                                  expressions {
+                                    kind: METHODCALL
+                                    expressions {
+                                      kind: VARACCESS
+                                      variable: "currentResource"
+                                    }
+                                    method: "addInclude"
+                                    method_args {
+                                      kind: METHODCALL
+                                      method: "getBodyText"
+                                    }
+                                  }
+                                }
+                              }
+                              statements {
+                                kind: IF
+                                statements {
+                                  kind: BLOCK
+                                  statements {
+                                    kind: EXPRESSION
+                                    expressions {
+                                      kind: METHODCALL
+                                      expressions {
+                                        kind: VARACCESS
+                                        variable: "currentResource"
+                                      }
+                                      method: "addExclude"
+                                      method_args {
+                                        kind: METHODCALL
+                                        method: "getBodyText"
+                                      }
+                                    }
+                                  }
+                                }
+                                conditions {
+                                  kind: METHODCALL
+                                  expressions {
+                                    kind: VARACCESS
+                                    variable: "rawName"
+                                  }
+                                  method: "equals"
+                                  method_args {
+                                    kind: LITERAL
+                                    literal: "\"exclude\""
+                                  }
+                                }
+                              }
+                              conditions {
+                                kind: METHODCALL
+                                expressions {
+                                  kind: VARACCESS
+                                  variable: "rawName"
+                                }
+                                method: "equals"
+                                method_args {
+                                  kind: LITERAL
+                                  literal: "\"include\""
+                                }
+                              }
+                            }
+                            conditions {
+                              kind: METHODCALL
+                              expressions {
+                                kind: VARACCESS
+                                variable: "rawName"
+                              }
+                              method: "equals"
+                              method_args {
+                                kind: LITERAL
+                                literal: "\"targetPath\""
+                              }
+                            }
+                          }
+                          conditions {
+                            kind: METHODCALL
+                            expressions {
+                              kind: VARACCESS
+                              variable: "rawName"
+                            }
+                            method: "equals"
+                            method_args {
+                              kind: LITERAL
+                              literal: "\"directory\""
+                            }
+                          }
+                        }
+                      }
+                      conditions {
+                        kind: VARACCESS
+                        variable: "insideResource"
+                      }
+                    }
+                    conditions {
+                      kind: VARACCESS
+                      variable: "insideDependency"
+                    }
+                  }
+                  conditions {
+                    kind: METHODCALL
+                    expressions {
+                      kind: VARACCESS
+                      variable: "rawName"
+                    }
+                    method: "equals"
+                    method_args {
+                      kind: LITERAL
+                      literal: "\"resource\""
+                    }
+                  }
+                }
+                conditions {
+                  kind: METHODCALL
+                  expressions {
+                    kind: VARACCESS
+                    variable: "rawName"
+                  }
+                  method: "equals"
+                  method_args {
+                    kind: LITERAL
+                    literal: "\"dependency\""
+                  }
+                }
+              }
+              conditions {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "rawName"
+                }
+                method: "equals"
+                method_args {
+                  kind: LITERAL
+                  literal: "\"unitTest\""
+                }
+              }
+            }
+            conditions {
+              kind: METHODCALL
+              expressions {
+                kind: VARACCESS
+                variable: "rawName"
+              }
+              method: "equals"
+              method_args {
+                kind: LITERAL
+                literal: "\"extend\""
+              }
+            }
+          }
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: ASSIGN
+              expressions {
+                kind: VARACCESS
+                variable: "bodyText"
+              }
+              expressions {
+                kind: NEW
+                new_type {
+                  name: "StringBuffer"
+                  kind: CLASS
+                }
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "warning"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "spe"
+          variable_type {
+            name: "SAXParseException"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: METHODCALL
+              method: "printParseError"
+              method_args {
+                kind: LITERAL
+                literal: "\"Warning\""
+              }
+              method_args {
+                kind: VARACCESS
+                variable: "spe"
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "error"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "spe"
+          variable_type {
+            name: "SAXParseException"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: METHODCALL
+              method: "printParseError"
+              method_args {
+                kind: LITERAL
+                literal: "\"Error\""
+              }
+              method_args {
+                kind: VARACCESS
+                variable: "spe"
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "fatalError"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "spe"
+          variable_type {
+            name: "SAXParseException"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: METHODCALL
+              method: "printParseError"
+              method_args {
+                kind: LITERAL
+                literal: "\"Fatal Error\""
+              }
+              method_args {
+                kind: VARACCESS
+                variable: "spe"
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "printParseError"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+        modifiers {
+          kind: FINAL
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "type"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        arguments {
+          name: "spe"
+          variable_type {
+            name: "SAXParseException"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: METHODCALL
+              expressions {
+                kind: VARACCESS
+                variable: "System.err"
+                is_member_access: true
+              }
+              method: "println"
+              method_args {
+                kind: OP_ADD
+                expressions {
+                  kind: VARACCESS
+                  variable: "type"
+                }
+                expressions {
+                  kind: LITERAL
+                  literal: "\" [line \""
+                }
+                expressions {
+                  kind: METHODCALL
+                  expressions {
+                    kind: VARACCESS
+                    variable: "spe"
+                  }
+                  method: "getLineNumber"
+                }
+                expressions {
+                  kind: LITERAL
+                  literal: "\", row \""
+                }
+                expressions {
+                  kind: METHODCALL
+                  expressions {
+                    kind: VARACCESS
+                    variable: "spe"
+                  }
+                  method: "getColumnNumber"
+                }
+                expressions {
+                  kind: LITERAL
+                  literal: "\"]: \""
+                }
+                expressions {
+                  kind: METHODCALL
+                  expressions {
+                    kind: VARACCESS
+                    variable: "spe"
+                  }
+                  method: "getMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+      fields {
+        name: "dependencies"
+        variable_type {
+          name: "List"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+        initializer {
+          kind: NEW
+          new_type {
+            name: "ArrayList"
+            kind: CLASS
+          }
+        }
+      }
+      fields {
+        name: "resources"
+        variable_type {
+          name: "List"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+        initializer {
+          kind: NEW
+          new_type {
+            name: "ArrayList"
+            kind: CLASS
+          }
+        }
+      }
+      fields {
+        name: "currentDependency"
+        variable_type {
+          name: "Dependency"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+      }
+      fields {
+        name: "currentResource"
+        variable_type {
+          name: "Resource"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+      }
+      fields {
+        name: "saxFactory"
+        variable_type {
+          name: "SAXParserFactory"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+        modifiers {
+          kind: STATIC
+        }
+      }
+      fields {
+        name: "insideDependency"
+        variable_type {
+          name: "boolean"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+        initializer {
+          kind: LITERAL
+          literal: "false"
+        }
+      }
+      fields {
+        name: "insideUnitTest"
+        variable_type {
+          name: "boolean"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+        initializer {
+          kind: LITERAL
+          literal: "false"
+        }
+      }
+      fields {
+        name: "insideResource"
+        variable_type {
+          name: "boolean"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+        initializer {
+          kind: LITERAL
+          literal: "false"
+        }
+      }
+      fields {
+        name: "bodyText"
+        variable_type {
+          name: "StringBuffer"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+        initializer {
+          kind: NEW
+          new_type {
+            name: "StringBuffer"
+            kind: CLASS
+          }
+        }
+      }
+      fields {
+        name: "file"
+        variable_type {
+          name: "File"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+      }
+      fully_qualified_name: "Bootstrapper.BootstrapPomParser"
+    }
+    nested_declarations {
+      name: "Dependency"
+      kind: CLASS
+      modifiers {
+        kind: VISIBILITY
+        visibility: PUBLIC
+      }
+      modifiers {
+        kind: STATIC
+      }
+      methods {
+        name: "<init>"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        statements {
+          kind: BLOCK
+        }
+      }
+      methods {
+        name: "setId"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "id"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: ASSIGN
+              expressions {
+                kind: VARACCESS
+                expressions {
+                  kind: LITERAL
+                  literal: "this"
+                }
+                variable: "id"
+                is_member_access: true
+              }
+              expressions {
+                kind: VARACCESS
+                variable: "id"
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "getId"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "String"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: IF
+            statements {
+              kind: BLOCK
+              statements {
+                kind: RETURN
+                expressions {
+                  kind: OP_ADD
+                  expressions {
+                    kind: METHODCALL
+                    method: "getGroupId"
+                  }
+                  expressions {
+                    kind: LITERAL
+                    literal: "\":\""
+                  }
+                  expressions {
+                    kind: METHODCALL
+                    method: "getArtifactId"
+                  }
+                }
+              }
+            }
+            conditions {
+              kind: LOGICAL_AND
+              expressions {
+                kind: METHODCALL
+                method: "isValid"
+                method_args {
+                  kind: METHODCALL
+                  method: "getGroupId"
+                }
+              }
+              expressions {
+                kind: METHODCALL
+                method: "isValid"
+                method_args {
+                  kind: METHODCALL
+                  method: "getArtifactId"
+                }
+              }
+            }
+          }
+          statements {
+            kind: RETURN
+            expressions {
+              kind: VARACCESS
+              variable: "id"
+            }
+          }
+        }
+      }
+      methods {
+        name: "setGroupId"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "groupId"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: ASSIGN
+              expressions {
+                kind: VARACCESS
+                expressions {
+                  kind: LITERAL
+                  literal: "this"
+                }
+                variable: "groupId"
+                is_member_access: true
+              }
+              expressions {
+                kind: VARACCESS
+                variable: "groupId"
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "getGroupId"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "String"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: RETURN
+            expressions {
+              kind: VARACCESS
+              variable: "groupId"
+            }
+          }
+        }
+      }
+      methods {
+        name: "getArtifactDirectory"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "String"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: IF
+            statements {
+              kind: BLOCK
+              statements {
+                kind: RETURN
+                expressions {
+                  kind: METHODCALL
+                  method: "getGroupId"
+                }
+              }
+            }
+            conditions {
+              kind: METHODCALL
+              method: "isValid"
+              method_args {
+                kind: METHODCALL
+                method: "getGroupId"
+              }
+            }
+          }
+          statements {
+            kind: RETURN
+            expressions {
+              kind: METHODCALL
+              method: "getId"
+            }
+          }
+        }
+      }
+      methods {
+        name: "getArtifactId"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "String"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: RETURN
+            expressions {
+              kind: VARACCESS
+              variable: "artifactId"
+            }
+          }
+        }
+      }
+      methods {
+        name: "setArtifactId"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "artifactId"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: ASSIGN
+              expressions {
+                kind: VARACCESS
+                expressions {
+                  kind: LITERAL
+                  literal: "this"
+                }
+                variable: "artifactId"
+                is_member_access: true
+              }
+              expressions {
+                kind: VARACCESS
+                variable: "artifactId"
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "getArtifact"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "String"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: IF
+            statements {
+              kind: BLOCK
+              statements {
+                kind: RETURN
+                expressions {
+                  kind: VARACCESS
+                  variable: "jar"
+                }
+              }
+            }
+            conditions {
+              kind: NEQ
+              expressions {
+                kind: VARACCESS
+                variable: "jar"
+              }
+              expressions {
+                kind: LITERAL
+                literal: "null"
+              }
+            }
+          }
+          statements {
+            kind: IF
+            statements {
+              kind: BLOCK
+              statements {
+                kind: RETURN
+                expressions {
+                  kind: OP_ADD
+                  expressions {
+                    kind: METHODCALL
+                    method: "getArtifactId"
+                  }
+                  expressions {
+                    kind: LITERAL
+                    literal: "\"-\""
+                  }
+                  expressions {
+                    kind: METHODCALL
+                    method: "getVersion"
+                  }
+                  expressions {
+                    kind: LITERAL
+                    literal: "\".\""
+                  }
+                  expressions {
+                    kind: METHODCALL
+                    method: "getType"
+                  }
+                }
+              }
+            }
+            statements {
+              kind: BLOCK
+              statements {
+                kind: RETURN
+                expressions {
+                  kind: OP_ADD
+                  expressions {
+                    kind: METHODCALL
+                    method: "getId"
+                  }
+                  expressions {
+                    kind: LITERAL
+                    literal: "\"-\""
+                  }
+                  expressions {
+                    kind: METHODCALL
+                    method: "getVersion"
+                  }
+                  expressions {
+                    kind: LITERAL
+                    literal: "\".\""
+                  }
+                  expressions {
+                    kind: METHODCALL
+                    method: "getType"
+                  }
+                }
+              }
+            }
+            conditions {
+              kind: METHODCALL
+              method: "isValid"
+              method_args {
+                kind: METHODCALL
+                method: "getArtifactId"
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "setVersion"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "version"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: ASSIGN
+              expressions {
+                kind: VARACCESS
+                expressions {
+                  kind: LITERAL
+                  literal: "this"
+                }
+                variable: "version"
+                is_member_access: true
+              }
+              expressions {
+                kind: VARACCESS
+                variable: "version"
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "getVersion"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "String"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: RETURN
+            expressions {
+              kind: VARACCESS
+              variable: "version"
+            }
+          }
+        }
+      }
+      methods {
+        name: "setJar"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "jar"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: IF
+            statements {
+              kind: BLOCK
+              statements {
+                kind: RETURN
+              }
+            }
+            conditions {
+              kind: EQ
+              expressions {
+                kind: METHODCALL
+                expressions {
+                  kind: METHODCALL
+                  expressions {
+                    kind: VARACCESS
+                    variable: "jar"
+                  }
+                  method: "trim"
+                }
+                method: "length"
+              }
+              expressions {
+                kind: LITERAL
+                literal: "0"
+              }
+            }
+          }
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: ASSIGN
+              expressions {
+                kind: VARACCESS
+                expressions {
+                  kind: LITERAL
+                  literal: "this"
+                }
+                variable: "jar"
+                is_member_access: true
+              }
+              expressions {
+                kind: VARACCESS
+                variable: "jar"
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "getJar"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "String"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: RETURN
+            expressions {
+              kind: VARACCESS
+              variable: "jar"
+            }
+          }
+        }
+      }
+      methods {
+        name: "setUrl"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "url"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: ASSIGN
+              expressions {
+                kind: VARACCESS
+                expressions {
+                  kind: LITERAL
+                  literal: "this"
+                }
+                variable: "url"
+                is_member_access: true
+              }
+              expressions {
+                kind: VARACCESS
+                variable: "url"
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "getUrl"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "String"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: RETURN
+            expressions {
+              kind: VARACCESS
+              variable: "url"
+            }
+          }
+        }
+      }
+      methods {
+        name: "getType"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "String"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: RETURN
+            expressions {
+              kind: VARACCESS
+              variable: "type"
+            }
+          }
+        }
+      }
+      methods {
+        name: "setType"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "type"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: ASSIGN
+              expressions {
+                kind: VARACCESS
+                expressions {
+                  kind: LITERAL
+                  literal: "this"
+                }
+                variable: "type"
+                is_member_access: true
+              }
+              expressions {
+                kind: VARACCESS
+                variable: "type"
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "isValid"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+        return_type {
+          name: "boolean"
+          kind: OTHER
+        }
+        arguments {
+          name: "value"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: IF
+            statements {
+              kind: BLOCK
+              statements {
+                kind: RETURN
+                expressions {
+                  kind: LITERAL
+                  literal: "true"
+                }
+              }
+            }
+            conditions {
+              kind: LOGICAL_AND
+              expressions {
+                kind: NEQ
+                expressions {
+                  kind: VARACCESS
+                  variable: "value"
+                }
+                expressions {
+                  kind: LITERAL
+                  literal: "null"
+                }
+              }
+              expressions {
+                kind: EQ
+                expressions {
+                  kind: METHODCALL
+                  expressions {
+                    kind: METHODCALL
+                    expressions {
+                      kind: VARACCESS
+                      variable: "value"
+                    }
+                    method: "trim"
+                  }
+                  method: "equals"
+                  method_args {
+                    kind: LITERAL
+                    literal: "\"\""
+                  }
+                }
+                expressions {
+                  kind: LITERAL
+                  literal: "false"
+                }
+              }
+            }
+          }
+          statements {
+            kind: RETURN
+            expressions {
+              kind: LITERAL
+              literal: "false"
+            }
+          }
+        }
+      }
+      fields {
+        name: "id"
+        variable_type {
+          name: "String"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+      }
+      fields {
+        name: "version"
+        variable_type {
+          name: "String"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+      }
+      fields {
+        name: "url"
+        variable_type {
+          name: "String"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+      }
+      fields {
+        name: "jar"
+        variable_type {
+          name: "String"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+      }
+      fields {
+        name: "artifactId"
+        variable_type {
+          name: "String"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+      }
+      fields {
+        name: "groupId"
+        variable_type {
+          name: "String"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+      }
+      fields {
+        name: "type"
+        variable_type {
+          name: "String"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+        initializer {
+          kind: LITERAL
+          literal: "\"jar\""
+        }
+      }
+      fully_qualified_name: "Bootstrapper.Dependency"
+    }
+    nested_declarations {
+      name: "Resource"
+      kind: CLASS
+      modifiers {
+        kind: VISIBILITY
+        visibility: PUBLIC
+      }
+      modifiers {
+        kind: STATIC
+      }
+      parents {
+        name: "Serializable"
+        kind: INTERFACE
+      }
+      methods {
+        name: "addInclude"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "pattern"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: METHODCALL
+              expressions {
+                kind: VARACCESS
+                expressions {
+                  kind: LITERAL
+                  literal: "this"
+                }
+                variable: "includes"
+                is_member_access: true
+              }
+              method: "add"
+              method_args {
+                kind: VARACCESS
+                variable: "pattern"
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "addExclude"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "pattern"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: METHODCALL
+              expressions {
+                kind: VARACCESS
+                expressions {
+                  kind: LITERAL
+                  literal: "this"
+                }
+                variable: "excludes"
+                is_member_access: true
+              }
+              method: "add"
+              method_args {
+                kind: VARACCESS
+                variable: "pattern"
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "getIncludes"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "List"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: RETURN
+            expressions {
+              kind: VARACCESS
+              expressions {
+                kind: LITERAL
+                literal: "this"
+              }
+              variable: "includes"
+              is_member_access: true
+            }
+          }
+        }
+      }
+      methods {
+        name: "getExcludes"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "List"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: RETURN
+            expressions {
+              kind: VARACCESS
+              expressions {
+                kind: LITERAL
+                literal: "this"
+              }
+              variable: "excludes"
+              is_member_access: true
+            }
+          }
+        }
+      }
+      methods {
+        name: "setDirectory"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "directory"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: ASSIGN
+              expressions {
+                kind: VARACCESS
+                expressions {
+                  kind: LITERAL
+                  literal: "this"
+                }
+                variable: "directory"
+                is_member_access: true
+              }
+              expressions {
+                kind: VARACCESS
+                variable: "directory"
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "getDirectory"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "String"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: RETURN
+            expressions {
+              kind: VARACCESS
+              expressions {
+                kind: LITERAL
+                literal: "this"
+              }
+              variable: "directory"
+              is_member_access: true
+            }
+          }
+        }
+      }
+      methods {
+        name: "setTargetPath"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "targetPath"
+          variable_type {
+            name: "String"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: ASSIGN
+              expressions {
+                kind: VARACCESS
+                expressions {
+                  kind: LITERAL
+                  literal: "this"
+                }
+                variable: "targetPath"
+                is_member_access: true
+              }
+              expressions {
+                kind: VARACCESS
+                variable: "targetPath"
+              }
+            }
+          }
+        }
+      }
+      methods {
+        name: "getTargetPath"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "String"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: RETURN
+            expressions {
+              kind: VARACCESS
+              variable: "targetPath"
+            }
+          }
+        }
+      }
+      methods {
+        name: "getFiltering"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "boolean"
+          kind: OTHER
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: RETURN
+            expressions {
+              kind: VARACCESS
+              variable: "filtering"
+            }
+          }
+        }
+      }
+      methods {
+        name: "setFiltering"
+        modifiers {
+          kind: VISIBILITY
+          visibility: PUBLIC
+        }
+        return_type {
+          name: "void"
+          kind: OTHER
+        }
+        arguments {
+          name: "filtering"
+          variable_type {
+            name: "boolean"
+            kind: OTHER
+          }
+        }
+        statements {
+          kind: BLOCK
+          statements {
+            kind: EXPRESSION
+            expressions {
+              kind: ASSIGN
+              expressions {
+                kind: VARACCESS
+                expressions {
+                  kind: LITERAL
+                  literal: "this"
+                }
+                variable: "filtering"
+                is_member_access: true
+              }
+              expressions {
+                kind: VARACCESS
+                variable: "filtering"
+              }
+            }
+          }
+        }
+      }
+      fields {
+        name: "directory"
+        variable_type {
+          name: "String"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+      }
+      fields {
+        name: "targetPath"
+        variable_type {
+          name: "String"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+      }
+      fields {
+        name: "includes"
+        variable_type {
+          name: "List"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+        initializer {
+          kind: NEW
+          new_type {
+            name: "ArrayList"
+            kind: CLASS
+          }
+        }
+      }
+      fields {
+        name: "excludes"
+        variable_type {
+          name: "List"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+        initializer {
+          kind: NEW
+          new_type {
+            name: "ArrayList"
+            kind: CLASS
+          }
+        }
+      }
+      fields {
+        name: "filtering"
+        variable_type {
+          name: "boolean"
+          kind: OTHER
+        }
+        modifiers {
+          kind: VISIBILITY
+          visibility: PRIVATE
+        }
+      }
+      fully_qualified_name: "Bootstrapper.Resource"
+    }
+    fully_qualified_name: "Bootstrapper"
+  }
+  imports: "org.xml.sax.Attributes"
+  imports: "org.xml.sax.InputSource"
+  imports: "org.xml.sax.SAXParseException"
+  imports: "org.xml.sax.helpers.DefaultHandler"
+  imports: "javax.xml.parsers.SAXParser"
+  imports: "javax.xml.parsers.SAXParserFactory"
+  imports: "java.io.File"
+  imports: "java.io.FileInputStream"
+  imports: "java.io.FileWriter"
+  imports: "java.io.IOException"
+  imports: "java.io.InputStream"
+  imports: "java.io.Serializable"
+  imports: "java.util.ArrayList"
+  imports: "java.util.Iterator"
+  imports: "java.util.List"
+  imports: "java.util.Properties"
+}
+

@@ -104,15 +104,18 @@ import boa.datagen.util.python3.Python3Parser.Xor_exprContext;
 import boa.datagen.util.python3.Python3Parser.Yield_argContext;
 import boa.datagen.util.python3.Python3Parser.Yield_exprContext;
 import boa.datagen.util.python3.Python3Parser.Yield_stmtContext;
+import boa.types.Ast.Expression;
 import boa.types.Ast.Method;
 import boa.types.Ast.Namespace;
 import boa.types.Ast.PositionInfo;
+import boa.types.Ast.Statement;
 import boa.types.Ast.Variable;
-public class Python3Visitor implements Python3Listener{
+public class Python3Visitor extends Python3BaseListener{
 	Python3Parser parser;
 	Python3Lexer lexer;
 	
 	private String src = null;
+	public static final int PY2 = 1, PY3 = 2;
 	
 	private PositionInfo.Builder pos = null;
 	private Namespace.Builder b = Namespace.newBuilder();
@@ -124,9 +127,27 @@ public class Python3Visitor implements Python3Listener{
 	private Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
 
 	
+	protected int astLevel = PY3;
+	public int getAstLevel() {
+		return astLevel;
+	}
+
+	public void setAstLevel(int astLevel) {
+		this.astLevel = astLevel;
+	}
+
 	public Namespace getNamespaces() {
 		return b.build();
 	}
+	
+	public List<boa.types.Ast.Comment> getComments() {
+		return comments;
+	}
+
+	public List<String> getImports() {
+		return imports;
+	}
+	
 	
 	public Python3Visitor(String src) {
 		this.src = src;
@@ -174,41 +195,7 @@ public class Python3Visitor implements Python3Listener{
 		}
 	}
 
-	@Override
-	public void enterEveryRule(ParserRuleContext arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitEveryRule(ParserRuleContext arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visitErrorNode(ErrorNode arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visitTerminal(TerminalNode arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void enterSingle_input(Single_inputContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitSingle_input(Single_inputContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public void enterFile_input(File_inputContext ctx) {
@@ -223,84 +210,23 @@ public class Python3Visitor implements Python3Listener{
 		
 	}
 
-	@Override
-	public void enterEval_input(Eval_inputContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitEval_input(Eval_inputContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void enterDecorator(DecoratorContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitDecorator(DecoratorContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void enterDecorators(DecoratorsContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitDecorators(DecoratorsContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void enterDecorated(DecoratedContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitDecorated(DecoratedContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void enterAsync_funcdef(Async_funcdefContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitAsync_funcdef(Async_funcdefContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	Method.Builder mb;
 	@Override
-	public void enterFuncdef(FuncdefContext ctx) {
-		// TODO Auto-generated method stub
-		
+	public void enterFuncdef(FuncdefContext ctx) {		
 		methods.push(new ArrayList<boa.types.Ast.Method>());
 		mb = Method.newBuilder();
-		b.setName(ctx.NAME().getText());
-		
+		mb.setName(ctx.NAME().getText());
+		methods.peek().add(mb.build());
 		
 	}
-
+    
 	
 	@Override
 	public void exitFuncdef(FuncdefContext ctx) {
-		// TODO Auto-generated method stub
 		for (boa.types.Ast.Method m : methods.pop())
 			b.addMethods(m);
+		mb = null;
 		
 	}
 
@@ -308,9 +234,7 @@ public class Python3Visitor implements Python3Listener{
 	
 	@Override
 	public void enterParameters(ParametersContext ctx) {
-		// TODO Auto-generated method stub
-		
-		
+		// TODO Auto-generated method stub	
 		
 	}
 
@@ -368,9 +292,12 @@ public class Python3Visitor implements Python3Listener{
 		
 	}
 
+	Statement.Builder sb ;
 	@Override
 	public void enterStmt(StmtContext ctx) {
 		// TODO Auto-generated method stub
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		sb = boa.types.Ast.Statement.newBuilder();	
 		
 	}
 
@@ -424,18 +351,6 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void exitAnnassign(AnnassignContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void enterTestlist_star_expr(Testlist_star_exprContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitTestlist_star_expr(Testlist_star_exprContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -920,9 +835,13 @@ public class Python3Visitor implements Python3Listener{
 		
 	}
 
+	
+	Expression.Builder eb;
 	@Override
 	public void enterExpr(ExprContext ctx) {
 		// TODO Auto-generated method stub
+		eb = Expression.newBuilder();
+		
 		
 	}
 
