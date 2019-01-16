@@ -68,10 +68,10 @@ public class ChangedFileProtoTuple extends BoaProtoTuple {
 		members.add(new BoaProtoList(new ChangeKindProtoMap()));
 
 		names.put("previous_names", counter++);
-		members.add(new BoaProtoList(new BoaInt()));
+		members.add(new BoaProtoList(new BoaString()));
 		
 		names.put("previous_versions", counter++);
-		members.add(new BoaProtoList(new BoaString()));
+		members.add(new BoaProtoList(new BoaInt()));
 
 		names.put("previous_indices", counter++);
 		members.add(new BoaProtoList(new BoaInt()));
