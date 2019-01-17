@@ -425,14 +425,14 @@ traverseStatement returns [TraverseStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: (LPAREN id=identifier COLON t=identifier RPAREN { $ast = new TraverseStatement(); $ast.setComponent((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn));} (COLON rt=type {$ast.setReturnType($rt.ast);})? (s=programStatement { $ast.setBody($s.ast); }))
+	: LPAREN id=identifier COLON t=identifier RPAREN { $ast = new TraverseStatement(); $ast.setComponent((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn));} (COLON rt=type {$ast.setReturnType($rt.ast);})? (s=programStatement { $ast.setBody($s.ast); })
 	;
 
 fixpStatement returns [FixPStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: (LPAREN id1=identifier COMMA id2=identifier COLON t=identifier RPAREN { $ast = new FixPStatement(); $ast.setParam1((Component)new Component($id1.ast, $t.ast).setPositions($id1.ast.beginLine, $id1.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn));$ast.setParam2((Component)new Component($id2.ast, $t.ast).setPositions($id2.ast.beginLine, $id2.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn));} (COLON rt=type {$ast.setReturnType($rt.ast);}) (s=programStatement { $ast.setBody($s.ast); }))
+	: LPAREN id1=identifier COMMA id2=identifier COLON t=identifier RPAREN { $ast = new FixPStatement(); $ast.setParam1((Component)new Component($id1.ast, $t.ast).setPositions($id1.ast.beginLine, $id1.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn));$ast.setParam2((Component)new Component($id2.ast, $t.ast).setPositions($id2.ast.beginLine, $id2.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn));} (COLON rt=type {$ast.setReturnType($rt.ast);}) (s=programStatement { $ast.setBody($s.ast); })
 	;
 	
 stopStatement returns [StopStatement ast]

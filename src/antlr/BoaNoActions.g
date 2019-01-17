@@ -240,11 +240,11 @@ visitStatement
 	;
 
 traverseStatement
-	: (LPAREN identifier COLON identifier RPAREN (COLON type)? (programStatement))
+	: LPAREN identifier COLON identifier RPAREN (COLON type)? (programStatement)
 	;
 
 fixpStatement
-	: (LPAREN identifier COMMA identifier COLON identifier RPAREN (COLON type) (programStatement))
+	: LPAREN identifier COMMA identifier COLON identifier RPAREN (COLON type) (programStatement)
 	;
 
 stopStatement
