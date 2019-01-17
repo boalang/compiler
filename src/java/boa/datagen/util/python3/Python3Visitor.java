@@ -104,11 +104,15 @@ import boa.datagen.util.python3.Python3Parser.Xor_exprContext;
 import boa.datagen.util.python3.Python3Parser.Yield_argContext;
 import boa.datagen.util.python3.Python3Parser.Yield_exprContext;
 import boa.datagen.util.python3.Python3Parser.Yield_stmtContext;
+import boa.types.Ast.Declaration;
 import boa.types.Ast.Expression;
+import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Method;
 import boa.types.Ast.Namespace;
 import boa.types.Ast.PositionInfo;
 import boa.types.Ast.Statement;
+import boa.types.Ast.Statement.StatementKind;
+import boa.types.Ast.TypeKind;
 import boa.types.Ast.Variable;
 public class Python3Visitor extends Python3BaseListener{
 	Python3Parser parser;
@@ -176,7 +180,6 @@ public class Python3Visitor extends Python3BaseListener{
     
 	public void visit(String source) {
         parser = parse(source);
-        System.out.println("Entered visitor");
 		try {
 			ParseTreeWalker.DEFAULT.walk(this, parser.file_input());
 		}
@@ -217,31 +220,47 @@ public class Python3Visitor extends Python3BaseListener{
 		methods.push(new ArrayList<boa.types.Ast.Method>());
 		mb = Method.newBuilder();
 		mb.setName(ctx.NAME().getText());
-		methods.peek().add(mb.build());
+		//methods.peek().add(mb.build());
 		
 	}
     
 	
 	@Override
 	public void exitFuncdef(FuncdefContext ctx) {
-		for (boa.types.Ast.Method m : methods.pop())
-			b.addMethods(m);
+		//for (boa.types.Ast.Method m : methods.pop())
+		//	b.addMethods(m);
+		/*if(mb != null)
+			b.addMethods(mb.build());
+		mb = null;
+		*/
+		if(mb != null) {
+			if(db != null) {
+				db.addMethods(mb.build());
+			}
+			else {
+				b.addMethods(mb.build());
+			}
+		}
+		
 		mb = null;
 		
 	}
 
 	
 	
+
+	Variable.Builder vb;
 	@Override
 	public void enterParameters(ParametersContext ctx) {
 		// TODO Auto-generated method stub	
+		vb = Variable.newBuilder();
 		
 	}
 
 	@Override
 	public void exitParameters(ParametersContext ctx) {
 		// TODO Auto-generated method stub
-		
+		vb = null;
 	}
 
 	@Override
@@ -258,6 +277,11 @@ public class Python3Visitor extends Python3BaseListener{
 
 	@Override
 	public void enterTfpdef(TfpdefContext ctx) {
+		if(vb != null) {
+			vb = Variable.newBuilder();
+			vb.setName(ctx.NAME().getText());
+			mb.addArguments(vb.build());
+		}
 		// TODO Auto-generated method stub
 		
 	}
@@ -343,18 +367,23 @@ public class Python3Visitor extends Python3BaseListener{
 		
 	}
 
+	
 	@Override
 	public void enterAnnassign(AnnassignContext ctx) {
 		// TODO Auto-generated method stub
 		
+		
 	}
 
+	
 	@Override
 	public void exitAnnassign(AnnassignContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	
+	Expression.Builder eb;
 	@Override
 	public void enterAugassign(AugassignContext ctx) {
 		// TODO Auto-generated method stub
@@ -619,16 +648,27 @@ public class Python3Visitor extends Python3BaseListener{
 		
 	}
 
+	Statement.Builder stb;
 	@Override
 	public void enterIf_stmt(If_stmtContext ctx) {
 		// TODO Auto-generated method stub
+		System.out.println("Entering IF statement");
+		stb = Statement.newBuilder();
+		stb.setKind(StatementKind.IF);
+		if(mb != null) {
+			System.out.println("mb is not null");
+			mb.addStatements(stb.build());
+		}
+		else {
+			System.out.println("mb is null");
+		}
 		
 	}
 
 	@Override
 	public void exitIf_stmt(If_stmtContext ctx) {
 		// TODO Auto-generated method stub
-		
+		stb = null;
 	}
 
 	@Override
@@ -836,11 +876,10 @@ public class Python3Visitor extends Python3BaseListener{
 	}
 
 	
-	Expression.Builder eb;
+	
 	@Override
 	public void enterExpr(ExprContext ctx) {
 		// TODO Auto-generated method stub
-		eb = Expression.newBuilder();
 		
 		
 	}
@@ -848,7 +887,7 @@ public class Python3Visitor extends Python3BaseListener{
 	@Override
 	public void exitExpr(ExprContext ctx) {
 		// TODO Auto-generated method stub
-		
+		eb = null;
 	}
 
 	@Override
@@ -939,6 +978,7 @@ public class Python3Visitor extends Python3BaseListener{
 	public void enterAtom_expr(Atom_exprContext ctx) {
 		// TODO Auto-generated method stub
 		
+		
 	}
 
 	@Override
@@ -950,6 +990,11 @@ public class Python3Visitor extends Python3BaseListener{
 	@Override
 	public void enterAtom(AtomContext ctx) {
 		// TODO Auto-generated method stub
+		if(vb != null) {
+			vb = Variable.newBuilder();
+			vb.setName(ctx.getText());
+			mb.addArguments(vb.build());
+		}
 		
 	}
 
@@ -1055,16 +1100,22 @@ public class Python3Visitor extends Python3BaseListener{
 		
 	}
 
+	Declaration.Builder db;
 	@Override
 	public void enterClassdef(ClassdefContext ctx) {
 		// TODO Auto-generated method stub
+		db = Declaration.newBuilder();
+		db.setName(ctx.NAME().getText());
+		db.setKind(TypeKind.CLASS);
 		
 	}
 
 	@Override
 	public void exitClassdef(ClassdefContext ctx) {
 		// TODO Auto-generated method stub
-		
+		if(db != null)
+			b.addDeclarations(db.build());
+		db = null;
 	}
 
 	@Override
