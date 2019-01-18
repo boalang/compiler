@@ -16,14 +16,12 @@ import org.apache.hadoop.io.Writable;
 
 import com.google.protobuf.CodedInputStream;
 
-
-
 public class TestSequenceFile {
 	
 	public static void main(String[] args) throws IOException {
 		Configuration conf = new Configuration();
 		FileSystem fileSystem = FileSystem.get(conf);
-		String astpath = "/Users/mislam/eclipse-workspace/outdata/ast/data";
+		String astpath = "/Users/sumon/Downloads/pydatagen/ast/data"; //"/Users/mislam/eclipse-workspace/outdata/ast/data";
 		Writable key = new LongWritable();
 		BytesWritable val = new BytesWritable();
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, 

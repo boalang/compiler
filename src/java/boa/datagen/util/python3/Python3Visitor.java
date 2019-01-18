@@ -125,11 +125,13 @@ public class Python3Visitor extends Python3BaseListener{
 	private Namespace.Builder b = Namespace.newBuilder();
 	private List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
 	private List<String> imports = new ArrayList<String>();
-	private Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
+	//private Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
 	protected Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
-	private Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
-	private Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
-
+	//private Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
+	//private Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
+	private Stack<Method.Builder> methods = new Stack<Method.Builder>();
+	private Stack<Statement.Builder> statements = new Stack<Statement.Builder>();
+	private Stack<Expression.Builder> expressions = new Stack<Expression.Builder>();
 	
 	protected int astLevel = PY3;
 	public int getAstLevel() {
@@ -198,8 +200,6 @@ public class Python3Visitor extends Python3BaseListener{
 		}
 	}
 
-	
-
 	@Override
 	public void enterFile_input(File_inputContext ctx) {
 		// TODO Auto-generated method stub
@@ -213,26 +213,15 @@ public class Python3Visitor extends Python3BaseListener{
 		
 	}
 
-
 	Method.Builder mb;
 	@Override
 	public void enterFuncdef(FuncdefContext ctx) {		
-		methods.push(new ArrayList<boa.types.Ast.Method>());
 		mb = Method.newBuilder();
 		mb.setName(ctx.NAME().getText());
-		//methods.peek().add(mb.build());
-		
-	}
-    
+	}   
 	
 	@Override
 	public void exitFuncdef(FuncdefContext ctx) {
-		//for (boa.types.Ast.Method m : methods.pop())
-		//	b.addMethods(m);
-		/*if(mb != null)
-			b.addMethods(mb.build());
-		mb = null;
-		*/
 		if(mb != null) {
 			if(db != null) {
 				db.addMethods(mb.build());
@@ -240,21 +229,15 @@ public class Python3Visitor extends Python3BaseListener{
 			else {
 				b.addMethods(mb.build());
 			}
-		}
-		
-		mb = null;
-		
-	}
-
-	
-	
+		}		
+		mb = null;	
+	}	
 
 	Variable.Builder vb;
 	@Override
 	public void enterParameters(ParametersContext ctx) {
 		// TODO Auto-generated method stub	
-		vb = Variable.newBuilder();
-		
+		vb = Variable.newBuilder();	
 	}
 
 	@Override
@@ -281,9 +264,7 @@ public class Python3Visitor extends Python3BaseListener{
 			vb = Variable.newBuilder();
 			vb.setName(ctx.NAME().getText());
 			mb.addArguments(vb.build());
-		}
-		// TODO Auto-generated method stub
-		
+		}		
 	}
 
 	@Override
@@ -320,8 +301,8 @@ public class Python3Visitor extends Python3BaseListener{
 	@Override
 	public void enterStmt(StmtContext ctx) {
 		// TODO Auto-generated method stub
-		statements.push(new ArrayList<boa.types.Ast.Statement>());
-		sb = boa.types.Ast.Statement.newBuilder();	
+		//statements.push(new ArrayList<boa.types.Ast.Statement>());
+		//sb = boa.types.Ast.Statement.newBuilder();	
 		
 	}
 
@@ -357,14 +338,28 @@ public class Python3Visitor extends Python3BaseListener{
 
 	@Override
 	public void enterExpr_stmt(Expr_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.EXPRESSION);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitExpr_stmt(Expr_stmtContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder current = statements.pop();
+		Statement.Builder parent; 
 		
+		if(!statements.isEmpty()) {
+			parent = statements.peek();
+			parent.addStatements(current.build());
+		}
+		else {
+			if (mb != null)
+				mb.addStatements(current.build());
+			else if (db != null) 
+				db.addStatements(current.build());
+			else 
+				b.addStatements(current.build());
+		}
 	}
 
 	
@@ -383,7 +378,6 @@ public class Python3Visitor extends Python3BaseListener{
 	}
 
 	
-	Expression.Builder eb;
 	@Override
 	public void enterAugassign(AugassignContext ctx) {
 		// TODO Auto-generated method stub
@@ -434,38 +428,82 @@ public class Python3Visitor extends Python3BaseListener{
 
 	@Override
 	public void enterBreak_stmt(Break_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.BREAK);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitBreak_stmt(Break_stmtContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder current = statements.pop();
+		Statement.Builder parent; 
+		
+		if(!statements.isEmpty()) {
+			parent = statements.peek();
+			parent.addStatements(current.build());
+		}
+		else {
+			if (mb != null)
+				mb.addStatements(current.build());
+			else if (db != null) 
+				db.addStatements(current.build());
+			else 
+				b.addStatements(current.build());
+		}
 		
 	}
 
 	@Override
 	public void enterContinue_stmt(Continue_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.CONTINUE);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitContinue_stmt(Continue_stmtContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder current = statements.pop();
+		Statement.Builder parent; 
 		
+		if(!statements.isEmpty()) {
+			parent = statements.peek();
+			parent.addStatements(current.build());
+		}
+		else {
+			if (mb != null)
+				mb.addStatements(current.build());
+			else if (db != null) 
+				db.addStatements(current.build());
+			else 
+				b.addStatements(current.build());
+		}
 	}
 
 	@Override
 	public void enterReturn_stmt(Return_stmtContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.RETURN);
+		statements.push(sb);
 		
 	}
 
 	@Override
 	public void exitReturn_stmt(Return_stmtContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder current = statements.pop();
+		Statement.Builder parent; 
 		
+		if(!statements.isEmpty()) {
+			parent = statements.peek();
+			parent.addStatements(current.build());
+		}
+		else {
+			if (mb != null)
+				mb.addStatements(current.build());
+			else if (db != null) 
+				db.addStatements(current.build());
+			else 
+				b.addStatements(current.build());
+		}
 	}
 
 	@Override
@@ -494,8 +532,8 @@ public class Python3Visitor extends Python3BaseListener{
 
 	@Override
 	public void enterImport_stmt(Import_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		//b.addImports(ctx.getText());
+		// import can be under the namespace or a class or a method
 	}
 
 	@Override
@@ -614,14 +652,29 @@ public class Python3Visitor extends Python3BaseListener{
 
 	@Override
 	public void enterAssert_stmt(Assert_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.ASSERT);
+		//sb.addConditions(value);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitAssert_stmt(Assert_stmtContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder current = statements.pop();
+		Statement.Builder parent; 
 		
+		if(!statements.isEmpty()) {
+			parent = statements.peek();
+			parent.addStatements(current.build());
+		}
+		else {
+			if (mb != null)
+				mb.addStatements(current.build());
+			else if (db != null) 
+				db.addStatements(current.build());
+			else 
+				b.addStatements(current.build());
+		}
 	}
 
 	@Override
@@ -648,74 +701,137 @@ public class Python3Visitor extends Python3BaseListener{
 		
 	}
 
-	Statement.Builder stb;
 	@Override
 	public void enterIf_stmt(If_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		System.out.println("Entering IF statement");
-		stb = Statement.newBuilder();
-		stb.setKind(StatementKind.IF);
-		if(mb != null) {
-			System.out.println("mb is not null");
-			mb.addStatements(stb.build());
-		}
-		else {
-			System.out.println("mb is null");
-		}
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.IF);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitIf_stmt(If_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		stb = null;
+		Statement.Builder current = statements.pop();
+		Statement.Builder parent; 
+		
+		if(!statements.isEmpty()) {
+			parent = statements.peek();
+			parent.addStatements(current.build());
+		}
+		else {
+			if (mb != null)
+				mb.addStatements(current.build());
+			else if (db != null) 
+				db.addStatements(current.build());
+			else 
+				b.addStatements(current.build());
+		}
 	}
 
 	@Override
 	public void enterWhile_stmt(While_stmtContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.WHILE);
+		statements.push(sb);
 		
 	}
 
 	@Override
 	public void exitWhile_stmt(While_stmtContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder current = statements.pop();
+		Statement.Builder parent; 
 		
+		if(!statements.isEmpty()) {
+			parent = statements.peek();
+			parent.addStatements(current.build());
+		}
+		else {
+			if (mb != null)
+				mb.addStatements(current.build());
+			else if (db != null) 
+				db.addStatements(current.build());
+			else 
+				b.addStatements(current.build());
+		}
 	}
 
 	@Override
 	public void enterFor_stmt(For_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.FOR);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitFor_stmt(For_stmtContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder current = statements.pop();
+		Statement.Builder parent; 
 		
+		if(!statements.isEmpty()) {
+			parent = statements.peek();
+			parent.addStatements(current.build());
+		}
+		else {
+			if (mb != null)
+				mb.addStatements(current.build());
+			else if (db != null) 
+				db.addStatements(current.build());
+			else 
+				b.addStatements(current.build());
+		}		
 	}
 
 	@Override
 	public void enterTry_stmt(Try_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.TRY);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitTry_stmt(Try_stmtContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder current = statements.pop();
+		Statement.Builder parent; 
+		
+		if(!statements.isEmpty()) {
+			parent = statements.peek();
+			parent.addStatements(current.build());
+		}
+		else {
+			if (mb != null)
+				mb.addStatements(current.build());
+			else if (db != null) 
+				db.addStatements(current.build());
+			else 
+				b.addStatements(current.build());
+		}
 		
 	}
 
 	@Override
 	public void enterWith_stmt(With_stmtContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.WITH);
+		statements.push(sb);
 		
 	}
 
 	@Override
 	public void exitWith_stmt(With_stmtContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder current = statements.pop();
+		Statement.Builder parent; 
+		
+		if(!statements.isEmpty()) {
+			parent = statements.peek();
+			parent.addStatements(current.build());
+		}
+		else {
+			if (mb != null)
+				mb.addStatements(current.build());
+			else if (db != null) 
+				db.addStatements(current.build());
+			else 
+				b.addStatements(current.build());
+		}
 		
 	}
 
@@ -743,16 +859,31 @@ public class Python3Visitor extends Python3BaseListener{
 		
 	}
 
+	Statement.Builder ss;
 	@Override
 	public void enterSuite(SuiteContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.BLOCK);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitSuite(SuiteContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder current = statements.pop();
+		Statement.Builder parent; 
 		
+		if(!statements.isEmpty()) {
+			parent = statements.peek();
+			parent.addStatements(current.build());
+		}
+		else {
+			if (mb != null)
+				mb.addStatements(current.build());
+			else if (db != null) 
+				db.addStatements(current.build());
+			else 
+				b.addStatements(current.build());
+		}	
 	}
 
 	@Override
@@ -873,21 +1004,31 @@ public class Python3Visitor extends Python3BaseListener{
 	public void exitStar_expr(Star_exprContext ctx) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	
+	}	
 	
 	@Override
 	public void enterExpr(ExprContext ctx) {
-		// TODO Auto-generated method stub
-		
-		
+//		Expression.Builder eb = Expression.newBuilder();
+//		eb.setKind(ExpressionKind.LITERAL);
+//		eb.setLiteral(ctx.getText());
+//		expressions.push(eb);
 	}
 
 	@Override
 	public void exitExpr(ExprContext ctx) {
-		// TODO Auto-generated method stub
-		eb = null;
+//		Expression.Builder current = expressions.pop();
+//		Expression.Builder parent;
+//		
+//		if(!expressions.isEmpty()) {
+//			parent = expressions.peek();
+//			parent.addExpressions(current.build());
+//		}
+//		else {
+//			if (!statements.isEmpty())
+//				statements.peek().addExpressions(current.build());
+//			else 
+//				b.addExpressions(current.build());
+//		}
 	}
 
 	@Override
@@ -976,26 +1117,27 @@ public class Python3Visitor extends Python3BaseListener{
 
 	@Override
 	public void enterAtom_expr(Atom_exprContext ctx) {
-		// TODO Auto-generated method stub
+		
+		
 		
 		
 	}
 
 	@Override
 	public void exitAtom_expr(Atom_exprContext ctx) {
-		// TODO Auto-generated method stub
+		
+		
+		
 		
 	}
 
 	@Override
 	public void enterAtom(AtomContext ctx) {
-		// TODO Auto-generated method stub
 		if(vb != null) {
 			vb = Variable.newBuilder();
 			vb.setName(ctx.getText());
 			mb.addArguments(vb.build());
 		}
-		
 	}
 
 	@Override
