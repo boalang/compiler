@@ -114,7 +114,7 @@ import boa.types.Ast.Statement;
 import boa.types.Ast.Statement.StatementKind;
 import boa.types.Ast.TypeKind;
 import boa.types.Ast.Variable;
-public class Python3Visitor extends Python3BaseListener{
+public class Python3Visitor implements Python3Listener{
 	Python3Parser parser;
 	Python3Lexer lexer;
 	
@@ -366,7 +366,6 @@ public class Python3Visitor extends Python3BaseListener{
 	@Override
 	public void enterAnnassign(AnnassignContext ctx) {
 		// TODO Auto-generated method stub
-		
 		
 	}
 
@@ -1131,13 +1130,10 @@ public class Python3Visitor extends Python3BaseListener{
 		
 	}
 
+	 
 	@Override
 	public void enterAtom(AtomContext ctx) {
-		if(vb != null) {
-			vb = Variable.newBuilder();
-			vb.setName(ctx.getText());
-			mb.addArguments(vb.build());
-		}
+		
 	}
 
 	@Override
@@ -1262,7 +1258,7 @@ public class Python3Visitor extends Python3BaseListener{
 
 	@Override
 	public void enterArglist(ArglistContext ctx) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -1364,6 +1360,114 @@ public class Python3Visitor extends Python3BaseListener{
 
 	@Override
 	public void exitCalldef(CalldefContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterEveryRule(ParserRuleContext arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitEveryRule(ParserRuleContext arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitErrorNode(ErrorNode arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitTerminal(TerminalNode arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterSingle_input(Single_inputContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitSingle_input(Single_inputContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterEval_input(Eval_inputContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitEval_input(Eval_inputContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterDecorator(DecoratorContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitDecorator(DecoratorContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterDecorators(DecoratorsContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitDecorators(DecoratorsContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterDecorated(DecoratedContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitDecorated(DecoratedContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterAsync_funcdef(Async_funcdefContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitAsync_funcdef(Async_funcdefContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterTestlist_star_expr(Testlist_star_exprContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitTestlist_star_expr(Testlist_star_exprContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}

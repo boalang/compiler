@@ -21,7 +21,7 @@ public class TestSequenceFile {
 	public static void main(String[] args) throws IOException {
 		Configuration conf = new Configuration();
 		FileSystem fileSystem = FileSystem.get(conf);
-		String astpath = "/Users/sumon/Downloads/pydatagen/ast/data"; //"/Users/mislam/eclipse-workspace/outdata/ast/data";
+		String astpath = "/Users/mislam/eclipse-workspace/outdata/ast/data"; //"/Users/mislam/eclipse-workspace/outdata/ast/data";
 		Writable key = new LongWritable();
 		BytesWritable val = new BytesWritable();
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, 
@@ -32,7 +32,7 @@ public class TestSequenceFile {
 			byte[] bytes = val.getBytes();
 			boa.types.Ast.ASTRoot ast = boa.types.Ast.ASTRoot.parseFrom((CodedInputStream.newInstance(bytes, 0, val.getLength())));
 			System.out.println(ast);
-			//break;
+			break;
 		}
 		r.close();
 	}
