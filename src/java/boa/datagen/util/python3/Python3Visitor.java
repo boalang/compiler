@@ -525,6 +525,7 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterImport_stmt(Import_stmtContext ctx) {
 		// import can be under the namespace or a class or a method
+		//b.addImports(ctx.getText());
 	}
 
 	@Override
@@ -536,6 +537,10 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterImport_name(Import_nameContext ctx) {
 		// TODO Auto-generated method stub
+		System.out.println("L540");
+		System.out.println(ctx.start.getText());
+		System.out.println(ctx.stop.getText());
+		b.addImports(ctx.stop.getText());
 		
 	}
 
@@ -548,6 +553,10 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterImport_from(Import_fromContext ctx) {
 		// TODO Auto-generated method stub
+		System.out.println("L556");
+		System.out.println(ctx.start.getText());
+		System.out.println(ctx.stop.getText());
+		b.addImports(ctx.stop.getText());
 		
 	}
 
@@ -560,6 +569,10 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterImport_as_name(Import_as_nameContext ctx) {
 		// TODO Auto-generated method stub
+		System.out.println("L572");
+		System.out.println(ctx.start.getText());
+		System.out.println(ctx.stop.getText());
+		b.addImports(ctx.stop.getText());
 		
 	}
 
