@@ -200,6 +200,16 @@ public interface Python3Listener extends ParseTreeListener {
 	 */
 	void exitAnnassign(Python3Parser.AnnassignContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link Python3Parser#assign}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssign(Python3Parser.AssignContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#assign}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssign(Python3Parser.AssignContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link Python3Parser#testlist_star_expr}.
 	 * @param ctx the parse tree
 	 */

@@ -24,6 +24,7 @@ import boa.datagen.util.python3.Python3Parser.ArglistContext;
 import boa.datagen.util.python3.Python3Parser.ArgumentContext;
 import boa.datagen.util.python3.Python3Parser.Arith_exprContext;
 import boa.datagen.util.python3.Python3Parser.Assert_stmtContext;
+import boa.datagen.util.python3.Python3Parser.AssignContext;
 import boa.datagen.util.python3.Python3Parser.Async_funcdefContext;
 import boa.datagen.util.python3.Python3Parser.Async_stmtContext;
 import boa.datagen.util.python3.Python3Parser.AtomContext;
@@ -193,6 +194,7 @@ public class Python3Visitor implements Python3Listener{
 	}
 	
 	public void visit(File file) {
+		System.out.println("visiting" + file.getName());
 		try {
 			parser = parsefile(file);
 			ParseTreeWalker.DEFAULT.walk(this, parser.file_input());
@@ -1482,6 +1484,19 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void exitTestlist_star_expr(Testlist_star_exprContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterAssign(AssignContext ctx) {
+		// TODO Auto-generated method stub
+		System.out.println("Entering assign " + ctx.start.getText() +" "+ ctx.stop.getText());
+		
+	}
+
+	@Override
+	public void exitAssign(AssignContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}

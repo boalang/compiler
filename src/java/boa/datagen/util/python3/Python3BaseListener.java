@@ -1,5 +1,4 @@
 // Generated from Python3.g4 by ANTLR 4.5
-
 package boa.datagen.util.python3;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -240,6 +239,18 @@ public class Python3BaseListener implements Python3Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAnnassign(Python3Parser.AnnassignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAssign(Python3Parser.AssignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssign(Python3Parser.AssignContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
