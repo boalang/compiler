@@ -32,7 +32,7 @@ public class TestSequenceFile {
 			byte[] bytes = val.getBytes();
 			boa.types.Ast.ASTRoot ast = boa.types.Ast.ASTRoot.parseFrom((CodedInputStream.newInstance(bytes, 0, val.getLength())));
 			System.out.println(ast);
-			break;
+			//break;
 		}
 		r.close();
 	}

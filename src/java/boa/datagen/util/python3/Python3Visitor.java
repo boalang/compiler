@@ -132,7 +132,7 @@ public class Python3Visitor implements Python3Listener{
 	private Stack<Method.Builder> methods = new Stack<Method.Builder>();
 	private Stack<Statement.Builder> statements = new Stack<Statement.Builder>();
 	private Stack<Expression.Builder> expressions = new Stack<Expression.Builder>();
-	
+	private Stack<String> atoms = new Stack<>();
 	protected int astLevel = PY3;
 	public int getAstLevel() {
 		return astLevel;
@@ -359,23 +359,7 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void exitExpr_stmt(Expr_stmtContext ctx) {
 		
-		Statement.Builder current = statements.pop();
-		Statement.Builder parent; 
-		
-		if(!statements.isEmpty()) {
-			parent = statements.peek();
-			parent.addStatements(current.build());
-		}
-		else {
-			if (!methods.isEmpty()) {
-				methods.peek().addStatements(current.build());
-				//mb = null;
-			}
-			else if (db != null) 
-				db.addStatements(current.build());
-			else 
-				b.addStatements(current.build());
-		}
+		exitStatement();
 		
 		
 	}
@@ -400,6 +384,11 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void exitAugassign(AugassignContext ctx) {
+		exitExpression();
+		
+	}
+
+	private void exitExpression() {
 		Expression.Builder current = expressions.pop();
 		Expression.Builder parent;
 		
@@ -413,7 +402,6 @@ public class Python3Visitor implements Python3Listener{
 				sb.addExpressions(current.build());
 			}
 		}
-		
 	}
 
 	@Override
@@ -466,6 +454,9 @@ public class Python3Visitor implements Python3Listener{
 	}
 
 	private void exitStatement() {
+		if(statements.empty()) {
+			return;
+		}
 		Statement.Builder current = statements.pop();
 		Statement.Builder parent; 
 		
@@ -1082,6 +1073,7 @@ public class Python3Visitor implements Python3Listener{
 //		eb.setKind(ExpressionKind.OTHER);
 //		eb.setVariable(ctx.getText());
 //		expressions.push(eb);
+		atoms.push(ctx.getText());
 	}
 
 	@Override
@@ -1100,6 +1092,7 @@ public class Python3Visitor implements Python3Listener{
 //			}
 //		}
 		
+		
 	}
 
 	@Override
@@ -1117,7 +1110,23 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterTrailer(TrailerContext ctx) {
 		// TODO Auto-generated method stub
-		
+		if(ctx.getText().startsWith(".")) {
+			atoms.push(ctx.getText().substring(1));
+		}
+		else if(ctx.getText().equals("()")) {
+			Expression.Builder eb = Expression.newBuilder();
+			eb.setKind(ExpressionKind.METHODCALL);
+			//eb.setVariable(ctx.getText());
+			if(!atoms.isEmpty()) {
+				//eb.setVariable(atoms.pop());
+				eb.setMethod(atoms.pop());
+			}
+			else {
+				eb.setVariable("Method name missing!");
+			}
+			expressions.push(eb);
+			exitExpression();
+		}
 	}
 
 	@Override
@@ -1218,20 +1227,54 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterArglist(ArglistContext ctx) {
-		
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.METHODCALL);
+		//eb.setVariable(ctx.getText());
+		if(!atoms.isEmpty()) {
+			eb.setMethod(atoms.pop());
+		}
+		else {
+			eb.setVariable("Method name missing!");
+		}
+		expressions.push(eb);
 		
 	}
 
 	@Override
 	public void exitArglist(ArglistContext ctx) {
 		// TODO Auto-generated method stub
+		exitExpression();
 		
 	}
 
 	@Override
 	public void enterArgument(ArgumentContext ctx) {
 		// TODO Auto-generated method stub
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.VARACCESS);
+		eb.setVariable(ctx.getText());
+		if(isLiteral(ctx.getText())) {
+			eb.setKind(ExpressionKind.LITERAL);
+		}
+		//System.out.println(ctx.toStringTree(parser));
+		if(!expressions.isEmpty()) {
+			expressions.peek().addMethodArgs(eb.build());
+		}
 		
+	}
+	
+	public boolean isLiteral(String text) {
+		boolean isLiteral = text.startsWith("\"")  ;
+		if(!isLiteral) {
+			try {
+				Double.parseDouble(text);
+				isLiteral =  true;
+			}
+			catch (Exception e){
+				isLiteral = false;
+			}
+		}
+		return isLiteral;
 	}
 
 	@Override
