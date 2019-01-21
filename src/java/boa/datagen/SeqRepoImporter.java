@@ -62,6 +62,7 @@ public class SeqRepoImporter {
 	public static final int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer.valueOf(DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS);
 	final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
 	final static String jsonCachePath = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
+	final static boolean STORE_COMMITS = DefaultProperties.STORE_COMMITS;
 	private static boolean done = false;
 	
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -80,7 +81,8 @@ public class SeqRepoImporter {
 			threads[i].start();
 			Thread.sleep(10);
 		}
-
+		
+		int counter = 0;
 		File dir = new File(jsonPath);
 		for (File file : dir.listFiles()) {
 			if (file.getName().endsWith(".json")) {
@@ -113,9 +115,9 @@ public class SeqRepoImporter {
 										break;
 									}
 								}
-								Thread.sleep(10);
+								Thread.sleep(100);
 							}
-							System.out.println(file.getPath() + ": " + i + ": " + repo.id + " " + repo.name);
+							System.out.println((++counter) + ": " + file.getPath() + ": " + i + ": " + repo.id + " " + repo.name);
 						}
 					} catch (Exception e) {
 						System.err.println("Error proccessing item " + i + " of page " + file.getPath());
@@ -164,7 +166,7 @@ public class SeqRepoImporter {
 
 	public static class ImportTask implements Runnable {
 		private int id;
-		private int counter = 0;
+		private int counter = 0, allCounter = 0;
 		private String suffix;
 		private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
 		private long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
@@ -252,7 +254,7 @@ public class SeqRepoImporter {
 
 					if (debug)
 						System.out.println(
-								Thread.currentThread().getId() + " Processing " + project.getId() + " " + name);
+								Thread.currentThread().getId() + " Processing " + (allCounter+1) + " project " + project.getId() + " " + name);
 					project = storeRepository(project, 0);
 					if (debug)
 						System.out.println(
@@ -284,6 +286,7 @@ public class SeqRepoImporter {
 						}
 					}
 					counter++;
+					allCounter++;
 					if (counter >= Integer.parseInt(DefaultProperties.MAX_PROJECTS)) {
 						closeWriters();
 						openWriters();
@@ -328,22 +331,25 @@ public class SeqRepoImporter {
 				conn = new GitConnector(gitDir.getAbsolutePath(), project.getName(), astWriter, astWriterLen, commitWriter, commitWriterLen,
 						contentWriter, contentWriterLen);
 				final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
-				List<Object> revisions = conn.getRevisions(project.getName());
-				if (!revisions.isEmpty()) {
-					if (revisions.get(0) instanceof Revision) {
-						for (final Object rev : revisions) {
-							final Revision.Builder revBuilder = Revision.newBuilder((Revision) rev);
-							repoBuilder.addRevisions(revBuilder);
+				if (STORE_COMMITS) {
+					List<Object> revisions = conn.getRevisions(project.getName());
+					if (!revisions.isEmpty()) {
+						if (revisions.get(0) instanceof Revision) {
+							for (final Object rev : revisions) {
+								final Revision.Builder revBuilder = Revision.newBuilder((Revision) rev);
+								repoBuilder.addRevisions(revBuilder);
+							}
+						} else {
+							for (final Object rev : revisions)
+								repoBuilder.addRevisionKeys((Long) rev);
 						}
-					} else {
-						for (final Object rev : revisions)
-							repoBuilder.addRevisionKeys((Long) rev);
 					}
-					if (debug)
-						System.out.println(Thread.currentThread().getId() + " Build head snapshot");
-					repoBuilder.setHead(conn.getHeadCommitOffset());
-					repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot());
 				}
+				if (debug)
+					System.out.println(Thread.currentThread().getId() + " Build head snapshot");
+				repoBuilder.setHead(conn.getHeadCommitOffset());
+				repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot());
+				
 				repoBuilder.addAllBranches(conn.getBranchIndices());
 				repoBuilder.addAllBranchNames(conn.getBranchNames());
 				repoBuilder.addAllTags(conn.getTagIndices());

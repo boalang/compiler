@@ -1,7 +1,8 @@
 package boa.datagen.forges.github;
 
 import java.io.File;
-import java.util.HashSet;
+import java.util.Calendar;
+import java.util.Date;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -13,11 +14,17 @@ import boa.datagen.util.FileIO;
 public class GetReposByLanguage {
 	
 	public static void main(String[] args) {
-		String[] languages = {"java", "javascript", "php"};
 		TokenList tokens = new TokenList(args[0]);
+		String outDir = args[1];
+		String[] languages = { "java" };
+		if (args.length > 2) {
+			languages = new String[args.length - 2];
+			for (int i = 2; i < args.length; i++)
+				languages[i - 2] = args[i];
+		}
 		Thread[] workers = new Thread[languages.length];
-		for (int i =0; i < languages.length; i++) {
-			workers[i] = new Thread(new Worker(i,languages[i],args[1], tokens));
+		for (int i = 0; i < languages.length; i++) {
+			workers[i] = new Thread(new Worker(i, languages[i], outDir, tokens));
 			workers[i].start();
 		}
 		for (Thread thread : workers)
@@ -48,12 +55,17 @@ public class GetReposByLanguage {
 		
 		@Override
 		public void run() {
-	//		HashSet<String> names = new HashSet<>();
-			String time = "2018-08-18T01:01:01Z";
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(new Date());
+			cal.add(Calendar.DATE, 1);
+			int year = cal.get(Calendar.YEAR);
+			int month = cal.get(Calendar.MONTH) + 1; // month starts from 0
+			int day = cal.get(Calendar.DAY_OF_MONTH);
+//			String time = "2018-12-21T01:01:01Z";
+			String time = year + "-" + month + "-" + day + "T23:59:59Z";
 			Gson parser = new Gson();
 			
 			while (true){
-				String pushedName = "";
 				Token tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
 				String url = "https://api.github.com/search/repositories?q=language:" + language +"+stars:>1+pushed:<=" + time + "&sort=updated&order=desc&per_page=100";
 				System.out.println(url);
@@ -78,8 +90,6 @@ public class GetReposByLanguage {
 			        for (int j = 0; j < items.size(); j++) {
 			        	JsonObject item = items.get(j).getAsJsonObject();
 			        	this.addRepo(item);
-			        	String name = item.get("full_name").getAsString();
-			        //	names.add(name);
 			        	String pushed = item.get("pushed_at").getAsString();
 			        	if (pushed.compareTo(time) < 0){
 			        		time = pushed;
@@ -102,10 +112,6 @@ public class GetReposByLanguage {
 				}
 			}
 			writeRemainingRepos();
-		//	StringBuilder sb = new StringBuilder();
-	    //	for (String name : names)
-	    //		sb.append(name + "\n");
-	    //    FileIO.writeFileContents(new File( outDir + "names/names.txt"), sb.toString());
 		} 
 		
 		private void addRepo(JsonObject repo) {
@@ -115,11 +121,9 @@ public class GetReposByLanguage {
 				fileToWriteJson = new File(
 						outDir + "/Thread-" + this.id + "-page-" + counter + ".json");
 				while (fileToWriteJson.exists()) {
-					System.out.println("file scala/thread-" + this.id + "-page-" + counter
-							+ " arleady exist");
+					System.out.println(fileToWriteJson.getAbsolutePath() + " arleady exist");
 					counter++;
-					fileToWriteJson = new File(
-							outDir + "/Thread-" + this.id + "-page-" + counter + ".json");
+					fileToWriteJson = new File(outDir + "/Thread-" + this.id + "-page-" + counter + ".json");
 				}
 				FileIO.writeFileContents(fileToWriteJson, this.repos.toString());
 				System.out.println(Thread.currentThread().getId() + " " + counter++);

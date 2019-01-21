@@ -106,6 +106,7 @@ public class BoaGenerator {
 		options.addOption("threads", "threads", true, "number of threads");
 		options.addOption("projects", "projects", true, "maximum number of projects per sequence file");
 		options.addOption("commits", "commits", true, "maximum number of commits of a project to be stored in the project object");
+		options.addOption("nocommits", "nocommits", false, "do not store commits");
 		options.addOption("size", "size", true, "maximum size of a project object to be stored");
 		options.addOption("libs", "libs", true, "directory to store libraries");
 		options.addOption("output", "output", true, "directory where output is desired");
@@ -116,7 +117,7 @@ public class BoaGenerator {
 		options.addOption("cache", "cache", false, "enable if you want to delete the cloned code for user.");
 		options.addOption("debug", "debug", false, "enable for debug mode.");
 		options.addOption("debugparse", "debugparse", false, "enable for debug mode when parsing source files.");
-		options.addOption("help", "help", true, "help");
+		options.addOption("help", "help", false, "help");
 	}
 
 	private static void handleCmdOptions(CommandLine cl, Options options, final String[] args) {
@@ -189,6 +190,8 @@ public class BoaGenerator {
 		if (cl.hasOption("libs")) {
 			DefaultProperties.CLASSPATH_ROOT = cl.getOptionValue("libs");
 		}
+		if (cl.hasOption("nocommits"))
+			DefaultProperties.STORE_COMMITS = false;
 	}
 
 	//
