@@ -133,7 +133,7 @@ public class Python3Visitor implements Python3Listener{
 	private Stack<Method.Builder> methods = new Stack<Method.Builder>();
 	private Stack<Statement.Builder> statements = new Stack<Statement.Builder>();
 	private Stack<Expression.Builder> expressions = new Stack<Expression.Builder>();
-	private Stack<String> atoms = new Stack<>();
+	private Stack<String> atoms = new Stack<String>();
 	protected int astLevel = PY3;
 	public int getAstLevel() {
 		return astLevel;
@@ -194,7 +194,7 @@ public class Python3Visitor implements Python3Listener{
 	}
 	
 	public void visit(File file) {
-		System.out.println("visiting" + file.getName());
+		//System.out.println("visiting" + file.getName());
 		try {
 			parser = parsefile(file);
 			ParseTreeWalker.DEFAULT.walk(this, parser.file_input());
@@ -539,9 +539,9 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterImport_name(Import_nameContext ctx) {
 		// TODO Auto-generated method stub
-		System.out.println("L540");
-		System.out.println(ctx.start.getText());
-		System.out.println(ctx.stop.getText());
+		//System.out.println("L540");
+		//System.out.println(ctx.start.getText());
+		//System.out.println(ctx.stop.getText());
 		b.addImports(ctx.stop.getText());
 		
 	}
@@ -555,9 +555,9 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterImport_from(Import_fromContext ctx) {
 		// TODO Auto-generated method stub
-		System.out.println("L556");
-		System.out.println(ctx.start.getText());
-		System.out.println(ctx.stop.getText());
+		//System.out.println("L556");
+		//System.out.println(ctx.start.getText());
+		//System.out.println(ctx.stop.getText());
 		b.addImports(ctx.stop.getText());
 		
 	}
@@ -571,9 +571,9 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterImport_as_name(Import_as_nameContext ctx) {
 		// TODO Auto-generated method stub
-		System.out.println("L572");
-		System.out.println(ctx.start.getText());
-		System.out.println(ctx.stop.getText());
+		//System.out.println("L572");
+		//System.out.println(ctx.start.getText());
+		//System.out.println(ctx.stop.getText());
 		b.addImports(ctx.stop.getText());
 		
 	}
@@ -696,6 +696,7 @@ public class Python3Visitor implements Python3Listener{
 	public void enterIf_stmt(If_stmtContext ctx) {
 		Statement.Builder sb = Statement.newBuilder();
 		sb.setKind(Statement.StatementKind.IF);
+		
 		statements.push(sb);
 	}
 
@@ -788,8 +789,17 @@ public class Python3Visitor implements Python3Listener{
 		//exitStatement();	
 	}
 
+	
 	@Override
 	public void enterTest(TestContext ctx) {
+		if(!statements.isEmpty()) {
+			if(statements.peek().getKind() == StatementKind.IF) {
+				System.out.println(ctx.getText() + " conditions" + ctx.start.getText() +" "+ ctx.stop.getText());
+				
+				
+				
+			}
+		}
 //		if(statements.peek().getKind() == StatementKind.IF) {
 //			Expression.Builder eb = Expression.newBuilder();
 //			eb.setKind(ExpressionKind.LOGICAL_AND);
@@ -850,7 +860,7 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterOr_test(Or_testContext ctx) {
-	
+		System.out.println("OR TEST "+ ctx.getText());
 	}
 
 	@Override
@@ -860,7 +870,7 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterAnd_test(And_testContext ctx) {
-		
+		System.out.println("AND TEST "+ ctx.getText());
 	}
 
 	@Override
@@ -879,14 +889,18 @@ public class Python3Visitor implements Python3Listener{
 
 	}
 
+	boolean comparisonentered = false;
 	@Override
 	public void enterComparison(ComparisonContext ctx) {
+		//System.out.println("Comparison " + ctx.getText());
 //		if(statements.peek().getKind() == StatementKind.IF) {
 //			Expression.Builder eb = Expression.newBuilder();
 //			eb.setKind(ExpressionKind.OTHER);
 //			eb.setVariable(ctx.getText());
 //			expressions.push(eb);
 //		}
+		
+		System.out.println();
 		
 	}
 	
@@ -985,6 +999,7 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterAnd_expr(And_exprContext ctx) {
+		//System.out.println("AND EXPR " + ctx.getText());
 //		if(statements.peek().getKind() == StatementKind.IF) {
 //			Expression.Builder eb = Expression.newBuilder();		
 //			
@@ -1491,7 +1506,7 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterAssign(AssignContext ctx) {
 		// TODO Auto-generated method stub
-		System.out.println("Entering assign " + ctx.start.getText() +" "+ ctx.stop.getText());
+		//System.out.println("Entering assign " + ctx.start.getText() +" "+ ctx.stop.getText());
 		
 	}
 
