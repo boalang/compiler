@@ -80,6 +80,11 @@ public abstract class BaseTest {
 	}
 
 	@Before
+	public void resetCustomTypes() throws IOException {
+		SymbolTable.resetTypeMap();
+	}
+
+	@Before
 	public void disableDebug() throws IOException {
 		DEBUG = false;
 	}

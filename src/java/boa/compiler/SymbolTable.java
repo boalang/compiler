@@ -44,7 +44,7 @@ import boa.compiler.ast.Operand;
 public class SymbolTable {
 	private static HashMap<String, Class<?>> aggregators;
 	private static final Map<Class<?>, BoaType> protomap;
-	private static Map<String, BoaType> idmap;
+	private static Map<String, BoaType> types;
 	private static final Map<String, BoaType> globals;
 	private static FunctionTrie globalFunctions;
 	private static Map<String, Program> views;
@@ -59,6 +59,69 @@ public class SymbolTable {
 	private Stack<Boolean> isVisitor = new Stack<Boolean>();
 	private boolean isTraverse = false;
 	private boolean shadowing = false;
+
+	private final static BoaProtoTuple[] dslTupleTypes = {
+		new ASTRootProtoTuple(),
+		new AttachmentProtoTuple(),
+		new CFGProtoTuple(),
+		new CFGNodeProtoTuple(),
+		new CFGEdgeProtoTuple(),
+		new CDGProtoTuple(),
+		new CDGNodeProtoTuple(),
+		new CDGEdgeProtoTuple(),
+		new DDGProtoTuple(),
+		new DDGNodeProtoTuple(),
+		new DDGEdgeProtoTuple(),
+		new PDGProtoTuple(),
+		new NodeProtoTuple(),
+		new EdgeProtoTuple(),
+		new PDGNodeProtoTuple(),
+		new PDGEdgeProtoTuple(),
+		new DTreeProtoTuple(),
+		new PDTreeProtoTuple(),
+		new TreeNodeProtoTuple(),
+		new CFGSlicerProtoTuple(),
+		new PDGSlicerProtoTuple(),
+		new ChangedFileProtoTuple(),
+		new CodeRepositoryProtoTuple(),
+		new CommentProtoTuple(),
+		new CommentsRootProtoTuple(),
+		new DeclarationProtoTuple(),
+		new ExpressionProtoTuple(),
+		new IssueProtoTuple(),
+		new IssueCommentProtoTuple(),
+		new IssueRepositoryProtoTuple(),
+		new IssuesRootProtoTuple(),
+		new MethodProtoTuple(),
+		new ModifierProtoTuple(),
+		new NamespaceProtoTuple(),
+		new PersonProtoTuple(),
+		new ProjectProtoTuple(),
+		new RevisionProtoTuple(),
+		new StatementProtoTuple(),
+		new TypeProtoTuple(),
+		new VariableProtoTuple(),
+	};
+	private final static BoaProtoMap[] dslMapTypes = {
+		new NodeTypeProtoMap(),
+		new EdgeLabelProtoMap(),
+		new EdgeTypeProtoMap(),
+		new ChangeKindProtoMap(),
+		new CommentKindProtoMap(),
+		new ExpressionKindProtoMap(),
+		new FileKindProtoMap(),
+		new ForgeKindProtoMap(),
+		new IssueStatusProtoMap(),
+		new IssuePriorityProtoMap(),
+		new IssueLabelProtoMap(),
+		new ModifierKindProtoMap(),
+		new RepositoryKindProtoMap(),
+		new StatementKindProtoMap(),
+		new TraversalKindProtoMap(),
+		new TraversalDirectionProtoMap(),
+		new TypeKindProtoMap(),
+		new VisibilityProtoMap(),
+	};
 
 	static {
 		aggregators = new HashMap<String, Class<?>>();
@@ -86,84 +149,8 @@ public class SymbolTable {
 		globals.put("nan", new BoaFloat());
 
 		// this maps scalar Boa scalar types names to their classes
-		idmap = new HashMap<String, BoaType>();
-
-		idmap.put("any", new BoaAny());
-		idmap.put("none", null);
-		idmap.put("bool", new BoaBool());
-		idmap.put("int", new BoaInt());
-		idmap.put("float", new BoaFloat());
-		idmap.put("time", new BoaTime());
-		idmap.put("string", new BoaString());
-
-		final BoaProtoTuple[] dslTupleTypes = {
-			new ASTRootProtoTuple(),
-			new AttachmentProtoTuple(),
-			new CFGProtoTuple(),
-			new CFGNodeProtoTuple(),
-			new CFGEdgeProtoTuple(),
-			new CDGProtoTuple(),
-			new CDGNodeProtoTuple(),
-			new CDGEdgeProtoTuple(),
-			new DDGProtoTuple(),
-			new DDGNodeProtoTuple(),
-			new DDGEdgeProtoTuple(),
-			new PDGProtoTuple(),
-			new NodeProtoTuple(),
-			new EdgeProtoTuple(),
-			new PDGNodeProtoTuple(),
-			new PDGEdgeProtoTuple(),
-			new DTreeProtoTuple(),
-			new PDTreeProtoTuple(),
-			new TreeNodeProtoTuple(),
-			new CFGSlicerProtoTuple(),
-			new PDGSlicerProtoTuple(),
-			new ChangedFileProtoTuple(),
-			new CodeRepositoryProtoTuple(),
-			new CommentProtoTuple(),
-			new CommentsRootProtoTuple(),
-			new DeclarationProtoTuple(),
-			new ExpressionProtoTuple(),
-			new IssueProtoTuple(),
-			new IssueCommentProtoTuple(),
-			new IssueRepositoryProtoTuple(),
-			new IssuesRootProtoTuple(),
-			new MethodProtoTuple(),
-			new ModifierProtoTuple(),
-			new NamespaceProtoTuple(),
-			new PersonProtoTuple(),
-			new ProjectProtoTuple(),
-			new RevisionProtoTuple(),
-			new StatementProtoTuple(),
-			new TypeProtoTuple(),
-			new VariableProtoTuple(),
-		};
-		final BoaProtoMap[] dslMapTypes = {
-			new NodeTypeProtoMap(),
-			new EdgeLabelProtoMap(),
-			new EdgeTypeProtoMap(),
-			new ChangeKindProtoMap(),
-			new CommentKindProtoMap(),
-			new ExpressionKindProtoMap(),
-			new FileKindProtoMap(),
-			new ForgeKindProtoMap(),
-			new IssueStatusProtoMap(),
-			new IssuePriorityProtoMap(),
-			new IssueLabelProtoMap(),
-			new ModifierKindProtoMap(),
-			new RepositoryKindProtoMap(),
-			new StatementKindProtoMap(),
-			new TraversalKindProtoMap(),
-			new TraversalDirectionProtoMap(),
-			new TypeKindProtoMap(),
-			new VisibilityProtoMap(),
-		};
-
-		for (final BoaType t : dslTupleTypes)
-			idmap.put(t.toString(), t);
-
-		for (final BoaType t : dslMapTypes)
-			idmap.put(t.toString(), t);
+		types = new HashMap<String, BoaType>();
+		resetTypeMap();
 
 		globalFunctions = new FunctionTrie();
 
@@ -358,6 +345,25 @@ public class SymbolTable {
 		importLibs(libs);
 	}
 
+	public static void resetTypeMap() {
+		types = new HashMap<String, BoaType>();
+		types.clear();
+
+		types.put("any", new BoaAny());
+		types.put("none", null);
+		types.put("bool", new BoaBool());
+		types.put("int", new BoaInt());
+		types.put("float", new BoaFloat());
+		types.put("time", new BoaTime());
+		types.put("string", new BoaString());
+
+		for (final BoaType t : dslTupleTypes)
+			types.put(t.toString(), t);
+
+		for (final BoaType t : dslMapTypes)
+			types.put(t.toString(), t);
+	}
+
 	public SymbolTable cloneNonLocals() throws IOException {
 		final SymbolTable st = new SymbolTable();
 
@@ -374,8 +380,8 @@ public class SymbolTable {
 	}
 
 	public void set(final String id, final BoaType type, final boolean global) {
-		if (idmap.containsKey(id))
-			throw new RuntimeException(id + " already declared as type " + idmap.get(id));
+		if (types.containsKey(id))
+			throw new RuntimeException(id + " already declared as type " + types.get(id));
 
 		if (type instanceof BoaFunction) {
 			if (global)
@@ -399,8 +405,8 @@ public class SymbolTable {
 	}
 
 	public BoaType get(final String id) {
-		if (idmap.containsKey(id))
-			return idmap.get(id);
+		if (types.containsKey(id))
+			return types.get(id);
 
 		if (globals.containsKey(id))
 			return globals.get(id);
@@ -412,12 +418,12 @@ public class SymbolTable {
 	}
 
 	public boolean hasType(final String id) {
-		return idmap.containsKey(id);
+		return types.containsKey(id);
 	}
 
 	public static BoaType getType(final String id) {
-		if (idmap.containsKey(id))
-			return idmap.get(id);
+		if (types.containsKey(id))
+			return types.get(id);
 
 		if (id.startsWith("array of "))
 			return new BoaArray(getType(id.substring("array of ".length()).trim()));
@@ -439,7 +445,7 @@ public class SymbolTable {
 	}
 
 	public void setType(final String id, final BoaType boaType) {
-		idmap.put(id, boaType);
+		types.put(id, boaType);
 	}
 
 	private static void importAggregator(final Class<?> clazz) {
