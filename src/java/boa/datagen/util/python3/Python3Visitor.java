@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -125,7 +127,7 @@ public class Python3Visitor implements Python3Listener{
 	private PositionInfo.Builder pos = null;
 	private Namespace.Builder b = Namespace.newBuilder();
 	private List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
-	private List<String> imports = new ArrayList<String>();
+	//private List<String> imports = new ArrayList<String>();
 	//private Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
 	protected Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
 	//private Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
@@ -134,7 +136,9 @@ public class Python3Visitor implements Python3Listener{
 	private Stack<Statement.Builder> statements = new Stack<Statement.Builder>();
 	private Stack<Expression.Builder> expressions = new Stack<Expression.Builder>();
 	private Stack<String> atoms = new Stack<String>();
+	private Stack<String> imports = new Stack<String>();
 	protected int astLevel = PY3;
+	
 	public int getAstLevel() {
 		return astLevel;
 	}
@@ -235,7 +239,7 @@ public class Python3Visitor implements Python3Listener{
 			else {
 				b.addMethods(mb.build());
 			}
-		}*/		
+		}*/	
 		while(!methods.isEmpty()) {
 			Method.Builder mbi = methods.pop();
 			if(db != null) {
@@ -360,10 +364,7 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void exitExpr_stmt(Expr_stmtContext ctx) {
-		
 		exitStatement();
-		
-		
 	}
 
 	@Override
@@ -452,7 +453,6 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void exitBreak_stmt(Break_stmtContext ctx) {
 		exitStatement();
-		
 	}
 
 	private void exitStatement() {
@@ -526,8 +526,7 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterImport_stmt(Import_stmtContext ctx) {
-		// import can be under the namespace or a class or a method
-		//b.addImports(ctx.getText());
+		
 	}
 
 	@Override
@@ -538,49 +537,39 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterImport_name(Import_nameContext ctx) {
-		// TODO Auto-generated method stub
-		//System.out.println("L540");
-		//System.out.println(ctx.start.getText());
-		//System.out.println(ctx.stop.getText());
-		b.addImports(ctx.stop.getText());
-		
+		imports.push(ctx.stop.getText());
 	}
 
 	@Override
 	public void exitImport_name(Import_nameContext ctx) {
-		// TODO Auto-generated method stub
-		
+		b.addImports(imports.pop());		
 	}
 
 	@Override
 	public void enterImport_from(Import_fromContext ctx) {
-		// TODO Auto-generated method stub
-		//System.out.println("L556");
-		//System.out.println(ctx.start.getText());
-		//System.out.println(ctx.stop.getText());
-		b.addImports(ctx.stop.getText());
-		
+		String mydata = ctx.getText();
+		Pattern pattern = Pattern.compile("from(.*?)import.*");
+		Matcher matcher = pattern.matcher(mydata);
+		if (matcher.find()) {
+			imports.push(ctx.stop.getText() + " From " + matcher.group(1));
+		}
 	}
 
 	@Override
 	public void exitImport_from(Import_fromContext ctx) {
-		// TODO Auto-generated method stub
+		b.addImports(imports.pop());
 		
 	}
 
 	@Override
 	public void enterImport_as_name(Import_as_nameContext ctx) {
-		// TODO Auto-generated method stub
-		//System.out.println("L572");
-		//System.out.println(ctx.start.getText());
-		//System.out.println(ctx.stop.getText());
-		b.addImports(ctx.stop.getText());
+		
+		
 		
 	}
 
 	@Override
 	public void exitImport_as_name(Import_as_nameContext ctx) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -599,12 +588,14 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterImport_as_names(Import_as_namesContext ctx) {
 		// TODO Auto-generated method stub
+		//imports.push(ctx.getText());
 		
 	}
 
 	@Override
 	public void exitImport_as_names(Import_as_namesContext ctx) {
 		// TODO Auto-generated method stub
+		//b.addImports(imports.pop() + "--");
 		
 	}
 
@@ -795,8 +786,6 @@ public class Python3Visitor implements Python3Listener{
 		if(!statements.isEmpty()) {
 			if(statements.peek().getKind() == StatementKind.IF) {
 				System.out.println(ctx.getText() + " conditions" + ctx.start.getText() +" "+ ctx.stop.getText());
-				
-				
 				
 			}
 		}
