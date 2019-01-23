@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * A {@link BoaType} representing an aggregator that can be emitted to.
+ * A {@link BoaType} representing the output from a previous Boa query.
  * 
  * @author rdyer
  * @author hungc
@@ -33,6 +33,7 @@ public class BoaTable extends BoaType {
 	private Map<String, Integer> names;
 	private List<Object> filter;
 	private BoaTable parent;
+	private BoaTuple rowType = null;
 
 	/**
 	 * Construct an empty BoaTable.
@@ -255,6 +256,16 @@ public class BoaTable extends BoaType {
 
 	public BoaTable getParent() {
 		return this.parent;
+	}
+
+	public BoaTuple getRowType() {
+		if (rowType == null) {
+			final List<BoaType> members = new ArrayList<BoaType>();
+			members.addAll(indexTypes);
+			members.add(type);
+			rowType = new BoaTuple(members);
+		}
+		return rowType;
 	}
 
 	/** {@inheritDoc} */
