@@ -43,8 +43,10 @@ public class BoaTuple extends BoaType {
 		this.names = new HashMap<String, Integer>();
 		for (int i = 0; i < this.members.size(); i++) {
 			BoaType t = this.members.get(i);
-			if (t instanceof BoaName)
+			if (t instanceof BoaName) {
 				this.names.put(((BoaName) t).getId(), i);
+				this.members.set(i, ((BoaName) t).getType());
+			}
 			this.names.put("_" + (i + 1), i);
 		}
 	}
@@ -69,18 +71,21 @@ public class BoaTuple extends BoaType {
 			BoaType type = ((BoaArray) that).getType();
 			if (type instanceof BoaName)
 				type = ((BoaName) type).getType();
-			for (BoaType t : this.members)
+			for (final BoaType t : this.members)
 				if (!t.assigns(type))
 					return false;
 			return true;
 		}
 
-		// FIXME have to construct it somehow
-		//if (that instanceof BoaBytes)
-		//	return true;
-
 		if (!(that instanceof BoaTuple))
 			return false;
+
+		final BoaTuple other = (BoaTuple)that;
+		if (this.members.size() != other.members.size())
+			return false;
+		for (int i = 0; i < this.members.size(); i++)
+			if (this.members.get(i).getClass() != other.members.get(i).getClass())
+				return false;
 
 		return true;
 	}
@@ -176,12 +181,9 @@ public class BoaTuple extends BoaType {
 		if (this.getClass() != obj.getClass())
 			return false;
 		final BoaTuple other = (BoaTuple) obj;
-		if (this.members == null) {
-			if (other.members != null)
-				return false;
-		} else if (!this.members.equals(other.members))
+		if (this.members == null && other.members != null)
 			return false;
-		return true;
+		return this.members.equals(other.members);
 	}
 
 	/** {@inheritDoc} */
