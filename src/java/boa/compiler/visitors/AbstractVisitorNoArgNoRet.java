@@ -357,6 +357,12 @@ public abstract class AbstractVisitorNoArgNoRet {
 		n.getType().accept(this);
 	}
 
+	public void visit(final RowType n) {
+		n.getId().accept(this);
+		for (final Index i : n.getIndices())
+			i.accept(this);
+	}
+
 	public void visit(final ArrayType n) {
 		n.getValue().accept(this);
 	}

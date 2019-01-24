@@ -55,8 +55,13 @@ type
 	| stackType
 	| setType
 	| enumType
-	| identifier
 	| tableType
+	| identifier
+	| rowType
+	;
+
+rowType
+	: identifier index* DOT ROW
 	;
 
 component
@@ -455,6 +460,7 @@ BEFORE    : 'before';
 AFTER     : 'after';
 STOP      : 'stop';
 ENUM      : 'enum';
+ROW       : '_row';
 
 //
 // separators

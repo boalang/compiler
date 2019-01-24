@@ -114,6 +114,14 @@ type returns [AbstractType ast]
 	| e=enumType       { $ast = $e.ast; }
 	| tt=tableType     { $ast = $tt.ast; }
 	| id=identifier    { $ast = $id.ast; }
+	| rt=rowtype       { $ast = $rt.ast; }
+	;
+
+rowtype returns [RowType ast]
+	locals [int l, int c]
+	@init { $l = getStartLine(); $c = getStartColumn(); }
+	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
+	: id=identifier { $ast = new RowType($id.ast); } (idx=index { $ast.addIndex($idx.ast); })* DOT ROW
 	;
 
 component returns [Component ast]
@@ -704,39 +712,40 @@ subView returns [SubView ast]
 // keywords
 //
 
-OF       : 'of';
-IF       : 'if';
-DO       : 'do';
-MAP      : 'map';
-STACK    : 'stack';
-SET      : 'set';
-FOR      : 'for';
-FOREACH  : 'foreach';
-IFALL    : 'ifall';
-EXISTS   : 'exists';
-NOT      : 'not';
-TYPE     : 'type';
-ELSE     : 'else';
-CASE     : 'case';
-OUTPUT   : 'output';
-FORMAT   : 'format';
-WHILE    : 'while';
-BREAK    : 'break';
-ARRAY    : 'array';
-STATIC   : 'static';
-SWITCH   : 'switch';
-RETURN   : 'return';
-WEIGHT   : 'weight';
-DEFAULT  : 'default';
-CONTINUE : 'continue';
-FUNCTION : 'function';
-FIXP : 'fixp';
-VISITOR  : 'visitor';
-TRAVERSAL  : 'traversal';
-BEFORE   : 'before';
-AFTER    : 'after';
-STOP     : 'stop';
-ENUM	 : 'enum';
+OF        : 'of';
+IF        : 'if';
+DO        : 'do';
+MAP       : 'map';
+STACK     : 'stack';
+SET       : 'set';
+FOR       : 'for';
+FOREACH   : 'foreach';
+IFALL     : 'ifall';
+EXISTS    : 'exists';
+NOT       : 'not';
+TYPE      : 'type';
+ELSE      : 'else';
+CASE      : 'case';
+OUTPUT    : 'output';
+FORMAT    : 'format';
+WHILE     : 'while';
+BREAK     : 'break';
+ARRAY     : 'array';
+STATIC    : 'static';
+SWITCH    : 'switch';
+RETURN    : 'return';
+WEIGHT    : 'weight';
+DEFAULT   : 'default';
+CONTINUE  : 'continue';
+FUNCTION  : 'function';
+FIXP      : 'fixp';
+VISITOR   : 'visitor';
+TRAVERSAL : 'traversal';
+BEFORE    : 'before';
+AFTER     : 'after';
+STOP      : 'stop';
+ENUM      : 'enum';
+ROW       : '_row';
 
 //
 // separators

@@ -29,10 +29,12 @@ v1: table[year: int][projectID: string][fileName: string] of temp:int;
 
 v2 := subv/o;
 
-v2._row;
 c1 := v2._1;
 
 v3: table[first: string][second: string] of third:int = subv/o2;
+
+r: v1._row;
+r2: v3._row;
 
 v4 := v1[1994];
 v5 := v4[_]["abc"][3];
@@ -42,15 +44,9 @@ v7 := v6["abc"];
 v8 := v7["foo"];
 v9 := v8[2];
 
-
-# TODO fix parser
-#r: v1._row;
-
-#TODO should change to 'temp: v1._row'
-temp := v1._row;
-v2._row;
-
-y := temp.year + 3;
+row_v4: v4._row;
+row_v6: v6._row;
+row_v4 = row_v6;
 
 c2 := v1._1;
 #c2 = v1._2;

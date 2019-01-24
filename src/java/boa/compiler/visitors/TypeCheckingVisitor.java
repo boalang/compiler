@@ -407,7 +407,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						type = ((BoaMap) type).getType();
 					} else if (type instanceof BoaTable) {
 						final Index idx = (Index)node;
-						BoaTable table = (BoaTable)type;
+						final BoaTable table = (BoaTable)type;
 
 						if (idx.hasEnd())
 							throw new TypeCheckException(node, "table type indices do not support slicing");
@@ -1397,6 +1397,22 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.type = n.getType().type;
 		n.env.setType(n.getId().getToken(), n.type);
 		n.getId().accept(this, env);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final RowType n, final SymbolTable env) {
+		n.env = env;
+		n.getId().accept(this, env);
+		final BoaType t = n.getId().type;
+		if (!(t instanceof BoaTable))
+			throw new TypeCheckException(n.getId(), "expected a table type here");
+		BoaTable table = (BoaTable)t;
+		for (final Index i : n.getIndices()) {
+			i.accept(this, env);
+			table = table.filterWith(null);
+		}
+		n.type = table.getRowType();
 	}
 
 	/** {@inheritDoc} */

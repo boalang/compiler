@@ -31,7 +31,7 @@ v5: table[string][string][float][float][float] of string = J12345/ProjectChurnRa
 
 v6 := view1/o;
 
-#r1: v1._row;
+r1: v1._row;
 v1 >> r1;
 
 while(v1 >> r1) {
