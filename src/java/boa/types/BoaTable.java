@@ -31,7 +31,7 @@ public class BoaTable extends BoaType {
 	private BoaType type;
 	private List<BoaScalar> indexTypes;
 	private Map<String, Integer> names;
-	private List<Object> filter;
+	private List<Object> filters;
 	private BoaTable parent;
 	private BoaTuple rowType = null;
 
@@ -65,7 +65,7 @@ public class BoaTable extends BoaType {
 	public BoaTable(final BoaType type, final List<BoaScalar> indexTypes) {
 		this.type = type;
 		this.indexTypes = indexTypes;
-		this.filter = null;
+		this.filters = null;
 		this.parent = null;
 
 		names = new HashMap<String, Integer>();
@@ -112,10 +112,8 @@ public class BoaTable extends BoaType {
 	 * @return An int containing the number of types each emit to this table
 	 *         will require
 	 */
-	public int countIndices() {
-		if (this.indexTypes == null)
-			return 0;
-		return this.indexTypes.size();
+	public int indicesCount() {
+		return this.indexTypes == null ? 0 : this.indexTypes.size();
 	}
 
 	/**
@@ -225,22 +223,63 @@ public class BoaTable extends BoaType {
 	}
 
 	public boolean hasFilter() {
-		return filter != null;
+		return filters != null;
 	}
 
 	public List<Object> getFilters() {
-		return filter;
+		return filters;
 	}
 
-	public void addFilter(final Object o) {
-		if (filter == null) {
-			filter = new ArrayList<Object>();
+	public int filtersCount() {
+		return filters == null ? 0 : filters.size();
+	}
+
+	public boolean canFilter() {
+		final int indexCount = this.indicesCount();
+		final int idx = this.filtersCount();
+
+		if (this.indexTypes == null)
+			return idx == 0;
+
+		return idx <= indexCount;
+	}
+
+	public boolean acceptsFilter(final BoaType index) {
+		final int indexCount = this.indicesCount();
+		final int idx = this.filtersCount();
+
+		final BoaType bt;
+
+		if (this.indexTypes == null || idx == indexCount)
+			bt = this.getType();
+		else
+			bt = this.getIndex(idx);
+
+		return bt.assigns(index);
+	}
+
+	public BoaTable filterWith(final Object o) {
+		final BoaTable temp = new BoaTable(this.getType(), this.getIndexTypes());
+		if (this.hasFilter()) {
+			final List<Object> newFilter = new ArrayList<Object>();
+			for (final Object f : this.getFilters())
+				newFilter.add(f);
+			temp.setFilter(newFilter);
 		}
-		filter.add(o);
+		temp.addFilter(o);
+		temp.setParent(this);
+		return temp;
+	}
+
+	protected void addFilter(final Object o) {
+		if (filters == null) {
+			filters = new ArrayList<Object>();
+		}
+		filters.add(o);
 	}
 
 	public void setFilter(final List<Object> f) {
-		filter = f;
+		filters = f;
 	}
 
 	public void setParent(final BoaTable p) {
@@ -260,6 +299,9 @@ public class BoaTable extends BoaType {
 			final List<BoaType> members = new ArrayList<BoaType>();
 			members.addAll(indexTypes);
 			members.add(type);
+			if (filters != null)
+				for (int i = 0; i < filters.size(); i++)
+					members.remove(0);
 			rowType = new BoaTuple(members);
 		}
 		return rowType;

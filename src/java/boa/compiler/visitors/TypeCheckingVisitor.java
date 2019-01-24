@@ -369,8 +369,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		BoaType type = null;
 
 		if (n.getOpsSize() > 0) {
-			int tableTypeCount = 0;
-
 			for (final Node node : n.getOps()) {
 				if (node instanceof Selector) {
 					if (type == null) {
@@ -414,42 +412,17 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						if (idx.hasEnd())
 							throw new TypeCheckException(node, "table type indices do not support slicing");
 
-						if (tableTypeCount == 0) {
-							final BoaTable temp = new BoaTable(table.getType(), table.getIndexTypes());
-							if (table.hasFilter()) {
-								final List<Object> newFilter = new ArrayList<Object>();
-								for (final Object o : table.getFilters())
-									newFilter.add(o);
-								temp.setFilter(newFilter);
-							}
-							temp.setParent(table);
-							n.getOperand().type = temp;
-							type = table = temp;
-						}
-
-						if (table.hasFilter() && tableTypeCount == 0)
-							tableTypeCount = table.getFilters().size();
+						if (!table.canFilter())
+							throw new TypeCheckException(n, "table column out of bounds");
 
 						if (!idx.hasStart()) {
-							table.addFilter('_');
+							type = table.filterWith('_');
 						} else {
-							final List<BoaScalar> indexTypes = table.getIndexTypes();
-							if ((indexTypes == null && tableTypeCount > 0) || (indexTypes != null && tableTypeCount > indexTypes.size()))
-								throw new TypeCheckException(n, "table column out of bounds");
-
-							BoaType bt = table.getType();
-
-							if (indexTypes != null && tableTypeCount < indexTypes.size())
-								bt = table.getIndex(tableTypeCount);
-
-							if (!bt.assigns(index))
+							if (!table.acceptsFilter(index))
 								throw new TypeCheckException(node, "invalid index type '" + index + "' for indexing into '" + type + "'");
-
 							final Object obj = idx.getStart().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
-							table.addFilter(obj);
+							type = table.filterWith(obj);
 						}
-
-						tableTypeCount++;
 					} else {
 						throw new TypeCheckException(node, "type '" + type + "' does not allow index operations");
 					}

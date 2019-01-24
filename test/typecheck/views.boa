@@ -35,12 +35,12 @@ c1 := v2._1;
 v3: table[first: string][second: string] of third:int = subv/o2;
 
 v4 := v1[1994];
-#v5 := v4[_]["abc"][3]; FIXME
+v5 := v4[_]["abc"][3];
 
-#v6 := v1[2019];
-#v7 := v6["abc"];
-#v8 := v7["foo"];
-#v9 := v8[2];
+v6 := v1[2019];
+v7 := v6["abc"];
+v8 := v7["foo"];
+v9 := v8[2];
 
 
 # TODO fix parser
