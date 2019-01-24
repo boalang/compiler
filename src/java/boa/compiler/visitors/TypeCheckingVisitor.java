@@ -408,58 +408,47 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 						type = ((BoaMap) type).getType();
 					} else if (type instanceof BoaTable) {
+						final Index idx = (Index)node;
+						BoaTable table = (BoaTable)type;
+
+						if (idx.hasEnd())
+							throw new TypeCheckException(node, "table type indices do not support slicing");
+
 						if (tableTypeCount == 0) {
-							BoaType temp = new BoaTable(((BoaTable)type).getType(), ((BoaTable)type).getIndexTypes());
-							if (((BoaTable)type).hasFilter()) {
-								List<Object> newFilter = new ArrayList<Object>();
-								for (Object o : ((BoaTable)type).getFilter())
+							final BoaTable temp = new BoaTable(table.getType(), table.getIndexTypes());
+							if (table.hasFilter()) {
+								final List<Object> newFilter = new ArrayList<Object>();
+								for (final Object o : table.getFilters())
 									newFilter.add(o);
-								((BoaTable)temp).setFilter(newFilter);
+								temp.setFilter(newFilter);
 							}
-							((BoaTable)temp).setParent((BoaTable)type);
+							temp.setParent(table);
 							n.getOperand().type = temp;
-							type = temp;
+							type = table = temp;
 						}
-						if (((BoaTable)type).hasFilter() && tableTypeCount == 0)
-							tableTypeCount = ((BoaTable)type).getFilter().size();
 
-						if (((Index)node).hasEnd())
-							throw new TypeCheckException(node, "index type should not have end expression for indexing into '" + type + "'");
+						if (table.hasFilter() && tableTypeCount == 0)
+							tableTypeCount = table.getFilters().size();
 
-						if (!((Index)node).hasStart())
-							((BoaTable)type).addToFilter('_');
-						else {
-							List<BoaScalar> indexTypes = ((BoaTable)type).getIndexTypes();
+						if (!idx.hasStart()) {
+							table.addFilter('_');
+						} else {
+							final List<BoaScalar> indexTypes = table.getIndexTypes();
 							if ((indexTypes == null && tableTypeCount > 0) || (indexTypes != null && tableTypeCount > indexTypes.size()))
-								throw new TypeCheckException(n, "table column out of bound");
+								throw new TypeCheckException(n, "table column out of bounds");
 
-							Operand op = ((Index)node).getStart().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
-							Object obj;
-							// TODO support variable: v[p.id]
-							if (op instanceof StringLiteral)
-								obj = ((StringLiteral)op).getLiteral();
-							else if (op instanceof IntegerLiteral)
-								obj = ((IntegerLiteral)op).getLiteral();
-							else
-								throw new TypeCheckException(n, "invalid index type '" + index + "' for indexing into '" + type + "'");
+							BoaType bt = table.getType();
 
-							BoaType bt = null;
-
-							if (indexTypes != null) {
-								if (tableTypeCount < indexTypes.size())
-									bt = ((BoaTable)type).getIndex(tableTypeCount);
-								else
-									bt = ((BoaTable)type).getType();
-							}
-							else {
-								bt = ((BoaTable)type).getType();
-							}
+							if (indexTypes != null && tableTypeCount < indexTypes.size())
+								bt = table.getIndex(tableTypeCount);
 
 							if (!bt.assigns(index))
-								throw new TypeCheckException(n, "invalid index type '" + index + "' for indexing into '" + type + "'");
+								throw new TypeCheckException(node, "invalid index type '" + index + "' for indexing into '" + type + "'");
 
-							((BoaTable)type).addToFilter(obj);
+							final Object obj = idx.getStart().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+							table.addFilter(obj);
 						}
+
 						tableTypeCount++;
 					} else {
 						throw new TypeCheckException(node, "type '" + type + "' does not allow index operations");
@@ -566,7 +555,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						if (i == 1)
 							n.type = new BoaTable(((BoaTable)type).getType());
 						else if (((BoaTable)type).getIndexTypes() == null || i < 1 || i > ((BoaTable)type).getIndexTypes().size() + 1)
-							throw new TypeCheckException(n, "table column out of bound");
+							throw new TypeCheckException(n, "table column out of bounds");
 						else
 							n.type = new BoaTable(((BoaTable)type).getIndex(i - 2));
 					} catch (NumberFormatException e) {

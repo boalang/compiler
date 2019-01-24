@@ -1,10 +1,7 @@
 view sv9 {
 	o: output sum[string][string] of int;
-	s := 2;
-
-	o["a"]["b"] << 0;
 }
 
-v : table [count:string][year: string] of happy: int = sv9/o;
+v: table[count: string][year: string] of happy: int = sv9/o;
 
 st := v["abc"]["123"][4][6];

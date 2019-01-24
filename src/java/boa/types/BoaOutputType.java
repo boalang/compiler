@@ -259,9 +259,11 @@ public class BoaOutputType extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		String s = "output " + this.getType();
+		String s = "output";
 		if (this.indexTypes != null)
-			s += this.indexTypes.toString();
+			for (int i = 0; i < this.indexTypes.size(); i++)
+				s += "[" + this.indexTypes.get(i) + "]";
+		s += " of " + this.getType();
 		if (this.weightType != null)
 			s += " weight " + this.weightType;
 		return s;

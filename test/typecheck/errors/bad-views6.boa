@@ -1,8 +1,5 @@
 view sv4 {
 	o: output sum of int;
-	s := 2;
-
-	o << 0;
 }
 
 v := sv4/o;

@@ -146,29 +146,26 @@ public class BoaTable extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
+		if (this == that)
+			return true;
 		if (!(that instanceof BoaTable))
 			return false;
 
-		BoaTable bt = (BoaTable) that;
+		final BoaTable bt = (BoaTable)that;
 
-		BoaType thatType = bt.getType();
-		if (!type.assigns(thatType))
+		if (!this.type.assigns(bt.getType()))
 			return false;
 
-		List<BoaScalar> thatIndexTypes = bt.getIndexTypes();
-		if (indexTypes == null && thatIndexTypes == null)
-			return true;
+		final List<BoaScalar> thatIndexTypes = bt.getIndexTypes();
+		if (this.indexTypes == null)
+			return thatIndexTypes == null;
 
-		if (indexTypes != null && thatIndexTypes != null) {
-			if (indexTypes.size() != thatIndexTypes.size())
+		if (this.indexTypes.size() != thatIndexTypes.size())
+			return false;
+
+		for (int i = 0; i < this.indexTypes.size(); i++)
+			if (!this.indexTypes.get(i).assigns(thatIndexTypes.get(i)))
 				return false;
-
-			for (int i = 0; i < indexTypes.size(); i++)
-				if (!indexTypes.get(i).assigns(thatIndexTypes.get(i)))
-					return false;
-		}
-		else
-			return false;
 
 		return true;
 	}
@@ -231,22 +228,22 @@ public class BoaTable extends BoaType {
 		return filter != null;
 	}
 
-	public List<Object> getFilter() {
+	public List<Object> getFilters() {
 		return filter;
 	}
 
-	public void addToFilter(Object o) {
+	public void addFilter(final Object o) {
 		if (filter == null) {
 			filter = new ArrayList<Object>();
 		}
 		filter.add(o);
 	}
 
-	public void setFilter(List<Object> f) {
+	public void setFilter(final List<Object> f) {
 		filter = f;
 	}
 
-	public void setParent(BoaTable p) {
+	public void setParent(final BoaTable p) {
 		this.parent = p;
 	}
 
@@ -287,26 +284,34 @@ public class BoaTable extends BoaType {
 			return false;
 		if (this.getClass() != obj.getClass())
 			return false;
+
 		final BoaTable other = (BoaTable) obj;
+
 		if (this.indexTypes == null) {
 			if (other.indexTypes != null)
 				return false;
-		} else if (!this.indexTypes.equals(other.indexTypes))
+		} else if (!this.indexTypes.equals(other.indexTypes)) {
 			return false;
+		}
+
 		if (this.type == null) {
 			if (other.type != null)
 				return false;
-		} else if (!this.type.equals(other.type))
+		} else if (!this.type.equals(other.type)) {
 			return false;
+		}
+
 		return true;
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		String s = "table " + this.getType();
+		String s = "table";
 		if (this.indexTypes != null)
-			s += this.indexTypes.toString();
+			for (int i = 0; i < this.indexTypes.size(); i++)
+				s += "[" + this.indexTypes.get(i) + "]";
+		s += " of " + this.getType();
 		return s;
 	}
 }
