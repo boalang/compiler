@@ -598,6 +598,24 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		final BoaType accepts = n.getLhs().type;
 		n.type = accepts;
 
+		if (n.getOpsSize() > 0 && accepts instanceof BoaTable && n.getOps().get(0).equals(">>")) {
+			if (!(n.getParent().getParent().getParent().getParent().getParent() instanceof WhileStatement))
+				throw new TypeCheckException(n, "expression has to be put in WhileStatement");
+
+			if (n.getOps().size() != 1 || n.getRhsSize() != 1)
+				throw new TypeCheckException(n, "expect one operator and one term with operator '>>'");
+
+			final Factor tuple = n.getRhs(0);
+			final Factor table = n.getLhs();
+			tuple.accept(this, env);
+			if (! (tuple.type instanceof BoaTuple))
+				throw new TypeCheckException(tuple, "type '" + tuple.type + "' does not support '>>' operator");
+			if (!(((BoaTable)table.type).getRowType().assigns(tuple.type)))
+				throw new TypeCheckException(n, "cannot assign row from table type '" + n.getLhs().type + "' to tuple type '" + n.getRhs(0).type + "'");
+			n.type = tuple.type;
+			return;
+		}
+
 		if (n.getRhsSize() > 0) {
 			BoaScalar type;
 

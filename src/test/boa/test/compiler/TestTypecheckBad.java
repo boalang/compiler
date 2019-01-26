@@ -68,6 +68,8 @@ public class TestTypecheckBad extends BaseTest {
 			{ "bad-views14.boa", "incompatible types for assignment: required 'table[year:int][projectID:string][fileName:string] of temp:int', found 'table[first:string][second:string] of third:int'" },
 			{ "bad-views15.boa", "incompatible types for assignment: required 'tuple [int, string, string, int]', found 'tuple [string, string, int]'" },
 			{ "bad-views16.boa", "incompatible types for assignment: required 'tuple [string, string, int]', found 'tuple [string, int]'" },
+			{ "bad-views17.boa", "expect one operator and one term with operator '>>'" },
+			{ "bad-views18.boa", "cannot assign row from table type 'table[year:int][projectID:string][fileName:string] of temp:int' to tuple type 'tuple [string, int]'" },
 			{ "bad-identifier1.boa", "invalid identifier '_abc'" },
 			{ "bad-identifier2.boa", "invalid identifier '_s'" },
 			{ "bad-identifier3.boa", "invalid identifier '_f'" },
