@@ -418,8 +418,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						if (!idx.hasStart()) {
 							type = table.filterWith('_');
 						} else {
-							if (!table.acceptsFilter(index))
-								throw new TypeCheckException(node, "invalid index type '" + index + "' for indexing into '" + type + "'");
+							final BoaScalar accepts = table.acceptsFilter();
+							if (!accepts.assigns(index))
+								throw new TypeCheckException(node, "invalid index type '" + index + "' for indexing into '" + type + "' - expected '" + accepts + "'");
 							final Object obj = idx.getStart().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
 							type = table.filterWith(obj);
 						}

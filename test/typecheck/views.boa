@@ -36,13 +36,13 @@ v3: table[first: string][second: string] of third:int = subv/o2;
 r: v1._row;
 r2: v3._row;
 
-v4 := v1[1994];
-v5 := v4[_]["abc"][3];
+v4: table[projectID: string][fileName: string] of temp:int;
+v4 = v1[1994];
+v5 := v4[_]["abc"];
 
 v6 := v1[2019];
 v7 := v6["abc"];
 v8 := v7["foo"];
-v9 := v8[2];
 
 row_v4: v4._row;
 row_v6: v6._row;
