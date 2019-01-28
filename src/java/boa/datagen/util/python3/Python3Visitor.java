@@ -209,18 +209,14 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterFile_input(File_inputContext ctx) {
-		// TODO Auto-generated method stub
 		String pkg = "";
 		b.setName(pkg);
 	}
 
 	@Override
 	public void exitFile_input(File_inputContext ctx) {
-		// TODO Auto-generated method stub
 		
-	}
-
-	
+	}	
 	
 	@Override
 	public void enterFuncdef(FuncdefContext ctx) {		
@@ -231,25 +227,20 @@ public class Python3Visitor implements Python3Listener{
 	
 	@Override
 	public void exitFuncdef(FuncdefContext ctx) {
-		
-		/*if(mb != null) {
-			if(db != null) {
-				db.addMethods(mb.build());
-			}
-			else {
-				b.addMethods(mb.build());
-			}
-		}*/	
-		while(!methods.isEmpty()) {
+		if(!methods.isEmpty()) {
 			Method.Builder mbi = methods.pop();
-			if(db != null) {
-				db.addMethods(mbi.build());
+			if(!methods.isEmpty()) {
+				methods.peek().addMethods(mbi.build());
 			}
 			else {
-				b.addMethods(mbi.build());
+				if(db != null) {
+					db.addMethods(mbi.build());
+				}
+				else {
+					b.addMethods(mbi.build());
+				}
 			}
 		}
-		///mb = null;	
 	}	
 
 	Variable.Builder vb;
@@ -277,13 +268,11 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterTfpdef(TfpdefContext ctx) {
-		/*
 		if(vb != null) {
 			vb = Variable.newBuilder();
 			vb.setName(ctx.NAME().getText());
 			methods.peek().addArguments(vb.build());
 		}
-		*/
 	}
 
 	@Override
@@ -354,7 +343,6 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterExpr_stmt(Expr_stmtContext ctx) {
-		
 		Statement.Builder sb = Statement.newBuilder();
 		sb.setKind(Statement.StatementKind.EXPRESSION);
 		sb.addNames(ctx.getText());
@@ -382,13 +370,11 @@ public class Python3Visitor implements Python3Listener{
 		eb.setKind(ExpressionKind.ASSIGN);
 		eb.setVariable(ctx.getText());
 		expressions.push(eb);
-		
 	}
 
 	@Override
 	public void exitAugassign(AugassignContext ctx) {
 		exitExpression();
-		
 	}
 
 	private void exitExpression() {
@@ -502,14 +488,14 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterYield_stmt(Yield_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.YIELD);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitYield_stmt(Yield_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();	
 	}
 
 	@Override

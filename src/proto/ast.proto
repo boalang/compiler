@@ -154,6 +154,7 @@ message Method {
 	optional int32 declaring_type = 13;
 	/** */
 	optional Expression computed_name = 14;
+	repeated Method methods = 15;
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */
@@ -227,6 +228,7 @@ message Statement {
 		TRAIT_ALIAS = 36;
 		TRAIT_PRECEDENCE = 37;
 		TRAIT_USE = 38;
+		YIELD = 39;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;

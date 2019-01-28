@@ -22,7 +22,7 @@ public class TestSequenceFile {
 		Configuration conf = new Configuration();
 		FileSystem fileSystem = FileSystem.get(conf);
 		
-		String astpath = "/Users/sumon/Downloads/pydatagen/ast/data"; //"/Users/mislam/eclipse-workspace/outdata/ast/data";
+		String astpath = "/Users/sumon/Downloads/testpydatagen/ast/data"; //"/Users/mislam/eclipse-workspace/outdata/ast/data";
 		Writable key = new LongWritable();
 		BytesWritable val = new BytesWritable();
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, 
