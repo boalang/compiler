@@ -767,12 +767,12 @@ public class Python3Visitor implements Python3Listener{
 	}
 
 	
+	boolean enteredtest = false;
 	@Override
 	public void enterTest(TestContext ctx) {
 		if(!statements.isEmpty()) {
 			if(statements.peek().getKind() == StatementKind.IF) {
 				System.out.println(ctx.getText() + " conditions" + ctx.start.getText() +" "+ ctx.stop.getText());
-				
 			}
 		}
 //		if(statements.peek().getKind() == StatementKind.IF) {
@@ -787,6 +787,7 @@ public class Python3Visitor implements Python3Listener{
 	
 	@Override
 	public void exitTest(TestContext ctx) {
+		enteredtest = false;
 //		if(!expressions.isEmpty()) {
 //			Expression.Builder current = expressions.pop();
 //			if(!expressions.isEmpty()) {
