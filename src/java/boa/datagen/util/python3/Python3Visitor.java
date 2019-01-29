@@ -331,13 +331,11 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterSmall_stmt(Small_stmtContext ctx) {
-
 		
 	}
 
 	@Override
 	public void exitSmall_stmt(Small_stmtContext ctx) {
-		
 		
 	}
 
@@ -379,42 +377,43 @@ public class Python3Visitor implements Python3Listener{
 
 	private void exitExpression() {
 		Expression.Builder current = expressions.pop();
-		Expression.Builder parent;
-		
 		if(!expressions.isEmpty()) {
-			parent = expressions.peek();
-			parent.addExpressions(current.build());
+			 expressions.peek().addExpressions(current.build());
 		}
 		else {
 			if(!statements.isEmpty()) {
 				Statement.Builder sb = statements.peek();
 				sb.addExpressions(current.build());
 			}
+			else
+				b.addExpressions(current.build());
 		}
 	}
 
 	@Override
 	public void enterDel_stmt(Del_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.DELETE);
+		eb.setVariable(ctx.getText());
+		expressions.push(eb);
 	}
 
 	@Override
 	public void exitDel_stmt(Del_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitExpression();
 	}
 
 	@Override
 	public void enterPass_stmt(Pass_stmtContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.PASS);
+		statements.push(sb);
 		
 	}
 
 	@Override
 	public void exitPass_stmt(Pass_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();
 	}
 
 	@Override
@@ -446,11 +445,8 @@ public class Python3Visitor implements Python3Listener{
 			return;
 		}
 		Statement.Builder current = statements.pop();
-		Statement.Builder parent; 
-		
 		if(!statements.isEmpty()) {
-			parent = statements.peek();
-			parent.addStatements(current.build());
+			statements.peek().addStatements(current.build());
 		}
 		else {
 			if (!methods.isEmpty())
@@ -488,26 +484,24 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterYield_stmt(Yield_stmtContext ctx) {
-		Statement.Builder sb = Statement.newBuilder();
-		sb.setKind(Statement.StatementKind.YIELD);
-		statements.push(sb);
+		
 	}
 
 	@Override
 	public void exitYield_stmt(Yield_stmtContext ctx) {
-		exitStatement();	
+		
 	}
 
 	@Override
 	public void enterRaise_stmt(Raise_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.BREAK);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitRaise_stmt(Raise_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();
 	}
 
 	@Override
@@ -673,7 +667,6 @@ public class Python3Visitor implements Python3Listener{
 	public void enterIf_stmt(If_stmtContext ctx) {
 		Statement.Builder sb = Statement.newBuilder();
 		sb.setKind(Statement.StatementKind.IF);
-		
 		statements.push(sb);
 	}
 
@@ -744,37 +737,55 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterExcept_clause(Except_clauseContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.CATCH);
+		statements.push(sb);
 		
 	}
 
 	@Override
 	public void exitExcept_clause(Except_clauseContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();
 	}
 
 	@Override
 	public void enterSuite(SuiteContext ctx) {
-		//Statement.Builder sb = Statement.newBuilder();
-		//sb.setKind(Statement.StatementKind.BLOCK);
-		//statements.push(sb);
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.BLOCK);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitSuite(SuiteContext ctx) {
-		//exitStatement();	
+		if(statements.empty()) {
+			return;
+		}
+		Statement.Builder current = statements.pop();
+		
+		if(ctx.getParent().start.getText().equals("def")) {
+			//System.out.println("Suite: " + ctx.getParent().start.getText());
+			methods.peek().addStatements(current.build());
+		}
+		else if (!statements.isEmpty()) {
+			statements.peek().addStatements(current.build());
+		}
+		else {
+			if (db != null) 
+				db.addStatements(current.build());
+			else 
+				b.addStatements(current.build());
+		}
 	}
 
-	
-	boolean enteredtest = false;
 	@Override
 	public void enterTest(TestContext ctx) {
-		if(!statements.isEmpty()) {
-			if(statements.peek().getKind() == StatementKind.IF) {
-				System.out.println(ctx.getText() + " conditions" + ctx.start.getText() +" "+ ctx.stop.getText());
-			}
-		}
+//		if(!statements.isEmpty()) {
+//			if(statements.peek().getKind() == StatementKind.IF) {
+//				System.out.println(ctx.getText() + " conditions" + ctx.start.getText() +" "+ ctx.stop.getText());
+//			}
+//		}
+		
+		
 //		if(statements.peek().getKind() == StatementKind.IF) {
 //			Expression.Builder eb = Expression.newBuilder();
 //			eb.setKind(ExpressionKind.LOGICAL_AND);
@@ -787,7 +798,6 @@ public class Python3Visitor implements Python3Listener{
 	
 	@Override
 	public void exitTest(TestContext ctx) {
-		enteredtest = false;
 //		if(!expressions.isEmpty()) {
 //			Expression.Builder current = expressions.pop();
 //			if(!expressions.isEmpty()) {
@@ -836,7 +846,6 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterOr_test(Or_testContext ctx) {
-		System.out.println("OR TEST "+ ctx.getText());
 	}
 
 	@Override
@@ -846,7 +855,7 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterAnd_test(And_testContext ctx) {
-		System.out.println("AND TEST "+ ctx.getText());
+		//System.out.println("AND TEST "+ ctx.getText());
 	}
 
 	@Override
@@ -865,7 +874,6 @@ public class Python3Visitor implements Python3Listener{
 
 	}
 
-	boolean comparisonentered = false;
 	@Override
 	public void enterComparison(ComparisonContext ctx) {
 		//System.out.println("Comparison " + ctx.getText());
@@ -876,7 +884,6 @@ public class Python3Visitor implements Python3Listener{
 //			expressions.push(eb);
 //		}
 		
-		System.out.println();
 		
 	}
 	
@@ -1069,36 +1076,17 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void exitAtom_expr(Atom_exprContext ctx) {
 		
-		
 	}
 
 	 
 	@Override
 	public void enterAtom(AtomContext ctx) {
-//		Expression.Builder eb = Expression.newBuilder();
-//		eb.setKind(ExpressionKind.OTHER);
-//		eb.setVariable(ctx.getText());
-//		expressions.push(eb);
 		atoms.push(ctx.getText());
 	}
 
 	@Override
 	public void exitAtom(AtomContext ctx) {
-//		Expression.Builder current = expressions.pop();
-//		Expression.Builder parent;
-//		
-//		if(!expressions.isEmpty()) {
-//			parent = expressions.peek();
-//			parent.addExpressions(current.build());
-//		}
-//		else {
-//			if(!statements.isEmpty()) {
-//				Statement.Builder sb = statements.peek();
-//				sb.addExpressions(current.build());
-//			}
-//		}
-		
-		
+	
 	}
 
 	@Override
@@ -1115,16 +1103,13 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterTrailer(TrailerContext ctx) {
-		// TODO Auto-generated method stub
 		if(ctx.getText().startsWith(".")) {
 			atoms.push(ctx.getText().substring(1));
 		}
 		else if(ctx.getText().equals("()")) {
 			Expression.Builder eb = Expression.newBuilder();
 			eb.setKind(ExpressionKind.METHODCALL);
-			//eb.setVariable(ctx.getText());
 			if(!atoms.isEmpty()) {
-				//eb.setVariable(atoms.pop());
 				eb.setMethod(atoms.pop());
 			}
 			else {
@@ -1220,12 +1205,10 @@ public class Python3Visitor implements Python3Listener{
 		db = Declaration.newBuilder();
 		db.setName(ctx.NAME().getText());
 		db.setKind(TypeKind.CLASS);
-		
 	}
 
 	@Override
 	public void exitClassdef(ClassdefContext ctx) {
-		// TODO Auto-generated method stub
 		if(db != null)
 			b.addDeclarations(db.build());
 		db = null;
@@ -1235,7 +1218,6 @@ public class Python3Visitor implements Python3Listener{
 	public void enterArglist(ArglistContext ctx) {
 		Expression.Builder eb = Expression.newBuilder();
 		eb.setKind(ExpressionKind.METHODCALL);
-		//eb.setVariable(ctx.getText());
 		if(!atoms.isEmpty()) {
 			eb.setMethod(atoms.pop());
 		}
@@ -1243,30 +1225,11 @@ public class Python3Visitor implements Python3Listener{
 			eb.setVariable("Method name missing!");
 		}
 		expressions.push(eb);
-		
 	}
 
 	@Override
 	public void exitArglist(ArglistContext ctx) {
-		// TODO Auto-generated method stub
 		exitExpression();
-		
-	}
-
-	@Override
-	public void enterArgument(ArgumentContext ctx) {
-		// TODO Auto-generated method stub
-		Expression.Builder eb = Expression.newBuilder();
-		eb.setKind(ExpressionKind.VARACCESS);
-		eb.setVariable(ctx.getText());
-		if(isLiteral(ctx.getText())) {
-			eb.setKind(ExpressionKind.LITERAL);
-		}
-		//System.out.println(ctx.toStringTree(parser));
-		if(!expressions.isEmpty()) {
-			expressions.peek().addMethodArgs(eb.build());
-		}
-		
 	}
 	
 	public boolean isLiteral(String text) {
@@ -1281,6 +1244,19 @@ public class Python3Visitor implements Python3Listener{
 			}
 		}
 		return isLiteral;
+	}
+
+	@Override
+	public void enterArgument(ArgumentContext ctx) {
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.VARACCESS);
+		eb.setVariable(ctx.getText());
+		if(isLiteral(ctx.getText())) {
+			eb.setKind(ExpressionKind.LITERAL);
+		}
+		if(!expressions.isEmpty()) {
+			expressions.peek().addMethodArgs(eb.build());
+		}	
 	}
 
 	@Override
@@ -1337,14 +1313,16 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterYield_expr(Yield_exprContext ctx) {
-		// TODO Auto-generated method stub
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.YIELD);
+		eb.setVariable(ctx.getText());
+		expressions.push(eb);
 		
 	}
 
 	@Override
 	public void exitYield_expr(Yield_exprContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitExpression();
 	}
 
 	@Override
