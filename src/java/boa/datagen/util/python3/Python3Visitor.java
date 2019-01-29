@@ -243,19 +243,25 @@ public class Python3Visitor implements Python3Listener{
 	
 	@Override
 	public void exitFuncdef(FuncdefContext ctx) {
-		if(!methods.isEmpty()) {
-			Method.Builder mbi = methods.pop();
-			if(!methods.isEmpty()) {
-				methods.peek().addMethods(mbi.build());
-			}
-			else {
+		if(methods.isEmpty()) {
+			return;
+		}
+		Method.Builder mbi = methods.pop();
+		if(!statements.isEmpty()) {
+			statements.peek().addMethods(mbi.build());
+		}
+		else {
+//			if(!methods.isEmpty()) {
+//				methods.peek().addMethods(mbi.build());
+//			}
+//			else {
 				if(db != null) {
 					db.addMethods(mbi.build());
 				}
 				else {
 					b.addMethods(mbi.build());
 				}
-			}
+			//}
 		}
 	}	
 
@@ -773,6 +779,7 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void exitSuite(SuiteContext ctx) {
+		//exitStatement();
 		if(statements.empty()) {
 			return;
 		}

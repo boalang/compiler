@@ -179,7 +179,7 @@ public class Python2Visitor implements Python2Listener{
 
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-        Python2Parser parser = new Python2Parser(tokens);
+        parser = new Python2Parser(tokens);
 
         return parser;
     }
@@ -242,19 +242,25 @@ public class Python2Visitor implements Python2Listener{
 	
 	@Override
 	public void exitFuncdef(FuncdefContext ctx) {
-		if(!methods.isEmpty()) {
-			Method.Builder mbi = methods.pop();
-			if(!methods.isEmpty()) {
-				methods.peek().addMethods(mbi.build());
-			}
-			else {
+		if(methods.isEmpty()) {
+			return;
+		}
+		Method.Builder mbi = methods.pop();
+		if(!statements.isEmpty()) {
+			statements.peek().addMethods(mbi.build());
+		}
+		else {
+//			if(!methods.isEmpty()) {
+//				methods.peek().addMethods(mbi.build());
+//			}
+//			else {
 				if(db != null) {
 					db.addMethods(mbi.build());
 				}
 				else {
 					b.addMethods(mbi.build());
 				}
-			}
+			//}
 		}
 	}	
 	
@@ -839,6 +845,7 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void exitSuite(SuiteContext ctx) {
+		//exitStatement();
 		if(statements.empty()) {
 			return;
 		}
@@ -858,6 +865,7 @@ public class Python2Visitor implements Python2Listener{
 				b.addStatements(current.build());
 		}
 	}
+
 
 	@Override
 	public void enterTestlist_safe(Testlist_safeContext ctx) {

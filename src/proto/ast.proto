@@ -154,7 +154,6 @@ message Method {
 	optional int32 declaring_type = 13;
 	/** */
 	optional Expression computed_name = 14;
-	repeated Method methods = 15;
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */
