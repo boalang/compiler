@@ -4,6 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -98,16 +103,67 @@ import boa.datagen.util.python2.Python2Parser.With_stmtContext;
 import boa.datagen.util.python2.Python2Parser.Xor_exprContext;
 import boa.datagen.util.python2.Python2Parser.Yield_exprContext;
 import boa.datagen.util.python2.Python2Parser.Yield_stmtContext;
+import boa.datagen.util.python3.Python3Lexer;
+import boa.datagen.util.python3.Python3Parser;
+import boa.types.Ast.Declaration;
+import boa.types.Ast.Expression;
+import boa.types.Ast.Method;
+import boa.types.Ast.Namespace;
+import boa.types.Ast.PositionInfo;
+import boa.types.Ast.Statement;
+import boa.types.Ast.TypeKind;
+import boa.types.Ast.Variable;
+import boa.types.Ast.Expression.ExpressionKind;
 
 public class Python2Visitor implements Python2Listener{
+	Python2Parser parser;
+	Python2Lexer lexer;
 	
-	String src = "";
+	private String src = null;
+	public static final int PY2 = 1, PY3 = 2;
+	
+	private PositionInfo.Builder pos = null;
+	private Namespace.Builder b = Namespace.newBuilder();
+	private List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
+	//private List<String> imports = new ArrayList<String>();
+	//private Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
+	protected Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
+	//private Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
+	//private Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
+	private Stack<Method.Builder> methods = new Stack<Method.Builder>();
+	private Stack<Statement.Builder> statements = new Stack<Statement.Builder>();
+	private Stack<Expression.Builder> expressions = new Stack<Expression.Builder>();
+	private Stack<String> atoms = new Stack<String>();
+	private Stack<String> imports = new Stack<String>();
+	protected int astLevel = PY2;
+	
+	public int getAstLevel() {
+		return astLevel;
+	}
+
+	public void setAstLevel(int astLevel) {
+		this.astLevel = astLevel;
+	}
+
+	public Namespace getNamespaces() {
+		return b.build();
+	}
+	
+	public List<boa.types.Ast.Comment> getComments() {
+		return comments;
+	}
+
+	public List<String> getImports() {
+		return imports;
+	}
 	
 	public Python2Visitor(String src) {
 		this.src = src;
 	}
+	
 	public Python2Visitor() {
 	}
+	
 	private static String readFile(File file, Charset encoding) throws IOException {
         byte[] encoded = Files.readAllBytes(file.toPath());
         return new String(encoded, encoding);
@@ -119,7 +175,7 @@ public class Python2Visitor implements Python2Listener{
     }
     
     public Python2Parser parse(String code) {
-    	Python2Lexer lexer = new Python2Lexer(new ANTLRInputStream(code));
+    	lexer = new Python2Lexer(new ANTLRInputStream(code));
 
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
@@ -129,17 +185,88 @@ public class Python2Visitor implements Python2Listener{
     }
     
 	public void visit(String source) {
-        Python2Parser parser = parse(source);
-		ParseTreeWalker.DEFAULT.walk(this, parser.file_input());
+        parser = parse(source);
+        try {
+			ParseTreeWalker.DEFAULT.walk(this, parser.file_input());
+		}
+		catch(Exception e) {
+			System.out.println("Error");
+			e.printStackTrace();
+		}
 	}
 	
 	public void visit(File file) {
+		//System.out.println("visiting" + file.getName());
 		try {
-			Python2Parser parser = parsefile(file);
+			parser = parsefile(file);
 			ParseTreeWalker.DEFAULT.walk(this, parser.file_input());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void enterFile_input(File_inputContext ctx) {
+		String pkg = "";
+		b.setName(pkg);
+	}
+
+	@Override
+	public void exitFile_input(File_inputContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	Declaration.Builder db;
+	@Override
+	public void enterClassdef(ClassdefContext ctx) {
+		// TODO Auto-generated method stub
+		db = Declaration.newBuilder();
+		db.setName(ctx.NAME().getText());
+		db.setKind(TypeKind.CLASS);
+	}
+
+	@Override
+	public void exitClassdef(ClassdefContext ctx) {
+		if(db != null)
+			b.addDeclarations(db.build());
+		db = null;
+	}
+	
+	@Override
+	public void enterFuncdef(FuncdefContext ctx) {		
+		Method.Builder mb = Method.newBuilder();
+		mb.setName(ctx.NAME().getText());
+		methods.push(mb);
+	}   
+	
+	@Override
+	public void exitFuncdef(FuncdefContext ctx) {
+		if(!methods.isEmpty()) {
+			Method.Builder mbi = methods.pop();
+			if(!methods.isEmpty()) {
+				methods.peek().addMethods(mbi.build());
+			}
+			else {
+				if(db != null) {
+					db.addMethods(mbi.build());
+				}
+				else {
+					b.addMethods(mbi.build());
+				}
+			}
+		}
+	}	
+	
+	Variable.Builder vb;
+	@Override
+	public void enterParameters(ParametersContext ctx) {
+		vb = Variable.newBuilder();	
+	}
+
+	@Override
+	public void exitParameters(ParametersContext ctx) {
+		vb = null;
 	}
 
 	@Override
@@ -174,19 +301,6 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void exitSingle_input(Single_inputContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void enterFile_input(File_inputContext ctx) {
-		// TODO Auto-generated method stub
-		
-		
-	}
-
-	@Override
-	public void exitFile_input(File_inputContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -240,30 +354,6 @@ public class Python2Visitor implements Python2Listener{
 	}
 
 	@Override
-	public void enterFuncdef(FuncdefContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitFuncdef(FuncdefContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void enterParameters(ParametersContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitParameters(ParametersContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void enterVarargslist(VarargslistContext ctx) {
 		// TODO Auto-generated method stub
 		
@@ -277,8 +367,11 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void enterFpdef(FpdefContext ctx) {
-		// TODO Auto-generated method stub
-		
+		if(vb != null) {
+			vb = Variable.newBuilder();
+			vb.setName(ctx.NAME().getText());
+			methods.peek().addArguments(vb.build());
+		}
 	}
 
 	@Override
@@ -337,62 +430,82 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void enterExpr_stmt(Expr_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.EXPRESSION);
+		sb.addNames(ctx.getText());
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitExpr_stmt(Expr_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();
 	}
 
 	@Override
 	public void enterAugassign(AugassignContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.ASSIGN);
+		eb.setVariable(ctx.getText());
+		expressions.push(eb);
 	}
 
 	@Override
 	public void exitAugassign(AugassignContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitExpression();
+	}
+	
+	private void exitExpression() {
+		Expression.Builder current = expressions.pop();
+		if(!expressions.isEmpty()) {
+			 expressions.peek().addExpressions(current.build());
+		}
+		else {
+			if(!statements.isEmpty()) {
+				Statement.Builder sb = statements.peek();
+				sb.addExpressions(current.build());
+			}
+			else
+				b.addExpressions(current.build());
+		}
 	}
 
 	@Override
 	public void enterPrint_stmt(Print_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.PRINT);
+		sb.addNames(ctx.getText());
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitPrint_stmt(Print_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();
 	}
 
 	@Override
 	public void enterDel_stmt(Del_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.DELETE);
+		eb.setVariable(ctx.getText());
+		expressions.push(eb);
 	}
 
 	@Override
 	public void exitDel_stmt(Del_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitExpression();
 	}
 
 	@Override
 	public void enterPass_stmt(Pass_stmtContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.PASS);
+		statements.push(sb);
 		
 	}
 
 	@Override
 	public void exitPass_stmt(Pass_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();
 	}
 
 	@Override
@@ -409,38 +522,56 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void enterBreak_stmt(Break_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.BREAK);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitBreak_stmt(Break_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();
+	}
+	
+	private void exitStatement() {
+		if(statements.empty()) {
+			return;
+		}
+		Statement.Builder current = statements.pop();
+		if(!statements.isEmpty()) {
+			statements.peek().addStatements(current.build());
+		}
+		else {
+			if (!methods.isEmpty())
+				methods.peek().addStatements(current.build());
+			else if (db != null) 
+				db.addStatements(current.build());
+			else 
+				b.addStatements(current.build());
+		}
 	}
 
 	@Override
 	public void enterContinue_stmt(Continue_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.CONTINUE);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitContinue_stmt(Continue_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();
 	}
 
 	@Override
 	public void enterReturn_stmt(Return_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.RETURN);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitReturn_stmt(Return_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();
 	}
 
 	@Override
@@ -457,14 +588,14 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void enterRaise_stmt(Raise_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.BREAK);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitRaise_stmt(Raise_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();
 	}
 
 	@Override
@@ -481,25 +612,27 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void enterImport_name(Import_nameContext ctx) {
-		// TODO Auto-generated method stub
-		
+		imports.push(ctx.stop.getText());
 	}
 
 	@Override
 	public void exitImport_name(Import_nameContext ctx) {
-		// TODO Auto-generated method stub
-		
+		b.addImports(imports.pop());		
 	}
 
 	@Override
 	public void enterImport_from(Import_fromContext ctx) {
-		// TODO Auto-generated method stub
-		
+		String mydata = ctx.getText();
+		Pattern pattern = Pattern.compile("from(.*?)import.*");
+		Matcher matcher = pattern.matcher(mydata);
+		if (matcher.find()) {
+			imports.push(ctx.stop.getText() + " From " + matcher.group(1));
+		}
 	}
 
 	@Override
 	public void exitImport_from(Import_fromContext ctx) {
-		// TODO Auto-generated method stub
+		b.addImports(imports.pop());
 		
 	}
 
@@ -589,14 +722,14 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void enterAssert_stmt(Assert_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.ASSERT);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitAssert_stmt(Assert_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();
 	}
 
 	@Override
@@ -613,62 +746,63 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void enterIf_stmt(If_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Entered Python 2 IF.");
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.IF);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitIf_stmt(If_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();
 	}
 
 	@Override
 	public void enterWhile_stmt(While_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.WHILE);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitWhile_stmt(While_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();
 	}
 
 	@Override
 	public void enterFor_stmt(For_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.FOR);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitFor_stmt(For_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();		
 	}
 
 	@Override
 	public void enterTry_stmt(Try_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.TRY);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitTry_stmt(Try_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();
 	}
 
 	@Override
 	public void enterWith_stmt(With_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.WITH);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitWith_stmt(With_stmtContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();
 	}
 
 	@Override
@@ -685,26 +819,44 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void enterExcept_clause(Except_clauseContext ctx) {
-		// TODO Auto-generated method stub
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.CATCH);
+		statements.push(sb);
 		
 	}
 
 	@Override
 	public void exitExcept_clause(Except_clauseContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStatement();
 	}
 
 	@Override
 	public void enterSuite(SuiteContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.BLOCK);
+		statements.push(sb);
 	}
 
 	@Override
 	public void exitSuite(SuiteContext ctx) {
-		// TODO Auto-generated method stub
+		if(statements.empty()) {
+			return;
+		}
+		Statement.Builder current = statements.pop();
 		
+		if(ctx.getParent().start.getText().equals("def")) {
+			//System.out.println("Suite: " + ctx.getParent().start.getText());
+			methods.peek().addStatements(current.build());
+		}
+		else if (!statements.isEmpty()) {
+			statements.peek().addStatements(current.build());
+		}
+		else {
+			if (db != null) 
+				db.addStatements(current.build());
+			else 
+				b.addStatements(current.build());
+		}
 	}
 
 	@Override
@@ -913,14 +1065,12 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void enterAtom(AtomContext ctx) {
-		// TODO Auto-generated method stub
-		
+		atoms.push(ctx.getText());
 	}
 
 	@Override
 	public void exitAtom(AtomContext ctx) {
-		// TODO Auto-generated method stub
-		
+	
 	}
 
 	@Override
@@ -961,8 +1111,21 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void enterTrailer(TrailerContext ctx) {
-		// TODO Auto-generated method stub
-		
+		if(ctx.getText().startsWith(".")) {
+			atoms.push(ctx.getText().substring(1));
+		}
+		else if(ctx.getText().equals("()")) {
+			Expression.Builder eb = Expression.newBuilder();
+			eb.setKind(ExpressionKind.METHODCALL);
+			if(!atoms.isEmpty()) {
+				eb.setMethod(atoms.pop());
+			}
+			else {
+				eb.setVariable("Method name missing!");
+			}
+			expressions.push(eb);
+			exitExpression();
+		}
 	}
 
 	@Override
@@ -1044,35 +1207,50 @@ public class Python2Visitor implements Python2Listener{
 	}
 
 	@Override
-	public void enterClassdef(ClassdefContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitClassdef(ClassdefContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void enterArglist(ArglistContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.METHODCALL);
+		if(!atoms.isEmpty()) {
+			eb.setMethod(atoms.pop());
+		}
+		else {
+			eb.setVariable("Method name missing!");
+		}
+		expressions.push(eb);
 	}
 
 	@Override
 	public void exitArglist(ArglistContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitExpression();
+	}
+	
+	public boolean isLiteral(String text) {
+		boolean isLiteral = text.startsWith("\"")  ;
+		if(!isLiteral) {
+			try {
+				Double.parseDouble(text);
+				isLiteral =  true;
+			}
+			catch (Exception e){
+				isLiteral = false;
+			}
+		}
+		return isLiteral;
 	}
 
 	@Override
 	public void enterArgument(ArgumentContext ctx) {
-		// TODO Auto-generated method stub
-		
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.VARACCESS);
+		eb.setVariable(ctx.getText());
+		if(isLiteral(ctx.getText())) {
+			eb.setKind(ExpressionKind.LITERAL);
+		}
+		if(!expressions.isEmpty()) {
+			expressions.peek().addMethodArgs(eb.build());
+		}	
 	}
-
+	
 	@Override
 	public void exitArgument(ArgumentContext ctx) {
 		// TODO Auto-generated method stub
@@ -1177,13 +1355,15 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void enterYield_expr(Yield_exprContext ctx) {
-		// TODO Auto-generated method stub
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.YIELD);
+		eb.setVariable(ctx.getText());
+		expressions.push(eb);
 		
 	}
 
 	@Override
 	public void exitYield_expr(Yield_exprContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitExpression();
 	}
 }

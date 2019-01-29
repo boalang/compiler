@@ -533,13 +533,14 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.SOURCE_PY_3);
 			visitor.visit(content);
 			ast.addNamespaces(visitor.getNamespaces());
-		}catch (Exception e1) {
+		} catch (Exception e1) {
 			e1.printStackTrace();
-			System.out.println(e1.getMessage());
+			System.out.println("Error in Python3 parse. " + e1.getMessage() + "\n\n Entered Python2 parse.");
 			try {
 				Python2Visitor visitor = new Python2Visitor();
 				fb.setKind(FileKind.SOURCE_PY_2);
 				visitor.visit(content);
+				ast.addNamespaces(visitor.getNamespaces());
 			}
 			catch (Exception e2) {
 				e2.printStackTrace();

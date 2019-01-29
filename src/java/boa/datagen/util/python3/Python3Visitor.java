@@ -216,7 +216,23 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void exitFile_input(File_inputContext ctx) {
 		
-	}	
+	}
+	
+	Declaration.Builder db;
+	@Override
+	public void enterClassdef(ClassdefContext ctx) {
+		// TODO Auto-generated method stub
+		db = Declaration.newBuilder();
+		db.setName(ctx.NAME().getText());
+		db.setKind(TypeKind.CLASS);
+	}
+
+	@Override
+	public void exitClassdef(ClassdefContext ctx) {
+		if(db != null)
+			b.addDeclarations(db.build());
+		db = null;
+	}
 	
 	@Override
 	public void enterFuncdef(FuncdefContext ctx) {		
@@ -1196,22 +1212,6 @@ public class Python3Visitor implements Python3Listener{
 	public void exitDictorsetmaker(DictorsetmakerContext ctx) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	Declaration.Builder db;
-	@Override
-	public void enterClassdef(ClassdefContext ctx) {
-		// TODO Auto-generated method stub
-		db = Declaration.newBuilder();
-		db.setName(ctx.NAME().getText());
-		db.setKind(TypeKind.CLASS);
-	}
-
-	@Override
-	public void exitClassdef(ClassdefContext ctx) {
-		if(db != null)
-			b.addDeclarations(db.build());
-		db = null;
 	}
 
 	@Override

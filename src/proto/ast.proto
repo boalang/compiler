@@ -228,8 +228,10 @@ message Statement {
 		TRAIT_ALIAS = 36;
 		TRAIT_PRECEDENCE = 37;
 		TRAIT_USE = 38;
+		/** Python exclusive Statements */
 		RAISE = 39;
 		PASS = 40;
+		PRINT = 41;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
