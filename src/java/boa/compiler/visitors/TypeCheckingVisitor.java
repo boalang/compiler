@@ -599,43 +599,58 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		final BoaType accepts = n.getLhs().type;
 		n.type = accepts;
 
-		if (n.getOpsSize() > 0 && accepts instanceof BoaTable && n.getOps().get(0).equals(">>")) {
-			if (!(n.getParent().getParent().getParent().getParent().getParent() instanceof WhileStatement))
-				throw new TypeCheckException(n, "expression has to be put in WhileStatement");
-
-			if (n.getOps().size() != 1 || n.getRhsSize() != 1)
-				throw new TypeCheckException(n, "expect one operator and one term with operator '>>'");
-
-			final Factor tuple = n.getRhs(0);
-			final Factor table = n.getLhs();
-			tuple.accept(this, env);
-			if (! (tuple.type instanceof BoaTuple))
-				throw new TypeCheckException(tuple, "type '" + tuple.type + "' does not support '>>' operator");
-			if (!(((BoaTable)table.type).getRowType().assigns(tuple.type)))
-				throw new TypeCheckException(n, "cannot assign row from table type '" + n.getLhs().type + "' to tuple type '" + n.getRhs(0).type + "'");
-			n.type = tuple.type;
-			return;
-		}
-
 		if (n.getRhsSize() > 0) {
-			BoaScalar type;
+			BoaType type;
 
 			if (accepts instanceof BoaFunction)
-				type = (BoaScalar) ((BoaFunction) accepts).getType();
+				type = (BoaType) ((BoaFunction) accepts).getType();
+			else if (accepts instanceof BoaTable)
+				type = (BoaTable) accepts;
 			else
-				type = (BoaScalar) accepts;
+				type = (BoaType) accepts;
 
+			boolean hasView = false;
 			for (int i = 0; i < n.getRhsSize(); i++) {
+				boolean isView = false;
 				final Factor f = n.getRhs(i);
 				f.accept(this, env);
-				try {
-					type = type.arithmetics(f.type);
-				} catch (final Exception e) {
-					throw new TypeCheckException(f, "type '" + f.type + "' does not support the '" + n.getOp(i) + "' operator", e);
+
+				if (n.getOps().get(i).equals(">>")) {
+					BoaType previousType = i == 0 ? accepts : n.getRhs(i - 1).type;
+					// 1 >> r
+					if (f.type instanceof BoaTuple && !(previousType instanceof BoaTable))
+						throw new TypeCheckException(f, "types '" + previousType + "' and '" + f.type + "' do not support '>>' operator");
+
+					// 1 >> t || 1 >> t + 3
+					if (f.type instanceof BoaTable && (i + 1 == n.getRhsSize() || !n.getOps().get(i + 1).equals(">>")))
+						throw new TypeCheckException(f, "types '" + previousType + "' and '" + f.type + "' do not support '>>' operator");
+
+					// t >> 2
+					if (previousType instanceof BoaTable && !(f.type instanceof BoaTuple))
+						throw new TypeCheckException(f, "types '" + previousType + "' and '" + f.type + "' do not support '>>' operator");
+
+					// r >> 2
+					if (previousType instanceof BoaTuple)
+						throw new TypeCheckException(f, "types '" + previousType + "' and '" + f.type + "' do not support '>>' operator");
+
+					if (f.type instanceof BoaTuple && !(((BoaTable)previousType).getRowType().assigns(f.type)))
+						throw new TypeCheckException(n, "cannot assign row from table type '" + n.getLhs().type + "' to tuple type '" + n.getRhs(0).type + "'");
+
+					// 1 >> t >> ... || t >> r
+					if (f.type instanceof BoaTable || f.type instanceof BoaTuple)
+						isView = true;
+				}
+
+				if (!isView) {
+					try {
+						type = type.arithmetics(f.type);
+					} catch (final Exception e) {
+						throw new TypeCheckException(f, "type '" + f.type + "' does not support the '" + n.getOp(i) + "' operator", e);
+					}
 				}
 			}
 
-			n.type = type;
+			n.type = hasView ? new BoaBool() : type;
 		}
 	}
 
