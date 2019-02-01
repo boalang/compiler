@@ -196,7 +196,6 @@ public class Python2Visitor implements Python2Listener{
 	}
 	
 	public void visit(File file) {
-		//System.out.println("visiting" + file.getName());
 		try {
 			parser = parsefile(file);
 			ParseTreeWalker.DEFAULT.walk(this, parser.file_input());
@@ -213,14 +212,12 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void exitFile_input(File_inputContext ctx) {
-		// TODO Auto-generated method stub
 		
 	}
 	
 	Declaration.Builder db;
 	@Override
 	public void enterClassdef(ClassdefContext ctx) {
-		// TODO Auto-generated method stub
 		db = Declaration.newBuilder();
 		db.setName(ctx.NAME().getText());
 		db.setKind(TypeKind.CLASS);
@@ -274,103 +271,7 @@ public class Python2Visitor implements Python2Listener{
 	public void exitParameters(ParametersContext ctx) {
 		vb = null;
 	}
-
-	@Override
-	public void enterEveryRule(ParserRuleContext arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitEveryRule(ParserRuleContext arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visitErrorNode(ErrorNode arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visitTerminal(TerminalNode arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void enterSingle_input(Single_inputContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitSingle_input(Single_inputContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void enterEval_input(Eval_inputContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitEval_input(Eval_inputContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void enterDecorator(DecoratorContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitDecorator(DecoratorContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void enterDecorators(DecoratorsContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitDecorators(DecoratorsContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void enterDecorated(DecoratedContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitDecorated(DecoratedContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void enterVarargslist(VarargslistContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitVarargslist(VarargslistContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public void enterFpdef(FpdefContext ctx) {
 		if(vb != null) {
@@ -382,6 +283,18 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void exitFpdef(FpdefContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void enterVarargslist(VarargslistContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitVarargslist(VarargslistContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -582,13 +495,11 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void enterYield_stmt(Yield_stmtContext ctx) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void exitYield_stmt(Yield_stmtContext ctx) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -644,7 +555,6 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void enterImport_as_name(Import_as_nameContext ctx) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -752,7 +662,6 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void enterIf_stmt(If_stmtContext ctx) {
-		System.out.println("Entered Python 2 IF.");
 		Statement.Builder sb = Statement.newBuilder();
 		sb.setKind(Statement.StatementKind.IF);
 		statements.push(sb);
@@ -1374,4 +1283,90 @@ public class Python2Visitor implements Python2Listener{
 	public void exitYield_expr(Yield_exprContext ctx) {
 		exitExpression();
 	}
+	
+	@Override
+	public void enterEveryRule(ParserRuleContext arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitEveryRule(ParserRuleContext arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitErrorNode(ErrorNode arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitTerminal(TerminalNode arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterSingle_input(Single_inputContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitSingle_input(Single_inputContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterEval_input(Eval_inputContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitEval_input(Eval_inputContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterDecorator(DecoratorContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitDecorator(DecoratorContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterDecorators(DecoratorsContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+	@Override
+	public void exitDecorators(DecoratorsContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterDecorated(DecoratedContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitDecorated(DecoratedContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

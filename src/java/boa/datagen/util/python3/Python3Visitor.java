@@ -139,6 +139,8 @@ public class Python3Visitor implements Python3Listener{
 	private Stack<String> imports = new Stack<String>();
 	protected int astLevel = PY3;
 	
+	public boolean isPython3 = true;
+	
 	public int getAstLevel() {
 		return astLevel;
 	}
@@ -198,7 +200,6 @@ public class Python3Visitor implements Python3Listener{
 	}
 	
 	public void visit(File file) {
-		//System.out.println("visiting" + file.getName());
 		try {
 			parser = parsefile(file);
 			ParseTreeWalker.DEFAULT.walk(this, parser.file_input());
@@ -221,7 +222,6 @@ public class Python3Visitor implements Python3Listener{
 	Declaration.Builder db;
 	@Override
 	public void enterClassdef(ClassdefContext ctx) {
-		// TODO Auto-generated method stub
 		db = Declaration.newBuilder();
 		db.setName(ctx.NAME().getText());
 		db.setKind(TypeKind.CLASS);
@@ -565,9 +565,7 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterImport_as_name(Import_as_nameContext ctx) {
-		
-		
-		
+
 	}
 
 	@Override
@@ -1371,6 +1369,8 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void visitErrorNode(ErrorNode arg0) {
 		// TODO Auto-generated method stub
+		isPython3 = false;
+		return;
 		
 	}
 
