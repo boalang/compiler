@@ -526,26 +526,26 @@ public abstract class AbstractCommit {
 	}
 
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
-		System.out.println("Reached Py Parse file");
+		//System.out.println("Reached Py Parse file");
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
 		try {
 			Python3Visitor visitor = new Python3Visitor();
 			fb.setKind(FileKind.SOURCE_PY_3);
 			visitor.visit(content);
 			//if(visitor.isPython3) {
-				System.out.println("Entered Python3 Parser.");
 				ast.addNamespaces(visitor.getNamespaces());
-			/*}else {
-				System.out.println("Entered Python2 Parser.");
-				Python2Visitor visitorp2 = new Python2Visitor();				
-				fb.setKind(FileKind.SOURCE_PY_2);
-				visitorp2.visit(content);
-				ast.addNamespaces(visitorp2.getNamespaces());
-			}*/
+			//} 
+//			else {
+//				System.out.println("Entered Python2 Parser.");
+//				Python2Visitor visitorp2 = new Python2Visitor();				
+//				fb.setKind(FileKind.SOURCE_PY_2);
+//				visitorp2.visit(content);
+//				ast.addNamespaces(visitorp2.getNamespaces());
+//			} 
 			
 		} catch (Exception e1) {
 			e1.printStackTrace();
-			System.out.println("Error in Python3 parse. " + e1.getMessage() + "\n\n Entered Python2 parse.");
+			System.out.println("Error in Python parse. " + e1.getMessage());
 		}
 		try {
 			// System.out.println("writing=" + count + "\t" + path);

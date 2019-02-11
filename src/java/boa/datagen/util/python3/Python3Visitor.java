@@ -293,7 +293,8 @@ public class Python3Visitor implements Python3Listener{
 		if(vb != null) {
 			vb = Variable.newBuilder();
 			vb.setName(ctx.NAME().getText());
-			methods.peek().addArguments(vb.build());
+			if(!methods.isEmpty())
+				methods.peek().addArguments(vb.build());
 		}
 	}
 
@@ -398,6 +399,8 @@ public class Python3Visitor implements Python3Listener{
 	}
 
 	private void exitExpression() {
+		if(expressions.isEmpty())
+			return;
 		Expression.Builder current = expressions.pop();
 		if(!expressions.isEmpty()) {
 			 expressions.peek().addExpressions(current.build());
@@ -533,7 +536,6 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void exitImport_stmt(Import_stmtContext ctx) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -544,28 +546,43 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void exitImport_name(Import_nameContext ctx) {
-		b.addImports(imports.pop());		
-	}
-
-	@Override
-	public void enterImport_from(Import_fromContext ctx) {
-		String mydata = ctx.getText();
-		Pattern pattern = Pattern.compile("from(.*?)import.*");
-		Matcher matcher = pattern.matcher(mydata);
-		if (matcher.find()) {
-			imports.push(ctx.stop.getText() + " From " + matcher.group(1));
+		if(!imports.isEmpty()) {
+			String i = imports.pop();
+			b.addImports(i);
 		}
 	}
 
 	@Override
+	public void enterImport_from(Import_fromContext ctx) {
+		String[] parts = new String[2];
+		try {
+			parts = ctx.getText().substring(4).split("import");
+		} catch (Exception e) {
+			System.out.println("Problem Parsing Import-From Statment");
+			return;
+		}
+		if(parts[1].endsWith("as" + ctx.getStop().getText())) {
+			String i = parts[1].split("as" + ctx.getStop().getText())[0] + " AS " + ctx.getStop().getText() + " FROM " + parts[0];
+			imports.push(i);
+		}
+		else
+			imports.push(parts[1] + " FROM " + parts[0]);
+	}
+
+	@Override
 	public void exitImport_from(Import_fromContext ctx) {
-		b.addImports(imports.pop());
-		
+		if(!imports.isEmpty()) {
+			String i = imports.pop();
+			b.addImports(i);
+		}
 	}
 
 	@Override
 	public void enterImport_as_name(Import_as_nameContext ctx) {
-
+		if(ctx.getText().equals(ctx.getStart().getText() + "as" + ctx.getStop().getText())) {
+			if(!imports.isEmpty() && imports.peek().contains(ctx.getText()))
+				imports.push(imports.pop().replace(ctx.getText(), ctx.getStart().getText() + " AS " + ctx.getStop().getText()));
+		}	
 	}
 
 	@Override
@@ -575,46 +592,46 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterDotted_as_name(Dotted_as_nameContext ctx) {
-		// TODO Auto-generated method stub
-		
+		if(ctx.getText().equals(ctx.getStart().getText() + "as" + ctx.getStop().getText())) {
+			if(!imports.isEmpty() && imports.peek().equals(ctx.getStop().getText()))
+				imports.pop();
+			String i = ctx.getStart().getText() + " AS " + ctx.getStop().getText();
+			imports.push(i);
+		}
 	}
 
 	@Override
 	public void exitDotted_as_name(Dotted_as_nameContext ctx) {
-		// TODO Auto-generated method stub
-		
+		if(!imports.isEmpty()) {
+			String i = imports.pop();
+			b.addImports(i);
+		}
 	}
 
 	@Override
 	public void enterImport_as_names(Import_as_namesContext ctx) {
 		// TODO Auto-generated method stub
-		//imports.push(ctx.getText());
 		
 	}
 
 	@Override
 	public void exitImport_as_names(Import_as_namesContext ctx) {
 		// TODO Auto-generated method stub
-		//b.addImports(imports.pop() + "--");
-		
 	}
 
 	@Override
 	public void enterDotted_as_names(Dotted_as_namesContext ctx) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void exitDotted_as_names(Dotted_as_namesContext ctx) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void enterDotted_name(Dotted_nameContext ctx) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -777,14 +794,12 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void exitSuite(SuiteContext ctx) {
-		//exitStatement();
 		if(statements.empty()) {
 			return;
 		}
 		Statement.Builder current = statements.pop();
 		
-		if(ctx.getParent().start.getText().equals("def")) {
-			//System.out.println("Suite: " + ctx.getParent().start.getText());
+		if(ctx.getParent().start.getText().equals("def") && !methods.isEmpty()) {
 			methods.peek().addStatements(current.build());
 		}
 		else if (!statements.isEmpty()) {
@@ -1368,10 +1383,8 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void visitErrorNode(ErrorNode arg0) {
-		// TODO Auto-generated method stub
 		isPython3 = false;
 		return;
-		
 	}
 
 	@Override

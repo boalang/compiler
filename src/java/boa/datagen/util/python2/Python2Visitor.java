@@ -111,6 +111,7 @@ import boa.types.Ast.Method;
 import boa.types.Ast.Namespace;
 import boa.types.Ast.PositionInfo;
 import boa.types.Ast.Statement;
+import boa.types.Ast.Statement.StatementKind;
 import boa.types.Ast.TypeKind;
 import boa.types.Ast.Variable;
 import boa.types.Ast.Expression.ExpressionKind;
@@ -374,6 +375,8 @@ public class Python2Visitor implements Python2Listener{
 	}
 	
 	private void exitExpression() {
+		if(expressions.isEmpty())
+			return;
 		Expression.Builder current = expressions.pop();
 		if(!expressions.isEmpty()) {
 			 expressions.peek().addExpressions(current.build());
@@ -392,12 +395,13 @@ public class Python2Visitor implements Python2Listener{
 	public void enterPrint_stmt(Print_stmtContext ctx) {
 		Statement.Builder sb = Statement.newBuilder();
 		sb.setKind(Statement.StatementKind.PRINT);
-		sb.addNames(ctx.getText());
+		//sb.addNames(ctx.getText());
 		statements.push(sb);
 	}
 
 	@Override
 	public void exitPrint_stmt(Print_stmtContext ctx) {
+		
 		exitStatement();
 	}
 
@@ -457,6 +461,7 @@ public class Python2Visitor implements Python2Listener{
 		}
 		Statement.Builder current = statements.pop();
 		if(!statements.isEmpty()) {
+			System.out.println("??" + statements.peek().getKind());
 			statements.peek().addStatements(current.build());
 		}
 		else {
@@ -534,46 +539,66 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void exitImport_name(Import_nameContext ctx) {
-		b.addImports(imports.pop());		
-	}
-
-	@Override
-	public void enterImport_from(Import_fromContext ctx) {
-		String mydata = ctx.getText();
-		Pattern pattern = Pattern.compile("from(.*?)import.*");
-		Matcher matcher = pattern.matcher(mydata);
-		if (matcher.find()) {
-			imports.push(ctx.stop.getText() + " From " + matcher.group(1));
+		if(!imports.isEmpty()) {
+			String i = imports.pop();
+			b.addImports(i);
 		}
 	}
 
 	@Override
+	public void enterImport_from(Import_fromContext ctx) {
+		String[] parts = new String[2];
+		try {
+			parts = ctx.getText().substring(4).split("import");
+		} catch (Exception e) {
+			System.out.println("Problem Parsing Import-From Statment");
+			return;
+		}
+		if(parts[1].endsWith("as" + ctx.getStop().getText())) {
+			String i = parts[1].split("as" + ctx.getStop().getText())[0] + " AS " + ctx.getStop().getText() + " FROM " + parts[0];
+			imports.push(i);
+		}
+		else
+			imports.push(parts[1] + " FROM " + parts[0]);
+	}
+
+	@Override
 	public void exitImport_from(Import_fromContext ctx) {
-		b.addImports(imports.pop());
-		
+		if(!imports.isEmpty()) {
+			String i = imports.pop();
+			b.addImports(i);
+		}
 	}
 
 	@Override
 	public void enterImport_as_name(Import_as_nameContext ctx) {
-		
+		if(ctx.getText().equals(ctx.getStart().getText() + "as" + ctx.getStop().getText())) {
+			if(!imports.isEmpty() && imports.peek().contains(ctx.getText()))
+				imports.push(imports.pop().replace(ctx.getText(), ctx.getStart().getText() + " AS " + ctx.getStop().getText()));
+		}	
 	}
 
 	@Override
 	public void exitImport_as_name(Import_as_nameContext ctx) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void enterDotted_as_name(Dotted_as_nameContext ctx) {
-		// TODO Auto-generated method stub
-		
+		if(ctx.getText().equals(ctx.getStart().getText() + "as" + ctx.getStop().getText())) {
+			if(!imports.isEmpty() && imports.peek().equals(ctx.getStop().getText()))
+				imports.pop();
+			String i = ctx.getStart().getText() + " AS " + ctx.getStop().getText();
+			imports.push(i);
+		}
 	}
 
 	@Override
 	public void exitDotted_as_name(Dotted_as_nameContext ctx) {
-		// TODO Auto-generated method stub
-		
+		if(!imports.isEmpty()) {
+			String i = imports.pop();
+			b.addImports(i);
+		}
 	}
 
 	@Override
@@ -754,14 +779,12 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void exitSuite(SuiteContext ctx) {
-		//exitStatement();
 		if(statements.empty()) {
 			return;
 		}
 		Statement.Builder current = statements.pop();
-		
-		if(ctx.getParent().start.getText().equals("def")) {
-			//System.out.println("Suite: " + ctx.getParent().start.getText());
+		if(ctx.getParent().start.getText().equals("def") && !methods.isEmpty()) {
+			
 			methods.peek().addStatements(current.build());
 		}
 		else if (!statements.isEmpty()) {
