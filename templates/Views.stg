@@ -1,0 +1,48 @@
+Workflow(jobNum, viewnames, views, main, jar, args) ::= <<
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="boa-workflow">
+    <start to="CheckJob#jobNum#" />
+    <end name="end" />
+    <kill name="kill" />
+
+    <decision name="CheckJob#jobNum#">
+        <switch>
+            <case to="#if(views)#fork#else#Job#jobNum##endif#">
+                ${fs:exists('${JobOutputPath}') eq 'false'}</case>
+            <default to="end" />
+        </switch>
+    </decision>
+
+#if(views)#
+    <fork name="fork">
+        #viewnames:{v | <path start="#v#" />#\n#}#
+    </fork>
+
+    #views:{v | #v##\n#}#
+
+    <join name="join" to="Job#jobNum#" />
+
+#endif#
+    <action name="Job#jobNum#">
+        <java>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <main-class>#main#</main-class>
+            #args:{arg | <arg>#arg#</arg>#\n#}#
+            <file>#jar#.jar</file>
+        </java>
+        <ok to="end" />
+        <error to="kill" />
+    </action>
+</workflow-app>
+>>
+
+ViewWorkflow(jobNum) ::= <<
+    <action name="subworkflow-job-#jobNum#">
+        <sub-workflow>
+            <app-path>${nameNode}/boa/#jobNum#/workflow.xml</app-path>
+            <propagate-configuration/>
+        </sub-workflow>
+        <ok to="join"/>
+        <error to="kill"/>
+    </action>
+>>
