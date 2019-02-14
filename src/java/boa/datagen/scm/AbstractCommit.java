@@ -216,8 +216,9 @@ public abstract class AbstractCommit {
 		// Python AST generation will be handled here
 		else if(lowerPath.endsWith(".py")) {
 			final String content = getFileContents(path);
-			System.out.println(path);
+			System.out.println(path); 
 			fb.setKind(FileKind.SOURCE_PY_ERROR);
+			//if the path contains spacy/lang/de/lemmatizer.py	
 			parsePythonFile(path, fb, content, false);
 		}
 		else if (lowerPath.endsWith(".js")) {

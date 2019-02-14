@@ -534,7 +534,7 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void enterImport_name(Import_nameContext ctx) {
-		imports.push(ctx.stop.getText());
+		//imports.push(ctx.stop.getText());
 	}
 
 	@Override
@@ -542,6 +542,7 @@ public class Python2Visitor implements Python2Listener{
 		if(!imports.isEmpty()) {
 			String i = imports.pop();
 			b.addImports(i);
+			System.out.println(i);
 		}
 	}
 
@@ -549,14 +550,23 @@ public class Python2Visitor implements Python2Listener{
 	public void enterImport_from(Import_fromContext ctx) {
 		String[] parts = new String[2];
 		try {
-			parts = ctx.getText().substring(4).split("import");
+			parts = ctx.getText().substring(4).split("import", 2);
 		} catch (Exception e) {
 			System.out.println("Problem Parsing Import-From Statment");
 			return;
 		}
+		
 		if(parts[1].endsWith("as" + ctx.getStop().getText())) {
-			String i = parts[1].split("as" + ctx.getStop().getText())[0] + " AS " + ctx.getStop().getText() + " FROM " + parts[0];
-			imports.push(i);
+			String i = null;
+			try {
+				i = parts[1].split("as" + ctx.getStop().getText())[0] + " AS " + ctx.getStop().getText() + " FROM " + parts[0];
+			} catch (Exception e) {
+				System.out.println("Continuing Import-From Statment with AS.");
+			}
+			if(i != null)
+				imports.push(i);
+			else
+				imports.push(parts[1] + " FROM " + parts[0]);
 		}
 		else
 			imports.push(parts[1] + " FROM " + parts[0]);
@@ -567,6 +577,7 @@ public class Python2Visitor implements Python2Listener{
 		if(!imports.isEmpty()) {
 			String i = imports.pop();
 			b.addImports(i);
+			System.out.println(i);
 		}
 	}
 
@@ -585,11 +596,15 @@ public class Python2Visitor implements Python2Listener{
 
 	@Override
 	public void enterDotted_as_name(Dotted_as_nameContext ctx) {
-		if(ctx.getText().equals(ctx.getStart().getText() + "as" + ctx.getStop().getText())) {
+		if(ctx.getText().endsWith("as" + ctx.getStop().getText())) { // equals(ctx.getStart().getText() + "as" + ctx.getStop().getText())) {
 			if(!imports.isEmpty() && imports.peek().equals(ctx.getStop().getText()))
 				imports.pop();
-			String i = ctx.getStart().getText() + " AS " + ctx.getStop().getText();
+			String i = ctx.getText().split("as" + ctx.getStop().getText())[0] + " AS " + ctx.getStop().getText();//ctx.getStart().getText() + " AS " + ctx.getStop().getText();
 			imports.push(i);
+		}
+		else {
+			imports.push(ctx.getText());
+			//System.out.println(ctx.getText() + ": " + ctx.getStart().getText() + ", " + ctx.getStop().getText());
 		}
 	}
 
@@ -598,6 +613,7 @@ public class Python2Visitor implements Python2Listener{
 		if(!imports.isEmpty()) {
 			String i = imports.pop();
 			b.addImports(i);
+			System.out.println(i);
 		}
 	}
 
