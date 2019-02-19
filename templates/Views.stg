@@ -14,7 +14,7 @@ Workflow(jobNum, viewnames, views, main, jar, args) ::= <<
 
 #if(views)#
     <fork name="fork">
-        #viewnames:{v | <path start="#v#" />#\n#}#
+        #viewnames:{v | <path start="subworkflow-job-#v#" />#\n#}#
     </fork>
 
     #views:{v | #v##\n#}#
@@ -36,10 +36,10 @@ Workflow(jobNum, viewnames, views, main, jar, args) ::= <<
 </workflow-app>
 >>
 
-ViewWorkflow(jobNum) ::= <<
-    <action name="subworkflow-job-#jobNum#">
+ViewWorkflow(jobName, path) ::= <<
+    <action name="subworkflow-job-#jobName#">
         <sub-workflow>
-            <app-path>${nameNode}/boa/#jobNum#/workflow.xml</app-path>
+            <app-path>${nameNode}/boa/#path#/workflow.xml</app-path>
             <propagate-configuration/>
         </sub-workflow>
         <ok to="join"/>
