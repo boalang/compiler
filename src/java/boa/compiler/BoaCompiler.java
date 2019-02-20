@@ -533,7 +533,6 @@ public class BoaCompiler extends BoaMain {
 	private static void generateWorkflow() {
 		List<String> jobNames = new ArrayList<String>();
 		List<String> mains = new ArrayList<String>();
-		List<String> jars = new ArrayList<String>();
 		List<List<String>> javaArgs = new ArrayList<List<String>>();
 		List<List<String>> subViews = new ArrayList<List<String>>();
 		List<List<String>> subWorkflowPaths = new ArrayList<List<String>>();
@@ -546,10 +545,6 @@ public class BoaCompiler extends BoaMain {
 		mains.add("fooMain-sv1");
 		mains.add("fooMain-sv2");
 		mains.add("fooMain-sv1-sv3");
-		jars.add("fooJar");
-		jars.add("fooJar-sv1");
-		jars.add("fooJar-sv2");
-		jars.add("fooJar-sv1-sv3");
 		for (int index = 0; index < jobNames.size(); index++) {
 			List<String> newJavaArgs = new ArrayList<String>();
 			List<String> newSubViews = new ArrayList<String>();
@@ -579,7 +574,6 @@ public class BoaCompiler extends BoaMain {
 		final WorkflowGenerator wg = new WorkflowGenerator();
 		wg.setJobNames(jobNames);
 		wg.setMains(mains);
-		wg.setJars(jars);
 		wg.setArgs(javaArgs);
 		wg.setSubViews(subViews);
 		wg.setSubWorkflowPaths(subWorkflowPaths);

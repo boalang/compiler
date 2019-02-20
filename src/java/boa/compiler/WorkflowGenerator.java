@@ -24,7 +24,6 @@ import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupDir;
 import org.stringtemplate.v4.STGroupFile;
 import org.stringtemplate.v4.STRawGroupDir;
-import org.wiztools.commons.Charsets;
 
 /**
  * 
@@ -39,7 +38,6 @@ public class WorkflowGenerator {
 
 	private List<String> jobNames;
 	private List<String> mains;
-	private List<String> jars;
 	private List<List<String>> subViews;
 	private List<List<String>> args;
 	private List<List<String>> subWorkflowPaths;
@@ -51,7 +49,6 @@ public class WorkflowGenerator {
 		workflows = new ArrayList<String>();
 		jobNames = new ArrayList<String>();
 		mains = new ArrayList<String>();
-		jars = new ArrayList<String>();
 		args = new ArrayList<List<String>>();
 		subViews = new ArrayList<List<String>>();
 		subWorkflowPaths = new ArrayList<List<String>>();
@@ -67,10 +64,6 @@ public class WorkflowGenerator {
 
 	public void setMains(List<String> mains) {
 		this.mains = mains;
-	}
-
-	public void setJars(List<String> jars) {
-		this.jars = jars;
 	}
 
 	public void setArgs(List<List<String>> args) {
@@ -105,7 +98,6 @@ public class WorkflowGenerator {
 			st.add("viewnames", subvs);
 			st.add("views", views);
 			st.add("main", mains.get(i));
-			st.add("jar", jars.get(i));
 			st.add("args", args.get(i));
 
 			workflows.add(st.render());

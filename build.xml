@@ -420,7 +420,6 @@
 			<zipfileset excludes="META-INF/" src="rtlib/protobuf-java-2.5.0.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/scannotation-1.0.3.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/ST-4.0.8.jar" />
-			<zipfileset excludes="META-INF/" src="rtlib/commons-lib-0.4.2.jar" />
 		</jar>
 	</target>
 

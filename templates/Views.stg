@@ -1,5 +1,5 @@
 delimiters "#", "#"
-Workflow(jobName, viewnames, views, main, jar, args) ::= <<
+Workflow(jobName, viewnames, views, main, args) ::= <<
 <workflow-app xmlns="uri:oozie:workflow:0.4" name="boa-workflow">
     <start to="CheckJob#jobName#" />
     <end name="end" />
@@ -29,7 +29,7 @@ Workflow(jobName, viewnames, views, main, jar, args) ::= <<
             <name-node>${nameNode}</name-node>
             <main-class>#main#</main-class>
             #args:{arg | <arg>#arg#</arg>#\n#}#
-            <file>#jar#.jar</file>
+            <file>query.jar</file>
         </java>
         <ok to="end" />
         <error to="kill" />
