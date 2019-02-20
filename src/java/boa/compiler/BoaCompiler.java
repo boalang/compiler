@@ -63,6 +63,7 @@ import boa.compiler.visitors.ViewFindingVisitor;
 import boa.compiler.listeners.BoaErrorListener;
 import boa.compiler.listeners.LexerErrorListener;
 import boa.compiler.listeners.ParserErrorListener;
+import boa.compiler.WorkflowGenerator;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.atn.PredictionMode;
@@ -193,6 +194,8 @@ public class BoaCompiler extends BoaMain {
 								jobs.add(cg.getCode());
 
 								jobnames.add(jobName);
+
+								generateWorkflow();
 							}
 							// if a job has visitors, fuse them all together into a single program
 							else {
@@ -221,6 +224,8 @@ public class BoaCompiler extends BoaMain {
 						jobs.add(cg.getCode());
 		
 						jobnames.add(p.jobName);
+
+						generateWorkflow();
 					}
 				} catch (final Exception e) {
 					System.err.println("error fusing visitors - falling back: " + e);
@@ -236,6 +241,8 @@ public class BoaCompiler extends BoaMain {
 						jobs.add(cg.getCode());
 
 						jobnames.add(p.jobName);
+
+						generateWorkflow();
 					}
 				}
 
@@ -521,5 +528,70 @@ public class BoaCompiler extends BoaMain {
 		}
 
 		jar.closeEntry();
+	}
+
+	private static void generateWorkflow() {
+		List<String> jobNames = new ArrayList<String>();
+		List<String> mains = new ArrayList<String>();
+		List<String> jars = new ArrayList<String>();
+		List<List<String>> javaArgs = new ArrayList<List<String>>();
+		List<List<String>> subViews = new ArrayList<List<String>>();
+		List<List<String>> subWorkflowPaths = new ArrayList<List<String>>();
+
+		jobNames.add("12345");
+		jobNames.add("12345-sv1");
+		jobNames.add("12345-sv2");
+		jobNames.add("12345-sv1-sv3");
+		mains.add("fooMain");
+		mains.add("fooMain-sv1");
+		mains.add("fooMain-sv2");
+		mains.add("fooMain-sv1-sv3");
+		jars.add("fooJar");
+		jars.add("fooJar-sv1");
+		jars.add("fooJar-sv2");
+		jars.add("fooJar-sv1-sv3");
+		for (int index = 0; index < jobNames.size(); index++) {
+			List<String> newJavaArgs = new ArrayList<String>();
+			List<String> newSubViews = new ArrayList<String>();
+			List<String> newSubWorkflowPath = new ArrayList<String>();
+
+			newJavaArgs.add("arg1");
+			newJavaArgs.add("arg2");
+
+			if (index == 0) {
+				newSubViews.add("12345-sv1");
+				newSubViews.add("12345-sv2");
+				newSubWorkflowPath.add("12345/sv1");
+				newSubWorkflowPath.add("12345/sv2");
+			}
+
+			if (index == 1) {
+				newSubViews.add("12345-sv1-sv3");
+				newSubWorkflowPath.add("12345/sv1/sv3");
+			}
+
+			javaArgs.add(newJavaArgs);
+			subViews.add(newSubViews);
+			subWorkflowPaths.add(newSubWorkflowPath);
+		}
+
+
+		final WorkflowGenerator wg = new WorkflowGenerator();
+		wg.setJobNames(jobNames);
+		wg.setMains(mains);
+		wg.setJars(jars);
+		wg.setArgs(javaArgs);
+		wg.setSubViews(subViews);
+		wg.setSubWorkflowPaths(subWorkflowPaths);
+
+		wg.createWorkflows();
+
+		List<String> wfs = wg.getWorkflows();
+
+		for (int i = 0; i < jobNames.size(); i++) {
+			// System.out.println("workflow " + jobNames.get(i) + "\n\n");
+			// System.out.println(wfs.get(i));
+			// System.out.println("\n\n\n");
+		}
 	}
 }

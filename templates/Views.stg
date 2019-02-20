@@ -1,12 +1,13 @@
-Workflow(jobNum, viewnames, views, main, jar, args) ::= <<
+delimiters "#", "#"
+Workflow(jobName, viewnames, views, main, jar, args) ::= <<
 <workflow-app xmlns="uri:oozie:workflow:0.4" name="boa-workflow">
-    <start to="CheckJob#jobNum#" />
+    <start to="CheckJob#jobName#" />
     <end name="end" />
     <kill name="kill" />
 
-    <decision name="CheckJob#jobNum#">
+    <decision name="CheckJob#jobName#">
         <switch>
-            <case to="#if(views)#fork#else#Job#jobNum##endif#">
+            <case to="#if(views)#fork#else#Job#jobName##endif#">
                 ${fs:exists('${JobOutputPath}') eq 'false'}</case>
             <default to="end" />
         </switch>
@@ -19,10 +20,10 @@ Workflow(jobNum, viewnames, views, main, jar, args) ::= <<
 
     #views:{v | #v##\n#}#
 
-    <join name="join" to="Job#jobNum#" />
+    <join name="join" to="Job#jobName#" />
 
 #endif#
-    <action name="Job#jobNum#">
+    <action name="Job#jobName#">
         <java>
             <job-tracker>${jobTracker}</job-tracker>
             <name-node>${nameNode}</name-node>
