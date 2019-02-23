@@ -16,6 +16,9 @@ package-runtime
 test
 test-codegen
 test-datagen
+test-datagen-java
+test-datagen-js
+test-datagen-php
 test-functions
 test-inhattr
 test-knowngood
