@@ -1,6 +1,5 @@
+syntax = "proto2";
 package boa.types;
-
-import "shared.proto";
 
 option optimize_for = SPEED;
 
@@ -452,7 +451,6 @@ message Modifier {
 	}
 	/** A scope modifier */
 	enum Scope {
-		option allow_alias = true;
 		/** A global scope modifier for a variable */
 		VAR = 1;
 		/** A block scope modifier for a variable */
@@ -519,7 +517,6 @@ message Document {
 /** A html Element */
 message Element {
 	enum ElementKind {
-		option allow_alias = true;
 		OTHER = 0;
 		BLOCK = 1;
 		IN_LINE = 2;
