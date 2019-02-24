@@ -24,9 +24,13 @@ import java.util.List;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.SequenceFile.Reader;
-import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.util.ReflectionUtils;
 import org.apache.hadoop.util.StringUtils;
+import org.apache.hadoop.conf.Configuration;
+
+import com.google.protobuf.CodedInputStream;
 
 
 /**
@@ -36,6 +40,7 @@ import org.apache.hadoop.util.StringUtils;
  * @author rdyer
  */
 public class SequenceFileIterator {
+	private String path = null;
 	private Configuration conf = null;
 	private SequenceFile.Reader reader = null;
 	private NullWritable key = null;
@@ -45,21 +50,23 @@ public class SequenceFileIterator {
 	private CodedInputStream stream = null;
 	private Row row = null;
 
-	public SequenceFileIterator(String path) {
+	public SequenceFileIterator(String path, long position) {
+		this.path = path;
 		conf = new Configuration();
 
 		reader = new SequenceFile.Reader(conf, Reader.file(new Path(path)), Reader.bufferSize(4096), Reader.start(0));
-		key = (NullWritable) ReflectionUtils.newIntance(this.reader.getKeyClass(), conf);
-		value = (BytesWritable) ReflectionUtils.newIntance(this.reader.getValueClass(), conf);
+		reader.seek(position);
+		key = (NullWritable) ReflectionUtils.newInstance(this.reader.getKeyClass(), conf);
+		value = (BytesWritable) ReflectionUtils.newInstance(this.reader.getValueClass(), conf);
 
 		indices = new ArrayList<Object>();
 	}
 
 	public boolean hasNext() {
-		if (preload)
+		if (preloaded)
 			return true;
-		preload = readNext();
-		return preload;
+		preloaded = readNext();
+		return preloaded;
 	}
 
 	public Row next() {
@@ -96,39 +103,47 @@ public class SequenceFileIterator {
 				return false;
 			}
 			stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
-			r = Row.parseFrom(_stream);
-			Liat<Value> rowValues = r.getColsList();
+			row = Row.parseFrom(stream);
+			List<Value> rowValues = row.getColsList();
 
 			for (int i = 0; i < indices.size(); i++) {
-				Value value = roeValues.get(i);
+				Value value = rowValues.get(i);
 				Object index = indices.get(i);
-				if ((index instanceof String && !(String)index.equals("_")) && !compareField(value, index)) {
+				if ((index instanceof String && !((String)index).equals("_")) && !compareField(value, index)) {
 					filter = true;
 					break;
 				}
 			}
-			rowValues.add(r.getV());
+			rowValues.add(row.getVal());
 		}
 
 		return true;
 	}
 
 	private boolean compareField(Value v, Object index) {
-		switch (v.getT()) {
-        	case Value.Type.INT:
-          		return v.getI() == (int) index;
-          	case Value.Type.FLOAT:
-          		return v.getF() == (float) index;
-          	case Value.Type.BOOL:
-          		return v.getB() == (boolean) index;
-          	case Value.Type.STR:
-          		return v.getS().equals(index);
-          	default:
-          		for (int i = 0; i < getVCount(); i++) {
-          			if (!compareField(v.getVs(i), index.get(i))) // need to think how to get each field from tuple index
-          				return false;
-          		}
-          		return true;
+		switch (v.getType()) {
+			case Value.Type.INT:
+				return v.getI() == (Integer) index;
+			case Value.Type.FLOAT:
+				return v.getF() == (Float) index;
+			case Value.Type.BOOL:
+				return v.getB() == (Boolean) index;
+			case Value.Type.STR:
+				return v.getS().equals(index);
+			case Value.Type.TUPLE:
+				for (int i = 0; i < getTCount(); i++) {
+					if (!compareField(v.getTs(i), index.get(i))) // need to think how to get each field from tuple index
+						return false;
+				}
+				return true;
+			default:
+				return false;
       	}
+	}
+
+	public SequenceFileIterator clone() {
+		SequenceFileIterator newSFI = new SequenceFileIterator(path, reader.getPosition());
+		newSFI.setIndices(((ArrayList) indices).clone());
+		return newSFI;
 	}
 }
