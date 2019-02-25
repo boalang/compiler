@@ -1306,10 +1306,10 @@ public class BoaAstIntrinsics {
 					s += ">";
 				}
 				s += "(";
-				for (int i = 0; i < e.getExpressionsCount(); i++) {
+				for (int i = 0; i < e.getMethodArgsCount(); i++) {
 					if (i > 0)
 						s += ", ";
-					s += prettyprint(e.getExpressions(i));
+					s += prettyprint(e.getMethodArgs(i));
 				}
 				s += ")";
 				if (e.hasAnonDeclaration())
