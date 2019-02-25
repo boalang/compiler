@@ -1,0 +1,27 @@
+syntax = "proto2";
+package boa.output;
+
+option optimize_for = SPEED;
+
+message Row {
+	repeated Value cols = 1;
+	required Value val = 2;
+}
+
+message Value {
+	enum Type {
+		INT = 0;
+		FLOAT = 1;
+		STRING = 2;
+		BOOL = 3;
+		TUPLE = 4;
+	}
+
+	required Type type = 1;
+
+    optional int64  i = 2;
+    optional double f = 3;
+    optional string s = 4;
+    optional bool   b = 5;
+    repeated Value  t = 6;
+}

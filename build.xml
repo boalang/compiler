@@ -79,6 +79,7 @@
 				<uptodate srcfile="src/proto/shared.proto" targetfile="src/compiled-proto/boa/types/Shared.java" />
 				<uptodate srcfile="src/proto/toplevel.proto" targetfile="src/compiled-proto/boa/types/Toplevel.java" />
 				<uptodate srcfile="src/proto/control.proto" targetfile="src/compiled-proto/boa/types/Control.java" />
+				<uptodate srcfile="src/proto/output.proto" targetfile="src/compiled-proto/boa/output/Output.java" />
 			</and>
 		</condition>
 	</target>
@@ -104,6 +105,7 @@
 			<fileset dir="build/classes">
 				<patternset>
 					<include name="boa/types/" />
+					<include name="boa/output/" />
 					<exclude name="boa/types/Boa*" />
 					<exclude name="boa/types/proto/*" />
 				</patternset>
@@ -164,6 +166,7 @@
 					<include name="boa/**" />
 					<exclude name="boa/parser/**" />
 					<exclude name="boa/types/**" />
+					<exclude name="boa/output/**" />
 				</patternset>
 			</fileset>
 			<fileset dir="build/classes/boa/types">
