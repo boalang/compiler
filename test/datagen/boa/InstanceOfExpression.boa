@@ -1,0 +1,27 @@
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "ASSIGN",
+         "expressions": [
+            {
+               "kind": "VARACCESS",
+               "variable": "z"
+            },
+            {
+               "kind": "TYPECOMPARE",
+               "expressions": [
+                  {
+                     "kind": "VARACCESS",
+                     "variable": "x"
+                  }
+               ],
+               "new_type": {
+                  "name": "y",
+                  "kind": "OTHER"
+               }
+            }
+         ]
+      }
+   ]
+}

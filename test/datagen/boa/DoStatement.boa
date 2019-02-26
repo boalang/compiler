@@ -1,0 +1,14 @@
+{
+   "kind": "DO",
+   "statements": [
+      {
+         "kind": "BLOCK"
+      }
+   ],
+   "conditions": [
+      {
+         "kind": "LITERAL",
+         "literal": "true"
+      }
+   ]
+}

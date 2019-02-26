@@ -27,7 +27,7 @@ import boa.types.BoaString;
 import boa.types.BoaType;
 import boa.types.BoaInt;
 import boa.types.BoaSet;
-import boa.types.proto.enums.CFGNodeTypeProtoMap;
+import boa.types.proto.enums.NodeTypeProtoMap;
 
 /**
  * A {@link CFGNodeProtoTuple}.
@@ -42,7 +42,7 @@ public class CFGNodeProtoTuple extends BoaProtoTuple {
 		int counter = 0;
 
 		names.put("kind", counter++);
-		members.add(new CFGNodeTypeProtoMap());
+		members.add(new NodeTypeProtoMap());
 
 		names.put("id", counter++);
 		members.add(new BoaInt());
@@ -56,17 +56,11 @@ public class CFGNodeProtoTuple extends BoaProtoTuple {
 		names.put("expr", counter++);
 		members.add(new ExpressionProtoTuple());
 
-		names.put("rhs", counter++);
-		members.add(new ExpressionProtoTuple());
-
 		names.put("useVariables", counter++);
 		members.add(new BoaSet(new BoaString()));
 
 		names.put("defVariables", counter++);
 		members.add(new BoaString());
-
-		names.put("defUse", counter++);
-		members.add(new BoaSet(new BoaString()));
 
 		names.put("predecessors", counter++);
 		members.add(new BoaProtoList(new CFGNodeProtoTuple()));

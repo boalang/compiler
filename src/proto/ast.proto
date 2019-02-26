@@ -1,6 +1,5 @@
+syntax = "proto2";
 package boa.types;
-
-import "shared.proto";
 
 option optimize_for = SPEED;
 
@@ -13,14 +12,12 @@ message CommentsRoot {
 message ASTRoot {
 	/** The top-level namespaces in the file */
 	repeated Namespace namespaces = 1;
-	/** The imported namespaces and types */
-	repeated string imports = 2;
 	/** @exclude */
 	repeated string names = 3;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 4;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 5;
+	/** */
+	optional int32 key = 4;
+	/**The top-level document of an html, css, or xml DOM*/
+	optional Document document = 5;
 }
 
 /** A namespace (aka, package) in a source file */
@@ -37,10 +34,13 @@ message Namespace {
 	repeated Method methods = 5;
 	/** Expressions contained in this namespace */
 	repeated Expression expressions = 6;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 7;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 8;
+	/** */
+	optional int32 key = 10;
+	/** The nested namespaces */
+	repeated Namespace namespaces = 11;
+	/** The imported namespaces and types */
+	repeated string imports = 12;
+	repeated Variable variables = 13;
 }
 
 /** A type declaration, such as a class or interface */
@@ -63,10 +63,14 @@ message Declaration {
 	repeated Declaration nested_declarations = 8;
 	/** @exclude TODO */
 	repeated Comment comments = 9;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 10;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 11;
+	/** */
+	optional int32 key = 13;
+	/** The fully qualified name of this type/interface */
+	optional string fully_qualified_name = 14;
+	/** the key of the declaring class in the same AST */
+	optional int32 declaring_type = 15;
+	/** Nested statements */
+	repeated Statement statements = 16;
 }
 
 /** The kinds of types in an AST */
@@ -94,30 +98,41 @@ enum TypeKind {
 	DELEGATE = 7;
 	/** A generic type */
 	GENERIC = 8;
+	/** A trait */
+	TRAIT = 9;
+	/** Pritimitve type */
+	PRIMITIVE = 10;
+	/** Array type */
+	ARRAY = 11;
 }
 
 /** A type in an AST */
 message Type {
 	/** The name of the type */
-	required string name = 1;
+	optional string name = 1;
+	/** The fully qualified name of this type/interface */
+	optional string fully_qualified_name = 2;
 	/** The kind of the type */
-	required TypeKind kind = 2;
+	required TypeKind kind = 3;
 	/** @exclude */
 	optional string id = 4;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 5;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 6;
+	/** the index of the file (in the list of files in the snapshot) containing the declaration of this type */
+	optional int32 declaration_file = 8;
+	/** the key of the node containing the declaration of this type in the AST of the file */
+	optional int32 declaration = 9;
+	/** */
+	optional int32 key = 10;
+	optional Expression computed_name = 14;
 }
 
 /** A method declaration */
 message Method {
-	/** The name of the method */
+	/** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  */
 	optional string name = 1;
 	/** A list of all modifiers on the variable */
 	repeated Modifier modifiers = 2;
 	/** The type returned from the method; if the method returns nothing, this type will be void */
-	required Type return_type = 3;
+	optional Type return_type = 3;
 	/** The list of generic parameters for this method */
 	repeated Type generic_parameters = 4;
 	/** The arguments the method takes */
@@ -132,28 +147,34 @@ message Method {
 	repeated Statement statements = 7;
 	/** @exclude TODO */
 	repeated Comment comments = 8;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 9;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 10;
+	/** */
+	optional int32 key = 12;
+	/** The key of the type declaration declaring this method in the same AST */
+	optional int32 declaring_type = 13;
+	/** */
+	optional Expression computed_name = 14;
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */
 message Variable {
 	/** The name of the variable */
-	required string name = 1;
+	optional string name = 1;
 	/** The type of the variable */
-	required Type variable_type = 2;
+	optional Type variable_type = 2;
 	/** A list of all modifiers on the variable */
 	repeated Modifier modifiers = 3;
 	/** If the variable has an initial assignment, the expression is stored here */
 	optional Expression initializer = 4;
 	/** @exclude TODO */
 	repeated Comment comments = 5;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 6;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 7;
+	/** */
+	optional int32 key = 9;
+	/** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable */
+	optional int32 declaring_type = 10;
+	/** */
+	optional Expression computed_name = 11;
+	optional bool dollar_sign = 12;
+	repeated Expression expressions = 13;
 }
 
 /** A single statement */
@@ -186,6 +207,25 @@ message Statement {
 		THROW = 17;
 		CATCH = 18;
 		EMPTY = 19;
+		FINALLY = 20;
+		DEBUGGER = 21;
+		DEFAULT = 22;
+		FOREACH = 23;
+		FORIN = 24;
+		WITH = 25;
+		SCOPE = 26;
+		DECLARE = 27;
+		GLOBAL = 28;
+		GOTO = 29;
+		INLINE_HTML = 30;
+		STATIC = 31;
+		ECHO = 32;
+		USE_NAMESPACE = 33;
+		USE_CONSTANT = 34;
+		USE_FUNCTION = 35;
+		TRAIT_ALIAS = 36;
+		TRAIT_PRECEDENCE = 37;
+		TRAIT_USE = 38;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -193,21 +233,24 @@ message Statement {
 	repeated Comment comments = 2;
 	repeated Statement statements = 3;
 	repeated Expression initializations = 4;
-	optional Expression condition = 5;
+	repeated Expression conditions = 5;
 	repeated Expression updates = 6;
 	optional Variable variable_declaration = 7;
 	optional Declaration type_declaration = 8;
-	optional Expression expression = 9;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 10;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 11;
+	repeated Expression expressions = 9;
+	/** */
+	optional int32 key = 12;
+	repeated Method methods = 13;
+	repeated Variable variable_declarations = 14;
+	repeated Declaration type_declarations = 15;
+	repeated string names = 16;
 }
 
 /** A single expression */
 message Expression {
 	/** The kind of expression */
 	enum ExpressionKind {
+		option allow_alias = true;
 		/** Any other expression */
 		OTHER = 0;
 		LITERAL = 1;
@@ -215,8 +258,10 @@ message Expression {
 		VARDECL = 3;
 		METHODCALL = 4;
 		CAST = 5;
-		ARRAYINDEX = 6;
+		ARRAYACCESS = 6;
 		ARRAYINIT = 7;
+		/** The same as ARRAYINIT */
+		ARRAYLITERAL = 7;
 		TYPECOMPARE = 8;
 		NEW = 9;
 		NEWARRAY = 10;
@@ -265,6 +310,56 @@ message Expression {
 		LAMBDA = 51;
 		/** @exclude TODO */
 		ANON_METHOD = 52;
+		YIELD = 53;
+		ARRAY_COMPREHENSION = 54;
+		EMPTY = 55;
+		SHEQ = 56;
+		SHNEQ = 57;
+		XML_DOTQUERY = 58;
+		OBJECT_LITERAL = 59;
+		METHODDECL = 60;
+		LOOP = 61;
+		GENERATOR = 62;
+		XML_LITERAL = 63;
+		XML_EXPRESSION = 64;
+		XML_PROPERTYREF = 65;
+		XML_MEMBERREF = 66;
+		XML_DOT = 67;
+		XML_DOTDOT = 68;
+		IN = 69;
+		TYPEOF = 70;
+		REGEXPLITERAL = 71;
+		DELETE = 72;
+		VOID = 73;
+		/** In PHP, its syntax uses curly brackets instead of square ones as in array access. Not used in Java*/
+		HASHTABLEACCESS = 74;
+		/** Represents a single element of array. Holds the key and the value both can be any expression. The key can be null */
+		ARRAYELEMENT = 75;
+		OP_CONCAT = 76;
+		OP_POW = 77;
+		ASSIGN_CONCAT = 78;
+		ASSIGN_POW = 79;
+		BACKTICK = 80;
+		IDENTICAL = 81;
+		NOTIDENTICAL = 82;
+		STRING_AND = 83;
+		STRING_OR = 84;
+		STRING_XOR = 85;
+		OP_THREE_WAY_COMPARE = 86;
+		OP_UNPACK = 87;
+		QUOTE = 88;
+		IGNORE_ERROR = 89;
+		REQUIRE = 90;
+		REQUIRE_ONCE = 91;
+		INCLUDE = 92;
+		INCLUDE_ONCE = 93;
+		LIST = 94;
+		REFERENCE = 95;
+		REFLECTION = 96;
+		CLONE = 97;
+		TRAIT_ALIAS = 98;
+		TRAIT_PRECEDENCE = 99;
+		NAMESPACENAME = 100;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
@@ -279,14 +374,26 @@ message Expression {
 	repeated Expression method_args = 10;
 	optional Declaration anon_declaration = 11;
 	optional Modifier annotation = 12;
-	/** @exclude */
-	optional Method lambda = 13;
+	/** 13 used to be lambda */
 	/** @exclude */
 	optional bool no_parens = 14;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 15;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 16;
+	/** */
+	optional int32 key = 18;
+	/** The type declaring this method call or field access */
+	optional Type declaring_type = 19;
+	/** Type of the return value */
+	optional Type return_type = 20;
+	/** Declared methods/functions */
+	repeated Method methods = 21;
+	/** Inside statements */
+	repeated Statement statements = 22;
+	optional bool is_member_access = 23;
+	optional bool dollar_sign = 24;
+	optional Expression computed_variable = 25;
+	optional Expression computed_method = 26;
+	optional bool is_static = 27;
+	optional bool has_from = 28;
+	optional Method trait = 29;
 }
 
 /** A single modifier */
@@ -300,8 +407,9 @@ message Modifier {
 		VISIBILITY = 1;
 		/** An annotation modifier */
 		ANNOTATION = 2;
-		/** A final modifier */
+		/** A final or constant modifier */
 		FINAL = 3;
+		CONSTANT = 3;
 		/** A static modifier */
 		STATIC = 4;
 		/** A synchronized modifier */
@@ -310,6 +418,20 @@ message Modifier {
 		SYNC = 5;
 		/** An abstract modifier */
 		ABSTRACT = 6;
+		/** A scope modifier */
+		SCOPE = 7;
+		/** A modifier for getter */
+		GETTER = 8;
+		/** A modifier for setter */
+		SETTER = 9;
+		/** A native modifier */
+		NATIVE = 10;
+		/** A strictfp modifier */
+		STRICTFP = 11;
+		/** A transient modifier */
+		TRANSIENT = 12;
+		/** A volatile modifier */
+		VOLATILE = 13;
 	}
 	/** A visibility modifier */
 	enum Visibility {
@@ -320,12 +442,21 @@ message Modifier {
 		PRIVATE = 2;
 		/** A protected modifier */
 		PROTECTED = 3;
-		/** A namespace (aka, default, aka package) visibility modifier */
+		/** A namespace (aka package) visibility modifier */
 		NAMESPACE = 4;
 		/** @exclude */
 		PACKAGE = 4;
-		/** @exclude */
-		DEFAULT = 4;
+		/** A default visibility modifier */
+		DEFAULT = 5;
+	}
+	/** A scope modifier */
+	enum Scope {
+		/** A global scope modifier for a variable */
+		VAR = 1;
+		/** A block scope modifier for a variable */
+		LET = 2;
+		/** A local scope modifier for a constant */
+		CONST = 3;
 	}
 	/** The kind of modifier */
 	required ModifierKind kind = 1;
@@ -339,10 +470,10 @@ message Modifier {
 	repeated Expression annotation_values = 5;
 	/** If the <code>kind</code> is <code>OTHER</code>, the modifier string from the source code */
 	optional string other = 6;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 7;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 8;
+	/** */
+	optional int32 key = 10;
+	/** */
+	optional Scope scope = 11;
 }
 
 /** @exclude */
@@ -361,10 +492,8 @@ message Comment {
 	required CommentKind kind = 1;
 	required string value = 2;
 	required PositionInfo position = 3;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 4;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 5;
+	/** */
+	optional int32 key = 7;
 }
 
 /** @exclude */
@@ -376,3 +505,56 @@ message PositionInfo {
 	required int32 end_line = 5;
 	required int32 end_col = 6;
 }
+
+/** A Html Document */
+message Document {
+	optional string title = 1;
+	repeated Element elements = 2;
+	optional Element doc_type = 3;
+	repeated Attribute processing_instruction = 11;
+}
+
+/** A html Element */
+message Element {
+	enum ElementKind {
+		OTHER = 0;
+		BLOCK = 1;
+		IN_LINE = 2;
+		FORM = 3;
+		DOC_TYPE = 4;
+		/** CSS Rule types */
+		STYLE_SHEET = 5;
+		PAGE_RULE = 6;
+		STYLE_RULE = 7;
+		FONT_FACE_RULE = 8;
+		MEDIA_RULE = 9;
+		MEDIA_QUERY = 10;
+		IMPORT_RULE = 11;
+		XML_ELEMENT = 12;
+	}
+	/** Element's tag */
+	required string tag = 1;
+	/** Element's kind eg. bloack, inline or form */
+	required ElementKind kind = 2;
+	/** The Elements under the Element */
+	repeated Element elements = 3;
+	/** The Element's text */
+	repeated string  text = 4;
+	/** The Element's data eg. scripts, contents of style, etc... */
+	repeated string  data = 5;
+	/** The Element's attributes */
+	repeated Attribute attributes = 6;
+	optional Namespace script = 7;
+	optional Namespace php = 8;  
+	repeated Variable var_decl = 9;
+	/** The Element's title */
+	optional string title = 10;
+	repeated Attribute processing_instruction = 11;
+}
+
+/** Key Value pairs eg. key = "onclick" value = "myFunction()", key = "type" value = "button" */  
+message Attribute {
+	required string key = 1;
+	required string value = 2;
+}
+

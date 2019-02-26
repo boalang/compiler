@@ -1,0 +1,22 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: ASSIGN
+      expressions {
+        kind: VARACCESS
+        variable: "x"
+        dollar_sign: true
+      }
+      expressions {
+        kind: REFERENCE
+        expressions {
+          kind: VARACCESS
+          variable: "y"
+          dollar_sign: true
+        }
+      }
+    }
+  }
+}

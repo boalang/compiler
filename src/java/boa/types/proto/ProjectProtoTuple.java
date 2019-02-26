@@ -113,6 +113,15 @@ public class ProjectProtoTuple extends BoaProtoTuple {
 
 		names.put("stars", counter++);
 		members.add(new BoaInt());
+		
+		names.put("programing_languages_loc", counter++);
+		members.add(new BoaInt());
+		
+		names.put("size", counter++);
+		members.add(new BoaInt());
+		
+		names.put("main_language", counter++);
+		members.add(new BoaString());
 	}
 
 	/**

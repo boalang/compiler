@@ -1,0 +1,129 @@
+p: Project = input;
+m: output collection[int] of string;
+# program analysis output
+type T= {in: set of string, out: set of string, dummy : int};
+type T1= {gen: string, kill: string};
+# cfg of the current method
+cfg: CFG;
+
+type Tloop = {start : int, end : int, use : set of string};
+
+loops : set of Tloop;
+codemotion : set of int;
+flag := false;
+
+cfg_def := traversal(node: CFGNode) : T1 {
+	cur_val : T1 = {"",""};
+	if(node.defVariables!="") {
+		cur_val.gen = node.defVariables+"@"+string(node.id);
+		cur_val.kill = node.defVariables;
+	}
+	return cur_val;
+};
+
+cfg_reach_def := traversal(n: CFGNode): T {
+	preds := n.predecessors;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T = {in_set, out_set, 0};
+	if(def(getvalue(n))) {
+		cur_val = getvalue(n);
+	}
+	foreach(i:int;def(preds[i])) {	
+		pred := getvalue(preds[i]);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	cur_val.out = clone(cur_val.in);
+	genkill := getvalue(n, cfg_def);
+	if(genkill.kill!="") {
+		tmp_out:=values(cur_val.out);
+		foreach(i:int;def(tmp_out[i])) {
+			tmp1:=clone(tmp_out[i]);
+			str_array:=splitall(tmp1,"@");
+			if(str_array[0] == genkill.kill) {
+				remove(cur_val.out, tmp1);
+			}
+		}
+		add(cur_val.out, genkill.gen);
+	}
+	return cur_val;
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T) : bool {
+	if (len(difference(curr.out, prev.out)) == 0)
+		return true;	
+	return false;
+};
+
+# traversal that gets all variable uses in a method
+init := traversal(node: CFGNode){
+	init_set : set of string;
+	cur_val : Tloop = {-1, -1, init_set};
+	if(node.name == "WHILE" || node.name == "FOR") {
+		succs := node.successors;
+		foreach(i:int;def(succs[i])) {
+			if(succs[i].id > node.id + 1) {
+				cur_val.start= int(node.id);
+				cur_val.end= int(succs[i].id);
+				cur_val.use = node.useVariables;
+				add(loops, cur_val);
+			}		
+		}
+	}
+};
+
+# traversal that accumulates generated values
+loop_invariant := traversal(node: CFGNode) {
+	loop := values(loops);
+	foreach(i:int;def(loop[i])) {
+		flag = false;
+		if(node.id > loop[i].start && node.id < loop[i].end) {
+			if(len(node.useVariables)!=0) {
+				cur_val := getvalue(node, cfg_reach_def);
+				if(def(cur_val)) {
+				uv := values(node.useVariables);
+				foreach(j:int;def(uv[j])) {
+					cout := values(cur_val.out);
+					foreach(k:int;def(cout[k])) {
+						str_array:=splitall(cout[k],"@");
+						if(str_array[0]==uv[j]) {
+							if(int(str_array[1]) > loop[i].start) {
+								flag = true;
+								break;
+							}
+						}
+					}
+				}
+				}
+			}
+			if(!flag) {
+				add(codemotion, int(node.id));
+			}
+		}
+	}
+};
+
+reach_def := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+			clear(cfg_def);clear(cfg_reach_def);clear(init);clear(loops);clear(codemotion);clear(loop_invariant);
+
+			cfg = getcfg(node);
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, cfg_def);
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, init);
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, cfg_reach_def, fixp1);
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, loop_invariant);
+			
+	}
+};
+
+visit(p, reach_def);
+
+m[1] << "1";

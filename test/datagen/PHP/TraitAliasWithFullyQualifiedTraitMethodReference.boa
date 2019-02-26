@@ -1,0 +1,28 @@
+namespaces {
+  name: ""
+  declarations {
+    name: "Talker"
+    kind: CLASS
+    statements {
+      kind: TRAIT_USE
+      statements {
+        kind: TRAIT_ALIAS
+        expressions {
+          kind: TRAIT_ALIAS
+          method: "thing"
+          trait {
+            computed_name {
+              kind: METHOD_REFERENCE
+              expressions {
+                kind: NAMESPACENAME
+                literal: "A"
+              }
+              method: "AsThing"
+            }
+          }
+        }
+      }
+      names: "A"
+    }
+  }
+}

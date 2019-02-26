@@ -1,5 +1,6 @@
 # Finding top imports
 ProjectsByFeature: output top(100) of string weight int;
+imports: output top(100) of string weight int;
 
 global := true;
 
@@ -12,14 +13,7 @@ visit(input, visitor {
 		stop;
 	}
 	# look for imports
-	before node: ASTRoot ->
-        foreach (j: int; def(node.imports[j])) {
-            parts := split(node.imports[j], `\.`);
-            s := "";
-            for (i := 0; i < len(parts) - 1; i++) {
-                s = s + parts[i];
-    	        ProjectsByFeature << s weight 1;
-    	        s = s + ".";
-            }
-        }
+	before node: Namespace ->
+        foreach (j: int; def(node.imports[j])) 
+        	imports << node.imports[j] weight 1;
 });

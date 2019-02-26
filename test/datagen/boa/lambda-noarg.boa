@@ -1,33 +1,26 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "VARDECL",
-      "variable_decls": [
-         {
-            "name": "x",
-            "variable_type": {
-               "name": "int",
-               "kind": "OTHER"
-            },
-            "initializer": {
-               "kind": "LAMBDA",
-               "lambda": {
-                  "return_type": {
-                     "name": "",
-                     "kind": "OTHER"
-                  },
-                  "statements": [
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "x",
+               "variable_type": {
+                  "name": "int",
+                  "kind": "PRIMITIVE"
+               },
+               "initializer": {
+                  "kind": "LAMBDA",
+                  "expressions": [
                      {
-                        "kind": "EXPRESSION",
-                        "expression": {
-                           "kind": "METHODCALL",
-                           "method": "m"
-                        }
+                        "kind": "METHODCALL",
+                        "method": "m"
                      }
                   ]
                }
             }
-         }
-      ]
-   }
+         ]
+      }
+   ]
 }

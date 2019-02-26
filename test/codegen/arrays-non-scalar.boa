@@ -1,0 +1,10 @@
+o: output sum of int;
+o << 1;
+
+
+s: stack of int;
+
+arr: array of stack of int;
+
+arr2: array of stack of int = { s, s, s };
+

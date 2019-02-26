@@ -1,0 +1,31 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: VARDECL
+      variable_decls {
+        name: "cars"
+        modifiers {
+          kind: SCOPE
+          scope: VAR
+        }
+        initializer {
+          kind: ARRAYINIT
+          expressions {
+            kind: LITERAL
+            literal: "Saab"
+          }
+          expressions {
+            kind: LITERAL
+            literal: "Volvo"
+          }
+          expressions {
+            kind: LITERAL
+            literal: "BMW"
+          }
+        }
+      }
+    }
+  }
+}

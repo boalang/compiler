@@ -3,8 +3,10 @@ package boa.datagen.forges.github;
 import boa.datagen.util.FileIO;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PriorityQueue;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.Scanner;
 
 public class TokenList {
 	private int lastUsedToken = 0;
@@ -16,7 +18,12 @@ public class TokenList {
 
 	public TokenList(String path) {
 		String tokenDetails = FileIO.readFileContents(new File(path));
-		String[] allTokens = tokenDetails.split("\n");
+		List<String> lines = new ArrayList<String>();
+		Scanner sc = new Scanner(tokenDetails);
+		while (sc.hasNextLine())
+			lines.add(sc.nextLine());
+		sc.close();
+		String[] allTokens = lines.toArray(new String[0]);
 		String[] usrNameAndToken = null;
 		int i = 0;
 		for (String token : allTokens) {

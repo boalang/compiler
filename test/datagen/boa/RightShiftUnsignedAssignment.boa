@@ -1,0 +1,39 @@
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "x",
+               "variable_type": {
+                  "name": "int",
+                  "kind": "PRIMITIVE"
+               }
+            }
+         ]
+      }
+   ]
+},
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "ASSIGN_UNSIGNEDRSHIFT",
+         "expressions": [
+            {
+               "kind": "VARACCESS",
+               "variable": "x",
+               "return_type": {
+                  "name": "int",
+                  "kind": "PRIMITIVE"
+               }
+            },
+            {
+               "kind": "LITERAL",
+               "literal": "5"
+            }
+         ]
+      }
+   ]
+}

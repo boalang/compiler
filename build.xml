@@ -24,6 +24,7 @@
 	<path id="project.class.path">
 		<fileset dir="lib">
 			<include name="**/*.jar"/>
+			<exclude name="checkstyle-6.19-all.jar"/>
 		</fileset>
 		<fileset dir="rtlib">
 			<include name="**/*.jar"/>
@@ -38,6 +39,7 @@
 		<dirset dir="build/tests">
 			<include name="**"/>
 		</dirset>
+		<dirset dir="./compile" />
 	</path>
 
 	<path id="src.paths">
@@ -58,6 +60,7 @@
 		<mkdir dir="build/depcache" />
 		<mkdir dir="build/tests" />
 		<mkdir dir="dist" />
+		<mkdir dir="./compile" />
 	</target>
 
 	<!-- do a dependency check -->
@@ -75,13 +78,14 @@
 				<uptodate srcfile="src/proto/issues.proto" targetfile="src/compiled-proto/boa/types/Issues.java" />
 				<uptodate srcfile="src/proto/shared.proto" targetfile="src/compiled-proto/boa/types/Shared.java" />
 				<uptodate srcfile="src/proto/toplevel.proto" targetfile="src/compiled-proto/boa/types/Toplevel.java" />
+				<uptodate srcfile="src/proto/control.proto" targetfile="src/compiled-proto/boa/types/Control.java" />
 			</and>
 		</condition>
 	</target>
 
 	<target name="-translate-protobuf" depends="-check-protobuf" unless="protobuf.uptodate">
 		<echo level="error" message="Translating Protocol Buffer files to Java" />
-		<apply executable="protoc" parallel="true">
+		 <apply executable="protoc" parallel="true"> 
 			<arg value="--proto_path=${src.proto}" />
 			<arg value="--java_out=src/compiled-proto" />
 			<srcfile />
@@ -171,17 +175,20 @@
 		</delete>
 	</target>
 
-
-	<!-- testing -->
-	<target name="test" depends="-compile-tests" description="Run all unit tests.">
+	
+	<target name="test" depends="-compile-tests, package" description="Run all unit tests.">
 		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
 				<fileset dir="build/tests">
-					<include name="boa/test/compiler/Test*.class" />
-					<include name="boa/test/functions/Test*.class" />
-					<include name="boa/test/datagen/Test*.class" />
+					<include name="boa/test/compiler/Test*.class" /> 
+					<include name="boa/test/functions/Test*.class" /> 
+					<!--include name="boa/test/datagen/Test*.class" /-->
+					<!--include name="boa/test/datagen/queries/Test*.class" /-->
+					<include name="boa/test/datagen/java/Test*.class" /> 
+					<include name="boa/test/datagen/js/Test*.class" />  
+					<include name="boa/test/datagen/php/Test*.class" />  
 					<exclude name="**/*$*.class" />
 				</fileset>
 			</batchtest>
@@ -189,13 +196,52 @@
 		<delete file="SecurityAuth.audit" />
 		<fail message="Test failure detected." if="test.failed" />
 	</target>
-	<target name="test-datagen" depends="-compile-tests" description="Run datagen unit tests.">
+	<target name="test-datagen" depends="test-datagen-java,test-datagen-js,test-datagen-php" description="Run datagen unit tests.">
 		<junit fork="yes" haltonfailure="no">
 			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
 				<fileset dir="build/tests">
 					<include name="boa/test/datagen/Test*.class" />
+					<exclude name="**/*$*.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
+	<target name="test-datagen-java" depends="-compile-tests" description="Run Java datagen unit tests.">
+		<junit fork="yes" haltonfailure="no">
+			<classpath refid="test.class.path" />
+			<batchtest>
+				<formatter type="plain" usefile="false" />
+				<fileset dir="build/tests">
+					<include name="boa/test/datagen/java/Test*.class" />
+					<exclude name="**/*$*.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
+	<target name="test-datagen-js" depends="-compile-tests" description="Run JavaScript datagen unit tests.">
+		<junit fork="yes" haltonfailure="no">
+			<classpath refid="test.class.path" />
+			<batchtest>
+				<formatter type="plain" usefile="false" />
+				<fileset dir="build/tests">
+					<include name="boa/test/datagen/js/Test*.class" />
+					<exclude name="**/*$*.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
+	<target name="test-datagen-php" depends="-compile-tests" description="Run PHP datagen unit tests.">
+		<junit fork="yes" haltonfailure="no">
+			<classpath refid="test.class.path" />
+			<batchtest>
+				<formatter type="plain" usefile="false" />
+				<fileset dir="build/tests">
+					<include name="boa/test/datagen/php/Test*.class" />
 					<exclude name="**/*$*.class" />
 				</fileset>
 			</batchtest>
@@ -268,6 +314,15 @@
 		</junit>
 		<delete file="SecurityAuth.audit" />
 	</target>
+	<target name="test-program-analysis" depends="-compile-tests" description="Run program analysis programs.">
+		<junit fork="yes" haltonfailure="no">
+			<classpath refid="test.class.path" />
+			<test name="boa.test.compiler.ProgramAnalysisGood">
+				<formatter type="plain" usefile="false" />
+			</test>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
 	<target name="test-knowngood" depends="-compile-tests" description="Run known good tests.">
 		<junit fork="yes" haltonfailure="no">
 			<classpath refid="test.class.path" />
@@ -290,7 +345,6 @@
 		</junit>
 		<delete file="SecurityAuth.audit" />
 	</target>
-
 
 	<target name="-compile-tests" depends="compile,-check-deps">
 		<javac includeantruntime="true" srcdir="src/test" destdir="build/tests" debug="${debug.enabled}" debuglevel="${debug.level}">

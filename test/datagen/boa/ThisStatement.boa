@@ -1,0 +1,30 @@
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "ASSIGN",
+         "expressions": [
+            {
+               "kind": "VARACCESS",
+               "variable": "y"
+            },
+            {
+               "kind": "VARACCESS",
+               "expressions": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "this",
+                     "return_type": {
+                        "name": "t",
+                        "fully_qualified_name": "t",
+                        "kind": "CLASS"
+                     }
+                  }
+               ],
+               "variable": "x",
+               "is_member_access": true
+            }
+         ]
+      }
+   ]
+}

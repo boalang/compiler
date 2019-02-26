@@ -18,53 +18,197 @@
 package boa.datagen.scm;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import org.apache.hadoop.io.SequenceFile.Writer;
-
-import boa.types.Code.Revision;
+import java.util.PriorityQueue;
+import java.util.Set;
+import org.apache.hadoop.io.SequenceFile;
+import boa.types.Diff.ChangedFile;
+import boa.types.Shared.ChangeKind;
 
 /**
  * @author rdyer
  */
 public abstract class AbstractConnector implements AutoCloseable {
-	protected List<AbstractCommit> revisions = null;
-	protected HashMap<String, Integer> nameIndices = new HashMap<String, Integer>();
+	
+	protected static final boolean debug = boa.datagen.util.Properties.getBoolean("debug", boa.datagen.DefaultProperties.DEBUG);
+	protected static final String classpathRoot = boa.datagen.util.Properties.getProperty("libs", boa.datagen.DefaultProperties.CLASSPATH_ROOT);
 
-	public abstract String getLastCommitId();
-	public abstract void setLastSeenCommitId(final String id);
+	protected String path;
+	protected List<AbstractCommit> revisions = new ArrayList<AbstractCommit>();
+	protected List<Long> revisionKeys = new ArrayList<Long>();
+	protected List<String> branchNames = new ArrayList<String>(), tagNames = new ArrayList<String>();
+	protected List<Integer> branchIndices = new ArrayList<Integer>(), tagIndices = new ArrayList<Integer>();
+	protected Map<String, Integer> revisionMap = new HashMap<String, Integer>();
+	protected String projectName;
+	protected int headCommitOffset = -1;
+	protected SequenceFile.Writer astWriter, commitWriter, contentWriter;
+	protected long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
 
-	public List<Revision> getCommits(final boolean parse) {
-		if (revisions == null) {
-			revisions = new ArrayList<AbstractCommit>();
-			setRevisions();
-		}
-		final List<Revision> revs = new ArrayList<Revision>();
-		for (final AbstractCommit rev : revisions)
-			revs.add(rev.asProtobuf(parse));
-
-		return revs;
+	public long getAstWriterLen() {
+		return astWriterLen;
 	}
 
-	protected abstract void setRevisions();
+	public long getCommitWriterLen() {
+		return commitWriterLen;
+	}
 
-	public abstract void getTags(final List<String> names, final List<String> commits);
+	public long getContentWriterLen() {
+		return contentWriterLen;
+	}
 
-	public abstract void getBranches(final List<String> names, final List<String> commits);
+	public int getHeadCommitOffset() {
+		return this.headCommitOffset;
+	}
 
-	protected Map<String, Integer> revisionMap;
+	public List<ChangedFile> buildHeadSnapshot() {
+		if (!revisions.isEmpty())
+			return buildSnapshot(headCommitOffset);
+		return ((GitConnector) this).buildHeadSnapshot();
+	}
+	
+	public List<ChangedFile> buildSnapshot(final int commitOffset) {
+		final List<ChangedFile> snapshot = new ArrayList<ChangedFile>();
+		getSnapshot(commitOffset, snapshot);
+		return snapshot;
+	}
 
-	public List<Revision> getCommits(final boolean parse, final Writer astWriter, final String repoKey, final String keyDelim) {
-		if (revisions == null) {
-			revisions = new ArrayList<AbstractCommit>();
-			setRevisions();
+	public void getSnapshot(int commitOffset, List<ChangedFile> snapshot) {
+		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>(); 
+		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
+			@Override
+			public int compare(Integer i1, Integer i2) {
+				return i2 - i1;
+			}
+		});
+		Set<Integer> queuedCommitIds = new HashSet<Integer>();
+		pq.offer(commitOffset);
+		queuedCommitIds.add(commitOffset);
+		while (!pq.isEmpty()) {
+			int offset = pq.poll();
+			AbstractCommit commit = revisions.get(offset);
+			for (ChangedFile.Builder cf : commit.changedFiles) {
+				ChangeKind ck = cf.getChange();
+				switch (ck) {
+				case ADDED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						snapshot.add(cf.build());
+					}
+					break;
+				case COPIED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						snapshot.add(cf.build());
+					}
+					break;
+				case DELETED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName()))
+						dels.add(cf.getName());
+					break;
+				case MERGED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						snapshot.add(cf.build());
+					}
+					for (int i = 0; i < cf.getChangesCount(); i++) {
+						if (cf.getChanges(i) != ChangeKind.ADDED) {
+							ChangeKind pck = cf.getChanges(i);
+//							ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
+//							String name = pcf.getName();
+							String name = cf.getPreviousNames(i);
+							if (name.isEmpty())
+								name = cf.getName();
+							if (!adds.contains(name) && !dels.contains(name) && (pck == ChangeKind.DELETED || pck == ChangeKind.RENAMED))
+								dels.add(name);
+						}
+					}
+					break;
+				case RENAMED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						snapshot.add(cf.build());
+					}
+					for (int i = 0; i < cf.getChangesCount(); i++) {
+//						ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
+//						String name = pcf.getName();
+						String name = cf.getPreviousNames(i);
+						if (!adds.contains(name) && !dels.contains(name))
+							dels.add(name);
+					}
+					break;
+				default:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						snapshot.add(cf.build());
+					}
+					break;
+				}
+			}
+			if (commit.parentIndices != null)
+				for (int p : commit.parentIndices) {
+					if (!queuedCommitIds.contains(p)) {
+						pq.offer(p);
+						queuedCommitIds.add(p);
+					}
+				}
 		}
-		final List<Revision> revs = new ArrayList<Revision>();
-		int i = 0;
-		for (final AbstractCommit rev : revisions)
-			revs.add(rev.asProtobuf(parse, astWriter, repoKey + keyDelim + (++i), keyDelim));
+	}
+	
+	public abstract void setRevisions();
 
+	public List<AbstractCommit> getRevisions() {
+		return revisions;
+	}
+
+	abstract void getTags();
+
+	abstract void getBranches();
+
+	public List<String> getBranchNames() {
+		return branchNames;
+	}
+	
+	public List<String> getTagNames() {
+		return tagNames;
+	}
+	
+	public List<Integer> getBranchIndices() {
+		return branchIndices;
+	}
+	
+	public List<Integer> getTagIndices() {
+		return tagIndices;
+	}
+	
+	public List<Object> getRevisions(final String projectName) {
+		this.projectName = projectName;
+		
+		setRevisions();
+		
+		long maxTime = 1000;
+		final List<Object> revs = new ArrayList<Object>();
+		if (!revisions.isEmpty()) {
+			for (int i = 0; i < revisions.size(); i++) {
+				long startTime = System.currentTimeMillis();
+				final AbstractCommit rev = revisions.get(i);
+				revs.add(rev.asProtobuf(projectName));
+				
+				if (debug) {
+					long endTime = System.currentTimeMillis();
+					long time = endTime - startTime;
+					if (time > maxTime) {
+						System.out.println(Thread.currentThread().getId() + " Max time " + (time / 1000) + " writing to protobuf commit " + (i+1)  + " " + rev.id);
+						maxTime = time;
+					}
+				}
+			}
+		}
+		if (!revisionKeys.isEmpty())
+			revs.addAll(revisionKeys);
 		return revs;
 	}
 

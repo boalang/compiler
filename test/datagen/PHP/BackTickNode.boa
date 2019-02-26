@@ -1,0 +1,13 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: BACKTICK
+      expressions {
+        kind: LITERAL
+        literal: "ls -al"
+      }
+    }
+  }
+}

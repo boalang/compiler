@@ -1,0 +1,23 @@
+{
+   "kind": "SWITCH",
+   "statements": [
+      {
+         "kind": "CASE",
+         "expressions": [
+            {
+               "kind": "LITERAL",
+               "literal": "1"
+            }
+         ]
+      }
+   ],
+   "expressions": [
+      {
+         "kind": "VARACCESS",
+         "variable": "x"
+      }
+   ]
+},
+{
+   "kind": "EMPTY"
+}

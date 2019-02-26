@@ -1,0 +1,27 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: VARDECL
+      variable_decls {
+        name: "x"
+        modifiers {
+          kind: SCOPE
+          scope: VAR
+        }
+        initializer {
+          kind: XML_DOTQUERY
+          expressions {
+            kind: VARACCESS
+            variable: "foo"
+          }
+          expressions {
+            kind: VARACCESS
+            variable: "bar"
+          }
+        }
+      }
+    }
+  }
+}

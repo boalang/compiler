@@ -5,11 +5,9 @@ import boa.datagen.util.FileIO;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 
 /**
@@ -78,20 +76,7 @@ public class GithubRepositoryNameDownloader {
 				if (!pageContent.isEmpty()) {
 					pageNumber++;
 					JsonArray repos = parser.fromJson(pageContent, JsonElement.class).getAsJsonArray();
-					JsonArray reducedRepos = new JsonArray();
-					for (int i = 0; i < repos.size(); i++) {
-						JsonObject repo = repos.get(i).getAsJsonObject();
-						String name = repo.get("full_name").getAsString();
-						String idNum = repo.get("id").getAsString();
-						String fork = repo.get("fork").getAsString();
-						repo = new JsonObject();
-						repo.addProperty("id", idNum);
-						repo.addProperty("full_name", name);
-						repo.addProperty("fork", fork);
-						reducedRepos.add(repo);
-					}
-					FileIO.writeFileContents(new File(outDir + "/page-" + pageNumber + ".json"),
-							reducedRepos.getAsString());
+					FileIO.writeFileContents(new File(outDir + "/page-" + pageNumber + ".json"), repos.toString());
 					id = getLastId(pageContent);
 				}
 				numOfRemainingRequests--;

@@ -1,22 +1,33 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "VARDECL",
-      "variable_decls": [
-         {
-            "name": "subtraction",
-            "variable_type": {
-               "name": "MathOperation",
-               "kind": "OTHER"
-            },
-            "initializer": {
-               "kind": "LAMBDA",
-               "lambda": {
-                  "return_type": {
-                     "name": "",
-                     "kind": "OTHER"
-                  },
-                  "arguments": [
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "subtraction",
+               "variable_type": {
+                  "name": "MathOperation",
+                  "kind": "OTHER"
+               },
+               "initializer": {
+                  "kind": "LAMBDA",
+                  "expressions": [
+                     {
+                        "kind": "OP_SUB",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "a"
+                           },
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "b"
+                           }
+                        ]
+                     }
+                  ],
+                  "variable_decls": [
                      {
                         "name": "a",
                         "variable_type": {
@@ -31,28 +42,10 @@
                            "kind": "OTHER"
                         }
                      }
-                  ],
-                  "statements": [
-                     {
-                        "kind": "EXPRESSION",
-                        "expression": {
-                           "kind": "OP_SUB",
-                           "expressions": [
-                              {
-                                 "kind": "VARACCESS",
-                                 "variable": "a"
-                              },
-                              {
-                                 "kind": "VARACCESS",
-                                 "variable": "b"
-                              }
-                           ]
-                        }
-                     }
                   ]
                }
             }
-         }
-      ]
-   }
+         ]
+      }
+   ]
 }

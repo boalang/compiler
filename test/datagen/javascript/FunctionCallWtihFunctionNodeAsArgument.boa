@@ -1,0 +1,97 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: VARDECL
+      variable_decls {
+        name: "p"
+        modifiers {
+          kind: SCOPE
+          scope: VAR
+        }
+        initializer {
+          kind: NEW
+          new_type {
+            name: "ParallelArray"
+            kind: OTHER
+          }
+          method_args {
+            kind: ARRAYINIT
+            expressions {
+              kind: LITERAL
+              literal: "0.0"
+            }
+            expressions {
+              kind: LITERAL
+              literal: "1.0"
+            }
+            expressions {
+              kind: LITERAL
+              literal: "2.0"
+            }
+            expressions {
+              kind: LITERAL
+              literal: "3.0"
+            }
+            expressions {
+              kind: LITERAL
+              literal: "4.0"
+            }
+          }
+        }
+      }
+    }
+  }
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: VARDECL
+      variable_decls {
+        name: "m"
+        modifiers {
+          kind: SCOPE
+          scope: VAR
+        }
+        initializer {
+          kind: METHODCALL
+          expressions {
+            kind: VARACCESS
+            variable: "p"
+          }
+          method: "map"
+          method_args {
+            kind: METHODDECL
+            methods {
+              name: ""
+              arguments {
+                name: "v"
+                modifiers {
+                  kind: SCOPE
+                  scope: LET
+                }
+              }
+              statements {
+                kind: BLOCK
+                statements {
+                  kind: RETURN
+                  expressions {
+                    kind: OP_ADD
+                    expressions {
+                      kind: VARACCESS
+                      variable: "v"
+                    }
+                    expressions {
+                      kind: LITERAL
+                      literal: "1.0"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

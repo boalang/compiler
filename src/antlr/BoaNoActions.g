@@ -141,7 +141,7 @@ emptyStatement
 	;
 
 assignmentStatement
-	: factor EQUALS expression { isSemiColon(); }
+	: factor (EQUALS | PLUSEQ | MINUSEQ | STAREQ | DIVEQ | ONEOREQ | XOREQ | MODEQ | ONEANDEQ | RSHIFTEQ | LSHIFTEQ) expression { isSemiColon(); }
 	;
 
 block
@@ -387,7 +387,8 @@ characterLiteral
 	;
 
 stringLiteral
-	: StringLiteral
+	: MultilineStringLiteral
+	| StringLiteral
 	| RegexLiteral
 	;
 
@@ -480,6 +481,16 @@ MOD    : '%';
 RSHIFT : '>>';
 NEG    : '~';
 INV    : '!';
+PLUSEQ : '+=';
+MINUSEQ: '-=';
+STAREQ : '*=';
+DIVEQ  : '/=';
+ONEOREQ: '|=';
+XOREQ  : '^=';
+MODEQ  : '%=';
+ONEANDEQ:'&=';
+RSHIFTEQ:'>>=';
+LSHIFTEQ:'<<=';
 
 //
 // other
@@ -491,6 +502,7 @@ DOLLAR      : '$';
 EQUALS      : '=';
 EMIT        : '<<';
 RIGHT_ARROW : '->';
+ML_STRING   : '"""';
 
 //
 // literals
@@ -562,6 +574,10 @@ RegexLiteral
 fragment
 RegexCharacter
 	: ~[`\n\r]
+	;
+
+MultilineStringLiteral
+	: ML_STRING (StringCharacter | ["\n\r])*? ML_STRING
 	;
 
 StringLiteral

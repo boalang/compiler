@@ -1,0 +1,175 @@
+m: output collection[int] of string;
+
+p: Project = input;
+
+type T = {gen: set of string, id: int};
+# program analysis output
+type T1 = {in: set of set of string, out: set of set of string, id1 : int};
+
+#all expression set
+allExprset: set of set of string;
+
+# cfg of the current method
+cfg: CFG;
+str: set of string;
+str1: set of set of string;
+pred_id : int;
+
+# parse node expression to construct the postfix expression
+node_expr := visitor {
+	before node: Expression -> {
+		switch (node.kind) {
+			case ExpressionKind.LT,ExpressionKind.OP_ADD, ExpressionKind.OP_SUB, ExpressionKind.OP_INC, ExpressionKind.OP_MULT, ExpressionKind.OP_DIV, ExpressionKind.OP_MOD, ExpressionKind.OP_DEC, ExpressionKind.GT, ExpressionKind.EQ, ExpressionKind.NEQ, ExpressionKind.LTEQ, ExpressionKind.GTEQ, ExpressionKind.LOGICAL_NOT, ExpressionKind.LOGICAL_AND, ExpressionKind.LOGICAL_OR, ExpressionKind.BIT_AND, ExpressionKind.BIT_OR, ExpressionKind.BIT_NOT, ExpressionKind.BIT_XOR, ExpressionKind.BIT_LSHIFT, ExpressionKind.BIT_RSHIFT, ExpressionKind.BIT_UNSIGNEDRSHIFT:
+				add(str, string(node.kind)); 
+				foreach(j:int;def(node.expressions[j])) {
+					visit(node.expressions[j]);
+				}
+				break;
+			case ExpressionKind.ASSIGN:
+				foreach(j:int;def(node.expressions[j])) {
+					if(j!=0) {
+						visit(node.expressions[j]);
+					}
+				}
+				break;
+			case ExpressionKind.VARACCESS:
+				add(str, node.variable);
+				break;
+			case ExpressionKind.VARDECL:
+				visit(node.variable_decls[0].initializer);
+				break;
+			case ExpressionKind.LITERAL:
+				add(str, node.literal);
+				break;
+			case ExpressionKind.METHODCALL:
+				clear(str);
+				stop;
+			default:break;
+		}
+		stop;
+	}
+};
+
+allExprTraversal := traversal(node: CFGNode): T {
+	cur_val : T;
+	init_set : set of string;
+	str = init_set;
+	cur_val = {str, -1};
+	if(def(node.expr)) {
+		visit(node.expr, node_expr);
+		if(len(str)!=0) {
+			add(allExprset, clone(str));
+			cur_val = {clone(str), int(node.id)};
+		}
+	}
+	if(def(node.stmt)) {
+		if(def(node.stmt.expressions[0])) {
+			visit(node.stmt.expressions[0], node_expr);
+			if(len(str)!=0) {
+				add(allExprset, clone(str));
+				cur_val = {clone(str), int(node.id)};
+			}
+		}
+		if(def(node.stmt.initializations)) {
+			foreach(i:int;def(node.stmt.initializations[i])) {
+				visit(node.stmt.initializations[i], node_expr);
+				if(len(str)!=0) {
+					add(allExprset, clone(str));
+					cur_val = {clone(str), int(node.id)};
+				}
+			}
+		}
+	}
+	return cur_val;
+};
+
+killTraversal := traversal(node: CFGNode): set of set of string {
+	init_set1 : set of set of string;
+	str1 = init_set1;
+	if(def(node.defVariables)) {
+		aa := values(allExprset);
+		foreach(i:int;def(aa[i])) {
+				if(contains(aa[i], node.defVariables)) {
+					add(str1, aa[i]);
+				}
+		}
+	}
+	return clone(str1);
+};
+
+avail_expr := traversal(node: CFGNode): T1 {
+	pred_id = -1;
+	in_set : set of set of string;
+	out_set : set of set of string;
+	cur_value : T1;
+	if(node.id==0) {
+		cur_value = {in_set, out_set, -1};
+	}
+	else
+		cur_value = {clone(allExprset), clone(allExprset), -1};
+	if(def(getvalue(node))) {
+		cur_value = getvalue(node);
+	}
+	genkill := getvalue(node, allExprTraversal);
+	killset := getvalue(node, killTraversal);
+
+	preds := node.predecessors;
+	foreach(i:int;def(preds[i])) {	
+		pred := getvalue(preds[i]);
+		if(def(pred)) {
+			cur_value.in = intersect(cur_value.in, pred.out);
+			if(contains(pred.out, genkill.gen)) {
+				pred_id = preds[i].id;
+			}
+		}
+	}
+	cur_value.out = clone(cur_value.in);
+	cur_value.out = difference(cur_value.out, killset);
+	if(def(genkill)) {
+		if(contains(cur_value.out, genkill.gen)) {
+			cur_value.id1 = int(pred_id);
+		}
+		else {
+			add(cur_value.out, genkill.gen);
+			cur_value.id1 = int(node.id);
+		}
+	}
+	return cur_value;
+};
+
+result := traversal(node: CFGNode) {
+	r:= getvalue(node, avail_expr);
+	if(def(r)) {
+		#m[node.id] << string(r.out);
+		m[node.id] << string(r.id1);
+	}
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T1) : bool {
+	if (len(difference(curr.out, prev.out)) == 0)
+		return true;	
+	return false;
+};
+
+def := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		if(node.name == "dead2") {
+		clear(allExprTraversal);clear(avail_expr);clear(killTraversal);clear(allExprset);
+
+		cfg = getcfg(node);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, allExprTraversal);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, killTraversal);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, avail_expr, fixp1);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, result);
+		}
+	}
+};
+
+visit(p, def);

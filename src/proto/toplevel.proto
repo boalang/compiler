@@ -1,3 +1,4 @@
+syntax = "proto2";
 package boa.types;
 
 import "shared.proto";
@@ -74,4 +75,9 @@ message Project {
 	optional int32 forks = 23;
 	/** The number of times this repository has been starred */
 	optional int32 stars = 24;
+	/** The number of bytes of code for each language **/
+	repeated int32 programming_languages_locs = 25;
+	/** The size of the repository in bytes of code **/
+	optional int32 size = 26;
+	optional string main_language = 27;
 }

@@ -1,0 +1,22 @@
+tag: ""
+kind: STYLE_SHEET
+elements {
+  tag: "img"
+  kind: STYLE_RULE
+  atributes {
+    key: "border"
+    value: "1px solid rgb(221, 221, 221)"
+  }
+  atributes {
+    key: "border-radius"
+    value: "4px"
+  }
+  atributes {
+    key: "padding"
+    value: "5px"
+  }
+  atributes {
+    key: "width"
+    value: "150px"
+  }
+}

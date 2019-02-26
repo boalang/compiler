@@ -1,0 +1,52 @@
+namespaces {
+  name: ""
+  statements {
+    kind: WHILE
+    statements {
+      kind: SCOPE
+      statements {
+        kind: EXPRESSION
+        expressions {
+          kind: ASSIGN_ADD
+          expressions {
+            kind: VARACCESS
+            variable: "text"
+          }
+          expressions {
+            kind: OP_ADD
+            expressions {
+              kind: LITERAL
+              literal: "<br>The number is "
+            }
+            expressions {
+              kind: VARACCESS
+              variable: "i"
+            }
+          }
+        }
+      }
+      statements {
+        kind: EXPRESSION
+        expressions {
+          kind: OP_INC
+          expressions {
+            kind: VARACCESS
+            variable: "i"
+          }
+          is_postfix: true
+        }
+      }
+    }
+    conditions {
+      kind: LT
+      expressions {
+        kind: VARACCESS
+        variable: "i"
+      }
+      expressions {
+        kind: LITERAL
+        literal: "5.0"
+      }
+    }
+  }
+}

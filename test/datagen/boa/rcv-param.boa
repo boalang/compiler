@@ -11,7 +11,7 @@
                      "name": "m",
                      "return_type": {
                         "name": "void",
-                        "kind": "OTHER"
+                        "kind": "PRIMITIVE"
                      },
                      "arguments": [
                         {
@@ -28,7 +28,8 @@
                         }
                      ]
                   }
-               ]
+               ],
+               "fully_qualified_name": "t"
             }
          ]
       }

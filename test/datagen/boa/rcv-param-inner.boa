@@ -15,14 +15,15 @@
                            "name": "m",
                            "return_type": {
                               "name": "void",
-                              "kind": "OTHER"
+                              "kind": "PRIMITIVE"
                            },
                            "arguments": [
                               {
                                  "name": "this",
                                  "variable_type": {
-                                    "name": "inner.t",
-                                    "kind": "OTHER"
+                                    "name": "t",
+                                    "fully_qualified_name": "t",
+                                    "kind": "CLASS"
                                  }
                               }
                            ],
@@ -32,9 +33,11 @@
                               }
                            ]
                         }
-                     ]
+                     ],
+                     "fully_qualified_name": "t.inner"
                   }
-               ]
+               ],
+               "fully_qualified_name": "t"
             }
          ]
       }

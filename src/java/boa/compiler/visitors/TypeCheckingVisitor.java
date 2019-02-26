@@ -30,6 +30,7 @@ import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 import boa.compiler.transforms.VisitorDesugar;
 import boa.types.*;
+import boa.types.proto.CodeRepositoryProtoTuple;
 
 /**
  * Prescan the program and check that all variables are consistently typed.
@@ -219,41 +220,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 	}
 
-	/**
-	 * Finds if the expression is a Call.
-	 * 
-	 * @author rdyer
-	 */
-	protected class CallFindingVisitor extends AbstractVisitorNoArgNoRet {
-		protected boolean isCall;
-
-		public boolean isCall() {
-			return isCall;
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void initialize() {
-			super.initialize();
-			isCall = false;
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void visit(final Factor n) {
-			for (final Node node : n.getOps()) {
-				isCall = false;
-				node.accept(this);
-			}
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void visit(final Call n) {
-			isCall = true;
-		}
-	}
-
 	protected final VisitorCheckingVisitor visitorChecker = new VisitorCheckingVisitor();
 	protected final TraversalCheckingVisitor traversalChecker = new TraversalCheckingVisitor();
 	protected final FixPCheckingVisitor fixPChecker = new FixPCheckingVisitor();
@@ -362,10 +328,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			final List<BoaType> types = check(n.getExprs(), env);
 
 			if (!(checkTupleArray(types) == true)) {
-				final BoaType t = types.get(0);
-				if (!(t instanceof BoaScalar) && !(t instanceof BoaTuple))
-					throw new TypeCheckException(n.getExprs(), "non-scalar/non-tuple type '" + t + "' can not be used in arrays");
-				n.type = new BoaArray(t);
+				n.type = new BoaArray(types.get(0));
 			} else {
 				n.type = new BoaTuple(types);
 			}
@@ -535,7 +498,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		} else if (type instanceof BoaTuple) {
 			if (!((BoaTuple) type).hasMember(selector))
 				throw new TypeCheckException(n.getId(), "'" + type + "' has no member named '" + selector + "'");
-
+			
+			if (type instanceof CodeRepositoryProtoTuple && selector.equals("revisions")) {
+				throw new TypeCheckException(n.getId(), "Accessing " + "'" + selector + "' of '" + type + "' is prohibited! "
+						+ "Use functions 'getrevisionscount(CodeRepository)' and 'getrevision(CodeRepository, int)' instead! "
+						+ "E.g., revision := getrevision(cr, 0); or for (i := 0; i < getrevisionscount(cr); i++) revision := getrevision(cr, i);");
+			}
+			
 			type = ((BoaTuple) type).getMember(selector);
 			if (type instanceof BoaName)
 				type = ((BoaName) type).getType();
@@ -1313,11 +1282,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		n.env = st;
 		n.getValue().accept(this, st);
-		final BoaType t = n.getValue().type;
-		if (!(t instanceof BoaScalar))
-			if (!(t instanceof BoaTuple))
-				throw new TypeCheckException(n.getValue(), "non-scalar/non-tuple type '" + t + "' can not be used in arrays");
-		n.type = new BoaArray(t);
+		n.type = new BoaArray(n.getValue().type);
 	}
 
 	/** {@inheritDoc} */
@@ -1459,11 +1424,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	@Override
 	public void visit(final TupleType n, final SymbolTable env) {
 		n.env = env;
+		final SymbolTable e = new SymbolTable();
 
 		final List<BoaType> types = new ArrayList<BoaType>();
 
 		for (final Component c : n.getMembers()) {
-			c.accept(this, env);
+			c.accept(this, e);
 			types.add(c.type);
 		}
 

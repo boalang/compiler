@@ -1,0 +1,17 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: VARACCESS
+      expressions {
+        kind: VARACCESS
+        variable: "Employee"
+      }
+      expressions {
+        kind: VARACCESS
+        variable: "name"
+      }
+    }
+  }
+}

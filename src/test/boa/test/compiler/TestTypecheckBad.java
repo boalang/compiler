@@ -87,21 +87,6 @@ public class TestTypecheckBad extends BaseTest {
 	}
 
 	@Test
-	public void complexArray1() throws IOException {
-		typecheck(load(badDir + "complex-arrays.boa"), "non-scalar/non-tuple type 'set of int' can not be used in arrays");
-	}
-
-	@Test
-	public void complexArray2() throws IOException {
-		typecheck(load(badDir + "complex-arrays2.boa"), "non-scalar/non-tuple type 'stack of int' can not be used in arrays");
-	}
-
-	@Test
-	public void complexArray3() throws IOException {
-		typecheck(load(badDir + "complex-arrays3.boa"), "non-scalar/non-tuple type 'map[string] of int' can not be used in arrays");
-	}
-
-	@Test
 	public void afterReturn() throws IOException {
 		typecheck(load(badDir + "after-return.boa"), "return statement not allowed inside visitors");
 	}
@@ -119,5 +104,10 @@ public class TestTypecheckBad extends BaseTest {
 	@Test
 	public void assignFuncNoRet() throws IOException {
 		typecheck(load(badDir + "assign-func-no-ret.boa"), "functions without a return type can not be used as initializers");
+	}
+
+	@Test
+	public void tupleRedecl() throws IOException {
+		typecheck(load(badDir + "tuple-redecl.boa"), "variable 'a' already declared as 'float'");
 	}
 }

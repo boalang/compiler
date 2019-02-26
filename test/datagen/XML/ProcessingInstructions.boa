@@ -1,0 +1,8 @@
+elements {
+  tag: "emptyElement"
+  kind: XML_ELEMENT
+}
+processing_instruction {
+  key: "xml-stylesheet"
+  value: "href=\"style.css\" type=\"text/css\""
+}

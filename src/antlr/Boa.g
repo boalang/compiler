@@ -257,7 +257,7 @@ assignmentStatement returns [AssignmentStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: f=factor EQUALS e=expression { isSemicolon(); $ast = new AssignmentStatement($f.ast, $e.ast); }
+	: f=factor op=(EQUALS | PLUSEQ | MINUSEQ | STAREQ | DIVEQ | ONEOREQ | XOREQ | MODEQ | ONEANDEQ | RSHIFTEQ | LSHIFTEQ) e=expression { isSemicolon(); $ast = new AssignmentStatement($f.ast, $op.text, $e.ast); }
 	;
 
 block returns [Block ast]
@@ -653,7 +653,8 @@ stringLiteral returns [StringLiteral ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: lit=StringLiteral { $ast = new StringLiteral(false, $lit.text); }
+	: lit=MultilineStringLiteral { $ast = new StringLiteral(false, "\"" + $lit.text.substring(3, $lit.text.length() - 3).replaceAll("\"", "\\\\\"").replaceAll("\n", "\\\\n") + "\""); }
+	| lit=StringLiteral { $ast = new StringLiteral(false, $lit.text); }
 	| lit=RegexLiteral  { $ast = new StringLiteral(true, $lit.text); }
 	;
 
@@ -749,6 +750,16 @@ MOD    : '%';
 RSHIFT : '>>';
 NEG    : '~';
 INV    : '!';
+PLUSEQ : '+=';
+MINUSEQ: '-=';
+STAREQ : '*=';
+DIVEQ  : '/=';
+ONEOREQ: '|=';
+XOREQ  : '^=';
+MODEQ  : '%=';
+ONEANDEQ:'&=';
+RSHIFTEQ:'>>=';
+LSHIFTEQ:'<<=';
 
 //
 // other
@@ -760,6 +771,7 @@ DOLLAR      : '$';
 EQUALS      : '=';
 EMIT        : '<<';
 RIGHT_ARROW : '->';
+ML_STRING   : '"""';
 
 //
 // literals
@@ -831,6 +843,10 @@ RegexLiteral
 fragment
 RegexCharacter
 	: ~[`\n\r]
+	;
+
+MultilineStringLiteral
+	: ML_STRING (StringCharacter | ["\n\r])*? ML_STRING
 	;
 
 StringLiteral

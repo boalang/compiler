@@ -19,20 +19,29 @@ package boa.functions;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.MapFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper.Context;
+
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.JavaCore;
 
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import boa.datagen.DefaultProperties;
+import boa.datagen.util.JavaErrorCheckVisitor;
+import boa.datagen.util.JavaVisitor;
 import boa.types.Ast.*;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -50,8 +59,31 @@ import boa.types.Toplevel.Project;
  */
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
-	private static Context context;
+	static Context context;
 	private static MapFile.Reader map, commentsMap, issuesMap;
+
+	private static final Revision emptyRevision;
+	static {
+		Revision.Builder rb = Revision.newBuilder();
+		rb.setCommitDate(0);
+		Person.Builder pb = Person.newBuilder();
+		pb.setUsername("");
+		rb.setCommitter(pb);
+		rb.setId("");
+		rb.setLog("");
+		emptyRevision = rb.build();
+	}
+	
+	private static MapFile.Reader commitMap;
+
+	public static enum COMMITCOUNTER {
+		GETS_ATTEMPTED,
+		GETS_SUCCEED,
+		GETS_FAILED,
+		GETS_FAIL_MISSING,
+		GETS_FAIL_BADPROTOBUF,
+		GETS_FAIL_BADLOC,
+	};
 
 	public static enum ASTCOUNTER {
 		GETS_ATTEMPTED,
@@ -80,25 +112,17 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "ChangedFile" })
 	public static ASTRoot getast(final ChangedFile f) {
-		// since we know only certain kinds have ASTs, filter before looking up
-		final ChangedFile.FileKind kind = f.getKind();
-		if (kind != ChangedFile.FileKind.SOURCE_JAVA_ERROR
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS2
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS3
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS8)
+		if (!f.getAst())
 			return emptyAst;
 
 		context.getCounter(ASTCOUNTER.GETS_ATTEMPTED).increment(1);
-
-		final String rowName = f.getKey() + "!!" + f.getName();
 
 		if (map == null)
 			openMap();
 
 		try {
 			final BytesWritable value = new BytesWritable();
-			if (map.get(new Text(rowName), value) == null) {
+			if (map.get(new LongWritable(f.getKey()), value) == null) {
 				context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
 			} else {
 				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
@@ -122,9 +146,47 @@ public class BoaAstIntrinsics {
 			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
 		}
 
-		System.err.println("error with ast: " + rowName);
+		System.err.println("error with ast: " + f.getKey() + " from " + f.getName());
 		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
 		return emptyAst;
+	}
+
+	@SuppressWarnings("unchecked")
+	static Revision getRevision(long key) {
+		context.getCounter(COMMITCOUNTER.GETS_ATTEMPTED).increment(1);
+		
+		if (commitMap == null)
+			openCommitMap();
+		
+		try {
+			final BytesWritable value = new BytesWritable();
+			if (commitMap.get(new LongWritable(key), value) == null) {
+				context.getCounter(COMMITCOUNTER.GETS_FAIL_MISSING).increment(1);
+			} else {
+				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+				// defaults to 64, really big ASTs require more
+				_stream.setRecursionLimit(Integer.MAX_VALUE);
+				final Revision root = Revision.parseFrom(_stream);
+				context.getCounter(COMMITCOUNTER.GETS_SUCCEED).increment(1);
+				return root;
+			}
+		} catch (final InvalidProtocolBufferException e) {
+			e.printStackTrace();
+			context.getCounter(COMMITCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+		} catch (final IOException e) {
+			e.printStackTrace();
+			context.getCounter(COMMITCOUNTER.GETS_FAIL_MISSING).increment(1);
+		} catch (final RuntimeException e) {
+			e.printStackTrace();
+			context.getCounter(COMMITCOUNTER.GETS_FAIL_MISSING).increment(1);
+		} catch (final Error e) {
+			e.printStackTrace();
+			context.getCounter(COMMITCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+		}
+
+		System.err.println("error with revision: " + key);
+		context.getCounter(COMMITCOUNTER.GETS_FAILED).increment(1);
+		return emptyRevision;
 	}
 
 	/**
@@ -213,7 +275,7 @@ public class BoaAstIntrinsics {
 			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
-				p = new Path(DefaultProperties.localDataPath);
+				p = new Path(DefaultProperties.localDataPath, "ast");
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
@@ -237,7 +299,7 @@ public class BoaAstIntrinsics {
 			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
-				p = new Path(DefaultProperties.localCommentPath);
+				p = new Path(DefaultProperties.localDataPath, "comments");
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
@@ -261,7 +323,7 @@ public class BoaAstIntrinsics {
 			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
-				p = new Path(DefaultProperties.localIssuePath);
+				p = new Path(DefaultProperties.localDataPath, "issues");
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
@@ -279,11 +341,31 @@ public class BoaAstIntrinsics {
 		}
 	}
 
+	private static void openCommitMap() {
+		try {
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localDataPath, "commit");
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+						new Path(conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("commit")));
+				fs = FileSystem.get(conf);
+			}
+			commitMap = new MapFile.Reader(fs, p.toString(), conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	@SuppressWarnings("rawtypes")
 	public static void cleanup(final Context context) {
 		closeMap();
 		closeCommentMap();
 		closeIssuesMap();
+		closeCommitMap();
 	}
 
 	private static void closeMap() {
@@ -314,6 +396,16 @@ public class BoaAstIntrinsics {
 				e.printStackTrace();
 			}
 		issuesMap = null;
+	}
+
+	private static void closeCommitMap() {
+		if (commitMap != null)
+			try {
+				commitMap.close();
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		commitMap = null;
 	}
 
 	@FunctionSpec(name = "type_name", returnType = "string", formalParameters = { "string" })
@@ -434,27 +526,6 @@ public class BoaAstIntrinsics {
 	}
 
 	public final static SnapshotVisitor snapshot = new SnapshotVisitor();
-
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time", "string..." })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp, final String... kinds) throws Exception {
-		snapshot.initialize(timestamp, kinds).visit(cr);
-		return snapshot.map.values().toArray(new ChangedFile[0]);
-	}
-
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string..." })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String... kinds) throws Exception {
-		return getSnapshot(cr, Long.MAX_VALUE, kinds);
-	}
-
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time" })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp) throws Exception {
-		return getSnapshot(cr, timestamp, new String[0]);
-	}
-
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository" })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr) throws Exception {
-		return getSnapshot(cr, Long.MAX_VALUE, new String[0]);
-	}
 
 	///////////////////////////////
 	// Literal testing functions */
@@ -662,6 +733,7 @@ public class BoaAstIntrinsics {
 		return genericsCollectingVisitor.map;
 	}
 
+	@SuppressWarnings("unused")
 	private static void parseGenericType(final String name, final HashMap<String,Long> counts) {
 		if (!name.contains("<") || name.startsWith("<"))
 			return;
@@ -735,5 +807,673 @@ public class BoaAstIntrinsics {
 			rawType += type.substring(type.lastIndexOf(">") + 1).trim();
 		final long rawCount = counts.containsKey(rawType) ? counts.get(rawType) : 0;
 		counts.put(rawType, rawCount + 1);
+	}
+
+	static int indent = 0;
+	private static String indent() {
+		String s = "";
+		for (int i = 0; i < indent; i++)
+			s += "\t";
+		return s;
+	}
+
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "ASTRoot" })
+	public static String prettyprint(final ASTRoot r) {
+		if (r == null) return "";
+
+		String s = "";
+
+		for (final Namespace n : r.getNamespacesList())
+			s += prettyprint(n);
+
+		return s;
+	}
+
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Namespace" })
+	public static String prettyprint(final Namespace n) {
+		if (n == null) return "";
+
+		String s = "";
+
+		if (n.getName().length() > 0) {
+			if (n.getModifiersCount() > 0)
+				s += prettyprint(n.getModifiersList()) + " ";
+			s += indent() + "package " + n.getName() + ";\n";
+		}
+
+		for (final String i : n.getImportsList())
+			s += indent() + "import " + i + "\n";
+
+		for (final Declaration d : n.getDeclarationsList())
+			s += prettyprint(d);
+
+		return s;
+	}
+
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Declaration" })
+	public static String prettyprint(final Declaration d) {
+		if (d == null) return "";
+
+		String s = indent() + prettyprint(d.getModifiersList()) + " ";
+
+		switch (d.getKind()) {
+			case INTERFACE:
+				s += "interface " + d.getName();
+				if (d.getGenericParametersCount() > 0) {
+					s += "<";
+					for (int i = 0; i < d.getGenericParametersCount(); i++) {
+						if (i != 0) s += ", ";
+						s += prettyprint(d.getGenericParameters(i));
+					}
+					s += ">";
+				}
+				if (d.getParentsCount() > 0) {
+					s += " extends ";
+					for (int i = 0; i < d.getParentsCount(); i++) {
+						if (i != 0) s += ", ";
+						s += prettyprint(d.getParents(i));
+					}
+				}
+				s += " {\n";
+				break;
+			case ANONYMOUS:
+				break;
+			case ENUM:
+				s += "enum " + d.getName();
+				break;
+			case ANNOTATION:
+				s += "@interface class " + d.getName();
+				if (d.getGenericParametersCount() > 0) {
+					s += "<";
+					for (int i = 0; i < d.getGenericParametersCount(); i++) {
+						if (i != 0) s += ", ";
+						s += prettyprint(d.getGenericParameters(i));
+					}
+					s += ">";
+				}
+				if (d.getParentsCount() > 0) {
+					int i = 0;
+					if (d.getParents(i).getKind() == TypeKind.CLASS)
+						s += " extends " + prettyprint(d.getParents(i++));
+					if (i < d.getParentsCount()) {
+						s += " implements ";
+						for (int j = i; i < d.getParentsCount(); i++) {
+							if (i != j) s += ", ";
+							s += prettyprint(d.getParents(i));
+						}
+					}
+				}
+				break;
+			default:
+			case CLASS:
+				s += "class " + d.getName();
+				if (d.getGenericParametersCount() > 0) {
+					s += "<";
+					for (int i = 0; i < d.getGenericParametersCount(); i++) {
+						if (i != 0) s += ", ";
+						s += prettyprint(d.getGenericParameters(i));
+					}
+					s += ">";
+				}
+				if (d.getParentsCount() > 0) {
+					int i = 0;
+					if (d.getParents(i).getKind() == TypeKind.CLASS)
+						s += " extends " + prettyprint(d.getParents(i++));
+					if (i < d.getParentsCount()) {
+						s += " implements ";
+						for (int j = i; i < d.getParentsCount(); i++) {
+							if (i != j) s += ", ";
+							s += prettyprint(d.getParents(i));
+						}
+					}
+				}
+				break;
+		}
+
+		s += " {\n";
+
+		indent++;
+
+		for (final Variable v : d.getFieldsList())
+			s += indent() + prettyprint(v) + ";\n";
+		for (final Method m : d.getMethodsList())
+			s += prettyprint(m);
+		for (final Declaration d2 : d.getNestedDeclarationsList())
+			s += prettyprint(d2);
+
+		indent--;
+
+		s += indent() + "}\n";
+
+		return s;
+	}
+
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Type" })
+	public static String prettyprint(final Type t) {
+		if (t == null) return "";
+
+		return t.getName();
+	}
+
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Method" })
+	public static String prettyprint(final Method m) {
+		if (m == null) return "";
+		String s = indent();
+
+		for (int i = 0; i < m.getModifiersCount(); i++)
+			s += prettyprint(m.getModifiers(i)) + " ";
+
+		if (m.getGenericParametersCount() > 0) {
+			s += "<";
+			for (int i = 0; i < m.getGenericParametersCount(); i++) {
+				if (i > 0)
+					s += ", ";
+				s += prettyprint(m.getGenericParameters(i));
+			}
+			s += "> ";
+		}
+
+		s += prettyprint(m.getReturnType()) + " " + m.getName() + "(";
+		for (int i = 0; i < m.getArgumentsCount(); i++) {
+			if (i > 0)
+				s += ", ";
+			s += prettyprint(m.getArguments(i));
+		}
+		s += ") ";
+
+		if (m.getExceptionTypesCount() > 0) {
+			s += "throws ";
+			for (int i = 0; i < m.getExceptionTypesCount(); i++)
+				s += prettyprint(m.getExceptionTypes(i)) + " ";
+		}
+
+		s += "\n";
+		for (int i = 0; i < m.getStatementsCount(); i++)
+			s += indent() + prettyprint(m.getStatements(i)) + "\n";
+
+		return s;
+	}
+
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Variable" })
+	public static String prettyprint(final Variable v) {
+		if (v == null) return "";
+
+		String s = prettyprint(v.getModifiersList()) + prettyprint(v.getVariableType()) + " " + v.getName();
+
+		if (v.hasInitializer())
+			s += " = " + prettyprint(v.getInitializer());
+
+		return s;
+	}
+
+	private static String prettyprint(final List<Modifier> mods) {
+		String s = "";
+
+		for (final Modifier m : mods)
+			s += prettyprint(m) + " ";
+
+		return s;
+	}
+
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Statement" })
+	public static String prettyprint(final Statement stmt) {
+		if (stmt == null) return "";
+
+		String s = "";
+
+		switch (stmt.getKind()) {
+			case EMPTY:
+				return ";";
+
+			case BLOCK:
+				s += "{\n";
+				indent++;
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				indent--;
+				s += indent() + "}";
+				return s;
+
+			case RETURN:
+				s += "return";
+				if (stmt.getExpressionsCount() > 0)
+					s += " " + prettyprint(stmt.getExpressions(0));
+				s += ";";
+				return s;
+			case BREAK:
+				s += "break";
+				if (stmt.getExpressionsCount() > 0)
+					s += " " + prettyprint(stmt.getExpressions(0));
+				s += ";";
+				return s;
+			case CONTINUE:
+				s += "continue";
+				if (stmt.getExpressionsCount() > 0)
+					s += " " + prettyprint(stmt.getExpressions(0));
+				s += ";";
+				return s;
+
+			case ASSERT:
+				s += "assert ";
+				s += prettyprint(stmt.getConditions(0));
+				if (stmt.getExpressionsCount() > 0)
+					s += " " + prettyprint(stmt.getExpressions(0));
+				s += ";";
+				return s;
+
+			case LABEL:
+				return prettyprint(stmt.getExpressions(0)) + ": " + prettyprint(stmt.getStatements(0));
+
+			case CASE:
+				return "case " + prettyprint(stmt.getExpressions(0)) + ":";
+
+			case DEFAULT:
+				return "default:";
+
+			case EXPRESSION:
+				return prettyprint(stmt.getExpressions(0)) + ";";
+
+			case TYPEDECL:
+				return prettyprint(stmt.getTypeDeclaration());
+
+			case SYNCHRONIZED:
+				s += "synchronized () {\n";
+				indent++;
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				indent--;
+				s += "}";
+				return s;
+
+			case CATCH:
+				s += indent() + "catch (";
+				s += prettyprint(stmt.getVariableDeclaration());
+				s += ") {\n";
+				indent++;
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				indent--;
+				s += indent() + "}";
+				return s;
+
+			case FINALLY:
+				s += indent() + "finally {\n";
+				indent++;
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				indent--;
+				s += indent() + "}";
+				return s;
+
+			case TRY:
+				s += "try";
+				if (stmt.getInitializationsCount() > 0) {
+					s += "(";
+					for (int i = 0; i < stmt.getInitializationsCount(); i++) {
+						if (i > 0)
+							s += ", ";
+						s += prettyprint(stmt.getInitializations(i));
+					}
+					s += ")";
+				}
+				s += " ";
+				for (int i = 0; i < stmt.getStatementsCount(); i++) {
+					s += prettyprint(stmt.getStatements(i)) + "\n";
+				}
+				return s;
+
+			case FOR:
+				s += "for (";
+				if (stmt.hasVariableDeclaration()) {
+					s += prettyprint(stmt.getVariableDeclaration()) + " : " + prettyprint(stmt.getConditions(0));
+				} else {
+					for (int i = 0; i < stmt.getInitializationsCount(); i++) {
+						if (i > 0)
+							s += ", ";
+						s += prettyprint(stmt.getInitializations(i));
+					}
+					s += "; " + prettyprint(stmt.getConditions(0)) + "; ";
+					for (int i = 0; i < stmt.getUpdatesCount(); i++) {
+						if (i > 0)
+							s += ", ";
+						s += prettyprint(stmt.getUpdates(i));
+					}
+				}
+				s += ")\n";
+				indent++;
+				s += indent() + prettyprint(stmt.getStatements(0)) + "\n";
+				indent--;
+				return s;
+
+			case DO:
+				s += "do\n";
+				indent++;
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				indent--;
+				s += indent() + "while (" + prettyprint(stmt.getConditions(0)) + ");";
+				return s;
+
+			case WHILE:
+				s += "while (" + prettyprint(stmt.getConditions(0)) + ") {\n";
+				indent++;
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				indent--;
+				s += indent() + "}";
+				return s;
+
+			case IF:
+				s += "if (" + prettyprint(stmt.getConditions(0)) + ")\n";
+				indent++;
+				s += indent() + prettyprint(stmt.getStatements(0)) + "\n";
+				indent--;
+				if (stmt.getStatementsCount() > 1) {
+					s += indent() + "else\n";
+					indent++;
+					s += indent() + prettyprint(stmt.getStatements(1)) + "\n";
+					indent--;
+				}
+				return s;
+
+			case SWITCH:
+				s += "switch (" + prettyprint(stmt.getExpressions(0)) + ") {";
+				indent++;
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				indent--;
+				s += "}";
+				return s;
+
+			case THROW:
+				return "throw " + prettyprint(stmt.getConditions(0)) + ";";
+
+			default: return s;
+		}
+	}
+
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Expression" })
+	public static String prettyprint(final Expression e) {
+		if (e == null) return "";
+
+		String s = "";
+
+		switch (e.getKind()) {
+			case OP_ADD:
+				if (e.getExpressionsCount() == 1)
+					return ppPrefix("+", e);
+				return ppInfix("+", e.getExpressionsList());
+			case OP_SUB:
+				if (e.getExpressionsCount() == 1)
+					return ppPrefix("-", e);
+				return ppInfix("-", e.getExpressionsList());
+
+			case LOGICAL_AND:           return "(" + ppInfix("&&", e.getExpressionsList()) + ")";
+			case LOGICAL_OR:            return "(" + ppInfix("||", e.getExpressionsList()) + ")";
+
+			case EQ:                    return ppInfix("==",   e.getExpressionsList());
+			case NEQ:                   return ppInfix("!=",   e.getExpressionsList());
+			case LT:                    return ppInfix("<",    e.getExpressionsList());
+			case GT:                    return ppInfix(">",    e.getExpressionsList());
+			case LTEQ:                  return ppInfix("<=",   e.getExpressionsList());
+			case GTEQ:                  return ppInfix(">=",   e.getExpressionsList());
+			case OP_DIV:                return ppInfix("/",    e.getExpressionsList());
+			case OP_MULT:               return ppInfix("*",    e.getExpressionsList());
+			case OP_MOD:                return ppInfix("%",    e.getExpressionsList());
+			case BIT_AND:               return ppInfix("&",    e.getExpressionsList());
+			case BIT_OR:                return ppInfix("|",    e.getExpressionsList());
+			case BIT_XOR:               return ppInfix("^",    e.getExpressionsList());
+			case BIT_LSHIFT:            return ppInfix("<<",   e.getExpressionsList());
+			case BIT_RSHIFT:            return ppInfix(">>",   e.getExpressionsList());
+			case BIT_UNSIGNEDRSHIFT:    return ppInfix(">>>",  e.getExpressionsList());
+			case ASSIGN:                return ppInfix("=",    e.getExpressionsList());
+			case ASSIGN_ADD:            return ppInfix("+=",   e.getExpressionsList());
+			case ASSIGN_SUB:            return ppInfix("-=",   e.getExpressionsList());
+			case ASSIGN_MULT:           return ppInfix("*=",   e.getExpressionsList());
+			case ASSIGN_DIV:            return ppInfix("/=",   e.getExpressionsList());
+			case ASSIGN_MOD:            return ppInfix("%=",   e.getExpressionsList());
+			case ASSIGN_BITXOR:         return ppInfix("^=",   e.getExpressionsList());
+			case ASSIGN_BITAND:         return ppInfix("&=",   e.getExpressionsList());
+			case ASSIGN_BITOR:          return ppInfix("|=",   e.getExpressionsList());
+			case ASSIGN_LSHIFT:         return ppInfix("<<=",  e.getExpressionsList());
+			case ASSIGN_RSHIFT:         return ppInfix(">>=",  e.getExpressionsList());
+			case ASSIGN_UNSIGNEDRSHIFT: return ppInfix(">>>=", e.getExpressionsList());
+
+			case LOGICAL_NOT: return ppPrefix("!", e);
+			case BIT_NOT:     return ppPrefix("~", e);
+
+			case OP_DEC:
+				if (e.getIsPostfix())
+					return ppPostfix("--", e);
+				return ppPrefix("--", e);
+			case OP_INC:
+				if (e.getIsPostfix())
+					return ppPostfix("++", e);
+				return ppPrefix("++", e);
+
+			case PAREN: return "(" + prettyprint(e.getExpressions(0)) + ")";
+			case LITERAL: return e.getLiteral();
+			case VARACCESS:
+				for (int i = 0; i < e.getExpressionsCount(); i++)
+					s += prettyprint(e.getExpressions(i)) + ".";
+				s += e.getVariable();
+				return s;
+			case CAST: return "(" + e.getNewType().getName() + ")" + prettyprint(e.getExpressions(0));
+			case CONDITIONAL: return prettyprint(e.getExpressions(0)) + " ? " + prettyprint(e.getExpressions(1)) + " : " + prettyprint(e.getExpressions(2));
+			case NULLCOALESCE: return prettyprint(e.getExpressions(0)) + " ?? " + prettyprint(e.getExpressions(1));
+
+			case METHODCALL:
+				for (int i = 0; i < e.getExpressionsCount(); i++)
+					s += prettyprint(e.getExpressions(i)) + ".";
+				if (e.getGenericParametersCount() > 0) {
+					s += "<";
+					for (int i = 0; i < e.getGenericParametersCount(); i++) {
+						if (i > 0)
+							s += ", ";
+						s += prettyprint(e.getGenericParameters(i));
+					}
+					s += ">";
+				}
+				s += e.getMethod() + "(";
+				for (int i = 0; i < e.getMethodArgsCount(); i++) {
+					if (i > 0)
+						s += ", ";
+					s += prettyprint(e.getMethodArgs(i));
+				}
+				s += ")";
+				return s;
+
+			case TYPECOMPARE:
+				return prettyprint(e.getExpressions(0)) + " instanceof " + prettyprint(e.getNewType());
+
+			case NEWARRAY:
+				s += "new ";
+				s += prettyprint(e.getNewType());
+				for (int i = 0; i < e.getExpressionsCount(); i++)
+					s += prettyprint(e.getExpressions(i));
+				return s;
+
+			case NEW:
+				s += "new ";
+				s += prettyprint(e.getNewType());
+				if (e.getGenericParametersCount() > 0) {
+					s += "<";
+					for (int i = 0; i < e.getGenericParametersCount(); i++) {
+						if (i > 0)
+							s += ", ";
+						s += prettyprint(e.getGenericParameters(i));
+					}
+					s += ">";
+				}
+				s += "(";
+				for (int i = 0; i < e.getMethodArgsCount(); i++) {
+					if (i > 0)
+						s += ", ";
+					s += prettyprint(e.getMethodArgs(i));
+				}
+				s += ")";
+				if (e.hasAnonDeclaration())
+					s += prettyprint(e.getAnonDeclaration());
+				return s;
+
+			case ARRAYACCESS:
+				return prettyprint(e.getExpressions(0)) + "[" + prettyprint(e.getExpressions(1)) + "]";
+
+			case ARRAYINIT:
+				s += "{";
+				for (int i = 0; i < e.getExpressionsCount(); i++) {
+					if (i > 0)
+						s += ", ";
+					s += prettyprint(e.getExpressions(i));
+				}
+				s += "}";
+				return s;
+
+			case ANNOTATION:
+				return prettyprint(e.getAnnotation());
+
+			case VARDECL:
+				for (int i = 0; i < e.getVariableDecls(0).getModifiersCount(); i++)
+					s += prettyprint(e.getVariableDecls(0).getModifiers(i)) + " ";
+				s += prettyprint(e.getVariableDecls(0).getVariableType()) + " ";
+				for (int i = 0; i < e.getVariableDeclsCount(); i++) {
+					if (i > 0)
+						s += ", ";
+					s += e.getVariableDecls(i).getName();
+					if (e.getVariableDecls(i).hasInitializer())
+						s += " = " + prettyprint(e.getVariableDecls(i).getInitializer());
+				}
+				return s;
+
+			// TODO
+			case METHOD_REFERENCE:
+			// TODO
+			case LAMBDA:
+			default: return s;
+		}
+	}
+
+	private static String ppPrefix(final String op, final Expression e) {
+		return op + prettyprint(e.getExpressions(0));
+	}
+
+	private static String ppPostfix(final String op, final Expression e) {
+		return prettyprint(e.getExpressions(0)) + op;
+	}
+
+	private static String ppInfix(final String op, final List<Expression> exps) {
+		StringBuilder s = new StringBuilder();
+
+		s.append(prettyprint(exps.get(0)));
+		for (int i = 1; i < exps.size(); i++) {
+			s.append(" ");
+			s.append(op);
+			s.append(" ");
+			s.append(prettyprint(exps.get(i)));
+		}
+
+		return s.toString();
+	}
+
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Modifier" })
+	public static String prettyprint(final Modifier m) {
+		if (m == null) return "";
+
+		String s = "";
+
+		switch (m.getKind()) {
+			case OTHER: return m.getOther();
+
+			case VISIBILITY:
+				switch (m.getVisibility()) {
+					case PUBLIC:    return "public";
+					case PRIVATE:   return "private";
+					case PROTECTED: return "protected";
+					case NAMESPACE: return "namespace";
+					default: return s;
+				}
+
+			case ANNOTATION:
+				s = "@" + m.getAnnotationName();
+				if (m.getAnnotationMembersCount() > 0) s += "(";
+				for (int i = 0; i < m.getAnnotationMembersCount(); i++) {
+					if (i > 0) s += ", ";
+					s += m.getAnnotationMembers(i) + " = " + prettyprint(m.getAnnotationValues(i));
+				}
+				if (m.getAnnotationMembersCount() > 0) s += ")";
+				return s;
+
+			case FINAL:        return "final";
+			case STATIC:       return "static";
+			case SYNCHRONIZED: return "synchronized";
+			case ABSTRACT:     return "abstract";
+
+			default: return s;
+		}
+	}
+
+	/**
+	 * Converts a string expression into an AST.
+	 *
+	 * @param s the string to parse/convert
+	 * @return the AST representation of the string
+	 */
+	@FunctionSpec(name = "parseexpression", returnType = "Expression", formalParameters = { "string" })
+	public static Expression parseexpression(final String s) {
+		final ASTParser parser = ASTParser.newParser(AST.JLS8);
+		parser.setKind(ASTParser.K_EXPRESSION);
+		parser.setSource(s.toCharArray());
+
+		@SuppressWarnings("rawtypes")
+		final Map options = JavaCore.getOptions();
+		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+		parser.setCompilerOptions(options);
+
+		try {
+			final org.eclipse.jdt.core.dom.Expression e = (org.eclipse.jdt.core.dom.Expression) parser.createAST(null);
+			final JavaVisitor visitor = new JavaVisitor(s);
+			e.accept(visitor);
+			return visitor.getExpression();
+		} catch (final Exception e) {
+			// do nothing
+		}
+
+		final Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(Expression.ExpressionKind.OTHER);
+		return eb.build();
+	}
+
+	/**
+	 * Converts a string into an AST.
+	 *
+	 * @param s the string to parse/convert
+	 * @return the AST representation of the string
+	 */
+	@FunctionSpec(name = "parse", returnType = "ASTRoot", formalParameters = { "string" })
+	public static ASTRoot parse(final String s) {
+		final ASTParser parser = ASTParser.newParser(AST.JLS8);
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setSource(s.toCharArray());
+
+		@SuppressWarnings("rawtypes")
+		final Map options = JavaCore.getOptions();
+		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+		parser.setCompilerOptions(options);
+
+		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+		try {
+			final org.eclipse.jdt.core.dom.CompilationUnit cu = (org.eclipse.jdt.core.dom.CompilationUnit) parser.createAST(null);
+			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
+			cu.accept(errorCheck);
+
+			if (!errorCheck.hasError) {
+				final JavaVisitor visitor = new JavaVisitor(s);
+				ast.addNamespaces(visitor.getNamespaces(cu));
+			}
+		} catch (final Exception e) {
+			// do nothing
+		}
+
+		return ast.build();
 	}
 }

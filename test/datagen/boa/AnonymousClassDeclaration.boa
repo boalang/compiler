@@ -1,0 +1,28 @@
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "anonymous",
+               "variable_type": {
+                  "name": "AnonymousClass",
+                  "kind": "OTHER"
+               },
+               "initializer": {
+                  "kind": "NEW",
+                  "new_type": {
+                     "name": "Anonymous",
+                     "kind": "CLASS"
+                  },
+                  "anon_declaration": {
+                     "name": "",
+                     "kind": "ANONYMOUS"
+                  }
+               }
+            }
+         ]
+      }
+   ]
+}
