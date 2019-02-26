@@ -1177,7 +1177,7 @@ public class BoaAstIntrinsics {
 				return s;
 
 			case SWITCH:
-				s += "switch (" + prettyprint(stmt.getConditions(0)) + ") {";
+				s += "switch (" + prettyprint(stmt.getExpressions(0)) + ") {";
 				indent++;
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
@@ -1259,7 +1259,7 @@ public class BoaAstIntrinsics {
 				s += e.getVariable();
 				return s;
 			case CAST: return "(" + e.getNewType().getName() + ")" + prettyprint(e.getExpressions(0));
-			case CONDITIONAL: return prettyprint(e.getExpressions(0)) + " ? " + prettyprint(e.getExpressions(0)) + " : " + prettyprint(e.getExpressions(2));
+			case CONDITIONAL: return prettyprint(e.getExpressions(0)) + " ? " + prettyprint(e.getExpressions(1)) + " : " + prettyprint(e.getExpressions(2));
 			case NULLCOALESCE: return prettyprint(e.getExpressions(0)) + " ?? " + prettyprint(e.getExpressions(1));
 
 			case METHODCALL:
@@ -1306,10 +1306,10 @@ public class BoaAstIntrinsics {
 					s += ">";
 				}
 				s += "(";
-				for (int i = 0; i < e.getExpressionsCount(); i++) {
+				for (int i = 0; i < e.getMethodArgsCount(); i++) {
 					if (i > 0)
 						s += ", ";
-					s += prettyprint(e.getExpressions(i));
+					s += prettyprint(e.getMethodArgs(i));
 				}
 				s += ")";
 				if (e.hasAnonDeclaration())
