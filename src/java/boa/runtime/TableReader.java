@@ -106,6 +106,10 @@ public class TableReader {
 		indices = objs;
 	}
 
+	public int getIndicesCount() {
+		return indices.size();
+	}
+
 	private boolean readNext() throws Exception{
 		boolean filter = true;
 		while (filter) {
@@ -150,6 +154,22 @@ public class TableReader {
 			default:
 				return false;
       	}
+	}
+
+	public static Long valToLong(Value val) {
+		return val.getI();
+	}
+
+	public static Double valToDouble(Value val) {
+		return val.getF();
+	}
+
+	public static String valToString(Value val) {
+		return val.getS();
+	}
+
+	public static Boolean valToBool(Value val) {
+		return val.getB();
 	}
 
 	public TableReader clone(){
