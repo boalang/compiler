@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import boa.output.Output.*;
+
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.SequenceFile.Reader;
@@ -29,6 +31,7 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.util.ReflectionUtils;
 import org.apache.hadoop.util.StringUtils;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 
 import com.google.protobuf.CodedInputStream;
 
@@ -39,8 +42,8 @@ import com.google.protobuf.CodedInputStream;
  * @author hungc
  * @author rdyer
  */
-public class SequenceFileIterator {
-	private String path = null;
+public class TableReader {
+	private String[] path = null;
 	private Configuration conf = null;
 	private SequenceFile.Reader reader = null;
 	private NullWritable key = null;
@@ -48,13 +51,21 @@ public class SequenceFileIterator {
 	private boolean preloaded = false;
 	private List<Object> indices = null;
 	private CodedInputStream stream = null;
-	private Row row = null;
+	private boa.output.Output.Row row = null;
 
-	public SequenceFileIterator(String path, long position) {
-		this.path = path;
+	public TableReader(long position, String ... path) throws Exception {
+		this.path = path.clone();
+		String filePath = path.length > 0 ? path[0] : "";
+
+		for (int i = 1; i < path.length; i++) {
+			filePath += "/" + path[i];
+		}
+
 		conf = new Configuration();
+		FileSystem fs = FileSystem.get(conf);
+		Path p = new Path(filePath);
 
-		reader = new SequenceFile.Reader(conf, Reader.file(new Path(path)), Reader.bufferSize(4096), Reader.start(0));
+		reader = new SequenceFile.Reader(fs, new Path(filePath), conf);
 		reader.seek(position);
 		key = (NullWritable) ReflectionUtils.newInstance(this.reader.getKeyClass(), conf);
 		value = (BytesWritable) ReflectionUtils.newInstance(this.reader.getValueClass(), conf);
@@ -62,14 +73,14 @@ public class SequenceFileIterator {
 		indices = new ArrayList<Object>();
 	}
 
-	public boolean hasNext() {
+	public boolean hasNext() throws Exception{
 		if (preloaded)
 			return true;
 		preloaded = readNext();
 		return preloaded;
 	}
 
-	public Row next() {
+	public boa.output.Output.Row next() throws Exception{
 		if (!preloaded)
 			readNext();
 		else
@@ -78,7 +89,7 @@ public class SequenceFileIterator {
 		return row;
 	}
 
-	public void close() {
+	public void close() throws Exception{
 		reader.close();
 	}
 
@@ -95,7 +106,7 @@ public class SequenceFileIterator {
 		indices = objs;
 	}
 
-	private boolean readNext() {
+	private boolean readNext() throws Exception{
 		boolean filter = true;
 		while (filter) {
 			filter = false;
@@ -103,11 +114,11 @@ public class SequenceFileIterator {
 				return false;
 			}
 			stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
-			row = Row.parseFrom(stream);
-			List<Value> rowValues = row.getColsList();
+			row = boa.output.Output.Row.parseFrom(stream);
+			List<boa.output.Output.Value> rowValues = row.getColsList();
 
 			for (int i = 0; i < indices.size(); i++) {
-				Value value = rowValues.get(i);
+				boa.output.Output.Value value = rowValues.get(i);
 				Object index = indices.get(i);
 				if ((index instanceof String && !((String)index).equals("_")) && !compareField(value, index)) {
 					filter = true;
@@ -120,19 +131,19 @@ public class SequenceFileIterator {
 		return true;
 	}
 
-	private boolean compareField(Value v, Object index) {
+	private boolean compareField(boa.output.Output.Value v, Object index) {
 		switch (v.getType()) {
-			case Value.Type.INT:
+			case INT:
 				return v.getI() == (Integer) index;
-			case Value.Type.FLOAT:
+			case FLOAT:
 				return v.getF() == (Float) index;
-			case Value.Type.BOOL:
+			case BOOL:
 				return v.getB() == (Boolean) index;
-			case Value.Type.STR:
+			case STRING:
 				return v.getS().equals(index);
-			case Value.Type.TUPLE:
-				for (int i = 0; i < getTCount(); i++) {
-					if (!compareField(v.getTs(i), index.get(i))) // need to think how to get each field from tuple index
+			case TUPLE:
+				for (int i = 0; i < v.getTCount(); i++) {
+					if (!compareField(v.getT(i), ((ArrayList)index).get(i)))
 						return false;
 				}
 				return true;
@@ -141,9 +152,19 @@ public class SequenceFileIterator {
       	}
 	}
 
-	public SequenceFileIterator clone() {
-		SequenceFileIterator newSFI = new SequenceFileIterator(path, reader.getPosition());
-		newSFI.setIndices(((ArrayList) indices).clone());
+	public TableReader clone(){
+		TableReader newSFI = null;
+
+		try {
+			newSFI = new TableReader(reader.getPosition(), path);
+			List<Object> newIndices = new ArrayList<Object>();
+			for (Object o : indices)
+				newIndices.add(o);
+			newSFI.setIndices(newIndices);
+		} catch (Exception e) {
+			return null;
+		}
+
 		return newSFI;
 	}
 }
