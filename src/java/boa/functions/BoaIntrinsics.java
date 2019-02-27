@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import boa.types.Ast.Statement;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -327,6 +328,7 @@ public class BoaIntrinsics {
 		return l.toArray(new ChangedFile[0]);
 	}
 	
+	// refactoring helpers
 	@FunctionSpec(name = "editdistance", returnType = "int", formalParameters = { "string", "string" })
 	public static int editDistance(String x, String y) {
 		int[][] dp = new int[x.length() + 1][y.length() + 1];
@@ -355,6 +357,13 @@ public class BoaIntrinsics {
         return Arrays.stream(numbers)
           .min().orElse(Integer.MAX_VALUE);
     }
+    
+    @FunctionSpec(name = "abstract", returnType = "array of string", formalParameters = { "Statement" })
+	public static String[] getAbstractStrings(Statement s) {
+    	List<String> strs = new ArrayList<String>();
+    	
+		return null;
+	}
 	
 	
 	/**
