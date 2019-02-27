@@ -328,10 +328,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				}
 				fieldCount++;
 				BoaType type = c.getType().type;
-				Boolean isProto = false;
-				if (type instanceof BoaProtoTuple)
-					isProto = true;
-				protos.add(isProto);
+				protos.add(type instanceof BoaProtoTuple);
 				types.add(type.toBoxedJavaType());
 			}
 
