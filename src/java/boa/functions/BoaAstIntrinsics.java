@@ -1186,7 +1186,7 @@ public class BoaAstIntrinsics {
 				return s;
 
 			case THROW:
-				return "throw " + prettyprint(stmt.getConditions(0)) + ";";
+				return "throw " + prettyprint(stmt.getExpressions(0)) + ";";
 
 			default: return s;
 		}
