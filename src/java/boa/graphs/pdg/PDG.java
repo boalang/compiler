@@ -137,7 +137,7 @@ public class PDG {
      */
     public int getTotalControlNodes() {
         int totalControlNodes = 0;
-        for (PDGNode node: nodes)
+        for (final PDGNode node: nodes)
             if (node.getKind() == Control.Node.NodeType.CONTROL)
                 totalControlNodes = totalControlNodes + 1;
         return totalControlNodes;
@@ -150,23 +150,23 @@ public class PDG {
      */
     public int getTotalEdges() {
         int totalEdges = 0;
-        for (PDGNode node: nodes)
+        for (final PDGNode node: nodes)
             totalEdges = totalEdges + node.getOutEdges().size();
         return totalEdges;
     }
 
-	public PDGNode[] sortNodes() {
-		try {
-			final PDGNode[] results = new PDGNode[nodes.size()];
-			for (final PDGNode node : nodes) {
-				results[node.getId()] = node;
-			}
-			return results;
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+    public PDGNode[] sortNodes() {
+        try {
+            final PDGNode[] results = new PDGNode[nodes.size()];
+            for (final PDGNode node : nodes) {
+                results[node.getId()] = node;
+            }
+            return results;
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * Returns the PDG node for the given node id. If not found then returns null
@@ -238,10 +238,10 @@ public class PDG {
                         // if successor has not been visited, add it
                         Collections.sort(node.getSuccessors());
                         for (final PDGNode succ : node.getSuccessors())
-                                nodes.push(succ);
+                            nodes.push(succ);
                     }
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 System.out.println(prettyprint(md));
                 throw e;
             }
@@ -349,7 +349,7 @@ public class PDG {
                 }
 
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             BoaAstIntrinsics.prettyprint(md);
         }
 
