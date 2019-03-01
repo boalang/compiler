@@ -58,6 +58,7 @@ import boa.compiler.SymbolTable;
 import boa.compiler.ast.Start;
 import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.InheritedAttributeTransformer;
+import boa.compiler.transforms.VariableDeclRenameTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
@@ -77,6 +78,11 @@ public abstract class BaseTest {
 	@BeforeClass
 	public static void initializeSymbols() throws IOException {
 		SymbolTable.initialize(new ArrayList<URL>());
+	}
+
+	@Before
+	public void resetCustomTypes() throws IOException {
+		SymbolTable.resetTypeMap();
 	}
 
 	@Before
@@ -231,7 +237,7 @@ public abstract class BaseTest {
 		return ctx;
 	}
 
-	
+
 	//
 	// code generation
 	//
@@ -260,6 +266,7 @@ public abstract class BaseTest {
 		final Start p = ctx.ast;
 
 		try {
+			new VariableDeclRenameTransformer().start(p);
 			new InheritedAttributeTransformer().start(p);
 			new LocalAggregationTransformer().start(p);
 			new VisitorOptimizingTransformer().start(p);

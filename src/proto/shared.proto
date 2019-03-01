@@ -1,3 +1,4 @@
+syntax = "proto2";
 package boa.types;
 
 option optimize_for = SPEED;

@@ -184,8 +184,8 @@
 				<fileset dir="build/tests">
 					<include name="boa/test/compiler/Test*.class" /> 
 					<include name="boa/test/functions/Test*.class" /> 
-					<include name="boa/test/datagen/Test*.class" />
-					<include name="boa/test/datagen/queries/Test*.class" />
+					<!--include name="boa/test/datagen/Test*.class" /-->
+					<!--include name="boa/test/datagen/queries/Test*.class" /-->
 					<include name="boa/test/datagen/java/Test*.class" /> 
 					<include name="boa/test/datagen/js/Test*.class" />  
 					<include name="boa/test/datagen/php/Test*.class" />  
@@ -245,6 +245,21 @@
 				<formatter type="plain" usefile="false" />
 				<fileset dir="build/tests">
 					<include name="boa/test/datagen/php/Test*.class" />
+					<exclude name="**/*$*.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
+	</target>
+	<target name="test-compiler" depends="-compile-tests" description="Run all unit tests, excluding datagen.">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
+			<classpath refid="test.class.path" />
+			<batchtest>
+				<formatter type="plain" usefile="false" />
+				<fileset dir="build/tests">
+					<include name="**/*.class" />
+					<exclude name="boa/test/datagen/**/*.class" />
 					<exclude name="**/*$*.class" />
 				</fileset>
 			</batchtest>
@@ -358,10 +373,10 @@
 		<delete file="SecurityAuth.audit" />
 		<fail message="Test failure detected." if="test.failed" />
 	</target>
-	<target name="test-suite" depends="-compile-tests" description="Run a specific test suite.">
+	<target name="test-specific" depends="-compile-tests" description="Run a specific test case.">
 		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
-			<test name="${test.suite}">
+			<test name="${test.case}">
 				<formatter type="plain" usefile="false" />
 			</test>
 		</junit>

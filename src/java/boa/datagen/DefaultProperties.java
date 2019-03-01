@@ -25,7 +25,7 @@ import java.io.File;
 public class DefaultProperties {
 	public static String NUM_THREADS = "1";
 	public static String MAX_PROJECTS = "1000";
-	public static String MAX_COMMITS = "25000";
+	public static String MAX_COMMITS = "10000";
 	public static String MAX_SIZE_FOR_PROJECT_WITH_COMMITS = String.valueOf(1 << 26); // Integer.MAX_VALUE / 3
 	
 	public static boolean DEBUG = false, DEBUGPARSE = false, CACHE = false;
@@ -70,7 +70,7 @@ public class DefaultProperties {
 	public static String CLASSPATH_ROOT = getClasspathRoot();
 	public static  String OUTPUT = "output";
 	
-	public static boolean STORE_ASCII_PRINTABLE_CONTENTS = true;
+	public static boolean STORE_ASCII_PRINTABLE_CONTENTS = true, STORE_COMMITS = true;
 
 	public static String localDataPath = null;
 	
