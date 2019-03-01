@@ -345,6 +345,15 @@
 		</junit>
 		<delete file="SecurityAuth.audit" />
 	</target>
+	<target name="test-specific" depends="-compile-tests" description="Run a specific test case.">
+		<junit fork="yes" haltonfailure="no">
+			<classpath refid="test.class.path" />
+			<test name="${test.case}">
+				<formatter type="plain" usefile="false" />
+			</test>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
 
 	<target name="-compile-tests" depends="compile,-check-deps">
 		<javac includeantruntime="true" srcdir="src/test" destdir="build/tests" debug="${debug.enabled}" debuglevel="${debug.level}">
