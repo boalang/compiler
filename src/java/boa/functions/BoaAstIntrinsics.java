@@ -1349,6 +1349,17 @@ public class BoaAstIntrinsics {
 			case METHOD_REFERENCE:
 			// TODO
 			case LAMBDA:
+				s += "(";
+				for (int i = 0; i < e.getVariableDeclsCount(); i++) {
+					if (i > 0)
+						s += ", ";
+					s += e.getVariableDecls(i).getVariableType().getName() + " " + e.getVariableDecls(i).getName();
+				}
+				s += ") -> ";
+				if (e.getStatementsCount() != 0)
+					s += prettyprint(e.getStatements(0));
+				if (e.getExpressionsCount() != 0)
+					s += prettyprint(e.getExpressions(0));
 			default: return s;
 		}
 	}
