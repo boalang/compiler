@@ -998,7 +998,10 @@ public class BoaAstIntrinsics {
 	public static String prettyprint(final Variable v) {
 		if (v == null) return "";
 
-		String s = prettyprint(v.getModifiersList()) + prettyprint(v.getVariableType()) + " " + v.getName() + "("+ prettyprint(v.getExpressions(0)) +")";
+		String s = prettyprint(v.getModifiersList()) + prettyprint(v.getVariableType()) + " " + v.getName();
+		
+		if (v.getExpressionsCount() != 0)
+			s = "("+ prettyprint(v.getExpressions(0)) +")";
 
 		if (v.hasInitializer())
 			s += " = " + prettyprint(v.getInitializer());
