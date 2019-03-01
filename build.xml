@@ -197,7 +197,7 @@
 		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-datagen" depends="test-datagen-java,test-datagen-js,test-datagen-php" description="Run datagen unit tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
@@ -208,9 +208,10 @@
 			</batchtest>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-datagen-java" depends="-compile-tests" description="Run Java datagen unit tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
@@ -221,9 +222,10 @@
 			</batchtest>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-datagen-js" depends="-compile-tests" description="Run JavaScript datagen unit tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
@@ -234,9 +236,10 @@
 			</batchtest>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-datagen-php" depends="-compile-tests" description="Run PHP datagen unit tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
@@ -247,9 +250,10 @@
 			</batchtest>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-compiler" depends="-compile-tests" description="Run all unit tests, excluding datagen.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
@@ -261,9 +265,10 @@
 			</batchtest>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-lexer" depends="-compile-tests" description="Run lexer unit tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<test name="boa.test.compiler.TestLexerBad">
 				<formatter type="plain" usefile="false" />
@@ -273,9 +278,10 @@
 			</test>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-parser" depends="-compile-tests" description="Run parser unit tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<test name="boa.test.compiler.TestParserBad">
 				<formatter type="plain" usefile="false" />
@@ -285,9 +291,10 @@
 			</test>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-typecheck" depends="-compile-tests" description="Run typechecker unit tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<test name="boa.test.compiler.TestTypecheckBad">
 				<formatter type="plain" usefile="false" />
@@ -297,27 +304,30 @@
 			</test>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-inhattr" depends="-compile-tests" description="Run inherited attribute unit tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<test name="boa.test.compiler.TestInhAttr">
 				<formatter type="plain" usefile="false" />
 			</test>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-codegen" depends="-compile-tests" description="Run code generation unit tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<test name="boa.test.compiler.TestCodegenGood">
 				<formatter type="plain" usefile="false" />
 			</test>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-traversal" depends="-compile-tests" description="Run traversal unit tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<test name="boa.test.compiler.TestTraversalGood">
 				<formatter type="plain" usefile="false" />
@@ -327,27 +337,30 @@
 			</test>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-program-analysis" depends="-compile-tests" description="Run program analysis programs.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<test name="boa.test.compiler.ProgramAnalysisGood">
 				<formatter type="plain" usefile="false" />
 			</test>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-knowngood" depends="-compile-tests" description="Run known good tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<test name="boa.test.compiler.TestGood">
 				<formatter type="plain" usefile="false" />
 			</test>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-functions" depends="-compile-tests" description="Run intrinsic functions tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
@@ -358,15 +371,17 @@
 			</batchtest>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-specific" depends="-compile-tests" description="Run a specific test case.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<test name="${test.case}">
 				<formatter type="plain" usefile="false" />
 			</test>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 
 	<target name="-compile-tests" depends="compile,-check-deps">
