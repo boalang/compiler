@@ -391,8 +391,8 @@ public class SymbolTable {
 			this.locals.put(id, type);
 	}
 
-	public void remove(final String id, final BoaType type) {
-		locals.remove(id, type);
+	public void removeLocal(final String id) {
+		locals.remove(id);
 	}
 
 	public boolean hasGlobal(final String id) {

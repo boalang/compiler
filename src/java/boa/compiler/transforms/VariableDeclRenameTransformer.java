@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, Robert Dyer, Che Shian Hung, 
+ * Copyright 2018, Robert Dyer, Che Shian Hung
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
 package boa.compiler.transforms;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
@@ -30,13 +31,13 @@ import boa.types.BoaFunction;
 /**
  * Finds and renames all variables based on the order of variable declaraction.
  * This allows the same variable names can be declared even in different scopes.
- * 
+ *
  * @author rdyer
  * @author hungc
  */
 public class VariableDeclRenameTransformer extends AbstractVisitorNoArgNoRet {
-	Integer counter;
-	HashMap<String, Integer> varHash = new HashMap<String, Integer>();
+	int counter;
+	final Map<String, String> varHash = new HashMap<String, String>();
 
 	/** {@inheritDoc} */
 	@Override
@@ -51,14 +52,13 @@ public class VariableDeclRenameTransformer extends AbstractVisitorNoArgNoRet {
 	public void visit(VarDeclStatement n) {
 		final String oldId = n.getId().getToken();
 
-		if(!(n.getType() instanceof OutputType) && !oldId.matches("_local_aggregator_(.*)") && !oldId.matches("^_inhattr_([0-9]+)")){
-			final String newId = oldId + "_" + Integer.toString(counter);
-			varHash.put(oldId, counter);
+		if (!(n.getType() instanceof OutputType)) {
+			final String newId = oldId + "_" + counter++;
 			n.getId().setToken(newId);
-			n.env.set(newId, n.env.get(oldId));
-			n.env.remove(oldId, n.getId().type);
+			varHash.put(oldId, newId);
 
-			counter++;
+			n.env.set(newId, n.env.get(oldId));
+			n.env.removeLocal(oldId);
 		}
 
 		super.visit(n);
@@ -74,25 +74,17 @@ public class VariableDeclRenameTransformer extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(Identifier n) {
 		final String oldId = n.getToken();
+		if (!varHash.containsKey(oldId))
+			return;
 
-		if(n.type != null && varHash.containsKey(oldId)){
-			final String newId = oldId + "_" + Integer.toString(varHash.get(oldId));
+		final String newId = varHash.get(oldId);
+
+		if (n.type != null || (n.env != null && !n.env.hasType(oldId) && !n.env.hasGlobal(oldId) && !n.env.hasGlobalFunction(oldId))) {
 			n.setToken(newId);
-			if(!n.env.hasLocal(newId))
+			if (!n.env.hasLocal(newId))
 				n.env.set(newId, n.env.get(oldId));
-			if(n.env.hasLocal(oldId))
-				n.env.remove(oldId, n.env.get(oldId));
-
+			if (n.env.hasLocal(oldId))
+				n.env.removeLocal(oldId);
 		}
-		else if(n.env != null)
-			if (!n.env.hasType(oldId) && !n.env.hasGlobal(oldId) && !n.env.hasGlobalFunction(oldId) && varHash.containsKey(oldId)){
-				final String newId = oldId + "_" + Integer.toString(varHash.get(oldId));
-				n.setToken(newId);
-				if(!n.env.hasLocal(newId))
-					n.env.set(newId, n.env.get(oldId));
-				if(n.env.hasLocal(oldId))
-					n.env.remove(oldId, n.env.get(oldId));
-
-			}
 	}
 }

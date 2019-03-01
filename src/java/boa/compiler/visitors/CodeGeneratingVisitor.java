@@ -35,9 +35,8 @@ import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
-import boa.types.*;
-import boa.compiler.transforms.VariableDeclRenameTransformer;
 import boa.compiler.visitors.analysis.*;
+import boa.types.*;
 
 /**
  *
@@ -492,8 +491,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	protected final TupleDeclaratorCodeGeneratingVisitor tupleDeclarator;
 	protected final EnumDeclaratorCodeGeneratingVisitor enumDeclarator;
 
-	protected final VariableDeclRenameTransformer varDeclRenamer = new VariableDeclRenameTransformer();
-
 	protected final HashMap<String, AggregatorDescription> aggregators = new HashMap<String, AggregatorDescription>();
 
 	protected final String name;
@@ -521,7 +518,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		st.add("name", this.name);
 
-		this.varDeclRenamer.start(n);
 		this.varDecl.start(n);
 		this.functionDeclarator.start(n);
 		this.tupleDeclarator.start(n);

@@ -51,6 +51,7 @@ import boa.compiler.ast.Program;
 import boa.compiler.ast.Start;
 import boa.compiler.transforms.InheritedAttributeTransformer;
 import boa.compiler.transforms.LocalAggregationTransformer;
+import boa.compiler.transforms.VariableDeclRenameTransformer;
 import boa.compiler.transforms.VisitorMergingTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
@@ -172,8 +173,8 @@ public class BoaCompiler extends BoaMain {
 							LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
 							isSimple &= !simpleVisitor.isComplex();
 							
+							new VariableDeclRenameTransformer().start(p);
 							new InheritedAttributeTransformer().start(p);
-
 							new LocalAggregationTransformer().start(p);
 
 							// if a job has no visitor, let it have its own method
