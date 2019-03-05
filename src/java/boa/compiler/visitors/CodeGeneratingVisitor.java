@@ -184,6 +184,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (n.type instanceof BoaOutputType)
 				return;
 
+			if (n.type instanceof BoaTable) {
+				code.add("boa.runtime.TableReader ___" + n.getId().getToken() + ";\n");
+				return;
+			}
+
 			final ST st = stg.getInstanceOf("VarDecl");
 
 			st.add("id", n.getId().getToken());
@@ -326,6 +331,45 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 
 			st.add("name", tupType.toJavaType());
+			st.add("fields", fields);
+			st.add("types", types);
+
+			code.add(st.render());
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final VarDeclStatement n) {
+			super.visit(n);
+
+			if (!(n.type instanceof BoaTable))
+				return;
+
+			final BoaTuple tuple = ((BoaTable)n.type).getRowType();
+			final TableType table = (TableType)n.getType();
+
+			final String name = tuple.toJavaType();
+			if (tuples.contains(name))
+				return;
+
+			tuples.add(name);
+
+			final ST st = stg.getInstanceOf("TupleType");
+
+			final List<Component> members = table.getIndices();
+			final List<String> fields = new ArrayList<String>();
+			final List<String> types = new ArrayList<String>();
+
+			members.add(table.getType());
+
+			int fieldCount = 1;
+			for (final Component c : members) {
+				fields.add("_" + fieldCount);
+				fieldCount++;
+				types.add(c.getType().type.toBoxedJavaType());
+			}
+
+			st.add("name", name);
 			st.add("fields", fields);
 			st.add("types", types);
 
@@ -1952,6 +1996,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		st.add("fname", fieldType.toJavaType());
 
 		code.add(st.render());
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final TableType n) {
+		code.add("");
 	}
 
 	protected static String expand(final String template, final String... parameters) {

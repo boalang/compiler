@@ -168,7 +168,7 @@ public class TableReader {
 		return val.getS();
 	}
 
-	public static Boolean valToBool(Value val) {
+	public static Boolean valToBoolean(Value val) {
 		return val.getB();
 	}
 
