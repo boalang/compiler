@@ -1089,8 +1089,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			if (lhs instanceof BoaArray && rhs instanceof BoaTuple)
 				rhs = new BoaArray(((BoaTuple)rhs).getMember(0));
 
-			if (rhs != null && !lhs.assigns(rhs) && !env.hasCast(rhs, lhs))
-				throw new TypeCheckException(n.getInitializer(), "incorrect type '" + rhs + "' for assignment to '" + id + ": " + lhs + "'");
+			// TODO uncomment this when type resolution is ready
+			//if (rhs != null && !lhs.assigns(rhs) && !env.hasCast(rhs, lhs))
+			//	throw new TypeCheckException(n.getInitializer(), "incorrect type '" + rhs + "' for assignment to '" + id + ": " + lhs + "'");
 		} else {
 			if (rhs == null)
 				throw new TypeCheckException(n, "variable declaration requires an explicit type or an initializer");

@@ -16,6 +16,7 @@
 package boa.compiler.ast;
 
 import java.util.List;
+import java.util.Arrays;
 import java.util.ArrayList;
 
 import boa.compiler.visitors.AbstractVisitor;
@@ -33,6 +34,7 @@ public class Table extends Operand {
 	protected String viewName;
 	protected String outputName;
 	protected List<String> subViews;
+	protected List<String> paths;
 
 	public Integer getJobNum () {
 		return jobNum;
@@ -54,6 +56,10 @@ public class Table extends Operand {
 		return subViews;
 	}
 
+	public List<String> getPaths () {
+		return paths;
+	}
+
 	public void addSubView(String sv) {
 		if (subViews == null)
 			subViews = new ArrayList<String>();
@@ -63,6 +69,7 @@ public class Table extends Operand {
 	public Table (final String s) {
 		if (s != null) {
 			String[] ary = s.split("/");
+			paths = Arrays.asList(s.split("/"));
 			outputName = ary[ary.length - 1];
 			subViews = new ArrayList<String>();
 			switch (s.charAt(0)) {

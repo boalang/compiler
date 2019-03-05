@@ -1413,6 +1413,19 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 		}
 
+
+		if (lhsType instanceof BoaTable && n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof Table) {
+			Table table = (Table)n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+			List<String> paths = table.getPaths();
+			String path = "\"" + paths.get(0) + "\"";
+			for(int i = 1; i < paths.size(); i++)
+				path += ", " + "\"" + paths.get(i) + "\"";
+
+			st.add("rhs", "new boa.runtime.TableReader(0, " + path + ")");
+			code.add(st.render());
+			return;
+		}
+
 		if (!type.assigns(t)) {
 			final BoaFunction f = n.env.getCast(t, type);
 
@@ -2002,6 +2015,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TableType n) {
+		code.add("");
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final Table n) {
 		code.add("");
 	}
 

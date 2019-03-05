@@ -1,0 +1,7 @@
+p: Project = input;
+counts: output sum of int;
+
+v1: table[int][string] of int = J12345/subv1/o;
+v2: table[string][int] of float = @rdyer/viewTag1/subv/subsubv/o;
+
+counts << 1;
