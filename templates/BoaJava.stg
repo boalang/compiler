@@ -124,7 +124,7 @@ new <type>()
 }
 >>
 
-TupleType(name, fields, types) ::= <<
+TupleType(name, fields, types, isrow) ::= <<
 private class <name>
 {
 	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
@@ -134,13 +134,13 @@ private class <name>
 	<name>( <name> tmp){
 		<fields,types:{field,type|this.___<field> = new <type>(tmp.___<field>)}; separator="; ">;
 	}
-	<name>(boa.output.Output.Row r, int offset) {
-		<trunc(fields), trunc(types):{field,type|this.___<field> = boa.runtime.TableReader.valTo<type>(r.getCols(<i0> + offset))}; separator="; ">;
-		this.___<last(fields)> = boa.runtime.TableReader.valTo<last(types)>(r.getCols(<length(fields)> - 1 + offset));
-	}
-	<name>(boa.output.Output.Value v) {
-		<fields, types:{field,type|this.___<field> = boa.runtime.TableReader.valTo<type>(v.getT(<i0>))}; separator="; ">;
-	}
+	<if(isrow)><name>(boa.output.Output.Row r, int offset) {
+	<trunc(fields), trunc(types):{field,type|this.___<field> = boa.runtime.TableReader.valTo<type>(r.getCols(<i0> + offset))}; separator="; ">;
+	this.___<last(fields)> = boa.runtime.TableReader.valTo<last(types)>(r.getCols(<length(fields)> - 1 + offset));
+}
+<name>(boa.output.Output.Value v) {
+	<fields, types:{field,type|this.___<field> = boa.runtime.TableReader.valTo<type>(v.getT(<i0>))}; separator="; ">;
+}<endif>
 
 	public <name> clone() {
     		return new <name>(this);

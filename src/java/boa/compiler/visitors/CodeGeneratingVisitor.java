@@ -369,6 +369,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				types.add(c.getType().type.toBoxedJavaType());
 			}
 
+			st.add("isrow", "true");
 			st.add("name", name);
 			st.add("fields", fields);
 			st.add("types", types);
