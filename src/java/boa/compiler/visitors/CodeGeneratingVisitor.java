@@ -1029,6 +1029,27 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 		}
 
+		if (n.getLhs().type instanceof BoaTable) {
+			final ST st2 = stg.getInstanceOf("ViewAssignment");
+
+			String rhsView = rhs.contains("[") ? rhs.substring(0, rhs.indexOf("[")) : rhs;
+			List<String> indices = new ArrayList<String>();
+
+			String patternString = "\\[(\".*\")\\]|\\[(\\(.*\\))\\]";
+			Pattern pattern = Pattern.compile(patternString);
+			Matcher matcher = pattern.matcher(rhs);
+
+			while (matcher.find())
+				indices.add(((matcher.group(1) == null) ? matcher.group(2) : matcher.group(1)));
+
+			st2.add("lhs", lhs);
+			st2.add("rhs", rhsView);
+			st2.add("indices", indices);
+			code.add(st2.render());
+
+			return;
+		}
+
 		// FIXME rdyer hack to fix assigning to maps
 		if (lhs.contains(".get(")) {
 			int idx = lhs.lastIndexOf(')') - 1;
@@ -1413,16 +1434,37 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 		}
 
+		if (lhsType instanceof BoaTable) {
+			if (n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof Table) {
+				Table table = (Table)n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+				List<String> paths = table.getPaths();
+				String path = "\"" + paths.get(0) + "\"";
+				for(int i = 1; i < paths.size(); i++)
+					path += ", " + "\"" + paths.get(i) + "\"";
 
-		if (lhsType instanceof BoaTable && n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof Table) {
-			Table table = (Table)n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
-			List<String> paths = table.getPaths();
-			String path = "\"" + paths.get(0) + "\"";
-			for(int i = 1; i < paths.size(); i++)
-				path += ", " + "\"" + paths.get(i) + "\"";
+				st.add("rhs", "new boa.runtime.TableReader(0, " + path + ")");
+				code.add(st.render());
+				return;
+			}
 
-			st.add("rhs", "new boa.runtime.TableReader(0, " + path + ")");
-			code.add(st.render());
+			final ST st2 = stg.getInstanceOf("ViewAssignment");
+
+			String lhsView = "___" + n.getId().getToken();
+			String rhsView = src.contains("[") ? src.substring(0, src.indexOf("[")) : src;
+			List<String> indices = new ArrayList<String>();
+
+			String patternString = "\\[(\".*\")\\]|\\[(\\(.*\\))\\]";
+			Pattern pattern = Pattern.compile(patternString);
+			Matcher matcher = pattern.matcher(src);
+
+			while (matcher.find())
+				indices.add(((matcher.group(1) == null) ? matcher.group(2) : matcher.group(1)));
+
+			st2.add("lhs", lhsView);
+			st2.add("rhs", rhsView);
+			st2.add("indices", indices);
+			code.add(st2.render());
+
 			return;
 		}
 

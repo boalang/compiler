@@ -249,3 +249,9 @@ public boolean invoke(Object <arg1>, Object <arg2>) throws Exception{
 		return invoke1((<type>)<arg1>, (<type>)<arg2>);
 }
 >>
+
+ViewAssignment(lhs, rhs, indices) ::= <<
+<lhs> = <rhs>.clone();
+<indices:{index|<lhs>.addIndex(<index>)}; separator=";\n">;
+
+>>

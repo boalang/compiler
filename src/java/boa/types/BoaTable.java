@@ -230,7 +230,8 @@ public class BoaTable extends BoaType {
 
 	public BoaTable filterWith(final Object o) {
 		final List<BoaScalar> indices = new ArrayList<BoaScalar>();
-		indices.addAll(this.getIndexTypes());
+		if (this.getIndexTypes() != null)
+			indices.addAll(this.getIndexTypes());
 		indices.remove(0);
 		final BoaTable temp = new BoaTable(this.getType(), indices.size() == 0 ? null : indices);
 		temp.filters = new ArrayList<Object>();
@@ -257,7 +258,8 @@ public class BoaTable extends BoaType {
 	public BoaTuple getRowType() {
 		if (rowType == null) {
 			final List<BoaType> members = new ArrayList<BoaType>();
-			members.addAll(indexTypes);
+			if (indexTypes != null)
+				members.addAll(indexTypes);
 			members.add(type);
 			rowType = new BoaTuple(members);
 		}
