@@ -2,6 +2,7 @@ p: Project = input;
 counts: output sum of int;
 
 v1: table[string][int][int][string] of int = J12345/subv1/o;
+r1: v1._row;
 v2: table[string][int] of float = @rdyer/viewTag1/subv/subsubv/o;
 v3: table[int][string] of int = v1["foo"][5];
 v4: table[string] of int = @rdyer/viewTag1/subv/subsubv/o2;
@@ -12,8 +13,13 @@ v7: table of int;
 v4 = v3[1];
 v5 = v4;
 
+
 v6 = v3[1]["abc"];
 v7 = v6;
+
+r2: v3._row;
+r3: v5._row;
+r4: v7._row;
 
 # TODO
 # v1 := J12345/subv1/o

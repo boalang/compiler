@@ -197,7 +197,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (n.isStatic())
 				st.add("isstatic", true);
 
-			code.add(st.render());
+			if (n.getType() instanceof RowType)
+				code.add(st.render() + "Boolean ___bool_" + n.getId().getToken() + ";\n");
+			else
+				code.add(st.render());
 		}
 	}
 
