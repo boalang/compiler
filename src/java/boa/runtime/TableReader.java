@@ -1,6 +1,6 @@
 /*
  * Copyright 2018, Che Shian Hung, Robert Dyer
- *                 and BowlingGreen State University
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 
 import com.google.protobuf.CodedInputStream;
+
+import boa.runtime.Tuple;
 
 
 /**
@@ -87,6 +89,14 @@ public class TableReader {
 			preloaded = false;
 
 		return row;
+	}
+
+	public boolean fetch(final Tuple t) throws Exception {
+		t.def = hasNext();
+		if (!t.def)
+			return false;
+		t.fromRow(next(), getIndicesCount());
+		return true;
 	}
 
 	public void close() throws Exception{
@@ -153,7 +163,7 @@ public class TableReader {
 				return true;
 			default:
 				return false;
-      	}
+	  	}
 	}
 
 	public static Long valToLong(Value val) {

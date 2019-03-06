@@ -158,6 +158,7 @@ public class SymbolTable {
 		// (easily) done with a static method, so they are handled with macros
 
 		// FIXME rdyer - def(protolist[i]) should generate "i < protolist.size()"
+		globalFunctions.addFunction("def", new BoaFunction(new BoaBool(), new BoaType[] { new BoaTuple() }, "(${0} != null && ${0}.def)"));
 		globalFunctions.addFunction("def", new BoaFunction(new BoaBool(), new BoaType[] { new BoaAny() }, "(${0} != null)"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaProtoList(new BoaAny()) }, "((long)${0}.size())"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaArray(new BoaAny()) }, "((long)${0}.length)"));
