@@ -124,7 +124,7 @@ new <type>()
 }
 >>
 
-TupleType(name, fields, types, isrow) ::= <<
+TupleType(name, fields, types, isrow, tuples) ::= <<
 private class <name>
 {
 	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
@@ -135,8 +135,8 @@ private class <name>
 		<fields,types:{field,type|this.___<field> = new <type>(tmp.___<field>)}; separator="; ">;
 	}
 	<if(isrow)>void fromRow(final boa.output.Output.Row r, final int offset) throws Exception {
-	<trunc(fields), trunc(types):{field,type|this.___<field> = boa.runtime.TableReader.valTo<type>(r.getCols(<i0> + offset))}; separator="; ">;
-	this.___<last(fields)> = boa.runtime.TableReader.valTo<last(types)>(r.getCols(<length(fields)> - 1 + offset));
+	<trunc(fields), trunc(types), trunc(tuples):{field,type,tuple|this.___<field> = <if(tuple)>new <tuple><else>boa.runtime.TableReader.valTo<type><endif>(r.getCols(<i0> + offset))}; separator="; ">;
+	this.___<last(fields)> = <if(last(tuples))>new <tuple><else>boa.runtime.TableReader.valTo<last(types)><endif>(r.getVal());
 }
 <name>(final boa.output.Output.Value v) {
 	<fields, types:{field,type|this.___<field> = boa.runtime.TableReader.valTo<type>(v.getT(<i0>))}; separator="; ">;

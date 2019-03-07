@@ -639,6 +639,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					// 1 >> t >> ... || t >> r
 					if (f.type instanceof BoaTable || f.type instanceof BoaTuple)
 						isView = true;
+
+					if (!hasView && isView)
+						hasView = true;
 				}
 
 				if (!isView) {

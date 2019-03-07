@@ -22,6 +22,9 @@ r3: v5._row;
 r4: v7._row;
 
 # TODO
-# v1 := J12345/subv1/o
+# v := J12345/subv1/o
+#
+# type t = {int, string, bool};
+# v: table[t][int] of int;
 
 counts << 1;

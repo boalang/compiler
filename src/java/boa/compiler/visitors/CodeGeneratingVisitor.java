@@ -362,6 +362,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final List<Component> members = table.getIndices();
 			final List<String> fields = new ArrayList<String>();
 			final List<String> types = new ArrayList<String>();
+			// TODO adding tuple types to view
+			// final List<String> tuples = new ArrayList<String>();
 
 			members.add(table.getType());
 
