@@ -636,8 +636,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if (f.type instanceof BoaTuple && !(((BoaTable)previousType).getRowType().assigns(f.type)))
 						throw new TypeCheckException(n, "cannot assign row from table type '" + n.getLhs().type + "' to tuple type '" + n.getRhs(0).type + "'");
 
-					// 1 >> t >> ... || t >> r
-					if (f.type instanceof BoaTable || f.type instanceof BoaTuple)
+					// t >> r
+					if (f.type instanceof BoaTuple)
 						isView = true;
 
 					if (!hasView && isView)
