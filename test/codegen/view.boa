@@ -1,10 +1,11 @@
 p: Project = input;
 counts: output sum of int;
+out: output collection of string;
 
-v1: table[string][int][int][string] of int = J12345/subv1/o;
+v1: table[string][int][int][abc: string] of c: int = J12345/subv1/o;
 r1: v1._row;
 v2: table[string][int] of float = @rdyer/viewTag1/subv/subsubv/o;
-v3: table[int][string] of int = v1["foo"][5];
+v3: table[int][abc: string] of d: int = v1["foo"][5];
 v4: table[string] of int = @rdyer/viewTag1/subv/subsubv/o2;
 v5: table[string] of int = @rdyer/viewTag1/subv/subsubv/o3;
 v6: table of int;
@@ -17,14 +18,25 @@ v5 = v4;
 v6 = v3[1]["abc"];
 v7 = v6;
 
-r2: v3._row;
-r3: v5._row;
-r4: v7._row;
+r3: v3._row;
+r5: v5._row;
+r7: v7._row;
+
+v1 >> r1;
+
+if (false && v3 >> r3) {
+  out << r3.abc;
+  counts << r3.d;
+  counts << r3._1;
+}
+
+while (v5 >> r5 && true) {
+  out << r5._1;
+  counts << r5._2;
+}
 
 # TODO
 # v := J12345/subv1/o
 #
 # type t = {int, string, bool};
 # v: table[t][int] of int;
-
-counts << 1;

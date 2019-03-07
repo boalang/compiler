@@ -979,7 +979,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final ST st = stg.getInstanceOf("Expression");
 
 		n.getLhs().accept(this);
-		st.add("lhs", code.removeLast());
+		String lhs = code.removeLast();
 
 		if (n.getRhsSize() > 0) {
 			final List<String> operands = new ArrayList<String>();
@@ -989,10 +989,31 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				operands.add(code.removeLast());
 			}
 
-			st.add("operators", n.getOps());
+			List<String> ops = n.getOps();
+			for (int i = 0; i < ops.size(); i++) {
+				if (ops.get(i).equals(">>")) {
+					BoaType lhsType = i == 0 ? n.getLhs().type : n.getRhs(i - 1).type;
+					BoaType rhsType = n.getRhs(i).type;
+					if (lhsType instanceof BoaTable && rhsType instanceof BoaTuple) {
+						String fetch = (i == 0 ? lhs : operands.get(i - 1)) + ".fetch(" + operands.get(i) + ")";
+						if (i == 0) {
+							lhs = fetch;
+							operands.remove(0);
+						}
+						else {
+							operands.set(i - 1, fetch);
+							operands.remove(i);
+						}
+						ops.remove(i);
+					}
+				}
+			}
+
+			st.add("operators", ops);
 			st.add("operands", operands);
 		}
 
+		st.add("lhs", lhs);
 		code.add(st.render());
 	}
 
