@@ -148,7 +148,7 @@ public void fromRow(final boa.output.Output.Row r, final int offset) throws Exce
 }<\n>
 >>
 
-Tuple(name, exprlist) ::= "new <name>(<exprlist>) <\n>"
+Tuple(name, exprlist) ::= "new <name>(<exprlist>)"
 
 EnumType(ename, fields, values, fname) ::= <<
 private enum <ename>
@@ -252,6 +252,6 @@ public boolean invoke(Object <arg1>, Object <arg2>) throws Exception{
 
 ViewAssignment(lhs, rhs, indices) ::= <<
 <lhs> = <rhs>.clone();
-<indices:{index|<lhs>.addIndex(<index>)}; separator=";\n">;
+<indices:{index|<lhs>.addIndex(<index>)}; separator="; "><if(indices)>;<endif>
 
 >>
