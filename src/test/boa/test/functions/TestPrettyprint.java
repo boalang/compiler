@@ -37,15 +37,18 @@ import org.junit.runners.Parameterized.Parameters;
 public class TestPrettyprint {
 	private final static String CLASS_START = "class c {\n";
 	private final static String CLASS_END = "}\n";
-	private final static String STATEMENT_START = CLASS_START + "\tvoid m()\n\t{";
+	private final static String STATEMENT_START = CLASS_START + "\tvoid m()\n\t{\n\t\t";
 	private final static String STATEMENT_END = "\n\t}\n" + CLASS_END;
 
 	@Parameters
 	public static Collection<String[]> code() {
 		return Arrays.asList(new String[][] {
 				/* classes */
-				{ "class c {\n}\n" }, { "public class c {\n}\n" }, { "class c extends d {\n}\n" },
-				{ "class c implements i1 {\n}\n" }, { "class c implements i1, i2, i3 {\n}\n" },
+				{ "class c {\n}\n" }, 
+				{ "public class c {\n}\n" }, 
+				{ "class c extends d {\n}\n" },
+				{ "class c implements i1 {\n}\n" }, 
+				{ "class c implements i1, i2, i3 {\n}\n" },
 				{ "abstract static final private class c extends d implements i1, i2, i3 {\n}\n" },
 
 				/* methods */
@@ -53,22 +56,32 @@ public class TestPrettyprint {
 				{ CLASS_START + "\tint m()\n\t{\n\t\treturn 1;\n\t}\n" + CLASS_END },
 
 				/* statements */
-				{ STATEMENT_START + "\n\t\tswitch (f1) {" 
-						+ "\n\t\t\tcase 1:" 
-						+ "\n\t\t\tf1 = 2;" 
-						+ "\n\t\t\tdefault:"
-						+ "\n\t\t\tbreak;\n\t\t}" + STATEMENT_END }, // SWITCH
+				{ STATEMENT_START + "switch (f1) {" 
+						+ indent(3) + "case 1:" 
+						+ indent(3) + "f1 = 2;" 
+						+ indent(3) + "default:"
+						+ indent(3) + "break;"
+						+ indent(2) + "}" + STATEMENT_END }, // SWITCH
+				{ STATEMENT_START + "throw new RuntimeException(e);" + STATEMENT_END }, // THROW
 				
 				/* expressions */
-				{ STATEMENT_START + "\n\t\tList<String> list = new ArrayList<String>();" + STATEMENT_END} // NEW
+				{ STATEMENT_START + "List<String> list = new ArrayList<String>();" + STATEMENT_END} // NEW
 		});
 	}
 
+	private static String indent(int num) {
+		String str = "\n";
+		while (num-- > 0) 
+			str += "\t"; 
+		return str;
+	}
+	
 	private String code;
 
 	public TestPrettyprint(final String code) {
 		this.code = code;
 	}
+	
 
 	@Test()
 	public void testPrettyprint() throws Exception {
