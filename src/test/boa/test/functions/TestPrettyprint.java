@@ -37,6 +37,8 @@ import org.junit.runners.Parameterized.Parameters;
 public class TestPrettyprint {
     private final static String CLASS_START = "class c {\n";
     private final static String CLASS_END = "}\n";
+    private final static String METHOD_START = "\tvoid m()\n\t{";
+    private final static String METHOD_END = "\n\t}\n";
 
     @Parameters
     public static Collection<String[]> code() {
@@ -52,6 +54,14 @@ public class TestPrettyprint {
             /* methods */
             { CLASS_START + "\tvoid m()\n\t{\n\t}\n" + CLASS_END },
             { CLASS_START + "\tint m()\n\t{\n\t\treturn 1;\n\t}\n" + CLASS_END },
+            
+            /* statements */
+            { CLASS_START + METHOD_START + "\n\t\tswitch (f1) {"
+            		+ "\n\t\t\tcase 1:"
+            		+ "\n\t\t\tf1 = 2;"
+            		+ "\n\t\t\tdefault:"
+            		+ "\n\t\t\tbreak;\n\t\t}" 
+            		+ METHOD_END + CLASS_END } // switch
         });
     }
 
@@ -63,6 +73,7 @@ public class TestPrettyprint {
 
     @Test()
     public void testPrettyprint() throws Exception {
+    	System.out.println(prettyprint(parse(code)));
         assertEquals(code, prettyprint(parse(code)));
     }
 }
