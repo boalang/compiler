@@ -35,8 +35,8 @@ import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
-import boa.types.*;
 import boa.compiler.visitors.analysis.*;
+import boa.types.*;
 
 /**
  *

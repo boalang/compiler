@@ -391,6 +391,10 @@ public class SymbolTable {
 			this.locals.put(id, type);
 	}
 
+	public void removeLocal(final String id) {
+		locals.remove(id);
+	}
+
 	public boolean hasGlobal(final String id) {
 		return globals.containsKey(id);
 	}
