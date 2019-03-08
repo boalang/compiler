@@ -15,6 +15,7 @@ package-compiler
 package-runtime
 test
 test-codegen
+test-compiler
 test-datagen
 test-datagen-java
 test-datagen-js
@@ -25,5 +26,6 @@ test-knowngood
 test-lexer
 test-parser
 test-program-analysis
+test-specific
 test-traversal
 test-typecheck

@@ -1,0 +1,20 @@
+o: output collection of int;
+a: array of int = {2};
+
+foreach (i: int; a[i]) {
+	f := function(j: int){
+		v := j;
+		o << v;
+	};
+	b := 2;
+	v := b + a[i];
+	v = b + v;
+	f(b);
+}
+
+
+foreach (i: int; a[i]) {
+	v := a[i];
+	b := 3;
+	o << v;
+}
