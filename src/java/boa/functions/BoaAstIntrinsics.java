@@ -1153,6 +1153,12 @@ public class BoaAstIntrinsics {
 				s += indent() + prettyprint(stmt.getStatements(0)) + "\n";
 				indent--;
 				return s;
+				
+			case FOREACH:
+				s += "for (" + prettyprint(stmt.getVariableDeclaration()) + " : " + prettyprint(stmt.getExpressions(0)) + ")\n";
+				s += indent() + prettyprint(stmt.getStatements(0));
+				return s;
+				
 
 			case DO:
 				s += "do\n";
@@ -1361,8 +1367,9 @@ public class BoaAstIntrinsics {
 				for (int i = 0; i < e.getVariableDeclsCount(); i++) {
 					if (i > 0)
 						s += ", ";
-					if (e.getVariableDecls(i).hasVariableType() && e.getVariableDecls(i).getVariableType().getName() != "")
-						s += e.getVariableDecls(i).getVariableType().getName() + " ";
+					String type = prettyprint(e.getVariableDecls(i).getVariableType());
+					if (!type.equals("")) 
+						s += type + " ";
 					s += e.getVariableDecls(i).getName();
 				}
 				s += ") -> ";

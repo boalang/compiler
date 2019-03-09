@@ -83,7 +83,12 @@ public class TestPrettyprint {
 				{ STATEMENT_START + "FuncInterface fobj = (int x, String y) -> {" 
 						+ indent(3) + "x = 2 * x;" 
 						+ indent(3) + "System.out.println(x);" 
-						+ indent(2) + "};" + STATEMENT_END} // LAMBDA 2
+						+ indent(2) + "};" + STATEMENT_END}, // LAMBDA 2
+				{ STATEMENT_START + "for (String s : strs)"
+						+ indent(2) + "{" 
+						+ indent(3) + "s += \"hi\";" 
+						+ indent(3) + "System.out.println(x);" 
+						+ indent(2) + "}" + STATEMENT_END} // FOREACH
 		});
 	}
 
@@ -104,8 +109,8 @@ public class TestPrettyprint {
 	@Test()
 	public void testPrettyprint() throws Exception {
 		String expected = prettyprint(parse(code));
-		System.out.println(expected);
-		System.out.println(code);
+//		System.out.println(expected);
+//		System.out.println(code);
 		assertEquals(code, expected);
 	}
 }
