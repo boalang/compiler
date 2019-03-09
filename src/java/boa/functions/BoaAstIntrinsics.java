@@ -932,11 +932,14 @@ public class BoaAstIntrinsics {
 		s += " {\n";
 
 		indent++;
-
-		for (final Variable v : d.getFieldsList())
-			s += indent() + prettyprint(v) + ";\n";
-		for (final Method m : d.getMethodsList())
-			s += prettyprint(m);
+		for (int i = 0; i < d.getFieldsCount(); i++) {
+			s += indent() + prettyprint(d.getFieldsList().get(i));
+			s += (!d.getFieldsList().get(i).hasVariableType() 
+					&& i < d.getFieldsCount() - 1 
+					&& !d.getFieldsList().get(i + 1).hasVariableType()) ? ",\n" : ";\n";
+		}
+		for (final Method m : d.getMethodsList()) 
+			s += m.getName().equals("<init>") ? prettyprint(m).replace(" <init>", d.getName()) : prettyprint(m);		
 		for (final Declaration d2 : d.getNestedDeclarationsList())
 			s += prettyprint(d2);
 
@@ -994,10 +997,17 @@ public class BoaAstIntrinsics {
 	public static String prettyprint(final Variable v) {
 		if (v == null) return "";
 
-		String s = prettyprint(v.getModifiersList()) + prettyprint(v.getVariableType()) + " " + v.getName();
+		String s = "";
+		if (v.getModifiersCount() > 0)
+			s += prettyprint(v.getModifiersList());
+		
+		if (v.hasVariableType())
+			s += prettyprint(v.getVariableType()) + " ";
+		
+		s += v.getName();
 		
 		if (v.getExpressionsCount() != 0)
-			s = "("+ prettyprint(v.getExpressions(0)) +")";
+			s += "("+ prettyprint(v.getExpressions(0)) +")";
 
 		if (v.hasInitializer())
 			s += " = " + prettyprint(v.getInitializer());

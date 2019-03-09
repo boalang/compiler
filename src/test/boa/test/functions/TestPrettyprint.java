@@ -50,7 +50,17 @@ public class TestPrettyprint {
 				{ "class c implements i1 {\n}\n" }, 
 				{ "class c implements i1, i2, i3 {\n}\n" },
 				{ "abstract static final private class c extends d implements i1, i2, i3 {\n}\n" },
-
+				
+				/* enums */
+				{ "enum E {\n" 
+						+ "\tNONE(\"None\"),\n"
+						+ "\tONE(\"One\"),\n"
+						+ "\tTWO(T.NAME);\n"
+						+ "\tString value;\n"
+						+ "\tE(final String value)\n\t{\n" 
+						+ "\t\tthis.value = value;\n" 
+						+ "\t}\n}\n" }, 
+				
 				/* methods */
 				{ CLASS_START + "\tvoid m()\n\t{\n\t}\n" + CLASS_END },
 				{ CLASS_START + "\tint m()\n\t{\n\t\treturn 1;\n\t}\n" + CLASS_END },
