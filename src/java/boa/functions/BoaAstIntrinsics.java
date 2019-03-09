@@ -1361,7 +1361,9 @@ public class BoaAstIntrinsics {
 				for (int i = 0; i < e.getVariableDeclsCount(); i++) {
 					if (i > 0)
 						s += ", ";
-					s += e.getVariableDecls(i).getVariableType().getName() + " " + e.getVariableDecls(i).getName();
+					if (e.getVariableDecls(i).hasVariableType() && e.getVariableDecls(i).getVariableType().getName() != "")
+						s += e.getVariableDecls(i).getVariableType().getName() + " ";
+					s += e.getVariableDecls(i).getName();
 				}
 				s += ") -> ";
 				if (e.getStatementsCount() != 0)

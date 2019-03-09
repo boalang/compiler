@@ -52,19 +52,19 @@ public class TestPrettyprint {
 				{ "abstract static final private class c extends d implements i1, i2, i3 {\n}\n" },
 				
 				/* enums */
-				{ "enum E {\n" 
-						+ "\tNONE(\"None\"),\n"
-						+ "\tONE(\"One\"),\n"
-						+ "\tTWO(T.NAME);\n"
-						+ "\tString value;\n"
-						+ "\tE(final String value)\n\t{\n" 
-						+ "\t\tthis.value = value;\n" 
-						+ "\t}\n}\n" }, 
+				{ "enum E {" 
+						+ indent(1) + "NONE(\"None\"),"
+						+ indent(1) + "ONE(\"One\"),"
+						+ indent(1) + "TWO(T.NAME);"
+						+ indent(1) + "String value;"
+						+ indent(1) + "E(final String value)\n\t{" 
+						+ indent(2) + "this.value = value;" 
+						+ indent(1) + "}\n}\n" }, 
 				
 				/* methods */
 				{ CLASS_START + "\tvoid m()\n\t{\n\t}\n" + CLASS_END },
 				{ CLASS_START + "\tint m()\n\t{\n\t\treturn 1;\n\t}\n" + CLASS_END },
-
+				
 				/* statements */
 				{ STATEMENT_START + "switch (f1) {" 
 						+ indent(3) + "case 1:" 
@@ -75,7 +75,15 @@ public class TestPrettyprint {
 				{ STATEMENT_START + "throw new RuntimeException(e);" + STATEMENT_END }, // THROW
 				
 				/* expressions */
-				{ STATEMENT_START + "List<String> list = new ArrayList<String>();" + STATEMENT_END} // NEW
+				{ STATEMENT_START + "List<String> list = new ArrayList<String>();" + STATEMENT_END}, // NEW
+				{ STATEMENT_START + "FuncInterface fobj = (E) -> {" 
+						+ indent(3) + "x = 2 * x;" 
+						+ indent(3) + "System.out.println(x);" 
+						+ indent(2) + "};" + STATEMENT_END}, // LAMBDA 1
+				{ STATEMENT_START + "FuncInterface fobj = (int x, String y) -> {" 
+						+ indent(3) + "x = 2 * x;" 
+						+ indent(3) + "System.out.println(x);" 
+						+ indent(2) + "};" + STATEMENT_END} // LAMBDA 2
 		});
 	}
 
@@ -97,6 +105,7 @@ public class TestPrettyprint {
 	public void testPrettyprint() throws Exception {
 		String expected = prettyprint(parse(code));
 		System.out.println(expected);
+		System.out.println(code);
 		assertEquals(code, expected);
 	}
 }
