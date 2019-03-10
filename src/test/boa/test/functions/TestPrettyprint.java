@@ -35,10 +35,10 @@ import org.junit.runners.Parameterized.Parameters;
  */
 @RunWith(Parameterized.class)
 public class TestPrettyprint {
-	private final static String CLASS_START = "class c {\n";
-	private final static String CLASS_END = "}\n";
-	private final static String STATEMENT_START = CLASS_START + "\tvoid m()\n\t{\n\t\t";
-	private final static String STATEMENT_END = "\n\t}\n" + CLASS_END;
+	private final static String CLASS_START = "class c {";
+	private final static String CLASS_END = "\n}\n";
+	private final static String STATEMENT_START = CLASS_START + indent(1) + "void m()" + indent(1) + "{" + indent(2);
+	private final static String STATEMENT_END = indent(1) + "}" + CLASS_END;
 
 	@Parameters
 	public static Collection<String[]> code() {
@@ -57,37 +57,43 @@ public class TestPrettyprint {
 						+ indent(1) + "ONE(\"One\"),"
 						+ indent(1) + "TWO(T.NAME);"
 						+ indent(1) + "String value;"
-						+ indent(1) + "E(final String value)\n\t{" 
-						+ indent(2) + "this.value = value;" 
-						+ indent(1) + "}\n}\n" }, 
+						+ indent(1) + "E(final String value)"
+						+ indent(1) + "{" 
+							+ indent(2) + "this.value = value;" + STATEMENT_END }, 
 				
 				/* methods */
-				{ CLASS_START + "\tvoid m()\n\t{\n\t}\n" + CLASS_END },
-				{ CLASS_START + "\tint m()\n\t{\n\t\treturn 1;\n\t}\n" + CLASS_END },
+				{ CLASS_START 
+						+ indent(1) + "void m()" 
+						+ indent(1) + "{" 
+						+ indent(1) + "}" + CLASS_END },
+				{ CLASS_START 
+						+ indent(1) + "int m()"
+						+ indent(1) + "{"
+							+ indent(2) + "return 1;"
+						+ indent(1) + "}" + CLASS_END },
 				
 				/* statements */
 				{ STATEMENT_START + "switch (f1) {" 
-						+ indent(3) + "case 1:" 
-						+ indent(3) + "f1 = 2;" 
-						+ indent(3) + "default:"
-						+ indent(3) + "break;"
+							+ indent(3) + "case 1:" 
+							+ indent(3) + "f1 = 2;" 
+							+ indent(3) + "default:"
+							+ indent(3) + "break;"
 						+ indent(2) + "}" + STATEMENT_END }, // SWITCH
 				{ STATEMENT_START + "throw new RuntimeException(e);" + STATEMENT_END }, // THROW
 				
 				/* expressions */
 				{ STATEMENT_START + "List<String> list = new ArrayList<String>();" + STATEMENT_END}, // NEW
-				{ STATEMENT_START + "FuncInterface fobj = (E) -> {" 
-						+ indent(3) + "x = 2 * x;" 
-						+ indent(3) + "System.out.println(x);" 
+				{ STATEMENT_START + "Func f = (E) -> {" 
+							+ indent(3) + "x = 2 * x;" 
+							+ indent(3) + "System.out.println(x);" 
 						+ indent(2) + "};" + STATEMENT_END}, // LAMBDA 1
-				{ STATEMENT_START + "FuncInterface fobj = (int x, String y) -> {" 
-						+ indent(3) + "x = 2 * x;" 
-						+ indent(3) + "System.out.println(x);" 
+				{ STATEMENT_START + "Func f = (int x, String y) -> {" 
+							+ indent(3) + "x = 2 * x;" 
+							+ indent(3) + "System.out.println(x);" 
 						+ indent(2) + "};" + STATEMENT_END}, // LAMBDA 2
 				{ STATEMENT_START + "for (String s : strs)"
 						+ indent(2) + "{" 
-						+ indent(3) + "s += \"hi\";" 
-						+ indent(3) + "System.out.println(x);" 
+							+ indent(3) + "System.out.println(s);" 
 						+ indent(2) + "}" + STATEMENT_END} // FOREACH
 		});
 	}
@@ -109,8 +115,6 @@ public class TestPrettyprint {
 	@Test()
 	public void testPrettyprint() throws Exception {
 		String expected = prettyprint(parse(code));
-//		System.out.println(expected);
-//		System.out.println(code);
 		assertEquals(code, expected);
 	}
 }
