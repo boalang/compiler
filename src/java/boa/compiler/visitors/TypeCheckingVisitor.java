@@ -1446,10 +1446,18 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if (!(t instanceof BoaTable))
 			throw new TypeCheckException(n.getId(), "expected a table type here");
 		BoaTable table = (BoaTable)t;
-		for (final Index i : n.getIndices()) {
-			i.accept(this, env);
-			table = table.filterWith(null);
+		List<BoaScalar> indexTypes = table.getIndexTypes();
+		if ((indexTypes != null && indexTypes.size() < n.getIndices().size()) || (indexTypes == null && n.getIndices().size() > 0))
+			throw new TypeCheckException(n.getId(), "too many indices");
+
+		for (int i = 0; i < n.getIndices().size(); i++) {
+			Index index = n.getIndices().get(i);
+			index.accept(this, env);
+			if (!index.type.assigns(indexTypes.get(i)))
+				throw new TypeCheckException(n.getId(), "index type " + index.type + " doesn't match with view column type " + indexTypes.get(i));
+			table = table.filterWith(index);
 		}
+
 		n.type = table.getRowType();
 	}
 

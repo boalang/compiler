@@ -1,0 +1,5 @@
+o: output sum of int;
+v: table [string][int] of int = J12345/o;
+r: v["abc"]["foo"]._row;
+
+o << 1;

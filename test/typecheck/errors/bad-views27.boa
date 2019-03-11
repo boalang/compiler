@@ -1,0 +1,5 @@
+o: output sum of int;
+v: table of int = J12345/o;
+r: v[5]._row;
+
+o << 1;
