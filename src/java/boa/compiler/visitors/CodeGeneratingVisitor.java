@@ -345,41 +345,68 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		public void visit(final VarDeclStatement n) {
 			super.visit(n);
 
-			if (!(n.type instanceof BoaTable))
-				return;
+			if (n.getType() instanceof RowType) {
+				final BoaTuple tupleType = (BoaTuple)n.type;
+				final String name = tupleType.toJavaType();
 
-			final BoaTuple tuple = ((BoaTable)n.type).getRowType();
-			final TableType table = (TableType)n.getType();
+				if (tuples.contains(name))
+					return;
+				tuples.add(name);
 
-			final String name = tuple.toJavaType();
-			if (tuples.contains(name))
-				return;
+				final ST st = stg.getInstanceOf("TupleType");
 
-			tuples.add(name);
+				final List<String> fields = new ArrayList<String>();
+				final List<String> types = new ArrayList<String>();
 
-			final ST st = stg.getInstanceOf("TupleType");
+				int counter = 1;
+				for (final BoaType bt : tupleType.getTypes()) {
+					fields.add("_" + counter);
+					types.add(bt.toBoxedJavaType());
+					counter++;
+				}
 
-			final List<Component> members = table.getIndices();
-			final List<String> fields = new ArrayList<String>();
-			final List<String> types = new ArrayList<String>();
-			// TODO adding tuple types to view
-			// final List<String> tuples = new ArrayList<String>();
+				st.add("isrow", "true");
+				st.add("name", name);
+				st.add("fields", fields);
+				st.add("types", types);
 
-			members.add(table.getType());
-
-			int fieldCount = 1;
-			for (final Component c : members) {
-				fields.add("_" + fieldCount);
-				fieldCount++;
-				types.add(c.getType().type.toBoxedJavaType());
+				code.add(st.render());
 			}
 
-			st.add("isrow", "true");
-			st.add("name", name);
-			st.add("fields", fields);
-			st.add("types", types);
+			if (n.type instanceof BoaTable) {
+				final BoaTuple tuple = ((BoaTable)n.type).getRowType();
+				final TableType table = (TableType)n.getType();
 
-			code.add(st.render());
+				final String name = tuple.toJavaType();
+				if (tuples.contains(name))
+					return;
+
+				tuples.add(name);
+
+				final ST st = stg.getInstanceOf("TupleType");
+
+				final List<Component> members = table.getIndices();
+				final List<String> fields = new ArrayList<String>();
+				final List<String> types = new ArrayList<String>();
+				// TODO adding tuple types to view
+				// final List<String> tuples = new ArrayList<String>();
+
+				members.add(table.getType());
+
+				int fieldCount = 1;
+				for (final Component c : members) {
+					fields.add("_" + fieldCount);
+					fieldCount++;
+					types.add(c.getType().type.toBoxedJavaType());
+				}
+
+				st.add("isrow", "true");
+				st.add("name", name);
+				st.add("fields", fields);
+				st.add("types", types);
+
+				code.add(st.render());
+			}
 		}
 	}
 
@@ -2089,6 +2116,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Table n) {
+		code.add("");
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final RowType n) {
 		code.add("");
 	}
 
