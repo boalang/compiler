@@ -35,34 +35,86 @@ import org.junit.runners.Parameterized.Parameters;
  */
 @RunWith(Parameterized.class)
 public class TestPrettyprint {
-    private final static String CLASS_START = "class c {\n";
-    private final static String CLASS_END = "}\n";
+	private final static String CLASS_START = "class c {";
+	private final static String CLASS_END = "\n}\n";
+	private final static String STATEMENT_START = CLASS_START + indent(1) + "void m()" + indent(1) + "{" + indent(2);
+	private final static String STATEMENT_END = indent(1) + "}" + CLASS_END;
 
-    @Parameters
-    public static Collection<String[]> code() {
-        return Arrays.asList(new String[][]{
-            /* classes */
-            { "class c {\n}\n" },
-            { "public class c {\n}\n" },
-            { "class c extends d {\n}\n" },
-            { "class c implements i1 {\n}\n" },
-            { "class c implements i1, i2, i3 {\n}\n" },
-            { "abstract static final private class c extends d implements i1, i2, i3 {\n}\n" },
+	@Parameters
+	public static Collection<String[]> code() {
+		return Arrays.asList(new String[][] {
+				/* classes */
+				{ "class c {\n}\n" }, 
+				{ "public class c {\n}\n" }, 
+				{ "class c extends d {\n}\n" },
+				{ "class c implements i1 {\n}\n" }, 
+				{ "class c implements i1, i2, i3 {\n}\n" },
+				{ "abstract static final private class c extends d implements i1, i2, i3 {\n}\n" },
+				
+				/* enums */
+				{ "enum E {" 
+						+ indent(1) + "NONE(\"None\"),"
+						+ indent(1) + "ONE(\"One\"),"
+						+ indent(1) + "TWO(T.NAME);"
+						+ indent(1) + "String value;"
+						+ indent(1) + "E(final String value)"
+						+ indent(1) + "{" 
+							+ indent(2) + "this.value = value;" + STATEMENT_END }, 
+				
+				/* methods */
+				{ CLASS_START 
+						+ indent(1) + "void m()" 
+						+ indent(1) + "{" 
+						+ indent(1) + "}" + CLASS_END },
+				{ CLASS_START 
+						+ indent(1) + "int m()"
+						+ indent(1) + "{"
+							+ indent(2) + "return 1;"
+						+ indent(1) + "}" + CLASS_END },
+				
+				/* statements */
+				{ STATEMENT_START + "switch (f1) {" 
+							+ indent(3) + "case 1:" 
+							+ indent(3) + "f1 = 2;" 
+							+ indent(3) + "default:"
+							+ indent(3) + "break;"
+						+ indent(2) + "}" + STATEMENT_END }, // SWITCH
+				{ STATEMENT_START + "throw new RuntimeException(e);" + STATEMENT_END }, // THROW
+				
+				/* expressions */
+				{ STATEMENT_START + "List<String> list = new ArrayList<String>();" + STATEMENT_END}, // NEW
+				{ STATEMENT_START + "Func f = (E) -> {" 
+							+ indent(3) + "x = 2 * x;" 
+							+ indent(3) + "System.out.println(x);" 
+						+ indent(2) + "};" + STATEMENT_END}, // LAMBDA 1
+				{ STATEMENT_START + "Func f = (int x, String y) -> {" 
+							+ indent(3) + "x = 2 * x;" 
+							+ indent(3) + "System.out.println(x);" 
+						+ indent(2) + "};" + STATEMENT_END}, // LAMBDA 2
+				{ STATEMENT_START + "for (String s : strs)"
+						+ indent(2) + "{" 
+							+ indent(3) + "System.out.println(s);" 
+						+ indent(2) + "}" + STATEMENT_END} // FOREACH
+		});
+	}
 
-            /* methods */
-            { CLASS_START + "\tvoid m()\n\t{\n\t}\n" + CLASS_END },
-            { CLASS_START + "\tint m()\n\t{\n\t\treturn 1;\n\t}\n" + CLASS_END },
-        });
-    }
+	private static String indent(int num) {
+		String str = "\n";
+		while (num-- > 0) 
+			str += "\t"; 
+		return str;
+	}
+	
+	private String code;
 
-    private String code;
+	public TestPrettyprint(final String code) {
+		this.code = code;
+	}
+	
 
-    public TestPrettyprint(final String code) {
-        this.code = code;
-    }
-
-    @Test()
-    public void testPrettyprint() throws Exception {
-        assertEquals(code, prettyprint(parse(code)));
-    }
+	@Test()
+	public void testPrettyprint() throws Exception {
+		String expected = prettyprint(parse(code));
+		assertEquals(code, expected);
+	}
 }
