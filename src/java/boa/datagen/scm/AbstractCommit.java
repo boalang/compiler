@@ -195,6 +195,13 @@ public abstract class AbstractCommit {
 
 		return revision.build();
 	}
+	
+	String[] badpaths = {"spacy/lang/ca/lemmatizer.py", "spacy/lang/da/lemmatizer.py", "spacy/lang/de/lemmatizer.py", 
+			 "spacy/lang/es/lemmatizer.py", "spacy/lang/fr/lemmatizer/lookup.py", "spacy/lang/hu/lemmatizer.py", 
+			 "spacy/lang/id/lemmatizer.py", "spacy/lang/it/lemmatizer.py", "spacy/lang/pt/lemmatizer.py", 
+			 "spacy/lang/ro/lemmatizer.py", "spacy/lang/sv/lemmatizer/lookup.py", "spacy/lang/tr/lemmatizer.py", 
+			 "spacy/lang/ur/lemmatizer.py"};
+	Set<String> badp = new HashSet<String>(Arrays.asList(badpaths));
 
 	
 	Builder processChangeFile(final ChangedFile.Builder fb) {
@@ -215,11 +222,16 @@ public abstract class AbstractCommit {
 		} 
 		// Python AST generation will be handled here
 		else if(lowerPath.endsWith(".py")) {
-			final String content = getFileContents(path);
-			System.out.println(path); 
-			fb.setKind(FileKind.SOURCE_PY_ERROR);
-			//if the path contains spacy/lang/de/lemmatizer.py	
-			parsePythonFile(path, fb, content, false);
+			if(badp.contains(lowerPath)) {
+				System.out.println(path); 
+				fb.setKind(FileKind.SOURCE_PY_ERROR);
+			}
+			else {
+				final String content = getFileContents(path);
+				System.out.println(projectName + ": " + path); 
+				fb.setKind(FileKind.SOURCE_PY_ERROR);
+				parsePythonFile(path, fb, content, false);
+			}
 		}
 		else if (lowerPath.endsWith(".js")) {
 			final String content = getFileContents(path);

@@ -222,6 +222,8 @@ public class Python3Visitor implements Python3Listener{
 	Declaration.Builder db;
 	@Override
 	public void enterClassdef(ClassdefContext ctx) {
+		if(ctx.NAME() == null) 
+			return;
 		db = Declaration.newBuilder();
 		db.setName(ctx.NAME().getText());
 		db.setKind(TypeKind.CLASS);
@@ -235,11 +237,13 @@ public class Python3Visitor implements Python3Listener{
 	}
 	
 	@Override
-	public void enterFuncdef(FuncdefContext ctx) {		
+	public void enterFuncdef(FuncdefContext ctx) {	
+		if(ctx.NAME() == null) 
+			return;
 		Method.Builder mb = Method.newBuilder();
 		mb.setName(ctx.NAME().getText());
 		methods.push(mb);
-	}   
+	}  
 	
 	@Override
 	public void exitFuncdef(FuncdefContext ctx) {
@@ -549,7 +553,6 @@ public class Python3Visitor implements Python3Listener{
 		if(!imports.isEmpty()) {
 			String i = imports.pop();
 			b.addImports(i);
-			System.out.println(i);
 		}
 	}
 
@@ -563,6 +566,8 @@ public class Python3Visitor implements Python3Listener{
 			return;
 		}
 		
+		if(!(parts.length > 1)) 
+			return;
 		if(parts[1].endsWith("as" + ctx.getStop().getText())) {
 			String i = null;
 			try {
@@ -577,6 +582,7 @@ public class Python3Visitor implements Python3Listener{
 		}
 		else
 			imports.push(parts[1] + " FROM " + parts[0]);
+		
 	}
 
 	@Override
@@ -584,7 +590,6 @@ public class Python3Visitor implements Python3Listener{
 		if(!imports.isEmpty()) {
 			String i = imports.pop();
 			b.addImports(i);
-			System.out.println(i);
 		}
 	}
 
@@ -627,7 +632,6 @@ public class Python3Visitor implements Python3Listener{
 		if(!imports.isEmpty()) {
 			String i = imports.pop();
 			b.addImports(i);
-			System.out.println(i);
 		}
 	}
 
