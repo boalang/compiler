@@ -22,6 +22,7 @@ r3: v3._row;
 r5: v5._row;
 r7: v7._row;
 r8: v5["temp"]._row;
+#r9: v1["foo"]._row;
 
 v1 >> r1;
 
