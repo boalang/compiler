@@ -1455,7 +1455,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			index.accept(this, env);
 			if (!index.type.assigns(indexTypes.get(i)))
 				throw new TypeCheckException(n.getId(), "index type " + index.type + " doesn't match with view column type " + indexTypes.get(i));
-			table = table.filterWith(index);
+			table = table.filterWith(null);
 		}
 
 		n.type = table.getRowType();
