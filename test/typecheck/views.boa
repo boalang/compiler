@@ -47,6 +47,7 @@ v8 := v7["foo"];
 row_v4: v4._row;
 row_v6: v6._row;
 row_v4 = row_v6;
+row_v7: v4["abc"][_]._row;
 
 c2 := v1._1;
 #c2 = v1._2;

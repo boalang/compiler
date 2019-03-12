@@ -387,6 +387,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						n.getOperand().accept(this, env);
 						type = n.getOperand().type;
 					}
+
 					node.accept(this, env);
 					final BoaType index = node.type;
 
@@ -1453,8 +1454,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		for (int i = 0; i < n.getIndices().size(); i++) {
 			Index index = n.getIndices().get(i);
 			index.accept(this, env);
-			if (!index.type.assigns(indexTypes.get(i)))
+
+			if (index.hasEnd())
+				throw new TypeCheckException(n.getId(), "table type indices do not support slicing");
+
+			if (index.hasStart() && !index.type.assigns(indexTypes.get(i)))
 				throw new TypeCheckException(n.getId(), "index type " + index.type + " doesn't match with view column type " + indexTypes.get(i));
+
 			table = table.filterWith(null);
 		}
 
