@@ -10,12 +10,12 @@ v4: table[string] of int = @rdyer/viewTag1/subv/subsubv/o2;
 v5: table[string] of int = @rdyer/viewTag1/subv/subsubv/o3;
 v6: table of int;
 v7: table of int;
-v8: table of int = v1["foo"][_][_]["abc"];
+v8 := v1["foo"][_][_]["abc"];
 
 
 v9: table of int = v4["abc"];
-v10: table of int = v4["foo"];
-v11: table of int = v4["sleepy"];
+v10 := v4["foo"];
+v11 := v4["sleepy"];
 
 v8 = v3[_]["foo"];
 v4 = v3[1];

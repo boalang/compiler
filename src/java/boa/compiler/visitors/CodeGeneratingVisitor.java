@@ -197,10 +197,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (n.isStatic())
 				st.add("isstatic", true);
 
-			if (n.getType() instanceof RowType)
-				code.add(st.render() + "Boolean ___bool_" + n.getId().getToken() + ";\n");
-			else
-				code.add(st.render());
+			code.add(st.render());
 		}
 	}
 
@@ -375,7 +372,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			if (n.type instanceof BoaTable) {
 				final BoaTuple tuple = ((BoaTable)n.type).getRowType();
-				final TableType table = (TableType)n.getType();
 
 				final String name = tuple.toJavaType();
 				if (tuples.contains(name))
@@ -385,19 +381,17 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 				final ST st = stg.getInstanceOf("TupleType");
 
-				final List<Component> members = table.getIndices();
+				final List<BoaType> members = tuple.getTypes();
 				final List<String> fields = new ArrayList<String>();
 				final List<String> types = new ArrayList<String>();
 				// TODO adding tuple types to view
 				// final List<String> tuples = new ArrayList<String>();
 
-				members.add(table.getType());
-
 				int fieldCount = 1;
-				for (final Component c : members) {
+				for (final BoaType bt : members) {
 					fields.add("_" + fieldCount);
 					fieldCount++;
-					types.add(c.getType().type.toBoxedJavaType());
+					types.add(bt.toBoxedJavaType());
 				}
 
 				st.add("isrow", "true");
@@ -932,7 +926,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		} else if (t instanceof BoaArray) {
 			n.env.setOperandType(((BoaArray) t).getType());
 		} else if (t instanceof BoaTable) {
-			n.env.setOperandType(((BoaTable) t).getType());
+			n.env.setOperandType(((BoaTable) t).getRowType());
 		}
 
 		st.add("operand", "");
@@ -1492,7 +1486,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 		}
 
-		if (lhsType instanceof BoaTable) {
+		if (lhsType instanceof BoaTable || type instanceof BoaTable) {
 			if (n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof Table) {
 				Table table = (Table)n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
 				List<String> paths = table.getPaths();
