@@ -876,8 +876,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				accept += code.removeLast();
 			}
 
-			if (n.env.hasOperandType())
-				n.env.getOperandType();
+			n.env.getOperandType();
 
 			code.add(accept);
 		} else {
@@ -932,6 +931,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("map", true);
 		} else if (t instanceof BoaArray) {
 			n.env.setOperandType(((BoaArray) t).getType());
+		} else if (t instanceof BoaTable) {
+			n.env.setOperandType(((BoaTable) t).getType());
 		}
 
 		st.add("operand", "");
