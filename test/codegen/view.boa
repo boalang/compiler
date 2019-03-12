@@ -10,11 +10,16 @@ v4: table[string] of int = @rdyer/viewTag1/subv/subsubv/o2;
 v5: table[string] of int = @rdyer/viewTag1/subv/subsubv/o3;
 v6: table of int;
 v7: table of int;
+v8: table of int = v1["foo"][_][_]["abc"];
 
+
+v9: table of int = v4["abc"];
+v10: table of int = v4["foo"];
+v11: table of int = v4["sleepy"];
+
+v8 = v3[_]["foo"];
 v4 = v3[1];
 v5 = v4;
-
-
 v6 = v3[1]["abc"];
 v7 = v6;
 
@@ -22,7 +27,7 @@ r3: v3._row;
 r5: v5._row;
 r7: v7._row;
 r8: v5["temp"]._row;
-#r9: v1["foo"]._row;
+r9: v1["foo"][_][3]._row;
 
 v1 >> r1;
 
@@ -39,6 +44,7 @@ while (v5 >> r5 && true) {
 
 # TODO
 # v := J12345/subv1/o
+# v := v1["abc"];
 #
 # type t = {int, string, bool};
 # v: table[t][int] of int;

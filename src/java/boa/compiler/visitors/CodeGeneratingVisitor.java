@@ -876,7 +876,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				accept += code.removeLast();
 			}
 
-			n.env.getOperandType();
+			if (n.env.hasOperandType())
+				n.env.getOperandType();
 
 			code.add(accept);
 		} else {
@@ -908,43 +909,46 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Index n) {
-		if (n.hasStart()) {
-			this.idFinder.start(n.getStart());
-			if (idFinder.getNames().contains(this.skipIndex)) {
-				abortGeneration = true;
-				code.add("");
-				return;
-			}
-
-			final ST st = stg.getInstanceOf("Index");
-
-			final BoaType t = n.env.getOperandType();
-			if (t instanceof BoaMap) {
-				n.env.setOperandType(((BoaMap) t).getType());
-				st.add("map", true);
-			} else if (t instanceof BoaProtoList) {
-				n.env.setOperandType(((BoaProtoList) t).getType());
-				st.add("map", true);
-			} else if (t instanceof BoaArray) {
-				n.env.setOperandType(((BoaArray) t).getType());
-			}
-
-			st.add("operand", "");
-
-			final BoaType indexType = n.getStart().type;
-			n.getStart().accept(this);
-			if (indexType instanceof BoaInt && !(t instanceof BoaMap))
-				st.add("index", "(int)(" + code.removeLast() + ")");
-			else
-				st.add("index", code.removeLast());
-
-			if (n.hasEnd()) {
-				n.getEnd().accept(this);
-				st.add("slice", code.removeLast());
-			}
-
-			code.add(st.render());
+		if (!n.hasStart()) {
+			code.add("[null]");
+			return;
 		}
+
+		this.idFinder.start(n.getStart());
+		if (idFinder.getNames().contains(this.skipIndex)) {
+			abortGeneration = true;
+			code.add("");
+			return;
+		}
+
+		final ST st = stg.getInstanceOf("Index");
+
+		final BoaType t = n.env.getOperandType();
+		if (t instanceof BoaMap) {
+			n.env.setOperandType(((BoaMap) t).getType());
+			st.add("map", true);
+		} else if (t instanceof BoaProtoList) {
+			n.env.setOperandType(((BoaProtoList) t).getType());
+			st.add("map", true);
+		} else if (t instanceof BoaArray) {
+			n.env.setOperandType(((BoaArray) t).getType());
+		}
+
+		st.add("operand", "");
+
+		final BoaType indexType = n.getStart().type;
+		n.getStart().accept(this);
+		if (indexType instanceof BoaInt && !(t instanceof BoaMap))
+			st.add("index", "(int)(" + code.removeLast() + ")");
+		else
+			st.add("index", code.removeLast());
+
+		if (n.hasEnd()) {
+			n.getEnd().accept(this);
+			st.add("slice", code.removeLast());
+		}
+
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
@@ -1088,12 +1092,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			String rhsView = rhs.contains("[") ? rhs.substring(0, rhs.indexOf("[")) : rhs;
 			List<String> indices = new ArrayList<String>();
 
-			String patternString = "\\[(\".*\")\\]|\\[(\\(.*\\))\\]";
+			String patternString = "\\[(\".*?\")\\]|\\[(\\(.*?\\))\\]|\\[(null)\\]";
 			Pattern pattern = Pattern.compile(patternString);
 			Matcher matcher = pattern.matcher(rhs);
 
 			while (matcher.find())
-				indices.add(((matcher.group(1) == null) ? matcher.group(2) : matcher.group(1)));
+				indices.add(((matcher.group(1) != null) ? matcher.group(1) : ((matcher.group(2) != null) ? matcher.group(2) : "null")));
 
 			st2.add("lhs", lhs);
 			st2.add("rhs", rhsView);
@@ -1506,12 +1510,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			String rhsView = src.contains("[") ? src.substring(0, src.indexOf("[")) : src;
 			List<String> indices = new ArrayList<String>();
 
-			String patternString = "\\[(\".*\")\\]|\\[(\\(.*\\))\\]";
+			String patternString = "\\[(\".*?\")\\]|\\[(\\(.*?\\))\\]|\\[(null)\\]";
 			Pattern pattern = Pattern.compile(patternString);
 			Matcher matcher = pattern.matcher(src);
 
 			while (matcher.find())
-				indices.add(((matcher.group(1) == null) ? matcher.group(2) : matcher.group(1)));
+				indices.add(((matcher.group(1) != null) ? matcher.group(1) : ((matcher.group(2) != null) ? matcher.group(2) : "null")));
 
 			st2.add("lhs", lhsView);
 			st2.add("rhs", rhsView);
