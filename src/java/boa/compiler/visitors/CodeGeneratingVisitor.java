@@ -199,6 +199,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			code.add(st.render());
 		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final SubView n) {
+			return;
+		}
 	}
 
 	/**
@@ -252,6 +258,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("types", types);
 
 			code.add(st.render());
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final SubView n) {
+			return;
 		}
 	}
 
@@ -402,6 +414,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				code.add(st.render());
 			}
 		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final SubView n) {
+			return;
+		}
 	}
 
 	/**
@@ -439,6 +457,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("fname", fieldType.toJavaType());
 
 			code.add(st.render());
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final SubView n) {
+			return;
 		}
 	}
 
@@ -489,6 +513,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 
 			code.add(s);
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final SubView n) {
+			return;
 		}
 	}
 
@@ -542,6 +572,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				indexees.add(firstFactor);
 				lastFactors.put(firstFactor, lastFactor);
 			}
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final SubView n, final String arg) {
+			return;
 		}
 	}
 
@@ -2121,6 +2157,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final RowType n) {
+		code.add("");
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final SubView n) {
 		code.add("");
 	}
 
