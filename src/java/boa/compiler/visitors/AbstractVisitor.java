@@ -486,8 +486,7 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	}
 
 	public ReturnTypeT visit(final SubView n, final ArgTypeT arg) {
-		n.getId().accept(this, arg);
-		n.getBlock().accept(this, arg);
+		n.getProgram().accept(this, arg);
 		return null;
 	}
 }

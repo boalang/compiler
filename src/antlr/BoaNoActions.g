@@ -415,7 +415,7 @@ table
 	;
 
 subView
-    : VIEW identifier BLOCK
+    : VIEW identifier LBRACE program RBRACE
     ;
 
 

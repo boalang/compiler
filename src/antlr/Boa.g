@@ -700,7 +700,7 @@ subView returns [SubView ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: VIEW id=identifier b=block { $ast = new SubView($id.ast, $b.ast); }
+	: VIEW id=identifier LBRACE p=program RBRACE { $ast = new SubView($id.ast.getToken(), $p.ast); }
 	;
 
 

@@ -430,7 +430,6 @@ public abstract class AbstractVisitorNoArgNoRet {
 	}
 
 	public void visit(final SubView n) {
-		n.getId().accept(this);
-		n.getBlock().accept(this);
+		n.getProgram().accept(this);
 	}
 }
