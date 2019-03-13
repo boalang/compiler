@@ -27,17 +27,25 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hungc
  */
 public class SubView extends Statement {
+	protected Identifier id;
 	protected Program p;
+
+	public Identifier getId() {
+		return id;
+	}
 
 	public Program getProgram() {
 		return p;
 	}
 
-	public SubView (final String jobName, final Program p) {
+	public SubView (final Identifier id, final Program p) {
+		if (id != null)
+			id.setParent(this);
 		if (p != null)
 			p.setParent(this);
-		p.jobName = jobName;
+		this.id = id;
 		this.p = p;
+		p.jobName = id.getToken();
 	}
 
 	/** {@inheritDoc} */
@@ -59,7 +67,7 @@ public class SubView extends Statement {
 	}
 
 	public SubView clone() {
-		final SubView sv = new SubView(p.jobName, p.clone());
+		final SubView sv = new SubView(id.clone(), p.clone());
 		copyFieldsTo(sv);
 		return sv;
 	}

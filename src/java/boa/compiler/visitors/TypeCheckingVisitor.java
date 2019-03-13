@@ -676,6 +676,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if (n.getJobNum() == null && n.getUserName() == null) {
 			if (!env.hasView(n.getViewName()))
 				throw new TypeCheckException(n, "subview '" + n.getViewName() + "' undefined");
+
 			Program p = env.getView(n.getViewName());
 			SymbolTable st = p.env;
 			BoaType bt = st.get(n.getOutputName());
@@ -705,17 +706,17 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final SubView n, final SymbolTable env) {
 		n.env = env;
 
-		String viewName = n.getProgram().jobName;
+		String viewName = n.getId().getToken();
 
 		final SymbolTable e = new SymbolTable();
 		n.getProgram().accept(this, e);
 		n.getProgram().env = e;
 
 		if (env.hasType(viewName) || env.hasGlobal(viewName) || env.hasLocal(viewName))
-			throw new TypeCheckException(n.getProgram(), "name conflict: job name '" + viewName + "' already exists");
+			throw new TypeCheckException(n.getId(), "name conflict: identifier name '" + viewName + "' already exists");
 
 		if (env.hasView(viewName))
-			throw new TypeCheckException(n.getProgram(), "name conflict: view '" + viewName + "' already exists");
+			throw new TypeCheckException(n.getId(), "name conflict: view '" + viewName + "' already exists");
 
 		env.addView(viewName, n.getProgram());
 	}

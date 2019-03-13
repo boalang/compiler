@@ -422,6 +422,7 @@ public abstract class AbstractVisitorNoReturn<ArgTypeT> {
 	}
 
 	public void visit(final SubView n, final ArgTypeT arg) {
+		n.getId().accept(this, arg);
 		n.getProgram().accept(this, arg);
 	}
 }
