@@ -1,0 +1,66 @@
+view sv1 {
+	p: Project = input;
+	o1: output sum[string] of int;
+	o2: output sum[string][string] of int;
+
+	o1[p.id] << 1;
+	o2[p.id][p.id] << 1;
+}
+
+view sv2 {
+	view sv3 {
+		o4: output collection[string] of string;
+
+		v: table [string] of count: int = J12345/o;
+		r: v._row;
+
+		while (v >> r) {
+			o4[r._1] << string(r.count);
+		}
+	}
+
+	view sv4 {
+		view sv5 {
+			p: Project = input;
+
+			o6: output collection[int][string] of string;
+			o6[1][p.id] << p.id;
+		}
+
+		o5: output collection[string][int] of string;
+		o5["haha"][1] << "foo";
+		
+		v := sv5/o6;
+		r : v._row;
+	}
+
+	o3: output sum[int][int] of int;
+	v1 := sv3/o4;
+	v2 := sv4/o5;
+	v3 := sv4/sv5/o6;
+
+	r1: v1._row;
+	r2: v2._row;
+	r3: v3._row;	
+}
+
+o5: output sum of int;
+
+v1 := sv1/o1;
+v2 := sv1/o2;
+v3 := sv2/o3;
+v4 := sv2/sv3/o4;
+v5 := sv2/sv4/o5;
+v6 := sv2/sv4/sv5/o6;
+
+r1: v1._row;
+r2: v2._row;
+r3: v3._row;
+r4: v4._row;
+r5: v5._row;
+r6: v6._row;
+
+
+while(v1 >> r1) {
+	o5 << len(r1._1);
+}

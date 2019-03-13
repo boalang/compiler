@@ -15,6 +15,9 @@
  */
 package boa.compiler.ast.statements;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Program;
 import boa.compiler.visitors.AbstractVisitor;
@@ -29,6 +32,8 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
 public class SubView extends Statement {
 	protected Identifier id;
 	protected Program p;
+	protected SubView parentView;
+	protected List<SubView> childViews;
 
 	public Identifier getId() {
 		return id;
@@ -38,7 +43,44 @@ public class SubView extends Statement {
 		return p;
 	}
 
+	public SubView getParentView() {
+		return parentView;
+	}
+
+	public SubView getChildView(int i) {
+		if (!this.hasChildViews() || childViews.size() <= i)
+			return null;
+
+		return childViews.get(i);
+	}
+
+	public List<SubView> getChildViews() {
+		return childViews;
+	}
+
+	public boolean hasParentView() {
+		return parentView != null;
+	}
+
+	public boolean hasChildViews() {
+		return childViews != null && childViews.size() > 0;
+	}
+
+	public void setParentView(SubView sv) {
+		parentView = sv;
+	}
+
+	public void addChildView(SubView sv) {
+		if (childViews == null)
+			childViews = new ArrayList<SubView>();
+
+		childViews.add(sv);
+	}
+
 	public SubView (final Identifier id, final Program p) {
+		parentView = null;
+		childViews = null;
+
 		if (id != null)
 			id.setParent(this);
 		if (p != null)

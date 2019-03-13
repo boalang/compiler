@@ -56,6 +56,17 @@ public class Table extends Operand {
 		return subViews;
 	}
 
+	public String getSubViewPath() {
+		if (subViews.size() == 0)
+			return "";
+
+		String p = subViews.get(0);
+		for(int i = 1; i < subViews.size(); i++)
+			p += "/" + subViews.get(i);
+
+		return p;
+	}
+
 	public List<String> getPaths () {
 		return paths;
 	}
@@ -92,10 +103,10 @@ public class Table extends Operand {
 				break;
 
 				default:
-				viewName = ary[0];
+				viewName = null;
 				jobNum = null;
 				userName = null;
-				for (int i = 1; i < ary.length - 1; i++) {
+				for (int i = 0; i < ary.length - 1; i++) {
 					subViews.add(ary[i]);
 				}
 				break;

@@ -43,6 +43,7 @@ import boa.types.proto.CodeRepositoryProtoTuple;
  */
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	BoaType lastRetType;
+	SubView currentSubView = null;
 
 	/**
 	 * This verifies visitors have at most 1 before/after for a type.
@@ -674,15 +675,23 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		BoaOutputType bot = null;
 
 		if (n.getJobNum() == null && n.getUserName() == null) {
-			if (!env.hasView(n.getViewName()))
-				throw new TypeCheckException(n, "subview '" + n.getViewName() + "' undefined");
 
-			Program p = env.getView(n.getViewName());
+			String subViewPath = n.getSubViewPath();
+			SubView temp = currentSubView;
+			while (temp != null) {
+				subViewPath = temp.getId().getToken() + "/" + subViewPath;
+				temp = temp.getParentView();
+			}
+
+			if (!env.hasView(subViewPath))
+				throw new TypeCheckException(n, "subview '" + n.getSubViewPath() + "' undefined");
+
+			Program p = env.getView(subViewPath);
 			SymbolTable st = p.env;
 			BoaType bt = st.get(n.getOutputName());
 
 			if(!(bt instanceof BoaOutputType))
-				throw new TypeCheckException(n, "output variable '" + n.getOutputName() + "' not found in subview '" + n.getViewName() + "'");
+				throw new TypeCheckException(n, "output variable '" + n.getOutputName() + "' not found in subview '" + n.getSubViewPath() + "'");
 
 			bot = (BoaOutputType) bt;
 		}
@@ -705,12 +714,24 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	@Override
 	public void visit(final SubView n, final SymbolTable env) {
 		n.env = env;
+		if (currentSubView != null) {
+			n.setParentView(currentSubView);
+			currentSubView.addChildView(n);
+		}
 
 		String viewName = n.getId().getToken();
+		String viewPath = viewName;
+		SubView temp = n;
+		while (temp.hasParentView()) {
+			viewPath = temp.getParentView().getId().getToken() + "/" + viewPath;
+			temp = temp.getParentView();
+		}
 
 		final SymbolTable e = new SymbolTable();
+		currentSubView = n;
 		n.getProgram().accept(this, e);
 		n.getProgram().env = e;
+		currentSubView = n.getParentView();
 
 		if (env.hasType(viewName) || env.hasGlobal(viewName) || env.hasLocal(viewName))
 			throw new TypeCheckException(n.getId(), "name conflict: identifier name '" + viewName + "' already exists");
@@ -718,7 +739,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if (env.hasView(viewName))
 			throw new TypeCheckException(n.getId(), "name conflict: view '" + viewName + "' already exists");
 
-		env.addView(viewName, n.getProgram());
+		env.addView(viewPath, n.getProgram());
 	}
 
 	//
