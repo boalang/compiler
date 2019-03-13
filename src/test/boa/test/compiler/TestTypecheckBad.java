@@ -54,7 +54,7 @@ public class TestTypecheckBad extends BaseTest {
 			{ "assign-func-no-ret.boa", "functions without a return type can not be used as initializers" },
 			{ "tuple-redecl.boa", "variable 'a' already declared as 'float'" },
 			{ "bad-views1.boa", "subview 'bad' undefined" },
-			{ "bad-views2.boa", "name conflict: job name 'subv' already exists" },
+			{ "bad-views2.boa", "name conflict: identifier name 'subv' already exists" },
 			{ "bad-views3.boa", "output variable 's' not found in subview 'sv'" },
 			{ "bad-views5.boa", "invalid selector '_f'" },
 			{ "bad-views6.boa", "invalid selector '_123f'" },
