@@ -91,10 +91,6 @@ public class FunctionTrie {
 	private BoaFunction getFunction(final Object[] ids, final Map<String, BoaType> typeVars) {
 		BoaFunction bestFound = null;
 
-		// TODO hack for 'def' function on BoaProtoTuple
-		if (ids.length == 3 && ids[0] instanceof String && ((String)ids[0]).equals("def") && ids[1] instanceof BoaProtoTuple)
-			ids[1] = new BoaSet();
-
 		if (this.trie.containsKey(ids[0])) {
 			if (ids[0].equals(""))
 				return (BoaFunction) this.trie.get(ids[0]);

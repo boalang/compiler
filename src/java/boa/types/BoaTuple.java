@@ -68,6 +68,10 @@ public class BoaTuple extends BoaType {
 			return this.assigns(((BoaName) that).getType());
 
 		if (that instanceof BoaArray) {
+			// if this is an empty tuple, dont allow assigning an array to it
+			if (this.members.size() == 0 && this.names.size() == 0)
+				return false;
+
 			BoaType type = ((BoaArray) that).getType();
 			if (type instanceof BoaName)
 				type = ((BoaName) type).getType();
@@ -81,8 +85,7 @@ public class BoaTuple extends BoaType {
 			return false;
 
 		final BoaTuple other = (BoaTuple)that;
-		if (this.members.size() == 0 && this.names.size() == 0)
-			return true;
+		// if the other is an empty tuple, we always allow it
 		if (other.members.size() == 0 && other.names.size() == 0)
 			return true;
 		if (this.members.size() != other.members.size())
