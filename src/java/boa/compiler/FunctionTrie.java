@@ -106,11 +106,11 @@ public class FunctionTrie {
 					if (o2.hasTypeVar())
 						o2 = replaceVar(o2, (BoaType)ids[0], typeVars);
 
-					if (((BoaType) o2).accepts((BoaType) ids[0])) {
+					if (o2.accepts((BoaType) ids[0])) {
 						final BoaFunction function = ((FunctionTrie) this.trie.get(o)).getFunction(Arrays.copyOfRange(ids, 1, ids.length), typeVars);
 
-						if (function != null && !((BoaType) o2).hasTypeVar())
-							if (bestFound == null || ((BoaType) ids[0]).accepts((BoaType) o2))
+						if (function != null && !o2.hasTypeVar())
+							if (bestFound == null || ((BoaType) ids[0]).accepts(o2))
 								bestFound = function;
 					}
 				}

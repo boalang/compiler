@@ -156,8 +156,6 @@ public class SymbolTable {
 
 		// these generic functions require more finagling than can currently be
 		// (easily) done with a static method, so they are handled with macros
-
-		// FIXME rdyer - def(protolist[i]) should generate "i < protolist.size()"
 		globalFunctions.addFunction("def", new BoaFunction(new BoaBool(), new BoaType[] { new BoaTuple() }, "(${0} != null && ${0}.def)"));
 		globalFunctions.addFunction("def", new BoaFunction(new BoaBool(), new BoaType[] { new BoaAny() }, "(${0} != null)"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaProtoList(new BoaAny()) }, "((long)${0}.size())"));
@@ -168,9 +166,9 @@ public class SymbolTable {
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString() }, "((long)${0}.length())"));
 
 		// traversal functions
-		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new CFGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))},"${1}.getValue(${0})"));
-		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaAny(), new BoaType[] { new CFGNodeProtoTuple()},"getValue(${0})"));
-		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaTraversal()},"${0}.clear()"));
+		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new CFGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))}, "${1}.getValue(${0})"));
+		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaAny(), new BoaType[] { new CFGNodeProtoTuple()}, "getValue(${0})"));
+		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaTraversal()}, "${0}.clear()"));
 
 		// graph functions
 		globalFunctions.addFunction("getoutedge", new BoaFunction(new CFGEdgeProtoTuple(), new BoaType[] { new CFGNodeProtoTuple(), new CFGNodeProtoTuple() }, "${0}.getOutEdge(${1}).newBuilder().build()"));
@@ -194,8 +192,8 @@ public class SymbolTable {
 		globalFunctions.addFunction("regex", new BoaFunction(new BoaString(), new BoaType[] { new BoaName(new BoaScalar()) }, "boa.functions.BoaSpecialIntrinsics.regex(\"${0}\")"));
 
 		// clone functions
-		globalFunctions.addFunction("clone", new BoaFunction(new BoaSet(new BoaTypeVar("V")), new BoaType[] {new BoaSet(new BoaTypeVar("V"))},"(java.util.HashSet)${0}.clone()"));
-		globalFunctions.addFunction("clone", new BoaFunction(new BoaString(), new BoaType[] {new BoaString()},"new String(${0})"));
+		globalFunctions.addFunction("clone", new BoaFunction(new BoaSet(new BoaTypeVar("V")), new BoaType[] {new BoaSet(new BoaTypeVar("V"))}, "(java.util.HashSet)${0}.clone()"));
+		globalFunctions.addFunction("clone", new BoaFunction(new BoaString(), new BoaType[] {new BoaString()}, "new String(${0})"));
 
 		// visitors
 		for (final BoaType t : dslTupleTypes) {
@@ -591,12 +589,12 @@ public class SymbolTable {
 
 			for (final URL url : urls)
 				db.scanArchives(url);
-	
+
 			final Map<String, Set<String>> annotationIndex = db.getAnnotationIndex();
-	
+
 			for (final String s : annotationIndex.get(AggregatorSpec.class.getCanonicalName()))
 				importAggregator(s);
-	
+
 			for (final String s : annotationIndex.get(FunctionSpec.class.getCanonicalName()))
 				importFunctions(s);
 		}
