@@ -9,13 +9,13 @@ view sv1 {
 
 view sv2 {
 	view sv3 {
-		o4: output collection[string] of string;
+		o: output collection[string] of string;
 
 		v: table [string] of count: int = J12345/o;
 		r: v._row;
 
 		while (v >> r) {
-			o4[r._1] << string(r.count);
+			o[r._1] << string(r.count);
 		}
 	}
 
@@ -23,35 +23,35 @@ view sv2 {
 		view sv5 {
 			p: Project = input;
 
-			o6: output collection[int][string] of string;
-			o6[1][p.id] << p.id;
+			o: output collection[int][string] of string;
+			o[1][p.id] << p.id;
 		}
 
-		o5: output collection[string][int] of string;
-		o5["haha"][1] << "foo";
+		o: output collection[string][int] of string;
+		o["haha"][1] << "foo";
 		
-		v := sv5/o6;
+		v := sv5/o;
 		r : v._row;
 	}
 
-	o3: output sum[int][int] of int;
-	v1 := sv3/o4;
-	v2 := sv4/o5;
-	v3 := sv4/sv5/o6;
+	o: output sum[int][int] of int;
+	v1 := sv3/o;
+	v2 := sv4/o;
+	v3 := sv4/sv5/o;
 
 	r1: v1._row;
 	r2: v2._row;
 	r3: v3._row;	
 }
 
-o5: output sum of int;
+o: output sum[int][string] of int;
 
 v1 := sv1/o1;
 v2 := sv1/o2;
-v3 := sv2/o3;
-v4 := sv2/sv3/o4;
-v5 := sv2/sv4/o5;
-v6 := sv2/sv4/sv5/o6;
+v3 := sv2/o;
+v4 := sv2/sv3/o;
+v5 := sv2/sv4/o;
+v6 := sv2/sv4/sv5/o;
 
 r1: v1._row;
 r2: v2._row;
@@ -62,5 +62,5 @@ r6: v6._row;
 
 
 while(v1 >> r1) {
-	o5 << len(r1._1);
+	o[r1._2][r1._1] << len(r1._1);
 }
