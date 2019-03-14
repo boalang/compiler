@@ -121,6 +121,7 @@ public class FunctionTrie {
 				}
 			}
 		}
+
 		return bestFound;
 	}
 
