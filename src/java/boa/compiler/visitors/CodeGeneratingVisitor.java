@@ -705,15 +705,25 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			final String s = expand(f.getMacro(), n.getArgs(), parts.toArray(new String[]{}));
 
-			// FIXME rdyer a hack, so that "def(pbuf.attr)" generates "pbuf.hasAttr()"
 			if (funcName.equals("def") && n.getArgsSize() == 1) {
-				final Matcher m = Pattern.compile("\\((\\w+).get(\\w+)\\(\\) != null\\)").matcher(s);
-				if (m.matches() && !m.group(2).endsWith("List"))
-					st.add("call", m.group(1) + ".has" + m.group(2) + "()");
+				final Matcher m = Pattern.compile("\\((\\w+)\\.get(\\w+)\\(\\)(\\.get\\(([^.]+)\\))? != null\\)").matcher(s);
 				// #68 - def(a[i]) was generating a[i] != null which fails for arrays of ints (or any nullable type)
 				// so instead, since they are always defined, replace with 'true'
-				else if (n.getArg(0).type instanceof BoaScalar && !(n.getArg(0).type instanceof BoaString) && !(n.getArg(0).type instanceof BoaTuple))
+				if (n.getArg(0).type instanceof BoaScalar && !(n.getArg(0).type instanceof BoaString) && !(n.getArg(0).type instanceof BoaTuple))
 					st.add("call", "true");
+				else if (m.matches()) {
+					if (m.group(4) == null) {
+						if (m.group(2).endsWith("List"))
+							// FIXME rdyer a hack, so that "def(pbuf.listattr)" generates "pbuf.getAttrList().size() > 0"
+							st.add("call", "(" + m.group(1) + ".get" + m.group(2) + "().size() > 0)");
+						else
+							// FIXME rdyer a hack, so that "def(pbuf.attr)" generates "pbuf.hasAttr()"
+							st.add("call", "(" + m.group(1) + ".has" + m.group(2) + "() && " + m.group(0) + ")");
+					} else {
+						// FIXME rdyer a hack, so that "def(pbuf.listattr[i])" generates "i < pbuf.getAttrList().size() && pbuf.getAttrList(i) != null"
+						st.add("call", "(" + m.group(4) + " < " + m.group(1) + ".get" + m.group(2) + "().size() && " + m.group(0) + ")");
+					}
+				}
 				else
 					st.add("call", s);
 			} else {

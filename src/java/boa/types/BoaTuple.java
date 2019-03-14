@@ -81,6 +81,10 @@ public class BoaTuple extends BoaType {
 			return false;
 
 		final BoaTuple other = (BoaTuple)that;
+		if (this.members.size() == 0 && this.names.size() == 0)
+			return true;
+		if (other.members.size() == 0 && other.names.size() == 0)
+			return true;
 		if (this.members.size() != other.members.size())
 			return false;
 		for (int i = 0; i < this.members.size(); i++)

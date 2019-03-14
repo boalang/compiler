@@ -88,6 +88,8 @@ public class FunctionTrie {
 	}
 
 	private BoaFunction getFunction(final Object[] ids, final Map<String, BoaType> typeVars) {
+		BoaFunction bestFound = null;
+
 		if (this.trie.containsKey(ids[0])) {
 			if (ids[0].equals(""))
 				return (BoaFunction) this.trie.get(ids[0]);
@@ -108,13 +110,14 @@ public class FunctionTrie {
 						final BoaFunction function = ((FunctionTrie) this.trie.get(o)).getFunction(Arrays.copyOfRange(ids, 1, ids.length), typeVars);
 
 						if (function != null && !((BoaType) o2).hasTypeVar())
-							return function;
+							if (bestFound == null || ((BoaType) ids[0]).accepts((BoaType) o2))
+								bestFound = function;
 					}
 				}
 			}
 		}
 
-		return null;
+		return bestFound;
 	}
 
 	public boolean hasFunction(final String name) {
