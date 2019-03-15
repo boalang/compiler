@@ -358,12 +358,12 @@ public class BoaIntrinsics {
           .min().orElse(Integer.MAX_VALUE);
     }
     
-    @FunctionSpec(name = "abstract", returnType = "array of string", formalParameters = { "Statement" })
-	public static String[] getAbstractStrings(Statement s) {
-    	List<String> strs = new ArrayList<String>();
-    	
-		return null;
-	}
+//    @FunctionSpec(name = "abstract", returnType = "array of string", formalParameters = { "Statement" })
+//	public static String[] getAbstractStrings(Statement s) {
+//    	List<String> strs = new ArrayList<String>();
+//    	
+//		return null;
+//	}
 	
 	
 	/**
