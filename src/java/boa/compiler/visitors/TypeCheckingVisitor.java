@@ -44,6 +44,7 @@ import boa.types.proto.CodeRepositoryProtoTuple;
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	BoaType lastRetType;
 	SubView currentSubView = null;
+	Map<String, Start> viewASTs =  new HashMap<String, Start>();
 
 	/**
 	 * This verifies visitors have at most 1 before/after for a type.
@@ -219,6 +220,83 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				throw new TypeCheckException(n, "must return a value of type '" + retType + "'");
 			if (!(retType instanceof BoaAny) && !retType.assigns(n.getExpr().type))
 				throw new TypeCheckException(n.getExpr(), "incompatible types: required '" + retType + "', found '" + n.getExpr().type + "'");
+		}
+	}
+
+	/**
+	 * This types checks the types of a specific output variable
+	 *
+	 * @author rdyer
+	 * @author hungc
+	 */
+	protected class ViewTypeCheckingVisitor extends AbstractVisitorNoArgNoRet {
+		public BoaType type;
+		private String outputName;
+		private List<String> subViews;
+		private boolean inRightScope;
+		private boolean found;
+
+		public void initialize(final String outputName, List<String> subViews) {
+			this.type = null;
+			this.outputName = outputName;
+			this.subViews = subViews;
+			this.inRightScope = (subViews == null || subViews.size() == 0) ? true : false;
+			this.found = false;
+		}
+
+		public BoaType getType() {
+			return type;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final Program n) {
+			int len = n.getStatementsSize();
+			for (int i = 0; i < n.getStatementsSize(); i++) {
+				n.getStatement(i).accept(this);
+				if (found)
+					return;
+				// if a node was added, dont visit it and
+				// dont re-visit the node we were just at
+				if (len != n.getStatementsSize()) {
+					i += (n.getStatementsSize() - len);
+					len = n.getStatementsSize();
+				}
+			}
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final SubView n) {
+			// if the scope is found, or the subView is not the one we are interested in
+			if (found || inRightScope || (subViews.size() > 0 && !n.getId().getToken().equals(subViews.get(0))))
+				return;
+
+			// if this is the one that we are interested in
+			subViews.remove(0);
+			if (subViews.size() == 0)
+				inRightScope = true;
+
+			super.visit(n.getProgram());
+
+			return;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final OutputType n) {
+			// if this is not the right scope
+			if (found || !inRightScope)
+				return;
+
+			String id = ((VarDeclStatement)n.getParent()).getId().getToken();
+			// if in the right scope and we found the output
+			if (id.equals(outputName)) {
+				new TypeCheckingVisitor().start(n, new SymbolTable());
+				found = true;
+				this.type = n.type;
+			}
+			return;
 		}
 	}
 
@@ -695,19 +773,23 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 			bot = (BoaOutputType) bt;
 		}
-		// Job number
-		else if (n.getUserName() == null) {
-			// get BoaOutputType
-		}
-		// username & view name
 		else {
-			// get BoaOutputType
+			String viewName = n.getUserName() == null ? n.getJobNum() : (n.getUserName() + "/" + n.getViewName());
+			if(!viewASTs.containsKey(viewName)) {
+				throw new TypeCheckException(n, "type of view '" + n.getJobNum() + "' undefined");
+			}
+			Start s = viewASTs.get(viewName);
+			ViewTypeCheckingVisitor v = new ViewTypeCheckingVisitor();
+			v.initialize(n.getOutputName(), n.getSubViews());
+			v.start(s);
+
+			if (v.getType() == null)
+				throw new TypeCheckException(n, "type of view '" + n.getJobNum() + "' undefined");
+
+			bot = (BoaOutputType) v.getType();
 		}
 
-		if (bot != null) //TODO remove this null checkd
-			n.type = new BoaTable(bot.getType(), bot.getIndexTypes());
-		else
-			n.type = new BoaTable();
+		n.type = new BoaTable(bot.getType(), bot.getIndexTypes());
 	}
 
 	/** {@inheritDoc} */
@@ -1791,5 +1873,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 
 		return boaMap;
+	}
+
+	public void setViewASTs(final Map<String, Start> viewASTs) {
+		this.viewASTs = viewASTs;
 	}
 }

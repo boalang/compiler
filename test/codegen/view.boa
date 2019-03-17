@@ -2,12 +2,17 @@ p: Project = input;
 counts: output sum of int;
 out: output collection of string;
 
-v1: table[string][int][int][abc: string] of c: int = J12345/subv1/o;
+v1: table[string][int][int][abc: string] of c: int;
+v2: table[string][int] of float;
+v4: table[string] of int;
+v5: table[string] of int;
+
+#v1: table[string][int][int][abc: string] of c: int = J12345/subv1/o;
 r1: v1._row;
-v2: table[string][int] of float = @rdyer/viewTag1/subv/subsubv/o;
+#v2: table[string][int] of float = @rdyer/viewTag1/subv/subsubv/o;
 v3: table[int][abc: string] of d: int = v1["foo"][5];
-v4: table[string] of int = @rdyer/viewTag1/subv/subsubv/o2;
-v5: table[string] of int = @rdyer/viewTag1/subv/subsubv/o3;
+#v4: table[string] of int = @rdyer/viewTag1/subv/subsubv/o2;
+#v5: table[string] of int = @rdyer/viewTag1/subv/subsubv/o3;
 v6: table of int;
 v7: table of int;
 v8 := v1["foo"][_][_]["abc"];

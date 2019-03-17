@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
@@ -170,7 +172,9 @@ public class BoaCompiler extends BoaMain {
 
 					try {
 						if (!parserErrorListener.hasError) {
-							new TypeCheckingVisitor().start(p, new SymbolTable());
+							TypeCheckingVisitor tcv = new TypeCheckingVisitor();
+							tcv.setViewASTs(generateViewASTs(cl));
+							tcv.start(p, new SymbolTable());
 
 							final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
 							simpleVisitor.start(p);
@@ -306,7 +310,9 @@ public class BoaCompiler extends BoaMain {
 
 				try {
 					if (!parserErrorListener.hasError) {
-						new TypeCheckingVisitor().start(p, new SymbolTable());
+						TypeCheckingVisitor tcv = new TypeCheckingVisitor();
+						tcv.setViewASTs(generateViewASTs(cl));
+						tcv.start(p, new SymbolTable());
 
 						final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
 						simpleVisitor.start(p);
@@ -381,6 +387,7 @@ public class BoaCompiler extends BoaMain {
 
 	private static CommandLine processCommandLineOptions(final String[] args) {
 		// parse the command line options
+
 		final Options options = new Options();
 		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
 		options.addOption("i", "in", true, "file(s) to be compiled (comma-separated list)");
@@ -393,6 +400,8 @@ public class BoaCompiler extends BoaMain {
 		options.addOption("pp", "pretty-print", false, "pretty print the AST before code generation (debug)");
 		options.addOption("cd", "compilation-dir", true, "directory to store all generated files");
 		options.addOption("views", "find-external-views", false, "print all referenced external view names");
+		options.addOption("viewSrcPath", "view-src-path", true, "view id and its src path");
+		options.addOption("viewId", "view-id", true, "view name and its job id");
 
 		final CommandLine cl;
 		try {
@@ -587,5 +596,61 @@ public class BoaCompiler extends BoaMain {
 			// System.out.println(wfs.get(i));
 			// System.out.println("\n\n\n");
 		}
+	}
+
+	private static Map<String, String> generateViewIds(CommandLine cl) {
+		Map<String, String> viewIds = new HashMap<String, String>();
+
+		if (!cl.hasOption("viewId"))
+			return viewIds;
+
+		for (String viewId : cl.getOptionValues("viewId")) {
+			String[] ary = viewId.split(":");
+			if (!viewIds.containsKey(ary[0]))
+				viewIds.put(ary[0], ary[1]);
+		}
+
+		return viewIds;
+	}
+
+	private static Map<String, Start> generateViewASTs(CommandLine cl) {
+		Map<String, Start> viewSrcPaths = new HashMap<String, Start>();
+
+		if (!cl.hasOption("viewSrcPath"))
+			return viewSrcPaths;
+
+		String currentFilePath = "";
+
+		try {
+			for (String srcPath : cl.getOptionValues("viewSrcPath")) {
+				String[] ary = srcPath.split(":");
+				currentFilePath = ary[1];
+				if (!viewSrcPaths.containsKey(ary[0])) {
+					final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(currentFilePath));
+					lexer.removeErrorListeners();
+					lexer.addErrorListener(new LexerErrorListener());
+
+					final CommonTokenStream tokens = new CommonTokenStream(lexer);
+					final BoaParser parser = new BoaParser(tokens);
+					parser.removeErrorListeners();
+					parser.addErrorListener(new BaseErrorListener() {
+						@Override
+						public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) throws ParseCancellationException {
+							throw new ParseCancellationException(e);
+						}
+					});
+
+					final BoaErrorListener parserErrorListener = new ParserErrorListener();
+					final Start p = parse(tokens, parser, parserErrorListener);
+
+					viewSrcPaths.put(ary[0], p);
+				}
+			}
+		} catch (final Exception e) {
+			System.err.print(currentFilePath + ": compilation failed: ");
+			e.printStackTrace();
+		}
+
+		return viewSrcPaths;
 	}
 }

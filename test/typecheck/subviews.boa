@@ -11,7 +11,8 @@ view sv2 {
 	view sv3 {
 		o: output collection[string] of string;
 
-		v: table [string] of count: int = J12345/o;
+		v: table [string] of count: int;
+		#v: table [string] of count: int = J12345/o;
 		r: v._row;
 
 		while (v >> r) {

@@ -29,14 +29,14 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hungc
  */
 public class Table extends Operand {
-	protected Integer jobNum;
+	protected String jobNum;
 	protected String userName;
 	protected String viewName;
 	protected String outputName;
 	protected List<String> subViews;
 	protected List<String> paths;
 
-	public Integer getJobNum () {
+	public String getJobNum () {
 		return jobNum;
 	}
 
@@ -77,6 +77,10 @@ public class Table extends Operand {
 		subViews.add(sv);
 	}
 
+	public boolean hasSubViews() {
+		return (subViews == null || subViews.size() == 0) ? false : true;
+	}
+
 	public Table (final String s) {
 		if (s != null) {
 			String[] ary = s.split("/");
@@ -85,7 +89,7 @@ public class Table extends Operand {
 			subViews = new ArrayList<String>();
 			switch (s.charAt(0)) {
 				case 'J':
-				jobNum = Integer.parseInt(ary[0].substring(1));
+				jobNum = ary[0].substring(1);
 				userName = null;
 				viewName = null;
 				for (int i = 1; i < ary.length - 1; i++) {
@@ -121,7 +125,7 @@ public class Table extends Operand {
 		}
 	}
 
-	public Table (final Integer jobNum, final String userName, final String viewName, final String outputName, final List<String> subViews) {
+	public Table (final String jobNum, final String userName, final String viewName, final String outputName, final List<String> subViews) {
 		this.jobNum = jobNum;
 		this.userName = userName;
 		this.viewName = viewName;
@@ -148,7 +152,7 @@ public class Table extends Operand {
 	}
 
 	public Table clone() {
-		final Table p = new Table(new Integer(jobNum), userName, viewName, outputName, null);
+		final Table p = new Table(jobNum, userName, viewName, outputName, null);
 		for (String sv : subViews) {
 			p.addSubView(sv);
 		}
