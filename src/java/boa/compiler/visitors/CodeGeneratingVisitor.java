@@ -50,9 +50,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 *
 	 * @author anthonyu
 	 */
-	String identifier="";
-	String traversalNodeIdentifier="";
-	String funcAssignParameter="";
+	String identifier = "";
+	String traversalNodeIdentifier = "";
+	String funcAssignParameter = "";
 	HashSet<String> funcAssignSet = new HashSet<String>();
 	HashMap<String, Integer> newName = new HashMap<String, Integer>();
 
@@ -583,8 +583,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if (this.functionDeclarator.hasCode())
 			st.add("staticDeclarations", this.varDecl.getCode() + "\n" + this.functionDeclarator.getCode());
- 		else
- 			st.add("staticDeclarations", this.varDecl.getCode());
+		else
+			st.add("staticDeclarations", this.varDecl.getCode());
 
 		if (this.tupleDeclarator.hasCode())
 			st.add("staticDeclarations", "\n" + this.tupleDeclarator.getCode());
@@ -603,7 +603,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				statements.add(statement);
 		}
 		st.add("statements", statements);
-		st.add("staticDeclarations", funcAssignParameter);
+		if (funcAssignParameter.length() > 0)
+			st.add("staticDeclarations", "\n" + funcAssignParameter);
 
 		if (this.aggregators.size() == 0)
 			throw new TypeCheckException(n, "No output variables were declared - must declare at least one output variable");
@@ -882,7 +883,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			return;
 		}
 
-		if(newName.containsKey(id)){
+		if (newName.containsKey(id)) {
 			id = id + "_f" + Integer.toString(newName.get(id));
 		}
 
@@ -1034,11 +1035,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		n.getRhs().accept(this);
 		String rhs = code.removeLast();
 
-		if(n.getLhs().type instanceof BoaTuple && n.getRhs().type instanceof BoaArray) {
+		if (n.getLhs().type instanceof BoaTuple && n.getRhs().type instanceof BoaArray) {
 			Operand op = n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
-			if(op instanceof Composite) {
+			if (op instanceof Composite) {
 				List<Expression> exps = ((Composite)op).getExprs();
-				if(checkTupleArray(this.check(exps)) == false) {
+				if (checkTupleArray(this.check(exps)) == false) {
 					final ST stup = stg.getInstanceOf("Tuple");
 					stup.add("name", n.getLhs().type.toJavaType());
 					visit(exps);
@@ -1415,11 +1416,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		n.getInitializer().accept(this);
 		String src = code.removeLast();
 
-		if(lhsType instanceof BoaTuple && t instanceof BoaArray) {
+		if (lhsType instanceof BoaTuple && t instanceof BoaArray) {
 			Operand op = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
-			if(op instanceof Composite) {
+			if (op instanceof Composite) {
 				List<Expression> exps = ((Composite)op).getExprs();
-				if(checkTupleArray(this.check(exps)) == false) {
+				if (checkTupleArray(this.check(exps)) == false) {
 					final ST stup = stg.getInstanceOf("Tuple");
 					stup.add("name", lhsType.toJavaType());
 					visit(exps);
@@ -1501,7 +1502,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		types = c.getType().type.toJavaType();
 		st.add("arg2", "___"+c.getIdentifier().getToken());
 
-		if(n.hasBody()) {
+		if (n.hasBody()) {
 			if (n.getBody() instanceof Block) {
 
 				for (final Node b : ((Block)n.getBody()).getStatements()) {
@@ -1543,7 +1544,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (!(funcType.getType() instanceof BoaAny))
 			st.add("ret", funcType.getType().toBoxedJavaType());
 
-		if(n.hasBody()) {
+		if (n.hasBody()) {
 			if (n.getBody() instanceof Block) {
 				for (final Node b : ((Block)n.getBody()).getStatements()) {
 					b.accept(this);
@@ -1626,14 +1627,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			args.add(((BoaName)c).getId());
 			types.add(((BoaName)c).getType().toJavaType());
 
-			if(newName.containsKey(((BoaName)c).getId())){
+			if (newName.containsKey(((BoaName)c).getId())) {
 				newName.put(((BoaName)c).getId(), newName.get(((BoaName)c).getId()) + 1);
-			}
-			else {
+			} else {
 				newName.put(((BoaName)c).getId(), 1);
 			}
 			String newParameterName = "___" + ((BoaName)c).getId() + "_f" + Integer.toString(newName.get(((BoaName)c).getId()));
-			if(!funcAssignSet.contains(newParameterName)){
+			if (!funcAssignSet.contains(newParameterName)) {
 				funcAssignParameter += ((BoaName)c).getType().toJavaType() + " " + newParameterName + ";\n";
 				funcAssignSet.add(newParameterName);
 			}
@@ -1657,7 +1657,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (!(c instanceof BoaName))
 				continue;
 			newName.put(((BoaName)c).getId(), newName.get(((BoaName)c).getId()) - 1);
-			if(newName.get(((BoaName)c).getId()) == 0)
+			if (newName.get(((BoaName)c).getId()) == 0)
 				newName.remove(((BoaName)c).getId());
 		}
 		String body = toAdd + code.removeLast().substring(2);
@@ -1741,11 +1741,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		final List<String> body = new ArrayList<String>();
 		for (final Node node : n.getBody().getStatements()) {
-			if(node instanceof TraverseStatement) {
+			if (node instanceof TraverseStatement) {
 				if (!(((BoaFunction) node.type).getType() instanceof BoaAny)) {
 					st.add("T", ((BoaFunction) node.type).getType().toBoxedJavaType());
-				}
-				else {
+				} else {
 					st.add("T", "Object");
 				}
 			}
