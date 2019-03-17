@@ -597,10 +597,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		BoaType type = env.getOperandType();
 
 		if (type instanceof BoaTable) {
-			// TODO after reading types correctly, uncomment this
-			// if (((BoaTable)type).getType() == null) {
-			// 	throw new TypeCheckException(n, "undefined TableType null");
-			// }
+			if (((BoaTable)type).getType() == null) {
+				throw new TypeCheckException(n, "undefined TableType null");
+			}
 			if (selector.charAt(0) == '_') {
 				if (!selector.equals("_row")) {
 					try {
@@ -1190,9 +1189,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			if (lhs instanceof BoaArray && rhs instanceof BoaTuple)
 				rhs = new BoaArray(((BoaTuple)rhs).getMember(0));
 
-			// TODO uncomment this when type resolution is ready
-			//if (rhs != null && !lhs.assigns(rhs) && !env.hasCast(rhs, lhs))
-			//	throw new TypeCheckException(n.getInitializer(), "incorrect type '" + rhs + "' for assignment to '" + id + ": " + lhs + "'");
+			if (rhs != null && !lhs.assigns(rhs) && !env.hasCast(rhs, lhs))
+				throw new TypeCheckException(n.getInitializer(), "incorrect type '" + rhs + "' for assignment to '" + id + ": " + lhs + "'");
 		} else {
 			if (rhs == null)
 				throw new TypeCheckException(n, "variable declaration requires an explicit type or an initializer");
