@@ -605,12 +605,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					try {
 						Integer i = Integer.parseInt(selector.substring(1));
 
-						if (i == 1)
+						if (((BoaTable)type).getIndexTypes() == null && i != 1)
+							throw new TypeCheckException(n, "table column out of bounds");
+						if (((BoaTable)type).getIndexTypes() == null || i == ((BoaTable)type).getIndexTypes().size() + 1)
 							n.type = new BoaTable(((BoaTable)type).getType());
-						else if (((BoaTable)type).getIndexTypes() == null || i < 1 || i > ((BoaTable)type).getIndexTypes().size() + 1)
+						else if (i < 1 || i > ((BoaTable)type).getIndexTypes().size() + 1)
 							throw new TypeCheckException(n, "table column out of bounds");
 						else
-							n.type = new BoaTable(((BoaTable)type).getIndex(i - 2));
+							n.type = new BoaTable(((BoaTable)type).getIndex(i - 1));
+
 					} catch (NumberFormatException e) {
 						throw new TypeCheckException(n, "invalid selector '" + selector + "'", e);
 					}
