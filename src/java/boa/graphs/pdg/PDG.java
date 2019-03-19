@@ -159,7 +159,7 @@ public class PDG {
         try {
             final PDGNode[] results = new PDGNode[nodes.size()];
             for (final PDGNode node : nodes) {
-                results[node.getId()] = node;
+                results[node.getNodeId()] = node;
             }
             return results;
         } catch (final Exception e) {
@@ -176,7 +176,7 @@ public class PDG {
      */
     public PDGNode getNode(final int id) {
         for (final PDGNode n : nodes)
-            if (n.getId() == id)
+            if (n.getNodeId() == id)
                 return n;
 
         return null;
@@ -259,11 +259,11 @@ public class PDG {
         }
 
         for (final CDGNode n : cdg.getNodes()) {
-            final PDGNode node = getNode(n.getId());
+            final PDGNode node = getNode(n.getNodeId());
             for (final CDGEdge ie : n.getInEdges())
-                node.addInEdge(new PDGEdge(getNode(ie.getSrc().getId()), getNode(ie.getDest().getId()), ie.getLabel(), Control.Edge.EdgeType.CONTROL));
+                node.addInEdge(new PDGEdge(getNode(ie.getSrc().getNodeId()), getNode(ie.getDest().getNodeId()), ie.getLabel(), Control.Edge.EdgeType.CONTROL));
             for (final CDGEdge oe : n.getOutEdges())
-                node.addOutEdge(new PDGEdge(getNode(oe.getSrc().getId()), getNode(oe.getDest().getId()), oe.getLabel(), Control.Edge.EdgeType.CONTROL));
+                node.addOutEdge(new PDGEdge(getNode(oe.getSrc().getNodeId()), getNode(oe.getDest().getNodeId()), oe.getLabel(), Control.Edge.EdgeType.CONTROL));
         }
     }
 
@@ -276,9 +276,9 @@ public class PDG {
         // all the nodes and control edges have already added. Only adds data edges
         try {
             for (final Map.Entry<DDGNode, Set<DDGNode>> entry : ddg.getDefUseChain().entrySet()) {
-                final PDGNode src = getNode(entry.getKey().getId());
+                final PDGNode src = getNode(entry.getKey().getNodeId());
                 for (final DDGNode d : entry.getValue()) {
-                    final PDGNode dest = getNode(d.getId());
+                    final PDGNode dest = getNode(d.getNodeId());
                     new PDGEdge(src, dest, entry.getKey().getDefVariable(), Control.Edge.EdgeType.DATA);
                 }
             }

@@ -141,7 +141,7 @@ public class CFGSlicer {
 
                 // m -> infl(n)
                 if (inSlice.contains(node) && node.getKind() == Control.Node.NodeType.CONTROL)
-                    controlInflNodes.addAll(infl.get(node.getId()));
+                    controlInflNodes.addAll(infl.get(node.getNodeId()));
 
                 return out;
             }
@@ -192,9 +192,9 @@ public class CFGSlicer {
             if (n.getKind() == Control.Node.NodeType.CONTROL)
                 for (final CFGEdge e : n.getOutEdges())
                     if (e.getLabel().equals("."))
-                        controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, "F");
+                        controlEdges.put(new Integer[]{e.getSrc().getNodeId(), e.getDest().getNodeId()}, "F");
                     else
-                        controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, e.getLabel());
+                        controlEdges.put(new Integer[]{e.getSrc().getNodeId(), e.getDest().getNodeId()}, e.getLabel());
         }
 
         // add the edge: entry ---> start
@@ -206,7 +206,7 @@ public class CFGSlicer {
             if (!contolDependentMap.containsKey(enodes[0]))
                 contolDependentMap.put(enodes[0], new HashSet<CFGNode>());
             while (!srcParent.equals(destination)) {
-                contolDependentMap.get(enodes[0]).add(cfg.getNode(destination.getId()));
+                contolDependentMap.get(enodes[0]).add(cfg.getNode(destination.getNodeId()));
                 destination = destination.getParent();
             }
         }

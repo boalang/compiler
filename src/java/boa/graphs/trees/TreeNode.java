@@ -46,7 +46,7 @@ public class TreeNode extends Node<TreeNode, TreeEdge> {
      * @param node CFG node
      */
     public TreeNode(final CFGNode node) {
-        this.id = node.getId();
+        this.id = node.getNodeId();
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
         this.kind = node.getKind();
