@@ -1,0 +1,26 @@
+o: output sum of int;
+
+type ftype = function(i: int) : int;
+
+f := ftype {
+    g := function() : int {
+        return i + 5;
+    };
+    return i + g();
+};
+
+f = ftype {
+    g := function() : int {
+        return i + 5;
+    };
+    return i + g();
+};
+
+h := f;
+
+l := function(myf: ftype, i: int) : int {
+    return myf(i);
+};
+
+o << l(f, 5);
+o << l(ftype { return 2; }, 5);

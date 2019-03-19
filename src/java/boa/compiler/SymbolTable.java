@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -382,7 +382,7 @@ public class SymbolTable {
 			if (global)
 				globalFunctions.addFunction(id, (BoaFunction) type);
 			else
-				this.setFunction(id, (BoaFunction) type);
+				this.functions.addFunction(id, (BoaFunction) type);
 		}
 
 		if (global)
@@ -589,19 +589,22 @@ public class SymbolTable {
 
 			for (final URL url : urls)
 				db.scanArchives(url);
-	
+
 			final Map<String, Set<String>> annotationIndex = db.getAnnotationIndex();
-	
+
 			for (final String s : annotationIndex.get(AggregatorSpec.class.getCanonicalName()))
 				importAggregator(s);
-	
+
 			for (final String s : annotationIndex.get(FunctionSpec.class.getCanonicalName()))
 				importFunctions(s);
 		}
 	}
 
 	public BoaFunction getFunction(final String id) {
-		return this.getFunction(id, new BoaType[0]);
+		final BoaFunction f = globalFunctions.getFunction(id);
+		if (f != null)
+			return f;
+		return functions.getFunction(id);
 	}
 
 	public BoaFunction getFunction(final String id, final List<BoaType> formalParameters) {
@@ -623,10 +626,6 @@ public class SymbolTable {
 
 	public boolean hasLocalFunction(final String id) {
 		return functions.hasFunction(id);
-	}
-
-	public void setFunction(final String id, final BoaFunction boaFunction) {
-		this.functions.addFunction(id, boaFunction);
 	}
 
 	public boolean hasCast(final BoaType from, final BoaType to) {

@@ -121,6 +121,16 @@ public class FunctionTrie {
 		return this.trie.containsKey(name);
 	}
 
+	public BoaFunction getFunction(final String name) {
+		Object o = this.trie.get(name);
+		while (o instanceof FunctionTrie) {
+			o = ((FunctionTrie)o).trie.values().toArray()[0];
+		}
+		if (o instanceof BoaFunction)
+			return (BoaFunction)o;
+		return null;
+	}
+
 	public BoaFunction getFunction(final String name, final BoaType[] formalParameters) {
 		final Object[] ids = new Object[formalParameters.length + 2];
 
