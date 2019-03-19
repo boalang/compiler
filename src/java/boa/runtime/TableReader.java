@@ -51,6 +51,7 @@ public class TableReader {
 	private BytesWritable value = null;
 	private boolean preloaded = false;
 	private List<Object> indices = new ArrayList<Object>();
+	private int columnIndex = -1;
 	private Row row = null;
 
 	public TableReader(long position, String ... path) {
@@ -93,7 +94,10 @@ public class TableReader {
 		t.def = hasNext();
 		if (!t.def)
 			return false;
-		t.fromRow(next(), getIndicesCount());
+		if (columnIndex != -1)
+			t.columnFromRow(next(), columnIndex);
+		else
+			t.fromRow(next(), getIndicesCount());
 		return true;
 	}
 
@@ -120,6 +124,10 @@ public class TableReader {
 		indices = objs;
 	}
 
+	public void setColumnIndex(final int index) {
+		this.columnIndex = index;
+	}
+
 	public int getIndicesCount() {
 		return indices.size();
 	}
@@ -139,12 +147,14 @@ public class TableReader {
 				row = Row.parseFrom(stream);
 				final List<Value> rowValues = row.getColsList();
 
-				for (int i = 0; i < indices.size(); i++) {
-					final Value value = rowValues.get(i);
-					final Object index = indices.get(i);
-					if ((index instanceof String && !((String)index).equals("_")) && !compareField(value, index)) {
-						filter = true;
-						break;
+				if (this.columnIndex == -1) {
+					for (int i = 0; i < indices.size(); i++) {
+						final Value value = rowValues.get(i);
+						final Object index = indices.get(i);
+						if ((index instanceof String && !((String)index).equals("_")) && !compareField(value, index)) {
+							filter = true;
+							break;
+						}
 					}
 				}
 				rowValues.add(row.getVal());
@@ -204,6 +214,7 @@ public class TableReader {
 		final TableReader newSFI = new TableReader(pos, path);
 		newSFI.preloaded = this.preloaded;
 		newSFI.row = this.row;
+		newSFI.columnIndex = this.columnIndex;
 		for (final Object o : indices)
 			newSFI.indices.add(o);
 		return newSFI;

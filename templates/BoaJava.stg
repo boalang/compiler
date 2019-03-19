@@ -131,17 +131,24 @@ private class <name> extends boa.runtime.Tuple
 	<name>(<fields,types:{field,type|final <type> ___<field>}; separator=", ">) {
 		<fields,types:{field,type|this.___<field> = new <type>(___<field>)}; separator="; ">;
 	}
+
 	<name>(final <name> tmp) {
 		<fields,types:{field,type|this.___<field> = new <type>(tmp.___<field>)}; separator="; ">;
 	}
-	<if(isrow)><name>(final boa.output.Output.Value v) {
-	<fields, types:{field,type|this.___<field> = boa.runtime.TableReader.valTo<type>(v.getT(<i0>))}; separator="; ">;
-}
-public void fromRow(final boa.output.Output.Row r, final int offset) {
-	<trunc(fields), trunc(types), trunc(tuples):{field,type,tuple|this.___<field> = <if(tuple)>new <tuple><else>boa.runtime.TableReader.valTo<type><endif>(r.getCols(<i0> + offset))}; separator="; ">;
-	this.___<last(fields)> = <if(last(tuples))>new <tuple><else>boa.runtime.TableReader.valTo<last(types)><endif>(r.getVal());
-}<endif>
 
+	<if(isrow)><name>(final boa.output.Output.Value v) {
+		<fields, types:{field,type|this.___<field> = boa.runtime.TableReader.valTo<type>(v.getT(<i0>))}; separator="; ">;
+	}
+
+	public void fromRow(final boa.output.Output.Row r, final int offset) {
+		<trunc(fields), trunc(types), trunc(tuples):{field,type,tuple|this.___<field> = <if(tuple)>new <tuple><else>boa.runtime.TableReader.valTo<type><endif>(r.getCols(<i0> + offset))}; separator="; ">;
+		this.___<last(fields)> = <if(last(tuples))>new <tuple><else>boa.runtime.TableReader.valTo<last(types)><endif>(r.getVal());
+	}
+
+	public void columnFromRow(final boa.output.Output.Row r, final int col) {
+		<trunc(fields), trunc(types), trunc(tuples):{field,type,tuple|this.___<field> = <if(tuple)>new <tuple><else>boa.runtime.TableReader.valTo<type><endif>(r.getCols(<i0> + col))}; separator="; ">;
+	}
+<endif>
 	public <name> clone() {
     		return new <name>(this);
 	}

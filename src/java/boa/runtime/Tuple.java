@@ -27,6 +27,10 @@ import boa.output.Output.Row;
 public abstract class Tuple {
 	public boolean def = true;
 
+
 	public void fromRow(final Row r, final int offset) {
+	}
+
+	public void columnFromRow(final Row r, final int col) {
 	}
 }
