@@ -19,14 +19,18 @@ package boa.compiler.transforms;
 import java.util.HashMap;
 import java.util.Map;
 
+import boa.compiler.ast.Component;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
 import boa.compiler.ast.Selector;
 import boa.compiler.ast.statements.VarDeclStatement;
+import boa.compiler.ast.types.FunctionType;
 import boa.compiler.ast.types.OutputType;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 
 import boa.types.BoaFunction;
+import boa.types.BoaName;
+import boa.types.BoaType;
 
 /**
  * Finds and renames all variables based on the order of variable declaraction.
@@ -41,7 +45,7 @@ public class VariableDeclRenameTransformer extends AbstractVisitorNoArgNoRet {
 
 	/** {@inheritDoc} */
 	@Override
-	public void start(Node n) {
+	public void start(final Node n) {
 		counter = 0;
 		varHash.clear();
 		super.start(n);
@@ -49,7 +53,7 @@ public class VariableDeclRenameTransformer extends AbstractVisitorNoArgNoRet {
 
 	/** {@inheritDoc} */
 	@Override
-	public void visit(VarDeclStatement n) {
+	public void visit(final VarDeclStatement n) {
 		final String oldId = n.getId().getToken();
 
 		if (!(n.getType() instanceof OutputType)) {
@@ -66,13 +70,26 @@ public class VariableDeclRenameTransformer extends AbstractVisitorNoArgNoRet {
 
 	/** {@inheritDoc} */
 	@Override
-	public void visit(Selector n) {
+	public void visit(final Selector n) {
 		// do nothing, we dont want to rename the selector's identifier
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void visit(Identifier n) {
+	public void visit(final FunctionType n) {
+		super.visit(n);
+		if (n.getArgsSize() > 0) {
+			final BoaType[] params = new BoaType[n.getArgsSize()];
+			int i = 0;
+			for (final Component c : n.getArgs())
+				params[i++] = new BoaName(c.getType().type, c.getIdentifier().getToken());
+			((BoaFunction)n.type).setFormalParameters(params);
+		}
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final Identifier n) {
 		final String oldId = n.getToken();
 		if (!varHash.containsKey(oldId))
 			return;

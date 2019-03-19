@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -43,9 +43,9 @@ public class TestTypecheckBad extends BaseTest {
 			{ "var-as-type.boa", "type 'input' undefined" },
 			{ "re-decl-var.boa", "variable 'f' already declared as 'function[]: any'" },
 			{ "re-decl-var2.boa", "variable 'i' already declared as 'int'" },
-			{ "method-no-call.boa", "expected a call to function 'f'" },
+			{ "method-no-call.boa", "incompatible types for if condition: required 'boolean', found 'function[]: bool'" },
 			{ "method-call-wrong-type.boa", "no such function push([stack of int, stack of int])" },
-			//{ "builtin-method-no-call.boa", "expected a call to function 'clear'" },
+			{ "builtin-method-no-call.boa", "incompatible types for if condition: required 'boolean', found 'function[traversal]: any'" },
 			//{ "quant-missing-use.boa", "quantifier variable 'i' must be used in the foreach condition expression" },
 			{ "current-badtype.boa", "no such function current([int])" },
 			{ "after-return.boa", "return statement not allowed inside visitors" },

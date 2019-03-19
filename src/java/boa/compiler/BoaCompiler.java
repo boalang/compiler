@@ -146,8 +146,6 @@ public class BoaCompiler extends BoaMain {
 				final File f = inputFiles.get(i);
 				try {
 					final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(f.getAbsolutePath()));
-					// use the whole input string to seed the RNG
-					seeds.add(lexer._input.getText(new Interval(0, lexer._input.size())).hashCode());
 					lexer.removeErrorListeners();
 					lexer.addErrorListener(new LexerErrorListener());
 
@@ -163,11 +161,13 @@ public class BoaCompiler extends BoaMain {
 
 					final BoaErrorListener parserErrorListener = new ParserErrorListener();
 					final Start p = parse(tokens, parser, parserErrorListener);
-					if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 					if (cl.hasOption("views")) {
 						new ViewFindingVisitor().start(p);
 						System.exit(0);
 					}
+					if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
+					// use the whole input string to seed the RNG
+					seeds.add(new PrettyPrintVisitor().startAndReturn(p).hashCode());
 
 					final String jobName = "" + i;
 

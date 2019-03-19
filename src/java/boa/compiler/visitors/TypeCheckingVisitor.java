@@ -34,7 +34,7 @@ import boa.types.proto.CodeRepositoryProtoTuple;
 
 /**
  * Prescan the program and check that all variables are consistently typed.
- * 
+ *
  * @author anthonyu
  * @author rdyer
  * @author ankuraga
@@ -48,7 +48,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 	/**
 	 * This verifies visitors have at most 1 before/after for a type.
-	 * 
+	 *
 	 * @author rdyer
 	 */
 	protected class VisitorCheckingVisitor extends AbstractVisitorNoArgNoRet {
@@ -176,7 +176,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/**
 	 * This does type checking of function bodies to ensure the
 	 * returns are the correct type.
-	 * 
+	 *
 	 * @author rdyer
 	 */
 	protected class ReturnCheckingVisitor extends AbstractVisitorNoArgNoRet {
@@ -184,7 +184,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		/**
 		 * Initialize the visitor with the function's return type.
-		 * 
+		 *
 		 * @param retType the function's return type
 		 */
 		public void initialize(final BoaType retType) {
@@ -530,9 +530,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		} else {
 			n.getOperand().accept(this, env);
 			type = n.getOperand().type;
-
-			if (type instanceof BoaFunction && n.getOperand() instanceof Identifier)
-				throw new TypeCheckException(n, "expected a call to function '" + n.getOperand() + "'");
 		}
 
 		n.type = type;
@@ -552,7 +549,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			try {
 				n.type = env.get(n.getToken());
 			} catch (final RuntimeException e) {
-				throw new TypeCheckException(n, "invalid identifier '" + n.getToken() + "'", e);
+				if (!env.hasGlobalFunction(n.getToken()) && !env.hasLocalFunction(n.getToken()))
+					throw new TypeCheckException(n, "invalid identifier '" + n.getToken() + "'", e);
+				n.type = env.getFunction(n.getToken());
 			}
 	}
 
@@ -639,13 +638,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					throw new TypeCheckException(n.getId(), "invalid element number " + selector + " for tuple '" + type + "' - element numbers start at _1");
 				throw new TypeCheckException(n.getId(), "'" + type + "' has no member named '" + selector + "'");
 			}
-			
+
 			if (type instanceof CodeRepositoryProtoTuple && selector.equals("revisions")) {
 				throw new TypeCheckException(n.getId(), "Accessing " + "'" + selector + "' of '" + type + "' is prohibited! "
 						+ "Use functions 'getrevisionscount(CodeRepository)' and 'getrevision(CodeRepository, int)' instead! "
 						+ "E.g., revision := getrevision(cr, 0); or for (i := 0; i < getrevisionscount(cr); i++) revision := getrevision(cr, i);");
 			}
-			
+
 			type = ((BoaTuple) type).getMember(selector);
 			if (type instanceof BoaName)
 				type = ((BoaName) type).getType();
@@ -671,14 +670,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.type = accepts;
 
 		if (n.getRhsSize() > 0) {
-			BoaType type;
-
-			if (accepts instanceof BoaFunction)
-				type = (BoaType) ((BoaFunction) accepts).getType();
-			else if (accepts instanceof BoaTable)
-				type = (BoaTable) accepts;
-			else
-				type = (BoaType) accepts;
+			BoaType type = (BoaType) accepts;
 
 			boolean hasView = false;
 			for (int i = 0; i < n.getRhsSize(); i++) {
@@ -823,7 +815,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final AssignmentStatement n, final SymbolTable env) {
 		n.env = env;
 
-		n.getLhs().accept(this, env);
+		try {
+			n.getLhs().accept(this, env);
+		} catch (final TypeCheckException e) {
+			if (!e.getMessage().startsWith("expected a call to function"))
+				throw e;
+		}
+
 		n.getRhs().accept(this, env);
 
 		if (!(n.getLhs().type instanceof BoaArray && n.getRhs().type instanceof BoaTuple))
@@ -1035,8 +1033,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.getCondition().accept(this, env);
 
 		if (!(n.getCondition().type instanceof BoaBool))
-			if (!(n.getCondition().type instanceof BoaFunction && ((BoaFunction) n.getCondition().type).getType() instanceof BoaBool))
-				throw new TypeCheckException(n.getCondition(), "incompatible types for if condition: required 'boolean', found '" + n.getCondition().type + "'");
+			throw new TypeCheckException(n.getCondition(), "incompatible types for if condition: required 'boolean', found '" + n.getCondition().type + "'");
 
 		n.getBody().accept(this, env);
 
@@ -1153,21 +1150,17 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 			n.getInitializer().accept(this, env);
 			rhs = n.getInitializer().type;
+			if (!(f.getOperand() instanceof FunctionExpression)) {
+				if (env.hasGlobalFunction(id) || env.hasLocalFunction(id))
+					throw new TypeCheckException(n.getId(), "name conflict: a function '" + id + "' already exists");
+				env.set(id, rhs);
+			}
 
 			if (rhs instanceof BoaAny)
 				throw new TypeCheckException(n.getInitializer(), "functions without a return type can not be used as initializers");
 
 			if (f.getOperand() instanceof Identifier && f.getOpsSize() == 0 && env.hasType(((Identifier)f.getOperand()).getToken()))
 				throw new TypeCheckException(n.getInitializer(), "type '" + f.getOperand().type + "' is not a value and can not be assigned");
-
-			// if type is a function but rhs isnt a function decl,
-			// then its a call so the lhs type is the return type
-			if (rhs instanceof BoaFunction) {
-				final IsFunctionVisitor v = new IsFunctionVisitor();
-				v.start(n.getInitializer());
-				if (!v.isFunction())
-					rhs = ((BoaFunction)rhs).getType();
-			}
 		}
 
 		BoaType lhs;
@@ -1734,7 +1727,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		for (final EnumBodyDeclaration c : n.getMembers()) {
 			names.add(c.getIdentifier().getToken());
 
-			Factor f = c.getExp().getLhs().getLhs().getLhs().getLhs().getLhs();
+			final Factor f = c.getExp().getLhs().getLhs().getLhs().getLhs().getLhs();
 			if(f.getOperand() instanceof ILiteral) {
 				if(f.getOperand() instanceof StringLiteral)
 					fieldType = new BoaString();
@@ -1823,16 +1816,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		for (final Expression e : el) {
 			e.accept(this, env);
-
-			// special case of a function call, use its return type instead of function type
-			if (e.type instanceof BoaFunction) {
-				callFinder.start(e);
-				if (callFinder.isCall()) {
-					types.add(((BoaFunction) e.type).getType());
-					continue;
-				}
-			}
-
 			types.add(e.type);
 		}
 

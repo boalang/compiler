@@ -386,7 +386,7 @@ public class SymbolTable {
 			if (global)
 				globalFunctions.addFunction(id, (BoaFunction) type);
 			else
-				this.setFunction(id, (BoaFunction) type);
+				this.functions.addFunction(id, (BoaFunction) type);
 		}
 
 		if (global)
@@ -605,7 +605,10 @@ public class SymbolTable {
 	}
 
 	public BoaFunction getFunction(final String id) {
-		return this.getFunction(id, new BoaType[0]);
+		final BoaFunction f = globalFunctions.getFunction(id);
+		if (f != null)
+			return f;
+		return functions.getFunction(id);
 	}
 
 	public BoaFunction getFunction(final String id, final List<BoaType> formalParameters) {
@@ -627,10 +630,6 @@ public class SymbolTable {
 
 	public boolean hasLocalFunction(final String id) {
 		return functions.hasFunction(id);
-	}
-
-	public void setFunction(final String id, final BoaFunction boaFunction) {
-		this.functions.addFunction(id, boaFunction);
 	}
 
 	public boolean hasCast(final BoaType from, final BoaType to) {
