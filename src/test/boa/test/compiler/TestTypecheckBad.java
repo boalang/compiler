@@ -73,7 +73,7 @@ public class TestTypecheckBad extends BaseTest {
 
 	@Test
 	public void buildinMethodNoCall() throws IOException {
-		typecheck(load(badDir + "builtin-method-no-call.boa"), "incompatible types for if condition: required 'boolean', found 'function[set of TypeVar V]: any'");
+		typecheck(load(badDir + "builtin-method-no-call.boa"), "incompatible types for if condition: required 'boolean', found 'function[traversal]: any'");
 	}
 
 	//@Test
