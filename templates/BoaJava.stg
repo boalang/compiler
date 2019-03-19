@@ -124,16 +124,16 @@ new <type>()
 }
 >>
 
-TupleType(name, fields, types, isrow, tuples) ::= <<
+TupleType(name, fields, types, isrow, tuples, protos) ::= <<
 private class <name> extends boa.runtime.Tuple
 {
 	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
 	<name>(<fields,types:{field,type|final <type> ___<field>}; separator=", ">) {
-		<fields,types:{field,type|this.___<field> = new <type>(___<field>)}; separator="; ">;
+		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = ___<field><else>this.___<field> = new <type>(___<field>)<endif>}; separator="; ">;
 	}
 
 	<name>(final <name> tmp) {
-		<fields,types:{field,type|this.___<field> = new <type>(tmp.___<field>)}; separator="; ">;
+		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = tmp.___<field><else>this.___<field> = new <type>(tmp.___<field>)</endif>}; separator="; ">;
 	}
 
 	<if(isrow)><name>(final boa.output.Output.Value v) {
