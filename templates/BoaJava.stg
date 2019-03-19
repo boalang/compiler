@@ -133,7 +133,7 @@ private class <name> extends boa.runtime.Tuple
 	}
 
 	<name>(final <name> tmp) {
-		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = tmp.___<field><else>this.___<field> = new <type>(tmp.___<field>)</endif>}; separator="; ">;
+		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = tmp.___<field><else>this.___<field> = new <type>(tmp.___<field>)<endif>}; separator="; ">;
 	}
 
 	<if(isrow)><name>(final boa.output.Output.Value v) {
