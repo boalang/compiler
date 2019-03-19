@@ -125,6 +125,10 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 		return this.useVariables;
 	}
 
+	public boolean hasDefVariables() {
+		return this.defVariables != null;
+	}
+
 	public String getDefVariables() {
 		if (this.defVariables == null)
 			processDef();

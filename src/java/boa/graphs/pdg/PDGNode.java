@@ -41,7 +41,7 @@ public class PDGNode extends Node<PDGNode, PDGEdge> {
      * @param node control dependence graph node
      */
     public PDGNode(final CDGNode node) {
-        this.id = node.getId();
+        this.id = node.getNodeId();
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
         this.kind = node.getKind();

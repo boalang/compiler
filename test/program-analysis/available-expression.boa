@@ -136,7 +136,7 @@ fixp1 := fixp(curr, prev: T1) : bool {
 	return false;
 };
 
-def := visitor {
+visit(p, visitor {
 	before node: CodeRepository -> {
 		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
 		foreach (i: int; def(snapshot[i]))
@@ -152,6 +152,4 @@ def := visitor {
 		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, avail_expr, fixp1);
 		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, result);
 	}
-};
-
-visit(p, def);
+});

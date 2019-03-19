@@ -116,7 +116,7 @@ public class PDTree {
 		try {
 			final TreeNode[] results = new TreeNode[nodes.size()];
 			for (final TreeNode node : nodes) {
-				results[node.getId()] = node;
+				results[node.getNodeId()] = node;
 			}
 			return results;
 		} catch (final Exception e) {
@@ -146,7 +146,7 @@ public class PDTree {
      */
     public TreeNode getImmediatePostDominator(final int nodeid) {
         for (final TreeNode n : nodes)
-            if (n.getId() == nodeid)
+            if (n.getNodeId() == nodeid)
                 return n.getParent();
         return null;
     }
@@ -159,7 +159,7 @@ public class PDTree {
      */
     public TreeNode getNode(final int id) {
         for (final TreeNode node : nodes) {
-            if (node.getId() == id)
+            if (node.getNodeId() == id)
                 return node;
         }
         return null;
@@ -182,16 +182,16 @@ public class PDTree {
         // initialize
         final BitSet allBits = new BitSet();
         for (final CFGNode n : cfg.getNodes()) {
-            allBits.set(n.getId());
+            allBits.set(n.getNodeId());
         }
 
         if (cfg.getNodes().size() > 2) {
             final int stopid = cfg.getNodes().size() - 1;
 
             for (final CFGNode n : cfg.getNodes()) {
-                if (n.getId() == stopid) {
+                if (n.getNodeId() == stopid) {
                     pDomMap.put(n, new BitSet());
-                    pDomMap.get(n).set(n.getId());
+                    pDomMap.get(n).set(n.getNodeId());
                 } else {
                     pDomMap.put(n, (BitSet)allBits.clone());
                 }
@@ -203,7 +203,7 @@ public class PDTree {
 
             final CFGNode stopNode = cfg.getNode(1);
             pDomMap.put(stopNode, new BitSet());
-            pDomMap.get(stopNode).set(stopNode.getId());
+            pDomMap.get(stopNode).set(stopNode.getNodeId());
 
             successors.put(cfg.getNode(0), cfg.getNode(0).getSuccessors());
             successors.put(stopNode, stopNode.getSuccessors());
@@ -227,7 +227,7 @@ public class PDTree {
                 }
                 // D[n] = {n} Union (Intersection[succ[node]])
                 if (currentPDom == null) currentPDom = new BitSet();
-                currentPDom.set(n.getId());
+                currentPDom.set(n.getNodeId());
 
                 if (!pDomMap.get(n).equals(currentPDom))
                     changed = true;
@@ -244,7 +244,7 @@ public class PDTree {
         // ensure strict post-dominance
         for (final CFGNode n : cfgNodes) {
             final BitSet curMap = pDomMap.get(n);
-            curMap.clear(n.getId());
+            curMap.clear(n.getNodeId());
         }
 
         return pDomMap;
@@ -316,7 +316,7 @@ public class PDTree {
      * @return the existing tree node for the given CFG node. If not found then returns a new node
      */
     private TreeNode getNode(final CFGNode cfgNode) {
-        final TreeNode node = getNode(cfgNode.getId());
+        final TreeNode node = getNode(cfgNode.getNodeId());
         if (node != null)
             return node;
 

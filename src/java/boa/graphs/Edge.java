@@ -30,7 +30,7 @@ public abstract class Edge<N extends Node, E extends Edge<N, E>> implements Comp
 
 	@Override
 	public int compareTo(final E edge) {
-		return this.dest.getId() - edge.dest.getId();
+		return this.dest.getNodeId() - edge.dest.getNodeId();
 	}
 
     public Edge() {

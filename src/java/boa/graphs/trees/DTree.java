@@ -131,7 +131,7 @@ public class DTree {
      */
     public TreeNode getImmediateDominator(final int nodeid) {
         for (final TreeNode n : nodes)
-            if (n.getId() == nodeid)
+            if (n.getNodeId() == nodeid)
                 return n.getParent();
         return null;
     }
@@ -144,7 +144,7 @@ public class DTree {
      */
     public TreeNode getNode(final int id) {
         for (final TreeNode node : nodes) {
-            if (node.getId() == id)
+            if (node.getNodeId() == id)
                 return node;
         }
         return null;
@@ -163,7 +163,7 @@ public class DTree {
         // initialize
         if (cfg.getNodes().size() > 2) {
             for (final CFGNode n : cfg.getNodes()) {
-                if (n.getId() == 0)
+                if (n.getNodeId() == 0)
                     pDomMap.put(n, new HashSet<CFGNode>(Collections.singletonList(n)));
                 else
                     pDomMap.put(n, cfg.getNodes());
@@ -233,7 +233,7 @@ public class DTree {
             for (final CFGNode pd1 : entry.getValue()) {
                 boolean isIPDom = true;
                 for (final CFGNode pd2 : entry.getValue()) {
-                    if (pd1.getId() != pd2.getId())
+                    if (pd1.getNodeId() != pd2.getNodeId())
                         if ((dom.get(pd2)).contains(pd1)) {
                             isIPDom = false;
                             break;
@@ -283,7 +283,7 @@ public class DTree {
      * @return the existing tree node for the given CFG node. If not found then returns a new node
      */
     private TreeNode getNode(final CFGNode cfgNode) {
-        final TreeNode node = getNode(cfgNode.getId());
+        final TreeNode node = getNode(cfgNode.getNodeId());
         if (node != null)
             return node;
 
