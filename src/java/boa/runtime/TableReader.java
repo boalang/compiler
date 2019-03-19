@@ -21,8 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import boa.output.Output.*;
-
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.SequenceFile.Reader;
@@ -35,6 +33,8 @@ import org.apache.hadoop.fs.FileSystem;
 
 import com.google.protobuf.CodedInputStream;
 
+import boa.output.Output.Value;
+import boa.output.Output.Row;
 import boa.runtime.Tuple;
 
 
@@ -46,16 +46,14 @@ import boa.runtime.Tuple;
  */
 public class TableReader {
 	private String[] path = null;
-	private Configuration conf = null;
 	private SequenceFile.Reader reader = null;
 	private NullWritable key = null;
 	private BytesWritable value = null;
 	private boolean preloaded = false;
-	private List<Object> indices = null;
-	private CodedInputStream stream = null;
-	private boa.output.Output.Row row = null;
+	private List<Object> indices = new ArrayList<Object>();
+	private Row row = null;
 
-	public TableReader(long position, String ... path) throws Exception {
+	public TableReader(long position, String ... path) {
 		this.path = path.clone();
 		String filePath = path.length > 0 ? path[0] : "";
 
@@ -63,26 +61,26 @@ public class TableReader {
 			filePath += "/" + path[i];
 		}
 
-		conf = new Configuration();
-		FileSystem fs = FileSystem.get(conf);
-		Path p = new Path(filePath);
+		final Configuration conf = new Configuration();
+		try {
+			reader = new SequenceFile.Reader(FileSystem.get(conf), new Path(filePath), conf);
+			reader.seek(position);
+		} catch (final Exception e) {
+			reader = null;
+		}
 
-		reader = new SequenceFile.Reader(fs, new Path(filePath), conf);
-		reader.seek(position);
 		key = (NullWritable) ReflectionUtils.newInstance(this.reader.getKeyClass(), conf);
 		value = (BytesWritable) ReflectionUtils.newInstance(this.reader.getValueClass(), conf);
-
-		indices = new ArrayList<Object>();
 	}
 
-	public boolean hasNext() throws Exception{
+	public boolean hasNext() {
 		if (preloaded)
 			return true;
 		preloaded = readNext();
 		return preloaded;
 	}
 
-	public boa.output.Output.Row next() throws Exception{
+	public Row next() {
 		if (!preloaded)
 			readNext();
 		else
@@ -91,7 +89,7 @@ public class TableReader {
 		return row;
 	}
 
-	public boolean fetch(final Tuple t) throws Exception {
+	public boolean fetch(final Tuple t) {
 		t.def = hasNext();
 		if (!t.def)
 			return false;
@@ -99,20 +97,26 @@ public class TableReader {
 		return true;
 	}
 
-	public void close() throws Exception{
-		reader.close();
+	public void close() {
+		if (reader != null)
+			try {
+				reader.close();
+			} catch (final Exception e) {
+				// do nothing
+			}
+		reader = null;
 	}
 
-	public void addIndex(Object obj) {
+	public void addIndex(final Object obj) {
 		indices.add(obj);
 	}
 
-	public void addIndices(List<Object> objs) {
-		for (Object obj : objs)
+	public void addIndices(final List<Object> objs) {
+		for (final Object obj : objs)
 			indices.add(obj);
 	}
 
-	public void setIndices(List<Object> objs) {
+	public void setIndices(final List<Object> objs) {
 		indices = objs;
 	}
 
@@ -120,32 +124,39 @@ public class TableReader {
 		return indices.size();
 	}
 
-	private boolean readNext() throws Exception{
+	private boolean readNext() {
+		if (reader == null)
+			return false;
+
 		boolean filter = true;
 		while (filter) {
-			filter = false;
-			if (!reader.next(key, value)) {
+			try {
+				filter = false;
+				if (!reader.next(key, value)) {
+					return false;
+				}
+				final CodedInputStream stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+				row = Row.parseFrom(stream);
+				final List<Value> rowValues = row.getColsList();
+
+				for (int i = 0; i < indices.size(); i++) {
+					final Value value = rowValues.get(i);
+					final Object index = indices.get(i);
+					if ((index instanceof String && !((String)index).equals("_")) && !compareField(value, index)) {
+						filter = true;
+						break;
+					}
+				}
+				rowValues.add(row.getVal());
+			} catch (final IOException e) {
 				return false;
 			}
-			stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
-			row = boa.output.Output.Row.parseFrom(stream);
-			List<boa.output.Output.Value> rowValues = row.getColsList();
-
-			for (int i = 0; i < indices.size(); i++) {
-				boa.output.Output.Value value = rowValues.get(i);
-				Object index = indices.get(i);
-				if ((index instanceof String && !((String)index).equals("_")) && !compareField(value, index)) {
-					filter = true;
-					break;
-				}
-			}
-			rowValues.add(row.getVal());
 		}
 
 		return true;
 	}
 
-	private boolean compareField(boa.output.Output.Value v, Object index) {
+	private boolean compareField(final Value v, final Object index) {
 		switch (v.getType()) {
 			case INT:
 				return v.getI() == (Integer) index;
@@ -166,35 +177,35 @@ public class TableReader {
 	  	}
 	}
 
-	public static Long valToLong(Value val) {
+	public static Long valToLong(final Value val) {
 		return val.getI();
 	}
 
-	public static Double valToDouble(Value val) {
+	public static Double valToDouble(final Value val) {
 		return val.getF();
 	}
 
-	public static String valToString(Value val) {
+	public static String valToString(final Value val) {
 		return val.getS();
 	}
 
-	public static Boolean valToBoolean(Value val) {
+	public static Boolean valToBoolean(final Value val) {
 		return val.getB();
 	}
 
 	public TableReader clone(){
-		TableReader newSFI = null;
-
-		try {
-			newSFI = new TableReader(reader.getPosition(), path);
-			List<Object> newIndices = new ArrayList<Object>();
-			for (Object o : indices)
-				newIndices.add(o);
-			newSFI.setIndices(newIndices);
-		} catch (Exception e) {
-			return null;
-		}
-
+		long pos = 0L;
+		if (reader != null)
+			try {
+				pos = reader.getPosition();
+			} catch (final Exception e) {
+				// do nothing
+			}
+		final TableReader newSFI = new TableReader(pos, path);
+		newSFI.preloaded = this.preloaded;
+		newSFI.row = this.row;
+		for (final Object o : indices)
+			newSFI.indices.add(o);
 		return newSFI;
 	}
 }

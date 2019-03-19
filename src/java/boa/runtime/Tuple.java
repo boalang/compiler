@@ -27,6 +27,6 @@ import boa.output.Output.Row;
 public abstract class Tuple {
 	public boolean def = true;
 
-	public void fromRow(final Row r, final int offset) throws Exception {
+	public void fromRow(final Row r, final int offset) {
 	}
 }
