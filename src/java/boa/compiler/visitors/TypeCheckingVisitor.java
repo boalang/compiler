@@ -601,31 +601,20 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				throw new TypeCheckException(n, "undefined TableType null");
 			}
 			if (selector.charAt(0) == '_') {
-				if (!selector.equals("_row")) {
-					try {
-						Integer i = Integer.parseInt(selector.substring(1));
+				try {
+					Integer i = Integer.parseInt(selector.substring(1));
 
-						if (((BoaTable)type).getIndexTypes() == null && i != 1)
-							throw new TypeCheckException(n, "table column out of bounds");
-						if (((BoaTable)type).getIndexTypes() == null || i == ((BoaTable)type).getIndexTypes().size() + 1)
-							n.type = new BoaTable(((BoaTable)type).getType());
-						else if (i < 1 || i > ((BoaTable)type).getIndexTypes().size() + 1)
-							throw new TypeCheckException(n, "table column out of bounds");
-						else
-							n.type = new BoaTable(((BoaTable)type).getIndex(i - 1));
+					if (((BoaTable)type).getIndexTypes() == null && i != 1)
+						throw new TypeCheckException(n, "table column out of bounds");
+					if (((BoaTable)type).getIndexTypes() == null || i == ((BoaTable)type).getIndexTypes().size() + 1)
+						n.type = new BoaTable(((BoaTable)type).getType());
+					else if (i < 1 || i > ((BoaTable)type).getIndexTypes().size() + 1)
+						throw new TypeCheckException(n, "table column out of bounds");
+					else
+						n.type = new BoaTable(((BoaTable)type).getIndex(i - 1));
 
-					} catch (NumberFormatException e) {
-						throw new TypeCheckException(n, "invalid selector '" + selector + "'", e);
-					}
-				} else {
-					List<BoaType> newTypes = new ArrayList<BoaType>();
-
-					if (((BoaTable)type).getIndexTypes() != null)
-						for(BoaType bt : ((BoaTable)type).getIndexTypes())
-							newTypes.add(bt);
-
-					newTypes.add(((BoaTable)type).getType());
-					n.type = new BoaTuple(newTypes);
+				} catch (NumberFormatException e) {
+					throw new TypeCheckException(n, "invalid selector '" + selector + "'", e);
 				}
 			} else {
 				if (((BoaTable)type).hasTypeName(selector)) {
