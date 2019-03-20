@@ -1,6 +1,6 @@
 /*
- * Copyright 2017, Hridesh Rajan, Robert Dyer, Che Shian Hung
- *                 Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, Che Shian Hung,
+ *                 Iowa State University of Science and Technology,
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -474,6 +474,13 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		n.getCondition().accept(this);
 		stream.println(")");
 		n.getBody().accept(this);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final SubView n) {
+		stream.print("view " + n.getId().getToken());
+		n.getProgram().accept(this);
 	}
 
 	//

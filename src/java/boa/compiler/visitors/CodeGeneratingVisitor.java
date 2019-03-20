@@ -51,6 +51,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	boolean flowSensitive = false;
 	boolean loopSensitive = false;
 	HashMap<String, Boolean> traversalMap = new HashMap<String, Boolean>();
+	HashMap<String, Program> subViewsMap = new HashMap<String, Program>();
 	String lastVarDecl;
 
 	/**
@@ -2153,6 +2154,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final SubView n) {
 		code.add("");
+		subViewsMap.put(n.getId().getToken(), n.getProgram());
 	}
 
 	protected static String expand(final String template, final String... parameters) {
@@ -2261,5 +2263,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				return true;
 
 		return false;
+	}
+
+	public Map<String, Program> getSubViewsMap() {
+		return this.subViewsMap;
 	}
 }

@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014, Hridesh Rajan, Robert Dyer, Che Shian Hung,
+ *                 Iowa State University of Science and Technology,
+ *				   and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ import boa.compiler.ast.statements.Block;
 import boa.compiler.ast.statements.Statement;
 import boa.compiler.ast.statements.StopStatement;
 import boa.compiler.ast.statements.VisitStatement;
+import boa.compiler.ast.statements.SubView;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.types.BoaType;
 import boa.types.proto.*;
@@ -128,6 +130,12 @@ public class VisitorOptimizingTransformer extends AbstractVisitorNoArgNoRet {
 				logType(n, id.type);
 
 		super.visit(n);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final SubView n) {
+		return;
 	}
 
 	protected void logType(final VisitStatement n, final BoaType t) {

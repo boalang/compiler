@@ -24,6 +24,7 @@ import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
 import boa.compiler.ast.Selector;
 import boa.compiler.ast.statements.VarDeclStatement;
+import boa.compiler.ast.statements.SubView;
 import boa.compiler.ast.types.FunctionType;
 import boa.compiler.ast.types.OutputType;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
@@ -103,5 +104,11 @@ public class VariableDeclRenameTransformer extends AbstractVisitorNoArgNoRet {
 			if (n.env.hasLocal(oldId))
 				n.env.removeLocal(oldId);
 		}
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final SubView n) {
+		return;
 	}
 }

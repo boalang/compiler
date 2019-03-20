@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014, Hridesh Rajan, Robert Dyer, Che Shian Hung,
+ *                 Iowa State University of Science and Technology,
+ *				   and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +31,7 @@ import boa.compiler.ast.statements.Block;
 import boa.compiler.ast.statements.EmitStatement;
 import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.ast.statements.VarDeclStatement;
+import boa.compiler.ast.statements.SubView;
 import boa.compiler.ast.types.OutputType;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.types.BoaInt;
@@ -70,6 +72,12 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArgNoRet {
 					vars.add(n.getId().getToken());
 			}
 		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final SubView n) {
+			return;
+		}
 	}
 
 	protected final SumAggregatorFindingVisitor sumAggregatorFinder = new SumAggregatorFindingVisitor();
@@ -97,6 +105,12 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArgNoRet {
 			return;
 
 		generateStoreValue(n);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final SubView n) {
+		return;
 	}
 
 	protected void generateCacheVariable(final Program n, final String s) {

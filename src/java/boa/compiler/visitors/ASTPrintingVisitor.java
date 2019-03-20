@@ -1,6 +1,6 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, Neha Bhide
- *                 Iowa State University of Science and Technology
+ * Copyright 2016, Hridesh Rajan, Robert Dyer, Neha Bhide, Che Shian Hung,
+ *                 Iowa State University of Science and Technology,
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -381,6 +381,17 @@ public class ASTPrintingVisitor extends AbstractVisitorNoArgNoRet {
 	public void visit(final WhileStatement n) {
 		indent();
 		System.out.println("WhileStatement");
+		indent++;
+		super.visit(n);
+		indent--;
+	}
+
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final SubView n) {
+		indent();
+		System.out.println("SubView");
 		indent++;
 		super.visit(n);
 		indent--;

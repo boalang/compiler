@@ -1,6 +1,6 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Neha Bhide
- *                 Iowa State University of Science and Technology
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Neha Bhide, Che Shian Hung,
+ *                 Iowa State University of Science and Technology,
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -89,6 +89,7 @@ import boa.parser.BoaLexer;
  * @author nbhide
  */
 public class BoaCompiler extends BoaMain {
+	private static int jobId = 0;
 	
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
 	
@@ -106,6 +107,8 @@ public class BoaCompiler extends BoaMain {
 			jarName = cl.getOptionValue('o');
 		else
 			jarName = className + ".jar";
+
+		Map<String, Program> subViews = null;
 
 		// make the output directory
 		File outputRoot = null;
@@ -169,7 +172,8 @@ public class BoaCompiler extends BoaMain {
 					// use the whole input string to seed the RNG
 					seeds.add(new PrettyPrintVisitor().startAndReturn(p).hashCode());
 
-					final String jobName = "" + i;
+					final String jobName = Integer.toString(jobId);
+					jobId++;
 
 					try {
 						if (!parserErrorListener.hasError) {
@@ -182,7 +186,7 @@ public class BoaCompiler extends BoaMain {
 
 							LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
 							isSimple &= !simpleVisitor.isComplex();
-							
+
 							new VariableDeclRenameTransformer().start(p);
 							new InheritedAttributeTransformer().start(p);
 							new LocalAggregationTransformer().start(p);
@@ -196,6 +200,7 @@ public class BoaCompiler extends BoaMain {
 								if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
 								final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 								cg.start(p);
+								subViews = cg.getSubViewsMap();
 								jobs.add(cg.getCode());
 
 								jobnames.add(jobName);
@@ -226,6 +231,7 @@ public class BoaCompiler extends BoaMain {
 						if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
+						subViews = cg.getSubViewsMap();
 						jobs.add(cg.getCode());
 		
 						jobnames.add(p.jobName);
@@ -243,6 +249,7 @@ public class BoaCompiler extends BoaMain {
 						if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
+						subViews = cg.getSubViewsMap();
 						jobs.add(cg.getCode());
 
 						jobnames.add(p.jobName);
@@ -274,6 +281,108 @@ public class BoaCompiler extends BoaMain {
 		}
 
 		compileGeneratedSrc(cl, jarName, outputRoot, outputFile);
+
+		if (subViews.size() > 0) {
+			for (Map.Entry<String, Program> entry: subViews.entrySet()) {
+				codegen(entry.getKey(), entry.getValue(), outputSrcDir, cl);
+			}
+		}
+	}
+
+	private static void codegen(String name, Program p, File srcDir, CommandLine cl) throws IOException{
+		if (cl == null) return;
+
+		final String className = name;
+		final String jarName = name + ".jar";
+
+		Map<String, Program> subViews = null;
+
+		final File outputSrcDir = new File(srcDir, name);
+		if (!outputSrcDir.mkdirs())
+			throw new IOException("unable to mkdir " + outputSrcDir);
+
+		final List<URL> libs = new ArrayList<URL>();
+		if (cl.hasOption('l'))
+			for (final String lib : cl.getOptionValues('l'))
+				libs.add(new File(lib).toURI().toURL());
+
+		final File outputFile = new File(outputSrcDir, className + ".java");
+		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile));
+		try {
+			final List<String> jobnames = new ArrayList<String>();
+			final List<String> jobs = new ArrayList<String>();
+			final List<Integer> seeds = new ArrayList<Integer>();
+			boolean isSimple = true;
+
+			final List<Program> visitorPrograms = new ArrayList<Program>();
+
+
+			final int maxVisitors;
+			if (cl.hasOption('v'))
+				maxVisitors = Integer.parseInt(cl.getOptionValue('v'));
+			else
+				maxVisitors = Integer.MAX_VALUE;
+
+			try {
+				final String jobName = Integer.toString(jobId);
+				jobId++;
+				seeds.add(new PrettyPrintVisitor().startAndReturn(p).hashCode());
+
+				final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
+				simpleVisitor.start(p);
+
+				LOG.info(name + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
+				isSimple &= !simpleVisitor.isComplex();
+
+				new VariableDeclRenameTransformer().start(p);
+				new InheritedAttributeTransformer().start(p);
+				new LocalAggregationTransformer().start(p);
+				new VisitorOptimizingTransformer().start(p);
+
+				if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
+				if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
+				final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
+				cg.start(p);
+				subViews = cg.getSubViewsMap();
+				jobs.add(cg.getCode());
+
+				jobnames.add(jobName);
+
+			} catch (final Exception e) {
+				System.err.print(name + ": compilation failed: ");
+				e.printStackTrace();
+			}
+
+
+			if (jobs.size() == 0)
+				throw new RuntimeException("no files compiled without error");
+
+			final ST st = AbstractCodeGeneratingVisitor.stg.getInstanceOf("Program");
+
+			st.add("name", className);
+			st.add("numreducers", 1);
+			st.add("jobs", jobs);
+			st.add("jobnames", jobnames);
+			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
+			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
+			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
+			st.add("seeds", seeds);
+			if (DefaultProperties.localDataPath != null) {
+				st.add("isLocal", true);
+			}
+
+			o.write(st.render().getBytes());
+		} finally {
+			o.close();
+		}
+
+		compileGeneratedSrc(cl, jarName, outputSrcDir, outputFile);
+
+		if (subViews.size() > 0) {
+			for (Map.Entry<String, Program> entry: subViews.entrySet()) {
+				codegen(entry.getKey(), entry.getValue(), outputSrcDir, cl);
+			}
+		}
 	}
 	
 	public static void parseOnly(final String[] args) throws IOException {

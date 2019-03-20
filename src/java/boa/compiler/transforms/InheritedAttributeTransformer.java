@@ -1,6 +1,6 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, Neha Bhide
- *                 Iowa State University of Science and Technology
+ * Copyright 2016, Hridesh Rajan, Robert Dyer, Neha Bhide, Che Shian Hung,
+ *                 Iowa State University of Science and Technology,
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +36,7 @@ import boa.compiler.ast.statements.ExprStatement;
 import boa.compiler.ast.statements.Statement;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.statements.VisitStatement;
+import boa.compiler.ast.statements.SubView;
 import boa.compiler.ast.types.StackType;
 import boa.compiler.SymbolTable;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
@@ -264,5 +265,11 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArgNoRet {
 				}
 			}
 		}
+	}
+
+	/** @{inheritDoc} */
+	@Override
+	public void visit(final SubView n) {
+		return;
 	}
 }
