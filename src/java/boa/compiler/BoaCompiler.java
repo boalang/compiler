@@ -280,16 +280,25 @@ public class BoaCompiler extends BoaMain {
 			o.close();
 		}
 
-		compileGeneratedSrc(cl, jarName, outputRoot, outputFile);
+		String jarDirName = "jar";
+		if (cl.hasOption("jardir"))
+			jarDirName = cl.getOptionValue("jardir");
+
+		final File jarDir = new File("./" + jarDirName);
+		if (jarDir.isDirectory())
+			delete(jarDir);
+		if (!jarDir.mkdirs())
+			throw new IOException("unable to mkdir " + jarDir);
+		compileGeneratedSrc(cl, jarName, jarDir, outputRoot, outputFile);
 
 		if (subViews.size() > 0) {
 			for (Map.Entry<String, Program> entry: subViews.entrySet()) {
-				codegen(entry.getKey(), entry.getValue(), outputSrcDir, cl);
+				codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, cl);
 			}
 		}
 	}
 
-	private static void codegen(String name, Program p, File srcDir, CommandLine cl) throws IOException{
+	private static void codegen(String name, Program p, File srcDir, File jarDir, CommandLine cl) throws IOException{
 		if (cl == null) return;
 
 		final String className = name;
@@ -298,7 +307,10 @@ public class BoaCompiler extends BoaMain {
 		Map<String, Program> subViews = null;
 
 		final File outputSrcDir = new File(srcDir, name);
+		jarDir = new File(jarDir, name);
 		if (!outputSrcDir.mkdirs())
+			throw new IOException("unable to mkdir " + outputSrcDir);
+		if (!jarDir.mkdirs())
 			throw new IOException("unable to mkdir " + outputSrcDir);
 
 		final List<URL> libs = new ArrayList<URL>();
@@ -376,11 +388,11 @@ public class BoaCompiler extends BoaMain {
 			o.close();
 		}
 
-		compileGeneratedSrc(cl, jarName, outputSrcDir, outputFile);
+		compileGeneratedSrc(cl, jarName, jarDir, outputSrcDir, outputFile);
 
 		if (subViews.size() > 0) {
 			for (Map.Entry<String, Program> entry: subViews.entrySet()) {
-				codegen(entry.getKey(), entry.getValue(), outputSrcDir, cl);
+				codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, cl);
 			}
 		}
 	}
@@ -458,7 +470,7 @@ public class BoaCompiler extends BoaMain {
 		}
 	}
 
-	private static void compileGeneratedSrc(final CommandLine cl, final String jarName, final File outputRoot, final File outputFile)
+	private static void compileGeneratedSrc(final CommandLine cl, final String jarName, final File jarDir, final File outputRoot, final File outputFile)
 			throws RuntimeException, IOException, FileNotFoundException {
 		// compile the generated .java file
 		final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -486,7 +498,7 @@ public class BoaCompiler extends BoaMain {
 			for (final String s : Arrays.asList(cl.getOptionValues('l')))
 				libJars.add(new File(s));
 
-		generateJar(jarName, outputRoot, libJars);
+		generateJar(jarName, outputRoot, jarDir, libJars);
 
 		if (DefaultProperties.localDataPath == null) {
 			delete(outputRoot);
@@ -512,6 +524,7 @@ public class BoaCompiler extends BoaMain {
 		options.addOption("views", "find-external-views", false, "print all referenced external view names");
 		options.addOption("viewSrcPath", "view-src-path", true, "view id and its src path");
 		options.addOption("viewId", "view-id", true, "view name and its job id");
+		options.addOption("jardir", "jar-dir", true, "the name of jar directory");
 
 		final CommandLine cl;
 		try {
@@ -607,8 +620,8 @@ public class BoaCompiler extends BoaMain {
 			throw new IOException("unable to delete file " + f);
 	}
 
-	private static void generateJar(final String jarName, final File dir, final List<File> libJars) throws IOException, FileNotFoundException {
-		final JarOutputStream jar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(new File(jarName))));
+	private static void generateJar(final String jarName, final File dir, final File jarDir, final List<File> libJars) throws IOException, FileNotFoundException {
+		final JarOutputStream jar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(new File(jarDir, jarName))));
 
 		try {
 			final int offset = dir.toString().length() + 1;
