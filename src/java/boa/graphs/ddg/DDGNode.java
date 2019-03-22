@@ -40,7 +40,7 @@ public class DDGNode extends Node<DDGNode, DDGEdge> {
      * @param node control flow graph node
      */
     public DDGNode(final CFGNode node) {
-        this(node.getId());
+        this(node.getNodeId());
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
         this.kind = node.getKind();

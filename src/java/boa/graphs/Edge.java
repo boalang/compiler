@@ -30,12 +30,13 @@ public abstract class Edge<N extends Node, E extends Edge<N, E>> implements Comp
 
 	@Override
 	public int compareTo(final E edge) {
-		return this.dest.getId() - edge.dest.getId();
+		return this.dest.getNodeId() - edge.dest.getNodeId();
 	}
 
     public Edge() {
     }
 
+	@SuppressWarnings("unchecked")
 	public Edge(final N src, final N dest) {
 		this.src = src;
 		this.dest = dest;
@@ -54,6 +55,7 @@ public abstract class Edge<N extends Node, E extends Edge<N, E>> implements Comp
 		return src;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setSrc(final N node) {
 		if (this.dest.getPredecessors().contains(node)) {
 			delete();
@@ -68,6 +70,7 @@ public abstract class Edge<N extends Node, E extends Edge<N, E>> implements Comp
 		return this.dest;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setDest(final N node) {
 		if (this.src.getSuccessors().contains(node)) {
 			delete();
@@ -86,6 +89,7 @@ public abstract class Edge<N extends Node, E extends Edge<N, E>> implements Comp
 		this.label = label;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void delete() {
         this.src.removeOutEdge(this);
         this.dest.removeInEdge(this);

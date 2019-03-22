@@ -18,7 +18,7 @@
 package boa.compiler;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import boa.types.BoaArray;
@@ -38,16 +38,16 @@ import boa.types.BoaVarargs;
  */
 public class FunctionTrie {
 	@SuppressWarnings("rawtypes")
-	private final HashMap trie;
+	private final LinkedHashMap trie;
 
 	@SuppressWarnings("rawtypes")
 	public FunctionTrie() {
-		this.trie = new HashMap();
+		this.trie = new LinkedHashMap();
 	}
 
 	@SuppressWarnings("unchecked")
 	public FunctionTrie(final FunctionTrie clone) {
-		this.trie = new HashMap(clone.trie);
+		this.trie = new LinkedHashMap(clone.trie);
 	}
 
 	private BoaType replaceVar(final BoaType formal, final BoaType actual, final Map<String, BoaType> typeVars) {
@@ -121,6 +121,16 @@ public class FunctionTrie {
 		return this.trie.containsKey(name);
 	}
 
+	public BoaFunction getFunction(final String name) {
+		Object o = this.trie.get(name);
+		while (o instanceof FunctionTrie) {
+			o = ((FunctionTrie)o).trie.values().toArray()[0];
+		}
+		if (o instanceof BoaFunction)
+			return (BoaFunction)o;
+		return null;
+	}
+
 	public BoaFunction getFunction(final String name, final BoaType[] formalParameters) {
 		final Object[] ids = new Object[formalParameters.length + 2];
 
@@ -131,7 +141,7 @@ public class FunctionTrie {
 
 		ids[ids.length - 1] = "";
 
-		return this.getFunction(ids, new HashMap<String, BoaType>());
+		return this.getFunction(ids, new LinkedHashMap<String, BoaType>());
 	}
 
 	@SuppressWarnings("unchecked")

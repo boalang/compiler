@@ -258,7 +258,7 @@
 			<batchtest>
 				<formatter type="plain" usefile="false" />
 				<fileset dir="build/tests">
-					<include name="**/*.class" />
+					<include name="**/Test*.class" />
 					<exclude name="boa/test/datagen/**/*.class" />
 					<exclude name="**/*$*.class" />
 				</fileset>
