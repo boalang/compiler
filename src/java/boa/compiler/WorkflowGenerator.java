@@ -26,12 +26,10 @@ import org.stringtemplate.v4.STGroupFile;
 import org.stringtemplate.v4.STRawGroupDir;
 
 /**
- * 
+ *
  * @author hungc
  * @author rdyer
- * 
  */
-
 public class WorkflowGenerator {
 	public static STGroup workflowStg;
 	protected String workflow;
@@ -46,7 +44,7 @@ public class WorkflowGenerator {
 		this(null, null, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
 	}
 
-	public WorkflowGenerator(String jobName, String main, List<String> subViews, List<String> subWorkflowPaths, List<String> args) {
+	public WorkflowGenerator(final String jobName, final String main, final List<String> subViews, final List<String> subWorkflowPaths, final List<String> args) {
 		workflowStg = new STGroupDir("templates");
 		workflowStg.importTemplates(new STGroupFile("Views.stg"));
 
@@ -58,23 +56,23 @@ public class WorkflowGenerator {
 		this.subWorkflowPaths = subWorkflowPaths == null ? new ArrayList<String>() : subWorkflowPaths;
 	}
 
-	public void setJobName(String jobName) {
+	public void setJobName(final String jobName) {
 		this.jobName = jobName;
 	}
 
-	public void setSubViews(List<String> subViews) {
+	public void setSubViews(final List<String> subViews) {
 		this.subViews = subViews == null ? new ArrayList<String>() : subViews;
 	}
 
-	public void setMain(String main) {
+	public void setMain(final String main) {
 		this.main = main;
 	}
 
-	public void setArgs(List<String> args) {
+	public void setArgs(final List<String> args) {
 		this.args = args == null ? new ArrayList<String>() : args;
 	}
 
-	public void setSubWorkflowPaths(List<String> subWorkflowPaths) {
+	public void setSubWorkflowPaths(final List<String> subWorkflowPaths) {
 		this.subWorkflowPaths = subWorkflowPaths == null ? new ArrayList<String>() : subWorkflowPaths;
 	}
 
@@ -89,7 +87,7 @@ public class WorkflowGenerator {
 
 		final ST st = workflowStg.getInstanceOf("Workflow");
 
-		List<String> views = new ArrayList<String>();
+		final List<String> views = new ArrayList<String>();
 
 		for (int i = 0; i < subViews.size(); i++)
 			views.add(createSubWorkflow(subViews.get(i), subWorkflowPaths.get(i)));
@@ -103,7 +101,7 @@ public class WorkflowGenerator {
 		workflow = st.render();
 	}
 
-	public String createSubWorkflow(String jobName, String path) {
+	public String createSubWorkflow(final String jobName, final String path) {
 		final ST st = workflowStg.getInstanceOf("ViewWorkflow");
 		st.add("jobName", jobName);
 		st.add("path", path);

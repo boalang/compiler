@@ -90,9 +90,9 @@ import boa.parser.BoaLexer;
  */
 public class BoaCompiler extends BoaMain {
 	private static int jobId = 0;
-	
+
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
-	
+
 	public static void main(final String[] args) throws IOException {
 		CommandLine cl = processCommandLineOptions(args);
 		if (cl == null) return;
@@ -231,7 +231,7 @@ public class BoaCompiler extends BoaMain {
 						cg.start(p);
 						subViews = cg.getSubViewsMap();
 						jobs.add(cg.getCode());
-		
+
 						jobnames.add(p.jobName);
 					}
 				} catch (final Exception e) {
@@ -296,15 +296,16 @@ public class BoaCompiler extends BoaMain {
 
 		compileGeneratedSrc(cl, jarName, jarDir, outputRoot, outputFile);
 
-		List<String> wfSubViews = new ArrayList<String>();
-		List<String> wfSubPaths = new ArrayList<String>();
+		final List<String> wfSubViews = new ArrayList<String>();
+		final List<String> wfSubPaths = new ArrayList<String>();
 		if (subViews.size() > 0) {
-			for (Map.Entry<String, Program> entry: subViews.entrySet()) {
+			for (final Map.Entry<String, Program> entry: subViews.entrySet()) {
 				wfSubViews.add(className + "-" + entry.getKey());
 				wfSubPaths.add(wfDir.getPath() + "/" + entry.getKey());
 				codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, className, wfDir, cl);
 			}
 		}
+
 		generateWorkflow(className, wfSubViews, wfSubPaths, new ArrayList<String>(), wfDir);
 	}
 
@@ -404,10 +405,10 @@ public class BoaCompiler extends BoaMain {
 
 		compileGeneratedSrc(cl, jarName, jarDir, outputSrcDir, outputFile);
 
-		List<String> wfSubViews = new ArrayList<String>();
-		List<String> wfSubPaths = new ArrayList<String>();
+		final List<String> wfSubViews = new ArrayList<String>();
+		final List<String> wfSubPaths = new ArrayList<String>();
 		if (subViews.size() > 0) {
-			for (Map.Entry<String, Program> entry: subViews.entrySet()) {
+			for (final Map.Entry<String, Program> entry: subViews.entrySet()) {
 				wfSubViews.add(wfName + "-" + entry.getKey());
 				wfSubPaths.add(wfDir.getPath() + "/" + entry.getKey());
 				codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, wfName, wfDir, cl);
@@ -415,9 +416,8 @@ public class BoaCompiler extends BoaMain {
 		}
 
 		generateWorkflow(wfName, wfSubViews, wfSubPaths, new ArrayList<String>(), wfDir);
-
 	}
-	
+
 	public static void parseOnly(final String[] args) throws IOException {
 		final CommandLine cl = processParseCommandLineOptions(args);
 		if (cl == null) return;
@@ -471,7 +471,7 @@ public class BoaCompiler extends BoaMain {
 			}
 		}
 	}
-	
+
 	private static Start parse(final CommonTokenStream tokens, final BoaParser parser, final BoaErrorListener parserErrorListener) {
 		parser.setBuildParseTree(false);
 		parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
@@ -511,7 +511,7 @@ public class BoaCompiler extends BoaMain {
 			final String path = ClasspathUrlFinder.findClassBase(BoaCompiler.class).getPath();
 			// find the location of the compiler distribution
 			final File root = new File(path.substring(path.indexOf(':') + 1, path.indexOf('!'))).getParentFile();
-	
+
 			libJars.add(new File(root, "boa-runtime.jar"));
 		}
 
@@ -526,7 +526,7 @@ public class BoaCompiler extends BoaMain {
 		}
 	}
 
-	static ArrayList<File> inputFiles = null; 
+	static ArrayList<File> inputFiles = null;
 
 	private static CommandLine processCommandLineOptions(final String[] args) {
 		// parse the command line options
@@ -556,7 +556,7 @@ public class BoaCompiler extends BoaMain {
 			new HelpFormatter().printHelp("Boa Compiler", options);
 			return null;
 		}
-		
+
 		// get the filename of the program we will be compiling
 		inputFiles = new ArrayList<File>();
 		if (cl.hasOption('i')) {
@@ -577,7 +577,7 @@ public class BoaCompiler extends BoaMain {
 			new HelpFormatter().printHelp("Boa Compiler", options);
 			return null;
 		}
-		
+
 		return cl;
 	}
 
@@ -591,10 +591,10 @@ public class BoaCompiler extends BoaMain {
 		try {
 			cl = new PosixParser().parse(options, args);
 		} catch (final org.apache.commons.cli.ParseException e) {
-            printHelp(options, e.getMessage());
+			printHelp(options, e.getMessage());
 			return null;
 		}
-		
+
 		// get the filename of the program we will be compiling
 		inputFiles = new ArrayList<File>();
 		if (cl.hasOption('i')) {
@@ -610,13 +610,13 @@ public class BoaCompiler extends BoaMain {
 		}
 
 		if (inputFiles.size() == 0) {
-            printHelp(options, "no valid input files found - did you use the --in option?");
+			printHelp(options, "no valid input files found - did you use the --in option?");
 			return null;
 		}
-		
+
 		return cl;
 	}
-	
+
 	// get the name of the generated class
 	private static final String getGeneratedClass(final CommandLine cl) {
 		String className;
@@ -632,7 +632,7 @@ public class BoaCompiler extends BoaMain {
 		}
 		return className;
 	}
-	
+
 	private static final void delete(final File f) throws IOException {
 		if (f.isDirectory())
 			for (final File g : f.listFiles())
@@ -684,24 +684,24 @@ public class BoaCompiler extends BoaMain {
 		jar.closeEntry();
 	}
 
-	private static void generateWorkflow(String jobName, List<String> subViews, List<String> subWorkflowPaths, List<String> javaArgs, File dir) throws IOException{
+	private static void generateWorkflow(final String jobName, final List<String> subViews, final List<String> subWorkflowPaths, final List<String> javaArgs, final File dir) throws IOException {
 		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(new File(dir, "workflow.xml")));
 		final WorkflowGenerator wg = new WorkflowGenerator(jobName, jobName, subViews, subWorkflowPaths, javaArgs);
 
 		wg.createWorkflows();
-		String wf = wg.getWorkflows();
+		final String wf = wg.getWorkflows();
 		o.write(wf.getBytes());
 		o.close();
 	}
 
-	private static Map<String, String> generateViewIds(CommandLine cl) {
-		Map<String, String> viewIds = new HashMap<String, String>();
+	private static Map<String, String> generateViewIds(final CommandLine cl) {
+		final Map<String, String> viewIds = new HashMap<String, String>();
 
 		if (!cl.hasOption("viewId"))
 			return viewIds;
 
-		for (String viewId : cl.getOptionValues("viewId")) {
-			String[] ary = viewId.split(":");
+		for (final String viewId : cl.getOptionValues("viewId")) {
+			final String[] ary = viewId.split(":");
 			if (!viewIds.containsKey(ary[0]))
 				viewIds.put(ary[0], ary[1]);
 		}
@@ -709,18 +709,16 @@ public class BoaCompiler extends BoaMain {
 		return viewIds;
 	}
 
-	private static Map<String, Start> generateViewASTs(CommandLine cl) {
-		Map<String, Start> viewSrcPaths = new HashMap<String, Start>();
+	private static Map<String, Start> generateViewASTs(final CommandLine cl) {
+		final Map<String, Start> viewSrcPaths = new HashMap<String, Start>();
 
 		if (!cl.hasOption("viewSrcPath"))
 			return viewSrcPaths;
 
-		String currentFilePath = "";
-
-		try {
-			for (String srcPath : cl.getOptionValues("viewSrcPath")) {
-				String[] ary = srcPath.split(":");
-				currentFilePath = ary[1];
+		for (final String srcPath : cl.getOptionValues("viewSrcPath")) {
+			final String[] ary = srcPath.split(":");
+			final String currentFilePath = ary[1];
+			try {
 				if (!viewSrcPaths.containsKey(ary[0])) {
 					final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(currentFilePath));
 					lexer.removeErrorListeners();
@@ -741,10 +739,10 @@ public class BoaCompiler extends BoaMain {
 
 					viewSrcPaths.put(ary[0], p);
 				}
+			} catch (final Exception e) {
+				System.err.print(currentFilePath + ": compilation failed: ");
+				e.printStackTrace();
 			}
-		} catch (final Exception e) {
-			System.err.print(currentFilePath + ": compilation failed: ");
-			e.printStackTrace();
 		}
 
 		return viewSrcPaths;
