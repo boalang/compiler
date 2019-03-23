@@ -688,8 +688,8 @@ public class BoaCompiler extends BoaMain {
 		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(new File(dir, "workflow.xml")));
 		final WorkflowGenerator wg = new WorkflowGenerator(jobName, jobName, subViews, subWorkflowPaths, javaArgs);
 
-		wg.createWorkflows();
-		final String wf = wg.getWorkflows();
+		wg.createWorkflow();
+		final String wf = wg.getWorkflow();
 		o.write(wf.getBytes());
 		o.close();
 	}

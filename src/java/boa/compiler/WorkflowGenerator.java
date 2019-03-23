@@ -76,11 +76,11 @@ public class WorkflowGenerator {
 		this.subWorkflowPaths = subWorkflowPaths == null ? new ArrayList<String>() : subWorkflowPaths;
 	}
 
-	public String getWorkflows() {
+	public String getWorkflow() {
 		return this.workflow;
 	}
 
-	public void createWorkflows() {
+	public void createWorkflow() {
 		workflow = "";
 		if (jobName == null || main == null)
 			return;
