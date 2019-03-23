@@ -34,76 +34,73 @@ import org.stringtemplate.v4.STRawGroupDir;
 
 public class WorkflowGenerator {
 	public static STGroup workflowStg;
-	protected final List<String> workflows;
+	protected String workflow;
 
-	private List<String> jobNames;
-	private List<String> mains;
-	private List<List<String>> subViews;
-	private List<List<String>> args;
-	private List<List<String>> subWorkflowPaths;
+	private String jobName;
+	private String main;
+	private List<String> subViews;
+	private List<String> args;
+	private List<String> subWorkflowPaths;
 
 	public WorkflowGenerator () {
+		this(null, null, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
+	}
+
+	public WorkflowGenerator(String jobName, String main, List<String> subViews, List<String> subWorkflowPaths, List<String> args) {
 		workflowStg = new STGroupDir("templates");
 		workflowStg.importTemplates(new STGroupFile("Views.stg"));
 
-		workflows = new ArrayList<String>();
-		jobNames = new ArrayList<String>();
-		mains = new ArrayList<String>();
-		args = new ArrayList<List<String>>();
-		subViews = new ArrayList<List<String>>();
-		subWorkflowPaths = new ArrayList<List<String>>();
+		this.workflow = "";
+		this.jobName = jobName;
+		this.main = main;
+		this.subViews = subViews == null ? new ArrayList<String>() : subViews;
+		this.args = args == null ? new ArrayList<String>() : args;
+		this.subWorkflowPaths = subWorkflowPaths == null ? new ArrayList<String>() : subWorkflowPaths;
 	}
 
-	public void setJobNames(List<String> jobNames) {
-		this.jobNames = jobNames;
+	public void setJobName(String jobName) {
+		this.jobName = jobName;
 	}
 
-	public void setSubViews(List<List<String>> subViews) {
-		this.subViews = subViews;
+	public void setSubViews(List<String> subViews) {
+		this.subViews = subViews == null ? new ArrayList<String>() : subViews;
 	}
 
-	public void setMains(List<String> mains) {
-		this.mains = mains;
+	public void setMain(String main) {
+		this.main = main;
 	}
 
-	public void setArgs(List<List<String>> args) {
-		this.args = args;
+	public void setArgs(List<String> args) {
+		this.args = args == null ? new ArrayList<String>() : args;
 	}
 
-	public void setSubWorkflowPaths(List<List<String>> subWorkflowPaths) {
-		this.subWorkflowPaths = subWorkflowPaths;
+	public void setSubWorkflowPaths(List<String> subWorkflowPaths) {
+		this.subWorkflowPaths = subWorkflowPaths == null ? new ArrayList<String>() : subWorkflowPaths;
 	}
-	// or add
 
-	public List<String> getWorkflows() {
-		return this.workflows;
+	public String getWorkflows() {
+		return this.workflow;
 	}
 
 	public void createWorkflows() {
-		workflows.clear();
+		workflow = "";
+		if (jobName == null || main == null)
+			return;
 
-		int i = 0;
+		final ST st = workflowStg.getInstanceOf("Workflow");
 
-		while (i < jobNames.size()) {
-			final ST st = workflowStg.getInstanceOf("Workflow");
+		List<String> views = new ArrayList<String>();
 
-			List<String> subvs = subViews.get(i);
-			List<String> paths = subWorkflowPaths.get(i);
-			List<String> views = new ArrayList<String>();
+		for (int i = 0; i < subViews.size(); i++)
+			views.add(createSubWorkflow(subViews.get(i), subWorkflowPaths.get(i)));
 
-			for (int j = 0; j < subvs.size(); j++)
-				views.add(createSubWorkflow(subvs.get(j), paths.get(j)));
+		st.add("jobName", jobName);
+		st.add("viewnames", subViews);
+		st.add("views", views);
+		st.add("main", main);
+		st.add("args", args);
 
-			st.add("jobName", jobNames.get(i));
-			st.add("viewnames", subvs);
-			st.add("views", views);
-			st.add("main", mains.get(i));
-			st.add("args", args.get(i));
-
-			workflows.add(st.render());
-
-			i++;
-		}
+		workflow = st.render();
 	}
 
 	public String createSubWorkflow(String jobName, String path) {

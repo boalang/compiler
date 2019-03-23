@@ -204,8 +204,6 @@ public class BoaCompiler extends BoaMain {
 								jobs.add(cg.getCode());
 
 								jobnames.add(jobName);
-
-								generateWorkflow();
 							}
 							// if a job has visitors, fuse them all together into a single program
 							else {
@@ -235,8 +233,6 @@ public class BoaCompiler extends BoaMain {
 						jobs.add(cg.getCode());
 		
 						jobnames.add(p.jobName);
-
-						generateWorkflow();
 					}
 				} catch (final Exception e) {
 					System.err.println("error fusing visitors - falling back: " + e);
@@ -253,8 +249,6 @@ public class BoaCompiler extends BoaMain {
 						jobs.add(cg.getCode());
 
 						jobnames.add(p.jobName);
-
-						generateWorkflow();
 					}
 				}
 
@@ -284,41 +278,61 @@ public class BoaCompiler extends BoaMain {
 		if (cl.hasOption("jardir"))
 			jarDirName = cl.getOptionValue("jardir");
 
-		final File jarDir = new File("./" + jarDirName);
+		String wfDirName = "workflow";
+		if (cl.hasOption("wfdir"))
+			wfDirName = cl.getOptionValue("wfdir");
+
+		final File jarDir = new File(jarDirName);
 		if (jarDir.isDirectory())
 			delete(jarDir);
 		if (!jarDir.mkdirs())
 			throw new IOException("unable to mkdir " + jarDir);
+
+		final File wfDir = new File(wfDirName);
+		if (wfDir.isDirectory())
+			delete(wfDir);
+		if (!wfDir.mkdirs())
+			throw new IOException("unable to mkdir " + wfDir);
+
 		compileGeneratedSrc(cl, jarName, jarDir, outputRoot, outputFile);
 
+		List<String> wfSubViews = new ArrayList<String>();
+		List<String> wfSubPaths = new ArrayList<String>();
 		if (subViews.size() > 0) {
 			for (Map.Entry<String, Program> entry: subViews.entrySet()) {
-				codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, cl);
+				wfSubViews.add(className + "-" + entry.getKey());
+				wfSubPaths.add(wfDir.getPath() + "/" + entry.getKey());
+				codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, className, wfDir, cl);
 			}
 		}
+		generateWorkflow(className, wfSubViews, wfSubPaths, new ArrayList<String>(), wfDir);
 	}
 
-	private static void codegen(String name, Program p, File srcDir, File jarDir, CommandLine cl) throws IOException{
+	private static void codegen(String name, Program p, File srcDir, File jarDir, String wfName, File wfDir, CommandLine cl) throws IOException{
 		if (cl == null) return;
 
-		final String className = name;
 		final String jarName = name + ".jar";
 
 		Map<String, Program> subViews = null;
 
 		final File outputSrcDir = new File(srcDir, name);
 		jarDir = new File(jarDir, name);
+		wfDir = new File(wfDir, name);
+		wfName += "-" + name;
+
 		if (!outputSrcDir.mkdirs())
 			throw new IOException("unable to mkdir " + outputSrcDir);
 		if (!jarDir.mkdirs())
-			throw new IOException("unable to mkdir " + outputSrcDir);
+			throw new IOException("unable to mkdir " + jarDir);
+		if (!wfDir.mkdirs())
+			throw new IOException("unable to mkdir " + wfDir);
 
 		final List<URL> libs = new ArrayList<URL>();
 		if (cl.hasOption('l'))
 			for (final String lib : cl.getOptionValues('l'))
 				libs.add(new File(lib).toURI().toURL());
 
-		final File outputFile = new File(outputSrcDir, className + ".java");
+		final File outputFile = new File(outputSrcDir, name + ".java");
 		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile));
 		try {
 			final List<String> jobnames = new ArrayList<String>();
@@ -371,7 +385,7 @@ public class BoaCompiler extends BoaMain {
 
 			final ST st = AbstractCodeGeneratingVisitor.stg.getInstanceOf("Program");
 
-			st.add("name", className);
+			st.add("name", name);
 			st.add("numreducers", 1);
 			st.add("jobs", jobs);
 			st.add("jobnames", jobnames);
@@ -390,11 +404,18 @@ public class BoaCompiler extends BoaMain {
 
 		compileGeneratedSrc(cl, jarName, jarDir, outputSrcDir, outputFile);
 
+		List<String> wfSubViews = new ArrayList<String>();
+		List<String> wfSubPaths = new ArrayList<String>();
 		if (subViews.size() > 0) {
 			for (Map.Entry<String, Program> entry: subViews.entrySet()) {
-				codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, cl);
+				wfSubViews.add(wfName + "-" + entry.getKey());
+				wfSubPaths.add(wfDir.getPath() + "/" + entry.getKey());
+				codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, wfName, wfDir, cl);
 			}
 		}
+
+		generateWorkflow(wfName, wfSubViews, wfSubPaths, new ArrayList<String>(), wfDir);
+
 	}
 	
 	public static void parseOnly(final String[] args) throws IOException {
@@ -525,6 +546,7 @@ public class BoaCompiler extends BoaMain {
 		options.addOption("viewSrcPath", "view-src-path", true, "view id and its src path");
 		options.addOption("viewId", "view-id", true, "view name and its job id");
 		options.addOption("jardir", "jar-dir", true, "the name of jar directory");
+		options.addOption("wfdir", "workflow-dir", true, "the name of workflow directory");
 
 		final CommandLine cl;
 		try {
@@ -662,63 +684,14 @@ public class BoaCompiler extends BoaMain {
 		jar.closeEntry();
 	}
 
-	private static void generateWorkflow() {
-		List<String> jobNames = new ArrayList<String>();
-		List<String> mains = new ArrayList<String>();
-		List<List<String>> javaArgs = new ArrayList<List<String>>();
-		List<List<String>> subViews = new ArrayList<List<String>>();
-		List<List<String>> subWorkflowPaths = new ArrayList<List<String>>();
-
-		jobNames.add("12345");
-		jobNames.add("12345-sv1");
-		jobNames.add("12345-sv2");
-		jobNames.add("12345-sv1-sv3");
-		mains.add("fooMain");
-		mains.add("fooMain-sv1");
-		mains.add("fooMain-sv2");
-		mains.add("fooMain-sv1-sv3");
-		for (int index = 0; index < jobNames.size(); index++) {
-			List<String> newJavaArgs = new ArrayList<String>();
-			List<String> newSubViews = new ArrayList<String>();
-			List<String> newSubWorkflowPath = new ArrayList<String>();
-
-			newJavaArgs.add("arg1");
-			newJavaArgs.add("arg2");
-
-			if (index == 0) {
-				newSubViews.add("12345-sv1");
-				newSubViews.add("12345-sv2");
-				newSubWorkflowPath.add("12345/sv1");
-				newSubWorkflowPath.add("12345/sv2");
-			}
-
-			if (index == 1) {
-				newSubViews.add("12345-sv1-sv3");
-				newSubWorkflowPath.add("12345/sv1/sv3");
-			}
-
-			javaArgs.add(newJavaArgs);
-			subViews.add(newSubViews);
-			subWorkflowPaths.add(newSubWorkflowPath);
-		}
-
-
-		final WorkflowGenerator wg = new WorkflowGenerator();
-		wg.setJobNames(jobNames);
-		wg.setMains(mains);
-		wg.setArgs(javaArgs);
-		wg.setSubViews(subViews);
-		wg.setSubWorkflowPaths(subWorkflowPaths);
+	private static void generateWorkflow(String jobName, List<String> subViews, List<String> subWorkflowPaths, List<String> javaArgs, File dir) throws IOException{
+		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(new File(dir, "workflow.xml")));
+		final WorkflowGenerator wg = new WorkflowGenerator(jobName, jobName, subViews, subWorkflowPaths, javaArgs);
 
 		wg.createWorkflows();
-
-		List<String> wfs = wg.getWorkflows();
-
-		for (int i = 0; i < jobNames.size(); i++) {
-			// System.out.println("workflow " + jobNames.get(i) + "\n\n");
-			// System.out.println(wfs.get(i));
-			// System.out.println("\n\n\n");
-		}
+		String wf = wg.getWorkflows();
+		o.write(wf.getBytes());
+		o.close();
 	}
 
 	private static Map<String, String> generateViewIds(CommandLine cl) {
