@@ -17,6 +17,7 @@
 package boa.compiler.visitors;
 
 import boa.compiler.ast.Table;
+import boa.compiler.ast.statements.SubView;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -28,19 +29,66 @@ import java.util.ArrayList;
  * @author hungc
  */
 public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
+	Boolean isLocal;
+	List<String> views;
+	List<String> subViewPaths;
+
+	public ViewFindingVisitor() {
+		this(false);
+	}
+
+	public ViewFindingVisitor(Boolean isLocal) {
+		initialize();
+		this.isLocal = isLocal;
+	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void initialize() {
-		super.initialize();
+		this.views = new ArrayList<String>();
+		this.subViewPaths = new ArrayList<String>();
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Table n) {
-		if (n.getJobNum() != null)
-			System.out.println(n.getJobNum());
-		else if (n.getUserName() != null)
-			System.out.println(n.getUserName() + "/" + n.getViewName());
+		if (n.getJobNum() != null) {
+			views.add(n.getJobNum());
+			subViewPaths.add(n.getSubViewPath());
+		}
+		else if (n.getUserName() != null) {
+			views.add(n.getUserName() + "/" + n.getViewName());
+			subViewPaths.add(n.getSubViewPath());
+		}
+
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final SubView n) {
+		if (!this.isLocal)
+			n.getProgram().accept(this);
+	}
+
+	public void setIsLocal(final Boolean b) {
+		this.isLocal = b;
+	}
+
+	public String getView(int i) {
+		return this.views.get(i);
+	}
+	public String getSubViewPath(int i) {
+		return this.subViewPaths.get(i);
+	}
+
+	public List<String> getViews() {
+		return this.views;
+	}
+	public List<String> getSubViewPaths() {
+		return this.subViewPaths;
+	}
+
+	public void resetViews() {
+		this.views.clear();
 	}
 }

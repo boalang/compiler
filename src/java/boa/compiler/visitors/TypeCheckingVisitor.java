@@ -761,9 +761,10 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			if(!viewASTs.containsKey(viewName)) {
 				throw new TypeCheckException(n, "type of view '" + n.getJobNum() + "' undefined");
 			}
+
 			Start s = viewASTs.get(viewName);
 			ViewTypeCheckingVisitor v = new ViewTypeCheckingVisitor();
-			v.initialize(n.getOutputName(), n.getSubViews());
+			v.initialize(n.getOutputName(), new ArrayList<String>(n.getSubViews()));
 			v.start(s);
 
 			if (v.getType() == null)

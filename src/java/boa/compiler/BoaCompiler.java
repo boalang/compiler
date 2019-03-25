@@ -93,6 +93,10 @@ public class BoaCompiler extends BoaMain {
 
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
 
+	private static Map<String, String> viewIds = null;
+	private static Map<String, String> viewSrcPaths = null;
+	private static Map<String, Start> viewASTs = null;
+
 	public static void main(final String[] args) throws IOException {
 		CommandLine cl = processCommandLineOptions(args);
 		if (cl == null) return;
@@ -109,6 +113,10 @@ public class BoaCompiler extends BoaMain {
 			jarName = className + ".jar";
 
 		Map<String, Program> subViews = null;
+		viewIds = generateViewIds(cl);
+		viewASTs = generateViewASTs(cl);
+		viewSrcPaths = generateViewSrcPaths(cl);
+		ViewFindingVisitor vfv = new ViewFindingVisitor(true);
 
 		// make the output directory
 		File outputRoot = null;
@@ -164,8 +172,9 @@ public class BoaCompiler extends BoaMain {
 
 					final BoaErrorListener parserErrorListener = new ParserErrorListener();
 					final Start p = parse(tokens, parser, parserErrorListener);
+
 					if (cl.hasOption("views")) {
-						new ViewFindingVisitor().start(p);
+						new ViewFindingVisitor(false).start(p);
 						System.exit(0);
 					}
 					if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
@@ -178,8 +187,9 @@ public class BoaCompiler extends BoaMain {
 					try {
 						if (!parserErrorListener.hasError) {
 							TypeCheckingVisitor tcv = new TypeCheckingVisitor();
-							tcv.setViewASTs(generateViewASTs(cl));
+							tcv.setViewASTs(viewASTs);
 							tcv.start(p, new SymbolTable());
+							vfv.start(p);
 
 							final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
 							simpleVisitor.start(p);
@@ -296,17 +306,36 @@ public class BoaCompiler extends BoaMain {
 
 		compileGeneratedSrc(cl, jarName, jarDir, outputRoot, outputFile);
 
-		final List<String> wfSubViews = new ArrayList<String>();
-		final List<String> wfSubPaths = new ArrayList<String>();
+		final List<String> wfViews = new ArrayList<String>();
+		final List<String> wfPaths = new ArrayList<String>();
 		if (subViews.size() > 0) {
 			for (final Map.Entry<String, Program> entry: subViews.entrySet()) {
-				wfSubViews.add(className + "-" + entry.getKey());
-				wfSubPaths.add(wfDir.getPath() + "/" + entry.getKey());
+				wfViews.add(className + "-" + entry.getKey());
+				wfPaths.add(wfDir.getPath() + "/" + entry.getKey());
 				codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, className, wfDir, cl);
 			}
 		}
 
-		generateWorkflow(className, wfSubViews, wfSubPaths, new ArrayList<String>(), wfDir);
+		List<String> externalViews = vfv.getViews();
+		for(int i = 0; i < vfv.getViews().size(); i++) {
+			String view = vfv.getView(i);
+			String viewName;
+			if (view.contains("/") && viewIds.containsKey(view) && viewSrcPaths.containsKey(view))
+				viewName = viewIds.get(view);
+			else if (!view.contains("/") && viewSrcPaths.containsKey(view))
+				viewName = view;
+			else
+				throw new IOException("unable to create workflow for external view " + view);
+
+			if (vfv.getSubViewPath(i).equals(""))
+				wfPaths.add(viewName);
+			else {
+				wfPaths.add(viewName + "/" + vfv.getSubViewPath(i));
+				viewName += "-" + vfv.getSubViewPath(i).replaceAll("/", "-");
+			}
+			wfViews.add(viewName);
+		}
+		generateWorkflow(className, wfViews, wfPaths, new ArrayList<String>(), wfDir);
 	}
 
 	private static void codegen(String name, Program p, File srcDir, File jarDir, String wfName, File wfDir, CommandLine cl) throws IOException{
@@ -405,17 +434,39 @@ public class BoaCompiler extends BoaMain {
 
 		compileGeneratedSrc(cl, jarName, jarDir, outputSrcDir, outputFile);
 
-		final List<String> wfSubViews = new ArrayList<String>();
-		final List<String> wfSubPaths = new ArrayList<String>();
+		final List<String> wfViews = new ArrayList<String>();
+		final List<String> wfPaths = new ArrayList<String>();
 		if (subViews.size() > 0) {
 			for (final Map.Entry<String, Program> entry: subViews.entrySet()) {
-				wfSubViews.add(wfName + "-" + entry.getKey());
-				wfSubPaths.add(wfDir.getPath() + "/" + entry.getKey());
+				wfViews.add(wfName + "-" + entry.getKey());
+				wfPaths.add(wfDir.getPath() + "/" + entry.getKey());
 				codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, wfName, wfDir, cl);
 			}
 		}
 
-		generateWorkflow(wfName, wfSubViews, wfSubPaths, new ArrayList<String>(), wfDir);
+		ViewFindingVisitor vfv = new ViewFindingVisitor(true);
+		vfv.start(p);
+
+		List<String> externalViews = vfv.getViews();
+		for(int i = 0; i < vfv.getViews().size(); i++) {
+			String view = vfv.getView(i);
+			String viewName;
+			if (view.contains("/") && viewIds.containsKey(view) && viewSrcPaths.containsKey(view))
+				viewName = viewIds.get(view);
+			else if (!view.contains("/") && viewSrcPaths.containsKey(view))
+				viewName = view;
+			else
+				throw new IOException("unable to create workflow for external view " + view);
+
+			if (vfv.getSubViewPath(i).equals(""))
+				wfPaths.add(viewName);
+			else {
+				wfPaths.add(viewName + "/" + vfv.getSubViewPath(i));
+				viewName += "-" + vfv.getSubViewPath(i).replaceAll("/", "-");
+			}
+			wfViews.add(viewName);
+		}
+		generateWorkflow(wfName, wfViews, wfPaths, new ArrayList<String>(), wfDir);
 	}
 
 	public static void parseOnly(final String[] args) throws IOException {
@@ -454,7 +505,7 @@ public class BoaCompiler extends BoaMain {
 				try {
 					if (!parserErrorListener.hasError) {
 						TypeCheckingVisitor tcv = new TypeCheckingVisitor();
-						tcv.setViewASTs(generateViewASTs(cl));
+						tcv.setViewASTs(viewASTs);
 						tcv.start(p, new SymbolTable());
 
 						final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
@@ -709,17 +760,32 @@ public class BoaCompiler extends BoaMain {
 		return viewIds;
 	}
 
-	private static Map<String, Start> generateViewASTs(final CommandLine cl) {
-		final Map<String, Start> viewSrcPaths = new HashMap<String, Start>();
+	private static Map<String, String> generateViewSrcPaths(final CommandLine cl) {
+		final Map<String, String> viewSrcPaths = new HashMap<String, String>();
 
 		if (!cl.hasOption("viewSrcPath"))
 			return viewSrcPaths;
 
 		for (final String srcPath : cl.getOptionValues("viewSrcPath")) {
 			final String[] ary = srcPath.split(":");
+			if (!viewSrcPaths.containsKey(ary[0]))
+				viewSrcPaths.put(ary[0], ary[1]);
+		}
+
+		return viewSrcPaths;
+	}
+
+	private static Map<String, Start> generateViewASTs(final CommandLine cl) {
+		final Map<String, Start> viewASTs = new HashMap<String, Start>();
+
+		if (!cl.hasOption("viewSrcPath"))
+			return viewASTs;
+
+		for (final String srcPath : cl.getOptionValues("viewSrcPath")) {
+			final String[] ary = srcPath.split(":");
 			final String currentFilePath = ary[1];
 			try {
-				if (!viewSrcPaths.containsKey(ary[0])) {
+				if (!viewASTs.containsKey(ary[0])) {
 					final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(currentFilePath));
 					lexer.removeErrorListeners();
 					lexer.addErrorListener(new LexerErrorListener());
@@ -737,7 +803,7 @@ public class BoaCompiler extends BoaMain {
 					final BoaErrorListener parserErrorListener = new ParserErrorListener();
 					final Start p = parse(tokens, parser, parserErrorListener);
 
-					viewSrcPaths.put(ary[0], p);
+					viewASTs.put(ary[0], p);
 				}
 			} catch (final Exception e) {
 				System.err.print(currentFilePath + ": compilation failed: ");
@@ -745,6 +811,6 @@ public class BoaCompiler extends BoaMain {
 			}
 		}
 
-		return viewSrcPaths;
+		return viewASTs;
 	}
 }
