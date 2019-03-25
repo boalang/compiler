@@ -25,11 +25,11 @@ Workflow(jobName, viewnames, views, main, args) ::= <<
 #endif#
     <action name="Job#jobName#">
         <java>
-            <job-tracker>${jobTracker}</job-tracker>
-            <name-node>${nameNode}</name-node>
-            <main-class>#main#</main-class>
+            <job-tracker>boa-head:8021</job-tracker>
+            <name-node>hdfs://boa-head:8020</name-node>
+            <main-class>boa.Query</main-class>
             #args:{arg | <arg>#arg#</arg>#\n#}#
-            <file>query.jar</file>
+            <file>Query.jar</file>
         </java>
         <ok to="end" />
         <error to="kill" />
@@ -40,7 +40,7 @@ Workflow(jobName, viewnames, views, main, args) ::= <<
 ViewWorkflow(jobName, path) ::= <<
     <action name="subworkflow-job-#jobName#">
         <sub-workflow>
-            <app-path>${nameNode}/boa/#path#/workflow.xml</app-path>
+            <app-path>hdfs://boa-head:8020/boa/#path#/workflow.xml</app-path>
             <propagate-configuration/>
         </sub-workflow>
         <ok to="join"/>
