@@ -304,38 +304,14 @@ public class BoaCompiler extends BoaMain {
 		if (!wfDir.mkdirs())
 			throw new IOException("unable to mkdir " + wfDir);
 
-		compileGeneratedSrc(cl, jarName, jarDir, outputRoot, outputFile);
-
-		final List<String> wfViews = new ArrayList<String>();
-		final List<String> wfPaths = new ArrayList<String>();
 		if (subViews.size() > 0) {
 			for (final Map.Entry<String, Program> entry: subViews.entrySet()) {
-				wfViews.add(className + "-" + entry.getKey());
-				wfPaths.add(wfDir.getPath() + "/" + entry.getKey());
 				codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, className, wfDir, cl);
 			}
 		}
 
-		List<String> externalViews = vfv.getViews();
-		for(int i = 0; i < vfv.getViews().size(); i++) {
-			String view = vfv.getView(i);
-			String viewName;
-			if (view.contains("/") && viewIds.containsKey(view) && viewSrcPaths.containsKey(view))
-				viewName = viewIds.get(view);
-			else if (!view.contains("/") && viewSrcPaths.containsKey(view))
-				viewName = view;
-			else
-				throw new IOException("unable to create workflow for external view " + view);
-
-			if (vfv.getSubViewPath(i).equals(""))
-				wfPaths.add(viewName);
-			else {
-				wfPaths.add(viewName + "/" + vfv.getSubViewPath(i));
-				viewName += "-" + vfv.getSubViewPath(i).replaceAll("/", "-");
-			}
-			wfViews.add(viewName);
-		}
-		generateWorkflow(className, wfViews, wfPaths, new ArrayList<String>(), wfDir);
+		generateWorkflow(className, vfv, new ArrayList<String>(), wfDir);
+		compileGeneratedSrc(cl, jarName, jarDir, outputRoot, outputFile);
 	}
 
 	private static void codegen(String name, Program p, File srcDir, File jarDir, String wfName, File wfDir, CommandLine cl) throws IOException{
@@ -432,14 +408,9 @@ public class BoaCompiler extends BoaMain {
 			o.close();
 		}
 
-		compileGeneratedSrc(cl, jarName, jarDir, outputSrcDir, outputFile);
 
-		final List<String> wfViews = new ArrayList<String>();
-		final List<String> wfPaths = new ArrayList<String>();
 		if (subViews.size() > 0) {
 			for (final Map.Entry<String, Program> entry: subViews.entrySet()) {
-				wfViews.add(wfName + "-" + entry.getKey());
-				wfPaths.add(wfDir.getPath() + "/" + entry.getKey());
 				codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, wfName, wfDir, cl);
 			}
 		}
@@ -447,26 +418,8 @@ public class BoaCompiler extends BoaMain {
 		ViewFindingVisitor vfv = new ViewFindingVisitor(true);
 		vfv.start(p);
 
-		List<String> externalViews = vfv.getViews();
-		for(int i = 0; i < vfv.getViews().size(); i++) {
-			String view = vfv.getView(i);
-			String viewName;
-			if (view.contains("/") && viewIds.containsKey(view) && viewSrcPaths.containsKey(view))
-				viewName = viewIds.get(view);
-			else if (!view.contains("/") && viewSrcPaths.containsKey(view))
-				viewName = view;
-			else
-				throw new IOException("unable to create workflow for external view " + view);
-
-			if (vfv.getSubViewPath(i).equals(""))
-				wfPaths.add(viewName);
-			else {
-				wfPaths.add(viewName + "/" + vfv.getSubViewPath(i));
-				viewName += "-" + vfv.getSubViewPath(i).replaceAll("/", "-");
-			}
-			wfViews.add(viewName);
-		}
-		generateWorkflow(wfName, wfViews, wfPaths, new ArrayList<String>(), wfDir);
+		generateWorkflow(wfName, vfv, new ArrayList<String>(), wfDir);
+		compileGeneratedSrc(cl, jarName, jarDir, outputSrcDir, outputFile);
 	}
 
 	public static void parseOnly(final String[] args) throws IOException {
@@ -735,9 +688,38 @@ public class BoaCompiler extends BoaMain {
 		jar.closeEntry();
 	}
 
-	private static void generateWorkflow(final String jobName, final List<String> subViews, final List<String> subWorkflowPaths, final List<String> javaArgs, final File dir) throws IOException {
+	private static void generateWorkflow(final String jobName, final ViewFindingVisitor vfv, final List<String> javaArgs, final File dir) throws IOException {
+		final List<String> wfViews = new ArrayList<String>();
+		final List<String> wfPaths = new ArrayList<String>();
+
+		List<String> internalViews = vfv.getSubViews();
+		for (String svPath : internalViews) {
+			wfViews.add(jobName + "-" + svPath.replaceAll("/", "-"));
+			wfPaths.add(dir.getPath() + "/" + svPath);
+		}
+
+		List<String> externalViews = vfv.getExternalViews();
+		for (int i = 0; i < vfv.getExternalViews().size(); i++) {
+			String view = vfv.getExternalView(i);
+			String viewName;
+			if (view.contains("/") && viewIds.containsKey(view) && viewSrcPaths.containsKey(view))
+				viewName = viewIds.get(view);
+			else if (!view.contains("/") && viewSrcPaths.containsKey(view))
+				viewName = view;
+			else
+				throw new IOException("unable to create workflow for external view " + view);
+
+			if (vfv.getSubViewPath(i).equals(""))
+				wfPaths.add(viewName);
+			else {
+				wfPaths.add(viewName + "/" + vfv.getSubViewPath(i));
+				viewName += "-" + vfv.getSubViewPath(i).replaceAll("/", "-");
+			}
+			wfViews.add(viewName);
+		}
+
 		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(new File(dir, "workflow.xml")));
-		final WorkflowGenerator wg = new WorkflowGenerator(jobName, jobName, subViews, subWorkflowPaths, javaArgs);
+		final WorkflowGenerator wg = new WorkflowGenerator(jobName, jobName, wfViews, wfPaths, javaArgs);
 
 		wg.createWorkflow();
 		final String wf = wg.getWorkflow();

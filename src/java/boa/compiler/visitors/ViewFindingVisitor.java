@@ -30,7 +30,8 @@ import java.util.ArrayList;
  */
 public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
 	Boolean isLocal;
-	List<String> views;
+	List<String> subViews;
+	List<String> externalViews;
 	List<String> subViewPaths;
 
 	public ViewFindingVisitor() {
@@ -45,7 +46,8 @@ public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void initialize() {
-		this.views = new ArrayList<String>();
+		this.subViews = new ArrayList<String>();
+		this.externalViews = new ArrayList<String>();
 		this.subViewPaths = new ArrayList<String>();
 	}
 
@@ -53,12 +55,15 @@ public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final Table n) {
 		if (n.getJobNum() != null) {
-			views.add(n.getJobNum());
+			externalViews.add(n.getJobNum());
 			subViewPaths.add(n.getSubViewPath());
 		}
 		else if (n.getUserName() != null) {
-			views.add(n.getUserName() + "/" + n.getViewName());
+			externalViews.add(n.getUserName() + "/" + n.getViewName());
 			subViewPaths.add(n.getSubViewPath());
+		}
+		else {
+			subViews.add(n.getSubViewPath());
 		}
 
 	}
@@ -74,21 +79,31 @@ public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
 		this.isLocal = b;
 	}
 
-	public String getView(int i) {
-		return this.views.get(i);
+	public String getSubView(int i) {
+		return this.subViews.get(i);
+	}
+
+	public String getExternalView(int i) {
+		return this.externalViews.get(i);
 	}
 	public String getSubViewPath(int i) {
 		return this.subViewPaths.get(i);
 	}
 
-	public List<String> getViews() {
-		return this.views;
+	public List<String> getSubViews() {
+		return this.subViews;
+	}
+
+	public List<String> getExternalViews() {
+		return this.externalViews;
 	}
 	public List<String> getSubViewPaths() {
 		return this.subViewPaths;
 	}
 
-	public void resetViews() {
-		this.views.clear();
+	public void reset() {
+		this.subViews.clear();
+		this.externalViews.clear();
+		this.subViewPaths.clear();
 	}
 }
