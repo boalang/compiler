@@ -20,10 +20,10 @@ Workflow(jobName, viewnames, views, main, args) ::= <<
 
     #views:{v | #v##\n#}#
 
-    <join name="join" to="Job#jobName#" />
+    <join name="join" to="Job-#jobName#" />
 
 #endif#
-    <action name="Job#jobName#">
+    <action name="Job-#jobName#">
         <java>
             <job-tracker>boa-head:8021</job-tracker>
             <name-node>hdfs://boa-head:8020</name-node>

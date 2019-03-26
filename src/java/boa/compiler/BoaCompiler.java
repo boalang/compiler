@@ -701,21 +701,21 @@ public class BoaCompiler extends BoaMain {
 		List<String> externalViews = vfv.getExternalViews();
 		for (int i = 0; i < vfv.getExternalViews().size(); i++) {
 			String view = vfv.getExternalView(i);
-			String viewName;
+			String viewId;
 			if (view.contains("/") && viewIds.containsKey(view) && viewSrcPaths.containsKey(view))
-				viewName = viewIds.get(view);
+				viewId = viewIds.get(view);
 			else if (!view.contains("/") && viewSrcPaths.containsKey(view))
-				viewName = view;
+				viewId = view;
 			else
 				throw new IOException("unable to create workflow for external view " + view);
 
 			if (vfv.getSubViewPath(i).equals(""))
-				wfPaths.add(viewName);
+				wfPaths.add(viewId);
 			else {
-				wfPaths.add(viewName + "/" + vfv.getSubViewPath(i));
-				viewName += "-" + vfv.getSubViewPath(i).replaceAll("/", "-");
+				wfPaths.add(viewId + "/" + vfv.getSubViewPath(i));
+				view += "-" + vfv.getSubViewPath(i).replaceAll("/", "-");
 			}
-			wfViews.add(viewName);
+			wfViews.add(view);
 		}
 
 		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(new File(dir, "workflow.xml")));
