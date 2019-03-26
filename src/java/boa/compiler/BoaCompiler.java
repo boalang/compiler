@@ -275,6 +275,7 @@ public class BoaCompiler extends BoaMain {
 			st.add("name", className);
 			st.add("numreducers", inputFiles.size());
 			st.add("jobs", jobs);
+			st.add("jobId", jobId);
 			st.add("jobnames", jobnames);
 			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
@@ -399,6 +400,7 @@ public class BoaCompiler extends BoaMain {
 			st.add("name", name);
 			st.add("numreducers", 1);
 			st.add("jobs", jobs);
+			st.add("jobId", jobId);
 			st.add("jobnames", jobnames);
 			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);

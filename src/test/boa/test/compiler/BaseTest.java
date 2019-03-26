@@ -281,6 +281,7 @@ public abstract class BaseTest {
 			st.add("name", "Test");
 			st.add("numreducers", 1);
 			st.add("jobs", jobs);
+			st.add("jobId", 12345);
 			st.add("jobnames", jobnames);
 			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
