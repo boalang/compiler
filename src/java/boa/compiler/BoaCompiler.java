@@ -102,6 +102,11 @@ public class BoaCompiler extends BoaMain {
 		if (cl == null) return;
 		final ArrayList<File> inputFiles = BoaCompiler.inputFiles;
 
+		if (cl.hasOption("job"))
+			jobId = Integer.parseInt(cl.getOptionValue("job"));
+		else
+			jobId = 0;
+
 		// get the name of the generated class
 		final String className = getGeneratedClass(cl);
 
@@ -182,7 +187,7 @@ public class BoaCompiler extends BoaMain {
 					seeds.add(new PrettyPrintVisitor().startAndReturn(p).hashCode());
 
 					final String jobName = Integer.toString(jobId);
-					jobId++;
+					// jobId++;
 
 					try {
 						if (!parserErrorListener.hasError) {
@@ -306,11 +311,11 @@ public class BoaCompiler extends BoaMain {
 
 		if (subViews.size() > 0) {
 			for (final Map.Entry<String, Program> entry: subViews.entrySet()) {
-				codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, className, wfDir, cl);
+				codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, Integer.toString(jobId), wfDir, cl);
 			}
 		}
 
-		generateWorkflow(className, vfv, new ArrayList<String>(), wfDir);
+		generateWorkflow(Integer.toString(jobId), vfv, new ArrayList<String>(), wfDir);
 		compileGeneratedSrc(cl, jarName, jarDir, outputRoot, outputFile);
 	}
 
@@ -357,7 +362,7 @@ public class BoaCompiler extends BoaMain {
 
 			try {
 				final String jobName = Integer.toString(jobId);
-				jobId++;
+				// jobId++;
 				seeds.add(new PrettyPrintVisitor().startAndReturn(p).hashCode());
 
 				final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
@@ -551,6 +556,7 @@ public class BoaCompiler extends BoaMain {
 		options.addOption("viewId", "view-id", true, "view name and its job id");
 		options.addOption("jardir", "jar-dir", true, "the name of jar directory");
 		options.addOption("wfdir", "workflow-dir", true, "the name of workflow directory");
+		options.addOption("job", "job", true, "sets the MySql ID to update with this job's status");
 
 		final CommandLine cl;
 		try {
@@ -691,12 +697,15 @@ public class BoaCompiler extends BoaMain {
 	private static void generateWorkflow(final String jobName, final ViewFindingVisitor vfv, final List<String> javaArgs, final File dir) throws IOException {
 		final List<String> wfViews = new ArrayList<String>();
 		final List<String> wfPaths = new ArrayList<String>();
+		String outputPath = dir.getPath().indexOf("/") == -1 ? Integer.toString(jobId) : Integer.toString(jobId) + dir.getPath().substring(dir.getPath().indexOf("/"));
 
 		List<String> internalViews = vfv.getSubViews();
 		for (String svPath : internalViews) {
 			wfViews.add(jobName + "-" + svPath.replaceAll("/", "-"));
-			wfPaths.add(dir.getPath() + "/" + svPath);
+			wfPaths.add(outputPath + "/" + svPath);
 		}
+
+		outputPath += "/output";
 
 		List<String> externalViews = vfv.getExternalViews();
 		for (int i = 0; i < vfv.getExternalViews().size(); i++) {
@@ -719,7 +728,7 @@ public class BoaCompiler extends BoaMain {
 		}
 
 		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(new File(dir, "workflow.xml")));
-		final WorkflowGenerator wg = new WorkflowGenerator(jobName, jobName, wfViews, wfPaths, javaArgs);
+		final WorkflowGenerator wg = new WorkflowGenerator(jobName, jobName, outputPath, wfViews, wfPaths, javaArgs);
 
 		wg.createWorkflow();
 		final String wf = wg.getWorkflow();

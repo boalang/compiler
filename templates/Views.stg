@@ -1,5 +1,5 @@
 delimiters "#", "#"
-Workflow(jobName, viewnames, views, main, args) ::= <<
+Workflow(jobName, viewnames, outputPath, views, main, args) ::= <<
 <workflow-app xmlns="uri:oozie:workflow:0.4" name="boa-workflow">
     <start to="CheckJob#jobName#" />
     <end name="end" />
@@ -8,7 +8,7 @@ Workflow(jobName, viewnames, views, main, args) ::= <<
     <decision name="CheckJob#jobName#">
         <switch>
             <case to="#if(views)#fork#else#Job#jobName##endif#">
-                ${fs:exists('${JobOutputPath}') eq 'false'}</case>
+                ${fs:exists('hdfs://boa-head:8020/boa/#outputPath#') eq 'false'}</case>
             <default to="end" />
         </switch>
     </decision>
