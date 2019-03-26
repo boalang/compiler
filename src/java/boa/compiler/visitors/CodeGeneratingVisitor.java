@@ -1035,6 +1035,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				return;
 			}
 
+			if (opType instanceof BoaTable) {
+				final BoaTable bt = (BoaTable) opType;
+				if (member.charAt(0) == '_') {
+					code.add("." + (Integer.parseInt(member.substring(1)) - 1));
+					return;
+				}
+
+				int i = bt.getTypeNameIndex(member);
+				code.add("." + ((i == -1) ? (bt.getIndexTypes().size()) : i));
+				return;
+			}
+
 			throw new RuntimeException("unimplemented operand type: " + opType.getClass());
 		} catch (final TypeCheckException e) {
 			throw new RuntimeException("unimplemented", e);
@@ -1125,6 +1137,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if (n.getLhs().type instanceof BoaTable) {
 			final ST st2 = stg.getInstanceOf("ViewAssignment");
+
+			if (n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOpsSize() == 1 &&
+				n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0) instanceof Selector) {
+				st2.add("col", rhs.substring(rhs.indexOf(".") + 1));
+				rhs = rhs.substring(0, rhs.indexOf("."));
+			}
 
 			String rhsView = rhs.contains("[") ? rhs.substring(0, rhs.indexOf("[")) : rhs;
 			List<String> indices = new ArrayList<String>();
@@ -1533,8 +1551,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				code.add(st.render());
 				return;
 			}
-
 			final ST st2 = stg.getInstanceOf("ViewAssignment");
+
+			if (n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOpsSize() == 1 &&
+				n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0) instanceof Selector) {
+				st2.add("col", src.substring(src.indexOf(".") + 1));
+				src = src.substring(0, src.indexOf("."));
+			}
 
 			String lhsView = "___" + n.getId().getToken();
 			String rhsView = src.contains("[") ? src.substring(0, src.indexOf("[")) : src;

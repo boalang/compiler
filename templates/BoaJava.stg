@@ -142,11 +142,16 @@ private class <name> extends boa.runtime.Tuple
 
 	public void fromRow(final boa.output.Output.Row r, final int offset) {
 		<trunc(fields), trunc(types), trunc(tuples):{field,type,tuple|this.___<field> = <if(tuple)>new <tuple><else>boa.runtime.TableReader.valTo<type><endif>(r.getCols(<i0> + offset))}; separator="; ">;
-		this.___<last(fields)> = <if(last(tuples))>new <tuple><else>boa.runtime.TableReader.valTo<last(types)><endif>(r.getVal());
+		this.___<last(fields)> = <if(last(tuples))>new <last(tuples)><else>boa.runtime.TableReader.valTo<last(types)><endif>(r.getVal());
 	}
 
 	public void columnFromRow(final boa.output.Output.Row r, final int col) {
-		<trunc(fields), trunc(types), trunc(tuples):{field,type,tuple|this.___<field> = <if(tuple)>new <tuple><else>boa.runtime.TableReader.valTo<type><endif>(r.getCols(<i0> + col))}; separator="; ">;
+		if (r.getColsCount() > col) {
+			this.___<last(fields)> = <if(last(tuples))>new <last(tuples)><else>boa.runtime.TableReader.valTo<last(types)><endif>(r.getCols(col));
+		}
+		else {
+			this.___<last(fields)> = <if(last(tuples))>new <last(tuples)><else>boa.runtime.TableReader.valTo<last(types)><endif>(r.getVal());
+		}
 	}
 <endif>
 	public <name> clone() {
@@ -257,8 +262,9 @@ public boolean invoke(Object <arg1>, Object <arg2>) throws Exception{
 }
 >>
 
-ViewAssignment(lhs, rhs, indices) ::= <<
+ViewAssignment(lhs, rhs, indices, col) ::= <<
 <lhs> = <rhs>.clone();
 <indices:{index|<lhs>.addIndex(<index>)}; separator="; "><if(indices)>;<endif>
+<if(col)><lhs>.setColumnIndex(<col>);<endif>
 
 >>
