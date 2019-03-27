@@ -117,6 +117,7 @@ public class BoaCompiler extends BoaMain {
 		else
 			jarName = className + ".jar";
 
+		List<String> outputs = null;
 		Map<String, Program> subViews = null;
 		viewIds = generateViewIds(cl);
 		viewASTs = generateViewASTs(cl);
@@ -215,6 +216,7 @@ public class BoaCompiler extends BoaMain {
 								if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
 								final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 								cg.start(p);
+								outputs = cg.getOutputs();
 								subViews = cg.getSubViewsMap();
 								jobs.add(cg.getCode());
 
@@ -244,6 +246,7 @@ public class BoaCompiler extends BoaMain {
 						if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
+						outputs = cg.getOutputs();
 						subViews = cg.getSubViewsMap();
 						jobs.add(cg.getCode());
 
@@ -260,6 +263,7 @@ public class BoaCompiler extends BoaMain {
 						if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
+						outputs = cg.getOutputs();
 						subViews = cg.getSubViewsMap();
 						jobs.add(cg.getCode());
 
@@ -316,7 +320,7 @@ public class BoaCompiler extends BoaMain {
 			}
 		}
 
-		generateWorkflow(Integer.toString(jobId), vfv, new ArrayList<String>(), wfDir);
+		generateWorkflow(Integer.toString(jobId), vfv, outputs, new ArrayList<String>(), wfDir);
 		compileGeneratedSrc(cl, jarName, jarDir, outputRoot, outputFile);
 	}
 
@@ -325,6 +329,7 @@ public class BoaCompiler extends BoaMain {
 
 		final String jarName = name + ".jar";
 
+		List<String> outputs = null;
 		Map<String, Program> subViews = null;
 
 		final File outputSrcDir = new File(srcDir, name);
@@ -381,7 +386,9 @@ public class BoaCompiler extends BoaMain {
 				if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
 				final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 				cg.start(p);
+				outputs = cg.getOutputs();
 				subViews = cg.getSubViewsMap();
+
 				jobs.add(cg.getCode());
 
 				jobnames.add(jobName);
@@ -425,7 +432,7 @@ public class BoaCompiler extends BoaMain {
 		ViewFindingVisitor vfv = new ViewFindingVisitor(true);
 		vfv.start(p);
 
-		generateWorkflow(wfName, vfv, new ArrayList<String>(), wfDir);
+		generateWorkflow(wfName, vfv, outputs, new ArrayList<String>(), wfDir);
 		compileGeneratedSrc(cl, jarName, jarDir, outputSrcDir, outputFile);
 	}
 
@@ -696,7 +703,7 @@ public class BoaCompiler extends BoaMain {
 		jar.closeEntry();
 	}
 
-	private static void generateWorkflow(final String jobName, final ViewFindingVisitor vfv, final List<String> javaArgs, final File dir) throws IOException {
+	private static void generateWorkflow(final String jobName, final ViewFindingVisitor vfv, final List<String> outputs, final List<String> javaArgs, final File dir) throws IOException {
 		final List<String> wfViews = new ArrayList<String>();
 		final List<String> wfPaths = new ArrayList<String>();
 		String outputPath = dir.getPath().indexOf("/") == -1 ? Integer.toString(jobId) : Integer.toString(jobId) + dir.getPath().substring(dir.getPath().indexOf("/"));
@@ -730,7 +737,7 @@ public class BoaCompiler extends BoaMain {
 		}
 
 		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(new File(dir, "workflow.xml")));
-		final WorkflowGenerator wg = new WorkflowGenerator(jobName, jobName, outputPath, wfViews, wfPaths, javaArgs);
+		final WorkflowGenerator wg = new WorkflowGenerator(jobName, jobName, outputPath, outputs, wfViews, wfPaths, javaArgs);
 
 		wg.createWorkflow();
 		final String wf = wg.getWorkflow();

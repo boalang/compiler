@@ -37,15 +37,16 @@ public class WorkflowGenerator {
 	private String jobName;
 	private String main;
 	private String outputPath;
+	private List<String> outputs;
 	private List<String> subViews;
 	private List<String> args;
 	private List<String> subWorkflowPaths;
 
 	public WorkflowGenerator () {
-		this(null, null, null, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
+		this(null, null, null, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
 	}
 
-	public WorkflowGenerator(final String jobName, final String main, final String outputPath, final List<String> subViews, final List<String> subWorkflowPaths, final List<String> args) {
+	public WorkflowGenerator(final String jobName, final String main, final String outputPath, final List<String> outputs, final List<String> subViews, final List<String> subWorkflowPaths, final List<String> args) {
 		workflowStg = new STGroupDir("templates");
 		workflowStg.importTemplates(new STGroupFile("Views.stg"));
 
@@ -53,6 +54,7 @@ public class WorkflowGenerator {
 		this.jobName = jobName;
 		this.main = main;
 		this.outputPath = outputPath;
+		this.outputs = outputs == null ? new ArrayList<String>() : outputs;
 		this.subViews = subViews == null ? new ArrayList<String>() : subViews;
 		this.args = args == null ? new ArrayList<String>() : args;
 		this.subWorkflowPaths = subWorkflowPaths == null ? new ArrayList<String>() : subWorkflowPaths;
@@ -70,8 +72,12 @@ public class WorkflowGenerator {
 		this.main = main;
 	}
 
-	public void setOutputPath(final String main) {
+	public void setOutputPath(final String outputPath) {
 		this.outputPath = outputPath;
+	}
+
+	public void setOutputs(final List<String> outputs) {
+		this.outputs = outputs;
 	}
 
 	public void setArgs(final List<String> args) {
@@ -100,6 +106,7 @@ public class WorkflowGenerator {
 
 		st.add("jobName", jobName);
 		st.add("outputPath", outputPath);
+		st.add("outputs", outputs);
 		st.add("viewnames", subViews);
 		st.add("views", views);
 		st.add("main", main);

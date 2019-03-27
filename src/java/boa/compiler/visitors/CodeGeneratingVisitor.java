@@ -50,6 +50,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	String identifier = "";
 	boolean flowSensitive = false;
 	boolean loopSensitive = false;
+	List<String> outputs = new ArrayList<String>();
 	HashMap<String, Boolean> traversalMap = new HashMap<String, Boolean>();
 	HashMap<String, Program> subViewsMap = new HashMap<String, Program>();
 	String lastVarDecl;
@@ -2076,6 +2077,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final OutputType n) {
 		final String id = n.env.getId();
+		outputs.add(id);
 
 		final String aggregator = n.getId().getToken();
 
@@ -2290,5 +2292,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	public Map<String, Program> getSubViewsMap() {
 		return this.subViewsMap;
+	}
+
+	public List<String> getOutputs() {
+		return this.outputs;
 	}
 }
