@@ -738,14 +738,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if (n.getJobNum() == null && n.getUserName() == null) {
 
 			String subViewPath = n.getSubViewPath();
-			SubView temp = currentSubView;
-			while (temp != null) {
-				subViewPath = temp.getId().getToken() + "/" + subViewPath;
-				temp = temp.getParentView();
+			if (!env.hasView(subViewPath)) {
+				SubView temp = currentSubView;
+				while (temp != null) {
+					subViewPath = temp.getId().getToken() + "/" + subViewPath;
+					temp = temp.getParentView();
+				}
+				if (!env.hasView(subViewPath))
+					throw new TypeCheckException(n, "subview '" + n.getSubViewPath() + "' undefined");
 			}
-
-			if (!env.hasView(subViewPath))
-				throw new TypeCheckException(n, "subview '" + n.getSubViewPath() + "' undefined");
 
 			Program p = env.getView(subViewPath);
 			SymbolTable st = p.env;
