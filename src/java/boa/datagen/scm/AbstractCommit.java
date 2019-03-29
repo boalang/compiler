@@ -189,7 +189,8 @@ public abstract class AbstractCommit {
 				cfb.setKey(0);
 //				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
 			} else
-				processChangeFile(cfb);
+				processPythonChangeFile(cfb); // Only process the Python files and ignore other files liek .java, .js
+				//processChangeFile(cfb); 
 			revision.addFiles(cfb.build());
 		}
 
@@ -202,7 +203,37 @@ public abstract class AbstractCommit {
 			 "spacy/lang/ro/lemmatizer.py", "spacy/lang/sv/lemmatizer/lookup.py", "spacy/lang/tr/lemmatizer.py", 
 			 "spacy/lang/ur/lemmatizer.py"};
 	Set<String> badp = new HashSet<String>(Arrays.asList(badpaths));
+	
+	Builder processPythonChangeFile(final ChangedFile.Builder fb) {
+		long len = connector.astWriterLen;
+		String path = fb.getName();
 
+		final String lowerPath = path.toLowerCase();
+		if (lowerPath.endsWith(".txt"))
+			fb.setKind(FileKind.TEXT);
+		else if (lowerPath.endsWith(".xml"))
+			fb.setKind(FileKind.XML);
+		
+		else if(lowerPath.endsWith(".py")) {
+			if(badp.contains(lowerPath)) {
+				System.out.println(path); 
+				fb.setKind(FileKind.SOURCE_PY_ERROR);
+			}
+			else {
+				final String content = getFileContents(path);
+				System.out.println(projectName + ": " + path); 
+				fb.setKind(FileKind.SOURCE_PY_ERROR);
+				parsePythonFile(path, fb, content, false);
+			}
+		}
+		
+		if (connector.astWriterLen > len) {
+			fb.setKey(len);
+			fb.setAst(true);
+		}
+
+		return fb;
+	}
 	
 	Builder processChangeFile(final ChangedFile.Builder fb) {
 		long len = connector.astWriterLen;
