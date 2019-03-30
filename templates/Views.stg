@@ -29,7 +29,7 @@ Workflow(jobName, viewnames, outputPath, outputs, views, main, args) ::= <<
             <job-tracker>boa-head:8021</job-tracker>
             <name-node>hdfs://boa-head:8020</name-node>
             <prepare>
-                <delete path="hdfs://boa-head:8020/boa/#outputPath#"/>
+                <delete path="hdfs://boa-head:8020/boa/#outputPath#/output"/>
             </prepare>
             <main-class>boa.Query</main-class>
             #args:{arg | <arg>#arg#</arg>#\n#}#
