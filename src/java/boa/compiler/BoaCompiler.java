@@ -662,7 +662,7 @@ public class BoaCompiler extends BoaMain {
 	}
 
 	private static void generateJar(final String jarName, final File dir, final File jarDir, final List<File> libJars) throws IOException, FileNotFoundException {
-		final JarOutputStream jar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(new File(jarDir, jarName))));
+		final JarOutputStream jar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(new File(jarDir, "Query.jar"))));
 
 		try {
 			final int offset = dir.toString().length() + 1;

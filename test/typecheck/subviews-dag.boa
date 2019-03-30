@@ -1,0 +1,39 @@
+view svdag1 {
+	view svdag3 {
+		o: output sum[string][string] of int;
+
+		o["abc"]["abc"] << 1;
+	}
+	o: output sum[string] of int;
+
+	o["abc"] << 1;
+}
+
+view svdag2 {
+	view svdag3 {
+		o: output sum[string][int] of int;
+
+		v1: table [string] of int = svdag1/o;
+		v2: table [string][string] of int = svdag1/svdag3/o;
+
+		r1: v1._row;
+		r2: v2._row;
+
+		o["abc"][3] << 1;
+	}
+	o: output sum[int][string] of int;
+
+	v1: table [string][int] of int = svdag3/o;
+	v2: table [string] of int = svdag1/o;
+	v3: table [string][string] of int = svdag1/svdag3/o;
+
+	r1: v1._row;
+	r2: v2._row;
+	r3: v3._row;
+
+	o[3]["abc"] << 1;
+}
+
+o: output sum[int] of int;
+
+o[3] << 1;
