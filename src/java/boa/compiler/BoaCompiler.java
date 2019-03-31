@@ -708,9 +708,11 @@ public class BoaCompiler extends BoaMain {
 			wfPaths.add(outputPath + "/" + svPath);
 		}
 
-		List<String> externalViews = vfv.getLocalExternalViews();
-		for (int i = 0; i < vfv.getLocalExternalViews().size(); i++) {
-			String view = vfv.getLocalExternalView(i);
+		List<String> localExternalViews = vfv.getLocalExternalViews();
+		List<String> localSubViewPaths = vfv.getLocalSubViewPaths();
+		for (int i = 0; i < localExternalViews.size(); i++) {
+			String view = localExternalViews.get(i);
+			String subViewPath = localSubViewPaths.get(i);
 			String viewId;
 			if (view.contains("/") && viewIds.containsKey(view) && viewSrcPaths.containsKey(view))
 				viewId = viewIds.get(view);
@@ -719,11 +721,11 @@ public class BoaCompiler extends BoaMain {
 			else
 				throw new IOException("unable to create workflow for external view " + view);
 
-			if (vfv.getLocalSubViewPath(i).equals(""))
+			if (subViewPath.equals(""))
 				wfPaths.add(viewId);
 			else {
-				wfPaths.add(viewId + "/" + vfv.getLocalSubViewPath(i));
-				view += "-" + vfv.getLocalSubViewPath(i).replaceAll("/", "-");
+				wfPaths.add(viewId + "/" + subViewPath);
+				view += "-" + subViewPath.replaceAll("/", "-");
 			}
 			wfViews.add(view);
 		}

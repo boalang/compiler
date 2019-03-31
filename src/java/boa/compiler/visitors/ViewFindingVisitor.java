@@ -21,6 +21,10 @@ import boa.compiler.ast.statements.SubView;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.types.BoaOutputType;
 
+import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.Set;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -31,14 +35,15 @@ import java.util.ArrayList;
  * @author hungc
  */
 public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
+	final boolean GET_VIEW_NAME = true;
+	final boolean GET_SUBVIEW_PATH = false;
+
 	int scopeLevel;
 	List<String> referencedOutputs;
 	List<String> subViews;
-	List<String> externalViews;
-	List<String> subViewPaths;
 	List<String> localSubViews;
-	List<String> localExternalViews;
-	List<String> localSubViewPaths;
+	Map<String, Set<String>> externalViews = new LinkedHashMap<String, Set<String>>();
+	Map<String, Set<String>> localExternalViews = new LinkedHashMap<String, Set<String>>();
 
 	public ViewFindingVisitor() {
 		initialize();
@@ -50,40 +55,33 @@ public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
 		this.scopeLevel = 0;
 		this.referencedOutputs = new ArrayList<String>();
 		this.subViews = new ArrayList<String>();
-		this.externalViews = new ArrayList<String>();
-		this.subViewPaths = new ArrayList<String>();
 		this.localSubViews = new ArrayList<String>();
-		this.localExternalViews = new ArrayList<String>();
-		this.localSubViewPaths = new ArrayList<String>();
+		this.externalViews = new LinkedHashMap<String, Set<String>>();
+		this.localExternalViews = new LinkedHashMap<String, Set<String>>();
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Table n) {
 		if (scopeLevel == 0) {
-			if (n.getJobNum() != null) {
-				localExternalViews.add(n.getJobNum());
-				localSubViewPaths.add(n.getSubViewPath());
-			}
-			else if (n.getUserName() != null) {
-				localExternalViews.add(n.getUserName() + "/" + n.getViewName());
-				localSubViewPaths.add(n.getSubViewPath());
-			}
+			if (n.getJobNum() != null)
+				addViewMap(localExternalViews, n.getJobNum(), n.getSubViewPath());
+			else if (n.getUserName() != null)
+				addViewMap(localExternalViews, n.getUserName() + "/" + n.getViewName(), n.getSubViewPath());
 			else {
-				localSubViews.add(n.getSubViewPath());
-				referencedOutputs.add(n.getSubViewPath() + "/output/" + n.getOutputName());
+				if (!localSubViews.contains(n.getSubViewPath())) {
+					localSubViews.add(n.getSubViewPath());
+					referencedOutputs.add(n.getSubViewPath() + "/output/" + n.getOutputName());
+				}
 			}
 		}
-		if (n.getJobNum() != null) {
-			externalViews.add(n.getJobNum());
-			subViewPaths.add(n.getSubViewPath());
-		}
-		else if (n.getUserName() != null) {
-			externalViews.add(n.getUserName() + "/" + n.getViewName());
-			subViewPaths.add(n.getSubViewPath());
-		}
+		if (n.getJobNum() != null)
+			addViewMap(externalViews, n.getJobNum(), n.getSubViewPath());
+		else if (n.getUserName() != null)
+			addViewMap(externalViews, n.getUserName() + "/" + n.getViewName(), n.getSubViewPath());
 		else {
-			subViews.add(n.getSubViewPath());
+			if (!subViews.contains(n.getSubViewPath()))
+				subViews.add(n.getSubViewPath());
 		}
 
 	}
@@ -118,21 +116,10 @@ public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
 	}
 
 	public List<String> getExternalViews() {
-		return this.externalViews;
+		return mapToList(externalViews, GET_VIEW_NAME);
 	}
 	public List<String> getSubViewPaths() {
-		return this.subViewPaths;
-	}
-
-	public String getLocalSubView(int i) {
-		return this.localSubViews.get(i);
-	}
-
-	public String getLocalExternalView(int i) {
-		return this.localExternalViews.get(i);
-	}
-	public String getLocalSubViewPath(int i) {
-		return this.localSubViewPaths.get(i);
+		return mapToList(externalViews, GET_SUBVIEW_PATH);
 	}
 
 	public List<String> getLocalSubViews() {
@@ -140,10 +127,34 @@ public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
 	}
 
 	public List<String> getLocalExternalViews() {
-		return this.localExternalViews;
+		return mapToList(localExternalViews, GET_VIEW_NAME);
 	}
 	public List<String> getLocalSubViewPaths() {
-		return this.localSubViewPaths;
+		return mapToList(localExternalViews, GET_SUBVIEW_PATH);
+	}
+
+	private void addViewMap(Map<String, Set<String>> m, String viewName, String subViewPath) {
+		if (m.containsKey(viewName)) {
+			Set<String> s = m.get(viewName);
+			s.add(subViewPath);
+			m.put(viewName, s);
+		}
+		else {
+			Set<String> s = new LinkedHashSet<String>();
+			s.add(subViewPath);
+			m.put(viewName, s);
+		}
+	}
+
+	private List<String> mapToList(Map<String, Set<String>> m, Boolean getViewName) {
+		List<String> list = new ArrayList<String>();
+		for(Map.Entry<String, Set<String>> entry : m.entrySet()) {
+			Set<String> subViewPaths = entry.getValue();
+			for(String p : subViewPaths) {
+				list.add(getViewName ? entry.getKey() : p);
+			}
+		}
+		return list;
 	}
 
 	public void reset() {
@@ -151,9 +162,7 @@ public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
 		this.referencedOutputs.clear();
 		this.subViews.clear();
 		this.externalViews.clear();
-		this.subViewPaths.clear();
 		this.localSubViews.clear();
 		this.localExternalViews.clear();
-		this.localSubViewPaths.clear();
 	}
 }
