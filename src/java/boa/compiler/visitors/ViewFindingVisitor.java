@@ -24,6 +24,7 @@ import boa.types.BoaOutputType;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ArrayList;
@@ -39,11 +40,12 @@ public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
 	final boolean GET_SUBVIEW_PATH = false;
 
 	int scopeLevel;
+	Set<String> localSubViewNames;
 	List<String> referencedOutputs;
 	List<String> subViews;
 	List<String> localSubViews;
-	Map<String, Set<String>> externalViews = new LinkedHashMap<String, Set<String>>();
-	Map<String, Set<String>> localExternalViews = new LinkedHashMap<String, Set<String>>();
+	Map<String, Set<String>> externalViews;
+	Map<String, Set<String>> localExternalViews;
 
 	public ViewFindingVisitor() {
 		initialize();
@@ -53,6 +55,7 @@ public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void initialize() {
 		this.scopeLevel = 0;
+		this.localSubViewNames = new HashSet<String>();
 		this.referencedOutputs = new ArrayList<String>();
 		this.subViews = new ArrayList<String>();
 		this.localSubViews = new ArrayList<String>();
@@ -102,9 +105,15 @@ public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SubView n) {
+		if (scopeLevel == 0)
+			localSubViewNames.add(n.getId().getToken());
 		scopeLevel++;
 		n.getProgram().accept(this);
 		scopeLevel--;
+	}
+
+	public Set<String> getLocalSubViewNames() {
+		return this.localSubViewNames;
 	}
 
 	public List<String> getReferencedOutputs() {
@@ -118,7 +127,7 @@ public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
 	public List<String> getExternalViews() {
 		return mapToList(externalViews, GET_VIEW_NAME);
 	}
-	public List<String> getSubViewPaths() {
+	public List<String> getExternalSubViewPaths() {
 		return mapToList(externalViews, GET_SUBVIEW_PATH);
 	}
 
@@ -129,7 +138,7 @@ public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
 	public List<String> getLocalExternalViews() {
 		return mapToList(localExternalViews, GET_VIEW_NAME);
 	}
-	public List<String> getLocalSubViewPaths() {
+	public List<String> getLocalExternalSubViewPaths() {
 		return mapToList(localExternalViews, GET_SUBVIEW_PATH);
 	}
 
@@ -159,6 +168,7 @@ public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
 
 	public void reset() {
 		this.scopeLevel = 0;
+		this.localSubViewNames.clear();
 		this.referencedOutputs.clear();
 		this.subViews.clear();
 		this.externalViews.clear();

@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
+import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -701,18 +702,28 @@ public class BoaCompiler extends BoaMain {
 		final List<String> wfViews = new ArrayList<String>();
 		final List<String> wfPaths = new ArrayList<String>();
 		String outputPath = jobName.replaceAll("-", "/");
+		Set<String> localSubViewNames = vfv.getLocalSubViewNames();
+
+		List<String> referencedOutputs = vfv.getReferencedOutputs();
+		for (int i  = 0; i < referencedOutputs.size(); i++) {
+			String head = referencedOutputs.get(i).split("/")[0];
+			String name = (localSubViewNames.contains(head) || head.equals("output")) ? outputPath : String.valueOf(jobId);
+			referencedOutputs.set(i, name + "/" + referencedOutputs.get(i));
+		}
 
 		List<String> internalViews = vfv.getLocalSubViews();
 		for (String svPath : internalViews) {
-			wfViews.add(jobName + "-" + svPath.replaceAll("/", "-"));
-			wfPaths.add(outputPath + "/" + svPath);
+			String head = svPath.split("/")[0];
+			String name = localSubViewNames.contains(head) ? jobName : String.valueOf(jobId);
+			wfViews.add(name + "-" + svPath.replaceAll("/", "-"));
+			wfPaths.add(name.replaceAll("-", "/") + "/" + svPath);
 		}
 
 		List<String> localExternalViews = vfv.getLocalExternalViews();
-		List<String> localSubViewPaths = vfv.getLocalSubViewPaths();
+		List<String> localExternalSubViewPaths = vfv.getLocalExternalSubViewPaths();
 		for (int i = 0; i < localExternalViews.size(); i++) {
 			String view = localExternalViews.get(i);
-			String subViewPath = localSubViewPaths.get(i);
+			String subViewPath = localExternalSubViewPaths.get(i);
 			String viewId;
 			if (view.contains("/") && viewIds.containsKey(view) && viewSrcPaths.containsKey(view))
 				viewId = viewIds.get(view);
@@ -731,7 +742,7 @@ public class BoaCompiler extends BoaMain {
 		}
 
 		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(new File(dir, "workflow.xml")));
-		final WorkflowGenerator wg = new WorkflowGenerator(jobName, outputPath, vfv.getReferencedOutputs(), wfViews, wfPaths, javaArgs);
+		final WorkflowGenerator wg = new WorkflowGenerator(jobName, outputPath, referencedOutputs, wfViews, wfPaths, javaArgs);
 
 		wg.createWorkflow();
 		final String wf = wg.getWorkflow();

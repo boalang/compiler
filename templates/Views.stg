@@ -8,7 +8,7 @@ Workflow(jobName, viewnames, outputPath, outputs, views, args) ::= <<
     <decision name="CheckJob#jobName#">
         <switch>
             <case to="#if(views)#fork#else#Job#jobName##endif#">${
-                #outputs:{o | fs:exists('hdfs://boa-head:8020/boa/#outputPath#/#o#.seq') eq 'false'};separator=" ||\n"#
+                #outputs:{o | fs:exists('hdfs://boa-head:8020/boa/#o#.seq') eq 'false'};separator=" ||\n"#
             }</case>
             <default to="end" />
         </switch>
