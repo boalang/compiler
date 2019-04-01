@@ -35,7 +35,6 @@ public class WorkflowGenerator {
 	protected String workflow;
 
 	private String jobName;
-	private String main;
 	private String outputPath;
 	private List<String> outputs;
 	private List<String> subViews;
@@ -43,16 +42,15 @@ public class WorkflowGenerator {
 	private List<String> subWorkflowPaths;
 
 	public WorkflowGenerator () {
-		this(null, null, null, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
+		this(null, null, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
 	}
 
-	public WorkflowGenerator(final String jobName, final String main, final String outputPath, final List<String> outputs, final List<String> subViews, final List<String> subWorkflowPaths, final List<String> args) {
+	public WorkflowGenerator(final String jobName, final String outputPath, final List<String> outputs, final List<String> subViews, final List<String> subWorkflowPaths, final List<String> args) {
 		workflowStg = new STGroupDir("templates");
 		workflowStg.importTemplates(new STGroupFile("Views.stg"));
 
 		this.workflow = "";
 		this.jobName = jobName;
-		this.main = main;
 		this.outputPath = outputPath;
 		this.outputs = outputs == null ? new ArrayList<String>() : outputs;
 		this.subViews = subViews == null ? new ArrayList<String>() : subViews;
@@ -66,10 +64,6 @@ public class WorkflowGenerator {
 
 	public void setSubViews(final List<String> subViews) {
 		this.subViews = subViews == null ? new ArrayList<String>() : subViews;
-	}
-
-	public void setMain(final String main) {
-		this.main = main;
 	}
 
 	public void setOutputPath(final String outputPath) {
@@ -94,7 +88,7 @@ public class WorkflowGenerator {
 
 	public void createWorkflow() {
 		workflow = "";
-		if (jobName == null || main == null)
+		if (jobName == null)
 			return;
 
 		final ST st = workflowStg.getInstanceOf("Workflow");
@@ -109,7 +103,6 @@ public class WorkflowGenerator {
 		st.add("outputs", outputs);
 		st.add("viewnames", subViews);
 		st.add("views", views);
-		st.add("main", main);
 		st.add("args", args);
 
 		workflow = st.render();

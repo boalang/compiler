@@ -700,7 +700,7 @@ public class BoaCompiler extends BoaMain {
 	private static void generateWorkflow(final String jobName, final ViewFindingVisitor vfv, final List<String> javaArgs, final File dir) throws IOException {
 		final List<String> wfViews = new ArrayList<String>();
 		final List<String> wfPaths = new ArrayList<String>();
-		String outputPath = dir.getPath().indexOf("/") == -1 ? Integer.toString(jobId) : Integer.toString(jobId) + dir.getPath().substring(dir.getPath().indexOf("/"));
+		String outputPath = jobName.replaceAll("-", "/");
 
 		List<String> internalViews = vfv.getLocalSubViews();
 		for (String svPath : internalViews) {
@@ -731,7 +731,7 @@ public class BoaCompiler extends BoaMain {
 		}
 
 		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(new File(dir, "workflow.xml")));
-		final WorkflowGenerator wg = new WorkflowGenerator(jobName, jobName, outputPath, vfv.getReferencedOutputs(), wfViews, wfPaths, javaArgs);
+		final WorkflowGenerator wg = new WorkflowGenerator(jobName, outputPath, vfv.getReferencedOutputs(), wfViews, wfPaths, javaArgs);
 
 		wg.createWorkflow();
 		final String wf = wg.getWorkflow();

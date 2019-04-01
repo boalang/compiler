@@ -1,5 +1,5 @@
 delimiters "#", "#"
-Workflow(jobName, viewnames, outputPath, outputs, views, main, args) ::= <<
+Workflow(jobName, viewnames, outputPath, outputs, views, args) ::= <<
 <workflow-app xmlns="uri:oozie:workflow:0.4" name="boa-workflow">
     <start to="CheckJob#jobName#" />
     <end name="end" />
