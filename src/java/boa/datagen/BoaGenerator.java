@@ -106,7 +106,8 @@ public class BoaGenerator {
 		options.addOption("threads", "threads", true, "number of threads");
 		options.addOption("projects", "projects", true, "maximum number of projects per sequence file");
 		options.addOption("commits", "commits", true, "maximum number of commits of a project to be stored in the project object");
-		options.addOption("nocommits", "nocommits", false, "do not store commits");
+		options.addOption("nocommits", "nocommits", false, "do not store commits");	
+		options.addOption("noasts", "noasts", false, "do not store asts");	
 		options.addOption("size", "size", true, "maximum size of a project object to be stored");
 		options.addOption("libs", "libs", true, "directory to store libraries");
 		options.addOption("output", "output", true, "directory where output is desired");
@@ -192,6 +193,10 @@ public class BoaGenerator {
 		}
 		if (cl.hasOption("nocommits"))
 			DefaultProperties.STORE_COMMITS = false;
+		if (cl.hasOption("noasts")) {
+			DefaultProperties.STORE_ASTS = false;
+			DefaultProperties.GH_GIT_PATH = DefaultProperties.OUTPUT + "/repos";
+		}
 	}
 
 	//

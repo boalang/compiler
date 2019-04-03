@@ -63,6 +63,7 @@ public class SeqRepoImporter {
 	final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
 	final static String jsonCachePath = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 	final static boolean STORE_COMMITS = DefaultProperties.STORE_COMMITS;
+	final static boolean STORE_ASTS = DefaultProperties.STORE_ASTS;
 	private static boolean done = false;
 	
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -370,7 +371,7 @@ public class SeqRepoImporter {
 						printError(e, "Cannot close Git connector to " + gitDir.getAbsolutePath(), project.getName());
 					}
 				}
-				if (!cache) {
+				if (!cache && STORE_ASTS) {
 					new Thread(new FileIO.DirectoryRemover(gitRootPath + "/" + project.getName())).start();
 				}
 			}
