@@ -358,12 +358,16 @@ public class BoaIntrinsics {
           .min().orElse(Integer.MAX_VALUE);
     }
     
-//    @FunctionSpec(name = "abstract", returnType = "array of string", formalParameters = { "Statement" })
-//	public static String[] getAbstractStrings(Statement s) {
-//    	List<String> strs = new ArrayList<String>();
-//    	
-//		return null;
-//	}
+    @FunctionSpec(name = "freemem", returnType = "int")
+	public static long freeMem() {
+		return Runtime.getRuntime().freeMemory();
+	}
+    
+    @FunctionSpec(name = "usedmem", returnType = "int")
+	public static long usedMem() {
+		return Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
+	}
+    
 	
 	
 	/**
