@@ -17,6 +17,8 @@
  */
 package boa.functions;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +36,16 @@ import org.apache.hadoop.mapreduce.Mapper.Context;
 
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.ObjectLoader;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevTree;
+import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jdt.core.JavaCore;
 
 import com.google.protobuf.CodedInputStream;
@@ -149,6 +161,99 @@ public class BoaAstIntrinsics {
 		System.err.println("error with ast: " + f.getKey() + " from " + f.getName());
 		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
 		return emptyAst;
+	}
+	
+//	/**
+//	 * Given a ChangedFile, return the AST for that file at that revision.
+//	 *
+//	 * @param f the ChangedFile to get a snapshot of the AST for
+//	 * @return the AST, or an empty AST on any sort of error
+//	 */
+//	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "string, ChangedFile" })
+//	public static ASTRoot getast(final String commitId, final ChangedFile f) {
+//		String content;
+//		try {
+//			content = getFileContent(commitId, f.getName());
+//			return parseJavaFile(content);
+//		} catch (IOException e) {
+//			return emptyAst;
+//		}
+//	}
+	
+	@SuppressWarnings("resource")
+	public static final String getFileContent(String commitId, String filePath) throws IOException {
+		String path = "/Users/hyj/git/BoaData/DataSet/new/repos/Activiti/Activiti";
+		Repository repo = new FileRepositoryBuilder().setGitDir(new File(path + "/.git")).build();
+		ObjectId oid = repo.resolve(commitId);
+		String content = null;
+		
+        // a RevWalk allows to walk over commits based on some filtering that is defined
+       
+    	RevWalk revWalk = new RevWalk(repo);
+        RevCommit commit = revWalk.parseCommit(oid);
+        // and using commit's tree find the path
+        RevTree tree = commit.getTree();
+        try {
+        	TreeWalk treeWalk = new TreeWalk(repo);
+            treeWalk.addTree(tree);
+            treeWalk.setRecursive(true);
+            treeWalk.setFilter(PathFilter.create(filePath));
+            if (!treeWalk.next()) 
+                throw new IllegalStateException("Did not find expected file 'README.md'");
+
+            ObjectLoader loader = repo.open(treeWalk.getObjectId(0));
+
+            // and then one can the loader to read the file
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            loader.copyTo(baos);
+            content = baos.toString();
+            treeWalk.close();
+        } catch (Exception e) {
+        	System.err.println(e);
+		} finally {
+			revWalk.dispose();
+            revWalk.close();
+            repo.close();
+		}
+		return content;
+	}
+	
+	public static final ASTRoot parseJavaFile(final String content) {
+		try {
+			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
+			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
+			parser.setSource(content.toCharArray());
+
+			final Map<?, ?> options = JavaCore.getOptions();
+			JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+			parser.setCompilerOptions(options);
+
+			final CompilationUnit cu;
+			try {
+				cu = (CompilationUnit) parser.createAST(null);
+			} catch(Throwable e) {
+				return emptyAst;
+			}
+
+			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
+			cu.accept(errorCheck);
+			
+			if (!errorCheck.hasError) {
+				final ASTRoot.Builder ast = ASTRoot.newBuilder();
+				final JavaVisitor visitor = new JavaVisitor(content);
+				try {				
+					ast.addNamespaces(visitor.getNamespaces(cu));
+					System.out.println("get ast");
+					return ast.build();
+				} catch (final Throwable e) {
+					System.exit(-1);
+					return emptyAst;
+				}
+			}
+			return emptyAst;
+		} catch (final Throwable e) {
+			return emptyAst;
+		}
 	}
 
 	@SuppressWarnings("unchecked")

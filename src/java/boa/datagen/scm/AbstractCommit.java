@@ -68,7 +68,8 @@ public abstract class AbstractCommit {
 	protected static final boolean debugparse = Properties.getBoolean("debugparse", DefaultProperties.DEBUGPARSE);
 	protected static final boolean STORE_ASCII_PRINTABLE_CONTENTS = Properties.getBoolean("ascii", DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
 	final static boolean STORE_ASTS = DefaultProperties.STORE_ASTS;
-
+	final static String GH_GIT_PATH = DefaultProperties.GH_GIT_PATH;
+	
 	protected AbstractConnector connector;
 	protected String projectName;
 
@@ -89,6 +90,9 @@ public abstract class AbstractCommit {
 			cfb.setKind(FileKind.OTHER);
 			cfb.setKey(0);
 			cfb.setAst(false);
+			cfb.setCommitId(id);
+			File gitDir = new File(GH_GIT_PATH + "/" + projectName);
+			cfb.setRepoPath(gitDir.getAbsolutePath());
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
 		} else

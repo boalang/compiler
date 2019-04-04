@@ -249,6 +249,36 @@ public final class Diff {
      * </pre>
      */
     int getPreviousIndices(int index);
+
+    // optional string repo_path = 11;
+    /**
+     * <code>optional string repo_path = 11;</code>
+     */
+    boolean hasRepoPath();
+    /**
+     * <code>optional string repo_path = 11;</code>
+     */
+    java.lang.String getRepoPath();
+    /**
+     * <code>optional string repo_path = 11;</code>
+     */
+    com.google.protobuf.ByteString
+        getRepoPathBytes();
+
+    // optional string commit_id = 12;
+    /**
+     * <code>optional string commit_id = 12;</code>
+     */
+    boolean hasCommitId();
+    /**
+     * <code>optional string commit_id = 12;</code>
+     */
+    java.lang.String getCommitId();
+    /**
+     * <code>optional string commit_id = 12;</code>
+     */
+    com.google.protobuf.ByteString
+        getCommitIdBytes();
   }
   /**
    * Protobuf type {@code boa.types.ChangedFile}
@@ -436,6 +466,16 @@ public final class Diff {
                 previousIndices_.add(input.readInt32());
               }
               input.popLimit(limit);
+              break;
+            }
+            case 90: {
+              bitField0_ |= 0x00000040;
+              repoPath_ = input.readBytes();
+              break;
+            }
+            case 98: {
+              bitField0_ |= 0x00000080;
+              commitId_ = input.readBytes();
               break;
             }
           }
@@ -1780,6 +1820,92 @@ public final class Diff {
       return previousIndices_.get(index);
     }
 
+    // optional string repo_path = 11;
+    public static final int REPO_PATH_FIELD_NUMBER = 11;
+    private java.lang.Object repoPath_;
+    /**
+     * <code>optional string repo_path = 11;</code>
+     */
+    public boolean hasRepoPath() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional string repo_path = 11;</code>
+     */
+    public java.lang.String getRepoPath() {
+      java.lang.Object ref = repoPath_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          repoPath_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string repo_path = 11;</code>
+     */
+    public com.google.protobuf.ByteString
+        getRepoPathBytes() {
+      java.lang.Object ref = repoPath_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        repoPath_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional string commit_id = 12;
+    public static final int COMMIT_ID_FIELD_NUMBER = 12;
+    private java.lang.Object commitId_;
+    /**
+     * <code>optional string commit_id = 12;</code>
+     */
+    public boolean hasCommitId() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional string commit_id = 12;</code>
+     */
+    public java.lang.String getCommitId() {
+      java.lang.Object ref = commitId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          commitId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string commit_id = 12;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCommitIdBytes() {
+      java.lang.Object ref = commitId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        commitId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.UNKNOWN;
       kind_ = boa.types.Diff.ChangedFile.FileKind.OTHER;
@@ -1791,6 +1917,8 @@ public final class Diff {
       previousNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       previousVersions_ = java.util.Collections.emptyList();
       previousIndices_ = java.util.Collections.emptyList();
+      repoPath_ = "";
+      commitId_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1860,6 +1988,12 @@ public final class Diff {
       for (int i = 0; i < previousIndices_.size(); i++) {
         output.writeInt32(10, previousIndices_.get(i));
       }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeBytes(11, getRepoPathBytes());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeBytes(12, getCommitIdBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1928,6 +2062,14 @@ public final class Diff {
         }
         size += dataSize;
         size += 1 * getPreviousIndicesList().size();
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(11, getRepoPathBytes());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(12, getCommitIdBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2074,6 +2216,10 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000100);
         previousIndices_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000200);
+        repoPath_ = "";
+        bitField0_ = (bitField0_ & ~0x00000400);
+        commitId_ = "";
+        bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
 
@@ -2151,6 +2297,14 @@ public final class Diff {
           bitField0_ = (bitField0_ & ~0x00000200);
         }
         result.previousIndices_ = previousIndices_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.repoPath_ = repoPath_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.commitId_ = commitId_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2225,6 +2379,16 @@ public final class Diff {
             ensurePreviousIndicesIsMutable();
             previousIndices_.addAll(other.previousIndices_);
           }
+          onChanged();
+        }
+        if (other.hasRepoPath()) {
+          bitField0_ |= 0x00000400;
+          repoPath_ = other.repoPath_;
+          onChanged();
+        }
+        if (other.hasCommitId()) {
+          bitField0_ |= 0x00000800;
+          commitId_ = other.commitId_;
           onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
@@ -3150,6 +3314,154 @@ public final class Diff {
         return this;
       }
 
+      // optional string repo_path = 11;
+      private java.lang.Object repoPath_ = "";
+      /**
+       * <code>optional string repo_path = 11;</code>
+       */
+      public boolean hasRepoPath() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>optional string repo_path = 11;</code>
+       */
+      public java.lang.String getRepoPath() {
+        java.lang.Object ref = repoPath_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          repoPath_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string repo_path = 11;</code>
+       */
+      public com.google.protobuf.ByteString
+          getRepoPathBytes() {
+        java.lang.Object ref = repoPath_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          repoPath_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string repo_path = 11;</code>
+       */
+      public Builder setRepoPath(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000400;
+        repoPath_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string repo_path = 11;</code>
+       */
+      public Builder clearRepoPath() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        repoPath_ = getDefaultInstance().getRepoPath();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string repo_path = 11;</code>
+       */
+      public Builder setRepoPathBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000400;
+        repoPath_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional string commit_id = 12;
+      private java.lang.Object commitId_ = "";
+      /**
+       * <code>optional string commit_id = 12;</code>
+       */
+      public boolean hasCommitId() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>optional string commit_id = 12;</code>
+       */
+      public java.lang.String getCommitId() {
+        java.lang.Object ref = commitId_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          commitId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string commit_id = 12;</code>
+       */
+      public com.google.protobuf.ByteString
+          getCommitIdBytes() {
+        java.lang.Object ref = commitId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          commitId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string commit_id = 12;</code>
+       */
+      public Builder setCommitId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000800;
+        commitId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string commit_id = 12;</code>
+       */
+      public Builder clearCommitId() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        commitId_ = getDefaultInstance().getCommitId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string commit_id = 12;</code>
+       */
+      public Builder setCommitIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000800;
+        commitId_ = value;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.ChangedFile)
     }
 
@@ -3176,38 +3488,39 @@ public final class Diff {
   static {
     java.lang.String[] descriptorData = {
       "\n\ndiff.proto\022\tboa.types\032\014shared.proto\032\ta" +
-      "st.proto\"\325\t\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
+      "st.proto\"\373\t\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
       "2\025.boa.types.ChangeKind\022-\n\004kind\030\002 \002(\0162\037." +
       "boa.types.ChangedFile.FileKind\022\014\n\004name\030\003" +
       " \002(\t\022\013\n\003key\030\004 \002(\004\022\013\n\003ast\030\005 \002(\010\022)\n\010commen" +
       "ts\030\006 \001(\0132\027.boa.types.CommentsRoot\022&\n\007cha" +
       "nges\030\007 \003(\0162\025.boa.types.ChangeKind\022\026\n\016pre" +
       "vious_names\030\010 \003(\t\022\031\n\021previous_versions\030\t" +
-      " \003(\005\022\030\n\020previous_indices\030\n \003(\005\"\247\007\n\010FileK" +
-      "ind\022\t\n\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003",
-      "XML\020\003\022\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_J" +
-      "AVA_JLS2\020f\022\024\n\020SOURCE_JAVA_JLS3\020g\022\024\n\020SOUR" +
-      "CE_JAVA_JLS4\020h\022\024\n\020SOURCE_JAVA_JLS8\020l\022\016\n\n" +
-      "JAVA_ERROR\020d\022\010\n\004JLS2\020f\022\010\n\004JLS3\020g\022\010\n\004JLS4" +
-      "\020h\022\010\n\004JLS8\020l\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rSO" +
-      "URCE_CS_CS1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\rSO" +
-      "URCE_CS_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rSO" +
-      "URCE_CS_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022" +
-      "\010\n\003CS2\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001\022" +
-      "\024\n\017SOURCE_JS_ERROR\020\254\002\022\022\n\rSOURCE_JS_ES1\020\255",
-      "\002\022\022\n\rSOURCE_JS_ES2\020\256\002\022\022\n\rSOURCE_JS_ES3\020\257" +
-      "\002\022\022\n\rSOURCE_JS_ES5\020\260\002\022\022\n\rSOURCE_JS_ES6\020\261" +
-      "\002\022\022\n\rSOURCE_JS_ES7\020\262\002\022\022\n\rSOURCE_JS_ES8\020\263" +
-      "\002\022\r\n\010JS_ERROR\020\254\002\022\025\n\020SOURCE_PHP_ERROR\020\220\003\022" +
-      "\020\n\013SOURCE_PHP5\020\221\003\022\022\n\rSOURCE_PHP5_3\020\222\003\022\022\n" +
-      "\rSOURCE_PHP5_4\020\223\003\022\022\n\rSOURCE_PHP5_5\020\224\003\022\022\n" +
-      "\rSOURCE_PHP5_6\020\225\003\022\022\n\rSOURCE_PHP7_0\020\226\003\022\022\n" +
-      "\rSOURCE_PHP7_1\020\227\003\022\016\n\tPHP_ERROR\020\220\003\022\026\n\021SOU" +
-      "RCE_HTML_ERROR\020\364\003\022\020\n\013Source_HTML\020\365\003\022\017\n\nH" +
-      "TML_ERROR\020\364\003\022\025\n\020SOURCE_XML_ERROR\020\330\004\022\017\n\nS",
-      "ource_XML\020\331\004\022\016\n\tXML_ERROR\020\330\004\022\025\n\020SOURCE_C" +
-      "SS_ERROR\020\274\005\022\017\n\nSource_CSS\020\275\005\022\016\n\tCSS_ERRO" +
-      "R\020\274\005\032\002\020\001B\002H\001"
+      " \003(\005\022\030\n\020previous_indices\030\n \003(\005\022\021\n\trepo_p" +
+      "ath\030\013 \001(\t\022\021\n\tcommit_id\030\014 \001(\t\"\247\007\n\010FileKin",
+      "d\022\t\n\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003XM" +
+      "L\020\003\022\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_JAV" +
+      "A_JLS2\020f\022\024\n\020SOURCE_JAVA_JLS3\020g\022\024\n\020SOURCE" +
+      "_JAVA_JLS4\020h\022\024\n\020SOURCE_JAVA_JLS8\020l\022\016\n\nJA" +
+      "VA_ERROR\020d\022\010\n\004JLS2\020f\022\010\n\004JLS3\020g\022\010\n\004JLS4\020h" +
+      "\022\010\n\004JLS8\020l\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rSOUR" +
+      "CE_CS_CS1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\rSOUR" +
+      "CE_CS_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rSOUR" +
+      "CE_CS_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n" +
+      "\003CS2\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001\022\024\n",
+      "\017SOURCE_JS_ERROR\020\254\002\022\022\n\rSOURCE_JS_ES1\020\255\002\022" +
+      "\022\n\rSOURCE_JS_ES2\020\256\002\022\022\n\rSOURCE_JS_ES3\020\257\002\022" +
+      "\022\n\rSOURCE_JS_ES5\020\260\002\022\022\n\rSOURCE_JS_ES6\020\261\002\022" +
+      "\022\n\rSOURCE_JS_ES7\020\262\002\022\022\n\rSOURCE_JS_ES8\020\263\002\022" +
+      "\r\n\010JS_ERROR\020\254\002\022\025\n\020SOURCE_PHP_ERROR\020\220\003\022\020\n" +
+      "\013SOURCE_PHP5\020\221\003\022\022\n\rSOURCE_PHP5_3\020\222\003\022\022\n\rS" +
+      "OURCE_PHP5_4\020\223\003\022\022\n\rSOURCE_PHP5_5\020\224\003\022\022\n\rS" +
+      "OURCE_PHP5_6\020\225\003\022\022\n\rSOURCE_PHP7_0\020\226\003\022\022\n\rS" +
+      "OURCE_PHP7_1\020\227\003\022\016\n\tPHP_ERROR\020\220\003\022\026\n\021SOURC" +
+      "E_HTML_ERROR\020\364\003\022\020\n\013Source_HTML\020\365\003\022\017\n\nHTM",
+      "L_ERROR\020\364\003\022\025\n\020SOURCE_XML_ERROR\020\330\004\022\017\n\nSou" +
+      "rce_XML\020\331\004\022\016\n\tXML_ERROR\020\330\004\022\025\n\020SOURCE_CSS" +
+      "_ERROR\020\274\005\022\017\n\nSource_CSS\020\275\005\022\016\n\tCSS_ERROR\020" +
+      "\274\005\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3219,7 +3532,7 @@ public final class Diff {
           internal_static_boa_types_ChangedFile_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedFile_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", "Comments", "Changes", "PreviousNames", "PreviousVersions", "PreviousIndices", });
+              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", "Comments", "Changes", "PreviousNames", "PreviousVersions", "PreviousIndices", "RepoPath", "CommitId", });
           return null;
         }
       };
