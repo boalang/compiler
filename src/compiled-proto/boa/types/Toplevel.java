@@ -816,6 +816,33 @@ public final class Toplevel {
      */
     com.google.protobuf.ByteString
         getMainLanguageBytes();
+
+    // optional string repo_path = 28;
+    /**
+     * <code>optional string repo_path = 28;</code>
+     *
+     * <pre>
+     ** The repo path of this project *
+     * </pre>
+     */
+    boolean hasRepoPath();
+    /**
+     * <code>optional string repo_path = 28;</code>
+     *
+     * <pre>
+     ** The repo path of this project *
+     * </pre>
+     */
+    java.lang.String getRepoPath();
+    /**
+     * <code>optional string repo_path = 28;</code>
+     *
+     * <pre>
+     ** The repo path of this project *
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getRepoPathBytes();
   }
   /**
    * Protobuf type {@code boa.types.Project}
@@ -1066,6 +1093,11 @@ public final class Toplevel {
             case 218: {
               bitField0_ |= 0x00001000;
               mainLanguage_ = input.readBytes();
+              break;
+            }
+            case 226: {
+              bitField0_ |= 0x00002000;
+              repoPath_ = input.readBytes();
               break;
             }
           }
@@ -2496,6 +2528,61 @@ public final class Toplevel {
       }
     }
 
+    // optional string repo_path = 28;
+    public static final int REPO_PATH_FIELD_NUMBER = 28;
+    private java.lang.Object repoPath_;
+    /**
+     * <code>optional string repo_path = 28;</code>
+     *
+     * <pre>
+     ** The repo path of this project *
+     * </pre>
+     */
+    public boolean hasRepoPath() {
+      return ((bitField0_ & 0x00002000) == 0x00002000);
+    }
+    /**
+     * <code>optional string repo_path = 28;</code>
+     *
+     * <pre>
+     ** The repo path of this project *
+     * </pre>
+     */
+    public java.lang.String getRepoPath() {
+      java.lang.Object ref = repoPath_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          repoPath_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string repo_path = 28;</code>
+     *
+     * <pre>
+     ** The repo path of this project *
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getRepoPathBytes() {
+      java.lang.Object ref = repoPath_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        repoPath_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       id_ = "";
       name_ = "";
@@ -2524,6 +2611,7 @@ public final class Toplevel {
       programmingLanguagesLocs_ = java.util.Collections.emptyList();
       size_ = 0;
       mainLanguage_ = "";
+      repoPath_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2657,6 +2745,9 @@ public final class Toplevel {
       }
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
         output.writeBytes(27, getMainLanguageBytes());
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        output.writeBytes(28, getRepoPathBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -2824,6 +2915,10 @@ public final class Toplevel {
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(27, getMainLanguageBytes());
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(28, getRepoPathBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3019,6 +3114,8 @@ public final class Toplevel {
         bitField0_ = (bitField0_ & ~0x02000000);
         mainLanguage_ = "";
         bitField0_ = (bitField0_ & ~0x04000000);
+        repoPath_ = "";
+        bitField0_ = (bitField0_ & ~0x08000000);
         return this;
       }
 
@@ -3194,6 +3291,10 @@ public final class Toplevel {
           to_bitField0_ |= 0x00001000;
         }
         result.mainLanguage_ = mainLanguage_;
+        if (((from_bitField0_ & 0x08000000) == 0x08000000)) {
+          to_bitField0_ |= 0x00002000;
+        }
+        result.repoPath_ = repoPath_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3463,6 +3564,11 @@ public final class Toplevel {
         if (other.hasMainLanguage()) {
           bitField0_ |= 0x04000000;
           mainLanguage_ = other.mainLanguage_;
+          onChanged();
+        }
+        if (other.hasRepoPath()) {
+          bitField0_ |= 0x08000000;
+          repoPath_ = other.repoPath_;
           onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
@@ -6945,6 +7051,104 @@ public final class Toplevel {
         return this;
       }
 
+      // optional string repo_path = 28;
+      private java.lang.Object repoPath_ = "";
+      /**
+       * <code>optional string repo_path = 28;</code>
+       *
+       * <pre>
+       ** The repo path of this project *
+       * </pre>
+       */
+      public boolean hasRepoPath() {
+        return ((bitField0_ & 0x08000000) == 0x08000000);
+      }
+      /**
+       * <code>optional string repo_path = 28;</code>
+       *
+       * <pre>
+       ** The repo path of this project *
+       * </pre>
+       */
+      public java.lang.String getRepoPath() {
+        java.lang.Object ref = repoPath_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          repoPath_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string repo_path = 28;</code>
+       *
+       * <pre>
+       ** The repo path of this project *
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getRepoPathBytes() {
+        java.lang.Object ref = repoPath_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          repoPath_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string repo_path = 28;</code>
+       *
+       * <pre>
+       ** The repo path of this project *
+       * </pre>
+       */
+      public Builder setRepoPath(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x08000000;
+        repoPath_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string repo_path = 28;</code>
+       *
+       * <pre>
+       ** The repo path of this project *
+       * </pre>
+       */
+      public Builder clearRepoPath() {
+        bitField0_ = (bitField0_ & ~0x08000000);
+        repoPath_ = getDefaultInstance().getRepoPath();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string repo_path = 28;</code>
+       *
+       * <pre>
+       ** The repo path of this project *
+       * </pre>
+       */
+      public Builder setRepoPathBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x08000000;
+        repoPath_ = value;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Project)
     }
 
@@ -6971,7 +7175,7 @@ public final class Toplevel {
   static {
     java.lang.String[] descriptorData = {
       "\n\016toplevel.proto\022\tboa.types\032\014shared.prot" +
-      "o\032\ncode.proto\032\014issues.proto\"\213\006\n\007Project\022" +
+      "o\032\ncode.proto\032\014issues.proto\"\236\006\n\007Project\022" +
       "\n\n\002id\030\001 \002(\t\022\014\n\004name\030\002 \002(\t\022\023\n\013project_url" +
       "\030\003 \002(\t\022\024\n\014homepage_url\030\004 \001(\t\022\024\n\014created_" +
       "date\030\005 \001(\004\022\023\n\013description\030\006 \001(\t\022\031\n\021opera" +
@@ -6988,10 +7192,10 @@ public final class Toplevel {
       "\0162\034.boa.types.Project.ForgeKind\022\016\n\006forke" +
       "d\030\026 \001(\010\022\r\n\005forks\030\027 \001(\005\022\r\n\005stars\030\030 \001(\005\022\"\n" +
       "\032programming_languages_locs\030\031 \003(\005\022\014\n\004siz" +
-      "e\030\032 \001(\005\022\025\n\rmain_language\030\033 \001(\t\"a\n\tForgeK" +
-      "ind\022\t\n\005OTHER\020\000\022\017\n\013SOURCEFORGE\020\001\022\006\n\002SF\020\001\022",
-      "\n\n\006GITHUB\020\002\022\006\n\002GH\020\002\022\n\n\006APACHE\020\003\022\014\n\010QUALI" +
-      "TAS\020\004\032\002\020\001B\002H\001"
+      "e\030\032 \001(\005\022\025\n\rmain_language\030\033 \001(\t\022\021\n\trepo_p" +
+      "ath\030\034 \001(\t\"a\n\tForgeKind\022\t\n\005OTHER\020\000\022\017\n\013SOU",
+      "RCEFORGE\020\001\022\006\n\002SF\020\001\022\n\n\006GITHUB\020\002\022\006\n\002GH\020\002\022\n" +
+      "\n\006APACHE\020\003\022\014\n\010QUALITAS\020\004\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -7003,7 +7207,7 @@ public final class Toplevel {
           internal_static_boa_types_Project_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Project_descriptor,
-              new java.lang.String[] { "Id", "Name", "ProjectUrl", "HomepageUrl", "CreatedDate", "Description", "OperatingSystems", "ProgrammingLanguages", "Databases", "Licenses", "Interfaces", "Audiences", "Topics", "Status", "Translations", "Donations", "Maintainers", "Developers", "CodeRepositories", "IssueRepositories", "Kind", "Forked", "Forks", "Stars", "ProgrammingLanguagesLocs", "Size", "MainLanguage", });
+              new java.lang.String[] { "Id", "Name", "ProjectUrl", "HomepageUrl", "CreatedDate", "Description", "OperatingSystems", "ProgrammingLanguages", "Databases", "Licenses", "Interfaces", "Audiences", "Topics", "Status", "Translations", "Donations", "Maintainers", "Developers", "CodeRepositories", "IssueRepositories", "Kind", "Forked", "Forks", "Stars", "ProgrammingLanguagesLocs", "Size", "MainLanguage", "RepoPath", });
           return null;
         }
       };

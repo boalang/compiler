@@ -319,6 +319,7 @@ public class SeqRepoImporter {
 			String[] args = { repo.getUrl(), gitDir.getAbsolutePath() };
 			try {
 				RepositoryCloner.clone(args);
+				projBuilder.setRepoPath(args[1]);
 			} catch (Throwable t) {
 				System.err.println("Error cloning " + repo.getUrl());
 				t.printStackTrace();
