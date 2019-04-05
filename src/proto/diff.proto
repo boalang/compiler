@@ -150,4 +150,5 @@ message ChangedFile {
 	
 	optional string repo_path = 11;
 	optional string commit_id = 12;
+	optional ASTRoot root = 13;
 }

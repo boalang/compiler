@@ -114,7 +114,7 @@ public class BoaAstIntrinsics {
 	private static final ASTRoot emptyAst = ASTRoot.newBuilder().build();
 	private static final CommentsRoot emptyComments = CommentsRoot.newBuilder().build();
 	private static final IssuesRoot emptyIssues = IssuesRoot.newBuilder().build();
-
+	
 	/**
 	 * Given a ChangedFile, return the AST for that file at that revision.
 	 *
@@ -123,15 +123,13 @@ public class BoaAstIntrinsics {
 	 */
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "ChangedFile" })
-	public static ASTRoot getast(final ChangedFile f) {
+	public static ASTRoot getast(ChangedFile f) {
 		if (!f.getAst()) {
 			if (f.hasRepoPath() && f.hasCommitId()) {
-				try {
-					String content = getFileContent(f);
-					return parseJavaFile(content);
-				} catch (IOException e) {
-					return emptyAst;
-				}
+				f = parseChangedFile(f);
+				if (f.hasRoot())
+					return f.getRoot();
+				return emptyAst;
 			}
 			return emptyAst;
 		}
@@ -170,6 +168,24 @@ public class BoaAstIntrinsics {
 		System.err.println("error with ast: " + f.getKey() + " from " + f.getName());
 		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
 		return emptyAst;
+	}
+	
+	public static ChangedFile parseChangedFile(ChangedFile f) {
+		if (f.hasRoot())
+			return f;
+		
+		if (f.hasRepoPath() && f.hasCommitId()) {
+			try {
+				String content = getFileContent(f);
+				ASTRoot ast = parseJavaFile(content);
+				if (ast != emptyAst)
+					f = f.toBuilder().setRoot(ast).build();
+				return f;
+			} catch (IOException e) {
+				return f;
+			}
+		}
+		return f;
 	}
 	
 	@SuppressWarnings("resource")
