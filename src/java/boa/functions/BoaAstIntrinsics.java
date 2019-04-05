@@ -124,8 +124,17 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "ChangedFile" })
 	public static ASTRoot getast(final ChangedFile f) {
-		if (!f.getAst())
+		if (!f.getAst()) {
+			if (f.hasRepoPath() && f.hasCommitId()) {
+				try {
+					String content = getFileContent(f);
+					return parseJavaFile(content);
+				} catch (IOException e) {
+					return emptyAst;
+				}
+			}
 			return emptyAst;
+		}
 
 		context.getCounter(ASTCOUNTER.GETS_ATTEMPTED).increment(1);
 
@@ -163,51 +172,25 @@ public class BoaAstIntrinsics {
 		return emptyAst;
 	}
 	
-//	/**
-//	 * Given a ChangedFile, return the AST for that file at that revision.
-//	 *
-//	 * @param f the ChangedFile to get a snapshot of the AST for
-//	 * @return the AST, or an empty AST on any sort of error
-//	 */
-//	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "string, ChangedFile" })
-//	public static ASTRoot getast(final String commitId, final ChangedFile f) {
-//		String content;
-//		try {
-//			content = getFileContent(commitId, f.getName());
-//			return parseJavaFile(content);
-//		} catch (IOException e) {
-//			return emptyAst;
-//		}
-//	}
-	
 	@SuppressWarnings("resource")
-	public static final String getFileContent(String commitId, String filePath) throws IOException {
-		String path = "/Users/hyj/git/BoaData/DataSet/new/repos/Activiti/Activiti";
-		Repository repo = new FileRepositoryBuilder().setGitDir(new File(path + "/.git")).build();
-		ObjectId oid = repo.resolve(commitId);
+	public static final String getFileContent(ChangedFile cf) throws IOException {
+		Repository repo = new FileRepositoryBuilder().setGitDir(new File(cf.getRepoPath() + "/.git")).build();
+		ObjectId oid = repo.resolve(cf.getCommitId());
 		String content = null;
-		
-        // a RevWalk allows to walk over commits based on some filtering that is defined
-       
     	RevWalk revWalk = new RevWalk(repo);
         RevCommit commit = revWalk.parseCommit(oid);
-        // and using commit's tree find the path
         RevTree tree = commit.getTree();
         try {
-        	TreeWalk treeWalk = new TreeWalk(repo);
-            treeWalk.addTree(tree);
-            treeWalk.setRecursive(true);
-            treeWalk.setFilter(PathFilter.create(filePath));
-            if (!treeWalk.next()) 
-                throw new IllegalStateException("Did not find expected file 'README.md'");
-
-            ObjectLoader loader = repo.open(treeWalk.getObjectId(0));
-
-            // and then one can the loader to read the file
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            loader.copyTo(baos);
-            content = baos.toString();
-            treeWalk.close();
+        	TreeWalk tw = new TreeWalk(repo);
+            tw.addTree(tree);
+            tw.setRecursive(true);
+            tw.setFilter(PathFilter.create(cf.getName()));
+            if (tw.next()) {
+            	ObjectLoader loader = repo.open(tw.getObjectId(0));
+	            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	            loader.copyTo(baos);
+	            content = baos.toString();
+            }
         } catch (Exception e) {
         	System.err.println(e);
 		} finally {
@@ -219,6 +202,8 @@ public class BoaAstIntrinsics {
 	}
 	
 	public static final ASTRoot parseJavaFile(final String content) {
+		if (content == null)
+			return emptyAst;
 		try {
 			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
 			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
@@ -243,7 +228,6 @@ public class BoaAstIntrinsics {
 				final JavaVisitor visitor = new JavaVisitor(content);
 				try {				
 					ast.addNamespaces(visitor.getNamespaces(cu));
-					System.out.println("get ast");
 					return ast.build();
 				} catch (final Throwable e) {
 					System.exit(-1);

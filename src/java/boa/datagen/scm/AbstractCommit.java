@@ -90,9 +90,10 @@ public abstract class AbstractCommit {
 			cfb.setKind(FileKind.OTHER);
 			cfb.setKey(0);
 			cfb.setAst(false);
-			cfb.setCommitId(id);
-			File gitDir = new File(GH_GIT_PATH + "/" + projectName);
-			cfb.setRepoPath(gitDir.getAbsolutePath());
+			if (!STORE_ASTS) {
+				cfb.setCommitId(id);
+				cfb.setRepoPath(new File(GH_GIT_PATH + "/" + projectName).getAbsolutePath());
+			}
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
 		} else

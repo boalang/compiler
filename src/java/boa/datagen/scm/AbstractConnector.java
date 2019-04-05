@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 import org.apache.hadoop.io.SequenceFile;
+
+import boa.datagen.DefaultProperties;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 
@@ -36,7 +38,9 @@ public abstract class AbstractConnector implements AutoCloseable {
 	
 	protected static final boolean debug = boa.datagen.util.Properties.getBoolean("debug", boa.datagen.DefaultProperties.DEBUG);
 	protected static final String classpathRoot = boa.datagen.util.Properties.getProperty("libs", boa.datagen.DefaultProperties.CLASSPATH_ROOT);
-
+	protected static final boolean STORE_ASTS = DefaultProperties.STORE_ASTS;
+	protected static final String GH_GIT_PATH = DefaultProperties.GH_GIT_PATH;
+	
 	protected String path;
 	protected List<AbstractCommit> revisions = new ArrayList<AbstractCommit>();
 	protected List<Long> revisionKeys = new ArrayList<Long>();
