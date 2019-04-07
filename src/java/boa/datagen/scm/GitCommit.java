@@ -234,9 +234,10 @@ public class GitCommit extends AbstractCommit {
 					}
 				} else if (diff.getChangeType() == ChangeType.DELETE) {
 					if (diff.getOldMode().getObjectType() == Constants.OBJ_BLOB) {
-						String oldPath = diff.getOldPath();
-						getChangeFile(oldPath, ChangeKind.DELETED);
-						filePathGitObjectIds.put(oldPath, diff.getNewId().toObjectId());
+						String path = diff.getOldPath();
+						ChangedFile.Builder cfb = getChangeFile(path, ChangeKind.DELETED);
+						cfb.addPreviousVersions(parentIndex);
+						filePathGitObjectIds.put(path, diff.getOldId().toObjectId());
 					}
 				}
 			}
