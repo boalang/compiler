@@ -76,18 +76,19 @@ public abstract class AbstractCommit {
 	protected AbstractCommit(AbstractConnector cnn) {
 		this.connector = cnn;
 	}
-
+	
+	// fileNameIndices, changedFiles for ChangedFile
 	protected Map<String, Integer> fileNameIndices = new HashMap<String, Integer>();
-
 	protected List<ChangedFile.Builder> changedFiles = new ArrayList<ChangedFile.Builder>();
 
-	protected ChangedFile.Builder getChangeFile(String path) {
+	protected ChangedFile.Builder getChangeFile(String path, ChangeKind changeKind) {
 		ChangedFile.Builder cfb = null;
 		Integer index = fileNameIndices.get(path);
 		if (index == null) {
 			cfb = ChangedFile.newBuilder();
-			cfb.setName(path);
+			cfb.setChange(changeKind);
 			cfb.setKind(FileKind.OTHER);
+			cfb.setName(path);
 			cfb.setKey(0);
 			cfb.setAst(false);
 			if (!STORE_ASTS) {
@@ -96,8 +97,9 @@ public abstract class AbstractCommit {
 			}
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
-		} else
+		} else {
 			cfb = changedFiles.get(index);
+		}
 		return cfb;
 	}
 

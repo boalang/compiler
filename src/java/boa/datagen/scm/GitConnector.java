@@ -163,7 +163,7 @@ public class GitConnector extends AbstractConnector {
 					gc.setMessage(rc.getFullMessage());
 				} catch (Exception e) {}
 				
-				gc.getChangeFiles(rc);
+				gc.updateChangedFiles(rc);
 				gc.fileNameIndices.clear();
 				
 				if (commitList.size() > MAX_COMMITS) {
