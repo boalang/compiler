@@ -187,7 +187,7 @@ public class GitCommit extends AbstractCommit {
 				while (tw.next()) {
 					if (!tw.isSubtree()) {
 						String path = tw.getPathString();
-						getChangeFile(path, ChangeKind.ADDED);
+						getChangeFile(path, ChangeKind.ADDED, tw.getObjectId(0));
 						filePathGitObjectIds.put(path, tw.getObjectId(0));
 					}
 				}
@@ -235,9 +235,10 @@ public class GitCommit extends AbstractCommit {
 				} else if (diff.getChangeType() == ChangeType.DELETE) {
 					if (diff.getOldMode().getObjectType() == Constants.OBJ_BLOB) {
 						String path = diff.getOldPath();
-						ChangedFile.Builder cfb = getChangeFile(path, ChangeKind.DELETED);
+						ObjectId oid = diff.getOldId().toObjectId();
+						ChangedFile.Builder cfb = getChangeFile(path, ChangeKind.DELETED, oid);
 						cfb.addPreviousVersions(parentIndex);
-						filePathGitObjectIds.put(path, diff.getOldId().toObjectId());
+						filePathGitObjectIds.put(path, oid);
 					}
 				}
 			}
@@ -250,7 +251,7 @@ public class GitCommit extends AbstractCommit {
 
 	private void updateChangedFiles(final RevCommit parent, int parentIndex, final DiffEntry diff, final ChangeKind kind) {
 		String path = diff.getNewPath();
-		ChangedFile.Builder cfb = getChangeFile(path, ChangeKind.UNKNOWN);
+		ChangedFile.Builder cfb = getChangeFile(path, ChangeKind.UNKNOWN, diff.getOldId().toObjectId());
 		if (cfb.getChange() == null || cfb.getChange() == ChangeKind.UNKNOWN)
 			cfb.setChange(kind);
 		else if (cfb.getChange() != kind)

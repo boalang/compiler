@@ -37,6 +37,7 @@ import org.apache.hadoop.mapreduce.Mapper.Context;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.Repository;
@@ -114,6 +115,7 @@ public class BoaAstIntrinsics {
 	private static final ASTRoot emptyAst = ASTRoot.newBuilder().build();
 	private static final CommentsRoot emptyComments = CommentsRoot.newBuilder().build();
 	private static final IssuesRoot emptyIssues = IssuesRoot.newBuilder().build();
+	private static final ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
 	
 	/**
 	 * Given a ChangedFile, return the AST for that file at that revision.
@@ -125,7 +127,7 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "ChangedFile" })
 	public static ASTRoot getast(ChangedFile f) {
 		if (!f.getAst()) {
-			if (f.hasRepoPath() && f.hasCommitId()) {
+			if (f.hasRepoPath() && f.hasObjectId()) {
 				f = parseChangedFile(f);
 				if (f.hasRoot())
 					return f.getRoot();
@@ -174,7 +176,7 @@ public class BoaAstIntrinsics {
 		if (f.hasRoot())
 			return f;
 		
-		if (f.hasRepoPath() && f.hasCommitId()) {
+		if (f.hasRepoPath() && f.hasObjectId()) {
 			try {
 				String content = getFileContent(f);
 				ASTRoot ast = parseJavaFile(content);
@@ -187,34 +189,17 @@ public class BoaAstIntrinsics {
 		}
 		return f;
 	}
-	
-	@SuppressWarnings("resource")
+
 	public static final String getFileContent(ChangedFile cf) throws IOException {
 		Repository repo = new FileRepositoryBuilder().setGitDir(new File(cf.getRepoPath() + "/.git")).build();
-		ObjectId oid = repo.resolve(cf.getCommitId());
-		String content = null;
-    	RevWalk revWalk = new RevWalk(repo);
-        RevCommit commit = revWalk.parseCommit(oid);
-        RevTree tree = commit.getTree();
-        try {
-        	TreeWalk tw = new TreeWalk(repo);
-            tw.addTree(tree);
-            tw.setRecursive(true);
-            tw.setFilter(PathFilter.create(cf.getName()));
-            if (tw.next()) {
-            	ObjectLoader loader = repo.open(tw.getObjectId(0));
-	            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	            loader.copyTo(baos);
-	            content = baos.toString();
-            }
-        } catch (Exception e) {
-        	System.err.println(e);
-		} finally {
-			revWalk.dispose();
-            revWalk.close();
-            repo.close();
+		ObjectId fileid = ObjectId.fromString(cf.getObjectId());
+		try {
+			buffer.reset();
+			buffer.write(repo.open(fileid, Constants.OBJ_BLOB).getCachedBytes());
+			return buffer.toString();
+		} catch (final Throwable e) {
+			return null;
 		}
-		return content;
 	}
 	
 	public static final ASTRoot parseJavaFile(final String content) {

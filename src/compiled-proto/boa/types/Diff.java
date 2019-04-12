@@ -265,20 +265,20 @@ public final class Diff {
     com.google.protobuf.ByteString
         getRepoPathBytes();
 
-    // optional string commit_id = 12;
+    // optional string object_id = 12;
     /**
-     * <code>optional string commit_id = 12;</code>
+     * <code>optional string object_id = 12;</code>
      */
-    boolean hasCommitId();
+    boolean hasObjectId();
     /**
-     * <code>optional string commit_id = 12;</code>
+     * <code>optional string object_id = 12;</code>
      */
-    java.lang.String getCommitId();
+    java.lang.String getObjectId();
     /**
-     * <code>optional string commit_id = 12;</code>
+     * <code>optional string object_id = 12;</code>
      */
     com.google.protobuf.ByteString
-        getCommitIdBytes();
+        getObjectIdBytes();
 
     // optional .boa.types.ASTRoot root = 13;
     /**
@@ -489,7 +489,7 @@ public final class Diff {
             }
             case 98: {
               bitField0_ |= 0x00000080;
-              commitId_ = input.readBytes();
+              objectId_ = input.readBytes();
               break;
             }
             case 106: {
@@ -1890,20 +1890,20 @@ public final class Diff {
       }
     }
 
-    // optional string commit_id = 12;
-    public static final int COMMIT_ID_FIELD_NUMBER = 12;
-    private java.lang.Object commitId_;
+    // optional string object_id = 12;
+    public static final int OBJECT_ID_FIELD_NUMBER = 12;
+    private java.lang.Object objectId_;
     /**
-     * <code>optional string commit_id = 12;</code>
+     * <code>optional string object_id = 12;</code>
      */
-    public boolean hasCommitId() {
+    public boolean hasObjectId() {
       return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     /**
-     * <code>optional string commit_id = 12;</code>
+     * <code>optional string object_id = 12;</code>
      */
-    public java.lang.String getCommitId() {
-      java.lang.Object ref = commitId_;
+    public java.lang.String getObjectId() {
+      java.lang.Object ref = objectId_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
@@ -1911,22 +1911,22 @@ public final class Diff {
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
-          commitId_ = s;
+          objectId_ = s;
         }
         return s;
       }
     }
     /**
-     * <code>optional string commit_id = 12;</code>
+     * <code>optional string object_id = 12;</code>
      */
     public com.google.protobuf.ByteString
-        getCommitIdBytes() {
-      java.lang.Object ref = commitId_;
+        getObjectIdBytes() {
+      java.lang.Object ref = objectId_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        commitId_ = b;
+        objectId_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -1967,7 +1967,7 @@ public final class Diff {
       previousVersions_ = java.util.Collections.emptyList();
       previousIndices_ = java.util.Collections.emptyList();
       repoPath_ = "";
-      commitId_ = "";
+      objectId_ = "";
       root_ = boa.types.Ast.ASTRoot.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
@@ -2048,7 +2048,7 @@ public final class Diff {
         output.writeBytes(11, getRepoPathBytes());
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeBytes(12, getCommitIdBytes());
+        output.writeBytes(12, getObjectIdBytes());
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         output.writeMessage(13, root_);
@@ -2128,7 +2128,7 @@ public final class Diff {
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(12, getCommitIdBytes());
+          .computeBytesSize(12, getObjectIdBytes());
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
@@ -2282,7 +2282,7 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000200);
         repoPath_ = "";
         bitField0_ = (bitField0_ & ~0x00000400);
-        commitId_ = "";
+        objectId_ = "";
         bitField0_ = (bitField0_ & ~0x00000800);
         if (rootBuilder_ == null) {
           root_ = boa.types.Ast.ASTRoot.getDefaultInstance();
@@ -2374,7 +2374,7 @@ public final class Diff {
         if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
           to_bitField0_ |= 0x00000080;
         }
-        result.commitId_ = commitId_;
+        result.objectId_ = objectId_;
         if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
           to_bitField0_ |= 0x00000100;
         }
@@ -2464,9 +2464,9 @@ public final class Diff {
           repoPath_ = other.repoPath_;
           onChanged();
         }
-        if (other.hasCommitId()) {
+        if (other.hasObjectId()) {
           bitField0_ |= 0x00000800;
-          commitId_ = other.commitId_;
+          objectId_ = other.objectId_;
           onChanged();
         }
         if (other.hasRoot()) {
@@ -3475,76 +3475,76 @@ public final class Diff {
         return this;
       }
 
-      // optional string commit_id = 12;
-      private java.lang.Object commitId_ = "";
+      // optional string object_id = 12;
+      private java.lang.Object objectId_ = "";
       /**
-       * <code>optional string commit_id = 12;</code>
+       * <code>optional string object_id = 12;</code>
        */
-      public boolean hasCommitId() {
+      public boolean hasObjectId() {
         return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       /**
-       * <code>optional string commit_id = 12;</code>
+       * <code>optional string object_id = 12;</code>
        */
-      public java.lang.String getCommitId() {
-        java.lang.Object ref = commitId_;
+      public java.lang.String getObjectId() {
+        java.lang.Object ref = objectId_;
         if (!(ref instanceof java.lang.String)) {
           java.lang.String s = ((com.google.protobuf.ByteString) ref)
               .toStringUtf8();
-          commitId_ = s;
+          objectId_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>optional string commit_id = 12;</code>
+       * <code>optional string object_id = 12;</code>
        */
       public com.google.protobuf.ByteString
-          getCommitIdBytes() {
-        java.lang.Object ref = commitId_;
+          getObjectIdBytes() {
+        java.lang.Object ref = objectId_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          commitId_ = b;
+          objectId_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>optional string commit_id = 12;</code>
+       * <code>optional string object_id = 12;</code>
        */
-      public Builder setCommitId(
+      public Builder setObjectId(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000800;
-        commitId_ = value;
+        objectId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string commit_id = 12;</code>
+       * <code>optional string object_id = 12;</code>
        */
-      public Builder clearCommitId() {
+      public Builder clearObjectId() {
         bitField0_ = (bitField0_ & ~0x00000800);
-        commitId_ = getDefaultInstance().getCommitId();
+        objectId_ = getDefaultInstance().getObjectId();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string commit_id = 12;</code>
+       * <code>optional string object_id = 12;</code>
        */
-      public Builder setCommitIdBytes(
+      public Builder setObjectIdBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000800;
-        commitId_ = value;
+        objectId_ = value;
         onChanged();
         return this;
       }
@@ -3700,7 +3700,7 @@ public final class Diff {
       "nges\030\007 \003(\0162\025.boa.types.ChangeKind\022\026\n\016pre" +
       "vious_names\030\010 \003(\t\022\031\n\021previous_versions\030\t" +
       " \003(\005\022\030\n\020previous_indices\030\n \003(\005\022\021\n\trepo_p" +
-      "ath\030\013 \001(\t\022\021\n\tcommit_id\030\014 \001(\t\022 \n\004root\030\r \001",
+      "ath\030\013 \001(\t\022\021\n\tobject_id\030\014 \001(\t\022 \n\004root\030\r \001",
       "(\0132\022.boa.types.ASTRoot\"\247\007\n\010FileKind\022\t\n\005O" +
       "THER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020\003\022\025\n" +
       "\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_JAVA_JLS2" +
@@ -3737,7 +3737,7 @@ public final class Diff {
           internal_static_boa_types_ChangedFile_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedFile_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", "Comments", "Changes", "PreviousNames", "PreviousVersions", "PreviousIndices", "RepoPath", "CommitId", "Root", });
+              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", "Comments", "Changes", "PreviousNames", "PreviousVersions", "PreviousIndices", "RepoPath", "ObjectId", "Root", });
           return null;
         }
       };

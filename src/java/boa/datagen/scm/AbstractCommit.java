@@ -28,6 +28,7 @@ import org.dom4j.dom.DOMDocument;
 import org.dom4j.io.SAXReader;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.php.internal.core.PHPVersion;
 import org.eclipse.php.internal.core.ast.nodes.Program;
 import org.jsoup.Jsoup;
@@ -81,7 +82,7 @@ public abstract class AbstractCommit {
 	protected Map<String, Integer> fileNameIndices = new HashMap<String, Integer>();
 	protected List<ChangedFile.Builder> changedFiles = new ArrayList<ChangedFile.Builder>();
 
-	protected ChangedFile.Builder getChangeFile(String path, ChangeKind changeKind) {
+	protected ChangedFile.Builder getChangeFile(String path, ChangeKind changeKind, ObjectId oid) {
 		ChangedFile.Builder cfb = null;
 		Integer index = fileNameIndices.get(path);
 		if (index == null) {
@@ -92,7 +93,7 @@ public abstract class AbstractCommit {
 			cfb.setKey(0);
 			cfb.setAst(false);
 			if (!STORE_ASTS) {
-				cfb.setCommitId(id);
+				cfb.setObjectId(oid.getName());
 				cfb.setRepoPath(new File(GH_GIT_PATH + "/" + projectName).getAbsolutePath());
 			}
 			fileNameIndices.put(path, changedFiles.size());
