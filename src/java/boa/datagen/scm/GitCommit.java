@@ -251,7 +251,7 @@ public class GitCommit extends AbstractCommit {
 
 	private void updateChangedFiles(final RevCommit parent, int parentIndex, final DiffEntry diff, final ChangeKind kind) {
 		String path = diff.getNewPath();
-		ChangedFile.Builder cfb = getChangeFile(path, ChangeKind.UNKNOWN, diff.getOldId().toObjectId());
+		ChangedFile.Builder cfb = getChangeFile(path, ChangeKind.UNKNOWN, diff.getNewId().toObjectId());
 		if (cfb.getChange() == null || cfb.getChange() == ChangeKind.UNKNOWN)
 			cfb.setChange(kind);
 		else if (cfb.getChange() != kind)
