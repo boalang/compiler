@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import boa.types.Ast.Statement;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -243,7 +244,7 @@ public class BoaIntrinsics {
 		return false;
 	}
 	
-	@FunctionSpec(name = "getsnapshotbyid", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string" })
+	@FunctionSpec(name = "getsnapshotbyid", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string", "bool" })
 	public static ChangedFile[] getSnapshotById(final CodeRepository cr, final String id, final boolean needAst) {
 		if (needAst) {
 			ChangedFile[] files = getSnapshotById(cr, id, new String[0]);
@@ -332,6 +333,48 @@ public class BoaIntrinsics {
 		}
 		return l.toArray(new ChangedFile[0]);
 	}
+	
+	// refactoring helpers
+	@FunctionSpec(name = "editdistance", returnType = "int", formalParameters = { "string", "string" })
+	public static int editDistance(String x, String y) {
+		int[][] dp = new int[x.length() + 1][y.length() + 1];
+		 
+	    for (int i = 0; i <= x.length(); i++) {
+	        for (int j = 0; j <= y.length(); j++) {
+	            if (i == 0) {
+	                dp[i][j] = j;
+	            }
+	            else if (j == 0) {
+	                dp[i][j] = i;
+	            }
+	            else {
+	                dp[i][j] = min(dp[i - 1][j - 1] 
+	                 + (x.charAt(i - 1) == y.charAt(j - 1) ? 0 : 1), 
+	                  dp[i - 1][j] + 1, 
+	                  dp[i][j - 1] + 1);
+	            }
+	        }
+	    }
+	 
+	    return dp[x.length()][y.length()];
+	}
+ 
+    public static int min(int... numbers) {
+        return Arrays.stream(numbers)
+          .min().orElse(Integer.MAX_VALUE);
+    }
+    
+    @FunctionSpec(name = "freemem", returnType = "int")
+	public static long freeMem() {
+		return Runtime.getRuntime().freeMemory();
+	}
+    
+    @FunctionSpec(name = "usedmem", returnType = "int")
+	public static long usedMem() {
+		return Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
+	}
+    
+	
 	
 	/**
 	 * Is a Revision's log message indicating it is a fixing revision?
