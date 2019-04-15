@@ -244,7 +244,7 @@ public class BoaIntrinsics {
 		return false;
 	}
 	
-	@FunctionSpec(name = "getsnapshotbyid", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string" })
+	@FunctionSpec(name = "getsnapshotbyid", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string", "bool" })
 	public static ChangedFile[] getSnapshotById(final CodeRepository cr, final String id, final boolean needAst) {
 		if (needAst) {
 			ChangedFile[] files = getSnapshotById(cr, id, new String[0]);
