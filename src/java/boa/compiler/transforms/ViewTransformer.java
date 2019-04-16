@@ -84,7 +84,6 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 				o.env = f.getOperand().env;
 				n.env.set(varPrefix + n.getId().getToken(), f.getOperand().type);
 				n.env.set(n.getId().getToken(), n.type);
-				System.out.println("transform: " + n.getId().getToken() + "\n\n");
 				
 				final VarDeclStatement vds = ASTFactory.createVarDecl(varPrefix + n.getId().getToken(), f.getOperand(), f.getOperand().type, n.env);
 				final VarDeclStatement vds2 = ASTFactory.createVarDecl(n.getId().getToken(), o, n.type, n.env);
@@ -115,7 +114,6 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 				o.env = rhf.getOperand().env;
 				n.env.set(varPrefix + lhs.getToken(), rhf.getOperand().type);
 				n.env.set(lhs.getToken(), n.type);
-				System.out.println("transform: " + n.getLhs().getOperand() + "\n\n");
 
 				final VarDeclStatement vds = ASTFactory.createVarDecl(varPrefix + lhs.getToken(), rhf.getOperand(), rhf.getOperand().type, n.env);
 				final AssignmentStatement as = new AssignmentStatement(n.getLhs(), new Expression(new Conjunction(new Comparison(new SimpleExpr(new Term(new Factor(o)))))));
