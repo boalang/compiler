@@ -21,14 +21,14 @@ public class TestSequenceFile {
 		Configuration conf = new Configuration();
 		FileSystem fileSystem = FileSystem.get(conf);
 		
-		String astpath = "/Users/sumon/Downloads/testpydatagen/ast/data"; //"/Users/mislam/eclipse-workspace/outdata/ast/data";
+		String astpath = "/Users/sumon/Research/PyDatagen/junk/test-out/ast/data"; //"/Users/mislam/eclipse-workspace/outdata/ast/data";
 		Writable key = new LongWritable();
 		BytesWritable val = new BytesWritable();
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, 
 				new Path(astpath), conf);
 		//System.setOut(new PrintStream(new File("out.txt")));
 		while (r.next(key, val)) {
-			System.out.println("next project");
+			System.out.println("-- next project -- ");
 			byte[] bytes = val.getBytes();
 			boa.types.Ast.ASTRoot ast = boa.types.Ast.ASTRoot.parseFrom((CodedInputStream.newInstance(bytes, 0, val.getLength())));
 			System.out.println(ast);

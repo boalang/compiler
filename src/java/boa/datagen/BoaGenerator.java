@@ -51,6 +51,11 @@ public class BoaGenerator {
 			return;
 		}
 		BoaGenerator.handleCmdOptions(cl, options, args);
+		
+		// Delete the existing dataset
+		File outDirectory = new File(DefaultProperties.OUTPUT);
+		if (outDirectory.exists())
+			org.apache.commons.io.FileUtils.deleteQuietly(outDirectory);
 
 		/*
 		 * 1. if user provides local json files 
