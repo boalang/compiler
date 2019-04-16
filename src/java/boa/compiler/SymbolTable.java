@@ -166,7 +166,7 @@ public class SymbolTable {
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaSet(new BoaTypeVar("V")) }, "((long)${0}.size())"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString() }, "((long)${0}.length())"));
 
-		globalFunctions.addFunction("reset", new BoaFunction(new BoAny(), new BoaType[] { new BoaTable(new BoaAny()) }, "${0}.reset())"));
+		globalFunctions.addFunction("reset", new BoaFunction(new BoaAny(), new BoaType[] { new BoaTable(new BoaAny()) }, "${0}.reset())"));
 
 		// traversal functions
 		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new CFGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))}, "${1}.getValue(${0})"));
