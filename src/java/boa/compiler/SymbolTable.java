@@ -158,7 +158,7 @@ public class SymbolTable {
 		// (easily) done with a static method, so they are handled with macros
 		globalFunctions.addFunction("def", new BoaFunction(new BoaBool(), new BoaType[] { new BoaTuple() }, "(${0} != null && ${0}.def)"));
 		globalFunctions.addFunction("def", new BoaFunction(new BoaBool(), new BoaType[] { new BoaAny() }, "(${0} != null)"));
-		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaTable(new BoaAny()) }, "${0}.length())"));
+		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaTable(new BoaAny()) }, "${0}.length()"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaProtoList(new BoaAny()) }, "((long)${0}.size())"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaArray(new BoaAny()) }, "((long)${0}.length)"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "((long)${0}.keySet().size())"));
@@ -166,7 +166,7 @@ public class SymbolTable {
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaSet(new BoaTypeVar("V")) }, "((long)${0}.size())"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString() }, "((long)${0}.length())"));
 
-		globalFunctions.addFunction("reset", new BoaFunction(new BoaAny(), new BoaType[] { new BoaTable(new BoaAny()) }, "${0}.reset())"));
+		globalFunctions.addFunction("reset", new BoaFunction(new BoaAny(), new BoaType[] { new BoaTable(new BoaAny()) }, "${0}.reset()"));
 
 		// traversal functions
 		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new CFGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))}, "${1}.getValue(${0})"));
