@@ -57,6 +57,7 @@ import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.VariableDeclRenameTransformer;
 import boa.compiler.transforms.VisitorMergingTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
+import boa.compiler.transforms.ViewTransformer;
 import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.ASTPrintingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
@@ -206,6 +207,7 @@ public class BoaCompiler extends BoaMain {
 							new VariableDeclRenameTransformer().start(p);
 							new InheritedAttributeTransformer().start(p);
 							new LocalAggregationTransformer().start(p);
+							new ViewTransformer().start(p);
 
 							// if a job has no visitor, let it have its own method
 							// also let jobs have own methods if visitor merging is disabled
@@ -377,6 +379,7 @@ public class BoaCompiler extends BoaMain {
 				new InheritedAttributeTransformer().start(p);
 				new LocalAggregationTransformer().start(p);
 				new VisitorOptimizingTransformer().start(p);
+				new ViewTransformer().start(p);
 
 				if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
 				if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
