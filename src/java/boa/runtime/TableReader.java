@@ -187,6 +187,24 @@ public class TableReader {
 	  	}
 	}
 
+	public int length() {
+		int count = 0;
+		TableReader tr = new TableReader(0, path);
+		while(tr.hasNext()) {
+			tr.next();
+			count++;
+		}
+		return count;
+	}
+
+	public void reset() {
+		try {
+			reader.seek(0);
+		} catch (final Exception e) {
+			reader = null;
+		}
+	}
+
 	public static Long valToLong(final Value val) {
 		return val.getI();
 	}

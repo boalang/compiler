@@ -1,0 +1,7 @@
+p: Project = input;
+counts: output sum of int;
+
+v: table[string][int][int][abc: string] of c: int;
+
+counts << len(v);
+reset(v);
