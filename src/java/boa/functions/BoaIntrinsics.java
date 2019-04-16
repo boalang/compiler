@@ -422,6 +422,18 @@ public class BoaIntrinsics {
 			return null;
 		return s.peek();
 	}
+	
+	public static <T> T queue_poll(final java.util.Queue<T> q) {
+		if (q.isEmpty())
+			return null;
+		return q.poll();
+	}
+
+	public static <T> T queue_peek(final java.util.Queue<T> q) {
+		if (q.isEmpty())
+			return null;
+		return q.peek();
+	}
 
 	public static String protolistToString(final List<String> l) {
 		String s = "";
