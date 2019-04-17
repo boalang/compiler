@@ -36,6 +36,11 @@ public class Factor extends Node {
 		return op;
 	}
 
+	public void setOperand(Operand o) {
+		this.op = o;
+		o.setParent(this);
+	}
+
 	public List<Node> getOps() {
 		return ops;
 	}

@@ -33,6 +33,7 @@ public class Table extends Operand {
 	protected String userName;
 	protected String viewName;
 	protected String outputName;
+	protected String tablePath;
 	protected List<String> subViews;
 	protected List<String> paths;
 
@@ -71,6 +72,10 @@ public class Table extends Operand {
 		return paths;
 	}
 
+	public String getTablePath() {
+		return tablePath;
+	}
+
 	public void addSubView(String sv) {
 		if (subViews == null)
 			subViews = new ArrayList<String>();
@@ -87,6 +92,7 @@ public class Table extends Operand {
 			paths = Arrays.asList(s.split("/"));
 			outputName = ary[ary.length - 1];
 			subViews = new ArrayList<String>();
+			tablePath = s;
 			switch (s.charAt(0)) {
 				case 'J':
 				jobNum = ary[0].substring(1);

@@ -1118,6 +1118,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		n.getLhs().accept(this);
 		final String lhs = code.removeLast();
 
+		if (n.env != null && n.type != null)
+			n.env.setOperandType(n.type);
+
 		n.getRhs().accept(this);
 		String rhs = code.removeLast();
 
