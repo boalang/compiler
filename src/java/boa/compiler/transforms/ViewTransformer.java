@@ -49,6 +49,8 @@ import boa.types.BoaTable;
  * @author hungc
  */
 public class ViewTransformer extends AbstractVisitorNoArgNoRet {
+	private int index = -1;
+	private Program currentProgram;
 	private Map<String, Table> tableMap = new LinkedHashMap<String, Table>();
 	private Map<String, String> tableIdMap = new LinkedHashMap<String, String>();
 	private Map<String, String> newFilterIdMap = new LinkedHashMap<String, String>();
@@ -59,14 +61,15 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Program n) {
+		currentProgram = n;
 		int len = n.getStatementsSize();
 		int insertCount = 0;
-		for (int i = 0; i < n.getStatementsSize(); i++) {
-			n.getStatement(i).accept(this);
+		for (index = 0; index < n.getStatementsSize(); index++) {
+			n.getStatement(index).accept(this);
 			// if a node was added, dont visit it and
 			// dont re-visit the node we were just at
 			if (len != n.getStatementsSize()) {
-				i += (n.getStatementsSize() - len);
+				index += (n.getStatementsSize() - len);
 				len = n.getStatementsSize();
 			}
 		}
@@ -155,10 +158,15 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 			vds2.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().env = n.env;
 			for (Node op : f.getOps())
 				vds2.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().addOp(op);
-			newFilterStatements.add(vds2);
 
-			if (allLiterals)
+			if (allLiterals) {
 				newFilterIdMap.put(p, varPrefix + count);
+				newFilterStatements.add(vds2);
+			}
+			else {
+				currentProgram.env.set(varPrefix + count, vds2.type);
+				currentProgram.getStatements().add(index, vds2);
+			}
 			count++;
 
 			f.getOps().clear();
