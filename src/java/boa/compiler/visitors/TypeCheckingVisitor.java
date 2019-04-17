@@ -413,7 +413,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					n.getOperand().env = env;
 
 					final List<BoaType> formalParameters = this.check((Call) node, env);
-
 					try {
 						type = env.getFunction(((Identifier)n.getOperand()).getToken(), formalParameters).erase(formalParameters);
 					} catch (final ClassCastException e) {
@@ -1398,6 +1397,22 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.getValue().accept(this, st);
 		n.type = new BoaStack(n.getValue().type);
 	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final QueueType n, final SymbolTable env) {
+		SymbolTable st;
+
+		try {
+			st = env.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+
+		n.env = st;
+		n.getValue().accept(this, st);
+		n.type = new BoaQueue(n.getValue().type);
+	}
 
 	/** {@inheritDoc} */
 	@Override
@@ -1502,7 +1517,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			e.accept(this, env);
 			types.add(e.type);
 		}
-
+		
 		return types;
 	}
 
