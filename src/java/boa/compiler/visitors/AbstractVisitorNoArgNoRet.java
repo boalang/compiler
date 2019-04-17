@@ -414,5 +414,4 @@ public abstract class AbstractVisitorNoArgNoRet {
 
 	public void visit(final FixPType n) {
 	}
-
 }

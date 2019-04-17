@@ -406,6 +406,4 @@ public abstract class AbstractVisitorNoReturn<ArgTypeT> {
 
 	public void visit(final FixPType n, final ArgTypeT arg) {
 	}
-
-	
 }
