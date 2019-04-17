@@ -215,8 +215,8 @@ public class SymbolTable {
 
 		// queue functions
 		globalFunctions.addFunction("offer", new BoaFunction(new BoaAny(), new BoaType[] { new BoaQueue(new BoaTypeVar("V")), new BoaTypeVar("V") }, "${0}.offer(${1})"));
-		globalFunctions.addFunction("poll", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaQueue(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.queue_poll(${0})"));
-		globalFunctions.addFunction("peek", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaQueue(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.queue_peek(${0})"));
+		globalFunctions.addFunction("poll", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaQueue(new BoaTypeVar("V")) }, "${0}.poll()"));
+		globalFunctions.addFunction("peek", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaQueue(new BoaTypeVar("V")) }, "${0}.peekFirst()"));
 		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaQueue(new BoaTypeVar("V")) }, "${0}.clear()"));
 		globalFunctions.addFunction("values", new BoaFunction(new BoaArray(new BoaTypeVar("V")), new BoaType[] { new BoaQueue(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.basic_array(${0}.toArray(new ${V}[0]))"));
 

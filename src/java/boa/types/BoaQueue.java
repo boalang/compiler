@@ -3,7 +3,7 @@ package boa.types;
 /**
  * A {@link BoaType} representing a queue of values.
  * 
- * @author 
+ * @author hyj
  */
 public class BoaQueue extends BoaType {
 	private final BoaType type;

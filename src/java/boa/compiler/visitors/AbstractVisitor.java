@@ -468,6 +468,4 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	public ReturnTypeT visit(final FixPType n, final ArgTypeT arg) {
 		return null;
 	}
-
-	
 }
