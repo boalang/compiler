@@ -111,8 +111,9 @@ public class TableReader {
 		reader = null;
 	}
 
-	public void addIndex(final Object obj) {
+	public TableReader addIndex(final Object obj) {
 		indices.add(obj);
+		return this;
 	}
 
 	public void addIndices(final List<Object> objs) {
@@ -124,8 +125,9 @@ public class TableReader {
 		indices = objs;
 	}
 
-	public void setColumnIndex(final int index) {
+	public TableReader setColumnIndex(final int index) {
 		this.columnIndex = index;
+		return this;
 	}
 
 	public int getIndicesCount() {

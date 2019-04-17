@@ -1139,29 +1139,38 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		if (n.getLhs().type instanceof BoaTable) {
-			final ST st2 = stg.getInstanceOf("ViewAssignment");
-
-			if (n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOpsSize() == 1 &&
-				n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0) instanceof Selector) {
-				st2.add("col", rhs.substring(rhs.indexOf(".") + 1));
-				rhs = rhs.substring(0, rhs.indexOf("."));
+			Factor f = (Factor) n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs();
+			String stmt = "";
+			String col = "";
+			if (f.getOpsSize() > 0 && f.getOp(f.getOpsSize() - 1) instanceof Selector) {
+				col = ".setColumnIndex(" + rhs.substring(rhs.indexOf(".") + 1) + ")";
+				rhs = rhs.substring(0, rhs.lastIndexOf("."));
 			}
 
-			String rhsView = rhs.contains("[") ? rhs.substring(0, rhs.indexOf("[")) : rhs;
-			List<String> indices = new ArrayList<String>();
+			if (f.getOperand() instanceof Table) {
+				Table table = (Table)f.getOperand();
+				List<String> paths = table.getPaths();
+				String path = "\"" + paths.get(0) + "\"";
+				for(int i = 1; i < paths.size(); i++)
+					path += ", " + "\"" + paths.get(i) + "\"";
+				stmt = "new boa.runtime.TableReader(0, " + path + ")";
+			}
+			else
+				stmt = rhs.contains("[") ? rhs.substring(0, rhs.indexOf("[")) : rhs;
 
 			String patternString = "\\[(\".*?\")\\]|\\[(\\(.*?\\))\\]|\\[(null)\\]";
 			Pattern pattern = Pattern.compile(patternString);
 			Matcher matcher = pattern.matcher(rhs);
 
-			while (matcher.find())
-				indices.add(((matcher.group(1) != null) ? matcher.group(1) : ((matcher.group(2) != null) ? matcher.group(2) : "null")));
+			while (matcher.find()) {
+				String index = ((matcher.group(1) != null) ? matcher.group(1) : ((matcher.group(2) != null) ? matcher.group(2) : "null"));
+				stmt += ".addIndex(" + index + ")";
+			}
 
-			st2.add("lhs", lhs);
-			st2.add("rhs", rhsView);
-			st2.add("indices", indices);
-			code.add(st2.render());
-
+			st.add("lhs", lhs);
+			st.add("operator", n.getOp());
+			st.add("rhs", stmt + col);
+			code.add(st.render());
 			return;
 		}
 
@@ -1543,41 +1552,37 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		if (lhsType instanceof BoaTable || type instanceof BoaTable) {
-			if (n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof Table) {
-				Table table = (Table)n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+			Factor f = (Factor) n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs();
+			String stmt = "";
+			String col = "";
+
+			if (f.getOpsSize() > 0 && f.getOp(f.getOpsSize() - 1) instanceof Selector) {
+				col = ".setColumnIndex(" + src.substring(src.indexOf(".") + 1) + ")";
+				src = src.substring(0, src.lastIndexOf("."));
+			}
+
+			if (f.getOperand() instanceof Table) {
+				Table table = (Table)f.getOperand();
 				List<String> paths = table.getPaths();
 				String path = "\"" + paths.get(0) + "\"";
 				for(int i = 1; i < paths.size(); i++)
 					path += ", " + "\"" + paths.get(i) + "\"";
-
-				st.add("rhs", "new boa.runtime.TableReader(0, " + path + ")");
-				code.add(st.render());
-				return;
+				stmt = "new boa.runtime.TableReader(0, " + path + ")";
 			}
-			final ST st2 = stg.getInstanceOf("ViewAssignment");
-
-			if (n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOpsSize() == 1 &&
-				n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0) instanceof Selector) {
-				st2.add("col", src.substring(src.indexOf(".") + 1));
-				src = src.substring(0, src.indexOf("."));
-			}
-
-			String lhsView = "___" + n.getId().getToken();
-			String rhsView = src.contains("[") ? src.substring(0, src.indexOf("[")) : src;
-			List<String> indices = new ArrayList<String>();
+			else
+				stmt = src.contains("[") ? src.substring(0, src.indexOf("[")) : src;
 
 			String patternString = "\\[(\".*?\")\\]|\\[(\\(.*?\\))\\]|\\[(null)\\]";
 			Pattern pattern = Pattern.compile(patternString);
 			Matcher matcher = pattern.matcher(src);
 
-			while (matcher.find())
-				indices.add(((matcher.group(1) != null) ? matcher.group(1) : ((matcher.group(2) != null) ? matcher.group(2) : "null")));
+			while (matcher.find()) {
+				String index = ((matcher.group(1) != null) ? matcher.group(1) : ((matcher.group(2) != null) ? matcher.group(2) : "null"));
+				stmt += ".addIndex(" + index + ")";
+			}
 
-			st2.add("lhs", lhsView);
-			st2.add("rhs", rhsView);
-			st2.add("indices", indices);
-			code.add(st2.render());
-
+			st.add("rhs", stmt + col);
+			code.add(st.render());
 			return;
 		}
 
