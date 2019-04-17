@@ -1518,6 +1518,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			e.accept(this, env);
 			types.add(e.type);
 		}
+		
 		return types;
 	}
 
