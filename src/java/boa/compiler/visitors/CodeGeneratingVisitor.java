@@ -905,15 +905,41 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				accept = code.removeLast();
 			}
 
-			for (int i = 0; !abortGeneration && i < n.getOpsSize(); i++) {
-				final Node o = n.getOp(i);
+			if (n.getOperand().type instanceof BoaTable) {
+				String ops = "";
+				String col = "";
+				for (int i = 0; !abortGeneration && i < n.getOpsSize(); i++) {
+					final Node o = n.getOp(i);
 
-				o.accept(this);
-				accept += code.removeLast();
+					o.env.setOperandType(n.getOperand().type);
+					o.accept(this);
+					ops += code.removeLast();
+				}
+				if (n.getOp(n.getOpsSize() - 1) instanceof Selector) {
+					String member = ops.substring(ops.lastIndexOf(".") + 1);
+					col = ops.substring(ops.lastIndexOf("."));
+				}
+
+				String patternString = "\\[(\".*?\")\\]|\\[(\\(.*?\\))\\]|\\[(null)\\]";
+				Pattern pattern = Pattern.compile(patternString);
+				Matcher matcher = pattern.matcher(ops);
+
+				while (matcher.find()) {
+					String index = ((matcher.group(1) != null) ? matcher.group(1) : ((matcher.group(2) != null) ? matcher.group(2) : "null"));
+					accept += ".addIndex(" + index + ")";
+				}
+				accept += col;
+			}
+			else {
+				for (int i = 0; !abortGeneration && i < n.getOpsSize(); i++) {
+					final Node o = n.getOp(i);
+
+					o.accept(this);
+					accept += code.removeLast();
+				}
 			}
 
 			n.env.getOperandType();
-
 			code.add(accept);
 		} else {
 			n.getOperand().accept(this);
@@ -1038,12 +1064,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (opType instanceof BoaTable) {
 				final BoaTable bt = (BoaTable) opType;
 				if (member.charAt(0) == '_') {
-					code.add("." + (Integer.parseInt(member.substring(1)) - 1));
+					code.add(".setColumnIndex(" + (Integer.parseInt(member.substring(1)) - 1) + ")");
 					return;
 				}
 
 				int i = bt.getTypeNameIndex(member);
-				code.add("." + ((i == -1) ? (bt.getIndexTypes().size()) : i));
+				code.add(".setColumnIndex(" + ((i == -1) ? (bt.getIndexTypes().size()) : i) + ")");
 				return;
 			}
 
@@ -1136,42 +1162,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					rhs = stup.render();
 				}
 			}
-		}
-
-		if (n.getLhs().type instanceof BoaTable) {
-			Factor f = (Factor) n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs();
-			String stmt = "";
-			String col = "";
-			if (f.getOpsSize() > 0 && f.getOp(f.getOpsSize() - 1) instanceof Selector) {
-				col = ".setColumnIndex(" + rhs.substring(rhs.indexOf(".") + 1) + ")";
-				rhs = rhs.substring(0, rhs.lastIndexOf("."));
-			}
-
-			if (f.getOperand() instanceof Table) {
-				Table table = (Table)f.getOperand();
-				List<String> paths = table.getPaths();
-				String path = "\"" + paths.get(0) + "\"";
-				for(int i = 1; i < paths.size(); i++)
-					path += ", " + "\"" + paths.get(i) + "\"";
-				stmt = "new boa.runtime.TableReader(0, " + path + ")";
-			}
-			else
-				stmt = rhs.contains("[") ? rhs.substring(0, rhs.indexOf("[")) : rhs;
-
-			String patternString = "\\[(\".*?\")\\]|\\[(\\(.*?\\))\\]|\\[(null)\\]";
-			Pattern pattern = Pattern.compile(patternString);
-			Matcher matcher = pattern.matcher(rhs);
-
-			while (matcher.find()) {
-				String index = ((matcher.group(1) != null) ? matcher.group(1) : ((matcher.group(2) != null) ? matcher.group(2) : "null"));
-				stmt += ".addIndex(" + index + ")";
-			}
-
-			st.add("lhs", lhs);
-			st.add("operator", n.getOp());
-			st.add("rhs", stmt + col);
-			code.add(st.render());
-			return;
 		}
 
 		// FIXME rdyer hack to fix assigning to maps
@@ -1551,42 +1541,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 		}
 
-		if (lhsType instanceof BoaTable || type instanceof BoaTable) {
-			Factor f = (Factor) n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs();
-			String stmt = "";
-			String col = "";
-
-			if (f.getOpsSize() > 0 && f.getOp(f.getOpsSize() - 1) instanceof Selector) {
-				col = ".setColumnIndex(" + src.substring(src.indexOf(".") + 1) + ")";
-				src = src.substring(0, src.lastIndexOf("."));
-			}
-
-			if (f.getOperand() instanceof Table) {
-				Table table = (Table)f.getOperand();
-				List<String> paths = table.getPaths();
-				String path = "\"" + paths.get(0) + "\"";
-				for(int i = 1; i < paths.size(); i++)
-					path += ", " + "\"" + paths.get(i) + "\"";
-				stmt = "new boa.runtime.TableReader(0, " + path + ")";
-			}
-			else
-				stmt = src.contains("[") ? src.substring(0, src.indexOf("[")) : src;
-
-			String patternString = "\\[(\".*?\")\\]|\\[(\\(.*?\\))\\]|\\[(null)\\]";
-			Pattern pattern = Pattern.compile(patternString);
-			Matcher matcher = pattern.matcher(src);
-
-			while (matcher.find()) {
-				String index = ((matcher.group(1) != null) ? matcher.group(1) : ((matcher.group(2) != null) ? matcher.group(2) : "null"));
-				stmt += ".addIndex(" + index + ")";
-			}
-
-			st.add("rhs", stmt + col);
-			code.add(st.render());
-			return;
-		}
-
-		if (!type.assigns(t)) {
+		if (!(type instanceof BoaTable) && !type.assigns(t)) {
 			final BoaFunction f = n.env.getCast(t, type);
 
 			if (f.hasName())
@@ -2172,7 +2127,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Table n) {
-		code.add("");
+		List<String> paths = n.getPaths();
+		String path = "\"" + paths.get(0) + "\"";
+		for(int i = 1; i < paths.size(); i++)
+			path += ", " + "\"" + paths.get(i) + "\"";
+		code.add("new boa.runtime.TableReader(0, " + path + ")");
 	}
 
 	/** {@inheritDoc} */

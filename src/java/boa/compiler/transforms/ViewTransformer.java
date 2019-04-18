@@ -33,6 +33,7 @@ import boa.compiler.ast.Node;
 import boa.compiler.ast.Index;
 import boa.compiler.ast.Operand;
 import boa.compiler.ast.Table;
+import boa.compiler.ast.Selector;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.statements.SubView;
 import boa.compiler.ast.statements.AssignmentStatement;
@@ -51,11 +52,8 @@ import boa.types.BoaTable;
 public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 	private int index = -1;
 	private Program currentProgram;
-	private Map<String, Table> tableMap = new LinkedHashMap<String, Table>();
-	private Map<String, String> tableIdMap = new LinkedHashMap<String, String>();
 	private Map<String, String> newFilterIdMap = new LinkedHashMap<String, String>();
-	private List<VarDeclStatement> newFilterStatements = new ArrayList<VarDeclStatement>();
-	protected final String varPrefix = "_table_";
+	protected final String varPrefix = "anon_table_";
 	private int count = 0;
 
 	/** {@inheritDoc} */
@@ -73,22 +71,6 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 				len = n.getStatementsSize();
 			}
 		}
-		for (Map.Entry<String,String> entry: tableIdMap.entrySet()) {
-			Operand o = new Table(entry.getKey());
-			Table t = tableMap.get(entry.getKey());
-			o.type = t.type;
-			o.env = t.env;
-			final VarDeclStatement vds = ASTFactory.createVarDecl(entry.getValue(), o, t.type, n.env);
-			n.env.set(entry.getValue(), t.type);
-			n.getStatements().add(insertCount, vds);
-			insertCount++;
-		}
-
-		for (VarDeclStatement vds : newFilterStatements) {
-			n.env.set(vds.getId().getToken(), vds.type);
-			n.getStatements().add(insertCount, vds);
-			insertCount++;
-		}
 	}
 
 	/** {@inheritDoc} */
@@ -97,81 +79,66 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 		Node parent = n.getParent().getParent().getParent().getParent().getParent().getParent().getParent();
 		Factor f = (Factor)n.getParent();
 		String p = n.getTablePath();
-		// if in vardecl or assignment statements or having no indices
-		if (parent instanceof VarDeclStatement || parent instanceof AssignmentStatement || f.getOpsSize() == 0) {
-			Operand o;
-			String id;
-			if (tableIdMap.containsKey(p))
-				id = tableIdMap.get(p);
-			else {
-				id = varPrefix + count;
-				count++;
-				tableIdMap.put(p, id);
-				tableMap.put(p, n);
+
+		// if have indices
+		int splitCount = -1;
+		for (int i = 0; i < f.getOps().size(); i++) {
+			Node op = f.getOps().get(i);
+			if (op instanceof Index && !(((Index)op).getStart().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof ILiteral)) {
+				splitCount = i;
+				break;
 			}
-			o = new Identifier(id);
-			o.env = n.env;
-			o.type = n.type;
-			f.setOperand(o);
+			else if (op instanceof Selector) {
+				p += "/" + ((Selector)op).getId().getToken();
+				continue;
+			}
+
+			ILiteral lit = (ILiteral)((Index)op).getStart().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+			p += "/" + lit.getLiteral();
 		}
-		else {
-			// caching, if @hungc/fileCount[3][5] repeats
-			boolean allLiterals = true;
-			for (Node op : f.getOps()) {
-				if (!(((Index)op).getStart().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof ILiteral)) {
-					allLiterals = false;
-					break;
-				}
-				ILiteral lit = (ILiteral)((Index)op).getStart().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
-				p += "/" + lit.getLiteral();
-			}
-			if (allLiterals && newFilterIdMap.containsKey(p)) {
-				String id = newFilterIdMap.get(p);
-				Operand o = new Identifier(id);
-				o.type = n.type;
-				o.env = n.env;
-				f.getOps().clear();
-				f.setOperand(o);
-				return;
-			}
 
-			// caching, if @hungc/fileCount repeats
-			String id = varPrefix + count;
-			if (tableIdMap.containsKey(n.getTablePath()))
-				id = tableIdMap.get(n.getTablePath());
-			else {
-				n.env.set(varPrefix + count, n.type);
-				final VarDeclStatement vds = ASTFactory.createVarDecl(varPrefix + count, n, n.type, n.env);
-				newFilterStatements.add(vds);
-				count++;
-			}
-
+		// if it's cached
+		if (newFilterIdMap.containsKey(p)) {
+			String id = newFilterIdMap.get(p);
 			Operand o = new Identifier(id);
-			Operand o2 = new Identifier(varPrefix + count);
 			o.type = n.type;
 			o.env = n.env;
-			o2.type = f.type;
-			o2.env = n.env;
-
-			n.env.set(varPrefix + count, f.type);
-			final VarDeclStatement vds2 = ASTFactory.createVarDecl(varPrefix + count, o, f.type, n.env);
-			vds2.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().env = n.env;
-			for (Node op : f.getOps())
-				vds2.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().addOp(op);
-
-			if (allLiterals) {
-				newFilterIdMap.put(p, varPrefix + count);
-				newFilterStatements.add(vds2);
-			}
-			else {
-				currentProgram.env.set(varPrefix + count, vds2.type);
-				currentProgram.getStatements().add(index, vds2);
-			}
-			count++;
-
-			f.getOps().clear();
-			f.setOperand(o2);
+			if (splitCount == -1)
+				f.getOps().clear();
+			else
+				for (int i = 0; i < splitCount; i++)
+					f.getOps().remove(0);
+			f.setOperand(o);
+			return;
 		}
+
+		// create new decl for the table
+		String id = varPrefix + (count++);
+		newFilterIdMap.put(p, id);
+		Operand o = new Identifier(id);
+		o.env = n.env;
+		o.type = n.type;
+		n.env.set(id, n.type);
+		final VarDeclStatement vds = ASTFactory.createVarDecl(id, n, f.type, n.env);
+		Factor f2 = (Factor) vds.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs();
+		f2.env = f.env;
+		if (f.getOpsSize() != 0 && splitCount != 0) {
+			int limit = splitCount == -1 ? f.getOpsSize() : splitCount;
+			for (int i = 0; i < limit; i++)
+				f2.addOp(f.getOp(i));
+		}
+		currentProgram.env.set(id, vds.type);
+		currentProgram.getStatements().add(index, vds);
+
+		// if has filter
+		if (f.getOpsSize() > 0 && splitCount == -1) {
+			f.getOps().clear();
+		}
+		else if (f.getOpsSize() > 0) {
+			for (int i = 0; i < splitCount; i++)
+				f.getOps().remove(0);
+		}
+		f.setOperand(o);
 	}
 
 	/** {@inheritDoc} */
