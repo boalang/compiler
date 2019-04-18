@@ -323,6 +323,8 @@ public class BoaFunction extends BoaType {
 			return replaceVar(var, ((BoaSet)formal).getType(), ((BoaSet)actual).getType());
 		if (formal instanceof BoaStack)
 			return replaceVar(var, ((BoaStack)formal).getType(), ((BoaStack)actual).getType());
+		if (formal instanceof BoaQueue)
+			return replaceVar(var, ((BoaQueue)formal).getType(), ((BoaQueue)actual).getType());
 		if (formal instanceof BoaTraversal)
 			return replaceVar(var, ((BoaTraversal)formal).getIndex(), ((BoaTraversal)actual).getIndex());
 		if (formal instanceof BoaMap) {
