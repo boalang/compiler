@@ -1164,6 +1164,21 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 		}
 
+		String clone = "";
+		if (n.getLhs().type instanceof BoaTable) {
+			Factor f = (Factor) n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs();
+			if (f.getOperand() instanceof Identifier) {
+				clone = "___" + ((Identifier) n.getLhs().getOperand()).getToken() + " = ___" + ((Identifier) f.getOperand()).getToken() + ".clone();\n";
+				if (f.getOpsSize() == 0) {
+					code.add(clone);
+					return;
+				}
+				clone += "___" + ((Identifier) n.getLhs().getOperand()).getToken() + rhs.substring(rhs.indexOf(".")) + ";\n";
+				code.add(clone);
+				return;
+			}
+		}
+
 		// FIXME rdyer hack to fix assigning to maps
 		if (lhs.contains(".get(")) {
 			int idx = lhs.lastIndexOf(')') - 1;
@@ -1538,6 +1553,21 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					stup.add("exprlist", code.removeLast());
 					src = stup.render();
 				}
+			}
+		}
+
+		String clone = "";
+		if (lhsType instanceof BoaTable || type instanceof BoaTable) {
+			Factor f = (Factor) n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs();
+			if (f.getOperand() instanceof Identifier) {
+				clone = "___" + n.getId().getToken() + " = ___" + ((Identifier) f.getOperand()).getToken() + ".clone();\n";
+				if (f.getOpsSize() == 0) {
+					code.add(clone);
+					return;
+				}
+				clone += "___" + n.getId().getToken() + src.substring(src.indexOf(".")) + ";\n";
+				code.add(clone);
+				return;
 			}
 		}
 
