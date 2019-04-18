@@ -116,10 +116,11 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 		String id = varPrefix + (count++);
 		newFilterIdMap.put(p, id);
 		Operand o = new Identifier(id);
+		BoaType bt = splitCount == -1  ? f.type : (splitCount == 0 ? n.type : f.getOp(splitCount - 1).type);
 		o.env = n.env;
 		o.type = n.type;
-		n.env.set(id, n.type);
-		final VarDeclStatement vds = ASTFactory.createVarDecl(id, n, f.type, n.env);
+		n.env.set(id, bt);
+		final VarDeclStatement vds = ASTFactory.createVarDecl(id, n, bt, n.env);
 		Factor f2 = (Factor) vds.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs();
 		f2.env = f.env;
 		if (f.getOpsSize() != 0 && splitCount != 0) {
@@ -130,15 +131,31 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 		currentProgram.env.set(id, vds.type);
 		currentProgram.getStatements().add(index, vds);
 
-		// if has filter
-		if (f.getOpsSize() > 0 && splitCount == -1) {
-			f.getOps().clear();
-		}
-		else if (f.getOpsSize() > 0) {
+		// if second stmt needed
+		if (f.getOpsSize() > 0 && splitCount != -1) {
+			String id2 = varPrefix + (count++);
+			Operand o2 = new Identifier(id2);
+			o2.env = n.env;
+			o2.type = n.type;
+			n.env.set(id2, f.type);
+			final VarDeclStatement vds2 = ASTFactory.createVarDecl(id2, o, f.type, n.env);
+			Factor f3 = (Factor) vds2.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs();
+			f3.env = f.env;
+			for (int i = splitCount; i < f.getOpsSize(); i++)
+				f3.addOp(f.getOp(i));
+
 			for (int i = 0; i < splitCount; i++)
 				f.getOps().remove(0);
+
+			currentProgram.env.set(id2, vds2.type);
+			currentProgram.getStatements().add(index + 1, vds2);
+			f.setOperand(o2);
+			f.getOps().clear();
+			return;
 		}
+
 		f.setOperand(o);
+		f.getOps().clear();
 	}
 
 	/** {@inheritDoc} */

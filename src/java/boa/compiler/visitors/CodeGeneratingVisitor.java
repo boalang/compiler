@@ -1541,7 +1541,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 		}
 
-		if (!(type instanceof BoaTable) && !type.assigns(t)) {
+		if (!type.assigns(t)) {
 			final BoaFunction f = n.env.getCast(t, type);
 
 			if (f.hasName())
