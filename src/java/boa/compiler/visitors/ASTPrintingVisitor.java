@@ -553,6 +553,16 @@ public class ASTPrintingVisitor extends AbstractVisitorNoArgNoRet {
 		super.visit(n);
 		indent--;
 	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final QueueType n) {
+		indent();
+		System.out.println("QueueType");
+		indent++;
+		super.visit(n);
+		indent--;
+	}
 
 	/** {@inheritDoc} */
 	@Override

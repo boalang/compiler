@@ -75,6 +75,7 @@ import boa.compiler.ast.types.FixPType;
 import boa.compiler.ast.types.FunctionType;
 import boa.compiler.ast.types.MapType;
 import boa.compiler.ast.types.OutputType;
+import boa.compiler.ast.types.QueueType;
 import boa.compiler.ast.types.SetType;
 import boa.compiler.ast.types.StackType;
 import boa.compiler.ast.types.TupleType;
@@ -683,6 +684,12 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StackType n) {
+		singleton(n);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final QueueType n) {
 		singleton(n);
 	}
 

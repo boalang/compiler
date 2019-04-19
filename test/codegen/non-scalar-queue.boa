@@ -1,0 +1,89 @@
+o: output collection of int;
+
+q: queue of int;
+q1: queue of array of int;
+q2: queue of set of int;
+q3: queue of stack of int;
+q4: queue of map[int] of int;
+q5: queue of queue of int;
+
+### Testing q #############
+offer(q, 1);
+offer(q, 2);
+poll(q);
+peek(q);
+clear(q);
+
+f := function(q: queue of int) : queue of int {
+	poll(q);
+	return q;
+};
+
+f(q);
+
+### Testing q1 #############
+a1: array of int = {1, 1};
+a2: array of int = {2, 2};
+
+offer(q1, a1);
+offer(q1, a2);
+
+v1 := values(q1);
+
+
+### Testing q2 #############
+ts1: set of int;
+ts2: set of int;
+
+add(ts1, 1);
+add(ts2, 2);
+
+offer(q2, ts1);
+offer(q2, ts2);
+
+v2 := values(q2);
+
+
+### Testing q3 #############
+st1: stack of int;
+st2: stack of int;
+
+push(st1, 1);
+push(st1, 1);
+push(st2, 2);
+push(st2, 2);
+
+offer(q3, st1);
+offer(q3, st2);
+
+v3 := values(q3);
+
+
+### Testing q4 #############
+m1: map[int] of int;
+m2: map[int] of int;
+
+m1[1] = 1;
+m2[2] = 2;
+
+offer(q4, m1);
+offer(q4, m2);
+
+v4 := values(q4);
+
+foreach(i: int; v4[i]){
+	v5 := values(v4[i]);
+	o << v5[0];
+}
+
+### Testing q5 #############
+queue1: queue of int;
+queue2: queue of int;
+
+offer(queue1, 1);
+offer(queue2, 2);
+
+offer(q5, queue1);
+offer(q5, queue2);
+
+v5 := values(q5);
