@@ -121,7 +121,7 @@ rowtype returns [RowType ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: id=identifier { $ast = new RowType($id.ast); } (idx=index { $ast.addIndex($idx.ast); })* DOT ROW
+	: id=identifier { $ast = new RowType($id.ast); } (idx=index { $ast.addIndex($idx.ast); })* DOT ROW | t=table {$ast = new RowType($t.ast); } (idx=index {$ast.addIndex($idx.ast); })* DOT ROW
 	;
 
 component returns [Component ast]

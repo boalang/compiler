@@ -401,7 +401,10 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	}
 
 	public ReturnTypeT visit(final RowType n, final ArgTypeT arg) {
-		n.getId().accept(this, arg);
+		if (n.getId() != null)
+			n.getId().accept(this, arg);
+		if (n.getTable() != null)
+			n.getTable().accept(this, arg);
 		for (final Index i : n.getIndices())
 			i.accept(this, arg);
 		return null;

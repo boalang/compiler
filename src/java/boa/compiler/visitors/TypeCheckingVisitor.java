@@ -1524,8 +1524,17 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	@Override
 	public void visit(final RowType n, final SymbolTable env) {
 		n.env = env;
-		n.getId().accept(this, env);
-		final BoaType t = n.getId().type;
+		final BoaType t;
+
+		if (n.getId() != null) {
+			n.getId().accept(this, env);
+			t = n.getId().type;
+		}
+		else {
+			n.getTable().accept(this, env);
+			t = n.getTable().type;
+		}
+
 		if (!(t instanceof BoaTable))
 			throw new TypeCheckException(n.getId(), "expected a table type here");
 		BoaTable table = (BoaTable)t;

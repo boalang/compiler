@@ -21,6 +21,7 @@ import java.util.List;
 
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Index;
+import boa.compiler.ast.Table;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
@@ -31,6 +32,7 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  */
 public class RowType extends AbstractType {
 	protected Identifier id;
+	protected Table t;
 	protected final List<Index> indices = new ArrayList<Index>();
 
 	public Identifier getId() {
@@ -41,12 +43,29 @@ public class RowType extends AbstractType {
 		return indices;
 	}
 
+	public Table getTable() {
+		return t;
+	}
+
 	public void addIndex(final Index idx) {
 		indices.add(idx);
 	}
 
 	public RowType(final Identifier id) {
+		this(id, null);
+	}
+
+	public RowType(final Table t) {
+		this(null, t);
+	}
+
+	public RowType(final Identifier id, final Table t) {
 		this.id = id;
+		this.t = t;
+		if (id != null)
+			id.setParent(this);
+		if (t != null)
+			t.setParent(this);
 	}
 
 	/** {@inheritDoc} */
@@ -68,10 +87,10 @@ public class RowType extends AbstractType {
 	}
 
 	public RowType clone() {
-		final RowType t = new RowType(id.clone());
+		final RowType rt = new RowType(id.clone(), t.clone());
 		for (final Index i : indices)
-			t.addIndex(i.clone());
-		copyFieldsTo(t);
-		return t;
+			rt.addIndex(i.clone());
+		copyFieldsTo(rt);
+		return rt;
 	}
 }

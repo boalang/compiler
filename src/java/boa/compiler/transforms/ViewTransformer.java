@@ -40,6 +40,7 @@ import boa.compiler.ast.statements.AssignmentStatement;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.literals.ILiteral;
+import boa.compiler.ast.types.RowType;
 import boa.types.BoaType;
 import boa.types.BoaTable;
 
@@ -76,7 +77,8 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Table n) {
-		Node parent = n.getParent().getParent().getParent().getParent().getParent().getParent().getParent();
+		if (n.getParent() instanceof RowType) return;
+
 		Factor f = (Factor)n.getParent();
 		String p = n.getTablePath();
 
