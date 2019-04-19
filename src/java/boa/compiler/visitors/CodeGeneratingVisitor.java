@@ -639,7 +639,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			if (n.getOp().equals("==") || n.getOp().equals("!=")) {
 				// special case string/stack/set/map (in)equality
-				if (n.getLhs().type instanceof BoaString || n.getLhs().type instanceof BoaStack || n.getLhs().type instanceof BoaSet || n.getLhs().type instanceof BoaMap) {
+				if (n.getLhs().type instanceof BoaString || n.getLhs().type instanceof BoaStack || n.getLhs().type instanceof BoaQueue || n.getLhs().type instanceof BoaSet || n.getLhs().type instanceof BoaMap) {
 					final String expr = code.removeLast() + ".equals(" + code.removeLast() + ")";
 
 					if (n.getOp().equals("!="))
@@ -1322,7 +1322,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if (!n.hasInitializer()) {
 			if (lhsType instanceof BoaProtoMap ||
-					!(lhsType instanceof BoaMap || lhsType instanceof BoaStack || lhsType instanceof BoaSet)) {
+					!(lhsType instanceof BoaMap || lhsType instanceof BoaStack || lhsType instanceof BoaQueue || lhsType instanceof BoaSet)) {
 				code.add("");
 				return;
 			}
@@ -1881,6 +1881,21 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		code.add(st.render());
 	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final QueueType n) {
+		final ST st = stg.getInstanceOf("QueueType");
+
+		n.env.setNeedsBoxing(true);
+
+		n.getValue().accept(this);
+		st.add("value", code.removeLast());
+
+		n.env.setNeedsBoxing(false);
+
+		code.add(st.render());
+	}
 
 	/** {@inheritDoc} */
 	@Override
@@ -1947,6 +1962,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			} else if (args.size() == 1 && args.get(0).type instanceof BoaStack) {
 				final BoaStack s = (BoaStack)args.get(0).type;
 				replaced = replaced.replace("${V}", nonScalarTypeTransform(s.getType(), s.getType().toBoxedJavaType()));
+			} else if (args.size() == 1 && args.get(0).type instanceof BoaQueue) {
+				final BoaQueue q = (BoaQueue)args.get(0).type;
+				replaced = replaced.replace("${V}", nonScalarTypeTransform(q.getType(), q.getType().toBoxedJavaType()));
 			} else if (args.size() == 1 && args.get(0).type instanceof BoaSet) {
 				final BoaSet s = (BoaSet)args.get(0).type;
 				replaced = replaced.replace("${V}", nonScalarTypeTransform(s.getType(), s.getType().toBoxedJavaType()));
@@ -1962,7 +1980,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	private static String nonScalarTypeTransform(final BoaType type, String typeStr) {
 		if (type instanceof BoaArray)
 			return typeStr.replace("[]", "[0]");
-		if (type instanceof BoaSet || type instanceof BoaStack || type instanceof BoaMap)
+		if (type instanceof BoaSet || type instanceof BoaStack || type instanceof BoaQueue || type instanceof BoaMap)
 			return typeStr.replaceAll("<(.*)>", "");
 		return typeStr;
 	}

@@ -20,6 +20,7 @@ VarDecl(isstatic, type, id) ::= "<if(isstatic)>static <endif><type> ___<id>;<\n>
 ArrayType(type) ::= "<type>[]"
 MapType(key, value) ::= "java.util.HashMap\<<key>, <value>>"
 StackType(value) ::= "java.util.Stack\<<value>>"
+QueueType(value) ::= "java.util.LinkedList\<<value>>"
 SetType(value) ::= "java.util.HashSet\<<value>>"
 Block(statements) ::= <<
 {
