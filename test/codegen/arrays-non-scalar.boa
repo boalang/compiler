@@ -1,10 +1,23 @@
 o: output sum of int;
 o << 1;
 
+# array of stack
+s1: stack of int;
 
-s: stack of int;
+arr1: array of stack of int;
 
-arr: array of stack of int;
+arr2: array of stack of int = { s1, s1, s1 };
 
-arr2: array of stack of int = { s, s, s };
+# array of set
+s2: set of int;
 
+arr3: array of set of int;
+
+arr4: array of set of int = { s2, s2, s2 };
+
+# array of queue
+q: queue of int;
+
+arr5: array of queue of int;
+
+arr6: array of queue of int = { q, q, q };
