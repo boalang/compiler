@@ -52,6 +52,7 @@ import boa.types.BoaTable;
 public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 	private int index = -1;
 	private Program currentProgram;
+	private Map<String, String> newFilterIdMap = new LinkedHashMap<String, String>();
 	protected final String varPrefix = "anon_table_";
 	private int count = 0;
 
@@ -77,6 +78,7 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 	public void visit(final Table n) {
 		Node parent = n.getParent().getParent().getParent().getParent().getParent().getParent().getParent();
 		Factor f = (Factor)n.getParent();
+		String p = n.getTablePath();
 
 		// check index
 		int splitCount = -1;
@@ -86,6 +88,28 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 				splitCount = i;
 				break;
 			}
+			else if (op instanceof Selector) {
+				p += "/" + ((Selector)op).getId().getToken();
+				continue;
+			}
+
+			ILiteral lit = (ILiteral)((Index)op).getStart().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+			p += "/" + lit.getLiteral();
+		}
+
+		// if it's cached
+		if (newFilterIdMap.containsKey(p)) {
+			String id = newFilterIdMap.get(p);
+			Operand o = new Identifier(id);
+			o.type = n.type;
+			o.env = n.env;
+			if (splitCount == -1)
+				f.getOps().clear();
+			else
+				for (int i = 0; i < splitCount; i++)
+					f.getOps().remove(0);
+			f.setOperand(o);
+			return;
 		}
 
 		// create new decl for the table
@@ -105,6 +129,7 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 		}
 		currentProgram.env.set(id, vds.type);
 		currentProgram.getStatements().add(index, vds);
+		newFilterIdMap.put(p, id);
 
 		// if second stmt needed
 		if (f.getOpsSize() > 0 && splitCount != -1) {
