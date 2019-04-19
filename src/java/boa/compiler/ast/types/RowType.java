@@ -87,7 +87,15 @@ public class RowType extends AbstractType {
 	}
 
 	public RowType clone() {
-		final RowType rt = new RowType(id.clone(), t.clone());
+		Identifier id2 = null;
+		Table t2 = null;
+
+		if (id != null)
+			id2 = id.clone();
+		if (t != null)
+			t2 = t.clone();
+
+		RowType	rt = new RowType(id2, t2);
 		for (final Index i : indices)
 			rt.addIndex(i.clone());
 		copyFieldsTo(rt);
