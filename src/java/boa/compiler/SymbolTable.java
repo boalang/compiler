@@ -493,6 +493,8 @@ public class SymbolTable {
 		if (type instanceof BoaTuple)
 			for (final BoaType subType : ((BoaTuple) type).getTypes())
 				aggregators.add(this.getAggregator(name, subType));
+		else if (type instanceof BoaName)
+			aggregators.add(this.getAggregator(name, ((BoaName)type).getType()));
 		else
 			aggregators.add(this.getAggregator(name, type));
 
