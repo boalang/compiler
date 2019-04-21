@@ -489,6 +489,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						final Index idx = (Index)node;
 						final BoaTable table = (BoaTable)type;
 
+						if (idx.hasStart() && !(idx.getStart().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof ILiteral))
+							throw new TypeCheckException(idx.getStart(), "invalid index type '" + idx.getStart().type + "' for table filter");
+
 						if (idx.hasEnd())
 							throw new TypeCheckException(node, "table type indices do not support slicing");
 
