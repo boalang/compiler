@@ -501,7 +501,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						if (!idx.hasStart()) {
 							type = table.filterWith('_');
 						} else {
-							final BoaScalar accepts = table.acceptsFilter();
+							final BoaType accepts = table.acceptsFilter();
 							if (!accepts.assigns(index))
 								throw new TypeCheckException(node, "invalid index type '" + index + "' for indexing into '" + type + "' - expected '" + accepts + "'");
 							final Object obj = idx.getStart().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
@@ -637,6 +637,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				throw new TypeCheckException(n.getId(), type + " has no member named '" + selector + "'");
 		} else if (type instanceof BoaTuple) {
 			if (!((BoaTuple) type).hasMember(selector)) {
+				if (((BoaTuple) type).getTypes().size() == 0)
+					throw new TypeCheckException(n.getId(), "cannot apply selector on empty tuple");
 				if (selector.startsWith("_"))
 					throw new TypeCheckException(n.getId(), "invalid element number " + selector + " for tuple '" + type + "' - element numbers start at _1");
 				throw new TypeCheckException(n.getId(), "'" + type + "' has no member named '" + selector + "'");

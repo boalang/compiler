@@ -34,6 +34,7 @@ public class BoaTable extends BoaType {
 	private List<Object> filters;
 	private BoaTable parent;
 	private BoaTuple rowType = null;
+	private boolean lastFilter;
 
 	/**
 	 * Construct an empty BoaTable.
@@ -63,10 +64,28 @@ public class BoaTable extends BoaType {
 	 *            types of this BoaTable
 	 */
 	public BoaTable(final BoaType type, final List<BoaScalar> indexTypes) {
+		this(type, indexTypes, false);
+	}
+
+	/**
+	 * Construct a BoaTable.
+	 *
+	 * @param type
+	 *            A {@link BoaType} representing the type of this BoaTable
+	 *
+	 * @param indexTypes
+	 *            A {@link List} of {@link BoaScalar} representing the index
+	 *            types of this BoaTable
+	 *
+	 * @param lastFilter
+	 *            A boolean variable indicates if the last column is filtered
+	 */
+	public BoaTable(final BoaType type, final List<BoaScalar> indexTypes, final boolean lastFilter) {
 		this.type = type;
 		this.indexTypes = indexTypes;
 		this.filters = null;
 		this.parent = null;
+		this.lastFilter = lastFilter;
 
 		names = new HashMap<String, Integer>();
 		if (indexTypes != null) {
@@ -77,7 +96,7 @@ public class BoaTable extends BoaType {
 				}
 			}
 		}
-		if (type != null && type instanceof BoaName) { //TODO remove this null check after finishing typeChecking
+		if (type instanceof BoaName) {
 			names.put(((BoaName)type).getId(), -1);
 		}
 	}
@@ -127,7 +146,7 @@ public class BoaTable extends BoaType {
 	 *         position
 	 * 
 	 */
-	public BoaScalar getIndex(final int position) {
+	public BoaType getIndex(final int position) {
 		return this.indexTypes.get(position);
 	}
 
@@ -221,19 +240,20 @@ public class BoaTable extends BoaType {
 	}
 
 	public boolean canFilter() {
-		return this.indexTypes != null && this.indexTypes.size() > 0;
+		return !lastFilter;
 	}
 
-	public BoaScalar acceptsFilter() {
-		return this.getIndex(0);
+	public BoaType acceptsFilter() {
+		return this.getIndexTypes() == null ? this.getType() : this.getIndex(0);
 	}
 
 	public BoaTable filterWith(final Object o) {
 		final List<BoaScalar> indices = new ArrayList<BoaScalar>();
-		if (this.getIndexTypes() != null)
+		if (this.getIndexTypes() != null) {
 			indices.addAll(this.getIndexTypes());
-		indices.remove(0);
-		final BoaTable temp = new BoaTable(this.getType(), indices.size() == 0 ? null : indices);
+			indices.remove(0);
+		}
+		final BoaTable temp = new BoaTable(this.getType(), indices.size() == 0 ? null : indices, this.getIndexTypes() == null);
 		temp.filters = new ArrayList<Object>();
 		if (this.hasFilter())
 			for (final Object f : this.getFilters())
@@ -256,6 +276,8 @@ public class BoaTable extends BoaType {
 	}
 
 	public BoaTuple getRowType() {
+		if (lastFilter)
+			return new BoaTuple();
 		if (rowType == null) {
 			final List<BoaType> members = new ArrayList<BoaType>();
 			if (indexTypes != null)
