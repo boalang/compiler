@@ -416,6 +416,30 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		/** {@inheritDoc} */
 		@Override
+		public void visit(final Factor n) {
+			// if anyone filters the last column
+			if (n.getOperand().type instanceof BoaTable && n.type instanceof BoaArray) {
+				final BoaTuple tupleType = new BoaTuple();
+				final String name = tupleType.toJavaType();
+
+				if (tuples.contains(name))
+					return;
+				tuples.add(name);
+
+				final ST st = stg.getInstanceOf("TupleType");
+
+				st.add("name", name);
+
+				code.add(st.render());
+			}
+
+			n.getOperand().accept(this);
+			for (final Node o : n.getOps())
+				o.accept(this);
+		}
+
+		/** {@inheritDoc} */
+		@Override
 		public void visit(final SubView n) {
 			return;
 		}
@@ -929,6 +953,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					accept += ".addIndex(" + index + ")";
 				}
 				accept += col;
+				if (n.type instanceof BoaArray) {
+					String t = ((BoaArray)n.type).getType().toJavaType();
+					accept += ".filterToArray(new " + t + "()).toArray(new " + t + "[0])";
+				}
 			}
 			else {
 				for (int i = 0; !abortGeneration && i < n.getOpsSize(); i++) {

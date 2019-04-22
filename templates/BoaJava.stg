@@ -127,17 +127,17 @@ new <type>()
 TupleType(name, fields, types, isrow, tuples, protos) ::= <<
 private class <name> extends boa.runtime.Tuple
 {
-	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
+	<fields,types:{field,type|<type> ___<field>}; separator="; "><if(fields)>;<endif>
 	<name>(<fields,types:{field,type|final <type> ___<field>}; separator=", ">) {
-		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = ___<field><else>this.___<field> = new <type>(___<field>)<endif>}; separator="; ">;
+		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = ___<field><else>this.___<field> = new <type>(___<field>)<endif>}; separator="; "><if(fields)>;<endif>
 	}
 
 	<name>(final <name> tmp) {
-		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = tmp.___<field><else>this.___<field> = new <type>(tmp.___<field>)<endif>}; separator="; ">;
+		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = tmp.___<field><else>this.___<field> = new <type>(tmp.___<field>)<endif>}; separator="; "><if(fields)>;<endif>
 	}
 
 	<if(isrow)><name>(final boa.output.Output.Value v) {
-		<fields, types:{field,type|this.___<field> = boa.runtime.TableReader.valTo<type>(v.getT(<i0>))}; separator="; ">;
+		<fields, types:{field,type|this.___<field> = boa.runtime.TableReader.valTo<type>(v.getT(<i0>))}; separator="; "><if(fields)>;<endif>
 	}
 
 	public void fromRow(final boa.output.Output.Row r, final int offset) {

@@ -207,6 +207,15 @@ public class TableReader {
 		}
 	}
 
+	public <T> List<T> filterToArray(T t) {
+		List<T> list = new ArrayList<T>();
+		int length = this.length();
+		for (int i = 0; i < length; i++)
+			list.add(t);
+
+		return list;
+	}
+
 	public static Long valToLong(final Value val) {
 		return val.getI();
 	}
