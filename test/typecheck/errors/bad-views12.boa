@@ -1,8 +1,0 @@
-view sv10 {
-	o: output sum[string][string] of int;
-}
-
-v: table[count: string][year: string] of happy: int = sv10/o;
-
-st1 := v["abc"];
-st2 := st1["def"][3][5];

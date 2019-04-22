@@ -495,9 +495,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						if (idx.hasEnd())
 							throw new TypeCheckException(node, "table type indices do not support slicing");
 
-						if (!table.canFilter())
-							throw new TypeCheckException(n, "table column out of bounds");
-
 						if (!idx.hasStart()) {
 							type = table.filterWith('_');
 						} else {
@@ -1541,7 +1538,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 
 		if (!(t instanceof BoaTable))
-			throw new TypeCheckException(n.getId(), "expected a table type here");
+			throw new TypeCheckException(n.getId(), "expected a table type instead of " + t);
 		BoaTable table = (BoaTable)t;
 		List<BoaScalar> indexTypes = table.getIndexTypes();
 		if ((indexTypes != null && indexTypes.size() < n.getIndices().size()) || (indexTypes == null && n.getIndices().size() > 0))
@@ -1557,7 +1554,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			if (index.hasStart() && !index.type.assigns(indexTypes.get(i)))
 				throw new TypeCheckException(n.getId(), "index type " + index.type + " doesn't match with view column type " + indexTypes.get(i));
 
-			table = table.filterWith(null);
+			table = (BoaTable)table.filterWith(null);
 		}
 
 		n.type = table.getRowType();
