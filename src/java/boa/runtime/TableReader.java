@@ -36,6 +36,7 @@ import com.google.protobuf.CodedInputStream;
 import boa.output.Output.Value;
 import boa.output.Output.Row;
 import boa.runtime.Tuple;
+import boa.runtime.EmptyTuple;
 
 
 /**
@@ -207,13 +208,13 @@ public class TableReader {
 		}
 	}
 
-	public <T> List<T> filterToArray(T t) {
-		List<T> list = new ArrayList<T>();
-		int length = this.length();
-		for (int i = 0; i < length; i++)
-			list.add(t);
+	public EmptyTuple[] filterToArray() {
+		EmptyTuple[] et = new EmptyTuple[this.length()];
+		EmptyTuple t = new EmptyTuple();
+		for (int i = 0; i < et.length; i++)
+			et[i] = t;
 
-		return list;
+		return et;
 	}
 
 	public static Long valToLong(final Value val) {

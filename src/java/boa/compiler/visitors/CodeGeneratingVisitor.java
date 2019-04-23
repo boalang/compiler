@@ -192,8 +192,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			final ST st = stg.getInstanceOf("VarDecl");
 
+			String type = "boa.runtime.EmptyTuple[]";
+
+			if (!(n.type instanceof BoaArray && ((BoaArray)n.type).getType() instanceof BoaTuple && ((BoaTuple)((BoaArray)n.type).getType()).getTypes().size() == 0))
+				type = n.type.toJavaType();
+
 			st.add("id", n.getId().getToken());
-			st.add("type", n.type.toJavaType());
+			st.add("type", type);
 
 			if (n.isStatic())
 				st.add("isstatic", true);
@@ -412,30 +417,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 				code.add(st.render());
 			}
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void visit(final Factor n) {
-			// if anyone filters the last column
-			if (n.getOperand().type instanceof BoaTable && n.type instanceof BoaArray) {
-				final BoaTuple tupleType = new BoaTuple();
-				final String name = tupleType.toJavaType();
-
-				if (tuples.contains(name))
-					return;
-				tuples.add(name);
-
-				final ST st = stg.getInstanceOf("TupleType");
-
-				st.add("name", name);
-
-				code.add(st.render());
-			}
-
-			n.getOperand().accept(this);
-			for (final Node o : n.getOps())
-				o.accept(this);
 		}
 
 		/** {@inheritDoc} */
@@ -953,10 +934,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					accept += ".addIndex(" + index + ")";
 				}
 				accept += col;
-				if (n.type instanceof BoaArray) {
-					String t = ((BoaArray)n.type).getType().toJavaType();
-					accept += ".filterToArray(new " + t + "()).toArray(new " + t + "[0])";
-				}
+				if (n.type instanceof BoaArray)
+					accept += ".filterToArray()";
 			}
 			else {
 				for (int i = 0; !abortGeneration && i < n.getOpsSize(); i++) {
