@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, Robert Dyer, Che Shian Hung
+ * Copyright 2019, Robert Dyer, Che Shian Hung
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,17 +17,17 @@
 package boa.runtime;
 
 /**
+ * An empty tuple, containing no values.
+ *
  * @author rdyer
  * @author hungc
  */
-public class EmptyTuple extends Tuple{
+public class EmptyTuple extends Tuple {
+	public EmptyTuple() {}
 
-	EmptyTuple() {}
-
-	EmptyTuple(final EmptyTuple tmp) {}
+	public EmptyTuple(final EmptyTuple tmp) {}
 
 	public EmptyTuple clone() {
-		return new EmptyTuple(this);
+		return this;
 	}
-
 }
