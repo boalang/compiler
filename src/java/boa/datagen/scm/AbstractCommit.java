@@ -220,103 +220,103 @@ public abstract class AbstractCommit {
 				final String content = getFileContents(path);
 				parseJavaFile(path, fb, content, false);
 			}
-//		} else if (lowerPath.endsWith(".js")) {
-//			final String content = getFileContents(path);
-//
-//			fb.setKind(FileKind.SOURCE_JS_ES1);
-//			if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_1, false)) {
-//				if (debugparse)
-//					System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
-//				fb.setKind(FileKind.SOURCE_JS_ES2);
-//				if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_2, false)) {
-//					if (debugparse)
-//						System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
-//					fb.setKind(FileKind.SOURCE_JS_ES3);
-//					if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_3, false)) {
-//						if (debugparse)
-//							System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
-//						fb.setKind(FileKind.SOURCE_JS_ES5);
-//						if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_5, false)) {
-//							if (debugparse)
-//								System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
-//							fb.setKind(FileKind.SOURCE_JS_ES6);
-//							if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_6, false)) {
-//								if (debugparse)
-//									System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
-//								fb.setKind(FileKind.SOURCE_JS_ES7);
-//								if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_7, false)) {
-//									if (debugparse)
-//										System.err
-//												.println("Found ES3 parse error in: revision " + id + ": file " + path);
-//									fb.setKind(FileKind.SOURCE_JS_ES8);
-//									if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_8, false)) {
-//										if (debugparse)
-//											System.err.println(
-//													"Found ES4 parse error in: revision " + id + ": file " + path);
-//										fb.setKind(FileKind.SOURCE_JS_ERROR);
-//									} else if (debugparse)
-//										System.err.println("Accepted ES8: revision " + id + ": file " + path);
-//								} else if (debugparse)
-//									System.err.println("Accepted ES7: revision " + id + ": file " + path);
-//							} else if (debugparse)
-//								System.err.println("Accepted ES6: revision " + id + ": file " + path);
-//						} else if (debugparse)
-//							System.err.println("Accepted ES5: revision " + id + ": file " + path);
-//					} else if (debugparse)
-//						System.err.println("Accepted ES3: revision " + id + ": file " + path);
-//				} else if (debugparse)
-//					System.err.println("Accepted ES2: revision " + id + ": file " + path);
-//			} else if (debugparse)
-//				System.err.println("Accepted ES1: revision " + id + ": file " + path);
-//		} else if (lowerPath.endsWith(".php")) {
-//			final String content = getFileContents(path);
-//
-//			fb.setKind(FileKind.SOURCE_PHP5);
-//			if (!parsePHPFile(path, fb, content, PHPVersion.PHP5, false)) {
-//				if (debugparse)
-//					System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
-//				fb.setKind(FileKind.SOURCE_PHP5_3);
-//				if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_3, false)) {
-//					if (debugparse)
-//						System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
-//					fb.setKind(FileKind.SOURCE_PHP5_4);
-//					if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_4, false)) {
-//						if (debugparse)
-//							System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
-//						fb.setKind(FileKind.SOURCE_PHP5_5);
-//						if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_5, false)) {
-//							if (debugparse)
-//								System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
-//							fb.setKind(FileKind.SOURCE_PHP5_6);
-//							if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_6, false)) {
-//								if (debugparse)
-//									System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
-//								fb.setKind(FileKind.SOURCE_PHP7_0);
-//								if (!parsePHPFile(path, fb, content, PHPVersion.PHP7_0, false)) {
-//									if (debugparse)
-//										System.err
-//												.println("Found ES3 parse error in: revision " + id + ": file " + path);
-//									fb.setKind(FileKind.SOURCE_PHP7_1);
-//									if (!parsePHPFile(path, fb, content, PHPVersion.PHP7_1, false)) {
-//										if (debugparse)
-//											System.err.println(
-//													"Found ES4 parse error in: revision " + id + ": file " + path);
-//										fb.setKind(FileKind.SOURCE_PHP_ERROR);
-//									} else if (debugparse)
-//										System.err.println("Accepted PHP7_1: revision " + id + ": file " + path);
-//								} else if (debugparse)
-//									System.err.println("Accepted PHP7_0: revision " + id + ": file " + path);
-//							} else if (debugparse)
-//								System.err.println("Accepted PHP5_6: revision " + id + ": file " + path);
-//						} else if (debugparse)
-//							System.err.println("Accepted PHP5_5: revision " + id + ": file " + path);
-//					} else if (debugparse)
-//						System.err.println("Accepted PHP5_4: revision " + id + ": file " + path);
-//				} else if (debugparse)
-//					System.err.println("Accepted PHP5_3: revision " + id + ": file " + path);
-//			} else if (debugparse)
-//				System.err.println("Accepted PHP5: revision " + id + ": file " + path);
-		}/* else if (lowerPath.endsWith(".html") && parse) {
+		} /* else if (lowerPath.endsWith(".js")) {
+			final String content = getFileContents(path);
+
+			fb.setKind(FileKind.SOURCE_JS_ES1);
+			if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_1, false)) {
+				if (debugparse)
+					System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
+				fb.setKind(FileKind.SOURCE_JS_ES2);
+				if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_2, false)) {
+					if (debugparse)
+						System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
+					fb.setKind(FileKind.SOURCE_JS_ES3);
+					if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_3, false)) {
+						if (debugparse)
+							System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
+						fb.setKind(FileKind.SOURCE_JS_ES5);
+						if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_5, false)) {
+							if (debugparse)
+								System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
+							fb.setKind(FileKind.SOURCE_JS_ES6);
+							if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_6, false)) {
+								if (debugparse)
+									System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
+								fb.setKind(FileKind.SOURCE_JS_ES7);
+								if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_7, false)) {
+									if (debugparse)
+										System.err
+												.println("Found ES3 parse error in: revision " + id + ": file " + path);
+									fb.setKind(FileKind.SOURCE_JS_ES8);
+									if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_8, false)) {
+										if (debugparse)
+											System.err.println(
+													"Found ES4 parse error in: revision " + id + ": file " + path);
+										fb.setKind(FileKind.SOURCE_JS_ERROR);
+									} else if (debugparse)
+										System.err.println("Accepted ES8: revision " + id + ": file " + path);
+								} else if (debugparse)
+									System.err.println("Accepted ES7: revision " + id + ": file " + path);
+							} else if (debugparse)
+								System.err.println("Accepted ES6: revision " + id + ": file " + path);
+						} else if (debugparse)
+							System.err.println("Accepted ES5: revision " + id + ": file " + path);
+					} else if (debugparse)
+						System.err.println("Accepted ES3: revision " + id + ": file " + path);
+				} else if (debugparse)
+					System.err.println("Accepted ES2: revision " + id + ": file " + path);
+			} else if (debugparse)
+				System.err.println("Accepted ES1: revision " + id + ": file " + path);
+		} else if (lowerPath.endsWith(".php")) {
+			final String content = getFileContents(path);
+
+			fb.setKind(FileKind.SOURCE_PHP5);
+			if (!parsePHPFile(path, fb, content, PHPVersion.PHP5, false)) {
+				if (debugparse)
+					System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
+				fb.setKind(FileKind.SOURCE_PHP5_3);
+				if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_3, false)) {
+					if (debugparse)
+						System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
+					fb.setKind(FileKind.SOURCE_PHP5_4);
+					if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_4, false)) {
+						if (debugparse)
+							System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
+						fb.setKind(FileKind.SOURCE_PHP5_5);
+						if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_5, false)) {
+							if (debugparse)
+								System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
+							fb.setKind(FileKind.SOURCE_PHP5_6);
+							if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_6, false)) {
+								if (debugparse)
+									System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
+								fb.setKind(FileKind.SOURCE_PHP7_0);
+								if (!parsePHPFile(path, fb, content, PHPVersion.PHP7_0, false)) {
+									if (debugparse)
+										System.err
+												.println("Found ES3 parse error in: revision " + id + ": file " + path);
+									fb.setKind(FileKind.SOURCE_PHP7_1);
+									if (!parsePHPFile(path, fb, content, PHPVersion.PHP7_1, false)) {
+										if (debugparse)
+											System.err.println(
+													"Found ES4 parse error in: revision " + id + ": file " + path);
+										fb.setKind(FileKind.SOURCE_PHP_ERROR);
+									} else if (debugparse)
+										System.err.println("Accepted PHP7_1: revision " + id + ": file " + path);
+								} else if (debugparse)
+									System.err.println("Accepted PHP7_0: revision " + id + ": file " + path);
+							} else if (debugparse)
+								System.err.println("Accepted PHP5_6: revision " + id + ": file " + path);
+						} else if (debugparse)
+							System.err.println("Accepted PHP5_5: revision " + id + ": file " + path);
+					} else if (debugparse)
+						System.err.println("Accepted PHP5_4: revision " + id + ": file " + path);
+				} else if (debugparse)
+					System.err.println("Accepted PHP5_3: revision " + id + ": file " + path);
+			} else if (debugparse)
+				System.err.println("Accepted PHP5: revision " + id + ": file " + path); 
+		} else if (lowerPath.endsWith(".html") && parse) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.Source_HTML);

@@ -466,6 +466,13 @@ public class BoaIntrinsics {
 		return s.pop();
 	}
 
+	public static <T> java.util.Stack<T> reverse_stack (final java.util.Stack<T> s) {
+		java.util.Stack<T> tmp = new java.util.Stack<T>();
+		while (!s.empty())
+			tmp.push(s.pop());
+		return tmp;
+	}
+
 	public static <T> T stack_peek(final java.util.Stack<T> s) {
 		if (s.empty())
 			return null;
