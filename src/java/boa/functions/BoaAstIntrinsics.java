@@ -1470,6 +1470,17 @@ public class BoaAstIntrinsics {
 			default: return s;
 		}
 	}
+	
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "array of Expression" })
+	public static String prettyprint(final Expression[] es) {
+		String s = "";
+		for (int i = 0; i < es.length; i++) {
+			if (i > 0)
+				s += ", ";
+			s += prettyprint(es[i]);
+		}
+		return s;
+	}
 
 	private static String ppPrefix(final String op, final Expression e) {
 		return op + prettyprint(e.getExpressions(0));

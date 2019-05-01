@@ -364,6 +364,11 @@ public class BoaIntrinsics {
           .min().orElse(Integer.MAX_VALUE);
     }
     
+    @FunctionSpec(name = "print", formalParameters = { "string" })
+	public static void print(String s) {
+    	System.out.println(s);
+    }
+    
     @FunctionSpec(name = "freemem", returnType = "int")
 	public static long freeMem() {
 		return Runtime.getRuntime().freeMemory();
