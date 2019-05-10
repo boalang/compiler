@@ -280,6 +280,17 @@ public class BoaIntrinsics {
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp) throws Exception {
 		return getSnapshot(cr, timestamp, new String[0]);
 	}
+	
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "bool" })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final boolean needAst) {
+		if (needAst) {
+			ChangedFile[] files = getSnapshot(cr);
+			for (int i = 0; i < files.length; i++)
+				files[i] = BoaAstIntrinsics.parseChangedFile(files[i]);
+			return files;
+		}
+		return getSnapshot(cr);
+	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository" })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr) {
@@ -364,9 +375,10 @@ public class BoaIntrinsics {
           .min().orElse(Integer.MAX_VALUE);
     }
     
-    @FunctionSpec(name = "print", formalParameters = { "string" })
-	public static void print(String s) {
+    @FunctionSpec(name = "print", returnType = "int", formalParameters = { "string" })
+	public static int print(String s) {
     	System.out.println(s);
+    	return 0;
     }
     
     @FunctionSpec(name = "freemem", returnType = "int")
