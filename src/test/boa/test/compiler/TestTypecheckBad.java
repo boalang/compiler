@@ -56,8 +56,6 @@ public class TestTypecheckBad extends BaseTest {
 			{ "bad-views1.boa", "subview 'bad' undefined" },
 			{ "bad-views2.boa", "name conflict: identifier name 'subv' already exists" },
 			{ "bad-views3.boa", "output variable 's' not found in subview 'sv'" },
-			{ "bad-views5.boa", "invalid selector '_f'" },
-			{ "bad-views6.boa", "invalid selector '_123f'" },
 			{ "bad-views7.boa", "table column out of bounds" },
 			{ "bad-views8.boa", "table column out of bounds" },
 			{ "bad-views9.boa", "'table[count:string][year:string] of happy:int' has no member named 'bomb'" },
@@ -79,12 +77,8 @@ public class TestTypecheckBad extends BaseTest {
 			{ "bad-views27.boa", "too many indices" },
 			{ "bad-views28.boa", "invalid index type 'int' for table filter" },
 			{ "bad-views29.boa", "expected a table type instead of array of tuple []" },
-			{ "bad-identifier1.boa", "invalid identifier '_abc'" },
-			{ "bad-identifier2.boa", "invalid identifier '_s'" },
-			{ "bad-identifier3.boa", "invalid identifier '_f'" },
-			{ "bad-identifier4.boa", "invalid identifier '_abc'" },
-			{ "bad-identifier5.boa", "invalid identifier '_0'" },
-			{ "bad-identifier6.boa", "invalid identifier '_0abc'" },
+			{ "bad-identifier1.boa", "invalid identifier '_2'" },
+			{ "bad-identifier2.boa", "invalid identifier '_0'" },
 		});
 	}
 

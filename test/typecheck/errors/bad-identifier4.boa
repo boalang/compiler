@@ -1,1 +1,0 @@
-f := function(int: _abc) : bool { return true; };

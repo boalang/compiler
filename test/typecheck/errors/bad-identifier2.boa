@@ -1,1 +1,1 @@
-_s: stack of int;
+f := function(int: _0) : bool { return true; };

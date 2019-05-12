@@ -1,7 +1,0 @@
-view sv4 {
-	o: output sum of int;
-}
-
-v := sv4/o;
-
-c := v._123f;

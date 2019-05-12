@@ -1,7 +1,0 @@
-view sv3 {
-	o: output sum of int;
-}
-
-v := sv3/o;
-
-c := v._f;
