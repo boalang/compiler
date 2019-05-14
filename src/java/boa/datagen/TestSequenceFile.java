@@ -24,8 +24,7 @@ public class TestSequenceFile {
 		String astpath = "/Users/sumon/Research/PyDatagen/junk/test-out/ast/data"; //"/Users/mislam/eclipse-workspace/outdata/ast/data";
 		Writable key = new LongWritable();
 		BytesWritable val = new BytesWritable();
-		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, 
-				new Path(astpath), conf);
+		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(astpath), conf);
 		//System.setOut(new PrintStream(new File("out.txt")));
 		while (r.next(key, val)) {
 			System.out.println("-- next project -- ");

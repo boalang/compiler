@@ -7,8 +7,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -137,6 +135,7 @@ public class Python3Visitor implements Python3Listener{
 	private Stack<Statement.Builder> statements = new Stack<Statement.Builder>();
 	private Stack<Expression.Builder> expressions = new Stack<Expression.Builder>();
 	private Stack<String> atoms = new Stack<String>();
+	private Stack<String> atomEx = new Stack<String>();
 	private Stack<String> imports = new Stack<String>();
 	protected int astLevel = PY3;
 	
@@ -378,14 +377,19 @@ public class Python3Visitor implements Python3Listener{
 	public void enterExpr_stmt(Expr_stmtContext ctx) {
 		Statement.Builder sb = Statement.newBuilder();
 		sb.setKind(Statement.StatementKind.EXPRESSION);
-		//sb.addNames(ctx.getText());
-		//System.out.println("@@  " + ctx.getText());
+		//sb.addNames(ctx.getText()); // For testing purpose
+		System.out.println("@@  " + ctx.getText());
 		statements.push(sb);
 	}
 
 	@Override
 	public void exitExpr_stmt(Expr_stmtContext ctx) {
+		if(isAssign) {
+			exitExpression();
+			isAssign = false;
+		}
 		exitStatement();
+		
 	}
 	
 	boolean isAssign = false;
@@ -393,8 +397,21 @@ public class Python3Visitor implements Python3Listener{
 	public void enterAssign(AssignContext ctx) {	
 		isAssign = true;
 		
-//		System.out.println("@@  " + ctx.getText());
-		//System.out.println("AA  " + ctx.getParent().getText());
+		Expression.Builder eb = Expression.newBuilder();
+		
+		eb.setKind(ExpressionKind.ASSIGN);
+		Expression.Builder ebl = Expression.newBuilder();
+		ebl.setKind(ExpressionKind.VARACCESS);
+		//System.out.println(atomEx.peek());
+		ebl.setVariable(atomEx.pop());
+		
+		eb.addExpressions(ebl.build());
+		expressions.push(eb);
+		
+		
+//		System.out.println("@@ " + ctx.getText());
+//		System.out.println("## " + ctx.getParent().getText());
+//		System.out.println("$$ " + atoms.pop());
 		
 	}
 
@@ -416,10 +433,10 @@ public class Python3Visitor implements Python3Listener{
 	
 	@Override
 	public void enterAugassign(AugassignContext ctx) {
-//		Expression.Builder eb = Expression.newBuilder();
-//		eb.setKind(ExpressionKind.ASSIGN);
-//		eb.setVariable(ctx.getText());
-//		expressions.push(eb);
+		//		Expression.Builder eb = Expression.newBuilder();
+		//		eb.setKind(ExpressionKind.ASSIGN);
+		//		eb.setVariable(ctx.getText());
+		//		expressions.push(eb);
 	}
 
 	@Override
@@ -1031,9 +1048,8 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterExpr(ExprContext ctx) {
-
+		System.out.println("## " + ctx.getText());
 		
-		//System.out.println("@@  " + ctx.getText());
 //		Expression.Builder eb = Expression.newBuilder();
 //		eb.setKind(ExpressionKind.OTHER);
 //		eb.setVariable(ctx.getText());
@@ -1116,6 +1132,8 @@ public class Python3Visitor implements Python3Listener{
 	public void enterArith_expr(Arith_exprContext ctx) {
 		// TODO Auto-generated method stub
 		
+		
+		
 	}
 
 	@Override
@@ -1139,7 +1157,7 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterFactor(FactorContext ctx) {
 		// TODO Auto-generated method stub
-		
+		//System.out.println(ctx.getText());
 	}
 
 	@Override
@@ -1162,46 +1180,64 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterAtom_expr(Atom_exprContext ctx) {
+		//System.out.println("## " + ctx.getText());
+		atomEx.push(ctx.getText());
+		
+		
+		
+		if(isAssign && !isMethodArg) {
+			
+			if(!atomEx.isEmpty() && isLiteral(atomEx.peek())) {
+				Expression.Builder ebr = Expression.newBuilder();
+				String rex = atomEx.pop();
+				ebr.setKind(ExpressionKind.LITERAL);
+				ebr.setLiteral(rex);
+				expressions.push(ebr);
+				exitExpression();
+			}
+			
+			else {
+				if(!atomEx.isEmpty() && isVar(atomEx.peek())) {	
+					Expression.Builder ebr = Expression.newBuilder();
+					String rex = atomEx.pop();
+					ebr.setKind(ExpressionKind.VARACCESS);
+					ebr.setVariable(rex);
+					expressions.push(ebr);
+					exitExpression();
+				}
+			}
+			
 
-		//System.out.println("@@  " + ctx.getText());
+
+			
+			
+		}
+	
 		
 	}
+	
+	
 
+	
+	
 	@Override
 	public void exitAtom_expr(Atom_exprContext ctx) {
-		//System.out.println("" + atoms.pop());
+		//System.out.println("RR ");
+//		if(isAssign) {
+//			isAssign = false;
+//			exitExpression();
+//		}
 		
-		
-		
-		
-		if(!atoms.isEmpty()) {
-//			String atom = atoms.pop();
-//		
-//			Expression.Builder eb = Expression.newBuilder();
-//			//eb.setKind(ExpressionKind.OTHER);
-//			eb.setKind(ExpressionKind.VARACCESS);
-//			eb.setVariable(atom);
-//			
-//			if(isLiteral(atom)) {
-//				eb.setKind(ExpressionKind.LITERAL);
-//			}
-//			
-//			if(!expressions.isEmpty())
-//				expressions.peek().addExpressions(eb.build());
-//			
-//			exitExpression();	
-		
-		}
-	}
 
+	}
 	 
 	@Override
 	public void enterAtom(AtomContext ctx) {
+		//System.out.println("%% " + ctx.getText());
+		
 		atoms.push(ctx.getText());
 
-		if(isAssign) {
-			
-		}
+		
 	}
 
 	@Override
@@ -1221,56 +1257,38 @@ public class Python3Visitor implements Python3Listener{
 		
 	}
 
+	boolean trailerMethodCall = false;
+	boolean isMethodCall = false;
 	@Override
 	public void enterTrailer(TrailerContext ctx) {
+		
 		if(ctx.getText().startsWith(".")) {
+			trailerMethodCall = true;
 			atoms.push(ctx.getText().substring(1));
 		}
 		else if(ctx.getText().equals("()")) {
+			trailerMethodCall = false;
 			Expression.Builder eb = Expression.newBuilder();
 			eb.setKind(ExpressionKind.METHODCALL);
-			if(!atoms.isEmpty()) {
+			
+			
+			if(!atoms.isEmpty())
 				eb.setMethod(atoms.pop());
-			}
-			else {
+			else
 				eb.setVariable("Method name missing!");
-			}
+			//System.out.println("M1 " + eb.getMethod());
 			expressions.push(eb);
 			exitExpression();
-			
-			
-			
-			
-			
 		}
 	}
 	
-	public void addMethodCall() {
-		if(expressions.isEmpty())
-			return;
-		Expression.Builder current = expressions.pop();
-		
-		
-		if(!expressions.isEmpty()) {
-			//if(expressions.peek().kind)
-			expressions.peek().addExpressions(current.build());
-		}
-		else {
-			if(!statements.isEmpty()) {
-				Statement.Builder sb = statements.peek();
-				sb.addExpressions(current.build());
-			}
-			else
-				b.addExpressions(current.build());
-		}
-		
-	}
 
 	@Override
 	public void exitTrailer(TrailerContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
+	
 
 	@Override
 	public void enterSubscriptlist(SubscriptlistContext ctx) {
@@ -1343,9 +1361,9 @@ public class Python3Visitor implements Python3Listener{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
-	public void enterArglist(ArglistContext ctx) {
+	public void enterArglist(ArglistContext ctx) {		
 		Expression.Builder eb = Expression.newBuilder();
 		eb.setKind(ExpressionKind.METHODCALL);
 		if(!atoms.isEmpty()) {
@@ -1354,28 +1372,51 @@ public class Python3Visitor implements Python3Listener{
 		else {
 			eb.setVariable("Method name missing!");
 		}
+		//System.out.println("M2 " + eb.getMethod());
+		
+		if(trailerMethodCall) {
+			String fullEx = atomEx.pop();
+			String trailer = fullEx.substring(0, fullEx.indexOf(eb.getMethod()));
+			trailer = trailer.substring(0, trailer.length() - 1);
+						
+			Expression.Builder eb2 = Expression.newBuilder();
+			eb2.setKind(ExpressionKind.VARACCESS);
+			eb2.setVariable(trailer);
+			eb.addExpressions(eb2);
+		}		
+		
 		expressions.push(eb);
+		
 	}
 
 	@Override
 	public void exitArglist(ArglistContext ctx) {
 		exitExpression();
-//		if(expressions.isEmpty())
-//			return;
-//		Expression.Builder current = expressions.pop();
-//		if(!expressions.isEmpty()) {
-//			expressions.peek().addMethodArgs(current.build());
-//		}
+		trailerMethodCall = false;
+	}
+	
+	boolean isMethodArg = false;
+	@Override
+	public void enterArgument(ArgumentContext ctx) {
+		isMethodArg = true;
+		Expression.Builder eb = Expression.newBuilder();
+		if(isLiteral(ctx.getText())) {
+			eb.setKind(ExpressionKind.LITERAL);
+			eb.setLiteral(ctx.getText());
+		}
+		else { // need some work to identify the assignment expression like 'x = 5' and another method call
+			eb.setKind(ExpressionKind.VARACCESS);
+			eb.setVariable(ctx.getText());
+		}
 		
-		
-//		else {
-//			if(!statements.isEmpty()) {
-//				Statement.Builder sb = statements.peek();
-//				sb.addExpressions(current.build());
-//			}
-//			else
-//				b.addExpressions(current.build());
-//		}
+		if(!expressions.isEmpty()) {
+			expressions.peek().addMethodArgs(eb.build());
+		}
+	}
+
+	@Override
+	public void exitArgument(ArgumentContext ctx) {
+		isMethodArg = false;
 	}
 	
 	public boolean isLiteral(String text) {
@@ -1392,29 +1433,14 @@ public class Python3Visitor implements Python3Listener{
 		return isLiteral;
 	}
 	
-	boolean isMethodArg = false;
-	@Override
-	public void enterArgument(ArgumentContext ctx) {
-		isMethodArg = true;
-		Expression.Builder eb = Expression.newBuilder();
-		if(isLiteral(ctx.getText())) {
-			eb.setKind(ExpressionKind.LITERAL);
-			eb.setLiteral(ctx.getText());
-		}
-		else { // need some work to identify the assignment expression like 'x = 5'
-			eb.setKind(ExpressionKind.VARACCESS);
-			eb.setVariable(ctx.getText());
-		}
+	public boolean isVar(String s) { 
+		if (s == null || s.length() == 0)
+		    return false;
 		
-		if(!expressions.isEmpty()) {
-			expressions.peek().addMethodArgs(eb.build());
-		}	
-	}
-
-	@Override
-	public void exitArgument(ArgumentContext ctx) {
-		// TODO Auto-generated method stub
-		isMethodArg = false;
+		if(isLiteral(s) || !s.matches("^[^\\d\\W]\\w*\\Z"))
+			return false;
+		
+		return true;		
 	}
 
 	@Override
