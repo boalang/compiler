@@ -381,6 +381,10 @@ public abstract class AbstractVisitorNoReturn<ArgTypeT> {
 	public void visit(final QueueType n, final ArgTypeT arg) {
 		n.getValue().accept(this, arg);
 	}
+	
+	public void visit(ListType n, final ArgTypeT arg) {
+		n.getValue().accept(this, arg);
+	}
 
 	public void visit(final SetType n, final ArgTypeT arg) {
 		n.getValue().accept(this, arg);

@@ -422,6 +422,18 @@ public class BoaIntrinsics {
 			return null;
 		return s.peek();
 	}
+	
+	public static <T> T list_get(final java.util.ArrayList<T> l, int idx) {
+		if (idx > -1 && idx < l.size())
+			return l.get(idx);
+		return null;
+	}
+
+	public static <T> T list_remove(final java.util.ArrayList<T> l, int idx) {
+		if (idx > -1 && idx < l.size())
+			return l.remove(idx);
+		return null;
+	}
 
 	public static String protolistToString(final List<String> l) {
 		String s = "";
