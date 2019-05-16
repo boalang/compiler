@@ -11,11 +11,11 @@ l6: list of queue of int;
 ### Testing l #############
 add(l, 1);
 add(l, 2);
-get(l, 0);
+n1 := get(l, 0);
 get(l, 1);
 get(l, 100);
 get(l, -1);
-remove(l, 1);
+n2 := remove(l, 1);
 remove(l, 0);
 remove(l, -1);
 remove(l, 0);
