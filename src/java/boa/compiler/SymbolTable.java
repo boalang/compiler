@@ -223,8 +223,8 @@ public class SymbolTable {
 
 		// list functions
 		globalFunctions.addFunction("add", new BoaFunction(new BoaAny(), new BoaType[] { new BoaList(new BoaTypeVar("V")), new BoaTypeVar("V") }, "${0}.add(${1})"));
-		globalFunctions.addFunction("get", new BoaFunction(new BoaAny(), new BoaType[] { new BoaList(new BoaTypeVar("V")), new BoaInt() }, "boa.functions.BoaIntrinsics.list_get(${0}, (int) ${1})"));
-		globalFunctions.addFunction("remove", new BoaFunction(new BoaAny(), new BoaType[] { new BoaList(new BoaTypeVar("V")), new BoaInt() }, "boa.functions.BoaIntrinsics.list_remove(${0}, (int) ${1})"));
+		globalFunctions.addFunction("get", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaList(new BoaTypeVar("V")), new BoaInt() }, "boa.functions.BoaIntrinsics.list_get(${0}, (int) ${1})"));
+		globalFunctions.addFunction("remove", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaList(new BoaTypeVar("V")), new BoaInt() }, "boa.functions.BoaIntrinsics.list_remove(${0}, (int) ${1})"));
 		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaList(new BoaTypeVar("V")) }, "${0}.clear()"));
 		globalFunctions.addFunction("values", new BoaFunction(new BoaArray(new BoaTypeVar("V")), new BoaType[] { new BoaList(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.basic_array(${0}.toArray(new ${V}[0]))"));
 
