@@ -110,6 +110,7 @@ type returns [AbstractType ast]
 	| tr=traversalType  { $ast = $tr.ast; }
 	| s=stackType    { $ast = $s.ast; }
 	| q=queueType    { $ast = $q.ast; }
+	| al=listType    { $ast = $al.ast; }
 	| set=setType    { $ast = $set.ast; }
 	| e=enumType     { $ast = $e.ast; }
 	| id=identifier  { $ast = $id.ast; }
@@ -187,6 +188,13 @@ queueType returns [QueueType ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: QUEUE OF m=component { $ast = new QueueType($m.ast); }
+	;
+
+listType returns [ListType ast]
+	locals [int l, int c]
+	@init { $l = getStartLine(); $c = getStartColumn(); }
+	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
+	: LIST OF m=component { $ast = new ListType($m.ast); }
 	;
 
 setType returns [SetType ast]
@@ -609,6 +617,7 @@ identifier returns [Identifier ast]
 	| lit=MAP      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=STACK    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=QUEUE    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=LIST     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=SET      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOR      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOREACH  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
@@ -689,6 +698,7 @@ DO       : 'do';
 MAP      : 'map';
 STACK    : 'stack';
 QUEUE    : 'queue';
+LIST     : 'list';
 SET      : 'set';
 FOR      : 'for';
 FOREACH  : 'foreach';

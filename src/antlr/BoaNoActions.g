@@ -53,6 +53,7 @@ type
 	| tr=traversalType
 	| stackType
 	| queueType
+	| listType
 	| setType
 	| enumType
 	| identifier
@@ -94,6 +95,10 @@ stackType
 
 queueType
 	: QUEUE OF component
+	;
+
+listType
+	: LIST OF component
 	;
 
 setType
@@ -352,6 +357,7 @@ identifier
 	| lit=MAP      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=STACK    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=QUEUE    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=LIST     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=SET      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOR      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOREACH  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
@@ -417,6 +423,7 @@ DO       : 'do';
 MAP      : 'map';
 STACK    : 'stack';
 QUEUE    : 'queue';
+LIST     : 'list';
 SET      : 'set';
 FOR      : 'for';
 FOREACH  : 'foreach';

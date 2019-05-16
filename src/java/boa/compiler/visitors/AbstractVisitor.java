@@ -438,6 +438,11 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 		return null;
 	};
 
+	public ReturnTypeT visit(final ListType n, final ArgTypeT arg) {
+		n.getValue().accept(this, arg);
+		return null;
+	};
+
 	public ReturnTypeT visit(final SetType n, final ArgTypeT arg) {
 		n.getValue().accept(this, arg);
 		return null;
