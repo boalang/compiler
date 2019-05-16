@@ -1,0 +1,1 @@
+kinds: array of StatementKind = { StatementKind.IF, StatementKind.OTHER };
