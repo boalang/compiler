@@ -378,7 +378,7 @@ public class Python3Visitor implements Python3Listener{
 		Statement.Builder sb = Statement.newBuilder();
 		sb.setKind(Statement.StatementKind.EXPRESSION);
 		//sb.addNames(ctx.getText()); // For testing purpose
-		System.out.println("@@  " + ctx.getText());
+		//System.out.println("@@  " + ctx.getText());
 		statements.push(sb);
 	}
 
@@ -1048,7 +1048,7 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterExpr(ExprContext ctx) {
-		System.out.println("## " + ctx.getText());
+		//System.out.println("## " + ctx.getText());
 		
 //		Expression.Builder eb = Expression.newBuilder();
 //		eb.setKind(ExpressionKind.OTHER);
@@ -1132,7 +1132,7 @@ public class Python3Visitor implements Python3Listener{
 	public void enterArith_expr(Arith_exprContext ctx) {
 		// TODO Auto-generated method stub
 		
-		
+		System.out.println(ctx.getText());
 		
 	}
 
