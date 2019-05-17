@@ -5,8 +5,8 @@
 	<property name="dst.proto" location="src/compiled-proto" />
 
 	<!-- Java version -->
-	<property name="ant.build.javac.source" value="1.6" />
-	<property name="ant.build.javac.target" value="1.6" />
+	<property name="ant.build.javac.source" value="1.7" />
+	<property name="ant.build.javac.target" value="1.7" />
 
 	<!-- ANTLR version -->
 	<property name="antlr.version" value="4.5" />
@@ -436,6 +436,7 @@
 					<exclude name="**/boa/types/Boa*" />
 				</patternset>
 			</fileset>
+			<zipfileset excludes="META-INF/" src="lib/datagen/org.eclipse.jgit-4.0.1.201506240215-r.jar" />
 		</jar>
 	</target>
 
