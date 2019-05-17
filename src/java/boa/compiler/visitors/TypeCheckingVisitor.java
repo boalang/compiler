@@ -1417,6 +1417,22 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 	/** {@inheritDoc} */
 	@Override
+	public void visit(final ListType n, final SymbolTable env) {
+		SymbolTable st;
+
+		try {
+			st = env.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+
+		n.env = st;
+		n.getValue().accept(this, st);
+		n.type = new BoaList(n.getValue().type);
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final SetType n, final SymbolTable env) {
 		SymbolTable st;
 

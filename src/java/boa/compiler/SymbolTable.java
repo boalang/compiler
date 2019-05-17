@@ -161,6 +161,7 @@ public class SymbolTable {
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "((long)${0}.keySet().size())"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "((long)${0}.size())"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaQueue(new BoaTypeVar("V")) }, "((long)${0}.size())"));
+		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaList(new BoaTypeVar("V")) }, "((long)${0}.size())"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaSet(new BoaTypeVar("V")) }, "((long)${0}.size())"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString() }, "((long)${0}.length())"));
 
@@ -219,6 +220,13 @@ public class SymbolTable {
 		globalFunctions.addFunction("peek", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaQueue(new BoaTypeVar("V")) }, "${0}.peekFirst()"));
 		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaQueue(new BoaTypeVar("V")) }, "${0}.clear()"));
 		globalFunctions.addFunction("values", new BoaFunction(new BoaArray(new BoaTypeVar("V")), new BoaType[] { new BoaQueue(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.basic_array(${0}.toArray(new ${V}[0]))"));
+
+		// list functions
+		globalFunctions.addFunction("add", new BoaFunction(new BoaAny(), new BoaType[] { new BoaList(new BoaTypeVar("V")), new BoaTypeVar("V") }, "${0}.add(${1})"));
+		globalFunctions.addFunction("get", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaList(new BoaTypeVar("V")), new BoaInt() }, "boa.functions.BoaIntrinsics.list_get(${0}, (int) ${1})"));
+		globalFunctions.addFunction("remove", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaList(new BoaTypeVar("V")), new BoaInt() }, "boa.functions.BoaIntrinsics.list_remove(${0}, (int) ${1})"));
+		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaList(new BoaTypeVar("V")) }, "${0}.clear()"));
+		globalFunctions.addFunction("values", new BoaFunction(new BoaArray(new BoaTypeVar("V")), new BoaType[] { new BoaList(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.basic_array(${0}.toArray(new ${V}[0]))"));
 
 		// set functions
 		globalFunctions.addFunction("contains", new BoaFunction(new BoaBool(), new BoaType[] { new BoaSet(new BoaTypeVar("V")), new BoaTypeVar("V") }, "${0}.contains(${1})"));
@@ -438,11 +446,14 @@ public class SymbolTable {
 		if (id.startsWith("stack of "))
 			return new BoaStack(getType(id.substring("stack of ".length()).trim()));
 
-		if (id.startsWith("set of "))
-			return new BoaSet(getType(id.substring("set of ".length()).trim()));
-
 		if (id.startsWith("queue of "))
 			return new BoaQueue(getType(id.substring("queue of ".length()).trim()));
+		
+		if (id.startsWith("list of "))
+			return new BoaList(getType(id.substring("list of ".length()).trim()));
+		
+		if (id.startsWith("set of "))
+			return new BoaSet(getType(id.substring("set of ".length()).trim()));
 
 		if (id.startsWith("map"))
 			return new BoaMap(getType(id.substring(id.indexOf(" of ") + " of ".length()).trim()),
