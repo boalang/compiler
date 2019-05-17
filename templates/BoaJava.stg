@@ -131,21 +131,13 @@ private class <name>
 {
 	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
 	<name>( <fields,types:{field,type|<type> ___<field>}; separator=", "> ){
-		<fields,types,protos:{field,type,proto|
-			<if(proto)> this.___<field> = ___<field>
-			<else> this.___<field> = new <type>(___<field>)
-			<endif>
-		}; separator="; ">;
+		<fields,types:{field,type|this.___<field> = ___<field>}; separator="; ">;
 	}
 	<name>( <name> tmp){
-		<fields,types,protos:{field,type,proto|
-			<if(proto)> this.___<field> = tmp.___<field>
-			<else> this.___<field> = new <type>(tmp.___<field>)
-			<endif>
-		}; separator="; ">;
+		<fields,types:{field,type|this.___<field> = tmp.___<field>}; separator="; ">;
 	}
 	public <name> clone() {
-    		return new <name>(this);
+		return new <name>(this);
 	}
 }<\n>
 >>
