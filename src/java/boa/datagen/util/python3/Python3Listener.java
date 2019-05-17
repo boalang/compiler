@@ -1,6 +1,6 @@
 // Generated from Python3.g4 by ANTLR 4.5
-
 package boa.datagen.util.python3;
+
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -209,6 +209,36 @@ public interface Python3Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAssign(Python3Parser.AssignContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#plus}.
+	 * @param ctx the parse tree
+	 */
+	void enterPlus(Python3Parser.PlusContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#plus}.
+	 * @param ctx the parse tree
+	 */
+	void exitPlus(Python3Parser.PlusContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#minus}.
+	 * @param ctx the parse tree
+	 */
+	void enterMinus(Python3Parser.MinusContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#minus}.
+	 * @param ctx the parse tree
+	 */
+	void exitMinus(Python3Parser.MinusContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#pluseq}.
+	 * @param ctx the parse tree
+	 */
+	void enterPluseq(Python3Parser.PluseqContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#pluseq}.
+	 * @param ctx the parse tree
+	 */
+	void exitPluseq(Python3Parser.PluseqContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link Python3Parser#testlist_star_expr}.
 	 * @param ctx the parse tree
