@@ -270,7 +270,7 @@ public class GitConnector extends AbstractConnector {
 					cfb.setAst(false);
 					if (!STORE_ASTS) {
 						cfb.setObjectId(tw.getObjectId(0).getName());
-						cfb.setRepoPath(new File(GH_GIT_PATH + "/" + projectName).getAbsolutePath());
+						cfb.setProjectName(this.projectName);
 					}
 					GitCommit gc = new GitCommit(this, repository, revwalk, projectName);
 					gc.filePathGitObjectIds.put(path, tw.getObjectId(0));

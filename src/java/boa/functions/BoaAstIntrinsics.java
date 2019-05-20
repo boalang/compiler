@@ -55,6 +55,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import boa.datagen.DefaultProperties;
 import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.JavaVisitor;
+import boa.evaluator.BoaEvaluator;
 import boa.types.Ast.*;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -127,7 +128,7 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "ChangedFile" })
 	public static ASTRoot getast(ChangedFile f) {
 		if (!f.getAst()) {
-			if (f.hasRepoPath() && f.hasObjectId()) {
+			if (f.hasProjectName() && f.hasObjectId()) {
 				f = parseChangedFile(f);
 				if (f.hasRoot())
 					return f.getRoot();
@@ -176,7 +177,7 @@ public class BoaAstIntrinsics {
 		if (f.hasRoot())
 			return f;
 		
-		if (f.hasRepoPath() && f.hasObjectId()) {
+		if (f.hasProjectName() && f.hasObjectId()) {
 			try {
 				String content = getFileContent(f);
 				ASTRoot ast = parseJavaFile(content);
@@ -191,7 +192,7 @@ public class BoaAstIntrinsics {
 	}
 
 	public static final String getFileContent(ChangedFile cf) throws IOException {
-		Repository repo = new FileRepositoryBuilder().setGitDir(new File(cf.getRepoPath() + "/.git")).build();
+		Repository repo = new FileRepositoryBuilder().setGitDir(new File(BoaEvaluator.GIT_PATH + "/" + cf.getProjectName() + "/.git")).build();
 		ObjectId fileid = ObjectId.fromString(cf.getObjectId());
 		try {
 			buffer.reset();
