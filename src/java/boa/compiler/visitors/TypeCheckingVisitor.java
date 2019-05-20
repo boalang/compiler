@@ -595,39 +595,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		final String selector = n.getId().getToken();
 		BoaType type = env.getOperandType();
 
-		if (type instanceof BoaTable) {
-			if (((BoaTable)type).getType() == null) {
-				throw new TypeCheckException(n, "undefined TableType null");
-			}
-			if (selector.charAt(0) == '_') {
-				try {
-					Integer i = Integer.parseInt(selector.substring(1));
-
-					if (((BoaTable)type).getIndexTypes() == null && i != 1)
-						throw new TypeCheckException(n, "table column out of bounds");
-					if (((BoaTable)type).getIndexTypes() == null || i == ((BoaTable)type).getIndexTypes().size() + 1)
-						n.type = new BoaTable(((BoaTable)type).getType());
-					else if (i < 1 || i > ((BoaTable)type).getIndexTypes().size() + 1)
-						throw new TypeCheckException(n, "table column out of bounds");
-					else
-						n.type = new BoaTable(((BoaTable)type).getIndex(i - 1));
-
-				} catch (NumberFormatException e) {
-					throw new TypeCheckException(n, "invalid selector '" + selector + "'", e);
-				}
-			} else {
-				if (((BoaTable)type).hasTypeName(selector)) {
-					int index = ((BoaTable)type).getTypeNameIndex(selector);
-
-					if (index == -1)
-						n.type = new BoaTable(((BoaTable)type).getType());
-					else
-						n.type = new BoaTable(((BoaTable)type).getIndex(index));
-				} else
-					throw new TypeCheckException(n, "'" + type + "' has no member named '" + selector + "'");
-			}
-			return;
-		}
+		if (type instanceof BoaTable)
+			throw new TypeCheckException(n, "invalid selector on BoaTable");
 
 		if (type instanceof BoaProtoMap) {
 			if (!((BoaProtoMap) type).hasAttribute(selector))
