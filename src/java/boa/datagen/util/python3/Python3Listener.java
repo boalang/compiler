@@ -220,6 +220,16 @@ public interface Python3Listener extends ParseTreeListener {
 	 */
 	void exitPlus(Python3Parser.PlusContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link Python3Parser#compl}.
+	 * @param ctx the parse tree
+	 */
+	void enterCompl(Python3Parser.ComplContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#compl}.
+	 * @param ctx the parse tree
+	 */
+	void exitCompl(Python3Parser.ComplContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link Python3Parser#minus}.
 	 * @param ctx the parse tree
 	 */
@@ -230,6 +240,66 @@ public interface Python3Listener extends ParseTreeListener {
 	 */
 	void exitMinus(Python3Parser.MinusContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link Python3Parser#mult}.
+	 * @param ctx the parse tree
+	 */
+	void enterMult(Python3Parser.MultContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#mult}.
+	 * @param ctx the parse tree
+	 */
+	void exitMult(Python3Parser.MultContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#pow}.
+	 * @param ctx the parse tree
+	 */
+	void enterPow(Python3Parser.PowContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#pow}.
+	 * @param ctx the parse tree
+	 */
+	void exitPow(Python3Parser.PowContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#at}.
+	 * @param ctx the parse tree
+	 */
+	void enterAt(Python3Parser.AtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#at}.
+	 * @param ctx the parse tree
+	 */
+	void exitAt(Python3Parser.AtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#div}.
+	 * @param ctx the parse tree
+	 */
+	void enterDiv(Python3Parser.DivContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#div}.
+	 * @param ctx the parse tree
+	 */
+	void exitDiv(Python3Parser.DivContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#rem}.
+	 * @param ctx the parse tree
+	 */
+	void enterRem(Python3Parser.RemContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#rem}.
+	 * @param ctx the parse tree
+	 */
+	void exitRem(Python3Parser.RemContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#fdiv}.
+	 * @param ctx the parse tree
+	 */
+	void enterFdiv(Python3Parser.FdivContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#fdiv}.
+	 * @param ctx the parse tree
+	 */
+	void exitFdiv(Python3Parser.FdivContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link Python3Parser#pluseq}.
 	 * @param ctx the parse tree
 	 */
@@ -239,6 +309,146 @@ public interface Python3Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPluseq(Python3Parser.PluseqContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#minuseq}.
+	 * @param ctx the parse tree
+	 */
+	void enterMinuseq(Python3Parser.MinuseqContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#minuseq}.
+	 * @param ctx the parse tree
+	 */
+	void exitMinuseq(Python3Parser.MinuseqContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#multeq}.
+	 * @param ctx the parse tree
+	 */
+	void enterMulteq(Python3Parser.MulteqContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#multeq}.
+	 * @param ctx the parse tree
+	 */
+	void exitMulteq(Python3Parser.MulteqContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#diveq}.
+	 * @param ctx the parse tree
+	 */
+	void enterDiveq(Python3Parser.DiveqContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#diveq}.
+	 * @param ctx the parse tree
+	 */
+	void exitDiveq(Python3Parser.DiveqContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#remeq}.
+	 * @param ctx the parse tree
+	 */
+	void enterRemeq(Python3Parser.RemeqContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#remeq}.
+	 * @param ctx the parse tree
+	 */
+	void exitRemeq(Python3Parser.RemeqContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#andeq}.
+	 * @param ctx the parse tree
+	 */
+	void enterAndeq(Python3Parser.AndeqContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#andeq}.
+	 * @param ctx the parse tree
+	 */
+	void exitAndeq(Python3Parser.AndeqContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#oreq}.
+	 * @param ctx the parse tree
+	 */
+	void enterOreq(Python3Parser.OreqContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#oreq}.
+	 * @param ctx the parse tree
+	 */
+	void exitOreq(Python3Parser.OreqContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#xoreq}.
+	 * @param ctx the parse tree
+	 */
+	void enterXoreq(Python3Parser.XoreqContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#xoreq}.
+	 * @param ctx the parse tree
+	 */
+	void exitXoreq(Python3Parser.XoreqContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#lshifteq}.
+	 * @param ctx the parse tree
+	 */
+	void enterLshifteq(Python3Parser.LshifteqContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#lshifteq}.
+	 * @param ctx the parse tree
+	 */
+	void exitLshifteq(Python3Parser.LshifteqContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#rshifteq}.
+	 * @param ctx the parse tree
+	 */
+	void enterRshifteq(Python3Parser.RshifteqContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#rshifteq}.
+	 * @param ctx the parse tree
+	 */
+	void exitRshifteq(Python3Parser.RshifteqContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#powereq}.
+	 * @param ctx the parse tree
+	 */
+	void enterPowereq(Python3Parser.PowereqContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#powereq}.
+	 * @param ctx the parse tree
+	 */
+	void exitPowereq(Python3Parser.PowereqContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#fdiveq}.
+	 * @param ctx the parse tree
+	 */
+	void enterFdiveq(Python3Parser.FdiveqContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#fdiveq}.
+	 * @param ctx the parse tree
+	 */
+	void exitFdiveq(Python3Parser.FdiveqContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#lor}.
+	 * @param ctx the parse tree
+	 */
+	void enterLor(Python3Parser.LorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#lor}.
+	 * @param ctx the parse tree
+	 */
+	void exitLor(Python3Parser.LorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#land}.
+	 * @param ctx the parse tree
+	 */
+	void enterLand(Python3Parser.LandContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#land}.
+	 * @param ctx the parse tree
+	 */
+	void exitLand(Python3Parser.LandContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#lnot}.
+	 * @param ctx the parse tree
+	 */
+	void enterLnot(Python3Parser.LnotContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#lnot}.
+	 * @param ctx the parse tree
+	 */
+	void exitLnot(Python3Parser.LnotContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link Python3Parser#testlist_star_expr}.
 	 * @param ctx the parse tree

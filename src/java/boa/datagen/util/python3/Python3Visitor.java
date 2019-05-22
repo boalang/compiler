@@ -15,106 +15,13 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import com.hp.hpl.jena.graph.query.ExpressionSet;
 
-import boa.datagen.util.python3.*;
-import boa.datagen.util.python3.Python3Parser.And_exprContext;
-import boa.datagen.util.python3.Python3Parser.And_testContext;
-import boa.datagen.util.python3.Python3Parser.AnnassignContext;
-import boa.datagen.util.python3.Python3Parser.ArglistContext;
-import boa.datagen.util.python3.Python3Parser.ArgumentContext;
-import boa.datagen.util.python3.Python3Parser.Arith_exprContext;
-import boa.datagen.util.python3.Python3Parser.Assert_stmtContext;
-import boa.datagen.util.python3.Python3Parser.AssignContext;
-import boa.datagen.util.python3.Python3Parser.Async_funcdefContext;
-import boa.datagen.util.python3.Python3Parser.Async_stmtContext;
-import boa.datagen.util.python3.Python3Parser.AtomContext;
-import boa.datagen.util.python3.Python3Parser.Atom_exprContext;
-import boa.datagen.util.python3.Python3Parser.AugassignContext;
-import boa.datagen.util.python3.Python3Parser.Break_stmtContext;
-import boa.datagen.util.python3.Python3Parser.CalldefContext;
-import boa.datagen.util.python3.Python3Parser.ClassdefContext;
-import boa.datagen.util.python3.Python3Parser.Comp_forContext;
-import boa.datagen.util.python3.Python3Parser.Comp_ifContext;
-import boa.datagen.util.python3.Python3Parser.Comp_iterContext;
-import boa.datagen.util.python3.Python3Parser.Comp_opContext;
-import boa.datagen.util.python3.Python3Parser.ComparisonContext;
-import boa.datagen.util.python3.Python3Parser.Compound_stmtContext;
-import boa.datagen.util.python3.Python3Parser.Continue_stmtContext;
-import boa.datagen.util.python3.Python3Parser.DecoratedContext;
-import boa.datagen.util.python3.Python3Parser.DecoratorContext;
-import boa.datagen.util.python3.Python3Parser.DecoratorsContext;
-import boa.datagen.util.python3.Python3Parser.Del_stmtContext;
-import boa.datagen.util.python3.Python3Parser.DictorsetmakerContext;
-import boa.datagen.util.python3.Python3Parser.Dotted_as_nameContext;
-import boa.datagen.util.python3.Python3Parser.Dotted_as_namesContext;
-import boa.datagen.util.python3.Python3Parser.Dotted_nameContext;
-import boa.datagen.util.python3.Python3Parser.Encoding_declContext;
-import boa.datagen.util.python3.Python3Parser.Eval_inputContext;
-import boa.datagen.util.python3.Python3Parser.Except_clauseContext;
-import boa.datagen.util.python3.Python3Parser.ExprContext;
-import boa.datagen.util.python3.Python3Parser.Expr_stmtContext;
-import boa.datagen.util.python3.Python3Parser.ExprlistContext;
-import boa.datagen.util.python3.Python3Parser.FactorContext;
-import boa.datagen.util.python3.Python3Parser.File_inputContext;
-import boa.datagen.util.python3.Python3Parser.Flow_stmtContext;
-import boa.datagen.util.python3.Python3Parser.For_stmtContext;
-import boa.datagen.util.python3.Python3Parser.FuncdefContext;
-import boa.datagen.util.python3.Python3Parser.Global_stmtContext;
-import boa.datagen.util.python3.Python3Parser.If_stmtContext;
-import boa.datagen.util.python3.Python3Parser.Import_as_nameContext;
-import boa.datagen.util.python3.Python3Parser.Import_as_namesContext;
-import boa.datagen.util.python3.Python3Parser.Import_fromContext;
-import boa.datagen.util.python3.Python3Parser.Import_nameContext;
-import boa.datagen.util.python3.Python3Parser.Import_stmtContext;
-import boa.datagen.util.python3.Python3Parser.LambdefContext;
-import boa.datagen.util.python3.Python3Parser.Lambdef_nocondContext;
-import boa.datagen.util.python3.Python3Parser.MinusContext;
-import boa.datagen.util.python3.Python3Parser.Nonlocal_stmtContext;
-import boa.datagen.util.python3.Python3Parser.Not_testContext;
-import boa.datagen.util.python3.Python3Parser.Or_testContext;
-import boa.datagen.util.python3.Python3Parser.ParametersContext;
-import boa.datagen.util.python3.Python3Parser.Pass_stmtContext;
-import boa.datagen.util.python3.Python3Parser.PlusContext;
-import boa.datagen.util.python3.Python3Parser.PluseqContext;
-import boa.datagen.util.python3.Python3Parser.PowerContext;
-import boa.datagen.util.python3.Python3Parser.Raise_stmtContext;
-import boa.datagen.util.python3.Python3Parser.Return_stmtContext;
-import boa.datagen.util.python3.Python3Parser.Shift_exprContext;
-import boa.datagen.util.python3.Python3Parser.Simple_stmtContext;
-import boa.datagen.util.python3.Python3Parser.Single_inputContext;
-import boa.datagen.util.python3.Python3Parser.SliceopContext;
-import boa.datagen.util.python3.Python3Parser.Small_stmtContext;
-import boa.datagen.util.python3.Python3Parser.Star_exprContext;
-import boa.datagen.util.python3.Python3Parser.StmtContext;
-import boa.datagen.util.python3.Python3Parser.SubscriptContext;
-import boa.datagen.util.python3.Python3Parser.SubscriptlistContext;
-import boa.datagen.util.python3.Python3Parser.SuiteContext;
-import boa.datagen.util.python3.Python3Parser.TermContext;
-import boa.datagen.util.python3.Python3Parser.TestContext;
-import boa.datagen.util.python3.Python3Parser.Test_nocondContext;
-import boa.datagen.util.python3.Python3Parser.TestlistContext;
-import boa.datagen.util.python3.Python3Parser.Testlist_compContext;
-import boa.datagen.util.python3.Python3Parser.Testlist_star_exprContext;
-import boa.datagen.util.python3.Python3Parser.TfpdefContext;
-import boa.datagen.util.python3.Python3Parser.TrailerContext;
-import boa.datagen.util.python3.Python3Parser.Try_stmtContext;
-import boa.datagen.util.python3.Python3Parser.TypedargslistContext;
-import boa.datagen.util.python3.Python3Parser.VarargslistContext;
-import boa.datagen.util.python3.Python3Parser.VfpdefContext;
-import boa.datagen.util.python3.Python3Parser.While_stmtContext;
-import boa.datagen.util.python3.Python3Parser.With_itemContext;
-import boa.datagen.util.python3.Python3Parser.With_stmtContext;
-import boa.datagen.util.python3.Python3Parser.Xor_exprContext;
-import boa.datagen.util.python3.Python3Parser.Yield_argContext;
-import boa.datagen.util.python3.Python3Parser.Yield_exprContext;
-import boa.datagen.util.python3.Python3Parser.Yield_stmtContext;
+import boa.datagen.util.python3.Python3Parser.*;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Method;
 import boa.types.Ast.Namespace;
-import boa.types.Ast.PositionInfo;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Statement.StatementKind;
 import boa.types.Ast.TypeKind;
@@ -127,7 +34,6 @@ public class Python3Visitor implements Python3Listener{
 	private String pkg = "";
 	public static final int PY2 = 1, PY3 = 2;
 	
-	private PositionInfo.Builder pos = null;
 	private Namespace.Builder b = Namespace.newBuilder();
 	private List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
 	//private List<String> imports = new ArrayList<String>();
@@ -140,6 +46,7 @@ public class Python3Visitor implements Python3Listener{
 	private Stack<Expression.Builder> expressions = new Stack<Expression.Builder>();
 	private Stack<String> atoms = new Stack<String>();
 	private Stack<String> atomEx = new Stack<String>();
+	private Stack<String> expStatements = new Stack<String>();
 	private Stack<String> imports = new Stack<String>();
 	protected int astLevel = PY3;
 	
@@ -304,6 +211,7 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterTfpdef(TfpdefContext ctx) {
+		//System.out.println("ARG " + ctx.getText());
 		if(vb != null) {
 			vb = Variable.newBuilder();
 			vb.setName(ctx.NAME().getText());
@@ -314,7 +222,7 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void exitTfpdef(TfpdefContext ctx) {
-		// TODO Auto-generated method stub
+		//System.out.println("END");
 		
 	}
 
@@ -357,12 +265,10 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterSimple_stmt(Simple_stmtContext ctx) {
 		
-		
 	}
 
 	@Override
 	public void exitSimple_stmt(Simple_stmtContext ctx) {
-		
 		
 	}
 
@@ -382,46 +288,40 @@ public class Python3Visitor implements Python3Listener{
 		Statement.Builder sb = Statement.newBuilder();
 		sb.setKind(Statement.StatementKind.EXPRESSION);
 		//sb.addNames(ctx.getText()); // For testing purpose
-		System.out.println("@@  " + ctx.getText());
+		expStatements.push(ctx.getText());
+		//System.out.println("@@ " + ctx.getText());
 		statements.push(sb);
 	}
 
 	@Override
 	public void exitExpr_stmt(Expr_stmtContext ctx) {
-		if(isAssign) {
+		
+		for(int i = 0; i < exitEx; i++) 
 			exitExpression();
-			isAssign = false;
-		}
+		exitEx = 0;
 		exitStatement();
 		
+		e = null;
+		
+		if(python2Print)
+			exitStatement();
 	}
 	
 	boolean isAssign = false;
 	@Override
 	public void enterAssign(AssignContext ctx) {	
+		if(expressions.isEmpty())
+			return;
 		isAssign = true;
-		
 		Expression.Builder eb = Expression.newBuilder();
-		
 		eb.setKind(ExpressionKind.ASSIGN);
-		Expression.Builder ebl = Expression.newBuilder();
-		ebl.setKind(ExpressionKind.VARACCESS);
-		//System.out.println(atomEx.peek());
-		ebl.setVariable(atomEx.pop());
-		
-		eb.addExpressions(ebl.build());
+		eb.addExpressions(expressions.pop());
 		expressions.push(eb);
-		
-		
-//		System.out.println("## " + ctx.getParent().getText());
-//		System.out.println("$$ " + atoms.pop());
-		
 	}
 
 	@Override
 	public void exitAssign(AssignContext ctx) {
-//		exitExpression();
-//		isAssign = false;
+
 	}
 
 	@Override
@@ -436,15 +336,12 @@ public class Python3Visitor implements Python3Listener{
 	
 	@Override
 	public void enterAugassign(AugassignContext ctx) {
-		//		Expression.Builder eb = Expression.newBuilder();
-		//		eb.setKind(ExpressionKind.ASSIGN);
-		//		eb.setVariable(ctx.getText());
-		//		expressions.push(eb);
+		
 	}
 
 	@Override
 	public void exitAugassign(AugassignContext ctx) {
-		//exitExpression();
+		
 	}
 
 	private void exitExpression() {
@@ -452,7 +349,7 @@ public class Python3Visitor implements Python3Listener{
 			return;
 		Expression.Builder current = expressions.pop();
 		if(!expressions.isEmpty()) {
-			 expressions.peek().addExpressions(current.build());
+			expressions.peek().addExpressions(current.build());
 		}
 		else {
 			if(!statements.isEmpty()) {
@@ -515,9 +412,9 @@ public class Python3Visitor implements Python3Listener{
 	}
 
 	private void exitStatement() {
-		if(statements.empty()) {
+		if(statements.empty())
 			return;
-		}
+
 		Statement.Builder current = statements.pop();
 		if(!statements.isEmpty()) {
 			statements.peek().addStatements(current.build());
@@ -653,12 +550,12 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterDotted_as_name(Dotted_as_nameContext ctx) {
-		if(ctx.getText().endsWith("as" + ctx.getStop().getText())) { // equals(ctx.getStart().getText() + "as" + ctx.getStop().getText())) {
+		if(ctx.getText().endsWith("as" + ctx.getStop().getText())) { 
 			if(!imports.isEmpty() && imports.peek().equals(ctx.getStop().getText()))
 				imports.pop();
 			String i = null;
 			try {
-				i = ctx.getText().split("as" + ctx.getStop().getText())[0] + " AS " + ctx.getStop().getText();//ctx.getStart().getText() + " AS " + ctx.getStop().getText();
+				i = ctx.getText().split("as" + ctx.getStop().getText())[0] + " AS " + ctx.getStop().getText();
 			} catch (Exception e) {
 				System.out.println("Continuing Import-AS");
 			}
@@ -781,7 +678,7 @@ public class Python3Visitor implements Python3Listener{
 	}
 
 	@Override
-	public void exitIf_stmt(If_stmtContext ctx) {
+	public void exitIf_stmt(If_stmtContext ctx) {		
 		exitStatement();
 	}
 
@@ -867,9 +764,9 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void exitSuite(SuiteContext ctx) {
-		if(statements.empty()) {
+		if(statements.empty()) 
 			return;
-		}
+		
 		Statement.Builder current = statements.pop();
 		
 		if(ctx.getParent().start.getText().equals("def") && !methods.isEmpty()) {
@@ -888,35 +785,12 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterTest(TestContext ctx) {
-//		if(!statements.isEmpty()) {
-//			if(statements.peek().getKind() == StatementKind.IF) {
-//				System.out.println(ctx.getText() + " conditions" + ctx.start.getText() +" "+ ctx.stop.getText());
-//			}
-//		}
-		
-		
-//		if(statements.peek().getKind() == StatementKind.IF) {
-//			Expression.Builder eb = Expression.newBuilder();
-//			eb.setKind(ExpressionKind.LOGICAL_AND);
-//			eb.setVariable(ctx.getText());
-//			eb.setLiteral(ctx.start.getText());
-//			eb.setMethod(ctx.getTokens(ctx.).toString());
-//			expressions.push(eb);
-//		}
+
 	}
 	
 	@Override
 	public void exitTest(TestContext ctx) {
-//		if(!expressions.isEmpty()) {
-//			Expression.Builder current = expressions.pop();
-//			if(!expressions.isEmpty()) {
-//				expressions.peek().addExpressions(current.build());
-//			}
-//			else {
-//				Statement.Builder sb = statements.peek();
-//				sb.addConditions(current.build());
-//			}
-//		}
+
 	}
 
 	@Override
@@ -985,62 +859,54 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterComparison(ComparisonContext ctx) {
-		//System.out.println("Comparison " + ctx.getText());
-//		if(statements.peek().getKind() == StatementKind.IF) {
-//			Expression.Builder eb = Expression.newBuilder();
-//			eb.setKind(ExpressionKind.OTHER);
-//			eb.setVariable(ctx.getText());
-//			expressions.push(eb);
-//		}
+		//System.out.println("CMP " + ctx.getText());
+
 		
 		
 	}
 	
 	@Override
 	public void exitComparison(ComparisonContext ctx) {
-//		if(!expressions.isEmpty()) {
-//			Expression.Builder current = expressions.pop();
-//			if(!expressions.isEmpty()) {
-//				expressions.peek().addExpressions(current.build());
-//			}
-//			else {
-//				Statement.Builder sb = statements.peek();
-//				sb.addConditions(current.build());
-//			}
-//		}
 		
 	}
-
+	
+	boolean isCondition = false;
 	@Override
 	public void enterComp_op(Comp_opContext ctx) {
-		/*
+		if(expressions.isEmpty())
+			return;
+
 		String op = ctx.getText();
-		if(statements.peek().getKind() == StatementKind.IF) {
-			Expression.Builder eb = Expression.newBuilder();
-			eb.setKind(ExpressionKind.OP_ADD);
-			if(op.equals("+"))
-			eb.setVariable(ctx.getText());
-			expressions.push(eb);
-		}
-		*/
+		Expression.Builder eb = Expression.newBuilder();
+		if(op.equals("=="))
+			eb.setKind(ExpressionKind.EQ);
+		else if(op.equals(">="))
+			eb.setKind(ExpressionKind.GTEQ);
+		else if(op.equals("<="))
+			eb.setKind(ExpressionKind.LTEQ);
+		else if(op.equals(">"))
+			eb.setKind(ExpressionKind.GT);
+		else if(op.equals("<"))
+			eb.setKind(ExpressionKind.LT);
+		else if(op.equals("!=") || op.equals("<>"))
+			eb.setKind(ExpressionKind.NEQ);
+		else
+			return;
+		
+		eb.addExpressions(expressions.pop());
+		expressions.push(eb);
+		isCondition = true;
 	}
 
 	@Override
 	public void exitComp_op(Comp_opContext ctx) {
-		/*
-		if(!expressions.isEmpty()) {
-			Expression.Builder current = expressions.pop();
-			if(!expressions.isEmpty()) {
-				expressions.peek().addExpressions(current.build());
-			}
-		}
-		*/
+		//exitExpression();
 	}
 
 	@Override
 	public void enterStar_expr(Star_exprContext ctx) {
 		// TODO Auto-generated method stub
-		System.out.println(ctx.getText());
+		
 	}
 
 	@Override
@@ -1051,31 +917,49 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterExpr(ExprContext ctx) {
-		//System.out.println("## " + ctx.getText());
+		//System.out.println("** " + ctx.getText());
 		
-//		Expression.Builder eb = Expression.newBuilder();
-//		eb.setKind(ExpressionKind.OTHER);
-//		eb.setVariable(ctx.getText());
-//		expressions.push(eb);		
 	}
 
 	@Override
 	public void exitExpr(ExprContext ctx) {
-//		if(!expressions.isEmpty()) {
-//			Expression.Builder current = expressions.pop();
-//			Expression.Builder parent;
-//			
-//			if(!expressions.isEmpty()) {
-//				parent = expressions.peek();
-//				parent.addExpressions(current.build());
-//			}
-//			else {
-//				if(!statements.isEmpty()) {
-//					Statement.Builder sb = statements.peek();
-//					sb.addExpressions(current.build());
-//				}
-//			}
-//		}
+
+		
+	}
+	
+	boolean isOr = false;
+	@Override
+	public void enterLor(LorContext ctx) {
+		isOr = true;
+		
+	}
+
+	@Override
+	public void exitLor(LorContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	boolean isAnd = false; 
+	@Override
+	public void enterLand(LandContext ctx) {		
+		isAnd = true;
+	}
+
+	@Override
+	public void exitLand(LandContext ctx) {
+		
+	}
+
+	boolean isNot = false;
+	@Override
+	public void enterLnot(LnotContext ctx) {
+		isNot = true;
+	}
+ 
+	@Override
+	public void exitLnot(LnotContext ctx) {
+		// TODO Auto-generated method stub
 		
 	}
 
@@ -1094,28 +978,12 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterAnd_expr(And_exprContext ctx) {
 		//System.out.println("AND EXPR " + ctx.getText());
-//		if(statements.peek().getKind() == StatementKind.IF) {
-//			Expression.Builder eb = Expression.newBuilder();		
-//			
-//			eb.setKind(ExpressionKind.LOGICAL_AND);
-//			eb.setLiteral(ctx.getText());
-//			expressions.push(eb);
-//		}	
+	
 		
 	}
 
 	@Override
 	public void exitAnd_expr(And_exprContext ctx) {
-//		if(statements.peek().getKind() == StatementKind.IF) {
-//			Expression.Builder current = expressions.pop();
-//			if(!expressions.isEmpty()) {
-//				expressions.peek().addExpressions(current.build());
-//			}
-//			else {
-//				Statement.Builder sb = statements.peek();
-//				sb.addConditions(current.build());
-//			}
-//		}
 		
 	}
 
@@ -1138,13 +1006,9 @@ public class Python3Visitor implements Python3Listener{
 	}
 
 	@Override
-	public void exitArith_expr(Arith_exprContext ctx) {
-//		if(needToExitEx)
-//			exitExpression();
-		for(int i = 0; i < exitEx; i++) 
-			exitExpression();
+	public void exitArith_expr(Arith_exprContext ctx) {			
 		isArith = false;
-		
+			
 	}
 
 	@Override
@@ -1161,13 +1025,11 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterFactor(FactorContext ctx) {
-		// TODO Auto-generated method stub
 		//System.out.println("factorstart");
 	}
 
 	@Override
 	public void exitFactor(FactorContext ctx) {
-		// TODO Auto-generated method stub
 		//System.out.println("factorend");
 		
 	}  
@@ -1192,7 +1054,7 @@ public class Python3Visitor implements Python3Listener{
 		
 		else {
 			Expression.Builder parentex = expressions.pop();
-			if(expressions.peek().getKind() == ExpressionKind.OP_ADD) {
+			if(!expressions.isEmpty() && expressions.peek().getKind() == ExpressionKind.OP_ADD) {
 				expressions.peek().addExpressions(parentex.build());
 				exitEx--;
 			}
@@ -1203,11 +1065,6 @@ public class Python3Visitor implements Python3Listener{
 				expressions.push(eb);
 			}
 		}
-			
-		
-			
-				
-		
 	}
 
 	@Override
@@ -1233,7 +1090,7 @@ public class Python3Visitor implements Python3Listener{
 		
 		else {
 			Expression.Builder parentex = expressions.pop();
-			if(expressions.peek().getKind() == ExpressionKind.OP_SUB) {
+			if(!expressions.isEmpty() && expressions.peek().getKind() == ExpressionKind.OP_SUB) {
 				expressions.peek().addExpressions(parentex.build());
 				exitEx--;
 			}
@@ -1249,6 +1106,42 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void exitMinus(MinusContext ctx) {
+		
+	}
+	
+	@Override
+	public void enterPow(PowContext ctx) {
+		if (expressions.isEmpty()) 
+			return;
+		
+		
+		if(!isArith) {
+			Expression.Builder parentex = expressions.pop();
+			Expression.Builder eb = Expression.newBuilder();
+			eb.setKind(ExpressionKind.OP_POW);
+			eb.addExpressions(parentex.build());
+			expressions.push(eb);
+			
+			isArith = true;
+		}
+		
+		else {
+			Expression.Builder parentex = expressions.pop();
+			if(!expressions.isEmpty() && expressions.peek().getKind() == ExpressionKind.OP_POW) {
+				expressions.peek().addExpressions(parentex.build());
+				exitEx--;
+			}
+			else {
+				Expression.Builder eb = Expression.newBuilder();
+				eb.setKind(ExpressionKind.OP_POW);
+				eb.addExpressions(parentex.build());
+				expressions.push(eb);
+			}
+		}
+	}
+
+	@Override
+	public void exitPow(PowContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -1267,7 +1160,7 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterPower(PowerContext ctx) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -1277,64 +1170,432 @@ public class Python3Visitor implements Python3Listener{
 		
 	}
 	
-	int atom_ex = 0;
+	@Override
+	public void enterCompl(ComplContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
 
+	@Override
+	public void exitCompl(ComplContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterMult(MultContext ctx) {
+		if (expressions.isEmpty()) 
+			return;
+		
+		
+		if(!isArith) {
+			Expression.Builder parentex = expressions.pop();
+			Expression.Builder eb = Expression.newBuilder();
+			eb.setKind(ExpressionKind.OP_MULT);
+			eb.addExpressions(parentex.build());
+			expressions.push(eb);
+			
+			isArith = true;
+		}
+		
+		else {
+			Expression.Builder parentex = expressions.pop();
+			if(!expressions.isEmpty() && expressions.peek().getKind() == ExpressionKind.OP_MULT) {
+				expressions.peek().addExpressions(parentex.build());
+				exitEx--;
+			}
+			else {
+				Expression.Builder eb = Expression.newBuilder();
+				eb.setKind(ExpressionKind.OP_MULT);
+				eb.addExpressions(parentex.build());
+				expressions.push(eb);
+			}
+		}
+		
+	}
+
+	@Override
+	public void exitMult(MultContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterAt(AtContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitAt(AtContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterDiv(DivContext ctx) {
+		if (expressions.isEmpty()) 
+			return;
+		
+		
+		if(!isArith) {
+			Expression.Builder parentex = expressions.pop();
+			Expression.Builder eb = Expression.newBuilder();
+			eb.setKind(ExpressionKind.OP_DIV);
+			eb.addExpressions(parentex.build());
+			expressions.push(eb);
+			
+			isArith = true;
+		}
+		
+		else {
+			Expression.Builder parentex = expressions.pop();
+			if(!expressions.isEmpty() && expressions.peek().getKind() == ExpressionKind.OP_DIV) {
+				expressions.peek().addExpressions(parentex.build());
+				exitEx--;
+			}
+			else {
+				Expression.Builder eb = Expression.newBuilder();
+				eb.setKind(ExpressionKind.OP_DIV);
+				eb.addExpressions(parentex.build());
+				expressions.push(eb);
+			}
+		}
+		
+	}
+
+	@Override
+	public void exitDiv(DivContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterRem(RemContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitRem(RemContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterFdiv(FdivContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitFdiv(FdivContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterMinuseq(MinuseqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitMinuseq(MinuseqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterMulteq(MulteqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitMulteq(MulteqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterDiveq(DiveqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitDiveq(DiveqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterRemeq(RemeqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitRemeq(RemeqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterAndeq(AndeqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitAndeq(AndeqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterOreq(OreqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitOreq(OreqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterXoreq(XoreqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitXoreq(XoreqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterLshifteq(LshifteqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitLshifteq(LshifteqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterRshifteq(RshifteqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitRshifteq(RshifteqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterPowereq(PowereqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitPowereq(PowereqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterFdiveq(FdiveqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitFdiveq(FdiveqContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	int exitEx = 0;
+	int exitArg = 0;
+	
 	@Override
 	public void enterAtom_expr(Atom_exprContext ctx) {
+
 		//System.out.println("## " + ctx.getText());
 		atomEx.push(ctx.getText());
 		
-		
-		
-		if(isAssign && !isMethodArg) {
+		if(!isMethodArg) {	// add condition here to avoid any expression
 			
-			if(!atomEx.isEmpty() && isLiteral(atomEx.peek())) {
+			if(ctx.getText().startsWith("[")) {
 				Expression.Builder ebr = Expression.newBuilder();
-				String rex = atomEx.pop();
-				ebr.setKind(ExpressionKind.LITERAL);
-				ebr.setLiteral(rex);
+				ebr.setKind(ExpressionKind.NEWARRAY);
 				expressions.push(ebr);
-				exitEx ++;
-
-				
+				exitEx++;
 			}
-			
-			else {
-				if(!atomEx.isEmpty() && isVar(atomEx.peek())) {	
-					Expression.Builder ebr = Expression.newBuilder();
-					String rex = atomEx.pop();
-					ebr.setKind(ExpressionKind.VARACCESS);
-					ebr.setVariable(rex);
-					expressions.push(ebr);
-					exitEx ++;
-
-					
-				}
+			else if(!atomEx.isEmpty() && isLiteral(atomEx.peek())) {
+				Expression.Builder ebr = Expression.newBuilder();
+				ebr.setKind(ExpressionKind.LITERAL);
+				ebr.setLiteral(atomEx.pop());
+				expressions.push(ebr);
+				exitEx++;	
+			}		
+			else if(!atomEx.isEmpty() && isVar(atomEx.peek())) {	
+				Expression.Builder ebr = Expression.newBuilder();
+				ebr.setKind(ExpressionKind.VARACCESS);
+				ebr.setVariable(atomEx.pop());
+				expressions.push(ebr);
+				exitEx++; 
 			}
 
-	
-			
 		}
+		
+		else {
+			if(ctx.getText().startsWith("[")) {
+				Expression.Builder ebr = Expression.newBuilder();
+				ebr.setKind(ExpressionKind.NEWARRAY);
+				expressions.push(ebr);
+				exitArg++;
+			}
+			else if(!atomEx.isEmpty() && isLiteral(atomEx.peek())) {
+				Expression.Builder ebr = Expression.newBuilder();
+				ebr.setKind(ExpressionKind.LITERAL);
+				ebr.setLiteral(atomEx.pop());
+				expressions.push(ebr);
+				exitArg++;	
+			}		
+			else if(!atomEx.isEmpty() && isVar(atomEx.peek())) {	
+				Expression.Builder ebr = Expression.newBuilder();
+				ebr.setKind(ExpressionKind.VARACCESS);
+				ebr.setVariable(atomEx.pop());
+				expressions.push(ebr);
+				exitArg++;
+			}
+		}
+		
+		
+			
 	
 	}
 	
-	
-
-	
+	private Stack<Expression.Builder> cons = new Stack<Expression.Builder>();
+	Expression.Builder e = null;
 	
 	@Override
-	public void exitAtom_expr(Atom_exprContext ctx) {		
+	public void exitAtom_expr(Atom_exprContext ctx) {
+//		if(isMethodArg)
+//			return;	
+		
+		if(isNot && !expressions.isEmpty()) {
+			Expression.Builder ebr = Expression.newBuilder();
+			ebr.setKind(ExpressionKind.LOGICAL_NOT);
+			ebr.addExpressions(expressions.pop());
+			expressions.push(ebr);
+			isNot = false;
+		}
 
+		if(isCondition) { //&& !isMethodArg
+			exitExpression();
+			exitEx--;
+
+			
+			if(!statements.isEmpty() && !expressions.isEmpty()) { 
+				if(statements.peek().getKind() == StatementKind.IF || statements.peek().getKind() == StatementKind.WHILE) {
+					cons.push(expressions.pop());
+					exitEx--;
+					
+					if(isAnd && e != null) {
+						Expression.Builder fst = e;
+						Expression.Builder snd = cons.pop();
+						
+						Expression.Builder eb = Expression.newBuilder();
+						eb.setKind(ExpressionKind.LOGICAL_AND);
+						eb.addExpressions(fst);
+						eb.addExpressions(snd);
+						cons.push(eb);
+						statements.peek().clearConditions();
+						isAnd = false;
+						e = null;
+					}
+					
+					else if(isOr && e != null) {
+						Expression.Builder fst = e;
+						Expression.Builder snd = cons.pop();
+						
+						Expression.Builder eb = Expression.newBuilder();
+						eb.setKind(ExpressionKind.LOGICAL_OR);
+						eb.addExpressions(fst);
+						eb.addExpressions(snd);
+						cons.push(eb);
+						statements.peek().clearConditions();
+						isOr = false;
+						e = null;
+					}
+					
+					while(!cons.isEmpty()) {
+						e = cons.pop();
+						statements.peek().addConditions(e);
+					}
+					
+				}
+				
+				else {
+					cons.push(expressions.pop());
+					exitEx--;
+					
+					if(isAnd && e != null) {
+						Expression.Builder fst = e;
+						Expression.Builder snd = cons.pop();
+						
+						Expression.Builder eb = Expression.newBuilder();
+						eb.setKind(ExpressionKind.LOGICAL_AND);
+						eb.addExpressions(fst);
+						eb.addExpressions(snd);
+						expressions.push(eb);
+						exitEx++;
+						isAnd = false;
+						e = null;
+					}
+					
+					else if(isOr && e != null) {
+						Expression.Builder fst = e;
+						Expression.Builder snd = cons.pop();
+						
+						Expression.Builder eb = Expression.newBuilder();
+						eb.setKind(ExpressionKind.LOGICAL_OR);
+						eb.addExpressions(fst);
+						eb.addExpressions(snd);
+						expressions.push(eb);
+						exitEx++;
+						isOr = false;
+						e = null;
+					}
+					
+				}
+				
+				isCondition = false;
+					
+				
+			}
+			
+			
+		}	
+			
 	}
 	 
 	@Override
 	public void enterAtom(AtomContext ctx) {
-		//System.out.println("%% " + ctx.getText());
-		
-		atoms.push(ctx.getText());
-
-		
+		atoms.push(ctx.getText());	
 	}
 
 	@Override
@@ -1345,7 +1606,6 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterTestlist_comp(Testlist_compContext ctx) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -1363,7 +1623,8 @@ public class Python3Visitor implements Python3Listener{
 			trailerMethodCall = true;
 			atoms.push(ctx.getText().substring(1));
 		}
-		else if(ctx.getText().equals("()")) {
+		
+		else if(ctx.getText().equals("()")) {		
 			trailerMethodCall = false;
 			Expression.Builder eb = Expression.newBuilder();
 			eb.setKind(ExpressionKind.METHODCALL);
@@ -1373,7 +1634,6 @@ public class Python3Visitor implements Python3Listener{
 				eb.setMethod(atoms.pop());
 			else
 				eb.setVariable("Method name missing!");
-			//System.out.println("M1 " + eb.getMethod());
 			expressions.push(eb);
 			exitExpression();
 		}
@@ -1383,7 +1643,6 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void exitTrailer(TrailerContext ctx) {
 		// TODO Auto-generated method stub
-		
 	}
 	
 
@@ -1426,7 +1685,7 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterExprlist(ExprlistContext ctx) {
 		// TODO Auto-generated method stub
-		
+		//System.out.println("%% " + ctx.getText());
 	}
 
 	@Override
@@ -1460,63 +1719,77 @@ public class Python3Visitor implements Python3Listener{
 	}
 	
 	@Override
-	public void enterArglist(ArglistContext ctx) {		
+	public void enterArglist(ArglistContext ctx) {
 		Expression.Builder eb = Expression.newBuilder();
 		eb.setKind(ExpressionKind.METHODCALL);
+		
 		if(!atoms.isEmpty()) {
 			eb.setMethod(atoms.pop());
 		}
 		else {
 			eb.setVariable("Method name missing!");
 		}
-		//System.out.println("M2 " + eb.getMethod());
 		
-		if(trailerMethodCall) {
+		if(trailerMethodCall && !atomEx.isEmpty()) {
 			String fullEx = atomEx.pop();
-			String trailer = fullEx.substring(0, fullEx.indexOf(eb.getMethod()));
-			trailer = trailer.substring(0, trailer.length() - 1);
+			//System.out.println("@@ " + fullEx);
+			String trailer = "";
+			//System.out.println(eb.getMethod() +" " + trailer);
+			if(fullEx.indexOf(eb.getMethod()) > 0) {
+				trailer = fullEx.substring(0, fullEx.indexOf(eb.getMethod()));
+				if(trailer.endsWith(".")) {
+					//String[] parts = trailer.split(".");
+					trailer = trailer.substring(0, trailer.length() - 1);
+				}
+				Expression.Builder eb2 = Expression.newBuilder();
+				eb2.setKind(ExpressionKind.VARACCESS);
+				eb2.setVariable(trailer);
+				eb.addExpressions(eb2);
+			}
 						
-			Expression.Builder eb2 = Expression.newBuilder();
-			eb2.setKind(ExpressionKind.VARACCESS);
-			eb2.setVariable(trailer);
-			eb.addExpressions(eb2);
-		}		
-		
+			
+		}
 		expressions.push(eb);
 		
 	}
 
 	@Override
 	public void exitArglist(ArglistContext ctx) {
-		exitExpression();
+		exitEx ++;
 		trailerMethodCall = false;
 	}
 	
 	boolean isMethodArg = false;
 	@Override
 	public void enterArgument(ArgumentContext ctx) {
+		//System.out.println("AA " + ctx.getText());
 		isMethodArg = true;
-		Expression.Builder eb = Expression.newBuilder();
-		if(isLiteral(ctx.getText())) {
-			eb.setKind(ExpressionKind.LITERAL);
-			eb.setLiteral(ctx.getText());
-		}
-		else { // need some work to identify the assignment expression like 'x = 5' and another method call
-			eb.setKind(ExpressionKind.VARACCESS);
-			eb.setVariable(ctx.getText());
-		}
-		
-		if(!expressions.isEmpty()) {
-			expressions.peek().addMethodArgs(eb.build());
-		}
 	}
 
 	@Override
 	public void exitArgument(ArgumentContext ctx) {
 		isMethodArg = false;
+		
+		for(int i = 0; i < exitArg; i++) {
+			if(expressions.isEmpty()) 
+				continue;
+			Expression.Builder e = expressions.pop();
+			
+				if(i == exitArg - 1 && !expressions.isEmpty()) //  && expressions.peek().getKind() == ExpressionKind.METHODCALL
+					expressions.peek().addMethodArgs(e);
+				else
+					exitExpression();
+		}
+		
+		
+		exitArg = 0;
+		//System.out.println("AA END");
 	}
 	
 	public boolean isLiteral(String text) {
+		if (text == null || text.length() == 0)
+		    return false;
+		
 		boolean isLiteral = text.startsWith("\"");
 		if(!isLiteral) {
 			try {
@@ -1635,9 +1908,21 @@ public class Python3Visitor implements Python3Listener{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	boolean python2Print = false;
 	@Override
 	public void visitErrorNode(ErrorNode arg0) {
+		//System.out.println(arg0.getText());
+		String var = arg0.getText().toString();
+				
+		if(var.equals("print")) {
+			Statement.Builder sb = Statement.newBuilder();
+			sb.setKind(Statement.StatementKind.PRINT);
+			statements.push(sb);
+			python2Print = true;
+			
+		}
+		
 		isPython3 = false;
 		return;
 	}
@@ -1728,6 +2013,5 @@ public class Python3Visitor implements Python3Listener{
 		// TODO Auto-generated method stub
 		
 	}
-
 
 }

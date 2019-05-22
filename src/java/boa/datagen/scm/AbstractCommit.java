@@ -576,6 +576,8 @@ public abstract class AbstractCommit {
 			Python3Visitor visitor = new Python3Visitor();
 			fb.setKind(FileKind.SOURCE_PY_3);
 			visitor.visit(path, content);
+			if(!visitor.isPython3)
+				fb.setKind(FileKind.SOURCE_PY_2);
 			ast.addNamespaces(visitor.getNamespaces());
 			
 /*			if(visitor.isPython3) {
