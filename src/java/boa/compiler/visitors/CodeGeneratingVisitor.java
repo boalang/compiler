@@ -385,38 +385,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 				code.add(st.render());
 			}
-
-			if (n.type instanceof BoaTable) {
-				final BoaTuple tuple = ((BoaTable)n.type).getRowType();
-
-				final String name = tuple.toJavaType();
-				if (tuples.contains(name))
-					return;
-
-				tuples.add(name);
-
-				final ST st = stg.getInstanceOf("TupleType");
-
-				final List<BoaType> members = tuple.getTypes();
-				final List<String> fields = new ArrayList<String>();
-				final List<String> types = new ArrayList<String>();
-				// TODO adding tuple types to view
-				// final List<String> tuples = new ArrayList<String>();
-
-				int fieldCount = 1;
-				for (final BoaType bt : members) {
-					fields.add("_" + fieldCount);
-					fieldCount++;
-					types.add(bt.toBoxedJavaType());
-				}
-
-				st.add("isrow", "true");
-				st.add("name", name);
-				st.add("fields", fields);
-				st.add("types", types);
-
-				code.add(st.render());
-			}
 		}
 
 		/** {@inheritDoc} */
@@ -1065,18 +1033,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				final BoaEnum tenum = (BoaEnum) opType;
 				n.env.setOperandType(tenum.getMember(member));
 				code.add("." + member);
-				return;
-			}
-
-			if (opType instanceof BoaTable) {
-				final BoaTable bt = (BoaTable) opType;
-				if (member.charAt(0) == '_') {
-					code.add(".setColumnIndex(" + (Integer.parseInt(member.substring(1)) - 1) + ")");
-					return;
-				}
-
-				int i = bt.getTypeNameIndex(member);
-				code.add(".setColumnIndex(" + ((i == -1) ? (bt.getIndexTypes().size()) : i) + ")");
 				return;
 			}
 

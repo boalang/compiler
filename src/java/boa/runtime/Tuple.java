@@ -30,7 +30,4 @@ public abstract class Tuple {
 
 	public void fromRow(final Row r, final int offset) {
 	}
-
-	public void columnFromRow(final Row r, final int col) {
-	}
 }
