@@ -29,7 +29,7 @@ import java.util.HashMap;
  */
 public class BoaTable extends BoaType {
 	private BoaType type;
-	private List<BoaScalar> indexTypes;
+	private List<BoaType> indexTypes;
 	private Map<String, Integer> names;
 	private List<Object> filters;
 	private BoaTable parent;
@@ -62,7 +62,7 @@ public class BoaTable extends BoaType {
 	 *            A {@link List} of {@link BoaScalar} representing the index
 	 *            types of this BoaTable
 	 */
-	public BoaTable(final BoaType type, final List<BoaScalar> indexTypes) {
+	public BoaTable(final BoaType type, final List<BoaType> indexTypes) {
 		this.type = type;
 		this.indexTypes = indexTypes;
 		this.filters = null;
@@ -144,7 +144,7 @@ public class BoaTable extends BoaType {
 		if (!this.type.assigns(bt.getType()))
 			return false;
 
-		final List<BoaScalar> thatIndexTypes = bt.getIndexTypes();
+		final List<BoaType> thatIndexTypes = bt.getIndexTypes();
 		if (this.indexTypes == null)
 			return thatIndexTypes == null;
 
@@ -196,7 +196,7 @@ public class BoaTable extends BoaType {
 	 *         the indices into this table
 	 * 
 	 */
-	public List<BoaScalar> getIndexTypes() {
+	public List<BoaType> getIndexTypes() {
 		return this.indexTypes;
 	}
 
@@ -208,7 +208,7 @@ public class BoaTable extends BoaType {
 	 *            of the indices into this table
 	 * 
 	 */
-	public void setIndexTypes(final List<BoaScalar> indexTypes) {
+	public void setIndexTypes(final List<BoaType> indexTypes) {
 		this.indexTypes = indexTypes;
 	}
 
@@ -229,7 +229,7 @@ public class BoaTable extends BoaType {
 			return new BoaArray(new BoaTuple());
 		}
 
-		final List<BoaScalar> indices = new ArrayList<BoaScalar>();
+		final List<BoaType> indices = new ArrayList<BoaType>();
 		indices.addAll(this.getIndexTypes());
 		indices.remove(0);
 

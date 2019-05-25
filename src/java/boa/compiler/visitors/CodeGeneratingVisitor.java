@@ -300,17 +300,20 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 				final List<String> fields = new ArrayList<String>();
 				final List<String> types = new ArrayList<String>();
+				final List<Boolean> tuples = new ArrayList<Boolean>();
 
 				int counter = 1;
 				for (final Expression e : n.getExprs()) {
 					fields.add("_" + counter);
 					types.add(e.type.toBoxedJavaType());
+					tuples.add(e.type instanceof BoaTuple);
 					counter++;
 				}
 
 				st.add("name", name);
 				st.add("fields", fields);
 				st.add("types", types);
+				st.add("tuples", tuples);
 
 				code.add(st.render());
 			}
@@ -335,6 +338,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final List<String> fields = new ArrayList<String>();
 			final List<String> types = new ArrayList<String>();
 			final List<Boolean> protos = new ArrayList<Boolean>();
+			final List<Boolean> tuples = new ArrayList<Boolean>();
 
 			int fieldCount = 1;
 			for (final Component c : members) {
@@ -342,6 +346,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				fieldCount++;
 				BoaType type = c.getType().type;
 				protos.add(type instanceof BoaProtoTuple);
+				tuples.add(type instanceof BoaTuple);
 				types.add(type.toBoxedJavaType());
 			}
 
@@ -349,6 +354,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("fields", fields);
 			st.add("types", types);
 			st.add("protos", protos);
+			st.add("tuples", tuples);
 
 			code.add(st.render());
 		}
@@ -370,11 +376,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 				final List<String> fields = new ArrayList<String>();
 				final List<String> types = new ArrayList<String>();
+				final List<Boolean> tuples = new ArrayList<Boolean>();
 
 				int counter = 1;
 				for (final BoaType bt : tupleType.getTypes()) {
 					fields.add("_" + counter);
 					types.add(bt.toBoxedJavaType());
+					tuples.add(bt instanceof BoaTuple);
 					counter++;
 				}
 
@@ -382,6 +390,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				st.add("name", name);
 				st.add("fields", fields);
 				st.add("types", types);
+				st.add("tuples", tuples);
 
 				code.add(st.render());
 			}

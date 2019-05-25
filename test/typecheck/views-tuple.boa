@@ -1,0 +1,15 @@
+o: output sum of int;
+
+type t1 = { i: int, string, b: bool };
+
+v: table [string][t1]of int;
+r: v._row;
+
+while (v >> r) {
+	o << 1;
+}
+
+v2 := v["abc"];
+
+
+o << 1;

@@ -707,7 +707,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		BoaOutputType bot = null;
 
 		if (n.getJobNum() == null && n.getUserName() == null) {
-
 			String subViewPath = n.getSubViewPath();
 			if (!env.hasView(subViewPath)) {
 				SubView temp = currentSubView;
@@ -745,7 +744,11 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			bot = (BoaOutputType) v.getType();
 		}
 
-		n.type = new BoaTable(bot.getType(), bot.getIndexTypes());
+		List<BoaType> types = new ArrayList<BoaType>();
+		if (bot.getIndexTypes() != null)
+			for (BoaType bs : bot.getIndexTypes())
+				types.add(bs);
+		n.type = new BoaTable(bot.getType(), types);
 	}
 
 	/** {@inheritDoc} */
@@ -1509,7 +1512,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if (!(t instanceof BoaTable))
 			throw new TypeCheckException(n.getId(), "expected a table type instead of " + t);
 		BoaTable table = (BoaTable)t;
-		List<BoaScalar> indexTypes = table.getIndexTypes();
+		List<BoaType> indexTypes = table.getIndexTypes();
 		if ((indexTypes != null && indexTypes.size() < n.getIndices().size()) || (indexTypes == null && n.getIndices().size() > 0))
 			throw new TypeCheckException(n.getId(), "too many indices");
 
@@ -1600,17 +1603,17 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		n.env = st;
 
-		List<BoaScalar> indexTypes = null;
+		List<BoaType> indexTypes = null;
 		if (n.getIndicesSize() > 0) {
-			indexTypes = new ArrayList<BoaScalar>();
+			indexTypes = new ArrayList<BoaType>();
 
 			for (final Component c : n.getIndices()) {
 				c.accept(this, st);
 
-				if (!(c.type instanceof BoaScalar))
+				if (!(c.type instanceof BoaScalar || c.type instanceof BoaTuple))
 					throw new TypeCheckException(c, "incorrect type '" + c.type + "' for index");
 
-				indexTypes.add((BoaScalar) c.type);
+				indexTypes.add(c.type);
 			}
 		}
 
@@ -1766,17 +1769,17 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		n.env = st;
 
-		List<BoaScalar> indexTypes = null;
+		List<BoaType> indexTypes = null;
 		if (n.getIndicesSize() > 0) {
-			indexTypes = new ArrayList<BoaScalar>();
+			indexTypes = new ArrayList<BoaType>();
 
 			for (final Component c : n.getIndices()) {
 				c.accept(this, st);
 
-				if (!(c.type instanceof BoaScalar))
+				if (!(c.type instanceof BoaScalar || c.type instanceof BoaTuple))
 					throw new TypeCheckException(c, "incorrect type '" + c.type + "' for index");
 
-				indexTypes.add((BoaScalar) c.type);
+				indexTypes.add(c.type);
 			}
 		}
 

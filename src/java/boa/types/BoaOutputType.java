@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class BoaOutputType extends BoaType {
 	private BoaType type;
-	private List<BoaScalar> indexTypes;
+	private List<BoaType> indexTypes;
 	private BoaScalar weightType;
 	private boolean canOmitWeight;
 
@@ -56,7 +56,7 @@ public class BoaOutputType extends BoaType {
 	 *            A {@link List} of {@link BoaScalar} representing the index
 	 *            types of this BoaOutputType
 	 */
-	public BoaOutputType(final BoaType type, final List<BoaScalar> indexTypes) {
+	public BoaOutputType(final BoaType type, final List<BoaType> indexTypes) {
 		this(type, indexTypes, null, false);
 	}
 
@@ -75,7 +75,7 @@ public class BoaOutputType extends BoaType {
 	 *            BoaOutputType
 	 * 
 	 */
-	public BoaOutputType(final BoaType type, final List<BoaScalar> indexTypes, final BoaScalar weightType, final boolean canOmitWeight) {
+	public BoaOutputType(final BoaType type, final List<BoaType> indexTypes, final BoaScalar weightType, final boolean canOmitWeight) {
 		this.type = type;
 		this.indexTypes = indexTypes;
 		this.weightType = weightType;
@@ -115,7 +115,7 @@ public class BoaOutputType extends BoaType {
 	 *         position
 	 * 
 	 */
-	public BoaScalar getIndex(final int position) {
+	public BoaType getIndex(final int position) {
 		return this.indexTypes.get(position);
 	}
 
@@ -174,7 +174,7 @@ public class BoaOutputType extends BoaType {
 	 *         the indices into this table
 	 * 
 	 */
-	public List<BoaScalar> getIndexTypes() {
+	public List<BoaType> getIndexTypes() {
 		return this.indexTypes;
 	}
 
@@ -186,7 +186,7 @@ public class BoaOutputType extends BoaType {
 	 *            of the indices into this table
 	 * 
 	 */
-	public void setIndexTypes(final List<BoaScalar> indexTypes) {
+	public void setIndexTypes(final List<BoaType> indexTypes) {
 		this.indexTypes = indexTypes;
 	}
 
