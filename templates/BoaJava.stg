@@ -124,7 +124,7 @@ new <type>()
 }
 >>
 
-TupleType(name, fields, types, isrow, tuples, protos) ::= <<
+TupleType(name, fields, types, isrow, scalars, protos, valids) ::= <<
 private class <name> extends boa.runtime.Tuple
 {
 	<fields,types:{field,type|<type> ___<field>;<\n>}; separator="">
@@ -137,11 +137,11 @@ private class <name> extends boa.runtime.Tuple
 	}
 
 	<name>(final boa.output.Output.Value v) {
-		<fields, types, tuples:{field,type, tuple|this.___<field> = <if(tuple)>new <type><else>boa.runtime.TableReader.valTo<type><endif>(v.getT(<i0>));}; separator="">
+		<fields, types, scalars, valids:{field,type,scalar,valid|this.___<field> = <if(!scalar)>new <type><else>boa.runtime.TableReader.valTo<type><endif>(<if(valid)>v.getT(<i0>)<endif>);}; separator="">
 	}
 
 	<if(isrow)>public void fromRow(final boa.output.Output.Row r, final int offset) {
-		<trunc(fields), trunc(types), trunc(tuples):{field,type,tuple|this.___<field> = <if(tuple)>new <type><else>boa.runtime.TableReader.valTo<type><endif>(r.getCols(<i0> + offset))}; separator="; "><if(trunc(fields))>;<endif>
+		<trunc(fields), trunc(types), trunc(scalars):{field,type,scalar|this.___<field> = <if(!scalar)>new <type><else>boa.runtime.TableReader.valTo<type><endif>(r.getCols(<i0> + offset))}; separator="; "><if(trunc(fields))>;<endif>
 		this.___<last(fields)> = <if(last(tuples))>new <last(types)><else>boa.runtime.TableReader.valTo<last(types)><endif>(r.getVal());
 	}
 
