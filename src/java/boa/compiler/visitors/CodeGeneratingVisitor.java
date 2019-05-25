@@ -1084,14 +1084,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					BoaType rhsType = n.getRhs(i).type;
 					if (lhsType instanceof BoaTable && rhsType instanceof BoaTuple) {
 						String fetch = (i == 0 ? lhs : operands.get(i - 1)) + ".fetch(" + operands.get(i) + ")";
-						if (i == 0) {
+						if (i == 0)
 							lhs = fetch;
-							operands.remove(0);
-						}
-						else {
+						else
 							operands.set(i - 1, fetch);
-							operands.remove(i);
-						}
+
+						operands.remove(i);
 						ops.remove(i);
 					}
 				}
