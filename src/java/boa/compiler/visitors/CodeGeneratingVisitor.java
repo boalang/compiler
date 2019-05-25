@@ -909,10 +909,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					o.accept(this);
 					ops += code.removeLast();
 				}
-				if (n.getOp(n.getOpsSize() - 1) instanceof Selector) {
-					String member = ops.substring(ops.lastIndexOf(".") + 1);
+				if (n.getOp(n.getOpsSize() - 1) instanceof Selector)
 					col = ops.substring(ops.lastIndexOf("."));
-				}
 
 				String patternString = "\\[(\".*?\")\\]|\\[(\\(.*?\\))\\]|\\[(null)\\]";
 				Pattern pattern = Pattern.compile(patternString);
