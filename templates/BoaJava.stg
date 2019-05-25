@@ -142,7 +142,7 @@ private class <name> extends boa.runtime.Tuple
 
 	<if(isrow)>public void fromRow(final boa.output.Output.Row r, final int offset) {
 		<trunc(fields), trunc(types), trunc(scalars):{field,type,scalar|this.___<field> = <if(!scalar)>new <type><else>boa.runtime.TableReader.valTo<type><endif>(r.getCols(<i0> + offset))}; separator="; "><if(trunc(fields))>;<endif>
-		this.___<last(fields)> = <if(last(tuples))>new <last(types)><else>boa.runtime.TableReader.valTo<last(types)><endif>(r.getVal());
+		this.___<last(fields)> = <if(!last(scalars))>new <last(types)><else>boa.runtime.TableReader.valTo<last(types)><endif>(r.getVal());
 	}
 
 <endif>
