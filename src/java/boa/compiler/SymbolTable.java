@@ -120,6 +120,28 @@ public class SymbolTable {
 		idmap.put("Type", new TypeProtoTuple());
 		idmap.put("Variable", new VariableProtoTuple());
 		idmap.put("Visibility", new VisibilityProtoMap());
+		idmap.put("CFG", new CFGProtoTuple());
+		idmap.put("CFGNode", new CFGNodeProtoTuple());
+		idmap.put("CFGEdge", new CFGEdgeProtoTuple());
+		idmap.put("CDG", new CDGProtoTuple());
+		idmap.put("CDGNode", new CDGNodeProtoTuple());
+		idmap.put("CDGEdge", new CDGEdgeProtoTuple());
+		idmap.put("DDG", new DDGProtoTuple());
+		idmap.put("DDGNode", new DDGNodeProtoTuple());
+		idmap.put("DDGEdge", new DDGEdgeProtoTuple());
+		idmap.put("PDG", new PDGProtoTuple());
+		idmap.put("Node", new NodeProtoTuple());
+		idmap.put("Edge", new EdgeProtoTuple());
+		idmap.put("PDGNode", new PDGNodeProtoTuple());
+		idmap.put("PDGEdge", new PDGEdgeProtoTuple());
+		idmap.put("DTree", new DTreeProtoTuple());
+		idmap.put("PDTree", new PDTreeProtoTuple());
+		idmap.put("TreeNode", new TreeNodeProtoTuple());
+		idmap.put("CFGSlicer", new CFGSlicerProtoTuple());
+		idmap.put("PDGSlicer", new PDGSlicerProtoTuple());
+		idmap.put("NodeType", new NodeTypeProtoMap());
+		idmap.put("EdgeLabel", new EdgeLabelProtoMap());
+		idmap.put("EdgeType", new EdgeTypeProtoMap());
 
 		globalFunctions = new FunctionTrie();
 
@@ -134,6 +156,16 @@ public class SymbolTable {
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaStack(new BoaScalar()) }, "((long)${0}.size())"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaSet(new BoaScalar()) }, "((long)${0}.size())"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString() }, "((long)${0}.length())"));
+
+		// graph functions
+		globalFunctions.addFunction("getoutedge", new BoaFunction(new CFGEdgeProtoTuple(), new BoaType[] { new CFGNodeProtoTuple(), new CFGNodeProtoTuple() }, "${0}.getOutEdge(${1}).newBuilder().build()"));
+		globalFunctions.addFunction("normalize", new BoaFunction(new PDGProtoTuple(), new BoaType[] { new PDGProtoTuple() }, "${0}.normalize()"));
+		globalFunctions.addFunction("gettotalnodes", new BoaFunction(new BoaInt(), new BoaType[] { new PDGProtoTuple() }, "${0}.getTotalNodes()"));
+		globalFunctions.addFunction("gettotalcontrolnodes", new BoaFunction(new BoaInt(), new BoaType[] { new PDGProtoTuple() }, "${0}.getTotalControlNodes()"));
+		globalFunctions.addFunction("gettotaledges", new BoaFunction(new BoaInt(), new BoaType[] { new PDGProtoTuple() }, "${0}.getTotalEdges()"));
+		globalFunctions.addFunction("gettotalnodes", new BoaFunction(new BoaInt(), new BoaType[] { new PDGSlicerProtoTuple() }, "${0}.getTotalNodes()"));
+		globalFunctions.addFunction("gettotalcontrolnodes", new BoaFunction(new BoaInt(), new BoaType[] { new PDGSlicerProtoTuple() }, "${0}.getTotalControlNodes()"));
+		globalFunctions.addFunction("gettotaledges", new BoaFunction(new BoaInt(), new BoaType[] { new PDGSlicerProtoTuple() }, "${0}.getTotalEdges()"));
 
 		// map functions
 		globalFunctions.addFunction("haskey", new BoaFunction(new BoaBool(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")), new BoaTypeVar("K") }, "${0}.containsKey(${1})"));
@@ -486,6 +518,7 @@ public class SymbolTable {
 		// load built-in functions
 		final Class<?>[] builtinFuncs = {
 			boa.functions.BoaAstIntrinsics.class,
+			boa.functions.BoaGraphIntrinsics.class,
 			boa.functions.BoaIntrinsics.class,
 			boa.functions.BoaMetricIntrinsics.class,
 			boa.functions.BoaModifierIntrinsics.class,

@@ -1,0 +1,20 @@
+digraph {
+	{ rank = source; 0; }
+	0[shape=ellipse,label="[0] ENTRY"]
+	1[shape=ellipse,label="[1] int x = 7"]
+	2[shape=ellipse,label="[2] x < 3"]
+	3[shape=ellipse,label="[3] return -1;"]
+	4[shape=ellipse,label="[4] (x <= 5 && x >= 3)"]
+	5[shape=ellipse,label="[5] return 0;"]
+	6[shape=ellipse,label="[6] x > 5"]
+	7[shape=ellipse,label="[7] return x;"]
+	8[shape=ellipse,label="[8] return -1;"]
+	0 -> 1 [label="T"]
+	0 -> 2 [label="T"]
+	2 -> 3 [label="T"]
+	2 -> 4 [label="F"]
+	4 -> 5 [label="T"]
+	4 -> 6 [label="F"]
+	6 -> 7 [label="T"]
+	6 -> 8 [label="F"]
+}

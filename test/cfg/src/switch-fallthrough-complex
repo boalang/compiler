@@ -1,0 +1,13 @@
+public class C {
+    public void m() {
+        switch (fallThroughComplex) {
+        case 1:
+            if (x > 5)
+                print(); // falls through
+            else
+                break;
+        case 2:
+            break;
+        }
+    }
+}

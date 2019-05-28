@@ -1,0 +1,9 @@
+digraph {
+	{ rank = source; 0; }
+	{ rank = sink; 2; }
+	0[shape=ellipse,label="[0] ENTRY"]
+	1[shape=box,label="[1] return m();"]
+	2[shape=ellipse,label="[2] EXIT"]
+	0 -> 1
+	1 -> 2
+}

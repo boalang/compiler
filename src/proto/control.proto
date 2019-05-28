@@ -1,0 +1,51 @@
+syntax = "proto2";
+package boa.types;
+
+import "ast.proto";
+
+option optimize_for = SPEED;
+
+message Node {
+	enum NodeType {
+		ENTRY = 1; // indicates start and end nodes
+		OTHER = 2; // sequential
+		METHOD = 3; // method calls, leading to external cfg
+		CONTROL = 4; // evaluates predicate
+	}
+	required int32 id = 1;
+	required NodeType kind = 2;
+	optional Statement statement = 3; // nodes are created for statements and their expressions as well
+  	optional Expression expression = 4; // optional because these fields will not be stored.
+}
+
+message Edge {
+	enum EdgeLabel {
+		NIL = 1; // no edge
+		DEFAULT = 2; // sequential
+		TRUE = 3; // true branch
+		FALSE = 4; // false branch
+		BACKEDGE = 5; // loop backedge
+		EXITEDGE = 6; // loop exitedge
+		VARDEF = 7; // variable definition edge.
+	}
+	required EdgeLabel label = 1;
+	enum EdgeType {
+		CONTROL = 1; // control dependency edge edges.
+		DATA = 2; // data dependency edge.
+	}
+	optional EdgeType kind = 2;
+}
+
+message Graph {
+    enum GraphKind {
+        CFG = 1;
+        CDG = 2;
+        DDG = 3;
+        PDG = 4;
+        DTREE = 5;
+        PDTREE = 6;
+    }
+    required GraphKind kind = 1;
+	repeated Node nodes = 2;
+	repeated Edge edges = 3; // n x n matrix stored as 1D-array
+}

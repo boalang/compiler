@@ -1,0 +1,11 @@
+public class C {
+    public void m() {
+        try {
+            System.out.println("body");
+        } catch (Exception e) {
+            // empty
+        } finally {
+            // empty
+        }
+    }
+}
