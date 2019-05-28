@@ -57,6 +57,7 @@ import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.JavaVisitor;
 import boa.evaluator.BoaEvaluator;
 import boa.types.Ast.*;
+import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -774,6 +775,41 @@ public class BoaAstIntrinsics {
 	public static boolean isLiteral(final Expression e, final String lit) throws Exception {
 		return e.getKind() == Expression.ExpressionKind.LITERAL && e.hasLiteral() && e.getLiteral().equals(lit);
 	}
+	
+	////////////////////////////////
+	// Operator testing functions */
+	////////////////////////////////
+	@FunctionSpec(name = "isoperator", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isOperator(final Expression e) throws Exception {
+		switch (e.getKind()) {
+			case OP_ADD: return true;
+			case OP_SUB: return true;
+			case OP_MULT: return true;
+			case OP_DIV: return true;
+			case OP_MOD: return true;
+			case OP_INC: return true;
+			case OP_DEC: return true;
+			case BIT_LSHIFT: return true;
+			case BIT_RSHIFT: return true;
+			case BIT_UNSIGNEDRSHIFT: return true;
+			case BIT_AND: return true;
+			case BIT_OR: return true;
+			case BIT_NOT: return true;
+			case BIT_XOR: return true;
+			case LOGICAL_NOT: return true;
+			case LOGICAL_AND: return true;
+			case LOGICAL_OR: return true;
+			case EQ: return true;
+			case NEQ: return true;
+			case LT: return true;
+			case GT: return true;
+			case LTEQ: return true;
+			case GTEQ: return true;
+			default:
+				return false;			
+		}
+	}
+	
 
 	//////////////////////////////
 	// Collect Annotations Used //
