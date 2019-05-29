@@ -43,6 +43,7 @@ import boa.compiler.ast.literals.ILiteral;
 import boa.compiler.ast.types.RowType;
 import boa.types.BoaType;
 import boa.types.BoaTable;
+import boa.types.BoaArray;
 
 /**
  * Create anonymous variables for tables when needed
@@ -118,6 +119,54 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 
 		f.setOperand(o);
 		f.getOps().clear();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final VarDeclStatement n) {
+		Operand op = n.hasInitializer() ? n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() : null;
+
+		if (n.hasInitializer())
+			n.getInitializer().accept(this);
+		if (!(n.type instanceof BoaArray) || !(op != null && op.type instanceof BoaTable))
+			return;
+
+		String id = varPrefix + (count++);
+		Operand o = new Identifier(id);
+		BoaType bt = op.type;
+		o.env = n.env;
+		o.type = op.type;
+		n.env.set(id, bt);
+		final VarDeclStatement vds = ASTFactory.createVarDecl(id, op, bt, n.env);
+
+		currentProgram.env.set(id, vds.type);
+		currentProgram.getStatements().add(index, vds);
+
+		Factor f = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs();
+		f.setOperand(o);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final AssignmentStatement n) {
+		Operand op = n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+		n.getRhs().accept(this);
+		if (!(n.type instanceof BoaArray) || !(op.type instanceof BoaTable))
+			return;
+
+		String id = varPrefix + (count++);
+		Operand o = new Identifier(id);
+		BoaType bt = op.type;
+		o.env = n.env;
+		o.type = op.type;
+		n.env.set(id, bt);
+		final VarDeclStatement vds = ASTFactory.createVarDecl(id, op, bt, n.env);
+
+		currentProgram.env.set(id, vds.type);
+		currentProgram.getStatements().add(index, vds);
+
+		Factor f = n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs();
+		f.setOperand(o);
 	}
 
 	/** {@inheritDoc} */

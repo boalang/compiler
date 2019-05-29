@@ -1,0 +1,20 @@
+o: output sum[string] of int;
+
+type emptyT = {};
+type t = { i: int, string, b: bool };
+v1: table [string][string][t] of int;
+v2 := v1["java"][_];
+r2: v2._row;
+
+v3 := v2[_][3];
+
+v4 : array of emptyT;
+v4 = v2[_][_];
+
+while (v2 >> r2) {
+	lastCol := r2._2;
+    o["sum"] << lastCol;
+}
+
+tableSize := len(v3);
+o["size"] << tableSize;
