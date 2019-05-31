@@ -44,6 +44,7 @@ import boa.types.proto.CodeRepositoryProtoTuple;
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	BoaType lastRetType;
 	SubView currentSubView = null;
+	boolean anonymousTable = true;
 	Map<String, Start> viewASTs =  new HashMap<String, Start>();
 
 	/**
@@ -489,9 +490,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						final Index idx = (Index)node;
 						final BoaTable table = (BoaTable)type;
 
-						if (idx.hasStart() && !(idx.getStart().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof ILiteral))
-							throw new TypeCheckException(idx.getStart(), "invalid index type '" + idx.getStart().type + "' for table filter");
-
 						if (idx.hasEnd())
 							throw new TypeCheckException(node, "table type indices do not support slicing");
 
@@ -706,6 +704,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		BoaOutputType bot = null;
 
+		if (anonymousTable && !(n.getParent() instanceof RowType)) {
+			Factor f = (Factor)n.getParent();
+			for (int i = 0; i < f.getOps().size(); i++) {
+				Node op = f.getOps().get(i);
+				if (op instanceof Index && ((Index)op).hasStart() && !(((Index)op).getStart().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof ILiteral))
+					throw new TypeCheckException(op, "invalid index type '" + op.type + "' for table filter");
+			}
+		}
+
 		if (n.getJobNum() == null && n.getUserName() == null) {
 			String subViewPath = n.getSubViewPath();
 			if (!env.hasView(subViewPath)) {
@@ -798,7 +805,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				throw e;
 		}
 
+		anonymousTable = false;
 		n.getRhs().accept(this, env);
+		anonymousTable = true;
 
 		if (!(n.getLhs().type instanceof BoaArray && n.getRhs().type instanceof BoaTuple))
 			if (!n.getLhs().type.assigns(n.getRhs().type))
@@ -1108,6 +1117,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if (n.hasInitializer()) {
 			final Factor f = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs();
 
+			anonymousTable = false;
 			if (f.getOperand() instanceof FunctionExpression) {
 				SymbolTable st;
 				try {
@@ -1125,6 +1135,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			}
 
 			n.getInitializer().accept(this, env);
+			anonymousTable = true;
 			rhs = n.getInitializer().type;
 			if (!(f.getOperand() instanceof FunctionExpression)) {
 				if (env.hasGlobalFunction(id) || env.hasLocalFunction(id))

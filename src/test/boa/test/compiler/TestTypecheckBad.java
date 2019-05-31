@@ -75,7 +75,6 @@ public class TestTypecheckBad extends BaseTest {
 			{ "bad-views25.boa", "too many indices" },
 			{ "bad-views26.boa", "index type string doesn't match with view column type int" },
 			{ "bad-views27.boa", "too many indices" },
-			{ "bad-views28.boa", "invalid index type 'int' for table filter" },
 			{ "bad-views29.boa", "expected a table type instead of array of tuple []" },
 			{ "bad-identifier1.boa", "invalid identifier '_2'" },
 			{ "bad-identifier2.boa", "invalid identifier '_0'" },

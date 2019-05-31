@@ -57,6 +57,7 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 	private Map<String, String> newFilterIdMap = new LinkedHashMap<String, String>();
 	protected final String varPrefix = "anon_table_";
 	private int count = 0;
+	private boolean anonymousTable = true;
 
 	/** {@inheritDoc} */
 	@Override
@@ -78,7 +79,7 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Table n) {
-		if (n.getParent() instanceof RowType) return;
+		if (n.getParent() instanceof RowType || !anonymousTable) return;
 
 		Factor f = (Factor)n.getParent();
 		String p = n.getTablePath();
@@ -86,8 +87,7 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 		// check index
 		for (int i = 0; i < f.getOps().size(); i++) {
 			Node op = f.getOps().get(i);
-			ILiteral lit = (ILiteral)((Index)op).getStart().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
-			p += "/" + lit.getLiteral();
+			p += "/" + (((Index)op).hasStart() ? ((ILiteral)((Index)op).getStart().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand()).getLiteral() : "_");
 		}
 
 		// if it's cached
@@ -126,8 +126,11 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 	public void visit(final VarDeclStatement n) {
 		Operand op = n.hasInitializer() ? n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() : null;
 
-		if (n.hasInitializer())
+		if (n.hasInitializer()) {
+			anonymousTable = false;
 			n.getInitializer().accept(this);
+			anonymousTable = true;
+		}
 		if (!(n.type instanceof BoaArray) || !(op != null && op.type instanceof BoaTable))
 			return;
 
@@ -150,7 +153,9 @@ public class ViewTransformer extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final AssignmentStatement n) {
 		Operand op = n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+		anonymousTable = false;
 		n.getRhs().accept(this);
+		anonymousTable = true;
 		if (!(n.type instanceof BoaArray) || !(op.type instanceof BoaTable))
 			return;
 

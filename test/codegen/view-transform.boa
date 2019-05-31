@@ -16,5 +16,8 @@ while (v2 >> r2) {
     o["sum"] << lastCol;
 }
 
+x := "foo";
+y := len(v1[x]);
+
 tableSize := len(v3);
 o["size"] << tableSize;

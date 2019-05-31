@@ -1,8 +1,0 @@
-o: output sum of int;
-v: table [string][int]of int;
-r: v._row;
-
-x:= 5;
-v2 := v["abc"][x];
-
-o << 1;
