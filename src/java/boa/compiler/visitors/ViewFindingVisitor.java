@@ -74,7 +74,7 @@ public class ViewFindingVisitor extends AbstractVisitorNoArgNoRet {
 			else {
 				if (!localSubViews.contains(n.getSubViewPath())) {
 					localSubViews.add(n.getSubViewPath());
-					referencedOutputs.add(n.getSubViewPath() + "/output/" + n.getOutputName());
+					// referencedOutputs.add(n.getSubViewPath() + "/output/" + n.getOutputName());
 				}
 			}
 		}
