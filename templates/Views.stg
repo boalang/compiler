@@ -1,13 +1,13 @@
 delimiters "#", "#"
 Workflow(jobName, viewnames, outputPath, outputs, views, args) ::= <<
 <workflow-app xmlns="uri:oozie:workflow:0.4" name="boa-workflow">
-    <start to="CheckJob#jobName#" />
+    <start to="CheckJob-#jobName#" />
     <end name="end" />
     <kill name="kill" />
 
-    <decision name="CheckJob#jobName#">
+    <decision name="CheckJob-#jobName#">
         <switch>
-            <case to="#if(views)#fork#else#Job#jobName##endif#">${
+            <case to="#if(views)#subworkflow-job-#first(viewnames)##else#Job-#jobName##endif#">${
                 #outputs:{o | fs:exists('hdfs://boa-head:8020/boa/#o#.seq') eq 'false'};separator=" ||\n"#
             }</case>
             <default to="end" />
@@ -15,14 +15,7 @@ Workflow(jobName, viewnames, outputPath, outputs, views, args) ::= <<
     </decision>
 
 #if(views)#
-    <fork name="fork">
-        #viewnames:{v | <path start="subworkflow-job-#v#" />#\n#}#
-    </fork>
-
-    #views:{v | #v##\n#}#
-
-    <join name="join" to="Job-#jobName#" />
-
+#views:{v | #v##\n##\n#}#
 #endif#
     <action name="Job-#jobName#">
         <java>
@@ -41,13 +34,13 @@ Workflow(jobName, viewnames, outputPath, outputs, views, args) ::= <<
 </workflow-app>
 >>
 
-ViewWorkflow(jobName, path) ::= <<
+ViewWorkflow(jobName, nextJobName, finalJobName, path) ::= <<
     <action name="subworkflow-job-#jobName#">
         <sub-workflow>
             <app-path>hdfs://boa-head:8020/boa/#path#/workflow.xml</app-path>
             <propagate-configuration/>
         </sub-workflow>
-        <ok to="join"/>
+        <ok to="#if(nextJobName)#subworkflow-job-#nextJobName##else#job-#finalJobName##endif#"/>
         <error to="kill"/>
     </action>
 >>

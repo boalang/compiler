@@ -96,7 +96,7 @@ public class WorkflowGenerator {
 		final List<String> views = new ArrayList<String>();
 
 		for (int i = 0; i < subViews.size(); i++)
-			views.add(createSubWorkflow(subViews.get(i), subWorkflowPaths.get(i)));
+			views.add(createSubWorkflow(subViews.get(i), (i == subViews.size() - 1 ? null : subViews.get(i + 1)), jobName, subWorkflowPaths.get(i)));
 
 		st.add("jobName", jobName);
 		st.add("outputPath", outputPath);
@@ -108,9 +108,11 @@ public class WorkflowGenerator {
 		workflow = st.render();
 	}
 
-	public String createSubWorkflow(final String jobName, final String path) {
+	public String createSubWorkflow(final String jobName, final String nextJobName, final String finalJobName, final String path) {
 		final ST st = workflowStg.getInstanceOf("ViewWorkflow");
 		st.add("jobName", jobName);
+		st.add("nextJobName", nextJobName);
+		st.add("finalJobName", finalJobName);
 		st.add("path", path);
 
 		return st.render();
