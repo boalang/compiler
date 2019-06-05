@@ -130,6 +130,9 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "ChangedFile" })
 	public static ASTRoot getast(ChangedFile f) {
+		context.getCounter(ASTCOUNTER.GETS_ATTEMPTED).increment(1);
+		
+		// if no ast, check new model
 		if (!f.getAst()) {
 			if (f.hasProjectId() && f.hasObjectId()) {
 				f = getParsedChangedFile(f);
@@ -139,8 +142,6 @@ public class BoaAstIntrinsics {
 			}
 			return emptyAst;
 		}
-
-		context.getCounter(ASTCOUNTER.GETS_ATTEMPTED).increment(1);
 
 		if (map == null)
 			openMap();
@@ -177,11 +178,10 @@ public class BoaAstIntrinsics {
 	}
 	
 	public static ChangedFile getParsedChangedFile(ChangedFile f) {
+		// if file contains ast root 
 		if (f.hasRoot())
 			return f;
 		
-		if (repoMap == null)
-			openRepoMap();
 		BytesWritable value = getValueFromRepoMap(f);
 		if (value != null) {
 			ByteArrayFile file = (ByteArrayFile) SerializationUtils.deserialize(value.getBytes());
@@ -201,6 +201,9 @@ public class BoaAstIntrinsics {
 	
 	@SuppressWarnings("unchecked")
 	public static final BytesWritable getValueFromRepoMap(ChangedFile f) {
+		if (repoMap == null)
+			openRepoMap();
+		
 		try {
 			BytesWritable value = new BytesWritable();
 			if (repoMap.get(new Text(f.getProjectId()), value) == null) {
