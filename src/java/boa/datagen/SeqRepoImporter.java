@@ -17,7 +17,6 @@
 
 package boa.datagen;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
@@ -36,10 +35,6 @@ import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.LargeObjectException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.internal.storage.file.ByteArrayFile;
-import org.eclipse.jgit.internal.storage.file.ByteArrayRepositoryBuilder;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.Repository;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
 
 import com.google.gson.Gson;
@@ -348,7 +343,7 @@ public class SeqRepoImporter {
 			AbstractConnector conn = null;
 
 			if (!STORE_ASTS) {
-				ByteArrayFile f = new ByteArrayFile(gitDir.getAbsolutePath()).build();
+				ByteArrayFile f = new ByteArrayFile(gitDir.getAbsolutePath());
 				BytesWritable bw = new BytesWritable(SerializationUtils.serialize(f));
 				repoWriter.append(new Text(project.getId()), bw);
 			}

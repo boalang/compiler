@@ -436,7 +436,7 @@
 					<exclude name="**/boa/types/Boa*" />
 				</patternset>
 			</fileset>
-			<zipfileset excludes="META-INF/" src="lib/datagen/org.eclipse.jgit-4.0.1.201506240215-r.jar" />
+			<zipfileset excludes="META-INF/" src="lib/datagen_new/org.eclipse.jgit-5.4.0-SNAPSHOT.jar" />
 		</jar>
 	</target>
 
@@ -459,7 +459,7 @@
 			<zipfileset excludes="META-INF/" src="rtlib/protobuf-java-2.5.0.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/scannotation-1.0.3.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/ST-4.0.8.jar" />
-			<zipfileset excludes="META-INF/" src="lib/datagen/org.eclipse.jgit-4.0.1.201506240215-r.jar" />
+			<zipfileset excludes="META-INF/" src="lib/datagen_new/org.eclipse.jgit-5.4.0-SNAPSHOT.jar" />
 		</jar>
 	</target>
 
