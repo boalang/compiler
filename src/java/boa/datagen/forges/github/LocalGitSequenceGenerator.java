@@ -91,7 +91,7 @@ public class LocalGitSequenceGenerator {
 		
 		AbstractConnector conn = null;
 		try {
-			conn = new GitConnector(gitDir.getAbsolutePath(), "");
+			conn = new GitConnector(gitDir.getAbsolutePath(), "", "");
 			final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
 			repoBuilder.setUrl(path);
 			repoBuilder.setKind(RepositoryKind.GIT);

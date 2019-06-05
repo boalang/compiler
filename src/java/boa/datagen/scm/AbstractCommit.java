@@ -72,6 +72,7 @@ public abstract class AbstractCommit {
 	
 	protected AbstractConnector connector;
 	protected String projectName;
+	protected String projectId;
 
 	protected AbstractCommit(AbstractConnector cnn) {
 		this.connector = cnn;
@@ -93,7 +94,7 @@ public abstract class AbstractCommit {
 			cfb.setAst(false);
 			if (!STORE_ASTS) {
 				cfb.setObjectId(oid.getName());
-				cfb.setProjectName(this.projectName);
+				cfb.setProjectId(this.projectId);
 			}
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);

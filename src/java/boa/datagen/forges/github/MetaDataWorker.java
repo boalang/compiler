@@ -295,7 +295,7 @@ public class MetaDataWorker implements Runnable {
 			System.out.println("Has repository: " + name);
 		AbstractConnector conn = null;
 		try {
-			conn = new GitConnector(gitDir.getAbsolutePath(), project.getName());
+			conn = new GitConnector(gitDir.getAbsolutePath(), project.getName(), project.getId());
 			final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
 			for (final Object rev : conn.getRevisions(project.getName())) {
 				final Revision.Builder revBuilder = Revision.newBuilder((Revision) rev);

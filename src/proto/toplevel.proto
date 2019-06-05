@@ -80,6 +80,4 @@ message Project {
 	/** The size of the repository in bytes of code **/
 	optional int32 size = 26;
 	optional string main_language = 27;
-	/** The repo path of this project **/
-	optional string repo_path = 28;
 }

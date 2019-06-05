@@ -148,7 +148,7 @@ message ChangedFile {
 	/** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits */
 	repeated int32 previous_indices = 10;
 	
-	optional string project_name = 11;
+	optional string project_id = 11;
 	optional string object_id = 12;
 	optional ASTRoot root = 13;
 }

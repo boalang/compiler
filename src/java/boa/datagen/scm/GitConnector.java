@@ -60,12 +60,13 @@ public class GitConnector extends AbstractConnector {
 	private Git git;
 	private RevWalk revwalk;
 
-	public GitConnector(final String path, String projectName) {
+	public GitConnector(final String path, String projectName, String projectId) {
 		this.projectName = projectName;
+		this.projectId = projectId;
 		try {
 			this.path = path;
 			this.repository = new FileRepositoryBuilder()
-								.setGitDir(new File(path + "/.git"))
+								.setGitDir(new File(path))
 								.build();
 			this.git = new Git(this.repository);
 			this.revwalk = new RevWalk(this.repository);
@@ -75,8 +76,8 @@ public class GitConnector extends AbstractConnector {
 		}
 	}
 
-	public GitConnector(String path, String projectName, Writer astWriter, long astWriterLen, Writer commitWriter, long commitWriterLen, Writer contentWriter, long contentWriterLen) {
-		this(path, projectName);
+	public GitConnector(String path, String projectName, String projectId, Writer astWriter, long astWriterLen, Writer commitWriter, long commitWriterLen, Writer contentWriter, long contentWriterLen) {
+		this(path, projectName, projectId);
 		this.astWriter = astWriter;
 		this.commitWriter = commitWriter;
 		this.contentWriter = contentWriter;
@@ -101,7 +102,7 @@ public class GitConnector extends AbstractConnector {
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
 			for (final RevCommit rc: revwalk) {
-				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName);
+				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName, projectId);
 				System.out.println(rc.getName());
 				commits.add(rc.getName());
 				int count = gc.countChangedFiles(rc);
@@ -144,7 +145,7 @@ public class GitConnector extends AbstractConnector {
 				i++;
 				long startTime = System.currentTimeMillis();
 				
-				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName);
+				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName, projectId);
 				
 				gc.setId(rc.getName());
 				try {
@@ -270,9 +271,9 @@ public class GitConnector extends AbstractConnector {
 					cfb.setAst(false);
 					if (!STORE_ASTS) {
 						cfb.setObjectId(tw.getObjectId(0).getName());
-						cfb.setProjectName(this.projectName);
+						cfb.setProjectId(projectId);
 					}
-					GitCommit gc = new GitCommit(this, repository, revwalk, projectName);
+					GitCommit gc = new GitCommit(this, repository, revwalk, projectName, projectId);
 					gc.filePathGitObjectIds.put(path, tw.getObjectId(0));
 					gc.processChangeFile(cfb);
 					snapshot.add(cfb.build());

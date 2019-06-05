@@ -195,7 +195,6 @@ public class BoaGenerator {
 			DefaultProperties.STORE_COMMITS = false;
 		if (cl.hasOption("noasts")) {
 			DefaultProperties.STORE_ASTS = false;
-			DefaultProperties.GH_GIT_PATH = DefaultProperties.OUTPUT + "/repos";
 		}
 	}
 

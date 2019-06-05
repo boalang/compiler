@@ -1303,7 +1303,7 @@ public class JavaVisitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.SWITCH);
 		node.getExpression().accept(this);
-		b.addConditions(expressions.pop());
+		b.addExpressions(expressions.pop());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		for (Object s : node.statements())
 			((org.eclipse.jdt.core.dom.Statement)s).accept(this);

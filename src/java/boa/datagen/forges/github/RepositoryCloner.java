@@ -19,7 +19,7 @@ public class RepositoryCloner {
 		// prepare a new folder for the cloned repository
 		String localPath = args[1];
 		String url = args[0];
-		File localGitDir = new File(localPath + "/.git");
+		File localGitDir = new File(localPath);
 		// then clone
 		Git result = null;
 

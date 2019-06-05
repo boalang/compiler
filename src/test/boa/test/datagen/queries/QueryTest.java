@@ -108,7 +108,7 @@ public abstract class QueryTest {
 		}
 		repository = new FileRepositoryBuilder().setGitDir(new File(gitDir + "/.git")).build();
 
-		GitConnector gc = new GitConnector(gitDir.getAbsolutePath(), "test-datagen");
+		GitConnector gc = new GitConnector(gitDir.getAbsolutePath(), "test-datagen", "");
 		gc.setRevisions();
 		System.out.println("Finish processing commits");
 		System.out.println("Finish building head snapshot");

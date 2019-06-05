@@ -26,6 +26,7 @@ import org.apache.hadoop.fs.PathFilter;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.MapFile;
+import org.apache.hadoop.io.MapFile.Writer;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
 import org.apache.hadoop.io.Text;
@@ -56,7 +57,7 @@ public class SeqCombiner {
 //		conf.set("fs.default.name", "hdfs://boa-njt/");
 		FileSystem fileSystem = FileSystem.get(conf);
 		String base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
-		
+
 		if (args.length > 0) {
 			base = args[0];
 		}
@@ -70,24 +71,31 @@ public class SeqCombiner {
 			else if (args[1].toLowerCase().equals("s"))
 				compressionCode = new SnappyCodec();
 		}
-		
-		SequenceFile.Writer projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/projects.seq"), Text.class, BytesWritable.class, compressionType, compressionCode);
-		MapFile.Writer astWriter = new MapFile.Writer(conf, fileSystem, base + "/ast", LongWritable.class, BytesWritable.class, compressionType, compressionCode, null);
-		MapFile.Writer commitWriter = new MapFile.Writer(conf, fileSystem, base + "/commit", LongWritable.class, BytesWritable.class, compressionType, compressionCode, null);
-		
+
+		SequenceFile.Writer projectWriter = SequenceFile.createWriter(fileSystem, conf,
+				new Path(base + "/projects.seq"), Text.class, BytesWritable.class, compressionType, compressionCode);
+		MapFile.Writer astWriter = new MapFile.Writer(conf, fileSystem, base + "/ast", LongWritable.class,
+				BytesWritable.class, compressionType, compressionCode, null);
+		MapFile.Writer commitWriter = new MapFile.Writer(conf, fileSystem, base + "/commit", LongWritable.class,
+				BytesWritable.class, compressionType, compressionCode, null);
+		MapFile.Writer repoWriter = new MapFile.Writer(conf, fileSystem, base + "/repo", Text.class,
+				BytesWritable.class, compressionType, compressionCode, null);
+
 		FileStatus[] files = fileSystem.listStatus(new Path(base + "/project"), new PathFilter() {
-			
+
 			@Override
 			public boolean accept(Path path) {
 				String name = path.getName();
 				return name.endsWith(".seq") && name.contains("-");
 			}
+
 		});
+
 		long lastAstWriterKey = 0, lastCommitWriterKey = 0;
 		for (int i = 0; i < files.length; i++) {
 			FileStatus file = files[i];
 			String name = file.getPath().getName();
-			System.out.println("Reading file " + (i+1) + " in " + files.length + ": " + name);
+			System.out.println("Reading file " + (i + 1) + " in " + files.length + ": " + name);
 			SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, file.getPath(), conf);
 			Text textKey = new Text();
 			BytesWritable value = new BytesWritable();
@@ -123,17 +131,36 @@ public class SeqCombiner {
 			} finally {
 				r.close();
 			}
-			lastCommitWriterKey = readAndAppendCommit(conf, fileSystem, commitWriter, base + "/commit/" + name, lastAstWriterKey, lastCommitWriterKey);
+			lastCommitWriterKey = readAndAppendCommit(conf, fileSystem, commitWriter, base + "/commit/" + name,
+					lastAstWriterKey, lastCommitWriterKey);
 			lastAstWriterKey = readAndAppendAst(conf, fileSystem, astWriter, base + "/ast/" + name, lastAstWriterKey);
+			readAndAppendRepo(conf, fileSystem, repoWriter, base + "/repo/" + name);
 		}
 		projectWriter.close();
 		astWriter.close();
 		commitWriter.close();
-		
+		repoWriter.close();
 		fileSystem.close();
 	}
 
-	public static long readAndAppendCommit(Configuration conf, FileSystem fileSystem, MapFile.Writer writer, String fileName, long lastAstKey, long lastCommitKey) throws IOException {
+	public static void readAndAppendRepo(Configuration conf, FileSystem fileSystem, MapFile.Writer writer,
+			String fileName) throws IOException {
+		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
+		Text textKey = new Text();
+		BytesWritable value = new BytesWritable();
+		try {
+			while (r.next(textKey, value))
+				writer.append(textKey, value);
+		} catch (Exception e) {
+			System.err.println(fileName);
+			e.printStackTrace();
+		} finally {
+			r.close();
+		}
+	}
+
+	public static long readAndAppendCommit(Configuration conf, FileSystem fileSystem, MapFile.Writer writer,
+			String fileName, long lastAstKey, long lastCommitKey) throws IOException {
 		long newLastKey = lastCommitKey;
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
 		LongWritable longKey = new LongWritable();
@@ -159,7 +186,8 @@ public class SeqCombiner {
 		return newLastKey;
 	}
 
-	public static long readAndAppendAst(Configuration conf, FileSystem fileSystem, MapFile.Writer writer, String fileName, long lastKey) throws IOException {
+	public static long readAndAppendAst(Configuration conf, FileSystem fileSystem, MapFile.Writer writer,
+			String fileName, long lastKey) throws IOException {
 		long newLastKey = lastKey;
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
 		LongWritable longKey = new LongWritable();

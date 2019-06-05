@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import org.apache.commons.lang.SerializationUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -37,6 +38,8 @@ import org.apache.hadoop.mapreduce.Mapper.Context;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jgit.internal.storage.file.ByteArrayFile;
+import org.eclipse.jgit.internal.storage.file.ByteArrayRepositoryBuilder;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
@@ -74,7 +77,7 @@ import boa.types.Toplevel.Project;
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	static Context context;
-	private static MapFile.Reader map, commentsMap, issuesMap;
+	private static MapFile.Reader map, repoMap, commentsMap, issuesMap;
 
 	private static final Revision emptyRevision;
 	static {
@@ -128,8 +131,8 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "ChangedFile" })
 	public static ASTRoot getast(ChangedFile f) {
 		if (!f.getAst()) {
-			if (f.hasProjectName() && f.hasObjectId()) {
-				f = parseChangedFile(f);
+			if (f.hasProjectId() && f.hasObjectId()) {
+				f = getParsedChangedFile(f);
 				if (f.hasRoot())
 					return f.getRoot();
 				return emptyAst;
@@ -173,27 +176,58 @@ public class BoaAstIntrinsics {
 		return emptyAst;
 	}
 	
-	public static ChangedFile parseChangedFile(ChangedFile f) {
+	public static ChangedFile getParsedChangedFile(ChangedFile f) {
 		if (f.hasRoot())
 			return f;
 		
-		if (f.hasProjectName() && f.hasObjectId()) {
+		if (repoMap == null)
+			openRepoMap();
+		BytesWritable value = getValueFromRepoMap(f);
+		if (value != null) {
+			ByteArrayFile file = (ByteArrayFile) SerializationUtils.deserialize(value.getBytes());
 			try {
-				String content = getFileContent(f);
+				Repository repo = new ByteArrayRepositoryBuilder().setGitDir(file).build();
+				String content = getContent(repo, f.getObjectId());
 				ASTRoot ast = parseJavaFile(content);
 				if (ast != emptyAst)
 					f = f.toBuilder().setRoot(ast).build();
 				return f;
 			} catch (IOException e) {
-				return f;
+				e.printStackTrace();
 			}
 		}
 		return f;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static final BytesWritable getValueFromRepoMap(ChangedFile f) {
+		try {
+			BytesWritable value = new BytesWritable();
+			if (repoMap.get(new Text(f.getProjectId()), value) == null) {
+				context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
+				return null;
+			} else {
+				context.getCounter(ASTCOUNTER.GETS_SUCCEED).increment(1);
+				return value;
+			}
+		} catch (final InvalidProtocolBufferException e) {
+			e.printStackTrace();
+			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+		} catch (final IOException e) {
+			e.printStackTrace();
+			context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
+		} catch (final RuntimeException e) {
+			e.printStackTrace();
+			context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
+		} catch (final Error e) {
+			e.printStackTrace();
+			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+		}
+		return null;
+	}
 
-	public static final String getFileContent(ChangedFile cf) throws IOException {
-		Repository repo = new FileRepositoryBuilder().setGitDir(new File(BoaEvaluator.GIT_PATH + "/" + cf.getProjectName() + "/.git")).build();
-		ObjectId fileid = ObjectId.fromString(cf.getObjectId());
+	public static final String getContent(Repository repo, String oid) throws IOException {
+		ObjectId fileid = ObjectId.fromString(oid);
 		try {
 			buffer.reset();
 			buffer.write(repo.open(fileid, Constants.OBJ_BLOB).getCachedBytes());
@@ -379,6 +413,30 @@ public class BoaAstIntrinsics {
 				fs = FileSystem.get(conf);
 			}
 			map = new MapFile.Reader(fs, p.toString(), conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static void openRepoMap() {
+		try {
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localDataPath, "repo");
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(
+					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+					new Path(
+						conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")),
+						new Path("repo")
+					)
+				);
+				fs = FileSystem.get(conf);
+			}
+			repoMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}

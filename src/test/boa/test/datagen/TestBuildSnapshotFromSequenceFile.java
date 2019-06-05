@@ -81,7 +81,7 @@ public class TestBuildSnapshotFromSequenceFile {
 			new FileIO.DirectoryRemover(gitDir.getAbsolutePath()).run();
 			String url = "https://github.com/" + repoName + ".git";
 			RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
-			GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName);
+			GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName, "");
 			
 //			ChangedFile[] snapshot = getSnapshot(dataPath, repoName, -1);
 //			String[] fileNames = new String[snapshot.length];
@@ -130,7 +130,7 @@ public class TestBuildSnapshotFromSequenceFile {
 			String url = "https://github.com/" + repoName + ".git";
 			RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
 		}
-		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName);
+		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName, "");
 		ChangedFile[] snapshot = getSnapshot(dataPath, repoName, index);
 		String[] fileNames = new String[snapshot.length];
 		for (int j = 0; j < snapshot.length; j++) {

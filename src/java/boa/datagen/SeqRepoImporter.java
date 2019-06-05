@@ -17,11 +17,13 @@
 
 package boa.datagen;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.commons.lang.SerializationUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -30,6 +32,14 @@ import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
+import org.eclipse.jgit.errors.IncorrectObjectTypeException;
+import org.eclipse.jgit.errors.LargeObjectException;
+import org.eclipse.jgit.errors.MissingObjectException;
+import org.eclipse.jgit.internal.storage.file.ByteArrayFile;
+import org.eclipse.jgit.internal.storage.file.ByteArrayRepositoryBuilder;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Repository;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
 
 import com.google.gson.Gson;
@@ -50,7 +60,8 @@ public class SeqRepoImporter {
 	private final static boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	private final static boolean cache = Properties.getBoolean("cache", DefaultProperties.CACHE);
 
-	private final static File gitRootPath = new File(Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
+	private final static File gitRootPath = new File(
+			Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
 
 	private final static HashSet<String> processedProjectIds = new HashSet<String>();
 
@@ -58,20 +69,22 @@ public class SeqRepoImporter {
 	private static FileSystem fileSystem = null;
 	private static String base = null;
 
-	private final static int poolSize = Integer.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
-	public static final int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer.valueOf(DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS);
+	private final static int poolSize = Integer
+			.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
+	public static final int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer
+			.valueOf(DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS);
 	final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
 	final static String jsonCachePath = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 	final static boolean STORE_COMMITS = DefaultProperties.STORE_COMMITS;
 	final static boolean STORE_ASTS = DefaultProperties.STORE_ASTS;
 	private static boolean done = false;
-	
+
 	public static void main(String[] args) throws IOException, InterruptedException {
 
 		conf = new Configuration();
 		fileSystem = FileSystem.get(conf);
 		base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
-		
+
 		getProcessedProjects();
 
 		ImportTask[] workers = new ImportTask[poolSize];
@@ -82,7 +95,7 @@ public class SeqRepoImporter {
 			threads[i].start();
 			Thread.sleep(10);
 		}
-		
+
 		int counter = 0;
 		File dir = new File(jsonPath);
 		for (File file : dir.listFiles()) {
@@ -118,7 +131,8 @@ public class SeqRepoImporter {
 								}
 								Thread.sleep(100);
 							}
-							System.out.println((++counter) + ": " + file.getPath() + ": " + i + ": " + repo.id + " " + repo.name);
+							System.out.println(
+									(++counter) + ": " + file.getPath() + ": " + i + ": " + repo.id + " " + repo.name);
 						}
 					} catch (Exception e) {
 						System.err.println("Error proccessing item " + i + " of page " + file.getPath());
@@ -132,7 +146,7 @@ public class SeqRepoImporter {
 				Thread.sleep(100);
 		}
 		done = true;
-		
+
 		// wait for workers to close writers and finish
 		for (Thread thread : threads)
 			while (thread.isAlive())
@@ -169,7 +183,7 @@ public class SeqRepoImporter {
 		private int id;
 		private int counter = 0, allCounter = 0;
 		private String suffix;
-		private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
+		private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter, repoWriter;
 		private long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
 		private boolean ready = true;
 		Project project;
@@ -199,6 +213,8 @@ public class SeqRepoImporter {
 							LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
 					contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/source/" + suffix),
 							LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
+					repoWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/repo/" + suffix),
+							Text.class, BytesWritable.class, CompressionType.BLOCK);
 					astWriterLen = 1;
 					commitWriterLen = 1;
 					contentWriterLen = 1;
@@ -220,6 +236,7 @@ public class SeqRepoImporter {
 					astWriter.close();
 					commitWriter.close();
 					contentWriter.close();
+					repoWriter.close();
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
@@ -254,16 +271,16 @@ public class SeqRepoImporter {
 					final String name = project.getName();
 
 					if (debug)
-						System.out.println(
-								Thread.currentThread().getId() + " Processing " + (allCounter+1) + " project " + project.getId() + " " + name);
+						System.out.println(Thread.currentThread().getId() + " Processing " + (allCounter + 1)
+								+ " project " + project.getId() + " " + name);
 					project = storeRepository(project, 0);
 					if (debug)
 						System.out.println(
 								Thread.currentThread().getId() + " Putting in sequence file: " + project.getId());
 
 					BytesWritable bw = new BytesWritable(project.toByteArray());
-					if (bw.getLength() <= MAX_SIZE_FOR_PROJECT_WITH_COMMITS 
-							|| (project.getCodeRepositoriesCount() > 0 && project.getCodeRepositories(0).getRevisionKeysCount() > 0)) {
+					if (bw.getLength() <= MAX_SIZE_FOR_PROJECT_WITH_COMMITS || (project.getCodeRepositoriesCount() > 0
+							&& project.getCodeRepositories(0).getRevisionKeysCount() > 0)) {
 						try {
 							projectWriter.append(new Text(project.getId()), bw);
 						} catch (IOException e) {
@@ -301,13 +318,14 @@ public class SeqRepoImporter {
 			closeWriters();
 		}
 
-		private Project storeRepository(final Project project, final int i) {
+		private Project storeRepository(final Project project, final int i)
+				throws LargeObjectException, MissingObjectException, IncorrectObjectTypeException, IOException {
 			final CodeRepository repo = project.getCodeRepositories(i);
 			final Project.Builder projBuilder = Project.newBuilder(project);
 
 			final String name = project.getName();
-			File gitDir = new File(gitRootPath + "/" + name);
-			
+			File gitDir = new File(gitRootPath + "/" + name + "/.git");
+
 			if (isFiltered(project))
 				return project;
 
@@ -319,7 +337,6 @@ public class SeqRepoImporter {
 			String[] args = { repo.getUrl(), gitDir.getAbsolutePath() };
 			try {
 				RepositoryCloner.clone(args);
-				projBuilder.setRepoPath(args[1]);
 			} catch (Throwable t) {
 				System.err.println("Error cloning " + repo.getUrl());
 				t.printStackTrace();
@@ -329,9 +346,16 @@ public class SeqRepoImporter {
 			if (debug)
 				System.out.println(Thread.currentThread().getId() + " Has repository: " + name);
 			AbstractConnector conn = null;
+
+			if (!STORE_ASTS) {
+				ByteArrayFile f = new ByteArrayFile(gitDir.getAbsolutePath()).build();
+				BytesWritable bw = new BytesWritable(SerializationUtils.serialize(f));
+				repoWriter.append(new Text(project.getId()), bw);
+			}
+
 			try {
-				conn = new GitConnector(gitDir.getAbsolutePath(), project.getName(), astWriter, astWriterLen, commitWriter, commitWriterLen,
-						contentWriter, contentWriterLen);
+				conn = new GitConnector(gitDir.getAbsolutePath(), project.getName(), project.getId(), astWriter, astWriterLen,
+						commitWriter, commitWriterLen, contentWriter, contentWriterLen);
 				final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
 				if (STORE_COMMITS) {
 					List<Object> revisions = conn.getRevisions(project.getName());
@@ -347,11 +371,13 @@ public class SeqRepoImporter {
 						}
 					}
 				}
+
 				if (debug)
 					System.out.println(Thread.currentThread().getId() + " Build head snapshot");
+
 				repoBuilder.setHead(conn.getHeadCommitOffset());
 				repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot());
-				
+
 				repoBuilder.addAllBranches(conn.getBranchIndices());
 				repoBuilder.addAllBranchNames(conn.getBranchNames());
 				repoBuilder.addAllTags(conn.getTagIndices());
@@ -372,8 +398,8 @@ public class SeqRepoImporter {
 						printError(e, "Cannot close Git connector to " + gitDir.getAbsolutePath(), project.getName());
 					}
 				}
-				if (!cache && STORE_ASTS) {
-					new Thread(new FileIO.DirectoryRemover(gitRootPath + "/" + project.getName())).start();
+				if (!cache) {
+					new Thread(new FileIO.DirectoryRemover(gitRootPath + "")).start();
 				}
 			}
 
@@ -390,10 +416,7 @@ public class SeqRepoImporter {
 					|| project.getProgrammingLanguagesList().contains("PHP"))
 				return false;
 			String lang = project.getMainLanguage();
-			if (lang != null
-					&& (lang.equals("Java")
-						|| lang.equals("JavaScript")
-						|| lang.equals("PHP")))
+			if (lang != null && (lang.equals("Java") || lang.equals("JavaScript") || lang.equals("PHP")))
 				return false;
 			return true;
 		}

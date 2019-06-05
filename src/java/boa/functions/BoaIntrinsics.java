@@ -249,7 +249,7 @@ public class BoaIntrinsics {
 		if (needAst) {
 			ChangedFile[] files = getSnapshotById(cr, id, new String[0]);
 			for (int i = 0; i < files.length; i++)
-				files[i] = BoaAstIntrinsics.parseChangedFile(files[i]);
+				files[i] = BoaAstIntrinsics.getParsedChangedFile(files[i]);
 			return files;
 		}
 		return getSnapshotById(cr, id, new String[0]);

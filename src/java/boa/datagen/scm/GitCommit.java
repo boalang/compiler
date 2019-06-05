@@ -64,11 +64,12 @@ public class GitCommit extends AbstractCommit {
 	private RevWalk revwalk;
 	Map<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
 
-	public GitCommit(final GitConnector cnn, final Repository repository, final RevWalk revwalk, String projectName) {
+	public GitCommit(final GitConnector cnn, final Repository repository, final RevWalk revwalk, String projectName, String projectId) {
 		super(cnn);
 		this.repository = repository;
 		this.revwalk = revwalk;
 		this.projectName = projectName;
+		this.projectId = projectId;
 	}
 
 	@Override
