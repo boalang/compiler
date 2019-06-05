@@ -110,4 +110,9 @@ public class TestTypecheckBad extends BaseTest {
 	public void tupleRedecl() throws IOException {
 		typecheck(load(badDir + "tuple-redecl.boa"), "variable 'a' already declared as 'float'");
 	}
+
+	@Test
+	public void addSetWrongVal() throws IOException {
+		typecheck(load(badDir + "add-set-wrong-val.boa"), "no such function add([set of string, ChangedFile])");
+	}
 }
