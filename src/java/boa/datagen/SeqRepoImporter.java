@@ -394,7 +394,7 @@ public class SeqRepoImporter {
 					}
 				}
 				if (!cache) {
-					new Thread(new FileIO.DirectoryRemover(gitRootPath + "")).start();
+					new Thread(new FileIO.DirectoryRemover(gitRootPath + "/" + name)).start();
 				}
 			}
 
