@@ -252,6 +252,8 @@ public class BoaIntrinsics {
 				files[i] = BoaAstIntrinsics.getParsedChangedFile(files[i]);
 			return files;
 		}
+		return getSnapshotById(cr, id, new String[0]);
+	}
 
 	@FunctionSpec(name = "getsnapshotbyid", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string" })
 	public static ChangedFile[] getSnapshotById(final CodeRepository cr, final String id) {
