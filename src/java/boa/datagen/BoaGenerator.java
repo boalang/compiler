@@ -16,8 +16,16 @@
  */
 package boa.datagen;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -84,6 +92,14 @@ public class BoaGenerator {
 		}
 
 		clear();
+		
+		FileWriter fw = new FileWriter("/Users/hyj/Desktop/excludes.txt");
+		BufferedWriter bw = new BufferedWriter(fw);
+		for (Object line : new ArrayList<String>(DefaultProperties.excludes)) {
+			bw.write(line.toString());
+			bw.newLine();
+		}
+		bw.close();
 	}
 
 	private static final void printHelp(Options options, String message) {
@@ -107,7 +123,8 @@ public class BoaGenerator {
 		options.addOption("projects", "projects", true, "maximum number of projects per sequence file");
 		options.addOption("commits", "commits", true, "maximum number of commits of a project to be stored in the project object");
 		options.addOption("nocommits", "nocommits", false, "do not store commits");	
-		options.addOption("noasts", "noasts", false, "do not store asts");	
+		options.addOption("noasts", "noasts", false, "do not store asts");
+		options.addOption("excludes", "excludes", true, "do not generate those excluded projects");
 		options.addOption("size", "size", true, "maximum size of a project object to be stored");
 		options.addOption("libs", "libs", true, "directory to store libraries");
 		options.addOption("output", "output", true, "directory where output is desired");
@@ -196,6 +213,24 @@ public class BoaGenerator {
 		if (cl.hasOption("noasts")) {
 			DefaultProperties.STORE_ASTS = false;
 		}
+		if (cl.hasOption("excludes")) {
+			try {
+				DefaultProperties.excludes = getExcludes(cl.getOptionValue("excludes"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private static Set<String> getExcludes(String path) throws IOException {
+		String line;
+		File file = new File(path);
+		HashSet<String> strSet = new HashSet<String>();
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		while ((line = br.readLine()) != null)
+			strSet.add(line);
+		br.close();
+		return strSet;
 	}
 
 	//

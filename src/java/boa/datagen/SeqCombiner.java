@@ -92,6 +92,10 @@ public class SeqCombiner {
 
 		long lastAstWriterKey = 0, lastCommitWriterKey = 0;
 		for (int i = 0; i < files.length; i++) {
+			
+			// excludes
+			boolean exclude = false;
+			
 			FileStatus file = files[i];
 			String name = file.getPath().getName();
 			System.out.println("Reading file " + (i + 1) + " in " + files.length + ": " + name);
@@ -101,6 +105,13 @@ public class SeqCombiner {
 			try {
 				while (r.next(textKey, value)) {
 					Project p = Project.parseFrom(CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
+					
+					// excludes
+					if (DefaultProperties.excludes.contains(p.getName())) {
+						exclude = true;
+						continue;
+					}
+					
 					Project.Builder pb = Project.newBuilder(p);
 					for (CodeRepository.Builder crb : pb.getCodeRepositoriesBuilderList()) {
 						if (crb.getRevisionsCount() > 0) {
@@ -130,6 +141,11 @@ public class SeqCombiner {
 			} finally {
 				r.close();
 			}
+			
+			// excludes
+			if (exclude)
+				continue;
+			
 			lastCommitWriterKey = readAndAppendCommit(conf, fileSystem, commitWriter, base + "/commit/" + name,
 					lastAstWriterKey, lastCommitWriterKey);
 			lastAstWriterKey = readAndAppendAst(conf, fileSystem, astWriter, base + "/ast/" + name, lastAstWriterKey);

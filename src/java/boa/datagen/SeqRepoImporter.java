@@ -90,6 +90,10 @@ public class SeqRepoImporter {
 			threads[i].start();
 			Thread.sleep(10);
 		}
+		
+		// excludes
+		if (DefaultProperties.excludes == null)
+			DefaultProperties.excludes = new HashSet<String>();
 
 		int counter = 0;
 		File dir = new File(jsonPath);
@@ -110,6 +114,11 @@ public class SeqRepoImporter {
 					try {
 						JsonObject rp = repoArray.get(i).getAsJsonObject();
 						RepoMetadata repo = new RepoMetadata(rp);
+						
+						// excludes
+						if (DefaultProperties.excludes.contains(repo.name))
+							continue;
+						
 						if (repo.id != null && repo.name != null && !processedProjectIds.contains(repo.id)) {
 							Project protobufRepo = repo.toBoaMetaDataProtobuf();
 
@@ -345,7 +354,11 @@ public class SeqRepoImporter {
 			if (!STORE_ASTS) {
 				ByteArrayFile f = new ByteArrayFile(gitDir.getAbsolutePath());
 				BytesWritable bw = new BytesWritable(SerializationUtils.serialize(f));
-				repoWriter.append(new Text(project.getId()), bw);
+				if (!f.isBuilt() || bw.getLength() > Integer.MAX_VALUE / 3) {
+					DefaultProperties.excludes.add(name);
+				} else {
+					repoWriter.append(new Text(project.getId()), bw);					
+				}
 			}
 
 			try {

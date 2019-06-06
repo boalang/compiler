@@ -18,6 +18,7 @@
 package boa.datagen;
 
 import java.io.File;
+import java.util.Set;
 
 /**
  * @author rdyer
@@ -73,6 +74,9 @@ public class DefaultProperties {
 	public static boolean STORE_ASCII_PRINTABLE_CONTENTS = true, STORE_COMMITS = true, STORE_ASTS = true;
 
 	public static String localDataPath = null;
+	
+	// excluded repo names
+	public static Set<String> excludes = null;
 	
 	@SuppressWarnings("unused")
 	private static String getRoot() {
