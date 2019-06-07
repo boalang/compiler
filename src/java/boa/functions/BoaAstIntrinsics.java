@@ -134,7 +134,7 @@ public class BoaAstIntrinsics {
 		
 		// if no ast, check new model
 		if (!f.getAst()) {
-			if (f.hasProjectId() && f.hasObjectId()) {
+			if (f.hasRepoKey() && f.hasObjectId()) {
 				f = getParsedChangedFile(f);
 				if (f.hasRoot())
 					return f.getRoot();
@@ -206,7 +206,7 @@ public class BoaAstIntrinsics {
 		
 		try {
 			BytesWritable value = new BytesWritable();
-			if (repoMap.get(new Text(f.getProjectId()), value) == null) {
+			if (repoMap.get(new LongWritable(f.getRepoKey()), value) == null) {
 				context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
 				return null;
 			} else {

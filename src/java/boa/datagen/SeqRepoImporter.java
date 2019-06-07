@@ -96,6 +96,7 @@ public class SeqRepoImporter {
 			DefaultProperties.excludes = new HashSet<String>();
 
 		int counter = 0;
+		long repoKey = 1;
 		File dir = new File(jsonPath);
 		for (File file : dir.listFiles()) {
 			if (file.getName().endsWith(".json")) {
@@ -127,7 +128,7 @@ public class SeqRepoImporter {
 							while (!assigned) {
 								for (int j = 0; j < poolSize; j++) {
 									if (workers[j].isReady()) {
-										workers[j].setProject(protobufRepo);
+										workers[j].setProject(protobufRepo, repoKey++);
 										workers[j].ready = false;
 										assigned = true;
 										break;
@@ -185,10 +186,11 @@ public class SeqRepoImporter {
 
 	public static class ImportTask implements Runnable {
 		private int id;
+		private long repoKey;
 		private int counter = 0, allCounter = 0;
 		private String suffix;
 		private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter, repoWriter;
-		private long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
+		private long astWriterLen, commitWriterLen, contentWriterLen;
 		private boolean ready = true;
 		Project project;
 
@@ -196,8 +198,9 @@ public class SeqRepoImporter {
 			this.id = id;
 		}
 
-		public void setProject(Project protobufRepo) {
+		public void setProject(Project protobufRepo, long repoKey) {
 			this.project = protobufRepo;
+			this.repoKey = repoKey;
 		};
 
 		public boolean isReady() {
@@ -218,7 +221,7 @@ public class SeqRepoImporter {
 					contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/source/" + suffix),
 							LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
 					repoWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/repo/" + suffix),
-							Text.class, BytesWritable.class, CompressionType.BLOCK);
+							LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
 					astWriterLen = 1;
 					commitWriterLen = 1;
 					contentWriterLen = 1;
@@ -357,13 +360,13 @@ public class SeqRepoImporter {
 				if (!f.isBuilt() || bw.getLength() > Integer.MAX_VALUE / 3) {
 					DefaultProperties.excludes.add(name);
 				} else {
-					repoWriter.append(new Text(project.getId()), bw);					
+					repoWriter.append(new LongWritable(repoKey), bw);
 				}
 			}
 
 			try {
-				conn = new GitConnector(gitDir.getAbsolutePath(), project.getName(), project.getId(), astWriter, astWriterLen,
-						commitWriter, commitWriterLen, contentWriter, contentWriterLen);
+				conn = new GitConnector(gitDir.getAbsolutePath(), project.getId(), astWriter, astWriterLen,
+						commitWriter, commitWriterLen, contentWriter, contentWriterLen, repoKey);
 				final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
 				if (STORE_COMMITS) {
 					List<Object> revisions = conn.getRevisions(project.getName());

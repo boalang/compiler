@@ -49,7 +49,7 @@ public class TestBuildSnapshot {
 //		File gitDir = new File("F:\\testrepos\\repos-test\\hoan\\test1");
 		if (!gitDir.exists())
 			return;
-		GitConnector gc = new GitConnector(gitDir.getAbsolutePath(), "condoia", "");
+		GitConnector gc = new GitConnector(gitDir.getAbsolutePath(), "condoia");
 		gc.setRevisions();
 		System.out.println("Finish processing commits");
 		List<ChangedFile> snapshot1 = gc.buildHeadSnapshot();
@@ -74,7 +74,7 @@ public class TestBuildSnapshot {
 	private static FileSystem fileSystem = null;
 
 	private static SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
-	private static long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
+	private static long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1, repoWriterLen = 1;
 
 	@Test
 	public void testGetSnapshotFromProtobuf1() throws Exception {
@@ -141,8 +141,8 @@ public class TestBuildSnapshot {
 		filecheck.run();
 		String url = "https://github.com/" + repoName + ".git";
 		RepositoryCloner.clone(new String[] { url, gitDir.getAbsolutePath() });
-		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName, "", astWriter, astWriterLen,
-				commitWriter, commitWriterLen, contentWriter, contentWriterLen);
+		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName, astWriter, astWriterLen,
+				commitWriter, commitWriterLen, contentWriter, contentWriterLen, repoWriterLen);
 		final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
 		repoBuilder.setKind(RepositoryKind.GIT);
 		repoBuilder.setUrl(url);

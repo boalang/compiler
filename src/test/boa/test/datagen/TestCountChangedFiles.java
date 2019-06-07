@@ -20,7 +20,7 @@ public class TestCountChangedFiles extends Java8BaseTest {
 	private GitConnector gc;
 		
 	public TestCountChangedFiles() throws IOException {
-		gc = new GitConnector("D:/Projects/Boa-compiler/dataset/repos/dmlloyd/openjdk", "dmlloyd/openjdk", "");
+		gc = new GitConnector("D:/Projects/Boa-compiler/dataset/repos/dmlloyd/openjdk", "dmlloyd/openjdk");
 	}
 	
 	@Test

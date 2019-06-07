@@ -93,13 +93,13 @@ public class BoaGenerator {
 
 		clear();
 		
-		FileWriter fw = new FileWriter("/Users/hyj/Desktop/excludes.txt");
-		BufferedWriter bw = new BufferedWriter(fw);
-		for (Object line : new ArrayList<String>(DefaultProperties.excludes)) {
-			bw.write(line.toString());
-			bw.newLine();
-		}
-		bw.close();
+//		FileWriter fw = new FileWriter("/Users/hyj/Desktop/excludes.txt");
+//		BufferedWriter bw = new BufferedWriter(fw);
+//		for (Object line : new ArrayList<String>(DefaultProperties.excludes)) {
+//			bw.write(line.toString());
+//			bw.newLine();
+//		}
+//		bw.close();
 	}
 
 	private static final void printHelp(Options options, String message) {

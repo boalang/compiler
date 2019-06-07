@@ -77,7 +77,7 @@ public class SeqCombiner {
 				BytesWritable.class, compressionType, compressionCode, null);
 		MapFile.Writer commitWriter = new MapFile.Writer(conf, fileSystem, base + "/commit", LongWritable.class,
 				BytesWritable.class, compressionType, compressionCode, null);
-		MapFile.Writer repoWriter = new MapFile.Writer(conf, fileSystem, base + "/repo", Text.class,
+		MapFile.Writer repoWriter = new MapFile.Writer(conf, fileSystem, base + "/repo", LongWritable.class,
 				BytesWritable.class, compressionType, compressionCode, null);
 
 		FileStatus[] files = fileSystem.listStatus(new Path(base + "/project"), new PathFilter() {
@@ -90,11 +90,8 @@ public class SeqCombiner {
 
 		});
 
-		long lastAstWriterKey = 0, lastCommitWriterKey = 0;
+		long lastAstWriterKey = 0, lastCommitWriterKey = 0,lastRepoKey = 0;
 		for (int i = 0; i < files.length; i++) {
-			
-			// excludes
-			boolean exclude = false;
 			
 			FileStatus file = files[i];
 			String name = file.getPath().getName();
@@ -106,12 +103,6 @@ public class SeqCombiner {
 				while (r.next(textKey, value)) {
 					Project p = Project.parseFrom(CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
 					
-					// excludes
-					if (DefaultProperties.excludes.contains(p.getName())) {
-						exclude = true;
-						continue;
-					}
-					
 					Project.Builder pb = Project.newBuilder(p);
 					for (CodeRepository.Builder crb : pb.getCodeRepositoriesBuilderList()) {
 						if (crb.getRevisionsCount() > 0) {
@@ -120,6 +111,8 @@ public class SeqCombiner {
 									long key = cfb.getKey();
 									if (key > 0)
 										cfb.setKey(lastAstWriterKey + key);
+									if (cfb.hasRepoKey() && cfb.getRepoKey() > 0)
+										cfb.setRepoKey(lastRepoKey + cfb.getRepoKey()); 
 								}
 							}
 						} else {
@@ -131,6 +124,8 @@ public class SeqCombiner {
 							long key = cfb.getKey();
 							if (key > 0)
 								cfb.setKey(lastAstWriterKey + key);
+							if (cfb.hasRepoKey() && cfb.getRepoKey() > 0)
+								cfb.setRepoKey(lastRepoKey + cfb.getRepoKey()); 
 						}
 					}
 					projectWriter.append(textKey, new BytesWritable(pb.build().toByteArray()));
@@ -142,14 +137,10 @@ public class SeqCombiner {
 				r.close();
 			}
 			
-			// excludes
-			if (exclude)
-				continue;
-			
 			lastCommitWriterKey = readAndAppendCommit(conf, fileSystem, commitWriter, base + "/commit/" + name,
-					lastAstWriterKey, lastCommitWriterKey);
+					lastAstWriterKey, lastCommitWriterKey, lastRepoKey);
 			lastAstWriterKey = readAndAppendAst(conf, fileSystem, astWriter, base + "/ast/" + name, lastAstWriterKey);
-			readAndAppendRepo(conf, fileSystem, repoWriter, base + "/repo/" + name);
+			lastRepoKey = readAndAppendRepo(conf, fileSystem, repoWriter, base + "/repo/" + name, lastRepoKey);
 		}
 		projectWriter.close();
 		astWriter.close();
@@ -158,24 +149,28 @@ public class SeqCombiner {
 		fileSystem.close();
 	}
 
-	public static void readAndAppendRepo(Configuration conf, FileSystem fileSystem, MapFile.Writer writer,
-			String fileName) throws IOException {
+	public static long readAndAppendRepo(Configuration conf, FileSystem fileSystem, MapFile.Writer writer,
+			String fileName, long lastRepoKey) throws IOException {
+		long newLastKey = lastRepoKey;
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
-		Text textKey = new Text();
+		LongWritable longKey = new LongWritable();
 		BytesWritable value = new BytesWritable();
 		try {
-			while (r.next(textKey, value))
-				writer.append(textKey, value);
+			while (r.next(longKey, value)) {
+				newLastKey = longKey.get() + lastRepoKey;
+				writer.append(new LongWritable(newLastKey), value);
+			}
 		} catch (Exception e) {
 			System.err.println(fileName);
 			e.printStackTrace();
 		} finally {
 			r.close();
 		}
+		return newLastKey;
 	}
 
 	public static long readAndAppendCommit(Configuration conf, FileSystem fileSystem, MapFile.Writer writer,
-			String fileName, long lastAstKey, long lastCommitKey) throws IOException {
+			String fileName, long lastAstKey, long lastCommitKey, long lastRepoKey) throws IOException {
 		long newLastKey = lastCommitKey;
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
 		LongWritable longKey = new LongWritable();
@@ -189,6 +184,8 @@ public class SeqCombiner {
 					long key = cfb.getKey();
 					if (key > 0)
 						cfb.setKey(lastAstKey + key);
+					if (cfb.hasRepoKey() && cfb.getRepoKey() > 0)
+						cfb.setRepoKey(lastRepoKey + cfb.getRepoKey()); 
 				}
 				writer.append(new LongWritable(newLastKey), new BytesWritable(rb.build().toByteArray()));
 			}
