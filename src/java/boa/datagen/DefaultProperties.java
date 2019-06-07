@@ -76,7 +76,7 @@ public class DefaultProperties {
 	public static String localDataPath = null;
 	
 	// excluded repo names
-	public static Set<String> excludes = null;
+	public static Set<String> exceptions = null;
 	
 	@SuppressWarnings("unused")
 	private static String getRoot() {

@@ -92,8 +92,8 @@ public class SeqRepoImporter {
 		}
 		
 		// excludes
-		if (DefaultProperties.excludes == null)
-			DefaultProperties.excludes = new HashSet<String>();
+		if (DefaultProperties.exceptions == null)
+			DefaultProperties.exceptions = new HashSet<String>();
 
 		int counter = 0;
 		long repoKey = 1;
@@ -117,7 +117,7 @@ public class SeqRepoImporter {
 						RepoMetadata repo = new RepoMetadata(rp);
 						
 						// excludes
-						if (DefaultProperties.excludes.contains(repo.name))
+						if (DefaultProperties.exceptions.contains(repo.name))
 							continue;
 						
 						if (repo.id != null && repo.name != null && !processedProjectIds.contains(repo.id)) {
@@ -358,7 +358,7 @@ public class SeqRepoImporter {
 				ByteArrayFile f = new ByteArrayFile(gitDir.getAbsolutePath());
 				BytesWritable bw = new BytesWritable(SerializationUtils.serialize(f));
 				if (!f.isBuilt() || bw.getLength() > Integer.MAX_VALUE / 3) {
-					DefaultProperties.excludes.add(name);
+					DefaultProperties.exceptions.add(name);
 				} else {
 					repoWriter.append(new LongWritable(repoKey), bw);
 				}

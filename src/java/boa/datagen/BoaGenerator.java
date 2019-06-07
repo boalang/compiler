@@ -17,13 +17,9 @@
 package boa.datagen;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -124,7 +120,7 @@ public class BoaGenerator {
 		options.addOption("commits", "commits", true, "maximum number of commits of a project to be stored in the project object");
 		options.addOption("nocommits", "nocommits", false, "do not store commits");	
 		options.addOption("noasts", "noasts", false, "do not store asts");
-		options.addOption("excludes", "excludes", true, "do not generate those excluded projects");
+		options.addOption("exceptions", "exceptions", true, "do not generate those projects");
 		options.addOption("size", "size", true, "maximum size of a project object to be stored");
 		options.addOption("libs", "libs", true, "directory to store libraries");
 		options.addOption("output", "output", true, "directory where output is desired");
@@ -213,9 +209,9 @@ public class BoaGenerator {
 		if (cl.hasOption("noasts")) {
 			DefaultProperties.STORE_ASTS = false;
 		}
-		if (cl.hasOption("excludes")) {
+		if (cl.hasOption("exceptions")) {
 			try {
-				DefaultProperties.excludes = getExcludes(cl.getOptionValue("excludes"));
+				DefaultProperties.exceptions = getExcludes(cl.getOptionValue("exceptions"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
