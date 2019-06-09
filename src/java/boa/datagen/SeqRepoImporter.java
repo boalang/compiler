@@ -357,7 +357,7 @@ public class SeqRepoImporter {
 			if (!STORE_ASTS) {
 				ByteArrayFile f = new ByteArrayFile(gitDir.getAbsolutePath());
 				BytesWritable bw = new BytesWritable(SerializationUtils.serialize(f));
-				if (!f.isBuilt() || bw.getLength() > Integer.MAX_VALUE / 3) {
+				if (!f.isBuilt() || bw.getLength() > MAX_SIZE_FOR_PROJECT_WITH_COMMITS) {
 					DefaultProperties.exceptions.add(name);
 				} else {
 					repoWriter.append(new LongWritable(repoKey), bw);

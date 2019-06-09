@@ -1293,7 +1293,8 @@ public class BoaAstIntrinsics {
 							s += ", ";
 						s += prettyprint(stmt.getInitializations(i));
 					}
-					s += "; " + prettyprint(stmt.getConditions(0)) + "; ";
+					String condition = stmt.getConditionsCount() == 1 ? prettyprint(stmt.getConditions(0)) : " ";
+					s += "; " + condition + "; ";
 					for (int i = 0; i < stmt.getUpdatesCount(); i++) {
 						if (i > 0)
 							s += ", ";

@@ -17,9 +17,12 @@
 package boa.datagen;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -89,9 +92,9 @@ public class BoaGenerator {
 
 		clear();
 		
-//		FileWriter fw = new FileWriter("/Users/hyj/Desktop/excludes.txt");
+//		FileWriter fw = new FileWriter("/work/LAS/hridesh-lab/yijia/exceptions.txt");
 //		BufferedWriter bw = new BufferedWriter(fw);
-//		for (Object line : new ArrayList<String>(DefaultProperties.excludes)) {
+//		for (Object line : new ArrayList<String>(DefaultProperties.exceptions)) {
 //			bw.write(line.toString());
 //			bw.newLine();
 //		}
