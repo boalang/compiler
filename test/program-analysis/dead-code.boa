@@ -1,0 +1,86 @@
+m: output collection[int] of string;
+p: Project = input;
+# program analysis output
+type T_gen_kill= {gen: set of string, kill: string, dummy : int};
+type T_inout= {in: set of string, out: set of string, dummy1:int};
+# cfg of the current method
+cfg: CFG;
+
+# current visiting cfg node
+dead_nodes : set of int;
+prev_dead : set of int;
+genset : set of string;
+killset : set of string;
+
+init := traversal(node: CFGNode): T_gen_kill {
+	cur_value : T_gen_kill;
+	cur_value = {node.useVariables, node.defVariables, 0};
+	return cur_value;
+};
+
+live := traversal(node: CFGNode): T_inout {
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T_inout = {in_set, out_set, 0};
+	succs := node.successors;
+	if(!contains(dead_nodes, int(node.id))) {
+		if(def(getvalue(node))) {
+			cur_val = getvalue(node);
+		}
+	}
+	foreach(i:int;def(succs[i])) {
+		succ := getvalue(succs[i]);
+		if(def(succ)) {
+			cur_val.out = union(cur_val.out,succ.in);
+		}
+	}
+	cur_val.in = clone(cur_val.out);
+	if(!contains(dead_nodes, int(node.id))) {
+		gen_kill := getvalue(node, init);
+		remove(cur_val.in, gen_kill.kill);
+		cur_val.in = union(gen_kill.gen, cur_val.in);
+	}
+	return cur_val;
+};
+
+deadTraversal := traversal(node: CFGNode) {
+	if(node.defVariables != "") {
+		cur_val := getvalue(node, live);
+		if(def(cur_val)) {
+			if(!contains(cur_val.out, node.defVariables)) {
+				add(dead_nodes, int(node.id));
+			}
+		}
+	}
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T_inout) : bool {
+	if (len(difference(curr.in, prev.in)) == 0)
+		return true;	
+	return false;
+};
+
+q_all := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		cfg = getcfg(node);
+		clear(init);clear(dead_nodes);clear(live);clear(prev_dead);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, init);
+		do {
+			clear(live);
+			traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, live, fixp1);
+			prev_dead = clone(dead_nodes);
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, deadTraversal);
+		}while(len(difference(dead_nodes,prev_dead))!=0);
+		m[1] << string(dead_nodes);
+	}
+
+};
+
+visit(p, q_all);

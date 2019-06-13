@@ -1,0 +1,7 @@
+m: output collection of int;
+
+# print results
+dom_result := traversal(node: CFGNode) : string {
+};
+
+m << 1;

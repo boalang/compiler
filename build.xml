@@ -71,6 +71,7 @@
 				<uptodate srcfile="src/proto/issues.proto" targetfile="src/compiled-proto/boa/types/Issues.java" />
 				<uptodate srcfile="src/proto/shared.proto" targetfile="src/compiled-proto/boa/types/Shared.java" />
 				<uptodate srcfile="src/proto/toplevel.proto" targetfile="src/compiled-proto/boa/types/Toplevel.java" />
+				<uptodate srcfile="src/proto/control.proto" targetfile="src/compiled-proto/boa/types/Control.java" />
 			</and>
 		</condition>
 	</target>
@@ -222,6 +223,29 @@
 			</test>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+	</target>
+	<target name="test-traversal" depends="-compile-tests" description="Run traversal unit tests.">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
+			<classpath refid="test.class.path" />
+			<test name="boa.test.compiler.TestTraversalGood">
+				<formatter type="plain" usefile="false" />
+			</test>
+			<test name="boa.test.compiler.TestTraversalBad">
+				<formatter type="plain" usefile="false" />
+			</test>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
+	</target>
+	<target name="test-program-analysis" depends="-compile-tests" description="Run program analysis programs.">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
+			<classpath refid="test.class.path" />
+			<test name="boa.test.compiler.ProgramAnalysisGood">
+				<formatter type="plain" usefile="false" />
+			</test>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-knowngood" depends="-compile-tests" description="Run known good tests.">
 		<junit fork="yes" haltonfailure="no">

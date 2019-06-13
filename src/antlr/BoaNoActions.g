@@ -48,7 +48,9 @@ type
 	| tupleType
 	| outputType
 	| functionType
+	| fixp=fixpType
 	| visitorType
+	| tr=traversalType
 	| stackType
 	| setType
 	| identifier
@@ -93,8 +95,16 @@ functionType
 	| FUNCTION LPAREN ((identifier COLON type | identifier { notifyErrorListeners("function arguments require an identifier and type"); }) (COMMA identifier COLON type | COMMA identifier { notifyErrorListeners("function arguments require an identifier and type"); })*)? RPAREN (COLON type)?
 	;
 
+fixpType
+	: FIXP
+	;
+
 visitorType
 	: VISITOR
+	;
+
+traversalType
+	: TRAVERSAL
 	;
 
 statement
@@ -215,6 +225,14 @@ visitStatement
 		RIGHT_ARROW programStatement
 	;
 
+traverseStatement
+	: (LPAREN identifier COLON identifier RPAREN (COLON type)? (programStatement))
+	;
+
+fixpStatement
+	: (LPAREN identifier COMMA identifier COLON identifier RPAREN (COLON type) (programStatement))
+	;
+
 stopStatement
 	: STOP { isSemicolon(); }
 	;
@@ -268,7 +286,9 @@ operand
 	| floatingPointLiteral
 	| composite
 	| functionExpression
+	| fixpExpression
 	| visitorExpression
+	| traversalExpression
 	| unaryFactor
 	| DOLLAR
 	| parenExpression
@@ -288,8 +308,16 @@ functionExpression
 	| identifier   block
 	;
 
+fixpExpression
+	: fixpType (fixpStatement | { notifyErrorListeners("error: only fixpoint statement allowed inside fixpoint expression"); } programStatement)
+	;
+
 visitorExpression
 	: visitorType LBRACE (visitStatement | { notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } programStatement)+ RBRACE
+	;
+
+traversalExpression
+	: traversalType (traverseStatement | { notifyErrorListeners("error: only traverse statements allowed inside traversal bodies"); } programStatement)
 	;
 
 composite
@@ -330,7 +358,9 @@ identifier
 	| lit=DEFAULT  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=CONTINUE { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FUNCTION { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=FIXP     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=VISITOR  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=TRAVERSAL{ notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=BEFORE   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=AFTER    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=STOP     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
@@ -393,7 +423,9 @@ WEIGHT   : 'weight';
 DEFAULT  : 'default';
 CONTINUE : 'continue';
 FUNCTION : 'function';
+FIXP : 'fixp';
 VISITOR  : 'visitor';
+TRAVERSAL  : 'traversal';
 BEFORE   : 'before';
 AFTER    : 'after';
 STOP     : 'stop';
