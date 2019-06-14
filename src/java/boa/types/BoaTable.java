@@ -77,6 +77,9 @@ public class BoaTable extends BoaType {
 				}
 			}
 		}
+		else
+			this.indexTypes = new ArrayList<BoaType>();
+
 		if (type instanceof BoaName) {
 			names.put(((BoaName)type).getId(), -1);
 		}
@@ -221,11 +224,11 @@ public class BoaTable extends BoaType {
 	}
 
 	public BoaType acceptsFilter() {
-		return this.getIndexTypes() == null ? this.getType() : this.getIndex(0);
+		return this.getIndexTypes().size() == 0 ? this.getType() : this.getIndex(0);
 	}
 
 	public BoaType filterWith(final Object o) {
-		if (this.getIndexTypes() == null) {
+		if (this.getIndexTypes().size() == 0) {
 			return new BoaArray(new BoaTuple());
 		}
 
