@@ -365,7 +365,7 @@ public class SeqRepoImporter {
 			}
 
 			try {
-				conn = new GitConnector(gitDir.getAbsolutePath(), project.getId(), astWriter, astWriterLen,
+				conn = new GitConnector(gitDir.getAbsolutePath(), project.getName(), astWriter, astWriterLen,
 						commitWriter, commitWriterLen, contentWriter, contentWriterLen, repoKey);
 				final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
 				if (STORE_COMMITS) {

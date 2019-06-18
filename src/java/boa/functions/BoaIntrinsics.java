@@ -28,6 +28,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.SerializationUtils;
+import org.apache.hadoop.io.BytesWritable;
+import org.eclipse.jgit.internal.storage.file.ByteArrayFile;
+
 import boa.types.Ast.Statement;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -94,6 +98,20 @@ public class BoaIntrinsics {
 			return BoaAstIntrinsics.getRevision(key);
 		}
 		return cr.getRevisions((int) index);
+	}
+	
+	@FunctionSpec(name = "getParsedChangedFiles", returnType = "array of ChangedFile", formalParameters = { "array of ChangedFile"})
+	public static ChangedFile[] getParsedChangedFiles(final ChangedFile[] files) {
+		ChangedFile[] fs = new ChangedFile[files.length];
+		for (int i = 0; i < fs.length; i++) {
+			fs[i] = BoaAstIntrinsics.getParsedChangedFile(files[i]);
+		}
+		return fs;
+	}
+	
+	@FunctionSpec(name = "gc")
+	public static void gc() {
+		System.gc();
 	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time", "string..." })
@@ -379,7 +397,10 @@ public class BoaIntrinsics {
 		return Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
 	}
     
-	
+    @FunctionSpec(name = "print", formalParameters = "string")
+	public static void print(String str) {
+		System.out.println(str);
+	}
 	
 	/**
 	 * Is a Revision's log message indicating it is a fixing revision?
