@@ -318,4 +318,10 @@ public class BoaTable extends BoaType {
 		s += " of " + this.getType();
 		return s;
 	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String toJavaType() {
+		return "boa.runtime.TableReader";
+	}
 }
