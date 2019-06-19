@@ -121,18 +121,13 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "ChangedFile" })
 	public static ASTRoot getast(ChangedFile f) {
 		context.getCounter(ASTCOUNTER.GETS_ATTEMPTED).increment(1);
-
+		
 		// if no ast, check new model
 		if (f.hasRepoKey() && f.hasObjectId()) {
-			System.out.println("new model");
 			ASTRoot r = getASTRoot(f);
-			if (r == emptyAst)
-				System.out.println("empty ast");
 			return r;
 		}
-
-		System.out.println("old model");
-
+		
 		if (map == null)
 			openMap();
 
@@ -169,11 +164,6 @@ public class BoaAstIntrinsics {
 
 	public static void gc() {
 		System.gc();
-	}
-
-	protected void finalize() throws Throwable {
-		System.out.println("BoaAstIntrinsics Garbage collector called");
-		System.out.println("Object garbage collected : " + this);
 	}
 
 	public static ASTRoot getASTRoot(ChangedFile f) {
