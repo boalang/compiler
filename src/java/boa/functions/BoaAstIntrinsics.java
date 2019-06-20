@@ -162,24 +162,36 @@ public class BoaAstIntrinsics {
 		return emptyAst;
 	}
 
+	private static long currentRepoKey = Long.MIN_VALUE;
+	private static Repository currentStoredRepository = null;
+	
 	public static ASTRoot getASTRoot(ChangedFile f) {
 		// if file contains ast root
 		if (f.hasRoot())
 			return f.getRoot();
+
 		if (f.hasRepoKey() && f.hasObjectId()) {
-			BytesWritable value = getValueFromRepoMap(f);
-			if (value != null) {
-				ByteArrayFile file = (ByteArrayFile) SerializationUtils.deserialize(value.getBytes());
-				try {
-					Repository repo = new ByteArrayRepositoryBuilder().setGitDir(file).build();
-					String content = getContent(repo, f.getObjectId());
-					repo.close();
-					file = null;
-					repo = null;
-					return parseJavaFile(content);
-				} catch (IOException e) {
-					e.printStackTrace();
-				} 
+			if (f.getRepoKey() != currentRepoKey) {
+				currentRepoKey = f.getRepoKey();
+				BytesWritable value = getValueFromRepoMap(f);
+				if (value != null) {
+					ByteArrayFile file = (ByteArrayFile) SerializationUtils.deserialize(value.getBytes());
+					try {
+						if (currentStoredRepository != null)
+							currentStoredRepository.close();
+						currentStoredRepository = new ByteArrayRepositoryBuilder().setGitDir(file).build();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				else
+					return emptyAst;
+			}
+			try {
+				String content = getContent(currentStoredRepository, f.getObjectId());
+				return parseJavaFile(content);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 		return emptyAst;
