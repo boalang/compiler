@@ -162,10 +162,6 @@ public class BoaAstIntrinsics {
 		return emptyAst;
 	}
 
-	public static void gc() {
-		System.gc();
-	}
-
 	public static ASTRoot getASTRoot(ChangedFile f) {
 		// if file contains ast root
 		if (f.hasRoot())
@@ -180,7 +176,6 @@ public class BoaAstIntrinsics {
 					repo.close();
 					file = null;
 					repo = null;
-//					gc();
 					return parseJavaFile(content);
 				} catch (IOException e) {
 					e.printStackTrace();
