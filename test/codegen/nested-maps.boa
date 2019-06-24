@@ -59,3 +59,13 @@ mk[si] = "foo";
 if (haskey(mk, si))
 	remove(mk, si);
 lk2 := lookup(mk, si, "foo");
+
+mq: map[queue of int] of string;
+clear(mq);
+lq := len(mq);
+v3 := values(mq);
+q: queue of int;
+mq[q] = "foo";
+if (haskey(mq, q))
+	remove(mq, q);
+lq2 := lookup(mq, q, "foo");

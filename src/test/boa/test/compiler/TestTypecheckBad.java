@@ -93,4 +93,9 @@ public class TestTypecheckBad extends BaseTest {
 	public void testTypecheckBad() throws Exception {
 		typecheck(load(badDir + file), err);
 	}
+
+	@Test
+	public void addSetWrongVal() throws IOException {
+		typecheck(load(badDir + "add-set-wrong-val.boa"), "no such function add([set of string, ChangedFile])");
+	}
 }

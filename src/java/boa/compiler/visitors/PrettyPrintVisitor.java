@@ -587,6 +587,13 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		stream.print("stack of ");
 		n.getValue().accept(this);
 	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final QueueType n) {
+		stream.print("queue of ");
+		n.getValue().accept(this);
+	}
 
 	/** {@inheritDoc} */
 	@Override
