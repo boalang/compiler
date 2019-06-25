@@ -18,6 +18,7 @@
 package boa.datagen;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Set;
 
 /**
@@ -28,6 +29,7 @@ public class DefaultProperties {
 	public static String MAX_PROJECTS = "1000";
 	public static String MAX_COMMITS = "10000";
 	public static String MAX_SIZE_FOR_PROJECT_WITH_COMMITS = String.valueOf(1 << 26); // Integer.MAX_VALUE / 3
+	public static int MAX_SIZE_FACTOR = 1;
 	
 	public static boolean DEBUG = false, DEBUGPARSE = false, CACHE = false;
 
@@ -76,7 +78,7 @@ public class DefaultProperties {
 	public static String localDataPath = null;
 	
 	// excluded repo names
-	public static Set<String> exceptions = null;
+	public static HashMap<String, String> exceptions = null;
 	
 	@SuppressWarnings("unused")
 	private static String getRoot() {

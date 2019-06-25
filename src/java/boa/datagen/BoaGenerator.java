@@ -23,7 +23,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.cli.CommandLine;
@@ -92,13 +94,13 @@ public class BoaGenerator {
 
 		clear();
 		
-//		FileWriter fw = new FileWriter("/work/LAS/hridesh-lab/yijia/exceptions.txt");
-//		BufferedWriter bw = new BufferedWriter(fw);
-//		for (Object line : new ArrayList<String>(DefaultProperties.exceptions)) {
-//			bw.write(line.toString());
-//			bw.newLine();
-//		}
-//		bw.close();
+		FileWriter fw = new FileWriter("exceptions_"+System.currentTimeMillis()+".txt");
+		BufferedWriter bw = new BufferedWriter(fw);
+		for (Entry<String, String> entry : DefaultProperties.exceptions.entrySet()) {
+			bw.write(entry.getKey() + " " + entry.getValue());
+			bw.newLine();
+		}
+		bw.close();
 	}
 
 	private static final void printHelp(Options options, String message) {
@@ -123,6 +125,7 @@ public class BoaGenerator {
 		options.addOption("commits", "commits", true, "maximum number of commits of a project to be stored in the project object");
 		options.addOption("nocommits", "nocommits", false, "do not store commits");	
 		options.addOption("noasts", "noasts", false, "do not store asts");
+		options.addOption("factor", "factor", true, "max size factor");
 		options.addOption("exceptions", "exceptions", true, "do not generate those projects");
 		options.addOption("size", "size", true, "maximum size of a project object to be stored");
 		options.addOption("libs", "libs", true, "directory to store libraries");
@@ -219,17 +222,20 @@ public class BoaGenerator {
 				e.printStackTrace();
 			}
 		}
+		if (cl.hasOption("factor")) {
+			DefaultProperties.MAX_SIZE_FACTOR = Integer.parseInt(cl.getOptionValue("factor"));
+		}
 	}
 
-	private static Set<String> getExcludes(String path) throws IOException {
+	private static HashMap<String, String> getExcludes(String path) throws IOException {
 		String line;
 		File file = new File(path);
-		HashSet<String> strSet = new HashSet<String>();
+		HashMap<String, String> map = new HashMap<String, String>();
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		while ((line = br.readLine()) != null)
-			strSet.add(line);
+			map.put(line, "");
 		br.close();
-		return strSet;
+		return map;
 	}
 
 	//

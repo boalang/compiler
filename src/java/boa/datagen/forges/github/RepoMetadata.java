@@ -216,7 +216,7 @@ public class RepoMetadata {
 		if (jsonProject.has(GIT_SIZE)) {
 			JsonElement e = jsonProject.get(GIT_SIZE);
 			if (!e.isJsonNull())
-				this.size = e.getAsInt();
+				this.setSize(e.getAsInt());
 		}
         /*if (jsonProject.has("databases")) {
 	    	JSONArray jsonDBs = jsonProject.getJSONArray("databases");
@@ -439,5 +439,13 @@ public class RepoMetadata {
 		}
 		Project prj = project.build();
 		return prj;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
 	}
 }

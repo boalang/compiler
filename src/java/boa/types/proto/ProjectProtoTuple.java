@@ -122,6 +122,9 @@ public class ProjectProtoTuple extends BoaProtoTuple {
 		
 		names.put("main_language", counter++);
 		members.add(new BoaString());
+		
+		names.put("noast", counter++);
+		members.add(new BoaBool());
 	}
 
 	/**

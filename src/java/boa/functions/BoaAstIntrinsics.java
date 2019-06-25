@@ -122,42 +122,43 @@ public class BoaAstIntrinsics {
 	public static ASTRoot getast(ChangedFile f) {
 		context.getCounter(ASTCOUNTER.GETS_ATTEMPTED).increment(1);
 		
-		// if no ast, check new model
+		// check new model
 		if (f.hasRepoKey() && f.hasObjectId()) {
 			ASTRoot r = getASTRoot(f);
-			return r;
-		}
-		
-		if (map == null)
-			openMap();
+			if (r != emptyAst)
+				return r;
+		} else {	
+			if (map == null)
+				openMap();
 
-		try {
-			final BytesWritable value = new BytesWritable();
-			if (map.get(new LongWritable(f.getKey()), value) == null) {
+			try {
+				final BytesWritable value = new BytesWritable();
+				if (map.get(new LongWritable(f.getKey()), value) == null) {
+					context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
+				} else {
+					final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+					// defaults to 64, really big ASTs require more
+					_stream.setRecursionLimit(Integer.MAX_VALUE);
+					final ASTRoot root = ASTRoot.parseFrom(_stream);
+					context.getCounter(ASTCOUNTER.GETS_SUCCEED).increment(1);
+					return root;
+				}
+			} catch (final InvalidProtocolBufferException e) {
+				e.printStackTrace();
+				context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+			} catch (final IOException e) {
+				e.printStackTrace();
 				context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
-			} else {
-				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
-				// defaults to 64, really big ASTs require more
-				_stream.setRecursionLimit(Integer.MAX_VALUE);
-				final ASTRoot root = ASTRoot.parseFrom(_stream);
-				context.getCounter(ASTCOUNTER.GETS_SUCCEED).increment(1);
-				return root;
+			} catch (final RuntimeException e) {
+				e.printStackTrace();
+				context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
+			} catch (final Error e) {
+				e.printStackTrace();
+				context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
 			}
-		} catch (final InvalidProtocolBufferException e) {
-			e.printStackTrace();
-			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
-		} catch (final IOException e) {
-			e.printStackTrace();
-			context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
-		} catch (final RuntimeException e) {
-			e.printStackTrace();
-			context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
-		} catch (final Error e) {
-			e.printStackTrace();
-			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
 		}
 
-		System.err.println("error with ast: " + f.getKey() + " from " + f.getName());
+		System.err.println("error with ast: " + f.getChange() + " " + f.getKey() + " from " + f.getName());
 		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
 		return emptyAst;
 	}
@@ -183,9 +184,9 @@ public class BoaAstIntrinsics {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-				}
-				else
+				} else {
 					return emptyAst;
+				}
 			}
 			try {
 				String content = getContent(currentStoredRepository, f.getObjectId());
