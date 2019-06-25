@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +18,16 @@
 package boa.types;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A {@link BoaType} that represents a function, its return value, and its
  * formal parameters.
  * 
  * @author anthonyu
+ * @author rdyer
  */
 public class BoaFunction extends BoaType {
-	private static final Map<String, String> funcNames = new HashMap<String, String>();
-
 	private BoaType type;
 	private BoaType[] formalParameters;
 	private String name;
@@ -243,19 +241,11 @@ public class BoaFunction extends BoaType {
 	@Override
 	public String toJavaType() {
 		String s = cleanType(type.toJavaType()) + "_";
+
 		for (final BoaType t : this.formalParameters)
 			s += "_" + cleanType(t.toJavaType());
-		// use numbers for each unique type, to avoid generating really long filenames
-		if (!funcNames.containsKey(s))
-			funcNames.put(s, "BoaFunc_" + funcNames.size());
-		return funcNames.get(s);
-	}
 
-	private String cleanType(String s) {
-		final String s2 = s.replace('<', '_').replace('>', '_').replaceAll(",\\s+", "_").replaceAll("\\[\\]", "Array");
-		if (!s2.contains("."))
-			return s2;
-		return s2.substring(s2.lastIndexOf(".") + 1);
+		return shortenedType(s, "BoaFunc");
 	}
 
 	/** {@inheritDoc} */
@@ -301,16 +291,20 @@ public class BoaFunction extends BoaType {
 			t = ((BoaArray)t).getType();
 			if (t instanceof BoaTypeVar)
 				return new BoaArray(replaceVar(((BoaTypeVar)t).getName(), actualParameters));
-		}
-		else if (t instanceof BoaTypeVar)
+		} else if (t instanceof BoaSet) {
+			t = ((BoaSet)t).getType();
+			if (t instanceof BoaTypeVar)
+				return new BoaSet(replaceVar(((BoaTypeVar)t).getName(), actualParameters));
+		} else if (t instanceof BoaTypeVar) {
 			return replaceVar(((BoaTypeVar)t).getName(), actualParameters);
+		}
 
 		return type;
 	}
 
 	private BoaType replaceVar(final String var, final List<BoaType> actual) {
 		for (int i = 0; i < formalParameters.length; i++) {
-			BoaType t = replaceVar(var, formalParameters[i], actual.get(i));
+			final BoaType t = replaceVar(var, formalParameters[i], actual.get(i));
 			if (t != null)
 				return t;
 		}
@@ -325,8 +319,12 @@ public class BoaFunction extends BoaType {
 		}
 		if (formal instanceof BoaArray)
 			return replaceVar(var, ((BoaArray)formal).getType(), ((BoaArray)actual).getType());
+		if (formal instanceof BoaSet)
+			return replaceVar(var, ((BoaSet)formal).getType(), ((BoaSet)actual).getType());
 		if (formal instanceof BoaStack)
 			return replaceVar(var, ((BoaStack)formal).getType(), ((BoaStack)actual).getType());
+		if (formal instanceof BoaTraversal)
+			return replaceVar(var, ((BoaTraversal)formal).getIndex(), ((BoaTraversal)actual).getIndex());
 		if (formal instanceof BoaMap) {
 			final BoaType t = replaceVar(var, ((BoaMap)formal).getType(), ((BoaMap)actual).getType());
 			if (t != null)

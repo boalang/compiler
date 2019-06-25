@@ -17,7 +17,7 @@
 package boa.types;
 
 /**
- * A {@link BoaType} representing an array of scalar values.
+ * A {@link BoaType} representing an array of values.
  * 
  * @author anthonyu
  */
@@ -44,9 +44,13 @@ public class BoaArray extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
-		// if that is a function, check its return type
+		// if that is a function, check the return type
 		if (that instanceof BoaFunction)
 			return this.assigns(((BoaFunction) that).getType());
+
+		// if that is a component, check the type
+		if (that instanceof BoaName)
+			return this.assigns(((BoaName) that).getType());
 
 		if (that instanceof BoaTuple) {
 			for (BoaType t : ((BoaTuple) that).getTypes())
@@ -87,6 +91,10 @@ public class BoaArray extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public boolean compares(final BoaType that) {
+		// if that is a function, check the return type
+		if (that instanceof BoaFunction)
+			return this.compares(((BoaFunction) that).getType());
+
 		// if that is an array..
 		if (that instanceof BoaArray)
 			// check against the element types of these arrays
@@ -96,27 +104,30 @@ public class BoaArray extends BoaType {
 		return false;
 	}
 
+	/** {@inheritDoc} */
+	@Override
+	public boolean hasTypeVar() {
+		return this.type.hasTypeVar();
+	}
+
 	/**
 	 * Get the element type of this array.
 	 * 
-	 * @return A {@link BoaScalar} representing the element type of this
+	 * @return A {@link BoaType} representing the element type of this
 	 *         array
 	 */
-	public BoaScalar getType() {
-		if (this.type instanceof BoaScalar)
-			return (BoaScalar) this.type;
-
-		throw new RuntimeException("this shouldn't happen");
+	public BoaType getType() {
+		return this.type;
 	}
 
 	/**
 	 * Set the element type of this array.
 	 * 
 	 * @param type
-	 *            A {@link BoaScalar} representing the element type of this
+	 *            A {@link BoaType} representing the element type of this
 	 *            array
 	 */
-	public void setType(final BoaScalar type) {
+	public void setType(final BoaType type) {
 		this.type = type;
 	}
 

@@ -55,8 +55,23 @@ public class BoaProtoTuple extends BoaTuple {
 
 	/** {@inheritDoc} */
 	@Override
+	public boolean compares(final BoaType that) {
+		// if that is a function, check the return type
+		if (that instanceof BoaFunction)
+			return this.compares(((BoaFunction) that).getType());
+
+		// otherwise, check if the types are equivalent one way or the other
+		if (this.assigns(that) || that.assigns(this))
+			return true;
+
+		// forget it
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public String toString() {
-		String type = toJavaType();
+		final String type = toJavaType();
 		return type.substring(type.lastIndexOf('.') + 1);
 	}
 

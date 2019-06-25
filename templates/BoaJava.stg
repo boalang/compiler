@@ -1,18 +1,19 @@
 identifierMap ::= [
-		"true" : "true",
-		"false" : "false",
-		"PI" : "Math.PI",
-		"Inf" : "Double.POSITIVE_INFINITY",
-		"inf" : "Double.POSITIVE_INFINITY",
-		"NaN" : "Double.NaN",
-		"nan" : "Double.NaN",
-		"SECOND" : "(1000 * 1000)",
-		"SEC" : "(1000 * 1000)",
-		"MINUTE" : "(60 * 1000 * 1000)",
-		"MIN" : "(60 * 1000 * 1000)",
-		"HOUR" : "(60 * 60 * 1000 * 1000)",
-		"HR" : "(60 * 60 * 1000 * 1000)",
-		"input" : "_input"
+		"Xtrue" : "true",
+		"Xfalse" : "false",
+		"XPI" : "Math.PI",
+		"XInf" : "Double.POSITIVE_INFINITY",
+		"Xinf" : "Double.POSITIVE_INFINITY",
+		"XNaN" : "Double.NaN",
+		"Xnan" : "Double.NaN",
+		"XSECOND" : "(1000 * 1000)",
+		"XSEC" : "(1000 * 1000)",
+		"XMINUTE" : "(60 * 1000 * 1000)",
+		"XMIN" : "(60 * 1000 * 1000)",
+		"XHOUR" : "(60 * 60 * 1000 * 1000)",
+		"XHR" : "(60 * 60 * 1000 * 1000)",
+		"Xinput" : "_input",
+		default : {___<id>}
 ]
 		
 VarDecl(isstatic, type, id) ::= "<if(isstatic)>static <endif><type> ___<id>;<\n>"
@@ -77,8 +78,8 @@ Index(map, operand, index, slice) ::= "<if(map)><operand>.get(<index>)<elseif(sl
 Call(call, operand, parameters) ::= "<if(call)><call><else><operand>(<parameters>)<endif>"
 Composite(type, exprlist) ::= "new <type> {<\n><exprlist><\n>}"
 Pair(map, key, value) ::= "put(<key>, <value>);"
-Identifier(id) ::= "<if(identifierMap.(id))><identifierMap.(id)><else>___<id><endif>"
-Assignment(lhs, rhs) ::= "<lhs> = <rhs>;<\n>"
+Identifier(id) ::= "<identifierMap.([\"X\", id])>"
+Assignment(lhs, operator, rhs) ::= "<lhs> <operator> <rhs>;<\n>"
 Break() ::= "break;<\n>"
 Continue() ::= "continue;<\n>"
 Stop() ::= "return false;<\n>"
@@ -122,6 +123,32 @@ new <type>()
 	<body>
 }
 >>
+
+TupleType(name, fields, types, protos) ::= <<
+private class <name>
+{
+	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
+	<name>( <fields,types:{field,type|<type> ___<field>}; separator=", "> ){
+		<fields,types,protos:{field,type,proto|
+			<if(proto)> this.___<field> = ___<field>
+			<else> this.___<field> = new <type>(___<field>)
+			<endif>
+		}; separator="; ">;
+	}
+	<name>( <name> tmp){
+		<fields,types,protos:{field,type,proto|
+			<if(proto)> this.___<field> = tmp.___<field>
+			<else> this.___<field> = new <type>(tmp.___<field>)
+			<endif>
+		}; separator="; ">;
+	}
+	public <name> clone() {
+    		return new <name>(this);
+	}
+}<\n>
+>>
+
+Tuple(name, exprlist) ::= "new <name>(<exprlist>) <\n>"
 Visitor(staticDeclarations, body) ::= <<
 new boa.runtime.BoaAbstractVisitor()
 {
@@ -149,13 +176,12 @@ new boa.runtime.BoaAbstractFixP()
 	<body:{s | <s><\n>}>}
 >>
 
-VisitClause(ret, name, args, types, body) ::= <<
-<if(args)>
-<args,types:{arg,type|
+VisitClause(ret, name, arg, type, body) ::= <<
+<if(arg)>
 @Override
 protected <ret> <name>(final <type> <arg>) throws Exception
 {
-	<body>\}}>
+	<body>\}
 <else>
 @Override
 protected <ret> <name>() throws Exception

@@ -47,6 +47,7 @@ import org.scannotation.ClasspathUrlFinder;
 
 import boa.compiler.ast.Program;
 import boa.compiler.ast.Start;
+import boa.compiler.transforms.InheritedAttributeTransformer;
 import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.VisitorMergingTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
@@ -276,6 +277,7 @@ public class BoaCompiler {
 							LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
 							isSimple &= !simpleVisitor.isComplex();
 
+							new InheritedAttributeTransformer().start(p);
 							new LocalAggregationTransformer().start(p);
 
 							// if a job has no visitor, let it have its own method

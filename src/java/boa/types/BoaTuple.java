@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +17,26 @@
  */
 package boa.types;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * A {@link BoaScalar} representing a data structure with named members of
+ * A {@link BoaType} representing a data structure with named members of
  * arbitrary type.
  * 
  * @author anthonyu
+ * @author rdyer
  */
-public class BoaTuple extends BoaScalar {
+public class BoaTuple extends BoaType {
 	protected final List<BoaType> members;
 	protected final Map<String, Integer> names;
+
+	public BoaTuple() {
+		members = new ArrayList<BoaType>();
+		names = new HashMap<String, Integer>();
+	}
 
 	public BoaTuple(final List<BoaType> members) {
 		this.members = members;
@@ -37,10 +45,11 @@ public class BoaTuple extends BoaScalar {
 			BoaType t = this.members.get(i);
 			if (t instanceof BoaName)
 				this.names.put(((BoaName) t).getId(), i);
+			this.names.put("f" + i, i);
 		}
 	}
 
-	public BoaTuple(final List<BoaType> members, final Map<String, Integer> names) {
+	protected BoaTuple(final List<BoaType> members, final Map<String, Integer> names) {
 		this.members = members;
 		this.names = names;
 	}
@@ -48,8 +57,13 @@ public class BoaTuple extends BoaScalar {
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
+		// if that is a function, check the return type
 		if (that instanceof BoaFunction)
 			return this.assigns(((BoaFunction) that).getType());
+
+		// if that is a component, check the type
+		if (that instanceof BoaName)
+			return this.assigns(((BoaName) that).getType());
 
 		if (that instanceof BoaArray) {
 			BoaType type = ((BoaArray) that).getType();
@@ -118,22 +132,36 @@ public class BoaTuple extends BoaScalar {
 		return this.names.get(member);
 	}
 
+	public String getMemberName(final String member) {
+		final BoaType t = this.members.get(this.names.get(member));
+		if (t instanceof BoaName)
+			return ((BoaName)t).getId();
+		return member;
+	}
+
 	public List<BoaType> getTypes() {
 		return this.members;
 	}
 
 	@Override
 	public String toJavaType() {
-		return "Object[]";
+		String s = "";
+
+		for (final BoaType t : this.members)
+			s += "_" + cleanType(t.toJavaType());
+
+		return shortenedType(s, "BoaTup");
 	}
 
 	private int hash = 0;
+	private boolean hashed = false;
 
 	@Override
 	public int hashCode() {
-		if (hash == 0) {
+		if (!hashed) {
 			final int prime = 31;
 			hash = super.hashCode();
+			hashed = true;
 			hash = prime * hash + (this.members == null ? 0 : this.members.hashCode());
 		}
 		return hash;
