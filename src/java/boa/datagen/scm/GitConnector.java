@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.sound.sampled.ReverbType;
+
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile.Writer;
@@ -121,8 +123,9 @@ public class GitConnector extends AbstractConnector {
 		RevWalk temprevwalk = new RevWalk(repository);
 		try {
 			revwalk.reset();
-			Set<RevCommit> heads = getHeads();
-			revwalk.markStart(heads);
+//			Set<RevCommit> heads = getHeads(); // all branches
+			RevCommit main = revwalk.parseCommit(repository.resolve(Constants.HEAD)); // main branch
+			revwalk.markStart(main);
 			revwalk.sort(RevSort.TOPO, true);
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
@@ -164,7 +167,10 @@ public class GitConnector extends AbstractConnector {
 					gc.setMessage(rc.getFullMessage());
 				} catch (Exception e) {
 				}
-
+				
+				if (rc.getId().getName().equals("6d11931421480016fe98aaee08a978a759f4a6ea"))
+					System.out.println("found");
+				
 				gc.updateChangedFiles(rc);
 				gc.fileNameIndices.clear();
 
@@ -172,6 +178,9 @@ public class GitConnector extends AbstractConnector {
 					revisionMap.put(gc.id, revisionKeys.size());
 
 					Revision revision = gc.asProtobuf(projectName);
+					
+					System.out.println("size " + revision.getSerializedSize() + " " + revision.getId());
+					
 					revisionKeys.add(commitWriterLen);
 					BytesWritable bw = new BytesWritable(revision.toByteArray());
 					commitWriter.append(new LongWritable(commitWriterLen), bw);
@@ -181,7 +190,7 @@ public class GitConnector extends AbstractConnector {
 
 					revisions.add(gc);
 				}
-
+				
 				if (debug) {
 					long endTime = System.currentTimeMillis();
 					long time = endTime - startTime;
@@ -192,6 +201,9 @@ public class GitConnector extends AbstractConnector {
 					}
 				}
 			}
+			
+			System.out.println("size " + commitWriterLen);
+			
 			System.out.println(Thread.currentThread().getId() + " Process metadata of all commits");
 
 			RevCommit head = revwalk.parseCommit(repository.resolve(Constants.HEAD));

@@ -124,8 +124,9 @@ public class SeqRepoImporter {
 						// new model
 						if (!STORE_ASTS) {
 							int size = MAX_SIZE_FOR_PROJECT_WITH_COMMITS * DefaultProperties.MAX_SIZE_FACTOR;
-							if (repo.getSize() * 1000 > size) {
-								DefaultProperties.exceptions.put(repo.name, "exceeding max size");
+							int curSize = repo.getSize() * 1000;
+							if (curSize > size) {
+								DefaultProperties.exceptions.put(repo.name, "repo size: " + curSize + " exceeding the max size: " + size);
 								continue;
 							}
 						}
@@ -386,7 +387,7 @@ public class SeqRepoImporter {
 				BytesWritable bw = new BytesWritable(SerializationUtils.serialize(f));
 				int size =  MAX_SIZE_FOR_PROJECT_WITH_COMMITS * DefaultProperties.MAX_SIZE_FACTOR;
 				if (!f.isBuilt() || bw.getLength() > size) {
-					DefaultProperties.exceptions.put(name, "exceeding max size");
+					DefaultProperties.exceptions.put(name, "pack file size: " + bw.getLength() + " exceeding the max size: " + size);
 					noast = true;
 					if (debug)
 						System.err.println("Thread " + Thread.currentThread().getId() + " the pack file size of project: " + name + " exceeds the " + size + " byte");
@@ -420,8 +421,8 @@ public class SeqRepoImporter {
 				repoBuilder.setHead(conn.getHeadCommitOffset());
 				repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot());
 
-				repoBuilder.addAllBranches(conn.getBranchIndices());
-				repoBuilder.addAllBranchNames(conn.getBranchNames());
+//				repoBuilder.addAllBranches(conn.getBranchIndices());
+//				repoBuilder.addAllBranchNames(conn.getBranchNames());
 				repoBuilder.addAllTags(conn.getTagIndices());
 				repoBuilder.addAllTagNames(conn.getTagNames());
 
