@@ -316,17 +316,21 @@ public class BoaNormalFormIntrinsics {
 	 */
 	@FunctionSpec(name = "normalize", returnType = "Expression", formalParameters = { "Expression" })
 	public static Expression normalize(final Expression e) throws Exception {
-		Expression exp = e;
-		Expression previous = e;
+		try {
+			Expression exp = e;
+			Expression previous = e;
 
-		for (int i = 0; i < 5; i++) {	// maximum iteration allowed = 5. Ideally should not exceed 2
-			exp = move(reduce(exp));	// reduce and move Expression. reduce is required before move
-			if (exp.equals(previous))
-				break;
-			previous = exp;
+			for (int i = 0; i < 5; i++) {	// maximum iteration allowed = 5. Ideally should not exceed 2
+				exp = move(reduce(exp));	// reduce and move Expression. reduce is required before move
+				if (exp.equals(previous))
+					break;
+				previous = exp;
+			}
+
+			return factorLiteral(sort(exp)); // sort the left side of the final expression and factor the literals
+		} catch (final Exception ex) {
+			throw new RuntimeException("normalize failed for: " + prettyprint(e), ex);
 		}
-
-		return factorLiteral(sort(exp)); // sort the left side of the final expression and factor the literals
 	}
 
 	/**
@@ -1287,7 +1291,7 @@ public class BoaNormalFormIntrinsics {
 						// if the term is like 1 / x or 1 / 2
 						if (subExp.getKind() == ExpressionKind.OP_DIV && subExp.getExpressions(0).getKind() == ExpressionKind.LITERAL) {
 							// if denominator is a number (1 / 2)
-							if (subExp.getExpressions(1).getKind() == ExpressionKind.LITERAL) {
+							if (subExp.getExpressions(1).getKind() == ExpressionKind.LITERAL && Character.isDigit(subExp.getExpressions(1).getLiteral().charAt(0))) {
 								final Object literal = internalReduce(subExp.getExpressions(1));
 								if (literal instanceof Double) {
 									dval *= ((Double)literal).doubleValue();
@@ -2136,8 +2140,9 @@ public class BoaNormalFormIntrinsics {
 				return b.build();
 
 			case LITERAL:
-				if (Double.parseDouble(e.getLiteral()) == 1.0 || Double.parseDouble(e.getLiteral()) == -1.0)
-					return e;
+				if (Character.isDigit(e.getLiteral().charAt(0)))
+					if (Double.parseDouble(e.getLiteral()) == 1.0 || Double.parseDouble(e.getLiteral()) == -1.0)
+						return e;
 				break;
 
 			case PAREN:
