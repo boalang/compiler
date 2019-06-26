@@ -1,6 +1,7 @@
 /*
- * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer,
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Neha Bhide
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,18 +54,19 @@ import boa.compiler.transforms.VisitorMergingTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
+import boa.compiler.visitors.PrettyPrintVisitor;
 import boa.compiler.visitors.TaskClassifyingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
-import org.antlr.v4.runtime.atn.PredictionMode;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import boa.parser.BoaParser;
 import boa.parser.BoaLexer;
@@ -74,10 +76,12 @@ import boa.parser.BoaLexer;
  *
  * @author anthonyu
  * @author rdyer
+ * @author nbhide
  */
 public class BoaCompiler {
+	
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
-
+	
 	public abstract static class BoaErrorListener extends BaseErrorListener {
 		public boolean hasError = false;
 
@@ -222,6 +226,7 @@ public class BoaCompiler {
 		try {
 			final List<String> jobnames = new ArrayList<String>();
 			final List<String> jobs = new ArrayList<String>();
+			final List<Integer> seeds = new ArrayList<Integer>();
 			boolean isSimple = true;
 
 			final List<Program> visitorPrograms = new ArrayList<Program>();
@@ -264,6 +269,8 @@ public class BoaCompiler {
 
 						p = parser.start().ast;
 					}
+					// use the whole input string to seed the RNG
+					seeds.add(new PrettyPrintVisitor().startAndReturn(p).hashCode());
 
 					final String jobName = "" + i;
 
@@ -350,6 +357,7 @@ public class BoaCompiler {
 			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
 			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
+			st.add("seeds", seeds);
 
 			o.write(st.render().getBytes());
 		} finally {
