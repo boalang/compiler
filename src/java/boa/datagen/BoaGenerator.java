@@ -94,13 +94,15 @@ public class BoaGenerator {
 
 		clear();
 		
-		FileWriter fw = new FileWriter("exceptions_"+System.currentTimeMillis()+".txt");
-		BufferedWriter bw = new BufferedWriter(fw);
-		for (Entry<String, String> entry : DefaultProperties.exceptions.entrySet()) {
-			bw.write(entry.getKey() + " " + entry.getValue());
-			bw.newLine();
+		if (DefaultProperties.exceptions.size() != 0) {
+			FileWriter fw = new FileWriter("exceptions_"+System.currentTimeMillis()+".txt");
+			BufferedWriter bw = new BufferedWriter(fw);
+			for (Entry<String, String> entry : DefaultProperties.exceptions.entrySet()) {
+				bw.write(entry.getKey() + " " + entry.getValue());
+				bw.newLine();
+			}
+			bw.close();
 		}
-		bw.close();
 	}
 
 	private static final void printHelp(Options options, String message) {
