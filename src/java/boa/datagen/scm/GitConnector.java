@@ -123,9 +123,9 @@ public class GitConnector extends AbstractConnector {
 		RevWalk temprevwalk = new RevWalk(repository);
 		try {
 			revwalk.reset();
-//			Set<RevCommit> heads = getHeads(); // all branches
-			RevCommit main = revwalk.parseCommit(repository.resolve(Constants.HEAD)); // main branch
-			revwalk.markStart(main);
+			Set<RevCommit> heads = getHeads(); // all branches
+//			RevCommit heads = revwalk.parseCommit(repository.resolve(Constants.HEAD)); // main branch
+			revwalk.markStart(heads);
 			revwalk.sort(RevSort.TOPO, true);
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);

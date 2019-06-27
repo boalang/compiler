@@ -421,8 +421,8 @@ public class SeqRepoImporter {
 				repoBuilder.setHead(conn.getHeadCommitOffset());
 				repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot());
 
-//				repoBuilder.addAllBranches(conn.getBranchIndices());
-//				repoBuilder.addAllBranchNames(conn.getBranchNames());
+				repoBuilder.addAllBranches(conn.getBranchIndices());
+				repoBuilder.addAllBranchNames(conn.getBranchNames());
 				repoBuilder.addAllTags(conn.getTagIndices());
 				repoBuilder.addAllTagNames(conn.getTagNames());
 
