@@ -244,7 +244,14 @@ public class BoaIntrinsics {
 				break;
 			}
 		}
-		for (int p : commit.getParentsList()) {
+//		for (int p : commit.getParentsList()) {
+//			if (!queuedCommitIds.contains(p)) {
+//				pq.offer(p);
+//				queuedCommitIds.add(p);
+//			}
+//		}
+		if (commit.getParentsList() != null && commit.getParentsList().size() != 0) {
+			int p = commit.getParentsList().get(0);
 			if (!queuedCommitIds.contains(p)) {
 				pq.offer(p);
 				queuedCommitIds.add(p);
@@ -345,7 +352,14 @@ public class BoaIntrinsics {
 					if (ocf.getChange() != ChangeKind.DELETED)
 						l.add(ocf);
 				} else {
-					for (int parentId : rev.getParentsList()) {
+//					for (int parentId : rev.getParentsList()) {
+//						if (!queuedRevisionIds.contains(parentId)) {
+//							pq.offer(parentId);
+//							queuedRevisionIds.add(parentId);
+//						}
+//					}
+					if (rev.getParentsList() != null && rev.getParentsList().size() != 0) {
+						int parentId = rev.getParentsList().get(0);
 						if (!queuedRevisionIds.contains(parentId)) {
 							pq.offer(parentId);
 							queuedRevisionIds.add(parentId);
