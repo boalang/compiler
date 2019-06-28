@@ -104,7 +104,6 @@ public class GitConnector extends AbstractConnector {
 			revwalk.sort(RevSort.REVERSE, true);
 			for (final RevCommit rc : revwalk) {
 				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName, repoKey);
-				System.out.println(rc.getName());
 				commits.add(rc.getName());
 				int count = gc.countChangedFiles(rc);
 				counts.put(rc.getName(), count);
@@ -168,9 +167,6 @@ public class GitConnector extends AbstractConnector {
 				} catch (Exception e) {
 				}
 				
-				if (rc.getId().getName().equals("6d11931421480016fe98aaee08a978a759f4a6ea"))
-					System.out.println("found");
-				
 				gc.updateChangedFiles(rc);
 				gc.fileNameIndices.clear();
 
@@ -178,8 +174,6 @@ public class GitConnector extends AbstractConnector {
 					revisionMap.put(gc.id, revisionKeys.size());
 
 					Revision revision = gc.asProtobuf(projectName);
-					
-					System.out.println("size " + revision.getSerializedSize() + " " + revision.getId());
 					
 					revisionKeys.add(commitWriterLen);
 					BytesWritable bw = new BytesWritable(revision.toByteArray());
@@ -201,8 +195,6 @@ public class GitConnector extends AbstractConnector {
 					}
 				}
 			}
-			
-			System.out.println("size " + commitWriterLen);
 			
 			System.out.println(Thread.currentThread().getId() + " Process metadata of all commits");
 
