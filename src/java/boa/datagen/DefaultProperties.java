@@ -29,7 +29,7 @@ public class DefaultProperties {
 	public static String MAX_PROJECTS = "1000";
 	public static String MAX_COMMITS = "10000";
 	public static String MAX_SIZE_FOR_PROJECT_WITH_COMMITS = String.valueOf(1 << 26); // Integer.MAX_VALUE / 3
-	public static int MAX_SIZE_FACTOR = 1;
+	public static double MAX_SIZE_FACTOR = 1;
 	
 	public static boolean DEBUG = false, DEBUGPARSE = false, CACHE = false;
 

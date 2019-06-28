@@ -229,7 +229,7 @@ public class BoaGenerator {
 			}
 		}
 		if (cl.hasOption("factor")) {
-			DefaultProperties.MAX_SIZE_FACTOR = Integer.parseInt(cl.getOptionValue("factor"));
+			DefaultProperties.MAX_SIZE_FACTOR = Double.parseDouble(cl.getOptionValue("factor"));
 		}
 	}
 
