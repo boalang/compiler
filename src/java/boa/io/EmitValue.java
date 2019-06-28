@@ -1,5 +1,6 @@
 /*
- * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -231,6 +232,52 @@ public class EmitValue implements Writable {
 	 */
 	public EmitValue(final double data, final double metadata) {
 		this(new String[] { BoaCasts.doubleToString(data) }, BoaCasts.doubleToString(metadata));
+	}
+
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
+	 *            A boolean representing the data to be emitted
+	 */
+	public EmitValue(final boolean data) {
+		this(new String[] { BoaCasts.booleanToString(data) }, null);
+	}
+
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
+	 *            A boolean representing the data to be emitted
+	 * @param metadata
+	 *            A {@link String} containing the metadata to be emitted
+	 */
+	public EmitValue(final boolean data, final String metadata) {
+		this(new String[] { BoaCasts.booleanToString(data) }, metadata);
+	}
+
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
+	 *            A boolean representing the data to be emitted
+	 * @param metadata
+	 *            A long representing the metadata to be emitted
+	 */
+	public EmitValue(final boolean data, final long metadata) {
+		this(new String[] { BoaCasts.booleanToString(data) }, BoaCasts.longToString(metadata));
+	}
+
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
+	 *            A boolean representing the data to be emitted
+	 * @param metadata
+	 *            A double representing the metadata to be emitted
+	 */
+	public EmitValue(final boolean data, final double metadata) {
+		this(new String[] { BoaCasts.booleanToString(data) }, BoaCasts.doubleToString(metadata));
 	}
 
 	/** {@inheritDoc} */

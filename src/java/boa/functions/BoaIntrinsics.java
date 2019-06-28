@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.SerializationUtils;
+import org.apache.hadoop.io.BytesWritable;
+import org.eclipse.jgit.internal.storage.file.ByteArrayFile;
+
 import boa.types.Ast.Statement;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -37,7 +41,7 @@ import boa.types.Toplevel.Project;
 
 /**
  * Boa domain-specific functions.
- * 
+ *
  * @author rdyer
  */
 public class BoaIntrinsics {
@@ -47,14 +51,14 @@ public class BoaIntrinsics {
 		//"\\b(bug|issue|fix)(s)?\\b\\s*(#)?\\s*[0-9]+",
 		//"\\b(bug|issue|fix)\\b\\s*id(s)?\\s*(=)?\\s*[0-9]+"
 	};
-	
+
 	private final static List<Matcher> fixingMatchers = new ArrayList<Matcher>();
 
 	static {
 		for (final String s : fixingRegex)
 			fixingMatchers.add(Pattern.compile(s).matcher(""));
 	}
-	
+
 	private static int getRevisionIndex(final CodeRepository cr, final long timestamp) {
 		int low = 0;
         int high = getRevisionsCount(cr) - 1;
@@ -73,7 +77,7 @@ public class BoaIntrinsics {
         }
         return low;  // key not found: return low index
 	}
-	
+
 	private static int getRevisionIndex(final CodeRepository cr, final String id) {
 		for (int i = 0; i < getRevisionsCount(cr); i++) {
 			if (getRevision(cr, i).getId().equals(id))
@@ -86,7 +90,7 @@ public class BoaIntrinsics {
 	public static int getRevisionsCount(CodeRepository cr) {
 		return Math.max(cr.getRevisionKeysCount(), cr.getRevisionsCount());
 	}
-	
+
 	@FunctionSpec(name = "getrevision", returnType = "Revision", formalParameters = { "CodeRepository", "int" })
 	public static Revision getRevision(final CodeRepository cr, final long index) {
 		if (cr.getRevisionKeysCount() > 0) {
@@ -94,6 +98,20 @@ public class BoaIntrinsics {
 			return BoaAstIntrinsics.getRevision(key);
 		}
 		return cr.getRevisions((int) index);
+	}
+	
+	@FunctionSpec(name = "getParsedChangedFiles", returnType = "array of ChangedFile", formalParameters = { "array of ChangedFile"})
+	public static ChangedFile[] getParsedChangedFiles(final ChangedFile[] files) {
+		ChangedFile[] fs = new ChangedFile[files.length];
+		for (int i = 0; i < fs.length; i++) {
+			fs[i] = BoaAstIntrinsics.getParsedChangedFile(files[i]);
+		}
+		return fs;
+	}
+	
+	@FunctionSpec(name = "gc")
+	public static void gc() {
+		System.gc();
 	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time", "string..." })
@@ -105,7 +123,7 @@ public class BoaIntrinsics {
 		int revisionOffset = getRevisionIndex(cr, timestamp);
 		return getSnapshotByIndex(cr, revisionOffset, kinds);
 	}
-	
+
 	@FunctionSpec(name = "getsnapshotbyindex", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "int"})
 	public static ChangedFile[] getSnapshotByIndex(final CodeRepository cr, final long commitOffset) {
 		if (commitOffset == cr.getHead())
@@ -118,7 +136,7 @@ public class BoaIntrinsics {
 		if (commitOffset == cr.getHead())
 			return getSnapshot(cr, kinds);
 		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
-		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>(); 
+		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>();
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
 			@Override
 			public int compare(Integer i1, Integer i2) {
@@ -144,7 +162,7 @@ public class BoaIntrinsics {
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "Revision", "string..." })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final Revision commit, final String... kinds) {
 		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
-		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>(); 
+		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>();
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
 			@Override
 			public int compare(Integer i1, Integer i2) {
@@ -163,7 +181,7 @@ public class BoaIntrinsics {
 
 	private static void update(List<ChangedFile> snapshot, Revision commit, Set<String> adds, Set<String> dels,
 			PriorityQueue<Integer> pq, Set<Integer> queuedCommitIds, final String... kinds) {
-		for (ChangedFile cf : commit.getFilesList()) {
+		for (final ChangedFile cf : commit.getFilesList()) {
 			ChangeKind ck = cf.getChange();
 			switch (ck) {
 			case ADDED:
@@ -226,7 +244,14 @@ public class BoaIntrinsics {
 				break;
 			}
 		}
-		for (int p : commit.getParentsList()) {
+//		for (int p : commit.getParentsList()) {
+//			if (!queuedCommitIds.contains(p)) {
+//				pq.offer(p);
+//				queuedCommitIds.add(p);
+//			}
+//		}
+		if (commit.getParentsList() != null && commit.getParentsList().size() != 0) {
+			int p = commit.getParentsList().get(0);
 			if (!queuedCommitIds.contains(p)) {
 				pq.offer(p);
 				queuedCommitIds.add(p);
@@ -249,12 +274,17 @@ public class BoaIntrinsics {
 		if (needAst) {
 			ChangedFile[] files = getSnapshotById(cr, id, new String[0]);
 			for (int i = 0; i < files.length; i++)
-				files[i] = BoaAstIntrinsics.parseChangedFile(files[i]);
+				files[i] = BoaAstIntrinsics.getParsedChangedFile(files[i]);
 			return files;
 		}
 		return getSnapshotById(cr, id, new String[0]);
 	}
-	
+
+	@FunctionSpec(name = "getsnapshotbyid", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string" })
+	public static ChangedFile[] getSnapshotById(final CodeRepository cr, final String id) {
+		return getSnapshotById(cr, id, new String[0]);
+	}
+
 	@FunctionSpec(name = "getsnapshotbyid", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string", "string..." })
 	public static ChangedFile[] getSnapshotById(final CodeRepository cr, final String id, final String... kinds) {
 		if (getRevisionsCount(cr) == 0)
@@ -269,7 +299,7 @@ public class BoaIntrinsics {
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String... kinds) {
 //		return getSnapshot(cr, Long.MAX_VALUE, kinds);
 		List<ChangedFile> files = new ArrayList<ChangedFile>();
-		for (ChangedFile file : cr.getHeadSnapshotList()) {
+		for (final ChangedFile file : cr.getHeadSnapshotList()) {
 			if (isIncluded(file, kinds))
 				files.add(file);
 		}
@@ -286,7 +316,7 @@ public class BoaIntrinsics {
 		if (needAst) {
 			ChangedFile[] files = getSnapshot(cr);
 			for (int i = 0; i < files.length; i++)
-				files[i] = BoaAstIntrinsics.parseChangedFile(files[i]);
+				files[i] = BoaAstIntrinsics.getParsedChangedFile(files[i]);
 			return files;
 		}
 		return getSnapshot(cr);
@@ -333,7 +363,14 @@ public class BoaIntrinsics {
 					if (ocf.getChange() != ChangeKind.DELETED)
 						l.add(ocf);
 				} else {
-					for (int parentId : rev.getParentsList()) {
+//					for (int parentId : rev.getParentsList()) {
+//						if (!queuedRevisionIds.contains(parentId)) {
+//							pq.offer(parentId);
+//							queuedRevisionIds.add(parentId);
+//						}
+//					}
+					if (rev.getParentsList() != null && rev.getParentsList().size() != 0) {
+						int parentId = rev.getParentsList().get(0);
 						if (!queuedRevisionIds.contains(parentId)) {
 							pq.offer(parentId);
 							queuedRevisionIds.add(parentId);
@@ -344,7 +381,7 @@ public class BoaIntrinsics {
 		}
 		return l.toArray(new ChangedFile[0]);
 	}
-	
+
 	// refactoring helpers
 	@FunctionSpec(name = "editdistance", returnType = "int", formalParameters = { "string", "string" })
 	public static int editDistance(String x, String y) {
@@ -375,12 +412,6 @@ public class BoaIntrinsics {
           .min().orElse(Integer.MAX_VALUE);
     }
     
-    @FunctionSpec(name = "print", returnType = "int", formalParameters = { "string" })
-	public static int print(String s) {
-    	System.out.println(s);
-    	return 0;
-    }
-    
     @FunctionSpec(name = "freemem", returnType = "int")
 	public static long freeMem() {
 		return Runtime.getRuntime().freeMemory();
@@ -391,11 +422,14 @@ public class BoaIntrinsics {
 		return Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
 	}
     
-	
+    @FunctionSpec(name = "print", formalParameters = "string")
+	public static void print(String str) {
+		System.out.println(str);
+	}
 	
 	/**
 	 * Is a Revision's log message indicating it is a fixing revision?
-	 * 
+	 *
 	 * @param rev the revision to mine
 	 * @return true if the revision's log indicates a fixing revision
 	 */
@@ -406,7 +440,7 @@ public class BoaIntrinsics {
 
 	/**
 	 * Is a log message indicating it is a fixing revision?
-	 * 
+	 *
 	 * @param log the revision's log message to mine
 	 * @return true if the log indicates a fixing revision
 	 */
@@ -422,7 +456,7 @@ public class BoaIntrinsics {
 
 	/**
 	 * Does a Project contain a file of the specified type? This compares based on file extension.
-	 * 
+	 *
 	 * @param p the Project to examine
 	 * @param ext the file extension to look for
 	 * @return true if the Project contains at least 1 file with the specified extension
@@ -437,7 +471,7 @@ public class BoaIntrinsics {
 
 	/**
 	 * Does a CodeRepository contain a file of the specified type? This compares based on file extension.
-	 * 
+	 *
 	 * @param cr the CodeRepository to examine
 	 * @param ext the file extension to look for
 	 * @return true if the CodeRepository contains at least 1 file with the specified extension
@@ -452,7 +486,7 @@ public class BoaIntrinsics {
 
 	/**
 	 * Does a Revision contain a file of the specified type? This compares based on file extension.
-	 * 
+	 *
 	 * @param rev the Revision to examine
 	 * @param ext the file extension to look for
 	 * @return true if the Revision contains at least 1 file with the specified extension
@@ -466,8 +500,20 @@ public class BoaIntrinsics {
 	}
 
 	/**
+	 * Does a ChangedFile contain a file of the specified type? This compares based on file extension.
+	 *
+	 * @param rev the ChangedFile to examine
+	 * @param ext the file extension to look for
+	 * @return true if the ChangedFile contains at least 1 file with the specified extension
+	 */
+	@FunctionSpec(name = "hasfiletype", returnType = "bool", formalParameters = { "ChangedFile", "string" })
+	public static boolean hasfile(final ChangedFile cf, final String ext) {
+        return cf.getName().toLowerCase().endsWith("." + ext.toLowerCase());
+	}
+
+	/**
 	 * Matches a FileKind enum to the given string.
-	 * 
+	 *
 	 * @param s the string to match against
 	 * @param kind the FileKind to match
 	 * @return true if the string matches the given kind
@@ -611,12 +657,12 @@ public class BoaIntrinsics {
 
 	public static <T> T[] concat(final T[] first, final T[]... rest) {
 		int totalLength = first.length;
-		for (T[] array : rest)
+		for (final T[] array : rest)
 			totalLength += array.length;
-		
+
 		final T[] result = Arrays.copyOf(first, totalLength);
 		int offset = first.length;
-		for (T[] array : rest) {
+		for (final T[] array : rest) {
 			System.arraycopy(array, 0, result, offset, array.length);
 			offset += array.length;
 		}
@@ -625,14 +671,14 @@ public class BoaIntrinsics {
 
 	public static long[] concat(final long[] first, final long[]... rest) {
 		int totalLength = first.length;
-		for (long[] array : rest)
+		for (final long[] array : rest)
 			totalLength += array.length;
-		
+
 		final long[] result = new long[totalLength];
 		System.arraycopy(first, 0, result, 0, first.length);
 
 		int offset = first.length;
-		for (long[] array : rest) {
+		for (final long[] array : rest) {
 			System.arraycopy(array, 0, result, offset, array.length);
 			offset += array.length;
 		}
@@ -641,14 +687,14 @@ public class BoaIntrinsics {
 
 	public static double[] concat(final double[] first, final double[]... rest) {
 		int totalLength = first.length;
-		for (double[] array : rest)
+		for (final double[] array : rest)
 			totalLength += array.length;
-		
+
 		final double[] result = new double[totalLength];
 		System.arraycopy(first, 0, result, 0, first.length);
 
 		int offset = first.length;
-		for (double[] array : rest) {
+		for (final double[] array : rest) {
 			System.arraycopy(array, 0, result, offset, array.length);
 			offset += array.length;
 		}
@@ -657,14 +703,14 @@ public class BoaIntrinsics {
 
 	public static boolean[] concat(final boolean[] first, final boolean[]... rest) {
 		int totalLength = first.length;
-		for (boolean[] array : rest)
+		for (final boolean[] array : rest)
 			totalLength += array.length;
-		
+
 		final boolean[] result = new boolean[totalLength];
 		System.arraycopy(first, 0, result, 0, first.length);
 
 		int offset = first.length;
-		for (boolean[] array : rest) {
+		for (final boolean[] array : rest) {
 			System.arraycopy(array, 0, result, offset, array.length);
 			offset += array.length;
 		}

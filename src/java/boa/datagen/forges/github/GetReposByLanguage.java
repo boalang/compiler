@@ -61,17 +61,23 @@ public class GetReposByLanguage {
 			int year = cal.get(Calendar.YEAR);
 			int month = cal.get(Calendar.MONTH) + 1; // month starts from 0
 			int day = cal.get(Calendar.DAY_OF_MONTH);
+			
+			String monthString = month < 10 ? "0" + month : String.valueOf(month);
+            String dayString = day < 10 ? "0" + day : String.valueOf(day);
+            String time = year + "-" + monthString + "-" + dayString + "T23:59:59Z";
+			
 //			String time = "2018-12-21T01:01:01Z";
-			String time = year + "-" + month + "-" + day + "T23:59:59Z";
+//			String time = year + "-" + month + "-" + day + "T23:59:59Z";
 			Gson parser = new Gson();
 			
 			while (true){
 				Token tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
-				String url = "https://api.github.com/search/repositories?q=language:" + language +"+stars:>1+pushed:<=" + time + "&sort=updated&order=desc&per_page=100";
+				String url = "https://api.github.com/search/repositories?q=language:" + language +"+stars:>80+pushed:<=" + time + "&sort=updated&order=desc&per_page=100";
 				System.out.println(url);
 				MetadataCacher mc = new MetadataCacher(url, tok.getUserName(), tok.getToken());
 				mc.authenticate();
 				while (!mc.isAuthenticated() || mc.getNumberOfRemainingLimit() <= 0) {
+					System.out.println("user: " + tok.getUserName() + " limit: " + mc.getNumberOfRemainingLimit());
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e1) {

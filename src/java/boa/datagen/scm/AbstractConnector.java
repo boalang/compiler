@@ -96,68 +96,75 @@ public abstract class AbstractConnector implements AutoCloseable {
 			for (ChangedFile.Builder cf : commit.changedFiles) {
 				ChangeKind ck = cf.getChange();
 				switch (ck) {
-				case ADDED:
-					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
-						adds.add(cf.getName());
-						snapshot.add(cf.build());
-					}
-					break;
-				case COPIED:
-					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
-						adds.add(cf.getName());
-						snapshot.add(cf.build());
-					}
-					break;
-				case DELETED:
-					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName()))
-						dels.add(cf.getName());
-					break;
-				case MERGED:
-					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
-						adds.add(cf.getName());
-						snapshot.add(cf.build());
-					}
-					for (int i = 0; i < cf.getChangesCount(); i++) {
-						if (cf.getChanges(i) != ChangeKind.ADDED) {
-							ChangeKind pck = cf.getChanges(i);
-//							ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
-//							String name = pcf.getName();
+					case ADDED:
+						if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+							adds.add(cf.getName());
+							snapshot.add(cf.build());
+						}
+						break;
+					case COPIED:
+						if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+							adds.add(cf.getName());
+							snapshot.add(cf.build());
+						}
+						break;
+					case DELETED:
+						if (!adds.contains(cf.getName()) && !dels.contains(cf.getName()))
+							dels.add(cf.getName());
+						break;
+					case MERGED:
+						if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+							adds.add(cf.getName());
+							snapshot.add(cf.build());
+						}
+						for (int i = 0; i < cf.getChangesCount(); i++) {
+							if (cf.getChanges(i) != ChangeKind.ADDED) {
+								ChangeKind pck = cf.getChanges(i);
+	//							ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
+	//							String name = pcf.getName();
+								String name = cf.getPreviousNames(i);
+								if (name.isEmpty())
+									name = cf.getName();
+								if (!adds.contains(name) && !dels.contains(name) && (pck == ChangeKind.DELETED || pck == ChangeKind.RENAMED))
+									dels.add(name);
+							}
+						}
+						break;
+					case RENAMED:
+						if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+							adds.add(cf.getName());
+							snapshot.add(cf.build());
+						}
+						for (int i = 0; i < cf.getChangesCount(); i++) {
+	//						ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
+	//						String name = pcf.getName();
 							String name = cf.getPreviousNames(i);
-							if (name.isEmpty())
-								name = cf.getName();
-							if (!adds.contains(name) && !dels.contains(name) && (pck == ChangeKind.DELETED || pck == ChangeKind.RENAMED))
+							if (!adds.contains(name) && !dels.contains(name))
 								dels.add(name);
 						}
-					}
-					break;
-				case RENAMED:
-					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
-						adds.add(cf.getName());
-						snapshot.add(cf.build());
-					}
-					for (int i = 0; i < cf.getChangesCount(); i++) {
-//						ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
-//						String name = pcf.getName();
-						String name = cf.getPreviousNames(i);
-						if (!adds.contains(name) && !dels.contains(name))
-							dels.add(name);
-					}
-					break;
-				default:
-					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
-						adds.add(cf.getName());
-						snapshot.add(cf.build());
-					}
-					break;
+						break;
+					default:
+						if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+							adds.add(cf.getName());
+							snapshot.add(cf.build());
+						}
+						break;
 				}
 			}
-			if (commit.parentIndices != null)
-				for (int p : commit.parentIndices) {
-					if (!queuedCommitIds.contains(p)) {
-						pq.offer(p);
-						queuedCommitIds.add(p);
-					}
+			if (commit.parentIndices != null && commit.parentIndices.length != 0) {
+				// only consider the first parent
+//				for (int p : commit.parentIndices) {
+//					if (!queuedCommitIds.contains(p)) {
+//						pq.offer(p);
+//						queuedCommitIds.add(p);
+//					}
+//				}
+				int p = commit.parentIndices[0];
+				if (!queuedCommitIds.contains(p)) {
+					pq.offer(p);
+					queuedCommitIds.add(p);
 				}
+			}
 		}
 	}
 	

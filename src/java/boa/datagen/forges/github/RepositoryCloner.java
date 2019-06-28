@@ -19,7 +19,7 @@ public class RepositoryCloner {
 		// prepare a new folder for the cloned repository
 		String localPath = args[1];
 		String url = args[0];
-		File localGitDir = new File(localPath + "/.git");
+		File localGitDir = new File(localPath);
 		// then clone
 		Git result = null;
 
@@ -31,17 +31,10 @@ public class RepositoryCloner {
 			// to be closed to avoid file handle leaks!
 			// workaround for
 			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
-			result.getRepository().close();
-			/*
-		} catch (Exception e) {
-			System.err.println("Error cloning " + url);
-			e.printStackTrace();
-			*/
 		} finally {
 			if (result != null && result.getRepository() != null) {
-//				System.out.println("Cloned repo " + url);
 				result.getRepository().close();
 			}
-		} 
+		}
 	}
 }

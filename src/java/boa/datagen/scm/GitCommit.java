@@ -64,11 +64,12 @@ public class GitCommit extends AbstractCommit {
 	private RevWalk revwalk;
 	Map<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
 
-	public GitCommit(final GitConnector cnn, final Repository repository, final RevWalk revwalk, String projectName) {
+	public GitCommit(final GitConnector cnn, final Repository repository, final RevWalk revwalk, String projectName, long repoKey) {
 		super(cnn);
 		this.repository = repository;
 		this.revwalk = revwalk;
 		this.projectName = projectName;
+		this.repoKey = repoKey;
 	}
 
 	@Override
@@ -200,7 +201,9 @@ public class GitCommit extends AbstractCommit {
 			parentIndices = new int[rc.getParentCount()];
 			for (int i = 0; i < rc.getParentCount(); i++) {
 				int parentIndex = connector.revisionMap.get(rc.getParent(i).getName());
-				updateChangedFiles(rc.getParent(i), parentIndex, rc);
+				// merged commit in git only store diffs between first parent and child
+				if (i == 0)
+					updateChangedFiles(rc.getParent(i), parentIndex, rc);
 				parentIndices[i] = parentIndex;
 			}
 		}
