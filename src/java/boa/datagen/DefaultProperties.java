@@ -19,7 +19,6 @@ package boa.datagen;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Set;
 
 /**
  * @author rdyer

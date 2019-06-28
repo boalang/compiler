@@ -28,11 +28,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.SerializationUtils;
-import org.apache.hadoop.io.BytesWritable;
-import org.eclipse.jgit.internal.storage.file.ByteArrayFile;
-
-import boa.types.Ast.Statement;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -637,6 +632,7 @@ public class BoaIntrinsics {
 		return arr2;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T[] concat(final T[] first, final T[]... rest) {
 		int totalLength = first.length;
 		for (final T[] array : rest)

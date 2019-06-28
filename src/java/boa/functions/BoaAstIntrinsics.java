@@ -18,7 +18,6 @@
 package boa.functions;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -42,14 +41,7 @@ import org.eclipse.jgit.internal.storage.file.ByteArrayFile;
 import org.eclipse.jgit.internal.storage.file.ByteArrayRepositoryBuilder;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevTree;
-import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import org.eclipse.jgit.treewalk.TreeWalk;
-import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jdt.core.JavaCore;
 
 import com.google.protobuf.CodedInputStream;
@@ -58,8 +50,6 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import boa.datagen.DefaultProperties;
 import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.JavaVisitor;
-import boa.evaluator.BoaEvaluator;
-import boa.functions.BoaAstIntrinsics.ASTCOUNTER;
 import boa.types.Ast.*;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
