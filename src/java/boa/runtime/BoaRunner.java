@@ -88,8 +88,6 @@ public abstract class BoaRunner extends Configured implements Tool {
 				FileInputFormat.addInputPath(job, in);
 		FileOutputFormat.setOutputPath(job, out);
 
-		job.setPartitionerClass(BoaPartitioner.class);
-
 		job.setMapOutputKeyClass(EmitKey.class);
 		job.setMapOutputValueClass(EmitValue.class);
 

@@ -55,7 +55,6 @@ import boa.compiler.ast.Start;
 import boa.compiler.transforms.InheritedAttributeTransformer;
 import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.VariableDeclRenameTransformer;
-import boa.compiler.transforms.VisitorMergingTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.transforms.ViewTransformer;
 import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
@@ -88,6 +87,7 @@ import boa.parser.BoaLexer;
  *
  * @author anthonyu
  * @author rdyer
+ * @author hungc
  * @author nbhide
  */
 public class BoaCompiler extends BoaMain {
@@ -100,9 +100,9 @@ public class BoaCompiler extends BoaMain {
 	private static Map<String, Start> viewASTs = null;
 
 	public static void main(final String[] args) throws IOException {
-		CommandLine cl = processCommandLineOptions(args);
+		final CommandLine cl = processCommandLineOptions(args);
 		if (cl == null) return;
-		final ArrayList<File> inputFiles = BoaCompiler.inputFiles;
+		final File inputFile = BoaCompiler.inputFile;
 
 		if (cl.hasOption("job"))
 			jobId = Integer.parseInt(cl.getOptionValue("job"));
@@ -119,11 +119,10 @@ public class BoaCompiler extends BoaMain {
 		else
 			jarName = className + ".jar";
 
-		Map<String, Program> subViews = null;
 		viewIds = generateViewIds(cl);
 		viewASTs = generateViewASTs(cl);
 		viewSrcPaths = generateViewSrcPaths(cl);
-		ViewFindingVisitor vfv = new ViewFindingVisitor();
+		final ViewFindingVisitor vfv = new ViewFindingVisitor();
 
 		// make the output directory
 		File outputRoot = null;
@@ -142,194 +141,104 @@ public class BoaCompiler extends BoaMain {
 			for (final String lib : cl.getOptionValues('l'))
 				libs.add(new File(lib).toURI().toURL());
 
-		final File outputFile = new File(outputSrcDir, className + ".java");
-		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile));
+		SymbolTable.initialize(libs);
+
 		try {
-			final List<String> jobnames = new ArrayList<String>();
-			final List<String> jobs = new ArrayList<String>();
-			final List<Integer> seeds = new ArrayList<Integer>();
-			boolean isSimple = true;
+			final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(inputFile.getAbsolutePath()));
+			lexer.removeErrorListeners();
+			lexer.addErrorListener(new LexerErrorListener());
 
-			final List<Program> visitorPrograms = new ArrayList<Program>();
-
-			SymbolTable.initialize(libs);
-
-			final int maxVisitors;
-			if (cl.hasOption('v'))
-				maxVisitors = Integer.parseInt(cl.getOptionValue('v'));
-			else
-				maxVisitors = Integer.MAX_VALUE;
-
-			for (int i = 0; i < inputFiles.size(); i++) {
-				final File f = inputFiles.get(i);
-				try {
-					final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(f.getAbsolutePath()));
-					lexer.removeErrorListeners();
-					lexer.addErrorListener(new LexerErrorListener());
-
-					final CommonTokenStream tokens = new CommonTokenStream(lexer);
-					final BoaParser parser = new BoaParser(tokens);
-					parser.removeErrorListeners();
-					parser.addErrorListener(new BaseErrorListener() {
-						@Override
-						public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) throws ParseCancellationException {
-							throw new ParseCancellationException(e);
-						}
-					});
-
-					final BoaErrorListener parserErrorListener = new ParserErrorListener();
-					final Start p = parse(tokens, parser, parserErrorListener);
-
-					if (cl.hasOption("views")) {
-						vfv.start(p);
-						System.exit(0);
-					}
-					if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
-					// use the whole input string to seed the RNG
-					seeds.add(new PrettyPrintVisitor().startAndReturn(p).hashCode());
-
-					final String jobName = Integer.toString(jobId);
-					// jobId++;
-
-					try {
-						if (!parserErrorListener.hasError) {
-							TypeCheckingVisitor tcv = new TypeCheckingVisitor();
-							tcv.setViewASTs(viewASTs);
-							tcv.start(p, new SymbolTable());
-							vfv.start(p);
-
-							final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
-							simpleVisitor.start(p);
-
-							LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
-							isSimple &= !simpleVisitor.isComplex();
-
-							new VariableDeclRenameTransformer().start(p);
-							new InheritedAttributeTransformer().start(p);
-							new LocalAggregationTransformer().start(p);
-							new ViewTransformer().start(p);
-
-							// if a job has no visitor, let it have its own method
-							// also let jobs have own methods if visitor merging is disabled
-							if (!simpleVisitor.isComplex() || maxVisitors < 2 || inputFiles.size() == 1) {
-								new VisitorOptimizingTransformer().start(p);
-
-								if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
-								if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
-								final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
-								cg.start(p);
-								subViews = cg.getSubViewsMap();
-								jobs.add(cg.getCode());
-
-								jobnames.add(jobName);
-							}
-							// if a job has visitors, fuse them all together into a single program
-							else {
-								p.getProgram().jobName = jobName;
-								visitorPrograms.add(p.getProgram());
-							}
-						}
-					} catch (final TypeCheckException e) {
-						parserErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
-					}
-				} catch (final Exception e) {
-					System.err.print(f.getName() + ": compilation failed: ");
-					e.printStackTrace();
+			final CommonTokenStream tokens = new CommonTokenStream(lexer);
+			final BoaParser parser = new BoaParser(tokens);
+			parser.removeErrorListeners();
+			parser.addErrorListener(new BaseErrorListener() {
+				@Override
+				public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) throws ParseCancellationException {
+					throw new ParseCancellationException(e);
 				}
+			});
+
+			final BoaErrorListener parserErrorListener = new ParserErrorListener();
+			final Start p = parse(tokens, parser, parserErrorListener);
+
+			if (cl.hasOption("views")) {
+				vfv.start(p);
+				System.exit(0);
 			}
 
-			if (!visitorPrograms.isEmpty())
-				try {
-					for (final Program p : new VisitorMergingTransformer().mergePrograms(visitorPrograms, maxVisitors)) {
-						new VisitorOptimizingTransformer().start(p);
+			if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
+			// use the whole input string to seed the RNG
+			final int seed = new PrettyPrintVisitor().startAndReturn(p).hashCode();
 
-						if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
-						if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
-						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
-						cg.start(p);
-						subViews = cg.getSubViewsMap();
-						jobs.add(cg.getCode());
+			try {
+				if (!parserErrorListener.hasError) {
+					TypeCheckingVisitor tcv = new TypeCheckingVisitor();
+					tcv.setViewASTs(viewASTs);
+					tcv.start(p, new SymbolTable());
+					vfv.start(p);
 
-						jobnames.add(p.jobName);
+					final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
+					simpleVisitor.start(p);
+					final boolean isSimple = !simpleVisitor.isComplex();
+					LOG.info(inputFile.getName() + ": task complexity: " + (isSimple ? "simple" : "complex"));
+
+					new VariableDeclRenameTransformer().start(p);
+					new InheritedAttributeTransformer().start(p);
+					new LocalAggregationTransformer().start(p);
+					new ViewTransformer().start(p);
+					new VisitorOptimizingTransformer().start(p);
+
+					if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
+					if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
+
+					final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(className, jobId, isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024, seed, DefaultProperties.localDataPath != null);
+					cg.start(p);
+					final Map<String, Program> subViews = cg.getSubViewsMap();
+
+					final File outputFile = new File(outputSrcDir, className + ".java");
+					try (final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile))) {
+						o.write(cg.getCode().getBytes());
 					}
-				} catch (final Exception e) {
-					System.err.println("error fusing visitors - falling back: " + e);
-					e.printStackTrace();
 
-					for (final Program p : visitorPrograms) {
-						new VisitorOptimizingTransformer().start(p);
+					String jarDirName = "jar";
+					if (cl.hasOption("jardir"))
+						jarDirName = cl.getOptionValue("jardir");
 
-						if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
-						if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
-						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
-						cg.start(p);
-						subViews = cg.getSubViewsMap();
-						jobs.add(cg.getCode());
+					String wfDirName = "workflow";
+					if (cl.hasOption("wfdir"))
+						wfDirName = cl.getOptionValue("wfdir");
 
-						jobnames.add(p.jobName);
+					final File jarDir = new File(jarDirName);
+					if (jarDir.isDirectory())
+						delete(jarDir);
+					if (!jarDir.mkdirs())
+						throw new IOException("unable to mkdir " + jarDir);
+
+					final File wfDir = new File(wfDirName);
+					if (wfDir.isDirectory())
+						delete(wfDir);
+					if (!wfDir.mkdirs())
+						throw new IOException("unable to mkdir " + wfDir);
+
+					if (subViews.size() > 0) {
+						for (final Map.Entry<String, Program> entry: subViews.entrySet()) {
+							codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, Integer.toString(jobId), wfDir, cl);
+						}
 					}
+
+					generateWorkflow(Integer.toString(jobId), vfv, new ArrayList<String>(), wfDir);
+					compileGeneratedSrc(cl, jarName, jarDir, outputRoot, outputFile);
 				}
-
-			if (jobs.size() == 0)
-				throw new RuntimeException("no files compiled without error");
-
-			final ST st = AbstractCodeGeneratingVisitor.stg.getInstanceOf("Program");
-
-			st.add("name", className);
-			st.add("numreducers", inputFiles.size());
-			st.add("jobs", jobs);
-			st.add("jobId", jobId);
-			st.add("jobnames", jobnames);
-			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
-			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
-			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
-			st.add("seeds", seeds);
-			if (DefaultProperties.localDataPath != null) {
-				st.add("isLocal", true);
+			} catch (final TypeCheckException e) {
+				parserErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
 			}
-
-			o.write(st.render().getBytes());
-		} finally {
-			o.close();
+		} catch (final Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(inputFile.getName() + ": compilation failed", e);
 		}
-
-		String jarDirName = "jar";
-		if (cl.hasOption("jardir"))
-			jarDirName = cl.getOptionValue("jardir");
-
-		String wfDirName = "workflow";
-		if (cl.hasOption("wfdir"))
-			wfDirName = cl.getOptionValue("wfdir");
-
-		final File jarDir = new File(jarDirName);
-		if (jarDir.isDirectory())
-			delete(jarDir);
-		if (!jarDir.mkdirs())
-			throw new IOException("unable to mkdir " + jarDir);
-
-		final File wfDir = new File(wfDirName);
-		if (wfDir.isDirectory())
-			delete(wfDir);
-		if (!wfDir.mkdirs())
-			throw new IOException("unable to mkdir " + wfDir);
-
-		if (subViews.size() > 0) {
-			for (final Map.Entry<String, Program> entry: subViews.entrySet()) {
-				codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, Integer.toString(jobId), wfDir, cl);
-			}
-		}
-
-		generateWorkflow(Integer.toString(jobId), vfv, new ArrayList<String>(), wfDir);
-		compileGeneratedSrc(cl, jarName, jarDir, outputRoot, outputFile);
 	}
 
 	private static void codegen(String name, Program p, File srcDir, File jarDir, String wfName, File wfDir, CommandLine cl) throws IOException{
-		if (cl == null) return;
-
-		final String jarName = name + ".jar";
-
-		Map<String, Program> subViews = null;
-
 		final File outputSrcDir = new File(srcDir, name);
 		jarDir = new File(jarDir, name);
 		wfDir = new File(wfDir, name);
@@ -347,97 +256,55 @@ public class BoaCompiler extends BoaMain {
 			for (final String lib : cl.getOptionValues('l'))
 				libs.add(new File(lib).toURI().toURL());
 
-		final File outputFile = new File(outputSrcDir, name + ".java");
-		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile));
 		try {
-			final List<String> jobnames = new ArrayList<String>();
-			final List<String> jobs = new ArrayList<String>();
-			final List<Integer> seeds = new ArrayList<Integer>();
-			boolean isSimple = true;
+			final String jobName = Integer.toString(jobId);
+			// use the whole input string to seed the RNG
+			final int seed = new PrettyPrintVisitor().startAndReturn(p).hashCode();
 
-			final List<Program> visitorPrograms = new ArrayList<Program>();
+			final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
+			simpleVisitor.start(p);
 
+			LOG.info(name + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
+			final boolean isSimple = !simpleVisitor.isComplex();
 
-			final int maxVisitors;
-			if (cl.hasOption('v'))
-				maxVisitors = Integer.parseInt(cl.getOptionValue('v'));
-			else
-				maxVisitors = Integer.MAX_VALUE;
+			new VariableDeclRenameTransformer().start(p);
+			new InheritedAttributeTransformer().start(p);
+			new LocalAggregationTransformer().start(p);
+			new VisitorOptimizingTransformer().start(p);
+			new ViewTransformer().start(p);
 
-			try {
-				final String jobName = Integer.toString(jobId);
-				// jobId++;
-				seeds.add(new PrettyPrintVisitor().startAndReturn(p).hashCode());
+			if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
+			if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
+			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(name, jobId, isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024, seed, DefaultProperties.localDataPath != null);
+			cg.start(p);
+			final Map<String, Program> subViews = cg.getSubViewsMap();
 
-				final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
-				simpleVisitor.start(p);
-
-				LOG.info(name + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
-				isSimple &= !simpleVisitor.isComplex();
-
-				new VariableDeclRenameTransformer().start(p);
-				new InheritedAttributeTransformer().start(p);
-				new LocalAggregationTransformer().start(p);
-				new VisitorOptimizingTransformer().start(p);
-				new ViewTransformer().start(p);
-
-				if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
-				if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
-				final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
-				cg.start(p);
-				subViews = cg.getSubViewsMap();
-
-				jobs.add(cg.getCode());
-
-				jobnames.add(jobName);
-
-			} catch (final Exception e) {
-				System.err.print(name + ": compilation failed: ");
-				e.printStackTrace();
+			final File outputFile = new File(outputSrcDir, name + ".java");
+			try (final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile))) {
+				o.write(cg.getCode().getBytes());
 			}
 
-
-			if (jobs.size() == 0)
-				throw new RuntimeException("no files compiled without error");
-
-			final ST st = AbstractCodeGeneratingVisitor.stg.getInstanceOf("Program");
-
-			st.add("name", name);
-			st.add("numreducers", 1);
-			st.add("jobs", jobs);
-			st.add("jobId", jobId);
-			st.add("jobnames", jobnames);
-			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
-			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
-			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
-			st.add("seeds", seeds);
-			if (DefaultProperties.localDataPath != null) {
-				st.add("isLocal", true);
+			if (subViews.size() > 0) {
+				for (final Map.Entry<String, Program> entry: subViews.entrySet()) {
+					codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, wfName, wfDir, cl);
+				}
 			}
 
-			o.write(st.render().getBytes());
-		} finally {
-			o.close();
+			final ViewFindingVisitor vfv = new ViewFindingVisitor();
+			vfv.start(p);
+
+			generateWorkflow(wfName, vfv, new ArrayList<String>(), wfDir);
+			final String jarName = name + ".jar";
+			compileGeneratedSrc(cl, jarName, jarDir, outputSrcDir, outputFile);
+		} catch (final Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(inputFile.getName() + ": compilation failed", e);
 		}
-
-
-		if (subViews.size() > 0) {
-			for (final Map.Entry<String, Program> entry: subViews.entrySet()) {
-				codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, wfName, wfDir, cl);
-			}
-		}
-
-		ViewFindingVisitor vfv = new ViewFindingVisitor();
-		vfv.start(p);
-
-		generateWorkflow(wfName, vfv, new ArrayList<String>(), wfDir);
-		compileGeneratedSrc(cl, jarName, jarDir, outputSrcDir, outputFile);
 	}
 
 	public static void parseOnly(final String[] args) throws IOException {
 		final CommandLine cl = processParseCommandLineOptions(args);
 		if (cl == null) return;
-		final ArrayList<File> inputFiles = BoaCompiler.inputFiles;
 
 		// find custom libs to load
 		final List<URL> libs = new ArrayList<URL>();
@@ -447,44 +314,41 @@ public class BoaCompiler extends BoaMain {
 
 		SymbolTable.initialize(libs);
 
-		for (int i = 0; i < inputFiles.size(); i++) {
-			final File f = inputFiles.get(i);
-			try {
-				final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(f.getAbsolutePath()));
-				lexer.removeErrorListeners();
-				lexer.addErrorListener(new LexerErrorListener());
+		try {
+			final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(inputFile.getAbsolutePath()));
+			lexer.removeErrorListeners();
+			lexer.addErrorListener(new LexerErrorListener());
 
-				final CommonTokenStream tokens = new CommonTokenStream(lexer);
-				final BoaParser parser = new BoaParser(tokens);
-				parser.removeErrorListeners();
-				parser.addErrorListener(new BaseErrorListener() {
-					@Override
-					public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) throws ParseCancellationException {
-						throw new ParseCancellationException(e);
-					}
-				});
-
-				final BoaErrorListener parserErrorListener = new ParserErrorListener();
-				final Start p = parse(tokens, parser, parserErrorListener);
-
-				try {
-					if (!parserErrorListener.hasError) {
-						TypeCheckingVisitor tcv = new TypeCheckingVisitor();
-						tcv.setViewASTs(viewASTs);
-						tcv.start(p, new SymbolTable());
-
-						final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
-						simpleVisitor.start(p);
-
-						LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
-					}
-				} catch (final TypeCheckException e) {
-					parserErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
+			final CommonTokenStream tokens = new CommonTokenStream(lexer);
+			final BoaParser parser = new BoaParser(tokens);
+			parser.removeErrorListeners();
+			parser.addErrorListener(new BaseErrorListener() {
+				@Override
+				public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) throws ParseCancellationException {
+					throw new ParseCancellationException(e);
 				}
-			} catch (final Exception e) {
-				System.err.print(f.getName() + ": parsing failed: ");
-				e.printStackTrace();
+			});
+
+			final BoaErrorListener parserErrorListener = new ParserErrorListener();
+			final Start p = parse(tokens, parser, parserErrorListener);
+
+			try {
+				if (!parserErrorListener.hasError) {
+					TypeCheckingVisitor tcv = new TypeCheckingVisitor();
+					tcv.setViewASTs(viewASTs);
+					tcv.start(p, new SymbolTable());
+
+					final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
+					simpleVisitor.start(p);
+
+					LOG.info(inputFile.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
+				}
+			} catch (final TypeCheckException e) {
+				parserErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
 			}
+		} catch (final Exception e) {
+			System.err.print(inputFile.getName() + ": parsing failed: ");
+			e.printStackTrace();
 		}
 	}
 
@@ -542,17 +406,16 @@ public class BoaCompiler extends BoaMain {
 		}
 	}
 
-	static ArrayList<File> inputFiles = null;
+	static File inputFile = null;
 
 	private static CommandLine processCommandLineOptions(final String[] args) {
 		// parse the command line options
 
 		final Options options = new Options();
 		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
-		options.addOption("i", "in", true, "file(s) to be compiled (comma-separated list)");
+		options.addOption("i", "in", true, "file to be compiled");
 		options.addOption("o", "out", true, "the name of the resulting jar");
 		options.addOption("j", "rtjar", true, "the path to the Boa runtime jar");
-		options.addOption("v", "visitors-fused", true, "number of visitors to fuse");
 		options.addOption("n", "name", true, "the name of the generated main class");
 		options.addOption("ast", "ast-parsed", false, "print the AST immediately after parsing (debug)");
 		options.addOption("ast2", "ast-transformed", false, "print the AST after transformations, before code generation (debug)");
@@ -575,22 +438,19 @@ public class BoaCompiler extends BoaMain {
 		}
 
 		// get the filename of the program we will be compiling
-		inputFiles = new ArrayList<File>();
+		inputFile = null;
 		if (cl.hasOption('i')) {
-			final String[] inputPaths = cl.getOptionValue('i').split(",");
+			final String inputPath = cl.getOptionValue('i');
 
-			for (final String s : inputPaths) {
-				final File f = new File(s);
-				if (!f.exists())
-					System.err.println("File '" + s + "' does not exist, skipping");
-				else
-					inputFiles.add(new File(s));
-			}
+			final File f = new File(inputPath);
+			if (!f.exists())
+				System.err.println("File '" + inputPath + "' does not exist, skipping");
+			else
+				inputFile = f;
 		}
 
-		if (inputFiles.size() == 0) {
-			System.err.println("no valid input files found - did you use the --in option?");
-			//new HelpFormatter().printHelp("BoaCompiler", options);
+		if (inputFile == null) {
+			System.err.println("no valid input file found - did you use the --in option?");
 			new HelpFormatter().printHelp("Boa Compiler", options);
 			return null;
 		}
@@ -602,7 +462,7 @@ public class BoaCompiler extends BoaMain {
 		// parse the command line options
 		final Options options = new Options();
 		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
-		options.addOption("i", "in", true, "file(s) to be parsed (comma-separated list)");
+		options.addOption("i", "in", true, "file to be parsed");
 
 		final CommandLine cl;
 		try {
@@ -613,21 +473,19 @@ public class BoaCompiler extends BoaMain {
 		}
 
 		// get the filename of the program we will be compiling
-		inputFiles = new ArrayList<File>();
+		inputFile = null;
 		if (cl.hasOption('i')) {
-			final String[] inputPaths = cl.getOptionValue('i').split(",");
+			final String inputPath = cl.getOptionValue('i');
 
-			for (final String s : inputPaths) {
-				final File f = new File(s);
-				if (!f.exists())
-					System.err.println("File '" + s + "' does not exist, skipping");
-				else
-					inputFiles.add(new File(s));
-			}
+			final File f = new File(inputPath);
+			if (!f.exists())
+				System.err.println("File '" + inputPath + "' does not exist, skipping");
+			else
+				inputFile = f;
 		}
 
-		if (inputFiles.size() == 0) {
-			printHelp(options, "no valid input files found - did you use the --in option?");
+		if (inputFile == null) {
+			printHelp(options, "no valid input file found - did you use the --in option?");
 			return null;
 		}
 
@@ -640,12 +498,7 @@ public class BoaCompiler extends BoaMain {
 		if (cl.hasOption('n')) {
 			className = cl.getOptionValue('n');
 		} else {
-			className = "";
-			for (final File f : inputFiles) {
-				if (className.length() != 0)
-					className += "_";
-				className += jarToClassname(f);
-			}
+			className = jarToClassname(inputFile);
 		}
 		return className;
 	}

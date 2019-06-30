@@ -37,7 +37,6 @@ import org.apache.hadoop.io.WritableComparator;
 public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitKey>, Serializable {
 	private static final long serialVersionUID = -6302400030199718829L;
 
-	private int id = 0;
 	private String index;
 	private String name;
 
@@ -54,12 +53,9 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 	 * @param name
 	 *            A {@link String} containing the name of the table this was
 	 *            emitted to
-	 * 
-	 * @param id
-	 *            An int containing the job id this was emitted to
 	 */
-	public EmitKey(final String name, final int id) {
-		this("[]", name, id);
+	public EmitKey(final String name) {
+		this("[]", name);
 	}
 
 	/**
@@ -72,23 +68,18 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 	 * @param name
 	 *            A {@link String} containing the name of the table this was
 	 *            emitted to
-	 * 
-	 * @param id
-	 *            An int containing the job id this was emitted to
 	 */
-	public EmitKey(final String index, final String name, final int id) {
+	public EmitKey(final String index, final String name) {
 		if (index.equals(""))
 			throw new RuntimeException();
 
 		this.index = index;
 		this.name = name;
-		this.id = id;
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void readFields(final DataInput in) throws IOException {
-		this.id = in.readInt();
 		this.index = Text.readString(in);
 		this.name = Text.readString(in);
 	}
@@ -96,7 +87,6 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 	/** {@inheritDoc} */
 	@Override
 	public void write(final DataOutput out) throws IOException {
-		out.writeInt(this.id);
 		Text.writeString(out, this.index);
 		Text.writeString(out, this.name);
 	}
@@ -122,12 +112,7 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 			return c;
 
 		// compare the indices
-		c = this.index.compareTo(that.index);
-		if (c != 0)
-			return c;
-
-		// compare the ids 
-		return (this.id - that.id);
+		return this.index.compareTo(that.index);
 	}
 
 	/** {@inheritDoc} */
@@ -137,7 +122,6 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 		int result = 1;
 		result = prime * result + (this.index == null ? 0 : this.index.hashCode());
 		result = prime * result + (this.name == null ? 0 : this.name.hashCode());
-		result = prime * result + this.id;
 		return result;
 	}
 
@@ -151,8 +135,6 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 		if (this.getClass() != obj.getClass())
 			return false;
 		final EmitKey other = (EmitKey) obj;
-		if (this.id != other.id)
-			return false;
 		if (this.index == null) {
 			if (other.index != null)
 				return false;
@@ -208,32 +190,9 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 		this.name = name;
 	}
 
-	/**
-	 * Get the job id this key was emitted to.
-	 * 
-	 * @return An int containing the name of the job id this key was emitted to
-	 */
-	public int getId() {
-		return this.id;
-	}
-
-	/**
-	 * Set the job id this key was emitted to.
-	 * 
-	 * @param name
-	 *            An int containing the name of the job id this key was emitted to
-	 */
-	public void setId(final int id) {
-		this.id = id;
-	}
-
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return this.name + this.index;
-	}
-
-	public String getKey() {
-		return this.id + "::" + this.name;
 	}
 }
