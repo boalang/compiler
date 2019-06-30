@@ -900,6 +900,19 @@ public class BoaAstIntrinsics {
 		}
 	}
 	
+	////////////////////////////////
+	// Creation testing functions */
+	////////////////////////////////
+	@FunctionSpec(name = "iscreation", returnType = "bool", formalParameters = { "Expression", "string" })
+	public static boolean isCreation(final Expression e) throws Exception {
+		switch (e.getKind()) {
+			case NEW: return true;
+			case NEWARRAY: return true;
+			default:
+				return false;			
+		}
+	}
+	
 
 	//////////////////////////////
 	// Collect Annotations Used //
