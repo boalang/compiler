@@ -117,6 +117,7 @@ public class BoaAstIntrinsics {
 			ASTRoot r = getASTRoot(f);
 			if (r != emptyAst)
 				return r;
+			System.out.print(" new model getast ");
 		} else {	
 			if (map == null)
 				openMap();
@@ -175,6 +176,7 @@ public class BoaAstIntrinsics {
 						e.printStackTrace();
 					}
 				} else {
+					System.out.print(" null value ");
 					return emptyAst;
 				}
 			}
@@ -270,8 +272,10 @@ public class BoaAstIntrinsics {
 	}
 
 	public static final ASTRoot parseJavaFile(final String content) {
-		if (content == null)
+		if (content == null) {
+			System.out.print(" null content ");
 			return emptyAst;
+		}
 		try {
 			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
 			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
@@ -299,9 +303,11 @@ public class BoaAstIntrinsics {
 					return ast.build();
 				} catch (final Throwable e) {
 					System.exit(-1);
+					System.out.print(" parser error check ");
 					return emptyAst;
 				}
 			}
+			System.out.print("java error check");
 			return emptyAst;
 		} catch (final Throwable e) {
 			return emptyAst;

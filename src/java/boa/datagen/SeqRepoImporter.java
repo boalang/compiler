@@ -379,8 +379,7 @@ public class SeqRepoImporter {
 				System.err.println("Thread " + Thread.currentThread().getId() + " cloned repository: " + name);
 			
 			AbstractConnector conn = null;
-
-			boolean noast = false;
+			int packSize = 0;
 			
 			if (!STORE_ASTS) {
 				ByteArrayFile f = new ByteArrayFile(gitDir.getAbsolutePath());
@@ -388,12 +387,13 @@ public class SeqRepoImporter {
 				double size =  MAX_SIZE_FOR_PROJECT_WITH_COMMITS * DefaultProperties.MAX_SIZE_FACTOR;
 				if (!f.isBuilt() || bw.getLength() > size) {
 					DefaultProperties.exceptions.put(name, "pack file size: " + bw.getLength() + " exceeding the max size: " + size);
-					noast = true;
 					if (debug)
 						System.err.println("Thread " + Thread.currentThread().getId() + " the pack file size of project: " + name + " exceeds the " + size + " byte");
+					return null;
 				} else {
 					repoWriter.append(new LongWritable(getRepoKey()), bw);
 				}
+				packSize = bw.getLength();
 			}
 
 			try {
@@ -427,8 +427,10 @@ public class SeqRepoImporter {
 				repoBuilder.addAllTagNames(conn.getTagNames());
 
 				projBuilder.setCodeRepositories(i, repoBuilder);
-				if (noast)
-					projBuilder.setNoast(true);
+
+				if (!STORE_ASTS)
+					projBuilder.setSize(packSize);
+
 				return projBuilder.build();
 			} catch (final Throwable e) {
 				printError(e, "unknown error", project.getName());
