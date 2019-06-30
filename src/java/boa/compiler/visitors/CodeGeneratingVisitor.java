@@ -674,6 +674,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		st.add("name", className);
 		st.add("splitsize", splitSize);
 		st.add("seed", seed);
+		st.add("jobId", jobId);
 		if (isLocal) st.add("isLocal", true);
 
 		code.add(st.render());
