@@ -987,6 +987,16 @@ public final class Output {
      */
     boa.output.Output.ValueOrBuilder getTOrBuilder(
         int index);
+
+    // optional bool hasWeight = 7 [default = false];
+    /**
+     * <code>optional bool hasWeight = 7 [default = false];</code>
+     */
+    boolean hasHasWeight();
+    /**
+     * <code>optional bool hasWeight = 7 [default = false];</code>
+     */
+    boolean getHasWeight();
   }
   /**
    * Protobuf type {@code boa.output.Value}
@@ -1076,6 +1086,11 @@ public final class Output {
                 mutable_bitField0_ |= 0x00000020;
               }
               t_.add(input.readMessage(boa.output.Output.Value.PARSER, extensionRegistry));
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000020;
+              hasWeight_ = input.readBool();
               break;
             }
           }
@@ -1373,6 +1388,22 @@ public final class Output {
       return t_.get(index);
     }
 
+    // optional bool hasWeight = 7 [default = false];
+    public static final int HASWEIGHT_FIELD_NUMBER = 7;
+    private boolean hasWeight_;
+    /**
+     * <code>optional bool hasWeight = 7 [default = false];</code>
+     */
+    public boolean hasHasWeight() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional bool hasWeight = 7 [default = false];</code>
+     */
+    public boolean getHasWeight() {
+      return hasWeight_;
+    }
+
     private void initFields() {
       type_ = boa.output.Output.Value.Type.INT;
       i_ = 0L;
@@ -1380,6 +1411,7 @@ public final class Output {
       s_ = "";
       b_ = false;
       t_ = java.util.Collections.emptyList();
+      hasWeight_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1421,6 +1453,9 @@ public final class Output {
       for (int i = 0; i < t_.size(); i++) {
         output.writeMessage(6, t_.get(i));
       }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBool(7, hasWeight_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1453,6 +1488,10 @@ public final class Output {
       for (int i = 0; i < t_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(6, t_.get(i));
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(7, hasWeight_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1587,6 +1626,8 @@ public final class Output {
         } else {
           tBuilder_.clear();
         }
+        hasWeight_ = false;
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
 
@@ -1644,6 +1685,10 @@ public final class Output {
         } else {
           result.t_ = tBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.hasWeight_ = hasWeight_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1702,6 +1747,9 @@ public final class Output {
               tBuilder_.addAllMessages(other.t_);
             }
           }
+        }
+        if (other.hasHasWeight()) {
+          setHasWeight(other.getHasWeight());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -2189,6 +2237,39 @@ public final class Output {
         return tBuilder_;
       }
 
+      // optional bool hasWeight = 7 [default = false];
+      private boolean hasWeight_ ;
+      /**
+       * <code>optional bool hasWeight = 7 [default = false];</code>
+       */
+      public boolean hasHasWeight() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional bool hasWeight = 7 [default = false];</code>
+       */
+      public boolean getHasWeight() {
+        return hasWeight_;
+      }
+      /**
+       * <code>optional bool hasWeight = 7 [default = false];</code>
+       */
+      public Builder setHasWeight(boolean value) {
+        bitField0_ |= 0x00000040;
+        hasWeight_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool hasWeight = 7 [default = false];</code>
+       */
+      public Builder clearHasWeight() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        hasWeight_ = false;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.output.Value)
     }
 
@@ -2221,12 +2302,12 @@ public final class Output {
     java.lang.String[] descriptorData = {
       "\n\014output.proto\022\nboa.output\"F\n\003Row\022\037\n\004col" +
       "s\030\001 \003(\0132\021.boa.output.Value\022\036\n\003val\030\002 \002(\0132" +
-      "\021.boa.output.Value\"\264\001\n\005Value\022$\n\004type\030\001 \002" +
+      "\021.boa.output.Value\"\316\001\n\005Value\022$\n\004type\030\001 \002" +
       "(\0162\026.boa.output.Value.Type\022\t\n\001i\030\002 \001(\003\022\t\n" +
       "\001f\030\003 \001(\001\022\t\n\001s\030\004 \001(\t\022\t\n\001b\030\005 \001(\010\022\034\n\001t\030\006 \003(" +
-      "\0132\021.boa.output.Value\";\n\004Type\022\007\n\003INT\020\000\022\t\n" +
-      "\005FLOAT\020\001\022\n\n\006STRING\020\002\022\010\n\004BOOL\020\003\022\t\n\005TUPLE\020" +
-      "\004B\002H\001"
+      "\0132\021.boa.output.Value\022\030\n\thasWeight\030\007 \001(\010:" +
+      "\005false\";\n\004Type\022\007\n\003INT\020\000\022\t\n\005FLOAT\020\001\022\n\n\006ST" +
+      "RING\020\002\022\010\n\004BOOL\020\003\022\t\n\005TUPLE\020\004B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2244,7 +2325,7 @@ public final class Output {
           internal_static_boa_output_Value_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_output_Value_descriptor,
-              new java.lang.String[] { "Type", "I", "F", "S", "B", "T", });
+              new java.lang.String[] { "Type", "I", "F", "S", "B", "T", "HasWeight", });
           return null;
         }
       };

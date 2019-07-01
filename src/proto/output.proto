@@ -24,4 +24,6 @@ message Value {
     optional string s = 4;
     optional bool   b = 5;
     repeated Value  t = 6;
+
+    optional bool   hasWeight = 7 [default = false];
 }
