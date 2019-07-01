@@ -10,207 +10,86 @@ public final class Shared {
   }
   /**
    * Protobuf enum {@code boa.types.ChangeKind}
-   *
-   * <pre>
-   ** Describes the kind of change for an artifact or program entity/element 
-   * </pre>
    */
   public enum ChangeKind
       implements com.google.protobuf.ProtocolMessageEnum {
     /**
-     * <code>UNKNOWN = 0;</code>
-     */
-    UNKNOWN(0, 0),
-    /**
      * <code>ADDED = 1;</code>
-     *
-     * <pre>
-     ** The artifact or program entity/element did not already exist and was added 
-     * </pre>
      */
-    ADDED(1, 1),
+    ADDED(0, 1),
     /**
      * <code>DELETED = 2;</code>
-     *
-     * <pre>
-     ** The artifact or program entity/element was deleted 
-     * </pre>
      */
-    DELETED(2, 2),
+    DELETED(1, 2),
     /**
      * <code>MODIFIED = 3;</code>
-     *
-     * <pre>
-     ** The artifact or program entity/element already existed and was modified 
-     * </pre>
      */
-    MODIFIED(4, 3),
+    MODIFIED(3, 3),
     /**
      * <code>RENAMED = 4;</code>
-     *
-     * <pre>
-     ** The label of the artifact or program entity/element was renamed 
-     * </pre>
      */
-    RENAMED(6, 4),
+    RENAMED(5, 4),
     /**
-     * <code>MOVED = 5;</code>
-     *
-     * <pre>
-     ** The artifact or program entity/element was moved to a different parent 
-     * </pre>
+     * <code>COPIED = 5;</code>
      */
-    MOVED(7, 5),
-    /**
-     * <code>COPIED = 6;</code>
-     *
-     * <pre>
-     ** The artifact or program entity/element was copied from another one 
-     * </pre>
-     */
-    COPIED(8, 6),
-    /**
-     * <code>MERGED = 7;</code>
-     *
-     * <pre>
-     ** The artifact or program entity/element was merged 
-     * </pre>
-     */
-    MERGED(9, 7),
-    /**
-     * <code>UNCHANGED = 8;</code>
-     *
-     * <pre>
-     ** The artifact or program entity/element was unchanged 
-     * </pre>
-     */
-    UNCHANGED(10, 8),
-    /**
-     * <code>UNMAPPED = 9;</code>
-     */
-    UNMAPPED(11, 9),
+    COPIED(7, 5),
     ;
 
     /**
      * <code>REMOVED = 2;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
      */
     public static final ChangeKind REMOVED = DELETED;
     /**
      * <code>CHANGED = 3;</code>
-     *
-     * <pre>
-     ** The artifact or program entity/element already existed and was changed 
-     * </pre>
      */
     public static final ChangeKind CHANGED = MODIFIED;
     /**
-     * <code>UNKNOWN = 0;</code>
+     * <code>MOVED = 4;</code>
      */
-    public static final int UNKNOWN_VALUE = 0;
+    public static final ChangeKind MOVED = RENAMED;
     /**
      * <code>ADDED = 1;</code>
-     *
-     * <pre>
-     ** The artifact or program entity/element did not already exist and was added 
-     * </pre>
      */
     public static final int ADDED_VALUE = 1;
     /**
      * <code>DELETED = 2;</code>
-     *
-     * <pre>
-     ** The artifact or program entity/element was deleted 
-     * </pre>
      */
     public static final int DELETED_VALUE = 2;
     /**
      * <code>REMOVED = 2;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
      */
     public static final int REMOVED_VALUE = 2;
     /**
      * <code>MODIFIED = 3;</code>
-     *
-     * <pre>
-     ** The artifact or program entity/element already existed and was modified 
-     * </pre>
      */
     public static final int MODIFIED_VALUE = 3;
     /**
      * <code>CHANGED = 3;</code>
-     *
-     * <pre>
-     ** The artifact or program entity/element already existed and was changed 
-     * </pre>
      */
     public static final int CHANGED_VALUE = 3;
     /**
      * <code>RENAMED = 4;</code>
-     *
-     * <pre>
-     ** The label of the artifact or program entity/element was renamed 
-     * </pre>
      */
     public static final int RENAMED_VALUE = 4;
     /**
-     * <code>MOVED = 5;</code>
-     *
-     * <pre>
-     ** The artifact or program entity/element was moved to a different parent 
-     * </pre>
+     * <code>MOVED = 4;</code>
      */
-    public static final int MOVED_VALUE = 5;
+    public static final int MOVED_VALUE = 4;
     /**
-     * <code>COPIED = 6;</code>
-     *
-     * <pre>
-     ** The artifact or program entity/element was copied from another one 
-     * </pre>
+     * <code>COPIED = 5;</code>
      */
-    public static final int COPIED_VALUE = 6;
-    /**
-     * <code>MERGED = 7;</code>
-     *
-     * <pre>
-     ** The artifact or program entity/element was merged 
-     * </pre>
-     */
-    public static final int MERGED_VALUE = 7;
-    /**
-     * <code>UNCHANGED = 8;</code>
-     *
-     * <pre>
-     ** The artifact or program entity/element was unchanged 
-     * </pre>
-     */
-    public static final int UNCHANGED_VALUE = 8;
-    /**
-     * <code>UNMAPPED = 9;</code>
-     */
-    public static final int UNMAPPED_VALUE = 9;
+    public static final int COPIED_VALUE = 5;
 
 
     public final int getNumber() { return value; }
 
     public static ChangeKind valueOf(int value) {
       switch (value) {
-        case 0: return UNKNOWN;
         case 1: return ADDED;
         case 2: return DELETED;
         case 3: return MODIFIED;
         case 4: return RENAMED;
-        case 5: return MOVED;
-        case 6: return COPIED;
-        case 7: return MERGED;
-        case 8: return UNCHANGED;
-        case 9: return UNMAPPED;
+        case 5: return COPIED;
         default: return null;
       }
     }
@@ -241,7 +120,7 @@ public final class Shared {
     }
 
     private static final ChangeKind[] VALUES = {
-      UNKNOWN, ADDED, DELETED, REMOVED, MODIFIED, CHANGED, RENAMED, MOVED, COPIED, MERGED, UNCHANGED, UNMAPPED, 
+      ADDED, DELETED, REMOVED, MODIFIED, CHANGED, RENAMED, MOVED, COPIED, 
     };
 
     public static ChangeKind valueOf(
@@ -270,90 +149,50 @@ public final class Shared {
     // required string username = 1;
     /**
      * <code>required string username = 1;</code>
-     *
-     * <pre>
-     ** The person's username 
-     * </pre>
      */
     boolean hasUsername();
     /**
      * <code>required string username = 1;</code>
-     *
-     * <pre>
-     ** The person's username 
-     * </pre>
      */
     java.lang.String getUsername();
     /**
      * <code>required string username = 1;</code>
-     *
-     * <pre>
-     ** The person's username 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getUsernameBytes();
 
-    // optional string real_name = 2;
+    // required string real_name = 2;
     /**
-     * <code>optional string real_name = 2;</code>
-     *
-     * <pre>
-     ** The person's real name, if known 
-     * </pre>
+     * <code>required string real_name = 2;</code>
      */
     boolean hasRealName();
     /**
-     * <code>optional string real_name = 2;</code>
-     *
-     * <pre>
-     ** The person's real name, if known 
-     * </pre>
+     * <code>required string real_name = 2;</code>
      */
     java.lang.String getRealName();
     /**
-     * <code>optional string real_name = 2;</code>
-     *
-     * <pre>
-     ** The person's real name, if known 
-     * </pre>
+     * <code>required string real_name = 2;</code>
      */
     com.google.protobuf.ByteString
         getRealNameBytes();
 
-    // optional string email = 3;
+    // required string email = 3;
     /**
-     * <code>optional string email = 3;</code>
-     *
-     * <pre>
-     ** The person's email address, if known 
-     * </pre>
+     * <code>required string email = 3;</code>
      */
     boolean hasEmail();
     /**
-     * <code>optional string email = 3;</code>
-     *
-     * <pre>
-     ** The person's email address, if known 
-     * </pre>
+     * <code>required string email = 3;</code>
      */
     java.lang.String getEmail();
     /**
-     * <code>optional string email = 3;</code>
-     *
-     * <pre>
-     ** The person's email address, if known 
-     * </pre>
+     * <code>required string email = 3;</code>
      */
     com.google.protobuf.ByteString
         getEmailBytes();
   }
   /**
    * Protobuf type {@code boa.types.Person}
-   *
-   * <pre>
-   ** A unique person's information 
-   * </pre>
    */
   public static final class Person extends
       com.google.protobuf.GeneratedMessage
@@ -463,20 +302,12 @@ public final class Shared {
     private java.lang.Object username_;
     /**
      * <code>required string username = 1;</code>
-     *
-     * <pre>
-     ** The person's username 
-     * </pre>
      */
     public boolean hasUsername() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required string username = 1;</code>
-     *
-     * <pre>
-     ** The person's username 
-     * </pre>
      */
     public java.lang.String getUsername() {
       java.lang.Object ref = username_;
@@ -494,10 +325,6 @@ public final class Shared {
     }
     /**
      * <code>required string username = 1;</code>
-     *
-     * <pre>
-     ** The person's username 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getUsernameBytes() {
@@ -513,25 +340,17 @@ public final class Shared {
       }
     }
 
-    // optional string real_name = 2;
+    // required string real_name = 2;
     public static final int REAL_NAME_FIELD_NUMBER = 2;
     private java.lang.Object realName_;
     /**
-     * <code>optional string real_name = 2;</code>
-     *
-     * <pre>
-     ** The person's real name, if known 
-     * </pre>
+     * <code>required string real_name = 2;</code>
      */
     public boolean hasRealName() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional string real_name = 2;</code>
-     *
-     * <pre>
-     ** The person's real name, if known 
-     * </pre>
+     * <code>required string real_name = 2;</code>
      */
     public java.lang.String getRealName() {
       java.lang.Object ref = realName_;
@@ -548,11 +367,7 @@ public final class Shared {
       }
     }
     /**
-     * <code>optional string real_name = 2;</code>
-     *
-     * <pre>
-     ** The person's real name, if known 
-     * </pre>
+     * <code>required string real_name = 2;</code>
      */
     public com.google.protobuf.ByteString
         getRealNameBytes() {
@@ -568,25 +383,17 @@ public final class Shared {
       }
     }
 
-    // optional string email = 3;
+    // required string email = 3;
     public static final int EMAIL_FIELD_NUMBER = 3;
     private java.lang.Object email_;
     /**
-     * <code>optional string email = 3;</code>
-     *
-     * <pre>
-     ** The person's email address, if known 
-     * </pre>
+     * <code>required string email = 3;</code>
      */
     public boolean hasEmail() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>optional string email = 3;</code>
-     *
-     * <pre>
-     ** The person's email address, if known 
-     * </pre>
+     * <code>required string email = 3;</code>
      */
     public java.lang.String getEmail() {
       java.lang.Object ref = email_;
@@ -603,11 +410,7 @@ public final class Shared {
       }
     }
     /**
-     * <code>optional string email = 3;</code>
-     *
-     * <pre>
-     ** The person's email address, if known 
-     * </pre>
+     * <code>required string email = 3;</code>
      */
     public com.google.protobuf.ByteString
         getEmailBytes() {
@@ -634,6 +437,14 @@ public final class Shared {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasUsername()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasRealName()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasEmail()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -754,10 +565,6 @@ public final class Shared {
     }
     /**
      * Protobuf type {@code boa.types.Person}
-     *
-     * <pre>
-     ** A unique person's information 
-     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -880,6 +687,14 @@ public final class Shared {
           
           return false;
         }
+        if (!hasRealName()) {
+          
+          return false;
+        }
+        if (!hasEmail()) {
+          
+          return false;
+        }
         return true;
       }
 
@@ -906,20 +721,12 @@ public final class Shared {
       private java.lang.Object username_ = "";
       /**
        * <code>required string username = 1;</code>
-       *
-       * <pre>
-       ** The person's username 
-       * </pre>
        */
       public boolean hasUsername() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required string username = 1;</code>
-       *
-       * <pre>
-       ** The person's username 
-       * </pre>
        */
       public java.lang.String getUsername() {
         java.lang.Object ref = username_;
@@ -934,10 +741,6 @@ public final class Shared {
       }
       /**
        * <code>required string username = 1;</code>
-       *
-       * <pre>
-       ** The person's username 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getUsernameBytes() {
@@ -954,10 +757,6 @@ public final class Shared {
       }
       /**
        * <code>required string username = 1;</code>
-       *
-       * <pre>
-       ** The person's username 
-       * </pre>
        */
       public Builder setUsername(
           java.lang.String value) {
@@ -971,10 +770,6 @@ public final class Shared {
       }
       /**
        * <code>required string username = 1;</code>
-       *
-       * <pre>
-       ** The person's username 
-       * </pre>
        */
       public Builder clearUsername() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -984,10 +779,6 @@ public final class Shared {
       }
       /**
        * <code>required string username = 1;</code>
-       *
-       * <pre>
-       ** The person's username 
-       * </pre>
        */
       public Builder setUsernameBytes(
           com.google.protobuf.ByteString value) {
@@ -1000,24 +791,16 @@ public final class Shared {
         return this;
       }
 
-      // optional string real_name = 2;
+      // required string real_name = 2;
       private java.lang.Object realName_ = "";
       /**
-       * <code>optional string real_name = 2;</code>
-       *
-       * <pre>
-       ** The person's real name, if known 
-       * </pre>
+       * <code>required string real_name = 2;</code>
        */
       public boolean hasRealName() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional string real_name = 2;</code>
-       *
-       * <pre>
-       ** The person's real name, if known 
-       * </pre>
+       * <code>required string real_name = 2;</code>
        */
       public java.lang.String getRealName() {
         java.lang.Object ref = realName_;
@@ -1031,11 +814,7 @@ public final class Shared {
         }
       }
       /**
-       * <code>optional string real_name = 2;</code>
-       *
-       * <pre>
-       ** The person's real name, if known 
-       * </pre>
+       * <code>required string real_name = 2;</code>
        */
       public com.google.protobuf.ByteString
           getRealNameBytes() {
@@ -1051,11 +830,7 @@ public final class Shared {
         }
       }
       /**
-       * <code>optional string real_name = 2;</code>
-       *
-       * <pre>
-       ** The person's real name, if known 
-       * </pre>
+       * <code>required string real_name = 2;</code>
        */
       public Builder setRealName(
           java.lang.String value) {
@@ -1068,11 +843,7 @@ public final class Shared {
         return this;
       }
       /**
-       * <code>optional string real_name = 2;</code>
-       *
-       * <pre>
-       ** The person's real name, if known 
-       * </pre>
+       * <code>required string real_name = 2;</code>
        */
       public Builder clearRealName() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -1081,11 +852,7 @@ public final class Shared {
         return this;
       }
       /**
-       * <code>optional string real_name = 2;</code>
-       *
-       * <pre>
-       ** The person's real name, if known 
-       * </pre>
+       * <code>required string real_name = 2;</code>
        */
       public Builder setRealNameBytes(
           com.google.protobuf.ByteString value) {
@@ -1098,24 +865,16 @@ public final class Shared {
         return this;
       }
 
-      // optional string email = 3;
+      // required string email = 3;
       private java.lang.Object email_ = "";
       /**
-       * <code>optional string email = 3;</code>
-       *
-       * <pre>
-       ** The person's email address, if known 
-       * </pre>
+       * <code>required string email = 3;</code>
        */
       public boolean hasEmail() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>optional string email = 3;</code>
-       *
-       * <pre>
-       ** The person's email address, if known 
-       * </pre>
+       * <code>required string email = 3;</code>
        */
       public java.lang.String getEmail() {
         java.lang.Object ref = email_;
@@ -1129,11 +888,7 @@ public final class Shared {
         }
       }
       /**
-       * <code>optional string email = 3;</code>
-       *
-       * <pre>
-       ** The person's email address, if known 
-       * </pre>
+       * <code>required string email = 3;</code>
        */
       public com.google.protobuf.ByteString
           getEmailBytes() {
@@ -1149,11 +904,7 @@ public final class Shared {
         }
       }
       /**
-       * <code>optional string email = 3;</code>
-       *
-       * <pre>
-       ** The person's email address, if known 
-       * </pre>
+       * <code>required string email = 3;</code>
        */
       public Builder setEmail(
           java.lang.String value) {
@@ -1166,11 +917,7 @@ public final class Shared {
         return this;
       }
       /**
-       * <code>optional string email = 3;</code>
-       *
-       * <pre>
-       ** The person's email address, if known 
-       * </pre>
+       * <code>required string email = 3;</code>
        */
       public Builder clearEmail() {
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -1179,11 +926,7 @@ public final class Shared {
         return this;
       }
       /**
-       * <code>optional string email = 3;</code>
-       *
-       * <pre>
-       ** The person's email address, if known 
-       * </pre>
+       * <code>required string email = 3;</code>
        */
       public Builder setEmailBytes(
           com.google.protobuf.ByteString value) {
@@ -1222,12 +965,11 @@ public final class Shared {
   static {
     java.lang.String[] descriptorData = {
       "\n\014shared.proto\022\tboa.types\"<\n\006Person\022\020\n\010u" +
-      "sername\030\001 \002(\t\022\021\n\treal_name\030\002 \001(\t\022\r\n\005emai" +
-      "l\030\003 \001(\t*\252\001\n\nChangeKind\022\013\n\007UNKNOWN\020\000\022\t\n\005A" +
-      "DDED\020\001\022\013\n\007DELETED\020\002\022\013\n\007REMOVED\020\002\022\014\n\010MODI" +
-      "FIED\020\003\022\013\n\007CHANGED\020\003\022\013\n\007RENAMED\020\004\022\t\n\005MOVE" +
-      "D\020\005\022\n\n\006COPIED\020\006\022\n\n\006MERGED\020\007\022\r\n\tUNCHANGED" +
-      "\020\010\022\014\n\010UNMAPPED\020\t\032\002\020\001B\002H\001"
+      "sername\030\001 \002(\t\022\021\n\treal_name\030\002 \002(\t\022\r\n\005emai" +
+      "l\030\003 \002(\t*t\n\nChangeKind\022\t\n\005ADDED\020\001\022\013\n\007DELE" +
+      "TED\020\002\022\013\n\007REMOVED\020\002\022\014\n\010MODIFIED\020\003\022\013\n\007CHAN" +
+      "GED\020\003\022\013\n\007RENAMED\020\004\022\t\n\005MOVED\020\004\022\n\n\006COPIED\020" +
+      "\005\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

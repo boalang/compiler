@@ -78,7 +78,6 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.RecognitionException;
 
-import boa.datagen.DefaultProperties;
 import boa.parser.BoaParser;
 import boa.parser.BoaLexer;
 
@@ -188,7 +187,7 @@ public class BoaCompiler extends BoaMain {
 					if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
 					if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
 
-					final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("Query", jobId, isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024, seed, DefaultProperties.localDataPath != null);
+					final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("Query", jobId, isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024, seed, false);
 					cg.start(p);
 					final Map<String, Program> subViews = cg.getSubViewsMap();
 
@@ -272,7 +271,7 @@ public class BoaCompiler extends BoaMain {
 
 			if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
 			if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
-			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(name, jobId, isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024, seed, DefaultProperties.localDataPath != null);
+			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(name, jobId, isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024, seed, false);
 			cg.start(p);
 			final Map<String, Program> subViews = cg.getSubViewsMap();
 
@@ -398,9 +397,7 @@ public class BoaCompiler extends BoaMain {
 
 		generateJar(jarName, outputRoot, jarDir, libJars);
 
-		if (DefaultProperties.localDataPath == null) {
-			delete(outputRoot);
-		}
+		delete(outputRoot);
 	}
 
 	static File inputFile = null;

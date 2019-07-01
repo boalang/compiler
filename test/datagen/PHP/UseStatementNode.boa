@@ -1,7 +1,0 @@
-namespaces {
-  name: ""
-  statements {
-    kind: USE_NAMESPACE
-    names: "myNamespace"
-  }
-}

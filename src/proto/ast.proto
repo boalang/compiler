@@ -1,196 +1,88 @@
-syntax = "proto2";
 package boa.types;
 
 option optimize_for = SPEED;
 
-/** @exclude TODO */
 message CommentsRoot {
 	repeated Comment comments = 1;
 }
 
-/** Container class that holds a file's parsed AST */
 message ASTRoot {
-	/** The top-level namespaces in the file */
 	repeated Namespace namespaces = 1;
-	/** @exclude */
+	repeated string imports = 2;
 	repeated string names = 3;
-	/** */
-	optional int32 key = 4;
-	/**The top-level document of an html, css, or xml DOM*/
-	optional Document document = 5;
 }
 
-/** A namespace (aka, package) in a source file */
 message Namespace {
-	/** The name of the namespace */
 	required string name = 1;
-	/** Any modifiers/annotations on the namespace */
 	repeated Modifier modifiers = 2;
-	/** Declarations contained in this namespace */
 	repeated Declaration declarations = 3;
-	/** Statements contained in this namespace */
-	repeated Statement statements = 4;
-	/** Methods contained in this namespace */
-	repeated Method methods = 5;
-	/** Expressions contained in this namespace */
-	repeated Expression expressions = 6;
-	/** */
-	optional int32 key = 10;
-	/** The nested namespaces */
-	repeated Namespace namespaces = 11;
-	/** The imported namespaces and types */
-	repeated string imports = 12;
-	repeated Variable variables = 13;
+//	required PositionInfo position = 4;
 }
 
-/** A type declaration, such as a class or interface */
 message Declaration {
-	/** The name of this declaration */
 	required string name = 1;
-	/** The kind of this declaration */
 	required TypeKind kind = 2;
-	/** The modifiers/annotations on this declaration */
 	repeated Modifier modifiers = 3;
-	/** Any generic parameters to this declaration */
 	repeated Type generic_parameters = 4;
-	/** The explicitly named parent type(s) of this declaration */
 	repeated Type parents = 5;
-	/** The methods in the declaration */
 	repeated Method methods = 6;
-	/** The fields in the declaration */
 	repeated Variable fields = 7;
-	/** Any nested declarations */
 	repeated Declaration nested_declarations = 8;
-	/** @exclude TODO */
 	repeated Comment comments = 9;
-	/** */
-	optional int32 key = 13;
-	/** The fully qualified name of this type/interface */
-	optional string fully_qualified_name = 14;
-	/** the key of the declaring class in the same AST */
-	optional int32 declaring_type = 15;
-	/** Nested statements */
-	repeated Statement statements = 16;
+//	required PositionInfo position = 10;
 }
 
-/** The kinds of types in an AST */
 enum TypeKind {
 	option allow_alias = true;
-	/** Any other kind of Type */
 	OTHER = 0;
-	/** A class type */
 	CLASS = 1;
-	/** An interface type */
 	INTERFACE = 2;
-	/** An anonymous type */
 	ANONYMOUS = 3;
-	/** @exclude */
 	ANON = 3;
-	/** A C-style struct */
 	STRUCT = 4;
-	/** An enumerated type */
 	ENUM = 5;
-	/** @exclude */
 	ENUMERATION = 5;
-	/** An annotation type */
 	ANNOTATION = 6;
-	/** A delegate type */
 	DELEGATE = 7;
-	/** A generic type */
 	GENERIC = 8;
-	/** A trait */
-	TRAIT = 9;
-	/** Pritimitve type */
-	PRIMITIVE = 10;
-	/** Array type */
-	ARRAY = 11;
 }
 
-/** A type in an AST */
 message Type {
-	/** The name of the type */
-	optional string name = 1;
-	/** The fully qualified name of this type/interface */
-	optional string fully_qualified_name = 2;
-	/** The kind of the type */
-	required TypeKind kind = 3;
-	/** @exclude */
+	required string name = 1;
+	required TypeKind kind = 2;
 	optional string id = 4;
-	/** the index of the file (in the list of files in the snapshot) containing the declaration of this type */
-	optional int32 declaration_file = 8;
-	/** the key of the node containing the declaration of this type in the AST of the file */
-	optional int32 declaration = 9;
-	/** */
-	optional int32 key = 10;
-	optional Expression computed_name = 14;
 }
 
-/** A method declaration */
 message Method {
-	/** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  */
 	optional string name = 1;
-	/** A list of all modifiers on the variable */
 	repeated Modifier modifiers = 2;
-	/** The type returned from the method; if the method returns nothing, this type will be void */
-	optional Type return_type = 3;
-	/** The list of generic parameters for this method */
+	required Type return_type = 3;
 	repeated Type generic_parameters = 4;
-	/** The arguments the method takes */
 	repeated Variable arguments = 5;
-	/** The list of exceptions thrown by this method */
 	repeated Type exception_types = 6;
-    /**
-	  * The statements in the method body. Note that most methods (in C-like
-	  * languages, such as Java) contain a single statement of type BLOCK, which
-	  * contains the list of statements within it!
-      */
 	repeated Statement statements = 7;
-	/** @exclude TODO */
 	repeated Comment comments = 8;
-	/** */
-	optional int32 key = 12;
-	/** The key of the type declaration declaring this method in the same AST */
-	optional int32 declaring_type = 13;
-	/** */
-	optional Expression computed_name = 14;
+//	required PositionInfo position = 9;
 }
 
-/** A variable declaration - can be a field, local, parameter, etc */
 message Variable {
-	/** The name of the variable */
-	optional string name = 1;
-	/** The type of the variable */
-	optional Type variable_type = 2;
-	/** A list of all modifiers on the variable */
+	required string name = 1;
+	required Type variable_type = 2;
 	repeated Modifier modifiers = 3;
-	/** If the variable has an initial assignment, the expression is stored here */
 	optional Expression initializer = 4;
-	/** @exclude TODO */
 	repeated Comment comments = 5;
-	/** */
-	optional int32 key = 9;
-	/** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable */
-	optional int32 declaring_type = 10;
-	/** */
-	optional Expression computed_name = 11;
-	optional bool dollar_sign = 12;
-	repeated Expression expressions = 13;
+//	required PositionInfo position = 6;
 }
 
-/** A single statement */
 message Statement {
-	/** The kind of statement */
 	enum StatementKind {
 		option allow_alias = true;
-		/** Any other statement */
 		OTHER = 0;
 		BLOCK = 1;
 		TYPEDECL = 2;
 		EXPRESSION = 3;
-		/** @exclude */
 		EXPR = 3;
 		SYNCHRONIZED = 4;
-		/** @exclude */
 		SYNC = 4;
 		RETURN = 5;
 		FOR = 6;
@@ -207,61 +99,29 @@ message Statement {
 		THROW = 17;
 		CATCH = 18;
 		EMPTY = 19;
-		FINALLY = 20;
-		DEBUGGER = 21;
-		DEFAULT = 22;
-		FOREACH = 23;
-		FORIN = 24;
-		WITH = 25;
-		SCOPE = 26;
-		DECLARE = 27;
-		GLOBAL = 28;
-		GOTO = 29;
-		INLINE_HTML = 30;
-		STATIC = 31;
-		ECHO = 32;
-		USE_NAMESPACE = 33;
-		USE_CONSTANT = 34;
-		USE_FUNCTION = 35;
-		TRAIT_ALIAS = 36;
-		TRAIT_PRECEDENCE = 37;
-		TRAIT_USE = 38;
 	}
-	/** The kind of statement */
 	required StatementKind kind = 1;
-	/** @exclude TODO */
 	repeated Comment comments = 2;
 	repeated Statement statements = 3;
 	repeated Expression initializations = 4;
-	repeated Expression conditions = 5;
+	optional Expression condition = 5;
 	repeated Expression updates = 6;
 	optional Variable variable_declaration = 7;
 	optional Declaration type_declaration = 8;
-	repeated Expression expressions = 9;
-	/** */
-	optional int32 key = 12;
-	repeated Method methods = 13;
-	repeated Variable variable_declarations = 14;
-	repeated Declaration type_declarations = 15;
-	repeated string names = 16;
+	optional Expression expression = 9;
+//	required PositionInfo position = 10;
 }
 
-/** A single expression */
 message Expression {
-	/** The kind of expression */
 	enum ExpressionKind {
-		option allow_alias = true;
-		/** Any other expression */
 		OTHER = 0;
 		LITERAL = 1;
 		VARACCESS = 2;
 		VARDECL = 3;
 		METHODCALL = 4;
 		CAST = 5;
-		ARRAYACCESS = 6;
+		ARRAYINDEX = 6;
 		ARRAYINIT = 7;
-		/** The same as ARRAYINIT */
-		ARRAYLITERAL = 7;
 		TYPECOMPARE = 8;
 		NEW = 9;
 		NEWARRAY = 10;
@@ -304,64 +164,7 @@ message Expression {
 		ASSIGN_UNSIGNEDRSHIFT = 47;
 		ANNOTATION = 48;
 		PAREN = 49;
-		/** @exclude TODO */
-		METHOD_REFERENCE = 50;
-		/** @exclude TODO */
-		LAMBDA = 51;
-		/** @exclude TODO */
-		ANON_METHOD = 52;
-		YIELD = 53;
-		ARRAY_COMPREHENSION = 54;
-		EMPTY = 55;
-		SHEQ = 56;
-		SHNEQ = 57;
-		XML_DOTQUERY = 58;
-		OBJECT_LITERAL = 59;
-		METHODDECL = 60;
-		LOOP = 61;
-		GENERATOR = 62;
-		XML_LITERAL = 63;
-		XML_EXPRESSION = 64;
-		XML_PROPERTYREF = 65;
-		XML_MEMBERREF = 66;
-		XML_DOT = 67;
-		XML_DOTDOT = 68;
-		IN = 69;
-		TYPEOF = 70;
-		REGEXPLITERAL = 71;
-		DELETE = 72;
-		VOID = 73;
-		/** In PHP, its syntax uses curly brackets instead of square ones as in array access. Not used in Java*/
-		HASHTABLEACCESS = 74;
-		/** Represents a single element of array. Holds the key and the value both can be any expression. The key can be null */
-		ARRAYELEMENT = 75;
-		OP_CONCAT = 76;
-		OP_POW = 77;
-		ASSIGN_CONCAT = 78;
-		ASSIGN_POW = 79;
-		BACKTICK = 80;
-		IDENTICAL = 81;
-		NOTIDENTICAL = 82;
-		STRING_AND = 83;
-		STRING_OR = 84;
-		STRING_XOR = 85;
-		OP_THREE_WAY_COMPARE = 86;
-		OP_UNPACK = 87;
-		QUOTE = 88;
-		IGNORE_ERROR = 89;
-		REQUIRE = 90;
-		REQUIRE_ONCE = 91;
-		INCLUDE = 92;
-		INCLUDE_ONCE = 93;
-		LIST = 94;
-		REFERENCE = 95;
-		REFLECTION = 96;
-		CLONE = 97;
-		TRAIT_ALIAS = 98;
-		TRAIT_PRECEDENCE = 99;
-		NAMESPACENAME = 100;
 	}
-	/** The kind of expression */
 	required ExpressionKind kind = 1;
 	repeated Expression expressions = 2;
 	repeated Variable variable_decls = 3;
@@ -374,111 +177,37 @@ message Expression {
 	repeated Expression method_args = 10;
 	optional Declaration anon_declaration = 11;
 	optional Modifier annotation = 12;
-	/** 13 used to be lambda */
-	/** @exclude */
-	optional bool no_parens = 14;
-	/** */
-	optional int32 key = 18;
-	/** The type declaring this method call or field access */
-	optional Type declaring_type = 19;
-	/** Type of the return value */
-	optional Type return_type = 20;
-	/** Declared methods/functions */
-	repeated Method methods = 21;
-	/** Inside statements */
-	repeated Statement statements = 22;
-	optional bool is_member_access = 23;
-	optional bool dollar_sign = 24;
-	optional Expression computed_variable = 25;
-	optional Expression computed_method = 26;
-	optional bool is_static = 27;
-	optional bool has_from = 28;
-	optional Method trait = 29;
+//	required PositionInfo position = 13;
 }
 
-/** A single modifier */
 message Modifier {
-	/** The kind of modifier */
 	enum ModifierKind {
 		option allow_alias = true;
-		/** Any other modifier - the value is in the <a href="#Modifier">Modifier</a>'s <code>other</code> attribute */
 		OTHER = 0;
-		/** A <a href="#Visibility">Visibility</a> modifier - the value is in the <a href="#Modifier">Modifier</a>'s <code>visibility</code> attribute */
 		VISIBILITY = 1;
-		/** An annotation modifier */
 		ANNOTATION = 2;
-		/** A final or constant modifier */
 		FINAL = 3;
-		CONSTANT = 3;
-		/** A static modifier */
 		STATIC = 4;
-		/** A synchronized modifier */
 		SYNCHRONIZED = 5;
-		/** @exclude */
 		SYNC = 5;
-		/** An abstract modifier */
 		ABSTRACT = 6;
-		/** A scope modifier */
-		SCOPE = 7;
-		/** A modifier for getter */
-		GETTER = 8;
-		/** A modifier for setter */
-		SETTER = 9;
-		/** A native modifier */
-		NATIVE = 10;
-		/** A strictfp modifier */
-		STRICTFP = 11;
-		/** A transient modifier */
-		TRANSIENT = 12;
-		/** A volatile modifier */
-		VOLATILE = 13;
 	}
-	/** A visibility modifier */
 	enum Visibility {
-		option allow_alias = true;
-		/** A public modifier */
 		PUBLIC = 1;
-		/** A private modifier */
 		PRIVATE = 2;
-		/** A protected modifier */
 		PROTECTED = 3;
-		/** A namespace (aka package) visibility modifier */
 		NAMESPACE = 4;
-		/** @exclude */
-		PACKAGE = 4;
-		/** A default visibility modifier */
-		DEFAULT = 5;
 	}
-	/** A scope modifier */
-	enum Scope {
-		/** A global scope modifier for a variable */
-		VAR = 1;
-		/** A block scope modifier for a variable */
-		LET = 2;
-		/** A local scope modifier for a constant */
-		CONST = 3;
-	}
-	/** The kind of modifier */
 	required ModifierKind kind = 1;
-	/** A kind of visibility modifier */
 	optional Visibility visibility = 2;
-	/** If the <code>kind</code> is <code>ANNOTATION</code>, then the name of the annotation */
 	optional string annotation_name = 3;
-	/** If the <code>kind</code> is <code>ANNOTATION</code>, then a list of all members explicitly assigned values */
 	repeated string annotation_members = 4;
-	/** If the <code>kind</code> is <code>ANNOTATION</code>, then a list of all values that were assigned to members */
 	repeated Expression annotation_values = 5;
-	/** If the <code>kind</code> is <code>OTHER</code>, the modifier string from the source code */
 	optional string other = 6;
-	/** */
-	optional int32 key = 10;
-	/** */
-	optional Scope scope = 11;
+//	required PositionInfo position = 7;
 }
 
-/** @exclude */
 message Comment {
-	/** @exclude */
 	enum CommentKind {
 		option allow_alias = true;
 		OTHER = 0;
@@ -492,11 +221,8 @@ message Comment {
 	required CommentKind kind = 1;
 	required string value = 2;
 	required PositionInfo position = 3;
-	/** */
-	optional int32 key = 7;
 }
 
-/** @exclude */
 message PositionInfo {
 	required int32 start_pos = 1;
 	required int32 length = 2;
@@ -505,56 +231,3 @@ message PositionInfo {
 	required int32 end_line = 5;
 	required int32 end_col = 6;
 }
-
-/** A Html Document */
-message Document {
-	optional string title = 1;
-	repeated Element elements = 2;
-	optional Element doc_type = 3;
-	repeated Attribute processing_instruction = 11;
-}
-
-/** A html Element */
-message Element {
-	enum ElementKind {
-		OTHER = 0;
-		BLOCK = 1;
-		IN_LINE = 2;
-		FORM = 3;
-		DOC_TYPE = 4;
-		/** CSS Rule types */
-		STYLE_SHEET = 5;
-		PAGE_RULE = 6;
-		STYLE_RULE = 7;
-		FONT_FACE_RULE = 8;
-		MEDIA_RULE = 9;
-		MEDIA_QUERY = 10;
-		IMPORT_RULE = 11;
-		XML_ELEMENT = 12;
-	}
-	/** Element's tag */
-	required string tag = 1;
-	/** Element's kind eg. bloack, inline or form */
-	required ElementKind kind = 2;
-	/** The Elements under the Element */
-	repeated Element elements = 3;
-	/** The Element's text */
-	repeated string  text = 4;
-	/** The Element's data eg. scripts, contents of style, etc... */
-	repeated string  data = 5;
-	/** The Element's attributes */
-	repeated Attribute attributes = 6;
-	optional Namespace script = 7;
-	optional Namespace php = 8;  
-	repeated Variable var_decl = 9;
-	/** The Element's title */
-	optional string title = 10;
-	repeated Attribute processing_instruction = 11;
-}
-
-/** Key Value pairs eg. key = "onclick" value = "myFunction()", key = "type" value = "button" */  
-message Attribute {
-	required string key = 1;
-	required string value = 2;
-}
-

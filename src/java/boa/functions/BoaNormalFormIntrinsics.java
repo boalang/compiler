@@ -117,7 +117,7 @@ public class BoaNormalFormIntrinsics {
 
 			case OP_DEC:
 			case OP_INC:
-			case ARRAYACCESS:
+			case ARRAYINDEX:
 				final Expression.Builder b = Expression.newBuilder(e);
 
 				for(int i = 0; i < convertedExpression.size(); i++) {
@@ -285,7 +285,7 @@ public class BoaNormalFormIntrinsics {
 			case NULLCOALESCE:
 			case OP_DEC:
 			case OP_INC:
-			case ARRAYACCESS:
+			case ARRAYINDEX:
 
 			case METHODCALL:
 			case LITERAL:
@@ -1470,7 +1470,7 @@ public class BoaNormalFormIntrinsics {
 			case ASSIGN_RSHIFT:
 			case ASSIGN_SUB:
 			case ASSIGN_UNSIGNEDRSHIFT:
-			case ARRAYACCESS:
+			case ARRAYINDEX:
 			case ARRAYINIT:
 			case BIT_AND:
 			case BIT_LSHIFT:
@@ -2613,9 +2613,7 @@ public class BoaNormalFormIntrinsics {
 
 	private static int getPriority(ExpressionKind kind) {
 		switch (kind) {
-		case ARRAY_COMPREHENSION:
-		case ARRAYACCESS:
-		case ARRAYELEMENT:
+		case ARRAYINDEX:
 		case ARRAYINIT:
 		case LOGICAL_NOT:
 		case LITERAL:
@@ -2629,15 +2627,10 @@ public class BoaNormalFormIntrinsics {
 		case OP_INC:
 			return 0;
 		case OP_ADD: return 12;
-		case OP_CONCAT: return 12;
 		case OP_DIV: return 11;
 		case OP_MOD: return 11;
 		case OP_MULT: return 11;
-		case OP_POW: return 11;
 		case OP_SUB:  return 12;
-		case OP_THREE_WAY_COMPARE:
-		case OP_UNPACK:
-			return 10;
 		case BIT_AND:
 		case BIT_LSHIFT:
 		case BIT_OR:
@@ -2958,12 +2951,12 @@ public class BoaNormalFormIntrinsics {
 
 		switch (stmt.getKind()) {
 			case RETURN:
-				final Expression exp = stmt.getExpressions(0);
+				final Expression exp = stmt.getExpression();
 				if (!exp.isInitialized())
 					return stmt;
 				final Statement.Builder sb = Statement.newBuilder(stmt);
 				sb.setKind(stmt.getKind());
-				sb.addExpressions(normalizeExpression(stmt.getExpressions(0), normalizedVars));
+				sb.setExpression(normalizeExpression(stmt.getExpression(), normalizedVars));
 				return sb.build();
 
 			case OTHER:
@@ -2981,11 +2974,9 @@ public class BoaNormalFormIntrinsics {
 			case LABEL:
 			case SWITCH:
 			case CASE:
-			case DEFAULT:
 			case TRY:
 			case THROW:
 			case CATCH:
-			case FINALLY:
 			case EMPTY:
 			default:
 				return stmt;
@@ -3040,7 +3031,7 @@ public class BoaNormalFormIntrinsics {
 			case NEW:
 			case NEWARRAY:
 			case ARRAYINIT:
-			case ARRAYACCESS:
+			case ARRAYINDEX:
 				final Expression.Builder bn = Expression.newBuilder(exp);
 
 				for (int i = 0; i < convertedExpression.size(); i++) {

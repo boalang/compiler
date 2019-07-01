@@ -25,7 +25,6 @@ import boa.types.BoaInt;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
-import boa.types.proto.enums.ChangeKindProtoMap;
 import boa.types.proto.enums.CommentKindProtoMap;
 
 /**
@@ -46,10 +45,7 @@ public class CommentProtoTuple extends BoaProtoTuple {
 		names.put("value", count++);
 		members.add(new BoaString());
 
-		names.put("position", count++);
-		members.add(new PositionInfoProtoTuple());
-		
-		names.put("key", count++);
+		names.put("start_line", count++);
 		members.add(new BoaInt());
 	}
 

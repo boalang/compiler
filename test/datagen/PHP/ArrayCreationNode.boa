@@ -1,9 +1,0 @@
-namespaces {
-  name: ""
-  statements {
-    kind: EXPRESSION
-    expressions {
-      kind: NEWARRAY
-    }
-  }
-}

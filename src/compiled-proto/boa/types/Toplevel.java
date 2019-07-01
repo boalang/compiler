@@ -14,26 +14,14 @@ public final class Toplevel {
     // required string id = 1;
     /**
      * <code>required string id = 1;</code>
-     *
-     * <pre>
-     ** Unique identifier for the project 
-     * </pre>
      */
     boolean hasId();
     /**
      * <code>required string id = 1;</code>
-     *
-     * <pre>
-     ** Unique identifier for the project 
-     * </pre>
      */
     java.lang.String getId();
     /**
      * <code>required string id = 1;</code>
-     *
-     * <pre>
-     ** Unique identifier for the project 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getIdBytes();
@@ -41,26 +29,14 @@ public final class Toplevel {
     // required string name = 2;
     /**
      * <code>required string name = 2;</code>
-     *
-     * <pre>
-     ** The name of the project 
-     * </pre>
      */
     boolean hasName();
     /**
      * <code>required string name = 2;</code>
-     *
-     * <pre>
-     ** The name of the project 
-     * </pre>
      */
     java.lang.String getName();
     /**
      * <code>required string name = 2;</code>
-     *
-     * <pre>
-     ** The name of the project 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getNameBytes();
@@ -68,26 +44,14 @@ public final class Toplevel {
     // required string project_url = 3;
     /**
      * <code>required string project_url = 3;</code>
-     *
-     * <pre>
-     ** A URL to the project's page on the forge 
-     * </pre>
      */
     boolean hasProjectUrl();
     /**
      * <code>required string project_url = 3;</code>
-     *
-     * <pre>
-     ** A URL to the project's page on the forge 
-     * </pre>
      */
     java.lang.String getProjectUrl();
     /**
      * <code>required string project_url = 3;</code>
-     *
-     * <pre>
-     ** A URL to the project's page on the forge 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getProjectUrlBytes();
@@ -95,26 +59,14 @@ public final class Toplevel {
     // optional string homepage_url = 4;
     /**
      * <code>optional string homepage_url = 4;</code>
-     *
-     * <pre>
-     ** A URL to the project's homepage 
-     * </pre>
      */
     boolean hasHomepageUrl();
     /**
      * <code>optional string homepage_url = 4;</code>
-     *
-     * <pre>
-     ** A URL to the project's homepage 
-     * </pre>
      */
     java.lang.String getHomepageUrl();
     /**
      * <code>optional string homepage_url = 4;</code>
-     *
-     * <pre>
-     ** A URL to the project's homepage 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getHomepageUrlBytes();
@@ -122,44 +74,24 @@ public final class Toplevel {
     // optional uint64 created_date = 5;
     /**
      * <code>optional uint64 created_date = 5;</code>
-     *
-     * <pre>
-     ** The time the project was created 
-     * </pre>
      */
     boolean hasCreatedDate();
     /**
      * <code>optional uint64 created_date = 5;</code>
-     *
-     * <pre>
-     ** The time the project was created 
-     * </pre>
      */
     long getCreatedDate();
 
     // optional string description = 6;
     /**
      * <code>optional string description = 6;</code>
-     *
-     * <pre>
-     ** A description of the project 
-     * </pre>
      */
     boolean hasDescription();
     /**
      * <code>optional string description = 6;</code>
-     *
-     * <pre>
-     ** A description of the project 
-     * </pre>
      */
     java.lang.String getDescription();
     /**
      * <code>optional string description = 6;</code>
-     *
-     * <pre>
-     ** A description of the project 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getDescriptionBytes();
@@ -167,35 +99,19 @@ public final class Toplevel {
     // repeated string operating_systems = 7;
     /**
      * <code>repeated string operating_systems = 7;</code>
-     *
-     * <pre>
-     ** A list of all OSes supported by the project 
-     * </pre>
      */
     java.util.List<java.lang.String>
     getOperatingSystemsList();
     /**
      * <code>repeated string operating_systems = 7;</code>
-     *
-     * <pre>
-     ** A list of all OSes supported by the project 
-     * </pre>
      */
     int getOperatingSystemsCount();
     /**
      * <code>repeated string operating_systems = 7;</code>
-     *
-     * <pre>
-     ** A list of all OSes supported by the project 
-     * </pre>
      */
     java.lang.String getOperatingSystems(int index);
     /**
      * <code>repeated string operating_systems = 7;</code>
-     *
-     * <pre>
-     ** A list of all OSes supported by the project 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getOperatingSystemsBytes(int index);
@@ -203,35 +119,19 @@ public final class Toplevel {
     // repeated string programming_languages = 8;
     /**
      * <code>repeated string programming_languages = 8;</code>
-     *
-     * <pre>
-     ** A list of all programming languages used by the project 
-     * </pre>
      */
     java.util.List<java.lang.String>
     getProgrammingLanguagesList();
     /**
      * <code>repeated string programming_languages = 8;</code>
-     *
-     * <pre>
-     ** A list of all programming languages used by the project 
-     * </pre>
      */
     int getProgrammingLanguagesCount();
     /**
      * <code>repeated string programming_languages = 8;</code>
-     *
-     * <pre>
-     ** A list of all programming languages used by the project 
-     * </pre>
      */
     java.lang.String getProgrammingLanguages(int index);
     /**
      * <code>repeated string programming_languages = 8;</code>
-     *
-     * <pre>
-     ** A list of all programming languages used by the project 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getProgrammingLanguagesBytes(int index);
@@ -239,35 +139,19 @@ public final class Toplevel {
     // repeated string databases = 9;
     /**
      * <code>repeated string databases = 9;</code>
-     *
-     * <pre>
-     ** A list of all databases used by the project 
-     * </pre>
      */
     java.util.List<java.lang.String>
     getDatabasesList();
     /**
      * <code>repeated string databases = 9;</code>
-     *
-     * <pre>
-     ** A list of all databases used by the project 
-     * </pre>
      */
     int getDatabasesCount();
     /**
      * <code>repeated string databases = 9;</code>
-     *
-     * <pre>
-     ** A list of all databases used by the project 
-     * </pre>
      */
     java.lang.String getDatabases(int index);
     /**
      * <code>repeated string databases = 9;</code>
-     *
-     * <pre>
-     ** A list of all databases used by the project 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getDatabasesBytes(int index);
@@ -275,35 +159,19 @@ public final class Toplevel {
     // repeated string licenses = 10;
     /**
      * <code>repeated string licenses = 10;</code>
-     *
-     * <pre>
-     ** A list of all licenses used by the project 
-     * </pre>
      */
     java.util.List<java.lang.String>
     getLicensesList();
     /**
      * <code>repeated string licenses = 10;</code>
-     *
-     * <pre>
-     ** A list of all licenses used by the project 
-     * </pre>
      */
     int getLicensesCount();
     /**
      * <code>repeated string licenses = 10;</code>
-     *
-     * <pre>
-     ** A list of all licenses used by the project 
-     * </pre>
      */
     java.lang.String getLicenses(int index);
     /**
      * <code>repeated string licenses = 10;</code>
-     *
-     * <pre>
-     ** A list of all licenses used by the project 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getLicensesBytes(int index);
@@ -311,35 +179,19 @@ public final class Toplevel {
     // repeated string interfaces = 11;
     /**
      * <code>repeated string interfaces = 11;</code>
-     *
-     * <pre>
-     ** A list of all interfaces supported by the project 
-     * </pre>
      */
     java.util.List<java.lang.String>
     getInterfacesList();
     /**
      * <code>repeated string interfaces = 11;</code>
-     *
-     * <pre>
-     ** A list of all interfaces supported by the project 
-     * </pre>
      */
     int getInterfacesCount();
     /**
      * <code>repeated string interfaces = 11;</code>
-     *
-     * <pre>
-     ** A list of all interfaces supported by the project 
-     * </pre>
      */
     java.lang.String getInterfaces(int index);
     /**
      * <code>repeated string interfaces = 11;</code>
-     *
-     * <pre>
-     ** A list of all interfaces supported by the project 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getInterfacesBytes(int index);
@@ -347,35 +199,19 @@ public final class Toplevel {
     // repeated string audiences = 12;
     /**
      * <code>repeated string audiences = 12;</code>
-     *
-     * <pre>
-     ** A list of the target audiences for the project 
-     * </pre>
      */
     java.util.List<java.lang.String>
     getAudiencesList();
     /**
      * <code>repeated string audiences = 12;</code>
-     *
-     * <pre>
-     ** A list of the target audiences for the project 
-     * </pre>
      */
     int getAudiencesCount();
     /**
      * <code>repeated string audiences = 12;</code>
-     *
-     * <pre>
-     ** A list of the target audiences for the project 
-     * </pre>
      */
     java.lang.String getAudiences(int index);
     /**
      * <code>repeated string audiences = 12;</code>
-     *
-     * <pre>
-     ** A list of the target audiences for the project 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getAudiencesBytes(int index);
@@ -383,35 +219,19 @@ public final class Toplevel {
     // repeated string topics = 13;
     /**
      * <code>repeated string topics = 13;</code>
-     *
-     * <pre>
-     ** A list of self-categorized topics the project belongs to 
-     * </pre>
      */
     java.util.List<java.lang.String>
     getTopicsList();
     /**
      * <code>repeated string topics = 13;</code>
-     *
-     * <pre>
-     ** A list of self-categorized topics the project belongs to 
-     * </pre>
      */
     int getTopicsCount();
     /**
      * <code>repeated string topics = 13;</code>
-     *
-     * <pre>
-     ** A list of self-categorized topics the project belongs to 
-     * </pre>
      */
     java.lang.String getTopics(int index);
     /**
      * <code>repeated string topics = 13;</code>
-     *
-     * <pre>
-     ** A list of self-categorized topics the project belongs to 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getTopicsBytes(int index);
@@ -419,35 +239,19 @@ public final class Toplevel {
     // repeated string status = 14;
     /**
      * <code>repeated string status = 14;</code>
-     *
-     * <pre>
-     ** @exclude TODO 
-     * </pre>
      */
     java.util.List<java.lang.String>
     getStatusList();
     /**
      * <code>repeated string status = 14;</code>
-     *
-     * <pre>
-     ** @exclude TODO 
-     * </pre>
      */
     int getStatusCount();
     /**
      * <code>repeated string status = 14;</code>
-     *
-     * <pre>
-     ** @exclude TODO 
-     * </pre>
      */
     java.lang.String getStatus(int index);
     /**
      * <code>repeated string status = 14;</code>
-     *
-     * <pre>
-     ** @exclude TODO 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getStatusBytes(int index);
@@ -455,35 +259,19 @@ public final class Toplevel {
     // repeated string translations = 15;
     /**
      * <code>repeated string translations = 15;</code>
-     *
-     * <pre>
-     ** @exclude TODO 
-     * </pre>
      */
     java.util.List<java.lang.String>
     getTranslationsList();
     /**
      * <code>repeated string translations = 15;</code>
-     *
-     * <pre>
-     ** @exclude TODO 
-     * </pre>
      */
     int getTranslationsCount();
     /**
      * <code>repeated string translations = 15;</code>
-     *
-     * <pre>
-     ** @exclude TODO 
-     * </pre>
      */
     java.lang.String getTranslations(int index);
     /**
      * <code>repeated string translations = 15;</code>
-     *
-     * <pre>
-     ** @exclude TODO 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getTranslationsBytes(int index);
@@ -491,62 +279,34 @@ public final class Toplevel {
     // optional bool donations = 16;
     /**
      * <code>optional bool donations = 16;</code>
-     *
-     * <pre>
-     ** If true, this project explicitly states it accepts donations 
-     * </pre>
      */
     boolean hasDonations();
     /**
      * <code>optional bool donations = 16;</code>
-     *
-     * <pre>
-     ** If true, this project explicitly states it accepts donations 
-     * </pre>
      */
     boolean getDonations();
 
     // repeated .boa.types.Person maintainers = 17;
     /**
      * <code>repeated .boa.types.Person maintainers = 17;</code>
-     *
-     * <pre>
-     ** A list of all people currently maintaining the project 
-     * </pre>
      */
     java.util.List<boa.types.Shared.Person> 
         getMaintainersList();
     /**
      * <code>repeated .boa.types.Person maintainers = 17;</code>
-     *
-     * <pre>
-     ** A list of all people currently maintaining the project 
-     * </pre>
      */
     boa.types.Shared.Person getMaintainers(int index);
     /**
      * <code>repeated .boa.types.Person maintainers = 17;</code>
-     *
-     * <pre>
-     ** A list of all people currently maintaining the project 
-     * </pre>
      */
     int getMaintainersCount();
     /**
      * <code>repeated .boa.types.Person maintainers = 17;</code>
-     *
-     * <pre>
-     ** A list of all people currently maintaining the project 
-     * </pre>
      */
     java.util.List<? extends boa.types.Shared.PersonOrBuilder> 
         getMaintainersOrBuilderList();
     /**
      * <code>repeated .boa.types.Person maintainers = 17;</code>
-     *
-     * <pre>
-     ** A list of all people currently maintaining the project 
-     * </pre>
      */
     boa.types.Shared.PersonOrBuilder getMaintainersOrBuilder(
         int index);
@@ -554,44 +314,24 @@ public final class Toplevel {
     // repeated .boa.types.Person developers = 18;
     /**
      * <code>repeated .boa.types.Person developers = 18;</code>
-     *
-     * <pre>
-     ** A list of all software developers currently on the project 
-     * </pre>
      */
     java.util.List<boa.types.Shared.Person> 
         getDevelopersList();
     /**
      * <code>repeated .boa.types.Person developers = 18;</code>
-     *
-     * <pre>
-     ** A list of all software developers currently on the project 
-     * </pre>
      */
     boa.types.Shared.Person getDevelopers(int index);
     /**
      * <code>repeated .boa.types.Person developers = 18;</code>
-     *
-     * <pre>
-     ** A list of all software developers currently on the project 
-     * </pre>
      */
     int getDevelopersCount();
     /**
      * <code>repeated .boa.types.Person developers = 18;</code>
-     *
-     * <pre>
-     ** A list of all software developers currently on the project 
-     * </pre>
      */
     java.util.List<? extends boa.types.Shared.PersonOrBuilder> 
         getDevelopersOrBuilderList();
     /**
      * <code>repeated .boa.types.Person developers = 18;</code>
-     *
-     * <pre>
-     ** A list of all software developers currently on the project 
-     * </pre>
      */
     boa.types.Shared.PersonOrBuilder getDevelopersOrBuilder(
         int index);
@@ -599,44 +339,24 @@ public final class Toplevel {
     // repeated .boa.types.CodeRepository code_repositories = 19;
     /**
      * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-     *
-     * <pre>
-     ** A list of all code repositories associated with this project 
-     * </pre>
      */
     java.util.List<boa.types.Code.CodeRepository> 
         getCodeRepositoriesList();
     /**
      * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-     *
-     * <pre>
-     ** A list of all code repositories associated with this project 
-     * </pre>
      */
     boa.types.Code.CodeRepository getCodeRepositories(int index);
     /**
      * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-     *
-     * <pre>
-     ** A list of all code repositories associated with this project 
-     * </pre>
      */
     int getCodeRepositoriesCount();
     /**
      * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-     *
-     * <pre>
-     ** A list of all code repositories associated with this project 
-     * </pre>
      */
     java.util.List<? extends boa.types.Code.CodeRepositoryOrBuilder> 
         getCodeRepositoriesOrBuilderList();
     /**
      * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-     *
-     * <pre>
-     ** A list of all code repositories associated with this project 
-     * </pre>
      */
     boa.types.Code.CodeRepositoryOrBuilder getCodeRepositoriesOrBuilder(
         int index);
@@ -644,44 +364,24 @@ public final class Toplevel {
     // repeated .boa.types.IssueRepository issue_repositories = 20;
     /**
      * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-     *
-     * <pre>
-     ** @exclude A list of all issue repositories associated with this project 
-     * </pre>
      */
     java.util.List<boa.types.Issues.IssueRepository> 
         getIssueRepositoriesList();
     /**
      * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-     *
-     * <pre>
-     ** @exclude A list of all issue repositories associated with this project 
-     * </pre>
      */
     boa.types.Issues.IssueRepository getIssueRepositories(int index);
     /**
      * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-     *
-     * <pre>
-     ** @exclude A list of all issue repositories associated with this project 
-     * </pre>
      */
     int getIssueRepositoriesCount();
     /**
      * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-     *
-     * <pre>
-     ** @exclude A list of all issue repositories associated with this project 
-     * </pre>
      */
     java.util.List<? extends boa.types.Issues.IssueRepositoryOrBuilder> 
         getIssueRepositoriesOrBuilderList();
     /**
      * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-     *
-     * <pre>
-     ** @exclude A list of all issue repositories associated with this project 
-     * </pre>
      */
     boa.types.Issues.IssueRepositoryOrBuilder getIssueRepositoriesOrBuilder(
         int index);
@@ -689,140 +389,15 @@ public final class Toplevel {
     // required .boa.types.Project.ForgeKind kind = 21;
     /**
      * <code>required .boa.types.Project.ForgeKind kind = 21;</code>
-     *
-     * <pre>
-     ** @exclude The kind of forge this project resides in 
-     * </pre>
      */
     boolean hasKind();
     /**
      * <code>required .boa.types.Project.ForgeKind kind = 21;</code>
-     *
-     * <pre>
-     ** @exclude The kind of forge this project resides in 
-     * </pre>
      */
     boa.types.Toplevel.Project.ForgeKind getKind();
-
-    // optional bool forked = 22;
-    /**
-     * <code>optional bool forked = 22;</code>
-     *
-     * <pre>
-     ** Specify if this repository is forked from some other repo 
-     * </pre>
-     */
-    boolean hasForked();
-    /**
-     * <code>optional bool forked = 22;</code>
-     *
-     * <pre>
-     ** Specify if this repository is forked from some other repo 
-     * </pre>
-     */
-    boolean getForked();
-
-    // optional int32 forks = 23;
-    /**
-     * <code>optional int32 forks = 23;</code>
-     *
-     * <pre>
-     ** The number of times this repository has been forked 
-     * </pre>
-     */
-    boolean hasForks();
-    /**
-     * <code>optional int32 forks = 23;</code>
-     *
-     * <pre>
-     ** The number of times this repository has been forked 
-     * </pre>
-     */
-    int getForks();
-
-    // optional int32 stars = 24;
-    /**
-     * <code>optional int32 stars = 24;</code>
-     *
-     * <pre>
-     ** The number of times this repository has been starred 
-     * </pre>
-     */
-    boolean hasStars();
-    /**
-     * <code>optional int32 stars = 24;</code>
-     *
-     * <pre>
-     ** The number of times this repository has been starred 
-     * </pre>
-     */
-    int getStars();
-
-    // repeated int32 programming_languages_locs = 25;
-    /**
-     * <code>repeated int32 programming_languages_locs = 25;</code>
-     *
-     * <pre>
-     ** The number of bytes of code for each language *
-     * </pre>
-     */
-    java.util.List<java.lang.Integer> getProgrammingLanguagesLocsList();
-    /**
-     * <code>repeated int32 programming_languages_locs = 25;</code>
-     *
-     * <pre>
-     ** The number of bytes of code for each language *
-     * </pre>
-     */
-    int getProgrammingLanguagesLocsCount();
-    /**
-     * <code>repeated int32 programming_languages_locs = 25;</code>
-     *
-     * <pre>
-     ** The number of bytes of code for each language *
-     * </pre>
-     */
-    int getProgrammingLanguagesLocs(int index);
-
-    // optional int32 size = 26;
-    /**
-     * <code>optional int32 size = 26;</code>
-     *
-     * <pre>
-     ** The size of the repository in bytes of code *
-     * </pre>
-     */
-    boolean hasSize();
-    /**
-     * <code>optional int32 size = 26;</code>
-     *
-     * <pre>
-     ** The size of the repository in bytes of code *
-     * </pre>
-     */
-    int getSize();
-
-    // optional string main_language = 27;
-    /**
-     * <code>optional string main_language = 27;</code>
-     */
-    boolean hasMainLanguage();
-    /**
-     * <code>optional string main_language = 27;</code>
-     */
-    java.lang.String getMainLanguage();
-    /**
-     * <code>optional string main_language = 27;</code>
-     */
-    com.google.protobuf.ByteString
-        getMainLanguageBytes();
   }
   /**
    * Protobuf type {@code boa.types.Project}
-   *
-   * <pre>
-   ** Top-level type, represents a single project on the forge 
-   * </pre>
    */
   public static final class Project extends
       com.google.protobuf.GeneratedMessage
@@ -1022,52 +597,6 @@ public final class Toplevel {
               }
               break;
             }
-            case 176: {
-              bitField0_ |= 0x00000100;
-              forked_ = input.readBool();
-              break;
-            }
-            case 184: {
-              bitField0_ |= 0x00000200;
-              forks_ = input.readInt32();
-              break;
-            }
-            case 192: {
-              bitField0_ |= 0x00000400;
-              stars_ = input.readInt32();
-              break;
-            }
-            case 200: {
-              if (!((mutable_bitField0_ & 0x01000000) == 0x01000000)) {
-                programmingLanguagesLocs_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x01000000;
-              }
-              programmingLanguagesLocs_.add(input.readInt32());
-              break;
-            }
-            case 202: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x01000000) == 0x01000000) && input.getBytesUntilLimit() > 0) {
-                programmingLanguagesLocs_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x01000000;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                programmingLanguagesLocs_.add(input.readInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 208: {
-              bitField0_ |= 0x00000800;
-              size_ = input.readInt32();
-              break;
-            }
-            case 218: {
-              bitField0_ |= 0x00001000;
-              mainLanguage_ = input.readBytes();
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -1115,9 +644,6 @@ public final class Toplevel {
         if (((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
           issueRepositories_ = java.util.Collections.unmodifiableList(issueRepositories_);
         }
-        if (((mutable_bitField0_ & 0x01000000) == 0x01000000)) {
-          programmingLanguagesLocs_ = java.util.Collections.unmodifiableList(programmingLanguagesLocs_);
-        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -1151,125 +677,57 @@ public final class Toplevel {
 
     /**
      * Protobuf enum {@code boa.types.Project.ForgeKind}
-     *
-     * <pre>
-     ** Describes the kind of forge 
-     * </pre>
      */
     public enum ForgeKind
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>OTHER = 0;</code>
-       *
-       * <pre>
-       ** Any other kind of forge 
-       * </pre>
        */
       OTHER(0, 0),
       /**
-       * <code>SOURCEFORGE = 1;</code>
-       *
-       * <pre>
-       ** SourceForge.net 
-       * </pre>
+       * <code>SF = 1;</code>
        */
-      SOURCEFORGE(1, 1),
+      SF(1, 1),
       /**
        * <code>GITHUB = 2;</code>
-       *
-       * <pre>
-       ** GitHub.com 
-       * </pre>
        */
       GITHUB(3, 2),
       /**
        * <code>APACHE = 3;</code>
-       *
-       * <pre>
-       ** Apache 
-       * </pre>
        */
-      APACHE(5, 3),
+      APACHE(4, 3),
       /**
        * <code>QUALITAS = 4;</code>
-       *
-       * <pre>
-       ** Qualitas Corpus 
-       * </pre>
        */
-      QUALITAS(6, 4),
+      QUALITAS(5, 4),
       ;
 
       /**
-       * <code>SF = 1;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
+       * <code>SOURCEFORGE = 1;</code>
        */
-      public static final ForgeKind SF = SOURCEFORGE;
-      /**
-       * <code>GH = 2;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public static final ForgeKind GH = GITHUB;
+      public static final ForgeKind SOURCEFORGE = SF;
       /**
        * <code>OTHER = 0;</code>
-       *
-       * <pre>
-       ** Any other kind of forge 
-       * </pre>
        */
       public static final int OTHER_VALUE = 0;
       /**
-       * <code>SOURCEFORGE = 1;</code>
-       *
-       * <pre>
-       ** SourceForge.net 
-       * </pre>
-       */
-      public static final int SOURCEFORGE_VALUE = 1;
-      /**
        * <code>SF = 1;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final int SF_VALUE = 1;
       /**
+       * <code>SOURCEFORGE = 1;</code>
+       */
+      public static final int SOURCEFORGE_VALUE = 1;
+      /**
        * <code>GITHUB = 2;</code>
-       *
-       * <pre>
-       ** GitHub.com 
-       * </pre>
        */
       public static final int GITHUB_VALUE = 2;
       /**
-       * <code>GH = 2;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public static final int GH_VALUE = 2;
-      /**
        * <code>APACHE = 3;</code>
-       *
-       * <pre>
-       ** Apache 
-       * </pre>
        */
       public static final int APACHE_VALUE = 3;
       /**
        * <code>QUALITAS = 4;</code>
-       *
-       * <pre>
-       ** Qualitas Corpus 
-       * </pre>
        */
       public static final int QUALITAS_VALUE = 4;
 
@@ -1279,7 +737,7 @@ public final class Toplevel {
       public static ForgeKind valueOf(int value) {
         switch (value) {
           case 0: return OTHER;
-          case 1: return SOURCEFORGE;
+          case 1: return SF;
           case 2: return GITHUB;
           case 3: return APACHE;
           case 4: return QUALITAS;
@@ -1313,7 +771,7 @@ public final class Toplevel {
       }
 
       private static final ForgeKind[] VALUES = {
-        OTHER, SOURCEFORGE, SF, GITHUB, GH, APACHE, QUALITAS, 
+        OTHER, SF, SOURCEFORGE, GITHUB, APACHE, QUALITAS, 
       };
 
       public static ForgeKind valueOf(
@@ -1342,20 +800,12 @@ public final class Toplevel {
     private java.lang.Object id_;
     /**
      * <code>required string id = 1;</code>
-     *
-     * <pre>
-     ** Unique identifier for the project 
-     * </pre>
      */
     public boolean hasId() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required string id = 1;</code>
-     *
-     * <pre>
-     ** Unique identifier for the project 
-     * </pre>
      */
     public java.lang.String getId() {
       java.lang.Object ref = id_;
@@ -1373,10 +823,6 @@ public final class Toplevel {
     }
     /**
      * <code>required string id = 1;</code>
-     *
-     * <pre>
-     ** Unique identifier for the project 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getIdBytes() {
@@ -1397,20 +843,12 @@ public final class Toplevel {
     private java.lang.Object name_;
     /**
      * <code>required string name = 2;</code>
-     *
-     * <pre>
-     ** The name of the project 
-     * </pre>
      */
     public boolean hasName() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>required string name = 2;</code>
-     *
-     * <pre>
-     ** The name of the project 
-     * </pre>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -1428,10 +866,6 @@ public final class Toplevel {
     }
     /**
      * <code>required string name = 2;</code>
-     *
-     * <pre>
-     ** The name of the project 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
@@ -1452,20 +886,12 @@ public final class Toplevel {
     private java.lang.Object projectUrl_;
     /**
      * <code>required string project_url = 3;</code>
-     *
-     * <pre>
-     ** A URL to the project's page on the forge 
-     * </pre>
      */
     public boolean hasProjectUrl() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>required string project_url = 3;</code>
-     *
-     * <pre>
-     ** A URL to the project's page on the forge 
-     * </pre>
      */
     public java.lang.String getProjectUrl() {
       java.lang.Object ref = projectUrl_;
@@ -1483,10 +909,6 @@ public final class Toplevel {
     }
     /**
      * <code>required string project_url = 3;</code>
-     *
-     * <pre>
-     ** A URL to the project's page on the forge 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getProjectUrlBytes() {
@@ -1507,20 +929,12 @@ public final class Toplevel {
     private java.lang.Object homepageUrl_;
     /**
      * <code>optional string homepage_url = 4;</code>
-     *
-     * <pre>
-     ** A URL to the project's homepage 
-     * </pre>
      */
     public boolean hasHomepageUrl() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
      * <code>optional string homepage_url = 4;</code>
-     *
-     * <pre>
-     ** A URL to the project's homepage 
-     * </pre>
      */
     public java.lang.String getHomepageUrl() {
       java.lang.Object ref = homepageUrl_;
@@ -1538,10 +952,6 @@ public final class Toplevel {
     }
     /**
      * <code>optional string homepage_url = 4;</code>
-     *
-     * <pre>
-     ** A URL to the project's homepage 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getHomepageUrlBytes() {
@@ -1562,20 +972,12 @@ public final class Toplevel {
     private long createdDate_;
     /**
      * <code>optional uint64 created_date = 5;</code>
-     *
-     * <pre>
-     ** The time the project was created 
-     * </pre>
      */
     public boolean hasCreatedDate() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
      * <code>optional uint64 created_date = 5;</code>
-     *
-     * <pre>
-     ** The time the project was created 
-     * </pre>
      */
     public long getCreatedDate() {
       return createdDate_;
@@ -1586,20 +988,12 @@ public final class Toplevel {
     private java.lang.Object description_;
     /**
      * <code>optional string description = 6;</code>
-     *
-     * <pre>
-     ** A description of the project 
-     * </pre>
      */
     public boolean hasDescription() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
      * <code>optional string description = 6;</code>
-     *
-     * <pre>
-     ** A description of the project 
-     * </pre>
      */
     public java.lang.String getDescription() {
       java.lang.Object ref = description_;
@@ -1617,10 +1011,6 @@ public final class Toplevel {
     }
     /**
      * <code>optional string description = 6;</code>
-     *
-     * <pre>
-     ** A description of the project 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getDescriptionBytes() {
@@ -1641,10 +1031,6 @@ public final class Toplevel {
     private com.google.protobuf.LazyStringList operatingSystems_;
     /**
      * <code>repeated string operating_systems = 7;</code>
-     *
-     * <pre>
-     ** A list of all OSes supported by the project 
-     * </pre>
      */
     public java.util.List<java.lang.String>
         getOperatingSystemsList() {
@@ -1652,30 +1038,18 @@ public final class Toplevel {
     }
     /**
      * <code>repeated string operating_systems = 7;</code>
-     *
-     * <pre>
-     ** A list of all OSes supported by the project 
-     * </pre>
      */
     public int getOperatingSystemsCount() {
       return operatingSystems_.size();
     }
     /**
      * <code>repeated string operating_systems = 7;</code>
-     *
-     * <pre>
-     ** A list of all OSes supported by the project 
-     * </pre>
      */
     public java.lang.String getOperatingSystems(int index) {
       return operatingSystems_.get(index);
     }
     /**
      * <code>repeated string operating_systems = 7;</code>
-     *
-     * <pre>
-     ** A list of all OSes supported by the project 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getOperatingSystemsBytes(int index) {
@@ -1687,10 +1061,6 @@ public final class Toplevel {
     private com.google.protobuf.LazyStringList programmingLanguages_;
     /**
      * <code>repeated string programming_languages = 8;</code>
-     *
-     * <pre>
-     ** A list of all programming languages used by the project 
-     * </pre>
      */
     public java.util.List<java.lang.String>
         getProgrammingLanguagesList() {
@@ -1698,30 +1068,18 @@ public final class Toplevel {
     }
     /**
      * <code>repeated string programming_languages = 8;</code>
-     *
-     * <pre>
-     ** A list of all programming languages used by the project 
-     * </pre>
      */
     public int getProgrammingLanguagesCount() {
       return programmingLanguages_.size();
     }
     /**
      * <code>repeated string programming_languages = 8;</code>
-     *
-     * <pre>
-     ** A list of all programming languages used by the project 
-     * </pre>
      */
     public java.lang.String getProgrammingLanguages(int index) {
       return programmingLanguages_.get(index);
     }
     /**
      * <code>repeated string programming_languages = 8;</code>
-     *
-     * <pre>
-     ** A list of all programming languages used by the project 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getProgrammingLanguagesBytes(int index) {
@@ -1733,10 +1091,6 @@ public final class Toplevel {
     private com.google.protobuf.LazyStringList databases_;
     /**
      * <code>repeated string databases = 9;</code>
-     *
-     * <pre>
-     ** A list of all databases used by the project 
-     * </pre>
      */
     public java.util.List<java.lang.String>
         getDatabasesList() {
@@ -1744,30 +1098,18 @@ public final class Toplevel {
     }
     /**
      * <code>repeated string databases = 9;</code>
-     *
-     * <pre>
-     ** A list of all databases used by the project 
-     * </pre>
      */
     public int getDatabasesCount() {
       return databases_.size();
     }
     /**
      * <code>repeated string databases = 9;</code>
-     *
-     * <pre>
-     ** A list of all databases used by the project 
-     * </pre>
      */
     public java.lang.String getDatabases(int index) {
       return databases_.get(index);
     }
     /**
      * <code>repeated string databases = 9;</code>
-     *
-     * <pre>
-     ** A list of all databases used by the project 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getDatabasesBytes(int index) {
@@ -1779,10 +1121,6 @@ public final class Toplevel {
     private com.google.protobuf.LazyStringList licenses_;
     /**
      * <code>repeated string licenses = 10;</code>
-     *
-     * <pre>
-     ** A list of all licenses used by the project 
-     * </pre>
      */
     public java.util.List<java.lang.String>
         getLicensesList() {
@@ -1790,30 +1128,18 @@ public final class Toplevel {
     }
     /**
      * <code>repeated string licenses = 10;</code>
-     *
-     * <pre>
-     ** A list of all licenses used by the project 
-     * </pre>
      */
     public int getLicensesCount() {
       return licenses_.size();
     }
     /**
      * <code>repeated string licenses = 10;</code>
-     *
-     * <pre>
-     ** A list of all licenses used by the project 
-     * </pre>
      */
     public java.lang.String getLicenses(int index) {
       return licenses_.get(index);
     }
     /**
      * <code>repeated string licenses = 10;</code>
-     *
-     * <pre>
-     ** A list of all licenses used by the project 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getLicensesBytes(int index) {
@@ -1825,10 +1151,6 @@ public final class Toplevel {
     private com.google.protobuf.LazyStringList interfaces_;
     /**
      * <code>repeated string interfaces = 11;</code>
-     *
-     * <pre>
-     ** A list of all interfaces supported by the project 
-     * </pre>
      */
     public java.util.List<java.lang.String>
         getInterfacesList() {
@@ -1836,30 +1158,18 @@ public final class Toplevel {
     }
     /**
      * <code>repeated string interfaces = 11;</code>
-     *
-     * <pre>
-     ** A list of all interfaces supported by the project 
-     * </pre>
      */
     public int getInterfacesCount() {
       return interfaces_.size();
     }
     /**
      * <code>repeated string interfaces = 11;</code>
-     *
-     * <pre>
-     ** A list of all interfaces supported by the project 
-     * </pre>
      */
     public java.lang.String getInterfaces(int index) {
       return interfaces_.get(index);
     }
     /**
      * <code>repeated string interfaces = 11;</code>
-     *
-     * <pre>
-     ** A list of all interfaces supported by the project 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getInterfacesBytes(int index) {
@@ -1871,10 +1181,6 @@ public final class Toplevel {
     private com.google.protobuf.LazyStringList audiences_;
     /**
      * <code>repeated string audiences = 12;</code>
-     *
-     * <pre>
-     ** A list of the target audiences for the project 
-     * </pre>
      */
     public java.util.List<java.lang.String>
         getAudiencesList() {
@@ -1882,30 +1188,18 @@ public final class Toplevel {
     }
     /**
      * <code>repeated string audiences = 12;</code>
-     *
-     * <pre>
-     ** A list of the target audiences for the project 
-     * </pre>
      */
     public int getAudiencesCount() {
       return audiences_.size();
     }
     /**
      * <code>repeated string audiences = 12;</code>
-     *
-     * <pre>
-     ** A list of the target audiences for the project 
-     * </pre>
      */
     public java.lang.String getAudiences(int index) {
       return audiences_.get(index);
     }
     /**
      * <code>repeated string audiences = 12;</code>
-     *
-     * <pre>
-     ** A list of the target audiences for the project 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getAudiencesBytes(int index) {
@@ -1917,10 +1211,6 @@ public final class Toplevel {
     private com.google.protobuf.LazyStringList topics_;
     /**
      * <code>repeated string topics = 13;</code>
-     *
-     * <pre>
-     ** A list of self-categorized topics the project belongs to 
-     * </pre>
      */
     public java.util.List<java.lang.String>
         getTopicsList() {
@@ -1928,30 +1218,18 @@ public final class Toplevel {
     }
     /**
      * <code>repeated string topics = 13;</code>
-     *
-     * <pre>
-     ** A list of self-categorized topics the project belongs to 
-     * </pre>
      */
     public int getTopicsCount() {
       return topics_.size();
     }
     /**
      * <code>repeated string topics = 13;</code>
-     *
-     * <pre>
-     ** A list of self-categorized topics the project belongs to 
-     * </pre>
      */
     public java.lang.String getTopics(int index) {
       return topics_.get(index);
     }
     /**
      * <code>repeated string topics = 13;</code>
-     *
-     * <pre>
-     ** A list of self-categorized topics the project belongs to 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getTopicsBytes(int index) {
@@ -1963,10 +1241,6 @@ public final class Toplevel {
     private com.google.protobuf.LazyStringList status_;
     /**
      * <code>repeated string status = 14;</code>
-     *
-     * <pre>
-     ** @exclude TODO 
-     * </pre>
      */
     public java.util.List<java.lang.String>
         getStatusList() {
@@ -1974,30 +1248,18 @@ public final class Toplevel {
     }
     /**
      * <code>repeated string status = 14;</code>
-     *
-     * <pre>
-     ** @exclude TODO 
-     * </pre>
      */
     public int getStatusCount() {
       return status_.size();
     }
     /**
      * <code>repeated string status = 14;</code>
-     *
-     * <pre>
-     ** @exclude TODO 
-     * </pre>
      */
     public java.lang.String getStatus(int index) {
       return status_.get(index);
     }
     /**
      * <code>repeated string status = 14;</code>
-     *
-     * <pre>
-     ** @exclude TODO 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getStatusBytes(int index) {
@@ -2009,10 +1271,6 @@ public final class Toplevel {
     private com.google.protobuf.LazyStringList translations_;
     /**
      * <code>repeated string translations = 15;</code>
-     *
-     * <pre>
-     ** @exclude TODO 
-     * </pre>
      */
     public java.util.List<java.lang.String>
         getTranslationsList() {
@@ -2020,30 +1278,18 @@ public final class Toplevel {
     }
     /**
      * <code>repeated string translations = 15;</code>
-     *
-     * <pre>
-     ** @exclude TODO 
-     * </pre>
      */
     public int getTranslationsCount() {
       return translations_.size();
     }
     /**
      * <code>repeated string translations = 15;</code>
-     *
-     * <pre>
-     ** @exclude TODO 
-     * </pre>
      */
     public java.lang.String getTranslations(int index) {
       return translations_.get(index);
     }
     /**
      * <code>repeated string translations = 15;</code>
-     *
-     * <pre>
-     ** @exclude TODO 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getTranslationsBytes(int index) {
@@ -2055,20 +1301,12 @@ public final class Toplevel {
     private boolean donations_;
     /**
      * <code>optional bool donations = 16;</code>
-     *
-     * <pre>
-     ** If true, this project explicitly states it accepts donations 
-     * </pre>
      */
     public boolean hasDonations() {
       return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
      * <code>optional bool donations = 16;</code>
-     *
-     * <pre>
-     ** If true, this project explicitly states it accepts donations 
-     * </pre>
      */
     public boolean getDonations() {
       return donations_;
@@ -2079,20 +1317,12 @@ public final class Toplevel {
     private java.util.List<boa.types.Shared.Person> maintainers_;
     /**
      * <code>repeated .boa.types.Person maintainers = 17;</code>
-     *
-     * <pre>
-     ** A list of all people currently maintaining the project 
-     * </pre>
      */
     public java.util.List<boa.types.Shared.Person> getMaintainersList() {
       return maintainers_;
     }
     /**
      * <code>repeated .boa.types.Person maintainers = 17;</code>
-     *
-     * <pre>
-     ** A list of all people currently maintaining the project 
-     * </pre>
      */
     public java.util.List<? extends boa.types.Shared.PersonOrBuilder> 
         getMaintainersOrBuilderList() {
@@ -2100,30 +1330,18 @@ public final class Toplevel {
     }
     /**
      * <code>repeated .boa.types.Person maintainers = 17;</code>
-     *
-     * <pre>
-     ** A list of all people currently maintaining the project 
-     * </pre>
      */
     public int getMaintainersCount() {
       return maintainers_.size();
     }
     /**
      * <code>repeated .boa.types.Person maintainers = 17;</code>
-     *
-     * <pre>
-     ** A list of all people currently maintaining the project 
-     * </pre>
      */
     public boa.types.Shared.Person getMaintainers(int index) {
       return maintainers_.get(index);
     }
     /**
      * <code>repeated .boa.types.Person maintainers = 17;</code>
-     *
-     * <pre>
-     ** A list of all people currently maintaining the project 
-     * </pre>
      */
     public boa.types.Shared.PersonOrBuilder getMaintainersOrBuilder(
         int index) {
@@ -2135,20 +1353,12 @@ public final class Toplevel {
     private java.util.List<boa.types.Shared.Person> developers_;
     /**
      * <code>repeated .boa.types.Person developers = 18;</code>
-     *
-     * <pre>
-     ** A list of all software developers currently on the project 
-     * </pre>
      */
     public java.util.List<boa.types.Shared.Person> getDevelopersList() {
       return developers_;
     }
     /**
      * <code>repeated .boa.types.Person developers = 18;</code>
-     *
-     * <pre>
-     ** A list of all software developers currently on the project 
-     * </pre>
      */
     public java.util.List<? extends boa.types.Shared.PersonOrBuilder> 
         getDevelopersOrBuilderList() {
@@ -2156,30 +1366,18 @@ public final class Toplevel {
     }
     /**
      * <code>repeated .boa.types.Person developers = 18;</code>
-     *
-     * <pre>
-     ** A list of all software developers currently on the project 
-     * </pre>
      */
     public int getDevelopersCount() {
       return developers_.size();
     }
     /**
      * <code>repeated .boa.types.Person developers = 18;</code>
-     *
-     * <pre>
-     ** A list of all software developers currently on the project 
-     * </pre>
      */
     public boa.types.Shared.Person getDevelopers(int index) {
       return developers_.get(index);
     }
     /**
      * <code>repeated .boa.types.Person developers = 18;</code>
-     *
-     * <pre>
-     ** A list of all software developers currently on the project 
-     * </pre>
      */
     public boa.types.Shared.PersonOrBuilder getDevelopersOrBuilder(
         int index) {
@@ -2191,20 +1389,12 @@ public final class Toplevel {
     private java.util.List<boa.types.Code.CodeRepository> codeRepositories_;
     /**
      * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-     *
-     * <pre>
-     ** A list of all code repositories associated with this project 
-     * </pre>
      */
     public java.util.List<boa.types.Code.CodeRepository> getCodeRepositoriesList() {
       return codeRepositories_;
     }
     /**
      * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-     *
-     * <pre>
-     ** A list of all code repositories associated with this project 
-     * </pre>
      */
     public java.util.List<? extends boa.types.Code.CodeRepositoryOrBuilder> 
         getCodeRepositoriesOrBuilderList() {
@@ -2212,30 +1402,18 @@ public final class Toplevel {
     }
     /**
      * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-     *
-     * <pre>
-     ** A list of all code repositories associated with this project 
-     * </pre>
      */
     public int getCodeRepositoriesCount() {
       return codeRepositories_.size();
     }
     /**
      * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-     *
-     * <pre>
-     ** A list of all code repositories associated with this project 
-     * </pre>
      */
     public boa.types.Code.CodeRepository getCodeRepositories(int index) {
       return codeRepositories_.get(index);
     }
     /**
      * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-     *
-     * <pre>
-     ** A list of all code repositories associated with this project 
-     * </pre>
      */
     public boa.types.Code.CodeRepositoryOrBuilder getCodeRepositoriesOrBuilder(
         int index) {
@@ -2247,20 +1425,12 @@ public final class Toplevel {
     private java.util.List<boa.types.Issues.IssueRepository> issueRepositories_;
     /**
      * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-     *
-     * <pre>
-     ** @exclude A list of all issue repositories associated with this project 
-     * </pre>
      */
     public java.util.List<boa.types.Issues.IssueRepository> getIssueRepositoriesList() {
       return issueRepositories_;
     }
     /**
      * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-     *
-     * <pre>
-     ** @exclude A list of all issue repositories associated with this project 
-     * </pre>
      */
     public java.util.List<? extends boa.types.Issues.IssueRepositoryOrBuilder> 
         getIssueRepositoriesOrBuilderList() {
@@ -2268,30 +1438,18 @@ public final class Toplevel {
     }
     /**
      * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-     *
-     * <pre>
-     ** @exclude A list of all issue repositories associated with this project 
-     * </pre>
      */
     public int getIssueRepositoriesCount() {
       return issueRepositories_.size();
     }
     /**
      * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-     *
-     * <pre>
-     ** @exclude A list of all issue repositories associated with this project 
-     * </pre>
      */
     public boa.types.Issues.IssueRepository getIssueRepositories(int index) {
       return issueRepositories_.get(index);
     }
     /**
      * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-     *
-     * <pre>
-     ** @exclude A list of all issue repositories associated with this project 
-     * </pre>
      */
     public boa.types.Issues.IssueRepositoryOrBuilder getIssueRepositoriesOrBuilder(
         int index) {
@@ -2303,197 +1461,15 @@ public final class Toplevel {
     private boa.types.Toplevel.Project.ForgeKind kind_;
     /**
      * <code>required .boa.types.Project.ForgeKind kind = 21;</code>
-     *
-     * <pre>
-     ** @exclude The kind of forge this project resides in 
-     * </pre>
      */
     public boolean hasKind() {
       return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     /**
      * <code>required .boa.types.Project.ForgeKind kind = 21;</code>
-     *
-     * <pre>
-     ** @exclude The kind of forge this project resides in 
-     * </pre>
      */
     public boa.types.Toplevel.Project.ForgeKind getKind() {
       return kind_;
-    }
-
-    // optional bool forked = 22;
-    public static final int FORKED_FIELD_NUMBER = 22;
-    private boolean forked_;
-    /**
-     * <code>optional bool forked = 22;</code>
-     *
-     * <pre>
-     ** Specify if this repository is forked from some other repo 
-     * </pre>
-     */
-    public boolean hasForked() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
-    }
-    /**
-     * <code>optional bool forked = 22;</code>
-     *
-     * <pre>
-     ** Specify if this repository is forked from some other repo 
-     * </pre>
-     */
-    public boolean getForked() {
-      return forked_;
-    }
-
-    // optional int32 forks = 23;
-    public static final int FORKS_FIELD_NUMBER = 23;
-    private int forks_;
-    /**
-     * <code>optional int32 forks = 23;</code>
-     *
-     * <pre>
-     ** The number of times this repository has been forked 
-     * </pre>
-     */
-    public boolean hasForks() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
-    }
-    /**
-     * <code>optional int32 forks = 23;</code>
-     *
-     * <pre>
-     ** The number of times this repository has been forked 
-     * </pre>
-     */
-    public int getForks() {
-      return forks_;
-    }
-
-    // optional int32 stars = 24;
-    public static final int STARS_FIELD_NUMBER = 24;
-    private int stars_;
-    /**
-     * <code>optional int32 stars = 24;</code>
-     *
-     * <pre>
-     ** The number of times this repository has been starred 
-     * </pre>
-     */
-    public boolean hasStars() {
-      return ((bitField0_ & 0x00000400) == 0x00000400);
-    }
-    /**
-     * <code>optional int32 stars = 24;</code>
-     *
-     * <pre>
-     ** The number of times this repository has been starred 
-     * </pre>
-     */
-    public int getStars() {
-      return stars_;
-    }
-
-    // repeated int32 programming_languages_locs = 25;
-    public static final int PROGRAMMING_LANGUAGES_LOCS_FIELD_NUMBER = 25;
-    private java.util.List<java.lang.Integer> programmingLanguagesLocs_;
-    /**
-     * <code>repeated int32 programming_languages_locs = 25;</code>
-     *
-     * <pre>
-     ** The number of bytes of code for each language *
-     * </pre>
-     */
-    public java.util.List<java.lang.Integer>
-        getProgrammingLanguagesLocsList() {
-      return programmingLanguagesLocs_;
-    }
-    /**
-     * <code>repeated int32 programming_languages_locs = 25;</code>
-     *
-     * <pre>
-     ** The number of bytes of code for each language *
-     * </pre>
-     */
-    public int getProgrammingLanguagesLocsCount() {
-      return programmingLanguagesLocs_.size();
-    }
-    /**
-     * <code>repeated int32 programming_languages_locs = 25;</code>
-     *
-     * <pre>
-     ** The number of bytes of code for each language *
-     * </pre>
-     */
-    public int getProgrammingLanguagesLocs(int index) {
-      return programmingLanguagesLocs_.get(index);
-    }
-
-    // optional int32 size = 26;
-    public static final int SIZE_FIELD_NUMBER = 26;
-    private int size_;
-    /**
-     * <code>optional int32 size = 26;</code>
-     *
-     * <pre>
-     ** The size of the repository in bytes of code *
-     * </pre>
-     */
-    public boolean hasSize() {
-      return ((bitField0_ & 0x00000800) == 0x00000800);
-    }
-    /**
-     * <code>optional int32 size = 26;</code>
-     *
-     * <pre>
-     ** The size of the repository in bytes of code *
-     * </pre>
-     */
-    public int getSize() {
-      return size_;
-    }
-
-    // optional string main_language = 27;
-    public static final int MAIN_LANGUAGE_FIELD_NUMBER = 27;
-    private java.lang.Object mainLanguage_;
-    /**
-     * <code>optional string main_language = 27;</code>
-     */
-    public boolean hasMainLanguage() {
-      return ((bitField0_ & 0x00001000) == 0x00001000);
-    }
-    /**
-     * <code>optional string main_language = 27;</code>
-     */
-    public java.lang.String getMainLanguage() {
-      java.lang.Object ref = mainLanguage_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          mainLanguage_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string main_language = 27;</code>
-     */
-    public com.google.protobuf.ByteString
-        getMainLanguageBytes() {
-      java.lang.Object ref = mainLanguage_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        mainLanguage_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
     }
 
     private void initFields() {
@@ -2518,12 +1494,6 @@ public final class Toplevel {
       codeRepositories_ = java.util.Collections.emptyList();
       issueRepositories_ = java.util.Collections.emptyList();
       kind_ = boa.types.Toplevel.Project.ForgeKind.OTHER;
-      forked_ = false;
-      forks_ = 0;
-      stars_ = 0;
-      programmingLanguagesLocs_ = java.util.Collections.emptyList();
-      size_ = 0;
-      mainLanguage_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2639,24 +1609,6 @@ public final class Toplevel {
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeEnum(21, kind_.getNumber());
-      }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeBool(22, forked_);
-      }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        output.writeInt32(23, forks_);
-      }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        output.writeInt32(24, stars_);
-      }
-      for (int i = 0; i < programmingLanguagesLocs_.size(); i++) {
-        output.writeInt32(25, programmingLanguagesLocs_.get(i));
-      }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        output.writeInt32(26, size_);
-      }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        output.writeBytes(27, getMainLanguageBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -2796,35 +1748,6 @@ public final class Toplevel {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(21, kind_.getNumber());
       }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(22, forked_);
-      }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(23, forks_);
-      }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(24, stars_);
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < programmingLanguagesLocs_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(programmingLanguagesLocs_.get(i));
-        }
-        size += dataSize;
-        size += 2 * getProgrammingLanguagesLocsList().size();
-      }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(26, size_);
-      }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(27, getMainLanguageBytes());
-      }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
@@ -2905,10 +1828,6 @@ public final class Toplevel {
     }
     /**
      * Protobuf type {@code boa.types.Project}
-     *
-     * <pre>
-     ** Top-level type, represents a single project on the forge 
-     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -3007,18 +1926,6 @@ public final class Toplevel {
         }
         kind_ = boa.types.Toplevel.Project.ForgeKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00100000);
-        forked_ = false;
-        bitField0_ = (bitField0_ & ~0x00200000);
-        forks_ = 0;
-        bitField0_ = (bitField0_ & ~0x00400000);
-        stars_ = 0;
-        bitField0_ = (bitField0_ & ~0x00800000);
-        programmingLanguagesLocs_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x01000000);
-        size_ = 0;
-        bitField0_ = (bitField0_ & ~0x02000000);
-        mainLanguage_ = "";
-        bitField0_ = (bitField0_ & ~0x04000000);
         return this;
       }
 
@@ -3169,31 +2076,6 @@ public final class Toplevel {
           to_bitField0_ |= 0x00000080;
         }
         result.kind_ = kind_;
-        if (((from_bitField0_ & 0x00200000) == 0x00200000)) {
-          to_bitField0_ |= 0x00000100;
-        }
-        result.forked_ = forked_;
-        if (((from_bitField0_ & 0x00400000) == 0x00400000)) {
-          to_bitField0_ |= 0x00000200;
-        }
-        result.forks_ = forks_;
-        if (((from_bitField0_ & 0x00800000) == 0x00800000)) {
-          to_bitField0_ |= 0x00000400;
-        }
-        result.stars_ = stars_;
-        if (((bitField0_ & 0x01000000) == 0x01000000)) {
-          programmingLanguagesLocs_ = java.util.Collections.unmodifiableList(programmingLanguagesLocs_);
-          bitField0_ = (bitField0_ & ~0x01000000);
-        }
-        result.programmingLanguagesLocs_ = programmingLanguagesLocs_;
-        if (((from_bitField0_ & 0x02000000) == 0x02000000)) {
-          to_bitField0_ |= 0x00000800;
-        }
-        result.size_ = size_;
-        if (((from_bitField0_ & 0x04000000) == 0x04000000)) {
-          to_bitField0_ |= 0x00001000;
-        }
-        result.mainLanguage_ = mainLanguage_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3438,33 +2320,6 @@ public final class Toplevel {
         if (other.hasKind()) {
           setKind(other.getKind());
         }
-        if (other.hasForked()) {
-          setForked(other.getForked());
-        }
-        if (other.hasForks()) {
-          setForks(other.getForks());
-        }
-        if (other.hasStars()) {
-          setStars(other.getStars());
-        }
-        if (!other.programmingLanguagesLocs_.isEmpty()) {
-          if (programmingLanguagesLocs_.isEmpty()) {
-            programmingLanguagesLocs_ = other.programmingLanguagesLocs_;
-            bitField0_ = (bitField0_ & ~0x01000000);
-          } else {
-            ensureProgrammingLanguagesLocsIsMutable();
-            programmingLanguagesLocs_.addAll(other.programmingLanguagesLocs_);
-          }
-          onChanged();
-        }
-        if (other.hasSize()) {
-          setSize(other.getSize());
-        }
-        if (other.hasMainLanguage()) {
-          bitField0_ |= 0x04000000;
-          mainLanguage_ = other.mainLanguage_;
-          onChanged();
-        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -3536,20 +2391,12 @@ public final class Toplevel {
       private java.lang.Object id_ = "";
       /**
        * <code>required string id = 1;</code>
-       *
-       * <pre>
-       ** Unique identifier for the project 
-       * </pre>
        */
       public boolean hasId() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required string id = 1;</code>
-       *
-       * <pre>
-       ** Unique identifier for the project 
-       * </pre>
        */
       public java.lang.String getId() {
         java.lang.Object ref = id_;
@@ -3564,10 +2411,6 @@ public final class Toplevel {
       }
       /**
        * <code>required string id = 1;</code>
-       *
-       * <pre>
-       ** Unique identifier for the project 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getIdBytes() {
@@ -3584,10 +2427,6 @@ public final class Toplevel {
       }
       /**
        * <code>required string id = 1;</code>
-       *
-       * <pre>
-       ** Unique identifier for the project 
-       * </pre>
        */
       public Builder setId(
           java.lang.String value) {
@@ -3601,10 +2440,6 @@ public final class Toplevel {
       }
       /**
        * <code>required string id = 1;</code>
-       *
-       * <pre>
-       ** Unique identifier for the project 
-       * </pre>
        */
       public Builder clearId() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -3614,10 +2449,6 @@ public final class Toplevel {
       }
       /**
        * <code>required string id = 1;</code>
-       *
-       * <pre>
-       ** Unique identifier for the project 
-       * </pre>
        */
       public Builder setIdBytes(
           com.google.protobuf.ByteString value) {
@@ -3634,20 +2465,12 @@ public final class Toplevel {
       private java.lang.Object name_ = "";
       /**
        * <code>required string name = 2;</code>
-       *
-       * <pre>
-       ** The name of the project 
-       * </pre>
        */
       public boolean hasName() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
        * <code>required string name = 2;</code>
-       *
-       * <pre>
-       ** The name of the project 
-       * </pre>
        */
       public java.lang.String getName() {
         java.lang.Object ref = name_;
@@ -3662,10 +2485,6 @@ public final class Toplevel {
       }
       /**
        * <code>required string name = 2;</code>
-       *
-       * <pre>
-       ** The name of the project 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getNameBytes() {
@@ -3682,10 +2501,6 @@ public final class Toplevel {
       }
       /**
        * <code>required string name = 2;</code>
-       *
-       * <pre>
-       ** The name of the project 
-       * </pre>
        */
       public Builder setName(
           java.lang.String value) {
@@ -3699,10 +2514,6 @@ public final class Toplevel {
       }
       /**
        * <code>required string name = 2;</code>
-       *
-       * <pre>
-       ** The name of the project 
-       * </pre>
        */
       public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -3712,10 +2523,6 @@ public final class Toplevel {
       }
       /**
        * <code>required string name = 2;</code>
-       *
-       * <pre>
-       ** The name of the project 
-       * </pre>
        */
       public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
@@ -3732,20 +2539,12 @@ public final class Toplevel {
       private java.lang.Object projectUrl_ = "";
       /**
        * <code>required string project_url = 3;</code>
-       *
-       * <pre>
-       ** A URL to the project's page on the forge 
-       * </pre>
        */
       public boolean hasProjectUrl() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
        * <code>required string project_url = 3;</code>
-       *
-       * <pre>
-       ** A URL to the project's page on the forge 
-       * </pre>
        */
       public java.lang.String getProjectUrl() {
         java.lang.Object ref = projectUrl_;
@@ -3760,10 +2559,6 @@ public final class Toplevel {
       }
       /**
        * <code>required string project_url = 3;</code>
-       *
-       * <pre>
-       ** A URL to the project's page on the forge 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getProjectUrlBytes() {
@@ -3780,10 +2575,6 @@ public final class Toplevel {
       }
       /**
        * <code>required string project_url = 3;</code>
-       *
-       * <pre>
-       ** A URL to the project's page on the forge 
-       * </pre>
        */
       public Builder setProjectUrl(
           java.lang.String value) {
@@ -3797,10 +2588,6 @@ public final class Toplevel {
       }
       /**
        * <code>required string project_url = 3;</code>
-       *
-       * <pre>
-       ** A URL to the project's page on the forge 
-       * </pre>
        */
       public Builder clearProjectUrl() {
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -3810,10 +2597,6 @@ public final class Toplevel {
       }
       /**
        * <code>required string project_url = 3;</code>
-       *
-       * <pre>
-       ** A URL to the project's page on the forge 
-       * </pre>
        */
       public Builder setProjectUrlBytes(
           com.google.protobuf.ByteString value) {
@@ -3830,20 +2613,12 @@ public final class Toplevel {
       private java.lang.Object homepageUrl_ = "";
       /**
        * <code>optional string homepage_url = 4;</code>
-       *
-       * <pre>
-       ** A URL to the project's homepage 
-       * </pre>
        */
       public boolean hasHomepageUrl() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
        * <code>optional string homepage_url = 4;</code>
-       *
-       * <pre>
-       ** A URL to the project's homepage 
-       * </pre>
        */
       public java.lang.String getHomepageUrl() {
         java.lang.Object ref = homepageUrl_;
@@ -3858,10 +2633,6 @@ public final class Toplevel {
       }
       /**
        * <code>optional string homepage_url = 4;</code>
-       *
-       * <pre>
-       ** A URL to the project's homepage 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getHomepageUrlBytes() {
@@ -3878,10 +2649,6 @@ public final class Toplevel {
       }
       /**
        * <code>optional string homepage_url = 4;</code>
-       *
-       * <pre>
-       ** A URL to the project's homepage 
-       * </pre>
        */
       public Builder setHomepageUrl(
           java.lang.String value) {
@@ -3895,10 +2662,6 @@ public final class Toplevel {
       }
       /**
        * <code>optional string homepage_url = 4;</code>
-       *
-       * <pre>
-       ** A URL to the project's homepage 
-       * </pre>
        */
       public Builder clearHomepageUrl() {
         bitField0_ = (bitField0_ & ~0x00000008);
@@ -3908,10 +2671,6 @@ public final class Toplevel {
       }
       /**
        * <code>optional string homepage_url = 4;</code>
-       *
-       * <pre>
-       ** A URL to the project's homepage 
-       * </pre>
        */
       public Builder setHomepageUrlBytes(
           com.google.protobuf.ByteString value) {
@@ -3928,30 +2687,18 @@ public final class Toplevel {
       private long createdDate_ ;
       /**
        * <code>optional uint64 created_date = 5;</code>
-       *
-       * <pre>
-       ** The time the project was created 
-       * </pre>
        */
       public boolean hasCreatedDate() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
        * <code>optional uint64 created_date = 5;</code>
-       *
-       * <pre>
-       ** The time the project was created 
-       * </pre>
        */
       public long getCreatedDate() {
         return createdDate_;
       }
       /**
        * <code>optional uint64 created_date = 5;</code>
-       *
-       * <pre>
-       ** The time the project was created 
-       * </pre>
        */
       public Builder setCreatedDate(long value) {
         bitField0_ |= 0x00000010;
@@ -3961,10 +2708,6 @@ public final class Toplevel {
       }
       /**
        * <code>optional uint64 created_date = 5;</code>
-       *
-       * <pre>
-       ** The time the project was created 
-       * </pre>
        */
       public Builder clearCreatedDate() {
         bitField0_ = (bitField0_ & ~0x00000010);
@@ -3977,20 +2720,12 @@ public final class Toplevel {
       private java.lang.Object description_ = "";
       /**
        * <code>optional string description = 6;</code>
-       *
-       * <pre>
-       ** A description of the project 
-       * </pre>
        */
       public boolean hasDescription() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
        * <code>optional string description = 6;</code>
-       *
-       * <pre>
-       ** A description of the project 
-       * </pre>
        */
       public java.lang.String getDescription() {
         java.lang.Object ref = description_;
@@ -4005,10 +2740,6 @@ public final class Toplevel {
       }
       /**
        * <code>optional string description = 6;</code>
-       *
-       * <pre>
-       ** A description of the project 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getDescriptionBytes() {
@@ -4025,10 +2756,6 @@ public final class Toplevel {
       }
       /**
        * <code>optional string description = 6;</code>
-       *
-       * <pre>
-       ** A description of the project 
-       * </pre>
        */
       public Builder setDescription(
           java.lang.String value) {
@@ -4042,10 +2769,6 @@ public final class Toplevel {
       }
       /**
        * <code>optional string description = 6;</code>
-       *
-       * <pre>
-       ** A description of the project 
-       * </pre>
        */
       public Builder clearDescription() {
         bitField0_ = (bitField0_ & ~0x00000020);
@@ -4055,10 +2778,6 @@ public final class Toplevel {
       }
       /**
        * <code>optional string description = 6;</code>
-       *
-       * <pre>
-       ** A description of the project 
-       * </pre>
        */
       public Builder setDescriptionBytes(
           com.google.protobuf.ByteString value) {
@@ -4081,10 +2800,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string operating_systems = 7;</code>
-       *
-       * <pre>
-       ** A list of all OSes supported by the project 
-       * </pre>
        */
       public java.util.List<java.lang.String>
           getOperatingSystemsList() {
@@ -4092,30 +2807,18 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string operating_systems = 7;</code>
-       *
-       * <pre>
-       ** A list of all OSes supported by the project 
-       * </pre>
        */
       public int getOperatingSystemsCount() {
         return operatingSystems_.size();
       }
       /**
        * <code>repeated string operating_systems = 7;</code>
-       *
-       * <pre>
-       ** A list of all OSes supported by the project 
-       * </pre>
        */
       public java.lang.String getOperatingSystems(int index) {
         return operatingSystems_.get(index);
       }
       /**
        * <code>repeated string operating_systems = 7;</code>
-       *
-       * <pre>
-       ** A list of all OSes supported by the project 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getOperatingSystemsBytes(int index) {
@@ -4123,10 +2826,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string operating_systems = 7;</code>
-       *
-       * <pre>
-       ** A list of all OSes supported by the project 
-       * </pre>
        */
       public Builder setOperatingSystems(
           int index, java.lang.String value) {
@@ -4140,10 +2839,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string operating_systems = 7;</code>
-       *
-       * <pre>
-       ** A list of all OSes supported by the project 
-       * </pre>
        */
       public Builder addOperatingSystems(
           java.lang.String value) {
@@ -4157,10 +2852,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string operating_systems = 7;</code>
-       *
-       * <pre>
-       ** A list of all OSes supported by the project 
-       * </pre>
        */
       public Builder addAllOperatingSystems(
           java.lang.Iterable<java.lang.String> values) {
@@ -4171,10 +2862,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string operating_systems = 7;</code>
-       *
-       * <pre>
-       ** A list of all OSes supported by the project 
-       * </pre>
        */
       public Builder clearOperatingSystems() {
         operatingSystems_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -4184,10 +2871,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string operating_systems = 7;</code>
-       *
-       * <pre>
-       ** A list of all OSes supported by the project 
-       * </pre>
        */
       public Builder addOperatingSystemsBytes(
           com.google.protobuf.ByteString value) {
@@ -4210,10 +2893,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string programming_languages = 8;</code>
-       *
-       * <pre>
-       ** A list of all programming languages used by the project 
-       * </pre>
        */
       public java.util.List<java.lang.String>
           getProgrammingLanguagesList() {
@@ -4221,30 +2900,18 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string programming_languages = 8;</code>
-       *
-       * <pre>
-       ** A list of all programming languages used by the project 
-       * </pre>
        */
       public int getProgrammingLanguagesCount() {
         return programmingLanguages_.size();
       }
       /**
        * <code>repeated string programming_languages = 8;</code>
-       *
-       * <pre>
-       ** A list of all programming languages used by the project 
-       * </pre>
        */
       public java.lang.String getProgrammingLanguages(int index) {
         return programmingLanguages_.get(index);
       }
       /**
        * <code>repeated string programming_languages = 8;</code>
-       *
-       * <pre>
-       ** A list of all programming languages used by the project 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getProgrammingLanguagesBytes(int index) {
@@ -4252,10 +2919,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string programming_languages = 8;</code>
-       *
-       * <pre>
-       ** A list of all programming languages used by the project 
-       * </pre>
        */
       public Builder setProgrammingLanguages(
           int index, java.lang.String value) {
@@ -4269,10 +2932,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string programming_languages = 8;</code>
-       *
-       * <pre>
-       ** A list of all programming languages used by the project 
-       * </pre>
        */
       public Builder addProgrammingLanguages(
           java.lang.String value) {
@@ -4286,10 +2945,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string programming_languages = 8;</code>
-       *
-       * <pre>
-       ** A list of all programming languages used by the project 
-       * </pre>
        */
       public Builder addAllProgrammingLanguages(
           java.lang.Iterable<java.lang.String> values) {
@@ -4300,10 +2955,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string programming_languages = 8;</code>
-       *
-       * <pre>
-       ** A list of all programming languages used by the project 
-       * </pre>
        */
       public Builder clearProgrammingLanguages() {
         programmingLanguages_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -4313,10 +2964,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string programming_languages = 8;</code>
-       *
-       * <pre>
-       ** A list of all programming languages used by the project 
-       * </pre>
        */
       public Builder addProgrammingLanguagesBytes(
           com.google.protobuf.ByteString value) {
@@ -4339,10 +2986,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string databases = 9;</code>
-       *
-       * <pre>
-       ** A list of all databases used by the project 
-       * </pre>
        */
       public java.util.List<java.lang.String>
           getDatabasesList() {
@@ -4350,30 +2993,18 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string databases = 9;</code>
-       *
-       * <pre>
-       ** A list of all databases used by the project 
-       * </pre>
        */
       public int getDatabasesCount() {
         return databases_.size();
       }
       /**
        * <code>repeated string databases = 9;</code>
-       *
-       * <pre>
-       ** A list of all databases used by the project 
-       * </pre>
        */
       public java.lang.String getDatabases(int index) {
         return databases_.get(index);
       }
       /**
        * <code>repeated string databases = 9;</code>
-       *
-       * <pre>
-       ** A list of all databases used by the project 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getDatabasesBytes(int index) {
@@ -4381,10 +3012,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string databases = 9;</code>
-       *
-       * <pre>
-       ** A list of all databases used by the project 
-       * </pre>
        */
       public Builder setDatabases(
           int index, java.lang.String value) {
@@ -4398,10 +3025,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string databases = 9;</code>
-       *
-       * <pre>
-       ** A list of all databases used by the project 
-       * </pre>
        */
       public Builder addDatabases(
           java.lang.String value) {
@@ -4415,10 +3038,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string databases = 9;</code>
-       *
-       * <pre>
-       ** A list of all databases used by the project 
-       * </pre>
        */
       public Builder addAllDatabases(
           java.lang.Iterable<java.lang.String> values) {
@@ -4429,10 +3048,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string databases = 9;</code>
-       *
-       * <pre>
-       ** A list of all databases used by the project 
-       * </pre>
        */
       public Builder clearDatabases() {
         databases_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -4442,10 +3057,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string databases = 9;</code>
-       *
-       * <pre>
-       ** A list of all databases used by the project 
-       * </pre>
        */
       public Builder addDatabasesBytes(
           com.google.protobuf.ByteString value) {
@@ -4468,10 +3079,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string licenses = 10;</code>
-       *
-       * <pre>
-       ** A list of all licenses used by the project 
-       * </pre>
        */
       public java.util.List<java.lang.String>
           getLicensesList() {
@@ -4479,30 +3086,18 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string licenses = 10;</code>
-       *
-       * <pre>
-       ** A list of all licenses used by the project 
-       * </pre>
        */
       public int getLicensesCount() {
         return licenses_.size();
       }
       /**
        * <code>repeated string licenses = 10;</code>
-       *
-       * <pre>
-       ** A list of all licenses used by the project 
-       * </pre>
        */
       public java.lang.String getLicenses(int index) {
         return licenses_.get(index);
       }
       /**
        * <code>repeated string licenses = 10;</code>
-       *
-       * <pre>
-       ** A list of all licenses used by the project 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getLicensesBytes(int index) {
@@ -4510,10 +3105,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string licenses = 10;</code>
-       *
-       * <pre>
-       ** A list of all licenses used by the project 
-       * </pre>
        */
       public Builder setLicenses(
           int index, java.lang.String value) {
@@ -4527,10 +3118,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string licenses = 10;</code>
-       *
-       * <pre>
-       ** A list of all licenses used by the project 
-       * </pre>
        */
       public Builder addLicenses(
           java.lang.String value) {
@@ -4544,10 +3131,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string licenses = 10;</code>
-       *
-       * <pre>
-       ** A list of all licenses used by the project 
-       * </pre>
        */
       public Builder addAllLicenses(
           java.lang.Iterable<java.lang.String> values) {
@@ -4558,10 +3141,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string licenses = 10;</code>
-       *
-       * <pre>
-       ** A list of all licenses used by the project 
-       * </pre>
        */
       public Builder clearLicenses() {
         licenses_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -4571,10 +3150,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string licenses = 10;</code>
-       *
-       * <pre>
-       ** A list of all licenses used by the project 
-       * </pre>
        */
       public Builder addLicensesBytes(
           com.google.protobuf.ByteString value) {
@@ -4597,10 +3172,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string interfaces = 11;</code>
-       *
-       * <pre>
-       ** A list of all interfaces supported by the project 
-       * </pre>
        */
       public java.util.List<java.lang.String>
           getInterfacesList() {
@@ -4608,30 +3179,18 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string interfaces = 11;</code>
-       *
-       * <pre>
-       ** A list of all interfaces supported by the project 
-       * </pre>
        */
       public int getInterfacesCount() {
         return interfaces_.size();
       }
       /**
        * <code>repeated string interfaces = 11;</code>
-       *
-       * <pre>
-       ** A list of all interfaces supported by the project 
-       * </pre>
        */
       public java.lang.String getInterfaces(int index) {
         return interfaces_.get(index);
       }
       /**
        * <code>repeated string interfaces = 11;</code>
-       *
-       * <pre>
-       ** A list of all interfaces supported by the project 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getInterfacesBytes(int index) {
@@ -4639,10 +3198,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string interfaces = 11;</code>
-       *
-       * <pre>
-       ** A list of all interfaces supported by the project 
-       * </pre>
        */
       public Builder setInterfaces(
           int index, java.lang.String value) {
@@ -4656,10 +3211,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string interfaces = 11;</code>
-       *
-       * <pre>
-       ** A list of all interfaces supported by the project 
-       * </pre>
        */
       public Builder addInterfaces(
           java.lang.String value) {
@@ -4673,10 +3224,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string interfaces = 11;</code>
-       *
-       * <pre>
-       ** A list of all interfaces supported by the project 
-       * </pre>
        */
       public Builder addAllInterfaces(
           java.lang.Iterable<java.lang.String> values) {
@@ -4687,10 +3234,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string interfaces = 11;</code>
-       *
-       * <pre>
-       ** A list of all interfaces supported by the project 
-       * </pre>
        */
       public Builder clearInterfaces() {
         interfaces_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -4700,10 +3243,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string interfaces = 11;</code>
-       *
-       * <pre>
-       ** A list of all interfaces supported by the project 
-       * </pre>
        */
       public Builder addInterfacesBytes(
           com.google.protobuf.ByteString value) {
@@ -4726,10 +3265,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string audiences = 12;</code>
-       *
-       * <pre>
-       ** A list of the target audiences for the project 
-       * </pre>
        */
       public java.util.List<java.lang.String>
           getAudiencesList() {
@@ -4737,30 +3272,18 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string audiences = 12;</code>
-       *
-       * <pre>
-       ** A list of the target audiences for the project 
-       * </pre>
        */
       public int getAudiencesCount() {
         return audiences_.size();
       }
       /**
        * <code>repeated string audiences = 12;</code>
-       *
-       * <pre>
-       ** A list of the target audiences for the project 
-       * </pre>
        */
       public java.lang.String getAudiences(int index) {
         return audiences_.get(index);
       }
       /**
        * <code>repeated string audiences = 12;</code>
-       *
-       * <pre>
-       ** A list of the target audiences for the project 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getAudiencesBytes(int index) {
@@ -4768,10 +3291,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string audiences = 12;</code>
-       *
-       * <pre>
-       ** A list of the target audiences for the project 
-       * </pre>
        */
       public Builder setAudiences(
           int index, java.lang.String value) {
@@ -4785,10 +3304,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string audiences = 12;</code>
-       *
-       * <pre>
-       ** A list of the target audiences for the project 
-       * </pre>
        */
       public Builder addAudiences(
           java.lang.String value) {
@@ -4802,10 +3317,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string audiences = 12;</code>
-       *
-       * <pre>
-       ** A list of the target audiences for the project 
-       * </pre>
        */
       public Builder addAllAudiences(
           java.lang.Iterable<java.lang.String> values) {
@@ -4816,10 +3327,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string audiences = 12;</code>
-       *
-       * <pre>
-       ** A list of the target audiences for the project 
-       * </pre>
        */
       public Builder clearAudiences() {
         audiences_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -4829,10 +3336,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string audiences = 12;</code>
-       *
-       * <pre>
-       ** A list of the target audiences for the project 
-       * </pre>
        */
       public Builder addAudiencesBytes(
           com.google.protobuf.ByteString value) {
@@ -4855,10 +3358,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string topics = 13;</code>
-       *
-       * <pre>
-       ** A list of self-categorized topics the project belongs to 
-       * </pre>
        */
       public java.util.List<java.lang.String>
           getTopicsList() {
@@ -4866,30 +3365,18 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string topics = 13;</code>
-       *
-       * <pre>
-       ** A list of self-categorized topics the project belongs to 
-       * </pre>
        */
       public int getTopicsCount() {
         return topics_.size();
       }
       /**
        * <code>repeated string topics = 13;</code>
-       *
-       * <pre>
-       ** A list of self-categorized topics the project belongs to 
-       * </pre>
        */
       public java.lang.String getTopics(int index) {
         return topics_.get(index);
       }
       /**
        * <code>repeated string topics = 13;</code>
-       *
-       * <pre>
-       ** A list of self-categorized topics the project belongs to 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getTopicsBytes(int index) {
@@ -4897,10 +3384,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string topics = 13;</code>
-       *
-       * <pre>
-       ** A list of self-categorized topics the project belongs to 
-       * </pre>
        */
       public Builder setTopics(
           int index, java.lang.String value) {
@@ -4914,10 +3397,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string topics = 13;</code>
-       *
-       * <pre>
-       ** A list of self-categorized topics the project belongs to 
-       * </pre>
        */
       public Builder addTopics(
           java.lang.String value) {
@@ -4931,10 +3410,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string topics = 13;</code>
-       *
-       * <pre>
-       ** A list of self-categorized topics the project belongs to 
-       * </pre>
        */
       public Builder addAllTopics(
           java.lang.Iterable<java.lang.String> values) {
@@ -4945,10 +3420,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string topics = 13;</code>
-       *
-       * <pre>
-       ** A list of self-categorized topics the project belongs to 
-       * </pre>
        */
       public Builder clearTopics() {
         topics_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -4958,10 +3429,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string topics = 13;</code>
-       *
-       * <pre>
-       ** A list of self-categorized topics the project belongs to 
-       * </pre>
        */
       public Builder addTopicsBytes(
           com.google.protobuf.ByteString value) {
@@ -4984,10 +3451,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string status = 14;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public java.util.List<java.lang.String>
           getStatusList() {
@@ -4995,30 +3458,18 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string status = 14;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public int getStatusCount() {
         return status_.size();
       }
       /**
        * <code>repeated string status = 14;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public java.lang.String getStatus(int index) {
         return status_.get(index);
       }
       /**
        * <code>repeated string status = 14;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getStatusBytes(int index) {
@@ -5026,10 +3477,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string status = 14;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public Builder setStatus(
           int index, java.lang.String value) {
@@ -5043,10 +3490,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string status = 14;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public Builder addStatus(
           java.lang.String value) {
@@ -5060,10 +3503,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string status = 14;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public Builder addAllStatus(
           java.lang.Iterable<java.lang.String> values) {
@@ -5074,10 +3513,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string status = 14;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public Builder clearStatus() {
         status_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -5087,10 +3522,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string status = 14;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public Builder addStatusBytes(
           com.google.protobuf.ByteString value) {
@@ -5113,10 +3544,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string translations = 15;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public java.util.List<java.lang.String>
           getTranslationsList() {
@@ -5124,30 +3551,18 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string translations = 15;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public int getTranslationsCount() {
         return translations_.size();
       }
       /**
        * <code>repeated string translations = 15;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public java.lang.String getTranslations(int index) {
         return translations_.get(index);
       }
       /**
        * <code>repeated string translations = 15;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getTranslationsBytes(int index) {
@@ -5155,10 +3570,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string translations = 15;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public Builder setTranslations(
           int index, java.lang.String value) {
@@ -5172,10 +3583,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string translations = 15;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public Builder addTranslations(
           java.lang.String value) {
@@ -5189,10 +3596,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string translations = 15;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public Builder addAllTranslations(
           java.lang.Iterable<java.lang.String> values) {
@@ -5203,10 +3606,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string translations = 15;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public Builder clearTranslations() {
         translations_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -5216,10 +3615,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated string translations = 15;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public Builder addTranslationsBytes(
           com.google.protobuf.ByteString value) {
@@ -5236,30 +3631,18 @@ public final class Toplevel {
       private boolean donations_ ;
       /**
        * <code>optional bool donations = 16;</code>
-       *
-       * <pre>
-       ** If true, this project explicitly states it accepts donations 
-       * </pre>
        */
       public boolean hasDonations() {
         return ((bitField0_ & 0x00008000) == 0x00008000);
       }
       /**
        * <code>optional bool donations = 16;</code>
-       *
-       * <pre>
-       ** If true, this project explicitly states it accepts donations 
-       * </pre>
        */
       public boolean getDonations() {
         return donations_;
       }
       /**
        * <code>optional bool donations = 16;</code>
-       *
-       * <pre>
-       ** If true, this project explicitly states it accepts donations 
-       * </pre>
        */
       public Builder setDonations(boolean value) {
         bitField0_ |= 0x00008000;
@@ -5269,10 +3652,6 @@ public final class Toplevel {
       }
       /**
        * <code>optional bool donations = 16;</code>
-       *
-       * <pre>
-       ** If true, this project explicitly states it accepts donations 
-       * </pre>
        */
       public Builder clearDonations() {
         bitField0_ = (bitField0_ & ~0x00008000);
@@ -5296,10 +3675,6 @@ public final class Toplevel {
 
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public java.util.List<boa.types.Shared.Person> getMaintainersList() {
         if (maintainersBuilder_ == null) {
@@ -5310,10 +3685,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public int getMaintainersCount() {
         if (maintainersBuilder_ == null) {
@@ -5324,10 +3695,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public boa.types.Shared.Person getMaintainers(int index) {
         if (maintainersBuilder_ == null) {
@@ -5338,10 +3705,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public Builder setMaintainers(
           int index, boa.types.Shared.Person value) {
@@ -5359,10 +3722,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public Builder setMaintainers(
           int index, boa.types.Shared.Person.Builder builderForValue) {
@@ -5377,10 +3736,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public Builder addMaintainers(boa.types.Shared.Person value) {
         if (maintainersBuilder_ == null) {
@@ -5397,10 +3752,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public Builder addMaintainers(
           int index, boa.types.Shared.Person value) {
@@ -5418,10 +3769,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public Builder addMaintainers(
           boa.types.Shared.Person.Builder builderForValue) {
@@ -5436,10 +3783,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public Builder addMaintainers(
           int index, boa.types.Shared.Person.Builder builderForValue) {
@@ -5454,10 +3797,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public Builder addAllMaintainers(
           java.lang.Iterable<? extends boa.types.Shared.Person> values) {
@@ -5472,10 +3811,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public Builder clearMaintainers() {
         if (maintainersBuilder_ == null) {
@@ -5489,10 +3824,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public Builder removeMaintainers(int index) {
         if (maintainersBuilder_ == null) {
@@ -5506,10 +3837,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public boa.types.Shared.Person.Builder getMaintainersBuilder(
           int index) {
@@ -5517,10 +3844,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public boa.types.Shared.PersonOrBuilder getMaintainersOrBuilder(
           int index) {
@@ -5531,10 +3854,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public java.util.List<? extends boa.types.Shared.PersonOrBuilder> 
            getMaintainersOrBuilderList() {
@@ -5546,10 +3865,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public boa.types.Shared.Person.Builder addMaintainersBuilder() {
         return getMaintainersFieldBuilder().addBuilder(
@@ -5557,10 +3872,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public boa.types.Shared.Person.Builder addMaintainersBuilder(
           int index) {
@@ -5569,10 +3880,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person maintainers = 17;</code>
-       *
-       * <pre>
-       ** A list of all people currently maintaining the project 
-       * </pre>
        */
       public java.util.List<boa.types.Shared.Person.Builder> 
            getMaintainersBuilderList() {
@@ -5608,10 +3915,6 @@ public final class Toplevel {
 
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public java.util.List<boa.types.Shared.Person> getDevelopersList() {
         if (developersBuilder_ == null) {
@@ -5622,10 +3925,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public int getDevelopersCount() {
         if (developersBuilder_ == null) {
@@ -5636,10 +3935,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public boa.types.Shared.Person getDevelopers(int index) {
         if (developersBuilder_ == null) {
@@ -5650,10 +3945,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public Builder setDevelopers(
           int index, boa.types.Shared.Person value) {
@@ -5671,10 +3962,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public Builder setDevelopers(
           int index, boa.types.Shared.Person.Builder builderForValue) {
@@ -5689,10 +3976,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public Builder addDevelopers(boa.types.Shared.Person value) {
         if (developersBuilder_ == null) {
@@ -5709,10 +3992,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public Builder addDevelopers(
           int index, boa.types.Shared.Person value) {
@@ -5730,10 +4009,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public Builder addDevelopers(
           boa.types.Shared.Person.Builder builderForValue) {
@@ -5748,10 +4023,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public Builder addDevelopers(
           int index, boa.types.Shared.Person.Builder builderForValue) {
@@ -5766,10 +4037,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public Builder addAllDevelopers(
           java.lang.Iterable<? extends boa.types.Shared.Person> values) {
@@ -5784,10 +4051,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public Builder clearDevelopers() {
         if (developersBuilder_ == null) {
@@ -5801,10 +4064,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public Builder removeDevelopers(int index) {
         if (developersBuilder_ == null) {
@@ -5818,10 +4077,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public boa.types.Shared.Person.Builder getDevelopersBuilder(
           int index) {
@@ -5829,10 +4084,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public boa.types.Shared.PersonOrBuilder getDevelopersOrBuilder(
           int index) {
@@ -5843,10 +4094,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public java.util.List<? extends boa.types.Shared.PersonOrBuilder> 
            getDevelopersOrBuilderList() {
@@ -5858,10 +4105,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public boa.types.Shared.Person.Builder addDevelopersBuilder() {
         return getDevelopersFieldBuilder().addBuilder(
@@ -5869,10 +4112,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public boa.types.Shared.Person.Builder addDevelopersBuilder(
           int index) {
@@ -5881,10 +4120,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.Person developers = 18;</code>
-       *
-       * <pre>
-       ** A list of all software developers currently on the project 
-       * </pre>
        */
       public java.util.List<boa.types.Shared.Person.Builder> 
            getDevelopersBuilderList() {
@@ -5920,10 +4155,6 @@ public final class Toplevel {
 
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public java.util.List<boa.types.Code.CodeRepository> getCodeRepositoriesList() {
         if (codeRepositoriesBuilder_ == null) {
@@ -5934,10 +4165,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public int getCodeRepositoriesCount() {
         if (codeRepositoriesBuilder_ == null) {
@@ -5948,10 +4175,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public boa.types.Code.CodeRepository getCodeRepositories(int index) {
         if (codeRepositoriesBuilder_ == null) {
@@ -5962,10 +4185,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public Builder setCodeRepositories(
           int index, boa.types.Code.CodeRepository value) {
@@ -5983,10 +4202,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public Builder setCodeRepositories(
           int index, boa.types.Code.CodeRepository.Builder builderForValue) {
@@ -6001,10 +4216,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public Builder addCodeRepositories(boa.types.Code.CodeRepository value) {
         if (codeRepositoriesBuilder_ == null) {
@@ -6021,10 +4232,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public Builder addCodeRepositories(
           int index, boa.types.Code.CodeRepository value) {
@@ -6042,10 +4249,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public Builder addCodeRepositories(
           boa.types.Code.CodeRepository.Builder builderForValue) {
@@ -6060,10 +4263,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public Builder addCodeRepositories(
           int index, boa.types.Code.CodeRepository.Builder builderForValue) {
@@ -6078,10 +4277,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public Builder addAllCodeRepositories(
           java.lang.Iterable<? extends boa.types.Code.CodeRepository> values) {
@@ -6096,10 +4291,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public Builder clearCodeRepositories() {
         if (codeRepositoriesBuilder_ == null) {
@@ -6113,10 +4304,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public Builder removeCodeRepositories(int index) {
         if (codeRepositoriesBuilder_ == null) {
@@ -6130,10 +4317,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public boa.types.Code.CodeRepository.Builder getCodeRepositoriesBuilder(
           int index) {
@@ -6141,10 +4324,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public boa.types.Code.CodeRepositoryOrBuilder getCodeRepositoriesOrBuilder(
           int index) {
@@ -6155,10 +4334,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public java.util.List<? extends boa.types.Code.CodeRepositoryOrBuilder> 
            getCodeRepositoriesOrBuilderList() {
@@ -6170,10 +4345,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public boa.types.Code.CodeRepository.Builder addCodeRepositoriesBuilder() {
         return getCodeRepositoriesFieldBuilder().addBuilder(
@@ -6181,10 +4352,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public boa.types.Code.CodeRepository.Builder addCodeRepositoriesBuilder(
           int index) {
@@ -6193,10 +4360,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.CodeRepository code_repositories = 19;</code>
-       *
-       * <pre>
-       ** A list of all code repositories associated with this project 
-       * </pre>
        */
       public java.util.List<boa.types.Code.CodeRepository.Builder> 
            getCodeRepositoriesBuilderList() {
@@ -6232,10 +4395,6 @@ public final class Toplevel {
 
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public java.util.List<boa.types.Issues.IssueRepository> getIssueRepositoriesList() {
         if (issueRepositoriesBuilder_ == null) {
@@ -6246,10 +4405,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public int getIssueRepositoriesCount() {
         if (issueRepositoriesBuilder_ == null) {
@@ -6260,10 +4415,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public boa.types.Issues.IssueRepository getIssueRepositories(int index) {
         if (issueRepositoriesBuilder_ == null) {
@@ -6274,10 +4425,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public Builder setIssueRepositories(
           int index, boa.types.Issues.IssueRepository value) {
@@ -6295,10 +4442,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public Builder setIssueRepositories(
           int index, boa.types.Issues.IssueRepository.Builder builderForValue) {
@@ -6313,10 +4456,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public Builder addIssueRepositories(boa.types.Issues.IssueRepository value) {
         if (issueRepositoriesBuilder_ == null) {
@@ -6333,10 +4472,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public Builder addIssueRepositories(
           int index, boa.types.Issues.IssueRepository value) {
@@ -6354,10 +4489,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public Builder addIssueRepositories(
           boa.types.Issues.IssueRepository.Builder builderForValue) {
@@ -6372,10 +4503,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public Builder addIssueRepositories(
           int index, boa.types.Issues.IssueRepository.Builder builderForValue) {
@@ -6390,10 +4517,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public Builder addAllIssueRepositories(
           java.lang.Iterable<? extends boa.types.Issues.IssueRepository> values) {
@@ -6408,10 +4531,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public Builder clearIssueRepositories() {
         if (issueRepositoriesBuilder_ == null) {
@@ -6425,10 +4544,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public Builder removeIssueRepositories(int index) {
         if (issueRepositoriesBuilder_ == null) {
@@ -6442,10 +4557,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public boa.types.Issues.IssueRepository.Builder getIssueRepositoriesBuilder(
           int index) {
@@ -6453,10 +4564,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public boa.types.Issues.IssueRepositoryOrBuilder getIssueRepositoriesOrBuilder(
           int index) {
@@ -6467,10 +4574,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public java.util.List<? extends boa.types.Issues.IssueRepositoryOrBuilder> 
            getIssueRepositoriesOrBuilderList() {
@@ -6482,10 +4585,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public boa.types.Issues.IssueRepository.Builder addIssueRepositoriesBuilder() {
         return getIssueRepositoriesFieldBuilder().addBuilder(
@@ -6493,10 +4592,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public boa.types.Issues.IssueRepository.Builder addIssueRepositoriesBuilder(
           int index) {
@@ -6505,10 +4600,6 @@ public final class Toplevel {
       }
       /**
        * <code>repeated .boa.types.IssueRepository issue_repositories = 20;</code>
-       *
-       * <pre>
-       ** @exclude A list of all issue repositories associated with this project 
-       * </pre>
        */
       public java.util.List<boa.types.Issues.IssueRepository.Builder> 
            getIssueRepositoriesBuilderList() {
@@ -6533,30 +4624,18 @@ public final class Toplevel {
       private boa.types.Toplevel.Project.ForgeKind kind_ = boa.types.Toplevel.Project.ForgeKind.OTHER;
       /**
        * <code>required .boa.types.Project.ForgeKind kind = 21;</code>
-       *
-       * <pre>
-       ** @exclude The kind of forge this project resides in 
-       * </pre>
        */
       public boolean hasKind() {
         return ((bitField0_ & 0x00100000) == 0x00100000);
       }
       /**
        * <code>required .boa.types.Project.ForgeKind kind = 21;</code>
-       *
-       * <pre>
-       ** @exclude The kind of forge this project resides in 
-       * </pre>
        */
       public boa.types.Toplevel.Project.ForgeKind getKind() {
         return kind_;
       }
       /**
        * <code>required .boa.types.Project.ForgeKind kind = 21;</code>
-       *
-       * <pre>
-       ** @exclude The kind of forge this project resides in 
-       * </pre>
        */
       public Builder setKind(boa.types.Toplevel.Project.ForgeKind value) {
         if (value == null) {
@@ -6569,378 +4648,10 @@ public final class Toplevel {
       }
       /**
        * <code>required .boa.types.Project.ForgeKind kind = 21;</code>
-       *
-       * <pre>
-       ** @exclude The kind of forge this project resides in 
-       * </pre>
        */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00100000);
         kind_ = boa.types.Toplevel.Project.ForgeKind.OTHER;
-        onChanged();
-        return this;
-      }
-
-      // optional bool forked = 22;
-      private boolean forked_ ;
-      /**
-       * <code>optional bool forked = 22;</code>
-       *
-       * <pre>
-       ** Specify if this repository is forked from some other repo 
-       * </pre>
-       */
-      public boolean hasForked() {
-        return ((bitField0_ & 0x00200000) == 0x00200000);
-      }
-      /**
-       * <code>optional bool forked = 22;</code>
-       *
-       * <pre>
-       ** Specify if this repository is forked from some other repo 
-       * </pre>
-       */
-      public boolean getForked() {
-        return forked_;
-      }
-      /**
-       * <code>optional bool forked = 22;</code>
-       *
-       * <pre>
-       ** Specify if this repository is forked from some other repo 
-       * </pre>
-       */
-      public Builder setForked(boolean value) {
-        bitField0_ |= 0x00200000;
-        forked_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional bool forked = 22;</code>
-       *
-       * <pre>
-       ** Specify if this repository is forked from some other repo 
-       * </pre>
-       */
-      public Builder clearForked() {
-        bitField0_ = (bitField0_ & ~0x00200000);
-        forked_ = false;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 forks = 23;
-      private int forks_ ;
-      /**
-       * <code>optional int32 forks = 23;</code>
-       *
-       * <pre>
-       ** The number of times this repository has been forked 
-       * </pre>
-       */
-      public boolean hasForks() {
-        return ((bitField0_ & 0x00400000) == 0x00400000);
-      }
-      /**
-       * <code>optional int32 forks = 23;</code>
-       *
-       * <pre>
-       ** The number of times this repository has been forked 
-       * </pre>
-       */
-      public int getForks() {
-        return forks_;
-      }
-      /**
-       * <code>optional int32 forks = 23;</code>
-       *
-       * <pre>
-       ** The number of times this repository has been forked 
-       * </pre>
-       */
-      public Builder setForks(int value) {
-        bitField0_ |= 0x00400000;
-        forks_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 forks = 23;</code>
-       *
-       * <pre>
-       ** The number of times this repository has been forked 
-       * </pre>
-       */
-      public Builder clearForks() {
-        bitField0_ = (bitField0_ & ~0x00400000);
-        forks_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 stars = 24;
-      private int stars_ ;
-      /**
-       * <code>optional int32 stars = 24;</code>
-       *
-       * <pre>
-       ** The number of times this repository has been starred 
-       * </pre>
-       */
-      public boolean hasStars() {
-        return ((bitField0_ & 0x00800000) == 0x00800000);
-      }
-      /**
-       * <code>optional int32 stars = 24;</code>
-       *
-       * <pre>
-       ** The number of times this repository has been starred 
-       * </pre>
-       */
-      public int getStars() {
-        return stars_;
-      }
-      /**
-       * <code>optional int32 stars = 24;</code>
-       *
-       * <pre>
-       ** The number of times this repository has been starred 
-       * </pre>
-       */
-      public Builder setStars(int value) {
-        bitField0_ |= 0x00800000;
-        stars_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 stars = 24;</code>
-       *
-       * <pre>
-       ** The number of times this repository has been starred 
-       * </pre>
-       */
-      public Builder clearStars() {
-        bitField0_ = (bitField0_ & ~0x00800000);
-        stars_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // repeated int32 programming_languages_locs = 25;
-      private java.util.List<java.lang.Integer> programmingLanguagesLocs_ = java.util.Collections.emptyList();
-      private void ensureProgrammingLanguagesLocsIsMutable() {
-        if (!((bitField0_ & 0x01000000) == 0x01000000)) {
-          programmingLanguagesLocs_ = new java.util.ArrayList<java.lang.Integer>(programmingLanguagesLocs_);
-          bitField0_ |= 0x01000000;
-         }
-      }
-      /**
-       * <code>repeated int32 programming_languages_locs = 25;</code>
-       *
-       * <pre>
-       ** The number of bytes of code for each language *
-       * </pre>
-       */
-      public java.util.List<java.lang.Integer>
-          getProgrammingLanguagesLocsList() {
-        return java.util.Collections.unmodifiableList(programmingLanguagesLocs_);
-      }
-      /**
-       * <code>repeated int32 programming_languages_locs = 25;</code>
-       *
-       * <pre>
-       ** The number of bytes of code for each language *
-       * </pre>
-       */
-      public int getProgrammingLanguagesLocsCount() {
-        return programmingLanguagesLocs_.size();
-      }
-      /**
-       * <code>repeated int32 programming_languages_locs = 25;</code>
-       *
-       * <pre>
-       ** The number of bytes of code for each language *
-       * </pre>
-       */
-      public int getProgrammingLanguagesLocs(int index) {
-        return programmingLanguagesLocs_.get(index);
-      }
-      /**
-       * <code>repeated int32 programming_languages_locs = 25;</code>
-       *
-       * <pre>
-       ** The number of bytes of code for each language *
-       * </pre>
-       */
-      public Builder setProgrammingLanguagesLocs(
-          int index, int value) {
-        ensureProgrammingLanguagesLocsIsMutable();
-        programmingLanguagesLocs_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 programming_languages_locs = 25;</code>
-       *
-       * <pre>
-       ** The number of bytes of code for each language *
-       * </pre>
-       */
-      public Builder addProgrammingLanguagesLocs(int value) {
-        ensureProgrammingLanguagesLocsIsMutable();
-        programmingLanguagesLocs_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 programming_languages_locs = 25;</code>
-       *
-       * <pre>
-       ** The number of bytes of code for each language *
-       * </pre>
-       */
-      public Builder addAllProgrammingLanguagesLocs(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureProgrammingLanguagesLocsIsMutable();
-        super.addAll(values, programmingLanguagesLocs_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 programming_languages_locs = 25;</code>
-       *
-       * <pre>
-       ** The number of bytes of code for each language *
-       * </pre>
-       */
-      public Builder clearProgrammingLanguagesLocs() {
-        programmingLanguagesLocs_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x01000000);
-        onChanged();
-        return this;
-      }
-
-      // optional int32 size = 26;
-      private int size_ ;
-      /**
-       * <code>optional int32 size = 26;</code>
-       *
-       * <pre>
-       ** The size of the repository in bytes of code *
-       * </pre>
-       */
-      public boolean hasSize() {
-        return ((bitField0_ & 0x02000000) == 0x02000000);
-      }
-      /**
-       * <code>optional int32 size = 26;</code>
-       *
-       * <pre>
-       ** The size of the repository in bytes of code *
-       * </pre>
-       */
-      public int getSize() {
-        return size_;
-      }
-      /**
-       * <code>optional int32 size = 26;</code>
-       *
-       * <pre>
-       ** The size of the repository in bytes of code *
-       * </pre>
-       */
-      public Builder setSize(int value) {
-        bitField0_ |= 0x02000000;
-        size_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 size = 26;</code>
-       *
-       * <pre>
-       ** The size of the repository in bytes of code *
-       * </pre>
-       */
-      public Builder clearSize() {
-        bitField0_ = (bitField0_ & ~0x02000000);
-        size_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional string main_language = 27;
-      private java.lang.Object mainLanguage_ = "";
-      /**
-       * <code>optional string main_language = 27;</code>
-       */
-      public boolean hasMainLanguage() {
-        return ((bitField0_ & 0x04000000) == 0x04000000);
-      }
-      /**
-       * <code>optional string main_language = 27;</code>
-       */
-      public java.lang.String getMainLanguage() {
-        java.lang.Object ref = mainLanguage_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          mainLanguage_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string main_language = 27;</code>
-       */
-      public com.google.protobuf.ByteString
-          getMainLanguageBytes() {
-        java.lang.Object ref = mainLanguage_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          mainLanguage_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string main_language = 27;</code>
-       */
-      public Builder setMainLanguage(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x04000000;
-        mainLanguage_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string main_language = 27;</code>
-       */
-      public Builder clearMainLanguage() {
-        bitField0_ = (bitField0_ & ~0x04000000);
-        mainLanguage_ = getDefaultInstance().getMainLanguage();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string main_language = 27;</code>
-       */
-      public Builder setMainLanguageBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x04000000;
-        mainLanguage_ = value;
         onChanged();
         return this;
       }
@@ -6971,7 +4682,7 @@ public final class Toplevel {
   static {
     java.lang.String[] descriptorData = {
       "\n\016toplevel.proto\022\tboa.types\032\014shared.prot" +
-      "o\032\ncode.proto\032\014issues.proto\"\213\006\n\007Project\022" +
+      "o\032\ncode.proto\032\014issues.proto\"\214\005\n\007Project\022" +
       "\n\n\002id\030\001 \002(\t\022\014\n\004name\030\002 \002(\t\022\023\n\013project_url" +
       "\030\003 \002(\t\022\024\n\014homepage_url\030\004 \001(\t\022\024\n\014created_" +
       "date\030\005 \001(\004\022\023\n\013description\030\006 \001(\t\022\031\n\021opera" +
@@ -6985,13 +4696,10 @@ public final class Toplevel {
       "\021code_repositories\030\023 \003(\0132\031.boa.types.Cod" +
       "eRepository\0226\n\022issue_repositories\030\024 \003(\0132" +
       "\032.boa.types.IssueRepository\022*\n\004kind\030\025 \002(" +
-      "\0162\034.boa.types.Project.ForgeKind\022\016\n\006forke" +
-      "d\030\026 \001(\010\022\r\n\005forks\030\027 \001(\005\022\r\n\005stars\030\030 \001(\005\022\"\n" +
-      "\032programming_languages_locs\030\031 \003(\005\022\014\n\004siz" +
-      "e\030\032 \001(\005\022\025\n\rmain_language\030\033 \001(\t\"a\n\tForgeK" +
-      "ind\022\t\n\005OTHER\020\000\022\017\n\013SOURCEFORGE\020\001\022\006\n\002SF\020\001\022",
-      "\n\n\006GITHUB\020\002\022\006\n\002GH\020\002\022\n\n\006APACHE\020\003\022\014\n\010QUALI" +
-      "TAS\020\004\032\002\020\001B\002H\001"
+      "\0162\034.boa.types.Project.ForgeKind\"Y\n\tForge" +
+      "Kind\022\t\n\005OTHER\020\000\022\006\n\002SF\020\001\022\017\n\013SOURCEFORGE\020\001" +
+      "\022\n\n\006GITHUB\020\002\022\n\n\006APACHE\020\003\022\014\n\010QUALITAS\020\004\032\002" +
+      "\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -7003,7 +4711,7 @@ public final class Toplevel {
           internal_static_boa_types_Project_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Project_descriptor,
-              new java.lang.String[] { "Id", "Name", "ProjectUrl", "HomepageUrl", "CreatedDate", "Description", "OperatingSystems", "ProgrammingLanguages", "Databases", "Licenses", "Interfaces", "Audiences", "Topics", "Status", "Translations", "Donations", "Maintainers", "Developers", "CodeRepositories", "IssueRepositories", "Kind", "Forked", "Forks", "Stars", "ProgrammingLanguagesLocs", "Size", "MainLanguage", });
+              new java.lang.String[] { "Id", "Name", "ProjectUrl", "HomepageUrl", "CreatedDate", "Description", "OperatingSystems", "ProgrammingLanguages", "Databases", "Licenses", "Interfaces", "Audiences", "Topics", "Status", "Translations", "Donations", "Maintainers", "Developers", "CodeRepositories", "IssueRepositories", "Kind", });
           return null;
         }
       };
