@@ -40,6 +40,7 @@ public class BoaMain {
         options.addOption("c", "compile",  false, "compile a Boa program");
         options.addOption("e", "execute",  false, "execute a Boa program locally");
         options.addOption("g", "generate", false, "generate a Boa dataset");
+        options.addOption("t", "text",     false, "convert a binary output SequenceFile into text");
 
         try {
             if (args.length == 0) {
@@ -58,6 +59,8 @@ public class BoaMain {
                     boa.evaluator.BoaEvaluator.main(tempargs);
                 } else if (cl.hasOption("g")) {
                     boa.datagen.BoaGenerator.main(tempargs);
+                } else if (cl.hasOption("t")) {
+                    boa.BoaOutputConverter.main(tempargs);
                 }
             }
         } catch (final org.apache.commons.cli.ParseException e) {
