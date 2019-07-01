@@ -491,22 +491,7 @@ public class SymbolTable {
 			return aggregators.get(name + ":" + type);
 		else if (aggregators.containsKey(name))
 			return aggregators.get(name);
-		else
-			throw new RuntimeException("no such aggregator " + name + " of " + type);
-	}
-
-	public List<Class<?>> getAggregators(final String name, final BoaType type) {
-		final List<Class<?>> aggregators = new ArrayList<Class<?>>();
-
-		if (type instanceof BoaTuple)
-			for (final BoaType subType : ((BoaTuple) type).getTypes())
-				aggregators.add(this.getAggregator(name, subType));
-		else if (type instanceof BoaName)
-			aggregators.add(this.getAggregator(name, ((BoaName)type).getType()));
-		else
-			aggregators.add(this.getAggregator(name, type));
-
-		return aggregators;
+		throw new RuntimeException("no such aggregator " + name + " of " + type);
 	}
 
 	private static void importFunction(final Method m) {

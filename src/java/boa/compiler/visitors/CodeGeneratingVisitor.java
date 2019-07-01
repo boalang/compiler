@@ -651,21 +651,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final String parameters = description.getParameters() == null ? "" : description.getParameters().get(0);
 			final BoaType type = description.getType();
 
-			final StringBuilder src = new StringBuilder();
 			boolean combines = false;
-			for (final Class<?> c : n.env.getAggregators(description.getAggregator(), type)) {
-				src.append(", new " + c.getCanonicalName() + "(" + parameters + ")");
-				try {
-					final AggregatorSpec annotation = c.getAnnotation(AggregatorSpec.class);
-					if (annotation.canCombine())
-						combines = true;
-				} catch (final RuntimeException e) {
-					throw new TypeCheckException(n, e.getMessage(), e);
-				}
+			final Class<?> c = n.env.getAggregator(description.getAggregator(), type);
+			try {
+				final AggregatorSpec annotation = c.getAnnotation(AggregatorSpec.class);
+				if (annotation.canCombine())
+					combines = true;
+			} catch (final RuntimeException e) {
+				throw new TypeCheckException(n, e.getMessage(), e);
 			}
+			reduceAggregatorStrings.add("this.aggregators.put(\"" + id + "\", new " + c.getCanonicalName() + "(" + parameters + "));");
 			if (combines)
-				combineAggregatorStrings.add("this.aggregators.put(\"" + id + "\", " + src.toString().substring(2) + ");");
-			reduceAggregatorStrings.add("this.aggregators.put(\"" + id + "\", " + src.toString().substring(2) + ");");
+				combineAggregatorStrings.add(reduceAggregatorStrings.get(reduceAggregatorStrings.size() - 1));
 		}
 
 		st.add("combineTables", combineAggregatorStrings);
