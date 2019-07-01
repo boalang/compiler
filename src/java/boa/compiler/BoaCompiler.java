@@ -109,15 +109,12 @@ public class BoaCompiler extends BoaMain {
 		else
 			jobId = 0;
 
-		// get the name of the generated class
-		final String className = getGeneratedClass(cl);
-
 		// get the filename of the jar we will be writing
 		final String jarName;
 		if (cl.hasOption('o'))
 			jarName = cl.getOptionValue('o');
 		else
-			jarName = className + ".jar";
+			jarName = "Query.jar";
 
 		viewIds = generateViewIds(cl);
 		viewASTs = generateViewASTs(cl);
@@ -191,11 +188,11 @@ public class BoaCompiler extends BoaMain {
 					if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
 					if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
 
-					final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(className, jobId, isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024, seed, DefaultProperties.localDataPath != null);
+					final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("Query", jobId, isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024, seed, DefaultProperties.localDataPath != null);
 					cg.start(p);
 					final Map<String, Program> subViews = cg.getSubViewsMap();
 
-					final File outputFile = new File(outputSrcDir, className + ".java");
+					final File outputFile = new File(outputSrcDir, "Query.java");
 					try (final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile))) {
 						o.write(cg.getCode().getBytes());
 					}
@@ -492,17 +489,6 @@ public class BoaCompiler extends BoaMain {
 		return cl;
 	}
 
-	// get the name of the generated class
-	private static final String getGeneratedClass(final CommandLine cl) {
-		String className;
-		if (cl.hasOption('n')) {
-			className = cl.getOptionValue('n');
-		} else {
-			className = jarToClassname(inputFile);
-		}
-		return className;
-	}
-
 	private static final void delete(final File f) throws IOException {
 		if (f.isDirectory())
 			for (final File g : f.listFiles())
@@ -513,7 +499,7 @@ public class BoaCompiler extends BoaMain {
 	}
 
 	private static void generateJar(final String jarName, final File dir, final File jarDir, final List<File> libJars) throws IOException, FileNotFoundException {
-		final JarOutputStream jar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(new File(jarDir, "Query.jar"))));
+		final JarOutputStream jar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(new File(jarDir, jarName))));
 
 		try {
 			final int offset = dir.toString().length() + 1;
