@@ -1,1 +1,0 @@
-x = String.class;

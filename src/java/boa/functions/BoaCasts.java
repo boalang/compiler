@@ -1,6 +1,5 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer,
- *                 Bowling Green State University
+ * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +28,6 @@ import java.util.TimeZone;
  * Some less trivial casts provided by Boa.
  * 
  * @author anthonyu
- * @author rdyer
  */
 public class BoaCasts {
 	/**
@@ -48,20 +46,6 @@ public class BoaCasts {
 			return true;
 
 		return false;
-	}
-
-	/**
-	 * Convert a boolean into a String.
-	 * 
-	 * @param b
-	 *            The boolean to be converted
-	 * 
-	 * @return A String representing the boolean value <em>b</em>
-	 */
-	public static String booleanToString(final boolean b) {
-		if (b)
-			return "true";
-		return "false";
 	}
 
 	/**

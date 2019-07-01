@@ -1,4 +1,3 @@
-syntax = "proto2";
 package boa.types;
 
 import "diff.proto";
@@ -6,66 +5,35 @@ import "shared.proto";
 
 option optimize_for = SPEED;
 
-/** A source code repository (SVN, CVS, Git, etc) */
 message CodeRepository {
-	/** Describes the kind of code repository */
+	required string url = 1;
 	enum RepositoryKind {
 		option allow_alias = true;
-		/** Any other code repository */
 		OTHER = 0;
-		/** For Subversion code repositories */
 		SVN = 1;
-		/** @exclude */
 		SUBVERSION = 1;
-		/** For CVS code repositories */
 		CVS = 2;
-		/** For Git code repositories */
 		GIT = 3;
-		/** For Mercurial code repositories */
 		HG = 4;
-		/** @exclude */
 		MERCURIAL = 4;
-		/** For Bazaar code repositories */
 		BZR = 5;
-		/** @exclude */
 		BAZAAR = 5;
 	}
-	/** The URL to access the code repository */
-	required string url = 1;
-	/** The kind of code repository (SVN, GIT, etc) */
 	required RepositoryKind kind = 2;
-	/** All of the revisions contained in the code repository */
 	repeated Revision revisions = 3;
-	/** @exclude The offsets of the branch commits */
 	repeated int32 branches = 4;
-	/** @exclude The names of all branches */
 	repeated string branch_names = 5;
-	/** @exclude The offsets of the tag commits */
 	repeated int32 tags = 6;
-	/** @exclude The names of all tags */
 	repeated string tag_names = 7;
-	/** @exclude The offset of the head commit */
-	required int32 head = 8;
-	/** @exclude The snapshot at the head commit */
-	repeated ChangedFile head_snapshot = 9;
-	/** Keys of the revisions stored in the commit sequence file */
-	repeated int64 revision_keys = 10;
 }
 
-/** A single revision inside a CodeRepository */
 message Revision {
-	/** A unique identifier for the revision */
 	required string id = 1;
-	/** The person who authored the revision, if known */
-	optional Person author = 2;
-	/** The person who committed the revision */
+	required Person author = 2;
 	required Person committer = 3;
-	/** The time the revision was committed */
 	required uint64 commit_date = 4;
-	/** The log message attached to the revision */
 	required string log = 5;
-	/** A list of all files committed in the revision */
 	repeated ChangedFile files = 6;
-	/** @exclude The offsets of any parent commits */
 	repeated int32 parents = 7;
+	repeated int32 children = 8;
 }

@@ -225,9 +225,10 @@ public abstract class BoaAbstractVisitor {
 	}
 	public final void visit(final CodeRepository node) throws Exception {
 		if (preVisit(node)) {
-			final int revisionsSize = BoaIntrinsics.getRevisionsCount(node);
+			final List<Revision> revisionsList = node.getRevisionsList();
+			final int revisionsSize = revisionsList.size();
 			for (int i = 0; i < revisionsSize; i++)
-				visit(BoaIntrinsics.getRevision(node, i));
+				visit(revisionsList.get(i));
 
 			postVisit(node);
 		}

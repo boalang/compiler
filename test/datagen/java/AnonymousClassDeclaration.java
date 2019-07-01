@@ -1,1 +1,0 @@
- AnonymousClass anonymous = new Anonymous() { };

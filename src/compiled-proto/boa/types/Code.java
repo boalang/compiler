@@ -14,26 +14,14 @@ public final class Code {
     // required string url = 1;
     /**
      * <code>required string url = 1;</code>
-     *
-     * <pre>
-     ** The URL to access the code repository 
-     * </pre>
      */
     boolean hasUrl();
     /**
      * <code>required string url = 1;</code>
-     *
-     * <pre>
-     ** The URL to access the code repository 
-     * </pre>
      */
     java.lang.String getUrl();
     /**
      * <code>required string url = 1;</code>
-     *
-     * <pre>
-     ** The URL to access the code repository 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getUrlBytes();
@@ -41,62 +29,34 @@ public final class Code {
     // required .boa.types.CodeRepository.RepositoryKind kind = 2;
     /**
      * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
-     *
-     * <pre>
-     ** The kind of code repository (SVN, GIT, etc) 
-     * </pre>
      */
     boolean hasKind();
     /**
      * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
-     *
-     * <pre>
-     ** The kind of code repository (SVN, GIT, etc) 
-     * </pre>
      */
     boa.types.Code.CodeRepository.RepositoryKind getKind();
 
     // repeated .boa.types.Revision revisions = 3;
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
-     *
-     * <pre>
-     ** All of the revisions contained in the code repository 
-     * </pre>
      */
     java.util.List<boa.types.Code.Revision> 
         getRevisionsList();
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
-     *
-     * <pre>
-     ** All of the revisions contained in the code repository 
-     * </pre>
      */
     boa.types.Code.Revision getRevisions(int index);
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
-     *
-     * <pre>
-     ** All of the revisions contained in the code repository 
-     * </pre>
      */
     int getRevisionsCount();
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
-     *
-     * <pre>
-     ** All of the revisions contained in the code repository 
-     * </pre>
      */
     java.util.List<? extends boa.types.Code.RevisionOrBuilder> 
         getRevisionsOrBuilderList();
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
-     *
-     * <pre>
-     ** All of the revisions contained in the code repository 
-     * </pre>
      */
     boa.types.Code.RevisionOrBuilder getRevisionsOrBuilder(
         int index);
@@ -104,61 +64,33 @@ public final class Code {
     // repeated int32 branches = 4;
     /**
      * <code>repeated int32 branches = 4;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of the branch commits 
-     * </pre>
      */
     java.util.List<java.lang.Integer> getBranchesList();
     /**
      * <code>repeated int32 branches = 4;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of the branch commits 
-     * </pre>
      */
     int getBranchesCount();
     /**
      * <code>repeated int32 branches = 4;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of the branch commits 
-     * </pre>
      */
     int getBranches(int index);
 
     // repeated string branch_names = 5;
     /**
      * <code>repeated string branch_names = 5;</code>
-     *
-     * <pre>
-     ** @exclude The names of all branches 
-     * </pre>
      */
     java.util.List<java.lang.String>
     getBranchNamesList();
     /**
      * <code>repeated string branch_names = 5;</code>
-     *
-     * <pre>
-     ** @exclude The names of all branches 
-     * </pre>
      */
     int getBranchNamesCount();
     /**
      * <code>repeated string branch_names = 5;</code>
-     *
-     * <pre>
-     ** @exclude The names of all branches 
-     * </pre>
      */
     java.lang.String getBranchNames(int index);
     /**
      * <code>repeated string branch_names = 5;</code>
-     *
-     * <pre>
-     ** @exclude The names of all branches 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getBranchNamesBytes(int index);
@@ -166,160 +98,39 @@ public final class Code {
     // repeated int32 tags = 6;
     /**
      * <code>repeated int32 tags = 6;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of the tag commits 
-     * </pre>
      */
     java.util.List<java.lang.Integer> getTagsList();
     /**
      * <code>repeated int32 tags = 6;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of the tag commits 
-     * </pre>
      */
     int getTagsCount();
     /**
      * <code>repeated int32 tags = 6;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of the tag commits 
-     * </pre>
      */
     int getTags(int index);
 
     // repeated string tag_names = 7;
     /**
      * <code>repeated string tag_names = 7;</code>
-     *
-     * <pre>
-     ** @exclude The names of all tags 
-     * </pre>
      */
     java.util.List<java.lang.String>
     getTagNamesList();
     /**
      * <code>repeated string tag_names = 7;</code>
-     *
-     * <pre>
-     ** @exclude The names of all tags 
-     * </pre>
      */
     int getTagNamesCount();
     /**
      * <code>repeated string tag_names = 7;</code>
-     *
-     * <pre>
-     ** @exclude The names of all tags 
-     * </pre>
      */
     java.lang.String getTagNames(int index);
     /**
      * <code>repeated string tag_names = 7;</code>
-     *
-     * <pre>
-     ** @exclude The names of all tags 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getTagNamesBytes(int index);
-
-    // required int32 head = 8;
-    /**
-     * <code>required int32 head = 8;</code>
-     *
-     * <pre>
-     ** @exclude The offset of the head commit 
-     * </pre>
-     */
-    boolean hasHead();
-    /**
-     * <code>required int32 head = 8;</code>
-     *
-     * <pre>
-     ** @exclude The offset of the head commit 
-     * </pre>
-     */
-    int getHead();
-
-    // repeated .boa.types.ChangedFile head_snapshot = 9;
-    /**
-     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-     *
-     * <pre>
-     ** @exclude The snapshot at the head commit 
-     * </pre>
-     */
-    java.util.List<boa.types.Diff.ChangedFile> 
-        getHeadSnapshotList();
-    /**
-     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-     *
-     * <pre>
-     ** @exclude The snapshot at the head commit 
-     * </pre>
-     */
-    boa.types.Diff.ChangedFile getHeadSnapshot(int index);
-    /**
-     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-     *
-     * <pre>
-     ** @exclude The snapshot at the head commit 
-     * </pre>
-     */
-    int getHeadSnapshotCount();
-    /**
-     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-     *
-     * <pre>
-     ** @exclude The snapshot at the head commit 
-     * </pre>
-     */
-    java.util.List<? extends boa.types.Diff.ChangedFileOrBuilder> 
-        getHeadSnapshotOrBuilderList();
-    /**
-     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-     *
-     * <pre>
-     ** @exclude The snapshot at the head commit 
-     * </pre>
-     */
-    boa.types.Diff.ChangedFileOrBuilder getHeadSnapshotOrBuilder(
-        int index);
-
-    // repeated int64 revision_keys = 10;
-    /**
-     * <code>repeated int64 revision_keys = 10;</code>
-     *
-     * <pre>
-     ** Keys of the revisions stored in the commit sequence file 
-     * </pre>
-     */
-    java.util.List<java.lang.Long> getRevisionKeysList();
-    /**
-     * <code>repeated int64 revision_keys = 10;</code>
-     *
-     * <pre>
-     ** Keys of the revisions stored in the commit sequence file 
-     * </pre>
-     */
-    int getRevisionKeysCount();
-    /**
-     * <code>repeated int64 revision_keys = 10;</code>
-     *
-     * <pre>
-     ** Keys of the revisions stored in the commit sequence file 
-     * </pre>
-     */
-    long getRevisionKeys(int index);
   }
   /**
    * Protobuf type {@code boa.types.CodeRepository}
-   *
-   * <pre>
-   ** A source code repository (SVN, CVS, Git, etc) 
-   * </pre>
    */
   public static final class CodeRepository extends
       com.google.protobuf.GeneratedMessage
@@ -451,40 +262,6 @@ public final class Code {
               tagNames_.add(input.readBytes());
               break;
             }
-            case 64: {
-              bitField0_ |= 0x00000004;
-              head_ = input.readInt32();
-              break;
-            }
-            case 74: {
-              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
-                headSnapshot_ = new java.util.ArrayList<boa.types.Diff.ChangedFile>();
-                mutable_bitField0_ |= 0x00000100;
-              }
-              headSnapshot_.add(input.readMessage(boa.types.Diff.ChangedFile.PARSER, extensionRegistry));
-              break;
-            }
-            case 80: {
-              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
-                revisionKeys_ = new java.util.ArrayList<java.lang.Long>();
-                mutable_bitField0_ |= 0x00000200;
-              }
-              revisionKeys_.add(input.readInt64());
-              break;
-            }
-            case 82: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200) && input.getBytesUntilLimit() > 0) {
-                revisionKeys_ = new java.util.ArrayList<java.lang.Long>();
-                mutable_bitField0_ |= 0x00000200;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                revisionKeys_.add(input.readInt64());
-              }
-              input.popLimit(limit);
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -507,12 +284,6 @@ public final class Code {
         }
         if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
           tagNames_ = new com.google.protobuf.UnmodifiableLazyStringList(tagNames_);
-        }
-        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
-          headSnapshot_ = java.util.Collections.unmodifiableList(headSnapshot_);
-        }
-        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
-          revisionKeys_ = java.util.Collections.unmodifiableList(revisionKeys_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -547,157 +318,81 @@ public final class Code {
 
     /**
      * Protobuf enum {@code boa.types.CodeRepository.RepositoryKind}
-     *
-     * <pre>
-     ** Describes the kind of code repository 
-     * </pre>
      */
     public enum RepositoryKind
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>OTHER = 0;</code>
-       *
-       * <pre>
-       ** Any other code repository 
-       * </pre>
        */
       OTHER(0, 0),
       /**
        * <code>SVN = 1;</code>
-       *
-       * <pre>
-       ** For Subversion code repositories 
-       * </pre>
        */
       SVN(1, 1),
       /**
        * <code>CVS = 2;</code>
-       *
-       * <pre>
-       ** For CVS code repositories 
-       * </pre>
        */
       CVS(3, 2),
       /**
        * <code>GIT = 3;</code>
-       *
-       * <pre>
-       ** For Git code repositories 
-       * </pre>
        */
       GIT(4, 3),
       /**
        * <code>HG = 4;</code>
-       *
-       * <pre>
-       ** For Mercurial code repositories 
-       * </pre>
        */
       HG(5, 4),
       /**
        * <code>BZR = 5;</code>
-       *
-       * <pre>
-       ** For Bazaar code repositories 
-       * </pre>
        */
       BZR(7, 5),
       ;
 
       /**
        * <code>SUBVERSION = 1;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final RepositoryKind SUBVERSION = SVN;
       /**
        * <code>MERCURIAL = 4;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final RepositoryKind MERCURIAL = HG;
       /**
        * <code>BAZAAR = 5;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final RepositoryKind BAZAAR = BZR;
       /**
        * <code>OTHER = 0;</code>
-       *
-       * <pre>
-       ** Any other code repository 
-       * </pre>
        */
       public static final int OTHER_VALUE = 0;
       /**
        * <code>SVN = 1;</code>
-       *
-       * <pre>
-       ** For Subversion code repositories 
-       * </pre>
        */
       public static final int SVN_VALUE = 1;
       /**
        * <code>SUBVERSION = 1;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final int SUBVERSION_VALUE = 1;
       /**
        * <code>CVS = 2;</code>
-       *
-       * <pre>
-       ** For CVS code repositories 
-       * </pre>
        */
       public static final int CVS_VALUE = 2;
       /**
        * <code>GIT = 3;</code>
-       *
-       * <pre>
-       ** For Git code repositories 
-       * </pre>
        */
       public static final int GIT_VALUE = 3;
       /**
        * <code>HG = 4;</code>
-       *
-       * <pre>
-       ** For Mercurial code repositories 
-       * </pre>
        */
       public static final int HG_VALUE = 4;
       /**
        * <code>MERCURIAL = 4;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final int MERCURIAL_VALUE = 4;
       /**
        * <code>BZR = 5;</code>
-       *
-       * <pre>
-       ** For Bazaar code repositories 
-       * </pre>
        */
       public static final int BZR_VALUE = 5;
       /**
        * <code>BAZAAR = 5;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final int BAZAAR_VALUE = 5;
 
@@ -771,20 +466,12 @@ public final class Code {
     private java.lang.Object url_;
     /**
      * <code>required string url = 1;</code>
-     *
-     * <pre>
-     ** The URL to access the code repository 
-     * </pre>
      */
     public boolean hasUrl() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required string url = 1;</code>
-     *
-     * <pre>
-     ** The URL to access the code repository 
-     * </pre>
      */
     public java.lang.String getUrl() {
       java.lang.Object ref = url_;
@@ -802,10 +489,6 @@ public final class Code {
     }
     /**
      * <code>required string url = 1;</code>
-     *
-     * <pre>
-     ** The URL to access the code repository 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getUrlBytes() {
@@ -826,20 +509,12 @@ public final class Code {
     private boa.types.Code.CodeRepository.RepositoryKind kind_;
     /**
      * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
-     *
-     * <pre>
-     ** The kind of code repository (SVN, GIT, etc) 
-     * </pre>
      */
     public boolean hasKind() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
-     *
-     * <pre>
-     ** The kind of code repository (SVN, GIT, etc) 
-     * </pre>
      */
     public boa.types.Code.CodeRepository.RepositoryKind getKind() {
       return kind_;
@@ -850,20 +525,12 @@ public final class Code {
     private java.util.List<boa.types.Code.Revision> revisions_;
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
-     *
-     * <pre>
-     ** All of the revisions contained in the code repository 
-     * </pre>
      */
     public java.util.List<boa.types.Code.Revision> getRevisionsList() {
       return revisions_;
     }
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
-     *
-     * <pre>
-     ** All of the revisions contained in the code repository 
-     * </pre>
      */
     public java.util.List<? extends boa.types.Code.RevisionOrBuilder> 
         getRevisionsOrBuilderList() {
@@ -871,30 +538,18 @@ public final class Code {
     }
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
-     *
-     * <pre>
-     ** All of the revisions contained in the code repository 
-     * </pre>
      */
     public int getRevisionsCount() {
       return revisions_.size();
     }
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
-     *
-     * <pre>
-     ** All of the revisions contained in the code repository 
-     * </pre>
      */
     public boa.types.Code.Revision getRevisions(int index) {
       return revisions_.get(index);
     }
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
-     *
-     * <pre>
-     ** All of the revisions contained in the code repository 
-     * </pre>
      */
     public boa.types.Code.RevisionOrBuilder getRevisionsOrBuilder(
         int index) {
@@ -906,10 +561,6 @@ public final class Code {
     private java.util.List<java.lang.Integer> branches_;
     /**
      * <code>repeated int32 branches = 4;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of the branch commits 
-     * </pre>
      */
     public java.util.List<java.lang.Integer>
         getBranchesList() {
@@ -917,20 +568,12 @@ public final class Code {
     }
     /**
      * <code>repeated int32 branches = 4;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of the branch commits 
-     * </pre>
      */
     public int getBranchesCount() {
       return branches_.size();
     }
     /**
      * <code>repeated int32 branches = 4;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of the branch commits 
-     * </pre>
      */
     public int getBranches(int index) {
       return branches_.get(index);
@@ -941,10 +584,6 @@ public final class Code {
     private com.google.protobuf.LazyStringList branchNames_;
     /**
      * <code>repeated string branch_names = 5;</code>
-     *
-     * <pre>
-     ** @exclude The names of all branches 
-     * </pre>
      */
     public java.util.List<java.lang.String>
         getBranchNamesList() {
@@ -952,30 +591,18 @@ public final class Code {
     }
     /**
      * <code>repeated string branch_names = 5;</code>
-     *
-     * <pre>
-     ** @exclude The names of all branches 
-     * </pre>
      */
     public int getBranchNamesCount() {
       return branchNames_.size();
     }
     /**
      * <code>repeated string branch_names = 5;</code>
-     *
-     * <pre>
-     ** @exclude The names of all branches 
-     * </pre>
      */
     public java.lang.String getBranchNames(int index) {
       return branchNames_.get(index);
     }
     /**
      * <code>repeated string branch_names = 5;</code>
-     *
-     * <pre>
-     ** @exclude The names of all branches 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getBranchNamesBytes(int index) {
@@ -987,10 +614,6 @@ public final class Code {
     private java.util.List<java.lang.Integer> tags_;
     /**
      * <code>repeated int32 tags = 6;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of the tag commits 
-     * </pre>
      */
     public java.util.List<java.lang.Integer>
         getTagsList() {
@@ -998,20 +621,12 @@ public final class Code {
     }
     /**
      * <code>repeated int32 tags = 6;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of the tag commits 
-     * </pre>
      */
     public int getTagsCount() {
       return tags_.size();
     }
     /**
      * <code>repeated int32 tags = 6;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of the tag commits 
-     * </pre>
      */
     public int getTags(int index) {
       return tags_.get(index);
@@ -1022,10 +637,6 @@ public final class Code {
     private com.google.protobuf.LazyStringList tagNames_;
     /**
      * <code>repeated string tag_names = 7;</code>
-     *
-     * <pre>
-     ** @exclude The names of all tags 
-     * </pre>
      */
     public java.util.List<java.lang.String>
         getTagNamesList() {
@@ -1033,149 +644,22 @@ public final class Code {
     }
     /**
      * <code>repeated string tag_names = 7;</code>
-     *
-     * <pre>
-     ** @exclude The names of all tags 
-     * </pre>
      */
     public int getTagNamesCount() {
       return tagNames_.size();
     }
     /**
      * <code>repeated string tag_names = 7;</code>
-     *
-     * <pre>
-     ** @exclude The names of all tags 
-     * </pre>
      */
     public java.lang.String getTagNames(int index) {
       return tagNames_.get(index);
     }
     /**
      * <code>repeated string tag_names = 7;</code>
-     *
-     * <pre>
-     ** @exclude The names of all tags 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getTagNamesBytes(int index) {
       return tagNames_.getByteString(index);
-    }
-
-    // required int32 head = 8;
-    public static final int HEAD_FIELD_NUMBER = 8;
-    private int head_;
-    /**
-     * <code>required int32 head = 8;</code>
-     *
-     * <pre>
-     ** @exclude The offset of the head commit 
-     * </pre>
-     */
-    public boolean hasHead() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>required int32 head = 8;</code>
-     *
-     * <pre>
-     ** @exclude The offset of the head commit 
-     * </pre>
-     */
-    public int getHead() {
-      return head_;
-    }
-
-    // repeated .boa.types.ChangedFile head_snapshot = 9;
-    public static final int HEAD_SNAPSHOT_FIELD_NUMBER = 9;
-    private java.util.List<boa.types.Diff.ChangedFile> headSnapshot_;
-    /**
-     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-     *
-     * <pre>
-     ** @exclude The snapshot at the head commit 
-     * </pre>
-     */
-    public java.util.List<boa.types.Diff.ChangedFile> getHeadSnapshotList() {
-      return headSnapshot_;
-    }
-    /**
-     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-     *
-     * <pre>
-     ** @exclude The snapshot at the head commit 
-     * </pre>
-     */
-    public java.util.List<? extends boa.types.Diff.ChangedFileOrBuilder> 
-        getHeadSnapshotOrBuilderList() {
-      return headSnapshot_;
-    }
-    /**
-     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-     *
-     * <pre>
-     ** @exclude The snapshot at the head commit 
-     * </pre>
-     */
-    public int getHeadSnapshotCount() {
-      return headSnapshot_.size();
-    }
-    /**
-     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-     *
-     * <pre>
-     ** @exclude The snapshot at the head commit 
-     * </pre>
-     */
-    public boa.types.Diff.ChangedFile getHeadSnapshot(int index) {
-      return headSnapshot_.get(index);
-    }
-    /**
-     * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-     *
-     * <pre>
-     ** @exclude The snapshot at the head commit 
-     * </pre>
-     */
-    public boa.types.Diff.ChangedFileOrBuilder getHeadSnapshotOrBuilder(
-        int index) {
-      return headSnapshot_.get(index);
-    }
-
-    // repeated int64 revision_keys = 10;
-    public static final int REVISION_KEYS_FIELD_NUMBER = 10;
-    private java.util.List<java.lang.Long> revisionKeys_;
-    /**
-     * <code>repeated int64 revision_keys = 10;</code>
-     *
-     * <pre>
-     ** Keys of the revisions stored in the commit sequence file 
-     * </pre>
-     */
-    public java.util.List<java.lang.Long>
-        getRevisionKeysList() {
-      return revisionKeys_;
-    }
-    /**
-     * <code>repeated int64 revision_keys = 10;</code>
-     *
-     * <pre>
-     ** Keys of the revisions stored in the commit sequence file 
-     * </pre>
-     */
-    public int getRevisionKeysCount() {
-      return revisionKeys_.size();
-    }
-    /**
-     * <code>repeated int64 revision_keys = 10;</code>
-     *
-     * <pre>
-     ** Keys of the revisions stored in the commit sequence file 
-     * </pre>
-     */
-    public long getRevisionKeys(int index) {
-      return revisionKeys_.get(index);
     }
 
     private void initFields() {
@@ -1186,9 +670,6 @@ public final class Code {
       branchNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       tags_ = java.util.Collections.emptyList();
       tagNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      head_ = 0;
-      headSnapshot_ = java.util.Collections.emptyList();
-      revisionKeys_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1203,18 +684,8 @@ public final class Code {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasHead()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       for (int i = 0; i < getRevisionsCount(); i++) {
         if (!getRevisions(i).isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-      }
-      for (int i = 0; i < getHeadSnapshotCount(); i++) {
-        if (!getHeadSnapshot(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -1246,15 +717,6 @@ public final class Code {
       }
       for (int i = 0; i < tagNames_.size(); i++) {
         output.writeBytes(7, tagNames_.getByteString(i));
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(8, head_);
-      }
-      for (int i = 0; i < headSnapshot_.size(); i++) {
-        output.writeMessage(9, headSnapshot_.get(i));
-      }
-      for (int i = 0; i < revisionKeys_.size(); i++) {
-        output.writeInt64(10, revisionKeys_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -1312,23 +774,6 @@ public final class Code {
         }
         size += dataSize;
         size += 1 * getTagNamesList().size();
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(8, head_);
-      }
-      for (int i = 0; i < headSnapshot_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(9, headSnapshot_.get(i));
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < revisionKeys_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt64SizeNoTag(revisionKeys_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getRevisionKeysList().size();
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1410,10 +855,6 @@ public final class Code {
     }
     /**
      * Protobuf type {@code boa.types.CodeRepository}
-     *
-     * <pre>
-     ** A source code repository (SVN, CVS, Git, etc) 
-     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -1443,7 +884,6 @@ public final class Code {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getRevisionsFieldBuilder();
-          getHeadSnapshotFieldBuilder();
         }
       }
       private static Builder create() {
@@ -1470,16 +910,6 @@ public final class Code {
         bitField0_ = (bitField0_ & ~0x00000020);
         tagNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000040);
-        head_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000080);
-        if (headSnapshotBuilder_ == null) {
-          headSnapshot_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000100);
-        } else {
-          headSnapshotBuilder_.clear();
-        }
-        revisionKeys_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -1547,24 +977,6 @@ public final class Code {
           bitField0_ = (bitField0_ & ~0x00000040);
         }
         result.tagNames_ = tagNames_;
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.head_ = head_;
-        if (headSnapshotBuilder_ == null) {
-          if (((bitField0_ & 0x00000100) == 0x00000100)) {
-            headSnapshot_ = java.util.Collections.unmodifiableList(headSnapshot_);
-            bitField0_ = (bitField0_ & ~0x00000100);
-          }
-          result.headSnapshot_ = headSnapshot_;
-        } else {
-          result.headSnapshot_ = headSnapshotBuilder_.build();
-        }
-        if (((bitField0_ & 0x00000200) == 0x00000200)) {
-          revisionKeys_ = java.util.Collections.unmodifiableList(revisionKeys_);
-          bitField0_ = (bitField0_ & ~0x00000200);
-        }
-        result.revisionKeys_ = revisionKeys_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1655,45 +1067,6 @@ public final class Code {
           }
           onChanged();
         }
-        if (other.hasHead()) {
-          setHead(other.getHead());
-        }
-        if (headSnapshotBuilder_ == null) {
-          if (!other.headSnapshot_.isEmpty()) {
-            if (headSnapshot_.isEmpty()) {
-              headSnapshot_ = other.headSnapshot_;
-              bitField0_ = (bitField0_ & ~0x00000100);
-            } else {
-              ensureHeadSnapshotIsMutable();
-              headSnapshot_.addAll(other.headSnapshot_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.headSnapshot_.isEmpty()) {
-            if (headSnapshotBuilder_.isEmpty()) {
-              headSnapshotBuilder_.dispose();
-              headSnapshotBuilder_ = null;
-              headSnapshot_ = other.headSnapshot_;
-              bitField0_ = (bitField0_ & ~0x00000100);
-              headSnapshotBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getHeadSnapshotFieldBuilder() : null;
-            } else {
-              headSnapshotBuilder_.addAllMessages(other.headSnapshot_);
-            }
-          }
-        }
-        if (!other.revisionKeys_.isEmpty()) {
-          if (revisionKeys_.isEmpty()) {
-            revisionKeys_ = other.revisionKeys_;
-            bitField0_ = (bitField0_ & ~0x00000200);
-          } else {
-            ensureRevisionKeysIsMutable();
-            revisionKeys_.addAll(other.revisionKeys_);
-          }
-          onChanged();
-        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -1707,18 +1080,8 @@ public final class Code {
           
           return false;
         }
-        if (!hasHead()) {
-          
-          return false;
-        }
         for (int i = 0; i < getRevisionsCount(); i++) {
           if (!getRevisions(i).isInitialized()) {
-            
-            return false;
-          }
-        }
-        for (int i = 0; i < getHeadSnapshotCount(); i++) {
-          if (!getHeadSnapshot(i).isInitialized()) {
             
             return false;
           }
@@ -1749,20 +1112,12 @@ public final class Code {
       private java.lang.Object url_ = "";
       /**
        * <code>required string url = 1;</code>
-       *
-       * <pre>
-       ** The URL to access the code repository 
-       * </pre>
        */
       public boolean hasUrl() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required string url = 1;</code>
-       *
-       * <pre>
-       ** The URL to access the code repository 
-       * </pre>
        */
       public java.lang.String getUrl() {
         java.lang.Object ref = url_;
@@ -1777,10 +1132,6 @@ public final class Code {
       }
       /**
        * <code>required string url = 1;</code>
-       *
-       * <pre>
-       ** The URL to access the code repository 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getUrlBytes() {
@@ -1797,10 +1148,6 @@ public final class Code {
       }
       /**
        * <code>required string url = 1;</code>
-       *
-       * <pre>
-       ** The URL to access the code repository 
-       * </pre>
        */
       public Builder setUrl(
           java.lang.String value) {
@@ -1814,10 +1161,6 @@ public final class Code {
       }
       /**
        * <code>required string url = 1;</code>
-       *
-       * <pre>
-       ** The URL to access the code repository 
-       * </pre>
        */
       public Builder clearUrl() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -1827,10 +1170,6 @@ public final class Code {
       }
       /**
        * <code>required string url = 1;</code>
-       *
-       * <pre>
-       ** The URL to access the code repository 
-       * </pre>
        */
       public Builder setUrlBytes(
           com.google.protobuf.ByteString value) {
@@ -1847,30 +1186,18 @@ public final class Code {
       private boa.types.Code.CodeRepository.RepositoryKind kind_ = boa.types.Code.CodeRepository.RepositoryKind.OTHER;
       /**
        * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
-       *
-       * <pre>
-       ** The kind of code repository (SVN, GIT, etc) 
-       * </pre>
        */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
        * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
-       *
-       * <pre>
-       ** The kind of code repository (SVN, GIT, etc) 
-       * </pre>
        */
       public boa.types.Code.CodeRepository.RepositoryKind getKind() {
         return kind_;
       }
       /**
        * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
-       *
-       * <pre>
-       ** The kind of code repository (SVN, GIT, etc) 
-       * </pre>
        */
       public Builder setKind(boa.types.Code.CodeRepository.RepositoryKind value) {
         if (value == null) {
@@ -1883,10 +1210,6 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
-       *
-       * <pre>
-       ** The kind of code repository (SVN, GIT, etc) 
-       * </pre>
        */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -1910,10 +1233,6 @@ public final class Code {
 
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public java.util.List<boa.types.Code.Revision> getRevisionsList() {
         if (revisionsBuilder_ == null) {
@@ -1924,10 +1243,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public int getRevisionsCount() {
         if (revisionsBuilder_ == null) {
@@ -1938,10 +1253,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public boa.types.Code.Revision getRevisions(int index) {
         if (revisionsBuilder_ == null) {
@@ -1952,10 +1263,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public Builder setRevisions(
           int index, boa.types.Code.Revision value) {
@@ -1973,10 +1280,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public Builder setRevisions(
           int index, boa.types.Code.Revision.Builder builderForValue) {
@@ -1991,10 +1294,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public Builder addRevisions(boa.types.Code.Revision value) {
         if (revisionsBuilder_ == null) {
@@ -2011,10 +1310,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public Builder addRevisions(
           int index, boa.types.Code.Revision value) {
@@ -2032,10 +1327,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public Builder addRevisions(
           boa.types.Code.Revision.Builder builderForValue) {
@@ -2050,10 +1341,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public Builder addRevisions(
           int index, boa.types.Code.Revision.Builder builderForValue) {
@@ -2068,10 +1355,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public Builder addAllRevisions(
           java.lang.Iterable<? extends boa.types.Code.Revision> values) {
@@ -2086,10 +1369,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public Builder clearRevisions() {
         if (revisionsBuilder_ == null) {
@@ -2103,10 +1382,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public Builder removeRevisions(int index) {
         if (revisionsBuilder_ == null) {
@@ -2120,10 +1395,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public boa.types.Code.Revision.Builder getRevisionsBuilder(
           int index) {
@@ -2131,10 +1402,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public boa.types.Code.RevisionOrBuilder getRevisionsOrBuilder(
           int index) {
@@ -2145,10 +1412,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public java.util.List<? extends boa.types.Code.RevisionOrBuilder> 
            getRevisionsOrBuilderList() {
@@ -2160,10 +1423,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public boa.types.Code.Revision.Builder addRevisionsBuilder() {
         return getRevisionsFieldBuilder().addBuilder(
@@ -2171,10 +1430,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public boa.types.Code.Revision.Builder addRevisionsBuilder(
           int index) {
@@ -2183,10 +1438,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
-       *
-       * <pre>
-       ** All of the revisions contained in the code repository 
-       * </pre>
        */
       public java.util.List<boa.types.Code.Revision.Builder> 
            getRevisionsBuilderList() {
@@ -2217,10 +1468,6 @@ public final class Code {
       }
       /**
        * <code>repeated int32 branches = 4;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of the branch commits 
-       * </pre>
        */
       public java.util.List<java.lang.Integer>
           getBranchesList() {
@@ -2228,30 +1475,18 @@ public final class Code {
       }
       /**
        * <code>repeated int32 branches = 4;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of the branch commits 
-       * </pre>
        */
       public int getBranchesCount() {
         return branches_.size();
       }
       /**
        * <code>repeated int32 branches = 4;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of the branch commits 
-       * </pre>
        */
       public int getBranches(int index) {
         return branches_.get(index);
       }
       /**
        * <code>repeated int32 branches = 4;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of the branch commits 
-       * </pre>
        */
       public Builder setBranches(
           int index, int value) {
@@ -2262,10 +1497,6 @@ public final class Code {
       }
       /**
        * <code>repeated int32 branches = 4;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of the branch commits 
-       * </pre>
        */
       public Builder addBranches(int value) {
         ensureBranchesIsMutable();
@@ -2275,10 +1506,6 @@ public final class Code {
       }
       /**
        * <code>repeated int32 branches = 4;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of the branch commits 
-       * </pre>
        */
       public Builder addAllBranches(
           java.lang.Iterable<? extends java.lang.Integer> values) {
@@ -2289,10 +1516,6 @@ public final class Code {
       }
       /**
        * <code>repeated int32 branches = 4;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of the branch commits 
-       * </pre>
        */
       public Builder clearBranches() {
         branches_ = java.util.Collections.emptyList();
@@ -2311,10 +1534,6 @@ public final class Code {
       }
       /**
        * <code>repeated string branch_names = 5;</code>
-       *
-       * <pre>
-       ** @exclude The names of all branches 
-       * </pre>
        */
       public java.util.List<java.lang.String>
           getBranchNamesList() {
@@ -2322,30 +1541,18 @@ public final class Code {
       }
       /**
        * <code>repeated string branch_names = 5;</code>
-       *
-       * <pre>
-       ** @exclude The names of all branches 
-       * </pre>
        */
       public int getBranchNamesCount() {
         return branchNames_.size();
       }
       /**
        * <code>repeated string branch_names = 5;</code>
-       *
-       * <pre>
-       ** @exclude The names of all branches 
-       * </pre>
        */
       public java.lang.String getBranchNames(int index) {
         return branchNames_.get(index);
       }
       /**
        * <code>repeated string branch_names = 5;</code>
-       *
-       * <pre>
-       ** @exclude The names of all branches 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getBranchNamesBytes(int index) {
@@ -2353,10 +1560,6 @@ public final class Code {
       }
       /**
        * <code>repeated string branch_names = 5;</code>
-       *
-       * <pre>
-       ** @exclude The names of all branches 
-       * </pre>
        */
       public Builder setBranchNames(
           int index, java.lang.String value) {
@@ -2370,10 +1573,6 @@ public final class Code {
       }
       /**
        * <code>repeated string branch_names = 5;</code>
-       *
-       * <pre>
-       ** @exclude The names of all branches 
-       * </pre>
        */
       public Builder addBranchNames(
           java.lang.String value) {
@@ -2387,10 +1586,6 @@ public final class Code {
       }
       /**
        * <code>repeated string branch_names = 5;</code>
-       *
-       * <pre>
-       ** @exclude The names of all branches 
-       * </pre>
        */
       public Builder addAllBranchNames(
           java.lang.Iterable<java.lang.String> values) {
@@ -2401,10 +1596,6 @@ public final class Code {
       }
       /**
        * <code>repeated string branch_names = 5;</code>
-       *
-       * <pre>
-       ** @exclude The names of all branches 
-       * </pre>
        */
       public Builder clearBranchNames() {
         branchNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -2414,10 +1605,6 @@ public final class Code {
       }
       /**
        * <code>repeated string branch_names = 5;</code>
-       *
-       * <pre>
-       ** @exclude The names of all branches 
-       * </pre>
        */
       public Builder addBranchNamesBytes(
           com.google.protobuf.ByteString value) {
@@ -2440,10 +1627,6 @@ public final class Code {
       }
       /**
        * <code>repeated int32 tags = 6;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of the tag commits 
-       * </pre>
        */
       public java.util.List<java.lang.Integer>
           getTagsList() {
@@ -2451,30 +1634,18 @@ public final class Code {
       }
       /**
        * <code>repeated int32 tags = 6;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of the tag commits 
-       * </pre>
        */
       public int getTagsCount() {
         return tags_.size();
       }
       /**
        * <code>repeated int32 tags = 6;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of the tag commits 
-       * </pre>
        */
       public int getTags(int index) {
         return tags_.get(index);
       }
       /**
        * <code>repeated int32 tags = 6;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of the tag commits 
-       * </pre>
        */
       public Builder setTags(
           int index, int value) {
@@ -2485,10 +1656,6 @@ public final class Code {
       }
       /**
        * <code>repeated int32 tags = 6;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of the tag commits 
-       * </pre>
        */
       public Builder addTags(int value) {
         ensureTagsIsMutable();
@@ -2498,10 +1665,6 @@ public final class Code {
       }
       /**
        * <code>repeated int32 tags = 6;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of the tag commits 
-       * </pre>
        */
       public Builder addAllTags(
           java.lang.Iterable<? extends java.lang.Integer> values) {
@@ -2512,10 +1675,6 @@ public final class Code {
       }
       /**
        * <code>repeated int32 tags = 6;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of the tag commits 
-       * </pre>
        */
       public Builder clearTags() {
         tags_ = java.util.Collections.emptyList();
@@ -2534,10 +1693,6 @@ public final class Code {
       }
       /**
        * <code>repeated string tag_names = 7;</code>
-       *
-       * <pre>
-       ** @exclude The names of all tags 
-       * </pre>
        */
       public java.util.List<java.lang.String>
           getTagNamesList() {
@@ -2545,30 +1700,18 @@ public final class Code {
       }
       /**
        * <code>repeated string tag_names = 7;</code>
-       *
-       * <pre>
-       ** @exclude The names of all tags 
-       * </pre>
        */
       public int getTagNamesCount() {
         return tagNames_.size();
       }
       /**
        * <code>repeated string tag_names = 7;</code>
-       *
-       * <pre>
-       ** @exclude The names of all tags 
-       * </pre>
        */
       public java.lang.String getTagNames(int index) {
         return tagNames_.get(index);
       }
       /**
        * <code>repeated string tag_names = 7;</code>
-       *
-       * <pre>
-       ** @exclude The names of all tags 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getTagNamesBytes(int index) {
@@ -2576,10 +1719,6 @@ public final class Code {
       }
       /**
        * <code>repeated string tag_names = 7;</code>
-       *
-       * <pre>
-       ** @exclude The names of all tags 
-       * </pre>
        */
       public Builder setTagNames(
           int index, java.lang.String value) {
@@ -2593,10 +1732,6 @@ public final class Code {
       }
       /**
        * <code>repeated string tag_names = 7;</code>
-       *
-       * <pre>
-       ** @exclude The names of all tags 
-       * </pre>
        */
       public Builder addTagNames(
           java.lang.String value) {
@@ -2610,10 +1745,6 @@ public final class Code {
       }
       /**
        * <code>repeated string tag_names = 7;</code>
-       *
-       * <pre>
-       ** @exclude The names of all tags 
-       * </pre>
        */
       public Builder addAllTagNames(
           java.lang.Iterable<java.lang.String> values) {
@@ -2624,10 +1755,6 @@ public final class Code {
       }
       /**
        * <code>repeated string tag_names = 7;</code>
-       *
-       * <pre>
-       ** @exclude The names of all tags 
-       * </pre>
        */
       public Builder clearTagNames() {
         tagNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -2637,10 +1764,6 @@ public final class Code {
       }
       /**
        * <code>repeated string tag_names = 7;</code>
-       *
-       * <pre>
-       ** @exclude The names of all tags 
-       * </pre>
        */
       public Builder addTagNamesBytes(
           com.google.protobuf.ByteString value) {
@@ -2649,461 +1772,6 @@ public final class Code {
   }
   ensureTagNamesIsMutable();
         tagNames_.add(value);
-        onChanged();
-        return this;
-      }
-
-      // required int32 head = 8;
-      private int head_ ;
-      /**
-       * <code>required int32 head = 8;</code>
-       *
-       * <pre>
-       ** @exclude The offset of the head commit 
-       * </pre>
-       */
-      public boolean hasHead() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
-      }
-      /**
-       * <code>required int32 head = 8;</code>
-       *
-       * <pre>
-       ** @exclude The offset of the head commit 
-       * </pre>
-       */
-      public int getHead() {
-        return head_;
-      }
-      /**
-       * <code>required int32 head = 8;</code>
-       *
-       * <pre>
-       ** @exclude The offset of the head commit 
-       * </pre>
-       */
-      public Builder setHead(int value) {
-        bitField0_ |= 0x00000080;
-        head_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required int32 head = 8;</code>
-       *
-       * <pre>
-       ** @exclude The offset of the head commit 
-       * </pre>
-       */
-      public Builder clearHead() {
-        bitField0_ = (bitField0_ & ~0x00000080);
-        head_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // repeated .boa.types.ChangedFile head_snapshot = 9;
-      private java.util.List<boa.types.Diff.ChangedFile> headSnapshot_ =
-        java.util.Collections.emptyList();
-      private void ensureHeadSnapshotIsMutable() {
-        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
-          headSnapshot_ = new java.util.ArrayList<boa.types.Diff.ChangedFile>(headSnapshot_);
-          bitField0_ |= 0x00000100;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Diff.ChangedFile, boa.types.Diff.ChangedFile.Builder, boa.types.Diff.ChangedFileOrBuilder> headSnapshotBuilder_;
-
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public java.util.List<boa.types.Diff.ChangedFile> getHeadSnapshotList() {
-        if (headSnapshotBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(headSnapshot_);
-        } else {
-          return headSnapshotBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public int getHeadSnapshotCount() {
-        if (headSnapshotBuilder_ == null) {
-          return headSnapshot_.size();
-        } else {
-          return headSnapshotBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public boa.types.Diff.ChangedFile getHeadSnapshot(int index) {
-        if (headSnapshotBuilder_ == null) {
-          return headSnapshot_.get(index);
-        } else {
-          return headSnapshotBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public Builder setHeadSnapshot(
-          int index, boa.types.Diff.ChangedFile value) {
-        if (headSnapshotBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureHeadSnapshotIsMutable();
-          headSnapshot_.set(index, value);
-          onChanged();
-        } else {
-          headSnapshotBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public Builder setHeadSnapshot(
-          int index, boa.types.Diff.ChangedFile.Builder builderForValue) {
-        if (headSnapshotBuilder_ == null) {
-          ensureHeadSnapshotIsMutable();
-          headSnapshot_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          headSnapshotBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public Builder addHeadSnapshot(boa.types.Diff.ChangedFile value) {
-        if (headSnapshotBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureHeadSnapshotIsMutable();
-          headSnapshot_.add(value);
-          onChanged();
-        } else {
-          headSnapshotBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public Builder addHeadSnapshot(
-          int index, boa.types.Diff.ChangedFile value) {
-        if (headSnapshotBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureHeadSnapshotIsMutable();
-          headSnapshot_.add(index, value);
-          onChanged();
-        } else {
-          headSnapshotBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public Builder addHeadSnapshot(
-          boa.types.Diff.ChangedFile.Builder builderForValue) {
-        if (headSnapshotBuilder_ == null) {
-          ensureHeadSnapshotIsMutable();
-          headSnapshot_.add(builderForValue.build());
-          onChanged();
-        } else {
-          headSnapshotBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public Builder addHeadSnapshot(
-          int index, boa.types.Diff.ChangedFile.Builder builderForValue) {
-        if (headSnapshotBuilder_ == null) {
-          ensureHeadSnapshotIsMutable();
-          headSnapshot_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          headSnapshotBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public Builder addAllHeadSnapshot(
-          java.lang.Iterable<? extends boa.types.Diff.ChangedFile> values) {
-        if (headSnapshotBuilder_ == null) {
-          ensureHeadSnapshotIsMutable();
-          super.addAll(values, headSnapshot_);
-          onChanged();
-        } else {
-          headSnapshotBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public Builder clearHeadSnapshot() {
-        if (headSnapshotBuilder_ == null) {
-          headSnapshot_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000100);
-          onChanged();
-        } else {
-          headSnapshotBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public Builder removeHeadSnapshot(int index) {
-        if (headSnapshotBuilder_ == null) {
-          ensureHeadSnapshotIsMutable();
-          headSnapshot_.remove(index);
-          onChanged();
-        } else {
-          headSnapshotBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public boa.types.Diff.ChangedFile.Builder getHeadSnapshotBuilder(
-          int index) {
-        return getHeadSnapshotFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public boa.types.Diff.ChangedFileOrBuilder getHeadSnapshotOrBuilder(
-          int index) {
-        if (headSnapshotBuilder_ == null) {
-          return headSnapshot_.get(index);  } else {
-          return headSnapshotBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public java.util.List<? extends boa.types.Diff.ChangedFileOrBuilder> 
-           getHeadSnapshotOrBuilderList() {
-        if (headSnapshotBuilder_ != null) {
-          return headSnapshotBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(headSnapshot_);
-        }
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public boa.types.Diff.ChangedFile.Builder addHeadSnapshotBuilder() {
-        return getHeadSnapshotFieldBuilder().addBuilder(
-            boa.types.Diff.ChangedFile.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public boa.types.Diff.ChangedFile.Builder addHeadSnapshotBuilder(
-          int index) {
-        return getHeadSnapshotFieldBuilder().addBuilder(
-            index, boa.types.Diff.ChangedFile.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .boa.types.ChangedFile head_snapshot = 9;</code>
-       *
-       * <pre>
-       ** @exclude The snapshot at the head commit 
-       * </pre>
-       */
-      public java.util.List<boa.types.Diff.ChangedFile.Builder> 
-           getHeadSnapshotBuilderList() {
-        return getHeadSnapshotFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Diff.ChangedFile, boa.types.Diff.ChangedFile.Builder, boa.types.Diff.ChangedFileOrBuilder> 
-          getHeadSnapshotFieldBuilder() {
-        if (headSnapshotBuilder_ == null) {
-          headSnapshotBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              boa.types.Diff.ChangedFile, boa.types.Diff.ChangedFile.Builder, boa.types.Diff.ChangedFileOrBuilder>(
-                  headSnapshot_,
-                  ((bitField0_ & 0x00000100) == 0x00000100),
-                  getParentForChildren(),
-                  isClean());
-          headSnapshot_ = null;
-        }
-        return headSnapshotBuilder_;
-      }
-
-      // repeated int64 revision_keys = 10;
-      private java.util.List<java.lang.Long> revisionKeys_ = java.util.Collections.emptyList();
-      private void ensureRevisionKeysIsMutable() {
-        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
-          revisionKeys_ = new java.util.ArrayList<java.lang.Long>(revisionKeys_);
-          bitField0_ |= 0x00000200;
-         }
-      }
-      /**
-       * <code>repeated int64 revision_keys = 10;</code>
-       *
-       * <pre>
-       ** Keys of the revisions stored in the commit sequence file 
-       * </pre>
-       */
-      public java.util.List<java.lang.Long>
-          getRevisionKeysList() {
-        return java.util.Collections.unmodifiableList(revisionKeys_);
-      }
-      /**
-       * <code>repeated int64 revision_keys = 10;</code>
-       *
-       * <pre>
-       ** Keys of the revisions stored in the commit sequence file 
-       * </pre>
-       */
-      public int getRevisionKeysCount() {
-        return revisionKeys_.size();
-      }
-      /**
-       * <code>repeated int64 revision_keys = 10;</code>
-       *
-       * <pre>
-       ** Keys of the revisions stored in the commit sequence file 
-       * </pre>
-       */
-      public long getRevisionKeys(int index) {
-        return revisionKeys_.get(index);
-      }
-      /**
-       * <code>repeated int64 revision_keys = 10;</code>
-       *
-       * <pre>
-       ** Keys of the revisions stored in the commit sequence file 
-       * </pre>
-       */
-      public Builder setRevisionKeys(
-          int index, long value) {
-        ensureRevisionKeysIsMutable();
-        revisionKeys_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int64 revision_keys = 10;</code>
-       *
-       * <pre>
-       ** Keys of the revisions stored in the commit sequence file 
-       * </pre>
-       */
-      public Builder addRevisionKeys(long value) {
-        ensureRevisionKeysIsMutable();
-        revisionKeys_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int64 revision_keys = 10;</code>
-       *
-       * <pre>
-       ** Keys of the revisions stored in the commit sequence file 
-       * </pre>
-       */
-      public Builder addAllRevisionKeys(
-          java.lang.Iterable<? extends java.lang.Long> values) {
-        ensureRevisionKeysIsMutable();
-        super.addAll(values, revisionKeys_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int64 revision_keys = 10;</code>
-       *
-       * <pre>
-       ** Keys of the revisions stored in the commit sequence file 
-       * </pre>
-       */
-      public Builder clearRevisionKeys() {
-        revisionKeys_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000200);
         onChanged();
         return this;
       }
@@ -3125,123 +1793,67 @@ public final class Code {
     // required string id = 1;
     /**
      * <code>required string id = 1;</code>
-     *
-     * <pre>
-     ** A unique identifier for the revision 
-     * </pre>
      */
     boolean hasId();
     /**
      * <code>required string id = 1;</code>
-     *
-     * <pre>
-     ** A unique identifier for the revision 
-     * </pre>
      */
     java.lang.String getId();
     /**
      * <code>required string id = 1;</code>
-     *
-     * <pre>
-     ** A unique identifier for the revision 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // optional .boa.types.Person author = 2;
+    // required .boa.types.Person author = 2;
     /**
-     * <code>optional .boa.types.Person author = 2;</code>
-     *
-     * <pre>
-     ** The person who authored the revision, if known 
-     * </pre>
+     * <code>required .boa.types.Person author = 2;</code>
      */
     boolean hasAuthor();
     /**
-     * <code>optional .boa.types.Person author = 2;</code>
-     *
-     * <pre>
-     ** The person who authored the revision, if known 
-     * </pre>
+     * <code>required .boa.types.Person author = 2;</code>
      */
     boa.types.Shared.Person getAuthor();
     /**
-     * <code>optional .boa.types.Person author = 2;</code>
-     *
-     * <pre>
-     ** The person who authored the revision, if known 
-     * </pre>
+     * <code>required .boa.types.Person author = 2;</code>
      */
     boa.types.Shared.PersonOrBuilder getAuthorOrBuilder();
 
     // required .boa.types.Person committer = 3;
     /**
      * <code>required .boa.types.Person committer = 3;</code>
-     *
-     * <pre>
-     ** The person who committed the revision 
-     * </pre>
      */
     boolean hasCommitter();
     /**
      * <code>required .boa.types.Person committer = 3;</code>
-     *
-     * <pre>
-     ** The person who committed the revision 
-     * </pre>
      */
     boa.types.Shared.Person getCommitter();
     /**
      * <code>required .boa.types.Person committer = 3;</code>
-     *
-     * <pre>
-     ** The person who committed the revision 
-     * </pre>
      */
     boa.types.Shared.PersonOrBuilder getCommitterOrBuilder();
 
     // required uint64 commit_date = 4;
     /**
      * <code>required uint64 commit_date = 4;</code>
-     *
-     * <pre>
-     ** The time the revision was committed 
-     * </pre>
      */
     boolean hasCommitDate();
     /**
      * <code>required uint64 commit_date = 4;</code>
-     *
-     * <pre>
-     ** The time the revision was committed 
-     * </pre>
      */
     long getCommitDate();
 
     // required string log = 5;
     /**
      * <code>required string log = 5;</code>
-     *
-     * <pre>
-     ** The log message attached to the revision 
-     * </pre>
      */
     boolean hasLog();
     /**
      * <code>required string log = 5;</code>
-     *
-     * <pre>
-     ** The log message attached to the revision 
-     * </pre>
      */
     java.lang.String getLog();
     /**
      * <code>required string log = 5;</code>
-     *
-     * <pre>
-     ** The log message attached to the revision 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getLogBytes();
@@ -3249,44 +1861,24 @@ public final class Code {
     // repeated .boa.types.ChangedFile files = 6;
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
-     *
-     * <pre>
-     ** A list of all files committed in the revision 
-     * </pre>
      */
     java.util.List<boa.types.Diff.ChangedFile> 
         getFilesList();
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
-     *
-     * <pre>
-     ** A list of all files committed in the revision 
-     * </pre>
      */
     boa.types.Diff.ChangedFile getFiles(int index);
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
-     *
-     * <pre>
-     ** A list of all files committed in the revision 
-     * </pre>
      */
     int getFilesCount();
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
-     *
-     * <pre>
-     ** A list of all files committed in the revision 
-     * </pre>
      */
     java.util.List<? extends boa.types.Diff.ChangedFileOrBuilder> 
         getFilesOrBuilderList();
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
-     *
-     * <pre>
-     ** A list of all files committed in the revision 
-     * </pre>
      */
     boa.types.Diff.ChangedFileOrBuilder getFilesOrBuilder(
         int index);
@@ -3294,35 +1886,33 @@ public final class Code {
     // repeated int32 parents = 7;
     /**
      * <code>repeated int32 parents = 7;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of any parent commits 
-     * </pre>
      */
     java.util.List<java.lang.Integer> getParentsList();
     /**
      * <code>repeated int32 parents = 7;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of any parent commits 
-     * </pre>
      */
     int getParentsCount();
     /**
      * <code>repeated int32 parents = 7;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of any parent commits 
-     * </pre>
      */
     int getParents(int index);
+
+    // repeated int32 children = 8;
+    /**
+     * <code>repeated int32 children = 8;</code>
+     */
+    java.util.List<java.lang.Integer> getChildrenList();
+    /**
+     * <code>repeated int32 children = 8;</code>
+     */
+    int getChildrenCount();
+    /**
+     * <code>repeated int32 children = 8;</code>
+     */
+    int getChildren(int index);
   }
   /**
    * Protobuf type {@code boa.types.Revision}
-   *
-   * <pre>
-   ** A single revision inside a CodeRepository 
-   * </pre>
    */
   public static final class Revision extends
       com.google.protobuf.GeneratedMessage
@@ -3442,6 +2032,27 @@ public final class Code {
               input.popLimit(limit);
               break;
             }
+            case 64: {
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+                children_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000080;
+              }
+              children_.add(input.readInt32());
+              break;
+            }
+            case 66: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080) && input.getBytesUntilLimit() > 0) {
+                children_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000080;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                children_.add(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -3455,6 +2066,9 @@ public final class Code {
         }
         if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
           parents_ = java.util.Collections.unmodifiableList(parents_);
+        }
+        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+          children_ = java.util.Collections.unmodifiableList(children_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -3493,20 +2107,12 @@ public final class Code {
     private java.lang.Object id_;
     /**
      * <code>required string id = 1;</code>
-     *
-     * <pre>
-     ** A unique identifier for the revision 
-     * </pre>
      */
     public boolean hasId() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required string id = 1;</code>
-     *
-     * <pre>
-     ** A unique identifier for the revision 
-     * </pre>
      */
     public java.lang.String getId() {
       java.lang.Object ref = id_;
@@ -3524,10 +2130,6 @@ public final class Code {
     }
     /**
      * <code>required string id = 1;</code>
-     *
-     * <pre>
-     ** A unique identifier for the revision 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getIdBytes() {
@@ -3543,35 +2145,23 @@ public final class Code {
       }
     }
 
-    // optional .boa.types.Person author = 2;
+    // required .boa.types.Person author = 2;
     public static final int AUTHOR_FIELD_NUMBER = 2;
     private boa.types.Shared.Person author_;
     /**
-     * <code>optional .boa.types.Person author = 2;</code>
-     *
-     * <pre>
-     ** The person who authored the revision, if known 
-     * </pre>
+     * <code>required .boa.types.Person author = 2;</code>
      */
     public boolean hasAuthor() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional .boa.types.Person author = 2;</code>
-     *
-     * <pre>
-     ** The person who authored the revision, if known 
-     * </pre>
+     * <code>required .boa.types.Person author = 2;</code>
      */
     public boa.types.Shared.Person getAuthor() {
       return author_;
     }
     /**
-     * <code>optional .boa.types.Person author = 2;</code>
-     *
-     * <pre>
-     ** The person who authored the revision, if known 
-     * </pre>
+     * <code>required .boa.types.Person author = 2;</code>
      */
     public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
       return author_;
@@ -3582,30 +2172,18 @@ public final class Code {
     private boa.types.Shared.Person committer_;
     /**
      * <code>required .boa.types.Person committer = 3;</code>
-     *
-     * <pre>
-     ** The person who committed the revision 
-     * </pre>
      */
     public boolean hasCommitter() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>required .boa.types.Person committer = 3;</code>
-     *
-     * <pre>
-     ** The person who committed the revision 
-     * </pre>
      */
     public boa.types.Shared.Person getCommitter() {
       return committer_;
     }
     /**
      * <code>required .boa.types.Person committer = 3;</code>
-     *
-     * <pre>
-     ** The person who committed the revision 
-     * </pre>
      */
     public boa.types.Shared.PersonOrBuilder getCommitterOrBuilder() {
       return committer_;
@@ -3616,20 +2194,12 @@ public final class Code {
     private long commitDate_;
     /**
      * <code>required uint64 commit_date = 4;</code>
-     *
-     * <pre>
-     ** The time the revision was committed 
-     * </pre>
      */
     public boolean hasCommitDate() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
      * <code>required uint64 commit_date = 4;</code>
-     *
-     * <pre>
-     ** The time the revision was committed 
-     * </pre>
      */
     public long getCommitDate() {
       return commitDate_;
@@ -3640,20 +2210,12 @@ public final class Code {
     private java.lang.Object log_;
     /**
      * <code>required string log = 5;</code>
-     *
-     * <pre>
-     ** The log message attached to the revision 
-     * </pre>
      */
     public boolean hasLog() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
      * <code>required string log = 5;</code>
-     *
-     * <pre>
-     ** The log message attached to the revision 
-     * </pre>
      */
     public java.lang.String getLog() {
       java.lang.Object ref = log_;
@@ -3671,10 +2233,6 @@ public final class Code {
     }
     /**
      * <code>required string log = 5;</code>
-     *
-     * <pre>
-     ** The log message attached to the revision 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getLogBytes() {
@@ -3695,20 +2253,12 @@ public final class Code {
     private java.util.List<boa.types.Diff.ChangedFile> files_;
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
-     *
-     * <pre>
-     ** A list of all files committed in the revision 
-     * </pre>
      */
     public java.util.List<boa.types.Diff.ChangedFile> getFilesList() {
       return files_;
     }
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
-     *
-     * <pre>
-     ** A list of all files committed in the revision 
-     * </pre>
      */
     public java.util.List<? extends boa.types.Diff.ChangedFileOrBuilder> 
         getFilesOrBuilderList() {
@@ -3716,30 +2266,18 @@ public final class Code {
     }
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
-     *
-     * <pre>
-     ** A list of all files committed in the revision 
-     * </pre>
      */
     public int getFilesCount() {
       return files_.size();
     }
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
-     *
-     * <pre>
-     ** A list of all files committed in the revision 
-     * </pre>
      */
     public boa.types.Diff.ChangedFile getFiles(int index) {
       return files_.get(index);
     }
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
-     *
-     * <pre>
-     ** A list of all files committed in the revision 
-     * </pre>
      */
     public boa.types.Diff.ChangedFileOrBuilder getFilesOrBuilder(
         int index) {
@@ -3751,10 +2289,6 @@ public final class Code {
     private java.util.List<java.lang.Integer> parents_;
     /**
      * <code>repeated int32 parents = 7;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of any parent commits 
-     * </pre>
      */
     public java.util.List<java.lang.Integer>
         getParentsList() {
@@ -3762,23 +2296,38 @@ public final class Code {
     }
     /**
      * <code>repeated int32 parents = 7;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of any parent commits 
-     * </pre>
      */
     public int getParentsCount() {
       return parents_.size();
     }
     /**
      * <code>repeated int32 parents = 7;</code>
-     *
-     * <pre>
-     ** @exclude The offsets of any parent commits 
-     * </pre>
      */
     public int getParents(int index) {
       return parents_.get(index);
+    }
+
+    // repeated int32 children = 8;
+    public static final int CHILDREN_FIELD_NUMBER = 8;
+    private java.util.List<java.lang.Integer> children_;
+    /**
+     * <code>repeated int32 children = 8;</code>
+     */
+    public java.util.List<java.lang.Integer>
+        getChildrenList() {
+      return children_;
+    }
+    /**
+     * <code>repeated int32 children = 8;</code>
+     */
+    public int getChildrenCount() {
+      return children_.size();
+    }
+    /**
+     * <code>repeated int32 children = 8;</code>
+     */
+    public int getChildren(int index) {
+      return children_.get(index);
     }
 
     private void initFields() {
@@ -3789,6 +2338,7 @@ public final class Code {
       log_ = "";
       files_ = java.util.Collections.emptyList();
       parents_ = java.util.Collections.emptyList();
+      children_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -3796,6 +2346,10 @@ public final class Code {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasAuthor()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -3811,11 +2365,9 @@ public final class Code {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (hasAuthor()) {
-        if (!getAuthor().isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
+      if (!getAuthor().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
       }
       if (!getCommitter().isInitialized()) {
         memoizedIsInitialized = 0;
@@ -3854,6 +2406,9 @@ public final class Code {
       }
       for (int i = 0; i < parents_.size(); i++) {
         output.writeInt32(7, parents_.get(i));
+      }
+      for (int i = 0; i < children_.size(); i++) {
+        output.writeInt32(8, children_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -3896,6 +2451,15 @@ public final class Code {
         }
         size += dataSize;
         size += 1 * getParentsList().size();
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < children_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(children_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getChildrenList().size();
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3977,10 +2541,6 @@ public final class Code {
     }
     /**
      * Protobuf type {@code boa.types.Revision}
-     *
-     * <pre>
-     ** A single revision inside a CodeRepository 
-     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -4046,6 +2606,8 @@ public final class Code {
         }
         parents_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000040);
+        children_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
 
@@ -4116,6 +2678,11 @@ public final class Code {
           bitField0_ = (bitField0_ & ~0x00000040);
         }
         result.parents_ = parents_;
+        if (((bitField0_ & 0x00000080) == 0x00000080)) {
+          children_ = java.util.Collections.unmodifiableList(children_);
+          bitField0_ = (bitField0_ & ~0x00000080);
+        }
+        result.children_ = children_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -4187,12 +2754,26 @@ public final class Code {
           }
           onChanged();
         }
+        if (!other.children_.isEmpty()) {
+          if (children_.isEmpty()) {
+            children_ = other.children_;
+            bitField0_ = (bitField0_ & ~0x00000080);
+          } else {
+            ensureChildrenIsMutable();
+            children_.addAll(other.children_);
+          }
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasId()) {
+          
+          return false;
+        }
+        if (!hasAuthor()) {
           
           return false;
         }
@@ -4208,11 +2789,9 @@ public final class Code {
           
           return false;
         }
-        if (hasAuthor()) {
-          if (!getAuthor().isInitialized()) {
-            
-            return false;
-          }
+        if (!getAuthor().isInitialized()) {
+          
+          return false;
         }
         if (!getCommitter().isInitialized()) {
           
@@ -4250,20 +2829,12 @@ public final class Code {
       private java.lang.Object id_ = "";
       /**
        * <code>required string id = 1;</code>
-       *
-       * <pre>
-       ** A unique identifier for the revision 
-       * </pre>
        */
       public boolean hasId() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required string id = 1;</code>
-       *
-       * <pre>
-       ** A unique identifier for the revision 
-       * </pre>
        */
       public java.lang.String getId() {
         java.lang.Object ref = id_;
@@ -4278,10 +2849,6 @@ public final class Code {
       }
       /**
        * <code>required string id = 1;</code>
-       *
-       * <pre>
-       ** A unique identifier for the revision 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getIdBytes() {
@@ -4298,10 +2865,6 @@ public final class Code {
       }
       /**
        * <code>required string id = 1;</code>
-       *
-       * <pre>
-       ** A unique identifier for the revision 
-       * </pre>
        */
       public Builder setId(
           java.lang.String value) {
@@ -4315,10 +2878,6 @@ public final class Code {
       }
       /**
        * <code>required string id = 1;</code>
-       *
-       * <pre>
-       ** A unique identifier for the revision 
-       * </pre>
        */
       public Builder clearId() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -4328,10 +2887,6 @@ public final class Code {
       }
       /**
        * <code>required string id = 1;</code>
-       *
-       * <pre>
-       ** A unique identifier for the revision 
-       * </pre>
        */
       public Builder setIdBytes(
           com.google.protobuf.ByteString value) {
@@ -4344,26 +2899,18 @@ public final class Code {
         return this;
       }
 
-      // optional .boa.types.Person author = 2;
+      // required .boa.types.Person author = 2;
       private boa.types.Shared.Person author_ = boa.types.Shared.Person.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> authorBuilder_;
       /**
-       * <code>optional .boa.types.Person author = 2;</code>
-       *
-       * <pre>
-       ** The person who authored the revision, if known 
-       * </pre>
+       * <code>required .boa.types.Person author = 2;</code>
        */
       public boolean hasAuthor() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional .boa.types.Person author = 2;</code>
-       *
-       * <pre>
-       ** The person who authored the revision, if known 
-       * </pre>
+       * <code>required .boa.types.Person author = 2;</code>
        */
       public boa.types.Shared.Person getAuthor() {
         if (authorBuilder_ == null) {
@@ -4373,11 +2920,7 @@ public final class Code {
         }
       }
       /**
-       * <code>optional .boa.types.Person author = 2;</code>
-       *
-       * <pre>
-       ** The person who authored the revision, if known 
-       * </pre>
+       * <code>required .boa.types.Person author = 2;</code>
        */
       public Builder setAuthor(boa.types.Shared.Person value) {
         if (authorBuilder_ == null) {
@@ -4393,11 +2936,7 @@ public final class Code {
         return this;
       }
       /**
-       * <code>optional .boa.types.Person author = 2;</code>
-       *
-       * <pre>
-       ** The person who authored the revision, if known 
-       * </pre>
+       * <code>required .boa.types.Person author = 2;</code>
        */
       public Builder setAuthor(
           boa.types.Shared.Person.Builder builderForValue) {
@@ -4411,11 +2950,7 @@ public final class Code {
         return this;
       }
       /**
-       * <code>optional .boa.types.Person author = 2;</code>
-       *
-       * <pre>
-       ** The person who authored the revision, if known 
-       * </pre>
+       * <code>required .boa.types.Person author = 2;</code>
        */
       public Builder mergeAuthor(boa.types.Shared.Person value) {
         if (authorBuilder_ == null) {
@@ -4434,11 +2969,7 @@ public final class Code {
         return this;
       }
       /**
-       * <code>optional .boa.types.Person author = 2;</code>
-       *
-       * <pre>
-       ** The person who authored the revision, if known 
-       * </pre>
+       * <code>required .boa.types.Person author = 2;</code>
        */
       public Builder clearAuthor() {
         if (authorBuilder_ == null) {
@@ -4451,11 +2982,7 @@ public final class Code {
         return this;
       }
       /**
-       * <code>optional .boa.types.Person author = 2;</code>
-       *
-       * <pre>
-       ** The person who authored the revision, if known 
-       * </pre>
+       * <code>required .boa.types.Person author = 2;</code>
        */
       public boa.types.Shared.Person.Builder getAuthorBuilder() {
         bitField0_ |= 0x00000002;
@@ -4463,11 +2990,7 @@ public final class Code {
         return getAuthorFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .boa.types.Person author = 2;</code>
-       *
-       * <pre>
-       ** The person who authored the revision, if known 
-       * </pre>
+       * <code>required .boa.types.Person author = 2;</code>
        */
       public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
         if (authorBuilder_ != null) {
@@ -4477,11 +3000,7 @@ public final class Code {
         }
       }
       /**
-       * <code>optional .boa.types.Person author = 2;</code>
-       *
-       * <pre>
-       ** The person who authored the revision, if known 
-       * </pre>
+       * <code>required .boa.types.Person author = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> 
@@ -4503,20 +3022,12 @@ public final class Code {
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> committerBuilder_;
       /**
        * <code>required .boa.types.Person committer = 3;</code>
-       *
-       * <pre>
-       ** The person who committed the revision 
-       * </pre>
        */
       public boolean hasCommitter() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
        * <code>required .boa.types.Person committer = 3;</code>
-       *
-       * <pre>
-       ** The person who committed the revision 
-       * </pre>
        */
       public boa.types.Shared.Person getCommitter() {
         if (committerBuilder_ == null) {
@@ -4527,10 +3038,6 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person committer = 3;</code>
-       *
-       * <pre>
-       ** The person who committed the revision 
-       * </pre>
        */
       public Builder setCommitter(boa.types.Shared.Person value) {
         if (committerBuilder_ == null) {
@@ -4547,10 +3054,6 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person committer = 3;</code>
-       *
-       * <pre>
-       ** The person who committed the revision 
-       * </pre>
        */
       public Builder setCommitter(
           boa.types.Shared.Person.Builder builderForValue) {
@@ -4565,10 +3068,6 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person committer = 3;</code>
-       *
-       * <pre>
-       ** The person who committed the revision 
-       * </pre>
        */
       public Builder mergeCommitter(boa.types.Shared.Person value) {
         if (committerBuilder_ == null) {
@@ -4588,10 +3087,6 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person committer = 3;</code>
-       *
-       * <pre>
-       ** The person who committed the revision 
-       * </pre>
        */
       public Builder clearCommitter() {
         if (committerBuilder_ == null) {
@@ -4605,10 +3100,6 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person committer = 3;</code>
-       *
-       * <pre>
-       ** The person who committed the revision 
-       * </pre>
        */
       public boa.types.Shared.Person.Builder getCommitterBuilder() {
         bitField0_ |= 0x00000004;
@@ -4617,10 +3108,6 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person committer = 3;</code>
-       *
-       * <pre>
-       ** The person who committed the revision 
-       * </pre>
        */
       public boa.types.Shared.PersonOrBuilder getCommitterOrBuilder() {
         if (committerBuilder_ != null) {
@@ -4631,10 +3118,6 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person committer = 3;</code>
-       *
-       * <pre>
-       ** The person who committed the revision 
-       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> 
@@ -4654,30 +3137,18 @@ public final class Code {
       private long commitDate_ ;
       /**
        * <code>required uint64 commit_date = 4;</code>
-       *
-       * <pre>
-       ** The time the revision was committed 
-       * </pre>
        */
       public boolean hasCommitDate() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
        * <code>required uint64 commit_date = 4;</code>
-       *
-       * <pre>
-       ** The time the revision was committed 
-       * </pre>
        */
       public long getCommitDate() {
         return commitDate_;
       }
       /**
        * <code>required uint64 commit_date = 4;</code>
-       *
-       * <pre>
-       ** The time the revision was committed 
-       * </pre>
        */
       public Builder setCommitDate(long value) {
         bitField0_ |= 0x00000008;
@@ -4687,10 +3158,6 @@ public final class Code {
       }
       /**
        * <code>required uint64 commit_date = 4;</code>
-       *
-       * <pre>
-       ** The time the revision was committed 
-       * </pre>
        */
       public Builder clearCommitDate() {
         bitField0_ = (bitField0_ & ~0x00000008);
@@ -4703,20 +3170,12 @@ public final class Code {
       private java.lang.Object log_ = "";
       /**
        * <code>required string log = 5;</code>
-       *
-       * <pre>
-       ** The log message attached to the revision 
-       * </pre>
        */
       public boolean hasLog() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
        * <code>required string log = 5;</code>
-       *
-       * <pre>
-       ** The log message attached to the revision 
-       * </pre>
        */
       public java.lang.String getLog() {
         java.lang.Object ref = log_;
@@ -4731,10 +3190,6 @@ public final class Code {
       }
       /**
        * <code>required string log = 5;</code>
-       *
-       * <pre>
-       ** The log message attached to the revision 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getLogBytes() {
@@ -4751,10 +3206,6 @@ public final class Code {
       }
       /**
        * <code>required string log = 5;</code>
-       *
-       * <pre>
-       ** The log message attached to the revision 
-       * </pre>
        */
       public Builder setLog(
           java.lang.String value) {
@@ -4768,10 +3219,6 @@ public final class Code {
       }
       /**
        * <code>required string log = 5;</code>
-       *
-       * <pre>
-       ** The log message attached to the revision 
-       * </pre>
        */
       public Builder clearLog() {
         bitField0_ = (bitField0_ & ~0x00000010);
@@ -4781,10 +3228,6 @@ public final class Code {
       }
       /**
        * <code>required string log = 5;</code>
-       *
-       * <pre>
-       ** The log message attached to the revision 
-       * </pre>
        */
       public Builder setLogBytes(
           com.google.protobuf.ByteString value) {
@@ -4812,10 +3255,6 @@ public final class Code {
 
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public java.util.List<boa.types.Diff.ChangedFile> getFilesList() {
         if (filesBuilder_ == null) {
@@ -4826,10 +3265,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public int getFilesCount() {
         if (filesBuilder_ == null) {
@@ -4840,10 +3275,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public boa.types.Diff.ChangedFile getFiles(int index) {
         if (filesBuilder_ == null) {
@@ -4854,10 +3285,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public Builder setFiles(
           int index, boa.types.Diff.ChangedFile value) {
@@ -4875,10 +3302,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public Builder setFiles(
           int index, boa.types.Diff.ChangedFile.Builder builderForValue) {
@@ -4893,10 +3316,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public Builder addFiles(boa.types.Diff.ChangedFile value) {
         if (filesBuilder_ == null) {
@@ -4913,10 +3332,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public Builder addFiles(
           int index, boa.types.Diff.ChangedFile value) {
@@ -4934,10 +3349,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public Builder addFiles(
           boa.types.Diff.ChangedFile.Builder builderForValue) {
@@ -4952,10 +3363,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public Builder addFiles(
           int index, boa.types.Diff.ChangedFile.Builder builderForValue) {
@@ -4970,10 +3377,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public Builder addAllFiles(
           java.lang.Iterable<? extends boa.types.Diff.ChangedFile> values) {
@@ -4988,10 +3391,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public Builder clearFiles() {
         if (filesBuilder_ == null) {
@@ -5005,10 +3404,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public Builder removeFiles(int index) {
         if (filesBuilder_ == null) {
@@ -5022,10 +3417,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public boa.types.Diff.ChangedFile.Builder getFilesBuilder(
           int index) {
@@ -5033,10 +3424,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public boa.types.Diff.ChangedFileOrBuilder getFilesOrBuilder(
           int index) {
@@ -5047,10 +3434,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public java.util.List<? extends boa.types.Diff.ChangedFileOrBuilder> 
            getFilesOrBuilderList() {
@@ -5062,10 +3445,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public boa.types.Diff.ChangedFile.Builder addFilesBuilder() {
         return getFilesFieldBuilder().addBuilder(
@@ -5073,10 +3452,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public boa.types.Diff.ChangedFile.Builder addFilesBuilder(
           int index) {
@@ -5085,10 +3460,6 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
-       *
-       * <pre>
-       ** A list of all files committed in the revision 
-       * </pre>
        */
       public java.util.List<boa.types.Diff.ChangedFile.Builder> 
            getFilesBuilderList() {
@@ -5119,10 +3490,6 @@ public final class Code {
       }
       /**
        * <code>repeated int32 parents = 7;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of any parent commits 
-       * </pre>
        */
       public java.util.List<java.lang.Integer>
           getParentsList() {
@@ -5130,30 +3497,18 @@ public final class Code {
       }
       /**
        * <code>repeated int32 parents = 7;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of any parent commits 
-       * </pre>
        */
       public int getParentsCount() {
         return parents_.size();
       }
       /**
        * <code>repeated int32 parents = 7;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of any parent commits 
-       * </pre>
        */
       public int getParents(int index) {
         return parents_.get(index);
       }
       /**
        * <code>repeated int32 parents = 7;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of any parent commits 
-       * </pre>
        */
       public Builder setParents(
           int index, int value) {
@@ -5164,10 +3519,6 @@ public final class Code {
       }
       /**
        * <code>repeated int32 parents = 7;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of any parent commits 
-       * </pre>
        */
       public Builder addParents(int value) {
         ensureParentsIsMutable();
@@ -5177,10 +3528,6 @@ public final class Code {
       }
       /**
        * <code>repeated int32 parents = 7;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of any parent commits 
-       * </pre>
        */
       public Builder addAllParents(
           java.lang.Iterable<? extends java.lang.Integer> values) {
@@ -5191,14 +3538,76 @@ public final class Code {
       }
       /**
        * <code>repeated int32 parents = 7;</code>
-       *
-       * <pre>
-       ** @exclude The offsets of any parent commits 
-       * </pre>
        */
       public Builder clearParents() {
         parents_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000040);
+        onChanged();
+        return this;
+      }
+
+      // repeated int32 children = 8;
+      private java.util.List<java.lang.Integer> children_ = java.util.Collections.emptyList();
+      private void ensureChildrenIsMutable() {
+        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
+          children_ = new java.util.ArrayList<java.lang.Integer>(children_);
+          bitField0_ |= 0x00000080;
+         }
+      }
+      /**
+       * <code>repeated int32 children = 8;</code>
+       */
+      public java.util.List<java.lang.Integer>
+          getChildrenList() {
+        return java.util.Collections.unmodifiableList(children_);
+      }
+      /**
+       * <code>repeated int32 children = 8;</code>
+       */
+      public int getChildrenCount() {
+        return children_.size();
+      }
+      /**
+       * <code>repeated int32 children = 8;</code>
+       */
+      public int getChildren(int index) {
+        return children_.get(index);
+      }
+      /**
+       * <code>repeated int32 children = 8;</code>
+       */
+      public Builder setChildren(
+          int index, int value) {
+        ensureChildrenIsMutable();
+        children_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 children = 8;</code>
+       */
+      public Builder addChildren(int value) {
+        ensureChildrenIsMutable();
+        children_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 children = 8;</code>
+       */
+      public Builder addAllChildren(
+          java.lang.Iterable<? extends java.lang.Integer> values) {
+        ensureChildrenIsMutable();
+        super.addAll(values, children_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 children = 8;</code>
+       */
+      public Builder clearChildren() {
+        children_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000080);
         onChanged();
         return this;
       }
@@ -5234,22 +3643,20 @@ public final class Code {
   static {
     java.lang.String[] descriptorData = {
       "\n\ncode.proto\022\tboa.types\032\ndiff.proto\032\014sha" +
-      "red.proto\"\222\003\n\016CodeRepository\022\013\n\003url\030\001 \002(" +
+      "red.proto\"\276\002\n\016CodeRepository\022\013\n\003url\030\001 \002(" +
       "\t\0226\n\004kind\030\002 \002(\0162(.boa.types.CodeReposito" +
       "ry.RepositoryKind\022&\n\trevisions\030\003 \003(\0132\023.b" +
       "oa.types.Revision\022\020\n\010branches\030\004 \003(\005\022\024\n\014b" +
       "ranch_names\030\005 \003(\t\022\014\n\004tags\030\006 \003(\005\022\021\n\ttag_n" +
-      "ames\030\007 \003(\t\022\014\n\004head\030\010 \002(\005\022-\n\rhead_snapsho" +
-      "t\030\t \003(\0132\026.boa.types.ChangedFile\022\025\n\rrevis" +
-      "ion_keys\030\n \003(\003\"v\n\016RepositoryKind\022\t\n\005OTHE" +
-      "R\020\000\022\007\n\003SVN\020\001\022\016\n\nSUBVERSION\020\001\022\007\n\003CVS\020\002\022\007\n",
-      "\003GIT\020\003\022\006\n\002HG\020\004\022\r\n\tMERCURIAL\020\004\022\007\n\003BZR\020\005\022\n" +
-      "\n\006BAZAAR\020\005\032\002\020\001\"\271\001\n\010Revision\022\n\n\002id\030\001 \002(\t\022" +
-      "!\n\006author\030\002 \001(\0132\021.boa.types.Person\022$\n\tco" +
-      "mmitter\030\003 \002(\0132\021.boa.types.Person\022\023\n\013comm" +
-      "it_date\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022%\n\005files\030\006 \003(" +
-      "\0132\026.boa.types.ChangedFile\022\017\n\007parents\030\007 \003" +
-      "(\005B\002H\001"
+      "ames\030\007 \003(\t\"v\n\016RepositoryKind\022\t\n\005OTHER\020\000\022" +
+      "\007\n\003SVN\020\001\022\016\n\nSUBVERSION\020\001\022\007\n\003CVS\020\002\022\007\n\003GIT" +
+      "\020\003\022\006\n\002HG\020\004\022\r\n\tMERCURIAL\020\004\022\007\n\003BZR\020\005\022\n\n\006BA" +
+      "ZAAR\020\005\032\002\020\001\"\313\001\n\010Revision\022\n\n\002id\030\001 \002(\t\022!\n\006a",
+      "uthor\030\002 \002(\0132\021.boa.types.Person\022$\n\tcommit" +
+      "ter\030\003 \002(\0132\021.boa.types.Person\022\023\n\013commit_d" +
+      "ate\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022%\n\005files\030\006 \003(\0132\026." +
+      "boa.types.ChangedFile\022\017\n\007parents\030\007 \003(\005\022\020" +
+      "\n\010children\030\010 \003(\005B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5261,13 +3668,13 @@ public final class Code {
           internal_static_boa_types_CodeRepository_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_CodeRepository_descriptor,
-              new java.lang.String[] { "Url", "Kind", "Revisions", "Branches", "BranchNames", "Tags", "TagNames", "Head", "HeadSnapshot", "RevisionKeys", });
+              new java.lang.String[] { "Url", "Kind", "Revisions", "Branches", "BranchNames", "Tags", "TagNames", });
           internal_static_boa_types_Revision_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_boa_types_Revision_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Revision_descriptor,
-              new java.lang.String[] { "Id", "Author", "Committer", "CommitDate", "Log", "Files", "Parents", });
+              new java.lang.String[] { "Id", "Author", "Committer", "CommitDate", "Log", "Files", "Parents", "Children", });
           return null;
         }
       };

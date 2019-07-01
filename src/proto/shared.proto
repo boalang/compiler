@@ -1,51 +1,26 @@
-syntax = "proto2";
 package boa.types;
 
 option optimize_for = SPEED;
 
-/** A unique person's information */
 message Person {
-	/** The person's username */
 	required string username = 1;
-	/** The person's real name, if known */
-	optional string real_name = 2;
-	/** The person's email address, if known */
-	optional string email = 3;
+	required string real_name = 2;
+	required string email = 3;
 }
 
-/** Describes the kind of change for an artifact or program entity/element */
 enum ChangeKind {
 	option allow_alias = true;
-	
-	UNKNOWN = 0;
-	
-	/** The artifact or program entity/element did not already exist and was added */
+
 	ADDED = 1;
 
-	/** The artifact or program entity/element was deleted */
 	DELETED = 2;
-	/** @exclude */
 	REMOVED = 2;
 
-	/** The artifact or program entity/element already existed and was modified */
 	MODIFIED = 3;
-	/** The artifact or program entity/element already existed and was changed */
 	CHANGED = 3;
 
-	/** The label of the artifact or program entity/element was renamed */
 	RENAMED = 4;
-	
-	/** The artifact or program entity/element was moved to a different parent */
-	MOVED = 5;
+	MOVED = 4;
 
-	/** The artifact or program entity/element was copied from another one */
-	COPIED = 6;
-	
-	/** The artifact or program entity/element was merged */
-	MERGED = 7;
-	
-	/** The artifact or program entity/element was unchanged */
-	UNCHANGED = 8;
-	
-	UNMAPPED = 9;
+	COPIED = 5;
 }

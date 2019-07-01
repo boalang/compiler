@@ -1,1 +1,0 @@
-String x = (String ) 5;

@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import boa.types.BoaBool;
-import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
@@ -104,24 +103,6 @@ public class ProjectProtoTuple extends BoaProtoTuple {
 
 		names.put("kind", counter++);
 		members.add(new ForgeKindProtoMap());
-
-		names.put("forked", counter++);
-		members.add(new BoaBool());
-
-		names.put("forks", counter++);
-		members.add(new BoaInt());
-
-		names.put("stars", counter++);
-		members.add(new BoaInt());
-		
-		names.put("programing_languages_loc", counter++);
-		members.add(new BoaInt());
-		
-		names.put("size", counter++);
-		members.add(new BoaInt());
-		
-		names.put("main_language", counter++);
-		members.add(new BoaString());
 	}
 
 	/**

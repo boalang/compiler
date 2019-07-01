@@ -1,8 +1,0 @@
-elements {
-  tag: "person"
-  kind: XML_ELEMENT
-  attributes {
-    key: "gender"
-    value: "female"
-  }
-}

@@ -14,248 +14,125 @@ public final class Diff {
     // required .boa.types.ChangeKind change = 1;
     /**
      * <code>required .boa.types.ChangeKind change = 1;</code>
-     *
-     * <pre>
-     ** The kind of change for this file 
-     * </pre>
      */
     boolean hasChange();
     /**
      * <code>required .boa.types.ChangeKind change = 1;</code>
-     *
-     * <pre>
-     ** The kind of change for this file 
-     * </pre>
      */
     boa.types.Shared.ChangeKind getChange();
 
     // required .boa.types.ChangedFile.FileKind kind = 2;
     /**
      * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
-     *
-     * <pre>
-     ** The kind of file 
-     * </pre>
      */
     boolean hasKind();
     /**
      * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
-     *
-     * <pre>
-     ** The kind of file 
-     * </pre>
      */
     boa.types.Diff.ChangedFile.FileKind getKind();
 
     // required string name = 3;
     /**
      * <code>required string name = 3;</code>
-     *
-     * <pre>
-     ** The full name and path of the file 
-     * </pre>
      */
     boolean hasName();
     /**
      * <code>required string name = 3;</code>
-     *
-     * <pre>
-     ** The full name and path of the file 
-     * </pre>
      */
     java.lang.String getName();
     /**
      * <code>required string name = 3;</code>
-     *
-     * <pre>
-     ** The full name and path of the file 
-     * </pre>
      */
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // required uint64 key = 4;
+    // required string key = 4;
     /**
-     * <code>required uint64 key = 4;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
+     * <code>required string key = 4;</code>
      */
     boolean hasKey();
     /**
-     * <code>required uint64 key = 4;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
+     * <code>required string key = 4;</code>
      */
-    long getKey();
-
-    // required bool ast = 5;
+    java.lang.String getKey();
     /**
-     * <code>required bool ast = 5;</code>
-     *
-     * <pre>
-     ** @exclude Indicates if this file has a corresponding parsed AST or not 
-     * </pre>
+     * <code>required string key = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getKeyBytes();
+
+    // optional .boa.types.ASTRoot ast = 5;
+    /**
+     * <code>optional .boa.types.ASTRoot ast = 5;</code>
      */
     boolean hasAst();
     /**
-     * <code>required bool ast = 5;</code>
-     *
-     * <pre>
-     ** @exclude Indicates if this file has a corresponding parsed AST or not 
-     * </pre>
+     * <code>optional .boa.types.ASTRoot ast = 5;</code>
      */
-    boolean getAst();
+    boa.types.Ast.ASTRoot getAst();
+    /**
+     * <code>optional .boa.types.ASTRoot ast = 5;</code>
+     */
+    boa.types.Ast.ASTRootOrBuilder getAstOrBuilder();
 
     // optional .boa.types.CommentsRoot comments = 6;
     /**
      * <code>optional .boa.types.CommentsRoot comments = 6;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
      */
     boolean hasComments();
     /**
      * <code>optional .boa.types.CommentsRoot comments = 6;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
      */
     boa.types.Ast.CommentsRoot getComments();
     /**
      * <code>optional .boa.types.CommentsRoot comments = 6;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
      */
     boa.types.Ast.CommentsRootOrBuilder getCommentsOrBuilder();
 
     // repeated .boa.types.ChangeKind changes = 7;
     /**
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
-     *
-     * <pre>
-     ** The kinds of changes of this this compared to the corresponding parent commits 
-     * </pre>
      */
     java.util.List<boa.types.Shared.ChangeKind> getChangesList();
     /**
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
-     *
-     * <pre>
-     ** The kinds of changes of this this compared to the corresponding parent commits 
-     * </pre>
      */
     int getChangesCount();
     /**
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
-     *
-     * <pre>
-     ** The kinds of changes of this this compared to the corresponding parent commits 
-     * </pre>
      */
     boa.types.Shared.ChangeKind getChanges(int index);
 
-    // repeated string previous_names = 8;
+    // repeated int32 previous_versions = 8;
     /**
-     * <code>repeated string previous_names = 8;</code>
-     *
-     * <pre>
-     ** The kinds of changes of this this compared to the corresponding parent commits 
-     * </pre>
-     */
-    java.util.List<java.lang.String>
-    getPreviousNamesList();
-    /**
-     * <code>repeated string previous_names = 8;</code>
-     *
-     * <pre>
-     ** The kinds of changes of this this compared to the corresponding parent commits 
-     * </pre>
-     */
-    int getPreviousNamesCount();
-    /**
-     * <code>repeated string previous_names = 8;</code>
-     *
-     * <pre>
-     ** The kinds of changes of this this compared to the corresponding parent commits 
-     * </pre>
-     */
-    java.lang.String getPreviousNames(int index);
-    /**
-     * <code>repeated string previous_names = 8;</code>
-     *
-     * <pre>
-     ** The kinds of changes of this this compared to the corresponding parent commits 
-     * </pre>
-     */
-    com.google.protobuf.ByteString
-        getPreviousNamesBytes(int index);
-
-    // repeated int32 previous_versions = 9;
-    /**
-     * <code>repeated int32 previous_versions = 9;</code>
-     *
-     * <pre>
-     ** @exclude The indices of the corresponding parent commits in the list of all commits 
-     * </pre>
+     * <code>repeated int32 previous_versions = 8;</code>
      */
     java.util.List<java.lang.Integer> getPreviousVersionsList();
     /**
-     * <code>repeated int32 previous_versions = 9;</code>
-     *
-     * <pre>
-     ** @exclude The indices of the corresponding parent commits in the list of all commits 
-     * </pre>
+     * <code>repeated int32 previous_versions = 8;</code>
      */
     int getPreviousVersionsCount();
     /**
-     * <code>repeated int32 previous_versions = 9;</code>
-     *
-     * <pre>
-     ** @exclude The indices of the corresponding parent commits in the list of all commits 
-     * </pre>
+     * <code>repeated int32 previous_versions = 8;</code>
      */
     int getPreviousVersions(int index);
 
-    // repeated int32 previous_indices = 10;
+    // repeated int32 previous_index = 9;
     /**
-     * <code>repeated int32 previous_indices = 10;</code>
-     *
-     * <pre>
-     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
-     * </pre>
+     * <code>repeated int32 previous_index = 9;</code>
      */
-    java.util.List<java.lang.Integer> getPreviousIndicesList();
+    java.util.List<java.lang.Integer> getPreviousIndexList();
     /**
-     * <code>repeated int32 previous_indices = 10;</code>
-     *
-     * <pre>
-     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
-     * </pre>
+     * <code>repeated int32 previous_index = 9;</code>
      */
-    int getPreviousIndicesCount();
+    int getPreviousIndexCount();
     /**
-     * <code>repeated int32 previous_indices = 10;</code>
-     *
-     * <pre>
-     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
-     * </pre>
+     * <code>repeated int32 previous_index = 9;</code>
      */
-    int getPreviousIndices(int index);
+    int getPreviousIndex(int index);
   }
   /**
    * Protobuf type {@code boa.types.ChangedFile}
-   *
-   * <pre>
-   ** A file committed in a Revision 
-   * </pre>
    */
   public static final class ChangedFile extends
       com.google.protobuf.GeneratedMessage
@@ -332,14 +209,22 @@ public final class Diff {
               name_ = input.readBytes();
               break;
             }
-            case 32: {
+            case 34: {
               bitField0_ |= 0x00000008;
-              key_ = input.readUInt64();
+              key_ = input.readBytes();
               break;
             }
-            case 40: {
+            case 42: {
+              boa.types.Ast.ASTRoot.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000010) == 0x00000010)) {
+                subBuilder = ast_.toBuilder();
+              }
+              ast_ = input.readMessage(boa.types.Ast.ASTRoot.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(ast_);
+                ast_ = subBuilder.buildPartial();
+              }
               bitField0_ |= 0x00000010;
-              ast_ = input.readBool();
               break;
             }
             case 50: {
@@ -388,28 +273,20 @@ public final class Diff {
               input.popLimit(oldLimit);
               break;
             }
-            case 66: {
+            case 64: {
               if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
-                previousNames_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000080;
-              }
-              previousNames_.add(input.readBytes());
-              break;
-            }
-            case 72: {
-              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
                 previousVersions_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000100;
+                mutable_bitField0_ |= 0x00000080;
               }
               previousVersions_.add(input.readInt32());
               break;
             }
-            case 74: {
+            case 66: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080) && input.getBytesUntilLimit() > 0) {
                 previousVersions_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000100;
+                mutable_bitField0_ |= 0x00000080;
               }
               while (input.getBytesUntilLimit() > 0) {
                 previousVersions_.add(input.readInt32());
@@ -417,23 +294,23 @@ public final class Diff {
               input.popLimit(limit);
               break;
             }
-            case 80: {
-              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
-                previousIndices_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000200;
+            case 72: {
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+                previousIndex_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000100;
               }
-              previousIndices_.add(input.readInt32());
+              previousIndex_.add(input.readInt32());
               break;
             }
-            case 82: {
+            case 74: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200) && input.getBytesUntilLimit() > 0) {
-                previousIndices_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000200;
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100) && input.getBytesUntilLimit() > 0) {
+                previousIndex_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000100;
               }
               while (input.getBytesUntilLimit() > 0) {
-                previousIndices_.add(input.readInt32());
+                previousIndex_.add(input.readInt32());
               }
               input.popLimit(limit);
               break;
@@ -450,13 +327,10 @@ public final class Diff {
           changes_ = java.util.Collections.unmodifiableList(changes_);
         }
         if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
-          previousNames_ = new com.google.protobuf.UnmodifiableLazyStringList(previousNames_);
-        }
-        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
           previousVersions_ = java.util.Collections.unmodifiableList(previousVersions_);
         }
-        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
-          previousIndices_ = java.util.Collections.unmodifiableList(previousIndices_);
+        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+          previousIndex_ = java.util.Collections.unmodifiableList(previousIndex_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -491,863 +365,219 @@ public final class Diff {
 
     /**
      * Protobuf enum {@code boa.types.ChangedFile.FileKind}
-     *
-     * <pre>
-     ** Describes the kind of the file 
-     * </pre>
      */
     public enum FileKind
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>OTHER = 0;</code>
-       *
-       * <pre>
-       ** The file's type was unknown 
-       * </pre>
        */
       OTHER(0, 0),
       /**
        * <code>BINARY = 1;</code>
-       *
-       * <pre>
-       ** The file represents a binary file 
-       * </pre>
        */
       BINARY(1, 1),
       /**
        * <code>TEXT = 2;</code>
-       *
-       * <pre>
-       ** The file represents a text file 
-       * </pre>
        */
       TEXT(2, 2),
       /**
        * <code>XML = 3;</code>
-       *
-       * <pre>
-       ** The file represents an XML file 
-       * </pre>
        */
       XML(3, 3),
       /**
        * <code>SOURCE_JAVA_ERROR = 100;</code>
-       *
-       * <pre>
-       ** The file represents a Java source file that had a parse error 
-       * </pre>
        */
       SOURCE_JAVA_ERROR(4, 100),
       /**
-       * <code>SOURCE_JAVA_JLS2 = 102;</code>
-       *
-       * <pre>
-       ** The file represents a Java source file that parsed without error as JLS2 
-       * </pre>
+       * <code>SOURCE_JAVA_JLS2 = 101;</code>
        */
-      SOURCE_JAVA_JLS2(5, 102),
+      SOURCE_JAVA_JLS2(5, 101),
       /**
-       * <code>SOURCE_JAVA_JLS3 = 103;</code>
-       *
-       * <pre>
-       ** The file represents a Java source file that parsed without error as JLS3 
-       * </pre>
+       * <code>SOURCE_JAVA_JLS3 = 102;</code>
        */
-      SOURCE_JAVA_JLS3(6, 103),
+      SOURCE_JAVA_JLS3(6, 102),
       /**
-       * <code>SOURCE_JAVA_JLS4 = 104;</code>
-       *
-       * <pre>
-       ** The file represents a Java source file that parsed without error as JLS4 
-       * </pre>
+       * <code>SOURCE_JAVA_JLS4 = 103;</code>
        */
-      SOURCE_JAVA_JLS4(7, 104),
+      SOURCE_JAVA_JLS4(7, 103),
       /**
-       * <code>SOURCE_JAVA_JLS8 = 108;</code>
-       *
-       * <pre>
-       ** The file represents a Java source file that parsed without error as JLS8 
-       * </pre>
+       * <code>SOURCE_JAVA_JLS5 = 104;</code>
        */
-      SOURCE_JAVA_JLS8(8, 108),
+      SOURCE_JAVA_JLS5(8, 104),
       /**
        * <code>SOURCE_CS_ERROR = 200;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       SOURCE_CS_ERROR(14, 200),
       /**
        * <code>SOURCE_CS_CS1 = 201;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       SOURCE_CS_CS1(15, 201),
       /**
        * <code>SOURCE_CS_CS2 = 202;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       SOURCE_CS_CS2(16, 202),
       /**
        * <code>SOURCE_CS_CS3 = 203;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       SOURCE_CS_CS3(17, 203),
       /**
        * <code>SOURCE_CS_CS4 = 204;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       SOURCE_CS_CS4(18, 204),
       /**
        * <code>SOURCE_CS_CS5 = 205;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       SOURCE_CS_CS5(19, 205),
-      /**
-       * <code>SOURCE_JS_ERROR = 300;</code>
-       *
-       * <pre>
-       ** The file represents a JavaScript source file that had a parse error 
-       * </pre>
-       */
-      SOURCE_JS_ERROR(26, 300),
-      /**
-       * <code>SOURCE_JS_ES1 = 301;</code>
-       *
-       * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES1 
-       * </pre>
-       */
-      SOURCE_JS_ES1(27, 301),
-      /**
-       * <code>SOURCE_JS_ES2 = 302;</code>
-       *
-       * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES2 
-       * </pre>
-       */
-      SOURCE_JS_ES2(28, 302),
-      /**
-       * <code>SOURCE_JS_ES3 = 303;</code>
-       *
-       * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES3 
-       * </pre>
-       */
-      SOURCE_JS_ES3(29, 303),
-      /**
-       * <code>SOURCE_JS_ES5 = 304;</code>
-       *
-       * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES5 
-       * </pre>
-       */
-      SOURCE_JS_ES5(30, 304),
-      /**
-       * <code>SOURCE_JS_ES6 = 305;</code>
-       *
-       * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES6 
-       * </pre>
-       */
-      SOURCE_JS_ES6(31, 305),
-      /**
-       * <code>SOURCE_JS_ES7 = 306;</code>
-       *
-       * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES7 
-       * </pre>
-       */
-      SOURCE_JS_ES7(32, 306),
-      /**
-       * <code>SOURCE_JS_ES8 = 307;</code>
-       *
-       * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES8 
-       * </pre>
-       */
-      SOURCE_JS_ES8(33, 307),
-      /**
-       * <code>SOURCE_PHP_ERROR = 400;</code>
-       *
-       * <pre>
-       ** The file represents a PHP source file that had a parse error 
-       * </pre>
-       */
-      SOURCE_PHP_ERROR(35, 400),
-      /**
-       * <code>SOURCE_PHP5 = 401;</code>
-       *
-       * <pre>
-       ** The file represents a PHP source file that parsed without error as ES1 
-       * </pre>
-       */
-      SOURCE_PHP5(36, 401),
-      /**
-       * <code>SOURCE_PHP5_3 = 402;</code>
-       *
-       * <pre>
-       ** The file represents a PHP source file that parsed without error as ES2 
-       * </pre>
-       */
-      SOURCE_PHP5_3(37, 402),
-      /**
-       * <code>SOURCE_PHP5_4 = 403;</code>
-       *
-       * <pre>
-       ** The file represents a PHP source file that parsed without error as ES3 
-       * </pre>
-       */
-      SOURCE_PHP5_4(38, 403),
-      /**
-       * <code>SOURCE_PHP5_5 = 404;</code>
-       *
-       * <pre>
-       ** The file represents a PHP source file that parsed without error as ES5 
-       * </pre>
-       */
-      SOURCE_PHP5_5(39, 404),
-      /**
-       * <code>SOURCE_PHP5_6 = 405;</code>
-       *
-       * <pre>
-       ** The file represents a PHP source file that parsed without error as ES6 
-       * </pre>
-       */
-      SOURCE_PHP5_6(40, 405),
-      /**
-       * <code>SOURCE_PHP7_0 = 406;</code>
-       *
-       * <pre>
-       ** The file represents a PHP source file that parsed without error as ES7 
-       * </pre>
-       */
-      SOURCE_PHP7_0(41, 406),
-      /**
-       * <code>SOURCE_PHP7_1 = 407;</code>
-       *
-       * <pre>
-       ** The file represents a PHP source file that parsed without error as ES8 
-       * </pre>
-       */
-      SOURCE_PHP7_1(42, 407),
-      /**
-       * <code>SOURCE_HTML_ERROR = 500;</code>
-       *
-       * <pre>
-       ** The file represents an HTML source file that had a parse error 
-       * </pre>
-       */
-      SOURCE_HTML_ERROR(44, 500),
-      /**
-       * <code>Source_HTML = 501;</code>
-       *
-       * <pre>
-       ** The file represents an HTML source file that parsed without error 
-       * </pre>
-       */
-      Source_HTML(45, 501),
-      /**
-       * <code>SOURCE_XML_ERROR = 600;</code>
-       *
-       * <pre>
-       ** The file represents an XML source file that had a parse error 
-       * </pre>
-       */
-      SOURCE_XML_ERROR(47, 600),
-      /**
-       * <code>Source_XML = 601;</code>
-       *
-       * <pre>
-       ** The file represents an HTML source file that parsed without error 
-       * </pre>
-       */
-      Source_XML(48, 601),
-      /**
-       * <code>SOURCE_CSS_ERROR = 700;</code>
-       *
-       * <pre>
-       ** The file represents an CSS source file that had a parse error 
-       * </pre>
-       */
-      SOURCE_CSS_ERROR(50, 700),
-      /**
-       * <code>Source_CSS = 701;</code>
-       *
-       * <pre>
-       ** The file represents an CSS source file that parsed without error 
-       * </pre>
-       */
-      Source_CSS(51, 701),
       ;
 
       /**
        * <code>JAVA_ERROR = 100;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final FileKind JAVA_ERROR = SOURCE_JAVA_ERROR;
       /**
-       * <code>JLS2 = 102;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
+       * <code>JLS2 = 101;</code>
        */
       public static final FileKind JLS2 = SOURCE_JAVA_JLS2;
       /**
-       * <code>JLS3 = 103;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
+       * <code>JLS3 = 102;</code>
        */
       public static final FileKind JLS3 = SOURCE_JAVA_JLS3;
       /**
-       * <code>JLS4 = 104;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
+       * <code>JLS4 = 103;</code>
        */
       public static final FileKind JLS4 = SOURCE_JAVA_JLS4;
       /**
-       * <code>JLS8 = 108;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
+       * <code>JLS5 = 104;</code>
        */
-      public static final FileKind JLS8 = SOURCE_JAVA_JLS8;
+      public static final FileKind JLS5 = SOURCE_JAVA_JLS5;
       /**
        * <code>CS_ERROR = 200;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final FileKind CS_ERROR = SOURCE_CS_ERROR;
       /**
        * <code>CS1 = 201;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final FileKind CS1 = SOURCE_CS_CS1;
       /**
        * <code>CS2 = 202;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final FileKind CS2 = SOURCE_CS_CS2;
       /**
        * <code>CS3 = 203;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final FileKind CS3 = SOURCE_CS_CS3;
       /**
        * <code>CS4 = 204;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final FileKind CS4 = SOURCE_CS_CS4;
       /**
        * <code>CS5 = 205;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final FileKind CS5 = SOURCE_CS_CS5;
       /**
-       * <code>JS_ERROR = 300;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public static final FileKind JS_ERROR = SOURCE_JS_ERROR;
-      /**
-       * <code>PHP_ERROR = 400;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public static final FileKind PHP_ERROR = SOURCE_PHP_ERROR;
-      /**
-       * <code>HTML_ERROR = 500;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public static final FileKind HTML_ERROR = SOURCE_HTML_ERROR;
-      /**
-       * <code>XML_ERROR = 600;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public static final FileKind XML_ERROR = SOURCE_XML_ERROR;
-      /**
-       * <code>CSS_ERROR = 700;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public static final FileKind CSS_ERROR = SOURCE_CSS_ERROR;
-      /**
        * <code>OTHER = 0;</code>
-       *
-       * <pre>
-       ** The file's type was unknown 
-       * </pre>
        */
       public static final int OTHER_VALUE = 0;
       /**
        * <code>BINARY = 1;</code>
-       *
-       * <pre>
-       ** The file represents a binary file 
-       * </pre>
        */
       public static final int BINARY_VALUE = 1;
       /**
        * <code>TEXT = 2;</code>
-       *
-       * <pre>
-       ** The file represents a text file 
-       * </pre>
        */
       public static final int TEXT_VALUE = 2;
       /**
        * <code>XML = 3;</code>
-       *
-       * <pre>
-       ** The file represents an XML file 
-       * </pre>
        */
       public static final int XML_VALUE = 3;
       /**
        * <code>SOURCE_JAVA_ERROR = 100;</code>
-       *
-       * <pre>
-       ** The file represents a Java source file that had a parse error 
-       * </pre>
        */
       public static final int SOURCE_JAVA_ERROR_VALUE = 100;
       /**
-       * <code>SOURCE_JAVA_JLS2 = 102;</code>
-       *
-       * <pre>
-       ** The file represents a Java source file that parsed without error as JLS2 
-       * </pre>
+       * <code>SOURCE_JAVA_JLS2 = 101;</code>
        */
-      public static final int SOURCE_JAVA_JLS2_VALUE = 102;
+      public static final int SOURCE_JAVA_JLS2_VALUE = 101;
       /**
-       * <code>SOURCE_JAVA_JLS3 = 103;</code>
-       *
-       * <pre>
-       ** The file represents a Java source file that parsed without error as JLS3 
-       * </pre>
+       * <code>SOURCE_JAVA_JLS3 = 102;</code>
        */
-      public static final int SOURCE_JAVA_JLS3_VALUE = 103;
+      public static final int SOURCE_JAVA_JLS3_VALUE = 102;
       /**
-       * <code>SOURCE_JAVA_JLS4 = 104;</code>
-       *
-       * <pre>
-       ** The file represents a Java source file that parsed without error as JLS4 
-       * </pre>
+       * <code>SOURCE_JAVA_JLS4 = 103;</code>
        */
-      public static final int SOURCE_JAVA_JLS4_VALUE = 104;
+      public static final int SOURCE_JAVA_JLS4_VALUE = 103;
       /**
-       * <code>SOURCE_JAVA_JLS8 = 108;</code>
-       *
-       * <pre>
-       ** The file represents a Java source file that parsed without error as JLS8 
-       * </pre>
+       * <code>SOURCE_JAVA_JLS5 = 104;</code>
        */
-      public static final int SOURCE_JAVA_JLS8_VALUE = 108;
+      public static final int SOURCE_JAVA_JLS5_VALUE = 104;
       /**
        * <code>JAVA_ERROR = 100;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final int JAVA_ERROR_VALUE = 100;
       /**
-       * <code>JLS2 = 102;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
+       * <code>JLS2 = 101;</code>
        */
-      public static final int JLS2_VALUE = 102;
+      public static final int JLS2_VALUE = 101;
       /**
-       * <code>JLS3 = 103;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
+       * <code>JLS3 = 102;</code>
        */
-      public static final int JLS3_VALUE = 103;
+      public static final int JLS3_VALUE = 102;
       /**
-       * <code>JLS4 = 104;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
+       * <code>JLS4 = 103;</code>
        */
-      public static final int JLS4_VALUE = 104;
+      public static final int JLS4_VALUE = 103;
       /**
-       * <code>JLS8 = 108;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
+       * <code>JLS5 = 104;</code>
        */
-      public static final int JLS8_VALUE = 108;
+      public static final int JLS5_VALUE = 104;
       /**
        * <code>SOURCE_CS_ERROR = 200;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public static final int SOURCE_CS_ERROR_VALUE = 200;
       /**
        * <code>SOURCE_CS_CS1 = 201;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public static final int SOURCE_CS_CS1_VALUE = 201;
       /**
        * <code>SOURCE_CS_CS2 = 202;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public static final int SOURCE_CS_CS2_VALUE = 202;
       /**
        * <code>SOURCE_CS_CS3 = 203;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public static final int SOURCE_CS_CS3_VALUE = 203;
       /**
        * <code>SOURCE_CS_CS4 = 204;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public static final int SOURCE_CS_CS4_VALUE = 204;
       /**
        * <code>SOURCE_CS_CS5 = 205;</code>
-       *
-       * <pre>
-       ** @exclude TODO 
-       * </pre>
        */
       public static final int SOURCE_CS_CS5_VALUE = 205;
       /**
        * <code>CS_ERROR = 200;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final int CS_ERROR_VALUE = 200;
       /**
        * <code>CS1 = 201;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final int CS1_VALUE = 201;
       /**
        * <code>CS2 = 202;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final int CS2_VALUE = 202;
       /**
        * <code>CS3 = 203;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final int CS3_VALUE = 203;
       /**
        * <code>CS4 = 204;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final int CS4_VALUE = 204;
       /**
        * <code>CS5 = 205;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public static final int CS5_VALUE = 205;
-      /**
-       * <code>SOURCE_JS_ERROR = 300;</code>
-       *
-       * <pre>
-       ** The file represents a JavaScript source file that had a parse error 
-       * </pre>
-       */
-      public static final int SOURCE_JS_ERROR_VALUE = 300;
-      /**
-       * <code>SOURCE_JS_ES1 = 301;</code>
-       *
-       * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES1 
-       * </pre>
-       */
-      public static final int SOURCE_JS_ES1_VALUE = 301;
-      /**
-       * <code>SOURCE_JS_ES2 = 302;</code>
-       *
-       * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES2 
-       * </pre>
-       */
-      public static final int SOURCE_JS_ES2_VALUE = 302;
-      /**
-       * <code>SOURCE_JS_ES3 = 303;</code>
-       *
-       * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES3 
-       * </pre>
-       */
-      public static final int SOURCE_JS_ES3_VALUE = 303;
-      /**
-       * <code>SOURCE_JS_ES5 = 304;</code>
-       *
-       * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES5 
-       * </pre>
-       */
-      public static final int SOURCE_JS_ES5_VALUE = 304;
-      /**
-       * <code>SOURCE_JS_ES6 = 305;</code>
-       *
-       * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES6 
-       * </pre>
-       */
-      public static final int SOURCE_JS_ES6_VALUE = 305;
-      /**
-       * <code>SOURCE_JS_ES7 = 306;</code>
-       *
-       * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES7 
-       * </pre>
-       */
-      public static final int SOURCE_JS_ES7_VALUE = 306;
-      /**
-       * <code>SOURCE_JS_ES8 = 307;</code>
-       *
-       * <pre>
-       ** The file represents a JavaScript source file that parsed without error as ES8 
-       * </pre>
-       */
-      public static final int SOURCE_JS_ES8_VALUE = 307;
-      /**
-       * <code>JS_ERROR = 300;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public static final int JS_ERROR_VALUE = 300;
-      /**
-       * <code>SOURCE_PHP_ERROR = 400;</code>
-       *
-       * <pre>
-       ** The file represents a PHP source file that had a parse error 
-       * </pre>
-       */
-      public static final int SOURCE_PHP_ERROR_VALUE = 400;
-      /**
-       * <code>SOURCE_PHP5 = 401;</code>
-       *
-       * <pre>
-       ** The file represents a PHP source file that parsed without error as ES1 
-       * </pre>
-       */
-      public static final int SOURCE_PHP5_VALUE = 401;
-      /**
-       * <code>SOURCE_PHP5_3 = 402;</code>
-       *
-       * <pre>
-       ** The file represents a PHP source file that parsed without error as ES2 
-       * </pre>
-       */
-      public static final int SOURCE_PHP5_3_VALUE = 402;
-      /**
-       * <code>SOURCE_PHP5_4 = 403;</code>
-       *
-       * <pre>
-       ** The file represents a PHP source file that parsed without error as ES3 
-       * </pre>
-       */
-      public static final int SOURCE_PHP5_4_VALUE = 403;
-      /**
-       * <code>SOURCE_PHP5_5 = 404;</code>
-       *
-       * <pre>
-       ** The file represents a PHP source file that parsed without error as ES5 
-       * </pre>
-       */
-      public static final int SOURCE_PHP5_5_VALUE = 404;
-      /**
-       * <code>SOURCE_PHP5_6 = 405;</code>
-       *
-       * <pre>
-       ** The file represents a PHP source file that parsed without error as ES6 
-       * </pre>
-       */
-      public static final int SOURCE_PHP5_6_VALUE = 405;
-      /**
-       * <code>SOURCE_PHP7_0 = 406;</code>
-       *
-       * <pre>
-       ** The file represents a PHP source file that parsed without error as ES7 
-       * </pre>
-       */
-      public static final int SOURCE_PHP7_0_VALUE = 406;
-      /**
-       * <code>SOURCE_PHP7_1 = 407;</code>
-       *
-       * <pre>
-       ** The file represents a PHP source file that parsed without error as ES8 
-       * </pre>
-       */
-      public static final int SOURCE_PHP7_1_VALUE = 407;
-      /**
-       * <code>PHP_ERROR = 400;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public static final int PHP_ERROR_VALUE = 400;
-      /**
-       * <code>SOURCE_HTML_ERROR = 500;</code>
-       *
-       * <pre>
-       ** The file represents an HTML source file that had a parse error 
-       * </pre>
-       */
-      public static final int SOURCE_HTML_ERROR_VALUE = 500;
-      /**
-       * <code>Source_HTML = 501;</code>
-       *
-       * <pre>
-       ** The file represents an HTML source file that parsed without error 
-       * </pre>
-       */
-      public static final int Source_HTML_VALUE = 501;
-      /**
-       * <code>HTML_ERROR = 500;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public static final int HTML_ERROR_VALUE = 500;
-      /**
-       * <code>SOURCE_XML_ERROR = 600;</code>
-       *
-       * <pre>
-       ** The file represents an XML source file that had a parse error 
-       * </pre>
-       */
-      public static final int SOURCE_XML_ERROR_VALUE = 600;
-      /**
-       * <code>Source_XML = 601;</code>
-       *
-       * <pre>
-       ** The file represents an HTML source file that parsed without error 
-       * </pre>
-       */
-      public static final int Source_XML_VALUE = 601;
-      /**
-       * <code>XML_ERROR = 600;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public static final int XML_ERROR_VALUE = 600;
-      /**
-       * <code>SOURCE_CSS_ERROR = 700;</code>
-       *
-       * <pre>
-       ** The file represents an CSS source file that had a parse error 
-       * </pre>
-       */
-      public static final int SOURCE_CSS_ERROR_VALUE = 700;
-      /**
-       * <code>Source_CSS = 701;</code>
-       *
-       * <pre>
-       ** The file represents an CSS source file that parsed without error 
-       * </pre>
-       */
-      public static final int Source_CSS_VALUE = 701;
-      /**
-       * <code>CSS_ERROR = 700;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public static final int CSS_ERROR_VALUE = 700;
 
 
       public final int getNumber() { return value; }
@@ -1359,38 +589,16 @@ public final class Diff {
           case 2: return TEXT;
           case 3: return XML;
           case 100: return SOURCE_JAVA_ERROR;
-          case 102: return SOURCE_JAVA_JLS2;
-          case 103: return SOURCE_JAVA_JLS3;
-          case 104: return SOURCE_JAVA_JLS4;
-          case 108: return SOURCE_JAVA_JLS8;
+          case 101: return SOURCE_JAVA_JLS2;
+          case 102: return SOURCE_JAVA_JLS3;
+          case 103: return SOURCE_JAVA_JLS4;
+          case 104: return SOURCE_JAVA_JLS5;
           case 200: return SOURCE_CS_ERROR;
           case 201: return SOURCE_CS_CS1;
           case 202: return SOURCE_CS_CS2;
           case 203: return SOURCE_CS_CS3;
           case 204: return SOURCE_CS_CS4;
           case 205: return SOURCE_CS_CS5;
-          case 300: return SOURCE_JS_ERROR;
-          case 301: return SOURCE_JS_ES1;
-          case 302: return SOURCE_JS_ES2;
-          case 303: return SOURCE_JS_ES3;
-          case 304: return SOURCE_JS_ES5;
-          case 305: return SOURCE_JS_ES6;
-          case 306: return SOURCE_JS_ES7;
-          case 307: return SOURCE_JS_ES8;
-          case 400: return SOURCE_PHP_ERROR;
-          case 401: return SOURCE_PHP5;
-          case 402: return SOURCE_PHP5_3;
-          case 403: return SOURCE_PHP5_4;
-          case 404: return SOURCE_PHP5_5;
-          case 405: return SOURCE_PHP5_6;
-          case 406: return SOURCE_PHP7_0;
-          case 407: return SOURCE_PHP7_1;
-          case 500: return SOURCE_HTML_ERROR;
-          case 501: return Source_HTML;
-          case 600: return SOURCE_XML_ERROR;
-          case 601: return Source_XML;
-          case 700: return SOURCE_CSS_ERROR;
-          case 701: return Source_CSS;
           default: return null;
         }
       }
@@ -1421,7 +629,7 @@ public final class Diff {
       }
 
       private static final FileKind[] VALUES = {
-        OTHER, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, SOURCE_JAVA_JLS8, JAVA_ERROR, JLS2, JLS3, JLS4, JLS8, SOURCE_CS_ERROR, SOURCE_CS_CS1, SOURCE_CS_CS2, SOURCE_CS_CS3, SOURCE_CS_CS4, SOURCE_CS_CS5, CS_ERROR, CS1, CS2, CS3, CS4, CS5, SOURCE_JS_ERROR, SOURCE_JS_ES1, SOURCE_JS_ES2, SOURCE_JS_ES3, SOURCE_JS_ES5, SOURCE_JS_ES6, SOURCE_JS_ES7, SOURCE_JS_ES8, JS_ERROR, SOURCE_PHP_ERROR, SOURCE_PHP5, SOURCE_PHP5_3, SOURCE_PHP5_4, SOURCE_PHP5_5, SOURCE_PHP5_6, SOURCE_PHP7_0, SOURCE_PHP7_1, PHP_ERROR, SOURCE_HTML_ERROR, Source_HTML, HTML_ERROR, SOURCE_XML_ERROR, Source_XML, XML_ERROR, SOURCE_CSS_ERROR, Source_CSS, CSS_ERROR, 
+        OTHER, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, SOURCE_JAVA_JLS5, JAVA_ERROR, JLS2, JLS3, JLS4, JLS5, SOURCE_CS_ERROR, SOURCE_CS_CS1, SOURCE_CS_CS2, SOURCE_CS_CS3, SOURCE_CS_CS4, SOURCE_CS_CS5, CS_ERROR, CS1, CS2, CS3, CS4, CS5, 
       };
 
       public static FileKind valueOf(
@@ -1450,20 +658,12 @@ public final class Diff {
     private boa.types.Shared.ChangeKind change_;
     /**
      * <code>required .boa.types.ChangeKind change = 1;</code>
-     *
-     * <pre>
-     ** The kind of change for this file 
-     * </pre>
      */
     public boolean hasChange() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required .boa.types.ChangeKind change = 1;</code>
-     *
-     * <pre>
-     ** The kind of change for this file 
-     * </pre>
      */
     public boa.types.Shared.ChangeKind getChange() {
       return change_;
@@ -1474,20 +674,12 @@ public final class Diff {
     private boa.types.Diff.ChangedFile.FileKind kind_;
     /**
      * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
-     *
-     * <pre>
-     ** The kind of file 
-     * </pre>
      */
     public boolean hasKind() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
-     *
-     * <pre>
-     ** The kind of file 
-     * </pre>
      */
     public boa.types.Diff.ChangedFile.FileKind getKind() {
       return kind_;
@@ -1498,20 +690,12 @@ public final class Diff {
     private java.lang.Object name_;
     /**
      * <code>required string name = 3;</code>
-     *
-     * <pre>
-     ** The full name and path of the file 
-     * </pre>
      */
     public boolean hasName() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>required string name = 3;</code>
-     *
-     * <pre>
-     ** The full name and path of the file 
-     * </pre>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -1529,10 +713,6 @@ public final class Diff {
     }
     /**
      * <code>required string name = 3;</code>
-     *
-     * <pre>
-     ** The full name and path of the file 
-     * </pre>
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
@@ -1548,51 +728,68 @@ public final class Diff {
       }
     }
 
-    // required uint64 key = 4;
+    // required string key = 4;
     public static final int KEY_FIELD_NUMBER = 4;
-    private long key_;
+    private java.lang.Object key_;
     /**
-     * <code>required uint64 key = 4;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
+     * <code>required string key = 4;</code>
      */
     public boolean hasKey() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required uint64 key = 4;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
+     * <code>required string key = 4;</code>
      */
-    public long getKey() {
-      return key_;
+    public java.lang.String getKey() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          key_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string key = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
-    // required bool ast = 5;
+    // optional .boa.types.ASTRoot ast = 5;
     public static final int AST_FIELD_NUMBER = 5;
-    private boolean ast_;
+    private boa.types.Ast.ASTRoot ast_;
     /**
-     * <code>required bool ast = 5;</code>
-     *
-     * <pre>
-     ** @exclude Indicates if this file has a corresponding parsed AST or not 
-     * </pre>
+     * <code>optional .boa.types.ASTRoot ast = 5;</code>
      */
     public boolean hasAst() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>required bool ast = 5;</code>
-     *
-     * <pre>
-     ** @exclude Indicates if this file has a corresponding parsed AST or not 
-     * </pre>
+     * <code>optional .boa.types.ASTRoot ast = 5;</code>
      */
-    public boolean getAst() {
+    public boa.types.Ast.ASTRoot getAst() {
+      return ast_;
+    }
+    /**
+     * <code>optional .boa.types.ASTRoot ast = 5;</code>
+     */
+    public boa.types.Ast.ASTRootOrBuilder getAstOrBuilder() {
       return ast_;
     }
 
@@ -1601,30 +798,18 @@ public final class Diff {
     private boa.types.Ast.CommentsRoot comments_;
     /**
      * <code>optional .boa.types.CommentsRoot comments = 6;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
      */
     public boolean hasComments() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
      * <code>optional .boa.types.CommentsRoot comments = 6;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
      */
     public boa.types.Ast.CommentsRoot getComments() {
       return comments_;
     }
     /**
      * <code>optional .boa.types.CommentsRoot comments = 6;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
      */
     public boa.types.Ast.CommentsRootOrBuilder getCommentsOrBuilder() {
       return comments_;
@@ -1635,162 +820,79 @@ public final class Diff {
     private java.util.List<boa.types.Shared.ChangeKind> changes_;
     /**
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
-     *
-     * <pre>
-     ** The kinds of changes of this this compared to the corresponding parent commits 
-     * </pre>
      */
     public java.util.List<boa.types.Shared.ChangeKind> getChangesList() {
       return changes_;
     }
     /**
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
-     *
-     * <pre>
-     ** The kinds of changes of this this compared to the corresponding parent commits 
-     * </pre>
      */
     public int getChangesCount() {
       return changes_.size();
     }
     /**
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
-     *
-     * <pre>
-     ** The kinds of changes of this this compared to the corresponding parent commits 
-     * </pre>
      */
     public boa.types.Shared.ChangeKind getChanges(int index) {
       return changes_.get(index);
     }
 
-    // repeated string previous_names = 8;
-    public static final int PREVIOUS_NAMES_FIELD_NUMBER = 8;
-    private com.google.protobuf.LazyStringList previousNames_;
-    /**
-     * <code>repeated string previous_names = 8;</code>
-     *
-     * <pre>
-     ** The kinds of changes of this this compared to the corresponding parent commits 
-     * </pre>
-     */
-    public java.util.List<java.lang.String>
-        getPreviousNamesList() {
-      return previousNames_;
-    }
-    /**
-     * <code>repeated string previous_names = 8;</code>
-     *
-     * <pre>
-     ** The kinds of changes of this this compared to the corresponding parent commits 
-     * </pre>
-     */
-    public int getPreviousNamesCount() {
-      return previousNames_.size();
-    }
-    /**
-     * <code>repeated string previous_names = 8;</code>
-     *
-     * <pre>
-     ** The kinds of changes of this this compared to the corresponding parent commits 
-     * </pre>
-     */
-    public java.lang.String getPreviousNames(int index) {
-      return previousNames_.get(index);
-    }
-    /**
-     * <code>repeated string previous_names = 8;</code>
-     *
-     * <pre>
-     ** The kinds of changes of this this compared to the corresponding parent commits 
-     * </pre>
-     */
-    public com.google.protobuf.ByteString
-        getPreviousNamesBytes(int index) {
-      return previousNames_.getByteString(index);
-    }
-
-    // repeated int32 previous_versions = 9;
-    public static final int PREVIOUS_VERSIONS_FIELD_NUMBER = 9;
+    // repeated int32 previous_versions = 8;
+    public static final int PREVIOUS_VERSIONS_FIELD_NUMBER = 8;
     private java.util.List<java.lang.Integer> previousVersions_;
     /**
-     * <code>repeated int32 previous_versions = 9;</code>
-     *
-     * <pre>
-     ** @exclude The indices of the corresponding parent commits in the list of all commits 
-     * </pre>
+     * <code>repeated int32 previous_versions = 8;</code>
      */
     public java.util.List<java.lang.Integer>
         getPreviousVersionsList() {
       return previousVersions_;
     }
     /**
-     * <code>repeated int32 previous_versions = 9;</code>
-     *
-     * <pre>
-     ** @exclude The indices of the corresponding parent commits in the list of all commits 
-     * </pre>
+     * <code>repeated int32 previous_versions = 8;</code>
      */
     public int getPreviousVersionsCount() {
       return previousVersions_.size();
     }
     /**
-     * <code>repeated int32 previous_versions = 9;</code>
-     *
-     * <pre>
-     ** @exclude The indices of the corresponding parent commits in the list of all commits 
-     * </pre>
+     * <code>repeated int32 previous_versions = 8;</code>
      */
     public int getPreviousVersions(int index) {
       return previousVersions_.get(index);
     }
 
-    // repeated int32 previous_indices = 10;
-    public static final int PREVIOUS_INDICES_FIELD_NUMBER = 10;
-    private java.util.List<java.lang.Integer> previousIndices_;
+    // repeated int32 previous_index = 9;
+    public static final int PREVIOUS_INDEX_FIELD_NUMBER = 9;
+    private java.util.List<java.lang.Integer> previousIndex_;
     /**
-     * <code>repeated int32 previous_indices = 10;</code>
-     *
-     * <pre>
-     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
-     * </pre>
+     * <code>repeated int32 previous_index = 9;</code>
      */
     public java.util.List<java.lang.Integer>
-        getPreviousIndicesList() {
-      return previousIndices_;
+        getPreviousIndexList() {
+      return previousIndex_;
     }
     /**
-     * <code>repeated int32 previous_indices = 10;</code>
-     *
-     * <pre>
-     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
-     * </pre>
+     * <code>repeated int32 previous_index = 9;</code>
      */
-    public int getPreviousIndicesCount() {
-      return previousIndices_.size();
+    public int getPreviousIndexCount() {
+      return previousIndex_.size();
     }
     /**
-     * <code>repeated int32 previous_indices = 10;</code>
-     *
-     * <pre>
-     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
-     * </pre>
+     * <code>repeated int32 previous_index = 9;</code>
      */
-    public int getPreviousIndices(int index) {
-      return previousIndices_.get(index);
+    public int getPreviousIndex(int index) {
+      return previousIndex_.get(index);
     }
 
     private void initFields() {
-      change_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      change_ = boa.types.Shared.ChangeKind.ADDED;
       kind_ = boa.types.Diff.ChangedFile.FileKind.OTHER;
       name_ = "";
-      key_ = 0L;
-      ast_ = false;
+      key_ = "";
+      ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
       comments_ = boa.types.Ast.CommentsRoot.getDefaultInstance();
       changes_ = java.util.Collections.emptyList();
-      previousNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       previousVersions_ = java.util.Collections.emptyList();
-      previousIndices_ = java.util.Collections.emptyList();
+      previousIndex_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1813,9 +915,11 @@ public final class Diff {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasAst()) {
-        memoizedIsInitialized = 0;
-        return false;
+      if (hasAst()) {
+        if (!getAst().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       if (hasComments()) {
         if (!getComments().isInitialized()) {
@@ -1840,10 +944,10 @@ public final class Diff {
         output.writeBytes(3, getNameBytes());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeUInt64(4, key_);
+        output.writeBytes(4, getKeyBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeBool(5, ast_);
+        output.writeMessage(5, ast_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeMessage(6, comments_);
@@ -1851,14 +955,11 @@ public final class Diff {
       for (int i = 0; i < changes_.size(); i++) {
         output.writeEnum(7, changes_.get(i).getNumber());
       }
-      for (int i = 0; i < previousNames_.size(); i++) {
-        output.writeBytes(8, previousNames_.getByteString(i));
-      }
       for (int i = 0; i < previousVersions_.size(); i++) {
-        output.writeInt32(9, previousVersions_.get(i));
+        output.writeInt32(8, previousVersions_.get(i));
       }
-      for (int i = 0; i < previousIndices_.size(); i++) {
-        output.writeInt32(10, previousIndices_.get(i));
+      for (int i = 0; i < previousIndex_.size(); i++) {
+        output.writeInt32(9, previousIndex_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -1883,11 +984,11 @@ public final class Diff {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(4, key_);
+          .computeBytesSize(4, getKeyBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(5, ast_);
+          .computeMessageSize(5, ast_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
@@ -1904,15 +1005,6 @@ public final class Diff {
       }
       {
         int dataSize = 0;
-        for (int i = 0; i < previousNames_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeBytesSizeNoTag(previousNames_.getByteString(i));
-        }
-        size += dataSize;
-        size += 1 * getPreviousNamesList().size();
-      }
-      {
-        int dataSize = 0;
         for (int i = 0; i < previousVersions_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
             .computeInt32SizeNoTag(previousVersions_.get(i));
@@ -1922,12 +1014,12 @@ public final class Diff {
       }
       {
         int dataSize = 0;
-        for (int i = 0; i < previousIndices_.size(); i++) {
+        for (int i = 0; i < previousIndex_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(previousIndices_.get(i));
+            .computeInt32SizeNoTag(previousIndex_.get(i));
         }
         size += dataSize;
-        size += 1 * getPreviousIndicesList().size();
+        size += 1 * getPreviousIndexList().size();
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2009,10 +1101,6 @@ public final class Diff {
     }
     /**
      * Protobuf type {@code boa.types.ChangedFile}
-     *
-     * <pre>
-     ** A file committed in a Revision 
-     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -2041,6 +1129,7 @@ public final class Diff {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getAstFieldBuilder();
           getCommentsFieldBuilder();
         }
       }
@@ -2050,15 +1139,19 @@ public final class Diff {
 
       public Builder clear() {
         super.clear();
-        change_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        change_ = boa.types.Shared.ChangeKind.ADDED;
         bitField0_ = (bitField0_ & ~0x00000001);
         kind_ = boa.types.Diff.ChangedFile.FileKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000002);
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
-        key_ = 0L;
+        key_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
-        ast_ = false;
+        if (astBuilder_ == null) {
+          ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
+        } else {
+          astBuilder_.clear();
+        }
         bitField0_ = (bitField0_ & ~0x00000010);
         if (commentsBuilder_ == null) {
           comments_ = boa.types.Ast.CommentsRoot.getDefaultInstance();
@@ -2068,12 +1161,10 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000020);
         changes_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000040);
-        previousNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000080);
         previousVersions_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000080);
+        previousIndex_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000100);
-        previousIndices_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -2121,7 +1212,11 @@ public final class Diff {
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.ast_ = ast_;
+        if (astBuilder_ == null) {
+          result.ast_ = ast_;
+        } else {
+          result.ast_ = astBuilder_.build();
+        }
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
         }
@@ -2136,21 +1231,15 @@ public final class Diff {
         }
         result.changes_ = changes_;
         if (((bitField0_ & 0x00000080) == 0x00000080)) {
-          previousNames_ = new com.google.protobuf.UnmodifiableLazyStringList(
-              previousNames_);
+          previousVersions_ = java.util.Collections.unmodifiableList(previousVersions_);
           bitField0_ = (bitField0_ & ~0x00000080);
         }
-        result.previousNames_ = previousNames_;
+        result.previousVersions_ = previousVersions_;
         if (((bitField0_ & 0x00000100) == 0x00000100)) {
-          previousVersions_ = java.util.Collections.unmodifiableList(previousVersions_);
+          previousIndex_ = java.util.Collections.unmodifiableList(previousIndex_);
           bitField0_ = (bitField0_ & ~0x00000100);
         }
-        result.previousVersions_ = previousVersions_;
-        if (((bitField0_ & 0x00000200) == 0x00000200)) {
-          previousIndices_ = java.util.Collections.unmodifiableList(previousIndices_);
-          bitField0_ = (bitField0_ & ~0x00000200);
-        }
-        result.previousIndices_ = previousIndices_;
+        result.previousIndex_ = previousIndex_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2179,10 +1268,12 @@ public final class Diff {
           onChanged();
         }
         if (other.hasKey()) {
-          setKey(other.getKey());
+          bitField0_ |= 0x00000008;
+          key_ = other.key_;
+          onChanged();
         }
         if (other.hasAst()) {
-          setAst(other.getAst());
+          mergeAst(other.getAst());
         }
         if (other.hasComments()) {
           mergeComments(other.getComments());
@@ -2197,33 +1288,23 @@ public final class Diff {
           }
           onChanged();
         }
-        if (!other.previousNames_.isEmpty()) {
-          if (previousNames_.isEmpty()) {
-            previousNames_ = other.previousNames_;
-            bitField0_ = (bitField0_ & ~0x00000080);
-          } else {
-            ensurePreviousNamesIsMutable();
-            previousNames_.addAll(other.previousNames_);
-          }
-          onChanged();
-        }
         if (!other.previousVersions_.isEmpty()) {
           if (previousVersions_.isEmpty()) {
             previousVersions_ = other.previousVersions_;
-            bitField0_ = (bitField0_ & ~0x00000100);
+            bitField0_ = (bitField0_ & ~0x00000080);
           } else {
             ensurePreviousVersionsIsMutable();
             previousVersions_.addAll(other.previousVersions_);
           }
           onChanged();
         }
-        if (!other.previousIndices_.isEmpty()) {
-          if (previousIndices_.isEmpty()) {
-            previousIndices_ = other.previousIndices_;
-            bitField0_ = (bitField0_ & ~0x00000200);
+        if (!other.previousIndex_.isEmpty()) {
+          if (previousIndex_.isEmpty()) {
+            previousIndex_ = other.previousIndex_;
+            bitField0_ = (bitField0_ & ~0x00000100);
           } else {
-            ensurePreviousIndicesIsMutable();
-            previousIndices_.addAll(other.previousIndices_);
+            ensurePreviousIndexIsMutable();
+            previousIndex_.addAll(other.previousIndex_);
           }
           onChanged();
         }
@@ -2248,9 +1329,11 @@ public final class Diff {
           
           return false;
         }
-        if (!hasAst()) {
-          
-          return false;
+        if (hasAst()) {
+          if (!getAst().isInitialized()) {
+            
+            return false;
+          }
         }
         if (hasComments()) {
           if (!getComments().isInitialized()) {
@@ -2281,33 +1364,21 @@ public final class Diff {
       private int bitField0_;
 
       // required .boa.types.ChangeKind change = 1;
-      private boa.types.Shared.ChangeKind change_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      private boa.types.Shared.ChangeKind change_ = boa.types.Shared.ChangeKind.ADDED;
       /**
        * <code>required .boa.types.ChangeKind change = 1;</code>
-       *
-       * <pre>
-       ** The kind of change for this file 
-       * </pre>
        */
       public boolean hasChange() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required .boa.types.ChangeKind change = 1;</code>
-       *
-       * <pre>
-       ** The kind of change for this file 
-       * </pre>
        */
       public boa.types.Shared.ChangeKind getChange() {
         return change_;
       }
       /**
        * <code>required .boa.types.ChangeKind change = 1;</code>
-       *
-       * <pre>
-       ** The kind of change for this file 
-       * </pre>
        */
       public Builder setChange(boa.types.Shared.ChangeKind value) {
         if (value == null) {
@@ -2320,14 +1391,10 @@ public final class Diff {
       }
       /**
        * <code>required .boa.types.ChangeKind change = 1;</code>
-       *
-       * <pre>
-       ** The kind of change for this file 
-       * </pre>
        */
       public Builder clearChange() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        change_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        change_ = boa.types.Shared.ChangeKind.ADDED;
         onChanged();
         return this;
       }
@@ -2336,30 +1403,18 @@ public final class Diff {
       private boa.types.Diff.ChangedFile.FileKind kind_ = boa.types.Diff.ChangedFile.FileKind.OTHER;
       /**
        * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
-       *
-       * <pre>
-       ** The kind of file 
-       * </pre>
        */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
        * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
-       *
-       * <pre>
-       ** The kind of file 
-       * </pre>
        */
       public boa.types.Diff.ChangedFile.FileKind getKind() {
         return kind_;
       }
       /**
        * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
-       *
-       * <pre>
-       ** The kind of file 
-       * </pre>
        */
       public Builder setKind(boa.types.Diff.ChangedFile.FileKind value) {
         if (value == null) {
@@ -2372,10 +1427,6 @@ public final class Diff {
       }
       /**
        * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
-       *
-       * <pre>
-       ** The kind of file 
-       * </pre>
        */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -2388,20 +1439,12 @@ public final class Diff {
       private java.lang.Object name_ = "";
       /**
        * <code>required string name = 3;</code>
-       *
-       * <pre>
-       ** The full name and path of the file 
-       * </pre>
        */
       public boolean hasName() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
        * <code>required string name = 3;</code>
-       *
-       * <pre>
-       ** The full name and path of the file 
-       * </pre>
        */
       public java.lang.String getName() {
         java.lang.Object ref = name_;
@@ -2416,10 +1459,6 @@ public final class Diff {
       }
       /**
        * <code>required string name = 3;</code>
-       *
-       * <pre>
-       ** The full name and path of the file 
-       * </pre>
        */
       public com.google.protobuf.ByteString
           getNameBytes() {
@@ -2436,10 +1475,6 @@ public final class Diff {
       }
       /**
        * <code>required string name = 3;</code>
-       *
-       * <pre>
-       ** The full name and path of the file 
-       * </pre>
        */
       public Builder setName(
           java.lang.String value) {
@@ -2453,10 +1488,6 @@ public final class Diff {
       }
       /**
        * <code>required string name = 3;</code>
-       *
-       * <pre>
-       ** The full name and path of the file 
-       * </pre>
        */
       public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -2466,10 +1497,6 @@ public final class Diff {
       }
       /**
        * <code>required string name = 3;</code>
-       *
-       * <pre>
-       ** The full name and path of the file 
-       * </pre>
        */
       public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
@@ -2482,102 +1509,195 @@ public final class Diff {
         return this;
       }
 
-      // required uint64 key = 4;
-      private long key_ ;
+      // required string key = 4;
+      private java.lang.Object key_ = "";
       /**
-       * <code>required uint64 key = 4;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
+       * <code>required string key = 4;</code>
        */
       public boolean hasKey() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>required uint64 key = 4;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
+       * <code>required string key = 4;</code>
        */
-      public long getKey() {
-        return key_;
+      public java.lang.String getKey() {
+        java.lang.Object ref = key_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          key_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>required uint64 key = 4;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
+       * <code>required string key = 4;</code>
        */
-      public Builder setKey(long value) {
-        bitField0_ |= 0x00000008;
+      public com.google.protobuf.ByteString
+          getKeyBytes() {
+        java.lang.Object ref = key_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          key_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string key = 4;</code>
+       */
+      public Builder setKey(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
         key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required uint64 key = 4;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
+       * <code>required string key = 4;</code>
        */
       public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        key_ = 0L;
+        key_ = getDefaultInstance().getKey();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string key = 4;</code>
+       */
+      public Builder setKeyBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        key_ = value;
         onChanged();
         return this;
       }
 
-      // required bool ast = 5;
-      private boolean ast_ ;
+      // optional .boa.types.ASTRoot ast = 5;
+      private boa.types.Ast.ASTRoot ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.ASTRoot, boa.types.Ast.ASTRoot.Builder, boa.types.Ast.ASTRootOrBuilder> astBuilder_;
       /**
-       * <code>required bool ast = 5;</code>
-       *
-       * <pre>
-       ** @exclude Indicates if this file has a corresponding parsed AST or not 
-       * </pre>
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
        */
       public boolean hasAst() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>required bool ast = 5;</code>
-       *
-       * <pre>
-       ** @exclude Indicates if this file has a corresponding parsed AST or not 
-       * </pre>
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
        */
-      public boolean getAst() {
-        return ast_;
+      public boa.types.Ast.ASTRoot getAst() {
+        if (astBuilder_ == null) {
+          return ast_;
+        } else {
+          return astBuilder_.getMessage();
+        }
       }
       /**
-       * <code>required bool ast = 5;</code>
-       *
-       * <pre>
-       ** @exclude Indicates if this file has a corresponding parsed AST or not 
-       * </pre>
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
        */
-      public Builder setAst(boolean value) {
+      public Builder setAst(boa.types.Ast.ASTRoot value) {
+        if (astBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ast_ = value;
+          onChanged();
+        } else {
+          astBuilder_.setMessage(value);
+        }
         bitField0_ |= 0x00000010;
-        ast_ = value;
-        onChanged();
         return this;
       }
       /**
-       * <code>required bool ast = 5;</code>
-       *
-       * <pre>
-       ** @exclude Indicates if this file has a corresponding parsed AST or not 
-       * </pre>
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       */
+      public Builder setAst(
+          boa.types.Ast.ASTRoot.Builder builderForValue) {
+        if (astBuilder_ == null) {
+          ast_ = builderForValue.build();
+          onChanged();
+        } else {
+          astBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       */
+      public Builder mergeAst(boa.types.Ast.ASTRoot value) {
+        if (astBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010) &&
+              ast_ != boa.types.Ast.ASTRoot.getDefaultInstance()) {
+            ast_ =
+              boa.types.Ast.ASTRoot.newBuilder(ast_).mergeFrom(value).buildPartial();
+          } else {
+            ast_ = value;
+          }
+          onChanged();
+        } else {
+          astBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
        */
       public Builder clearAst() {
+        if (astBuilder_ == null) {
+          ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
+          onChanged();
+        } else {
+          astBuilder_.clear();
+        }
         bitField0_ = (bitField0_ & ~0x00000010);
-        ast_ = false;
-        onChanged();
         return this;
+      }
+      /**
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       */
+      public boa.types.Ast.ASTRoot.Builder getAstBuilder() {
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return getAstFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       */
+      public boa.types.Ast.ASTRootOrBuilder getAstOrBuilder() {
+        if (astBuilder_ != null) {
+          return astBuilder_.getMessageOrBuilder();
+        } else {
+          return ast_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.ASTRoot, boa.types.Ast.ASTRoot.Builder, boa.types.Ast.ASTRootOrBuilder> 
+          getAstFieldBuilder() {
+        if (astBuilder_ == null) {
+          astBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.ASTRoot, boa.types.Ast.ASTRoot.Builder, boa.types.Ast.ASTRootOrBuilder>(
+                  ast_,
+                  getParentForChildren(),
+                  isClean());
+          ast_ = null;
+        }
+        return astBuilder_;
       }
 
       // optional .boa.types.CommentsRoot comments = 6;
@@ -2586,20 +1706,12 @@ public final class Diff {
           boa.types.Ast.CommentsRoot, boa.types.Ast.CommentsRoot.Builder, boa.types.Ast.CommentsRootOrBuilder> commentsBuilder_;
       /**
        * <code>optional .boa.types.CommentsRoot comments = 6;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public boolean hasComments() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
        * <code>optional .boa.types.CommentsRoot comments = 6;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public boa.types.Ast.CommentsRoot getComments() {
         if (commentsBuilder_ == null) {
@@ -2610,10 +1722,6 @@ public final class Diff {
       }
       /**
        * <code>optional .boa.types.CommentsRoot comments = 6;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public Builder setComments(boa.types.Ast.CommentsRoot value) {
         if (commentsBuilder_ == null) {
@@ -2630,10 +1738,6 @@ public final class Diff {
       }
       /**
        * <code>optional .boa.types.CommentsRoot comments = 6;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public Builder setComments(
           boa.types.Ast.CommentsRoot.Builder builderForValue) {
@@ -2648,10 +1752,6 @@ public final class Diff {
       }
       /**
        * <code>optional .boa.types.CommentsRoot comments = 6;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public Builder mergeComments(boa.types.Ast.CommentsRoot value) {
         if (commentsBuilder_ == null) {
@@ -2671,10 +1771,6 @@ public final class Diff {
       }
       /**
        * <code>optional .boa.types.CommentsRoot comments = 6;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public Builder clearComments() {
         if (commentsBuilder_ == null) {
@@ -2688,10 +1784,6 @@ public final class Diff {
       }
       /**
        * <code>optional .boa.types.CommentsRoot comments = 6;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public boa.types.Ast.CommentsRoot.Builder getCommentsBuilder() {
         bitField0_ |= 0x00000020;
@@ -2700,10 +1792,6 @@ public final class Diff {
       }
       /**
        * <code>optional .boa.types.CommentsRoot comments = 6;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       public boa.types.Ast.CommentsRootOrBuilder getCommentsOrBuilder() {
         if (commentsBuilder_ != null) {
@@ -2714,10 +1802,6 @@ public final class Diff {
       }
       /**
        * <code>optional .boa.types.CommentsRoot comments = 6;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Ast.CommentsRoot, boa.types.Ast.CommentsRoot.Builder, boa.types.Ast.CommentsRootOrBuilder> 
@@ -2744,40 +1828,24 @@ public final class Diff {
       }
       /**
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
-       *
-       * <pre>
-       ** The kinds of changes of this this compared to the corresponding parent commits 
-       * </pre>
        */
       public java.util.List<boa.types.Shared.ChangeKind> getChangesList() {
         return java.util.Collections.unmodifiableList(changes_);
       }
       /**
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
-       *
-       * <pre>
-       ** The kinds of changes of this this compared to the corresponding parent commits 
-       * </pre>
        */
       public int getChangesCount() {
         return changes_.size();
       }
       /**
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
-       *
-       * <pre>
-       ** The kinds of changes of this this compared to the corresponding parent commits 
-       * </pre>
        */
       public boa.types.Shared.ChangeKind getChanges(int index) {
         return changes_.get(index);
       }
       /**
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
-       *
-       * <pre>
-       ** The kinds of changes of this this compared to the corresponding parent commits 
-       * </pre>
        */
       public Builder setChanges(
           int index, boa.types.Shared.ChangeKind value) {
@@ -2791,10 +1859,6 @@ public final class Diff {
       }
       /**
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
-       *
-       * <pre>
-       ** The kinds of changes of this this compared to the corresponding parent commits 
-       * </pre>
        */
       public Builder addChanges(boa.types.Shared.ChangeKind value) {
         if (value == null) {
@@ -2807,10 +1871,6 @@ public final class Diff {
       }
       /**
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
-       *
-       * <pre>
-       ** The kinds of changes of this this compared to the corresponding parent commits 
-       * </pre>
        */
       public Builder addAllChanges(
           java.lang.Iterable<? extends boa.types.Shared.ChangeKind> values) {
@@ -2821,10 +1881,6 @@ public final class Diff {
       }
       /**
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
-       *
-       * <pre>
-       ** The kinds of changes of this this compared to the corresponding parent commits 
-       * </pre>
        */
       public Builder clearChanges() {
         changes_ = java.util.Collections.emptyList();
@@ -2833,180 +1889,35 @@ public final class Diff {
         return this;
       }
 
-      // repeated string previous_names = 8;
-      private com.google.protobuf.LazyStringList previousNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      private void ensurePreviousNamesIsMutable() {
+      // repeated int32 previous_versions = 8;
+      private java.util.List<java.lang.Integer> previousVersions_ = java.util.Collections.emptyList();
+      private void ensurePreviousVersionsIsMutable() {
         if (!((bitField0_ & 0x00000080) == 0x00000080)) {
-          previousNames_ = new com.google.protobuf.LazyStringArrayList(previousNames_);
+          previousVersions_ = new java.util.ArrayList<java.lang.Integer>(previousVersions_);
           bitField0_ |= 0x00000080;
          }
       }
       /**
-       * <code>repeated string previous_names = 8;</code>
-       *
-       * <pre>
-       ** The kinds of changes of this this compared to the corresponding parent commits 
-       * </pre>
-       */
-      public java.util.List<java.lang.String>
-          getPreviousNamesList() {
-        return java.util.Collections.unmodifiableList(previousNames_);
-      }
-      /**
-       * <code>repeated string previous_names = 8;</code>
-       *
-       * <pre>
-       ** The kinds of changes of this this compared to the corresponding parent commits 
-       * </pre>
-       */
-      public int getPreviousNamesCount() {
-        return previousNames_.size();
-      }
-      /**
-       * <code>repeated string previous_names = 8;</code>
-       *
-       * <pre>
-       ** The kinds of changes of this this compared to the corresponding parent commits 
-       * </pre>
-       */
-      public java.lang.String getPreviousNames(int index) {
-        return previousNames_.get(index);
-      }
-      /**
-       * <code>repeated string previous_names = 8;</code>
-       *
-       * <pre>
-       ** The kinds of changes of this this compared to the corresponding parent commits 
-       * </pre>
-       */
-      public com.google.protobuf.ByteString
-          getPreviousNamesBytes(int index) {
-        return previousNames_.getByteString(index);
-      }
-      /**
-       * <code>repeated string previous_names = 8;</code>
-       *
-       * <pre>
-       ** The kinds of changes of this this compared to the corresponding parent commits 
-       * </pre>
-       */
-      public Builder setPreviousNames(
-          int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensurePreviousNamesIsMutable();
-        previousNames_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string previous_names = 8;</code>
-       *
-       * <pre>
-       ** The kinds of changes of this this compared to the corresponding parent commits 
-       * </pre>
-       */
-      public Builder addPreviousNames(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensurePreviousNamesIsMutable();
-        previousNames_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string previous_names = 8;</code>
-       *
-       * <pre>
-       ** The kinds of changes of this this compared to the corresponding parent commits 
-       * </pre>
-       */
-      public Builder addAllPreviousNames(
-          java.lang.Iterable<java.lang.String> values) {
-        ensurePreviousNamesIsMutable();
-        super.addAll(values, previousNames_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string previous_names = 8;</code>
-       *
-       * <pre>
-       ** The kinds of changes of this this compared to the corresponding parent commits 
-       * </pre>
-       */
-      public Builder clearPreviousNames() {
-        previousNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000080);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string previous_names = 8;</code>
-       *
-       * <pre>
-       ** The kinds of changes of this this compared to the corresponding parent commits 
-       * </pre>
-       */
-      public Builder addPreviousNamesBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensurePreviousNamesIsMutable();
-        previousNames_.add(value);
-        onChanged();
-        return this;
-      }
-
-      // repeated int32 previous_versions = 9;
-      private java.util.List<java.lang.Integer> previousVersions_ = java.util.Collections.emptyList();
-      private void ensurePreviousVersionsIsMutable() {
-        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
-          previousVersions_ = new java.util.ArrayList<java.lang.Integer>(previousVersions_);
-          bitField0_ |= 0x00000100;
-         }
-      }
-      /**
-       * <code>repeated int32 previous_versions = 9;</code>
-       *
-       * <pre>
-       ** @exclude The indices of the corresponding parent commits in the list of all commits 
-       * </pre>
+       * <code>repeated int32 previous_versions = 8;</code>
        */
       public java.util.List<java.lang.Integer>
           getPreviousVersionsList() {
         return java.util.Collections.unmodifiableList(previousVersions_);
       }
       /**
-       * <code>repeated int32 previous_versions = 9;</code>
-       *
-       * <pre>
-       ** @exclude The indices of the corresponding parent commits in the list of all commits 
-       * </pre>
+       * <code>repeated int32 previous_versions = 8;</code>
        */
       public int getPreviousVersionsCount() {
         return previousVersions_.size();
       }
       /**
-       * <code>repeated int32 previous_versions = 9;</code>
-       *
-       * <pre>
-       ** @exclude The indices of the corresponding parent commits in the list of all commits 
-       * </pre>
+       * <code>repeated int32 previous_versions = 8;</code>
        */
       public int getPreviousVersions(int index) {
         return previousVersions_.get(index);
       }
       /**
-       * <code>repeated int32 previous_versions = 9;</code>
-       *
-       * <pre>
-       ** @exclude The indices of the corresponding parent commits in the list of all commits 
-       * </pre>
+       * <code>repeated int32 previous_versions = 8;</code>
        */
       public Builder setPreviousVersions(
           int index, int value) {
@@ -3016,11 +1927,7 @@ public final class Diff {
         return this;
       }
       /**
-       * <code>repeated int32 previous_versions = 9;</code>
-       *
-       * <pre>
-       ** @exclude The indices of the corresponding parent commits in the list of all commits 
-       * </pre>
+       * <code>repeated int32 previous_versions = 8;</code>
        */
       public Builder addPreviousVersions(int value) {
         ensurePreviousVersionsIsMutable();
@@ -3029,11 +1936,7 @@ public final class Diff {
         return this;
       }
       /**
-       * <code>repeated int32 previous_versions = 9;</code>
-       *
-       * <pre>
-       ** @exclude The indices of the corresponding parent commits in the list of all commits 
-       * </pre>
+       * <code>repeated int32 previous_versions = 8;</code>
        */
       public Builder addAllPreviousVersions(
           java.lang.Iterable<? extends java.lang.Integer> values) {
@@ -3043,109 +1946,77 @@ public final class Diff {
         return this;
       }
       /**
-       * <code>repeated int32 previous_versions = 9;</code>
-       *
-       * <pre>
-       ** @exclude The indices of the corresponding parent commits in the list of all commits 
-       * </pre>
+       * <code>repeated int32 previous_versions = 8;</code>
        */
       public Builder clearPreviousVersions() {
         previousVersions_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000080);
         onChanged();
         return this;
       }
 
-      // repeated int32 previous_indices = 10;
-      private java.util.List<java.lang.Integer> previousIndices_ = java.util.Collections.emptyList();
-      private void ensurePreviousIndicesIsMutable() {
-        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
-          previousIndices_ = new java.util.ArrayList<java.lang.Integer>(previousIndices_);
-          bitField0_ |= 0x00000200;
+      // repeated int32 previous_index = 9;
+      private java.util.List<java.lang.Integer> previousIndex_ = java.util.Collections.emptyList();
+      private void ensurePreviousIndexIsMutable() {
+        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
+          previousIndex_ = new java.util.ArrayList<java.lang.Integer>(previousIndex_);
+          bitField0_ |= 0x00000100;
          }
       }
       /**
-       * <code>repeated int32 previous_indices = 10;</code>
-       *
-       * <pre>
-       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
-       * </pre>
+       * <code>repeated int32 previous_index = 9;</code>
        */
       public java.util.List<java.lang.Integer>
-          getPreviousIndicesList() {
-        return java.util.Collections.unmodifiableList(previousIndices_);
+          getPreviousIndexList() {
+        return java.util.Collections.unmodifiableList(previousIndex_);
       }
       /**
-       * <code>repeated int32 previous_indices = 10;</code>
-       *
-       * <pre>
-       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
-       * </pre>
+       * <code>repeated int32 previous_index = 9;</code>
        */
-      public int getPreviousIndicesCount() {
-        return previousIndices_.size();
+      public int getPreviousIndexCount() {
+        return previousIndex_.size();
       }
       /**
-       * <code>repeated int32 previous_indices = 10;</code>
-       *
-       * <pre>
-       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
-       * </pre>
+       * <code>repeated int32 previous_index = 9;</code>
        */
-      public int getPreviousIndices(int index) {
-        return previousIndices_.get(index);
+      public int getPreviousIndex(int index) {
+        return previousIndex_.get(index);
       }
       /**
-       * <code>repeated int32 previous_indices = 10;</code>
-       *
-       * <pre>
-       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
-       * </pre>
+       * <code>repeated int32 previous_index = 9;</code>
        */
-      public Builder setPreviousIndices(
+      public Builder setPreviousIndex(
           int index, int value) {
-        ensurePreviousIndicesIsMutable();
-        previousIndices_.set(index, value);
+        ensurePreviousIndexIsMutable();
+        previousIndex_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 previous_indices = 10;</code>
-       *
-       * <pre>
-       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
-       * </pre>
+       * <code>repeated int32 previous_index = 9;</code>
        */
-      public Builder addPreviousIndices(int value) {
-        ensurePreviousIndicesIsMutable();
-        previousIndices_.add(value);
+      public Builder addPreviousIndex(int value) {
+        ensurePreviousIndexIsMutable();
+        previousIndex_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 previous_indices = 10;</code>
-       *
-       * <pre>
-       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
-       * </pre>
+       * <code>repeated int32 previous_index = 9;</code>
        */
-      public Builder addAllPreviousIndices(
+      public Builder addAllPreviousIndex(
           java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensurePreviousIndicesIsMutable();
-        super.addAll(values, previousIndices_);
+        ensurePreviousIndexIsMutable();
+        super.addAll(values, previousIndex_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 previous_indices = 10;</code>
-       *
-       * <pre>
-       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
-       * </pre>
+       * <code>repeated int32 previous_index = 9;</code>
        */
-      public Builder clearPreviousIndices() {
-        previousIndices_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000200);
+      public Builder clearPreviousIndex() {
+        previousIndex_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000100);
         onChanged();
         return this;
       }
@@ -3176,38 +2047,25 @@ public final class Diff {
   static {
     java.lang.String[] descriptorData = {
       "\n\ndiff.proto\022\tboa.types\032\014shared.proto\032\ta" +
-      "st.proto\"\325\t\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
+      "st.proto\"\302\005\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
       "2\025.boa.types.ChangeKind\022-\n\004kind\030\002 \002(\0162\037." +
       "boa.types.ChangedFile.FileKind\022\014\n\004name\030\003" +
-      " \002(\t\022\013\n\003key\030\004 \002(\004\022\013\n\003ast\030\005 \002(\010\022)\n\010commen" +
-      "ts\030\006 \001(\0132\027.boa.types.CommentsRoot\022&\n\007cha" +
-      "nges\030\007 \003(\0162\025.boa.types.ChangeKind\022\026\n\016pre" +
-      "vious_names\030\010 \003(\t\022\031\n\021previous_versions\030\t" +
-      " \003(\005\022\030\n\020previous_indices\030\n \003(\005\"\247\007\n\010FileK" +
-      "ind\022\t\n\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003",
-      "XML\020\003\022\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_J" +
-      "AVA_JLS2\020f\022\024\n\020SOURCE_JAVA_JLS3\020g\022\024\n\020SOUR" +
-      "CE_JAVA_JLS4\020h\022\024\n\020SOURCE_JAVA_JLS8\020l\022\016\n\n" +
-      "JAVA_ERROR\020d\022\010\n\004JLS2\020f\022\010\n\004JLS3\020g\022\010\n\004JLS4" +
-      "\020h\022\010\n\004JLS8\020l\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rSO" +
-      "URCE_CS_CS1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\rSO" +
-      "URCE_CS_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rSO" +
-      "URCE_CS_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022" +
-      "\010\n\003CS2\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001\022" +
-      "\024\n\017SOURCE_JS_ERROR\020\254\002\022\022\n\rSOURCE_JS_ES1\020\255",
-      "\002\022\022\n\rSOURCE_JS_ES2\020\256\002\022\022\n\rSOURCE_JS_ES3\020\257" +
-      "\002\022\022\n\rSOURCE_JS_ES5\020\260\002\022\022\n\rSOURCE_JS_ES6\020\261" +
-      "\002\022\022\n\rSOURCE_JS_ES7\020\262\002\022\022\n\rSOURCE_JS_ES8\020\263" +
-      "\002\022\r\n\010JS_ERROR\020\254\002\022\025\n\020SOURCE_PHP_ERROR\020\220\003\022" +
-      "\020\n\013SOURCE_PHP5\020\221\003\022\022\n\rSOURCE_PHP5_3\020\222\003\022\022\n" +
-      "\rSOURCE_PHP5_4\020\223\003\022\022\n\rSOURCE_PHP5_5\020\224\003\022\022\n" +
-      "\rSOURCE_PHP5_6\020\225\003\022\022\n\rSOURCE_PHP7_0\020\226\003\022\022\n" +
-      "\rSOURCE_PHP7_1\020\227\003\022\016\n\tPHP_ERROR\020\220\003\022\026\n\021SOU" +
-      "RCE_HTML_ERROR\020\364\003\022\020\n\013Source_HTML\020\365\003\022\017\n\nH" +
-      "TML_ERROR\020\364\003\022\025\n\020SOURCE_XML_ERROR\020\330\004\022\017\n\nS",
-      "ource_XML\020\331\004\022\016\n\tXML_ERROR\020\330\004\022\025\n\020SOURCE_C" +
-      "SS_ERROR\020\274\005\022\017\n\nSource_CSS\020\275\005\022\016\n\tCSS_ERRO" +
-      "R\020\274\005\032\002\020\001B\002H\001"
+      " \002(\t\022\013\n\003key\030\004 \002(\t\022\037\n\003ast\030\005 \001(\0132\022.boa.typ" +
+      "es.ASTRoot\022)\n\010comments\030\006 \001(\0132\027.boa.types" +
+      ".CommentsRoot\022&\n\007changes\030\007 \003(\0162\025.boa.typ" +
+      "es.ChangeKind\022\031\n\021previous_versions\030\010 \003(\005" +
+      "\022\026\n\016previous_index\030\t \003(\005\"\232\003\n\010FileKind\022\t\n" +
+      "\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020\003\022",
+      "\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_JAVA_JL" +
+      "S2\020e\022\024\n\020SOURCE_JAVA_JLS3\020f\022\024\n\020SOURCE_JAV" +
+      "A_JLS4\020g\022\024\n\020SOURCE_JAVA_JLS5\020h\022\016\n\nJAVA_E" +
+      "RROR\020d\022\010\n\004JLS2\020e\022\010\n\004JLS3\020f\022\010\n\004JLS4\020g\022\010\n\004" +
+      "JLS5\020h\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rSOURCE_C" +
+      "S_CS1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\rSOURCE_C" +
+      "S_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rSOURCE_C" +
+      "S_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003CS2" +
+      "\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001\032\002\020\001B\002H" +
+      "\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3219,7 +2077,7 @@ public final class Diff {
           internal_static_boa_types_ChangedFile_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedFile_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", "Comments", "Changes", "PreviousNames", "PreviousVersions", "PreviousIndices", });
+              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", "Comments", "Changes", "PreviousVersions", "PreviousIndex", });
           return null;
         }
       };

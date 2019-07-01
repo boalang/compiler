@@ -1,1 +1,0 @@
- new Car('Eagle', 'Talon TSi', 1993);

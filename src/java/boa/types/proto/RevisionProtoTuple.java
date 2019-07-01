@@ -60,6 +60,9 @@ public class RevisionProtoTuple extends BoaProtoTuple {
 
 		names.put("parents", counter++);
 		members.add(new BoaProtoList(new BoaInt()));
+
+		names.put("children", counter++);
+		members.add(new BoaProtoList(new BoaInt()));
 	}
 
 	/**

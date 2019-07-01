@@ -21,12 +21,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
-import boa.types.proto.enums.ChangeKindProtoMap;
 
 /**
  * A {@link MethodProtoTuple}.
@@ -63,15 +61,6 @@ public class MethodProtoTuple extends BoaProtoTuple {
 
 		names.put("comments", counter++);
 		members.add(new BoaProtoList(new CommentProtoTuple()));
-		
-		names.put("key", counter++);
-		members.add(new BoaInt());
-		
-		names.put("declaring_type", counter++);
-		members.add(new BoaInt());
-		
-		names.put("computed_name", counter++);
-		members.add(new ExpressionProtoTuple());
 	}
 
 	/**

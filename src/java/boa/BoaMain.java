@@ -38,8 +38,6 @@ public class BoaMain {
 
         options.addOption("p", "parse",    false, "parse and semantic check a Boa program (don't generate code)");
         options.addOption("c", "compile",  false, "compile a Boa program");
-        options.addOption("e", "execute",  false, "execute a Boa program locally");
-        options.addOption("g", "generate", false, "generate a Boa dataset");
         options.addOption("t", "text",     false, "convert a binary output SequenceFile into text");
 
         try {
@@ -55,10 +53,6 @@ public class BoaMain {
                     boa.compiler.BoaCompiler.main(tempargs);
                 } else if (cl.hasOption("p")) {
                     boa.compiler.BoaCompiler.parseOnly(tempargs);
-                } else if (cl.hasOption("e")) {
-                    boa.evaluator.BoaEvaluator.main(tempargs);
-                } else if (cl.hasOption("g")) {
-                    boa.datagen.BoaGenerator.main(tempargs);
                 } else if (cl.hasOption("t")) {
                     boa.BoaOutputConverter.main(tempargs);
                 }

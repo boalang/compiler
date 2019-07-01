@@ -1,3 +1,0 @@
-@MyAnnotation
-public class MarkerAnnotation {
-}
