@@ -388,6 +388,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 				int counter = 1;
 				for (final BoaType bt : tupleType.getTypes()) {
+					if (bt instanceof BoaTuple)
+						tupleDeclareForBoaTuple((BoaTuple)bt);
 					fields.add("_" + counter);
 					types.add(bt.toBoxedJavaType());
 					protos.add(bt instanceof BoaProtoTuple);
@@ -412,6 +414,45 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		@Override
 		public void visit(final SubView n) {
 			return;
+		}
+
+		private void tupleDeclareForBoaTuple(BoaTuple bt) {
+			final String name = bt.toJavaType();
+			if (tuples.contains(name))
+				return;
+
+			tuples.add(name);
+
+			final ST st = stg.getInstanceOf("TupleType");
+
+			Map<String, Integer> names = bt.getNames();
+
+			final List<String> fields = new ArrayList<String>();
+			final List<String> types = new ArrayList<String>();
+			final List<Boolean> protos = new ArrayList<Boolean>();
+			final List<Boolean> scalars = new ArrayList<Boolean>();
+			final List<Boolean> valids = new ArrayList<Boolean>();
+
+			for (Map.Entry<String, Integer> entry : names.entrySet()) {
+				if (entry.getKey().charAt(0) == '_') {
+					fields.add(entry.getKey());
+					BoaType type = bt.getMember(entry.getKey());
+					protos.add(type instanceof BoaProtoTuple);
+					scalars.add(type instanceof BoaScalar);
+					valids.add(type instanceof BoaScalar || type instanceof BoaTuple);
+					types.add(type.toBoxedJavaType());
+					System.out.println("field:" + entry.getKey() + ", type: " + type);
+				}
+			}
+
+			st.add("name", name);
+			st.add("fields", fields);
+			st.add("types", types);
+			st.add("protos", protos);
+			st.add("scalars", scalars);
+			st.add("valids", valids);
+
+			code.add(st.render());
 		}
 	}
 

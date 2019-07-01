@@ -151,6 +151,10 @@ public class BoaTuple extends BoaType {
 		return member;
 	}
 
+	public Map<String, Integer> getNames() {
+		return this.names;
+	}
+
 	public List<BoaType> getTypes() {
 		return this.members;
 	}
