@@ -208,8 +208,11 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 				return String.valueOf(v.getB());
 			case TUPLE:
 				String s = "{ ";
-				for (int i = 0; i < v.getTCount(); i++)
+				for (int i = 0; i < v.getTCount(); i++) {
+					if (i > 0)
+						s += ", ";
 					s += EmitKey.valueToString(v.getT(i));
+				}
 				return s + " }";
 			default:
 				return "";
