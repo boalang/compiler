@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,21 +21,23 @@ import java.io.IOException;
 
 import boa.functions.BoaCasts;
 import boa.io.EmitKey;
+import boa.output.Output.Value;
 
 /**
  * A Boa aggregator to calculate the top or bottom <i>n</i> values in a
  * dataset by weight.
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
 abstract class MinOrMaxAggregator extends Aggregator {
-	protected final WeightedString[] list;
+	protected final WeightedValue[] list;
 	private final int last;
 	protected double DefaultWeight;
 
 	/**
 	 * Construct a {@link MinOrMaxAggregator}.
-	 * 
+	 *
 	 * @param n
 	 *            A long representing the number of values to return
 	 */
@@ -42,7 +45,7 @@ abstract class MinOrMaxAggregator extends Aggregator {
 		super(n);
 
 		// an array of weighted string of length n
-		this.list = new WeightedString[(int) this.getArg()];
+		this.list = new WeightedValue[(int) this.getArg()];
 
 		// the index of the last entry in the list
 		this.last = (int) (this.getArg() - 1);
@@ -55,20 +58,20 @@ abstract class MinOrMaxAggregator extends Aggregator {
 
 		// clear out the list
 		for (int i = 0; i < this.getArg(); i++)
-			this.list[i] = new WeightedString("", DefaultWeight);
+			this.list[i] = new WeightedValue(EmitKey.toValue(""), DefaultWeight);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final String data, final String metadata) {
+	public void aggregate(final String data, final Value metadata) {
 		double weight;
 
 		if (metadata == null)
 			weight = 1.0;
 		else
-			weight = Double.parseDouble(metadata);
+			weight = metadata.getF();
 
-		final WeightedString s = new WeightedString(data, weight);
+		final WeightedValue s = new WeightedValue(EmitKey.toValue(data), weight);
 
 		if (this.compare(s, this.list[this.last]) > 0)
 			// find this new item's position within the list
@@ -87,28 +90,25 @@ abstract class MinOrMaxAggregator extends Aggregator {
 
 	/**
 	 * Compare two weighted strings.
-	 * 
+	 *
 	 * @param a
-	 *            A {@link WeightedString} containing a {@link String} and its
+	 *            A {@link WeightedValue} containing a {@link String} and its
 	 *            weight.
-	 * 
+	 *
 	 * @param b
-	 *            A {@link WeightedString} containing a {@link String} and its
+	 *            A {@link WeightedValue} containing a {@link String} and its
 	 *            weight.
-	 * 
+	 *
 	 * @return A positive integer if <em>a</em> is smaller than <em>b</em>, zero
 	 *         if they are equal, and a negative integer if <em>a</em> is larger
 	 *         than <em>b</em>.
 	 */
-	abstract protected int compare(WeightedString a, WeightedString b);
+	abstract protected int compare(WeightedValue a, WeightedValue b);
 
 	/** {@inheritDoc} */
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		for (int i = 0; i < this.getArg(); i++)
-			if (this.isCombining())
-				this.collect(this.list[i].getString(), BoaCasts.doubleToString(this.list[i].getWeight()));
-			else
-				this.collect(this.list[i].toString());
+			this.collect(this.list[i].getValue(), EmitKey.toValue(this.list[i].getWeight()));
 	}
 }

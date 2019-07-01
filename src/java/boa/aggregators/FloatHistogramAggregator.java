@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,11 +23,13 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import boa.io.EmitKey;
+import boa.output.Output.Value;
 
 /**
  * A Boa aggregator to calculate a histogram for the values in a dataset.
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
 @AggregatorSpec(name = "histogram", formalParameters = { "int", "int", "int" }, type = "float", canCombine = true)
 public class FloatHistogramAggregator extends HistogramAggregator {
@@ -34,15 +37,15 @@ public class FloatHistogramAggregator extends HistogramAggregator {
 
 	/**
 	 * Construct a FloatHistogramAggregator.
-	 * 
+	 *
 	 * @param min
 	 *            A long representing the minimum value to be considered in the
 	 *            histogram
-	 * 
+	 *
 	 * @param max
 	 *            A long representing the maximum value to be considered in the
 	 *            histogram
-	 * 
+	 *
 	 * @param buckets
 	 *            A long representing the number of buckets in the histogram
 	 */
@@ -60,20 +63,20 @@ public class FloatHistogramAggregator extends HistogramAggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final String data, final String metadata) throws NumberFormatException, IOException, InterruptedException {
-		this.aggregate(Double.parseDouble(data), metadata);
+	public void aggregate(final double data, final Value metadata) throws IOException {
+		this.list.add(data, super.count(metadata));
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final long data, final String metadata) throws IOException {
-		this.aggregate(Long.valueOf(data).doubleValue(), metadata);
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void aggregate(final double data, final String metadata) throws IOException {
-		this.list.add(Double.valueOf(data), super.count(metadata));
+	public void finish() throws IOException, InterruptedException {
+		if (this.isCombining()) {
+			// if we're in the combiner, just output the compressed data
+			for (final Pair<Number, Long> p : this.getTuples())
+				this.collect(EmitKey.toValue((Double)p.getFirst()), EmitKey.toValue(p.getSecond()));
+		} else {
+			super.finish();
+		}
 	}
 
 	/** {@inheritDoc} */

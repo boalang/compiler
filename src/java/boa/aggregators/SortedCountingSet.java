@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,9 +26,9 @@ import java.util.TreeMap;
 /**
  * A sorted counting set. Like a {@link SortedSet}, but also keeps track of how many
  * times a given member has been added.
- * 
+ *
  * @author anthonyu
- * 
+ *
  * @param <T> The type of value that will be inserted into the set
  */
 class SortedCountingSet<T> implements Iterable<T> {
@@ -43,7 +43,7 @@ class SortedCountingSet<T> implements Iterable<T> {
 
 	/**
 	 * Add a value to the set, with cardinality 1.
-	 * 
+	 *
 	 * @param t The value to be added
 	 */
 	public void add(final T t) {
@@ -52,7 +52,7 @@ class SortedCountingSet<T> implements Iterable<T> {
 
 	/**
 	 * Add a value and its cardinality to the set.
-	 * 
+	 *
 	 * @param t The value to be added
 	 * @param n The cardinality of the value
 	 */
@@ -105,7 +105,7 @@ class SortedCountingSet<T> implements Iterable<T> {
 
 	/**
 	 * Copy this set into a {@link List}.
-	 * 
+	 *
 	 * @return A {@link List} containing the values in this set
 	 */
 	public List<T> toList() {
@@ -119,7 +119,7 @@ class SortedCountingSet<T> implements Iterable<T> {
 
 	/**
 	 * Get the entries in this set.
-	 * 
+	 *
 	 * @return A {@link Set} of Map.Entry containing the entries in this set
 	 */
 	public Set<java.util.Map.Entry<T, Long>> getEntries() {

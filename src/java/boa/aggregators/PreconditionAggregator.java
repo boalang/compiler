@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static boa.functions.BoaAstIntrinsics.*;
+import boa.output.Output.Value;
 
 /**
  * @author marafat
@@ -52,7 +53,7 @@ public class PreconditionAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
+	public void aggregate(final String data, final Value metadata) throws IOException, InterruptedException, FinishedException {
 		// data expected format: "no_of_args:pid:fq_clientmethodname:precondition"
 		final String[] sData = data.split(":", 4);
 

@@ -17,6 +17,7 @@
 package boa.runtime;
 
 import boa.output.Output.Row;
+import boa.output.Output.Value;
 
 
 /**
@@ -30,4 +31,6 @@ public abstract class Tuple {
 
 	public void fromRow(final Row r, final int offset) {
 	}
+
+	abstract public Value toValue();
 }

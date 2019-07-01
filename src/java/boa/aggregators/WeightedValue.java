@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,42 +18,45 @@
 package boa.aggregators;
 
 import boa.functions.BoaCasts;
+import boa.io.EmitKey;
+import boa.output.Output.Value;
 
 /**
- * A tuple containing a {@link String} and its weight.
- * 
+ * A tuple containing a {@link Value} and its weight.
+ *
  * @author anthonyu
+ * @author rdyer
  */
-class WeightedString {
-	private final String string;
+class WeightedValue {
+	private final Value v;
 	private final double weight;
 
 	/**
-	 * Construct a WeightedString.
-	 * 
-	 * @param string
-	 *            A {@link String} containing the string part of the tuple
-	 * 
+	 * Construct a WeightedValue.
+	 *
+	 * @param v
+	 *            A {@link Value} containing the value part of the tuple
+	 *
 	 * @param weight
 	 *            A double representing the weight part of the tuple
 	 */
-	public WeightedString(final String string, final double weight) {
-		this.string = string;
+	public WeightedValue(final Value v, final double weight) {
+		this.v = v;
 		this.weight = weight;
 	}
 
 	/**
-	 * Get the string part of the tuple.
-	 * 
-	 * @return A {@link String} containing the string part of the tuple
+	 * Get the value part of the tuple.
+	 *
+	 * @return A {@link Value} containing the value part of the tuple
 	 */
-	public String getString() {
-		return this.string;
+	public Value getValue() {
+		return this.v;
 	}
 
 	/**
 	 * Get the weight part of the tuple.
-	 * 
+	 *
 	 * @return A double containing the weight part of the tuple
 	 */
 	public double getWeight() {
@@ -64,7 +68,7 @@ class WeightedString {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (this.string == null ? 0 : this.string.hashCode());
+		result = prime * result + (this.v == null ? 0 : this.v.hashCode());
 		final long temp = Double.doubleToLongBits(this.weight);
 		result = prime * result + (int) (temp ^ temp >>> 32);
 		return result;
@@ -79,12 +83,12 @@ class WeightedString {
 		if (obj == null || this.getClass() != obj.getClass())
 			return false;
 
-		final WeightedString other = (WeightedString) obj;
+		final WeightedValue other = (WeightedValue) obj;
 
-		if (this.string == null && other.string != null)
+		if (this.v == null && other.v != null)
 				return false;
 
-		if (this.string != null && !this.string.equals(other.string))
+		if (this.v != null && !this.v.equals(other.v))
 			return false;
 
 		if (Double.doubleToLongBits(this.weight) != Double.doubleToLongBits(other.weight))
@@ -96,6 +100,6 @@ class WeightedString {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return this.string + ", " + BoaCasts.doubleToString(this.weight);
+		return EmitKey.valueToString(this.v) + ", " + BoaCasts.doubleToString(this.weight);
 	}
 }

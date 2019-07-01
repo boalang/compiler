@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,10 +22,11 @@ import java.util.TreeMap;
 import java.util.SortedMap;
 
 import boa.io.EmitKey;
+import boa.output.Output.Value;
 
 /**
  * A Boa aggregator to calculate a median of the values in a dataset.
- * 
+ *
  * @author rdyer
  */
 @AggregatorSpec(name = "median", type = "int")
@@ -43,7 +45,7 @@ public class MedianAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
+	public void aggregate(final String data, final Value metadata) throws IOException, InterruptedException {
 		for (final String s : data.split(";")) {
 			final int idx = s.indexOf(":");
 			if (idx > 0) {
@@ -51,14 +53,15 @@ public class MedianAggregator extends Aggregator {
 				final long count = Long.valueOf(s.substring(idx + 1));
 				for (int i = 0; i < count; i++)
 					aggregate(item, metadata);
-			} else
+			} else {
 				aggregate(Long.valueOf(s), metadata);
+			}
 		}
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final long data, final String metadata) {
+	public void aggregate(final long data, final Value metadata) {
 		if (map.containsKey(data))
 			map.put(data, map.get(data) + 1L);
 		else
@@ -68,7 +71,7 @@ public class MedianAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final double data, final String metadata) {
+	public void aggregate(final double data, final Value metadata) {
 		this.aggregate(Double.valueOf(data).longValue(), metadata);
 	}
 

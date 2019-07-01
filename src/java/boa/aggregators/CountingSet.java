@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,9 +24,9 @@ import java.util.Set;
 /**
  * A counting set. Like a {@link Set}, but also keeps track of how many times a
  * given member has been added.
- * 
+ *
  * @author anthonyu
- * 
+ *
  * @param <T> The type of value that will be inserted into the set
  */
 class CountingSet<T> {
@@ -41,7 +41,7 @@ class CountingSet<T> {
 
 	/**
 	 * Add a value and its cardinality to the set.
-	 * 
+	 *
 	 * @param t The value to be added
 	 * @param n The cardinality of the value
 	 */
@@ -59,7 +59,7 @@ class CountingSet<T> {
 
 	/**
 	 * Get the entries in this set.
-	 * 
+	 *
 	 * @return A {@link Set} of T containing the entries in this set
 	 */
 	public Set<Entry<T, Double>> getEntries() {

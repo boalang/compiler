@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,27 +18,25 @@
 package boa.aggregators;
 
 import boa.io.EmitKey;
+import boa.output.Output.Value;
 
 /**
  * A Boa aggregator to calculate a mean of the values in a dataset.
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
 abstract class MeanAggregator extends Aggregator {
 	private long count;
 
-	public void count(final String metadata) {
-		if (metadata == null)
-		{
+	public void count(final Value metadata) {
+		if (metadata == null) {
 			this.count++;
-		}			
-		else
-		{
-			try {
-				this.count += Long.parseLong(metadata);
-			} catch (NumberFormatException e) {
-				this.count += (long)Double.parseDouble(metadata);
-			}
+		} else {
+			if (metadata.getType() == Value.Type.INT)
+				this.count += metadata.getI();
+			else if (metadata.getType() == Value.Type.FLOAT)
+				this.count += metadata.getF();
 		}
 	}
 
@@ -51,7 +50,7 @@ abstract class MeanAggregator extends Aggregator {
 
 	/**
 	 * Return the count of the values in the dataset.
-	 * 
+	 *
 	 * @return A long representing the cardinality of the dataset
 	 */
 	protected long getCount() {

@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,24 +22,29 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.io.Serializable;
 
+import com.google.protobuf.CodedInputStream;
 import org.apache.hadoop.io.RawComparator;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
+import org.apache.hadoop.io.WritableUtils;
+
+import boa.output.Output.Value;
+import boa.runtime.Tuple;
 
 /**
  * A {@link WritableComparable} that contains a low resolution key which is the
  * name of the table this value is being emitted to, and a high resolution key
  * which is an index into that table.
- * 
+ *
  * @author anthonyu
  * @author rdyer
  */
 public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitKey>, Serializable {
 	private static final long serialVersionUID = -6302400030199718829L;
 
-	private String index;
 	private String name;
+	private Value[] indices;
 
 	/**
 	 * Construct an EmitKey.
@@ -49,46 +55,59 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 
 	/**
 	 * Construct an EmitKey.
-	 * 
+	 *
 	 * @param name
 	 *            A {@link String} containing the name of the table this was
 	 *            emitted to
 	 */
 	public EmitKey(final String name) {
-		this("[]", name);
+		this.name = name;
+		this.indices = new Value[0];
 	}
 
 	/**
 	 * Construct an EmitKey.
-	 * 
-	 * @param index
-	 *            A {@link String} containing the index into the table this was
-	 *            emitted to
-	 * 
+	 *
 	 * @param name
 	 *            A {@link String} containing the name of the table this was
 	 *            emitted to
+	 *
+	 * @param indices
+	 *            A {@link Value[]} containing the indices into the table this was
+	 *            emitted to
 	 */
-	public EmitKey(final String index, final String name) {
-		if (index.equals(""))
-			throw new RuntimeException();
-
-		this.index = index;
+	public EmitKey(final String name, final Value... indices) {
 		this.name = name;
+		this.indices = new Value[indices.length];
+		for (int i = 0; i < indices.length; i++)
+			this.indices[i] = indices[i];
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void readFields(final DataInput in) throws IOException {
-		this.index = Text.readString(in);
 		this.name = Text.readString(in);
+		final int count = in.readInt();
+		this.indices = new Value[count];
+		for (int i = 0; i < count; i++) {
+			final int len = in.readInt();
+			final byte[] b = new byte[len];
+			for (int j = 0; j < len; j++)
+				b[j] = in.readByte();
+			this.indices[i] = Value.parseFrom(CodedInputStream.newInstance(b, 0, len));
+		}
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void write(final DataOutput out) throws IOException {
-		Text.writeString(out, this.index);
 		Text.writeString(out, this.name);
+		out.writeInt(this.indices.length);
+		for (final Value idx : this.indices) {
+			final byte[] b = idx.toByteArray();
+			out.write(b.length);
+			out.write(b);
+		}
 	}
 
 	/** {@inheritDoc} */
@@ -112,7 +131,13 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 			return c;
 
 		// compare the indices
-		return this.index.compareTo(that.index);
+		for (int i = 0; i < this.indices.length && i < that.indices.length; i++) {
+			c = EmitKey.valueToString(this.indices[i]).compareTo(EmitKey.valueToString(that.indices[i]));
+			if (c != 0)
+				return c;
+		}
+
+		return this.indices.length - that.indices.length;
 	}
 
 	/** {@inheritDoc} */
@@ -120,8 +145,9 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (this.index == null ? 0 : this.index.hashCode());
 		result = prime * result + (this.name == null ? 0 : this.name.hashCode());
+		for (int i = 0; i < this.indices.length; i++)
+			result = prime * result + this.indices[i].hashCode();
 		return result;
 	}
 
@@ -135,43 +161,64 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 		if (this.getClass() != obj.getClass())
 			return false;
 		final EmitKey other = (EmitKey) obj;
-		if (this.index == null) {
-			if (other.index != null)
-				return false;
-		} else if (!this.index.equals(other.index))
-			return false;
 		if (this.name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!this.name.equals(other.name))
 			return false;
-		return true;
+		if (this.indices == null) {
+			if (other.indices != null)
+				return false;
+		}
+		return java.util.Arrays.equals(this.indices, other.indices);
 	}
 
 	/**
-	 * Get the index into the table this key was emitted to.
-	 * 
-	 * @return A {@link String} containing the index into the table this key was
+	 * Get the indices into the table this key was emitted to.
+	 *
+	 * @return A {@link Value[]} containing the indices into the table this key was
+	 *         emitted to
+	 */
+	public Value[] getIndices() {
+		return this.indices;
+	}
+
+	/**
+	 * Get the indices into the table this key was emitted to as a string.
+	 *
+	 * @return A {@link String} containing the indices into the table this key was
 	 *         emitted to
 	 */
 	public String getIndex() {
-		return this.index;
+		String s = "[";
+		for (int i = 0; i < this.indices.length; i++)
+			s += EmitKey.valueToString(this.indices[i]);
+		return s + "]";
 	}
 
-	/**
-	 * Get the index into the table this key was emitted to.
-	 * 
-	 * @param index
-	 *            A {@link String} containing the index into the table this key
-	 *            was emitted to
-	 */
-	public void setIndex(final String index) {
-		this.index = index;
+	public static String valueToString(final Value v) {
+		switch (v.getType()) {
+			case INT:
+				return String.valueOf(v.getI());
+			case FLOAT:
+				return String.valueOf(v.getF());
+			case STRING:
+				return v.getS();
+			case BOOL:
+				return String.valueOf(v.getB());
+			case TUPLE:
+				String s = "{ ";
+				for (int i = 0; i < v.getTCount(); i++)
+					s += EmitKey.valueToString(v.getT(i));
+				return s + " }";
+			default:
+				return "";
+		}
 	}
 
 	/**
 	 * Get the name of the table this key was emitted to.
-	 * 
+	 *
 	 * @return A {@link String} containing the name of the table this key was
 	 *         emitted to
 	 */
@@ -179,20 +226,42 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 		return this.name;
 	}
 
-	/**
-	 * Set the name of the table this key was emitted to.
-	 * 
-	 * @param name
-	 *            A {@link String} containing the name of the table this key was
-	 *            emitted to
-	 */
-	public void setName(final String name) {
-		this.name = name;
-	}
-
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return this.name + this.index;
+		return this.name + this.getIndex();
+	}
+
+	public static Value toValue(final String data) {
+		if (data == null) return null;
+		final Value.Builder v = Value.newBuilder();
+		v.setType(Value.Type.STRING);
+		v.setS(data);
+		return v.build();
+	}
+
+	public static Value toValue(final long data) {
+		final Value.Builder v = Value.newBuilder();
+		v.setType(Value.Type.INT);
+		v.setI(data);
+		return v.build();
+	}
+
+	public static Value toValue(final double data) {
+		final Value.Builder v = Value.newBuilder();
+		v.setType(Value.Type.FLOAT);
+		v.setF(data);
+		return v.build();
+	}
+
+	public static Value toValue(final boolean data) {
+		final Value.Builder v = Value.newBuilder();
+		v.setType(Value.Type.BOOL);
+		v.setB(data);
+		return v.build();
+	}
+
+	public static Value toValue(final Tuple data) {
+		return data.toValue();
 	}
 }

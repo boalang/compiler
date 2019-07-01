@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling GreenState University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,21 +21,22 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
+import boa.output.Output.Value;
+
 /**
  * A Boa aggregator to log values in a dataset by weight.
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
-//@AggregatorSpec(name = "log", weightType = "string")
+@AggregatorSpec(name = "log", weightType = "string")
 public class LogAggregator extends Aggregator {
 	private static Logger logger = Logger.getLogger(LogAggregator.class);
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final String data, final String metadata) throws IOException {
+	public void aggregate(final Value data, final Value metadata) throws IOException {
 		if (metadata.equals("trace"))
-			LogAggregator.logger.debug(data);
-		else if (metadata.equals("debug"))
 			LogAggregator.logger.debug(data);
 		else if (metadata.equals("info"))
 			LogAggregator.logger.info(data);
@@ -44,5 +46,7 @@ public class LogAggregator extends Aggregator {
 			LogAggregator.logger.error(data);
 		else if (metadata.equals("fatal"))
 			LogAggregator.logger.fatal(data);
+		else
+			LogAggregator.logger.debug(data);
 	}
 }

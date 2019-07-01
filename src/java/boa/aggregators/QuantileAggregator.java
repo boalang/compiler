@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,18 +22,20 @@ import java.util.Arrays;
 import java.util.List;
 
 import boa.io.EmitKey;
+import boa.output.Output.Value;
 
 /**
  * A Boa aggregator to calculate the quantiles for the values in a dataset.
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
 abstract class QuantileAggregator extends Aggregator {
 	private int total;
 
 	/**
 	 * Construct a QuantileAggregator.
-	 * 
+	 *
 	 * @param n
 	 *            A long representing the number of quantiles to calculate
 	 */
@@ -42,19 +45,21 @@ abstract class QuantileAggregator extends Aggregator {
 
 	/**
 	 * Parse a string as long and add it to the running total.
-	 * 
+	 *
 	 * @param metadata
-	 *            A {@link String} containing the number of values, or null
-	 * 
+	 *            A {@link Value} containing the number of values, or null
+	 *
 	 * @return A long representing the value in metadata
 	 */
-	public long count(final String metadata) {
+	public long count(final Value metadata) {
 		final long count;
 
 		if (metadata == null)
 			count = 1;
+		else if (metadata.getType() == Value.Type.INT)
+			count = metadata.getI();
 		else
-			count = Long.parseLong(metadata);
+			count = Double.valueOf(metadata.getF()).longValue();
 
 		this.total += count;
 
@@ -71,24 +76,20 @@ abstract class QuantileAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public abstract void aggregate(final String data, final String metadata) throws IOException;
-
-	/** {@inheritDoc} */
-	@Override
 	public void finish() throws IOException, InterruptedException {
 		// if we're in the combiner, just output the compressed data
 		if (this.isCombining()) {
-			for (final Pair<String, Long> e : this.getTuples())
-				this.collect(e.getFirst(), e.getSecond().toString());
+			for (final Pair<Value, Long> e : this.getTuples())
+				this.collect(e.getFirst(), EmitKey.toValue(e.getSecond()));
 		} else {
 			// otherwise, set up the quantiles
 			final int n = (int) (this.getArg() - 1);
-			final String[] quantiles = new String[n];
+			final Value[] quantiles = new Value[n];
 			final double step = this.total / (double) n;
 
 			long last = 0;
 			long q = 0;
-			for (final Pair<String, Long> e : this.getTuples()) {
+			for (final Pair<Value, Long> e : this.getTuples()) {
 				q += e.getSecond();
 
 				final int curr = (int) (q / step);
@@ -107,9 +108,9 @@ abstract class QuantileAggregator extends Aggregator {
 
 	/**
 	 * Return the data points from the dataset in pairs.
-	 * 
-	 * @return A {@link List} of {@link Pair}&lt{@link Number}, {@link Long}&gt;
+	 *
+	 * @return A {@link List} of {@link Pair}&lt{@link Value}, {@link Long}&gt;
 	 *         containing the data points from the dataset
 	 */
-	public abstract List<Pair<String, Long>> getTuples();
+	public abstract List<Pair<Value, Long>> getTuples();
 }

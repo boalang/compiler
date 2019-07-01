@@ -15,7 +15,7 @@ identifierMap ::= [
 		"Xinput" : "_input",
 		default : {___<id>}
 ]
-		
+
 VarDecl(isstatic, type, id) ::= "<if(isstatic)>static <endif><type> ___<id>;<\n>"
 ArrayType(type) ::= "<type>[]"
 MapType(key, value) ::= "java.util.HashMap\<<key>, <value>>"
@@ -130,15 +130,15 @@ private class <name> extends boa.runtime.Tuple
 {
 	<fields,types:{field,type|<type> ___<field>;<\n>}; separator="">
 	<name>(<fields,types:{field,type|final <type> ___<field>}; separator=", ">) {
-		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = ___<field><else>this.___<field> = new <type>(___<field>)<endif>;}; separator="">
+		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = ___<field><else>this.___<field> = new <type>(___<field>)<endif>;}; separator="\n">
 	}
 
 	<name>(final <name> tmp) {
-		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = tmp.___<field><else>this.___<field> = new <type>(tmp.___<field>)<endif>;}; separator="">
+		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = tmp.___<field><else>this.___<field> = new <type>(tmp.___<field>)<endif>;}; separator="\n">
 	}
 
 	<name>(final boa.output.Output.Value v) {
-		<fields, types, scalars, valids:{field,type,scalar,valid|this.___<field> = <if(!scalar)>new <type><else>boa.runtime.TableReader.valTo<type><endif>(<if(valid)>v.getT(<i0>)<endif>);}; separator="">
+		<fields, types, scalars, valids:{field,type,scalar,valid|this.___<field> = <if(!scalar)>new <type><else>boa.runtime.TableReader.valTo<type><endif>(<if(valid)>v.getT(<i0>)<endif>);}; separator="\n">
 	}
 
 	<if(isrow)>public void fromRow(final boa.output.Output.Row r, final int offset) {
@@ -148,7 +148,14 @@ private class <name> extends boa.runtime.Tuple
 
 <endif>
 	public <name> clone() {
-    		return new <name>(this);
+		return new <name>(this);
+	}
+
+	public boa.output.Output.Value toValue() {
+		final boa.output.Output.Value.Builder v = boa.output.Output.Value.newBuilder();
+		v.setType(boa.output.Output.Value.Type.TUPLE);
+		<fields, types, scalars, valids:{field,type,scalar,valid|v.addT(boa.io.EmitKey.toValue(this.___<field>));}; separator="\n">
+		return v.build();
 	}
 }<\n>
 >>

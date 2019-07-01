@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,10 +26,11 @@ import org.apache.commons.math.distribution.TDistributionImpl;
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 import boa.io.EmitKey;
+import boa.output.Output.Value;
 
 /**
  * A Boa aggregator to calculate a confidence interval of the values in a dataset.
- * 
+ *
  * @author rdyer
  */
 @AggregatorSpec(name = "confidence", formalParameters = {"float"}, type = "int")
@@ -45,7 +47,7 @@ public class ConfidenceIntervalAggregator extends Aggregator {
 
 	/**
 	 * Construct a {@link ConfidenceIntervalAggregator}.
-	 * 
+	 *
 	 * @param n
 	 *            A double representing the significance
 	 */
@@ -63,7 +65,7 @@ public class ConfidenceIntervalAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
+	public void aggregate(final String data, final Value metadata) throws IOException, InterruptedException {
 		for (final String s : data.split(";")) {
 			final int idx = s.indexOf(":");
 			if (idx > 0) {
@@ -78,17 +80,11 @@ public class ConfidenceIntervalAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final long data, final String metadata) {
+	public void aggregate(final long data, final Value metadata) {
 		if (map.containsKey(data))
 			map.put(data, map.get(data) + 1L);
 		else
 			map.put(data, 1L);
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void aggregate(final double data, final String metadata) {
-		this.aggregate(Double.valueOf(data).longValue(), metadata);
 	}
 
 	/** {@inheritDoc} */
@@ -104,13 +100,13 @@ public class ConfidenceIntervalAggregator extends Aggregator {
 
 		try {
 			final SummaryStatistics summaryStatistics = new SummaryStatistics();
-			
+
 			for (final Long key : map.keySet())
 				for (int i = 0; i < map.get(key); i++)
 					summaryStatistics.addValue(key);
 
 			final double a = new TDistributionImpl(summaryStatistics.getN() - 1).inverseCumulativeProbability(1.0 - n / 200.0);
-	
+
 			this.collect(a * summaryStatistics.getStandardDeviation() / Math.sqrt(summaryStatistics.getN()));
 		} catch (final MathException e) {
 		}

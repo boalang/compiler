@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,17 +17,20 @@
  */
 package boa.aggregators;
 
+import boa.io.EmitKey;
+
 /**
  * A Boa aggregator to calculate the top <i>n</i> values in a dataset by
  * weight.
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
 @AggregatorSpec(name = "maximum", formalParameters = { "int" }, weightType = "float", canOmitWeight = true, canCombine = true)
 public class MaximumAggregator extends MinOrMaxAggregator {
 	/**
 	 * Construct a {@link MaximumAggregator}.
-	 * 
+	 *
 	 * @param n A long representing the number of values to return
 	 */
 	public MaximumAggregator(final long n) {
@@ -37,7 +41,7 @@ public class MaximumAggregator extends MinOrMaxAggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public int compare(final WeightedString a, final WeightedString b) {
+	public int compare(final WeightedValue a, final WeightedValue b) {
 		final double delta = a.getWeight() - b.getWeight();
 
 		// if the weights are different, return the difference
@@ -45,6 +49,6 @@ public class MaximumAggregator extends MinOrMaxAggregator {
 			return (int) Math.ceil(delta);
 
 		// otherwise compare the strings
-		return b.getString().compareTo(a.getString());
+		return EmitKey.valueToString(b.getValue()).compareTo(EmitKey.valueToString(a.getValue()));
 	}
 }

@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,11 +21,13 @@ import java.io.IOException;
 
 import boa.functions.BoaCasts;
 import boa.io.EmitKey;
+import boa.output.Output.Value;
 
 /**
  * A Boa aggregator to calculate a mean of the values in a dataset.
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
 @AggregatorSpec(name = "mean", type = "float", canCombine = true)
 public class FloatMeanAggregator extends MeanAggregator {
@@ -40,19 +43,7 @@ public class FloatMeanAggregator extends MeanAggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
-		this.aggregate(Double.parseDouble(data), metadata);
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void aggregate(final long data, final String metadata) {
-		this.aggregate(Long.valueOf(data).doubleValue(), metadata);
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void aggregate(final double data, final String metadata) {
+	public void aggregate(final double data, final Value metadata) {
 		this.sum += data;
 
 		super.count(metadata);
@@ -63,7 +54,7 @@ public class FloatMeanAggregator extends MeanAggregator {
 	public void finish() throws IOException, InterruptedException {
 		// if we are in the combiner, output the sum and the count
 		if (this.isCombining())
-			this.collect(this.sum, BoaCasts.doubleToString(this.getCount()));
+			this.collect(this.sum, EmitKey.toValue(this.getCount()));
 		// otherwise, output the final answer
 		else
 			this.collect(this.sum / this.getCount());

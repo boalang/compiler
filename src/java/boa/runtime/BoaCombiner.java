@@ -1,5 +1,6 @@
 /*
- * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -93,8 +94,7 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 
 		for (final EmitValue value : values)
 			try {
-				for (final String s : value.getData())
-					a.aggregate(s, value.getMetadata());
+				a.aggregate(value.getData(), value.getMetadata());
 			} catch (final FinishedException e) {
 				// we are done
 				return;

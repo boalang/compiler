@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,10 +20,12 @@ package boa.aggregators;
 import java.util.*;
 import java.io.IOException;
 
+import boa.io.EmitKey;
+import boa.output.Output.Value;
 
 /**
  * A Boa aggregator to output graph data in CSV format as an adjacency list.
- * 
+ *
  * @author rdyer
  */
 @AggregatorSpec(name = "graph", canCombine = true)
@@ -33,19 +36,19 @@ public class GraphCSVAggregator extends GraphAggregator {
 		this.collect(toString(this.neighbors));
 	}
 
-	private String toString(final Set<String> set) {
+	private String toString(final Set<Value> set) {
 		String str = "";
-		for (final String s : set) {
+		for (final Value v : set) {
 			if (!str.isEmpty())
 				str += ",";
-			str += s;
+			str += EmitKey.valueToString(v);
 		}
 		return str;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	protected String format(final String idx, final String data, final String metadata) {
-		return "\"" + idx.substring(1, idx.length() - 1)  + "\"," + data + "";
+	protected String format(final String idx, final Value data, final Value metadata) {
+		return "\"" + idx.substring(1, idx.length() - 1)  + "\"," + EmitKey.valueToString(data);
 	}
 }

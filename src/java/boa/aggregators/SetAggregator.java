@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,15 +21,17 @@ import java.io.IOException;
 import java.util.HashSet;
 
 import boa.io.EmitKey;
+import boa.output.Output.Value;
 
 /**
  * A Boa aggregator to filter the values in a dataset by maximum size.
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
 @AggregatorSpec(name = "set", canCombine = true)
 public class SetAggregator extends Aggregator {
-	private HashSet<String> set;
+	private HashSet<Value> set;
 	private final long max;
 
 	/**
@@ -43,7 +46,7 @@ public class SetAggregator extends Aggregator {
 
 	/**
 	 * Construct a SetAggregator.
-	 * 
+	 *
 	 * @param n
 	 *            A long representing the number of values to return
 	 */
@@ -60,12 +63,12 @@ public class SetAggregator extends Aggregator {
 		super.start(key);
 
 		// the set of data to be collected
-		this.set = new HashSet<String>();
+		this.set = new HashSet<Value>();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
+	public void aggregate(final Value data, final Value metadata) throws IOException, InterruptedException, FinishedException {
 		if (this.set.size() >= this.max)
 			throw new FinishedException();
 
@@ -75,7 +78,7 @@ public class SetAggregator extends Aggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void finish() throws IOException, InterruptedException {
-		for (final String s : this.set)
-			this.collect(s);
+		for (final Value v : this.set)
+			this.collect(v);
 	}
 }

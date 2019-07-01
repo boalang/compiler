@@ -16,6 +16,8 @@
  */
 package boa.runtime;
 
+import boa.output.Output.Value;
+
 /**
  * An empty tuple, containing no values.
  *
@@ -30,4 +32,8 @@ public class EmptyTuple extends Tuple {
 	public EmptyTuple clone() {
 		return this;
 	}
+
+	public Value toValue() {
+        return null;
+    }
 }

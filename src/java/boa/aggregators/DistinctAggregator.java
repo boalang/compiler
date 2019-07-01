@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,12 +25,14 @@ import org.apache.hadoop.util.bloom.Key;
 import org.apache.hadoop.util.hash.Hash;
 
 import boa.io.EmitKey;
+import boa.output.Output.Value;
 
 /**
  * A Boa aggregator to estimate the set of the unique values in a dataset.
  * Roughly equivalent to a distinct(*).
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
 @AggregatorSpec(name = "distinct", canCombine = true)
 public class DistinctAggregator extends Aggregator {
@@ -44,7 +47,7 @@ public class DistinctAggregator extends Aggregator {
 
 	/**
 	 * Construct a DistinctAggregator.
-	 * 
+	 *
 	 * @param arg
 	 *            The size of the internal table used to perform the
 	 *            calculation.
@@ -71,9 +74,9 @@ public class DistinctAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
+	public void aggregate(final Value data, final Value metadata) throws IOException, InterruptedException {
 		// instantiate a bloom filter input key initialized by the data
-		Key key = new Key(data.getBytes());
+		Key key = new Key(data.toByteArray());
 
 		// if the key is already in the filter, forget it
 		if (this.filter.membershipTest(key))
@@ -83,6 +86,6 @@ public class DistinctAggregator extends Aggregator {
 		this.filter.add(key);
 
 		// and collect it
-		this.collect(data);
+		this.collect(data, metadata);
 	}
 }

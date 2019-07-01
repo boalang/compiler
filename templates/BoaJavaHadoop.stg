@@ -188,4 +188,4 @@ public class <name> extends boa.runtime.BoaRunner {
 }
 >>
 
-EmitStatement(indices, id, expression, weight) ::= "context.write(new boa.io.EmitKey(<if(indices)><indices:{idx | \"[\" + (<idx>) + \"]\"}; separator=\" + \">, <endif><id>), new boa.io.EmitValue(<expression><if(weight)>, <weight><endif>));<\n>"
+EmitStatement(indices, id, expression, weight) ::= "context.write(new boa.io.EmitKey(<id><if(indices)>, <indices:{idx | boa.io.EmitKey.toValue(<idx>)}; separator=\", \"><endif>), new boa.io.EmitValue(boa.io.EmitKey.toValue(<expression>)<if(weight)>, boa.io.EmitKey.toValue(<weight>)<endif>));<\n>"

@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,11 +22,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import boa.io.EmitKey;
+import boa.output.Output.Value;
 
 /**
  * A Boa aggregator to calculate a histogram for the values in a dataset.
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
 abstract class HistogramAggregator extends Aggregator {
 	private final long min;
@@ -34,15 +37,15 @@ abstract class HistogramAggregator extends Aggregator {
 
 	/**
 	 * Construct a HistogramAggregator.
-	 * 
+	 *
 	 * @param min
 	 *            A long representing the minimum value to be considered in the
 	 *            histogram
-	 * 
+	 *
 	 * @param max
 	 *            A long representing the maximum value to be considered in the
 	 *            histogram
-	 * 
+	 *
 	 * @param buckets
 	 *            A long representing the number of buckets in the histogram
 	 */
@@ -52,13 +55,14 @@ abstract class HistogramAggregator extends Aggregator {
 		this.buckets = (int) buckets;
 	}
 
-	public long count(final String metadata) {
+	public long count(final Value metadata) {
 		// if the metadata is null, it counts as a single
 		if (metadata == null)
 			return 1;
 		// otherwise, parse the metadata and count it as that
-		else
-			return Long.parseLong(metadata);
+		if (metadata.getType() == Value.Type.INT)
+			return metadata.getI();
+		return Double.valueOf(metadata.getF()).longValue();
 	}
 
 	/** {@inheritDoc} */
@@ -69,33 +73,22 @@ abstract class HistogramAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public abstract void aggregate(final String data, final String metadata) throws NumberFormatException, IOException, InterruptedException;
-
-	/** {@inheritDoc} */
-	@Override
 	public void finish() throws IOException, InterruptedException {
-		if (this.isCombining()) {
-			// if we're in the combiner, just output the compressed data
-			for (final Pair<Number, Long> p : this.getTuples())
-				this.collect(p.getFirst().toString(), p.getSecond().toString());
-		} else {
-			// otherwise, set up the histogram
-			int[] buckets = new int[this.buckets];
-			// calculate the step or the space between the buckets
-			double step = (this.max - this.min) / (double) this.buckets;
+		// otherwise, set up the histogram
+		int[] buckets = new int[this.buckets];
+		// calculate the step or the space between the buckets
+		double step = (this.max - this.min) / (double) this.buckets;
 
-			// for each of the compressed data points, increment the bucket it
-			// belongs to by its cardinality
-			for (final Pair<Number, Long> p : this.getTuples())
-				buckets[(int) ((p.getFirst().longValue() - this.min) / step)] += p.getSecond();
+		// for each of the compressed data points, increment the bucket it belongs to by its cardinality
+		for (final Pair<Number, Long> p : this.getTuples())
+			buckets[(int) ((p.getFirst().longValue() - this.min) / step)] += p.getSecond();
 
-			this.collect(Arrays.toString(buckets));
-		}
+		this.collect(Arrays.toString(buckets));
 	}
 
 	/**
 	 * Return the data points from the dataset in pairs.
-	 * 
+	 *
 	 * @return A {@link List} of {@link Pair}&lt{@link Number}, {@link Long}&gt;
 	 *         containing the data points from the dataset
 	 */

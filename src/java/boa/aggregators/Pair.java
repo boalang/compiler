@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,9 +18,9 @@ package boa.aggregators;
 
 /**
  * A pair of values.
- * 
+ *
  * @author anthonyu
- * 
+ *
  * @param <F> The type of the first value
  * @param <S> The type of the second value
  */
@@ -30,7 +30,7 @@ class Pair<F, S> {
 
 	/**
 	 * Construct a {@link Pair}.
-	 * 
+	 *
 	 * @param first The first value
 	 * @param second The second value
 	 */
@@ -41,7 +41,7 @@ class Pair<F, S> {
 
 	/**
 	 * Get the first value.
-	 * 
+	 *
 	 * @return The first value
 	 */
 	public F getFirst() {
@@ -50,7 +50,7 @@ class Pair<F, S> {
 
 	/**
 	 * Get the second value.
-	 * 
+	 *
 	 * @return The second value
 	 */
 	public S getSecond() {

@@ -1,5 +1,6 @@
 /*
- * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,8 +23,8 @@ import java.util.Map;
 
 import org.apache.hadoop.conf.Configurable;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.log4j.Logger;
 
@@ -39,7 +40,7 @@ import boa.io.EmitValue;
  * @author anthonyu
  * @author rdyer
  */
-public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullWritable> implements Configurable {
+public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, NullWritable, BytesWritable> implements Configurable {
 	/**
 	 * A {@link Logger} that log entries can be written to.
 	 * 
@@ -85,8 +86,7 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 
 		for (final EmitValue value : values)
 			try {
-				for (final String s : value.getData())
-					a.aggregate(s, value.getMetadata());
+				a.aggregate(value.getData(), value.getMetadata());
 			} catch (final FinishedException e) {
 				// we are done
 				return;

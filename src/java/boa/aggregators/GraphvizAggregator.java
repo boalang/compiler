@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,10 +19,12 @@ package boa.aggregators;
 
 import java.io.IOException;
 
+import boa.io.EmitKey;
+import boa.output.Output.Value;
 
 /**
  * A Boa aggregator to output graph data in GraphViz format.
- * 
+ *
  * @author rdyer
  */
 @AggregatorSpec(name = "graphviz", weightType = "any", canCombine = true)
@@ -29,15 +32,15 @@ public class GraphvizAggregator extends GraphAggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void finish() throws IOException, InterruptedException {
-		for (final String s : this.neighbors)
-			this.collect(s, weights.get(s));
+		for (final Value v : this.neighbors)
+			this.collect(v, weights.get(v));
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	protected String format(final String idx, final String data, final String metadata) {
+	protected String format(final String idx, final Value data, final Value metadata) {
 		if (metadata == null)
-			return "\"" + idx.substring(1, idx.length() - 1)  + "\" -> " + data + ";";
-		return "\"" + idx.substring(1, idx.length() - 1)  + "\" -> " + data + " [label=" + metadata + "];";
+			return "\"" + idx.substring(1, idx.length() - 1)  + "\" -> \"" + EmitKey.valueToString(data) + "\";";
+		return "\"" + idx.substring(1, idx.length() - 1)  + "\" -> \"" + EmitKey.valueToString(data) + "\" [label=\"" + EmitKey.valueToString(metadata) + "\"];";
 	}
 }

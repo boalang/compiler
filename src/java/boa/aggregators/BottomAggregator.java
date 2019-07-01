@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@ package boa.aggregators;
 /**
  * A Boa aggregator to estimate the bottom <i>n</i> values in a dataset by
  * cardinality.
- * 
+ *
  * @author anthonyu
  * @author rdyer
  */
@@ -27,7 +27,7 @@ package boa.aggregators;
 public class BottomAggregator extends BottomOrTopAggregator {
 	/**
 	 * Construct a {@link BottomAggregator}.
-	 * 
+	 *
 	 * @param n A long representing the number of values to return
 	 */
 	public BottomAggregator(final long n) {

@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,9 +19,11 @@ package boa.aggregators;
 
 import java.io.IOException;
 
+import boa.output.Output.Value;
+
 /**
  * A Boa aggregator to output all of the values in a dataset.
- * 
+ *
  * @author anthonyu
  * @author rdyer
  */
@@ -28,8 +31,8 @@ import java.io.IOException;
 public class CollectionAggregator extends Aggregator {
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
+	public void aggregate(final Value data, final Value metadata) throws IOException, InterruptedException {
 		// just pass it through
-		this.collect(data);
+		this.collect(data, metadata);
 	}
 }

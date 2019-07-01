@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
@@ -22,21 +22,24 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
 
+import com.google.protobuf.CodedInputStream;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 
 import boa.functions.BoaCasts;
+import boa.output.Output.Value;
+import boa.runtime.Tuple;
 
 /**
  * A {@link Writable} that contains a datum and an optional metadatum to be
  * emitted to a Boa table.
- * 
+ *
  * @author anthonyu
  * @author rdyer
  */
 public class EmitValue implements Writable {
-	private String[] data;
-	private String metadata;
+	private Value data;
+	private Value metadata;
 
 	/**
 	 * Construct an EmitValue.
@@ -47,304 +50,82 @@ public class EmitValue implements Writable {
 
 	/**
 	 * Construct an EmitValue.
-	 * 
+	 *
 	 * @param data
-	 *            An array of {@link String} containing the data to be emitted
+	 *            A {@link Value} containing the data to be emitted
 	 * @param metadata
 	 *            A {@link String} containing the metadata to be emitted
 	 */
-	public EmitValue(final String[] data, final String metadata) {
+	public EmitValue(final Value data, final Value metadata) {
 		this.data = data;
 		this.metadata = metadata;
 	}
 
 	/**
 	 * Construct an EmitValue.
-	 * 
+	 *
 	 * @param data
-	 *            An array of {@link String} containing the data to be emitted
+	 *            A {@link Value} containing the data to be emitted
 	 */
-	public EmitValue(final String[] data) {
+	public EmitValue(final Value data) {
 		this(data, null);
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            An array of {@link Object} containing the data to be emitted
-	 * @param metadata
-	 *            A {@link String} containing the metadata to be emitted
-	 */
-	public EmitValue(final Object[] data, final String metadata) {
-		final String[] strings = new String[data.length];
-
-		for (int i = 0; i < data.length; i++)
-			strings[i] = data[i].toString();
-
-		this.data = strings;
-		this.metadata = metadata;
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            An array of {@link String} containing the data to be emitted
-	 */
-	public EmitValue(final Object[] data) {
-		this(data, null);
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            A {@link String} containing the data to be emitted
-	 */
-	public EmitValue(final String data) {
-		this(new String[] { data }, null);
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            A {@link String} containing the data to be emitted
-	 * @param metadata
-	 *            A {@link String} containing the metadata to be emitted
-	 */
-	public EmitValue(final String data, final String metadata) {
-		this(new String[] { data }, metadata);
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            A {@link String} containing the data to be emitted
-	 * @param metadata
-	 *            A long representing the metadata to be emitted
-	 */
-	public EmitValue(final String data, final long metadata) {
-		this(new String[] { data }, BoaCasts.longToString(metadata));
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            A {@link String} containing the data to be emitted
-	 * @param metadata
-	 *            A double representing the metadata to be emitted
-	 */
-	public EmitValue(final String data, final double metadata) {
-		this(new String[] { data }, BoaCasts.doubleToString(metadata));
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            A long representing the data to be emitted
-	 */
-	public EmitValue(final long data) {
-		this(new String[] { BoaCasts.longToString(data) }, null);
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            A long representing the data to be emitted
-	 * @param metadata
-	 *            A {@link String} containing the metadata to be emitted
-	 */
-	public EmitValue(final long data, final String metadata) {
-		this(new String[] { BoaCasts.longToString(data) }, metadata);
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            A long representing the data to be emitted
-	 * @param metadata
-	 *            A long representing the metadata to be emitted
-	 */
-	public EmitValue(final long data, final long metadata) {
-		this(new String[] { BoaCasts.longToString(data) }, BoaCasts.longToString(metadata));
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            A long representing the data to be emitted
-	 * @param metadata
-	 *            A double representing the metadata to be emitted
-	 */
-	public EmitValue(final long data, final double metadata) {
-		this(new String[] { BoaCasts.longToString(data) }, BoaCasts.doubleToString(metadata));
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            A double representing the data to be emitted
-	 */
-	public EmitValue(final double data) {
-		this(new String[] { BoaCasts.doubleToString(data) }, null);
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            A double representing the data to be emitted
-	 * @param metadata
-	 *            A {@link String} containing the metadata to be emitted
-	 */
-	public EmitValue(final double data, final String metadata) {
-		this(new String[] { BoaCasts.doubleToString(data) }, metadata);
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            A double representing the data to be emitted
-	 * @param metadata
-	 *            A long representing the metadata to be emitted
-	 */
-	public EmitValue(final double data, final long metadata) {
-		this(new String[] { BoaCasts.doubleToString(data) }, BoaCasts.longToString(metadata));
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            A double representing the data to be emitted
-	 * @param metadata
-	 *            A double representing the metadata to be emitted
-	 */
-	public EmitValue(final double data, final double metadata) {
-		this(new String[] { BoaCasts.doubleToString(data) }, BoaCasts.doubleToString(metadata));
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            A boolean representing the data to be emitted
-	 */
-	public EmitValue(final boolean data) {
-		this(new String[] { BoaCasts.booleanToString(data) }, null);
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            A boolean representing the data to be emitted
-	 * @param metadata
-	 *            A {@link String} containing the metadata to be emitted
-	 */
-	public EmitValue(final boolean data, final String metadata) {
-		this(new String[] { BoaCasts.booleanToString(data) }, metadata);
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            A boolean representing the data to be emitted
-	 * @param metadata
-	 *            A long representing the metadata to be emitted
-	 */
-	public EmitValue(final boolean data, final long metadata) {
-		this(new String[] { BoaCasts.booleanToString(data) }, BoaCasts.longToString(metadata));
-	}
-
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            A boolean representing the data to be emitted
-	 * @param metadata
-	 *            A double representing the metadata to be emitted
-	 */
-	public EmitValue(final boolean data, final double metadata) {
-		this(new String[] { BoaCasts.booleanToString(data) }, BoaCasts.doubleToString(metadata));
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void readFields(final DataInput in) throws IOException {
-		final int count = in.readInt();
+		int len = in.readInt();
+		byte[] b = new byte[len];
+		for (int i = 0; i < len; i++)
+			b[i] = in.readByte();
+		this.data = Value.parseFrom(CodedInputStream.newInstance(b, 0, len));
 
-		this.data = new String[count];
-		for (int i = 0; i < count; i++)
-			this.data[i] = Text.readString(in);
-
-		final String metadata = Text.readString(in);
-		if (metadata.equals(""))
+		len = in.readInt();
+		if (len == 0) {
 			this.metadata = null;
-		else
-			this.metadata = metadata;
+		} else {
+			b = new byte[len];
+			for (int i = 0; i < len; i++)
+				b[i] = in.readByte();
+			this.metadata = Value.parseFrom(CodedInputStream.newInstance(b, 0, len));
+		}
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void write(final DataOutput out) throws IOException {
-		out.writeInt(this.data.length);
+		byte[] b = this.data.toByteArray();
+		out.write(b.length);
+		out.write(b);
 
-		for (final String d : this.data)
-			Text.writeString(out, d);
-
-		if (this.metadata == null)
-			Text.writeString(out, "");
-		else
-			Text.writeString(out, this.metadata);
+		if (this.metadata == null) {
+			out.write(0);
+		} else {
+			b = this.metadata.toByteArray();
+			out.write(b.length);
+			out.write(b);
+		}
 	}
 
 	/**
 	 * @return the data
 	 */
-	public String[] getData() {
+	public Value getData() {
 		return this.data;
-	}
-
-	/**
-	 * @param data
-	 *            the data to set
-	 */
-	public void setData(final String[] data) {
-		this.data = data;
 	}
 
 	/**
 	 * @return the metadata
 	 */
-	public String getMetadata() {
+	public Value getMetadata() {
 		return this.metadata;
-	}
-
-	/**
-	 * @param metadata
-	 *            the metadatum to set
-	 */
-	public void setMetadata(final String metadata) {
-		this.metadata = metadata;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + Arrays.hashCode(this.data);
+		result = prime * result + this.data.hashCode();
 		result = prime * result + (this.metadata == null ? 0 : this.metadata.hashCode());
 		return result;
 	}
@@ -358,7 +139,7 @@ public class EmitValue implements Writable {
 		if (this.getClass() != obj.getClass())
 			return false;
 		final EmitValue other = (EmitValue) obj;
-		if (!Arrays.equals(this.data, other.data))
+		if (!this.data.equals(other.data))
 			return false;
 		if (this.metadata == null) {
 			if (other.metadata != null)
@@ -371,6 +152,8 @@ public class EmitValue implements Writable {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return Arrays.toString(this.data) + ":" + this.metadata;
+		if (this.metadata != null)
+			return EmitKey.valueToString(this.data) + ", " + EmitKey.valueToString(this.metadata);
+		return EmitKey.valueToString(this.data);
 	}
 }

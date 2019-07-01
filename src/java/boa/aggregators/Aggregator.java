@@ -1,5 +1,6 @@
 /*
- * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ * Copyright 2019, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +19,7 @@ package boa.aggregators;
 
 import java.io.IOException;
 
+import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer.Context;
@@ -25,10 +27,12 @@ import org.apache.hadoop.mapreduce.Reducer.Context;
 import boa.functions.BoaCasts;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
+import boa.output.Output.Row;
+import boa.output.Output.Value;
 
 /**
  * The base class for all Boa aggregators.
- * 
+ *
  * @author anthonyu
  * @author rdyer
  */
@@ -41,7 +45,7 @@ public abstract class Aggregator {
 
 	/**
 	 * Construct an Aggregator.
-	 * 
+	 *
 	 */
 	public Aggregator() {
 		// default constructor
@@ -49,10 +53,9 @@ public abstract class Aggregator {
 
 	/**
 	 * Construct an Aggregator.
-	 * 
+	 *
 	 * @param arg
 	 *            A long (Boa int) containing the argument to the table
-	 * 
 	 */
 	public Aggregator(final long arg) {
 		this();
@@ -62,65 +65,122 @@ public abstract class Aggregator {
 
 	/**
 	 * Reset this aggregator for a new key.
-	 * 
+	 *
 	 * @param key
 	 *            The {@link EmitKey} to aggregate for
-	 * 
 	 */
 	public void start(final EmitKey key) {
 		this.setKey(key);
 	}
 
-	public abstract void aggregate(String data, String metadata) throws IOException, InterruptedException, FinishedException;
+	public void aggregate(final Value data, final Value metadata) throws IOException, InterruptedException, FinishedException {
+		switch (data.getType()) {
+			case INT:
+				this.aggregate(data.getI(), metadata);
+				break;
+			case FLOAT:
+				this.aggregate(data.getF(), metadata);
+				break;
+			case STRING:
+				this.aggregate(data.getS(), metadata);
+				break;
+			case BOOL:
+				this.aggregate(data.getB(), metadata);
+				break;
+			case TUPLE:
+				// TODO FIXME
+				//this.aggregate(data.getB(), metadata);
+				break;
+			default:
+				break;
+		}
+	}
 
-	public void aggregate(final String data) throws IOException, InterruptedException, FinishedException {
+	public final void aggregate(final Value data) throws IOException, InterruptedException, FinishedException {
 		this.aggregate(data, null);
 	}
 
-	public void aggregate(final long data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(BoaCasts.longToString(data), metadata);
+	public void aggregate(final String data, final Value metadata) throws IOException, InterruptedException, FinishedException {
+		// intentionally blank
 	}
 
-	public void aggregate(final long data) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(BoaCasts.longToString(data), null);
+	public void aggregate(final long data, final Value metadata) throws IOException, InterruptedException, FinishedException {
+		// intentionally blank
 	}
 
-	public void aggregate(final double data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(BoaCasts.doubleToString(data), metadata);
+	public void aggregate(final double data, final Value metadata) throws IOException, InterruptedException, FinishedException {
+		// intentionally blank
 	}
 
-	public void aggregate(final double data) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(BoaCasts.doubleToString(data), null);
+	public void aggregate(final boolean data, final Value metadata) throws IOException, InterruptedException, FinishedException {
+		// intentionally blank
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void collect(final String data, final String metadata) throws IOException, InterruptedException {
+	protected void collect(final Value data, final Value metadata) throws IOException, InterruptedException {
 		if (this.combining)
 			this.getContext().write(this.getKey(), new EmitValue(data, metadata));
-		else if (metadata != null)
-			this.getContext().write(new Text(this.getKey() + " = " + data + " weight " + metadata), NullWritable.get());
 		else
-			this.getContext().write(new Text(this.getKey() + " = " + data), NullWritable.get());
+			this.getContext().write(NullWritable.get(), toRow(data, metadata));
+	}
+
+	protected void collect(final Value data) throws IOException, InterruptedException {
+		this.collect(data, null);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void collect(final String data, final Value metadata) throws IOException, InterruptedException {
+		if (this.combining)
+			this.getContext().write(this.getKey(), new EmitValue(EmitKey.toValue(data), metadata));
+		else
+			this.getContext().write(NullWritable.get(), toRow(EmitKey.toValue(data), metadata));
+	}
+
+	protected BytesWritable toRow(final Value data, final Value metadata) {
+		final Row.Builder r = Row.newBuilder();
+		for (final Value idx : this.getKey().getIndices())
+			r.addCols(idx);
+		if (metadata != null) {
+			final Value.Builder v = Value.newBuilder();
+			v.setType(Value.Type.TUPLE);
+			v.addT(data);
+			v.addT(metadata);
+			v.setHasWeight(true);
+			r.setVal(v.build());
+		} else {
+			r.setVal(data);
+		}
+		final byte[] arr = r.build().toByteArray();
+		final BytesWritable b = new BytesWritable(arr);
+		return b;
 	}
 
 	protected void collect(final String data) throws IOException, InterruptedException {
 		this.collect(data, null);
 	}
 
-	protected void collect(final long data, final String metadata) throws IOException, InterruptedException {
-		this.collect(BoaCasts.longToString(data), metadata);
+	@SuppressWarnings("unchecked")
+	protected void collect(final long data, final Value metadata) throws IOException, InterruptedException {
+		if (this.combining)
+			this.getContext().write(this.getKey(), new EmitValue(EmitKey.toValue(data), metadata));
+		else
+			this.getContext().write(NullWritable.get(), toRow(EmitKey.toValue(data), metadata));
 	}
 
 	protected void collect(final long data) throws IOException, InterruptedException {
-		this.collect(BoaCasts.longToString(data), null);
+		this.collect(data, null);
 	}
 
-	protected void collect(final double data, final String metadata) throws IOException, InterruptedException {
-		this.collect(BoaCasts.doubleToString(data), metadata);
+	@SuppressWarnings("unchecked")
+	protected void collect(final double data, final Value metadata) throws IOException, InterruptedException {
+		if (this.combining)
+			this.getContext().write(this.getKey(), new EmitValue(EmitKey.toValue(data), metadata));
+		else
+			this.getContext().write(NullWritable.get(), toRow(EmitKey.toValue(data), metadata));
 	}
 
 	protected void collect(final double data) throws IOException, InterruptedException {
-		this.collect(BoaCasts.doubleToString(data), null);
+		this.collect(data, null);
 	}
 
 	public void finish() throws IOException, InterruptedException {
