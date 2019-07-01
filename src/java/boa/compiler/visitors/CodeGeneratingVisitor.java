@@ -487,10 +487,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	protected String skipIndex = "";
 	protected boolean abortGeneration = false;
 
-    protected String className;
-    protected int splitSize;
-    protected int seed;
-    protected boolean isLocal;
+	protected String className;
+	protected int splitSize;
+	protected int seed;
+	protected boolean isLocal;
 
 	public CodeGeneratingVisitor(final String className, final int splitSize, final int seed, final boolean isLocal) throws IOException {
 		this.className = className;
@@ -713,9 +713,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("exprlist", s);
 			st.add("type", n.type.toBoxedJavaType() + "()");
 		} else if (n.getExprsSize() > 0) {
-			// FIXME rdyer
-			BoaType t = n.type;
-//			BoaType t = ((ExprList) nodeChoice.choice).type;
+			final BoaType t = n.type;
 
 			if (t instanceof BoaTuple) {
 				final ST stup = stg.getInstanceOf("Tuple");
@@ -971,9 +969,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		String rhs = code.removeLast();
 
 		if (n.getLhs().type instanceof BoaTuple && n.getRhs().type instanceof BoaArray) {
-			Operand op = n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+			final Operand op = n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
 			if (op instanceof Composite) {
-				List<Expression> exps = ((Composite)op).getExprs();
+				final List<Expression> exps = ((Composite)op).getExprs();
 				if (checkTupleArray(this.check(exps)) == false) {
 					final ST stup = stg.getInstanceOf("Tuple");
 					stup.add("name", n.getLhs().type.toJavaType());
@@ -1339,9 +1337,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		String src = code.removeLast();
 
 		if (lhsType instanceof BoaTuple && t instanceof BoaArray) {
-			Operand op = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+			final Operand op = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
 			if (op instanceof Composite) {
-				List<Expression> exps = ((Composite)op).getExprs();
+				final List<Expression> exps = ((Composite)op).getExprs();
 				if (checkTupleArray(this.check(exps)) == false) {
 					final ST stup = stg.getInstanceOf("Tuple");
 					stup.add("name", lhsType.toJavaType());
@@ -1879,7 +1877,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		code.add(st.render());
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final QueueType n) {
