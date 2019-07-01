@@ -1232,13 +1232,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.getComponent().accept(this, st);
 			if (n.getComponent().type instanceof BoaName)
 				n.getComponent().type = n.getComponent().getType().type;
-		}
-		else if (!n.hasWildcard())
+		} else if (!n.hasWildcard()) {
 			for (final Identifier id : n.getIdList()) {
 				if (SymbolTable.getType(id.getToken()) == null)
 					throw new TypeCheckException(id, "Invalid type '" + id.getToken() + "'");
 				id.accept(this, st);
 			}
+		}
 
 		for (final IfStatement ifStatement : n.getIfStatements()) {
 			ifStatement.accept(this, st);
@@ -1677,7 +1677,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.getValue().accept(this, st);
 		n.type = new BoaStack(n.getValue().type);
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final QueueType n, final SymbolTable env) {
@@ -1740,14 +1740,14 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			names.add(c.getIdentifier().getToken());
 
 			final Factor f = c.getExp().getLhs().getLhs().getLhs().getLhs().getLhs();
-			if(f.getOperand() instanceof ILiteral) {
-				if(f.getOperand() instanceof StringLiteral)
+			if (f.getOperand() instanceof ILiteral) {
+				if (f.getOperand() instanceof StringLiteral)
 					fieldType = new BoaString();
-				else if(f.getOperand() instanceof IntegerLiteral)
+				else if (f.getOperand() instanceof IntegerLiteral)
 					fieldType = new BoaInt();
-				else if(f.getOperand() instanceof FloatLiteral)
+				else if (f.getOperand() instanceof FloatLiteral)
 					fieldType = new BoaFloat();
-				else if(f.getOperand() instanceof TimeLiteral)
+				else if (f.getOperand() instanceof TimeLiteral)
 					fieldType = new BoaTime();
 				values.add(((ILiteral)(f.getOperand())).getLiteral());
 				types.add(new BoaEnum(c.getIdentifier().getToken(),((ILiteral)(f.getOperand())).getLiteral(),fieldType));
@@ -1768,12 +1768,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	@Override
 	public void visit(final TraversalType n, final SymbolTable env) {
 		n.env = env;
-		BoaTraversal tr = new BoaTraversal();
-		if(n.getIndex()!=null) {
+		if (n.getIndex() != null) {
 			n.getIndex().accept(this, env);
-			tr.setIndex(n.getIndex().type);
+			n.type = new BoaTraversal(n.getIndex().type);
+		} else {
+			n.type = new BoaTraversal();
 		}
-		n.type = tr;
 	}
 
 	/** {@inheritDoc} */
