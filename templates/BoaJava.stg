@@ -154,7 +154,7 @@ private class <name> extends boa.runtime.Tuple
 	public boa.output.Output.Value toValue() {
 		final boa.output.Output.Value.Builder v = boa.output.Output.Value.newBuilder();
 		v.setType(boa.output.Output.Value.Type.TUPLE);
-		<fields, types, scalars, valids:{field,type,scalar,valid|v.addT(boa.io.EmitKey.toValue(this.___<field>));}; separator="\n">
+		<fields, types, scalars, valids:{field,type,scalar,valid|<if(valid)>v.addT(boa.io.EmitKey.toValue(this.___<field>));<endif>}; separator="\n">
 		return v.build();
 	}
 }<\n>
