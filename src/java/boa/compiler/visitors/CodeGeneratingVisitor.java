@@ -709,9 +709,20 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		st.add("combineTables", combineAggregatorStrings);
 		st.add("reduceTables", reduceAggregatorStrings);
 
+		final List<String> variableNames = new ArrayList<String>();
+		for (final String s : reduceAggregatorStrings)
+			variableNames.add(s.substring(s.lastIndexOf(':') + 1, s.lastIndexOf('\"')));
+		Collections.sort(variableNames);
+
+		String outputVariableNames = "";
+		for (final String s : variableNames)
+			outputVariableNames += (outputVariableNames.length() == 0 ? "" : ",") + "\"" + s + "\"";
+
 		st.add("name", className);
 		st.add("splitsize", splitSize);
 		st.add("seed", seed);
+		st.add("numreducers", variableNames.size());
+		st.add("outputVariableNames", outputVariableNames);
 		st.add("jobId", jobId);
 		if (isLocal) st.add("isLocal", true);
 

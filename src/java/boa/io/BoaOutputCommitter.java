@@ -37,6 +37,7 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
  * A {@link FileOutputCommitter} that stores the job results into a database.
  *
  * @author rdyer
+ * @author hungc
  */
 public class BoaOutputCommitter extends FileOutputCommitter {
 	private final Path outputPath;
@@ -119,7 +120,6 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 		Connection con = null;
 		FileSystem fileSystem = null;
 		FSDataInputStream in = null;
-		FSDataOutputStream out = null;
 
 		try {
 			fileSystem = outputPath.getFileSystem(context.getConfiguration());
@@ -136,7 +136,6 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 			}
 
 			fileSystem.mkdirs(new Path("/boa", new Path("" + jobId)));
-			out = fileSystem.create(new Path("/boa", new Path("" + jobId, new Path("output.txt"))));
 
 			int partNum = 0;
 
@@ -145,11 +144,17 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 			int webLength = 0;
 			final int webSize = 64 * 1024 - 1;
 
+			context.getReducerClass();
+
 			while (true) {
-				final Path path = new Path(outputPath, "part-r-" + String.format("%05d", partNum++));
+				final Path path = new Path(outputPath, "part-r-" + String.format("%05d", partNum));
 				if (!fileSystem.exists(path))
 					break;
 
+				fileSystem.rename(path, new Path("/boa", new Path("" + jobId, new Path(boa.runtime.BoaPartitioner.getVariableFromPartition(partNum) + ".seq"))));
+				partNum++;
+
+                /* FIXME later
 				if (in != null)
 					try { in.close(); } catch (final Exception e) { e.printStackTrace(); }
 				in = fileSystem.open(path);
@@ -167,13 +172,14 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 							try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
 						}
 					}
-					out.write(b, 0, numBytes);
 					length += numBytes;
 
 					this.context.progress();
 				}
+                */
 			}
 
+                /* FIXME later
 			try {
 				ps = con.prepareStatement("UPDATE boa_output SET length=?, hash=MD5(web_result) WHERE id=" + jobId);
 				ps.setLong(1, length);
@@ -181,12 +187,12 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 			} finally {
 				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
 			}
+            */
 		} catch (final Exception e) {
 			e.printStackTrace();
 		} finally {
 			try { if (con != null) con.close(); } catch (final Exception e) { e.printStackTrace(); }
 			try { if (in != null) in.close(); } catch (final Exception e) { e.printStackTrace(); }
-			try { if (out != null) out.close(); } catch (final Exception e) { e.printStackTrace(); }
 			try { if (fileSystem != null) fileSystem.close(); } catch (final Exception e) { e.printStackTrace(); }
 		}
 	}

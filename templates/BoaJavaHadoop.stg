@@ -1,4 +1,4 @@
-Program(name, jobId, staticDeclarations, staticStatements, statements, combineTables, reduceTables, splitsize, seed, isLocal) ::= <<
+Program(name, jobId, numreducers, staticDeclarations, staticStatements, statements, combineTables, reduceTables, splitsize, seed, isLocal, outputVariableNames) ::= <<
 package boa;
 
 public class <name> extends boa.runtime.BoaRunner {
@@ -75,6 +75,8 @@ public class <name> extends boa.runtime.BoaRunner {
 		}
 
 		jb.setInputFormatClass(org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat.class);
+
+		jb.setNumReduceTasks(<numreducers>);
 
 		if (id > 0)
 			configuration.setInt("boa.hadoop.jobid", id);
@@ -165,6 +167,9 @@ public class <name> extends boa.runtime.BoaRunner {
 	}
 	
 	static class <name>BoaReducer extends boa.runtime.BoaReducer {
+		static {
+			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames>});
+		}
 		public <name>BoaReducer() {
 			super();
 
