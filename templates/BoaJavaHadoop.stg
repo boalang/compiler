@@ -166,7 +166,7 @@ public class <name> extends boa.runtime.BoaRunner {
 			<combineTables:{t | <t><\n>}>		}
 	}
 	
-	static class <name>BoaReducer extends boa.runtime.BoaReducer {
+	public static class <name>BoaReducer extends boa.runtime.BoaReducer {
 		static {
 			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames>});
 		}
