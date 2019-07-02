@@ -41,7 +41,7 @@ public class WorkflowGenerator {
 	private List<String> subWorkflowPaths;
 
 	public WorkflowGenerator () {
-		this(null, null, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
+		this(null, null, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
 	}
 
 	public WorkflowGenerator(final String jobName, final String outputPath, final List<String> outputs, final List<String> subViews, final List<String> subWorkflowPaths) {
