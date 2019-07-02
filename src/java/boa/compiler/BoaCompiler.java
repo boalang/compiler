@@ -284,7 +284,7 @@ public class BoaCompiler extends BoaMain {
 			vfv.start(p);
 
 			generateWorkflow(wfName, vfv, wfDir);
-			compileGeneratedSrc(cl, jarDir, outputSrcDir, outputFile);
+			compileGeneratedSrc(cl, jarDir, srcDir, outputFile);
 		} catch (final Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(inputFile.getName() + ": compilation failed", e);
