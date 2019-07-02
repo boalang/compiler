@@ -229,7 +229,7 @@ public class BoaCompiler extends BoaMain {
 	}
 
 	private static void codegen(String name, Program p, File srcDir, File jarDir, String wfName, File wfDir, CommandLine cl) throws IOException{
-		final File outputSrcDir = new File(srcDir, name);
+		final File outputSrcDir = new File(srcDir, new File(name, "boa"));
 		jarDir = new File(jarDir, name);
 		wfDir = new File(wfDir, name);
 		wfName += "-" + name;
