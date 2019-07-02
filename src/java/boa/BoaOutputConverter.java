@@ -111,7 +111,7 @@ public class BoaOutputConverter extends BoaMain {
 		final NullWritable key = (NullWritable) ReflectionUtils.newInstance(reader.getKeyClass(), conf);
 		final BytesWritable value = (BytesWritable) ReflectionUtils.newInstance(reader.getValueClass(), conf);
 
-		final String tableName = inputPath.getName();
+		final String tableName = inputPath.getName().substring(0, inputPath.getName().indexOf("."));
 		try {
 			while (reader.next(key, value))
 				System.out.println(tableName + convertLine(value));
@@ -129,8 +129,11 @@ public class BoaOutputConverter extends BoaMain {
 			return "<<ERROR CONVERTING ROW TO TEXT>>";
 		}
 
-		for (final Value v : row.getColsList())
-			line += "[" + EmitKey.valueToString(v) + "]";
+		if (row.getColsCount() == 0)
+			line += "[]";
+		else
+			for (final Value v : row.getColsList())
+				line += "[" + EmitKey.valueToString(v) + "]";
 
 		line += " = " + EmitKey.valueToString(row.getVal());
 
