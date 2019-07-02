@@ -139,12 +139,13 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 
 			int partNum = 0;
 
-			final byte[] b = new byte[64 * 1024 * 1024];
-			long length = 0;
-			int webLength = 0;
-			final int webSize = 64 * 1024 - 1;
+			final int MAX_OUTPUT = 64 * 1024 - 1;
+			final byte[] b = new byte[MAX_OUTPUT];
+			int length = 0;
+			String output = "";
 
-			context.getReducerClass();
+			// ensure the reducer class is initialized in the cleanup task
+			context.getReducerClass().newInstance();
 
 			while (true) {
 				final Path path = new Path(outputPath, "part-r-" + String.format("%05d", partNum));
@@ -161,18 +162,9 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 
 				int numBytes = 0;
 
-				while ((numBytes = in.read(b)) > 0) {
-					if (webLength < webSize) {
-						try {
-							ps = con.prepareStatement("UPDATE boa_output SET web_result=CONCAT(web_result, ?) WHERE id=" + jobId);
-							ps.setString(1, new String(b, 0, webLength + numBytes < webSize ? numBytes : webSize - webLength));
-							ps.executeUpdate();
-                            webLength += numBytes;
-						} finally {
-							try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
-						}
-					}
+				while (length < MAX_OUTPUT && (numBytes = in.read(b)) > 0) {
 					length += numBytes;
+					output += new String(b, 0, numBytes < MAX_OUTPUT ? numBytes : MAX_OUTPUT);
 
 					this.context.progress();
 				}
@@ -181,8 +173,9 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 
                 /* FIXME later
 			try {
-				ps = con.prepareStatement("UPDATE boa_output SET length=?, hash=MD5(web_result) WHERE id=" + jobId);
+				ps = con.prepareStatement("UPDATE boa_output SET length=?, web_result=?, hash=MD5(web_result) WHERE id=" + jobId);
 				ps.setLong(1, length);
+				ps.setString(2, output.substring(0, length < MAX_OUTPUT ? length : MAX_OUTPUT));
 				ps.executeUpdate();
 			} finally {
 				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
