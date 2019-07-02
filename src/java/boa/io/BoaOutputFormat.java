@@ -19,7 +19,7 @@ package boa.io;
 import org.apache.hadoop.mapreduce.OutputCommitter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter;
-import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 
 /**
  * Uses our custom output committer.
@@ -29,7 +29,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
  * @param <K> the type of keys
  * @param <V> the type of values
  */
-public class BoaOutputFormat<K, V> extends TextOutputFormat<K, V> {
+public class BoaOutputFormat<K, V> extends SequenceFileOutputFormat<K, V> {
 	private FileOutputCommitter committer = null;
 
 	@Override
