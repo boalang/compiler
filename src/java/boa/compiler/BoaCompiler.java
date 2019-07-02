@@ -109,13 +109,6 @@ public class BoaCompiler extends BoaMain {
 		else
 			jobId = 0;
 
-		// get the filename of the jar we will be writing
-		final String jarName;
-		if (cl.hasOption('o'))
-			jarName = cl.getOptionValue('o');
-		else
-			jarName = "Query.jar";
-
 		viewIds = generateViewIds(cl);
 		viewASTs = generateViewASTs(cl);
 		viewSrcPaths = generateViewSrcPaths(cl);
@@ -224,7 +217,7 @@ public class BoaCompiler extends BoaMain {
 					}
 
 					generateWorkflow(Integer.toString(jobId), vfv, new ArrayList<String>(), wfDir);
-					compileGeneratedSrc(cl, jarName, jarDir, outputRoot, outputFile);
+					compileGeneratedSrc(cl, jarDir, outputRoot, outputFile);
 				}
 			} catch (final TypeCheckException e) {
 				parserErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
@@ -291,8 +284,7 @@ public class BoaCompiler extends BoaMain {
 			vfv.start(p);
 
 			generateWorkflow(wfName, vfv, new ArrayList<String>(), wfDir);
-			final String jarName = name + ".jar";
-			compileGeneratedSrc(cl, jarName, jarDir, outputSrcDir, outputFile);
+			compileGeneratedSrc(cl, jarDir, outputSrcDir, outputFile);
 		} catch (final Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(inputFile.getName() + ": compilation failed", e);
@@ -368,7 +360,7 @@ public class BoaCompiler extends BoaMain {
 		}
 	}
 
-	private static void compileGeneratedSrc(final CommandLine cl, final String jarName, final File jarDir, final File outputRoot, final File outputFile)
+	private static void compileGeneratedSrc(final CommandLine cl, final File jarDir, final File outputRoot, final File outputFile)
 			throws RuntimeException, IOException, FileNotFoundException {
 		// compile the generated .java file
 		final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -396,7 +388,7 @@ public class BoaCompiler extends BoaMain {
 			for (final String s : Arrays.asList(cl.getOptionValues('l')))
 				libJars.add(new File(s));
 
-		generateJar(jarName, outputRoot, jarDir, libJars);
+		generateJar(outputRoot, jarDir, libJars);
 
 		if (DefaultProperties.localDataPath == null) {
 			delete(outputRoot);
@@ -411,7 +403,6 @@ public class BoaCompiler extends BoaMain {
 		final Options options = new Options();
 		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
 		options.addOption("i", "in", true, "file to be compiled");
-		options.addOption("o", "out", true, "the name of the resulting jar");
 		options.addOption("j", "rtjar", true, "the path to the Boa runtime jar");
 		options.addOption("n", "name", true, "the name of the generated main class");
 		options.addOption("ast", "ast-parsed", false, "print the AST immediately after parsing (debug)");
@@ -498,8 +489,8 @@ public class BoaCompiler extends BoaMain {
 			throw new IOException("unable to delete file " + f);
 	}
 
-	private static void generateJar(final String jarName, final File dir, final File jarDir, final List<File> libJars) throws IOException, FileNotFoundException {
-		final JarOutputStream jar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(new File(jarDir, jarName))));
+	private static void generateJar(final File dir, final File jarDir, final List<File> libJars) throws IOException, FileNotFoundException {
+		final JarOutputStream jar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(new File(jarDir, "Query.jar"))));
 
 		try {
 			final int offset = dir.toString().length() + 1;
