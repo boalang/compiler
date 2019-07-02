@@ -70,8 +70,10 @@ public abstract class BottomOrTopAggregator extends Aggregator {
 	public void aggregate(final Value data, final Value metadata) {
 		if (metadata == null)
 			this.set.add(data, 1.0);
-		else
+		else if (metadata.getType() == Value.Type.FLOAT)
 			this.set.add(data, metadata.getF());
+		else
+			this.set.add(data, metadata.getI());
 	}
 
 	protected abstract boolean shouldInsert(final double a, final double b);
