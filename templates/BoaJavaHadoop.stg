@@ -122,7 +122,7 @@ public class <name> extends boa.runtime.BoaRunner {
 		return "\<inputDir> \<outputDir>";
 	}
 
-	static class <name>BoaMapper extends boa.runtime.BoaMapper {
+	public static class <name>BoaMapper extends boa.runtime.BoaMapper {
         <staticDeclarations>
         <if(staticStatements)>
         {
@@ -159,7 +159,7 @@ public class <name> extends boa.runtime.BoaRunner {
 		}
 	}
 	
-	static class <name>BoaCombiner extends boa.runtime.BoaCombiner {
+	public static class <name>BoaCombiner extends boa.runtime.BoaCombiner {
 		public <name>BoaCombiner() {
 			super();
 			
