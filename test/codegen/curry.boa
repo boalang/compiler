@@ -1,0 +1,11 @@
+TEST: output collection of string;
+
+type f = function(y: int) : bool;
+
+curry := function(x: int) : f {
+	return f {
+		return x > y;
+	};
+};
+
+if (curry(3)(2)) TEST << "OK";

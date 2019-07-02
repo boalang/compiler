@@ -1,3 +1,0 @@
-a1: array of int;
-a2: array of Statement;
-a3: array of { int, float };

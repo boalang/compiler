@@ -49,15 +49,15 @@ public class TestLexerGood extends BaseTest {
 	@Test
 	public void integerLiterals() throws IOException {
 		lex(load(rootDir + "int-lit.boa"),
-			new int[] { BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.EOF },
-			new String[] { "7", "94", "50", "0x9aF", "0X9Af", "0x9", "0X9", "0x000", "0753", "0", "0b10", "0B10", "0b0", "0B1", "<EOF>" });
+			new int[] { BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.IntegerLiteral, BoaLexer.EOF },
+			new String[] { "7", "94", "50", "-7", "-94", "-50", "0x9aF", "0X9Af", "0x9", "0X9", "0x000", "-0x9aF", "-0X9Af", "-0x9", "-0X9", "-0x000", "0753", "0", "-0753", "-0", "0b10", "0B10", "0b0", "0B1", "<EOF>" });
 	}
 
 	@Test
 	public void floatingLiterals() throws IOException {
 		lex(load(rootDir + "fp-lit.boa"),
-			new int[] { BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.EOF },
-			new String[] { "05.", "5.", "5.55", "5.e5", "5.e+5", "5.e-5", "5.E-5", "5.E5", ".5", ".5e0", ".5e+0", ".5e-0", ".5E0", "000e0", "000E0", "000E-0", "000E+0", "<EOF>" });
+			new int[] { BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.FloatingPointLiteral, BoaLexer.EOF },
+			new String[] { "05.", "5.", "5.55", "5.e5", "5.e+5", "5.e-5", "5.E-5", "5.E5", "-05.", "-5.", "-5.55", "-5.e5", "-5.e+5", "-5.e-5", "-5.E-5", "-5.E5", ".5", ".5e0", ".5e+0", ".5e-0", ".5E0", "-.5", "-.5e0", "-.5e+0", "-.5e-0", "-.5E0", "000e0", "000E0", "000E-0", "000E+0", "-000e0", "-000E0", "-000E-0", "-000E+0", "<EOF>" });
 	}
 
 	@Test
@@ -85,8 +85,8 @@ public class TestLexerGood extends BaseTest {
 	@Test
 	public void identifierLiterals() throws IOException {
 		lex(load(rootDir + "identifier-lit.boa"),
-			new int[] { BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.EOF },
-			new String[] { "valid_", "valid0", "valid0_", "Valid_0_valid", "_2", "<EOF>" });
+			new int[] { BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.EOF },
+			new String[] { "valid_", "valid0", "valid0_", "Valid_0_valid", "<EOF>" });
 	}
 
 	@Test
@@ -94,12 +94,5 @@ public class TestLexerGood extends BaseTest {
 		lex(load(rootDir + "time-lit.boa"),
 			new int[] { BoaLexer.TimeLiteral, BoaLexer.TimeLiteral, BoaLexer.TimeLiteral, BoaLexer.TimeLiteral, BoaLexer.EOF },
 			new String[] { "0t", "1000000T", "T\"Wed Feb  4 16:26:41 PST 2004\"", "T\"Tue Jun  5 10:43:07 America/Los_Angeles 2007\"", "<EOF>" });
-	}
-
-	@Test
-	public void views() throws IOException {
-		lex(load(rootDir + "views.boa"),
-			new int[] { BoaLexer.VIEW, BoaLexer.TABLE, BoaLexer.VIEWTABLE, BoaLexer.VIEWTABLE, BoaLexer.VIEWTABLE, BoaLexer.VIEWTABLE, BoaLexer.VIEWTABLE, BoaLexer.VIEWTABLE, BoaLexer.VIEWTABLE, BoaLexer.VIEWTABLE, BoaLexer.VIEWTABLE, BoaLexer.EOF },
-			new String[] { "view", "table", "J0/o", "J12345/o", "J29843238948/o", "@rdyer/v/o", "@rdyer/v/sv/o", "@rdyer/v/sv/sv/sv/sv/sv/o", "v/o", "v/sv/o", "v/sv/sv/sv/sv/sv/o", "<EOF>" });
 	}
 }

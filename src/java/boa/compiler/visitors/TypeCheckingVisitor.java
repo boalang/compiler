@@ -608,12 +608,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				throw new TypeCheckException(n.getId(), "'" + type + "' has no member named '" + selector + "'");
 			}
 
-			if (type instanceof CodeRepositoryProtoTuple && selector.equals("revisions")) {
-				throw new TypeCheckException(n.getId(), "Accessing " + "'" + selector + "' of '" + type + "' is prohibited! "
-						+ "Use functions 'getrevisionscount(CodeRepository)' and 'getrevision(CodeRepository, int)' instead! "
-						+ "E.g., revision := getrevision(cr, 0); or for (i := 0; i < getrevisionscount(cr); i++) revision := getrevision(cr, i);");
-			}
-
 			type = ((BoaTuple) type).getMember(selector);
 			if (type instanceof BoaName)
 				type = ((BoaName) type).getType();

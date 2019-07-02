@@ -1,6 +1,0 @@
-o: output sum of int;
-v: table [string] of int;
-#v: table [string] of int = J12345/o;
-r: v["abc"][5]._row;
-
-o << 1;

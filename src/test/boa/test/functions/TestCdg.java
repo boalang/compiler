@@ -36,6 +36,7 @@ import org.junit.runners.Parameterized.Parameters;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Method;
+import boa.types.Ast.Namespace;
 
 /**
  * Test CDG generation.
@@ -66,7 +67,8 @@ public class TestCdg {
 
 	@Test
 	public void testCdg() throws Exception {
-		final Declaration d = root.getNamespacesList().get(0).getDeclarationsList().get(0);
+		final Namespace n = root.getNamespacesList().get(0);
+		final Declaration d = n.getDeclarationsList().get(0);
 		String s = "";
 		for (final Method m : d.getMethodsList())
 			s += cdgToDot(getcdg(m)) + "\n";

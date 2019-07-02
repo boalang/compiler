@@ -1,5 +1,0 @@
-o: output sum of int;
-
-visit(input, visitor {
-	before Statement -> if (current(int)) o << 1;
-});

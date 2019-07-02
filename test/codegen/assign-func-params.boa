@@ -1,8 +1,6 @@
 o: output sum of int;
+o << 1;
 
 f := function(i: int) {
-    o << i;
+	i = 3;
 };
-
-
-g := f(5);

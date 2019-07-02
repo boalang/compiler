@@ -1,8 +1,8 @@
-# Counting the number of commiters for all Java projects with GIT
+# Counting the number of commiters for all Java projects with SVN
 counts: output set of string;
 p: Project = input;
 
 exists (i: int; match(`^java$`, lowercase(p.programming_languages[i])))
-	foreach (j: int; p.code_repositories[j].kind == RepositoryKind.GIT)
-		for (k:= 0; k < getrevisionscount(p.code_repositories[j]); k++)
-			counts << getrevision(p.code_repositories[j], k).committer.real_name;
+	foreach (j: int; p.code_repositories[j].kind == RepositoryKind.SVN)
+		foreach (k: int; def(p.code_repositories[j].revisions[k]))
+			counts << p.code_repositories[j].revisions[k].committer.real_name;

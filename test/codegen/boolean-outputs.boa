@@ -1,4 +1,0 @@
-b: output collection of bool;
-
-b << true;
-b << false;

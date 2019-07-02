@@ -1,5 +1,0 @@
-view subv {
-	o: output sum of int;
-}
-
-v := bad/o;

@@ -1,4 +1,0 @@
-v1: table[year: int][projectID: string][fileName: string] of temp: int;
-v2: table[first: string][second: string] of third: int;
-
-v1 = v2;

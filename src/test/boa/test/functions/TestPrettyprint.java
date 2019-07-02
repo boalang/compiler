@@ -51,16 +51,6 @@ public class TestPrettyprint {
 				{ "class c implements i1, i2, i3 {\n}\n" },
 				{ "abstract static final private class c extends d implements i1, i2, i3 {\n}\n" },
 				
-				/* enums */
-				{ "enum E {" 
-						+ indent(1) + "NONE(\"None\"),"
-						+ indent(1) + "ONE(\"One\"),"
-						+ indent(1) + "TWO(T.NAME);"
-						+ indent(1) + "String value;"
-						+ indent(1) + "E(final String value)"
-						+ indent(1) + "{" 
-							+ indent(2) + "this.value = value;" + STATEMENT_END }, 
-				
 				/* methods */
 				{ CLASS_START 
 						+ indent(1) + "void m()" 
@@ -83,18 +73,10 @@ public class TestPrettyprint {
 				
 				/* expressions */
 				{ STATEMENT_START + "List<String> list = new ArrayList<String>();" + STATEMENT_END}, // NEW
-				{ STATEMENT_START + "Func f = (E) -> {" 
-							+ indent(3) + "x = 2 * x;" 
-							+ indent(3) + "System.out.println(x);" 
-						+ indent(2) + "};" + STATEMENT_END}, // LAMBDA 1
-				{ STATEMENT_START + "Func f = (int x, String y) -> {" 
-							+ indent(3) + "x = 2 * x;" 
-							+ indent(3) + "System.out.println(x);" 
-						+ indent(2) + "};" + STATEMENT_END}, // LAMBDA 2
 				{ STATEMENT_START + "for (String s : strs)"
-						+ indent(2) + "{" 
-							+ indent(3) + "System.out.println(s);" 
-						+ indent(2) + "}" + STATEMENT_END} // FOREACH
+						+ indent(3) + "{" 
+							+ indent(4) + "System.out.println(s);" 
+						+ indent(3) + "}\n" + STATEMENT_END} // FOREACH
 		});
 	}
 

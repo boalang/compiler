@@ -1,8 +1,7 @@
 # looking for dead code
-DEAD: output top(1000000) of string weight int;
+DEAD: output sum[string] of int;
 
 cur_file: string;
-cur_method: string;
 s: stack of bool;
 alive := true;
 
@@ -14,45 +13,46 @@ visit(input, visitor {
 			visit(snapshot[i]);
 		stop;
 	}
-	before node: ChangedFile -> cur_file = string(node);
-	before node: Method -> {
-		cur_method = node.name;
-		push(s, alive);
+	before node: ChangedFile -> {
+		cur_file = string(node);
 		alive = true;
-	}
-	after node: Method -> alive = pop(s);
-	before node: Expression -> {
-		if (node.kind == ExpressionKind.LAMBDA) {
-			cur_method = "lambda";
-			push(s, alive);
-			alive = true;
-		}
-	}
-	after node: Expression -> {
-		if (node.kind == ExpressionKind.LAMBDA) 
-			alive = pop(s);
 	}
 	before node: Statement -> {
 		if (!alive) {
-			DEAD << format("%s - %s", cur_file, cur_method) weight 1;
+			DEAD[cur_file] << 1;
 			stop;
 		}
 		switch (node.kind) {
-			case StatementKind.BREAK: if (def(node.expressions)) break;
-			case StatementKind.RETURN, StatementKind.THROW, StatementKind.CONTINUE:
-				alive = false;
-				break;
-			case StatementKind.IF, StatementKind.LABEL: stop;
-			case StatementKind.FOR, StatementKind.DO, StatementKind.WHILE,
-					StatementKind.SWITCH, StatementKind.TRY:
-				foreach (i: int; def(node.statements[i])) {
-					push(s, alive);
-					visit(node.statements[i]);
-					alive = pop(s);
-				}
-				stop;
-			default:
-				break;
+		case StatementKind.RETURN, StatementKind.THROW,
+				StatementKind.BREAK, StatementKind.CONTINUE:
+			alive = false;
+			break;
+		case StatementKind.BLOCK, StatementKind.FOR, StatementKind.DO,
+				StatementKind.SYNCHRONIZED, StatementKind.CATCH,
+				StatementKind.CASE, StatementKind.WHILE:
+			push(s, alive);
+			alive = true;
+			break;
+		case StatementKind.IF, StatementKind.SWITCH, StatementKind.TRY:
+			foreach (i: int; def(node.statements[i])) {
+				push(s, alive);
+				alive = true;
+				visit(node.statements[i]);
+				alive = alive || pop(s);
+			}
+			stop;
+		default:
+			break;
 		}
 	}
+	after node: Statement ->
+		switch (node.kind) {
+		case StatementKind.BLOCK, StatementKind.FOR, StatementKind.DO,
+				StatementKind.SYNCHRONIZED, StatementKind.CATCH,
+				StatementKind.CASE, StatementKind.WHILE:
+			alive = alive && pop(s);
+			break;
+		default:
+			break;
+		}
 });

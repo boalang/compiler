@@ -19,7 +19,7 @@ visit(input, visitor {
 	before node: Statement ->
 		switch (node.kind) {
     	    case StatementKind.BREAK:
-				if (def(node.expressions[0])) break;
+				if (def(node.expression)) break;
     		case StatementKind.RETURN, StatementKind.THROW, StatementKind.CONTINUE:
     			alive = false;
     			break;

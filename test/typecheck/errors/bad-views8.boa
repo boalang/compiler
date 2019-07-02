@@ -1,7 +1,0 @@
-view sv6 {
-	o: output sum[string][string] of int;
-}
-
-v := sv6/o;
-
-c := v._4;

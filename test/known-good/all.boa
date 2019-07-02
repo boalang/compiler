@@ -113,9 +113,10 @@ q_all := visitor {
 			push(q22_s, q22_cur_val);
 			q22_cur_val = 0;
 			foreach (i: int; def(node.fields[i])) {
-				foreach (j: int; node.fields[i].modifiers[j].kind == ModifierKind.TRANSIENT)
+				foreach (j: int; node.fields[i].modifiers[j].kind == ModifierKind.OTHER)
+					if (node.fields[i].modifiers[j].other == "transient")
 						q20a_cur_val++;
-				foreach (j: int; node.fields[i].modifiers[j].kind == ModifierKind.VOLATILE)	
+					else if (node.fields[i].modifiers[j].other == "volatile")
 						q20b_cur_val++;
 				exists (j: int; node.fields[i].modifiers[j].kind == ModifierKind.STATIC)
 					q21_cur_val++;

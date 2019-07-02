@@ -1,5 +1,0 @@
-subv := 2;
-
-view subv {
-	o: output sum of int;
-}

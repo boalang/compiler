@@ -1,3 +1,0 @@
-visit(input, visitor {
-    after _ -> return;
-});

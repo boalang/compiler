@@ -1,9 +1,0 @@
-type t1 = { i: int, string, b: bool };
-tup1: t1 = { 5, "string", false };
-
-# structurally similar tuple, different names
-type t2 = { i2: int, s: string, b2: bool };
-tup2: t2 = { 5, "string", false };
-
-# tuples without declaring explicit type
-tup3 := { 5, false };

@@ -1,7 +1,0 @@
-view sv5 {
-	o: output sum of int;
-}
-
-v := sv5/o;
-
-c := v._2;

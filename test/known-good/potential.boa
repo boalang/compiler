@@ -75,7 +75,7 @@ visit(p, visitor {
 				before node: Statement ->
 					if (node.kind == StatementKind.IF)
 						if (node.statements[0].kind == StatementKind.THROW)
-							if (match(`^IllegalArgumentException$`, node.statements[0].expressions[0].new_type.name)) {
+							if (match(`^IllegalArgumentException$`, node.statements[0].expression.new_type.name)) {
 								foundUse("Assert", 4);
 								filesAssert[cur_file] = true;
 							}

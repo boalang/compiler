@@ -8,7 +8,7 @@ project_url := p.project_url;
 file_name: string;
 commit_date: time;
 
-visit(p, visitor {
+assert := visitor {
 	before node: ChangedFile -> {
 		if (!iskind("SOURCE_JAVA_JLS", node.kind))
 			stop;
@@ -18,4 +18,6 @@ visit(p, visitor {
 	before node: Statement ->
 		if (node.kind == StatementKind.ASSERT)
 			USES[project_url][file_name][commit_date] << 1;
-});
+};
+
+visit(p, assert);

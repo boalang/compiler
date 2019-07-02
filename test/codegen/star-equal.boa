@@ -1,5 +1,0 @@
-a: output collection of int;
-
-b := 3;
-b *= 2;
-a << b; 

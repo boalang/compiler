@@ -1,10 +1,10 @@
-o: output sum of int;
-
-f1 := function(i: int) : int {
-	f2 := function(j: int) : int {
-		return i + j;
+outer := function () : int {
+	inner := function () : bool {
+		return true;
 	};
-	return f2(i);
+
+	return 1;
 };
 
-o << f1(3);
+TEST: output collection of string;
+TEST << "OK";

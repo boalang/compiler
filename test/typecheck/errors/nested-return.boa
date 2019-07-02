@@ -1,9 +1,0 @@
-visit(input, visitor {
-    before n: Statement -> {
-        visit(n, visitor {
-            after n: Statement -> {
-            }
-        });
-        return;
-    }
-});

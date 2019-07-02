@@ -13,13 +13,5 @@ new(a4, 7, 100t);
 a5: array of string;
 new(a5, 2, "hi");
 
-type t = {int, float};
-a6: array of t = { {0, 0.5}, {1, 0.5} };
-a6[0] = {1, 1.0};
-l := len(a6);
-
-a7 := {input, input};
-a7[1] = input;
-
 TEST: output collection of string;
 TEST << "OK";

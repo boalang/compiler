@@ -1,4 +1,0 @@
-o: output top(5)[string] of int weight int;
-
-for (i := 1; i <= 5; i++)
-    o[input.id] << nrand(1000) weight i;

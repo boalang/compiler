@@ -1,8 +1,0 @@
-o: output sum of int;
-v: table[year: int][projectID: string][fileName: string] of temp:int;
-
-r: v._row;
-
-while (v >> r && v >> r) {
-	o << 1;
-}

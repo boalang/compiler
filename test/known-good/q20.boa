@@ -28,10 +28,10 @@ q20 := visitor {
 			trans_count = 0;
 			volt_count = 0;
 			foreach (i: int; def(node.fields[i]))
-				foreach (j: int; node.fields[i].modifiers[j].kind  == ModifierKind.TRANSIENT ||node.fields[i].modifiers[j].kind  == ModifierKind.VOLATILE )
-					if (node.fields[i].modifiers[j].kind == ModifierKind.VOLATILE)
+				foreach (j: int; node.fields[i].modifiers[j].kind == ModifierKind.OTHER)
+					if (node.fields[i].modifiers[j].other == "volatile")
 						volt_count++;
-					else if (node.fields[i].modifiers[j].kind == ModifierKind.TRANSIENT)
+					else if (node.fields[i].modifiers[j].other == "transient")
 						trans_count++;
 		} else
 			stop;

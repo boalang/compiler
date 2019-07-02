@@ -33,7 +33,7 @@ import org.junit.runners.Parameterized.Parameters;
 public class TestCodegenGood extends BaseTest {
 	final private static String rootDir = "test/codegen/";
 
-	@Parameters(name = "{index}][{0}")
+	@Parameters(name = "{0}")
 	public static List<String[]> data() {
 		final List<String[]> files = new ArrayList<String[]>();
 		for (final File f : new File(rootDir).listFiles())
@@ -43,14 +43,14 @@ public class TestCodegenGood extends BaseTest {
 	}
 
 	private String fileName;
-
 	public TestCodegenGood(final String fileName, final String ignored) {
 		this.fileName = fileName;
 	}
 
+
 	// test a bunch of known good files
 	@Test
-	public void testCodegenGood() throws IOException {
+	public void knownGood() throws IOException {
 		codegen(load(fileName));
 	}
 }

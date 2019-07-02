@@ -1,7 +1,0 @@
-view sv8 {
-	o: output sum[string][string] of int;
-}
-
-v: table[count: string][year: string] of happy: int = sv8/o;
-
-st := v["abc"][3];

@@ -37,6 +37,6 @@ public class TestTraversalBad extends BaseTest {
 
 	@Test
 	public void traversalWithNoReturn() throws IOException {
-		codegen(load(badDir + "traverse-with-no-return-statement.boa"), "Error on line 129: missing return statement");
+		codegen(load(badDir + "traverse-with-no-return-statement.boa"), "Error on line 131: missing return statement");
 	}
 }
