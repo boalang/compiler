@@ -43,7 +43,7 @@ ViewWorkflow(jobName, nextJobName, finalJobName, path) ::= <<
             <app-path>hdfs://paclab:8020/boa/#path#/workflow.xml</app-path>
             <propagate-configuration/>
         </sub-workflow>
-        <ok to="#if(nextJobName)#subworkflow-job-#nextJobName##else#job-#finalJobName##endif#"/>
+        <ok to="#if(nextJobName)#subworkflow-job-#nextJobName##else#Job-#finalJobName##endif#"/>
         <error to="fail"/>
     </action>
 >>
