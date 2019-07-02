@@ -212,7 +212,7 @@ public class BoaCompiler extends BoaMain {
 
 					if (subViews.size() > 0) {
 						for (final Map.Entry<String, Program> entry: subViews.entrySet()) {
-							codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, Integer.toString(jobId), wfDir, cl);
+							codegen(entry.getKey(), entry.getValue(), outputRoot, jarDir, Integer.toString(jobId), wfDir, cl);
 						}
 					}
 
@@ -229,7 +229,8 @@ public class BoaCompiler extends BoaMain {
 	}
 
 	private static void codegen(String name, Program p, File srcDir, File jarDir, String wfName, File wfDir, CommandLine cl) throws IOException{
-		final File outputSrcDir = new File(srcDir, name + "/boa");
+        srcDir = new File(srcDir, name);
+		final File outputSrcDir = new File(srcDir, "boa");
 		jarDir = new File(jarDir, name);
 		wfDir = new File(wfDir, name);
 		wfName += "-" + name;
@@ -276,7 +277,7 @@ public class BoaCompiler extends BoaMain {
 
 			if (subViews.size() > 0) {
 				for (final Map.Entry<String, Program> entry: subViews.entrySet()) {
-					codegen(entry.getKey(), entry.getValue(), outputSrcDir, jarDir, wfName, wfDir, cl);
+					codegen(entry.getKey(), entry.getValue(), srcDir, jarDir, wfName, wfDir, cl);
 				}
 			}
 
