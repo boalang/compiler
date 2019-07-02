@@ -207,13 +207,17 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 			case BOOL:
 				return String.valueOf(v.getB());
 			case TUPLE:
-				String s = "{ ";
+				String s = "";
+				if (!v.getHasWeight())
+					s += "{ ";
 				for (int i = 0; i < v.getTCount(); i++) {
 					if (i > 0)
 						s += ", ";
 					s += EmitKey.valueToString(v.getT(i));
 				}
-				return s + " }";
+				if (!v.getHasWeight())
+					s += " }";
+				return s;
 			default:
 				return "";
 		}
