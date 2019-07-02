@@ -24,8 +24,8 @@ Workflow(jobName, viewnames, outputPath, outputs, views) ::= <<
             </prepare>
             <main-class>boa.Query</main-class>
             <arg>-b</arg>
-            <arg>${boa.input}</arg>
-            <arg>${boa.output}</arg>
+            <arg>${boainput}</arg>
+            <arg>${boaoutput}</arg>
         </java>
         <ok to="end" />
         <error to="fail" />
