@@ -63,7 +63,7 @@ abstract class MinOrMaxAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final String data, final Value metadata) {
+	public void aggregate(final Value data, final Value metadata) {
 		double weight;
 
 		if (metadata == null)
@@ -71,7 +71,7 @@ abstract class MinOrMaxAggregator extends Aggregator {
 		else
 			weight = metadata.getF();
 
-		final WeightedValue s = new WeightedValue(EmitKey.toValue(data), weight);
+		final WeightedValue s = new WeightedValue(data, weight);
 
 		if (this.compare(s, this.list[this.last]) > 0)
 			// find this new item's position within the list
