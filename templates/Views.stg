@@ -23,9 +23,9 @@ Workflow(jobName, viewnames, outputPath, outputs, views) ::= <<
                 <delete path="hdfs://paclab:8020/boa/#outputPath#/output"/>
             </prepare>
             <main-class>boa.Query</main-class>
-            <arg>-b</b>
-            <arg>${boa.input}</b>
-            <arg>${boa.output}</b>
+            <arg>-b</arg>
+            <arg>${boa.input}</arg>
+            <arg>${boa.output}</arg>
         </java>
         <ok to="end" />
         <error to="fail" />
