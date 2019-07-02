@@ -95,14 +95,14 @@ public class EmitValue implements Writable {
 	@Override
 	public void write(final DataOutput out) throws IOException {
 		byte[] b = this.data.toByteArray();
-		out.write(b.length);
+		out.writeInt(b.length);
 		out.write(b);
 
 		if (this.metadata == null) {
-			out.write(0);
+			out.writeInt(0);
 		} else {
 			b = this.metadata.toByteArray();
-			out.write(b.length);
+			out.writeInt(b.length);
 			out.write(b);
 		}
 	}
