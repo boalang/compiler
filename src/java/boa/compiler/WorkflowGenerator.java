@@ -38,14 +38,13 @@ public class WorkflowGenerator {
 	private String outputPath;
 	private List<String> outputs;
 	private List<String> subViews;
-	private List<String> args;
 	private List<String> subWorkflowPaths;
 
 	public WorkflowGenerator () {
 		this(null, null, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
 	}
 
-	public WorkflowGenerator(final String jobName, final String outputPath, final List<String> outputs, final List<String> subViews, final List<String> subWorkflowPaths, final List<String> args) {
+	public WorkflowGenerator(final String jobName, final String outputPath, final List<String> outputs, final List<String> subViews, final List<String> subWorkflowPaths) {
 		workflowStg = new STGroupDir("templates");
 		workflowStg.importTemplates(new STGroupFile("Views.stg"));
 
@@ -54,7 +53,6 @@ public class WorkflowGenerator {
 		this.outputPath = outputPath;
 		this.outputs = outputs == null ? new ArrayList<String>() : outputs;
 		this.subViews = subViews == null ? new ArrayList<String>() : subViews;
-		this.args = args == null ? new ArrayList<String>() : args;
 		this.subWorkflowPaths = subWorkflowPaths == null ? new ArrayList<String>() : subWorkflowPaths;
 	}
 
@@ -72,10 +70,6 @@ public class WorkflowGenerator {
 
 	public void setOutputs(final List<String> outputs) {
 		this.outputs = outputs;
-	}
-
-	public void setArgs(final List<String> args) {
-		this.args = args == null ? new ArrayList<String>() : args;
 	}
 
 	public void setSubWorkflowPaths(final List<String> subWorkflowPaths) {
@@ -103,7 +97,6 @@ public class WorkflowGenerator {
 		st.add("outputs", outputs);
 		st.add("viewnames", subViews);
 		st.add("views", views);
-		st.add("args", args);
 
 		workflow = st.render();
 	}

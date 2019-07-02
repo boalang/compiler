@@ -1,5 +1,5 @@
 delimiters "#", "#"
-Workflow(jobName, viewnames, outputPath, outputs, views, args) ::= <<
+Workflow(jobName, viewnames, outputPath, outputs, views) ::= <<
 <workflow-app xmlns="uri:oozie:workflow:0.4" name="boa-workflow">
     <start to="CheckJob-#jobName#" />
 
@@ -23,8 +23,9 @@ Workflow(jobName, viewnames, outputPath, outputs, views, args) ::= <<
                 <delete path="hdfs://paclab:8020/boa/#outputPath#/output"/>
             </prepare>
             <main-class>boa.Query</main-class>
-            #args:{arg | <arg>#arg#</arg>#\n#}#
-            <file>Query.jar</file>
+            <arg>-b</b>
+            <arg>${boa.input}</b>
+            <arg>${boa.output}</b>
         </java>
         <ok to="end" />
         <error to="fail" />

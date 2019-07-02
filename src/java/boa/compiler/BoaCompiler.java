@@ -216,7 +216,7 @@ public class BoaCompiler extends BoaMain {
 						}
 					}
 
-					generateWorkflow(Integer.toString(jobId), vfv, new ArrayList<String>(), wfDir);
+					generateWorkflow(Integer.toString(jobId), vfv, wfDir);
 					compileGeneratedSrc(cl, jarDir, outputRoot, outputFile);
 				}
 			} catch (final TypeCheckException e) {
@@ -283,7 +283,7 @@ public class BoaCompiler extends BoaMain {
 			final ViewFindingVisitor vfv = new ViewFindingVisitor();
 			vfv.start(p);
 
-			generateWorkflow(wfName, vfv, new ArrayList<String>(), wfDir);
+			generateWorkflow(wfName, vfv, wfDir);
 			compileGeneratedSrc(cl, jarDir, outputSrcDir, outputFile);
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -531,7 +531,7 @@ public class BoaCompiler extends BoaMain {
 		jar.closeEntry();
 	}
 
-	private static void generateWorkflow(final String jobName, final ViewFindingVisitor vfv, final List<String> javaArgs, final File dir) throws IOException {
+	private static void generateWorkflow(final String jobName, final ViewFindingVisitor vfv, final File dir) throws IOException {
 		final List<String> wfViews = new ArrayList<String>();
 		final List<String> wfPaths = new ArrayList<String>();
 		String outputPath = jobName.replaceAll("-", "/");
@@ -575,7 +575,7 @@ public class BoaCompiler extends BoaMain {
 		}
 
 		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(new File(dir, "workflow.xml")));
-		final WorkflowGenerator wg = new WorkflowGenerator(jobName, outputPath, referencedOutputs, wfViews, wfPaths, javaArgs);
+		final WorkflowGenerator wg = new WorkflowGenerator(jobName, outputPath, referencedOutputs, wfViews, wfPaths);
 
 		wg.createWorkflow();
 		final String wf = wg.getWorkflow();
