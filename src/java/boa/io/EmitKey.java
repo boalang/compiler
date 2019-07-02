@@ -105,7 +105,7 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 		out.writeInt(this.indices.length);
 		for (final Value idx : this.indices) {
 			final byte[] b = idx.toByteArray();
-			out.write(b.length);
+			out.writeInt(b.length);
 			out.write(b);
 		}
 	}
