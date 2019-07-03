@@ -971,12 +971,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				if (n.getOp(n.getOpsSize() - 1) instanceof Selector)
 					col = ops.substring(ops.lastIndexOf("."));
 
-				String patternString = "\\[(\".*?\")\\]|\\[(\\(.*?\\))\\]|\\[(null)\\]";
+				String patternString = "\\[(\".*?\")\\]|\\[(\\(.*?\\))\\]|\\[(_.*?)\\]|\\[(null)\\]";
 				Pattern pattern = Pattern.compile(patternString);
 				Matcher matcher = pattern.matcher(ops);
 
 				while (matcher.find()) {
-					String index = ((matcher.group(1) != null) ? matcher.group(1) : ((matcher.group(2) != null) ? matcher.group(2) : "null"));
+					String index = ((matcher.group(1) != null) ? matcher.group(1) : ((matcher.group(2) != null) ? matcher.group(2) : ((matcher.group(3) != null) ? matcher.group(3) : "null")));
 					accept += ".addIndex(" + index + ")";
 				}
 				accept += col;

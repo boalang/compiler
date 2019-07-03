@@ -129,9 +129,9 @@ TupleType(name, fields, types, isrow, scalars, protos, valids) ::= <<
 private class <name> extends boa.runtime.Tuple
 {
 	<fields,types:{field,type|<type> ___<field>;<\n>}; separator="">
-	<name>() {
-		<fields:{f|___<f> = null;}; separator="\n">
-	}
+	<if(fields)><name>() {
+	<fields:{f|___<f> = null;}; separator="\n">
+}<endif>
 
 	<name>(<fields,types:{field,type|final <type> ___<field>}; separator=", ">) {
 		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = ___<field><else>this.___<field> = new <type>(___<field>)<endif>;}; separator="\n">
