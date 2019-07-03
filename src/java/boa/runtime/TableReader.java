@@ -147,12 +147,10 @@ public class TableReader {
 		while (filter) {
 			try {
 				filter = false;
-                System.err.println("READING");
 				if (!reader.next(key, value)) {
 					close();
 					return false;
 				}
-                System.err.println("PARSING");
 				row = Row.parseFrom(CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
 
 				final List<Value> rowValues = row.getColsList();
@@ -167,19 +165,18 @@ public class TableReader {
 					}
 				}
 
-                if (!filter && indices.size() > rowValues.size()) {
+				if (!filter && indices.size() > rowValues.size()) {
 					final Object target = indices.get(indices.size() - 1);
 					if (!(target instanceof String && ((String)target).equals("_")))
-                        if (!compareField(row.getVal(), target))
-                            filter = true;
-                }
+						if (!compareField(row.getVal(), target))
+							filter = true;
+				}
 			} catch (final IOException e) {
 				close();
 				return false;
 			}
 		}
 
-        System.err.println("KEPT");
 		return true;
 	}
 
@@ -215,11 +212,10 @@ public class TableReader {
 	}
 
 	public void reset() {
-		try {
-			reader.sync(0);
-		} catch (final Exception e) {
-			close();
-		}
+		close();
+		preloaded = false;
+		row = null;
+		open();
 	}
 
 	public EmptyTuple[] filterToArray() {
