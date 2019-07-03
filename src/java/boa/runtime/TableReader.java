@@ -65,7 +65,7 @@ public class TableReader {
 			filePath += path[i];
 		}
 		this.filePath = new Path("/boa/79335/" + filePath + "/output/" + path[path.length - 1] + ".seq");
-		open(position);
+		open();
 	}
 
 	private TableReader(final Path filePath, final boolean preloaded, final long position, final Row row, final List<Object> indices) {
@@ -73,13 +73,12 @@ public class TableReader {
 		this.preloaded = preloaded;
 		this.row = row;
 		this.indices = new ArrayList<Object>(indices);
-		open(position);
+		open();
 	}
 
-	private void open(final long position) {
+	private void open() {
 		try {
 			reader = new SequenceFile.Reader(FileSystem.get(conf), this.filePath, conf);
-			reader.sync(position);
 		} catch (final Exception e) {
 			System.err.println(e);
 			e.printStackTrace();
@@ -147,12 +146,10 @@ public class TableReader {
 		while (filter) {
 			try {
 				filter = false;
-                System.err.println("READING");
 				if (!reader.next(key, value)) {
 					close();
 					return false;
 				}
-                System.err.println("PARSING");
 				row = Row.parseFrom(CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
 
 				final List<Value> rowValues = row.getColsList();
@@ -167,19 +164,18 @@ public class TableReader {
 					}
 				}
 
-                if (!filter && indices.size() > rowValues.size()) {
+				if (!filter && indices.size() > rowValues.size()) {
 					final Object target = indices.get(indices.size() - 1);
 					if (!(target instanceof String && ((String)target).equals("_")))
-                        if (!compareField(row.getVal(), target))
-                            filter = true;
-                }
+						if (!compareField(row.getVal(), target))
+							filter = true;
+				}
 			} catch (final IOException e) {
 				close();
 				return false;
 			}
 		}
 
-        System.err.println("KEPT");
 		return true;
 	}
 
@@ -215,11 +211,10 @@ public class TableReader {
 	}
 
 	public void reset() {
-		try {
-			reader.sync(0);
-		} catch (final Exception e) {
-			close();
-		}
+		close();
+		preloaded = false;
+		row = null;
+		open();
 	}
 
 	public EmptyTuple[] filterToArray() {
