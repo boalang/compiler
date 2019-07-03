@@ -171,7 +171,7 @@ public class BoaAstIntrinsics {
 					ByteArrayFile file = (ByteArrayFile) SerializationUtils.deserialize(value.getBytes());
 					try {
 						if (currentStoredRepository != null)
-							currentStoredRepository.close();
+							closeRepo();
 						currentStoredRepository = new ByteArrayRepositoryBuilder().setGitDir(file).build();
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -189,6 +189,12 @@ public class BoaAstIntrinsics {
 			}
 		}
 		return emptyAst;
+	}
+	
+	@FunctionSpec(name = "closerepo")
+	public static void closeRepo() {
+		currentStoredRepository.close();
+		System.gc();
 	}
 
 	@FunctionSpec(name = "getParsedChangedFile", returnType = "ChangedFile", formalParameters = { "ChangedFile" })
