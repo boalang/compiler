@@ -38,7 +38,6 @@ import boa.output.Output.Row;
 import boa.runtime.Tuple;
 import boa.runtime.EmptyTuple;
 
-
 /**
  * SequenceFile Iterator
  *
@@ -46,32 +45,46 @@ import boa.runtime.EmptyTuple;
  * @author rdyer
  */
 public class TableReader {
-	private String[] path = null;
+	private static final Configuration conf = new Configuration();
+
+	private Path filePath = null;
 	private SequenceFile.Reader reader = null;
-	private NullWritable key = null;
-	private BytesWritable value = null;
-	private boolean preloaded = false;
 	private List<Object> indices = new ArrayList<Object>();
+	private boolean preloaded = false;
 	private Row row = null;
 
-	public TableReader(long position, String ... path) {
-		this.path = path.clone();
-		String filePath = path.length > 0 ? path[0] : "";
+	private NullWritable key = NullWritable.get();
+	private BytesWritable value = new BytesWritable();
 
-		for (int i = 1; i < path.length; i++) {
-			filePath += "/" + path[i];
+	public TableReader(final long position, final String ... path) {
+		String filePath = "";
+
+		for (int i = 0; i < path.length - 1; i++) {
+			if (i > 0)
+				filePath += "/";
+			filePath += path[i];
 		}
+		this.filePath = new Path("/boa/79335/" + filePath + "/output/" + path[path.length - 1] + ".seq");
+		open(position);
+	}
 
-		final Configuration conf = new Configuration();
+	private TableReader(final Path filePath, final boolean preloaded, final long position, final Row row, final List<Object> indices) {
+		this.filePath = filePath;
+		this.preloaded = preloaded;
+		this.row = row;
+		this.indices = new ArrayList<Object>(indices);
+		open(position);
+	}
+
+	private void open(final long position) {
 		try {
-			reader = new SequenceFile.Reader(FileSystem.get(conf), new Path(filePath), conf);
-			reader.seek(position);
+			reader = new SequenceFile.Reader(FileSystem.get(conf), this.filePath, conf);
+			reader.sync(position);
 		} catch (final Exception e) {
+			System.err.println(e);
+			e.printStackTrace();
 			reader = null;
 		}
-
-		key = (NullWritable) ReflectionUtils.newInstance(this.reader.getKeyClass(), conf);
-		value = (BytesWritable) ReflectionUtils.newInstance(this.reader.getValueClass(), conf);
 	}
 
 	public boolean hasNext() {
@@ -135,22 +148,26 @@ public class TableReader {
 			try {
 				filter = false;
 				if (!reader.next(key, value)) {
+					close();
 					return false;
 				}
-				final CodedInputStream stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
-				row = Row.parseFrom(stream);
+				row = Row.parseFrom(CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
+
 				final List<Value> rowValues = row.getColsList();
+				rowValues.add(row.getVal());
 
 				for (int i = 0; i < indices.size(); i++) {
-					final Value value = rowValues.get(i);
-					final Object index = indices.get(i);
-					if ((index instanceof String && !((String)index).equals("_")) && !compareField(value, index)) {
+					final Value src = rowValues.get(i);
+					final Object target = indices.get(i);
+					if (target instanceof String && ((String)target).equals("_"))
+						continue;
+					if (!compareField(src, target)) {
 						filter = true;
 						break;
 					}
 				}
-				rowValues.add(row.getVal());
 			} catch (final IOException e) {
+				close();
 				return false;
 			}
 		}
@@ -181,8 +198,8 @@ public class TableReader {
 
 	public int length() {
 		int count = 0;
-		TableReader tr = new TableReader(0, path);
-		while(tr.hasNext()) {
+		final TableReader tr = clone();
+		while (tr.hasNext()) {
 			tr.next();
 			count++;
 		}
@@ -191,15 +208,16 @@ public class TableReader {
 
 	public void reset() {
 		try {
-			reader.seek(0);
+			reader.sync(0);
 		} catch (final Exception e) {
-			reader = null;
+			close();
 		}
 	}
 
 	public EmptyTuple[] filterToArray() {
+		final EmptyTuple t = new EmptyTuple();
+
 		EmptyTuple[] et = new EmptyTuple[this.length()];
-		EmptyTuple t = new EmptyTuple();
 		for (int i = 0; i < et.length; i++)
 			et[i] = t;
 
@@ -228,13 +246,8 @@ public class TableReader {
 			try {
 				pos = reader.getPosition();
 			} catch (final Exception e) {
-				// do nothing
+				close();
 			}
-		final TableReader newSFI = new TableReader(pos, path);
-		newSFI.preloaded = this.preloaded;
-		newSFI.row = this.row;
-		for (final Object o : indices)
-			newSFI.indices.add(o);
-		return newSFI;
+		return new TableReader(filePath, preloaded, pos, row, indices);
 	}
 }
