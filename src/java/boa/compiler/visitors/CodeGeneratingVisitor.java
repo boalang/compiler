@@ -190,6 +190,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				return;
 			}
 
+			if (n.type instanceof BoaTuple) {
+				String id = n.getId().getToken();
+				String type = n.type.toJavaType();
+				code.add(type+ " ___" + id + " = new " + type + "();\n");
+				return;
+			}
+
 			final ST st = stg.getInstanceOf("VarDecl");
 
 			String type = "boa.runtime.EmptyTuple[]";
