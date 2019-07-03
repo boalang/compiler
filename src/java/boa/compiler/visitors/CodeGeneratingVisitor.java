@@ -190,7 +190,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				return;
 			}
 
-			if (n.type instanceof BoaTuple) {
+			if (n.type instanceof BoaTuple && !(n.type instanceof BoaProtoTuple)) {
 				String id = n.getId().getToken();
 				String type = n.type.toJavaType();
 				code.add(type+ " ___" + id + " = new " + type + "();\n");
