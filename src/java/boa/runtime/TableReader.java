@@ -45,6 +45,7 @@ import boa.runtime.EmptyTuple;
  * @author rdyer
  */
 public class TableReader {
+	public static int jobId = 0;
 	private static final Configuration conf = new Configuration();
 
 	private Path filePath = null;
@@ -65,7 +66,7 @@ public class TableReader {
 				filePath += "/";
 			filePath += path[i];
 		}
-		this.filePath = new Path("/boa/79335/" + filePath + "/output/" + path[path.length - 1] + ".seq");
+		this.filePath = new Path("/boa/" + jobId + "/" + filePath + "/output/" + path[path.length - 1] + ".seq");
 		open();
 		seek(position);
 	}

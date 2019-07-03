@@ -147,6 +147,7 @@ public class Query extends boa.runtime.BoaRunner {
 		/** {@inheritDoc} */
 		@Override
 		protected void setup(final org.apache.hadoop.mapreduce.Mapper.Context context) throws java.io.IOException, java.lang.InterruptedException {
+			boa.runtime.TableReader.jobId = <jobId>;
 			boa.functions.BoaAstIntrinsics.setup(context);
 			super.setup(context);
 		}
