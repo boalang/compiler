@@ -909,7 +909,7 @@ public class BoaAstIntrinsics {
 	////////////////////////////////
 	// Creation testing functions */
 	////////////////////////////////
-	@FunctionSpec(name = "iscreation", returnType = "bool", formalParameters = { "Expression", "string" })
+	@FunctionSpec(name = "iscreation", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isCreation(final Expression e) throws Exception {
 		switch (e.getKind()) {
 			case NEW: return true;
