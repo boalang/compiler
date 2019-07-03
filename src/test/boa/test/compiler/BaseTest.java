@@ -254,7 +254,7 @@ public abstract class BaseTest {
 		final File outputSrcDir = new File(outputRoot, "boa");
 		if (!outputSrcDir.mkdirs())
 			throw new IOException("unable to mkdir " + outputSrcDir);
-		final File outputFile = new File(outputSrcDir, "Test.java");
+		final File outputFile = new File(outputSrcDir, "Query.java");
 
 		final StartContext ctx = typecheck(input);
 		final Start p = ctx.ast;
@@ -268,7 +268,7 @@ public abstract class BaseTest {
 			new VisitorOptimizingTransformer().start(p);
 			new ViewTransformer().start(p);
 
-			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("Test", 12345, 64 * 1024 * 1024, seed, false);
+			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(12345, 64 * 1024 * 1024, seed, false);
 			cg.start(p);
 
 			try (final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile))) {

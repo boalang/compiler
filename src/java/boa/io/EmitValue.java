@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import com.google.protobuf.CodedInputStream;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 
 import boa.functions.BoaCasts;
