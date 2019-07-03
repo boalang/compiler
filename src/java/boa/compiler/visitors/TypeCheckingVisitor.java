@@ -736,8 +736,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 		else {
 			String viewName = n.getUserName() == null ? n.getJobNum() : (n.getUserName() + "/" + n.getViewName());
-			if(!viewASTs.containsKey(viewName)) {
-				throw new TypeCheckException(n, "type of view '" + n.getJobNum() + "' undefined");
+			if (!viewASTs.containsKey(viewName)) {
+				throw new TypeCheckException(n, "view '" + viewName + "' undefined");
 			}
 
 			Start s = viewASTs.get(viewName);
@@ -746,7 +746,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			v.start(s);
 
 			if (v.getType() == null)
-				throw new TypeCheckException(n, "type of view '" + n.getJobNum() + "' undefined");
+				throw new TypeCheckException(n, "type of view '" + viewName + "' undefined");
 
 			bot = (BoaOutputType) v.getType();
 		}
