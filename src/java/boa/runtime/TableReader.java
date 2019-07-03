@@ -52,6 +52,7 @@ public class TableReader {
 	private List<Object> indices = new ArrayList<Object>();
 	private boolean preloaded = false;
 	private Row row = null;
+	private long position = 0;
 
 	private NullWritable key = NullWritable.get();
 	private BytesWritable value = new BytesWritable();
@@ -66,6 +67,7 @@ public class TableReader {
 		}
 		this.filePath = new Path("/boa/79335/" + filePath + "/output/" + path[path.length - 1] + ".seq");
 		open();
+		seek(position);
 	}
 
 	private TableReader(final Path filePath, final boolean preloaded, final long position, final Row row, final List<Object> indices) {
@@ -74,15 +76,29 @@ public class TableReader {
 		this.row = row;
 		this.indices = new ArrayList<Object>(indices);
 		open();
+		seek(position);
 	}
 
 	private void open() {
 		try {
 			reader = new SequenceFile.Reader(FileSystem.get(conf), this.filePath, conf);
+			this.position = 0;
 		} catch (final Exception e) {
 			System.err.println(e);
 			e.printStackTrace();
 			reader = null;
+		}
+	}
+
+	private void seek(final long position) {
+		try {
+			for (; this.position < position; this.position++)
+				if (!reader.next(key, value)) {
+					close();
+					return;
+				}
+		} catch (final Exception e) {
+			close();
 		}
 	}
 
@@ -150,6 +166,7 @@ public class TableReader {
 					close();
 					return false;
 				}
+				this.position++;
 				row = Row.parseFrom(CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
 
 				final List<Value> rowValues = row.getColsList();
@@ -244,13 +261,6 @@ public class TableReader {
 	}
 
 	public TableReader clone(){
-		long pos = 0L;
-		if (reader != null)
-			try {
-				pos = reader.getPosition();
-			} catch (final Exception e) {
-				close();
-			}
-		return new TableReader(filePath, preloaded, pos, row, indices);
+		return new TableReader(this.filePath, this.preloaded, this.position, this.row, this.indices);
 	}
 }
