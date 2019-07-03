@@ -176,8 +176,7 @@ public class TableReader {
 
 				for (int i = 0; i < indices.size() && i < rowValues.size(); i++) {
 					final Object target = indices.get(i);
-					if (target instanceof String && ((String)target).equals("_"))
-						continue;
+					if (target == null) continue; // wildcards
 					if (!compareField(rowValues.get(i), target)) {
 						filter = true;
 						break;
@@ -186,7 +185,7 @@ public class TableReader {
 
 				if (!filter && indices.size() > rowValues.size()) {
 					final Object target = indices.get(indices.size() - 1);
-					if (!(target instanceof String && ((String)target).equals("_")))
+					if (target != null) continue; // wildcards
 						if (!compareField(row.getVal(), target))
 							filter = true;
 				}
