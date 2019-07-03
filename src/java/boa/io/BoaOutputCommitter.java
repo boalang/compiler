@@ -152,7 +152,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 				if (!fileSystem.exists(path))
 					break;
 
-				fileSystem.rename(path, new Path("/boa", new Path("" + jobId, new Path(boa.runtime.BoaPartitioner.getVariableFromPartition(partNum) + ".seq"))));
+				fileSystem.rename(path, new Path(outputPath, new Path(boa.runtime.BoaPartitioner.getVariableFromPartition(partNum) + ".seq")));
 				partNum++;
 
                 /* FIXME later
