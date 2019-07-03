@@ -89,7 +89,7 @@ public class Table extends Operand {
 	public Table (final String s) {
 		if (s != null) {
 			String[] ary = s.split("/");
-			paths = Arrays.asList(s.split("/"));
+			paths = new ArrayList<String>(Arrays.asList(s.split("/")));
 			outputName = ary[ary.length - 1];
 			subViews = new ArrayList<String>();
 			tablePath = s;

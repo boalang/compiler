@@ -2199,10 +2199,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Table n) {
-		List<String> paths = n.getPaths();
-		String path = "\"" + paths.get(0) + "\"";
-		for(int i = 1; i < paths.size(); i++)
-			path += ", " + "\"" + paths.get(i) + "\"";
+		final List<String> paths = n.getPaths();
+		if (n.getJobNum() != null)
+			paths.set(0, n.getJobNum());
+		else if (boa.compiler.BoaCompiler.viewIds.containsKey(paths.get(0)))
+			paths.set(0, boa.compiler.BoaCompiler.viewIds.get(paths.get(0)));
+		else
+			paths.add(0, String.valueOf(boa.compiler.BoaCompiler.jobId));
+		String path = "";
+		for (int i = 0; i < paths.size(); i++) {
+			if (i > 0) path += ", ";
+			path += "\"" + paths.get(i) + "\"";
+		}
 		code.add("new boa.runtime.TableReader(0, " + path + ")");
 	}
 

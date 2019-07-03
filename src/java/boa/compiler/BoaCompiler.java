@@ -90,11 +90,11 @@ import boa.parser.BoaLexer;
  * @author nbhide
  */
 public class BoaCompiler extends BoaMain {
-	private static int jobId = 0;
+	public static int jobId = 0;
 
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
 
-	private static Map<String, String> viewIds = null;
+	public static Map<String, String> viewIds = null;
 	private static Map<String, String> viewSrcPaths = null;
 	private static Map<String, Start> viewASTs = null;
 

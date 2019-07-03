@@ -99,24 +99,19 @@ public class BoaOutputConverter extends BoaMain {
 		return cl;
 	}
 
-	public static void convert(final Path inputPath) {
+	public static void convert(final Path inputPath) throws IOException {
 		SequenceFile.Reader reader = null;
 
-		try {
-			reader = new SequenceFile.Reader(fs, inputPath, conf);
-		} catch (final Exception e) {
-			reader = null;
-		}
+		reader = new SequenceFile.Reader(fs, inputPath, conf);
 
 		final NullWritable key = (NullWritable) ReflectionUtils.newInstance(reader.getKeyClass(), conf);
 		final BytesWritable value = (BytesWritable) ReflectionUtils.newInstance(reader.getValueClass(), conf);
 
 		final String tableName = inputPath.getName().substring(0, inputPath.getName().indexOf("."));
-		try {
-			while (reader.next(key, value))
-				System.out.println(tableName + convertLine(value));
-		} catch (final IOException e) {
-		}
+		while (reader.next(key, value))
+			System.out.println(tableName + convertLine(value));
+
+		reader.close();
 	}
 
 	private static String convertLine(final BytesWritable value) {
