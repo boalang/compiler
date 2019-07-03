@@ -65,7 +65,7 @@ public class TableReader {
 			filePath += path[i];
 		}
 		this.filePath = new Path("/boa/79335/" + filePath + "/output/" + path[path.length - 1] + ".seq");
-		open(position);
+		open();
 	}
 
 	private TableReader(final Path filePath, final boolean preloaded, final long position, final Row row, final List<Object> indices) {
@@ -73,13 +73,12 @@ public class TableReader {
 		this.preloaded = preloaded;
 		this.row = row;
 		this.indices = new ArrayList<Object>(indices);
-		open(position);
+		open();
 	}
 
-	private void open(final long position) {
+	private void open() {
 		try {
 			reader = new SequenceFile.Reader(FileSystem.get(conf), this.filePath, conf);
-			reader.sync(position);
 		} catch (final Exception e) {
 			System.err.println(e);
 			e.printStackTrace();
