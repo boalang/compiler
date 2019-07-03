@@ -633,14 +633,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	protected String skipIndex = "";
 	protected boolean abortGeneration = false;
 
-	protected String className;
 	protected int jobId;
 	protected int splitSize;
 	protected int seed;
 	protected boolean isLocal;
 
-	public CodeGeneratingVisitor(final String className, final int jobId, final int splitSize, final int seed, final boolean isLocal) throws IOException {
-		this.className = className;
+	public CodeGeneratingVisitor(final int jobId, final int splitSize, final int seed, final boolean isLocal) throws IOException {
 		this.jobId = jobId;
 		this.splitSize = splitSize;
 		this.seed = seed;
@@ -721,7 +719,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			variableNames.add(s.substring(s.indexOf('"'), s.indexOf(", new")));
 		Collections.sort(variableNames);
 
-		st.add("name", className);
 		st.add("splitsize", splitSize);
 		st.add("seed", seed);
 		st.add("numreducers", variableNames.size());

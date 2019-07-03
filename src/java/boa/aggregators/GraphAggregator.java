@@ -21,7 +21,6 @@ import java.util.*;
 import java.io.IOException;
 
 import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.io.Text;
 
 import boa.io.EmitKey;
 import boa.io.EmitValue;

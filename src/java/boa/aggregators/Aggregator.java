@@ -21,7 +21,6 @@ import java.io.IOException;
 
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer.Context;
 
 import boa.functions.BoaCasts;
@@ -150,9 +149,7 @@ public abstract class Aggregator {
 		} else {
 			r.setVal(data);
 		}
-		final byte[] arr = r.build().toByteArray();
-		final BytesWritable b = new BytesWritable(arr);
-		return b;
+		return new BytesWritable(r.build().toByteArray());
 	}
 
 	protected void collect(final String data) throws IOException, InterruptedException {
