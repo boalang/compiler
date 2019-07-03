@@ -147,31 +147,39 @@ public class TableReader {
 		while (filter) {
 			try {
 				filter = false;
+                System.err.println("READING");
 				if (!reader.next(key, value)) {
 					close();
 					return false;
 				}
+                System.err.println("PARSING");
 				row = Row.parseFrom(CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
 
 				final List<Value> rowValues = row.getColsList();
-				rowValues.add(row.getVal());
 
-				for (int i = 0; i < indices.size(); i++) {
-					final Value src = rowValues.get(i);
+				for (int i = 0; i < indices.size() && i < rowValues.size(); i++) {
 					final Object target = indices.get(i);
 					if (target instanceof String && ((String)target).equals("_"))
 						continue;
-					if (!compareField(src, target)) {
+					if (!compareField(rowValues.get(i), target)) {
 						filter = true;
 						break;
 					}
 				}
+
+                if (!filter && indices.size() > rowValues.size()) {
+					final Object target = indices.get(indices.size() - 1);
+					if (!(target instanceof String && ((String)target).equals("_")))
+                        if (!compareField(row.getVal(), target))
+                            filter = true;
+                }
 			} catch (final IOException e) {
 				close();
 				return false;
 			}
 		}
 
+        System.err.println("KEPT");
 		return true;
 	}
 
