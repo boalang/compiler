@@ -53,6 +53,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	HashMap<String, Boolean> traversalMap = new HashMap<String, Boolean>();
 	HashMap<String, Program> subViewsMap = new HashMap<String, Program>();
 	String lastVarDecl;
+	Stack<String> tableCloses = new Stack<String>();
 
 	/**
 	 *
@@ -656,6 +657,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	public void visit(final Program n) {
 		final ST st = stg.getInstanceOf("Program");
 
+		tableCloses.clear();
 		this.varDecl.start(n);
 		this.functionDeclarator.start(n);
 		this.tupleDeclarator.start(n);
@@ -682,6 +684,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (!statement.isEmpty())
 				statements.add(statement);
 		}
+		for (final String s : tableCloses)
+			statements.add(s + ".close();\n");
 		st.add("statements", statements);
 
 		if (this.aggregators.size() == 0)
@@ -1200,11 +1204,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 		}
 
-		String clone = "";
 		if (n.getLhs().type instanceof BoaTable) {
 			Factor f = (Factor) n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs();
 			if (f.getOperand() instanceof Identifier) {
-				clone = "___" + ((Identifier) n.getLhs().getOperand()).getToken() + " = ___" + ((Identifier) f.getOperand()).getToken() + ".clone();\n";
+				String clone = "___" + ((Identifier) n.getLhs().getOperand()).getToken() + " = ___" + ((Identifier) f.getOperand()).getToken() + ".clone();\n";
 				if (f.getOpsSize() == 0) {
 					code.add(clone);
 					return;
@@ -1546,8 +1549,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		final ST st = stg.getInstanceOf("Assignment");
 		st.add("operator", "=");
-		st.add("lhs", "___" + n.getId().getToken());
-		lastVarDecl = "___" + n.getId().getToken();
+		final String lhs = "___" + n.getId().getToken();
+		st.add("lhs", lhs);
+		lastVarDecl = lhs;
 
 		if (!n.hasInitializer()) {
 			if (lhsType instanceof BoaProtoMap ||
@@ -1583,16 +1587,16 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 		}
 
-		String clone = "";
 		if (lhsType instanceof BoaTable || type instanceof BoaTable) {
+			tableCloses.push(lhs);
 			Factor f = (Factor) n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs();
 			if (f.getOperand() instanceof Identifier) {
-				clone = "___" + n.getId().getToken() + " = ___" + ((Identifier) f.getOperand()).getToken() + ".clone();\n";
+				String clone = lhs + " = ___" + ((Identifier) f.getOperand()).getToken() + ".clone();\n";
 				if (f.getOpsSize() == 0) {
 					code.add(clone);
 					return;
 				}
-				clone += "___" + n.getId().getToken() + src.substring(src.indexOf(".")) + ";\n";
+				clone += lhs + src.substring(src.indexOf(".")) + ";\n";
 				code.add(clone);
 				return;
 			}
