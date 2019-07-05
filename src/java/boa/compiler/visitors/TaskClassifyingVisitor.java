@@ -99,7 +99,6 @@ public class TaskClassifyingVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SubView n) {
-		complex = true;
-		return;
+		// dont visit the sub-views
 	}
 }
