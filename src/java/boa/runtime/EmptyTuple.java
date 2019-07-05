@@ -25,9 +25,15 @@ import boa.output.Output.Value;
  * @author hungc
  */
 public class EmptyTuple extends Tuple {
-	public EmptyTuple() {}
+	private static EmptyTuple instance;
 
-	public EmptyTuple(final EmptyTuple tmp) {}
+	private EmptyTuple() {}
+
+	public static EmptyTuple getInstance() {
+		if (instance == null)
+			instance = new EmptyTuple();
+		return instance;
+	}
 
 	public EmptyTuple clone() {
 		return this;
