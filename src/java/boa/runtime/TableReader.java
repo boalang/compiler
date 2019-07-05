@@ -237,7 +237,7 @@ public class TableReader {
 	}
 
 	public EmptyTuple[] filterToArray() {
-		final EmptyTuple t = new EmptyTuple();
+		final EmptyTuple t = EmptyTuple.getInstance();
 
 		EmptyTuple[] et = new EmptyTuple[this.length()];
 		for (int i = 0; i < et.length; i++)
