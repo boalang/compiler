@@ -185,9 +185,8 @@ public class TableReader {
 
 				if (!filter && indices.size() > rowValues.size()) {
 					final Object target = indices.get(indices.size() - 1);
-					if (target != null) continue; // wildcards
-						if (!compareField(row.getVal(), target))
-							filter = true;
+					if (target != null && !compareField(row.getVal(), target))
+						filter = true;
 				}
 			} catch (final IOException e) {
 				close();
