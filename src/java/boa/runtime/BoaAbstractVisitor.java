@@ -16,12 +16,7 @@
  */
 package boa.runtime;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
-import com.google.protobuf.AbstractMessage;
-import com.google.protobuf.Descriptors.FieldDescriptor;
 
 import boa.functions.BoaAstIntrinsics;
 import boa.functions.BoaIntrinsics;
@@ -61,61 +56,6 @@ public abstract class BoaAbstractVisitor {
 	 */
 	protected boolean defaultPreVisit() throws Exception {
 		return true;
-	}
-
-	private void visitChildren(AbstractMessage message) throws Exception {
-		for (Iterator<Map.Entry<FieldDescriptor, Object>> iter = message.getAllFields().entrySet().iterator(); iter.hasNext();) {
-            Map.Entry<FieldDescriptor, Object> field = iter.next();
-            visitField(field.getKey(), field.getValue());
-        }
-	}
-
-	private void visitField(FieldDescriptor field, Object value) throws Exception {
-		if (field.isRepeated())
-            for (Iterator<?> iter = ((List<?>) value).iterator(); iter.hasNext();)
-                visitFieldValue(field, iter.next());
-        else
-        	visitFieldValue(field, value);
-	}
-
-	private void visitFieldValue(FieldDescriptor field, Object value) throws Exception {
-		if (field.getType() == com.google.protobuf.Descriptors.FieldDescriptor.Type.MESSAGE)
-			visit((AbstractMessage) value);
-	}
-
-	private void visit(AbstractMessage value) throws Exception {
-		if (value instanceof Project) {
-			visit((Project) value);
-		} else if (value instanceof CodeRepository) {
-			visit((CodeRepository) value);
-		} else if (value instanceof Revision) {
-			visit((Revision) value);
-		} else if (value instanceof ChangedFile) {
-			visit((ChangedFile) value);
-		} else if (value instanceof ASTRoot) {
-			visit((ASTRoot) value);
-		} else if (value instanceof Namespace) {
-			visit((Namespace) value);
-		} else if (value instanceof Declaration) {
-			visit((Declaration) value);
-		} else if (value instanceof Type) {
-			visit((Type) value);
-		} else if (value instanceof Method) {
-			visit((Method) value);
-		} else if (value instanceof Variable) {
-			visit((Variable) value);
-		} else if (value instanceof Statement) {
-			visit((Statement) value);
-		} else if (value instanceof Expression) {
-			visit((Expression) value);
-		} else if (value instanceof Modifier) {
-			visit((Modifier) value);
-		} else if (value instanceof Comment) {
-			visit((Comment) value);
-		} else if (value instanceof Person) {
-			visit((Person) value);
-		} else
-			throw new UnsupportedOperationException("Unsupported Boa message type!");
 	}
 
 	protected boolean preVisit(final Project node) throws Exception {
@@ -218,7 +158,20 @@ public abstract class BoaAbstractVisitor {
 
 	public final void visit(final Project node) throws Exception {
 		if (preVisit(node)) {
-			visitChildren(node);
+			final List<CodeRepository> reposList = node.getCodeRepositoriesList();
+			final int reposSize = reposList.size();
+			for (int i = 0; i < reposSize; i++)
+				visit(reposList.get(i));
+
+			final List<Person> devsList = node.getDevelopersList();
+			final int devsSize = devsList.size();
+			for (int i = 0; i < devsSize; i++)
+				visit(devsList.get(i));
+
+			final List<Person> maintsList = node.getMaintainersList();
+			final int maintsSize = maintsList.size();
+			for (int i = 0; i < maintsSize; i++)
+				visit(maintsList.get(i));
 
 			postVisit(node);
 		}
@@ -234,7 +187,16 @@ public abstract class BoaAbstractVisitor {
 	}
 	public final void visit(final Revision node) throws Exception {
 		if (preVisit(node)) {
-			visitChildren(node);
+			final List<ChangedFile> filesList = node.getFilesList();
+			final int filesSize = filesList.size();
+			for (int i = 0; i < filesSize; i++)
+				visit(filesList.get(i));
+
+			if (node.hasAuthor())
+				visit(node.getAuthor());
+
+			if (node.hasCommitter())
+				visit(node.getCommitter());
 
 			postVisit(node);
 		}
@@ -248,63 +210,187 @@ public abstract class BoaAbstractVisitor {
 	}
 	public final void visit(final ASTRoot node) throws Exception {
 		if (preVisit(node)) {
-			visitChildren(node);
+			final List<Namespace> namespacesList = node.getNamespacesList();
+			final int namespacesSize = namespacesList.size();
+			for (int i = 0; i < namespacesSize; i++)
+				visit(namespacesList.get(i));
 
 			postVisit(node);
 		}
 	}
 	public final void visit(final Namespace node) throws Exception {
 		if (preVisit(node)) {
-			visitChildren(node);
+			final List<Declaration> declarationsList = node.getDeclarationsList();
+			final int declarationsSize = declarationsList.size();
+			for (int i = 0; i < declarationsSize; i++)
+				visit(declarationsList.get(i));
+
+			final List<Modifier> modifiersList = node.getModifiersList();
+			final int modifiersSize = modifiersList.size();
+			for (int i = 0; i < modifiersSize; i++)
+				visit(modifiersList.get(i));
 
 			postVisit(node);
 		}
 	}
 	public final void visit(final Declaration node) throws Exception {
 		if (preVisit(node)) {
-			visitChildren(node);
+			final List<Modifier> modifiersList = node.getModifiersList();
+			final int modifiersSize = modifiersList.size();
+			for (int i = 0; i < modifiersSize; i++)
+				visit(modifiersList.get(i));
+
+			final List<Type> genericParamsList = node.getGenericParametersList();
+			final int genericParamsSize = genericParamsList.size();
+			for (int i = 0; i < genericParamsSize; i++)
+				visit(genericParamsList.get(i));
+
+			final List<Type> parentsList = node.getParentsList();
+			final int parentsSize = parentsList.size();
+			for (int i = 0; i < parentsSize; i++)
+				visit(parentsList.get(i));
+
+			final List<Method> methodsList = node.getMethodsList();
+			final int methodsSize = methodsList.size();
+			for (int i = 0; i < methodsSize; i++)
+				visit(methodsList.get(i));
+
+			final List<Variable> fieldsList = node.getFieldsList();
+			final int fieldsSize = fieldsList.size();
+			for (int i = 0; i < fieldsSize; i++)
+				visit(fieldsList.get(i));
+
+			final List<Declaration> nestedList = node.getNestedDeclarationsList();
+			final int nestedSize = nestedList.size();
+			for (int i = 0; i < nestedSize; i++)
+				visit(nestedList.get(i));
 
 			postVisit(node);
 		}
 	}
 	public final void visit(final Type node) throws Exception {
 		if (preVisit(node)) {
-			visitChildren(node);
-			
 			postVisit(node);
 		}
 	}
 	public final void visit(final Method node) throws Exception {
 		if (preVisit(node)) {
-			visitChildren(node);
+			visit(node.getReturnType());
+
+			final List<Modifier> modifiersList = node.getModifiersList();
+			final int modifiersSize = modifiersList.size();
+			for (int i = 0; i < modifiersSize; i++)
+				visit(modifiersList.get(i));
+
+			final List<Type> genericParametersList = node.getGenericParametersList();
+			final int genericParametersSize = genericParametersList.size();
+			for (int i = 0; i < genericParametersSize; i++)
+				visit(genericParametersList.get(i));
+
+			final List<Variable> argumentsList = node.getArgumentsList();
+			final int argumentsSize = argumentsList.size();
+			for (int i = 0; i < argumentsSize; i++)
+				visit(argumentsList.get(i));
+
+			final List<Type> exceptionTypesList = node.getExceptionTypesList();
+			final int exceptionTypesSize = exceptionTypesList.size();
+			for (int i = 0; i < exceptionTypesSize; i++)
+				visit(exceptionTypesList.get(i));
+
+			final List<Statement> statementsList = node.getStatementsList();
+			final int statementsSize = statementsList.size();
+			for (int i = 0; i < statementsSize; i++)
+				visit(statementsList.get(i));
 
 			postVisit(node);
 		}
 	}
 	public final void visit(final Variable node) throws Exception {
 		if (preVisit(node)) {
-			visitChildren(node);
+			visit(node.getVariableType());
+
+			final List<Modifier> modifiersList = node.getModifiersList();
+			final int modifiersSize = modifiersList.size();
+			for (int i = 0; i < modifiersSize; i++)
+				visit(modifiersList.get(i));
+
+			if (node.hasInitializer())
+				visit(node.getInitializer());
 
 			postVisit(node);
 		}
 	}
 	public final void visit(final Statement node) throws Exception {
 		if (preVisit(node)) {
-			visitChildren(node);
+			final List<Statement> statementsList = node.getStatementsList();
+			final int statementsSize = statementsList.size();
+			for (int i = 0; i < statementsSize; i++)
+				visit(statementsList.get(i));
+
+			final List<Expression> initsList = node.getInitializationsList();
+			final int initsSize = initsList.size();
+			for (int i = 0; i < initsSize; i++)
+				visit(initsList.get(i));
+
+			final List<Expression> conditionsList = node.getConditionsList();
+			final int conditionsSize = conditionsList.size();
+			for (int i = 0; i < conditionsSize; i++)
+				visit(conditionsList.get(i));
+
+			final List<Expression> updatesList = node.getUpdatesList();
+			final int updatesSize = updatesList.size();
+			for (int i = 0; i < updatesSize; i++)
+				visit(updatesList.get(i));
+
+			if (node.hasVariableDeclaration())
+				visit(node.getVariableDeclaration());
+
+			if (node.hasTypeDeclaration())
+				visit(node.getTypeDeclaration());
+
+			if (node.getExpressionsCount() > 0)
+				visit(node.getExpressions(0));
 
 			postVisit(node);
 		}
 	}
 	public final void visit(final Expression node) throws Exception {
 		if (preVisit(node)) {
-			visitChildren(node);
+			final List<Expression> expressionsList = node.getExpressionsList();
+			final int expressionsSize = expressionsList.size();
+			for (int i = 0; i < expressionsSize; i++)
+				visit(expressionsList.get(i));
+
+			final List<Variable> varDeclsList = node.getVariableDeclsList();
+			final int varDeclsSize = varDeclsList.size();
+			for (int i = 0; i < varDeclsSize; i++)
+				visit(varDeclsList.get(i));
+
+			if (node.hasNewType())
+				visit(node.getNewType());
+
+			final List<Type> genericParametersList = node.getGenericParametersList();
+			final int genericParametersSize = genericParametersList.size();
+			for (int i = 0; i < genericParametersSize; i++)
+				visit(genericParametersList.get(i));
+
+			final List<Expression> methodArgsList = node.getMethodArgsList();
+			final int methodArgsSize = methodArgsList.size();
+			for (int i = 0; i < methodArgsSize; i++)
+				visit(methodArgsList.get(i));
+
+			if (node.hasAnonDeclaration())
+				visit(node.getAnonDeclaration());
 
 			postVisit(node);
 		}
 	}
 	public final void visit(final Modifier node) throws Exception {
 		if (preVisit(node)) {
-			visitChildren(node);
+			final List<Expression> annotationValuesList = node.getAnnotationValuesList();
+			final int annotationValuesSize = annotationValuesList.size();
+			for (int i = 0; i < annotationValuesSize; i++)
+				visit(annotationValuesList.get(i));
 
 			postVisit(node);
 		}
