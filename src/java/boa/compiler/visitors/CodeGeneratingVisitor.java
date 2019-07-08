@@ -480,16 +480,19 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	protected final HashMap<String, AggregatorDescription> aggregators = new HashMap<String, AggregatorDescription>();
 
-	protected final String name;
-
 	protected String skipIndex = "";
 	protected boolean abortGeneration = false;
 
-	final public static List<String> combineAggregatorStrings = new ArrayList<String>();
-	final public static List<String> reduceAggregatorStrings = new ArrayList<String>();
+	protected String className;
+	protected int splitSize;
+	protected int seed;
+	protected boolean isLocal;
 
-	public CodeGeneratingVisitor(final String name) throws IOException {
-		this.name = name;
+	public CodeGeneratingVisitor(final String className, final int splitSize, final int seed, final boolean isLocal) throws IOException {
+		this.className = className;
+		this.splitSize = splitSize;
+		this.seed = seed;
+		this.isLocal = isLocal;
 
 		varDecl = new VarDeclCodeGeneratingVisitor();
 		staticInitialization = new StaticInitializationCodeGeneratingVisitor();
@@ -501,9 +504,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Program n) {
-		final ST st = stg.getInstanceOf("Job");
-
-		st.add("name", this.name);
+		final ST st = stg.getInstanceOf("Program");
 
 		this.varDecl.start(n);
 		this.functionDeclarator.start(n);
@@ -536,35 +537,37 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (this.aggregators.size() == 0)
 			throw new TypeCheckException(n, "No output variables were declared - must declare at least one output variable");
 
-		for (final Entry<String, AggregatorDescription> entry : this.aggregators.entrySet()) {
-			String id = entry.getKey();
-			String prefix = name;
+		final List<String> combineAggregatorStrings = new ArrayList<String>();
+		final List<String> reduceAggregatorStrings = new ArrayList<String>();
 
-			if (id.matches("\\d+_.*")) {
-				prefix = id.substring(0, id.indexOf('_'));
-				id = id.substring(id.indexOf('_') + 1);
-			}
+		for (final Entry<String, AggregatorDescription> entry : this.aggregators.entrySet()) {
+			final String id = entry.getKey();
 
 			final AggregatorDescription description = entry.getValue();
 			final String parameters = description.getParameters() == null ? "" : description.getParameters().get(0);
 			final BoaType type = description.getType();
 
-			final StringBuilder src = new StringBuilder();
 			boolean combines = false;
-			for (final Class<?> c : n.env.getAggregators(description.getAggregator(), type)) {
-				src.append(", new " + c.getCanonicalName() + "(" + parameters + ")");
-				try {
-					final AggregatorSpec annotation = c.getAnnotation(AggregatorSpec.class);
-					if (annotation.canCombine())
-						combines = true;
-				} catch (final RuntimeException e) {
-					throw new TypeCheckException(n, e.getMessage(), e);
-				}
+			final Class<?> c = n.env.getAggregator(description.getAggregator(), type);
+			try {
+				final AggregatorSpec annotation = c.getAnnotation(AggregatorSpec.class);
+				if (annotation.canCombine())
+					combines = true;
+			} catch (final RuntimeException e) {
+				throw new TypeCheckException(n, e.getMessage(), e);
 			}
+			reduceAggregatorStrings.add("this.aggregators.put(\"" + id + "\", new " + c.getCanonicalName() + "(" + parameters + "));");
 			if (combines)
-				combineAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
-			reduceAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
+				combineAggregatorStrings.add(reduceAggregatorStrings.get(reduceAggregatorStrings.size() - 1));
 		}
+
+		st.add("combineTables", combineAggregatorStrings);
+		st.add("reduceTables", reduceAggregatorStrings);
+
+		st.add("name", className);
+		st.add("splitsize", splitSize);
+		st.add("seed", seed);
+		if (isLocal) st.add("isLocal", true);
 
 		code.add(st.render());
 	}
@@ -711,9 +714,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("exprlist", s);
 			st.add("type", n.type.toBoxedJavaType() + "()");
 		} else if (n.getExprsSize() > 0) {
-			// FIXME rdyer
-			BoaType t = n.type;
-//			BoaType t = ((ExprList) nodeChoice.choice).type;
+			final BoaType t = n.type;
 
 			if (t instanceof BoaTuple) {
 				final ST stup = stg.getInstanceOf("Tuple");
@@ -969,9 +970,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		String rhs = code.removeLast();
 
 		if (n.getLhs().type instanceof BoaTuple && n.getRhs().type instanceof BoaArray) {
-			Operand op = n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+			final Operand op = n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
 			if (op instanceof Composite) {
-				List<Expression> exps = ((Composite)op).getExprs();
+				final List<Expression> exps = ((Composite)op).getExprs();
 				if (checkTupleArray(this.check(exps)) == false) {
 					final ST stup = stg.getInstanceOf("Tuple");
 					stup.add("name", n.getLhs().type.toJavaType());
@@ -1066,16 +1067,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("indices", indices);
 		}
 
-		String id = n.getId().getToken();
-		String prefix = name;
-
-		if (id.matches("\\d+_.*")) {
-			prefix = id.substring(0, id.indexOf('_'));
-			id = id.substring(id.indexOf('_') + 1);
-		}
-
-		st.add("id", "\"" + id + "\"");
-		st.add("job", prefix);
+		st.add("id", "\"" + n.getId().getToken() + "\"");
 
 		n.getValue().accept(this);
 		st.add("expression", code.removeLast());
@@ -1350,9 +1342,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		String src = code.removeLast();
 
 		if (lhsType instanceof BoaTuple && t instanceof BoaArray) {
-			Operand op = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+			final Operand op = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
 			if (op instanceof Composite) {
-				List<Expression> exps = ((Composite)op).getExprs();
+				final List<Expression> exps = ((Composite)op).getExprs();
 				if (checkTupleArray(this.check(exps)) == false) {
 					final ST stup = stg.getInstanceOf("Tuple");
 					stup.add("name", lhsType.toJavaType());
@@ -1890,7 +1882,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		code.add(st.render());
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final QueueType n) {
