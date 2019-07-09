@@ -149,7 +149,7 @@ public class SeqRepoImporter {
 							
 							System.err.println("Assigned the " + (++counter) + "th project: " + repo.name 
 									+ " with id: " + repo.id  
-									+ " from the " + i + "th object of the jason file: " + file.getPath());
+									+ " from the " + i + "th object of the json file: " + file.getPath());
 						}
 					} catch (Exception e) {
 						System.err.println("Error proccessing item " + i + " of page " + file.getPath());
@@ -392,6 +392,8 @@ public class SeqRepoImporter {
 					return null;
 				} else {
 					repoWriter.append(new LongWritable(getRepoKey()), bw);
+					if (debug)
+						System.err.println("Thread " + Thread.currentThread().getId() + " the pack file size of project " + name + " is " + bw.getLength() + " byte");
 				}
 				packSize = bw.getLength();
 			}
