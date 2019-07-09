@@ -196,7 +196,7 @@ public class GitConnector extends AbstractConnector {
 				}
 			}
 			
-			System.out.println(Thread.currentThread().getId() + " Process metadata of all commits");
+			System.err.println(Thread.currentThread().getId() + " Process metadata of all commits");
 
 			RevCommit head = revwalk.parseCommit(repository.resolve(Constants.HEAD));
 			headCommitOffset = revisionMap.get(head.getName());
