@@ -13,10 +13,14 @@ import boa.datagen.util.FileIO;
 
 public class GetReposByLanguage {
 	
+	static int stars = 0;
+	
 	public static void main(String[] args) {
 		TokenList tokens = new TokenList(args[0]);
 		String outDir = args[1];
-		String[] languages = { "R" };
+		String[] languages = args[2].split(",");
+		stars = Integer.parseInt(args[3]);
+		
 		if (args.length > 2) {
 			languages = new String[args.length - 2];
 			for (int i = 2; i < args.length; i++)
@@ -72,7 +76,7 @@ public class GetReposByLanguage {
 			
 			while (true){
 				Token tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
-				String url = "https://api.github.com/search/repositories?q=language:" + language +"+stars:>1+pushed:<=" + time + "&sort=updated&order=desc&per_page=100";
+				String url = "https://api.github.com/search/repositories?q=language:" + language +"+stars:>" + stars + "+pushed:<=" + time + "&sort=updated&order=desc&per_page=100";
 				System.out.println(url);
 				MetadataCacher mc = new MetadataCacher(url, tok.getUserName(), tok.getToken());
 				mc.authenticate();
