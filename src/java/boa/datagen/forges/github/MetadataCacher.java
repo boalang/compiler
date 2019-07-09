@@ -153,7 +153,11 @@ public class MetadataCacher {
 	}
 	
 	public int getNumberOfRemainingLimit() {
-		return Integer.parseInt(this.connection.getHeaderField("X-RateLimit-Remaining"));
+		try {
+			return Integer.parseInt(this.connection.getHeaderField("X-RateLimit-Remaining"));
+		} catch(NumberFormatException e) {
+			return -1;
+		}
 	}
 	
 	public long getLimitResetTime() {
