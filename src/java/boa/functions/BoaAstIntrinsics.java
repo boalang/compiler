@@ -314,7 +314,7 @@ public class BoaAstIntrinsics {
 					return emptyAst;
 				}
 			}
-			System.out.print("java error check");
+//			System.out.print("java error check");
 			return emptyAst;
 		} catch (final Throwable e) {
 			return emptyAst;
@@ -883,6 +883,11 @@ public class BoaAstIntrinsics {
 	////////////////////////////////
 	@FunctionSpec(name = "isoperator", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isOperator(final Expression e) throws Exception {
+		return isArithmeticOperator(e) || isBitwiseOperator(e) || isLogicalOperator(e) || isRelationalOperator(e);
+	}
+	
+	@FunctionSpec(name = "isarithmeticoperator", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isArithmeticOperator(final Expression e) throws Exception {
 		switch (e.getKind()) {
 			case OP_ADD: return true;
 			case OP_SUB: return true;
@@ -891,6 +896,14 @@ public class BoaAstIntrinsics {
 			case OP_MOD: return true;
 			case OP_INC: return true;
 			case OP_DEC: return true;
+			default:
+				return false;			
+		}
+	}
+	
+	@FunctionSpec(name = "isbitwiseoperator", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isBitwiseOperator(final Expression e) throws Exception {
+		switch (e.getKind()) {
 			case BIT_LSHIFT: return true;
 			case BIT_RSHIFT: return true;
 			case BIT_UNSIGNEDRSHIFT: return true;
@@ -898,9 +911,25 @@ public class BoaAstIntrinsics {
 			case BIT_OR: return true;
 			case BIT_NOT: return true;
 			case BIT_XOR: return true;
+			default:
+				return false;			
+		}
+	}
+	
+	@FunctionSpec(name = "islogicaloperator", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isLogicalOperator(final Expression e) throws Exception {
+		switch (e.getKind()) {
 			case LOGICAL_NOT: return true;
 			case LOGICAL_AND: return true;
 			case LOGICAL_OR: return true;
+			default:
+				return false;			
+		}
+	}
+	
+	@FunctionSpec(name = "isrelationaloperator", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isRelationalOperator(final Expression e) throws Exception {
+		switch (e.getKind()) {
 			case EQ: return true;
 			case NEQ: return true;
 			case LT: return true;
@@ -911,6 +940,8 @@ public class BoaAstIntrinsics {
 				return false;			
 		}
 	}
+	
+	
 	
 	////////////////////////////////
 	// Creation testing functions */
