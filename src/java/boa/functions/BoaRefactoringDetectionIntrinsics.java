@@ -8,7 +8,7 @@ import java.util.Iterator;
 
 import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
-import boa.runtime.BoaAbstractVisitor;
+import boa.types.Ast.Statement;
 
 import static boa.functions.BoaAstIntrinsics.*;
 
@@ -17,7 +17,6 @@ public class BoaRefactoringDetectionIntrinsics {
 	@FunctionSpec(name = "editdistance", returnType = "int", formalParameters = { "string", "string" })
 	public static int editDistance(String x, String y) {
 		int[][] dp = new int[x.length() + 1][y.length() + 1];
-
 		for (int i = 0; i <= x.length(); i++) {
 			for (int j = 0; j <= y.length(); j++) {
 				if (i == 0) {
@@ -30,7 +29,6 @@ public class BoaRefactoringDetectionIntrinsics {
 				}
 			}
 		}
-
 		return dp[x.length()][y.length()];
 	}
 
@@ -39,20 +37,11 @@ public class BoaRefactoringDetectionIntrinsics {
 	}
 
 	@FunctionSpec(name = "matchargswithreplacement", returnType = "bool", formalParameters = { "Expression",
-			"Expression", "map[string] of Expression" })
-	public static boolean matchArgumentsWithReplacement(Expression e1, Expression e2, HashMap<String, Expression> map)
-			throws Exception {
+			"Expression" })
+	public static boolean matchArgumentsWithReplacement(Expression e1, Expression e2) throws Exception {
 		for (int i = 0; i < e1.getMethodArgsList().size() - 1; i++) {
-			// check same pretty print
+			// TODO
 			if (prettyprint(e1.getMethodArgs(i)).equals(prettyprint(e2.getMethodArgs(i)))) {
-				continue;
-				// if map is not null check both replacements(ParaToArg and AST)
-			} else if (map != null && map.size() != 0
-					&& (replacementMatchWithAugment(e1.getMethodArgs(i), e2.getMethodArgs(i), map)
-							|| replacementMatchWithAugment(e2.getMethodArgs(i), e1.getMethodArgs(i), map))) {
-				continue;
-				// if map is null
-			} else if (map == null && replacementMatchWithAugment(e1.getMethodArgs(i), e2.getMethodArgs(i), null)) {
 				continue;
 			} else {
 				return false;
@@ -62,22 +51,81 @@ public class BoaRefactoringDetectionIntrinsics {
 	}
 
 	@FunctionSpec(name = "replacementmatchwithaugment", returnType = "bool", formalParameters = { "Expression",
-			"Expression", "map[string] of Expression" })
-	public static boolean replacementMatchWithAugment(Expression e1, Expression e2, HashMap<String, Expression> map)
-			throws Exception {
+			"Expression" })
+	public static boolean replacementMatchWithAugment(Expression e1, Expression e2) throws Exception {
 		System.out.println("before parameter to argument replacement");
 		System.out.println("e1: " + prettyprint(e1));
 		System.out.println("e2: " + prettyprint(e2));
-		Expression exp2 = e2;
-		if (needParameterToArgumentReplacement(e2, map)) {
-			exp2 = updateWithParameterToArgumentReplacement(e2, map);
-			System.out.println("Need Parameter To Argument Replacement");
-		}
-		return replacementMatchWithAugmentUntil(e1, exp2, map);
+//		Expression exp2 = e2;
+//		if (needParameterToArgumentReplacement(e2, map)) {
+//			exp2 = updateWithParameterToArgumentReplacement(e2, map);
+//			System.out.println("Need Parameter To Argument Replacement");
+//		}
+		return replacementMatchWithAugmentUntil(e1, e2);
 	}
 
-	private static boolean replacementMatchWithAugmentUntil(Expression e1, Expression e2,
-			HashMap<String, Expression> map) throws Exception {
+	@FunctionSpec(name = "updatewithparametertoargumentreplacement", returnType = "Statement", formalParameters = {
+			"Statement", "map[string] of Expression" })
+	public static Statement updateWithParameterToArgumentReplacement(Statement s, HashMap<String, Expression> map) {
+		Statement.Builder sb = Statement.newBuilder(s);
+		for (int i = 0; i < sb.getInitializationsCount() - 1; i++)
+			sb.setInitializations(i, updateWithParameterToArgumentReplacementUntil(sb.getInitializations(i), map));
+		for (int i = 0; i < sb.getConditionsCount() - 1; i++)
+			sb.setConditions(i, updateWithParameterToArgumentReplacementUntil(sb.getConditions(i), map));
+		for (int i = 0; i < sb.getUpdatesCount() - 1; i++)
+			sb.setUpdates(i, updateWithParameterToArgumentReplacementUntil(sb.getUpdates(i), map));
+		for (int i = 0; i < sb.getExpressionsCount() - 1; i++)
+			sb.setExpressions(i, updateWithParameterToArgumentReplacementUntil(sb.getExpressions(i), map));
+		return sb.build();
+	}
+
+	private static Expression updateWithParameterToArgumentReplacementUntil(Expression e,
+			HashMap<String, Expression> map) {
+		if (e.getExpressionsCount() == 0 && e.getMethodArgsCount() == 0 && e.getKind().equals(ExpressionKind.VARACCESS)
+				&& map.containsKey(e.getVariable()))
+			return map.get(e.getVariable());
+		Expression.Builder eb = Expression.newBuilder(e);
+		for (int i = 0; i < eb.getExpressionsCount() - 1; i++)
+			eb.setExpressions(i, updateWithParameterToArgumentReplacementUntil(eb.getExpressions(i), map));
+		for (int i = 0; i < eb.getMethodArgsCount() - 1; i++)
+			eb.setMethodArgs(i, updateWithParameterToArgumentReplacementUntil(eb.getMethodArgs(i), map));
+		return eb.build();
+	}
+
+	@FunctionSpec(name = "needparametertoargumentreplacement", returnType = "bool", formalParameters = { "Statement",
+			"map[string] of Expression" })
+	public static boolean needParameterToArgumentReplacement(Statement s, HashMap<String, Expression> map) {
+		for (Expression e : s.getInitializationsList())
+			if (needParameterToArgumentReplacement(e, map))
+				return true;
+		for (Expression e : s.getConditionsList())
+			if (needParameterToArgumentReplacement(e, map))
+				return true;
+		for (Expression e : s.getUpdatesList())
+			if (needParameterToArgumentReplacement(e, map))
+				return true;
+		for (Expression e : s.getExpressionsList())
+			if (needParameterToArgumentReplacement(e, map))
+				return true;
+		return false;
+	}
+
+	private static boolean needParameterToArgumentReplacement(Expression e, HashMap<String, Expression> map) {
+		if (map == null || map.size() == 0)
+			return false;
+		if (e.getExpressionsCount() == 0 && e.getMethodArgsCount() == 0 && e.getKind().equals(ExpressionKind.VARACCESS)
+				&& map.containsKey(e.getVariable()))
+			return true;
+		for (Expression exp1 : e.getExpressionsList())
+			if (needParameterToArgumentReplacement(exp1, map))
+				return true;
+		for (Expression exp2 : e.getMethodArgsList())
+			if (needParameterToArgumentReplacement(exp2, map))
+				return true;
+		return false;
+	}
+
+	private static boolean replacementMatchWithAugmentUntil(Expression e1, Expression e2) throws Exception {
 		// variables
 		HashSet<String> variables1 = new HashSet<String>();
 		HashSet<String> variables2 = new HashSet<String>();
@@ -123,7 +171,7 @@ public class BoaRefactoringDetectionIntrinsics {
 					matched = true;
 				} else if (e1.getKind().equals(ExpressionKind.METHODCALL)) {
 					// check method name and args
-					if (e1.getMethod().equals(e2.getMethod()) && replacementMatchWithAugment(e1, e2, null))
+					if (e1.getMethod().equals(e2.getMethod()) && replacementMatchWithAugment(e1, e2))
 						matched = true;
 				} else if (isCreation(e1)) {
 					// check new type and args
@@ -172,35 +220,6 @@ public class BoaRefactoringDetectionIntrinsics {
 		for (Expression e : operators1)
 			System.out.print(e + " | ");
 		System.out.println("\n");
-	}
-
-	@FunctionSpec(name = "updatewithparametertoargumentreplacement", returnType = "Expression", formalParameters = {
-			"Expression", "map[string] of Expression" })
-	public static Expression updateWithParameterToArgumentReplacement(Expression e, HashMap<String, Expression> map) {
-		if (e.getExpressionsCount() == 0 && e.getMethodArgsCount() == 0 && e.getKind().equals(ExpressionKind.VARACCESS)
-				&& map.containsKey(e.getVariable()))
-			return map.get(e.getVariable());
-		Expression.Builder eb = Expression.newBuilder(e);
-		for (int i = 0; i < eb.getExpressionsCount() - 1; i++)
-			eb.setExpressions(i, updateWithParameterToArgumentReplacement(eb.getExpressions(i), map));
-		for (int i = 0; i < eb.getMethodArgsCount() - 1; i++)
-			eb.setMethodArgs(i, updateWithParameterToArgumentReplacement(eb.getMethodArgs(i), map));
-		return eb.build();
-	}
-
-	private static boolean needParameterToArgumentReplacement(Expression e, HashMap<String, Expression> map) {
-		if (map == null || map.size() == 0)
-			return false;
-		if (e.getExpressionsCount() == 0 && e.getMethodArgsCount() == 0 && e.getKind().equals(ExpressionKind.VARACCESS)
-				&& map.containsKey(e.getVariable()))
-			return true;
-		for (Expression exp1 : e.getExpressionsList())
-			if (needParameterToArgumentReplacement(exp1, map))
-				return true;
-		for (Expression exp2 : e.getMethodArgsList())
-			if (needParameterToArgumentReplacement(exp2, map))
-				return true;
-		return false;
 	}
 
 	private static void collectNodes(Expression e, HashSet<String> variables, HashSet<Expression> methodInvocations,
