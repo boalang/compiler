@@ -117,7 +117,7 @@ public class BoaAstIntrinsics {
 			ASTRoot r = getASTRoot(f);
 			if (r != emptyAst)
 				return r;
-			System.out.print(" new model getast ");
+			System.err.print(" [New Model Getast] ");
 		} else {	
 			if (map == null)
 				openMap();
@@ -161,7 +161,6 @@ public class BoaAstIntrinsics {
 		// if file contains ast root
 		if (f.hasRoot())
 			return f.getRoot();
-
 		if (f.hasRepoKey() && f.hasObjectId()) {
 			if (f.getRepoKey() != currentRepoKey) {
 				currentRepoKey = f.getRepoKey();
@@ -176,7 +175,7 @@ public class BoaAstIntrinsics {
 						e.printStackTrace();
 					}
 				} else {
-					System.out.print(" null value ");
+					System.err.print(" [Map Value Null] ");
 					return emptyAst;
 				}
 			}
@@ -279,7 +278,7 @@ public class BoaAstIntrinsics {
 
 	public static final ASTRoot parseJavaFile(final String content) {
 		if (content == null) {
-			System.out.print(" null content ");
+			System.out.print(" [Null Content] ");
 			return emptyAst;
 		}
 		try {
@@ -309,11 +308,11 @@ public class BoaAstIntrinsics {
 					return ast.build();
 				} catch (final Throwable e) {
 					System.exit(-1);
-					System.out.print(" parser error check ");
+					System.err.print(" [Parser Error] ");
 					return emptyAst;
 				}
 			}
-			System.out.print("java error check");
+			System.err.print(" [Java Error] ");
 			return emptyAst;
 		} catch (final Throwable e) {
 			return emptyAst;
