@@ -58,6 +58,7 @@ public class SymbolTable {
 	private boolean needsBoxing;
 	private Stack<Boolean> isVisitor = new Stack<Boolean>();
 	private boolean isTraverse = false;
+	private boolean isAnonymousTable = false;
 	private boolean shadowing = false;
 
 	private final static BoaProtoTuple[] dslTupleTypes = {
@@ -380,6 +381,7 @@ public class SymbolTable {
 		st.functions = new FunctionTrie(this.functions);
 		st.locals = new HashMap<String, BoaType>(this.locals);
 		st.isVisitor = this.isVisitor;
+		st.isAnonymousTable = this.isAnonymousTable;
 		st.shadowing = this.shadowing;
 
 		return st;
@@ -686,6 +688,14 @@ public class SymbolTable {
 
 	public boolean getIsTraverse() {
 		return this.isTraverse;
+	}
+
+	public void setIsAnonymousTable(final boolean isAnonymousTable) {
+		this.isAnonymousTable = isAnonymousTable;
+	}
+
+	public boolean getIsAnonymousTable() {
+		return this.isAnonymousTable;
 	}
 
 	public void setIsVisitor(final boolean isVisitor) {

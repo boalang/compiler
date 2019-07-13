@@ -44,7 +44,6 @@ import boa.types.proto.CodeRepositoryProtoTuple;
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	BoaType lastRetType;
 	SubView currentSubView = null;
-	boolean anonymousTable = true;
 	Map<String, Start> viewASTs =  new HashMap<String, Start>();
 
 	/**
@@ -704,12 +703,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		BoaOutputType bot = null;
 
-		if (anonymousTable && !(n.getParent() instanceof RowType)) {
+		if (env.getIsAnonymousTable() && !(n.getParent() instanceof RowType)) {
 			Factor f = (Factor)n.getParent();
 			for (int i = 0; i < f.getOps().size(); i++) {
 				Node op = f.getOps().get(i);
 				if (op instanceof Index && ((Index)op).hasStart() && !(((Index)op).getStart().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof ILiteral))
-					throw new TypeCheckException(op, "invalid index type '" + op.type + "' for table filter");
+					throw new TypeCheckException(op, "static table does not support dynamic filter");
 			}
 		}
 
@@ -805,9 +804,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				throw e;
 		}
 
-		anonymousTable = false;
+		env.setIsAnonymousTable(false);
 		n.getRhs().accept(this, env);
-		anonymousTable = true;
+		env.setIsAnonymousTable(true);
 
 		if (!(n.getLhs().type instanceof BoaArray && n.getRhs().type instanceof BoaTuple))
 			if (!n.getLhs().type.assigns(n.getRhs().type))
@@ -1117,7 +1116,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if (n.hasInitializer()) {
 			final Factor f = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs();
 
-			anonymousTable = false;
+			env.setIsAnonymousTable(false);
 			if (f.getOperand() instanceof FunctionExpression) {
 				SymbolTable st;
 				try {
@@ -1135,7 +1134,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			}
 
 			n.getInitializer().accept(this, env);
-			anonymousTable = true;
+			env.setIsAnonymousTable(true);
 			rhs = n.getInitializer().type;
 			if (!(f.getOperand() instanceof FunctionExpression)) {
 				if (env.hasGlobalFunction(id) || env.hasLocalFunction(id))
