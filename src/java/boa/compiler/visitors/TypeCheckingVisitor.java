@@ -462,12 +462,14 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					node.accept(this, env);
 					type = node.type;
 				} else if (node instanceof Index) {
+					env.setIsAnonymousTable(true);
 					if (type == null) {
 						n.getOperand().accept(this, env);
 						type = n.getOperand().type;
 					}
 
 					node.accept(this, env);
+					env.unsetIsAnonymousTable();
 					final BoaType index = node.type;
 
 					if (type instanceof BoaArray) {
@@ -806,7 +808,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		env.setIsAnonymousTable(false);
 		n.getRhs().accept(this, env);
-		env.setIsAnonymousTable(true);
+		env.unsetIsAnonymousTable();
 
 		if (!(n.getLhs().type instanceof BoaArray && n.getRhs().type instanceof BoaTuple))
 			if (!n.getLhs().type.assigns(n.getRhs().type))
@@ -1134,7 +1136,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			}
 
 			n.getInitializer().accept(this, env);
-			env.setIsAnonymousTable(true);
+			env.unsetIsAnonymousTable();
 			rhs = n.getInitializer().type;
 			if (!(f.getOperand() instanceof FunctionExpression)) {
 				if (env.hasGlobalFunction(id) || env.hasLocalFunction(id))
