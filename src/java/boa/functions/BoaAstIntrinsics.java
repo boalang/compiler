@@ -311,9 +311,10 @@ public class BoaAstIntrinsics {
 					System.err.print(" [Parser Error] ");
 					return emptyAst;
 				}
+			} else {
+				System.err.print(" [Java Error] ");
+//				System.out.println(content);
 			}
-			System.err.print(" [Java Error] ");
-			System.err.print(" [Java Error] ");
 			return emptyAst;
 		} catch (final Throwable e) {
 			return emptyAst;

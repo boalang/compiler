@@ -264,12 +264,17 @@ public class BoaIntrinsics {
 		return false;
 	}
 	
+	private static boolean isJavaFile(String name) {
+		return name.substring(name.lastIndexOf('.') + 1).equals("java");
+	}
+	
 	@FunctionSpec(name = "getsnapshotbyid", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string", "bool" })
 	public static ChangedFile[] getSnapshotById(final CodeRepository cr, final String id, final boolean needAst) {
 		if (needAst) {
 			ChangedFile[] files = getSnapshotById(cr, id, new String[0]);
 			for (int i = 0; i < files.length; i++)
-				files[i] = BoaAstIntrinsics.getParsedChangedFile(files[i]);
+				if (isJavaFile(files[i].getName()))
+					files[i] = BoaAstIntrinsics.getParsedChangedFile(files[i]);
 			return files;
 		}
 		return getSnapshotById(cr, id, new String[0]);
