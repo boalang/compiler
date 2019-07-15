@@ -124,7 +124,7 @@ public class SeqRepoImporter {
 						// new model
 						if (!STORE_ASTS) {
 							double size = MAX_SIZE_FOR_PROJECT_WITH_COMMITS * DefaultProperties.MAX_SIZE_FACTOR;
-							int curSize = repo.getSize() * 1000;
+							long curSize = repo.getSize() * 1000L;
 							if (curSize > size) {
 								DefaultProperties.exceptions.put(repo.name, "repo size: " + curSize + " exceeding the max size: " + size);
 								continue;
