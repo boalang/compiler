@@ -941,6 +941,26 @@ public class BoaAstIntrinsics {
 		}
 	}
 	
+	@FunctionSpec(name = "isassignmentoperator", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isAssignmentOperator(final Expression e) throws Exception {
+		switch (e.getKind()) {
+			case ASSIGN: return true;
+			case ASSIGN_ADD: return true;
+			case ASSIGN_SUB: return true;
+			case ASSIGN_MULT: return true;
+			case ASSIGN_DIV: return true;
+			case ASSIGN_MOD: return true;
+			case ASSIGN_BITXOR: return true;
+			case ASSIGN_BITAND: return true;
+			case ASSIGN_BITOR: return true;
+			case ASSIGN_LSHIFT: return true;
+			case ASSIGN_RSHIFT: return true;
+			case ASSIGN_UNSIGNEDRSHIFT: return true;
+			default:
+				return false;			
+		}
+	}
+	
 	
 	
 	////////////////////////////////
