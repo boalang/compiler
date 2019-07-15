@@ -127,7 +127,6 @@ public class SeqRepoImporter {
 							long curSize = repo.getSize() * 1000L;
 							if (curSize > size) {
 								DefaultProperties.exceptions.put(repo.name, "repo size: " + curSize + " exceeding the max size: " + size);
-								System.out.println(repo.name + " with size " + curSize);
 								continue;
 							}
 						}
