@@ -10,58 +10,28 @@ import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Statement;
 
+import org.apache.commons.text.similarity.LevenshteinDistance;
+
 import static boa.functions.BoaAstIntrinsics.*;
 
 public class BoaRefactoringDetectionIntrinsics {
 
 	@FunctionSpec(name = "editdistance", returnType = "int", formalParameters = { "string", "string" })
 	public static int editDistance(String x, String y) {
-		int[][] dp = new int[x.length() + 1][y.length() + 1];
-		for (int i = 0; i <= x.length(); i++) {
-			for (int j = 0; j <= y.length(); j++) {
-				if (i == 0) {
-					dp[i][j] = j;
-				} else if (j == 0) {
-					dp[i][j] = i;
-				} else {
-					dp[i][j] = min(dp[i - 1][j - 1] + (x.charAt(i - 1) == y.charAt(j - 1) ? 0 : 1), dp[i - 1][j] + 1,
-							dp[i][j - 1] + 1);
-				}
-			}
-		}
-		return dp[x.length()][y.length()];
+		return new LevenshteinDistance().apply(x, y);
 	}
-
-	public static int min(int... numbers) {
-		return Arrays.stream(numbers).min().orElse(Integer.MAX_VALUE);
-	}
-
 	@FunctionSpec(name = "matchargswithreplacement", returnType = "bool", formalParameters = { "Expression",
 			"Expression" })
 	public static boolean matchArgumentsWithReplacement(Expression e1, Expression e2) throws Exception {
 		for (int i = 0; i < e1.getMethodArgsList().size() - 1; i++) {
-			// TODO
-			if (prettyprint(e1.getMethodArgs(i)).equals(prettyprint(e2.getMethodArgs(i)))) {
+			if (prettyprint(e1.getMethodArgs(i)).equals(prettyprint(e2.getMethodArgs(i)))
+					|| replacementMatch(e1.getMethodArgs(i), e2.getMethodArgs(i))) {
 				continue;
 			} else {
 				return false;
 			}
 		}
 		return false;
-	}
-
-	@FunctionSpec(name = "replacementmatchwithaugment", returnType = "bool", formalParameters = { "Expression",
-			"Expression" })
-	public static boolean replacementMatchWithAugment(Expression e1, Expression e2) throws Exception {
-		System.out.println("before parameter to argument replacement");
-		System.out.println("e1: " + prettyprint(e1));
-		System.out.println("e2: " + prettyprint(e2));
-//		Expression exp2 = e2;
-//		if (needParameterToArgumentReplacement(e2, map)) {
-//			exp2 = updateWithParameterToArgumentReplacement(e2, map);
-//			System.out.println("Need Parameter To Argument Replacement");
-//		}
-		return replacementMatchWithAugmentUntil(e1, e2);
 	}
 
 	@FunctionSpec(name = "updatewithparametertoargumentreplacement", returnType = "Statement", formalParameters = {
@@ -125,7 +95,9 @@ public class BoaRefactoringDetectionIntrinsics {
 		return false;
 	}
 
-	private static boolean replacementMatchWithAugmentUntil(Expression e1, Expression e2) throws Exception {
+	@FunctionSpec(name = "replacementmatch", returnType = "bool", formalParameters = { "Expression",
+			"Expression" })
+	public static boolean replacementMatch(Expression e1, Expression e2) throws Exception {
 		// variables
 		HashSet<String> variables1 = new HashSet<String>();
 		HashSet<String> variables2 = new HashSet<String>();
@@ -151,14 +123,40 @@ public class BoaRefactoringDetectionIntrinsics {
 		// remove all commons
 		removeCommons(variables1, variables2);
 		removeCommonExpressions(methodInvocations1, methodInvocations2);
+		removeCommonExpressions(creations1, creations2);
 		removeCommons(types1, types2);
 		for (int i = 0; i < 3; i++)
 			removeCommons(literals1.get(i), literals2.get(i));
+		removeCommonExpressions(operators1, operators2);
 
+		// remove compatible code elements for replacements
+		// check replacements for compatible variables
+		removeCompatibleCodeElements(variables1, variables2, e1, e2);
+		// check replacements for compatible method invocations
+		removeCompatibleExpressions(methodInvocations1, methodInvocations2);
+		// check replacements for compatible creations
+		removeCompatibleExpressions(creations1, creations2);
+		// check replacements for compatible types
+		
+		// check replacements for compatible literals
+		
+		// check replacements for compatible operators
+		removeCompatibleExpressions(operators1, operators2);
+		
 		print("e1", e1, variables1, methodInvocations1, creations1, types1, literals1, operators1);
 		print("e2", e2, variables2, methodInvocations2, creations2, types2, literals2, operators2);
 
 		return false;
+	}
+
+	private static void removeCompatibleCodeElements(HashSet<String> set1, HashSet<String> set2, Expression e1, Expression e2) {
+		for (Iterator<String> itr1 = set1.iterator(); itr1.hasNext();) {
+			String s1 = itr1.next();
+			for (Iterator<String> itr2 = set2.iterator(); itr2.hasNext();) {
+				String s2 = itr2.next();
+				
+			}
+		}
 	}
 
 	private static void removeCommonExpressions(HashSet<Expression> exps1, HashSet<Expression> exps2) throws Exception {
@@ -171,11 +169,44 @@ public class BoaRefactoringDetectionIntrinsics {
 					matched = true;
 				} else if (e1.getKind().equals(ExpressionKind.METHODCALL)) {
 					// check method name and args
-					if (e1.getMethod().equals(e2.getMethod()) && replacementMatchWithAugment(e1, e2))
+					if (e1.getMethod().equals(e2.getMethod()) && matchArgumentsWithReplacement(e1, e2))
 						matched = true;
 				} else if (isCreation(e1)) {
 					// check new type and args
-					// TODO
+					if (e1.getNewType().getName().equals(e2.getNewType().getName()) && matchArgumentsWithReplacement(e1, e2))
+						matched = true;
+				} else if (isOperator(e1)) {
+					// check operator kind
+					if (isArithmeticOperator(e1) && isArithmeticOperator(e2)
+							|| isBitwiseOperator(e1) && isBitwiseOperator(e2)
+							|| isLogicalOperator(e1) && isLogicalOperator(e2)
+							|| isRelationalOperator(e1) && isRelationalOperator(e2))
+						matched = true;
+				}
+				if (matched) {
+					itr1.remove();
+					itr2.remove();
+				}
+			}
+		}
+	}
+	
+	private static void removeCompatibleExpressions(HashSet<Expression> exps1, HashSet<Expression> exps2) throws Exception {
+		for (Iterator<Expression> itr1 = exps1.iterator(); itr1.hasNext();) {
+			Expression e1 = itr1.next();
+			for (Iterator<Expression> itr2 = exps2.iterator(); itr2.hasNext();) {
+				Expression e2 = itr2.next();
+				boolean matched = false;
+				if (prettyprint(e1).equals(prettyprint(e2))) {
+					matched = true;
+				} else if (e1.getKind().equals(ExpressionKind.METHODCALL)) {
+					// check method name and args
+					if (matchArgumentsWithReplacement(e1, e2))
+						matched = true;
+				} else if (isCreation(e1)) {
+					// check new type and args
+					if (matchArgumentsWithReplacement(e1, e2))
+						matched = true;
 				} else if (isOperator(e1)) {
 					// check operator kind
 					if (isArithmeticOperator(e1) && isArithmeticOperator(e2)
