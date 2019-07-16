@@ -106,33 +106,145 @@ public class BoaRefactoringDetectionIntrinsics {
 		return false;
 	}
 
+	private static boolean hasRemainings(HashSet<String> variables, HashSet<Expression> arrayAccesses,
+			HashSet<Expression> methodInvocations, HashSet<Expression> creations, HashSet<Expression> arrayInitializers,
+			HashSet<String> types, ArrayList<HashSet<String>> literals, HashSet<Expression> operators) {
+		return max(variables.size(), arrayAccesses.size(), methodInvocations.size(), creations.size(),
+				arrayInitializers.size(), types.size(), literals.get(0).size(), literals.get(1).size(),
+				literals.get(2).size(), operators.size()) != 0;
+	}
+
+	private static void print(String str, Expression e, HashSet<String> variables, HashSet<Expression> arrayAccesses,
+			HashSet<Expression> methodInvocations, HashSet<Expression> creations, HashSet<Expression> arrayInitializers,
+			HashSet<String> types, ArrayList<HashSet<String>> literals, HashSet<Expression> operators) {
+		System.out.println(str + ": " + prettyprint(e));
+		System.out.println("variables: " + variables);
+		System.out.print("arrayAccesses: ");
+		for (Expression aa : arrayAccesses)
+			System.out.print(prettyprint(aa) + " | ");
+		System.out.print("\nmethodInvocations: ");
+		for (Expression m : methodInvocations)
+			System.out.print(prettyprint(m) + " | ");
+		System.out.print("\ncreations: ");
+		for (Expression c : creations)
+			System.out.print(prettyprint(c) + " | ");
+		System.out.print("\narrayInitializers: ");
+		for (Expression ai : arrayInitializers)
+			System.out.print(prettyprint(ai) + " | ");
+		System.out.print("\ntypes: ");
+		for (String s : types)
+			System.out.print(s + " | ");
+		System.out.print("\nliterals: ");
+		for (HashSet<String> s : literals)
+			System.out.print(s + " | ");
+		System.out.print("\noperators: ");
+		for (Expression op : operators)
+			System.out.print(op + " | ");
+		System.out.println("\n");
+	}
+
+	private static void collectNodes(Expression e, HashSet<String> variables, HashSet<Expression> arrayAccesses,
+			HashSet<Expression> methodInvocations, HashSet<Expression> creations, HashSet<Expression> arrayInitializers,
+			HashSet<String> types, ArrayList<HashSet<String>> literals, HashSet<Expression> operators)
+			throws Exception {
+		// CHECKME
+		new boa.runtime.BoaAbstractVisitor() {
+			@Override
+			protected boolean preVisit(final boa.types.Ast.Expression exp) throws Exception {
+				// collect variables
+				if (exp.getKind().equals(ExpressionKind.VARACCESS))
+					variables.add(exp.getVariable());
+				// collect array accesses
+				if (exp.getKind().equals(ExpressionKind.ARRAYACCESS)) {
+					arrayAccesses.add(exp);
+					return false;
+				}
+				// collect method invocations
+				if (exp.getKind().equals(ExpressionKind.METHODCALL)) {
+					methodInvocations.add(exp);
+//					for (Expression arg: exp.getMethodArgsList())
+//						this.visit(arg);
+					return false;
+				}
+				// collect class instantiations
+				if (isCreation(exp)) {
+					creations.add(exp);
+//					for (Expression arg : exp.getMethodArgsList())
+//						this.visit(arg);
+					return false;
+				}
+				// collect literals: [{string}, {number}, {boolean}]
+				if (isStringLit(exp))
+					literals.get(0).add(exp.getLiteral());
+				if (isIntLit(exp))
+					literals.get(1).add(exp.getLiteral());
+				if (isBoolLit(exp))
+					literals.get(2).add(exp.getLiteral());
+				// collect operators
+				if (isOperator(exp))
+					operators.add(exp);
+				return true;
+			}
+
+			@Override
+			protected boolean preVisit(final boa.types.Ast.Type ty) throws Exception {
+				// collect types
+				types.add(ty.getName());
+				return true;
+			}
+		}.visit(e);
+	}
+
 	@FunctionSpec(name = "replacementmatch", returnType = "bool", formalParameters = { "Expression", "Expression" })
 	public static boolean replacementMatch(Expression e1, Expression e2) throws Exception {
 
 		// variables
 		HashSet<String> variables1 = new HashSet<String>();
 		HashSet<String> variables2 = new HashSet<String>();
+
+		// array accesses
+		HashSet<Expression> arrayAccesses1 = new HashSet<Expression>();
+		HashSet<Expression> arrayAccesses2 = new HashSet<Expression>();
+
 		// method invocations
 		HashSet<Expression> methodInvocations1 = new HashSet<Expression>();
 		HashSet<Expression> methodInvocations2 = new HashSet<Expression>();
-		// creations
+
+		// TODO creations [{NEW}, {NEWARRAY}]
 		HashSet<Expression> creations1 = new HashSet<Expression>();
 		HashSet<Expression> creations2 = new HashSet<Expression>();
+
+		// TODO array initializer
+		HashSet<Expression> arrayInitializers1 = new HashSet<Expression>();
+		HashSet<Expression> arrayInitializers2 = new HashSet<Expression>();
+
 		// types
 		HashSet<String> types1 = new HashSet<String>();
 		HashSet<String> types2 = new HashSet<String>();
+
 		// literals: [{string}, {number}, {boolean}]
 		ArrayList<HashSet<String>> literals1 = getNewLiterals();
 		ArrayList<HashSet<String>> literals2 = getNewLiterals();
-		// operators
+
+		// TODO operators; [{arithmetic}, {bitwise}, {logic}, {relation}]
 		HashSet<Expression> operators1 = new HashSet<Expression>();
 		HashSet<Expression> operators2 = new HashSet<Expression>();
 
-		collectNodes(e1, variables1, methodInvocations1, creations1, types1, literals1, operators1);
-		collectNodes(e2, variables2, methodInvocations2, creations2, types2, literals2, operators2);
+		collectNodes(e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
+				literals1, operators1);
+		collectNodes(e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
+				literals2, operators2);
+
+		System.out.println("-------------before------------------------------------");
+		print("e1", e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
+				literals1, operators1);
+		print("e2", e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
+				literals2, operators2);
+		System.out.println("-------------------------------------------------------\n");
 
 		// remove all commons
 		removeCommons(variables1, variables2);
+		removeCommonExpressions(arrayAccesses1, arrayAccesses2);
 		removeCommonExpressions(methodInvocations1, methodInvocations2);
 		removeCommonExpressions(creations1, creations2);
 		removeCommons(types1, types2);
@@ -140,10 +252,18 @@ public class BoaRefactoringDetectionIntrinsics {
 			removeCommons(literals1.get(i), literals2.get(i));
 		removeCommonExpressions(operators1, operators2);
 
+		System.out.println("--------------after common in the same type--------------");
+		print("e1", e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
+				literals1, operators1);
+		print("e2", e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
+				literals2, operators2);
+		System.out.println("---------------------------------------------------------\n");
+
 		ReplacementInfo info = new ReplacementInfo(prettyprint(e1), prettyprint(e2));
 
 		// remove compatible code elements for replacements
 		removeCompatibleCodeElements(variables1, variables2, info);
+		removeCompatibleExpressions(arrayAccesses1, arrayAccesses2, info);
 		removeCompatibleExpressions(methodInvocations1, methodInvocations2, info);
 		removeCompatibleExpressions(creations1, creations2, info);
 		removeCompatibleCodeElements(types1, types2, info);
@@ -151,30 +271,249 @@ public class BoaRefactoringDetectionIntrinsics {
 			removeCompatibleCodeElements(literals1.get(i), literals2.get(i), info);
 		removeCompatibleExpressions(operators1, operators2, info);
 
+		System.out.println("------after compatible in the same type------------------");
+		print("e1", e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
+				literals1, operators1);
+		print("e2", e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
+				literals2, operators2);
+		System.out.println("----------------------------------------------------------\n");
+
 		// CHECKME add code element replacement types from here
-		
+
 		// remove compatible method invocations and creations
 		removeCompatibleMetodInvocationsAndCreations(methodInvocations1, creations2, info.prettyPrint1,
 				info.prettyPrint2, info.distance);
 		removeCompatibleMetodInvocationsAndCreations(methodInvocations2, creations1, info.prettyPrint2,
 				info.prettyPrint1, info.distance);
-		
-		// remove compatible variables and method invocations
-		
-		
-		// remove compatible variables and method invocations
-		
-		
-		// remove compatible variables and literals
-		
-		
-		System.out.println("----------------------------------------------------------------------");
-		print("e1", e1, variables1, methodInvocations1, creations1, types1, literals1, operators1);
-		print("e2", e2, variables2, methodInvocations2, creations2, types2, literals2, operators2);
-		System.out.println("----------------------------------------------------------------------");
 
-		return !hasRemainings(variables1, methodInvocations1, creations1, types1, literals1, operators1)
-				&& !hasRemainings(variables2, methodInvocations2, creations2, types2, literals2, operators2);
+		// remove compatible method invocations and array accesses
+		removeCompatibleMetodInvocationsAndArrayAccesses(methodInvocations1, arrayAccesses2, info.prettyPrint1,
+				info.prettyPrint2, info.distance);
+		removeCompatibleMetodInvocationsAndArrayAccesses(methodInvocations2, arrayAccesses1, info.prettyPrint2,
+				info.prettyPrint1, info.distance);
+
+		// remove compatible variables and array accesses
+		removeCompatibleVariablesAndExpressions(variables1, arrayAccesses2, info.prettyPrint1, info.prettyPrint2,
+				info.distance);
+		removeCompatibleVariablesAndExpressions(variables2, arrayAccesses1, info.prettyPrint2, info.prettyPrint1,
+				info.distance);
+
+		// remove compatible variables and method invocations
+		removeCompatibleVariablesAndExpressions(variables1, methodInvocations2, info.prettyPrint1, info.prettyPrint2,
+				info.distance);
+		removeCompatibleVariablesAndExpressions(variables2, methodInvocations1, info.prettyPrint2, info.prettyPrint1,
+				info.distance);
+
+		// remove compatible variables and creations
+		removeCompatibleVariablesAndExpressions(variables1, creations2, info.prettyPrint1, info.prettyPrint2,
+				info.distance);
+		removeCompatibleVariablesAndExpressions(variables2, creations1, info.prettyPrint2, info.prettyPrint1,
+				info.distance);
+
+		// remove compatible variables and literals: [{string}, {number}, {boolean}]
+		removeCompatibleVariablesAndLiterals(variables1, literals2, info.prettyPrint1, info.prettyPrint2,
+				info.distance);
+		removeCompatibleVariablesAndLiterals(variables2, literals1, info.prettyPrint2, info.prettyPrint1,
+				info.distance);
+
+		System.out.println("-----------after compatible in the diff types--------------");
+		print("e1", e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
+				literals1, operators1);
+		print("e2", e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
+				literals2, operators2);
+		System.out.println("-----------------------------------------------------------\n");
+
+		return !hasRemainings(variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
+				literals1, operators1)
+				&& !hasRemainings(variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2,
+						types2, literals2, operators2);
+	}
+
+	private static void removeCompatibleMetodInvocationsAndArrayAccesses(HashSet<Expression> methodInvocations,
+			HashSet<Expression> arrayAccesses, String prettyPrint1, String prettyPrint2, int distance)
+			throws Exception {
+		if (methodInvocations.size() <= arrayAccesses.size()) {
+			removeCompatibleMetodInvocationsAndArrayAccesses1(methodInvocations, arrayAccesses, prettyPrint1,
+					prettyPrint2, distance);
+		} else {
+			removeCompatibleMetodInvocationsAndArrayAccesses2(arrayAccesses, methodInvocations, prettyPrint2,
+					prettyPrint1, distance);
+		}
+	}
+
+	private static void removeCompatibleMetodInvocationsAndArrayAccesses1(HashSet<Expression> methodInvocations,
+			HashSet<Expression> arrayAccesses, String prettyPrint1, String prettyPrint2, int distance)
+			throws Exception {
+		for (Iterator<Expression> itr1 = methodInvocations.iterator(); itr1.hasNext();) {
+			Expression methodInvocation = itr1.next();
+			String s1 = prettyprint(methodInvocation);
+			TreeMap<Double, ArrayList<Expression>> map = new TreeMap<Double, ArrayList<Expression>>();
+			for (Iterator<Expression> itr2 = arrayAccesses.iterator(); itr2.hasNext();) {
+				Expression arrayAccess = itr2.next();
+				String s2 = prettyprint(arrayAccess);
+				boolean preMatched = false;
+				if (arrayAccess.getExpressionsCount() == 1) {
+					preMatched = true;
+				} else if (arrayAccess.getExpressionsCount() == 2 && methodInvocation.getMethodArgsCount() == 1
+						&& replacementMatch(arrayAccess.getExpressions(1), methodInvocation.getMethodArgs(0))) {
+					preMatched = true;
+				}
+				if (preMatched) {
+					String afterReplacement1 = prettyPrint1.replaceAll(Pattern.quote(s1), Matcher.quoteReplacement(s2));
+					int tempDistance = editDistance(afterReplacement1, prettyPrint2);
+					if (tempDistance >= 0 && tempDistance < distance
+					// && syntaxAwareReplacement(s1, s2, prettyprint1, prettyprint2)
+					) {
+						double normalized = (double) tempDistance
+								/ (double) Math.max(afterReplacement1.length(), prettyPrint2.length());
+						ArrayList<Expression> pairs = new ArrayList<Expression>(2);
+						pairs.add(methodInvocation);
+						pairs.add(arrayAccess);
+						map.put(normalized, pairs);
+						if (tempDistance == 0)
+							break;
+					}
+				}
+			}
+			if (!map.isEmpty()) {
+				ArrayList<Expression> bestPairs = map.firstEntry().getValue();
+				methodInvocations.remove(bestPairs.get(0));
+				arrayAccesses.remove(bestPairs.get(1));
+			}
+		}
+	}
+
+	private static void removeCompatibleMetodInvocationsAndArrayAccesses2(HashSet<Expression> arrayAccesses,
+			HashSet<Expression> methodInvocations, String prettyPrint1, String prettyPrint2, int distance)
+			throws Exception {
+		for (Iterator<Expression> itr1 = arrayAccesses.iterator(); itr1.hasNext();) {
+			Expression arrayAccess = itr1.next();
+			String s1 = prettyprint(arrayAccess);
+			TreeMap<Double, ArrayList<Expression>> map = new TreeMap<Double, ArrayList<Expression>>();
+			for (Iterator<Expression> itr2 = methodInvocations.iterator(); itr2.hasNext();) {
+				Expression methodInvocation = itr2.next();
+				String s2 = prettyprint(methodInvocation);
+				boolean preMatched = false;
+				if (arrayAccess.getExpressionsCount() == 1) {
+					preMatched = true;
+				} else if (arrayAccess.getExpressionsCount() == 2 && methodInvocation.getMethodArgsCount() == 1
+						&& replacementMatch(arrayAccess.getExpressions(1), methodInvocation.getMethodArgs(0))) {
+					preMatched = true;
+				}
+				if (preMatched) {
+					String afterReplacement1 = prettyPrint1.replaceAll(Pattern.quote(s1), Matcher.quoteReplacement(s2));
+					int tempDistance = editDistance(afterReplacement1, prettyPrint2);
+					if (tempDistance >= 0 && tempDistance < distance
+					// && syntaxAwareReplacement(s1, s2, prettyprint1, prettyprint2)
+					) {
+						double normalized = (double) tempDistance
+								/ (double) Math.max(afterReplacement1.length(), prettyPrint2.length());
+						ArrayList<Expression> pairs = new ArrayList<Expression>(2);
+						pairs.add(arrayAccess);
+						pairs.add(methodInvocation);
+						map.put(normalized, pairs);
+						if (tempDistance == 0)
+							break;
+					}
+				}
+			}
+			if (!map.isEmpty()) {
+				ArrayList<Expression> bestPairs = map.firstEntry().getValue();
+				arrayAccesses.remove(bestPairs.get(0));
+				methodInvocations.remove(bestPairs.get(1));
+			}
+		}
+	}
+
+	private static void removeCompatibleVariablesAndLiterals(HashSet<String> variables,
+			ArrayList<HashSet<String>> literals, String prettyPrint1, String prettyPrint2, int distance) {
+		HashSet<String> stringLiterals = literals.get(0);
+		HashSet<String> numberLiterals = literals.get(1);
+		HashSet<String> booleanLiterals = literals.get(2);
+		if (variables.size() <= stringLiterals.size()) {
+			removeCompatibleCodeElements(variables, stringLiterals, prettyPrint1, prettyPrint2, distance);
+		} else {
+			removeCompatibleCodeElements(stringLiterals, variables, prettyPrint2, prettyPrint1, distance);
+		}
+		if (variables.size() <= numberLiterals.size()) {
+			removeCompatibleCodeElements(variables, numberLiterals, prettyPrint1, prettyPrint2, distance);
+		} else {
+			removeCompatibleCodeElements(numberLiterals, variables, prettyPrint2, prettyPrint1, distance);
+		}
+		if (variables.size() <= booleanLiterals.size()) {
+			removeCompatibleCodeElements(variables, booleanLiterals, prettyPrint1, prettyPrint2, distance);
+		} else {
+			removeCompatibleCodeElements(booleanLiterals, variables, prettyPrint2, prettyPrint1, distance);
+		}
+	}
+
+	private static void removeCompatibleVariablesAndExpressions(HashSet<String> variables,
+			HashSet<Expression> expressions, String prettyPrint1, String prettyPrint2, int distance) {
+		if (variables.size() <= expressions.size()) {
+			removeCompatibleVariablesAndExpressions1(variables, expressions, prettyPrint1, prettyPrint2,
+					distance);
+		} else {
+			removeCompatibleVariablesAndExpressions2(expressions, variables, prettyPrint2, prettyPrint1,
+					distance);
+		}
+	}
+
+	private static void removeCompatibleVariablesAndExpressions2(HashSet<Expression> expressions,
+			HashSet<String> variables, String prettyPrint2, String prettyPrint1, int distance) {
+		for (Iterator<Expression> itr1 = expressions.iterator(); itr1.hasNext();) {
+			Expression e1 = itr1.next();
+			String s1 = prettyprint(e1);
+			TreeMap<Double, Expression> map1 = new TreeMap<Double, Expression>();
+			TreeMap<Double, String> map2 = new TreeMap<Double, String>();
+			for (Iterator<String> itr2 = variables.iterator(); itr2.hasNext();) {
+				String s2 = itr2.next();
+				String afterReplacement1 = prettyPrint1.replaceAll(Pattern.quote(s1), Matcher.quoteReplacement(s2));
+				int tempDistance = editDistance(afterReplacement1, prettyPrint2);
+				if (tempDistance >= 0 && tempDistance < distance
+//						&& syntaxAwareReplacement(s1, s2, prettyprint1, prettyprint2)
+				) {
+					double normalized = (double) tempDistance
+							/ (double) Math.max(afterReplacement1.length(), prettyPrint2.length());
+					map1.put(normalized, e1);
+					map2.put(normalized, s2);
+					if (tempDistance == 0)
+						break;
+				}
+			}
+			if (!map1.isEmpty()) {
+				variables.remove(map2.firstEntry().getValue());
+				expressions.remove(map1.firstEntry().getValue());
+			}
+		}
+	}
+
+	private static void removeCompatibleVariablesAndExpressions1(HashSet<String> variables,
+			HashSet<Expression> expressions, String prettyPrint1, String prettyPrint2, int distance) {
+		for (Iterator<String> itr1 = variables.iterator(); itr1.hasNext();) {
+			String s1 = itr1.next();
+			TreeMap<Double, String> map1 = new TreeMap<Double, String>();
+			TreeMap<Double, Expression> map2 = new TreeMap<Double, Expression>();
+			for (Iterator<Expression> itr2 = expressions.iterator(); itr2.hasNext();) {
+				Expression e2 = itr2.next();
+				String s2 = prettyprint(e2);
+				String afterReplacement1 = prettyPrint1.replaceAll(Pattern.quote(s1), Matcher.quoteReplacement(s2));
+				int tempDistance = editDistance(afterReplacement1, prettyPrint2);
+				if (tempDistance >= 0 && tempDistance < distance
+//						&& syntaxAwareReplacement(s1, s2, prettyprint1, prettyprint2)
+				) {
+					double normalized = (double) tempDistance
+							/ (double) Math.max(afterReplacement1.length(), prettyPrint2.length());
+					map1.put(normalized, s1);
+					map2.put(normalized, e2);
+					if (tempDistance == 0)
+						break;
+				}
+			}
+			if (!map1.isEmpty()) {
+				variables.remove(map1.firstEntry().getValue());
+				expressions.remove(map2.firstEntry().getValue());
+			}
+		}
 	}
 
 	private static void removeCompatibleMetodInvocationsAndCreations(HashSet<Expression> methodInvocations,
@@ -192,27 +531,27 @@ public class BoaRefactoringDetectionIntrinsics {
 			HashSet<Expression> set2, String prettyPrint1, String prettyPrint2, int distance) throws Exception {
 		for (Iterator<Expression> itr1 = set1.iterator(); itr1.hasNext();) {
 			Expression e1 = itr1.next();
-//			System.out.println("111 " + prettyprint(e1));
-			String s1 = e1.getKind().equals(ExpressionKind.METHODCALL) ? e1.getMethod() : ("new " + e1.getNewType().getName());
+			String s1 = e1.getKind().equals(ExpressionKind.METHODCALL) ? e1.getMethod()
+					: ("new " + e1.getNewType().getName());
 			TreeMap<Double, ArrayList<Expression>> map = new TreeMap<Double, ArrayList<Expression>>();
 			for (Iterator<Expression> itr2 = set2.iterator(); itr2.hasNext();) {
 				Expression e2 = itr2.next();
-//				System.out.println("222 " + prettyprint(e2) + " " + matchArgumentsWithReplacement(e1, e2));
-				String s2 = e2.getKind().equals(ExpressionKind.METHODCALL) ? e2.getMethod() : ("new " + e2.getNewType().getName());
+				String s2 = e2.getKind().equals(ExpressionKind.METHODCALL) ? e2.getMethod()
+						: ("new " + e2.getNewType().getName());
 				if (matchArgumentsWithReplacement(e1, e2)) {
 					String afterReplacement1 = prettyPrint1.replaceAll(Pattern.quote(s1), Matcher.quoteReplacement(s2));
 					int tempDistance = editDistance(afterReplacement1, prettyPrint2);
 					if (tempDistance >= 0 && tempDistance < distance
 					// && syntaxAwareReplacement(s1, s2, prettyprint1, prettyprint2)
 					) {
-						if (tempDistance == 0)
-							break;
 						double normalized = (double) tempDistance
 								/ (double) Math.max(afterReplacement1.length(), prettyPrint2.length());
 						ArrayList<Expression> pairs = new ArrayList<Expression>(2);
 						pairs.add(e1);
 						pairs.add(e2);
 						map.put(normalized, pairs);
+						if (tempDistance == 0)
+							break;
 					}
 				}
 			}
@@ -234,13 +573,6 @@ public class BoaRefactoringDetectionIntrinsics {
 			this.prettyPrint2 = prettyPrint2;
 			this.distance = editDistance(prettyPrint1, prettyPrint2);
 		}
-	}
-
-	private static boolean hasRemainings(HashSet<String> variables1, HashSet<Expression> methodInvocations1,
-			HashSet<Expression> creations1, HashSet<String> types1, ArrayList<HashSet<String>> literals1,
-			HashSet<Expression> operators1) {
-		return max(variables1.size(), methodInvocations1.size(), creations1.size(), types1.size(), literals1.size(),
-				operators1.size()) != 0;
 	}
 
 	private static int max(int... numbers) {
@@ -267,14 +599,14 @@ public class BoaRefactoringDetectionIntrinsics {
 				if (tempDistance >= 0 && tempDistance < distance
 //						&& syntaxAwareReplacement(s1, s2, prettyprint1, prettyprint2)
 				) {
-					if (tempDistance == 0)
-						break;
 					double normalized = (double) tempDistance
 							/ (double) Math.max(afterReplacement1.length(), prettyPrint2.length());
 					ArrayList<String> pairs = new ArrayList<String>(2);
 					pairs.add(s1);
 					pairs.add(s2);
 					map.put(normalized, pairs);
+					if (tempDistance == 0)
+						break;
 				}
 			}
 			if (!map.isEmpty()) {
@@ -327,6 +659,19 @@ public class BoaRefactoringDetectionIntrinsics {
 				boolean matched = false;
 				if (prettyprint(e1).equals(prettyprint(e2))) {
 					matched = true;
+				} else if (e1.getKind().equals(ExpressionKind.ARRAYACCESS)) {
+					// check array access name and args
+					if (e1.getExpressionsCount() == e2.getExpressionsCount()) {
+						if (e1.getExpressionsCount() == 1 && compatiableForReplacement(
+								e1.getExpressions(0).getVariable(), e2.getExpressions(0).getVariable(), info)) {
+							matched = true;
+						} else if (e1.getExpressionsCount() == 2
+								&& compatiableForReplacement(e1.getExpressions(0).getVariable(),
+										e2.getExpressions(0).getVariable(), info)
+								&& replacementMatch(e1.getExpressions(1), e2.getExpressions(1))) {
+							matched = true;
+						}
+					}
 				} else if (e1.getKind().equals(ExpressionKind.METHODCALL)) {
 					// check method name and args
 					if (matchArgumentsWithReplacement(e1, e2)
@@ -362,66 +707,6 @@ public class BoaRefactoringDetectionIntrinsics {
 		intersection.retainAll(s2);
 		s1.removeAll(intersection);
 		s2.removeAll(intersection);
-	}
-
-	private static void print(String str, Expression e1, HashSet<String> variables1,
-			HashSet<Expression> methodInvocations1, HashSet<Expression> creations1, HashSet<String> types1,
-			ArrayList<HashSet<String>> literals1, HashSet<Expression> operators1) {
-		System.out.println(str + ": " + prettyprint(e1));
-		System.out.println("variables: " + variables1);
-		System.out.print("methodInvocations: ");
-		for (Expression e : methodInvocations1)
-			System.out.print(prettyprint(e) + " | ");
-		System.out.print("\ncreations: ");
-		for (Expression e : creations1)
-			System.out.print(prettyprint(e) + " | ");
-		System.out.print("\ntypes: ");
-		for (Expression e : creations1)
-			System.out.print(prettyprint(e) + " | ");
-		System.out.print("\nliterals: ");
-		for (HashSet<String> s : literals1)
-			System.out.print(s + " | ");
-		System.out.print("\noperators: ");
-		for (Expression e : operators1)
-			System.out.print(e + " | ");
-		System.out.println("\n");
-	}
-
-	private static void collectNodes(Expression e, HashSet<String> variables, HashSet<Expression> methodInvocations,
-			HashSet<Expression> creations, HashSet<String> types, ArrayList<HashSet<String>> literals,
-			HashSet<Expression> operators1) throws Exception {
-		new boa.runtime.BoaAbstractVisitor() {
-			@Override
-			protected boolean preVisit(final boa.types.Ast.Expression exp) throws Exception {
-				// collect local variables w/o "this."
-				if (exp.getKind().equals(ExpressionKind.VARACCESS) && exp.getExpressionsCount() == 0)
-					variables.add(exp.getVariable());
-				// collect method invocations
-				if (exp.getKind().equals(ExpressionKind.METHODCALL))
-					methodInvocations.add(exp);
-				// collect class instantiations
-				if (isCreation(exp))
-					creations.add(exp);
-				// collect literals: [{string}, {number}, {boolean}]
-				if (isStringLit(exp))
-					literals.get(0).add(exp.getLiteral());
-				if (isIntLit(exp))
-					literals.get(1).add(exp.getLiteral());
-				if (isBoolLit(exp))
-					literals.get(2).add(exp.getLiteral());
-				// collect operators
-				if (isOperator(exp))
-					operators1.add(exp);
-				return true;
-			}
-
-			@Override
-			protected boolean preVisit(final boa.types.Ast.Type ty) throws Exception {
-				// collect types
-				types.add(ty.getName());
-				return true;
-			}
-		}.visit(e);
 	}
 
 	private static ArrayList<HashSet<String>> getNewLiterals() {

@@ -51,6 +51,7 @@ import boa.datagen.DefaultProperties;
 import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.JavaVisitor;
 import boa.types.Ast.*;
+import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -975,7 +976,6 @@ public class BoaAstIntrinsics {
 				return false;			
 		}
 	}
-	
 
 	//////////////////////////////
 	// Collect Annotations Used //
@@ -1654,9 +1654,11 @@ public class BoaAstIntrinsics {
 
 		case NEWARRAY:
 			s += "new ";
-			s += prettyprint(e.getNewType());
-			for (int i = 0; i < e.getExpressionsCount(); i++)
-				s += prettyprint(e.getExpressions(i));
+			String ty = prettyprint(e.getNewType());
+			if (e.getExpressionsCount() == 1 && e.getExpressions(0).getKind().equals(ExpressionKind.ARRAYINIT))
+				s += ty + prettyprint(e.getExpressions(0));
+			else if (e.getExpressionsCount() == 1)
+				s += ty.substring(0, ty.lastIndexOf(']')) + prettyprint(e.getExpressions(0)) + ']';
 			return s;
 
 		case NEW:
