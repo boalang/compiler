@@ -235,12 +235,12 @@ public class BoaRefactoringDetectionIntrinsics {
 		collectNodes(e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
 				literals2, operators2);
 
-		System.out.println("-------------before------------------------------------");
-		print("e1", e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
-				literals1, operators1);
-		print("e2", e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
-				literals2, operators2);
-		System.out.println("-------------------------------------------------------\n");
+//		System.out.println("-------------before------------------------------------");
+//		print("e1", e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
+//				literals1, operators1);
+//		print("e2", e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
+//				literals2, operators2);
+//		System.out.println("-------------------------------------------------------\n");
 
 		// remove all commons
 		removeCommons(variables1, variables2);
@@ -252,12 +252,12 @@ public class BoaRefactoringDetectionIntrinsics {
 			removeCommons(literals1.get(i), literals2.get(i));
 		removeCommonExpressions(operators1, operators2);
 
-		System.out.println("--------------after common in the same type--------------");
-		print("e1", e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
-				literals1, operators1);
-		print("e2", e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
-				literals2, operators2);
-		System.out.println("---------------------------------------------------------\n");
+//		System.out.println("--------------after common in the same type--------------");
+//		print("e1", e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
+//				literals1, operators1);
+//		print("e2", e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
+//				literals2, operators2);
+//		System.out.println("---------------------------------------------------------\n");
 
 		ReplacementInfo info = new ReplacementInfo(prettyprint(e1), prettyprint(e2));
 
@@ -271,12 +271,12 @@ public class BoaRefactoringDetectionIntrinsics {
 			removeCompatibleCodeElements(literals1.get(i), literals2.get(i), info);
 		removeCompatibleExpressions(operators1, operators2, info);
 
-		System.out.println("------after compatible in the same type------------------");
-		print("e1", e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
-				literals1, operators1);
-		print("e2", e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
-				literals2, operators2);
-		System.out.println("----------------------------------------------------------\n");
+//		System.out.println("------after compatible in the same type------------------");
+//		print("e1", e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
+//				literals1, operators1);
+//		print("e2", e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
+//				literals2, operators2);
+//		System.out.println("----------------------------------------------------------\n");
 
 		// CHECKME add code element replacement types from here
 
@@ -587,6 +587,13 @@ public class BoaRefactoringDetectionIntrinsics {
 		}
 	}
 
+	@FunctionSpec(name = "compatiblestrings", returnType = "bool", formalParameters = { "string", "string", "string", "string" })
+	public static boolean compatibleStrings(String s1, String s2, String prettyPrint1, String prettyPrint2) {
+		String afterReplacement1 = prettyPrint1.replaceAll(Pattern.quote(s1), Matcher.quoteReplacement(s2));
+		int tempDistance = editDistance(afterReplacement1, prettyPrint2);
+		return tempDistance >= 0 && tempDistance < editDistance(prettyPrint1, prettyPrint2);
+	}
+	
 	private static void removeCompatibleCodeElements(HashSet<String> set1, HashSet<String> set2, String prettyPrint1,
 			String prettyPrint2, int distance) {
 		for (Iterator<String> itr1 = set1.iterator(); itr1.hasNext();) {
