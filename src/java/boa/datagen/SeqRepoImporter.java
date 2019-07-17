@@ -56,25 +56,22 @@ public class SeqRepoImporter {
 	private final static boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	private final static boolean cache = Properties.getBoolean("cache", DefaultProperties.CACHE);
 
-	private final static File gitRootPath = new File(
-			Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
+	private final static File gitRootPath = new File(Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
+	private final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
+//	private final static String jsonCachePath = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 
 	private final static HashSet<String> processedProjectIds = new HashSet<String>();
 
 	private static Configuration conf = null;
 	private static FileSystem fileSystem = null;
 	private static String base = null;
-
-	private final static int poolSize = Integer
-			.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
-	public static final int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer
-			.valueOf(DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS);
-	final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
-	final static String jsonCachePath = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
-	final static boolean STORE_COMMITS = DefaultProperties.STORE_COMMITS;
-	final static boolean STORE_ASTS = DefaultProperties.STORE_ASTS;
-	final static double MAX_REPO_SIZE = MAX_SIZE_FOR_PROJECT_WITH_COMMITS * DefaultProperties.MAX_SIZE_FACTOR;
 	private static boolean done = false;
+
+	private final static int poolSize = Integer.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
+	private static final int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer.valueOf(DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS);
+	private final static double MAX_REPO_SIZE = MAX_SIZE_FOR_PROJECT_WITH_COMMITS * DefaultProperties.MAX_SIZE_FACTOR;
+	private final static boolean STORE_COMMITS = DefaultProperties.STORE_COMMITS;
+	private final static boolean STORE_ASTS = DefaultProperties.STORE_ASTS;
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 
