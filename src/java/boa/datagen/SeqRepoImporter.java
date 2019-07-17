@@ -73,6 +73,7 @@ public class SeqRepoImporter {
 	final static String jsonCachePath = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 	final static boolean STORE_COMMITS = DefaultProperties.STORE_COMMITS;
 	final static boolean STORE_ASTS = DefaultProperties.STORE_ASTS;
+	final static double MAX_REPO_SIZE = MAX_SIZE_FOR_PROJECT_WITH_COMMITS * DefaultProperties.MAX_SIZE_FACTOR;
 	private static boolean done = false;
 
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -123,10 +124,9 @@ public class SeqRepoImporter {
 							continue;
 						// new model
 						if (!STORE_ASTS) {
-							double size = MAX_SIZE_FOR_PROJECT_WITH_COMMITS * DefaultProperties.MAX_SIZE_FACTOR;
 							long curSize = repo.getSize() * 1000L;
-							if (curSize > size) {
-								DefaultProperties.exceptions.put(repo.name, "repo size: " + curSize + " exceeding the max size: " + size);
+							if (curSize > MAX_REPO_SIZE) {
+								DefaultProperties.exceptions.put(repo.name, "repo size: " + curSize + " exceeding the max size: " + MAX_REPO_SIZE);
 								continue;
 							}
 						}
@@ -384,11 +384,10 @@ public class SeqRepoImporter {
 			if (!STORE_ASTS) {
 				ByteArrayFile f = new ByteArrayFile(gitDir.getAbsolutePath());
 				BytesWritable bw = new BytesWritable(SerializationUtils.serialize(f));
-				double size =  MAX_SIZE_FOR_PROJECT_WITH_COMMITS * DefaultProperties.MAX_SIZE_FACTOR;
-				if (!f.isBuilt() || bw.getLength() > size) {
-					DefaultProperties.exceptions.put(name, "pack file size: " + bw.getLength() + " exceeding the max size: " + size);
+				if (!f.isBuilt() || bw.getLength() > MAX_REPO_SIZE) {
+					DefaultProperties.exceptions.put(name, "pack file size: " + bw.getLength() + " exceeding the max size: " + MAX_REPO_SIZE);
 					if (debug)
-						System.err.println("Thread " + Thread.currentThread().getId() + " the pack file size of project: " + name + " exceeds the " + size + " byte");
+						System.err.println("Thread " + Thread.currentThread().getId() + " the pack file size of project: " + name + " exceeds the " + MAX_REPO_SIZE + " byte");
 					return null;
 				} else {
 					repoWriter.append(new LongWritable(getRepoKey()), bw);
