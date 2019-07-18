@@ -193,14 +193,14 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "closerepo")
 	public static void closeRepo() {
 		currentStoredRepository.close();
-		System.gc();
+//		System.gc();
 	}
 
 	@FunctionSpec(name = "getParsedChangedFile", returnType = "ChangedFile", formalParameters = { "ChangedFile" })
 	public static ChangedFile getParsedChangedFile(ChangedFile f) {
 		ASTRoot ast = getASTRoot(f);
 		if (ast != emptyAst)
-			f = f.toBuilder().setRoot(ast).build();
+			f = f.toBuilder().setRoot(ast).setAst(true).build();
 		return f;
 	}
 

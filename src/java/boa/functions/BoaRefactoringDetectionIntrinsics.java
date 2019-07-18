@@ -267,12 +267,12 @@ public class BoaRefactoringDetectionIntrinsics {
 			removeCompatibleCodeElements(literals1.get(i), literals2.get(i), info);
 		removeCompatibleExpressions(operators1, operators2, info);
 
-		System.out.println("------after compatible in the same type------------------");
-		print("e1", e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
-				literals1, operators1);
-		print("e2", e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
-				literals2, operators2);
-		System.out.println("----------------------------------------------------------\n");
+//		System.out.println("------after compatible in the same type------------------");
+//		print("e1", e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
+//				literals1, operators1);
+//		print("e2", e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
+//				literals2, operators2);
+//		System.out.println("----------------------------------------------------------\n");
 
 		// CHECKME add code element replacement types from here
 
@@ -312,12 +312,12 @@ public class BoaRefactoringDetectionIntrinsics {
 		removeCompatibleVariablesAndLiterals(variables2, literals1, info.prettyPrint2, info.prettyPrint1,
 				info.distance);
 
-		System.out.println("-----------after compatible in the diff types--------------");
-		print("e1", e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
-				literals1, operators1);
-		print("e2", e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
-				literals2, operators2);
-		System.out.println("-----------------------------------------------------------\n");
+//		System.out.println("-----------after compatible in the diff types--------------");
+//		print("e1", e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
+//				literals1, operators1);
+//		print("e2", e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
+//				literals2, operators2);
+//		System.out.println("-----------------------------------------------------------\n");
 
 		return !hasRemainings(variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
 				literals1, operators1)
