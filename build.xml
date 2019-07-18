@@ -437,6 +437,7 @@
 				</patternset>
 			</fileset>
 			<zipfileset excludes="META-INF/" src="lib/datagen_new/org.eclipse.jgit-5.4.0-SNAPSHOT.jar" />
+			<zipfileset excludes="META-INF/" src="lib/evaluator/commons-text-1.7.jar" />
 		</jar>
 	</target>
 
@@ -460,6 +461,7 @@
 			<zipfileset excludes="META-INF/" src="rtlib/scannotation-1.0.3.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/ST-4.0.8.jar" />
 			<zipfileset excludes="META-INF/" src="lib/datagen_new/org.eclipse.jgit-5.4.0-SNAPSHOT.jar" />
+			<zipfileset excludes="META-INF/" src="lib/evaluator/commons-text-1.7.jar" />
 		</jar>
 	</target>
 
