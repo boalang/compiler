@@ -169,14 +169,13 @@ public class BoaAstIntrinsics {
 				if (value != null) {
 					ByteArrayFile file = (ByteArrayFile) SerializationUtils.deserialize(value.getBytes());
 					try {
-						if (currentStoredRepository != null)
-							closeRepo();
+						closeRepo();
 						currentStoredRepository = new ByteArrayRepositoryBuilder().setGitDir(file).build();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				} else {
-					System.err.print(" [Map Value Null] ");
+					System.err.print(" [Repo Map Value Null] ");
 					return emptyAst;
 				}
 			}
@@ -192,7 +191,8 @@ public class BoaAstIntrinsics {
 	
 	@FunctionSpec(name = "closerepo")
 	public static void closeRepo() {
-		currentStoredRepository.close();
+		if (currentStoredRepository != null)
+			currentStoredRepository.close();
 //		System.gc();
 	}
 
