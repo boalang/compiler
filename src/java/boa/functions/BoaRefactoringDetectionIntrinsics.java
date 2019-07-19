@@ -13,6 +13,9 @@ import java.util.regex.Pattern;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Statement;
+import boa.types.Code.Revision;
+import boa.types.Diff.ChangedFile;
+import boa.types.Shared.ChangeKind;
 
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
@@ -20,6 +23,51 @@ import static boa.functions.BoaAstIntrinsics.*;
 
 public class BoaRefactoringDetectionIntrinsics {
 
+	@FunctionSpec(name = "getparsedrevision", returnType = "Revision", formalParameters = { "Revision" })
+	public static Revision getParsedRevision(Revision r) {
+		ArrayList<ChangedFile> files = new ArrayList<ChangedFile>();
+		for (ChangedFile cf : r.getFilesList())
+			files.add(getParsedChangedFile(cf));
+		return r.toBuilder().clearFiles().addAllFiles(files).build();
+	}
+	
+	@FunctionSpec(name = "updatesnapshotbyrevision", returnType = "array of ChangedFile", formalParameters = { "array of ChangedFile", "Revision" })
+	public static ChangedFile[] updateSnapshotByRevision(ChangedFile[] snapshot, Revision r) {
+		HashMap<String, ChangedFile> map = new HashMap<String, ChangedFile>();
+		for (ChangedFile cf : snapshot)
+			map.put(cf.getName(), cf);
+		ArrayList<ChangedFile> files = new ArrayList<ChangedFile>();
+		for (ChangedFile cf : r.getFilesList())
+			files.add(getParsedChangedFile(cf));
+		ArrayList<ChangedFile> copies = new ArrayList<ChangedFile>();
+		for (ChangedFile cf : files) {
+			ChangeKind ck = cf.getChange();
+			switch (ck) {
+				case ADDED:
+					map.put(cf.getName(), cf);
+					break;
+				case COPIED:
+					copies.add(cf);
+					break;
+				case DELETED:
+					map.remove(cf.getName());
+					break;
+				case RENAMED:
+					for (String name : cf.getPreviousNamesList())
+						map.remove(name);
+					map.put(cf.getName(), cf);
+					break;
+				case MODIFIED:
+					map.replace(cf.getName(), cf);
+					break;
+				default:
+					map.put(cf.getName(), cf);
+					break;
+			}
+		}
+		return map.values().toArray(new ChangedFile[0]);
+	}
+	
 	@FunctionSpec(name = "editdistance", returnType = "int", formalParameters = { "string", "string" })
 	public static int editDistance(String x, String y) {
 		return new LevenshteinDistance().apply(x, y);

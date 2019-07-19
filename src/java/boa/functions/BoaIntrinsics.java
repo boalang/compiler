@@ -103,11 +103,6 @@ public class BoaIntrinsics {
 		}
 		return fs;
 	}
-	
-	@FunctionSpec(name = "gc")
-	public static void gc() {
-		System.gc();
-	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time", "string..." })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp, final String... kinds) throws Exception {
