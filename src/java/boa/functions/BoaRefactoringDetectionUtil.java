@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,8 +42,8 @@ public class BoaRefactoringDetectionUtil {
 		return res;
 	}
 
-	@FunctionSpec(name = "detectrefactorings", returnType = "array of string", formalParameters = { "CodeRepository", "string" })
-	public static String[] detectRefactorings(final CodeRepository cr, final String id) throws Exception {
+	@FunctionSpec(name = "detectrefactorings", returnType = "queue of string", formalParameters = { "CodeRepository", "string" })
+	public static LinkedList<String> detectRefactorings(final CodeRepository cr, final String id) throws Exception {
 		Revision currentRevision = getRevisionById(cr, id);
 		Map<String, String> renamedFilesHint = new HashMap<String, String>();
 		
@@ -62,10 +63,11 @@ public class BoaRefactoringDetectionUtil {
 			
 			List<Refactoring> refactoringsAtRevision = modelBefore.diff(modelCurrent, renamedFilesHint)
 					.getRefactorings();
-			String[] res = new String[refactoringsAtRevision.size()];
-			for (int i = 0; i < res.length; i++)
-				res[i] = refactoringsAtRevision.get(i).toString();
-			return res;
+			LinkedList<String> q = new LinkedList<String>();
+			for (Refactoring rf : refactoringsAtRevision) {
+				q.offer(rf.toString());
+			}
+			return q;
 		}
 		
 		return null;

@@ -68,7 +68,7 @@ public class Java7BaseTest extends BaseTest {
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(content.toCharArray());
 
-		final Map<String, String> options = JavaCore.getOptions();
+		final Map<?, ?> options = JavaCore.getOptions();
 		JavaCore.setComplianceOptions(javaVersion, options);
 		parser.setCompilerOptions(options);
 
@@ -82,6 +82,7 @@ public class Java7BaseTest extends BaseTest {
 		} catch (final Exception e) {}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected static String parseJava(final String content) {
 		final StringBuilder sb = new StringBuilder();
 		final FileASTRequestor r = new FileASTRequestor() {
@@ -108,7 +109,7 @@ public class Java7BaseTest extends BaseTest {
 		parser.setCompilerOptions(options);
 		parser.setEnvironment(new String[0], new String[]{}, new String[]{}, true);
 		parser.setResolveBindings(true);
-		parser.createASTs(new String[]{""}, null, new String[0], r, null);
+		parser.createASTs(fileContents, new String[]{""}, null, new String[0], r, null);
 
 		return FileIO.normalizeEOL(sb.toString());
 	}
