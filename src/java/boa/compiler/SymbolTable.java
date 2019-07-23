@@ -551,6 +551,7 @@ public class SymbolTable {
 			boa.functions.BoaStringIntrinsics.class,
 			boa.functions.BoaTimeIntrinsics.class,
 			boa.functions.BoaRefactoringDetectionIntrinsics.class,
+			boa.functions.BoaRefactoringDetectionUtil.class
 		};
 		for (final Class<?> c : builtinFuncs)
 			importFunctions(c);

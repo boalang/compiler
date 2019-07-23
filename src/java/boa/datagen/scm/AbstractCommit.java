@@ -605,7 +605,7 @@ public abstract class AbstractCommit {
 //			parser.setEnvironment(null, null, null, true);
 			parser.setSource(content.toCharArray());
 
-			final Map<?, ?> options = JavaCore.getOptions();
+			final Map<String, String> options = JavaCore.getOptions();
 			JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
 			parser.setCompilerOptions(options);
 

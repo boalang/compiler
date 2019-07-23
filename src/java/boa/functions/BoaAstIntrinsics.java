@@ -162,6 +162,13 @@ public class BoaAstIntrinsics {
 		// if file contains ast root
 		if (f.hasRoot())
 			return f.getRoot();
+		String content = getContent(f);
+		if (content != null)
+			return parseJavaFile(content);
+		return emptyAst;
+	}
+	
+	public static String getContent(ChangedFile f) {
 		if (f.hasRepoKey() && f.hasObjectId()) {
 			if (f.getRepoKey() != currentRepoKey) {
 				currentRepoKey = f.getRepoKey();
@@ -176,25 +183,42 @@ public class BoaAstIntrinsics {
 					}
 				} else {
 					System.err.print(" [Repo Map Value Null] ");
-					return emptyAst;
+					return null;
 				}
 			}
 			try {
-				String content = getContent(currentStoredRepository, f.getObjectId());
-				return parseJavaFile(content);
+				return getContent(currentStoredRepository, f.getObjectId());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		return emptyAst;
+		return null;
 	}
 	
 	@FunctionSpec(name = "closerepo")
 	public static void closeRepo() {
 		if (currentStoredRepository != null)
 			currentStoredRepository.close();
-//		System.gc();
 	}
+	
+	public static final String getContent(Repository repo, String oid) throws IOException {
+		ObjectId fileid = ObjectId.fromString(oid);
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
+		String content;
+		try {
+			buffer.reset();
+			byte[] arr = repo.open(fileid, Constants.OBJ_BLOB).getCachedBytes();
+			buffer.write(arr);
+			content = buffer.toString();
+			return content;
+		} catch (final Throwable e) {
+			return null;
+		} finally {
+			buffer.flush();
+			buffer.close();
+		}
+	}
+	
 
 	@FunctionSpec(name = "getParsedChangedFile", returnType = "ChangedFile", formalParameters = { "ChangedFile" })
 	public static ChangedFile getParsedChangedFile(ChangedFile f) {
@@ -259,24 +283,6 @@ public class BoaAstIntrinsics {
 		return values;
 	}
 
-	public static final String getContent(Repository repo, String oid) throws IOException {
-		ObjectId fileid = ObjectId.fromString(oid);
-		ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
-		String content;
-		try {
-			buffer.reset();
-			byte[] arr = repo.open(fileid, Constants.OBJ_BLOB).getCachedBytes();
-			buffer.write(arr);
-			content = buffer.toString();
-			return content;
-		} catch (final Throwable e) {
-			return null;
-		} finally {
-			buffer.flush();
-			buffer.close();
-		}
-	}
-
 	public static final ASTRoot parseJavaFile(final String content) {
 		if (content == null) {
 			System.out.print(" [Null Content] ");
@@ -287,7 +293,7 @@ public class BoaAstIntrinsics {
 			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 			parser.setSource(content.toCharArray());
 
-			final Map<?, ?> options = JavaCore.getOptions();
+			final Map<String, String> options = JavaCore.getOptions();
 			JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
 			parser.setCompilerOptions(options);
 

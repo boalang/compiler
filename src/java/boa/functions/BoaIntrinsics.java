@@ -95,6 +95,29 @@ public class BoaIntrinsics {
 		return cr.getRevisions((int) index);
 	}
 	
+	@FunctionSpec(name = "getrevisionbyid", returnType = "Revision", formalParameters = { "CodeRepository", "string" })
+	public static Revision getRevisionById(final CodeRepository cr, final String id) {
+		for (int i = 0; i < cr.getRevisionKeysCount(); i++) {
+			long key = cr.getRevisionKeys(i);
+			Revision r = BoaAstIntrinsics.getRevision(key);
+			if (r.getId().equals(id))
+				return r;
+		}
+		for (Revision r : cr.getRevisionsList())
+			if (r.getId().equals(id))
+				return r;
+		return null;
+	}
+	
+	public static List<Revision> getParentRevisions(final CodeRepository cr, final Revision r) {
+		ArrayList<Revision> parents = new ArrayList<Revision>();
+		for (int key : r.getParentsList()) {
+			if (key != -1)
+				parents.add(getRevision(cr, key));
+		}
+		return parents;
+	}
+	
 	@FunctionSpec(name = "getParsedChangedFiles", returnType = "array of ChangedFile", formalParameters = { "array of ChangedFile"})
 	public static ChangedFile[] getParsedChangedFiles(final ChangedFile[] files) {
 		ChangedFile[] fs = new ChangedFile[files.length];

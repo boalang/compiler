@@ -10,9 +10,11 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Statement;
+import boa.types.Ast.Type;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
@@ -31,42 +33,7 @@ public class BoaRefactoringDetectionIntrinsics {
 		return r.toBuilder().clearFiles().addAllFiles(files).build();
 	}
 	
-	@FunctionSpec(name = "updatesnapshotbyrevision", returnType = "array of ChangedFile", formalParameters = { "array of ChangedFile", "Revision" })
-	public static ChangedFile[] updateSnapshotByRevision(ChangedFile[] snapshot, Revision r) {
-		HashMap<String, ChangedFile> map = new HashMap<String, ChangedFile>();
-		for (ChangedFile cf : snapshot)
-			map.put(cf.getName(), cf);
-		ArrayList<ChangedFile> files = new ArrayList<ChangedFile>();
-		for (ChangedFile cf : r.getFilesList())
-			files.add(getParsedChangedFile(cf));
-		ArrayList<ChangedFile> copies = new ArrayList<ChangedFile>();
-		for (ChangedFile cf : files) {
-			ChangeKind ck = cf.getChange();
-			switch (ck) {
-				case ADDED:
-					map.put(cf.getName(), cf);
-					break;
-				case COPIED:
-					copies.add(cf);
-					break;
-				case DELETED:
-					map.remove(cf.getName());
-					break;
-				case RENAMED:
-					for (String name : cf.getPreviousNamesList())
-						map.remove(name);
-					map.put(cf.getName(), cf);
-					break;
-				case MODIFIED:
-					map.replace(cf.getName(), cf);
-					break;
-				default:
-					map.put(cf.getName(), cf);
-					break;
-			}
-		}
-		return map.values().toArray(new ChangedFile[0]);
-	}
+
 	
 	@FunctionSpec(name = "editdistance", returnType = "int", formalParameters = { "string", "string" })
 	public static int editDistance(String x, String y) {
@@ -80,7 +47,7 @@ public class BoaRefactoringDetectionIntrinsics {
 			return false;
 		for (int i = 0; i < e1.getMethodArgsList().size(); i++) {
 			if (prettyprint(e1.getMethodArgs(i)).equals(prettyprint(e2.getMethodArgs(i)))
-					|| replacementMatch(e1.getMethodArgs(i), e2.getMethodArgs(i))) {
+					|| replacementMatch(new SuperStatement(e1.getMethodArgs(i)), new SuperStatement(e2.getMethodArgs(i)))) {
 				continue;
 			} else {
 				return false;
@@ -158,10 +125,10 @@ public class BoaRefactoringDetectionIntrinsics {
 				literals.get(2).size(), operators.size()) != 0;
 	}
 
-	private static void print(String str, Expression e, HashSet<String> variables, HashSet<Expression> arrayAccesses,
+	private static void print(String str, SuperStatement stmt, HashSet<String> variables, HashSet<Expression> arrayAccesses,
 			HashSet<Expression> methodInvocations, HashSet<Expression> creations, HashSet<Expression> arrayInitializers,
 			HashSet<String> types, ArrayList<HashSet<String>> literals, HashSet<Expression> operators) {
-		System.out.println(str + ": " + prettyprint(e));
+		System.out.println(str + ": " + stmt.getPrettyPrint());
 		System.out.println("variables: " + variables);
 		System.out.print("arrayAccesses: ");
 		for (Expression aa : arrayAccesses)
@@ -187,14 +154,14 @@ public class BoaRefactoringDetectionIntrinsics {
 		System.out.println("\n");
 	}
 
-	private static void collectNodes(Expression e, HashSet<String> variables, HashSet<Expression> arrayAccesses,
+	private static void collectNodes(SuperStatement s, HashSet<String> variables, HashSet<Expression> arrayAccesses,
 			HashSet<Expression> methodInvocations, HashSet<Expression> creations, HashSet<Expression> arrayInitializers,
 			HashSet<String> types, ArrayList<HashSet<String>> literals, HashSet<Expression> operators)
 			throws Exception {
 		// CHECKME
-		new boa.runtime.BoaAbstractVisitor() {
+		BoaAbstractVisitor visitor = new BoaAbstractVisitor() {
 			@Override
-			protected boolean preVisit(final boa.types.Ast.Expression exp) throws Exception {
+			protected boolean preVisit(final Expression exp) throws Exception {
 				// collect variables
 				if (exp.getKind().equals(ExpressionKind.VARACCESS))
 					variables.add(exp.getVariable());
@@ -220,7 +187,7 @@ public class BoaRefactoringDetectionIntrinsics {
 				// collect literals: [{string}, {number}, {boolean}]
 				if (isStringLit(exp))
 					literals.get(0).add(exp.getLiteral());
-				if (isIntLit(exp))
+				if (isIntLit(exp) || isFloatLit(exp))
 					literals.get(1).add(exp.getLiteral());
 				if (isBoolLit(exp))
 					literals.get(2).add(exp.getLiteral());
@@ -231,16 +198,55 @@ public class BoaRefactoringDetectionIntrinsics {
 			}
 
 			@Override
-			protected boolean preVisit(final boa.types.Ast.Type ty) throws Exception {
+			protected boolean preVisit(final Type ty) throws Exception {
 				// collect types
 				types.add(ty.getName());
 				return true;
 			}
-		}.visit(e);
+		};
+		if (s.getComponent() instanceof Expression)
+			visitor.visit((Expression) s.getComponent());
+		else
+			visitor.visit((Statement) s.getComponent());
 	}
-
-	@FunctionSpec(name = "replacementmatch", returnType = "bool", formalParameters = { "Expression", "Expression" })
-	public static boolean replacementMatch(Expression e1, Expression e2) throws Exception {
+	
+	@FunctionSpec(name = "expressionreplacementmatch", returnType = "bool", formalParameters = { "Expression", "Expression" })
+	public static boolean expressionReplacementMatch(Expression e1, Expression e2) throws Exception {
+		return replacementMatch(new SuperStatement(e1), new SuperStatement(e2));
+	}
+	
+	@FunctionSpec(name = "statementreplacementmatch", returnType = "bool", formalParameters = { "Statement", "Statement" })
+	public static boolean statementReplacementMatch(Statement s1, Statement s2) throws Exception {
+		return replacementMatch(new SuperStatement(s1), new SuperStatement(s2));
+	}
+	
+	private static class SuperStatement {
+		private Expression e;
+		private Statement s;
+		private String prettyprint;
+		
+		SuperStatement(Expression e) {
+			this.e = e;
+			this.prettyprint = prettyprint(e);
+		}
+		
+		SuperStatement(Statement s) {
+			this.s = s;
+			this.prettyprint = prettyprint(s);
+		}
+		
+		public Object getComponent() {
+			if (e != null)
+				return this.e;
+			return this.s;
+		}
+		
+		public String getPrettyPrint() {
+			return this.prettyprint;
+		}
+	}
+	
+	public static boolean replacementMatch(SuperStatement s1, SuperStatement s2) throws Exception {
 
 		// variables
 		HashSet<String> variables1 = new HashSet<String>();
@@ -274,9 +280,9 @@ public class BoaRefactoringDetectionIntrinsics {
 		HashSet<Expression> operators1 = new HashSet<Expression>();
 		HashSet<Expression> operators2 = new HashSet<Expression>();
 
-		collectNodes(e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
+		collectNodes(s1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
 				literals1, operators1);
-		collectNodes(e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
+		collectNodes(s2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
 				literals2, operators2);
 
 //		System.out.println("-------------before------------------------------------");
@@ -303,7 +309,8 @@ public class BoaRefactoringDetectionIntrinsics {
 //				literals2, operators2);
 //		System.out.println("---------------------------------------------------------\n");
 
-		ReplacementInfo info = new ReplacementInfo(prettyprint(e1), prettyprint(e2));
+		
+		ReplacementInfo info = new ReplacementInfo(s1.getPrettyPrint(), s2.getPrettyPrint());
 
 		// remove compatible code elements for replacements
 		removeCompatibleCodeElements(variables1, variables2, info);
@@ -361,9 +368,9 @@ public class BoaRefactoringDetectionIntrinsics {
 				info.distance);
 
 //		System.out.println("-----------after compatible in the diff types--------------");
-//		print("e1", e1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
+//		print("e1", s1, variables1, arrayAccesses1, methodInvocations1, creations1, arrayInitializers1, types1,
 //				literals1, operators1);
-//		print("e2", e2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
+//		print("e2", s2, variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2, types2,
 //				literals2, operators2);
 //		System.out.println("-----------------------------------------------------------\n");
 
@@ -372,6 +379,8 @@ public class BoaRefactoringDetectionIntrinsics {
 				&& !hasRemainings(variables2, arrayAccesses2, methodInvocations2, creations2, arrayInitializers2,
 						types2, literals2, operators2);
 	}
+	
+	
 
 	private static void removeCompatibleMetodInvocationsAndArrayAccesses(HashSet<Expression> methodInvocations,
 			HashSet<Expression> arrayAccesses, String prettyPrint1, String prettyPrint2, int distance)
@@ -401,7 +410,7 @@ public class BoaRefactoringDetectionIntrinsics {
 				if (arrayAccess.getExpressionsCount() == 1) {
 					preMatched = true;
 				} else if (arrayAccess.getExpressionsCount() == 2 && methodInvocation.getMethodArgsCount() == 1
-						&& replacementMatch(arrayAccess.getExpressions(1), methodInvocation.getMethodArgs(0))) {
+						&& replacementMatch(new SuperStatement(arrayAccess.getExpressions(1)), new SuperStatement(methodInvocation.getMethodArgs(0)))) {
 					preMatched = true;
 				}
 				if (preMatched) {
@@ -447,7 +456,7 @@ public class BoaRefactoringDetectionIntrinsics {
 				if (arrayAccess.getExpressionsCount() == 1) {
 					preMatched = true;
 				} else if (arrayAccess.getExpressionsCount() == 2 && methodInvocation.getMethodArgsCount() == 1
-						&& replacementMatch(arrayAccess.getExpressions(1), methodInvocation.getMethodArgs(0))) {
+						&& replacementMatch(new SuperStatement(arrayAccess.getExpressions(1)), new SuperStatement(methodInvocation.getMethodArgs(0)))) {
 					preMatched = true;
 				}
 				if (preMatched) {
@@ -743,7 +752,7 @@ public class BoaRefactoringDetectionIntrinsics {
 						} else if (e1.getExpressionsCount() == 2
 								&& compatiableForReplacement(e1.getExpressions(0).getVariable(),
 										e2.getExpressions(0).getVariable(), info)
-								&& replacementMatch(e1.getExpressions(1), e2.getExpressions(1))) {
+								&& replacementMatch(new SuperStatement(e1.getExpressions(1)), new SuperStatement(e2.getExpressions(1)))) {
 							matched = true;
 						}
 					}
