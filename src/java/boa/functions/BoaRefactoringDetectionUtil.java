@@ -45,6 +45,12 @@ public class BoaRefactoringDetectionUtil {
 	@FunctionSpec(name = "detectrefactorings", returnType = "array of string", formalParameters = { "CodeRepository", "string" })
 	public static String[] detectRefactorings(final CodeRepository cr, final String id) throws Exception {
 		Revision currentRevision = getRevisionById(cr, id);
+		if (currentRevision != null)
+			return detectRefactorings(cr, currentRevision);
+		return new String[0];
+	}
+	
+	private static String[] detectRefactorings(final CodeRepository cr, final Revision currentRevision) throws Exception {
 		Map<String, String> renamedFilesHint = new HashMap<String, String>();
 		
 		if (updateRenamedFilesHintAndCheckRefactoringPossibility(currentRevision, renamedFilesHint)) {
@@ -149,7 +155,8 @@ public class BoaRefactoringDetectionUtil {
 			}
 		}
 		// If all files are added or deleted or non-java files, then there is no refactoring.
-		return !(Math.max(adds, removes) == javaFileCount || javaFileCount == 0);
+		// If the revision has no parent, then there is no refactoring.
+		return !(Math.max(adds, removes) == javaFileCount || javaFileCount == 0 || r.getParentsCount() == 0);
 	}
 
 	private static boolean isJavaFile(String path) {

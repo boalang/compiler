@@ -19,7 +19,6 @@ package boa.evaluator;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -48,17 +47,20 @@ public class BoaEvaluator extends BoaMain {
 	private final String DATA_PATH;
 	private final String COMPILATION_DIR;
 	private final String OUTPUT_DIR;
-	private final boolean EXECUTED_IN_TERMINAL;
 	
 	public static String GIT_PATH = "";
 
-	public BoaEvaluator(final String prog, final String data, final String outDir, final boolean inTerminal) throws IOException {
+	public BoaEvaluator(final String prog, final String data) throws IOException {
+		this(prog, data, System.getProperty("java.io.tmpdir") + File.separator + UUID.randomUUID().toString());
+	}
+
+	public BoaEvaluator(final String prog, final String data, final String outDir) throws IOException {
 		this.PROG_PATH = prog;
 		this.DATA_PATH = data;
 		this.GIT_PATH = data + "/repos";
 		this.COMPILATION_DIR = "./compile"; // can not customize to be user defined because of classpath issues
 		this.OUTPUT_DIR = outDir;
-		this.EXECUTED_IN_TERMINAL = inTerminal;
+
 		setup();
 	}
 
@@ -68,12 +70,9 @@ public class BoaEvaluator extends BoaMain {
 		options.addOption("i", "input",  true, "input Boa source file (*.boa)");
 		options.addOption("d", "data",   true, "path to local data directory");
 		options.addOption("o", "output", true, "output directory");
-		options.addOption("t", "terminal", false, "is executed in terminal");
 
 		options.getOption("i").setRequired(true);
 		options.getOption("d").setRequired(true);
-		
-		
 
 		try {
 			if (args.length == 0) {
@@ -81,14 +80,15 @@ public class BoaEvaluator extends BoaMain {
 				return;
 			} else {
 				final CommandLine cl = new PosixParser().parse(options, args);
-				
+
 				if (cl.hasOption('i') && cl.hasOption('d')) {
 					final BoaEvaluator evaluator;
 					try {
-						evaluator = new BoaEvaluator(cl.getOptionValue('i'),
-								cl.getOptionValue('d'),
-								(cl.hasOption('o') ? cl.getOptionValue('o') : System.getProperty("java.io.tmpdir") + File.separator + UUID.randomUUID().toString()),
-								(cl.hasOption('t') ? true : false));
+						if (cl.hasOption('o')) {
+							evaluator = new BoaEvaluator(cl.getOptionValue('i'), cl.getOptionValue('d'), cl.getOptionValue('o'));
+						} else {
+							evaluator = new BoaEvaluator(cl.getOptionValue('i'), cl.getOptionValue('d'));
+						}
 					} catch (final IOException e) {
 						System.err.print(e);
 						return;
@@ -124,8 +124,7 @@ public class BoaEvaluator extends BoaMain {
 			final URL srcDirUrl = srcDir.toURI().toURL();
 
 			cl = new URLClassLoader(new URL[] { srcDirUrl }, ClassLoader.getSystemClassLoader());
-			String path = this.EXECUTED_IN_TERMINAL ? "compile.boa." : "boa.";
-			final Class<?> cls = cl.loadClass(path + jarToClassname(this.PROG_PATH));
+			final Class<?> cls = cl.loadClass("boa." + jarToClassname(this.PROG_PATH));
 			final Method method = cls.getMethod("main", String[].class);
 
 			method.invoke(null, (Object)actualArgs);
