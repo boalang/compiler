@@ -197,8 +197,11 @@ public class BoaAstIntrinsics {
 	
 	@FunctionSpec(name = "closerepo")
 	public static void closeRepo() {
-		if (currentStoredRepository != null)
+		if (currentStoredRepository != null) {
 			currentStoredRepository.close();
+			currentStoredRepository = null;
+			System.gc();
+		}
 	}
 	
 	public static final String getContent(Repository repo, String oid) throws IOException {
