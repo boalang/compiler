@@ -1,7 +1,6 @@
 package boa.functions.refactoring;
 
 import boa.functions.FunctionSpec;
-import boa.types.Ast.Method;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -25,22 +24,6 @@ import org.refactoringminer.rm1.GitHistoryRefactoringMinerImpl;
 
 public class BoaRefactoringDetectionIntrinsics {
 
-	@FunctionSpec(name = "getmethodname", returnType = "string", formalParameters = { "Method" })
-	public static String getMethodName(Method m) throws Exception {
-		String res = "";
-		res += m.getName();
-		for (int i = 0; i < m.getArgumentsCount(); i++) {
-			if (i == 0)
-				res += "(" + m.getArguments(0).getName() + " " + m.getArguments(0).getVariableType().getName();
-			res += ", " + m.getArguments(0).getName() + " " + m.getArguments(0).getVariableType().getName();
-			if (i == m.getArgumentsCount() - 1)
-				res += ")";
-		}
-		if (!m.getName().equals("<init>"))
-			res += " : " + m.getReturnType().getName();
-		return res;
-	}
-
 	@FunctionSpec(name = "detectrefactoringsbyid", returnType = "array of string", formalParameters = {
 			"CodeRepository", "string" })
 	public static String[] detectRefactorings(final CodeRepository cr, final String id) throws Exception {
@@ -60,18 +43,24 @@ public class BoaRefactoringDetectionIntrinsics {
 
 		if (updateRenamedFilesHintAndCheckRefactoringPossibility(currentRevision, renamedFilesHint)) {
 			hasOutOfMemoryError = false;
+			
+			Set<String> fileNamesBefore = new HashSet<String>();
+			Set<String> fileNamesCurrent = new HashSet<String>();
+			updateFileNames(fileNamesBefore, fileNamesCurrent, currentRevision);
+			
 			// before
 			Map<String, String> fileContentsBefore = new LinkedHashMap<String, String>();
 			Set<String> repositoryDirectoriesBefore = new LinkedHashSet<String>();
 			ChangedFile[] snapshotBefore = getSnapshotByIndex(cr, currentRevision.getParents(0));
-			updateFileContents(fileContentsBefore, repositoryDirectoriesBefore, snapshotBefore);
+			updateFileContents(fileContentsBefore, repositoryDirectoriesBefore, snapshotBefore, fileNamesBefore);
 			// current
 			Map<String, String> fileContentsCurrent = new LinkedHashMap<String, String>();
 			Set<String> repositoryDirectoriesCurrent = new LinkedHashSet<String>();
 			ChangedFile[] snapshotCurrent = updateSnapshotByRevision(snapshotBefore, currentRevision);
-			updateFileContents(fileContentsCurrent, repositoryDirectoriesCurrent, snapshotCurrent);
+			updateFileContents(fileContentsCurrent, repositoryDirectoriesCurrent, snapshotCurrent, fileNamesCurrent);
 			// close jgit repo to avoid memory leak
-			System.out.println(currentRevision.getId() + " " + snapshotBefore.length + " " + snapshotCurrent.length);
+			System.out.println(currentRevision.getId() + " " + snapshotBefore.length + " " + snapshotCurrent.length + " " +
+					fileContentsBefore.size() + " " + fileContentsCurrent.size() + " " + currentRevision.getFilesCount());
 			snapshotBefore = null;
 			snapshotCurrent = null;
 			closeRepo();
@@ -87,14 +76,43 @@ public class BoaRefactoringDetectionIntrinsics {
 				System.out.println("OutOfMemoryError: " + currentRevision.getId());
 				hasOutOfMemoryError = true;
 				return new String[0];
+			} catch (Throwable e) {
+				System.out.println("Other Error: " + currentRevision.getId());
+				return new String[0];
 			}
 			String[] res = new String[refactoringsAtRevision.size()];
-			for (int i = 0; i < res.length; i++)
+			for (int i = 0; i < res.length; i++) {
 				res[i] = refactoringsAtRevision.get(i).toString();
+			}
 			return res;
 		}
 
+		System.out.println(currentRevision.getId() + " is not possible to contain refactorings");
 		return new String[0];
+	}
+	
+	private static void updateFileNames(Set<String> fileNamesBefore, Set<String> fileNamesCurrent, Revision r) {
+		for (ChangedFile cf : r.getFilesList()) {
+			switch (cf.getChange()) {
+				case MODIFIED:
+					fileNamesBefore.add(cf.getName());
+					fileNamesCurrent.add(cf.getName());
+					break;
+				case ADDED:
+					fileNamesCurrent.add(cf.getName());
+					break;
+				case DELETED:
+					fileNamesBefore.add(cf.getName());
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	public static String[] detectRefactoring(final CodeRepository cr, final Revision currentRevision)
+			throws Exception {
+		return null;
 	}
 
 	@FunctionSpec(name = "hasoutofmemoryerror", returnType = "bool")
@@ -103,22 +121,22 @@ public class BoaRefactoringDetectionIntrinsics {
 	}
 
 	private static void updateFileContents(Map<String, String> fileContents, Set<String> repositoryDirectories,
-			ChangedFile[] snapshot) {
+			ChangedFile[] snapshot, Set<String> fileNames) {
 		for (ChangedFile cf : snapshot) {
 			String pathString = cf.getName();
 			if (isJavaFile(pathString)) {
-				String content = getContent(cf);
-				if (content != null) {
-					fileContents.put(pathString, getContent(cf));
-					String directory = pathString.substring(0, pathString.lastIndexOf("/"));
-					repositoryDirectories.add(directory);
-					String subDirectory = new String(directory);
-					while (subDirectory.contains("/")) {
-						subDirectory = subDirectory.substring(0, subDirectory.lastIndexOf("/"));
-						repositoryDirectories.add(subDirectory);
-					}
+				if (fileNames.contains(pathString)) {
+					String content = getContent(cf);
+					if (content != null)
+						fileContents.put(pathString, getContent(cf));
 				}
-
+				String directory = pathString.substring(0, pathString.lastIndexOf("/"));
+				repositoryDirectories.add(directory);
+				String subDirectory = new String(directory);
+				while (subDirectory.contains("/")) {
+					subDirectory = subDirectory.substring(0, subDirectory.lastIndexOf("/"));
+					repositoryDirectories.add(subDirectory);
+				}
 			}
 		}
 	}
@@ -184,8 +202,7 @@ public class BoaRefactoringDetectionIntrinsics {
 				}
 			}
 		}
-		// If all files are added or deleted or non-java files, then there is no
-		// refactoring.
+		// If all files are added or deleted or non-java files, then there is no refactoring.
 		// If the revision has no parent, then there is no refactoring.
 		return !(Math.max(adds, removes) == javaFileCount || javaFileCount == 0 || r.getParentsCount() == 0);
 	}

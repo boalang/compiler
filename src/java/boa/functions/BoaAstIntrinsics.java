@@ -296,7 +296,7 @@ public class BoaAstIntrinsics {
 			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 			parser.setSource(content.toCharArray());
 
-			final Map<String, String> options = JavaCore.getOptions();
+			final Map<?, ?> options = JavaCore.getOptions();
 			JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
 			parser.setCompilerOptions(options);
 
