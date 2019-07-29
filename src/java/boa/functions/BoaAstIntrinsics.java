@@ -200,7 +200,6 @@ public class BoaAstIntrinsics {
 		if (currentStoredRepository != null) {
 			currentStoredRepository.close();
 			currentStoredRepository = null;
-			System.gc();
 		}
 	}
 	

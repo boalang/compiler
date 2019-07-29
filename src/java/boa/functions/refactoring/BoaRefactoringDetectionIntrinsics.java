@@ -34,6 +34,12 @@ public class BoaRefactoringDetectionIntrinsics {
 	}
 
 	public static boolean hasOutOfMemoryError;
+	public static boolean repoCloseMode = false;
+	
+	@FunctionSpec(name = "activerepoclosemode")
+	public static void activeRepoCloseMode() {
+		repoCloseMode = true;
+	}
 
 	@FunctionSpec(name = "detectrefactoringsbyrevision", returnType = "array of string", formalParameters = {
 			"CodeRepository", "Revision" })
@@ -58,12 +64,14 @@ public class BoaRefactoringDetectionIntrinsics {
 			Set<String> repositoryDirectoriesCurrent = new LinkedHashSet<String>();
 			ChangedFile[] snapshotCurrent = updateSnapshotByRevision(snapshotBefore, currentRevision);
 			updateFileContents(fileContentsCurrent, repositoryDirectoriesCurrent, snapshotCurrent, fileNamesCurrent);
-			// close jgit repo to avoid memory leak
+			
 			System.out.println(currentRevision.getId() + " " + snapshotBefore.length + " " + snapshotCurrent.length + " " +
 					fileContentsBefore.size() + " " + fileContentsCurrent.size() + " " + currentRevision.getFilesCount());
-			snapshotBefore = null;
-			snapshotCurrent = null;
-			closeRepo();
+			
+			// close jgit repo to avoid memory leak
+			if (repoCloseMode)
+				closeRepo();
+			
 			// build model and detect refactorings
 			List<Refactoring> refactoringsAtRevision = new ArrayList<Refactoring>();
 			try {
