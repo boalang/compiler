@@ -443,9 +443,9 @@ public class SeqRepoImporter {
 						printError(e, "Cannot close Git connector to " + gitDir.getAbsolutePath(), project.getName());
 					}
 				}
-				if (!cache) {
-					new Thread(new FileIO.DirectoryRemover(gitRootPath + "/" + name)).start();
-				}
+//				if (!cache) {
+//					new Thread(new FileIO.DirectoryRemover(gitRootPath + "/" + name)).start();
+//				}
 			}
 			
 			DefaultProperties.exceptions.put(name, "unknow");

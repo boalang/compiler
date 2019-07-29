@@ -76,8 +76,8 @@ public class BoaRefactoringDetectionIntrinsics {
 				System.out.println("OutOfMemoryError: " + currentRevision.getId());
 				hasOutOfMemoryError = true;
 				return new String[0];
-			} catch (Throwable e) {
-				System.out.println("Other Error: " + currentRevision.getId());
+			} catch (Exception e) {
+				System.out.println("Throw Exception: " + currentRevision.getId());
 				return new String[0];
 			}
 			String[] res = new String[refactoringsAtRevision.size()];
