@@ -103,7 +103,12 @@ public class BoaRefactoringDetectionIntrinsics {
 		for (ChangedFile cf : r.getFilesList()) {
 			switch (cf.getChange()) {
 				case MODIFIED:
+				case COPIED:
 					fileNamesBefore.add(cf.getName());
+					fileNamesCurrent.add(cf.getName());
+					break;
+				case RENAMED:
+					fileNamesBefore.add(cf.getPreviousNames(0));
 					fileNamesCurrent.add(cf.getName());
 					break;
 				case ADDED:
@@ -138,12 +143,15 @@ public class BoaRefactoringDetectionIntrinsics {
 					if (content != null)
 						fileContents.put(pathString, getContent(cf));
 				}
-				String directory = pathString.substring(0, pathString.lastIndexOf("/"));
-				repositoryDirectories.add(directory);
-				String subDirectory = new String(directory);
-				while (subDirectory.contains("/")) {
-					subDirectory = subDirectory.substring(0, subDirectory.lastIndexOf("/"));
-					repositoryDirectories.add(subDirectory);
+				int idx = pathString.lastIndexOf("/");
+				if (idx != -1) {
+					String directory = pathString.substring(0, idx);
+					repositoryDirectories.add(directory);
+					String subDirectory = new String(directory);
+					while (subDirectory.contains("/")) {
+						subDirectory = subDirectory.substring(0, subDirectory.lastIndexOf("/"));
+						repositoryDirectories.add(subDirectory);
+					}					
 				}
 			}
 		}

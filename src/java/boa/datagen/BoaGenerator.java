@@ -95,12 +95,12 @@ public class BoaGenerator {
 		clear();
 		
 		if (DefaultProperties.exceptions.size() != 0) {
-			outputExceptions();
+			writeTo("exceptions_"+System.currentTimeMillis()+".txt");
 		}
 	}
 	
-	private static void outputExceptions() throws IOException {
-		FileWriter fw = new FileWriter("exceptions_"+System.currentTimeMillis()+".txt");
+	public static void writeTo(String path) throws IOException {
+		FileWriter fw = new FileWriter(path);
 		BufferedWriter bw = new BufferedWriter(fw);
 		for (Entry<String, String> entry : DefaultProperties.exceptions.entrySet()) {
 			bw.write(entry.getKey() + " " + entry.getValue());
