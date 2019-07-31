@@ -44,7 +44,7 @@ public class PreconditionAggregator extends Aggregator {
 	private int args = 0;
 
 	private final Set<Expression> preconds = new HashSet<Expression>();
-	private final Map<Expression, Set<String>> omega = new HashMap<Expression, Set<String>>();  //preconditions: set of methods
+	private final Map<Expression, Set<String>> omega = new HashMap<Expression, Set<String>>();  // preconditions: set of methods
 
 	/**
 	 * Construct a {@link PreconditionAggregator}
@@ -80,10 +80,10 @@ public class PreconditionAggregator extends Aggregator {
 
 		if (!omega.containsKey(precondition)) {
 			omega.put(precondition, new HashSet<String>());
+			preconds.add(precondition);
 		}
 
 		omega.get(precondition).add(project + ":" + clientmethod);
-		preconds.add(precondition);
 	}
 
 	/** {@inheritDoc} */
@@ -103,6 +103,8 @@ public class PreconditionAggregator extends Aggregator {
 	 * @return map of all preconditions which include inferred preconditions
 	 */
 	private void inferNonStrictInequalities() {
+		final Set<Expression> added = new HashSet<Expression>();
+
 		for (final Expression p : preconds) {
 			if (p.getKind() == ExpressionKind.EQ) {
 				for (final Expression q : preconds) {
@@ -117,8 +119,10 @@ public class PreconditionAggregator extends Aggregator {
 
 							final Expression t = builder.build();
 
-							if (!preconds.contains(t))
+							if (!preconds.contains(t)) {
 								omega.put(t, new HashSet<String>());
+								added.add(t);
+							}
 
 							if (omega.get(p).size() == omega.get(q).size()) {
 								omega.get(t).addAll(omega.get(p));
@@ -133,6 +137,8 @@ public class PreconditionAggregator extends Aggregator {
 				}
 			}
 		}
+
+		preconds.addAll(added);
 	}
 
 	/**
@@ -142,10 +148,12 @@ public class PreconditionAggregator extends Aggregator {
 	 */
 	private void mergeConditionsWithImplication() {
 		final List<Expression> removed = new ArrayList<Expression>();
+
 		for (final Expression p : preconds) {
 			if (p.getKind() == ExpressionKind.EQ || p.getKind() == ExpressionKind.LT || p.getKind() == ExpressionKind.GT) {
 				for (final Expression q : preconds) {
-					if ((p.getKind() == ExpressionKind.EQ && (q.getKind() == ExpressionKind.LTEQ || q.getKind() == ExpressionKind.GTEQ))
+					if ((p.getKind() == ExpressionKind.EQ && q.getKind() == ExpressionKind.LTEQ)
+							|| (p.getKind() == ExpressionKind.EQ && q.getKind() == ExpressionKind.GTEQ)
 							|| (p.getKind() == ExpressionKind.LT && q.getKind() == ExpressionKind.LTEQ)
 							|| (p.getKind() == ExpressionKind.GT && q.getKind() == ExpressionKind.GTEQ)) {
 						if (omega.get(p).size() <= omega.get(q).size()
@@ -160,6 +168,7 @@ public class PreconditionAggregator extends Aggregator {
 				}
 			}
 		}
+
 		preconds.removeAll(removed);
 	}
 
