@@ -183,8 +183,10 @@ public class SeqRepoImporter {
 				} catch (Exception e) {
 					if (r != null)
 						r.close();
-					for (String dir : new String[] { "project", "ast", "commit", "source", "repo" })
+					for (String dir : new String[] { "project", "ast", "commit", "source", "repo" }) {
 						fileSystem.delete(new Path(base + "/" + dir + "/" + name), false);
+						System.out.println("remove " + base + "/" + dir + "/" + name);
+					}
 				}
 			}
 		}
