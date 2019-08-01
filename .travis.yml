@@ -5,6 +5,7 @@ jdk:
 addons:
   apt:
     packages:
+      - junit4
       - ant
 script: ant -Dprotobuf.uptodate=true test checkstyle
 notifications:
