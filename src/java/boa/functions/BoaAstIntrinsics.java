@@ -69,7 +69,7 @@ import boa.types.Toplevel.Project;
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	static Context context;
-	private static MapFile.Reader map, repoMap, commentsMap, issuesMap;
+	private static MapFile.Reader map, reposMap, commentsMap, issuesMap, refactoringsMap;
 
 	private static final Revision emptyRevision;
 	static {
@@ -232,11 +232,11 @@ public class BoaAstIntrinsics {
 
 	@SuppressWarnings("unchecked")
 	public static final BytesWritable getValueFromRepoMap(ChangedFile f) {
-		if (repoMap == null)
+		if (reposMap == null)
 			openRepoMap();
 		try {
 			BytesWritable value = new BytesWritable();
-			if (repoMap.get(new LongWritable(f.getRepoKey()), value) == null) {
+			if (reposMap.get(new LongWritable(f.getRepoKey()), value) == null) {
 				context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
 				return null;
 			} else {
@@ -262,12 +262,12 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("unchecked")
 	public static final BytesWritable[] getValuesFromRepoMap(ChangedFile[] fs) {
 		BytesWritable[] values = new BytesWritable[fs.length];
-		if (repoMap == null)
+		if (reposMap == null)
 			openRepoMap();
 		try {
 			for (int i = 0; i < fs.length; i++) {
 				BytesWritable value = new BytesWritable();
-				values[i] = repoMap.get(new LongWritable(fs[i].getRepoKey()), value) == null ? null : value;
+				values[i] = reposMap.get(new LongWritable(fs[i].getRepoKey()), value) == null ? null : value;
 			}
 		} catch (final InvalidProtocolBufferException e) {
 			e.printStackTrace();
@@ -445,6 +445,49 @@ public class BoaAstIntrinsics {
 	public static void setup(final Context context) {
 		BoaAstIntrinsics.context = context;
 	}
+	
+	@FunctionSpec(name = "getrefactorings", returnType = "array of string", formalParameters = { "Project", "Revision" })
+	public static String[] getRefactorings(Project p, Revision r) {
+		
+		if (refactoringsMap == null)
+			openRefactoringsMap();
+		
+		try {
+			final BytesWritable value = new BytesWritable();
+			if (refactoringsMap.get(new Text(p.getName() + " " + r.getId()), value) != null) {
+				return new String(value.getBytes()).split("\\r?\\n");
+			}
+		} catch (final InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		} catch (final RuntimeException e) {
+			e.printStackTrace();
+		} catch (final Error e) {
+			e.printStackTrace();
+		}
+		
+		return new String[0];
+	}
+	
+	private static void openRefactoringsMap() {
+		try {
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localDataPath, "refactorings");
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+						new Path(conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("ast")));
+				fs = FileSystem.get(conf);
+			}
+			refactoringsMap = new MapFile.Reader(fs, p.toString(), conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	private static void openMap() {
 		try {
@@ -478,7 +521,7 @@ public class BoaAstIntrinsics {
 						conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("repo")));
 				fs = FileSystem.get(conf);
 			}
-			repoMap = new MapFile.Reader(fs, p.toString(), conf);
+			reposMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -544,13 +587,14 @@ public class BoaAstIntrinsics {
 
 	@SuppressWarnings("rawtypes")
 	public static void cleanup(final Context context) {
-		closeMap();
-		closeCommentMap();
-		closeIssuesMap();
-		closeCommitMap();
+		closeMap(map);
+		closeMap(commentsMap);
+		closeMap(issuesMap);
+		closeMap(commitMap);
+		closeMap(refactoringsMap);
 	}
 
-	private static void closeMap() {
+	private static void closeMap(MapFile.Reader map) {
 		if (map != null)
 			try {
 				map.close();
@@ -558,36 +602,6 @@ public class BoaAstIntrinsics {
 				e.printStackTrace();
 			}
 		map = null;
-	}
-
-	private static void closeCommentMap() {
-		if (commentsMap != null)
-			try {
-				commentsMap.close();
-			} catch (final IOException e) {
-				e.printStackTrace();
-			}
-		commentsMap = null;
-	}
-
-	private static void closeIssuesMap() {
-		if (issuesMap != null)
-			try {
-				issuesMap.close();
-			} catch (final IOException e) {
-				e.printStackTrace();
-			}
-		issuesMap = null;
-	}
-
-	private static void closeCommitMap() {
-		if (commitMap != null)
-			try {
-				commitMap.close();
-			} catch (final IOException e) {
-				e.printStackTrace();
-			}
-		commitMap = null;
 	}
 
 	@FunctionSpec(name = "type_name", returnType = "string", formalParameters = { "string" })

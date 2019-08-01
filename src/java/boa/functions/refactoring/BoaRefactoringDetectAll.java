@@ -47,7 +47,7 @@ public class BoaRefactoringDetectAll {
 	public static void main(String[] args) {
 //		args = new String[] { "/Users/hyj/test3/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo", "/Users/hyj/test3/output/o.txt" };
 		if (args.length < 2) {
-			System.err.println("args: NAMES_PATH, REPOS_PATH");
+			System.err.println("args: NAMES_PATH, REPOS_PATH, OUTPUT_PATH");
 		} else {
 			NAMES_PATH = args[0];
 			String input = FileIO.readFileContents(new File(NAMES_PATH));
