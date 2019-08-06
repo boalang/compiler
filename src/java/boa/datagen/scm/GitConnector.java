@@ -33,6 +33,7 @@ import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile.Writer;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.PersonIdent;
@@ -215,7 +216,9 @@ public class GitConnector extends AbstractConnector {
 		Set<RevCommit> heads = new HashSet<RevCommit>();
 		try {
 			for (final Ref ref : git.branchList().call()) {
-				heads.add(revwalk.parseCommit(repository.resolve(ref.getName())));
+				RevCommit r = revwalk.parseCommit(repository.resolve(ref.getName()));
+				System.out.println(ref.getName());
+				heads.add(r);
 			}
 		} catch (final GitAPIException e) {
 			if (debug)

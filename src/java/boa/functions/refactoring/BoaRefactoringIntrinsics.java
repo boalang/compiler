@@ -1,20 +1,16 @@
 package boa.functions.refactoring;
 
-import boa.datagen.DefaultProperties;
 import boa.functions.FunctionSpec;
-import boa.functions.BoaAstIntrinsics.ASTCOUNTER;
-import boa.types.Ast.ASTRoot;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
-import boa.types.Toplevel.Project;
 import gr.uom.java.xmi.UMLModel;
+import org.refactoringminer.api.RefactoringType;
 
 import static boa.functions.BoaAstIntrinsics.*;
 import static boa.functions.BoaIntrinsics.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,22 +19,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.BytesWritable;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.MapFile;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Mapper.Context;
 import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.rm1.GitHistoryRefactoringMinerImpl;
 
-import com.google.protobuf.CodedInputStream;
-import com.google.protobuf.InvalidProtocolBufferException;
-
 public class BoaRefactoringIntrinsics {
+	
+	@FunctionSpec(name = "getrefactoringtype", returnType = "string", formalParameters = { "string" })
+	public static String getRefactoringType(final String desctiption) throws Exception {
+		return RefactoringType.extractFromDescription(desctiption).getDisplayName();
+	}
 
 	@FunctionSpec(name = "detectrefactoringsbyid", returnType = "array of string", formalParameters = {
 			"CodeRepository", "string" })

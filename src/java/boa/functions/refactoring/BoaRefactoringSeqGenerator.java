@@ -23,7 +23,7 @@ public class BoaRefactoringSeqGenerator {
 	private static String INPUT_PATH;
 
 	public static void main(String[] args) throws IOException {
-		args = new String[] { "/Users/hyj/test4/output", "/Users/hyj/test4" };
+//		args = new String[] { "/Users/hyj/test4/output", "/Users/hyj/test4" };
 		if (args.length < 2) {
 			System.err.println("args: INPUT_PATH, OUTPUT_PATH");
 		} else {
@@ -38,15 +38,22 @@ public class BoaRefactoringSeqGenerator {
 				
 				String input = FileIO.readFileContents(file);
 				String[] refactorings = input.split("\\r?\\n");
+				System.out.println(file.getName() + " start");
 				for (String rf : refactorings) {
-					int idx = rf.indexOf('=');
-					String key = rf.substring(0, idx);
-					String value = rf.substring(idx + 1);
-					if (!map.containsKey(key))
-						map.put(key, new StringBuilder(value));
-					else
-						map.get(key).append("\n" + value);
+					System.out.println("get " + rf);
+					if (rf != null && !rf.equals("") ) {
+						int idx = rf.indexOf('=');
+						if (idx != -1) {
+							String key = rf.substring(0, idx);
+							String value = rf.substring(idx + 1);
+							if (!map.containsKey(key))
+								map.put(key, new StringBuilder(value));
+							else
+								map.get(key).append("\n" + value);
+						}
+					}
 				}
+				System.out.println(file.getName() + " end");
 				
 			}
 			Configuration conf = new Configuration();
