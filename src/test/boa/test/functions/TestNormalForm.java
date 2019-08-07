@@ -487,4 +487,9 @@ public class TestNormalForm {
 	public void testCNF() throws Exception {
 		assertEquals(cnf, BoaNormalFormIntrinsics.cnf(e));
 	}
+
+	@Test
+	public void testCDF() throws Exception {
+		assertEquals(dnf, BoaNormalFormIntrinsics.dnf(e));
+	}
 }
