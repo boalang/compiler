@@ -60,8 +60,8 @@ allExprTraversal := traversal(node: CFGNode): set of string {
 		}
 	}
 	if(def(node.stmt)) {
-		if(def(node.stmt.expressions[0])) {
-			visit(node.stmt.expressions[0], node_expr);
+		if(def(node.stmt.expression)) {
+			visit(node.stmt.expression, node_expr);
 			if(len(str)!=0) {
 				add(allExprset, clone(str));
 			}

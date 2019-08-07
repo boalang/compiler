@@ -105,7 +105,7 @@ public class CFGSlicer {
         final Map<Integer, Set<CFGNode>> infl = getInfluence(new PDTree(cfg), cfg);
 
         // TODO: get rid of the traversal
-        final BoaAbstractTraversal slicer = new BoaAbstractTraversal<Set<String>>(true, true) {
+        final BoaAbstractTraversal<Set<String>> slicer = new BoaAbstractTraversal<Set<String>>(true, true) {
             protected Set<String> preTraverse(final CFGNode node) throws Exception {
                 // in(n) = \/(pred) out(pred)
                 final Set<String> in = new HashSet<String>();

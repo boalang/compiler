@@ -62,7 +62,7 @@
 	</target>
 
 	<!-- Protocol Buffers schemas -->
-	<target name="-check-protobuf" depends="-init">
+	<target name="-check-protobuf">
 		<condition property="protobuf.uptodate">
 			<and>
 				<uptodate srcfile="src/proto/ast.proto" targetfile="src/compiled-proto/boa/types/Ast.java" />
@@ -86,7 +86,7 @@
 		</apply>
 	</target>
 
-	<target name="compile-protobuf" depends="-translate-protobuf,-check-deps" description="Compiles the generated protobuf code.">
+	<target name="compile-protobuf" depends="-init,-translate-protobuf,-check-deps" description="Compiles the generated protobuf code.">
 		<javac includeantruntime="true" srcdir="src/compiled-proto" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
 			<classpath refid="project.class.path" />
 		</javac>
@@ -129,6 +129,8 @@
 
 	<target name="compile-parser" depends="-parser,-check-deps" description="Compile the parser.">
 		<javac includeantruntime="true" srcdir="${src.parser.paths}" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
+			<compilerarg value="-Xlint:unchecked"/>
+			<compilerarg value="-Xlint:deprecation"/>
 			<classpath refid="project.class.path" />
 		</javac>
 	</target>
@@ -142,6 +144,8 @@
 	<!-- main compilation targets -->
 	<target name="compile" depends="compile-protobuf,compile-parser,-check-deps" description="Compile the compiler.">
 		<javac includeantruntime="true" srcdir="${src.paths}" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
+			<compilerarg value="-Xlint:unchecked"/>
+			<compilerarg value="-Xlint:deprecation"/>
 			<classpath refid="project.class.path" />
 		</javac>
 	</target>
@@ -167,7 +171,7 @@
 
 	<!-- testing -->
 	<target name="test" depends="-compile-tests" description="Run all unit tests.">
-		<junit fork="yes">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
@@ -178,9 +182,10 @@
 			</batchtest>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-lexer" depends="-compile-tests" description="Run lexer unit tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<test name="boa.test.compiler.TestLexerBad">
 				<formatter type="plain" usefile="false" />
@@ -190,9 +195,10 @@
 			</test>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-parser" depends="-compile-tests" description="Run parser unit tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<test name="boa.test.compiler.TestParserBad">
 				<formatter type="plain" usefile="false" />
@@ -202,9 +208,10 @@
 			</test>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-typecheck" depends="-compile-tests" description="Run typechecker unit tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<test name="boa.test.compiler.TestTypecheckBad">
 				<formatter type="plain" usefile="false" />
@@ -216,13 +223,14 @@
 		<delete file="SecurityAuth.audit" />
 	</target>
 	<target name="test-codegen" depends="-compile-tests" description="Run code generation unit tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<test name="boa.test.compiler.TestCodegenGood">
 				<formatter type="plain" usefile="false" />
 			</test>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-traversal" depends="-compile-tests" description="Run traversal unit tests.">
 		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
@@ -248,13 +256,14 @@
 		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-knowngood" depends="-compile-tests" description="Run known good tests.">
-		<junit fork="yes" haltonfailure="no">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<test name="boa.test.compiler.TestGood">
 				<formatter type="plain" usefile="false" />
 			</test>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-functions" depends="-compile-tests" description="Run intrinsic functions tests.">
 		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
@@ -270,9 +279,21 @@
 		<delete file="SecurityAuth.audit" />
 		<fail message="Test failure detected." if="test.failed" />
 	</target>
+	<target name="test-specific" depends="-compile-tests" description="Run a specific test case.">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
+			<classpath refid="test.class.path" />
+			<test name="${test.case}">
+				<formatter type="plain" usefile="false" />
+			</test>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
+	</target>
 
 	<target name="-compile-tests" depends="compile,-check-deps">
 		<javac includeantruntime="true" srcdir="src/test" destdir="build/tests" debug="${debug.enabled}" debuglevel="${debug.level}">
+			<compilerarg value="-Xlint:unchecked"/>
+			<compilerarg value="-Xlint:deprecation"/>
 			<classpath refid="project.class.path" />
 		</javac>
 	</target>

@@ -1261,16 +1261,32 @@ public class JavaVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_MULT);
 		else if (node.getOperator() == InfixExpression.Operator.XOR)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_XOR);
-		node.getLeftOperand().accept(this);
-		b.addExpressions(expressions.pop());
-		node.getRightOperand().accept(this);
-		b.addExpressions(expressions.pop());
-		for (Object e : node.extendedOperands()) {
-			((org.eclipse.jdt.core.dom.Expression)e).accept(this);
+		List<org.eclipse.jdt.core.dom.Expression> operands = new ArrayList<org.eclipse.jdt.core.dom.Expression>();
+		getOperands(node, operands);
+		for (org.eclipse.jdt.core.dom.Expression e : operands) {
+			e.accept(this);
 			b.addExpressions(expressions.pop());
 		}
 		expressions.push(b.build());
 		return false;
+	}
+
+	private void getOperands(InfixExpression node, List<org.eclipse.jdt.core.dom.Expression> operands) {
+		addOperand(node.getOperator(), operands, node.getLeftOperand());
+		addOperand(node.getOperator(), operands, node.getRightOperand());
+		for (int i = 0; i < node.extendedOperands().size(); i++) {
+			org.eclipse.jdt.core.dom.Expression e = (org.eclipse.jdt.core.dom.Expression) node.extendedOperands().get(i);
+			addOperand(node.getOperator(), operands, e);
+		}
+	}
+
+	public void addOperand(InfixExpression.Operator operator, List<org.eclipse.jdt.core.dom.Expression> operands,
+			org.eclipse.jdt.core.dom.Expression e) {
+		if (e instanceof org.eclipse.jdt.core.dom.InfixExpression
+				&& ((org.eclipse.jdt.core.dom.InfixExpression) e).getOperator() == operator)
+			getOperands((InfixExpression) e, operands);
+		else
+			operands.add(e);
 	}
 
 	@Override
@@ -1334,8 +1350,12 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ParenthesizedExpression node) {
-		// TODO maybe? or ignore...
-		return true;
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.PAREN);
+		node.getExpression().accept(this);
+		b.addExpressions(expressions.pop());
+		expressions.push(b.build());
+		return false;
 	}
 
 	@Override

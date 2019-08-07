@@ -249,6 +249,7 @@ public abstract class BaseTest {
 
 		final List<String> jobnames = new ArrayList<String>();
 		final List<String> jobs = new ArrayList<String>();
+		final List<String> seeds = new ArrayList<String>();
 
 		try {
 			new TypeCheckingVisitor().start(p, new SymbolTable());
@@ -259,6 +260,7 @@ public abstract class BaseTest {
 			cg.start(p);
 			jobs.add(cg.getCode());
 			jobnames.add("1");
+			seeds.add("0");
 
 			final ST st = AbstractCodeGeneratingVisitor.stg.getInstanceOf("Program");
 
@@ -269,6 +271,7 @@ public abstract class BaseTest {
 			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
 			st.add("splitsize", 64 * 1024 * 1024);
+			st.add("seeds", seeds);
 
 			final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile));
 			try {

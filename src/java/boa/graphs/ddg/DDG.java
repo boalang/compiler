@@ -33,7 +33,6 @@ public class DDG {
     private DDGNode entryNode;
     private final HashSet<DDGNode> nodes = new HashSet<DDGNode>();
     private final HashMap<DDGNode, Set<DDGNode>> defUseChain = new HashMap<DDGNode, Set<DDGNode>>();
-    //private HashMap<DDGNode, Set<DDGNode>> useDefChain; //TODO: needs reaching-def analysis
 
     /**
      * Constructs a data dependence graph
@@ -115,10 +114,6 @@ public class DDG {
      */
     public HashMap<DDGNode, Set<DDGNode>> getDefUseChain() {
         return defUseChain;
-    }
-
-    private Set<DDGNode> getUseNodes(final DDGNode node) {
-        return defUseChain.get(node);
     }
 
     /**
@@ -312,19 +307,9 @@ public class DDG {
         Set<Pair> in;
         Set<Pair> out;
 
-        InOut() {
-            in = new HashSet<Pair>();
-            out = new HashSet<Pair>();
-        }
-
-        InOut(final Set<Pair> in, final Set<Pair> out){
+        InOut(final Set<Pair> in, final Set<Pair> out) {
             this.in = in;
             this.out = out;
-        }
-
-        InOut(final InOut inout){
-            this.in = new HashSet<Pair>(inout.in);
-            this.out = new HashSet<Pair>(inout.out);
         }
     }
 

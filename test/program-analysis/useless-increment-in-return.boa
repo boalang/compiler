@@ -23,9 +23,9 @@ find_local := traversal(node: CFGNode) {
 init := traversal(node: CFGNode){
 	if(def(node.stmt)) {
 		if(node.stmt.kind == StatementKind.RETURN) {
-			if(def(node.stmt.expressions[0])) {
-				if(node.stmt.expressions[0].kind == ExpressionKind.OP_INC) {
-					if(contains(local, node.stmt.expressions[0].expressions[0].variable))
+			if(def(node.stmt.expression)) {
+				if(node.stmt.expression.kind == ExpressionKind.OP_INC) {
+					if(contains(local, node.stmt.expression.expressions[0].variable))
 						add(invalid, int(node.id));
 				}
 			}

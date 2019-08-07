@@ -107,7 +107,6 @@ public abstract class Aggregator {
 		this.collect(data, null);
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void collect(final long data, final String metadata) throws IOException, InterruptedException {
 		this.collect(BoaCasts.longToString(data), metadata);
 	}
@@ -116,7 +115,6 @@ public abstract class Aggregator {
 		this.collect(BoaCasts.longToString(data), null);
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void collect(final double data, final String metadata) throws IOException, InterruptedException {
 		this.collect(BoaCasts.doubleToString(data), metadata);
 	}

@@ -16,14 +16,13 @@
  */
 package boa.graphs.pdg;
 
-import boa.graphs.cdg.CDGNode;
-import boa.graphs.Edge;
-import boa.graphs.Node;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import boa.graphs.Node;
+import boa.graphs.cdg.CDGNode;
 
 /**
  * Program Dependence Graph node

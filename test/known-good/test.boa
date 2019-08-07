@@ -38,7 +38,7 @@ clear(s2);
 concat := "a" + "b";
 
 foo:string = p.code_repositories[0].kind;
-foo2:string = input.programming_languages;
+#foo2:string = input.programming_languages;
 
 visitor {
 	before _ -> parts := "";

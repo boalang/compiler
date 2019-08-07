@@ -83,7 +83,6 @@ import boa.compiler.ast.types.TupleType;
  * @author ganeshau
  */
 public class CFGBuildingVisitor extends AbstractVisitorNoArg {
-	private int id = 0;
 	public List<Node> currentStartNodes;
 	public List<Node> currentEndNodes;
 	public List<Node> currentExitNodes;

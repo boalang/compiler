@@ -16,10 +16,9 @@
  */
 package boa.compiler.visitors.analysis;
 
-import java.util.*;
-
 import boa.compiler.ast.Node;
-import boa.compiler.visitors.*;
+import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.CFGBuildingVisitor;
 
 /**
  * @author rramu

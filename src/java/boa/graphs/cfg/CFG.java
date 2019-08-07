@@ -20,18 +20,17 @@ package boa.graphs.cfg;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 
 import boa.functions.BoaAstIntrinsics;
 import boa.types.Ast.Expression;
+import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Method;
 import boa.types.Ast.Statement;
-import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Statement.StatementKind;
 import boa.types.Ast.Variable;
-import boa.types.Control.Graph.Builder;
 import boa.types.Control.Edge.EdgeLabel;
+import boa.types.Control.Graph.Builder;
 import boa.types.Control.Node.NodeType;
 
 /**

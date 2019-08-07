@@ -17,5 +17,6 @@ test-knowngood
 test-lexer
 test-parser
 test-program-analysis
+test-specific
 test-traversal
 test-typecheck

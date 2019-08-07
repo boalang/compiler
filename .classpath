@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="lib" path="rtlib/antlr-runtime-4.5.jar"/>
+	<classpathentry kind="lib" path="rtlib/commons-cli-1.2.jar"/>
+	<classpathentry kind="lib" path="rtlib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="rtlib/protobuf-java-2.5.0.jar"/>
+	<classpathentry kind="lib" path="rtlib/scannotation-1.0.3.jar"/>
+	<classpathentry kind="lib" path="rtlib/ST-4.0.8.jar"/>
+
+	<classpathentry kind="lib" path="lib/antlr-4.5-complete.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-math-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/eclipse.jdt.core.jar"/>
+	<classpathentry kind="lib" path="lib/hadoop-core-1.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/junit-4.11.jar"/>
+	<classpathentry kind="lib" path="lib/mockito-all-1.8.5.jar"/>
+	<classpathentry kind="lib" path="lib/mrunit-0.9.0-incubating-hadoop1.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.core.contenttype_3.4.100.dist.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.core.jobs_3.5.101.dist.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.core.resources_3.7.101.dist.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.core.runtime_3.7.0.dist.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.equinox.common_3.6.0.dist.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.equinox.preferences_3.4.2.dist.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.osgi_3.9.1.v20130814-1242.jar"/>
+
+	<classpathentry kind="output" path="build/classes" />
+	<classpathentry kind="src" path="build/java" />
+	<classpathentry kind="src" path="src/java" />
+	<classpathentry kind="src" path="src/compiled-proto" />
+
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+
+	<classpathentry kind="src" output="build/tests" path="src/test">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="test" value="true"/>
+		</attributes>
+	</classpathentry>
+</classpath>

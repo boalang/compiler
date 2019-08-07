@@ -16,8 +16,6 @@
  */
 package boa.functions;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,16 +30,9 @@ import java.util.Map;
  * @author anthonyu
  */
 public class BoaSpecialIntrinsics {
-	private static MessageDigest md;
 	private static Map<String, String> regexMap;
 
 	static {
-		try {
-			BoaSpecialIntrinsics.md = MessageDigest.getInstance("SHA");
-		} catch (final NoSuchAlgorithmException e) {
-			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
-		}
-
 		BoaSpecialIntrinsics.regexMap = new HashMap<String, String>();
 		BoaSpecialIntrinsics.regexMap.put("int,16", "(0x)?[A-Fa-f0-9]+h?");
 		BoaSpecialIntrinsics.regexMap.put("int,10", "[+-]?[0-9]+");
@@ -85,16 +76,6 @@ public class BoaSpecialIntrinsics {
 	public static void azzert(final boolean condition) {
 		if (!condition)
 			throw new RuntimeException("assertion failed");
-	}
-
-	private static byte[] longToByteArray(final long l) {
-		return new byte[] { (byte) (l >> 56 & 0xff), (byte) (l >> 48 & 0xff), (byte) (l >> 40 & 0xff), (byte) (l >> 32 & 0xff), (byte) (l >> 24 & 0xff),
-				(byte) (l >> 16 & 0xff), (byte) (l >> 8 & 0xff), (byte) (l >> 0 & 0xff), };
-	}
-
-	private static long byteArrayToLong(final byte[] bs) {
-		return (long) (0xff & bs[0]) << 56 | (long) (0xff & bs[1]) << 48 | (long) (0xff & bs[2]) << 40 | (long) (0xff & bs[3]) << 32
-				| (long) (0xff & bs[4]) << 24 | (long) (0xff & bs[5]) << 16 | (long) (0xff & bs[6]) << 8 | (long) (0xff & bs[7]) << 0;
 	}
 
 	/**

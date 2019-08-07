@@ -17,7 +17,6 @@
 package boa.graphs.ddg;
 
 import boa.graphs.Edge;
-import boa.graphs.Node;
 import boa.types.Control;
 
 /**
