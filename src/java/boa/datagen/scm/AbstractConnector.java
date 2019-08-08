@@ -68,8 +68,10 @@ public abstract class AbstractConnector implements AutoCloseable {
 	}
 
 	public List<ChangedFile> buildHeadSnapshot() {
-		if (!revisions.isEmpty())
+		if (!revisions.isEmpty()) {
+			System.out.println("");
 			return buildSnapshot(headCommitOffset);
+		}
 		return ((GitConnector) this).buildHeadSnapshot();
 	}
 	

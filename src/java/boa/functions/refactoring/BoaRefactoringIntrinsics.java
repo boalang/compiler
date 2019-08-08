@@ -23,7 +23,7 @@ import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.rm1.GitHistoryRefactoringMinerImpl;
 
 public class BoaRefactoringIntrinsics {
-	
+
 	@FunctionSpec(name = "getrefactoringtype", returnType = "string", formalParameters = { "string" })
 	public static String getRefactoringType(final String desctiption) throws Exception {
 		return RefactoringType.extractFromDescription(desctiption).getDisplayName();
@@ -40,7 +40,7 @@ public class BoaRefactoringIntrinsics {
 
 	public static boolean hasOutOfMemoryError;
 	public static boolean repoCloseMode = false;
-	
+
 	@FunctionSpec(name = "activerepoclosemode")
 	public static void activeRepoCloseMode() {
 		repoCloseMode = true;
@@ -54,11 +54,11 @@ public class BoaRefactoringIntrinsics {
 
 		if (updateRenamedFilesHintAndCheckRefactoringPossibility(currentRevision, renamedFilesHint)) {
 			hasOutOfMemoryError = false;
-			
+
 			Set<String> fileNamesBefore = new HashSet<String>();
 			Set<String> fileNamesCurrent = new HashSet<String>();
 			updateFileNames(fileNamesBefore, fileNamesCurrent, currentRevision);
-			
+
 			// before
 			Map<String, String> fileContentsBefore = new LinkedHashMap<String, String>();
 			Set<String> repositoryDirectoriesBefore = new LinkedHashSet<String>();
@@ -69,14 +69,15 @@ public class BoaRefactoringIntrinsics {
 			Set<String> repositoryDirectoriesCurrent = new LinkedHashSet<String>();
 			ChangedFile[] snapshotCurrent = updateSnapshotByRevision(snapshotBefore, currentRevision);
 			updateFileContents(fileContentsCurrent, repositoryDirectoriesCurrent, snapshotCurrent, fileNamesCurrent);
-			
-			System.out.println(currentRevision.getId() + " " + snapshotBefore.length + " " + snapshotCurrent.length + " " +
-					fileContentsBefore.size() + " " + fileContentsCurrent.size() + " " + currentRevision.getFilesCount());
-			
+
+			System.out.println(currentRevision.getId() + " " + snapshotBefore.length + " " + snapshotCurrent.length
+					+ " " + fileContentsBefore.size() + " " + fileContentsCurrent.size() + " "
+					+ currentRevision.getFilesCount());
+
 			// close jgit repo to avoid memory leak
 			if (repoCloseMode)
 				closeRepo();
-			
+
 			// build model and detect refactorings
 			List<Refactoring> refactoringsAtRevision = new ArrayList<Refactoring>();
 			try {
@@ -103,33 +104,32 @@ public class BoaRefactoringIntrinsics {
 		System.out.println(currentRevision.getId() + " is not possible to contain refactorings");
 		return new String[0];
 	}
-	
+
 	private static void updateFileNames(Set<String> fileNamesBefore, Set<String> fileNamesCurrent, Revision r) {
 		for (ChangedFile cf : r.getFilesList()) {
 			switch (cf.getChange()) {
-				case MODIFIED:
-				case COPIED:
-					fileNamesBefore.add(cf.getName());
-					fileNamesCurrent.add(cf.getName());
-					break;
-				case RENAMED:
-					fileNamesBefore.add(cf.getPreviousNames(0));
-					fileNamesCurrent.add(cf.getName());
-					break;
-				case ADDED:
-					fileNamesCurrent.add(cf.getName());
-					break;
-				case DELETED:
-					fileNamesBefore.add(cf.getName());
-					break;
-				default:
-					break;
+			case MODIFIED:
+			case COPIED:
+				fileNamesBefore.add(cf.getName());
+				fileNamesCurrent.add(cf.getName());
+				break;
+			case RENAMED:
+				fileNamesBefore.add(cf.getPreviousNames(0));
+				fileNamesCurrent.add(cf.getName());
+				break;
+			case ADDED:
+				fileNamesCurrent.add(cf.getName());
+				break;
+			case DELETED:
+				fileNamesBefore.add(cf.getName());
+				break;
+			default:
+				break;
 			}
 		}
 	}
 
-	public static String[] detectRefactoring(final CodeRepository cr, final Revision currentRevision)
-			throws Exception {
+	public static String[] detectRefactoring(final CodeRepository cr, final Revision currentRevision) throws Exception {
 		return null;
 	}
 
@@ -156,7 +156,7 @@ public class BoaRefactoringIntrinsics {
 					while (subDirectory.contains("/")) {
 						subDirectory = subDirectory.substring(0, subDirectory.lastIndexOf("/"));
 						repositoryDirectories.add(subDirectory);
-					}					
+					}
 				}
 			}
 		}
@@ -223,7 +223,8 @@ public class BoaRefactoringIntrinsics {
 				}
 			}
 		}
-		// If all files are added or deleted or non-java files, then there is no refactoring.
+		// If all files are added or deleted or non-java files, then there is no
+		// refactoring.
 		// If the revision has no parent, then there is no refactoring.
 		return !(Math.max(adds, removes) == javaFileCount || javaFileCount == 0 || r.getParentsCount() == 0);
 	}

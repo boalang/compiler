@@ -217,7 +217,6 @@ public class GitConnector extends AbstractConnector {
 		try {
 			for (final Ref ref : git.branchList().call()) {
 				RevCommit r = revwalk.parseCommit(repository.resolve(ref.getName()));
-				System.out.println(ref.getName());
 				heads.add(r);
 			}
 		} catch (final GitAPIException e) {

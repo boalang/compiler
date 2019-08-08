@@ -271,18 +271,27 @@ public class BoaIntrinsics {
 			}
 		}
 	}
+	
+	@FunctionSpec(name = "updateastcount", returnType = "bool", formalParameters = { "ChangedFile" })
+	public static boolean updateASTCount(ChangedFile cf) {
+		String name = cf.getName();
+		return name.substring(name.lastIndexOf('.') + 1).equals("java");
+	}
+	
 
 	private static boolean isIncluded(ChangedFile cf, String[] kinds) {
 		if (kinds == null || kinds.length == 0)
 			return true;
 		final String kindName = cf.getKind().name();
 		for (final String kind : kinds)
-			if (kindName.startsWith(kind))
+			if (kindName.startsWith(kind) || kindName.endsWith(kind))
 				return true;
 		return false;
 	}
 	
-	private static boolean isJavaFile(String name) {
+	@FunctionSpec(name = "isjavafile", returnType = "bool", formalParameters = { "ChangedFile" })
+	public static boolean isJavaFile(ChangedFile cf) {
+		String name = cf.getName();
 		return name.substring(name.lastIndexOf('.') + 1).equals("java");
 	}
 	
@@ -291,7 +300,7 @@ public class BoaIntrinsics {
 		if (needAst) {
 			ChangedFile[] files = getSnapshotById(cr, id, new String[0]);
 			for (int i = 0; i < files.length; i++)
-				if (isJavaFile(files[i].getName()))
+				if (isJavaFile(files[i]))
 					files[i] = BoaAstIntrinsics.getParsedChangedFile(files[i]);
 			return files;
 		}

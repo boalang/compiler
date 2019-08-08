@@ -480,7 +480,7 @@ public class BoaAstIntrinsics {
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
-						new Path(conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("ast")));
+						new Path(conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("refactorings")));
 				fs = FileSystem.get(conf);
 			}
 			refactoringsMap = new MapFile.Reader(fs, p.toString(), conf);
