@@ -44,7 +44,7 @@ public class CDGNode extends Node<CDGNode, CDGEdge> {
      * @param node Tree node
      */
     public CDGNode(final TreeNode node) {
-        this.id = node.getId();
+        this.id = node.getNodeId();
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
         this.kind = node.getKind();

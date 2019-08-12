@@ -56,8 +56,9 @@ public class PreconditionAggregator extends Aggregator {
 		// data expected format: "no_of_args:pid:fq_clientmethodname:precondition"
 		final String[] sData = data.split(":", 4);
 
-		if (Integer.parseInt(sData[0]) > this.args)
+		if (Integer.parseInt(sData[0]) > this.args) {
 			this.args = Integer.parseInt(sData[0]);
+		}
 
 		final String project = sData[1];
 		final String clientmethod = sData[2];
@@ -80,11 +81,10 @@ public class PreconditionAggregator extends Aggregator {
 		doInference();
 
 		final Map<String, Double> filteredPreconds = doFiltering();
-		final List<Map.Entry<String, Double>> rankedPreconds = doRanking(filteredPreconds);
 
 		// send to Writer
-		for (final Map.Entry<String, Double> precondConf : rankedPreconds) {
-			this.collect(precondConf.getKey()+": "+precondConf.getValue());
+		for (final Map.Entry<String, Double> precondConf : doRanking(filteredPreconds)) {
+			this.collect(precondConf.getKey() + ": " + precondConf.getValue());
 		}
 	}
 
@@ -92,8 +92,8 @@ public class PreconditionAggregator extends Aggregator {
 	 * Infers preconditions for both projects and method calls
 	 */
 	private void doInference() {
-		precondMethods = removeEquality(mergeConditionsWithImplication(infer(precondMethods)));
-		precondProjects = removeEquality(mergeConditionsWithImplication(infer(precondProjects)));
+		precondMethods = mergeConditionsWithImplication(infer(precondMethods));
+		precondProjects = mergeConditionsWithImplication(infer(precondProjects));
 	}
 
 	/**
@@ -155,17 +155,17 @@ public class PreconditionAggregator extends Aggregator {
 
 		for (final Expression strongPrecond : preconds) {
 			for (final Expression weakPrecond : preconds) {
-				if (strongPrecond.getKind() == ExpressionKind.EQ &&
-						(weakPrecond.getKind() == ExpressionKind.LTEQ || weakPrecond.getKind() == ExpressionKind.GTEQ)) {
-					if (strongPrecond.getExpressions(0).equals(weakPrecond.getExpressions(0)) &&
-							strongPrecond.getExpressions(1).equals(weakPrecond.getExpressions(1)))
+				if (strongPrecond.getKind() == ExpressionKind.EQ
+						&& (weakPrecond.getKind() == ExpressionKind.LTEQ || weakPrecond.getKind() == ExpressionKind.GTEQ)) {
+					if (strongPrecond.getExpressions(0).equals(weakPrecond.getExpressions(0))
+							&& strongPrecond.getExpressions(1).equals(weakPrecond.getExpressions(1)))
 						if (mergedPreconditions.get(strongPrecond).size() <= mergedPreconditions.get(weakPrecond).size())
 							mergedPreconditions.get(weakPrecond).addAll(mergedPreconditions.get(strongPrecond));
 				}
 				else if (strongPrecond.getKind() == ExpressionKind.LT && weakPrecond.getKind() == ExpressionKind.LTEQ ||
 						strongPrecond.getKind() == ExpressionKind.GT && weakPrecond.getKind() == ExpressionKind.GTEQ) {
-					if (strongPrecond.getExpressions(0).equals(weakPrecond.getExpressions(0)) &&
-							strongPrecond.getExpressions(1).equals(weakPrecond.getExpressions(1)))
+					if (strongPrecond.getExpressions(0).equals(weakPrecond.getExpressions(0))
+							&& strongPrecond.getExpressions(1).equals(weakPrecond.getExpressions(1)))
 						if (mergedPreconditions.get(strongPrecond).size() <= mergedPreconditions.get(weakPrecond).size()) {
 							mergedPreconditions.get(weakPrecond).addAll(mergedPreconditions.get(strongPrecond));
 							mergedPreconditions.get(strongPrecond).clear();

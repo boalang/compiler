@@ -384,6 +384,10 @@ public abstract class AbstractVisitorNoArgNoRet {
 	public void visit(final StackType n) {
 		n.getValue().accept(this);
 	}
+	
+	public void visit(final QueueType n) {
+		n.getValue().accept(this);
+	}
 
 	public void visit(final SetType n) {
 		n.getValue().accept(this);

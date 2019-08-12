@@ -81,7 +81,11 @@ public abstract class Node<N extends Node<N, E>, E extends Edge<N, E>> implement
 		return this.expr != null;
 	}
 
-	public int getId() {
+	public long getId() {
+		return (long)this.id;
+	}
+
+	public int getNodeId() {
 		return this.id;
 	}
 
@@ -222,6 +226,6 @@ public abstract class Node<N extends Node<N, E>, E extends Edge<N, E>> implement
 	}
 
 	public String toString() {
-		return "node " + getId();
+		return "node " + getNodeId();
 	}
 }

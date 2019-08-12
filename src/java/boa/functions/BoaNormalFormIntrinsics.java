@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Robert Dyer, Mohd Arafat
+ * Copyright 2017, Robert Dyer, Mohd Arafat, Che Shian Hung
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,6 +39,7 @@ import static boa.functions.BoaAstIntrinsics.prettyprint;
  *
  * @author marafat
  * @author rdyer
+ * @author cheshianhung
  */
 public class BoaNormalFormIntrinsics {
 	/**
@@ -315,19 +316,137 @@ public class BoaNormalFormIntrinsics {
 	 */
 	@FunctionSpec(name = "normalize", returnType = "Expression", formalParameters = { "Expression" })
 	public static Expression normalize(final Expression e) throws Exception {
-		Expression expRed;
-		Expression expMov = e;
-		Expression previous = e;
+		try {
+			Expression exp = e;
+			Expression previous = e;
 
-		for (int i = 0; i < 5; i++) {	// maximum iteration allowed = 5. Ideally should not exceed 2
-			expRed = reduce(expMov);	// reduce Expression. reduce is required before move
-			expMov = move(expRed);		// move Variables to the left and literals to the right.
-			if (expMov.equals(previous))
-				break;
-			previous = expMov;
+			for (int i = 0; i < 5; i++) {	// maximum iteration allowed = 5. Ideally should not exceed 2
+				exp = move(reduce(exp));	// reduce and move Expression. reduce is required before move
+				if (exp.equals(previous))
+					break;
+				previous = exp;
+			}
+
+			return factorLiteral(sort(exp)); // sort the left side of the final expression and factor the literals
+		} catch (final Exception ex) {
+			throw new RuntimeException("normalize failed for: " + prettyprint(e), ex);
 		}
+	}
 
-		return sort(expMov);			// sort the left side of the final expression
+	/**
+	 * factor the literals in the first term if there is any
+	 *
+	 * @param e the expression to be factored
+	 * @return factored form
+	 * @throws Exception
+	 */
+	private static Expression factorLiteral(final Expression e) throws Exception {
+		switch (e.getKind()) {
+			// comparison operators
+			case EQ:
+			case NEQ:
+			case GT:
+			case LT:
+			case GTEQ:
+			case LTEQ:
+				boolean isNumerator = true;
+				Expression literal = null;
+				Expression firstTerm = null;
+				if (e.getExpressions(0).getKind() == ExpressionKind.OP_ADD ||
+					e.getExpressions(0).getKind() == ExpressionKind.OP_SUB) {
+					firstTerm = e.getExpressions(0).getExpressions(0);
+					while (firstTerm.getKind() == ExpressionKind.OP_ADD || firstTerm.getKind() == ExpressionKind.OP_SUB)
+						firstTerm = firstTerm.getExpressions(0);
+				}
+				else {
+					firstTerm = e.getExpressions(0);
+					if (firstTerm.getExpressionsCount() == 0)
+						return e;
+				}
+
+				literal = getLiteralFromExp(firstTerm);
+				if (literal == null)
+					return e;
+
+				Expression lhs = null;
+				Expression rhs = null;
+				if (literal.getKind() == ExpressionKind.OP_DIV) {
+					lhs = reduce(createExpression(ExpressionKind.OP_MULT, e.getExpressions(0), literal.getExpressions(1)));
+					rhs = reduce(createExpression(ExpressionKind.OP_MULT, e.getExpressions(1), literal.getExpressions(1)));
+					if (literal.getExpressions(0).getLiteral() != "1") {
+						lhs = reduce(createExpression(ExpressionKind.OP_DIV, lhs, literal.getExpressions(0)));
+						rhs = reduce(createExpression(ExpressionKind.OP_DIV, rhs, literal.getExpressions(0)));
+					}
+				}
+				else {
+					lhs = reduce(createExpression(ExpressionKind.OP_DIV, e.getExpressions(0), literal));
+					rhs = reduce(createExpression(ExpressionKind.OP_DIV, e.getExpressions(1), literal));
+				}
+				return createExpression(e.getKind(), lhs, rhs);
+
+			default:
+				return e;
+		}
+	}
+
+	/**
+	* get the literal expression from a div or mult expression, assuming the literal is always at front
+	* @param div or mult expression
+	* @return return the literal expression if there is any
+	*         , else return null (exclude the literal "1" in the first term of div)
+	*/
+	private static Expression getLiteralFromExp(final Expression e) {
+		if (e.getKind() != ExpressionKind.OP_MULT && e.getKind() != ExpressionKind.OP_DIV) {
+			return null;
+		}
+		Expression literal = null;
+		if (e.getKind() == ExpressionKind.OP_MULT &&
+			e.getExpressions(0).getKind() == ExpressionKind.LITERAL)
+			literal = e.getExpressions(0);
+		else if (e.getKind() == ExpressionKind.OP_DIV){
+			Expression numer = null;
+			Expression denom = null;
+			// if 2 / x
+			if (e.getExpressions(0).getKind() == ExpressionKind.LITERAL &&
+				e.getExpressions(0).getLiteral() != "1")
+				numer = e.getExpressions(0);
+			// if 2 * x / y
+			else if (e.getExpressions(0).getKind() == ExpressionKind.OP_MULT &&
+				e.getExpressions(0).getExpressions(0).getKind() == ExpressionKind.LITERAL)
+				numer = e.getExpressions(0).getExpressions(0);
+			// if x / 2 or 3 * x / 2
+			if (e.getExpressions(1).getKind() == ExpressionKind.LITERAL)
+				denom = e.getExpressions(1);
+			// if x / (2 * y) or 3 * x / (2 * y)
+			else if (e.getExpressions(1).getExpressionsCount() > 0 &&
+				e.getExpressions(1).getExpressions(0).getKind() == ExpressionKind.OP_MULT &&
+				e.getExpressions(1).getExpressions(0).getExpressions(0).getKind() == ExpressionKind.LITERAL)
+				denom = e.getExpressions(1).getExpressions(0).getExpressions(0);
+
+			if (denom == null)
+				literal = numer;
+			else if (numer == null)
+				literal = createExpression(ExpressionKind.OP_DIV, createLiteral("1"), denom);
+			else
+				literal = createExpression(ExpressionKind.OP_DIV, numer, denom);
+		}
+		return literal;
+	}
+
+	/**
+	* Divies a number.
+	* This method is used in place of actual division, only when both parts are doubles.
+	* If the resulting division results in an integer value, it returns a long.
+	*
+	* @param num the numerator
+	* @param denom the denominator
+	* @return the result of dividing num by denom
+	*/
+	private static Object div(final double num, final double denom) {
+		final double result = num / denom;
+		if (result == (long)result)
+			return (long) result;
+		return result;
 	}
 
 	/**
@@ -481,7 +600,9 @@ public class BoaNormalFormIntrinsics {
 
 			default:
 				// no comparison operator
-				// here, first component could be negative
+				// first component could be negative
+				if (isNegative(e) && e.getExpressions(0) instanceof Expression && e.getExpressions(0).getKind() != ExpressionKind.LITERAL)
+					return (Expression)negate(sort((Expression)negate(e)));
 				final List<Object[]> variableList = new ArrayList<Object[]>();
 				final List<Object[]> literalList = new ArrayList<Object[]>();
 
@@ -637,7 +758,7 @@ public class BoaNormalFormIntrinsics {
 
 			case LITERAL:
 				final List<Object[]> literalList = new ArrayList<Object[]>();
-				if (BoaAstIntrinsics.isStringLit(e)) {     // if it is a string expression, we don't want to process it
+				if (BoaAstIntrinsics.isStringLit(e)) { // if it is a string expression, we don't want to process it
 					literalList.add(new Object[] {true});
 					componentMap.put(-1, literalList);
 				} else {
@@ -671,33 +792,29 @@ public class BoaNormalFormIntrinsics {
 
 		switch (expr.getKind()) {
 			case OP_MULT:
-				for(final Expression e: expr.getExpressionsList())
+				for (final Expression e : expr.getExpressionsList())
 					result.addAll(seperateNumDenom(e, type));
 				break;
 
 			case OP_DIV:
-				for(int i = 0; i < expr.getExpressionsCount(); i++) {
-					if(i % 2 == 0)
-						result.addAll(seperateNumDenom(expr.getExpressions(i), 'n'));
-					else
-						result.addAll(seperateNumDenom(expr.getExpressions(i), 'd'));
-				}
+				result.addAll(seperateNumDenom(expr.getExpressions(0), 'n'));
+				for (int i = 1; i < expr.getExpressionsCount(); i++)
+					result.addAll(seperateNumDenom(expr.getExpressions(i), 'd'));
 				break;
 
 			case OP_ADD:
 			case OP_SUB:
 			case PAREN:
 				// these cases will not execute once the expression is fully siimplified
-				final Object[] oo = {normalize(expr), type};
-				result.add(oo);
+				result.add(new Object[] {normalize(expr), type});
 				break;
 
 			default:
-				final Object[] o = {expr, type};
-				result.add(o);
+				result.add(new Object[] {expr, type});
+				break;
 		}
 
-		return  result;
+		return result;
 	}
 
 	/**
@@ -781,7 +898,12 @@ public class BoaNormalFormIntrinsics {
 	// Comparator for sorting array list
 	private static class ExpressionArrayComparator implements Comparator<Object[]> {
 		public int compare(final Object[] e1, final Object[] e2) {
-			return prettyprint((Expression)e1[0]).compareTo(prettyprint((Expression)e2[0]));
+			String s1 = prettyprint((Expression)e1[0]).replaceAll("[^a-zA-Z\\+\\-()]", "");
+			String s2 = prettyprint((Expression)e2[0]).replaceAll("[^a-zA-Z\\+\\-()]", "");
+			if (!s1.equals("") && !s2.equals(""))
+				return s1.compareTo(s2);
+			else
+				return prettyprint((Expression)e1[0]).compareTo(prettyprint((Expression)e2[0]));
 		}
 	}
 
@@ -808,9 +930,18 @@ public class BoaNormalFormIntrinsics {
 	 */
 	@FunctionSpec(name = "reduce", returnType = "Expression", formalParameters = { "Expression" })
 	public static Expression reduce(final Expression e) throws Exception {
-		final Object o = internalReduce(e);
-		if (o instanceof Expression)
-			return (Expression)o;
+		Object o = internalReduce(e);
+		if (o instanceof Expression) {
+			Object o2 = factorAll((Expression)o);
+			if (o != o2)
+				o = internalReduce((Expression)o2);
+			if (o instanceof Expression) {
+				o2 = distributeAll((Expression)o);
+				if (o != o2)
+					o = internalReduce((Expression)o2);
+			}
+			return finalReduce((Expression)o);
+		}
 		return createLiteral(o.toString());
 	}
 
@@ -830,6 +961,7 @@ public class BoaNormalFormIntrinsics {
 		Double dval = 0.0;
 		Long ival = 0L;
 		boolean first = true;
+		boolean isDouble = false;
 
 		switch (e.getKind()) {
 			// reduce both sides of the comparison
@@ -839,14 +971,13 @@ public class BoaNormalFormIntrinsics {
 			case LT:
 			case GTEQ:
 			case LTEQ:
-				Expression[] results1 = new Expression[results.size()] ;
 				for(int i = 0; i < results.size(); i++) {
 					if (results.get(i) instanceof Long || results.get(i) instanceof Double)
-						results1[i] = createLiteral(results.get(i).toString());
+						results.set(i, createLiteral(results.get(i).toString()));
 					else
-						results1[i] = (Expression)results.get(i);
+						results.set(i, reduce((Expression)results.get(i)));
 				}
-				return createExpression(e.getKind(), results1);
+				return createExpression(e.getKind(), convertArray(results));
 
 			case OP_ADD:
 				// handle cases like '+x' or '+3'
@@ -854,73 +985,186 @@ public class BoaNormalFormIntrinsics {
 					final Object o = results.get(0);
 					if (o instanceof Expression)
 						return internalReduce(e.getExpressions(0));
-					if (o instanceof Double)
-						return ((Double)o).doubleValue();
-					return ((Long)o).longValue();
+					return o;
 				}
 
-				// bring children up if the child node is an sub
-				for (int i = 0; i < results.size(); i++)
-					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_SUB) {
+				// bring children up if the child node is an ADD or SUB
+				for (int i = 0; i < results.size(); i++) {
+					if (results.get(i) instanceof Expression) {
 						final Expression subExp = (Expression)results.get(i);
-						if (subExp.getExpressionsCount() > 1) {
-							results.remove(i);
-							for (int j = 0; j < subExp.getExpressionsCount(); j++){
-								if (j == 0)
+						switch (((Expression)results.get(i)).getKind()) {
+							case OP_ADD:
+								results.remove(i);
+								for (int j = 0; j < subExp.getExpressionsCount(); j++)
 									results.add(i + j, internalReduce(subExp.getExpressions(j)));
-								else
-									results.add(i + j, internalReduce(negateExpression(subExp.getExpressions(j))));
-							}
+								break;
+							case OP_SUB:
+								if (subExp.getExpressionsCount() > 1) {
+									results.set(i, internalReduce(subExp.getExpressions(0)));
+									for (int j = 1; j < subExp.getExpressionsCount(); j++)
+										results.add(i + j, internalReduce(negateExpression(subExp.getExpressions(j))));
+								}
+								break;
+							default:
+								break;
 						}
 					}
-
-				// bring children up if the child node is an add
-				for (int i = 0; i < results.size(); i++)
-					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_ADD) {
-						final Expression subExp = (Expression)results.get(i);
-						results.remove(i);
-						for (int j = 0; j < subExp.getExpressionsCount(); j++)
-							results.add(i + j, internalReduce(subExp.getExpressions(j)));
-					}
+				}
 
 				// if multiple arguments, try to add them all together
 				for (final Object o : results) {
-					if (o instanceof Expression)
+					if (o instanceof Expression) {
 						results2.add(o);
-					else if (o instanceof Double)
+					} else if (o instanceof Double) {
 						dval += ((Double)o).doubleValue();
-					else if (o instanceof Long)
+						isDouble = true;
+					} else if (o instanceof Long) {
 						ival += ((Long)o).longValue();
+					}
 				}
 
 				// both float and integer results, so merge them into float
-				if (dval != 0.0 && ival != 0L) {
+				if (isDouble) {
 					dval += ival;
 					ival = 0L;
 				}
 
-				if (dval != 0.0)
-					// after merging, add the one that remains to results
+				// after merging, add the one that remains to results
+				if (isDouble)
 					results2.add(0, dval);
 				else
 					results2.add(0, ival);
 
 				if (results2.size() > 1) {
 					// group common terms
-					for (int i = 0; i < results2.size(); i++) {
-						int count = 1;
+					final Map<Expression, ArrayList<Integer>> commonMap = new LinkedHashMap<Expression, ArrayList<Integer>>();
+					final Map<Expression, Double> doubleCountMap = new LinkedHashMap<Expression, Double>();
 
-						for (int j = i + 1; j < results2.size(); j++)
-							if (results2.get(i).equals(results2.get(j)))
-								count++;
+					// skip the first term since the first term is always literal
+					for (int i = 1; i < results2.size(); i++) {
+						boolean noLiteral = false;
 
-						if (count > 1) {
-							final Expression commonTerm = (Expression)results2.get(i);
-							while (results2.remove(commonTerm))
-								;
-							results2.add(i, createExpression(ExpressionKind.OP_MULT, createLiteral("" + count), commonTerm));
+						// if Mult, like 2 * x
+						if ((results2.get(i) instanceof Expression && ((Expression)results2.get(i)).getKind() == ExpressionKind.OP_MULT)) {
+							final Expression subExp = (Expression)results2.get(i);
+							int literalCount = 0;
+							int literalIndex = -1;
+							boolean negLiteral = false;
+							boolean negExp = false;
+							Expression literal = null;
+							Expression exp = null;
+							for (int j = 0; j < subExp.getExpressionsCount(); j++){
+								if (subExp.getExpressions(j).getKind() == ExpressionKind.LITERAL) {
+									literal = subExp.getExpressions(j);
+									literalCount++;
+									literalIndex = j;
+								} else if (subExp.getExpressions(j).getKind() == ExpressionKind.OP_SUB && ((Expression)negate(subExp.getExpressions(j))).getKind() == ExpressionKind.LITERAL) {
+									literal = (Expression)negate(subExp.getExpressions(j));
+									negLiteral = true;
+									literalCount++;
+									literalIndex = j;
+								} else if (subExp.getExpressions(j).getKind() == ExpressionKind.OP_SUB && ((Expression)subExp.getExpressions(j)).getExpressionsCount() == 1) {
+									negExp = !negExp;
+									exp = (Expression)negate(subExp.getExpressions(j));
+								} else {
+									exp = (Expression)subExp.getExpressions(j);
+								}
+							}
+							if (literalCount == 1) {
+								// for cases like 3 * x * y
+								if (subExp.getExpressionsCount() != 2) {
+									final List<Object> tempExpList = new ArrayList<Object>();
+									for (int j = 0; j < subExp.getExpressionsCount(); j++) {
+										if (j != literalIndex)
+											tempExpList.add(subExp.getExpressions(j));
+									}
+									exp = (Expression)internalReduce(createExpression(subExp.getKind(), convertArray(tempExpList)));
+								}
+								if (commonMap.containsKey(exp)) {
+									final ArrayList<Integer> ary = commonMap.get(exp);
+									ary.add(i);
+									commonMap.put(exp, ary);
+									if ((negLiteral || negExp) && !(negLiteral && negExp))
+										doubleCountMap.put(exp, doubleCountMap.get(exp) - Double.parseDouble(literal.getLiteral()));
+									else
+										doubleCountMap.put(exp, doubleCountMap.get(exp) + Double.parseDouble(literal.getLiteral()));
+								} else {
+									final ArrayList<Integer> ary = new ArrayList<Integer>();
+									ary.add(i);
+									commonMap.put(exp, ary);
+									if ((negLiteral || negExp) && !(negLiteral && negExp))
+										doubleCountMap.put(exp, Double.parseDouble(literal.getLiteral()) * -1);
+									else
+										doubleCountMap.put(exp, Double.parseDouble(literal.getLiteral()));
+								}
+							}
+							// for cases like x * y or x * y * z
+							else {
+								noLiteral = true;
+							}
+						}
+
+						// regular common terms
+						if (noLiteral || (results2.get(i) instanceof Expression && ((Expression)results2.get(i)).getKind() != ExpressionKind.OP_MULT)) {
+							boolean negExp = false;
+							Expression exp = (Expression)internalReduce((Expression)results2.get(i));
+
+							if (isNegative(exp)) {
+								negExp = true;
+								exp = (Expression)negate(exp);
+							}
+
+							if (commonMap.containsKey(exp)) {
+								final ArrayList<Integer> ary = commonMap.get(exp);
+								ary.add(i);
+								commonMap.put(exp, ary);
+								if (negExp)
+									doubleCountMap.put(exp, doubleCountMap.get(exp) - 1.0);
+								else
+									doubleCountMap.put(exp, doubleCountMap.get(exp) + 1.0);
+							}
+							else {
+								final ArrayList<Integer> ary = new ArrayList<Integer>();
+								ary.add(i);
+								commonMap.put(exp, ary);
+								if (negExp)
+									doubleCountMap.put(exp, -1.0);
+								else
+									doubleCountMap.put(exp, 1.0);
+							}
 						}
 					}
+
+					// record the repeated index and add common terms at the end
+					boolean[] repeat = new boolean[results2.size()];
+
+					for (final Map.Entry<Expression, ArrayList<Integer>> entry : commonMap.entrySet()) {
+						final ArrayList<Integer> ary = entry.getValue();
+
+						if (ary.size() > 1) {
+							final Expression o = entry.getKey();
+
+							// record index
+							for (final Integer i : ary)
+								repeat[i] = true;
+
+							if (doubleCountMap.get(o) != 0.0) {
+								if (doubleCountMap.get(o) == 1.0)
+									results2.add(o);
+								else if (doubleCountMap.get(o) == -1.0)
+									results2.add(negate(o));
+								else if (doubleCountMap.get(o) % 1 == 0)
+									results2.add(internalReduce(createExpression(ExpressionKind.OP_MULT, createLiteral("" + Integer.toString(doubleCountMap.get(o).intValue())), o)));
+								else
+									results2.add(internalReduce(createExpression(ExpressionKind.OP_MULT, createLiteral("" + Double.toString(doubleCountMap.get(o))), o)));
+							}
+						}
+					}
+
+					// remove common terms
+					for (int i = repeat.length - 1; i >= 0; i--)
+						if (repeat[i])
+							results2.remove(i);
 
 					// check for identity
 					if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == 0.0 && results2.size() > 1)
@@ -933,6 +1177,18 @@ public class BoaNormalFormIntrinsics {
 				return createExpression(e.getKind(), convertArray(results2));
 
 			case OP_SUB:
+				// if sub kind is add
+				if (results.size() == 1 &&
+					results.get(0) instanceof Expression &&
+					((Expression)results.get(0)).getKind() == ExpressionKind.OP_ADD) {
+					Expression subExp = (Expression)results.get(0);
+					List<Object> results3 = new ArrayList<Object>();
+					for (int i = 0; i < subExp.getExpressionsCount(); i++) {
+						results3.add(negate(subExp.getExpressions(i)));
+					}
+					return createExpression(ExpressionKind.OP_ADD, convertArray(results3));
+				}
+
 				// handle cases like '-x' or '-3'
 				if (results.size() == 1) {
 					final Object o = results.get(0);
@@ -945,223 +1201,213 @@ public class BoaNormalFormIntrinsics {
 						return neg;
 					}
 
-					if (o instanceof Expression)
-						return negate(o);
-					if (o instanceof Double)
-						return -((Double)o).doubleValue();
-					return -((Long)o).longValue();
+					return negate(o);
 				}
 
-				// bring children up if the child node is a sub
-				for (int i = 0; i < results.size(); i++)
-					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_SUB) {
-						final Expression subExp = (Expression)results.get(i);
-						if (subExp.getExpressionsCount() > 1) {
-							results.remove(i);
-							for (int j = 0; j < subExp.getExpressionsCount(); j++)
-								if (i == 0 || j == 0)
-									results.add(i + j, internalReduce(subExp.getExpressions(j)));
-								else
-									results.add(i + j, negate(internalReduce(subExp.getExpressions(j))));
-						}
-					}
+				// for 2+ term cases, we convert to an OP_ADD with each RHS term negated
+				// e.g., x - 2 - y becomes x + -2 + -y
+				for (int i = 1; i < results.size(); i++)
+					results.set(i, negate(results.get(i)));
 
-				// bring parent down if the child node is an add
-				List<Object> results3 = new ArrayList<Object>();
-				boolean foundAdd = false;
-				for (int i = 0; i < results.size(); i++) {
-					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_ADD) {
-						foundAdd = true;
-						final Expression subExp = (Expression)results.get(i);
-						if (subExp.getExpressionsCount() > 1) {
-							for (int j = 0; j < subExp.getExpressionsCount(); j++){
-								if (i == 0)
-									results3.add(internalReduce(subExp.getExpressions(j)));
-								else
-									results3.add(internalReduce(negateExpression(subExp.getExpressions(j))));
-							}
-						}
-						else
-							if (i == 0){
-								if (results.get(i) instanceof Expression)
-									results3.add(internalReduce((Expression) results.get(i)));
-								else
-									results3.add(results.get(i));
-							}
-							else
-								results3.add(internalReduce(negateExpression(results.get(i))));
-					}
-					else {
-						if (i == 0){
-							if (results.get(i) instanceof Expression)
-								results3.add(internalReduce((Expression) results.get(i)));
-							else
-								results3.add(results.get(i));
-						}
-						else
-							results3.add(internalReduce(negateExpression(results.get(i))));
-					}
-				}
-				if (foundAdd)
-					return internalReduce(createExpression(ExpressionKind.OP_ADD, convertArray(results3)));
-				else
-					results3 = null;
-
-				final List<Object> adds = new ArrayList<Object>();
-
-				// if multiple arguments, try to subtract them all together
-				for (final Object o : results) {
-					if (!first && isNegative(o)) {
-						adds.add(negate(o));
-					} else {
-						if (o instanceof Expression) {
-							results2.add(o);
-						} else {
-							if (first) {
-								results2.add(o);
-							} else {
-								if (o instanceof Double)
-									dval += ((Double)o).doubleValue();
-								else
-									ival += ((Long)o).longValue();
-							}
-						}
-						first = false;
-					}
-				}
-
-				// both float and integer results, so merge them into float
-				if (dval != 0.0 && ival != 0L) {
-					dval += ival;
-					ival = 0L;
-				}
-
-				// if the first term is a number, perform subtraction on it
-				if (results2.get(0) instanceof Number) {
-					if (results2.get(0) instanceof Double) {
-						if (dval != 0.0)
-							results2.set(0, (Double)results2.get(0) - dval);
-						else
-							results2.set(0, (Double)results2.get(0) - ival);
-					} else {
-						if (dval != 0.0)
-							results2.set(0, (double)(Long)results2.get(0) - dval);
-						else
-							results2.set(0, (Long)results2.get(0) - ival);
-					}
-				} else {
-					// after merging, add the one that remains to results
-					if (dval != 0.0)
-						results2.add(dval);
-					else if (ival != 0L)
-						results2.add(ival);
-				}
-
-				if (results2.size() > 1) {
-					Object lhs = results2.get(0);
-
-					// check for elimination
-					if (lhs instanceof Expression) {
-						int idx = results2.lastIndexOf(lhs);
-						if (idx > 0) {
-							results2.remove(idx);
-							results2.set(0, 0L);
-							lhs = results2.get(0);
-						}
-					}
-
-					// group common terms
-					for (int i = 0; i < results2.size(); i++) {
-						int count = 1;
-
-						for (int j = i + 1; j < results2.size(); j++)
-							if (results2.get(i).equals(results2.get(j)))
-								count++;
-
-						if (count > 1) {
-							lhs = results2.get(i);
-							while (results2.remove(lhs))
-								;
-							results2.add(i, createExpression(ExpressionKind.OP_MULT, createLiteral("" + count), (Expression)lhs));
-						}
-
-						lhs = results2.get(0);
-					}
-
-					// check for identity
-					if (lhs instanceof Number && ((Number)lhs).doubleValue() == 0.0 && results2.size() > 1) {
-						results2.remove(0);
-						results2.set(0, negate(results2.get(0)));
-					}
-				}
-
-				// if it reduced to a single term, return just the term otherwise return the whole expression
-				Object result;
-				if (results2.size() == 1)
-					result = results2.get(0);
-				else
-					result = createExpression(e.getKind(), convertArray(results2));
-
-				if (adds.size() > 0) {
-					adds.add(0, result);
-					result = internalReduce(createExpression(ExpressionKind.OP_ADD, convertArray(adds)));
-				}
-
-				return result;
+				// then we reduce the new OP_ADD
+				return internalReduce(createExpression(ExpressionKind.OP_ADD, convertArray(results)));
 
 			case OP_MULT:
 				dval = 1.0;
 				ival = 1L;
 
+				// bring children up if the child node is an mult
+				for (int i = 0; i < results.size(); i++)
+					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_MULT) {
+						final Expression subExp = (Expression)results.get(i);
+						results.remove(i);
+						for (int j = 0; j < subExp.getExpressionsCount(); j++)
+							results.add(i + j, internalReduce(subExp.getExpressions(j)));
+					}
+
 				// if multiple arguments, try to multiply them all together
-				for (Object o : results) {
-					if (o instanceof Expression)
+				for (final Object o : results) {
+					if (o instanceof Expression) {
 						results2.add(o);
-					else if (o instanceof Double)
+					} else if (o instanceof Double) {
 						dval *= ((Double)o).doubleValue();
-					else if (o instanceof Long)
+						isDouble = true;
+					} else if (o instanceof Long) {
 						ival *= ((Long)o).longValue();
+					}
 				}
 
 				// both float and integer results, so merge them into float
-				if (dval != 1.0 && ival != 1L) {
+				if (isDouble) {
 					dval *= ival;
 					ival = 1L;
 				}
 
 				// after merging, add the one that remains to results
-				if (dval != 1.0)
+				if (isDouble)
 					results2.add(0, dval);
 				else
 					results2.add(0, ival);
 
 				if (results2.size() > 1) {
-					// check for identity
-					if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == 1.0)
-						results2.remove(0);
-					else if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == -1.0) {
-						results2.remove(0);
-						results2.set(0, negate(results2.get(0)));
-					}
-
-					// only at most 1 term should remain negative
-					int lastNeg = -1;
-					for (int i = results2.size() - 1; i >= 0; i--)
-						if (isNegative(results2.get(i))) {
-							if (lastNeg != -1) {
-								results2.set(lastNeg, negate(results2.get(lastNeg)));
-								results2.set(i, negate(results2.get(i)));
-								lastNeg = -1;
-							} else {
-								lastNeg = i;
-							}
-						}
-
 					// check for elimination
 					if (results2.get(0) instanceof Double && (Double)results2.get(0) == 0.0)
 						return 0.0;
-					else if (results2.get(0) instanceof Long && (Long)results2.get(0) == 0L)
+					if (results2.get(0) instanceof Long && (Long)results2.get(0) == 0L)
 						return 0L;
+
+					// check for identity
+					boolean hasNumLiteral = true;
+					if (results2.get(0) instanceof Number && results2.get(0) instanceof Long && (Long)results2.get(0) == 1L) {
+						results2.remove(0);
+						hasNumLiteral = false;
+					} else if (results2.get(0) instanceof Number && results2.get(0) instanceof Long && (Long)results2.get(0) == -1L) {
+						results2.remove(0);
+						results2.set(0, negate(results2.get(0)));
+						hasNumLiteral = false;
+					}
+
+					// only the first term can remain negative
+					boolean positive = true;
+					for (int i = results2.size() - 1; i >= 0; i--)
+						if (isNegative(results2.get(i))) {
+							positive = !positive;
+							results2.set(i, negate(results2.get(i)));
+						}
+
+					// simplify terms and literal
+					dval = 1.0;
+					ival = 1L;
+					isDouble = false;
+
+					boolean[] cancelTerms = new boolean[results2.size()];
+
+					final Map<Expression, List<Integer>> numMap = new LinkedHashMap<Expression, List<Integer>>();
+					final Map<Expression, List<Integer>> denMap = new LinkedHashMap<Expression, List<Integer>>();
+
+					for (int i = hasNumLiteral ? 1 : 0; i < results2.size(); i++) {
+						final Expression subExp = (Expression)results2.get(i);
+
+						// if the term is like 1 / x or 1 / 2
+						if (subExp.getKind() == ExpressionKind.OP_DIV && subExp.getExpressions(0).getKind() == ExpressionKind.LITERAL) {
+							// if denominator is a number (1 / 2)
+							if (subExp.getExpressions(1).getKind() == ExpressionKind.LITERAL && Character.isDigit(subExp.getExpressions(1).getLiteral().charAt(0))) {
+								final Object literal = internalReduce(subExp.getExpressions(1));
+								if (literal instanceof Double) {
+									dval *= ((Double)literal).doubleValue();
+									isDouble = true;
+								} else {
+									ival *= ((Long)literal).longValue();
+								}
+								cancelTerms[i] = true;
+							// if regular denominator term
+							} else {
+								// if able to cancel
+								Expression subExp2 = subExp.getExpressions(1);
+								if (subExp2.getKind() == ExpressionKind.PAREN)
+									subExp2 = subExp2.getExpressions(0);
+								if (numMap.containsKey(subExp2)) {
+									final List<Integer> aryList = numMap.get(subExp2);
+									cancelTerms[aryList.get(0)] = true;
+									cancelTerms[i] = true;
+									aryList.remove(0);
+									if (aryList.size() == 0)
+										numMap.remove(subExp2);
+								} else {
+									if (!denMap.containsKey(subExp2))
+										denMap.put(subExp2, new ArrayList<Integer>());
+									denMap.get(subExp2).add(i);
+								}
+							}
+						// if regular term like x or y
+						} else {
+							// if able to cancel
+							if (results2.get(i) instanceof Expression) {
+								final Expression subExp2 = (Expression) results2.get(i);
+								if (denMap.containsKey(subExp2)) {
+									final List<Integer> aryList = denMap.get(subExp2);
+									cancelTerms[aryList.get(0)] = true;
+									cancelTerms[i] = true;
+									aryList.remove(0);
+									if (aryList.size() == 0)
+										denMap.remove(subExp2);
+								} else {
+									if (!numMap.containsKey(subExp2))
+										numMap.put(subExp2, new ArrayList<Integer>());
+									numMap.get(subExp2).add(i);
+								}
+							}
+						}
+					}
+
+					for (int i = results2.size() - 1; i >= 0; i--)
+						if (cancelTerms[i])
+							results2.remove(i);
+
+					if (isDouble) {
+						dval *= ival;
+						ival = 1L;
+					}
+
+					boolean divLiteral = hasNumLiteral ? false : true;
+					if (hasNumLiteral && (dval != 1.0 || ival != 1L)) {
+						final Object numLiteral = results2.get(0);
+						Number num = null;
+						if (isDouble)
+							num = (Number)div(((Number)numLiteral).doubleValue(), dval);
+						else
+							num = (Number)div(((Number)numLiteral).doubleValue(), (double)ival);
+
+						if ((Number)numLiteral instanceof Double)
+							isDouble = true;
+
+						if (num instanceof Long) {
+							if ((Long)num == 1L) {
+								results2.remove(0);
+								if (isDouble)
+									results2.add(0, (double) 1.0);
+							}
+							else if (isDouble || numLiteral instanceof Double)
+								results2.set(0, num.doubleValue());
+							else
+								results2.set(0, num);
+						}
+						else
+							divLiteral = true;
+					}
+					if (divLiteral) {
+						if (dval != 1.0)
+							results2.add(createExpression(ExpressionKind.OP_DIV, createLiteral("1"), createLiteral("" + dval)));
+						else if (ival != 1L)
+							results2.add(createExpression(ExpressionKind.OP_DIV, createLiteral("1"), createLiteral("" + ival)));
+					}
+
+					if (results2.size() == 0) {
+						if (isDouble)
+							return positive ? 1.0 : -1.0;
+						return positive ? 1L : -1L;
+					}
+					else if (results2.size() > 1 && results2.get(0) instanceof Double && (Double)results2.get(0) == 1.0) {
+						boolean hasOtherKind = false;;
+						for (int i = 1; i < results2.size(); i++) {
+							if (((Expression)results2.get(i)).getKind() != ExpressionKind.VARACCESS) {
+								hasOtherKind = true;
+								break;
+							}
+						}
+						if (!hasOtherKind)
+							results2.remove(0);
+					}
+
+					if (results2.size() > 0 && !positive) {
+						if (results2.get(0) instanceof Expression && ((Expression)results2.get(0)).getKind() == ExpressionKind.OP_DIV) {
+							b = Expression.newBuilder((Expression)results2.get(0));
+							b.setExpressions(0, (Expression)negate(b.getExpressions(0)));
+							results2.set(0, b.build());
+						} else {
+							results2.set(0, negate(results2.get(0)));
+						}
+					}
 				}
 
 				// if it reduced to a single term, return just the term otherwise return the whole expression
@@ -1170,75 +1416,24 @@ public class BoaNormalFormIntrinsics {
 				return createExpression(e.getKind(), convertArray(results2));
 
 			case OP_DIV:
-				dval = 1.0;
-				ival = 1L;
+				if (results.size() == 2 && !(results.get(0) instanceof Expression))
+					if (((Number)results.get(0)).doubleValue() == 1.0 || ((Number)results.get(0)).doubleValue() == -1.0)
+						if (!(results.get(1) instanceof Expression) || ((Expression)results.get(1)).getKind() != ExpressionKind.OP_MULT)
+							return e;
 
-				// if multiple arguments, try to divide them all together
-				// in thise case, all of the denominators get multiplied together
-				for (final Object o : results) {
-					if (o instanceof Expression) {
-						results2.add(o);
-					} else {
-						if (first) {
-							results2.add(o);
-						} else {
-							if (o instanceof Double)
-								dval *= ((Double)o).doubleValue();
-							else if (o instanceof Long)
-								ival *= ((Long)o).longValue();
-						}
+				int count = 0;
+				for (int i = 0; i < results.size(); i++) {
+					if (i != 0 && isNegative(results.get(i))) {
+						results.set(i, negate(results.get(i)));
+						count++;
 					}
-					first = false;
+					if (i != 0)
+						results.set(i, inverse(results.get(i)));
 				}
 
-				// both float and integer results, so merge them into float
-				if (dval != 1.0 && ival != 1L) {
-					dval *= ival;
-					ival = 1L;
-				}
-
-				final Object numerator = results2.get(0);
-				// if the numerator is a number, try to do the actual division
-				if (numerator instanceof Number) {
-					if (dval != 1.0) {
-						if (numerator instanceof Double)
-							results2.set(0, ((Double)numerator).doubleValue() / dval);
-						else
-							results2.set(0, (double)((Long)numerator).longValue() / dval);
-					} else {
-						if (numerator instanceof Double)
-							results2.set(0, ((Double)numerator).doubleValue() / (double)ival);
-						else
-							results2.set(0, div((double)((Long)numerator).longValue(), (double)ival));
-					}
-				} else {
-					// otherwise just add the new denominator
-					if (dval != 1.0)
-						results2.add(dval);
-					else
-						results2.add(ival);
-				}
-
-				if (results2.size() > 1) {
-					// check for elimination
-					if (results2.get(0) instanceof Expression) {
-						int idx = results2.lastIndexOf(results2.get(0));
-						if (idx > 0) {
-							results2.remove(idx);
-							results2.set(0, 1L);
-						}
-					}
-
-					// check for identity
-					for (int i = 1; i < results2.size(); i++)
-						if (results2.get(i) instanceof Number && ((Number)results2.get(i)).doubleValue() == 1.0)
-							results2.remove(i);
-				}
-
-				// if it reduced to a single term, return just the term otherwise return the whole expression
-				if (results2.size() == 1)
-					return results2.get(0);
-				return createExpression(e.getKind(), convertArray(results2));
+				if (count % 2 == 1)
+					results.set(0, negate(results.get(0)));
+				return internalReduce(createExpression(ExpressionKind.OP_MULT, convertArray(results)));
 
 			// literals are converted to numbers, if possible
 			case LITERAL:
@@ -1322,6 +1517,532 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
+	 * Converts literals in an expression into doubles.
+	 */
+	private static Object toDouble(final Object o) {
+		if (o instanceof Number)
+			return ((Number)o).doubleValue();
+
+		final Expression.Builder b = Expression.newBuilder((Expression)o);
+		for (int i = 0; i < b.getExpressionsCount(); i++) {
+			final Expression sub = b.getExpressions(i);
+			if (sub.getKind() == ExpressionKind.LITERAL)
+				b.setExpressions(i, createLiteral("" + Double.parseDouble(sub.getLiteral())));
+			else
+				b.setExpressions(i, (Expression)toDouble(sub));
+		}
+
+		return b.build();
+	}
+
+	/**
+	 * takes an expression to distribute recursively
+	 *
+	 * @param e the expression to distribute
+	 * @return the distribute form of the expression
+	 */
+	private static Expression distributeAll(final Expression e) throws Exception {
+		if (e.getExpressionsCount() == 1 && e.getKind() != ExpressionKind.PAREN)
+			return e;
+
+		final List<Object> results = new ArrayList<Object>();
+		for (final Expression sub : e.getExpressionsList())
+			results.add(sub);
+
+		switch (e.getKind()) {
+			case OP_ADD:
+				for (int i = 0; i < results.size(); i++) {
+					if (results.get(i) instanceof Expression &&
+						((Expression)results.get(i)).getKind() == ExpressionKind.OP_MULT)
+						results.set(i, distributeAll((Expression)results.get(i)));
+				}
+				return createExpression(e.getKind(), convertArray(results));
+
+			case OP_MULT:
+				boolean hasAdd = false;
+				for (int i = 0; i < results.size(); i++) {
+					if (results.get(i) instanceof Expression) {
+						Expression subExp = (Expression)results.get(i);
+						if (subExp.getKind() == ExpressionKind.PAREN)
+							subExp = subExp.getExpressions(0);
+						if (subExp.getKind() == ExpressionKind.OP_ADD)
+							hasAdd = true;
+						else if (subExp.getKind() == ExpressionKind.OP_DIV &&
+								(subExp.getExpressions(1).getKind() == ExpressionKind.PAREN &&
+								subExp.getExpressions(1).getExpressions(0).getKind() == ExpressionKind.OP_ADD)) {
+							hasAdd = true;
+						}
+					}
+				}
+				if (hasAdd)
+					return distribute(e);
+			case PAREN:
+				if(results.get(0) instanceof Expression)
+					results.set(0, distributeAll((Expression)results.get(0)));
+				return createExpression(e.getKind(), convertArray(results));
+			default:
+				break;
+		}
+		return e;
+	}
+
+	/**
+	 * takes an OP_MULT expression to distribute the terms
+	 *
+	 * @param e the expression to distribute
+	 * @return the distribute form of the expression
+	 */
+	private static Expression distribute(final Expression e) throws Exception {
+		if (e.getKind() != ExpressionKind.OP_MULT)
+			return e;
+
+		final List<Object> results = new ArrayList<Object>();
+		final List<Object> divResults = new ArrayList<Object>();
+		final List<Object> addResults = new ArrayList<Object>();
+		final List<List<Object>> addList = new ArrayList<List<Object>>();
+
+		int addTermsNum = 1;
+		boolean divHasAdd = false;
+		for (Expression sub : e.getExpressionsList()) {
+			if (sub.getKind() == ExpressionKind.PAREN)
+				sub = sub.getExpressions(0);
+			if (sub.getKind() == ExpressionKind.OP_ADD) {
+				addResults.add(sub);
+				addTermsNum *= sub.getExpressionsCount();
+			}
+			else if (sub.getKind() == ExpressionKind.OP_DIV) {
+				if (sub.getExpressions(1).getKind() == ExpressionKind.PAREN &&
+					sub.getExpressions(1).getExpressions(0).getKind() == ExpressionKind.OP_ADD) {
+					divHasAdd = true;
+				}
+				divResults.add(sub.getExpressions(1));
+				if (sub.getExpressions(1).getKind() == ExpressionKind.PAREN)
+					divResults.set(divResults.size() - 1, ((Expression)divResults.get(divResults.size() - 1)).getExpressions(0));
+			}
+			else
+				results.add(sub);
+		}
+
+		if (addResults.size() == 0 && !divHasAdd)
+			return e;
+
+		// combine div terms
+		if (divHasAdd && divResults.size() > 1)
+			results.add(createExpression(ExpressionKind.OP_DIV, createLiteral("1"), distribute(createExpression(ExpressionKind.OP_MULT, convertArray(divResults)))));
+		else
+			for (Object o: divResults)
+				results.add(createExpression(ExpressionKind.OP_DIV, createLiteral("1"), (Expression) o));
+
+		// initialize addList
+		for (int i = 0; i < addTermsNum; i++) {
+			List<Object> l = new ArrayList<Object>(results);
+			addList.add(l);
+		}
+
+		// multiply the terms
+		int continuousNum = addTermsNum;
+		for (int i = 0; i < addResults.size(); i++) {
+			Expression subExp = (Expression)addResults.get(i);
+			int index = 0;
+			continuousNum = continuousNum / subExp.getExpressionsCount();
+			while (index < addTermsNum) {
+				for (int j = 0; j < subExp.getExpressionsCount(); j++) {
+					for (int k = 0; k < continuousNum; k++) {
+						List<Object> l = addList.get(index);
+						l.add(subExp.getExpressions(j));
+						index++;
+					}
+				}
+			}
+		}
+
+		// add mutiplied terms
+		results.clear();
+		for (int i = 0; i < addTermsNum; i++) {
+			Object temp = internalReduce(createExpression(ExpressionKind.OP_MULT, convertArray(addList.get(i))));
+			if (temp instanceof Expression)
+				results.add(sort((Expression)temp));
+			else
+				results.add(temp);
+		}
+
+		return createExpression(ExpressionKind.OP_ADD, convertArray(results));
+	}
+
+	/**
+	 * takes an expression to factor recursively
+	 *
+	 * @param e the expression to distribute
+	 * @return the factor form of the expression
+	 */
+	private static Expression factorAll(final Expression e) throws Exception {
+		if (e.getExpressionsCount() == 1 && e.getKind() != ExpressionKind.PAREN)
+			return e;
+
+		final List<Object> results = new ArrayList<Object>();
+		for (final Expression sub : e.getExpressionsList())
+			results.add(sub);
+
+		switch (e.getKind()) {
+			case OP_ADD:
+				for (int i = 0; i < results.size(); i++) {
+					if (results.get(i) instanceof Expression)
+						results.set(i, factorAll((Expression)results.get(i)));
+				}
+				return createExpression(e.getKind(), convertArray(results));
+
+			case OP_MULT:
+				boolean hasDiv = false;
+				boolean hasAdd = false;
+				List<Integer> indexList = new ArrayList<Integer>();
+				for (int i = 0; i < results.size(); i++) {
+					if (results.get(i) instanceof Expression &&
+						((Expression)results.get(i)).getKind() == ExpressionKind.PAREN) {
+						ExpressionKind subExpKind = ((Expression)((Expression)results.get(i)).getExpressions(0)).getKind();
+						if (subExpKind == ExpressionKind.OP_DIV) {
+							hasDiv = true;
+							results.set(i, factorAll((Expression)results.get(i)));
+						}
+						else if (subExpKind == ExpressionKind.OP_ADD) {
+							hasAdd = true;
+							indexList.add(i);
+						}
+					}
+				}
+				if (hasDiv && hasAdd) {
+					for (Integer i : indexList) {
+						if (((Expression)results.get(i)).getKind() == ExpressionKind.PAREN)
+							results.set(i, createExpression(ExpressionKind.PAREN, factor(((Expression)results.get(i)).getExpressions(0))));
+						else
+							results.set(i, factor((Expression)results.get(i)));
+					}
+				}
+
+				return createExpression(e.getKind(), convertArray(results));
+
+			case OP_DIV:
+				for (int i = 0; i < results.size(); i++)
+					if (results.get(i) instanceof Expression &&
+						((Expression)results.get(i)).getKind() == ExpressionKind.PAREN &&
+						((Expression)((Expression)results.get(i)).getExpressions(0)).getKind() == ExpressionKind.OP_ADD)
+						results.set(i, createExpression(ExpressionKind.PAREN, factor(((Expression)results.get(i)).getExpressions(0))));
+
+				return createExpression(e.getKind(), convertArray(results));
+
+			case PAREN:
+				if(results.get(0) instanceof Expression)
+					results.set(0, factorAll((Expression)results.get(0)));
+				return createExpression(e.getKind(), convertArray(results));
+
+			default:
+				break;
+		}
+		return e;
+	}
+
+	/**
+	 * takes an OP_ADD or OP_SUB expression to factor out the common terms
+	 *
+	 * @param e the expression to factor
+	 * @return the factored form of the expression
+	 */
+	private static Expression factor(final Expression e) throws Exception {
+		if (e.getKind() != ExpressionKind.OP_ADD && e.getKind() != ExpressionKind.OP_SUB)
+			return e;
+
+		final List<Object> results = new ArrayList<Object>();
+		for (final Expression sub : e.getExpressionsList())
+			results.add(sub);
+
+		final Map<Expression, Integer> commonTermMap = new LinkedHashMap<Expression, Integer>();
+		final List<Object> commonResults = new ArrayList<Object>();
+		boolean allNegative = true;
+		final boolean[] negativeList = new boolean[results.size()];
+
+		// get first terms
+		for (int i = 0; i < ((Expression)results.get(0)).getExpressionsCount(); i++) {
+			Expression exp = ((Expression)results.get(0)).getExpressions(i);
+			if (i == 0 && isNegative(exp)) {
+				results.set(0, negate(results.get(0)));
+				exp = (Expression)negate(exp);
+				negativeList[0] = true;
+			}
+			if (commonTermMap.containsKey(exp))
+				commonTermMap.put(exp, commonTermMap.get(exp) + 1);
+			else
+				commonTermMap.put(exp, 1);
+		}
+
+		// scan through results list and get the common terms
+		for (int i = 1; i < results.size(); i++) {
+			final Map<Expression, Integer> tempMap = new LinkedHashMap<Expression, Integer>();
+			for (int j = 0; j < ((Expression)results.get(i)).getExpressionsCount(); j++) {
+				Expression exp = ((Expression)results.get(i)).getExpressions(j);
+				if (j == 0 && isNegative(exp)) {
+					results.set(i, negate(results.get(i)));
+					exp = (Expression)negate(exp);
+					negativeList[i] = true;
+				}
+				if (commonTermMap.containsKey(exp)) {
+					if (tempMap.containsKey(exp))
+						tempMap.put(exp, tempMap.get(exp) + 1);
+					else
+						tempMap.put(exp, 1);
+
+					if (commonTermMap.get(exp) == 1)
+						commonTermMap.remove(exp);
+					else
+						commonTermMap.put(exp, commonTermMap.get(exp) - 1);
+				}
+			}
+			if (tempMap.size() == 0)
+				return e;
+			commonTermMap.clear();
+			commonTermMap.putAll(tempMap);
+		}
+
+		// see if all terms are negative
+		for (int i = 0; i < results.size(); i++) {
+			if (!negativeList[i]) {
+				allNegative = false;
+				break;
+			}
+		}
+
+		// remove the common terms
+		for (int i = 0; i < results.size(); i++) {
+			final Map<Expression, Integer> tempMap = new LinkedHashMap<Expression, Integer>(commonTermMap);
+			final Expression.Builder b = Expression.newBuilder((Expression)results.get(i));
+			for (int j = ((Expression)results.get(i)).getExpressionsCount() - 1; j >= 0; j--) {
+				final Expression subExp = ((Expression)results.get(i)).getExpressions(j);
+				if (tempMap.containsKey(subExp)) {
+					b.removeExpressions(j);
+					if (tempMap.get(subExp) == 1)
+						tempMap.remove(subExp);
+					else
+						tempMap.put(subExp, tempMap.get(subExp) - 1);
+				}
+			}
+			if (b.getExpressionsCount() == 0)
+				b.addExpressions(createLiteral("1"));
+			results.set(i, b.build());
+			if (!allNegative && negativeList[i] && b.getExpressionsCount() != 0)
+				results.set(i, negate(results.get(i)));
+		}
+
+		// create common terms' expression
+		for (final Map.Entry<Expression, Integer> entry : commonTermMap.entrySet()) {
+			for (int i = 0; i < entry.getValue(); i++) {
+				commonResults.add(entry.getKey());
+			}
+		}
+
+		// negate the first term is all negative
+		if (allNegative)
+			commonResults.set(0, negate(commonResults.get(0)));
+
+		Object e2 = internalReduce(createExpression(e.getKind(), convertArray(results)));
+		if (e2 instanceof Expression)
+			e2 = finalReduce((Expression)e2);
+
+		// return final expression
+		return createExpression(ExpressionKind.OP_MULT, createExpression(ExpressionKind.OP_MULT, convertArray(commonResults)), (Expression)e2);
+	}
+
+	/**
+	 * Fixes the expression to remove cases like "x + -y", converting them to the proper "x - y" form.
+	 *
+	 * @param e the expression to reduce
+	 * @return the reduced form of the expression
+	 */
+	private static Expression finalReduce(final Expression e) throws Exception {
+		if (e.getExpressionsCount() == 1 && e.getKind() != ExpressionKind.PAREN)
+			return e;
+
+		final List<Object> results = new ArrayList<Object>();
+		for (final Expression sub : e.getExpressionsList())
+			results.add(sub);
+		switch (e.getKind()) {
+			case OP_ADD:
+				// resolve all + - issues (3 + -x)
+				boolean hasLiteral = false;
+				final List<Object> negResult = new ArrayList<Object>();
+				for (int i = results.size() - 1; i >= 0; i--) {
+					if (results.get(i) instanceof Expression)
+						results.set(i, finalReduce((Expression)results.get(i)));
+					// if the first term is literal
+					if (i == 0 &&
+						((Expression)results.get(i)).getKind() == ExpressionKind.OP_SUB &&
+						((Expression)results.get(i)).getExpressions(0).getKind() == ExpressionKind.LITERAL) {
+						hasLiteral = true;
+						break;
+					}
+					if (i == 0 && ((Expression)results.get(i)).getKind() == ExpressionKind.LITERAL)
+						hasLiteral = true;
+
+					if (isNegative(results.get(i))) {
+						negResult.add(0, negate(results.get(i)));
+						results.remove(i);
+					}
+				}
+
+				Object tempLiteral = null;
+				if (hasLiteral) {
+					tempLiteral = results.get(0);
+					results.remove(0);
+				}
+				// sort results
+				if (results.size() > 1) {
+					Object tempE = internalReduce(sort(createExpression(ExpressionKind.OP_ADD, convertArray(results))));
+					results.clear();
+					if (tempE instanceof Expression && ((Expression)tempE).getKind() == ExpressionKind.OP_MULT)
+						results.add(finalReduce((Expression)tempE));
+					else
+						for (final Expression sub : ((Expression)tempE).getExpressionsList()) {
+							results.add(finalReduce(sub));
+						}
+				}
+				if (hasLiteral)
+					results.add(0, tempLiteral);
+
+				// append the neg terms to the end and return whole as OP_SUB
+				if (negResult.size() > 0) {
+					// sort negResults
+					if (negResult.size() != 1) {
+						Object tempE = internalReduce(sort(createExpression(ExpressionKind.OP_ADD, convertArray(negResult))));
+						negResult.clear();
+						for (final Expression sub : ((Expression)tempE).getExpressionsList()) {
+							negResult.add(finalReduce(sub));
+						}
+					}
+					if (results.size() == 0)
+						negResult.set(0, negate(negResult.get(0)));
+					else if (results.size() == 1)
+						negResult.add(0, results.get(0));
+					else
+						negResult.add(0, createExpression(e.getKind(), convertArray(results)));
+					return createExpression(ExpressionKind.OP_SUB, convertArray(negResult));
+				}
+
+				if (results.size() == 1 && results.get(0) instanceof Expression)
+					return (Expression)results.get(0);
+				return createExpression(e.getKind(), convertArray(results));
+
+			case OP_MULT:
+				// push all divs at the end
+				final List<Object> numeratorList = new ArrayList<Object>();
+				final List<Object> denominatorList = new ArrayList<Object>();
+				for (int i = results.size() - 1; i >= 0; i--) {
+					if (!(results.get(i) instanceof Expression))
+						continue;
+					results.set(i, finalReduce((Expression)results.get(i)));
+					if (((Expression)results.get(i)).getKind() != ExpressionKind.OP_DIV &&
+						(((Expression)results.get(i)).getKind() != ExpressionKind.PAREN ||
+						((Expression)((Expression)results.get(i)).getExpressions(0)).getKind() != ExpressionKind.OP_DIV))
+						continue;
+					Expression subExp = ((Expression)results.get(i)).getExpressions(0);
+					if (((Expression)results.get(i)).getKind() != ExpressionKind.PAREN)
+						subExp = (Expression)results.get(i);
+					results.remove(i);
+					// if numerator is not 1
+					if (subExp.getExpressions(0).getKind() != ExpressionKind.LITERAL ||
+						Double.parseDouble(subExp.getExpressions(0).getLiteral()) != 1.0){
+						numeratorList.add(0, subExp.getExpressions(0));
+					}
+					for (int j = subExp.getExpressionsCount() - 1; j > 0; j--) {
+						denominatorList.add(0, subExp.getExpressions(j));
+					}
+				}
+				// if there are new numerators
+				if (numeratorList.size() > 0)
+					for (Object o : numeratorList) {
+						results.add(o);
+					}
+
+				// sort numeratorList
+				if (results.size() > 1) {
+					Object tempE = internalReduce(sort(createExpression(ExpressionKind.OP_MULT, convertArray(results))));
+					results.clear();
+
+					for (final Expression sub : ((Expression)tempE).getExpressionsList()) {
+						results.add(sub);
+					}
+				}
+
+				// simplify denominatorList
+				if (denominatorList.size() > 1) {
+					// sort numeratorList
+					if (denominatorList.size() > 1) {
+						Object tempE = internalReduce(sort(createExpression(ExpressionKind.OP_MULT, convertArray(denominatorList))));
+						denominatorList.clear();
+						for (final Expression sub : ((Expression)tempE).getExpressionsList()) {
+							denominatorList.add(sub);
+						}
+					}
+					final Object multDiv = internalReduce(createExpression(ExpressionKind.OP_MULT, convertArray(denominatorList)));
+					denominatorList.clear();
+					if (multDiv instanceof Expression)
+						for (final Expression sub : ((Expression)multDiv).getExpressionsList()) {
+							denominatorList.add(sub);
+						}
+					else
+						denominatorList.add(createLiteral("" + multDiv));
+				}
+				if (denominatorList.size() > 0) {
+					// if one div
+					if (denominatorList.size() == 1) {
+						if (results.size() == 0)
+							denominatorList.add(0, createLiteral("1"));
+						else if (results.size() == 1)
+							denominatorList.add(0, results.get(0));
+						else
+							denominatorList.add(0, createExpression(e.getKind(), convertArray(results)));
+						return createExpression(ExpressionKind.OP_DIV, convertArray(denominatorList));
+					}
+					// mult the div
+					else {
+						if (results.size() == 0)
+							results.add(createLiteral("1"));
+						final Object multDiv = createExpression(ExpressionKind.OP_MULT, convertArray(denominatorList));
+						if (results.size() == 1) {
+							results.add(multDiv);
+							return createExpression(ExpressionKind.OP_DIV, convertArray(results));
+						} else {
+							final Expression mult = createExpression(e.getKind(), convertArray(results));
+							return createExpression(ExpressionKind.OP_DIV, mult, (Expression)multDiv);
+						}
+					}
+				}
+				else
+					return createExpression(e.getKind(), convertArray(results));
+
+			case OP_DIV:
+				int count = 0;
+				for (int i = 1; i < results.size(); i++) {
+					if (results.get(i) instanceof Expression)
+						results.set(i, finalReduce((Expression)results.get(i)));
+					if (isNegative(results.get(i))) {
+						results.set(i, negate(results.get(i)));
+						count++;
+					}
+				}
+				if (count % 2 == 1)
+					results.set(0, negate(results.get(0)));
+				return createExpression(e.getKind(), convertArray(results));
+
+			case PAREN:
+				if(results.get(0) instanceof Expression)
+					results.set(0, finalReduce((Expression)results.get(0)));
+				return createExpression(e.getKind(), convertArray(results));
+
+			default:
+				break;
+		}
+
+		return e;
+	}
+
+	/**
 	 * Converts a list of values into an Expression array.
 	 * The values may contain Numbers, which are converted into Expression.
 	 *
@@ -1333,22 +2054,6 @@ public class BoaNormalFormIntrinsics {
 			if (arr.get(i) instanceof Number)
 				arr.set(i, createLiteral(arr.get(i).toString()));
 		return arr.toArray(new Expression[arr.size()]);
-	}
-
-	/**
-	 * Divides a number.
-	 * This method is used in place of actual division, only when both parts are doubles.
-	 * If the resulting division results in an integer value, it returns a long.
-	 *
-	 * @param num the numerator
-	 * @param denom the denominator
-	 * @return the result of dividing num by denom
-	 */
-	private static Object div(final double num, final double denom) {
-		final double result = num / denom;
-		if (result == (long)result)
-			return (long)result;
-		return result;
 	}
 
 	/**
@@ -1367,6 +2072,7 @@ public class BoaNormalFormIntrinsics {
 		switch (e.getKind()) {
 			case OP_SUB:
 				return e.getExpressionsCount() == 1;
+			case OP_DIV:
 			case OP_MULT:
 				for (int i = 0; i < e.getExpressionsCount(); i++)
 					if (isNegative(e.getExpressions(i)))
@@ -1378,6 +2084,77 @@ public class BoaNormalFormIntrinsics {
 				return false;
 		}
 	}
+
+	/**
+	 * Inverse an Object.
+	 *
+	 * @param o an object to inverse (either an Expression or a Number)
+	 * @return an Object representing the inverse form of o
+	 */
+	private static Object inverse(final Object o) {
+		if (o instanceof Number) {
+			// if o is 1 or -1
+			if (((Number)o).doubleValue() == 1.0 || ((Number)o).doubleValue() == -1.0)
+				return o;
+
+			// create fraction
+			return createExpression(ExpressionKind.OP_DIV, createLiteral("1"), createLiteral("" + o));
+		}
+
+		final Expression e = (Expression)o;
+		final Expression.Builder b = Expression.newBuilder(e);
+		switch (e.getKind()) {
+			case OP_ADD:
+			case OP_SUB:
+				// if literal 1 or -1
+				if (e.getExpressionsCount() == 1 && e.getExpressions(0).getKind() == ExpressionKind.LITERAL)
+					if (Double.parseDouble(e.getExpressions(0).getLiteral()) == 1.0 || Double.parseDouble(e.getExpressions(0).getLiteral()) == -1.0)
+						return o;
+				break;
+
+			case OP_MULT:
+				// inverse each term
+				for (int i = 0; i < e.getExpressionsCount(); i++)
+					b.setExpressions(i, (Expression)inverse(e.getExpressions(i)));
+				return b.build();
+
+			case OP_DIV:
+				// if first term is 1 or -1
+				final boolean negative = isNegative(e.getExpressions(0));
+				final Expression first = negative ? (Expression)negate(e.getExpressions(0)) : e.getExpressions(0);
+
+				if (first.getKind() == ExpressionKind.LITERAL && (first.getLiteral() == "1" || first.getLiteral() == "1.0")) {
+					// if only 1 denominator, return denominator
+					if (e.getExpressionsCount() == 2)
+						return negative ? negate(e.getExpressions(1)) : e.getExpressions(1);
+
+					// if more than 1 denominator, return mult
+					b.removeExpressions(0);
+					b.setKind(ExpressionKind.OP_MULT);
+					return negative ? negate(b.build()) : b.build();
+				}
+
+				// inverse the first term and mult the rest
+				b.setExpressions(0, (Expression)inverse(b.getExpressions(0)));
+				b.setKind(ExpressionKind.OP_MULT);
+				return b.build();
+
+			case LITERAL:
+				if (Character.isDigit(e.getLiteral().charAt(0)))
+					if (Double.parseDouble(e.getLiteral()) == 1.0 || Double.parseDouble(e.getLiteral()) == -1.0)
+						return e;
+				break;
+
+			case PAREN:
+				return inverse(e.getExpressions(0));
+
+			default:
+				break;
+		}
+
+		return createExpression(ExpressionKind.OP_DIV, createLiteral("1"), (Expression)o);
+	}
+
 
 	/**
 	 * Similar to negate(), but ensures the returned value is always an Expression.
@@ -1424,6 +2201,7 @@ public class BoaNormalFormIntrinsics {
 				b.setExpressions(0, negateExpression(e.getExpressions(0)));
 				return b.build();
 
+			case OP_DIV:
 			case OP_MULT:
 				// find first negative term - if none, use the first term
 				int i = 0;
@@ -1448,6 +2226,7 @@ public class BoaNormalFormIntrinsics {
 	 * Uses pretty printing and string comparison.
 	 *
 	 * @author rdyer
+	 * @author cheshianhung
 	 */
 	public static class ExpressionComparator implements Comparator<Expression> {
 		public int compare(final Expression e1, final Expression e2) {
@@ -1632,7 +2411,7 @@ public class BoaNormalFormIntrinsics {
 			return simplify(e.getExpressions(0));
 		return simplify(e, null, 0);
 	}
-	
+
 	public static Expression simplify(final Expression e, final ExpressionKind parentKind, final int pos) {
 		switch (e.getKind()) {
 			case PAREN:
@@ -1640,7 +2419,7 @@ public class BoaNormalFormIntrinsics {
 				if (checkPriority(parentKind, sub, pos) > 0)
 					return createExpression(e.getKind(), sub);
 				return sub;
-				
+
 			case LOGICAL_NOT:
 				final Expression inner = simplify(e.getExpressions(0), e.getKind(), 0);
 				if (inner.equals(trueLit)) return Expression.newBuilder(falseLit).build();
@@ -1683,7 +2462,7 @@ public class BoaNormalFormIntrinsics {
 				// identity
 				// a || false = a
 				if      (e.getKind() == ExpressionKind.LOGICAL_OR)  while (exps.remove(falseLit)) ;
-					// a && true  = a
+				// a && true  = a
 				else if (e.getKind() == ExpressionKind.LOGICAL_AND) while (exps.remove(trueLit)) ;
 
 				// elimination
@@ -1810,7 +2589,7 @@ public class BoaNormalFormIntrinsics {
 		int priority2 = getPriority(subKind);
 //		String name = subKind.toString();
 //		if (name.startsWith("OP_") && sub.getExpressionsCount() == 1)
-		if (sub.getExpressionsCount() == 1 
+		if (sub.getExpressionsCount() == 1
 				&& (subKind == ExpressionKind.OP_ADD || subKind == ExpressionKind.OP_SUB))
 			priority2 = 0;
 		if (priority2 == 0)
@@ -1846,7 +2625,7 @@ public class BoaNormalFormIntrinsics {
 		case BIT_NOT:
 		case CONDITIONAL:
 			return 0;
-		case OP_DEC: 
+		case OP_DEC:
 		case OP_INC:
 			return 0;
 		case OP_ADD: return 12;
@@ -2034,7 +2813,7 @@ public class BoaNormalFormIntrinsics {
 			final Expression e = exps[i];
 			if (checkPriority(kind, e, i) > 0)
 				b.addExpressions(Expression.newBuilder(createExpression(ExpressionKind.PAREN, e)).build());
-			else 
+			else
 				b.addExpressions(Expression.newBuilder(e).build());
 		}
 		return b.build();

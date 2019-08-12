@@ -1,0 +1,10 @@
+public class C {
+    public int m() {
+    	int count = 0;
+        while(true) {
+        	if (count == 10) return 1;
+        	else count++;
+        }
+        return 0;
+    }
+}

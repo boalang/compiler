@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -42,7 +42,7 @@ import boa.compiler.ast.Operand;
 public class SymbolTable {
 	private static HashMap<String, Class<?>> aggregators;
 	private static final Map<Class<?>, BoaType> protomap;
-	private static Map<String, BoaType> idmap;
+	private static Map<String, BoaType> types;
 	private static final Map<String, BoaType> globals;
 	private static FunctionTrie globalFunctions;
 
@@ -56,6 +56,69 @@ public class SymbolTable {
 	private Stack<Boolean> isVisitor = new Stack<Boolean>();
 	private boolean isTraverse = false;
 	private boolean shadowing = false;
+
+	private final static BoaProtoTuple[] dslTupleTypes = {
+		new ASTRootProtoTuple(),
+		new AttachmentProtoTuple(),
+		new NodeProtoTuple(),
+		new EdgeProtoTuple(),
+		new CFGProtoTuple(),
+		new CFGNodeProtoTuple(),
+		new CFGEdgeProtoTuple(),
+		new CDGProtoTuple(),
+		new CDGNodeProtoTuple(),
+		new CDGEdgeProtoTuple(),
+		new DDGProtoTuple(),
+		new DDGNodeProtoTuple(),
+		new DDGEdgeProtoTuple(),
+		new PDGProtoTuple(),
+		new PDGNodeProtoTuple(),
+		new PDGEdgeProtoTuple(),
+		new DTreeProtoTuple(),
+		new PDTreeProtoTuple(),
+		new TreeNodeProtoTuple(),
+		new CFGSlicerProtoTuple(),
+		new PDGSlicerProtoTuple(),
+		new ChangedFileProtoTuple(),
+		new CodeRepositoryProtoTuple(),
+		new CommentProtoTuple(),
+		new CommentsRootProtoTuple(),
+		new DeclarationProtoTuple(),
+		new ExpressionProtoTuple(),
+		new IssueProtoTuple(),
+		new IssueCommentProtoTuple(),
+		new IssueRepositoryProtoTuple(),
+		new IssuesRootProtoTuple(),
+		new MethodProtoTuple(),
+		new ModifierProtoTuple(),
+		new NamespaceProtoTuple(),
+		new PersonProtoTuple(),
+		new ProjectProtoTuple(),
+		new RevisionProtoTuple(),
+		new StatementProtoTuple(),
+		new TypeProtoTuple(),
+		new VariableProtoTuple(),
+	};
+	private final static BoaProtoMap[] dslMapTypes = {
+		new NodeTypeProtoMap(),
+		new EdgeLabelProtoMap(),
+		new EdgeTypeProtoMap(),
+		new ChangeKindProtoMap(),
+		new CommentKindProtoMap(),
+		new ExpressionKindProtoMap(),
+		new FileKindProtoMap(),
+		new ForgeKindProtoMap(),
+		new IssueStatusProtoMap(),
+		new IssuePriorityProtoMap(),
+		new IssueLabelProtoMap(),
+		new ModifierKindProtoMap(),
+		new RepositoryKindProtoMap(),
+		new StatementKindProtoMap(),
+		new TraversalKindProtoMap(),
+		new TraversalDirectionProtoMap(),
+		new TypeKindProtoMap(),
+		new VisibilityProtoMap(),
+	};
 
 	static {
 		aggregators = new HashMap<String, Class<?>>();
@@ -83,84 +146,8 @@ public class SymbolTable {
 		globals.put("nan", new BoaFloat());
 
 		// this maps scalar Boa scalar types names to their classes
-		idmap = new HashMap<String, BoaType>();
-
-		idmap.put("any", new BoaAny());
-		idmap.put("none", null);
-		idmap.put("bool", new BoaBool());
-		idmap.put("int", new BoaInt());
-		idmap.put("float", new BoaFloat());
-		idmap.put("time", new BoaTime());
-		idmap.put("string", new BoaString());
-
-		final BoaProtoTuple[] dslTupleTypes = {
-			new ASTRootProtoTuple(),
-			new AttachmentProtoTuple(),
-			new CFGProtoTuple(),
-			new CFGNodeProtoTuple(),
-			new CFGEdgeProtoTuple(),
-			new CDGProtoTuple(),
-			new CDGNodeProtoTuple(),
-			new CDGEdgeProtoTuple(),
-			new DDGProtoTuple(),
-			new DDGNodeProtoTuple(),
-			new DDGEdgeProtoTuple(),
-			new PDGProtoTuple(),
-			new NodeProtoTuple(),
-			new EdgeProtoTuple(),
-			new PDGNodeProtoTuple(),
-			new PDGEdgeProtoTuple(),
-			new DTreeProtoTuple(),
-			new PDTreeProtoTuple(),
-			new TreeNodeProtoTuple(),
-			new CFGSlicerProtoTuple(),
-			new PDGSlicerProtoTuple(),
-			new ChangedFileProtoTuple(),
-			new CodeRepositoryProtoTuple(),
-			new CommentProtoTuple(),
-			new CommentsRootProtoTuple(),
-			new DeclarationProtoTuple(),
-			new ExpressionProtoTuple(),
-			new IssueProtoTuple(),
-			new IssueCommentProtoTuple(),
-			new IssueRepositoryProtoTuple(),
-			new IssuesRootProtoTuple(),
-			new MethodProtoTuple(),
-			new ModifierProtoTuple(),
-			new NamespaceProtoTuple(),
-			new PersonProtoTuple(),
-			new ProjectProtoTuple(),
-			new RevisionProtoTuple(),
-			new StatementProtoTuple(),
-			new TypeProtoTuple(),
-			new VariableProtoTuple(),
-		};
-		final BoaProtoMap[] dslMapTypes = {
-			new NodeTypeProtoMap(),
-			new EdgeLabelProtoMap(),
-			new EdgeTypeProtoMap(),
-			new ChangeKindProtoMap(),
-			new CommentKindProtoMap(),
-			new ExpressionKindProtoMap(),
-			new FileKindProtoMap(),
-			new ForgeKindProtoMap(),
-			new IssueStatusProtoMap(),
-			new IssuePriorityProtoMap(),
-			new IssueLabelProtoMap(),
-			new ModifierKindProtoMap(),
-			new RepositoryKindProtoMap(),
-			new StatementKindProtoMap(),
-			new TraversalKindProtoMap(),
-			new TraversalDirectionProtoMap(),
-			new TypeKindProtoMap(),
-			new VisibilityProtoMap(),
-		};
-
-		for (final BoaType t : dslTupleTypes)
-			idmap.put(t.toString(), t);
-
-		for (final BoaType t : dslMapTypes)
-			idmap.put(t.toString(), t);
+		types = new HashMap<String, BoaType>();
+		resetTypeMap();
 
 		globalFunctions = new FunctionTrie();
 
@@ -173,16 +160,30 @@ public class SymbolTable {
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaArray(new BoaAny()) }, "((long)${0}.length)"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "((long)${0}.keySet().size())"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "((long)${0}.size())"));
+		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaQueue(new BoaTypeVar("V")) }, "((long)${0}.size())"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaSet(new BoaTypeVar("V")) }, "((long)${0}.size())"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString() }, "((long)${0}.length())"));
 
 		// traversal functions
 		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new CFGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))},"${1}.getValue(${0})"));
 		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaAny(), new BoaType[] { new CFGNodeProtoTuple()},"getValue(${0})"));
+		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new CDGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))},"${1}.getValue(${0})"));
+		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaAny(), new BoaType[] { new CDGNodeProtoTuple()},"getValue(${0})"));
+		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new DDGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))},"${1}.getValue(${0})"));
+		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaAny(), new BoaType[] { new DDGNodeProtoTuple()},"getValue(${0})"));
+		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new PDGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))},"${1}.getValue(${0})"));
+		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaAny(), new BoaType[] { new PDGNodeProtoTuple()},"getValue(${0})"));
 		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaTraversal()},"${0}.clear()"));
 
 		// graph functions
 		globalFunctions.addFunction("getoutedge", new BoaFunction(new CFGEdgeProtoTuple(), new BoaType[] { new CFGNodeProtoTuple(), new CFGNodeProtoTuple() }, "${0}.getOutEdge(${1}).newBuilder().build()"));
+		globalFunctions.addFunction("getinedge", new BoaFunction(new CFGEdgeProtoTuple(), new BoaType[] { new CFGNodeProtoTuple(), new CFGNodeProtoTuple() }, "${0}.getInEdge(${1}).newBuilder().build()"));
+		globalFunctions.addFunction("getoutedge", new BoaFunction(new CDGEdgeProtoTuple(), new BoaType[] { new CDGNodeProtoTuple(), new CDGNodeProtoTuple() }, "${0}.getOutEdge(${1}).newBuilder().build()"));
+		globalFunctions.addFunction("getinedge", new BoaFunction(new CDGEdgeProtoTuple(), new BoaType[] { new CDGNodeProtoTuple(), new CDGNodeProtoTuple() }, "${0}.getInEdge(${1}).newBuilder().build()"));
+		globalFunctions.addFunction("getoutedge", new BoaFunction(new DDGEdgeProtoTuple(), new BoaType[] { new DDGNodeProtoTuple(), new DDGNodeProtoTuple() }, "${0}.getOutEdge(${1}).newBuilder().build()"));
+		globalFunctions.addFunction("getinedge", new BoaFunction(new DDGEdgeProtoTuple(), new BoaType[] { new DDGNodeProtoTuple(), new DDGNodeProtoTuple() }, "${0}.getInEdge(${1}).newBuilder().build()"));
+		globalFunctions.addFunction("getoutedge", new BoaFunction(new PDGEdgeProtoTuple(), new BoaType[] { new PDGNodeProtoTuple(), new PDGNodeProtoTuple() }, "${0}.getOutEdge(${1}).newBuilder().build()"));
+		globalFunctions.addFunction("getinedge", new BoaFunction(new PDGEdgeProtoTuple(), new BoaType[] { new PDGNodeProtoTuple(), new PDGNodeProtoTuple() }, "${0}.getInEdge(${1}).newBuilder().build()"));
 		globalFunctions.addFunction("normalize", new BoaFunction(new PDGProtoTuple(), new BoaType[] { new PDGProtoTuple() }, "${0}.normalize()"));
 		globalFunctions.addFunction("gettotalnodes", new BoaFunction(new BoaInt(), new BoaType[] { new PDGProtoTuple() }, "${0}.getTotalNodes()"));
 		globalFunctions.addFunction("gettotalcontrolnodes", new BoaFunction(new BoaInt(), new BoaType[] { new PDGProtoTuple() }, "${0}.getTotalControlNodes()"));
@@ -217,6 +218,13 @@ public class SymbolTable {
 		// traversal
 		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new CFGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal()}, "${3}.traverse(${0},${1},${2})"));
 		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new CFGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${3}.traverse(${0},${1},${2},${4})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new CDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal()}, "${3}.traverse(${0},${1},${2})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new CDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${3}.traverse(${0},${1},${2},${4})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new DDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal()}, "${3}.traverse(${0},${1},${2})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new DDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${3}.traverse(${0},${1},${2},${4})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new PDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal()}, "${3}.traverse(${0},${1},${2})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new PDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${3}.traverse(${0},${1},${2},${4})"));
+
 
 		// stack functions
 		globalFunctions.addFunction("push", new BoaFunction(new BoaAny(), new BoaType[] { new BoaStack(new BoaTypeVar("V")), new BoaTypeVar("V") }, "${0}.push(${1})"));
@@ -224,6 +232,13 @@ public class SymbolTable {
 		globalFunctions.addFunction("peek", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.stack_peek(${0})"));
 		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "${0}.clear()"));
 		globalFunctions.addFunction("values", new BoaFunction(new BoaArray(new BoaTypeVar("V")), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.basic_array(${0}.toArray(new ${V}[0]))"));
+
+		// queue functions
+		globalFunctions.addFunction("offer", new BoaFunction(new BoaAny(), new BoaType[] { new BoaQueue(new BoaTypeVar("V")), new BoaTypeVar("V") }, "${0}.offer(${1})"));
+		globalFunctions.addFunction("poll", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaQueue(new BoaTypeVar("V")) }, "${0}.poll()"));
+		globalFunctions.addFunction("peek", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaQueue(new BoaTypeVar("V")) }, "${0}.peekFirst()"));
+		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaQueue(new BoaTypeVar("V")) }, "${0}.clear()"));
+		globalFunctions.addFunction("values", new BoaFunction(new BoaArray(new BoaTypeVar("V")), new BoaType[] { new BoaQueue(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.basic_array(${0}.toArray(new ${V}[0]))"));
 
 		// set functions
 		globalFunctions.addFunction("contains", new BoaFunction(new BoaBool(), new BoaType[] { new BoaSet(new BoaTypeVar("V")), new BoaTypeVar("V") }, "${0}.contains(${1})"));
@@ -247,6 +262,9 @@ public class SymbolTable {
 
 		// set to string
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaSet(new BoaTypeVar("V")) }, "${0}.toString()"));
+
+		// map to string
+        globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "${0}.toString()"));
 
 		// current() function inside visits
 		for (final BoaType t : dslTupleTypes)
@@ -353,6 +371,25 @@ public class SymbolTable {
 		importLibs(libs);
 	}
 
+	public static void resetTypeMap() {
+		types = new HashMap<String, BoaType>();
+		types.clear();
+
+		types.put("any", new BoaAny());
+		types.put("none", null);
+		types.put("bool", new BoaBool());
+		types.put("int", new BoaInt());
+		types.put("float", new BoaFloat());
+		types.put("time", new BoaTime());
+		types.put("string", new BoaString());
+
+		for (final BoaType t : dslTupleTypes)
+			types.put(t.toString(), t);
+
+		for (final BoaType t : dslMapTypes)
+			types.put(t.toString(), t);
+	}
+
 	public SymbolTable cloneNonLocals() throws IOException {
 		final SymbolTable st = new SymbolTable();
 
@@ -369,20 +406,24 @@ public class SymbolTable {
 	}
 
 	public void set(final String id, final BoaType type, final boolean global) {
-		if (idmap.containsKey(id))
-			throw new RuntimeException(id + " already declared as type " + idmap.get(id));
+		if (types.containsKey(id))
+			throw new RuntimeException(id + " already declared as type " + types.get(id));
 
 		if (type instanceof BoaFunction) {
 			if (global)
 				globalFunctions.addFunction(id, (BoaFunction) type);
 			else
-				this.setFunction(id, (BoaFunction) type);
+				this.functions.addFunction(id, (BoaFunction) type);
 		}
 
 		if (global)
 			globals.put(id, type);
 		else
 			this.locals.put(id, type);
+	}
+
+	public void removeLocal(final String id) {
+		locals.remove(id);
 	}
 
 	public boolean hasGlobal(final String id) {
@@ -394,8 +435,8 @@ public class SymbolTable {
 	}
 
 	public BoaType get(final String id) {
-		if (idmap.containsKey(id))
-			return idmap.get(id);
+		if (types.containsKey(id))
+			return types.get(id);
 
 		if (globals.containsKey(id))
 			return globals.get(id);
@@ -407,12 +448,12 @@ public class SymbolTable {
 	}
 
 	public boolean hasType(final String id) {
-		return idmap.containsKey(id);
+		return types.containsKey(id);
 	}
 
 	public static BoaType getType(final String id) {
-		if (idmap.containsKey(id))
-			return idmap.get(id);
+		if (types.containsKey(id))
+			return types.get(id);
 
 		if (id.startsWith("array of "))
 			return new BoaArray(getType(id.substring("array of ".length()).trim()));
@@ -423,8 +464,8 @@ public class SymbolTable {
 		if (id.startsWith("set of "))
 			return new BoaSet(getType(id.substring("set of ".length()).trim()));
 
-		if (id.startsWith("stack of "))
-			return new BoaStack(getType(id.substring("stack of ".length()).trim()));
+		if (id.startsWith("queue of "))
+			return new BoaQueue(getType(id.substring("queue of ".length()).trim()));
 
 		if (id.startsWith("map"))
 			return new BoaMap(getType(id.substring(id.indexOf(" of ") + " of ".length()).trim()),
@@ -434,7 +475,7 @@ public class SymbolTable {
 	}
 
 	public void setType(final String id, final BoaType boaType) {
-		idmap.put(id, boaType);
+		types.put(id, boaType);
 	}
 
 	private static void importAggregator(final Class<?> clazz) {
@@ -466,20 +507,7 @@ public class SymbolTable {
 			return aggregators.get(name + ":" + type);
 		else if (aggregators.containsKey(name))
 			return aggregators.get(name);
-		else
-			throw new RuntimeException("no such aggregator " + name + " of " + type);
-	}
-
-	public List<Class<?>> getAggregators(final String name, final BoaType type) {
-		final List<Class<?>> aggregators = new ArrayList<Class<?>>();
-
-		if (type instanceof BoaTuple)
-			for (final BoaType subType : ((BoaTuple) type).getTypes())
-				aggregators.add(this.getAggregator(name, subType));
-		else
-			aggregators.add(this.getAggregator(name, type));
-
-		return aggregators;
+		throw new RuntimeException("no such aggregator " + name + " of " + type);
 	}
 
 	private static void importFunction(final Method m) {
@@ -579,19 +607,22 @@ public class SymbolTable {
 
 			for (final URL url : urls)
 				db.scanArchives(url);
-	
+
 			final Map<String, Set<String>> annotationIndex = db.getAnnotationIndex();
-	
+
 			for (final String s : annotationIndex.get(AggregatorSpec.class.getCanonicalName()))
 				importAggregator(s);
-	
+
 			for (final String s : annotationIndex.get(FunctionSpec.class.getCanonicalName()))
 				importFunctions(s);
 		}
 	}
 
 	public BoaFunction getFunction(final String id) {
-		return this.getFunction(id, new BoaType[0]);
+		final BoaFunction f = globalFunctions.getFunction(id);
+		if (f != null)
+			return f;
+		return functions.getFunction(id);
 	}
 
 	public BoaFunction getFunction(final String id, final List<BoaType> formalParameters) {
@@ -613,10 +644,6 @@ public class SymbolTable {
 
 	public boolean hasLocalFunction(final String id) {
 		return functions.hasFunction(id);
-	}
-
-	public void setFunction(final String id, final BoaFunction boaFunction) {
-		this.functions.addFunction(id, boaFunction);
 	}
 
 	public boolean hasCast(final BoaType from, final BoaType to) {

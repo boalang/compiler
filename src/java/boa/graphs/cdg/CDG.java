@@ -113,7 +113,7 @@ public class CDG {
         try {
             final CDGNode[] results = new CDGNode[nodes.size()];
             for (final CDGNode node : nodes) {
-                results[node.getId()] = node;
+                results[node.getNodeId()] = node;
             }
             return results;
         } catch (final Exception e) {
@@ -130,7 +130,7 @@ public class CDG {
      */
     public CDGNode getNode(final int id) { // sort and do b-search
         for (final CDGNode n : nodes)
-            if (n.getId() == id)
+            if (n.getNodeId() == id)
                 return n;
 
         return null;
@@ -144,7 +144,7 @@ public class CDG {
      */
     private void constructCDG(final PDTree pdTree, final CFG cfg) throws Exception {
         for (final TreeNode n : pdTree.getNodes())
-            if (n.getId() < pdTree.getNodes().size() - 2)
+            if (n.getNodeId() < pdTree.getNodes().size() - 2)
                 getNode(n);
 
         // store source and desination of control edges with label
@@ -155,9 +155,9 @@ public class CDG {
                 Collections.sort(edges);
                 for (final CFGEdge e : edges)
                     if (e.getLabel().equals("."))
-                        controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, "F");
+                        controlEdges.put(new Integer[]{e.getSrc().getNodeId(), e.getDest().getNodeId()}, "F");
                     else
-                        controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, e.getLabel());
+                        controlEdges.put(new Integer[]{e.getSrc().getNodeId(), e.getDest().getNodeId()}, e.getLabel());
             }
         }
 
@@ -201,7 +201,7 @@ public class CDG {
      */
     private CDGNode getNode(final TreeNode treeNode) throws Exception {
         try {
-            final CDGNode node = getNode(treeNode.getId());
+            final CDGNode node = getNode(treeNode.getNodeId());
             if (node != null)
                 return node;
 

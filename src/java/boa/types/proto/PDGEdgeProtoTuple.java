@@ -62,6 +62,6 @@ public class PDGEdgeProtoTuple extends BoaProtoTuple {
     /** @{inheritDoc} */
     @Override
     public String toJavaType() {
-        return "boa.types.pdg.PDGEdge";
+        return "boa.types.control.Edge";
     }
 }

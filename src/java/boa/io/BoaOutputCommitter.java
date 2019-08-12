@@ -1,7 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, Che Shian Hung
+ * Copyright 2019, Hridesh Rajan, Robert Dyer, Che Shian Hung
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
- *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 
 /**
  * A {@link FileOutputCommitter} that stores the job results into a database.
- * 
+ *
  * @author rdyer
  * @author hungc
  */
@@ -44,7 +44,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 	private final TaskAttemptContext context;
 	public static Throwable lastSeenEx = null;
 
-	public BoaOutputCommitter(Path output, TaskAttemptContext context) throws java.io.IOException {
+	public BoaOutputCommitter(final Path output, final TaskAttemptContext context) throws java.io.IOException {
 		super(output, context);
 
 		this.context = context;
@@ -52,16 +52,16 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 	}
 
 	@Override
-	public void commitJob(JobContext context) throws java.io.IOException {
+	public void commitJob(final JobContext context) throws java.io.IOException {
 		super.commitJob(context);
 
-		int boaJobId = context.getConfiguration().getInt("boa.hadoop.jobid", 0);
+		final int boaJobId = context.getConfiguration().getInt("boa.hadoop.jobid", 0);
 		storeOutput(context, boaJobId);
 		updateStatus(null, boaJobId);
 	}
 
 	@Override
-	public void abortJob(JobContext context, JobStatus.State runState) throws java.io.IOException {
+	public void abortJob(final JobContext context, final JobStatus.State runState) throws java.io.IOException {
 		super.abortJob(context, runState);
 
 		final JobClient jobClient = new JobClient(new JobConf(context.getConfiguration()));
@@ -128,7 +128,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 
 			PreparedStatement ps = null;
 			try {
-				ps = con.prepareStatement("INSERT INTO boa_output (id, length) VALUES (" + jobId + ", 0)");
+				ps = con.prepareStatement("INSERT INTO boa_output (id, length, web_result) VALUES (" + jobId + ", 0, '')");
 				ps.executeUpdate();
 			} catch (final Exception e) {
 			} finally {

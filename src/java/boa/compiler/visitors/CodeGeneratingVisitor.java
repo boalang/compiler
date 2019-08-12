@@ -35,8 +35,8 @@ import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
-import boa.types.*;
 import boa.compiler.visitors.analysis.*;
+import boa.types.*;
 
 /**
  *
@@ -47,16 +47,16 @@ import boa.compiler.visitors.analysis.*;
  * @author hungc
  */
 public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
-	/**
-	 *
-	 * @author anthonyu
-	 */
 	String identifier = "";
 	boolean flowSensitive = false;
 	boolean loopSensitive = false;
 	HashMap<String, Boolean> traversalMap = new HashMap<String, Boolean>();
 	String lastVarDecl;
 
+	/**
+	 *
+	 * @author anthonyu
+	 */
 	protected class AggregatorDescription {
 		protected String aggregator;
 		protected BoaType type;
@@ -224,9 +224,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			final ST st = stg.getInstanceOf("FunctionType");
 
-			if (!(n.type instanceof BoaFunction))
-				throw new TypeCheckException(n ,"type " + n.type + " is not a function type");
-
 			final BoaFunction funcType = ((BoaFunction) n.type);
 
 			final List<Component> params = n.getArgs();
@@ -309,14 +306,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			final ST st = stg.getInstanceOf("TupleType");
 
-			if (!(n.type instanceof BoaTuple))
-				throw new TypeCheckException(n ,"type " + n.type + " is not a tuple type");
-
 			final BoaTuple tupType = ((BoaTuple) n.type);
 
 			final List<Component> members = n.getMembers();
 			final List<String> fields = new ArrayList<String>();
 			final List<String> types = new ArrayList<String>();
+			final List<Boolean> protos = new ArrayList<Boolean>();
 
 			int fieldCount = 0;
 			for (final Component c : members) {
@@ -326,12 +321,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					fields.add("f" + fieldCount);
 				}
 				fieldCount++;
-				types.add(c.getType().type.toBoxedJavaType());
+				BoaType type = c.getType().type;
+				protos.add(type instanceof BoaProtoTuple);
+				types.add(type.toBoxedJavaType());
 			}
 
 			st.add("name", tupType.toJavaType());
 			st.add("fields", fields);
 			st.add("types", types);
+			st.add("protos", protos);
 
 			code.add(st.render());
 		}
@@ -347,9 +345,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		@Override
 		public void visit(final EnumType n) {
 			final ST st = stg.getInstanceOf("EnumType");
-
-			if (!(n.type instanceof BoaEnum))
-				throw new TypeCheckException(n ,"type " + n.type + " is not a enum type");
 
 			final BoaEnum enumType = ((BoaEnum) n.type);
 			final BoaType fieldType = enumType.getType();
@@ -489,16 +484,19 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	protected final HashMap<String, AggregatorDescription> aggregators = new HashMap<String, AggregatorDescription>();
 
-	protected final String name;
-
 	protected String skipIndex = "";
 	protected boolean abortGeneration = false;
 
-	final public static List<String> combineAggregatorStrings = new ArrayList<String>();
-	final public static List<String> reduceAggregatorStrings = new ArrayList<String>();
+	protected String className;
+	protected int splitSize;
+	protected int seed;
+	protected boolean isLocal;
 
-	public CodeGeneratingVisitor(final String name) throws IOException {
-		this.name = name;
+	public CodeGeneratingVisitor(final String className, final int splitSize, final int seed, final boolean isLocal) throws IOException {
+		this.className = className;
+		this.splitSize = splitSize;
+		this.seed = seed;
+		this.isLocal = isLocal;
 
 		varDecl = new VarDeclCodeGeneratingVisitor();
 		staticInitialization = new StaticInitializationCodeGeneratingVisitor();
@@ -510,9 +508,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Program n) {
-		final ST st = stg.getInstanceOf("Job");
-
-		st.add("name", this.name);
+		final ST st = stg.getInstanceOf("Program");
 
 		this.varDecl.start(n);
 		this.functionDeclarator.start(n);
@@ -545,35 +541,44 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (this.aggregators.size() == 0)
 			throw new TypeCheckException(n, "No output variables were declared - must declare at least one output variable");
 
-		for (final Entry<String, AggregatorDescription> entry : this.aggregators.entrySet()) {
-			String id = entry.getKey();
-			String prefix = name;
+		final List<String> combineAggregatorStrings = new ArrayList<String>();
+		final List<String> reduceAggregatorStrings = new ArrayList<String>();
 
-			if (id.matches("\\d+_.*")) {
-				prefix = id.substring(0, id.indexOf('_'));
-				id = id.substring(id.indexOf('_') + 1);
-			}
+		for (final Entry<String, AggregatorDescription> entry : this.aggregators.entrySet()) {
+			final String id = entry.getKey();
 
 			final AggregatorDescription description = entry.getValue();
 			final String parameters = description.getParameters() == null ? "" : description.getParameters().get(0);
 			final BoaType type = description.getType();
 
-			final StringBuilder src = new StringBuilder();
 			boolean combines = false;
-			for (final Class<?> c : n.env.getAggregators(description.getAggregator(), type)) {
-				src.append(", new " + c.getCanonicalName() + "(" + parameters + ")");
-				try {
-					final AggregatorSpec annotation = c.getAnnotation(AggregatorSpec.class);
-					if (annotation.canCombine())
-						combines = true;
-				} catch (final RuntimeException e) {
-					throw new TypeCheckException(n, e.getMessage(), e);
-				}
+			final Class<?> c = n.env.getAggregator(description.getAggregator(), type);
+			try {
+				final AggregatorSpec annotation = c.getAnnotation(AggregatorSpec.class);
+				if (annotation.canCombine())
+					combines = true;
+			} catch (final RuntimeException e) {
+				throw new TypeCheckException(n, e.getMessage(), e);
 			}
+			reduceAggregatorStrings.add("this.aggregators.put(\"" + id + "\", new " + c.getCanonicalName() + "(" + parameters + "));");
 			if (combines)
-				combineAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
-			reduceAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
+				combineAggregatorStrings.add(reduceAggregatorStrings.get(reduceAggregatorStrings.size() - 1));
 		}
+
+		st.add("combineTables", combineAggregatorStrings);
+		st.add("reduceTables", reduceAggregatorStrings);
+
+		final List<String> variableNames = new ArrayList<String>();
+		for (final String s : reduceAggregatorStrings)
+			variableNames.add(s.substring(s.indexOf('"'), s.indexOf(", new")));
+		Collections.sort(variableNames);
+
+		st.add("name", className);
+		st.add("splitsize", splitSize);
+		st.add("seed", seed);
+		st.add("numreducers", variableNames.size());
+		st.add("outputVariableNames", String.join(",", variableNames));
+		if (isLocal) st.add("isLocal", true);
 
 		code.add(st.render());
 	}
@@ -648,7 +653,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			if (n.getOp().equals("==") || n.getOp().equals("!=")) {
 				// special case string/stack/set/map (in)equality
-				if (n.getLhs().type instanceof BoaString || n.getLhs().type instanceof BoaStack || n.getLhs().type instanceof BoaSet || n.getLhs().type instanceof BoaMap) {
+				if (n.getLhs().type instanceof BoaString || n.getLhs().type instanceof BoaStack || n.getLhs().type instanceof BoaQueue || n.getLhs().type instanceof BoaSet || n.getLhs().type instanceof BoaMap) {
 					final String expr = code.removeLast() + ".equals(" + code.removeLast() + ")";
 
 					if (n.getOp().equals("!="))
@@ -715,9 +720,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("exprlist", s);
 			st.add("type", n.type.toBoxedJavaType() + "()");
 		} else if (n.getExprsSize() > 0) {
-			// FIXME rdyer
-			BoaType t = n.type;
-//			BoaType t = ((ExprList) nodeChoice.choice).type;
+			final BoaType t = n.type;
 
 			if (t instanceof BoaTuple) {
 				final ST stup = stg.getInstanceOf("Tuple");
@@ -731,10 +734,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			visit(n.getExprs());
 
 			if (t instanceof BoaArray && ((BoaArray)t).getType() instanceof BoaEnum) {
-                st.add("type", "Object[] ");
+				st.add("type", "Object[] ");
 			} else {
-                st.add("type", t.toJavaType().replaceAll("<(.*)>", ""));
-            }
+				st.add("type", t.toJavaType().replaceAll("<(.*)>", ""));
+			}
 
 			st.add("exprlist", code.removeLast());
 		}
@@ -880,6 +883,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (opType instanceof BoaName)
 				opType = ((BoaName) opType).getType();
 
+			if (opType == null)
+				throw new RuntimeException("operand type is null");
+
 			final String member = n.getId().getToken();
 
 			// operand is a proto map (aka enum)
@@ -916,12 +922,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				return;
 			}
 
-			if (opType == null)
-				throw new RuntimeException("operand type is null");
-			else
-				throw new RuntimeException("unimplemented operand type: " + opType.getClass());
+			throw new RuntimeException("unimplemented operand type: " + opType.getClass());
 		} catch (final TypeCheckException e) {
-			throw new RuntimeException("unimplemented");
+			throw new RuntimeException("unimplemented", e);
 		}
 	}
 
@@ -972,11 +975,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		n.getRhs().accept(this);
 		String rhs = code.removeLast();
 
-		if(n.getLhs().type instanceof BoaTuple && n.getRhs().type instanceof BoaArray) {
-			Operand op = n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
-			if(op instanceof Composite) {
-				List<Expression> exps = ((Composite)op).getExprs();
-				if(checkTupleArray(this.check(exps)) == false) {
+		if (n.getLhs().type instanceof BoaTuple && n.getRhs().type instanceof BoaArray) {
+			final Operand op = n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+			if (op instanceof Composite) {
+				final List<Expression> exps = ((Composite)op).getExprs();
+				if (checkTupleArray(this.check(exps)) == false) {
 					final ST stup = stg.getInstanceOf("Tuple");
 					stup.add("name", n.getLhs().type.toJavaType());
 					visit(exps);
@@ -1070,16 +1073,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("indices", indices);
 		}
 
-		String id = n.getId().getToken();
-		String prefix = name;
-
-		if (id.matches("\\d+_.*")) {
-			prefix = id.substring(0, id.indexOf('_'));
-			id = id.substring(id.indexOf('_') + 1);
-		}
-
-		st.add("id", "\"" + id + "\"");
-		st.add("job", prefix);
+		st.add("id", "\"" + n.getId().getToken() + "\"");
 
 		n.getValue().accept(this);
 		st.add("expression", code.removeLast());
@@ -1327,11 +1321,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final ST st = stg.getInstanceOf("Assignment");
 		st.add("operator", "=");
 		st.add("lhs", "___" + n.getId().getToken());
-		lastVarDecl = "___" + n.getId().getToken();	
+		lastVarDecl = "___" + n.getId().getToken();
 
 		if (!n.hasInitializer()) {
 			if (lhsType instanceof BoaProtoMap ||
-					!(lhsType instanceof BoaMap || lhsType instanceof BoaStack || lhsType instanceof BoaSet)) {
+					!(lhsType instanceof BoaMap || lhsType instanceof BoaStack || lhsType instanceof BoaQueue || lhsType instanceof BoaSet)) {
 				code.add("");
 				return;
 			}
@@ -1344,23 +1338,16 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		n.env.setOperandType(type);
 
-		BoaType t = n.getInitializer().type;
-
-		if (t instanceof BoaFunction) {
-			final IsFunctionVisitor isFuncV = new IsFunctionVisitor();
-			isFuncV.start(n.getInitializer());
-			if (!isFuncV.isFunction())
-				t = ((BoaFunction)t).getType();
-		}
+		final BoaType t = n.getInitializer().type;
 
 		n.getInitializer().accept(this);
 		String src = code.removeLast();
 
-		if(lhsType instanceof BoaTuple && t instanceof BoaArray) {
-			Operand op = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
-			if(op instanceof Composite) {
-				List<Expression> exps = ((Composite)op).getExprs();
-				if(checkTupleArray(this.check(exps)) == false) {
+		if (lhsType instanceof BoaTuple && t instanceof BoaArray) {
+			final Operand op = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+			if (op instanceof Composite) {
+				final List<Expression> exps = ((Composite)op).getExprs();
+				if (checkTupleArray(this.check(exps)) == false) {
 					final ST stup = stg.getInstanceOf("Tuple");
 					stup.add("name", lhsType.toJavaType());
 					visit(exps);
@@ -1442,7 +1429,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		types = c.getType().type.toJavaType();
 		st.add("arg2", "___"+c.getIdentifier().getToken());
 
-		if(n.hasBody()) {
+		if (n.hasBody()) {
 			if (n.getBody() instanceof Block) {
 
 				for (final Node b : ((Block)n.getBody()).getStatements()) {
@@ -1508,7 +1495,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		final LocalMayAliasAnalysis localMayAliasAnalysis = new LocalMayAliasAnalysis();
 		final HashSet<Identifier> aliastSet = localMayAliasAnalysis.start(cfgBuilder, traversalId);
-		
+
 		final DataFlowSensitivityAnalysis dataFlowSensitivityAnalysis = new DataFlowSensitivityAnalysis();
 		dataFlowSensitivityAnalysis.start(cfgBuilder, aliastSet);
 		flowSensitive = dataFlowSensitivityAnalysis.isFlowSensitive();
@@ -1575,9 +1562,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final FunctionExpression n) {
 		final ST st = stg.getInstanceOf("Function");
-
-		if (!(n.getType().type instanceof BoaFunction))
-			throw new TypeCheckException(n ,"type " + n.getType().type + " is not a function type");
 
 		final BoaFunction funcType = ((BoaFunction) n.getType().type);
 
@@ -1687,8 +1671,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (node instanceof TraverseStatement) {
 				if (!(((BoaFunction) node.type).getType() instanceof BoaAny)) {
 					st.add("T", ((BoaFunction) node.type).getType().toBoxedJavaType());
-				}
-				else {
+				} else {
 					st.add("T", "Object");
 				}
 			}
@@ -1761,7 +1744,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				final DateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss zzz yyyy");
 				code.add(formatDate(df.parse(s)));
 				return;
-			} catch (Exception e) { }
+			} catch (final Exception e) { }
 
 			// then try every possible combination of built in formats
 			final int [] formats = new int[] {DateFormat.DEFAULT, DateFormat.FULL, DateFormat.SHORT, DateFormat.LONG, DateFormat.MEDIUM};
@@ -1771,15 +1754,16 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 						final DateFormat df = DateFormat.getDateTimeInstance(f, f2);
 						code.add(formatDate(df.parse(s)));
 						return;
-					} catch (Exception e) { }
+					} catch (final Exception e) { }
 
 			throw new TypeCheckException(n, "Invalid time literal '" + s + "'");
 		}
 
 		code.add(lit.substring(0, lit.length() - 1));
 	}
+
 	private String formatDate(final Date date) {
-		return "" + (date.getTime() * 1000) + "L";
+		return (date.getTime() * 1000) + "L";
 	}
 
 	//
@@ -1811,9 +1795,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final FunctionType n) {
 		final ST st = stg.getInstanceOf("FunctionType");
-
-		if (!(n.type instanceof BoaFunction))
-			throw new TypeCheckException(n ,"type " + n.type + " is not a function type");
 
 		final BoaFunction funcType = ((BoaFunction) n.type);
 
@@ -1906,6 +1887,21 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	/** {@inheritDoc} */
 	@Override
+	public void visit(final QueueType n) {
+		final ST st = stg.getInstanceOf("QueueType");
+
+		n.env.setNeedsBoxing(true);
+
+		n.getValue().accept(this);
+		st.add("value", code.removeLast());
+
+		n.env.setNeedsBoxing(false);
+
+		code.add(st.render());
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final SetType n) {
 		final ST st = stg.getInstanceOf("SetType");
 
@@ -1929,9 +1925,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final EnumType n) {
 		final ST st = stg.getInstanceOf("EnumType");
-
-		if (!(n.type instanceof BoaEnum))
-			throw new TypeCheckException(n ,"type " + n.type + " is not a enum type");
 
 		final BoaEnum enumType = ((BoaEnum) n.type);
 		final BoaType fieldType = enumType.getType();
@@ -1972,6 +1965,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			} else if (args.size() == 1 && args.get(0).type instanceof BoaStack) {
 				final BoaStack s = (BoaStack)args.get(0).type;
 				replaced = replaced.replace("${V}", nonScalarTypeTransform(s.getType(), s.getType().toBoxedJavaType()));
+			} else if (args.size() == 1 && args.get(0).type instanceof BoaQueue) {
+				final BoaQueue q = (BoaQueue)args.get(0).type;
+				replaced = replaced.replace("${V}", nonScalarTypeTransform(q.getType(), q.getType().toBoxedJavaType()));
 			} else if (args.size() == 1 && args.get(0).type instanceof BoaSet) {
 				final BoaSet s = (BoaSet)args.get(0).type;
 				replaced = replaced.replace("${V}", nonScalarTypeTransform(s.getType(), s.getType().toBoxedJavaType()));
@@ -1987,7 +1983,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	private static String nonScalarTypeTransform(final BoaType type, String typeStr) {
 		if (type instanceof BoaArray)
 			return typeStr.replace("[]", "[0]");
-		if (type instanceof BoaSet || type instanceof BoaStack || type instanceof BoaMap)
+		if (type instanceof BoaSet || type instanceof BoaStack || type instanceof BoaQueue || type instanceof BoaMap)
 			return typeStr.replaceAll("<(.*)>", "");
 		return typeStr;
 	}
@@ -2045,15 +2041,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final List<BoaType> types = new ArrayList<BoaType>();
 
 		for (final Expression e : el) {
-			// special case of a function call, use its return type instead of function type
-			if (e.type instanceof BoaFunction) {
-				callFinder.start(e);
-				if (callFinder.isCall()) {
-					types.add(((BoaFunction) e.type).getType());
-					continue;
-				}
-			}
-
 			types.add(e.type);
 		}
 
