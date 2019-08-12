@@ -127,6 +127,9 @@ public class <name> extends boa.runtime.BoaRunner {
 	}
 
 	static class <name>BoaMapper extends boa.runtime.BoaMapper {
+		static {
+			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames>});
+		}
         <staticDeclarations>
         <if(staticStatements)>
         {
@@ -164,6 +167,9 @@ public class <name> extends boa.runtime.BoaRunner {
 	}
 	
 	static class <name>BoaCombiner extends boa.runtime.BoaCombiner {
+		static {
+			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames>});
+		}
 		public <name>BoaCombiner() {
 			super();
 			

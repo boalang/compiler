@@ -145,7 +145,9 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 			String output = "";
 
 			// ensure the reducer class is initialized in the cleanup task
-			context.getReducerClass().newInstance();
+			try {
+				context.getReducerClass().getConstructor().newInstance();
+			} catch (final ReflectiveOperationException e) { }
 
 			while (true) {
 				final Path path = new Path(outputPath, "part-r-" + String.format("%05d", partNum));

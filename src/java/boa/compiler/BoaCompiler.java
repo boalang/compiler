@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Neha Bhide, Che Shian Hung
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Neha Bhide
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
-import java.util.Collections;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
@@ -83,7 +82,6 @@ import boa.parser.BoaLexer;
  * @author anthonyu
  * @author rdyer
  * @author nbhide
- * @author hungc
  */
 public class BoaCompiler extends BoaMain {
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
