@@ -58,6 +58,6 @@ public class CDGEdgeProtoTuple extends BoaProtoTuple {
     /** @{inheritDoc} */
     @Override
     public String toJavaType() {
-        return "boa.types.cdg.CDGEdge";
+        return "boa.types.control.Edge";
     }
 }

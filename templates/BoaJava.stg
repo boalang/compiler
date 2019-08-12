@@ -202,7 +202,7 @@ protected void <name>(final <types> <args>) throws Exception
 <endif>
 <if(ret)>
 @Override
-public void traverse(final boa.graphs.cfg.CFGNode node, boolean flag) throws Exception {
+public void traverse(final <types> node, boolean flag) throws Exception {
 		if(flag) {
 			currentResult = new <ret>(preTraverse(node));
 			outputMapObj.put(node.getId(), new <ret>(currentResult));
@@ -212,7 +212,7 @@ public void traverse(final boa.graphs.cfg.CFGNode node, boolean flag) throws Exc
 }
 <else>
 @Override
-public void traverse(final boa.graphs.cfg.CFGNode node, boolean flag) throws Exception {
+public void traverse(final <types> node, boolean flag) throws Exception {
 		preTraverse(node);
 }
 <endif>
