@@ -402,7 +402,6 @@ public abstract class BoaAbstractTraversal<T1> {
 						final java.util.HashSet<CFGNode> nl = cfg.getNodes();
 						for (final CFGNode node : nl) {
 							boolean curFlag = outputMapObj.containsKey(node.getId());
-							boolean prevFlag = prevOutputMapObj.containsKey(node.getId());
 							if (curFlag) {
 								if (outputMapObj.containsKey(node.getId()) && prevOutputMapObj.containsKey(node.getId())) {
 									fixpFlag = fixpFlag && fixp.invoke((T1)outputMapObj.get(node.getId()), (T1)prevOutputMapObj.get(node.getId()));
