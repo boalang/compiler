@@ -16,8 +16,8 @@ public class <name> extends boa.runtime.BoaRunner {
 		job.setCombinerClass(<name>BoaCombiner.class);
 		<endif>
 		<if(isLocal)>
-        job.getConfiguration().setClass("mapred.map.output.compression.codec", org.apache.hadoop.io.compress.DefaultCodec.class, org.apache.hadoop.io.compress.CompressionCodec.class);
-        <endif>
+		job.getConfiguration().setClass("mapred.map.output.compression.codec", org.apache.hadoop.io.compress.DefaultCodec.class, org.apache.hadoop.io.compress.CompressionCodec.class);
+		<endif>
 		job.setReducerClass(<name>BoaReducer.class);
 
 		return job;
@@ -34,7 +34,7 @@ public class <name> extends boa.runtime.BoaRunner {
 	public static void main(String[] args) throws Exception {
 		<if(isLocal)>org.apache.hadoop.util.ToolRunner.run(new <name>(), args);
 		<else> System.exit(org.apache.hadoop.util.ToolRunner.run(new <name>(), args));
-	    <endif>
+		<endif>
 	}
 
 	@Override
@@ -51,10 +51,10 @@ public class <name> extends boa.runtime.BoaRunner {
 			id = Integer.parseInt(line.getOptionValue("job"));
 		else
 			id = 0;
-		
+
 		final org.apache.hadoop.fs.Path[] ins = new org.apache.hadoop.fs.Path[1];
 		ins[0] = new org.apache.hadoop.fs.Path(args[0] + "/projects.seq");
-		
+
 		final org.apache.hadoop.mapreduce.Job jb = job(ins, new org.apache.hadoop.fs.Path(args[1]));
 
 		org.apache.hadoop.conf.Configuration configuration = jb.getConfiguration();
@@ -130,13 +130,13 @@ public class <name> extends boa.runtime.BoaRunner {
 		static {
 			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames>});
 		}
-        <staticDeclarations>
-        <if(staticStatements)>
-        {
-            <staticStatements>
-        }
-        
-        <endif>
+		<staticDeclarations>
+		<if(staticStatements)>
+		{
+			<staticStatements>
+		}
+
+		<endif>
 		/** {@inheritDoc} */
 		@Override
 		protected void map(final org.apache.hadoop.io.Text key, final org.apache.hadoop.io.BytesWritable value, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws java.io.IOException {
@@ -165,17 +165,17 @@ public class <name> extends boa.runtime.BoaRunner {
 			super.cleanup(context);
 		}
 	}
-	
+
 	static class <name>BoaCombiner extends boa.runtime.BoaCombiner {
 		static {
 			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames>});
 		}
 		public <name>BoaCombiner() {
 			super();
-			
+
 			<combineTables:{t | <t><\n>}>		}
 	}
-	
+
 	static class <name>BoaReducer extends boa.runtime.BoaReducer {
 		static {
 			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames>});
@@ -185,17 +185,17 @@ public class <name> extends boa.runtime.BoaRunner {
 
 			<reduceTables:{t | <t><\n>}>		}
 	}
-	
+
 	@Override
 	public org.apache.hadoop.mapreduce.Mapper getMapper() {
 		return new <name>BoaMapper();
 	}
-	
+
 	@Override
 	public boa.runtime.BoaCombiner getCombiner() {
 		return new <name>BoaCombiner();
 	}
-	
+
 	@Override
 	public boa.runtime.BoaReducer getReducer() {
 		return new <name>BoaReducer();
