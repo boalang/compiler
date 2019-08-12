@@ -12,6 +12,8 @@ push(sa, a);
 
 s: stack of mapType;
 push(s, m);
+p := peek(s);
+pop(s);
 
 ms: map[string] of stackType;
 intS: stackType;
@@ -19,6 +21,8 @@ ms["foo"] = intS;
 
 s2: set of stackType;
 add(s2, intS);
+if (contains(s2, intS))
+	remove(s2, intS);
 
 m2: map[string] of mapType;
 m2["foo"] = m;
@@ -31,3 +35,37 @@ m3["foo1"]["foo2"] = m3["foo3"]["foo4"];
 
 mm := m3["foo"];
 mm["foo"] = m;
+
+clear(m3);
+k := keys(m3);
+# for now, this cant work because you cant have arrays of non-scalar types
+#v := values(m3);
+if (haskey(m3, "foo1"))
+	remove(m3, "foo1");
+l := lookup(m3, "foo1", m2);
+
+l1 := len(s);
+l2 := len(s2);
+l3 := len(m3);
+
+mk: map[set of int] of string;
+clear(mk);
+lk := len(mk);
+# for now, this cant work because you cant have arrays of non-scalar types
+#k2 := keys(mk);
+v2 := values(mk);
+si: set of int;
+mk[si] = "foo";
+if (haskey(mk, si))
+	remove(mk, si);
+lk2 := lookup(mk, si, "foo");
+
+mq: map[queue of int] of string;
+clear(mq);
+lq := len(mq);
+v3 := values(mq);
+q: queue of int;
+mq[q] = "foo";
+if (haskey(mq, q))
+	remove(mq, q);
+lq2 := lookup(mq, q, "foo");

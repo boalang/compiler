@@ -27,6 +27,8 @@ import boa.compiler.ast.types.*;
  * 
  * @author hridesh
  * @author rdyer
+ * @author ankuraga
+ * @author rramu
  *
  * @param <ArgType> the type of the argument to pass down the tree while visiting
  */
@@ -368,6 +370,10 @@ public abstract class AbstractVisitorNoReturn<ArgType> {
 	}
 
 	public void visit(final StackType n, final ArgType arg) {
+		n.getValue().accept(this, arg);
+	}
+
+	public void visit(final QueueType n, final ArgType arg) {
 		n.getValue().accept(this, arg);
 	}
 

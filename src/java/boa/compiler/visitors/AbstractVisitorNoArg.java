@@ -26,6 +26,8 @@ import boa.compiler.ast.types.*;
  * An abstract visitor class that passes no arguments during the visit.
  * 
  * @author rdyer
+ * @author ankuraga
+ * @author rramu
  */
 public abstract class AbstractVisitorNoArg {
 	public void dfs(final Node node, final java.util.Set<Integer> visitedNodes) {
@@ -375,6 +377,10 @@ public abstract class AbstractVisitorNoArg {
 	}
 
 	public void visit(final StackType n) {
+		n.getValue().accept(this);
+	}
+	
+	public void visit(final QueueType n) {
 		n.getValue().accept(this);
 	}
 

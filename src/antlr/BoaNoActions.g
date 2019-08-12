@@ -52,6 +52,7 @@ type
 	| visitorType
 	| tr=traversalType
 	| stackType
+	| queueType
 	| setType
 	| identifier
 	;
@@ -80,6 +81,10 @@ mapType
 
 stackType
 	: STACK OF component
+	;
+
+queueType
+	: QUEUE OF component
 	;
 
 setType
@@ -338,6 +343,7 @@ identifier
 	| lit=DO       { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=MAP      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=STACK    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=QUEUE    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=SET      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOR      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOREACH  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
@@ -402,6 +408,7 @@ IF       : 'if';
 DO       : 'do';
 MAP      : 'map';
 STACK    : 'stack';
+QUEUE    : 'queue';
 SET      : 'set';
 FOR      : 'for';
 FOREACH  : 'foreach';

@@ -27,6 +27,8 @@ import boa.compiler.ast.types.*;
  * 
  * @author rdyer
  * @author hridesh
+ * @author ankuraga
+ * @author rramu
  *
  * @param <RetType> the return type to pass up the tree while visiting
  * @param <ArgType> the type of the argument to pass down the tree while visiting
@@ -424,6 +426,11 @@ public abstract class AbstractVisitor<ReturnType, ArgType> {
 		n.getValue().accept(this, arg);
 		return null;
 	}
+	
+	public ReturnType visit(final QueueType n, final ArgType arg) {
+		n.getValue().accept(this, arg);
+		return null;
+	};
 
 	public ReturnType visit(final SetType n, final ArgType arg) {
 		n.getValue().accept(this, arg);

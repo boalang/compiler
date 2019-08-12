@@ -25,6 +25,7 @@ import boa.types.BoaArray;
 import boa.types.BoaFunction;
 import boa.types.BoaMap;
 import boa.types.BoaName;
+import boa.types.BoaQueue;
 import boa.types.BoaSet;
 import boa.types.BoaStack;
 import boa.types.BoaType;
@@ -68,6 +69,11 @@ public class FunctionTrie {
 			t2 = ((BoaStack)t2).getType();
 			if (t instanceof BoaTypeVar)
 				return new BoaStack(replaceVar(t, t2, typeVars));
+		} else if (t instanceof BoaQueue && t2 instanceof BoaQueue) {
+			t = ((BoaQueue)t).getType();
+			t2 = ((BoaQueue)t2).getType();
+			if (t instanceof BoaTypeVar)
+				return new BoaQueue(replaceVar(t, t2, typeVars));
 		} else if (t instanceof BoaSet && t2 instanceof BoaSet) {
 			t = ((BoaSet)t).getType();
 			t2 = ((BoaSet)t2).getType();
