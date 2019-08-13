@@ -1,4 +1,4 @@
-Program(name, numreducers, staticDeclarations, staticStatements, statements, combineTables, reduceTables, splitsize, seed, isLocal, outputVariableNames) ::= <<
+Program(name, staticDeclarations, staticStatements, statements, combineTables, reduceTables, splitsize, seed, isLocal, outputVariableNames) ::= <<
 package boa;
 
 public class <name> extends boa.runtime.BoaRunner {
@@ -80,7 +80,7 @@ public class <name> extends boa.runtime.BoaRunner {
 
 		jb.setInputFormatClass(org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat.class);
 
-		jb.setNumReduceTasks(<numreducers>);
+		jb.setNumReduceTasks(<length(outputVariableNames)>);
 
 		if (id > 0)
 			configuration.setInt("boa.hadoop.jobid", id);
@@ -128,7 +128,7 @@ public class <name> extends boa.runtime.BoaRunner {
 
 	static class <name>BoaMapper extends boa.runtime.BoaMapper {
 		static {
-			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames>});
+			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames:{o|<o>}; separator=", ">});
 		}
 		<staticDeclarations>
 		<if(staticStatements)>
@@ -168,7 +168,7 @@ public class <name> extends boa.runtime.BoaRunner {
 
 	static class <name>BoaCombiner extends boa.runtime.BoaCombiner {
 		static {
-			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames>});
+			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames:{o|<o>}; separator=", ">});
 		}
 		public <name>BoaCombiner() {
 			super();
@@ -178,7 +178,7 @@ public class <name> extends boa.runtime.BoaRunner {
 
 	static class <name>BoaReducer extends boa.runtime.BoaReducer {
 		static {
-			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames>});
+			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames:{o|<o>}; separator=", ">});
 		}
 		public <name>BoaReducer() {
 			super();

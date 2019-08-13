@@ -576,8 +576,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		st.add("name", className);
 		st.add("splitsize", splitSize);
 		st.add("seed", seed);
-		st.add("numreducers", variableNames.size());
-		st.add("outputVariableNames", String.join(",", variableNames));
+		st.add("outputVariableNames", variableNames);
 		if (isLocal) st.add("isLocal", true);
 
 		code.add(st.render());
