@@ -1860,16 +1860,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final QueueType n) {
-		final ST st = stg.getInstanceOf("QueueType");
-
-		n.env.setNeedsBoxing(true);
-
-		n.getValue().accept(this);
-		st.add("value", code.removeLast());
-
-		n.env.setNeedsBoxing(false);
-
-		code.add(st.render());
+		code.add(n.type.toJavaType());
 	}
 
 	/** {@inheritDoc} */
