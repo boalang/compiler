@@ -127,9 +127,7 @@ public class <name> extends boa.runtime.BoaRunner {
 	}
 
 	static class <name>BoaMapper extends boa.runtime.BoaMapper {
-		static {
-			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames:{o|<o>}; separator=", ">});
-		}
+		<SetVarNames(outputVariableNames)>
 		<staticDeclarations>
 		<if(staticStatements)>
 		{
@@ -167,9 +165,7 @@ public class <name> extends boa.runtime.BoaRunner {
 	}
 
 	static class <name>BoaCombiner extends boa.runtime.BoaCombiner {
-		static {
-			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames:{o|<o>}; separator=", ">});
-		}
+		<SetVarNames(outputVariableNames)>
 		public <name>BoaCombiner() {
 			super();
 
@@ -177,9 +173,7 @@ public class <name> extends boa.runtime.BoaRunner {
 	}
 
 	static class <name>BoaReducer extends boa.runtime.BoaReducer {
-		static {
-			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames:{o|<o>}; separator=", ">});
-		}
+		<SetVarNames(outputVariableNames)>
 		public <name>BoaReducer() {
 			super();
 
@@ -200,6 +194,12 @@ public class <name> extends boa.runtime.BoaRunner {
 	public boa.runtime.BoaReducer getReducer() {
 		return new <name>BoaReducer();
 	}
+}
+>>
+
+SetVarNames(vars) ::= <<
+static {
+	boa.runtime.BoaPartitioner.setVariableNames(new String[] {<vars:{v|<v>}; separator=", ">});
 }
 >>
 
