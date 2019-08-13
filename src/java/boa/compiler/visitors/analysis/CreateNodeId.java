@@ -38,7 +38,7 @@ public class CreateNodeId extends AbstractVisitorNoArgNoRet {
 	}
 
 	public void start(final CFGBuildingVisitor cfgBuilder) {
-		final java.util.Set<Node> visitedNodes = new java.util.HashSet<Node>();
+		final Set<Node> visitedNodes = new LinkedHashSet<Node>();
 		visitedNodes.add(cfgBuilder.currentStartNodes.get(0));
 		createNodeIds(cfgBuilder.currentStartNodes.get(0), visitedNodes);
 	}

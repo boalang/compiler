@@ -32,7 +32,7 @@ import boa.graphs.cfg.CFGNode;
 public class DTree {
     private Method md;
     private TreeNode rootNode;
-    private final HashSet<TreeNode> nodes = new HashSet<TreeNode>();
+    private final Set<TreeNode> nodes = new LinkedHashSet<TreeNode>();
     private boolean isEntryNode = false; // as specified in ferrante-1987 paper on PDG
 
     /**
@@ -106,7 +106,7 @@ public class DTree {
      *
      * @return the set of all the nodes in the tree
      */
-    public HashSet<TreeNode> getNodes() {
+    public Set<TreeNode> getNodes() {
         return nodes;
     }
 
@@ -164,14 +164,14 @@ public class DTree {
         if (cfg.getNodes().size() > 2) {
             for (final CFGNode n : cfg.getNodes()) {
                 if (n.getNodeId() == 0)
-                    pDomMap.put(n, new HashSet<CFGNode>(Collections.singletonList(n)));
+                    pDomMap.put(n, new LinkedHashSet<CFGNode>(Collections.singletonList(n)));
                 else
                     pDomMap.put(n, cfg.getNodes());
             }
         } else {
             final CFGNode startNode = cfg.getNode(0);
-            pDomMap.put(startNode, new HashSet<CFGNode>(Collections.singletonList(startNode)));
-            pDomMap.put(cfg.getNode(1), new HashSet<CFGNode>(cfg.getNodes()));
+            pDomMap.put(startNode, new LinkedHashSet<CFGNode>(Collections.singletonList(startNode)));
+            pDomMap.put(cfg.getNode(1), new LinkedHashSet<CFGNode>(cfg.getNodes()));
         }
 
         final Map<CFGNode, Set<CFGNode>> currentPDomMap = new HashMap<CFGNode, Set<CFGNode>>();
@@ -179,7 +179,7 @@ public class DTree {
         while (!saturated) { // fix point iteration
             int changeCount = 0;
             for (final CFGNode n : cfg.getNodes()) {
-                final Set<CFGNode> currentPDom = new HashSet<CFGNode>();
+                final Set<CFGNode> currentPDom = new LinkedHashSet<CFGNode>();
 
                 // Intersection[pred(node)]
                 boolean first = true;
@@ -194,7 +194,7 @@ public class DTree {
                 // D[n] = {n} Union (Intersection[pred[node]])
                 currentPDom.add(n);
 
-                final Set<CFGNode> diff = new HashSet<CFGNode>(pDomMap.get(n));
+                final Set<CFGNode> diff = new LinkedHashSet<CFGNode>(pDomMap.get(n));
                 diff.removeAll(currentPDom);
                 if (diff.size() > 0)
                     changeCount++;

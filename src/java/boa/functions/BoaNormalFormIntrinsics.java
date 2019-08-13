@@ -2432,7 +2432,7 @@ public class BoaNormalFormIntrinsics {
 			case LOGICAL_AND:
 			case LOGICAL_OR:
 				final List<Expression> exps = new ArrayList<Expression>();
-				final Set<Expression> seen = new HashSet<Expression>();
+				final Set<Expression> seen = new LinkedHashSet<Expression>();
 
 				// recurse in and simplify inner expressions
 				OUTER:
@@ -2913,7 +2913,7 @@ public class BoaNormalFormIntrinsics {
 	 * @throws UnsupportedEncodingException if the character encoding used is not supported by JVM
 	 */
 	private static String getCryptHash(final Stack<PDGNode> nodes, final String algorithm) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		final Set<PDGNode> visited = new HashSet<PDGNode>();
+		final Set<PDGNode> visited = new LinkedHashSet<PDGNode>();
 		final StringBuilder sb = new StringBuilder();
 
 		while (nodes.size() != 0) {

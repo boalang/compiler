@@ -42,15 +42,15 @@ import boa.compiler.visitors.*;
  * @author rramu
  */
 public class LocalMayAliasAnalysis extends AbstractVisitorNoArgNoRet {
-	HashSet<Identifier> aliastSet = new HashSet<Identifier>();
+	Set<Identifier> aliastSet = new LinkedHashSet<Identifier>();
 	Identifier lastDefVariable;
 	boolean cloneFound = false;
 	protected final IdentifierFindingVisitor idFinder = new IdentifierFindingVisitor();
 	protected final CallFindingVisitor callFinder = new CallFindingVisitor();
 
-	public HashSet<Identifier> start(CFGBuildingVisitor cfgBuilder, Identifier id) {
+	public Set<Identifier> start(CFGBuildingVisitor cfgBuilder, Identifier id) {
 		aliastSet.add(id);
-		final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+		final Set<Integer> visitedNodes = new LinkedHashSet<Integer>();
 		visitedNodes.add(cfgBuilder.currentStartNodes.get(0).nodeId);
 		dfs(cfgBuilder.currentStartNodes.get(0), visitedNodes);
 		return aliastSet;

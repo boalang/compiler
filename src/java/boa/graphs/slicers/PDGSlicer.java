@@ -37,7 +37,7 @@ import static boa.functions.BoaNormalFormIntrinsics.normalizeStatement;
 public class PDGSlicer {
     private final Method md;
     private final ArrayList<PDGNode> entryNodes = new ArrayList<PDGNode>();
-    private final HashSet<PDGNode> slice = new HashSet<PDGNode>();
+    private final Set<PDGNode> slice = new LinkedHashSet<PDGNode>();
     private boolean normalize = false;
     private int hashcode = 0;
 
@@ -176,7 +176,7 @@ public class PDGSlicer {
      *
      * @return all the nodes in the slice
      */
-    public HashSet<PDGNode> getSlice() {
+    public Set<PDGNode> getSlice() {
         return slice;
     }
 
@@ -254,7 +254,7 @@ public class PDGSlicer {
                             node.setDefVariable(normalizedVars.get(node.getDefVariable()));
                         }
                         // use variables
-                        final HashSet<String> useVars = new HashSet<String>();
+                        final Set<String> useVars = new LinkedHashSet<String>();
                         for (final String dVar : node.getUseVariables()) {
                             if (dVar != null) {
                                 if (!normalizedVars.containsKey(dVar)) {
@@ -307,8 +307,8 @@ public class PDGSlicer {
 
         final Stack<PDGNode> nodes1 = new Stack<PDGNode>();
         final Stack<PDGNode> nodes2 = new Stack<PDGNode>();
-        final Set<PDGNode> visited1 = new HashSet<PDGNode>();
-        final Set<PDGNode> visited2 = new HashSet<PDGNode>();
+        final Set<PDGNode> visited1 = new LinkedHashSet<PDGNode>();
+        final Set<PDGNode> visited2 = new LinkedHashSet<PDGNode>();
         nodes1.addAll(entryNodes);
         nodes2.addAll(pdgSlicer.getEntrynodesList());
 

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -117,14 +117,14 @@ public class BoaIntrinsics {
 		if (commitOffset == cr.getHead())
 			return getSnapshot(cr, kinds);
 		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
-		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>();
+		Set<String> adds = new LinkedHashSet<String>(), dels = new LinkedHashSet<String>();
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
 			@Override
 			public int compare(Integer i1, Integer i2) {
 				return i2 - i1;
 			}
 		});
-		Set<Integer> queuedCommitIds = new HashSet<Integer>();
+		Set<Integer> queuedCommitIds = new LinkedHashSet<Integer>();
 		pq.offer((int) commitOffset);
 		queuedCommitIds.add((int) commitOffset);
 		while (!pq.isEmpty()) {
@@ -143,14 +143,14 @@ public class BoaIntrinsics {
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "Revision", "string..." })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final Revision commit, final String... kinds) {
 		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
-		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>();
+		Set<String> adds = new LinkedHashSet<String>(), dels = new LinkedHashSet<String>();
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
 			@Override
 			public int compare(Integer i1, Integer i2) {
 				return i2 - i1;
 			}
 		});
-		Set<Integer> queuedCommitIds = new HashSet<Integer>();
+		Set<Integer> queuedCommitIds = new LinkedHashSet<Integer>();
 		update(snapshot, commit, adds, dels, pq, queuedCommitIds, kinds);
 		while (!pq.isEmpty()) {
 			int offset = pq.poll();
@@ -292,7 +292,7 @@ public class BoaIntrinsics {
 				fb.setName(cf.getPreviousNames(i));
 			ChangedFile key = fb.build();
 			int revisionIndex = cf.getPreviousVersions(i);
-			Set<Integer> queuedRevisionIds = new HashSet<Integer>();
+			Set<Integer> queuedRevisionIds = new LinkedHashSet<Integer>();
 			PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
 				@Override
 				public int compare(Integer i1, Integer i2) {

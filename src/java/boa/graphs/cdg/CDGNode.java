@@ -17,7 +17,7 @@
 package boa.graphs.cdg;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.List;
 
@@ -59,7 +59,7 @@ public class CDGNode extends Node<CDGNode, CDGEdge> {
      */
     public CDGNode(int id) {
         this.id = id;
-        this.useVariables = new HashSet<String>();
+        this.useVariables = new LinkedHashSet<String>();
     }
 
     public String getDefVariable() {
@@ -74,7 +74,7 @@ public class CDGNode extends Node<CDGNode, CDGEdge> {
         return useVariables;
     }
 
-    public void setUseVariables(final HashSet<String> useVariables) {
+    public void setUseVariables(final Set<String> useVariables) {
         this.useVariables = useVariables;
     }
 

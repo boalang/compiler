@@ -202,7 +202,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 * @author rdyer
 	 */
 	protected class FunctionDeclaratorCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
-		protected final Set<String> funcs = new HashSet<String>();
+		protected final Set<String> funcs = new LinkedHashSet<String>();
 
 		/** {@inheritDoc} */
 		@Override
@@ -253,7 +253,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 * @author ankuraga
 	 */
 	protected class TupleDeclaratorCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
-		protected final Set<String> tuples = new HashSet<String>();
+		protected final Set<String> tuples = new LinkedHashSet<String>();
 
 		/** {@inheritDoc} */
 		@Override
@@ -429,7 +429,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		protected Node lastFactor;
 
 		protected Map<Node, Node> lastFactors = new HashMap<Node, Node>();
-		protected final Set<Node> indexees = new HashSet<Node>();
+		protected final Set<Node> indexees = new LinkedHashSet<Node>();
 
 		/** {@inheritDoc} */
 		@Override
@@ -1487,7 +1487,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		createNodeId.start(cfgBuilder);
 
 		final LocalMayAliasAnalysis localMayAliasAnalysis = new LocalMayAliasAnalysis();
-		final HashSet<Identifier> aliastSet = localMayAliasAnalysis.start(cfgBuilder, traversalId);
+		final Set<Identifier> aliastSet = localMayAliasAnalysis.start(cfgBuilder, traversalId);
 
 		final DataFlowSensitivityAnalysis dataFlowSensitivityAnalysis = new DataFlowSensitivityAnalysis();
 		dataFlowSensitivityAnalysis.start(cfgBuilder, aliastSet);

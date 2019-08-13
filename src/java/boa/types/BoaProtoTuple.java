@@ -16,7 +16,7 @@
  */
 package boa.types;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -86,7 +86,7 @@ public class BoaProtoTuple extends BoaTuple {
 		if (reachableTypesCache != null)
 			return reachableTypesCache;
 
-		reachableTypesCache = new HashSet<Class<? extends BoaProtoTuple>>();
+		reachableTypesCache = new LinkedHashSet<Class<? extends BoaProtoTuple>>();
 		reachableTypesCache.add((Class<? extends BoaProtoTuple>) this.getClass());
 		for (final BoaType t : members)
 			if (t instanceof BoaProtoTuple) {
