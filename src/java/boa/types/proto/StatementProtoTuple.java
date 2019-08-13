@@ -21,9 +21,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
+import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.ChangeKindProtoMap;
 import boa.types.proto.enums.StatementKindProtoMap;
 
 /**
@@ -50,8 +53,8 @@ public class StatementProtoTuple extends BoaProtoTuple {
 		names.put("initializations", counter++);
 		members.add(new BoaProtoList(new ExpressionProtoTuple()));
 
-		names.put("condition", counter++);
-		members.add(new ExpressionProtoTuple());
+		names.put("conditions", counter++);
+		members.add(new BoaProtoList(new ExpressionProtoTuple()));
 
 		names.put("updates", counter++);
 		members.add(new BoaProtoList(new ExpressionProtoTuple()));
@@ -62,8 +65,24 @@ public class StatementProtoTuple extends BoaProtoTuple {
 		names.put("type_declaration", counter++);
 		members.add(new DeclarationProtoTuple());
 
-		names.put("expression", counter++);
-		members.add(new ExpressionProtoTuple());
+		names.put("expressions", counter++);
+		members.add(new BoaProtoList(new ExpressionProtoTuple()));
+		
+		names.put("key", counter++);
+		members.add(new BoaInt());
+		
+		names.put("methods", counter++);
+		members.add(new BoaProtoList(new MethodProtoTuple()));
+		
+		names.put("variable_declarations", counter++);
+		members.add(new BoaProtoList(new VariableProtoTuple()));
+		
+		names.put("type_declarations", counter++);
+		members.add(new BoaProtoList(new DeclarationProtoTuple()));
+		
+		names.put("names", counter++);
+		members.add(new BoaProtoList(new BoaString()));
+		
 	}
 
 	/**

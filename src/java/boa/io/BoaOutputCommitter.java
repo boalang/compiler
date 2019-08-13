@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2019, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +35,7 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 
 /**
  * A {@link FileOutputCommitter} that stores the job results into a database.
- * 
+ *
  * @author rdyer
  */
 public class BoaOutputCommitter extends FileOutputCommitter {
@@ -42,7 +43,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 	private final TaskAttemptContext context;
 	public static Throwable lastSeenEx = null;
 
-	public BoaOutputCommitter(Path output, TaskAttemptContext context) throws java.io.IOException {
+	public BoaOutputCommitter(final Path output, final TaskAttemptContext context) throws java.io.IOException {
 		super(output, context);
 
 		this.context = context;
@@ -50,16 +51,16 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 	}
 
 	@Override
-	public void commitJob(JobContext context) throws java.io.IOException {
+	public void commitJob(final JobContext context) throws java.io.IOException {
 		super.commitJob(context);
 
-		int boaJobId = context.getConfiguration().getInt("boa.hadoop.jobid", 0);
+		final int boaJobId = context.getConfiguration().getInt("boa.hadoop.jobid", 0);
 		storeOutput(context, boaJobId);
 		updateStatus(null, boaJobId);
 	}
 
 	@Override
-	public void abortJob(JobContext context, JobStatus.State runState) throws java.io.IOException {
+	public void abortJob(final JobContext context, final JobStatus.State runState) throws java.io.IOException {
 		super.abortJob(context, runState);
 
 		final JobClient jobClient = new JobClient(new JobConf(context.getConfiguration()));
@@ -69,7 +70,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 			switch (event.getTaskStatus()) {
 				case SUCCEEDED:
 					break;
-                default:
+				default:
 					diag += "Diagnostics for: " + event.getTaskTrackerHttp() + "\n";
 					for (final String s : job.getTaskDiagnostics(event.getTaskAttemptId()))
 						diag += s + "\n";
@@ -127,7 +128,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 
 			PreparedStatement ps = null;
 			try {
-				ps = con.prepareStatement("INSERT INTO boa_output (id, length) VALUES (" + jobId + ", 0)");
+				ps = con.prepareStatement("INSERT INTO boa_output (id, length, web_result) VALUES (" + jobId + ", 0, '')");
 				ps.executeUpdate();
 			} catch (final Exception e) {
 			} finally {
@@ -141,7 +142,8 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 
 			final byte[] b = new byte[64 * 1024 * 1024];
 			long length = 0;
-			boolean hasWebResult = false;
+			int webLength = 0;
+			final int webSize = 64 * 1024 - 1;
 
 			while (true) {
 				final Path path = new Path(outputPath, "part-r-" + String.format("%05d", partNum++));
@@ -155,14 +157,12 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 				int numBytes = 0;
 
 				while ((numBytes = in.read(b)) > 0) {
-					if (!hasWebResult) {
-						hasWebResult = true;
-
+					if (webLength < webSize) {
 						try {
-							ps = con.prepareStatement("UPDATE boa_output SET web_result=?, hash=MD5(web_result) WHERE id=" + jobId);
-							int webSize = 64 * 1024 - 1;
-							ps.setString(1, new String(b, 0, numBytes < webSize ? numBytes : webSize));
+							ps = con.prepareStatement("UPDATE boa_output SET web_result=CONCAT(web_result, ?) WHERE id=" + jobId);
+							ps.setString(1, new String(b, 0, webLength + numBytes < webSize ? numBytes : webSize - webLength));
 							ps.executeUpdate();
+                            webLength += numBytes;
 						} finally {
 							try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
 						}
@@ -175,7 +175,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 			}
 
 			try {
-				ps = con.prepareStatement("UPDATE boa_output SET length=? WHERE id=" + jobId);
+				ps = con.prepareStatement("UPDATE boa_output SET length=?, hash=MD5(web_result) WHERE id=" + jobId);
 				ps.setLong(1, length);
 				ps.executeUpdate();
 			} finally {

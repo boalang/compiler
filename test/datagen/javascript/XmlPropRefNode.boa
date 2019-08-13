@@ -1,0 +1,18 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: XML_PROPERTYREF
+      expressions {
+        kind: VARACCESS
+        variable: "ns"
+      }
+      expressions {
+        kind: VARACCESS
+        variable: "name"
+      }
+      is_member_access: true
+    }
+  }
+}

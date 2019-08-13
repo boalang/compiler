@@ -1,0 +1,37 @@
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "x",
+               "variable_type": {
+                  "name": "int[]",
+                  "fully_qualified_name": "int[]",
+                  "kind": "ARRAY"
+               },
+               "initializer": {
+                  "kind": "NEWARRAY",
+                  "expressions": [
+                     {
+                        "kind": "LITERAL",
+                        "literal": "3"
+                     }
+                  ],
+                  "new_type": {
+                     "name": "int[]",
+                     "fully_qualified_name": "int[]",
+                     "kind": "ARRAY"
+                  },
+                  "return_type": {
+                     "name": "int[]",
+                     "fully_qualified_name": "int[]",
+                     "kind": "ARRAY"
+                  }
+               }
+            }
+         ]
+      }
+   ]
+}

@@ -1,19 +1,44 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "METHODCALL",
-      "method": "m",
-      "method_args": [
-         {
-            "kind": "METHOD_REFERENCE",
-            "expressions": [
-               {
-                  "kind": "VARACCESS",
-                  "variable": "String"
+   "expressions": [
+      {
+         "kind": "METHODCALL",
+         "method": "m",
+         "method_args": [
+            {
+               "kind": "METHOD_REFERENCE",
+               "expressions": [
+                  {
+                     "kind": "VARACCESS",
+                     "variable": "String",
+                     "return_type": {
+                        "name": "String",
+                        "fully_qualified_name": "java.lang.String",
+                        "kind": "CLASS"
+                     }
+                  }
+               ],
+               "method": "compareToIgnoreCase",
+               "declaring_type": {
+                  "name": "String",
+                  "fully_qualified_name": "java.lang.String",
+                  "kind": "CLASS"
+               },
+               "return_type": {
+                  "name": "int",
+                  "kind": "PRIMITIVE"
                }
-            ],
-            "method": "compareToIgnoreCase"
+            }
+         ],
+         "declaring_type": {
+            "name": "t",
+            "fully_qualified_name": "t",
+            "kind": "CLASS"
+         },
+         "return_type": {
+            "name": "void",
+            "kind": "PRIMITIVE"
          }
-      ]
-   }
+      }
+   ]
 }

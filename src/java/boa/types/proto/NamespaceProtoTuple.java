@@ -21,10 +21,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.ChangeKindProtoMap;
 
 /**
  * A {@link NamespaceProtoTuple}.
@@ -46,9 +48,6 @@ public class NamespaceProtoTuple extends BoaProtoTuple {
 
 		names.put("declarations", counter++);
 		members.add(new BoaProtoList(new DeclarationProtoTuple()));
-
-		names.put("comments", counter++);
-		members.add(new BoaProtoList(new CommentProtoTuple()));
 		
 		names.put("statements", counter++);
 		members.add(new BoaProtoList(new StatementProtoTuple()));
@@ -58,6 +57,18 @@ public class NamespaceProtoTuple extends BoaProtoTuple {
 		
 		names.put("expressions", counter++);
 		members.add(new BoaProtoList(new ExpressionProtoTuple()));
+		
+		names.put("key", counter++);
+		members.add(new BoaInt());
+		
+		names.put("namespaces", counter++);
+		members.add(new BoaProtoList(new NamespaceProtoTuple()));
+
+		names.put("imports", counter++);
+		members.add(new BoaProtoList(new BoaString()));
+		
+		names.put("variables", counter++);
+		members.add(new BoaProtoList(new VariableProtoTuple()));
 	}
 
 	/**

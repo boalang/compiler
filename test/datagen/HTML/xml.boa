@@ -1,0 +1,137 @@
+title: ""
+elements {
+  tag: "html"
+  kind: BLOCK
+  elements {
+    tag: "head"
+    kind: BLOCK
+  }
+  elements {
+    tag: "body"
+    kind: BLOCK
+    elements {
+      tag: "breakfast_menu"
+      kind: IN_LINE
+      elements {
+        tag: "food"
+        kind: IN_LINE
+        elements {
+          tag: "name"
+          kind: IN_LINE
+          text: "Belgian Waffles"
+        }
+        elements {
+          tag: "price"
+          kind: IN_LINE
+          text: "$5.95"
+        }
+        elements {
+          tag: "description"
+          kind: IN_LINE
+          text: " Two of our famous Belgian Waffles with plenty of real maple syrup "
+        }
+        elements {
+          tag: "calories"
+          kind: IN_LINE
+          text: "650"
+        }
+      }
+      elements {
+        tag: "food"
+        kind: IN_LINE
+        elements {
+          tag: "name"
+          kind: IN_LINE
+          text: "Strawberry Belgian Waffles"
+        }
+        elements {
+          tag: "price"
+          kind: IN_LINE
+          text: "$7.95"
+        }
+        elements {
+          tag: "description"
+          kind: IN_LINE
+          text: " Light Belgian waffles covered with strawberries and whipped cream "
+        }
+        elements {
+          tag: "calories"
+          kind: IN_LINE
+          text: "900"
+        }
+      }
+      elements {
+        tag: "food"
+        kind: IN_LINE
+        elements {
+          tag: "name"
+          kind: IN_LINE
+          text: "Berry-Berry Belgian Waffles"
+        }
+        elements {
+          tag: "price"
+          kind: IN_LINE
+          text: "$8.95"
+        }
+        elements {
+          tag: "description"
+          kind: IN_LINE
+          text: " Light Belgian waffles covered with an assortment of fresh berries and whipped cream "
+        }
+        elements {
+          tag: "calories"
+          kind: IN_LINE
+          text: "900"
+        }
+      }
+      elements {
+        tag: "food"
+        kind: IN_LINE
+        elements {
+          tag: "name"
+          kind: IN_LINE
+          text: "French Toast"
+        }
+        elements {
+          tag: "price"
+          kind: IN_LINE
+          text: "$4.50"
+        }
+        elements {
+          tag: "description"
+          kind: IN_LINE
+          text: " Thick slices made from our homemade sourdough bread "
+        }
+        elements {
+          tag: "calories"
+          kind: IN_LINE
+          text: "600"
+        }
+      }
+      elements {
+        tag: "food"
+        kind: IN_LINE
+        elements {
+          tag: "name"
+          kind: IN_LINE
+          text: "Homestyle Breakfast"
+        }
+        elements {
+          tag: "price"
+          kind: IN_LINE
+          text: "$6.95"
+        }
+        elements {
+          tag: "description"
+          kind: IN_LINE
+          text: " Two eggs, bacon or sausage, toast, and our ever-popular hash browns "
+        }
+        elements {
+          tag: "calories"
+          kind: IN_LINE
+          text: "950"
+        }
+      }
+    }
+  }
+}

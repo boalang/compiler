@@ -1,0 +1,23 @@
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "ASSIGN",
+         "expressions": [
+            {
+               "kind": "VARACCESS",
+               "variable": "y"
+            },
+            {
+               "kind": "OP_SUB",
+               "expressions": [
+                  {
+                     "kind": "VARACCESS",
+                     "variable": "x"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

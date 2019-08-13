@@ -2122,6 +2122,33 @@ public final class Issues {
      */
     com.google.protobuf.ByteString
         getOtherLabelsBytes(int index);
+
+    // optional string commit = 35;
+    /**
+     * <code>optional string commit = 35;</code>
+     *
+     * <pre>
+     ** Commit addressing the issue 
+     * </pre>
+     */
+    boolean hasCommit();
+    /**
+     * <code>optional string commit = 35;</code>
+     *
+     * <pre>
+     ** Commit addressing the issue 
+     * </pre>
+     */
+    java.lang.String getCommit();
+    /**
+     * <code>optional string commit = 35;</code>
+     *
+     * <pre>
+     ** Commit addressing the issue 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getCommitBytes();
   }
   /**
    * Protobuf type {@code boa.types.Issue}
@@ -2362,6 +2389,11 @@ public final class Issues {
                 mutable_bitField0_ |= 0x00400000;
               }
               otherLabels_.add(input.readBytes());
+              break;
+            }
+            case 282: {
+              bitField0_ |= 0x00020000;
+              commit_ = input.readBytes();
               break;
             }
           }
@@ -3884,6 +3916,61 @@ public final class Issues {
       return otherLabels_.getByteString(index);
     }
 
+    // optional string commit = 35;
+    public static final int COMMIT_FIELD_NUMBER = 35;
+    private java.lang.Object commit_;
+    /**
+     * <code>optional string commit = 35;</code>
+     *
+     * <pre>
+     ** Commit addressing the issue 
+     * </pre>
+     */
+    public boolean hasCommit() {
+      return ((bitField0_ & 0x00020000) == 0x00020000);
+    }
+    /**
+     * <code>optional string commit = 35;</code>
+     *
+     * <pre>
+     ** Commit addressing the issue 
+     * </pre>
+     */
+    public java.lang.String getCommit() {
+      java.lang.Object ref = commit_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          commit_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string commit = 35;</code>
+     *
+     * <pre>
+     ** Commit addressing the issue 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getCommitBytes() {
+      java.lang.Object ref = commit_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        commit_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       id_ = "";
       status_ = boa.types.Issues.Issue.IssueStatus.OTHER_STATUS;
@@ -3908,6 +3995,7 @@ public final class Issues {
       otherStatus_ = "";
       otherPriority_ = "";
       otherLabels_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      commit_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -4050,6 +4138,9 @@ public final class Issues {
       for (int i = 0; i < otherLabels_.size(); i++) {
         output.writeBytes(34, otherLabels_.getByteString(i));
       }
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+        output.writeBytes(35, getCommitBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -4165,6 +4256,10 @@ public final class Issues {
         }
         size += dataSize;
         size += 2 * getOtherLabelsList().size();
+      }
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(35, getCommitBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -4357,6 +4452,8 @@ public final class Issues {
         bitField0_ = (bitField0_ & ~0x00200000);
         otherLabels_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00400000);
+        commit_ = "";
+        bitField0_ = (bitField0_ & ~0x00800000);
         return this;
       }
 
@@ -4505,6 +4602,10 @@ public final class Issues {
           bitField0_ = (bitField0_ & ~0x00400000);
         }
         result.otherLabels_ = otherLabels_;
+        if (((from_bitField0_ & 0x00800000) == 0x00800000)) {
+          to_bitField0_ |= 0x00020000;
+        }
+        result.commit_ = commit_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -4694,6 +4795,11 @@ public final class Issues {
             ensureOtherLabelsIsMutable();
             otherLabels_.addAll(other.otherLabels_);
           }
+          onChanged();
+        }
+        if (other.hasCommit()) {
+          bitField0_ |= 0x00800000;
+          commit_ = other.commit_;
           onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
@@ -7512,6 +7618,104 @@ public final class Issues {
   }
   ensureOtherLabelsIsMutable();
         otherLabels_.add(value);
+        onChanged();
+        return this;
+      }
+
+      // optional string commit = 35;
+      private java.lang.Object commit_ = "";
+      /**
+       * <code>optional string commit = 35;</code>
+       *
+       * <pre>
+       ** Commit addressing the issue 
+       * </pre>
+       */
+      public boolean hasCommit() {
+        return ((bitField0_ & 0x00800000) == 0x00800000);
+      }
+      /**
+       * <code>optional string commit = 35;</code>
+       *
+       * <pre>
+       ** Commit addressing the issue 
+       * </pre>
+       */
+      public java.lang.String getCommit() {
+        java.lang.Object ref = commit_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          commit_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string commit = 35;</code>
+       *
+       * <pre>
+       ** Commit addressing the issue 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getCommitBytes() {
+        java.lang.Object ref = commit_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          commit_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string commit = 35;</code>
+       *
+       * <pre>
+       ** Commit addressing the issue 
+       * </pre>
+       */
+      public Builder setCommit(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00800000;
+        commit_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string commit = 35;</code>
+       *
+       * <pre>
+       ** Commit addressing the issue 
+       * </pre>
+       */
+      public Builder clearCommit() {
+        bitField0_ = (bitField0_ & ~0x00800000);
+        commit_ = getDefaultInstance().getCommit();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string commit = 35;</code>
+       *
+       * <pre>
+       ** Commit addressing the issue 
+       * </pre>
+       */
+      public Builder setCommitBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00800000;
+        commit_ = value;
         onChanged();
         return this;
       }
@@ -11780,7 +11984,7 @@ public final class Issues {
       "\n\014issues.proto\022\tboa.types\032\014shared.proto\"" +
       "9\n\017IssueRepository\022\013\n\003url\030\001 \002(\t\022\014\n\004name\030" +
       "\002 \001(\t\022\013\n\003key\030\003 \002(\t\".\n\nIssuesRoot\022 \n\006issu" +
-      "es\030\001 \003(\0132\020.boa.types.Issue\"\360\010\n\005Issue\022\n\n\002" +
+      "es\030\001 \003(\0132\020.boa.types.Issue\"\364\010\n\005Issue\022\n\n\002" +
       "id\030\001 \002(\t\022,\n\006status\030\002 \002(\0162\034.boa.types.Iss" +
       "ue.IssueStatus\022!\n\006author\030\003 \002(\0132\021.boa.typ" +
       "es.Person\022#\n\010assignee\030\004 \001(\0132\021.boa.types." +
@@ -11796,30 +12000,30 @@ public final class Issues {
       ".Person\022\016\n\006number\030\036 \002(\r\022+\n\006labels\030\037 \003(\0162" +
       "\033.boa.types.Issue.IssueLabel\022\024\n\014other_st" +
       "atus\030  \001(\t\022\026\n\016other_priority\030! \001(\t\022\024\n\014ot" +
-      "her_labels\030\" \003(\t\"\270\001\n\nIssueLabel\022\017\n\013OTHER",
-      "_LABEL\020\000\022\007\n\003BUG\020\001\022\017\n\013ENHANCEMENT\020\002\022\014\n\010PR" +
-      "OPOSAL\020\003\022\010\n\004TASK\020\004\022\013\n\007FEATURE\020\005\022\013\n\007SUPPO" +
-      "RT\020\006\022\016\n\nDISCUSSION\020\007\022\021\n\rDOCUMENTATION\020\010\022" +
-      "\016\n\nSUGGESTION\020\t\022\014\n\010QUESTION\020\n\022\010\n\004TEST\020\013\032" +
-      "\002\020\001\"e\n\rIssuePriority\022\022\n\016OTHER_PRIORITY\020\000" +
-      "\022\013\n\007TRIVIAL\020\001\022\t\n\005MINOR\020\002\022\t\n\005MAJOR\020\003\022\014\n\010C" +
-      "RITICAL\020\004\022\013\n\007BLOCKER\020\005\032\002\020\001\"\330\001\n\013IssueStat" +
-      "us\022\020\n\014OTHER_STATUS\020\000\022\007\n\003NEW\020\001\022\010\n\004OPEN\020\002\022" +
-      "\013\n\007ON_HOLD\020\003\022\014\n\010RESOLVED\020\004\022\r\n\tDUPLICATE\020" +
-      "\005\022\013\n\007INVALID\020\006\022\014\n\010WONT_FIX\020\007\022\n\n\006CLOSED\020\010",
-      "\022\t\n\005FIXED\020\t\022\022\n\016NOT_APPLICABLE\020\n\022\024\n\020NOT_R" +
-      "EPRODUCIBLE\020\013\022\014\n\010EXTERNAL\020\014\022\014\n\010ANSWERED\020" +
-      "\r\032\002\020\001\"\177\n\nAttachment\022\013\n\003url\030\001 \002(\t\022\020\n\010file" +
-      "name\030\002 \002(\t\022\014\n\004size\030\003 \001(\004\022\014\n\004date\030\004 \001(\004\022!" +
-      "\n\006author\030\005 \001(\0132\021.boa.types.Person\022\023\n\013des" +
-      "cription\030\006 \001(\t\"\206\001\n\014IssueComment\022\n\n\002id\030\001 " +
-      "\002(\t\022\014\n\004date\030\002 \002(\004\022!\n\006author\030\003 \002(\0132\021.boa." +
-      "types.Person\022\023\n\013description\030\004 \002(\t\022$\n\005fil" +
-      "es\030\005 \003(\0132\025.boa.types.Attachment\"\223\001\n\013Issu" +
-      "eChange\022\n\n\002id\030\001 \002(\t\022\014\n\004what\030\002 \002(\t\022\014\n\004dat",
-      "e\030\003 \002(\004\022!\n\006author\030\004 \002(\0132\021.boa.types.Pers" +
-      "on\022\021\n\told_value\030\005 \002(\t\022\021\n\tnew_value\030\006 \002(\t" +
-      "\022\023\n\013description\030\007 \001(\tB\002H\001"
+      "her_labels\030\" \003(\t\022\016\n\006commit\030# \001(\t\"\264\001\n\nIss",
+      "ueLabel\022\017\n\013OTHER_LABEL\020\000\022\007\n\003BUG\020\001\022\017\n\013ENH" +
+      "ANCEMENT\020\002\022\014\n\010PROPOSAL\020\003\022\010\n\004TASK\020\004\022\013\n\007FE" +
+      "ATURE\020\005\022\013\n\007SUPPORT\020\006\022\016\n\nDISCUSSION\020\007\022\021\n\r" +
+      "DOCUMENTATION\020\010\022\016\n\nSUGGESTION\020\t\022\014\n\010QUEST" +
+      "ION\020\n\022\010\n\004TEST\020\013\"a\n\rIssuePriority\022\022\n\016OTHE" +
+      "R_PRIORITY\020\000\022\013\n\007TRIVIAL\020\001\022\t\n\005MINOR\020\002\022\t\n\005" +
+      "MAJOR\020\003\022\014\n\010CRITICAL\020\004\022\013\n\007BLOCKER\020\005\"\324\001\n\013I" +
+      "ssueStatus\022\020\n\014OTHER_STATUS\020\000\022\007\n\003NEW\020\001\022\010\n" +
+      "\004OPEN\020\002\022\013\n\007ON_HOLD\020\003\022\014\n\010RESOLVED\020\004\022\r\n\tDU" +
+      "PLICATE\020\005\022\013\n\007INVALID\020\006\022\014\n\010WONT_FIX\020\007\022\n\n\006",
+      "CLOSED\020\010\022\t\n\005FIXED\020\t\022\022\n\016NOT_APPLICABLE\020\n\022" +
+      "\024\n\020NOT_REPRODUCIBLE\020\013\022\014\n\010EXTERNAL\020\014\022\014\n\010A" +
+      "NSWERED\020\r\"\177\n\nAttachment\022\013\n\003url\030\001 \002(\t\022\020\n\010" +
+      "filename\030\002 \002(\t\022\014\n\004size\030\003 \001(\004\022\014\n\004date\030\004 \001" +
+      "(\004\022!\n\006author\030\005 \001(\0132\021.boa.types.Person\022\023\n" +
+      "\013description\030\006 \001(\t\"\206\001\n\014IssueComment\022\n\n\002i" +
+      "d\030\001 \002(\t\022\014\n\004date\030\002 \002(\004\022!\n\006author\030\003 \002(\0132\021." +
+      "boa.types.Person\022\023\n\013description\030\004 \002(\t\022$\n" +
+      "\005files\030\005 \003(\0132\025.boa.types.Attachment\"\223\001\n\013" +
+      "IssueChange\022\n\n\002id\030\001 \002(\t\022\014\n\004what\030\002 \002(\t\022\014\n",
+      "\004date\030\003 \002(\004\022!\n\006author\030\004 \002(\0132\021.boa.types." +
+      "Person\022\021\n\told_value\030\005 \002(\t\022\021\n\tnew_value\030\006" +
+      " \002(\t\022\023\n\013description\030\007 \001(\tB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -11843,7 +12047,7 @@ public final class Issues {
           internal_static_boa_types_Issue_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Issue_descriptor,
-              new java.lang.String[] { "Id", "Status", "Author", "Assignee", "Summary", "Description", "CreatedDate", "ModifiedDate", "CompletedDate", "Keywords", "Vote", "Priority", "Files", "Comments", "Milestone", "Blocked", "PullUrl", "Assignees", "Number", "Labels", "OtherStatus", "OtherPriority", "OtherLabels", });
+              new java.lang.String[] { "Id", "Status", "Author", "Assignee", "Summary", "Description", "CreatedDate", "ModifiedDate", "CompletedDate", "Keywords", "Vote", "Priority", "Files", "Comments", "Milestone", "Blocked", "PullUrl", "Assignees", "Number", "Labels", "OtherStatus", "OtherPriority", "OtherLabels", "Commit", });
           internal_static_boa_types_Attachment_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_boa_types_Attachment_fieldAccessorTable = new

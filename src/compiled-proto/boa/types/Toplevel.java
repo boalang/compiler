@@ -757,6 +757,65 @@ public final class Toplevel {
      * </pre>
      */
     int getStars();
+
+    // repeated int32 programming_languages_locs = 25;
+    /**
+     * <code>repeated int32 programming_languages_locs = 25;</code>
+     *
+     * <pre>
+     ** The number of bytes of code for each language *
+     * </pre>
+     */
+    java.util.List<java.lang.Integer> getProgrammingLanguagesLocsList();
+    /**
+     * <code>repeated int32 programming_languages_locs = 25;</code>
+     *
+     * <pre>
+     ** The number of bytes of code for each language *
+     * </pre>
+     */
+    int getProgrammingLanguagesLocsCount();
+    /**
+     * <code>repeated int32 programming_languages_locs = 25;</code>
+     *
+     * <pre>
+     ** The number of bytes of code for each language *
+     * </pre>
+     */
+    int getProgrammingLanguagesLocs(int index);
+
+    // optional int32 size = 26;
+    /**
+     * <code>optional int32 size = 26;</code>
+     *
+     * <pre>
+     ** The size of the repository in bytes of code *
+     * </pre>
+     */
+    boolean hasSize();
+    /**
+     * <code>optional int32 size = 26;</code>
+     *
+     * <pre>
+     ** The size of the repository in bytes of code *
+     * </pre>
+     */
+    int getSize();
+
+    // optional string main_language = 27;
+    /**
+     * <code>optional string main_language = 27;</code>
+     */
+    boolean hasMainLanguage();
+    /**
+     * <code>optional string main_language = 27;</code>
+     */
+    java.lang.String getMainLanguage();
+    /**
+     * <code>optional string main_language = 27;</code>
+     */
+    com.google.protobuf.ByteString
+        getMainLanguageBytes();
   }
   /**
    * Protobuf type {@code boa.types.Project}
@@ -978,6 +1037,37 @@ public final class Toplevel {
               stars_ = input.readInt32();
               break;
             }
+            case 200: {
+              if (!((mutable_bitField0_ & 0x01000000) == 0x01000000)) {
+                programmingLanguagesLocs_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x01000000;
+              }
+              programmingLanguagesLocs_.add(input.readInt32());
+              break;
+            }
+            case 202: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x01000000) == 0x01000000) && input.getBytesUntilLimit() > 0) {
+                programmingLanguagesLocs_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x01000000;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                programmingLanguagesLocs_.add(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 208: {
+              bitField0_ |= 0x00000800;
+              size_ = input.readInt32();
+              break;
+            }
+            case 218: {
+              bitField0_ |= 0x00001000;
+              mainLanguage_ = input.readBytes();
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -1024,6 +1114,9 @@ public final class Toplevel {
         }
         if (((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
           issueRepositories_ = java.util.Collections.unmodifiableList(issueRepositories_);
+        }
+        if (((mutable_bitField0_ & 0x01000000) == 0x01000000)) {
+          programmingLanguagesLocs_ = java.util.Collections.unmodifiableList(programmingLanguagesLocs_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -2301,6 +2394,108 @@ public final class Toplevel {
       return stars_;
     }
 
+    // repeated int32 programming_languages_locs = 25;
+    public static final int PROGRAMMING_LANGUAGES_LOCS_FIELD_NUMBER = 25;
+    private java.util.List<java.lang.Integer> programmingLanguagesLocs_;
+    /**
+     * <code>repeated int32 programming_languages_locs = 25;</code>
+     *
+     * <pre>
+     ** The number of bytes of code for each language *
+     * </pre>
+     */
+    public java.util.List<java.lang.Integer>
+        getProgrammingLanguagesLocsList() {
+      return programmingLanguagesLocs_;
+    }
+    /**
+     * <code>repeated int32 programming_languages_locs = 25;</code>
+     *
+     * <pre>
+     ** The number of bytes of code for each language *
+     * </pre>
+     */
+    public int getProgrammingLanguagesLocsCount() {
+      return programmingLanguagesLocs_.size();
+    }
+    /**
+     * <code>repeated int32 programming_languages_locs = 25;</code>
+     *
+     * <pre>
+     ** The number of bytes of code for each language *
+     * </pre>
+     */
+    public int getProgrammingLanguagesLocs(int index) {
+      return programmingLanguagesLocs_.get(index);
+    }
+
+    // optional int32 size = 26;
+    public static final int SIZE_FIELD_NUMBER = 26;
+    private int size_;
+    /**
+     * <code>optional int32 size = 26;</code>
+     *
+     * <pre>
+     ** The size of the repository in bytes of code *
+     * </pre>
+     */
+    public boolean hasSize() {
+      return ((bitField0_ & 0x00000800) == 0x00000800);
+    }
+    /**
+     * <code>optional int32 size = 26;</code>
+     *
+     * <pre>
+     ** The size of the repository in bytes of code *
+     * </pre>
+     */
+    public int getSize() {
+      return size_;
+    }
+
+    // optional string main_language = 27;
+    public static final int MAIN_LANGUAGE_FIELD_NUMBER = 27;
+    private java.lang.Object mainLanguage_;
+    /**
+     * <code>optional string main_language = 27;</code>
+     */
+    public boolean hasMainLanguage() {
+      return ((bitField0_ & 0x00001000) == 0x00001000);
+    }
+    /**
+     * <code>optional string main_language = 27;</code>
+     */
+    public java.lang.String getMainLanguage() {
+      java.lang.Object ref = mainLanguage_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          mainLanguage_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string main_language = 27;</code>
+     */
+    public com.google.protobuf.ByteString
+        getMainLanguageBytes() {
+      java.lang.Object ref = mainLanguage_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        mainLanguage_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       id_ = "";
       name_ = "";
@@ -2326,6 +2521,9 @@ public final class Toplevel {
       forked_ = false;
       forks_ = 0;
       stars_ = 0;
+      programmingLanguagesLocs_ = java.util.Collections.emptyList();
+      size_ = 0;
+      mainLanguage_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2450,6 +2648,15 @@ public final class Toplevel {
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         output.writeInt32(24, stars_);
+      }
+      for (int i = 0; i < programmingLanguagesLocs_.size(); i++) {
+        output.writeInt32(25, programmingLanguagesLocs_.get(i));
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        output.writeInt32(26, size_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        output.writeBytes(27, getMainLanguageBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -2600,6 +2807,23 @@ public final class Toplevel {
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(24, stars_);
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < programmingLanguagesLocs_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(programmingLanguagesLocs_.get(i));
+        }
+        size += dataSize;
+        size += 2 * getProgrammingLanguagesLocsList().size();
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(26, size_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(27, getMainLanguageBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2789,6 +3013,12 @@ public final class Toplevel {
         bitField0_ = (bitField0_ & ~0x00400000);
         stars_ = 0;
         bitField0_ = (bitField0_ & ~0x00800000);
+        programmingLanguagesLocs_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x01000000);
+        size_ = 0;
+        bitField0_ = (bitField0_ & ~0x02000000);
+        mainLanguage_ = "";
+        bitField0_ = (bitField0_ & ~0x04000000);
         return this;
       }
 
@@ -2951,6 +3181,19 @@ public final class Toplevel {
           to_bitField0_ |= 0x00000400;
         }
         result.stars_ = stars_;
+        if (((bitField0_ & 0x01000000) == 0x01000000)) {
+          programmingLanguagesLocs_ = java.util.Collections.unmodifiableList(programmingLanguagesLocs_);
+          bitField0_ = (bitField0_ & ~0x01000000);
+        }
+        result.programmingLanguagesLocs_ = programmingLanguagesLocs_;
+        if (((from_bitField0_ & 0x02000000) == 0x02000000)) {
+          to_bitField0_ |= 0x00000800;
+        }
+        result.size_ = size_;
+        if (((from_bitField0_ & 0x04000000) == 0x04000000)) {
+          to_bitField0_ |= 0x00001000;
+        }
+        result.mainLanguage_ = mainLanguage_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3203,6 +3446,24 @@ public final class Toplevel {
         }
         if (other.hasStars()) {
           setStars(other.getStars());
+        }
+        if (!other.programmingLanguagesLocs_.isEmpty()) {
+          if (programmingLanguagesLocs_.isEmpty()) {
+            programmingLanguagesLocs_ = other.programmingLanguagesLocs_;
+            bitField0_ = (bitField0_ & ~0x01000000);
+          } else {
+            ensureProgrammingLanguagesLocsIsMutable();
+            programmingLanguagesLocs_.addAll(other.programmingLanguagesLocs_);
+          }
+          onChanged();
+        }
+        if (other.hasSize()) {
+          setSize(other.getSize());
+        }
+        if (other.hasMainLanguage()) {
+          bitField0_ |= 0x04000000;
+          mainLanguage_ = other.mainLanguage_;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -6467,6 +6728,223 @@ public final class Toplevel {
         return this;
       }
 
+      // repeated int32 programming_languages_locs = 25;
+      private java.util.List<java.lang.Integer> programmingLanguagesLocs_ = java.util.Collections.emptyList();
+      private void ensureProgrammingLanguagesLocsIsMutable() {
+        if (!((bitField0_ & 0x01000000) == 0x01000000)) {
+          programmingLanguagesLocs_ = new java.util.ArrayList<java.lang.Integer>(programmingLanguagesLocs_);
+          bitField0_ |= 0x01000000;
+         }
+      }
+      /**
+       * <code>repeated int32 programming_languages_locs = 25;</code>
+       *
+       * <pre>
+       ** The number of bytes of code for each language *
+       * </pre>
+       */
+      public java.util.List<java.lang.Integer>
+          getProgrammingLanguagesLocsList() {
+        return java.util.Collections.unmodifiableList(programmingLanguagesLocs_);
+      }
+      /**
+       * <code>repeated int32 programming_languages_locs = 25;</code>
+       *
+       * <pre>
+       ** The number of bytes of code for each language *
+       * </pre>
+       */
+      public int getProgrammingLanguagesLocsCount() {
+        return programmingLanguagesLocs_.size();
+      }
+      /**
+       * <code>repeated int32 programming_languages_locs = 25;</code>
+       *
+       * <pre>
+       ** The number of bytes of code for each language *
+       * </pre>
+       */
+      public int getProgrammingLanguagesLocs(int index) {
+        return programmingLanguagesLocs_.get(index);
+      }
+      /**
+       * <code>repeated int32 programming_languages_locs = 25;</code>
+       *
+       * <pre>
+       ** The number of bytes of code for each language *
+       * </pre>
+       */
+      public Builder setProgrammingLanguagesLocs(
+          int index, int value) {
+        ensureProgrammingLanguagesLocsIsMutable();
+        programmingLanguagesLocs_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 programming_languages_locs = 25;</code>
+       *
+       * <pre>
+       ** The number of bytes of code for each language *
+       * </pre>
+       */
+      public Builder addProgrammingLanguagesLocs(int value) {
+        ensureProgrammingLanguagesLocsIsMutable();
+        programmingLanguagesLocs_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 programming_languages_locs = 25;</code>
+       *
+       * <pre>
+       ** The number of bytes of code for each language *
+       * </pre>
+       */
+      public Builder addAllProgrammingLanguagesLocs(
+          java.lang.Iterable<? extends java.lang.Integer> values) {
+        ensureProgrammingLanguagesLocsIsMutable();
+        super.addAll(values, programmingLanguagesLocs_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 programming_languages_locs = 25;</code>
+       *
+       * <pre>
+       ** The number of bytes of code for each language *
+       * </pre>
+       */
+      public Builder clearProgrammingLanguagesLocs() {
+        programmingLanguagesLocs_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x01000000);
+        onChanged();
+        return this;
+      }
+
+      // optional int32 size = 26;
+      private int size_ ;
+      /**
+       * <code>optional int32 size = 26;</code>
+       *
+       * <pre>
+       ** The size of the repository in bytes of code *
+       * </pre>
+       */
+      public boolean hasSize() {
+        return ((bitField0_ & 0x02000000) == 0x02000000);
+      }
+      /**
+       * <code>optional int32 size = 26;</code>
+       *
+       * <pre>
+       ** The size of the repository in bytes of code *
+       * </pre>
+       */
+      public int getSize() {
+        return size_;
+      }
+      /**
+       * <code>optional int32 size = 26;</code>
+       *
+       * <pre>
+       ** The size of the repository in bytes of code *
+       * </pre>
+       */
+      public Builder setSize(int value) {
+        bitField0_ |= 0x02000000;
+        size_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 size = 26;</code>
+       *
+       * <pre>
+       ** The size of the repository in bytes of code *
+       * </pre>
+       */
+      public Builder clearSize() {
+        bitField0_ = (bitField0_ & ~0x02000000);
+        size_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional string main_language = 27;
+      private java.lang.Object mainLanguage_ = "";
+      /**
+       * <code>optional string main_language = 27;</code>
+       */
+      public boolean hasMainLanguage() {
+        return ((bitField0_ & 0x04000000) == 0x04000000);
+      }
+      /**
+       * <code>optional string main_language = 27;</code>
+       */
+      public java.lang.String getMainLanguage() {
+        java.lang.Object ref = mainLanguage_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          mainLanguage_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string main_language = 27;</code>
+       */
+      public com.google.protobuf.ByteString
+          getMainLanguageBytes() {
+        java.lang.Object ref = mainLanguage_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          mainLanguage_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string main_language = 27;</code>
+       */
+      public Builder setMainLanguage(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x04000000;
+        mainLanguage_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string main_language = 27;</code>
+       */
+      public Builder clearMainLanguage() {
+        bitField0_ = (bitField0_ & ~0x04000000);
+        mainLanguage_ = getDefaultInstance().getMainLanguage();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string main_language = 27;</code>
+       */
+      public Builder setMainLanguageBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x04000000;
+        mainLanguage_ = value;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Project)
     }
 
@@ -6493,7 +6971,7 @@ public final class Toplevel {
   static {
     java.lang.String[] descriptorData = {
       "\n\016toplevel.proto\022\tboa.types\032\014shared.prot" +
-      "o\032\ncode.proto\032\014issues.proto\"\302\005\n\007Project\022" +
+      "o\032\ncode.proto\032\014issues.proto\"\213\006\n\007Project\022" +
       "\n\n\002id\030\001 \002(\t\022\014\n\004name\030\002 \002(\t\022\023\n\013project_url" +
       "\030\003 \002(\t\022\024\n\014homepage_url\030\004 \001(\t\022\024\n\014created_" +
       "date\030\005 \001(\004\022\023\n\013description\030\006 \001(\t\022\031\n\021opera" +
@@ -6508,10 +6986,12 @@ public final class Toplevel {
       "eRepository\0226\n\022issue_repositories\030\024 \003(\0132" +
       "\032.boa.types.IssueRepository\022*\n\004kind\030\025 \002(" +
       "\0162\034.boa.types.Project.ForgeKind\022\016\n\006forke" +
-      "d\030\026 \001(\010\022\r\n\005forks\030\027 \001(\005\022\r\n\005stars\030\030 \001(\005\"a\n" +
-      "\tForgeKind\022\t\n\005OTHER\020\000\022\017\n\013SOURCEFORGE\020\001\022\006" +
-      "\n\002SF\020\001\022\n\n\006GITHUB\020\002\022\006\n\002GH\020\002\022\n\n\006APACHE\020\003\022\014" +
-      "\n\010QUALITAS\020\004\032\002\020\001B\002H\001"
+      "d\030\026 \001(\010\022\r\n\005forks\030\027 \001(\005\022\r\n\005stars\030\030 \001(\005\022\"\n" +
+      "\032programming_languages_locs\030\031 \003(\005\022\014\n\004siz" +
+      "e\030\032 \001(\005\022\025\n\rmain_language\030\033 \001(\t\"a\n\tForgeK" +
+      "ind\022\t\n\005OTHER\020\000\022\017\n\013SOURCEFORGE\020\001\022\006\n\002SF\020\001\022",
+      "\n\n\006GITHUB\020\002\022\006\n\002GH\020\002\022\n\n\006APACHE\020\003\022\014\n\010QUALI" +
+      "TAS\020\004\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -6523,7 +7003,7 @@ public final class Toplevel {
           internal_static_boa_types_Project_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Project_descriptor,
-              new java.lang.String[] { "Id", "Name", "ProjectUrl", "HomepageUrl", "CreatedDate", "Description", "OperatingSystems", "ProgrammingLanguages", "Databases", "Licenses", "Interfaces", "Audiences", "Topics", "Status", "Translations", "Donations", "Maintainers", "Developers", "CodeRepositories", "IssueRepositories", "Kind", "Forked", "Forks", "Stars", });
+              new java.lang.String[] { "Id", "Name", "ProjectUrl", "HomepageUrl", "CreatedDate", "Description", "OperatingSystems", "ProgrammingLanguages", "Databases", "Licenses", "Interfaces", "Audiences", "Topics", "Status", "Translations", "Donations", "Maintainers", "Developers", "CodeRepositories", "IssueRepositories", "Kind", "Forked", "Forks", "Stars", "ProgrammingLanguagesLocs", "Size", "MainLanguage", });
           return null;
         }
       };

@@ -1,0 +1,25 @@
+namespaces {
+  name: ""
+  methods {
+    name: "fn"
+    return_type {
+      name: ""
+      kind: OTHER
+    }
+    statements {
+      kind: BLOCK
+      statements {
+        kind: EXPRESSION
+        expressions {
+          kind: YIELD
+          expressions {
+            kind: VARACCESS
+            variable: "x"
+            dollar_sign: true
+          }
+          has_from: true
+        }
+      }
+    }
+  }
+}

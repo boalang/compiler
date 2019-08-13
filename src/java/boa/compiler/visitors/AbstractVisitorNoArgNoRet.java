@@ -30,6 +30,16 @@ import boa.compiler.ast.types.*;
  * @author rramu
  */
 public abstract class AbstractVisitorNoArgNoRet {
+	public void dfs(final Node node, final java.util.Set<Integer> visitedNodes) {
+		visitedNodes.add(node.nodeId);
+		node.accept(this);
+		for (final Node succ : node.successors) {
+		    if (!visitedNodes.contains(succ.nodeId)) {
+				dfs(succ, visitedNodes);
+		    }
+		}
+	}
+
 	protected void initialize() { }
 
 	public void start(final Node n) {
@@ -372,6 +382,10 @@ public abstract class AbstractVisitorNoArgNoRet {
 	}
 
 	public void visit(final StackType n) {
+		n.getValue().accept(this);
+	}
+	
+	public void visit(final QueueType n) {
 		n.getValue().accept(this);
 	}
 

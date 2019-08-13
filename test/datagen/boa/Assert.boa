@@ -1,0 +1,48 @@
+{
+   "kind": "ASSERT",
+   "conditions": [
+      {
+         "kind": "LOGICAL_AND",
+         "expressions": [
+            {
+               "kind": "NEQ",
+               "expressions": [
+                  {
+                     "kind": "VARACCESS",
+                     "variable": "list"
+                  },
+                  {
+                     "kind": "LITERAL",
+                     "literal": "null"
+                  }
+               ]
+            },
+            {
+               "kind": "GT",
+               "expressions": [
+                  {
+                     "kind": "METHODCALL",
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "list"
+                        }
+                     ],
+                     "method": "size"
+                  },
+                  {
+                     "kind": "LITERAL",
+                     "literal": "0"
+                  }
+               ]
+            }
+         ]
+      }
+   ],
+   "expressions": [
+      {
+         "kind": "LITERAL",
+         "literal": "\"list variable is null or empty\""
+      }
+   ]
+}

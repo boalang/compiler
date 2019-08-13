@@ -1,0 +1,13 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: DELETE
+      expressions {
+        kind: VARACCESS
+        variable: "x"
+      }
+    }
+  }
+}

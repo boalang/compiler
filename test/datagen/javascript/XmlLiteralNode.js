@@ -1,0 +1,1 @@
+var el = <foo>bar<baz/></foo>;

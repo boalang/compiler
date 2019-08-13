@@ -1,20 +1,31 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "ASSIGN_ADD",
-      "expressions": [
-         {
-            "kind": "VARACCESS",
-            "variable": "y"
-         },
-         {
-            "kind": "LAMBDA",
-            "lambda": {
-               "return_type": {
-                  "name": "",
-                  "kind": "OTHER"
-               },
-               "arguments": [
+   "expressions": [
+      {
+         "kind": "ASSIGN_ADD",
+         "expressions": [
+            {
+               "kind": "VARACCESS",
+               "variable": "y"
+            },
+            {
+               "kind": "LAMBDA",
+               "expressions": [
+                  {
+                     "kind": "OP_ADD",
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "x"
+                        },
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "x"
+                        }
+                     ]
+                  }
+               ],
+               "variable_decls": [
                   {
                      "name": "x",
                      "variable_type": {
@@ -23,27 +34,9 @@
                      }
                   }
                ],
-               "statements": [
-                  {
-                     "kind": "EXPRESSION",
-                     "expression": {
-                        "kind": "OP_ADD",
-                        "expressions": [
-                           {
-                              "kind": "VARACCESS",
-                              "variable": "x"
-                           },
-                           {
-                              "kind": "VARACCESS",
-                              "variable": "x"
-                           }
-                        ]
-                     }
-                  }
-               ]
-            },
-            "no_parens": true
-         }
-      ]
-   }
+               "no_parens": true
+            }
+         ]
+      }
+   ]
 }

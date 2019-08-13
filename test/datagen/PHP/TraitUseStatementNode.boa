@@ -1,0 +1,15 @@
+namespaces {
+  name: ""
+  declarations {
+    name: "ezcReflectionFunction"
+    kind: CLASS
+    parents {
+      name: "ReflectionFunction"
+      kind: CLASS
+    }
+    statements {
+      kind: TRAIT_USE
+      names: "ezcReflectionReturnInfo"
+    }
+  }
+}

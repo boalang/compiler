@@ -1,8 +1,8 @@
-# how did # of commits for Java/SVN change over time?
+# how did # of commits for Java/GIT change over time?
 counts: output sum[int] of int;
 p: Project = input;
 
 exists (i: int; match(`^java$`, lowercase(p.programming_languages[i])))
-	foreach (j: int; p.code_repositories[j].kind == RepositoryKind.SVN)
-		foreach (k: int; def(p.code_repositories[j].revisions[k]))
-			counts[yearof(p.code_repositories[j].revisions[k].commit_date)] << 1;
+	foreach (j: int; p.code_repositories[j].kind == RepositoryKind.GIT)
+		for (k := 0; k < getrevisionscount(p.code_repositories[j]) ; k++)
+			counts[yearof(getrevision(p.code_repositories[j], k).commit_date)] << 1;

@@ -28,6 +28,7 @@ import java.util.Map;
  */
 public abstract class BoaType {
 	private static final Map<String, Map<String, String>> shortNamesMap = new HashMap<String, Map<String, String>>();
+	private static final Map<Class<?>, Integer> typeHashCodeMap = new HashMap<Class<?>, Integer>();
 
 	/**
 	 * Returns the type that results from an expression of this type and an
@@ -177,7 +178,13 @@ public abstract class BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
-		return 0;
+		Class<?> clazz = this.getClass();
+		Integer code = typeHashCodeMap.get(clazz);
+		if (code == null) {
+			code = typeHashCodeMap.size() + 1;
+			typeHashCodeMap.put(clazz, code);
+		}
+		return code;
 	}
 
 	/** {@inheritDoc} */

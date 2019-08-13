@@ -19,7 +19,7 @@ package boa.runtime;
 import java.util.List;
 
 import boa.functions.BoaAstIntrinsics;
-
+import boa.functions.BoaIntrinsics;
 import boa.types.Ast.*;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -178,10 +178,9 @@ public abstract class BoaAbstractVisitor {
 	}
 	public final void visit(final CodeRepository node) throws Exception {
 		if (preVisit(node)) {
-			final List<Revision> revisionsList = node.getRevisionsList();
-			final int revisionsSize = revisionsList.size();
+			final int revisionsSize = BoaIntrinsics.getRevisionsCount(node);
 			for (int i = 0; i < revisionsSize; i++)
-				visit(revisionsList.get(i));
+				visit(BoaIntrinsics.getRevision(node, i));
 
 			postVisit(node);
 		}
@@ -333,8 +332,10 @@ public abstract class BoaAbstractVisitor {
 			for (int i = 0; i < initsSize; i++)
 				visit(initsList.get(i));
 
-			if (node.hasCondition())
-				visit(node.getCondition());
+			final List<Expression> conditionsList = node.getConditionsList();
+			final int conditionsSize = conditionsList.size();
+			for (int i = 0; i < conditionsSize; i++)
+				visit(conditionsList.get(i));
 
 			final List<Expression> updatesList = node.getUpdatesList();
 			final int updatesSize = updatesList.size();
@@ -347,8 +348,8 @@ public abstract class BoaAbstractVisitor {
 			if (node.hasTypeDeclaration())
 				visit(node.getTypeDeclaration());
 
-			if (node.hasExpression())
-				visit(node.getExpression());
+			if (node.getExpressionsCount() > 0)
+				visit(node.getExpressions(0));
 
 			postVisit(node);
 		}

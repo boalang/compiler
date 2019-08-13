@@ -1,0 +1,16 @@
+digraph {
+	{ rank = source; 0; }
+	{ rank = sink; 5; }
+	0[shape=ellipse,label="[0] ENTRY"]
+	1[shape=box,label="[1] int i = 0"]
+	2[shape=diamond,label="[2] i < 5"]
+	3[shape=parallelogram,label="[3] System.out.println(\"hi\")"]
+	4[shape=box,label="[4] i++"]
+	5[shape=ellipse,label="[5] EXIT"]
+	0 -> 1
+	1 -> 2
+	2 -> 3 [label="T"]
+	2 -> 5
+	3 -> 4
+	4 -> 2 [label="B"]
+}

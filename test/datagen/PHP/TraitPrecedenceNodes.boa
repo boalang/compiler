@@ -1,0 +1,48 @@
+namespaces {
+  name: ""
+  declarations {
+    name: "Talker"
+    kind: CLASS
+    statements {
+      kind: TRAIT_USE
+      statements {
+        kind: TRAIT_PRECEDENCE
+        expressions {
+          kind: TRAIT_PRECEDENCE
+          expressions {
+            kind: METHOD_REFERENCE
+            expressions {
+              kind: NAMESPACENAME
+              literal: "B"
+            }
+            method: "smallTalk"
+          }
+          expressions {
+            kind: NAMESPACENAME
+            literal: "A"
+          }
+        }
+      }
+      statements {
+        kind: TRAIT_PRECEDENCE
+        expressions {
+          kind: TRAIT_PRECEDENCE
+          expressions {
+            kind: METHOD_REFERENCE
+            expressions {
+              kind: NAMESPACENAME
+              literal: "A"
+            }
+            method: "bigTalk"
+          }
+          expressions {
+            kind: NAMESPACENAME
+            literal: "B"
+          }
+        }
+      }
+      names: "A"
+      names: "B"
+    }
+  }
+}

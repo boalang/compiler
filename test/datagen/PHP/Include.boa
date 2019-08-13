@@ -1,0 +1,43 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: INCLUDE
+      expressions {
+        kind: LITERAL
+        literal: "\'myfile\'"
+      }
+    }
+  }
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: REQUIRE
+      expressions {
+        kind: LITERAL
+        literal: "\'myfile\'"
+      }
+    }
+  }
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: INCLUDE_ONCE
+      expressions {
+        kind: LITERAL
+        literal: "\'myfile\'"
+      }
+    }
+  }
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: REQUIRE_ONCE
+      expressions {
+        kind: LITERAL
+        literal: "\'myfile\'"
+      }
+    }
+  }
+}

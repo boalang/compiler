@@ -1,0 +1,11 @@
+{
+   "kind": "TYPEDECL",
+   "type_declaration": {
+      "name": "x",
+      "kind": "CLASS",
+      "fully_qualified_name": ""
+   }
+},
+{
+   "kind": "EMPTY"
+}

@@ -1,0 +1,103 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: VARDECL
+      variable_decls {
+        name: "myObject"
+        modifiers {
+          kind: SCOPE
+          scope: VAR
+        }
+        initializer {
+          kind: OBJECT_LITERAL
+          variable_decls {
+            name: "sProp"
+            initializer {
+              kind: LITERAL
+              literal: "some string value"
+            }
+          }
+          variable_decls {
+            name: "numProp"
+            initializer {
+              kind: LITERAL
+              literal: "2.0"
+            }
+          }
+          variable_decls {
+            name: "bProp"
+            initializer {
+              kind: LITERAL
+              literal: "false"
+            }
+          }
+          methods {
+            name: "property"
+            arguments {
+              modifiers {
+                kind: SCOPE
+                scope: LET
+              }
+              computed_name {
+                kind: ARRAYINIT
+                expressions {
+                  kind: VARACCESS
+                  variable: "parameters"
+                }
+              }
+            }
+            statements {
+              kind: BLOCK
+            }
+          }
+          methods {
+            name: "property"
+            modifiers {
+              kind: GETTER
+            }
+            statements {
+              kind: BLOCK
+            }
+          }
+          methods {
+            name: "property"
+            modifiers {
+              kind: SETTER
+            }
+            arguments {
+              name: "value"
+              modifiers {
+                kind: SCOPE
+                scope: LET
+              }
+            }
+            statements {
+              kind: BLOCK
+            }
+          }
+          methods {
+            name: "property"
+            arguments {
+              modifiers {
+                kind: SCOPE
+                scope: LET
+              }
+              computed_name {
+                kind: ARRAYINIT
+                expressions {
+                  kind: VARACCESS
+                  variable: "parameters"
+                }
+              }
+            }
+            statements {
+              kind: BLOCK
+            }
+          }
+        }
+      }
+    }
+  }
+}

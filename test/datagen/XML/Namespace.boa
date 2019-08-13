@@ -1,0 +1,73 @@
+elements {
+  tag: "root"
+  kind: XML_ELEMENT
+  elements {
+    tag: "h:table"
+    kind: XML_ELEMENT
+    elements {
+      tag: "h:tr"
+      kind: XML_ELEMENT
+      elements {
+        tag: "h:td"
+        kind: XML_ELEMENT
+        text: "Apples"
+        attributes {
+          key: "h URI"
+          value: "http://www.w3.org/TR/html4/"
+        }
+      }
+      elements {
+        tag: "h:td"
+        kind: XML_ELEMENT
+        text: "Bananas"
+        attributes {
+          key: "h URI"
+          value: "http://www.w3.org/TR/html4/"
+        }
+      }
+      attributes {
+        key: "h URI"
+        value: "http://www.w3.org/TR/html4/"
+      }
+    }
+    attributes {
+      key: "h URI"
+      value: "http://www.w3.org/TR/html4/"
+    }
+  }
+  elements {
+    tag: "f:table"
+    kind: XML_ELEMENT
+    elements {
+      tag: "f:name"
+      kind: XML_ELEMENT
+      text: "African Coffee Table"
+      attributes {
+        key: "f URI"
+        value: "https://www.w3schools.com/furniture"
+      }
+    }
+    elements {
+      tag: "f:width"
+      kind: XML_ELEMENT
+      text: "80"
+      attributes {
+        key: "f URI"
+        value: "https://www.w3schools.com/furniture"
+      }
+    }
+    elements {
+      tag: "f:length"
+      kind: XML_ELEMENT
+      text: "120"
+      attributes {
+        key: "f URI"
+        value: "https://www.w3schools.com/furniture"
+      }
+    }
+    attributes {
+      key: "f URI"
+      value: "https://www.w3schools.com/furniture"
+    }
+  }
+}

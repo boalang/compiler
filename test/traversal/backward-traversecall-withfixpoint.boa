@@ -57,6 +57,7 @@ q_all := visitor {
 		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.WORKLIST_REVERSEPOSTORDER, init);
 		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.ITERATIVE, init);
 		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.RANDOM, init);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, init);
 
 		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.DFS, live, fixp1);
 		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.POSTORDER, live, fixp1);
@@ -65,6 +66,7 @@ q_all := visitor {
 		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.WORKLIST_REVERSEPOSTORDER, live, fixp1);
 		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.ITERATIVE, live, fixp1);
 		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.RANDOM, live, fixp1);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, live, fixp1);
 	}
 };
 

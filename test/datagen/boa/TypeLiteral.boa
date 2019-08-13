@@ -1,0 +1,23 @@
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "ASSIGN",
+         "expressions": [
+            {
+               "kind": "VARACCESS",
+               "variable": "x"
+            },
+            {
+               "kind": "LITERAL",
+               "literal": "String.class",
+               "return_type": {
+                  "name": "Class",
+                  "fully_qualified_name": "java.lang.Class",
+                  "kind": "CLASS"
+               }
+            }
+         ]
+      }
+   ]
+}

@@ -1,0 +1,11 @@
+namespaces {
+  name: ""
+  statements {
+    kind: STATIC
+    expressions {
+      kind: VARACCESS
+      variable: "x"
+      dollar_sign: true
+    }
+  }
+}

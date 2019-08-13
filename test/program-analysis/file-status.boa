@@ -1,0 +1,97 @@
+m: output collection[int] of string;
+p: Project = input;
+# program analysis output
+type T= {in: set of string, out : set of string, dummy : int};
+type T1= {gen: string, kill : string};
+# cfg of the current method
+cfg: CFG;
+
+genStr : string;
+killStr : string; 
+acc := false;
+
+evisitor := visitor {
+	before node:Expression -> {
+		switch(node.kind) {
+			case ExpressionKind.METHODCALL: 
+				if(node.method == "write" || node.method == "read" || node.method == "open") {
+					if(len(node.expressions)>0) {
+						genStr = node.expressions[0].variable;
+					}
+				}
+				else if(node.method == "close") {
+					if(len(node.expressions)>0) {
+						killStr = node.expressions[0].variable;
+					}
+				}
+  				break;
+			default: break;
+		}
+	}
+};
+
+track := traversal(node: CFGNode) : T1 {
+	cur_val : T1 = {"",""};
+	genStr = "";
+	killStr = "";
+	if (def(node.expr)) {
+		visit(node.expr, evisitor);
+		cur_val = {genStr, killStr};
+	}
+	return cur_val;
+};
+
+cfg_def := traversal(node: CFGNode) : T {
+	inset : set of string;
+	outset : set of string;
+	cur_val : T = {inset, outset, 0};
+	if(def(getvalue(node))) {
+		cur_val = getvalue(node);
+	}
+	preds := node.predecessors;
+	foreach(i:int;def(preds[i])) {
+		pred := getvalue(preds[i]);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	track_val := getvalue(node, track);
+	cur_val.out = union(cur_val.out, cur_val.in);
+	if(track_val.gen != "")
+		add(cur_val.out, track_val.gen);
+	if(track_val.kill != "")
+		remove(cur_val.out, track_val.kill);
+	return cur_val;
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T) : bool {
+	if (len(difference(curr.out, prev.out)) == 0)
+		return true;	
+	return false;
+};
+
+result := traversal(node: CFGNode) {
+	r:= getvalue(node, cfg_def);
+	if(def(r)) {
+		m[node.id] << string(r.out);
+	}
+};
+
+q_all := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		clear(track);clear(cfg_def);
+
+		cfg = getcfg(node);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, track);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, cfg_def, fixp1);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, result);
+	}
+};
+
+visit(p, q_all);

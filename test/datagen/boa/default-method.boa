@@ -11,13 +11,14 @@
                      "name": "notRequired",
                      "modifiers": [
                         {
-                           "kind": "OTHER",
-                           "other": "default"
+                           "kind": "VISIBILITY",
+                           "visibility": "DEFAULT"
                         }
                      ],
                      "return_type": {
                         "name": "String",
-                        "kind": "OTHER"
+                        "fully_qualified_name": "java.lang.String",
+                        "kind": "CLASS"
                      },
                      "statements": [
                         {
@@ -25,7 +26,8 @@
                         }
                      ]
                   }
-               ]
+               ],
+               "fully_qualified_name": "I"
             }
          ]
       }

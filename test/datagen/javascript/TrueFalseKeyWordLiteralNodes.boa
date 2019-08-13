@@ -1,0 +1,17 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: LITERAL
+      literal: "true"
+    }
+  }
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: LITERAL
+      literal: "false"
+    }
+  }
+}

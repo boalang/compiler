@@ -26,6 +26,7 @@ import org.apache.commons.cli.PosixParser;
 
 import boa.datagen.forges.github.GetGithubRepoByUser;
 import boa.datagen.forges.github.LocalGitSequenceGenerator;
+import boa.datagen.forges.github.MetaDataMaster;
 
 /**
  * The main entry point for Boa tools for generating datasets.
@@ -34,8 +35,8 @@ import boa.datagen.forges.github.LocalGitSequenceGenerator;
  * 
  */
 public class BoaGenerator {
-	public static boolean jsonAvailable = true;
-	public static boolean localCloning = false;
+	private static boolean jsonAvailable = true;
+	private static boolean tokenAvailable = false;
 
 	public static void main(final String[] args) throws IOException {
 		final Options options = new Options();
@@ -52,42 +53,37 @@ public class BoaGenerator {
 		BoaGenerator.handleCmdOptions(cl, options, args);
 
 		/*
-		 * 1. if user provides local json files 2. if user provides username and
-		 * password in both the cases json files are going to be available
+		 * 1. if user provides local json files 
+		 * 2. if user provides username and password 
+		 * in both the cases json files are going to be available
 		 */
 
 		if (jsonAvailable) {
-			CacheGithubJSON.main(args);
 			try {
-				SeqRepoImporter.main(args);
+				SeqRepoImporter.main(new String[0]);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			SeqCombiner.main(new String[0]);
+		} else if (tokenAvailable) { // when user provides local repo and does
+										// not have json files
+			MetaDataMaster mdm = new MetaDataMaster();
+			mdm.downloadRepoNames(DefaultProperties.TOKEN, DefaultProperties.OUTPUT);
 
-			// SeqProjectCombiner.main(args);
-			// SeqSort.main(args);
-			// SeqSortMerge.main(args);
-			try {
-				MapFileGen.main(args);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			SeqCombiner.main(new String[0]);
 		} else { // when user provides local repo and does not have json files
-			File output = new File(DefaultProperties.GH_JSON_CACHE_PATH);
+			File output = new File(DefaultProperties.OUTPUT);
 			if (!output.exists())
 				output.mkdirs();
-			LocalGitSequenceGenerator.localGitSequenceGenerate(DefaultProperties.GH_GIT_PATH,
-					DefaultProperties.GH_JSON_CACHE_PATH);
+			LocalGitSequenceGenerator.localGitSequenceGenerate(DefaultProperties.GH_GIT_PATH, DefaultProperties.OUTPUT);
 			try {
-				MapFileGen.main(args);
+				MapFileGen.main(new String[0]);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		if (cl.hasOption("cache"))
-			clear(true);
-		else
-			clear(false);
+
+		clear();
 	}
 
 	private static final void printHelp(Options options, String message) {
@@ -105,32 +101,46 @@ public class BoaGenerator {
 
 	private static void addOptions(Options options) {
 		options.addOption("inputJson", "json", true, ".json files for metadata");
+		options.addOption("inputToken", "token", true, "token file");
 		options.addOption("inputRepo", "json", true, "cloned repo path");
-		options.addOption("output", "json", true, "directory where output is desired");
-		options.addOption("user", "json", true, "github username to authenticate");
-		options.addOption("password", "json", true, "github password to authenticate.");
-		options.addOption("targetUser", "json", true, "username of target repository");
-		options.addOption("targetRepo", "json", true, "name of the target repository");
-		options.addOption("cache", "json", false, "enable if you want to delete the cloned code for user.");
-		options.addOption("help", "help", true, "help");
+		options.addOption("threads", "threads", true, "number of threads");
+		options.addOption("projects", "projects", true, "maximum number of projects per sequence file");
+		options.addOption("commits", "commits", true, "maximum number of commits of a project to be stored in the project object");
+		options.addOption("nocommits", "nocommits", false, "do not store commits");
+		options.addOption("size", "size", true, "maximum size of a project object to be stored");
+		options.addOption("libs", "libs", true, "directory to store libraries");
+		options.addOption("output", "output", true, "directory where output is desired");
+		options.addOption("user", "user", true, "github username to authenticate");
+		options.addOption("password", "password", true, "github password to authenticate.");
+		options.addOption("targetUser", "targetUser", true, "username of target repository");
+		options.addOption("targetRepo", "targetRepo", true, "name of the target repository");
+		options.addOption("cache", "cache", false, "enable if you want to delete the cloned code for user.");
+		options.addOption("debug", "debug", false, "enable for debug mode.");
+		options.addOption("debugparse", "debugparse", false, "enable for debug mode when parsing source files.");
+		options.addOption("help", "help", false, "help");
 	}
 
 	private static void handleCmdOptions(CommandLine cl, Options options, final String[] args) {
 		if (cl.hasOption("inputJson") && cl.hasOption("inputRepo") && cl.hasOption("output")) {
 			DefaultProperties.GH_JSON_PATH = cl.getOptionValue("inputJson");
-			DefaultProperties.GH_JSON_CACHE_PATH = cl.getOptionValue("output");
+			DefaultProperties.OUTPUT = cl.getOptionValue("output");
 			// DefaultProperties.GH_GIT_PATH = GH_JSON_CACHE_PATH + "/github";
 			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("inputRepo");
-			localCloning = true;
 		} else if (cl.hasOption("inputJson") && cl.hasOption("output")) {
 			DefaultProperties.GH_JSON_PATH = cl.getOptionValue("inputJson");
-			DefaultProperties.GH_JSON_CACHE_PATH = cl.getOptionValue("output");
+			DefaultProperties.OUTPUT = cl.getOptionValue("output");
 			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("output");
-		} else if (cl.hasOption("inputRepo") && cl.hasOption("output")) {
-			DefaultProperties.GH_JSON_CACHE_PATH = cl.getOptionValue("output");
+		} else if (cl.hasOption("inputToken") && cl.hasOption("inputRepo") && cl.hasOption("output")) {
+			DefaultProperties.TOKEN = cl.getOptionValue("inputToken");
+			DefaultProperties.OUTPUT = cl.getOptionValue("output");
+			// DefaultProperties.GH_GIT_PATH = GH_JSON_CACHE_PATH + "/github";
 			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("inputRepo");
 			jsonAvailable = false;
-			localCloning = true;
+			tokenAvailable = true;
+		} else if (cl.hasOption("inputRepo") && cl.hasOption("output")) {
+			DefaultProperties.OUTPUT = cl.getOptionValue("output");
+			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("inputRepo");
+			jsonAvailable = false;
 		} else if (cl.hasOption("user") && cl.hasOption("password") && cl.hasOption("targetUser")
 				&& cl.hasOption("targetRepo") && cl.hasOption("output")) {
 			try {
@@ -144,7 +154,7 @@ public class BoaGenerator {
 
 				// output directory
 				final String GH_JSON_CACHE_PATH = cl.getOptionValue("output");
-				DefaultProperties.GH_JSON_CACHE_PATH = GH_JSON_CACHE_PATH;
+				DefaultProperties.OUTPUT = GH_JSON_CACHE_PATH;
 				DefaultProperties.GH_GIT_PATH = GH_JSON_CACHE_PATH + "/github";
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -156,16 +166,37 @@ public class BoaGenerator {
 			System.err.println("User must specify the path of the repository. Please see --remote and --local options");
 			printHelp(options);
 		}
+		if (cl.hasOption("threads")) {
+			DefaultProperties.NUM_THREADS = cl.getOptionValue("threads");
+		}
+		if (cl.hasOption("projects")) {
+			DefaultProperties.MAX_PROJECTS = cl.getOptionValue("projects");
+		}
+		if (cl.hasOption("commits")) {
+			DefaultProperties.MAX_COMMITS = cl.getOptionValue("commits");
+		}
+		if (cl.hasOption("size")) {
+			DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS = cl.getOptionValue("size");
+		}
+		if (cl.hasOption("debug")) {
+			DefaultProperties.DEBUG = true;
+		}
+		if (cl.hasOption("debugparse")) {
+			DefaultProperties.DEBUGPARSE = true;
+		}
+		if (cl.hasOption("cache")) {
+			DefaultProperties.CACHE = true;
+		}
+		if (cl.hasOption("libs")) {
+			DefaultProperties.CLASSPATH_ROOT = cl.getOptionValue("libs");
+		}
+		if (cl.hasOption("nocommits"))
+			DefaultProperties.STORE_COMMITS = false;
 	}
 
 	//
-	private static void clear(boolean cache) {
-		if (!cache) {
-			File clonedCode = new File(DefaultProperties.GH_GIT_PATH);
-			if (clonedCode.exists())
-				org.apache.commons.io.FileUtils.deleteQuietly(clonedCode);
-		}
-		File inputDirectory = new File(DefaultProperties.GH_JSON_CACHE_PATH + "/buf-map");
+	private static void clear() {
+		File inputDirectory = new File(DefaultProperties.OUTPUT + "/buf-map");
 		if (inputDirectory.exists())
 			org.apache.commons.io.FileUtils.deleteQuietly(inputDirectory);
 	}

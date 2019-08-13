@@ -1,0 +1,110 @@
+m: output collection[int] of string;
+p: Project = input;
+
+type T= {gen : string, kill : string};
+type T1= {in : set of string, out : set of string, dummy : int};
+cfg : CFG;
+
+local : set of string;
+
+init := traversal(node: CFGNode) : T {
+	cur_val : T = {"",""};
+	if(def(node.expr)) {
+		if(node.expr.kind == ExpressionKind.VARDECL) {
+			cur_val.kill = node.defVariables;
+			if(def(node.expr.variable_decls[0].initializer)) {
+				if(node.expr.variable_decls[0].initializer.kind == ExpressionKind.NEW) {
+					add(local, node.defVariables+"@");
+					cur_val.gen= node.defVariables+"@";
+				}
+				else if(node.expr.variable_decls[0].initializer.kind == ExpressionKind.VARACCESS) {
+					add(local, node.defVariables+"@var@"+node.expr.variable_decls[0].initializer.variable);
+					cur_val.gen= node.defVariables+"@var@"+node.expr.variable_decls[0].initializer.variable;
+				}
+				else {
+					add(local, node.defVariables+"@unknown");
+					cur_val.gen= node.defVariables+"@unknown";
+				}
+			}
+		}
+		else if (node.expr.kind == ExpressionKind.ASSIGN) {
+			cur_val.kill = node.defVariables;
+			if(node.expr.expressions[1].kind == ExpressionKind.NEW) {
+				add(local, node.defVariables+"@");
+				cur_val.gen= node.defVariables+"@";
+			}
+			else if(node.expr.expressions[1].kind == ExpressionKind.VARACCESS) {
+				add(local, node.defVariables+"@var@"+node.expr.expressions[1].variable);
+				cur_val.gen= node.defVariables+"@var@"+node.expr.expressions[1].variable;
+			}
+			else {
+				add(local, node.defVariables+"@unknown");
+				cur_val.gen= node.defVariables+"@unknown";
+			}
+		}
+	}
+	return cur_val;
+};
+
+alias := traversal(node: CFGNode) : T1 {
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T1;
+	cur_val = {in_set, out_set, 0};
+	preds := node.predecessors;
+	foreach(i:int;def(preds[i])) {	
+		pred := getvalue(preds[i]);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	cur_val.out = clone(cur_val.in);
+	genkill := getvalue(node, init);
+	if(genkill.gen!="") {
+		str_array:=splitall(genkill.gen,"@");
+		if(str_array[1]!="var")
+			add(cur_val.out, genkill.gen);
+		else {
+			tmp_out:=values(cur_val.out);
+			foreach(i:int;def(tmp_out[i])) {
+				tmp1:=clone(tmp_out[i]);
+				str_array1:=splitall(tmp1,"@");
+				if(str_array1[0] == str_array[2]) {
+					add(cur_val.out, str_array[0]+"@"+str_array1[1]);
+				}
+			}
+		}
+	}
+	cur_val.out = union(cur_val.out, cur_val.in);
+	return cur_val;
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T1) : bool {
+	if (len(difference(curr.out, prev.out)) == 0)
+		return true;	
+	return false;
+};
+
+q_all := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		cfg = getcfg(node);
+		clear(local);clear(init);clear(alias);
+		if(def(node.arguments)) {
+			foreach(i:int;def(node.arguments[i])) {
+				add(local, node.arguments[i].name+"@argument"+string(i));
+			}
+		}
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, init);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, alias, fixp1);
+	}
+};
+
+visit(p, q_all);
+
+m[1] << "1";

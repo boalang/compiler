@@ -1,0 +1,25 @@
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "ASSIGN",
+         "expressions": [
+            {
+               "kind": "VARACCESS",
+               "expressions": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "super"
+                  }
+               ],
+               "variable": "x",
+               "is_member_access": true
+            },
+            {
+               "kind": "VARACCESS",
+               "variable": "y"
+            }
+         ]
+      }
+   ]
+}

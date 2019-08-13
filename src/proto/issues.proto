@@ -1,3 +1,4 @@
+syntax = "proto2";
 package boa.types;
 
 import "shared.proto";
@@ -18,7 +19,6 @@ message IssuesRoot {
 message Issue {
 	/** Describes the kind/label of issue */
 	enum IssueLabel {
-		option allow_alias = true;
 		OTHER_LABEL = 0;
 		BUG = 1;
 		ENHANCEMENT = 2;
@@ -34,7 +34,6 @@ message Issue {
 	}
 	/** Describes the priority of issue */
 	enum IssuePriority {
-		option allow_alias = true;
 		OTHER_PRIORITY = 0;
 		TRIVIAL = 1;
 		MINOR = 2;
@@ -44,7 +43,6 @@ message Issue {
 	}
 	/** Describes the status of issue */
 	enum IssueStatus {
-		option allow_alias = true;
 		OTHER_STATUS = 0;
 		NEW = 1;
 		OPEN = 2;
@@ -121,6 +119,8 @@ message Issue {
 	optional string other_priority = 33;
 	/** The issue's other labels */
 	repeated string other_labels = 34;
+	/** Commit addressing the issue */
+	optional string commit = 35;
 }
 
 message Attachment {

@@ -109,6 +109,7 @@ type returns [AbstractType ast]
 	| v=visitorType  { $ast = $v.ast; }
 	| tr=traversalType  { $ast = $tr.ast; }
 	| s=stackType    { $ast = $s.ast; }
+	| q=queueType    { $ast = $q.ast; }
 	| set=setType    { $ast = $set.ast; }
 	| e=enumType     { $ast = $e.ast; }
 	| id=identifier  { $ast = $id.ast; }
@@ -179,6 +180,13 @@ stackType returns [StackType ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: STACK OF m=component { $ast = new StackType($m.ast); }
+	;
+
+queueType returns [QueueType ast]
+	locals [int l, int c]
+	@init { $l = getStartLine(); $c = getStartColumn(); }
+	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
+	: QUEUE OF m=component { $ast = new QueueType($m.ast); }
 	;
 
 setType returns [SetType ast]
@@ -257,7 +265,7 @@ assignmentStatement returns [AssignmentStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: f=factor EQUALS e=expression { isSemicolon(); $ast = new AssignmentStatement($f.ast, $e.ast); }
+	: f=factor op=(EQUALS | PLUSEQ | MINUSEQ | STAREQ | DIVEQ | ONEOREQ | XOREQ | MODEQ | ONEANDEQ | RSHIFTEQ | LSHIFTEQ) e=expression { isSemicolon(); $ast = new AssignmentStatement($f.ast, $op.text, $e.ast); }
 	;
 
 block returns [Block ast]
@@ -600,6 +608,7 @@ identifier returns [Identifier ast]
 	| lit=DO       { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=MAP      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=STACK    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=QUEUE    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=SET      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOR      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOREACH  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
@@ -653,7 +662,8 @@ stringLiteral returns [StringLiteral ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: lit=StringLiteral { $ast = new StringLiteral(false, $lit.text); }
+	: lit=MultilineStringLiteral { $ast = new StringLiteral(false, "\"" + $lit.text.substring(3, $lit.text.length() - 3).replaceAll("\"", "\\\\\"").replaceAll("\n", "\\\\n") + "\""); }
+	| lit=StringLiteral { $ast = new StringLiteral(false, $lit.text); }
 	| lit=RegexLiteral  { $ast = new StringLiteral(true, $lit.text); }
 	;
 
@@ -678,6 +688,7 @@ IF       : 'if';
 DO       : 'do';
 MAP      : 'map';
 STACK    : 'stack';
+QUEUE    : 'queue';
 SET      : 'set';
 FOR      : 'for';
 FOREACH  : 'foreach';
@@ -749,6 +760,16 @@ MOD    : '%';
 RSHIFT : '>>';
 NEG    : '~';
 INV    : '!';
+PLUSEQ : '+=';
+MINUSEQ: '-=';
+STAREQ : '*=';
+DIVEQ  : '/=';
+ONEOREQ: '|=';
+XOREQ  : '^=';
+MODEQ  : '%=';
+ONEANDEQ:'&=';
+RSHIFTEQ:'>>=';
+LSHIFTEQ:'<<=';
 
 //
 // other
@@ -760,6 +781,7 @@ DOLLAR      : '$';
 EQUALS      : '=';
 EMIT        : '<<';
 RIGHT_ARROW : '->';
+ML_STRING   : '"""';
 
 //
 // literals
@@ -831,6 +853,10 @@ RegexLiteral
 fragment
 RegexCharacter
 	: ~[`\n\r]
+	;
+
+MultilineStringLiteral
+	: ML_STRING (StringCharacter | ["\n\r])*? ML_STRING
 	;
 
 StringLiteral

@@ -1,0 +1,75 @@
+o: output collection of int;
+
+s1: set of array of int;
+s2: set of set of int;
+s3: set of stack of int;
+s4: set of map[int] of int;
+s5: set of queue of int;
+
+
+### Testing s1 #############
+a1: array of int = {1, 1};
+a2: array of int = {2, 2};
+
+add(s1, a1);
+add(s1, a2);
+
+v1 := values(s1);
+
+
+### Testing s2 #############
+ts1: set of int;
+ts2: set of int;
+
+add(ts1, 1);
+add(ts2, 2);
+
+add(s2, ts1);
+add(s2, ts2);
+
+v2 := values(s2);
+
+
+### Testing s3 #############
+st1: stack of int;
+st2: stack of int;
+
+push(st1, 1);
+push(st1, 1);
+push(st2, 2);
+push(st2, 2);
+
+add(s3, st1);
+add(s3, st2);
+
+v3 := values(s3);
+
+
+### Testing s4 #############
+m1: map[int] of int;
+m2: map[int] of int;
+
+m1[1] = 1;
+m2[2] = 2;
+
+add(s4, m1);
+add(s4, m2);
+
+v4 := values(s4);
+
+foreach(i: int; v4[i]){
+	v5 := values(v4[i]);
+	o << v5[0];
+}
+
+### Testing s5 #############
+q1: queue of int;
+q2: queue of int;
+
+offer(q1, 1);
+offer(q2, 2);
+
+add(s5, q1);
+add(s5, q2);
+
+v5 := values(s5);

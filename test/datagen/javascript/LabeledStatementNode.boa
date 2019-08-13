@@ -1,0 +1,127 @@
+namespaces {
+  name: ""
+  statements {
+    kind: LABEL
+    statements {
+      kind: FOR
+      statements {
+        kind: SCOPE
+        statements {
+          kind: LABEL
+          statements {
+            kind: FOR
+            statements {
+              kind: SCOPE
+              statements {
+                kind: IF
+                statements {
+                  kind: SCOPE
+                  statements {
+                    kind: CONTINUE
+                    expressions {
+                      kind: LITERAL
+                      literal: "loop1"
+                    }
+                  }
+                }
+                conditions {
+                  kind: LOGICAL_AND
+                  expressions {
+                    kind: SHEQ
+                    expressions {
+                      kind: VARACCESS
+                      variable: "i"
+                    }
+                    expressions {
+                      kind: LITERAL
+                      literal: "1.0"
+                    }
+                  }
+                  expressions {
+                    kind: SHEQ
+                    expressions {
+                      kind: VARACCESS
+                      variable: "j"
+                    }
+                    expressions {
+                      kind: LITERAL
+                      literal: "1.0"
+                    }
+                  }
+                }
+              }
+            }
+            initializations {
+              kind: ASSIGN
+              expressions {
+                kind: VARACCESS
+                variable: "j"
+              }
+              expressions {
+                kind: LITERAL
+                literal: "0.0"
+              }
+            }
+            conditions {
+              kind: LT
+              expressions {
+                kind: VARACCESS
+                variable: "j"
+              }
+              expressions {
+                kind: LITERAL
+                literal: "3.0"
+              }
+            }
+            updates {
+              kind: OP_INC
+              expressions {
+                kind: VARACCESS
+                variable: "j"
+              }
+              is_postfix: true
+            }
+          }
+          expressions {
+            kind: LITERAL
+            literal: "loop2"
+          }
+        }
+      }
+      initializations {
+        kind: ASSIGN
+        expressions {
+          kind: VARACCESS
+          variable: "i"
+        }
+        expressions {
+          kind: LITERAL
+          literal: "0.0"
+        }
+      }
+      conditions {
+        kind: LT
+        expressions {
+          kind: VARACCESS
+          variable: "i"
+        }
+        expressions {
+          kind: LITERAL
+          literal: "3.0"
+        }
+      }
+      updates {
+        kind: OP_INC
+        expressions {
+          kind: VARACCESS
+          variable: "i"
+        }
+        is_postfix: true
+      }
+    }
+    expressions {
+      kind: LITERAL
+      literal: "loop1"
+    }
+  }
+}

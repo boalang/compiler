@@ -20,11 +20,11 @@ package boa.test.compiler;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
@@ -58,9 +58,11 @@ import boa.compiler.SymbolTable;
 import boa.compiler.ast.Start;
 import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.InheritedAttributeTransformer;
+import boa.compiler.transforms.VariableDeclRenameTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
+import boa.compiler.visitors.PrettyPrintVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
 
 import boa.parser.BoaLexer;
@@ -77,6 +79,11 @@ public abstract class BaseTest {
 	@BeforeClass
 	public static void initializeSymbols() throws IOException {
 		SymbolTable.initialize(new ArrayList<URL>());
+	}
+
+	@Before
+	public void resetCustomTypes() throws IOException {
+		SymbolTable.resetTypeMap();
 	}
 
 	@Before
@@ -247,44 +254,22 @@ public abstract class BaseTest {
 			throw new IOException("unable to mkdir " + outputSrcDir);
 		final File outputFile = new File(outputSrcDir, "Test.java");
 
-		CodeGeneratingVisitor.combineAggregatorStrings.clear();
-		CodeGeneratingVisitor.reduceAggregatorStrings.clear();
-
-		final List<String> jobnames = new ArrayList<String>();
-		final List<String> jobs = new ArrayList<String>();
-		final List<Integer> seeds = new ArrayList<Integer>();
-
 		final StartContext ctx = typecheck(input);
-		// use the whole input string to seed the RNG
-		seeds.add(input.hashCode());
 		final Start p = ctx.ast;
+		// use the whole input string to seed the RNG
+		final int seed = new PrettyPrintVisitor().startAndReturn(p).hashCode();
 
 		try {
+			new VariableDeclRenameTransformer().start(p);
 			new InheritedAttributeTransformer().start(p);
 			new LocalAggregationTransformer().start(p);
 			new VisitorOptimizingTransformer().start(p);
 
-			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("1");
+			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("Test", 64 * 1024 * 1024, seed, false);
 			cg.start(p);
-			jobs.add(cg.getCode());
-			jobnames.add("1");
 
-			final ST st = AbstractCodeGeneratingVisitor.stg.getInstanceOf("Program");
-
-			st.add("name", "Test");
-			st.add("numreducers", 1);
-			st.add("jobs", jobs);
-			st.add("jobnames", jobnames);
-			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
-			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
-			st.add("splitsize", 64 * 1024 * 1024);
-			st.add("seeds", seeds);
-
-			final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile));
-			try {
-				o.write(st.render().getBytes());
-			} finally {
-				o.close();
+			try (final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile))) {
+				o.write(cg.getCode().getBytes());
 			}
 
 			final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -320,16 +305,30 @@ public abstract class BaseTest {
 	//
 
 	protected String load(final String fileName) throws IOException {
-		BufferedInputStream in = null;
+		final StringBuilder sb = new StringBuilder();
+		BufferedReader br = null;
+		FileReader fr = null;
 		try {
-			in = new BufferedInputStream(new FileInputStream(fileName));
-			final byte[] bytes = new byte[(int) new File(fileName).length()];
-			in.read(bytes);
-			return new String(bytes);
+			fr = new FileReader(fileName);
+			br = new BufferedReader(fr);
+			String line;
+			while ((line = br.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		} finally {
-			if (in != null)
-				in.close();
+			try {
+				if (br != null)
+					br.close();
+				if (fr != null)
+					fr.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+
 		}
+		return sb.toString();
 	}
 
 	protected final void delete(final File f) throws IOException {

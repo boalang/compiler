@@ -1,0 +1,18 @@
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "ASSIGN",
+         "expressions": [
+            {
+               "kind": "VARACCESS",
+               "variable": "x"
+            },
+            {
+               "kind": "LITERAL",
+               "literal": "\"Hello World\""
+            }
+         ]
+      }
+   ]
+}

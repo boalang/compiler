@@ -42,8 +42,8 @@ public class TestLiterals {
 	private Expression e = null;
 	private Integer k = -1;
 
-	@Parameters(name = "{index}: {0}")
-	public static Collection literals() {
+	@Parameters(name = "{index}][{0}")
+	public static Collection<Object[]> literals() {
 		return Arrays.asList(new Object[][] {
 			// integers
 			{ "5", 1 },

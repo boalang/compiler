@@ -1,34 +1,30 @@
 {
    "kind": "EXPRESSION",
-   "expression": {
-      "kind": "VARDECL",
-      "variable_decls": [
-         {
-            "name": "multiplication",
-            "variable_type": {
-               "name": "MathOperation",
-               "kind": "OTHER"
-            },
-            "initializer": {
-               "kind": "LAMBDA",
-               "lambda": {
-                  "return_type": {
-                     "name": "",
-                     "kind": "OTHER"
-                  },
-                  "arguments": [
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "multiplication",
+               "variable_type": {
+                  "name": "MathOperation",
+                  "kind": "OTHER"
+               },
+               "initializer": {
+                  "kind": "LAMBDA",
+                  "variable_decls": [
                      {
                         "name": "a",
                         "variable_type": {
                            "name": "int",
-                           "kind": "OTHER"
+                           "kind": "PRIMITIVE"
                         }
                      },
                      {
                         "name": "b",
                         "variable_type": {
                            "name": "int",
-                           "kind": "OTHER"
+                           "kind": "PRIMITIVE"
                         }
                      }
                   ],
@@ -38,26 +34,28 @@
                         "statements": [
                            {
                               "kind": "RETURN",
-                              "expression": {
-                                 "kind": "OP_MULT",
-                                 "expressions": [
-                                    {
-                                       "kind": "VARACCESS",
-                                       "variable": "a"
-                                    },
-                                    {
-                                       "kind": "VARACCESS",
-                                       "variable": "b"
-                                    }
-                                 ]
-                              }
+                              "expressions": [
+                                 {
+                                    "kind": "OP_MULT",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "a"
+                                       },
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "b"
+                                       }
+                                    ]
+                                 }
+                              ]
                            }
                         ]
                      }
                   ]
                }
             }
-         }
-      ]
-   }
+         ]
+      }
+   ]
 }

@@ -1,0 +1,16 @@
+namespaces {
+  name: ""
+  methods {
+    name: "myFunction"
+    return_type {
+      name: ""
+      kind: OTHER
+    }
+    arguments {
+      name: "formalParamater"
+    }
+    statements {
+      kind: BLOCK
+    }
+  }
+}

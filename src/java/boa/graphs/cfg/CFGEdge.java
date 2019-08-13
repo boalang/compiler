@@ -1,5 +1,6 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2018, Hridesh Rajan, Ganesha Upadhyaya, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,113 +17,33 @@
  */
 package boa.graphs.cfg;
 
+import boa.graphs.Edge;
+import boa.types.Control.Node.NodeType;
+
 /**
  * Control flow graph builder edge
- * @author ganeshau
  *
+ * @author ganeshau
+ * @author rdyer
  */
-public class CFGEdge {
-	public static long numOfEdges = 0;
+public class CFGEdge extends Edge<CFGNode, CFGEdge> {
+	public CFGEdge(final CFGNode src, final CFGNode dest) {
+        super(src, dest);
 
-	private long id;
-	private CFGNode src;
-	private CFGNode dest;
-	private String label = ".";
-
-	public CFGEdge(CFGNode src, CFGNode dest) {
-		this.id = ++numOfEdges;
-		this.src = src;
-		this.dest = dest;
-		src.addOutEdge(this);
-		dest.addInEdge(this);
-
-		if (src.getNodeKind() == CFGNode.TYPE_CONTROL) {
-			if (src.hasFalseBranch()) {
+		if (this.src.getKind() == NodeType.CONTROL) {
+			if (this.src.hasFalseBranch()) {
 				this.label = "T";
 			} else {
-				if (label == null || label.compareTo(".") != 0) {
+				if (this.label == null || this.label.compareTo(".") != 0) {
 					this.label = "F";
 				}
 			}
 		}
 	}
 
-	public CFGEdge(CFGNode src, CFGNode dest, String label) {
+	public CFGEdge(final CFGNode src, final CFGNode dest, final String label) {
 		this(src, dest);
-		this.label = label;
-	}
 
-	public CFGNode getSrc() {
-		return src;
-	}
-
-	public void setSrc(CFGNode node) {
-		if (dest.getInNodes().contains(node)) {
-			delete();
-			CFGEdge e = (CFGEdge) dest.getInEdge(node);
-			e.setLabel(".");
-		} else {
-			this.src = node;
-			node.addOutEdge(this);
-		}
-	}
-
-	public CFGNode getDest() {
-		return dest;
-	}
-
-	public void setDest(CFGNode node) {
-		if (src.getOutNodes().contains(node)) {
-			delete();
-			CFGEdge e = (CFGEdge) src.getOutEdge(node);
-			e.setLabel(".");
-		} else {
-			this.dest = node;
-			node.addInEdge(this);
-		}
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String label() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	public void delete() {
-		this.src.getOutEdges().remove(this);
-		this.dest.getInEdges().remove(this);
-	}
-
-	public CFGEdge(long id, CFGNode src, CFGNode dest) {
-		this.id = id;
-		this.src = src;
-		this.dest = dest;
-		src.addOutEdge(this);
-		dest.addInEdge(this);
-
-		if (src.getNodeKind() == CFGNode.TYPE_CONTROL) {
-			if (src.hasFalseBranch()) {
-				this.label = "T";
-			} else {
-				if (label == null || label.compareTo(".") != 0) {
-					this.label = "F";
-				}
-			}
-		}
-	}
-
-	public CFGEdge(long id, CFGNode src, CFGNode dest, String label) {
-		this(id, src, dest);
 		this.label = label;
 	}
 }

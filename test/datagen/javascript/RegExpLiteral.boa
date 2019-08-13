@@ -1,0 +1,10 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expressions {
+      kind: REGEXPLITERAL
+      literal: "ab+c"
+    }
+  }
+}

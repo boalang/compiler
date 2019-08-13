@@ -1,4 +1,13 @@
+dist: xenial
 language: java
+jdk:
+  - openjdk8
+addons:
+  apt:
+    packages:
+      - junit4
+      - ant
+      - ant-optional
 script: ant -Dprotobuf.uptodate=true test checkstyle
 notifications:
   email:

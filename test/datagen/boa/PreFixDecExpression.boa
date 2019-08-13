@@ -1,0 +1,14 @@
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "OP_DEC",
+         "expressions": [
+            {
+               "kind": "VARACCESS",
+               "variable": "x"
+            }
+         ]
+      }
+   ]
+}

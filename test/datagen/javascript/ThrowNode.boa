@@ -1,0 +1,10 @@
+namespaces {
+  name: ""
+  statements {
+    kind: THROW
+    expressions {
+      kind: LITERAL
+      literal: "throw example"
+    }
+  }
+}

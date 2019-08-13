@@ -17,9 +17,20 @@
 
 package boa.datagen.scm;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
@@ -31,9 +42,15 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
-import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.NullOutputStream;
+
+import boa.datagen.dependencies.GradleFile;
+import boa.datagen.dependencies.PomFile;
+import boa.datagen.util.FileIO;
+import boa.types.Diff.ChangedFile;
+import boa.types.Diff.ChangedFile.FileKind;
+import boa.types.Shared.ChangeKind;
 
 /**
  * Concrete implementation of a commit for Git.
@@ -45,68 +62,122 @@ public class GitCommit extends AbstractCommit {
 	// the repository the commit lives in - should already be connected!
 	private Repository repository;
 	private RevWalk revwalk;
-	private HashMap<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
+	Map<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
 
-	public GitCommit(final GitConnector cnn, final Repository repository, final RevWalk revwalk) {
+	public GitCommit(final GitConnector cnn, final Repository repository, final RevWalk revwalk, String projectName) {
 		super(cnn);
 		this.repository = repository;
 		this.revwalk = revwalk;
+		this.projectName = projectName;
 	}
 
 	@Override
 	/** {@inheritDoc} */
 	protected String getFileContents(final String path) {
+		ObjectId fileid = filePathGitObjectIds.get(path);
 		try {
-			/*ObjectId fileid = null;
-			revwalk.reset();
-			tw.reset();
-			try {
-				tw.addTree(revwalk.lookupCommit(ObjectId.fromString(id)).getTree());
-				tw.setRecursive(true);
+			buffer.reset();
+			buffer.write(repository.open(fileid, Constants.OBJ_BLOB).getCachedBytes());
+		} catch (final Throwable e) {
+			if (debug)
+				System.err.println("Git Error getting contents for '" + path + "' at revision " + id + ": " + e.getMessage());
+		}
+		return buffer.toString();
+	}
 
-				while (tw.next())
-					if (!tw.isSubtree() && path.equals(tw.getPathString()))
-						fileid = tw.getObjectId(0);
-			} catch (final IOException e) {
-				if (debug)
-					System.err.println("Git Error getting contents for '" + path + "' at revision " + id + ": " + e.getMessage());
-			}*/
+	@Override
+	public String writeFile(final String classpathRoot, final String path) {
+		String name = FileIO.getFileName(path);
+		File file = new File(classpathRoot, name);
+		if (!file.exists()) {
 			ObjectId fileid = filePathGitObjectIds.get(path);
-			if (fileid == null) return "";
-
+			OutputStream fos = null;
 			try {
 				buffer.reset();
 				buffer.write(repository.open(fileid, Constants.OBJ_BLOB).getCachedBytes());
+				fos = new FileOutputStream(file);
+				buffer.writeTo(fos);
 			} catch (final IOException e) {
 				if (debug)
-					System.err.println("Git Error getting contents for '" + path + "' at revision " + id + ": " + e.getMessage());
+					System.err.println("Git Error write contents of '" + path + "' at revision " + id + ": " + e.getMessage());
+				return null;
+			} finally {
+				try {
+					buffer.flush();
+				} catch (Exception e) {}
+				if (fos != null) {
+					try {
+						fos.flush();
+						fos.close();
+					} catch (Exception e) {}
+				}
 			}
-			return buffer.toString();
-		} catch (final Exception e) {
-			if (debug)
-				System.err.println("Git Error getting contents for '" + path + "' at revision " + id + ": " + e.getMessage());
-			e.printStackTrace();
 		}
-		return "";
+		return file.getAbsolutePath();
 	}
 
-	protected Map<String, Integer> fileNameIndices;
-
-	/**
-	 *
-	 * @param path Name of file to search for
-	 * @return the index the file occurs in fileChanges
-	 */
-	protected int getFileIndex(final String path) {
-		if (!fileNameIndices.containsKey(path))
-			return -1;
-		return fileNameIndices.get(path);
+	@Override
+	public Set<String> getGradleDependencies(final String classpathRoot, final String path) {
+		Set<String> paths = new HashSet<String>();
+		String content = null;
+		ObjectId fileid = filePathGitObjectIds.get(path);
+		try {
+			buffer.reset();
+			buffer.write(repository.open(fileid, Constants.OBJ_BLOB).getCachedBytes());
+			content = buffer.toString();
+			buffer.flush();
+		} catch (final IOException e) {
+			if (debug)
+				System.err.println("Git Error write contents of '" + path + "' at revision " + id + ": " + e.getMessage());
+			return paths;
+		}
+		if (content == null)
+			return paths;
+		GradleFile gradle = new GradleFile(content);
+		paths = gradle.getDependencies(classpathRoot);
+		return paths;
+	}
+	
+	@Override
+	public Set<String> getPomDependencies(String outPath, String path,
+			HashSet<String> globalRepoLinks, HashMap<String, String> globalProperties, HashMap<String, String> globalManagedDependencies,
+			Stack<PomFile> parentPomFiles) {
+		Set<String> paths = new HashSet<String>();
+		String content = null;
+		ObjectId fileid = filePathGitObjectIds.get(path);
+		try {
+			buffer.reset();
+			buffer.write(repository.open(fileid, Constants.OBJ_BLOB).getCachedBytes());
+			content = buffer.toString();
+			buffer.flush();
+		} catch (final IOException e) {
+			if (debug)
+				System.err.println("Git Error write contents of '" + path + "' at revision " + id + ": " + e.getMessage());
+			return paths;
+		}
+		if (content == null)
+			return paths;
+		MavenXpp3Reader xpp3Reader = new MavenXpp3Reader();
+		Model model = null;
+		try {
+			model = xpp3Reader.read(new ByteArrayInputStream(content.getBytes()));
+		} catch (IOException e1) {
+			return paths;
+		} catch (XmlPullParserException e1) {
+			return paths;
+		}
+		PomFile pf = new PomFile(path, model.getId(), model.getParent() != null ? model.getParent().getId() : null,
+						model.getProperties(),
+						model.getDependencyManagement() != null ? model.getDependencyManagement().getDependencies() : null,
+						model.getRepositories(),
+						globalRepoLinks, globalProperties, globalManagedDependencies,
+						parentPomFiles);
+		parentPomFiles.push(pf);
+		paths = pf.getDependencies(model.getDependencies(), globalRepoLinks, globalProperties, globalManagedDependencies, outPath);
+		return paths;
 	}
 
-	public void getChangeFiles(Map<String, Integer> revisionMap, RevCommit rc) {
-		HashMap<String, String> rChangedPaths = new HashMap<String, String>();
-		HashMap<String, String> rRemovedPaths = new HashMap<String, String>();
-		HashMap<String, String> rAddedPaths = new HashMap<String, String>();
+	void getChangeFiles(RevCommit rc) {
 		if (rc.getParentCount() == 0) {
 			TreeWalk tw = new TreeWalk(repository);
 			tw.reset();
@@ -116,73 +187,101 @@ public class GitCommit extends AbstractCommit {
 				while (tw.next()) {
 					if (!tw.isSubtree()) {
 						String path = tw.getPathString();
-						rAddedPaths.put(path, null);
+						ChangedFile.Builder cfb = ChangedFile.newBuilder();
+						cfb.setChange(ChangeKind.ADDED);
+						cfb.setName(path);
+						cfb.setKind(FileKind.OTHER);
+						cfb.setKey(0);
+						cfb.setAst(false);
+						fileNameIndices.put(path, changedFiles.size());
+						changedFiles.add(cfb);
+						filePathGitObjectIds.put(path, tw.getObjectId(0));
 					}
 				}
 			} catch (IOException e) {
-				System.err.println(e.getMessage());
+				if (debug)
+					System.err.println(e.getMessage());
 			}
 			tw.close();
 		} else {
-			int[] parentList = new int[rc.getParentCount()];
+			parentIndices = new int[rc.getParentCount()];
 			for (int i = 0; i < rc.getParentCount(); i++) {
+				int parentIndex = connector.revisionMap.get(rc.getParent(i).getName());
 				try {
-					getChangeFiles(revwalk.parseCommit(rc.getParent(i).getId()), rc, rChangedPaths, rRemovedPaths, rAddedPaths);
+					getChangeFiles(revwalk.parseCommit(rc.getParent(i).getId()), parentIndex, rc);
 				} catch (IOException e) {
 					if (debug)
 						System.err.println("Git Error parsing parent commit. " + e.getMessage());
 				}
-				parentList[i] = revisionMap.get(rc.getParent(i).getName());
-			}
-			setParentIndices(parentList);
-			if (parentList.length > 1) {
-				rChangedPaths.putAll(rAddedPaths);
-				rChangedPaths.putAll(rRemovedPaths);
-				for (String key : rChangedPaths.keySet())
-					rChangedPaths.put(key, key);
-				rAddedPaths.clear();
-				rRemovedPaths.clear();
+				parentIndices[i] = parentIndex;
 			}
 		}
-		setChangedPaths(rChangedPaths);
-		setRemovedPaths(rRemovedPaths);
-		setAddedPaths(rAddedPaths);
 	}
 
-	private void getChangeFiles(final RevCommit parent, final RevCommit rc, final HashMap<String, String> rChangedPaths, final HashMap<String, String> rRemovedPaths, final HashMap<String, String> rAddedPaths) {
+	private void getChangeFiles(final RevCommit parent, final int parentIndex, final RevCommit rc) {
 		final DiffFormatter df = new DiffFormatter(NullOutputStream.INSTANCE);
 		df.setRepository(repository);
 		df.setDiffComparator(RawTextComparator.DEFAULT);
 		df.setDetectRenames(true);
 
 		try {
-			final AbstractTreeIterator parentIter;
-			if (parent == null)
-				parentIter = new EmptyTreeIterator();
-			else
-				parentIter = new CanonicalTreeParser(null, repository.newObjectReader(), parent.getTree());
-
-			for (final DiffEntry diff : df.scan(parentIter, new CanonicalTreeParser(null, repository.newObjectReader(), rc.getTree()))) {
+			final AbstractTreeIterator parentIter = new CanonicalTreeParser(null, repository.newObjectReader(), parent.getTree());
+			
+			List<DiffEntry> diffs = df.scan(parentIter, new CanonicalTreeParser(null, repository.newObjectReader(), rc.getTree()));			
+			for (final DiffEntry diff : diffs) {
 				if (diff.getChangeType() == ChangeType.MODIFY) {
-					if (diff.getOldMode().getObjectType() == Constants.OBJ_BLOB && diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
-						String path = diff.getNewPath();
-						rChangedPaths.put(path, diff.getOldPath());
-						filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
+					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
+						getChangeFile(parent, parentIndex, diff, ChangeKind.MODIFIED);
 					}
 				} else if (diff.getChangeType() == ChangeType.RENAME) {
-					
+					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
+						getChangeFile(parent, parentIndex, diff, ChangeKind.RENAMED);
+					}
 				} else if (diff.getChangeType() == ChangeType.COPY) {
-					
+					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
+						getChangeFile(parent, parentIndex, diff, ChangeKind.COPIED);
+					}
 				} else if (diff.getChangeType() == ChangeType.ADD) {
 					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
 						String path = diff.getNewPath();
-						rAddedPaths.put(path, null);
+						ChangedFile.Builder cfb = getChangeFile(path);
+						if (cfb.getChange() == null || cfb.getChange() == ChangeKind.UNKNOWN)
+							cfb.setChange(ChangeKind.ADDED);
+						else if (cfb.getChange() != ChangeKind.ADDED)
+							cfb.setChange(ChangeKind.MERGED);
+						cfb.addChanges(ChangeKind.ADDED);
+						cfb.addPreviousNames("");
+						cfb.addPreviousVersions(parentIndex);
+//						cfb.addPreviousIndices(-1);
+//						cfb.addPreviousVersions(-1);
 						filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
 					}
 				}
 				else if (diff.getChangeType() == ChangeType.DELETE) {
 					if (diff.getOldMode().getObjectType() == Constants.OBJ_BLOB) {
-						rRemovedPaths.put(diff.getOldPath(), diff.getOldPath());
+						String path = diff.getOldPath();
+						ChangedFile.Builder cfb = getChangeFile(path);
+						if (cfb.getChange() == null || cfb.getChange() == ChangeKind.UNKNOWN)
+							cfb.setChange(ChangeKind.DELETED);
+						else if (cfb.getChange() != ChangeKind.DELETED)
+							cfb.setChange(ChangeKind.MERGED);
+						filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
+//						List<int[]> previousFiles = new ArrayList<int[]>();
+//						String path = getPreviousFiles(previousFiles, parent.getName(), diff.getOldPath());
+//						if (path != null) {
+//							ChangedFile.Builder cfb = getChangeFile(path);
+//							if (cfb.getChange() == null || cfb.getChange() == ChangeKind.UNKNOWN)
+//								cfb.setChange(ChangeKind.DELETED);
+//							else if (cfb.getChange() != ChangeKind.DELETED)
+//								cfb.setChange(ChangeKind.MERGED);
+//							cfb.setName(path);
+//							for (int[] values : previousFiles) {
+//								cfb.addChanges(ChangeKind.DELETED);
+//								cfb.addPreviousIndices(values[0]);
+//								cfb.addPreviousVersions(values[1]);
+//							}
+//							filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
+//						}
 					}
 				}
 			}
@@ -191,5 +290,79 @@ public class GitCommit extends AbstractCommit {
 				System.err.println("Git Error getting commit diffs: " + e.getMessage());
 		}
 		df.close();
+	}
+
+	private void getChangeFile(final RevCommit parent, int parentIndex, final DiffEntry diff, final ChangeKind kind) {
+//		List<int[]> previousFiles = new ArrayList<int[]>();
+//		String p = getPreviousFiles(previousFiles, parent.getName(), diff.getOldPath());
+//		if (p == null)
+//			return;
+		String path = diff.getNewPath();
+		ChangedFile.Builder cfb = getChangeFile(path);
+		if (cfb.getChange() == null || cfb.getChange() == ChangeKind.UNKNOWN)
+			cfb.setChange(kind);
+		else if (cfb.getChange() != kind)
+			cfb.setChange(ChangeKind.MERGED);
+		cfb.addChanges(kind);
+		String oldPath = diff.getOldPath();
+		if (oldPath.equals(path))
+			cfb.addPreviousNames("");
+		else
+			cfb.addPreviousNames(oldPath);
+		cfb.addPreviousVersions(parentIndex);
+//		int start = 0;
+//		while (path.charAt(start) == '/')
+//			start++;
+//		if (start > 0)
+//			path = p.substring(0, start) + path.substring(start);
+//		cfb.setName(path);
+//		for (int[] values : previousFiles) {
+//			cfb.addChanges(kind);
+//			cfb.addPreviousIndices(values[0]);
+//			cfb.addPreviousVersions(values[1]);
+//		}
+		filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
+	}
+	
+	public int countChangedFiles(RevCommit rc) {
+		int count = 0;
+		if (rc.getParentCount() == 0) {
+			TreeWalk tw = new TreeWalk(repository);
+			tw.reset();
+			try {
+				tw.addTree(rc.getTree());
+				tw.setRecursive(true);
+				while (tw.next()) {
+					if (!tw.isSubtree()) {
+						count++;
+					}
+				}
+			} catch (IOException e) {
+				if (debug)
+					System.err.println(e.getMessage());
+			}
+			tw.close();
+		} else {
+			parentIndices = new int[rc.getParentCount()];
+			for (int i = 0; i < rc.getParentCount(); i++) {
+				final DiffFormatter df = new DiffFormatter(NullOutputStream.INSTANCE);
+				df.setRepository(repository);
+				df.setDiffComparator(RawTextComparator.DEFAULT);
+				df.setDetectRenames(true);
+
+				try {
+					RevCommit parent = revwalk.parseCommit(rc.getParent(i).getId());
+					final AbstractTreeIterator parentIter = new CanonicalTreeParser(null, repository.newObjectReader(), parent.getTree());
+					List<DiffEntry> diffs = df.scan(parentIter, new CanonicalTreeParser(null, repository.newObjectReader(), rc.getTree()));
+					if (diffs.size() > count)
+						count = diffs.size();
+				} catch (final IOException e) {
+					if (debug)
+						System.err.println("Git Error getting commit diffs: " + e.getMessage());
+				}
+				df.close();
+			}
+		}
+		return count;
 	}
 }

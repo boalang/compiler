@@ -1,0 +1,99 @@
+namespaces {
+  name: ""
+  statements {
+    kind: SWITCH
+    statements {
+      kind: CASE
+      statements {
+        kind: EXPRESSION
+        expressions {
+          kind: METHODCALL
+          expressions {
+            kind: VARACCESS
+            variable: "console"
+          }
+          method: "log"
+          method_args {
+            kind: LITERAL
+            literal: "Oranges are $0.59 a pound."
+          }
+        }
+      }
+      statements {
+        kind: BREAK
+      }
+      expressions {
+        kind: LITERAL
+        literal: "Oranges"
+      }
+    }
+    statements {
+      kind: CASE
+      expressions {
+        kind: LITERAL
+        literal: "Mangoes"
+      }
+    }
+    statements {
+      kind: CASE
+      statements {
+        kind: EXPRESSION
+        expressions {
+          kind: METHODCALL
+          expressions {
+            kind: VARACCESS
+            variable: "console"
+          }
+          method: "log"
+          method_args {
+            kind: LITERAL
+            literal: "Mangoes and papayas are $2.79 a pound."
+          }
+        }
+      }
+      statements {
+        kind: BREAK
+      }
+      expressions {
+        kind: LITERAL
+        literal: "Papayas"
+      }
+    }
+    statements {
+      kind: DEFAULT
+      statements {
+        kind: EXPRESSION
+        expressions {
+          kind: METHODCALL
+          expressions {
+            kind: VARACCESS
+            variable: "console"
+          }
+          method: "log"
+          method_args {
+            kind: OP_ADD
+            expressions {
+              kind: OP_ADD
+              expressions {
+                kind: LITERAL
+                literal: "Sorry, we are out of "
+              }
+              expressions {
+                kind: VARACCESS
+                variable: "expr"
+              }
+            }
+            expressions {
+              kind: LITERAL
+              literal: "."
+            }
+          }
+        }
+      }
+    }
+    expressions {
+      kind: VARACCESS
+      variable: "expr"
+    }
+  }
+}

@@ -89,6 +89,30 @@ public final class Ast {
      * </pre>
      */
     GENERIC(10, 8),
+    /**
+     * <code>TRAIT = 9;</code>
+     *
+     * <pre>
+     ** A trait 
+     * </pre>
+     */
+    TRAIT(11, 9),
+    /**
+     * <code>PRIMITIVE = 10;</code>
+     *
+     * <pre>
+     ** Pritimitve type 
+     * </pre>
+     */
+    PRIMITIVE(12, 10),
+    /**
+     * <code>ARRAY = 11;</code>
+     *
+     * <pre>
+     ** Array type 
+     * </pre>
+     */
+    ARRAY(13, 11),
     ;
 
     /**
@@ -195,6 +219,30 @@ public final class Ast {
      * </pre>
      */
     public static final int GENERIC_VALUE = 8;
+    /**
+     * <code>TRAIT = 9;</code>
+     *
+     * <pre>
+     ** A trait 
+     * </pre>
+     */
+    public static final int TRAIT_VALUE = 9;
+    /**
+     * <code>PRIMITIVE = 10;</code>
+     *
+     * <pre>
+     ** Pritimitve type 
+     * </pre>
+     */
+    public static final int PRIMITIVE_VALUE = 10;
+    /**
+     * <code>ARRAY = 11;</code>
+     *
+     * <pre>
+     ** Array type 
+     * </pre>
+     */
+    public static final int ARRAY_VALUE = 11;
 
 
     public final int getNumber() { return value; }
@@ -210,6 +258,9 @@ public final class Ast {
         case 6: return ANNOTATION;
         case 7: return DELEGATE;
         case 8: return GENERIC;
+        case 9: return TRAIT;
+        case 10: return PRIMITIVE;
+        case 11: return ARRAY;
         default: return null;
       }
     }
@@ -240,7 +291,7 @@ public final class Ast {
     }
 
     private static final TypeKind[] VALUES = {
-      OTHER, CLASS, INTERFACE, ANONYMOUS, ANON, STRUCT, ENUM, ENUMERATION, ANNOTATION, DELEGATE, GENERIC, 
+      OTHER, CLASS, INTERFACE, ANONYMOUS, ANON, STRUCT, ENUM, ENUMERATION, ANNOTATION, DELEGATE, GENERIC, TRAIT, PRIMITIVE, ARRAY, 
     };
 
     public static TypeKind valueOf(
@@ -1005,42 +1056,6 @@ public final class Ast {
     boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
         int index);
 
-    // repeated string imports = 2;
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    java.util.List<java.lang.String>
-    getImportsList();
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    int getImportsCount();
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    java.lang.String getImports(int index);
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    com.google.protobuf.ByteString
-        getImportsBytes(int index);
-
     // repeated string names = 3;
     /**
      * <code>repeated string names = 3;</code>
@@ -1077,41 +1092,49 @@ public final class Ast {
     com.google.protobuf.ByteString
         getNamesBytes(int index);
 
-    // optional .boa.types.ChangeKind structural_change_kind = 4;
+    // optional int32 key = 4;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional int32 key = 4;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasKey();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional int32 key = 4;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    int getKey();
 
-    // optional .boa.types.ChangeKind label_change_kind = 5;
+    // optional .boa.types.Document document = 5;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional .boa.types.Document document = 5;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     **The top-level document of an html, css, or xml DOM
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasDocument();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional .boa.types.Document document = 5;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     **The top-level document of an html, css, or xml DOM
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    boa.types.Ast.Document getDocument();
+    /**
+     * <code>optional .boa.types.Document document = 5;</code>
+     *
+     * <pre>
+     **The top-level document of an html, css, or xml DOM
+     * </pre>
+     */
+    boa.types.Ast.DocumentOrBuilder getDocumentOrBuilder();
   }
   /**
    * Protobuf type {@code boa.types.ASTRoot}
@@ -1176,42 +1199,30 @@ public final class Ast {
               namespaces_.add(input.readMessage(boa.types.Ast.Namespace.PARSER, extensionRegistry));
               break;
             }
-            case 18: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                imports_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              imports_.add(input.readBytes());
-              break;
-            }
             case 26: {
-              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
                 names_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000004;
+                mutable_bitField0_ |= 0x00000002;
               }
               names_.add(input.readBytes());
               break;
             }
             case 32: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(4, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                structuralChangeKind_ = value;
-              }
+              bitField0_ |= 0x00000001;
+              key_ = input.readInt32();
               break;
             }
-            case 40: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(5, rawValue);
-              } else {
-                bitField0_ |= 0x00000002;
-                labelChangeKind_ = value;
+            case 42: {
+              boa.types.Ast.Document.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                subBuilder = document_.toBuilder();
               }
+              document_ = input.readMessage(boa.types.Ast.Document.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(document_);
+                document_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000002;
               break;
             }
           }
@@ -1226,9 +1237,6 @@ public final class Ast {
           namespaces_ = java.util.Collections.unmodifiableList(namespaces_);
         }
         if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          imports_ = new com.google.protobuf.UnmodifiableLazyStringList(imports_);
-        }
-        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
           names_ = new com.google.protobuf.UnmodifiableLazyStringList(names_);
         }
         this.unknownFields = unknownFields.build();
@@ -1319,52 +1327,6 @@ public final class Ast {
       return namespaces_.get(index);
     }
 
-    // repeated string imports = 2;
-    public static final int IMPORTS_FIELD_NUMBER = 2;
-    private com.google.protobuf.LazyStringList imports_;
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    public java.util.List<java.lang.String>
-        getImportsList() {
-      return imports_;
-    }
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    public int getImportsCount() {
-      return imports_.size();
-    }
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    public java.lang.String getImports(int index) {
-      return imports_.get(index);
-    }
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    public com.google.protobuf.ByteString
-        getImportsBytes(int index) {
-      return imports_.getByteString(index);
-    }
-
     // repeated string names = 3;
     public static final int NAMES_FIELD_NUMBER = 3;
     private com.google.protobuf.LazyStringList names_;
@@ -1411,60 +1373,69 @@ public final class Ast {
       return names_.getByteString(index);
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 4;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 4;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional int32 key = 4;
+    public static final int KEY_FIELD_NUMBER = 4;
+    private int key_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional int32 key = 4;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasKey() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional int32 key = 4;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public int getKey() {
+      return key_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 5;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 5;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // optional .boa.types.Document document = 5;
+    public static final int DOCUMENT_FIELD_NUMBER = 5;
+    private boa.types.Ast.Document document_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional .boa.types.Document document = 5;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     **The top-level document of an html, css, or xml DOM
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
+    public boolean hasDocument() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional .boa.types.Document document = 5;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     **The top-level document of an html, css, or xml DOM
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public boa.types.Ast.Document getDocument() {
+      return document_;
+    }
+    /**
+     * <code>optional .boa.types.Document document = 5;</code>
+     *
+     * <pre>
+     **The top-level document of an html, css, or xml DOM
+     * </pre>
+     */
+    public boa.types.Ast.DocumentOrBuilder getDocumentOrBuilder() {
+      return document_;
     }
 
     private void initFields() {
       namespaces_ = java.util.Collections.emptyList();
-      imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      key_ = 0;
+      document_ = boa.types.Ast.Document.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1473,6 +1444,12 @@ public final class Ast {
 
       for (int i = 0; i < getNamespacesCount(); i++) {
         if (!getNamespaces(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasDocument()) {
+        if (!getDocument().isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -1487,17 +1464,14 @@ public final class Ast {
       for (int i = 0; i < namespaces_.size(); i++) {
         output.writeMessage(1, namespaces_.get(i));
       }
-      for (int i = 0; i < imports_.size(); i++) {
-        output.writeBytes(2, imports_.getByteString(i));
-      }
       for (int i = 0; i < names_.size(); i++) {
         output.writeBytes(3, names_.getByteString(i));
       }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeEnum(4, structuralChangeKind_.getNumber());
+        output.writeInt32(4, key_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeEnum(5, labelChangeKind_.getNumber());
+        output.writeMessage(5, document_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1514,15 +1488,6 @@ public final class Ast {
       }
       {
         int dataSize = 0;
-        for (int i = 0; i < imports_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeBytesSizeNoTag(imports_.getByteString(i));
-        }
-        size += dataSize;
-        size += 1 * getImportsList().size();
-      }
-      {
-        int dataSize = 0;
         for (int i = 0; i < names_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
             .computeBytesSizeNoTag(names_.getByteString(i));
@@ -1532,11 +1497,11 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, structuralChangeKind_.getNumber());
+          .computeInt32Size(4, key_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(5, labelChangeKind_.getNumber());
+          .computeMessageSize(5, document_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1651,6 +1616,7 @@ public final class Ast {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getNamespacesFieldBuilder();
+          getDocumentFieldBuilder();
         }
       }
       private static Builder create() {
@@ -1665,14 +1631,16 @@ public final class Ast {
         } else {
           namespacesBuilder_.clear();
         }
-        imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000002);
         names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        key_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        if (documentBuilder_ == null) {
+          document_ = boa.types.Ast.Document.getDefaultInstance();
+        } else {
+          documentBuilder_.clear();
+        }
         bitField0_ = (bitField0_ & ~0x00000008);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
@@ -1711,25 +1679,23 @@ public final class Ast {
           result.namespaces_ = namespacesBuilder_.build();
         }
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          imports_ = new com.google.protobuf.UnmodifiableLazyStringList(
-              imports_);
-          bitField0_ = (bitField0_ & ~0x00000002);
-        }
-        result.imports_ = imports_;
-        if (((bitField0_ & 0x00000004) == 0x00000004)) {
           names_ = new com.google.protobuf.UnmodifiableLazyStringList(
               names_);
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000002);
         }
         result.names_ = names_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+        result.key_ = key_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        if (documentBuilder_ == null) {
+          result.document_ = document_;
+        } else {
+          result.document_ = documentBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1772,31 +1738,21 @@ public final class Ast {
             }
           }
         }
-        if (!other.imports_.isEmpty()) {
-          if (imports_.isEmpty()) {
-            imports_ = other.imports_;
-            bitField0_ = (bitField0_ & ~0x00000002);
-          } else {
-            ensureImportsIsMutable();
-            imports_.addAll(other.imports_);
-          }
-          onChanged();
-        }
         if (!other.names_.isEmpty()) {
           if (names_.isEmpty()) {
             names_ = other.names_;
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000002);
           } else {
             ensureNamesIsMutable();
             names_.addAll(other.names_);
           }
           onChanged();
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasKey()) {
+          setKey(other.getKey());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasDocument()) {
+          mergeDocument(other.getDocument());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -1805,6 +1761,12 @@ public final class Ast {
       public final boolean isInitialized() {
         for (int i = 0; i < getNamespacesCount(); i++) {
           if (!getNamespaces(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasDocument()) {
+          if (!getDocument().isInitialized()) {
             
             return false;
           }
@@ -2143,141 +2105,12 @@ public final class Ast {
         return namespacesBuilder_;
       }
 
-      // repeated string imports = 2;
-      private com.google.protobuf.LazyStringList imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      private void ensureImportsIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          imports_ = new com.google.protobuf.LazyStringArrayList(imports_);
-          bitField0_ |= 0x00000002;
-         }
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public java.util.List<java.lang.String>
-          getImportsList() {
-        return java.util.Collections.unmodifiableList(imports_);
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public int getImportsCount() {
-        return imports_.size();
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public java.lang.String getImports(int index) {
-        return imports_.get(index);
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public com.google.protobuf.ByteString
-          getImportsBytes(int index) {
-        return imports_.getByteString(index);
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public Builder setImports(
-          int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureImportsIsMutable();
-        imports_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public Builder addImports(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureImportsIsMutable();
-        imports_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public Builder addAllImports(
-          java.lang.Iterable<java.lang.String> values) {
-        ensureImportsIsMutable();
-        super.addAll(values, imports_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public Builder clearImports() {
-        imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public Builder addImportsBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureImportsIsMutable();
-        imports_.add(value);
-        onChanged();
-        return this;
-      }
-
       // repeated string names = 3;
       private com.google.protobuf.LazyStringList names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureNamesIsMutable() {
-        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
           names_ = new com.google.protobuf.LazyStringArrayList(names_);
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000002;
          }
       }
       /**
@@ -2379,7 +2212,7 @@ public final class Ast {
        */
       public Builder clearNames() {
         names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
@@ -2401,108 +2234,206 @@ public final class Ast {
         return this;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 4;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional int32 key = 4;
+      private int key_ ;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional int32 key = 4;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional int32 key = 4;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public int getKey() {
+        return key_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional int32 key = 4;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000008;
-        structuralChangeKind_ = value;
+      public Builder setKey(int value) {
+        bitField0_ |= 0x00000004;
+        key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional int32 key = 4;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        key_ = 0;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 5;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional .boa.types.Document document = 5;
+      private boa.types.Ast.Document document_ = boa.types.Ast.Document.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Document, boa.types.Ast.Document.Builder, boa.types.Ast.DocumentOrBuilder> documentBuilder_;
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional .boa.types.Document document = 5;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       **The top-level document of an html, css, or xml DOM
        * </pre>
        */
-      public boolean hasLabelChangeKind() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+      public boolean hasDocument() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional .boa.types.Document document = 5;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       **The top-level document of an html, css, or xml DOM
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
-      }
-      /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
-       *
-       * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-       * </pre>
-       */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
+      public boa.types.Ast.Document getDocument() {
+        if (documentBuilder_ == null) {
+          return document_;
+        } else {
+          return documentBuilder_.getMessage();
         }
-        bitField0_ |= 0x00000010;
-        labelChangeKind_ = value;
-        onChanged();
+      }
+      /**
+       * <code>optional .boa.types.Document document = 5;</code>
+       *
+       * <pre>
+       **The top-level document of an html, css, or xml DOM
+       * </pre>
+       */
+      public Builder setDocument(boa.types.Ast.Document value) {
+        if (documentBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          document_ = value;
+          onChanged();
+        } else {
+          documentBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000008;
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional .boa.types.Document document = 5;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       **The top-level document of an html, css, or xml DOM
        * </pre>
        */
-      public Builder clearLabelChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-        onChanged();
+      public Builder setDocument(
+          boa.types.Ast.Document.Builder builderForValue) {
+        if (documentBuilder_ == null) {
+          document_ = builderForValue.build();
+          onChanged();
+        } else {
+          documentBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000008;
         return this;
+      }
+      /**
+       * <code>optional .boa.types.Document document = 5;</code>
+       *
+       * <pre>
+       **The top-level document of an html, css, or xml DOM
+       * </pre>
+       */
+      public Builder mergeDocument(boa.types.Ast.Document value) {
+        if (documentBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              document_ != boa.types.Ast.Document.getDefaultInstance()) {
+            document_ =
+              boa.types.Ast.Document.newBuilder(document_).mergeFrom(value).buildPartial();
+          } else {
+            document_ = value;
+          }
+          onChanged();
+        } else {
+          documentBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Document document = 5;</code>
+       *
+       * <pre>
+       **The top-level document of an html, css, or xml DOM
+       * </pre>
+       */
+      public Builder clearDocument() {
+        if (documentBuilder_ == null) {
+          document_ = boa.types.Ast.Document.getDefaultInstance();
+          onChanged();
+        } else {
+          documentBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Document document = 5;</code>
+       *
+       * <pre>
+       **The top-level document of an html, css, or xml DOM
+       * </pre>
+       */
+      public boa.types.Ast.Document.Builder getDocumentBuilder() {
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return getDocumentFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Document document = 5;</code>
+       *
+       * <pre>
+       **The top-level document of an html, css, or xml DOM
+       * </pre>
+       */
+      public boa.types.Ast.DocumentOrBuilder getDocumentOrBuilder() {
+        if (documentBuilder_ != null) {
+          return documentBuilder_.getMessageOrBuilder();
+        } else {
+          return document_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Document document = 5;</code>
+       *
+       * <pre>
+       **The top-level document of an html, css, or xml DOM
+       * </pre>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Document, boa.types.Ast.Document.Builder, boa.types.Ast.DocumentOrBuilder> 
+          getDocumentFieldBuilder() {
+        if (documentBuilder_ == null) {
+          documentBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Document, boa.types.Ast.Document.Builder, boa.types.Ast.DocumentOrBuilder>(
+                  document_,
+                  getParentForChildren(),
+                  isClean());
+          document_ = null;
+        }
+        return documentBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.ASTRoot)
@@ -2771,41 +2702,129 @@ public final class Ast {
     boa.types.Ast.ExpressionOrBuilder getExpressionsOrBuilder(
         int index);
 
-    // optional .boa.types.ChangeKind structural_change_kind = 7;
+    // optional int32 key = 10;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional int32 key = 10;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasKey();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional int32 key = 10;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    int getKey();
 
-    // optional .boa.types.ChangeKind label_change_kind = 8;
+    // repeated .boa.types.Namespace namespaces = 11;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** The nested namespaces 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    java.util.List<boa.types.Ast.Namespace> 
+        getNamespacesList();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** The nested namespaces 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    boa.types.Ast.Namespace getNamespaces(int index);
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    int getNamespacesCount();
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
+        getNamespacesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
+        int index);
+
+    // repeated string imports = 12;
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    java.util.List<java.lang.String>
+    getImportsList();
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    int getImportsCount();
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    java.lang.String getImports(int index);
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getImportsBytes(int index);
+
+    // repeated .boa.types.Variable variables = 13;
+    /**
+     * <code>repeated .boa.types.Variable variables = 13;</code>
+     */
+    java.util.List<boa.types.Ast.Variable> 
+        getVariablesList();
+    /**
+     * <code>repeated .boa.types.Variable variables = 13;</code>
+     */
+    boa.types.Ast.Variable getVariables(int index);
+    /**
+     * <code>repeated .boa.types.Variable variables = 13;</code>
+     */
+    int getVariablesCount();
+    /**
+     * <code>repeated .boa.types.Variable variables = 13;</code>
+     */
+    java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
+        getVariablesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Variable variables = 13;</code>
+     */
+    boa.types.Ast.VariableOrBuilder getVariablesOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code boa.types.Namespace}
@@ -2907,26 +2926,33 @@ public final class Ast {
               expressions_.add(input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry));
               break;
             }
-            case 56: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(7, rawValue);
-              } else {
-                bitField0_ |= 0x00000002;
-                structuralChangeKind_ = value;
-              }
+            case 80: {
+              bitField0_ |= 0x00000002;
+              key_ = input.readInt32();
               break;
             }
-            case 64: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(8, rawValue);
-              } else {
-                bitField0_ |= 0x00000004;
-                labelChangeKind_ = value;
+            case 90: {
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+                namespaces_ = new java.util.ArrayList<boa.types.Ast.Namespace>();
+                mutable_bitField0_ |= 0x00000080;
               }
+              namespaces_.add(input.readMessage(boa.types.Ast.Namespace.PARSER, extensionRegistry));
+              break;
+            }
+            case 98: {
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+                imports_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000100;
+              }
+              imports_.add(input.readBytes());
+              break;
+            }
+            case 106: {
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+                variables_ = new java.util.ArrayList<boa.types.Ast.Variable>();
+                mutable_bitField0_ |= 0x00000200;
+              }
+              variables_.add(input.readMessage(boa.types.Ast.Variable.PARSER, extensionRegistry));
               break;
             }
           }
@@ -2951,6 +2977,15 @@ public final class Ast {
         }
         if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
           expressions_ = java.util.Collections.unmodifiableList(expressions_);
+        }
+        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+          namespaces_ = java.util.Collections.unmodifiableList(namespaces_);
+        }
+        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+          imports_ = new com.google.protobuf.UnmodifiableLazyStringList(imports_);
+        }
+        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+          variables_ = java.util.Collections.unmodifiableList(variables_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -3319,52 +3354,166 @@ public final class Ast {
       return expressions_.get(index);
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 7;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 7;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional int32 key = 10;
+    public static final int KEY_FIELD_NUMBER = 10;
+    private int key_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional int32 key = 10;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasKey() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional int32 key = 10;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public int getKey() {
+      return key_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 8;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 8;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // repeated .boa.types.Namespace namespaces = 11;
+    public static final int NAMESPACES_FIELD_NUMBER = 11;
+    private java.util.List<boa.types.Ast.Namespace> namespaces_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** The nested namespaces 
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+    public java.util.List<boa.types.Ast.Namespace> getNamespacesList() {
+      return namespaces_;
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** The nested namespaces 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
+        getNamespacesOrBuilderList() {
+      return namespaces_;
+    }
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    public int getNamespacesCount() {
+      return namespaces_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    public boa.types.Ast.Namespace getNamespaces(int index) {
+      return namespaces_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    public boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
+        int index) {
+      return namespaces_.get(index);
+    }
+
+    // repeated string imports = 12;
+    public static final int IMPORTS_FIELD_NUMBER = 12;
+    private com.google.protobuf.LazyStringList imports_;
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    public java.util.List<java.lang.String>
+        getImportsList() {
+      return imports_;
+    }
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    public int getImportsCount() {
+      return imports_.size();
+    }
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    public java.lang.String getImports(int index) {
+      return imports_.get(index);
+    }
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getImportsBytes(int index) {
+      return imports_.getByteString(index);
+    }
+
+    // repeated .boa.types.Variable variables = 13;
+    public static final int VARIABLES_FIELD_NUMBER = 13;
+    private java.util.List<boa.types.Ast.Variable> variables_;
+    /**
+     * <code>repeated .boa.types.Variable variables = 13;</code>
+     */
+    public java.util.List<boa.types.Ast.Variable> getVariablesList() {
+      return variables_;
+    }
+    /**
+     * <code>repeated .boa.types.Variable variables = 13;</code>
+     */
+    public java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
+        getVariablesOrBuilderList() {
+      return variables_;
+    }
+    /**
+     * <code>repeated .boa.types.Variable variables = 13;</code>
+     */
+    public int getVariablesCount() {
+      return variables_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Variable variables = 13;</code>
+     */
+    public boa.types.Ast.Variable getVariables(int index) {
+      return variables_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Variable variables = 13;</code>
+     */
+    public boa.types.Ast.VariableOrBuilder getVariablesOrBuilder(
+        int index) {
+      return variables_.get(index);
     }
 
     private void initFields() {
@@ -3374,8 +3523,10 @@ public final class Ast {
       statements_ = java.util.Collections.emptyList();
       methods_ = java.util.Collections.emptyList();
       expressions_ = java.util.Collections.emptyList();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      key_ = 0;
+      namespaces_ = java.util.Collections.emptyList();
+      imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      variables_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -3416,6 +3567,18 @@ public final class Ast {
           return false;
         }
       }
+      for (int i = 0; i < getNamespacesCount(); i++) {
+        if (!getNamespaces(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getVariablesCount(); i++) {
+        if (!getVariables(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -3442,10 +3605,16 @@ public final class Ast {
         output.writeMessage(6, expressions_.get(i));
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeEnum(7, structuralChangeKind_.getNumber());
+        output.writeInt32(10, key_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeEnum(8, labelChangeKind_.getNumber());
+      for (int i = 0; i < namespaces_.size(); i++) {
+        output.writeMessage(11, namespaces_.get(i));
+      }
+      for (int i = 0; i < imports_.size(); i++) {
+        output.writeBytes(12, imports_.getByteString(i));
+      }
+      for (int i = 0; i < variables_.size(); i++) {
+        output.writeMessage(13, variables_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -3482,11 +3651,24 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(7, structuralChangeKind_.getNumber());
+          .computeInt32Size(10, key_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      for (int i = 0; i < namespaces_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(8, labelChangeKind_.getNumber());
+          .computeMessageSize(11, namespaces_.get(i));
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < imports_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(imports_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getImportsList().size();
+      }
+      for (int i = 0; i < variables_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(13, variables_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3605,6 +3787,8 @@ public final class Ast {
           getStatementsFieldBuilder();
           getMethodsFieldBuilder();
           getExpressionsFieldBuilder();
+          getNamespacesFieldBuilder();
+          getVariablesFieldBuilder();
         }
       }
       private static Builder create() {
@@ -3645,10 +3829,22 @@ public final class Ast {
         } else {
           expressionsBuilder_.clear();
         }
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        key_ = 0;
         bitField0_ = (bitField0_ & ~0x00000040);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-        bitField0_ = (bitField0_ & ~0x00000080);
+        if (namespacesBuilder_ == null) {
+          namespaces_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000080);
+        } else {
+          namespacesBuilder_.clear();
+        }
+        imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        if (variablesBuilder_ == null) {
+          variables_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000200);
+        } else {
+          variablesBuilder_.clear();
+        }
         return this;
       }
 
@@ -3729,11 +3925,31 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000004;
+        result.key_ = key_;
+        if (namespacesBuilder_ == null) {
+          if (((bitField0_ & 0x00000080) == 0x00000080)) {
+            namespaces_ = java.util.Collections.unmodifiableList(namespaces_);
+            bitField0_ = (bitField0_ & ~0x00000080);
+          }
+          result.namespaces_ = namespaces_;
+        } else {
+          result.namespaces_ = namespacesBuilder_.build();
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        if (((bitField0_ & 0x00000100) == 0x00000100)) {
+          imports_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              imports_);
+          bitField0_ = (bitField0_ & ~0x00000100);
+        }
+        result.imports_ = imports_;
+        if (variablesBuilder_ == null) {
+          if (((bitField0_ & 0x00000200) == 0x00000200)) {
+            variables_ = java.util.Collections.unmodifiableList(variables_);
+            bitField0_ = (bitField0_ & ~0x00000200);
+          }
+          result.variables_ = variables_;
+        } else {
+          result.variables_ = variablesBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3885,11 +4101,70 @@ public final class Ast {
             }
           }
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasKey()) {
+          setKey(other.getKey());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (namespacesBuilder_ == null) {
+          if (!other.namespaces_.isEmpty()) {
+            if (namespaces_.isEmpty()) {
+              namespaces_ = other.namespaces_;
+              bitField0_ = (bitField0_ & ~0x00000080);
+            } else {
+              ensureNamespacesIsMutable();
+              namespaces_.addAll(other.namespaces_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.namespaces_.isEmpty()) {
+            if (namespacesBuilder_.isEmpty()) {
+              namespacesBuilder_.dispose();
+              namespacesBuilder_ = null;
+              namespaces_ = other.namespaces_;
+              bitField0_ = (bitField0_ & ~0x00000080);
+              namespacesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getNamespacesFieldBuilder() : null;
+            } else {
+              namespacesBuilder_.addAllMessages(other.namespaces_);
+            }
+          }
+        }
+        if (!other.imports_.isEmpty()) {
+          if (imports_.isEmpty()) {
+            imports_ = other.imports_;
+            bitField0_ = (bitField0_ & ~0x00000100);
+          } else {
+            ensureImportsIsMutable();
+            imports_.addAll(other.imports_);
+          }
+          onChanged();
+        }
+        if (variablesBuilder_ == null) {
+          if (!other.variables_.isEmpty()) {
+            if (variables_.isEmpty()) {
+              variables_ = other.variables_;
+              bitField0_ = (bitField0_ & ~0x00000200);
+            } else {
+              ensureVariablesIsMutable();
+              variables_.addAll(other.variables_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.variables_.isEmpty()) {
+            if (variablesBuilder_.isEmpty()) {
+              variablesBuilder_.dispose();
+              variablesBuilder_ = null;
+              variables_ = other.variables_;
+              bitField0_ = (bitField0_ & ~0x00000200);
+              variablesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getVariablesFieldBuilder() : null;
+            } else {
+              variablesBuilder_.addAllMessages(other.variables_);
+            }
+          }
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -3926,6 +4201,18 @@ public final class Ast {
         }
         for (int i = 0; i < getExpressionsCount(); i++) {
           if (!getExpressions(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getNamespacesCount(); i++) {
+          if (!getNamespaces(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getVariablesCount(); i++) {
+          if (!getVariables(i).isInitialized()) {
             
             return false;
           }
@@ -5610,108 +5897,734 @@ public final class Ast {
         return expressionsBuilder_;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 7;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional int32 key = 10;
+      private int key_ ;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional int32 key = 10;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
+      public boolean hasKey() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional int32 key = 10;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public int getKey() {
+        return key_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional int32 key = 10;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setKey(int value) {
         bitField0_ |= 0x00000040;
-        structuralChangeKind_ = value;
+        key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional int32 key = 10;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
+      public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00000040);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        key_ = 0;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 8;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
-       *
-       * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-       * </pre>
-       */
-      public boolean hasLabelChangeKind() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
+      // repeated .boa.types.Namespace namespaces = 11;
+      private java.util.List<boa.types.Ast.Namespace> namespaces_ =
+        java.util.Collections.emptyList();
+      private void ensureNamespacesIsMutable() {
+        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
+          namespaces_ = new java.util.ArrayList<boa.types.Ast.Namespace>(namespaces_);
+          bitField0_ |= 0x00000080;
+         }
       }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder> namespacesBuilder_;
+
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** The nested namespaces 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
-      }
-      /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
-       *
-       * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-       * </pre>
-       */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
+      public java.util.List<boa.types.Ast.Namespace> getNamespacesList() {
+        if (namespacesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(namespaces_);
+        } else {
+          return namespacesBuilder_.getMessageList();
         }
-        bitField0_ |= 0x00000080;
-        labelChangeKind_ = value;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public int getNamespacesCount() {
+        if (namespacesBuilder_ == null) {
+          return namespaces_.size();
+        } else {
+          return namespacesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public boa.types.Ast.Namespace getNamespaces(int index) {
+        if (namespacesBuilder_ == null) {
+          return namespaces_.get(index);
+        } else {
+          return namespacesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder setNamespaces(
+          int index, boa.types.Ast.Namespace value) {
+        if (namespacesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNamespacesIsMutable();
+          namespaces_.set(index, value);
+          onChanged();
+        } else {
+          namespacesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder setNamespaces(
+          int index, boa.types.Ast.Namespace.Builder builderForValue) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          namespacesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder addNamespaces(boa.types.Ast.Namespace value) {
+        if (namespacesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNamespacesIsMutable();
+          namespaces_.add(value);
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder addNamespaces(
+          int index, boa.types.Ast.Namespace value) {
+        if (namespacesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNamespacesIsMutable();
+          namespaces_.add(index, value);
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder addNamespaces(
+          boa.types.Ast.Namespace.Builder builderForValue) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.add(builderForValue.build());
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder addNamespaces(
+          int index, boa.types.Ast.Namespace.Builder builderForValue) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder addAllNamespaces(
+          java.lang.Iterable<? extends boa.types.Ast.Namespace> values) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          super.addAll(values, namespaces_);
+          onChanged();
+        } else {
+          namespacesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder clearNamespaces() {
+        if (namespacesBuilder_ == null) {
+          namespaces_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000080);
+          onChanged();
+        } else {
+          namespacesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder removeNamespaces(int index) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.remove(index);
+          onChanged();
+        } else {
+          namespacesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public boa.types.Ast.Namespace.Builder getNamespacesBuilder(
+          int index) {
+        return getNamespacesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
+          int index) {
+        if (namespacesBuilder_ == null) {
+          return namespaces_.get(index);  } else {
+          return namespacesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
+           getNamespacesOrBuilderList() {
+        if (namespacesBuilder_ != null) {
+          return namespacesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(namespaces_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public boa.types.Ast.Namespace.Builder addNamespacesBuilder() {
+        return getNamespacesFieldBuilder().addBuilder(
+            boa.types.Ast.Namespace.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public boa.types.Ast.Namespace.Builder addNamespacesBuilder(
+          int index) {
+        return getNamespacesFieldBuilder().addBuilder(
+            index, boa.types.Ast.Namespace.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Namespace.Builder> 
+           getNamespacesBuilderList() {
+        return getNamespacesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder> 
+          getNamespacesFieldBuilder() {
+        if (namespacesBuilder_ == null) {
+          namespacesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder>(
+                  namespaces_,
+                  ((bitField0_ & 0x00000080) == 0x00000080),
+                  getParentForChildren(),
+                  isClean());
+          namespaces_ = null;
+        }
+        return namespacesBuilder_;
+      }
+
+      // repeated string imports = 12;
+      private com.google.protobuf.LazyStringList imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureImportsIsMutable() {
+        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
+          imports_ = new com.google.protobuf.LazyStringArrayList(imports_);
+          bitField0_ |= 0x00000100;
+         }
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public java.util.List<java.lang.String>
+          getImportsList() {
+        return java.util.Collections.unmodifiableList(imports_);
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public int getImportsCount() {
+        return imports_.size();
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public java.lang.String getImports(int index) {
+        return imports_.get(index);
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getImportsBytes(int index) {
+        return imports_.getByteString(index);
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public Builder setImports(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureImportsIsMutable();
+        imports_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>repeated string imports = 12;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** The imported namespaces and types 
        * </pre>
        */
-      public Builder clearLabelChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00000080);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      public Builder addImports(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureImportsIsMutable();
+        imports_.add(value);
         onChanged();
         return this;
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public Builder addAllImports(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureImportsIsMutable();
+        super.addAll(values, imports_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public Builder clearImports() {
+        imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public Builder addImportsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureImportsIsMutable();
+        imports_.add(value);
+        onChanged();
+        return this;
+      }
+
+      // repeated .boa.types.Variable variables = 13;
+      private java.util.List<boa.types.Ast.Variable> variables_ =
+        java.util.Collections.emptyList();
+      private void ensureVariablesIsMutable() {
+        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
+          variables_ = new java.util.ArrayList<boa.types.Ast.Variable>(variables_);
+          bitField0_ |= 0x00000200;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Variable, boa.types.Ast.Variable.Builder, boa.types.Ast.VariableOrBuilder> variablesBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public java.util.List<boa.types.Ast.Variable> getVariablesList() {
+        if (variablesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(variables_);
+        } else {
+          return variablesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public int getVariablesCount() {
+        if (variablesBuilder_ == null) {
+          return variables_.size();
+        } else {
+          return variablesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public boa.types.Ast.Variable getVariables(int index) {
+        if (variablesBuilder_ == null) {
+          return variables_.get(index);
+        } else {
+          return variablesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public Builder setVariables(
+          int index, boa.types.Ast.Variable value) {
+        if (variablesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureVariablesIsMutable();
+          variables_.set(index, value);
+          onChanged();
+        } else {
+          variablesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public Builder setVariables(
+          int index, boa.types.Ast.Variable.Builder builderForValue) {
+        if (variablesBuilder_ == null) {
+          ensureVariablesIsMutable();
+          variables_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          variablesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public Builder addVariables(boa.types.Ast.Variable value) {
+        if (variablesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureVariablesIsMutable();
+          variables_.add(value);
+          onChanged();
+        } else {
+          variablesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public Builder addVariables(
+          int index, boa.types.Ast.Variable value) {
+        if (variablesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureVariablesIsMutable();
+          variables_.add(index, value);
+          onChanged();
+        } else {
+          variablesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public Builder addVariables(
+          boa.types.Ast.Variable.Builder builderForValue) {
+        if (variablesBuilder_ == null) {
+          ensureVariablesIsMutable();
+          variables_.add(builderForValue.build());
+          onChanged();
+        } else {
+          variablesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public Builder addVariables(
+          int index, boa.types.Ast.Variable.Builder builderForValue) {
+        if (variablesBuilder_ == null) {
+          ensureVariablesIsMutable();
+          variables_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          variablesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public Builder addAllVariables(
+          java.lang.Iterable<? extends boa.types.Ast.Variable> values) {
+        if (variablesBuilder_ == null) {
+          ensureVariablesIsMutable();
+          super.addAll(values, variables_);
+          onChanged();
+        } else {
+          variablesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public Builder clearVariables() {
+        if (variablesBuilder_ == null) {
+          variables_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000200);
+          onChanged();
+        } else {
+          variablesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public Builder removeVariables(int index) {
+        if (variablesBuilder_ == null) {
+          ensureVariablesIsMutable();
+          variables_.remove(index);
+          onChanged();
+        } else {
+          variablesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public boa.types.Ast.Variable.Builder getVariablesBuilder(
+          int index) {
+        return getVariablesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public boa.types.Ast.VariableOrBuilder getVariablesOrBuilder(
+          int index) {
+        if (variablesBuilder_ == null) {
+          return variables_.get(index);  } else {
+          return variablesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
+           getVariablesOrBuilderList() {
+        if (variablesBuilder_ != null) {
+          return variablesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(variables_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public boa.types.Ast.Variable.Builder addVariablesBuilder() {
+        return getVariablesFieldBuilder().addBuilder(
+            boa.types.Ast.Variable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public boa.types.Ast.Variable.Builder addVariablesBuilder(
+          int index) {
+        return getVariablesFieldBuilder().addBuilder(
+            index, boa.types.Ast.Variable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Variable variables = 13;</code>
+       */
+      public java.util.List<boa.types.Ast.Variable.Builder> 
+           getVariablesBuilderList() {
+        return getVariablesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Variable, boa.types.Ast.Variable.Builder, boa.types.Ast.VariableOrBuilder> 
+          getVariablesFieldBuilder() {
+        if (variablesBuilder_ == null) {
+          variablesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Variable, boa.types.Ast.Variable.Builder, boa.types.Ast.VariableOrBuilder>(
+                  variables_,
+                  ((bitField0_ & 0x00000200) == 0x00000200),
+                  getParentForChildren(),
+                  isClean());
+          variables_ = null;
+        }
+        return variablesBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Namespace)
@@ -6088,41 +7001,113 @@ public final class Ast {
     boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
         int index);
 
-    // optional .boa.types.ChangeKind structural_change_kind = 10;
+    // optional int32 key = 13;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional int32 key = 13;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasKey();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional int32 key = 13;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    int getKey();
 
-    // optional .boa.types.ChangeKind label_change_kind = 11;
+    // optional string fully_qualified_name = 14;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional string fully_qualified_name = 14;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** The fully qualified name of this type/interface 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasFullyQualifiedName();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional string fully_qualified_name = 14;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** The fully qualified name of this type/interface 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    java.lang.String getFullyQualifiedName();
+    /**
+     * <code>optional string fully_qualified_name = 14;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getFullyQualifiedNameBytes();
+
+    // optional int32 declaring_type = 15;
+    /**
+     * <code>optional int32 declaring_type = 15;</code>
+     *
+     * <pre>
+     ** the key of the declaring class in the same AST 
+     * </pre>
+     */
+    boolean hasDeclaringType();
+    /**
+     * <code>optional int32 declaring_type = 15;</code>
+     *
+     * <pre>
+     ** the key of the declaring class in the same AST 
+     * </pre>
+     */
+    int getDeclaringType();
+
+    // repeated .boa.types.Statement statements = 16;
+    /**
+     * <code>repeated .boa.types.Statement statements = 16;</code>
+     *
+     * <pre>
+     ** Nested statements 
+     * </pre>
+     */
+    java.util.List<boa.types.Ast.Statement> 
+        getStatementsList();
+    /**
+     * <code>repeated .boa.types.Statement statements = 16;</code>
+     *
+     * <pre>
+     ** Nested statements 
+     * </pre>
+     */
+    boa.types.Ast.Statement getStatements(int index);
+    /**
+     * <code>repeated .boa.types.Statement statements = 16;</code>
+     *
+     * <pre>
+     ** Nested statements 
+     * </pre>
+     */
+    int getStatementsCount();
+    /**
+     * <code>repeated .boa.types.Statement statements = 16;</code>
+     *
+     * <pre>
+     ** Nested statements 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Ast.StatementOrBuilder> 
+        getStatementsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Statement statements = 16;</code>
+     *
+     * <pre>
+     ** Nested statements 
+     * </pre>
+     */
+    boa.types.Ast.StatementOrBuilder getStatementsOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code boa.types.Declaration}
@@ -6251,26 +7236,27 @@ public final class Ast {
               comments_.add(input.readMessage(boa.types.Ast.Comment.PARSER, extensionRegistry));
               break;
             }
-            case 80: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(10, rawValue);
-              } else {
-                bitField0_ |= 0x00000004;
-                structuralChangeKind_ = value;
-              }
+            case 104: {
+              bitField0_ |= 0x00000004;
+              key_ = input.readInt32();
               break;
             }
-            case 88: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(11, rawValue);
-              } else {
-                bitField0_ |= 0x00000008;
-                labelChangeKind_ = value;
+            case 114: {
+              bitField0_ |= 0x00000008;
+              fullyQualifiedName_ = input.readBytes();
+              break;
+            }
+            case 120: {
+              bitField0_ |= 0x00000010;
+              declaringType_ = input.readInt32();
+              break;
+            }
+            case 130: {
+              if (!((mutable_bitField0_ & 0x00001000) == 0x00001000)) {
+                statements_ = new java.util.ArrayList<boa.types.Ast.Statement>();
+                mutable_bitField0_ |= 0x00001000;
               }
+              statements_.add(input.readMessage(boa.types.Ast.Statement.PARSER, extensionRegistry));
               break;
             }
           }
@@ -6301,6 +7287,9 @@ public final class Ast {
         }
         if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
           comments_ = java.util.Collections.unmodifiableList(comments_);
+        }
+        if (((mutable_bitField0_ & 0x00001000) == 0x00001000)) {
+          statements_ = java.util.Collections.unmodifiableList(statements_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -6805,52 +7794,163 @@ public final class Ast {
       return comments_.get(index);
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 10;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 10;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional int32 key = 13;
+    public static final int KEY_FIELD_NUMBER = 13;
+    private int key_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional int32 key = 13;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasKey() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional int32 key = 13;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public int getKey() {
+      return key_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 11;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 11;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // optional string fully_qualified_name = 14;
+    public static final int FULLY_QUALIFIED_NAME_FIELD_NUMBER = 14;
+    private java.lang.Object fullyQualifiedName_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional string fully_qualified_name = 14;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** The fully qualified name of this type/interface 
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
+    public boolean hasFullyQualifiedName() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional string fully_qualified_name = 14;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** The fully qualified name of this type/interface 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public java.lang.String getFullyQualifiedName() {
+      java.lang.Object ref = fullyQualifiedName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          fullyQualifiedName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string fully_qualified_name = 14;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getFullyQualifiedNameBytes() {
+      java.lang.Object ref = fullyQualifiedName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        fullyQualifiedName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional int32 declaring_type = 15;
+    public static final int DECLARING_TYPE_FIELD_NUMBER = 15;
+    private int declaringType_;
+    /**
+     * <code>optional int32 declaring_type = 15;</code>
+     *
+     * <pre>
+     ** the key of the declaring class in the same AST 
+     * </pre>
+     */
+    public boolean hasDeclaringType() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional int32 declaring_type = 15;</code>
+     *
+     * <pre>
+     ** the key of the declaring class in the same AST 
+     * </pre>
+     */
+    public int getDeclaringType() {
+      return declaringType_;
+    }
+
+    // repeated .boa.types.Statement statements = 16;
+    public static final int STATEMENTS_FIELD_NUMBER = 16;
+    private java.util.List<boa.types.Ast.Statement> statements_;
+    /**
+     * <code>repeated .boa.types.Statement statements = 16;</code>
+     *
+     * <pre>
+     ** Nested statements 
+     * </pre>
+     */
+    public java.util.List<boa.types.Ast.Statement> getStatementsList() {
+      return statements_;
+    }
+    /**
+     * <code>repeated .boa.types.Statement statements = 16;</code>
+     *
+     * <pre>
+     ** Nested statements 
+     * </pre>
+     */
+    public java.util.List<? extends boa.types.Ast.StatementOrBuilder> 
+        getStatementsOrBuilderList() {
+      return statements_;
+    }
+    /**
+     * <code>repeated .boa.types.Statement statements = 16;</code>
+     *
+     * <pre>
+     ** Nested statements 
+     * </pre>
+     */
+    public int getStatementsCount() {
+      return statements_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Statement statements = 16;</code>
+     *
+     * <pre>
+     ** Nested statements 
+     * </pre>
+     */
+    public boa.types.Ast.Statement getStatements(int index) {
+      return statements_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Statement statements = 16;</code>
+     *
+     * <pre>
+     ** Nested statements 
+     * </pre>
+     */
+    public boa.types.Ast.StatementOrBuilder getStatementsOrBuilder(
+        int index) {
+      return statements_.get(index);
     }
 
     private void initFields() {
@@ -6863,8 +7963,10 @@ public final class Ast {
       fields_ = java.util.Collections.emptyList();
       nestedDeclarations_ = java.util.Collections.emptyList();
       comments_ = java.util.Collections.emptyList();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      key_ = 0;
+      fullyQualifiedName_ = "";
+      declaringType_ = 0;
+      statements_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -6921,6 +8023,12 @@ public final class Ast {
           return false;
         }
       }
+      for (int i = 0; i < getStatementsCount(); i++) {
+        if (!getStatements(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -6956,10 +8064,16 @@ public final class Ast {
         output.writeMessage(9, comments_.get(i));
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeEnum(10, structuralChangeKind_.getNumber());
+        output.writeInt32(13, key_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(11, labelChangeKind_.getNumber());
+        output.writeBytes(14, getFullyQualifiedNameBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeInt32(15, declaringType_);
+      }
+      for (int i = 0; i < statements_.size(); i++) {
+        output.writeMessage(16, statements_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -7008,11 +8122,19 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(10, structuralChangeKind_.getNumber());
+          .computeInt32Size(13, key_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(11, labelChangeKind_.getNumber());
+          .computeBytesSize(14, getFullyQualifiedNameBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(15, declaringType_);
+      }
+      for (int i = 0; i < statements_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(16, statements_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -7133,6 +8255,7 @@ public final class Ast {
           getFieldsFieldBuilder();
           getNestedDeclarationsFieldBuilder();
           getCommentsFieldBuilder();
+          getStatementsFieldBuilder();
         }
       }
       private static Builder create() {
@@ -7187,10 +8310,18 @@ public final class Ast {
         } else {
           commentsBuilder_.clear();
         }
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        key_ = 0;
         bitField0_ = (bitField0_ & ~0x00000200);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        fullyQualifiedName_ = "";
         bitField0_ = (bitField0_ & ~0x00000400);
+        declaringType_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000800);
+        if (statementsBuilder_ == null) {
+          statements_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00001000);
+        } else {
+          statementsBuilder_.clear();
+        }
         return this;
       }
 
@@ -7293,11 +8424,24 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        result.key_ = key_;
         if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.fullyQualifiedName_ = fullyQualifiedName_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.declaringType_ = declaringType_;
+        if (statementsBuilder_ == null) {
+          if (((bitField0_ & 0x00001000) == 0x00001000)) {
+            statements_ = java.util.Collections.unmodifiableList(statements_);
+            bitField0_ = (bitField0_ & ~0x00001000);
+          }
+          result.statements_ = statements_;
+        } else {
+          result.statements_ = statementsBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -7504,11 +8648,42 @@ public final class Ast {
             }
           }
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasKey()) {
+          setKey(other.getKey());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasFullyQualifiedName()) {
+          bitField0_ |= 0x00000400;
+          fullyQualifiedName_ = other.fullyQualifiedName_;
+          onChanged();
+        }
+        if (other.hasDeclaringType()) {
+          setDeclaringType(other.getDeclaringType());
+        }
+        if (statementsBuilder_ == null) {
+          if (!other.statements_.isEmpty()) {
+            if (statements_.isEmpty()) {
+              statements_ = other.statements_;
+              bitField0_ = (bitField0_ & ~0x00001000);
+            } else {
+              ensureStatementsIsMutable();
+              statements_.addAll(other.statements_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.statements_.isEmpty()) {
+            if (statementsBuilder_.isEmpty()) {
+              statementsBuilder_.dispose();
+              statementsBuilder_ = null;
+              statements_ = other.statements_;
+              bitField0_ = (bitField0_ & ~0x00001000);
+              statementsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getStatementsFieldBuilder() : null;
+            } else {
+              statementsBuilder_.addAllMessages(other.statements_);
+            }
+          }
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -7561,6 +8736,12 @@ public final class Ast {
         }
         for (int i = 0; i < getCommentsCount(); i++) {
           if (!getComments(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getStatementsCount(); i++) {
+          if (!getStatements(i).isInitialized()) {
             
             return false;
           }
@@ -9921,108 +11102,512 @@ public final class Ast {
         return commentsBuilder_;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 10;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional int32 key = 13;
+      private int key_ ;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional int32 key = 13;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
+      public boolean hasKey() {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional int32 key = 13;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public int getKey() {
+        return key_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional int32 key = 13;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setKey(int value) {
         bitField0_ |= 0x00000200;
-        structuralChangeKind_ = value;
+        key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional int32 key = 13;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
+      public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00000200);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        key_ = 0;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 11;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional string fully_qualified_name = 14;
+      private java.lang.Object fullyQualifiedName_ = "";
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional string fully_qualified_name = 14;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** The fully qualified name of this type/interface 
        * </pre>
        */
-      public boolean hasLabelChangeKind() {
+      public boolean hasFullyQualifiedName() {
         return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional string fully_qualified_name = 14;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** The fully qualified name of this type/interface 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
-      }
-      /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
-       *
-       * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-       * </pre>
-       */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
+      public java.lang.String getFullyQualifiedName() {
+        java.lang.Object ref = fullyQualifiedName_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          fullyQualifiedName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
         }
-        bitField0_ |= 0x00000400;
-        labelChangeKind_ = value;
+      }
+      /**
+       * <code>optional string fully_qualified_name = 14;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getFullyQualifiedNameBytes() {
+        java.lang.Object ref = fullyQualifiedName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          fullyQualifiedName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string fully_qualified_name = 14;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder setFullyQualifiedName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000400;
+        fullyQualifiedName_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional string fully_qualified_name = 14;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** The fully qualified name of this type/interface 
        * </pre>
        */
-      public Builder clearLabelChangeKind() {
+      public Builder clearFullyQualifiedName() {
         bitField0_ = (bitField0_ & ~0x00000400);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        fullyQualifiedName_ = getDefaultInstance().getFullyQualifiedName();
         onChanged();
         return this;
+      }
+      /**
+       * <code>optional string fully_qualified_name = 14;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder setFullyQualifiedNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000400;
+        fullyQualifiedName_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 declaring_type = 15;
+      private int declaringType_ ;
+      /**
+       * <code>optional int32 declaring_type = 15;</code>
+       *
+       * <pre>
+       ** the key of the declaring class in the same AST 
+       * </pre>
+       */
+      public boolean hasDeclaringType() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>optional int32 declaring_type = 15;</code>
+       *
+       * <pre>
+       ** the key of the declaring class in the same AST 
+       * </pre>
+       */
+      public int getDeclaringType() {
+        return declaringType_;
+      }
+      /**
+       * <code>optional int32 declaring_type = 15;</code>
+       *
+       * <pre>
+       ** the key of the declaring class in the same AST 
+       * </pre>
+       */
+      public Builder setDeclaringType(int value) {
+        bitField0_ |= 0x00000800;
+        declaringType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 declaring_type = 15;</code>
+       *
+       * <pre>
+       ** the key of the declaring class in the same AST 
+       * </pre>
+       */
+      public Builder clearDeclaringType() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        declaringType_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // repeated .boa.types.Statement statements = 16;
+      private java.util.List<boa.types.Ast.Statement> statements_ =
+        java.util.Collections.emptyList();
+      private void ensureStatementsIsMutable() {
+        if (!((bitField0_ & 0x00001000) == 0x00001000)) {
+          statements_ = new java.util.ArrayList<boa.types.Ast.Statement>(statements_);
+          bitField0_ |= 0x00001000;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> statementsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Statement> getStatementsList() {
+        if (statementsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(statements_);
+        } else {
+          return statementsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public int getStatementsCount() {
+        if (statementsBuilder_ == null) {
+          return statements_.size();
+        } else {
+          return statementsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public boa.types.Ast.Statement getStatements(int index) {
+        if (statementsBuilder_ == null) {
+          return statements_.get(index);
+        } else {
+          return statementsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public Builder setStatements(
+          int index, boa.types.Ast.Statement value) {
+        if (statementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureStatementsIsMutable();
+          statements_.set(index, value);
+          onChanged();
+        } else {
+          statementsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public Builder setStatements(
+          int index, boa.types.Ast.Statement.Builder builderForValue) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          statementsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public Builder addStatements(boa.types.Ast.Statement value) {
+        if (statementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureStatementsIsMutable();
+          statements_.add(value);
+          onChanged();
+        } else {
+          statementsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public Builder addStatements(
+          int index, boa.types.Ast.Statement value) {
+        if (statementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureStatementsIsMutable();
+          statements_.add(index, value);
+          onChanged();
+        } else {
+          statementsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public Builder addStatements(
+          boa.types.Ast.Statement.Builder builderForValue) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.add(builderForValue.build());
+          onChanged();
+        } else {
+          statementsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public Builder addStatements(
+          int index, boa.types.Ast.Statement.Builder builderForValue) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          statementsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public Builder addAllStatements(
+          java.lang.Iterable<? extends boa.types.Ast.Statement> values) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          super.addAll(values, statements_);
+          onChanged();
+        } else {
+          statementsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public Builder clearStatements() {
+        if (statementsBuilder_ == null) {
+          statements_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00001000);
+          onChanged();
+        } else {
+          statementsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public Builder removeStatements(int index) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.remove(index);
+          onChanged();
+        } else {
+          statementsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public boa.types.Ast.Statement.Builder getStatementsBuilder(
+          int index) {
+        return getStatementsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public boa.types.Ast.StatementOrBuilder getStatementsOrBuilder(
+          int index) {
+        if (statementsBuilder_ == null) {
+          return statements_.get(index);  } else {
+          return statementsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public java.util.List<? extends boa.types.Ast.StatementOrBuilder> 
+           getStatementsOrBuilderList() {
+        if (statementsBuilder_ != null) {
+          return statementsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(statements_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public boa.types.Ast.Statement.Builder addStatementsBuilder() {
+        return getStatementsFieldBuilder().addBuilder(
+            boa.types.Ast.Statement.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public boa.types.Ast.Statement.Builder addStatementsBuilder(
+          int index) {
+        return getStatementsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Statement.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 16;</code>
+       *
+       * <pre>
+       ** Nested statements 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Statement.Builder> 
+           getStatementsBuilderList() {
+        return getStatementsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> 
+          getStatementsFieldBuilder() {
+        if (statementsBuilder_ == null) {
+          statementsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder>(
+                  statements_,
+                  ((bitField0_ & 0x00001000) == 0x00001000),
+                  getParentForChildren(),
+                  isClean());
+          statements_ = null;
+        }
+        return statementsBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Declaration)
@@ -10039,9 +11624,9 @@ public final class Ast {
   public interface TypeOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required string name = 1;
+    // optional string name = 1;
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the type 
@@ -10049,7 +11634,7 @@ public final class Ast {
      */
     boolean hasName();
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the type 
@@ -10057,7 +11642,7 @@ public final class Ast {
      */
     java.lang.String getName();
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the type 
@@ -10066,9 +11651,36 @@ public final class Ast {
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // required .boa.types.TypeKind kind = 2;
+    // optional string fully_qualified_name = 2;
     /**
-     * <code>required .boa.types.TypeKind kind = 2;</code>
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    boolean hasFullyQualifiedName();
+    /**
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    java.lang.String getFullyQualifiedName();
+    /**
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getFullyQualifiedNameBytes();
+
+    // required .boa.types.TypeKind kind = 3;
+    /**
+     * <code>required .boa.types.TypeKind kind = 3;</code>
      *
      * <pre>
      ** The kind of the type 
@@ -10076,7 +11688,7 @@ public final class Ast {
      */
     boolean hasKind();
     /**
-     * <code>required .boa.types.TypeKind kind = 2;</code>
+     * <code>required .boa.types.TypeKind kind = 3;</code>
      *
      * <pre>
      ** The kind of the type 
@@ -10111,41 +11723,73 @@ public final class Ast {
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // optional .boa.types.ChangeKind structural_change_kind = 5;
+    // optional int32 declaration_file = 8;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
+     * <code>optional int32 declaration_file = 8;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasDeclarationFile();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
+     * <code>optional int32 declaration_file = 8;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    int getDeclarationFile();
 
-    // optional .boa.types.ChangeKind label_change_kind = 6;
+    // optional int32 declaration = 9;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
+     * <code>optional int32 declaration = 9;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the node containing the declaration of this type in the AST of the file 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasDeclaration();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
+     * <code>optional int32 declaration = 9;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the node containing the declaration of this type in the AST of the file 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    int getDeclaration();
+
+    // optional int32 key = 10;
+    /**
+     * <code>optional int32 key = 10;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boolean hasKey();
+    /**
+     * <code>optional int32 key = 10;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    int getKey();
+
+    // optional .boa.types.Expression computed_name = 14;
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     */
+    boolean hasComputedName();
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     */
+    boa.types.Ast.Expression getComputedName();
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     */
+    boa.types.Ast.ExpressionOrBuilder getComputedNameOrBuilder();
   }
   /**
    * Protobuf type {@code boa.types.Type}
@@ -10207,42 +11851,53 @@ public final class Ast {
               name_ = input.readBytes();
               break;
             }
-            case 16: {
+            case 18: {
+              bitField0_ |= 0x00000002;
+              fullyQualifiedName_ = input.readBytes();
+              break;
+            }
+            case 24: {
               int rawValue = input.readEnum();
               boa.types.Ast.TypeKind value = boa.types.Ast.TypeKind.valueOf(rawValue);
               if (value == null) {
-                unknownFields.mergeVarintField(2, rawValue);
+                unknownFields.mergeVarintField(3, rawValue);
               } else {
-                bitField0_ |= 0x00000002;
+                bitField0_ |= 0x00000004;
                 kind_ = value;
               }
               break;
             }
             case 34: {
-              bitField0_ |= 0x00000004;
+              bitField0_ |= 0x00000008;
               id_ = input.readBytes();
               break;
             }
-            case 40: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(5, rawValue);
-              } else {
-                bitField0_ |= 0x00000008;
-                structuralChangeKind_ = value;
-              }
+            case 64: {
+              bitField0_ |= 0x00000010;
+              declarationFile_ = input.readInt32();
               break;
             }
-            case 48: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(6, rawValue);
-              } else {
-                bitField0_ |= 0x00000010;
-                labelChangeKind_ = value;
+            case 72: {
+              bitField0_ |= 0x00000020;
+              declaration_ = input.readInt32();
+              break;
+            }
+            case 80: {
+              bitField0_ |= 0x00000040;
+              key_ = input.readInt32();
+              break;
+            }
+            case 114: {
+              boa.types.Ast.Expression.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000080) == 0x00000080)) {
+                subBuilder = computedName_.toBuilder();
               }
+              computedName_ = input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(computedName_);
+                computedName_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000080;
               break;
             }
           }
@@ -10285,11 +11940,11 @@ public final class Ast {
     }
 
     private int bitField0_;
-    // required string name = 1;
+    // optional string name = 1;
     public static final int NAME_FIELD_NUMBER = 1;
     private java.lang.Object name_;
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the type 
@@ -10299,7 +11954,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the type 
@@ -10320,7 +11975,7 @@ public final class Ast {
       }
     }
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the type 
@@ -10340,21 +11995,76 @@ public final class Ast {
       }
     }
 
-    // required .boa.types.TypeKind kind = 2;
-    public static final int KIND_FIELD_NUMBER = 2;
+    // optional string fully_qualified_name = 2;
+    public static final int FULLY_QUALIFIED_NAME_FIELD_NUMBER = 2;
+    private java.lang.Object fullyQualifiedName_;
+    /**
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    public boolean hasFullyQualifiedName() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    public java.lang.String getFullyQualifiedName() {
+      java.lang.Object ref = fullyQualifiedName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          fullyQualifiedName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getFullyQualifiedNameBytes() {
+      java.lang.Object ref = fullyQualifiedName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        fullyQualifiedName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // required .boa.types.TypeKind kind = 3;
+    public static final int KIND_FIELD_NUMBER = 3;
     private boa.types.Ast.TypeKind kind_;
     /**
-     * <code>required .boa.types.TypeKind kind = 2;</code>
+     * <code>required .boa.types.TypeKind kind = 3;</code>
      *
      * <pre>
      ** The kind of the type 
      * </pre>
      */
     public boolean hasKind() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required .boa.types.TypeKind kind = 2;</code>
+     * <code>required .boa.types.TypeKind kind = 3;</code>
      *
      * <pre>
      ** The kind of the type 
@@ -10375,7 +12085,7 @@ public final class Ast {
      * </pre>
      */
     public boolean hasId() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
      * <code>optional string id = 4;</code>
@@ -10419,73 +12129,124 @@ public final class Ast {
       }
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 5;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 5;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional int32 declaration_file = 8;
+    public static final int DECLARATION_FILE_FIELD_NUMBER = 8;
+    private int declarationFile_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
+     * <code>optional int32 declaration_file = 8;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
-     *
-     * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
-     * </pre>
-     */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
-    }
-
-    // optional .boa.types.ChangeKind label_change_kind = 6;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 6;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
-    /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
-     *
-     * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-     * </pre>
-     */
-    public boolean hasLabelChangeKind() {
+    public boolean hasDeclarationFile() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
+     * <code>optional int32 declaration_file = 8;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public int getDeclarationFile() {
+      return declarationFile_;
+    }
+
+    // optional int32 declaration = 9;
+    public static final int DECLARATION_FIELD_NUMBER = 9;
+    private int declaration_;
+    /**
+     * <code>optional int32 declaration = 9;</code>
+     *
+     * <pre>
+     ** the key of the node containing the declaration of this type in the AST of the file 
+     * </pre>
+     */
+    public boolean hasDeclaration() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional int32 declaration = 9;</code>
+     *
+     * <pre>
+     ** the key of the node containing the declaration of this type in the AST of the file 
+     * </pre>
+     */
+    public int getDeclaration() {
+      return declaration_;
+    }
+
+    // optional int32 key = 10;
+    public static final int KEY_FIELD_NUMBER = 10;
+    private int key_;
+    /**
+     * <code>optional int32 key = 10;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional int32 key = 10;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public int getKey() {
+      return key_;
+    }
+
+    // optional .boa.types.Expression computed_name = 14;
+    public static final int COMPUTED_NAME_FIELD_NUMBER = 14;
+    private boa.types.Ast.Expression computedName_;
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     */
+    public boolean hasComputedName() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     */
+    public boa.types.Ast.Expression getComputedName() {
+      return computedName_;
+    }
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     */
+    public boa.types.Ast.ExpressionOrBuilder getComputedNameOrBuilder() {
+      return computedName_;
     }
 
     private void initFields() {
       name_ = "";
+      fullyQualifiedName_ = "";
       kind_ = boa.types.Ast.TypeKind.OTHER;
       id_ = "";
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      declarationFile_ = 0;
+      declaration_ = 0;
+      key_ = 0;
+      computedName_ = boa.types.Ast.Expression.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
-      if (!hasName()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       if (!hasKind()) {
         memoizedIsInitialized = 0;
         return false;
+      }
+      if (hasComputedName()) {
+        if (!getComputedName().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       memoizedIsInitialized = 1;
       return true;
@@ -10498,16 +12259,25 @@ public final class Ast {
         output.writeBytes(1, getNameBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeEnum(2, kind_.getNumber());
+        output.writeBytes(2, getFullyQualifiedNameBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(4, getIdBytes());
+        output.writeEnum(3, kind_.getNumber());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(5, structuralChangeKind_.getNumber());
+        output.writeBytes(4, getIdBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeEnum(6, labelChangeKind_.getNumber());
+        output.writeInt32(8, declarationFile_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt32(9, declaration_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeInt32(10, key_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeMessage(14, computedName_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -10524,19 +12294,31 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, kind_.getNumber());
+          .computeBytesSize(2, getFullyQualifiedNameBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getIdBytes());
+          .computeEnumSize(3, kind_.getNumber());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(5, structuralChangeKind_.getNumber());
+          .computeBytesSize(4, getIdBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(6, labelChangeKind_.getNumber());
+          .computeInt32Size(8, declarationFile_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(9, declaration_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(10, key_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(14, computedName_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -10650,6 +12432,7 @@ public final class Ast {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getComputedNameFieldBuilder();
         }
       }
       private static Builder create() {
@@ -10660,14 +12443,24 @@ public final class Ast {
         super.clear();
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Ast.TypeKind.OTHER;
+        fullyQualifiedName_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        id_ = "";
+        kind_ = boa.types.Ast.TypeKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000004);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        id_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        declarationFile_ = 0;
         bitField0_ = (bitField0_ & ~0x00000010);
+        declaration_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        key_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        if (computedNameBuilder_ == null) {
+          computedName_ = boa.types.Ast.Expression.getDefaultInstance();
+        } else {
+          computedNameBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
 
@@ -10703,19 +12496,35 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.kind_ = kind_;
+        result.fullyQualifiedName_ = fullyQualifiedName_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.id_ = id_;
+        result.kind_ = kind_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        result.id_ = id_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.declarationFile_ = declarationFile_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.declaration_ = declaration_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.key_ = key_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        if (computedNameBuilder_ == null) {
+          result.computedName_ = computedName_;
+        } else {
+          result.computedName_ = computedNameBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -10737,32 +12546,45 @@ public final class Ast {
           name_ = other.name_;
           onChanged();
         }
+        if (other.hasFullyQualifiedName()) {
+          bitField0_ |= 0x00000002;
+          fullyQualifiedName_ = other.fullyQualifiedName_;
+          onChanged();
+        }
         if (other.hasKind()) {
           setKind(other.getKind());
         }
         if (other.hasId()) {
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000008;
           id_ = other.id_;
           onChanged();
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasDeclarationFile()) {
+          setDeclarationFile(other.getDeclarationFile());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasDeclaration()) {
+          setDeclaration(other.getDeclaration());
+        }
+        if (other.hasKey()) {
+          setKey(other.getKey());
+        }
+        if (other.hasComputedName()) {
+          mergeComputedName(other.getComputedName());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
-        if (!hasName()) {
-          
-          return false;
-        }
         if (!hasKind()) {
           
           return false;
+        }
+        if (hasComputedName()) {
+          if (!getComputedName().isInitialized()) {
+            
+            return false;
+          }
         }
         return true;
       }
@@ -10786,10 +12608,10 @@ public final class Ast {
       }
       private int bitField0_;
 
-      // required string name = 1;
+      // optional string name = 1;
       private java.lang.Object name_ = "";
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the type 
@@ -10799,7 +12621,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the type 
@@ -10817,7 +12639,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the type 
@@ -10837,7 +12659,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the type 
@@ -10854,7 +12676,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the type 
@@ -10867,7 +12689,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the type 
@@ -10884,20 +12706,118 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.TypeKind kind = 2;
+      // optional string fully_qualified_name = 2;
+      private java.lang.Object fullyQualifiedName_ = "";
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public boolean hasFullyQualifiedName() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public java.lang.String getFullyQualifiedName() {
+        java.lang.Object ref = fullyQualifiedName_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          fullyQualifiedName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getFullyQualifiedNameBytes() {
+        java.lang.Object ref = fullyQualifiedName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          fullyQualifiedName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder setFullyQualifiedName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        fullyQualifiedName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder clearFullyQualifiedName() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        fullyQualifiedName_ = getDefaultInstance().getFullyQualifiedName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder setFullyQualifiedNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        fullyQualifiedName_ = value;
+        onChanged();
+        return this;
+      }
+
+      // required .boa.types.TypeKind kind = 3;
       private boa.types.Ast.TypeKind kind_ = boa.types.Ast.TypeKind.OTHER;
       /**
-       * <code>required .boa.types.TypeKind kind = 2;</code>
+       * <code>required .boa.types.TypeKind kind = 3;</code>
        *
        * <pre>
        ** The kind of the type 
        * </pre>
        */
       public boolean hasKind() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required .boa.types.TypeKind kind = 2;</code>
+       * <code>required .boa.types.TypeKind kind = 3;</code>
        *
        * <pre>
        ** The kind of the type 
@@ -10907,7 +12827,7 @@ public final class Ast {
         return kind_;
       }
       /**
-       * <code>required .boa.types.TypeKind kind = 2;</code>
+       * <code>required .boa.types.TypeKind kind = 3;</code>
        *
        * <pre>
        ** The kind of the type 
@@ -10917,20 +12837,20 @@ public final class Ast {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         kind_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required .boa.types.TypeKind kind = 2;</code>
+       * <code>required .boa.types.TypeKind kind = 3;</code>
        *
        * <pre>
        ** The kind of the type 
        * </pre>
        */
       public Builder clearKind() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000004);
         kind_ = boa.types.Ast.TypeKind.OTHER;
         onChanged();
         return this;
@@ -10946,7 +12866,7 @@ public final class Ast {
        * </pre>
        */
       public boolean hasId() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
        * <code>optional string id = 4;</code>
@@ -10998,7 +12918,7 @@ public final class Ast {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000008;
         id_ = value;
         onChanged();
         return this;
@@ -11011,7 +12931,7 @@ public final class Ast {
        * </pre>
        */
       public Builder clearId() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000008);
         id_ = getDefaultInstance().getId();
         onChanged();
         return this;
@@ -11028,114 +12948,274 @@ public final class Ast {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000008;
         id_ = value;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 5;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional int32 declaration_file = 8;
+      private int declarationFile_ ;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
+       * <code>optional int32 declaration_file = 8;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+      public boolean hasDeclarationFile() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
+       * <code>optional int32 declaration_file = 8;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public int getDeclarationFile() {
+        return declarationFile_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
+       * <code>optional int32 declaration_file = 8;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000008;
-        structuralChangeKind_ = value;
+      public Builder setDeclarationFile(int value) {
+        bitField0_ |= 0x00000010;
+        declarationFile_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
+       * <code>optional int32 declaration_file = 8;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      public Builder clearDeclarationFile() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        declarationFile_ = 0;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 6;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional int32 declaration = 9;
+      private int declaration_ ;
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
+       * <code>optional int32 declaration = 9;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the node containing the declaration of this type in the AST of the file 
        * </pre>
        */
-      public boolean hasLabelChangeKind() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+      public boolean hasDeclaration() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
+       * <code>optional int32 declaration = 9;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the node containing the declaration of this type in the AST of the file 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
+      public int getDeclaration() {
+        return declaration_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
+       * <code>optional int32 declaration = 9;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the node containing the declaration of this type in the AST of the file 
        * </pre>
        */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
+      public Builder setDeclaration(int value) {
+        bitField0_ |= 0x00000020;
+        declaration_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 declaration = 9;</code>
+       *
+       * <pre>
+       ** the key of the node containing the declaration of this type in the AST of the file 
+       * </pre>
+       */
+      public Builder clearDeclaration() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        declaration_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 key = 10;
+      private int key_ ;
+      /**
+       * <code>optional int32 key = 10;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional int32 key = 10;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public int getKey() {
+        return key_;
+      }
+      /**
+       * <code>optional int32 key = 10;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder setKey(int value) {
+        bitField0_ |= 0x00000040;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 key = 10;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        key_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional .boa.types.Expression computed_name = 14;
+      private boa.types.Ast.Expression computedName_ = boa.types.Ast.Expression.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> computedNameBuilder_;
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      public boolean hasComputedName() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      public boa.types.Ast.Expression getComputedName() {
+        if (computedNameBuilder_ == null) {
+          return computedName_;
+        } else {
+          return computedNameBuilder_.getMessage();
         }
-        bitField0_ |= 0x00000010;
-        labelChangeKind_ = value;
-        onChanged();
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      public Builder setComputedName(boa.types.Ast.Expression value) {
+        if (computedNameBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          computedName_ = value;
+          onChanged();
+        } else {
+          computedNameBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000080;
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
-       *
-       * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-       * </pre>
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
        */
-      public Builder clearLabelChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-        onChanged();
+      public Builder setComputedName(
+          boa.types.Ast.Expression.Builder builderForValue) {
+        if (computedNameBuilder_ == null) {
+          computedName_ = builderForValue.build();
+          onChanged();
+        } else {
+          computedNameBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000080;
         return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      public Builder mergeComputedName(boa.types.Ast.Expression value) {
+        if (computedNameBuilder_ == null) {
+          if (((bitField0_ & 0x00000080) == 0x00000080) &&
+              computedName_ != boa.types.Ast.Expression.getDefaultInstance()) {
+            computedName_ =
+              boa.types.Ast.Expression.newBuilder(computedName_).mergeFrom(value).buildPartial();
+          } else {
+            computedName_ = value;
+          }
+          onChanged();
+        } else {
+          computedNameBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000080;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      public Builder clearComputedName() {
+        if (computedNameBuilder_ == null) {
+          computedName_ = boa.types.Ast.Expression.getDefaultInstance();
+          onChanged();
+        } else {
+          computedNameBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000080);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      public boa.types.Ast.Expression.Builder getComputedNameBuilder() {
+        bitField0_ |= 0x00000080;
+        onChanged();
+        return getComputedNameFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      public boa.types.Ast.ExpressionOrBuilder getComputedNameOrBuilder() {
+        if (computedNameBuilder_ != null) {
+          return computedNameBuilder_.getMessageOrBuilder();
+        } else {
+          return computedName_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
+          getComputedNameFieldBuilder() {
+        if (computedNameBuilder_ == null) {
+          computedNameBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder>(
+                  computedName_,
+                  getParentForChildren(),
+                  isClean());
+          computedName_ = null;
+        }
+        return computedNameBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Type)
@@ -11157,7 +13237,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     boolean hasName();
@@ -11165,7 +13245,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     java.lang.String getName();
@@ -11173,7 +13253,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     com.google.protobuf.ByteString
@@ -11224,9 +13304,9 @@ public final class Ast {
     boa.types.Ast.ModifierOrBuilder getModifiersOrBuilder(
         int index);
 
-    // required .boa.types.Type return_type = 3;
+    // optional .boa.types.Type return_type = 3;
     /**
-     * <code>required .boa.types.Type return_type = 3;</code>
+     * <code>optional .boa.types.Type return_type = 3;</code>
      *
      * <pre>
      ** The type returned from the method; if the method returns nothing, this type will be void 
@@ -11234,7 +13314,7 @@ public final class Ast {
      */
     boolean hasReturnType();
     /**
-     * <code>required .boa.types.Type return_type = 3;</code>
+     * <code>optional .boa.types.Type return_type = 3;</code>
      *
      * <pre>
      ** The type returned from the method; if the method returns nothing, this type will be void 
@@ -11242,7 +13322,7 @@ public final class Ast {
      */
     boa.types.Ast.Type getReturnType();
     /**
-     * <code>required .boa.types.Type return_type = 3;</code>
+     * <code>optional .boa.types.Type return_type = 3;</code>
      *
      * <pre>
      ** The type returned from the method; if the method returns nothing, this type will be void 
@@ -11490,41 +13570,67 @@ public final class Ast {
     boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
         int index);
 
-    // optional .boa.types.ChangeKind structural_change_kind = 9;
+    // optional int32 key = 12;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
+     * <code>optional int32 key = 12;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasKey();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
+     * <code>optional int32 key = 12;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    int getKey();
 
-    // optional .boa.types.ChangeKind label_change_kind = 10;
+    // optional int32 declaring_type = 13;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
+     * <code>optional int32 declaring_type = 13;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** The key of the type declaration declaring this method in the same AST 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasDeclaringType();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
+     * <code>optional int32 declaring_type = 13;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** The key of the type declaration declaring this method in the same AST 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    int getDeclaringType();
+
+    // optional .boa.types.Expression computed_name = 14;
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boolean hasComputedName();
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boa.types.Ast.Expression getComputedName();
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boa.types.Ast.ExpressionOrBuilder getComputedNameOrBuilder();
   }
   /**
    * Protobuf type {@code boa.types.Method}
@@ -11647,26 +13753,27 @@ public final class Ast {
               comments_.add(input.readMessage(boa.types.Ast.Comment.PARSER, extensionRegistry));
               break;
             }
-            case 72: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(9, rawValue);
-              } else {
-                bitField0_ |= 0x00000004;
-                structuralChangeKind_ = value;
-              }
+            case 96: {
+              bitField0_ |= 0x00000004;
+              key_ = input.readInt32();
               break;
             }
-            case 80: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(10, rawValue);
-              } else {
-                bitField0_ |= 0x00000008;
-                labelChangeKind_ = value;
+            case 104: {
+              bitField0_ |= 0x00000008;
+              declaringType_ = input.readInt32();
+              break;
+            }
+            case 114: {
+              boa.types.Ast.Expression.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000010) == 0x00000010)) {
+                subBuilder = computedName_.toBuilder();
               }
+              computedName_ = input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(computedName_);
+                computedName_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000010;
               break;
             }
           }
@@ -11734,7 +13841,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     public boolean hasName() {
@@ -11744,7 +13851,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     public java.lang.String getName() {
@@ -11765,7 +13872,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     public com.google.protobuf.ByteString
@@ -11838,11 +13945,11 @@ public final class Ast {
       return modifiers_.get(index);
     }
 
-    // required .boa.types.Type return_type = 3;
+    // optional .boa.types.Type return_type = 3;
     public static final int RETURN_TYPE_FIELD_NUMBER = 3;
     private boa.types.Ast.Type returnType_;
     /**
-     * <code>required .boa.types.Type return_type = 3;</code>
+     * <code>optional .boa.types.Type return_type = 3;</code>
      *
      * <pre>
      ** The type returned from the method; if the method returns nothing, this type will be void 
@@ -11852,7 +13959,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required .boa.types.Type return_type = 3;</code>
+     * <code>optional .boa.types.Type return_type = 3;</code>
      *
      * <pre>
      ** The type returned from the method; if the method returns nothing, this type will be void 
@@ -11862,7 +13969,7 @@ public final class Ast {
       return returnType_;
     }
     /**
-     * <code>required .boa.types.Type return_type = 3;</code>
+     * <code>optional .boa.types.Type return_type = 3;</code>
      *
      * <pre>
      ** The type returned from the method; if the method returns nothing, this type will be void 
@@ -12167,52 +14274,86 @@ public final class Ast {
       return comments_.get(index);
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 9;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 9;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional int32 key = 12;
+    public static final int KEY_FIELD_NUMBER = 12;
+    private int key_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
+     * <code>optional int32 key = 12;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasKey() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
+     * <code>optional int32 key = 12;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public int getKey() {
+      return key_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 10;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 10;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // optional int32 declaring_type = 13;
+    public static final int DECLARING_TYPE_FIELD_NUMBER = 13;
+    private int declaringType_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
+     * <code>optional int32 declaring_type = 13;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** The key of the type declaration declaring this method in the same AST 
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
+    public boolean hasDeclaringType() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
+     * <code>optional int32 declaring_type = 13;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** The key of the type declaration declaring this method in the same AST 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public int getDeclaringType() {
+      return declaringType_;
+    }
+
+    // optional .boa.types.Expression computed_name = 14;
+    public static final int COMPUTED_NAME_FIELD_NUMBER = 14;
+    private boa.types.Ast.Expression computedName_;
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boolean hasComputedName() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boa.types.Ast.Expression getComputedName() {
+      return computedName_;
+    }
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boa.types.Ast.ExpressionOrBuilder getComputedNameOrBuilder() {
+      return computedName_;
     }
 
     private void initFields() {
@@ -12224,27 +14365,26 @@ public final class Ast {
       exceptionTypes_ = java.util.Collections.emptyList();
       statements_ = java.util.Collections.emptyList();
       comments_ = java.util.Collections.emptyList();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      key_ = 0;
+      declaringType_ = 0;
+      computedName_ = boa.types.Ast.Expression.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
-      if (!hasReturnType()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       for (int i = 0; i < getModifiersCount(); i++) {
         if (!getModifiers(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
       }
-      if (!getReturnType().isInitialized()) {
-        memoizedIsInitialized = 0;
-        return false;
+      if (hasReturnType()) {
+        if (!getReturnType().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       for (int i = 0; i < getGenericParametersCount(); i++) {
         if (!getGenericParameters(i).isInitialized()) {
@@ -12272,6 +14412,12 @@ public final class Ast {
       }
       for (int i = 0; i < getCommentsCount(); i++) {
         if (!getComments(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasComputedName()) {
+        if (!getComputedName().isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -12308,10 +14454,13 @@ public final class Ast {
         output.writeMessage(8, comments_.get(i));
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeEnum(9, structuralChangeKind_.getNumber());
+        output.writeInt32(12, key_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(10, labelChangeKind_.getNumber());
+        output.writeInt32(13, declaringType_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeMessage(14, computedName_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -12356,11 +14505,15 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(9, structuralChangeKind_.getNumber());
+          .computeInt32Size(12, key_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(10, labelChangeKind_.getNumber());
+          .computeInt32Size(13, declaringType_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(14, computedName_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -12481,6 +14634,7 @@ public final class Ast {
           getExceptionTypesFieldBuilder();
           getStatementsFieldBuilder();
           getCommentsFieldBuilder();
+          getComputedNameFieldBuilder();
         }
       }
       private static Builder create() {
@@ -12533,10 +14687,16 @@ public final class Ast {
         } else {
           commentsBuilder_.clear();
         }
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        key_ = 0;
         bitField0_ = (bitField0_ & ~0x00000100);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        declaringType_ = 0;
         bitField0_ = (bitField0_ & ~0x00000200);
+        if (computedNameBuilder_ == null) {
+          computedName_ = boa.types.Ast.Expression.getDefaultInstance();
+        } else {
+          computedNameBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
 
@@ -12634,11 +14794,19 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        result.key_ = key_;
         if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.declaringType_ = declaringType_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        if (computedNameBuilder_ == null) {
+          result.computedName_ = computedName_;
+        } else {
+          result.computedName_ = computedNameBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -12819,30 +14987,31 @@ public final class Ast {
             }
           }
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasKey()) {
+          setKey(other.getKey());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasDeclaringType()) {
+          setDeclaringType(other.getDeclaringType());
+        }
+        if (other.hasComputedName()) {
+          mergeComputedName(other.getComputedName());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
-        if (!hasReturnType()) {
-          
-          return false;
-        }
         for (int i = 0; i < getModifiersCount(); i++) {
           if (!getModifiers(i).isInitialized()) {
             
             return false;
           }
         }
-        if (!getReturnType().isInitialized()) {
-          
-          return false;
+        if (hasReturnType()) {
+          if (!getReturnType().isInitialized()) {
+            
+            return false;
+          }
         }
         for (int i = 0; i < getGenericParametersCount(); i++) {
           if (!getGenericParameters(i).isInitialized()) {
@@ -12870,6 +15039,12 @@ public final class Ast {
         }
         for (int i = 0; i < getCommentsCount(); i++) {
           if (!getComments(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasComputedName()) {
+          if (!getComputedName().isInitialized()) {
             
             return false;
           }
@@ -12902,7 +15077,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public boolean hasName() {
@@ -12912,7 +15087,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public java.lang.String getName() {
@@ -12930,7 +15105,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public com.google.protobuf.ByteString
@@ -12950,7 +15125,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public Builder setName(
@@ -12967,7 +15142,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public Builder clearName() {
@@ -12980,7 +15155,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public Builder setNameBytes(
@@ -13306,12 +15481,12 @@ public final class Ast {
         return modifiersBuilder_;
       }
 
-      // required .boa.types.Type return_type = 3;
+      // optional .boa.types.Type return_type = 3;
       private boa.types.Ast.Type returnType_ = boa.types.Ast.Type.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> returnTypeBuilder_;
       /**
-       * <code>required .boa.types.Type return_type = 3;</code>
+       * <code>optional .boa.types.Type return_type = 3;</code>
        *
        * <pre>
        ** The type returned from the method; if the method returns nothing, this type will be void 
@@ -13321,7 +15496,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required .boa.types.Type return_type = 3;</code>
+       * <code>optional .boa.types.Type return_type = 3;</code>
        *
        * <pre>
        ** The type returned from the method; if the method returns nothing, this type will be void 
@@ -13335,7 +15510,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required .boa.types.Type return_type = 3;</code>
+       * <code>optional .boa.types.Type return_type = 3;</code>
        *
        * <pre>
        ** The type returned from the method; if the method returns nothing, this type will be void 
@@ -13355,7 +15530,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.Type return_type = 3;</code>
+       * <code>optional .boa.types.Type return_type = 3;</code>
        *
        * <pre>
        ** The type returned from the method; if the method returns nothing, this type will be void 
@@ -13373,7 +15548,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.Type return_type = 3;</code>
+       * <code>optional .boa.types.Type return_type = 3;</code>
        *
        * <pre>
        ** The type returned from the method; if the method returns nothing, this type will be void 
@@ -13396,7 +15571,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.Type return_type = 3;</code>
+       * <code>optional .boa.types.Type return_type = 3;</code>
        *
        * <pre>
        ** The type returned from the method; if the method returns nothing, this type will be void 
@@ -13413,7 +15588,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.Type return_type = 3;</code>
+       * <code>optional .boa.types.Type return_type = 3;</code>
        *
        * <pre>
        ** The type returned from the method; if the method returns nothing, this type will be void 
@@ -13425,7 +15600,7 @@ public final class Ast {
         return getReturnTypeFieldBuilder().getBuilder();
       }
       /**
-       * <code>required .boa.types.Type return_type = 3;</code>
+       * <code>optional .boa.types.Type return_type = 3;</code>
        *
        * <pre>
        ** The type returned from the method; if the method returns nothing, this type will be void 
@@ -13439,7 +15614,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required .boa.types.Type return_type = 3;</code>
+       * <code>optional .boa.types.Type return_type = 3;</code>
        *
        * <pre>
        ** The type returned from the method; if the method returns nothing, this type will be void 
@@ -15073,108 +17248,255 @@ public final class Ast {
         return commentsBuilder_;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 9;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional int32 key = 12;
+      private int key_ ;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
+       * <code>optional int32 key = 12;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
+      public boolean hasKey() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
+       * <code>optional int32 key = 12;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public int getKey() {
+        return key_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
+       * <code>optional int32 key = 12;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setKey(int value) {
         bitField0_ |= 0x00000100;
-        structuralChangeKind_ = value;
+        key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
+       * <code>optional int32 key = 12;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
+      public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00000100);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        key_ = 0;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 10;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional int32 declaring_type = 13;
+      private int declaringType_ ;
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
+       * <code>optional int32 declaring_type = 13;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** The key of the type declaration declaring this method in the same AST 
        * </pre>
        */
-      public boolean hasLabelChangeKind() {
+      public boolean hasDeclaringType() {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
+       * <code>optional int32 declaring_type = 13;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** The key of the type declaration declaring this method in the same AST 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
+      public int getDeclaringType() {
+        return declaringType_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
+       * <code>optional int32 declaring_type = 13;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** The key of the type declaration declaring this method in the same AST 
        * </pre>
        */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setDeclaringType(int value) {
         bitField0_ |= 0x00000200;
-        labelChangeKind_ = value;
+        declaringType_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
+       * <code>optional int32 declaring_type = 13;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** The key of the type declaration declaring this method in the same AST 
        * </pre>
        */
-      public Builder clearLabelChangeKind() {
+      public Builder clearDeclaringType() {
         bitField0_ = (bitField0_ & ~0x00000200);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        declaringType_ = 0;
         onChanged();
         return this;
+      }
+
+      // optional .boa.types.Expression computed_name = 14;
+      private boa.types.Ast.Expression computedName_ = boa.types.Ast.Expression.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> computedNameBuilder_;
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boolean hasComputedName() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boa.types.Ast.Expression getComputedName() {
+        if (computedNameBuilder_ == null) {
+          return computedName_;
+        } else {
+          return computedNameBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder setComputedName(boa.types.Ast.Expression value) {
+        if (computedNameBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          computedName_ = value;
+          onChanged();
+        } else {
+          computedNameBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000400;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder setComputedName(
+          boa.types.Ast.Expression.Builder builderForValue) {
+        if (computedNameBuilder_ == null) {
+          computedName_ = builderForValue.build();
+          onChanged();
+        } else {
+          computedNameBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000400;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder mergeComputedName(boa.types.Ast.Expression value) {
+        if (computedNameBuilder_ == null) {
+          if (((bitField0_ & 0x00000400) == 0x00000400) &&
+              computedName_ != boa.types.Ast.Expression.getDefaultInstance()) {
+            computedName_ =
+              boa.types.Ast.Expression.newBuilder(computedName_).mergeFrom(value).buildPartial();
+          } else {
+            computedName_ = value;
+          }
+          onChanged();
+        } else {
+          computedNameBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000400;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder clearComputedName() {
+        if (computedNameBuilder_ == null) {
+          computedName_ = boa.types.Ast.Expression.getDefaultInstance();
+          onChanged();
+        } else {
+          computedNameBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000400);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boa.types.Ast.Expression.Builder getComputedNameBuilder() {
+        bitField0_ |= 0x00000400;
+        onChanged();
+        return getComputedNameFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boa.types.Ast.ExpressionOrBuilder getComputedNameOrBuilder() {
+        if (computedNameBuilder_ != null) {
+          return computedNameBuilder_.getMessageOrBuilder();
+        } else {
+          return computedName_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
+          getComputedNameFieldBuilder() {
+        if (computedNameBuilder_ == null) {
+          computedNameBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder>(
+                  computedName_,
+                  getParentForChildren(),
+                  isClean());
+          computedName_ = null;
+        }
+        return computedNameBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Method)
@@ -15191,9 +17513,9 @@ public final class Ast {
   public interface VariableOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required string name = 1;
+    // optional string name = 1;
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the variable 
@@ -15201,7 +17523,7 @@ public final class Ast {
      */
     boolean hasName();
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the variable 
@@ -15209,7 +17531,7 @@ public final class Ast {
      */
     java.lang.String getName();
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the variable 
@@ -15218,9 +17540,9 @@ public final class Ast {
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // required .boa.types.Type variable_type = 2;
+    // optional .boa.types.Type variable_type = 2;
     /**
-     * <code>required .boa.types.Type variable_type = 2;</code>
+     * <code>optional .boa.types.Type variable_type = 2;</code>
      *
      * <pre>
      ** The type of the variable 
@@ -15228,7 +17550,7 @@ public final class Ast {
      */
     boolean hasVariableType();
     /**
-     * <code>required .boa.types.Type variable_type = 2;</code>
+     * <code>optional .boa.types.Type variable_type = 2;</code>
      *
      * <pre>
      ** The type of the variable 
@@ -15236,7 +17558,7 @@ public final class Ast {
      */
     boa.types.Ast.Type getVariableType();
     /**
-     * <code>required .boa.types.Type variable_type = 2;</code>
+     * <code>optional .boa.types.Type variable_type = 2;</code>
      *
      * <pre>
      ** The type of the variable 
@@ -15360,41 +17682,102 @@ public final class Ast {
     boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
         int index);
 
-    // optional .boa.types.ChangeKind structural_change_kind = 6;
+    // optional int32 key = 9;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
+     * <code>optional int32 key = 9;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasKey();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
+     * <code>optional int32 key = 9;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    int getKey();
 
-    // optional .boa.types.ChangeKind label_change_kind = 7;
+    // optional int32 declaring_type = 10;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
+     * <code>optional int32 declaring_type = 10;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasDeclaringType();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
+     * <code>optional int32 declaring_type = 10;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    int getDeclaringType();
+
+    // optional .boa.types.Expression computed_name = 11;
+    /**
+     * <code>optional .boa.types.Expression computed_name = 11;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boolean hasComputedName();
+    /**
+     * <code>optional .boa.types.Expression computed_name = 11;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boa.types.Ast.Expression getComputedName();
+    /**
+     * <code>optional .boa.types.Expression computed_name = 11;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boa.types.Ast.ExpressionOrBuilder getComputedNameOrBuilder();
+
+    // optional bool dollar_sign = 12;
+    /**
+     * <code>optional bool dollar_sign = 12;</code>
+     */
+    boolean hasDollarSign();
+    /**
+     * <code>optional bool dollar_sign = 12;</code>
+     */
+    boolean getDollarSign();
+
+    // repeated .boa.types.Expression expressions = 13;
+    /**
+     * <code>repeated .boa.types.Expression expressions = 13;</code>
+     */
+    java.util.List<boa.types.Ast.Expression> 
+        getExpressionsList();
+    /**
+     * <code>repeated .boa.types.Expression expressions = 13;</code>
+     */
+    boa.types.Ast.Expression getExpressions(int index);
+    /**
+     * <code>repeated .boa.types.Expression expressions = 13;</code>
+     */
+    int getExpressionsCount();
+    /**
+     * <code>repeated .boa.types.Expression expressions = 13;</code>
+     */
+    java.util.List<? extends boa.types.Ast.ExpressionOrBuilder> 
+        getExpressionsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Expression expressions = 13;</code>
+     */
+    boa.types.Ast.ExpressionOrBuilder getExpressionsOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code boa.types.Variable}
@@ -15498,26 +17881,40 @@ public final class Ast {
               comments_.add(input.readMessage(boa.types.Ast.Comment.PARSER, extensionRegistry));
               break;
             }
-            case 48: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(6, rawValue);
-              } else {
-                bitField0_ |= 0x00000008;
-                structuralChangeKind_ = value;
-              }
+            case 72: {
+              bitField0_ |= 0x00000008;
+              key_ = input.readInt32();
               break;
             }
-            case 56: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(7, rawValue);
-              } else {
-                bitField0_ |= 0x00000010;
-                labelChangeKind_ = value;
+            case 80: {
+              bitField0_ |= 0x00000010;
+              declaringType_ = input.readInt32();
+              break;
+            }
+            case 90: {
+              boa.types.Ast.Expression.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000020) == 0x00000020)) {
+                subBuilder = computedName_.toBuilder();
               }
+              computedName_ = input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(computedName_);
+                computedName_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000020;
+              break;
+            }
+            case 96: {
+              bitField0_ |= 0x00000040;
+              dollarSign_ = input.readBool();
+              break;
+            }
+            case 106: {
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+                expressions_ = new java.util.ArrayList<boa.types.Ast.Expression>();
+                mutable_bitField0_ |= 0x00000200;
+              }
+              expressions_.add(input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry));
               break;
             }
           }
@@ -15533,6 +17930,9 @@ public final class Ast {
         }
         if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
           comments_ = java.util.Collections.unmodifiableList(comments_);
+        }
+        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+          expressions_ = java.util.Collections.unmodifiableList(expressions_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -15566,11 +17966,11 @@ public final class Ast {
     }
 
     private int bitField0_;
-    // required string name = 1;
+    // optional string name = 1;
     public static final int NAME_FIELD_NUMBER = 1;
     private java.lang.Object name_;
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the variable 
@@ -15580,7 +17980,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the variable 
@@ -15601,7 +18001,7 @@ public final class Ast {
       }
     }
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the variable 
@@ -15621,11 +18021,11 @@ public final class Ast {
       }
     }
 
-    // required .boa.types.Type variable_type = 2;
+    // optional .boa.types.Type variable_type = 2;
     public static final int VARIABLE_TYPE_FIELD_NUMBER = 2;
     private boa.types.Ast.Type variableType_;
     /**
-     * <code>required .boa.types.Type variable_type = 2;</code>
+     * <code>optional .boa.types.Type variable_type = 2;</code>
      *
      * <pre>
      ** The type of the variable 
@@ -15635,7 +18035,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required .boa.types.Type variable_type = 2;</code>
+     * <code>optional .boa.types.Type variable_type = 2;</code>
      *
      * <pre>
      ** The type of the variable 
@@ -15645,7 +18045,7 @@ public final class Ast {
       return variableType_;
     }
     /**
-     * <code>required .boa.types.Type variable_type = 2;</code>
+     * <code>optional .boa.types.Type variable_type = 2;</code>
      *
      * <pre>
      ** The type of the variable 
@@ -15801,52 +18201,138 @@ public final class Ast {
       return comments_.get(index);
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 6;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 6;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional int32 key = 9;
+    public static final int KEY_FIELD_NUMBER = 9;
+    private int key_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
+     * <code>optional int32 key = 9;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasKey() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
+     * <code>optional int32 key = 9;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public int getKey() {
+      return key_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 7;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 7;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // optional int32 declaring_type = 10;
+    public static final int DECLARING_TYPE_FIELD_NUMBER = 10;
+    private int declaringType_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
+     * <code>optional int32 declaring_type = 10;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
+    public boolean hasDeclaringType() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
+     * <code>optional int32 declaring_type = 10;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public int getDeclaringType() {
+      return declaringType_;
+    }
+
+    // optional .boa.types.Expression computed_name = 11;
+    public static final int COMPUTED_NAME_FIELD_NUMBER = 11;
+    private boa.types.Ast.Expression computedName_;
+    /**
+     * <code>optional .boa.types.Expression computed_name = 11;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boolean hasComputedName() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional .boa.types.Expression computed_name = 11;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boa.types.Ast.Expression getComputedName() {
+      return computedName_;
+    }
+    /**
+     * <code>optional .boa.types.Expression computed_name = 11;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boa.types.Ast.ExpressionOrBuilder getComputedNameOrBuilder() {
+      return computedName_;
+    }
+
+    // optional bool dollar_sign = 12;
+    public static final int DOLLAR_SIGN_FIELD_NUMBER = 12;
+    private boolean dollarSign_;
+    /**
+     * <code>optional bool dollar_sign = 12;</code>
+     */
+    public boolean hasDollarSign() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional bool dollar_sign = 12;</code>
+     */
+    public boolean getDollarSign() {
+      return dollarSign_;
+    }
+
+    // repeated .boa.types.Expression expressions = 13;
+    public static final int EXPRESSIONS_FIELD_NUMBER = 13;
+    private java.util.List<boa.types.Ast.Expression> expressions_;
+    /**
+     * <code>repeated .boa.types.Expression expressions = 13;</code>
+     */
+    public java.util.List<boa.types.Ast.Expression> getExpressionsList() {
+      return expressions_;
+    }
+    /**
+     * <code>repeated .boa.types.Expression expressions = 13;</code>
+     */
+    public java.util.List<? extends boa.types.Ast.ExpressionOrBuilder> 
+        getExpressionsOrBuilderList() {
+      return expressions_;
+    }
+    /**
+     * <code>repeated .boa.types.Expression expressions = 13;</code>
+     */
+    public int getExpressionsCount() {
+      return expressions_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Expression expressions = 13;</code>
+     */
+    public boa.types.Ast.Expression getExpressions(int index) {
+      return expressions_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Expression expressions = 13;</code>
+     */
+    public boa.types.Ast.ExpressionOrBuilder getExpressionsOrBuilder(
+        int index) {
+      return expressions_.get(index);
     }
 
     private void initFields() {
@@ -15855,25 +18341,22 @@ public final class Ast {
       modifiers_ = java.util.Collections.emptyList();
       initializer_ = boa.types.Ast.Expression.getDefaultInstance();
       comments_ = java.util.Collections.emptyList();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      key_ = 0;
+      declaringType_ = 0;
+      computedName_ = boa.types.Ast.Expression.getDefaultInstance();
+      dollarSign_ = false;
+      expressions_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
-      if (!hasName()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasVariableType()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!getVariableType().isInitialized()) {
-        memoizedIsInitialized = 0;
-        return false;
+      if (hasVariableType()) {
+        if (!getVariableType().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       for (int i = 0; i < getModifiersCount(); i++) {
         if (!getModifiers(i).isInitialized()) {
@@ -15889,6 +18372,18 @@ public final class Ast {
       }
       for (int i = 0; i < getCommentsCount(); i++) {
         if (!getComments(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasComputedName()) {
+        if (!getComputedName().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getExpressionsCount(); i++) {
+        if (!getExpressions(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -15916,10 +18411,19 @@ public final class Ast {
         output.writeMessage(5, comments_.get(i));
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(6, structuralChangeKind_.getNumber());
+        output.writeInt32(9, key_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeEnum(7, labelChangeKind_.getNumber());
+        output.writeInt32(10, declaringType_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeMessage(11, computedName_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeBool(12, dollarSign_);
+      }
+      for (int i = 0; i < expressions_.size(); i++) {
+        output.writeMessage(13, expressions_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -15952,11 +18456,23 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(6, structuralChangeKind_.getNumber());
+          .computeInt32Size(9, key_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(7, labelChangeKind_.getNumber());
+          .computeInt32Size(10, declaringType_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(11, computedName_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(12, dollarSign_);
+      }
+      for (int i = 0; i < expressions_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(13, expressions_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -16074,6 +18590,8 @@ public final class Ast {
           getModifiersFieldBuilder();
           getInitializerFieldBuilder();
           getCommentsFieldBuilder();
+          getComputedNameFieldBuilder();
+          getExpressionsFieldBuilder();
         }
       }
       private static Builder create() {
@@ -16108,10 +18626,24 @@ public final class Ast {
         } else {
           commentsBuilder_.clear();
         }
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        key_ = 0;
         bitField0_ = (bitField0_ & ~0x00000020);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        declaringType_ = 0;
         bitField0_ = (bitField0_ & ~0x00000040);
+        if (computedNameBuilder_ == null) {
+          computedName_ = boa.types.Ast.Expression.getDefaultInstance();
+        } else {
+          computedNameBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000080);
+        dollarSign_ = false;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        if (expressionsBuilder_ == null) {
+          expressions_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000200);
+        } else {
+          expressionsBuilder_.clear();
+        }
         return this;
       }
 
@@ -16181,11 +18713,32 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        result.key_ = key_;
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.declaringType_ = declaringType_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        if (computedNameBuilder_ == null) {
+          result.computedName_ = computedName_;
+        } else {
+          result.computedName_ = computedNameBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.dollarSign_ = dollarSign_;
+        if (expressionsBuilder_ == null) {
+          if (((bitField0_ & 0x00000200) == 0x00000200)) {
+            expressions_ = java.util.Collections.unmodifiableList(expressions_);
+            bitField0_ = (bitField0_ & ~0x00000200);
+          }
+          result.expressions_ = expressions_;
+        } else {
+          result.expressions_ = expressionsBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -16265,28 +18818,54 @@ public final class Ast {
             }
           }
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasKey()) {
+          setKey(other.getKey());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasDeclaringType()) {
+          setDeclaringType(other.getDeclaringType());
+        }
+        if (other.hasComputedName()) {
+          mergeComputedName(other.getComputedName());
+        }
+        if (other.hasDollarSign()) {
+          setDollarSign(other.getDollarSign());
+        }
+        if (expressionsBuilder_ == null) {
+          if (!other.expressions_.isEmpty()) {
+            if (expressions_.isEmpty()) {
+              expressions_ = other.expressions_;
+              bitField0_ = (bitField0_ & ~0x00000200);
+            } else {
+              ensureExpressionsIsMutable();
+              expressions_.addAll(other.expressions_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.expressions_.isEmpty()) {
+            if (expressionsBuilder_.isEmpty()) {
+              expressionsBuilder_.dispose();
+              expressionsBuilder_ = null;
+              expressions_ = other.expressions_;
+              bitField0_ = (bitField0_ & ~0x00000200);
+              expressionsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getExpressionsFieldBuilder() : null;
+            } else {
+              expressionsBuilder_.addAllMessages(other.expressions_);
+            }
+          }
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
-        if (!hasName()) {
-          
-          return false;
-        }
-        if (!hasVariableType()) {
-          
-          return false;
-        }
-        if (!getVariableType().isInitialized()) {
-          
-          return false;
+        if (hasVariableType()) {
+          if (!getVariableType().isInitialized()) {
+            
+            return false;
+          }
         }
         for (int i = 0; i < getModifiersCount(); i++) {
           if (!getModifiers(i).isInitialized()) {
@@ -16302,6 +18881,18 @@ public final class Ast {
         }
         for (int i = 0; i < getCommentsCount(); i++) {
           if (!getComments(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasComputedName()) {
+          if (!getComputedName().isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getExpressionsCount(); i++) {
+          if (!getExpressions(i).isInitialized()) {
             
             return false;
           }
@@ -16328,10 +18919,10 @@ public final class Ast {
       }
       private int bitField0_;
 
-      // required string name = 1;
+      // optional string name = 1;
       private java.lang.Object name_ = "";
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the variable 
@@ -16341,7 +18932,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the variable 
@@ -16359,7 +18950,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the variable 
@@ -16379,7 +18970,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the variable 
@@ -16396,7 +18987,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the variable 
@@ -16409,7 +19000,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the variable 
@@ -16426,12 +19017,12 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.Type variable_type = 2;
+      // optional .boa.types.Type variable_type = 2;
       private boa.types.Ast.Type variableType_ = boa.types.Ast.Type.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> variableTypeBuilder_;
       /**
-       * <code>required .boa.types.Type variable_type = 2;</code>
+       * <code>optional .boa.types.Type variable_type = 2;</code>
        *
        * <pre>
        ** The type of the variable 
@@ -16441,7 +19032,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required .boa.types.Type variable_type = 2;</code>
+       * <code>optional .boa.types.Type variable_type = 2;</code>
        *
        * <pre>
        ** The type of the variable 
@@ -16455,7 +19046,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required .boa.types.Type variable_type = 2;</code>
+       * <code>optional .boa.types.Type variable_type = 2;</code>
        *
        * <pre>
        ** The type of the variable 
@@ -16475,7 +19066,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.Type variable_type = 2;</code>
+       * <code>optional .boa.types.Type variable_type = 2;</code>
        *
        * <pre>
        ** The type of the variable 
@@ -16493,7 +19084,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.Type variable_type = 2;</code>
+       * <code>optional .boa.types.Type variable_type = 2;</code>
        *
        * <pre>
        ** The type of the variable 
@@ -16516,7 +19107,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.Type variable_type = 2;</code>
+       * <code>optional .boa.types.Type variable_type = 2;</code>
        *
        * <pre>
        ** The type of the variable 
@@ -16533,7 +19124,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.Type variable_type = 2;</code>
+       * <code>optional .boa.types.Type variable_type = 2;</code>
        *
        * <pre>
        ** The type of the variable 
@@ -16545,7 +19136,7 @@ public final class Ast {
         return getVariableTypeFieldBuilder().getBuilder();
       }
       /**
-       * <code>required .boa.types.Type variable_type = 2;</code>
+       * <code>optional .boa.types.Type variable_type = 2;</code>
        *
        * <pre>
        ** The type of the variable 
@@ -16559,7 +19150,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required .boa.types.Type variable_type = 2;</code>
+       * <code>optional .boa.types.Type variable_type = 2;</code>
        *
        * <pre>
        ** The type of the variable 
@@ -17356,108 +19947,528 @@ public final class Ast {
         return commentsBuilder_;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 6;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional int32 key = 9;
+      private int key_ ;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
+       * <code>optional int32 key = 9;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
+      public boolean hasKey() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
+       * <code>optional int32 key = 9;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public int getKey() {
+        return key_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
+       * <code>optional int32 key = 9;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setKey(int value) {
         bitField0_ |= 0x00000020;
-        structuralChangeKind_ = value;
+        key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
+       * <code>optional int32 key = 9;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
+      public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00000020);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        key_ = 0;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 7;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional int32 declaring_type = 10;
+      private int declaringType_ ;
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
+       * <code>optional int32 declaring_type = 10;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
        * </pre>
        */
-      public boolean hasLabelChangeKind() {
+      public boolean hasDeclaringType() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
+       * <code>optional int32 declaring_type = 10;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
+      public int getDeclaringType() {
+        return declaringType_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
+       * <code>optional int32 declaring_type = 10;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
        * </pre>
        */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setDeclaringType(int value) {
         bitField0_ |= 0x00000040;
-        labelChangeKind_ = value;
+        declaringType_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
+       * <code>optional int32 declaring_type = 10;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
        * </pre>
        */
-      public Builder clearLabelChangeKind() {
+      public Builder clearDeclaringType() {
         bitField0_ = (bitField0_ & ~0x00000040);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        declaringType_ = 0;
         onChanged();
         return this;
+      }
+
+      // optional .boa.types.Expression computed_name = 11;
+      private boa.types.Ast.Expression computedName_ = boa.types.Ast.Expression.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> computedNameBuilder_;
+      /**
+       * <code>optional .boa.types.Expression computed_name = 11;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boolean hasComputedName() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 11;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boa.types.Ast.Expression getComputedName() {
+        if (computedNameBuilder_ == null) {
+          return computedName_;
+        } else {
+          return computedNameBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 11;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder setComputedName(boa.types.Ast.Expression value) {
+        if (computedNameBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          computedName_ = value;
+          onChanged();
+        } else {
+          computedNameBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000080;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 11;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder setComputedName(
+          boa.types.Ast.Expression.Builder builderForValue) {
+        if (computedNameBuilder_ == null) {
+          computedName_ = builderForValue.build();
+          onChanged();
+        } else {
+          computedNameBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000080;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 11;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder mergeComputedName(boa.types.Ast.Expression value) {
+        if (computedNameBuilder_ == null) {
+          if (((bitField0_ & 0x00000080) == 0x00000080) &&
+              computedName_ != boa.types.Ast.Expression.getDefaultInstance()) {
+            computedName_ =
+              boa.types.Ast.Expression.newBuilder(computedName_).mergeFrom(value).buildPartial();
+          } else {
+            computedName_ = value;
+          }
+          onChanged();
+        } else {
+          computedNameBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000080;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 11;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder clearComputedName() {
+        if (computedNameBuilder_ == null) {
+          computedName_ = boa.types.Ast.Expression.getDefaultInstance();
+          onChanged();
+        } else {
+          computedNameBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000080);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 11;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boa.types.Ast.Expression.Builder getComputedNameBuilder() {
+        bitField0_ |= 0x00000080;
+        onChanged();
+        return getComputedNameFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 11;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boa.types.Ast.ExpressionOrBuilder getComputedNameOrBuilder() {
+        if (computedNameBuilder_ != null) {
+          return computedNameBuilder_.getMessageOrBuilder();
+        } else {
+          return computedName_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 11;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
+          getComputedNameFieldBuilder() {
+        if (computedNameBuilder_ == null) {
+          computedNameBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder>(
+                  computedName_,
+                  getParentForChildren(),
+                  isClean());
+          computedName_ = null;
+        }
+        return computedNameBuilder_;
+      }
+
+      // optional bool dollar_sign = 12;
+      private boolean dollarSign_ ;
+      /**
+       * <code>optional bool dollar_sign = 12;</code>
+       */
+      public boolean hasDollarSign() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional bool dollar_sign = 12;</code>
+       */
+      public boolean getDollarSign() {
+        return dollarSign_;
+      }
+      /**
+       * <code>optional bool dollar_sign = 12;</code>
+       */
+      public Builder setDollarSign(boolean value) {
+        bitField0_ |= 0x00000100;
+        dollarSign_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool dollar_sign = 12;</code>
+       */
+      public Builder clearDollarSign() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        dollarSign_ = false;
+        onChanged();
+        return this;
+      }
+
+      // repeated .boa.types.Expression expressions = 13;
+      private java.util.List<boa.types.Ast.Expression> expressions_ =
+        java.util.Collections.emptyList();
+      private void ensureExpressionsIsMutable() {
+        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
+          expressions_ = new java.util.ArrayList<boa.types.Ast.Expression>(expressions_);
+          bitField0_ |= 0x00000200;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> expressionsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public java.util.List<boa.types.Ast.Expression> getExpressionsList() {
+        if (expressionsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(expressions_);
+        } else {
+          return expressionsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public int getExpressionsCount() {
+        if (expressionsBuilder_ == null) {
+          return expressions_.size();
+        } else {
+          return expressionsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public boa.types.Ast.Expression getExpressions(int index) {
+        if (expressionsBuilder_ == null) {
+          return expressions_.get(index);
+        } else {
+          return expressionsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public Builder setExpressions(
+          int index, boa.types.Ast.Expression value) {
+        if (expressionsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureExpressionsIsMutable();
+          expressions_.set(index, value);
+          onChanged();
+        } else {
+          expressionsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public Builder setExpressions(
+          int index, boa.types.Ast.Expression.Builder builderForValue) {
+        if (expressionsBuilder_ == null) {
+          ensureExpressionsIsMutable();
+          expressions_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          expressionsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public Builder addExpressions(boa.types.Ast.Expression value) {
+        if (expressionsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureExpressionsIsMutable();
+          expressions_.add(value);
+          onChanged();
+        } else {
+          expressionsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public Builder addExpressions(
+          int index, boa.types.Ast.Expression value) {
+        if (expressionsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureExpressionsIsMutable();
+          expressions_.add(index, value);
+          onChanged();
+        } else {
+          expressionsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public Builder addExpressions(
+          boa.types.Ast.Expression.Builder builderForValue) {
+        if (expressionsBuilder_ == null) {
+          ensureExpressionsIsMutable();
+          expressions_.add(builderForValue.build());
+          onChanged();
+        } else {
+          expressionsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public Builder addExpressions(
+          int index, boa.types.Ast.Expression.Builder builderForValue) {
+        if (expressionsBuilder_ == null) {
+          ensureExpressionsIsMutable();
+          expressions_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          expressionsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public Builder addAllExpressions(
+          java.lang.Iterable<? extends boa.types.Ast.Expression> values) {
+        if (expressionsBuilder_ == null) {
+          ensureExpressionsIsMutable();
+          super.addAll(values, expressions_);
+          onChanged();
+        } else {
+          expressionsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public Builder clearExpressions() {
+        if (expressionsBuilder_ == null) {
+          expressions_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000200);
+          onChanged();
+        } else {
+          expressionsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public Builder removeExpressions(int index) {
+        if (expressionsBuilder_ == null) {
+          ensureExpressionsIsMutable();
+          expressions_.remove(index);
+          onChanged();
+        } else {
+          expressionsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public boa.types.Ast.Expression.Builder getExpressionsBuilder(
+          int index) {
+        return getExpressionsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public boa.types.Ast.ExpressionOrBuilder getExpressionsOrBuilder(
+          int index) {
+        if (expressionsBuilder_ == null) {
+          return expressions_.get(index);  } else {
+          return expressionsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public java.util.List<? extends boa.types.Ast.ExpressionOrBuilder> 
+           getExpressionsOrBuilderList() {
+        if (expressionsBuilder_ != null) {
+          return expressionsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(expressions_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public boa.types.Ast.Expression.Builder addExpressionsBuilder() {
+        return getExpressionsFieldBuilder().addBuilder(
+            boa.types.Ast.Expression.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public boa.types.Ast.Expression.Builder addExpressionsBuilder(
+          int index) {
+        return getExpressionsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Expression.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 13;</code>
+       */
+      public java.util.List<boa.types.Ast.Expression.Builder> 
+           getExpressionsBuilderList() {
+        return getExpressionsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
+          getExpressionsFieldBuilder() {
+        if (expressionsBuilder_ == null) {
+          expressionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder>(
+                  expressions_,
+                  ((bitField0_ & 0x00000200) == 0x00000200),
+                  getParentForChildren(),
+                  isClean());
+          expressions_ = null;
+        }
+        return expressionsBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Variable)
@@ -17587,19 +20598,30 @@ public final class Ast {
     boa.types.Ast.ExpressionOrBuilder getInitializationsOrBuilder(
         int index);
 
-    // optional .boa.types.Expression condition = 5;
+    // repeated .boa.types.Expression conditions = 5;
     /**
-     * <code>optional .boa.types.Expression condition = 5;</code>
+     * <code>repeated .boa.types.Expression conditions = 5;</code>
      */
-    boolean hasCondition();
+    java.util.List<boa.types.Ast.Expression> 
+        getConditionsList();
     /**
-     * <code>optional .boa.types.Expression condition = 5;</code>
+     * <code>repeated .boa.types.Expression conditions = 5;</code>
      */
-    boa.types.Ast.Expression getCondition();
+    boa.types.Ast.Expression getConditions(int index);
     /**
-     * <code>optional .boa.types.Expression condition = 5;</code>
+     * <code>repeated .boa.types.Expression conditions = 5;</code>
      */
-    boa.types.Ast.ExpressionOrBuilder getConditionOrBuilder();
+    int getConditionsCount();
+    /**
+     * <code>repeated .boa.types.Expression conditions = 5;</code>
+     */
+    java.util.List<? extends boa.types.Ast.ExpressionOrBuilder> 
+        getConditionsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Expression conditions = 5;</code>
+     */
+    boa.types.Ast.ExpressionOrBuilder getConditionsOrBuilder(
+        int index);
 
     // repeated .boa.types.Expression updates = 6;
     /**
@@ -17654,55 +20676,143 @@ public final class Ast {
      */
     boa.types.Ast.DeclarationOrBuilder getTypeDeclarationOrBuilder();
 
-    // optional .boa.types.Expression expression = 9;
+    // repeated .boa.types.Expression expressions = 9;
     /**
-     * <code>optional .boa.types.Expression expression = 9;</code>
+     * <code>repeated .boa.types.Expression expressions = 9;</code>
      */
-    boolean hasExpression();
+    java.util.List<boa.types.Ast.Expression> 
+        getExpressionsList();
     /**
-     * <code>optional .boa.types.Expression expression = 9;</code>
+     * <code>repeated .boa.types.Expression expressions = 9;</code>
      */
-    boa.types.Ast.Expression getExpression();
+    boa.types.Ast.Expression getExpressions(int index);
     /**
-     * <code>optional .boa.types.Expression expression = 9;</code>
+     * <code>repeated .boa.types.Expression expressions = 9;</code>
      */
-    boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder();
+    int getExpressionsCount();
+    /**
+     * <code>repeated .boa.types.Expression expressions = 9;</code>
+     */
+    java.util.List<? extends boa.types.Ast.ExpressionOrBuilder> 
+        getExpressionsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Expression expressions = 9;</code>
+     */
+    boa.types.Ast.ExpressionOrBuilder getExpressionsOrBuilder(
+        int index);
 
-    // optional .boa.types.ChangeKind structural_change_kind = 10;
+    // optional int32 key = 12;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional int32 key = 12;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasKey();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional int32 key = 12;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    int getKey();
 
-    // optional .boa.types.ChangeKind label_change_kind = 11;
+    // repeated .boa.types.Method methods = 13;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
-     *
-     * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-     * </pre>
+     * <code>repeated .boa.types.Method methods = 13;</code>
      */
-    boolean hasLabelChangeKind();
+    java.util.List<boa.types.Ast.Method> 
+        getMethodsList();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
-     *
-     * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-     * </pre>
+     * <code>repeated .boa.types.Method methods = 13;</code>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    boa.types.Ast.Method getMethods(int index);
+    /**
+     * <code>repeated .boa.types.Method methods = 13;</code>
+     */
+    int getMethodsCount();
+    /**
+     * <code>repeated .boa.types.Method methods = 13;</code>
+     */
+    java.util.List<? extends boa.types.Ast.MethodOrBuilder> 
+        getMethodsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Method methods = 13;</code>
+     */
+    boa.types.Ast.MethodOrBuilder getMethodsOrBuilder(
+        int index);
+
+    // repeated .boa.types.Variable variable_declarations = 14;
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+     */
+    java.util.List<boa.types.Ast.Variable> 
+        getVariableDeclarationsList();
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+     */
+    boa.types.Ast.Variable getVariableDeclarations(int index);
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+     */
+    int getVariableDeclarationsCount();
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+     */
+    java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
+        getVariableDeclarationsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+     */
+    boa.types.Ast.VariableOrBuilder getVariableDeclarationsOrBuilder(
+        int index);
+
+    // repeated .boa.types.Declaration type_declarations = 15;
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+     */
+    java.util.List<boa.types.Ast.Declaration> 
+        getTypeDeclarationsList();
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+     */
+    boa.types.Ast.Declaration getTypeDeclarations(int index);
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+     */
+    int getTypeDeclarationsCount();
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+     */
+    java.util.List<? extends boa.types.Ast.DeclarationOrBuilder> 
+        getTypeDeclarationsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+     */
+    boa.types.Ast.DeclarationOrBuilder getTypeDeclarationsOrBuilder(
+        int index);
+
+    // repeated string names = 16;
+    /**
+     * <code>repeated string names = 16;</code>
+     */
+    java.util.List<java.lang.String>
+    getNamesList();
+    /**
+     * <code>repeated string names = 16;</code>
+     */
+    int getNamesCount();
+    /**
+     * <code>repeated string names = 16;</code>
+     */
+    java.lang.String getNames(int index);
+    /**
+     * <code>repeated string names = 16;</code>
+     */
+    com.google.protobuf.ByteString
+        getNamesBytes(int index);
   }
   /**
    * Protobuf type {@code boa.types.Statement}
@@ -17795,16 +20905,11 @@ public final class Ast {
               break;
             }
             case 42: {
-              boa.types.Ast.Expression.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000002) == 0x00000002)) {
-                subBuilder = condition_.toBuilder();
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+                conditions_ = new java.util.ArrayList<boa.types.Ast.Expression>();
+                mutable_bitField0_ |= 0x00000010;
               }
-              condition_ = input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(condition_);
-                condition_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000002;
+              conditions_.add(input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry));
               break;
             }
             case 50: {
@@ -17817,7 +20922,7 @@ public final class Ast {
             }
             case 58: {
               boa.types.Ast.Variable.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
                 subBuilder = variableDeclaration_.toBuilder();
               }
               variableDeclaration_ = input.readMessage(boa.types.Ast.Variable.PARSER, extensionRegistry);
@@ -17825,12 +20930,12 @@ public final class Ast {
                 subBuilder.mergeFrom(variableDeclaration_);
                 variableDeclaration_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000004;
+              bitField0_ |= 0x00000002;
               break;
             }
             case 66: {
               boa.types.Ast.Declaration.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
                 subBuilder = typeDeclaration_.toBuilder();
               }
               typeDeclaration_ = input.readMessage(boa.types.Ast.Declaration.PARSER, extensionRegistry);
@@ -17838,42 +20943,52 @@ public final class Ast {
                 subBuilder.mergeFrom(typeDeclaration_);
                 typeDeclaration_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000008;
+              bitField0_ |= 0x00000004;
               break;
             }
             case 74: {
-              boa.types.Ast.Expression.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000010) == 0x00000010)) {
-                subBuilder = expression_.toBuilder();
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+                expressions_ = new java.util.ArrayList<boa.types.Ast.Expression>();
+                mutable_bitField0_ |= 0x00000100;
               }
-              expression_ = input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(expression_);
-                expression_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000010;
+              expressions_.add(input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry));
               break;
             }
-            case 80: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(10, rawValue);
-              } else {
-                bitField0_ |= 0x00000020;
-                structuralChangeKind_ = value;
-              }
+            case 96: {
+              bitField0_ |= 0x00000008;
+              key_ = input.readInt32();
               break;
             }
-            case 88: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(11, rawValue);
-              } else {
-                bitField0_ |= 0x00000040;
-                labelChangeKind_ = value;
+            case 106: {
+              if (!((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+                methods_ = new java.util.ArrayList<boa.types.Ast.Method>();
+                mutable_bitField0_ |= 0x00000400;
               }
+              methods_.add(input.readMessage(boa.types.Ast.Method.PARSER, extensionRegistry));
+              break;
+            }
+            case 114: {
+              if (!((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
+                variableDeclarations_ = new java.util.ArrayList<boa.types.Ast.Variable>();
+                mutable_bitField0_ |= 0x00000800;
+              }
+              variableDeclarations_.add(input.readMessage(boa.types.Ast.Variable.PARSER, extensionRegistry));
+              break;
+            }
+            case 122: {
+              if (!((mutable_bitField0_ & 0x00001000) == 0x00001000)) {
+                typeDeclarations_ = new java.util.ArrayList<boa.types.Ast.Declaration>();
+                mutable_bitField0_ |= 0x00001000;
+              }
+              typeDeclarations_.add(input.readMessage(boa.types.Ast.Declaration.PARSER, extensionRegistry));
+              break;
+            }
+            case 130: {
+              if (!((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
+                names_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00002000;
+              }
+              names_.add(input.readBytes());
               break;
             }
           }
@@ -17893,8 +21008,26 @@ public final class Ast {
         if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
           initializations_ = java.util.Collections.unmodifiableList(initializations_);
         }
+        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+          conditions_ = java.util.Collections.unmodifiableList(conditions_);
+        }
         if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
           updates_ = java.util.Collections.unmodifiableList(updates_);
+        }
+        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+          expressions_ = java.util.Collections.unmodifiableList(expressions_);
+        }
+        if (((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+          methods_ = java.util.Collections.unmodifiableList(methods_);
+        }
+        if (((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
+          variableDeclarations_ = java.util.Collections.unmodifiableList(variableDeclarations_);
+        }
+        if (((mutable_bitField0_ & 0x00001000) == 0x00001000)) {
+          typeDeclarations_ = java.util.Collections.unmodifiableList(typeDeclarations_);
+        }
+        if (((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
+          names_ = new com.google.protobuf.UnmodifiableLazyStringList(names_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -18020,6 +21153,82 @@ public final class Ast {
        * <code>EMPTY = 19;</code>
        */
       EMPTY(21, 19),
+      /**
+       * <code>FINALLY = 20;</code>
+       */
+      FINALLY(22, 20),
+      /**
+       * <code>DEBUGGER = 21;</code>
+       */
+      DEBUGGER(23, 21),
+      /**
+       * <code>DEFAULT = 22;</code>
+       */
+      DEFAULT(24, 22),
+      /**
+       * <code>FOREACH = 23;</code>
+       */
+      FOREACH(25, 23),
+      /**
+       * <code>FORIN = 24;</code>
+       */
+      FORIN(26, 24),
+      /**
+       * <code>WITH = 25;</code>
+       */
+      WITH(27, 25),
+      /**
+       * <code>SCOPE = 26;</code>
+       */
+      SCOPE(28, 26),
+      /**
+       * <code>DECLARE = 27;</code>
+       */
+      DECLARE(29, 27),
+      /**
+       * <code>GLOBAL = 28;</code>
+       */
+      GLOBAL(30, 28),
+      /**
+       * <code>GOTO = 29;</code>
+       */
+      GOTO(31, 29),
+      /**
+       * <code>INLINE_HTML = 30;</code>
+       */
+      INLINE_HTML(32, 30),
+      /**
+       * <code>STATIC = 31;</code>
+       */
+      STATIC(33, 31),
+      /**
+       * <code>ECHO = 32;</code>
+       */
+      ECHO(34, 32),
+      /**
+       * <code>USE_NAMESPACE = 33;</code>
+       */
+      USE_NAMESPACE(35, 33),
+      /**
+       * <code>USE_CONSTANT = 34;</code>
+       */
+      USE_CONSTANT(36, 34),
+      /**
+       * <code>USE_FUNCTION = 35;</code>
+       */
+      USE_FUNCTION(37, 35),
+      /**
+       * <code>TRAIT_ALIAS = 36;</code>
+       */
+      TRAIT_ALIAS(38, 36),
+      /**
+       * <code>TRAIT_PRECEDENCE = 37;</code>
+       */
+      TRAIT_PRECEDENCE(39, 37),
+      /**
+       * <code>TRAIT_USE = 38;</code>
+       */
+      TRAIT_USE(40, 38),
       ;
 
       /**
@@ -18138,6 +21347,82 @@ public final class Ast {
        * <code>EMPTY = 19;</code>
        */
       public static final int EMPTY_VALUE = 19;
+      /**
+       * <code>FINALLY = 20;</code>
+       */
+      public static final int FINALLY_VALUE = 20;
+      /**
+       * <code>DEBUGGER = 21;</code>
+       */
+      public static final int DEBUGGER_VALUE = 21;
+      /**
+       * <code>DEFAULT = 22;</code>
+       */
+      public static final int DEFAULT_VALUE = 22;
+      /**
+       * <code>FOREACH = 23;</code>
+       */
+      public static final int FOREACH_VALUE = 23;
+      /**
+       * <code>FORIN = 24;</code>
+       */
+      public static final int FORIN_VALUE = 24;
+      /**
+       * <code>WITH = 25;</code>
+       */
+      public static final int WITH_VALUE = 25;
+      /**
+       * <code>SCOPE = 26;</code>
+       */
+      public static final int SCOPE_VALUE = 26;
+      /**
+       * <code>DECLARE = 27;</code>
+       */
+      public static final int DECLARE_VALUE = 27;
+      /**
+       * <code>GLOBAL = 28;</code>
+       */
+      public static final int GLOBAL_VALUE = 28;
+      /**
+       * <code>GOTO = 29;</code>
+       */
+      public static final int GOTO_VALUE = 29;
+      /**
+       * <code>INLINE_HTML = 30;</code>
+       */
+      public static final int INLINE_HTML_VALUE = 30;
+      /**
+       * <code>STATIC = 31;</code>
+       */
+      public static final int STATIC_VALUE = 31;
+      /**
+       * <code>ECHO = 32;</code>
+       */
+      public static final int ECHO_VALUE = 32;
+      /**
+       * <code>USE_NAMESPACE = 33;</code>
+       */
+      public static final int USE_NAMESPACE_VALUE = 33;
+      /**
+       * <code>USE_CONSTANT = 34;</code>
+       */
+      public static final int USE_CONSTANT_VALUE = 34;
+      /**
+       * <code>USE_FUNCTION = 35;</code>
+       */
+      public static final int USE_FUNCTION_VALUE = 35;
+      /**
+       * <code>TRAIT_ALIAS = 36;</code>
+       */
+      public static final int TRAIT_ALIAS_VALUE = 36;
+      /**
+       * <code>TRAIT_PRECEDENCE = 37;</code>
+       */
+      public static final int TRAIT_PRECEDENCE_VALUE = 37;
+      /**
+       * <code>TRAIT_USE = 38;</code>
+       */
+      public static final int TRAIT_USE_VALUE = 38;
 
 
       public final int getNumber() { return value; }
@@ -18164,6 +21449,25 @@ public final class Ast {
           case 17: return THROW;
           case 18: return CATCH;
           case 19: return EMPTY;
+          case 20: return FINALLY;
+          case 21: return DEBUGGER;
+          case 22: return DEFAULT;
+          case 23: return FOREACH;
+          case 24: return FORIN;
+          case 25: return WITH;
+          case 26: return SCOPE;
+          case 27: return DECLARE;
+          case 28: return GLOBAL;
+          case 29: return GOTO;
+          case 30: return INLINE_HTML;
+          case 31: return STATIC;
+          case 32: return ECHO;
+          case 33: return USE_NAMESPACE;
+          case 34: return USE_CONSTANT;
+          case 35: return USE_FUNCTION;
+          case 36: return TRAIT_ALIAS;
+          case 37: return TRAIT_PRECEDENCE;
+          case 38: return TRAIT_USE;
           default: return null;
         }
       }
@@ -18194,7 +21498,7 @@ public final class Ast {
       }
 
       private static final StatementKind[] VALUES = {
-        OTHER, BLOCK, TYPEDECL, EXPRESSION, EXPR, SYNCHRONIZED, SYNC, RETURN, FOR, DO, WHILE, IF, ASSERT, BREAK, CONTINUE, LABEL, SWITCH, CASE, TRY, THROW, CATCH, EMPTY, 
+        OTHER, BLOCK, TYPEDECL, EXPRESSION, EXPR, SYNCHRONIZED, SYNC, RETURN, FOR, DO, WHILE, IF, ASSERT, BREAK, CONTINUE, LABEL, SWITCH, CASE, TRY, THROW, CATCH, EMPTY, FINALLY, DEBUGGER, DEFAULT, FOREACH, FORIN, WITH, SCOPE, DECLARE, GLOBAL, GOTO, INLINE_HTML, STATIC, ECHO, USE_NAMESPACE, USE_CONSTANT, USE_FUNCTION, TRAIT_ALIAS, TRAIT_PRECEDENCE, TRAIT_USE, 
       };
 
       public static StatementKind valueOf(
@@ -18370,26 +21674,40 @@ public final class Ast {
       return initializations_.get(index);
     }
 
-    // optional .boa.types.Expression condition = 5;
-    public static final int CONDITION_FIELD_NUMBER = 5;
-    private boa.types.Ast.Expression condition_;
+    // repeated .boa.types.Expression conditions = 5;
+    public static final int CONDITIONS_FIELD_NUMBER = 5;
+    private java.util.List<boa.types.Ast.Expression> conditions_;
     /**
-     * <code>optional .boa.types.Expression condition = 5;</code>
+     * <code>repeated .boa.types.Expression conditions = 5;</code>
      */
-    public boolean hasCondition() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+    public java.util.List<boa.types.Ast.Expression> getConditionsList() {
+      return conditions_;
     }
     /**
-     * <code>optional .boa.types.Expression condition = 5;</code>
+     * <code>repeated .boa.types.Expression conditions = 5;</code>
      */
-    public boa.types.Ast.Expression getCondition() {
-      return condition_;
+    public java.util.List<? extends boa.types.Ast.ExpressionOrBuilder> 
+        getConditionsOrBuilderList() {
+      return conditions_;
     }
     /**
-     * <code>optional .boa.types.Expression condition = 5;</code>
+     * <code>repeated .boa.types.Expression conditions = 5;</code>
      */
-    public boa.types.Ast.ExpressionOrBuilder getConditionOrBuilder() {
-      return condition_;
+    public int getConditionsCount() {
+      return conditions_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Expression conditions = 5;</code>
+     */
+    public boa.types.Ast.Expression getConditions(int index) {
+      return conditions_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Expression conditions = 5;</code>
+     */
+    public boa.types.Ast.ExpressionOrBuilder getConditionsOrBuilder(
+        int index) {
+      return conditions_.get(index);
     }
 
     // repeated .boa.types.Expression updates = 6;
@@ -18435,7 +21753,7 @@ public final class Ast {
      * <code>optional .boa.types.Variable variable_declaration = 7;</code>
      */
     public boolean hasVariableDeclaration() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>optional .boa.types.Variable variable_declaration = 7;</code>
@@ -18457,7 +21775,7 @@ public final class Ast {
      * <code>optional .boa.types.Declaration type_declaration = 8;</code>
      */
     public boolean hasTypeDeclaration() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>optional .boa.types.Declaration type_declaration = 8;</code>
@@ -18472,74 +21790,202 @@ public final class Ast {
       return typeDeclaration_;
     }
 
-    // optional .boa.types.Expression expression = 9;
-    public static final int EXPRESSION_FIELD_NUMBER = 9;
-    private boa.types.Ast.Expression expression_;
+    // repeated .boa.types.Expression expressions = 9;
+    public static final int EXPRESSIONS_FIELD_NUMBER = 9;
+    private java.util.List<boa.types.Ast.Expression> expressions_;
     /**
-     * <code>optional .boa.types.Expression expression = 9;</code>
+     * <code>repeated .boa.types.Expression expressions = 9;</code>
      */
-    public boolean hasExpression() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+    public java.util.List<boa.types.Ast.Expression> getExpressionsList() {
+      return expressions_;
     }
     /**
-     * <code>optional .boa.types.Expression expression = 9;</code>
+     * <code>repeated .boa.types.Expression expressions = 9;</code>
      */
-    public boa.types.Ast.Expression getExpression() {
-      return expression_;
+    public java.util.List<? extends boa.types.Ast.ExpressionOrBuilder> 
+        getExpressionsOrBuilderList() {
+      return expressions_;
     }
     /**
-     * <code>optional .boa.types.Expression expression = 9;</code>
+     * <code>repeated .boa.types.Expression expressions = 9;</code>
      */
-    public boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder() {
-      return expression_;
-    }
-
-    // optional .boa.types.ChangeKind structural_change_kind = 10;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 10;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
-    /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
-     *
-     * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
-     * </pre>
-     */
-    public boolean hasStructuralChangeKind() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+    public int getExpressionsCount() {
+      return expressions_.size();
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
-     *
-     * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
-     * </pre>
+     * <code>repeated .boa.types.Expression expressions = 9;</code>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public boa.types.Ast.Expression getExpressions(int index) {
+      return expressions_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Expression expressions = 9;</code>
+     */
+    public boa.types.Ast.ExpressionOrBuilder getExpressionsOrBuilder(
+        int index) {
+      return expressions_.get(index);
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 11;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 11;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // optional int32 key = 12;
+    public static final int KEY_FIELD_NUMBER = 12;
+    private int key_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional int32 key = 12;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** 
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional int32 key = 12;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public int getKey() {
+      return key_;
+    }
+
+    // repeated .boa.types.Method methods = 13;
+    public static final int METHODS_FIELD_NUMBER = 13;
+    private java.util.List<boa.types.Ast.Method> methods_;
+    /**
+     * <code>repeated .boa.types.Method methods = 13;</code>
+     */
+    public java.util.List<boa.types.Ast.Method> getMethodsList() {
+      return methods_;
+    }
+    /**
+     * <code>repeated .boa.types.Method methods = 13;</code>
+     */
+    public java.util.List<? extends boa.types.Ast.MethodOrBuilder> 
+        getMethodsOrBuilderList() {
+      return methods_;
+    }
+    /**
+     * <code>repeated .boa.types.Method methods = 13;</code>
+     */
+    public int getMethodsCount() {
+      return methods_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Method methods = 13;</code>
+     */
+    public boa.types.Ast.Method getMethods(int index) {
+      return methods_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Method methods = 13;</code>
+     */
+    public boa.types.Ast.MethodOrBuilder getMethodsOrBuilder(
+        int index) {
+      return methods_.get(index);
+    }
+
+    // repeated .boa.types.Variable variable_declarations = 14;
+    public static final int VARIABLE_DECLARATIONS_FIELD_NUMBER = 14;
+    private java.util.List<boa.types.Ast.Variable> variableDeclarations_;
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+     */
+    public java.util.List<boa.types.Ast.Variable> getVariableDeclarationsList() {
+      return variableDeclarations_;
+    }
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+     */
+    public java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
+        getVariableDeclarationsOrBuilderList() {
+      return variableDeclarations_;
+    }
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+     */
+    public int getVariableDeclarationsCount() {
+      return variableDeclarations_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+     */
+    public boa.types.Ast.Variable getVariableDeclarations(int index) {
+      return variableDeclarations_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+     */
+    public boa.types.Ast.VariableOrBuilder getVariableDeclarationsOrBuilder(
+        int index) {
+      return variableDeclarations_.get(index);
+    }
+
+    // repeated .boa.types.Declaration type_declarations = 15;
+    public static final int TYPE_DECLARATIONS_FIELD_NUMBER = 15;
+    private java.util.List<boa.types.Ast.Declaration> typeDeclarations_;
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+     */
+    public java.util.List<boa.types.Ast.Declaration> getTypeDeclarationsList() {
+      return typeDeclarations_;
+    }
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+     */
+    public java.util.List<? extends boa.types.Ast.DeclarationOrBuilder> 
+        getTypeDeclarationsOrBuilderList() {
+      return typeDeclarations_;
+    }
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+     */
+    public int getTypeDeclarationsCount() {
+      return typeDeclarations_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+     */
+    public boa.types.Ast.Declaration getTypeDeclarations(int index) {
+      return typeDeclarations_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+     */
+    public boa.types.Ast.DeclarationOrBuilder getTypeDeclarationsOrBuilder(
+        int index) {
+      return typeDeclarations_.get(index);
+    }
+
+    // repeated string names = 16;
+    public static final int NAMES_FIELD_NUMBER = 16;
+    private com.google.protobuf.LazyStringList names_;
+    /**
+     * <code>repeated string names = 16;</code>
+     */
+    public java.util.List<java.lang.String>
+        getNamesList() {
+      return names_;
+    }
+    /**
+     * <code>repeated string names = 16;</code>
+     */
+    public int getNamesCount() {
+      return names_.size();
+    }
+    /**
+     * <code>repeated string names = 16;</code>
+     */
+    public java.lang.String getNames(int index) {
+      return names_.get(index);
+    }
+    /**
+     * <code>repeated string names = 16;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNamesBytes(int index) {
+      return names_.getByteString(index);
     }
 
     private void initFields() {
@@ -18547,13 +21993,16 @@ public final class Ast {
       comments_ = java.util.Collections.emptyList();
       statements_ = java.util.Collections.emptyList();
       initializations_ = java.util.Collections.emptyList();
-      condition_ = boa.types.Ast.Expression.getDefaultInstance();
+      conditions_ = java.util.Collections.emptyList();
       updates_ = java.util.Collections.emptyList();
       variableDeclaration_ = boa.types.Ast.Variable.getDefaultInstance();
       typeDeclaration_ = boa.types.Ast.Declaration.getDefaultInstance();
-      expression_ = boa.types.Ast.Expression.getDefaultInstance();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      expressions_ = java.util.Collections.emptyList();
+      key_ = 0;
+      methods_ = java.util.Collections.emptyList();
+      variableDeclarations_ = java.util.Collections.emptyList();
+      typeDeclarations_ = java.util.Collections.emptyList();
+      names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -18582,8 +22031,8 @@ public final class Ast {
           return false;
         }
       }
-      if (hasCondition()) {
-        if (!getCondition().isInitialized()) {
+      for (int i = 0; i < getConditionsCount(); i++) {
+        if (!getConditions(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -18606,8 +22055,26 @@ public final class Ast {
           return false;
         }
       }
-      if (hasExpression()) {
-        if (!getExpression().isInitialized()) {
+      for (int i = 0; i < getExpressionsCount(); i++) {
+        if (!getExpressions(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getMethodsCount(); i++) {
+        if (!getMethods(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getVariableDeclarationsCount(); i++) {
+        if (!getVariableDeclarations(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getTypeDeclarationsCount(); i++) {
+        if (!getTypeDeclarations(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -18631,26 +22098,35 @@ public final class Ast {
       for (int i = 0; i < initializations_.size(); i++) {
         output.writeMessage(4, initializations_.get(i));
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeMessage(5, condition_);
+      for (int i = 0; i < conditions_.size(); i++) {
+        output.writeMessage(5, conditions_.get(i));
       }
       for (int i = 0; i < updates_.size(); i++) {
         output.writeMessage(6, updates_.get(i));
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeMessage(7, variableDeclaration_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeMessage(8, typeDeclaration_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeMessage(9, expression_);
+      for (int i = 0; i < expressions_.size(); i++) {
+        output.writeMessage(9, expressions_.get(i));
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeEnum(10, structuralChangeKind_.getNumber());
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt32(12, key_);
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeEnum(11, labelChangeKind_.getNumber());
+      for (int i = 0; i < methods_.size(); i++) {
+        output.writeMessage(13, methods_.get(i));
+      }
+      for (int i = 0; i < variableDeclarations_.size(); i++) {
+        output.writeMessage(14, variableDeclarations_.get(i));
+      }
+      for (int i = 0; i < typeDeclarations_.size(); i++) {
+        output.writeMessage(15, typeDeclarations_.get(i));
+      }
+      for (int i = 0; i < names_.size(); i++) {
+        output.writeBytes(16, names_.getByteString(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -18677,33 +22153,50 @@ public final class Ast {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, initializations_.get(i));
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      for (int i = 0; i < conditions_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, condition_);
+          .computeMessageSize(5, conditions_.get(i));
       }
       for (int i = 0; i < updates_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(6, updates_.get(i));
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(7, variableDeclaration_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(8, typeDeclaration_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      for (int i = 0; i < expressions_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(9, expression_);
+          .computeMessageSize(9, expressions_.get(i));
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(10, structuralChangeKind_.getNumber());
+          .computeInt32Size(12, key_);
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+      for (int i = 0; i < methods_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(11, labelChangeKind_.getNumber());
+          .computeMessageSize(13, methods_.get(i));
+      }
+      for (int i = 0; i < variableDeclarations_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(14, variableDeclarations_.get(i));
+      }
+      for (int i = 0; i < typeDeclarations_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(15, typeDeclarations_.get(i));
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < names_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(names_.getByteString(i));
+        }
+        size += dataSize;
+        size += 2 * getNamesList().size();
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -18820,11 +22313,14 @@ public final class Ast {
           getCommentsFieldBuilder();
           getStatementsFieldBuilder();
           getInitializationsFieldBuilder();
-          getConditionFieldBuilder();
+          getConditionsFieldBuilder();
           getUpdatesFieldBuilder();
           getVariableDeclarationFieldBuilder();
           getTypeDeclarationFieldBuilder();
-          getExpressionFieldBuilder();
+          getExpressionsFieldBuilder();
+          getMethodsFieldBuilder();
+          getVariableDeclarationsFieldBuilder();
+          getTypeDeclarationsFieldBuilder();
         }
       }
       private static Builder create() {
@@ -18853,12 +22349,12 @@ public final class Ast {
         } else {
           initializationsBuilder_.clear();
         }
-        if (conditionBuilder_ == null) {
-          condition_ = boa.types.Ast.Expression.getDefaultInstance();
+        if (conditionsBuilder_ == null) {
+          conditions_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000010);
         } else {
-          conditionBuilder_.clear();
+          conditionsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000010);
         if (updatesBuilder_ == null) {
           updates_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000020);
@@ -18877,16 +22373,34 @@ public final class Ast {
           typeDeclarationBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000080);
-        if (expressionBuilder_ == null) {
-          expression_ = boa.types.Ast.Expression.getDefaultInstance();
+        if (expressionsBuilder_ == null) {
+          expressions_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000100);
         } else {
-          expressionBuilder_.clear();
+          expressionsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000100);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        key_ = 0;
         bitField0_ = (bitField0_ & ~0x00000200);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-        bitField0_ = (bitField0_ & ~0x00000400);
+        if (methodsBuilder_ == null) {
+          methods_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000400);
+        } else {
+          methodsBuilder_.clear();
+        }
+        if (variableDeclarationsBuilder_ == null) {
+          variableDeclarations_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000800);
+        } else {
+          variableDeclarationsBuilder_.clear();
+        }
+        if (typeDeclarationsBuilder_ == null) {
+          typeDeclarations_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00001000);
+        } else {
+          typeDeclarationsBuilder_.clear();
+        }
+        names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00002000);
         return this;
       }
 
@@ -18946,13 +22460,14 @@ public final class Ast {
         } else {
           result.initializations_ = initializationsBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        if (conditionBuilder_ == null) {
-          result.condition_ = condition_;
+        if (conditionsBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010)) {
+            conditions_ = java.util.Collections.unmodifiableList(conditions_);
+            bitField0_ = (bitField0_ & ~0x00000010);
+          }
+          result.conditions_ = conditions_;
         } else {
-          result.condition_ = conditionBuilder_.build();
+          result.conditions_ = conditionsBuilder_.build();
         }
         if (updatesBuilder_ == null) {
           if (((bitField0_ & 0x00000020) == 0x00000020)) {
@@ -18964,7 +22479,7 @@ public final class Ast {
           result.updates_ = updatesBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000004;
+          to_bitField0_ |= 0x00000002;
         }
         if (variableDeclarationBuilder_ == null) {
           result.variableDeclaration_ = variableDeclaration_;
@@ -18972,29 +22487,59 @@ public final class Ast {
           result.variableDeclaration_ = variableDeclarationBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000008;
+          to_bitField0_ |= 0x00000004;
         }
         if (typeDeclarationBuilder_ == null) {
           result.typeDeclaration_ = typeDeclaration_;
         } else {
           result.typeDeclaration_ = typeDeclarationBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        if (expressionBuilder_ == null) {
-          result.expression_ = expression_;
+        if (expressionsBuilder_ == null) {
+          if (((bitField0_ & 0x00000100) == 0x00000100)) {
+            expressions_ = java.util.Collections.unmodifiableList(expressions_);
+            bitField0_ = (bitField0_ & ~0x00000100);
+          }
+          result.expressions_ = expressions_;
         } else {
-          result.expression_ = expressionBuilder_.build();
+          result.expressions_ = expressionsBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
-          to_bitField0_ |= 0x00000020;
+          to_bitField0_ |= 0x00000008;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
-        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
-          to_bitField0_ |= 0x00000040;
+        result.key_ = key_;
+        if (methodsBuilder_ == null) {
+          if (((bitField0_ & 0x00000400) == 0x00000400)) {
+            methods_ = java.util.Collections.unmodifiableList(methods_);
+            bitField0_ = (bitField0_ & ~0x00000400);
+          }
+          result.methods_ = methods_;
+        } else {
+          result.methods_ = methodsBuilder_.build();
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        if (variableDeclarationsBuilder_ == null) {
+          if (((bitField0_ & 0x00000800) == 0x00000800)) {
+            variableDeclarations_ = java.util.Collections.unmodifiableList(variableDeclarations_);
+            bitField0_ = (bitField0_ & ~0x00000800);
+          }
+          result.variableDeclarations_ = variableDeclarations_;
+        } else {
+          result.variableDeclarations_ = variableDeclarationsBuilder_.build();
+        }
+        if (typeDeclarationsBuilder_ == null) {
+          if (((bitField0_ & 0x00001000) == 0x00001000)) {
+            typeDeclarations_ = java.util.Collections.unmodifiableList(typeDeclarations_);
+            bitField0_ = (bitField0_ & ~0x00001000);
+          }
+          result.typeDeclarations_ = typeDeclarations_;
+        } else {
+          result.typeDeclarations_ = typeDeclarationsBuilder_.build();
+        }
+        if (((bitField0_ & 0x00002000) == 0x00002000)) {
+          names_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              names_);
+          bitField0_ = (bitField0_ & ~0x00002000);
+        }
+        result.names_ = names_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -19092,8 +22637,31 @@ public final class Ast {
             }
           }
         }
-        if (other.hasCondition()) {
-          mergeCondition(other.getCondition());
+        if (conditionsBuilder_ == null) {
+          if (!other.conditions_.isEmpty()) {
+            if (conditions_.isEmpty()) {
+              conditions_ = other.conditions_;
+              bitField0_ = (bitField0_ & ~0x00000010);
+            } else {
+              ensureConditionsIsMutable();
+              conditions_.addAll(other.conditions_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.conditions_.isEmpty()) {
+            if (conditionsBuilder_.isEmpty()) {
+              conditionsBuilder_.dispose();
+              conditionsBuilder_ = null;
+              conditions_ = other.conditions_;
+              bitField0_ = (bitField0_ & ~0x00000010);
+              conditionsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getConditionsFieldBuilder() : null;
+            } else {
+              conditionsBuilder_.addAllMessages(other.conditions_);
+            }
+          }
         }
         if (updatesBuilder_ == null) {
           if (!other.updates_.isEmpty()) {
@@ -19127,14 +22695,122 @@ public final class Ast {
         if (other.hasTypeDeclaration()) {
           mergeTypeDeclaration(other.getTypeDeclaration());
         }
-        if (other.hasExpression()) {
-          mergeExpression(other.getExpression());
+        if (expressionsBuilder_ == null) {
+          if (!other.expressions_.isEmpty()) {
+            if (expressions_.isEmpty()) {
+              expressions_ = other.expressions_;
+              bitField0_ = (bitField0_ & ~0x00000100);
+            } else {
+              ensureExpressionsIsMutable();
+              expressions_.addAll(other.expressions_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.expressions_.isEmpty()) {
+            if (expressionsBuilder_.isEmpty()) {
+              expressionsBuilder_.dispose();
+              expressionsBuilder_ = null;
+              expressions_ = other.expressions_;
+              bitField0_ = (bitField0_ & ~0x00000100);
+              expressionsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getExpressionsFieldBuilder() : null;
+            } else {
+              expressionsBuilder_.addAllMessages(other.expressions_);
+            }
+          }
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasKey()) {
+          setKey(other.getKey());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (methodsBuilder_ == null) {
+          if (!other.methods_.isEmpty()) {
+            if (methods_.isEmpty()) {
+              methods_ = other.methods_;
+              bitField0_ = (bitField0_ & ~0x00000400);
+            } else {
+              ensureMethodsIsMutable();
+              methods_.addAll(other.methods_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.methods_.isEmpty()) {
+            if (methodsBuilder_.isEmpty()) {
+              methodsBuilder_.dispose();
+              methodsBuilder_ = null;
+              methods_ = other.methods_;
+              bitField0_ = (bitField0_ & ~0x00000400);
+              methodsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getMethodsFieldBuilder() : null;
+            } else {
+              methodsBuilder_.addAllMessages(other.methods_);
+            }
+          }
+        }
+        if (variableDeclarationsBuilder_ == null) {
+          if (!other.variableDeclarations_.isEmpty()) {
+            if (variableDeclarations_.isEmpty()) {
+              variableDeclarations_ = other.variableDeclarations_;
+              bitField0_ = (bitField0_ & ~0x00000800);
+            } else {
+              ensureVariableDeclarationsIsMutable();
+              variableDeclarations_.addAll(other.variableDeclarations_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.variableDeclarations_.isEmpty()) {
+            if (variableDeclarationsBuilder_.isEmpty()) {
+              variableDeclarationsBuilder_.dispose();
+              variableDeclarationsBuilder_ = null;
+              variableDeclarations_ = other.variableDeclarations_;
+              bitField0_ = (bitField0_ & ~0x00000800);
+              variableDeclarationsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getVariableDeclarationsFieldBuilder() : null;
+            } else {
+              variableDeclarationsBuilder_.addAllMessages(other.variableDeclarations_);
+            }
+          }
+        }
+        if (typeDeclarationsBuilder_ == null) {
+          if (!other.typeDeclarations_.isEmpty()) {
+            if (typeDeclarations_.isEmpty()) {
+              typeDeclarations_ = other.typeDeclarations_;
+              bitField0_ = (bitField0_ & ~0x00001000);
+            } else {
+              ensureTypeDeclarationsIsMutable();
+              typeDeclarations_.addAll(other.typeDeclarations_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.typeDeclarations_.isEmpty()) {
+            if (typeDeclarationsBuilder_.isEmpty()) {
+              typeDeclarationsBuilder_.dispose();
+              typeDeclarationsBuilder_ = null;
+              typeDeclarations_ = other.typeDeclarations_;
+              bitField0_ = (bitField0_ & ~0x00001000);
+              typeDeclarationsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getTypeDeclarationsFieldBuilder() : null;
+            } else {
+              typeDeclarationsBuilder_.addAllMessages(other.typeDeclarations_);
+            }
+          }
+        }
+        if (!other.names_.isEmpty()) {
+          if (names_.isEmpty()) {
+            names_ = other.names_;
+            bitField0_ = (bitField0_ & ~0x00002000);
+          } else {
+            ensureNamesIsMutable();
+            names_.addAll(other.names_);
+          }
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -19163,8 +22839,8 @@ public final class Ast {
             return false;
           }
         }
-        if (hasCondition()) {
-          if (!getCondition().isInitialized()) {
+        for (int i = 0; i < getConditionsCount(); i++) {
+          if (!getConditions(i).isInitialized()) {
             
             return false;
           }
@@ -19187,8 +22863,26 @@ public final class Ast {
             return false;
           }
         }
-        if (hasExpression()) {
-          if (!getExpression().isInitialized()) {
+        for (int i = 0; i < getExpressionsCount(); i++) {
+          if (!getExpressions(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getMethodsCount(); i++) {
+          if (!getMethods(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getVariableDeclarationsCount(); i++) {
+          if (!getVariableDeclarations(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getTypeDeclarationsCount(); i++) {
+          if (!getTypeDeclarations(i).isInitialized()) {
             
             return false;
           }
@@ -20059,121 +23753,244 @@ public final class Ast {
         return initializationsBuilder_;
       }
 
-      // optional .boa.types.Expression condition = 5;
-      private boa.types.Ast.Expression condition_ = boa.types.Ast.Expression.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> conditionBuilder_;
-      /**
-       * <code>optional .boa.types.Expression condition = 5;</code>
-       */
-      public boolean hasCondition() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+      // repeated .boa.types.Expression conditions = 5;
+      private java.util.List<boa.types.Ast.Expression> conditions_ =
+        java.util.Collections.emptyList();
+      private void ensureConditionsIsMutable() {
+        if (!((bitField0_ & 0x00000010) == 0x00000010)) {
+          conditions_ = new java.util.ArrayList<boa.types.Ast.Expression>(conditions_);
+          bitField0_ |= 0x00000010;
+         }
       }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> conditionsBuilder_;
+
       /**
-       * <code>optional .boa.types.Expression condition = 5;</code>
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
        */
-      public boa.types.Ast.Expression getCondition() {
-        if (conditionBuilder_ == null) {
-          return condition_;
+      public java.util.List<boa.types.Ast.Expression> getConditionsList() {
+        if (conditionsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(conditions_);
         } else {
-          return conditionBuilder_.getMessage();
+          return conditionsBuilder_.getMessageList();
         }
       }
       /**
-       * <code>optional .boa.types.Expression condition = 5;</code>
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
        */
-      public Builder setCondition(boa.types.Ast.Expression value) {
-        if (conditionBuilder_ == null) {
+      public int getConditionsCount() {
+        if (conditionsBuilder_ == null) {
+          return conditions_.size();
+        } else {
+          return conditionsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
+       */
+      public boa.types.Ast.Expression getConditions(int index) {
+        if (conditionsBuilder_ == null) {
+          return conditions_.get(index);
+        } else {
+          return conditionsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
+       */
+      public Builder setConditions(
+          int index, boa.types.Ast.Expression value) {
+        if (conditionsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          condition_ = value;
+          ensureConditionsIsMutable();
+          conditions_.set(index, value);
           onChanged();
         } else {
-          conditionBuilder_.setMessage(value);
+          conditionsBuilder_.setMessage(index, value);
         }
-        bitField0_ |= 0x00000010;
         return this;
       }
       /**
-       * <code>optional .boa.types.Expression condition = 5;</code>
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
        */
-      public Builder setCondition(
-          boa.types.Ast.Expression.Builder builderForValue) {
-        if (conditionBuilder_ == null) {
-          condition_ = builderForValue.build();
+      public Builder setConditions(
+          int index, boa.types.Ast.Expression.Builder builderForValue) {
+        if (conditionsBuilder_ == null) {
+          ensureConditionsIsMutable();
+          conditions_.set(index, builderForValue.build());
           onChanged();
         } else {
-          conditionBuilder_.setMessage(builderForValue.build());
+          conditionsBuilder_.setMessage(index, builderForValue.build());
         }
-        bitField0_ |= 0x00000010;
         return this;
       }
       /**
-       * <code>optional .boa.types.Expression condition = 5;</code>
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
        */
-      public Builder mergeCondition(boa.types.Ast.Expression value) {
-        if (conditionBuilder_ == null) {
-          if (((bitField0_ & 0x00000010) == 0x00000010) &&
-              condition_ != boa.types.Ast.Expression.getDefaultInstance()) {
-            condition_ =
-              boa.types.Ast.Expression.newBuilder(condition_).mergeFrom(value).buildPartial();
-          } else {
-            condition_ = value;
+      public Builder addConditions(boa.types.Ast.Expression value) {
+        if (conditionsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
           }
+          ensureConditionsIsMutable();
+          conditions_.add(value);
           onChanged();
         } else {
-          conditionBuilder_.mergeFrom(value);
+          conditionsBuilder_.addMessage(value);
         }
-        bitField0_ |= 0x00000010;
         return this;
       }
       /**
-       * <code>optional .boa.types.Expression condition = 5;</code>
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
        */
-      public Builder clearCondition() {
-        if (conditionBuilder_ == null) {
-          condition_ = boa.types.Ast.Expression.getDefaultInstance();
+      public Builder addConditions(
+          int index, boa.types.Ast.Expression value) {
+        if (conditionsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureConditionsIsMutable();
+          conditions_.add(index, value);
           onChanged();
         } else {
-          conditionBuilder_.clear();
+          conditionsBuilder_.addMessage(index, value);
         }
-        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       /**
-       * <code>optional .boa.types.Expression condition = 5;</code>
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
        */
-      public boa.types.Ast.Expression.Builder getConditionBuilder() {
-        bitField0_ |= 0x00000010;
-        onChanged();
-        return getConditionFieldBuilder().getBuilder();
+      public Builder addConditions(
+          boa.types.Ast.Expression.Builder builderForValue) {
+        if (conditionsBuilder_ == null) {
+          ensureConditionsIsMutable();
+          conditions_.add(builderForValue.build());
+          onChanged();
+        } else {
+          conditionsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
       }
       /**
-       * <code>optional .boa.types.Expression condition = 5;</code>
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
        */
-      public boa.types.Ast.ExpressionOrBuilder getConditionOrBuilder() {
-        if (conditionBuilder_ != null) {
-          return conditionBuilder_.getMessageOrBuilder();
+      public Builder addConditions(
+          int index, boa.types.Ast.Expression.Builder builderForValue) {
+        if (conditionsBuilder_ == null) {
+          ensureConditionsIsMutable();
+          conditions_.add(index, builderForValue.build());
+          onChanged();
         } else {
-          return condition_;
+          conditionsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
+       */
+      public Builder addAllConditions(
+          java.lang.Iterable<? extends boa.types.Ast.Expression> values) {
+        if (conditionsBuilder_ == null) {
+          ensureConditionsIsMutable();
+          super.addAll(values, conditions_);
+          onChanged();
+        } else {
+          conditionsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
+       */
+      public Builder clearConditions() {
+        if (conditionsBuilder_ == null) {
+          conditions_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000010);
+          onChanged();
+        } else {
+          conditionsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
+       */
+      public Builder removeConditions(int index) {
+        if (conditionsBuilder_ == null) {
+          ensureConditionsIsMutable();
+          conditions_.remove(index);
+          onChanged();
+        } else {
+          conditionsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
+       */
+      public boa.types.Ast.Expression.Builder getConditionsBuilder(
+          int index) {
+        return getConditionsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
+       */
+      public boa.types.Ast.ExpressionOrBuilder getConditionsOrBuilder(
+          int index) {
+        if (conditionsBuilder_ == null) {
+          return conditions_.get(index);  } else {
+          return conditionsBuilder_.getMessageOrBuilder(index);
         }
       }
       /**
-       * <code>optional .boa.types.Expression condition = 5;</code>
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
        */
-      private com.google.protobuf.SingleFieldBuilder<
+      public java.util.List<? extends boa.types.Ast.ExpressionOrBuilder> 
+           getConditionsOrBuilderList() {
+        if (conditionsBuilder_ != null) {
+          return conditionsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(conditions_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
+       */
+      public boa.types.Ast.Expression.Builder addConditionsBuilder() {
+        return getConditionsFieldBuilder().addBuilder(
+            boa.types.Ast.Expression.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
+       */
+      public boa.types.Ast.Expression.Builder addConditionsBuilder(
+          int index) {
+        return getConditionsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Expression.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Expression conditions = 5;</code>
+       */
+      public java.util.List<boa.types.Ast.Expression.Builder> 
+           getConditionsBuilderList() {
+        return getConditionsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
-          getConditionFieldBuilder() {
-        if (conditionBuilder_ == null) {
-          conditionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          getConditionsFieldBuilder() {
+        if (conditionsBuilder_ == null) {
+          conditionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder>(
-                  condition_,
+                  conditions_,
+                  ((bitField0_ & 0x00000010) == 0x00000010),
                   getParentForChildren(),
                   isClean());
-          condition_ = null;
+          conditions_ = null;
         }
-        return conditionBuilder_;
+        return conditionsBuilder_;
       }
 
       // repeated .boa.types.Expression updates = 6;
@@ -20650,223 +24467,1104 @@ public final class Ast {
         return typeDeclarationBuilder_;
       }
 
-      // optional .boa.types.Expression expression = 9;
-      private boa.types.Ast.Expression expression_ = boa.types.Ast.Expression.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> expressionBuilder_;
-      /**
-       * <code>optional .boa.types.Expression expression = 9;</code>
-       */
-      public boolean hasExpression() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
+      // repeated .boa.types.Expression expressions = 9;
+      private java.util.List<boa.types.Ast.Expression> expressions_ =
+        java.util.Collections.emptyList();
+      private void ensureExpressionsIsMutable() {
+        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
+          expressions_ = new java.util.ArrayList<boa.types.Ast.Expression>(expressions_);
+          bitField0_ |= 0x00000100;
+         }
       }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> expressionsBuilder_;
+
       /**
-       * <code>optional .boa.types.Expression expression = 9;</code>
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
        */
-      public boa.types.Ast.Expression getExpression() {
-        if (expressionBuilder_ == null) {
-          return expression_;
+      public java.util.List<boa.types.Ast.Expression> getExpressionsList() {
+        if (expressionsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(expressions_);
         } else {
-          return expressionBuilder_.getMessage();
+          return expressionsBuilder_.getMessageList();
         }
       }
       /**
-       * <code>optional .boa.types.Expression expression = 9;</code>
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
        */
-      public Builder setExpression(boa.types.Ast.Expression value) {
-        if (expressionBuilder_ == null) {
+      public int getExpressionsCount() {
+        if (expressionsBuilder_ == null) {
+          return expressions_.size();
+        } else {
+          return expressionsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
+       */
+      public boa.types.Ast.Expression getExpressions(int index) {
+        if (expressionsBuilder_ == null) {
+          return expressions_.get(index);
+        } else {
+          return expressionsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
+       */
+      public Builder setExpressions(
+          int index, boa.types.Ast.Expression value) {
+        if (expressionsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          expression_ = value;
+          ensureExpressionsIsMutable();
+          expressions_.set(index, value);
           onChanged();
         } else {
-          expressionBuilder_.setMessage(value);
+          expressionsBuilder_.setMessage(index, value);
         }
-        bitField0_ |= 0x00000100;
         return this;
       }
       /**
-       * <code>optional .boa.types.Expression expression = 9;</code>
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
        */
-      public Builder setExpression(
-          boa.types.Ast.Expression.Builder builderForValue) {
-        if (expressionBuilder_ == null) {
-          expression_ = builderForValue.build();
+      public Builder setExpressions(
+          int index, boa.types.Ast.Expression.Builder builderForValue) {
+        if (expressionsBuilder_ == null) {
+          ensureExpressionsIsMutable();
+          expressions_.set(index, builderForValue.build());
           onChanged();
         } else {
-          expressionBuilder_.setMessage(builderForValue.build());
+          expressionsBuilder_.setMessage(index, builderForValue.build());
         }
-        bitField0_ |= 0x00000100;
         return this;
       }
       /**
-       * <code>optional .boa.types.Expression expression = 9;</code>
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
        */
-      public Builder mergeExpression(boa.types.Ast.Expression value) {
-        if (expressionBuilder_ == null) {
-          if (((bitField0_ & 0x00000100) == 0x00000100) &&
-              expression_ != boa.types.Ast.Expression.getDefaultInstance()) {
-            expression_ =
-              boa.types.Ast.Expression.newBuilder(expression_).mergeFrom(value).buildPartial();
-          } else {
-            expression_ = value;
+      public Builder addExpressions(boa.types.Ast.Expression value) {
+        if (expressionsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
           }
+          ensureExpressionsIsMutable();
+          expressions_.add(value);
           onChanged();
         } else {
-          expressionBuilder_.mergeFrom(value);
+          expressionsBuilder_.addMessage(value);
         }
-        bitField0_ |= 0x00000100;
         return this;
       }
       /**
-       * <code>optional .boa.types.Expression expression = 9;</code>
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
        */
-      public Builder clearExpression() {
-        if (expressionBuilder_ == null) {
-          expression_ = boa.types.Ast.Expression.getDefaultInstance();
+      public Builder addExpressions(
+          int index, boa.types.Ast.Expression value) {
+        if (expressionsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureExpressionsIsMutable();
+          expressions_.add(index, value);
           onChanged();
         } else {
-          expressionBuilder_.clear();
+          expressionsBuilder_.addMessage(index, value);
         }
-        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
       /**
-       * <code>optional .boa.types.Expression expression = 9;</code>
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
        */
-      public boa.types.Ast.Expression.Builder getExpressionBuilder() {
-        bitField0_ |= 0x00000100;
-        onChanged();
-        return getExpressionFieldBuilder().getBuilder();
+      public Builder addExpressions(
+          boa.types.Ast.Expression.Builder builderForValue) {
+        if (expressionsBuilder_ == null) {
+          ensureExpressionsIsMutable();
+          expressions_.add(builderForValue.build());
+          onChanged();
+        } else {
+          expressionsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
       }
       /**
-       * <code>optional .boa.types.Expression expression = 9;</code>
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
        */
-      public boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder() {
-        if (expressionBuilder_ != null) {
-          return expressionBuilder_.getMessageOrBuilder();
+      public Builder addExpressions(
+          int index, boa.types.Ast.Expression.Builder builderForValue) {
+        if (expressionsBuilder_ == null) {
+          ensureExpressionsIsMutable();
+          expressions_.add(index, builderForValue.build());
+          onChanged();
         } else {
-          return expression_;
+          expressionsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
+       */
+      public Builder addAllExpressions(
+          java.lang.Iterable<? extends boa.types.Ast.Expression> values) {
+        if (expressionsBuilder_ == null) {
+          ensureExpressionsIsMutable();
+          super.addAll(values, expressions_);
+          onChanged();
+        } else {
+          expressionsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
+       */
+      public Builder clearExpressions() {
+        if (expressionsBuilder_ == null) {
+          expressions_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000100);
+          onChanged();
+        } else {
+          expressionsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
+       */
+      public Builder removeExpressions(int index) {
+        if (expressionsBuilder_ == null) {
+          ensureExpressionsIsMutable();
+          expressions_.remove(index);
+          onChanged();
+        } else {
+          expressionsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
+       */
+      public boa.types.Ast.Expression.Builder getExpressionsBuilder(
+          int index) {
+        return getExpressionsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
+       */
+      public boa.types.Ast.ExpressionOrBuilder getExpressionsOrBuilder(
+          int index) {
+        if (expressionsBuilder_ == null) {
+          return expressions_.get(index);  } else {
+          return expressionsBuilder_.getMessageOrBuilder(index);
         }
       }
       /**
-       * <code>optional .boa.types.Expression expression = 9;</code>
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
        */
-      private com.google.protobuf.SingleFieldBuilder<
+      public java.util.List<? extends boa.types.Ast.ExpressionOrBuilder> 
+           getExpressionsOrBuilderList() {
+        if (expressionsBuilder_ != null) {
+          return expressionsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(expressions_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
+       */
+      public boa.types.Ast.Expression.Builder addExpressionsBuilder() {
+        return getExpressionsFieldBuilder().addBuilder(
+            boa.types.Ast.Expression.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
+       */
+      public boa.types.Ast.Expression.Builder addExpressionsBuilder(
+          int index) {
+        return getExpressionsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Expression.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 9;</code>
+       */
+      public java.util.List<boa.types.Ast.Expression.Builder> 
+           getExpressionsBuilderList() {
+        return getExpressionsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
-          getExpressionFieldBuilder() {
-        if (expressionBuilder_ == null) {
-          expressionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          getExpressionsFieldBuilder() {
+        if (expressionsBuilder_ == null) {
+          expressionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder>(
-                  expression_,
+                  expressions_,
+                  ((bitField0_ & 0x00000100) == 0x00000100),
                   getParentForChildren(),
                   isClean());
-          expression_ = null;
+          expressions_ = null;
         }
-        return expressionBuilder_;
+        return expressionsBuilder_;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 10;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional int32 key = 12;
+      private int key_ ;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional int32 key = 12;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
+      public boolean hasKey() {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional int32 key = 12;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public int getKey() {
+        return key_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional int32 key = 12;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setKey(int value) {
         bitField0_ |= 0x00000200;
-        structuralChangeKind_ = value;
+        key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional int32 key = 12;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
+      public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00000200);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        key_ = 0;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 11;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
-       *
-       * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-       * </pre>
-       */
-      public boolean hasLabelChangeKind() {
-        return ((bitField0_ & 0x00000400) == 0x00000400);
+      // repeated .boa.types.Method methods = 13;
+      private java.util.List<boa.types.Ast.Method> methods_ =
+        java.util.Collections.emptyList();
+      private void ensureMethodsIsMutable() {
+        if (!((bitField0_ & 0x00000400) == 0x00000400)) {
+          methods_ = new java.util.ArrayList<boa.types.Ast.Method>(methods_);
+          bitField0_ |= 0x00000400;
+         }
       }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder> methodsBuilder_;
+
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
-       *
-       * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-       * </pre>
+       * <code>repeated .boa.types.Method methods = 13;</code>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
-      }
-      /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
-       *
-       * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-       * </pre>
-       */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
+      public java.util.List<boa.types.Ast.Method> getMethodsList() {
+        if (methodsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(methods_);
+        } else {
+          return methodsBuilder_.getMessageList();
         }
-        bitField0_ |= 0x00000400;
-        labelChangeKind_ = value;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public int getMethodsCount() {
+        if (methodsBuilder_ == null) {
+          return methods_.size();
+        } else {
+          return methodsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public boa.types.Ast.Method getMethods(int index) {
+        if (methodsBuilder_ == null) {
+          return methods_.get(index);
+        } else {
+          return methodsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public Builder setMethods(
+          int index, boa.types.Ast.Method value) {
+        if (methodsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMethodsIsMutable();
+          methods_.set(index, value);
+          onChanged();
+        } else {
+          methodsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public Builder setMethods(
+          int index, boa.types.Ast.Method.Builder builderForValue) {
+        if (methodsBuilder_ == null) {
+          ensureMethodsIsMutable();
+          methods_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          methodsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public Builder addMethods(boa.types.Ast.Method value) {
+        if (methodsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMethodsIsMutable();
+          methods_.add(value);
+          onChanged();
+        } else {
+          methodsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public Builder addMethods(
+          int index, boa.types.Ast.Method value) {
+        if (methodsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMethodsIsMutable();
+          methods_.add(index, value);
+          onChanged();
+        } else {
+          methodsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public Builder addMethods(
+          boa.types.Ast.Method.Builder builderForValue) {
+        if (methodsBuilder_ == null) {
+          ensureMethodsIsMutable();
+          methods_.add(builderForValue.build());
+          onChanged();
+        } else {
+          methodsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public Builder addMethods(
+          int index, boa.types.Ast.Method.Builder builderForValue) {
+        if (methodsBuilder_ == null) {
+          ensureMethodsIsMutable();
+          methods_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          methodsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public Builder addAllMethods(
+          java.lang.Iterable<? extends boa.types.Ast.Method> values) {
+        if (methodsBuilder_ == null) {
+          ensureMethodsIsMutable();
+          super.addAll(values, methods_);
+          onChanged();
+        } else {
+          methodsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public Builder clearMethods() {
+        if (methodsBuilder_ == null) {
+          methods_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000400);
+          onChanged();
+        } else {
+          methodsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public Builder removeMethods(int index) {
+        if (methodsBuilder_ == null) {
+          ensureMethodsIsMutable();
+          methods_.remove(index);
+          onChanged();
+        } else {
+          methodsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public boa.types.Ast.Method.Builder getMethodsBuilder(
+          int index) {
+        return getMethodsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public boa.types.Ast.MethodOrBuilder getMethodsOrBuilder(
+          int index) {
+        if (methodsBuilder_ == null) {
+          return methods_.get(index);  } else {
+          return methodsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public java.util.List<? extends boa.types.Ast.MethodOrBuilder> 
+           getMethodsOrBuilderList() {
+        if (methodsBuilder_ != null) {
+          return methodsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(methods_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public boa.types.Ast.Method.Builder addMethodsBuilder() {
+        return getMethodsFieldBuilder().addBuilder(
+            boa.types.Ast.Method.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public boa.types.Ast.Method.Builder addMethodsBuilder(
+          int index) {
+        return getMethodsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Method.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 13;</code>
+       */
+      public java.util.List<boa.types.Ast.Method.Builder> 
+           getMethodsBuilderList() {
+        return getMethodsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder> 
+          getMethodsFieldBuilder() {
+        if (methodsBuilder_ == null) {
+          methodsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder>(
+                  methods_,
+                  ((bitField0_ & 0x00000400) == 0x00000400),
+                  getParentForChildren(),
+                  isClean());
+          methods_ = null;
+        }
+        return methodsBuilder_;
+      }
+
+      // repeated .boa.types.Variable variable_declarations = 14;
+      private java.util.List<boa.types.Ast.Variable> variableDeclarations_ =
+        java.util.Collections.emptyList();
+      private void ensureVariableDeclarationsIsMutable() {
+        if (!((bitField0_ & 0x00000800) == 0x00000800)) {
+          variableDeclarations_ = new java.util.ArrayList<boa.types.Ast.Variable>(variableDeclarations_);
+          bitField0_ |= 0x00000800;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Variable, boa.types.Ast.Variable.Builder, boa.types.Ast.VariableOrBuilder> variableDeclarationsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public java.util.List<boa.types.Ast.Variable> getVariableDeclarationsList() {
+        if (variableDeclarationsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(variableDeclarations_);
+        } else {
+          return variableDeclarationsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public int getVariableDeclarationsCount() {
+        if (variableDeclarationsBuilder_ == null) {
+          return variableDeclarations_.size();
+        } else {
+          return variableDeclarationsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public boa.types.Ast.Variable getVariableDeclarations(int index) {
+        if (variableDeclarationsBuilder_ == null) {
+          return variableDeclarations_.get(index);
+        } else {
+          return variableDeclarationsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public Builder setVariableDeclarations(
+          int index, boa.types.Ast.Variable value) {
+        if (variableDeclarationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureVariableDeclarationsIsMutable();
+          variableDeclarations_.set(index, value);
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public Builder setVariableDeclarations(
+          int index, boa.types.Ast.Variable.Builder builderForValue) {
+        if (variableDeclarationsBuilder_ == null) {
+          ensureVariableDeclarationsIsMutable();
+          variableDeclarations_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public Builder addVariableDeclarations(boa.types.Ast.Variable value) {
+        if (variableDeclarationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureVariableDeclarationsIsMutable();
+          variableDeclarations_.add(value);
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public Builder addVariableDeclarations(
+          int index, boa.types.Ast.Variable value) {
+        if (variableDeclarationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureVariableDeclarationsIsMutable();
+          variableDeclarations_.add(index, value);
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public Builder addVariableDeclarations(
+          boa.types.Ast.Variable.Builder builderForValue) {
+        if (variableDeclarationsBuilder_ == null) {
+          ensureVariableDeclarationsIsMutable();
+          variableDeclarations_.add(builderForValue.build());
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public Builder addVariableDeclarations(
+          int index, boa.types.Ast.Variable.Builder builderForValue) {
+        if (variableDeclarationsBuilder_ == null) {
+          ensureVariableDeclarationsIsMutable();
+          variableDeclarations_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public Builder addAllVariableDeclarations(
+          java.lang.Iterable<? extends boa.types.Ast.Variable> values) {
+        if (variableDeclarationsBuilder_ == null) {
+          ensureVariableDeclarationsIsMutable();
+          super.addAll(values, variableDeclarations_);
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public Builder clearVariableDeclarations() {
+        if (variableDeclarationsBuilder_ == null) {
+          variableDeclarations_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000800);
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public Builder removeVariableDeclarations(int index) {
+        if (variableDeclarationsBuilder_ == null) {
+          ensureVariableDeclarationsIsMutable();
+          variableDeclarations_.remove(index);
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public boa.types.Ast.Variable.Builder getVariableDeclarationsBuilder(
+          int index) {
+        return getVariableDeclarationsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public boa.types.Ast.VariableOrBuilder getVariableDeclarationsOrBuilder(
+          int index) {
+        if (variableDeclarationsBuilder_ == null) {
+          return variableDeclarations_.get(index);  } else {
+          return variableDeclarationsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
+           getVariableDeclarationsOrBuilderList() {
+        if (variableDeclarationsBuilder_ != null) {
+          return variableDeclarationsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(variableDeclarations_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public boa.types.Ast.Variable.Builder addVariableDeclarationsBuilder() {
+        return getVariableDeclarationsFieldBuilder().addBuilder(
+            boa.types.Ast.Variable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public boa.types.Ast.Variable.Builder addVariableDeclarationsBuilder(
+          int index) {
+        return getVariableDeclarationsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Variable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 14;</code>
+       */
+      public java.util.List<boa.types.Ast.Variable.Builder> 
+           getVariableDeclarationsBuilderList() {
+        return getVariableDeclarationsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Variable, boa.types.Ast.Variable.Builder, boa.types.Ast.VariableOrBuilder> 
+          getVariableDeclarationsFieldBuilder() {
+        if (variableDeclarationsBuilder_ == null) {
+          variableDeclarationsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Variable, boa.types.Ast.Variable.Builder, boa.types.Ast.VariableOrBuilder>(
+                  variableDeclarations_,
+                  ((bitField0_ & 0x00000800) == 0x00000800),
+                  getParentForChildren(),
+                  isClean());
+          variableDeclarations_ = null;
+        }
+        return variableDeclarationsBuilder_;
+      }
+
+      // repeated .boa.types.Declaration type_declarations = 15;
+      private java.util.List<boa.types.Ast.Declaration> typeDeclarations_ =
+        java.util.Collections.emptyList();
+      private void ensureTypeDeclarationsIsMutable() {
+        if (!((bitField0_ & 0x00001000) == 0x00001000)) {
+          typeDeclarations_ = new java.util.ArrayList<boa.types.Ast.Declaration>(typeDeclarations_);
+          bitField0_ |= 0x00001000;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Declaration, boa.types.Ast.Declaration.Builder, boa.types.Ast.DeclarationOrBuilder> typeDeclarationsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public java.util.List<boa.types.Ast.Declaration> getTypeDeclarationsList() {
+        if (typeDeclarationsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(typeDeclarations_);
+        } else {
+          return typeDeclarationsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public int getTypeDeclarationsCount() {
+        if (typeDeclarationsBuilder_ == null) {
+          return typeDeclarations_.size();
+        } else {
+          return typeDeclarationsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public boa.types.Ast.Declaration getTypeDeclarations(int index) {
+        if (typeDeclarationsBuilder_ == null) {
+          return typeDeclarations_.get(index);
+        } else {
+          return typeDeclarationsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public Builder setTypeDeclarations(
+          int index, boa.types.Ast.Declaration value) {
+        if (typeDeclarationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureTypeDeclarationsIsMutable();
+          typeDeclarations_.set(index, value);
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public Builder setTypeDeclarations(
+          int index, boa.types.Ast.Declaration.Builder builderForValue) {
+        if (typeDeclarationsBuilder_ == null) {
+          ensureTypeDeclarationsIsMutable();
+          typeDeclarations_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public Builder addTypeDeclarations(boa.types.Ast.Declaration value) {
+        if (typeDeclarationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureTypeDeclarationsIsMutable();
+          typeDeclarations_.add(value);
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public Builder addTypeDeclarations(
+          int index, boa.types.Ast.Declaration value) {
+        if (typeDeclarationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureTypeDeclarationsIsMutable();
+          typeDeclarations_.add(index, value);
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public Builder addTypeDeclarations(
+          boa.types.Ast.Declaration.Builder builderForValue) {
+        if (typeDeclarationsBuilder_ == null) {
+          ensureTypeDeclarationsIsMutable();
+          typeDeclarations_.add(builderForValue.build());
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public Builder addTypeDeclarations(
+          int index, boa.types.Ast.Declaration.Builder builderForValue) {
+        if (typeDeclarationsBuilder_ == null) {
+          ensureTypeDeclarationsIsMutable();
+          typeDeclarations_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public Builder addAllTypeDeclarations(
+          java.lang.Iterable<? extends boa.types.Ast.Declaration> values) {
+        if (typeDeclarationsBuilder_ == null) {
+          ensureTypeDeclarationsIsMutable();
+          super.addAll(values, typeDeclarations_);
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public Builder clearTypeDeclarations() {
+        if (typeDeclarationsBuilder_ == null) {
+          typeDeclarations_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00001000);
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public Builder removeTypeDeclarations(int index) {
+        if (typeDeclarationsBuilder_ == null) {
+          ensureTypeDeclarationsIsMutable();
+          typeDeclarations_.remove(index);
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public boa.types.Ast.Declaration.Builder getTypeDeclarationsBuilder(
+          int index) {
+        return getTypeDeclarationsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public boa.types.Ast.DeclarationOrBuilder getTypeDeclarationsOrBuilder(
+          int index) {
+        if (typeDeclarationsBuilder_ == null) {
+          return typeDeclarations_.get(index);  } else {
+          return typeDeclarationsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public java.util.List<? extends boa.types.Ast.DeclarationOrBuilder> 
+           getTypeDeclarationsOrBuilderList() {
+        if (typeDeclarationsBuilder_ != null) {
+          return typeDeclarationsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(typeDeclarations_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public boa.types.Ast.Declaration.Builder addTypeDeclarationsBuilder() {
+        return getTypeDeclarationsFieldBuilder().addBuilder(
+            boa.types.Ast.Declaration.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public boa.types.Ast.Declaration.Builder addTypeDeclarationsBuilder(
+          int index) {
+        return getTypeDeclarationsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Declaration.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 15;</code>
+       */
+      public java.util.List<boa.types.Ast.Declaration.Builder> 
+           getTypeDeclarationsBuilderList() {
+        return getTypeDeclarationsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Declaration, boa.types.Ast.Declaration.Builder, boa.types.Ast.DeclarationOrBuilder> 
+          getTypeDeclarationsFieldBuilder() {
+        if (typeDeclarationsBuilder_ == null) {
+          typeDeclarationsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Declaration, boa.types.Ast.Declaration.Builder, boa.types.Ast.DeclarationOrBuilder>(
+                  typeDeclarations_,
+                  ((bitField0_ & 0x00001000) == 0x00001000),
+                  getParentForChildren(),
+                  isClean());
+          typeDeclarations_ = null;
+        }
+        return typeDeclarationsBuilder_;
+      }
+
+      // repeated string names = 16;
+      private com.google.protobuf.LazyStringList names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureNamesIsMutable() {
+        if (!((bitField0_ & 0x00002000) == 0x00002000)) {
+          names_ = new com.google.protobuf.LazyStringArrayList(names_);
+          bitField0_ |= 0x00002000;
+         }
+      }
+      /**
+       * <code>repeated string names = 16;</code>
+       */
+      public java.util.List<java.lang.String>
+          getNamesList() {
+        return java.util.Collections.unmodifiableList(names_);
+      }
+      /**
+       * <code>repeated string names = 16;</code>
+       */
+      public int getNamesCount() {
+        return names_.size();
+      }
+      /**
+       * <code>repeated string names = 16;</code>
+       */
+      public java.lang.String getNames(int index) {
+        return names_.get(index);
+      }
+      /**
+       * <code>repeated string names = 16;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNamesBytes(int index) {
+        return names_.getByteString(index);
+      }
+      /**
+       * <code>repeated string names = 16;</code>
+       */
+      public Builder setNames(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureNamesIsMutable();
+        names_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
-       *
-       * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-       * </pre>
+       * <code>repeated string names = 16;</code>
        */
-      public Builder clearLabelChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00000400);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      public Builder addNames(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureNamesIsMutable();
+        names_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string names = 16;</code>
+       */
+      public Builder addAllNames(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureNamesIsMutable();
+        super.addAll(values, names_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string names = 16;</code>
+       */
+      public Builder clearNames() {
+        names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00002000);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string names = 16;</code>
+       */
+      public Builder addNamesBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureNamesIsMutable();
+        names_.add(value);
         onChanged();
         return this;
       }
@@ -21089,42 +25787,28 @@ public final class Ast {
     // optional .boa.types.Modifier annotation = 12;
     /**
      * <code>optional .boa.types.Modifier annotation = 12;</code>
+     *
+     * <pre>
+     ** 13 used to be lambda 
+     * </pre>
      */
     boolean hasAnnotation();
     /**
      * <code>optional .boa.types.Modifier annotation = 12;</code>
+     *
+     * <pre>
+     ** 13 used to be lambda 
+     * </pre>
      */
     boa.types.Ast.Modifier getAnnotation();
     /**
      * <code>optional .boa.types.Modifier annotation = 12;</code>
+     *
+     * <pre>
+     ** 13 used to be lambda 
+     * </pre>
      */
     boa.types.Ast.ModifierOrBuilder getAnnotationOrBuilder();
-
-    // optional .boa.types.Method lambda = 13;
-    /**
-     * <code>optional .boa.types.Method lambda = 13;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
-     */
-    boolean hasLambda();
-    /**
-     * <code>optional .boa.types.Method lambda = 13;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
-     */
-    boa.types.Ast.Method getLambda();
-    /**
-     * <code>optional .boa.types.Method lambda = 13;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
-     */
-    boa.types.Ast.MethodOrBuilder getLambdaOrBuilder();
 
     // optional bool no_parens = 14;
     /**
@@ -21144,41 +25828,247 @@ public final class Ast {
      */
     boolean getNoParens();
 
-    // optional .boa.types.ChangeKind structural_change_kind = 15;
+    // optional int32 key = 18;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
+     * <code>optional int32 key = 18;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasKey();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
+     * <code>optional int32 key = 18;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    int getKey();
 
-    // optional .boa.types.ChangeKind label_change_kind = 16;
+    // optional .boa.types.Type declaring_type = 19;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** The type declaring this method call or field access 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasDeclaringType();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** The type declaring this method call or field access 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    boa.types.Ast.Type getDeclaringType();
+    /**
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
+     *
+     * <pre>
+     ** The type declaring this method call or field access 
+     * </pre>
+     */
+    boa.types.Ast.TypeOrBuilder getDeclaringTypeOrBuilder();
+
+    // optional .boa.types.Type return_type = 20;
+    /**
+     * <code>optional .boa.types.Type return_type = 20;</code>
+     *
+     * <pre>
+     ** Type of the return value 
+     * </pre>
+     */
+    boolean hasReturnType();
+    /**
+     * <code>optional .boa.types.Type return_type = 20;</code>
+     *
+     * <pre>
+     ** Type of the return value 
+     * </pre>
+     */
+    boa.types.Ast.Type getReturnType();
+    /**
+     * <code>optional .boa.types.Type return_type = 20;</code>
+     *
+     * <pre>
+     ** Type of the return value 
+     * </pre>
+     */
+    boa.types.Ast.TypeOrBuilder getReturnTypeOrBuilder();
+
+    // repeated .boa.types.Method methods = 21;
+    /**
+     * <code>repeated .boa.types.Method methods = 21;</code>
+     *
+     * <pre>
+     ** Declared methods/functions 
+     * </pre>
+     */
+    java.util.List<boa.types.Ast.Method> 
+        getMethodsList();
+    /**
+     * <code>repeated .boa.types.Method methods = 21;</code>
+     *
+     * <pre>
+     ** Declared methods/functions 
+     * </pre>
+     */
+    boa.types.Ast.Method getMethods(int index);
+    /**
+     * <code>repeated .boa.types.Method methods = 21;</code>
+     *
+     * <pre>
+     ** Declared methods/functions 
+     * </pre>
+     */
+    int getMethodsCount();
+    /**
+     * <code>repeated .boa.types.Method methods = 21;</code>
+     *
+     * <pre>
+     ** Declared methods/functions 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Ast.MethodOrBuilder> 
+        getMethodsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Method methods = 21;</code>
+     *
+     * <pre>
+     ** Declared methods/functions 
+     * </pre>
+     */
+    boa.types.Ast.MethodOrBuilder getMethodsOrBuilder(
+        int index);
+
+    // repeated .boa.types.Statement statements = 22;
+    /**
+     * <code>repeated .boa.types.Statement statements = 22;</code>
+     *
+     * <pre>
+     ** Inside statements 
+     * </pre>
+     */
+    java.util.List<boa.types.Ast.Statement> 
+        getStatementsList();
+    /**
+     * <code>repeated .boa.types.Statement statements = 22;</code>
+     *
+     * <pre>
+     ** Inside statements 
+     * </pre>
+     */
+    boa.types.Ast.Statement getStatements(int index);
+    /**
+     * <code>repeated .boa.types.Statement statements = 22;</code>
+     *
+     * <pre>
+     ** Inside statements 
+     * </pre>
+     */
+    int getStatementsCount();
+    /**
+     * <code>repeated .boa.types.Statement statements = 22;</code>
+     *
+     * <pre>
+     ** Inside statements 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Ast.StatementOrBuilder> 
+        getStatementsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Statement statements = 22;</code>
+     *
+     * <pre>
+     ** Inside statements 
+     * </pre>
+     */
+    boa.types.Ast.StatementOrBuilder getStatementsOrBuilder(
+        int index);
+
+    // optional bool is_member_access = 23;
+    /**
+     * <code>optional bool is_member_access = 23;</code>
+     */
+    boolean hasIsMemberAccess();
+    /**
+     * <code>optional bool is_member_access = 23;</code>
+     */
+    boolean getIsMemberAccess();
+
+    // optional bool dollar_sign = 24;
+    /**
+     * <code>optional bool dollar_sign = 24;</code>
+     */
+    boolean hasDollarSign();
+    /**
+     * <code>optional bool dollar_sign = 24;</code>
+     */
+    boolean getDollarSign();
+
+    // optional .boa.types.Expression computed_variable = 25;
+    /**
+     * <code>optional .boa.types.Expression computed_variable = 25;</code>
+     */
+    boolean hasComputedVariable();
+    /**
+     * <code>optional .boa.types.Expression computed_variable = 25;</code>
+     */
+    boa.types.Ast.Expression getComputedVariable();
+    /**
+     * <code>optional .boa.types.Expression computed_variable = 25;</code>
+     */
+    boa.types.Ast.ExpressionOrBuilder getComputedVariableOrBuilder();
+
+    // optional .boa.types.Expression computed_method = 26;
+    /**
+     * <code>optional .boa.types.Expression computed_method = 26;</code>
+     */
+    boolean hasComputedMethod();
+    /**
+     * <code>optional .boa.types.Expression computed_method = 26;</code>
+     */
+    boa.types.Ast.Expression getComputedMethod();
+    /**
+     * <code>optional .boa.types.Expression computed_method = 26;</code>
+     */
+    boa.types.Ast.ExpressionOrBuilder getComputedMethodOrBuilder();
+
+    // optional bool is_static = 27;
+    /**
+     * <code>optional bool is_static = 27;</code>
+     */
+    boolean hasIsStatic();
+    /**
+     * <code>optional bool is_static = 27;</code>
+     */
+    boolean getIsStatic();
+
+    // optional bool has_from = 28;
+    /**
+     * <code>optional bool has_from = 28;</code>
+     */
+    boolean hasHasFrom();
+    /**
+     * <code>optional bool has_from = 28;</code>
+     */
+    boolean getHasFrom();
+
+    // optional .boa.types.Method trait = 29;
+    /**
+     * <code>optional .boa.types.Method trait = 29;</code>
+     */
+    boolean hasTrait();
+    /**
+     * <code>optional .boa.types.Method trait = 29;</code>
+     */
+    boa.types.Ast.Method getTrait();
+    /**
+     * <code>optional .boa.types.Method trait = 29;</code>
+     */
+    boa.types.Ast.MethodOrBuilder getTraitOrBuilder();
   }
   /**
    * Protobuf type {@code boa.types.Expression}
@@ -21337,44 +26227,115 @@ public final class Ast {
               bitField0_ |= 0x00000080;
               break;
             }
-            case 106: {
-              boa.types.Ast.Method.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000100) == 0x00000100)) {
-                subBuilder = lambda_.toBuilder();
-              }
-              lambda_ = input.readMessage(boa.types.Ast.Method.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(lambda_);
-                lambda_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000100;
-              break;
-            }
             case 112: {
-              bitField0_ |= 0x00000200;
+              bitField0_ |= 0x00000100;
               noParens_ = input.readBool();
               break;
             }
-            case 120: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(15, rawValue);
-              } else {
-                bitField0_ |= 0x00000400;
-                structuralChangeKind_ = value;
-              }
+            case 144: {
+              bitField0_ |= 0x00000200;
+              key_ = input.readInt32();
               break;
             }
-            case 128: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(16, rawValue);
-              } else {
-                bitField0_ |= 0x00000800;
-                labelChangeKind_ = value;
+            case 154: {
+              boa.types.Ast.Type.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000400) == 0x00000400)) {
+                subBuilder = declaringType_.toBuilder();
               }
+              declaringType_ = input.readMessage(boa.types.Ast.Type.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(declaringType_);
+                declaringType_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000400;
+              break;
+            }
+            case 162: {
+              boa.types.Ast.Type.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000800) == 0x00000800)) {
+                subBuilder = returnType_.toBuilder();
+              }
+              returnType_ = input.readMessage(boa.types.Ast.Type.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(returnType_);
+                returnType_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000800;
+              break;
+            }
+            case 170: {
+              if (!((mutable_bitField0_ & 0x00010000) == 0x00010000)) {
+                methods_ = new java.util.ArrayList<boa.types.Ast.Method>();
+                mutable_bitField0_ |= 0x00010000;
+              }
+              methods_.add(input.readMessage(boa.types.Ast.Method.PARSER, extensionRegistry));
+              break;
+            }
+            case 178: {
+              if (!((mutable_bitField0_ & 0x00020000) == 0x00020000)) {
+                statements_ = new java.util.ArrayList<boa.types.Ast.Statement>();
+                mutable_bitField0_ |= 0x00020000;
+              }
+              statements_.add(input.readMessage(boa.types.Ast.Statement.PARSER, extensionRegistry));
+              break;
+            }
+            case 184: {
+              bitField0_ |= 0x00001000;
+              isMemberAccess_ = input.readBool();
+              break;
+            }
+            case 192: {
+              bitField0_ |= 0x00002000;
+              dollarSign_ = input.readBool();
+              break;
+            }
+            case 202: {
+              boa.types.Ast.Expression.Builder subBuilder = null;
+              if (((bitField0_ & 0x00004000) == 0x00004000)) {
+                subBuilder = computedVariable_.toBuilder();
+              }
+              computedVariable_ = input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(computedVariable_);
+                computedVariable_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00004000;
+              break;
+            }
+            case 210: {
+              boa.types.Ast.Expression.Builder subBuilder = null;
+              if (((bitField0_ & 0x00008000) == 0x00008000)) {
+                subBuilder = computedMethod_.toBuilder();
+              }
+              computedMethod_ = input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(computedMethod_);
+                computedMethod_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00008000;
+              break;
+            }
+            case 216: {
+              bitField0_ |= 0x00010000;
+              isStatic_ = input.readBool();
+              break;
+            }
+            case 224: {
+              bitField0_ |= 0x00020000;
+              hasFrom_ = input.readBool();
+              break;
+            }
+            case 234: {
+              boa.types.Ast.Method.Builder subBuilder = null;
+              if (((bitField0_ & 0x00040000) == 0x00040000)) {
+                subBuilder = trait_.toBuilder();
+              }
+              trait_ = input.readMessage(boa.types.Ast.Method.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(trait_);
+                trait_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00040000;
               break;
             }
           }
@@ -21396,6 +26357,12 @@ public final class Ast {
         }
         if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
           methodArgs_ = java.util.Collections.unmodifiableList(methodArgs_);
+        }
+        if (((mutable_bitField0_ & 0x00010000) == 0x00010000)) {
+          methods_ = java.util.Collections.unmodifiableList(methods_);
+        }
+        if (((mutable_bitField0_ & 0x00020000) == 0x00020000)) {
+          statements_ = java.util.Collections.unmodifiableList(statements_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -21466,9 +26433,9 @@ public final class Ast {
        */
       CAST(5, 5),
       /**
-       * <code>ARRAYINDEX = 6;</code>
+       * <code>ARRAYACCESS = 6;</code>
        */
-      ARRAYINDEX(6, 6),
+      ARRAYACCESS(6, 6),
       /**
        * <code>ARRAYINIT = 7;</code>
        */
@@ -21476,171 +26443,171 @@ public final class Ast {
       /**
        * <code>TYPECOMPARE = 8;</code>
        */
-      TYPECOMPARE(8, 8),
+      TYPECOMPARE(9, 8),
       /**
        * <code>NEW = 9;</code>
        */
-      NEW(9, 9),
+      NEW(10, 9),
       /**
        * <code>NEWARRAY = 10;</code>
        */
-      NEWARRAY(10, 10),
+      NEWARRAY(11, 10),
       /**
        * <code>OP_ADD = 11;</code>
        */
-      OP_ADD(11, 11),
+      OP_ADD(12, 11),
       /**
        * <code>OP_SUB = 12;</code>
        */
-      OP_SUB(12, 12),
+      OP_SUB(13, 12),
       /**
        * <code>OP_MULT = 13;</code>
        */
-      OP_MULT(13, 13),
+      OP_MULT(14, 13),
       /**
        * <code>OP_DIV = 14;</code>
        */
-      OP_DIV(14, 14),
+      OP_DIV(15, 14),
       /**
        * <code>OP_MOD = 15;</code>
        */
-      OP_MOD(15, 15),
+      OP_MOD(16, 15),
       /**
        * <code>OP_INC = 16;</code>
        */
-      OP_INC(16, 16),
+      OP_INC(17, 16),
       /**
        * <code>OP_DEC = 17;</code>
        */
-      OP_DEC(17, 17),
+      OP_DEC(18, 17),
       /**
        * <code>BIT_LSHIFT = 18;</code>
        */
-      BIT_LSHIFT(18, 18),
+      BIT_LSHIFT(19, 18),
       /**
        * <code>BIT_RSHIFT = 19;</code>
        */
-      BIT_RSHIFT(19, 19),
+      BIT_RSHIFT(20, 19),
       /**
        * <code>BIT_UNSIGNEDRSHIFT = 20;</code>
        */
-      BIT_UNSIGNEDRSHIFT(20, 20),
+      BIT_UNSIGNEDRSHIFT(21, 20),
       /**
        * <code>BIT_AND = 21;</code>
        */
-      BIT_AND(21, 21),
+      BIT_AND(22, 21),
       /**
        * <code>BIT_OR = 22;</code>
        */
-      BIT_OR(22, 22),
+      BIT_OR(23, 22),
       /**
        * <code>BIT_NOT = 23;</code>
        */
-      BIT_NOT(23, 23),
+      BIT_NOT(24, 23),
       /**
        * <code>BIT_XOR = 24;</code>
        */
-      BIT_XOR(24, 24),
+      BIT_XOR(25, 24),
       /**
        * <code>LOGICAL_NOT = 25;</code>
        */
-      LOGICAL_NOT(25, 25),
+      LOGICAL_NOT(26, 25),
       /**
        * <code>LOGICAL_AND = 26;</code>
        */
-      LOGICAL_AND(26, 26),
+      LOGICAL_AND(27, 26),
       /**
        * <code>LOGICAL_OR = 27;</code>
        */
-      LOGICAL_OR(27, 27),
+      LOGICAL_OR(28, 27),
       /**
        * <code>EQ = 28;</code>
        */
-      EQ(28, 28),
+      EQ(29, 28),
       /**
        * <code>NEQ = 29;</code>
        */
-      NEQ(29, 29),
+      NEQ(30, 29),
       /**
        * <code>LT = 30;</code>
        */
-      LT(30, 30),
+      LT(31, 30),
       /**
        * <code>GT = 31;</code>
        */
-      GT(31, 31),
+      GT(32, 31),
       /**
        * <code>LTEQ = 32;</code>
        */
-      LTEQ(32, 32),
+      LTEQ(33, 32),
       /**
        * <code>GTEQ = 33;</code>
        */
-      GTEQ(33, 33),
+      GTEQ(34, 33),
       /**
        * <code>CONDITIONAL = 34;</code>
        */
-      CONDITIONAL(34, 34),
+      CONDITIONAL(35, 34),
       /**
        * <code>NULLCOALESCE = 35;</code>
        */
-      NULLCOALESCE(35, 35),
+      NULLCOALESCE(36, 35),
       /**
        * <code>ASSIGN = 36;</code>
        */
-      ASSIGN(36, 36),
+      ASSIGN(37, 36),
       /**
        * <code>ASSIGN_ADD = 37;</code>
        */
-      ASSIGN_ADD(37, 37),
+      ASSIGN_ADD(38, 37),
       /**
        * <code>ASSIGN_SUB = 38;</code>
        */
-      ASSIGN_SUB(38, 38),
+      ASSIGN_SUB(39, 38),
       /**
        * <code>ASSIGN_MULT = 39;</code>
        */
-      ASSIGN_MULT(39, 39),
+      ASSIGN_MULT(40, 39),
       /**
        * <code>ASSIGN_DIV = 40;</code>
        */
-      ASSIGN_DIV(40, 40),
+      ASSIGN_DIV(41, 40),
       /**
        * <code>ASSIGN_MOD = 41;</code>
        */
-      ASSIGN_MOD(41, 41),
+      ASSIGN_MOD(42, 41),
       /**
        * <code>ASSIGN_BITXOR = 42;</code>
        */
-      ASSIGN_BITXOR(42, 42),
+      ASSIGN_BITXOR(43, 42),
       /**
        * <code>ASSIGN_BITAND = 43;</code>
        */
-      ASSIGN_BITAND(43, 43),
+      ASSIGN_BITAND(44, 43),
       /**
        * <code>ASSIGN_BITOR = 44;</code>
        */
-      ASSIGN_BITOR(44, 44),
+      ASSIGN_BITOR(45, 44),
       /**
        * <code>ASSIGN_LSHIFT = 45;</code>
        */
-      ASSIGN_LSHIFT(45, 45),
+      ASSIGN_LSHIFT(46, 45),
       /**
        * <code>ASSIGN_RSHIFT = 46;</code>
        */
-      ASSIGN_RSHIFT(46, 46),
+      ASSIGN_RSHIFT(47, 46),
       /**
        * <code>ASSIGN_UNSIGNEDRSHIFT = 47;</code>
        */
-      ASSIGN_UNSIGNEDRSHIFT(47, 47),
+      ASSIGN_UNSIGNEDRSHIFT(48, 47),
       /**
        * <code>ANNOTATION = 48;</code>
        */
-      ANNOTATION(48, 48),
+      ANNOTATION(49, 48),
       /**
        * <code>PAREN = 49;</code>
        */
-      PAREN(49, 49),
+      PAREN(50, 49),
       /**
        * <code>METHOD_REFERENCE = 50;</code>
        *
@@ -21648,7 +26615,7 @@ public final class Ast {
        ** @exclude TODO 
        * </pre>
        */
-      METHOD_REFERENCE(50, 50),
+      METHOD_REFERENCE(51, 50),
       /**
        * <code>LAMBDA = 51;</code>
        *
@@ -21656,7 +26623,7 @@ public final class Ast {
        ** @exclude TODO 
        * </pre>
        */
-      LAMBDA(51, 51),
+      LAMBDA(52, 51),
       /**
        * <code>ANON_METHOD = 52;</code>
        *
@@ -21664,9 +26631,217 @@ public final class Ast {
        ** @exclude TODO 
        * </pre>
        */
-      ANON_METHOD(52, 52),
+      ANON_METHOD(53, 52),
+      /**
+       * <code>YIELD = 53;</code>
+       */
+      YIELD(54, 53),
+      /**
+       * <code>ARRAY_COMPREHENSION = 54;</code>
+       */
+      ARRAY_COMPREHENSION(55, 54),
+      /**
+       * <code>EMPTY = 55;</code>
+       */
+      EMPTY(56, 55),
+      /**
+       * <code>SHEQ = 56;</code>
+       */
+      SHEQ(57, 56),
+      /**
+       * <code>SHNEQ = 57;</code>
+       */
+      SHNEQ(58, 57),
+      /**
+       * <code>XML_DOTQUERY = 58;</code>
+       */
+      XML_DOTQUERY(59, 58),
+      /**
+       * <code>OBJECT_LITERAL = 59;</code>
+       */
+      OBJECT_LITERAL(60, 59),
+      /**
+       * <code>METHODDECL = 60;</code>
+       */
+      METHODDECL(61, 60),
+      /**
+       * <code>LOOP = 61;</code>
+       */
+      LOOP(62, 61),
+      /**
+       * <code>GENERATOR = 62;</code>
+       */
+      GENERATOR(63, 62),
+      /**
+       * <code>XML_LITERAL = 63;</code>
+       */
+      XML_LITERAL(64, 63),
+      /**
+       * <code>XML_EXPRESSION = 64;</code>
+       */
+      XML_EXPRESSION(65, 64),
+      /**
+       * <code>XML_PROPERTYREF = 65;</code>
+       */
+      XML_PROPERTYREF(66, 65),
+      /**
+       * <code>XML_MEMBERREF = 66;</code>
+       */
+      XML_MEMBERREF(67, 66),
+      /**
+       * <code>XML_DOT = 67;</code>
+       */
+      XML_DOT(68, 67),
+      /**
+       * <code>XML_DOTDOT = 68;</code>
+       */
+      XML_DOTDOT(69, 68),
+      /**
+       * <code>IN = 69;</code>
+       */
+      IN(70, 69),
+      /**
+       * <code>TYPEOF = 70;</code>
+       */
+      TYPEOF(71, 70),
+      /**
+       * <code>REGEXPLITERAL = 71;</code>
+       */
+      REGEXPLITERAL(72, 71),
+      /**
+       * <code>DELETE = 72;</code>
+       */
+      DELETE(73, 72),
+      /**
+       * <code>VOID = 73;</code>
+       */
+      VOID(74, 73),
+      /**
+       * <code>HASHTABLEACCESS = 74;</code>
+       *
+       * <pre>
+       ** In PHP, its syntax uses curly brackets instead of square ones as in array access. Not used in Java
+       * </pre>
+       */
+      HASHTABLEACCESS(75, 74),
+      /**
+       * <code>ARRAYELEMENT = 75;</code>
+       *
+       * <pre>
+       ** Represents a single element of array. Holds the key and the value both can be any expression. The key can be null 
+       * </pre>
+       */
+      ARRAYELEMENT(76, 75),
+      /**
+       * <code>OP_CONCAT = 76;</code>
+       */
+      OP_CONCAT(77, 76),
+      /**
+       * <code>OP_POW = 77;</code>
+       */
+      OP_POW(78, 77),
+      /**
+       * <code>ASSIGN_CONCAT = 78;</code>
+       */
+      ASSIGN_CONCAT(79, 78),
+      /**
+       * <code>ASSIGN_POW = 79;</code>
+       */
+      ASSIGN_POW(80, 79),
+      /**
+       * <code>BACKTICK = 80;</code>
+       */
+      BACKTICK(81, 80),
+      /**
+       * <code>IDENTICAL = 81;</code>
+       */
+      IDENTICAL(82, 81),
+      /**
+       * <code>NOTIDENTICAL = 82;</code>
+       */
+      NOTIDENTICAL(83, 82),
+      /**
+       * <code>STRING_AND = 83;</code>
+       */
+      STRING_AND(84, 83),
+      /**
+       * <code>STRING_OR = 84;</code>
+       */
+      STRING_OR(85, 84),
+      /**
+       * <code>STRING_XOR = 85;</code>
+       */
+      STRING_XOR(86, 85),
+      /**
+       * <code>OP_THREE_WAY_COMPARE = 86;</code>
+       */
+      OP_THREE_WAY_COMPARE(87, 86),
+      /**
+       * <code>OP_UNPACK = 87;</code>
+       */
+      OP_UNPACK(88, 87),
+      /**
+       * <code>QUOTE = 88;</code>
+       */
+      QUOTE(89, 88),
+      /**
+       * <code>IGNORE_ERROR = 89;</code>
+       */
+      IGNORE_ERROR(90, 89),
+      /**
+       * <code>REQUIRE = 90;</code>
+       */
+      REQUIRE(91, 90),
+      /**
+       * <code>REQUIRE_ONCE = 91;</code>
+       */
+      REQUIRE_ONCE(92, 91),
+      /**
+       * <code>INCLUDE = 92;</code>
+       */
+      INCLUDE(93, 92),
+      /**
+       * <code>INCLUDE_ONCE = 93;</code>
+       */
+      INCLUDE_ONCE(94, 93),
+      /**
+       * <code>LIST = 94;</code>
+       */
+      LIST(95, 94),
+      /**
+       * <code>REFERENCE = 95;</code>
+       */
+      REFERENCE(96, 95),
+      /**
+       * <code>REFLECTION = 96;</code>
+       */
+      REFLECTION(97, 96),
+      /**
+       * <code>CLONE = 97;</code>
+       */
+      CLONE(98, 97),
+      /**
+       * <code>TRAIT_ALIAS = 98;</code>
+       */
+      TRAIT_ALIAS(99, 98),
+      /**
+       * <code>TRAIT_PRECEDENCE = 99;</code>
+       */
+      TRAIT_PRECEDENCE(100, 99),
+      /**
+       * <code>NAMESPACENAME = 100;</code>
+       */
+      NAMESPACENAME(101, 100),
       ;
 
+      /**
+       * <code>ARRAYLITERAL = 7;</code>
+       *
+       * <pre>
+       ** The same as ARRAYINIT 
+       * </pre>
+       */
+      public static final ExpressionKind ARRAYLITERAL = ARRAYINIT;
       /**
        * <code>OTHER = 0;</code>
        *
@@ -21696,13 +26871,21 @@ public final class Ast {
        */
       public static final int CAST_VALUE = 5;
       /**
-       * <code>ARRAYINDEX = 6;</code>
+       * <code>ARRAYACCESS = 6;</code>
        */
-      public static final int ARRAYINDEX_VALUE = 6;
+      public static final int ARRAYACCESS_VALUE = 6;
       /**
        * <code>ARRAYINIT = 7;</code>
        */
       public static final int ARRAYINIT_VALUE = 7;
+      /**
+       * <code>ARRAYLITERAL = 7;</code>
+       *
+       * <pre>
+       ** The same as ARRAYINIT 
+       * </pre>
+       */
+      public static final int ARRAYLITERAL_VALUE = 7;
       /**
        * <code>TYPECOMPARE = 8;</code>
        */
@@ -21895,6 +27078,206 @@ public final class Ast {
        * </pre>
        */
       public static final int ANON_METHOD_VALUE = 52;
+      /**
+       * <code>YIELD = 53;</code>
+       */
+      public static final int YIELD_VALUE = 53;
+      /**
+       * <code>ARRAY_COMPREHENSION = 54;</code>
+       */
+      public static final int ARRAY_COMPREHENSION_VALUE = 54;
+      /**
+       * <code>EMPTY = 55;</code>
+       */
+      public static final int EMPTY_VALUE = 55;
+      /**
+       * <code>SHEQ = 56;</code>
+       */
+      public static final int SHEQ_VALUE = 56;
+      /**
+       * <code>SHNEQ = 57;</code>
+       */
+      public static final int SHNEQ_VALUE = 57;
+      /**
+       * <code>XML_DOTQUERY = 58;</code>
+       */
+      public static final int XML_DOTQUERY_VALUE = 58;
+      /**
+       * <code>OBJECT_LITERAL = 59;</code>
+       */
+      public static final int OBJECT_LITERAL_VALUE = 59;
+      /**
+       * <code>METHODDECL = 60;</code>
+       */
+      public static final int METHODDECL_VALUE = 60;
+      /**
+       * <code>LOOP = 61;</code>
+       */
+      public static final int LOOP_VALUE = 61;
+      /**
+       * <code>GENERATOR = 62;</code>
+       */
+      public static final int GENERATOR_VALUE = 62;
+      /**
+       * <code>XML_LITERAL = 63;</code>
+       */
+      public static final int XML_LITERAL_VALUE = 63;
+      /**
+       * <code>XML_EXPRESSION = 64;</code>
+       */
+      public static final int XML_EXPRESSION_VALUE = 64;
+      /**
+       * <code>XML_PROPERTYREF = 65;</code>
+       */
+      public static final int XML_PROPERTYREF_VALUE = 65;
+      /**
+       * <code>XML_MEMBERREF = 66;</code>
+       */
+      public static final int XML_MEMBERREF_VALUE = 66;
+      /**
+       * <code>XML_DOT = 67;</code>
+       */
+      public static final int XML_DOT_VALUE = 67;
+      /**
+       * <code>XML_DOTDOT = 68;</code>
+       */
+      public static final int XML_DOTDOT_VALUE = 68;
+      /**
+       * <code>IN = 69;</code>
+       */
+      public static final int IN_VALUE = 69;
+      /**
+       * <code>TYPEOF = 70;</code>
+       */
+      public static final int TYPEOF_VALUE = 70;
+      /**
+       * <code>REGEXPLITERAL = 71;</code>
+       */
+      public static final int REGEXPLITERAL_VALUE = 71;
+      /**
+       * <code>DELETE = 72;</code>
+       */
+      public static final int DELETE_VALUE = 72;
+      /**
+       * <code>VOID = 73;</code>
+       */
+      public static final int VOID_VALUE = 73;
+      /**
+       * <code>HASHTABLEACCESS = 74;</code>
+       *
+       * <pre>
+       ** In PHP, its syntax uses curly brackets instead of square ones as in array access. Not used in Java
+       * </pre>
+       */
+      public static final int HASHTABLEACCESS_VALUE = 74;
+      /**
+       * <code>ARRAYELEMENT = 75;</code>
+       *
+       * <pre>
+       ** Represents a single element of array. Holds the key and the value both can be any expression. The key can be null 
+       * </pre>
+       */
+      public static final int ARRAYELEMENT_VALUE = 75;
+      /**
+       * <code>OP_CONCAT = 76;</code>
+       */
+      public static final int OP_CONCAT_VALUE = 76;
+      /**
+       * <code>OP_POW = 77;</code>
+       */
+      public static final int OP_POW_VALUE = 77;
+      /**
+       * <code>ASSIGN_CONCAT = 78;</code>
+       */
+      public static final int ASSIGN_CONCAT_VALUE = 78;
+      /**
+       * <code>ASSIGN_POW = 79;</code>
+       */
+      public static final int ASSIGN_POW_VALUE = 79;
+      /**
+       * <code>BACKTICK = 80;</code>
+       */
+      public static final int BACKTICK_VALUE = 80;
+      /**
+       * <code>IDENTICAL = 81;</code>
+       */
+      public static final int IDENTICAL_VALUE = 81;
+      /**
+       * <code>NOTIDENTICAL = 82;</code>
+       */
+      public static final int NOTIDENTICAL_VALUE = 82;
+      /**
+       * <code>STRING_AND = 83;</code>
+       */
+      public static final int STRING_AND_VALUE = 83;
+      /**
+       * <code>STRING_OR = 84;</code>
+       */
+      public static final int STRING_OR_VALUE = 84;
+      /**
+       * <code>STRING_XOR = 85;</code>
+       */
+      public static final int STRING_XOR_VALUE = 85;
+      /**
+       * <code>OP_THREE_WAY_COMPARE = 86;</code>
+       */
+      public static final int OP_THREE_WAY_COMPARE_VALUE = 86;
+      /**
+       * <code>OP_UNPACK = 87;</code>
+       */
+      public static final int OP_UNPACK_VALUE = 87;
+      /**
+       * <code>QUOTE = 88;</code>
+       */
+      public static final int QUOTE_VALUE = 88;
+      /**
+       * <code>IGNORE_ERROR = 89;</code>
+       */
+      public static final int IGNORE_ERROR_VALUE = 89;
+      /**
+       * <code>REQUIRE = 90;</code>
+       */
+      public static final int REQUIRE_VALUE = 90;
+      /**
+       * <code>REQUIRE_ONCE = 91;</code>
+       */
+      public static final int REQUIRE_ONCE_VALUE = 91;
+      /**
+       * <code>INCLUDE = 92;</code>
+       */
+      public static final int INCLUDE_VALUE = 92;
+      /**
+       * <code>INCLUDE_ONCE = 93;</code>
+       */
+      public static final int INCLUDE_ONCE_VALUE = 93;
+      /**
+       * <code>LIST = 94;</code>
+       */
+      public static final int LIST_VALUE = 94;
+      /**
+       * <code>REFERENCE = 95;</code>
+       */
+      public static final int REFERENCE_VALUE = 95;
+      /**
+       * <code>REFLECTION = 96;</code>
+       */
+      public static final int REFLECTION_VALUE = 96;
+      /**
+       * <code>CLONE = 97;</code>
+       */
+      public static final int CLONE_VALUE = 97;
+      /**
+       * <code>TRAIT_ALIAS = 98;</code>
+       */
+      public static final int TRAIT_ALIAS_VALUE = 98;
+      /**
+       * <code>TRAIT_PRECEDENCE = 99;</code>
+       */
+      public static final int TRAIT_PRECEDENCE_VALUE = 99;
+      /**
+       * <code>NAMESPACENAME = 100;</code>
+       */
+      public static final int NAMESPACENAME_VALUE = 100;
 
 
       public final int getNumber() { return value; }
@@ -21907,7 +27290,7 @@ public final class Ast {
           case 3: return VARDECL;
           case 4: return METHODCALL;
           case 5: return CAST;
-          case 6: return ARRAYINDEX;
+          case 6: return ARRAYACCESS;
           case 7: return ARRAYINIT;
           case 8: return TYPECOMPARE;
           case 9: return NEW;
@@ -21954,6 +27337,54 @@ public final class Ast {
           case 50: return METHOD_REFERENCE;
           case 51: return LAMBDA;
           case 52: return ANON_METHOD;
+          case 53: return YIELD;
+          case 54: return ARRAY_COMPREHENSION;
+          case 55: return EMPTY;
+          case 56: return SHEQ;
+          case 57: return SHNEQ;
+          case 58: return XML_DOTQUERY;
+          case 59: return OBJECT_LITERAL;
+          case 60: return METHODDECL;
+          case 61: return LOOP;
+          case 62: return GENERATOR;
+          case 63: return XML_LITERAL;
+          case 64: return XML_EXPRESSION;
+          case 65: return XML_PROPERTYREF;
+          case 66: return XML_MEMBERREF;
+          case 67: return XML_DOT;
+          case 68: return XML_DOTDOT;
+          case 69: return IN;
+          case 70: return TYPEOF;
+          case 71: return REGEXPLITERAL;
+          case 72: return DELETE;
+          case 73: return VOID;
+          case 74: return HASHTABLEACCESS;
+          case 75: return ARRAYELEMENT;
+          case 76: return OP_CONCAT;
+          case 77: return OP_POW;
+          case 78: return ASSIGN_CONCAT;
+          case 79: return ASSIGN_POW;
+          case 80: return BACKTICK;
+          case 81: return IDENTICAL;
+          case 82: return NOTIDENTICAL;
+          case 83: return STRING_AND;
+          case 84: return STRING_OR;
+          case 85: return STRING_XOR;
+          case 86: return OP_THREE_WAY_COMPARE;
+          case 87: return OP_UNPACK;
+          case 88: return QUOTE;
+          case 89: return IGNORE_ERROR;
+          case 90: return REQUIRE;
+          case 91: return REQUIRE_ONCE;
+          case 92: return INCLUDE;
+          case 93: return INCLUDE_ONCE;
+          case 94: return LIST;
+          case 95: return REFERENCE;
+          case 96: return REFLECTION;
+          case 97: return CLONE;
+          case 98: return TRAIT_ALIAS;
+          case 99: return TRAIT_PRECEDENCE;
+          case 100: return NAMESPACENAME;
           default: return null;
         }
       }
@@ -21983,7 +27414,9 @@ public final class Ast {
         return boa.types.Ast.Expression.getDescriptor().getEnumTypes().get(0);
       }
 
-      private static final ExpressionKind[] VALUES = values();
+      private static final ExpressionKind[] VALUES = {
+        OTHER, LITERAL, VARACCESS, VARDECL, METHODCALL, CAST, ARRAYACCESS, ARRAYINIT, ARRAYLITERAL, TYPECOMPARE, NEW, NEWARRAY, OP_ADD, OP_SUB, OP_MULT, OP_DIV, OP_MOD, OP_INC, OP_DEC, BIT_LSHIFT, BIT_RSHIFT, BIT_UNSIGNEDRSHIFT, BIT_AND, BIT_OR, BIT_NOT, BIT_XOR, LOGICAL_NOT, LOGICAL_AND, LOGICAL_OR, EQ, NEQ, LT, GT, LTEQ, GTEQ, CONDITIONAL, NULLCOALESCE, ASSIGN, ASSIGN_ADD, ASSIGN_SUB, ASSIGN_MULT, ASSIGN_DIV, ASSIGN_MOD, ASSIGN_BITXOR, ASSIGN_BITAND, ASSIGN_BITOR, ASSIGN_LSHIFT, ASSIGN_RSHIFT, ASSIGN_UNSIGNEDRSHIFT, ANNOTATION, PAREN, METHOD_REFERENCE, LAMBDA, ANON_METHOD, YIELD, ARRAY_COMPREHENSION, EMPTY, SHEQ, SHNEQ, XML_DOTQUERY, OBJECT_LITERAL, METHODDECL, LOOP, GENERATOR, XML_LITERAL, XML_EXPRESSION, XML_PROPERTYREF, XML_MEMBERREF, XML_DOT, XML_DOTDOT, IN, TYPEOF, REGEXPLITERAL, DELETE, VOID, HASHTABLEACCESS, ARRAYELEMENT, OP_CONCAT, OP_POW, ASSIGN_CONCAT, ASSIGN_POW, BACKTICK, IDENTICAL, NOTIDENTICAL, STRING_AND, STRING_OR, STRING_XOR, OP_THREE_WAY_COMPARE, OP_UNPACK, QUOTE, IGNORE_ERROR, REQUIRE, REQUIRE_ONCE, INCLUDE, INCLUDE_ONCE, LIST, REFERENCE, REFLECTION, CLONE, TRAIT_ALIAS, TRAIT_PRECEDENCE, NAMESPACENAME, 
+      };
 
       public static ExpressionKind valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -22368,55 +27801,33 @@ public final class Ast {
     private boa.types.Ast.Modifier annotation_;
     /**
      * <code>optional .boa.types.Modifier annotation = 12;</code>
+     *
+     * <pre>
+     ** 13 used to be lambda 
+     * </pre>
      */
     public boolean hasAnnotation() {
       return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     /**
      * <code>optional .boa.types.Modifier annotation = 12;</code>
+     *
+     * <pre>
+     ** 13 used to be lambda 
+     * </pre>
      */
     public boa.types.Ast.Modifier getAnnotation() {
       return annotation_;
     }
     /**
      * <code>optional .boa.types.Modifier annotation = 12;</code>
+     *
+     * <pre>
+     ** 13 used to be lambda 
+     * </pre>
      */
     public boa.types.Ast.ModifierOrBuilder getAnnotationOrBuilder() {
       return annotation_;
-    }
-
-    // optional .boa.types.Method lambda = 13;
-    public static final int LAMBDA_FIELD_NUMBER = 13;
-    private boa.types.Ast.Method lambda_;
-    /**
-     * <code>optional .boa.types.Method lambda = 13;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
-     */
-    public boolean hasLambda() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
-    }
-    /**
-     * <code>optional .boa.types.Method lambda = 13;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
-     */
-    public boa.types.Ast.Method getLambda() {
-      return lambda_;
-    }
-    /**
-     * <code>optional .boa.types.Method lambda = 13;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
-     */
-    public boa.types.Ast.MethodOrBuilder getLambdaOrBuilder() {
-      return lambda_;
     }
 
     // optional bool no_parens = 14;
@@ -22430,7 +27841,7 @@ public final class Ast {
      * </pre>
      */
     public boolean hasNoParens() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
+      return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     /**
      * <code>optional bool no_parens = 14;</code>
@@ -22443,52 +27854,338 @@ public final class Ast {
       return noParens_;
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 15;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 15;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional int32 key = 18;
+    public static final int KEY_FIELD_NUMBER = 18;
+    private int key_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
+     * <code>optional int32 key = 18;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>optional int32 key = 18;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public int getKey() {
+      return key_;
+    }
+
+    // optional .boa.types.Type declaring_type = 19;
+    public static final int DECLARING_TYPE_FIELD_NUMBER = 19;
+    private boa.types.Ast.Type declaringType_;
+    /**
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
+     *
+     * <pre>
+     ** The type declaring this method call or field access 
+     * </pre>
+     */
+    public boolean hasDeclaringType() {
       return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** The type declaring this method call or field access 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public boa.types.Ast.Type getDeclaringType() {
+      return declaringType_;
+    }
+    /**
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
+     *
+     * <pre>
+     ** The type declaring this method call or field access 
+     * </pre>
+     */
+    public boa.types.Ast.TypeOrBuilder getDeclaringTypeOrBuilder() {
+      return declaringType_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 16;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 16;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // optional .boa.types.Type return_type = 20;
+    public static final int RETURN_TYPE_FIELD_NUMBER = 20;
+    private boa.types.Ast.Type returnType_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
+     * <code>optional .boa.types.Type return_type = 20;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** Type of the return value 
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
+    public boolean hasReturnType() {
       return ((bitField0_ & 0x00000800) == 0x00000800);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
+     * <code>optional .boa.types.Type return_type = 20;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** Type of the return value 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public boa.types.Ast.Type getReturnType() {
+      return returnType_;
+    }
+    /**
+     * <code>optional .boa.types.Type return_type = 20;</code>
+     *
+     * <pre>
+     ** Type of the return value 
+     * </pre>
+     */
+    public boa.types.Ast.TypeOrBuilder getReturnTypeOrBuilder() {
+      return returnType_;
+    }
+
+    // repeated .boa.types.Method methods = 21;
+    public static final int METHODS_FIELD_NUMBER = 21;
+    private java.util.List<boa.types.Ast.Method> methods_;
+    /**
+     * <code>repeated .boa.types.Method methods = 21;</code>
+     *
+     * <pre>
+     ** Declared methods/functions 
+     * </pre>
+     */
+    public java.util.List<boa.types.Ast.Method> getMethodsList() {
+      return methods_;
+    }
+    /**
+     * <code>repeated .boa.types.Method methods = 21;</code>
+     *
+     * <pre>
+     ** Declared methods/functions 
+     * </pre>
+     */
+    public java.util.List<? extends boa.types.Ast.MethodOrBuilder> 
+        getMethodsOrBuilderList() {
+      return methods_;
+    }
+    /**
+     * <code>repeated .boa.types.Method methods = 21;</code>
+     *
+     * <pre>
+     ** Declared methods/functions 
+     * </pre>
+     */
+    public int getMethodsCount() {
+      return methods_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Method methods = 21;</code>
+     *
+     * <pre>
+     ** Declared methods/functions 
+     * </pre>
+     */
+    public boa.types.Ast.Method getMethods(int index) {
+      return methods_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Method methods = 21;</code>
+     *
+     * <pre>
+     ** Declared methods/functions 
+     * </pre>
+     */
+    public boa.types.Ast.MethodOrBuilder getMethodsOrBuilder(
+        int index) {
+      return methods_.get(index);
+    }
+
+    // repeated .boa.types.Statement statements = 22;
+    public static final int STATEMENTS_FIELD_NUMBER = 22;
+    private java.util.List<boa.types.Ast.Statement> statements_;
+    /**
+     * <code>repeated .boa.types.Statement statements = 22;</code>
+     *
+     * <pre>
+     ** Inside statements 
+     * </pre>
+     */
+    public java.util.List<boa.types.Ast.Statement> getStatementsList() {
+      return statements_;
+    }
+    /**
+     * <code>repeated .boa.types.Statement statements = 22;</code>
+     *
+     * <pre>
+     ** Inside statements 
+     * </pre>
+     */
+    public java.util.List<? extends boa.types.Ast.StatementOrBuilder> 
+        getStatementsOrBuilderList() {
+      return statements_;
+    }
+    /**
+     * <code>repeated .boa.types.Statement statements = 22;</code>
+     *
+     * <pre>
+     ** Inside statements 
+     * </pre>
+     */
+    public int getStatementsCount() {
+      return statements_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Statement statements = 22;</code>
+     *
+     * <pre>
+     ** Inside statements 
+     * </pre>
+     */
+    public boa.types.Ast.Statement getStatements(int index) {
+      return statements_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Statement statements = 22;</code>
+     *
+     * <pre>
+     ** Inside statements 
+     * </pre>
+     */
+    public boa.types.Ast.StatementOrBuilder getStatementsOrBuilder(
+        int index) {
+      return statements_.get(index);
+    }
+
+    // optional bool is_member_access = 23;
+    public static final int IS_MEMBER_ACCESS_FIELD_NUMBER = 23;
+    private boolean isMemberAccess_;
+    /**
+     * <code>optional bool is_member_access = 23;</code>
+     */
+    public boolean hasIsMemberAccess() {
+      return ((bitField0_ & 0x00001000) == 0x00001000);
+    }
+    /**
+     * <code>optional bool is_member_access = 23;</code>
+     */
+    public boolean getIsMemberAccess() {
+      return isMemberAccess_;
+    }
+
+    // optional bool dollar_sign = 24;
+    public static final int DOLLAR_SIGN_FIELD_NUMBER = 24;
+    private boolean dollarSign_;
+    /**
+     * <code>optional bool dollar_sign = 24;</code>
+     */
+    public boolean hasDollarSign() {
+      return ((bitField0_ & 0x00002000) == 0x00002000);
+    }
+    /**
+     * <code>optional bool dollar_sign = 24;</code>
+     */
+    public boolean getDollarSign() {
+      return dollarSign_;
+    }
+
+    // optional .boa.types.Expression computed_variable = 25;
+    public static final int COMPUTED_VARIABLE_FIELD_NUMBER = 25;
+    private boa.types.Ast.Expression computedVariable_;
+    /**
+     * <code>optional .boa.types.Expression computed_variable = 25;</code>
+     */
+    public boolean hasComputedVariable() {
+      return ((bitField0_ & 0x00004000) == 0x00004000);
+    }
+    /**
+     * <code>optional .boa.types.Expression computed_variable = 25;</code>
+     */
+    public boa.types.Ast.Expression getComputedVariable() {
+      return computedVariable_;
+    }
+    /**
+     * <code>optional .boa.types.Expression computed_variable = 25;</code>
+     */
+    public boa.types.Ast.ExpressionOrBuilder getComputedVariableOrBuilder() {
+      return computedVariable_;
+    }
+
+    // optional .boa.types.Expression computed_method = 26;
+    public static final int COMPUTED_METHOD_FIELD_NUMBER = 26;
+    private boa.types.Ast.Expression computedMethod_;
+    /**
+     * <code>optional .boa.types.Expression computed_method = 26;</code>
+     */
+    public boolean hasComputedMethod() {
+      return ((bitField0_ & 0x00008000) == 0x00008000);
+    }
+    /**
+     * <code>optional .boa.types.Expression computed_method = 26;</code>
+     */
+    public boa.types.Ast.Expression getComputedMethod() {
+      return computedMethod_;
+    }
+    /**
+     * <code>optional .boa.types.Expression computed_method = 26;</code>
+     */
+    public boa.types.Ast.ExpressionOrBuilder getComputedMethodOrBuilder() {
+      return computedMethod_;
+    }
+
+    // optional bool is_static = 27;
+    public static final int IS_STATIC_FIELD_NUMBER = 27;
+    private boolean isStatic_;
+    /**
+     * <code>optional bool is_static = 27;</code>
+     */
+    public boolean hasIsStatic() {
+      return ((bitField0_ & 0x00010000) == 0x00010000);
+    }
+    /**
+     * <code>optional bool is_static = 27;</code>
+     */
+    public boolean getIsStatic() {
+      return isStatic_;
+    }
+
+    // optional bool has_from = 28;
+    public static final int HAS_FROM_FIELD_NUMBER = 28;
+    private boolean hasFrom_;
+    /**
+     * <code>optional bool has_from = 28;</code>
+     */
+    public boolean hasHasFrom() {
+      return ((bitField0_ & 0x00020000) == 0x00020000);
+    }
+    /**
+     * <code>optional bool has_from = 28;</code>
+     */
+    public boolean getHasFrom() {
+      return hasFrom_;
+    }
+
+    // optional .boa.types.Method trait = 29;
+    public static final int TRAIT_FIELD_NUMBER = 29;
+    private boa.types.Ast.Method trait_;
+    /**
+     * <code>optional .boa.types.Method trait = 29;</code>
+     */
+    public boolean hasTrait() {
+      return ((bitField0_ & 0x00040000) == 0x00040000);
+    }
+    /**
+     * <code>optional .boa.types.Method trait = 29;</code>
+     */
+    public boa.types.Ast.Method getTrait() {
+      return trait_;
+    }
+    /**
+     * <code>optional .boa.types.Method trait = 29;</code>
+     */
+    public boa.types.Ast.MethodOrBuilder getTraitOrBuilder() {
+      return trait_;
     }
 
     private void initFields() {
@@ -22504,10 +28201,19 @@ public final class Ast {
       methodArgs_ = java.util.Collections.emptyList();
       anonDeclaration_ = boa.types.Ast.Declaration.getDefaultInstance();
       annotation_ = boa.types.Ast.Modifier.getDefaultInstance();
-      lambda_ = boa.types.Ast.Method.getDefaultInstance();
       noParens_ = false;
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      key_ = 0;
+      declaringType_ = boa.types.Ast.Type.getDefaultInstance();
+      returnType_ = boa.types.Ast.Type.getDefaultInstance();
+      methods_ = java.util.Collections.emptyList();
+      statements_ = java.util.Collections.emptyList();
+      isMemberAccess_ = false;
+      dollarSign_ = false;
+      computedVariable_ = boa.types.Ast.Expression.getDefaultInstance();
+      computedMethod_ = boa.types.Ast.Expression.getDefaultInstance();
+      isStatic_ = false;
+      hasFrom_ = false;
+      trait_ = boa.types.Ast.Method.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -22560,8 +28266,44 @@ public final class Ast {
           return false;
         }
       }
-      if (hasLambda()) {
-        if (!getLambda().isInitialized()) {
+      if (hasDeclaringType()) {
+        if (!getDeclaringType().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasReturnType()) {
+        if (!getReturnType().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getMethodsCount(); i++) {
+        if (!getMethods(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getStatementsCount(); i++) {
+        if (!getStatements(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasComputedVariable()) {
+        if (!getComputedVariable().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasComputedMethod()) {
+        if (!getComputedMethod().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasTrait()) {
+        if (!getTrait().isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -22610,16 +28352,43 @@ public final class Ast {
         output.writeMessage(12, annotation_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeMessage(13, lambda_);
-      }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
         output.writeBool(14, noParens_);
       }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeInt32(18, key_);
+      }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        output.writeEnum(15, structuralChangeKind_.getNumber());
+        output.writeMessage(19, declaringType_);
       }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        output.writeEnum(16, labelChangeKind_.getNumber());
+        output.writeMessage(20, returnType_);
+      }
+      for (int i = 0; i < methods_.size(); i++) {
+        output.writeMessage(21, methods_.get(i));
+      }
+      for (int i = 0; i < statements_.size(); i++) {
+        output.writeMessage(22, statements_.get(i));
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        output.writeBool(23, isMemberAccess_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        output.writeBool(24, dollarSign_);
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        output.writeMessage(25, computedVariable_);
+      }
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        output.writeMessage(26, computedMethod_);
+      }
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        output.writeBool(27, isStatic_);
+      }
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+        output.writeBool(28, hasFrom_);
+      }
+      if (((bitField0_ & 0x00040000) == 0x00040000)) {
+        output.writeMessage(29, trait_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -22680,19 +28449,55 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(13, lambda_);
+          .computeBoolSize(14, noParens_);
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(14, noParens_);
+          .computeInt32Size(18, key_);
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(15, structuralChangeKind_.getNumber());
+          .computeMessageSize(19, declaringType_);
       }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(16, labelChangeKind_.getNumber());
+          .computeMessageSize(20, returnType_);
+      }
+      for (int i = 0; i < methods_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(21, methods_.get(i));
+      }
+      for (int i = 0; i < statements_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(22, statements_.get(i));
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(23, isMemberAccess_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(24, dollarSign_);
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(25, computedVariable_);
+      }
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(26, computedMethod_);
+      }
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(27, isStatic_);
+      }
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(28, hasFrom_);
+      }
+      if (((bitField0_ & 0x00040000) == 0x00040000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(29, trait_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -22813,7 +28618,13 @@ public final class Ast {
           getMethodArgsFieldBuilder();
           getAnonDeclarationFieldBuilder();
           getAnnotationFieldBuilder();
-          getLambdaFieldBuilder();
+          getDeclaringTypeFieldBuilder();
+          getReturnTypeFieldBuilder();
+          getMethodsFieldBuilder();
+          getStatementsFieldBuilder();
+          getComputedVariableFieldBuilder();
+          getComputedMethodFieldBuilder();
+          getTraitFieldBuilder();
         }
       }
       private static Builder create() {
@@ -22874,18 +28685,60 @@ public final class Ast {
           annotationBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000800);
-        if (lambdaBuilder_ == null) {
-          lambda_ = boa.types.Ast.Method.getDefaultInstance();
-        } else {
-          lambdaBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00001000);
         noParens_ = false;
+        bitField0_ = (bitField0_ & ~0x00001000);
+        key_ = 0;
         bitField0_ = (bitField0_ & ~0x00002000);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        if (declaringTypeBuilder_ == null) {
+          declaringType_ = boa.types.Ast.Type.getDefaultInstance();
+        } else {
+          declaringTypeBuilder_.clear();
+        }
         bitField0_ = (bitField0_ & ~0x00004000);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        if (returnTypeBuilder_ == null) {
+          returnType_ = boa.types.Ast.Type.getDefaultInstance();
+        } else {
+          returnTypeBuilder_.clear();
+        }
         bitField0_ = (bitField0_ & ~0x00008000);
+        if (methodsBuilder_ == null) {
+          methods_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00010000);
+        } else {
+          methodsBuilder_.clear();
+        }
+        if (statementsBuilder_ == null) {
+          statements_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00020000);
+        } else {
+          statementsBuilder_.clear();
+        }
+        isMemberAccess_ = false;
+        bitField0_ = (bitField0_ & ~0x00040000);
+        dollarSign_ = false;
+        bitField0_ = (bitField0_ & ~0x00080000);
+        if (computedVariableBuilder_ == null) {
+          computedVariable_ = boa.types.Ast.Expression.getDefaultInstance();
+        } else {
+          computedVariableBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00100000);
+        if (computedMethodBuilder_ == null) {
+          computedMethod_ = boa.types.Ast.Expression.getDefaultInstance();
+        } else {
+          computedMethodBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00200000);
+        isStatic_ = false;
+        bitField0_ = (bitField0_ & ~0x00400000);
+        hasFrom_ = false;
+        bitField0_ = (bitField0_ & ~0x00800000);
+        if (traitBuilder_ == null) {
+          trait_ = boa.types.Ast.Method.getDefaultInstance();
+        } else {
+          traitBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x01000000);
         return this;
       }
 
@@ -22997,23 +28850,85 @@ public final class Ast {
         if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
           to_bitField0_ |= 0x00000100;
         }
-        if (lambdaBuilder_ == null) {
-          result.lambda_ = lambda_;
-        } else {
-          result.lambda_ = lambdaBuilder_.build();
-        }
+        result.noParens_ = noParens_;
         if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
           to_bitField0_ |= 0x00000200;
         }
-        result.noParens_ = noParens_;
+        result.key_ = key_;
         if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
           to_bitField0_ |= 0x00000400;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        if (declaringTypeBuilder_ == null) {
+          result.declaringType_ = declaringType_;
+        } else {
+          result.declaringType_ = declaringTypeBuilder_.build();
+        }
         if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
           to_bitField0_ |= 0x00000800;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        if (returnTypeBuilder_ == null) {
+          result.returnType_ = returnType_;
+        } else {
+          result.returnType_ = returnTypeBuilder_.build();
+        }
+        if (methodsBuilder_ == null) {
+          if (((bitField0_ & 0x00010000) == 0x00010000)) {
+            methods_ = java.util.Collections.unmodifiableList(methods_);
+            bitField0_ = (bitField0_ & ~0x00010000);
+          }
+          result.methods_ = methods_;
+        } else {
+          result.methods_ = methodsBuilder_.build();
+        }
+        if (statementsBuilder_ == null) {
+          if (((bitField0_ & 0x00020000) == 0x00020000)) {
+            statements_ = java.util.Collections.unmodifiableList(statements_);
+            bitField0_ = (bitField0_ & ~0x00020000);
+          }
+          result.statements_ = statements_;
+        } else {
+          result.statements_ = statementsBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
+          to_bitField0_ |= 0x00001000;
+        }
+        result.isMemberAccess_ = isMemberAccess_;
+        if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
+          to_bitField0_ |= 0x00002000;
+        }
+        result.dollarSign_ = dollarSign_;
+        if (((from_bitField0_ & 0x00100000) == 0x00100000)) {
+          to_bitField0_ |= 0x00004000;
+        }
+        if (computedVariableBuilder_ == null) {
+          result.computedVariable_ = computedVariable_;
+        } else {
+          result.computedVariable_ = computedVariableBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00200000) == 0x00200000)) {
+          to_bitField0_ |= 0x00008000;
+        }
+        if (computedMethodBuilder_ == null) {
+          result.computedMethod_ = computedMethod_;
+        } else {
+          result.computedMethod_ = computedMethodBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00400000) == 0x00400000)) {
+          to_bitField0_ |= 0x00010000;
+        }
+        result.isStatic_ = isStatic_;
+        if (((from_bitField0_ & 0x00800000) == 0x00800000)) {
+          to_bitField0_ |= 0x00020000;
+        }
+        result.hasFrom_ = hasFrom_;
+        if (((from_bitField0_ & 0x01000000) == 0x01000000)) {
+          to_bitField0_ |= 0x00040000;
+        }
+        if (traitBuilder_ == null) {
+          result.trait_ = trait_;
+        } else {
+          result.trait_ = traitBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -23164,17 +29079,90 @@ public final class Ast {
         if (other.hasAnnotation()) {
           mergeAnnotation(other.getAnnotation());
         }
-        if (other.hasLambda()) {
-          mergeLambda(other.getLambda());
-        }
         if (other.hasNoParens()) {
           setNoParens(other.getNoParens());
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasKey()) {
+          setKey(other.getKey());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasDeclaringType()) {
+          mergeDeclaringType(other.getDeclaringType());
+        }
+        if (other.hasReturnType()) {
+          mergeReturnType(other.getReturnType());
+        }
+        if (methodsBuilder_ == null) {
+          if (!other.methods_.isEmpty()) {
+            if (methods_.isEmpty()) {
+              methods_ = other.methods_;
+              bitField0_ = (bitField0_ & ~0x00010000);
+            } else {
+              ensureMethodsIsMutable();
+              methods_.addAll(other.methods_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.methods_.isEmpty()) {
+            if (methodsBuilder_.isEmpty()) {
+              methodsBuilder_.dispose();
+              methodsBuilder_ = null;
+              methods_ = other.methods_;
+              bitField0_ = (bitField0_ & ~0x00010000);
+              methodsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getMethodsFieldBuilder() : null;
+            } else {
+              methodsBuilder_.addAllMessages(other.methods_);
+            }
+          }
+        }
+        if (statementsBuilder_ == null) {
+          if (!other.statements_.isEmpty()) {
+            if (statements_.isEmpty()) {
+              statements_ = other.statements_;
+              bitField0_ = (bitField0_ & ~0x00020000);
+            } else {
+              ensureStatementsIsMutable();
+              statements_.addAll(other.statements_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.statements_.isEmpty()) {
+            if (statementsBuilder_.isEmpty()) {
+              statementsBuilder_.dispose();
+              statementsBuilder_ = null;
+              statements_ = other.statements_;
+              bitField0_ = (bitField0_ & ~0x00020000);
+              statementsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getStatementsFieldBuilder() : null;
+            } else {
+              statementsBuilder_.addAllMessages(other.statements_);
+            }
+          }
+        }
+        if (other.hasIsMemberAccess()) {
+          setIsMemberAccess(other.getIsMemberAccess());
+        }
+        if (other.hasDollarSign()) {
+          setDollarSign(other.getDollarSign());
+        }
+        if (other.hasComputedVariable()) {
+          mergeComputedVariable(other.getComputedVariable());
+        }
+        if (other.hasComputedMethod()) {
+          mergeComputedMethod(other.getComputedMethod());
+        }
+        if (other.hasIsStatic()) {
+          setIsStatic(other.getIsStatic());
+        }
+        if (other.hasHasFrom()) {
+          setHasFrom(other.getHasFrom());
+        }
+        if (other.hasTrait()) {
+          mergeTrait(other.getTrait());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -23227,8 +29215,44 @@ public final class Ast {
             return false;
           }
         }
-        if (hasLambda()) {
-          if (!getLambda().isInitialized()) {
+        if (hasDeclaringType()) {
+          if (!getDeclaringType().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasReturnType()) {
+          if (!getReturnType().isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getMethodsCount(); i++) {
+          if (!getMethods(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getStatementsCount(); i++) {
+          if (!getStatements(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasComputedVariable()) {
+          if (!getComputedVariable().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasComputedMethod()) {
+          if (!getComputedMethod().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasTrait()) {
+          if (!getTrait().isInitialized()) {
             
             return false;
           }
@@ -24762,12 +30786,20 @@ public final class Ast {
           boa.types.Ast.Modifier, boa.types.Ast.Modifier.Builder, boa.types.Ast.ModifierOrBuilder> annotationBuilder_;
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
+       *
+       * <pre>
+       ** 13 used to be lambda 
+       * </pre>
        */
       public boolean hasAnnotation() {
         return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
+       *
+       * <pre>
+       ** 13 used to be lambda 
+       * </pre>
        */
       public boa.types.Ast.Modifier getAnnotation() {
         if (annotationBuilder_ == null) {
@@ -24778,6 +30810,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
+       *
+       * <pre>
+       ** 13 used to be lambda 
+       * </pre>
        */
       public Builder setAnnotation(boa.types.Ast.Modifier value) {
         if (annotationBuilder_ == null) {
@@ -24794,6 +30830,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
+       *
+       * <pre>
+       ** 13 used to be lambda 
+       * </pre>
        */
       public Builder setAnnotation(
           boa.types.Ast.Modifier.Builder builderForValue) {
@@ -24808,6 +30848,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
+       *
+       * <pre>
+       ** 13 used to be lambda 
+       * </pre>
        */
       public Builder mergeAnnotation(boa.types.Ast.Modifier value) {
         if (annotationBuilder_ == null) {
@@ -24827,6 +30871,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
+       *
+       * <pre>
+       ** 13 used to be lambda 
+       * </pre>
        */
       public Builder clearAnnotation() {
         if (annotationBuilder_ == null) {
@@ -24840,6 +30888,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
+       *
+       * <pre>
+       ** 13 used to be lambda 
+       * </pre>
        */
       public boa.types.Ast.Modifier.Builder getAnnotationBuilder() {
         bitField0_ |= 0x00000800;
@@ -24848,6 +30900,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
+       *
+       * <pre>
+       ** 13 used to be lambda 
+       * </pre>
        */
       public boa.types.Ast.ModifierOrBuilder getAnnotationOrBuilder() {
         if (annotationBuilder_ != null) {
@@ -24858,6 +30914,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
+       *
+       * <pre>
+       ** 13 used to be lambda 
+       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Ast.Modifier, boa.types.Ast.Modifier.Builder, boa.types.Ast.ModifierOrBuilder> 
@@ -24873,159 +30933,6 @@ public final class Ast {
         return annotationBuilder_;
       }
 
-      // optional .boa.types.Method lambda = 13;
-      private boa.types.Ast.Method lambda_ = boa.types.Ast.Method.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder> lambdaBuilder_;
-      /**
-       * <code>optional .boa.types.Method lambda = 13;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public boolean hasLambda() {
-        return ((bitField0_ & 0x00001000) == 0x00001000);
-      }
-      /**
-       * <code>optional .boa.types.Method lambda = 13;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public boa.types.Ast.Method getLambda() {
-        if (lambdaBuilder_ == null) {
-          return lambda_;
-        } else {
-          return lambdaBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>optional .boa.types.Method lambda = 13;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public Builder setLambda(boa.types.Ast.Method value) {
-        if (lambdaBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          lambda_ = value;
-          onChanged();
-        } else {
-          lambdaBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00001000;
-        return this;
-      }
-      /**
-       * <code>optional .boa.types.Method lambda = 13;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public Builder setLambda(
-          boa.types.Ast.Method.Builder builderForValue) {
-        if (lambdaBuilder_ == null) {
-          lambda_ = builderForValue.build();
-          onChanged();
-        } else {
-          lambdaBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00001000;
-        return this;
-      }
-      /**
-       * <code>optional .boa.types.Method lambda = 13;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public Builder mergeLambda(boa.types.Ast.Method value) {
-        if (lambdaBuilder_ == null) {
-          if (((bitField0_ & 0x00001000) == 0x00001000) &&
-              lambda_ != boa.types.Ast.Method.getDefaultInstance()) {
-            lambda_ =
-              boa.types.Ast.Method.newBuilder(lambda_).mergeFrom(value).buildPartial();
-          } else {
-            lambda_ = value;
-          }
-          onChanged();
-        } else {
-          lambdaBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00001000;
-        return this;
-      }
-      /**
-       * <code>optional .boa.types.Method lambda = 13;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public Builder clearLambda() {
-        if (lambdaBuilder_ == null) {
-          lambda_ = boa.types.Ast.Method.getDefaultInstance();
-          onChanged();
-        } else {
-          lambdaBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00001000);
-        return this;
-      }
-      /**
-       * <code>optional .boa.types.Method lambda = 13;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public boa.types.Ast.Method.Builder getLambdaBuilder() {
-        bitField0_ |= 0x00001000;
-        onChanged();
-        return getLambdaFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>optional .boa.types.Method lambda = 13;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public boa.types.Ast.MethodOrBuilder getLambdaOrBuilder() {
-        if (lambdaBuilder_ != null) {
-          return lambdaBuilder_.getMessageOrBuilder();
-        } else {
-          return lambda_;
-        }
-      }
-      /**
-       * <code>optional .boa.types.Method lambda = 13;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder> 
-          getLambdaFieldBuilder() {
-        if (lambdaBuilder_ == null) {
-          lambdaBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder>(
-                  lambda_,
-                  getParentForChildren(),
-                  isClean());
-          lambda_ = null;
-        }
-        return lambdaBuilder_;
-      }
-
       // optional bool no_parens = 14;
       private boolean noParens_ ;
       /**
@@ -25036,7 +30943,7 @@ public final class Ast {
        * </pre>
        */
       public boolean hasNoParens() {
-        return ((bitField0_ & 0x00002000) == 0x00002000);
+        return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
        * <code>optional bool no_parens = 14;</code>
@@ -25056,7 +30963,7 @@ public final class Ast {
        * </pre>
        */
       public Builder setNoParens(boolean value) {
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00001000;
         noParens_ = value;
         onChanged();
         return this;
@@ -25069,114 +30976,1472 @@ public final class Ast {
        * </pre>
        */
       public Builder clearNoParens() {
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00001000);
         noParens_ = false;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 15;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional int32 key = 18;
+      private int key_ ;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
+       * <code>optional int32 key = 18;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
-        return ((bitField0_ & 0x00004000) == 0x00004000);
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00002000) == 0x00002000);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
+       * <code>optional int32 key = 18;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public int getKey() {
+        return key_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
+       * <code>optional int32 key = 18;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00004000;
-        structuralChangeKind_ = value;
+      public Builder setKey(int value) {
+        bitField0_ |= 0x00002000;
+        key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
+       * <code>optional int32 key = 18;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00004000);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        key_ = 0;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 16;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional .boa.types.Type declaring_type = 19;
+      private boa.types.Ast.Type declaringType_ = boa.types.Ast.Type.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> declaringTypeBuilder_;
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** The type declaring this method call or field access 
        * </pre>
        */
-      public boolean hasLabelChangeKind() {
+      public boolean hasDeclaringType() {
+        return ((bitField0_ & 0x00004000) == 0x00004000);
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public boa.types.Ast.Type getDeclaringType() {
+        if (declaringTypeBuilder_ == null) {
+          return declaringType_;
+        } else {
+          return declaringTypeBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public Builder setDeclaringType(boa.types.Ast.Type value) {
+        if (declaringTypeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          declaringType_ = value;
+          onChanged();
+        } else {
+          declaringTypeBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00004000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public Builder setDeclaringType(
+          boa.types.Ast.Type.Builder builderForValue) {
+        if (declaringTypeBuilder_ == null) {
+          declaringType_ = builderForValue.build();
+          onChanged();
+        } else {
+          declaringTypeBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00004000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public Builder mergeDeclaringType(boa.types.Ast.Type value) {
+        if (declaringTypeBuilder_ == null) {
+          if (((bitField0_ & 0x00004000) == 0x00004000) &&
+              declaringType_ != boa.types.Ast.Type.getDefaultInstance()) {
+            declaringType_ =
+              boa.types.Ast.Type.newBuilder(declaringType_).mergeFrom(value).buildPartial();
+          } else {
+            declaringType_ = value;
+          }
+          onChanged();
+        } else {
+          declaringTypeBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00004000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public Builder clearDeclaringType() {
+        if (declaringTypeBuilder_ == null) {
+          declaringType_ = boa.types.Ast.Type.getDefaultInstance();
+          onChanged();
+        } else {
+          declaringTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00004000);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public boa.types.Ast.Type.Builder getDeclaringTypeBuilder() {
+        bitField0_ |= 0x00004000;
+        onChanged();
+        return getDeclaringTypeFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public boa.types.Ast.TypeOrBuilder getDeclaringTypeOrBuilder() {
+        if (declaringTypeBuilder_ != null) {
+          return declaringTypeBuilder_.getMessageOrBuilder();
+        } else {
+          return declaringType_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> 
+          getDeclaringTypeFieldBuilder() {
+        if (declaringTypeBuilder_ == null) {
+          declaringTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder>(
+                  declaringType_,
+                  getParentForChildren(),
+                  isClean());
+          declaringType_ = null;
+        }
+        return declaringTypeBuilder_;
+      }
+
+      // optional .boa.types.Type return_type = 20;
+      private boa.types.Ast.Type returnType_ = boa.types.Ast.Type.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> returnTypeBuilder_;
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public boolean hasReturnType() {
         return ((bitField0_ & 0x00008000) == 0x00008000);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
+       * <code>optional .boa.types.Type return_type = 20;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** Type of the return value 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
+      public boa.types.Ast.Type getReturnType() {
+        if (returnTypeBuilder_ == null) {
+          return returnType_;
+        } else {
+          return returnTypeBuilder_.getMessage();
+        }
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
+       * <code>optional .boa.types.Type return_type = 20;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** Type of the return value 
        * </pre>
        */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
+      public Builder setReturnType(boa.types.Ast.Type value) {
+        if (returnTypeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          returnType_ = value;
+          onChanged();
+        } else {
+          returnTypeBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00008000;
-        labelChangeKind_ = value;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public Builder setReturnType(
+          boa.types.Ast.Type.Builder builderForValue) {
+        if (returnTypeBuilder_ == null) {
+          returnType_ = builderForValue.build();
+          onChanged();
+        } else {
+          returnTypeBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00008000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public Builder mergeReturnType(boa.types.Ast.Type value) {
+        if (returnTypeBuilder_ == null) {
+          if (((bitField0_ & 0x00008000) == 0x00008000) &&
+              returnType_ != boa.types.Ast.Type.getDefaultInstance()) {
+            returnType_ =
+              boa.types.Ast.Type.newBuilder(returnType_).mergeFrom(value).buildPartial();
+          } else {
+            returnType_ = value;
+          }
+          onChanged();
+        } else {
+          returnTypeBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00008000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public Builder clearReturnType() {
+        if (returnTypeBuilder_ == null) {
+          returnType_ = boa.types.Ast.Type.getDefaultInstance();
+          onChanged();
+        } else {
+          returnTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00008000);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public boa.types.Ast.Type.Builder getReturnTypeBuilder() {
+        bitField0_ |= 0x00008000;
+        onChanged();
+        return getReturnTypeFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public boa.types.Ast.TypeOrBuilder getReturnTypeOrBuilder() {
+        if (returnTypeBuilder_ != null) {
+          return returnTypeBuilder_.getMessageOrBuilder();
+        } else {
+          return returnType_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> 
+          getReturnTypeFieldBuilder() {
+        if (returnTypeBuilder_ == null) {
+          returnTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder>(
+                  returnType_,
+                  getParentForChildren(),
+                  isClean());
+          returnType_ = null;
+        }
+        return returnTypeBuilder_;
+      }
+
+      // repeated .boa.types.Method methods = 21;
+      private java.util.List<boa.types.Ast.Method> methods_ =
+        java.util.Collections.emptyList();
+      private void ensureMethodsIsMutable() {
+        if (!((bitField0_ & 0x00010000) == 0x00010000)) {
+          methods_ = new java.util.ArrayList<boa.types.Ast.Method>(methods_);
+          bitField0_ |= 0x00010000;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder> methodsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Method> getMethodsList() {
+        if (methodsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(methods_);
+        } else {
+          return methodsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public int getMethodsCount() {
+        if (methodsBuilder_ == null) {
+          return methods_.size();
+        } else {
+          return methodsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public boa.types.Ast.Method getMethods(int index) {
+        if (methodsBuilder_ == null) {
+          return methods_.get(index);
+        } else {
+          return methodsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public Builder setMethods(
+          int index, boa.types.Ast.Method value) {
+        if (methodsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMethodsIsMutable();
+          methods_.set(index, value);
+          onChanged();
+        } else {
+          methodsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public Builder setMethods(
+          int index, boa.types.Ast.Method.Builder builderForValue) {
+        if (methodsBuilder_ == null) {
+          ensureMethodsIsMutable();
+          methods_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          methodsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public Builder addMethods(boa.types.Ast.Method value) {
+        if (methodsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMethodsIsMutable();
+          methods_.add(value);
+          onChanged();
+        } else {
+          methodsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public Builder addMethods(
+          int index, boa.types.Ast.Method value) {
+        if (methodsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMethodsIsMutable();
+          methods_.add(index, value);
+          onChanged();
+        } else {
+          methodsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public Builder addMethods(
+          boa.types.Ast.Method.Builder builderForValue) {
+        if (methodsBuilder_ == null) {
+          ensureMethodsIsMutable();
+          methods_.add(builderForValue.build());
+          onChanged();
+        } else {
+          methodsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public Builder addMethods(
+          int index, boa.types.Ast.Method.Builder builderForValue) {
+        if (methodsBuilder_ == null) {
+          ensureMethodsIsMutable();
+          methods_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          methodsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public Builder addAllMethods(
+          java.lang.Iterable<? extends boa.types.Ast.Method> values) {
+        if (methodsBuilder_ == null) {
+          ensureMethodsIsMutable();
+          super.addAll(values, methods_);
+          onChanged();
+        } else {
+          methodsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public Builder clearMethods() {
+        if (methodsBuilder_ == null) {
+          methods_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00010000);
+          onChanged();
+        } else {
+          methodsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public Builder removeMethods(int index) {
+        if (methodsBuilder_ == null) {
+          ensureMethodsIsMutable();
+          methods_.remove(index);
+          onChanged();
+        } else {
+          methodsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public boa.types.Ast.Method.Builder getMethodsBuilder(
+          int index) {
+        return getMethodsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public boa.types.Ast.MethodOrBuilder getMethodsOrBuilder(
+          int index) {
+        if (methodsBuilder_ == null) {
+          return methods_.get(index);  } else {
+          return methodsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public java.util.List<? extends boa.types.Ast.MethodOrBuilder> 
+           getMethodsOrBuilderList() {
+        if (methodsBuilder_ != null) {
+          return methodsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(methods_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public boa.types.Ast.Method.Builder addMethodsBuilder() {
+        return getMethodsFieldBuilder().addBuilder(
+            boa.types.Ast.Method.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public boa.types.Ast.Method.Builder addMethodsBuilder(
+          int index) {
+        return getMethodsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Method.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 21;</code>
+       *
+       * <pre>
+       ** Declared methods/functions 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Method.Builder> 
+           getMethodsBuilderList() {
+        return getMethodsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder> 
+          getMethodsFieldBuilder() {
+        if (methodsBuilder_ == null) {
+          methodsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder>(
+                  methods_,
+                  ((bitField0_ & 0x00010000) == 0x00010000),
+                  getParentForChildren(),
+                  isClean());
+          methods_ = null;
+        }
+        return methodsBuilder_;
+      }
+
+      // repeated .boa.types.Statement statements = 22;
+      private java.util.List<boa.types.Ast.Statement> statements_ =
+        java.util.Collections.emptyList();
+      private void ensureStatementsIsMutable() {
+        if (!((bitField0_ & 0x00020000) == 0x00020000)) {
+          statements_ = new java.util.ArrayList<boa.types.Ast.Statement>(statements_);
+          bitField0_ |= 0x00020000;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> statementsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Statement> getStatementsList() {
+        if (statementsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(statements_);
+        } else {
+          return statementsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public int getStatementsCount() {
+        if (statementsBuilder_ == null) {
+          return statements_.size();
+        } else {
+          return statementsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public boa.types.Ast.Statement getStatements(int index) {
+        if (statementsBuilder_ == null) {
+          return statements_.get(index);
+        } else {
+          return statementsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public Builder setStatements(
+          int index, boa.types.Ast.Statement value) {
+        if (statementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureStatementsIsMutable();
+          statements_.set(index, value);
+          onChanged();
+        } else {
+          statementsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public Builder setStatements(
+          int index, boa.types.Ast.Statement.Builder builderForValue) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          statementsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public Builder addStatements(boa.types.Ast.Statement value) {
+        if (statementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureStatementsIsMutable();
+          statements_.add(value);
+          onChanged();
+        } else {
+          statementsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public Builder addStatements(
+          int index, boa.types.Ast.Statement value) {
+        if (statementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureStatementsIsMutable();
+          statements_.add(index, value);
+          onChanged();
+        } else {
+          statementsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public Builder addStatements(
+          boa.types.Ast.Statement.Builder builderForValue) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.add(builderForValue.build());
+          onChanged();
+        } else {
+          statementsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public Builder addStatements(
+          int index, boa.types.Ast.Statement.Builder builderForValue) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          statementsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public Builder addAllStatements(
+          java.lang.Iterable<? extends boa.types.Ast.Statement> values) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          super.addAll(values, statements_);
+          onChanged();
+        } else {
+          statementsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public Builder clearStatements() {
+        if (statementsBuilder_ == null) {
+          statements_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00020000);
+          onChanged();
+        } else {
+          statementsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public Builder removeStatements(int index) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.remove(index);
+          onChanged();
+        } else {
+          statementsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public boa.types.Ast.Statement.Builder getStatementsBuilder(
+          int index) {
+        return getStatementsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public boa.types.Ast.StatementOrBuilder getStatementsOrBuilder(
+          int index) {
+        if (statementsBuilder_ == null) {
+          return statements_.get(index);  } else {
+          return statementsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public java.util.List<? extends boa.types.Ast.StatementOrBuilder> 
+           getStatementsOrBuilderList() {
+        if (statementsBuilder_ != null) {
+          return statementsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(statements_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public boa.types.Ast.Statement.Builder addStatementsBuilder() {
+        return getStatementsFieldBuilder().addBuilder(
+            boa.types.Ast.Statement.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public boa.types.Ast.Statement.Builder addStatementsBuilder(
+          int index) {
+        return getStatementsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Statement.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 22;</code>
+       *
+       * <pre>
+       ** Inside statements 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Statement.Builder> 
+           getStatementsBuilderList() {
+        return getStatementsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> 
+          getStatementsFieldBuilder() {
+        if (statementsBuilder_ == null) {
+          statementsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder>(
+                  statements_,
+                  ((bitField0_ & 0x00020000) == 0x00020000),
+                  getParentForChildren(),
+                  isClean());
+          statements_ = null;
+        }
+        return statementsBuilder_;
+      }
+
+      // optional bool is_member_access = 23;
+      private boolean isMemberAccess_ ;
+      /**
+       * <code>optional bool is_member_access = 23;</code>
+       */
+      public boolean hasIsMemberAccess() {
+        return ((bitField0_ & 0x00040000) == 0x00040000);
+      }
+      /**
+       * <code>optional bool is_member_access = 23;</code>
+       */
+      public boolean getIsMemberAccess() {
+        return isMemberAccess_;
+      }
+      /**
+       * <code>optional bool is_member_access = 23;</code>
+       */
+      public Builder setIsMemberAccess(boolean value) {
+        bitField0_ |= 0x00040000;
+        isMemberAccess_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
-       *
-       * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-       * </pre>
+       * <code>optional bool is_member_access = 23;</code>
        */
-      public Builder clearLabelChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00008000);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      public Builder clearIsMemberAccess() {
+        bitField0_ = (bitField0_ & ~0x00040000);
+        isMemberAccess_ = false;
         onChanged();
         return this;
+      }
+
+      // optional bool dollar_sign = 24;
+      private boolean dollarSign_ ;
+      /**
+       * <code>optional bool dollar_sign = 24;</code>
+       */
+      public boolean hasDollarSign() {
+        return ((bitField0_ & 0x00080000) == 0x00080000);
+      }
+      /**
+       * <code>optional bool dollar_sign = 24;</code>
+       */
+      public boolean getDollarSign() {
+        return dollarSign_;
+      }
+      /**
+       * <code>optional bool dollar_sign = 24;</code>
+       */
+      public Builder setDollarSign(boolean value) {
+        bitField0_ |= 0x00080000;
+        dollarSign_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool dollar_sign = 24;</code>
+       */
+      public Builder clearDollarSign() {
+        bitField0_ = (bitField0_ & ~0x00080000);
+        dollarSign_ = false;
+        onChanged();
+        return this;
+      }
+
+      // optional .boa.types.Expression computed_variable = 25;
+      private boa.types.Ast.Expression computedVariable_ = boa.types.Ast.Expression.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> computedVariableBuilder_;
+      /**
+       * <code>optional .boa.types.Expression computed_variable = 25;</code>
+       */
+      public boolean hasComputedVariable() {
+        return ((bitField0_ & 0x00100000) == 0x00100000);
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_variable = 25;</code>
+       */
+      public boa.types.Ast.Expression getComputedVariable() {
+        if (computedVariableBuilder_ == null) {
+          return computedVariable_;
+        } else {
+          return computedVariableBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_variable = 25;</code>
+       */
+      public Builder setComputedVariable(boa.types.Ast.Expression value) {
+        if (computedVariableBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          computedVariable_ = value;
+          onChanged();
+        } else {
+          computedVariableBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00100000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_variable = 25;</code>
+       */
+      public Builder setComputedVariable(
+          boa.types.Ast.Expression.Builder builderForValue) {
+        if (computedVariableBuilder_ == null) {
+          computedVariable_ = builderForValue.build();
+          onChanged();
+        } else {
+          computedVariableBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00100000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_variable = 25;</code>
+       */
+      public Builder mergeComputedVariable(boa.types.Ast.Expression value) {
+        if (computedVariableBuilder_ == null) {
+          if (((bitField0_ & 0x00100000) == 0x00100000) &&
+              computedVariable_ != boa.types.Ast.Expression.getDefaultInstance()) {
+            computedVariable_ =
+              boa.types.Ast.Expression.newBuilder(computedVariable_).mergeFrom(value).buildPartial();
+          } else {
+            computedVariable_ = value;
+          }
+          onChanged();
+        } else {
+          computedVariableBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00100000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_variable = 25;</code>
+       */
+      public Builder clearComputedVariable() {
+        if (computedVariableBuilder_ == null) {
+          computedVariable_ = boa.types.Ast.Expression.getDefaultInstance();
+          onChanged();
+        } else {
+          computedVariableBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00100000);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_variable = 25;</code>
+       */
+      public boa.types.Ast.Expression.Builder getComputedVariableBuilder() {
+        bitField0_ |= 0x00100000;
+        onChanged();
+        return getComputedVariableFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_variable = 25;</code>
+       */
+      public boa.types.Ast.ExpressionOrBuilder getComputedVariableOrBuilder() {
+        if (computedVariableBuilder_ != null) {
+          return computedVariableBuilder_.getMessageOrBuilder();
+        } else {
+          return computedVariable_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_variable = 25;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
+          getComputedVariableFieldBuilder() {
+        if (computedVariableBuilder_ == null) {
+          computedVariableBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder>(
+                  computedVariable_,
+                  getParentForChildren(),
+                  isClean());
+          computedVariable_ = null;
+        }
+        return computedVariableBuilder_;
+      }
+
+      // optional .boa.types.Expression computed_method = 26;
+      private boa.types.Ast.Expression computedMethod_ = boa.types.Ast.Expression.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> computedMethodBuilder_;
+      /**
+       * <code>optional .boa.types.Expression computed_method = 26;</code>
+       */
+      public boolean hasComputedMethod() {
+        return ((bitField0_ & 0x00200000) == 0x00200000);
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_method = 26;</code>
+       */
+      public boa.types.Ast.Expression getComputedMethod() {
+        if (computedMethodBuilder_ == null) {
+          return computedMethod_;
+        } else {
+          return computedMethodBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_method = 26;</code>
+       */
+      public Builder setComputedMethod(boa.types.Ast.Expression value) {
+        if (computedMethodBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          computedMethod_ = value;
+          onChanged();
+        } else {
+          computedMethodBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00200000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_method = 26;</code>
+       */
+      public Builder setComputedMethod(
+          boa.types.Ast.Expression.Builder builderForValue) {
+        if (computedMethodBuilder_ == null) {
+          computedMethod_ = builderForValue.build();
+          onChanged();
+        } else {
+          computedMethodBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00200000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_method = 26;</code>
+       */
+      public Builder mergeComputedMethod(boa.types.Ast.Expression value) {
+        if (computedMethodBuilder_ == null) {
+          if (((bitField0_ & 0x00200000) == 0x00200000) &&
+              computedMethod_ != boa.types.Ast.Expression.getDefaultInstance()) {
+            computedMethod_ =
+              boa.types.Ast.Expression.newBuilder(computedMethod_).mergeFrom(value).buildPartial();
+          } else {
+            computedMethod_ = value;
+          }
+          onChanged();
+        } else {
+          computedMethodBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00200000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_method = 26;</code>
+       */
+      public Builder clearComputedMethod() {
+        if (computedMethodBuilder_ == null) {
+          computedMethod_ = boa.types.Ast.Expression.getDefaultInstance();
+          onChanged();
+        } else {
+          computedMethodBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00200000);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_method = 26;</code>
+       */
+      public boa.types.Ast.Expression.Builder getComputedMethodBuilder() {
+        bitField0_ |= 0x00200000;
+        onChanged();
+        return getComputedMethodFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_method = 26;</code>
+       */
+      public boa.types.Ast.ExpressionOrBuilder getComputedMethodOrBuilder() {
+        if (computedMethodBuilder_ != null) {
+          return computedMethodBuilder_.getMessageOrBuilder();
+        } else {
+          return computedMethod_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_method = 26;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
+          getComputedMethodFieldBuilder() {
+        if (computedMethodBuilder_ == null) {
+          computedMethodBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder>(
+                  computedMethod_,
+                  getParentForChildren(),
+                  isClean());
+          computedMethod_ = null;
+        }
+        return computedMethodBuilder_;
+      }
+
+      // optional bool is_static = 27;
+      private boolean isStatic_ ;
+      /**
+       * <code>optional bool is_static = 27;</code>
+       */
+      public boolean hasIsStatic() {
+        return ((bitField0_ & 0x00400000) == 0x00400000);
+      }
+      /**
+       * <code>optional bool is_static = 27;</code>
+       */
+      public boolean getIsStatic() {
+        return isStatic_;
+      }
+      /**
+       * <code>optional bool is_static = 27;</code>
+       */
+      public Builder setIsStatic(boolean value) {
+        bitField0_ |= 0x00400000;
+        isStatic_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool is_static = 27;</code>
+       */
+      public Builder clearIsStatic() {
+        bitField0_ = (bitField0_ & ~0x00400000);
+        isStatic_ = false;
+        onChanged();
+        return this;
+      }
+
+      // optional bool has_from = 28;
+      private boolean hasFrom_ ;
+      /**
+       * <code>optional bool has_from = 28;</code>
+       */
+      public boolean hasHasFrom() {
+        return ((bitField0_ & 0x00800000) == 0x00800000);
+      }
+      /**
+       * <code>optional bool has_from = 28;</code>
+       */
+      public boolean getHasFrom() {
+        return hasFrom_;
+      }
+      /**
+       * <code>optional bool has_from = 28;</code>
+       */
+      public Builder setHasFrom(boolean value) {
+        bitField0_ |= 0x00800000;
+        hasFrom_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool has_from = 28;</code>
+       */
+      public Builder clearHasFrom() {
+        bitField0_ = (bitField0_ & ~0x00800000);
+        hasFrom_ = false;
+        onChanged();
+        return this;
+      }
+
+      // optional .boa.types.Method trait = 29;
+      private boa.types.Ast.Method trait_ = boa.types.Ast.Method.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder> traitBuilder_;
+      /**
+       * <code>optional .boa.types.Method trait = 29;</code>
+       */
+      public boolean hasTrait() {
+        return ((bitField0_ & 0x01000000) == 0x01000000);
+      }
+      /**
+       * <code>optional .boa.types.Method trait = 29;</code>
+       */
+      public boa.types.Ast.Method getTrait() {
+        if (traitBuilder_ == null) {
+          return trait_;
+        } else {
+          return traitBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Method trait = 29;</code>
+       */
+      public Builder setTrait(boa.types.Ast.Method value) {
+        if (traitBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          trait_ = value;
+          onChanged();
+        } else {
+          traitBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x01000000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Method trait = 29;</code>
+       */
+      public Builder setTrait(
+          boa.types.Ast.Method.Builder builderForValue) {
+        if (traitBuilder_ == null) {
+          trait_ = builderForValue.build();
+          onChanged();
+        } else {
+          traitBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x01000000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Method trait = 29;</code>
+       */
+      public Builder mergeTrait(boa.types.Ast.Method value) {
+        if (traitBuilder_ == null) {
+          if (((bitField0_ & 0x01000000) == 0x01000000) &&
+              trait_ != boa.types.Ast.Method.getDefaultInstance()) {
+            trait_ =
+              boa.types.Ast.Method.newBuilder(trait_).mergeFrom(value).buildPartial();
+          } else {
+            trait_ = value;
+          }
+          onChanged();
+        } else {
+          traitBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x01000000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Method trait = 29;</code>
+       */
+      public Builder clearTrait() {
+        if (traitBuilder_ == null) {
+          trait_ = boa.types.Ast.Method.getDefaultInstance();
+          onChanged();
+        } else {
+          traitBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x01000000);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Method trait = 29;</code>
+       */
+      public boa.types.Ast.Method.Builder getTraitBuilder() {
+        bitField0_ |= 0x01000000;
+        onChanged();
+        return getTraitFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Method trait = 29;</code>
+       */
+      public boa.types.Ast.MethodOrBuilder getTraitOrBuilder() {
+        if (traitBuilder_ != null) {
+          return traitBuilder_.getMessageOrBuilder();
+        } else {
+          return trait_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Method trait = 29;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder> 
+          getTraitFieldBuilder() {
+        if (traitBuilder_ == null) {
+          traitBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder>(
+                  trait_,
+                  getParentForChildren(),
+                  isClean());
+          trait_ = null;
+        }
+        return traitBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Expression)
@@ -25364,41 +32629,41 @@ public final class Ast {
     com.google.protobuf.ByteString
         getOtherBytes();
 
-    // optional .boa.types.ChangeKind structural_change_kind = 7;
+    // optional int32 key = 10;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional int32 key = 10;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasKey();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional int32 key = 10;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    int getKey();
 
-    // optional .boa.types.ChangeKind label_change_kind = 8;
+    // optional .boa.types.Modifier.Scope scope = 11;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional .boa.types.Modifier.Scope scope = 11;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasScope();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional .boa.types.Modifier.Scope scope = 11;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    boa.types.Ast.Modifier.Scope getScope();
   }
   /**
    * Protobuf type {@code boa.types.Modifier}
@@ -25503,25 +32768,19 @@ public final class Ast {
               other_ = input.readBytes();
               break;
             }
-            case 56: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(7, rawValue);
-              } else {
-                bitField0_ |= 0x00000010;
-                structuralChangeKind_ = value;
-              }
+            case 80: {
+              bitField0_ |= 0x00000010;
+              key_ = input.readInt32();
               break;
             }
-            case 64: {
+            case 88: {
               int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
+              boa.types.Ast.Modifier.Scope value = boa.types.Ast.Modifier.Scope.valueOf(rawValue);
               if (value == null) {
-                unknownFields.mergeVarintField(8, rawValue);
+                unknownFields.mergeVarintField(11, rawValue);
               } else {
                 bitField0_ |= 0x00000020;
-                labelChangeKind_ = value;
+                scope_ = value;
               }
               break;
             }
@@ -25607,7 +32866,7 @@ public final class Ast {
        * <code>FINAL = 3;</code>
        *
        * <pre>
-       ** A final modifier 
+       ** A final or constant modifier 
        * </pre>
        */
       FINAL(3, 3),
@@ -25618,7 +32877,7 @@ public final class Ast {
        ** A static modifier 
        * </pre>
        */
-      STATIC(4, 4),
+      STATIC(5, 4),
       /**
        * <code>SYNCHRONIZED = 5;</code>
        *
@@ -25626,7 +32885,7 @@ public final class Ast {
        ** A synchronized modifier 
        * </pre>
        */
-      SYNCHRONIZED(5, 5),
+      SYNCHRONIZED(6, 5),
       /**
        * <code>ABSTRACT = 6;</code>
        *
@@ -25634,9 +32893,69 @@ public final class Ast {
        ** An abstract modifier 
        * </pre>
        */
-      ABSTRACT(7, 6),
+      ABSTRACT(8, 6),
+      /**
+       * <code>SCOPE = 7;</code>
+       *
+       * <pre>
+       ** A scope modifier 
+       * </pre>
+       */
+      SCOPE(9, 7),
+      /**
+       * <code>GETTER = 8;</code>
+       *
+       * <pre>
+       ** A modifier for getter 
+       * </pre>
+       */
+      GETTER(10, 8),
+      /**
+       * <code>SETTER = 9;</code>
+       *
+       * <pre>
+       ** A modifier for setter 
+       * </pre>
+       */
+      SETTER(11, 9),
+      /**
+       * <code>NATIVE = 10;</code>
+       *
+       * <pre>
+       ** A native modifier 
+       * </pre>
+       */
+      NATIVE(12, 10),
+      /**
+       * <code>STRICTFP = 11;</code>
+       *
+       * <pre>
+       ** A strictfp modifier 
+       * </pre>
+       */
+      STRICTFP(13, 11),
+      /**
+       * <code>TRANSIENT = 12;</code>
+       *
+       * <pre>
+       ** A transient modifier 
+       * </pre>
+       */
+      TRANSIENT(14, 12),
+      /**
+       * <code>VOLATILE = 13;</code>
+       *
+       * <pre>
+       ** A volatile modifier 
+       * </pre>
+       */
+      VOLATILE(15, 13),
       ;
 
+      /**
+       * <code>CONSTANT = 3;</code>
+       */
+      public static final ModifierKind CONSTANT = FINAL;
       /**
        * <code>SYNC = 5;</code>
        *
@@ -25673,10 +32992,14 @@ public final class Ast {
        * <code>FINAL = 3;</code>
        *
        * <pre>
-       ** A final modifier 
+       ** A final or constant modifier 
        * </pre>
        */
       public static final int FINAL_VALUE = 3;
+      /**
+       * <code>CONSTANT = 3;</code>
+       */
+      public static final int CONSTANT_VALUE = 3;
       /**
        * <code>STATIC = 4;</code>
        *
@@ -25709,6 +33032,62 @@ public final class Ast {
        * </pre>
        */
       public static final int ABSTRACT_VALUE = 6;
+      /**
+       * <code>SCOPE = 7;</code>
+       *
+       * <pre>
+       ** A scope modifier 
+       * </pre>
+       */
+      public static final int SCOPE_VALUE = 7;
+      /**
+       * <code>GETTER = 8;</code>
+       *
+       * <pre>
+       ** A modifier for getter 
+       * </pre>
+       */
+      public static final int GETTER_VALUE = 8;
+      /**
+       * <code>SETTER = 9;</code>
+       *
+       * <pre>
+       ** A modifier for setter 
+       * </pre>
+       */
+      public static final int SETTER_VALUE = 9;
+      /**
+       * <code>NATIVE = 10;</code>
+       *
+       * <pre>
+       ** A native modifier 
+       * </pre>
+       */
+      public static final int NATIVE_VALUE = 10;
+      /**
+       * <code>STRICTFP = 11;</code>
+       *
+       * <pre>
+       ** A strictfp modifier 
+       * </pre>
+       */
+      public static final int STRICTFP_VALUE = 11;
+      /**
+       * <code>TRANSIENT = 12;</code>
+       *
+       * <pre>
+       ** A transient modifier 
+       * </pre>
+       */
+      public static final int TRANSIENT_VALUE = 12;
+      /**
+       * <code>VOLATILE = 13;</code>
+       *
+       * <pre>
+       ** A volatile modifier 
+       * </pre>
+       */
+      public static final int VOLATILE_VALUE = 13;
 
 
       public final int getNumber() { return value; }
@@ -25722,6 +33101,13 @@ public final class Ast {
           case 4: return STATIC;
           case 5: return SYNCHRONIZED;
           case 6: return ABSTRACT;
+          case 7: return SCOPE;
+          case 8: return GETTER;
+          case 9: return SETTER;
+          case 10: return NATIVE;
+          case 11: return STRICTFP;
+          case 12: return TRANSIENT;
+          case 13: return VOLATILE;
           default: return null;
         }
       }
@@ -25752,7 +33138,7 @@ public final class Ast {
       }
 
       private static final ModifierKind[] VALUES = {
-        OTHER, VISIBILITY, ANNOTATION, FINAL, STATIC, SYNCHRONIZED, SYNC, ABSTRACT, 
+        OTHER, VISIBILITY, ANNOTATION, FINAL, CONSTANT, STATIC, SYNCHRONIZED, SYNC, ABSTRACT, SCOPE, GETTER, SETTER, NATIVE, STRICTFP, TRANSIENT, VOLATILE, 
       };
 
       public static ModifierKind valueOf(
@@ -25812,10 +33198,18 @@ public final class Ast {
        * <code>NAMESPACE = 4;</code>
        *
        * <pre>
-       ** A namespace (aka, default, aka package) visibility modifier 
+       ** A namespace (aka package) visibility modifier 
        * </pre>
        */
       NAMESPACE(3, 4),
+      /**
+       * <code>DEFAULT = 5;</code>
+       *
+       * <pre>
+       ** A default visibility modifier 
+       * </pre>
+       */
+      DEFAULT(5, 5),
       ;
 
       /**
@@ -25826,14 +33220,6 @@ public final class Ast {
        * </pre>
        */
       public static final Visibility PACKAGE = NAMESPACE;
-      /**
-       * <code>DEFAULT = 4;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public static final Visibility DEFAULT = NAMESPACE;
       /**
        * <code>PUBLIC = 1;</code>
        *
@@ -25862,7 +33248,7 @@ public final class Ast {
        * <code>NAMESPACE = 4;</code>
        *
        * <pre>
-       ** A namespace (aka, default, aka package) visibility modifier 
+       ** A namespace (aka package) visibility modifier 
        * </pre>
        */
       public static final int NAMESPACE_VALUE = 4;
@@ -25875,13 +33261,13 @@ public final class Ast {
        */
       public static final int PACKAGE_VALUE = 4;
       /**
-       * <code>DEFAULT = 4;</code>
+       * <code>DEFAULT = 5;</code>
        *
        * <pre>
-       ** @exclude 
+       ** A default visibility modifier 
        * </pre>
        */
-      public static final int DEFAULT_VALUE = 4;
+      public static final int DEFAULT_VALUE = 5;
 
 
       public final int getNumber() { return value; }
@@ -25892,6 +33278,7 @@ public final class Ast {
           case 2: return PRIVATE;
           case 3: return PROTECTED;
           case 4: return NAMESPACE;
+          case 5: return DEFAULT;
           default: return null;
         }
       }
@@ -25943,6 +33330,125 @@ public final class Ast {
       }
 
       // @@protoc_insertion_point(enum_scope:boa.types.Modifier.Visibility)
+    }
+
+    /**
+     * Protobuf enum {@code boa.types.Modifier.Scope}
+     *
+     * <pre>
+     ** A scope modifier 
+     * </pre>
+     */
+    public enum Scope
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>VAR = 1;</code>
+       *
+       * <pre>
+       ** A global scope modifier for a variable 
+       * </pre>
+       */
+      VAR(0, 1),
+      /**
+       * <code>LET = 2;</code>
+       *
+       * <pre>
+       ** A block scope modifier for a variable 
+       * </pre>
+       */
+      LET(1, 2),
+      /**
+       * <code>CONST = 3;</code>
+       *
+       * <pre>
+       ** A local scope modifier for a constant 
+       * </pre>
+       */
+      CONST(2, 3),
+      ;
+
+      /**
+       * <code>VAR = 1;</code>
+       *
+       * <pre>
+       ** A global scope modifier for a variable 
+       * </pre>
+       */
+      public static final int VAR_VALUE = 1;
+      /**
+       * <code>LET = 2;</code>
+       *
+       * <pre>
+       ** A block scope modifier for a variable 
+       * </pre>
+       */
+      public static final int LET_VALUE = 2;
+      /**
+       * <code>CONST = 3;</code>
+       *
+       * <pre>
+       ** A local scope modifier for a constant 
+       * </pre>
+       */
+      public static final int CONST_VALUE = 3;
+
+
+      public final int getNumber() { return value; }
+
+      public static Scope valueOf(int value) {
+        switch (value) {
+          case 1: return VAR;
+          case 2: return LET;
+          case 3: return CONST;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<Scope>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<Scope>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<Scope>() {
+              public Scope findValueByNumber(int number) {
+                return Scope.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return boa.types.Ast.Modifier.getDescriptor().getEnumTypes().get(2);
+      }
+
+      private static final Scope[] VALUES = values();
+
+      public static Scope valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private Scope(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:boa.types.Modifier.Scope)
     }
 
     private int bitField0_;
@@ -26206,52 +33712,52 @@ public final class Ast {
       }
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 7;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 7;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional int32 key = 10;
+    public static final int KEY_FIELD_NUMBER = 10;
+    private int key_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional int32 key = 10;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasKey() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional int32 key = 10;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public int getKey() {
+      return key_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 8;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 8;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // optional .boa.types.Modifier.Scope scope = 11;
+    public static final int SCOPE_FIELD_NUMBER = 11;
+    private boa.types.Ast.Modifier.Scope scope_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional .boa.types.Modifier.Scope scope = 11;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** 
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
+    public boolean hasScope() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional .boa.types.Modifier.Scope scope = 11;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public boa.types.Ast.Modifier.Scope getScope() {
+      return scope_;
     }
 
     private void initFields() {
@@ -26261,8 +33767,8 @@ public final class Ast {
       annotationMembers_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       annotationValues_ = java.util.Collections.emptyList();
       other_ = "";
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      key_ = 0;
+      scope_ = boa.types.Ast.Modifier.Scope.VAR;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -26305,10 +33811,10 @@ public final class Ast {
         output.writeBytes(6, getOtherBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeEnum(7, structuralChangeKind_.getNumber());
+        output.writeInt32(10, key_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeEnum(8, labelChangeKind_.getNumber());
+        output.writeEnum(11, scope_.getNumber());
       }
       getUnknownFields().writeTo(output);
     }
@@ -26350,11 +33856,11 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(7, structuralChangeKind_.getNumber());
+          .computeInt32Size(10, key_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(8, labelChangeKind_.getNumber());
+          .computeEnumSize(11, scope_.getNumber());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -26493,9 +33999,9 @@ public final class Ast {
         }
         other_ = "";
         bitField0_ = (bitField0_ & ~0x00000020);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        key_ = 0;
         bitField0_ = (bitField0_ & ~0x00000040);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        scope_ = boa.types.Ast.Modifier.Scope.VAR;
         bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
@@ -26559,11 +34065,11 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        result.key_ = key_;
         if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
           to_bitField0_ |= 0x00000020;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.scope_ = scope_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -26632,11 +34138,11 @@ public final class Ast {
           other_ = other.other_;
           onChanged();
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasKey()) {
+          setKey(other.getKey());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasScope()) {
+          setScope(other.getScope());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -27416,106 +34922,103 @@ public final class Ast {
         return this;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 7;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional int32 key = 10;
+      private int key_ ;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional int32 key = 10;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
+      public boolean hasKey() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional int32 key = 10;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public int getKey() {
+        return key_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional int32 key = 10;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setKey(int value) {
         bitField0_ |= 0x00000040;
-        structuralChangeKind_ = value;
+        key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional int32 key = 10;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
+      public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00000040);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        key_ = 0;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 8;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional .boa.types.Modifier.Scope scope = 11;
+      private boa.types.Ast.Modifier.Scope scope_ = boa.types.Ast.Modifier.Scope.VAR;
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional .boa.types.Modifier.Scope scope = 11;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** 
        * </pre>
        */
-      public boolean hasLabelChangeKind() {
+      public boolean hasScope() {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional .boa.types.Modifier.Scope scope = 11;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
+      public boa.types.Ast.Modifier.Scope getScope() {
+        return scope_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional .boa.types.Modifier.Scope scope = 11;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** 
        * </pre>
        */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
+      public Builder setScope(boa.types.Ast.Modifier.Scope value) {
         if (value == null) {
           throw new NullPointerException();
         }
         bitField0_ |= 0x00000080;
-        labelChangeKind_ = value;
+        scope_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional .boa.types.Modifier.Scope scope = 11;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** 
        * </pre>
        */
-      public Builder clearLabelChangeKind() {
+      public Builder clearScope() {
         bitField0_ = (bitField0_ & ~0x00000080);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        scope_ = boa.types.Ast.Modifier.Scope.VAR;
         onChanged();
         return this;
       }
@@ -27573,41 +35076,23 @@ public final class Ast {
      */
     boa.types.Ast.PositionInfoOrBuilder getPositionOrBuilder();
 
-    // optional .boa.types.ChangeKind structural_change_kind = 4;
+    // optional int32 key = 7;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional int32 key = 7;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasKey();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional int32 key = 7;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
-
-    // optional .boa.types.ChangeKind label_change_kind = 5;
-    /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
-     *
-     * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-     * </pre>
-     */
-    boolean hasLabelChangeKind();
-    /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
-     *
-     * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-     * </pre>
-     */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    int getKey();
   }
   /**
    * Protobuf type {@code boa.types.Comment}
@@ -27693,26 +35178,9 @@ public final class Ast {
               bitField0_ |= 0x00000004;
               break;
             }
-            case 32: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(4, rawValue);
-              } else {
-                bitField0_ |= 0x00000008;
-                structuralChangeKind_ = value;
-              }
-              break;
-            }
-            case 40: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(5, rawValue);
-              } else {
-                bitField0_ |= 0x00000010;
-                labelChangeKind_ = value;
-              }
+            case 56: {
+              bitField0_ |= 0x00000008;
+              key_ = input.readInt32();
               break;
             }
           }
@@ -27967,60 +35435,35 @@ public final class Ast {
       return position_;
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 4;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 4;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional int32 key = 7;
+    public static final int KEY_FIELD_NUMBER = 7;
+    private int key_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional int32 key = 7;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasKey() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional int32 key = 7;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
-    }
-
-    // optional .boa.types.ChangeKind label_change_kind = 5;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 5;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
-    /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
-     *
-     * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-     * </pre>
-     */
-    public boolean hasLabelChangeKind() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
-     *
-     * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-     * </pre>
-     */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public int getKey() {
+      return key_;
     }
 
     private void initFields() {
       kind_ = boa.types.Ast.Comment.CommentKind.OTHER;
       value_ = "";
       position_ = boa.types.Ast.PositionInfo.getDefaultInstance();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      key_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -28060,10 +35503,7 @@ public final class Ast {
         output.writeMessage(3, position_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(4, structuralChangeKind_.getNumber());
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeEnum(5, labelChangeKind_.getNumber());
+        output.writeInt32(7, key_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -28088,11 +35528,7 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, structuralChangeKind_.getNumber());
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(5, labelChangeKind_.getNumber());
+          .computeInt32Size(7, key_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -28225,10 +35661,8 @@ public final class Ast {
           positionBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000004);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        key_ = 0;
         bitField0_ = (bitField0_ & ~0x00000008);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
@@ -28276,11 +35710,7 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.key_ = key_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -28308,11 +35738,8 @@ public final class Ast {
         if (other.hasPosition()) {
           mergePosition(other.getPosition());
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
-        }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasKey()) {
+          setKey(other.getKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -28584,106 +36011,51 @@ public final class Ast {
         return positionBuilder_;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 4;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      // optional int32 key = 7;
+      private int key_ ;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional int32 key = 7;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
+      public boolean hasKey() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional int32 key = 7;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public int getKey() {
+        return key_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional int32 key = 7;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setKey(int value) {
         bitField0_ |= 0x00000008;
-        structuralChangeKind_ = value;
+        key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional int32 key = 7;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
+      public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-        onChanged();
-        return this;
-      }
-
-      // optional .boa.types.ChangeKind label_change_kind = 5;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
-       *
-       * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-       * </pre>
-       */
-      public boolean hasLabelChangeKind() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
-       *
-       * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-       * </pre>
-       */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
-      }
-      /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
-       *
-       * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-       * </pre>
-       */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000010;
-        labelChangeKind_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
-       *
-       * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-       * </pre>
-       */
-      public Builder clearLabelChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        key_ = 0;
         onChanged();
         return this;
       }
@@ -29556,6 +36928,5780 @@ public final class Ast {
     // @@protoc_insertion_point(class_scope:boa.types.PositionInfo)
   }
 
+  public interface DocumentOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // optional string title = 1;
+    /**
+     * <code>optional string title = 1;</code>
+     */
+    boolean hasTitle();
+    /**
+     * <code>optional string title = 1;</code>
+     */
+    java.lang.String getTitle();
+    /**
+     * <code>optional string title = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getTitleBytes();
+
+    // repeated .boa.types.Element elements = 2;
+    /**
+     * <code>repeated .boa.types.Element elements = 2;</code>
+     */
+    java.util.List<boa.types.Ast.Element> 
+        getElementsList();
+    /**
+     * <code>repeated .boa.types.Element elements = 2;</code>
+     */
+    boa.types.Ast.Element getElements(int index);
+    /**
+     * <code>repeated .boa.types.Element elements = 2;</code>
+     */
+    int getElementsCount();
+    /**
+     * <code>repeated .boa.types.Element elements = 2;</code>
+     */
+    java.util.List<? extends boa.types.Ast.ElementOrBuilder> 
+        getElementsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Element elements = 2;</code>
+     */
+    boa.types.Ast.ElementOrBuilder getElementsOrBuilder(
+        int index);
+
+    // optional .boa.types.Element doc_type = 3;
+    /**
+     * <code>optional .boa.types.Element doc_type = 3;</code>
+     */
+    boolean hasDocType();
+    /**
+     * <code>optional .boa.types.Element doc_type = 3;</code>
+     */
+    boa.types.Ast.Element getDocType();
+    /**
+     * <code>optional .boa.types.Element doc_type = 3;</code>
+     */
+    boa.types.Ast.ElementOrBuilder getDocTypeOrBuilder();
+
+    // repeated .boa.types.Attribute processing_instruction = 11;
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    java.util.List<boa.types.Ast.Attribute> 
+        getProcessingInstructionList();
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    boa.types.Ast.Attribute getProcessingInstruction(int index);
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    int getProcessingInstructionCount();
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+        getProcessingInstructionOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    boa.types.Ast.AttributeOrBuilder getProcessingInstructionOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code boa.types.Document}
+   *
+   * <pre>
+   ** A Html Document 
+   * </pre>
+   */
+  public static final class Document extends
+      com.google.protobuf.GeneratedMessage
+      implements DocumentOrBuilder {
+    // Use Document.newBuilder() to construct.
+    private Document(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private Document(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final Document defaultInstance;
+    public static Document getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public Document getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Document(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              title_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                elements_ = new java.util.ArrayList<boa.types.Ast.Element>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              elements_.add(input.readMessage(boa.types.Ast.Element.PARSER, extensionRegistry));
+              break;
+            }
+            case 26: {
+              boa.types.Ast.Element.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                subBuilder = docType_.toBuilder();
+              }
+              docType_ = input.readMessage(boa.types.Ast.Element.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(docType_);
+                docType_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000002;
+              break;
+            }
+            case 90: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                processingInstruction_ = new java.util.ArrayList<boa.types.Ast.Attribute>();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              processingInstruction_.add(input.readMessage(boa.types.Ast.Attribute.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          elements_ = java.util.Collections.unmodifiableList(elements_);
+        }
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+          processingInstruction_ = java.util.Collections.unmodifiableList(processingInstruction_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Ast.internal_static_boa_types_Document_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Ast.internal_static_boa_types_Document_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Ast.Document.class, boa.types.Ast.Document.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<Document> PARSER =
+        new com.google.protobuf.AbstractParser<Document>() {
+      public Document parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Document(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Document> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // optional string title = 1;
+    public static final int TITLE_FIELD_NUMBER = 1;
+    private java.lang.Object title_;
+    /**
+     * <code>optional string title = 1;</code>
+     */
+    public boolean hasTitle() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional string title = 1;</code>
+     */
+    public java.lang.String getTitle() {
+      java.lang.Object ref = title_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          title_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string title = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTitleBytes() {
+      java.lang.Object ref = title_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        title_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // repeated .boa.types.Element elements = 2;
+    public static final int ELEMENTS_FIELD_NUMBER = 2;
+    private java.util.List<boa.types.Ast.Element> elements_;
+    /**
+     * <code>repeated .boa.types.Element elements = 2;</code>
+     */
+    public java.util.List<boa.types.Ast.Element> getElementsList() {
+      return elements_;
+    }
+    /**
+     * <code>repeated .boa.types.Element elements = 2;</code>
+     */
+    public java.util.List<? extends boa.types.Ast.ElementOrBuilder> 
+        getElementsOrBuilderList() {
+      return elements_;
+    }
+    /**
+     * <code>repeated .boa.types.Element elements = 2;</code>
+     */
+    public int getElementsCount() {
+      return elements_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Element elements = 2;</code>
+     */
+    public boa.types.Ast.Element getElements(int index) {
+      return elements_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Element elements = 2;</code>
+     */
+    public boa.types.Ast.ElementOrBuilder getElementsOrBuilder(
+        int index) {
+      return elements_.get(index);
+    }
+
+    // optional .boa.types.Element doc_type = 3;
+    public static final int DOC_TYPE_FIELD_NUMBER = 3;
+    private boa.types.Ast.Element docType_;
+    /**
+     * <code>optional .boa.types.Element doc_type = 3;</code>
+     */
+    public boolean hasDocType() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional .boa.types.Element doc_type = 3;</code>
+     */
+    public boa.types.Ast.Element getDocType() {
+      return docType_;
+    }
+    /**
+     * <code>optional .boa.types.Element doc_type = 3;</code>
+     */
+    public boa.types.Ast.ElementOrBuilder getDocTypeOrBuilder() {
+      return docType_;
+    }
+
+    // repeated .boa.types.Attribute processing_instruction = 11;
+    public static final int PROCESSING_INSTRUCTION_FIELD_NUMBER = 11;
+    private java.util.List<boa.types.Ast.Attribute> processingInstruction_;
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public java.util.List<boa.types.Ast.Attribute> getProcessingInstructionList() {
+      return processingInstruction_;
+    }
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+        getProcessingInstructionOrBuilderList() {
+      return processingInstruction_;
+    }
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public int getProcessingInstructionCount() {
+      return processingInstruction_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public boa.types.Ast.Attribute getProcessingInstruction(int index) {
+      return processingInstruction_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public boa.types.Ast.AttributeOrBuilder getProcessingInstructionOrBuilder(
+        int index) {
+      return processingInstruction_.get(index);
+    }
+
+    private void initFields() {
+      title_ = "";
+      elements_ = java.util.Collections.emptyList();
+      docType_ = boa.types.Ast.Element.getDefaultInstance();
+      processingInstruction_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      for (int i = 0; i < getElementsCount(); i++) {
+        if (!getElements(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasDocType()) {
+        if (!getDocType().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getProcessingInstructionCount(); i++) {
+        if (!getProcessingInstruction(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getTitleBytes());
+      }
+      for (int i = 0; i < elements_.size(); i++) {
+        output.writeMessage(2, elements_.get(i));
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeMessage(3, docType_);
+      }
+      for (int i = 0; i < processingInstruction_.size(); i++) {
+        output.writeMessage(11, processingInstruction_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getTitleBytes());
+      }
+      for (int i = 0; i < elements_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, elements_.get(i));
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, docType_);
+      }
+      for (int i = 0; i < processingInstruction_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(11, processingInstruction_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Ast.Document parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Ast.Document parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Ast.Document parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Ast.Document parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Ast.Document parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Ast.Document parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Ast.Document parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Ast.Document parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Ast.Document parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Ast.Document parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Ast.Document prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.Document}
+     *
+     * <pre>
+     ** A Html Document 
+     * </pre>
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Ast.DocumentOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Ast.internal_static_boa_types_Document_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Ast.internal_static_boa_types_Document_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Ast.Document.class, boa.types.Ast.Document.Builder.class);
+      }
+
+      // Construct using boa.types.Ast.Document.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getElementsFieldBuilder();
+          getDocTypeFieldBuilder();
+          getProcessingInstructionFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        title_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        if (elementsBuilder_ == null) {
+          elements_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+        } else {
+          elementsBuilder_.clear();
+        }
+        if (docTypeBuilder_ == null) {
+          docType_ = boa.types.Ast.Element.getDefaultInstance();
+        } else {
+          docTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        if (processingInstructionBuilder_ == null) {
+          processingInstruction_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+        } else {
+          processingInstructionBuilder_.clear();
+        }
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Ast.internal_static_boa_types_Document_descriptor;
+      }
+
+      public boa.types.Ast.Document getDefaultInstanceForType() {
+        return boa.types.Ast.Document.getDefaultInstance();
+      }
+
+      public boa.types.Ast.Document build() {
+        boa.types.Ast.Document result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Ast.Document buildPartial() {
+        boa.types.Ast.Document result = new boa.types.Ast.Document(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.title_ = title_;
+        if (elementsBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+            elements_ = java.util.Collections.unmodifiableList(elements_);
+            bitField0_ = (bitField0_ & ~0x00000002);
+          }
+          result.elements_ = elements_;
+        } else {
+          result.elements_ = elementsBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        if (docTypeBuilder_ == null) {
+          result.docType_ = docType_;
+        } else {
+          result.docType_ = docTypeBuilder_.build();
+        }
+        if (processingInstructionBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+            processingInstruction_ = java.util.Collections.unmodifiableList(processingInstruction_);
+            bitField0_ = (bitField0_ & ~0x00000008);
+          }
+          result.processingInstruction_ = processingInstruction_;
+        } else {
+          result.processingInstruction_ = processingInstructionBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Ast.Document) {
+          return mergeFrom((boa.types.Ast.Document)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Ast.Document other) {
+        if (other == boa.types.Ast.Document.getDefaultInstance()) return this;
+        if (other.hasTitle()) {
+          bitField0_ |= 0x00000001;
+          title_ = other.title_;
+          onChanged();
+        }
+        if (elementsBuilder_ == null) {
+          if (!other.elements_.isEmpty()) {
+            if (elements_.isEmpty()) {
+              elements_ = other.elements_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+            } else {
+              ensureElementsIsMutable();
+              elements_.addAll(other.elements_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.elements_.isEmpty()) {
+            if (elementsBuilder_.isEmpty()) {
+              elementsBuilder_.dispose();
+              elementsBuilder_ = null;
+              elements_ = other.elements_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+              elementsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getElementsFieldBuilder() : null;
+            } else {
+              elementsBuilder_.addAllMessages(other.elements_);
+            }
+          }
+        }
+        if (other.hasDocType()) {
+          mergeDocType(other.getDocType());
+        }
+        if (processingInstructionBuilder_ == null) {
+          if (!other.processingInstruction_.isEmpty()) {
+            if (processingInstruction_.isEmpty()) {
+              processingInstruction_ = other.processingInstruction_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+            } else {
+              ensureProcessingInstructionIsMutable();
+              processingInstruction_.addAll(other.processingInstruction_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.processingInstruction_.isEmpty()) {
+            if (processingInstructionBuilder_.isEmpty()) {
+              processingInstructionBuilder_.dispose();
+              processingInstructionBuilder_ = null;
+              processingInstruction_ = other.processingInstruction_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+              processingInstructionBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getProcessingInstructionFieldBuilder() : null;
+            } else {
+              processingInstructionBuilder_.addAllMessages(other.processingInstruction_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        for (int i = 0; i < getElementsCount(); i++) {
+          if (!getElements(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasDocType()) {
+          if (!getDocType().isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getProcessingInstructionCount(); i++) {
+          if (!getProcessingInstruction(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Ast.Document parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Ast.Document) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // optional string title = 1;
+      private java.lang.Object title_ = "";
+      /**
+       * <code>optional string title = 1;</code>
+       */
+      public boolean hasTitle() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional string title = 1;</code>
+       */
+      public java.lang.String getTitle() {
+        java.lang.Object ref = title_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          title_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string title = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getTitleBytes() {
+        java.lang.Object ref = title_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          title_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string title = 1;</code>
+       */
+      public Builder setTitle(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        title_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string title = 1;</code>
+       */
+      public Builder clearTitle() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        title_ = getDefaultInstance().getTitle();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string title = 1;</code>
+       */
+      public Builder setTitleBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        title_ = value;
+        onChanged();
+        return this;
+      }
+
+      // repeated .boa.types.Element elements = 2;
+      private java.util.List<boa.types.Ast.Element> elements_ =
+        java.util.Collections.emptyList();
+      private void ensureElementsIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          elements_ = new java.util.ArrayList<boa.types.Ast.Element>(elements_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Element, boa.types.Ast.Element.Builder, boa.types.Ast.ElementOrBuilder> elementsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public java.util.List<boa.types.Ast.Element> getElementsList() {
+        if (elementsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(elements_);
+        } else {
+          return elementsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public int getElementsCount() {
+        if (elementsBuilder_ == null) {
+          return elements_.size();
+        } else {
+          return elementsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public boa.types.Ast.Element getElements(int index) {
+        if (elementsBuilder_ == null) {
+          return elements_.get(index);
+        } else {
+          return elementsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public Builder setElements(
+          int index, boa.types.Ast.Element value) {
+        if (elementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureElementsIsMutable();
+          elements_.set(index, value);
+          onChanged();
+        } else {
+          elementsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public Builder setElements(
+          int index, boa.types.Ast.Element.Builder builderForValue) {
+        if (elementsBuilder_ == null) {
+          ensureElementsIsMutable();
+          elements_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          elementsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public Builder addElements(boa.types.Ast.Element value) {
+        if (elementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureElementsIsMutable();
+          elements_.add(value);
+          onChanged();
+        } else {
+          elementsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public Builder addElements(
+          int index, boa.types.Ast.Element value) {
+        if (elementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureElementsIsMutable();
+          elements_.add(index, value);
+          onChanged();
+        } else {
+          elementsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public Builder addElements(
+          boa.types.Ast.Element.Builder builderForValue) {
+        if (elementsBuilder_ == null) {
+          ensureElementsIsMutable();
+          elements_.add(builderForValue.build());
+          onChanged();
+        } else {
+          elementsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public Builder addElements(
+          int index, boa.types.Ast.Element.Builder builderForValue) {
+        if (elementsBuilder_ == null) {
+          ensureElementsIsMutable();
+          elements_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          elementsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public Builder addAllElements(
+          java.lang.Iterable<? extends boa.types.Ast.Element> values) {
+        if (elementsBuilder_ == null) {
+          ensureElementsIsMutable();
+          super.addAll(values, elements_);
+          onChanged();
+        } else {
+          elementsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public Builder clearElements() {
+        if (elementsBuilder_ == null) {
+          elements_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+          onChanged();
+        } else {
+          elementsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public Builder removeElements(int index) {
+        if (elementsBuilder_ == null) {
+          ensureElementsIsMutable();
+          elements_.remove(index);
+          onChanged();
+        } else {
+          elementsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public boa.types.Ast.Element.Builder getElementsBuilder(
+          int index) {
+        return getElementsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public boa.types.Ast.ElementOrBuilder getElementsOrBuilder(
+          int index) {
+        if (elementsBuilder_ == null) {
+          return elements_.get(index);  } else {
+          return elementsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public java.util.List<? extends boa.types.Ast.ElementOrBuilder> 
+           getElementsOrBuilderList() {
+        if (elementsBuilder_ != null) {
+          return elementsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(elements_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public boa.types.Ast.Element.Builder addElementsBuilder() {
+        return getElementsFieldBuilder().addBuilder(
+            boa.types.Ast.Element.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public boa.types.Ast.Element.Builder addElementsBuilder(
+          int index) {
+        return getElementsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Element.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       */
+      public java.util.List<boa.types.Ast.Element.Builder> 
+           getElementsBuilderList() {
+        return getElementsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Element, boa.types.Ast.Element.Builder, boa.types.Ast.ElementOrBuilder> 
+          getElementsFieldBuilder() {
+        if (elementsBuilder_ == null) {
+          elementsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Element, boa.types.Ast.Element.Builder, boa.types.Ast.ElementOrBuilder>(
+                  elements_,
+                  ((bitField0_ & 0x00000002) == 0x00000002),
+                  getParentForChildren(),
+                  isClean());
+          elements_ = null;
+        }
+        return elementsBuilder_;
+      }
+
+      // optional .boa.types.Element doc_type = 3;
+      private boa.types.Ast.Element docType_ = boa.types.Ast.Element.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Element, boa.types.Ast.Element.Builder, boa.types.Ast.ElementOrBuilder> docTypeBuilder_;
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      public boolean hasDocType() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      public boa.types.Ast.Element getDocType() {
+        if (docTypeBuilder_ == null) {
+          return docType_;
+        } else {
+          return docTypeBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      public Builder setDocType(boa.types.Ast.Element value) {
+        if (docTypeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          docType_ = value;
+          onChanged();
+        } else {
+          docTypeBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      public Builder setDocType(
+          boa.types.Ast.Element.Builder builderForValue) {
+        if (docTypeBuilder_ == null) {
+          docType_ = builderForValue.build();
+          onChanged();
+        } else {
+          docTypeBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      public Builder mergeDocType(boa.types.Ast.Element value) {
+        if (docTypeBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              docType_ != boa.types.Ast.Element.getDefaultInstance()) {
+            docType_ =
+              boa.types.Ast.Element.newBuilder(docType_).mergeFrom(value).buildPartial();
+          } else {
+            docType_ = value;
+          }
+          onChanged();
+        } else {
+          docTypeBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      public Builder clearDocType() {
+        if (docTypeBuilder_ == null) {
+          docType_ = boa.types.Ast.Element.getDefaultInstance();
+          onChanged();
+        } else {
+          docTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      public boa.types.Ast.Element.Builder getDocTypeBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getDocTypeFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      public boa.types.Ast.ElementOrBuilder getDocTypeOrBuilder() {
+        if (docTypeBuilder_ != null) {
+          return docTypeBuilder_.getMessageOrBuilder();
+        } else {
+          return docType_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Element, boa.types.Ast.Element.Builder, boa.types.Ast.ElementOrBuilder> 
+          getDocTypeFieldBuilder() {
+        if (docTypeBuilder_ == null) {
+          docTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Element, boa.types.Ast.Element.Builder, boa.types.Ast.ElementOrBuilder>(
+                  docType_,
+                  getParentForChildren(),
+                  isClean());
+          docType_ = null;
+        }
+        return docTypeBuilder_;
+      }
+
+      // repeated .boa.types.Attribute processing_instruction = 11;
+      private java.util.List<boa.types.Ast.Attribute> processingInstruction_ =
+        java.util.Collections.emptyList();
+      private void ensureProcessingInstructionIsMutable() {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+          processingInstruction_ = new java.util.ArrayList<boa.types.Ast.Attribute>(processingInstruction_);
+          bitField0_ |= 0x00000008;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder> processingInstructionBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public java.util.List<boa.types.Ast.Attribute> getProcessingInstructionList() {
+        if (processingInstructionBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(processingInstruction_);
+        } else {
+          return processingInstructionBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public int getProcessingInstructionCount() {
+        if (processingInstructionBuilder_ == null) {
+          return processingInstruction_.size();
+        } else {
+          return processingInstructionBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.Attribute getProcessingInstruction(int index) {
+        if (processingInstructionBuilder_ == null) {
+          return processingInstruction_.get(index);
+        } else {
+          return processingInstructionBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder setProcessingInstruction(
+          int index, boa.types.Ast.Attribute value) {
+        if (processingInstructionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.set(index, value);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder setProcessingInstruction(
+          int index, boa.types.Ast.Attribute.Builder builderForValue) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          processingInstructionBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addProcessingInstruction(boa.types.Ast.Attribute value) {
+        if (processingInstructionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.add(value);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addProcessingInstruction(
+          int index, boa.types.Ast.Attribute value) {
+        if (processingInstructionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.add(index, value);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addProcessingInstruction(
+          boa.types.Ast.Attribute.Builder builderForValue) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.add(builderForValue.build());
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addProcessingInstruction(
+          int index, boa.types.Ast.Attribute.Builder builderForValue) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addAllProcessingInstruction(
+          java.lang.Iterable<? extends boa.types.Ast.Attribute> values) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          super.addAll(values, processingInstruction_);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder clearProcessingInstruction() {
+        if (processingInstructionBuilder_ == null) {
+          processingInstruction_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder removeProcessingInstruction(int index) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.remove(index);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.Attribute.Builder getProcessingInstructionBuilder(
+          int index) {
+        return getProcessingInstructionFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.AttributeOrBuilder getProcessingInstructionOrBuilder(
+          int index) {
+        if (processingInstructionBuilder_ == null) {
+          return processingInstruction_.get(index);  } else {
+          return processingInstructionBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+           getProcessingInstructionOrBuilderList() {
+        if (processingInstructionBuilder_ != null) {
+          return processingInstructionBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(processingInstruction_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.Attribute.Builder addProcessingInstructionBuilder() {
+        return getProcessingInstructionFieldBuilder().addBuilder(
+            boa.types.Ast.Attribute.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.Attribute.Builder addProcessingInstructionBuilder(
+          int index) {
+        return getProcessingInstructionFieldBuilder().addBuilder(
+            index, boa.types.Ast.Attribute.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public java.util.List<boa.types.Ast.Attribute.Builder> 
+           getProcessingInstructionBuilderList() {
+        return getProcessingInstructionFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder> 
+          getProcessingInstructionFieldBuilder() {
+        if (processingInstructionBuilder_ == null) {
+          processingInstructionBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder>(
+                  processingInstruction_,
+                  ((bitField0_ & 0x00000008) == 0x00000008),
+                  getParentForChildren(),
+                  isClean());
+          processingInstruction_ = null;
+        }
+        return processingInstructionBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.Document)
+    }
+
+    static {
+      defaultInstance = new Document(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.Document)
+  }
+
+  public interface ElementOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required string tag = 1;
+    /**
+     * <code>required string tag = 1;</code>
+     *
+     * <pre>
+     ** Element's tag 
+     * </pre>
+     */
+    boolean hasTag();
+    /**
+     * <code>required string tag = 1;</code>
+     *
+     * <pre>
+     ** Element's tag 
+     * </pre>
+     */
+    java.lang.String getTag();
+    /**
+     * <code>required string tag = 1;</code>
+     *
+     * <pre>
+     ** Element's tag 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getTagBytes();
+
+    // required .boa.types.Element.ElementKind kind = 2;
+    /**
+     * <code>required .boa.types.Element.ElementKind kind = 2;</code>
+     *
+     * <pre>
+     ** Element's kind eg. bloack, inline or form 
+     * </pre>
+     */
+    boolean hasKind();
+    /**
+     * <code>required .boa.types.Element.ElementKind kind = 2;</code>
+     *
+     * <pre>
+     ** Element's kind eg. bloack, inline or form 
+     * </pre>
+     */
+    boa.types.Ast.Element.ElementKind getKind();
+
+    // repeated .boa.types.Element elements = 3;
+    /**
+     * <code>repeated .boa.types.Element elements = 3;</code>
+     *
+     * <pre>
+     ** The Elements under the Element 
+     * </pre>
+     */
+    java.util.List<boa.types.Ast.Element> 
+        getElementsList();
+    /**
+     * <code>repeated .boa.types.Element elements = 3;</code>
+     *
+     * <pre>
+     ** The Elements under the Element 
+     * </pre>
+     */
+    boa.types.Ast.Element getElements(int index);
+    /**
+     * <code>repeated .boa.types.Element elements = 3;</code>
+     *
+     * <pre>
+     ** The Elements under the Element 
+     * </pre>
+     */
+    int getElementsCount();
+    /**
+     * <code>repeated .boa.types.Element elements = 3;</code>
+     *
+     * <pre>
+     ** The Elements under the Element 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Ast.ElementOrBuilder> 
+        getElementsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Element elements = 3;</code>
+     *
+     * <pre>
+     ** The Elements under the Element 
+     * </pre>
+     */
+    boa.types.Ast.ElementOrBuilder getElementsOrBuilder(
+        int index);
+
+    // repeated string text = 4;
+    /**
+     * <code>repeated string text = 4;</code>
+     *
+     * <pre>
+     ** The Element's text 
+     * </pre>
+     */
+    java.util.List<java.lang.String>
+    getTextList();
+    /**
+     * <code>repeated string text = 4;</code>
+     *
+     * <pre>
+     ** The Element's text 
+     * </pre>
+     */
+    int getTextCount();
+    /**
+     * <code>repeated string text = 4;</code>
+     *
+     * <pre>
+     ** The Element's text 
+     * </pre>
+     */
+    java.lang.String getText(int index);
+    /**
+     * <code>repeated string text = 4;</code>
+     *
+     * <pre>
+     ** The Element's text 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getTextBytes(int index);
+
+    // repeated string data = 5;
+    /**
+     * <code>repeated string data = 5;</code>
+     *
+     * <pre>
+     ** The Element's data eg. scripts, contents of style, etc... 
+     * </pre>
+     */
+    java.util.List<java.lang.String>
+    getDataList();
+    /**
+     * <code>repeated string data = 5;</code>
+     *
+     * <pre>
+     ** The Element's data eg. scripts, contents of style, etc... 
+     * </pre>
+     */
+    int getDataCount();
+    /**
+     * <code>repeated string data = 5;</code>
+     *
+     * <pre>
+     ** The Element's data eg. scripts, contents of style, etc... 
+     * </pre>
+     */
+    java.lang.String getData(int index);
+    /**
+     * <code>repeated string data = 5;</code>
+     *
+     * <pre>
+     ** The Element's data eg. scripts, contents of style, etc... 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getDataBytes(int index);
+
+    // repeated .boa.types.Attribute attributes = 6;
+    /**
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
+     *
+     * <pre>
+     ** The Element's attributes 
+     * </pre>
+     */
+    java.util.List<boa.types.Ast.Attribute> 
+        getAttributesList();
+    /**
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
+     *
+     * <pre>
+     ** The Element's attributes 
+     * </pre>
+     */
+    boa.types.Ast.Attribute getAttributes(int index);
+    /**
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
+     *
+     * <pre>
+     ** The Element's attributes 
+     * </pre>
+     */
+    int getAttributesCount();
+    /**
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
+     *
+     * <pre>
+     ** The Element's attributes 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+        getAttributesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
+     *
+     * <pre>
+     ** The Element's attributes 
+     * </pre>
+     */
+    boa.types.Ast.AttributeOrBuilder getAttributesOrBuilder(
+        int index);
+
+    // optional .boa.types.Namespace script = 7;
+    /**
+     * <code>optional .boa.types.Namespace script = 7;</code>
+     */
+    boolean hasScript();
+    /**
+     * <code>optional .boa.types.Namespace script = 7;</code>
+     */
+    boa.types.Ast.Namespace getScript();
+    /**
+     * <code>optional .boa.types.Namespace script = 7;</code>
+     */
+    boa.types.Ast.NamespaceOrBuilder getScriptOrBuilder();
+
+    // optional .boa.types.Namespace php = 8;
+    /**
+     * <code>optional .boa.types.Namespace php = 8;</code>
+     */
+    boolean hasPhp();
+    /**
+     * <code>optional .boa.types.Namespace php = 8;</code>
+     */
+    boa.types.Ast.Namespace getPhp();
+    /**
+     * <code>optional .boa.types.Namespace php = 8;</code>
+     */
+    boa.types.Ast.NamespaceOrBuilder getPhpOrBuilder();
+
+    // repeated .boa.types.Variable var_decl = 9;
+    /**
+     * <code>repeated .boa.types.Variable var_decl = 9;</code>
+     */
+    java.util.List<boa.types.Ast.Variable> 
+        getVarDeclList();
+    /**
+     * <code>repeated .boa.types.Variable var_decl = 9;</code>
+     */
+    boa.types.Ast.Variable getVarDecl(int index);
+    /**
+     * <code>repeated .boa.types.Variable var_decl = 9;</code>
+     */
+    int getVarDeclCount();
+    /**
+     * <code>repeated .boa.types.Variable var_decl = 9;</code>
+     */
+    java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
+        getVarDeclOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Variable var_decl = 9;</code>
+     */
+    boa.types.Ast.VariableOrBuilder getVarDeclOrBuilder(
+        int index);
+
+    // optional string title = 10;
+    /**
+     * <code>optional string title = 10;</code>
+     *
+     * <pre>
+     ** The Element's title 
+     * </pre>
+     */
+    boolean hasTitle();
+    /**
+     * <code>optional string title = 10;</code>
+     *
+     * <pre>
+     ** The Element's title 
+     * </pre>
+     */
+    java.lang.String getTitle();
+    /**
+     * <code>optional string title = 10;</code>
+     *
+     * <pre>
+     ** The Element's title 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getTitleBytes();
+
+    // repeated .boa.types.Attribute processing_instruction = 11;
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    java.util.List<boa.types.Ast.Attribute> 
+        getProcessingInstructionList();
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    boa.types.Ast.Attribute getProcessingInstruction(int index);
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    int getProcessingInstructionCount();
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+        getProcessingInstructionOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    boa.types.Ast.AttributeOrBuilder getProcessingInstructionOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code boa.types.Element}
+   *
+   * <pre>
+   ** A html Element 
+   * </pre>
+   */
+  public static final class Element extends
+      com.google.protobuf.GeneratedMessage
+      implements ElementOrBuilder {
+    // Use Element.newBuilder() to construct.
+    private Element(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private Element(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final Element defaultInstance;
+    public static Element getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public Element getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Element(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              tag_ = input.readBytes();
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              boa.types.Ast.Element.ElementKind value = boa.types.Ast.Element.ElementKind.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                kind_ = value;
+              }
+              break;
+            }
+            case 26: {
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                elements_ = new java.util.ArrayList<boa.types.Ast.Element>();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              elements_.add(input.readMessage(boa.types.Ast.Element.PARSER, extensionRegistry));
+              break;
+            }
+            case 34: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                text_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              text_.add(input.readBytes());
+              break;
+            }
+            case 42: {
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+                data_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000010;
+              }
+              data_.add(input.readBytes());
+              break;
+            }
+            case 50: {
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+                attributes_ = new java.util.ArrayList<boa.types.Ast.Attribute>();
+                mutable_bitField0_ |= 0x00000020;
+              }
+              attributes_.add(input.readMessage(boa.types.Ast.Attribute.PARSER, extensionRegistry));
+              break;
+            }
+            case 58: {
+              boa.types.Ast.Namespace.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = script_.toBuilder();
+              }
+              script_ = input.readMessage(boa.types.Ast.Namespace.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(script_);
+                script_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
+              break;
+            }
+            case 66: {
+              boa.types.Ast.Namespace.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+                subBuilder = php_.toBuilder();
+              }
+              php_ = input.readMessage(boa.types.Ast.Namespace.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(php_);
+                php_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000008;
+              break;
+            }
+            case 74: {
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+                varDecl_ = new java.util.ArrayList<boa.types.Ast.Variable>();
+                mutable_bitField0_ |= 0x00000100;
+              }
+              varDecl_.add(input.readMessage(boa.types.Ast.Variable.PARSER, extensionRegistry));
+              break;
+            }
+            case 82: {
+              bitField0_ |= 0x00000010;
+              title_ = input.readBytes();
+              break;
+            }
+            case 90: {
+              if (!((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+                processingInstruction_ = new java.util.ArrayList<boa.types.Ast.Attribute>();
+                mutable_bitField0_ |= 0x00000400;
+              }
+              processingInstruction_.add(input.readMessage(boa.types.Ast.Attribute.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+          elements_ = java.util.Collections.unmodifiableList(elements_);
+        }
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+          text_ = new com.google.protobuf.UnmodifiableLazyStringList(text_);
+        }
+        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+          data_ = new com.google.protobuf.UnmodifiableLazyStringList(data_);
+        }
+        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+          attributes_ = java.util.Collections.unmodifiableList(attributes_);
+        }
+        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+          varDecl_ = java.util.Collections.unmodifiableList(varDecl_);
+        }
+        if (((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+          processingInstruction_ = java.util.Collections.unmodifiableList(processingInstruction_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Ast.internal_static_boa_types_Element_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Ast.internal_static_boa_types_Element_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Ast.Element.class, boa.types.Ast.Element.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<Element> PARSER =
+        new com.google.protobuf.AbstractParser<Element>() {
+      public Element parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Element(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Element> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code boa.types.Element.ElementKind}
+     */
+    public enum ElementKind
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>OTHER = 0;</code>
+       */
+      OTHER(0, 0),
+      /**
+       * <code>BLOCK = 1;</code>
+       */
+      BLOCK(1, 1),
+      /**
+       * <code>IN_LINE = 2;</code>
+       */
+      IN_LINE(2, 2),
+      /**
+       * <code>FORM = 3;</code>
+       */
+      FORM(3, 3),
+      /**
+       * <code>DOC_TYPE = 4;</code>
+       */
+      DOC_TYPE(4, 4),
+      /**
+       * <code>STYLE_SHEET = 5;</code>
+       *
+       * <pre>
+       ** CSS Rule types 
+       * </pre>
+       */
+      STYLE_SHEET(5, 5),
+      /**
+       * <code>PAGE_RULE = 6;</code>
+       */
+      PAGE_RULE(6, 6),
+      /**
+       * <code>STYLE_RULE = 7;</code>
+       */
+      STYLE_RULE(7, 7),
+      /**
+       * <code>FONT_FACE_RULE = 8;</code>
+       */
+      FONT_FACE_RULE(8, 8),
+      /**
+       * <code>MEDIA_RULE = 9;</code>
+       */
+      MEDIA_RULE(9, 9),
+      /**
+       * <code>MEDIA_QUERY = 10;</code>
+       */
+      MEDIA_QUERY(10, 10),
+      /**
+       * <code>IMPORT_RULE = 11;</code>
+       */
+      IMPORT_RULE(11, 11),
+      /**
+       * <code>XML_ELEMENT = 12;</code>
+       */
+      XML_ELEMENT(12, 12),
+      ;
+
+      /**
+       * <code>OTHER = 0;</code>
+       */
+      public static final int OTHER_VALUE = 0;
+      /**
+       * <code>BLOCK = 1;</code>
+       */
+      public static final int BLOCK_VALUE = 1;
+      /**
+       * <code>IN_LINE = 2;</code>
+       */
+      public static final int IN_LINE_VALUE = 2;
+      /**
+       * <code>FORM = 3;</code>
+       */
+      public static final int FORM_VALUE = 3;
+      /**
+       * <code>DOC_TYPE = 4;</code>
+       */
+      public static final int DOC_TYPE_VALUE = 4;
+      /**
+       * <code>STYLE_SHEET = 5;</code>
+       *
+       * <pre>
+       ** CSS Rule types 
+       * </pre>
+       */
+      public static final int STYLE_SHEET_VALUE = 5;
+      /**
+       * <code>PAGE_RULE = 6;</code>
+       */
+      public static final int PAGE_RULE_VALUE = 6;
+      /**
+       * <code>STYLE_RULE = 7;</code>
+       */
+      public static final int STYLE_RULE_VALUE = 7;
+      /**
+       * <code>FONT_FACE_RULE = 8;</code>
+       */
+      public static final int FONT_FACE_RULE_VALUE = 8;
+      /**
+       * <code>MEDIA_RULE = 9;</code>
+       */
+      public static final int MEDIA_RULE_VALUE = 9;
+      /**
+       * <code>MEDIA_QUERY = 10;</code>
+       */
+      public static final int MEDIA_QUERY_VALUE = 10;
+      /**
+       * <code>IMPORT_RULE = 11;</code>
+       */
+      public static final int IMPORT_RULE_VALUE = 11;
+      /**
+       * <code>XML_ELEMENT = 12;</code>
+       */
+      public static final int XML_ELEMENT_VALUE = 12;
+
+
+      public final int getNumber() { return value; }
+
+      public static ElementKind valueOf(int value) {
+        switch (value) {
+          case 0: return OTHER;
+          case 1: return BLOCK;
+          case 2: return IN_LINE;
+          case 3: return FORM;
+          case 4: return DOC_TYPE;
+          case 5: return STYLE_SHEET;
+          case 6: return PAGE_RULE;
+          case 7: return STYLE_RULE;
+          case 8: return FONT_FACE_RULE;
+          case 9: return MEDIA_RULE;
+          case 10: return MEDIA_QUERY;
+          case 11: return IMPORT_RULE;
+          case 12: return XML_ELEMENT;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<ElementKind>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<ElementKind>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<ElementKind>() {
+              public ElementKind findValueByNumber(int number) {
+                return ElementKind.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return boa.types.Ast.Element.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final ElementKind[] VALUES = values();
+
+      public static ElementKind valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private ElementKind(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:boa.types.Element.ElementKind)
+    }
+
+    private int bitField0_;
+    // required string tag = 1;
+    public static final int TAG_FIELD_NUMBER = 1;
+    private java.lang.Object tag_;
+    /**
+     * <code>required string tag = 1;</code>
+     *
+     * <pre>
+     ** Element's tag 
+     * </pre>
+     */
+    public boolean hasTag() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required string tag = 1;</code>
+     *
+     * <pre>
+     ** Element's tag 
+     * </pre>
+     */
+    public java.lang.String getTag() {
+      java.lang.Object ref = tag_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          tag_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string tag = 1;</code>
+     *
+     * <pre>
+     ** Element's tag 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getTagBytes() {
+      java.lang.Object ref = tag_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        tag_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // required .boa.types.Element.ElementKind kind = 2;
+    public static final int KIND_FIELD_NUMBER = 2;
+    private boa.types.Ast.Element.ElementKind kind_;
+    /**
+     * <code>required .boa.types.Element.ElementKind kind = 2;</code>
+     *
+     * <pre>
+     ** Element's kind eg. bloack, inline or form 
+     * </pre>
+     */
+    public boolean hasKind() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required .boa.types.Element.ElementKind kind = 2;</code>
+     *
+     * <pre>
+     ** Element's kind eg. bloack, inline or form 
+     * </pre>
+     */
+    public boa.types.Ast.Element.ElementKind getKind() {
+      return kind_;
+    }
+
+    // repeated .boa.types.Element elements = 3;
+    public static final int ELEMENTS_FIELD_NUMBER = 3;
+    private java.util.List<boa.types.Ast.Element> elements_;
+    /**
+     * <code>repeated .boa.types.Element elements = 3;</code>
+     *
+     * <pre>
+     ** The Elements under the Element 
+     * </pre>
+     */
+    public java.util.List<boa.types.Ast.Element> getElementsList() {
+      return elements_;
+    }
+    /**
+     * <code>repeated .boa.types.Element elements = 3;</code>
+     *
+     * <pre>
+     ** The Elements under the Element 
+     * </pre>
+     */
+    public java.util.List<? extends boa.types.Ast.ElementOrBuilder> 
+        getElementsOrBuilderList() {
+      return elements_;
+    }
+    /**
+     * <code>repeated .boa.types.Element elements = 3;</code>
+     *
+     * <pre>
+     ** The Elements under the Element 
+     * </pre>
+     */
+    public int getElementsCount() {
+      return elements_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Element elements = 3;</code>
+     *
+     * <pre>
+     ** The Elements under the Element 
+     * </pre>
+     */
+    public boa.types.Ast.Element getElements(int index) {
+      return elements_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Element elements = 3;</code>
+     *
+     * <pre>
+     ** The Elements under the Element 
+     * </pre>
+     */
+    public boa.types.Ast.ElementOrBuilder getElementsOrBuilder(
+        int index) {
+      return elements_.get(index);
+    }
+
+    // repeated string text = 4;
+    public static final int TEXT_FIELD_NUMBER = 4;
+    private com.google.protobuf.LazyStringList text_;
+    /**
+     * <code>repeated string text = 4;</code>
+     *
+     * <pre>
+     ** The Element's text 
+     * </pre>
+     */
+    public java.util.List<java.lang.String>
+        getTextList() {
+      return text_;
+    }
+    /**
+     * <code>repeated string text = 4;</code>
+     *
+     * <pre>
+     ** The Element's text 
+     * </pre>
+     */
+    public int getTextCount() {
+      return text_.size();
+    }
+    /**
+     * <code>repeated string text = 4;</code>
+     *
+     * <pre>
+     ** The Element's text 
+     * </pre>
+     */
+    public java.lang.String getText(int index) {
+      return text_.get(index);
+    }
+    /**
+     * <code>repeated string text = 4;</code>
+     *
+     * <pre>
+     ** The Element's text 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getTextBytes(int index) {
+      return text_.getByteString(index);
+    }
+
+    // repeated string data = 5;
+    public static final int DATA_FIELD_NUMBER = 5;
+    private com.google.protobuf.LazyStringList data_;
+    /**
+     * <code>repeated string data = 5;</code>
+     *
+     * <pre>
+     ** The Element's data eg. scripts, contents of style, etc... 
+     * </pre>
+     */
+    public java.util.List<java.lang.String>
+        getDataList() {
+      return data_;
+    }
+    /**
+     * <code>repeated string data = 5;</code>
+     *
+     * <pre>
+     ** The Element's data eg. scripts, contents of style, etc... 
+     * </pre>
+     */
+    public int getDataCount() {
+      return data_.size();
+    }
+    /**
+     * <code>repeated string data = 5;</code>
+     *
+     * <pre>
+     ** The Element's data eg. scripts, contents of style, etc... 
+     * </pre>
+     */
+    public java.lang.String getData(int index) {
+      return data_.get(index);
+    }
+    /**
+     * <code>repeated string data = 5;</code>
+     *
+     * <pre>
+     ** The Element's data eg. scripts, contents of style, etc... 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getDataBytes(int index) {
+      return data_.getByteString(index);
+    }
+
+    // repeated .boa.types.Attribute attributes = 6;
+    public static final int ATTRIBUTES_FIELD_NUMBER = 6;
+    private java.util.List<boa.types.Ast.Attribute> attributes_;
+    /**
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
+     *
+     * <pre>
+     ** The Element's attributes 
+     * </pre>
+     */
+    public java.util.List<boa.types.Ast.Attribute> getAttributesList() {
+      return attributes_;
+    }
+    /**
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
+     *
+     * <pre>
+     ** The Element's attributes 
+     * </pre>
+     */
+    public java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+        getAttributesOrBuilderList() {
+      return attributes_;
+    }
+    /**
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
+     *
+     * <pre>
+     ** The Element's attributes 
+     * </pre>
+     */
+    public int getAttributesCount() {
+      return attributes_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
+     *
+     * <pre>
+     ** The Element's attributes 
+     * </pre>
+     */
+    public boa.types.Ast.Attribute getAttributes(int index) {
+      return attributes_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
+     *
+     * <pre>
+     ** The Element's attributes 
+     * </pre>
+     */
+    public boa.types.Ast.AttributeOrBuilder getAttributesOrBuilder(
+        int index) {
+      return attributes_.get(index);
+    }
+
+    // optional .boa.types.Namespace script = 7;
+    public static final int SCRIPT_FIELD_NUMBER = 7;
+    private boa.types.Ast.Namespace script_;
+    /**
+     * <code>optional .boa.types.Namespace script = 7;</code>
+     */
+    public boolean hasScript() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .boa.types.Namespace script = 7;</code>
+     */
+    public boa.types.Ast.Namespace getScript() {
+      return script_;
+    }
+    /**
+     * <code>optional .boa.types.Namespace script = 7;</code>
+     */
+    public boa.types.Ast.NamespaceOrBuilder getScriptOrBuilder() {
+      return script_;
+    }
+
+    // optional .boa.types.Namespace php = 8;
+    public static final int PHP_FIELD_NUMBER = 8;
+    private boa.types.Ast.Namespace php_;
+    /**
+     * <code>optional .boa.types.Namespace php = 8;</code>
+     */
+    public boolean hasPhp() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional .boa.types.Namespace php = 8;</code>
+     */
+    public boa.types.Ast.Namespace getPhp() {
+      return php_;
+    }
+    /**
+     * <code>optional .boa.types.Namespace php = 8;</code>
+     */
+    public boa.types.Ast.NamespaceOrBuilder getPhpOrBuilder() {
+      return php_;
+    }
+
+    // repeated .boa.types.Variable var_decl = 9;
+    public static final int VAR_DECL_FIELD_NUMBER = 9;
+    private java.util.List<boa.types.Ast.Variable> varDecl_;
+    /**
+     * <code>repeated .boa.types.Variable var_decl = 9;</code>
+     */
+    public java.util.List<boa.types.Ast.Variable> getVarDeclList() {
+      return varDecl_;
+    }
+    /**
+     * <code>repeated .boa.types.Variable var_decl = 9;</code>
+     */
+    public java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
+        getVarDeclOrBuilderList() {
+      return varDecl_;
+    }
+    /**
+     * <code>repeated .boa.types.Variable var_decl = 9;</code>
+     */
+    public int getVarDeclCount() {
+      return varDecl_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Variable var_decl = 9;</code>
+     */
+    public boa.types.Ast.Variable getVarDecl(int index) {
+      return varDecl_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Variable var_decl = 9;</code>
+     */
+    public boa.types.Ast.VariableOrBuilder getVarDeclOrBuilder(
+        int index) {
+      return varDecl_.get(index);
+    }
+
+    // optional string title = 10;
+    public static final int TITLE_FIELD_NUMBER = 10;
+    private java.lang.Object title_;
+    /**
+     * <code>optional string title = 10;</code>
+     *
+     * <pre>
+     ** The Element's title 
+     * </pre>
+     */
+    public boolean hasTitle() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional string title = 10;</code>
+     *
+     * <pre>
+     ** The Element's title 
+     * </pre>
+     */
+    public java.lang.String getTitle() {
+      java.lang.Object ref = title_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          title_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string title = 10;</code>
+     *
+     * <pre>
+     ** The Element's title 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getTitleBytes() {
+      java.lang.Object ref = title_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        title_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // repeated .boa.types.Attribute processing_instruction = 11;
+    public static final int PROCESSING_INSTRUCTION_FIELD_NUMBER = 11;
+    private java.util.List<boa.types.Ast.Attribute> processingInstruction_;
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public java.util.List<boa.types.Ast.Attribute> getProcessingInstructionList() {
+      return processingInstruction_;
+    }
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+        getProcessingInstructionOrBuilderList() {
+      return processingInstruction_;
+    }
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public int getProcessingInstructionCount() {
+      return processingInstruction_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public boa.types.Ast.Attribute getProcessingInstruction(int index) {
+      return processingInstruction_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public boa.types.Ast.AttributeOrBuilder getProcessingInstructionOrBuilder(
+        int index) {
+      return processingInstruction_.get(index);
+    }
+
+    private void initFields() {
+      tag_ = "";
+      kind_ = boa.types.Ast.Element.ElementKind.OTHER;
+      elements_ = java.util.Collections.emptyList();
+      text_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      data_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      attributes_ = java.util.Collections.emptyList();
+      script_ = boa.types.Ast.Namespace.getDefaultInstance();
+      php_ = boa.types.Ast.Namespace.getDefaultInstance();
+      varDecl_ = java.util.Collections.emptyList();
+      title_ = "";
+      processingInstruction_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasTag()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasKind()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      for (int i = 0; i < getElementsCount(); i++) {
+        if (!getElements(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getAttributesCount(); i++) {
+        if (!getAttributes(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasScript()) {
+        if (!getScript().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasPhp()) {
+        if (!getPhp().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getVarDeclCount(); i++) {
+        if (!getVarDecl(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getProcessingInstructionCount(); i++) {
+        if (!getProcessingInstruction(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getTagBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeEnum(2, kind_.getNumber());
+      }
+      for (int i = 0; i < elements_.size(); i++) {
+        output.writeMessage(3, elements_.get(i));
+      }
+      for (int i = 0; i < text_.size(); i++) {
+        output.writeBytes(4, text_.getByteString(i));
+      }
+      for (int i = 0; i < data_.size(); i++) {
+        output.writeBytes(5, data_.getByteString(i));
+      }
+      for (int i = 0; i < attributes_.size(); i++) {
+        output.writeMessage(6, attributes_.get(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(7, script_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeMessage(8, php_);
+      }
+      for (int i = 0; i < varDecl_.size(); i++) {
+        output.writeMessage(9, varDecl_.get(i));
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBytes(10, getTitleBytes());
+      }
+      for (int i = 0; i < processingInstruction_.size(); i++) {
+        output.writeMessage(11, processingInstruction_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getTagBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, kind_.getNumber());
+      }
+      for (int i = 0; i < elements_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, elements_.get(i));
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < text_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(text_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getTextList().size();
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < data_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(data_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getDataList().size();
+      }
+      for (int i = 0; i < attributes_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(6, attributes_.get(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(7, script_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(8, php_);
+      }
+      for (int i = 0; i < varDecl_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(9, varDecl_.get(i));
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(10, getTitleBytes());
+      }
+      for (int i = 0; i < processingInstruction_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(11, processingInstruction_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Ast.Element parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Ast.Element parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Ast.Element parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Ast.Element parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Ast.Element parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Ast.Element parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Ast.Element parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Ast.Element parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Ast.Element parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Ast.Element parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Ast.Element prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.Element}
+     *
+     * <pre>
+     ** A html Element 
+     * </pre>
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Ast.ElementOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Ast.internal_static_boa_types_Element_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Ast.internal_static_boa_types_Element_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Ast.Element.class, boa.types.Ast.Element.Builder.class);
+      }
+
+      // Construct using boa.types.Ast.Element.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getElementsFieldBuilder();
+          getAttributesFieldBuilder();
+          getScriptFieldBuilder();
+          getPhpFieldBuilder();
+          getVarDeclFieldBuilder();
+          getProcessingInstructionFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        tag_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        kind_ = boa.types.Ast.Element.ElementKind.OTHER;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        if (elementsBuilder_ == null) {
+          elements_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+        } else {
+          elementsBuilder_.clear();
+        }
+        text_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        data_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        if (attributesBuilder_ == null) {
+          attributes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000020);
+        } else {
+          attributesBuilder_.clear();
+        }
+        if (scriptBuilder_ == null) {
+          script_ = boa.types.Ast.Namespace.getDefaultInstance();
+        } else {
+          scriptBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000040);
+        if (phpBuilder_ == null) {
+          php_ = boa.types.Ast.Namespace.getDefaultInstance();
+        } else {
+          phpBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000080);
+        if (varDeclBuilder_ == null) {
+          varDecl_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000100);
+        } else {
+          varDeclBuilder_.clear();
+        }
+        title_ = "";
+        bitField0_ = (bitField0_ & ~0x00000200);
+        if (processingInstructionBuilder_ == null) {
+          processingInstruction_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000400);
+        } else {
+          processingInstructionBuilder_.clear();
+        }
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Ast.internal_static_boa_types_Element_descriptor;
+      }
+
+      public boa.types.Ast.Element getDefaultInstanceForType() {
+        return boa.types.Ast.Element.getDefaultInstance();
+      }
+
+      public boa.types.Ast.Element build() {
+        boa.types.Ast.Element result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Ast.Element buildPartial() {
+        boa.types.Ast.Element result = new boa.types.Ast.Element(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.tag_ = tag_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.kind_ = kind_;
+        if (elementsBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004)) {
+            elements_ = java.util.Collections.unmodifiableList(elements_);
+            bitField0_ = (bitField0_ & ~0x00000004);
+          }
+          result.elements_ = elements_;
+        } else {
+          result.elements_ = elementsBuilder_.build();
+        }
+        if (((bitField0_ & 0x00000008) == 0x00000008)) {
+          text_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              text_);
+          bitField0_ = (bitField0_ & ~0x00000008);
+        }
+        result.text_ = text_;
+        if (((bitField0_ & 0x00000010) == 0x00000010)) {
+          data_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              data_);
+          bitField0_ = (bitField0_ & ~0x00000010);
+        }
+        result.data_ = data_;
+        if (attributesBuilder_ == null) {
+          if (((bitField0_ & 0x00000020) == 0x00000020)) {
+            attributes_ = java.util.Collections.unmodifiableList(attributes_);
+            bitField0_ = (bitField0_ & ~0x00000020);
+          }
+          result.attributes_ = attributes_;
+        } else {
+          result.attributes_ = attributesBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (scriptBuilder_ == null) {
+          result.script_ = script_;
+        } else {
+          result.script_ = scriptBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        if (phpBuilder_ == null) {
+          result.php_ = php_;
+        } else {
+          result.php_ = phpBuilder_.build();
+        }
+        if (varDeclBuilder_ == null) {
+          if (((bitField0_ & 0x00000100) == 0x00000100)) {
+            varDecl_ = java.util.Collections.unmodifiableList(varDecl_);
+            bitField0_ = (bitField0_ & ~0x00000100);
+          }
+          result.varDecl_ = varDecl_;
+        } else {
+          result.varDecl_ = varDeclBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.title_ = title_;
+        if (processingInstructionBuilder_ == null) {
+          if (((bitField0_ & 0x00000400) == 0x00000400)) {
+            processingInstruction_ = java.util.Collections.unmodifiableList(processingInstruction_);
+            bitField0_ = (bitField0_ & ~0x00000400);
+          }
+          result.processingInstruction_ = processingInstruction_;
+        } else {
+          result.processingInstruction_ = processingInstructionBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Ast.Element) {
+          return mergeFrom((boa.types.Ast.Element)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Ast.Element other) {
+        if (other == boa.types.Ast.Element.getDefaultInstance()) return this;
+        if (other.hasTag()) {
+          bitField0_ |= 0x00000001;
+          tag_ = other.tag_;
+          onChanged();
+        }
+        if (other.hasKind()) {
+          setKind(other.getKind());
+        }
+        if (elementsBuilder_ == null) {
+          if (!other.elements_.isEmpty()) {
+            if (elements_.isEmpty()) {
+              elements_ = other.elements_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+            } else {
+              ensureElementsIsMutable();
+              elements_.addAll(other.elements_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.elements_.isEmpty()) {
+            if (elementsBuilder_.isEmpty()) {
+              elementsBuilder_.dispose();
+              elementsBuilder_ = null;
+              elements_ = other.elements_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+              elementsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getElementsFieldBuilder() : null;
+            } else {
+              elementsBuilder_.addAllMessages(other.elements_);
+            }
+          }
+        }
+        if (!other.text_.isEmpty()) {
+          if (text_.isEmpty()) {
+            text_ = other.text_;
+            bitField0_ = (bitField0_ & ~0x00000008);
+          } else {
+            ensureTextIsMutable();
+            text_.addAll(other.text_);
+          }
+          onChanged();
+        }
+        if (!other.data_.isEmpty()) {
+          if (data_.isEmpty()) {
+            data_ = other.data_;
+            bitField0_ = (bitField0_ & ~0x00000010);
+          } else {
+            ensureDataIsMutable();
+            data_.addAll(other.data_);
+          }
+          onChanged();
+        }
+        if (attributesBuilder_ == null) {
+          if (!other.attributes_.isEmpty()) {
+            if (attributes_.isEmpty()) {
+              attributes_ = other.attributes_;
+              bitField0_ = (bitField0_ & ~0x00000020);
+            } else {
+              ensureAttributesIsMutable();
+              attributes_.addAll(other.attributes_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.attributes_.isEmpty()) {
+            if (attributesBuilder_.isEmpty()) {
+              attributesBuilder_.dispose();
+              attributesBuilder_ = null;
+              attributes_ = other.attributes_;
+              bitField0_ = (bitField0_ & ~0x00000020);
+              attributesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getAttributesFieldBuilder() : null;
+            } else {
+              attributesBuilder_.addAllMessages(other.attributes_);
+            }
+          }
+        }
+        if (other.hasScript()) {
+          mergeScript(other.getScript());
+        }
+        if (other.hasPhp()) {
+          mergePhp(other.getPhp());
+        }
+        if (varDeclBuilder_ == null) {
+          if (!other.varDecl_.isEmpty()) {
+            if (varDecl_.isEmpty()) {
+              varDecl_ = other.varDecl_;
+              bitField0_ = (bitField0_ & ~0x00000100);
+            } else {
+              ensureVarDeclIsMutable();
+              varDecl_.addAll(other.varDecl_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.varDecl_.isEmpty()) {
+            if (varDeclBuilder_.isEmpty()) {
+              varDeclBuilder_.dispose();
+              varDeclBuilder_ = null;
+              varDecl_ = other.varDecl_;
+              bitField0_ = (bitField0_ & ~0x00000100);
+              varDeclBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getVarDeclFieldBuilder() : null;
+            } else {
+              varDeclBuilder_.addAllMessages(other.varDecl_);
+            }
+          }
+        }
+        if (other.hasTitle()) {
+          bitField0_ |= 0x00000200;
+          title_ = other.title_;
+          onChanged();
+        }
+        if (processingInstructionBuilder_ == null) {
+          if (!other.processingInstruction_.isEmpty()) {
+            if (processingInstruction_.isEmpty()) {
+              processingInstruction_ = other.processingInstruction_;
+              bitField0_ = (bitField0_ & ~0x00000400);
+            } else {
+              ensureProcessingInstructionIsMutable();
+              processingInstruction_.addAll(other.processingInstruction_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.processingInstruction_.isEmpty()) {
+            if (processingInstructionBuilder_.isEmpty()) {
+              processingInstructionBuilder_.dispose();
+              processingInstructionBuilder_ = null;
+              processingInstruction_ = other.processingInstruction_;
+              bitField0_ = (bitField0_ & ~0x00000400);
+              processingInstructionBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getProcessingInstructionFieldBuilder() : null;
+            } else {
+              processingInstructionBuilder_.addAllMessages(other.processingInstruction_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasTag()) {
+          
+          return false;
+        }
+        if (!hasKind()) {
+          
+          return false;
+        }
+        for (int i = 0; i < getElementsCount(); i++) {
+          if (!getElements(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getAttributesCount(); i++) {
+          if (!getAttributes(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasScript()) {
+          if (!getScript().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasPhp()) {
+          if (!getPhp().isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getVarDeclCount(); i++) {
+          if (!getVarDecl(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getProcessingInstructionCount(); i++) {
+          if (!getProcessingInstruction(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Ast.Element parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Ast.Element) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required string tag = 1;
+      private java.lang.Object tag_ = "";
+      /**
+       * <code>required string tag = 1;</code>
+       *
+       * <pre>
+       ** Element's tag 
+       * </pre>
+       */
+      public boolean hasTag() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string tag = 1;</code>
+       *
+       * <pre>
+       ** Element's tag 
+       * </pre>
+       */
+      public java.lang.String getTag() {
+        java.lang.Object ref = tag_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          tag_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string tag = 1;</code>
+       *
+       * <pre>
+       ** Element's tag 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getTagBytes() {
+        java.lang.Object ref = tag_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          tag_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string tag = 1;</code>
+       *
+       * <pre>
+       ** Element's tag 
+       * </pre>
+       */
+      public Builder setTag(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        tag_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string tag = 1;</code>
+       *
+       * <pre>
+       ** Element's tag 
+       * </pre>
+       */
+      public Builder clearTag() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        tag_ = getDefaultInstance().getTag();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string tag = 1;</code>
+       *
+       * <pre>
+       ** Element's tag 
+       * </pre>
+       */
+      public Builder setTagBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        tag_ = value;
+        onChanged();
+        return this;
+      }
+
+      // required .boa.types.Element.ElementKind kind = 2;
+      private boa.types.Ast.Element.ElementKind kind_ = boa.types.Ast.Element.ElementKind.OTHER;
+      /**
+       * <code>required .boa.types.Element.ElementKind kind = 2;</code>
+       *
+       * <pre>
+       ** Element's kind eg. bloack, inline or form 
+       * </pre>
+       */
+      public boolean hasKind() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required .boa.types.Element.ElementKind kind = 2;</code>
+       *
+       * <pre>
+       ** Element's kind eg. bloack, inline or form 
+       * </pre>
+       */
+      public boa.types.Ast.Element.ElementKind getKind() {
+        return kind_;
+      }
+      /**
+       * <code>required .boa.types.Element.ElementKind kind = 2;</code>
+       *
+       * <pre>
+       ** Element's kind eg. bloack, inline or form 
+       * </pre>
+       */
+      public Builder setKind(boa.types.Ast.Element.ElementKind value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
+        kind_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .boa.types.Element.ElementKind kind = 2;</code>
+       *
+       * <pre>
+       ** Element's kind eg. bloack, inline or form 
+       * </pre>
+       */
+      public Builder clearKind() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        kind_ = boa.types.Ast.Element.ElementKind.OTHER;
+        onChanged();
+        return this;
+      }
+
+      // repeated .boa.types.Element elements = 3;
+      private java.util.List<boa.types.Ast.Element> elements_ =
+        java.util.Collections.emptyList();
+      private void ensureElementsIsMutable() {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+          elements_ = new java.util.ArrayList<boa.types.Ast.Element>(elements_);
+          bitField0_ |= 0x00000004;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Element, boa.types.Ast.Element.Builder, boa.types.Ast.ElementOrBuilder> elementsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Element> getElementsList() {
+        if (elementsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(elements_);
+        } else {
+          return elementsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public int getElementsCount() {
+        if (elementsBuilder_ == null) {
+          return elements_.size();
+        } else {
+          return elementsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public boa.types.Ast.Element getElements(int index) {
+        if (elementsBuilder_ == null) {
+          return elements_.get(index);
+        } else {
+          return elementsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public Builder setElements(
+          int index, boa.types.Ast.Element value) {
+        if (elementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureElementsIsMutable();
+          elements_.set(index, value);
+          onChanged();
+        } else {
+          elementsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public Builder setElements(
+          int index, boa.types.Ast.Element.Builder builderForValue) {
+        if (elementsBuilder_ == null) {
+          ensureElementsIsMutable();
+          elements_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          elementsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public Builder addElements(boa.types.Ast.Element value) {
+        if (elementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureElementsIsMutable();
+          elements_.add(value);
+          onChanged();
+        } else {
+          elementsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public Builder addElements(
+          int index, boa.types.Ast.Element value) {
+        if (elementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureElementsIsMutable();
+          elements_.add(index, value);
+          onChanged();
+        } else {
+          elementsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public Builder addElements(
+          boa.types.Ast.Element.Builder builderForValue) {
+        if (elementsBuilder_ == null) {
+          ensureElementsIsMutable();
+          elements_.add(builderForValue.build());
+          onChanged();
+        } else {
+          elementsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public Builder addElements(
+          int index, boa.types.Ast.Element.Builder builderForValue) {
+        if (elementsBuilder_ == null) {
+          ensureElementsIsMutable();
+          elements_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          elementsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public Builder addAllElements(
+          java.lang.Iterable<? extends boa.types.Ast.Element> values) {
+        if (elementsBuilder_ == null) {
+          ensureElementsIsMutable();
+          super.addAll(values, elements_);
+          onChanged();
+        } else {
+          elementsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public Builder clearElements() {
+        if (elementsBuilder_ == null) {
+          elements_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+          onChanged();
+        } else {
+          elementsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public Builder removeElements(int index) {
+        if (elementsBuilder_ == null) {
+          ensureElementsIsMutable();
+          elements_.remove(index);
+          onChanged();
+        } else {
+          elementsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public boa.types.Ast.Element.Builder getElementsBuilder(
+          int index) {
+        return getElementsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public boa.types.Ast.ElementOrBuilder getElementsOrBuilder(
+          int index) {
+        if (elementsBuilder_ == null) {
+          return elements_.get(index);  } else {
+          return elementsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public java.util.List<? extends boa.types.Ast.ElementOrBuilder> 
+           getElementsOrBuilderList() {
+        if (elementsBuilder_ != null) {
+          return elementsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(elements_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public boa.types.Ast.Element.Builder addElementsBuilder() {
+        return getElementsFieldBuilder().addBuilder(
+            boa.types.Ast.Element.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public boa.types.Ast.Element.Builder addElementsBuilder(
+          int index) {
+        return getElementsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Element.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 3;</code>
+       *
+       * <pre>
+       ** The Elements under the Element 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Element.Builder> 
+           getElementsBuilderList() {
+        return getElementsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Element, boa.types.Ast.Element.Builder, boa.types.Ast.ElementOrBuilder> 
+          getElementsFieldBuilder() {
+        if (elementsBuilder_ == null) {
+          elementsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Element, boa.types.Ast.Element.Builder, boa.types.Ast.ElementOrBuilder>(
+                  elements_,
+                  ((bitField0_ & 0x00000004) == 0x00000004),
+                  getParentForChildren(),
+                  isClean());
+          elements_ = null;
+        }
+        return elementsBuilder_;
+      }
+
+      // repeated string text = 4;
+      private com.google.protobuf.LazyStringList text_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureTextIsMutable() {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+          text_ = new com.google.protobuf.LazyStringArrayList(text_);
+          bitField0_ |= 0x00000008;
+         }
+      }
+      /**
+       * <code>repeated string text = 4;</code>
+       *
+       * <pre>
+       ** The Element's text 
+       * </pre>
+       */
+      public java.util.List<java.lang.String>
+          getTextList() {
+        return java.util.Collections.unmodifiableList(text_);
+      }
+      /**
+       * <code>repeated string text = 4;</code>
+       *
+       * <pre>
+       ** The Element's text 
+       * </pre>
+       */
+      public int getTextCount() {
+        return text_.size();
+      }
+      /**
+       * <code>repeated string text = 4;</code>
+       *
+       * <pre>
+       ** The Element's text 
+       * </pre>
+       */
+      public java.lang.String getText(int index) {
+        return text_.get(index);
+      }
+      /**
+       * <code>repeated string text = 4;</code>
+       *
+       * <pre>
+       ** The Element's text 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getTextBytes(int index) {
+        return text_.getByteString(index);
+      }
+      /**
+       * <code>repeated string text = 4;</code>
+       *
+       * <pre>
+       ** The Element's text 
+       * </pre>
+       */
+      public Builder setText(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureTextIsMutable();
+        text_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string text = 4;</code>
+       *
+       * <pre>
+       ** The Element's text 
+       * </pre>
+       */
+      public Builder addText(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureTextIsMutable();
+        text_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string text = 4;</code>
+       *
+       * <pre>
+       ** The Element's text 
+       * </pre>
+       */
+      public Builder addAllText(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureTextIsMutable();
+        super.addAll(values, text_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string text = 4;</code>
+       *
+       * <pre>
+       ** The Element's text 
+       * </pre>
+       */
+      public Builder clearText() {
+        text_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string text = 4;</code>
+       *
+       * <pre>
+       ** The Element's text 
+       * </pre>
+       */
+      public Builder addTextBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureTextIsMutable();
+        text_.add(value);
+        onChanged();
+        return this;
+      }
+
+      // repeated string data = 5;
+      private com.google.protobuf.LazyStringList data_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureDataIsMutable() {
+        if (!((bitField0_ & 0x00000010) == 0x00000010)) {
+          data_ = new com.google.protobuf.LazyStringArrayList(data_);
+          bitField0_ |= 0x00000010;
+         }
+      }
+      /**
+       * <code>repeated string data = 5;</code>
+       *
+       * <pre>
+       ** The Element's data eg. scripts, contents of style, etc... 
+       * </pre>
+       */
+      public java.util.List<java.lang.String>
+          getDataList() {
+        return java.util.Collections.unmodifiableList(data_);
+      }
+      /**
+       * <code>repeated string data = 5;</code>
+       *
+       * <pre>
+       ** The Element's data eg. scripts, contents of style, etc... 
+       * </pre>
+       */
+      public int getDataCount() {
+        return data_.size();
+      }
+      /**
+       * <code>repeated string data = 5;</code>
+       *
+       * <pre>
+       ** The Element's data eg. scripts, contents of style, etc... 
+       * </pre>
+       */
+      public java.lang.String getData(int index) {
+        return data_.get(index);
+      }
+      /**
+       * <code>repeated string data = 5;</code>
+       *
+       * <pre>
+       ** The Element's data eg. scripts, contents of style, etc... 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getDataBytes(int index) {
+        return data_.getByteString(index);
+      }
+      /**
+       * <code>repeated string data = 5;</code>
+       *
+       * <pre>
+       ** The Element's data eg. scripts, contents of style, etc... 
+       * </pre>
+       */
+      public Builder setData(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureDataIsMutable();
+        data_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string data = 5;</code>
+       *
+       * <pre>
+       ** The Element's data eg. scripts, contents of style, etc... 
+       * </pre>
+       */
+      public Builder addData(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureDataIsMutable();
+        data_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string data = 5;</code>
+       *
+       * <pre>
+       ** The Element's data eg. scripts, contents of style, etc... 
+       * </pre>
+       */
+      public Builder addAllData(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureDataIsMutable();
+        super.addAll(values, data_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string data = 5;</code>
+       *
+       * <pre>
+       ** The Element's data eg. scripts, contents of style, etc... 
+       * </pre>
+       */
+      public Builder clearData() {
+        data_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string data = 5;</code>
+       *
+       * <pre>
+       ** The Element's data eg. scripts, contents of style, etc... 
+       * </pre>
+       */
+      public Builder addDataBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureDataIsMutable();
+        data_.add(value);
+        onChanged();
+        return this;
+      }
+
+      // repeated .boa.types.Attribute attributes = 6;
+      private java.util.List<boa.types.Ast.Attribute> attributes_ =
+        java.util.Collections.emptyList();
+      private void ensureAttributesIsMutable() {
+        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+          attributes_ = new java.util.ArrayList<boa.types.Ast.Attribute>(attributes_);
+          bitField0_ |= 0x00000020;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder> attributesBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Attribute> getAttributesList() {
+        if (attributesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(attributes_);
+        } else {
+          return attributesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public int getAttributesCount() {
+        if (attributesBuilder_ == null) {
+          return attributes_.size();
+        } else {
+          return attributesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public boa.types.Ast.Attribute getAttributes(int index) {
+        if (attributesBuilder_ == null) {
+          return attributes_.get(index);
+        } else {
+          return attributesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public Builder setAttributes(
+          int index, boa.types.Ast.Attribute value) {
+        if (attributesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureAttributesIsMutable();
+          attributes_.set(index, value);
+          onChanged();
+        } else {
+          attributesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public Builder setAttributes(
+          int index, boa.types.Ast.Attribute.Builder builderForValue) {
+        if (attributesBuilder_ == null) {
+          ensureAttributesIsMutable();
+          attributes_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          attributesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public Builder addAttributes(boa.types.Ast.Attribute value) {
+        if (attributesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureAttributesIsMutable();
+          attributes_.add(value);
+          onChanged();
+        } else {
+          attributesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public Builder addAttributes(
+          int index, boa.types.Ast.Attribute value) {
+        if (attributesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureAttributesIsMutable();
+          attributes_.add(index, value);
+          onChanged();
+        } else {
+          attributesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public Builder addAttributes(
+          boa.types.Ast.Attribute.Builder builderForValue) {
+        if (attributesBuilder_ == null) {
+          ensureAttributesIsMutable();
+          attributes_.add(builderForValue.build());
+          onChanged();
+        } else {
+          attributesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public Builder addAttributes(
+          int index, boa.types.Ast.Attribute.Builder builderForValue) {
+        if (attributesBuilder_ == null) {
+          ensureAttributesIsMutable();
+          attributes_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          attributesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public Builder addAllAttributes(
+          java.lang.Iterable<? extends boa.types.Ast.Attribute> values) {
+        if (attributesBuilder_ == null) {
+          ensureAttributesIsMutable();
+          super.addAll(values, attributes_);
+          onChanged();
+        } else {
+          attributesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public Builder clearAttributes() {
+        if (attributesBuilder_ == null) {
+          attributes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000020);
+          onChanged();
+        } else {
+          attributesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public Builder removeAttributes(int index) {
+        if (attributesBuilder_ == null) {
+          ensureAttributesIsMutable();
+          attributes_.remove(index);
+          onChanged();
+        } else {
+          attributesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public boa.types.Ast.Attribute.Builder getAttributesBuilder(
+          int index) {
+        return getAttributesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public boa.types.Ast.AttributeOrBuilder getAttributesOrBuilder(
+          int index) {
+        if (attributesBuilder_ == null) {
+          return attributes_.get(index);  } else {
+          return attributesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+           getAttributesOrBuilderList() {
+        if (attributesBuilder_ != null) {
+          return attributesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(attributes_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public boa.types.Ast.Attribute.Builder addAttributesBuilder() {
+        return getAttributesFieldBuilder().addBuilder(
+            boa.types.Ast.Attribute.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public boa.types.Ast.Attribute.Builder addAttributesBuilder(
+          int index) {
+        return getAttributesFieldBuilder().addBuilder(
+            index, boa.types.Ast.Attribute.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
+       *
+       * <pre>
+       ** The Element's attributes 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Attribute.Builder> 
+           getAttributesBuilderList() {
+        return getAttributesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder> 
+          getAttributesFieldBuilder() {
+        if (attributesBuilder_ == null) {
+          attributesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder>(
+                  attributes_,
+                  ((bitField0_ & 0x00000020) == 0x00000020),
+                  getParentForChildren(),
+                  isClean());
+          attributes_ = null;
+        }
+        return attributesBuilder_;
+      }
+
+      // optional .boa.types.Namespace script = 7;
+      private boa.types.Ast.Namespace script_ = boa.types.Ast.Namespace.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder> scriptBuilder_;
+      /**
+       * <code>optional .boa.types.Namespace script = 7;</code>
+       */
+      public boolean hasScript() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional .boa.types.Namespace script = 7;</code>
+       */
+      public boa.types.Ast.Namespace getScript() {
+        if (scriptBuilder_ == null) {
+          return script_;
+        } else {
+          return scriptBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Namespace script = 7;</code>
+       */
+      public Builder setScript(boa.types.Ast.Namespace value) {
+        if (scriptBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          script_ = value;
+          onChanged();
+        } else {
+          scriptBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Namespace script = 7;</code>
+       */
+      public Builder setScript(
+          boa.types.Ast.Namespace.Builder builderForValue) {
+        if (scriptBuilder_ == null) {
+          script_ = builderForValue.build();
+          onChanged();
+        } else {
+          scriptBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Namespace script = 7;</code>
+       */
+      public Builder mergeScript(boa.types.Ast.Namespace value) {
+        if (scriptBuilder_ == null) {
+          if (((bitField0_ & 0x00000040) == 0x00000040) &&
+              script_ != boa.types.Ast.Namespace.getDefaultInstance()) {
+            script_ =
+              boa.types.Ast.Namespace.newBuilder(script_).mergeFrom(value).buildPartial();
+          } else {
+            script_ = value;
+          }
+          onChanged();
+        } else {
+          scriptBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Namespace script = 7;</code>
+       */
+      public Builder clearScript() {
+        if (scriptBuilder_ == null) {
+          script_ = boa.types.Ast.Namespace.getDefaultInstance();
+          onChanged();
+        } else {
+          scriptBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000040);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Namespace script = 7;</code>
+       */
+      public boa.types.Ast.Namespace.Builder getScriptBuilder() {
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return getScriptFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Namespace script = 7;</code>
+       */
+      public boa.types.Ast.NamespaceOrBuilder getScriptOrBuilder() {
+        if (scriptBuilder_ != null) {
+          return scriptBuilder_.getMessageOrBuilder();
+        } else {
+          return script_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Namespace script = 7;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder> 
+          getScriptFieldBuilder() {
+        if (scriptBuilder_ == null) {
+          scriptBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder>(
+                  script_,
+                  getParentForChildren(),
+                  isClean());
+          script_ = null;
+        }
+        return scriptBuilder_;
+      }
+
+      // optional .boa.types.Namespace php = 8;
+      private boa.types.Ast.Namespace php_ = boa.types.Ast.Namespace.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder> phpBuilder_;
+      /**
+       * <code>optional .boa.types.Namespace php = 8;</code>
+       */
+      public boolean hasPhp() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional .boa.types.Namespace php = 8;</code>
+       */
+      public boa.types.Ast.Namespace getPhp() {
+        if (phpBuilder_ == null) {
+          return php_;
+        } else {
+          return phpBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Namespace php = 8;</code>
+       */
+      public Builder setPhp(boa.types.Ast.Namespace value) {
+        if (phpBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          php_ = value;
+          onChanged();
+        } else {
+          phpBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000080;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Namespace php = 8;</code>
+       */
+      public Builder setPhp(
+          boa.types.Ast.Namespace.Builder builderForValue) {
+        if (phpBuilder_ == null) {
+          php_ = builderForValue.build();
+          onChanged();
+        } else {
+          phpBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000080;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Namespace php = 8;</code>
+       */
+      public Builder mergePhp(boa.types.Ast.Namespace value) {
+        if (phpBuilder_ == null) {
+          if (((bitField0_ & 0x00000080) == 0x00000080) &&
+              php_ != boa.types.Ast.Namespace.getDefaultInstance()) {
+            php_ =
+              boa.types.Ast.Namespace.newBuilder(php_).mergeFrom(value).buildPartial();
+          } else {
+            php_ = value;
+          }
+          onChanged();
+        } else {
+          phpBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000080;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Namespace php = 8;</code>
+       */
+      public Builder clearPhp() {
+        if (phpBuilder_ == null) {
+          php_ = boa.types.Ast.Namespace.getDefaultInstance();
+          onChanged();
+        } else {
+          phpBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000080);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Namespace php = 8;</code>
+       */
+      public boa.types.Ast.Namespace.Builder getPhpBuilder() {
+        bitField0_ |= 0x00000080;
+        onChanged();
+        return getPhpFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Namespace php = 8;</code>
+       */
+      public boa.types.Ast.NamespaceOrBuilder getPhpOrBuilder() {
+        if (phpBuilder_ != null) {
+          return phpBuilder_.getMessageOrBuilder();
+        } else {
+          return php_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Namespace php = 8;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder> 
+          getPhpFieldBuilder() {
+        if (phpBuilder_ == null) {
+          phpBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder>(
+                  php_,
+                  getParentForChildren(),
+                  isClean());
+          php_ = null;
+        }
+        return phpBuilder_;
+      }
+
+      // repeated .boa.types.Variable var_decl = 9;
+      private java.util.List<boa.types.Ast.Variable> varDecl_ =
+        java.util.Collections.emptyList();
+      private void ensureVarDeclIsMutable() {
+        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
+          varDecl_ = new java.util.ArrayList<boa.types.Ast.Variable>(varDecl_);
+          bitField0_ |= 0x00000100;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Variable, boa.types.Ast.Variable.Builder, boa.types.Ast.VariableOrBuilder> varDeclBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public java.util.List<boa.types.Ast.Variable> getVarDeclList() {
+        if (varDeclBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(varDecl_);
+        } else {
+          return varDeclBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public int getVarDeclCount() {
+        if (varDeclBuilder_ == null) {
+          return varDecl_.size();
+        } else {
+          return varDeclBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public boa.types.Ast.Variable getVarDecl(int index) {
+        if (varDeclBuilder_ == null) {
+          return varDecl_.get(index);
+        } else {
+          return varDeclBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public Builder setVarDecl(
+          int index, boa.types.Ast.Variable value) {
+        if (varDeclBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureVarDeclIsMutable();
+          varDecl_.set(index, value);
+          onChanged();
+        } else {
+          varDeclBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public Builder setVarDecl(
+          int index, boa.types.Ast.Variable.Builder builderForValue) {
+        if (varDeclBuilder_ == null) {
+          ensureVarDeclIsMutable();
+          varDecl_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          varDeclBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public Builder addVarDecl(boa.types.Ast.Variable value) {
+        if (varDeclBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureVarDeclIsMutable();
+          varDecl_.add(value);
+          onChanged();
+        } else {
+          varDeclBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public Builder addVarDecl(
+          int index, boa.types.Ast.Variable value) {
+        if (varDeclBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureVarDeclIsMutable();
+          varDecl_.add(index, value);
+          onChanged();
+        } else {
+          varDeclBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public Builder addVarDecl(
+          boa.types.Ast.Variable.Builder builderForValue) {
+        if (varDeclBuilder_ == null) {
+          ensureVarDeclIsMutable();
+          varDecl_.add(builderForValue.build());
+          onChanged();
+        } else {
+          varDeclBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public Builder addVarDecl(
+          int index, boa.types.Ast.Variable.Builder builderForValue) {
+        if (varDeclBuilder_ == null) {
+          ensureVarDeclIsMutable();
+          varDecl_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          varDeclBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public Builder addAllVarDecl(
+          java.lang.Iterable<? extends boa.types.Ast.Variable> values) {
+        if (varDeclBuilder_ == null) {
+          ensureVarDeclIsMutable();
+          super.addAll(values, varDecl_);
+          onChanged();
+        } else {
+          varDeclBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public Builder clearVarDecl() {
+        if (varDeclBuilder_ == null) {
+          varDecl_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000100);
+          onChanged();
+        } else {
+          varDeclBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public Builder removeVarDecl(int index) {
+        if (varDeclBuilder_ == null) {
+          ensureVarDeclIsMutable();
+          varDecl_.remove(index);
+          onChanged();
+        } else {
+          varDeclBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public boa.types.Ast.Variable.Builder getVarDeclBuilder(
+          int index) {
+        return getVarDeclFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public boa.types.Ast.VariableOrBuilder getVarDeclOrBuilder(
+          int index) {
+        if (varDeclBuilder_ == null) {
+          return varDecl_.get(index);  } else {
+          return varDeclBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
+           getVarDeclOrBuilderList() {
+        if (varDeclBuilder_ != null) {
+          return varDeclBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(varDecl_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public boa.types.Ast.Variable.Builder addVarDeclBuilder() {
+        return getVarDeclFieldBuilder().addBuilder(
+            boa.types.Ast.Variable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public boa.types.Ast.Variable.Builder addVarDeclBuilder(
+          int index) {
+        return getVarDeclFieldBuilder().addBuilder(
+            index, boa.types.Ast.Variable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Variable var_decl = 9;</code>
+       */
+      public java.util.List<boa.types.Ast.Variable.Builder> 
+           getVarDeclBuilderList() {
+        return getVarDeclFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Variable, boa.types.Ast.Variable.Builder, boa.types.Ast.VariableOrBuilder> 
+          getVarDeclFieldBuilder() {
+        if (varDeclBuilder_ == null) {
+          varDeclBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Variable, boa.types.Ast.Variable.Builder, boa.types.Ast.VariableOrBuilder>(
+                  varDecl_,
+                  ((bitField0_ & 0x00000100) == 0x00000100),
+                  getParentForChildren(),
+                  isClean());
+          varDecl_ = null;
+        }
+        return varDeclBuilder_;
+      }
+
+      // optional string title = 10;
+      private java.lang.Object title_ = "";
+      /**
+       * <code>optional string title = 10;</code>
+       *
+       * <pre>
+       ** The Element's title 
+       * </pre>
+       */
+      public boolean hasTitle() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional string title = 10;</code>
+       *
+       * <pre>
+       ** The Element's title 
+       * </pre>
+       */
+      public java.lang.String getTitle() {
+        java.lang.Object ref = title_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          title_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string title = 10;</code>
+       *
+       * <pre>
+       ** The Element's title 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getTitleBytes() {
+        java.lang.Object ref = title_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          title_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string title = 10;</code>
+       *
+       * <pre>
+       ** The Element's title 
+       * </pre>
+       */
+      public Builder setTitle(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        title_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string title = 10;</code>
+       *
+       * <pre>
+       ** The Element's title 
+       * </pre>
+       */
+      public Builder clearTitle() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        title_ = getDefaultInstance().getTitle();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string title = 10;</code>
+       *
+       * <pre>
+       ** The Element's title 
+       * </pre>
+       */
+      public Builder setTitleBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        title_ = value;
+        onChanged();
+        return this;
+      }
+
+      // repeated .boa.types.Attribute processing_instruction = 11;
+      private java.util.List<boa.types.Ast.Attribute> processingInstruction_ =
+        java.util.Collections.emptyList();
+      private void ensureProcessingInstructionIsMutable() {
+        if (!((bitField0_ & 0x00000400) == 0x00000400)) {
+          processingInstruction_ = new java.util.ArrayList<boa.types.Ast.Attribute>(processingInstruction_);
+          bitField0_ |= 0x00000400;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder> processingInstructionBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public java.util.List<boa.types.Ast.Attribute> getProcessingInstructionList() {
+        if (processingInstructionBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(processingInstruction_);
+        } else {
+          return processingInstructionBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public int getProcessingInstructionCount() {
+        if (processingInstructionBuilder_ == null) {
+          return processingInstruction_.size();
+        } else {
+          return processingInstructionBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.Attribute getProcessingInstruction(int index) {
+        if (processingInstructionBuilder_ == null) {
+          return processingInstruction_.get(index);
+        } else {
+          return processingInstructionBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder setProcessingInstruction(
+          int index, boa.types.Ast.Attribute value) {
+        if (processingInstructionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.set(index, value);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder setProcessingInstruction(
+          int index, boa.types.Ast.Attribute.Builder builderForValue) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          processingInstructionBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addProcessingInstruction(boa.types.Ast.Attribute value) {
+        if (processingInstructionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.add(value);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addProcessingInstruction(
+          int index, boa.types.Ast.Attribute value) {
+        if (processingInstructionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.add(index, value);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addProcessingInstruction(
+          boa.types.Ast.Attribute.Builder builderForValue) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.add(builderForValue.build());
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addProcessingInstruction(
+          int index, boa.types.Ast.Attribute.Builder builderForValue) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addAllProcessingInstruction(
+          java.lang.Iterable<? extends boa.types.Ast.Attribute> values) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          super.addAll(values, processingInstruction_);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder clearProcessingInstruction() {
+        if (processingInstructionBuilder_ == null) {
+          processingInstruction_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000400);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder removeProcessingInstruction(int index) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.remove(index);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.Attribute.Builder getProcessingInstructionBuilder(
+          int index) {
+        return getProcessingInstructionFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.AttributeOrBuilder getProcessingInstructionOrBuilder(
+          int index) {
+        if (processingInstructionBuilder_ == null) {
+          return processingInstruction_.get(index);  } else {
+          return processingInstructionBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+           getProcessingInstructionOrBuilderList() {
+        if (processingInstructionBuilder_ != null) {
+          return processingInstructionBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(processingInstruction_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.Attribute.Builder addProcessingInstructionBuilder() {
+        return getProcessingInstructionFieldBuilder().addBuilder(
+            boa.types.Ast.Attribute.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.Attribute.Builder addProcessingInstructionBuilder(
+          int index) {
+        return getProcessingInstructionFieldBuilder().addBuilder(
+            index, boa.types.Ast.Attribute.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public java.util.List<boa.types.Ast.Attribute.Builder> 
+           getProcessingInstructionBuilderList() {
+        return getProcessingInstructionFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder> 
+          getProcessingInstructionFieldBuilder() {
+        if (processingInstructionBuilder_ == null) {
+          processingInstructionBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder>(
+                  processingInstruction_,
+                  ((bitField0_ & 0x00000400) == 0x00000400),
+                  getParentForChildren(),
+                  isClean());
+          processingInstruction_ = null;
+        }
+        return processingInstructionBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.Element)
+    }
+
+    static {
+      defaultInstance = new Element(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.Element)
+  }
+
+  public interface AttributeOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required string key = 1;
+    /**
+     * <code>required string key = 1;</code>
+     */
+    boolean hasKey();
+    /**
+     * <code>required string key = 1;</code>
+     */
+    java.lang.String getKey();
+    /**
+     * <code>required string key = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getKeyBytes();
+
+    // required string value = 2;
+    /**
+     * <code>required string value = 2;</code>
+     */
+    boolean hasValue();
+    /**
+     * <code>required string value = 2;</code>
+     */
+    java.lang.String getValue();
+    /**
+     * <code>required string value = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getValueBytes();
+  }
+  /**
+   * Protobuf type {@code boa.types.Attribute}
+   *
+   * <pre>
+   ** Key Value pairs eg. key = "onclick" value = "myFunction()", key = "type" value = "button" 
+   * </pre>
+   */
+  public static final class Attribute extends
+      com.google.protobuf.GeneratedMessage
+      implements AttributeOrBuilder {
+    // Use Attribute.newBuilder() to construct.
+    private Attribute(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private Attribute(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final Attribute defaultInstance;
+    public static Attribute getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public Attribute getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Attribute(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              key_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              value_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Ast.internal_static_boa_types_Attribute_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Ast.internal_static_boa_types_Attribute_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Ast.Attribute.class, boa.types.Ast.Attribute.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<Attribute> PARSER =
+        new com.google.protobuf.AbstractParser<Attribute>() {
+      public Attribute parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Attribute(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Attribute> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // required string key = 1;
+    public static final int KEY_FIELD_NUMBER = 1;
+    private java.lang.Object key_;
+    /**
+     * <code>required string key = 1;</code>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required string key = 1;</code>
+     */
+    public java.lang.String getKey() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          key_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string key = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // required string value = 2;
+    public static final int VALUE_FIELD_NUMBER = 2;
+    private java.lang.Object value_;
+    /**
+     * <code>required string value = 2;</code>
+     */
+    public boolean hasValue() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required string value = 2;</code>
+     */
+    public java.lang.String getValue() {
+      java.lang.Object ref = value_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          value_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string value = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getValueBytes() {
+      java.lang.Object ref = value_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        value_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private void initFields() {
+      key_ = "";
+      value_ = "";
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasKey()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasValue()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getKeyBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getValueBytes());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getKeyBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getValueBytes());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Ast.Attribute parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Ast.Attribute parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Ast.Attribute parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Ast.Attribute parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Ast.Attribute parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Ast.Attribute parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Ast.Attribute parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Ast.Attribute parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Ast.Attribute parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Ast.Attribute parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Ast.Attribute prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.Attribute}
+     *
+     * <pre>
+     ** Key Value pairs eg. key = "onclick" value = "myFunction()", key = "type" value = "button" 
+     * </pre>
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Ast.AttributeOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Ast.internal_static_boa_types_Attribute_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Ast.internal_static_boa_types_Attribute_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Ast.Attribute.class, boa.types.Ast.Attribute.Builder.class);
+      }
+
+      // Construct using boa.types.Ast.Attribute.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        key_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        value_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Ast.internal_static_boa_types_Attribute_descriptor;
+      }
+
+      public boa.types.Ast.Attribute getDefaultInstanceForType() {
+        return boa.types.Ast.Attribute.getDefaultInstance();
+      }
+
+      public boa.types.Ast.Attribute build() {
+        boa.types.Ast.Attribute result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Ast.Attribute buildPartial() {
+        boa.types.Ast.Attribute result = new boa.types.Ast.Attribute(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.key_ = key_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.value_ = value_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Ast.Attribute) {
+          return mergeFrom((boa.types.Ast.Attribute)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Ast.Attribute other) {
+        if (other == boa.types.Ast.Attribute.getDefaultInstance()) return this;
+        if (other.hasKey()) {
+          bitField0_ |= 0x00000001;
+          key_ = other.key_;
+          onChanged();
+        }
+        if (other.hasValue()) {
+          bitField0_ |= 0x00000002;
+          value_ = other.value_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasKey()) {
+          
+          return false;
+        }
+        if (!hasValue()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Ast.Attribute parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Ast.Attribute) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required string key = 1;
+      private java.lang.Object key_ = "";
+      /**
+       * <code>required string key = 1;</code>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string key = 1;</code>
+       */
+      public java.lang.String getKey() {
+        java.lang.Object ref = key_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          key_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string key = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getKeyBytes() {
+        java.lang.Object ref = key_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          key_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string key = 1;</code>
+       */
+      public Builder setKey(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string key = 1;</code>
+       */
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        key_ = getDefaultInstance().getKey();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string key = 1;</code>
+       */
+      public Builder setKeyBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+
+      // required string value = 2;
+      private java.lang.Object value_ = "";
+      /**
+       * <code>required string value = 2;</code>
+       */
+      public boolean hasValue() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required string value = 2;</code>
+       */
+      public java.lang.String getValue() {
+        java.lang.Object ref = value_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          value_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string value = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getValueBytes() {
+        java.lang.Object ref = value_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          value_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string value = 2;</code>
+       */
+      public Builder setValue(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        value_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string value = 2;</code>
+       */
+      public Builder clearValue() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        value_ = getDefaultInstance().getValue();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string value = 2;</code>
+       */
+      public Builder setValueBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        value_ = value;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.Attribute)
+    }
+
+    static {
+      defaultInstance = new Attribute(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.Attribute)
+  }
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_boa_types_CommentsRoot_descriptor;
   private static
@@ -29616,6 +42762,21 @@ public final class Ast {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_boa_types_PositionInfo_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_Document_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_Document_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_Element_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_Element_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_Attribute_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_Attribute_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -29625,140 +42786,193 @@ public final class Ast {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\tast.proto\022\tboa.types\032\014shared.proto\"4\n\014" +
-      "CommentsRoot\022$\n\010comments\030\001 \003(\0132\022.boa.typ" +
-      "es.Comment\"\274\001\n\007ASTRoot\022(\n\nnamespaces\030\001 \003" +
-      "(\0132\024.boa.types.Namespace\022\017\n\007imports\030\002 \003(" +
-      "\t\022\r\n\005names\030\003 \003(\t\0225\n\026structural_change_ki" +
-      "nd\030\004 \001(\0162\025.boa.types.ChangeKind\0220\n\021label" +
-      "_change_kind\030\005 \001(\0162\025.boa.types.ChangeKin" +
-      "d\"\322\002\n\tNamespace\022\014\n\004name\030\001 \002(\t\022&\n\tmodifie" +
-      "rs\030\002 \003(\0132\023.boa.types.Modifier\022,\n\014declara" +
-      "tions\030\003 \003(\0132\026.boa.types.Declaration\022(\n\ns",
-      "tatements\030\004 \003(\0132\024.boa.types.Statement\022\"\n" +
-      "\007methods\030\005 \003(\0132\021.boa.types.Method\022*\n\013exp" +
-      "ressions\030\006 \003(\0132\025.boa.types.Expression\0225\n" +
-      "\026structural_change_kind\030\007 \001(\0162\025.boa.type" +
-      "s.ChangeKind\0220\n\021label_change_kind\030\010 \001(\0162" +
-      "\025.boa.types.ChangeKind\"\302\003\n\013Declaration\022\014" +
-      "\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.types.T" +
-      "ypeKind\022&\n\tmodifiers\030\003 \003(\0132\023.boa.types.M" +
-      "odifier\022+\n\022generic_parameters\030\004 \003(\0132\017.bo" +
-      "a.types.Type\022 \n\007parents\030\005 \003(\0132\017.boa.type",
-      "s.Type\022\"\n\007methods\030\006 \003(\0132\021.boa.types.Meth" +
-      "od\022#\n\006fields\030\007 \003(\0132\023.boa.types.Variable\022" +
-      "3\n\023nested_declarations\030\010 \003(\0132\026.boa.types" +
-      ".Declaration\022$\n\010comments\030\t \003(\0132\022.boa.typ" +
-      "es.Comment\0225\n\026structural_change_kind\030\n \001" +
-      "(\0162\025.boa.types.ChangeKind\0220\n\021label_chang" +
-      "e_kind\030\013 \001(\0162\025.boa.types.ChangeKind\"\254\001\n\004" +
-      "Type\022\014\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.t" +
-      "ypes.TypeKind\022\n\n\002id\030\004 \001(\t\0225\n\026structural_" +
-      "change_kind\030\005 \001(\0162\025.boa.types.ChangeKind",
-      "\0220\n\021label_change_kind\030\006 \001(\0162\025.boa.types." +
-      "ChangeKind\"\234\003\n\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tm" +
-      "odifiers\030\002 \003(\0132\023.boa.types.Modifier\022$\n\013r" +
-      "eturn_type\030\003 \002(\0132\017.boa.types.Type\022+\n\022gen" +
-      "eric_parameters\030\004 \003(\0132\017.boa.types.Type\022&" +
-      "\n\targuments\030\005 \003(\0132\023.boa.types.Variable\022(" +
-      "\n\017exception_types\030\006 \003(\0132\017.boa.types.Type" +
-      "\022(\n\nstatements\030\007 \003(\0132\024.boa.types.Stateme" +
-      "nt\022$\n\010comments\030\010 \003(\0132\022.boa.types.Comment" +
-      "\0225\n\026structural_change_kind\030\t \001(\0162\025.boa.t",
-      "ypes.ChangeKind\0220\n\021label_change_kind\030\n \001" +
-      "(\0162\025.boa.types.ChangeKind\"\243\002\n\010Variable\022\014" +
-      "\n\004name\030\001 \002(\t\022&\n\rvariable_type\030\002 \002(\0132\017.bo" +
-      "a.types.Type\022&\n\tmodifiers\030\003 \003(\0132\023.boa.ty" +
-      "pes.Modifier\022*\n\013initializer\030\004 \001(\0132\025.boa." +
-      "types.Expression\022$\n\010comments\030\005 \003(\0132\022.boa" +
-      ".types.Comment\0225\n\026structural_change_kind" +
-      "\030\006 \001(\0162\025.boa.types.ChangeKind\0220\n\021label_c" +
-      "hange_kind\030\007 \001(\0162\025.boa.types.ChangeKind\"" +
-      "\230\006\n\tStatement\0220\n\004kind\030\001 \002(\0162\".boa.types.",
-      "Statement.StatementKind\022$\n\010comments\030\002 \003(" +
-      "\0132\022.boa.types.Comment\022(\n\nstatements\030\003 \003(" +
-      "\0132\024.boa.types.Statement\022.\n\017initializatio" +
-      "ns\030\004 \003(\0132\025.boa.types.Expression\022(\n\tcondi" +
-      "tion\030\005 \001(\0132\025.boa.types.Expression\022&\n\007upd" +
-      "ates\030\006 \003(\0132\025.boa.types.Expression\0221\n\024var" +
-      "iable_declaration\030\007 \001(\0132\023.boa.types.Vari" +
-      "able\0220\n\020type_declaration\030\010 \001(\0132\026.boa.typ" +
-      "es.Declaration\022)\n\nexpression\030\t \001(\0132\025.boa" +
-      ".types.Expression\0225\n\026structural_change_k",
-      "ind\030\n \001(\0162\025.boa.types.ChangeKind\0220\n\021labe" +
-      "l_change_kind\030\013 \001(\0162\025.boa.types.ChangeKi" +
-      "nd\"\215\002\n\rStatementKind\022\t\n\005OTHER\020\000\022\t\n\005BLOCK" +
-      "\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRESSION\020\003\022\010\n\004EXPR" +
-      "\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SYNC\020\004\022\n\n\006RETURN" +
-      "\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010\022\006\n\002IF\020\t\022\n" +
-      "\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020\014\022\t\n\005L" +
-      "ABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TRY\020\020\022\t\n" +
-      "\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\032\002\020\001\"\354\n\n\nE" +
-      "xpression\0222\n\004kind\030\001 \002(\0162$.boa.types.Expr",
-      "ession.ExpressionKind\022*\n\013expressions\030\002 \003" +
-      "(\0132\025.boa.types.Expression\022+\n\016variable_de" +
-      "cls\030\003 \003(\0132\023.boa.types.Variable\022!\n\010new_ty" +
-      "pe\030\004 \001(\0132\017.boa.types.Type\022+\n\022generic_par" +
-      "ameters\030\005 \003(\0132\017.boa.types.Type\022\022\n\nis_pos" +
-      "tfix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010variable\030" +
-      "\010 \001(\t\022\016\n\006method\030\t \001(\t\022*\n\013method_args\030\n \003" +
-      "(\0132\025.boa.types.Expression\0220\n\020anon_declar" +
-      "ation\030\013 \001(\0132\026.boa.types.Declaration\022\'\n\na" +
-      "nnotation\030\014 \001(\0132\023.boa.types.Modifier\022!\n\006",
-      "lambda\030\r \001(\0132\021.boa.types.Method\022\021\n\tno_pa" +
-      "rens\030\016 \001(\010\0225\n\026structural_change_kind\030\017 \001" +
-      "(\0162\025.boa.types.ChangeKind\0220\n\021label_chang" +
-      "e_kind\030\020 \001(\0162\025.boa.types.ChangeKind\"\223\006\n\016" +
-      "ExpressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r" +
-      "\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCALL" +
-      "\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tARRAYINI" +
-      "T\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRA" +
-      "Y\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r" +
-      "\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006",
-      "OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023" +
-      "\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n" +
-      "\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013L" +
-      "OGICAL_NOT\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLOGICAL" +
-      "_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010" +
-      "\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014N" +
-      "ULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020" +
-      "%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nAS" +
-      "SIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)\022\021\n\rASSIGN_BIT" +
-      "XOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIGN_BITOR",
-      "\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020." +
-      "\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nANNOTATIO" +
-      "N\0200\022\t\n\005PAREN\0201\022\024\n\020METHOD_REFERENCE\0202\022\n\n\006" +
-      "LAMBDA\0203\022\017\n\013ANON_METHOD\0204\"\260\004\n\010Modifier\022." +
-      "\n\004kind\030\001 \002(\0162 .boa.types.Modifier.Modifi" +
-      "erKind\0222\n\nvisibility\030\002 \001(\0162\036.boa.types.M" +
-      "odifier.Visibility\022\027\n\017annotation_name\030\003 " +
-      "\001(\t\022\032\n\022annotation_members\030\004 \003(\t\0220\n\021annot" +
-      "ation_values\030\005 \003(\0132\025.boa.types.Expressio" +
-      "n\022\r\n\005other\030\006 \001(\t\0225\n\026structural_change_ki",
-      "nd\030\007 \001(\0162\025.boa.types.ChangeKind\0220\n\021label" +
-      "_change_kind\030\010 \001(\0162\025.boa.types.ChangeKin" +
-      "d\"~\n\014ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILI" +
-      "TY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATI" +
-      "C\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTR" +
-      "ACT\020\006\032\002\020\001\"a\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007P" +
-      "RIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013" +
-      "\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020\004\032\002\020\001\"\306\002\n\007Comment" +
-      "\022,\n\004kind\030\001 \002(\0162\036.boa.types.Comment.Comme" +
-      "ntKind\022\r\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132",
-      "\027.boa.types.PositionInfo\0225\n\026structural_c" +
-      "hange_kind\030\004 \001(\0162\025.boa.types.ChangeKind\022" +
-      "0\n\021label_change_kind\030\005 \001(\0162\025.boa.types.C" +
-      "hangeKind\"j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010\n\004L" +
-      "INE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATI" +
-      "ON\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n" +
-      "\014PositionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006leng" +
-      "th\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart_co" +
-      "l\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002" +
-      "(\005*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n",
-      "\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n" +
-      "\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\n" +
-      "ANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032" +
-      "\002\020\001B\002H\001"
+      "\n\tast.proto\022\tboa.types\"4\n\014CommentsRoot\022$" +
+      "\n\010comments\030\001 \003(\0132\022.boa.types.Comment\"v\n\007" +
+      "ASTRoot\022(\n\nnamespaces\030\001 \003(\0132\024.boa.types." +
+      "Namespace\022\r\n\005names\030\003 \003(\t\022\013\n\003key\030\004 \001(\005\022%\n" +
+      "\010document\030\005 \001(\0132\023.boa.types.Document\"\331\002\n" +
+      "\tNamespace\022\014\n\004name\030\001 \002(\t\022&\n\tmodifiers\030\002 " +
+      "\003(\0132\023.boa.types.Modifier\022,\n\014declarations" +
+      "\030\003 \003(\0132\026.boa.types.Declaration\022(\n\nstatem" +
+      "ents\030\004 \003(\0132\024.boa.types.Statement\022\"\n\007meth" +
+      "ods\030\005 \003(\0132\021.boa.types.Method\022*\n\013expressi",
+      "ons\030\006 \003(\0132\025.boa.types.Expression\022\013\n\003key\030" +
+      "\n \001(\005\022(\n\nnamespaces\030\013 \003(\0132\024.boa.types.Na" +
+      "mespace\022\017\n\007imports\030\014 \003(\t\022&\n\tvariables\030\r " +
+      "\003(\0132\023.boa.types.Variable\"\306\003\n\013Declaration" +
+      "\022\014\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.types" +
+      ".TypeKind\022&\n\tmodifiers\030\003 \003(\0132\023.boa.types" +
+      ".Modifier\022+\n\022generic_parameters\030\004 \003(\0132\017." +
+      "boa.types.Type\022 \n\007parents\030\005 \003(\0132\017.boa.ty" +
+      "pes.Type\022\"\n\007methods\030\006 \003(\0132\021.boa.types.Me" +
+      "thod\022#\n\006fields\030\007 \003(\0132\023.boa.types.Variabl",
+      "e\0223\n\023nested_declarations\030\010 \003(\0132\026.boa.typ" +
+      "es.Declaration\022$\n\010comments\030\t \003(\0132\022.boa.t" +
+      "ypes.Comment\022\013\n\003key\030\r \001(\005\022\034\n\024fully_quali" +
+      "fied_name\030\016 \001(\t\022\026\n\016declaring_type\030\017 \001(\005\022" +
+      "(\n\nstatements\030\020 \003(\0132\024.boa.types.Statemen" +
+      "t\"\313\001\n\004Type\022\014\n\004name\030\001 \001(\t\022\034\n\024fully_qualif" +
+      "ied_name\030\002 \001(\t\022!\n\004kind\030\003 \002(\0162\023.boa.types" +
+      ".TypeKind\022\n\n\002id\030\004 \001(\t\022\030\n\020declaration_fil" +
+      "e\030\010 \001(\005\022\023\n\013declaration\030\t \001(\005\022\013\n\003key\030\n \001(" +
+      "\005\022,\n\rcomputed_name\030\016 \001(\0132\025.boa.types.Exp",
+      "ression\"\206\003\n\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tmodi" +
+      "fiers\030\002 \003(\0132\023.boa.types.Modifier\022$\n\013retu" +
+      "rn_type\030\003 \001(\0132\017.boa.types.Type\022+\n\022generi" +
+      "c_parameters\030\004 \003(\0132\017.boa.types.Type\022&\n\ta" +
+      "rguments\030\005 \003(\0132\023.boa.types.Variable\022(\n\017e" +
+      "xception_types\030\006 \003(\0132\017.boa.types.Type\022(\n" +
+      "\nstatements\030\007 \003(\0132\024.boa.types.Statement\022" +
+      "$\n\010comments\030\010 \003(\0132\022.boa.types.Comment\022\013\n" +
+      "\003key\030\014 \001(\005\022\026\n\016declaring_type\030\r \001(\005\022,\n\rco" +
+      "mputed_name\030\016 \001(\0132\025.boa.types.Expression",
+      "\"\316\002\n\010Variable\022\014\n\004name\030\001 \001(\t\022&\n\rvariable_" +
+      "type\030\002 \001(\0132\017.boa.types.Type\022&\n\tmodifiers" +
+      "\030\003 \003(\0132\023.boa.types.Modifier\022*\n\013initializ" +
+      "er\030\004 \001(\0132\025.boa.types.Expression\022$\n\010comme" +
+      "nts\030\005 \003(\0132\022.boa.types.Comment\022\013\n\003key\030\t \001" +
+      "(\005\022\026\n\016declaring_type\030\n \001(\005\022,\n\rcomputed_n" +
+      "ame\030\013 \001(\0132\025.boa.types.Expression\022\023\n\013doll" +
+      "ar_sign\030\014 \001(\010\022*\n\013expressions\030\r \003(\0132\025.boa" +
+      ".types.Expression\"\344\010\n\tStatement\0220\n\004kind\030" +
+      "\001 \002(\0162\".boa.types.Statement.StatementKin",
+      "d\022$\n\010comments\030\002 \003(\0132\022.boa.types.Comment\022" +
+      "(\n\nstatements\030\003 \003(\0132\024.boa.types.Statemen" +
+      "t\022.\n\017initializations\030\004 \003(\0132\025.boa.types.E" +
+      "xpression\022)\n\nconditions\030\005 \003(\0132\025.boa.type" +
+      "s.Expression\022&\n\007updates\030\006 \003(\0132\025.boa.type" +
+      "s.Expression\0221\n\024variable_declaration\030\007 \001" +
+      "(\0132\023.boa.types.Variable\0220\n\020type_declarat" +
+      "ion\030\010 \001(\0132\026.boa.types.Declaration\022*\n\013exp" +
+      "ressions\030\t \003(\0132\025.boa.types.Expression\022\013\n" +
+      "\003key\030\014 \001(\005\022\"\n\007methods\030\r \003(\0132\021.boa.types.",
+      "Method\0222\n\025variable_declarations\030\016 \003(\0132\023." +
+      "boa.types.Variable\0221\n\021type_declarations\030" +
+      "\017 \003(\0132\026.boa.types.Declaration\022\r\n\005names\030\020" +
+      " \003(\t\"\231\004\n\rStatementKind\022\t\n\005OTHER\020\000\022\t\n\005BLO" +
+      "CK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRESSION\020\003\022\010\n\004EX" +
+      "PR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SYNC\020\004\022\n\n\006RETU" +
+      "RN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010\022\006\n\002IF\020\t" +
+      "\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020\014\022\t\n" +
+      "\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TRY\020\020\022" +
+      "\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\022\013\n\007FINA",
+      "LLY\020\024\022\014\n\010DEBUGGER\020\025\022\013\n\007DEFAULT\020\026\022\013\n\007FORE" +
+      "ACH\020\027\022\t\n\005FORIN\020\030\022\010\n\004WITH\020\031\022\t\n\005SCOPE\020\032\022\013\n" +
+      "\007DECLARE\020\033\022\n\n\006GLOBAL\020\034\022\010\n\004GOTO\020\035\022\017\n\013INLI" +
+      "NE_HTML\020\036\022\n\n\006STATIC\020\037\022\010\n\004ECHO\020 \022\021\n\rUSE_N" +
+      "AMESPACE\020!\022\020\n\014USE_CONSTANT\020\"\022\020\n\014USE_FUNC" +
+      "TION\020#\022\017\n\013TRAIT_ALIAS\020$\022\024\n\020TRAIT_PRECEDE" +
+      "NCE\020%\022\r\n\tTRAIT_USE\020&\032\002\020\001\"\350\022\n\nExpression\022" +
+      "2\n\004kind\030\001 \002(\0162$.boa.types.Expression.Exp" +
+      "ressionKind\022*\n\013expressions\030\002 \003(\0132\025.boa.t" +
+      "ypes.Expression\022+\n\016variable_decls\030\003 \003(\0132",
+      "\023.boa.types.Variable\022!\n\010new_type\030\004 \001(\0132\017" +
+      ".boa.types.Type\022+\n\022generic_parameters\030\005 " +
+      "\003(\0132\017.boa.types.Type\022\022\n\nis_postfix\030\006 \001(\010" +
+      "\022\017\n\007literal\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006m" +
+      "ethod\030\t \001(\t\022*\n\013method_args\030\n \003(\0132\025.boa.t" +
+      "ypes.Expression\0220\n\020anon_declaration\030\013 \001(" +
+      "\0132\026.boa.types.Declaration\022\'\n\nannotation\030" +
+      "\014 \001(\0132\023.boa.types.Modifier\022\021\n\tno_parens\030" +
+      "\016 \001(\010\022\013\n\003key\030\022 \001(\005\022\'\n\016declaring_type\030\023 \001" +
+      "(\0132\017.boa.types.Type\022$\n\013return_type\030\024 \001(\013",
+      "2\017.boa.types.Type\022\"\n\007methods\030\025 \003(\0132\021.boa" +
+      ".types.Method\022(\n\nstatements\030\026 \003(\0132\024.boa." +
+      "types.Statement\022\030\n\020is_member_access\030\027 \001(" +
+      "\010\022\023\n\013dollar_sign\030\030 \001(\010\0220\n\021computed_varia" +
+      "ble\030\031 \001(\0132\025.boa.types.Expression\022.\n\017comp" +
+      "uted_method\030\032 \001(\0132\025.boa.types.Expression" +
+      "\022\021\n\tis_static\030\033 \001(\010\022\020\n\010has_from\030\034 \001(\010\022 \n" +
+      "\005trait\030\035 \001(\0132\021.boa.types.Method\"\231\014\n\016Expr" +
+      "essionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r\n\tVA" +
+      "RACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010",
+      "\n\004CAST\020\005\022\017\n\013ARRAYACCESS\020\006\022\r\n\tARRAYINIT\020\007" +
+      "\022\020\n\014ARRAYLITERAL\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003N" +
+      "EW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB" +
+      "\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022" +
+      "\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022" +
+      "\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022" +
+      "\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n" +
+      "\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGICAL_A" +
+      "ND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n" +
+      "\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CON",
+      "DITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASSIGN\020$" +
+      "\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSI" +
+      "GN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN_MOD\020" +
+      ")\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_BITAND\020+\022" +
+      "\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\r" +
+      "ASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGNEDRSHIFT" +
+      "\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022\024\n\020METHOD_" +
+      "REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANON_METHOD\0204" +
+      "\022\t\n\005YIELD\0205\022\027\n\023ARRAY_COMPREHENSION\0206\022\t\n\005" +
+      "EMPTY\0207\022\010\n\004SHEQ\0208\022\t\n\005SHNEQ\0209\022\020\n\014XML_DOTQ",
+      "UERY\020:\022\022\n\016OBJECT_LITERAL\020;\022\016\n\nMETHODDECL" +
+      "\020<\022\010\n\004LOOP\020=\022\r\n\tGENERATOR\020>\022\017\n\013XML_LITER" +
+      "AL\020?\022\022\n\016XML_EXPRESSION\020@\022\023\n\017XML_PROPERTY" +
+      "REF\020A\022\021\n\rXML_MEMBERREF\020B\022\013\n\007XML_DOT\020C\022\016\n" +
+      "\nXML_DOTDOT\020D\022\006\n\002IN\020E\022\n\n\006TYPEOF\020F\022\021\n\rREG" +
+      "EXPLITERAL\020G\022\n\n\006DELETE\020H\022\010\n\004VOID\020I\022\023\n\017HA" +
+      "SHTABLEACCESS\020J\022\020\n\014ARRAYELEMENT\020K\022\r\n\tOP_" +
+      "CONCAT\020L\022\n\n\006OP_POW\020M\022\021\n\rASSIGN_CONCAT\020N\022" +
+      "\016\n\nASSIGN_POW\020O\022\014\n\010BACKTICK\020P\022\r\n\tIDENTIC" +
+      "AL\020Q\022\020\n\014NOTIDENTICAL\020R\022\016\n\nSTRING_AND\020S\022\r",
+      "\n\tSTRING_OR\020T\022\016\n\nSTRING_XOR\020U\022\030\n\024OP_THRE" +
+      "E_WAY_COMPARE\020V\022\r\n\tOP_UNPACK\020W\022\t\n\005QUOTE\020" +
+      "X\022\020\n\014IGNORE_ERROR\020Y\022\013\n\007REQUIRE\020Z\022\020\n\014REQU" +
+      "IRE_ONCE\020[\022\013\n\007INCLUDE\020\\\022\020\n\014INCLUDE_ONCE\020" +
+      "]\022\010\n\004LIST\020^\022\r\n\tREFERENCE\020_\022\016\n\nREFLECTION" +
+      "\020`\022\t\n\005CLONE\020a\022\017\n\013TRAIT_ALIAS\020b\022\024\n\020TRAIT_" +
+      "PRECEDENCE\020c\022\021\n\rNAMESPACENAME\020d\032\002\020\001\"\215\005\n\010" +
+      "Modifier\022.\n\004kind\030\001 \002(\0162 .boa.types.Modif" +
+      "ier.ModifierKind\0222\n\nvisibility\030\002 \001(\0162\036.b" +
+      "oa.types.Modifier.Visibility\022\027\n\017annotati",
+      "on_name\030\003 \001(\t\022\032\n\022annotation_members\030\004 \003(" +
+      "\t\0220\n\021annotation_values\030\005 \003(\0132\025.boa.types" +
+      ".Expression\022\r\n\005other\030\006 \001(\t\022\013\n\003key\030\n \001(\005\022" +
+      "(\n\005scope\030\013 \001(\0162\031.boa.types.Modifier.Scop" +
+      "e\"\346\001\n\014ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBIL" +
+      "ITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\014\n\010CONS" +
+      "TANT\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004" +
+      "SYNC\020\005\022\014\n\010ABSTRACT\020\006\022\t\n\005SCOPE\020\007\022\n\n\006GETTE" +
+      "R\020\010\022\n\n\006SETTER\020\t\022\n\n\006NATIVE\020\n\022\014\n\010STRICTFP\020" +
+      "\013\022\r\n\tTRANSIENT\020\014\022\014\n\010VOLATILE\020\r\032\002\020\001\"a\n\nVi",
+      "sibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPRO" +
+      "TECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007" +
+      "DEFAULT\020\005\032\002\020\001\"$\n\005Scope\022\007\n\003VAR\020\001\022\007\n\003LET\020\002" +
+      "\022\t\n\005CONST\020\003\"\352\001\n\007Comment\022,\n\004kind\030\001 \002(\0162\036." +
+      "boa.types.Comment.CommentKind\022\r\n\005value\030\002" +
+      " \002(\t\022)\n\010position\030\003 \002(\0132\027.boa.types.Posit" +
+      "ionInfo\022\013\n\003key\030\007 \001(\005\"j\n\013CommentKind\022\t\n\005O" +
+      "THER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\r" +
+      "DOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICATI" +
+      "ON\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos\030\001 ",
+      "\002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005\022" +
+      "\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007" +
+      "end_col\030\006 \002(\005\"\233\001\n\010Document\022\r\n\005title\030\001 \001(" +
+      "\t\022$\n\010elements\030\002 \003(\0132\022.boa.types.Element\022" +
+      "$\n\010doc_type\030\003 \001(\0132\022.boa.types.Element\0224\n" +
+      "\026processing_instruction\030\013 \003(\0132\024.boa.type" +
+      "s.Attribute\"\267\004\n\007Element\022\013\n\003tag\030\001 \002(\t\022,\n\004" +
+      "kind\030\002 \002(\0162\036.boa.types.Element.ElementKi" +
+      "nd\022$\n\010elements\030\003 \003(\0132\022.boa.types.Element" +
+      "\022\014\n\004text\030\004 \003(\t\022\014\n\004data\030\005 \003(\t\022(\n\nattribut",
+      "es\030\006 \003(\0132\024.boa.types.Attribute\022$\n\006script" +
+      "\030\007 \001(\0132\024.boa.types.Namespace\022!\n\003php\030\010 \001(" +
+      "\0132\024.boa.types.Namespace\022%\n\010var_decl\030\t \003(" +
+      "\0132\023.boa.types.Variable\022\r\n\005title\030\n \001(\t\0224\n" +
+      "\026processing_instruction\030\013 \003(\0132\024.boa.type" +
+      "s.Attribute\"\317\001\n\013ElementKind\022\t\n\005OTHER\020\000\022\t" +
+      "\n\005BLOCK\020\001\022\013\n\007IN_LINE\020\002\022\010\n\004FORM\020\003\022\014\n\010DOC_" +
+      "TYPE\020\004\022\017\n\013STYLE_SHEET\020\005\022\r\n\tPAGE_RULE\020\006\022\016" +
+      "\n\nSTYLE_RULE\020\007\022\022\n\016FONT_FACE_RULE\020\010\022\016\n\nME" +
+      "DIA_RULE\020\t\022\017\n\013MEDIA_QUERY\020\n\022\017\n\013IMPORT_RU",
+      "LE\020\013\022\017\n\013XML_ELEMENT\020\014\"\'\n\tAttribute\022\013\n\003ke" +
+      "y\030\001 \002(\t\022\r\n\005value\030\002 \002(\t*\303\001\n\010TypeKind\022\t\n\005O" +
+      "THER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANON" +
+      "YMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022" +
+      "\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELE" +
+      "GATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005TRAIT\020\t\022\r\n\tPRIMIT" +
+      "IVE\020\n\022\t\n\005ARRAY\020\013\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -29776,74 +42990,91 @@ public final class Ast {
           internal_static_boa_types_ASTRoot_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ASTRoot_descriptor,
-              new java.lang.String[] { "Namespaces", "Imports", "Names", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Namespaces", "Names", "Key", "Document", });
           internal_static_boa_types_Namespace_descriptor =
             getDescriptor().getMessageTypes().get(2);
           internal_static_boa_types_Namespace_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Namespace_descriptor,
-              new java.lang.String[] { "Name", "Modifiers", "Declarations", "Statements", "Methods", "Expressions", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "Modifiers", "Declarations", "Statements", "Methods", "Expressions", "Key", "Namespaces", "Imports", "Variables", });
           internal_static_boa_types_Declaration_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_boa_types_Declaration_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Declaration_descriptor,
-              new java.lang.String[] { "Name", "Kind", "Modifiers", "GenericParameters", "Parents", "Methods", "Fields", "NestedDeclarations", "Comments", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "Kind", "Modifiers", "GenericParameters", "Parents", "Methods", "Fields", "NestedDeclarations", "Comments", "Key", "FullyQualifiedName", "DeclaringType", "Statements", });
           internal_static_boa_types_Type_descriptor =
             getDescriptor().getMessageTypes().get(4);
           internal_static_boa_types_Type_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Type_descriptor,
-              new java.lang.String[] { "Name", "Kind", "Id", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "FullyQualifiedName", "Kind", "Id", "DeclarationFile", "Declaration", "Key", "ComputedName", });
           internal_static_boa_types_Method_descriptor =
             getDescriptor().getMessageTypes().get(5);
           internal_static_boa_types_Method_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Method_descriptor,
-              new java.lang.String[] { "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", "Key", "DeclaringType", "ComputedName", });
           internal_static_boa_types_Variable_descriptor =
             getDescriptor().getMessageTypes().get(6);
           internal_static_boa_types_Variable_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Variable_descriptor,
-              new java.lang.String[] { "Name", "VariableType", "Modifiers", "Initializer", "Comments", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "VariableType", "Modifiers", "Initializer", "Comments", "Key", "DeclaringType", "ComputedName", "DollarSign", "Expressions", });
           internal_static_boa_types_Statement_descriptor =
             getDescriptor().getMessageTypes().get(7);
           internal_static_boa_types_Statement_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Statement_descriptor,
-              new java.lang.String[] { "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Kind", "Comments", "Statements", "Initializations", "Conditions", "Updates", "VariableDeclaration", "TypeDeclaration", "Expressions", "Key", "Methods", "VariableDeclarations", "TypeDeclarations", "Names", });
           internal_static_boa_types_Expression_descriptor =
             getDescriptor().getMessageTypes().get(8);
           internal_static_boa_types_Expression_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Expression_descriptor,
-              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "Lambda", "NoParens", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "NoParens", "Key", "DeclaringType", "ReturnType", "Methods", "Statements", "IsMemberAccess", "DollarSign", "ComputedVariable", "ComputedMethod", "IsStatic", "HasFrom", "Trait", });
           internal_static_boa_types_Modifier_descriptor =
             getDescriptor().getMessageTypes().get(9);
           internal_static_boa_types_Modifier_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Modifier_descriptor,
-              new java.lang.String[] { "Kind", "Visibility", "AnnotationName", "AnnotationMembers", "AnnotationValues", "Other", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Kind", "Visibility", "AnnotationName", "AnnotationMembers", "AnnotationValues", "Other", "Key", "Scope", });
           internal_static_boa_types_Comment_descriptor =
             getDescriptor().getMessageTypes().get(10);
           internal_static_boa_types_Comment_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Comment_descriptor,
-              new java.lang.String[] { "Kind", "Value", "Position", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Kind", "Value", "Position", "Key", });
           internal_static_boa_types_PositionInfo_descriptor =
             getDescriptor().getMessageTypes().get(11);
           internal_static_boa_types_PositionInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_PositionInfo_descriptor,
               new java.lang.String[] { "StartPos", "Length", "StartLine", "StartCol", "EndLine", "EndCol", });
+          internal_static_boa_types_Document_descriptor =
+            getDescriptor().getMessageTypes().get(12);
+          internal_static_boa_types_Document_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_Document_descriptor,
+              new java.lang.String[] { "Title", "Elements", "DocType", "ProcessingInstruction", });
+          internal_static_boa_types_Element_descriptor =
+            getDescriptor().getMessageTypes().get(13);
+          internal_static_boa_types_Element_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_Element_descriptor,
+              new java.lang.String[] { "Tag", "Kind", "Elements", "Text", "Data", "Attributes", "Script", "Php", "VarDecl", "Title", "ProcessingInstruction", });
+          internal_static_boa_types_Attribute_descriptor =
+            getDescriptor().getMessageTypes().get(14);
+          internal_static_boa_types_Attribute_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_Attribute_descriptor,
+              new java.lang.String[] { "Key", "Value", });
           return null;
         }
       };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          boa.types.Shared.getDescriptor(),
         }, assigner);
   }
 
