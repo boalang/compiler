@@ -71,12 +71,6 @@ public class BoaFloat extends BoaScalar {
 
 	/** {@inheritDoc} */
 	@Override
-	public String toInterfaceJavaType() {
-		return toBoxedJavaType();
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public String toString() {
 		return "float";
 	}

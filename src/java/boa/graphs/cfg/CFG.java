@@ -50,10 +50,10 @@ public class CFG {
 	protected CFGNode entryNode;
 	protected CFGNode exitNode;
 
-	private final Set<CFGNode> outs = new LinkedHashSet<CFGNode>();
-	private final Set<CFGNode> ins = new LinkedHashSet<CFGNode>();
-	private final Set<CFGNode> breaks = new LinkedHashSet<CFGNode>();
-	private final Set<CFGNode> returns = new LinkedHashSet<CFGNode>();
+	protected final Set<CFGNode> outs = new LinkedHashSet<CFGNode>();
+	protected final Set<CFGNode> ins = new LinkedHashSet<CFGNode>();
+	protected final Set<CFGNode> breaks = new LinkedHashSet<CFGNode>();
+	protected final Set<CFGNode> returns = new LinkedHashSet<CFGNode>();
 
 	protected boolean isLoopPresent = false;
 	protected boolean isBranchPresent = false;
