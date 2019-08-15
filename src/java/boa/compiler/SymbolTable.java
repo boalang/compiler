@@ -53,6 +53,7 @@ public class SymbolTable {
 	private Operand operand;
 	private Stack<BoaType> operandType = new Stack<BoaType>();
 	private boolean needsBoxing;
+	private boolean needsCast;
 	private Stack<Boolean> isVisitor = new Stack<Boolean>();
 	private boolean isTraverse = false;
 	private boolean shadowing = false;
@@ -694,6 +695,14 @@ public class SymbolTable {
 
 	public boolean getNeedsBoxing() {
 		return this.needsBoxing;
+	}
+
+	public void setNeedsCast(final boolean needsCast) {
+		this.needsCast = needsCast;
+	}
+
+	public boolean getNeedsCast() {
+		return this.needsCast;
 	}
 
 	public void setIsTraverse(final boolean isTraverse) {

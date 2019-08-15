@@ -455,7 +455,7 @@ public class BoaIntrinsics {
 		return s;
 	}
 
-	public static String arrayToString(final long[] arr) {
+	public static String arrayToString(final Long[] arr) {
 		String s = "";
 		for (final long val : arr)
 			if (s.isEmpty())
@@ -465,7 +465,7 @@ public class BoaIntrinsics {
 		return s;
 	}
 
-	public static String arrayToString(final double[] arr) {
+	public static String arrayToString(final Double[] arr) {
 		String s = "";
 		for (final double val : arr)
 			if (s.isEmpty())
@@ -475,7 +475,7 @@ public class BoaIntrinsics {
 		return s;
 	}
 
-	public static String arrayToString(final boolean[] arr) {
+	public static String arrayToString(final Boolean[] arr) {
 		String s = "";
 		for (final boolean val : arr)
 			if (s.isEmpty())
@@ -489,21 +489,21 @@ public class BoaIntrinsics {
 		return java.util.Arrays.deepEquals(arr, arr2);
 	}
 
-	public static boolean deepEquals(final long[] arr, final long[] arr2) {
+	public static boolean deepEquals(final Long[] arr, final Long[] arr2) {
 		if (arr.length != arr2.length) return false;
 		for (int i = 0; i < arr.length; i++)
 			if (arr2[i] != arr[i]) return false;
 		return true;
 	}
 
-	public static boolean deepEquals(final double[] arr, final double[] arr2) {
+	public static boolean deepEquals(final Double[] arr, final Double[] arr2) {
 		if (arr.length != arr2.length) return false;
 		for (int i = 0; i < arr.length; i++)
 			if (arr2[i] != arr[i]) return false;
 		return true;
 	}
 
-	public static boolean deepEquals(final boolean[] arr, final boolean[] arr2) {
+	public static boolean deepEquals(final Boolean[] arr, final Boolean[] arr2) {
 		if (arr.length != arr2.length) return false;
 		for (int i = 0; i < arr.length; i++)
 			if (arr2[i] != arr[i]) return false;
@@ -515,22 +515,22 @@ public class BoaIntrinsics {
 		return arr;
 	}
 
-	public static <T> long[] basic_array(final Long[] arr) {
-		long[] arr2 = new long[arr.length];
+	public static <T> Long[] basic_array(final Long[] arr) {
+		Long[] arr2 = new Long[arr.length];
 		for (int i = 0; i < arr.length; i++)
 			arr2[i] = arr[i];
 		return arr2;
 	}
 
-	public static <T> double[] basic_array(final Double[] arr) {
-		double[] arr2 = new double[arr.length];
+	public static <T> Double[] basic_array(final Double[] arr) {
+		Double[] arr2 = new Double[arr.length];
 		for (int i = 0; i < arr.length; i++)
 			arr2[i] = arr[i];
 		return arr2;
 	}
 
-	public static <T> boolean[] basic_array(final Boolean[] arr) {
-		boolean[] arr2 = new boolean[arr.length];
+	public static <T> Boolean[] basic_array(final Boolean[] arr) {
+		Boolean[] arr2 = new Boolean[arr.length];
 		for (int i = 0; i < arr.length; i++)
 			arr2[i] = arr[i];
 		return arr2;
@@ -550,48 +550,48 @@ public class BoaIntrinsics {
 		return result;
 	}
 
-	public static long[] concat(final long[] first, final long[]... rest) {
+	public static Long[] concat(final Long[] first, final Long[]... rest) {
 		int totalLength = first.length;
-		for (final long[] array : rest)
+		for (final Long[] array : rest)
 			totalLength += array.length;
 
-		final long[] result = new long[totalLength];
+		final Long[] result = new Long[totalLength];
 		System.arraycopy(first, 0, result, 0, first.length);
 
 		int offset = first.length;
-		for (final long[] array : rest) {
+		for (final Long[] array : rest) {
 			System.arraycopy(array, 0, result, offset, array.length);
 			offset += array.length;
 		}
 		return result;
 	}
 
-	public static double[] concat(final double[] first, final double[]... rest) {
+	public static Double[] concat(final Double[] first, final Double[]... rest) {
 		int totalLength = first.length;
-		for (final double[] array : rest)
+		for (final Double[] array : rest)
 			totalLength += array.length;
 
-		final double[] result = new double[totalLength];
+		final Double[] result = new Double[totalLength];
 		System.arraycopy(first, 0, result, 0, first.length);
 
 		int offset = first.length;
-		for (final double[] array : rest) {
+		for (final Double[] array : rest) {
 			System.arraycopy(array, 0, result, offset, array.length);
 			offset += array.length;
 		}
 		return result;
 	}
 
-	public static boolean[] concat(final boolean[] first, final boolean[]... rest) {
+	public static Boolean[] concat(final Boolean[] first, final Boolean[]... rest) {
 		int totalLength = first.length;
-		for (final boolean[] array : rest)
+		for (final Boolean[] array : rest)
 			totalLength += array.length;
 
-		final boolean[] result = new boolean[totalLength];
+		final Boolean[] result = new Boolean[totalLength];
 		System.arraycopy(first, 0, result, 0, first.length);
 
 		int offset = first.length;
-		for (final boolean[] array : rest) {
+		for (final Boolean[] array : rest) {
 			System.arraycopy(array, 0, result, offset, array.length);
 			offset += array.length;
 		}

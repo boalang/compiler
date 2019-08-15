@@ -124,7 +124,7 @@ public class BoaQueue extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "java.util.LinkedList<" + this.type.toBoxedJavaType() + ">";
+		return "java.util.LinkedList<" + this.type.toInterfaceJavaType() + ">";
 	}
 
 	/** {@inheritDoc} */
