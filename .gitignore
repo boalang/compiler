@@ -1,2 +1,8 @@
-build/
-dist/
+/build/
+/dist/
+/.idea/
+/.vscode/
+/.classpath
+/.project
+/.settings/
+/junitvmwatcher*.properties
