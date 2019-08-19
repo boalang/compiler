@@ -201,6 +201,7 @@ public class SymbolTable {
 		globalFunctions.addFunction("regex", new BoaFunction(new BoaString(), new BoaType[] { new BoaName(new BoaScalar()) }, "boa.functions.BoaSpecialIntrinsics.regex(\"${0}\")"));
 
 		// clone functions
+		globalFunctions.addFunction("clone", new BoaFunction(new BoaMap(new BoaTypeVar("K"), new BoaTypeVar("V")), new BoaType[] {new BoaMap(new BoaTypeVar("K"), new BoaTypeVar("V"))},"(java.util.HashMap)${0}.clone()"));
 		globalFunctions.addFunction("clone", new BoaFunction(new BoaSet(new BoaTypeVar("V")), new BoaType[] {new BoaSet(new BoaTypeVar("V"))},"(java.util.HashSet)${0}.clone()"));
 		globalFunctions.addFunction("clone", new BoaFunction(new BoaString(), new BoaType[] {new BoaString()},"new String(${0})"));
 
