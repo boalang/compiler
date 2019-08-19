@@ -55,6 +55,18 @@ public abstract class BoaAbstractTraversal<T1> {
 		return (T1)outputMapObj.get(node.getId());
 	}
 
+	public T1 getValue(final CDGNode node) throws Exception {
+		return (T1)outputMapObj.get(node.getId());
+	}
+
+	public T1 getValue(final DDGNode node) throws Exception {
+		return (T1)outputMapObj.get(node.getId());
+	}
+
+	public T1 getValue(final PDGNode node) throws Exception {
+		return (T1)outputMapObj.get(node.getId());
+	}
+
 	public void clear() {
 		if (outputMapObj != null)
 			outputMapObj.clear();
