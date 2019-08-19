@@ -299,7 +299,7 @@ public class BoaFunction extends BoaType {
 			t = ((BoaSet)t).getType();
 			if (t instanceof BoaTypeVar)
 				return new BoaSet(replaceVar(((BoaTypeVar)t).getName(), actualParameters));
-		} else if (t instanceof BoaMap) {
+		} else if (t.getClass() == BoaMap.class) {
 			BoaType i = ((BoaMap)t).getIndexType();
 			BoaType t2 = ((BoaMap)t).getType();
 			if (t2 instanceof BoaTypeVar)
