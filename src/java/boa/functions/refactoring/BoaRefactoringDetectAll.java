@@ -45,7 +45,7 @@ public class BoaRefactoringDetectAll {
 	private static Set<RefactoringType> refactoringTypesToConsider = null;
 
 	public static void main(String[] args) {
-//		args = new String[] { "/Users/hyj/test3/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo", "/Users/hyj/test3/output/o.txt" };
+		args = new String[] { "/Users/hyj/test6/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo", "/Users/hyj/test6/output/o.txt" };
 		if (args.length < 2) {
 			System.err.println("args: NAMES_PATH, REPOS_PATH, OUTPUT_PATH");
 		} else {
@@ -54,35 +54,39 @@ public class BoaRefactoringDetectAll {
 			String[] projectNames = input.split("\\r?\\n");
 			REPOS_PATH = args[1];
 			OUTPUT_PATH = args[2];
-			
+
+			HashSet<String> typeSet = BoaRefactoringIntrinsics.getConsideredTypes();
+
 			List<String> outputs = new ArrayList<String>();
 			for (String name : projectNames) {
-				
-				System.out.println(name + " start");
-				
+
+				System.err.println(name + " start");
+
 				File gitDir = new File(REPOS_PATH + "/" + name + "/.git");
-				
+
 				if (gitDir.exists()) {
-					
+
 					try {
 						Repository repo = new FileRepositoryBuilder().setGitDir(gitDir).build();
 						RevWalk revWalk = new RevWalk(repo);
 						Set<RevCommit> heads = getHeads(revWalk, repo);
-						
+
 						revWalk.markStart(heads);
 						revWalk.sort(RevSort.TOPO, true);
 						revWalk.sort(RevSort.COMMIT_TIME_DESC, true);
 						revWalk.sort(RevSort.REVERSE, true);
-						
+
 						Iterator<RevCommit> i = revWalk.iterator();
+						int count = 0;
 						while (i.hasNext()) {
 							RevCommit r = i.next();
 							List<Refactoring> temp = detect(repo, r);
-							
-							System.out.println(name + " " + r.getName() + " detected " + temp.size());
-							
+							temp = filterTypes(temp, typeSet);
+
+							System.err.println(name + " " + ++count + "th Commit " + r.getName() + " detected " + temp.size());
+
 							for (Refactoring rf : temp) {
-								String output = name + " " + r.getName() + "=" + rf.toString();  
+								String output = name + " " + r.getName() + " " + rf.getName() + "=" + rf.toString();
 								outputs.add(output);
 							}
 						}
@@ -93,7 +97,7 @@ public class BoaRefactoringDetectAll {
 						continue;
 					}
 				} else {
-					System.out.println(name + " not exist! Continue");
+					System.err.println(name + " not exist! Continue");
 				}
 			}
 			writeOutputs(outputs, OUTPUT_PATH);
@@ -101,10 +105,18 @@ public class BoaRefactoringDetectAll {
 		}
 	}
 
+	private static List<Refactoring> filterTypes(List<Refactoring> temp, HashSet<String> typeSet) {
+		ArrayList<Refactoring> res = new ArrayList<Refactoring>();
+		for (Refactoring ref : temp)
+			if (typeSet.contains(ref.getName()))
+				res.add(ref);
+		return res;
+	}
+
 	public static void writeOutputs(List<String> outputs, String path) {
 		StringBuilder sb = new StringBuilder();
 		for (String s : outputs)
-			sb.append(s+"\n");
+			sb.append(s + "\n");
 		FileIO.writeFileContents(new File(path), sb.toString());
 	}
 
@@ -143,6 +155,7 @@ public class BoaRefactoringDetectAll {
 						repositoryDirectoriesCurrent);
 
 				refactoringsAtRevision = parentUMLModel.diff(currentUMLModel, renamedFilesHint).getRefactorings();
+				refactoringsAtRevision = removeDuplicates(refactoringsAtRevision);
 				refactoringsAtRevision = filter(refactoringsAtRevision);
 			} else {
 				refactoringsAtRevision = Collections.emptyList();
@@ -150,6 +163,19 @@ public class BoaRefactoringDetectAll {
 			walk.dispose();
 		}
 		return refactoringsAtRevision;
+	}
+
+	private static List<Refactoring> removeDuplicates(List<Refactoring> refactoringsAtRevision) {
+		ArrayList<Refactoring> res = new ArrayList<Refactoring>();
+		HashSet<String> set = new HashSet<String>();
+		for (Refactoring ref : refactoringsAtRevision) {
+			String description = ref.toString();
+			if (!set.contains(description)) {
+				res.add(ref);
+				set.add(description);
+			}
+		}
+		return res;
 	}
 
 	private static void populateFileContents(Repository repository, RevCommit commit, List<String> filePaths,

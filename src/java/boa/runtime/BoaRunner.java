@@ -80,6 +80,10 @@ public abstract class BoaRunner extends Configured implements Tool {
 		configuration.setBoolean("mapred.map.tasks.speculative.execution", false);
 		configuration.setBoolean("mapred.reduce.tasks.speculative.execution", false);
 		configuration.setLong("mapred.job.reuse.jvm.num.tasks", -1);
+		
+		// Set the maximum percentage of map tasks that can fail without 
+		// the job being aborted. 
+		configuration.setLong("mapred.max.map.failures.percent", 5);
 
 		final Job job = new Job(configuration);
 

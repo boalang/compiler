@@ -19,7 +19,9 @@ package boa.functions;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -98,7 +100,7 @@ public class BoaAstIntrinsics {
 		return f.getKey() + "!!" + f.getName();
 	}
 
-	private static final ASTRoot emptyAst = ASTRoot.newBuilder().build();
+	private static final ASTRoot emptyAst = ASTRoot.newBuilder().setAstCount(0).build();
 	private static final CommentsRoot emptyComments = CommentsRoot.newBuilder().build();
 	private static final IssuesRoot emptyIssues = IssuesRoot.newBuilder().build();
 
@@ -154,6 +156,11 @@ public class BoaAstIntrinsics {
 		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
 		return emptyAst;
 	}
+	
+	@FunctionSpec(name = "getastcount", returnType = "int", formalParameters = { "ChangedFile" })
+	public static int getAstCount(ChangedFile f) {
+		return getast(f).getAstCount();
+	}
 
 	private static long currentRepoKey = Long.MIN_VALUE;
 	private static Repository currentStoredRepository = null;
@@ -164,8 +171,54 @@ public class BoaAstIntrinsics {
 			return f.getRoot();
 		String content = getContent(f);
 		if (content != null)
-			return parseJavaFile(content);
+			return getASTRoot(content);
 		return emptyAst;
+	}
+	
+	public static final ASTRoot getASTRoot(final String content) {
+		if (content == null) {
+			System.out.print(" [Null Content] ");
+			return emptyAst;
+		}
+		try {
+			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
+			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
+			parser.setSource(content.toCharArray());
+
+			final Map<?, ?> options = JavaCore.getOptions();
+			JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+			parser.setCompilerOptions(options);
+
+			final CompilationUnit cu;
+			try {
+				cu = (CompilationUnit) parser.createAST(null);
+			} catch (Throwable e) {
+				return emptyAst;
+			}
+
+			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
+			cu.accept(errorCheck);
+
+			if (!errorCheck.hasError) {
+				final ASTRoot.Builder ast = ASTRoot.newBuilder();
+				final JavaVisitor visitor = new JavaVisitor(content);
+				try {
+					ast.addNamespaces(visitor.getNamespaces(cu));
+					ast.setAstCount(visitor.getAstCount());
+					return ast.build();
+				} catch (final Throwable e) {
+					System.exit(-1);
+					System.err.print(" [Parser Error] ");
+					return emptyAst;
+				}
+			} else {
+				System.err.print(" [Java Error] ");
+//				System.out.println(content);
+			}
+			return emptyAst;
+		} catch (final Throwable e) {
+			return emptyAst;
+		}
 	}
 	
 	public static String getContent(ChangedFile f) {
@@ -283,51 +336,6 @@ public class BoaAstIntrinsics {
 			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
 		}
 		return values;
-	}
-
-	public static final ASTRoot parseJavaFile(final String content) {
-		if (content == null) {
-			System.out.print(" [Null Content] ");
-			return emptyAst;
-		}
-		try {
-			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
-			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
-			parser.setSource(content.toCharArray());
-
-			final Map<?, ?> options = JavaCore.getOptions();
-			JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
-			parser.setCompilerOptions(options);
-
-			final CompilationUnit cu;
-			try {
-				cu = (CompilationUnit) parser.createAST(null);
-			} catch (Throwable e) {
-				return emptyAst;
-			}
-
-			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
-			cu.accept(errorCheck);
-
-			if (!errorCheck.hasError) {
-				final ASTRoot.Builder ast = ASTRoot.newBuilder();
-				final JavaVisitor visitor = new JavaVisitor(content);
-				try {
-					ast.addNamespaces(visitor.getNamespaces(cu));
-					return ast.build();
-				} catch (final Throwable e) {
-					System.exit(-1);
-					System.err.print(" [Parser Error] ");
-					return emptyAst;
-				}
-			} else {
-				System.err.print(" [Java Error] ");
-//				System.out.println(content);
-			}
-			return emptyAst;
-		} catch (final Throwable e) {
-			return emptyAst;
-		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -455,18 +463,13 @@ public class BoaAstIntrinsics {
 		try {
 			final BytesWritable value = new BytesWritable();
 			if (refactoringsMap.get(new Text(p.getName() + " " + r.getId()), value) != null) {
-				return new String(value.getBytes()).split("\\r?\\n");
+				String[] temp = new String(value.getBytes()).split("\\r?\\n");
+				HashSet<String> set = new HashSet<String>(Arrays.asList(temp));
+				return set.toArray(new String[0]);
 			}
-		} catch (final InvalidProtocolBufferException e) {
-			e.printStackTrace();
-		} catch (final IOException e) {
-			e.printStackTrace();
-		} catch (final RuntimeException e) {
-			e.printStackTrace();
-		} catch (final Error e) {
-			e.printStackTrace();
+		} catch (final Throwable e) {
+			return new String[0];
 		}
-		
 		return new String[0];
 	}
 	

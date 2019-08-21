@@ -279,12 +279,13 @@ public class BoaIntrinsics {
 	}
 	
 
-	private static boolean isIncluded(ChangedFile cf, String[] kinds) {
+	private static boolean isIncluded(ChangedFile cf, String[] kinds) {		
 		if (kinds == null || kinds.length == 0)
 			return true;
 		final String kindName = cf.getKind().name();
+		final String fileName = cf.getName();
 		for (final String kind : kinds)
-			if (kindName.startsWith(kind) || kindName.endsWith(kind))
+			if (kindName.startsWith(kind) || fileName.endsWith(kind))
 				return true;
 		return false;
 	}

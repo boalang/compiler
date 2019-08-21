@@ -32,6 +32,7 @@ import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
+import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.LargeObjectException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -357,13 +358,19 @@ public class SeqRepoImporter {
 			filecheck.run();
 			
 			// clone repository
-			String[] args = { repo.getUrl(), gitDir.getAbsolutePath() };
+			Git result = null;
 			try {
-				RepositoryCloner.clone(args);
+				String url = repo.getUrl();
+				File localGitDir = new File(gitDir.getAbsolutePath());
+				result = Git.cloneRepository().setURI(url).setBare(true).setDirectory(localGitDir).call();
 			} catch (Throwable t) {
 				System.err.println("Error cloning " + repo.getUrl());
 				DefaultProperties.exceptions.put(name, "err cloning");
 				return null;
+			} finally {
+				if (result != null && result.getRepository() != null) {
+					result.getRepository().close();
+				}
 			}
 			
 			if (debug)

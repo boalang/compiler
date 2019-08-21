@@ -1,6 +1,9 @@
 package boa.functions.refactoring;
 
+import boa.functions.BoaAstIntrinsics;
 import boa.functions.FunctionSpec;
+import boa.types.Ast.ASTRoot;
+import boa.types.Ast.Namespace;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -12,6 +15,7 @@ import static boa.functions.BoaAstIntrinsics.*;
 import static boa.functions.BoaIntrinsics.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -19,6 +23,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.stream.Collectors;
+
 import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.rm1.GitHistoryRefactoringMinerImpl;
 
@@ -36,6 +43,67 @@ public class BoaRefactoringIntrinsics {
 		if (currentRevision != null)
 			return detectRefactorings(cr, currentRevision);
 		return new String[0];
+	}
+	
+	@FunctionSpec(name = "getconsideredtypes", returnType = "set of string")
+	public static HashSet<String> getConsideredTypes() {
+		String[] types = new String[] {
+				"Move Method", "Pull Up Attribute", "Move Attribute", "Rename Class",
+				"Push Down Attribute", "Move Class", "Extract Method", "Rename Method",
+				"Pull Up Method", "Inline Method", "Extract Superclass", "Change Package",
+				"Extract Interface", "Extract And Move Method", "Move And Rename Class"
+		};
+		HashSet<String> typeSet = new HashSet<String>(Arrays.asList(types));
+		return typeSet;
+	}
+	
+	@FunctionSpec(name = "findequivalentfilepath", returnType = "string", formalParameters = { "array of string", "string" })
+	public static String findEquivalentFilePath(String[] filePathes, String namespace) throws Exception {
+		String path = namespace.replace('.', '/');
+		for (String filePath : filePathes)
+			if (filePath.contains(path))
+				return filePath;
+		return null;
+	}
+	
+	
+	
+	@FunctionSpec(name = "isleafclass", returnType = "bool", formalParameters = { "array of ChangedFile", "string" })
+	public static boolean isLeafClass(ChangedFile[] snapshot, String namespace) {
+		String path = namespace.replace('.', '/');
+		ChangedFile file = getChangedFile(snapshot, path);
+		if (file != null) {
+			ASTRoot root = BoaAstIntrinsics.getast(file);
+			for (Namespace ns : root.getNamespacesList()) {
+				String temp = ns.getName();
+				if (temp.startsWith("java."))
+					continue;
+				if (temp.startsWith("static ")) {
+					temp = temp.replace("static ", "");
+					int idx = temp.lastIndexOf('.');
+					if (idx != -1)
+						temp = temp.substring(0, idx);
+				}
+				if (getChangedFile(snapshot, temp.replace('.', '/')) != null)
+					return false;
+			}
+		}
+		return true;
+	}
+	
+	private static ChangedFile getChangedFile(ChangedFile[] snapshot, String path) {
+		
+		for (ChangedFile cf : snapshot) {
+//			System.out.println("getChangedFile: " + cf.getName());
+			if (cf.getName().contains(path))
+				return cf;
+		}
+		return null;
+	}
+	
+	@FunctionSpec(name = "getinvolvedclasses", returnType = "array of string", formalParameters = { "string" })
+	public static String[] getInvolvedClasses(String description) {
+		return BoaRefactoringType.getBeforeClasses(description);
 	}
 
 	public static boolean hasOutOfMemoryError;
@@ -70,9 +138,9 @@ public class BoaRefactoringIntrinsics {
 			ChangedFile[] snapshotCurrent = updateSnapshotByRevision(snapshotBefore, currentRevision);
 			updateFileContents(fileContentsCurrent, repositoryDirectoriesCurrent, snapshotCurrent, fileNamesCurrent);
 
-			System.out.println(currentRevision.getId() + " " + snapshotBefore.length + " " + snapshotCurrent.length
-					+ " " + fileContentsBefore.size() + " " + fileContentsCurrent.size() + " "
-					+ currentRevision.getFilesCount());
+//			System.out.println(currentRevision.getId() + " " + snapshotBefore.length + " " + snapshotCurrent.length
+//					+ " " + fileContentsBefore.size() + " " + fileContentsCurrent.size() + " "
+//					+ currentRevision.getFilesCount());
 
 			// close jgit repo to avoid memory leak
 			if (repoCloseMode)
@@ -94,6 +162,7 @@ public class BoaRefactoringIntrinsics {
 				System.out.println("Throw Exception: " + currentRevision.getId());
 				return new String[0];
 			}
+			refactoringsAtRevision = refactoringsAtRevision.stream().distinct().collect(Collectors.toList());
 			String[] res = new String[refactoringsAtRevision.size()];
 			for (int i = 0; i < res.length; i++) {
 				res[i] = refactoringsAtRevision.get(i).toString();

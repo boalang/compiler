@@ -104,6 +104,7 @@ public class GitConnector extends AbstractConnector {
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
 			for (final RevCommit rc : revwalk) {
+				System.out.println(rc.getId());
 				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName, repoKey);
 				commits.add(rc.getName());
 				int count = gc.countChangedFiles(rc);

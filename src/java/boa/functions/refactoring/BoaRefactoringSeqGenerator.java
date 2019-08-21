@@ -44,6 +44,7 @@ public class BoaRefactoringSeqGenerator {
 					if (rf != null && !rf.equals("") ) {
 						int idx = rf.indexOf('=');
 						if (idx != -1) {
+							// key: bluesoft-rnd/aperte-workflow-core 1ef031d4656da761f2be2df171dcde581d7c2e29
 							String key = rf.substring(0, idx);
 							String value = rf.substring(idx + 1);
 							if (!map.containsKey(key))
