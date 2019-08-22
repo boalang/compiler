@@ -42,10 +42,9 @@ public class BoaRefactoringDetectAll {
 	private static String NAMES_PATH;
 	private static String REPOS_PATH;
 	private static String OUTPUT_PATH;
-	private static Set<RefactoringType> refactoringTypesToConsider = null;
 
 	public static void main(String[] args) {
-		args = new String[] { "/Users/hyj/test6/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo", "/Users/hyj/test6/output/o.txt" };
+//		args = new String[] { "/Users/hyj/test6/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo", "/Users/hyj/test6/output/o.txt" };
 		if (args.length < 2) {
 			System.err.println("args: NAMES_PATH, REPOS_PATH, OUTPUT_PATH");
 		} else {
@@ -156,7 +155,7 @@ public class BoaRefactoringDetectAll {
 
 				refactoringsAtRevision = parentUMLModel.diff(currentUMLModel, renamedFilesHint).getRefactorings();
 				refactoringsAtRevision = removeDuplicates(refactoringsAtRevision);
-				refactoringsAtRevision = filter(refactoringsAtRevision);
+//				refactoringsAtRevision = filter(refactoringsAtRevision);
 			} else {
 				refactoringsAtRevision = Collections.emptyList();
 			}
@@ -208,26 +207,6 @@ public class BoaRefactoringDetectAll {
 				}
 			}
 		}
-	}
-
-	public static void setRefactoringTypesToConsider(RefactoringType... types) {
-		refactoringTypesToConsider = new HashSet<RefactoringType>();
-		for (RefactoringType type : types) {
-			refactoringTypesToConsider.add(type);
-		}
-	}
-
-	protected static List<Refactoring> filter(List<Refactoring> refactoringsAtRevision) {
-		if (refactoringTypesToConsider == null) {
-			return refactoringsAtRevision;
-		}
-		List<Refactoring> filteredList = new ArrayList<Refactoring>();
-		for (Refactoring ref : refactoringsAtRevision) {
-			if (refactoringTypesToConsider.contains(ref.getRefactoringType())) {
-				filteredList.add(ref);
-			}
-		}
-		return filteredList;
 	}
 
 	private static Set<RevCommit> getHeads(RevWalk revWalk, Repository repo) {
