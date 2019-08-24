@@ -71,7 +71,7 @@ import boa.types.Toplevel.Project;
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	static Context context;
-	private static MapFile.Reader map, reposMap, commentsMap, issuesMap, refactoringsMap;
+	private static MapFile.Reader map, commitsMap, reposMap, commentsMap, issuesMap, refactoringsMap, refactoringIdsMap;
 
 	private static final Revision emptyRevision;
 	static {
@@ -84,8 +84,6 @@ public class BoaAstIntrinsics {
 		rb.setLog("");
 		emptyRevision = rb.build();
 	}
-
-	private static MapFile.Reader commitMap;
 
 	public static enum COMMITCOUNTER {
 		GETS_ATTEMPTED, GETS_SUCCEED, GETS_FAILED, GETS_FAIL_MISSING, GETS_FAIL_BADPROTOBUF, GETS_FAIL_BADLOC,
@@ -114,14 +112,14 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "ChangedFile" })
 	public static ASTRoot getast(ChangedFile f) {
 		context.getCounter(ASTCOUNTER.GETS_ATTEMPTED).increment(1);
-		
+
 		// check new model
 		if (f.hasRepoKey() && f.hasObjectId()) {
 			ASTRoot r = getASTRoot(f);
 			if (r != emptyAst)
 				return r;
 			System.err.print(" [New Model Getast] ");
-		} else {	
+		} else {
 			if (map == null)
 				openMap();
 
@@ -130,7 +128,8 @@ public class BoaAstIntrinsics {
 				if (map.get(new LongWritable(f.getKey()), value) == null) {
 					context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
 				} else {
-					final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+					final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0,
+							value.getLength());
 					// defaults to 64, really big ASTs require more
 					_stream.setRecursionLimit(Integer.MAX_VALUE);
 					final ASTRoot root = ASTRoot.parseFrom(_stream);
@@ -156,15 +155,12 @@ public class BoaAstIntrinsics {
 		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
 		return emptyAst;
 	}
-	
+
 	@FunctionSpec(name = "getastcount", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int getAstCount(ChangedFile f) {
 		return getast(f).getAstCount();
 	}
 
-	private static long currentRepoKey = Long.MIN_VALUE;
-	private static Repository currentStoredRepository = null;
-	
 	public static ASTRoot getASTRoot(ChangedFile f) {
 		// if file contains ast root
 		if (f.hasRoot())
@@ -174,7 +170,7 @@ public class BoaAstIntrinsics {
 			return getASTRoot(content);
 		return emptyAst;
 	}
-	
+
 	public static final ASTRoot getASTRoot(final String content) {
 		if (content == null) {
 			System.out.print(" [Null Content] ");
@@ -213,14 +209,16 @@ public class BoaAstIntrinsics {
 				}
 			} else {
 				System.err.print(" [Java Error] ");
-//				System.out.println(content);
 			}
 			return emptyAst;
 		} catch (final Throwable e) {
 			return emptyAst;
 		}
 	}
-	
+
+	private static long currentRepoKey = Long.MIN_VALUE;
+	private static Repository currentStoredRepository = null;
+
 	public static String getContent(ChangedFile f) {
 		if (f.hasRepoKey() && f.hasObjectId()) {
 			if (f.getRepoKey() != currentRepoKey) {
@@ -247,7 +245,7 @@ public class BoaAstIntrinsics {
 		}
 		return null;
 	}
-	
+
 	@FunctionSpec(name = "closerepo")
 	public static void closeRepo() {
 		if (currentStoredRepository != null) {
@@ -255,7 +253,7 @@ public class BoaAstIntrinsics {
 			currentStoredRepository = null;
 		}
 	}
-	
+
 	public static final String getContent(Repository repo, String oid) throws IOException {
 		ObjectId fileid = ObjectId.fromString(oid);
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
@@ -273,7 +271,6 @@ public class BoaAstIntrinsics {
 			buffer.close();
 		}
 	}
-	
 
 	@FunctionSpec(name = "getParsedChangedFile", returnType = "ChangedFile", formalParameters = { "ChangedFile" })
 	public static ChangedFile getParsedChangedFile(ChangedFile f) {
@@ -342,12 +339,12 @@ public class BoaAstIntrinsics {
 	static Revision getRevision(long key) {
 		context.getCounter(COMMITCOUNTER.GETS_ATTEMPTED).increment(1);
 
-		if (commitMap == null)
+		if (commitsMap == null)
 			openCommitMap();
 
 		try {
 			final BytesWritable value = new BytesWritable();
-			if (commitMap.get(new LongWritable(key), value) == null) {
+			if (commitsMap.get(new LongWritable(key), value) == null) {
 				context.getCounter(COMMITCOUNTER.GETS_FAIL_MISSING).increment(1);
 			} else {
 				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
@@ -453,13 +450,14 @@ public class BoaAstIntrinsics {
 	public static void setup(final Context context) {
 		BoaAstIntrinsics.context = context;
 	}
-	
-	@FunctionSpec(name = "getrefactorings", returnType = "array of string", formalParameters = { "Project", "Revision" })
+
+	@FunctionSpec(name = "getrefactorings", returnType = "array of string", formalParameters = { "Project",
+			"Revision" })
 	public static String[] getRefactorings(Project p, Revision r) {
-		
+
 		if (refactoringsMap == null)
-			openRefactoringsMap();
-		
+			openRefactoringMap();
+
 		try {
 			final BytesWritable value = new BytesWritable();
 			if (refactoringsMap.get(new Text(p.getName() + " " + r.getId()), value) != null) {
@@ -468,25 +466,69 @@ public class BoaAstIntrinsics {
 				return set.toArray(new String[0]);
 			}
 		} catch (final Throwable e) {
-			return new String[0];
+			e.printStackTrace();
 		}
 		return new String[0];
 	}
-	
-	private static void openRefactoringsMap() {
+
+	private static void openRefactoringMap() {
 		try {
 			final Configuration conf = context.getConfiguration();
 			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
-				p = new Path(DefaultProperties.localDataPath, "refactorings");
+				p = new Path(DefaultProperties.localDataPath, "refactoring");
 				fs = FileSystem.getLocal(conf);
 			} else {
-				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
-						new Path(conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("refactorings")));
+				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"), new Path(
+						conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("refactoring")));
 				fs = FileSystem.get(conf);
 			}
 			refactoringsMap = new MapFile.Reader(fs, p.toString(), conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@FunctionSpec(name = "getrefactoringidsinset", returnType = "set of string", formalParameters = { "Project" })
+	public static HashSet<String> getRefactoringIdsInSet(Project p) {
+		return new HashSet<String>(Arrays.asList(getRefactoringIds(p)));
+	}
+	
+	@FunctionSpec(name = "getrefactoringids", returnType = "array of string", formalParameters = { "Project" })
+	public static String[] getRefactoringIds(Project p) {
+	
+		if (refactoringIdsMap == null)
+			openRefactoringIdMap();
+		
+		try {
+			final BytesWritable value = new BytesWritable();
+			if (refactoringIdsMap.get(new Text(p.getName()), value) != null) {
+				String[] temp = new String(value.getBytes()).split("\\r?\\n");
+				return temp;
+			}
+		} catch (final Throwable e) {
+			e.printStackTrace();
+		} finally {
+			closeRefactoringIdsMap();
+		}
+		return new String[0];
+	}
+
+	private static void openRefactoringIdMap() {
+		try {
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localDataPath, "refactoringId");
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+						new Path(conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("refactoringId")));
+				fs = FileSystem.get(conf);
+			}
+			refactoringIdsMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -582,7 +624,7 @@ public class BoaAstIntrinsics {
 						conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("commit")));
 				fs = FileSystem.get(conf);
 			}
-			commitMap = new MapFile.Reader(fs, p.toString(), conf);
+			commitsMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -590,11 +632,13 @@ public class BoaAstIntrinsics {
 
 	@SuppressWarnings("rawtypes")
 	public static void cleanup(final Context context) {
-		closeMap(map);
-		closeMap(commentsMap);
-		closeMap(issuesMap);
-		closeMap(commitMap);
-		closeMap(refactoringsMap);
+		closeMap();
+		closeCommentsMap();
+		closeIssuesMap();
+		closeCommitsMap();
+		closeRefactoringsMap();
+		closeRefactoringIdsMap();
+		closeRepo();
 	}
 
 	private static void closeMap(MapFile.Reader map) {
@@ -604,7 +648,36 @@ public class BoaAstIntrinsics {
 			} catch (final IOException e) {
 				e.printStackTrace();
 			}
+	}
+	
+	private static void closeMap() {
+		closeMap(map);
 		map = null;
+	}
+	
+	private static void closeCommentsMap() {
+		closeMap(commentsMap);
+		commentsMap = null;
+	}
+	
+	private static void closeIssuesMap() {
+		closeMap(issuesMap);
+		issuesMap = null;
+	}
+	
+	private static void closeCommitsMap() {
+		closeMap(commitsMap);
+		commitsMap = null;
+	}
+	
+	private static void closeRefactoringsMap() {
+		closeMap(refactoringsMap);
+		refactoringsMap = null;
+	}
+	
+	private static void closeRefactoringIdsMap() {
+		closeMap(refactoringIdsMap);
+		refactoringIdsMap = null;
 	}
 
 	@FunctionSpec(name = "type_name", returnType = "string", formalParameters = { "string" })
@@ -903,7 +976,7 @@ public class BoaAstIntrinsics {
 	public static boolean isLiteral(final Expression e, final String lit) throws Exception {
 		return e.getKind() == Expression.ExpressionKind.LITERAL && e.hasLiteral() && e.getLiteral().equals(lit);
 	}
-	
+
 	////////////////////////////////
 	// Operator testing functions */
 	////////////////////////////////
@@ -911,94 +984,129 @@ public class BoaAstIntrinsics {
 	public static boolean isOperator(final Expression e) throws Exception {
 		return isArithmeticOperator(e) || isBitwiseOperator(e) || isLogicalOperator(e) || isRelationalOperator(e);
 	}
-	
+
 	@FunctionSpec(name = "isarithmeticoperator", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isArithmeticOperator(final Expression e) throws Exception {
 		switch (e.getKind()) {
-			case OP_ADD: return true;
-			case OP_SUB: return true;
-			case OP_MULT: return true;
-			case OP_DIV: return true;
-			case OP_MOD: return true;
-			case OP_INC: return true;
-			case OP_DEC: return true;
-			default:
-				return false;			
+		case OP_ADD:
+			return true;
+		case OP_SUB:
+			return true;
+		case OP_MULT:
+			return true;
+		case OP_DIV:
+			return true;
+		case OP_MOD:
+			return true;
+		case OP_INC:
+			return true;
+		case OP_DEC:
+			return true;
+		default:
+			return false;
 		}
 	}
-	
+
 	@FunctionSpec(name = "isbitwiseoperator", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isBitwiseOperator(final Expression e) throws Exception {
 		switch (e.getKind()) {
-			case BIT_LSHIFT: return true;
-			case BIT_RSHIFT: return true;
-			case BIT_UNSIGNEDRSHIFT: return true;
-			case BIT_AND: return true;
-			case BIT_OR: return true;
-			case BIT_NOT: return true;
-			case BIT_XOR: return true;
-			default:
-				return false;			
+		case BIT_LSHIFT:
+			return true;
+		case BIT_RSHIFT:
+			return true;
+		case BIT_UNSIGNEDRSHIFT:
+			return true;
+		case BIT_AND:
+			return true;
+		case BIT_OR:
+			return true;
+		case BIT_NOT:
+			return true;
+		case BIT_XOR:
+			return true;
+		default:
+			return false;
 		}
 	}
-	
+
 	@FunctionSpec(name = "islogicaloperator", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isLogicalOperator(final Expression e) throws Exception {
 		switch (e.getKind()) {
-			case LOGICAL_NOT: return true;
-			case LOGICAL_AND: return true;
-			case LOGICAL_OR: return true;
-			default:
-				return false;			
+		case LOGICAL_NOT:
+			return true;
+		case LOGICAL_AND:
+			return true;
+		case LOGICAL_OR:
+			return true;
+		default:
+			return false;
 		}
 	}
-	
+
 	@FunctionSpec(name = "isrelationaloperator", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isRelationalOperator(final Expression e) throws Exception {
 		switch (e.getKind()) {
-			case EQ: return true;
-			case NEQ: return true;
-			case LT: return true;
-			case GT: return true;
-			case LTEQ: return true;
-			case GTEQ: return true;
-			default:
-				return false;			
+		case EQ:
+			return true;
+		case NEQ:
+			return true;
+		case LT:
+			return true;
+		case GT:
+			return true;
+		case LTEQ:
+			return true;
+		case GTEQ:
+			return true;
+		default:
+			return false;
 		}
 	}
-	
+
 	@FunctionSpec(name = "isassignmentoperator", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isAssignmentOperator(final Expression e) throws Exception {
 		switch (e.getKind()) {
-			case ASSIGN: return true;
-			case ASSIGN_ADD: return true;
-			case ASSIGN_SUB: return true;
-			case ASSIGN_MULT: return true;
-			case ASSIGN_DIV: return true;
-			case ASSIGN_MOD: return true;
-			case ASSIGN_BITXOR: return true;
-			case ASSIGN_BITAND: return true;
-			case ASSIGN_BITOR: return true;
-			case ASSIGN_LSHIFT: return true;
-			case ASSIGN_RSHIFT: return true;
-			case ASSIGN_UNSIGNEDRSHIFT: return true;
-			default:
-				return false;			
+		case ASSIGN:
+			return true;
+		case ASSIGN_ADD:
+			return true;
+		case ASSIGN_SUB:
+			return true;
+		case ASSIGN_MULT:
+			return true;
+		case ASSIGN_DIV:
+			return true;
+		case ASSIGN_MOD:
+			return true;
+		case ASSIGN_BITXOR:
+			return true;
+		case ASSIGN_BITAND:
+			return true;
+		case ASSIGN_BITOR:
+			return true;
+		case ASSIGN_LSHIFT:
+			return true;
+		case ASSIGN_RSHIFT:
+			return true;
+		case ASSIGN_UNSIGNEDRSHIFT:
+			return true;
+		default:
+			return false;
 		}
 	}
-	
-	
-	
+
 	////////////////////////////////
 	// Creation testing functions */
 	////////////////////////////////
 	@FunctionSpec(name = "iscreation", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isCreation(final Expression e) throws Exception {
 		switch (e.getKind()) {
-			case NEW: return true;
-			case NEWARRAY: return true;
-			default:
-				return false;			
+		case NEW:
+			return true;
+		case NEWARRAY:
+			return true;
+		default:
+			return false;
 		}
 	}
 
@@ -1759,7 +1867,7 @@ public class BoaAstIntrinsics {
 			return s;
 		}
 	}
-	
+
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "array of Expression" })
 	public static String prettyprint(final Expression[] es) {
 		String s = "";

@@ -10,10 +10,10 @@ import boa.datagen.util.FileIO;
 public class BoaRefactoringPartition {
 
 	public static void main(String[] args) {
-		int size = 40;
+		int size = 300;
 //		int[] inputSizes = new int[size];
-		String path = "/Users/hyj/test3/sutton_names.txt";
-		String output = "/Users/hyj/test3/partition/";
+		String path = "/Users/hyj/test3_pronto/sutton_names.txt";
+		String output = "/Users/hyj/test3_pronto/partition/";
 		
 		// even partition
 		String input = FileIO.readFileContents(new File(path));

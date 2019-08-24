@@ -57,9 +57,10 @@ public class BoaRefactoringDetectAll {
 			HashSet<String> typeSet = BoaRefactoringIntrinsics.getConsideredTypes();
 
 			List<String> outputs = new ArrayList<String>();
+			int projectCount = 0;
 			for (String name : projectNames) {
 
-				System.err.println(name + " start");
+				System.err.println(++projectCount + "th project " + name + " start");
 
 				File gitDir = new File(REPOS_PATH + "/" + name + "/.git");
 
@@ -96,7 +97,7 @@ public class BoaRefactoringDetectAll {
 						continue;
 					}
 				} else {
-					System.err.println(name + " not exist! Continue");
+					System.err.println(++projectCount + "th project " + name + " not exist! Continue");
 				}
 			}
 			writeOutputs(outputs, OUTPUT_PATH);
