@@ -59,8 +59,8 @@ public class BoaRefactoringDetectAll {
 			List<String> outputs = new ArrayList<String>();
 			int projectCount = 0;
 			for (String name : projectNames) {
-
-				System.err.println(++projectCount + "th project " + name + " start");
+				projectCount++;
+				System.err.println(projectCount + "th project " + name + " start");
 
 				File gitDir = new File(REPOS_PATH + "/" + name + "/.git");
 
@@ -77,18 +77,28 @@ public class BoaRefactoringDetectAll {
 						revWalk.sort(RevSort.REVERSE, true);
 
 						Iterator<RevCommit> i = revWalk.iterator();
-						int count = 0;
+						int commitCount = 0;
 						while (i.hasNext()) {
 							RevCommit r = i.next();
-							List<Refactoring> temp = detect(repo, r);
-							temp = filterTypes(temp, typeSet);
-
-							System.err.println(name + " " + ++count + "th Commit " + r.getName() + " detected " + temp.size());
-
-							for (Refactoring rf : temp) {
-								String output = name + " " + r.getName() + " " + rf.getName() + "=" + rf.toString();
-								outputs.add(output);
+							commitCount++;
+							System.out.println(name + " " + commitCount + "th Commit " + r.getName() + " started");
+							try {
+								
+								List<Refactoring> temp = detect(repo, r);
+								temp = filterTypes(temp, typeSet);
+								
+								System.out.println(name + " " + commitCount + "th Commit " + r.getName() + " detected " + temp.size());
+								
+								for (Refactoring rf : temp) {
+									String output = name + " " + r.getName() + " " + rf.getName() + "=" + rf.toString();
+									outputs.add(output);
+								}
+								
+							} catch (OutOfMemoryError e) {
+								System.err.println(commitCount + "th Commit " + r.getName() + " OutOfMemoryError");
+								continue;
 							}
+							
 						}
 						revWalk.dispose();
 						repo.close();
@@ -96,8 +106,9 @@ public class BoaRefactoringDetectAll {
 						e.printStackTrace();
 						continue;
 					}
+					System.err.println(projectCount + "th project " + name + " end");
 				} else {
-					System.err.println(++projectCount + "th project " + name + " not exist! Continue");
+					System.err.println(projectCount + "th project " + name + " not exist! Continue");
 				}
 			}
 			writeOutputs(outputs, OUTPUT_PATH);

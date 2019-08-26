@@ -23,57 +23,26 @@ public class BoaRefactoringSeqGenerator {
 	private static String INPUT_PATH;
 
 	public static void main(String[] args) throws IOException {
-		args = new String[] { "/Users/hyj/test4/output", "/Users/hyj/test4" };
+		args = new String[] { "/Users/hyj/test4", "/Users/hyj/test4" };
 		if (args.length < 2) {
 			System.err.println("args: INPUT_PATH, OUTPUT_PATH");
 		} else {
 			
 			INPUT_PATH = args[0];
 			OUTPUT_PATH = args[1];
-			File dir = new File(INPUT_PATH);
 			
 			Map<String, StringBuilder> refactoringMap = new TreeMap<String, StringBuilder>();
 			Map<String, StringBuilder> refactoringIdMap = new TreeMap<String, StringBuilder>();
-			String previous = "";
 			
-			for (File file : dir.listFiles()) {
-				
-				String input = FileIO.readFileContents(file);
-				String[] refactorings = input.split("\\r?\\n");
-				System.out.println(file.getName() + " start");
-				for (String rf : refactorings) {
-//					System.out.println("get " + rf);
-					if (rf != null && !rf.equals("") ) {
-						int idx = rf.indexOf('=');
-						if (idx != -1) {
-							// key: bluesoft-rnd/aperte-workflow-core 1ef031d4656da761f2be2df171dcde581d7c2e29 Move Attribute
-							String lhs = rf.substring(0, idx);
-							String[] splits = lhs.split(" ");
-							String projectName = splits[0];
-							String commitId = splits[1];
-							// key: bluesoft-rnd/aperte-workflow-core 1ef031d4656da761f2be2df171dcde581d7c2e29
-							String key = projectName + " " + commitId;
-							String value = rf.substring(idx + 1);
-							if (!refactoringMap.containsKey(key)) {
-								refactoringMap.put(key, new StringBuilder(value));
-							} else {
-								refactoringMap.get(key).append("\n" + value);
-							}
-							if (!refactoringIdMap.containsKey(projectName)) {
-								refactoringIdMap.put(projectName, new StringBuilder(commitId));
-								previous = commitId;
-							} else {
-								if (!previous.equals(commitId)) {
-									refactoringIdMap.get(projectName).append("\n" + commitId);
-									previous = commitId;
-								}
-							}
-						}
-					}
-				}
-				System.out.println(file.getName() + " end");
-			}
+			File dir1 = new File(INPUT_PATH + "/output");
+			File dir2 = new File(INPUT_PATH + "/undone_output");
+			File dir3 = new File(INPUT_PATH + "/unundone_output");
 			
+			updateMaps(dir1, refactoringMap, refactoringIdMap);
+			updateMaps(dir2, refactoringMap, refactoringIdMap);
+			updateMaps(dir3, refactoringMap, refactoringIdMap);
+			
+			// write refactorings into sequence files
 			Configuration conf = new Configuration();
 			FileSystem fileSystem = FileSystem.get(conf);
 			CompressionType compressionType = CompressionType.BLOCK;
@@ -94,6 +63,47 @@ public class BoaRefactoringSeqGenerator {
 			hasRefactoringWriter.close();
 		}
 		
+	}
+
+	private static void updateMaps(File dir, Map<String, StringBuilder> refactoringMap,
+			Map<String, StringBuilder> refactoringIdMap) {
+		String previous = "";
+		for (File file : dir.listFiles()) {
+			
+			String input = FileIO.readFileContents(file);
+			String[] refactorings = input.split("\\r?\\n");
+			System.out.println(file.getName() + " start");
+			for (String rf : refactorings) {
+				if (rf != null && !rf.equals("") ) {
+					int idx = rf.indexOf('=');
+					if (idx != -1) {
+						// key: bluesoft-rnd/aperte-workflow-core 1ef031d4656da761f2be2df171dcde581d7c2e29 Move Attribute
+						String lhs = rf.substring(0, idx);
+						String[] splits = lhs.split(" ");
+						String projectName = splits[0];
+						String commitId = splits[1];
+						// key: bluesoft-rnd/aperte-workflow-core 1ef031d4656da761f2be2df171dcde581d7c2e29
+						String key = projectName + " " + commitId;
+						String value = rf.substring(idx + 1);
+						if (!refactoringMap.containsKey(key)) {
+							refactoringMap.put(key, new StringBuilder(value));
+						} else {
+							refactoringMap.get(key).append("\n" + value);
+						}
+						if (!refactoringIdMap.containsKey(projectName)) {
+							refactoringIdMap.put(projectName, new StringBuilder(commitId));
+							previous = commitId;
+						} else {
+							if (!previous.equals(commitId)) {
+								refactoringIdMap.get(projectName).append("\n" + commitId);
+								previous = commitId;
+							}
+						}
+					}
+				}
+			}
+			System.out.println(file.getName() + " end");
+		}
 	}
 
 }
