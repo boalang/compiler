@@ -19,6 +19,7 @@ package boa.functions;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -450,7 +451,7 @@ public class BoaAstIntrinsics {
 	public static void setup(final Context context) {
 		BoaAstIntrinsics.context = context;
 	}
-
+	
 	@FunctionSpec(name = "getrefactorings", returnType = "array of string", formalParameters = { "Project",
 			"Revision" })
 	public static String[] getRefactorings(Project p, Revision r) {
@@ -461,7 +462,9 @@ public class BoaAstIntrinsics {
 		try {
 			final BytesWritable value = new BytesWritable();
 			if (refactoringsMap.get(new Text(p.getName() + " " + r.getId()), value) != null) {
-				String[] temp = new String(value.getBytes()).split("\\r?\\n");
+				// use array copy to avoid extra bytes
+				byte[] data = Arrays.copyOf(value.getBytes(), value.getLength());
+				String[] temp = new String(data, StandardCharsets.UTF_8).split("\\r?\\n");			
 				HashSet<String> set = new HashSet<String>(Arrays.asList(temp));
 				return set.toArray(new String[0]);
 			}
@@ -495,6 +498,8 @@ public class BoaAstIntrinsics {
 		return new HashSet<String>(Arrays.asList(getRefactoringIds(p)));
 	}
 	
+	
+	
 	@FunctionSpec(name = "getrefactoringids", returnType = "array of string", formalParameters = { "Project" })
 	public static String[] getRefactoringIds(Project p) {
 	
@@ -504,7 +509,9 @@ public class BoaAstIntrinsics {
 		try {
 			final BytesWritable value = new BytesWritable();
 			if (refactoringIdsMap.get(new Text(p.getName()), value) != null) {
-				String[] temp = new String(value.getBytes()).split("\\r?\\n");
+				// use array copy to avoid extra bytes
+				byte[] data = Arrays.copyOf(value.getBytes(), value.getLength());
+				String[] temp = new String(data, StandardCharsets.UTF_8).split("\\r?\\n");
 				return temp;
 			}
 		} catch (final Throwable e) {

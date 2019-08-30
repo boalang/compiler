@@ -2,6 +2,7 @@ package boa.functions.refactoring;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -34,13 +35,13 @@ public class BoaRefactoringSeqGenerator {
 			Map<String, StringBuilder> refactoringMap = new TreeMap<String, StringBuilder>();
 			Map<String, StringBuilder> refactoringIdMap = new TreeMap<String, StringBuilder>();
 			
-			File dir1 = new File(INPUT_PATH + "/output");
-			File dir2 = new File(INPUT_PATH + "/undone_output");
-			File dir3 = new File(INPUT_PATH + "/unundone_output");
-			
+			File dir1 = new File(INPUT_PATH + "/test_output");
+//			File dir2 = new File(INPUT_PATH + "/undone_output");
+//			File dir3 = new File(INPUT_PATH + "/unundone_output");
+//			
 			updateMaps(dir1, refactoringMap, refactoringIdMap);
-			updateMaps(dir2, refactoringMap, refactoringIdMap);
-			updateMaps(dir3, refactoringMap, refactoringIdMap);
+//			updateMaps(dir2, refactoringMap, refactoringIdMap);
+//			updateMaps(dir3, refactoringMap, refactoringIdMap);
 			
 			// write refactorings into sequence files
 			Configuration conf = new Configuration();
@@ -50,13 +51,17 @@ public class BoaRefactoringSeqGenerator {
 			MapFile.Writer refactoringWriter = new MapFile.Writer(conf, fileSystem, OUTPUT_PATH + "/refactoring", Text.class,
 					BytesWritable.class, compressionType, compressionCode, null);
 			MapFile.Writer hasRefactoringWriter = new MapFile.Writer(conf, fileSystem, OUTPUT_PATH + "/refactoringId", Text.class,
-					BytesWritable.class, compressionType, compressionCode, null);
+					BytesWritable.class, compressionType, compressionCode, null);			
 			for (Entry<String, StringBuilder> entry : refactoringMap.entrySet()) {
-				refactoringWriter.append(new Text(entry.getKey()), new BytesWritable(entry.getValue().toString().getBytes()));
+				String commitRefactorings = entry.getValue().toString();
+				byte[] data = commitRefactorings.getBytes(StandardCharsets.UTF_8);
+				refactoringWriter.append(new Text(entry.getKey()), new BytesWritable(data));
 //				System.out.println("appending refactoring");
 			}
 			for (Entry<String, StringBuilder> entry : refactoringIdMap.entrySet()) {
-				hasRefactoringWriter.append(new Text(entry.getKey()), new BytesWritable(entry.getValue().toString().getBytes()));
+				String commitIds = entry.getValue().toString();
+				byte[] data = commitIds.getBytes(StandardCharsets.UTF_8);
+				hasRefactoringWriter.append(new Text(entry.getKey()), new BytesWritable(data));
 //				System.out.println("appending hasRefactoring");
 			}
 			refactoringWriter.close();

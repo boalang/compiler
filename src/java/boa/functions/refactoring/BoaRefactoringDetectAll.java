@@ -13,6 +13,12 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jgit.api.Git;
@@ -42,17 +48,22 @@ public class BoaRefactoringDetectAll {
 	private static String NAMES_PATH;
 	private static String REPOS_PATH;
 	private static String OUTPUT_PATH;
+	private static int TIME_OUT; // in seconds
+
+	private static ExecutorService executor;
 
 	public static void main(String[] args) {
-//		args = new String[] { "/Users/hyj/test6/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo", "/Users/hyj/test6/output/o.txt" };
-		if (args.length < 2) {
-			System.err.println("args: NAMES_PATH, REPOS_PATH, OUTPUT_PATH");
+//		args = new String[] { "/Users/hyj/test6/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo",
+//				"/Users/hyj/test6/output/o.txt", "1" };
+		if (args.length < 4) {
+			System.err.println("args: NAMES_PATH, REPOS_PATH, OUTPUT_PATH, TIME_OUT");
 		} else {
 			NAMES_PATH = args[0];
 			String input = FileIO.readFileContents(new File(NAMES_PATH));
 			String[] projectNames = input.split("\\r?\\n");
 			REPOS_PATH = args[1];
 			OUTPUT_PATH = args[2];
+			TIME_OUT = Integer.parseInt(args[3]); // in seconds
 
 			HashSet<String> typeSet = BoaRefactoringIntrinsics.getConsideredTypes();
 
@@ -83,37 +94,76 @@ public class BoaRefactoringDetectAll {
 							commitCount++;
 							System.out.println(name + " " + commitCount + "th Commit " + r.getName() + " started");
 							try {
-								
-								List<Refactoring> temp = detect(repo, r);
+
+								long before = System.currentTimeMillis();
+								List<Refactoring> temp = getRefactorings(TIME_OUT * 1000, name, repo, r);
 								temp = filterTypes(temp, typeSet);
-								
-								System.out.println(name + " " + commitCount + "th Commit " + r.getName() + " detected " + temp.size());
-								
-								for (Refactoring rf : temp) {
-									String output = name + " " + r.getName() + " " + rf.getName() + "=" + rf.toString();
-									outputs.add(output);
+								if (temp.size() > 0) {
+									long after = System.currentTimeMillis();
+									
+									System.out.println(
+											name + " " + commitCount + "th Commit " + r.getName() + " detected "
+													+ temp.size() + " with time secs: " + (after - before) / 1000.0);
+
+									for (Refactoring rf : temp) {
+										String output = name + " " + r.getName() + " " + rf.getName() + "="
+												+ rf.toString();
+										outputs.add(output);
+									}
 								}
-								
+
 							} catch (OutOfMemoryError e) {
 								System.err.println(commitCount + "th Commit " + r.getName() + " OutOfMemoryError");
 								continue;
+							} finally {
+								System.gc();
 							}
-							
+
 						}
 						revWalk.dispose();
 						repo.close();
-					} catch (IOException e) {
+					} catch (Throwable e) {
 						e.printStackTrace();
 						continue;
+					}  finally {
+						System.gc();
 					}
+
 					System.err.println(projectCount + "th project " + name + " end");
 				} else {
 					System.err.println(projectCount + "th project " + name + " not exist! Continue");
 				}
 			}
+			System.err.println("Write start");
 			writeOutputs(outputs, OUTPUT_PATH);
-
+			System.err.println("Write end");
+			
+			if (executor != null)
+				executor.shutdown();
+			System.exit(1);
 		}
+	}
+
+	private static List<Refactoring> getRefactorings(int timeout, String projectName, Repository repo, RevCommit r) {
+		executor = Executors.newSingleThreadExecutor();
+		Future<List<Refactoring>> future = executor.submit(() -> {
+			return detect(repo, r);
+		});
+
+		try {
+			List<Refactoring> results = future.get(timeout, TimeUnit.MILLISECONDS);
+			return results;
+		} catch (TimeoutException e) {
+			System.err.println(projectName + " " + r.getName() + " TimeoutException");
+		} catch (InterruptedException e) {
+			System.err.println(projectName + " " + r.getName() + " InterruptedException");
+		} catch (ExecutionException e) {
+			System.err.println(projectName + " " + r.getName() + " ExecutionException");
+		}
+
+		executor.shutdown();
+		executor = null;
+		return new ArrayList<Refactoring>();
 	}
 
 	private static List<Refactoring> filterTypes(List<Refactoring> temp, HashSet<String> typeSet) {

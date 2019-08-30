@@ -14,6 +14,7 @@ import org.refactoringminer.api.RefactoringType;
 import static boa.functions.BoaAstIntrinsics.*;
 import static boa.functions.BoaIntrinsics.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -63,10 +64,16 @@ public class BoaRefactoringIntrinsics {
 		for (String filePath : filePathes)
 			if (filePath.contains(path))
 				return filePath;
+		// if cannot find, check parent path
+		int idx = path.lastIndexOf('/');
+		if (idx > -1) {
+			String parentPath = path.substring(0, idx);			
+			if (namespace.equals("com.consol.citrus.util.TestCaseCreator.TestCaseCreatorCliOptions"))
+				System.out.println(parentPath);
+			return findEquivalentFilePath(filePathes, parentPath); 
+		}
 		return null;
 	}
-	
-	
 	
 	@FunctionSpec(name = "isleafclass", returnType = "bool", formalParameters = { "array of ChangedFile", "string" })
 	public static boolean isLeafClass(ChangedFile[] snapshot, String namespace) {
@@ -104,6 +111,11 @@ public class BoaRefactoringIntrinsics {
 	@FunctionSpec(name = "getinvolvedclasses", returnType = "array of string", formalParameters = { "string" })
 	public static String[] getInvolvedClasses(String description) {
 		return BoaRefactoringType.getBeforeClasses(description);
+	}
+	
+	@FunctionSpec(name = "getinvolvedclassesinstring", returnType = "string", formalParameters = { "string" })
+	public static String getInvolvedClassesInString(String description) {
+		return Arrays.asList(BoaRefactoringType.getBeforeClasses(description)).toString();
 	}
 
 	public static boolean hasOutOfMemoryError;
