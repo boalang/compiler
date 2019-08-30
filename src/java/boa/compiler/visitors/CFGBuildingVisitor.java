@@ -1377,12 +1377,13 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArg {
 	}
 
 	private static void connectStartNodesToEndNodesOf(Node start, Node end) {
-		for (Node endNode : end.endNodes) {
-			for (Node startNode : start.startNodes) {
-				endNode.successors.add(startNode);
-				startNode.predecessors.add(endNode);
+		if (end.endNodes != null)
+			for (Node endNode : end.endNodes) {
+				for (Node startNode : start.startNodes) {
+					endNode.successors.add(startNode);
+					startNode.predecessors.add(endNode);
+				}
 			}
-		}
 	}
 
 	private static void connectToStartNodesOf(Node start, Node end) {
