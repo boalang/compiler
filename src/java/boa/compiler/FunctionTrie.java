@@ -60,7 +60,7 @@ public class FunctionTrie {
 			t2 = ((BoaArray)t2).getType();
 			if (t instanceof BoaTypeVar)
 				return new BoaArray(replaceVar(t, t2, typeVars));
-		} else if (t instanceof BoaMap && t2 instanceof BoaMap) {
+		} else if (t.getClass() == BoaMap.class && t2.getClass() == BoaMap.class) {
 			final BoaType i = ((BoaMap)t).getIndexType();
 			final BoaType i2 = ((BoaMap)t2).getIndexType();
 			t = ((BoaMap)t).getType();

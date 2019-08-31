@@ -4,7 +4,5 @@
 /output/
 /.idea/
 /bin/
-/.classpath
-/.project
 /.settings/
 /junitvmwatcher*.properties

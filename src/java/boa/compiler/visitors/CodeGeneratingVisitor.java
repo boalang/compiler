@@ -574,9 +574,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		st.add("combineTables", combineAggregatorStrings);
 		st.add("reduceTables", reduceAggregatorStrings);
 
+		final List<String> variableNames = new ArrayList<String>();
+		for (final String s : reduceAggregatorStrings)
+			variableNames.add(s.substring(s.indexOf('"'), s.indexOf(", new")));
+		Collections.sort(variableNames);
+
 		st.add("name", className);
 		st.add("splitsize", splitSize);
 		st.add("seed", seed);
+		st.add("outputVariableNames", variableNames);
 		if (isLocal) st.add("isLocal", true);
 
 		code.add(st.render());
