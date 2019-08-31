@@ -191,13 +191,15 @@ public class BoaGraphIntrinsics {
 	private static String dotEscapeString(final String s) {
 		final String escaped = s.replace("\\", "\\\\")
 			.replace("\"", "\\\"")
-			.replace("{", "\\{")
-			.replace("}", "\\}")
 			.replace("\r", "\\l")
 			.replace("\n", "\\l");
 		if (escaped.indexOf("\\l") != -1 && !escaped.endsWith("\\l"))
 			return escaped + "\\l";
 		return escaped;
+	}
+
+	private static String dotEscapeRecord(final String s) {
+		return dotEscapeString(s).replace("{", "\\{").replace("}", "\\}");
 	}
 
 	private static String dotEscapeHtml(final String s) {
@@ -246,19 +248,18 @@ public class BoaGraphIntrinsics {
 		}
 		str.append(nodeId);
 		str.append("] ");
-		if (isTable)
-			str.append(dotEscapeHtml(label));
-		else
-			str.append(dotEscapeString(label));
 		if (isTable) {
+			str.append(dotEscapeHtml(label));
 			str.append("</TD></TR><TR><TD>");
 			str.append(dotEscapeHtml(val).replace("|", "</TD><TD>"));
 			str.append("</TD></TR></TABLE>>]\n");
 		} else if (isRecord) {
+			str.append(dotEscapeRecord(label));
 			str.append("|{");
-			str.append(dotEscapeString(val));
+			str.append(dotEscapeRecord(val));
 			str.append("}}\"]\n");
 		} else {
+			str.append(dotEscapeString(label));
 			str.append("\"]\n");
 		}
 	}
@@ -335,9 +336,7 @@ public class BoaGraphIntrinsics {
 				str.append(n.getName());
 				if (isRecord) {
 					str.append("|{");
-					try {
-						str.append(dotEscapeString(t.getValue(n).toString()));
-					} catch (final Exception e) {}
+					str.append(dotEscapeRecord(val));
 					str.append("}}\"]\n");
 				} else {
 					str.append("\"]\n");
