@@ -1077,6 +1077,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if (indexees.size() > 0) {
 			final List<Node> array = new ArrayList<Node>(indexees);
+			final Set<String> seen = new LinkedHashSet<String>();
 			String src = "";
 			for (int i = 0; i < array.size(); i++) {
 				final Factor indexee = (Factor)array.get(i);
@@ -1085,6 +1086,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				indexee.accept(this);
 				final String src2 = code.removeLast();
 				this.skipIndex = "";
+
+				if (seen.contains(src2)) continue;
+				seen.add(src2);
 
 				final BoaType indexeeType = this.indexeeFinder.getFactors().get(indexee).type;
 				final String func = (indexeeType instanceof BoaArray) ? ".length" : ".size()";
