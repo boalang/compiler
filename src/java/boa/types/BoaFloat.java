@@ -47,6 +47,10 @@ public class BoaFloat extends BoaScalar {
 		if (that instanceof BoaInt)
 			return true;
 
+		// time can be assigned to floats
+		if (that instanceof BoaTime)
+			return true;
+
 		// otherwise, just check the defaults
 		return super.assigns(that);
 	}

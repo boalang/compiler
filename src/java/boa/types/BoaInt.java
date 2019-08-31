@@ -44,6 +44,17 @@ public class BoaInt extends BoaScalar {
 
 	/** {@inheritDoc} */
 	@Override
+	public boolean assigns(final BoaType that) {
+		// time can be assigned to ints
+		if (that instanceof BoaTime)
+			return true;
+
+		// otherwise, just check the defaults
+		return super.assigns(that);
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public boolean accepts(final BoaType that) {
 		return this.assigns(that);
 	}
