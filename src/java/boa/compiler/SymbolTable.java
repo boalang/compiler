@@ -456,6 +456,9 @@ public class SymbolTable {
 		if (types.containsKey(id))
 			return types.get(id);
 
+		if (id.equals("traversal"))
+			return new BoaTraversal();
+
 		if (id.startsWith("array of "))
 			return new BoaArray(getType(id.substring("array of ".length()).trim()));
 
