@@ -19,7 +19,7 @@ package boa.graphs.cdg;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +43,7 @@ import boa.types.Control;
 public class CDG {
     private Method md;
     private CDGNode entryNode;
-    private final Set<CDGNode> nodes = new HashSet<CDGNode>();
+    private final Set<CDGNode> nodes = new LinkedHashSet<CDGNode>();
 
     /**
      * Constructs a control dependence graph

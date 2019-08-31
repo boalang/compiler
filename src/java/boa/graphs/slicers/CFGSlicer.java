@@ -100,15 +100,15 @@ public class CFGSlicer {
     private void getSlice(final CFG cfg, final List<CFGNode> slicingNodes) throws Exception {
         if (slicingNodes.size() == 0) return;
 
-        final Set<CFGNode> inSlice = new HashSet<CFGNode>(slicingNodes);
-        final Set<CFGNode> controlInflNodes = new HashSet<CFGNode>();
+        final Set<CFGNode> inSlice = new LinkedHashSet<CFGNode>(slicingNodes);
+        final Set<CFGNode> controlInflNodes = new LinkedHashSet<CFGNode>();
         final Map<Integer, Set<CFGNode>> infl = getInfluence(new PDTree(cfg), cfg);
 
         // TODO: get rid of the traversal
         final BoaAbstractTraversal slicer = new BoaAbstractTraversal<Set<String>>(true, true) {
             protected Set<String> preTraverse(final CFGNode node) throws Exception {
                 // in(n) = \/(pred) out(pred)
-                final Set<String> in = new HashSet<String>();
+                final Set<String> in = new LinkedHashSet<String>();
                 for (final CFGNode p : node.getPredecessors()) {
                     final Set<String> pred = getValue(p);
                     if (pred != null)
@@ -117,7 +117,7 @@ public class CFGSlicer {
 
                 // gen(n) = def(n) and (ref(n) /\ in(n) != {} or inSlice(n))
                 String gen = null;
-                final Set<String> refIn = new HashSet<String>(node.getUseVariables());
+                final Set<String> refIn = new LinkedHashSet<String>(node.getUseVariables());
                 refIn.retainAll(in);
                 if (refIn.size() != 0 || inSlice.contains(node))
                     if (node.getDefVariables() != null)
@@ -127,14 +127,14 @@ public class CFGSlicer {
                 // use def directly
 
                 // out(n) = gen(n) \/ (in(n) - kill(n))
-                final Set<String> out = new HashSet<String>(in);
+                final Set<String> out = new LinkedHashSet<String>(in);
                 if (node.getDefVariables() != null)
                     out.remove(node.getDefVariables());
                 if (gen != null)
                     out.add(gen);
 
                 // inSlice(n) if ref(n) /\ out(n) != {}
-                final Set<String> refOut = new HashSet<String>(node.getUseVariables());
+                final Set<String> refOut = new LinkedHashSet<String>(node.getUseVariables());
                 refOut.retainAll(out);
                 if (refOut.size() != 0)
                     inSlice.add(node);
@@ -150,7 +150,7 @@ public class CFGSlicer {
             public void traverse(final CFGNode node, boolean flag) throws Exception {
                 if (flag) {
                     currentResult = preTraverse(node);
-                    outputMapObj.put(node.getId(), new HashSet<String>(currentResult));
+                    outputMapObj.put(node.getId(), new LinkedHashSet<String>(currentResult));
                 } else {
                     outputMapObj.put(node.getId(), preTraverse(node));
                 }
@@ -159,7 +159,7 @@ public class CFGSlicer {
 
         final BoaAbstractFixP fixp = new BoaAbstractFixP() {
             public boolean invoke1(final Set<String> current, final Set<String> previous) {
-                final Set<String> curr = new HashSet<String>(current);
+                final Set<String> curr = new LinkedHashSet<String>(current);
                 curr.removeAll(previous);
                 return curr.size() == 0;
             }
@@ -167,7 +167,7 @@ public class CFGSlicer {
             @Override
             @SuppressWarnings({"unchecked"})
             public boolean invoke(final Object current, final Object previous) throws Exception {
-                return invoke1((HashSet<String>) current, (HashSet<String>) previous);
+                return invoke1((LinkedHashSet<String>) current, (LinkedHashSet<String>) previous);
             }
         };
 
@@ -204,7 +204,7 @@ public class CFGSlicer {
             final TreeNode srcParent = pdTree.getNode(enodes[0]).getParent();
             TreeNode destination = pdTree.getNode(enodes[1]);
             if (!contolDependentMap.containsKey(enodes[0]))
-                contolDependentMap.put(enodes[0], new HashSet<CFGNode>());
+                contolDependentMap.put(enodes[0], new LinkedHashSet<CFGNode>());
             while (!srcParent.equals(destination)) {
                 contolDependentMap.get(enodes[0]).add(cfg.getNode(destination.getNodeId()));
                 destination = destination.getParent();

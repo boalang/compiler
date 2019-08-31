@@ -411,7 +411,7 @@ public abstract class BoaAbstractTraversal<T1> {
 						prevOutputMapObj = new java.util.HashMap<Long, T1>(outputMapObj);
 						traverse(cfg, direction, kind);
 						fixpFlag = true;
-						final java.util.HashSet<CFGNode> nl = cfg.getNodes();
+						final java.util.Set<CFGNode> nl = cfg.getNodes();
 						for (final CFGNode node : nl) {
 							boolean curFlag = outputMapObj.containsKey(node.getId());
 							if (curFlag) {
@@ -432,7 +432,7 @@ public abstract class BoaAbstractTraversal<T1> {
 					break;
 				case HYBRID:
 					prevOutputMapObj = new java.util.HashMap<Long, T1>();
-					final java.util.Set<Long> visitedNodes = new java.util.HashSet<Long>();
+					final java.util.Set<Long> visitedNodes = new java.util.LinkedHashSet<Long>();
 					final CFGNode[] nl = cfg.sortNodes();
 					if (nl.length != 0) {
 						if (this.isFlowSensitive) {
@@ -520,7 +520,7 @@ public abstract class BoaAbstractTraversal<T1> {
 				outputMapObj = new java.util.HashMap<Long, T1>();
 			}
 			if (cfg.getNodes().size() != 0) {
-				final java.util.Set<Long> visitedNodes = new java.util.HashSet<Long>();
+				final java.util.Set<Long> visitedNodes = new java.util.LinkedHashSet<Long>();
 				switch (kind) {
 					case WORKLIST_POSTORDER:
 						Queue<CFGNode> queue = new LinkedList<CFGNode>();
@@ -563,7 +563,7 @@ public abstract class BoaAbstractTraversal<T1> {
 					outputMapObj = new java.util.HashMap<Long, T1>();
 				}
 				if (cfg.getNodes().size() != 0) {
-					final java.util.Set<Long> visitedNodes = new java.util.HashSet<Long>();
+					final java.util.Set<Long> visitedNodes = new java.util.LinkedHashSet<Long>();
 					final CFGNode[] nl = cfg.sortNodes();
 					switch (kind) {
 						case DFS:
@@ -658,7 +658,7 @@ public abstract class BoaAbstractTraversal<T1> {
 					outputMapObj = new java.util.HashMap<Long, T1>();
 				}
 				if (cdg.getNodes().size() != 0) {
-					final java.util.Set<Long> visitedNodes = new java.util.HashSet<Long>();
+					final java.util.Set<Long> visitedNodes = new java.util.LinkedHashSet<Long>();
 					//final CDGNode[] nl = cdg.sortNodes();
 					switch (kind) {
 						case DFS:
@@ -755,7 +755,7 @@ public abstract class BoaAbstractTraversal<T1> {
 					outputMapObj = new java.util.HashMap<Long, T1>();
 				}
 				if (ddg.getNodes().size() != 0) {
-					final java.util.Set<Long> visitedNodes = new java.util.HashSet<Long>();
+					final java.util.Set<Long> visitedNodes = new java.util.LinkedHashSet<Long>();
 					//final CDGNode[] nl = cdg.sortNodes();
 					switch (kind) {
 						case DFS:
@@ -852,7 +852,7 @@ public abstract class BoaAbstractTraversal<T1> {
 					outputMapObj = new java.util.HashMap<Long, T1>();
 				}
 				if (pdg.getNodes().size() != 0) {
-					final java.util.Set<Long> visitedNodes = new java.util.HashSet<Long>();
+					final java.util.Set<Long> visitedNodes = new java.util.LinkedHashSet<Long>();
 					//final CDGNode[] nl = cdg.sortNodes();
 					switch (kind) {
 						case DFS:
@@ -949,7 +949,7 @@ public abstract class BoaAbstractTraversal<T1> {
 					outputMapObj = new java.util.HashMap<Long, T1>();
 				}
 				if (pdgslicer.getSlice().size() != 0) {
-					final java.util.Set<Long> visitedNodes = new java.util.HashSet<Long>();
+					final java.util.Set<Long> visitedNodes = new java.util.LinkedHashSet<Long>();
 					//final CDGNode[] nl = cdg.sortNodes();
 					switch (kind) {
 						case DFS:
@@ -1043,7 +1043,7 @@ public abstract class BoaAbstractTraversal<T1> {
 					outputMapObj = new java.util.HashMap<Long, T1>();
 				}
 				if (tree.getNodes().size() != 0) {
-					final java.util.Set<Long> visitedNodes = new java.util.HashSet<Long>();
+					final java.util.Set<Long> visitedNodes = new java.util.LinkedHashSet<Long>();
 					//final CDGNode[] nl = cdg.sortNodes();
 					switch (kind) {
 						case DFS:

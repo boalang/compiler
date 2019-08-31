@@ -17,7 +17,7 @@
 package boa.graphs.ddg;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import boa.graphs.Edge;
@@ -32,7 +32,7 @@ import boa.graphs.cfg.CFGNode;
  */
 public class DDGNode extends Node<DDGNode, DDGEdge> {
     protected String defVariable;
-    protected HashSet<String> useVariables = new HashSet<String>();
+    protected Set<String> useVariables = new LinkedHashSet<String>();
 
     /**
      * Constructs a DDG node.
@@ -61,7 +61,7 @@ public class DDGNode extends Node<DDGNode, DDGEdge> {
         this.defVariable = defVariables;
     }
 
-    public void setUseVariables(final HashSet<String> useVariables) {
+    public void setUseVariables(final Set<String> useVariables) {
         this.useVariables = useVariables;
     }
 

@@ -16,7 +16,7 @@
  */
 package boa.compiler.transforms;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.Stack;
 
@@ -39,7 +39,7 @@ import boa.types.proto.*;
  * @author rdyer
  */
 public class VisitorOptimizingTransformer extends AbstractVisitorNoArgNoRet {
-	protected final static Set<Class<? extends BoaType>> astTypes = new HashSet<Class<? extends BoaType>>();
+	protected final static Set<Class<? extends BoaType>> astTypes = new LinkedHashSet<Class<? extends BoaType>>();
 
 	static {
 		astTypes.addAll(new ASTRootProtoTuple().reachableTypes());
@@ -59,7 +59,7 @@ public class VisitorOptimizingTransformer extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	protected void initialize() {
-		types = new HashSet<Class<? extends BoaType>>();
+		types = new LinkedHashSet<Class<? extends BoaType>>();
 		beforeChangedFile = afterChangedFile = null;
 
 		typeStack.clear();
@@ -74,7 +74,7 @@ public class VisitorOptimizingTransformer extends AbstractVisitorNoArgNoRet {
 		beforeStack.push(beforeChangedFile);
 		afterStack.push(afterChangedFile);
 
-		types = new HashSet<Class<? extends BoaType>>();
+		types = new LinkedHashSet<Class<? extends BoaType>>();
 		beforeChangedFile = afterChangedFile = null;
 
 		n.getBody().accept(this);

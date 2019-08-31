@@ -18,10 +18,6 @@ identifierMap ::= [
 		
 VarDecl(isstatic, type, id) ::= "<if(isstatic)>static <endif><type> ___<id>;<\n>"
 ArrayType(type) ::= "<type>[]"
-MapType(key, value) ::= "java.util.HashMap\<<key>, <value>>"
-StackType(value) ::= "java.util.Stack\<<value>>"
-QueueType(value) ::= "java.util.LinkedList\<<value>>"
-SetType(value) ::= "java.util.HashSet\<<value>>"
 Block(statements) ::= <<
 {
 	<statements:{s | <s>}>}
@@ -125,19 +121,19 @@ new <type>()
 }
 >>
 
-TupleType(name, fields, types, protos) ::= <<
+TupleType(name, fields, types, types2, protos) ::= <<
 private class <name>
 {
 	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
 	<name>( <fields,types:{field,type|<type> ___<field>}; separator=", "> ){
-		<fields,types,protos:{field,type,proto|
+		<fields,types2,protos:{field,type,proto|
 			<if(proto)> this.___<field> = ___<field>
 			<else> this.___<field> = new <type>(___<field>)
 			<endif>
 		}; separator="; ">;
 	}
 	<name>( <name> tmp){
-		<fields,types,protos:{field,type,proto|
+		<fields,types2,protos:{field,type,proto|
 			<if(proto)> this.___<field> = tmp.___<field>
 			<else> this.___<field> = new <type>(tmp.___<field>)
 			<endif>

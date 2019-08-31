@@ -53,6 +53,7 @@ public class SymbolTable {
 	private Operand operand;
 	private Stack<BoaType> operandType = new Stack<BoaType>();
 	private boolean needsBoxing;
+	private boolean needsCast;
 	private Stack<Boolean> isVisitor = new Stack<Boolean>();
 	private boolean isTraverse = false;
 	private boolean shadowing = false;
@@ -205,7 +206,7 @@ public class SymbolTable {
 
 		// clone functions
 		globalFunctions.addFunction("clone", new BoaFunction(new BoaMap(new BoaTypeVar("K"), new BoaTypeVar("V")), new BoaType[] {new BoaMap(new BoaTypeVar("K"), new BoaTypeVar("V"))},"(java.util.HashMap)${0}.clone()"));
-		globalFunctions.addFunction("clone", new BoaFunction(new BoaSet(new BoaTypeVar("V")), new BoaType[] {new BoaSet(new BoaTypeVar("V"))},"(java.util.HashSet)${0}.clone()"));
+		globalFunctions.addFunction("clone", new BoaFunction(new BoaSet(new BoaTypeVar("V")), new BoaType[] {new BoaSet(new BoaTypeVar("V"))},"(java.util.LinkedHashSet)${0}.clone()"));
 		globalFunctions.addFunction("clone", new BoaFunction(new BoaString(), new BoaType[] {new BoaString()},"new String(${0})"));
 
 		// visitors
@@ -248,7 +249,7 @@ public class SymbolTable {
 		globalFunctions.addFunction("remove", new BoaFunction(new BoaAny(), new BoaType[] { new BoaSet(new BoaTypeVar("V")), new BoaTypeVar("V") }, "${0}.remove(${1})"));
 		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaSet(new BoaTypeVar("V")) }, "${0}.clear()"));
 		globalFunctions.addFunction("values", new BoaFunction(new BoaArray(new BoaTypeVar("V")), new BoaType[] { new BoaSet(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.basic_array(${0}.toArray(new ${V}[0]))"));
-		globalFunctions.addFunction("values", new BoaFunction(new BoaArray(new BoaSet(new BoaString())), new BoaType[] { new BoaSet(new BoaSet(new BoaString())) }, "boa.functions.BoaIntrinsics.basic_array(${0}.toArray(new java.util.HashSet[0]))"));
+		globalFunctions.addFunction("values", new BoaFunction(new BoaArray(new BoaSet(new BoaString())), new BoaType[] { new BoaSet(new BoaSet(new BoaString())) }, "boa.functions.BoaIntrinsics.basic_array(${0}.toArray(new java.util.LinkedHashSet[0]))"));
 
 		globalFunctions.addFunction("union", new BoaFunction(new BoaSet(new BoaTypeVar("V")), new BoaType[] { new BoaSet(new BoaTypeVar("V")), new BoaSet(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.set_union(${0}, ${1})"));
 		globalFunctions.addFunction("intersect", new BoaFunction(new BoaSet(new BoaTypeVar("V")), new BoaType[] { new BoaSet(new BoaTypeVar("V")), new BoaSet(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.set_intersect(${0}, ${1})"));
@@ -698,6 +699,14 @@ public class SymbolTable {
 
 	public boolean getNeedsBoxing() {
 		return this.needsBoxing;
+	}
+
+	public void setNeedsCast(final boolean needsCast) {
+		this.needsCast = needsCast;
+	}
+
+	public boolean getNeedsCast() {
+		return this.needsCast;
 	}
 
 	public void setIsTraverse(final boolean isTraverse) {

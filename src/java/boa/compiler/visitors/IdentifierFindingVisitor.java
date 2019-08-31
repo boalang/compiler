@@ -17,7 +17,7 @@
  */
 package boa.compiler.visitors;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import boa.compiler.ast.Identifier;
@@ -27,7 +27,7 @@ import boa.compiler.ast.Identifier;
  * @author rdyer
  */
 public class IdentifierFindingVisitor extends AbstractVisitorNoArgNoRet {
-	protected final Set<String> names = new HashSet<String>();
+	protected final Set<String> names = new LinkedHashSet<String>();
 
 	public Set<String> getNames() {
 		return names;

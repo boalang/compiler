@@ -46,21 +46,21 @@ public class InformationAnalysis extends AbstractVisitorNoArgNoRet {
 	public boolean intersectionFound = false;
 	public boolean addFound = false;
 	public boolean removeFound = false;
-	public HashSet<Identifier> getValueNodesAlias = new HashSet<Identifier>();
-	public HashSet<Identifier> totalGetValueNodes = new HashSet<Identifier>();
+	public Set<Identifier> getValueNodesAlias = new LinkedHashSet<Identifier>();
+	public Set<Identifier> totalGetValueNodes = new LinkedHashSet<Identifier>();
 	protected final IdentifierFindingVisitor idFinder = new IdentifierFindingVisitor();
 	protected final CallFindingVisitor callFinder = new CallFindingVisitor();
 	protected boolean abortGeneration = false;
 	public boolean argFlag = false;
 	public boolean genFlag = false;
 	public boolean killFlag = false;
-	HashSet<String> mergeOperation = new HashSet<String>(); 
+	Set<String> mergeOperation = new LinkedHashSet<String>(); 
 	int satisfiedNodes = 0;
 
-	public void start(final CFGBuildingVisitor cfgBuilder, final HashSet<Identifier> getValueNodesAlias, final HashSet<Identifier> totalGetValueNodes) {
+	public void start(final CFGBuildingVisitor cfgBuilder, final Set<Identifier> getValueNodesAlias, final Set<Identifier> totalGetValueNodes) {
 		this.getValueNodesAlias = getValueNodesAlias;
 		this.totalGetValueNodes = totalGetValueNodes;
-		final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+		final Set<Integer> visitedNodes = new LinkedHashSet<Integer>();
 		visitedNodes.add(cfgBuilder.currentStartNodes.get(0).nodeId);
 		dfs(cfgBuilder.currentStartNodes.get(0), visitedNodes);
 	}

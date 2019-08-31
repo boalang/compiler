@@ -67,8 +67,8 @@ public class PreconditionAggregator extends Aggregator {
 		final Expression precondition = parseexpression(precond);
 
 		if (!precondMethods.containsKey(precondition)) {
-			precondMethods.put(precondition, new HashSet<String>());
-			precondProjects.put(precondition, new HashSet<String>());
+			precondMethods.put(precondition, new LinkedHashSet<String>());
+			precondProjects.put(precondition, new LinkedHashSet<String>());
 		}
 
 		precondMethods.get(precondition).add(project + clientmethod);
@@ -103,7 +103,7 @@ public class PreconditionAggregator extends Aggregator {
 	 */
 	private Map<Expression, Set<String>> infer(Map<Expression, Set<String>> precondMP) {
 		final Map<Expression, Set<String>> infPreconditions = new HashMap<Expression, Set<String>>(precondMP);
-		final Set<Expression> preconds = new HashSet<Expression>(infPreconditions.keySet());
+		final Set<Expression> preconds = new LinkedHashSet<Expression>(infPreconditions.keySet());
 
 		for (final Expression eqPrecond : preconds) {
 			if (eqPrecond.getKind() == ExpressionKind.EQ) {
@@ -121,10 +121,10 @@ public class PreconditionAggregator extends Aggregator {
 							final Expression nsineqPrecond = builder.build();
 
 							if (!preconds.contains(nsineqPrecond))
-								infPreconditions.put(nsineqPrecond, new HashSet<String>());
+								infPreconditions.put(nsineqPrecond, new LinkedHashSet<String>());
 
 							if (infPreconditions.get(eqPrecond).size() == infPreconditions.get(sineqPrecond).size()) {
-								Set<String> tempSet = new HashSet<String>(infPreconditions.get(nsineqPrecond));
+								Set<String> tempSet = new LinkedHashSet<String>(infPreconditions.get(nsineqPrecond));
 								tempSet.addAll(infPreconditions.get(eqPrecond));
 								infPreconditions.get(nsineqPrecond).addAll(tempSet);
 							}
@@ -151,7 +151,7 @@ public class PreconditionAggregator extends Aggregator {
 
 	private Map<Expression, Set<String>> mergeConditionsWithImplication(final Map<Expression, Set<String>> precondMP) {
 		final Map<Expression, Set<String>> mergedPreconditions = new HashMap<Expression, Set<String>>(precondMP);
-		final Set<Expression> preconds = new HashSet<Expression>(mergedPreconditions.keySet());
+		final Set<Expression> preconds = new LinkedHashSet<Expression>(mergedPreconditions.keySet());
 
 		for (final Expression strongPrecond : preconds) {
 			for (final Expression weakPrecond : preconds) {
@@ -186,7 +186,7 @@ public class PreconditionAggregator extends Aggregator {
 	 */
 	private Map<Expression, Set<String>> removeEquality(final Map<Expression, Set<String>> precondMP) {
 		final Map<Expression, Set<String>> filtPreconditions = new HashMap<Expression, Set<String>>(precondMP);
-		final Set<Expression> preconds = new HashSet<Expression>(filtPreconditions.keySet());
+		final Set<Expression> preconds = new LinkedHashSet<Expression>(filtPreconditions.keySet());
 
 		for (final Expression precond : preconds) {
 			if (precond.getKind() == ExpressionKind.OTHER) {
@@ -241,7 +241,7 @@ public class PreconditionAggregator extends Aggregator {
 		final Map<String, Double> precondConf = new HashMap<String, Double>();
 		final Set<Expression> preconds = precondMP.keySet();
 
-		final Set<String> totalCalls = new HashSet<String>();
+		final Set<String> totalCalls = new LinkedHashSet<String>();
 		for (final Expression precond : preconds)
 			if (precondMP.get(precond).size() > 1)
 				totalCalls.addAll(precondMP.get(precond));
@@ -302,7 +302,7 @@ public class PreconditionAggregator extends Aggregator {
 	 * @return set of all combinations of arguments
 	 */
 	private Set<SortedSet<String>> kCombinations() {
-		final Set<SortedSet<String>> comb = new HashSet<SortedSet<String>>();
+		final Set<SortedSet<String>> comb = new LinkedHashSet<SortedSet<String>>();
 		final List<String> argList = new ArrayList<String>();
 		comb.add(new TreeSet<String>(Collections.singletonList("rcv$")));
 		argList.add("rcv$");
@@ -313,7 +313,7 @@ public class PreconditionAggregator extends Aggregator {
 		}
 
 		for (final String arg : argList) {
-			final Set<SortedSet<String>> tempComb = new HashSet<SortedSet<String>>(comb);
+			final Set<SortedSet<String>> tempComb = new LinkedHashSet<SortedSet<String>>(comb);
 			for (final SortedSet<String> s : tempComb) {
 				final SortedSet<String> t = new TreeSet<String>(s);
 				t.add(arg);

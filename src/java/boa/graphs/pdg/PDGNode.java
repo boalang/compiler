@@ -21,7 +21,7 @@ import boa.graphs.Edge;
 import boa.graphs.Node;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,7 +33,7 @@ import java.util.Set;
  */
 public class PDGNode extends Node<PDGNode, PDGEdge> {
     private String defVariable;
-    private Set<String> useVariables = new HashSet<String>();
+    private Set<String> useVariables = new LinkedHashSet<String>();
 
     /**
      * Constructs a PDG node.
@@ -53,7 +53,7 @@ public class PDGNode extends Node<PDGNode, PDGEdge> {
         this.defVariable = defVariables;
     }
 
-    public void setUseVariables(final HashSet<String> useVariables) {
+    public void setUseVariables(final Set<String> useVariables) {
         this.useVariables = useVariables;
     }
 

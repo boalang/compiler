@@ -175,6 +175,18 @@ public class BoaArray extends BoaType {
 
 	/** {@inheritDoc} */
 	@Override
+	public String toBoxedJavaType() {
+		return this.type.toBoxedJavaType() + "[]";
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String toInterfaceJavaType() {
+		return this.type.toInterfaceJavaType() + "[]";
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public String toString() {
 		if (this.type == null)
 			return "array of none";

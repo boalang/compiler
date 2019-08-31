@@ -16,7 +16,7 @@
  */
 package boa.compiler.visitors;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import boa.compiler.ast.Call;
@@ -34,13 +34,13 @@ import boa.types.proto.ASTRootProtoTuple;
  * @author rdyer
  */
 public class TaskClassifyingVisitor extends AbstractVisitorNoArgNoRet {
-	protected final static Set<Class<? extends BoaType>> astTypes = new HashSet<Class<? extends BoaType>>();
+	protected final static Set<Class<? extends BoaType>> astTypes = new LinkedHashSet<Class<? extends BoaType>>();
 
 	static {
 		astTypes.addAll(new ASTRootProtoTuple().reachableTypes());
 	}
 
-	protected final Set<Class<? extends BoaType>> types = new HashSet<Class<? extends BoaType>>();
+	protected final Set<Class<? extends BoaType>> types = new LinkedHashSet<Class<? extends BoaType>>();
 
 	private boolean complex = false;
 
