@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Hridesh Rajan, Ganesha Upadhyaya, Ramanathan Ramu, Robert Dyer, Che Shian Hung
+ * Copyright 2019, Hridesh Rajan, Ganesha Upadhyaya, Ramanathan Ramu, Robert Dyer, Che Shian Hung
  *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
@@ -31,6 +31,7 @@ import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Method;
 import boa.types.Ast.Variable;
 import boa.types.Control.Node;
+import boa.runtime.BoaAbstractTraversal;
 
 /**
  * Boa functions for working with control flow graphs.
@@ -187,11 +188,20 @@ public class BoaGraphIntrinsics {
 		}
 	}
 
-	private static String dotEscape(final String s) {
-		final String escaped = s.replace("\\", "\\\\").replace("\"", "\\\"").replace("\r", "\\l").replace("\n", "\\l");
+	private static String dotEscapeString(final String s) {
+		final String escaped = s.replace("\\", "\\\\")
+			.replace("\"", "\\\"")
+			.replace("{", "\\{")
+			.replace("}", "\\}")
+			.replace("\r", "\\l")
+			.replace("\n", "\\l");
 		if (escaped.indexOf("\\l") != -1 && !escaped.endsWith("\\l"))
 			return escaped + "\\l";
 		return escaped;
+	}
+
+	private static String dotEscapeHtml(final String s) {
+		return s.replace("<", "&lt;").replace(">", "&gt;").replace("\r", "<BR/>").replace("\n", "<BR/>");
 	}
 
 	// Graph Visualizers
@@ -208,8 +218,53 @@ public class BoaGraphIntrinsics {
 		return cfgToDot(cfg, "");
 	}
 
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CFG", "traversal" })
+	public static String cfgToDot(final CFG cfg, final BoaAbstractTraversal t) {
+		return cfgToDot(cfg, "", t);
+	}
+
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CFG", "string" })
 	public static String cfgToDot(final CFG cfg, final String label) {
+		return cfgToDot(cfg, label, null);
+	}
+
+	private static void generateLabel(final StringBuilder str, final boolean isTable, final boolean isRecord, final long nodeId, final String label, final String val) {
+		if (isTable) {
+			int count = 1;
+
+			for (int i = 0; i < val.length(); i++)
+				if (val.charAt(i) == '|')
+					count++;
+
+			str.append(",label=<<TABLE CELLBORDER=\"1\" CELLPADDING=\"4\" CELLSPACING=\"0\" BORDER=\"0\"><TR><TD COLSPAN=\"");
+			str.append(count);
+			str.append("\">[");
+		} else if (isRecord) {
+			str.append(",label=\"{[");
+		} else {
+			str.append(",label=\"[");
+		}
+		str.append(nodeId);
+		str.append("] ");
+		if (isTable)
+			str.append(dotEscapeHtml(label));
+		else
+			str.append(dotEscapeString(label));
+		if (isTable) {
+			str.append("</TD></TR><TR><TD>");
+			str.append(dotEscapeHtml(val).replace("|", "</TD><TD>"));
+			str.append("</TD></TR></TABLE>>]\n");
+		} else if (isRecord) {
+			str.append("|{");
+			str.append(dotEscapeString(val));
+			str.append("}}\"]\n");
+		} else {
+			str.append("\"]\n");
+		}
+	}
+
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CFG", "string", "traversal" })
+	public static String cfgToDot(final CFG cfg, final String label, final BoaAbstractTraversal t) {
 		if (cfg == null || cfg.getNodes().size() == 0) return "";
 		final StringBuilder str = new StringBuilder();
 		final StringBuilder str2 = new StringBuilder();
@@ -221,47 +276,72 @@ public class BoaGraphIntrinsics {
 		if (label.length() > 0) {
 			str.append("\tlabelloc=\"t\"\n");
 			str.append("\tlabel=\"");
-			str.append(dotEscape(label));
+			str.append(dotEscapeString(label));
 			str.append("\"\n");
 		}
 
+		final boolean isRecord = t != null;
+
 		for (final boa.graphs.cfg.CFGNode n : cfg.sortNodes()) {
+			boolean isTable = false;
+			String val = "";
+			if (isRecord)
+				try {
+					val = t.getValue(n).toString();
+				} catch (final Exception e) {}
+
 			str.append("\t");
 			str.append(n.getId());
 			str.append("[");
 			switch (n.getKind()) {
 				case CONTROL:
 					str.append("shape=diamond");
+					if (isRecord) isTable = true;
 					break;
 				case METHOD:
-					str.append("shape=parallelogram");
+					if (isRecord) {
+						str.append("shape=polygon,skew=0.2,fixedsize=true,height=1.2,margin=0,width=");
+						str.append(val.length() / 8); // FIXME is there a better way to size this polygon?
+						isTable = true;
+					} else {
+						str.append("shape=parallelogram");
+					}
 					break;
 				case OTHER:
-					str.append("shape=box");
+					if (isRecord)
+						str.append("shape=record");
+					else
+						str.append("shape=box");
 					break;
 				case ENTRY:
 				default:
-					str.append("shape=ellipse");
+					if (isRecord)
+						str.append("shape=Mrecord");
+					else
+						str.append("shape=ellipse");
 					break;
 			}
 			if (n.hasStmt()) {
-				str.append(",label=\"[");
-				str.append(n.getId());
-				str.append("] ");
-				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt())));
-				str.append("\"]\n");
+				generateLabel(str, isTable, isRecord, n.getId(), boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt()), val);
 			} else if (n.hasExpr()) {
-				str.append(",label=\"[");
-				str.append(n.getId());
-				str.append("] ");
-				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
-				str.append("\"]\n");
+				generateLabel(str, isTable, isRecord, n.getId(), boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr()), val);
 			} else if (n.getKind() == boa.types.Control.Node.NodeType.ENTRY) {
-				str.append(",label=\"[");
+				if (isRecord)
+					str.append(",label=\"{[");
+				else
+					str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
 				str.append(n.getName());
-				str.append("\"]\n");
+				if (isRecord) {
+					str.append("|{");
+					try {
+						str.append(dotEscapeString(t.getValue(n).toString()));
+					} catch (final Exception e) {}
+					str.append("}}\"]\n");
+				} else {
+					str.append("\"]\n");
+				}
 			} else {
 				str.append("]\n");
 			}
@@ -275,7 +355,7 @@ public class BoaGraphIntrinsics {
 				str2.append(e.getDest().getId());
 				if (e.getLabel() != null && !e.getLabel().isEmpty() && !e.getLabel().equals(".")) {
 					str2.append(" [label=\"");
-					str2.append(dotEscape(e.getLabel()));
+					str2.append(dotEscapeString(e.getLabel()));
 					str2.append("\"]");
 				}
 				str2.append("\n");
@@ -310,7 +390,7 @@ public class BoaGraphIntrinsics {
 		if (label.length() > 0) {
 			str.append("\tlabelloc=\"t\"\n");
 			str.append("\tlabel=\"");
-			str.append(dotEscape(label));
+			str.append(dotEscapeString(label));
 			str.append("\"\n");
 		}
 
@@ -322,13 +402,13 @@ public class BoaGraphIntrinsics {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
-				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt())));
+				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt())));
 				str.append("\"]\n");
 			} else if (n.hasExpr()) {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
-				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
+				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
 				str.append("\"]\n");
 			} else if (n.getKind() == boa.types.Control.Node.NodeType.ENTRY) {
 				str.append(",label=\"[");
@@ -347,7 +427,7 @@ public class BoaGraphIntrinsics {
 				str2.append(e.getDest().getId());
 				if (!(e.getLabel() == null || e.getLabel().equals(".") || e.getLabel().equals(""))) {
 					str2.append(" [label=\"");
-					str2.append(dotEscape(e.getLabel()));
+					str2.append(dotEscapeString(e.getLabel()));
 					str2.append("\"]");
 				}
 				str2.append("\n");
@@ -382,7 +462,7 @@ public class BoaGraphIntrinsics {
 		if (label.length() > 0) {
 			str.append("\tlabelloc=\"t\"\n");
 			str.append("\tlabel=\"");
-			str.append(dotEscape(label));
+			str.append(dotEscapeString(label));
 			str.append("\"\n");
 		}
 
@@ -394,13 +474,13 @@ public class BoaGraphIntrinsics {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
-				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt())));
+				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt())));
 				str.append("\"]\n");
 			} else if (n.hasExpr()) {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
-				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
+				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
 				str.append("\"]\n");
 			} else if (n.getKind() == boa.types.Control.Node.NodeType.ENTRY) {
 				str.append(",label=\"[");
@@ -419,7 +499,7 @@ public class BoaGraphIntrinsics {
 				str2.append(e.getDest().getId());
 				if (e.getLabel() != null && !e.getLabel().isEmpty() && !e.getLabel().equals(".")) {
 					str2.append(" [label=\"");
-					str2.append(dotEscape(e.getLabel()));
+					str2.append(dotEscapeString(e.getLabel()));
 					str2.append("\"]");
 				}
 				str2.append("\n");
@@ -453,7 +533,7 @@ public class BoaGraphIntrinsics {
 		if (label.length() > 0) {
 			str.append("\tlabelloc=\"t\"\n");
 			str.append("\tlabel=\"");
-			str.append(dotEscape(label));
+			str.append(dotEscapeString(label));
 			str.append("\"\n");
 		}
 
@@ -465,13 +545,13 @@ public class BoaGraphIntrinsics {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
-				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt())));
+				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt())));
 				str.append("\"]\n");
 			} else if (n.hasExpr()) {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
-				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
+				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
 				str.append("\"]\n");
 			} else if (n.getKind() == boa.types.Control.Node.NodeType.ENTRY) {
 				str.append(",label=\"[");
@@ -492,7 +572,7 @@ public class BoaGraphIntrinsics {
 					str2.append(" [label=\"");
 					str2.append(e.getKind());
 					str2.append(":");
-					str2.append(dotEscape(e.getLabel()));
+					str2.append(dotEscapeString(e.getLabel()));
 					str2.append("\"]");
 				}
 				str2.append("\n");
@@ -526,7 +606,7 @@ public class BoaGraphIntrinsics {
 		if (label.length() > 0) {
 			str.append("\tlabelloc=\"t\"\n");
 			str.append("\tlabel=\"");
-			str.append(dotEscape(label));
+			str.append(dotEscapeString(label));
 			str.append("\"\n");
 		}
 
@@ -538,13 +618,13 @@ public class BoaGraphIntrinsics {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
-				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt())));
+				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt())));
 				str.append("\"]\n");
 			} else if (n.hasExpr()) {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
-				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
+				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
 				str.append("\"]\n");
 			} else if (n.getKind() == boa.types.Control.Node.NodeType.ENTRY) {
 				str.append(",label=\"[");
@@ -565,7 +645,7 @@ public class BoaGraphIntrinsics {
 					str2.append(" [label=\"");
 					str2.append(e.getKind());
 					str2.append(":");
-					str2.append(dotEscape(e.getLabel()));
+					str2.append(dotEscapeString(e.getLabel()));
 					str2.append("\"]");
 				}
 				str2.append("\n");
@@ -599,7 +679,7 @@ public class BoaGraphIntrinsics {
 		if (label.length() > 0) {
 			str.append("\tlabelloc=\"t\"\n");
 			str.append("\tlabel=\"");
-			str.append(dotEscape(label));
+			str.append(dotEscapeString(label));
 			str.append("\"\n");
 		}
 
@@ -611,13 +691,13 @@ public class BoaGraphIntrinsics {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
-				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt())));
+				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt())));
 				str.append("\"]\n");
 			} else if (n.hasExpr()) {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
-				str.append(dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
+				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())));
 				str.append("\"]\n");
 			} else if (n.getId() == 0) {
 				str.append(",label=\"[");
