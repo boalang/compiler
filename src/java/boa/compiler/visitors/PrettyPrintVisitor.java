@@ -588,6 +588,13 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 
 	/** {@inheritDoc} */
 	@Override
+	public void visit(final ListType n) {
+		stream.print("list of ");
+		n.getValue().accept(this);
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final SetType n) {
 		stream.print("set of ");
 		n.getValue().accept(this);
