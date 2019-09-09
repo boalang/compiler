@@ -55,7 +55,7 @@ public class BoaNormalFormIntrinsics {
 
 		if (e.getKind() == ExpressionKind.VARACCESS) {
 			final String var = e.getVariable();
-			if (!var.matches("arg\\$[0-9]+") && !"rcv$".equals(var))
+			if (!var.matches("\\$ARG\\$[0-9]+") && !"$RECEIVER$".equals(var))
 				variableList.add(e);
 		} else {
 			for (final Expression sub : e.getExpressionsList())
@@ -106,11 +106,11 @@ public class BoaNormalFormIntrinsics {
 						convertedExpression.toArray(new Expression[convertedExpression.size()]));
 
 				if (replacedExpr.equals(reciever))
-					return createVariable("rcv$");
+					return createVariable("$RECEIVER$");
 
 				for (int i = 0; i < arguments.length; i++) {
 					if (replacedExpr.equals(arguments[i]))
-						return createVariable("arg$" + Integer.toString(i));
+						return createVariable("$ARG$" + Integer.toString(i));
 				}
 
 				return replacedExpr;
@@ -126,11 +126,11 @@ public class BoaNormalFormIntrinsics {
 				final Expression replacedExpr1 = b.build();
 
 				if (replacedExpr1.equals(reciever))
-					return createVariable("rcv$");
+					return createVariable("$RECEIVER$");
 
 				for (int i = 0; i < arguments.length; i++) {
 					if (replacedExpr1.equals(arguments[i]))
-						return createVariable("arg$" + Integer.toString(i));
+						return createVariable("$ARG$" + Integer.toString(i));
 				}
 
 				return replacedExpr1;
@@ -152,11 +152,11 @@ public class BoaNormalFormIntrinsics {
 			case VARACCESS:
 				// replace with symbolic names
 				if (e.equals(reciever))
-					return createVariable("rcv$");
+					return createVariable("$RECEIVER$");
 
 				for (int i = 0; i < arguments.length; i++) {
 					if (e.equals(arguments[i]))
-						return createVariable("arg$" + Integer.toString(i));
+						return createVariable("$ARG$" + Integer.toString(i));
 				}
 				/*
 				for (int i = 0; i < arguments.length; i++) {
@@ -174,7 +174,7 @@ public class BoaNormalFormIntrinsics {
 					boolean exist = false;
 					for (final Object[] o: variableList) {
 						if (o[0].equals(e)) {
-							o[0] = createVariable("arg$" + Integer.toString(i));
+							o[0] = createVariable("$ARG$" + Integer.toString(i));
 							exist = true;
 						} else
 							o[2] = !((Boolean)o[2]);
