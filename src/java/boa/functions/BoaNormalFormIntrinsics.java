@@ -55,7 +55,7 @@ public class BoaNormalFormIntrinsics {
 
 		if (e.getKind() == ExpressionKind.VARACCESS) {
 			final String var = e.getVariable();
-			if (!var.matches("$ARG\\$[0-9]+") && !"$RECEIVER$".equals(var))
+			if (!var.matches("\\$ARG\\$[0-9]+") && !"$RECEIVER$".equals(var))
 				variableList.add(e);
 		} else {
 			for (final Expression sub : e.getExpressionsList())
