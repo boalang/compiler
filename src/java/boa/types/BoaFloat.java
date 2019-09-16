@@ -78,4 +78,10 @@ public class BoaFloat extends BoaScalar {
 	public String toString() {
 		return "float";
 	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String defaultValue() {
+		return "0.0";
+	}
 }

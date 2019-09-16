@@ -76,4 +76,10 @@ public class BoaInt extends BoaScalar {
 	public String toBoxedJavaType() {
 		return "Long";
 	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String defaultValue() {
+		return "0L";
+	}
 }
