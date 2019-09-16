@@ -1273,7 +1273,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (!n.hasInitializer()) {
 			if (lhsType instanceof BoaProtoMap ||
 					!(lhsType instanceof BoaMap || lhsType instanceof BoaStack || lhsType instanceof BoaQueue || lhsType instanceof BoaSet)) {
-				code.add("");
+				st.add("rhs", n.type.defaultValue());
+				code.add(st.render());
 				return;
 			}
 
@@ -1724,6 +1725,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	/** {@inheritDoc} */
 	@Override
+	public void visit(final VisitorType n) {
+		code.add("");
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final TraversalType n) {
+		code.add("");
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final ArrayType n) {
 		final ST st = stg.getInstanceOf("ArrayType");
 
@@ -1768,16 +1781,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FixPType n) {
-		final BoaFunction funcType = ((BoaFunction) n.type);
-
-		final BoaType[] paramTypes = funcType.getFormalParameters();
-		final List<String> args = new ArrayList<String>();
-		final List<String> types = new ArrayList<String>();
-
-		for (int i = 0; i < paramTypes.length; i++) {
-			args.add(((BoaName) paramTypes[i]).getId());
-			types.add(paramTypes[i].toJavaType());
-		}
+		code.add("");
 	}
 
 	/** {@inheritDoc} */

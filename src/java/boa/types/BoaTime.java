@@ -58,4 +58,10 @@ public class BoaTime extends BoaScalar {
 	public String toBoxedJavaType() {
 		return "Long";
 	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String defaultValue() {
+		return "0L";
+	}
 }
