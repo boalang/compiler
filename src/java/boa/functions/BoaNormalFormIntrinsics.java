@@ -349,7 +349,6 @@ public class BoaNormalFormIntrinsics {
 			case LT:
 			case GTEQ:
 			case LTEQ:
-				boolean isNumerator = true;
 				Expression literal = null;
 				Expression firstTerm = null;
 				if (e.getExpressions(0).getKind() == ExpressionKind.OP_ADD ||
@@ -960,7 +959,6 @@ public class BoaNormalFormIntrinsics {
 		final List<Object> results2 = new ArrayList<Object>();
 		Double dval = 0.0;
 		Long ival = 0L;
-		boolean first = true;
 		boolean isDouble = false;
 
 		switch (e.getKind()) {
@@ -1514,25 +1512,6 @@ public class BoaNormalFormIntrinsics {
 				}
 				return b.build();
 		}
-	}
-
-	/**
-	 * Converts literals in an expression into doubles.
-	 */
-	private static Object toDouble(final Object o) {
-		if (o instanceof Number)
-			return ((Number)o).doubleValue();
-
-		final Expression.Builder b = Expression.newBuilder((Expression)o);
-		for (int i = 0; i < b.getExpressionsCount(); i++) {
-			final Expression sub = b.getExpressions(i);
-			if (sub.getKind() == ExpressionKind.LITERAL)
-				b.setExpressions(i, createLiteral("" + Double.parseDouble(sub.getLiteral())));
-			else
-				b.setExpressions(i, (Expression)toDouble(sub));
-		}
-
-		return b.build();
 	}
 
 	/**

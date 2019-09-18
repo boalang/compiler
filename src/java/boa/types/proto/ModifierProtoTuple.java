@@ -26,7 +26,6 @@ import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
-import boa.types.proto.enums.ChangeKindProtoMap;
 import boa.types.proto.enums.ModifierKindProtoMap;
 import boa.types.proto.enums.ScopeProtoMap;
 import boa.types.proto.enums.VisibilityProtoMap;

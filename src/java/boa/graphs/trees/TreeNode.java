@@ -21,11 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import boa.graphs.cfg.CFGNode;
-import boa.graphs.Edge;
 import boa.graphs.Node;
-import boa.types.Ast.Statement;
-import boa.types.Ast.Expression;
+import boa.graphs.cfg.CFGNode;
 
 /**
  * Tree node

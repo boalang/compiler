@@ -16,17 +16,11 @@
  */
 package boa.graphs.cdg;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.List;
 
-import boa.graphs.Edge;
 import boa.graphs.Node;
 import boa.graphs.trees.TreeNode;
-import boa.types.Ast.Statement;
-import boa.types.Ast.Expression;
-import boa.types.Control.Node.*;
 
 /**
  * Control Dependence Graph node

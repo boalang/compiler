@@ -16,8 +16,6 @@
  */
 package boa.compiler.visitors.analysis;
 
-import java.util.*;
-
 import boa.compiler.ast.Node;
 import boa.compiler.visitors.*;
 

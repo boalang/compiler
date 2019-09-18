@@ -97,19 +97,15 @@ public class TestQ28 extends QueryTest {
 
 		@Override
 		public boolean visit(VariableDeclarationStatement node) {
-			for (Object o : node.fragments()) {
-				locals++;
-				locals2++;
-			}
+			locals += node.fragments().size();
+			locals2 += node.fragments().size();
 			return true;
 		}
 
 		@Override
 		public boolean visit(VariableDeclarationExpression node) {
-			for (Object o : node.fragments()) {
-				locals++;
-				locals2++;
-			}
+			locals += node.fragments().size();
+			locals2 += node.fragments().size();
 			return true;
 		}
 
@@ -129,10 +125,8 @@ public class TestQ28 extends QueryTest {
 
 		@Override
 		public boolean visit(LambdaExpression node) {
-			for (Object o : node.parameters()) {
-				locals++;
-				locals2++;
-			}
+			locals += node.parameters().size();
+			locals2 += node.parameters().size();
 			return true;
 		}
 	}

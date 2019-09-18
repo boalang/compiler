@@ -17,15 +17,11 @@
  */
 package boa.graphs.cfg;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 import boa.graphs.Node;
-import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
-import boa.types.Ast.Statement;
 import boa.types.Control.Node.NodeType;
 
 /**

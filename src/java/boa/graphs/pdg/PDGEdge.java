@@ -17,8 +17,8 @@
 package boa.graphs.pdg;
 
 import boa.graphs.Edge;
-import boa.graphs.Node;
-import boa.types.Control.Edge.*;
+import boa.types.Control.Edge.EdgeLabel;
+import boa.types.Control.Edge.EdgeType;
 
 /**
  * Program Dependence Graph edge
