@@ -3,6 +3,8 @@ package boa.functions.refactoring;
 import boa.functions.BoaAstIntrinsics;
 import boa.functions.FunctionSpec;
 import boa.types.Ast.ASTRoot;
+import boa.types.Ast.Declaration;
+import boa.types.Ast.Method;
 import boa.types.Ast.Namespace;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -67,9 +69,7 @@ public class BoaRefactoringIntrinsics {
 		// if cannot find, check parent path
 		int idx = path.lastIndexOf('/');
 		if (idx > -1) {
-			String parentPath = path.substring(0, idx);			
-			if (namespace.equals("com.consol.citrus.util.TestCaseCreator.TestCaseCreatorCliOptions"))
-				System.out.println(parentPath);
+			String parentPath = path.substring(0, idx);
 			return findEquivalentFilePath(filePathes, parentPath); 
 		}
 		return null;
@@ -99,9 +99,7 @@ public class BoaRefactoringIntrinsics {
 	}
 	
 	private static ChangedFile getChangedFile(ChangedFile[] snapshot, String path) {
-		
 		for (ChangedFile cf : snapshot) {
-//			System.out.println("getChangedFile: " + cf.getName());
 			if (cf.getName().contains(path))
 				return cf;
 		}
@@ -313,6 +311,19 @@ public class BoaRefactoringIntrinsics {
 	private static boolean isJavaFile(String path) {
 		return path.endsWith(".java");
 	}
+	
+	//////////////////////////////////////////////////
+	// C&K Metrics //
+	//////////////////////////////////////////////////
+	@FunctionSpec(name = "wmc", returnType = "int", formalParameters = { "Declaration" })
+	public static int wmc(Declaration d) {
+		int cc = 0;
+		for (Method m : d.getMethodsList()) {
+			
+		}
+		return 0;
+	}
+	
 
 	//////////////////////////////////////////////////
 	// Oracle Dataset Project Names and Commit Ids //

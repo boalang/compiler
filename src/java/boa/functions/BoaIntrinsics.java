@@ -120,11 +120,12 @@ public class BoaIntrinsics {
 	
 	@FunctionSpec(name = "getParsedChangedFiles", returnType = "array of ChangedFile", formalParameters = { "array of ChangedFile"})
 	public static ChangedFile[] getParsedChangedFiles(final ChangedFile[] files) {
-		ChangedFile[] fs = new ChangedFile[files.length];
-		for (int i = 0; i < fs.length; i++) {
-			fs[i] = BoaAstIntrinsics.getParsedChangedFile(files[i]);
-		}
-		return fs;
+		List<ChangedFile> lst = new ArrayList<ChangedFile>();
+		for (ChangedFile file : files)
+			if (isJavaFile(file))
+				lst.add(BoaAstIntrinsics.getParsedChangedFile(file));
+		BoaAstIntrinsics.cleanup(null);
+		return lst.toArray(new ChangedFile[0]);
 	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time", "string..." })

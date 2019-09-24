@@ -202,7 +202,7 @@ public class BoaRefactoringDetectAll {
 		Map<String, String> fileContentsBefore = new LinkedHashMap<String, String>();
 		Map<String, String> fileContentsCurrent = new LinkedHashMap<String, String>();
 		try (RevWalk walk = new RevWalk(repository)) {
-
+			
 			if (!filePathsBefore.isEmpty() && !filePathsCurrent.isEmpty() && currentCommit.getParentCount() == 1) {
 				RevCommit parentCommit = currentCommit.getParent(0);
 				populateFileContents(repository, parentCommit, filePathsBefore, fileContentsBefore,
