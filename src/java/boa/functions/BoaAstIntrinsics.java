@@ -64,8 +64,6 @@ import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
 import boa.types.Toplevel.Project;
 
-import static raykernel.apps.readability.eval.Main.getReadability;
-
 /**
  * Boa functions for working with ASTs.
  *
@@ -273,14 +271,6 @@ public class BoaAstIntrinsics {
 			buffer.flush();
 			buffer.close();
 		}
-	}
-	
-	@FunctionSpec(name = "getreadability", returnType = "float", formalParameters = { "ChangedFile" })
-	public static double getReadabilityFromFile(ChangedFile f) {
-		String content = getContent(f);
-		if (content != null)
-			return getReadability(content); 
-		return -1;
 	}
 
 	@FunctionSpec(name = "getParsedChangedFile", returnType = "ChangedFile", formalParameters = { "ChangedFile" })
