@@ -17,8 +17,11 @@
 package boa.functions;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
+import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.*;
+import boa.types.Ast.Expression.ExpressionKind;
 
 /**
  * Boa domain-specific functions for computing software engineering metrics.
@@ -38,6 +41,7 @@ public class BoaMetricIntrinsics {
 			return true;
 		}
 	}
+
 	private static BoaNOAVisitor noaVisitor = new BoaNOAVisitor();
 
 	/**
@@ -61,9 +65,10 @@ public class BoaMetricIntrinsics {
 		public boolean preVisit(final Declaration node) {
 			if (node.getKind() == TypeKind.CLASS)
 				count += node.getMethodsCount();
-    		return true;
+			return true;
 		}
 	}
+
 	private static BoaNOOVisitor nooVisitor = new BoaNOOVisitor();
 
 	/**
@@ -85,11 +90,12 @@ public class BoaMetricIntrinsics {
 	private static class BoaNPMVisitor extends BoaCountingVisitor {
 		@Override
 		public boolean preVisit(final Method node) {
-    		if (BoaModifierIntrinsics.hasModifierPublic(node))
-    			count++;
-    		return true;
+			if (BoaModifierIntrinsics.hasModifierPublic(node))
+				count++;
+			return true;
 		}
 	}
+
 	private static BoaNPMVisitor npmVisitor = new BoaNPMVisitor();
 
 	/**
@@ -104,60 +110,72 @@ public class BoaMetricIntrinsics {
 		return npmVisitor.count;
 	}
 
-	////////////////////////////////
-	// Number of Children (NOC) //
-	////////////////////////////////
+	/////////////////////////////////////
+	// Weighted Methods per Class(WMC) //
+	/////////////////////////////////////
 
-	private static class BoaNOCVisitor extends BoaCollectingVisitor<String,Long> {
-		private String ns;
-		@Override
-		protected boolean preVisit(Namespace node) throws Exception {
-			this.ns = node.getName();
-			return super.preVisit(node);
-		}
-		@Override
-		protected boolean preVisit(Declaration node) throws Exception {
-			for (final Type t : node.getParentsList()) {
-				final String key = ns + "." + t.getName();
-				final long val = map.containsKey(key) ? map.get(key) : 0;
-				map.put(key, val + 1);
+	private static class BoaWMCVisitor extends BoaCountingVisitor {
+		
+		private int methodCC;
+		
+		private BoaAbstractVisitor visitor = new BoaAbstractVisitor() {
+			@Override
+			public boolean preVisit(final Method node) throws Exception {
+				methodCC = 0;
+				for (Statement s : node.getStatementsList()) {
+					// check for, do, while, if, case, catch
+					switch (s.getKind()) {
+						case FOR:
+						case DO:
+						case WHILE:
+						case IF:
+						case CASE:
+						case CATCH:
+							methodCC++;
+							break;
+						default:
+							break;
+					}
+					visit(s);
+				}
+				methodCC++;
+				return false;
 			}
-			return super.preVisit(node);
+			
+			@Override
+			public boolean preVisit(final Expression node) {
+				// check ||
+				if (node.getKind() == ExpressionKind.LOGICAL_OR)
+					methodCC++;
+				return true;
+			}
+		};
+		
+		@Override
+		public boolean preVisit(final Declaration node) throws Exception {
+			for (Method m : node.getMethodsList()) {
+				visitor.visit(m);
+				count += methodCC;
+			}
+			return false;
 		}
+		
+		
 	}
-	private static BoaNOCVisitor nocVisitor = new BoaNOCVisitor();
+
+	private static BoaWMCVisitor wmcVisitor = new BoaWMCVisitor();
 
 	/**
-	 * (Partially) Computes the Number of Children (NOC) metric.
+	 * Compute the complexity of a class as the sum of the McCabe’s cyclomatic complexity of
+	 * its methods
 	 * 
-	 * @param node the node to compute NOC for
-	 * @return a map containing partial computation of the NOC metric
+	 * @param node the node to compute DIT for
+	 * @return the WMC value for node
 	 */
-	@FunctionSpec(name = "get_metric_noc", returnType = "map[string] of int", formalParameters = { "ASTRoot" })
-	public static HashMap<String,Long> getMetricNOC(final ASTRoot node) throws Exception {
-		nocVisitor.initialize(new HashMap<String,Long>()).visit(node);
-		return nocVisitor.map;
-	}
-
-	///////////////////////////////////////////
-	// Lack of Cohesion in Operations (LCOO) //
-	///////////////////////////////////////////
-
-	private static class BoaLCOOVisitor extends BoaCountingVisitor {
-		// TODO
-	}
-	private static BoaLCOOVisitor lcooVisitor = new BoaLCOOVisitor();
-
-	/**
-	 * Computes the Lack of Cohesion in Operations (LCOO) metric for a node.
-	 * 
-	 * @param node the node to compute LCOO for
-	 * @return the LCOO value for node
-	 */
-	@FunctionSpec(name = "get_metric_lcoo", returnType = "int", formalParameters = { "Declaration" })
-	public static long getMetricLCOO(final Declaration node) throws Exception {
-		lcooVisitor.initialize().visit(node);
-		return lcooVisitor.count;
+	@FunctionSpec(name = "get_metric_wmc", returnType = "int", formalParameters = { "Declaration" })
+	public static long getMetricWMC(final Declaration node) throws Exception {
+		wmcVisitor.initialize().visit(node);
+		return wmcVisitor.count;
 	}
 
 	/////////////////////////////////////
@@ -167,6 +185,7 @@ public class BoaMetricIntrinsics {
 	private static class BoaDITVisitor extends BoaCountingVisitor {
 		// TODO
 	}
+
 	private static BoaDITVisitor ditVisitor = new BoaDITVisitor();
 
 	/**
@@ -182,16 +201,80 @@ public class BoaMetricIntrinsics {
 	}
 
 	////////////////////////////////
+	// Number of Children (NOC) //
+	////////////////////////////////
+
+	private static class BoaNOCVisitor extends BoaCollectingVisitor<String, Long> {
+		private String ns;
+
+		@Override
+		protected boolean preVisit(Namespace node) throws Exception {
+			this.ns = node.getName();
+			return super.preVisit(node);
+		}
+
+		@Override
+		protected boolean preVisit(Declaration node) throws Exception {
+			for (final Type t : node.getParentsList()) {
+				final String key = ns + "." + t.getName();
+				final long val = map.containsKey(key) ? map.get(key) : 0;
+				map.put(key, val + 1);
+			}
+			return super.preVisit(node);
+		}
+	}
+
+	private static BoaNOCVisitor nocVisitor = new BoaNOCVisitor();
+
+	/**
+	 * (Partially) Computes the Number of Children (NOC) metric.
+	 * 
+	 * @param node the node to compute NOC for
+	 * @return a map containing partial computation of the NOC metric
+	 */
+	@FunctionSpec(name = "get_metric_noc", returnType = "map[string] of int", formalParameters = { "ASTRoot" })
+	public static HashMap<String, Long> getMetricNOC(final ASTRoot node) throws Exception {
+		nocVisitor.initialize(new HashMap<String, Long>()).visit(node);
+		return nocVisitor.map;
+	}
+
+	////////////////////////////////
 	// Response For a Class (RFC) //
 	////////////////////////////////
 
 	private static class BoaRFCVisitor extends BoaCountingVisitor {
-		// TODO
+		
+		private HashSet<String> methodSet;
+		
+		private BoaAbstractVisitor visitor = new BoaAbstractVisitor() {
+			@Override
+			public boolean preVisit(final Expression node) {
+				if (node.getKind() == ExpressionKind.METHODCALL)
+					methodSet.add(node.getMethod() + " " + node.getMethodArgsCount());
+				if (node.getKind() == ExpressionKind.NEW)
+					methodSet.add(node.getNewType().getName() + " " + node.getMethodArgsCount());
+				return true;
+			}
+		};
+		
+		@Override
+		public boolean preVisit(final Declaration node) throws Exception {
+			methodSet = new HashSet<String>();
+			for (Variable v : node.getFieldsList())
+				visitor.visit(v);
+			for (Method m : node.getMethodsList())
+				visitor.visit(m);
+			count = methodSet.size();
+			methodSet.clear();
+			return false;
+		}
+
 	}
+
 	private static BoaRFCVisitor rfcVisitor = new BoaRFCVisitor();
 
 	/**
-	 * Computes the Response For a Class (RFC) metric for a node.
+	 * Computes the number of distinct methods and constructors invoked by a class 
 	 * 
 	 * @param node the node to compute RFC for
 	 * @return the RFC value for node
@@ -203,13 +286,14 @@ public class BoaMetricIntrinsics {
 	}
 
 	////////////////////////////////////
-	// Coupling Between Classes (CBC) //
+	// Coupling Between Object (CBO) //
 	////////////////////////////////////
 
-	private static class BoaCBCVisitor extends BoaCountingVisitor {
+	private static class BoaCBOVisitor extends BoaCountingVisitor {
 		// TODO
 	}
-	private static BoaCBCVisitor cbcVisitor = new BoaCBCVisitor();
+
+	private static BoaCBOVisitor cboVisitor = new BoaCBOVisitor();
 
 	/**
 	 * Computes the Coupling Between Classes (CBC) metric for a node.
@@ -217,10 +301,90 @@ public class BoaMetricIntrinsics {
 	 * @param node the node to compute CBC for
 	 * @return the CBC value for node
 	 */
-	@FunctionSpec(name = "get_metric_cbc", returnType = "int", formalParameters = { "Declaration" })
-	public static long getMetricCBC(final Declaration node) throws Exception {
-		cbcVisitor.initialize().visit(node);
-		return cbcVisitor.count;
+	@FunctionSpec(name = "get_metric_cbo", returnType = "int", formalParameters = { "Declaration" })
+	public static long getMetricCBO(final Declaration node) throws Exception {
+		cboVisitor.initialize().visit(node);
+		return cboVisitor.count;
+	}
+
+	///////////////////////////////////////////
+	// Lack of Cohesion in Methods (LCOM) //
+	///////////////////////////////////////////
+
+	private static class BoaLCOMVisitor extends BoaCountingVisitor {
+		
+		private HashSet<String> declarationVars;
+		private HashSet<String> methodVars;
+		private double numAccesses;
+		private double lcom;
+
+		private BoaAbstractVisitor methodVisitor = new BoaAbstractVisitor() {
+			@Override
+			public boolean preVisit(final Method node) throws Exception {
+				for (Statement s : node.getStatementsList())
+					visit(s);
+				return false;
+			}
+			
+			@Override
+			public boolean preVisit(final Variable node) {
+				if (declarationVars.contains(node.getName()))
+					methodVars.add(node.getName());
+				return true;
+			}
+			
+			@Override
+			public boolean preVisit(final Expression node) throws Exception {
+				if (node.getKind() == ExpressionKind.VARACCESS && declarationVars.contains(node.getVariable()))		
+					methodVars.add(node.getVariable());
+				return true;
+			}
+		};
+		
+		public double getLCOM() {
+			return lcom;
+		}
+		
+		@Override
+		public boolean preVisit(final Declaration node) throws Exception {
+			double fieldsCount = node.getFieldsCount();
+			double methodsCount = node.getMethodsCount();
+			if (fieldsCount == 0 || methodsCount < 2) {
+				lcom = 0.0;
+			} else {
+				declarationVars = new HashSet<String>();
+				methodVars = new HashSet<String>();
+				numAccesses = 0;
+				for (Variable v : node.getFieldsList())
+					declarationVars.add(v.getName());
+				for (Method m : node.getMethodsList()) {
+					methodVisitor.visit(m);
+					numAccesses += methodVars.size();
+					methodVars.clear();
+				}
+				lcom = (methodsCount - numAccesses / fieldsCount) / (methodsCount - 1.0);
+				declarationVars.clear();
+				methodVars.clear();
+			}
+			return false;
+		}
+
+	}
+
+	private static BoaLCOMVisitor lcooVisitor = new BoaLCOMVisitor();
+
+	/**
+	 * Computes the Lack of Cohesion in Methods (LCOM) metric for a node.
+	 * The higher the pairs of methods in a class sharing at least a field,
+	 * the higher its cohesion
+	 * 
+	 * @param node the node to compute LCOM for
+	 * @return the LCOM value for node
+	 */
+	@FunctionSpec(name = "get_metric_lcom", returnType = "float", formalParameters = { "Declaration" })
+	public static double getMetricLCOM(final Declaration node) throws Exception {
+		lcooVisitor.initialize().visit(node);
+		return lcooVisitor.getLCOM();
 	}
 
 	////////////////////////////
@@ -230,6 +394,7 @@ public class BoaMetricIntrinsics {
 	private static class BoaCAVisitor extends BoaCountingVisitor {
 		// TODO
 	}
+
 	private static BoaCAVisitor caVisitor = new BoaCAVisitor();
 
 	/**
