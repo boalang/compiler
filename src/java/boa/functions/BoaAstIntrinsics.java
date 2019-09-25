@@ -163,18 +163,15 @@ public class BoaAstIntrinsics {
 	}
 
 	public static ASTRoot getASTRoot(ChangedFile f) {
-		// if file contains ast root
+		// if ChangedFile contains ast root
 		if (f.hasRoot())
 			return f.getRoot();
-		String content = getContent(f);
-		if (content != null)
-			return getASTRoot(content);
-		return emptyAst;
+		return getASTRoot(getContent(f));
 	}
 
 	public static final ASTRoot getASTRoot(final String content) {
 		if (content == null) {
-			System.out.print(" [Null Content] ");
+			System.err.print(" [Null Content] ");
 			return emptyAst;
 		}
 		try {
@@ -277,10 +274,11 @@ public class BoaAstIntrinsics {
 	public static ChangedFile getParsedChangedFile(ChangedFile f) {
 		ASTRoot ast = getASTRoot(f);
 		if (ast != emptyAst)
-			f = f.toBuilder().setRoot(ast).setAst(true).build();
-		else
-			System.out.println("getParsedChangedFile: emptyAst");
-		return f;
+			return f.toBuilder().setRoot(ast).setAst(true).build();
+		else {
+			System.err.println("getParsedChangedFile: emptyAst");
+			return null;
+		}
 	}
 
 	@SuppressWarnings("unchecked")

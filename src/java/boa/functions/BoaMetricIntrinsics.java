@@ -18,6 +18,9 @@ package boa.functions;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.*;
@@ -289,22 +292,93 @@ public class BoaMetricIntrinsics {
 	// Coupling Between Object (CBO) //
 	////////////////////////////////////
 
-	private static class BoaCBOVisitor extends BoaCountingVisitor {
-		// TODO
+	private static class BoaCBOVisitor extends BoaCollectingVisitor<String, Long> {
+		
+		private String curFQN;
+		private HashMap<String, Declaration> declMap;
+		private HashMap<String, HashSet<String>> references;
+		private HashMap<String, HashSet<String>> referenced;
+		
+		private BoaAbstractVisitor visitor = new BoaAbstractVisitor() {
+			private String getReference(String reference) {
+				if (declMap.containsKey(reference))
+					return declMap.get(reference).getFullyQualifiedName();
+				int idx = reference.lastIndexOf('.');
+				if (idx > 0) {
+					String suffix = reference.substring(idx + 1);
+					if (declMap.containsKey(suffix))
+						return declMap.get(suffix).getFullyQualifiedName();
+				}
+				return null;
+			}
+			
+			private void updateMaps(String reference) {
+				if (!references.containsKey(curFQN))
+					references.put(curFQN, new HashSet<String>());
+				references.get(curFQN).add(reference);
+				if (!referenced.containsKey(reference))
+					referenced.put(reference, new HashSet<String>());
+				referenced.get(reference).add(curFQN);
+			}
+			
+			@Override
+			public boolean preVisit(final Expression node) {
+				if (node.getKind() == ExpressionKind.VARACCESS) {
+					String reference = getReference(node.getVariable());
+					if (reference != null)
+						updateMaps(reference);
+				}
+				return true;
+			}
+			
+			@Override
+			public boolean preVisit(final Variable node) {
+				String reference = getReference(node.getName());
+				if (reference != null)
+					updateMaps(reference);
+				return true;
+			}
+			
+			@Override
+			public boolean preVisit(final Type node) {
+				String reference = getReference(node.getName());
+				if (reference != null)
+					updateMaps(reference);
+				return true;
+			}
+		};
+		
+		public void process(HashMap<String, Declaration> decls) throws Exception {
+			declMap = decls;
+			references = new HashMap<String, HashSet<String>>();
+			referenced = new HashMap<String, HashSet<String>>();
+			for (Declaration node : decls.values()) {
+				curFQN = node.getFullyQualifiedName();
+				for (Variable v : node.getFieldsList())
+					visitor.visit(v);
+				for (Method m : node.getMethodsList())
+					visitor.visit(m);
+			}
+			for (Declaration node : decls.values()) {
+				
+			}
+		}
+		
 	}
 
 	private static BoaCBOVisitor cboVisitor = new BoaCBOVisitor();
 
 	/**
-	 * Computes the Coupling Between Classes (CBC) metric for a node.
+	 * Computes the number of classes to which a class is coupled.
 	 * 
-	 * @param node the node to compute CBC for
-	 * @return the CBC value for node
+	 * @param node the node to compute CBO for
+	 * @return the CBO value for node
 	 */
-	@FunctionSpec(name = "get_metric_cbo", returnType = "int", formalParameters = { "Declaration" })
-	public static long getMetricCBO(final Declaration node) throws Exception {
-		cboVisitor.initialize().visit(node);
-		return cboVisitor.count;
+	@FunctionSpec(name = "get_metric_cbo", returnType = "map[string] of int", formalParameters = { "map[string] of Declaration" })
+	public static HashMap<String, Long> getMetricCBO(final HashMap<String, Declaration> decls) throws Exception {
+		cboVisitor.initialize(new HashMap<String, Long>());
+		cboVisitor.process(decls);
+		return cboVisitor.map;
 	}
 
 	///////////////////////////////////////////

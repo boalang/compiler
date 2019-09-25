@@ -118,15 +118,15 @@ public class BoaIntrinsics {
 		return parents;
 	}
 	
-	@FunctionSpec(name = "getParsedChangedFiles", returnType = "array of ChangedFile", formalParameters = { "array of ChangedFile"})
-	public static ChangedFile[] getParsedChangedFiles(final ChangedFile[] files) {
-		List<ChangedFile> lst = new ArrayList<ChangedFile>();
-		for (ChangedFile file : files)
-			if (isJavaFile(file))
-				lst.add(BoaAstIntrinsics.getParsedChangedFile(file));
-		BoaAstIntrinsics.cleanup(null);
-		return lst.toArray(new ChangedFile[0]);
-	}
+//	@FunctionSpec(name = "getParsedChangedFiles", returnType = "array of ChangedFile", formalParameters = { "array of ChangedFile"})
+//	public static ChangedFile[] getParsedChangedFiles(final ChangedFile[] files) {
+//		List<ChangedFile> lst = new ArrayList<ChangedFile>();
+//		for (ChangedFile file : files)
+//			if (isJavaFile(file))
+//				lst.add(BoaAstIntrinsics.getParsedChangedFile(file));
+//		BoaAstIntrinsics.cleanup(null);
+//		return lst.toArray(new ChangedFile[0]);
+//	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time", "string..." })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp, final String... kinds) throws Exception {
@@ -297,17 +297,19 @@ public class BoaIntrinsics {
 		return name.substring(name.lastIndexOf('.') + 1).equals("java");
 	}
 	
-	@FunctionSpec(name = "getsnapshotbyid", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string", "bool" })
-	public static ChangedFile[] getSnapshotById(final CodeRepository cr, final String id, final boolean needAst) {
-		if (needAst) {
-			ChangedFile[] files = getSnapshotById(cr, id, new String[0]);
-			for (int i = 0; i < files.length; i++)
-				if (isJavaFile(files[i]))
-					files[i] = BoaAstIntrinsics.getParsedChangedFile(files[i]);
-			return files;
-		}
-		return getSnapshotById(cr, id, new String[0]);
-	}
+//	@FunctionSpec(name = "getsnapshotbyid", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string", "bool" })
+//	public static ChangedFile[] getSnapshotById(final CodeRepository cr, final String id, final boolean needAst) {
+//		if (needAst) {
+//			List<ChangedFile> lst = new ArrayList<ChangedFile>();
+//			ChangedFile[] files = getSnapshotById(cr, id, new String[0]);
+//			for (ChangedFile file : files)
+//				if (isJavaFile(file))
+//					lst.add(BoaAstIntrinsics.getParsedChangedFile(file));
+//			BoaAstIntrinsics.cleanup(null);
+//			return lst.toArray(new ChangedFile[0]);
+//		}
+//		return getSnapshotById(cr, id, new String[0]);
+//	}
 
 	@FunctionSpec(name = "getsnapshotbyid", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string" })
 	public static ChangedFile[] getSnapshotById(final CodeRepository cr, final String id) {
@@ -343,10 +345,16 @@ public class BoaIntrinsics {
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "bool" })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final boolean needAst) {
 		if (needAst) {
+			List<ChangedFile> lst = new ArrayList<ChangedFile>();
 			ChangedFile[] files = getSnapshot(cr);
-			for (int i = 0; i < files.length; i++)
-				files[i] = BoaAstIntrinsics.getParsedChangedFile(files[i]);
-			return files;
+			for (ChangedFile file : files)
+				if (isJavaFile(file)) {
+					ChangedFile cf = BoaAstIntrinsics.getParsedChangedFile(file);
+					if (cf != null)
+						lst.add(BoaAstIntrinsics.getParsedChangedFile(file));
+				}
+			BoaAstIntrinsics.cleanup(null);
+			return lst.toArray(new ChangedFile[0]);
 		}
 		return getSnapshot(cr);
 	}
