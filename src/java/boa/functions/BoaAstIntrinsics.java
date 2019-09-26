@@ -20,6 +20,7 @@ package boa.functions;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -161,6 +162,21 @@ public class BoaAstIntrinsics {
 	public static int getAstCount(ChangedFile f) {
 		return getast(f).getAstCount();
 	}
+	
+	
+	@FunctionSpec(name = "getsnapshotroots", returnType = "array of ASTRoot", formalParameters = { "CodeRepository" })
+	public static ASTRoot[] getASTRoots(final CodeRepository cr) {
+			List<ASTRoot> lst = new ArrayList<ASTRoot>();
+			ChangedFile[] files = BoaIntrinsics.getSnapshot(cr);
+			for (ChangedFile file : files)
+				if (BoaIntrinsics.isJavaFile(file)) {
+					ASTRoot ast = getASTRoot(file);;
+					if (ast != emptyAst)
+						lst.add(ast);
+				}
+			BoaAstIntrinsics.cleanup(null);
+			return lst.toArray(new ASTRoot[0]);
+	}
 
 	public static ASTRoot getASTRoot(ChangedFile f) {
 		// if ChangedFile contains ast root
@@ -241,6 +257,7 @@ public class BoaAstIntrinsics {
 				e.printStackTrace();
 			}
 		}
+		System.err.print(" [No reposkey or objectid] ");
 		return null;
 	}
 
@@ -276,7 +293,7 @@ public class BoaAstIntrinsics {
 		if (ast != emptyAst)
 			return f.toBuilder().setRoot(ast).setAst(true).build();
 		else {
-			System.err.println("getParsedChangedFile: emptyAst");
+			System.err.println(" [getParsedChangedFile: emptyAst] " + f.getName());
 			return null;
 		}
 	}

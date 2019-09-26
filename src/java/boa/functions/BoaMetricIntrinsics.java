@@ -360,7 +360,13 @@ public class BoaMetricIntrinsics {
 					visitor.visit(m);
 			}
 			for (Declaration node : decls.values()) {
-				
+				String fqn = node.getFullyQualifiedName();
+				HashSet<String> union = new HashSet<String>();
+				if (references.containsKey(fqn))
+					union.addAll(references.get(fqn));
+				if (referenced.containsKey(fqn))
+					union.addAll(referenced.get(fqn));
+				map.put(fqn, (long) union.size());
 			}
 		}
 		
