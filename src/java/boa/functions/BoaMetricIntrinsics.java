@@ -18,10 +18,13 @@ package boa.functions;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map.Entry;
+import java.util.Queue;
 
 import com.sun.org.apache.bcel.internal.generic.NEW;
 
+import antlr.collections.Stack;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.*;
 import boa.types.Ast.Expression.ExpressionKind;
@@ -185,8 +188,56 @@ public class BoaMetricIntrinsics {
 	// Depth of Inheritance Tree (DIT) //
 	/////////////////////////////////////
 
-	private static class BoaDITVisitor extends BoaCountingVisitor {
-		// TODO
+	private static class BoaDITVisitor extends BoaCollectingVisitor<String, Long> {
+		private HashMap<String, Declaration> declMap;
+		private HashMap<String, HashSet<String>> childParentsMap;
+
+		private void updateMaps(Declaration node) {
+			for (Type parentType : node.getParentsList()) {
+				String parent = parentType.getName();
+				String child = node.getFullyQualifiedName();
+				if (declMap.containsKey(parent)) {
+					parent = declMap.get(parent).getFullyQualifiedName();
+					if (!childParentsMap.containsKey(child))
+						childParentsMap.put(child, new HashSet<String>());
+					childParentsMap.get(child).add(parent);
+				}
+			}
+		}
+		
+		public void process(HashMap<String, Declaration> decls) throws Exception {
+			declMap = decls;
+			childParentsMap = new HashMap<String, HashSet<String>>();
+			for (Declaration node : decls.values())
+				updateMaps(node);
+			for (Declaration node : decls.values()) {
+				String fqn = node.getFullyQualifiedName();
+				long dit = getMaxDepth(fqn);
+				map.put(fqn, dit);
+			}
+			childParentsMap.clear();
+		}
+
+		private long getMaxDepth(String fqn) {
+			Queue<String> q = new LinkedList<String>();
+			q.offer(fqn);
+			q.offer(null);
+			int depth = -1;
+			while (!q.isEmpty()) {
+				String cur = q.poll();
+				if (cur == null) {
+					depth++;
+					if (q.isEmpty())
+						break;
+					else
+						q.offer(null);
+				} else if (childParentsMap.containsKey(cur)) {
+					for (String parent : childParentsMap.get(cur))
+						q.offer(parent);
+				}
+			}
+			return depth;
+		}
 	}
 
 	private static BoaDITVisitor ditVisitor = new BoaDITVisitor();
@@ -194,13 +245,14 @@ public class BoaMetricIntrinsics {
 	/**
 	 * Computes the Depth of Inheritance Tree (DIT) metric for a node.
 	 * 
-	 * @param node the node to compute DIT for
-	 * @return the DIT value for node
+	 * @param decls a map mapping class name to its corresponding Declaration object
+	 * @return a map mapping class full qualified name to its DIT value
 	 */
-	@FunctionSpec(name = "get_metric_dit", returnType = "int", formalParameters = { "Declaration" })
-	public static long getMetricDIT(final Declaration node) throws Exception {
-		ditVisitor.initialize().visit(node);
-		return ditVisitor.count;
+	@FunctionSpec(name = "get_metric_dit", returnType = "map[string] of int", formalParameters = { "map[string] of Declaration" })
+	public static HashMap<String, Long> getMetricDIT(final HashMap<String, Declaration> decls) throws Exception {
+		ditVisitor.initialize(new HashMap<String, Long>());
+		ditVisitor.process(decls);
+		return ditVisitor.map;
 	}
 
 	////////////////////////////////
@@ -208,23 +260,36 @@ public class BoaMetricIntrinsics {
 	////////////////////////////////
 
 	private static class BoaNOCVisitor extends BoaCollectingVisitor<String, Long> {
-		private String ns;
 
-		@Override
-		protected boolean preVisit(Namespace node) throws Exception {
-			this.ns = node.getName();
-			return super.preVisit(node);
-		}
+		private HashMap<String, Declaration> declMap;
+		private HashMap<String, HashSet<String>> parenctChildrenMap;
 
-		@Override
-		protected boolean preVisit(Declaration node) throws Exception {
-			for (final Type t : node.getParentsList()) {
-				final String key = ns + "." + t.getName();
-				final long val = map.containsKey(key) ? map.get(key) : 0;
-				map.put(key, val + 1);
+		private void updateMaps(Declaration node) {
+			for (Type parentType : node.getParentsList()) {
+				String parent = parentType.getName();
+				String child = node.getFullyQualifiedName();
+				if (declMap.containsKey(parent)) {
+					parent = declMap.get(parent).getFullyQualifiedName();
+					if (!parenctChildrenMap.containsKey(parent))
+						parenctChildrenMap.put(parent, new HashSet<String>());
+					parenctChildrenMap.get(parent).add(child);
+				}
 			}
-			return super.preVisit(node);
 		}
+		
+		public void process(HashMap<String, Declaration> decls) throws Exception {
+			declMap = decls;
+			parenctChildrenMap = new HashMap<String, HashSet<String>>();
+			for (Declaration node : decls.values())
+				updateMaps(node);
+			for (Declaration node : decls.values()) {
+				String fqn = node.getFullyQualifiedName();
+				long noc = parenctChildrenMap.containsKey(fqn) ? parenctChildrenMap.get(fqn).size() : 0;
+				map.put(fqn, noc);
+			}
+			parenctChildrenMap.clear();
+		}
+		
 	}
 
 	private static BoaNOCVisitor nocVisitor = new BoaNOCVisitor();
@@ -235,9 +300,10 @@ public class BoaMetricIntrinsics {
 	 * @param node the node to compute NOC for
 	 * @return a map containing partial computation of the NOC metric
 	 */
-	@FunctionSpec(name = "get_metric_noc", returnType = "map[string] of int", formalParameters = { "ASTRoot" })
-	public static HashMap<String, Long> getMetricNOC(final ASTRoot node) throws Exception {
-		nocVisitor.initialize(new HashMap<String, Long>()).visit(node);
+	@FunctionSpec(name = "get_metric_noc", returnType = "map[string] of int", formalParameters = { "map[string] of Declaration" })
+	public static HashMap<String, Long> getMetricNOC(final HashMap<String, Declaration> decls) throws Exception {
+		nocVisitor.initialize(new HashMap<String, Long>());
+		nocVisitor.process(decls);
 		return nocVisitor.map;
 	}
 
@@ -368,6 +434,8 @@ public class BoaMetricIntrinsics {
 					union.addAll(referenced.get(fqn));
 				map.put(fqn, (long) union.size());
 			}
+			references.clear();
+			referenced.clear();
 		}
 		
 	}
