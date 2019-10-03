@@ -155,12 +155,19 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 				if (!fileSystem.exists(path))
 					break;
 
-				fileSystem.rename(path, new Path("/boa", new Path("" + jobId, new Path(boa.runtime.BoaPartitioner.getVariableFromPartition(partNum) + ".txt"))));
-				partNum++;
+				final Path newpath = new Path("/boa", new Path("" + jobId, new Path(boa.runtime.BoaPartitioner.getVariableFromPartition(partNum++) + ".txt")));
+				if (fileSystem.exists(newpath))
+					try {
+						fileSystem.delete(newpath, false);
+					} catch (final Exception e) {
+						// do nothing
+					}
+
+				fileSystem.rename(path, newpath);
 
 				if (in != null)
 					try { in.close(); } catch (final Exception e) { e.printStackTrace(); }
-				in = fileSystem.open(path);
+				in = fileSystem.open(newpath);
 
 				int numBytes = 0;
 
