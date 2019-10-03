@@ -200,11 +200,10 @@ public class BoaMetricIntrinsics {
 
 	private static class BoaDITVisitor extends BoaCollectingVisitor<String, Long> {
 		
-		private HashMap<String, HashSet<String>> classNameToPackagesMap;
+		private HashSet<String> fqns;
 		private HashMap<String, HashSet<String>> fileNameToClassFQNMap;
 		private HashMap<String, HashSet<String>> childToParentsMap;
 		private HashMap<String, HashSet<String>> parentToChildsMap;
-		private ArrayList<Namespace> namespaces;
 		private HashMap<String, long[]> DITNOCMap;
 		
 		private BoaAbstractVisitor collector = new BoaAbstractVisitor() {
@@ -219,7 +218,6 @@ public class BoaMetricIntrinsics {
 			
 			@Override
 			public boolean preVisit(final Namespace node) throws Exception {
-				namespaces.add(node);
 				for (Declaration d : node.getDeclarationsList())
 					visit(d);
 				return false;
@@ -228,14 +226,11 @@ public class BoaMetricIntrinsics {
 			@Override
 			public boolean preVisit(final Declaration node) throws Exception {
 				String fqn = node.getFullyQualifiedName();
+				fqns.add(fqn);
 				if (!fileNameToClassFQNMap.containsKey(fileName))
 					fileNameToClassFQNMap.put(fileName, new HashSet<String>());
 				fileNameToClassFQNMap.get(fileName).add(fqn);
-				String className = node.getName();
-				String pkg = getPackage(fqn, "");
-				if (!classNameToPackagesMap.containsKey(className))
-					classNameToPackagesMap.put(className, new HashSet<String>());
-				classNameToPackagesMap.get(className).add(pkg);
+				
 				for (Declaration d : node.getNestedDeclarationsList())
 					visit(d);
 				return false;
@@ -245,14 +240,40 @@ public class BoaMetricIntrinsics {
 		private BoaAbstractVisitor visitor = new BoaAbstractVisitor() {
 			
 			private HashSet<String> importedPackages;
+			private HashSet<String> importedClasses;
+			
+			private void updateMaps(String child, String parent) {
+				if (!childToParentsMap.containsKey(child))
+					childToParentsMap.put(child, new HashSet<String>());
+				childToParentsMap.get(child).add(parent);
+				if (!parentToChildsMap.containsKey(parent))
+					parentToChildsMap.put(parent, new HashSet<String>());
+				parentToChildsMap.get(parent).add(child);
+			}
 			
 			@Override
 			public boolean preVisit(final Namespace node) throws Exception {
+				// collect imported packages and classes
 				importedPackages = new HashSet<String>();
-				for (String ipt : node.getImportsList())
-					if (!ipt.startsWith("static "))
-						importedPackages.add(getPackage(ipt, ipt));
+				importedClasses = new HashSet<String>();
 				importedPackages.add(node.getName());
+				for (String importName : node.getImportsList()) {
+					// import static org.junit.Assert.*
+					// import static org.mockito.Mockito.doNothing
+					if (importName.startsWith("static ")) {
+						String temp = importName.replace("static ", "");
+						int idx = temp.lastIndexOf('.');
+						temp = idx > 0 ? temp.substring(0, idx) : temp;
+						importedClasses.add(temp);
+					// import org.societies.android.api.useragent.*
+					} else if (importName.endsWith(".*")) {
+						importedPackages.add(importName.substring(0, importName.lastIndexOf(".*")));
+					// import org.junit.After
+					} else {
+						importedClasses.add(importName);
+					}
+				}
+				// visit type declarations
 				for (Declaration d : node.getDeclarationsList())
 					visit(d);
 				return false;
@@ -263,18 +284,34 @@ public class BoaMetricIntrinsics {
 				if (node.getParentsCount() > 0) {
 					String child = node.getFullyQualifiedName();
 					for (Type t : node.getParentsList()) {
-						String parentClassName = getClassName(t.getName(), t.getName());
-						if (classNameToPackagesMap.containsKey(parentClassName))
-							for (String pkg : classNameToPackagesMap.get(parentClassName))
-								if (importedPackages.contains(pkg)) {
-									String parent = pkg + "." + parentClassName;
-									if (!childToParentsMap.containsKey(child))
-										childToParentsMap.put(child, new HashSet<String>());
-									childToParentsMap.get(child).add(parent);
-									if (!parentToChildsMap.containsKey(parent))
-										parentToChildsMap.put(parent, new HashSet<String>());
-									parentToChildsMap.get(parent).add(child);
+						String parentName = t.getName();
+						// implements org.red5.io.object.Output
+						if (parentName.contains(".") && !child.equals(parentName)) {
+							updateMaps(child, parentName);
+						// extends BaseOutput
+						} else {
+							String parentFQN = null;
+							// 1. check imported classes
+							for (String importedClass : importedClasses)
+								if (importedClass.contains(parentName) && fqns.contains(importedClass) && !child.equals(importedClass)) {
+									parentFQN = importedClass;
+									break;
 								}
+							// 2. check imported packages
+							if (parentFQN == null) {
+								for (String pkg : importedPackages) {
+									String tmp = pkg + "." + parentName;
+									if (fqns.contains(tmp) && !child.equals(tmp)) {
+										parentFQN = tmp;
+										break;
+									}
+								}
+							}
+							if (parentFQN != null)
+								updateMaps(child, parentFQN);
+							else
+								updateMaps(child, parentName);
+						}
 					}
 				}
 				for (Declaration d : node.getNestedDeclarationsList())
@@ -285,16 +322,19 @@ public class BoaMetricIntrinsics {
 		};
 		
 		public void process(ChangedFile[] snapshot) throws Exception {
-			classNameToPackagesMap = new HashMap<String, HashSet<String>>();
+			fqns = new HashSet<String>();
 			childToParentsMap = new HashMap<String, HashSet<String>>();
 			parentToChildsMap = new HashMap<String, HashSet<String>>();
 			fileNameToClassFQNMap = new HashMap<String, HashSet<String>>();
-			namespaces = new ArrayList<Namespace>();
 			DITNOCMap = new HashMap<String, long[]>();
 			for (ChangedFile cf : snapshot)
 				collector.visit(cf);
-			for (Namespace ns : namespaces)
-				visitor.visit(ns);
+			for (ChangedFile cf : snapshot)
+				visitor.visit(cf);
+			
+//			for (Entry<String, HashSet<String>> entry : childToParentsMap.entrySet())
+//				System.out.println(entry);
+			
 			for (Entry<String, HashSet<String>> entry : fileNameToClassFQNMap.entrySet()) {
 				String fileName = entry.getKey();
 				for (String fqn : entry.getValue()) {
@@ -303,9 +343,9 @@ public class BoaMetricIntrinsics {
 					DITNOCMap.put(fileName + " " + fqn, new long[] { dit, noc });
 				}
 			}
+			fqns.clear();
 			childToParentsMap.clear();
-			classNameToPackagesMap.clear();
-			namespaces.clear();
+			parentToChildsMap.clear();
 			fileNameToClassFQNMap.clear();
 		}
 
@@ -315,6 +355,7 @@ public class BoaMetricIntrinsics {
 			q.offer(null);
 			int depth = -1;
 			while (!q.isEmpty()) {
+//				System.out.println("Free memory (MB): " + Runtime.getRuntime().freeMemory() / 1000.0);
 				String cur = q.poll();
 				if (cur == null) {
 					depth++;
@@ -325,6 +366,7 @@ public class BoaMetricIntrinsics {
 				} else if (childToParentsMap.containsKey(cur)) {
 					for (String parent : childToParentsMap.get(cur)) {
 						q.offer(parent);
+//						System.out.println(cur + " " + parent);
 					}
 				}
 			}
@@ -485,29 +527,34 @@ public class BoaMetricIntrinsics {
 				decls = new ArrayList<Declaration>();
 				for (Declaration d : node.getDeclarationsList())
 					visit(d);
-				HashSet<String> importedPakcages = new HashSet<String>();
+				
+				// collect imported packages and classes
+				HashSet<String> importedPackages = new HashSet<String>();
 				HashSet<String> importedClasses = new HashSet<String>();
-				importedPakcages.add(node.getName());
-				// check imports
+				importedPackages.add(node.getName());
 				for (String importName : node.getImportsList()) {
 					// import static org.junit.Assert.*
 					// import static org.mockito.Mockito.doNothing
 					if (importName.startsWith("static ")) {
-						int idx = importName.lastIndexOf('.');
-						String temp = idx > 0 ? importName.substring(8, idx) : importName.substring(8);
+						String temp = importName.replace("static ", "");
+						int idx = temp.lastIndexOf('.');
+						temp = idx > 0 ? temp.substring(0, idx) : temp;
 						importedClasses.add(temp);
 					// import org.societies.android.api.useragent.*
 					} else if (importName.endsWith(".*")) {
-						importedPakcages.add(importName.substring(0, importName.lastIndexOf(".*")));
+						importedPackages.add(importName.substring(0, importName.lastIndexOf(".*")));
 					// import org.junit.After
 					} else {
 						importedClasses.add(importName);
 					}
 				}
+				
+				
 				for (String importedClass : importedClasses)
 					if (fqns.contains(importedClass))
 						for (Declaration decl : decls)
 							updateMaps(decl.getFullyQualifiedName(), importedClass);
+				
 				// check classes under imported packages
 				// TODO
 				return false;
