@@ -351,6 +351,8 @@ public class BoaMetricIntrinsics {
 
 		private long getMaxDepth(String fqn) {
 			Queue<String> q = new LinkedList<String>();
+			// avoid cyclic graph
+			HashSet<String> visited = new HashSet<String>();
 			q.offer(fqn);
 			q.offer(null);
 			int depth = -1;
@@ -364,9 +366,12 @@ public class BoaMetricIntrinsics {
 					else
 						q.offer(null);
 				} else if (childToParentsMap.containsKey(cur)) {
+					visited.add(cur);
 					for (String parent : childToParentsMap.get(cur)) {
-						q.offer(parent);
-//						System.out.println(cur + " " + parent);
+						if (!visited.contains(parent)) {
+							q.offer(parent);
+//							System.out.println(cur + " " + parent);							
+						}
 					}
 				}
 			}
