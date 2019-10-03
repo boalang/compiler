@@ -55,6 +55,7 @@ import boa.compiler.SymbolTable;
 import boa.compiler.ast.Start;
 import boa.compiler.transforms.InheritedAttributeTransformer;
 import boa.compiler.transforms.LocalAggregationTransformer;
+import boa.compiler.transforms.ProjectYearFixer;
 import boa.compiler.transforms.VariableDeclRenameTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.CodeGeneratingVisitor;
@@ -255,6 +256,7 @@ public abstract class BaseTest {
 		final int seed = new PrettyPrintVisitor().startAndReturn(p).hashCode();
 
 		try {
+			new ProjectYearFixer().start(p);
 			new VariableDeclRenameTransformer().start(p);
 			new InheritedAttributeTransformer().start(p);
 			new LocalAggregationTransformer().start(p);

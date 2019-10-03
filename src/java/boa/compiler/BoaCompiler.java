@@ -57,6 +57,7 @@ import boa.compiler.listeners.LexerErrorListener;
 import boa.compiler.listeners.ParserErrorListener;
 import boa.compiler.transforms.InheritedAttributeTransformer;
 import boa.compiler.transforms.LocalAggregationTransformer;
+import boa.compiler.transforms.ProjectYearFixer;
 import boa.compiler.transforms.VariableDeclRenameTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.ASTPrintingVisitor;
@@ -141,6 +142,7 @@ public class BoaCompiler extends BoaMain {
 					final boolean isSimple = !simpleVisitor.isComplex();
 					LOG.info(inputFile.getName() + ": task complexity: " + (isSimple ? "simple" : "complex"));
 
+					new ProjectYearFixer().start(p);
 					new VariableDeclRenameTransformer().start(p);
 					new InheritedAttributeTransformer().start(p);
 					new LocalAggregationTransformer().start(p);

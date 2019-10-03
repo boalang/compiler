@@ -32,6 +32,10 @@ public class Factor extends Node {
 	protected Operand op;
 	protected final List<Node> ops = new ArrayList<Node>();
 
+	public void setOperand(final Operand op) {
+		this.op = op ;
+	}
+
 	public Operand getOperand() {
 		return op;
 	}
