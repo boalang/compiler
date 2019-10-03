@@ -1,0 +1,8 @@
+o: output sum of int;
+o << 1;
+
+m: map[string] of bool;
+a: array of string = {"a", "b"};
+
+foreach (i: int; a[i])
+    m[a[i]] = true;

@@ -1,0 +1,6 @@
+o: output sum of int;
+o << 1;
+
+s: set of string;
+cf: ChangedFile;
+add(s, cf);

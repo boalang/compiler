@@ -79,6 +79,12 @@ public abstract class AbstractVisitor<ReturnType, ArgType> {
 		return null;
 	}
 
+	public ReturnType visit(final EnumBodyDeclaration n, final ArgType arg) {
+		n.getIdentifier().accept(this, arg);
+		n.getExp().accept(this, arg);
+		return null;
+	}
+
 	public ReturnType visit(final Composite n, final ArgType arg) {
 		for (final Pair p : n.getPairs())
 			p.accept(this, arg);
@@ -439,6 +445,12 @@ public abstract class AbstractVisitor<ReturnType, ArgType> {
 
 	public ReturnType visit(final TupleType n, final ArgType arg) {
 		for (final Component c : n.getMembers())
+			c.accept(this, arg);
+		return null;
+	}
+
+	public ReturnType visit(final EnumType n, final ArgType arg) {
+		for (final EnumBodyDeclaration c : n.getMembers())
 			c.accept(this, arg);
 		return null;
 	}

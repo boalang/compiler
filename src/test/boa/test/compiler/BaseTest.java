@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2016, Hridesh Rajan, Robert Dyer, Neha Bhide
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +20,11 @@ package boa.test.compiler;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
@@ -32,12 +33,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import javax.tools.ToolProvider;
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
@@ -47,26 +48,25 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 
-import org.stringtemplate.v4.ST;
-
 import boa.compiler.SymbolTable;
 import boa.compiler.ast.Start;
+import boa.compiler.transforms.InheritedAttributeTransformer;
 import boa.compiler.transforms.LocalAggregationTransformer;
+import boa.compiler.transforms.VariableDeclRenameTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
-import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
+import boa.compiler.visitors.PrettyPrintVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
-
 import boa.parser.BoaLexer;
 import boa.parser.BoaParser;
 import boa.parser.BoaParser.StartContext;
 
 /**
  * @author rdyer
+ * @author nbhide
  */
 public abstract class BaseTest {
 	protected static boolean DEBUG = false;
@@ -74,6 +74,11 @@ public abstract class BaseTest {
 	@BeforeClass
 	public static void initializeSymbols() throws IOException {
 		SymbolTable.initialize(new ArrayList<URL>());
+	}
+
+	@Before
+	public void resetCustomTypes() throws IOException {
+		SymbolTable.resetTypeMap();
 	}
 
 	@Before
@@ -207,15 +212,15 @@ public abstract class BaseTest {
 	// type checking
 	//
 
-	protected void typecheck(final String input) throws IOException {
-		typecheck(input, null);
+	protected StartContext typecheck(final String input) throws IOException {
+		return typecheck(input, null);
 	}
 
-	protected void typecheck(final String input, final String error) throws IOException {
-		final Start p = parse(input).ast;
+	protected StartContext typecheck(final String input, final String error) throws IOException {
+		final StartContext ctx = parse(input);
 
 		try {
-			new TypeCheckingVisitor().start(p, new SymbolTable());
+			new TypeCheckingVisitor().start(ctx.ast, new SymbolTable());
 			if (error != null)
 				fail("expected error: " + error);
 		} catch (final Exception e) {
@@ -224,6 +229,8 @@ public abstract class BaseTest {
 			else
 				assertEquals(error, e.getMessage());
 		}
+
+		return ctx;
 	}
 
 	
@@ -231,53 +238,33 @@ public abstract class BaseTest {
 	// code generation
 	//
 
-	protected void codegen(final String input) throws IOException {
-		codegen(input, null);
+	protected StartContext codegen(final String input) throws IOException {
+		return codegen(input, null);
 	}
 
-	protected void codegen(final String input, final String error) throws IOException {
-		final Start p = parse(input).ast;
-
+	protected StartContext codegen(final String input, final String error) throws IOException {
 		final File outputRoot = new File(new File(System.getProperty("java.io.tmpdir")), UUID.randomUUID().toString());
 		final File outputSrcDir = new File(outputRoot, "boa");
 		if (!outputSrcDir.mkdirs())
 			throw new IOException("unable to mkdir " + outputSrcDir);
 		final File outputFile = new File(outputSrcDir, "Test.java");
 
-		CodeGeneratingVisitor.combineAggregatorStrings.clear();
-		CodeGeneratingVisitor.reduceAggregatorStrings.clear();
-
-		final List<String> jobnames = new ArrayList<String>();
-		final List<String> jobs = new ArrayList<String>();
-		final List<String> seeds = new ArrayList<String>();
+		final StartContext ctx = typecheck(input);
+		final Start p = ctx.ast;
+		// use the whole input string to seed the RNG
+		final int seed = new PrettyPrintVisitor().startAndReturn(p).hashCode();
 
 		try {
-			new TypeCheckingVisitor().start(p, new SymbolTable());
+			new VariableDeclRenameTransformer().start(p);
+			new InheritedAttributeTransformer().start(p);
 			new LocalAggregationTransformer().start(p);
 			new VisitorOptimizingTransformer().start(p);
 
-			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("1");
+			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("Test", 64 * 1024 * 1024, seed);
 			cg.start(p);
-			jobs.add(cg.getCode());
-			jobnames.add("1");
-			seeds.add("0");
 
-			final ST st = AbstractCodeGeneratingVisitor.stg.getInstanceOf("Program");
-
-			st.add("name", "Test");
-			st.add("numreducers", 1);
-			st.add("jobs", jobs);
-			st.add("jobnames", jobnames);
-			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
-			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
-			st.add("splitsize", 64 * 1024 * 1024);
-			st.add("seeds", seeds);
-
-			final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile));
-			try {
-				o.write(st.render().getBytes());
-			} finally {
-				o.close();
+			try (final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile))) {
+				o.write(cg.getCode().getBytes());
 			}
 
 			final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -303,6 +290,8 @@ public abstract class BaseTest {
 		}
 
 		delete(outputSrcDir);
+
+		return ctx;
 	}
 
 
@@ -311,16 +300,30 @@ public abstract class BaseTest {
 	//
 
 	protected String load(final String fileName) throws IOException {
-		BufferedInputStream in = null;
+		final StringBuilder sb = new StringBuilder();
+		BufferedReader br = null;
+		FileReader fr = null;
 		try {
-			in = new BufferedInputStream(new FileInputStream(fileName));
-			final byte[] bytes = new byte[(int) new File(fileName).length()];
-			in.read(bytes);
-			return new String(bytes);
+			fr = new FileReader(fileName);
+			br = new BufferedReader(fr);
+			String line;
+			while ((line = br.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		} finally {
-			if (in != null)
-				in.close();
+			try {
+				if (br != null)
+					br.close();
+				if (fr != null)
+					fr.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+
 		}
+		return sb.toString();
 	}
 
 	protected final void delete(final File f) throws IOException {

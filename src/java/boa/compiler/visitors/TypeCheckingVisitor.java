@@ -500,7 +500,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			type = ((BoaTuple) type).getMember(selector);
 			if (type instanceof BoaName)
 				type = ((BoaName) type).getType();
-		} else {
+		} else if (type instanceof BoaEnum) {
+			if (!((BoaEnum) type).hasMember(selector))
+				throw new TypeCheckException(n.getId(), "'" + type + "' has no member named '" + selector + "'");
+			type = ((BoaEnum) type).getMember(selector);
+		}
+		else {
 			throw new TypeCheckException(n, "invalid operand type '" + type + "' for member selection");
 		}
 
@@ -837,7 +842,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		n.getCondition().accept(this, st);
 		final BoaType expr = n.getCondition().type;
-		if (!(expr instanceof BoaInt) && !(expr instanceof BoaProtoMap))
+		if (!(expr instanceof BoaInt) && !(expr instanceof BoaProtoMap) && !(expr instanceof BoaEnum))
 			throw new TypeCheckException(n.getCondition(), "incompatible types for switch expression: required 'int' or 'enum', found: " + expr);
 
 		for (final SwitchCase sc : n.getCases()) {
@@ -979,13 +984,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.getComponent().accept(this, st);
 			if (n.getComponent().type instanceof BoaName)
 				n.getComponent().type = n.getComponent().getType().type;
-		}
-		else if (!n.hasWildcard())
+		} else if (!n.hasWildcard()) {
 			for (final Identifier id : n.getIdList()) {
 				if (SymbolTable.getType(id.getToken()) == null)
 					throw new TypeCheckException(id, "Invalid type '" + id.getToken() + "'");
 				id.accept(this, st);
 			}
+		}
 
 		for (final IfStatement ifStatement : n.getIfStatements()) {
 			ifStatement.accept(this, st);
@@ -1342,7 +1347,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		final AggregatorSpec annotation;
 		try {
-			annotation = st.getAggregators(n.getId().getToken(), type).get(0).getAnnotation(AggregatorSpec.class);
+			annotation = st.getAggregator(n.getId().getToken(), type).getAnnotation(AggregatorSpec.class);
 		} catch (final RuntimeException e) {
 			throw new TypeCheckException(n, e.getMessage(), e);
 		}
@@ -1437,6 +1442,37 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 	/** {@inheritDoc} */
 	@Override
+	public void visit(final EnumType n, final SymbolTable env) {
+		n.env = env;
+
+		final List<BoaEnum> types = new ArrayList<BoaEnum>();
+		final List<String> names = new ArrayList<String>();
+		final List<String> values = new ArrayList<String>();
+		BoaType fieldType = null;
+
+		for (final EnumBodyDeclaration c : n.getMembers()) {
+			names.add(c.getIdentifier().getToken());
+
+			final Factor f = c.getExp().getLhs().getLhs().getLhs().getLhs().getLhs();
+			if (f.getOperand() instanceof ILiteral) {
+				if (f.getOperand() instanceof StringLiteral)
+					fieldType = new BoaString();
+				else if (f.getOperand() instanceof IntegerLiteral)
+					fieldType = new BoaInt();
+				else if (f.getOperand() instanceof FloatLiteral)
+					fieldType = new BoaFloat();
+				else if (f.getOperand() instanceof TimeLiteral)
+					fieldType = new BoaTime();
+				values.add(((ILiteral)(f.getOperand())).getLiteral());
+				types.add(new BoaEnum(c.getIdentifier().getToken(),((ILiteral)(f.getOperand())).getLiteral(),fieldType));
+			}
+		}
+
+		n.type = new BoaEnum(types, names, values, fieldType);
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final VisitorType n, final SymbolTable env) {
 		n.env = env;
 		n.type = new BoaVisitor();
@@ -1446,12 +1482,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	@Override
 	public void visit(final TraversalType n, final SymbolTable env) {
 		n.env = env;
-		BoaTraversal tr = new BoaTraversal();
-		if(n.getIndex()!=null) {
+		if (n.getIndex() != null) {
 			n.getIndex().accept(this, env);
-			tr.setIndex(n.getIndex().type);
+			n.type = new BoaTraversal(n.getIndex().type);
+		} else {
+			n.type = new BoaTraversal();
 		}
-		n.type = tr;
 	}
 
 	/** {@inheritDoc} */

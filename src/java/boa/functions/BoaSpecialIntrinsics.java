@@ -115,7 +115,7 @@ public class BoaSpecialIntrinsics {
 		return arr;
 	}
 	@FunctionSpec(name = "new", returnType = "array of string", formalParameters = { "array of string", "int", "string" })
-	public static String[] newBoolean(String[] a, long size, String val) {
+	public static String[] newString(String[] a, long size, String val) {
 		String[] arr = new String[(int)size];
 		for (int i = 0; i < size; i++)
 			arr[i] = val;

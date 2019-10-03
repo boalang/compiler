@@ -86,4 +86,4 @@ offer(queue2, 2);
 offer(q5, queue1);
 offer(q5, queue2);
 
-v6 := values(q5);
+v5 := values(q5);

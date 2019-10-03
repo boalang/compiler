@@ -17,8 +17,7 @@
 package boa.compiler.visitors.analysis;
 
 import boa.compiler.ast.Node;
-import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.compiler.visitors.CFGBuildingVisitor;
+import boa.compiler.visitors.*;
 
 /**
  * @author rramu

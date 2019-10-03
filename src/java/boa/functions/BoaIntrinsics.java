@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ import boa.types.Toplevel.Project;
 
 /**
  * Boa domain-specific functions.
- * 
+ *
  * @author rdyer
  */
 public class BoaIntrinsics {
@@ -43,13 +43,13 @@ public class BoaIntrinsics {
 	private final static List<Matcher> fixingMatchers = new ArrayList<Matcher>();
 
 	static {
-		for (final String s : BoaIntrinsics.fixingRegex)
+		for (final String s : fixingRegex)
 			fixingMatchers.add(Pattern.compile(s).matcher(""));
 	}
 
 	/**
 	 * Is a Revision's log message indicating it is a fixing revision?
-	 * 
+	 *
 	 * @param rev the revision to mine
 	 * @return true if the revision's log indicates a fixing revision
 	 */
@@ -60,7 +60,7 @@ public class BoaIntrinsics {
 
 	/**
 	 * Is a log message indicating it is a fixing revision?
-	 * 
+	 *
 	 * @param log the revision's log message to mine
 	 * @return true if the log indicates a fixing revision
 	 */
@@ -76,7 +76,7 @@ public class BoaIntrinsics {
 
 	/**
 	 * Does a Project contain a file of the specified type? This compares based on file extension.
-	 * 
+	 *
 	 * @param p the Project to examine
 	 * @param ext the file extension to look for
 	 * @return true if the Project contains at least 1 file with the specified extension
@@ -91,7 +91,7 @@ public class BoaIntrinsics {
 
 	/**
 	 * Does a CodeRepository contain a file of the specified type? This compares based on file extension.
-	 * 
+	 *
 	 * @param cr the CodeRepository to examine
 	 * @param ext the file extension to look for
 	 * @return true if the CodeRepository contains at least 1 file with the specified extension
@@ -106,7 +106,7 @@ public class BoaIntrinsics {
 
 	/**
 	 * Does a Revision contain a file of the specified type? This compares based on file extension.
-	 * 
+	 *
 	 * @param rev the Revision to examine
 	 * @param ext the file extension to look for
 	 * @return true if the Revision contains at least 1 file with the specified extension
@@ -120,8 +120,20 @@ public class BoaIntrinsics {
 	}
 
 	/**
+	 * Does a ChangedFile contain a file of the specified type? This compares based on file extension.
+	 *
+	 * @param rev the ChangedFile to examine
+	 * @param ext the file extension to look for
+	 * @return true if the ChangedFile contains at least 1 file with the specified extension
+	 */
+	@FunctionSpec(name = "hasfiletype", returnType = "bool", formalParameters = { "ChangedFile", "string" })
+	public static boolean hasfile(final ChangedFile cf, final String ext) {
+        return cf.getName().toLowerCase().endsWith("." + ext.toLowerCase());
+	}
+
+	/**
 	 * Matches a FileKind enum to the given string.
-	 * 
+	 *
 	 * @param s the string to match against
 	 * @param kind the FileKind to match
 	 * @return true if the string matches the given kind
@@ -193,6 +205,32 @@ public class BoaIntrinsics {
 		return s;
 	}
 
+	public static <T> boolean deepEquals(final T[] arr, final T[] arr2) {
+		return java.util.Arrays.deepEquals(arr, arr2);
+	}
+
+	public static boolean deepEquals(final long[] arr, final long[] arr2) {
+		if (arr.length != arr2.length) return false;
+		for (int i = 0; i < arr.length; i++)
+			if (arr2[i] != arr[i]) return false;
+		return true;
+	}
+
+	public static boolean deepEquals(final double[] arr, final double[] arr2) {
+		if (arr.length != arr2.length) return false;
+		for (int i = 0; i < arr.length; i++)
+			if (arr2[i] != arr[i]) return false;
+		return true;
+	}
+
+	public static boolean deepEquals(final boolean[] arr, final boolean[] arr2) {
+		if (arr.length != arr2.length) return false;
+		for (int i = 0; i < arr.length; i++)
+			if (arr2[i] != arr[i]) return false;
+		return true;
+	}
+
+
 	public static <T> T[] basic_array(final T[] arr) {
 		return arr;
 	}
@@ -218,14 +256,14 @@ public class BoaIntrinsics {
 		return arr2;
 	}
 
-	public static <T> T[] concat(final T[] first, @SuppressWarnings("unchecked") final T[]... rest) {
+	public static <T> T[] concat(final T[] first, final T[]... rest) {
 		int totalLength = first.length;
-		for (T[] array : rest)
+		for (final T[] array : rest)
 			totalLength += array.length;
-		
+
 		final T[] result = Arrays.copyOf(first, totalLength);
 		int offset = first.length;
-		for (T[] array : rest) {
+		for (final T[] array : rest) {
 			System.arraycopy(array, 0, result, offset, array.length);
 			offset += array.length;
 		}
@@ -234,14 +272,14 @@ public class BoaIntrinsics {
 
 	public static long[] concat(final long[] first, final long[]... rest) {
 		int totalLength = first.length;
-		for (long[] array : rest)
+		for (final long[] array : rest)
 			totalLength += array.length;
-		
+
 		final long[] result = new long[totalLength];
 		System.arraycopy(first, 0, result, 0, first.length);
 
 		int offset = first.length;
-		for (long[] array : rest) {
+		for (final long[] array : rest) {
 			System.arraycopy(array, 0, result, offset, array.length);
 			offset += array.length;
 		}
@@ -250,14 +288,14 @@ public class BoaIntrinsics {
 
 	public static double[] concat(final double[] first, final double[]... rest) {
 		int totalLength = first.length;
-		for (double[] array : rest)
+		for (final double[] array : rest)
 			totalLength += array.length;
-		
+
 		final double[] result = new double[totalLength];
 		System.arraycopy(first, 0, result, 0, first.length);
 
 		int offset = first.length;
-		for (double[] array : rest) {
+		for (final double[] array : rest) {
 			System.arraycopy(array, 0, result, offset, array.length);
 			offset += array.length;
 		}
@@ -266,14 +304,14 @@ public class BoaIntrinsics {
 
 	public static boolean[] concat(final boolean[] first, final boolean[]... rest) {
 		int totalLength = first.length;
-		for (boolean[] array : rest)
+		for (final boolean[] array : rest)
 			totalLength += array.length;
-		
+
 		final boolean[] result = new boolean[totalLength];
 		System.arraycopy(first, 0, result, 0, first.length);
 
 		int offset = first.length;
-		for (boolean[] array : rest) {
+		for (final boolean[] array : rest) {
 			System.arraycopy(array, 0, result, offset, array.length);
 			offset += array.length;
 		}

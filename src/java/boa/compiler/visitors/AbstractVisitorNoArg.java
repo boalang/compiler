@@ -23,7 +23,7 @@ import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 
 /**
- * An abstract visitor class that passes no arguments during the visit.
+ * An abstract visitor class that passes no arguments during the visit and returns nothing.
  * 
  * @author rdyer
  * @author ankuraga
@@ -79,6 +79,11 @@ public abstract class AbstractVisitorNoArg {
 		if (n.hasIdentifier())
 			n.getIdentifier().accept(this);
 		n.getType().accept(this);
+	}
+
+	public void visit(final EnumBodyDeclaration n) {
+		n.getIdentifier().accept(this);
+		n.getExp().accept(this);
 	}
 
 	public void visit(final Composite n) {
@@ -391,6 +396,12 @@ public abstract class AbstractVisitorNoArg {
 	public void visit(final TupleType n) {
 		for (final Component c : n.getMembers())
 			c.accept(this);
+	}
+
+	public void visit(final EnumType n) {
+		for (final EnumBodyDeclaration c : n.getMembers()){
+			c.accept(this);
+		}
 	}
 
 	public void visit(final VisitorType n) {

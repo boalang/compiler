@@ -1,0 +1,15 @@
+o: output sum of int;
+o << 1;
+
+visit(input, visitor {
+    before Statement -> {
+        f := function() : bool {
+            return true;
+        };
+    }
+    after Statement -> {
+        g := function() : bool {
+            return false;
+        };
+    }
+});

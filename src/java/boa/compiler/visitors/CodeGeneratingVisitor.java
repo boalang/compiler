@@ -335,6 +335,42 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	}
 
 	/**
+	 * Finds the set of all enum types and generates classes for each enum type.
+	 *
+	 * @author ankuraga
+	 */
+	protected class EnumDeclaratorCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final EnumType n) {
+			final ST st = stg.getInstanceOf("EnumType");
+
+			final BoaEnum enumType = ((BoaEnum) n.type);
+			final BoaType fieldType = enumType.getType();
+			final List<String> fields = new ArrayList<String>();
+			final List<String> values = new ArrayList<String>();
+
+			for (final EnumBodyDeclaration c : n.getMembers()) {
+				final Factor f = c.getExp().getLhs().getLhs().getLhs().getLhs().getLhs();
+
+				if (f.getOperand() instanceof ILiteral) {
+					code.add(((ILiteral)(f.getOperand())).getLiteral());
+					fields.add(c.getIdentifier().getToken());
+					values.add(code.removeLast());
+				}
+			}
+
+			st.add("ename", enumType.toJavaType());
+			st.add("fields", fields);
+			st.add("values", values);
+			st.add("fname", fieldType.toJavaType());
+
+			code.add(st.render());
+		}
+	}
+
+
+	/**
 	 *
 	 * @author rdyer
 	 */
@@ -443,36 +479,39 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	protected final StaticInitializationCodeGeneratingVisitor staticInitialization;
 	protected final FunctionDeclaratorCodeGeneratingVisitor functionDeclarator;
 	protected final TupleDeclaratorCodeGeneratingVisitor tupleDeclarator;
+	protected final EnumDeclaratorCodeGeneratingVisitor enumDeclarator;
 
 	protected final HashMap<String, AggregatorDescription> aggregators = new HashMap<String, AggregatorDescription>();
-
-	protected final String name;
 
 	protected String skipIndex = "";
 	protected boolean abortGeneration = false;
 
-	final public static List<String> combineAggregatorStrings = new ArrayList<String>();
-	final public static List<String> reduceAggregatorStrings = new ArrayList<String>();
+	protected String className;
+	protected int splitSize;
+	protected int seed;
 
-	public CodeGeneratingVisitor(final String name) throws IOException {
-		this.name = name;
+	public CodeGeneratingVisitor(final String className, final int splitSize, final int seed) throws IOException {
+		this.className = className;
+		this.splitSize = splitSize;
+		this.seed = seed;
 
 		varDecl = new VarDeclCodeGeneratingVisitor();
 		staticInitialization = new StaticInitializationCodeGeneratingVisitor();
 		functionDeclarator = new FunctionDeclaratorCodeGeneratingVisitor();
 		tupleDeclarator = new TupleDeclaratorCodeGeneratingVisitor();
+		enumDeclarator = new EnumDeclaratorCodeGeneratingVisitor();
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Program n) {
-		final ST st = stg.getInstanceOf("Job");
-
-		st.add("name", this.name);
+		final ST st = stg.getInstanceOf("Program");
 
 		this.varDecl.start(n);
 		this.functionDeclarator.start(n);
 		this.tupleDeclarator.start(n);
+		this.enumDeclarator.start(n);
+
 		if (this.functionDeclarator.hasCode())
 			st.add("staticDeclarations", this.varDecl.getCode() + "\n" + this.functionDeclarator.getCode());
 		else
@@ -480,6 +519,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if (this.tupleDeclarator.hasCode())
 			st.add("staticDeclarations", "\n" + this.tupleDeclarator.getCode());
+		if (this.enumDeclarator.hasCode())
+			st.add("staticDeclarations", "\n" + this.enumDeclarator.getCode());
+
 		this.staticInitialization.start(n);
 		if (this.staticInitialization.hasCode())
 			st.add("staticStatements", this.staticInitialization.getCode());
@@ -496,35 +538,42 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (this.aggregators.size() == 0)
 			throw new TypeCheckException(n, "No output variables were declared - must declare at least one output variable");
 
-		for (final Entry<String, AggregatorDescription> entry : this.aggregators.entrySet()) {
-			String id = entry.getKey();
-			String prefix = name;
+		final List<String> combineAggregatorStrings = new ArrayList<String>();
+		final List<String> reduceAggregatorStrings = new ArrayList<String>();
 
-			if (id.matches("\\d+_.*")) {
-				prefix = id.substring(0, id.indexOf('_'));
-				id = id.substring(id.indexOf('_') + 1);
-			}
+		for (final Entry<String, AggregatorDescription> entry : this.aggregators.entrySet()) {
+			final String id = entry.getKey();
 
 			final AggregatorDescription description = entry.getValue();
 			final String parameters = description.getParameters() == null ? "" : description.getParameters().get(0);
 			final BoaType type = description.getType();
 
-			final StringBuilder src = new StringBuilder();
 			boolean combines = false;
-			for (final Class<?> c : n.env.getAggregators(description.getAggregator(), type)) {
-				src.append(", new " + c.getCanonicalName() + "(" + parameters + ")");
-				try {
-					final AggregatorSpec annotation = c.getAnnotation(AggregatorSpec.class);
-					if (annotation.canCombine())
-						combines = true;
-				} catch (final RuntimeException e) {
-					throw new TypeCheckException(n, e.getMessage(), e);
-				}
+			final Class<?> c = n.env.getAggregator(description.getAggregator(), type);
+			try {
+				final AggregatorSpec annotation = c.getAnnotation(AggregatorSpec.class);
+				if (annotation.canCombine())
+					combines = true;
+			} catch (final RuntimeException e) {
+				throw new TypeCheckException(n, e.getMessage(), e);
 			}
+			reduceAggregatorStrings.add("this.aggregators.put(\"" + id + "\", new " + c.getCanonicalName() + "(" + parameters + "));");
 			if (combines)
-				combineAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
-			reduceAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
+				combineAggregatorStrings.add(reduceAggregatorStrings.get(reduceAggregatorStrings.size() - 1));
 		}
+
+		st.add("combineTables", combineAggregatorStrings);
+		st.add("reduceTables", reduceAggregatorStrings);
+
+		final List<String> variableNames = new ArrayList<String>();
+		for (final String s : reduceAggregatorStrings)
+			variableNames.add(s.substring(s.indexOf('"'), s.indexOf(", new")));
+		Collections.sort(variableNames);
+
+		st.add("name", className);
+		st.add("splitsize", splitSize);
+		st.add("seed", seed);
+		st.add("outputVariableNames", variableNames);
 
 		code.add(st.render());
 	}
@@ -679,7 +728,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			visit(n.getExprs());
 
-			st.add("type", t.toJavaType().replaceAll("<(.*)>", ""));
+			if (t instanceof BoaArray && ((BoaArray)t).getType() instanceof BoaEnum) {
+				st.add("type", "Object[] ");
+			} else {
+				st.add("type", t.toJavaType().replaceAll("<(.*)>", ""));
+			}
 
 			st.add("exprlist", code.removeLast());
 		}
@@ -856,6 +909,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				return;
 			}
 
+			// operand is a enum
+			if (opType instanceof BoaEnum) {
+				final BoaEnum tenum = (BoaEnum) opType;
+				n.env.setOperandType(tenum.getMember(member));
+				code.add("." + member);
+				return;
+			}
+
 			throw new RuntimeException("unimplemented operand type: " + opType.getClass());
 		} catch (final TypeCheckException e) {
 			throw new RuntimeException("unimplemented", e);
@@ -1007,16 +1068,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("indices", indices);
 		}
 
-		String id = n.getId().getToken();
-		String prefix = name;
-
-		if (id.matches("\\d+_.*")) {
-			prefix = id.substring(0, id.indexOf('_'));
-			id = id.substring(id.indexOf('_') + 1);
-		}
-
-		st.add("id", "\"" + id + "\"");
-		st.add("job", prefix);
+		st.add("id", "\"" + n.getId().getToken() + "\"");
 
 		n.getValue().accept(this);
 		st.add("expression", code.removeLast());
@@ -1204,7 +1256,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		for (final Expression expr : n.getCases()) {
 			expr.accept(this);
 			String s = code.removeLast();
-			if (expr.type instanceof BoaProtoMap)
+			if (expr.type instanceof BoaProtoMap || expr.type instanceof BoaEnum)
 				s = s.substring(s.lastIndexOf(".") + 1);
 			cases.add(s);
 		}
@@ -1870,6 +1922,34 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final TupleType n) {
 		throw new RuntimeException("unexpected error");
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final EnumType n) {
+		final ST st = stg.getInstanceOf("EnumType");
+
+		final BoaEnum enumType = ((BoaEnum) n.type);
+		final BoaType fieldType = enumType.getType();
+		final List<String> fields = new ArrayList<String>();
+		final List<String> values = new ArrayList<String>();
+
+		for (final EnumBodyDeclaration c : n.getMembers()) {
+			final Factor f = c.getExp().getLhs().getLhs().getLhs().getLhs().getLhs();
+
+			if (f.getOperand() instanceof ILiteral) {
+				code.add(((ILiteral)(f.getOperand())).getLiteral());
+				fields.add(c.getIdentifier().getToken());
+				values.add(code.removeLast());
+			}
+		}
+
+		st.add("ename", enumType.toJavaType());
+		st.add("fields", fields);
+		st.add("values", values);
+		st.add("fname", fieldType.toJavaType());
+
+		code.add(st.render());
 	}
 
 	protected static String expand(final String template, final String... parameters) {

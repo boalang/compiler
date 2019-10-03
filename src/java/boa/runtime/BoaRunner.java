@@ -46,7 +46,6 @@ import boa.io.EmitValue;
  * @author anthonyu
  * @author rdyer
  */
-@SuppressWarnings("static-access")
 public abstract class BoaRunner extends Configured implements Tool {
 	/**
 	 * Create a {@link Job} describing the work to be done by this Boa job.
@@ -88,8 +87,6 @@ public abstract class BoaRunner extends Configured implements Tool {
 			for (final Path in : ins)
 				FileInputFormat.addInputPath(job, in);
 		FileOutputFormat.setOutputPath(job, out);
-
-		job.setPartitionerClass(BoaPartitioner.class);
 
 		job.setMapOutputKeyClass(EmitKey.class);
 		job.setMapOutputValueClass(EmitValue.class);

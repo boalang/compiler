@@ -20,15 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import boa.aggregators.Aggregator;
-import boa.compiler.ast.Comparison;
-import boa.compiler.ast.Conjunction;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Program;
-import boa.compiler.ast.Term;
-import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.expressions.ParenExpression;
-import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.literals.IntegerLiteral;
 import boa.compiler.ast.statements.AssignmentStatement;
 import boa.compiler.ast.statements.Block;
@@ -105,65 +100,20 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 	}
 
 	protected void generateCacheVariable(final Program n, final String s) {
-		final VarDeclStatement var = new VarDeclStatement(
-				new Identifier(varPrefix + s),
-				new Expression(
-					new Conjunction(
-						new Comparison(
-							new SimpleExpr(
-								new Term(
-									new Factor(
-										new IntegerLiteral("0")
-									)
-								)
-							)
-						)
-					)
-				)
-			);
-		n.getStatements().add(0, var);
-
+		final VarDeclStatement var = ASTFactory.createVarDecl(varPrefix + s, new IntegerLiteral("0"), new BoaInt(), n.env);
 		n.env.set(varPrefix + s, new BoaInt());
-		var.type = var.getInitializer().type = new BoaInt();
-		var.env = n.env;
+		n.getStatements().add(0, var);
 	}
 
 	protected void generateCacheOutput(final Program n, String s) {
-		final Identifier id = new Identifier(varPrefix + s);
-		id.env = n.env;
+		final Identifier id = ASTFactory.createIdentifier(varPrefix + s, n.env);
 		n.getStatements().add(
 			new IfStatement(
-				new Expression(
-					new Conjunction(
-						new Comparison(
-							new SimpleExpr(
-								new Term(
-									new Factor(id)
-								)
-							),
-							"!=",
-							new SimpleExpr(
-								new Term(
-									new Factor(new IntegerLiteral("0"))
-								)
-							)
-						)
-					)
-				),
+				ASTFactory.createComparison(id, "!=", new IntegerLiteral("0")),
 				new Block().addStatement(
 					new EmitStatement(
-						new Identifier(s),
-						new Expression(
-							new Conjunction(
-								new Comparison(
-									new SimpleExpr(
-										new Term(
-											new Factor(id.clone())
-										)
-									)
-								)
-							)
-						)
+						ASTFactory.createIdentifier(s, n.env),
+						ASTFactory.createFactorExpr(id.clone())
 					)
 				)
 			)
@@ -171,31 +121,13 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 	}
 
 	protected void generateStoreValue(final EmitStatement n) {
-		final Identifier id = new Identifier(varPrefix + n.getId().getToken());
-		id.env = n.env;
+		final Identifier id = ASTFactory.createIdentifier(varPrefix + n.getId().getToken(), n.env);
 
-		final SimpleExpr e = new SimpleExpr(
-			new Term(
-				new Factor(
-					id
-				)
+		n.replaceStatement(n,
+			new AssignmentStatement(
+				new Factor(id.clone()),
+				ASTFactory.createComparison(id, "+", new ParenExpression(n.getValue().clone()))
 			)
 		);
-		e.addOp("+");
-		e.addRhs(new Term(
-			new Factor(
-				new ParenExpression(n.getValue().clone())
-			)
-		));
-
-		n.replaceStatement(n, new AssignmentStatement(
-				new Factor(
-					id.clone()
-				),
-				new Expression(
-					new Conjunction(
-						new Comparison(e)
-					)
-				)));
 	}
 }

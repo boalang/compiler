@@ -150,6 +150,27 @@ private class <name>
 >>
 
 Tuple(name, exprlist) ::= "new <name>(<exprlist>) <\n>"
+
+EnumType(ename, fields, values, fname) ::= <<
+private enum <ename>
+{
+	<fields,values:{field,value|<field>(<value>)}; separator=", ">;
+
+	private <fname> value;
+	private <ename> (<fname> value) {
+		this.value = value;
+	}
+
+	public Object getValue() {
+		return this.value;
+	}
+
+	public String toString() {
+		return this.value + "";
+	}
+}<\n>
+>>
+
 Visitor(staticDeclarations, body) ::= <<
 new boa.runtime.BoaAbstractVisitor()
 {

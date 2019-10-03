@@ -36,7 +36,7 @@ public class StringLiteral extends Operand implements ILiteral {
 	public StringLiteral (final boolean regex, final String literal) {
 		this(literal);
 		if (regex)
-			this.literal = "\"" + literal.substring(1, literal.length() - 1).replace("\\", "\\\\") + "\"";
+			this.literal = "\"" + literal.substring(1, literal.length() - 1).replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
 	}
 
 	public StringLiteral (final String literal) {

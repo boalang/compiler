@@ -39,7 +39,7 @@ staticVariableDeclaration
 	;
 
 variableDeclaration
-	: identifier COLON (type)? (EQUALS ({ notifyErrorListeners("error: output variable declarations should not include '='"); } outputType | expression))? { isSemiColon(); }
+	: forVariableDeclaration { isSemiColon(); }
 	;
 
 type 
@@ -54,11 +54,16 @@ type
 	| stackType
 	| queueType
 	| setType
+	| enumType
 	| identifier
 	;
 
 component
 	: (identifier COLON)? type
+	;
+	
+enumBodyDeclaration
+	: identifier EQUALS expression
 	;
 
 arrayType
@@ -67,6 +72,10 @@ arrayType
 
 tupleType
 	: LBRACE (member (COMMA member)* COMMA?)? RBRACE
+	;
+
+enumType
+	: ENUM LBRACE (enumBodyDeclaration (COMMA enumBodyDeclaration)* COMMA?)? RBRACE
 	;
 
 member
@@ -137,7 +146,7 @@ emptyStatement
 	;
 
 assignmentStatement
-	: factor EQUALS expression { isSemiColon(); }
+	: factor (EQUALS | PLUSEQ | MINUSEQ | STAREQ | DIVEQ | ONEOREQ | XOREQ | MODEQ | ONEANDEQ | RSHIFTEQ | LSHIFTEQ) expression { isSemiColon(); }
 	;
 
 block
@@ -171,12 +180,11 @@ forExpression
 	;
 
 forVariableDeclaration
-	: identifier COLON (type)? (EQUALS expression)?
+	: identifier COLON (type)? (EQUALS ({ notifyErrorListeners("error: output variable declarations should not include '='"); } outputType | expression))?
 	;
 
 forExpressionStatement
 	: expression (INCR | DECR) # postfixStatement
-	| factor EQUALS expression # variableDeclaration
 	| expression               # exprStatement
 	;
 
@@ -436,6 +444,7 @@ TRAVERSAL  : 'traversal';
 BEFORE   : 'before';
 AFTER    : 'after';
 STOP     : 'stop';
+ENUM 	 : 'enum';
 
 //
 // separators
@@ -479,6 +488,16 @@ MOD    : '%';
 RSHIFT : '>>';
 NEG    : '~';
 INV    : '!';
+PLUSEQ : '+=';
+MINUSEQ: '-=';
+STAREQ : '*=';
+DIVEQ  : '/=';
+ONEOREQ: '|=';
+XOREQ  : '^=';
+MODEQ  : '%=';
+ONEANDEQ:'&=';
+RSHIFTEQ:'>>=';
+LSHIFTEQ:'<<=';
 
 //
 // other
@@ -497,9 +516,9 @@ ML_STRING   : '"""';
 //
 
 IntegerLiteral
-	: [-]? DecimalNumeral
-	| [-]? HexNumeral 
-	| [-]? OctalNumeral 
+	: DecimalNumeral
+	| HexNumeral 
+	| OctalNumeral 
 	| BinaryNumeral 
 	;
 
@@ -535,9 +554,9 @@ BinaryNumeral
 	;
 
 FloatingPointLiteral
-	: [-]? Digit+ DOT Digit* ExponentPart?
-	| [-]? DOT Digit+ ExponentPart?
-	| [-]? Digit+ ExponentPart
+	: Digit+ DOT Digit* ExponentPart?
+	| DOT Digit+ ExponentPart?
+	| Digit+ ExponentPart
 	;
 
 fragment

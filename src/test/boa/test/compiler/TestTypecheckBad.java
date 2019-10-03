@@ -58,12 +58,12 @@ public class TestTypecheckBad extends BaseTest {
 
 	@Test
 	public void reDeclVar2() throws IOException {
-		typecheck("autoaddedoutputvar: output sum of int;autoaddedoutputvar << 1;" + load(badDir + "re-decl-var2.boa"), "variable 'i' already declared as 'int'");
+		typecheck(load(badDir + "re-decl-var2.boa"), "variable 'i' already declared as 'int'");
 	}
 
-	//@Test
+	@Test
 	public void methodNoCall() throws IOException {
-		typecheck(load(badDir + "method-no-call.boa"), "expected a call to function 'f'");
+		typecheck(load(badDir + "method-no-call.boa"), "incompatible types for if condition: required 'boolean', found 'function[]: bool'");
 	}
 
 	@Test
@@ -71,13 +71,48 @@ public class TestTypecheckBad extends BaseTest {
 		typecheck(load(badDir + "method-call-wrong-type.boa"), "no such function push([stack of int, stack of int])");
 	}
 
-	//@Test
+	@Test
 	public void buildinMethodNoCall() throws IOException {
-		typecheck(load(badDir + "builtin-method-no-call.boa"), "expected a call to function 'clear'");
+		typecheck(load(badDir + "builtin-method-no-call.boa"), "incompatible types for if condition: required 'boolean', found 'function[traversal]: any'");
 	}
 
 	//@Test
 	public void quantMissingUse() throws IOException {
 		typecheck(load(badDir + "quant-missing-use.boa"), "quantifier variable 'i' must be used in the foreach condition expression");
+	}
+
+	@Test
+	public void currentBadType() throws IOException {
+		typecheck(load(badDir + "current-badtype.boa"), "no such function current([int])");
+	}
+
+	@Test
+	public void afterReturn() throws IOException {
+		typecheck(load(badDir + "after-return.boa"), "return statement not allowed inside visitors");
+	}
+
+	@Test
+	public void beforeReturn() throws IOException {
+		typecheck(load(badDir + "before-return.boa"), "return statement not allowed inside visitors");
+	}
+
+	@Test
+	public void nestedReturn() throws IOException {
+		typecheck(load(badDir + "nested-return.boa"), "return statement not allowed inside visitors");
+	}
+
+	@Test
+	public void assignFuncNoRet() throws IOException {
+		typecheck(load(badDir + "assign-func-no-ret.boa"), "functions without a return type can not be used as initializers");
+	}
+
+	@Test
+	public void tupleRedecl() throws IOException {
+		typecheck(load(badDir + "tuple-redecl.boa"), "variable 'a' already declared as 'float'");
+	}
+
+	@Test
+	public void addSetWrongVal() throws IOException {
+		typecheck(load(badDir + "add-set-wrong-val.boa"), "no such function add([set of string, ChangedFile])");
 	}
 }

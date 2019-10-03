@@ -74,6 +74,11 @@ public abstract class AbstractVisitorNoReturn<ArgType> {
 		n.getType().accept(this, arg);
 	}
 
+	public void visit(final EnumBodyDeclaration n, final ArgType arg) {
+		n.getIdentifier().accept(this, arg);
+		n.getExp().accept(this, arg);
+	}
+
 	public void visit(final Composite n, final ArgType arg) {
 		for (final Pair p : n.getPairs())
 			p.accept(this, arg);
@@ -383,6 +388,11 @@ public abstract class AbstractVisitorNoReturn<ArgType> {
 
 	public void visit(final TupleType n, final ArgType arg) {
 		for (final Component c : n.getMembers())
+			c.accept(this, arg);
+	}
+
+	public void visit(final EnumType n, final ArgType arg) {
+		for (final EnumBodyDeclaration c : n.getMembers())
 			c.accept(this, arg);
 	}
 

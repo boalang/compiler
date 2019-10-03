@@ -347,7 +347,7 @@ public class BoaGraphIntrinsics {
 
 			final java.util.List<boa.graphs.cfg.CFGEdge> edges = new ArrayList<boa.graphs.cfg.CFGEdge>(n.getOutEdges());
 			Collections.sort(edges);
-			for (final boa.graphs.cfg.CFGEdge e : edges) {
+			for (final boa.graphs.Edge e : edges) {
 				str2.append("\t");
 				str2.append(n.getId());
 				str2.append(" -> ");
@@ -401,7 +401,7 @@ public class BoaGraphIntrinsics {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
-				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt())));
+				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())));
 				str.append("\"]\n");
 			} else if (n.hasExpr()) {
 				str.append(",label=\"[");
@@ -473,7 +473,7 @@ public class BoaGraphIntrinsics {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
-				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt())));
+				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())));
 				str.append("\"]\n");
 			} else if (n.hasExpr()) {
 				str.append(",label=\"[");
@@ -544,7 +544,7 @@ public class BoaGraphIntrinsics {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
-				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt())));
+				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())));
 				str.append("\"]\n");
 			} else if (n.hasExpr()) {
 				str.append(",label=\"[");
@@ -617,7 +617,7 @@ public class BoaGraphIntrinsics {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
-				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt())));
+				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())));
 				str.append("\"]\n");
 			} else if (n.hasExpr()) {
 				str.append(",label=\"[");
@@ -690,7 +690,7 @@ public class BoaGraphIntrinsics {
 				str.append(",label=\"[");
 				str.append(n.getId());
 				str.append("] ");
-				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprintstmt(n.getStmt())));
+				str.append(dotEscapeString(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())));
 				str.append("\"]\n");
 			} else if (n.hasExpr()) {
 				str.append(",label=\"[");

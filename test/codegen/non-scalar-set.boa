@@ -72,4 +72,4 @@ offer(q2, 2);
 add(s5, q1);
 add(s5, q2);
 
-v6 := values(s5);
+v5 := values(s5);
