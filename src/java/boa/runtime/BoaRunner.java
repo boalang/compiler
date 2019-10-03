@@ -84,6 +84,13 @@ public abstract class BoaRunner extends Configured implements Tool {
 		// Set the maximum percentage of map tasks that can fail without 
 		// the job being aborted. 
 		configuration.setLong("mapred.max.map.failures.percent", 5);
+		
+		// Set map task timeout (1440mins)
+		configuration.setLong("mapred.task.timeout", 86400000);
+		
+		// mem to 2GB
+		configuration.set("mapred.map.child.java.opts", "-Xmx2048m");
+		configuration.set("mapred.reduce.child.java.opts", "-Xmx2048m");
 
 		final Job job = new Job(configuration);
 

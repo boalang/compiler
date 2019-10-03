@@ -16,18 +16,18 @@
  */
 package boa.functions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Queue;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
-import antlr.collections.Stack;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.*;
 import boa.types.Ast.Expression.ExpressionKind;
+import boa.types.Diff.ChangedFile;
 
 /**
  * Boa domain-specific functions for computing software engineering metrics.
@@ -187,35 +187,126 @@ public class BoaMetricIntrinsics {
 	/////////////////////////////////////
 	// Depth of Inheritance Tree (DIT) //
 	/////////////////////////////////////
+	
+	private static String getPackage(String n, String defaultReturn) {
+		int idx = n.lastIndexOf('.');
+		return idx > 0 ? n.substring(0, idx) : defaultReturn;
+	}
+	
+	private static String getClassName(String n, String defaultReturn) {
+		int idx = n.lastIndexOf('.');
+		return idx > 0 ? n.substring(idx + 1) : defaultReturn;
+	}
 
 	private static class BoaDITVisitor extends BoaCollectingVisitor<String, Long> {
-		private HashMap<String, Declaration> declMap;
-		private HashMap<String, HashSet<String>> childParentsMap;
-
-		private void updateMaps(Declaration node) {
-			for (Type parentType : node.getParentsList()) {
-				String parent = parentType.getName();
-				String child = node.getFullyQualifiedName();
-				if (declMap.containsKey(parent)) {
-					parent = declMap.get(parent).getFullyQualifiedName();
-					if (!childParentsMap.containsKey(child))
-						childParentsMap.put(child, new HashSet<String>());
-					childParentsMap.get(child).add(parent);
+		
+		private HashMap<String, HashSet<String>> classNameToPackagesMap;
+		private HashMap<String, HashSet<String>> fileNameToClassFQNMap;
+		private HashMap<String, HashSet<String>> childToParentsMap;
+		private HashMap<String, HashSet<String>> parentToChildsMap;
+		private ArrayList<Namespace> namespaces;
+		private HashMap<String, long[]> DITNOCMap;
+		
+		private BoaAbstractVisitor collector = new BoaAbstractVisitor() {
+			
+			private String fileName;
+			
+			@Override
+			public boolean preVisit(final ChangedFile node) throws Exception {
+				fileName = node.getName();
+				return true;
+			}
+			
+			@Override
+			public boolean preVisit(final Namespace node) throws Exception {
+				namespaces.add(node);
+				for (Declaration d : node.getDeclarationsList())
+					visit(d);
+				return false;
+			}
+			
+			@Override
+			public boolean preVisit(final Declaration node) throws Exception {
+				String fqn = node.getFullyQualifiedName();
+				if (!fileNameToClassFQNMap.containsKey(fileName))
+					fileNameToClassFQNMap.put(fileName, new HashSet<String>());
+				fileNameToClassFQNMap.get(fileName).add(fqn);
+				String className = node.getName();
+				String pkg = getPackage(fqn, "");
+				if (!classNameToPackagesMap.containsKey(className))
+					classNameToPackagesMap.put(className, new HashSet<String>());
+				classNameToPackagesMap.get(className).add(pkg);
+				for (Declaration d : node.getNestedDeclarationsList())
+					visit(d);
+				return false;
+			}
+		};
+		
+		private BoaAbstractVisitor visitor = new BoaAbstractVisitor() {
+			
+			private HashSet<String> importedPackages;
+			
+			@Override
+			public boolean preVisit(final Namespace node) throws Exception {
+				importedPackages = new HashSet<String>();
+				for (String ipt : node.getImportsList())
+					if (!ipt.startsWith("static "))
+						importedPackages.add(getPackage(ipt, ipt));
+				importedPackages.add(node.getName());
+				for (Declaration d : node.getDeclarationsList())
+					visit(d);
+				return false;
+			}
+			
+			@Override
+			public boolean preVisit(final Declaration node) throws Exception {
+				if (node.getParentsCount() > 0) {
+					String child = node.getFullyQualifiedName();
+					for (Type t : node.getParentsList()) {
+						String parentClassName = getClassName(t.getName(), t.getName());
+						if (classNameToPackagesMap.containsKey(parentClassName))
+							for (String pkg : classNameToPackagesMap.get(parentClassName))
+								if (importedPackages.contains(pkg)) {
+									String parent = pkg + "." + parentClassName;
+									if (!childToParentsMap.containsKey(child))
+										childToParentsMap.put(child, new HashSet<String>());
+									childToParentsMap.get(child).add(parent);
+									if (!parentToChildsMap.containsKey(parent))
+										parentToChildsMap.put(parent, new HashSet<String>());
+									parentToChildsMap.get(parent).add(child);
+								}
+					}
+				}
+				for (Declaration d : node.getNestedDeclarationsList())
+					visit(d);
+				return false;
+			}
+			
+		};
+		
+		public void process(ChangedFile[] snapshot) throws Exception {
+			classNameToPackagesMap = new HashMap<String, HashSet<String>>();
+			childToParentsMap = new HashMap<String, HashSet<String>>();
+			parentToChildsMap = new HashMap<String, HashSet<String>>();
+			fileNameToClassFQNMap = new HashMap<String, HashSet<String>>();
+			namespaces = new ArrayList<Namespace>();
+			DITNOCMap = new HashMap<String, long[]>();
+			for (ChangedFile cf : snapshot)
+				collector.visit(cf);
+			for (Namespace ns : namespaces)
+				visitor.visit(ns);
+			for (Entry<String, HashSet<String>> entry : fileNameToClassFQNMap.entrySet()) {
+				String fileName = entry.getKey();
+				for (String fqn : entry.getValue()) {
+					long dit = getMaxDepth(fqn);
+					long noc = parentToChildsMap.containsKey(fqn) ? parentToChildsMap.get(fqn).size() : 0;
+					DITNOCMap.put(fileName + " " + fqn, new long[] { dit, noc });
 				}
 			}
-		}
-		
-		public void process(HashMap<String, Declaration> decls) throws Exception {
-			declMap = decls;
-			childParentsMap = new HashMap<String, HashSet<String>>();
-			for (Declaration node : decls.values())
-				updateMaps(node);
-			for (Declaration node : decls.values()) {
-				String fqn = node.getFullyQualifiedName();
-				long dit = getMaxDepth(fqn);
-				map.put(fqn, dit);
-			}
-			childParentsMap.clear();
+			childToParentsMap.clear();
+			classNameToPackagesMap.clear();
+			namespaces.clear();
+			fileNameToClassFQNMap.clear();
 		}
 
 		private long getMaxDepth(String fqn) {
@@ -231,9 +322,10 @@ public class BoaMetricIntrinsics {
 						break;
 					else
 						q.offer(null);
-				} else if (childParentsMap.containsKey(cur)) {
-					for (String parent : childParentsMap.get(cur))
+				} else if (childToParentsMap.containsKey(cur)) {
+					for (String parent : childToParentsMap.get(cur)) {
 						q.offer(parent);
+					}
 				}
 			}
 			return depth;
@@ -248,11 +340,10 @@ public class BoaMetricIntrinsics {
 	 * @param decls a map mapping class name to its corresponding Declaration object
 	 * @return a map mapping class full qualified name to its DIT value
 	 */
-	@FunctionSpec(name = "get_metric_dit", returnType = "map[string] of int", formalParameters = { "map[string] of Declaration" })
-	public static HashMap<String, Long> getMetricDIT(final HashMap<String, Declaration> decls) throws Exception {
-		ditVisitor.initialize(new HashMap<String, Long>());
-		ditVisitor.process(decls);
-		return ditVisitor.map;
+	@FunctionSpec(name = "get_metric_dit_noc", returnType = "map[string] of array of int", formalParameters = { "array of ChangedFile" })
+	public static HashMap<String, long[]> getMetricDITNOC(final ChangedFile[] snapshot) throws Exception {
+		ditVisitor.process(snapshot);
+		return ditVisitor.DITNOCMap;
 	}
 
 	////////////////////////////////
@@ -276,7 +367,7 @@ public class BoaMetricIntrinsics {
 				}
 			}
 		}
-		
+
 		public void process(HashMap<String, Declaration> decls) throws Exception {
 			declMap = decls;
 			parenctChildrenMap = new HashMap<String, HashSet<String>>();
@@ -289,7 +380,7 @@ public class BoaMetricIntrinsics {
 			}
 			parenctChildrenMap.clear();
 		}
-		
+
 	}
 
 	private static BoaNOCVisitor nocVisitor = new BoaNOCVisitor();
@@ -325,7 +416,7 @@ public class BoaMetricIntrinsics {
 				return true;
 			}
 		};
-		
+
 		@Override
 		public boolean preVisit(final Declaration node) throws Exception {
 			methodSet = new HashSet<String>();
@@ -359,81 +450,109 @@ public class BoaMetricIntrinsics {
 	////////////////////////////////////
 
 	private static class BoaCBOVisitor extends BoaCollectingVisitor<String, Long> {
-		
-		private String curFQN;
-		private HashMap<String, Declaration> declMap;
+
+		private HashMap<String, HashSet<String>> fileNameToClassFQNMap;
+		private HashSet<String> fqns;
 		private HashMap<String, HashSet<String>> references;
 		private HashMap<String, HashSet<String>> referenced;
 		
-		private BoaAbstractVisitor visitor = new BoaAbstractVisitor() {
-			private String getReference(String reference) {
-				if (declMap.containsKey(reference))
-					return declMap.get(reference).getFullyQualifiedName();
-				int idx = reference.lastIndexOf('.');
-				if (idx > 0) {
-					String suffix = reference.substring(idx + 1);
-					if (declMap.containsKey(suffix))
-						return declMap.get(suffix).getFullyQualifiedName();
-				}
-				return null;
-			}
+		private BoaAbstractVisitor collector = new BoaAbstractVisitor() {
 			
-			private void updateMaps(String reference) {
-				if (!references.containsKey(curFQN))
-					references.put(curFQN, new HashSet<String>());
-				references.get(curFQN).add(reference);
-				if (!referenced.containsKey(reference))
-					referenced.put(reference, new HashSet<String>());
-				referenced.get(reference).add(curFQN);
-			}
+			private String fileName;
 			
 			@Override
-			public boolean preVisit(final Expression node) {
-				if (node.getKind() == ExpressionKind.VARACCESS) {
-					String reference = getReference(node.getVariable());
-					if (reference != null)
-						updateMaps(reference);
-				}
+			public boolean preVisit(final ChangedFile node) throws Exception {
+				fileNameToClassFQNMap.put(node.getName(), new HashSet<String>());
+				fileName = node.getName();
 				return true;
 			}
-			
+
 			@Override
-			public boolean preVisit(final Variable node) {
-				String reference = getReference(node.getName());
-				if (reference != null)
-					updateMaps(reference);
-				return true;
-			}
-			
-			@Override
-			public boolean preVisit(final Type node) {
-				String reference = getReference(node.getName());
-				if (reference != null)
-					updateMaps(reference);
-				return true;
+			public boolean preVisit(final Declaration node) throws Exception {
+				fileNameToClassFQNMap.get(fileName).add(node.getFullyQualifiedName());
+				fqns.add(node.getFullyQualifiedName());
+				for (Declaration d : node.getNestedDeclarationsList())
+					visit(d);
+				return false;
 			}
 		};
 		
-		public void process(HashMap<String, Declaration> decls) throws Exception {
-			declMap = decls;
+		private BoaAbstractVisitor visitor = new BoaAbstractVisitor() {
+			private List<Declaration> decls;
+			
+			@Override
+			public boolean preVisit(final Namespace node) throws Exception {
+				decls = new ArrayList<Declaration>();
+				for (Declaration d : node.getDeclarationsList())
+					visit(d);
+				HashSet<String> importedPakcages = new HashSet<String>();
+				HashSet<String> importedClasses = new HashSet<String>();
+				importedPakcages.add(node.getName());
+				// check imports
+				for (String importName : node.getImportsList()) {
+					// import static org.junit.Assert.*
+					// import static org.mockito.Mockito.doNothing
+					if (importName.startsWith("static ")) {
+						int idx = importName.lastIndexOf('.');
+						String temp = idx > 0 ? importName.substring(8, idx) : importName.substring(8);
+						importedClasses.add(temp);
+					// import org.societies.android.api.useragent.*
+					} else if (importName.endsWith(".*")) {
+						importedPakcages.add(importName.substring(0, importName.lastIndexOf(".*")));
+					// import org.junit.After
+					} else {
+						importedClasses.add(importName);
+					}
+				}
+				for (String importedClass : importedClasses)
+					if (fqns.contains(importedClass))
+						for (Declaration decl : decls)
+							updateMaps(decl.getFullyQualifiedName(), importedClass);
+				// check classes under imported packages
+				// TODO
+				return false;
+			}
+			
+			@Override
+			public boolean preVisit(final Declaration node) throws Exception {
+				decls.add(node);
+				for (Declaration d : node.getNestedDeclarationsList())
+					visit(d);
+				return false;
+			}
+
+			private void updateMaps(String fqn, String reference) {
+				if (!references.containsKey(fqn))
+					references.put(fqn, new HashSet<String>());
+				references.get(fqn).add(reference);
+				if (!referenced.containsKey(reference))
+					referenced.put(reference, new HashSet<String>());
+				referenced.get(reference).add(fqn);
+			}
+		};
+		
+		public void process(ChangedFile[] snapshot) throws Exception {
+			fileNameToClassFQNMap = new HashMap<String, HashSet<String>>();
+			fqns = new HashSet<String>();
 			references = new HashMap<String, HashSet<String>>();
 			referenced = new HashMap<String, HashSet<String>>();
-			for (Declaration node : decls.values()) {
-				curFQN = node.getFullyQualifiedName();
-				for (Variable v : node.getFieldsList())
-					visitor.visit(v);
-				for (Method m : node.getMethodsList())
-					visitor.visit(m);
+			for (ChangedFile cf : snapshot)
+				collector.visit(cf);
+			for (ChangedFile cf : snapshot)
+				visitor.visit(cf);
+			for (Entry<String, HashSet<String>> entry : fileNameToClassFQNMap.entrySet()) {
+				String fileName = entry.getKey();
+				for (String fqn : entry.getValue()) {
+					HashSet<String> union = new HashSet<String>();
+					if (references.containsKey(fqn))
+						union.addAll(references.get(fqn));
+					if (referenced.containsKey(fqn))
+						union.addAll(referenced.get(fqn));
+					map.put(fileName + " " + fqn, (long) union.size());
+				}
 			}
-			for (Declaration node : decls.values()) {
-				String fqn = node.getFullyQualifiedName();
-				HashSet<String> union = new HashSet<String>();
-				if (references.containsKey(fqn))
-					union.addAll(references.get(fqn));
-				if (referenced.containsKey(fqn))
-					union.addAll(referenced.get(fqn));
-				map.put(fqn, (long) union.size());
-			}
+			fileNameToClassFQNMap.clear();
+			fqns.clear();
 			references.clear();
 			referenced.clear();
 		}
@@ -448,10 +567,10 @@ public class BoaMetricIntrinsics {
 	 * @param node the node to compute CBO for
 	 * @return the CBO value for node
 	 */
-	@FunctionSpec(name = "get_metric_cbo", returnType = "map[string] of int", formalParameters = { "map[string] of Declaration" })
-	public static HashMap<String, Long> getMetricCBO(final HashMap<String, Declaration> decls) throws Exception {
+	@FunctionSpec(name = "get_metric_cbo", returnType = "map[string] of int", formalParameters = { "array of ChangedFile" })
+	public static HashMap<String, Long> getMetricCBO(final ChangedFile[] snapshot) throws Exception {
 		cboVisitor.initialize(new HashMap<String, Long>());
-		cboVisitor.process(decls);
+		cboVisitor.process(snapshot);
 		return cboVisitor.map;
 	}
 
@@ -488,11 +607,11 @@ public class BoaMetricIntrinsics {
 				return true;
 			}
 		};
-		
+
 		public double getLCOM() {
 			return lcom;
 		}
-		
+
 		@Override
 		public boolean preVisit(final Declaration node) throws Exception {
 			double fieldsCount = node.getFieldsCount();
