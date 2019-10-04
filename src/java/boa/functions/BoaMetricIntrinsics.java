@@ -40,6 +40,7 @@ public class BoaMetricIntrinsics {
 	////////////////////////////////
 
 	private static class BoaNOAVisitor extends BoaCountingVisitor {
+		
 		@Override
 		public boolean preVisit(final Declaration node) {
 			if (node.getKind() == TypeKind.CLASS)
