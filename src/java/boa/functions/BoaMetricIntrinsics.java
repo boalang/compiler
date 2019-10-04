@@ -188,16 +188,6 @@ public class BoaMetricIntrinsics {
 	/////////////////////////////////////
 	// Depth of Inheritance Tree (DIT) //
 	/////////////////////////////////////
-	
-	private static String getPackage(String n, String defaultReturn) {
-		int idx = n.lastIndexOf('.');
-		return idx > 0 ? n.substring(0, idx) : defaultReturn;
-	}
-	
-	private static String getClassName(String n, String defaultReturn) {
-		int idx = n.lastIndexOf('.');
-		return idx > 0 ? n.substring(idx + 1) : defaultReturn;
-	}
 
 	private static class BoaDITVisitor extends BoaCollectingVisitor<String, Long> {
 		
@@ -213,6 +203,7 @@ public class BoaMetricIntrinsics {
 			
 			@Override
 			public boolean preVisit(final ChangedFile node) throws Exception {
+				fileNameToClassFQNMap.put(node.getName(), new HashSet<String>());
 				fileName = node.getName();
 				return true;
 			}
@@ -228,10 +219,7 @@ public class BoaMetricIntrinsics {
 			public boolean preVisit(final Declaration node) throws Exception {
 				String fqn = node.getFullyQualifiedName();
 				fqns.add(fqn);
-				if (!fileNameToClassFQNMap.containsKey(fileName))
-					fileNameToClassFQNMap.put(fileName, new HashSet<String>());
 				fileNameToClassFQNMap.get(fileName).add(fqn);
-				
 				for (Declaration d : node.getNestedDeclarationsList())
 					visit(d);
 				return false;

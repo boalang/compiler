@@ -657,12 +657,13 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	public static void cleanup(final Context context) {
 		closeMap();
+		closeReposMap();
+		closeRepo();
 		closeCommentsMap();
 		closeIssuesMap();
 		closeCommitsMap();
 		closeRefactoringsMap();
 		closeRefactoringIdsMap();
-		closeRepo();
 		System.gc();
 	}
 
@@ -677,6 +678,11 @@ public class BoaAstIntrinsics {
 	
 	private static void closeMap() {
 		closeMap(map);
+		map = null;
+	}
+	
+	private static void closeReposMap() {
+		closeMap(reposMap);
 		map = null;
 	}
 	
