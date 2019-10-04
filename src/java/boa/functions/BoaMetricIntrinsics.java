@@ -316,13 +316,11 @@ public class BoaMetricIntrinsics {
 			parentToChildsMap = new HashMap<String, HashSet<String>>();
 			fileNameToClassFQNMap = new HashMap<String, HashSet<String>>();
 			DITNOCMap = new HashMap<String, long[]>();
+			
 			for (ChangedFile cf : snapshot)
 				collector.visit(cf);
 			for (ChangedFile cf : snapshot)
 				visitor.visit(cf);
-			
-//			for (Entry<String, HashSet<String>> entry : childToParentsMap.entrySet())
-//				System.out.println(entry);
 			
 			for (Entry<String, HashSet<String>> entry : fileNameToClassFQNMap.entrySet()) {
 				String fileName = entry.getKey();
@@ -346,7 +344,6 @@ public class BoaMetricIntrinsics {
 			q.offer(null);
 			int depth = -1;
 			while (!q.isEmpty()) {
-//				System.out.println("Free memory (MB): " + Runtime.getRuntime().freeMemory() / 1000.0);
 				String cur = q.poll();
 				if (cur == null) {
 					depth++;
@@ -358,8 +355,7 @@ public class BoaMetricIntrinsics {
 					visited.add(cur);
 					for (String parent : childToParentsMap.get(cur)) {
 						if (!visited.contains(parent)) {
-							q.offer(parent);
-//							System.out.println(cur + " " + parent);							
+							q.offer(parent);						
 						}
 					}
 				}

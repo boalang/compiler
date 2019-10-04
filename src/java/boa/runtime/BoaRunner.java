@@ -89,8 +89,8 @@ public abstract class BoaRunner extends Configured implements Tool {
 		configuration.setLong("mapred.task.timeout", 86400000);
 		
 		// mem to 2GB
-		configuration.set("mapred.map.child.java.opts", "-Xmx2048m");
-		configuration.set("mapred.reduce.child.java.opts", "-Xmx2048m");
+//		configuration.set("mapred.map.child.java.opts", "-Xmx2048m");
+//		configuration.set("mapred.reduce.child.java.opts", "-Xmx2048m");
 
 		final Job job = new Job(configuration);
 
