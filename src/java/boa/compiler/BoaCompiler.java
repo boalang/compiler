@@ -159,9 +159,12 @@ public class BoaCompiler extends BoaMain {
 					}
 
 					compileGeneratedSrc(cl, jarName, outputRoot, outputFile);
+				} else {
+					System.exit(-1);
 				}
 			} catch (final TypeCheckException e) {
 				parserErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
+				System.exit(-1);
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
