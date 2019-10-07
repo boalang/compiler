@@ -65,6 +65,27 @@ public class BoaNormalFormIntrinsics {
 		return variableList.toArray(new Expression[variableList.size()]);
 	}
 
+	private static List<List<Expression>> permutate(final List<Expression[]> l, final int start) {
+		final List<List<Expression>> ret = new ArrayList<List<Expression>>();
+		if (start == l.size() - 1) {
+			for (final Expression e : l.get(start)) {
+				final List<Expression> newl = new ArrayList<Expression>();
+				newl.add(e);
+				ret.add(newl);
+			}
+		} else {
+			final List<List<Expression>> ps = permutate(l, start + 1);
+			for (int i = 0; i < l.get(start).length; i++) {
+				for (final List<Expression> exps : ps) {
+					final List<Expression> newl = new ArrayList<Expression>(exps);
+					newl.add(0, l.get(start)[i]);
+					ret.add(newl);
+				}
+			}
+		}
+		return ret;
+	}
+
 	/**
 	 * Replaces api arguments in the given expression with symbolic names
 	 *
@@ -73,9 +94,11 @@ public class BoaNormalFormIntrinsics {
 	 * @param arguments api arguments
 	 * @return the expression in symbolic form
 	 */
-	@FunctionSpec(name = "converttosymbolicname", returnType = "Expression", formalParameters = { "Expression", "Expression", "array of Expression"})
-	public static Expression convertToSymbolicName(final Expression e, final Expression reciever, final Expression[] arguments) throws Exception {
-		final List<Expression> convertedExpression = new ArrayList<Expression>();
+	@FunctionSpec(name = "converttosymbolicname", returnType = "array of Expression", formalParameters = { "Expression", "Expression", "array of Expression"})
+	public static Expression[] convertToSymbolicName(final Expression e, final Expression reciever, final Expression[] arguments) throws Exception {
+		final List<Expression> exps = new ArrayList<Expression>();
+
+		final List<Expression[]> convertedExpression = new ArrayList<Expression[]>();
 		for (final Expression sub : e.getExpressionsList())
 			convertedExpression.add(convertToSymbolicName(sub, reciever, arguments));
 
@@ -92,10 +115,14 @@ public class BoaNormalFormIntrinsics {
 			case LOGICAL_NOT:
 			case PAREN:
 			case NEW:
-				return createExpression(e.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()]));
+				for (final List<Expression> e2 : permutate(convertedExpression, 0))
+					exps.add(createExpression(e.getKind(), e2.toArray(new Expression[e2.size()])));
+				return exps.toArray(new Expression[exps.size()]);
 
 			case ASSIGN:
-				return createExpression(e.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()])).getExpressions(1);
+				for (final List<Expression> e2 : permutate(convertedExpression, 0))
+					exps.add(createExpression(e.getKind(), e2.toArray(new Expression[e2.size()])).getExpressions(1));
+				return exps.toArray(new Expression[exps.size()]);
 
 			case OP_ADD:
 			case OP_SUB:
@@ -106,86 +133,84 @@ public class BoaNormalFormIntrinsics {
 						convertedExpression.toArray(new Expression[convertedExpression.size()]));
 
 				if (replacedExpr.equals(reciever))
-					return createVariable("$RECEIVER$");
+					exps.add(createVariable("$RECEIVER$"));
 
 				for (int i = 0; i < arguments.length; i++) {
 					if (replacedExpr.equals(arguments[i]))
-						return createVariable("$ARG$" + Integer.toString(i));
+						exps.add(createVariable("$ARG$" + Integer.toString(i)));
 				}
 
-				return replacedExpr;
+				if (exps.size() == 0)
+					exps.add(e);
+
+				return exps.toArray(new Expression[exps.size()]);
 
 			case OP_DEC:
 			case OP_INC:
 			case ARRAYACCESS:
-				final Expression.Builder b = Expression.newBuilder(e);
+				if (convertedExpression.size() == 0)
+					convertedExpression.add(new Expression[0]);
 
-				for(int i = 0; i < convertedExpression.size(); i++) {
-					b.setExpressions(i, convertedExpression.get(i));
+				for (final Expression[] es : convertedExpression) {
+					final Expression.Builder b = Expression.newBuilder(e);
+
+					for(int i = 0; i < es.length; i++) {
+						b.setExpressions(i, es[i]);
+					}
+					final Expression replacedExpr1 = b.build();
+
+					if (replacedExpr1.equals(reciever))
+						exps.add(createVariable("$RECEIVER$"));
+
+					for (int i = 0; i < arguments.length; i++) {
+						if (replacedExpr1.equals(arguments[i]))
+							exps.add(createVariable("$ARG$" + Integer.toString(i)));
+					}
 				}
-				final Expression replacedExpr1 = b.build();
 
-				if (replacedExpr1.equals(reciever))
-					return createVariable("$RECEIVER$");
+				if (exps.size() == 0)
+					exps.add(e);
 
-				for (int i = 0; i < arguments.length; i++) {
-					if (replacedExpr1.equals(arguments[i]))
-						return createVariable("$ARG$" + Integer.toString(i));
-				}
-
-				return replacedExpr1;
+				return exps.toArray(new Expression[exps.size()]);
 
 			case METHODCALL:
-				final Expression.Builder bm = Expression.newBuilder(e);
+				if (convertedExpression.size() == 0)
+					convertedExpression.add(new Expression[0]);
 
-				for(int i = 0; i < convertedExpression.size(); i++) {
-					bm.setExpressions(i, convertedExpression.get(i));
+				for (final Expression[] es : convertedExpression) {
+					final Expression.Builder bm = Expression.newBuilder(e);
+
+					for (int i = 0; i < es.length; i++) {
+						bm.setExpressions(i, es[i]);
+					}
+
+					final List<Expression[]> args = new ArrayList<Expression[]>();
+					for (int i = 0; i < e.getMethodArgsList().size(); i++) {
+						args.add(convertToSymbolicName(e.getMethodArgs(i), reciever, arguments));
+					}
+					for (final List<Expression> arg : permutate(args, 0)) {
+						for (int i = 0; i < arg.size(); i++) {
+							bm.setMethodArgs(i, arg.get(i));
+						}
+						exps.add(bm.build());
+					}
 				}
-
-				for(int i = 0; i < e.getMethodArgsList().size(); i++) {
-					Expression mArgs = convertToSymbolicName(e.getMethodArgs(i), reciever, arguments);
-					bm.setMethodArgs(i, mArgs);
-				}
-
-				return bm.build();
+				return exps.toArray(new Expression[exps.size()]);
 
 			case VARACCESS:
 				// replace with symbolic names
 				if (e.equals(reciever))
-					return createVariable("$RECEIVER$");
+					exps.add(createVariable("$RECEIVER$"));
 
 				for (int i = 0; i < arguments.length; i++) {
 					if (e.equals(arguments[i]))
-						return createVariable("$ARG$" + Integer.toString(i));
+						exps.add(createVariable("$ARG$" + Integer.toString(i)));
 				}
-				/*
-				for (int i = 0; i < arguments.length; i++) {
-					final Map<Integer, List<Object[]>> componentMap = seperate(arguments[i], true, true);
-					final List<Object[]> variableList = new ArrayList<Object[]>();
 
-					if (componentMap.containsKey(-1))
-						break;
+				if (exps.size() == 0)
+					exps.add(e);
 
-					if (componentMap.containsKey(0))
-						variableList.addAll(componentMap.get(0));
-					if (componentMap.containsKey(1))
-						variableList.addAll(componentMap.get(1));
-
-					boolean exist = false;
-					for (final Object[] o: variableList) {
-						if (o[0].equals(e)) {
-							o[0] = createVariable("$ARG$" + Integer.toString(i));
-							exist = true;
-						} else
-							o[2] = !((Boolean)o[2]);
-					}
-
-					if (exist)
-						return combineLeft(variableList);
-
-				}
-				*/
-				return e;
+				return exps.toArray(new Expression[exps.size()]);
 
 			// TODO: Handle as per need
 			case NEWARRAY:
@@ -214,7 +239,7 @@ public class BoaNormalFormIntrinsics {
 
 			case LITERAL:
 			default:
-				return e;
+				return new Expression[] { e };
 		}
 	}
 
