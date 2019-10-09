@@ -646,6 +646,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if (!(type instanceof BoaTable))
 			throw new TypeCheckException(n.getId(), "emitting to non-output variable '" + id + "'");
 
+		Class<?> aggregator = null;
+		try {
+			aggregator = env.getAggregator(id, ((BoaTable)type).getType());
+		} catch (final RuntimeException e) {
+			// do nothing
+		}
+		if (aggregator != null)
+			throw new TypeCheckException(n.getId(), "'" + id + "' is an aggregator function - you must declare an output variable that uses this function, then emit to it");
+
 		final BoaTable t = (BoaTable) type;
 
 		if (n.getIndicesSize() != t.countIndices())
