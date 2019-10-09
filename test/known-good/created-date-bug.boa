@@ -1,0 +1,12 @@
+# How many projects created each year?
+p: Project = input;
+counts: output sum[int] of int;
+
+counts[yearof(p.created_date)] << 1;
+counts[yearof((p.created_date / 1000))] << 1;
+
+counts[yearof(p.created_date + 1)] << 1;
+counts[yearof((p.created_date / 1000) + 1)] << 1;
+
+counts[yearof(p.created_date * 5)] << 1;
+counts[yearof((p.created_date / 1000) * 5)] << 1;
