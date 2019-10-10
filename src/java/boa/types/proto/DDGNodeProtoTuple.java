@@ -48,6 +48,12 @@ public class DDGNodeProtoTuple extends BoaProtoTuple {
 
         names.put("expr", counter++);
         members.add(new ExpressionProtoTuple());
+
+        names.put("successors", counter++);
+        members.add(new BoaProtoList(new DDGNodeProtoTuple()));
+
+        names.put("predecessors", counter++);
+        members.add(new BoaProtoList(new DDGNodeProtoTuple()));
     }
 
     /**
