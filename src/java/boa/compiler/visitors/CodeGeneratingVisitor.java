@@ -1490,11 +1490,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		final CFGBuildingVisitor cfgBuilder = new CFGBuildingVisitor();
 		n.accept(cfgBuilder);
-		final CreateNodeId createNodeId = new CreateNodeId();
-		createNodeId.start(cfgBuilder);
+		new CreateNodeId().start(cfgBuilder);
 
-		final LocalMayAliasAnalysis localMayAliasAnalysis = new LocalMayAliasAnalysis();
-		final HashSet<Identifier> aliastSet = localMayAliasAnalysis.start(cfgBuilder, traversalId);
+		final HashSet<Identifier> aliastSet = new LocalMayAliasAnalysis().start(cfgBuilder, traversalId);
 
 		final DataFlowSensitivityAnalysis dataFlowSensitivityAnalysis = new DataFlowSensitivityAnalysis();
 		dataFlowSensitivityAnalysis.start(cfgBuilder, aliastSet);

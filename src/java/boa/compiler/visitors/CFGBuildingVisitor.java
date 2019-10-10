@@ -105,11 +105,9 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArg {
 	public void visit(final Block n) {
 		List<Statement> stats = n.getStatements();
 
-		if (stats.size() == 0) {
-			singleton(n);
-		} else {
+		singleton(n);
+		if (stats.size() > 0) {
 			visitStatements(stats);
-			addNode(n);
 			visitList(stats);
 		}
 	}
