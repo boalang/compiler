@@ -39,7 +39,7 @@ public class DDGEdgeProtoTuple extends BoaProtoTuple{
         int counter = 0;
 
         names.put("src", counter++);
-        members.add(new BoaString());
+        members.add(new DDGNodeProtoTuple());
 
         names.put("dest", counter++);
         members.add(new DDGNodeProtoTuple());

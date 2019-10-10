@@ -40,6 +40,11 @@ public class CFGEdgeProtoTuple extends BoaProtoTuple {
 		names.put("label", counter++);
 		members.add(new EdgeLabelProtoMap());
 
+        names.put("src", counter++);
+        members.add(new CFGNodeProtoTuple());
+
+        names.put("dest", counter++);
+        members.add(new CFGNodeProtoTuple());
 	}
 
 	/**

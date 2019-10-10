@@ -39,7 +39,7 @@ public class CDGEdgeProtoTuple extends BoaProtoTuple {
         int counter = 0;
 
         names.put("src", counter++);
-        members.add(new BoaString());
+        members.add(new CDGNodeProtoTuple());
 
         names.put("dest", counter++);
         members.add(new CDGNodeProtoTuple());
