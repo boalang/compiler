@@ -60,8 +60,6 @@ public class SymbolTable {
 	private final static BoaProtoTuple[] dslTupleTypes = {
 		new ASTRootProtoTuple(),
 		new AttachmentProtoTuple(),
-		new NodeProtoTuple(),
-		new EdgeProtoTuple(),
 		new CFGProtoTuple(),
 		new CFGNodeProtoTuple(),
 		new CFGEdgeProtoTuple(),

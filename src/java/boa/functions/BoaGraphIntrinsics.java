@@ -98,7 +98,7 @@ public class BoaGraphIntrinsics {
 		return new PDGSlicer(method, (int)(long) id, normalize);
 	}
 
-	@FunctionSpec(name = "get_nodes_with_definition", returnType = "set of string", formalParameters = { "Node" })
+	//@FunctionSpec(name = "get_nodes_with_definition", returnType = "set of string", formalParameters = { "Node" })
 	public static HashSet<String> getNodesWithDefinition(final Node node) {
 		final HashSet<String> vardef = new HashSet<String>();
 		if (node.getExpression() != null) {
@@ -109,7 +109,7 @@ public class BoaGraphIntrinsics {
 		return vardef;
 	}
 
-	@FunctionSpec(name = "get_variable_killed", returnType = "set of string", formalParameters = {"CFG", "Node" })
+	//@FunctionSpec(name = "get_variable_killed", returnType = "set of string", formalParameters = {"CFG", "Node" })
 	public static HashSet<String> getVariableKilled(final boa.types.Control.Graph cfg, final Node node) {
 		final HashSet<String> varkilled = new HashSet<String>();
 		String vardef = "";
@@ -144,7 +144,7 @@ public class BoaGraphIntrinsics {
 		return varkilled;
 	}
 
-	@FunctionSpec(name = "get_variable_def", returnType = "set of string", formalParameters = { "Node" })
+	//@FunctionSpec(name = "get_variable_def", returnType = "set of string", formalParameters = { "Node" })
 	public static HashSet<String> getVariableDef(final Node node) {
 		final HashSet<String> vardef = new HashSet<String>();
 		if (node.getExpression() != null) {
@@ -158,7 +158,7 @@ public class BoaGraphIntrinsics {
 		return vardef;
 	}
 
-	@FunctionSpec(name = "get_variable_used", returnType = "set of string", formalParameters = { "Node" })
+	//@FunctionSpec(name = "get_variable_used", returnType = "set of string", formalParameters = { "Node" })
 	public static HashSet<String> getVariableUsed(final Node node) {
 		final HashSet<String> varused = new HashSet<String>();
 		if (node.getExpression() != null) {
