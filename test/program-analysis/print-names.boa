@@ -1,0 +1,10 @@
+ids: output collection of string;
+
+printNodes := traversal(n: CFGNode) {
+    ids << n.name;
+};
+
+visit(input, visitor {
+    before m: Method ->
+        traverse(getcfg(m), TraversalDirection.FORWARD, TraversalKind.DFS, printNodes);
+});
