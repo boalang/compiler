@@ -36,6 +36,7 @@ public class TreeNode extends Node<TreeNode, TreeEdge> {
     private HashSet<String> useVariables;
 
     private final ArrayList<TreeNode> children = new ArrayList<TreeNode>();
+    private final CFGNode cfgnode;
 
     /**
      * Constructs a tree node.
@@ -43,6 +44,7 @@ public class TreeNode extends Node<TreeNode, TreeEdge> {
      * @param node CFG node
      */
     public TreeNode(final CFGNode node) {
+        this.cfgnode = node;
         this.id = node.getNodeId();
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
@@ -57,6 +59,7 @@ public class TreeNode extends Node<TreeNode, TreeEdge> {
      * @param id node id. Uses default values for remaining fields
      */
     public TreeNode(final int id) {
+        this.cfgnode = null;
         this.id = id;
         this.useVariables = new HashSet<String>();
     }
@@ -67,6 +70,10 @@ public class TreeNode extends Node<TreeNode, TreeEdge> {
 
     public void setParent(final TreeNode parent) {
         this.parent = parent;
+    }
+
+    public CFGNode getCfgNode() {
+        return cfgnode;
     }
 
     public String getDefVariable() {
