@@ -32,6 +32,7 @@ import boa.types.proto.*;
 import boa.types.proto.enums.*;
 
 import boa.compiler.ast.Operand;
+import boa.compiler.ast.statements.VisitStatement;
 
 /**
  * @author anthonyu
@@ -54,6 +55,7 @@ public class SymbolTable {
 	private Stack<BoaType> operandType = new Stack<BoaType>();
 	private boolean needsBoxing;
 	private Stack<Boolean> isVisitor = new Stack<Boolean>();
+	private Stack<VisitStatement> lastVisit = new Stack<VisitStatement>();
 	private boolean isTraverse = false;
 	private boolean shadowing = false;
 
@@ -390,6 +392,7 @@ public class SymbolTable {
 		st.functions = new FunctionTrie(this.functions);
 		st.locals = new HashMap<String, BoaType>(this.locals);
 		st.isVisitor = this.isVisitor;
+		st.lastVisit = this.lastVisit;
 		st.shadowing = this.shadowing;
 
 		return st;
@@ -711,6 +714,18 @@ public class SymbolTable {
 
 	public boolean getIsVisitor() {
 		return this.isVisitor.peek();
+	}
+
+	public void setLastVisit(final VisitStatement visit) {
+		this.lastVisit.push(visit);
+	}
+
+	public void unsetLastVisit() {
+		this.lastVisit.pop();
+	}
+
+	public VisitStatement getLastVisit() {
+		return this.lastVisit.peek();
 	}
 
 	public void setShadowing(final boolean shadowing) {
