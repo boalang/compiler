@@ -820,10 +820,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StopStatement n, final SymbolTable env) {
-		n.env = env;
-
 		if (!env.getIsVisitor())
 			throw new TypeCheckException(n, "Stop statement only allowed inside 'before' visits");
+		if (!env.getLastVisit().isBefore())
+			throw new TypeCheckException(n, "Stop statement not allowed inside 'after' visits");
+
+		n.env = env;
 	}
 
 	/** {@inheritDoc} */
@@ -964,7 +966,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			}
 
 		st.setIsVisitor(true);
+		st.setLastVisit(n);
 		n.getBody().accept(this, st);
+		st.unsetLastVisit();
 		st.unsetIsVisitor();
 	}
 
