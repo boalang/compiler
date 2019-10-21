@@ -203,7 +203,7 @@ public class BoaGraphIntrinsics {
 	}
 
 	private static String dotEscapeHtml(final String s) {
-		return s.replace("<", "&lt;").replace(">", "&gt;").replace("\r", "<BR/>").replace("\n", "<BR/>");
+		return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\r", "<BR/>").replace("\n", "<BR/>");
 	}
 
 	// Graph Visualizers
