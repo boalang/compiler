@@ -1243,9 +1243,11 @@ public class BoaAstIntrinsics {
 
 			case NEWARRAY:
 				s += "new ";
-				s += prettyprint(e.getNewType());
+				final String arrtype = prettyprint(e.getNewType());
+				s += arrtype.substring(0, arrtype.length() - 1);
 				for (int i = 0; i < e.getExpressionsCount(); i++)
 					s += prettyprint(e.getExpressions(i));
+				s += "]";
 				return s;
 
 			case NEW:
