@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import com.google.protobuf.CodedInputStream;
+import com.google.protobuf.InvalidProtocolBufferException;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -31,18 +34,24 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.MapFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper.Context;
-
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.JavaCore;
-
-import com.google.protobuf.CodedInputStream;
-import com.google.protobuf.InvalidProtocolBufferException;
 
 import boa.datagen.DefaultProperties;
 import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.JavaVisitor;
-import boa.types.Ast.*;
+import boa.types.Ast.ASTRoot;
+import boa.types.Ast.CommentsRoot;
+import boa.types.Ast.Declaration;
+import boa.types.Ast.Expression;
+import boa.types.Ast.Method;
+import boa.types.Ast.Modifier;
+import boa.types.Ast.Namespace;
+import boa.types.Ast.Statement;
+import boa.types.Ast.Type;
+import boa.types.Ast.TypeKind;
+import boa.types.Ast.Variable;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -1361,9 +1370,6 @@ public class BoaAstIntrinsics {
 				}
 				return s;
 
-			// TODO
-			case METHOD_REFERENCE:
-			// TODO
 			case LAMBDA:
 				s += "(";
 				for (int i = 0; i < e.getVariableDeclsCount(); i++) {
@@ -1379,6 +1385,9 @@ public class BoaAstIntrinsics {
 					s += prettyprint(e.getStatements(0));
 				if (e.getExpressionsCount() != 0)
 					s += prettyprint(e.getExpressions(0));
+
+			// TODO
+			case METHOD_REFERENCE:
 			default: return s;
 		}
 	}

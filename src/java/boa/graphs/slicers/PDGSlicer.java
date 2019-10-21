@@ -16,17 +16,25 @@
  */
 package boa.graphs.slicers;
 
-import boa.graphs.pdg.PDG;
-import boa.graphs.pdg.PDGEdge;
-import boa.graphs.pdg.PDGNode;
-import boa.types.Ast.*;
-import boa.types.Control;
-
-import java.util.*;
-
 import static boa.functions.BoaAstIntrinsics.prettyprint;
 import static boa.functions.BoaNormalFormIntrinsics.normalizeExpression;
 import static boa.functions.BoaNormalFormIntrinsics.normalizeStatement;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
+
+import boa.graphs.pdg.PDG;
+import boa.graphs.pdg.PDGEdge;
+import boa.graphs.pdg.PDGNode;
+import boa.types.Ast.Method;
+import boa.types.Control;
 
 /**
  * A forward slicer based on PDG
@@ -104,7 +112,7 @@ public class PDGSlicer {
         this.md = md;
         this.normalize = normalize;
         final PDG pdg = new PDG(md, false);
-        for (Integer i: nids) {
+        for (final Integer i: nids) {
             final PDGNode node = pdg.getNode(i);
             if (node != null)
                 entryNodes.add(node);
@@ -196,7 +204,7 @@ public class PDGSlicer {
      */
     public int getTotalControlNodes() {
         int totalControlNodes = 0;
-        for (PDGNode node: slice)
+        for (final PDGNode node: slice)
             if (node.getKind() == Control.Node.NodeType.CONTROL)
                 totalControlNodes = totalControlNodes + 1;
         return totalControlNodes;
@@ -209,7 +217,7 @@ public class PDGSlicer {
      */
     public int getTotalEdges() {
         int totalEdges = 0;
-        for (PDGNode node: slice)
+        for (final PDGNode node: slice)
             totalEdges = totalEdges + node.getOutEdges().size();
         return totalEdges;
     }
@@ -289,14 +297,13 @@ public class PDGSlicer {
                             nodes.push(succ);
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println(prettyprint(md));
             throw e;
         }
 
         // compute and cache hash
         hashcode = sb.toString().hashCode();
-
     }
 
     @Override
@@ -322,7 +329,7 @@ public class PDGSlicer {
                     (node1.hasStmt() && !node2.hasStmt()))
                 return false;
             if (node1.hasStmt() && node2.hasStmt() &&
-                    !node1.getStmt().equals(node2.getStmt())) // use string comparisons?? prettyprint
+                    !node1.getStmt().equals(node2.getStmt()))
                 return false;
 
             // compare expressions
@@ -330,7 +337,7 @@ public class PDGSlicer {
                     (node1.hasExpr() && !node2.hasExpr()))
                 return false;
             if (node1.hasExpr() && node2.hasExpr() &&
-                    !node1.getExpr().equals(node2.getExpr())) // use string comparisons?? prettyprint
+                    !node1.getExpr().equals(node2.getExpr()))
                 return false;
 
             // compare out edges
@@ -356,7 +363,6 @@ public class PDGSlicer {
                 if (!visited2.contains(node2.getSuccessors().get(i)))
                     nodes2.push(node2.getSuccessors().get(i));
             }
-
         }
 
         return true;
