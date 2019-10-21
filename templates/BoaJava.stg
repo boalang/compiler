@@ -128,23 +128,26 @@ new <type>()
 TupleType(name, fields, types, protos) ::= <<
 private class <name>
 {
-	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
-	<name>( <fields,types:{field,type|<type> ___<field>}; separator=", "> ){
-		<fields,types,protos:{field,type,proto|
-			<if(proto)> this.___<field> = ___<field>
-			<else> this.___<field> = new <type>(___<field>)
-			<endif>
-		}; separator="; ">;
+	<fields,types:{field,type|<type> ___<field>;}; separator="\n">
+
+	<name>(<fields,types:{field,type|<type> ___<field>}; separator=", ">) {
+		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = ___<field>;<else>this.___<field> = new <type>(___<field>);<endif>}; separator="\n">
 	}
-	<name>( <name> tmp){
-		<fields,types,protos:{field,type,proto|
-			<if(proto)> this.___<field> = tmp.___<field>
-			<else> this.___<field> = new <type>(tmp.___<field>)
-			<endif>
-		}; separator="; ">;
+	<name>(<name> tmp) {
+		<fields,types,protos:{field,type,proto|<if(proto)> this.___<field> = tmp.___<field>;<else> this.___<field> = new <type>(tmp.___<field>);<endif>}; separator="\n">
 	}
+
 	public <name> clone() {
-    		return new <name>(this);
+		return new <name>(this);
+	}
+
+	public String toString() {
+		String s = "{";
+		<fields:{field|
+if (s.length() > 1) s += ",";
+s += " <field> = " + this.___<field>;}; separator="\n">
+		s += " }";
+		return s;
 	}
 }<\n>
 >>
