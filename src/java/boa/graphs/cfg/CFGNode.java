@@ -160,7 +160,9 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 
 	private static String processDef(final boa.types.Ast.Expression expr) {
 		if (expr.getKind() == ExpressionKind.VARDECL) {
-			return getVar(expr.getVariableDeclsList().get(0).getName());
+			if (expr.getVariableDeclsList().get(0).hasInitializer())
+				return getVar(expr.getVariableDeclsList().get(0).getName());
+			return "";
 		}
 		if (expr.getKind() == ExpressionKind.OP_INC || expr.getKind() == ExpressionKind.OP_DEC) {
 			if (expr.getExpressionsList().get(0).hasVariable()) {
