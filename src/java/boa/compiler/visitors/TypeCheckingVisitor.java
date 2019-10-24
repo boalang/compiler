@@ -1566,6 +1566,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	}
 
 	protected void warn(final Node node, final String msg) {
-		System.err.println("WARNING at line " + node.beginLine + ", column " + node.beginColumn + ": " + msg);
+		System.err.println("WARNING at line " + node.beginLine + ", columns " + node.beginColumn + "-" + node.endColumn + ": " + msg);
 	}
 }
