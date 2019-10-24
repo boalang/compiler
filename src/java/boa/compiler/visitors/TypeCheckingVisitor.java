@@ -404,6 +404,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						if (!((BoaMap) type).getIndexType().assigns(index))
 							throw new TypeCheckException(node, "invalid index type '" + index + "' for indexing into '" + type + "'");
 
+						warn(node, "directly indexing maps can lead to runtime crashes - replace with lookup(" + n.getOperand() + ", " + new PrettyPrintVisitor().startAndReturn(((Index)node).getStart()) + ", <defaultValue>)");
 						type = ((BoaMap) type).getType();
 					} else {
 						throw new TypeCheckException(node, "type '" + type + "' does not allow index operations");
@@ -1559,5 +1560,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 
 		return boaMap;
+	}
+
+	protected void warn(final Node node, final String msg) {
+		System.err.println("WARNING at line " + node.beginLine + ", column " + node.beginColumn + ": " + msg);
 	}
 }
