@@ -58,6 +58,7 @@ public class SymbolTable {
 	private Stack<VisitStatement> lastVisit = new Stack<VisitStatement>();
 	private boolean isTraverse = false;
 	private boolean shadowing = false;
+	private boolean isLhs = false;
 
 	private final static BoaProtoTuple[] dslTupleTypes = {
 		new ASTRootProtoTuple(),
@@ -394,6 +395,7 @@ public class SymbolTable {
 		st.isVisitor = this.isVisitor;
 		st.lastVisit = this.lastVisit;
 		st.shadowing = this.shadowing;
+		st.isLhs = this.isLhs;
 
 		return st;
 	}
@@ -734,6 +736,14 @@ public class SymbolTable {
 
 	public boolean getShadowing() {
 		return this.shadowing;
+	}
+
+	public void setIsLhs(final boolean isLhs) {
+		this.isLhs = isLhs;
+	}
+
+	public boolean getIsLhs() {
+		return this.isLhs;
 	}
 
 	@Override
