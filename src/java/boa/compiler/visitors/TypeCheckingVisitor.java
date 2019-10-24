@@ -403,7 +403,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						if (!((BoaMap) type).getIndexType().assigns(index))
 							throw new TypeCheckException(node, "invalid index type '" + index + "' for indexing into '" + type + "'");
 
-						warn(node, "directly indexing maps can lead to runtime crashes - replace with lookup(" + n.getOperand() + ", " + new PrettyPrintVisitor().startAndReturn(((Index)node).getStart()) + ", <defaultValue>)");
+						if (!n.env.getIsLhs())
+							warn(node, "directly indexing maps can lead to runtime crashes - replace with lookup(" + n.getOperand() + ", " + new PrettyPrintVisitor().startAndReturn(((Index)node).getStart()) + ", <defaultValue>)");
 						type = ((BoaMap) type).getType();
 					} else {
 						throw new TypeCheckException(node, "type '" + type + "' does not allow index operations");
@@ -556,7 +557,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.env = env;
 
 		try {
+            n.env.setIsLhs(true);
 			n.getLhs().accept(this, env);
+            n.env.setIsLhs(false);
 		} catch (final TypeCheckException e) {
 			if (!e.getMessage().startsWith("expected a call to function"))
 				throw e;
