@@ -36,7 +36,7 @@ public abstract class BoaErrorListener extends BaseErrorListener {
 			System.err.print("\"" + offendingSymbol + "\" ");
 		System.err.print("at line " + line + ", ");
 		if (length > 0)
-			System.err.print("columns " + charPositionInLine + "-" + (charPositionInLine + length));
+			System.err.print("columns " + charPositionInLine + "-" + (charPositionInLine + length - 1));
 		else
 			System.err.print("column " + charPositionInLine);
 		System.err.println(". " + msg);
