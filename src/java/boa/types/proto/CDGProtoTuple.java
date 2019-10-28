@@ -39,6 +39,9 @@ public class CDGProtoTuple extends BoaProtoTuple {
 
         names.put("nodes", counter++);
         members.add(new BoaSet(new CDGNodeProtoTuple()));
+
+        names.put("cfg", counter++);
+        members.add(new CFGProtoTuple());
     }
 
     /**
