@@ -167,8 +167,9 @@ public class BoaNormalFormIntrinsics {
 				for (final Expression[] es : convertedExpression) {
 					final Expression.Builder b = Expression.newBuilder(e);
 
+					b.clearExpressions();
 					for(int i = 0; i < es.length; i++) {
-						b.setExpressions(i, es[i]);
+						b.addExpressions(es[i]);
 					}
 					final Expression replacedExpr1 = b.build();
 
@@ -193,8 +194,9 @@ public class BoaNormalFormIntrinsics {
 				for (final Expression[] es : convertedExpression) {
 					final Expression.Builder bm = Expression.newBuilder(e);
 
+					bm.clearExpressions();
 					for (int i = 0; i < es.length; i++) {
-						bm.setExpressions(i, es[i]);
+						bm.addExpressions(es[i]);
 					}
 
 					final List<Expression[]> args = new ArrayList<Expression[]>();
