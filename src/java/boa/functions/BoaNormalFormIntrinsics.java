@@ -141,8 +141,8 @@ public class BoaNormalFormIntrinsics {
 				if (convertedExpression.size() == 0)
 					convertedExpression.add(new Expression[0]);
 
-				for (final Expression[] es : convertedExpression) {
-					final Expression replacedExpr = createExpression(e.getKind(), es);
+				for (final List<Expression> e2 : permutate(convertedExpression, 0)) {
+					final Expression replacedExpr = createExpression(e.getKind(), e2.toArray(new Expression[e2.size()]));
 
 					if (replacedExpr.equals(reciever))
 						exps.add(createVariable("$RECEIVER$"));
@@ -164,12 +164,11 @@ public class BoaNormalFormIntrinsics {
 				if (convertedExpression.size() == 0)
 					convertedExpression.add(new Expression[0]);
 
-				for (final Expression[] es : convertedExpression) {
+				for (final List<Expression> e2 : permutate(convertedExpression, 0)) {
 					final Expression.Builder b = Expression.newBuilder(e);
 
-					b.clearExpressions();
-					for(int i = 0; i < es.length; i++) {
-						b.addExpressions(es[i]);
+					for(int i = 0; i < e2.size(); i++) {
+						b.setExpressions(i, e2.get(i));
 					}
 					final Expression replacedExpr1 = b.build();
 
@@ -191,12 +190,11 @@ public class BoaNormalFormIntrinsics {
 				if (convertedExpression.size() == 0)
 					convertedExpression.add(new Expression[0]);
 
-				for (final Expression[] es : convertedExpression) {
+				for (final List<Expression> e2 : permutate(convertedExpression, 0)) {
 					final Expression.Builder bm = Expression.newBuilder(e);
 
-					bm.clearExpressions();
-					for (int i = 0; i < es.length; i++) {
-						bm.addExpressions(es[i]);
+					for (int i = 0; i < e2.size(); i++) {
+						bm.setExpressions(i, e2.get(i));
 					}
 
 					final List<Expression[]> args = new ArrayList<Expression[]>();
@@ -1417,8 +1415,11 @@ public class BoaNormalFormIntrinsics {
 
 			// literals are converted to numbers, if possible
 			case LITERAL:
-				if (BoaAstIntrinsics.isIntLit(e))
+				if (BoaAstIntrinsics.isIntLit(e)) {
+					if (e.getLiteral().toUpperCase().endsWith("L"))
+						return Long.decode(e.getLiteral().substring(0, e.getLiteral().length() - 1));
 					return Long.decode(e.getLiteral());
+				}
 				if (BoaAstIntrinsics.isFloatLit(e))
 					return Double.parseDouble(e.getLiteral());
 				return e;
@@ -2455,22 +2456,26 @@ public class BoaNormalFormIntrinsics {
 							if (getKind(e1) == ExpressionKind.LOGICAL_NOT && getKind(e2) != ExpressionKind.LOGICAL_NOT) {
 								if (e1.getExpressions(0).equals(e2)) {
 									final Expression.Builder b1 = Expression.newBuilder(exp);
-									getExpressionsList(b1).remove(e1);
+									final List<Expression> el1 = getExpressionsList(b1);
+									removeExpression(b1, el1.indexOf(e1));
 									exps.set(i, b1.build());
 
 									final Expression.Builder b2 = Expression.newBuilder(exp2);
-									getExpressionsList(b2).remove(e2);
+									final List<Expression> el2 = getExpressionsList(b2);
+									removeExpression(b2, el2.indexOf(e2));
 									exps.set(j, b2.build());
 								}
 							}
 							else if (getKind(e1) != ExpressionKind.LOGICAL_NOT && getKind(e2) == ExpressionKind.LOGICAL_NOT) {
 								if (e2.getExpressions(0).equals(e1)) {
 									final Expression.Builder b1 = Expression.newBuilder(exp);
-									getExpressionsList(b1).remove(e1);
+									final List<Expression> el1 = getExpressionsList(b1);
+									removeExpression(b1, el1.indexOf(e1));
 									exps.set(i, b1.build());
 
 									final Expression.Builder b2 = Expression.newBuilder(exp2);
-									getExpressionsList(b2).remove(e2);
+									final List<Expression> el2 = getExpressionsList(b2);
+									removeExpression(b2, el2.indexOf(e2));
 									exps.set(j, b2.build());
 								}
 							}
