@@ -207,9 +207,10 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 				useVar.add(getVar(expr.getVariable()));
 			}
 		}
-		for (final boa.types.Ast.Expression exprs : expr.getExpressionsList()) {
-			processUse(useVar, exprs);
-		}
+		if (expr.getKind() != ExpressionKind.METHODCALL)
+			for (final boa.types.Ast.Expression exprs : expr.getExpressionsList()) {
+				processUse(useVar, exprs);
+			}
 		for (final boa.types.Ast.Variable vardecls : expr.getVariableDeclsList()) {
 			processUse(useVar, vardecls);
 		}
