@@ -1,0 +1,65 @@
+liveness: output collection[string][string] of array of string;
+
+type T_gen_kill = { gen: set of string, kill: string };
+genkill := traversal(node: CFGNode): T_gen_kill {
+	return { node.useVariables, node.defVariables };
+};
+
+type T_inout = { in: set of string, out: set of string };
+init := traversal(node: CFGNode): T_inout {
+    in_set: set of string;
+    out_set: set of string;
+    val: T_inout = { in_set, out_set };
+    return val;
+};
+
+live := traversal(node: CFGNode): T_inout {
+    cur_val: T_inout;
+    if (def(getvalue(node))) cur_val = getvalue(node);
+    else cur_val = getvalue(node, init);
+
+    gen_kill := getvalue(node, genkill);
+
+    # update out set
+    foreach (i: int; def(node.successors[i])) {
+        succ := getvalue(node.successors[i]);
+        if (def(succ)) {
+            cur_val.out = union(cur_val.out, succ.in);
+        }
+    }
+
+    # update in set
+    cur_val.in = clone(cur_val.out);
+    remove(cur_val.in, gen_kill.kill);
+    cur_val.in = union(gen_kill.gen, cur_val.in);
+
+    return cur_val;
+};
+
+fp := fixp(curr, prev: T_inout) : bool {
+    return len(difference(curr.in, prev.in)) == 0;
+};
+
+mName := "";
+
+printNodes := traversal(node: CFGNode) {
+    live_val := getvalue(node, live);
+    liveness[mName][node.name] << values(live_val.out);
+};
+
+visit(input, visitor {
+    before method: Method -> {
+        mName = method.name;
+
+        clear(genkill);
+        clear(init);
+        clear(live);
+
+        cfg := getcfg(method);
+
+        traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, genkill);
+        traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, init);
+        traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, live, fp);
+        traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, printNodes);
+    }
+});
