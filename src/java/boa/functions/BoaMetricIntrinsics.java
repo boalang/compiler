@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Queue;
 
+import boa.compiler.visitors.AbstractVisitor;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.*;
 import boa.types.Ast.Expression.ExpressionKind;
@@ -686,9 +687,9 @@ public class BoaMetricIntrinsics {
 	 * @return the LCOM value for node
 	 */
 	@FunctionSpec(name = "get_metric_lcom", returnType = "float", formalParameters = { "Declaration" })
-	public static double getMetricLCOM(final Declaration node) throws Exception {
+	public static long getMetricLCOM(final Declaration node) throws Exception {
 		lcooVisitor.initialize().visit(node);
-		return lcooVisitor.getLCOM();
+		return (long) lcooVisitor.getLCOM();
 	}
 
 	////////////////////////////
@@ -711,5 +712,34 @@ public class BoaMetricIntrinsics {
 	public static long getMetricCA(final Declaration node) throws Exception {
 		caVisitor.initialize().visit(node);
 		return caVisitor.count;
+	}
+	
+	@FunctionSpec(name = "get_metrics", returnType = "map[string] of array of float", formalParameters = { "array of ChangedFile" })
+	public static HashMap<String, double[]> getMetrics(final ChangedFile[] snapshot) throws Exception {
+		HashMap<String, Long> wmc = new HashMap<String, Long>();
+		HashMap<String, Long> rfc = new HashMap<String, Long>();
+		HashMap<String, Long> lcom = new HashMap<String, Long>();
+		for (ChangedFile cf : snapshot)
+			new BoaAbstractVisitor() {
+				@Override
+				public boolean preVisit(final Declaration node) throws Exception {
+					String key = cf.getName() + " " + node.getFullyQualifiedName();
+					wmc.put(key, getMetricWMC(node));
+					rfc.put(key, getMetricRFC(node));
+					lcom.put(key, getMetricLCOM(node));
+					for (Declaration d : node.getNestedDeclarationsList())
+						visit(d);
+					return false;
+				}
+			}.visit(cf);
+		HashMap<String, long[]> ditNOC = getMetricDITNOC(snapshot);
+		HashMap<String, Long> cbo = getMetricCBO(snapshot);
+
+		HashMap<String, double[]> metrics = new HashMap<String, double[]>();
+		for (String k : cbo.keySet()) {
+			long[] dit_noc =  ditNOC.get(k);
+			metrics.put(k, new double[] {wmc.get(k), rfc.get(k), lcom.get(k), dit_noc[0], dit_noc[1], cbo.get(k)});
+		}
+		return metrics;
 	}
 }

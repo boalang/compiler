@@ -65,6 +65,16 @@ public enum BoaRefactoringType {
 	    public String getDisplayName() {
 			return this.displayName;
 		}
+	    
+	    public static String getPackageBefore(String description) {
+	    	BoaRefactoringType type = BoaRefactoringType.extractFromDescription(description);
+//			System.out.println(type.getDisplayName());
+			Matcher m = type.getRegex().matcher(description);
+			if (m.matches() && type == RENAME_PACKAGE) {
+				return m.group(1);
+			}
+			return null;
+	    }
 
 	    public static String[] getBeforeClasses(String description) {
 	    	BoaRefactoringType type = BoaRefactoringType.extractFromDescription(description);

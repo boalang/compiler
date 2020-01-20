@@ -162,21 +162,6 @@ public class BoaAstIntrinsics {
 	public static int getAstCount(ChangedFile f) {
 		return getast(f).getAstCount();
 	}
-	
-	
-	@FunctionSpec(name = "getsnapshotroots", returnType = "array of ASTRoot", formalParameters = { "CodeRepository" })
-	public static ASTRoot[] getASTRoots(final CodeRepository cr) {
-			List<ASTRoot> lst = new ArrayList<ASTRoot>();
-			ChangedFile[] files = BoaIntrinsics.getSnapshot(cr);
-			for (ChangedFile file : files)
-				if (BoaIntrinsics.isJavaFile(file)) {
-					ASTRoot ast = getASTRoot(file);;
-					if (ast != emptyAst)
-						lst.add(ast);
-				}
-			BoaAstIntrinsics.cleanup(null);
-			return lst.toArray(new ASTRoot[0]);
-	}
 
 	public static ASTRoot getASTRoot(ChangedFile f) {
 		// if ChangedFile contains ast root
@@ -235,7 +220,7 @@ public class BoaAstIntrinsics {
 
 	public static String getContent(ChangedFile f) {
 		if (f.hasRepoKey() && f.hasObjectId()) {
-			if (f.getRepoKey() != currentRepoKey) {
+			if (f.getRepoKey() != currentRepoKey || currentStoredRepository == null) {
 				currentRepoKey = f.getRepoKey();
 				BytesWritable value = getValueFromRepoMap(f);
 				if (value != null) {
@@ -248,6 +233,7 @@ public class BoaAstIntrinsics {
 					}
 				} else {
 					System.err.print(" [Repo Map Value Null] ");
+					cleanup(null);
 					return null;
 				}
 			}
@@ -270,6 +256,10 @@ public class BoaAstIntrinsics {
 	}
 
 	public static final String getContent(Repository repo, String oid) throws IOException {
+		if (repo == null) {
+			System.err.println("repo null");
+			return null;
+		}
 		ObjectId fileid = ObjectId.fromString(oid);
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
 		String content;
@@ -280,6 +270,7 @@ public class BoaAstIntrinsics {
 			content = buffer.toString();
 			return content;
 		} catch (final Throwable e) {
+			e.printStackTrace();
 			return null;
 		} finally {
 			buffer.flush();
@@ -325,32 +316,6 @@ public class BoaAstIntrinsics {
 			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
 		}
 		return null;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static final BytesWritable[] getValuesFromRepoMap(ChangedFile[] fs) {
-		BytesWritable[] values = new BytesWritable[fs.length];
-		if (reposMap == null)
-			openRepoMap();
-		try {
-			for (int i = 0; i < fs.length; i++) {
-				BytesWritable value = new BytesWritable();
-				values[i] = reposMap.get(new LongWritable(fs[i].getRepoKey()), value) == null ? null : value;
-			}
-		} catch (final InvalidProtocolBufferException e) {
-			e.printStackTrace();
-			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
-		} catch (final IOException e) {
-			e.printStackTrace();
-			context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
-		} catch (final RuntimeException e) {
-			e.printStackTrace();
-			context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
-		} catch (final Error e) {
-			e.printStackTrace();
-			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
-		}
-		return values;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -591,6 +556,7 @@ public class BoaAstIntrinsics {
 				fs = FileSystem.get(conf);
 			}
 			reposMap = new MapFile.Reader(fs, p.toString(), conf);
+			System.err.println(" [open repo map] ");
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -656,15 +622,24 @@ public class BoaAstIntrinsics {
 
 	@SuppressWarnings("rawtypes")
 	public static void cleanup(final Context context) {
+		closeRepo();
+		closeAllMaps();
+		System.gc();
+	}
+	
+	public static void closeAllMaps() {
 		closeMap();
 		closeReposMap();
-		closeRepo();
 		closeCommentsMap();
 		closeIssuesMap();
 		closeCommitsMap();
 		closeRefactoringsMap();
 		closeRefactoringIdsMap();
-		System.gc();
+	}
+	
+	@FunctionSpec(name = "clean_up")
+	public static void cleanup() {
+		cleanup(null);
 	}
 
 	private static void closeMap(MapFile.Reader map) {
@@ -683,7 +658,7 @@ public class BoaAstIntrinsics {
 	
 	private static void closeReposMap() {
 		closeMap(reposMap);
-		map = null;
+		reposMap = null;
 	}
 	
 	private static void closeCommentsMap() {

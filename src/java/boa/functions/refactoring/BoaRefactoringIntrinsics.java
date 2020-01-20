@@ -75,6 +75,29 @@ public class BoaRefactoringIntrinsics {
 		return null;
 	}
 	
+	@FunctionSpec(name = "getfilesbefore", returnType = "array of ChangedFile", formalParameters = { "Revision", "array of ChangedFile" })
+	public static ChangedFile[] getFilesBefore(Revision r, ChangedFile[] snapshot) {
+		HashSet<String> fileNamesBefore = new HashSet<String>();
+		for (ChangedFile cf : r.getFilesList()) {
+			if (cf.getChange() == ChangeKind.ADDED)
+				continue;
+			if (cf.getChange() == ChangeKind.RENAMED)
+				fileNamesBefore.add(cf.getPreviousNames(0));
+			else
+				fileNamesBefore.add(cf.getName());
+		}
+		List<ChangedFile> filesBefore = new ArrayList<ChangedFile>();
+		for (ChangedFile cf : snapshot) {
+			if (fileNamesBefore.isEmpty())
+				break;
+			if (fileNamesBefore.contains(cf.getName())) {
+				filesBefore.add(cf);
+				fileNamesBefore.remove(cf.getName());
+			}
+		}
+		return filesBefore.toArray(new ChangedFile[0]);
+	}
+	
 	@FunctionSpec(name = "isleafclass", returnType = "bool", formalParameters = { "array of ChangedFile", "string" })
 	public static boolean isLeafClass(ChangedFile[] snapshot, String namespace) {
 		String path = namespace.replace('.', '/');
@@ -104,6 +127,11 @@ public class BoaRefactoringIntrinsics {
 				return cf;
 		}
 		return null;
+	}
+	
+	@FunctionSpec(name = "getpackagebefore", returnType = "string", formalParameters = { "string" })
+	public static String getPackageBefore(String description) {
+		return BoaRefactoringType.getPackageBefore(description);
 	}
 	
 	@FunctionSpec(name = "getinvolvedclasses", returnType = "array of string", formalParameters = { "string" })
