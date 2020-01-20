@@ -37,9 +37,6 @@ import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.LargeObjectException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.internal.storage.file.ByteArrayFile;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
 
 import com.google.gson.Gson;
@@ -47,7 +44,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import boa.datagen.forges.github.RepoMetadata;
-import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.AbstractConnector;
 import boa.datagen.scm.GitConnector;
 import boa.datagen.util.FileIO;
