@@ -3,8 +3,6 @@ package boa.functions.refactoring;
 import boa.functions.BoaAstIntrinsics;
 import boa.functions.FunctionSpec;
 import boa.types.Ast.ASTRoot;
-import boa.types.Ast.Declaration;
-import boa.types.Ast.Method;
 import boa.types.Ast.Namespace;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -15,8 +13,8 @@ import org.refactoringminer.api.RefactoringType;
 
 import static boa.functions.BoaAstIntrinsics.*;
 import static boa.functions.BoaIntrinsics.*;
+import static boa.functions.BoaMetricIntrinsics.getMetrics;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,12 +23,14 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.rm1.GitHistoryRefactoringMinerImpl;
+
+import com.google.common.math.*;
 
 public class BoaRefactoringIntrinsics {
 
@@ -47,20 +47,19 @@ public class BoaRefactoringIntrinsics {
 			return detectRefactorings(cr, currentRevision);
 		return new String[0];
 	}
-	
+
 	@FunctionSpec(name = "getconsideredtypes", returnType = "set of string")
 	public static HashSet<String> getConsideredTypes() {
-		String[] types = new String[] {
-				"Move Method", "Pull Up Attribute", "Move Attribute", "Rename Class",
-				"Push Down Attribute", "Move Class", "Extract Method", "Rename Method",
-				"Pull Up Method", "Inline Method", "Extract Superclass", "Change Package",
-				"Extract Interface", "Extract And Move Method", "Move And Rename Class"
-		};
+		String[] types = new String[] { "Move Method", "Pull Up Attribute", "Move Attribute", "Rename Class",
+				"Push Down Attribute", "Move Class", "Extract Method", "Rename Method", "Pull Up Method",
+				"Inline Method", "Extract Superclass", "Change Package", "Extract Interface", "Extract And Move Method",
+				"Move And Rename Class" };
 		HashSet<String> typeSet = new HashSet<String>(Arrays.asList(types));
 		return typeSet;
 	}
-	
-	@FunctionSpec(name = "findequivalentfilepath", returnType = "string", formalParameters = { "array of string", "string" })
+
+	@FunctionSpec(name = "findequivalentfilepath", returnType = "string", formalParameters = { "array of string",
+			"string" })
 	public static String findEquivalentFilePath(String[] filePathes, String namespace) throws Exception {
 		String path = namespace.replace('.', '/');
 		for (String filePath : filePathes)
@@ -70,12 +69,13 @@ public class BoaRefactoringIntrinsics {
 		int idx = path.lastIndexOf('/');
 		if (idx > -1) {
 			String parentPath = path.substring(0, idx);
-			return findEquivalentFilePath(filePathes, parentPath); 
+			return findEquivalentFilePath(filePathes, parentPath);
 		}
 		return null;
 	}
-	
-	@FunctionSpec(name = "getfilesbefore", returnType = "array of ChangedFile", formalParameters = { "Revision", "array of ChangedFile" })
+
+	@FunctionSpec(name = "getfilesbefore", returnType = "array of ChangedFile", formalParameters = { "Revision",
+			"array of ChangedFile" })
 	public static ChangedFile[] getFilesBefore(Revision r, ChangedFile[] snapshot) {
 		HashSet<String> fileNamesBefore = new HashSet<String>();
 		for (ChangedFile cf : r.getFilesList()) {
@@ -97,7 +97,7 @@ public class BoaRefactoringIntrinsics {
 		}
 		return filesBefore.toArray(new ChangedFile[0]);
 	}
-	
+
 	@FunctionSpec(name = "isleafclass", returnType = "bool", formalParameters = { "array of ChangedFile", "string" })
 	public static boolean isLeafClass(ChangedFile[] snapshot, String namespace) {
 		String path = namespace.replace('.', '/');
@@ -120,7 +120,7 @@ public class BoaRefactoringIntrinsics {
 		}
 		return true;
 	}
-	
+
 	private static ChangedFile getChangedFile(ChangedFile[] snapshot, String path) {
 		for (ChangedFile cf : snapshot) {
 			if (cf.getName().contains(path))
@@ -128,17 +128,17 @@ public class BoaRefactoringIntrinsics {
 		}
 		return null;
 	}
-	
+
 	@FunctionSpec(name = "getpackagebefore", returnType = "string", formalParameters = { "string" })
 	public static String getPackageBefore(String description) {
 		return BoaRefactoringType.getPackageBefore(description);
 	}
-	
+
 	@FunctionSpec(name = "getinvolvedclasses", returnType = "array of string", formalParameters = { "string" })
 	public static String[] getInvolvedClasses(String description) {
 		return BoaRefactoringType.getBeforeClasses(description);
 	}
-	
+
 	@FunctionSpec(name = "getinvolvedclassesinstring", returnType = "string", formalParameters = { "string" })
 	public static String getInvolvedClassesInString(String description) {
 		return Arrays.asList(BoaRefactoringType.getBeforeClasses(description)).toString();
@@ -339,19 +339,58 @@ public class BoaRefactoringIntrinsics {
 	private static boolean isJavaFile(String path) {
 		return path.endsWith(".java");
 	}
-	
+
 	//////////////////////////////////////////////////
-	// C&K Metrics //
+	// Refactoring Prediction Feature STATS //
 	//////////////////////////////////////////////////
-	@FunctionSpec(name = "wmc", returnType = "int", formalParameters = { "Declaration" })
-	public static int wmc(Declaration d) {
-		int cc = 0;
-		for (Method m : d.getMethodsList()) {
-			
+	@FunctionSpec(name = "getstats", returnType = "array of array of float", formalParameters = "array of ChangedFile")
+	public static double[][] getStats(ChangedFile[] snapshot) throws Exception {
+		double[][] results = new double[6][5];
+		// wmc, rfc, lcom, dit, noc, cbo
+		List<Double> wmc = new ArrayList<Double>();
+		List<Double> rfc = new ArrayList<Double>();
+		List<Double> lcom = new ArrayList<Double>();
+		List<Double> dit = new ArrayList<Double>();
+		List<Double> noc = new ArrayList<Double>();
+		List<Double> cbo = new ArrayList<Double>();
+		HashMap<String, double[]> metrics = getMetrics(snapshot);
+		if (snapshot.length == 0 || metrics.size() == 0)
+			return results;
+		for (Entry<String, double[]> entry : metrics.entrySet()) {
+			String fqn = entry.getKey();
+			double[] m = entry.getValue();
+			wmc.add(m[0]);
+			rfc.add(m[1]);
+			lcom.add(m[2]);
+			dit.add(m[3]);
+			noc.add(m[4]);
+			cbo.add(m[5]);
 		}
-		return 0;
+		Stats wmcStats = Stats.of(wmc);
+		Stats rfcStats = Stats.of(rfc);
+		Stats lcomStats = Stats.of(lcom);
+		Stats ditStats = Stats.of(dit);
+		Stats nocStats = Stats.of(noc);
+		Stats cboStats = Stats.of(cbo);
+		// min, max, mean, median, std
+		results[0] = new double[] { wmcStats.min(), wmcStats.max(), wmcStats.mean(), Quantiles.median().compute(wmc),
+				wmcStats.populationStandardDeviation() };
+		results[1] = new double[] { rfcStats.min(), rfcStats.max(), rfcStats.mean(), Quantiles.median().compute(rfc),
+				rfcStats.populationStandardDeviation() };
+		results[2] = new double[] { lcomStats.min(), lcomStats.max(), lcomStats.mean(),
+				Quantiles.median().compute(lcom), lcomStats.populationStandardDeviation() };
+		results[3] = new double[] { ditStats.min(), ditStats.max(), ditStats.mean(), Quantiles.median().compute(dit),
+				ditStats.populationStandardDeviation() };
+		results[4] = new double[] { nocStats.min(), nocStats.max(), nocStats.mean(), Quantiles.median().compute(noc),
+				nocStats.populationStandardDeviation() };
+		results[5] = new double[] { cboStats.min(), cboStats.max(), cboStats.mean(), Quantiles.median().compute(cbo),
+				cboStats.populationStandardDeviation() };
+		return results;
 	}
-	
+
+	private static String getFQN(String s) {
+		return s.split(" ")[1];
+	}
 
 	//////////////////////////////////////////////////
 	// Oracle Dataset Project Names and Commit Ids //
