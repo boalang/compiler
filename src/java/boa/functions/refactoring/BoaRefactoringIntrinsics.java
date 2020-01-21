@@ -356,8 +356,13 @@ public class BoaRefactoringIntrinsics {
 		HashMap<String, double[]> metrics = getMetrics(snapshot);
 		if (snapshot.length == 0 || metrics.size() == 0)
 			return results;
+		HashMap<String, List<String>> map = new HashMap<String, List<String>>();
 		for (Entry<String, double[]> entry : metrics.entrySet()) {
 			String fqn = entry.getKey();
+			String packageName = getPackageNameFromFQN(fqn);
+			if (!map.containsKey(packageName))
+				map.put(packageName, new ArrayList<String>());
+			map.get(packageName).add(fqn);
 			double[] m = entry.getValue();
 			wmc.add(m[0]);
 			rfc.add(m[1]);
@@ -386,6 +391,13 @@ public class BoaRefactoringIntrinsics {
 		results[5] = new double[] { cboStats.min(), cboStats.max(), cboStats.mean(), Quantiles.median().compute(cbo),
 				cboStats.populationStandardDeviation() };
 		return results;
+	}
+	
+	private static String getPackageNameFromFQN(String fqn) {
+		int idx = fqn.lastIndexOf('.');
+		if (idx < 0)
+			return fqn;
+		return fqn.substring(0, idx);
 	}
 
 	private static String getFQN(String s) {
