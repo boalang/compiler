@@ -18,3 +18,46 @@ You need to have following already installed in your system:
 6. Create a class folder: $ mkdir compile
 7.	In Eclipse go to: File > Open Projects from File System > Import Source – Directory > Browse the cloned repository (compiler) > Hit Finish
 
+<p align="center"> 
+<img src="img/import.png" title="Import compiler project in Eclipse">
+</p>
+
+
+8.	Right click on the project compiler > Build Path > Configure Build Path
+9.	In Source tab, click Add Folder to add the required source folders and remove unnecessary folder(s). After adding all the folders, the window should look like the following:
+
+<p align="center"> 
+<img src="img/after_config.png" title="After configuring Eclipse">
+</p>
+
+10.	Select Libraries tab in the same window and click on Add Class Folder and add the compiler/compile folder that has been created in step 6. 
+11.	Click Add JARs… in the same Libraries tab > select lib > select all the files inside lib, including files under datagen and evaluator folder > hit Apply and Close.
+12.	From the compiler project in Eclipse, right click on build.xml > Run as > 1 Ant build. This should build the project successfully. The development setup is completed. Now, we will move on to data generation steps. 
+
+## Boa Data Generation Steps
+1.	Go to github.com and search the project for which you want to create the dataset. For example, if you want to create dataset for Apache Mavan project, go to https://github.com/apache/maven .
+2.	Invoke a GitHub http-based RESTful API to get the metadata of the project by constructing a URL https://api.github.com/repos/repo_full_name, for example https://api.github.com/repos/apache/maven. 
+3.	Copy the whole JSON metadata, create a blank text file, type a pair of brackets ‘[]’, paste the metadata inside the brackets.
+4.	Search for "languages_url" field in the JSON data, go to the URL, copy everything, create another field in the JSON file ("language_list": ), paste copied text and save the file as filename.json (e.g., maven.json). The last few lines of the JSON file should look like:
+
+<p align="center"> 
+<img src="img/json_looklike.png" title="JSON file">
+</p>
+
+5.	In this way, for each project, that will be included in the dataset, create a JSON file. So, if you want to create a dataset for 5 projects, you will create 5 separate JSON files. Save all the JSON files in a folder. Alternatively, you can create a single JSON file for all of the projects by separating them by comma in an array ‘[]’. The format looks like [{}, {}]. Each curly brace is for one project. 
+6.	In Eclipse, go to the project compiler > src/java > boa.datagen, right click on BoaGenerator.java > Run As > Run Configurations.
+7.	Double click on Java Application to create a new configuration. Browse project and select compiler, Search Main Class and select boa.datagen.BoaGenerator.
+
+<p align="center"> 
+<img src="img/datagen.png" title="Data generator configuration">
+</p>
+
+8.	Select Arguments tab and add program arguments. The program arguments format should look like:
+<pre><center>
+  -inputJson 	&#60;directory containing project JSON files&#62;	
+  -output 	&#60;output directory of the dataset (folder will be automatically created)&#62;	
+  -inputRepo 	&#60;temporary directory used to clone the projects (this folder 
+                   will be automatically created)&#62;	
+ </center></pre>
+
+
