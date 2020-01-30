@@ -59,5 +59,26 @@ You need to have following already installed in your system:
   -inputRepo 	&#60;temporary directory used to clone the projects (this folder 
                    will be automatically created)&#62;	
  </center></pre>
+ 
+ The other arguments are optional. For example, to print debug messages in console use -debug. 
+ 
+<p align="center"> 
+<img src="img/datagenparam.png" title="Data generator parameters">
+</p>
+
+9.	Hit Run.
+10.	This should start cloning the projects form Github and generating dataset. Depending on the number of projects and size of the projects, this will take some time to finish. When the red Terminate option in the console goes off, the data generation process is finished. 
+
+## Run Boa Query on New Dataset
+1.	Create a dataset folder copying three files (projects.seq, ast/data, ast/index) from the generated output folder from step 8 of data generation process.
+2.	In Eclipse, go to the project compiler > src/java > boa.evaluator, right click on BoaEvaluator.java > Run As > Run Configurations… 
+3.	Create a new configuration by clicking the New Configuration in the upper left corner of the window. 
+4.	Give a Name to the configuration, Browse project and select compiler, Search Main Class and select boa.evaluator.BoaEvaluator.
+5.	Select Arguments tab and add program arguments. The program arguments format should look like:
+<pre><center>
+  -input 	&#60;file path to the boa source code file&#62;
+  -data 	&#60;dataset directory containing three files(projects.seq, data, index)&#62;
+  -output 	&#60;output directory&#62;
+ </center></pre>
 
 
