@@ -24,7 +24,7 @@ public class BoaRefactoringSeqGenerator {
 	private static String INPUT_PATH;
 
 	public static void main(String[] args) throws IOException {
-		args = new String[] { "/Users/hyj/test4", "/Users/hyj/test4" };
+		args = new String[] { "/Users/hyj/test6", "/Users/hyj/test6" };
 		if (args.length < 2) {
 			System.err.println("args: INPUT_PATH, OUTPUT_PATH");
 		} else {
@@ -35,7 +35,7 @@ public class BoaRefactoringSeqGenerator {
 			Map<String, StringBuilder> refactoringMap = new TreeMap<String, StringBuilder>();
 			Map<String, StringBuilder> refactoringIdMap = new TreeMap<String, StringBuilder>();
 			
-			File dir1 = new File(INPUT_PATH + "/test_output");
+			File dir1 = new File(INPUT_PATH + "/output");
 //			File dir2 = new File(INPUT_PATH + "/undone_output");
 //			File dir3 = new File(INPUT_PATH + "/unundone_output");
 //			

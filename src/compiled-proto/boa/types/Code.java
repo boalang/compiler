@@ -5214,6 +5214,692 @@ public final class Code {
     // @@protoc_insertion_point(class_scope:boa.types.Revision)
   }
 
+  public interface ChangeOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // repeated .boa.types.CodeRefactoring refactorings = 1;
+    /**
+     * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+     */
+    java.util.List<boa.types.Code.CodeRefactoring> 
+        getRefactoringsList();
+    /**
+     * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+     */
+    boa.types.Code.CodeRefactoring getRefactorings(int index);
+    /**
+     * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+     */
+    int getRefactoringsCount();
+    /**
+     * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+     */
+    java.util.List<? extends boa.types.Code.CodeRefactoringOrBuilder> 
+        getRefactoringsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+     */
+    boa.types.Code.CodeRefactoringOrBuilder getRefactoringsOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code boa.types.Change}
+   */
+  public static final class Change extends
+      com.google.protobuf.GeneratedMessage
+      implements ChangeOrBuilder {
+    // Use Change.newBuilder() to construct.
+    private Change(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private Change(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final Change defaultInstance;
+    public static Change getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public Change getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Change(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                refactorings_ = new java.util.ArrayList<boa.types.Code.CodeRefactoring>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              refactorings_.add(input.readMessage(boa.types.Code.CodeRefactoring.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          refactorings_ = java.util.Collections.unmodifiableList(refactorings_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Code.internal_static_boa_types_Change_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Code.internal_static_boa_types_Change_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Code.Change.class, boa.types.Code.Change.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<Change> PARSER =
+        new com.google.protobuf.AbstractParser<Change>() {
+      public Change parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Change(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Change> getParserForType() {
+      return PARSER;
+    }
+
+    // repeated .boa.types.CodeRefactoring refactorings = 1;
+    public static final int REFACTORINGS_FIELD_NUMBER = 1;
+    private java.util.List<boa.types.Code.CodeRefactoring> refactorings_;
+    /**
+     * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+     */
+    public java.util.List<boa.types.Code.CodeRefactoring> getRefactoringsList() {
+      return refactorings_;
+    }
+    /**
+     * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+     */
+    public java.util.List<? extends boa.types.Code.CodeRefactoringOrBuilder> 
+        getRefactoringsOrBuilderList() {
+      return refactorings_;
+    }
+    /**
+     * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+     */
+    public int getRefactoringsCount() {
+      return refactorings_.size();
+    }
+    /**
+     * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+     */
+    public boa.types.Code.CodeRefactoring getRefactorings(int index) {
+      return refactorings_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+     */
+    public boa.types.Code.CodeRefactoringOrBuilder getRefactoringsOrBuilder(
+        int index) {
+      return refactorings_.get(index);
+    }
+
+    private void initFields() {
+      refactorings_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      for (int i = 0; i < getRefactoringsCount(); i++) {
+        if (!getRefactorings(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < refactorings_.size(); i++) {
+        output.writeMessage(1, refactorings_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < refactorings_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, refactorings_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Code.Change parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Code.Change parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Code.Change parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Code.Change parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Code.Change parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Code.Change parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Code.Change parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Code.Change parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Code.Change parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Code.Change parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Code.Change prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.Change}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Code.ChangeOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Code.internal_static_boa_types_Change_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Code.internal_static_boa_types_Change_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Code.Change.class, boa.types.Code.Change.Builder.class);
+      }
+
+      // Construct using boa.types.Code.Change.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getRefactoringsFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        if (refactoringsBuilder_ == null) {
+          refactorings_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          refactoringsBuilder_.clear();
+        }
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Code.internal_static_boa_types_Change_descriptor;
+      }
+
+      public boa.types.Code.Change getDefaultInstanceForType() {
+        return boa.types.Code.Change.getDefaultInstance();
+      }
+
+      public boa.types.Code.Change build() {
+        boa.types.Code.Change result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Code.Change buildPartial() {
+        boa.types.Code.Change result = new boa.types.Code.Change(this);
+        int from_bitField0_ = bitField0_;
+        if (refactoringsBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            refactorings_ = java.util.Collections.unmodifiableList(refactorings_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.refactorings_ = refactorings_;
+        } else {
+          result.refactorings_ = refactoringsBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Code.Change) {
+          return mergeFrom((boa.types.Code.Change)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Code.Change other) {
+        if (other == boa.types.Code.Change.getDefaultInstance()) return this;
+        if (refactoringsBuilder_ == null) {
+          if (!other.refactorings_.isEmpty()) {
+            if (refactorings_.isEmpty()) {
+              refactorings_ = other.refactorings_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureRefactoringsIsMutable();
+              refactorings_.addAll(other.refactorings_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.refactorings_.isEmpty()) {
+            if (refactoringsBuilder_.isEmpty()) {
+              refactoringsBuilder_.dispose();
+              refactoringsBuilder_ = null;
+              refactorings_ = other.refactorings_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              refactoringsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getRefactoringsFieldBuilder() : null;
+            } else {
+              refactoringsBuilder_.addAllMessages(other.refactorings_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        for (int i = 0; i < getRefactoringsCount(); i++) {
+          if (!getRefactorings(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Code.Change parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Code.Change) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // repeated .boa.types.CodeRefactoring refactorings = 1;
+      private java.util.List<boa.types.Code.CodeRefactoring> refactorings_ =
+        java.util.Collections.emptyList();
+      private void ensureRefactoringsIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          refactorings_ = new java.util.ArrayList<boa.types.Code.CodeRefactoring>(refactorings_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Code.CodeRefactoring, boa.types.Code.CodeRefactoring.Builder, boa.types.Code.CodeRefactoringOrBuilder> refactoringsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public java.util.List<boa.types.Code.CodeRefactoring> getRefactoringsList() {
+        if (refactoringsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(refactorings_);
+        } else {
+          return refactoringsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public int getRefactoringsCount() {
+        if (refactoringsBuilder_ == null) {
+          return refactorings_.size();
+        } else {
+          return refactoringsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public boa.types.Code.CodeRefactoring getRefactorings(int index) {
+        if (refactoringsBuilder_ == null) {
+          return refactorings_.get(index);
+        } else {
+          return refactoringsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public Builder setRefactorings(
+          int index, boa.types.Code.CodeRefactoring value) {
+        if (refactoringsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureRefactoringsIsMutable();
+          refactorings_.set(index, value);
+          onChanged();
+        } else {
+          refactoringsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public Builder setRefactorings(
+          int index, boa.types.Code.CodeRefactoring.Builder builderForValue) {
+        if (refactoringsBuilder_ == null) {
+          ensureRefactoringsIsMutable();
+          refactorings_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          refactoringsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public Builder addRefactorings(boa.types.Code.CodeRefactoring value) {
+        if (refactoringsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureRefactoringsIsMutable();
+          refactorings_.add(value);
+          onChanged();
+        } else {
+          refactoringsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public Builder addRefactorings(
+          int index, boa.types.Code.CodeRefactoring value) {
+        if (refactoringsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureRefactoringsIsMutable();
+          refactorings_.add(index, value);
+          onChanged();
+        } else {
+          refactoringsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public Builder addRefactorings(
+          boa.types.Code.CodeRefactoring.Builder builderForValue) {
+        if (refactoringsBuilder_ == null) {
+          ensureRefactoringsIsMutable();
+          refactorings_.add(builderForValue.build());
+          onChanged();
+        } else {
+          refactoringsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public Builder addRefactorings(
+          int index, boa.types.Code.CodeRefactoring.Builder builderForValue) {
+        if (refactoringsBuilder_ == null) {
+          ensureRefactoringsIsMutable();
+          refactorings_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          refactoringsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public Builder addAllRefactorings(
+          java.lang.Iterable<? extends boa.types.Code.CodeRefactoring> values) {
+        if (refactoringsBuilder_ == null) {
+          ensureRefactoringsIsMutable();
+          super.addAll(values, refactorings_);
+          onChanged();
+        } else {
+          refactoringsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public Builder clearRefactorings() {
+        if (refactoringsBuilder_ == null) {
+          refactorings_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          refactoringsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public Builder removeRefactorings(int index) {
+        if (refactoringsBuilder_ == null) {
+          ensureRefactoringsIsMutable();
+          refactorings_.remove(index);
+          onChanged();
+        } else {
+          refactoringsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public boa.types.Code.CodeRefactoring.Builder getRefactoringsBuilder(
+          int index) {
+        return getRefactoringsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public boa.types.Code.CodeRefactoringOrBuilder getRefactoringsOrBuilder(
+          int index) {
+        if (refactoringsBuilder_ == null) {
+          return refactorings_.get(index);  } else {
+          return refactoringsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public java.util.List<? extends boa.types.Code.CodeRefactoringOrBuilder> 
+           getRefactoringsOrBuilderList() {
+        if (refactoringsBuilder_ != null) {
+          return refactoringsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(refactorings_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public boa.types.Code.CodeRefactoring.Builder addRefactoringsBuilder() {
+        return getRefactoringsFieldBuilder().addBuilder(
+            boa.types.Code.CodeRefactoring.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public boa.types.Code.CodeRefactoring.Builder addRefactoringsBuilder(
+          int index) {
+        return getRefactoringsFieldBuilder().addBuilder(
+            index, boa.types.Code.CodeRefactoring.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.CodeRefactoring refactorings = 1;</code>
+       */
+      public java.util.List<boa.types.Code.CodeRefactoring.Builder> 
+           getRefactoringsBuilderList() {
+        return getRefactoringsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Code.CodeRefactoring, boa.types.Code.CodeRefactoring.Builder, boa.types.Code.CodeRefactoringOrBuilder> 
+          getRefactoringsFieldBuilder() {
+        if (refactoringsBuilder_ == null) {
+          refactoringsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Code.CodeRefactoring, boa.types.Code.CodeRefactoring.Builder, boa.types.Code.CodeRefactoringOrBuilder>(
+                  refactorings_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          refactorings_ = null;
+        }
+        return refactoringsBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.Change)
+    }
+
+    static {
+      defaultInstance = new Change(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.Change)
+  }
+
   public interface CodeRefactoringOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
@@ -7911,6 +8597,11 @@ public final class Code {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_boa_types_Revision_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_Change_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_Change_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_boa_types_CodeRefactoring_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -7945,15 +8636,17 @@ public final class Code {
       "mmitter\030\003 \002(\0132\021.boa.types.Person\022\023\n\013comm" +
       "it_date\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022%\n\005files\030\006 \003(" +
       "\0132\026.boa.types.ChangedFile\022\017\n\007parents\030\007 \003" +
-      "(\005\"\231\001\n\017CodeRefactoring\022\014\n\004type\030\001 \002(\t\022\023\n\013" +
-      "description\030\003 \002(\t\0220\n\023left_side_locations" +
-      "\030\004 \003(\0132\023.boa.types.Location\0221\n\024right_sid" +
-      "e_locations\030\005 \003(\0132\023.boa.types.Location\"\263",
-      "\001\n\010Location\022\021\n\tfile_path\030\001 \002(\t\022\024\n\014code_e" +
-      "lement\030\002 \002(\t\022\031\n\021code_element_type\030\003 \002(\t\022" +
-      "\023\n\013description\030\004 \002(\t\022\022\n\nstart_line\030\005 \001(\005" +
-      "\022\020\n\010end_line\030\006 \001(\005\022\024\n\014start_column\030\007 \001(\005" +
-      "\022\022\n\nend_column\030\010 \001(\005B\002H\001"
+      "(\005\":\n\006Change\0220\n\014refactorings\030\001 \003(\0132\032.boa" +
+      ".types.CodeRefactoring\"\231\001\n\017CodeRefactori" +
+      "ng\022\014\n\004type\030\001 \002(\t\022\023\n\013description\030\003 \002(\t\0220\n" +
+      "\023left_side_locations\030\004 \003(\0132\023.boa.types.L",
+      "ocation\0221\n\024right_side_locations\030\005 \003(\0132\023." +
+      "boa.types.Location\"\263\001\n\010Location\022\021\n\tfile_" +
+      "path\030\001 \002(\t\022\024\n\014code_element\030\002 \002(\t\022\031\n\021code" +
+      "_element_type\030\003 \002(\t\022\023\n\013description\030\004 \002(\t" +
+      "\022\022\n\nstart_line\030\005 \001(\005\022\020\n\010end_line\030\006 \001(\005\022\024" +
+      "\n\014start_column\030\007 \001(\005\022\022\n\nend_column\030\010 \001(\005" +
+      "B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -7972,14 +8665,20 @@ public final class Code {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Revision_descriptor,
               new java.lang.String[] { "Id", "Author", "Committer", "CommitDate", "Log", "Files", "Parents", });
-          internal_static_boa_types_CodeRefactoring_descriptor =
+          internal_static_boa_types_Change_descriptor =
             getDescriptor().getMessageTypes().get(2);
+          internal_static_boa_types_Change_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_Change_descriptor,
+              new java.lang.String[] { "Refactorings", });
+          internal_static_boa_types_CodeRefactoring_descriptor =
+            getDescriptor().getMessageTypes().get(3);
           internal_static_boa_types_CodeRefactoring_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_CodeRefactoring_descriptor,
               new java.lang.String[] { "Type", "Description", "LeftSideLocations", "RightSideLocations", });
           internal_static_boa_types_Location_descriptor =
-            getDescriptor().getMessageTypes().get(3);
+            getDescriptor().getMessageTypes().get(4);
           internal_static_boa_types_Location_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Location_descriptor,

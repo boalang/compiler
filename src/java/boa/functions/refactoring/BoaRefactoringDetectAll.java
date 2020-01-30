@@ -115,11 +115,6 @@ public class BoaRefactoringDetectAll {
 										sb.append(",").append("\n");
 									}
 									commitJSON(sb, name, r.getName(), temp);
-//									for (Refactoring rf : temp) {
-//										String output = name + " " + r.getName() + " " + rf.getName() + "="
-//												+ rf.toString();
-//										outputs.add(output);
-//									}
 								}
 
 							} catch (OutOfMemoryError e) {
@@ -179,9 +174,10 @@ public class BoaRefactoringDetectAll {
 
 	private static List<Refactoring> filterTypes(List<Refactoring> temp, HashSet<String> typeSet) {
 		ArrayList<Refactoring> res = new ArrayList<Refactoring>();
-		for (Refactoring ref : temp)
+		for (Refactoring ref : temp) {
 			if (typeSet.contains(ref.getName()))
 				res.add(ref);
+		}
 		return res;
 	}
 
