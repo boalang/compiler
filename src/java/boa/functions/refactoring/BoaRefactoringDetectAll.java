@@ -36,9 +36,11 @@ import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
+import org.refactoringminer.api.GitService;
 import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.api.RefactoringType;
 import org.refactoringminer.rm1.GitHistoryRefactoringMinerImpl;
+import org.refactoringminer.util.GitServiceImpl;
 
 import boa.datagen.util.FileIO;
 import gr.uom.java.xmi.UMLModel;
@@ -53,8 +55,8 @@ public class BoaRefactoringDetectAll {
 	private static ExecutorService executor;
 
 	public static void main(String[] args) {
-//		args = new String[] { "/Users/hyj/test6/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo",
-//				"/Users/hyj/test6/output/o.txt", "1" };
+		args = new String[] { "/Users/hyj/test6/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo",
+				"/Users/hyj/test6/output/o.json", "1" };
 		if (args.length < 4) {
 			System.err.println("args: NAMES_PATH, REPOS_PATH, OUTPUT_PATH, TIME_OUT");
 		} else {
@@ -67,8 +69,11 @@ public class BoaRefactoringDetectAll {
 
 			HashSet<String> typeSet = BoaRefactoringIntrinsics.getConsideredTypes();
 
-			List<String> outputs = new ArrayList<String>();
+//			List<String> outputs = new ArrayList<String>();
+			StringBuilder sb = new StringBuilder();
 			int projectCount = 0;
+			int totolRefCommit = 0;
+			startJSON(sb);
 			for (String name : projectNames) {
 				projectCount++;
 				System.err.println(projectCount + "th project " + name + " start");
@@ -88,6 +93,8 @@ public class BoaRefactoringDetectAll {
 						revWalk.sort(RevSort.REVERSE, true);
 
 						Iterator<RevCommit> i = revWalk.iterator();
+						
+						
 						int commitCount = 0;
 						while (i.hasNext()) {
 							RevCommit r = i.next();
@@ -100,16 +107,19 @@ public class BoaRefactoringDetectAll {
 								temp = filterTypes(temp, typeSet);
 								if (temp.size() > 0) {
 									long after = System.currentTimeMillis();
-									
+									totolRefCommit++;
 									System.out.println(
 											name + " " + commitCount + "th Commit " + r.getName() + " detected "
 													+ temp.size() + " with time secs: " + (after - before) / 1000.0);
-
-									for (Refactoring rf : temp) {
-										String output = name + " " + r.getName() + " " + rf.getName() + "="
-												+ rf.toString();
-										outputs.add(output);
+									if(totolRefCommit > 1) {
+										sb.append(",").append("\n");
 									}
+									commitJSON(sb, name, r.getName(), temp);
+//									for (Refactoring rf : temp) {
+//										String output = name + " " + r.getName() + " " + rf.getName() + "="
+//												+ rf.toString();
+//										outputs.add(output);
+//									}
 								}
 
 							} catch (OutOfMemoryError e) {
@@ -122,20 +132,21 @@ public class BoaRefactoringDetectAll {
 						}
 						revWalk.dispose();
 						repo.close();
+						
 					} catch (Throwable e) {
 						e.printStackTrace();
 						continue;
 					}  finally {
 						System.gc();
 					}
-
 					System.err.println(projectCount + "th project " + name + " end");
 				} else {
 					System.err.println(projectCount + "th project " + name + " not exist! Continue");
 				}
 			}
+			endJSON(sb);
 			System.err.println("Write start");
-			writeOutputs(outputs, OUTPUT_PATH);
+			FileIO.writeFileContents(new File(OUTPUT_PATH), sb.toString());
 			System.err.println("Write end");
 			
 			if (executor != null)
@@ -154,15 +165,15 @@ public class BoaRefactoringDetectAll {
 			List<Refactoring> results = future.get(timeout, TimeUnit.MILLISECONDS);
 			return results;
 		} catch (TimeoutException e) {
-			System.err.println(projectName + " " + r.getName() + " TimeoutException");
+			System.err.println(projectName + " " + r.getName() + " TimeoutException " + timeout / 1000.0 + " sec");
 		} catch (InterruptedException e) {
 			System.err.println(projectName + " " + r.getName() + " InterruptedException");
 		} catch (ExecutionException e) {
 			System.err.println(projectName + " " + r.getName() + " ExecutionException");
+		} finally {
+			executor.shutdown();
+			executor = null;
 		}
-
-		executor.shutdown();
-		executor = null;
 		return new ArrayList<Refactoring>();
 	}
 
@@ -191,11 +202,12 @@ public class BoaRefactoringDetectAll {
 
 	protected static List<Refactoring> detectRefactorings(Repository repository, RevCommit currentCommit)
 			throws Exception {
+		GitService gitService = new GitServiceImpl();
 		List<Refactoring> refactoringsAtRevision;
 		List<String> filePathsBefore = new ArrayList<String>();
 		List<String> filePathsCurrent = new ArrayList<String>();
 		Map<String, String> renamedFilesHint = new HashMap<String, String>();
-		fileTreeDiff(repository, currentCommit, filePathsBefore, filePathsCurrent, renamedFilesHint);
+		gitService.fileTreeDiff(repository, currentCommit, filePathsBefore, filePathsCurrent, renamedFilesHint);
 
 		Set<String> repositoryDirectoriesBefore = new LinkedHashSet<String>();
 		Set<String> repositoryDirectoriesCurrent = new LinkedHashSet<String>();
@@ -287,46 +299,35 @@ public class BoaRefactoringDetectAll {
 		}
 		return heads;
 	}
-
-	private static void fileTreeDiff(Repository repository, RevCommit currentCommit, List<String> javaFilesBefore,
-			List<String> javaFilesCurrent, Map<String, String> renamedFilesHint) throws Exception {
-		if (currentCommit.getParentCount() > 0) {
-			ObjectId oldTree = currentCommit.getParent(0).getTree();
-			ObjectId newTree = currentCommit.getTree();
-			final TreeWalk tw = new TreeWalk(repository);
-			tw.setRecursive(true);
-			tw.addTree(oldTree);
-			tw.addTree(newTree);
-
-			final RenameDetector rd = new RenameDetector(repository);
-			rd.setRenameScore(80);
-			rd.addAll(DiffEntry.scan(tw));
-
-			for (DiffEntry diff : rd.compute(tw.getObjectReader(), null)) {
-				ChangeType changeType = diff.getChangeType();
-				String oldPath = diff.getOldPath();
-				String newPath = diff.getNewPath();
-				if (changeType != ChangeType.ADD) {
-					if (isJavafile(oldPath)) {
-						javaFilesBefore.add(oldPath);
-					}
-				}
-				if (changeType != ChangeType.DELETE) {
-					if (isJavafile(newPath)) {
-						javaFilesCurrent.add(newPath);
-					}
-				}
-				if (changeType == ChangeType.RENAME && diff.getScore() >= rd.getRenameScore()) {
-					if (isJavafile(oldPath) && isJavafile(newPath)) {
-						renamedFilesHint.put(oldPath, newPath);
-					}
-				}
-			}
-		}
+	
+	private static void startJSON(StringBuilder sb) {
+		sb.append("{").append("\n");
+		sb.append("\"").append("commits").append("\"").append(": ");
+		sb.append("[").append("\n");
 	}
 
-	private static boolean isJavafile(String path) {
-		return path.endsWith(".java");
+	private static void endJSON(StringBuilder sb) {
+		sb.append("]").append("\n");
+		sb.append("}");
+	}
+	
+	private static void commitJSON(StringBuilder sb, String projectName, String currentCommitId, List<Refactoring> refactoringsAtRevision) {
+		sb.append("{").append("\n");
+		sb.append("\t").append("\"").append("project_name").append("\"").append(": ").append("\"").append(projectName).append("\"").append(",").append("\n");
+		sb.append("\t").append("\"").append("sha1").append("\"").append(": ").append("\"").append(currentCommitId).append("\"").append(",").append("\n");
+		sb.append("\t").append("\"").append("refactorings").append("\"").append(": ");
+		sb.append("[");
+		int counter = 0;
+		for(Refactoring refactoring : refactoringsAtRevision) {
+			sb.append(refactoring.toJSON());
+			if(counter < refactoringsAtRevision.size()-1) {
+				sb.append(",");
+			}
+			sb.append("\n");
+			counter++;
+		}
+		sb.append("]").append("\n");
+		sb.append("}");
 	}
 
 }

@@ -30,7 +30,8 @@ import boa.functions.FunctionSpec;
 import boa.types.*;
 import boa.types.proto.*;
 import boa.types.proto.enums.*;
-
+import boa.types.proto.refactoring.CodeRefactoringProtoTuple;
+import boa.types.proto.refactoring.LocationProtoTuple;
 import boa.compiler.ast.Operand;
 
 /**
@@ -95,6 +96,8 @@ public class SymbolTable {
 		new PersonProtoTuple(),
 		new ProjectProtoTuple(),
 		new RevisionProtoTuple(),
+		new CodeRefactoringProtoTuple(),
+		new LocationProtoTuple(),
 		new StatementProtoTuple(),
 		new TypeProtoTuple(),
 		new VariableProtoTuple(),

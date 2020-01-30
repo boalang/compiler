@@ -50,10 +50,22 @@ public class BoaRefactoringIntrinsics {
 
 	@FunctionSpec(name = "getconsideredtypes", returnType = "set of string")
 	public static HashSet<String> getConsideredTypes() {
-		String[] types = new String[] { "Move Method", "Pull Up Attribute", "Move Attribute", "Rename Class",
-				"Push Down Attribute", "Move Class", "Extract Method", "Rename Method", "Pull Up Method",
-				"Inline Method", "Extract Superclass", "Change Package", "Extract Interface", "Extract And Move Method",
-				"Move And Rename Class" };
+		String[] types = new String[] { 
+				"Extract Method", 
+				"Inline Method", 
+				"Rename Method", 
+				"Move Method", 
+				"Move Attribute", 
+				"Pull Up Method",
+				"Pull Up Attribute",
+				"Push Down Method",
+				"Push Down Attribute", 
+				"Extract Superclass", 
+				"Extract Interface", 
+				"Move Class", 
+				"Rename Class",
+				"Change Package", 
+				"Extract And Move Method" };
 		HashSet<String> typeSet = new HashSet<String>(Arrays.asList(types));
 		return typeSet;
 	}
@@ -392,7 +404,7 @@ public class BoaRefactoringIntrinsics {
 				cboStats.populationStandardDeviation() };
 		return results;
 	}
-	
+
 	private static String getPackageNameFromFQN(String fqn) {
 		int idx = fqn.lastIndexOf('.');
 		if (idx < 0)

@@ -5214,6 +5214,2692 @@ public final class Code {
     // @@protoc_insertion_point(class_scope:boa.types.Revision)
   }
 
+  public interface CodeRefactoringOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required string type = 1;
+    /**
+     * <code>required string type = 1;</code>
+     */
+    boolean hasType();
+    /**
+     * <code>required string type = 1;</code>
+     */
+    java.lang.String getType();
+    /**
+     * <code>required string type = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getTypeBytes();
+
+    // required string description = 3;
+    /**
+     * <code>required string description = 3;</code>
+     */
+    boolean hasDescription();
+    /**
+     * <code>required string description = 3;</code>
+     */
+    java.lang.String getDescription();
+    /**
+     * <code>required string description = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getDescriptionBytes();
+
+    // repeated .boa.types.Location left_side_locations = 4;
+    /**
+     * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+     */
+    java.util.List<boa.types.Code.Location> 
+        getLeftSideLocationsList();
+    /**
+     * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+     */
+    boa.types.Code.Location getLeftSideLocations(int index);
+    /**
+     * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+     */
+    int getLeftSideLocationsCount();
+    /**
+     * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+     */
+    java.util.List<? extends boa.types.Code.LocationOrBuilder> 
+        getLeftSideLocationsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+     */
+    boa.types.Code.LocationOrBuilder getLeftSideLocationsOrBuilder(
+        int index);
+
+    // repeated .boa.types.Location right_side_locations = 5;
+    /**
+     * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+     */
+    java.util.List<boa.types.Code.Location> 
+        getRightSideLocationsList();
+    /**
+     * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+     */
+    boa.types.Code.Location getRightSideLocations(int index);
+    /**
+     * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+     */
+    int getRightSideLocationsCount();
+    /**
+     * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+     */
+    java.util.List<? extends boa.types.Code.LocationOrBuilder> 
+        getRightSideLocationsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+     */
+    boa.types.Code.LocationOrBuilder getRightSideLocationsOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code boa.types.CodeRefactoring}
+   */
+  public static final class CodeRefactoring extends
+      com.google.protobuf.GeneratedMessage
+      implements CodeRefactoringOrBuilder {
+    // Use CodeRefactoring.newBuilder() to construct.
+    private CodeRefactoring(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private CodeRefactoring(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final CodeRefactoring defaultInstance;
+    public static CodeRefactoring getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public CodeRefactoring getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private CodeRefactoring(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              type_ = input.readBytes();
+              break;
+            }
+            case 26: {
+              bitField0_ |= 0x00000002;
+              description_ = input.readBytes();
+              break;
+            }
+            case 34: {
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                leftSideLocations_ = new java.util.ArrayList<boa.types.Code.Location>();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              leftSideLocations_.add(input.readMessage(boa.types.Code.Location.PARSER, extensionRegistry));
+              break;
+            }
+            case 42: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                rightSideLocations_ = new java.util.ArrayList<boa.types.Code.Location>();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              rightSideLocations_.add(input.readMessage(boa.types.Code.Location.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+          leftSideLocations_ = java.util.Collections.unmodifiableList(leftSideLocations_);
+        }
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+          rightSideLocations_ = java.util.Collections.unmodifiableList(rightSideLocations_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Code.internal_static_boa_types_CodeRefactoring_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Code.internal_static_boa_types_CodeRefactoring_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Code.CodeRefactoring.class, boa.types.Code.CodeRefactoring.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<CodeRefactoring> PARSER =
+        new com.google.protobuf.AbstractParser<CodeRefactoring>() {
+      public CodeRefactoring parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new CodeRefactoring(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<CodeRefactoring> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // required string type = 1;
+    public static final int TYPE_FIELD_NUMBER = 1;
+    private java.lang.Object type_;
+    /**
+     * <code>required string type = 1;</code>
+     */
+    public boolean hasType() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required string type = 1;</code>
+     */
+    public java.lang.String getType() {
+      java.lang.Object ref = type_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          type_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string type = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTypeBytes() {
+      java.lang.Object ref = type_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        type_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // required string description = 3;
+    public static final int DESCRIPTION_FIELD_NUMBER = 3;
+    private java.lang.Object description_;
+    /**
+     * <code>required string description = 3;</code>
+     */
+    public boolean hasDescription() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required string description = 3;</code>
+     */
+    public java.lang.String getDescription() {
+      java.lang.Object ref = description_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          description_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string description = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getDescriptionBytes() {
+      java.lang.Object ref = description_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        description_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // repeated .boa.types.Location left_side_locations = 4;
+    public static final int LEFT_SIDE_LOCATIONS_FIELD_NUMBER = 4;
+    private java.util.List<boa.types.Code.Location> leftSideLocations_;
+    /**
+     * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+     */
+    public java.util.List<boa.types.Code.Location> getLeftSideLocationsList() {
+      return leftSideLocations_;
+    }
+    /**
+     * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+     */
+    public java.util.List<? extends boa.types.Code.LocationOrBuilder> 
+        getLeftSideLocationsOrBuilderList() {
+      return leftSideLocations_;
+    }
+    /**
+     * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+     */
+    public int getLeftSideLocationsCount() {
+      return leftSideLocations_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+     */
+    public boa.types.Code.Location getLeftSideLocations(int index) {
+      return leftSideLocations_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+     */
+    public boa.types.Code.LocationOrBuilder getLeftSideLocationsOrBuilder(
+        int index) {
+      return leftSideLocations_.get(index);
+    }
+
+    // repeated .boa.types.Location right_side_locations = 5;
+    public static final int RIGHT_SIDE_LOCATIONS_FIELD_NUMBER = 5;
+    private java.util.List<boa.types.Code.Location> rightSideLocations_;
+    /**
+     * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+     */
+    public java.util.List<boa.types.Code.Location> getRightSideLocationsList() {
+      return rightSideLocations_;
+    }
+    /**
+     * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+     */
+    public java.util.List<? extends boa.types.Code.LocationOrBuilder> 
+        getRightSideLocationsOrBuilderList() {
+      return rightSideLocations_;
+    }
+    /**
+     * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+     */
+    public int getRightSideLocationsCount() {
+      return rightSideLocations_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+     */
+    public boa.types.Code.Location getRightSideLocations(int index) {
+      return rightSideLocations_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+     */
+    public boa.types.Code.LocationOrBuilder getRightSideLocationsOrBuilder(
+        int index) {
+      return rightSideLocations_.get(index);
+    }
+
+    private void initFields() {
+      type_ = "";
+      description_ = "";
+      leftSideLocations_ = java.util.Collections.emptyList();
+      rightSideLocations_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasType()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasDescription()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      for (int i = 0; i < getLeftSideLocationsCount(); i++) {
+        if (!getLeftSideLocations(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getRightSideLocationsCount(); i++) {
+        if (!getRightSideLocations(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getTypeBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(3, getDescriptionBytes());
+      }
+      for (int i = 0; i < leftSideLocations_.size(); i++) {
+        output.writeMessage(4, leftSideLocations_.get(i));
+      }
+      for (int i = 0; i < rightSideLocations_.size(); i++) {
+        output.writeMessage(5, rightSideLocations_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getTypeBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getDescriptionBytes());
+      }
+      for (int i = 0; i < leftSideLocations_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, leftSideLocations_.get(i));
+      }
+      for (int i = 0; i < rightSideLocations_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, rightSideLocations_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Code.CodeRefactoring parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Code.CodeRefactoring parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Code.CodeRefactoring parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Code.CodeRefactoring parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Code.CodeRefactoring parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Code.CodeRefactoring parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Code.CodeRefactoring parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Code.CodeRefactoring parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Code.CodeRefactoring parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Code.CodeRefactoring parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Code.CodeRefactoring prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.CodeRefactoring}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Code.CodeRefactoringOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Code.internal_static_boa_types_CodeRefactoring_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Code.internal_static_boa_types_CodeRefactoring_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Code.CodeRefactoring.class, boa.types.Code.CodeRefactoring.Builder.class);
+      }
+
+      // Construct using boa.types.Code.CodeRefactoring.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getLeftSideLocationsFieldBuilder();
+          getRightSideLocationsFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        type_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        description_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        if (leftSideLocationsBuilder_ == null) {
+          leftSideLocations_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+        } else {
+          leftSideLocationsBuilder_.clear();
+        }
+        if (rightSideLocationsBuilder_ == null) {
+          rightSideLocations_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+        } else {
+          rightSideLocationsBuilder_.clear();
+        }
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Code.internal_static_boa_types_CodeRefactoring_descriptor;
+      }
+
+      public boa.types.Code.CodeRefactoring getDefaultInstanceForType() {
+        return boa.types.Code.CodeRefactoring.getDefaultInstance();
+      }
+
+      public boa.types.Code.CodeRefactoring build() {
+        boa.types.Code.CodeRefactoring result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Code.CodeRefactoring buildPartial() {
+        boa.types.Code.CodeRefactoring result = new boa.types.Code.CodeRefactoring(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.type_ = type_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.description_ = description_;
+        if (leftSideLocationsBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004)) {
+            leftSideLocations_ = java.util.Collections.unmodifiableList(leftSideLocations_);
+            bitField0_ = (bitField0_ & ~0x00000004);
+          }
+          result.leftSideLocations_ = leftSideLocations_;
+        } else {
+          result.leftSideLocations_ = leftSideLocationsBuilder_.build();
+        }
+        if (rightSideLocationsBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+            rightSideLocations_ = java.util.Collections.unmodifiableList(rightSideLocations_);
+            bitField0_ = (bitField0_ & ~0x00000008);
+          }
+          result.rightSideLocations_ = rightSideLocations_;
+        } else {
+          result.rightSideLocations_ = rightSideLocationsBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Code.CodeRefactoring) {
+          return mergeFrom((boa.types.Code.CodeRefactoring)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Code.CodeRefactoring other) {
+        if (other == boa.types.Code.CodeRefactoring.getDefaultInstance()) return this;
+        if (other.hasType()) {
+          bitField0_ |= 0x00000001;
+          type_ = other.type_;
+          onChanged();
+        }
+        if (other.hasDescription()) {
+          bitField0_ |= 0x00000002;
+          description_ = other.description_;
+          onChanged();
+        }
+        if (leftSideLocationsBuilder_ == null) {
+          if (!other.leftSideLocations_.isEmpty()) {
+            if (leftSideLocations_.isEmpty()) {
+              leftSideLocations_ = other.leftSideLocations_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+            } else {
+              ensureLeftSideLocationsIsMutable();
+              leftSideLocations_.addAll(other.leftSideLocations_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.leftSideLocations_.isEmpty()) {
+            if (leftSideLocationsBuilder_.isEmpty()) {
+              leftSideLocationsBuilder_.dispose();
+              leftSideLocationsBuilder_ = null;
+              leftSideLocations_ = other.leftSideLocations_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+              leftSideLocationsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getLeftSideLocationsFieldBuilder() : null;
+            } else {
+              leftSideLocationsBuilder_.addAllMessages(other.leftSideLocations_);
+            }
+          }
+        }
+        if (rightSideLocationsBuilder_ == null) {
+          if (!other.rightSideLocations_.isEmpty()) {
+            if (rightSideLocations_.isEmpty()) {
+              rightSideLocations_ = other.rightSideLocations_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+            } else {
+              ensureRightSideLocationsIsMutable();
+              rightSideLocations_.addAll(other.rightSideLocations_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.rightSideLocations_.isEmpty()) {
+            if (rightSideLocationsBuilder_.isEmpty()) {
+              rightSideLocationsBuilder_.dispose();
+              rightSideLocationsBuilder_ = null;
+              rightSideLocations_ = other.rightSideLocations_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+              rightSideLocationsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getRightSideLocationsFieldBuilder() : null;
+            } else {
+              rightSideLocationsBuilder_.addAllMessages(other.rightSideLocations_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasType()) {
+          
+          return false;
+        }
+        if (!hasDescription()) {
+          
+          return false;
+        }
+        for (int i = 0; i < getLeftSideLocationsCount(); i++) {
+          if (!getLeftSideLocations(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getRightSideLocationsCount(); i++) {
+          if (!getRightSideLocations(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Code.CodeRefactoring parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Code.CodeRefactoring) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required string type = 1;
+      private java.lang.Object type_ = "";
+      /**
+       * <code>required string type = 1;</code>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string type = 1;</code>
+       */
+      public java.lang.String getType() {
+        java.lang.Object ref = type_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          type_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string type = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getTypeBytes() {
+        java.lang.Object ref = type_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          type_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string type = 1;</code>
+       */
+      public Builder setType(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string type = 1;</code>
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        type_ = getDefaultInstance().getType();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string type = 1;</code>
+       */
+      public Builder setTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        type_ = value;
+        onChanged();
+        return this;
+      }
+
+      // required string description = 3;
+      private java.lang.Object description_ = "";
+      /**
+       * <code>required string description = 3;</code>
+       */
+      public boolean hasDescription() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required string description = 3;</code>
+       */
+      public java.lang.String getDescription() {
+        java.lang.Object ref = description_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          description_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string description = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getDescriptionBytes() {
+        java.lang.Object ref = description_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          description_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string description = 3;</code>
+       */
+      public Builder setDescription(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        description_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string description = 3;</code>
+       */
+      public Builder clearDescription() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        description_ = getDefaultInstance().getDescription();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string description = 3;</code>
+       */
+      public Builder setDescriptionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        description_ = value;
+        onChanged();
+        return this;
+      }
+
+      // repeated .boa.types.Location left_side_locations = 4;
+      private java.util.List<boa.types.Code.Location> leftSideLocations_ =
+        java.util.Collections.emptyList();
+      private void ensureLeftSideLocationsIsMutable() {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+          leftSideLocations_ = new java.util.ArrayList<boa.types.Code.Location>(leftSideLocations_);
+          bitField0_ |= 0x00000004;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Code.Location, boa.types.Code.Location.Builder, boa.types.Code.LocationOrBuilder> leftSideLocationsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public java.util.List<boa.types.Code.Location> getLeftSideLocationsList() {
+        if (leftSideLocationsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(leftSideLocations_);
+        } else {
+          return leftSideLocationsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public int getLeftSideLocationsCount() {
+        if (leftSideLocationsBuilder_ == null) {
+          return leftSideLocations_.size();
+        } else {
+          return leftSideLocationsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public boa.types.Code.Location getLeftSideLocations(int index) {
+        if (leftSideLocationsBuilder_ == null) {
+          return leftSideLocations_.get(index);
+        } else {
+          return leftSideLocationsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public Builder setLeftSideLocations(
+          int index, boa.types.Code.Location value) {
+        if (leftSideLocationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureLeftSideLocationsIsMutable();
+          leftSideLocations_.set(index, value);
+          onChanged();
+        } else {
+          leftSideLocationsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public Builder setLeftSideLocations(
+          int index, boa.types.Code.Location.Builder builderForValue) {
+        if (leftSideLocationsBuilder_ == null) {
+          ensureLeftSideLocationsIsMutable();
+          leftSideLocations_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          leftSideLocationsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public Builder addLeftSideLocations(boa.types.Code.Location value) {
+        if (leftSideLocationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureLeftSideLocationsIsMutable();
+          leftSideLocations_.add(value);
+          onChanged();
+        } else {
+          leftSideLocationsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public Builder addLeftSideLocations(
+          int index, boa.types.Code.Location value) {
+        if (leftSideLocationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureLeftSideLocationsIsMutable();
+          leftSideLocations_.add(index, value);
+          onChanged();
+        } else {
+          leftSideLocationsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public Builder addLeftSideLocations(
+          boa.types.Code.Location.Builder builderForValue) {
+        if (leftSideLocationsBuilder_ == null) {
+          ensureLeftSideLocationsIsMutable();
+          leftSideLocations_.add(builderForValue.build());
+          onChanged();
+        } else {
+          leftSideLocationsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public Builder addLeftSideLocations(
+          int index, boa.types.Code.Location.Builder builderForValue) {
+        if (leftSideLocationsBuilder_ == null) {
+          ensureLeftSideLocationsIsMutable();
+          leftSideLocations_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          leftSideLocationsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public Builder addAllLeftSideLocations(
+          java.lang.Iterable<? extends boa.types.Code.Location> values) {
+        if (leftSideLocationsBuilder_ == null) {
+          ensureLeftSideLocationsIsMutable();
+          super.addAll(values, leftSideLocations_);
+          onChanged();
+        } else {
+          leftSideLocationsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public Builder clearLeftSideLocations() {
+        if (leftSideLocationsBuilder_ == null) {
+          leftSideLocations_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+          onChanged();
+        } else {
+          leftSideLocationsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public Builder removeLeftSideLocations(int index) {
+        if (leftSideLocationsBuilder_ == null) {
+          ensureLeftSideLocationsIsMutable();
+          leftSideLocations_.remove(index);
+          onChanged();
+        } else {
+          leftSideLocationsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public boa.types.Code.Location.Builder getLeftSideLocationsBuilder(
+          int index) {
+        return getLeftSideLocationsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public boa.types.Code.LocationOrBuilder getLeftSideLocationsOrBuilder(
+          int index) {
+        if (leftSideLocationsBuilder_ == null) {
+          return leftSideLocations_.get(index);  } else {
+          return leftSideLocationsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public java.util.List<? extends boa.types.Code.LocationOrBuilder> 
+           getLeftSideLocationsOrBuilderList() {
+        if (leftSideLocationsBuilder_ != null) {
+          return leftSideLocationsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(leftSideLocations_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public boa.types.Code.Location.Builder addLeftSideLocationsBuilder() {
+        return getLeftSideLocationsFieldBuilder().addBuilder(
+            boa.types.Code.Location.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public boa.types.Code.Location.Builder addLeftSideLocationsBuilder(
+          int index) {
+        return getLeftSideLocationsFieldBuilder().addBuilder(
+            index, boa.types.Code.Location.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Location left_side_locations = 4;</code>
+       */
+      public java.util.List<boa.types.Code.Location.Builder> 
+           getLeftSideLocationsBuilderList() {
+        return getLeftSideLocationsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Code.Location, boa.types.Code.Location.Builder, boa.types.Code.LocationOrBuilder> 
+          getLeftSideLocationsFieldBuilder() {
+        if (leftSideLocationsBuilder_ == null) {
+          leftSideLocationsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Code.Location, boa.types.Code.Location.Builder, boa.types.Code.LocationOrBuilder>(
+                  leftSideLocations_,
+                  ((bitField0_ & 0x00000004) == 0x00000004),
+                  getParentForChildren(),
+                  isClean());
+          leftSideLocations_ = null;
+        }
+        return leftSideLocationsBuilder_;
+      }
+
+      // repeated .boa.types.Location right_side_locations = 5;
+      private java.util.List<boa.types.Code.Location> rightSideLocations_ =
+        java.util.Collections.emptyList();
+      private void ensureRightSideLocationsIsMutable() {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+          rightSideLocations_ = new java.util.ArrayList<boa.types.Code.Location>(rightSideLocations_);
+          bitField0_ |= 0x00000008;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Code.Location, boa.types.Code.Location.Builder, boa.types.Code.LocationOrBuilder> rightSideLocationsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public java.util.List<boa.types.Code.Location> getRightSideLocationsList() {
+        if (rightSideLocationsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(rightSideLocations_);
+        } else {
+          return rightSideLocationsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public int getRightSideLocationsCount() {
+        if (rightSideLocationsBuilder_ == null) {
+          return rightSideLocations_.size();
+        } else {
+          return rightSideLocationsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public boa.types.Code.Location getRightSideLocations(int index) {
+        if (rightSideLocationsBuilder_ == null) {
+          return rightSideLocations_.get(index);
+        } else {
+          return rightSideLocationsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public Builder setRightSideLocations(
+          int index, boa.types.Code.Location value) {
+        if (rightSideLocationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureRightSideLocationsIsMutable();
+          rightSideLocations_.set(index, value);
+          onChanged();
+        } else {
+          rightSideLocationsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public Builder setRightSideLocations(
+          int index, boa.types.Code.Location.Builder builderForValue) {
+        if (rightSideLocationsBuilder_ == null) {
+          ensureRightSideLocationsIsMutable();
+          rightSideLocations_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          rightSideLocationsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public Builder addRightSideLocations(boa.types.Code.Location value) {
+        if (rightSideLocationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureRightSideLocationsIsMutable();
+          rightSideLocations_.add(value);
+          onChanged();
+        } else {
+          rightSideLocationsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public Builder addRightSideLocations(
+          int index, boa.types.Code.Location value) {
+        if (rightSideLocationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureRightSideLocationsIsMutable();
+          rightSideLocations_.add(index, value);
+          onChanged();
+        } else {
+          rightSideLocationsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public Builder addRightSideLocations(
+          boa.types.Code.Location.Builder builderForValue) {
+        if (rightSideLocationsBuilder_ == null) {
+          ensureRightSideLocationsIsMutable();
+          rightSideLocations_.add(builderForValue.build());
+          onChanged();
+        } else {
+          rightSideLocationsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public Builder addRightSideLocations(
+          int index, boa.types.Code.Location.Builder builderForValue) {
+        if (rightSideLocationsBuilder_ == null) {
+          ensureRightSideLocationsIsMutable();
+          rightSideLocations_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          rightSideLocationsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public Builder addAllRightSideLocations(
+          java.lang.Iterable<? extends boa.types.Code.Location> values) {
+        if (rightSideLocationsBuilder_ == null) {
+          ensureRightSideLocationsIsMutable();
+          super.addAll(values, rightSideLocations_);
+          onChanged();
+        } else {
+          rightSideLocationsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public Builder clearRightSideLocations() {
+        if (rightSideLocationsBuilder_ == null) {
+          rightSideLocations_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+          onChanged();
+        } else {
+          rightSideLocationsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public Builder removeRightSideLocations(int index) {
+        if (rightSideLocationsBuilder_ == null) {
+          ensureRightSideLocationsIsMutable();
+          rightSideLocations_.remove(index);
+          onChanged();
+        } else {
+          rightSideLocationsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public boa.types.Code.Location.Builder getRightSideLocationsBuilder(
+          int index) {
+        return getRightSideLocationsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public boa.types.Code.LocationOrBuilder getRightSideLocationsOrBuilder(
+          int index) {
+        if (rightSideLocationsBuilder_ == null) {
+          return rightSideLocations_.get(index);  } else {
+          return rightSideLocationsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public java.util.List<? extends boa.types.Code.LocationOrBuilder> 
+           getRightSideLocationsOrBuilderList() {
+        if (rightSideLocationsBuilder_ != null) {
+          return rightSideLocationsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(rightSideLocations_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public boa.types.Code.Location.Builder addRightSideLocationsBuilder() {
+        return getRightSideLocationsFieldBuilder().addBuilder(
+            boa.types.Code.Location.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public boa.types.Code.Location.Builder addRightSideLocationsBuilder(
+          int index) {
+        return getRightSideLocationsFieldBuilder().addBuilder(
+            index, boa.types.Code.Location.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Location right_side_locations = 5;</code>
+       */
+      public java.util.List<boa.types.Code.Location.Builder> 
+           getRightSideLocationsBuilderList() {
+        return getRightSideLocationsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Code.Location, boa.types.Code.Location.Builder, boa.types.Code.LocationOrBuilder> 
+          getRightSideLocationsFieldBuilder() {
+        if (rightSideLocationsBuilder_ == null) {
+          rightSideLocationsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Code.Location, boa.types.Code.Location.Builder, boa.types.Code.LocationOrBuilder>(
+                  rightSideLocations_,
+                  ((bitField0_ & 0x00000008) == 0x00000008),
+                  getParentForChildren(),
+                  isClean());
+          rightSideLocations_ = null;
+        }
+        return rightSideLocationsBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.CodeRefactoring)
+    }
+
+    static {
+      defaultInstance = new CodeRefactoring(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.CodeRefactoring)
+  }
+
+  public interface LocationOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required string file_path = 1;
+    /**
+     * <code>required string file_path = 1;</code>
+     */
+    boolean hasFilePath();
+    /**
+     * <code>required string file_path = 1;</code>
+     */
+    java.lang.String getFilePath();
+    /**
+     * <code>required string file_path = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getFilePathBytes();
+
+    // required string code_element = 2;
+    /**
+     * <code>required string code_element = 2;</code>
+     */
+    boolean hasCodeElement();
+    /**
+     * <code>required string code_element = 2;</code>
+     */
+    java.lang.String getCodeElement();
+    /**
+     * <code>required string code_element = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getCodeElementBytes();
+
+    // required string code_element_type = 3;
+    /**
+     * <code>required string code_element_type = 3;</code>
+     */
+    boolean hasCodeElementType();
+    /**
+     * <code>required string code_element_type = 3;</code>
+     */
+    java.lang.String getCodeElementType();
+    /**
+     * <code>required string code_element_type = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getCodeElementTypeBytes();
+
+    // required string description = 4;
+    /**
+     * <code>required string description = 4;</code>
+     */
+    boolean hasDescription();
+    /**
+     * <code>required string description = 4;</code>
+     */
+    java.lang.String getDescription();
+    /**
+     * <code>required string description = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getDescriptionBytes();
+
+    // optional int32 start_line = 5;
+    /**
+     * <code>optional int32 start_line = 5;</code>
+     */
+    boolean hasStartLine();
+    /**
+     * <code>optional int32 start_line = 5;</code>
+     */
+    int getStartLine();
+
+    // optional int32 end_line = 6;
+    /**
+     * <code>optional int32 end_line = 6;</code>
+     */
+    boolean hasEndLine();
+    /**
+     * <code>optional int32 end_line = 6;</code>
+     */
+    int getEndLine();
+
+    // optional int32 start_column = 7;
+    /**
+     * <code>optional int32 start_column = 7;</code>
+     */
+    boolean hasStartColumn();
+    /**
+     * <code>optional int32 start_column = 7;</code>
+     */
+    int getStartColumn();
+
+    // optional int32 end_column = 8;
+    /**
+     * <code>optional int32 end_column = 8;</code>
+     */
+    boolean hasEndColumn();
+    /**
+     * <code>optional int32 end_column = 8;</code>
+     */
+    int getEndColumn();
+  }
+  /**
+   * Protobuf type {@code boa.types.Location}
+   */
+  public static final class Location extends
+      com.google.protobuf.GeneratedMessage
+      implements LocationOrBuilder {
+    // Use Location.newBuilder() to construct.
+    private Location(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private Location(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final Location defaultInstance;
+    public static Location getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public Location getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Location(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              filePath_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              codeElement_ = input.readBytes();
+              break;
+            }
+            case 26: {
+              bitField0_ |= 0x00000004;
+              codeElementType_ = input.readBytes();
+              break;
+            }
+            case 34: {
+              bitField0_ |= 0x00000008;
+              description_ = input.readBytes();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
+              startLine_ = input.readInt32();
+              break;
+            }
+            case 48: {
+              bitField0_ |= 0x00000020;
+              endLine_ = input.readInt32();
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000040;
+              startColumn_ = input.readInt32();
+              break;
+            }
+            case 64: {
+              bitField0_ |= 0x00000080;
+              endColumn_ = input.readInt32();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Code.internal_static_boa_types_Location_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Code.internal_static_boa_types_Location_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Code.Location.class, boa.types.Code.Location.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<Location> PARSER =
+        new com.google.protobuf.AbstractParser<Location>() {
+      public Location parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Location(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Location> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // required string file_path = 1;
+    public static final int FILE_PATH_FIELD_NUMBER = 1;
+    private java.lang.Object filePath_;
+    /**
+     * <code>required string file_path = 1;</code>
+     */
+    public boolean hasFilePath() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required string file_path = 1;</code>
+     */
+    public java.lang.String getFilePath() {
+      java.lang.Object ref = filePath_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          filePath_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string file_path = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getFilePathBytes() {
+      java.lang.Object ref = filePath_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        filePath_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // required string code_element = 2;
+    public static final int CODE_ELEMENT_FIELD_NUMBER = 2;
+    private java.lang.Object codeElement_;
+    /**
+     * <code>required string code_element = 2;</code>
+     */
+    public boolean hasCodeElement() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required string code_element = 2;</code>
+     */
+    public java.lang.String getCodeElement() {
+      java.lang.Object ref = codeElement_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          codeElement_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string code_element = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCodeElementBytes() {
+      java.lang.Object ref = codeElement_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        codeElement_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // required string code_element_type = 3;
+    public static final int CODE_ELEMENT_TYPE_FIELD_NUMBER = 3;
+    private java.lang.Object codeElementType_;
+    /**
+     * <code>required string code_element_type = 3;</code>
+     */
+    public boolean hasCodeElementType() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required string code_element_type = 3;</code>
+     */
+    public java.lang.String getCodeElementType() {
+      java.lang.Object ref = codeElementType_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          codeElementType_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string code_element_type = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCodeElementTypeBytes() {
+      java.lang.Object ref = codeElementType_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        codeElementType_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // required string description = 4;
+    public static final int DESCRIPTION_FIELD_NUMBER = 4;
+    private java.lang.Object description_;
+    /**
+     * <code>required string description = 4;</code>
+     */
+    public boolean hasDescription() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>required string description = 4;</code>
+     */
+    public java.lang.String getDescription() {
+      java.lang.Object ref = description_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          description_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string description = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getDescriptionBytes() {
+      java.lang.Object ref = description_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        description_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional int32 start_line = 5;
+    public static final int START_LINE_FIELD_NUMBER = 5;
+    private int startLine_;
+    /**
+     * <code>optional int32 start_line = 5;</code>
+     */
+    public boolean hasStartLine() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional int32 start_line = 5;</code>
+     */
+    public int getStartLine() {
+      return startLine_;
+    }
+
+    // optional int32 end_line = 6;
+    public static final int END_LINE_FIELD_NUMBER = 6;
+    private int endLine_;
+    /**
+     * <code>optional int32 end_line = 6;</code>
+     */
+    public boolean hasEndLine() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional int32 end_line = 6;</code>
+     */
+    public int getEndLine() {
+      return endLine_;
+    }
+
+    // optional int32 start_column = 7;
+    public static final int START_COLUMN_FIELD_NUMBER = 7;
+    private int startColumn_;
+    /**
+     * <code>optional int32 start_column = 7;</code>
+     */
+    public boolean hasStartColumn() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional int32 start_column = 7;</code>
+     */
+    public int getStartColumn() {
+      return startColumn_;
+    }
+
+    // optional int32 end_column = 8;
+    public static final int END_COLUMN_FIELD_NUMBER = 8;
+    private int endColumn_;
+    /**
+     * <code>optional int32 end_column = 8;</code>
+     */
+    public boolean hasEndColumn() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional int32 end_column = 8;</code>
+     */
+    public int getEndColumn() {
+      return endColumn_;
+    }
+
+    private void initFields() {
+      filePath_ = "";
+      codeElement_ = "";
+      codeElementType_ = "";
+      description_ = "";
+      startLine_ = 0;
+      endLine_ = 0;
+      startColumn_ = 0;
+      endColumn_ = 0;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasFilePath()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasCodeElement()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasCodeElementType()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasDescription()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getFilePathBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getCodeElementBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getCodeElementTypeBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(4, getDescriptionBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeInt32(5, startLine_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt32(6, endLine_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeInt32(7, startColumn_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeInt32(8, endColumn_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getFilePathBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getCodeElementBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getCodeElementTypeBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(4, getDescriptionBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, startLine_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, endLine_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, startColumn_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(8, endColumn_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Code.Location parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Code.Location parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Code.Location parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Code.Location parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Code.Location parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Code.Location parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Code.Location parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Code.Location parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Code.Location parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Code.Location parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Code.Location prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.Location}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Code.LocationOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Code.internal_static_boa_types_Location_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Code.internal_static_boa_types_Location_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Code.Location.class, boa.types.Code.Location.Builder.class);
+      }
+
+      // Construct using boa.types.Code.Location.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        filePath_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        codeElement_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        codeElementType_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
+        description_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
+        startLine_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        endLine_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        startColumn_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        endColumn_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Code.internal_static_boa_types_Location_descriptor;
+      }
+
+      public boa.types.Code.Location getDefaultInstanceForType() {
+        return boa.types.Code.Location.getDefaultInstance();
+      }
+
+      public boa.types.Code.Location build() {
+        boa.types.Code.Location result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Code.Location buildPartial() {
+        boa.types.Code.Location result = new boa.types.Code.Location(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.filePath_ = filePath_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.codeElement_ = codeElement_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.codeElementType_ = codeElementType_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.description_ = description_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.startLine_ = startLine_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.endLine_ = endLine_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.startColumn_ = startColumn_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.endColumn_ = endColumn_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Code.Location) {
+          return mergeFrom((boa.types.Code.Location)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Code.Location other) {
+        if (other == boa.types.Code.Location.getDefaultInstance()) return this;
+        if (other.hasFilePath()) {
+          bitField0_ |= 0x00000001;
+          filePath_ = other.filePath_;
+          onChanged();
+        }
+        if (other.hasCodeElement()) {
+          bitField0_ |= 0x00000002;
+          codeElement_ = other.codeElement_;
+          onChanged();
+        }
+        if (other.hasCodeElementType()) {
+          bitField0_ |= 0x00000004;
+          codeElementType_ = other.codeElementType_;
+          onChanged();
+        }
+        if (other.hasDescription()) {
+          bitField0_ |= 0x00000008;
+          description_ = other.description_;
+          onChanged();
+        }
+        if (other.hasStartLine()) {
+          setStartLine(other.getStartLine());
+        }
+        if (other.hasEndLine()) {
+          setEndLine(other.getEndLine());
+        }
+        if (other.hasStartColumn()) {
+          setStartColumn(other.getStartColumn());
+        }
+        if (other.hasEndColumn()) {
+          setEndColumn(other.getEndColumn());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasFilePath()) {
+          
+          return false;
+        }
+        if (!hasCodeElement()) {
+          
+          return false;
+        }
+        if (!hasCodeElementType()) {
+          
+          return false;
+        }
+        if (!hasDescription()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Code.Location parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Code.Location) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required string file_path = 1;
+      private java.lang.Object filePath_ = "";
+      /**
+       * <code>required string file_path = 1;</code>
+       */
+      public boolean hasFilePath() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string file_path = 1;</code>
+       */
+      public java.lang.String getFilePath() {
+        java.lang.Object ref = filePath_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          filePath_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string file_path = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getFilePathBytes() {
+        java.lang.Object ref = filePath_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          filePath_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string file_path = 1;</code>
+       */
+      public Builder setFilePath(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        filePath_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string file_path = 1;</code>
+       */
+      public Builder clearFilePath() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        filePath_ = getDefaultInstance().getFilePath();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string file_path = 1;</code>
+       */
+      public Builder setFilePathBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        filePath_ = value;
+        onChanged();
+        return this;
+      }
+
+      // required string code_element = 2;
+      private java.lang.Object codeElement_ = "";
+      /**
+       * <code>required string code_element = 2;</code>
+       */
+      public boolean hasCodeElement() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required string code_element = 2;</code>
+       */
+      public java.lang.String getCodeElement() {
+        java.lang.Object ref = codeElement_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          codeElement_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string code_element = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getCodeElementBytes() {
+        java.lang.Object ref = codeElement_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          codeElement_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string code_element = 2;</code>
+       */
+      public Builder setCodeElement(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        codeElement_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string code_element = 2;</code>
+       */
+      public Builder clearCodeElement() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        codeElement_ = getDefaultInstance().getCodeElement();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string code_element = 2;</code>
+       */
+      public Builder setCodeElementBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        codeElement_ = value;
+        onChanged();
+        return this;
+      }
+
+      // required string code_element_type = 3;
+      private java.lang.Object codeElementType_ = "";
+      /**
+       * <code>required string code_element_type = 3;</code>
+       */
+      public boolean hasCodeElementType() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required string code_element_type = 3;</code>
+       */
+      public java.lang.String getCodeElementType() {
+        java.lang.Object ref = codeElementType_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          codeElementType_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string code_element_type = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getCodeElementTypeBytes() {
+        java.lang.Object ref = codeElementType_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          codeElementType_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string code_element_type = 3;</code>
+       */
+      public Builder setCodeElementType(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        codeElementType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string code_element_type = 3;</code>
+       */
+      public Builder clearCodeElementType() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        codeElementType_ = getDefaultInstance().getCodeElementType();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string code_element_type = 3;</code>
+       */
+      public Builder setCodeElementTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        codeElementType_ = value;
+        onChanged();
+        return this;
+      }
+
+      // required string description = 4;
+      private java.lang.Object description_ = "";
+      /**
+       * <code>required string description = 4;</code>
+       */
+      public boolean hasDescription() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>required string description = 4;</code>
+       */
+      public java.lang.String getDescription() {
+        java.lang.Object ref = description_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          description_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string description = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getDescriptionBytes() {
+        java.lang.Object ref = description_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          description_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string description = 4;</code>
+       */
+      public Builder setDescription(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        description_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string description = 4;</code>
+       */
+      public Builder clearDescription() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        description_ = getDefaultInstance().getDescription();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string description = 4;</code>
+       */
+      public Builder setDescriptionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        description_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 start_line = 5;
+      private int startLine_ ;
+      /**
+       * <code>optional int32 start_line = 5;</code>
+       */
+      public boolean hasStartLine() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional int32 start_line = 5;</code>
+       */
+      public int getStartLine() {
+        return startLine_;
+      }
+      /**
+       * <code>optional int32 start_line = 5;</code>
+       */
+      public Builder setStartLine(int value) {
+        bitField0_ |= 0x00000010;
+        startLine_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 start_line = 5;</code>
+       */
+      public Builder clearStartLine() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        startLine_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 end_line = 6;
+      private int endLine_ ;
+      /**
+       * <code>optional int32 end_line = 6;</code>
+       */
+      public boolean hasEndLine() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional int32 end_line = 6;</code>
+       */
+      public int getEndLine() {
+        return endLine_;
+      }
+      /**
+       * <code>optional int32 end_line = 6;</code>
+       */
+      public Builder setEndLine(int value) {
+        bitField0_ |= 0x00000020;
+        endLine_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 end_line = 6;</code>
+       */
+      public Builder clearEndLine() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        endLine_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 start_column = 7;
+      private int startColumn_ ;
+      /**
+       * <code>optional int32 start_column = 7;</code>
+       */
+      public boolean hasStartColumn() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional int32 start_column = 7;</code>
+       */
+      public int getStartColumn() {
+        return startColumn_;
+      }
+      /**
+       * <code>optional int32 start_column = 7;</code>
+       */
+      public Builder setStartColumn(int value) {
+        bitField0_ |= 0x00000040;
+        startColumn_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 start_column = 7;</code>
+       */
+      public Builder clearStartColumn() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        startColumn_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 end_column = 8;
+      private int endColumn_ ;
+      /**
+       * <code>optional int32 end_column = 8;</code>
+       */
+      public boolean hasEndColumn() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional int32 end_column = 8;</code>
+       */
+      public int getEndColumn() {
+        return endColumn_;
+      }
+      /**
+       * <code>optional int32 end_column = 8;</code>
+       */
+      public Builder setEndColumn(int value) {
+        bitField0_ |= 0x00000080;
+        endColumn_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 end_column = 8;</code>
+       */
+      public Builder clearEndColumn() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        endColumn_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.Location)
+    }
+
+    static {
+      defaultInstance = new Location(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.Location)
+  }
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_boa_types_CodeRepository_descriptor;
   private static
@@ -5224,6 +7910,16 @@ public final class Code {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_boa_types_Revision_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_CodeRefactoring_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_CodeRefactoring_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_Location_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_Location_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -5249,7 +7945,15 @@ public final class Code {
       "mmitter\030\003 \002(\0132\021.boa.types.Person\022\023\n\013comm" +
       "it_date\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022%\n\005files\030\006 \003(" +
       "\0132\026.boa.types.ChangedFile\022\017\n\007parents\030\007 \003" +
-      "(\005B\002H\001"
+      "(\005\"\231\001\n\017CodeRefactoring\022\014\n\004type\030\001 \002(\t\022\023\n\013" +
+      "description\030\003 \002(\t\0220\n\023left_side_locations" +
+      "\030\004 \003(\0132\023.boa.types.Location\0221\n\024right_sid" +
+      "e_locations\030\005 \003(\0132\023.boa.types.Location\"\263",
+      "\001\n\010Location\022\021\n\tfile_path\030\001 \002(\t\022\024\n\014code_e" +
+      "lement\030\002 \002(\t\022\031\n\021code_element_type\030\003 \002(\t\022" +
+      "\023\n\013description\030\004 \002(\t\022\022\n\nstart_line\030\005 \001(\005" +
+      "\022\020\n\010end_line\030\006 \001(\005\022\024\n\014start_column\030\007 \001(\005" +
+      "\022\022\n\nend_column\030\010 \001(\005B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5268,6 +7972,18 @@ public final class Code {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Revision_descriptor,
               new java.lang.String[] { "Id", "Author", "Committer", "CommitDate", "Log", "Files", "Parents", });
+          internal_static_boa_types_CodeRefactoring_descriptor =
+            getDescriptor().getMessageTypes().get(2);
+          internal_static_boa_types_CodeRefactoring_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_CodeRefactoring_descriptor,
+              new java.lang.String[] { "Type", "Description", "LeftSideLocations", "RightSideLocations", });
+          internal_static_boa_types_Location_descriptor =
+            getDescriptor().getMessageTypes().get(3);
+          internal_static_boa_types_Location_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_Location_descriptor,
+              new java.lang.String[] { "FilePath", "CodeElement", "CodeElementType", "Description", "StartLine", "EndLine", "StartColumn", "EndColumn", });
           return null;
         }
       };
