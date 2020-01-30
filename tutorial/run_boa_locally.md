@@ -80,5 +80,10 @@ You need to have following already installed in your system:
   -data 	&#60;dataset directory containing three files(projects.seq, data, index)&#62;
   -output 	&#60;output directory&#62;
  </center></pre>
+ 
+ <p align="center"> 
+<img src="img/evalparam.png" title="Data evaluator parameters">
+</p>
 
+6. The output of the query will be printed in the console. 
 
