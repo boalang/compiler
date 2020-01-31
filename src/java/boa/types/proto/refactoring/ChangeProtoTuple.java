@@ -40,7 +40,7 @@ public class ChangeProtoTuple extends BoaProtoTuple {
 		int counter = 0;
 		
 		names.put("refactorings", counter++);
-		members.add(new BoaProtoList(new LocationProtoTuple()));
+		members.add(new BoaProtoList(new CodeRefactoringProtoTuple()));
 	}
 
 	/**

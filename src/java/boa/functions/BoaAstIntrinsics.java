@@ -20,7 +20,6 @@ package boa.functions;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -434,9 +433,9 @@ public class BoaAstIntrinsics {
 		BoaAstIntrinsics.context = context;
 	}
 	
-	@FunctionSpec(name = "getrefactorings", returnType = "array of string", formalParameters = { "Project",
+	@FunctionSpec(name = "get_code_change", returnType = "Change", formalParameters = { "Project",
 			"Revision" })
-	public static String[] getRefactorings(Project p, Revision r) {
+	public static boa.types.Code.Change getCodeChange(Project p, Revision r) {
 
 		if (refactoringsMap == null)
 			openRefactoringMap();
@@ -448,12 +447,18 @@ public class BoaAstIntrinsics {
 				byte[] data = Arrays.copyOf(value.getBytes(), value.getLength());
 				String[] temp = new String(data, StandardCharsets.UTF_8).split("\\r?\\n");			
 				HashSet<String> set = new HashSet<String>(Arrays.asList(temp));
-				return set.toArray(new String[0]);
+				
+				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+				// defaults to 64, really big ASTs require more
+				_stream.setRecursionLimit(Integer.MAX_VALUE);
+				final boa.types.Code.Change change = boa.types.Code.Change.parseFrom(_stream);
+				
+				return change;
 			}
 		} catch (final Throwable e) {
 			e.printStackTrace();
 		}
-		return new String[0];
+		return boa.types.Code.Change.newBuilder().build();
 	}
 
 	private static void openRefactoringMap() {
