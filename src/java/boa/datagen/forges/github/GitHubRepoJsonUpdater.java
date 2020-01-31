@@ -41,8 +41,11 @@ public class GitHubRepoJsonUpdater {
 	private static List<String> getUrls(File input) {
 		List<String> urls = new ArrayList<String>();
 		for (File f : input.listFiles()) {
+			if (!f.getName().endsWith(".json"))
+				continue;
 			JsonParser parser = new JsonParser();
-			JsonElement jsonTree = parser.parse(FileIO.readFileContents(f));
+			String content = FileIO.readFileContents(f);
+			JsonElement jsonTree = parser.parse(content);
 			for (JsonElement je : jsonTree.getAsJsonArray()) {
 				JsonObject jo = je.getAsJsonObject();
 				urls.add(jo.get("html_url").getAsString());
