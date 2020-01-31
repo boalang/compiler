@@ -3,6 +3,8 @@ package boa.functions.refactoring;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -16,7 +18,13 @@ import org.apache.hadoop.io.SequenceFile.CompressionType;
 import org.apache.hadoop.io.compress.CompressionCodec;
 import org.apache.hadoop.io.compress.DefaultCodec;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import boa.datagen.util.FileIO;
+import boa.types.Code.Change;
 
 public class BoaRefactoringSeqGenerator {
 
@@ -32,7 +40,7 @@ public class BoaRefactoringSeqGenerator {
 			INPUT_PATH = args[0];
 			OUTPUT_PATH = args[1];
 			
-			Map<String, StringBuilder> refactoringMap = new TreeMap<String, StringBuilder>();
+			Map<String, boa.types.Code.Change> refactoringMap = new TreeMap<String, boa.types.Code.Change>();
 			Map<String, StringBuilder> refactoringIdMap = new TreeMap<String, StringBuilder>();
 			
 			File dir1 = new File(INPUT_PATH + "/output");
@@ -52,10 +60,8 @@ public class BoaRefactoringSeqGenerator {
 					BytesWritable.class, compressionType, compressionCode, null);
 			MapFile.Writer hasRefactoringWriter = new MapFile.Writer(conf, fileSystem, OUTPUT_PATH + "/refactoringId", Text.class,
 					BytesWritable.class, compressionType, compressionCode, null);			
-			for (Entry<String, StringBuilder> entry : refactoringMap.entrySet()) {
-				String commitRefactorings = entry.getValue().toString();
-				byte[] data = commitRefactorings.getBytes(StandardCharsets.UTF_8);
-				refactoringWriter.append(new Text(entry.getKey()), new BytesWritable(data));
+			for (Entry<String, boa.types.Code.Change> entry : refactoringMap.entrySet()) {
+				refactoringWriter.append(new Text(entry.getKey()), new BytesWritable(entry.getValue().toByteArray()));
 //				System.out.println("appending refactoring");
 			}
 			for (Entry<String, StringBuilder> entry : refactoringIdMap.entrySet()) {
@@ -70,31 +76,29 @@ public class BoaRefactoringSeqGenerator {
 		
 	}
 
-	private static void updateMaps(File dir, Map<String, StringBuilder> refactoringMap,
+	private static void updateMaps(File dir, Map<String, Change> refactoringMap,
 			Map<String, StringBuilder> refactoringIdMap) {
 		String previous = "";
 		for (File file : dir.listFiles()) {
-			
+			if (!file.getName().endsWith(".json"))
+				continue;
 			String input = FileIO.readFileContents(file);
-			String[] refactorings = input.split("\\r?\\n");
-			System.out.println(file.getName() + " start");
-			for (String rf : refactorings) {
-				if (rf != null && !rf.equals("") ) {
-					int idx = rf.indexOf('=');
-					if (idx != -1) {
-						// key: bluesoft-rnd/aperte-workflow-core 1ef031d4656da761f2be2df171dcde581d7c2e29 Move Attribute
-						String lhs = rf.substring(0, idx);
-						String[] splits = lhs.split(" ");
-						String projectName = splits[0];
-						String commitId = splits[1];
-						// key: bluesoft-rnd/aperte-workflow-core 1ef031d4656da761f2be2df171dcde581d7c2e29
+			JsonParser parser = new JsonParser();
+			JsonElement jsonTree = parser.parse(input);
+			JsonObject jsonObject = jsonTree.getAsJsonObject();
+			JsonElement je = jsonObject.get("commits");
+			if (je.isJsonArray()) {
+				JsonArray commits = je.getAsJsonArray();
+				if (commits.size() > 0) {
+					for (JsonElement commmitJE : commits) {
+						JsonObject commit = commmitJE.getAsJsonObject();
+						String projectName = commit.get("project_name").getAsString();
+						String commitId = commit.get("sha1").getAsString();
+						boa.types.Code.Change.Builder cb = boa.types.Code.Change.newBuilder();
+						cb.addAllRefactorings(getRefactorings(commit.get("refactorings").getAsJsonArray()));
 						String key = projectName + " " + commitId;
-						String value = rf.substring(idx + 1);
-						if (!refactoringMap.containsKey(key)) {
-							refactoringMap.put(key, new StringBuilder(value));
-						} else {
-							refactoringMap.get(key).append("\n" + value);
-						}
+						refactoringMap.put(key, cb.build());
+						
 						if (!refactoringIdMap.containsKey(projectName)) {
 							refactoringIdMap.put(projectName, new StringBuilder(commitId));
 							previous = commitId;
@@ -111,4 +115,29 @@ public class BoaRefactoringSeqGenerator {
 		}
 	}
 
+	private static List<boa.types.Code.CodeRefactoring> getRefactorings(JsonArray refJA) {
+		List<boa.types.Code.CodeRefactoring> refactorings = new ArrayList<boa.types.Code.CodeRefactoring>();
+		for (JsonElement refJE : refJA) {
+			JsonObject refactoring = refJE.getAsJsonObject();
+			boa.types.Code.CodeRefactoring.Builder crb = boa.types.Code.CodeRefactoring.newBuilder();
+			crb.setType(refactoring.get("type").getAsString());
+			crb.setDescription(refactoring.get("description").getAsString());
+			crb.addAllLeftSideLocations(getLoctions(refactoring.get("leftSideLocations").getAsJsonArray()));
+			crb.addAllRightSideLocations(getLoctions(refactoring.get("leftSideLocations").getAsJsonArray()));
+			refactorings.add(crb.build());
+		}
+		return refactorings;
+	}
+	
+	private static List<boa.types.Code.Location> getLoctions(JsonArray locationJA) {
+		List<boa.types.Code.Location> locations = new ArrayList<boa.types.Code.Location>();
+		JsonObject location = locationJA.get(0).getAsJsonObject();
+		boa.types.Code.Location.Builder lb = boa.types.Code.Location.newBuilder();
+		lb.setFilePath(location.get("filePath").getAsString());
+		lb.setCodeElement(location.get("codeElement").getAsString());
+		lb.setCodeElementType(location.get("codeElementType").getAsString());
+		lb.setDescription(location.get("description").getAsString());
+		locations.add(lb.build());
+		return locations;
+	}
 }
