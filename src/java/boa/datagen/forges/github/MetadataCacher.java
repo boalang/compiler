@@ -84,7 +84,7 @@ public class MetadataCacher {
 		} catch (IOException e) {
 			// considered as failed
 		}
-		System.out.println("authenticate: " + this.authenticated);
+//		System.out.println("authenticate: " + this.authenticated);
 		return this.authenticated;
 	}
 	

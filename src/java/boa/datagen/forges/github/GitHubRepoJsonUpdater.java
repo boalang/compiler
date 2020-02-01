@@ -18,9 +18,9 @@ public class GitHubRepoJsonUpdater {
 	private static String OUTPUT_PATH;
 
 	public static void main(String[] args) {
-		args = new String[] { "/Users/hyj/hpc_repo_json/sutton_dataset_json", 
-				"/Users/hyj/hpc_repo_json/updated_json",
-				"/Users/hyj/hpc_repo_json/myToken.txt" };
+		args = new String[] { "/Users/yijiahuang/hpc_repo_json/sutton_dataset_json", 
+				"/Users/yijiahuang/hpc_repo_json/updated_json",
+				"/Users/yijiahuang/hpc_repo_json/myToken.txt" };
 		if (args.length < 3) {
 			System.out.println("args: INPUT_PATH, OUTPUT_PATH, TOKEN_PATH");
 		} else {
@@ -30,7 +30,6 @@ public class GitHubRepoJsonUpdater {
 			File input = new File(INPUT_PATH);
 			List<String> urls = getUrls(input);
 			for (String url : urls) {
-				url = url.replaceFirst("github.com/", "api.github.com/repos/");
 				updateRepoJson(url);
 			}
 			// write the rest
@@ -62,9 +61,13 @@ public class GitHubRepoJsonUpdater {
 	private static long start, stop = 0;
 
 	private static void updateRepoJson(String url) {
+		if (!checkExistance(url)) {
+			System.err.println(url + " not exist");
+			return;
+		}
+		url = url.replaceFirst("github.com/", "api.github.com/repos/");
 		MetadataCacher mc = tokens.getNextAuthenticMetadataCacher(url);
 		System.out.println("use token user: " + mc.getUserName() + " limit: " + mc.getNumberOfRemainingLimit());
-		
 		while (!mc.isAuthenticated() || mc.getNumberOfRemainingLimit() <= 0) {
 			System.out.println("fail to authenticate user: " + mc.getUserName() + " limit: " + mc.getNumberOfRemainingLimit());
 			try {
@@ -100,6 +103,12 @@ public class GitHubRepoJsonUpdater {
 			}
 		}
 		
+	}
+	
+	private static boolean checkExistance(String repo_url) {
+		Token tok = tokens.getNextAuthenticToken("https://api.github.com/repositories");
+		MetadataCacher mc = new MetadataCacher(repo_url, tok.getUserName(), tok.getToken());
+		return mc.authenticate();
 	}
 	
 	private static void writeWith(boolean condition) {
