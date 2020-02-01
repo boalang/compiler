@@ -64,12 +64,17 @@ public class GitCommit extends AbstractCommit {
 	private RevWalk revwalk;
 	Map<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
 
-	public GitCommit(final GitConnector cnn, final Repository repository, final RevWalk revwalk, String projectName, long repoKey) {
+
+	public GitCommit(final GitConnector cnn, 
+			final Repository repository, final RevWalk revwalk, String projectName, 
+			long repoKey, Map<String, Integer> objectIdToRevisionIdx, int commitIdx) {
 		super(cnn);
 		this.repository = repository;
 		this.revwalk = revwalk;
 		this.projectName = projectName;
 		this.repoKey = repoKey;
+		this.objectIdToRevisionIdx = objectIdToRevisionIdx;
+		this.commitIdx = commitIdx;
 	}
 
 	@Override
@@ -238,10 +243,11 @@ public class GitCommit extends AbstractCommit {
 				} else if (diff.getChangeType() == ChangeType.DELETE) {
 					if (diff.getOldMode().getObjectType() == Constants.OBJ_BLOB) {
 						String path = diff.getOldPath();
-						ObjectId oid = diff.getOldId().toObjectId();
-						ChangedFile.Builder cfb = getChangeFile(path, ChangeKind.DELETED, oid);
-						cfb.addPreviousVersions(parentIndex);
-						filePathGitObjectIds.put(path, oid);
+						ObjectId nid = diff.getNewId().toObjectId();
+						ChangedFile.Builder cfb = getChangeFile(path, ChangeKind.DELETED, nid);
+						String previousObjectId = diff.getOldId().toObjectId().getName();
+						cfb.addPreviousVersions(objectIdToRevisionIdx.get(previousObjectId));
+						filePathGitObjectIds.put(path, nid);
 					}
 				}
 			}
@@ -265,7 +271,9 @@ public class GitCommit extends AbstractCommit {
 			cfb.addPreviousNames("");
 		else
 			cfb.addPreviousNames(oldPath);
-		cfb.addPreviousVersions(parentIndex);
+		String previousObjectId = diff.getOldId().toObjectId().getName();
+		if (objectIdToRevisionIdx.containsKey(previousObjectId))
+			cfb.addPreviousVersions(objectIdToRevisionIdx.get(previousObjectId));
 		filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
 	}
 	

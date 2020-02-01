@@ -73,6 +73,8 @@ public abstract class AbstractCommit {
 	protected AbstractConnector connector;
 	protected String projectName;
 	protected long repoKey;
+	protected Map<String, Integer> objectIdToRevisionIdx;
+	protected int commitIdx;
 
 	protected AbstractCommit(AbstractConnector cnn) {
 		this.connector = cnn;
@@ -96,9 +98,11 @@ public abstract class AbstractCommit {
 				cfb.setObjectId(oid.getName());
 				cfb.setRepoKey(repoKey);
 			}
+			objectIdToRevisionIdx.put(oid.getName(), commitIdx);
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
 		} else {
+			System.err.println("FIND PREVIOUS CFB!!!!!!!!!!!!");
 			cfb = changedFiles.get(index);
 		}
 		return cfb;

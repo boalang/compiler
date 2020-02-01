@@ -348,25 +348,30 @@ public class SeqRepoImporter {
 
 			if (isFiltered(project))
 				return null;
-			
+
 			// If repository is already cloned delete then re-clone, this should only happen during recover
-			FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitRootPath + "/" + project.getName());
-			filecheck.run();
+//			FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitRootPath + "/" + project.getName());
+//			filecheck.run();
+
 			
 			// clone repository
-			Git result = null;
-			try {
-				String url = repo.getUrl();
-				File localGitDir = new File(gitDir.getAbsolutePath());
-				result = Git.cloneRepository().setURI(url).setBare(true).setDirectory(localGitDir).call();
-			} catch (Throwable t) {
-				System.err.println("Error cloning " + repo.getUrl());
-				DefaultProperties.exceptions.put(name, "err cloning");
-				return null;
-			} finally {
-				if (result != null && result.getRepository() != null) {
-					result.getRepository().close();
+			if (!gitDir.exists()) {
+				Git result = null;
+				try {
+					String url = repo.getUrl();
+					File localGitDir = new File(gitDir.getAbsolutePath());
+					result = Git.cloneRepository().setURI(url).setBare(true).setDirectory(localGitDir).call();
+				} catch (Throwable t) {
+					System.err.println("Error cloning " + repo.getUrl());
+					DefaultProperties.exceptions.put(name, "err cloning");
+					return null;
+				} finally {
+					if (result != null && result.getRepository() != null) {
+						result.getRepository().close();
+					}
 				}
+			} else {
+				System.err.println(gitDir.getName() + " already exits");
 			}
 			
 			if (debug)

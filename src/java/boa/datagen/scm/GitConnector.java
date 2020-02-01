@@ -105,7 +105,7 @@ public class GitConnector extends AbstractConnector {
 			revwalk.sort(RevSort.REVERSE, true);
 			for (final RevCommit rc : revwalk) {
 				System.out.println(rc.getId());
-				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName, repoKey);
+				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName, repoKey, objectIdToRevisionIdx, -1);
 				commits.add(rc.getName());
 				int count = gc.countChangedFiles(rc);
 				counts.put(rc.getName(), count);
@@ -118,6 +118,9 @@ public class GitConnector extends AbstractConnector {
 			temprevwalk.close();
 		}
 	}
+	
+	// file object id tracker for entire commit history
+	Map<String, Integer> objectIdToRevisionIdx = new HashMap<String, Integer>();
 
 	@Override
 	public void setRevisions() {
@@ -145,10 +148,10 @@ public class GitConnector extends AbstractConnector {
 			}
 
 			for (final RevCommit rc : commitList) {
-				i++;
+				
 				long startTime = System.currentTimeMillis();
 
-				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName, repoKey);
+				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName, repoKey, objectIdToRevisionIdx, i);
 
 				gc.setId(rc.getName());
 				try {
@@ -187,6 +190,7 @@ public class GitConnector extends AbstractConnector {
 					revisions.add(gc);
 				}
 				
+				i++;
 				if (debug) {
 					long endTime = System.currentTimeMillis();
 					long time = endTime - startTime;
@@ -282,7 +286,7 @@ public class GitConnector extends AbstractConnector {
 						cfb.setObjectId(tw.getObjectId(0).getName());
 						cfb.setRepoKey(repoKey);
 					}
-					GitCommit gc = new GitCommit(this, repository, revwalk, projectName, repoKey);
+					GitCommit gc = new GitCommit(this, repository, revwalk, projectName, repoKey, objectIdToRevisionIdx, -1);
 					gc.filePathGitObjectIds.put(path, tw.getObjectId(0));
 					gc.processChangeFile(cfb);
 					snapshot.add(cfb.build());
