@@ -38,7 +38,7 @@ public class GitHubRepoJsonUpdater {
 		}
 	}
 
-	private static List<String> getUrls(File input) {
+	public static List<String> getUrls(File input) {
 		List<String> urls = new ArrayList<String>();
 		for (File f : input.listFiles()) {
 			if (!f.getName().endsWith(".json"))
