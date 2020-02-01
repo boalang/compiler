@@ -14,8 +14,8 @@ public class GitHubRepoBareDownloader {
 	
 
 	public static void main(String[] args) {
-//		args = new String[] { "/Users/yijiahuang/Desktop/oracleJsons", 
-//				"/Users/yijiahuang/Desktop/repos",
+//		args = new String[] { "/Users/hyj/Desktop/updated_json", 
+//				"/Users/hyj/Desktop/repos",
 //				"2" };
 		if (args.length < 3) {
 			System.out.println("args: INPUT_NAMES_PATH, OUTPUT_REPOS_PATH, THREAD_NUM");

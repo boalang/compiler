@@ -30,7 +30,7 @@ public class GitHubRepoJsonUpdater {
 			File input = new File(INPUT_PATH);
 			List<String> urls = getUrls(input);
 			for (String url : urls) {
-				url = urls.get(0).replaceFirst("github.com/", "api.github.com/repos/");
+				url = url.replaceFirst("github.com/", "api.github.com/repos/");
 				updateRepoJson(url);
 			}
 			// write the rest
