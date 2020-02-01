@@ -18,9 +18,9 @@ public class GitHubRepoJsonUpdater {
 	private static String OUTPUT_PATH;
 
 	public static void main(String[] args) {
-//		args = new String[] { "/Users/hyj/hpc_repo_json/sutton_dataset_json", 
-//				"/Users/hyj/hpc_repo_json/updated_json",
-//				"/Users/hyj/hpc_repo_json/myToken.txt" };
+		args = new String[] { "/Users/hyj/hpc_repo_json/sutton_dataset_json", 
+				"/Users/hyj/hpc_repo_json/updated_json",
+				"/Users/hyj/hpc_repo_json/myToken.txt" };
 		if (args.length < 3) {
 			System.out.println("args: INPUT_PATH, OUTPUT_PATH, TOKEN_PATH");
 		} else {
@@ -62,19 +62,17 @@ public class GitHubRepoJsonUpdater {
 	private static long start, stop = 0;
 
 	private static void updateRepoJson(String url) {
-		Token tok = tokens.getNextAuthenticToken("https://api.github.com/repositories");
-		MetadataCacher mc = new MetadataCacher(url, tok.getUserName(), tok.getToken());
-		mc.authenticate();
+		MetadataCacher mc = tokens.getNextAuthenticMetadataCacher(url);
+		System.out.println("use token user: " + mc.getUserName() + " limit: " + mc.getNumberOfRemainingLimit());
 		
 		while (!mc.isAuthenticated() || mc.getNumberOfRemainingLimit() <= 0) {
-			System.out.println("user: " + tok.getUserName() + " limit: " + mc.getNumberOfRemainingLimit());
+			System.out.println("fail to authenticate user: " + mc.getUserName() + " limit: " + mc.getNumberOfRemainingLimit());
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
-			mc = new MetadataCacher(url, tok.getUserName(), tok.getToken());
-			mc.authenticate();
+			mc = tokens.getNextAuthenticMetadataCacher(url);
 		}
 		mc.getResponseJson();
 		// get Repository Json
@@ -85,12 +83,12 @@ public class GitHubRepoJsonUpdater {
 		// add language list
 		addLanguageToRepo(repo, parser);
 		repos.add(repo);
-		System.out.println("Add repository " + ++repoCounter);
+		System.out.println("Add repository " + ++repoCounter + " " + repo.get("full_name").getAsString());
 		
 		// write to output path
 		writeWith(repos.size() % RECORDS_PER_FILE == 0);
 		
-		if (tok.getNumberOfRemainingLimit() <= 1) {
+		if (mc.getNumberOfRemainingLimit() <= 1) {
 			long t = mc.getLimitResetTime() * 1000 - System.currentTimeMillis();
 			if (t >= 0) {
 				System.out.println("Waiting " + (t / 1000) + " seconds for sending more requests.");
