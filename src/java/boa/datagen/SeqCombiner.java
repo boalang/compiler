@@ -102,7 +102,7 @@ public class SeqCombiner {
 			try {
 				while (r.next(textKey, value)) {
 					Project p = Project.parseFrom(CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
-					
+					DefaultProperties.processedProjects.add(p.getName());
 					Project.Builder pb = Project.newBuilder(p);
 					for (CodeRepository.Builder crb : pb.getCodeRepositoriesBuilderList()) {
 						if (crb.getRevisionsCount() > 0) {

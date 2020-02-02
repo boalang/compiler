@@ -52,6 +52,8 @@ import boa.types.Diff.ChangedFile;
 import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 
+import boa.datagen.scm.GitConnector.FileLoc;
+
 /**
  * Concrete implementation of a commit for Git.
  *
@@ -67,7 +69,7 @@ public class GitCommit extends AbstractCommit {
 
 	public GitCommit(final GitConnector cnn, 
 			final Repository repository, final RevWalk revwalk, String projectName, 
-			long repoKey, Map<String, Integer> objectIdToRevisionIdx, int commitIdx) {
+			long repoKey, Map<String, FileLoc> objectIdToRevisionIdx, int commitIdx) {
 		super(cnn);
 		this.repository = repository;
 		this.revwalk = revwalk;
@@ -246,7 +248,9 @@ public class GitCommit extends AbstractCommit {
 						ObjectId nid = diff.getNewId().toObjectId();
 						ChangedFile.Builder cfb = getChangeFile(path, ChangeKind.DELETED, nid);
 						String previousObjectId = diff.getOldId().toObjectId().getName();
-						cfb.addPreviousVersions(objectIdToRevisionIdx.get(previousObjectId));
+						FileLoc loc = objectIdToRevisionIdx.get(previousObjectId);
+						cfb.addPreviousVersions(loc.revisionIdx);
+						cfb.addPreviousIndices(loc.locIdx);
 						filePathGitObjectIds.put(path, nid);
 					}
 				}
@@ -272,8 +276,11 @@ public class GitCommit extends AbstractCommit {
 		else
 			cfb.addPreviousNames(oldPath);
 		String previousObjectId = diff.getOldId().toObjectId().getName();
-		if (objectIdToRevisionIdx.containsKey(previousObjectId))
-			cfb.addPreviousVersions(objectIdToRevisionIdx.get(previousObjectId));
+		if (objectIdToRevisionIdx.containsKey(previousObjectId)) {
+			FileLoc loc = objectIdToRevisionIdx.get(previousObjectId);
+			cfb.addPreviousVersions(loc.revisionIdx);
+			cfb.addPreviousIndices(loc.locIdx);
+		}
 		filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
 	}
 	
