@@ -2,6 +2,7 @@ package boa.datagen.forges.github;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -16,6 +17,7 @@ public class GitHubRepoJsonUpdater {
 
 	private static String INPUT_PATH;
 	private static String OUTPUT_PATH;
+	private static HashSet<String> processedRepos;
 
 	public static void main(String[] args) {
 		args = new String[] { "/Users/yijiahuang/hpc_repo_json/sutton_dataset_json", 
@@ -29,11 +31,17 @@ public class GitHubRepoJsonUpdater {
 			tokens = new TokenList(args[2]);
 			File input = new File(INPUT_PATH);
 			List<String> urls = getUrls(input);
+			// get processed urls
+			File output = new File(OUTPUT_PATH);
+			processedRepos = new HashSet<String>(getUrls(output));
+			System.out.println("get processed repos: " + processedRepos.size());
 			for (String url : urls) {
-				updateRepoJson(url);
+				if (!processedRepos.contains(url))
+					updateRepoJson(url);
 			}
 			// write the rest
 			writeWith(repos.size() > 0);
+//			updateRepoJson("https://github.com/ebayopensource/turmeric-repository");
 		}
 	}
 
@@ -55,7 +63,7 @@ public class GitHubRepoJsonUpdater {
 
 	private static TokenList tokens;
 	private static JsonArray repos = new JsonArray();
-	private static final int RECORDS_PER_FILE = 100;
+	private static final int RECORDS_PER_FILE = 50;
 	private static int jsonFileCounter = 0;
 	private static int repoCounter = 0;
 	private static long start, stop = 0;
@@ -65,24 +73,22 @@ public class GitHubRepoJsonUpdater {
 			System.err.println(url + " not exist");
 			return;
 		}
+		System.out.println("start url: " + url);
 		url = url.replaceFirst("github.com/", "api.github.com/repos/");
 		MetadataCacher mc = tokens.getNextAuthenticMetadataCacher(url);
+		// check 404
+		if (mc == null)
+			return;
 		System.out.println("use token user: " + mc.getUserName() + " limit: " + mc.getNumberOfRemainingLimit());
-		while (!mc.isAuthenticated() || mc.getNumberOfRemainingLimit() <= 0) {
-			System.out.println("fail to authenticate user: " + mc.getUserName() + " limit: " + mc.getNumberOfRemainingLimit());
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
-			mc = tokens.getNextAuthenticMetadataCacher(url);
-		}
 		mc.getResponseJson();
 		// get Repository Json
 		String content = mc.getContent();
 		Gson parser = new Gson();
 		JsonObject repo = null;
 		repo = parser.fromJson(content, JsonElement.class).getAsJsonObject();
+		// double check if already downloaded
+		if (processedRepos.contains(repo.get("html_url").getAsString()))
+			return;
 		// add language list
 		addLanguageToRepo(repo, parser);
 		repos.add(repo);
@@ -130,37 +136,16 @@ public class GitHubRepoJsonUpdater {
 	
 
 	private static void addLanguageToRepo(JsonObject repo, Gson parser) {
+		System.out.println("start to add lang to json object");
 		String langurl = "https://api.github.com/repos/" + repo.get("full_name").getAsString() + "/languages";
-		Token tok = tokens.getNextAuthenticToken("https://api.github.com/repositories");
-		MetadataCacher mc = null;
-		if (tok.getNumberOfRemainingLimit() <= 0) {
-			tok = tokens.getNextAuthenticToken("https://api.github.com/repositories");
-		}
-		for (int i = 0; i < 1; i++) {
-			mc = new MetadataCacher(langurl, tok.getUserName(), tok.getToken());
-			boolean authnticationResult = mc.authenticate();
-			if (authnticationResult) {
-				mc.getResponse();
-				String pageContent = mc.getContent();
-				JsonObject languages = parser.fromJson(pageContent, JsonElement.class).getAsJsonObject();
-				repo.add("language_list", languages);
-				tok.setLastResponseCode(mc.getResponseCode());
-				tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
-				tok.setResetTime(mc.getLimitResetTime());
-			} else {
-				final int responsecode = mc.getResponseCode();
-				System.err.println("authentication error " + responsecode);
-				mc = new MetadataCacher("https://api.github.com/repositories", tok.getUserName(), tok.getToken());
-				if (mc.authenticate()) {
-					tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
-				} else {
-					System.out.println("token: " + tok.getId() + " exhausted");
-					tok.setnumberOfRemainingLimit(0);
-					i--;
-				}
-			}
-		}
-
+		MetadataCacher mc = tokens.getNextAuthenticMetadataCacher(langurl);
+		// check not found
+		if (mc == null)
+			return;
+		mc.getResponse();
+		String pageContent = mc.getContent();
+		JsonObject languages = parser.fromJson(pageContent, JsonElement.class).getAsJsonObject();
+		repo.add("language_list", languages);
 	}
 
 }

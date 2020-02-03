@@ -363,7 +363,6 @@ public class SeqRepoImporter {
 			// If repository is already cloned delete then re-clone, this should only happen during recover
 //			FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitRootPath + "/" + project.getName());
 //			filecheck.run();
-
 			
 			// clone repository
 			if (!gitDir.exists()) {

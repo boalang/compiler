@@ -14,8 +14,8 @@ public class GitHubRepoBareDownloader {
 	
 
 	public static void main(String[] args) {
-//		args = new String[] { "/Users/hyj/Desktop/updated_json", 
-//				"/Users/hyj/Desktop/repos",
+//		args = new String[] { "/Users/yijiahuang/hpc_repo_json/dowload_repos/updated_json", 
+//				"/Users/yijiahuang/hpc_repo_json/dowload_repos/repos",
 //				"2" };
 		if (args.length < 3) {
 			System.out.println("args: INPUT_NAMES_PATH, OUTPUT_REPOS_PATH, THREAD_NUM");
@@ -108,17 +108,19 @@ public class GitHubRepoBareDownloader {
 				String projectName = getName();
 				String url = "https://github.com/" + projectName + ".git";
 				File gitDir = new File(OUTPUT_REPOS_PATH + "/" + projectName + "/.git");
-				String[] args = { url, gitDir.getAbsolutePath() };
-				try {
-					System.err.println("worker " + getId() + " is cloning " + projectName);
-					RepositoryCloner.clone(args);
-					System.err.println("worker " + getId() + " finished cloning " + projectName);
-				} catch (Throwable t) {
-					System.err.println(t);
-					System.err.println("Error cloning " + url);
-					setReady(true);
+				if (!gitDir.exists()) {
+					String[] args = { url, gitDir.getAbsolutePath() };
+					try {
+						System.err.println("worker " + getId() + " is cloning " + projectName);
+						RepositoryCloner.clone(args);
+						System.err.println("worker " + getId() + " finished cloning " + projectName);
+					} catch (Throwable t) {
+						System.err.println(t);
+						System.err.println("Error cloning " + url);
+					}
+				} else {
+					System.err.println("repo " + projectName + "already exists");
 				}
-				
 				setReady(true);
 			}
 		}
