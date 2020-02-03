@@ -23,6 +23,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
@@ -36,6 +37,8 @@ import org.apache.commons.cli.PosixParser;
 import boa.datagen.forges.github.GetGithubRepoByUser;
 import boa.datagen.forges.github.LocalGitSequenceGenerator;
 import boa.datagen.forges.github.MetaDataMaster;
+import boa.datagen.util.FileIO;
+import boa.datagen.util.Properties;
 
 /**
  * The main entry point for Boa tools for generating datasets.
@@ -94,8 +97,12 @@ public class BoaGenerator {
 
 		clear();
 		
+		String base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 		if (DefaultProperties.exceptions.size() != 0) {
-			writeTo("exceptions_"+System.currentTimeMillis()+".txt");
+			writeTo(base + "/exceptions_"+System.currentTimeMillis()+".txt");
+		}
+		if (DefaultProperties.processedProjects.size() != 0) {
+			writeProcessedProjects(base + "/processed_"+System.currentTimeMillis()+".txt");
 		}
 	}
 	
@@ -104,6 +111,16 @@ public class BoaGenerator {
 		BufferedWriter bw = new BufferedWriter(fw);
 		for (Entry<String, String> entry : DefaultProperties.exceptions.entrySet()) {
 			bw.write(entry.getKey() + " " + entry.getValue());
+			bw.newLine();
+		}
+		bw.close();
+	}
+	
+	public static void writeProcessedProjects(String path) throws IOException {
+		FileWriter fw = new FileWriter(path);
+		BufferedWriter bw = new BufferedWriter(fw);
+		for (String s : DefaultProperties.processedProjects) {
+			bw.write(s);
 			bw.newLine();
 		}
 		bw.close();

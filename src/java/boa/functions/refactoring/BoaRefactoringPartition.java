@@ -15,7 +15,7 @@ public class BoaRefactoringPartition {
 	public static void main(String[] args) {
 		int size = 300;
 		String path = "/Users/hyj/test3_pronto/sutton_names.txt";
-		String firstPartition = "/Users/hyj/test3_pronto/partition";
+		String firstPartition = "/Users/hyj/hpc_repo_json/partition";
 		
 		// even partition
 		String input = FileIO.readFileContents(new File(path));
@@ -30,22 +30,22 @@ public class BoaRefactoringPartition {
 			projectNameToPairMap.put(splits[0], pair);
 		}
 		
-//		partitionAndWrite(pairs, output, size);
+		partitionAndWrite(pairs, firstPartition, size);
 		
 		
 		// filter
-		String outputPath = "/Users/hyj/test4/output";
-		String undonePartitionPath = "/Users/hyj/test4/undone";
-		String undoneOutputPath = "/Users/hyj/test4/undone_output";
-		String unundonePartitionPath = "/Users/hyj/test4/unundone";
-		String unundoneOutputPath = "/Users/hyj/test4/unundone_output";
+//		String outputPath = "/Users/hyj/test4/output";
+//		String undonePartitionPath = "/Users/hyj/test4/undone";
+//		String undoneOutputPath = "/Users/hyj/test4/undone_output";
+//		String unundonePartitionPath = "/Users/hyj/test4/unundone";
+//		String unundoneOutputPath = "/Users/hyj/test4/unundone_output";
 		
 		// undone
-		Set<Integer> undoneFromFirstPartition = getUndoneFileIndexs(outputPath, 300);
-		System.out.println(undoneFromFirstPartition);
-		System.out.println(undoneFromFirstPartition.size());
-		Set<String> undoneNames = getNamesByFileIndexs(firstPartition, undoneFromFirstPartition);
-		System.out.println("Undone names from first partition: " + undoneNames.size());
+//		Set<Integer> undoneFromFirstPartition = getUndoneFileIndexs(outputPath, 300);
+//		System.out.println(undoneFromFirstPartition);
+//		System.out.println(undoneFromFirstPartition.size());
+//		Set<String> undoneNames = getNamesByFileIndexs(firstPartition, undoneFromFirstPartition);
+//		System.out.println("Undone names from first partition: " + undoneNames.size());
 		
 		// undone validation
 //		Set<String> undoneNames = getProjectNamesFromPartitionPath(new File(undonePartitionPath));
@@ -53,20 +53,20 @@ public class BoaRefactoringPartition {
 //		System.out.println(names);
 		
 		// unundone
-		Set<Integer> unundoneFromundonePartition = getUndoneFileIndexs(undoneOutputPath, 100);
-		System.out.println(unundoneFromundonePartition);
-		System.out.println(unundoneFromundonePartition.size());
-		Set<String> unundoneNames = getNamesByFileIndexs(undonePartitionPath, unundoneFromundonePartition);
-		System.out.println("Unundone names from undone partition: " + unundoneNames.size());
+//		Set<Integer> unundoneFromundonePartition = getUndoneFileIndexs(undoneOutputPath, 100);
+//		System.out.println(unundoneFromundonePartition);
+//		System.out.println(unundoneFromundonePartition.size());
+//		Set<String> unundoneNames = getNamesByFileIndexs(undonePartitionPath, unundoneFromundonePartition);
+//		System.out.println("Unundone names from undone partition: " + unundoneNames.size());
 		
 		// ununundone
-		Set<Integer> ununundoneFromUndonePartition = getUndoneFileIndexs(unundoneOutputPath, 100);
-		System.out.println(ununundoneFromUndonePartition);
-		System.out.println(ununundoneFromUndonePartition.size());
-		Set<String> ununundoneNames = getNamesByFileIndexs(unundonePartitionPath, ununundoneFromUndonePartition);
-		System.out.println("Ununundone names from unundone partition: " + ununundoneNames.size());
-		
-		System.out.println(ununundoneNames);
+//		Set<Integer> ununundoneFromUndonePartition = getUndoneFileIndexs(unundoneOutputPath, 100);
+//		System.out.println(ununundoneFromUndonePartition);
+//		System.out.println(ununundoneFromUndonePartition.size());
+//		Set<String> ununundoneNames = getNamesByFileIndexs(unundonePartitionPath, ununundoneFromUndonePartition);
+//		System.out.println("Ununundone names from unundone partition: " + ununundoneNames.size());
+//		
+//		System.out.println(ununundoneNames);
 		
 		// parition unundone
 //		List<Pair> undonePairs = new ArrayList<Pair>();
@@ -123,7 +123,7 @@ public class BoaRefactoringPartition {
 
 		@Override
 		public int compareTo(Pair o) {
-			return size - o.size;
+			return this.size - o.size;
 		}
 		
 		

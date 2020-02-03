@@ -51,12 +51,15 @@ public class BoaRefactoringDetectAll {
 	private static String REPOS_PATH;
 	private static String OUTPUT_PATH;
 	private static int TIME_OUT; // in seconds
+	private static String ID;
 
 	private static ExecutorService executor;
+	private static List<String> processedProjects = new ArrayList<String>();
+	private static List<String> exceptions = new ArrayList<String>();
 
 	public static void main(String[] args) {
 		args = new String[] { "/Users/hyj/test6/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo",
-				"/Users/hyj/test6/output/o.json", "1" };
+				"/Users/hyj/test6/output", "1", "1" };
 		if (args.length < 4) {
 			System.err.println("args: NAMES_PATH, REPOS_PATH, OUTPUT_PATH, TIME_OUT");
 		} else {
@@ -66,10 +69,10 @@ public class BoaRefactoringDetectAll {
 			REPOS_PATH = args[1];
 			OUTPUT_PATH = args[2];
 			TIME_OUT = Integer.parseInt(args[3]); // in seconds
+			ID = args[3];
 
 			HashSet<String> typeSet = BoaRefactoringIntrinsics.getConsideredTypes();
-
-//			List<String> outputs = new ArrayList<String>();
+			
 			StringBuilder sb = new StringBuilder();
 			int projectCount = 0;
 			int totolRefCommit = 0;
@@ -135,13 +138,16 @@ public class BoaRefactoringDetectAll {
 						System.gc();
 					}
 					System.err.println(projectCount + "th project " + name + " end");
+					processedProjects.add(name);
 				} else {
 					System.err.println(projectCount + "th project " + name + " not exist! Continue");
 				}
 			}
 			endJSON(sb);
 			System.err.println("Write start");
-			FileIO.writeFileContents(new File(OUTPUT_PATH), sb.toString());
+			FileIO.writeFileContents(new File(OUTPUT_PATH + "/o" + ID + ".json"), sb.toString());
+			writeOutputs(processedProjects, OUTPUT_PATH + "/processed_" + ID + ".txt");
+			writeOutputs(exceptions, OUTPUT_PATH + "/excepted_" + ID + ".txt");
 			System.err.println("Write end");
 			
 			if (executor != null)
@@ -153,7 +159,13 @@ public class BoaRefactoringDetectAll {
 	private static List<Refactoring> getRefactorings(int timeout, String projectName, Repository repo, RevCommit r) {
 		executor = Executors.newSingleThreadExecutor();
 		Future<List<Refactoring>> future = executor.submit(() -> {
-			return detect(repo, r);
+			try {
+				return detectRefactorings(repo, r);
+			} catch (Throwable e) {
+				System.err.println(projectName + " " + r.getName() + " Detect Throwable");
+				exceptions.add(projectName + " " + r.getName());
+				return new ArrayList<Refactoring>();
+			}
 		});
 
 		try {
@@ -161,10 +173,13 @@ public class BoaRefactoringDetectAll {
 			return results;
 		} catch (TimeoutException e) {
 			System.err.println(projectName + " " + r.getName() + " TimeoutException " + timeout / 1000.0 + " sec");
+			exceptions.add(projectName + " " + r.getName());
 		} catch (InterruptedException e) {
 			System.err.println(projectName + " " + r.getName() + " InterruptedException");
+			exceptions.add(projectName + " " + r.getName());
 		} catch (ExecutionException e) {
 			System.err.println(projectName + " " + r.getName() + " ExecutionException");
+			exceptions.add(projectName + " " + r.getName());
 		} finally {
 			executor.shutdown();
 			executor = null;
@@ -186,14 +201,6 @@ public class BoaRefactoringDetectAll {
 		for (String s : outputs)
 			sb.append(s + "\n");
 		FileIO.writeFileContents(new File(path), sb.toString());
-	}
-
-	private static List<Refactoring> detect(Repository repo, RevCommit next) {
-		try {
-			return detectRefactorings(repo, next);
-		} catch (Exception e) {
-			return new ArrayList<Refactoring>();
-		}
 	}
 
 	protected static List<Refactoring> detectRefactorings(Repository repository, RevCommit currentCommit)

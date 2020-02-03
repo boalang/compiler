@@ -19,6 +19,7 @@ package boa.datagen;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * @author rdyer
@@ -78,6 +79,8 @@ public class DefaultProperties {
 	
 	// excluded repo names
 	public static HashMap<String, String> exceptions = null;
+	// processed repos names
+	public static HashSet<String> processedProjects = null;
 	
 	@SuppressWarnings("unused")
 	private static String getRoot() {

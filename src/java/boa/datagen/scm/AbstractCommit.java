@@ -49,6 +49,7 @@ import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
 import boa.datagen.DefaultProperties;
 import boa.datagen.dependencies.PomFile;
+import boa.datagen.scm.GitConnector.FileLoc;
 import boa.datagen.util.CssVisitor;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.HtmlVisitor;
@@ -73,7 +74,7 @@ public abstract class AbstractCommit {
 	protected AbstractConnector connector;
 	protected String projectName;
 	protected long repoKey;
-	protected Map<String, Integer> objectIdToRevisionIdx;
+	protected Map<String, FileLoc> objectIdToRevisionIdx;
 	protected int commitIdx;
 
 	protected AbstractCommit(AbstractConnector cnn) {
@@ -98,7 +99,7 @@ public abstract class AbstractCommit {
 				cfb.setObjectId(oid.getName());
 				cfb.setRepoKey(repoKey);
 			}
-			objectIdToRevisionIdx.put(oid.getName(), commitIdx);
+			objectIdToRevisionIdx.put(oid.getName(), new FileLoc(commitIdx, changedFiles.size()));
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
 		} else {
