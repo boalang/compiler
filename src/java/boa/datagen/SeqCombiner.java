@@ -102,10 +102,11 @@ public class SeqCombiner {
 			try {
 				while (r.next(textKey, value)) {
 					Project p = Project.parseFrom(CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
-					DefaultProperties.processedProjects.add(p.getName());
+					int revisionCount = 0;
 					Project.Builder pb = Project.newBuilder(p);
 					for (CodeRepository.Builder crb : pb.getCodeRepositoriesBuilderList()) {
 						if (crb.getRevisionsCount() > 0) {
+							revisionCount = crb.getRevisionsCount();
 							for (Revision.Builder rb : crb.getRevisionsBuilderList()) {
 								for (ChangedFile.Builder cfb : rb.getFilesBuilderList()) {
 									long key = cfb.getKey();
@@ -116,6 +117,7 @@ public class SeqCombiner {
 								}
 							}
 						} else {
+							revisionCount = crb.getRevisionKeysCount();
 							for (int j = 0; j < crb.getRevisionKeysCount(); j++) {
 								crb.setRevisionKeys(j, lastCommitWriterKey + crb.getRevisionKeys(j));
 							}
@@ -128,6 +130,7 @@ public class SeqCombiner {
 								cfb.setRepoKey(lastRepoKey + cfb.getRepoKey()); 
 						}
 					}
+					DefaultProperties.processedProjects.add(p.getName() + " " + revisionCount);
 					projectWriter.append(textKey, new BytesWritable(pb.build().toByteArray()));
 				}
 			} catch (Exception e) {
