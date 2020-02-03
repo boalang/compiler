@@ -131,7 +131,7 @@ public class SeqRepoImporter {
 										break;
 									}
 								}
-								Thread.sleep(100);
+//								Thread.sleep(100);
 							}
 							
 							System.err.println("Assigned the " + (++counter) + "th project: " + repo.name 
