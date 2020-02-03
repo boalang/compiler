@@ -58,8 +58,8 @@ public class BoaRefactoringDetectAll {
 	private static List<String> exceptions = new ArrayList<String>();
 
 	public static void main(String[] args) {
-		args = new String[] { "/Users/hyj/test6/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo",
-				"/Users/hyj/test6/output", "1", "1" };
+//		args = new String[] { "/Users/hyj/test6/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo",
+//				"/Users/hyj/test6/output", "1", "2" };
 		if (args.length < 4) {
 			System.err.println("args: NAMES_PATH, REPOS_PATH, OUTPUT_PATH, TIME_OUT");
 		} else {
@@ -69,7 +69,7 @@ public class BoaRefactoringDetectAll {
 			REPOS_PATH = args[1];
 			OUTPUT_PATH = args[2];
 			TIME_OUT = Integer.parseInt(args[3]); // in seconds
-			ID = args[3];
+			ID = args[4];
 
 			HashSet<String> typeSet = BoaRefactoringIntrinsics.getConsideredTypes();
 			

@@ -14,7 +14,7 @@ public class BoaRefactoringPartition {
 
 	public static void main(String[] args) {
 		int size = 300;
-		String path = "/Users/hyj/test3_pronto/sutton_names.txt";
+		String path = "/Users/hyj/hpc_repo_json/names.txt";
 		String firstPartition = "/Users/hyj/hpc_repo_json/partition";
 		
 		// even partition
