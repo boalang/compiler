@@ -33,57 +33,6 @@ public class TokenList {
 		}
 	}
 
-	public Token getNextAuthenticToken(String url) {
-		MetadataCacher mc = null;
-		while (true) {
-			for (Token token : tokens) {
-				mc = new MetadataCacher(url, token.getUserName(), token.getToken());
-				System.out.print("Trying token: " + token.getUserName());
-				if (mc.authenticate() && mc.getNumberOfRemainingLimit() > 0) {
-					if (this.lastUsedToken != token.getId()) {
-						this.lastUsedToken = token.getId();
-						System.out.println("now using token: " + token.getId());
-					}
-					System.out.println(mc.getNumberOfRemainingLimit());
-					return token;
-				}
-			}
-			try {
-				System.out.println("waiting for token, going to sleep for 10s");
-				Thread.sleep(10000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		// throw new IllegalArgumentException();
-	}
-	
-	public Token getNextAuthenticToken(String url, int minRateLimit) {
-		MetadataCacher mc = null;
-		while (true) {
-			for (Token token : tokens) {
-				System.out.print("Trying token: " + token.getUserName() + " ");
-				mc = new MetadataCacher(url, token.getUserName(), token.getToken());
-				if (mc.authenticate()) {
-					if (mc.getNumberOfRemainingLimit() < minRateLimit)
-						continue;
-					if (this.lastUsedToken != token.getId()) {
-						this.lastUsedToken = token.getId();
-						System.out.println("now using token: " + token.getId());
-					}
-					System.out.println(mc.getNumberOfRemainingLimit());
-					return token;
-				}
-			}
-			try {
-				System.out.println("waiting for token, going to sleep for 10s");
-				Thread.sleep(10000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		// throw new IllegalArgumentException();
-	}
 
 	public synchronized Token getAuthenticatedToken(long threadId) {
 		while (true) {
