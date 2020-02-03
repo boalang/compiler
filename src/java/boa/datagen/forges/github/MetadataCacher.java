@@ -45,6 +45,10 @@ public class MetadataCacher {
 			e.printStackTrace();
 		}
 	}
+	
+	public String getUserName() {
+		return this.username;
+	}
 
 	public void setUsername(String username) {
 		this.username = username;
@@ -88,6 +92,7 @@ public class MetadataCacher {
 		} catch (IOException e) {
 			// considered as failed
 		}
+//		System.out.println("authenticate: " + this.authenticated);
 		return this.authenticated;
 	}
 	

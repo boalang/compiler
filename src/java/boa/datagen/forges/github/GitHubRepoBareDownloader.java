@@ -1,27 +1,32 @@
 package boa.datagen.forges.github;
 
 import java.io.File;
+import java.util.List;
 
-import boa.datagen.util.FileIO;
+import static boa.datagen.forges.github.GitHubRepoJsonUpdater.getUrls;
 
-public class GitHubRepositoryDownloaderByPorjectName {
+public class GitHubRepoBareDownloader {
 	
-	private static String INPUT_NAMES_PATH;
+	private static String INPUT_PATH;
 	private static String OUTPUT_REPOS_PATH;
 	private static int THREAD_NUM;
 	private static boolean done = false;
 	
 
 	public static void main(String[] args) {
-		
+//		args = new String[] { "/Users/yijiahuang/hpc_repo_json/dowload_repos/updated_json", 
+//				"/Users/yijiahuang/hpc_repo_json/dowload_repos/repos",
+//				"2" };
 		if (args.length < 3) {
 			System.out.println("args: INPUT_NAMES_PATH, OUTPUT_REPOS_PATH, THREAD_NUM");
 		} else {
-			INPUT_NAMES_PATH = args[0];
+			INPUT_PATH = args[0];
 			OUTPUT_REPOS_PATH = args[1];
 			THREAD_NUM = Integer.parseInt(args[2]);
-			String input = FileIO.readFileContents(new File(INPUT_NAMES_PATH));
-			String[] projectNames = input.split("\\r?\\n");
+//			String input = FileIO.readFileContents(new File(INPUT_NAMES_PATH));
+//			String[] projectNames = input.split("\\r?\\n");
+			File input = new File(INPUT_PATH);
+			List<String> urls = getUrls(input);
 			
 			DownloadWorker[] workers = new DownloadWorker[THREAD_NUM];
 			Thread[] threads = new Thread[THREAD_NUM];
@@ -32,13 +37,12 @@ public class GitHubRepositoryDownloaderByPorjectName {
 			}
 			
 			// assign tasks to workers
-			for (String name : projectNames) {
-				System.out.println(name);
+			for (String url : urls) {
 				boolean assigned = false;
 				while (!assigned) {
 					for (int j = 0; j < THREAD_NUM; j++) {
 						if (workers[j].isReady()) {
-							workers[j].setName(name);
+							workers[j].setName(url.replace("https://github.com/",""));
 							workers[j].setReady(false);
 							assigned = true;
 							break;
@@ -68,11 +72,11 @@ public class GitHubRepositoryDownloaderByPorjectName {
 	}
 	
 	synchronized static boolean getDone() {
-		return GitHubRepositoryDownloaderByPorjectName.done;
+		return GitHubRepoBareDownloader.done;
 	}
 	
 	synchronized static void setDone(boolean done) {
-		GitHubRepositoryDownloaderByPorjectName.done = done;
+		GitHubRepoBareDownloader.done = done;
 	}
 
 	private static class DownloadWorker implements Runnable {
@@ -104,15 +108,19 @@ public class GitHubRepositoryDownloaderByPorjectName {
 				String projectName = getName();
 				String url = "https://github.com/" + projectName + ".git";
 				File gitDir = new File(OUTPUT_REPOS_PATH + "/" + projectName + "/.git");
-				String[] args = { url, gitDir.getAbsolutePath() };
-				try {
-					RepositoryCloner.clone(args);
-				} catch (Throwable t) {
-					System.err.println(t);
-					System.out.println("Error cloning " + url);
-					setReady(true);
+				if (!gitDir.exists()) {
+					String[] args = { url, gitDir.getAbsolutePath() };
+					try {
+						System.err.println("worker " + getId() + " is cloning " + projectName);
+						RepositoryCloner.clone(args);
+						System.err.println("worker " + getId() + " finished cloning " + projectName);
+					} catch (Throwable t) {
+						System.err.println(t);
+						System.err.println("Error cloning " + url);
+					}
+				} else {
+					System.err.println("repo " + projectName + "already exists");
 				}
-				
 				setReady(true);
 			}
 		}
@@ -124,13 +132,13 @@ public class GitHubRepositoryDownloaderByPorjectName {
 		synchronized void setReady(boolean ready) {
 			this.ready = ready;
 		}
-
-		synchronized int getId() {
-			return this.id;
-		}
 		
 		synchronized void setId(int id) {
 			this.id = id;
+		}
+		
+		synchronized int getId() {
+			return this.id;
 		}
 
 		synchronized String getName() {

@@ -94,6 +94,8 @@ public class SeqRepoImporter {
 		// exceptions
 		if (DefaultProperties.exceptions == null)
 			DefaultProperties.exceptions = new HashMap<String, String>();
+		if (DefaultProperties.processedProjects == null)
+			DefaultProperties.processedProjects = new HashSet<String>();
 
 		int counter = 0;
 		long repoKey = 1;
@@ -129,7 +131,7 @@ public class SeqRepoImporter {
 										break;
 									}
 								}
-								Thread.sleep(100);
+//								Thread.sleep(100);
 							}
 							
 							System.err.println("Assigned the " + (++counter) + "th project: " + repo.name 
@@ -162,6 +164,14 @@ public class SeqRepoImporter {
 	synchronized static void setDone(boolean done) {
 		SeqRepoImporter.done = done;
 	}
+	
+	synchronized static void updateExceptions(String key, String value) {
+		DefaultProperties.exceptions.put(key, value);
+	}
+	
+//	synchronized static void updateProcessedProjects(String projectName) {
+//		DefaultProperties.processedProjects.add(projectName);
+//	}
 
 	private static void getProcessedProjects() throws IOException {
 		FileStatus[] files = fileSystem.listStatus(new Path(base + "/project"));
@@ -337,6 +347,7 @@ public class SeqRepoImporter {
 			}
 			closeWriters();
 		}
+		
 
 		private synchronized Project storeRepository(Project project, final int i)
 				throws LargeObjectException, MissingObjectException, IncorrectObjectTypeException {
@@ -348,25 +359,32 @@ public class SeqRepoImporter {
 
 			if (isFiltered(project))
 				return null;
-			
+
 			// If repository is already cloned delete then re-clone, this should only happen during recover
-			FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitRootPath + "/" + project.getName());
-			filecheck.run();
+//			FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitRootPath + "/" + project.getName());
+//			filecheck.run();
 			
 			// clone repository
-			Git result = null;
-			try {
-				String url = repo.getUrl();
-				File localGitDir = new File(gitDir.getAbsolutePath());
-				result = Git.cloneRepository().setURI(url).setBare(true).setDirectory(localGitDir).call();
-			} catch (Throwable t) {
-				System.err.println("Error cloning " + repo.getUrl());
-				DefaultProperties.exceptions.put(name, "err cloning");
+			if (!gitDir.exists()) {
+//				Git result = null;
+//				try {
+//					String url = repo.getUrl();
+//					File localGitDir = new File(gitDir.getAbsolutePath());
+//					result = Git.cloneRepository().setURI(url).setBare(true).setDirectory(localGitDir).call();
+//				} catch (Throwable t) {
+//					System.err.println("Error cloning " + repo.getUrl());
+//					updateExceptions(name, "err cloning");
+//					return null;
+//				} finally {
+//					if (result != null && result.getRepository() != null) {
+//						result.getRepository().close();
+//					}
+//				}
+				System.err.println(gitDir.getName() + " not exist");
 				return null;
-			} finally {
-				if (result != null && result.getRepository() != null) {
-					result.getRepository().close();
-				}
+			} else {
+//				updateProcessedProjects(name);
+				System.err.println(gitDir.getName() + " already exists");
 			}
 			
 			if (debug)
@@ -379,7 +397,7 @@ public class SeqRepoImporter {
 				ByteArrayFile f = new ByteArrayFile(gitDir.getAbsolutePath());
 				BytesWritable bw = new BytesWritable(SerializationUtils.serialize(f));
 				if (!f.isBuilt() || bw.getLength() > MAX_REPO_SIZE) {
-					DefaultProperties.exceptions.put(name, "pack file size: " + bw.getLength() + " exceeding the max size: " + MAX_REPO_SIZE);
+					updateExceptions(name, "pack file size: " + bw.getLength() + " exceeding the max size: " + MAX_REPO_SIZE);
 					if (debug)
 						System.err.println(Thread.currentThread().getName() + " id: " + Thread.currentThread().getId() + " the pack file size of project: " + name + " exceeds the " + MAX_REPO_SIZE + " byte");
 					return null;
@@ -449,7 +467,7 @@ public class SeqRepoImporter {
 //				}
 			}
 			
-			DefaultProperties.exceptions.put(name, "unknow");
+			updateExceptions(name, "unknow");
 			return null;
 		}
 
@@ -466,7 +484,7 @@ public class SeqRepoImporter {
 			if (!STORE_ASTS) {
 				long curSize = project.getSize() * 1000L;
 				if (curSize > MAX_REPO_SIZE) {
-					DefaultProperties.exceptions.put(project.getName(), "repo size: " + curSize + " exceeding the max size: " + MAX_REPO_SIZE);
+					updateExceptions(project.getName(), "repo size: " + curSize + " exceeding the max size: " + MAX_REPO_SIZE);
 					return true;
 				}
 			}
