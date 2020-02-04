@@ -23,9 +23,6 @@ import java.util.concurrent.TimeoutException;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.diff.DiffEntry;
-import org.eclipse.jgit.diff.RenameDetector;
-import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.Ref;
@@ -38,7 +35,6 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.refactoringminer.api.GitService;
 import org.refactoringminer.api.Refactoring;
-import org.refactoringminer.api.RefactoringType;
 import org.refactoringminer.rm1.GitHistoryRefactoringMinerImpl;
 import org.refactoringminer.util.GitServiceImpl;
 
@@ -58,8 +54,8 @@ public class BoaRefactoringDetectAll {
 	private static List<String> exceptions = new ArrayList<String>();
 
 	public static void main(String[] args) {
-//		args = new String[] { "/Users/hyj/test6/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo",
-//				"/Users/hyj/test6/output", "1", "2" };
+		args = new String[] { "/Users/hyj/test6/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo",
+				"/Users/hyj/test6/output", "1", "2" };
 		if (args.length < 4) {
 			System.err.println("args: NAMES_PATH, REPOS_PATH, OUTPUT_PATH, TIME_OUT");
 		} else {
@@ -118,6 +114,8 @@ public class BoaRefactoringDetectAll {
 										sb.append(",").append("\n");
 									}
 									commitJSON(sb, name, r.getName(), temp);
+									if (r.getName().equals("6e3ac2a275b225f669d6586316deea7f4da9c3ea"))
+										System.out.println(sb);
 								}
 
 							} catch (OutOfMemoryError e) {
