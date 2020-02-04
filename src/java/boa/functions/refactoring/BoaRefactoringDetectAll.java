@@ -54,8 +54,8 @@ public class BoaRefactoringDetectAll {
 	private static List<String> exceptions = new ArrayList<String>();
 
 	public static void main(String[] args) {
-		args = new String[] { "/Users/hyj/test6/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo",
-				"/Users/hyj/test6/output", "1", "2" };
+//		args = new String[] { "/Users/hyj/test6/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo",
+//				"/Users/hyj/test6/output", "1", "2" };
 		if (args.length < 4) {
 			System.err.println("args: NAMES_PATH, REPOS_PATH, OUTPUT_PATH, TIME_OUT");
 		} else {
@@ -92,8 +92,7 @@ public class BoaRefactoringDetectAll {
 						revWalk.sort(RevSort.REVERSE, true);
 
 						Iterator<RevCommit> i = revWalk.iterator();
-						
-						
+
 						int commitCount = 0;
 						while (i.hasNext()) {
 							RevCommit r = i.next();
@@ -114,8 +113,6 @@ public class BoaRefactoringDetectAll {
 										sb.append(",").append("\n");
 									}
 									commitJSON(sb, name, r.getName(), temp);
-									if (r.getName().equals("6e3ac2a275b225f669d6586316deea7f4da9c3ea"))
-										System.out.println(sb);
 								}
 
 							} catch (OutOfMemoryError e) {
