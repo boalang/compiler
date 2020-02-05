@@ -100,7 +100,7 @@ public class TokenList {
 					System.out.println(mc.getNumberOfRemainingLimit());
 					if (this.lastUsedToken != token.getId()) {
 						this.lastUsedToken = token.getId();
-						System.out.println("now using token: " + token.getId());
+						System.out.println("now using token: " + token.getUserName());
 					}
 					return token;
 				}
@@ -129,17 +129,23 @@ public class TokenList {
 		MetadataCacher mc = null;
 		while (true) {
 			for (Token token : tokens) {
-				System.out.print("Trying token: " + token.getUserName() + " ");
+				System.out.println("Trying token: " + token.getUserName() + " ");
 				mc = new MetadataCacher(url, token.getUserName(), token.getToken());
-				if (mc.authenticate()) {
-					if (mc.getNumberOfRemainingLimit() < minRateLimit)
-						continue;
+				mc.authenticate();
+				if (mc.isAuthenticated()) {
+					int limitRemaining = mc.getNumberOfRemainingLimit();
+					if (limitRemaining < minRateLimit) {
+						System.out.println("Authenticated but have " + limitRemaining + " than min rate limit of " + minRateLimit);
+						continue;	
+					}
 					if (this.lastUsedToken != token.getId()) {
 						this.lastUsedToken = token.getId();
-						System.out.println("now using token: " + token.getId());
+						System.out.println("Now using token: " + token.getUserName() + " ");
 					}
 					System.out.println(mc.getNumberOfRemainingLimit());
 					return token;
+				} else {
+					System.err.println("Can't authenticate, response code:" + mc.getResponseCode());
 				}
 			}
 			try {

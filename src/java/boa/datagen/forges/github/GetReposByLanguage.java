@@ -94,11 +94,9 @@ public class GetReposByLanguage {
 
 //			String time = "2018-12-21T01:01:01Z";
 //			String time = year + "-" + month + "-" + day + "T23:59:59Z";
-			//:" + language + "+stars:>=" + stars
-			//+ "+pushed:<=" + time + "&sort=updated&order=desc&per_page=100"
 			Gson parser = new Gson();
 			
-			Token tokenGetAPI = this.tokens.getNextAuthenticTokenM("https://api.github.com/repositories");
+			Token tokenGetAPI = this.tokens.getNextAuthenticTokenM("https://api.github.com");
 			Token tokenSearch = this.tokens.getNextAuthenticTokenM("https://api.github.com/search/repositories?q=language");
 			MetadataCacher mcGetAPI = new MetadataCacher("https://api.github.com/repositories", tokenGetAPI.getUserName(), tokenGetAPI.getToken());
 			mcGetAPI.authenticate();
@@ -108,11 +106,13 @@ public class GetReposByLanguage {
 				System.out.println(searchURL);
 				MetadataCacher mcSearch = new MetadataCacher(searchURL, tokenSearch.getUserName(), tokenSearch.getToken());
 				mcSearch.authenticate();
-				while (mcSearch.getNumberOfRemainingLimit() <= 0) {
-					System.out.println("user: " + tokenSearch.getUserName() + " limit: " + mcSearch.getNumberOfRemainingLimit());
-					tokenSearch = this.tokens.getNextAuthenticToken(searchURL);
-					mcSearch = new MetadataCacher(searchURL, tokenSearch.getUserName(), tokenSearch.getToken());
-				}
+				// We don't need to check for remaining limit for search because 30 requests/1 min is way faster than we could process, could be
+				// useful if in the future we can find a way to get 100 repos in 2 secs.
+//				while (mcSearch.getNumberOfRemainingLimit() <= 0) {
+//					System.out.println("user: " + tokenSearch.getUserName() + " limit: " + mcSearch.getNumberOfRemainingLimit());
+//					tokenSearch = this.tokens.getNextAuthenticToken(searchURL);
+//					mcSearch = new MetadataCacher(searchURL, tokenSearch.getUserName(), tokenSearch.getToken());
+//				}
 				
 				mcSearch.getResponseJson();
 				String content = mcSearch.getContent();
@@ -126,7 +126,7 @@ public class GetReposByLanguage {
 					System.out.println("Get API rate limit remaining: " + getLimit);
 					
 					if (getLimit < items.size() + 1 || !mcGetAPI.isAuthenticated()) {
-						tokenGetAPI = this.tokens.getNextAuthenticToken("https://api.github.com/repositories", items.size() + 1);
+						tokenGetAPI = this.tokens.getNextAuthenticToken("https://api.github.com/repositories", items.size() + 2); // 1 for getting authentic token, 1 for authenticating language link
 						mcGetAPI = new MetadataCacher(mcGetAPI.getUrl(), tokenGetAPI.getUserName(), tokenGetAPI.getToken());
 					}
 					for (int j = 0; j < items.size(); j++) {
@@ -134,7 +134,7 @@ public class GetReposByLanguage {
 						// check if repository is already saved
 						int repID = item.get("id").getAsInt();
 						if (!processedRepID.contains(repID)) {
-							addLanguageToRepo(item, parser, mcGetAPI);
+							mcGetAPI = addLanguageToRepo(item, parser, mcGetAPI);
 
 							this.addRepo(item);
 							processedRepID.add(repID);
@@ -199,7 +199,8 @@ public class GetReposByLanguage {
 			}
 		}
 
-		private void addLanguageToRepo(JsonObject repo, Gson parser, MetadataCacher mc) {
+		// Returning metadataCacher so that we don't have to authenticate again to get remaining limit
+		private MetadataCacher addLanguageToRepo(JsonObject repo, Gson parser, MetadataCacher mc) {
 			String langurl = "https://api.github.com/repos/" + repo.get("full_name").getAsString() + "/languages";
 			mc = new MetadataCacher(langurl, mc.getUsername(), mc.getPassword());
 			if (mc.authenticate()) {
@@ -208,9 +209,10 @@ public class GetReposByLanguage {
 				JsonObject languages = parser.fromJson(pageContent, JsonElement.class).getAsJsonObject();
 				repo.add("language_list", languages);
 			} else {
-				final int responsecode = mc.getResponseCode(); // need to check for authentication again?
+				final int responsecode = mc.getResponseCode();
 				System.err.println("authentication error " + responsecode);
 			}
+			return mc;
 		}
 
 	}
