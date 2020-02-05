@@ -366,22 +366,22 @@ public class SeqRepoImporter {
 			
 			// clone repository
 			if (!gitDir.exists()) {
-//				Git result = null;
-//				try {
-//					String url = repo.getUrl();
-//					File localGitDir = new File(gitDir.getAbsolutePath());
-//					result = Git.cloneRepository().setURI(url).setBare(true).setDirectory(localGitDir).call();
-//				} catch (Throwable t) {
-//					System.err.println("Error cloning " + repo.getUrl());
-//					updateExceptions(name, "err cloning");
-//					return null;
-//				} finally {
-//					if (result != null && result.getRepository() != null) {
-//						result.getRepository().close();
-//					}
-//				}
+				Git result = null;
+				try {
+					String url = repo.getUrl();
+					File localGitDir = new File(gitDir.getAbsolutePath());
+					result = Git.cloneRepository().setURI(url).setBare(true).setDirectory(localGitDir).call();
+				} catch (Throwable t) {
+					System.err.println("Error cloning " + repo.getUrl());
+					updateExceptions(name, "err cloning");
+					return null;
+				} finally {
+					if (result != null && result.getRepository() != null) {
+						result.getRepository().close();
+					}
+				}
 				System.err.println(gitDir.getName() + " not exist");
-				return null;
+//				return null;
 			} else {
 //				updateProcessedProjects(name);
 				System.err.println(gitDir.getName() + " already exists");
