@@ -48,25 +48,21 @@ public class BoaRefactoringIntrinsics {
 		return new String[0];
 	}
 
+	public static String[] DETECTED_TYPES = new String[] {
+			// package level
+			"Change Package",
+			// class level
+			"Move Class", "Rename Class", "Extract Superclass", "Extract Interface",
+			// method level
+			"Rename Method", "Inline Method", "Extract Method", 
+			"Extract And Move Method",
+			"Move Method", "Pull Up Method", "Push Down Method",
+			// field level
+			"Move Attribute", "Pull Up Attribute", "Push Down Attribute" };
+
 	@FunctionSpec(name = "getconsideredtypes", returnType = "set of string")
 	public static HashSet<String> getConsideredTypes() {
-		String[] types = new String[] { 
-				"Extract Method", 
-				"Inline Method", 
-				"Rename Method", 
-				"Move Method", 
-				"Move Attribute", 
-				"Pull Up Method",
-				"Pull Up Attribute",
-				"Push Down Method",
-				"Push Down Attribute", 
-				"Extract Superclass", 
-				"Extract Interface", 
-				"Move Class", 
-				"Rename Class",
-				"Change Package", 
-				"Extract And Move Method" };
-		HashSet<String> typeSet = new HashSet<String>(Arrays.asList(types));
+		HashSet<String> typeSet = new HashSet<String>(Arrays.asList(DETECTED_TYPES));
 		return typeSet;
 	}
 
@@ -348,7 +344,7 @@ public class BoaRefactoringIntrinsics {
 		return !(Math.max(adds, removes) == javaFileCount || javaFileCount == 0 || r.getParentsCount() == 0);
 	}
 
-	private static boolean isJavaFile(String path) {
+	public static boolean isJavaFile(String path) {
 		return path.endsWith(".java");
 	}
 

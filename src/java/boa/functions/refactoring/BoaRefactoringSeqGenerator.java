@@ -33,7 +33,8 @@ public class BoaRefactoringSeqGenerator {
 
 	public static void main(String[] args) throws IOException {
 //		args = new String[] { "/Users/hyj/test6", "/Users/hyj/test6" };
-		args = new String[] { "/Users/hyj/git/BoaData/DataSet/aa", "/Users/hyj/git/BoaData/DataSet/aa" };
+//		args = new String[] { "/Users/hyj/git/BoaData/DataSet/aa", "/Users/hyj/git/BoaData/DataSet/aa" };
+		args = new String[] { "/Users/hyj/hpc_repo_json/detect/output", "/Users/hyj/hpc_repo_json/detect/output" };
 		if (args.length < 2) {
 			System.err.println("args: INPUT_PATH, OUTPUT_PATH");
 		} else {

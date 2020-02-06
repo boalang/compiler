@@ -52,6 +52,7 @@ public class BoaRefactoringDetectAll {
 	private static ExecutorService executor;
 	private static List<String> processedProjects = new ArrayList<String>();
 	private static List<String> exceptions = new ArrayList<String>();
+	private static int TIME_OUT_COUNT = 0;
 
 	public static void main(String[] args) {
 //		args = new String[] { "/Users/hyj/test6/names.txt", "/Users/hyj/git/BoaData/DataGenInputRepo",
@@ -75,10 +76,13 @@ public class BoaRefactoringDetectAll {
 			startJSON(sb);
 			for (String name : projectNames) {
 				projectCount++;
+				TIME_OUT_COUNT = 0;
+				boolean ignore = false;
 				System.err.println(projectCount + "th project " + name + " start");
-
+				
+				// one project start
+				StringBuilder psb = new StringBuilder();
 				File gitDir = new File(REPOS_PATH + "/" + name + "/.git");
-
 				if (gitDir.exists()) {
 
 					try {
@@ -95,6 +99,10 @@ public class BoaRefactoringDetectAll {
 
 						int commitCount = 0;
 						while (i.hasNext()) {
+							if (TIME_OUT_COUNT > 10) {
+								ignore = true;
+								break;
+							}
 							RevCommit r = i.next();
 							commitCount++;
 							System.out.println(name + " " + commitCount + "th Commit " + r.getName() + " started");
@@ -110,9 +118,9 @@ public class BoaRefactoringDetectAll {
 											name + " " + commitCount + "th Commit " + r.getName() + " detected "
 													+ temp.size() + " with time secs: " + (after - before) / 1000.0);
 									if(totolRefCommit > 1) {
-										sb.append(",").append("\n");
+										psb.append(",").append("\n");
 									}
-									commitJSON(sb, name, r.getName(), temp);
+									commitJSON(psb, name, r.getName(), temp);
 								}
 
 							} catch (OutOfMemoryError e) {
@@ -133,10 +141,16 @@ public class BoaRefactoringDetectAll {
 						System.gc();
 					}
 					System.err.println(projectCount + "th project " + name + " end");
-					processedProjects.add(name);
+					if (!ignore) {
+						processedProjects.add(name);
+						sb.append(psb);
+					} else {
+						System.err.println(projectCount + "th project " + name + " is ignored");
+					}
 				} else {
 					System.err.println(projectCount + "th project " + name + " not exist! Continue");
 				}
+				// one project end
 			}
 			endJSON(sb);
 			System.err.println("Write start");
@@ -158,6 +172,7 @@ public class BoaRefactoringDetectAll {
 				return detectRefactorings(repo, r);
 			} catch (Throwable e) {
 				System.err.println(projectName + " " + r.getName() + " Detect Throwable");
+				TIME_OUT_COUNT++;
 				exceptions.add(projectName + " " + r.getName());
 				return new ArrayList<Refactoring>();
 			}
@@ -168,12 +183,15 @@ public class BoaRefactoringDetectAll {
 			return results;
 		} catch (TimeoutException e) {
 			System.err.println(projectName + " " + r.getName() + " TimeoutException " + timeout / 1000.0 + " sec");
+			TIME_OUT_COUNT++;
 			exceptions.add(projectName + " " + r.getName());
 		} catch (InterruptedException e) {
 			System.err.println(projectName + " " + r.getName() + " InterruptedException");
+			TIME_OUT_COUNT++;
 			exceptions.add(projectName + " " + r.getName());
 		} catch (ExecutionException e) {
 			System.err.println(projectName + " " + r.getName() + " ExecutionException");
+			TIME_OUT_COUNT++;
 			exceptions.add(projectName + " " + r.getName());
 		} finally {
 			executor.shutdown();
