@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Stack;
+import java.util.TreeMap;
 
 import boa.functions.FunctionSpec;
 import boa.types.Code.CodeRefactoring;
@@ -16,6 +18,7 @@ import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 import boa.types.Toplevel.Project;
+import javafx.scene.control.Tab;
 
 import static boa.functions.refactoring.BoaRefactoringIntrinsics.*;
 import static boa.functions.BoaAstIntrinsics.*;
@@ -282,5 +285,123 @@ public class BoaRefactoringPredictionIntrinsics {
 		}
 		return fileLinkedLists;
 	}
+	
+	private static HashMap<Integer, Rev> visited = new HashMap<Integer, Rev>();
+	private static List<FileChangeLinkedList> lists = new ArrayList<FileChangeLinkedList>();
+	private static HashMap<String, Integer> fileObjectIdToListIdx = new HashMap<String, Integer>();
+	private static HashMap<Integer, List<Integer>> links = new HashMap<Integer, List<Integer>>();
+	
+	@FunctionSpec(name = "test1", formalParameters = { "Project" })
+	public static void test1(Project p) throws Exception {
+		CodeRepository cr = p.getCodeRepositories(0);
+		int revCount = getRevisionsCount(cr);
+		System.out.println(revCount);
+		Rev root = getRev(cr, revCount - 1);
+		Stack<Rev> stack = new Stack<Rev>();
+		stack.push(root);
+		int count = 0;
+		while (!stack.isEmpty()) {
+			Rev r = stack.pop();
+			if (visited.containsKey(r.revIdx))
+				continue;
+			visited.put(r.revIdx, r);
+//			for (int i = r.rev.getParentsCount() - 1; i >= 0; i--)
+			if (r.rev.getParentsCount() > 0)
+				stack.push(getRev(cr, r.rev.getParents(0)));
+			count++;
+			
+			// need link
+			HashMap<Integer, ChangedFile> files = getFilesFrom(r.rev);
+			if (links.containsKey(r.revIdx)) {
+				for (int listIdx : links.remove(r.revIdx)) {
+					FileChangeLinkedList list = lists.get(listIdx);
+					if (list.getPrevFileIdx() == -1)
+						System.out.println("err 1");
+					System.out.println(r.revIdx + " file size: " + files.size());
+					System.out.println(list.id);
+					ChangedFile cf = list.revIdxToNode.firstEntry().getValue().cf;
+					System.out.println(cf.getName() + " " + cf.getPreviousVersions(0) + " " + cf.getPreviousIndices(0) + " " + cf.getChange());
+					System.out.println(list.getPrevFileIdx());
+					list.add(files.remove(list.getPrevFileIdx()), r.revIdx);
+				}
+			}
+			
+			// update files
+			for (ChangedFile cf : files.values()) {
+				if (isJavaFile(cf.getName())) {
+					if (fileObjectIdToListIdx.containsKey(cf.getObjectId()))
+						System.out.println("err");
+					lists.add(new FileChangeLinkedList(cf, r.revIdx, lists.size()));
+				}
+			}
+		}
+		System.out.println(count);
+		System.out.println(cr.getBranchesList());
+		System.out.println(cr.getBranchNamesList());
+//		for ()
+		System.out.println(links.size());
+	}
+	
+	private static HashMap<Integer, ChangedFile> getFilesFrom(Revision rev) {
+		HashMap<Integer, ChangedFile> map = new HashMap<Integer, ChangedFile>();
+		for (int i = 0; i < rev.getFilesCount(); i++)
+			map.put(i, rev.getFiles(i));
+		return map;
+	}
 
+	public static Rev getRev(CodeRepository cr, int idx) {
+		if (visited.containsKey(idx))
+			return visited.get(idx);
+		return new Rev(idx, getRevision(cr, idx));
+	}
+	
+	public static class Rev {
+		int revIdx;
+		Revision rev;
+		public Rev(int revIdx, Revision rev) {
+			this.revIdx = revIdx;
+			this.rev = rev;
+		}
+	}
+	
+	public static class FileChangeLinkedList {
+		public int id;
+		public HashSet<String> fileObjectIds = new HashSet<String>();
+		public TreeMap<Integer, Node> revIdxToNode = new TreeMap<Integer, Node>();
+		public int prevRevIdx = -1;
+		public int prevFileIdx = -1;
+		
+		public FileChangeLinkedList(ChangedFile cf, int revIdx, int listIdx) {
+			this.id = listIdx;
+			add(cf, revIdx);
+		}
+		
+		public void add(ChangedFile cf, int revIdx) {
+			fileObjectIds.add(cf.getObjectId());
+			revIdxToNode.put(revIdx, new Node(cf));
+			if (cf.getPreviousVersionsCount() != 0 && cf.getPreviousIndicesCount() != 0) {
+				if (cf.getChange() == ChangeKind.ADDED)
+					System.out.println("err!!!!!!!!");
+				prevRevIdx = cf.getPreviousVersions(0);
+				prevFileIdx = cf.getPreviousIndices(0);
+				if (!links.containsKey(prevRevIdx))
+					links.put(prevRevIdx, new ArrayList<Integer>());
+				links.get(prevRevIdx).add(this.id);
+			} else {
+				prevRevIdx = -1;
+				prevFileIdx = -1;
+			}
+		}
+		
+		public int getPrevFileIdx() {
+			return this.prevFileIdx;
+		}
+	}
+	
+	public static class Node {
+		public ChangedFile cf;
+		public Node(ChangedFile cf) {
+			this.cf = cf;
+		}
+	}
 }

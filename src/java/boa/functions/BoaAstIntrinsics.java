@@ -219,6 +219,10 @@ public class BoaAstIntrinsics {
 
 	public static String getContent(ChangedFile f) {
 		if (f.hasRepoKey() && f.hasObjectId()) {
+			if (f.getObjectId().startsWith("BOA_DELETED_FILE")) {
+				System.err.println(" [BOA_DELETED_FILE] ");
+				return null;
+			}
 			if (f.getRepoKey() != currentRepoKey || currentStoredRepository == null) {
 				currentRepoKey = f.getRepoKey();
 				BytesWritable value = getValueFromRepoMap(f);

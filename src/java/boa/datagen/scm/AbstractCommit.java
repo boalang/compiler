@@ -74,7 +74,7 @@ public abstract class AbstractCommit {
 	protected AbstractConnector connector;
 	protected String projectName;
 	protected long repoKey;
-	protected Map<String, FileLoc> objectIdToRevisionIdx;
+	protected Map<String, FileLoc> objectIdToFileLoc;
 	protected int commitIdx;
 
 	protected AbstractCommit(AbstractConnector cnn) {
@@ -85,7 +85,7 @@ public abstract class AbstractCommit {
 	protected Map<String, Integer> fileNameIndices = new HashMap<String, Integer>();
 	protected List<ChangedFile.Builder> changedFiles = new ArrayList<ChangedFile.Builder>();
 
-	protected ChangedFile.Builder getChangeFile(String path, ChangeKind changeKind, ObjectId oid) {
+	protected ChangedFile.Builder getChangeFile(String path, ChangeKind changeKind, String oid) {
 		ChangedFile.Builder cfb = null;
 		Integer index = fileNameIndices.get(path);
 		if (index == null) {
@@ -96,10 +96,10 @@ public abstract class AbstractCommit {
 			cfb.setKey(0);
 			cfb.setAst(false);
 			if (!STORE_ASTS) {
-				cfb.setObjectId(oid.getName());
+				cfb.setObjectId(oid);
 				cfb.setRepoKey(repoKey);
 			}
-			objectIdToRevisionIdx.put(oid.getName(), new FileLoc(commitIdx, changedFiles.size()));
+			objectIdToFileLoc.put(oid, new FileLoc(commitIdx, changedFiles.size()));
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
 		} else {
