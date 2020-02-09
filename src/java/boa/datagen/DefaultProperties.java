@@ -81,6 +81,8 @@ public class DefaultProperties {
 	public static HashMap<String, String> exceptions = null;
 	// processed repos names
 	public static HashSet<String> processedProjects = null;
+	// repos names
+	public static HashSet<String> projects = null;
 	
 	@SuppressWarnings("unused")
 	private static String getRoot() {

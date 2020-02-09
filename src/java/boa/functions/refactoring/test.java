@@ -27,10 +27,12 @@ public class test {
 //			}
 //		}
 		
+		int count = 0;
 		String input = "/Users/hyj/hpc_repo_json/detect/output";
 		HashSet<Integer> nums = new HashSet<Integer>();
 		for (int i = 0; i < 300; i++)
 			nums.add(i);
+		System.out.println(nums.size());
 		File file = new File(input);
 		for (File f : file.listFiles()) {
 			if (f.getName().startsWith("processed")) {
@@ -41,8 +43,10 @@ public class test {
 			if (f.getName().startsWith("excepted"))
 				getLines(f, exceptedCommits);
 		}
-		for (Integer n : nums)
-			System.out.println(n);
+		System.out.println(processedProjects.size());
+//		for (Integer n : nums)
+//			System.out.println(n);
+		BoaRefactoringDetectAll.writeOutputs(processedProjects, "/Users/hyj/hpc_repo_json/detect/processed_projects.txt");
 	}
 	
 	private static List<String> processedProjects = new ArrayList<String>();

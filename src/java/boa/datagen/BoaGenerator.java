@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -63,6 +64,9 @@ public class BoaGenerator {
 			return;
 		}
 		BoaGenerator.handleCmdOptions(cl, options, args);
+		
+		String projectsPath = "/work/LAS/hridesh-lab/yijia/sutton_dataset/projects.txt";
+		DefaultProperties.projects = getProjects(new File(projectsPath));
 
 		/*
 		 * 1. if user provides local json files 
@@ -104,6 +108,25 @@ public class BoaGenerator {
 		if (DefaultProperties.processedProjects.size() != 0) {
 			writeProcessedProjects(base + "/processed_"+System.currentTimeMillis()+".txt");
 		}
+	}
+	
+	public static HashSet<String> getProjects(File file) {
+		if (!file.exists())
+			return new HashSet<String>();
+		HashSet<String> set = new HashSet<String>();
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			String line = reader.readLine();
+			while (line != null) {
+				set.add(line);
+				line = reader.readLine();
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return set;
 	}
 	
 	public static void writeTo(String path) throws IOException {

@@ -17,6 +17,7 @@ import static boa.functions.BoaMetricIntrinsics.getMetrics;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -379,26 +380,25 @@ public class BoaRefactoringIntrinsics {
 			noc.add(m[4]);
 			cbo.add(m[5]);
 		}
-		Stats wmcStats = Stats.of(wmc);
-		Stats rfcStats = Stats.of(rfc);
-		Stats lcomStats = Stats.of(lcom);
-		Stats ditStats = Stats.of(dit);
-		Stats nocStats = Stats.of(noc);
-		Stats cboStats = Stats.of(cbo);
 		// min, max, mean, median, std
-		results[0] = new double[] { wmcStats.min(), wmcStats.max(), wmcStats.mean(), Quantiles.median().compute(wmc),
-				wmcStats.populationStandardDeviation() };
-		results[1] = new double[] { rfcStats.min(), rfcStats.max(), rfcStats.mean(), Quantiles.median().compute(rfc),
-				rfcStats.populationStandardDeviation() };
-		results[2] = new double[] { lcomStats.min(), lcomStats.max(), lcomStats.mean(),
-				Quantiles.median().compute(lcom), lcomStats.populationStandardDeviation() };
-		results[3] = new double[] { ditStats.min(), ditStats.max(), ditStats.mean(), Quantiles.median().compute(dit),
-				ditStats.populationStandardDeviation() };
-		results[4] = new double[] { nocStats.min(), nocStats.max(), nocStats.mean(), Quantiles.median().compute(noc),
-				nocStats.populationStandardDeviation() };
-		results[5] = new double[] { cboStats.min(), cboStats.max(), cboStats.mean(), Quantiles.median().compute(cbo),
-				cboStats.populationStandardDeviation() };
+		results[0] = getStatisitcs(wmc);
+		results[1] = getStatisitcs(rfc);
+		results[2] = getStatisitcs(lcom);
+		results[3] = getStatisitcs(dit);
+		results[4] = getStatisitcs(noc);
+		results[5] = getStatisitcs(cbo);
 		return results;
+	}
+	
+
+	/**
+	 * @param nums
+	 * @return min, max, mean, median, std
+	 */
+	public static double[] getStatisitcs(Collection<? extends Number> nums) {
+		Stats stats = Stats.of(nums);
+		return new double[] { stats.min(), stats.max(), stats.mean(), Quantiles.median().compute(nums),
+				stats.populationStandardDeviation() };
 	}
 
 	private static String getPackageNameFromFQN(String fqn) {
