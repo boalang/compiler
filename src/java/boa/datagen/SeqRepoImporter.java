@@ -118,8 +118,8 @@ public class SeqRepoImporter {
 						JsonObject rp = repoArray.get(i).getAsJsonObject();
 						RepoMetadata repo = new RepoMetadata(rp);
 						
-						if (!DefaultProperties.projects.contains(repo.name))
-							continue;
+//						if (!DefaultProperties.projects.contains(repo.name))
+//							continue;
 						
 						if (repo.id != null && repo.name != null && !processedProjectIds.contains(repo.id)) {
 							Project protobufRepo = repo.toBoaMetaDataProtobuf();
