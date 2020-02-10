@@ -289,7 +289,7 @@ public class BoaRefactoringPredictionIntrinsics {
 	
 	private static HashMap<Integer, Rev> visited = new HashMap<Integer, Rev>();
 	private static List<FileChangeLinkedList> lists = new ArrayList<FileChangeLinkedList>();
-	private static HashMap<String, Integer> fileObjectIdToListIdx = new HashMap<String, Integer>();
+	private static HashMap<String, Integer> fileLocIdToListIdx = new HashMap<String, Integer>();
 	// rev idx to file idx to list idx
 	private static HashMap<Integer, HashMap<Integer, List<Integer>>> links = new HashMap<Integer, HashMap<Integer, List<Integer>>>();
 	
@@ -335,42 +335,43 @@ public class BoaRefactoringPredictionIntrinsics {
 						list = lists.get(listIdxs.get(0));
 					}
 					if (list != null) {
+						Node node = new Node(cf, r.revIdx, fileIdx);
 						if (list.getPrevFileIdx() != fileIdx && list.getPrevRevIdx() != r.revIdx)
-							System.out.println("err 1");
-						list.add(cf, r.revIdx);
+							System.err.println("err 1");
+						list.add(node);
 					}
 				}
 			}
 			
 			// update files
-			for (ChangedFile cf : files.values()) {
+			for (Entry<Integer, ChangedFile> entry : files.entrySet()) {
+				ChangedFile cf = entry.getValue();
 				if (isJavaFile(cf.getName())) {
-					if (fileObjectIdToListIdx.containsKey(cf.getObjectId())) {
-						System.out.println("already visited "
+					Node node = new Node(cf, r.revIdx, entry.getKey());
+					if (fileLocIdToListIdx.containsKey(node.getLocId())) {
+						System.err.println("already visited "
 								+ " " + r.revIdx 
 								+ " " + r.rev.getId() 
 								+ " " + cf.getChange() 
-								+ " " + cf.getName() );
-						
-						
+								+ " " + cf.getName());
 					} else {
 						int listId = lists.size();
-						lists.add(new FileChangeLinkedList(cf, r.revIdx, listId));
-						fileObjectIdToListIdx.put(cf.getObjectId(), listId);
+						lists.add(new FileChangeLinkedList(node, listId));
+						
 					}
 				}
 			}
 		}
-		System.out.println(count);
-		System.out.println(cr.getBranchesList());
-		System.out.println(cr.getBranchNamesList());
+		System.out.println("Total Revs: " + count);
+//		System.out.println(cr.getBranchesList());
+//		System.out.println(cr.getBranchNamesList());
 		
 		for (int idx : links.keySet())
 			System.out.println(visited.containsKey(idx));
 		
-		System.out.println(links.size());
-		System.out.println(lists.size());
-		System.out.println(getSnapshot(cr, 1604, true).length);
+		System.out.println("links count: " + links.size());
+		System.out.println("lists count: " + lists.size());
+		System.out.println("last snapshot size: " + getSnapshot(cr, 1604, true).length);
 	}
 
 	private static HashMap<Integer, ChangedFile> getFilesFrom(Revision rev) {
@@ -397,44 +398,61 @@ public class BoaRefactoringPredictionIntrinsics {
 	
 	public static class FileChangeLinkedList {
 		public int id;
-		public HashSet<String> fileObjectIds = new HashSet<String>();
-		public TreeMap<Integer, ChangedFile> revIdxToNode = new TreeMap<Integer, ChangedFile>();
+		public HashSet<String> fileLocIds = new HashSet<String>();
+		public TreeMap<Integer, Node> revIdxToNode = new TreeMap<Integer, Node>();
 		public int prevRevIdx = -1;
 		public int prevFileIdx = -1;
 		
-		public FileChangeLinkedList(ChangedFile cf, int revIdx, int listIdx) {
+		public FileChangeLinkedList(Node node, int listIdx) {
 			this.id = listIdx;
-			add(cf, revIdx);
+			add(node);
 		}
 		
-		public void add(ChangedFile cf, int revIdx) {
-			if (cf == null) System.out.println(1);;
-			fileObjectIds.add(cf.getObjectId());
-			revIdxToNode.put(revIdx, cf);
-			if (cf.getPreviousVersionsCount() != 0 && cf.getPreviousIndicesCount() != 0) {
-				prevRevIdx = cf.getPreviousVersions(0);
-				prevFileIdx = cf.getPreviousIndices(0);
-
-				if (!links.containsKey(prevRevIdx))
-					links.put(prevRevIdx, new HashMap<Integer, List<Integer>>());
-				if (!links.get(prevRevIdx).containsKey(prevFileIdx))
-					links.get(prevRevIdx).put(prevFileIdx, new ArrayList<Integer>());
-				links.get(prevRevIdx).get(prevFileIdx).add(this.id);				
+		public void add(Node node) {
+			if (fileLocIds.contains(node.getLocId()))
+				System.err.println(" fileLocIds err ");
+			fileLocIds.add(node.getLocId());
+			revIdxToNode.put(node.revIdx, node);
+			fileLocIdToListIdx.put(node.getLocId(), this.id);
+			if (node.cf.getPreviousVersionsCount() != 0
+					&& node.cf.getPreviousIndicesCount() != 0) {
+				prevRevIdx = node.cf.getPreviousVersions(0);
+				prevFileIdx = node.cf.getPreviousIndices(0);
+				String prevFileLocId = prevRevIdx + " " + prevFileIdx;
+				if (fileLocIdToListIdx.containsKey(prevFileLocId)) {
+					int prevListIdx = fileLocIdToListIdx.get(prevFileLocId);
+					System.out.println("visited prev file now merge " + this.id + " to "+ prevListIdx);
+					lists.get(prevListIdx).merge(this);
+				} else {
+					updateLinks();
+				}
 			} else {
 				prevRevIdx = -1;
 				prevFileIdx = -1;
 			}
 		}
 		
+		private void updateLinks() {
+			if (!links.containsKey(prevRevIdx))
+				links.put(prevRevIdx, new HashMap<Integer, List<Integer>>());
+			if (!links.get(prevRevIdx).containsKey(prevFileIdx))
+				links.get(prevRevIdx).put(prevFileIdx, new ArrayList<Integer>());
+			links.get(prevRevIdx).get(prevFileIdx).add(this.id);
+		}
+		
 		public void merge(FileChangeLinkedList list) {
-			System.out.println(list.id + " merged to " + this.id);
-			for (String oid : list.fileObjectIds) {
-				this.fileObjectIds.add(oid);
+			System.out.println(list.id + " merge to " + this.id);
+			for (String locId : list.fileLocIds) {
+				this.fileLocIds.add(locId);
 				// replace old list idx
-				fileObjectIdToListIdx.put(oid, this.id);
+				if (!fileLocIdToListIdx.containsKey(locId))
+					System.err.println(" locId not exits err ");
+				fileLocIdToListIdx.put(locId, this.id);
 			}
 			this.revIdxToNode.putAll(list.revIdxToNode);
-			lists.set(list.id, null);
+//			System.out.println(lists.size() + " " + list.id);
+			if (list.id != lists.size())
+				lists.set(list.id, null);
 		}
 		
 		public int getPrevFileIdx() {
@@ -447,9 +465,23 @@ public class BoaRefactoringPredictionIntrinsics {
 	}
 	
 	public static class Node {
-		public ChangedFile cf;
-		public Node(ChangedFile cf) {
+		ChangedFile cf = null;
+		int revIdx = -1;
+		int fileIdx = -1;
+		String locId = null;
+
+		public Node(ChangedFile cf, int revIdx, int fileIdx) {
+			if (cf == null)
+				System.err.println("err null ChangedFile");
 			this.cf = cf;
+			this.revIdx = revIdx;
+			this.fileIdx = fileIdx;
+		}
+
+		public String getLocId() {
+			if (locId == null)
+				locId = revIdx + " " + fileIdx;
+			return locId;
 		}
 	}
 }
