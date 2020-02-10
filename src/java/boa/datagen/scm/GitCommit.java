@@ -208,7 +208,7 @@ public class GitCommit extends AbstractCommit {
 			parentIndices = new int[rc.getParentCount()];
 			for (int i = 0; i < rc.getParentCount(); i++) {
 				int parentIndex = connector.revisionMap.get(rc.getParent(i).getName());
-				// merged commit in git only store diffs between first parent and child
+				// merged commit in git only store diffs between the first parent and the child
 				if (i == 0)
 					updateChangedFiles(rc.getParent(i), parentIndex, rc);
 				parentIndices[i] = parentIndex;
@@ -228,32 +228,39 @@ public class GitCommit extends AbstractCommit {
 			for (final DiffEntry diff : diffs) {
 				if (diff.getChangeType() == ChangeType.MODIFY) {
 					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
-						updateChangedFiles(parent, parentIndex, diff, ChangeKind.MODIFIED);
+						updateChangedFiles(child, parentIndex, diff, ChangeKind.MODIFIED);
 					}
+				// RENAMED file may have the same/different object id(s) for old and new
 				} else if (diff.getChangeType() == ChangeType.RENAME) {
 					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
-						updateChangedFiles(parent, parentIndex, diff, ChangeKind.RENAMED);
+						updateChangedFiles(child, parentIndex, diff, ChangeKind.RENAMED);
 					}
 				} else if (diff.getChangeType() == ChangeType.COPY) {
 					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
-						updateChangedFiles(parent, parentIndex, diff, ChangeKind.COPIED);
+						updateChangedFiles(child, parentIndex, diff, ChangeKind.COPIED);
 					}
+				// ADDED file should not have old path and its old object id is 0's
 				} else if (diff.getChangeType() == ChangeType.ADD) {
 					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
-						updateChangedFiles(parent, parentIndex, diff, ChangeKind.ADDED);
+						updateChangedFiles(child, parentIndex, diff, ChangeKind.ADDED);
 					}
+				// DELETED file's new object id is 0's and doesn't have new path
 				} else if (diff.getChangeType() == ChangeType.DELETE) {
 					if (diff.getOldMode().getObjectType() == Constants.OBJ_BLOB) {
-						String path = diff.getOldPath();
-						// The deleted files have the same object id in the Git system.
+						String newPath = diff.getNewPath();
+						String newObjectId = diff.getNewId().toObjectId().getName();
+						String oldPath = diff.getOldPath();
+						String oldObjectId = diff.getOldId().toObjectId().getName();
+
+						// new object id for building file change linked list
 						String id = "BOA_DELETED_FILE_" + objectIdToFileLoc.size();
-						ChangedFile.Builder cfb = getChangeFile(path, ChangeKind.DELETED, id);
-						String previousObjectId = diff.getOldId().toObjectId().getName();
-						FileLoc loc = objectIdToFileLoc.get(previousObjectId);
+						ChangedFile.Builder cfb = getChangeFile(oldPath, ChangeKind.DELETED, id);
+						
+						FileLoc loc = objectIdToFileLoc.get(oldObjectId);
 						cfb.addPreviousVersions(loc.revisionIdx);
 						cfb.addPreviousIndices(loc.locIdx);
 						// not use the BOA_DELETED_FILE object id
-						filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
+						filePathGitObjectIds.put(oldPath, diff.getNewId().toObjectId());
 					}
 				}
 			}
@@ -264,21 +271,23 @@ public class GitCommit extends AbstractCommit {
 		df.close();
 	}
 
-	private void updateChangedFiles(final RevCommit parent, int parentIndex, final DiffEntry diff, final ChangeKind kind) {
-		String path = diff.getNewPath();
-		ChangedFile.Builder cfb = getChangeFile(path, kind, diff.getNewId().toObjectId().getName());
-		cfb.addChanges(kind);
+	private void updateChangedFiles(final RevCommit child, int parentIndex, final DiffEntry diff, final ChangeKind kind) {
+		String newPath = diff.getNewPath();
+		String newObjectId = diff.getNewId().toObjectId().getName();
 		String oldPath = diff.getOldPath();
-		if (!oldPath.equals(path))
+		String oldObjectId = diff.getOldId().toObjectId().getName();
+		
+		// get old loc before update the map
+		FileLoc oldLoc = objectIdToFileLoc.containsKey(oldObjectId) && !ObjectId.zeroId().getName().equals(oldObjectId)
+				? objectIdToFileLoc.get(oldObjectId) : null;
+		ChangedFile.Builder cfb = getChangeFile(newPath, kind, newObjectId);
+		if (!oldPath.equals(newPath))
 			cfb.addPreviousNames(oldPath);
-		String previousObjectId = diff.getOldId().toObjectId().getName();
-		if (objectIdToFileLoc.containsKey(previousObjectId)
-				&& diff.getChangeType() != ChangeType.ADD) {
-			FileLoc loc = objectIdToFileLoc.get(previousObjectId);
-			cfb.addPreviousVersions(loc.revisionIdx);
-			cfb.addPreviousIndices(loc.locIdx);
+		if (oldLoc != null) {
+			cfb.addPreviousVersions(oldLoc.revisionIdx);
+			cfb.addPreviousIndices(oldLoc.locIdx);			
 		}
-		filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
+		filePathGitObjectIds.put(newPath, diff.getNewId().toObjectId());
 	}
 	
 	public int countChangedFiles(RevCommit rc) {

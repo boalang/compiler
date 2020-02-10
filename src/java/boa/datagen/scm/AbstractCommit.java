@@ -99,6 +99,9 @@ public abstract class AbstractCommit {
 				cfb.setObjectId(oid);
 				cfb.setRepoKey(repoKey);
 			}
+			// check zero id
+			if (objectIdToFileLoc.containsKey(ObjectId.zeroId().getName()))
+				System.err.println("[ERR zero object id]");
 			objectIdToFileLoc.put(oid, new FileLoc(commitIdx, changedFiles.size()));
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);

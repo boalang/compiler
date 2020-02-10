@@ -301,9 +301,10 @@ public class BoaRefactoringPredictionIntrinsics {
 		stack.push(root);
 		int count = 0;
 		while (!stack.isEmpty()) {
-			Rev r = stack.pop();
-			if (visited.containsKey(r.revIdx))
+			Rev r = stack.pop();			
+			if (visited.containsKey(r.revIdx)) {
 				continue;
+			}
 			visited.put(r.revIdx, r);
 //			for (int i = r.rev.getParentsCount() - 1; i >= 0; i--)
 			if (r.rev.getParentsCount() > 0)
@@ -312,34 +313,35 @@ public class BoaRefactoringPredictionIntrinsics {
 			
 			// need link
 			HashMap<Integer, ChangedFile> files = getFilesFrom(r.rev);
-			if (links.containsKey(r.revIdx)) {
-				for (int listIdx : links.remove(r.revIdx)) {
-					FileChangeLinkedList list = lists.get(listIdx);
-					if (list.getPrevFileIdx() == -1)
-						System.out.println("err 1");
-					System.out.println(r.revIdx + " file size: " + files.size());
-					System.out.println(list.id);
-					ChangedFile cf = list.revIdxToNode.firstEntry().getValue().cf;
-					System.out.println(cf.getName() + " " + cf.getPreviousVersions(0) + " " + cf.getPreviousIndices(0) + " " + cf.getChange());
-					System.out.println(list.getPrevFileIdx());
-					list.add(files.remove(list.getPrevFileIdx()), r.revIdx);
-				}
-			}
+//			if (links.containsKey(r.revIdx)) {
+//				for (int listIdx : links.remove(r.revIdx)) {
+//					FileChangeLinkedList list = lists.get(listIdx);
+//					if (list.getPrevFileIdx() == -1)
+//						System.out.println("err 1");
+//					list.add(files.remove(list.getPrevFileIdx()), r.revIdx);
+//				}
+//			}
 			
 			// update files
 			for (ChangedFile cf : files.values()) {
 				if (isJavaFile(cf.getName())) {
-					if (fileObjectIdToListIdx.containsKey(cf.getObjectId()))
-						System.out.println("err");
-					lists.add(new FileChangeLinkedList(cf, r.revIdx, lists.size()));
+					if (fileObjectIdToListIdx.containsKey(cf.getObjectId())
+//							&& cf.getChange() != ChangeKind.RENAMED
+							)
+						System.out.println(" err " + cf.getChange() + " " + r.rev.getId() + " " + r.revIdx);
+					int listId = lists.size();
+//					lists.add(new FileChangeLinkedList(cf, r.revIdx, listId));
+					fileObjectIdToListIdx.put(cf.getObjectId(), listId);
 				}
 			}
 		}
 		System.out.println(count);
 		System.out.println(cr.getBranchesList());
 		System.out.println(cr.getBranchNamesList());
-//		for ()
+		
 		System.out.println(links.size());
+		System.out.println(lists.size());
+		System.out.println(getSnapshot(cr, 1604, true).length);
 	}
 	
 	private static HashMap<Integer, ChangedFile> getFilesFrom(Revision rev) {
@@ -367,7 +369,7 @@ public class BoaRefactoringPredictionIntrinsics {
 	public static class FileChangeLinkedList {
 		public int id;
 		public HashSet<String> fileObjectIds = new HashSet<String>();
-		public TreeMap<Integer, Node> revIdxToNode = new TreeMap<Integer, Node>();
+		public TreeMap<Integer, ChangedFile> revIdxToNode = new TreeMap<Integer, ChangedFile>();
 		public int prevRevIdx = -1;
 		public int prevFileIdx = -1;
 		
@@ -377,16 +379,19 @@ public class BoaRefactoringPredictionIntrinsics {
 		}
 		
 		public void add(ChangedFile cf, int revIdx) {
+			if (cf == null) System.out.println(1);;
 			fileObjectIds.add(cf.getObjectId());
-			revIdxToNode.put(revIdx, new Node(cf));
+			revIdxToNode.put(revIdx, cf);
 			if (cf.getPreviousVersionsCount() != 0 && cf.getPreviousIndicesCount() != 0) {
-				if (cf.getChange() == ChangeKind.ADDED)
-					System.out.println("err!!!!!!!!");
 				prevRevIdx = cf.getPreviousVersions(0);
 				prevFileIdx = cf.getPreviousIndices(0);
 				if (!links.containsKey(prevRevIdx))
 					links.put(prevRevIdx, new ArrayList<Integer>());
 				links.get(prevRevIdx).add(this.id);
+				
+				if (prevRevIdx == revIdx)
+					System.out.println(cf.getChange());
+				
 			} else {
 				prevRevIdx = -1;
 				prevFileIdx = -1;
