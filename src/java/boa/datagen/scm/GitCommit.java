@@ -281,6 +281,7 @@ public class GitCommit extends AbstractCommit {
 		FileLoc oldLoc = objectIdToFileLoc.containsKey(oldObjectId) && !ObjectId.zeroId().getName().equals(oldObjectId)
 				? objectIdToFileLoc.get(oldObjectId) : null;
 		ChangedFile.Builder cfb = getChangeFile(newPath, kind, newObjectId);
+		cfb.addChanges(kind);
 		if (!oldPath.equals(newPath))
 			cfb.addPreviousNames(oldPath);
 		if (oldLoc != null) {
