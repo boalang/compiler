@@ -163,9 +163,8 @@ public class BoaRefactoringPredictionIntrinsics {
 		int revCount = getRevisionsCount(cr);
 		for (int i = revCount - 1; i >= 0; i--)
 			getRev(cr, i);
-		FileChangeLinkedLists cfLists = new FileChangeLinkedLists(revIdxMap);
-		
-		HashMap<Integer, HashMap<Integer, List<Integer>>> links = cfLists.getLinks();
+		FileChangeLinkedLists cfLists = new FileChangeLinkedLists(revIdxMap, false);
+
 		List<FileChangeLinkedList> lists = cfLists.getLists();
 		HashMap<String, Integer> fileLocIdToListIdx = cfLists.getFileLocIdToListIdxMap();
 		
@@ -211,15 +210,7 @@ public class BoaRefactoringPredictionIntrinsics {
 		
 		// print
 		System.out.println("Total Revs: " + revCount);
-		for (int idx : links.keySet())
-			System.out.println(revIdxMap.containsKey(idx));
-		System.out.println("links count: " + links.size());
-		System.out.println("lists total count: " + lists.size());
-		int listCount = 0;
-		for (FileChangeLinkedList list : lists) {
-			if (list != null) listCount++;
-		}
-		System.out.println("lists count: " + listCount);
+		System.out.println("lists count: " + lists.size());
 //		System.out.println("ref lists count: " + refLists.size());
 //		System.out.println("no ref lists count: " + noRefLists.size());
 		ChangedFile[] snapshot = getSnapshot(cr, revCount - 1, true);
@@ -263,6 +254,17 @@ public class BoaRefactoringPredictionIntrinsics {
 		public Rev(int revIdx, Revision rev) {
 			this.revIdx = revIdx;
 			this.rev = rev;
+		}
+		
+		public List<FileNode> getJavaFileNodes() {
+			List<FileNode> fns = new ArrayList<FileNode>();
+			for (int i = 0; i < rev.getFilesCount(); i++) {
+				ChangedFile cf = rev.getFiles(i);
+				if (isJavaFile(cf.getName()))
+					fns.add(new FileNode(rev.getFiles(i), this, i));
+//				System.out.println(revIdx + " " + i + " " + cf.getName());
+			}
+			return fns;
 		}
 	}
 }
