@@ -151,24 +151,67 @@ public class BoaRefactoringPredictionIntrinsics {
 	}
 	
 	private static HashMap<Integer, Rev> visited = new HashMap<Integer, Rev>();
+	private static HashMap<String, Rev> revMap = new HashMap<String, Rev>();
 
 	@FunctionSpec(name = "test2", formalParameters = { "Project" })
 	public static void test2(Project p) throws Exception {
 		CodeRepository cr = p.getCodeRepositories(0);
 		int revCount = getRevisionsCount(cr);
-		System.out.println(revCount);
-		int count = 0;
+		HashSet<String> refRevIds = getRefactoringIds(p);
+		if (refRevIds.size() == 0)
+			return;
 		
 		FileChangeLinkedLists cfLists = new FileChangeLinkedLists();
 		for (int i = revCount - 1; i >= 0; i--) {
 			Rev r = getRev(cr, i);
 			cfLists.updateFileChangeLinkedLists(r);
-			count++;
 		}
 		HashMap<Integer, HashMap<Integer, List<Integer>>> links = cfLists.getLinks();
 		List<FileChangeLinkedList> lists = cfLists.getLists();
+		HashMap<String, Integer> fileLocIdToListIdx = cfLists.getFileLocIdToListIdxMap();
 		
-		System.out.println("Total Revs: " + count);
+		// refactoring
+		
+//		Set<String> refTypes = CLASS_LEVEL_REFACTORING_TYPES;
+//		refTypes.remove("Rename Class");
+//		refTypes.remove("Extract Superclass");
+//		refTypes.remove("Extract Interface");
+//		printRefStat(p, null);
+//		
+//		for (String id : refRevIds) {
+//			Rev r = revMap.get(id);
+//			List<CodeRefactoring> refs = refTypes == null ? getCodeChange(p, r.rev).getRefactoringsList()
+//					: getRefactorings(p, r.rev, refTypes);
+//			for (CodeRefactoring ref : refs) {
+//				String beforeFilePath = ref.getLeftSideLocations(0).getFilePath();
+//				FileNode fn = findBeforeFile(beforeFilePath, r);
+//				if (!fileLocIdToListIdx.containsKey(fn.getLocId()))
+//					System.err.println("err 1");
+//				int ListIdx = fileLocIdToListIdx.get(fn.getLocId());
+//				FileChangeLinkedList list = lists.get(ListIdx);
+//				if (list == null)
+//					System.err.println("err 3");
+//				if (!list.revIdxToNode.get(fn.revIdx).equals(fn))
+//					System.err.println("err 4");
+//				
+//				list.refRevIdxs.add(fn.revIdx);
+//			}
+//		}
+//		
+//		List<FileChangeLinkedList> refLists = new ArrayList<FileChangeLinkedList>();
+//		List<FileChangeLinkedList> noRefLists = new ArrayList<FileChangeLinkedList>();
+//		for (FileChangeLinkedList list : lists)
+//			if (list == null)
+//				continue;
+//			else if (list.refRevIdxs.size() > 0)
+//				refLists.add(list);
+//			else
+//				noRefLists.add(list);
+		
+		
+		
+		// print
+		System.out.println("Total Revs: " + revCount);
 		for (int idx : links.keySet())
 			System.out.println(visited.containsKey(idx));
 		System.out.println("links count: " + links.size());
@@ -178,14 +221,39 @@ public class BoaRefactoringPredictionIntrinsics {
 			if (list != null) listCount++;
 		}
 		System.out.println("lists count: " + listCount);
-
+//		System.out.println("ref lists count: " + refLists.size());
+//		System.out.println("no ref lists count: " + noRefLists.size());
 		ChangedFile[] snapshot = getSnapshot(cr, revCount - 1, true);
 		System.out.println("last snapshot size: " + snapshot.length);
+	}
+
+	private static FileNode findBeforeFile(String beforeFilePath, Rev r) {
+		FileNode fn = null;
+		boolean found = false;
+		Rev cur = r;
+		while (!found) {
+			if (cur.rev.getParentsCount() == 0)
+				System.err.println("err 2");
+			Rev parent = visited.get(cur.rev.getParents(0));
+			for (int i = 0; i < parent.rev.getFilesCount(); i++) {
+				ChangedFile cf = parent.rev.getFiles(i);
+				if (cf.getName().equals(beforeFilePath)) {
+					fn = new FileNode(cf, parent.revIdx, i);
+					found = true;
+					break;
+				}
+			}
+			cur = parent;
+		}
+		return fn;
 	}
 
 	public static Rev getRev(CodeRepository cr, int idx) {
 		if (visited.containsKey(idx))
 			return visited.get(idx);
+		Rev r = new Rev(idx, getRevision(cr, idx));
+		visited.put(idx, r);
+		revMap.put(r.rev.getId(), r);
 		return new Rev(idx, getRevision(cr, idx));
 	}
 

@@ -8,11 +8,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.Map.Entry;
 
 import boa.functions.refactoring.BoaRefactoringPredictionIntrinsics.Rev;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
+import boa.types.Shared.ChangeKind;
 
 public class FileChangeLinkedLists {
 
@@ -76,6 +78,10 @@ public class FileChangeLinkedLists {
 	public List<FileChangeLinkedList> getLists() {
 		return lists;
 	}
+	
+	public HashMap<String, Integer> getFileLocIdToListIdxMap() {
+		return fileLocIdToListIdx;
+	}
 
 	public class FileChangeLinkedList {
 		public int id;
@@ -83,6 +89,8 @@ public class FileChangeLinkedLists {
 		public TreeMap<Integer, FileNode> revIdxToNode = new TreeMap<Integer, FileNode>();
 		public int prevRevIdx = -1;
 		public int prevFileIdx = -1;
+		// refactoring
+		public TreeSet<Integer> refRevIdxs = new TreeSet<Integer>();
 
 		public FileChangeLinkedList(FileNode node, int listIdx) {
 			this.id = listIdx;
