@@ -74,7 +74,7 @@ public abstract class AbstractCommit {
 	protected AbstractConnector connector;
 	protected String projectName;
 	protected long repoKey;
-	protected Map<String, FileLoc> objectIdToFileLoc;
+	protected Map<String, List<FileLoc>> objectIdToFileLoc;
 	protected int commitIdx;
 
 	protected AbstractCommit(AbstractConnector cnn) {
@@ -102,7 +102,9 @@ public abstract class AbstractCommit {
 			// check zero id
 			if (objectIdToFileLoc.containsKey(ObjectId.zeroId().getName()))
 				System.err.println("[ERR zero object id]");
-			objectIdToFileLoc.put(oid, new FileLoc(commitIdx, changedFiles.size()));
+			if (!objectIdToFileLoc.containsKey(oid))
+				objectIdToFileLoc.put(oid, new ArrayList<FileLoc>());
+			objectIdToFileLoc.get(oid).add(new FileLoc(commitIdx, changedFiles.size(), changeKind));
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
 		} else {

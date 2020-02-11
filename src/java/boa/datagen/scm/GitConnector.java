@@ -117,14 +117,16 @@ public class GitConnector extends AbstractConnector {
 	}
 	
 	// file object id tracker for entire commit history
-	Map<String, FileLoc> objectIdToRevisionIdx = new HashMap<String, FileLoc>();
+	Map<String, List<FileLoc>> objectIdToRevisionIdx = new HashMap<String, List<FileLoc>>();
 	
 	public static class FileLoc {
 		int revisionIdx;
 		int locIdx;
-		FileLoc(int revisionIdx, int locIdx) {
+		ChangeKind kind;
+		FileLoc(int revisionIdx, int locIdx, ChangeKind kind) {
 			this.revisionIdx = revisionIdx;
 			this.locIdx = locIdx;
+			this.kind = kind;
 		}
 	}
 

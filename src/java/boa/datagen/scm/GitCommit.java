@@ -69,7 +69,7 @@ public class GitCommit extends AbstractCommit {
 
 	public GitCommit(final GitConnector cnn, 
 			final Repository repository, final RevWalk revwalk, String projectName, 
-			long repoKey, Map<String, FileLoc> objectIdToRevisionIdx, int commitIdx) {
+			long repoKey, Map<String, List<FileLoc>> objectIdToRevisionIdx, int commitIdx) {
 		super(cnn);
 		this.repository = repository;
 		this.revwalk = revwalk;
@@ -256,9 +256,18 @@ public class GitCommit extends AbstractCommit {
 						String id = "BOA_DELETED_FILE_" + objectIdToFileLoc.size();
 						ChangedFile.Builder cfb = getChangeFile(oldPath, ChangeKind.DELETED, id);
 						
-						FileLoc loc = objectIdToFileLoc.get(oldObjectId);
-						cfb.addPreviousVersions(loc.revisionIdx);
-						cfb.addPreviousIndices(loc.locIdx);
+						List<FileLoc> oldLocs = objectIdToFileLoc.get(oldObjectId);
+						for (FileLoc oldLoc : oldLocs) {
+							cfb.addPreviousVersions(oldLoc.revisionIdx);
+							cfb.addPreviousIndices(oldLoc.locIdx);
+
+//							if (oldLocs.size() > 1)
+//								System.out.println(oldLoc.revisionIdx 
+//										+ " " + oldLoc.locIdx + " " + oldLoc.kind 
+//										+ " at " + commitIdx + " " + ChangeKind.DELETED 
+//										+ " " + oldLocs.size() + " " + child.getParentCount());
+							
+						}
 						// not use the BOA_DELETED_FILE object id
 						filePathGitObjectIds.put(oldPath, diff.getNewId().toObjectId());
 					}
@@ -278,15 +287,23 @@ public class GitCommit extends AbstractCommit {
 		String oldObjectId = diff.getOldId().toObjectId().getName();
 		
 		// get old loc before update the map
-		FileLoc oldLoc = objectIdToFileLoc.containsKey(oldObjectId) && !ObjectId.zeroId().getName().equals(oldObjectId)
+		List<FileLoc> oldLocs = objectIdToFileLoc.containsKey(oldObjectId) && !ObjectId.zeroId().getName().equals(oldObjectId)
 				? objectIdToFileLoc.get(oldObjectId) : null;
 		ChangedFile.Builder cfb = getChangeFile(newPath, kind, newObjectId);
 		cfb.addChanges(kind);
 		if (!oldPath.equals(newPath))
 			cfb.addPreviousNames(oldPath);
-		if (oldLoc != null) {
-			cfb.addPreviousVersions(oldLoc.revisionIdx);
-			cfb.addPreviousIndices(oldLoc.locIdx);			
+		if (oldLocs != null) {
+			for (FileLoc oldLoc : oldLocs) {
+				cfb.addPreviousVersions(oldLoc.revisionIdx);
+				cfb.addPreviousIndices(oldLoc.locIdx);
+
+//				if (oldLocs.size() > 1)
+//					System.out.println(oldLoc.revisionIdx 
+//							+ " " + oldLoc.locIdx + " " + oldLoc.kind 
+//							+ " at " + commitIdx + " " + kind 
+//							+ " " + oldLocs.size() + " " + child.getParentCount());
+			}
 		}
 		filePathGitObjectIds.put(newPath, diff.getNewId().toObjectId());
 	}
