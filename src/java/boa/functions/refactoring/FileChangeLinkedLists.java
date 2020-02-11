@@ -18,10 +18,23 @@ import boa.types.Shared.ChangeKind;
 
 public class FileChangeLinkedLists {
 
+	private HashMap<Integer, Rev> revIdxMap = null;
 	private List<FileChangeLinkedList> lists = new ArrayList<FileChangeLinkedList>();
 	private HashMap<String, Integer> fileLocIdToListIdx = new HashMap<String, Integer>();
 	// rev idx to file idx to list idx
 	private HashMap<Integer, HashMap<Integer, List<Integer>>> links = new HashMap<Integer, HashMap<Integer, List<Integer>>>();
+
+	public FileChangeLinkedLists(HashMap<Integer, Rev> revIdxMap) {
+		this.revIdxMap = revIdxMap;
+		updateLists();
+	}
+
+	public void updateLists() {
+		for (int i = revIdxMap.size() - 1; i >= 0; i--) {
+			Rev r = revIdxMap.get(i);
+			updateFileChangeLinkedLists(r);
+		}
+	}
 
 	public void updateFileChangeLinkedLists(Rev r) {
 		// linking requests
@@ -34,7 +47,7 @@ public class FileChangeLinkedLists {
 
 				FileChangeLinkedList list = null;
 				if (listIdxs.size() > 1) {
-//					System.out.println("merge " + listIdxs.size());
+					System.out.println("linking request merge lists with size " + listIdxs.size());
 					// merge other lists to the oldest list
 					Collections.sort(listIdxs);
 					list = lists.get(listIdxs.get(0));
@@ -46,9 +59,10 @@ public class FileChangeLinkedLists {
 					System.err.println("err 1");
 				}
 				if (list != null) {
-					FileNode node = new FileNode(cf, r.revIdx, fileIdx);
+					FileNode node = new FileNode(cf, r, fileIdx);
 					if (list.getPrevFileIdx() != fileIdx && list.getPrevRevIdx() != r.revIdx)
 						System.err.println("err 2");
+					System.out.println("linking request add ");
 					list.add(node);
 				}
 			}
@@ -57,7 +71,7 @@ public class FileChangeLinkedLists {
 		for (Entry<Integer, ChangedFile> entry : files.entrySet()) {
 			ChangedFile cf = entry.getValue();
 			if (isJavaFile(cf.getName())) {
-				FileNode node = new FileNode(cf, r.revIdx, entry.getKey());
+				FileNode node = new FileNode(cf, r, entry.getKey());
 				int listId = lists.size();
 				lists.add(new FileChangeLinkedList(node, listId));
 			}
@@ -98,40 +112,59 @@ public class FileChangeLinkedLists {
 		}
 
 		public void add(FileNode node) {
-			// check local set
-			if (fileLocIds.contains(node.getLocId()))
-				System.err.println(" fileLocIds err ");
+			System.out.println("try to add node " + node.getLocId() + " " + node.cf.getChange() + " to list " + this.id);
+			// check if the node is added by some lists
+			if (fileLocIdToListIdx.containsKey(node.getLocId())) {
+				int listIdx = fileLocIdToListIdx.get(node.getLocId());
+				System.out.println("node " + node.getLocId() + " already added to list " + listIdx);
+				lists.get(listIdx).merge(this);
+				return;
+			}
+
 			fileLocIds.add(node.getLocId());
 			revIdxToNode.put(node.revIdx, node);
-			// check global loc id set
-			if (fileLocIdToListIdx.containsKey(node.getLocId()))
-				System.err.println("This file node already visited");
 			fileLocIdToListIdx.put(node.getLocId(), this.id);
 
 			if (node.cf.getPreviousVersionsCount() != 0 && node.cf.getPreviousIndicesCount() != 0) {
+				// update linking requests
 				prevRevIdx = node.cf.getPreviousVersions(0);
 				prevFileIdx = node.cf.getPreviousIndices(0);
-				String prevFileLocId = prevRevIdx + " " + prevFileIdx;
-				// check if the previous file already in a list
-				if (fileLocIdToListIdx.containsKey(prevFileLocId)) {
-					int prevListIdx = fileLocIdToListIdx.get(prevFileLocId);
-					System.out.println("visited prev file now merge " + this.id + " to " + prevListIdx);
-					lists.get(prevListIdx).merge(this);
-				} else {
-					if (!links.containsKey(prevRevIdx))
-						links.put(prevRevIdx, new HashMap<Integer, List<Integer>>());
-					if (!links.get(prevRevIdx).containsKey(prevFileIdx))
-						links.get(prevRevIdx).put(prevFileIdx, new ArrayList<Integer>());
-					links.get(prevRevIdx).get(prevFileIdx).add(this.id);
+				if (!links.containsKey(prevRevIdx))
+					links.put(prevRevIdx, new HashMap<Integer, List<Integer>>());
+				if (!links.get(prevRevIdx).containsKey(prevFileIdx))
+					links.get(prevRevIdx).put(prevFileIdx, new ArrayList<Integer>());
+				links.get(prevRevIdx).get(prevFileIdx).add(this.id);
+				System.out.println("list " + this.id + " add linking request to " + prevRevIdx + " " + prevFileIdx);
+			} else if (node.cf.getChange() == ChangeKind.ADDED && node.rev.getParentsCount() > 1) {
+				// link ADDED files in merge commit to feature branch
+				System.out.println(node.rev.getParentsCount());
+				FileNode prevNode = findNode(node.cf.getName(), node.rev.getParents(1));
+				if (prevNode != null) {
+					System.out.println("found");
+					this.add(prevNode);
 				}
 			} else {
 				prevRevIdx = -1;
 				prevFileIdx = -1;
 			}
 		}
+		
+		public FileNode findNode(String fileName, int parentIdx) {
+			Rev cur = revIdxMap.get(parentIdx);
+			while (true) {
+				for (int i = 0; i < cur.rev.getFilesCount(); i++) {
+					ChangedFile cf = cur.rev.getFiles(i);
+					if (cf.getName().equals(fileName))
+						return new FileNode(cf, cur, i);
+				}
+				if (cur.rev.getParentsCount() == 0)
+					return null;
+				cur = revIdxMap.get(cur.rev.getParents(0));
+			}
+		}
 
 		public void merge(FileChangeLinkedList list) {
-//			System.out.println(list.id + " merge to " + this.id);
+			System.out.println("merge list " + list.id + " to " + this.id);
 			for (String locId : list.fileLocIds) {
 				this.fileLocIds.add(locId);
 				// replace old list idx
@@ -140,7 +173,7 @@ public class FileChangeLinkedLists {
 				fileLocIdToListIdx.put(locId, this.id);
 			}
 			this.revIdxToNode.putAll(list.revIdxToNode);
-			if (list.id != lists.size())
+			if (list.id < lists.size())
 				lists.set(list.id, null);
 		}
 
@@ -152,5 +185,7 @@ public class FileChangeLinkedLists {
 			return this.prevRevIdx;
 		}
 	}
+
+	
 
 }

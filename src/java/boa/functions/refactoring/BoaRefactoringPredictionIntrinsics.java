@@ -150,22 +150,21 @@ public class BoaRefactoringPredictionIntrinsics {
 		return fqn;
 	}
 	
-	private static HashMap<Integer, Rev> visited = new HashMap<Integer, Rev>();
-	private static HashMap<String, Rev> revMap = new HashMap<String, Rev>();
+	private static HashMap<Integer, Rev> revIdxMap = new HashMap<Integer, Rev>();
+	private static HashMap<String, Rev> revIdMap = new HashMap<String, Rev>();
 
 	@FunctionSpec(name = "test2", formalParameters = { "Project" })
 	public static void test2(Project p) throws Exception {
 		CodeRepository cr = p.getCodeRepositories(0);
+//		HashSet<String> refRevIds = getRefactoringIds(p);
+//		if (refRevIds.size() == 0)
+//			return;
+		// get all revisions
 		int revCount = getRevisionsCount(cr);
-		HashSet<String> refRevIds = getRefactoringIds(p);
-		if (refRevIds.size() == 0)
-			return;
+		for (int i = revCount - 1; i >= 0; i--)
+			getRev(cr, i);
+		FileChangeLinkedLists cfLists = new FileChangeLinkedLists(revIdxMap);
 		
-		FileChangeLinkedLists cfLists = new FileChangeLinkedLists();
-		for (int i = revCount - 1; i >= 0; i--) {
-			Rev r = getRev(cr, i);
-			cfLists.updateFileChangeLinkedLists(r);
-		}
 		HashMap<Integer, HashMap<Integer, List<Integer>>> links = cfLists.getLinks();
 		List<FileChangeLinkedList> lists = cfLists.getLists();
 		HashMap<String, Integer> fileLocIdToListIdx = cfLists.getFileLocIdToListIdxMap();
@@ -213,7 +212,7 @@ public class BoaRefactoringPredictionIntrinsics {
 		// print
 		System.out.println("Total Revs: " + revCount);
 		for (int idx : links.keySet())
-			System.out.println(visited.containsKey(idx));
+			System.out.println(revIdxMap.containsKey(idx));
 		System.out.println("links count: " + links.size());
 		System.out.println("lists total count: " + lists.size());
 		int listCount = 0;
@@ -234,11 +233,11 @@ public class BoaRefactoringPredictionIntrinsics {
 		while (!found) {
 			if (cur.rev.getParentsCount() == 0)
 				System.err.println("err 2");
-			Rev parent = visited.get(cur.rev.getParents(0));
+			Rev parent = revIdxMap.get(cur.rev.getParents(0));
 			for (int i = 0; i < parent.rev.getFilesCount(); i++) {
 				ChangedFile cf = parent.rev.getFiles(i);
 				if (cf.getName().equals(beforeFilePath)) {
-					fn = new FileNode(cf, parent.revIdx, i);
+					fn = new FileNode(cf, parent, i);
 					found = true;
 					break;
 				}
@@ -249,12 +248,12 @@ public class BoaRefactoringPredictionIntrinsics {
 	}
 
 	public static Rev getRev(CodeRepository cr, int idx) {
-		if (visited.containsKey(idx))
-			return visited.get(idx);
+		if (revIdxMap.containsKey(idx))
+			return revIdxMap.get(idx);
 		Rev r = new Rev(idx, getRevision(cr, idx));
-		visited.put(idx, r);
-		revMap.put(r.rev.getId(), r);
-		return new Rev(idx, getRevision(cr, idx));
+		revIdxMap.put(idx, r);
+		revIdMap.put(r.rev.getId(), r);
+		return revIdxMap.get(idx);
 	}
 
 	public static class Rev {

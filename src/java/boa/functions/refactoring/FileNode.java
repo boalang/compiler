@@ -1,18 +1,22 @@
 package boa.functions.refactoring;
 
+import boa.functions.refactoring.BoaRefactoringPredictionIntrinsics.Rev;
+import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 
 public class FileNode {
 	ChangedFile cf = null;
+	Revision rev = null;
 	int revIdx = -1;
 	int fileIdx = -1;
 	String locId = null;
 
-	public FileNode(ChangedFile cf, int revIdx, int fileIdx) {
+	public FileNode(ChangedFile cf, Rev r, int fileIdx) {
 		if (cf == null)
 			System.err.println("err null ChangedFile");
 		this.cf = cf;
-		this.revIdx = revIdx;
+		this.rev = r.rev;
+		this.revIdx = r.revIdx;
 		this.fileIdx = fileIdx;
 	}
 
