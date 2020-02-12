@@ -1,5 +1,6 @@
 package boa.functions.refactoring;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,7 +13,14 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import boa.functions.FunctionSpec;
+import boa.functions.refactoring.features.ClassFeatureSet;
+import boa.runtime.BoaAbstractVisitor;
+import boa.types.Ast.Declaration;
+import boa.types.Ast.Namespace;
 import boa.types.Code.CodeRefactoring;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -24,6 +32,7 @@ import javafx.scene.control.Tab;
 import static boa.functions.refactoring.BoaRefactoringIntrinsics.*;
 import static boa.functions.BoaAstIntrinsics.*;
 import static boa.functions.BoaIntrinsics.*;
+import static boa.functions.BoaMetricIntrinsics.getMetrics;
 
 public class BoaRefactoringPredictionIntrinsics {
 
@@ -147,7 +156,7 @@ public class BoaRefactoringPredictionIntrinsics {
 			return fqn.substring(0, idx);
 		return fqn;
 	}
-	
+
 	public static HashMap<Integer, Rev> revIdxMap = new HashMap<Integer, Rev>();
 	public static HashMap<String, Rev> revIdMap = new HashMap<String, Rev>();
 
@@ -160,7 +169,7 @@ public class BoaRefactoringPredictionIntrinsics {
 		int revCount = getRevisionsCount(cr);
 		for (int i = revCount - 1; i >= 0; i--)
 			getRev(cr, i);
-		FileChangeLinkedLists cfLists = new FileChangeLinkedLists(false);	
+		FileChangeLinkedLists cfLists = new FileChangeLinkedLists(false);
 		List<FileChangeLinkedList> lists = cfLists.getLists();
 
 		Set<String> refTypes = CLASS_LEVEL_REFACTORING_TYPES;
@@ -168,18 +177,21 @@ public class BoaRefactoringPredictionIntrinsics {
 		refTypes.remove("Extract Superclass");
 		refTypes.remove("Extract Interface");
 //		printRefStat(p, null);
-		
+
 		cfLists.updateRefLists(p, refRevIds, refTypes);
 		HashSet<Integer> refListIdxs = cfLists.getRefListIdxs();
 		HashSet<Integer> noRefListIdxs = cfLists.getNoRefListIdxs();
 		HashSet<String> refNodeLocs = cfLists.getRefNodeLocs();
 		HashSet<String> noRefNodeLocs = cfLists.getNoRefNodeLocs();
 		HashMap<Integer, List<FileNode>> revIdxToNodes = cfLists.getRevIdxToNodes();
-		System.out.println(refNodeLocs.size() + " " + noRefNodeLocs.size() + " " + revIdxToNodes.size());
-		
-		
-		
-		
+
+//		for (Entry<Integer, List<FileNode>> entry : revIdxToNodes.entrySet()) {
+//			int revIdx = entry.getKey();
+//			List<FileNode> fileNodes = entry.getValue();
+//
+//			break;
+//		}
+
 		// print
 		System.out.println("Total Revs: " + revCount);
 		System.out.println("lists count: " + lists.size());
@@ -187,6 +199,103 @@ public class BoaRefactoringPredictionIntrinsics {
 		System.out.println("no ref lists count: " + noRefListIdxs.size());
 		ChangedFile[] snapshot = getSnapshot(cr, revCount - 1, true);
 		System.out.println("last snapshot size: " + snapshot.length);
+		System.out.println("Observed ref files: " + refNodeLocs.size());
+		System.out.println("Observed no ref files: " + noRefNodeLocs.size());
+		System.out.println("Observed rev count: " + revIdxToNodes.size());
+
+		RevisionFeatureSet cfs = new RevisionFeatureSet(snapshot);
+		for (Entry<String, ClassFeatureSet> entry : cfs.classFeatures.entrySet()) {
+			String key = entry.getKey();
+			ClassFeatureSet c = entry.getValue();
+		}
+		System.out.println("\n" + cfs);
+	}
+
+	public static Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PRIVATE).setVersion(2.0)
+			.setPrettyPrinting().create();
+
+	public static class ProjectFeatureSet {
+		int projectType = -1; // 0 - user, 1 - org
+	}
+
+	public static class RevisionFeatureSet {
+		int nContributor = 0; // num of contributors
+		int nPackage = 0; // num of packages
+		int nFile = 0;
+		int nClass = 0; // num of classes
+		int nMethod = 0; // num of methods
+		int nField = 0; // num of fields
+		int nASTNode = 0; // num of AST nodes
+
+		// ---- statistics(min, max, mean, median, std) of the entire snapshot
+		// C&K metrics
+		double[] wmcStats = null;
+		double[] rfcStats = null;
+		double[] lcomStats = null;
+		double[] ditStats = null;
+		double[] nocStats = null;
+		double[] cboStats = null;
+
+		double[] classDensity = null; // at package-level
+		double[] methodDensity = null; // at class-level
+		double[] fieldDensity = null; // at class-level
+		double[] astDensityInClass = null; // at class-level
+		double[] astDensityinMethod = null; // at method-level
+
+		// ----
+		private HashMap<String, double[]> metrics = null;
+		HashMap<String, ClassFeatureSet> classFeatures = new HashMap<String, ClassFeatureSet>();
+
+		private BoaAbstractVisitor fileVisitor = new BoaAbstractVisitor() {
+			private List<Declaration> decls = new ArrayList<Declaration>();
+			private String fileName = null;
+
+			@Override
+			public boolean preVisit(final ChangedFile cf) throws Exception {
+				this.fileName = cf.getName();
+				return true;
+			}
+
+			@Override
+			public boolean preVisit(final Declaration node) throws Exception {
+				decls.add(node);
+				for (Declaration d : node.getNestedDeclarationsList())
+					visit(d);
+				return false;
+			}
+
+			@Override
+			public boolean preVisit(final Namespace node) throws Exception {
+				for (Declaration d : node.getDeclarationsList())
+					visit(d); // collect all decls
+				for (Declaration d : decls) {
+					String classKey = fileName + " " + d.getFullyQualifiedName();
+					ClassFeatureSet cfs = new ClassFeatureSet(d, metrics.get(classKey));
+					classFeatures.put(classKey, cfs); // visit each decl
+					nMethod += cfs.methodFeatureSets.size();
+					nField += cfs.nField;
+					nASTNode += cfs.nASTNode;
+				}
+				nClass += decls.size();
+				decls.clear();
+				return false;
+			}
+		};
+
+		public RevisionFeatureSet(ChangedFile[] snapshot) throws Exception {
+			this.metrics = getMetrics(snapshot);
+			int count = 0;
+			for (ChangedFile cf : snapshot) {
+				nFile++;
+				fileVisitor.visit(cf);
+				if (count++ == 2) break;
+			}
+		}
+
+		@Override
+		public String toString() {
+			return BoaRefactoringPredictionIntrinsics.gson.toJson(this);
+		}
 	}
 
 	public static Rev getRev(CodeRepository cr, int idx) {

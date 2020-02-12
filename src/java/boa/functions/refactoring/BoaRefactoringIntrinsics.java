@@ -367,7 +367,7 @@ public class BoaRefactoringIntrinsics {
 			return results;
 		HashMap<String, List<String>> map = new HashMap<String, List<String>>();
 		for (Entry<String, double[]> entry : metrics.entrySet()) {
-			String fqn = entry.getKey();
+			String fqn = entry.getKey().split(" ")[1];
 			String packageName = getPackageNameFromFQN(fqn);
 			if (!map.containsKey(packageName))
 				map.put(packageName, new ArrayList<String>());
@@ -406,10 +406,6 @@ public class BoaRefactoringIntrinsics {
 		if (idx < 0)
 			return fqn;
 		return fqn.substring(0, idx);
-	}
-
-	private static String getFQN(String s) {
-		return s.split(" ")[1];
 	}
 
 	//////////////////////////////////////////////////
