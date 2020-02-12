@@ -1,6 +1,5 @@
 package boa.functions.refactoring;
 
-import boa.functions.refactoring.BoaRefactoringPredictionIntrinsics.Rev;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 

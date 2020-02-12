@@ -1,28 +1,57 @@
 package boa.functions.refactoring;
 
+import static boa.functions.BoaAstIntrinsics.getCodeChange;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.Queue;
+import java.util.Set;
 
-import boa.functions.refactoring.BoaRefactoringPredictionIntrinsics.Rev;
-import boa.types.Diff.ChangedFile;
+import boa.types.Code.CodeRefactoring;
+import boa.types.Toplevel.Project;
+
+import static boa.functions.refactoring.BoaRefactoringPredictionIntrinsics.*;
 
 public class FileChangeLinkedLists {
+	// file change linked list
+	List<FileChangeLinkedList> lists = new ArrayList<FileChangeLinkedList>();
+	HashMap<String, Integer> fileLocIdToListIdx = new HashMap<String, Integer>();
+	boolean debug = false;
 
-	private HashMap<Integer, Rev> revIdxMap = null;
-	private List<FileChangeLinkedList> lists = new ArrayList<FileChangeLinkedList>();
-	private HashMap<String, Integer> fileLocIdToListIdx = new HashMap<String, Integer>();
-	private boolean debug = false;
-
-	public FileChangeLinkedLists(HashMap<Integer, Rev> revIdxMap, boolean debug) {
-		this.revIdxMap = revIdxMap;
+	public FileChangeLinkedLists(boolean debug) {
 		this.debug = debug;
 		updateLists();
+	}
+	
+	// refactoring info
+	private List<FileChangeLinkedList> refLists = new ArrayList<FileChangeLinkedList>();
+	private List<FileChangeLinkedList> noRefLists = new ArrayList<FileChangeLinkedList>();
+	
+	public void updateRefLists(Project p, HashSet<String> refRevIds, Set<String> refTypes) {
+		for (String id : refRevIds) {
+			Rev r = revIdMap.get(id);
+			List<CodeRefactoring> refs = refTypes == null ? getCodeChange(p, r.rev).getRefactoringsList()
+					: getRefactorings(p, r.rev, refTypes);
+			for (CodeRefactoring ref : refs) {
+				String beforeFilePath = ref.getLeftSideLocations(0).getFilePath();
+				FileNode fn = findBeforeFile(beforeFilePath, r);
+				if (!fileLocIdToListIdx.containsKey(fn.getLocId()))
+					System.err.println("err 1");
+				int ListIdx = fileLocIdToListIdx.get(fn.getLocId());
+				FileChangeLinkedList list = lists.get(ListIdx);
+				if (!list.fileLocIdToNode.get(fn.locId).equals(fn)) {
+					System.out.println(ref.getDescription());
+				}
+				list.refLocs.add(fn.getLocId());
+			}
+		}
+		
+		for (FileChangeLinkedList list : lists)
+			if (list.refLocs.size() > 0)
+				refLists.add(list);
+			else
+				noRefLists.add(list);
 	}
 
 	private void updateLists() {
@@ -30,12 +59,20 @@ public class FileChangeLinkedLists {
 			Rev r = revIdxMap.get(i);
 			for (FileNode fn : r.getJavaFileNodes()) {
 				if (!fileLocIdToListIdx.containsKey(fn.getLocId())) {
-					FileChangeLinkedList list = new FileChangeLinkedList(fn, lists.size());
+					FileChangeLinkedList list = new FileChangeLinkedList(this, fn, lists.size());
 					if (list.linkAll())
 						lists.add(list);
 				}
 			}
 		}
+	}
+	
+	public List<FileChangeLinkedList> getRefLists() {
+		return refLists;
+	}
+
+	public List<FileChangeLinkedList> getNoRefLists() {
+		return noRefLists;
 	}
 
 	public List<FileChangeLinkedList> getLists() {
@@ -44,97 +81,6 @@ public class FileChangeLinkedLists {
 
 	public HashMap<String, Integer> getFileLocIdToListIdxMap() {
 		return fileLocIdToListIdx;
-	}
-
-	public class FileChangeLinkedList {
-		public int id;
-		public HashSet<String> fileLocIds = new HashSet<String>();
-		public TreeMap<Integer, FileNode> revIdxToNode = new TreeMap<Integer, FileNode>();
-		public Queue<Integer> prevRevIdxs = new LinkedList<Integer>();
-		public Queue<Integer> prevFileIdxs = new LinkedList<Integer>();
-		// refactoring
-		public TreeSet<Integer> refRevIdxs = new TreeSet<Integer>();
-
-		public FileChangeLinkedList(FileNode node, int listIdx) {
-			this.id = listIdx;
-			add(node);
-		}
-
-		public boolean linkAll() {
-			while (!prevRevIdxs.isEmpty()) {
-				int prevRevIdx = prevRevIdxs.poll();
-				int prevFileIdx = prevFileIdxs.poll();
-				Rev prevRev = revIdxMap.get(prevRevIdx);
-				if (!add(new FileNode(prevRev.rev.getFiles(prevFileIdx), prevRev, prevFileIdx)))
-					return false;
-			}
-			return true;
-		}
-
-		private boolean add(FileNode node) {
-			if (debug)
-				System.out.println("try to add node " 
-						+ node.getLocId() + " " + node.cf.getChange() + " to list " + this.id);
-			// check if the node is added by some lists
-			if (fileLocIdToListIdx.containsKey(node.getLocId())) {
-				int listIdx = fileLocIdToListIdx.get(node.getLocId());
-				if (listIdx != this.id) {
-					if (debug)
-						System.out.println("node " + node.getLocId() + " already added to list " + listIdx);
-					lists.get(listIdx).merge(this);
-					if (debug)
-						System.out.println("drop list " + this.id);
-					return false;
-				}
-				return true;
-			}
-			// update list
-			fileLocIds.add(node.getLocId());
-			revIdxToNode.put(node.revIdx, node);
-			fileLocIdToListIdx.put(node.getLocId(), this.id);
-			if (node.cf.getPreviousVersionsCount() != 0 && node.cf.getPreviousIndicesCount() != 0) {
-				prevRevIdxs.addAll(node.cf.getPreviousVersionsList());
-				prevFileIdxs.addAll(node.cf.getPreviousIndicesList());
-			}
-			return true;
-		}
-
-		public FileNode findNode(String fileName, int parentIdx) {
-			Rev cur = revIdxMap.get(parentIdx);
-			while (true) {
-				for (int i = 0; i < cur.rev.getFilesCount(); i++) {
-					ChangedFile cf = cur.rev.getFiles(i);
-					if (cf.getName().equals(fileName))
-						return new FileNode(cf, cur, i);
-				}
-				if (cur.rev.getParentsCount() == 0)
-					return null;
-				cur = revIdxMap.get(cur.rev.getParents(0));
-			}
-		}
-
-		public void merge(FileChangeLinkedList list) {
-			if (debug)
-				System.out.println("list " + this.id + " merge list " + list.id);
-			for (String locId : list.fileLocIds) {
-				this.fileLocIds.add(locId);
-				fileLocIdToListIdx.put(locId, this.id);
-			}
-			this.revIdxToNode.putAll(list.revIdxToNode);
-			// merge queues
-			while (!list.prevRevIdxs.isEmpty()) {
-				int prevRevIdx = list.prevRevIdxs.poll();
-				int prevFileIdx = list.prevFileIdxs.poll();
-				if (!fileLocIds.contains(prevRevIdx + " " + prevFileIdx)) {
-					this.prevRevIdxs.offer(prevRevIdx);
-					this.prevFileIdxs.offer(prevFileIdx);
-				}
-			}
-			this.refRevIdxs.addAll(list.refRevIdxs);
-			if (list.id < lists.size())
-				lists.set(list.id, null);
-			linkAll();
-		}
 	}
 
 }

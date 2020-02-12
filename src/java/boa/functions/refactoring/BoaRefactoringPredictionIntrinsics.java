@@ -13,8 +13,6 @@ import java.util.Stack;
 import java.util.TreeMap;
 
 import boa.functions.FunctionSpec;
-import boa.functions.refactoring.BoaRefactoringPredictionIntrinsics.Rev;
-import boa.functions.refactoring.FileChangeLinkedLists.FileChangeLinkedList;
 import boa.types.Code.CodeRefactoring;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -97,7 +95,7 @@ public class BoaRefactoringPredictionIntrinsics {
 			System.out.println(entry.getKey() + " " + entry.getValue());
 	}
 
-	private static List<CodeRefactoring> getRefactorings(Project p, Revision r, Set<String> set) {
+	public static List<CodeRefactoring> getRefactorings(Project p, Revision r, Set<String> set) {
 		List<CodeRefactoring> refs = getCodeChange(p, r).getRefactoringsList();
 		refs = filterOutChangePackage(refs);
 		refs = filterOutNestedClass(refs);
@@ -150,74 +148,42 @@ public class BoaRefactoringPredictionIntrinsics {
 		return fqn;
 	}
 	
-	private static HashMap<Integer, Rev> revIdxMap = new HashMap<Integer, Rev>();
-	private static HashMap<String, Rev> revIdMap = new HashMap<String, Rev>();
+	public static HashMap<Integer, Rev> revIdxMap = new HashMap<Integer, Rev>();
+	public static HashMap<String, Rev> revIdMap = new HashMap<String, Rev>();
 
 	@FunctionSpec(name = "test2", formalParameters = { "Project" })
 	public static void test2(Project p) throws Exception {
 		CodeRepository cr = p.getCodeRepositories(0);
-//		HashSet<String> refRevIds = getRefactoringIds(p);
-//		if (refRevIds.size() == 0)
-//			return;
-		// get all revisions
+		HashSet<String> refRevIds = getRefactoringIds(p);
+		if (refRevIds.size() == 0)
+			return;
 		int revCount = getRevisionsCount(cr);
 		for (int i = revCount - 1; i >= 0; i--)
 			getRev(cr, i);
-		FileChangeLinkedLists cfLists = new FileChangeLinkedLists(revIdxMap, false);
-
+		FileChangeLinkedLists cfLists = new FileChangeLinkedLists(false);	
 		List<FileChangeLinkedList> lists = cfLists.getLists();
-		HashMap<String, Integer> fileLocIdToListIdx = cfLists.getFileLocIdToListIdxMap();
-		
-		// refactoring
-		
-//		Set<String> refTypes = CLASS_LEVEL_REFACTORING_TYPES;
-//		refTypes.remove("Rename Class");
-//		refTypes.remove("Extract Superclass");
-//		refTypes.remove("Extract Interface");
+	
+		Set<String> refTypes = CLASS_LEVEL_REFACTORING_TYPES;
+		refTypes.remove("Rename Class");
+		refTypes.remove("Extract Superclass");
+		refTypes.remove("Extract Interface");
 //		printRefStat(p, null);
-//		
-//		for (String id : refRevIds) {
-//			Rev r = revMap.get(id);
-//			List<CodeRefactoring> refs = refTypes == null ? getCodeChange(p, r.rev).getRefactoringsList()
-//					: getRefactorings(p, r.rev, refTypes);
-//			for (CodeRefactoring ref : refs) {
-//				String beforeFilePath = ref.getLeftSideLocations(0).getFilePath();
-//				FileNode fn = findBeforeFile(beforeFilePath, r);
-//				if (!fileLocIdToListIdx.containsKey(fn.getLocId()))
-//					System.err.println("err 1");
-//				int ListIdx = fileLocIdToListIdx.get(fn.getLocId());
-//				FileChangeLinkedList list = lists.get(ListIdx);
-//				if (list == null)
-//					System.err.println("err 3");
-//				if (!list.revIdxToNode.get(fn.revIdx).equals(fn))
-//					System.err.println("err 4");
-//				
-//				list.refRevIdxs.add(fn.revIdx);
-//			}
-//		}
-//		
-//		List<FileChangeLinkedList> refLists = new ArrayList<FileChangeLinkedList>();
-//		List<FileChangeLinkedList> noRefLists = new ArrayList<FileChangeLinkedList>();
-//		for (FileChangeLinkedList list : lists)
-//			if (list == null)
-//				continue;
-//			else if (list.refRevIdxs.size() > 0)
-//				refLists.add(list);
-//			else
-//				noRefLists.add(list);
 		
+		cfLists.updateRefLists(p, refRevIds, refTypes);
 		
+		List<FileChangeLinkedList> refLists = cfLists.getRefLists();
+		List<FileChangeLinkedList> noRefLists = cfLists.getNoRefLists();
 		
 		// print
 		System.out.println("Total Revs: " + revCount);
 		System.out.println("lists count: " + lists.size());
-//		System.out.println("ref lists count: " + refLists.size());
-//		System.out.println("no ref lists count: " + noRefLists.size());
+		System.out.println("ref lists count: " + refLists.size());
+		System.out.println("no ref lists count: " + noRefLists.size());
 		ChangedFile[] snapshot = getSnapshot(cr, revCount - 1, true);
 		System.out.println("last snapshot size: " + snapshot.length);
 	}
 
-	private static FileNode findBeforeFile(String beforeFilePath, Rev r) {
+	public static FileNode findBeforeFile(String beforeFilePath, Rev r) {
 		FileNode fn = null;
 		boolean found = false;
 		Rev cur = r;
@@ -245,26 +211,5 @@ public class BoaRefactoringPredictionIntrinsics {
 		revIdxMap.put(idx, r);
 		revIdMap.put(r.rev.getId(), r);
 		return revIdxMap.get(idx);
-	}
-
-	public static class Rev {
-		int revIdx;
-		Revision rev;
-
-		public Rev(int revIdx, Revision rev) {
-			this.revIdx = revIdx;
-			this.rev = rev;
-		}
-		
-		public List<FileNode> getJavaFileNodes() {
-			List<FileNode> fns = new ArrayList<FileNode>();
-			for (int i = 0; i < rev.getFilesCount(); i++) {
-				ChangedFile cf = rev.getFiles(i);
-				if (isJavaFile(cf.getName()))
-					fns.add(new FileNode(rev.getFiles(i), this, i));
-//				System.out.println(revIdx + " " + i + " " + cf.getName());
-			}
-			return fns;
-		}
 	}
 }
