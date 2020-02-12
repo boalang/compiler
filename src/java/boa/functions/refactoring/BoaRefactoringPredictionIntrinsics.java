@@ -162,7 +162,7 @@ public class BoaRefactoringPredictionIntrinsics {
 			getRev(cr, i);
 		FileChangeLinkedLists cfLists = new FileChangeLinkedLists(false);	
 		List<FileChangeLinkedList> lists = cfLists.getLists();
-	
+
 		Set<String> refTypes = CLASS_LEVEL_REFACTORING_TYPES;
 		refTypes.remove("Rename Class");
 		refTypes.remove("Extract Superclass");
@@ -170,7 +170,6 @@ public class BoaRefactoringPredictionIntrinsics {
 //		printRefStat(p, null);
 		
 		cfLists.updateRefLists(p, refRevIds, refTypes);
-		
 		List<FileChangeLinkedList> refLists = cfLists.getRefLists();
 		List<FileChangeLinkedList> noRefLists = cfLists.getNoRefLists();
 		
@@ -181,27 +180,6 @@ public class BoaRefactoringPredictionIntrinsics {
 		System.out.println("no ref lists count: " + noRefLists.size());
 		ChangedFile[] snapshot = getSnapshot(cr, revCount - 1, true);
 		System.out.println("last snapshot size: " + snapshot.length);
-	}
-
-	public static FileNode findBeforeFile(String beforeFilePath, Rev r) {
-		FileNode fn = null;
-		boolean found = false;
-		Rev cur = r;
-		while (!found) {
-			if (cur.rev.getParentsCount() == 0)
-				System.err.println("err 2");
-			Rev parent = revIdxMap.get(cur.rev.getParents(0));
-			for (int i = 0; i < parent.rev.getFilesCount(); i++) {
-				ChangedFile cf = parent.rev.getFiles(i);
-				if (cf.getName().equals(beforeFilePath)) {
-					fn = new FileNode(cf, parent, i);
-					found = true;
-					break;
-				}
-			}
-			cur = parent;
-		}
-		return fn;
 	}
 
 	public static Rev getRev(CodeRepository cr, int idx) {

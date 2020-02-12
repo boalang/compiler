@@ -66,20 +66,6 @@ public class FileChangeLinkedList {
 		return true;
 	}
 
-	public FileNode findNode(String fileName, int parentIdx) {
-		Rev cur = revIdxMap.get(parentIdx);
-		while (true) {
-			for (int i = 0; i < cur.rev.getFilesCount(); i++) {
-				ChangedFile cf = cur.rev.getFiles(i);
-				if (cf.getName().equals(fileName))
-					return new FileNode(cf, cur, i);
-			}
-			if (cur.rev.getParentsCount() == 0)
-				return null;
-			cur = revIdxMap.get(cur.rev.getParents(0));
-		}
-	}
-
 	public void merge(FileChangeLinkedList list) {
 		if (this.fileChangeLinkedLists.debug)
 			System.out.println("list " + this.id + " merge list " + list.id);

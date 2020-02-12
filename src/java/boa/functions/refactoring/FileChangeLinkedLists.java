@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import boa.types.Code.CodeRefactoring;
+import boa.types.Diff.ChangedFile;
 import boa.types.Toplevel.Project;
 
 import static boa.functions.refactoring.BoaRefactoringPredictionIntrinsics.*;
@@ -35,7 +36,7 @@ public class FileChangeLinkedLists {
 					: getRefactorings(p, r.rev, refTypes);
 			for (CodeRefactoring ref : refs) {
 				String beforeFilePath = ref.getLeftSideLocations(0).getFilePath();
-				FileNode fn = findBeforeFile(beforeFilePath, r);
+				FileNode fn = findNode(beforeFilePath, r.rev.getParents(0));
 				if (!fileLocIdToListIdx.containsKey(fn.getLocId()))
 					System.err.println("err 1");
 				int ListIdx = fileLocIdToListIdx.get(fn.getLocId());
@@ -52,6 +53,20 @@ public class FileChangeLinkedLists {
 				refLists.add(list);
 			else
 				noRefLists.add(list);
+	}
+
+	public FileNode findNode(String fileName, int parentIdx) {
+		Rev cur = revIdxMap.get(parentIdx);
+		while (true) {
+			for (int i = 0; i < cur.rev.getFilesCount(); i++) {
+				ChangedFile cf = cur.rev.getFiles(i);
+				if (cf.getName().equals(fileName))
+					return new FileNode(cf, cur, i);
+			}
+			if (cur.rev.getParentsCount() == 0)
+				return null;
+			cur = revIdxMap.get(cur.rev.getParents(0));
+		}
 	}
 
 	private void updateLists() {
