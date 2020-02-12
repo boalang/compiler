@@ -10,6 +10,7 @@ import java.util.Set;
 
 import boa.types.Code.CodeRefactoring;
 import boa.types.Diff.ChangedFile;
+import boa.types.Shared.ChangeKind;
 import boa.types.Toplevel.Project;
 
 import static boa.functions.refactoring.BoaRefactoringPredictionIntrinsics.*;
@@ -24,11 +25,14 @@ public class FileChangeLinkedLists {
 		this.debug = debug;
 		updateLists();
 	}
-	
+
 	// refactoring info
-	private List<FileChangeLinkedList> refLists = new ArrayList<FileChangeLinkedList>();
-	private List<FileChangeLinkedList> noRefLists = new ArrayList<FileChangeLinkedList>();
-	
+	private HashSet<Integer> refListIdxs = new HashSet<Integer>();
+	private HashSet<Integer> noRefListIdxs = new HashSet<Integer>();
+	private HashSet<String> refNodeLocs = null;
+	private HashSet<String> noRefNodeLocs = null;
+	private HashMap<Integer, List<FileNode>> revIdxToNodes = new HashMap<Integer, List<FileNode>>();
+
 	public void updateRefLists(Project p, HashSet<String> refRevIds, Set<String> refTypes) {
 		for (String id : refRevIds) {
 			Rev r = revIdMap.get(id);
@@ -47,12 +51,47 @@ public class FileChangeLinkedLists {
 				list.refLocs.add(fn.getLocId());
 			}
 		}
-		
+
 		for (FileChangeLinkedList list : lists)
 			if (list.refLocs.size() > 0)
-				refLists.add(list);
+				refListIdxs.add(list.id);
 			else
-				noRefLists.add(list);
+				noRefListIdxs.add(list.id);
+
+		refNodeLocs = getRefNodeIdxs();
+		noRefNodeLocs = getNoRefNodeIdxs();
+	}
+
+	private HashSet<String> getNoRefNodeIdxs() {
+		HashSet<String> noRefNodeIdxs = new HashSet<String>();
+		for (int ListIdx : noRefListIdxs) {
+			FileChangeLinkedList list = lists.get(ListIdx);
+			for (FileNode fn : list.fileLocIdToNode.values()) {
+				// no deleted files
+				if (fn.cf.getChange() != ChangeKind.DELETED) {
+					noRefNodeIdxs.add(fn.getLocId());
+					if (!revIdxToNodes.containsKey(fn.revIdx))
+						revIdxToNodes.put(fn.revIdx, new ArrayList<FileNode>());
+					revIdxToNodes.get(fn.revIdx).add(fn);
+				}
+			}
+		}
+		return noRefNodeIdxs;
+	}
+
+	private HashSet<String> getRefNodeIdxs() {
+		HashSet<String> refNodeIdxs = new HashSet<String>();
+		for (int ListIdx : refListIdxs) {
+			FileChangeLinkedList list = lists.get(ListIdx);
+			for (String Loc : list.refLocs) {
+				FileNode fn = list.fileLocIdToNode.get(Loc);
+				refNodeIdxs.add(fn.getLocId());
+				if (!revIdxToNodes.containsKey(fn.revIdx))
+					revIdxToNodes.put(fn.revIdx, new ArrayList<FileNode>());
+				revIdxToNodes.get(fn.revIdx).add(fn);
+			}
+		}
+		return refNodeIdxs;
 	}
 
 	public FileNode findNode(String fileName, int parentIdx) {
@@ -81,13 +120,13 @@ public class FileChangeLinkedLists {
 			}
 		}
 	}
-	
-	public List<FileChangeLinkedList> getRefLists() {
-		return refLists;
+
+	public HashSet<Integer> getRefListIdxs() {
+		return refListIdxs;
 	}
 
-	public List<FileChangeLinkedList> getNoRefLists() {
-		return noRefLists;
+	public HashSet<Integer> getNoRefListIdxs() {
+		return noRefListIdxs;
 	}
 
 	public List<FileChangeLinkedList> getLists() {
@@ -96,6 +135,18 @@ public class FileChangeLinkedLists {
 
 	public HashMap<String, Integer> getFileLocIdToListIdxMap() {
 		return fileLocIdToListIdx;
+	}
+	
+	public HashSet<String> getRefNodeLocs() {
+		return refNodeLocs;
+	}
+
+	public HashSet<String> getNoRefNodeLocs() {
+		return noRefNodeLocs;
+	}
+
+	public HashMap<Integer, List<FileNode>> getRevIdxToNodes() {
+		return revIdxToNodes;
 	}
 
 }

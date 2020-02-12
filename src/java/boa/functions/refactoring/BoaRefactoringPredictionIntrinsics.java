@@ -170,14 +170,21 @@ public class BoaRefactoringPredictionIntrinsics {
 //		printRefStat(p, null);
 		
 		cfLists.updateRefLists(p, refRevIds, refTypes);
-		List<FileChangeLinkedList> refLists = cfLists.getRefLists();
-		List<FileChangeLinkedList> noRefLists = cfLists.getNoRefLists();
+		HashSet<Integer> refListIdxs = cfLists.getRefListIdxs();
+		HashSet<Integer> noRefListIdxs = cfLists.getNoRefListIdxs();
+		HashSet<String> refNodeLocs = cfLists.getRefNodeLocs();
+		HashSet<String> noRefNodeLocs = cfLists.getNoRefNodeLocs();
+		HashMap<Integer, List<FileNode>> revIdxToNodes = cfLists.getRevIdxToNodes();
+		System.out.println(refNodeLocs.size() + " " + noRefNodeLocs.size() + " " + revIdxToNodes.size());
+		
+		
+		
 		
 		// print
 		System.out.println("Total Revs: " + revCount);
 		System.out.println("lists count: " + lists.size());
-		System.out.println("ref lists count: " + refLists.size());
-		System.out.println("no ref lists count: " + noRefLists.size());
+		System.out.println("ref lists count: " + refListIdxs.size());
+		System.out.println("no ref lists count: " + noRefListIdxs.size());
 		ChangedFile[] snapshot = getSnapshot(cr, revCount - 1, true);
 		System.out.println("last snapshot size: " + snapshot.length);
 	}

@@ -8,8 +8,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Map.Entry;
 
-import boa.types.Diff.ChangedFile;
-
 public class FileChangeLinkedList {
 
 	private final FileChangeLinkedLists fileChangeLinkedLists;
