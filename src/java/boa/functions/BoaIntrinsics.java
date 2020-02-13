@@ -148,8 +148,8 @@ public class BoaIntrinsics {
 
 	@FunctionSpec(name = "getsnapshotbyindex", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "int", "string..." })
 	public static ChangedFile[] getSnapshotByIndex(final CodeRepository cr, final long commitOffset, final String... kinds) {
-		if (commitOffset == cr.getHead())
-			return getSnapshot(cr, kinds);
+//		if (commitOffset == cr.getHead())
+//			return getSnapshot(cr, kinds);
 		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
 		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>();
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {

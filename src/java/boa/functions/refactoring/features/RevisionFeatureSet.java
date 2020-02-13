@@ -41,7 +41,7 @@ public class RevisionFeatureSet {
 	// ---- FEATURES end ------
 
 	private HashMap<String, double[]> metrics = null;
-	 HashMap<String, ClassFeatureSet> classFeatures = new HashMap<String, ClassFeatureSet>();
+	HashMap<String, ClassFeatureSet> classFeatures = new HashMap<String, ClassFeatureSet>();
 	private HashMap<String, Integer> pkgToClassNum = new HashMap<String, Integer>();
 	private List<Integer> methodNums = new ArrayList<Integer>();
 	private List<Integer> fieldNums = new ArrayList<Integer>();
@@ -51,10 +51,14 @@ public class RevisionFeatureSet {
 	private BoaAbstractVisitor fileVisitor = new BoaAbstractVisitor() {
 		private List<Declaration> decls = new ArrayList<Declaration>();
 		private String fileName = null;
+		private int revIdx = -1;
+		private int fileIdx = -1;
 
 		@Override
 		public boolean preVisit(final ChangedFile cf) throws Exception {
 			this.fileName = cf.getName();
+			this.revIdx = cf.getRevisionIdx();
+			this.fileIdx = cf.getFileIdx();
 			return true;
 		}
 
@@ -85,7 +89,7 @@ public class RevisionFeatureSet {
 				String classKey = fileName + " " + d.getFullyQualifiedName();
 				ClassFeatureSet cfs = new ClassFeatureSet(d, metrics.get(classKey));
 				if (isTestFile) cfs.isTestClass = 1;
-				classFeatures.put(classKey, cfs); // visit each decl
+				classFeatures.put(revIdx + " " + fileIdx, cfs); // visit each decl
 				nMethod += cfs.methodFeatureSets.size();
 				methodNums.add(cfs.methodFeatureSets.size());
 				for (MethodFeatureSet mfs : cfs.methodFeatureSets)
