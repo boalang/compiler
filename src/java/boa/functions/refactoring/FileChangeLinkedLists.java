@@ -21,8 +21,8 @@ public class FileChangeLinkedLists {
 	
 	protected static HashMap<Integer, Rev> revIdxMap = new HashMap<Integer, Rev>();
 	protected static HashMap<String, Rev> revIdMap = new HashMap<String, Rev>();
-	protected List<FileChangeLinkedList> lists = new ArrayList<FileChangeLinkedList>();
-	protected HashMap<String, Integer> fileLocIdToListIdx = new HashMap<String, Integer>();
+	protected static List<FileChangeLinkedList> lists = new ArrayList<FileChangeLinkedList>();
+	protected static HashMap<String, Integer> fileLocIdToListIdx = new HashMap<String, Integer>();
 	
 	
 	boolean debug = false;
@@ -91,6 +91,8 @@ public class FileChangeLinkedLists {
 			FileChangeLinkedList list = lists.get(ListIdx);
 			for (String Loc : list.refLocs) {
 				FileNode fn = list.fileLocIdToNode.get(Loc);
+				if (fn.cf.getChange() == ChangeKind.DELETED)
+					System.err.println("**** ref cf is DELETED");
 				refNodeIdxs.add(fn.getLocId());
 				if (!revIdxToNodes.containsKey(fn.getRevIdx()))
 					revIdxToNodes.put(fn.getRevIdx(), new ArrayList<FileNode>());
@@ -126,6 +128,12 @@ public class FileChangeLinkedLists {
 				}
 			}
 		}
+	}
+	
+	public static FileNode getFileNode(String locId) {
+		if (!fileLocIdToListIdx.containsKey(locId))
+			System.err.println("cannot find locId " + locId);
+		return lists.get(fileLocIdToListIdx.get(locId)).fileLocIdToNode.get(locId);
 	}
 	
 	// revision info

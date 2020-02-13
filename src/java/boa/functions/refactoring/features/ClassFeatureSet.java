@@ -11,10 +11,10 @@ import boa.types.Ast.Variable;
 
 public class ClassFeatureSet {
 	public int isTestClass = 0;
-	public int nField = 0; // num of fields
-	public int nASTNode = 0; // num of AST nodes
+	public int nFieldInClass = 0; // num of fields
+	public int nASTNodeInClass = 0; // num of AST nodes
 	public List<MethodFeatureSet> methodFeatureSets = new ArrayList<MethodFeatureSet>();
-	public double[] metrics = null; // C&K metrics: wmc, rfc, lcom, dit, noc, cbo
+	public double[] metricsInClass = null; // C&K metrics: wmc, rfc, lcom, dit, noc, cbo
 
 	private class ASTCountVisitor extends BoaAbstractVisitor {
 		int astCount = 0;
@@ -36,14 +36,14 @@ public class ClassFeatureSet {
 		public boolean preVisit(final Declaration node) throws Exception {
 			ASTCountVisitor astCounter = new ASTCountVisitor();
 			for (Variable v : node.getFieldsList()) {
-				nField++;
+				nFieldInClass++;
 				astCounter.visit(v);
-				nASTNode += astCounter.getASTCount();
+				nASTNodeInClass += astCounter.getASTCount();
 			}
 			for (Method m : node.getMethodsList()) {
 				astCounter.visit(m);
-				methodFeatureSets.add(new MethodFeatureSet(astCounter.astCount));
-				nASTNode += astCounter.getASTCount();
+				getMethodFeatureSets().add(new MethodFeatureSet(astCounter.astCount));
+				nASTNodeInClass += astCounter.getASTCount();
 			}
 			return false;
 		}
@@ -51,11 +51,15 @@ public class ClassFeatureSet {
 
 	public ClassFeatureSet(Declaration node, double[] metrics) throws Exception {
 		classVisitor.visit(node);
-		this.metrics = metrics;
+		this.metricsInClass = metrics;
 	}
 
 	@Override
 	public String toString() {
 		return BoaRefactoringPredictionIntrinsics.gson.toJson(this);
+	}
+
+	public List<MethodFeatureSet> getMethodFeatureSets() {
+		return methodFeatureSets;
 	}
 }

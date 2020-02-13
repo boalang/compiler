@@ -158,7 +158,7 @@ public class BoaRefactoringPredictionIntrinsics {
 		for (int i = 0; i < revCount; i++)
 			getRev(cr, i);
 		FileChangeLinkedLists cfLists = new FileChangeLinkedLists(false);
-		System.out.println(cfLists.validation());
+//		System.out.println(cfLists.validation());
 		List<FileChangeLinkedList> lists = cfLists.getLists();
 
 		Set<String> refTypes = CLASS_LEVEL_REFACTORING_TYPES;
