@@ -352,8 +352,7 @@ public class BoaRefactoringIntrinsics {
 	//////////////////////////////////////////////////
 	// Refactoring Prediction Feature STATS //
 	//////////////////////////////////////////////////
-	@FunctionSpec(name = "getstats", returnType = "array of array of float", formalParameters = "array of ChangedFile")
-	public static double[][] getStats(ChangedFile[] snapshot) throws Exception {
+	public static double[][] getCKStats(HashMap<String, double[]> metrics) throws Exception {
 		double[][] results = new double[6][5];
 		// wmc, rfc, lcom, dit, noc, cbo
 		List<Double> wmc = new ArrayList<Double>();
@@ -362,16 +361,9 @@ public class BoaRefactoringIntrinsics {
 		List<Double> dit = new ArrayList<Double>();
 		List<Double> noc = new ArrayList<Double>();
 		List<Double> cbo = new ArrayList<Double>();
-		HashMap<String, double[]> metrics = getMetrics(snapshot);
-		if (snapshot.length == 0 || metrics.size() == 0)
+		if (metrics.size() == 0)
 			return results;
-		HashMap<String, List<String>> map = new HashMap<String, List<String>>();
 		for (Entry<String, double[]> entry : metrics.entrySet()) {
-			String fqn = entry.getKey().split(" ")[1];
-			String packageName = getPackageNameFromFQN(fqn);
-			if (!map.containsKey(packageName))
-				map.put(packageName, new ArrayList<String>());
-			map.get(packageName).add(fqn);
 			double[] m = entry.getValue();
 			wmc.add(m[0]);
 			rfc.add(m[1]);
@@ -381,12 +373,12 @@ public class BoaRefactoringIntrinsics {
 			cbo.add(m[5]);
 		}
 		// min, max, mean, median, std
-		results[0] = getStatisitcs(wmc);
-		results[1] = getStatisitcs(rfc);
-		results[2] = getStatisitcs(lcom);
-		results[3] = getStatisitcs(dit);
-		results[4] = getStatisitcs(noc);
-		results[5] = getStatisitcs(cbo);
+		results[0] = getStats(wmc);
+		results[1] = getStats(rfc);
+		results[2] = getStats(lcom);
+		results[3] = getStats(dit);
+		results[4] = getStats(noc);
+		results[5] = getStats(cbo);
 		return results;
 	}
 	
@@ -395,13 +387,15 @@ public class BoaRefactoringIntrinsics {
 	 * @param nums
 	 * @return min, max, mean, median, std
 	 */
-	public static double[] getStatisitcs(Collection<? extends Number> nums) {
+	public static double[] getStats(Collection<? extends Number> nums) {
+		if (nums == null || nums.size() == 0)
+			return new double[5];
 		Stats stats = Stats.of(nums);
 		return new double[] { stats.min(), stats.max(), stats.mean(), Quantiles.median().compute(nums),
 				stats.populationStandardDeviation() };
 	}
 
-	private static String getPackageNameFromFQN(String fqn) {
+	public static String getPackageNameFromFQN(String fqn) {
 		int idx = fqn.lastIndexOf('.');
 		if (idx < 0)
 			return fqn;

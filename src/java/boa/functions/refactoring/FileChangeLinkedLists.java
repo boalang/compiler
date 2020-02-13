@@ -1,14 +1,15 @@
 package boa.functions.refactoring;
 
 import static boa.functions.BoaAstIntrinsics.getCodeChange;
+import static boa.functions.BoaIntrinsics.getRevision;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import boa.types.Code.CodeRefactoring;
+import boa.types.Code.CodeRepository;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 import boa.types.Toplevel.Project;
@@ -16,9 +17,13 @@ import boa.types.Toplevel.Project;
 import static boa.functions.refactoring.BoaRefactoringPredictionIntrinsics.*;
 
 public class FileChangeLinkedLists {
-	// file change linked list
-	List<FileChangeLinkedList> lists = new ArrayList<FileChangeLinkedList>();
-	HashMap<String, Integer> fileLocIdToListIdx = new HashMap<String, Integer>();
+	
+	protected static HashMap<Integer, Rev> revIdxMap = new HashMap<Integer, Rev>();
+	protected static HashMap<String, Rev> revIdMap = new HashMap<String, Rev>();
+	protected List<FileChangeLinkedList> lists = new ArrayList<FileChangeLinkedList>();
+	protected HashMap<String, Integer> fileLocIdToListIdx = new HashMap<String, Integer>();
+	
+	
 	boolean debug = false;
 
 	public FileChangeLinkedLists(boolean debug) {
@@ -113,12 +118,29 @@ public class FileChangeLinkedLists {
 			Rev r = revIdxMap.get(i);
 			for (FileNode fn : r.getJavaFileNodes()) {
 				if (!fileLocIdToListIdx.containsKey(fn.getLocId())) {
+					
 					FileChangeLinkedList list = new FileChangeLinkedList(this, fn, lists.size());
 					if (list.linkAll())
 						lists.add(list);
 				}
 			}
 		}
+	}
+	
+	public static Rev getRev(CodeRepository cr, int idx) {
+		if (revIdxMap.containsKey(idx))
+			return revIdxMap.get(idx);
+		Rev r = new Rev(idx, getRevision(cr, idx));
+		revIdxMap.put(idx, r);
+		revIdMap.put(r.rev.getId(), r);
+		return revIdxMap.get(idx);
+	}
+	
+	public boolean validation() {
+		for (FileChangeLinkedList list : lists)
+			if (!list.validation())
+				return false;
+		return true;
 	}
 
 	public HashSet<Integer> getRefListIdxs() {

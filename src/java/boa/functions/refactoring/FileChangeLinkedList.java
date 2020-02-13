@@ -1,11 +1,14 @@
 package boa.functions.refactoring;
 
-import static boa.functions.refactoring.BoaRefactoringPredictionIntrinsics.revIdxMap;
+import static boa.functions.refactoring.FileChangeLinkedLists.revIdxMap;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.TreeMap;
 import java.util.Map.Entry;
 
 public class FileChangeLinkedList {
@@ -13,6 +16,7 @@ public class FileChangeLinkedList {
 	private final FileChangeLinkedLists fileChangeLinkedLists;
 	public int id;
 	public HashMap<String, FileNode> fileLocIdToNode = new HashMap<String, FileNode>();
+	public TreeMap<Integer, List<Integer>> revIdxToLocs = new TreeMap<Integer, List<Integer>>();
 	public Queue<Integer> prevRevIdxs = new LinkedList<Integer>();
 	public Queue<Integer> prevFileIdxs = new LinkedList<Integer>();
 	// refactoring
@@ -56,6 +60,9 @@ public class FileChangeLinkedList {
 		if (fileLocIdToNode.containsKey(node.getLocId()))
 			System.out.println("err!!!!!!!!!!!!!!!!!");
 		fileLocIdToNode.put(node.getLocId(), node);
+		if (!revIdxToLocs.containsKey(node.revIdx))
+			revIdxToLocs.put(node.revIdx, new ArrayList<Integer>());
+		revIdxToLocs.get(node.revIdx).add(node.fileIdx);
 		this.fileChangeLinkedLists.fileLocIdToListIdx.put(node.getLocId(), this.id);
 		if (node.cf.getPreviousVersionsCount() != 0 && node.cf.getPreviousIndicesCount() != 0) {
 			prevRevIdxs.addAll(node.cf.getPreviousVersionsList());
@@ -71,7 +78,11 @@ public class FileChangeLinkedList {
 			this.fileLocIdToNode.put(entry.getKey(), entry.getValue());
 			this.fileChangeLinkedLists.fileLocIdToListIdx.put(entry.getKey(), this.id);
 		}
-		this.fileLocIdToNode.putAll(list.fileLocIdToNode);
+		for (Entry<Integer, List<Integer>> entry : list.revIdxToLocs.entrySet())
+			if (!revIdxToLocs.containsKey(entry.getKey()))
+				revIdxToLocs.put(entry.getKey(), entry.getValue());
+			else
+				revIdxToLocs.get(entry.getKey()).addAll(entry.getValue());
 		// merge queues
 		while (!list.prevRevIdxs.isEmpty()) {
 			int prevRevIdx = list.prevRevIdxs.poll();
@@ -85,5 +96,12 @@ public class FileChangeLinkedList {
 		if (list.id < this.fileChangeLinkedLists.lists.size())
 			this.fileChangeLinkedLists.lists.set(list.id, null);
 		linkAll();
+	}
+	
+	public boolean validation() {
+		int size = 0;
+		for (Entry<Integer, List<Integer>> entry : revIdxToLocs.entrySet())
+			size += entry.getValue().size();
+		return size == fileLocIdToNode.size() ? true : false;
 	}
 }

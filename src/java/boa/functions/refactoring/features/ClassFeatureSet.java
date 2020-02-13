@@ -10,9 +10,10 @@ import boa.types.Ast.Method;
 import boa.types.Ast.Variable;
 
 public class ClassFeatureSet {
-	public List<MethodFeatureSet> methodFeatureSets = new ArrayList<MethodFeatureSet>();
+	public int isTestClass = 0;
 	public int nField = 0; // num of fields
 	public int nASTNode = 0; // num of AST nodes
+	public List<MethodFeatureSet> methodFeatureSets = new ArrayList<MethodFeatureSet>();
 	public double[] metrics = null; // C&K metrics: wmc, rfc, lcom, dit, noc, cbo
 
 	private class ASTCountVisitor extends BoaAbstractVisitor {

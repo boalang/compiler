@@ -11,6 +11,7 @@ import boa.types.Diff.ChangedFile;
 public class Rev {
 	int revIdx;
 	Revision rev;
+	int nContributorSoFar;
 
 	public Rev(int revIdx, Revision rev) {
 		this.revIdx = revIdx;
