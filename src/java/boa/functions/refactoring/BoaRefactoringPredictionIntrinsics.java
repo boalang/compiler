@@ -191,13 +191,13 @@ public class BoaRefactoringPredictionIntrinsics {
 		System.out.println("Observed ref files: " + refNodeLocs.size());
 		System.out.println("Observed no ref files: " + noRefNodeLocs.size());
 		System.out.println("Observed rev count: " + revIdxToNodes.size());
+		System.out.println();
 
 		RevisionFeatureSet cfs = new RevisionFeatureSet(snapshot, getRev(cr, revCount - 1));
-//		for (Entry<String, ClassFeatureSet> entry : cfs.classFeatures.entrySet()) {
-//			String key = entry.getKey();
-//			ClassFeatureSet c = entry.getValue();
-//		}
-		System.out.println("\n" + cfs);
+		for (String output : cfs.toOutputLists(refNodeLocs, noRefNodeLocs)) {
+			System.out.println(output);
+		}
+//		System.out.println("\n" + cfs);
 	}
 
 	public static Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PRIVATE).setVersion(2.0)

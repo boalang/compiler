@@ -9,12 +9,24 @@ import boa.types.Ast.Declaration;
 import boa.types.Ast.Method;
 import boa.types.Ast.Variable;
 
+import static boa.functions.refactoring.BoaRefactoringIntrinsics.getStats;
+
 public class ClassFeatureSet {
+	
+	// ---- FEATURES start ------
 	public int isTestClass = 0;
 	public int nFieldInClass = 0; // num of fields
 	public int nASTNodeInClass = 0; // num of AST nodes
 	public List<MethodFeatureSet> methodFeatureSets = new ArrayList<MethodFeatureSet>();
-	public double[] metricsInClass = null; // C&K metrics: wmc, rfc, lcom, dit, noc, cbo
+	public double[] ckInClass = null; // C&K metrics: wmc, rfc, lcom, dit, noc, cbo
+	
+	// ---- statistics(min, max, mean, median, std) of the class
+	double[] astStatsInFieldOfClass = null;
+	double[] astStatsInMethodOfClass = null;
+	// ---- FEATURES end ------
+	
+	private List<Integer> astNodeNumsInFieldOfClass = new ArrayList<Integer>();
+	private List<Integer> astNodeNumsInMethodOfClass = new ArrayList<Integer>();
 
 	private class ASTCountVisitor extends BoaAbstractVisitor {
 		int astCount = 0;
@@ -38,12 +50,16 @@ public class ClassFeatureSet {
 			for (Variable v : node.getFieldsList()) {
 				nFieldInClass++;
 				astCounter.visit(v);
-				nASTNodeInClass += astCounter.getASTCount();
+				int ast = astCounter.getASTCount();
+				astNodeNumsInFieldOfClass.add(ast);
+				nASTNodeInClass += ast;
 			}
 			for (Method m : node.getMethodsList()) {
 				astCounter.visit(m);
 				getMethodFeatureSets().add(new MethodFeatureSet(astCounter.astCount));
-				nASTNodeInClass += astCounter.getASTCount();
+				int ast = astCounter.getASTCount();
+				astNodeNumsInMethodOfClass.add(ast);
+				nASTNodeInClass += ast;
 			}
 			return false;
 		}
@@ -51,7 +67,9 @@ public class ClassFeatureSet {
 
 	public ClassFeatureSet(Declaration node, double[] metrics) throws Exception {
 		classVisitor.visit(node);
-		this.metricsInClass = metrics;
+		this.ckInClass = metrics;
+		this.astStatsInFieldOfClass = getStats(astNodeNumsInFieldOfClass);
+		this.astStatsInMethodOfClass = getStats(astNodeNumsInMethodOfClass);
 	}
 
 	@Override

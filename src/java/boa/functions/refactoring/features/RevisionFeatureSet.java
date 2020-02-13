@@ -13,6 +13,10 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import boa.functions.refactoring.BoaRefactoringPredictionIntrinsics;
 import boa.functions.refactoring.Rev;
 import boa.runtime.BoaAbstractVisitor;
@@ -41,7 +45,7 @@ public class RevisionFeatureSet {
 	// ---- FEATURES end ------
 
 	private HashMap<String, double[]> metrics = null;
-	 HashMap<String, ClassFeatureSet> classFeatures = new HashMap<String, ClassFeatureSet>();
+	HashMap<String, ClassFeatureSet> classFeatures = new HashMap<String, ClassFeatureSet>();
 	private HashMap<String, Integer> pkgToClassNum = new HashMap<String, Integer>();
 	private List<Integer> methodNums = new ArrayList<Integer>();
 	private List<Integer> fieldNums = new ArrayList<Integer>();
@@ -116,8 +120,8 @@ public class RevisionFeatureSet {
 			nFileInSnapshot++;
 			fileVisitor.visit(cf);
 
-			if (count++ == 0)
-				break;
+//			if (count++ == 0)
+//				break;
 		}
 
 		this.nContributorInSnapshot = rev.nContributorSoFar;
@@ -128,11 +132,99 @@ public class RevisionFeatureSet {
 		this.astStatsInClass = getStats(astNodeNumsInClass);
 		this.astStatsInMethod = getStats(astNodeNumsInMethod);
 	}
-	
-	public List<String> toOutputLists() {
-		List<String> outputs = new ArrayList<String>();
-		
+
+	// output string column names
+	private List<String> cols = new ArrayList<String>();
+	private String[] ck = new String[] { "wmc", "rfc", "lcom", "dit", "noc", "cbo" };
+	private String[] stat = new String[] { "min", "max", "mean", "median", "std" };
+	private boolean updateCols = true;
+
+	public List<String> toOutputLists(HashSet<String> refNodeLocs, HashSet<String> noRefNodeLocs) {
+		List<String> outputs = featuresToString(noRefNodeLocs, 0);
+		outputs.addAll(featuresToString(refNodeLocs, 1));
+//		System.out.println(cols.size() + " " + outputs.get(0).split(" ").length + " " + outputs.size());
 		return outputs;
+	}
+
+	private List<String> featuresToString(HashSet<String> set, int label) {
+		List<String> outputs = new ArrayList<String>();
+		JsonObject obj = BoaRefactoringPredictionIntrinsics.gson.toJsonTree(this).getAsJsonObject();
+		StringBuilder revSB = new StringBuilder();
+
+		for (Entry<String, JsonElement> entry : obj.entrySet()) {
+			String key = entry.getKey();
+			JsonElement je = entry.getValue();
+			if (je.isJsonPrimitive()) {
+//				System.out.println(key + " " + je.getAsString());
+				if (updateCols)
+					cols.add(key);
+				revSB.append(je.getAsString() + " ");
+			} else if (je.isJsonArray()) {
+				if (key.equals("ckStats")) {
+					JsonArray cks = je.getAsJsonArray();
+					for (int i = 0; i < cks.size(); i++)
+						updateStatsOutputs(revSB, ck[i], cks.get(i));
+				} else {
+					updateStatsOutputs(revSB, key, je);
+				}
+			} else if (je.isJsonObject()) {
+				Iterator<Entry<String, JsonElement>> itr = je.getAsJsonObject().entrySet().iterator();
+				while (itr.hasNext()) {
+					Entry<String, JsonElement> e = itr.next();
+					if (set.contains(e.getKey()))
+						outputs.add(getClassOutput(e.getValue(), new StringBuilder(revSB), label));
+				}
+			}
+		}
+		return outputs;
+	}
+
+	private void updateStatsOutputs(StringBuilder revSB, String key, JsonElement je) {
+		JsonArray ja = je.getAsJsonArray();
+		for (int j = 0; j < ja.size(); j++) {
+			String k = key + "_" + stat[j];
+			String v = ja.get(j).getAsString();
+			if (updateCols)
+				cols.add(k);
+			revSB.append(v + " ");
+//			System.out.println(k + " " + v);
+		}
+	}
+
+	private String getClassOutput(JsonElement je, StringBuilder sb, int label) {
+		for (Entry<String, JsonElement> entry : je.getAsJsonObject().entrySet()) {
+			String key = entry.getKey();
+			JsonElement e = entry.getValue();
+			if (e.isJsonPrimitive()) {
+				if (updateCols)
+					cols.add(key);
+				sb.append(e.getAsString() + " ");
+//				System.out.println(key + " " + e.getAsString());
+			} else if (e.isJsonArray()) {
+				if (key.equals("methodFeatureSets")) {
+					if (updateCols)
+						cols.add(key);
+					sb.append(e.getAsJsonArray().size() + " ");
+//					System.out.println(key + " " + e.getAsJsonArray().size());
+				} else if (key.equals("ckInClass")) {
+					JsonArray cks = e.getAsJsonArray();
+					for (int i = 0; i < cks.size(); i++) {
+						if (updateCols)
+							cols.add(ck[i]);
+						sb.append(cks.get(i).getAsString() + " ");
+//						System.out.println(ck[i] + " " + cks.get(i).getAsString());
+					}
+				} else {
+					updateStatsOutputs(sb, key, e);
+				}
+			}
+		}
+		if (updateCols)
+			cols.add("label");
+		sb.append(label + " ");
+//		System.out.println("label " + label);
+		updateCols = false;
+		return sb.toString();
 	}
 
 	@Override
