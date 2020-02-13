@@ -288,6 +288,26 @@ public final class Diff {
      * <code>optional .boa.types.ASTRoot root = 13;</code>
      */
     boa.types.Ast.ASTRootOrBuilder getRootOrBuilder();
+
+    // optional int32 revision_idx = 14;
+    /**
+     * <code>optional int32 revision_idx = 14;</code>
+     */
+    boolean hasRevisionIdx();
+    /**
+     * <code>optional int32 revision_idx = 14;</code>
+     */
+    int getRevisionIdx();
+
+    // optional int32 file_idx = 15;
+    /**
+     * <code>optional int32 file_idx = 15;</code>
+     */
+    boolean hasFileIdx();
+    /**
+     * <code>optional int32 file_idx = 15;</code>
+     */
+    int getFileIdx();
   }
   /**
    * Protobuf type {@code boa.types.ChangedFile}
@@ -498,6 +518,16 @@ public final class Diff {
                 root_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000100;
+              break;
+            }
+            case 112: {
+              bitField0_ |= 0x00000200;
+              revisionIdx_ = input.readInt32();
+              break;
+            }
+            case 120: {
+              bitField0_ |= 0x00000400;
+              fileIdx_ = input.readInt32();
               break;
             }
           }
@@ -1923,6 +1953,38 @@ public final class Diff {
       return root_;
     }
 
+    // optional int32 revision_idx = 14;
+    public static final int REVISION_IDX_FIELD_NUMBER = 14;
+    private int revisionIdx_;
+    /**
+     * <code>optional int32 revision_idx = 14;</code>
+     */
+    public boolean hasRevisionIdx() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>optional int32 revision_idx = 14;</code>
+     */
+    public int getRevisionIdx() {
+      return revisionIdx_;
+    }
+
+    // optional int32 file_idx = 15;
+    public static final int FILE_IDX_FIELD_NUMBER = 15;
+    private int fileIdx_;
+    /**
+     * <code>optional int32 file_idx = 15;</code>
+     */
+    public boolean hasFileIdx() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    /**
+     * <code>optional int32 file_idx = 15;</code>
+     */
+    public int getFileIdx() {
+      return fileIdx_;
+    }
+
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.UNKNOWN;
       kind_ = boa.types.Diff.ChangedFile.FileKind.OTHER;
@@ -1937,6 +1999,8 @@ public final class Diff {
       repoKey_ = 0L;
       objectId_ = "";
       root_ = boa.types.Ast.ASTRoot.getDefaultInstance();
+      revisionIdx_ = 0;
+      fileIdx_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2021,6 +2085,12 @@ public final class Diff {
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         output.writeMessage(13, root_);
       }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeInt32(14, revisionIdx_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeInt32(15, fileIdx_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -2101,6 +2171,14 @@ public final class Diff {
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(13, root_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(14, revisionIdx_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(15, fileIdx_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2258,6 +2336,10 @@ public final class Diff {
           rootBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00001000);
+        revisionIdx_ = 0;
+        bitField0_ = (bitField0_ & ~0x00002000);
+        fileIdx_ = 0;
+        bitField0_ = (bitField0_ & ~0x00004000);
         return this;
       }
 
@@ -2351,6 +2433,14 @@ public final class Diff {
         } else {
           result.root_ = rootBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        result.revisionIdx_ = revisionIdx_;
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        result.fileIdx_ = fileIdx_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2437,6 +2527,12 @@ public final class Diff {
         }
         if (other.hasRoot()) {
           mergeRoot(other.getRoot());
+        }
+        if (other.hasRevisionIdx()) {
+          setRevisionIdx(other.getRevisionIdx());
+        }
+        if (other.hasFileIdx()) {
+          setFileIdx(other.getFileIdx());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -3591,6 +3687,72 @@ public final class Diff {
         return rootBuilder_;
       }
 
+      // optional int32 revision_idx = 14;
+      private int revisionIdx_ ;
+      /**
+       * <code>optional int32 revision_idx = 14;</code>
+       */
+      public boolean hasRevisionIdx() {
+        return ((bitField0_ & 0x00002000) == 0x00002000);
+      }
+      /**
+       * <code>optional int32 revision_idx = 14;</code>
+       */
+      public int getRevisionIdx() {
+        return revisionIdx_;
+      }
+      /**
+       * <code>optional int32 revision_idx = 14;</code>
+       */
+      public Builder setRevisionIdx(int value) {
+        bitField0_ |= 0x00002000;
+        revisionIdx_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 revision_idx = 14;</code>
+       */
+      public Builder clearRevisionIdx() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        revisionIdx_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 file_idx = 15;
+      private int fileIdx_ ;
+      /**
+       * <code>optional int32 file_idx = 15;</code>
+       */
+      public boolean hasFileIdx() {
+        return ((bitField0_ & 0x00004000) == 0x00004000);
+      }
+      /**
+       * <code>optional int32 file_idx = 15;</code>
+       */
+      public int getFileIdx() {
+        return fileIdx_;
+      }
+      /**
+       * <code>optional int32 file_idx = 15;</code>
+       */
+      public Builder setFileIdx(int value) {
+        bitField0_ |= 0x00004000;
+        fileIdx_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 file_idx = 15;</code>
+       */
+      public Builder clearFileIdx() {
+        bitField0_ = (bitField0_ & ~0x00004000);
+        fileIdx_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.ChangedFile)
     }
 
@@ -3617,7 +3779,7 @@ public final class Diff {
   static {
     java.lang.String[] descriptorData = {
       "\n\ndiff.proto\022\tboa.types\032\014shared.proto\032\ta" +
-      "st.proto\"\234\n\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
+      "st.proto\"\304\n\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
       "2\025.boa.types.ChangeKind\022-\n\004kind\030\002 \002(\0162\037." +
       "boa.types.ChangedFile.FileKind\022\014\n\004name\030\003" +
       " \002(\t\022\013\n\003key\030\004 \002(\004\022\013\n\003ast\030\005 \002(\010\022)\n\010commen" +
@@ -3626,7 +3788,8 @@ public final class Diff {
       "vious_names\030\010 \003(\t\022\031\n\021previous_versions\030\t" +
       " \003(\005\022\030\n\020previous_indices\030\n \003(\005\022\020\n\010repo_k" +
       "ey\030\013 \001(\004\022\021\n\tobject_id\030\014 \001(\t\022 \n\004root\030\r \001(",
-      "\0132\022.boa.types.ASTRoot\"\247\007\n\010FileKind\022\t\n\005OT" +
+      "\0132\022.boa.types.ASTRoot\022\024\n\014revision_idx\030\016 " +
+      "\001(\005\022\020\n\010file_idx\030\017 \001(\005\"\247\007\n\010FileKind\022\t\n\005OT" +
       "HER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020\003\022\025\n\021" +
       "SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_JAVA_JLS2\020" +
       "f\022\024\n\020SOURCE_JAVA_JLS3\020g\022\024\n\020SOURCE_JAVA_J" +
@@ -3634,8 +3797,8 @@ public final class Diff {
       "R\020d\022\010\n\004JLS2\020f\022\010\n\004JLS3\020g\022\010\n\004JLS4\020h\022\010\n\004JLS" +
       "8\020l\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rSOURCE_CS_C" +
       "S1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\rSOURCE_CS_C" +
-      "S3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rSOURCE_CS_C" +
-      "S5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003CS2\020\312\001",
+      "S3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rSOURCE_CS_C",
+      "S5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003CS2\020\312\001" +
       "\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001\022\024\n\017SOURCE" +
       "_JS_ERROR\020\254\002\022\022\n\rSOURCE_JS_ES1\020\255\002\022\022\n\rSOUR" +
       "CE_JS_ES2\020\256\002\022\022\n\rSOURCE_JS_ES3\020\257\002\022\022\n\rSOUR" +
@@ -3644,8 +3807,8 @@ public final class Diff {
       "RROR\020\254\002\022\025\n\020SOURCE_PHP_ERROR\020\220\003\022\020\n\013SOURCE" +
       "_PHP5\020\221\003\022\022\n\rSOURCE_PHP5_3\020\222\003\022\022\n\rSOURCE_P" +
       "HP5_4\020\223\003\022\022\n\rSOURCE_PHP5_5\020\224\003\022\022\n\rSOURCE_P" +
-      "HP5_6\020\225\003\022\022\n\rSOURCE_PHP7_0\020\226\003\022\022\n\rSOURCE_P" +
-      "HP7_1\020\227\003\022\016\n\tPHP_ERROR\020\220\003\022\026\n\021SOURCE_HTML_",
+      "HP5_6\020\225\003\022\022\n\rSOURCE_PHP7_0\020\226\003\022\022\n\rSOURCE_P",
+      "HP7_1\020\227\003\022\016\n\tPHP_ERROR\020\220\003\022\026\n\021SOURCE_HTML_" +
       "ERROR\020\364\003\022\020\n\013Source_HTML\020\365\003\022\017\n\nHTML_ERROR" +
       "\020\364\003\022\025\n\020SOURCE_XML_ERROR\020\330\004\022\017\n\nSource_XML" +
       "\020\331\004\022\016\n\tXML_ERROR\020\330\004\022\025\n\020SOURCE_CSS_ERROR\020" +
@@ -3662,7 +3825,7 @@ public final class Diff {
           internal_static_boa_types_ChangedFile_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedFile_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", "Comments", "Changes", "PreviousNames", "PreviousVersions", "PreviousIndices", "RepoKey", "ObjectId", "Root", });
+              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", "Comments", "Changes", "PreviousNames", "PreviousVersions", "PreviousIndices", "RepoKey", "ObjectId", "Root", "RevisionIdx", "FileIdx", });
           return null;
         }
       };

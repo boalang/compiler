@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import boa.types.Code.CodeRefactoring;
 import boa.types.Code.CodeRepository;
+import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 import boa.types.Toplevel.Project;
@@ -75,9 +76,9 @@ public class FileChangeLinkedLists {
 				// no deleted files
 				if (fn.cf.getChange() != ChangeKind.DELETED) {
 					noRefNodeIdxs.add(fn.getLocId());
-					if (!revIdxToNodes.containsKey(fn.revIdx))
-						revIdxToNodes.put(fn.revIdx, new ArrayList<FileNode>());
-					revIdxToNodes.get(fn.revIdx).add(fn);
+					if (!revIdxToNodes.containsKey(fn.getRevIdx()))
+						revIdxToNodes.put(fn.getRevIdx(), new ArrayList<FileNode>());
+					revIdxToNodes.get(fn.getRevIdx()).add(fn);
 				}
 			}
 		}
@@ -91,9 +92,9 @@ public class FileChangeLinkedLists {
 			for (String Loc : list.refLocs) {
 				FileNode fn = list.fileLocIdToNode.get(Loc);
 				refNodeIdxs.add(fn.getLocId());
-				if (!revIdxToNodes.containsKey(fn.revIdx))
-					revIdxToNodes.put(fn.revIdx, new ArrayList<FileNode>());
-				revIdxToNodes.get(fn.revIdx).add(fn);
+				if (!revIdxToNodes.containsKey(fn.getRevIdx()))
+					revIdxToNodes.put(fn.getRevIdx(), new ArrayList<FileNode>());
+				revIdxToNodes.get(fn.getRevIdx()).add(fn);
 			}
 		}
 		return refNodeIdxs;
@@ -127,19 +128,25 @@ public class FileChangeLinkedLists {
 		}
 	}
 	
+	// revision info
+	private static HashSet<String> nContributor = new HashSet<String>();
+	
 	public static Rev getRev(CodeRepository cr, int idx) {
 		if (revIdxMap.containsKey(idx))
 			return revIdxMap.get(idx);
-		Rev r = new Rev(idx, getRevision(cr, idx));
-		revIdxMap.put(idx, r);
-		revIdMap.put(r.rev.getId(), r);
+		Revision r = getRevision(cr, idx);
+		nContributor.add(r.getAuthor().getUsername());
+		Rev rev = new Rev(idx, r, nContributor.size());
+		revIdxMap.put(idx, rev);
+		revIdMap.put(r.getId(), rev);
 		return revIdxMap.get(idx);
 	}
 	
 	public boolean validation() {
-		for (FileChangeLinkedList list : lists)
+		for (FileChangeLinkedList list : lists) {
 			if (!list.validation())
 				return false;
+		}
 		return true;
 	}
 

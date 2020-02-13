@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import boa.functions.refactoring.BoaRefactoringPredictionIntrinsics;
+import boa.functions.refactoring.Rev;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Namespace;
@@ -101,7 +102,7 @@ public class RevisionFeatureSet {
 		}
 	};
 
-	public RevisionFeatureSet(ChangedFile[] snapshot) throws Exception {
+	public RevisionFeatureSet(ChangedFile[] snapshot, Rev rev) throws Exception {
 		this.metrics = getMetrics(snapshot);
 		this.ckStats = getCKStats(metrics);
 
@@ -114,6 +115,7 @@ public class RevisionFeatureSet {
 				break;
 		}
 		
+		this.nContributor = rev.nContributorSoFar;
 		this.nPackage = pkgToClassNum.size();
 		this.classDensity = getStats(pkgToClassNum.values());
 		this.methodDensity = getStats(methodNums);

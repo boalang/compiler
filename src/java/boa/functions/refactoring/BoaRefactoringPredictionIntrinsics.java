@@ -155,10 +155,10 @@ public class BoaRefactoringPredictionIntrinsics {
 		if (refRevIds.size() == 0)
 			return;
 		int revCount = getRevisionsCount(cr);
-		for (int i = revCount - 1; i >= 0; i--)
+		for (int i = 0; i < revCount; i++)
 			getRev(cr, i);
 		FileChangeLinkedLists cfLists = new FileChangeLinkedLists(false);
-//		System.out.println(cfLists.validation());
+		System.out.println(cfLists.validation());
 		List<FileChangeLinkedList> lists = cfLists.getLists();
 
 		Set<String> refTypes = CLASS_LEVEL_REFACTORING_TYPES;
@@ -192,7 +192,7 @@ public class BoaRefactoringPredictionIntrinsics {
 		System.out.println("Observed no ref files: " + noRefNodeLocs.size());
 		System.out.println("Observed rev count: " + revIdxToNodes.size());
 
-		RevisionFeatureSet cfs = new RevisionFeatureSet(snapshot);
+		RevisionFeatureSet cfs = new RevisionFeatureSet(snapshot, getRev(cr, revCount - 1));
 //		for (Entry<String, ClassFeatureSet> entry : cfs.classFeatures.entrySet()) {
 //			String key = entry.getKey();
 //			ClassFeatureSet c = entry.getValue();

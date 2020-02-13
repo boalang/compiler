@@ -95,6 +95,8 @@ public abstract class AbstractCommit {
 			cfb.setName(path);
 			cfb.setKey(0);
 			cfb.setAst(false);
+			cfb.setRevisionIdx(commitIdx);
+			cfb.setFileIdx(changedFiles.size());
 			if (!STORE_ASTS) {
 				cfb.setObjectId(oid);
 				cfb.setRepoKey(repoKey);

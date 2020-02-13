@@ -60,9 +60,9 @@ public class FileChangeLinkedList {
 		if (fileLocIdToNode.containsKey(node.getLocId()))
 			System.out.println("err!!!!!!!!!!!!!!!!!");
 		fileLocIdToNode.put(node.getLocId(), node);
-		if (!revIdxToLocs.containsKey(node.revIdx))
-			revIdxToLocs.put(node.revIdx, new ArrayList<Integer>());
-		revIdxToLocs.get(node.revIdx).add(node.fileIdx);
+		if (!revIdxToLocs.containsKey(node.getRevIdx()))
+			revIdxToLocs.put(node.getRevIdx(), new ArrayList<Integer>());
+		revIdxToLocs.get(node.getRevIdx()).add(node.getRevIdx());
 		this.fileChangeLinkedLists.fileLocIdToListIdx.put(node.getLocId(), this.id);
 		if (node.cf.getPreviousVersionsCount() != 0 && node.cf.getPreviousIndicesCount() != 0) {
 			prevRevIdxs.addAll(node.cf.getPreviousVersionsList());
