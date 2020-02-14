@@ -112,6 +112,8 @@ public class RepoMetadata {
 	private String svnRepository;
 	private String gitRepository;
 	private String mainLanguage;
+	private String ownerType;
+	private String defaultBranch;
 	
 
 	private boolean fork = false;
@@ -217,6 +219,16 @@ public class RepoMetadata {
 			JsonElement e = jsonProject.get(GIT_SIZE);
 			if (!e.isJsonNull())
 				this.setSize(e.getAsInt());
+		}
+		if (jsonProject.has("owner")) {
+			JsonElement e = jsonProject.get("owner");
+			if (!e.isJsonNull())
+				this.ownerType = e.getAsJsonObject().get("type").getAsString();
+		}
+		if (jsonProject.has("default_branch")) {
+			JsonElement e = jsonProject.get("default_branch");
+			if (!e.isJsonNull())
+				this.ownerType = e.getAsJsonObject().getAsString();
 		}
         /*if (jsonProject.has("databases")) {
 	    	JSONArray jsonDBs = jsonProject.getJSONArray("databases");

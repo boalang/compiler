@@ -224,7 +224,8 @@ public class BoaRefactoringPredictionIntrinsics {
 			.setPrettyPrinting().create();
 	// output string column names
 	public static StringBuilder colSB = new StringBuilder();
-	public static boolean updateCols = true;
+	public static boolean updateCols1 = true;
+	public static boolean updateCols2 = true;
 
 	public static class ProjectFeatureSet {
 		int projectType = -1; // 0 - user, 1 - org

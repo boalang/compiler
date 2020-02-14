@@ -125,6 +125,12 @@ public class ProjectProtoTuple extends BoaProtoTuple {
 		
 		names.put("noast", counter++);
 		members.add(new BoaBool());
+		
+		names.put("owner_type", counter++);
+		members.add(new BoaString());
+		
+		names.put("default_branch", counter++);
+		members.add(new BoaString());
 	}
 
 	/**

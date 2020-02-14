@@ -82,4 +82,6 @@ message Project {
 	optional string main_language = 27;
 	
 	optional bool noast = 28;
+	optional string owner_type = 29;
+	optional string default_branch = 30;
 }

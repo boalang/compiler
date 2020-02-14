@@ -154,18 +154,19 @@ public class RevisionFeatureSet {
 			JsonElement je = entry.getValue();
 			if (je.isJsonPrimitive()) {
 //				System.out.println(key + " " + je.getAsString());
-				if (updateCols)
+				if (updateCols1)
 					colSB.append(key + " ");
 				revSB.append(je.getAsString() + " ");
 			} else if (je.isJsonArray()) {
 				if (key.equals("ckStats")) {
 					JsonArray cks = je.getAsJsonArray();
 					for (int i = 0; i < cks.size(); i++)
-						updateStatsOutputs(revSB, ck[i], cks.get(i));
+						updateStatsOutputs(revSB, ck[i], cks.get(i), updateCols1);
 				} else {
-					updateStatsOutputs(revSB, key, je);
+					updateStatsOutputs(revSB, key, je, updateCols1);
 				}
 			} else if (je.isJsonObject()) {
+				updateCols1 = false;
 				Iterator<Entry<String, JsonElement>> itr = je.getAsJsonObject().entrySet().iterator();
 				while (itr.hasNext()) {
 					Entry<String, JsonElement> e = itr.next();
@@ -177,7 +178,7 @@ public class RevisionFeatureSet {
 		return outputs;
 	}
 
-	private void updateStatsOutputs(StringBuilder revSB, String key, JsonElement je) {
+	private void updateStatsOutputs(StringBuilder revSB, String key, JsonElement je, boolean updateCols) {
 		JsonArray ja = je.getAsJsonArray();
 		for (int j = 0; j < ja.size(); j++) {
 			String k = key + "_" + stat[j];
@@ -194,34 +195,34 @@ public class RevisionFeatureSet {
 			String key = entry.getKey();
 			JsonElement e = entry.getValue();
 			if (e.isJsonPrimitive()) {
-				if (updateCols)
+				if (updateCols2)
 					colSB.append(key + " ");
 				sb.append(e.getAsString() + " ");
 //				System.out.println(key + " " + e.getAsString());
 			} else if (e.isJsonArray()) {
 				if (key.equals("methodFeatureSets")) {
-					if (updateCols)
+					if (updateCols2)
 						colSB.append(key + " ");
 					sb.append(e.getAsJsonArray().size() + " ");
 //					System.out.println(key + " " + e.getAsJsonArray().size());
 				} else if (key.equals("ckInClass")) {
 					JsonArray cks = e.getAsJsonArray();
 					for (int i = 0; i < cks.size(); i++) {
-						if (updateCols)
+						if (updateCols2)
 							colSB.append(ck[i] + " ");
 						sb.append(cks.get(i).getAsString() + " ");
 //						System.out.println(ck[i] + " " + cks.get(i).getAsString());
 					}
 				} else {
-					updateStatsOutputs(sb, key, e);
+					updateStatsOutputs(sb, key, e, updateCols2);
 				}
 			}
 		}
-		if (updateCols)
-			colSB.append("label" + " ");
-		sb.append(label + " ");
+		if (updateCols2)
+			colSB.append("label");
+		sb.append(label);
 //		System.out.println("label " + label);
-		updateCols = false;
+		updateCols2 = false;
 		return sb.toString();
 	}
 
