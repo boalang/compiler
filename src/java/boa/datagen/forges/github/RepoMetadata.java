@@ -228,7 +228,7 @@ public class RepoMetadata {
 		if (jsonProject.has("default_branch")) {
 			JsonElement e = jsonProject.get("default_branch");
 			if (!e.isJsonNull())
-				this.ownerType = e.getAsString();
+				this.defaultBranch = e.getAsString();
 		}
         /*if (jsonProject.has("databases")) {
 	    	JSONArray jsonDBs = jsonProject.getJSONArray("databases");
@@ -393,6 +393,8 @@ public class RepoMetadata {
 		project.setForks(forks);
 		project.setStars(stars);
 		project.setSize(size);
+		project.setOwnerType(ownerType);
+		project.setDefaultBranch(defaultBranch);
 		if (mainLanguage != null)
 			project.setMainLanguage(mainLanguage);
 		if (programmingLanguages != null) {
