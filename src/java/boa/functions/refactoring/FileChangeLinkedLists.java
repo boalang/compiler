@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeMap;
+
 import boa.types.Code.CodeRefactoring;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -37,7 +39,7 @@ public class FileChangeLinkedLists {
 	private HashSet<Integer> noRefListIdxs = new HashSet<Integer>();
 	private HashSet<String> refNodeLocs = null;
 	private HashSet<String> noRefNodeLocs = null;
-	private HashMap<Integer, List<FileNode>> revIdxToNodes = new HashMap<Integer, List<FileNode>>();
+	private TreeMap<Integer, List<FileNode>> revIdxToObservedNodes = new TreeMap<Integer, List<FileNode>>();
 
 	public void updateRefLists(Project p, HashSet<String> refRevIds, Set<String> refTypes) {
 		for (String id : refRevIds) {
@@ -76,9 +78,9 @@ public class FileChangeLinkedLists {
 				// no deleted files
 				if (fn.cf.getChange() != ChangeKind.DELETED) {
 					noRefNodeIdxs.add(fn.getLocId());
-					if (!revIdxToNodes.containsKey(fn.getRevIdx()))
-						revIdxToNodes.put(fn.getRevIdx(), new ArrayList<FileNode>());
-					revIdxToNodes.get(fn.getRevIdx()).add(fn);
+					if (!revIdxToObservedNodes.containsKey(fn.getRevIdx()))
+						revIdxToObservedNodes.put(fn.getRevIdx(), new ArrayList<FileNode>());
+					revIdxToObservedNodes.get(fn.getRevIdx()).add(fn);
 				}
 			}
 		}
@@ -94,9 +96,9 @@ public class FileChangeLinkedLists {
 				if (fn.cf.getChange() == ChangeKind.DELETED)
 					System.err.println("**** ref cf is DELETED");
 				refNodeIdxs.add(fn.getLocId());
-				if (!revIdxToNodes.containsKey(fn.getRevIdx()))
-					revIdxToNodes.put(fn.getRevIdx(), new ArrayList<FileNode>());
-				revIdxToNodes.get(fn.getRevIdx()).add(fn);
+				if (!revIdxToObservedNodes.containsKey(fn.getRevIdx()))
+					revIdxToObservedNodes.put(fn.getRevIdx(), new ArrayList<FileNode>());
+				revIdxToObservedNodes.get(fn.getRevIdx()).add(fn);
 			}
 		}
 		return refNodeIdxs;
@@ -182,8 +184,8 @@ public class FileChangeLinkedLists {
 		return noRefNodeLocs;
 	}
 
-	public HashMap<Integer, List<FileNode>> getRevIdxToNodes() {
-		return revIdxToNodes;
+	public TreeMap<Integer, List<FileNode>> getRevIdxToObservedNodes() {
+		return revIdxToObservedNodes;
 	}
 
 }

@@ -1,5 +1,6 @@
 package boa.functions.refactoring;
 
+import java.io.File;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,9 +8,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import boa.datagen.util.FileIO;
 import boa.functions.FunctionSpec;
 import boa.functions.refactoring.features.RevisionFeatureSet;
 import boa.types.Code.CodeRefactoring;
@@ -172,7 +176,7 @@ public class BoaRefactoringPredictionIntrinsics {
 		HashSet<Integer> noRefListIdxs = cfLists.getNoRefListIdxs();
 		HashSet<String> refNodeLocs = cfLists.getRefNodeLocs();
 		HashSet<String> noRefNodeLocs = cfLists.getNoRefNodeLocs();
-		HashMap<Integer, List<FileNode>> revIdxToNodes = cfLists.getRevIdxToNodes();
+		TreeMap<Integer, List<FileNode>> revIdxToObservedNodes = cfLists.getRevIdxToObservedNodes();
 
 //		for (Entry<Integer, List<FileNode>> entry : revIdxToNodes.entrySet()) {
 //			int revIdx = entry.getKey();
@@ -186,26 +190,44 @@ public class BoaRefactoringPredictionIntrinsics {
 		System.out.println("lists count: " + lists.size());
 		System.out.println("ref lists count: " + refListIdxs.size());
 		System.out.println("no ref lists count: " + noRefListIdxs.size());
-		ChangedFile[] snapshot = getSnapshot(cr, revCount - 1, true);
-		System.out.println("last snapshot size: " + snapshot.length);
+		ChangedFile[] LatestSnapshot = getSnapshot(cr, revCount - 1, true);
+		System.out.println("last snapshot size: " + LatestSnapshot.length);
 		System.out.println("Observed ref files: " + refNodeLocs.size());
 		System.out.println("Observed no ref files: " + noRefNodeLocs.size());
-		System.out.println("Observed rev count: " + revIdxToNodes.size());
+		System.out.println("Observed rev count: " + revIdxToObservedNodes.size());
 		System.out.println();
 
-		RevisionFeatureSet cfs = new RevisionFeatureSet(snapshot, getRev(cr, revCount - 1));
-		for (String output : cfs.toOutputLists(refNodeLocs, noRefNodeLocs)) {
-			System.out.println(output);
-		}
+//		RevisionFeatureSet cfs = new RevisionFeatureSet(LatestSnapshot, getRev(cr, revCount - 1));
+//		cfs.toOutputLists(refNodeLocs, noRefNodeLocs);
+//		System.out.println(colSB.toString().split(" ").length);
 //		System.out.println("\n" + cfs);
+		
+		StringBuilder sb = new StringBuilder();
+		int dataCount = 0;
+		int obRevCount = 0;
+		for (int revIdx : revIdxToObservedNodes.keySet()) {
+			obRevCount++;
+			ChangedFile[] snapshot = getSnapshot(cr, revIdx, true);
+			RevisionFeatureSet rfs = new RevisionFeatureSet(snapshot, getRev(cr, revIdx));
+			for (String output : rfs.toOutputLists(refNodeLocs, noRefNodeLocs)) {
+				if (dataCount == 0)
+					sb.append(colSB.toString() + "\n");
+				sb.append(output + "\n");
+				System.out.println(obRevCount + " " + revIdx + " " + ++dataCount);
+			}
+		}
+		FileIO.writeFileContents(new File("/Users/hyj/git/BoaData/RefactoringAnalysis/Output2/prediction/features.txt"), sb.toString());
+
 	}
 
 	public static Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PRIVATE).setVersion(2.0)
 			.setPrettyPrinting().create();
+	// output string column names
+	public static StringBuilder colSB = new StringBuilder();
+	public static boolean updateCols = true;
 
 	public static class ProjectFeatureSet {
 		int projectType = -1; // 0 - user, 1 - org
 	}
-
 
 }

@@ -17,12 +17,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import boa.functions.refactoring.BoaRefactoringPredictionIntrinsics;
 import boa.functions.refactoring.Rev;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Namespace;
 import boa.types.Diff.ChangedFile;
+
+import static boa.functions.refactoring.BoaRefactoringPredictionIntrinsics.*;
 
 public class RevisionFeatureSet {
 
@@ -133,11 +134,8 @@ public class RevisionFeatureSet {
 		this.astStatsInMethod = getStats(astNodeNumsInMethod);
 	}
 
-	// output string column names
-	private List<String> cols = new ArrayList<String>();
 	private String[] ck = new String[] { "wmc", "rfc", "lcom", "dit", "noc", "cbo" };
 	private String[] stat = new String[] { "min", "max", "mean", "median", "std" };
-	private boolean updateCols = true;
 
 	public List<String> toOutputLists(HashSet<String> refNodeLocs, HashSet<String> noRefNodeLocs) {
 		List<String> outputs = featuresToString(noRefNodeLocs, 0);
@@ -148,7 +146,7 @@ public class RevisionFeatureSet {
 
 	private List<String> featuresToString(HashSet<String> set, int label) {
 		List<String> outputs = new ArrayList<String>();
-		JsonObject obj = BoaRefactoringPredictionIntrinsics.gson.toJsonTree(this).getAsJsonObject();
+		JsonObject obj = gson.toJsonTree(this).getAsJsonObject();
 		StringBuilder revSB = new StringBuilder();
 
 		for (Entry<String, JsonElement> entry : obj.entrySet()) {
@@ -157,7 +155,7 @@ public class RevisionFeatureSet {
 			if (je.isJsonPrimitive()) {
 //				System.out.println(key + " " + je.getAsString());
 				if (updateCols)
-					cols.add(key);
+					colSB.append(key + " ");
 				revSB.append(je.getAsString() + " ");
 			} else if (je.isJsonArray()) {
 				if (key.equals("ckStats")) {
@@ -185,7 +183,7 @@ public class RevisionFeatureSet {
 			String k = key + "_" + stat[j];
 			String v = ja.get(j).getAsString();
 			if (updateCols)
-				cols.add(k);
+				colSB.append(k + " ");
 			revSB.append(v + " ");
 //			System.out.println(k + " " + v);
 		}
@@ -197,20 +195,20 @@ public class RevisionFeatureSet {
 			JsonElement e = entry.getValue();
 			if (e.isJsonPrimitive()) {
 				if (updateCols)
-					cols.add(key);
+					colSB.append(key + " ");
 				sb.append(e.getAsString() + " ");
 //				System.out.println(key + " " + e.getAsString());
 			} else if (e.isJsonArray()) {
 				if (key.equals("methodFeatureSets")) {
 					if (updateCols)
-						cols.add(key);
+						colSB.append(key + " ");
 					sb.append(e.getAsJsonArray().size() + " ");
 //					System.out.println(key + " " + e.getAsJsonArray().size());
 				} else if (key.equals("ckInClass")) {
 					JsonArray cks = e.getAsJsonArray();
 					for (int i = 0; i < cks.size(); i++) {
 						if (updateCols)
-							cols.add(ck[i]);
+							colSB.append(ck[i] + " ");
 						sb.append(cks.get(i).getAsString() + " ");
 //						System.out.println(ck[i] + " " + cks.get(i).getAsString());
 					}
@@ -220,7 +218,7 @@ public class RevisionFeatureSet {
 			}
 		}
 		if (updateCols)
-			cols.add("label");
+			colSB.append("label" + " ");
 		sb.append(label + " ");
 //		System.out.println("label " + label);
 		updateCols = false;
@@ -229,6 +227,6 @@ public class RevisionFeatureSet {
 
 	@Override
 	public String toString() {
-		return BoaRefactoringPredictionIntrinsics.gson.toJson(this);
+		return gson.toJson(this);
 	}
 }
