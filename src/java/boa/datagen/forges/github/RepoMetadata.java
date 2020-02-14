@@ -228,7 +228,7 @@ public class RepoMetadata {
 		if (jsonProject.has("default_branch")) {
 			JsonElement e = jsonProject.get("default_branch");
 			if (!e.isJsonNull())
-				this.ownerType = e.getAsJsonObject().getAsString();
+				this.ownerType = e.getAsString();
 		}
         /*if (jsonProject.has("databases")) {
 	    	JSONArray jsonDBs = jsonProject.getJSONArray("databases");
