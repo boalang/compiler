@@ -93,17 +93,28 @@ public class TokenList {
 		while (true) {
 			for (Token token : tokens) {
 				mc = new MetadataCacher(url, token.getUserName(), token.getToken());
-				System.out.print("Trying token: " + token.getUserName());
-				if (mc.authenticate() && mc.getNumberOfRemainingLimit() > 0) {
+				System.out.println("Trying token: " + token.getUserName() + " for " + url.substring(0, Math.min(url.length(), 40)) + ((url.length() < 40) ? "" : "..."));
+				mc.authenticate();
+				System.out.println(mc.getUsername() + " " + mc.isAuthenticated());
+				if (mc.getNumberOfRemainingLimit() >= 0) {
+					System.out.println(mc.getNumberOfRemainingLimit());
 					if (this.lastUsedToken != token.getId()) {
 						this.lastUsedToken = token.getId();
-						System.out.println("now using token: " + token.getId());
+						System.out.println("now using token: " + token.getUserName());
 					}
-					System.out.println(mc.getNumberOfRemainingLimit());
 					return token;
 				}
 			}
 			try {
+//				long t = mc.getLimitResetTime() * 1000 - System.currentTimeMillis();
+//				if (t >= 0) { // could be useful if json is created too fast
+//					System.out.println("Waiting " + (t / 1000) + " seconds for sending more requests.");
+//					try {
+//						Thread.sleep(t);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//				}
 				System.out.println("waiting for token, going to sleep for 10s");
 				Thread.sleep(10000);
 			} catch (InterruptedException e) {
@@ -113,21 +124,28 @@ public class TokenList {
 		// throw new IllegalArgumentException();
 	}
 	
+	
 	public Token getNextAuthenticToken(String url, int minRateLimit) {
 		MetadataCacher mc = null;
 		while (true) {
 			for (Token token : tokens) {
-				System.out.print("Trying token: " + token.getUserName() + " ");
+				System.out.println("Trying token: " + token.getUserName() + " ");
 				mc = new MetadataCacher(url, token.getUserName(), token.getToken());
-				if (mc.authenticate()) {
-					if (mc.getNumberOfRemainingLimit() < minRateLimit)
-						continue;
+				mc.authenticate();
+				if (mc.isAuthenticated()) {
+					int limitRemaining = mc.getNumberOfRemainingLimit();
+					if (limitRemaining < minRateLimit) {
+						System.out.println("Authenticated but have " + limitRemaining + " than min rate limit of " + minRateLimit);
+						continue;	
+					}
 					if (this.lastUsedToken != token.getId()) {
 						this.lastUsedToken = token.getId();
-						System.out.println("now using token: " + token.getId());
+						System.out.println("Now using token: " + token.getUserName() + " ");
 					}
 					System.out.println(mc.getNumberOfRemainingLimit());
 					return token;
+				} else {
+					System.err.println("Can't authenticate, response code:" + mc.getResponseCode());
 				}
 			}
 			try {
