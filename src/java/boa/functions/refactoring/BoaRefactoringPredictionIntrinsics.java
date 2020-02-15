@@ -189,11 +189,6 @@ public class BoaRefactoringPredictionIntrinsics {
 		System.out.println("Observed no ref files: " + noRefNodeLocs.size());
 		System.out.println("Observed rev count: " + observedRevIdx.size());
 		System.out.println();
-
-//		RevisionFeatureSet cfs = new RevisionFeatureSet(LatestSnapshot, getRev(cr, revCount - 1));
-//		cfs.toOutputLists(refNodeLocs, noRefNodeLocs);
-//		System.out.println(colSB.toString().split(" ").length);
-//		System.out.println("\n" + cfs);
 		
 		StringBuilder sb = new StringBuilder();
 		int dataCount = 0;
@@ -207,12 +202,12 @@ public class BoaRefactoringPredictionIntrinsics {
 					sb.append(colSB.toString() + "\n");
 				sb.append(output + "\n");
 				System.out.println(obRevCount + " " + revIdx + " " + ++dataCount);
-				System.out.println(output);
+//				System.out.println(output);
 			}
 			break;
 		}
 		
-//		FileIO.writeFileContents(new File("/Users/hyj/git/BoaData/RefactoringAnalysis/Output2/prediction/features.txt"), sb.toString());
+		FileIO.writeFileContents(new File("/Users/hyj/git/BoaData/RefactoringAnalysis/Output2/prediction/ob1.txt"), sb.toString());
 
 	}
 

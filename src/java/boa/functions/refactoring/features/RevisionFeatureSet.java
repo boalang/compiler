@@ -2,7 +2,6 @@ package boa.functions.refactoring.features;
 
 import static boa.functions.BoaMetricIntrinsics.getMetrics;
 import static boa.functions.refactoring.BoaRefactoringIntrinsics.getCKStats;
-import static boa.functions.refactoring.BoaRefactoringIntrinsics.getPackageNameFromFQN;
 import static boa.functions.refactoring.BoaRefactoringIntrinsics.getStats;
 
 import java.util.ArrayList;
@@ -11,8 +10,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

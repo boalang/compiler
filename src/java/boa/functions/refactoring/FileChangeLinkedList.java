@@ -50,11 +50,14 @@ public class FileChangeLinkedList {
 			}
 			return true;
 		}
-		// update list and global node map
+		// update list and global maps
 		fileLocs.add(node.getLocId());
 		node.setListObjectId(this.id);
 		fileLocIdToNode.put(node.getLocId(), node);
-		fileObjectIdToLocs.put(node.getChangedFile().getObjectId(), node.getLocId());
+		String oid = node.getChangedFile().getObjectId();
+		if (!fileObjectIdToLocs.containsKey(oid))
+			fileObjectIdToLocs.put(oid, new HashSet<String>());
+		fileObjectIdToLocs.get(oid).add(node.getLocId());
 		// update prev queues
 		if (node.getChangedFile().getPreviousVersionsCount() != 0
 				&& node.getChangedFile().getPreviousIndicesCount() != 0) {
@@ -85,6 +88,10 @@ public class FileChangeLinkedList {
 
 	public ListObjectId getId() {
 		return id;
+	}
+	
+	public HashSet<String> getFileLocs() {
+		return fileLocs;
 	}
 
 	public class ListObjectId {
