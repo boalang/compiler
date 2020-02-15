@@ -9,16 +9,16 @@ import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 
 public class Rev {
-	public int revIdx;
-	public Revision rev;
-	public int nContributorSoFar;
+	private int revIdx;
+	private Revision rev;
+	private int nContributorSoFar;
 
 	public Rev(int revIdx, Revision rev, int nContributor) {
 		this.revIdx = revIdx;
 		this.rev = rev;
 		this.nContributorSoFar = nContributor;
 	}
-	
+
 	public List<FileNode> getJavaFileNodes() {
 		List<FileNode> fns = new ArrayList<FileNode>();
 		for (int i = 0; i < rev.getFilesCount(); i++) {
@@ -28,4 +28,17 @@ public class Rev {
 		}
 		return fns;
 	}
+
+	public int getRevIdx() {
+		return revIdx;
+	}
+
+	public Revision getRevision() {
+		return rev;
+	}
+
+	public int getContributorNumSoFar() {
+		return nContributorSoFar;
+	}
+
 }

@@ -24,8 +24,8 @@ public class FileChangeLinkedLists {
 	protected static HashMap<Integer, Rev> revIdxMap = new HashMap<Integer, Rev>();
 	protected static HashMap<String, Rev> revIdMap = new HashMap<String, Rev>();
 	protected static List<FileChangeLinkedList> lists = new ArrayList<FileChangeLinkedList>();
-	protected static HashMap<String, Integer> fileLocIdToListIdx = new HashMap<String, Integer>();
-	
+	protected static HashMap<String, String> fileObjectIdToLocs = new HashMap<String, String>();
+	protected static HashMap<String, FileNode> fileLocIdToNode = new HashMap<String, FileNode>();
 	
 	boolean debug = false;
 
@@ -39,22 +39,22 @@ public class FileChangeLinkedLists {
 	private HashSet<Integer> noRefListIdxs = new HashSet<Integer>();
 	private HashSet<String> refNodeLocs = null;
 	private HashSet<String> noRefNodeLocs = null;
-	private TreeMap<Integer, List<FileNode>> revIdxToObservedNodes = new TreeMap<Integer, List<FileNode>>();
+	private HashSet<Integer> observedRevIdx = new HashSet<Integer>();
 
 	public void updateRefLists(Project p, HashSet<String> refRevIds, Set<String> refTypes) {
 		for (String id : refRevIds) {
 			Rev r = revIdMap.get(id);
-			List<CodeRefactoring> refs = refTypes == null ? getCodeChange(p, r.rev).getRefactoringsList()
-					: getRefactorings(p, r.rev, refTypes);
+			List<CodeRefactoring> refs = refTypes == null ? getCodeChange(p, r.getRevision()).getRefactoringsList()
+					: getRefactorings(p, r.getRevision(), refTypes);
 			for (CodeRefactoring ref : refs) {
 				String beforeFilePath = ref.getLeftSideLocations(0).getFilePath();
-				FileNode fn = findNode(beforeFilePath, r.rev.getParents(0));
-				if (!fileLocIdToListIdx.containsKey(fn.getLocId()))
+				FileNode fn = findNode(beforeFilePath, r.getRevision().getParents(0));
+				if (!fileLocIdToNode.containsKey(fn.getLocId()))
 					System.err.println("err 1");
-				int ListIdx = fileLocIdToListIdx.get(fn.getLocId());
+				int ListIdx = fileLocIdToNode.get(fn.getLocId()).getListObjectId().getAsInt();
 				FileChangeLinkedList list = lists.get(ListIdx);
-				if (!list.fileLocIdToNode.get(fn.locId).equals(fn)) {
-					System.out.println(ref.getDescription());
+				if (!fileLocIdToNode.get(fn.getLocId()).equals(fn)) {
+					System.err.println(ref.getDescription());
 				}
 				list.refLocs.add(fn.getLocId());
 			}
@@ -62,9 +62,9 @@ public class FileChangeLinkedLists {
 
 		for (FileChangeLinkedList list : lists)
 			if (list.refLocs.size() > 0)
-				refListIdxs.add(list.id);
+				refListIdxs.add(list.getId().getAsInt());
 			else
-				noRefListIdxs.add(list.id);
+				noRefListIdxs.add(list.getId().getAsInt());
 
 		refNodeLocs = getRefNodeIdxs();
 		noRefNodeLocs = getNoRefNodeIdxs();
@@ -74,13 +74,15 @@ public class FileChangeLinkedLists {
 		HashSet<String> noRefNodeIdxs = new HashSet<String>();
 		for (int ListIdx : noRefListIdxs) {
 			FileChangeLinkedList list = lists.get(ListIdx);
-			for (FileNode fn : list.fileLocIdToNode.values()) {
+			for (String locId : list.refLocs) {
+				FileNode fn = fileLocIdToNode.get(locId);
 				// no deleted files
-				if (fn.cf.getChange() != ChangeKind.DELETED) {
+				if (fn.getChangedFile().getChange() != ChangeKind.DELETED) {
 					noRefNodeIdxs.add(fn.getLocId());
-					if (!revIdxToObservedNodes.containsKey(fn.getRevIdx()))
-						revIdxToObservedNodes.put(fn.getRevIdx(), new ArrayList<FileNode>());
-					revIdxToObservedNodes.get(fn.getRevIdx()).add(fn);
+//					if (!revIdxToObservedNodes.containsKey(fn.getRevIdx()))
+//						revIdxToObservedNodes.put(fn.getRevIdx(), new ArrayList<FileNode>());
+//					revIdxToObservedNodes.get(fn.getRevIdx()).add(fn);
+					
 				}
 			}
 		}
@@ -91,14 +93,16 @@ public class FileChangeLinkedLists {
 		HashSet<String> refNodeIdxs = new HashSet<String>();
 		for (int ListIdx : refListIdxs) {
 			FileChangeLinkedList list = lists.get(ListIdx);
-			for (String Loc : list.refLocs) {
-				FileNode fn = list.fileLocIdToNode.get(Loc);
-				if (fn.cf.getChange() == ChangeKind.DELETED)
+			for (String locId : list.refLocs) {
+				FileNode fn = fileLocIdToNode.get(locId);
+				if (fn.getChangedFile().getChange() == ChangeKind.DELETED)
 					System.err.println("**** ref cf is DELETED");
 				refNodeIdxs.add(fn.getLocId());
-				if (!revIdxToObservedNodes.containsKey(fn.getRevIdx()))
-					revIdxToObservedNodes.put(fn.getRevIdx(), new ArrayList<FileNode>());
-				revIdxToObservedNodes.get(fn.getRevIdx()).add(fn);
+//				if (!revIdxToObservedNodes.containsKey(fn.getRevIdx()))
+//					revIdxToObservedNodes.put(fn.getRevIdx(), new ArrayList<FileNode>());
+//				revIdxToObservedNodes.get(fn.getRevIdx()).add(fn);
+				if (!observedRevIdx.contains(fn.getRevIdx()))
+					System.err.println("err");
 			}
 		}
 		return refNodeIdxs;
@@ -107,14 +111,15 @@ public class FileChangeLinkedLists {
 	public FileNode findNode(String fileName, int parentIdx) {
 		Rev cur = revIdxMap.get(parentIdx);
 		while (true) {
-			for (int i = 0; i < cur.rev.getFilesCount(); i++) {
-				ChangedFile cf = cur.rev.getFiles(i);
+			for (int i = 0; i < cur.getRevision().getFilesCount(); i++) {
+				ChangedFile cf = cur.getRevision().getFiles(i);
+				observedRevIdx.add(cur.getRevIdx());
 				if (cf.getName().equals(fileName))
 					return new FileNode(cf, cur, i);
 			}
-			if (cur.rev.getParentsCount() == 0)
+			if (cur.getRevision().getParentsCount() == 0)
 				return null;
-			cur = revIdxMap.get(cur.rev.getParents(0));
+			cur = revIdxMap.get(cur.getRevision().getParents(0));
 		}
 	}
 
@@ -122,20 +127,13 @@ public class FileChangeLinkedLists {
 		for (int i = revIdxMap.size() - 1; i >= 0; i--) {
 			Rev r = revIdxMap.get(i);
 			for (FileNode fn : r.getJavaFileNodes()) {
-				if (!fileLocIdToListIdx.containsKey(fn.getLocId())) {
-					
+				if (!fileLocIdToNode.containsKey(fn.getLocId())) {
 					FileChangeLinkedList list = new FileChangeLinkedList(this, fn, lists.size());
 					if (list.linkAll())
 						lists.add(list);
 				}
 			}
 		}
-	}
-	
-	public static FileNode getFileNode(String locId) {
-		if (!fileLocIdToListIdx.containsKey(locId))
-			System.err.println("cannot find locId " + locId);
-		return lists.get(fileLocIdToListIdx.get(locId)).fileLocIdToNode.get(locId);
 	}
 	
 	// revision info
@@ -151,14 +149,6 @@ public class FileChangeLinkedLists {
 		revIdMap.put(r.getId(), rev);
 		return revIdxMap.get(idx);
 	}
-	
-	public boolean validation() {
-		for (FileChangeLinkedList list : lists) {
-			if (!list.validation())
-				return false;
-		}
-		return true;
-	}
 
 	public HashSet<Integer> getRefListIdxs() {
 		return refListIdxs;
@@ -171,10 +161,6 @@ public class FileChangeLinkedLists {
 	public List<FileChangeLinkedList> getLists() {
 		return lists;
 	}
-
-	public HashMap<String, Integer> getFileLocIdToListIdxMap() {
-		return fileLocIdToListIdx;
-	}
 	
 	public HashSet<String> getRefNodeLocs() {
 		return refNodeLocs;
@@ -184,8 +170,8 @@ public class FileChangeLinkedLists {
 		return noRefNodeLocs;
 	}
 
-	public TreeMap<Integer, List<FileNode>> getRevIdxToObservedNodes() {
-		return revIdxToObservedNodes;
+	public HashSet<Integer> getObservedRevIdx() {
+		return observedRevIdx;
 	}
 
 }

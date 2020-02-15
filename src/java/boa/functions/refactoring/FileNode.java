@@ -1,16 +1,16 @@
 package boa.functions.refactoring;
 
+import boa.functions.refactoring.FileChangeLinkedList.ListObjectId;
 import boa.types.Diff.ChangedFile;
 
 public class FileNode {
 
-	ChangedFile cf = null;
-	Rev r = null;
-	String locId = null;
+	private ChangedFile cf = null;
+	private Rev r = null;
+	private String locId = null;
+	private ListObjectId listId = null;
 
 	public FileNode(ChangedFile cf, Rev r, int fileIdx) {
-		if (cf == null)
-			System.err.println("err null ChangedFile");
 		this.cf = cf;
 		this.r = r;
 	}
@@ -28,14 +28,35 @@ public class FileNode {
 	public int getFileIdx() {
 		return cf.getFileIdx();
 	}
+	
+	public ListObjectId getListObjectId() {
+		return listId;
+	}
+	
+	public void setListObjectId(ListObjectId listId) {
+		this.listId = listId;
+	}
+	
+	public ChangedFile getChangedFile() {
+		return cf;
+	}
+
+	public Rev getRev() {
+		return r;
+	}
+
+	public ListObjectId getListId() {
+		return listId;
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cf == null) ? 0 : cf.hashCode());
+//		result = prime * result + ((cf == null) ? 0 : cf.hashCode());
+		result = prime * result + ((listId == null) ? 0 : listId.hashCode());
 		result = prime * result + ((locId == null) ? 0 : locId.hashCode());
-		result = prime * result + ((r == null) ? 0 : r.hashCode());
+//		result = prime * result + ((r == null) ? 0 : r.hashCode());
 		return result;
 	}
 
@@ -53,6 +74,11 @@ public class FileNode {
 //				return false;
 //		} else if (!cf.equals(other.cf))
 //			return false;
+//		if (listId == null) {
+//			if (other.listId != null)
+//				return false;
+//		} else if (!listId.equals(other.listId))
+//			return false;
 		if (locId == null) {
 			if (other.locId != null)
 				return false;
@@ -65,5 +91,6 @@ public class FileNode {
 //			return false;
 		return true;
 	}
+
 
 }

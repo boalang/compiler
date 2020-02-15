@@ -176,14 +176,7 @@ public class BoaRefactoringPredictionIntrinsics {
 		HashSet<Integer> noRefListIdxs = cfLists.getNoRefListIdxs();
 		HashSet<String> refNodeLocs = cfLists.getRefNodeLocs();
 		HashSet<String> noRefNodeLocs = cfLists.getNoRefNodeLocs();
-		TreeMap<Integer, List<FileNode>> revIdxToObservedNodes = cfLists.getRevIdxToObservedNodes();
-
-//		for (Entry<Integer, List<FileNode>> entry : revIdxToNodes.entrySet()) {
-//			int revIdx = entry.getKey();
-//			List<FileNode> fileNodes = entry.getValue();
-//
-//			break;
-//		}
+		HashSet<Integer> observedRevIdx = cfLists.getObservedRevIdx();
 
 		// print
 		System.out.println("Total Revs: " + revCount);
@@ -194,7 +187,7 @@ public class BoaRefactoringPredictionIntrinsics {
 		System.out.println("last snapshot size: " + LatestSnapshot.length);
 		System.out.println("Observed ref files: " + refNodeLocs.size());
 		System.out.println("Observed no ref files: " + noRefNodeLocs.size());
-		System.out.println("Observed rev count: " + revIdxToObservedNodes.size());
+		System.out.println("Observed rev count: " + observedRevIdx.size());
 		System.out.println();
 
 //		RevisionFeatureSet cfs = new RevisionFeatureSet(LatestSnapshot, getRev(cr, revCount - 1));
@@ -205,18 +198,21 @@ public class BoaRefactoringPredictionIntrinsics {
 		StringBuilder sb = new StringBuilder();
 		int dataCount = 0;
 		int obRevCount = 0;
-		for (int revIdx : revIdxToObservedNodes.keySet()) {
+		for (int revIdx : observedRevIdx) {
 			obRevCount++;
 			ChangedFile[] snapshot = getSnapshot(cr, revIdx, true);
 			RevisionFeatureSet rfs = new RevisionFeatureSet(snapshot, getRev(cr, revIdx));
-			for (String output : rfs.toOutputLists(refNodeLocs, noRefNodeLocs)) {
+			for (String output : rfs.toOutputListsForBC(refNodeLocs, noRefNodeLocs)) {
 				if (dataCount == 0)
 					sb.append(colSB.toString() + "\n");
 				sb.append(output + "\n");
 				System.out.println(obRevCount + " " + revIdx + " " + ++dataCount);
+				System.out.println(output);
 			}
+			break;
 		}
-		FileIO.writeFileContents(new File("/Users/hyj/git/BoaData/RefactoringAnalysis/Output2/prediction/features.txt"), sb.toString());
+		
+//		FileIO.writeFileContents(new File("/Users/hyj/git/BoaData/RefactoringAnalysis/Output2/prediction/features.txt"), sb.toString());
 
 	}
 

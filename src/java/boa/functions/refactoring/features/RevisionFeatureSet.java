@@ -125,7 +125,7 @@ public class RevisionFeatureSet {
 //				break;
 		}
 
-		this.nContributorInSnapshot = rev.nContributorSoFar;
+		this.nContributorInSnapshot = rev.getContributorNumSoFar();
 		this.nPackageInSnapshot = pkgToClassNum.size();
 		this.classStatsInPacakge = getStats(pkgToClassNum.values());
 		this.methodStatsInClass = getStats(methodNums);
@@ -137,14 +137,20 @@ public class RevisionFeatureSet {
 	private String[] ck = new String[] { "wmc", "rfc", "lcom", "dit", "noc", "cbo" };
 	private String[] stat = new String[] { "min", "max", "mean", "median", "std" };
 
-	public List<String> toOutputLists(HashSet<String> refNodeLocs, HashSet<String> noRefNodeLocs) {
-		List<String> outputs = featuresToString(noRefNodeLocs, 0);
-		outputs.addAll(featuresToString(refNodeLocs, 1));
+	public List<String> toOutputListsForBC(HashSet<String> refNodeLocs, HashSet<String> noRefNodeLocs) {
+		List<String> outputs = featuresToString(noRefNodeLocs, "label", "0");
+		outputs.addAll(featuresToString(refNodeLocs, "label", "1"));
 //		System.out.println(cols.size() + " " + outputs.get(0).split(" ").length + " " + outputs.size());
 		return outputs;
 	}
+	
+	public List<String> toOutputListsForCC(HashSet<String> refNodeLocs, HashSet<String> noRefNodeLocs) {
+		List<String> outputs = featuresToString(noRefNodeLocs, "R NR NS", "0 1 0");
+		outputs.addAll(featuresToString(refNodeLocs, "R NR NS", "1 0 0"));
+		return outputs;
+	}
 
-	private List<String> featuresToString(HashSet<String> set, int label) {
+	private List<String> featuresToString(HashSet<String> set, String label_cols, String labels) {
 		List<String> outputs = new ArrayList<String>();
 		JsonObject obj = gson.toJsonTree(this).getAsJsonObject();
 		StringBuilder revSB = new StringBuilder();
@@ -171,7 +177,7 @@ public class RevisionFeatureSet {
 				while (itr.hasNext()) {
 					Entry<String, JsonElement> e = itr.next();
 					if (set.contains(e.getKey()))
-						outputs.add(getClassOutput(e.getValue(), new StringBuilder(revSB), label));
+						outputs.add(getClassOutput(e.getValue(), new StringBuilder(revSB), label_cols, labels));
 				}
 			}
 		}
@@ -190,7 +196,7 @@ public class RevisionFeatureSet {
 		}
 	}
 
-	private String getClassOutput(JsonElement je, StringBuilder sb, int label) {
+	private String getClassOutput(JsonElement je, StringBuilder sb, String label_cols, String labels) {
 		for (Entry<String, JsonElement> entry : je.getAsJsonObject().entrySet()) {
 			String key = entry.getKey();
 			JsonElement e = entry.getValue();
@@ -219,8 +225,8 @@ public class RevisionFeatureSet {
 			}
 		}
 		if (updateCols2)
-			colSB.append("label");
-		sb.append(label);
+			colSB.append(label_cols);
+		sb.append(labels);
 //		System.out.println("label " + label);
 		updateCols2 = false;
 		return sb.toString();
