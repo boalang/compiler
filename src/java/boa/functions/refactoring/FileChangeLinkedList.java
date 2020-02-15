@@ -13,7 +13,7 @@ public class FileChangeLinkedList {
 	private HashSet<String> fileLocs = new HashSet<String>();
 	private Queue<Integer> prevRevIdxs = new LinkedList<Integer>();
 	private Queue<Integer> prevFileIdxs = new LinkedList<Integer>();
-	// refactoring
+	// refactoring info
 	public HashSet<String> refLocs = new HashSet<String>();
 
 	public FileChangeLinkedList(FileChangeLinkedLists fileChangeLinkedLists, FileNode node, int listIdx) {
@@ -50,10 +50,11 @@ public class FileChangeLinkedList {
 			}
 			return true;
 		}
-		// update list and node
+		// update list and global node map
 		fileLocs.add(node.getLocId());
 		node.setListObjectId(this.id);
 		fileLocIdToNode.put(node.getLocId(), node);
+		fileObjectIdToLocs.put(node.getChangedFile().getObjectId(), node.getLocId());
 		// update prev queues
 		if (node.getChangedFile().getPreviousVersionsCount() != 0
 				&& node.getChangedFile().getPreviousIndicesCount() != 0) {
@@ -66,6 +67,7 @@ public class FileChangeLinkedList {
 	public void merge(FileChangeLinkedList list) {
 		if (this.fileChangeLinkedLists.debug)
 			System.out.println("list " + this.id + " merge list " + list.id);
+		// add nodes and update their list id
 		this.fileLocs.addAll(list.fileLocs);
 		list.id.setId(this.id.getAsInt());
 		// merge queues
