@@ -110,11 +110,9 @@ public class FileChangeLinkedLists {
 					if (fileObjectIdToLocs.containsKey(cf.getObjectId()) 
 							&& fileObjectIdToLocs.get(cf.getObjectId()).size() > 1) {
 						String fileLoc = cf.getRevisionIdx() + " " + cf.getFileIdx();						
-						for (String locId : fileObjectIdToLocs.get(cf.getObjectId())) {
-							if (!locId.equals(fileLoc)) {
+						for (String locId : fileObjectIdToLocs.get(cf.getObjectId()))
+							if (!locId.equals(fileLoc))
 								observedRevIdx.add(Integer.parseInt(locId.split(" ")[0]));
-							}
-						}
 					}
 					return new FileNode(cf, cur, i);
 				}

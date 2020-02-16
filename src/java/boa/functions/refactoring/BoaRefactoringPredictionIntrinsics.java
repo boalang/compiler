@@ -203,11 +203,12 @@ public class BoaRefactoringPredictionIntrinsics {
 				sb.append(output + "\n");
 				System.out.println(obRevCount + " " + revIdx + " " + ++dataCount);
 //				System.out.println(output);
+//				break;
 			}
-			break;
+//			break;
 		}
 		
-		FileIO.writeFileContents(new File("/Users/hyj/git/BoaData/RefactoringAnalysis/Output2/prediction/ob1.txt"), sb.toString());
+		FileIO.writeFileContents(new File("/Users/hyj/git/BoaData/RefactoringAnalysis/Output2/prediction/ob3.txt"), sb.toString());
 
 	}
 

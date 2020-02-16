@@ -135,8 +135,8 @@ public class RevisionFeatureSet {
 	private String[] stat = new String[] { "min", "max", "mean", "median", "std" };
 
 	public List<String> toOutputListsForBC(HashSet<String> refNodeLocs, HashSet<String> noRefNodeLocs) {
-		List<String> outputs = featuresToString(noRefNodeLocs, "label", "0");
-		outputs.addAll(featuresToString(refNodeLocs, "label", "1"));
+		List<String> outputs = featuresToString(refNodeLocs, "label", "1");
+//		outputs.addAll(featuresToString(noRefNodeLocs, "label", "0"));
 //		System.out.println(cols.size() + " " + outputs.get(0).split(" ").length + " " + outputs.size());
 		return outputs;
 	}
@@ -175,6 +175,8 @@ public class RevisionFeatureSet {
 					Entry<String, JsonElement> e = itr.next();
 					if (set.contains(e.getKey()))
 						outputs.add(getClassOutput(e.getValue(), new StringBuilder(revSB), label_cols, labels));
+					else
+						outputs.add(getClassOutput(e.getValue(), new StringBuilder(revSB), "label", "0"));
 				}
 			}
 		}
