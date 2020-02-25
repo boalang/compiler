@@ -310,7 +310,7 @@ public class BoaMetricIntrinsics {
 			}
 			
 		};
-		
+
 		public void process(ChangedFile[] snapshot) throws Exception {
 			fqns = new HashSet<String>();
 			childToParentsMap = new HashMap<String, HashSet<String>>();
@@ -620,7 +620,7 @@ public class BoaMetricIntrinsics {
 		
 		private HashSet<String> declarationVars;
 		private HashSet<String> methodVars;
-		private double numAccesses;
+		private long numAccesses;
 		private double lcom;
 
 		private BoaAbstractVisitor methodVisitor = new BoaAbstractVisitor() {
@@ -667,7 +667,8 @@ public class BoaMetricIntrinsics {
 					numAccesses += methodVars.size();
 					methodVars.clear();
 				}
-				lcom = (methodsCount - numAccesses / fieldsCount) / (methodsCount - 1.0);
+				lcom = ((methodsCount - numAccesses / fieldsCount) / (methodsCount - 1.0));
+//				System.out.println(fieldsCount + " " + methodsCount + " " + lcom);
 				declarationVars.clear();
 				methodVars.clear();
 			}
@@ -687,9 +688,9 @@ public class BoaMetricIntrinsics {
 	 * @return the LCOM value for node
 	 */
 	@FunctionSpec(name = "get_metric_lcom", returnType = "float", formalParameters = { "Declaration" })
-	public static long getMetricLCOM(final Declaration node) throws Exception {
+	public static double getMetricLCOM(final Declaration node) throws Exception {
 		lcooVisitor.initialize().visit(node);
-		return (long) lcooVisitor.getLCOM();
+		return lcooVisitor.getLCOM();
 	}
 
 	////////////////////////////
@@ -718,7 +719,7 @@ public class BoaMetricIntrinsics {
 	public static HashMap<String, double[]> getMetrics(final ChangedFile[] snapshot) throws Exception {
 		HashMap<String, Long> wmc = new HashMap<String, Long>();
 		HashMap<String, Long> rfc = new HashMap<String, Long>();
-		HashMap<String, Long> lcom = new HashMap<String, Long>();
+		HashMap<String, Double> lcom = new HashMap<String, Double>();
 		for (ChangedFile cf : snapshot)
 			new BoaAbstractVisitor() {
 				@Override
