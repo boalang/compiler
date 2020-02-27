@@ -28,7 +28,9 @@ import boa.compiler.visitors.AbstractVisitor;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.*;
 import boa.types.Ast.Expression.ExpressionKind;
+import boa.types.Code.CodeRepository;
 import boa.types.Diff.ChangedFile;
+import boa.types.Toplevel.Project;
 
 /**
  * Boa domain-specific functions for computing software engineering metrics.
@@ -687,9 +689,26 @@ public class BoaMetricIntrinsics {
 	 * @return the LCOM value for node
 	 */
 	@FunctionSpec(name = "get_metric_lcom", returnType = "float", formalParameters = { "Declaration" })
-	public static long getMetricLCOM(final Declaration node) throws Exception {
+	public static double getMetricLCOM(final Declaration node) throws Exception {
 		lcooVisitor.initialize().visit(node);
-		return (long) lcooVisitor.getLCOM();
+		return lcooVisitor.getLCOM();
+	}
+	
+	@FunctionSpec(name = "get_lcoms", returnType = "map[string] of float", formalParameters = { "array of ChangedFile" })
+	public static HashMap<String, Double> getLCOMs(final ChangedFile[] snapshot) throws Exception {
+		HashMap<String, Double> lcoms = new HashMap<String, Double>();
+		for (ChangedFile cf : snapshot)
+			new BoaAbstractVisitor() {
+				@Override
+				public boolean preVisit(final Declaration node) throws Exception {
+					String key = cf.getName() + " " + node.getFullyQualifiedName();
+					lcoms.put(key, getMetricLCOM(node));
+					for (Declaration d : node.getNestedDeclarationsList())
+						visit(d);
+					return false;
+				}
+			}.visit(cf);
+		return lcoms;
 	}
 
 	////////////////////////////
@@ -718,7 +737,7 @@ public class BoaMetricIntrinsics {
 	public static HashMap<String, double[]> getMetrics(final ChangedFile[] snapshot) throws Exception {
 		HashMap<String, Long> wmc = new HashMap<String, Long>();
 		HashMap<String, Long> rfc = new HashMap<String, Long>();
-		HashMap<String, Long> lcom = new HashMap<String, Long>();
+		HashMap<String, Double> lcom = new HashMap<String, Double>();
 		for (ChangedFile cf : snapshot)
 			new BoaAbstractVisitor() {
 				@Override
