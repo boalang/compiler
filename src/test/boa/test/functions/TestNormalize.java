@@ -43,6 +43,8 @@ public class TestNormalize {
     @Parameters(name = "{index}][{0} = {1}")
     public static Collection<String[]> expressions() {
         return Arrays.asList(new String[][]{
+                {"a != 0xFFFFFFFFFFFFFFFFL", "a != 0xFFFFFFFFFFFFFFFFL"},
+
                 {"a > 1", "a > 1"},
                 {"a > +1", "a > 1"},
                 {"1 > a", "a < 1"},

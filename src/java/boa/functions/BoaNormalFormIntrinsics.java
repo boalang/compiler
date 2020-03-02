@@ -1416,9 +1416,13 @@ public class BoaNormalFormIntrinsics {
 			// literals are converted to numbers, if possible
 			case LITERAL:
 				if (BoaAstIntrinsics.isIntLit(e)) {
-					if (e.getLiteral().toUpperCase().endsWith("L"))
-						return Long.decode(e.getLiteral().substring(0, e.getLiteral().length() - 1));
-					return Long.decode(e.getLiteral());
+					try {
+						if (e.getLiteral().toUpperCase().endsWith("L"))
+							return Long.decode(e.getLiteral().substring(0, e.getLiteral().length() - 1));
+						return Long.decode(e.getLiteral());
+					} catch (final NumberFormatException ex) {
+						return e;
+					}
 				}
 				if (BoaAstIntrinsics.isFloatLit(e))
 					return Double.parseDouble(e.getLiteral());
