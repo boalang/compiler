@@ -8,6 +8,7 @@ import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
+import boa.types.Toplevel.Project;
 import gr.uom.java.xmi.UMLModel;
 import org.refactoringminer.api.RefactoringType;
 
@@ -34,7 +35,7 @@ import org.refactoringminer.rm1.GitHistoryRefactoringMinerImpl;
 import com.google.common.math.*;
 
 public class BoaRefactoringIntrinsics {
-
+	
 	@FunctionSpec(name = "getrefactoringtype", returnType = "string", formalParameters = { "string" })
 	public static String getRefactoringType(final String desctiption) throws Exception {
 		return RefactoringType.extractFromDescription(desctiption).getDisplayName();
@@ -88,12 +89,14 @@ public class BoaRefactoringIntrinsics {
 	public static ChangedFile[] getFilesBefore(Revision r, ChangedFile[] snapshot) {
 		HashSet<String> fileNamesBefore = new HashSet<String>();
 		for (ChangedFile cf : r.getFilesList()) {
-			if (cf.getChange() == ChangeKind.ADDED)
-				continue;
-			if (cf.getChange() == ChangeKind.RENAMED)
-				fileNamesBefore.add(cf.getPreviousNames(0));
-			else
-				fileNamesBefore.add(cf.getName());
+			if (isJavaFile(cf.getName())) {
+				if (cf.getChange() == ChangeKind.ADDED)
+					continue;
+				if (cf.getChange() == ChangeKind.RENAMED)
+					fileNamesBefore.add(cf.getPreviousNames(0));
+				else
+					fileNamesBefore.add(cf.getName());
+			}
 		}
 		List<ChangedFile> filesBefore = new ArrayList<ChangedFile>();
 		for (ChangedFile cf : snapshot) {
@@ -380,6 +383,16 @@ public class BoaRefactoringIntrinsics {
 		results[4] = getStats(noc);
 		results[5] = getStats(cbo);
 		return results;
+	}
+	
+	@FunctionSpec(name = "one_month", returnType = "bool", formalParameters = { "Project" })
+	public static boolean oneMonth(final Project p) throws Exception {
+		CodeRepository cr = p.getCodeRepositories(0);
+		int count = getRevisionsCount(cr);
+		long r_start = getRevision(cr, 0).getCommitDate();
+		long r_end = getRevision(cr, count - 1).getCommitDate();
+		double time = (r_end - r_start) * 1.0 / 2.628e12;
+		return time > 1;
 	}
 	
 

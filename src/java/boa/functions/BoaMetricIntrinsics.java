@@ -28,7 +28,9 @@ import boa.compiler.visitors.AbstractVisitor;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.*;
 import boa.types.Ast.Expression.ExpressionKind;
+import boa.types.Code.CodeRepository;
 import boa.types.Diff.ChangedFile;
+import boa.types.Toplevel.Project;
 
 /**
  * Boa domain-specific functions for computing software engineering metrics.
@@ -191,8 +193,8 @@ public class BoaMetricIntrinsics {
 	/////////////////////////////////////
 
 	private static class BoaDITVisitor extends BoaCollectingVisitor<String, Long> {
-		
-		private HashSet<String> fqns;
+
+		private HashMap<String, String> fqnToClassType;
 		private HashMap<String, HashSet<String>> fileNameToClassFQNMap;
 		private HashMap<String, HashSet<String>> childToParentsMap;
 		private HashMap<String, HashSet<String>> parentToChildsMap;
@@ -219,7 +221,7 @@ public class BoaMetricIntrinsics {
 			@Override
 			public boolean preVisit(final Declaration node) throws Exception {
 				String fqn = node.getFullyQualifiedName();
-				fqns.add(fqn);
+				fqnToClassType.put(fqn, node.getKind().toString());
 				fileNameToClassFQNMap.get(fileName).add(fqn);
 				for (Declaration d : node.getNestedDeclarationsList())
 					visit(d);
@@ -283,7 +285,7 @@ public class BoaMetricIntrinsics {
 							String parentFQN = null;
 							// 1. check imported classes
 							for (String importedClass : importedClasses)
-								if (importedClass.contains(parentName) && fqns.contains(importedClass) && !child.equals(importedClass)) {
+								if (importedClass.contains(parentName) && fqnToClassType.containsKey(importedClass) && !child.equals(importedClass)) {
 									parentFQN = importedClass;
 									break;
 								}
@@ -291,7 +293,7 @@ public class BoaMetricIntrinsics {
 							if (parentFQN == null) {
 								for (String pkg : importedPackages) {
 									String tmp = pkg + "." + parentName;
-									if (fqns.contains(tmp) && !child.equals(tmp)) {
+									if (fqnToClassType.containsKey(tmp) && !child.equals(tmp)) {
 										parentFQN = tmp;
 										break;
 									}
@@ -310,9 +312,9 @@ public class BoaMetricIntrinsics {
 			}
 			
 		};
-
+		
 		public void process(ChangedFile[] snapshot) throws Exception {
-			fqns = new HashSet<String>();
+			fqnToClassType = new HashMap<String, String>();
 			childToParentsMap = new HashMap<String, HashSet<String>>();
 			parentToChildsMap = new HashMap<String, HashSet<String>>();
 			fileNameToClassFQNMap = new HashMap<String, HashSet<String>>();
@@ -328,10 +330,10 @@ public class BoaMetricIntrinsics {
 				for (String fqn : entry.getValue()) {
 					long dit = getMaxDepth(fqn);
 					long noc = parentToChildsMap.containsKey(fqn) ? parentToChildsMap.get(fqn).size() : 0;
-					DITNOCMap.put(fileName + " " + fqn, new long[] { dit, noc });
+					DITNOCMap.put(fileName + " " + fqn + " " + fqnToClassType.get(fqn), new long[] { dit, noc });
 				}
 			}
-			fqns.clear();
+			fqnToClassType.clear();
 			childToParentsMap.clear();
 			parentToChildsMap.clear();
 			fileNameToClassFQNMap.clear();
@@ -485,7 +487,7 @@ public class BoaMetricIntrinsics {
 	private static class BoaCBOVisitor extends BoaCollectingVisitor<String, Long> {
 
 		private HashMap<String, HashSet<String>> fileNameToClassFQNMap;
-		private HashSet<String> fqns;
+		private HashMap<String, String> fqnToClassType;
 		private HashMap<String, HashSet<String>> references;
 		private HashMap<String, HashSet<String>> referenced;
 		
@@ -503,7 +505,7 @@ public class BoaMetricIntrinsics {
 			@Override
 			public boolean preVisit(final Declaration node) throws Exception {
 				fileNameToClassFQNMap.get(fileName).add(node.getFullyQualifiedName());
-				fqns.add(node.getFullyQualifiedName());
+				fqnToClassType.put(node.getFullyQualifiedName(), node.getKind().toString());
 				for (Declaration d : node.getNestedDeclarationsList())
 					visit(d);
 				return false;
@@ -542,7 +544,7 @@ public class BoaMetricIntrinsics {
 				
 				
 				for (String importedClass : importedClasses)
-					if (fqns.contains(importedClass))
+					if (fqnToClassType.containsKey(importedClass))
 						for (Declaration decl : decls)
 							updateMaps(decl.getFullyQualifiedName(), importedClass);
 				
@@ -571,7 +573,7 @@ public class BoaMetricIntrinsics {
 		
 		public void process(ChangedFile[] snapshot) throws Exception {
 			fileNameToClassFQNMap = new HashMap<String, HashSet<String>>();
-			fqns = new HashSet<String>();
+			fqnToClassType = new HashMap<String, String>();
 			references = new HashMap<String, HashSet<String>>();
 			referenced = new HashMap<String, HashSet<String>>();
 			for (ChangedFile cf : snapshot)
@@ -586,11 +588,11 @@ public class BoaMetricIntrinsics {
 						union.addAll(references.get(fqn));
 					if (referenced.containsKey(fqn))
 						union.addAll(referenced.get(fqn));
-					map.put(fileName + " " + fqn, (long) union.size());
+					map.put(fileName + " " + fqn + " " + fqnToClassType.get(fqn), (long) union.size());
 				}
 			}
 			fileNameToClassFQNMap.clear();
-			fqns.clear();
+			fqnToClassType.clear();
 			references.clear();
 			referenced.clear();
 		}
@@ -620,7 +622,7 @@ public class BoaMetricIntrinsics {
 		
 		private HashSet<String> declarationVars;
 		private HashSet<String> methodVars;
-		private long numAccesses;
+		private double numAccesses;
 		private double lcom;
 
 		private BoaAbstractVisitor methodVisitor = new BoaAbstractVisitor() {
@@ -667,8 +669,7 @@ public class BoaMetricIntrinsics {
 					numAccesses += methodVars.size();
 					methodVars.clear();
 				}
-				lcom = ((methodsCount - numAccesses / fieldsCount) / (methodsCount - 1.0));
-//				System.out.println(fieldsCount + " " + methodsCount + " " + lcom);
+				lcom = (methodsCount - numAccesses / fieldsCount) / (methodsCount - 1.0);
 				declarationVars.clear();
 				methodVars.clear();
 			}
@@ -691,6 +692,23 @@ public class BoaMetricIntrinsics {
 	public static double getMetricLCOM(final Declaration node) throws Exception {
 		lcooVisitor.initialize().visit(node);
 		return lcooVisitor.getLCOM();
+	}
+	
+	@FunctionSpec(name = "get_lcoms", returnType = "map[string] of float", formalParameters = { "array of ChangedFile" })
+	public static HashMap<String, Double> getLCOMs(final ChangedFile[] snapshot) throws Exception {
+		HashMap<String, Double> lcoms = new HashMap<String, Double>();
+		for (ChangedFile cf : snapshot)
+			new BoaAbstractVisitor() {
+				@Override
+				public boolean preVisit(final Declaration node) throws Exception {
+					String key = cf.getName() + " " + node.getFullyQualifiedName();
+					lcoms.put(key, getMetricLCOM(node));
+					for (Declaration d : node.getNestedDeclarationsList())
+						visit(d);
+					return false;
+				}
+			}.visit(cf);
+		return lcoms;
 	}
 
 	////////////////////////////
@@ -724,7 +742,7 @@ public class BoaMetricIntrinsics {
 			new BoaAbstractVisitor() {
 				@Override
 				public boolean preVisit(final Declaration node) throws Exception {
-					String key = cf.getName() + " " + node.getFullyQualifiedName();
+					String key = cf.getName() + " " + node.getFullyQualifiedName() + " " + node.getKind().toString();
 					wmc.put(key, getMetricWMC(node));
 					rfc.put(key, getMetricRFC(node));
 					lcom.put(key, getMetricLCOM(node));
@@ -737,9 +755,10 @@ public class BoaMetricIntrinsics {
 		HashMap<String, Long> cbo = getMetricCBO(snapshot);
 
 		HashMap<String, double[]> metrics = new HashMap<String, double[]>();
-		for (String k : cbo.keySet()) {
+		for (String k : ditNOC.keySet()) {
 			long[] dit_noc =  ditNOC.get(k);
-			metrics.put(k, new double[] {wmc.get(k), rfc.get(k), lcom.get(k), dit_noc[0], dit_noc[1], cbo.get(k)});
+			if (cbo.containsKey(k) && wmc.containsKey(k))
+				metrics.put(k, new double[] {wmc.get(k), rfc.get(k), lcom.get(k), dit_noc[0], dit_noc[1], cbo.get(k)});
 		}
 		return metrics;
 	}

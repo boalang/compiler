@@ -217,6 +217,7 @@ public class BoaAstIntrinsics {
 	private static long currentRepoKey = Long.MIN_VALUE;
 	private static Repository currentStoredRepository = null;
 
+	@FunctionSpec(name = "getcontent", returnType = "string", formalParameters = { "ChangedFile" })
 	public static String getContent(ChangedFile f) {
 		if (f.hasRepoKey() && f.hasObjectId()) {
 			if (f.getObjectId().startsWith("BOA_DELETED_FILE")) {
