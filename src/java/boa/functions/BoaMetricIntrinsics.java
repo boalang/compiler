@@ -755,9 +755,10 @@ public class BoaMetricIntrinsics {
 		HashMap<String, Long> cbo = getMetricCBO(snapshot);
 
 		HashMap<String, double[]> metrics = new HashMap<String, double[]>();
-		for (String k : cbo.keySet()) {
+		for (String k : ditNOC.keySet()) {
 			long[] dit_noc =  ditNOC.get(k);
-			metrics.put(k, new double[] {wmc.get(k), rfc.get(k), lcom.get(k), dit_noc[0], dit_noc[1], cbo.get(k)});
+			if (cbo.containsKey(k) && wmc.containsKey(k))
+				metrics.put(k, new double[] {wmc.get(k), rfc.get(k), lcom.get(k), dit_noc[0], dit_noc[1], cbo.get(k)});
 		}
 		return metrics;
 	}
