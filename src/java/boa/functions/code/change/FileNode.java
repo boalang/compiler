@@ -1,16 +1,16 @@
 package boa.functions.code.change;
 
-import boa.functions.code.change.FileTree.ListObjectId;
+import boa.functions.code.change.FileTree.TreeObjectId;
 import boa.types.Diff.ChangedFile;
 
 public class FileNode {
 
 	private ChangedFile cf = null;
-	private Rev r = null;
+	private RevNode r = null;
 	private String locId = null;
-	private ListObjectId listId = null;
+	private TreeObjectId treeId = null;
 
-	public FileNode(ChangedFile cf, Rev r, int fileIdx) {
+	public FileNode(ChangedFile cf, RevNode r, int fileIdx) {
 		this.cf = cf;
 		this.r = r;
 	}
@@ -29,24 +29,24 @@ public class FileNode {
 		return cf.getFileIdx();
 	}
 	
-	public ListObjectId getListObjectId() {
-		return listId;
+	public TreeObjectId getListObjectId() {
+		return treeId;
 	}
 	
-	public void setListObjectId(ListObjectId listId) {
-		this.listId = listId;
+	public void setListObjectId(TreeObjectId listId) {
+		this.treeId = listId;
 	}
 	
 	public ChangedFile getChangedFile() {
 		return cf;
 	}
 
-	public Rev getRev() {
+	public RevNode getRev() {
 		return r;
 	}
 
-	public ListObjectId getListId() {
-		return listId;
+	public TreeObjectId getListId() {
+		return treeId;
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class FileNode {
 		final int prime = 31;
 		int result = 1;
 //		result = prime * result + ((cf == null) ? 0 : cf.hashCode());
-		result = prime * result + ((listId == null) ? 0 : listId.hashCode());
+		result = prime * result + ((treeId == null) ? 0 : treeId.hashCode());
 		result = prime * result + ((locId == null) ? 0 : locId.hashCode());
 //		result = prime * result + ((r == null) ? 0 : r.hashCode());
 		return result;

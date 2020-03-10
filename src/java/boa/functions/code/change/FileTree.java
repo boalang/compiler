@@ -7,7 +7,7 @@ import java.util.Queue;
 public class FileTree {
 
 	private final HisTrees trees;
-	private ListObjectId id;
+	private TreeObjectId id;
 	private HashSet<String> fileLocs = new HashSet<String>();
 	private Queue<Integer> prevRevIdxs = new LinkedList<Integer>();
 	private Queue<Integer> prevFileIdxs = new LinkedList<Integer>();
@@ -16,7 +16,7 @@ public class FileTree {
 
 	public FileTree(HisTrees trees, FileNode node, int listIdx) {
 		this.trees = trees;
-		this.id = new ListObjectId(listIdx);
+		this.id = new TreeObjectId(listIdx);
 		add(node);
 	}
 
@@ -24,7 +24,7 @@ public class FileTree {
 		while (!prevRevIdxs.isEmpty()) {
 			int prevRevIdx = prevRevIdxs.poll();
 			int prevFileIdx = prevFileIdxs.poll();
-			Rev prevRev = trees.revIdxMap.get(prevRevIdx);
+			RevNode prevRev = trees.revIdxMap.get(prevRevIdx);
 			if (!add(new FileNode(prevRev.getRevision().getFiles(prevFileIdx), prevRev, prevFileIdx)))
 				return false;
 		}
@@ -41,7 +41,7 @@ public class FileTree {
 			if (listIdx != this.id.getAsInt()) {
 				if (this.trees.debug)
 					System.out.println("node " + node.getLocId() + " already added to list " + listIdx);
-				trees.lists.get(listIdx).merge(this);
+				trees.trees.get(listIdx).merge(this);
 				linkAll();
 				if (this.trees.debug)
 					System.out.println("drop list " + this.id);
@@ -49,9 +49,11 @@ public class FileTree {
 			}
 			return true;
 		}
-		// update list and global maps
+		// update tree
 		fileLocs.add(node.getLocId());
+		// node update tree id
 		node.setListObjectId(this.id);
+		// update global nodes
 		trees.fileLocIdToNode.put(node.getLocId(), node);
 		String oid = node.getChangedFile().getObjectId();
 		if (!trees.fileObjectIdToLocs.containsKey(oid))
@@ -69,8 +71,9 @@ public class FileTree {
 	public void merge(FileTree list) {
 		if (this.trees.debug)
 			System.out.println("list " + this.id + " merge list " + list.id);
-		// add nodes and update their list id
+		// add nodes
 		this.fileLocs.addAll(list.fileLocs);
+		// update list id
 		list.id.setId(this.id.getAsInt());
 		// merge queues
 		while (!list.prevRevIdxs.isEmpty()) {
@@ -84,7 +87,7 @@ public class FileTree {
 //		this.refLocs.addAll(list.refLocs);
 	}
 
-	public ListObjectId getId() {
+	public TreeObjectId getId() {
 		return id;
 	}
 	
@@ -92,10 +95,10 @@ public class FileTree {
 		return fileLocs;
 	}
 
-	public class ListObjectId {
+	public class TreeObjectId {
 		public int id = -1;
 
-		public ListObjectId(int id) {
+		public TreeObjectId(int id) {
 			this.id = id;
 		}
 

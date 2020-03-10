@@ -8,12 +8,12 @@ import java.util.List;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 
-public class Rev {
+public class RevNode {
 	private int revIdx;
 	private Revision rev;
 	private int nContributorSoFar;
 
-	public Rev(int revIdx, Revision rev, int nContributor) {
+	public RevNode(int revIdx, Revision rev, int nContributor) {
 		this.revIdx = revIdx;
 		this.rev = rev;
 		this.nContributorSoFar = nContributor;
