@@ -12,7 +12,7 @@ public class FileTree {
 	private Queue<Integer> prevRevIdxs = new LinkedList<Integer>();
 	private Queue<Integer> prevFileIdxs = new LinkedList<Integer>();
 	// refactoring info
-//	public HashSet<String> refLocs = new HashSet<String>();
+	public HashSet<String> refLocs = new HashSet<String>();
 
 	public FileTree(FileChangeForest trees, FileNode node, int listIdx) {
 		this.trees = trees;
@@ -37,7 +37,7 @@ public class FileTree {
 					+ " to list " + this.id);
 		// check if the node is added by some lists
 		if (trees.fileLocIdToNode.containsKey(node.getLocId())) {
-			int listIdx = trees.fileLocIdToNode.get(node.getLocId()).getListObjectId().getAsInt();
+			int listIdx = trees.fileLocIdToNode.get(node.getLocId()).getTreeObjectId().getAsInt();
 			if (listIdx != this.id.getAsInt()) {
 				if (this.trees.debug)
 					System.out.println("node " + node.getLocId() + " already added to list " + listIdx);
@@ -84,7 +84,7 @@ public class FileTree {
 				this.prevFileIdxs.offer(prevFileIdx);
 			}
 		}
-//		this.refLocs.addAll(list.refLocs);
+		this.refLocs.addAll(list.refLocs);
 	}
 
 	public TreeObjectId getId() {

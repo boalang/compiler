@@ -9,6 +9,9 @@ public class FileNode {
 	private RevNode r = null;
 	private String locId = null;
 	private TreeObjectId treeId = null;
+	
+	// refactoring info
+	
 
 	public FileNode(ChangedFile cf, RevNode r, int fileIdx) {
 		this.cf = cf;
@@ -29,7 +32,7 @@ public class FileNode {
 		return cf.getFileIdx();
 	}
 	
-	public TreeObjectId getListObjectId() {
+	public TreeObjectId getTreeObjectId() {
 		return treeId;
 	}
 	

@@ -60,7 +60,7 @@ public class BoaRefactoringPredictionIntrinsics {
 			FIELD_LEVEL_REFACTORING_TYPES.add(s);
 	}
 
-	private static HashSet<String> getRefactoringIds(Project p) {
+	public static HashSet<String> getRefactoringIds(Project p) {
 		if (REFACTORING_COMMIT_IDS == null)
 			REFACTORING_COMMIT_IDS = getRefactoringIdsInSet(p);
 		return REFACTORING_COMMIT_IDS;
