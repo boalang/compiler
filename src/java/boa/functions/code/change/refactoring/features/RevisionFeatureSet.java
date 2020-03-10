@@ -1,8 +1,9 @@
-package boa.functions.refactoring.features;
+package boa.functions.code.change.refactoring.features;
 
 import static boa.functions.BoaMetricIntrinsics.getMetrics;
-import static boa.functions.refactoring.BoaRefactoringIntrinsics.getCKStats;
-import static boa.functions.refactoring.BoaRefactoringIntrinsics.getStats;
+import static boa.functions.code.change.refactoring.BoaRefactoringIntrinsics.getCKStats;
+import static boa.functions.code.change.refactoring.BoaRefactoringIntrinsics.getStats;
+import static boa.functions.code.change.refactoring.BoaRefactoringPredictionIntrinsics.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,13 +15,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import boa.functions.refactoring.Rev;
+import boa.functions.code.change.refactoring.Rev;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Namespace;
 import boa.types.Diff.ChangedFile;
-
-import static boa.functions.refactoring.BoaRefactoringPredictionIntrinsics.*;
 
 public class RevisionFeatureSet {
 

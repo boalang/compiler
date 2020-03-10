@@ -1,6 +1,6 @@
-package boa.functions.refactoring;
+package boa.functions.code.change.refactoring;
 
-import static boa.functions.refactoring.FileChangeLinkedLists.*;
+import static boa.functions.code.change.refactoring.FileChangeLinkedLists.*;
 
 import java.util.HashSet;
 import java.util.LinkedList;

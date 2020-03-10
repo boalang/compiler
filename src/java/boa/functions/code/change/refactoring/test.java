@@ -1,4 +1,4 @@
-package boa.functions.refactoring;
+package boa.functions.code.change.refactoring;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,7 +1,8 @@
-package boa.functions.refactoring;
+package boa.functions.code.change.refactoring;
 
 import static boa.functions.BoaAstIntrinsics.getCodeChange;
 import static boa.functions.BoaIntrinsics.getRevision;
+import static boa.functions.code.change.refactoring.BoaRefactoringPredictionIntrinsics.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,8 +15,6 @@ import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 import boa.types.Toplevel.Project;
-
-import static boa.functions.refactoring.BoaRefactoringPredictionIntrinsics.*;
 
 public class FileChangeLinkedLists {
 	

@@ -1,15 +1,15 @@
-package boa.functions.refactoring.features;
+package boa.functions.code.change.refactoring.features;
+
+import static boa.functions.code.change.refactoring.BoaRefactoringIntrinsics.getStats;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import boa.functions.refactoring.BoaRefactoringPredictionIntrinsics;
+import boa.functions.code.change.refactoring.BoaRefactoringPredictionIntrinsics;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Method;
 import boa.types.Ast.Variable;
-
-import static boa.functions.refactoring.BoaRefactoringIntrinsics.getStats;
 
 public class ClassFeatureSet {
 	

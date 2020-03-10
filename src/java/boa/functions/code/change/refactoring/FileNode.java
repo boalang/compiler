@@ -1,6 +1,6 @@
-package boa.functions.refactoring;
+package boa.functions.code.change.refactoring;
 
-import boa.functions.refactoring.FileChangeLinkedList.ListObjectId;
+import boa.functions.code.change.refactoring.FileChangeLinkedList.ListObjectId;
 import boa.types.Diff.ChangedFile;
 
 public class FileNode {

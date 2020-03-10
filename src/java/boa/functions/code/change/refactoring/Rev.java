@@ -1,6 +1,6 @@
-package boa.functions.refactoring;
+package boa.functions.code.change.refactoring;
 
-import static boa.functions.refactoring.BoaRefactoringIntrinsics.isJavaFile;
+import static boa.functions.code.change.refactoring.BoaRefactoringIntrinsics.isJavaFile;
 
 import java.util.ArrayList;
 import java.util.List;

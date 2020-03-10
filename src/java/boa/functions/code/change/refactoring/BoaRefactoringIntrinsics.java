@@ -1,4 +1,4 @@
-package boa.functions.refactoring;
+package boa.functions.code.change.refactoring;
 
 import boa.functions.BoaAstIntrinsics;
 import boa.functions.FunctionSpec;

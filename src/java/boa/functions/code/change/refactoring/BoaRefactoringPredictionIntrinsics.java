@@ -1,4 +1,4 @@
-package boa.functions.refactoring;
+package boa.functions.code.change.refactoring;
 
 import java.io.File;
 import java.lang.reflect.Modifier;
@@ -15,17 +15,18 @@ import com.google.gson.GsonBuilder;
 
 import boa.datagen.util.FileIO;
 import boa.functions.FunctionSpec;
-import boa.functions.refactoring.features.RevisionFeatureSet;
+import boa.functions.code.change.refactoring.features.RevisionFeatureSet;
 import boa.types.Code.CodeRefactoring;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 import boa.types.Toplevel.Project;
-import static boa.functions.refactoring.BoaRefactoringIntrinsics.*;
-import static boa.functions.refactoring.FileChangeLinkedLists.*;
+
 import static boa.functions.BoaAstIntrinsics.*;
 import static boa.functions.BoaIntrinsics.*;
+import static boa.functions.code.change.refactoring.BoaRefactoringIntrinsics.*;
+import static boa.functions.code.change.refactoring.FileChangeLinkedLists.*;
 
 public class BoaRefactoringPredictionIntrinsics {
 
@@ -203,12 +204,12 @@ public class BoaRefactoringPredictionIntrinsics {
 				sb.append(output + "\n");
 				System.out.println(obRevCount + " " + revIdx + " " + ++dataCount);
 //				System.out.println(output);
-//				break;
+				break;
 			}
-//			break;
+			break;
 		}
 		
-		FileIO.writeFileContents(new File("/Users/hyj/git/BoaData/RefactoringAnalysis/Output2/prediction/ob3.txt"), sb.toString());
+//		FileIO.writeFileContents(new File("/Users/hyj/git/BoaData/RefactoringAnalysis/Output2/prediction/ob3.txt"), sb.toString());
 
 	}
 
