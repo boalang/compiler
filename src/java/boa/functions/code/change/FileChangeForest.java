@@ -10,7 +10,7 @@ import java.util.List;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 
-public class HisTrees {
+public class FileChangeForest {
 
 	// tree properties
 	protected List<FileTree> trees = new ArrayList<FileTree>();
@@ -23,8 +23,11 @@ public class HisTrees {
 	protected HashSet<String> nContributor = new HashSet<String>();
 	protected HashMap<Integer, RevNode> revIdxMap = new HashMap<Integer, RevNode>();
 	protected HashMap<String, RevNode> revIdMap = new HashMap<String, RevNode>();
+	
+	// refactorings
+	
 
-	public HisTrees(CodeRepository cr, int revCount, boolean debug) {
+	public FileChangeForest(CodeRepository cr, int revCount, boolean debug) {
 		for (int i = 0; i < revCount; i++)
 			getRev(cr, i);
 		this.debug = debug;

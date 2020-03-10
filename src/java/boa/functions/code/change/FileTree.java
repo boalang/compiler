@@ -6,7 +6,7 @@ import java.util.Queue;
 
 public class FileTree {
 
-	private final HisTrees trees;
+	private final FileChangeForest trees;
 	private TreeObjectId id;
 	private HashSet<String> fileLocs = new HashSet<String>();
 	private Queue<Integer> prevRevIdxs = new LinkedList<Integer>();
@@ -14,7 +14,7 @@ public class FileTree {
 	// refactoring info
 //	public HashSet<String> refLocs = new HashSet<String>();
 
-	public FileTree(HisTrees trees, FileNode node, int listIdx) {
+	public FileTree(FileChangeForest trees, FileNode node, int listIdx) {
 		this.trees = trees;
 		this.id = new TreeObjectId(listIdx);
 		add(node);

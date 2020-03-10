@@ -53,10 +53,8 @@ public class FileNode {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-//		result = prime * result + ((cf == null) ? 0 : cf.hashCode());
 		result = prime * result + ((treeId == null) ? 0 : treeId.hashCode());
 		result = prime * result + ((locId == null) ? 0 : locId.hashCode());
-//		result = prime * result + ((r == null) ? 0 : r.hashCode());
 		return result;
 	}
 
@@ -69,26 +67,11 @@ public class FileNode {
 		if (getClass() != obj.getClass())
 			return false;
 		FileNode other = (FileNode) obj;
-//		if (cf == null) {
-//			if (other.cf != null)
-//				return false;
-//		} else if (!cf.equals(other.cf))
-//			return false;
-//		if (listId == null) {
-//			if (other.listId != null)
-//				return false;
-//		} else if (!listId.equals(other.listId))
-//			return false;
 		if (locId == null) {
 			if (other.locId != null)
 				return false;
 		} else if (!locId.equals(other.locId))
 			return false;
-//		if (r == null) {
-//			if (other.r != null)
-//				return false;
-//		} else if (!r.equals(other.r))
-//			return false;
 		return true;
 	}
 

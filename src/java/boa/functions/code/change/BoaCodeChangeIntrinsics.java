@@ -16,7 +16,7 @@ public class BoaCodeChangeIntrinsics {
 	public static void test2(Project p) throws Exception {
 		CodeRepository cr = p.getCodeRepositories(0);
 		int revCount = getRevisionsCount(cr);
-		HisTrees ht = new HisTrees(cr, revCount, false);
+		FileChangeForest ht = new FileChangeForest(cr, revCount, false);
 		List<FileTree> trees = ht.getTreesAsList();
 		System.out.println(p.getName());
 		System.out.println("Total Revs: " + revCount);
