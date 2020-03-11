@@ -75,6 +75,10 @@ public class BoaNormalFormIntrinsics {
 		return variableList.toArray(new Expression[variableList.size()]);
 	}
 
+	public static List<List<Expression>> permutate(final List<Expression[]> l) {
+		return permutate(l, 0);
+	}
+
 	private static List<List<Expression>> permutate(final List<Expression[]> l, final int start) {
 		final List<List<Expression>> ret = new ArrayList<List<Expression>>();
 		if (l.size() == 0) return ret;
@@ -125,14 +129,14 @@ public class BoaNormalFormIntrinsics {
 			case LOGICAL_NOT:
 			case PAREN:
 			case NEW:
-				for (final List<Expression> e2 : permutate(convertedExpression, 0))
+				for (final List<Expression> e2 : permutate(convertedExpression))
 					exps.add(createExpression(e.getKind(), e2.toArray(new Expression[e2.size()])));
-				return exps.toArray(new Expression[exps.size()]);
+				break;
 
 			case ASSIGN:
-				for (final List<Expression> e2 : permutate(convertedExpression, 0))
+				for (final List<Expression> e2 : permutate(convertedExpression))
 					exps.add(createExpression(e.getKind(), e2.toArray(new Expression[e2.size()])).getExpressions(1));
-				return exps.toArray(new Expression[exps.size()]);
+				break;
 
 			case OP_ADD:
 			case OP_SUB:
@@ -142,7 +146,7 @@ public class BoaNormalFormIntrinsics {
 				if (convertedExpression.size() == 0)
 					convertedExpression.add(new Expression[0]);
 
-				for (final List<Expression> e2 : permutate(convertedExpression, 0)) {
+				for (final List<Expression> e2 : permutate(convertedExpression)) {
 					final Expression replacedExpr = createExpression(e.getKind(), e2.toArray(new Expression[e2.size()]));
 
 					if (replacedExpr.equals(reciever))
@@ -157,7 +161,7 @@ public class BoaNormalFormIntrinsics {
 				if (exps.size() == 0)
 					exps.add(e);
 
-				return exps.toArray(new Expression[exps.size()]);
+				break;
 
 			case OP_DEC:
 			case OP_INC:
@@ -165,7 +169,7 @@ public class BoaNormalFormIntrinsics {
 				if (convertedExpression.size() == 0)
 					convertedExpression.add(new Expression[0]);
 
-				for (final List<Expression> e2 : permutate(convertedExpression, 0)) {
+				for (final List<Expression> e2 : permutate(convertedExpression)) {
 					final Expression.Builder b = Expression.newBuilder(e);
 
 					for(int i = 0; i < e2.size(); i++) {
@@ -185,13 +189,13 @@ public class BoaNormalFormIntrinsics {
 				if (exps.size() == 0)
 					exps.add(e);
 
-				return exps.toArray(new Expression[exps.size()]);
+				break;
 
 			case METHODCALL:
 				if (convertedExpression.size() == 0)
 					convertedExpression.add(new Expression[0]);
 
-				for (final List<Expression> e2 : permutate(convertedExpression, 0)) {
+				for (final List<Expression> e2 : permutate(convertedExpression)) {
 					final Expression.Builder bm = Expression.newBuilder(e);
 
 					for (int i = 0; i < e2.size(); i++) {
@@ -202,14 +206,19 @@ public class BoaNormalFormIntrinsics {
 					for (int i = 0; i < e.getMethodArgsList().size(); i++) {
 						args.add(convertToSymbolicName(e.getMethodArgs(i), reciever, arguments));
 					}
-					for (final List<Expression> arg : permutate(args, 0)) {
-						for (int i = 0; i < arg.size(); i++) {
-							bm.setMethodArgs(i, arg.get(i));
+					if (args.size() > 0) {
+						for (final List<Expression> arg : permutate(args)) {
+							for (int i = 0; i < arg.size(); i++) {
+								bm.setMethodArgs(i, arg.get(i));
+							}
+							exps.add(bm.build());
 						}
+					} else {
 						exps.add(bm.build());
 					}
 				}
-				return exps.toArray(new Expression[exps.size()]);
+
+				break;
 
 			case VARACCESS:
 				// replace with symbolic names
@@ -224,11 +233,13 @@ public class BoaNormalFormIntrinsics {
 				if (exps.size() == 0)
 					exps.add(e);
 
-				return exps.toArray(new Expression[exps.size()]);
+				break;
 
 			default:
 				return new Expression[] { e };
 		}
+
+		return exps.toArray(new Expression[exps.size()]);
 	}
 
 	/**
