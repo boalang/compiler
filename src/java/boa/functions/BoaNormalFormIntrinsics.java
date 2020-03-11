@@ -77,6 +77,7 @@ public class BoaNormalFormIntrinsics {
 
 	private static List<List<Expression>> permutate(final List<Expression[]> l, final int start) {
 		final List<List<Expression>> ret = new ArrayList<List<Expression>>();
+		if (l.size() == 0) return ret;
 		if (start == l.size() - 1) {
 			for (final Expression e : l.get(start)) {
 				final List<Expression> newl = new ArrayList<Expression>();
