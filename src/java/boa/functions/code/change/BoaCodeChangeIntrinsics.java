@@ -13,10 +13,6 @@ import boa.types.Toplevel.Project;
 
 public class BoaCodeChangeIntrinsics {
 
-	
-	
-	
-	
 	@FunctionSpec(name = "test3", formalParameters = { "Project" })
 	public static void test2(Project p) throws Exception {
 		CodeRepository cr = p.getCodeRepositories(0);
@@ -25,10 +21,10 @@ public class BoaCodeChangeIntrinsics {
 
 		int revCount = getRevisionsCount(cr);
 		GlobalData gd = new GlobalData(cr, revCount);
-		FileChangeForest ht = new FileChangeForest(gd, false);
-		List<FileTree> trees = ht.getTreesAsList();
+		FileChangeForest forest = new FileChangeForest(gd, false);
+		forest.updateWithRefs(p, refRevIds, null);
+		List<FileTree> trees = forest.getTreesAsList();
 		
-		ht.updateRefLists(p, refRevIds, null);
 		
 		System.out.println("Total Revs: " + revCount);
 		System.out.println("lists count: " + trees.size());

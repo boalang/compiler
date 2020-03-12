@@ -46,7 +46,7 @@ public class FileChangeForest {
 	}
 	
 	// refactoring functions
-	public void updateRefLists(Project p, HashSet<String> refRevIds, Set<String> refTypes) {
+	public void updateWithRefs(Project p, HashSet<String> refRevIds, Set<String> refTypes) {
 		for (String id : refRevIds) {
 			RevNode r = gd.revIdMap.get(id);
 			List<CodeRefactoring> refs = refTypes == null ? getCodeChange(p, r.getRevision()).getRefactoringsList()
@@ -56,6 +56,9 @@ public class FileChangeForest {
 				FileNode fileBefore = findLastModification(beforeFilePath, r);
 				String afterFilePath = ref.getRightSideLocations(0).getFilePath();
 				FileNode fileAfter = getFileNodeFrom(afterFilePath, r);
+				RefactoringBond refBond = new RefactoringBond(fileBefore.getLocId(), fileAfter.getLocId(), ref);
+				fileBefore.getRefBonds().add(refBond);
+				fileAfter.getRefBonds().add(refBond);
 
 				int beforeTreeIdx = gd.fileLocIdToNode.get(fileBefore.getLocId()).getTreeObjectId().getAsInt();
 				FileTree beforeTree = trees.get(beforeTreeIdx);
