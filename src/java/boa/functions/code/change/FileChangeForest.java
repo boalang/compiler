@@ -81,8 +81,9 @@ public class FileChangeForest {
 			// first parent in main branch
 			cur = gd.revIdxMap.get(cur.getRevision().getParents(0));
 			fn = getFileNodeFrom(fileName, cur);
-			if (fn != null)
+			if (fn != null) {
 				return fn;
+			}
 			
 		} while (true);
 	}

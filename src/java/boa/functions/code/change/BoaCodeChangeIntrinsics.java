@@ -15,6 +15,9 @@ public class BoaCodeChangeIntrinsics {
 
 	@FunctionSpec(name = "test3", formalParameters = { "Project" })
 	public static void test2(Project p) throws Exception {
+		
+		long beforeUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
+		
 		CodeRepository cr = p.getCodeRepositories(0);
 		HashSet<String> refRevIds = getRefactoringIdsInSet(p);
 		System.out.println(p.getName() + " " + refRevIds.size());
@@ -25,11 +28,16 @@ public class BoaCodeChangeIntrinsics {
 		forest.updateWithRefs(p, refRevIds, null);
 		List<FileTree> trees = forest.getTreesAsList();
 		
+		DeclarationChangeForest declForest = new DeclarationChangeForest(forest);
+		
 		
 		System.out.println("Total Revs: " + revCount);
 		System.out.println("lists count: " + trees.size());
 		ChangedFile[] LatestSnapshot = getSnapshot(cr, revCount - 1, true);
 		System.out.println("last snapshot size: " + LatestSnapshot.length);
+		
+		long afterUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
+		System.err.println("Used " + afterUsedMem / 1000000.0 + " MB");
 	}
 
 }
