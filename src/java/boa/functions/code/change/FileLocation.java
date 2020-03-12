@@ -1,13 +1,12 @@
 package boa.functions.code.change;
 
-public class FileLocation implements Comparable<FileLocation> {
+public class FileLocation extends Location implements Comparable<FileLocation> {
 	
 	private int revIdx;
-	private int fileIdx;
 	
 	public FileLocation(int revIdx, int fileIdx) {
+		super(fileIdx, null);
 		this.revIdx = revIdx;
-		this.fileIdx = fileIdx;
 	}
 
 	public int getRevIdx() {
@@ -17,20 +16,11 @@ public class FileLocation implements Comparable<FileLocation> {
 	public void setRevIdx(int revIdx) {
 		this.revIdx = revIdx;
 	}
-
-	public int getFileIdx() {
-		return fileIdx;
-	}
-
-	public void setFileIdx(int fileIdx) {
-		this.fileIdx = fileIdx;
-	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
-		result = prime * result + fileIdx;
+		int result = super.hashCode();
 		result = prime * result + revIdx;
 		return result;
 	}
@@ -39,27 +29,25 @@ public class FileLocation implements Comparable<FileLocation> {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		FileLocation other = (FileLocation) obj;
-		if (fileIdx != other.fileIdx)
-			return false;
 		if (revIdx != other.revIdx)
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
-		return revIdx + " " + fileIdx;
+		return revIdx + " " + super.toString();
 	}
 
 	@Override
 	public int compareTo(FileLocation o) {
 		int comp = this.revIdx - o.getRevIdx();
-		return comp == 0 ? this.fileIdx - o.getFileIdx() : comp;
+		return comp == 0 ? this.idx - o.idx : comp;
 	}
 	
  }

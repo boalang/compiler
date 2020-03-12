@@ -1,6 +1,6 @@
 package boa.functions.code.change;
 
-public class DeclarationLocation extends ASTLocation implements Comparable<DeclarationLocation> {
+public class DeclarationLocation extends Location implements Comparable<DeclarationLocation> {
 	
 	private FileLocation fileLoc;
 
@@ -20,9 +20,8 @@ public class DeclarationLocation extends ASTLocation implements Comparable<Decla
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
+		int result = super.hashCode();
 		result = prime * result + ((fileLoc == null) ? 0 : fileLoc.hashCode());
-		result = prime * result + this.idx;
 		return result;
 	}
 
@@ -30,7 +29,7 @@ public class DeclarationLocation extends ASTLocation implements Comparable<Decla
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
@@ -40,11 +39,9 @@ public class DeclarationLocation extends ASTLocation implements Comparable<Decla
 				return false;
 		} else if (!fileLoc.equals(other.fileLoc))
 			return false;
-		if (this.idx != other.idx)
-			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.fileLoc + " " + super.toString();

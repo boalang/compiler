@@ -1,11 +1,11 @@
 package boa.functions.code.change;
 
-public abstract class ASTLocation {
+public abstract class Location {
 
 	protected int idx;
 	protected String signature;
 
-	public ASTLocation(int idx, String sig) {
+	public Location(int idx, String sig) {
 		this.idx = idx;
 		this.signature = sig;
 	}
@@ -25,7 +25,7 @@ public abstract class ASTLocation {
 	public void setSignature(String signature) {
 		this.signature = signature;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -42,12 +42,12 @@ public abstract class ASTLocation {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ASTLocation other = (ASTLocation) obj;
+		Location other = (Location) obj;
 		if (idx != other.idx)
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.idx + " " + this.signature;

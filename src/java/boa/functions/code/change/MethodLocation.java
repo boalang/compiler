@@ -1,6 +1,6 @@
 package boa.functions.code.change;
 
-public class MethodLocation extends ASTLocation implements Comparable<MethodLocation> {
+public class MethodLocation extends Location implements Comparable<MethodLocation> {
 
 	private DeclarationLocation declLoc;
 	
@@ -20,9 +20,8 @@ public class MethodLocation extends ASTLocation implements Comparable<MethodLoca
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
+		int result = super.hashCode();
 		result = prime * result + ((declLoc == null) ? 0 : declLoc.hashCode());
-		result = prime * result + this.idx;
 		return result;
 	}
 
@@ -30,7 +29,7 @@ public class MethodLocation extends ASTLocation implements Comparable<MethodLoca
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
@@ -39,8 +38,6 @@ public class MethodLocation extends ASTLocation implements Comparable<MethodLoca
 			if (other.declLoc != null)
 				return false;
 		} else if (!declLoc.equals(other.declLoc))
-			return false;
-		if (this.idx != other.idx)
 			return false;
 		return true;
 	}
