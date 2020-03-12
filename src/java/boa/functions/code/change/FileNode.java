@@ -7,20 +7,17 @@ public class FileNode {
 
 	private ChangedFile cf = null;
 	private RevNode r = null;
-	private String locId = null;
+	private FileLocation locId = null;
 	private TreeObjectId treeId = null;
-	
-	// refactoring info
 	
 
 	public FileNode(ChangedFile cf, RevNode r, int fileIdx) {
 		this.cf = cf;
 		this.r = r;
+		this.locId = new FileLocation(cf.getRevisionIdx(), cf.getFileIdx());
 	}
 
-	public String getLocId() {
-		if (locId == null)
-			locId = cf.getRevisionIdx() + " " + cf.getFileIdx();
+	public FileLocation getLocId() {
 		return locId;
 	}
 	
@@ -36,8 +33,8 @@ public class FileNode {
 		return treeId;
 	}
 	
-	public void setListObjectId(TreeObjectId listId) {
-		this.treeId = listId;
+	public void setTreeObjectId(TreeObjectId treeId) {
+		this.treeId = treeId;
 	}
 	
 	public ChangedFile getChangedFile() {

@@ -3,16 +3,18 @@ package boa.functions.code.change;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.TreeSet;
 
 public class FileTree {
 
 	private final FileChangeForest trees;
 	private TreeObjectId id;
-	private HashSet<String> fileLocs = new HashSet<String>();
+	private TreeSet<FileLocation> fileLocs = new TreeSet<FileLocation>();
 	private Queue<Integer> prevRevIdxs = new LinkedList<Integer>();
 	private Queue<Integer> prevFileIdxs = new LinkedList<Integer>();
 	// refactoring info
-	public HashSet<String> refLocs = new HashSet<String>();
+	public HashSet<FileLocation> fileBeforeRef = new HashSet<FileLocation>();
+	public HashSet<FileLocation> fileAfterRef = new HashSet<FileLocation>();
 
 	public FileTree(FileChangeForest trees, FileNode node, int listIdx) {
 		this.trees = trees;
@@ -52,12 +54,12 @@ public class FileTree {
 		// update tree
 		fileLocs.add(node.getLocId());
 		// node update tree id
-		node.setListObjectId(this.id);
+		node.setTreeObjectId(this.id);
 		// update global nodes
 		trees.fileLocIdToNode.put(node.getLocId(), node);
 		String oid = node.getChangedFile().getObjectId();
 		if (!trees.fileObjectIdToLocs.containsKey(oid))
-			trees.fileObjectIdToLocs.put(oid, new HashSet<String>());
+			trees.fileObjectIdToLocs.put(oid, new TreeSet<FileLocation>());
 		trees.fileObjectIdToLocs.get(oid).add(node.getLocId());
 		// update prev queues
 		if (node.getChangedFile().getPreviousVersionsCount() != 0
@@ -68,30 +70,29 @@ public class FileTree {
 		return true;
 	}
 
-	public void merge(FileTree list) {
+	public void merge(FileTree tree) {
 		if (this.trees.debug)
-			System.out.println("list " + this.id + " merge list " + list.id);
+			System.out.println("list " + this.id + " merge list " + tree.id);
 		// add nodes
-		this.fileLocs.addAll(list.fileLocs);
+		this.fileLocs.addAll(tree.fileLocs);
 		// update list id
-		list.id.setId(this.id.getAsInt());
+		tree.id.setId(this.id.getAsInt());
 		// merge queues
-		while (!list.prevRevIdxs.isEmpty()) {
-			int prevRevIdx = list.prevRevIdxs.poll();
-			int prevFileIdx = list.prevFileIdxs.poll();
-			if (!fileLocs.contains(prevRevIdx + " " + prevFileIdx)) {
+		while (!tree.prevRevIdxs.isEmpty()) {
+			int prevRevIdx = tree.prevRevIdxs.poll();
+			int prevFileIdx = tree.prevFileIdxs.poll();
+			if (!fileLocs.contains(new FileLocation(prevRevIdx, prevFileIdx))) {
 				this.prevRevIdxs.offer(prevRevIdx);
 				this.prevFileIdxs.offer(prevFileIdx);
 			}
 		}
-		this.refLocs.addAll(list.refLocs);
 	}
 
 	public TreeObjectId getId() {
 		return id;
 	}
 	
-	public HashSet<String> getFileLocs() {
+	public TreeSet<FileLocation> getFileLocs() {
 		return fileLocs;
 	}
 
