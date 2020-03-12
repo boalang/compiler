@@ -7,7 +7,7 @@ import java.util.TreeSet;
 
 public class FileTree {
 
-	private final FileChangeForest trees;
+	private final FileChangeForest forest;
 	private TreeObjectId id;
 	private TreeSet<FileLocation> fileLocs = new TreeSet<FileLocation>();
 	private Queue<Integer> prevRevIdxs = new LinkedList<Integer>();
@@ -16,8 +16,8 @@ public class FileTree {
 	public HashSet<FileLocation> fileBeforeRef = new HashSet<FileLocation>();
 	public HashSet<FileLocation> fileAfterRef = new HashSet<FileLocation>();
 
-	public FileTree(FileChangeForest trees, FileNode node, int listIdx) {
-		this.trees = trees;
+	public FileTree(FileChangeForest fileChangeForest, FileNode node, int listIdx) {
+		this.forest = fileChangeForest;
 		this.id = new TreeObjectId(listIdx);
 		add(node);
 	}
@@ -26,7 +26,7 @@ public class FileTree {
 		while (!prevRevIdxs.isEmpty()) {
 			int prevRevIdx = prevRevIdxs.poll();
 			int prevFileIdx = prevFileIdxs.poll();
-			RevNode prevRev = trees.revIdxMap.get(prevRevIdx);
+			RevNode prevRev = forest.gd.revIdxMap.get(prevRevIdx);
 			if (!add(new FileNode(prevRev.getRevision().getFiles(prevFileIdx), prevRev, prevFileIdx)))
 				return false;
 		}
@@ -34,18 +34,18 @@ public class FileTree {
 	}
 
 	private boolean add(FileNode node) {
-		if (this.trees.debug)
+		if (this.forest.debug)
 			System.out.println("try to add node " + node.getLocId() + " " + node.getChangedFile().getChange()
 					+ " to list " + this.id);
 		// check if the node is added by some lists
-		if (trees.fileLocIdToNode.containsKey(node.getLocId())) {
-			int listIdx = trees.fileLocIdToNode.get(node.getLocId()).getTreeObjectId().getAsInt();
+		if (forest.gd.fileLocIdToNode.containsKey(node.getLocId())) {
+			int listIdx = forest.gd.fileLocIdToNode.get(node.getLocId()).getTreeObjectId().getAsInt();
 			if (listIdx != this.id.getAsInt()) {
-				if (this.trees.debug)
+				if (this.forest.debug)
 					System.out.println("node " + node.getLocId() + " already added to list " + listIdx);
-				trees.trees.get(listIdx).merge(this);
+				forest.trees.get(listIdx).merge(this);
 				linkAll();
-				if (this.trees.debug)
+				if (this.forest.debug)
 					System.out.println("drop list " + this.id);
 				return false;
 			}
@@ -56,11 +56,11 @@ public class FileTree {
 		// node update tree id
 		node.setTreeObjectId(this.id);
 		// update global nodes
-		trees.fileLocIdToNode.put(node.getLocId(), node);
+		forest.gd.fileLocIdToNode.put(node.getLocId(), node);
 		String oid = node.getChangedFile().getObjectId();
-		if (!trees.fileObjectIdToLocs.containsKey(oid))
-			trees.fileObjectIdToLocs.put(oid, new TreeSet<FileLocation>());
-		trees.fileObjectIdToLocs.get(oid).add(node.getLocId());
+		if (!forest.gd.fileObjectIdToLocs.containsKey(oid))
+			forest.gd.fileObjectIdToLocs.put(oid, new TreeSet<FileLocation>());
+		forest.gd.fileObjectIdToLocs.get(oid).add(node.getLocId());
 		// update prev queues
 		if (node.getChangedFile().getPreviousVersionsCount() != 0
 				&& node.getChangedFile().getPreviousIndicesCount() != 0) {
@@ -71,7 +71,7 @@ public class FileTree {
 	}
 
 	public void merge(FileTree tree) {
-		if (this.trees.debug)
+		if (this.forest.debug)
 			System.out.println("list " + this.id + " merge list " + tree.id);
 		// add nodes
 		this.fileLocs.addAll(tree.fileLocs);
