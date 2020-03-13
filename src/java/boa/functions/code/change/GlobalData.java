@@ -2,8 +2,10 @@ package boa.functions.code.change;
 
 import static boa.functions.BoaIntrinsics.getRevision;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -20,6 +22,10 @@ public class GlobalData {
 	// file info
 	protected HashMap<String, TreeSet<FileLocation>> fileObjectIdToLocs = new HashMap<String, TreeSet<FileLocation>>();
 	protected TreeMap<FileLocation, FileNode> fileLocIdToNode = new TreeMap<FileLocation, FileNode>();
+	
+	
+	// refactoring info
+	protected List<RefactoringBond> refBonds = new ArrayList<RefactoringBond>();
 	
 	public GlobalData(CodeRepository cr, int revCount) {
 		for (int i = 0; i < revCount; i++)

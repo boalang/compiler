@@ -3,7 +3,6 @@ package boa.functions.code.change;
 import java.util.ArrayList;
 import java.util.List;
 
-import boa.functions.code.change.FileTree.TreeObjectId;
 import boa.types.Diff.ChangedFile;
 
 public class FileNode {
@@ -12,7 +11,7 @@ public class FileNode {
 	private RevNode r = null;
 	private FileLocation locId = null;
 	private TreeObjectId treeId = null;
-	private List<RefactoringBond> refBonds = new ArrayList<RefactoringBond>();;
+	private List<Integer> refBondIdxs = new ArrayList<Integer>();
 	
 
 	public FileNode(ChangedFile cf, RevNode r, int fileIdx) {
@@ -79,8 +78,8 @@ public class FileNode {
 		return true;
 	}
 
-	public List<RefactoringBond> getRefBonds() {
-		return refBonds;
+	public List<Integer> getRefBondIdxs() {
+		return refBondIdxs;
 	}
 
 

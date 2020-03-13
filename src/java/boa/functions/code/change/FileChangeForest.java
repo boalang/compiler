@@ -57,8 +57,10 @@ public class FileChangeForest {
 				String afterFilePath = ref.getRightSideLocations(0).getFilePath();
 				FileNode fileAfter = getFileNodeFrom(afterFilePath, r);
 				RefactoringBond refBond = new RefactoringBond(fileBefore.getLocId(), fileAfter.getLocId(), ref);
-				fileBefore.getRefBonds().add(refBond);
-				fileAfter.getRefBonds().add(refBond);
+				int refBondIdx = gd.refBonds.size();
+				gd.refBonds.add(refBond);
+				fileBefore.getRefBondIdxs().add(refBondIdx);
+				fileAfter.getRefBondIdxs().add(refBondIdx);
 
 				int beforeTreeIdx = gd.fileLocIdToNode.get(fileBefore.getLocId()).getTreeObjectId().getAsInt();
 				FileTree beforeTree = trees.get(beforeTreeIdx);

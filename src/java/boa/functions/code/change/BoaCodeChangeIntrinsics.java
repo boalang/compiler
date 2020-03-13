@@ -1,5 +1,6 @@
 package boa.functions.code.change;
 
+import static boa.functions.BoaAstIntrinsics.cleanup;
 import static boa.functions.BoaAstIntrinsics.getRefactoringIdsInSet;
 import static boa.functions.BoaIntrinsics.getRevisionsCount;
 import static boa.functions.BoaIntrinsics.getSnapshot;
@@ -15,7 +16,6 @@ public class BoaCodeChangeIntrinsics {
 
 	@FunctionSpec(name = "test3", formalParameters = { "Project" })
 	public static void test2(Project p) throws Exception {
-		
 		long beforeUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
 		
 		CodeRepository cr = p.getCodeRepositories(0);
@@ -28,16 +28,26 @@ public class BoaCodeChangeIntrinsics {
 		forest.updateWithRefs(p, refRevIds, null);
 		List<FileTree> trees = forest.getTreesAsList();
 		
+		long afterUsedMem1=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();		
+		
 		DeclarationChangeForest declForest = new DeclarationChangeForest(forest);
-		
-		
+//		declForest = null;
+		cleanup();
+
 		System.out.println("Total Revs: " + revCount);
 		System.out.println("lists count: " + trees.size());
-		ChangedFile[] LatestSnapshot = getSnapshot(cr, revCount - 1, true);
-		System.out.println("last snapshot size: " + LatestSnapshot.length);
-		
-		long afterUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
-		System.err.println("Used " + afterUsedMem / 1000000.0 + " MB");
+		System.out.println("Total refs: " + gd.refBonds.size());
+		ChangedFile[] LatestSnapshot = getSnapshot(cr, revCount - 1, false);
+		int count = 0;
+		for (ChangedFile cf : LatestSnapshot)
+			if (cf.getName().endsWith(".java"))
+				count++;
+		System.out.println("last snapshot size: " + count);
+
+		long afterUsedMem2=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
+		System.err.println("Before Used " + beforeUsedMem / 1000000.0 + " MB");
+		System.err.println("File Tree Used " + afterUsedMem1 / 1000000.0 + " MB");
+		System.err.println("Parse Files Used " + afterUsedMem2 / 1000000.0 + " MB");
 	}
 
 }

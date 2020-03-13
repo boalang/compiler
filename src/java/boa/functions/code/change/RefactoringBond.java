@@ -4,29 +4,29 @@ import boa.types.Code.CodeRefactoring;
 
 public class RefactoringBond {
 	
-	private FileLocation leftLoc;
-	private FileLocation rightLoc;
+	private Location leftLoc;
+	private Location rightLoc;
 	private CodeRefactoring refactoring;
 	
-	public RefactoringBond(FileLocation leftLoc, FileLocation rightLoc, CodeRefactoring ref) {
+	public RefactoringBond(Location leftLoc, Location rightLoc, CodeRefactoring ref) {
 		this.leftLoc = leftLoc;
 		this.rightLoc = rightLoc;
 		this.refactoring = ref;
 	}
 
-	public FileLocation getLeftLoc() {
+	public Location getLeftLoc() {
 		return leftLoc;
 	}
 
-	public void setLeftLoc(FileLocation leftLoc) {
+	public void setLeftLoc(Location leftLoc) {
 		this.leftLoc = leftLoc;
 	}
 
-	public FileLocation getRightLoc() {
+	public Location getRightLoc() {
 		return rightLoc;
 	}
 
-	public void setRightLoc(FileLocation rightLoc) {
+	public void setRightLoc(Location rightLoc) {
 		this.rightLoc = rightLoc;
 	}
 
