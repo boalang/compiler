@@ -37,6 +37,7 @@ public class BoaCodeChangeIntrinsics {
 		System.out.println("Total Revs: " + revCount);
 		System.out.println("lists count: " + trees.size());
 		System.out.println("Total refs: " + gd.refBonds.size());
+		System.out.println("Total decls: " + gd.declLocToNode.size());
 		ChangedFile[] LatestSnapshot = getSnapshot(cr, revCount - 1, false);
 		int count = 0;
 		for (ChangedFile cf : LatestSnapshot)

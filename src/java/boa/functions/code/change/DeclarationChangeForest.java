@@ -16,11 +16,11 @@ public class DeclarationChangeForest {
 
 	protected List<DeclarationTree> trees = new ArrayList<DeclarationTree>();
 
-	
+	private FileChangeForest fcf;
 	private HashSet<String> visitedFileObjectIds = new HashSet<String>();
 	
 	
-	private FileNode curFL;
+	private FileNode curFN;
 	private BoaAbstractVisitor visitor = new BoaAbstractVisitor() {
 		private int declIdx = 0;
 		@Override
@@ -30,7 +30,10 @@ public class DeclarationChangeForest {
 		@Override
 		public boolean preVisit(final Declaration node) throws Exception {
 			String fqn = node.getFullyQualifiedName();
-			DeclarationNode declNode = new DeclarationNode(curFL, fqn, declIdx++);
+			DeclarationNode declNode = new DeclarationNode(curFN, fqn, declIdx++);
+			if (!fcf.gd.declLocToNode.containsKey(declNode.getLoc())) {
+				fcf.gd.declLocToNode.put(declNode.getLoc(), declNode);
+			}
 			System.out.println(declNode);
 			for (Declaration d : node.getNestedDeclarationsList())
 				visit(d);
@@ -39,20 +42,13 @@ public class DeclarationChangeForest {
 	};
 	
 	public DeclarationChangeForest(FileChangeForest forest) throws Exception {
-		
-		for (Entry<FileLocation, FileNode> e : forest.gd.fileLocIdToNode.descendingMap().entrySet()) {
-//			FileNode fn = forest.gd.fileLocIdToNode.get(loc);
-//			System.out.println(e.getKey());`
+		this.fcf = forest;
+		for (Entry<FileLocation, FileNode> e : fcf.gd.fileLocIdToNode.descendingMap().entrySet()) {
 			FileNode fn = e.getValue();
 			if (fn.getChangedFile().getChange() != ChangeKind.DELETED) {
-				curFL = fn;
+				curFN = fn;
 				visitor.visit(fn.getChangedFile());
 			}
 		}
-		
-		
-		
-		System.out.println(forest.gd.fileObjectIdToLocs.size());
-		
 	}
 }

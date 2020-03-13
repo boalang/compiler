@@ -23,9 +23,11 @@ public class GlobalData {
 	protected HashMap<String, TreeSet<FileLocation>> fileObjectIdToLocs = new HashMap<String, TreeSet<FileLocation>>();
 	protected TreeMap<FileLocation, FileNode> fileLocIdToNode = new TreeMap<FileLocation, FileNode>();
 	
-	
 	// refactoring info
 	protected List<RefactoringBond> refBonds = new ArrayList<RefactoringBond>();
+	
+	// decl info
+	protected TreeMap<DeclarationLocation, DeclarationNode> declLocToNode = new TreeMap<DeclarationLocation, DeclarationNode>();
 	
 	public GlobalData(CodeRepository cr, int revCount) {
 		for (int i = 0; i < revCount; i++)
