@@ -4,8 +4,8 @@ public class MethodLocation extends Location implements Comparable<MethodLocatio
 
 	private DeclarationLocation declLoc;
 	
-	public MethodLocation(DeclarationLocation declLoc, int methodIdx, String signature) {
-		super(methodIdx, signature);
+	public MethodLocation(DeclarationLocation declLoc, int methodIdx) {
+		super(methodIdx);
 		this.setDeclLoc(declLoc);
 	}
 	

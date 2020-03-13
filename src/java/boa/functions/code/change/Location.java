@@ -3,11 +3,9 @@ package boa.functions.code.change;
 public abstract class Location {
 
 	protected int idx;
-	protected String signature;
 
-	public Location(int idx, String sig) {
+	public Location(int idx) {
 		this.idx = idx;
-		this.signature = sig;
 	}
 	
 	public int getIdx() {
@@ -16,14 +14,6 @@ public abstract class Location {
 
 	public void setIdx(int idx) {
 		this.idx = idx;
-	}
-
-	public String getSignature() {
-		return signature;
-	}
-
-	public void setSignature(String signature) {
-		this.signature = signature;
 	}
 	
 	@Override
@@ -50,7 +40,7 @@ public abstract class Location {
 
 	@Override
 	public String toString() {
-		return this.idx + " " + this.signature;
+		return Integer.toString(idx);
 	};
 
 }

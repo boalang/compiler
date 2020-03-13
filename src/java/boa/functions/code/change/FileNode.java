@@ -9,7 +9,7 @@ public class FileNode {
 
 	private ChangedFile cf = null;
 	private RevNode r = null;
-	private FileLocation locId = null;
+	private FileLocation loc = null;
 	private TreeObjectId treeId = null;
 	private List<Integer> refBondIdxs = new ArrayList<Integer>();
 	
@@ -17,11 +17,11 @@ public class FileNode {
 	public FileNode(ChangedFile cf, RevNode r, int fileIdx) {
 		this.cf = cf;
 		this.r = r;
-		this.locId = new FileLocation(cf.getRevisionIdx(), cf.getFileIdx());
+		this.loc = new FileLocation(cf.getRevisionIdx(), cf.getFileIdx());
 	}
 
-	public FileLocation getLocId() {
-		return locId;
+	public FileLocation getLoc() {
+		return loc;
 	}
 	
 	public int getRevIdx() {
@@ -56,8 +56,7 @@ public class FileNode {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((treeId == null) ? 0 : treeId.hashCode());
-		result = prime * result + ((locId == null) ? 0 : locId.hashCode());
+		result = prime * result + ((loc == null) ? 0 : loc.hashCode());
 		return result;
 	}
 
@@ -70,12 +69,17 @@ public class FileNode {
 		if (getClass() != obj.getClass())
 			return false;
 		FileNode other = (FileNode) obj;
-		if (locId == null) {
-			if (other.locId != null)
+		if (loc == null) {
+			if (other.loc != null)
 				return false;
-		} else if (!locId.equals(other.locId))
+		} else if (!loc.equals(other.loc))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return loc + " " + cf.getName();
 	}
 
 	public List<Integer> getRefBondIdxs() {

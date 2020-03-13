@@ -20,7 +20,7 @@ public class DeclarationChangeForest {
 	private HashSet<String> visitedFileObjectIds = new HashSet<String>();
 	
 	
-	private FileLocation curFL;
+	private FileNode curFL;
 	private BoaAbstractVisitor visitor = new BoaAbstractVisitor() {
 		private int declIdx = 0;
 		@Override
@@ -30,8 +30,8 @@ public class DeclarationChangeForest {
 		@Override
 		public boolean preVisit(final Declaration node) throws Exception {
 			String fqn = node.getFullyQualifiedName();
-			DeclarationLocation declLoc = new DeclarationLocation(curFL, declIdx++, fqn);
-//			System.out.println(declLoc);
+			DeclarationNode declNode = new DeclarationNode(curFL, fqn, declIdx++);
+			System.out.println(declNode);
 			for (Declaration d : node.getNestedDeclarationsList())
 				visit(d);
 			return false;
@@ -45,7 +45,7 @@ public class DeclarationChangeForest {
 //			System.out.println(e.getKey());`
 			FileNode fn = e.getValue();
 			if (fn.getChangedFile().getChange() != ChangeKind.DELETED) {
-				curFL = fn.getLocId();
+				curFL = fn;
 				visitor.visit(fn.getChangedFile());
 			}
 		}

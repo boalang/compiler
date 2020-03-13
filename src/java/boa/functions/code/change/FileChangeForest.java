@@ -32,7 +32,7 @@ public class FileChangeForest {
 		for (int i = gd.revIdxMap.size() - 1; i >= 0; i--) {
 			RevNode r = gd.revIdxMap.get(i);
 			for (FileNode fn : r.getJavaFileNodes()) {
-				if (!gd.fileLocIdToNode.containsKey(fn.getLocId())) {
+				if (!gd.fileLocIdToNode.containsKey(fn.getLoc())) {
 					FileTree list = new FileTree(this, fn, trees.size());
 					if (list.linkAll())
 						trees.add(list);
@@ -56,18 +56,18 @@ public class FileChangeForest {
 				FileNode fileBefore = findLastModification(beforeFilePath, r);
 				String afterFilePath = ref.getRightSideLocations(0).getFilePath();
 				FileNode fileAfter = getFileNodeFrom(afterFilePath, r);
-				RefactoringBond refBond = new RefactoringBond(fileBefore.getLocId(), fileAfter.getLocId(), ref);
+				RefactoringBond refBond = new RefactoringBond(fileBefore.getLoc(), fileAfter.getLoc(), ref);
 				int refBondIdx = gd.refBonds.size();
 				gd.refBonds.add(refBond);
 				fileBefore.getRefBondIdxs().add(refBondIdx);
 				fileAfter.getRefBondIdxs().add(refBondIdx);
 
-				int beforeTreeIdx = gd.fileLocIdToNode.get(fileBefore.getLocId()).getTreeObjectId().getAsInt();
+				int beforeTreeIdx = gd.fileLocIdToNode.get(fileBefore.getLoc()).getTreeObjectId().getAsInt();
 				FileTree beforeTree = trees.get(beforeTreeIdx);
-				beforeTree.fileBeforeRef.add(fileBefore.getLocId());
-				int afterTreeIdx = gd.fileLocIdToNode.get(fileAfter.getLocId()).getTreeObjectId().getAsInt();
+				beforeTree.fileBeforeRef.add(fileBefore.getLoc());
+				int afterTreeIdx = gd.fileLocIdToNode.get(fileAfter.getLoc()).getTreeObjectId().getAsInt();
 				FileTree afterTree = trees.get(afterTreeIdx);
-				afterTree.fileBeforeRef.add(fileAfter.getLocId());
+				afterTree.fileBeforeRef.add(fileAfter.getLoc());
 			}
 		}
 	}

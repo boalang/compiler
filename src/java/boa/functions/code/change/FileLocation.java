@@ -5,7 +5,7 @@ public class FileLocation extends Location implements Comparable<FileLocation> {
 	private int revIdx;
 	
 	public FileLocation(int revIdx, int fileIdx) {
-		super(fileIdx, null);
+		super(fileIdx);
 		this.revIdx = revIdx;
 	}
 

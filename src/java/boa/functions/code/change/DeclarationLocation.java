@@ -4,8 +4,8 @@ public class DeclarationLocation extends Location implements Comparable<Declarat
 	
 	private FileLocation fileLoc;
 
-	public DeclarationLocation(FileLocation loc, int declIdx, String fullyQualifiedName) {
-		super(declIdx, fullyQualifiedName);
+	public DeclarationLocation(FileLocation loc, int declIdx) {
+		super(declIdx);
 		this.fileLoc = loc;
 	}
 
