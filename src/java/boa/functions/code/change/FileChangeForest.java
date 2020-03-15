@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import boa.types.Code.CodeRefactoring;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
@@ -59,9 +60,10 @@ public class FileChangeForest {
 				RefactoringBond refBond = new RefactoringBond(fileBefore.getLoc(), fileAfter.getLoc(), ref);
 				int refBondIdx = gd.refBonds.size();
 				gd.refBonds.add(refBond);
-				fileBefore.getRefBondIdxs().add(refBondIdx);
-				fileAfter.getRefBondIdxs().add(refBondIdx);
-
+				// update file ref bonds
+				fileBefore.getRightRefBondIdxs().add(refBondIdx);
+				fileAfter.getLeftRefBondIdxs().add(refBondIdx);
+				// update tree ref locations
 				int beforeTreeIdx = gd.fileLocIdToNode.get(fileBefore.getLoc()).getTreeObjectId().getAsInt();
 				FileTree beforeTree = trees.get(beforeTreeIdx);
 				beforeTree.fileBeforeRef.add(fileBefore.getLoc());

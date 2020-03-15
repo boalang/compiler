@@ -11,8 +11,8 @@ public class FileNode {
 	private RevNode r = null;
 	private FileLocation loc = null;
 	private TreeObjectId treeId = null;
-	private List<Integer> refBondIdxs = new ArrayList<Integer>();
-	
+	private List<Integer> leftRefBondIdxs = new ArrayList<Integer>();
+	private List<Integer> rightRefBondIdxs = new ArrayList<Integer>();
 
 	public FileNode(ChangedFile cf, RevNode r, int fileIdx) {
 		this.cf = cf;
@@ -82,8 +82,12 @@ public class FileNode {
 		return loc + " " + cf.getName();
 	}
 
-	public List<Integer> getRefBondIdxs() {
-		return refBondIdxs;
+	public List<Integer> getLeftRefBondIdxs() {
+		return leftRefBondIdxs;
+	}
+
+	public List<Integer> getRightRefBondIdxs() {
+		return rightRefBondIdxs;
 	}
 
 

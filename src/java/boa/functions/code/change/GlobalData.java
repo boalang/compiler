@@ -26,7 +26,7 @@ public class GlobalData {
 	// refactoring info
 	protected List<RefactoringBond> refBonds = new ArrayList<RefactoringBond>();
 	
-	// decl info
+	// declaration info
 	protected TreeMap<DeclarationLocation, DeclarationNode> declLocToNode = new TreeMap<DeclarationLocation, DeclarationNode>();
 	
 	public GlobalData(CodeRepository cr, int revCount) {

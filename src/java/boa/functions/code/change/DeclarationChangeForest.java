@@ -16,8 +16,8 @@ public class DeclarationChangeForest {
 
 	protected List<DeclarationTree> trees = new ArrayList<DeclarationTree>();
 
-	private FileChangeForest fcf;
-	private HashSet<String> visitedFileObjectIds = new HashSet<String>();
+	protected FileChangeForest fcf;
+	protected HashSet<String> visitedFileObjectIds = new HashSet<String>();
 	
 	
 	private FileNode curFN;
@@ -34,7 +34,7 @@ public class DeclarationChangeForest {
 			if (!fcf.gd.declLocToNode.containsKey(declNode.getLoc())) {
 				fcf.gd.declLocToNode.put(declNode.getLoc(), declNode);
 			}
-			System.out.println(declNode);
+//			System.out.println(declNode);
 			for (Declaration d : node.getNestedDeclarationsList())
 				visit(d);
 			return false;

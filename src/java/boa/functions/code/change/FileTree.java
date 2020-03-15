@@ -16,9 +16,9 @@ public class FileTree {
 	public HashSet<FileLocation> fileBeforeRef = new HashSet<FileLocation>();
 	public HashSet<FileLocation> fileAfterRef = new HashSet<FileLocation>();
 
-	public FileTree(FileChangeForest fileChangeForest, FileNode node, int listIdx) {
+	public FileTree(FileChangeForest fileChangeForest, FileNode node, int treeIdx) {
 		this.forest = fileChangeForest;
-		this.id = new TreeObjectId(listIdx);
+		this.id = new TreeObjectId(treeIdx);
 		add(node);
 	}
 
@@ -37,7 +37,7 @@ public class FileTree {
 		if (this.forest.debug)
 			System.out.println("try to add node " + node.getLoc() + " " + node.getChangedFile().getChange()
 					+ " to list " + this.id);
-		// check if the node is added by some lists
+		// check if the node is added by some trees
 		if (forest.gd.fileLocIdToNode.containsKey(node.getLoc())) {
 			int listIdx = forest.gd.fileLocIdToNode.get(node.getLoc()).getTreeObjectId().getAsInt();
 			if (listIdx != this.id.getAsInt()) {
