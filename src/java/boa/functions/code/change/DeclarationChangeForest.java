@@ -1,6 +1,7 @@
 package boa.functions.code.change;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
@@ -15,40 +16,60 @@ import static boa.functions.BoaAstIntrinsics.*;
 public class DeclarationChangeForest {
 
 	protected List<DeclarationTree> trees = new ArrayList<DeclarationTree>();
-
 	protected FileChangeForest fcf;
 	protected HashSet<String> visitedFileObjectIds = new HashSet<String>();
+	protected HashSet<DeclarationLocation> visitedDecls = new HashSet<DeclarationLocation>();
+	// considered ref types
+	protected HashSet<String> refTypes = new HashSet<String>(
+			Arrays.asList(new String[] { "Move Class", "Rename Class" }));
+
+	protected DeclarationCollector declCollector = new DeclarationCollector();
 	
+	public DeclarationChangeForest(FileChangeForest forest) throws Exception {
+		this.fcf = forest;
+		this.updateTrees();
+	}
 	
-	private FileNode curFN;
-	private BoaAbstractVisitor visitor = new BoaAbstractVisitor() {
-		private int declIdx = 0;
-		@Override
-		public void postVisit(final ChangedFile node) throws Exception { 
-			declIdx = 0; 
+	private void updateTrees() throws Exception {
+		for (Entry<FileLocation, FileNode> e : fcf.gd.fileLocIdToNode.descendingMap().entrySet()) {
+			FileNode fn = e.getValue();
+			if (fn.getChangedFile().getChange() != ChangeKind.DELETED) {
+				for (DeclarationNode dn : declCollector.getDeclNodes(fn)) {
+					if (!visitedDecls.contains(dn.getLoc())) {
+						DeclarationTree tree = new DeclarationTree(this, dn, trees.size());
+						if (tree.linkAll()) {
+							trees.add(tree);
+							visitedDecls.addAll(tree.getDeclLocs());
+						}
+					}
+				}
+			}
 		}
+	}
+	
+	public class DeclarationCollector extends BoaAbstractVisitor {
+		private int declIdx;
+		private FileNode fn;
+		private List<DeclarationNode> nodes = new ArrayList<DeclarationNode>();
+		
 		@Override
 		public boolean preVisit(final Declaration node) throws Exception {
 			String fqn = node.getFullyQualifiedName();
-			DeclarationNode declNode = new DeclarationNode(curFN, fqn, declIdx++);
-			if (!fcf.gd.declLocToNode.containsKey(declNode.getLoc())) {
-				fcf.gd.declLocToNode.put(declNode.getLoc(), declNode);
-			}
-//			System.out.println(declNode);
+			DeclarationNode declNode = new DeclarationNode(fn, fqn, declIdx++);
+			fcf.gd.declLocToNode.put(declNode.getLoc(), declNode);
+			nodes.add(declNode);
+			System.out.println(declNode);
 			for (Declaration d : node.getNestedDeclarationsList())
 				visit(d);
 			return false;
 		}
-	};
-	
-	public DeclarationChangeForest(FileChangeForest forest) throws Exception {
-		this.fcf = forest;
-		for (Entry<FileLocation, FileNode> e : fcf.gd.fileLocIdToNode.descendingMap().entrySet()) {
-			FileNode fn = e.getValue();
-			if (fn.getChangedFile().getChange() != ChangeKind.DELETED) {
-				curFN = fn;
-				visitor.visit(fn.getChangedFile());
-			}
+		
+		public List<DeclarationNode> getDeclNodes(FileNode fn) throws Exception {
+			this.declIdx = 0;
+			this.fn = fn;
+			this.nodes.clear();
+			this.visit(fn.getChangedFile());
+			return nodes;
 		}
 	}
 }

@@ -53,5 +53,4 @@ public class DeclarationLocation extends Location implements Comparable<Declarat
 		return comp == 0 ? this.idx - o.idx : comp;
 	}
 
-
 }

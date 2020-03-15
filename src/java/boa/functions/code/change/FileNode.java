@@ -1,8 +1,6 @@
 package boa.functions.code.change;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import boa.functions.code.change.refactoring.RefactoringBonds;
 import boa.types.Diff.ChangedFile;
 
 public class FileNode {
@@ -11,8 +9,8 @@ public class FileNode {
 	private RevNode r = null;
 	private FileLocation loc = null;
 	private TreeObjectId treeId = null;
-	private List<Integer> leftRefBondIdxs = new ArrayList<Integer>();
-	private List<Integer> rightRefBondIdxs = new ArrayList<Integer>();
+	private RefactoringBonds leftRefBonds = new RefactoringBonds();
+	private RefactoringBonds rightRefBonds = new RefactoringBonds();
 
 	public FileNode(ChangedFile cf, RevNode r, int fileIdx) {
 		this.cf = cf;
@@ -82,12 +80,12 @@ public class FileNode {
 		return loc + " " + cf.getName();
 	}
 
-	public List<Integer> getLeftRefBondIdxs() {
-		return leftRefBondIdxs;
+	public RefactoringBonds getLeftRefBonds() {
+		return leftRefBonds;
 	}
 
-	public List<Integer> getRightRefBondIdxs() {
-		return rightRefBondIdxs;
+	public RefactoringBonds getRightRefBonds() {
+		return rightRefBonds;
 	}
 
 

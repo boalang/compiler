@@ -1,5 +1,6 @@
-package boa.functions.code.change;
+package boa.functions.code.change.refactoring;
 
+import boa.functions.code.change.Location;
 import boa.types.Code.CodeRefactoring;
 
 public class RefactoringBond {
@@ -7,11 +8,13 @@ public class RefactoringBond {
 	private Location leftLoc;
 	private Location rightLoc;
 	private CodeRefactoring refactoring;
+	private BoaCodeElementLevel level;
 	
 	public RefactoringBond(Location leftLoc, Location rightLoc, CodeRefactoring ref) {
 		this.leftLoc = leftLoc;
 		this.rightLoc = rightLoc;
 		this.refactoring = ref;
+		this.level = BoaCodeElementLevel.getCodeElementLevel(ref.getType());
 	}
 
 	public Location getLeftLoc() {
@@ -37,5 +40,20 @@ public class RefactoringBond {
 	public void setRefactoring(CodeRefactoring refactoring) {
 		this.refactoring = refactoring;
 	}
+	
+	public String getType() {
+		return refactoring.getType();
+	}
 
+	public BoaCodeElementLevel getLevel() {
+		return level;
+	}
+	
+	public String getRightElement() {
+		return refactoring.getRightSideLocations(0).getCodeElement();
+	}
+
+	public String getLeftElement() {
+		return refactoring.getLeftSideLocations(0).getCodeElement();
+	}
 }

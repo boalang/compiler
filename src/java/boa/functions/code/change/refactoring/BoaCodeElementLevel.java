@@ -1,9 +1,11 @@
 package boa.functions.code.change.refactoring;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
 public enum BoaCodeElementLevel {
 	UNKOWN(),
+	PACKAGE_LEVEL("Change Package"),
 	CLASS_LEVEL("Move Class", "Rename Class", 
 			"Extract Superclass", "Extract Interface"),
 	METHOD_LEVEL("Rename Method", "Inline Method", 
@@ -15,14 +17,16 @@ public enum BoaCodeElementLevel {
 	
 	private HashSet<String> refactoringTypes = new HashSet<String>();
 	
-	BoaCodeElementLevel(String ... refactoringType) {
-		refactoringTypes.addAll(refactoringTypes);
+	private BoaCodeElementLevel(String ... refactoringType) {
+		refactoringTypes.addAll(Arrays.asList(refactoringType));
 	}
 	
 	public static BoaCodeElementLevel getCodeElementLevel(String refactoringType) {
-		for (BoaCodeElementLevel cl : BoaCodeElementLevel.values())
+		for (BoaCodeElementLevel cl : BoaCodeElementLevel.values()) {
 			if (cl.refactoringTypes.contains(refactoringType))
 				return cl;
-		return UNKOWN;
+		}
+//		return UNKOWN;
+		throw new IllegalArgumentException("level not known " + refactoringType);
 	}
 }

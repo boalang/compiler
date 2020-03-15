@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import boa.functions.code.change.refactoring.RefactoringBond;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 
