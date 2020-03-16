@@ -11,7 +11,6 @@ public class DeclarationNode {
 	private TreeObjectId treeId;
 	private List<Integer> refBondIdxs = new ArrayList<Integer>();
 	
-	
 	public DeclarationNode(FileNode fn, String fqn, int declIdx) {
 		this.fn = fn;
 		this.signature = fqn;

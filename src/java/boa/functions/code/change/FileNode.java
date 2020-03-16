@@ -1,5 +1,8 @@
 package boa.functions.code.change;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.functions.code.change.refactoring.RefactoringBonds;
 import boa.types.Diff.ChangedFile;
 
@@ -9,10 +12,23 @@ public class FileNode {
 	private RevNode r = null;
 	private FileLocation loc = null;
 	private TreeObjectId treeId = null;
+	private List<FileLocation> prevLocs = new ArrayList<FileLocation>();
 	private RefactoringBonds leftRefBonds = new RefactoringBonds();
 	private RefactoringBonds rightRefBonds = new RefactoringBonds();
+	
+	// decl/method/field
+	private List<DeclarationNode> decls = new ArrayList<DeclarationNode>();
+	private List<DeclarationNode> methods = new ArrayList<DeclarationNode>();
+	private List<DeclarationNode> fields = new ArrayList<DeclarationNode>();
+	
 
-	public FileNode(ChangedFile cf, RevNode r, int fileIdx) {
+	public FileNode(ChangedFile cf, RevNode r, FileLocation loc) {
+		this.cf = cf;
+		this.r = r;
+		this.loc = loc;
+	}
+	
+	public FileNode(ChangedFile cf, RevNode r) {
 		this.cf = cf;
 		this.r = r;
 		this.loc = new FileLocation(cf.getRevisionIdx(), cf.getFileIdx());
@@ -50,6 +66,18 @@ public class FileNode {
 		return treeId;
 	}
 
+	public RefactoringBonds getLeftRefBonds() {
+		return leftRefBonds;
+	}
+
+	public RefactoringBonds getRightRefBonds() {
+		return rightRefBonds;
+	}
+
+	public List<FileLocation> getPrevLocs() {
+		return prevLocs;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -79,14 +107,5 @@ public class FileNode {
 	public String toString() {
 		return loc + " " + cf.getName();
 	}
-
-	public RefactoringBonds getLeftRefBonds() {
-		return leftRefBonds;
-	}
-
-	public RefactoringBonds getRightRefBonds() {
-		return rightRefBonds;
-	}
-
 
 }

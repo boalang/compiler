@@ -10,8 +10,7 @@ public class FileTree {
 	private final FileChangeForest forest;
 	private TreeObjectId id;
 	private TreeSet<FileLocation> fileLocs = new TreeSet<FileLocation>();
-	private Queue<Integer> prevRevIdxs = new LinkedList<Integer>();
-	private Queue<Integer> prevFileIdxs = new LinkedList<Integer>();
+	private Queue<FileLocation> prevFileLocs = new LinkedList<FileLocation>();
 	// refactoring info
 	public HashSet<FileLocation> fileBeforeRef = new HashSet<FileLocation>();
 	public HashSet<FileLocation> fileAfterRef = new HashSet<FileLocation>();
@@ -23,11 +22,10 @@ public class FileTree {
 	}
 
 	public boolean linkAll() {
-		while (!prevRevIdxs.isEmpty()) {
-			int prevRevIdx = prevRevIdxs.poll();
-			int prevFileIdx = prevFileIdxs.poll();
-			RevNode prevRev = forest.gd.revIdxMap.get(prevRevIdx);
-			if (!add(new FileNode(prevRev.getRevision().getFiles(prevFileIdx), prevRev, prevFileIdx)))
+		while (!prevFileLocs.isEmpty()) {
+			FileLocation loc = prevFileLocs.poll();
+			RevNode prevRev = forest.gd.revIdxMap.get(loc.getRevIdx());
+			if (!add(new FileNode(prevRev.getRevision().getFiles(loc.getIdx()), prevRev, loc)))
 				return false;
 		}
 		return true;
@@ -43,8 +41,7 @@ public class FileTree {
 			if (listIdx != this.id.getAsInt()) {
 				if (this.forest.debug)
 					System.out.println("node " + node.getLoc() + " already added to list " + listIdx);
-				forest.trees.get(listIdx).merge(this);
-				linkAll();
+				forest.trees.get(listIdx).merge(this).linkAll();
 				if (this.forest.debug)
 					System.out.println("drop list " + this.id);
 				return false;
@@ -64,13 +61,18 @@ public class FileTree {
 		// update prev queues
 		if (node.getChangedFile().getPreviousVersionsCount() != 0
 				&& node.getChangedFile().getPreviousIndicesCount() != 0) {
-			prevRevIdxs.addAll(node.getChangedFile().getPreviousVersionsList());
-			prevFileIdxs.addAll(node.getChangedFile().getPreviousIndicesList());
+			for (int i = 0; i < node.getChangedFile().getPreviousVersionsCount(); i++) {
+				int revIdx = node.getChangedFile().getPreviousVersions(i);
+				int fileIdx = node.getChangedFile().getPreviousIndices(i);
+				FileLocation loc = new FileLocation(revIdx, fileIdx);
+				node.getPrevLocs().add(loc);
+				prevFileLocs.offer(loc);
+			}
 		}
 		return true;
 	}
 
-	public void merge(FileTree tree) {
+	public FileTree merge(FileTree tree) {
 		if (this.forest.debug)
 			System.out.println("list " + this.id + " merge list " + tree.id);
 		// add nodes
@@ -78,20 +80,19 @@ public class FileTree {
 		// update list id
 		tree.id.setId(this.id.getAsInt());
 		// merge queues
-		while (!tree.prevRevIdxs.isEmpty()) {
-			int prevRevIdx = tree.prevRevIdxs.poll();
-			int prevFileIdx = tree.prevFileIdxs.poll();
-			if (!fileLocs.contains(new FileLocation(prevRevIdx, prevFileIdx))) {
-				this.prevRevIdxs.offer(prevRevIdx);
-				this.prevFileIdxs.offer(prevFileIdx);
+		while (!tree.prevFileLocs.isEmpty()) {
+			FileLocation loc = tree.prevFileLocs.poll();
+			if (!fileLocs.contains(loc)) {
+				this.prevFileLocs.offer(loc);
 			}
 		}
+		return this;
 	}
 
 	public TreeObjectId getId() {
 		return id;
 	}
-	
+
 	public TreeSet<FileLocation> getFileLocs() {
 		return fileLocs;
 	}

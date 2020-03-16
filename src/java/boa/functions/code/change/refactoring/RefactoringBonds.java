@@ -43,4 +43,8 @@ public class RefactoringBonds {
 	public List<Integer> getFieldLevel() {
 		return fieldLevel;
 	}
+
+	public int getSize() {
+		return packageLevel.size() + classLevel.size() + methodLevel.size() + fieldLevel.size();
+	}
 }

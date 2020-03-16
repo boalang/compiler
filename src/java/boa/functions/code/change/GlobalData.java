@@ -10,6 +10,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import boa.functions.code.change.refactoring.RefactoringBond;
+import boa.types.Ast.ASTRoot;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 
@@ -26,6 +27,9 @@ public class GlobalData {
 	
 	// refactoring info
 	protected List<RefactoringBond> refBonds = new ArrayList<RefactoringBond>();
+	
+	// class/method/field edges
+	protected HashMap<String, ASTRoot> fileObjectIdToASTRoot = new HashMap<String, ASTRoot>();
 	
 	// declaration info
 	protected TreeMap<DeclarationLocation, DeclarationNode> declLocToNode = new TreeMap<DeclarationLocation, DeclarationNode>();

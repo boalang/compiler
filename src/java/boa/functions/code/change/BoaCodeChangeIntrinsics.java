@@ -30,12 +30,14 @@ public class BoaCodeChangeIntrinsics {
 		
 		long afterUsedMem1=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();		
 		
-		DeclarationChangeForest declForest = new DeclarationChangeForest(forest);
+		
+		forest.updateWithEdges();
+//		DeclarationChangeForest declForest = new DeclarationChangeForest(forest);
 //		declForest = null;
 		cleanup();
 
 		System.out.println("Total Revs: " + revCount);
-		System.out.println("lists count: " + trees.size());
+		System.out.println("Tress count: " + trees.size());
 		System.out.println("Total refs: " + gd.refBonds.size());
 		System.out.println("Total decls: " + gd.declLocToNode.size());
 		ChangedFile[] LatestSnapshot = getSnapshot(cr, revCount - 1, false);

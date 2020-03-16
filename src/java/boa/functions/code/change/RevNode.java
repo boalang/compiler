@@ -24,7 +24,7 @@ public class RevNode {
 		for (int i = 0; i < rev.getFilesCount(); i++) {
 			ChangedFile cf = rev.getFiles(i);
 			if (isJavaFile(cf.getName()))
-				fns.add(new FileNode(rev.getFiles(i), this, i));
+				fns.add(new FileNode(rev.getFiles(i), this));
 		}
 		return fns;
 	}

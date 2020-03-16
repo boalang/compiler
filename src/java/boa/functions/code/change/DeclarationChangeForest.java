@@ -27,7 +27,7 @@ public class DeclarationChangeForest {
 	
 	public DeclarationChangeForest(FileChangeForest forest) throws Exception {
 		this.fcf = forest;
-		this.updateTrees();
+//		this.updateTrees();
 	}
 	
 	private void updateTrees() throws Exception {
