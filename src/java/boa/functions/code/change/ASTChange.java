@@ -6,8 +6,8 @@ import java.util.List;
 public class ASTChange {
 	
 	private List<DeclarationNode> decls = new ArrayList<DeclarationNode>();
-	private List<DeclarationNode> methods = new ArrayList<DeclarationNode>();
-	private List<DeclarationNode> fields = new ArrayList<DeclarationNode>();
+	private List<MethodNode> methods = new ArrayList<MethodNode>();
+	private List<FieldNode> fields = new ArrayList<FieldNode>();
 	
 	public ASTChange() {
 		
@@ -17,11 +17,15 @@ public class ASTChange {
 		return decls;
 	}
 
-	public List<DeclarationNode> getMethods() {
+	public List<MethodNode> getMethods() {
 		return methods;
 	}
 
-	public List<DeclarationNode> getFields() {
+	public List<FieldNode> getFields() {
 		return fields;
+	}
+	
+	public int getSize() {
+		return decls.size() + methods.size() + fields.size();
 	}
 }

@@ -30,7 +30,6 @@ public class BoaCodeChangeIntrinsics {
 		
 		long afterUsedMem1=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();		
 		
-
 		System.out.println(forest.gd.fileNames.size());
 		
 		forest.updateWithEdges();
