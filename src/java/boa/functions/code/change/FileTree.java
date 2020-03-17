@@ -67,7 +67,13 @@ public class FileTree {
 			forest.gd.fileObjectIdToLocs.put(oid, new TreeSet<FileLocation>());
 		forest.gd.fileObjectIdToLocs.get(oid).add(node.getLoc());
 		// update prev queues
-		for (FileLocation loc : getPrevLocs(node)) {
+		
+		List<FileLocation> prevLocs = getPrevLocs(node);
+//		if (prevLocs.size() == 0) {
+//			if (node.getChangedFile().getChange() != ChangeKind.ADDED)
+//				System.out.println("err");
+//		}
+		for (FileLocation loc : prevLocs) {
 			node.getPrevLocs().add(loc);
 			prevFileLocs.offer(loc);
 		}

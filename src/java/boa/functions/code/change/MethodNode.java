@@ -5,19 +5,16 @@ import java.util.List;
 
 import boa.types.Shared.ChangeKind;
 
-public class MethodNode {
+public class MethodNode extends ChangedASTNode {
 
 	private DeclarationNode declNode;
 	private String signature;
 	private MethodLocation loc;
-	private ChangeKind change;
-	private TreeObjectId treeId;
-	private List<Integer> refBondIdxs = new ArrayList<Integer>();
-	
+	private List<MethodLocation> prevLocs = new ArrayList<MethodLocation>();
+
 	public MethodNode(DeclarationNode declNode, String sig, int mIdx, ChangeKind change) {
+		super(sig, change);
 		this.declNode = declNode;
-		this.signature = sig;
-		this.change = change;
 		this.loc = new MethodLocation(declNode.getLoc(), mIdx);
 	}
 
@@ -25,24 +22,12 @@ public class MethodNode {
 		return declNode;
 	}
 
-	public String getSignature() {
-		return signature;
-	}
-
 	public MethodLocation getLoc() {
 		return loc;
 	}
 
-	public ChangeKind getChange() {
-		return change;
-	}
-
-	public TreeObjectId getTreeId() {
-		return treeId;
-	}
-
-	public List<Integer> getRefBondIdxs() {
-		return refBondIdxs;
+	public List<MethodLocation> getPrevLocs() {
+		return prevLocs;
 	}
 
 	@Override

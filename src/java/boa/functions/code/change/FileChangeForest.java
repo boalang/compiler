@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.Queue;
 
 import boa.functions.code.change.refactoring.RefactoringBond;
@@ -109,119 +111,173 @@ public class FileChangeForest {
 				return gd.fileLocIdToNode.get(new FileLocation(cf.getRevisionIdx(), cf.getFileIdx()));
 		return null;
 	}
-	
+
 	private HashSet<FileLocation> visited = new HashSet<FileLocation>();
 
 	// update code element edges
 	public void updateWithEdges() throws Exception {
 		for (Entry<FileLocation, FileNode> e : gd.fileLocIdToNode.descendingMap().entrySet()) {
 			FileNode fn = e.getValue();
-			System.out.println(fn.getLoc());
+//			System.out.println(fn.getLoc());
 			if (visited.contains(fn.getLoc()))
 				continue;
 			Queue<FileNode> queue = new LinkedList<FileNode>();
 			queue.offer(fn);
 			while (!queue.isEmpty()) {
-				FileNode leftNode = queue.poll();
-				visited.add(leftNode.getLoc());
-				for (FileLocation loc : leftNode.getPrevLocs()) {
-					FileNode rightNode = gd.fileLocIdToNode.get(loc);
-					compareFileNodes(rightNode, leftNode);
-					if (rightNode.getPrevLocs().size() > 0) {
-						queue.offer(rightNode);
-						visited.add(rightNode.getLoc());
-					}
+				FileNode rightNode = queue.poll();
+				visited.add(rightNode.getLoc());
+				for (FileLocation loc : rightNode.getPrevLocs()) {
+					FileNode leftNode = gd.fileLocIdToNode.get(loc);
+					compareFileNodes(leftNode, rightNode);
+					if (leftNode.getPrevLocs().size() > 0)
+						queue.offer(leftNode);
+					else
+						visited.add(leftNode.getLoc());
 				}
 			}
 		}
 	}
 
-	private void compareFileNodes(FileNode rightNode, FileNode leftNode) throws Exception {
+	private void compareFileNodes(FileNode leftNode, FileNode rightNode) throws Exception {
 		DeclarationCollector declCollector = new DeclarationCollector();
-		List<Declaration> rightDecls = null;
-		
-		// left is deleted
-		if (leftNode.getChangedFile().getChange() == ChangeKind.DELETED) {
-			if (rightDecls == null)
-				rightDecls = declCollector.getDeclNodes(rightNode);
-			ASTChange leftASTChange = new ASTChange();
-			for (int i = 0; i < rightDecls.size(); i++) {
-				Declaration decl = rightDecls.get(i);
-				DeclarationNode declNode = new DeclarationNode(rightNode, decl.getFullyQualifiedName(), i, ChangeKind.DELETED);
-				leftASTChange.getDecls().add(declNode);
-				for (int j = 0; j < decl.getMethodsCount(); j++) {
-					Method method = decl.getMethods(j);
-					MethodNode methodNode = new MethodNode(declNode, method.getName(), j, ChangeKind.DELETED);
-					leftASTChange.getMethods().add(methodNode);
-				}
-				for (int k = 0; k < decl.getFieldsCount(); k++) {
-					Variable var = decl.getFields(k);
-					FieldNode varNode = new FieldNode(declNode, var.getName(), k, ChangeKind.DELETED);
-					leftASTChange.getFields().add(varNode);
-				}
-			}
-			leftNode.getAstChanges().add(leftASTChange);
-		}
-		
-		// right is added
-		if (rightNode.getChangedFile().getChange() == ChangeKind.ADDED 
-				&& rightNode.getPrevLocs().size() == 0) {
-			if (rightDecls == null)
-				rightDecls = declCollector.getDeclNodes(rightNode);
+		List<Declaration> leftDecls = null;
+
+		// right is deleted
+		if (rightNode.getChangedFile().getChange() == ChangeKind.DELETED) {
+			if (leftDecls == null)
+				leftDecls = declCollector.getDeclNodes(leftNode);
 			ASTChange rightASTChange = new ASTChange();
-			for (int i = 0; i < rightDecls.size(); i++) {
-				Declaration decl = rightDecls.get(i);
-				DeclarationNode declNode = new DeclarationNode(rightNode, decl.getFullyQualifiedName(), i, ChangeKind.ADDED);
-				rightASTChange.getDecls().add(declNode);
-				for (int j = 0; j < decl.getMethodsCount(); j++) {
-					Method method = decl.getMethods(j);
-					MethodNode methodNode = new MethodNode(declNode, method.getName(), j, ChangeKind.ADDED);
-					rightASTChange.getMethods().add(methodNode);
-				}
-				for (int k = 0; k < decl.getFieldsCount(); k++) {
-					Variable var = decl.getFields(k);
-					FieldNode varNode = new FieldNode(declNode, var.getName(), k, ChangeKind.ADDED);
-					rightASTChange.getFields().add(varNode);
-				}
+			for (int i = 0; i < leftDecls.size(); i++) {
+				Declaration decl = leftDecls.get(i);
+				updateAllASTChange(rightNode, decl, i, ChangeKind.DELETED, rightASTChange);
 			}
 			rightNode.getAstChanges().add(rightASTChange);
 		}
 
-		// change is saved into left node
-		if (leftNode.getChangedFile().getChange() == ChangeKind.MODIFIED) {
-			if (rightDecls == null)
-				rightDecls = declCollector.getDeclNodes(rightNode);
-			List<Declaration> leftDecls = declCollector.getDeclNodes(leftNode);
+		// left is added
+		if (leftNode.getChangedFile().getChange() == ChangeKind.ADDED && leftNode.getPrevLocs().size() == 0) {
+			if (leftDecls == null)
+				leftDecls = declCollector.getDeclNodes(leftNode);
 			ASTChange leftASTChange = new ASTChange();
-			
-			for (int i = 0; i < rightDecls.size(); i++) {
-				Declaration rightDecl = rightDecls.get(i);
-				boolean found = false;
-				for (int j = 0; j < leftDecls.size(); j++) {
-					Declaration leftDecl = leftDecls.get(j);
-					if (rightDecl.getFullyQualifiedName().equals(leftDecl.getFullyQualifiedName())) {
-						
-						found = true;
-						break;
+			for (int i = 0; i < leftDecls.size(); i++) {
+				Declaration decl = leftDecls.get(i);
+				updateAllASTChange(leftNode, decl, i, ChangeKind.ADDED, leftASTChange);
+			}
+			leftNode.getAstChanges().add(leftASTChange);
+		}
+
+		// change is saved into left node
+		if (rightNode.getChangedFile().getChange() == ChangeKind.MODIFIED) {
+			if (leftDecls == null)
+				leftDecls = declCollector.getDeclNodes(leftNode);
+			List<Declaration> rightDecls = declCollector.getDeclNodes(rightNode);
+			ASTChange rightASTChange = new ASTChange();
+
+//			if (leftDecls.size() == 0) {
+//				System.out.println("left " + leftNode + " " + leftNode.getChangedFile().getChange());
+//			}
+//			if (rightDecls.size() == 0) {
+//				System.out.println("right " + rightNode + " " + rightNode.getChangedFile().getChange());
+//			}
+
+			Set<Integer> deleted = Stream.iterate(0, n -> n + 1).limit(leftDecls.size()).collect(Collectors.toSet());
+			Set<Integer> added = Stream.iterate(0, n -> n + 1).limit(rightDecls.size()).collect(Collectors.toSet());
+
+			for (int i = 0; i < leftDecls.size(); i++) {
+				Declaration leftDecl = leftDecls.get(i);
+				for (int j = 0; j < rightDecls.size(); j++) {
+					if (added.contains(j)) {
+						Declaration rightDecl = rightDecls.get(j);
+						if (leftDecl.getFullyQualifiedName().equals(rightDecl.getFullyQualifiedName())) {
+							deleted.remove(i);
+							added.remove(j);
+							compareDeclarations(leftDecl, rightDecl, j, rightNode, rightASTChange);
+							break;
+						}
 					}
-					
-				}
-				if (!found) {
-					System.out.println("deleted class " + rightDecl.getFullyQualifiedName());
-					DeclarationNode declNode = new DeclarationNode(rightNode, rightDecl.getFullyQualifiedName(), i, ChangeKind.DELETED);
-					leftASTChange.getDecls().add(declNode);
 				}
 			}
-			
-			if (leftASTChange.getSize() != 0) {
-				leftNode.getAstChanges().add(leftASTChange);
+			for (int i : deleted) {
+				Declaration decl = leftDecls.get(i);
+				updateAllASTChange(rightNode, decl, i, ChangeKind.DELETED, rightASTChange);
+			}
+			for (int j : added) {
+				Declaration decl = rightDecls.get(j);
+				updateAllASTChange(rightNode, decl, j, ChangeKind.ADDED, rightASTChange);
+			}
+			if (rightASTChange.getSize() != 0) {
+				rightNode.getAstChanges().add(rightASTChange);
 			}
 		}
-		
+
+	}
+
+	private void updateAllASTChange(FileNode fileNode, Declaration decl, int i, ChangeKind change,
+			ASTChange astChange) {
+		DeclarationNode declNode = new DeclarationNode(fileNode, decl.getFullyQualifiedName(), i, change);
+		astChange.getDecls().add(declNode);
+		for (int j = 0; j < decl.getMethodsCount(); j++) {
+			updateMethodChange(decl, j, declNode, astChange, change);
+		}
+		for (int k = 0; k < decl.getFieldsCount(); k++) {
+			updateFieldChange(decl, k, declNode, astChange, change);
+		}
+	}
+
+	private void updateFieldChange(Declaration decl, int k, DeclarationNode declNode, ASTChange astChange,
+			ChangeKind change) {
+		Variable var = decl.getFields(k);
+		FieldNode varNode = new FieldNode(declNode, var.getName(), k, change);
+		astChange.getFields().add(varNode);
+	}
+
+	private void updateMethodChange(Declaration decl, int j, DeclarationNode declNode, ASTChange astChange,
+			ChangeKind change) {
+		Method method = decl.getMethods(j);
+		MethodNode methodNode = new MethodNode(declNode, method.getName(), j, change);
+		astChange.getMethods().add(methodNode);
+	}
+
+	private void compareDeclarations(Declaration leftDecl, Declaration rightDecl, int rightDeclIdx, FileNode rightNode,
+			ASTChange rightASTChange) {
+
+		// compare fields
+		Set<Integer> deleted = Stream.iterate(0, n -> n + 1).limit(leftDecl.getFieldsCount()).collect(Collectors.toSet());
+		Set<Integer> added = Stream.iterate(0, n -> n + 1).limit(rightDecl.getFieldsCount()).collect(Collectors.toSet());
+		Set<Integer> modified = new HashSet<Integer>();
+
+		for (int i = 0; i < leftDecl.getFieldsCount(); i++) {
+			Variable leftVar = leftDecl.getFields(i);
+			for (int j = 0; j < rightDecl.getFieldsCount(); j++) {
+				if (added.contains(j)) {
+					Variable rightVar = rightDecl.getFields(j);
+					if (leftVar.getName().equals(rightVar.getName())) {
+						if (!prettyprint(leftVar).equals(prettyprint(rightVar)))
+							modified.add(j);
+						deleted.remove(i);
+						added.remove(j);
+						break;
+					}
+				}
+			}
+		}
+
+		if (deleted.size() + added.size() == 0)
+			return;
+		DeclarationNode declNode = new DeclarationNode(rightNode, rightDecl.getFullyQualifiedName(), rightDeclIdx,
+				ChangeKind.MODIFIED);
+
+		for (int i : deleted) {
+			updateFieldChange(leftDecl, i, declNode, rightASTChange, ChangeKind.DELETED);
+		}
+		for (int j : added) {
+			updateFieldChange(rightDecl, j, declNode, rightASTChange, ChangeKind.ADDED);
+		}
+
 	}
 
 	public class DeclarationCollector extends BoaAbstractVisitor {
-		private List<Declaration> nodes = new ArrayList<Declaration>();
+		private List<Declaration> nodes;
 
 		@Override
 		public boolean preVisit(final Declaration node) throws Exception {
@@ -232,7 +288,7 @@ public class FileChangeForest {
 		}
 
 		public List<Declaration> getDeclNodes(FileNode fn) throws Exception {
-			this.nodes.clear();
+			this.nodes = new ArrayList<Declaration>();
 			this.visit(fn.getChangedFile());
 			return nodes;
 		}

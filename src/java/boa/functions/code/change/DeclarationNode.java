@@ -5,19 +5,15 @@ import java.util.List;
 
 import boa.types.Shared.ChangeKind;
 
-public class DeclarationNode {
-	
+public class DeclarationNode extends ChangedASTNode {
+
 	private FileNode fn;
-	private String signature;
 	private DeclarationLocation loc;
-	private ChangeKind change;
-	private TreeObjectId treeId;
-	private List<Integer> refBondIdxs = new ArrayList<Integer>();
+	private List<DeclarationLocation> prevLocs = new ArrayList<DeclarationLocation>();
 	
 	public DeclarationNode(FileNode fn, String fqn, int declIdx, ChangeKind change) {
+		super(fqn, change);
 		this.fn = fn;
-		this.signature = fqn;
-		this.change = change;
 		this.loc = new DeclarationLocation(fn.getLoc(), declIdx); 
 	}
 
@@ -25,29 +21,12 @@ public class DeclarationNode {
 		return fn;
 	}
 
-
-	public String getSignature() {
-		return signature;
-	}
-
-
 	public DeclarationLocation getLoc() {
 		return loc;
 	}
 
-
-	public TreeObjectId getTreeId() {
-		return treeId;
-	}
-
-
-	public void setTreeId(TreeObjectId treeId) {
-		this.treeId = treeId;
-	}
-
-
-	public List<Integer> getRefBondIdxs() {
-		return refBondIdxs;
+	public List<DeclarationLocation> getPrevLocs() {
+		return prevLocs;
 	}
 
 	@Override
@@ -80,8 +59,4 @@ public class DeclarationNode {
 		return fn + " " + loc.getIdx() + " " + signature;
 	}
 
-	public ChangeKind getChange() {
-		return change;
-	}
-	
 }

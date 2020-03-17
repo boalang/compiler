@@ -8,10 +8,10 @@ import boa.types.Diff.ChangedFile;
 
 public class FileNode {
 
-	private ChangedFile cf = null;
-	private RevNode r = null;
-	private FileLocation loc = null;
-	private TreeObjectId treeId = null;
+	private RevNode r;
+	private ChangedFile cf;
+	private FileLocation loc;
+	private TreeObjectId treeId;
 	private List<FileLocation> prevLocs = new ArrayList<FileLocation>();
 	private RefactoringBonds leftRefBonds = new RefactoringBonds();
 	private RefactoringBonds rightRefBonds = new RefactoringBonds();
