@@ -5,7 +5,7 @@ import java.util.List;
 
 import boa.types.Shared.ChangeKind;
 
-public class MethodNode extends ChangedASTNode {
+public class MethodNode extends ASTChangeNode {
 
 	private DeclNode declNode;
 	private String signature;

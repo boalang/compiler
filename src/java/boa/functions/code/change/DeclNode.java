@@ -5,7 +5,7 @@ import java.util.List;
 
 import boa.types.Shared.ChangeKind;
 
-public class DeclNode extends ChangedASTNode {
+public class DeclNode extends ASTChangeNode {
 
 	private FileNode fn;
 	private DeclLocation loc;

@@ -5,7 +5,7 @@ import java.util.List;
 
 import boa.types.Shared.ChangeKind;
 
-public class FieldNode extends ChangedASTNode {
+public class FieldNode extends ASTChangeNode {
 
 	private DeclNode declNode;
 	private FieldLocation loc;
