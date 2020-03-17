@@ -32,19 +32,19 @@ public class FileChangeForest {
 	protected boolean debug = false;
 
 	// global data
-	protected final GlobalData gd;
+	protected final ChangeDataBase db;
 
-	public FileChangeForest(GlobalData gd, boolean debug) {
-		this.gd = gd;
+	public FileChangeForest(ChangeDataBase gd, boolean debug) {
+		this.db = gd;
 		this.debug = debug;
 		updateTrees();
 	}
 
 	private void updateTrees() {
-		for (int i = gd.revIdxMap.size() - 1; i >= 0; i--) {
-			RevNode r = gd.revIdxMap.get(i);
+		for (int i = db.revIdxMap.size() - 1; i >= 0; i--) {
+			RevNode r = db.revIdxMap.get(i);
 			for (FileNode fn : r.getJavaFileNodes()) {
-				if (!gd.fileLocIdToNode.containsKey(fn.getLoc())) {
+				if (!db.fileLocIdToNode.containsKey(fn.getLoc())) {
 					FileTree tree = new FileTree(this, fn, trees.size());
 					if (tree.linkAll())
 						trees.add(tree);
@@ -60,7 +60,7 @@ public class FileChangeForest {
 	// refactoring functions
 	public void updateWithRefs(Project p, HashSet<String> refRevIds, Set<String> refTypes) {
 		for (String id : refRevIds) {
-			RevNode r = gd.revIdMap.get(id);
+			RevNode r = db.revIdMap.get(id);
 			List<CodeRefactoring> refs = refTypes == null ? getCodeChange(p, r.getRevision()).getRefactoringsList()
 					: getRefactorings(p, r.getRevision(), refTypes);
 			for (CodeRefactoring ref : refs) {
@@ -69,16 +69,16 @@ public class FileChangeForest {
 				String afterFilePath = ref.getRightSideLocations(0).getFilePath();
 				FileNode fileAfter = getFileNodeFrom(afterFilePath, r);
 				RefactoringBond refBond = new RefactoringBond(fileBefore.getLoc(), fileAfter.getLoc(), ref);
-				int refBondIdx = gd.refBonds.size();
-				gd.refBonds.add(refBond);
+				int refBondIdx = db.refBonds.size();
+				db.refBonds.add(refBond);
 				// update file ref bonds
 				fileBefore.getRightRefBonds().add(refBond, refBondIdx);
 				fileAfter.getLeftRefBonds().add(refBond, refBondIdx);
 				// update tree ref locations
-				int beforeTreeIdx = gd.fileLocIdToNode.get(fileBefore.getLoc()).getTreeObjectId().getAsInt();
+				int beforeTreeIdx = db.fileLocIdToNode.get(fileBefore.getLoc()).getTreeObjectId().getAsInt();
 				FileTree beforeTree = trees.get(beforeTreeIdx);
 				beforeTree.fileBeforeRef.add(fileBefore.getLoc());
-				int afterTreeIdx = gd.fileLocIdToNode.get(fileAfter.getLoc()).getTreeObjectId().getAsInt();
+				int afterTreeIdx = db.fileLocIdToNode.get(fileAfter.getLoc()).getTreeObjectId().getAsInt();
 				FileTree afterTree = trees.get(afterTreeIdx);
 				afterTree.fileBeforeRef.add(fileAfter.getLoc());
 			}
@@ -96,7 +96,7 @@ public class FileChangeForest {
 			if (cur.getRevision().getParentsCount() == 0)
 				return null;
 			// first parent in main branch
-			cur = gd.revIdxMap.get(cur.getRevision().getParents(0));
+			cur = db.revIdxMap.get(cur.getRevision().getParents(0));
 			fn = getFileNodeFrom(fileName, cur);
 			if (fn != null) {
 				return fn;
@@ -108,7 +108,7 @@ public class FileChangeForest {
 	private FileNode getFileNodeFrom(String filePath, RevNode r) {
 		for (ChangedFile cf : r.getRevision().getFilesList())
 			if (cf.getName().equals(filePath))
-				return gd.fileLocIdToNode.get(new FileLocation(cf.getRevisionIdx(), cf.getFileIdx()));
+				return db.fileLocIdToNode.get(new FileLocation(cf.getRevisionIdx(), cf.getFileIdx()));
 		return null;
 	}
 
@@ -116,7 +116,7 @@ public class FileChangeForest {
 
 	// update code element edges
 	public void updateWithEdges() throws Exception {
-		for (Entry<FileLocation, FileNode> e : gd.fileLocIdToNode.descendingMap().entrySet()) {
+		for (Entry<FileLocation, FileNode> e : db.fileLocIdToNode.descendingMap().entrySet()) {
 			FileNode fn = e.getValue();
 //			System.out.println(fn.getLoc());
 			if (visited.contains(fn.getLoc()))
@@ -127,7 +127,7 @@ public class FileChangeForest {
 				FileNode rightNode = queue.poll();
 				visited.add(rightNode.getLoc());
 				for (FileLocation loc : rightNode.getPrevLocs()) {
-					FileNode leftNode = gd.fileLocIdToNode.get(loc);
+					FileNode leftNode = db.fileLocIdToNode.get(loc);
 					compareFileNodes(leftNode, rightNode);
 					if (leftNode.getPrevLocs().size() > 0)
 						queue.offer(leftNode);

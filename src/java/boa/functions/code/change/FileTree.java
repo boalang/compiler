@@ -30,7 +30,7 @@ public class FileTree {
 	public boolean linkAll() {
 		while (!prevFileLocs.isEmpty()) {
 			FileLocation loc = prevFileLocs.poll();
-			RevNode prevRev = forest.gd.revIdxMap.get(loc.getRevIdx());
+			RevNode prevRev = forest.db.revIdxMap.get(loc.getRevIdx());
 			if (!add(new FileNode(prevRev.getRevision().getFiles(loc.getIdx()), prevRev, loc)))
 				return false;
 		}
@@ -42,9 +42,9 @@ public class FileTree {
 			System.out.println("try to add node " + node.getLoc() + " " + node.getChangedFile().getChange()
 					+ " to list " + this.id);
 		// check if the node is added by some trees
-		if (forest.gd.fileLocIdToNode.containsKey(node.getLoc())) {
+		if (forest.db.fileLocIdToNode.containsKey(node.getLoc())) {
 //			System.out.println("merge");
-			int listIdx = forest.gd.fileLocIdToNode.get(node.getLoc()).getTreeObjectId().getAsInt();
+			int listIdx = forest.db.fileLocIdToNode.get(node.getLoc()).getTreeObjectId().getAsInt();
 			if (listIdx != this.id.getAsInt()) {
 				if (this.forest.debug)
 					System.out.println("node " + node.getLoc() + " already added to list " + listIdx);
@@ -60,12 +60,12 @@ public class FileTree {
 		// node update tree id
 		node.setTreeObjectId(this.id);
 		// update global nodes
-		forest.gd.fileLocIdToNode.put(node.getLoc(), node);
-		forest.gd.fileNames.add(node.getChangedFile().getName());
+		forest.db.fileLocIdToNode.put(node.getLoc(), node);
+		forest.db.fileNames.add(node.getChangedFile().getName());
 		String oid = node.getChangedFile().getObjectId();
-		if (!forest.gd.fileObjectIdToLocs.containsKey(oid))
-			forest.gd.fileObjectIdToLocs.put(oid, new TreeSet<FileLocation>());
-		forest.gd.fileObjectIdToLocs.get(oid).add(node.getLoc());
+		if (!forest.db.fileObjectIdToLocs.containsKey(oid))
+			forest.db.fileObjectIdToLocs.put(oid, new TreeSet<FileLocation>());
+		forest.db.fileObjectIdToLocs.get(oid).add(node.getLoc());
 		// update prev queues
 		
 		List<FileLocation> prevLocs = getPrevLocs(node);
@@ -103,7 +103,7 @@ public class FileTree {
 	// find previous file from parent r
 	private FileLocation findPrevious(ChangedFile cf, int revParentIdx) {
 		String prevName = cf.getChange() == ChangeKind.RENAMED ? cf.getPreviousNames(0) : cf.getName();
-		RevNode cur = forest.gd.revIdxMap.get(revParentIdx);
+		RevNode cur = forest.db.revIdxMap.get(revParentIdx);
 		do {
 			FileLocation loc = getFileLocationFrom(prevName, cur);
 			if (loc != null)
@@ -111,7 +111,7 @@ public class FileTree {
 			if (cur.getRevision().getParentsCount() == 0)
 				return null;
 			// first parent in main branch
-			cur = forest.gd.revIdxMap.get(cur.getRevision().getParents(0));
+			cur = forest.db.revIdxMap.get(cur.getRevision().getParents(0));
 		} while (true);
 	}
 

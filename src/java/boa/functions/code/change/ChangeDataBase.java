@@ -14,7 +14,7 @@ import boa.types.Ast.ASTRoot;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 
-public class GlobalData {
+public class ChangeDataBase {
 
 	// revision info
 	protected HashSet<String> nContributor = new HashSet<String>();
@@ -34,7 +34,7 @@ public class GlobalData {
 	// declaration info
 	protected TreeMap<DeclarationLocation, DeclarationNode> declLocToNode = new TreeMap<DeclarationLocation, DeclarationNode>();
 	
-	public GlobalData(CodeRepository cr, int revCount) {
+	public ChangeDataBase(CodeRepository cr, int revCount) {
 		for (int i = 0; i < revCount; i++)
 			getRev(cr, i);
 	}

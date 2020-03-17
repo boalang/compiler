@@ -29,11 +29,11 @@ public class DeclarationTree {
 		// node update tree id
 		node.setTreeId(this.id);
 		// update global nodes
-		forest.fcf.gd.declLocToNode.put(node.getLoc(), node);
+		forest.fcf.db.declLocToNode.put(node.getLoc(), node);
 		
 		// update prev queues
 		for (int refBondIdx : node.getFileNode().getLeftRefBonds().getClassLevel()) {
-			RefactoringBond rb = forest.fcf.gd.refBonds.get(refBondIdx);
+			RefactoringBond rb = forest.fcf.db.refBonds.get(refBondIdx);
 			if (forest.refTypes.contains(rb.getType())
 					&& node.getSignature().equals(rb.getRightElement())) {
 				prevLocations.add((FileLocation) rb.getLeftLoc());
