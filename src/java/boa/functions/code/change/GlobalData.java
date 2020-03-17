@@ -39,6 +39,10 @@ public class GlobalData {
 			getRev(cr, i);
 	}
 	
+	
+	// test
+	protected HashSet<String> fileNames = new HashSet<String>();
+	
 	private RevNode getRev(CodeRepository cr, int idx) {
 		if (revIdxMap.containsKey(idx))
 			return revIdxMap.get(idx);

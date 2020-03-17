@@ -16,11 +16,8 @@ public class FileNode {
 	private RefactoringBonds leftRefBonds = new RefactoringBonds();
 	private RefactoringBonds rightRefBonds = new RefactoringBonds();
 	
-	// decl/method/field
-	private List<DeclarationNode> decls = new ArrayList<DeclarationNode>();
-	private List<DeclarationNode> methods = new ArrayList<DeclarationNode>();
-	private List<DeclarationNode> fields = new ArrayList<DeclarationNode>();
-	
+	// decl/method/field changes
+	private List<ASTChange> astChanges = new ArrayList<ASTChange>();
 
 	public FileNode(ChangedFile cf, RevNode r, FileLocation loc) {
 		this.cf = cf;
@@ -105,7 +102,11 @@ public class FileNode {
 	
 	@Override
 	public String toString() {
-		return loc + " " + cf.getName();
+		return r.getRevision().getId() + " " + loc + " " + cf.getName();
+	}
+
+	public List<ASTChange> getAstChanges() {
+		return astChanges;
 	}
 
 }

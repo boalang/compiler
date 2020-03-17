@@ -1,9 +1,15 @@
 package boa.functions.code.change;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.TreeSet;
+
+import boa.types.Code.Revision;
+import boa.types.Diff.ChangedFile;
+import boa.types.Shared.ChangeKind;
 
 public class FileTree {
 
@@ -37,6 +43,7 @@ public class FileTree {
 					+ " to list " + this.id);
 		// check if the node is added by some trees
 		if (forest.gd.fileLocIdToNode.containsKey(node.getLoc())) {
+//			System.out.println("merge");
 			int listIdx = forest.gd.fileLocIdToNode.get(node.getLoc()).getTreeObjectId().getAsInt();
 			if (listIdx != this.id.getAsInt()) {
 				if (this.forest.debug)
@@ -54,22 +61,60 @@ public class FileTree {
 		node.setTreeObjectId(this.id);
 		// update global nodes
 		forest.gd.fileLocIdToNode.put(node.getLoc(), node);
+		forest.gd.fileNames.add(node.getChangedFile().getName());
 		String oid = node.getChangedFile().getObjectId();
 		if (!forest.gd.fileObjectIdToLocs.containsKey(oid))
 			forest.gd.fileObjectIdToLocs.put(oid, new TreeSet<FileLocation>());
 		forest.gd.fileObjectIdToLocs.get(oid).add(node.getLoc());
 		// update prev queues
-		if (node.getChangedFile().getPreviousVersionsCount() != 0
-				&& node.getChangedFile().getPreviousIndicesCount() != 0) {
-			for (int i = 0; i < node.getChangedFile().getPreviousVersionsCount(); i++) {
-				int revIdx = node.getChangedFile().getPreviousVersions(i);
-				int fileIdx = node.getChangedFile().getPreviousIndices(i);
-				FileLocation loc = new FileLocation(revIdx, fileIdx);
-				node.getPrevLocs().add(loc);
-				prevFileLocs.offer(loc);
-			}
+		for (FileLocation loc : getPrevLocs(node)) {
+			node.getPrevLocs().add(loc);
+			prevFileLocs.offer(loc);
 		}
 		return true;
+	}
+	
+	private List<FileLocation> getPrevLocs(FileNode node) {
+		List<FileLocation> res = new ArrayList<FileLocation>();
+		Revision r = node.getRev().getRevision();
+		int prevCount = node.getChangedFile().getPreviousVersionsCount();
+		if ((r.getParentsCount() == 1 && prevCount > 1) 
+				|| (r.getParentsCount() == 2)) {
+			for (int i = 0; i < r.getParentsCount(); i++) {
+				FileLocation prevLoc = findPrevious(node.getChangedFile(), r.getParents(i));
+				if (prevLoc != null)
+					res.add(prevLoc);
+			}
+		} else if (r.getParentsCount() == 1 && prevCount == 1) {
+			int revIdx = node.getChangedFile().getPreviousVersions(0);
+			int fileIdx = node.getChangedFile().getPreviousIndices(0);
+			FileLocation prevLoc =  new FileLocation(revIdx, fileIdx);
+			res.add(prevLoc);
+		}
+		return res;
+	}
+
+	// find previous file from parent r
+	private FileLocation findPrevious(ChangedFile cf, int revParentIdx) {
+		String prevName = cf.getChange() == ChangeKind.RENAMED ? cf.getPreviousNames(0) : cf.getName();
+		RevNode cur = forest.gd.revIdxMap.get(revParentIdx);
+		do {
+			FileLocation loc = getFileLocationFrom(prevName, cur);
+			if (loc != null)
+				return loc;
+			if (cur.getRevision().getParentsCount() == 0)
+				return null;
+			// first parent in main branch
+			cur = forest.gd.revIdxMap.get(cur.getRevision().getParents(0));
+		} while (true);
+	}
+
+	private FileLocation getFileLocationFrom(String filePath, RevNode r) {
+		for (ChangedFile cf : r.getRevision().getFilesList()) {
+			if (cf.getName().equals(filePath))
+				return new FileLocation(cf.getRevisionIdx(), cf.getFileIdx());
+		}
+		return null;
 	}
 
 	public FileTree merge(FileTree tree) {

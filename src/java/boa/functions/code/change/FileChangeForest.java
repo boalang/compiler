@@ -5,14 +5,18 @@ import static boa.functions.code.change.refactoring.BoaRefactoringPredictionIntr
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Queue;
 
 import boa.functions.code.change.refactoring.RefactoringBond;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Declaration;
+import boa.types.Ast.Method;
+import boa.types.Ast.Variable;
 import boa.types.Code.CodeRefactoring;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
@@ -109,52 +113,77 @@ public class FileChangeForest {
 	// update code element edges
 	public void updateWithEdges() throws Exception {
 
-		DeclarationCollector declCollector = new DeclarationCollector();
+		
 		for (Entry<FileLocation, FileNode> e : gd.fileLocIdToNode.descendingMap().entrySet()) {
 			FileNode leftNode = e.getValue();
-			if (leftNode.getChangedFile().getChange() != ChangeKind.DELETED)
-				declCollector.getDeclNodes(leftNode);
+//			if (leftNode.getChangedFile().getChange() != ChangeKind.DELETED)
+//				declCollector.getDeclNodes(leftNode);
 			
 			
 //			if (leftNode.getPrevLocs().size() == 0 
 //					&& leftNode.getRightRefBonds().getSize() == 0)
 //				continue;
-//			
-//			FileNode rightNode = gd.fileLocIdToNode.get(leftNode.getPrevLocs().get(0));
 			
-//			if (fn.getChangedFile().getChange() != ChangeKind.DELETED) {
-//				for (DeclarationNode dn : declCollector.getDeclNodes(fn)) {
-//					
-//				}
-//			}
+			Queue<FileNode> queue = new LinkedList<FileNode>();
+			queue.offer(leftNode);
+			while (!queue.isEmpty()) {
+				
+				for (FileLocation loc : leftNode.getPrevLocs()) {
+					FileNode rightNode = gd.fileLocIdToNode.get(loc);
+					compareFileNodes(rightNode, leftNode);
+					if (rightNode.getPrevLocs().size() > 0) {
+						queue.offer(rightNode);
+					}
+				}
+			}
 		}
 	}
 
+	private void compareFileNodes(FileNode rightNode, FileNode leftNode) throws Exception {
+		DeclarationCollector declCollector = new DeclarationCollector();
+		// change is saved into right node
+		if (leftNode.getChangedFile().getChange() == ChangeKind.DELETED) {
+			List<Declaration> rightDecls = declCollector.getDeclNodes(rightNode);
+			for (int i = 0; i < rightDecls.size(); i++) {
+				Declaration decl = rightDecls.get(i);
+				DeclarationNode declNode = new DeclarationNode(rightNode, decl.getFullyQualifiedName(), i, ChangeKind.DELETED);
+				for (int j = 0; j < decl.getMethodsCount(); j++) {
+					Method method = decl.getMethods(j);
+					
+				}
+				for (int k = 0; k < decl.getFieldsCount(); k++) {
+					Variable var = decl.getFields(k);
+					
+				}
+			}
+		}
+		
+		
+			
+	}
+
 	public class DeclarationCollector extends BoaAbstractVisitor {
-		private int declIdx;
-		private FileNode fn;
-		private List<DeclarationNode> nodes = new ArrayList<DeclarationNode>();
+//		private int declIdx;
+//		private FileNode fn;
+		private List<Declaration> nodes = new ArrayList<Declaration>();
 
 		@Override
 		public boolean preVisit(final Declaration node) throws Exception {
-			String fqn = node.getFullyQualifiedName();
-			DeclarationNode declNode = new DeclarationNode(fn, fqn, declIdx++);
-			gd.declLocToNode.put(declNode.getLoc(), declNode);
-			nodes.add(declNode);
-//			System.out.println(declNode);
+//			String fqn = node.getFullyQualifiedName();
+//			DeclarationNode declNode = new DeclarationNode(fn, fqn, declIdx++);
+//			gd.declLocToNode.put(declNode.getLoc(), declNode);
+			nodes.add(node);
 			for (Declaration d : node.getNestedDeclarationsList())
 				visit(d);
 			return false;
 		}
 
-		public List<DeclarationNode> getDeclNodes(FileNode fn) throws Exception {
-			this.declIdx = 0;
-			this.fn = fn;
+		public List<Declaration> getDeclNodes(FileNode fn) throws Exception {
 			this.nodes.clear();
-			String oid = fn.getChangedFile().getObjectId();
-			if (!gd.fileObjectIdToASTRoot.containsKey(oid))
-				gd.fileObjectIdToASTRoot.put(oid, getast(fn.getChangedFile()));
-			this.visit(gd.fileObjectIdToASTRoot.get(oid));
+//			String oid = fn.getChangedFile().getObjectId();
+//			if (!gd.fileObjectIdToASTRoot.containsKey(oid))
+//				gd.fileObjectIdToASTRoot.put(oid, getast(fn.getChangedFile()));
+			this.visit(fn.getChangedFile());
 			return nodes;
 		}
 	}

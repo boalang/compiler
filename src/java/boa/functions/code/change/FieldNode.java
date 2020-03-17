@@ -5,46 +5,41 @@ import java.util.List;
 
 import boa.types.Shared.ChangeKind;
 
-public class DeclarationNode {
-	
-	private FileNode fn;
+public class FieldNode {
+
+	private DeclarationNode declNode;
 	private String signature;
-	private DeclarationLocation loc;
+	private FieldLocation loc;
 	private ChangeKind change;
 	private TreeObjectId treeId;
 	private List<Integer> refBondIdxs = new ArrayList<Integer>();
 	
-	public DeclarationNode(FileNode fn, String fqn, int declIdx, ChangeKind change) {
-		this.fn = fn;
-		this.signature = fqn;
+	public FieldNode(DeclarationNode declNode, String sig, int mIdx, ChangeKind change) {
+		this.declNode = declNode;
+		this.signature = sig;
 		this.change = change;
-		this.loc = new DeclarationLocation(fn.getLoc(), declIdx); 
+		this.loc = new FieldLocation(declNode.getLoc(), mIdx);
 	}
-
-	public FileNode getFileNode() {
-		return fn;
+	
+	public DeclarationNode getDeclNode() {
+		return declNode;
 	}
-
 
 	public String getSignature() {
 		return signature;
 	}
 
-
-	public DeclarationLocation getLoc() {
+	public FieldLocation getLoc() {
 		return loc;
 	}
 
+	public ChangeKind getChange() {
+		return change;
+	}
 
 	public TreeObjectId getTreeId() {
 		return treeId;
 	}
-
-
-	public void setTreeId(TreeObjectId treeId) {
-		this.treeId = treeId;
-	}
-
 
 	public List<Integer> getRefBondIdxs() {
 		return refBondIdxs;
@@ -66,7 +61,7 @@ public class DeclarationNode {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DeclarationNode other = (DeclarationNode) obj;
+		FieldNode other = (FieldNode) obj;
 		if (loc == null) {
 			if (other.loc != null)
 				return false;
@@ -77,11 +72,7 @@ public class DeclarationNode {
 	
 	@Override
 	public String toString() {
-		return fn + " " + loc.getIdx() + " " + signature;
+		return declNode + " " + loc.getIdx() + " " + signature;
 	}
 
-	public ChangeKind getChange() {
-		return change;
-	}
-	
 }

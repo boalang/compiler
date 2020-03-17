@@ -23,53 +23,53 @@ public class DeclarationChangeForest {
 	protected HashSet<String> refTypes = new HashSet<String>(
 			Arrays.asList(new String[] { "Move Class", "Rename Class" }));
 
-	protected DeclarationCollector declCollector = new DeclarationCollector();
+//	protected DeclarationCollector declCollector = new DeclarationCollector();
 	
 	public DeclarationChangeForest(FileChangeForest forest) throws Exception {
 		this.fcf = forest;
 //		this.updateTrees();
 	}
 	
-	private void updateTrees() throws Exception {
-		for (Entry<FileLocation, FileNode> e : fcf.gd.fileLocIdToNode.descendingMap().entrySet()) {
-			FileNode fn = e.getValue();
-			if (fn.getChangedFile().getChange() != ChangeKind.DELETED) {
-				for (DeclarationNode dn : declCollector.getDeclNodes(fn)) {
-					if (!visitedDecls.contains(dn.getLoc())) {
-						DeclarationTree tree = new DeclarationTree(this, dn, trees.size());
-						if (tree.linkAll()) {
-							trees.add(tree);
-							visitedDecls.addAll(tree.getDeclLocs());
-						}
-					}
-				}
-			}
-		}
-	}
-	
-	public class DeclarationCollector extends BoaAbstractVisitor {
-		private int declIdx;
-		private FileNode fn;
-		private List<DeclarationNode> nodes = new ArrayList<DeclarationNode>();
-		
-		@Override
-		public boolean preVisit(final Declaration node) throws Exception {
-			String fqn = node.getFullyQualifiedName();
-			DeclarationNode declNode = new DeclarationNode(fn, fqn, declIdx++);
-			fcf.gd.declLocToNode.put(declNode.getLoc(), declNode);
-			nodes.add(declNode);
-			System.out.println(declNode);
-			for (Declaration d : node.getNestedDeclarationsList())
-				visit(d);
-			return false;
-		}
-		
-		public List<DeclarationNode> getDeclNodes(FileNode fn) throws Exception {
-			this.declIdx = 0;
-			this.fn = fn;
-			this.nodes.clear();
-			this.visit(fn.getChangedFile());
-			return nodes;
-		}
-	}
+//	private void updateTrees() throws Exception {
+//		for (Entry<FileLocation, FileNode> e : fcf.gd.fileLocIdToNode.descendingMap().entrySet()) {
+//			FileNode fn = e.getValue();
+//			if (fn.getChangedFile().getChange() != ChangeKind.DELETED) {
+//				for (DeclarationNode dn : declCollector.getDeclNodes(fn)) {
+//					if (!visitedDecls.contains(dn.getLoc())) {
+//						DeclarationTree tree = new DeclarationTree(this, dn, trees.size());
+//						if (tree.linkAll()) {
+//							trees.add(tree);
+//							visitedDecls.addAll(tree.getDeclLocs());
+//						}
+//					}
+//				}
+//			}
+//		}
+//	}
+//	
+//	public class DeclarationCollector extends BoaAbstractVisitor {
+//		private int declIdx;
+//		private FileNode fn;
+//		private List<DeclarationNode> nodes = new ArrayList<DeclarationNode>();
+//		
+//		@Override
+//		public boolean preVisit(final Declaration node) throws Exception {
+//			String fqn = node.getFullyQualifiedName();
+//			DeclarationNode declNode = new DeclarationNode(fn, fqn, declIdx++);
+//			fcf.gd.declLocToNode.put(declNode.getLoc(), declNode);
+//			nodes.add(declNode);
+//			System.out.println(declNode);
+//			for (Declaration d : node.getNestedDeclarationsList())
+//				visit(d);
+//			return false;
+//		}
+//		
+//		public List<DeclarationNode> getDeclNodes(FileNode fn) throws Exception {
+//			this.declIdx = 0;
+//			this.fn = fn;
+//			this.nodes.clear();
+//			this.visit(fn.getChangedFile());
+//			return nodes;
+//		}
+//	}
 }
