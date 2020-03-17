@@ -5,27 +5,27 @@ import java.util.List;
 
 import boa.types.Shared.ChangeKind;
 
-public class DeclarationNode extends ChangedASTNode {
+public class DeclNode extends ChangedASTNode {
 
 	private FileNode fn;
-	private DeclarationLocation loc;
-	private List<DeclarationLocation> prevLocs = new ArrayList<DeclarationLocation>();
+	private DeclLocation loc;
+	private List<DeclLocation> prevLocs = new ArrayList<DeclLocation>();
 	
-	public DeclarationNode(FileNode fn, String fqn, int declIdx, ChangeKind change) {
+	public DeclNode(FileNode fn, String fqn, int declIdx, ChangeKind change) {
 		super(fqn, change);
 		this.fn = fn;
-		this.loc = new DeclarationLocation(fn.getLoc(), declIdx); 
+		this.loc = new DeclLocation(fn.getLoc(), declIdx); 
 	}
 
 	public FileNode getFileNode() {
 		return fn;
 	}
 
-	public DeclarationLocation getLoc() {
+	public DeclLocation getLoc() {
 		return loc;
 	}
 
-	public List<DeclarationLocation> getPrevLocs() {
+	public List<DeclLocation> getPrevLocs() {
 		return prevLocs;
 	}
 
@@ -45,7 +45,7 @@ public class DeclarationNode extends ChangedASTNode {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DeclarationNode other = (DeclarationNode) obj;
+		DeclNode other = (DeclNode) obj;
 		if (loc == null) {
 			if (other.loc != null)
 				return false;

@@ -32,13 +32,12 @@ public class ChangeDataBase {
 	protected HashMap<String, ASTRoot> fileObjectIdToASTRoot = new HashMap<String, ASTRoot>();
 	
 	// declaration info
-	protected TreeMap<DeclarationLocation, DeclarationNode> declLocToNode = new TreeMap<DeclarationLocation, DeclarationNode>();
+	protected TreeMap<DeclLocation, DeclNode> declLocToNode = new TreeMap<DeclLocation, DeclNode>();
 	
 	public ChangeDataBase(CodeRepository cr, int revCount) {
 		for (int i = 0; i < revCount; i++)
 			getRev(cr, i);
 	}
-	
 	
 	// test
 	protected HashSet<String> fileNames = new HashSet<String>();

@@ -7,17 +7,17 @@ import boa.types.Shared.ChangeKind;
 
 public class FieldNode extends ChangedASTNode {
 
-	private DeclarationNode declNode;
+	private DeclNode declNode;
 	private FieldLocation loc;
 	private List<FieldLocation> prevLocs = new ArrayList<FieldLocation>();
 
-	public FieldNode(DeclarationNode declNode, String sig, int mIdx, ChangeKind change) {
+	public FieldNode(DeclNode declNode, String sig, int mIdx, ChangeKind change) {
 		super(sig, change);
 		this.declNode = declNode;
 		this.loc = new FieldLocation(declNode.getLoc(), mIdx);
 	}
 	
-	public DeclarationNode getDeclNode() {
+	public DeclNode getDeclNode() {
 		return declNode;
 	}
 

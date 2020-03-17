@@ -1,10 +1,10 @@
 package boa.functions.code.change;
 
-public class DeclarationLocation extends Location implements Comparable<DeclarationLocation> {
+public class DeclLocation extends Location implements Comparable<DeclLocation> {
 	
 	private FileLocation fileLoc;
 
-	public DeclarationLocation(FileLocation loc, int declIdx) {
+	public DeclLocation(FileLocation loc, int declIdx) {
 		super(declIdx);
 		this.fileLoc = loc;
 	}
@@ -33,7 +33,7 @@ public class DeclarationLocation extends Location implements Comparable<Declarat
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DeclarationLocation other = (DeclarationLocation) obj;
+		DeclLocation other = (DeclLocation) obj;
 		if (fileLoc == null) {
 			if (other.fileLoc != null)
 				return false;
@@ -48,7 +48,7 @@ public class DeclarationLocation extends Location implements Comparable<Declarat
 	}
 
 	@Override
-	public int compareTo(DeclarationLocation o) {
+	public int compareTo(DeclLocation o) {
 		int comp = this.fileLoc.compareTo(o.getFileLoc());
 		return comp == 0 ? this.idx - o.idx : comp;
 	}

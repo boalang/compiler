@@ -6,22 +6,22 @@ import java.util.TreeSet;
 
 import boa.functions.code.change.refactoring.RefactoringBond;
 
-public class DeclarationTree {
+public class DeclTree {
 	
-	private final DeclarationChangeForest forest;
+	private final DeclChangeForest forest;
 	private TreeObjectId id;
-	private TreeSet<DeclarationLocation> declLocs = new TreeSet<DeclarationLocation>();
+	private TreeSet<DeclLocation> declLocs = new TreeSet<DeclLocation>();
 
 	private Queue<FileLocation> prevLocations = new LinkedList<FileLocation>();
 	private Queue<String> prevNames = new LinkedList<String>();
 	
-	public DeclarationTree(DeclarationChangeForest forest, DeclarationNode node, int treeIdx) {
+	public DeclTree(DeclChangeForest forest, DeclNode node, int treeIdx) {
 		this.forest = forest;
 		this.id = new TreeObjectId(treeIdx);
 		add(node);
 	}
 
-	private void add(DeclarationNode node) {
+	private void add(DeclNode node) {
 		// check if the node is added by some trees
 		
 		// update tree
@@ -47,7 +47,7 @@ public class DeclarationTree {
 		return false;
 	}
 	
-	public TreeSet<DeclarationLocation> getDeclLocs() {
+	public TreeSet<DeclLocation> getDeclLocs() {
 		return declLocs;
 	}
 	

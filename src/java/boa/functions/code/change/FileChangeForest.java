@@ -214,7 +214,7 @@ public class FileChangeForest {
 
 	private void updateAllASTChange(FileNode fileNode, Declaration decl, int i, ChangeKind change,
 			ASTChange astChange) {
-		DeclarationNode declNode = new DeclarationNode(fileNode, decl.getFullyQualifiedName(), i, change);
+		DeclNode declNode = new DeclNode(fileNode, decl.getFullyQualifiedName(), i, change);
 		astChange.getDecls().add(declNode);
 		for (int j = 0; j < decl.getMethodsCount(); j++) {
 			updateMethodChange(decl, j, declNode, astChange, change);
@@ -224,14 +224,14 @@ public class FileChangeForest {
 		}
 	}
 
-	private void updateFieldChange(Declaration decl, int k, DeclarationNode declNode, ASTChange astChange,
+	private void updateFieldChange(Declaration decl, int k, DeclNode declNode, ASTChange astChange,
 			ChangeKind change) {
 		Variable var = decl.getFields(k);
 		FieldNode varNode = new FieldNode(declNode, var.getName(), k, change);
 		astChange.getFields().add(varNode);
 	}
 
-	private void updateMethodChange(Declaration decl, int j, DeclarationNode declNode, ASTChange astChange,
+	private void updateMethodChange(Declaration decl, int j, DeclNode declNode, ASTChange astChange,
 			ChangeKind change) {
 		Method method = decl.getMethods(j);
 		MethodNode methodNode = new MethodNode(declNode, method.getName(), j, change);
@@ -264,7 +264,7 @@ public class FileChangeForest {
 
 		if (deleted.size() + added.size() == 0)
 			return;
-		DeclarationNode declNode = new DeclarationNode(rightNode, rightDecl.getFullyQualifiedName(), rightDeclIdx,
+		DeclNode declNode = new DeclNode(rightNode, rightDecl.getFullyQualifiedName(), rightDeclIdx,
 				ChangeKind.MODIFIED);
 
 		for (int i : deleted) {

@@ -7,18 +7,18 @@ import boa.types.Shared.ChangeKind;
 
 public class MethodNode extends ChangedASTNode {
 
-	private DeclarationNode declNode;
+	private DeclNode declNode;
 	private String signature;
 	private MethodLocation loc;
 	private List<MethodLocation> prevLocs = new ArrayList<MethodLocation>();
 
-	public MethodNode(DeclarationNode declNode, String sig, int mIdx, ChangeKind change) {
+	public MethodNode(DeclNode declNode, String sig, int mIdx, ChangeKind change) {
 		super(sig, change);
 		this.declNode = declNode;
 		this.loc = new MethodLocation(declNode.getLoc(), mIdx);
 	}
 
-	public DeclarationNode getDeclNode() {
+	public DeclNode getDeclNode() {
 		return declNode;
 	}
 

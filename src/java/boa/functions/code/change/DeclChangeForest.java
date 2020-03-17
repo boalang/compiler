@@ -13,19 +13,19 @@ import boa.types.Shared.ChangeKind;
 
 import static boa.functions.BoaAstIntrinsics.*;
 
-public class DeclarationChangeForest {
+public class DeclChangeForest {
 
-	protected List<DeclarationTree> trees = new ArrayList<DeclarationTree>();
+	protected List<DeclTree> trees = new ArrayList<DeclTree>();
 	protected FileChangeForest fcf;
 	protected HashSet<String> visitedFileObjectIds = new HashSet<String>();
-	protected HashSet<DeclarationLocation> visitedDecls = new HashSet<DeclarationLocation>();
+	protected HashSet<DeclLocation> visitedDecls = new HashSet<DeclLocation>();
 	// considered ref types
 	protected HashSet<String> refTypes = new HashSet<String>(
 			Arrays.asList(new String[] { "Move Class", "Rename Class" }));
 
 //	protected DeclarationCollector declCollector = new DeclarationCollector();
 	
-	public DeclarationChangeForest(FileChangeForest forest) throws Exception {
+	public DeclChangeForest(FileChangeForest forest) throws Exception {
 		this.fcf = forest;
 //		this.updateTrees();
 	}

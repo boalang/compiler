@@ -2,18 +2,18 @@ package boa.functions.code.change;
 
 public class FieldLocation extends Location implements Comparable<MethodLocation> {
 
-	private DeclarationLocation declLoc;
+	private DeclLocation declLoc;
 	
-	public FieldLocation(DeclarationLocation declLoc, int fieldIdx) {
+	public FieldLocation(DeclLocation declLoc, int fieldIdx) {
 		super(fieldIdx);
 		this.setDeclLoc(declLoc);
 	}
 	
-	public DeclarationLocation getDeclLoc() {
+	public DeclLocation getDeclLoc() {
 		return declLoc;
 	}
 
-	public void setDeclLoc(DeclarationLocation declLoc) {
+	public void setDeclLoc(DeclLocation declLoc) {
 		this.declLoc = declLoc;
 	}
 
