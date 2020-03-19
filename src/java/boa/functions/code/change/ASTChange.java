@@ -57,9 +57,15 @@ public class ASTChange {
 		return declNode;
 	}
 
-	public void compare(ChangedFileNode leftNode, ChangedFileNode rightNode, DeclCollector declCollector) throws Exception {
+	public void compare(ChangedFileNode leftNode, ChangedFileNode rightNode, DeclCollector declCollector, int prevIdx) throws Exception {
 		List<Declaration> leftDecls = null;
 
+		if (prevIdx == 1) {
+			System.out.println(leftNode.getChangedFile().getChange() + " " + rightNode.getChangedFile().getChange()
+					+ " " + leftNode.getChangedFile().getObjectId().equals(rightNode.getChangedFile().getObjectId()));
+			return;
+		}
+		
 		// both have the same content id (COPIED)
 		if (leftNode.getChangedFile().getObjectId().equals(rightNode.getChangedFile().getObjectId())) {
 

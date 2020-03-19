@@ -134,10 +134,15 @@ public class FileChangeForest {
 				ChangedFileNode rightNode = queue.poll();
 //				System.out.println(rightNode.getLoc());
 				visited.add(rightNode.getLoc());
+				int prevIdx = 0;
 				for (ChangedFileLocation loc : rightNode.getPrevLocs()) {
-					ChangedFileNode leftNode = db.fileLocIdToNode.get(loc);
-//					astChange.compare(leftNode, rightNode, collector);
-					queue.offer(leftNode);
+					// check null
+					if (loc != null) {
+						ChangedFileNode leftNode = db.fileLocIdToNode.get(loc);
+						astChange.compare(leftNode, rightNode, collector, prevIdx);
+						queue.offer(leftNode);
+					}
+					prevIdx++;
 				}
 				// corner case: node w/t previous one
 				if (rightNode.getPrevLocs().size() == 0 && rightNode.getASTChangeCount() == 0) {
