@@ -1,37 +1,48 @@
-package boa.functions.code.change;
+package boa.functions.code.change.file;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import boa.functions.code.change.RevNode;
+import boa.functions.code.change.TreeObjectId;
+import boa.functions.code.change.declaration.ChangedDeclNode;
 import boa.functions.code.change.refactoring.RefactoringBonds;
 import boa.types.Diff.ChangedFile;
+import boa.types.Shared.ChangeKind;
 
-public class FileNode {
+public class ChangedFileNode {
 
 	private RevNode r;
 	private ChangedFile cf;
-	private FileLocation loc;
+	private ChangedFileLocation loc;
 	private TreeObjectId treeId;
-	private List<FileLocation> prevLocs = new ArrayList<FileLocation>();
+	private List<ChangedFileLocation> prevLocs = new ArrayList<ChangedFileLocation>();
+	
+	// changes
+	private List<ChangeKind> changes = new ArrayList<ChangeKind>();
+	private List<ChangedDeclNode> declChanges = new ArrayList<ChangedDeclNode>(); //TODO
 	private RefactoringBonds leftRefBonds = new RefactoringBonds();
 	private RefactoringBonds rightRefBonds = new RefactoringBonds();
-	
-	// decl/method/field changes
-	private List<ASTChange> astChanges = new ArrayList<ASTChange>();
 
-	public FileNode(ChangedFile cf, RevNode r, FileLocation loc) {
+	public ChangedFileNode(ChangedFile cf, RevNode r, ChangedFileLocation loc) {
 		this.cf = cf;
 		this.r = r;
 		this.loc = loc;
 	}
 	
-	public FileNode(ChangedFile cf, RevNode r) {
+	public ChangedFileNode(ChangedFile cf, RevNode r) {
 		this.cf = cf;
 		this.r = r;
-		this.loc = new FileLocation(cf.getRevisionIdx(), cf.getFileIdx());
+		this.loc = new ChangedFileLocation(cf.getRevisionIdx(), cf.getFileIdx());
+	}
+	
+	public ChangedDeclNode getNewDeclNode(String fqn, ChangeKind change) {
+		ChangedDeclNode declNode = new ChangedDeclNode(fqn, this, declChanges.size());
+		this.changes.add(change);
+		return declNode;
 	}
 
-	public FileLocation getLoc() {
+	public ChangedFileLocation getLoc() {
 		return loc;
 	}
 	
@@ -71,8 +82,12 @@ public class FileNode {
 		return rightRefBonds;
 	}
 
-	public List<FileLocation> getPrevLocs() {
+	public List<ChangedFileLocation> getPrevLocs() {
 		return prevLocs;
+	}
+	
+	public List<Integer> getRevisionParents() {
+		return r.getRevision().getParentsList();
 	}
 
 	@Override
@@ -91,7 +106,7 @@ public class FileNode {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		FileNode other = (FileNode) obj;
+		ChangedFileNode other = (ChangedFileNode) obj;
 		if (loc == null) {
 			if (other.loc != null)
 				return false;
@@ -105,8 +120,19 @@ public class FileNode {
 		return r.getRevision().getId() + " " + loc + " " + cf.getName();
 	}
 
-	public List<ASTChange> getAstChanges() {
-		return astChanges;
+	public List<ChangeKind> getChanges() {
+		return changes;
+	}
+
+	public List<ChangedDeclNode> getDeclChanges() {
+		return declChanges;
+	}
+	
+	public int getASTChangeCount() {
+		int count = 0;
+		for (ChangedDeclNode declNode : declChanges)
+			count += declNode.getASTChangeCount();
+		return count;
 	}
 
 }

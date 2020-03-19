@@ -5,17 +5,21 @@ import java.util.List;
 
 import boa.types.Shared.ChangeKind;
 
-public abstract class ASTChangeNode {
+public abstract class ChangedASTNode {
 
+	// code entity identifier in the scope
 	protected String signature;
+
+	// tree id
 	protected TreeObjectId treeId;
+	
+	// changes
 	protected List<ChangeKind> changes = new ArrayList<ChangeKind>();
 	protected List<Integer> leftRefBondIdxs = new ArrayList<Integer>();
 	protected List<Integer> rightRefBondIdxs = new ArrayList<Integer>();
 	
-	public ASTChangeNode(String sig, ChangeKind change) {
+	public ChangedASTNode(String sig) {
 		this.signature = sig;
-		this.changes.add(change);
 	}
 
 	public String getSignature() {

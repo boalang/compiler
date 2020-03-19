@@ -708,7 +708,8 @@ public class JavaVisitor extends ASTVisitor {
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
 		if (node.isConstructor())
-			b.setName("<init>");
+//			b.setName("<init>");
+			b.setName(node.getName().getFullyQualifiedName());
 		else {
 			b.setName(node.getName().getFullyQualifiedName());
 			

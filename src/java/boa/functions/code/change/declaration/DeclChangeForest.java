@@ -1,4 +1,4 @@
-package boa.functions.code.change;
+package boa.functions.code.change.declaration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 
+import boa.functions.code.change.file.FileChangeForest;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.Declaration;
 import boa.types.Diff.ChangedFile;
@@ -18,7 +19,7 @@ public class DeclChangeForest {
 	protected List<DeclTree> trees = new ArrayList<DeclTree>();
 	protected FileChangeForest fcf;
 	protected HashSet<String> visitedFileObjectIds = new HashSet<String>();
-	protected HashSet<DeclLocation> visitedDecls = new HashSet<DeclLocation>();
+	protected HashSet<ChangedDeclLocation> visitedDecls = new HashSet<ChangedDeclLocation>();
 	// considered ref types
 	protected HashSet<String> refTypes = new HashSet<String>(
 			Arrays.asList(new String[] { "Move Class", "Rename Class" }));

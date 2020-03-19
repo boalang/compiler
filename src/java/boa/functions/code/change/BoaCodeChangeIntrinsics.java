@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import boa.functions.FunctionSpec;
+import boa.functions.code.change.file.FileChangeForest;
+import boa.functions.code.change.file.FileTree;
 import boa.types.Code.CodeRepository;
 import boa.types.Diff.ChangedFile;
 import boa.types.Toplevel.Project;
@@ -40,7 +42,7 @@ public class BoaCodeChangeIntrinsics {
 		System.out.println("Total Revs: " + revCount);
 		System.out.println("Trees count: " + trees.size());
 		System.out.println("Total refs: " + gd.refBonds.size());
-		System.out.println("Total decls: " + gd.declLocToNode.size());
+		System.out.println("Total decls: " + gd.declDB.size());
 		ChangedFile[] LatestSnapshot = getSnapshot(cr, revCount - 1, false);
 		int count = 0;
 		for (ChangedFile cf : LatestSnapshot)

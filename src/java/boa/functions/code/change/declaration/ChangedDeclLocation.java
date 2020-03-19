@@ -1,19 +1,22 @@
-package boa.functions.code.change;
+package boa.functions.code.change.declaration;
 
-public class DeclLocation extends Location implements Comparable<DeclLocation> {
+import boa.functions.code.change.Location;
+import boa.functions.code.change.file.ChangedFileLocation;
+
+public class ChangedDeclLocation extends Location implements Comparable<ChangedDeclLocation> {
 	
-	private FileLocation fileLoc;
+	private ChangedFileLocation fileLoc;
 
-	public DeclLocation(FileLocation loc, int declIdx) {
-		super(declIdx);
+	public ChangedDeclLocation(ChangedFileLocation loc, int idx) {
+		super(idx);
 		this.fileLoc = loc;
 	}
 
-	public FileLocation getFileLoc() {
+	public ChangedFileLocation getFileLoc() {
 		return fileLoc;
 	}
 
-	public void setFileLoc(FileLocation fl) {
+	public void setFileLoc(ChangedFileLocation fl) {
 		this.fileLoc = fl;
 	}
 	
@@ -33,7 +36,7 @@ public class DeclLocation extends Location implements Comparable<DeclLocation> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DeclLocation other = (DeclLocation) obj;
+		ChangedDeclLocation other = (ChangedDeclLocation) obj;
 		if (fileLoc == null) {
 			if (other.fileLoc != null)
 				return false;
@@ -48,9 +51,9 @@ public class DeclLocation extends Location implements Comparable<DeclLocation> {
 	}
 
 	@Override
-	public int compareTo(DeclLocation o) {
+	public int compareTo(ChangedDeclLocation o) {
 		int comp = this.fileLoc.compareTo(o.getFileLoc());
-		return comp == 0 ? this.idx - o.idx : comp;
+		return comp == 0 ? this.getIdx() - o.getIdx() : comp;
 	}
 
 }

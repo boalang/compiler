@@ -247,8 +247,8 @@ public class GitCommit extends AbstractCommit {
 				// DELETED file's new object id is 0's and doesn't have new path
 				} else if (diff.getChangeType() == ChangeType.DELETE) {
 					if (diff.getOldMode().getObjectType() == Constants.OBJ_BLOB) {
-						String newPath = diff.getNewPath();
-						String newObjectId = diff.getNewId().toObjectId().getName();
+						diff.getNewPath();
+						diff.getNewId().toObjectId().getName();
 						String oldPath = diff.getOldPath();
 						String oldObjectId = diff.getOldId().toObjectId().getName();
 

@@ -1,19 +1,22 @@
-package boa.functions.code.change;
+package boa.functions.code.change.method;
 
-public class FieldLocation extends Location implements Comparable<MethodLocation> {
+import boa.functions.code.change.Location;
+import boa.functions.code.change.declaration.ChangedDeclLocation;
 
-	private DeclLocation declLoc;
+public class ChangedMethodLocation extends Location implements Comparable<ChangedMethodLocation> {
+
+	private ChangedDeclLocation declLoc;
 	
-	public FieldLocation(DeclLocation declLoc, int fieldIdx) {
-		super(fieldIdx);
+	public ChangedMethodLocation(ChangedDeclLocation declLoc, int methodIdx) {
+		super(methodIdx);
 		this.setDeclLoc(declLoc);
 	}
 	
-	public DeclLocation getDeclLoc() {
+	public ChangedDeclLocation getDeclLoc() {
 		return declLoc;
 	}
 
-	public void setDeclLoc(DeclLocation declLoc) {
+	public void setDeclLoc(ChangedDeclLocation declLoc) {
 		this.declLoc = declLoc;
 	}
 
@@ -33,7 +36,7 @@ public class FieldLocation extends Location implements Comparable<MethodLocation
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		FieldLocation other = (FieldLocation) obj;
+		ChangedMethodLocation other = (ChangedMethodLocation) obj;
 		if (declLoc == null) {
 			if (other.declLoc != null)
 				return false;
@@ -48,9 +51,9 @@ public class FieldLocation extends Location implements Comparable<MethodLocation
 	}
 
 	@Override
-	public int compareTo(MethodLocation o) {
+	public int compareTo(ChangedMethodLocation o) {
 		int comp = this.declLoc.compareTo(o.getDeclLoc());
-		return comp == 0 ? this.idx - o.idx : comp;
+		return comp == 0 ? this.getIdx() - o.getIdx() : comp;
 	}
-
+	
 }

@@ -2,7 +2,7 @@ package boa.functions.code.change;
 
 public abstract class Location {
 
-	protected int idx;
+	private int idx;
 
 	public Location(int idx) {
 		this.idx = idx;
