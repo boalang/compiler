@@ -38,7 +38,8 @@ public class ChangedFileNode {
 	
 	public ChangedDeclNode getNewDeclNode(String fqn, ChangeKind change) {
 		ChangedDeclNode declNode = new ChangedDeclNode(fqn, this, declChanges.size());
-		this.changes.add(change);
+		declNode.getChanges().add(change);
+		declChanges.add(declNode);
 		return declNode;
 	}
 
@@ -117,7 +118,7 @@ public class ChangedFileNode {
 	
 	@Override
 	public String toString() {
-		return r.getRevision().getId() + " " + loc + " " + cf.getName();
+		return r.getRevision().getId() + " " + loc + " " + cf.getName() + " " + cf.getChange();
 	}
 
 	public List<ChangeKind> getChanges() {

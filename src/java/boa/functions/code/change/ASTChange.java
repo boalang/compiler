@@ -32,24 +32,24 @@ public class ASTChange {
 
 	public void update(ChangedFileNode fileNode, List<Declaration> decls, ChangeKind change) {
 		for (int i = 0; i < decls.size(); i++) {
-			// update decl
 			Declaration decl = decls.get(i);
 			ChangedDeclNode declNode = update(fileNode, decl, change);
-			// update method
-			for (int j = 0; j < decl.getMethodsCount(); j++) {
-				Method m = decl.getMethods(j);
-				ChangedMethodNode methodNode = declNode.getNewMethodNode(getSignature(m), change);
-				db.methodDB.put(methodNode.getLoc(), methodNode);
-			}
-			// update field
-			for (int j = 0; j < decl.getFieldsCount(); j++) {
-				Variable v = decl.getFields(j);
-				ChangedFieldNode fieldNode = declNode.getNewFieldNode(getSignature(v), change);
-				db.fieldDB.put(fieldNode.getLoc(), fieldNode);
-			}
+			for (int j = 0; j < decl.getMethodsCount(); j++)
+				update(declNode, decl.getMethods(j), change);
+			for (int j = 0; j < decl.getFieldsCount(); j++)
+				update(declNode, decl.getFields(j), change);
 		}
 	}
-	
+
+	private void update(ChangedDeclNode declNode, Variable v, ChangeKind change) {
+		ChangedFieldNode fieldNode = declNode.getNewFieldNode(getSignature(v), change);
+		db.fieldDB.put(fieldNode.getLoc(), fieldNode);
+	}
+
+	private void update(ChangedDeclNode declNode, Method m, ChangeKind change) {
+		ChangedMethodNode methodNode = declNode.getNewMethodNode(getSignature(m), change);
+		db.methodDB.put(methodNode.getLoc(), methodNode);
+	}
 
 	private ChangedDeclNode update(ChangedFileNode fileNode, Declaration decl, ChangeKind change) {
 		ChangedDeclNode declNode = fileNode.getNewDeclNode(decl.getFullyQualifiedName(), change);
@@ -57,18 +57,19 @@ public class ASTChange {
 		return declNode;
 	}
 
-	public void compare(ChangedFileNode leftNode, ChangedFileNode rightNode, DeclCollector declCollector, int prevIdx) throws Exception {
+	public void compare(ChangedFileNode leftNode, ChangedFileNode rightNode, DeclCollector declCollector, int prevIdx)
+			throws Exception {
 		List<Declaration> leftDecls = null;
-
-		if (prevIdx == 1) {
-			System.out.println(leftNode.getChangedFile().getChange() + " " + rightNode.getChangedFile().getChange()
-					+ " " + leftNode.getChangedFile().getObjectId().equals(rightNode.getChangedFile().getObjectId()));
-			return;
-		}
 		
+		if (prevIdx == 1 && rightNode.getASTChangeCount() == 0) {
+			System.out.println(rightNode); 
+		}
+
 		// both have the same content id (COPIED)
 		if (leftNode.getChangedFile().getObjectId().equals(rightNode.getChangedFile().getObjectId())) {
-
+			// 2nd parent then add copied as 2nd change
+			if (prevIdx == 1 && rightNode.getASTChangeCount() != 0)
+				updateChange(rightNode, ChangeKind.COPIED);
 			return;
 		}
 
@@ -86,14 +87,13 @@ public class ASTChange {
 			update(rightNode, leftDecls, ChangeKind.DELETED);
 		}
 
-		// right is modified/renamed
+		// right is modified/renamed/added
 		if (rightNode.getChangedFile().getChange() != ChangeKind.DELETED) {
 			if (leftDecls == null)
 				leftDecls = declCollector.getDeclNodes(leftNode);
 			List<Declaration> rightDecls = declCollector.getDeclNodes(rightNode);
 			Set<Integer> deleted = Stream.iterate(0, n -> n + 1).limit(leftDecls.size()).collect(Collectors.toSet());
 			Set<Integer> added = Stream.iterate(0, n -> n + 1).limit(rightDecls.size()).collect(Collectors.toSet());
-
 			for (int i = 0; i < leftDecls.size(); i++) {
 				Declaration leftDecl = leftDecls.get(i);
 				for (int j = 0; j < rightDecls.size(); j++) {
@@ -102,62 +102,103 @@ public class ASTChange {
 						if (leftDecl.getFullyQualifiedName().equals(rightDecl.getFullyQualifiedName())) {
 							deleted.remove(i);
 							added.remove(j);
-							compareDecls(leftDecl, rightDecl, j, rightNode);
+							compareDecls(leftDecl, rightDecl, rightNode, prevIdx);
 							break;
 						}
 					}
 				}
 			}
-			for (int i : deleted) {
-				Declaration decl = leftDecls.get(i);
-				update(rightNode, decl, ChangeKind.DELETED);
-			}
-			for (int j : added) {
-				Declaration decl = rightDecls.get(j);
-				update(leftNode, decl, ChangeKind.ADDED);
-			}
+			for (int i : deleted)
+				update(rightNode, leftDecls.get(i), ChangeKind.DELETED);
+			for (int j : added)
+				update(leftNode, rightDecls.get(j), ChangeKind.ADDED);
 		}
 
 	}
 
-
-	private void compareDecls(Declaration leftDecl, Declaration rightDecl, int rightDeclIdx, ChangedFileNode rightNode) {
-
+	private void compareDecls(Declaration leftDecl, Declaration rightDecl, ChangedFileNode rightNode, int prevIdx) {
+		
 		// compare fields
-		Set<Integer> deleted = Stream.iterate(0, n -> n + 1).limit(leftDecl.getFieldsCount())
+		Set<Integer> deleted1 = Stream.iterate(0, n -> n + 1).limit(leftDecl.getFieldsCount())
 				.collect(Collectors.toSet());
-		Set<Integer> added = Stream.iterate(0, n -> n + 1).limit(rightDecl.getFieldsCount())
+		Set<Integer> added1 = Stream.iterate(0, n -> n + 1).limit(rightDecl.getFieldsCount())
 				.collect(Collectors.toSet());
-		Set<Integer> modified = new HashSet<Integer>();
+		Set<Integer> modified1 = new HashSet<Integer>();
 
 		for (int i = 0; i < leftDecl.getFieldsCount(); i++) {
 			Variable leftVar = leftDecl.getFields(i);
 			for (int j = 0; j < rightDecl.getFieldsCount(); j++) {
-				if (added.contains(j)) {
+				if (added1.contains(j)) {
 					Variable rightVar = rightDecl.getFields(j);
-					if (leftVar.getName().equals(rightVar.getName())) {
+					if (getSignature(leftVar).equals(getSignature(rightVar))) {
 						if (!prettyprint(leftVar).equals(prettyprint(rightVar)))
-							modified.add(j);
-						deleted.remove(i);
-						added.remove(j);
+							modified1.add(j);
+						deleted1.remove(i);
+						added1.remove(j);
 						break;
 					}
 				}
 			}
 		}
 
-		if (deleted.size() + added.size() == 0)
-			return;
-//		ChangedDeclNode declNode = new ChangedDeclNode(rightNode, rightDecl.getFullyQualifiedName(), rightDeclIdx,
-//				ChangeKind.MODIFIED);
-//
-//		for (int i : deleted) {
-//			updateFieldChange(leftDecl, i, declNode, rightASTChange, ChangeKind.DELETED);
-//		}
-//		for (int j : added) {
-//			updateFieldChange(rightDecl, j, declNode, rightASTChange, ChangeKind.ADDED);
-//		}
+		// compare methods
+		Set<Integer> deleted2 = Stream.iterate(0, n -> n + 1).limit(leftDecl.getMethodsCount())
+				.collect(Collectors.toSet());
+		Set<Integer> added2 = Stream.iterate(0, n -> n + 1).limit(rightDecl.getMethodsCount())
+				.collect(Collectors.toSet());
+		Set<Integer> modified2 = new HashSet<Integer>();
 
+		for (int i = 0; i < leftDecl.getMethodsCount(); i++) {
+			Method leftMethod = leftDecl.getMethods(i);
+			for (int j = 0; j < rightDecl.getMethodsCount(); j++) {
+				if (added2.contains(j)) {
+					Method rightMethod = rightDecl.getMethods(j);
+					if (getSignature(leftMethod).equals(getSignature(rightMethod))) {
+						if (!prettyprint(leftMethod).equals(prettyprint(rightMethod)))
+							modified2.add(j);
+						deleted2.remove(i);
+						added2.remove(j);
+						break;
+					}
+				}
+			}
+		}
+
+		if (deleted1.size() + added1.size() + modified1.size() + deleted2.size() + added2.size()
+				+ modified2.size() == 0) {
+			if (prevIdx == 1 && rightNode.getASTChangeCount() != 0)
+				updateChange(rightNode, ChangeKind.COPIED);
+			return;
+		}
+
+		ChangedDeclNode declNode = update(rightNode, rightDecl, ChangeKind.MODIFIED);
+
+		// update field changes
+		for (int i : deleted1)
+			update(declNode, leftDecl.getFields(i), ChangeKind.DELETED);
+		for (int j : added1)
+			update(declNode, rightDecl.getFields(j), ChangeKind.ADDED);
+		for (int j : modified1)
+			update(declNode, rightDecl.getFields(j), ChangeKind.MODIFIED);
+
+		// update method chagnes
+		for (int i : deleted2)
+			update(declNode, leftDecl.getMethods(i), ChangeKind.DELETED);
+		for (int j : added2)
+			update(declNode, rightDecl.getMethods(j), ChangeKind.ADDED);
+		for (int j : modified2)
+			update(declNode, rightDecl.getMethods(j), ChangeKind.MODIFIED);
+
+	}
+
+	private void updateChange(ChangedFileNode rightNode, ChangeKind change) {
+		for (ChangedDeclNode decl : rightNode.getDeclChanges()) {
+			decl.getChanges().add(change);
+			for (ChangedMethodNode method : decl.getMethodChanges())
+				method.getChanges().add(change);
+			for (ChangedFieldNode field : decl.getFieldChanges())
+				field.getChanges().add(change);
+		}
 	}
 
 	private String getSignature(Method m) {

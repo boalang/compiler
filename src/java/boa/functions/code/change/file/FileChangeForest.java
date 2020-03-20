@@ -9,21 +9,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.Queue;
 
 import boa.functions.code.change.ASTChange;
 import boa.functions.code.change.ChangeDataBase;
 import boa.functions.code.change.RevNode;
-import boa.functions.code.change.declaration.ChangedDeclNode;
-import boa.functions.code.change.field.ChangedFieldNode;
-import boa.functions.code.change.method.ChangedMethodNode;
 import boa.functions.code.change.refactoring.RefactoringBond;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.Declaration;
-import boa.types.Ast.Method;
-import boa.types.Ast.Variable;
 import boa.types.Code.CodeRefactoring;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
@@ -119,9 +112,8 @@ public class FileChangeForest {
 
 	private HashSet<ChangedFileLocation> visited = new HashSet<ChangedFileLocation>();
 
-	// update code element edges
-	public void updateWithEdges() throws Exception {
-		
+	// update ast changes
+	public void updateASTChanges() throws Exception {
 		ASTChange astChange = new ASTChange(db);
 		DeclCollector collector = new DeclCollector();
 		for (Entry<ChangedFileLocation, ChangedFileNode> e : db.fileLocIdToNode.descendingMap().entrySet()) {
@@ -134,6 +126,12 @@ public class FileChangeForest {
 				ChangedFileNode rightNode = queue.poll();
 //				System.out.println(rightNode.getLoc());
 				visited.add(rightNode.getLoc());
+				
+				// corner case: node w/t previous one
+				if (rightNode.getChangedFile().getChange() == ChangeKind.ADDED && rightNode.getASTChangeCount() == 0) {
+					astChange.update(rightNode, collector.getDeclNodes(rightNode), ChangeKind.ADDED);
+				}
+				
 				int prevIdx = 0;
 				for (ChangedFileLocation loc : rightNode.getPrevLocs()) {
 					// check null
@@ -141,12 +139,19 @@ public class FileChangeForest {
 						ChangedFileNode leftNode = db.fileLocIdToNode.get(loc);
 						astChange.compare(leftNode, rightNode, collector, prevIdx);
 						queue.offer(leftNode);
+						// update new file change
+						if (prevIdx == 0) {
+							rightNode.getChanges().add(rightNode.getChangedFile().getChange());
+						} else {
+							ChangeKind change = leftNode.getChangedFile().getObjectId().equals(
+									rightNode.getChangedFile().getObjectId()) ? ChangeKind.COPIED : ChangeKind.MODIFIED;
+							rightNode.getChanges().add(change);
+						}
+					} else {
+						// if loc is null add null to changes
+						rightNode.getChanges().add(null);
 					}
 					prevIdx++;
-				}
-				// corner case: node w/t previous one
-				if (rightNode.getPrevLocs().size() == 0 && rightNode.getASTChangeCount() == 0) {
-					astChange.update(rightNode, collector.getDeclNodes(rightNode), ChangeKind.ADDED);
 				}
 			}
 		}

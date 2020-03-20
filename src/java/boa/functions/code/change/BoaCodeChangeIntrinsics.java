@@ -31,14 +31,13 @@ public class BoaCodeChangeIntrinsics {
 		List<FileTree> trees = forest.getTreesAsList();
 		
 		long afterUsedMem1=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();		
-		
-		System.out.println(forest.db.fileNames.size());
-		
-		forest.updateWithEdges();
+
+		forest.updateASTChanges();
 //		DeclarationChangeForest declForest = new DeclarationChangeForest(forest);
 //		declForest = null;
 		cleanup();
 
+		System.out.println("Distinct Files: " + forest.db.fileNames.size());
 		System.out.println("Total Revs: " + revCount);
 		System.out.println("Trees count: " + trees.size());
 		System.out.println("Total refs: " + gd.refBonds.size());

@@ -34,12 +34,14 @@ public class ChangedDeclNode extends ChangedASTNode {
 	public ChangedMethodNode getNewMethodNode(String signature, ChangeKind change) {
 		ChangedMethodNode methodNode = new ChangedMethodNode(signature, this, methodChanges.size());
 		methodNode.getChanges().add(change);
+		methodChanges.add(methodNode);
 		return methodNode;
 	}
 
 	public ChangedFieldNode getNewFieldNode(String signature, ChangeKind change) {
 		ChangedFieldNode fieldNode = new ChangedFieldNode(signature, this, fieldChanges.size());
 		fieldNode.getChanges().add(change);
+		fieldChanges.add(fieldNode);
 		return fieldNode;
 	}
 
