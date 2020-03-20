@@ -1,8 +1,5 @@
 package boa.functions.code.change.field;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import boa.functions.code.change.ChangedASTNode;
 import boa.functions.code.change.declaration.ChangedDeclNode;
 
@@ -10,30 +7,27 @@ public class ChangedFieldNode extends ChangedASTNode {
 
 	private ChangedDeclNode declNode;
 	private ChangedFieldLocation loc;
-	private List<ChangedFieldLocation> prevLocs = new ArrayList<ChangedFieldLocation>();
+	private ChangedFieldLocation firstParent;
+	private ChangedFieldLocation secondParent;
 
 	public ChangedFieldNode(String sig, ChangedDeclNode declNode, ChangedFieldLocation loc) {
 		super(sig);
 		this.declNode = declNode;
 		this.loc = loc;
 	}
-	
+
 	public ChangedFieldNode(String sig, ChangedDeclNode declNode, int size) {
 		super(sig);
 		this.declNode = declNode;
 		this.loc = new ChangedFieldLocation(declNode.getLoc(), size);
 	}
-	
+
 	public ChangedDeclNode getDeclNode() {
 		return declNode;
 	}
 
 	public ChangedFieldLocation getLoc() {
 		return loc;
-	}
-
-	public List<ChangedFieldLocation> getPrevLocs() {
-		return prevLocs;
 	}
 
 	@Override
@@ -60,10 +54,34 @@ public class ChangedFieldNode extends ChangedASTNode {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return declNode + " " + loc.getIdx() + " " + signature;
+	}
+
+	public boolean hasFirstParent() {
+		return firstParent != null;
+	}
+
+	public boolean hasSecondParent() {
+		return secondParent != null;
+	}
+
+	public ChangedFieldLocation getFirstParent() {
+		return firstParent;
+	}
+
+	public void setFirstParent(ChangedFieldLocation firstParent) {
+		this.firstParent = firstParent;
+	}
+
+	public ChangedFieldLocation getSecondParent() {
+		return secondParent;
+	}
+
+	public void setSecondParent(ChangedFieldLocation secondParent) {
+		this.secondParent = secondParent;
 	}
 
 }

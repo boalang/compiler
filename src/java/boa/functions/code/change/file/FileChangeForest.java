@@ -126,32 +126,28 @@ public class FileChangeForest {
 				ChangedFileNode rightNode = queue.poll();
 //				System.out.println(rightNode.getLoc());
 				visited.add(rightNode.getLoc());
-				
-				// corner case: node w/t previous one
+
+				// edge case: added file w/o any further modifications
 				if (rightNode.getChangedFile().getChange() == ChangeKind.ADDED && rightNode.getASTChangeCount() == 0) {
-					astChange.update(rightNode, collector.getDeclNodes(rightNode), ChangeKind.ADDED);
+					astChange.update(rightNode, collector.getDeclNodes(rightNode), ChangeKind.ADDED, true);
 				}
 				
-				int prevIdx = 0;
-				for (ChangedFileLocation loc : rightNode.getPrevLocs()) {
-					// check null
-					if (loc != null) {
-						ChangedFileNode leftNode = db.fileLocIdToNode.get(loc);
-						astChange.compare(leftNode, rightNode, collector, prevIdx);
-						queue.offer(leftNode);
-						// update new file change
-						if (prevIdx == 0) {
-							rightNode.getChanges().add(rightNode.getChangedFile().getChange());
-						} else {
-							ChangeKind change = leftNode.getChangedFile().getObjectId().equals(
-									rightNode.getChangedFile().getObjectId()) ? ChangeKind.COPIED : ChangeKind.MODIFIED;
-							rightNode.getChanges().add(change);
-						}
-					} else {
-						// if loc is null add null to changes
-						rightNode.getChanges().add(null);
-					}
-					prevIdx++;
+				// update changes from 1st parent
+				if (rightNode.hasFirstParent()) {
+					ChangedFileNode leftNode = db.fileLocIdToNode.get(rightNode.getFirstParent());
+					astChange.compare(leftNode, rightNode, collector, true);
+					queue.offer(leftNode);
+					rightNode.setFirstChange(rightNode.getChangedFile().getChange());
+				}
+
+				// update changes from 2nd parent
+				if (rightNode.hasSecondParent()) {
+					ChangedFileNode leftNode = db.fileLocIdToNode.get(rightNode.getSecondParent());
+					astChange.compare(leftNode, rightNode, collector, false);
+					queue.offer(leftNode);
+					ChangeKind change = leftNode.getChangedFile().getObjectId()
+							.equals(rightNode.getChangedFile().getObjectId()) ? ChangeKind.COPIED : ChangeKind.MODIFIED;
+					rightNode.setSecondChange(change);
 				}
 			}
 		}

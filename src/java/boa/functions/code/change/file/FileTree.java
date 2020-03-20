@@ -67,15 +67,15 @@ public class FileTree {
 		forest.db.fileLocIdToNode.put(node.getLoc(), node);
 		forest.db.fileNames.add(node.getChangedFile().getName());
 		// update prev queues
-		List<ChangedFileLocation> prevLocs = getPrevLocs(node);
-		for (ChangedFileLocation loc : prevLocs) {
-			node.getPrevLocs().add(loc);
-			prevFileLocs.offer(loc);
-		}
+		updatePrevLocs(node);
+		if (node.hasFirstParent())
+			prevFileLocs.offer(node.getFirstParent());
+		if (node.hasSecondParent())
+			prevFileLocs.offer(node.getSecondParent());
 		return true;
 	}
 	
-	private List<ChangedFileLocation> getPrevLocs(ChangedFileNode node) {
+	private void updatePrevLocs(ChangedFileNode node) {
 		List<ChangedFileLocation> res = new ArrayList<ChangedFileLocation>();
 		Revision r = node.getRev().getRevision();
 		int prevCount = node.getChangedFile().getPreviousVersionsCount();
@@ -86,21 +86,17 @@ public class FileTree {
 		} else if (r.getParentsCount() == 1 && prevCount == 1) {
 			int revIdx = node.getChangedFile().getPreviousVersions(0);
 			int fileIdx = node.getChangedFile().getPreviousIndices(0);
-			ChangedFileLocation prevLoc =  new ChangedFileLocation(revIdx, fileIdx);
-			res.add(prevLoc);
+			node.setFirstParent(new ChangedFileLocation(revIdx, fileIdx));
 		} else if (r.getParentsCount() == 2) {
 			for (int i = 0; i < r.getParentsCount(); i++) {
-				// added file has no previous one in first-parent branch
-				if (i == 0 && node.getChangedFile().getChange() == ChangeKind.ADDED) {
-					res.add(null);
-					continue;
-				}
 				ChangedFileLocation prevLoc = findPrevious(node.getChangedFile(), r.getParents(i));
 				if (prevLoc != null)
-					res.add(prevLoc);
+					if (i == 0)
+						node.setFirstParent(prevLoc);
+					else
+						node.setSecondParent(prevLoc);
 			}
 		}
-		return res;
 	}
 
 	// find previous file from parent r

@@ -30,46 +30,64 @@ public class ASTChange {
 		return db;
 	}
 
-	public void update(ChangedFileNode fileNode, List<Declaration> decls, ChangeKind change) {
+	public void update(ChangedFileNode fileNode, List<Declaration> decls, ChangeKind change, boolean isFirstParent) {
 		for (int i = 0; i < decls.size(); i++) {
 			Declaration decl = decls.get(i);
-			ChangedDeclNode declNode = update(fileNode, decl, change);
+			ChangedDeclNode declNode = update(fileNode, decl, change, isFirstParent);
 			for (int j = 0; j < decl.getMethodsCount(); j++)
-				update(declNode, decl.getMethods(j), change);
+				update(declNode, decl.getMethods(j), change, isFirstParent);
 			for (int j = 0; j < decl.getFieldsCount(); j++)
-				update(declNode, decl.getFields(j), change);
+				update(declNode, decl.getFields(j), change, isFirstParent);
 		}
 	}
 
-	private void update(ChangedDeclNode declNode, Variable v, ChangeKind change) {
-		ChangedFieldNode fieldNode = declNode.getNewFieldNode(getSignature(v), change);
-		db.fieldDB.put(fieldNode.getLoc(), fieldNode);
+	private void update(ChangedDeclNode declNode, Variable v, ChangeKind change, boolean isFirstParent) {
+		ChangedFieldNode fieldNode = declNode.getFieldNode(getSignature(v), db.fieldDB);
+		updateChange(fieldNode, change, isFirstParent);
 	}
 
-	private void update(ChangedDeclNode declNode, Method m, ChangeKind change) {
-		ChangedMethodNode methodNode = declNode.getNewMethodNode(getSignature(m), change);
-		db.methodDB.put(methodNode.getLoc(), methodNode);
+	private void update(ChangedDeclNode declNode, Method m, ChangeKind change, boolean isFirstParent) {
+		ChangedMethodNode methodNode = declNode.getMethodNode(getSignature(m), db.methodDB);
+		updateChange(methodNode, change, isFirstParent);
 	}
 
-	private ChangedDeclNode update(ChangedFileNode fileNode, Declaration decl, ChangeKind change) {
-		ChangedDeclNode declNode = fileNode.getNewDeclNode(decl.getFullyQualifiedName(), change);
-		db.declDB.put(declNode.getLoc(), declNode);
+	private ChangedDeclNode update(ChangedFileNode fileNode, Declaration decl, ChangeKind change, boolean isFirstParent) {
+		ChangedDeclNode declNode = fileNode.getDeclNode(decl.getFullyQualifiedName(), db.declDB);
+		updateChange(declNode, change, isFirstParent);
 		return declNode;
 	}
+	
+	private void updateChange(ChangedASTNode node, ChangeKind change, boolean isFirstParent) {
+		if (isFirstParent)
+			node.setFirstChange(change);
+		else
+			node.setSecondChange(change);
+	}
 
-	public void compare(ChangedFileNode leftNode, ChangedFileNode rightNode, DeclCollector declCollector, int prevIdx)
+	private void updateAllChanges(ChangedFileNode rightNode, ChangeKind change, boolean isFirstParent) {
+		for (ChangedDeclNode decl : rightNode.getDeclChanges()) {
+			updateChange(decl, change, isFirstParent);
+			decl.setSecondChange(change);
+			for (ChangedMethodNode method : decl.getMethodChanges())
+				updateChange(method, change, isFirstParent);
+			for (ChangedFieldNode field : decl.getFieldChanges())
+				updateChange(field, change, isFirstParent);
+		}
+	}
+
+	public void compare(ChangedFileNode leftNode, ChangedFileNode rightNode, DeclCollector declCollector, boolean isFirstParent)
 			throws Exception {
 		List<Declaration> leftDecls = null;
 		
-		if (prevIdx == 1 && rightNode.getASTChangeCount() == 0) {
+		if (!isFirstParent && rightNode.getASTChangeCount() == 0) {
 			System.out.println(rightNode); 
 		}
 
 		// both have the same content id (COPIED)
 		if (leftNode.getChangedFile().getObjectId().equals(rightNode.getChangedFile().getObjectId())) {
 			// 2nd parent then add copied as 2nd change
-			if (prevIdx == 1 && rightNode.getASTChangeCount() != 0)
-				updateChange(rightNode, ChangeKind.COPIED);
+			if (!isFirstParent && rightNode.getASTChangeCount() != 0)
+				updateAllChanges(rightNode, ChangeKind.COPIED, isFirstParent);
 			return;
 		}
 
@@ -77,14 +95,14 @@ public class ASTChange {
 		if (leftNode.getChangedFile().getChange() == ChangeKind.ADDED) {
 			if (leftDecls == null)
 				leftDecls = declCollector.getDeclNodes(leftNode);
-			update(leftNode, leftDecls, ChangeKind.ADDED);
+			update(leftNode, leftDecls, ChangeKind.ADDED, true);
 		}
 
 		// right is deleted
 		if (rightNode.getChangedFile().getChange() == ChangeKind.DELETED) {
 			if (leftDecls == null)
 				leftDecls = declCollector.getDeclNodes(leftNode);
-			update(rightNode, leftDecls, ChangeKind.DELETED);
+			update(rightNode, leftDecls, ChangeKind.DELETED, true);
 		}
 
 		// right is modified/renamed/added
@@ -102,21 +120,21 @@ public class ASTChange {
 						if (leftDecl.getFullyQualifiedName().equals(rightDecl.getFullyQualifiedName())) {
 							deleted.remove(i);
 							added.remove(j);
-							compareDecls(leftDecl, rightDecl, rightNode, prevIdx);
+							compareDecls(leftDecl, rightDecl, rightNode, isFirstParent);
 							break;
 						}
 					}
 				}
 			}
 			for (int i : deleted)
-				update(rightNode, leftDecls.get(i), ChangeKind.DELETED);
+				update(rightNode, leftDecls.get(i), ChangeKind.DELETED, isFirstParent);
 			for (int j : added)
-				update(leftNode, rightDecls.get(j), ChangeKind.ADDED);
+				update(leftNode, rightDecls.get(j), ChangeKind.ADDED, isFirstParent);
 		}
 
 	}
 
-	private void compareDecls(Declaration leftDecl, Declaration rightDecl, ChangedFileNode rightNode, int prevIdx) {
+	private void compareDecls(Declaration leftDecl, Declaration rightDecl, ChangedFileNode rightNode, boolean isFirstParent) {
 		
 		// compare fields
 		Set<Integer> deleted1 = Stream.iterate(0, n -> n + 1).limit(leftDecl.getFieldsCount())
@@ -166,40 +184,31 @@ public class ASTChange {
 
 		if (deleted1.size() + added1.size() + modified1.size() + deleted2.size() + added2.size()
 				+ modified2.size() == 0) {
-			if (prevIdx == 1 && rightNode.getASTChangeCount() != 0)
-				updateChange(rightNode, ChangeKind.COPIED);
+			if (isFirstParent && rightNode.getASTChangeCount() != 0)
+				updateAllChanges(rightNode, ChangeKind.COPIED, true);
 			return;
 		}
 
-		ChangedDeclNode declNode = update(rightNode, rightDecl, ChangeKind.MODIFIED);
+		ChangedDeclNode declNode = update(rightNode, rightDecl, ChangeKind.MODIFIED, isFirstParent);
 
 		// update field changes
 		for (int i : deleted1)
-			update(declNode, leftDecl.getFields(i), ChangeKind.DELETED);
+			update(declNode, leftDecl.getFields(i), ChangeKind.DELETED, isFirstParent);
 		for (int j : added1)
-			update(declNode, rightDecl.getFields(j), ChangeKind.ADDED);
+			update(declNode, rightDecl.getFields(j), ChangeKind.ADDED, isFirstParent);
 		for (int j : modified1)
-			update(declNode, rightDecl.getFields(j), ChangeKind.MODIFIED);
+			update(declNode, rightDecl.getFields(j), ChangeKind.MODIFIED, isFirstParent);
 
 		// update method chagnes
 		for (int i : deleted2)
-			update(declNode, leftDecl.getMethods(i), ChangeKind.DELETED);
+			update(declNode, leftDecl.getMethods(i), ChangeKind.DELETED, isFirstParent);
 		for (int j : added2)
-			update(declNode, rightDecl.getMethods(j), ChangeKind.ADDED);
+			update(declNode, rightDecl.getMethods(j), ChangeKind.ADDED, isFirstParent);
 		for (int j : modified2)
-			update(declNode, rightDecl.getMethods(j), ChangeKind.MODIFIED);
+			update(declNode, rightDecl.getMethods(j), ChangeKind.MODIFIED, isFirstParent);
 
 	}
 
-	private void updateChange(ChangedFileNode rightNode, ChangeKind change) {
-		for (ChangedDeclNode decl : rightNode.getDeclChanges()) {
-			decl.getChanges().add(change);
-			for (ChangedMethodNode method : decl.getMethodChanges())
-				method.getChanges().add(change);
-			for (ChangedFieldNode field : decl.getFieldChanges())
-				field.getChanges().add(change);
-		}
-	}
 
 	private String getSignature(Method m) {
 		StringBuilder sb = new StringBuilder();

@@ -1,18 +1,15 @@
 package boa.functions.code.change.method;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import boa.functions.code.change.ChangedASTNode;
-import boa.functions.code.change.declaration.ChangedDeclLocation;
 import boa.functions.code.change.declaration.ChangedDeclNode;
-import boa.functions.code.change.file.ChangedFileNode;
+import boa.functions.code.change.file.ChangedFileLocation;
 
 public class ChangedMethodNode extends ChangedASTNode {
 
 	private ChangedDeclNode declNode;
 	private ChangedMethodLocation loc;
-	private List<ChangedMethodLocation> prevLocs = new ArrayList<ChangedMethodLocation>();
+	private ChangedFileLocation firstParent;
+	private ChangedFileLocation secondParent;
 
 	public ChangedMethodNode(String sig, ChangedDeclNode declNode, ChangedMethodLocation loc) {
 		super(sig);
@@ -32,10 +29,6 @@ public class ChangedMethodNode extends ChangedASTNode {
 
 	public ChangedMethodLocation getLoc() {
 		return loc;
-	}
-
-	public List<ChangedMethodLocation> getPrevLocs() {
-		return prevLocs;
 	}
 
 	@Override
@@ -66,6 +59,30 @@ public class ChangedMethodNode extends ChangedASTNode {
 	@Override
 	public String toString() {
 		return declNode + " " + loc.getIdx() + " " + signature;
+	}
+
+	public ChangedFileLocation getSecondParent() {
+		return secondParent;
+	}
+
+	public void setSecondParent(ChangedFileLocation secondParent) {
+		this.secondParent = secondParent;
+	}
+
+	public ChangedFileLocation getFirstParent() {
+		return firstParent;
+	}
+
+	public void setFirstParent(ChangedFileLocation firstParent) {
+		this.firstParent = firstParent;
+	}
+	
+	public boolean hasFirstParent() {
+		return firstParent != null;
+	}
+	
+	public boolean hasSecondParent() {
+		return secondParent != null;
 	}
 
 }

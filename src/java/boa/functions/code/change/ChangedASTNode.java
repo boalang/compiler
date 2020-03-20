@@ -12,12 +12,13 @@ public abstract class ChangedASTNode {
 
 	// tree id
 	protected TreeObjectId treeId;
-	
+
 	// changes
-	protected List<ChangeKind> changes = new ArrayList<ChangeKind>();
+	protected ChangeKind firstChange;
+	protected ChangeKind secondChange;
 	protected List<Integer> leftRefBondIdxs = new ArrayList<Integer>();
 	protected List<Integer> rightRefBondIdxs = new ArrayList<Integer>();
-	
+
 	public ChangedASTNode(String sig) {
 		this.signature = sig;
 	}
@@ -34,10 +35,6 @@ public abstract class ChangedASTNode {
 		this.treeId = treeId;
 	}
 
-	public List<ChangeKind> getChanges() {
-		return changes;
-	}
-
 	public List<Integer> getLeftRefBondIdxs() {
 		return leftRefBondIdxs;
 	}
@@ -46,12 +43,28 @@ public abstract class ChangedASTNode {
 		return rightRefBondIdxs;
 	}
 
+	public ChangeKind getFirstChange() {
+		return firstChange;
+	}
+
+	public void setFirstChange(ChangeKind firstChange) {
+		this.firstChange = firstChange;
+	}
+
+	public ChangeKind getSecondChange() {
+		return secondChange;
+	}
+
+	public void setSecondChange(ChangeKind secondChange) {
+		this.secondChange = secondChange;
+	}
+
 	@Override
 	public abstract int hashCode();
 
 	@Override
 	public abstract boolean equals(Object obj);
-	
+
 	@Override
 	public abstract String toString();
 

@@ -1,10 +1,13 @@
 package boa.functions.code.change.file;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import boa.functions.code.change.RevNode;
 import boa.functions.code.change.TreeObjectId;
+import boa.functions.code.change.declaration.ChangedDeclLocation;
 import boa.functions.code.change.declaration.ChangedDeclNode;
 import boa.functions.code.change.refactoring.RefactoringBonds;
 import boa.types.Diff.ChangedFile;
@@ -16,11 +19,15 @@ public class ChangedFileNode {
 	private ChangedFile cf;
 	private ChangedFileLocation loc;
 	private TreeObjectId treeId;
-	private List<ChangedFileLocation> prevLocs = new ArrayList<ChangedFileLocation>();
-	
+
+	private ChangedFileLocation firstParent;
+	private ChangedFileLocation secondParent;
+
 	// changes
-	private List<ChangeKind> changes = new ArrayList<ChangeKind>();
-	private List<ChangedDeclNode> declChanges = new ArrayList<ChangedDeclNode>(); //TODO
+	private ChangeKind firstChange;
+	private ChangeKind secondChange;
+	private HashMap<String, Integer> declChangeMap = new HashMap<String, Integer>();
+	private List<ChangedDeclNode> declChanges = new ArrayList<ChangedDeclNode>();
 	private RefactoringBonds leftRefBonds = new RefactoringBonds();
 	private RefactoringBonds rightRefBonds = new RefactoringBonds();
 
@@ -29,40 +36,45 @@ public class ChangedFileNode {
 		this.r = r;
 		this.loc = loc;
 	}
-	
+
 	public ChangedFileNode(ChangedFile cf, RevNode r) {
 		this.cf = cf;
 		this.r = r;
 		this.loc = new ChangedFileLocation(cf.getRevisionIdx(), cf.getFileIdx());
 	}
-	
-	public ChangedDeclNode getNewDeclNode(String fqn, ChangeKind change) {
-		ChangedDeclNode declNode = new ChangedDeclNode(fqn, this, declChanges.size());
-		declNode.getChanges().add(change);
-		declChanges.add(declNode);
-		return declNode;
+
+	public ChangedDeclNode getDeclNode(String fqn, TreeMap<ChangedDeclLocation, ChangedDeclNode> declDB) {
+		if (!declChangeMap.containsKey(fqn)) {
+			int idx = declChanges.size();
+			ChangedDeclNode declNode = new ChangedDeclNode(fqn, this, idx);
+			declChangeMap.put(fqn, idx);
+			declChanges.add(declNode);
+			declDB.put(declNode.getLoc(), declNode);
+			return declNode;
+		}
+		return declChanges.get(declChangeMap.get(fqn));
 	}
 
 	public ChangedFileLocation getLoc() {
 		return loc;
 	}
-	
+
 	public int getRevIdx() {
 		return cf.getRevisionIdx();
 	}
-	
+
 	public int getFileIdx() {
 		return cf.getFileIdx();
 	}
-	
+
 	public TreeObjectId getTreeObjectId() {
 		return treeId;
 	}
-	
+
 	public void setTreeObjectId(TreeObjectId treeId) {
 		this.treeId = treeId;
 	}
-	
+
 	public ChangedFile getChangedFile() {
 		return cf;
 	}
@@ -83,10 +95,6 @@ public class ChangedFileNode {
 		return rightRefBonds;
 	}
 
-	public List<ChangedFileLocation> getPrevLocs() {
-		return prevLocs;
-	}
-	
 	public List<Integer> getRevisionParents() {
 		return r.getRevision().getParentsList();
 	}
@@ -115,25 +123,61 @@ public class ChangedFileNode {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return r.getRevision().getId() + " " + loc + " " + cf.getName() + " " + cf.getChange();
 	}
 
-	public List<ChangeKind> getChanges() {
-		return changes;
-	}
-
 	public List<ChangedDeclNode> getDeclChanges() {
 		return declChanges;
 	}
-	
+
 	public int getASTChangeCount() {
 		int count = 0;
 		for (ChangedDeclNode declNode : declChanges)
 			count += declNode.getASTChangeCount();
 		return count;
+	}
+
+	public ChangedFileLocation getFirstParent() {
+		return firstParent;
+	}
+
+	public void setFirstParent(ChangedFileLocation firstParent) {
+		this.firstParent = firstParent;
+	}
+
+	public boolean hasFirstParent() {
+		return firstParent != null;
+	}
+
+	public ChangedFileLocation getSecondParent() {
+		return secondParent;
+	}
+
+	public void setSecondParent(ChangedFileLocation secondParent) {
+		this.secondParent = secondParent;
+	}
+
+	public boolean hasSecondParent() {
+		return secondParent != null;
+	}
+
+	public ChangeKind getFirstChange() {
+		return firstChange;
+	}
+
+	public void setFirstChange(ChangeKind firstChange) {
+		this.firstChange = firstChange;
+	}
+
+	public ChangeKind getSecondChange() {
+		return secondChange;
+	}
+
+	public void setSecondChange(ChangeKind secondChange) {
+		this.secondChange = secondChange;
 	}
 
 }

@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.TreeSet;
-
 import boa.functions.code.change.declaration.ChangedDeclLocation;
 import boa.functions.code.change.declaration.ChangedDeclNode;
 import boa.functions.code.change.field.ChangedFieldLocation;
@@ -18,7 +16,6 @@ import boa.functions.code.change.file.ChangedFileNode;
 import boa.functions.code.change.method.ChangedMethodLocation;
 import boa.functions.code.change.method.ChangedMethodNode;
 import boa.functions.code.change.refactoring.RefactoringBond;
-import boa.types.Ast.ASTRoot;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 
