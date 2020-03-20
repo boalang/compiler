@@ -87,7 +87,7 @@ public class ASTChange {
 		if (leftNode.getChangedFile().getObjectId().equals(rightNode.getChangedFile().getObjectId())) {
 			// 2nd parent then add copied as 2nd change
 			if (!isFirstParent && rightNode.getASTChangeCount() != 0)
-				updateAllChanges(rightNode, ChangeKind.COPIED, isFirstParent);
+				updateAllChanges(rightNode, ChangeKind.COPIED, false);
 			return;
 		}
 
@@ -182,9 +182,11 @@ public class ASTChange {
 			}
 		}
 
+		// no ast changes
 		if (deleted1.size() + added1.size() + modified1.size() + deleted2.size() + added2.size()
 				+ modified2.size() == 0) {
-			if (isFirstParent && rightNode.getASTChangeCount() != 0)
+			// 2nd parent then add copied as 2nd change
+			if (!isFirstParent && rightNode.getASTChangeCount() != 0)
 				updateAllChanges(rightNode, ChangeKind.COPIED, true);
 			return;
 		}

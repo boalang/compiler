@@ -18,6 +18,10 @@ public class BoaCodeChangeIntrinsics {
 
 	@FunctionSpec(name = "test3", formalParameters = { "Project" })
 	public static void test2(Project p) throws Exception {
+		
+		if (p.getName().equals("ant4eclipse/ant4eclipse"))
+			return;
+		
 		long beforeUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
 		
 		CodeRepository cr = p.getCodeRepositories(0);
@@ -26,7 +30,7 @@ public class BoaCodeChangeIntrinsics {
 
 		int revCount = getRevisionsCount(cr);
 		ChangeDataBase gd = new ChangeDataBase(cr, revCount);
-		FileChangeForest forest = new FileChangeForest(gd, false);
+		FileChangeForest forest = new FileChangeForest(gd, true);
 		forest.updateWithRefs(p, refRevIds, null);
 		List<FileTree> trees = forest.getTreesAsList();
 		
@@ -39,7 +43,7 @@ public class BoaCodeChangeIntrinsics {
 
 		System.out.println("Distinct Files: " + forest.db.fileNames.size());
 		System.out.println("Total Revs: " + revCount);
-		System.out.println("Trees count: " + trees.size());
+		System.out.println("Total Trees: " + trees.size());
 		System.out.println("Total refs: " + gd.refBonds.size());
 		System.out.println("Total decls: " + gd.declDB.size());
 		ChangedFile[] LatestSnapshot = getSnapshot(cr, revCount - 1, false);

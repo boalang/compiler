@@ -2,9 +2,8 @@ package boa.functions.code.change.file;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
+import java.util.Stack;
 import java.util.TreeSet;
 
 import boa.functions.code.change.RevNode;
@@ -18,7 +17,7 @@ public class FileTree {
 	private final FileChangeForest forest;
 	private TreeObjectId id;
 	private TreeSet<ChangedFileLocation> fileLocs = new TreeSet<ChangedFileLocation>();
-	private Queue<ChangedFileLocation> prevFileLocs = new LinkedList<ChangedFileLocation>();
+	private Stack<ChangedFileLocation> prevFileLocs = new Stack<ChangedFileLocation>();
 	// refactoring info
 	public HashSet<ChangedFileLocation> fileBeforeRef = new HashSet<ChangedFileLocation>();
 	public HashSet<ChangedFileLocation> fileAfterRef = new HashSet<ChangedFileLocation>();
@@ -31,7 +30,7 @@ public class FileTree {
 
 	public boolean linkAll() {
 		while (!prevFileLocs.isEmpty()) {
-			ChangedFileLocation loc = prevFileLocs.poll();
+			ChangedFileLocation loc = prevFileLocs.pop();
 			if (loc == null) // check null
 				continue;
 			RevNode prevRev = forest.db.revIdxMap.get(loc.getRevIdx());
@@ -69,9 +68,9 @@ public class FileTree {
 		// update prev queues
 		updatePrevLocs(node);
 		if (node.hasFirstParent())
-			prevFileLocs.offer(node.getFirstParent());
+			prevFileLocs.push(node.getFirstParent());
 		if (node.hasSecondParent())
-			prevFileLocs.offer(node.getSecondParent());
+			prevFileLocs.push(node.getSecondParent());
 		return true;
 	}
 	
@@ -131,9 +130,9 @@ public class FileTree {
 		tree.id.setId(this.id.getAsInt());
 		// merge queues
 		while (!tree.prevFileLocs.isEmpty()) {
-			ChangedFileLocation loc = tree.prevFileLocs.poll();
+			ChangedFileLocation loc = tree.prevFileLocs.pop();
 			if (!fileLocs.contains(loc)) {
-				this.prevFileLocs.offer(loc);
+				this.prevFileLocs.push(loc);
 			}
 		}
 		return this;
