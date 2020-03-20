@@ -3,21 +3,17 @@ package boa.functions.code.change.declaration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TreeMap;
-
 import boa.functions.code.change.ChangedASTNode;
-import boa.functions.code.change.field.ChangedFieldLocation;
 import boa.functions.code.change.field.ChangedFieldNode;
 import boa.functions.code.change.file.ChangedFileNode;
-import boa.functions.code.change.method.ChangedMethodLocation;
 import boa.functions.code.change.method.ChangedMethodNode;
 
 public class ChangedDeclNode extends ChangedASTNode {
 
 	private ChangedFileNode fn;
 	private ChangedDeclLocation loc;
-	private ChangedDeclLocation firstParent;
-	private ChangedDeclLocation secondParent;
+	private ChangedDeclNode firstParent;
+	private ChangedDeclNode secondParent;
 
 	// changes
 	private HashMap<String, Integer> methodChangeMap = new HashMap<String, Integer>();
@@ -37,25 +33,25 @@ public class ChangedDeclNode extends ChangedASTNode {
 		this.loc = new ChangedDeclLocation(fn.getLoc(), size);
 	}
 
-	public ChangedMethodNode getMethodNode(String signature, TreeMap<ChangedMethodLocation, ChangedMethodNode> methodDB) {
+	public ChangedMethodNode getMethodNode(String signature) {
 		if (!methodChangeMap.containsKey(signature)) {
 			int idx = methodChanges.size();
 			ChangedMethodNode methodNode = new ChangedMethodNode(signature, this, idx);
 			methodChangeMap.put(signature, idx);
 			methodChanges.add(methodNode);
-			methodDB.put(methodNode.getLoc(), methodNode);
+//			methodDB.put(methodNode.getLoc(), methodNode);
 			return methodNode;
 		}
 		return methodChanges.get(methodChangeMap.get(signature));
 	}
 
-	public ChangedFieldNode getFieldNode(String signature, TreeMap<ChangedFieldLocation, ChangedFieldNode> fieldDB) {
+	public ChangedFieldNode getFieldNode(String signature) {
 		if (!fieldChangeMap.containsKey(signature)) {
 			int idx = fieldChanges.size();
 			ChangedFieldNode fieldNode = new ChangedFieldNode(signature, this, idx);
 			fieldChangeMap.put(signature, idx);
 			fieldChanges.add(fieldNode);
-			fieldDB.put(fieldNode.getLoc(), fieldNode);
+//			fieldDB.put(fieldNode.getLoc(), fieldNode);
 			return fieldNode;
 		}
 		return fieldChanges.get(fieldChangeMap.get(signature));
@@ -96,7 +92,7 @@ public class ChangedDeclNode extends ChangedASTNode {
 
 	@Override
 	public String toString() {
-		return fn + " " + loc.getIdx() + " " + signature;
+		return fn + " " + loc.getIdx() + " " + signature + " " + this.firstChange + " " + this.secondChange;
 	}
 
 	public List<ChangedMethodNode> getMethodChanges() {
@@ -119,19 +115,19 @@ public class ChangedDeclNode extends ChangedASTNode {
 		return secondParent != null;
 	}
 
-	public ChangedDeclLocation getFirstParent() {
+	public ChangedDeclNode getFirstParent() {
 		return firstParent;
 	}
 
-	public void setFirstParent(ChangedDeclLocation firstParent) {
+	public void setFirstParent(ChangedDeclNode firstParent) {
 		this.firstParent = firstParent;
 	}
 
-	public ChangedDeclLocation getSecondParent() {
+	public ChangedDeclNode getSecondParent() {
 		return secondParent;
 	}
 
-	public void setSecondParent(ChangedDeclLocation secondParent) {
+	public void setSecondParent(ChangedDeclNode secondParent) {
 		this.secondParent = secondParent;
 	}
 

@@ -3,11 +3,8 @@ package boa.functions.code.change.file;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TreeMap;
-
 import boa.functions.code.change.RevNode;
 import boa.functions.code.change.TreeObjectId;
-import boa.functions.code.change.declaration.ChangedDeclLocation;
 import boa.functions.code.change.declaration.ChangedDeclNode;
 import boa.functions.code.change.refactoring.RefactoringBonds;
 import boa.types.Diff.ChangedFile;
@@ -20,8 +17,8 @@ public class ChangedFileNode {
 	private ChangedFileLocation loc;
 	private TreeObjectId treeId;
 
-	private ChangedFileLocation firstParent;
-	private ChangedFileLocation secondParent;
+	private ChangedFileLocation firstParentLoc;
+	private ChangedFileLocation secondParentLoc;
 
 	// changes
 	private ChangeKind firstChange;
@@ -43,13 +40,13 @@ public class ChangedFileNode {
 		this.loc = new ChangedFileLocation(cf.getRevisionIdx(), cf.getFileIdx());
 	}
 
-	public ChangedDeclNode getDeclNode(String fqn, TreeMap<ChangedDeclLocation, ChangedDeclNode> declDB) {
+	public ChangedDeclNode getDeclNode(String fqn) {
 		if (!declChangeMap.containsKey(fqn)) {
 			int idx = declChanges.size();
 			ChangedDeclNode declNode = new ChangedDeclNode(fqn, this, idx);
 			declChangeMap.put(fqn, idx);
 			declChanges.add(declNode);
-			declDB.put(declNode.getLoc(), declNode);
+//			declDB.put(declNode.getLoc(), declNode);
 			return declNode;
 		}
 		return declChanges.get(declChangeMap.get(fqn));
@@ -67,7 +64,7 @@ public class ChangedFileNode {
 		return cf.getFileIdx();
 	}
 
-	public TreeObjectId getTreeObjectId() {
+	public TreeObjectId getTreeId() {
 		return treeId;
 	}
 
@@ -140,28 +137,28 @@ public class ChangedFileNode {
 		return count;
 	}
 
-	public ChangedFileLocation getFirstParent() {
-		return firstParent;
+	public ChangedFileLocation getFirstParentLoc() {
+		return firstParentLoc;
 	}
 
-	public void setFirstParent(ChangedFileLocation firstParent) {
-		this.firstParent = firstParent;
+	public void setFirstParentLoc(ChangedFileLocation firstParent) {
+		this.firstParentLoc = firstParent;
 	}
 
-	public boolean hasFirstParent() {
-		return firstParent != null;
+	public boolean hasFirstParentLoc() {
+		return firstParentLoc != null;
 	}
 
-	public ChangedFileLocation getSecondParent() {
-		return secondParent;
+	public ChangedFileLocation getSecondParentLoc() {
+		return secondParentLoc;
 	}
 
-	public void setSecondParent(ChangedFileLocation secondParent) {
-		this.secondParent = secondParent;
+	public void setSecondParentLoc(ChangedFileLocation secondParent) {
+		this.secondParentLoc = secondParent;
 	}
 
-	public boolean hasSecondParent() {
-		return secondParent != null;
+	public boolean hasSecondParentLoc() {
+		return secondParentLoc != null;
 	}
 
 	public ChangeKind getFirstChange() {
@@ -178,6 +175,12 @@ public class ChangedFileNode {
 
 	public void setSecondChange(ChangeKind secondChange) {
 		this.secondChange = secondChange;
+	}
+
+	public ChangedDeclNode getDeclChange(String fqn) {
+		if (declChangeMap.containsKey(fqn))
+			return declChanges.get(declChangeMap.get(fqn));
+		return null;
 	}
 
 }

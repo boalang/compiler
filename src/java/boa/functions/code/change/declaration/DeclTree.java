@@ -1,21 +1,19 @@
 package boa.functions.code.change.declaration;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Stack;
 import java.util.TreeSet;
 
 import boa.functions.code.change.TreeObjectId;
 import boa.functions.code.change.file.ChangedFileLocation;
-import boa.functions.code.change.refactoring.RefactoringBond;
+import boa.functions.code.change.file.ChangedFileNode;
+import boa.types.Shared.ChangeKind;
 
 public class DeclTree {
 	
 	private final DeclChangeForest forest;
 	private TreeObjectId id;
 	private TreeSet<ChangedDeclLocation> declLocs = new TreeSet<ChangedDeclLocation>();
-
-	private Queue<ChangedFileLocation> prevLocations = new LinkedList<ChangedFileLocation>();
-	private Queue<String> prevNames = new LinkedList<String>();
+	private Stack<ChangedDeclNode> prevNodes = new Stack<ChangedDeclNode>();
 	
 	public DeclTree(DeclChangeForest forest, ChangedDeclNode node, int treeIdx) {
 		this.forest = forest;
@@ -23,30 +21,84 @@ public class DeclTree {
 		add(node);
 	}
 
-	private void add(ChangedDeclNode node) {
-		// check if the node is added by some trees
+	public boolean linkAll() {
+		while (!prevNodes.isEmpty()) {
+			ChangedDeclNode node = prevNodes.pop();
+			if (!add(node))
+				return false;
+		}
+		return true;
+	}
+
+	private boolean add(ChangedDeclNode node) {
+		// case 1: check if the node is added by some trees
+		if (forest.db.declDB.containsKey(node.getLoc())) {
+			int listIdx = forest.db.declDB.get(node.getLoc()).getTreeId().getAsInt();
+			if (listIdx != this.id.getAsInt()) {
+				forest.getTreesAsList().get(listIdx).merge(this).linkAll();
+				return false;
+			}
+			return true;
+		}
 		
-		// update tree
+		// case 2: update tree
 		declLocs.add(node.getLoc());
 		// node update tree id
 		node.setTreeId(this.id);
 		// update global nodes
-		forest.fcf.db.declDB.put(node.getLoc(), node);
-		
+		forest.db.declDB.put(node.getLoc(), node);
 		// update prev queues
-		for (int refBondIdx : node.getFileNode().getLeftRefBonds().getClassLevel()) {
-			RefactoringBond rb = forest.fcf.db.refBonds.get(refBondIdx);
-			if (forest.refTypes.contains(rb.getType())
-					&& node.getSignature().equals(rb.getRightElement())) {
-				prevLocations.add((ChangedFileLocation) rb.getLeftLoc());
-				prevNames.add(rb.getLeftElement());
-			}
+		updatePrevLocs(node);
+		// push 2nd parent first for dfs first-parent branch first
+		if (node.hasSecondParent()) {
+			prevNodes.push(node.getSecondParent());			
+		}
+		if (node.hasFirstParent()) {
+			prevNodes.push(node.getFirstParent());
+		}
+		return true;
+	}
+
+	private void updatePrevLocs(ChangedDeclNode node) {
+		ChangedFileNode fn = node.getFileNode();
+		if (fn.hasFirstParentLoc()) {
+			ChangedDeclNode firstParent = findPrevious(node, fn.getFirstParentLoc());
+			node.setFirstParent(firstParent);
+		}
+		if (fn.hasSecondParentLoc()) {
+			ChangedDeclNode secondParent = findPrevious(node, fn.getSecondParentLoc());
+			node.setSecondParent(secondParent);
 		}
 	}
 
-	public boolean linkAll() {
-		// TODO Auto-generated method stub
-		return false;
+	private ChangedDeclNode findPrevious(ChangedDeclNode node, ChangedFileLocation firstParentLoc) {
+		String fqn = node.getSignature();
+		ChangedFileNode cur = forest.db.fileDB.get(firstParentLoc);
+		while (true) {
+			ChangedDeclNode prev = cur.getDeclChange(fqn);
+			if (prev != null) {
+				return prev;
+			}
+			if (!cur.hasFirstParentLoc())
+				return null;
+			// check first-parent branch
+			cur = forest.db.fileDB.get(cur.getFirstParentLoc());
+		}
+	}
+
+	private DeclTree merge(DeclTree tree) {
+		// update list id
+		this.declLocs.addAll(tree.declLocs);
+		// update list id
+		tree.id.setId(this.id.getAsInt());
+		// merge queues
+		while (!tree.prevNodes.isEmpty()) {
+			ChangedDeclNode node = tree.prevNodes.pop();
+			if (!declLocs.contains(node.getLoc())) {
+				this.prevNodes.push(node);
+			}
+		}
+		return this;
 	}
 	
 	public TreeSet<ChangedDeclLocation> getDeclLocs() {

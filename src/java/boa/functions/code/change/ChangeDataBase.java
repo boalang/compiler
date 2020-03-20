@@ -25,31 +25,30 @@ public class ChangeDataBase {
 	public HashSet<String> nContributor = new HashSet<String>();
 	public HashMap<Integer, RevNode> revIdxMap = new HashMap<Integer, RevNode>();
 	public HashMap<String, RevNode> revIdMap = new HashMap<String, RevNode>();
-	
-	// file data
-	public TreeMap<ChangedFileLocation, ChangedFileNode> fileLocIdToNode = new TreeMap<ChangedFileLocation, ChangedFileNode>();
-	
+
+	// file change data
+	public TreeMap<ChangedFileLocation, ChangedFileNode> fileDB = new TreeMap<ChangedFileLocation, ChangedFileNode>();
+
 	// refactoring data
-	public List<RefactoringBond> refBonds = new ArrayList<RefactoringBond>();
-	
+	public List<RefactoringBond> refDB = new ArrayList<RefactoringBond>();
+
 	// declaration data
 	public TreeMap<ChangedDeclLocation, ChangedDeclNode> declDB = new TreeMap<ChangedDeclLocation, ChangedDeclNode>();
-	
-	// field data
-	public TreeMap<ChangedMethodLocation, ChangedMethodNode> methodDB= new TreeMap<ChangedMethodLocation, ChangedMethodNode>();
-	
-	// method data
+
+	// field change data
+	public TreeMap<ChangedMethodLocation, ChangedMethodNode> methodDB = new TreeMap<ChangedMethodLocation, ChangedMethodNode>();
+
+	// method change data
 	public TreeMap<ChangedFieldLocation, ChangedFieldNode> fieldDB = new TreeMap<ChangedFieldLocation, ChangedFieldNode>();
-	
-	
+
 	public ChangeDataBase(CodeRepository cr, int revCount) {
 		for (int i = 0; i < revCount; i++)
 			getRev(cr, i);
 	}
-	
+
 	// test
 	public HashSet<String> fileNames = new HashSet<String>();
-	
+
 	private RevNode getRev(CodeRepository cr, int idx) {
 		if (revIdxMap.containsKey(idx))
 			return revIdxMap.get(idx);

@@ -24,25 +24,22 @@ import boa.types.Toplevel.Project;
 
 public class FileChangeForest {
 
-	// tree properties
-	protected List<FileTree> trees = new ArrayList<FileTree>();
+	private List<FileTree> trees = new ArrayList<FileTree>();
+	public final ChangeDataBase db;
 
 	protected boolean debug = false;
-
-	// global data
-	public final ChangeDataBase db;
 
 	public FileChangeForest(ChangeDataBase gd, boolean debug) {
 		this.db = gd;
 		this.debug = debug;
-		updateTrees();
+		buildTrees();
 	}
 
-	private void updateTrees() {
+	private void buildTrees() {
 		for (int i = db.revIdxMap.size() - 1; i >= 0; i--) {
 			RevNode r = db.revIdxMap.get(i);
 			for (ChangedFileNode fn : r.getJavaFileNodes()) {
-				if (!db.fileLocIdToNode.containsKey(fn.getLoc())) {
+				if (!db.fileDB.containsKey(fn.getLoc())) {
 					if (debug)
 						System.err.println("start new node " + fn.getLoc());
 					FileTree tree = new FileTree(this, fn, trees.size());
@@ -69,16 +66,16 @@ public class FileChangeForest {
 				String afterFilePath = ref.getRightSideLocations(0).getFilePath();
 				ChangedFileNode fileAfter = getFileNodeFrom(afterFilePath, r);
 				RefactoringBond refBond = new RefactoringBond(fileBefore.getLoc(), fileAfter.getLoc(), ref);
-				int refBondIdx = db.refBonds.size();
-				db.refBonds.add(refBond);
+				int refBondIdx = db.refDB.size();
+				db.refDB.add(refBond);
 				// update file ref bonds
 				fileBefore.getRightRefBonds().add(refBond, refBondIdx);
 				fileAfter.getLeftRefBonds().add(refBond, refBondIdx);
 				// update tree ref locations
-				int beforeTreeIdx = db.fileLocIdToNode.get(fileBefore.getLoc()).getTreeObjectId().getAsInt();
+				int beforeTreeIdx = db.fileDB.get(fileBefore.getLoc()).getTreeId().getAsInt();
 				FileTree beforeTree = trees.get(beforeTreeIdx);
 				beforeTree.fileBeforeRef.add(fileBefore.getLoc());
-				int afterTreeIdx = db.fileLocIdToNode.get(fileAfter.getLoc()).getTreeObjectId().getAsInt();
+				int afterTreeIdx = db.fileDB.get(fileAfter.getLoc()).getTreeId().getAsInt();
 				FileTree afterTree = trees.get(afterTreeIdx);
 				afterTree.fileBeforeRef.add(fileAfter.getLoc());
 			}
@@ -108,7 +105,7 @@ public class FileChangeForest {
 	private ChangedFileNode getFileNodeFrom(String filePath, RevNode r) {
 		for (ChangedFile cf : r.getRevision().getFilesList())
 			if (cf.getName().equals(filePath))
-				return db.fileLocIdToNode.get(new ChangedFileLocation(cf.getRevisionIdx(), cf.getFileIdx()));
+				return db.fileDB.get(new ChangedFileLocation(cf.getRevisionIdx(), cf.getFileIdx()));
 		return null;
 	}
 
@@ -118,7 +115,7 @@ public class FileChangeForest {
 	public void updateASTChanges() throws Exception {
 		ASTChange astChange = new ASTChange(db);
 		DeclCollector collector = new DeclCollector();
-		for (Entry<ChangedFileLocation, ChangedFileNode> e : db.fileLocIdToNode.descendingMap().entrySet()) {
+		for (Entry<ChangedFileLocation, ChangedFileNode> e : db.fileDB.descendingMap().entrySet()) {
 			ChangedFileNode fn = e.getValue();
 			if (visited.contains(fn.getLoc()))
 				continue;
@@ -135,16 +132,16 @@ public class FileChangeForest {
 				}
 				
 				// update changes from 1st parent
-				if (rightNode.hasFirstParent()) {
-					ChangedFileNode leftNode = db.fileLocIdToNode.get(rightNode.getFirstParent());
+				if (rightNode.hasFirstParentLoc()) {
+					ChangedFileNode leftNode = db.fileDB.get(rightNode.getFirstParentLoc());
 					astChange.compare(leftNode, rightNode, collector, true);
 					queue.offer(leftNode);
 					rightNode.setFirstChange(rightNode.getChangedFile().getChange());
 				}
 
 				// update changes from 2nd parent
-				if (rightNode.hasSecondParent()) {
-					ChangedFileNode leftNode = db.fileLocIdToNode.get(rightNode.getSecondParent());
+				if (rightNode.hasSecondParentLoc()) {
+					ChangedFileNode leftNode = db.fileDB.get(rightNode.getSecondParentLoc());
 					astChange.compare(leftNode, rightNode, collector, false);
 					queue.offer(leftNode);
 					ChangeKind change = leftNode.getChangedFile().getObjectId()

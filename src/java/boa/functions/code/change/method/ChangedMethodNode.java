@@ -2,14 +2,13 @@ package boa.functions.code.change.method;
 
 import boa.functions.code.change.ChangedASTNode;
 import boa.functions.code.change.declaration.ChangedDeclNode;
-import boa.functions.code.change.file.ChangedFileLocation;
 
 public class ChangedMethodNode extends ChangedASTNode {
 
 	private ChangedDeclNode declNode;
 	private ChangedMethodLocation loc;
-	private ChangedFileLocation firstParent;
-	private ChangedFileLocation secondParent;
+	private ChangedMethodNode firstParent;
+	private ChangedMethodNode secondParent;
 
 	public ChangedMethodNode(String sig, ChangedDeclNode declNode, ChangedMethodLocation loc) {
 		super(sig);
@@ -61,19 +60,19 @@ public class ChangedMethodNode extends ChangedASTNode {
 		return declNode + " " + loc.getIdx() + " " + signature;
 	}
 
-	public ChangedFileLocation getSecondParent() {
+	public ChangedMethodNode getSecondParent() {
 		return secondParent;
 	}
 
-	public void setSecondParent(ChangedFileLocation secondParent) {
+	public void setSecondParent(ChangedMethodNode secondParent) {
 		this.secondParent = secondParent;
 	}
 
-	public ChangedFileLocation getFirstParent() {
+	public ChangedMethodNode getFirstParent() {
 		return firstParent;
 	}
 
-	public void setFirstParent(ChangedFileLocation firstParent) {
+	public void setFirstParent(ChangedMethodNode firstParent) {
 		this.firstParent = firstParent;
 	}
 	

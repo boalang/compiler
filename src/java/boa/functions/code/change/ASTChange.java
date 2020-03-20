@@ -42,17 +42,17 @@ public class ASTChange {
 	}
 
 	private void update(ChangedDeclNode declNode, Variable v, ChangeKind change, boolean isFirstParent) {
-		ChangedFieldNode fieldNode = declNode.getFieldNode(getSignature(v), db.fieldDB);
+		ChangedFieldNode fieldNode = declNode.getFieldNode(getSignature(v));
 		updateChange(fieldNode, change, isFirstParent);
 	}
 
 	private void update(ChangedDeclNode declNode, Method m, ChangeKind change, boolean isFirstParent) {
-		ChangedMethodNode methodNode = declNode.getMethodNode(getSignature(m), db.methodDB);
+		ChangedMethodNode methodNode = declNode.getMethodNode(getSignature(m));
 		updateChange(methodNode, change, isFirstParent);
 	}
 
 	private ChangedDeclNode update(ChangedFileNode fileNode, Declaration decl, ChangeKind change, boolean isFirstParent) {
-		ChangedDeclNode declNode = fileNode.getDeclNode(decl.getFullyQualifiedName(), db.declDB);
+		ChangedDeclNode declNode = fileNode.getDeclNode(decl.getFullyQualifiedName());
 		updateChange(declNode, change, isFirstParent);
 		return declNode;
 	}
@@ -78,10 +78,7 @@ public class ASTChange {
 	public void compare(ChangedFileNode leftNode, ChangedFileNode rightNode, DeclCollector declCollector, boolean isFirstParent)
 			throws Exception {
 		List<Declaration> leftDecls = null;
-		
-//		if (!isFirstParent && rightNode.getASTChangeCount() == 0) {
-//			System.out.println(rightNode); 
-//		}
+
 
 		// both have the same content id (COPIED)
 		if (leftNode.getChangedFile().getObjectId().equals(rightNode.getChangedFile().getObjectId())) {

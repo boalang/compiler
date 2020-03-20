@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import boa.functions.FunctionSpec;
+import boa.functions.code.change.declaration.DeclChangeForest;
 import boa.functions.code.change.file.FileChangeForest;
 import boa.functions.code.change.file.FileTree;
 import boa.types.Code.CodeRepository;
@@ -34,14 +35,13 @@ public class BoaCodeChangeIntrinsics {
 		long afterUsedMem1=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();		
 
 		forest.updateASTChanges();
-//		DeclarationChangeForest declForest = new DeclarationChangeForest(forest);
-//		declForest = null;
+		DeclChangeForest declForest = new DeclChangeForest(gd);
 		cleanup();
 
 		System.out.println("Distinct Files: " + forest.db.fileNames.size());
 		System.out.println("Total Revs: " + revCount);
 		System.out.println("Total Trees: " + trees.size());
-		System.out.println("Total refs: " + gd.refBonds.size());
+		System.out.println("Total refs: " + gd.refDB.size());
 		System.out.println("Total decl changes: " + gd.declDB.size());
 		System.out.println("Total method changes: " + gd.methodDB.size());
 		System.out.println("Total field changes: " + gd.fieldDB.size());

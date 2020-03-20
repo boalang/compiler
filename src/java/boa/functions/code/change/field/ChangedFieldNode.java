@@ -7,8 +7,8 @@ public class ChangedFieldNode extends ChangedASTNode {
 
 	private ChangedDeclNode declNode;
 	private ChangedFieldLocation loc;
-	private ChangedFieldLocation firstParent;
-	private ChangedFieldLocation secondParent;
+	private ChangedFieldNode firstParent;
+	private ChangedFieldNode secondParent;
 
 	public ChangedFieldNode(String sig, ChangedDeclNode declNode, ChangedFieldLocation loc) {
 		super(sig);
@@ -68,19 +68,19 @@ public class ChangedFieldNode extends ChangedASTNode {
 		return secondParent != null;
 	}
 
-	public ChangedFieldLocation getFirstParent() {
+	public ChangedFieldNode getFirstParent() {
 		return firstParent;
 	}
 
-	public void setFirstParent(ChangedFieldLocation firstParent) {
+	public void setFirstParent(ChangedFieldNode firstParent) {
 		this.firstParent = firstParent;
 	}
 
-	public ChangedFieldLocation getSecondParent() {
+	public ChangedFieldNode getSecondParent() {
 		return secondParent;
 	}
 
-	public void setSecondParent(ChangedFieldLocation secondParent) {
+	public void setSecondParent(ChangedFieldNode secondParent) {
 		this.secondParent = secondParent;
 	}
 
