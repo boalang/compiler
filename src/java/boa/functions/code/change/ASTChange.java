@@ -79,9 +79,9 @@ public class ASTChange {
 			throws Exception {
 		List<Declaration> leftDecls = null;
 		
-		if (!isFirstParent && rightNode.getASTChangeCount() == 0) {
-			System.out.println(rightNode); 
-		}
+//		if (!isFirstParent && rightNode.getASTChangeCount() == 0) {
+//			System.out.println(rightNode); 
+//		}
 
 		// both have the same content id (COPIED)
 		if (leftNode.getChangedFile().getObjectId().equals(rightNode.getChangedFile().getObjectId())) {

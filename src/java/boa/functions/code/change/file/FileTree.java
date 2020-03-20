@@ -1,8 +1,6 @@
 package boa.functions.code.change.file;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Stack;
 import java.util.TreeSet;
 
@@ -31,8 +29,8 @@ public class FileTree {
 	public boolean linkAll() {
 		while (!prevFileLocs.isEmpty()) {
 			ChangedFileLocation loc = prevFileLocs.pop();
-			if (loc == null) // check null
-				continue;
+			if (this.forest.debug)
+				System.out.println("pop parent " + loc);
 			RevNode prevRev = forest.db.revIdxMap.get(loc.getRevIdx());
 			if (!add(new ChangedFileNode(prevRev.getRevision().getFiles(loc.getIdx()), prevRev, loc)))
 				return false;
@@ -41,7 +39,7 @@ public class FileTree {
 	}
 
 	private boolean add(ChangedFileNode node) {
-		if (this.forest.debug)
+		if (forest.debug)
 			System.out.println("try to add node " + node.getLoc() + " " + node.getChangedFile().getChange()
 					+ " to list " + this.id);
 		// check if the node is added by some trees
@@ -49,13 +47,16 @@ public class FileTree {
 //			System.out.println("merge");
 			int listIdx = forest.db.fileLocIdToNode.get(node.getLoc()).getTreeObjectId().getAsInt();
 			if (listIdx != this.id.getAsInt()) {
-				if (this.forest.debug)
+				if (forest.debug)
 					System.out.println("node " + node.getLoc() + " already added to list " + listIdx);
+				String thisId = id.toString();
 				forest.trees.get(listIdx).merge(this).linkAll();
 				if (this.forest.debug)
-					System.out.println("drop list " + this.id);
+					System.err.println("drop list " + thisId);
 				return false;
 			}
+			if (forest.debug)
+				System.out.println("node " + node.getLoc() + " already in the same tree");
 			return true;
 		}
 		// update tree
@@ -67,21 +68,28 @@ public class FileTree {
 		forest.db.fileNames.add(node.getChangedFile().getName());
 		// update prev queues
 		updatePrevLocs(node);
-		if (node.hasFirstParent())
-			prevFileLocs.push(node.getFirstParent());
-		if (node.hasSecondParent())
+		if (node.hasSecondParent()) {
 			prevFileLocs.push(node.getSecondParent());
+			if (forest.debug)
+				System.out.println("push 2nd parent " + node.getSecondParent());			
+		}
+		if (node.hasFirstParent()) {
+			prevFileLocs.push(node.getFirstParent());
+			if (forest.debug)
+				System.out.println("push 1st parent " + node.getFirstParent());
+		}
 		return true;
 	}
 	
 	private void updatePrevLocs(ChangedFileNode node) {
-		List<ChangedFileLocation> res = new ArrayList<ChangedFileLocation>();
 		Revision r = node.getRev().getRevision();
 		int prevCount = node.getChangedFile().getPreviousVersionsCount();
+		if (forest.debug)
+			System.out.println("node " + node.getLoc() + " has revision parents: " + r.getParentsCount() + " and conetent parents: " + prevCount);
 		if (r.getParentsCount() == 1 && prevCount > 1) {
 			ChangedFileLocation prevLoc = findPrevious(node.getChangedFile(), r.getParents(0));
 			if (prevLoc != null)
-				res.add(prevLoc);
+				node.setFirstParent(prevLoc);
 		} else if (r.getParentsCount() == 1 && prevCount == 1) {
 			int revIdx = node.getChangedFile().getPreviousVersions(0);
 			int fileIdx = node.getChangedFile().getPreviousIndices(0);

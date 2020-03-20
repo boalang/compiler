@@ -43,6 +43,8 @@ public class FileChangeForest {
 			RevNode r = db.revIdxMap.get(i);
 			for (ChangedFileNode fn : r.getJavaFileNodes()) {
 				if (!db.fileLocIdToNode.containsKey(fn.getLoc())) {
+					if (debug)
+						System.err.println("start new node " + fn.getLoc());
 					FileTree tree = new FileTree(this, fn, trees.size());
 					if (tree.linkAll())
 						trees.add(tree);
