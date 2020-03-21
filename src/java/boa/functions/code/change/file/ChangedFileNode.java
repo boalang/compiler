@@ -17,8 +17,8 @@ public class ChangedFileNode {
 	private ChangedFileLocation loc;
 	private TreeObjectId treeId;
 
-	private ChangedFileLocation firstParentLoc;
-	private ChangedFileLocation secondParentLoc;
+	private ChangedFileNode firstParent;
+	private ChangedFileNode secondParent;
 
 	// changes
 	private ChangeKind firstChange;
@@ -80,10 +80,6 @@ public class ChangedFileNode {
 		return r;
 	}
 
-	public TreeObjectId getListId() {
-		return treeId;
-	}
-
 	public RefactoringBonds getLeftRefBonds() {
 		return leftRefBonds;
 	}
@@ -137,28 +133,28 @@ public class ChangedFileNode {
 		return count;
 	}
 
-	public ChangedFileLocation getFirstParentLoc() {
-		return firstParentLoc;
+	public ChangedFileNode getFirstParent() {
+		return firstParent;
 	}
 
-	public void setFirstParentLoc(ChangedFileLocation firstParent) {
-		this.firstParentLoc = firstParent;
+	public void setFirstParent(ChangedFileNode firstParent) {
+		this.firstParent = firstParent;
 	}
 
-	public boolean hasFirstParentLoc() {
-		return firstParentLoc != null;
+	public boolean hasFirstParent() {
+		return firstParent != null;
 	}
 
-	public ChangedFileLocation getSecondParentLoc() {
-		return secondParentLoc;
+	public ChangedFileNode getSecondParent() {
+		return secondParent;
 	}
 
-	public void setSecondParentLoc(ChangedFileLocation secondParent) {
-		this.secondParentLoc = secondParent;
+	public void setSecondParent(ChangedFileNode secondParent) {
+		this.secondParent = secondParent;
 	}
 
-	public boolean hasSecondParentLoc() {
-		return secondParentLoc != null;
+	public boolean hasSecondParent() {
+		return secondParent != null;
 	}
 
 	public ChangeKind getFirstChange() {
@@ -175,6 +171,10 @@ public class ChangedFileNode {
 
 	public void setSecondChange(ChangeKind secondChange) {
 		this.secondChange = secondChange;
+	}
+
+	public HashMap<String, Integer> getDeclChangeMap() {
+		return declChangeMap;
 	}
 
 	public ChangedDeclNode getDeclChange(String fqn) {

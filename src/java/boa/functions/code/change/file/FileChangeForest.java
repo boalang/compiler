@@ -26,7 +26,6 @@ public class FileChangeForest {
 
 	private List<FileTree> trees = new ArrayList<FileTree>();
 	public final ChangeDataBase db;
-
 	protected boolean debug = false;
 
 	public FileChangeForest(ChangeDataBase gd, boolean debug) {
@@ -132,16 +131,16 @@ public class FileChangeForest {
 				}
 				
 				// update changes from 1st parent
-				if (rightNode.hasFirstParentLoc()) {
-					ChangedFileNode leftNode = db.fileDB.get(rightNode.getFirstParentLoc());
+				if (rightNode.hasFirstParent()) {
+					ChangedFileNode leftNode = rightNode.getFirstParent();
 					astChange.compare(leftNode, rightNode, collector, true);
 					queue.offer(leftNode);
 					rightNode.setFirstChange(rightNode.getChangedFile().getChange());
 				}
 
 				// update changes from 2nd parent
-				if (rightNode.hasSecondParentLoc()) {
-					ChangedFileNode leftNode = db.fileDB.get(rightNode.getSecondParentLoc());
+				if (rightNode.hasSecondParent()) {
+					ChangedFileNode leftNode = rightNode.getSecondParent();
 					astChange.compare(leftNode, rightNode, collector, false);
 					queue.offer(leftNode);
 					ChangeKind change = leftNode.getChangedFile().getObjectId()

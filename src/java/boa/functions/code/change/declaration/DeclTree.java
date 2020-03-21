@@ -4,17 +4,15 @@ import java.util.Stack;
 import java.util.TreeSet;
 
 import boa.functions.code.change.TreeObjectId;
-import boa.functions.code.change.file.ChangedFileLocation;
 import boa.functions.code.change.file.ChangedFileNode;
-import boa.types.Shared.ChangeKind;
 
 public class DeclTree {
-	
+
 	private final DeclChangeForest forest;
 	private TreeObjectId id;
 	private TreeSet<ChangedDeclLocation> declLocs = new TreeSet<ChangedDeclLocation>();
 	private Stack<ChangedDeclNode> prevNodes = new Stack<ChangedDeclNode>();
-	
+
 	public DeclTree(DeclChangeForest forest, ChangedDeclNode node, int treeIdx) {
 		this.forest = forest;
 		this.id = new TreeObjectId(treeIdx);
@@ -24,6 +22,8 @@ public class DeclTree {
 	public boolean linkAll() {
 		while (!prevNodes.isEmpty()) {
 			ChangedDeclNode node = prevNodes.pop();
+			if (this.forest.debug)
+				System.out.println("pop parent " + node.getLoc());
 			if (!add(node))
 				return false;
 		}
@@ -31,16 +31,25 @@ public class DeclTree {
 	}
 
 	private boolean add(ChangedDeclNode node) {
+		if (forest.debug)
+			System.out.println("try to add node " + node.getLoc() + " to list " + this.id);
 		// case 1: check if the node is added by some trees
 		if (forest.db.declDB.containsKey(node.getLoc())) {
 			int listIdx = forest.db.declDB.get(node.getLoc()).getTreeId().getAsInt();
 			if (listIdx != this.id.getAsInt()) {
+				if (forest.debug)
+					System.out.println("node " + node.getLoc() + " already added to list " + listIdx);
+				String thisId = id.toString();
 				forest.getTreesAsList().get(listIdx).merge(this).linkAll();
+				if (forest.debug)
+					System.out.println("drop list " + thisId);
 				return false;
 			}
+			if (forest.debug)
+				System.out.println("node " + node.getLoc() + " already in the same tree");
 			return true;
 		}
-		
+
 		// case 2: update tree
 		declLocs.add(node.getLoc());
 		// node update tree id
@@ -48,45 +57,60 @@ public class DeclTree {
 		// update global nodes
 		forest.db.declDB.put(node.getLoc(), node);
 		// update prev queues
-		updatePrevLocs(node);
+		updatePrevNodes(node);
 		// push 2nd parent first for dfs first-parent branch first
 		if (node.hasSecondParent()) {
-			prevNodes.push(node.getSecondParent());			
+			prevNodes.push(node.getSecondParent());
+			if (forest.debug)
+				System.out.println("push 2nd parent " + node.getSecondParent().getLoc());
 		}
 		if (node.hasFirstParent()) {
 			prevNodes.push(node.getFirstParent());
+			if (forest.debug)
+				System.out.println("push 1st parent " + node.getFirstParent().getLoc());
 		}
 		return true;
 	}
 
-	private void updatePrevLocs(ChangedDeclNode node) {
+	private void updatePrevNodes(ChangedDeclNode node) {
 		ChangedFileNode fn = node.getFileNode();
-		if (fn.hasFirstParentLoc()) {
-			ChangedDeclNode firstParent = findPrevious(node, fn.getFirstParentLoc());
+		if (fn.hasFirstParent()) {
+			if (forest.debug)
+				System.out.println("file node " + fn.getLoc() + " has 1st parent " + fn.getFirstParent().getLoc());
+			ChangedDeclNode firstParent = findPreviousNode(node, fn.getFirstParent());
 			node.setFirstParent(firstParent);
 		}
-		if (fn.hasSecondParentLoc()) {
-			ChangedDeclNode secondParent = findPrevious(node, fn.getSecondParentLoc());
+		if (fn.hasSecondParent()) {
+			if (forest.debug)
+				System.out.println("file node " + fn.getLoc() + " has 2nd parent " + fn.getSecondParent().getLoc());
+			ChangedDeclNode secondParent = findPreviousNode(node, fn.getSecondParent());
 			node.setSecondParent(secondParent);
 		}
 	}
 
-	private ChangedDeclNode findPrevious(ChangedDeclNode node, ChangedFileLocation firstParentLoc) {
+	private ChangedDeclNode findPreviousNode(ChangedDeclNode node, ChangedFileNode firstParent) {
 		String fqn = node.getSignature();
-		ChangedFileNode cur = forest.db.fileDB.get(firstParentLoc);
+		if (forest.debug)
+			System.out.println("try to find decl name " + fqn);
+		ChangedFileNode cur = firstParent;
 		while (true) {
 			ChangedDeclNode prev = cur.getDeclChange(fqn);
+			if (forest.debug)
+				System.out.println("file node " + cur.getLoc() + " has map " + cur.getDeclChangeMap()
+						+ " with list size " + cur.getDeclChanges().size());
 			if (prev != null) {
 				return prev;
 			}
-			if (!cur.hasFirstParentLoc())
+			if (!cur.hasFirstParent())
 				return null;
 			// check first-parent branch
-			cur = forest.db.fileDB.get(cur.getFirstParentLoc());
+			cur = cur.getFirstParent();
 		}
 	}
 
 	private DeclTree merge(DeclTree tree) {
+		if (forest.debug)
+			System.out.println("list " + this.id + " merge list " + tree.id);
 		// update list id
 		this.declLocs.addAll(tree.declLocs);
 		// update list id
@@ -100,10 +124,9 @@ public class DeclTree {
 		}
 		return this;
 	}
-	
+
 	public TreeSet<ChangedDeclLocation> getDeclLocs() {
 		return declLocs;
 	}
-	
-	
+
 }
