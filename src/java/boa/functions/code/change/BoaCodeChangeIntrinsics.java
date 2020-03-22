@@ -8,9 +8,9 @@ import java.util.HashSet;
 import java.util.List;
 
 import boa.functions.FunctionSpec;
-import boa.functions.code.change.declaration.DeclChangeForest;
+import boa.functions.code.change.declaration.DeclForest;
 import boa.functions.code.change.declaration.DeclTree;
-import boa.functions.code.change.file.FileChangeForest;
+import boa.functions.code.change.file.FileForest;
 import boa.functions.code.change.file.FileTree;
 import boa.types.Code.CodeRepository;
 import boa.types.Diff.ChangedFile;
@@ -32,14 +32,14 @@ public class BoaCodeChangeIntrinsics {
 
 		int revCount = getRevisionsCount(cr);
 		ChangeDataBase gd = new ChangeDataBase(cr, revCount);
-		FileChangeForest forest = new FileChangeForest(gd, false);
+		FileForest forest = new FileForest(gd, false);
 		forest.updateWithRefs(p, refRevIds, null);
 		List<FileTree> fileTrees = forest.getTreesAsList();
 
 		long afterUsedMem1 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
 		forest.updateASTChanges();
-		DeclChangeForest declForest = new DeclChangeForest(gd, false);
+		DeclForest declForest = new DeclForest(gd, false);
 		List<DeclTree> declTrees = declForest.getTreesAsList();
 		cleanup();
 

@@ -7,12 +7,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.TreeMap;
-import boa.functions.code.change.declaration.ChangedDeclLocation;
-import boa.functions.code.change.declaration.ChangedDeclNode;
-import boa.functions.code.change.field.ChangedFieldLocation;
-import boa.functions.code.change.field.ChangedFieldNode;
-import boa.functions.code.change.file.ChangedFileLocation;
-import boa.functions.code.change.file.ChangedFileNode;
+import boa.functions.code.change.declaration.DeclLocation;
+import boa.functions.code.change.declaration.DeclNode;
+import boa.functions.code.change.field.FieldLocation;
+import boa.functions.code.change.field.FieldNode;
+import boa.functions.code.change.file.FileLocation;
+import boa.functions.code.change.file.FileNode;
 import boa.functions.code.change.method.ChangedMethodLocation;
 import boa.functions.code.change.method.ChangedMethodNode;
 import boa.functions.code.change.refactoring.RefactoringBond;
@@ -27,19 +27,19 @@ public class ChangeDataBase {
 	public HashMap<String, RevNode> revIdMap = new HashMap<String, RevNode>();
 
 	// file change data
-	public TreeMap<ChangedFileLocation, ChangedFileNode> fileDB = new TreeMap<ChangedFileLocation, ChangedFileNode>();
+	public TreeMap<FileLocation, FileNode> fileDB = new TreeMap<FileLocation, FileNode>();
 
 	// refactoring data
 	public List<RefactoringBond> refDB = new ArrayList<RefactoringBond>();
 
 	// declaration data
-	public TreeMap<ChangedDeclLocation, ChangedDeclNode> declDB = new TreeMap<ChangedDeclLocation, ChangedDeclNode>();
+	public TreeMap<DeclLocation, DeclNode> declDB = new TreeMap<DeclLocation, DeclNode>();
 
 	// field change data
 	public TreeMap<ChangedMethodLocation, ChangedMethodNode> methodDB = new TreeMap<ChangedMethodLocation, ChangedMethodNode>();
 
 	// method change data
-	public TreeMap<ChangedFieldLocation, ChangedFieldNode> fieldDB = new TreeMap<ChangedFieldLocation, ChangedFieldNode>();
+	public TreeMap<FieldLocation, FieldNode> fieldDB = new TreeMap<FieldLocation, FieldNode>();
 
 	public ChangeDataBase(CodeRepository cr, int revCount) {
 		for (int i = 0; i < revCount; i++)

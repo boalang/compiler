@@ -1,28 +1,28 @@
 package boa.functions.code.change.method;
 
 import boa.functions.code.change.ChangedASTNode;
-import boa.functions.code.change.declaration.ChangedDeclNode;
+import boa.functions.code.change.declaration.DeclNode;
 
 public class ChangedMethodNode extends ChangedASTNode {
 
-	private ChangedDeclNode declNode;
+	private DeclNode declNode;
 	private ChangedMethodLocation loc;
 	private ChangedMethodNode firstParent;
 	private ChangedMethodNode secondParent;
 
-	public ChangedMethodNode(String sig, ChangedDeclNode declNode, ChangedMethodLocation loc) {
+	public ChangedMethodNode(String sig, DeclNode declNode, ChangedMethodLocation loc) {
 		super(sig);
 		this.declNode = declNode;
 		this.loc = loc;
 	}
 
-	public ChangedMethodNode(String sig, ChangedDeclNode declNode, int size) {
+	public ChangedMethodNode(String sig, DeclNode declNode, int size) {
 		super(sig);
 		this.declNode = declNode;
 		this.loc = new ChangedMethodLocation(declNode.getLoc(), size);
 	}
 
-	public ChangedDeclNode getDeclNode() {
+	public DeclNode getDeclNode() {
 		return declNode;
 	}
 

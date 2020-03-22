@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import boa.functions.code.change.ChangeDataBase;
-import boa.functions.code.change.file.ChangedFileLocation;
-import boa.functions.code.change.file.ChangedFileNode;
+import boa.functions.code.change.file.FileLocation;
+import boa.functions.code.change.file.FileNode;
 
-public class DeclChangeForest {
+public class DeclForest {
 
 	protected List<DeclTree> trees = new ArrayList<DeclTree>();
 	protected ChangeDataBase db;
@@ -20,16 +20,16 @@ public class DeclChangeForest {
 	protected HashSet<String> refTypes = new HashSet<String>(
 			Arrays.asList(new String[] { "Move Class", "Rename Class" }));
 
-	public DeclChangeForest(ChangeDataBase db, boolean debug) throws Exception {
+	public DeclForest(ChangeDataBase db, boolean debug) throws Exception {
 		this.db = db;
 		this.debug = debug;
 		this.buildTrees();
 	}
 
 	private void buildTrees() throws Exception {
-		for (Entry<ChangedFileLocation, ChangedFileNode> e : db.fileDB.descendingMap().entrySet()) {
-			ChangedFileNode fn = e.getValue();
-			for (ChangedDeclNode declNode : fn.getDeclChanges()) {
+		for (Entry<FileLocation, FileNode> e : db.fileDB.descendingMap().entrySet()) {
+			FileNode fn = e.getValue();
+			for (DeclNode declNode : fn.getDeclChanges()) {
 				if (!db.declDB.containsKey(declNode.getLoc())) {
 					if (debug)
 						System.out.println("start new node " + declNode.getLoc());

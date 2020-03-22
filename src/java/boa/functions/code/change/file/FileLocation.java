@@ -2,11 +2,11 @@ package boa.functions.code.change.file;
 
 import boa.functions.code.change.Location;
 
-public class ChangedFileLocation extends Location implements Comparable<ChangedFileLocation> {
+public class FileLocation extends Location implements Comparable<FileLocation> {
 	
 	private int revIdx;
 	
-	public ChangedFileLocation(int revIdx, int fileIdx) {
+	public FileLocation(int revIdx, int fileIdx) {
 		super(fileIdx);
 		this.revIdx = revIdx;
 	}
@@ -35,7 +35,7 @@ public class ChangedFileLocation extends Location implements Comparable<ChangedF
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ChangedFileLocation other = (ChangedFileLocation) obj;
+		FileLocation other = (FileLocation) obj;
 		if (revIdx != other.revIdx)
 			return false;
 		return true;
@@ -47,7 +47,7 @@ public class ChangedFileLocation extends Location implements Comparable<ChangedF
 	}
 
 	@Override
-	public int compareTo(ChangedFileLocation o) {
+	public int compareTo(FileLocation o) {
 		int comp = this.revIdx - o.getRevIdx();
 		return comp == 0 ? this.getIdx() - o.getIdx() : comp;
 	}

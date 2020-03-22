@@ -1,22 +1,22 @@
 package boa.functions.code.change.method;
 
 import boa.functions.code.change.Location;
-import boa.functions.code.change.declaration.ChangedDeclLocation;
+import boa.functions.code.change.declaration.DeclLocation;
 
 public class ChangedMethodLocation extends Location implements Comparable<ChangedMethodLocation> {
 
-	private ChangedDeclLocation declLoc;
+	private DeclLocation declLoc;
 	
-	public ChangedMethodLocation(ChangedDeclLocation declLoc, int methodIdx) {
+	public ChangedMethodLocation(DeclLocation declLoc, int methodIdx) {
 		super(methodIdx);
 		this.setDeclLoc(declLoc);
 	}
 	
-	public ChangedDeclLocation getDeclLoc() {
+	public DeclLocation getDeclLoc() {
 		return declLoc;
 	}
 
-	public void setDeclLoc(ChangedDeclLocation declLoc) {
+	public void setDeclLoc(DeclLocation declLoc) {
 		this.declLoc = declLoc;
 	}
 

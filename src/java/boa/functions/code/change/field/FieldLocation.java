@@ -1,22 +1,22 @@
 package boa.functions.code.change.field;
 
 import boa.functions.code.change.Location;
-import boa.functions.code.change.declaration.ChangedDeclLocation;
+import boa.functions.code.change.declaration.DeclLocation;
 
-public class ChangedFieldLocation extends Location implements Comparable<ChangedFieldLocation> {
+public class FieldLocation extends Location implements Comparable<FieldLocation> {
 
-	private ChangedDeclLocation declLoc;
+	private DeclLocation declLoc;
 	
-	public ChangedFieldLocation(ChangedDeclLocation declLoc, int fieldIdx) {
+	public FieldLocation(DeclLocation declLoc, int fieldIdx) {
 		super(fieldIdx);
 		this.setDeclLoc(declLoc);
 	}
 	
-	public ChangedDeclLocation getDeclLoc() {
+	public DeclLocation getDeclLoc() {
 		return declLoc;
 	}
 
-	public void setDeclLoc(ChangedDeclLocation declLoc) {
+	public void setDeclLoc(DeclLocation declLoc) {
 		this.declLoc = declLoc;
 	}
 
@@ -36,7 +36,7 @@ public class ChangedFieldLocation extends Location implements Comparable<Changed
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ChangedFieldLocation other = (ChangedFieldLocation) obj;
+		FieldLocation other = (FieldLocation) obj;
 		if (declLoc == null) {
 			if (other.declLoc != null)
 				return false;
@@ -51,7 +51,7 @@ public class ChangedFieldLocation extends Location implements Comparable<Changed
 	}
 
 	@Override
-	public int compareTo(ChangedFieldLocation o) {
+	public int compareTo(FieldLocation o) {
 		int comp = this.declLoc.compareTo(o.getDeclLoc());
 		return comp == 0 ? this.getIdx() - o.getIdx() : comp;
 	}

@@ -22,13 +22,13 @@ import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 import boa.types.Toplevel.Project;
 
-public class FileChangeForest {
+public class FileForest {
 
 	private List<FileTree> trees = new ArrayList<FileTree>();
 	public final ChangeDataBase db;
 	protected boolean debug = false;
 
-	public FileChangeForest(ChangeDataBase gd, boolean debug) {
+	public FileForest(ChangeDataBase gd, boolean debug) {
 		this.db = gd;
 		this.debug = debug;
 		buildTrees();
@@ -37,7 +37,7 @@ public class FileChangeForest {
 	private void buildTrees() {
 		for (int i = db.revIdxMap.size() - 1; i >= 0; i--) {
 			RevNode r = db.revIdxMap.get(i);
-			for (ChangedFileNode fn : r.getJavaFileNodes()) {
+			for (FileNode fn : r.getJavaFileNodes()) {
 				if (!db.fileDB.containsKey(fn.getLoc())) {
 					if (debug)
 						System.err.println("start new node " + fn.getLoc());
@@ -61,9 +61,9 @@ public class FileChangeForest {
 					: getRefactorings(p, r.getRevision(), refTypes);
 			for (CodeRefactoring ref : refs) {
 				String beforeFilePath = ref.getLeftSideLocations(0).getFilePath();
-				ChangedFileNode fileBefore = findLastModification(beforeFilePath, r);
+				FileNode fileBefore = findLastModification(beforeFilePath, r);
 				String afterFilePath = ref.getRightSideLocations(0).getFilePath();
-				ChangedFileNode fileAfter = getFileNodeFrom(afterFilePath, r);
+				FileNode fileAfter = getFileNodeFrom(afterFilePath, r);
 				RefactoringBond refBond = new RefactoringBond(fileBefore.getLoc(), fileAfter.getLoc(), ref);
 				int refBondIdx = db.refDB.size();
 				db.refDB.add(refBond);
@@ -81,8 +81,8 @@ public class FileChangeForest {
 		}
 	}
 
-	private ChangedFileNode findLastModification(String fileName, RevNode r) {
-		ChangedFileNode fn = getFileNodeFrom(fileName, r);
+	private FileNode findLastModification(String fileName, RevNode r) {
+		FileNode fn = getFileNodeFrom(fileName, r);
 		// case: extract interface from added file
 		if (fn != null && fn.getChangedFile().getChange() == ChangeKind.ADDED) {
 			return fn;
@@ -101,27 +101,27 @@ public class FileChangeForest {
 		} while (true);
 	}
 
-	private ChangedFileNode getFileNodeFrom(String filePath, RevNode r) {
+	private FileNode getFileNodeFrom(String filePath, RevNode r) {
 		for (ChangedFile cf : r.getRevision().getFilesList())
 			if (cf.getName().equals(filePath))
-				return db.fileDB.get(new ChangedFileLocation(cf.getRevisionIdx(), cf.getFileIdx()));
+				return db.fileDB.get(new FileLocation(cf.getRevisionIdx(), cf.getFileIdx()));
 		return null;
 	}
 
-	private HashSet<ChangedFileLocation> visited = new HashSet<ChangedFileLocation>();
+	private HashSet<FileLocation> visited = new HashSet<FileLocation>();
 
 	// update ast changes
 	public void updateASTChanges() throws Exception {
 		ASTChange astChange = new ASTChange(db);
 		DeclCollector collector = new DeclCollector();
-		for (Entry<ChangedFileLocation, ChangedFileNode> e : db.fileDB.descendingMap().entrySet()) {
-			ChangedFileNode fn = e.getValue();
+		for (Entry<FileLocation, FileNode> e : db.fileDB.descendingMap().entrySet()) {
+			FileNode fn = e.getValue();
 			if (visited.contains(fn.getLoc()))
 				continue;
-			Queue<ChangedFileNode> queue = new LinkedList<ChangedFileNode>();
+			Queue<FileNode> queue = new LinkedList<FileNode>();
 			queue.offer(fn);
 			while (!queue.isEmpty()) {
-				ChangedFileNode rightNode = queue.poll();
+				FileNode rightNode = queue.poll();
 //				System.out.println(rightNode.getLoc());
 				visited.add(rightNode.getLoc());
 
@@ -132,7 +132,7 @@ public class FileChangeForest {
 				
 				// update changes from 1st parent
 				if (rightNode.hasFirstParent()) {
-					ChangedFileNode leftNode = rightNode.getFirstParent();
+					FileNode leftNode = rightNode.getFirstParent();
 					astChange.compare(leftNode, rightNode, collector, true);
 					queue.offer(leftNode);
 					rightNode.setFirstChange(rightNode.getChangedFile().getChange());
@@ -140,7 +140,7 @@ public class FileChangeForest {
 
 				// update changes from 2nd parent
 				if (rightNode.hasSecondParent()) {
-					ChangedFileNode leftNode = rightNode.getSecondParent();
+					FileNode leftNode = rightNode.getSecondParent();
 					astChange.compare(leftNode, rightNode, collector, false);
 					queue.offer(leftNode);
 					ChangeKind change = leftNode.getChangedFile().getObjectId()
@@ -162,7 +162,7 @@ public class FileChangeForest {
 			return false;
 		}
 
-		public List<Declaration> getDeclNodes(ChangedFileNode fn) throws Exception {
+		public List<Declaration> getDeclNodes(FileNode fn) throws Exception {
 			this.nodes = new ArrayList<Declaration>();
 			this.visit(fn.getChangedFile());
 			return nodes;

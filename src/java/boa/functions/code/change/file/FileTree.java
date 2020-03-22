@@ -12,15 +12,15 @@ import boa.types.Shared.ChangeKind;
 
 public class FileTree {
 
-	private final FileChangeForest forest;
+	private final FileForest forest;
 	private TreeObjectId id;
-	private TreeSet<ChangedFileLocation> fileLocs = new TreeSet<ChangedFileLocation>();
-	private Stack<ChangedFileNode> prevNodes = new Stack<ChangedFileNode>();
+	private TreeSet<FileLocation> fileLocs = new TreeSet<FileLocation>();
+	private Stack<FileNode> prevNodes = new Stack<FileNode>();
 	// refactoring info
-	public HashSet<ChangedFileLocation> fileBeforeRef = new HashSet<ChangedFileLocation>();
-	public HashSet<ChangedFileLocation> fileAfterRef = new HashSet<ChangedFileLocation>();
+	public HashSet<FileLocation> fileBeforeRef = new HashSet<FileLocation>();
+	public HashSet<FileLocation> fileAfterRef = new HashSet<FileLocation>();
 
-	public FileTree(FileChangeForest fileChangeForest, ChangedFileNode node, int treeIdx) {
+	public FileTree(FileForest fileChangeForest, FileNode node, int treeIdx) {
 		this.forest = fileChangeForest;
 		this.id = new TreeObjectId(treeIdx);
 		add(node);
@@ -28,7 +28,7 @@ public class FileTree {
 
 	public boolean linkAll() {
 		while (!prevNodes.isEmpty()) {
-			ChangedFileNode node = prevNodes.pop();
+			FileNode node = prevNodes.pop();
 			if (this.forest.debug)
 				System.out.println("pop parent " + node.getLoc());
 			if (!add(node))
@@ -37,7 +37,7 @@ public class FileTree {
 		return true;
 	}
 
-	private boolean add(ChangedFileNode node) {
+	private boolean add(FileNode node) {
 		if (forest.debug)
 			System.out.println("try to add node " + node.getLoc() + " " + node.getChangedFile().getChange()
 					+ " to list " + this.id);
@@ -81,9 +81,9 @@ public class FileTree {
 		return true;
 	}
 
-	private void updatePrevNodes(ChangedFileNode node) {
+	private void updatePrevNodes(FileNode node) {
 		for (int i = 0; i < node.getRev().getRevision().getParentsCount(); i++) {
-			ChangedFileNode prevNode = getPreviousNode(node, i);
+			FileNode prevNode = getPreviousNode(node, i);
 			if (prevNode != null) {
 				// check if the prevNode is already added to database
 				if (forest.db.fileDB.containsKey(prevNode.getLoc()))
@@ -96,7 +96,7 @@ public class FileTree {
 		}
 	}
 
-	private ChangedFileNode getPreviousNode(ChangedFileNode node, int i) {
+	private FileNode getPreviousNode(FileNode node, int i) {
 		ChangedFile cf = node.getChangedFile();
 		Revision r = node.getRev().getRevision();
 		int prevContentCount = node.getChangedFile().getPreviousVersionsCount();
@@ -105,17 +105,17 @@ public class FileTree {
 			int revIdx = node.getChangedFile().getPreviousVersions(0);
 			int fileIdx = node.getChangedFile().getPreviousIndices(0);
 			RevNode prevRev = forest.db.revIdxMap.get(revIdx);
-			return new ChangedFileNode(prevRev.getRevision().getFiles(fileIdx), prevRev);
+			return new FileNode(prevRev.getRevision().getFiles(fileIdx), prevRev);
 		}
 		return findPreviousNode(cf, r.getParents(i));
 	}
 
 	// find previous file from parent r
-	private ChangedFileNode findPreviousNode(ChangedFile cf, int revParentIdx) {
+	private FileNode findPreviousNode(ChangedFile cf, int revParentIdx) {
 		String prevName = cf.getChange() == ChangeKind.RENAMED ? cf.getPreviousNames(0) : cf.getName();
 		RevNode cur = forest.db.revIdxMap.get(revParentIdx);
 		do {
-			ChangedFileNode node = getFileNode(prevName, cur);
+			FileNode node = getFileNode(prevName, cur);
 			if (node != null)
 				return node;
 			if (cur.getRevision().getParentsCount() == 0)
@@ -125,10 +125,10 @@ public class FileTree {
 		} while (true);
 	}
 
-	private ChangedFileNode getFileNode(String filePath, RevNode r) {
+	private FileNode getFileNode(String filePath, RevNode r) {
 		for (ChangedFile cf : r.getRevision().getFilesList())
 			if (cf.getName().equals(filePath))
-				return new ChangedFileNode(cf, r);
+				return new FileNode(cf, r);
 		return null;
 	}
 
@@ -141,7 +141,7 @@ public class FileTree {
 		tree.id.setId(this.id.getAsInt());
 		// merge queues
 		while (!tree.prevNodes.isEmpty()) {
-			ChangedFileNode node = tree.prevNodes.pop();
+			FileNode node = tree.prevNodes.pop();
 			if (!fileLocs.contains(node.getLoc()))
 				this.prevNodes.push(node);
 		}
@@ -152,7 +152,7 @@ public class FileTree {
 		return id;
 	}
 
-	public TreeSet<ChangedFileLocation> getFileLocs() {
+	public TreeSet<FileLocation> getFileLocs() {
 		return fileLocs;
 	}
 }

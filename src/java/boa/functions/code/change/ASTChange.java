@@ -8,10 +8,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import boa.functions.code.change.declaration.ChangedDeclNode;
-import boa.functions.code.change.field.ChangedFieldNode;
-import boa.functions.code.change.file.ChangedFileNode;
-import boa.functions.code.change.file.FileChangeForest.DeclCollector;
+import boa.functions.code.change.declaration.DeclNode;
+import boa.functions.code.change.field.FieldNode;
+import boa.functions.code.change.file.FileNode;
+import boa.functions.code.change.file.FileForest.DeclCollector;
 import boa.functions.code.change.method.ChangedMethodNode;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Method;
@@ -30,10 +30,10 @@ public class ASTChange {
 		return db;
 	}
 
-	public void update(ChangedFileNode fileNode, List<Declaration> decls, ChangeKind change, boolean isFirstParent) {
+	public void update(FileNode fileNode, List<Declaration> decls, ChangeKind change, boolean isFirstParent) {
 		for (int i = 0; i < decls.size(); i++) {
 			Declaration decl = decls.get(i);
-			ChangedDeclNode declNode = update(fileNode, decl, change, isFirstParent);
+			DeclNode declNode = update(fileNode, decl, change, isFirstParent);
 			for (int j = 0; j < decl.getMethodsCount(); j++)
 				update(declNode, decl.getMethods(j), change, isFirstParent);
 			for (int j = 0; j < decl.getFieldsCount(); j++)
@@ -41,18 +41,18 @@ public class ASTChange {
 		}
 	}
 
-	private void update(ChangedDeclNode declNode, Variable v, ChangeKind change, boolean isFirstParent) {
-		ChangedFieldNode fieldNode = declNode.getFieldNode(getSignature(v));
+	private void update(DeclNode declNode, Variable v, ChangeKind change, boolean isFirstParent) {
+		FieldNode fieldNode = declNode.getFieldNode(getSignature(v));
 		updateChange(fieldNode, change, isFirstParent);
 	}
 
-	private void update(ChangedDeclNode declNode, Method m, ChangeKind change, boolean isFirstParent) {
+	private void update(DeclNode declNode, Method m, ChangeKind change, boolean isFirstParent) {
 		ChangedMethodNode methodNode = declNode.getMethodNode(getSignature(m));
 		updateChange(methodNode, change, isFirstParent);
 	}
 
-	private ChangedDeclNode update(ChangedFileNode fileNode, Declaration decl, ChangeKind change, boolean isFirstParent) {
-		ChangedDeclNode declNode = fileNode.getDeclNode(decl.getFullyQualifiedName());
+	private DeclNode update(FileNode fileNode, Declaration decl, ChangeKind change, boolean isFirstParent) {
+		DeclNode declNode = fileNode.getDeclNode(decl.getFullyQualifiedName());
 		updateChange(declNode, change, isFirstParent);
 		return declNode;
 	}
@@ -64,18 +64,18 @@ public class ASTChange {
 			node.setSecondChange(change);
 	}
 
-	private void updateAllChanges(ChangedFileNode rightNode, ChangeKind change, boolean isFirstParent) {
-		for (ChangedDeclNode decl : rightNode.getDeclChanges()) {
+	private void updateAllChanges(FileNode rightNode, ChangeKind change, boolean isFirstParent) {
+		for (DeclNode decl : rightNode.getDeclChanges()) {
 			updateChange(decl, change, isFirstParent);
 			decl.setSecondChange(change);
 			for (ChangedMethodNode method : decl.getMethodChanges())
 				updateChange(method, change, isFirstParent);
-			for (ChangedFieldNode field : decl.getFieldChanges())
+			for (FieldNode field : decl.getFieldChanges())
 				updateChange(field, change, isFirstParent);
 		}
 	}
 
-	public void compare(ChangedFileNode leftNode, ChangedFileNode rightNode, DeclCollector declCollector, boolean isFirstParent)
+	public void compare(FileNode leftNode, FileNode rightNode, DeclCollector declCollector, boolean isFirstParent)
 			throws Exception {
 		List<Declaration> leftDecls = null;
 
@@ -137,7 +137,7 @@ public class ASTChange {
 
 	}
 
-	private void compareDecls(Declaration leftDecl, Declaration rightDecl, ChangedFileNode rightNode, boolean isFirstParent) {
+	private void compareDecls(Declaration leftDecl, Declaration rightDecl, FileNode rightNode, boolean isFirstParent) {
 		
 		// compare fields
 		Set<Integer> deleted1 = Stream.iterate(0, n -> n + 1).limit(leftDecl.getFieldsCount())
@@ -194,7 +194,7 @@ public class ASTChange {
 			return;
 		}
 
-		ChangedDeclNode declNode = update(rightNode, rightDecl, ChangeKind.MODIFIED, isFirstParent);
+		DeclNode declNode = update(rightNode, rightDecl, ChangeKind.MODIFIED, isFirstParent);
 
 		// update field changes
 		for (int i : deleted1)

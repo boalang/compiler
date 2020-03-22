@@ -1,32 +1,32 @@
 package boa.functions.code.change.field;
 
 import boa.functions.code.change.ChangedASTNode;
-import boa.functions.code.change.declaration.ChangedDeclNode;
+import boa.functions.code.change.declaration.DeclNode;
 
-public class ChangedFieldNode extends ChangedASTNode {
+public class FieldNode extends ChangedASTNode {
 
-	private ChangedDeclNode declNode;
-	private ChangedFieldLocation loc;
-	private ChangedFieldNode firstParent;
-	private ChangedFieldNode secondParent;
+	private DeclNode declNode;
+	private FieldLocation loc;
+	private FieldNode firstParent;
+	private FieldNode secondParent;
 
-	public ChangedFieldNode(String sig, ChangedDeclNode declNode, ChangedFieldLocation loc) {
+	public FieldNode(String sig, DeclNode declNode, FieldLocation loc) {
 		super(sig);
 		this.declNode = declNode;
 		this.loc = loc;
 	}
 
-	public ChangedFieldNode(String sig, ChangedDeclNode declNode, int size) {
+	public FieldNode(String sig, DeclNode declNode, int size) {
 		super(sig);
 		this.declNode = declNode;
-		this.loc = new ChangedFieldLocation(declNode.getLoc(), size);
+		this.loc = new FieldLocation(declNode.getLoc(), size);
 	}
 
-	public ChangedDeclNode getDeclNode() {
+	public DeclNode getDeclNode() {
 		return declNode;
 	}
 
-	public ChangedFieldLocation getLoc() {
+	public FieldLocation getLoc() {
 		return loc;
 	}
 
@@ -46,7 +46,7 @@ public class ChangedFieldNode extends ChangedASTNode {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ChangedFieldNode other = (ChangedFieldNode) obj;
+		FieldNode other = (FieldNode) obj;
 		if (loc == null) {
 			if (other.loc != null)
 				return false;
@@ -68,19 +68,19 @@ public class ChangedFieldNode extends ChangedASTNode {
 		return secondParent != null;
 	}
 
-	public ChangedFieldNode getFirstParent() {
+	public FieldNode getFirstParent() {
 		return firstParent;
 	}
 
-	public void setFirstParent(ChangedFieldNode firstParent) {
+	public void setFirstParent(FieldNode firstParent) {
 		this.firstParent = firstParent;
 	}
 
-	public ChangedFieldNode getSecondParent() {
+	public FieldNode getSecondParent() {
 		return secondParent;
 	}
 
-	public void setSecondParent(ChangedFieldNode secondParent) {
+	public void setSecondParent(FieldNode secondParent) {
 		this.secondParent = secondParent;
 	}
 
