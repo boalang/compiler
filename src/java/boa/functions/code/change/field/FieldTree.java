@@ -31,17 +31,17 @@ public class FieldTree {
 
 	private boolean add(FieldNode node) {
 		if (forest.debug)
-			System.out.println("try to add node " + node.getLoc() + " to list " + this.id);
+			System.out.println("try to add node " + node.getLoc() + " to tree " + this.id);
 		// case 1: check if the node is added by some trees
 		if (node.getTreeId() != null) {
-			int listIdx = node.getTreeId().getAsInt();
-			if (listIdx != this.id.getAsInt()) {
+			int treeIdx = node.getTreeId().getAsInt();
+			if (treeIdx != this.id.getAsInt()) {
 				if (forest.debug)
-					System.out.println("node " + node.getLoc() + " already added to list " + listIdx);
+					System.out.println("node " + node.getLoc() + " already added to tree " + treeIdx);
 				String thisId = id.toString();
-				forest.getTreesAsList().get(listIdx).merge(this).linkAll();
+				forest.getTreesAsList().get(treeIdx).merge(this).linkAll();
 				if (forest.debug)
-					System.out.println("drop list " + thisId);
+					System.out.println("drop tree " + thisId);
 				return false;
 			}
 			if (forest.debug)
@@ -90,13 +90,13 @@ public class FieldTree {
 	private FieldNode findPreviousNode(FieldNode node, DeclNode firstParent) {
 		String fqn = node.getSignature();
 		if (forest.debug)
-			System.out.println("try to find decl name " + fqn);
+			System.out.println("try to find field name " + fqn);
 		DeclNode cur = firstParent;
 		while (true) {
 			FieldNode prev = cur.getFieldChange(fqn);
 			if (forest.debug)
 				System.out.println("file node " + cur.getLoc() + " has map " + cur.getMethodChangeMap()
-						+ " with list size " + cur.getMethodChanges().size());
+						+ " with tree size " + cur.getMethodChanges().size());
 			if (prev != null) {
 				return prev;
 			}
@@ -109,10 +109,10 @@ public class FieldTree {
 
 	private FieldTree merge(FieldTree tree) {
 		if (forest.debug)
-			System.out.println("list " + this.id + " merge list " + tree.id);
-		// update list id
+			System.out.println("tree " + this.id + " merge tree " + tree.id);
+		// update tree id
 		this.fieldLocs.addAll(tree.fieldLocs);
-		// update list id
+		// update tree id
 		tree.id.setId(this.id.getAsInt());
 		// merge queues
 		while (!tree.prevNodes.isEmpty()) {

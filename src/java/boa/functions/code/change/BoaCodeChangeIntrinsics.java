@@ -49,9 +49,6 @@ public class BoaCodeChangeIntrinsics {
 		List<MethodTree> methodTrees = methodForest.getTreesAsList();
 		FieldForest fieldForest = new FieldForest(gd, false);
 		List<FieldTree> fieldTrees = fieldForest.getTreesAsList();
-//		for (MethodTree tree : methodTrees)
-//			if (tree.getMethodLocs().size() > 4)
-//				System.out.println(tree.getMethodLocs().size());
 		cleanup();
 
 		System.out.println("Distinct Files: " + forest.db.fileNames.size());

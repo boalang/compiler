@@ -32,17 +32,17 @@ public class DeclTree {
 
 	private boolean add(DeclNode node) {
 		if (forest.debug)
-			System.out.println("try to add node " + node.getLoc() + " to list " + this.id);
+			System.out.println("try to add node " + node.getLoc() + " to tree " + this.id);
 		// case 1: check if the node is added by some trees
 		if (node.getTreeId() != null) {
-			int listIdx = node.getTreeId().getAsInt();
-			if (listIdx != this.id.getAsInt()) {
+			int treeIdx = node.getTreeId().getAsInt();
+			if (treeIdx != this.id.getAsInt()) {
 				if (forest.debug)
-					System.out.println("node " + node.getLoc() + " already added to list " + listIdx);
+					System.out.println("node " + node.getLoc() + " already added to tree " + treeIdx);
 				String thisId = id.toString();
-				forest.getTreesAsList().get(listIdx).merge(this).linkAll();
+				forest.getTreesAsList().get(treeIdx).merge(this).linkAll();
 				if (forest.debug)
-					System.out.println("drop list " + thisId);
+					System.out.println("drop tree " + thisId);
 				return false;
 			}
 			if (forest.debug)
@@ -97,7 +97,7 @@ public class DeclTree {
 			DeclNode prev = cur.getDeclChange(fqn);
 			if (forest.debug)
 				System.out.println("file node " + cur.getLoc() + " has map " + cur.getDeclChangeMap()
-						+ " with list size " + cur.getDeclChanges().size());
+						+ " with tree size " + cur.getDeclChanges().size());
 			if (prev != null) {
 				return prev;
 			}
@@ -110,10 +110,10 @@ public class DeclTree {
 
 	private DeclTree merge(DeclTree tree) {
 		if (forest.debug)
-			System.out.println("list " + this.id + " merge list " + tree.id);
-		// update list id
+			System.out.println("tree " + this.id + " merge tree " + tree.id);
+		// update tree id
 		this.declLocs.addAll(tree.declLocs);
-		// update list id
+		// update tree id
 		tree.id.setId(this.id.getAsInt());
 		// merge queues
 		while (!tree.prevNodes.isEmpty()) {
