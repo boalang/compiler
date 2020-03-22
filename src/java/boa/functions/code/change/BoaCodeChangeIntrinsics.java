@@ -10,6 +10,8 @@ import java.util.List;
 import boa.functions.FunctionSpec;
 import boa.functions.code.change.declaration.DeclForest;
 import boa.functions.code.change.declaration.DeclTree;
+import boa.functions.code.change.field.FieldForest;
+import boa.functions.code.change.field.FieldTree;
 import boa.functions.code.change.file.FileForest;
 import boa.functions.code.change.file.FileTree;
 import boa.functions.code.change.method.MethodForest;
@@ -45,6 +47,8 @@ public class BoaCodeChangeIntrinsics {
 		List<DeclTree> declTrees = declForest.getTreesAsList();
 		MethodForest methodForest = new MethodForest(gd, false);
 		List<MethodTree> methodTrees = methodForest.getTreesAsList();
+		FieldForest fieldForest = new FieldForest(gd, false);
+		List<FieldTree> fieldTrees = fieldForest.getTreesAsList();
 //		for (MethodTree tree : methodTrees)
 //			if (tree.getMethodLocs().size() > 4)
 //				System.out.println(tree.getMethodLocs().size());
@@ -62,6 +66,8 @@ public class BoaCodeChangeIntrinsics {
 		System.out.println("Total methodTrees: " + methodTrees.size());
 		
 		System.out.println("Total field changes: " + gd.fieldDB.size());
+		System.out.println("Total fieldTrees: " + fieldTrees.size());
+		
 		ChangedFile[] LatestSnapshot = getSnapshot(cr, revCount - 1, false);
 		int count = 0;
 		for (ChangedFile cf : LatestSnapshot)
