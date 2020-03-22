@@ -3,30 +3,30 @@ package boa.functions.code.change.method;
 import boa.functions.code.change.ChangedASTNode;
 import boa.functions.code.change.declaration.DeclNode;
 
-public class ChangedMethodNode extends ChangedASTNode {
+public class MethodNode extends ChangedASTNode {
 
 	private DeclNode declNode;
-	private ChangedMethodLocation loc;
-	private ChangedMethodNode firstParent;
-	private ChangedMethodNode secondParent;
+	private MethodLocation loc;
+	private MethodNode firstParent;
+	private MethodNode secondParent;
 
-	public ChangedMethodNode(String sig, DeclNode declNode, ChangedMethodLocation loc) {
+	public MethodNode(String sig, DeclNode declNode, MethodLocation loc) {
 		super(sig);
 		this.declNode = declNode;
 		this.loc = loc;
 	}
 
-	public ChangedMethodNode(String sig, DeclNode declNode, int size) {
+	public MethodNode(String sig, DeclNode declNode, int size) {
 		super(sig);
 		this.declNode = declNode;
-		this.loc = new ChangedMethodLocation(declNode.getLoc(), size);
+		this.loc = new MethodLocation(declNode.getLoc(), size);
 	}
 
 	public DeclNode getDeclNode() {
 		return declNode;
 	}
 
-	public ChangedMethodLocation getLoc() {
+	public MethodLocation getLoc() {
 		return loc;
 	}
 
@@ -46,7 +46,7 @@ public class ChangedMethodNode extends ChangedASTNode {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ChangedMethodNode other = (ChangedMethodNode) obj;
+		MethodNode other = (MethodNode) obj;
 		if (loc == null) {
 			if (other.loc != null)
 				return false;
@@ -60,19 +60,19 @@ public class ChangedMethodNode extends ChangedASTNode {
 		return declNode + " " + loc.getIdx() + " " + signature;
 	}
 
-	public ChangedMethodNode getSecondParent() {
+	public MethodNode getSecondParent() {
 		return secondParent;
 	}
 
-	public void setSecondParent(ChangedMethodNode secondParent) {
+	public void setSecondParent(MethodNode secondParent) {
 		this.secondParent = secondParent;
 	}
 
-	public ChangedMethodNode getFirstParent() {
+	public MethodNode getFirstParent() {
 		return firstParent;
 	}
 
-	public void setFirstParent(ChangedMethodNode firstParent) {
+	public void setFirstParent(MethodNode firstParent) {
 		this.firstParent = firstParent;
 	}
 	

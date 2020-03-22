@@ -12,7 +12,7 @@ import boa.functions.code.change.declaration.DeclNode;
 import boa.functions.code.change.field.FieldNode;
 import boa.functions.code.change.file.FileNode;
 import boa.functions.code.change.file.FileForest.DeclCollector;
-import boa.functions.code.change.method.ChangedMethodNode;
+import boa.functions.code.change.method.MethodNode;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Method;
 import boa.types.Ast.Variable;
@@ -47,7 +47,7 @@ public class ASTChange {
 	}
 
 	private void update(DeclNode declNode, Method m, ChangeKind change, boolean isFirstParent) {
-		ChangedMethodNode methodNode = declNode.getMethodNode(getSignature(m));
+		MethodNode methodNode = declNode.getMethodNode(getSignature(m));
 		updateChange(methodNode, change, isFirstParent);
 	}
 
@@ -68,7 +68,7 @@ public class ASTChange {
 		for (DeclNode decl : rightNode.getDeclChanges()) {
 			updateChange(decl, change, isFirstParent);
 			decl.setSecondChange(change);
-			for (ChangedMethodNode method : decl.getMethodChanges())
+			for (MethodNode method : decl.getMethodChanges())
 				updateChange(method, change, isFirstParent);
 			for (FieldNode field : decl.getFieldChanges())
 				updateChange(field, change, isFirstParent);

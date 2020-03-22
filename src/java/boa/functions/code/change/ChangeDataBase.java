@@ -13,8 +13,8 @@ import boa.functions.code.change.field.FieldLocation;
 import boa.functions.code.change.field.FieldNode;
 import boa.functions.code.change.file.FileLocation;
 import boa.functions.code.change.file.FileNode;
-import boa.functions.code.change.method.ChangedMethodLocation;
-import boa.functions.code.change.method.ChangedMethodNode;
+import boa.functions.code.change.method.MethodLocation;
+import boa.functions.code.change.method.MethodNode;
 import boa.functions.code.change.refactoring.RefactoringBond;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -36,7 +36,7 @@ public class ChangeDataBase {
 	public TreeMap<DeclLocation, DeclNode> declDB = new TreeMap<DeclLocation, DeclNode>();
 
 	// field change data
-	public TreeMap<ChangedMethodLocation, ChangedMethodNode> methodDB = new TreeMap<ChangedMethodLocation, ChangedMethodNode>();
+	public TreeMap<MethodLocation, MethodNode> methodDB = new TreeMap<MethodLocation, MethodNode>();
 
 	// method change data
 	public TreeMap<FieldLocation, FieldNode> fieldDB = new TreeMap<FieldLocation, FieldNode>();

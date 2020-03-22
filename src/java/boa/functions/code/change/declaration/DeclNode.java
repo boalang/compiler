@@ -6,7 +6,7 @@ import java.util.List;
 import boa.functions.code.change.ChangedASTNode;
 import boa.functions.code.change.field.FieldNode;
 import boa.functions.code.change.file.FileNode;
-import boa.functions.code.change.method.ChangedMethodNode;
+import boa.functions.code.change.method.MethodNode;
 
 public class DeclNode extends ChangedASTNode {
 
@@ -17,7 +17,7 @@ public class DeclNode extends ChangedASTNode {
 
 	// changes
 	private HashMap<String, Integer> methodChangeMap = new HashMap<String, Integer>();
-	private List<ChangedMethodNode> methodChanges = new ArrayList<ChangedMethodNode>();
+	private List<MethodNode> methodChanges = new ArrayList<MethodNode>();
 	private HashMap<String, Integer> fieldChangeMap = new HashMap<String, Integer>();
 	private List<FieldNode> fieldChanges = new ArrayList<FieldNode>();
 
@@ -33,10 +33,10 @@ public class DeclNode extends ChangedASTNode {
 		this.loc = new DeclLocation(fn.getLoc(), size);
 	}
 
-	public ChangedMethodNode getMethodNode(String signature) {
+	public MethodNode getMethodNode(String signature) {
 		if (!methodChangeMap.containsKey(signature)) {
 			int idx = methodChanges.size();
-			ChangedMethodNode methodNode = new ChangedMethodNode(signature, this, idx);
+			MethodNode methodNode = new MethodNode(signature, this, idx);
 			methodChangeMap.put(signature, idx);
 			methodChanges.add(methodNode);
 //			methodDB.put(methodNode.getLoc(), methodNode);
@@ -95,7 +95,7 @@ public class DeclNode extends ChangedASTNode {
 		return fn + " " + loc.getIdx() + " " + signature + " " + this.firstChange + " " + this.secondChange;
 	}
 
-	public List<ChangedMethodNode> getMethodChanges() {
+	public List<MethodNode> getMethodChanges() {
 		return methodChanges;
 	}
 

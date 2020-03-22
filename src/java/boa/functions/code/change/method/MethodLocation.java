@@ -3,11 +3,11 @@ package boa.functions.code.change.method;
 import boa.functions.code.change.Location;
 import boa.functions.code.change.declaration.DeclLocation;
 
-public class ChangedMethodLocation extends Location implements Comparable<ChangedMethodLocation> {
+public class MethodLocation extends Location implements Comparable<MethodLocation> {
 
 	private DeclLocation declLoc;
 	
-	public ChangedMethodLocation(DeclLocation declLoc, int methodIdx) {
+	public MethodLocation(DeclLocation declLoc, int methodIdx) {
 		super(methodIdx);
 		this.setDeclLoc(declLoc);
 	}
@@ -36,7 +36,7 @@ public class ChangedMethodLocation extends Location implements Comparable<Change
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ChangedMethodLocation other = (ChangedMethodLocation) obj;
+		MethodLocation other = (MethodLocation) obj;
 		if (declLoc == null) {
 			if (other.declLoc != null)
 				return false;
@@ -51,7 +51,7 @@ public class ChangedMethodLocation extends Location implements Comparable<Change
 	}
 
 	@Override
-	public int compareTo(ChangedMethodLocation o) {
+	public int compareTo(MethodLocation o) {
 		int comp = this.declLoc.compareTo(o.getDeclLoc());
 		return comp == 0 ? this.getIdx() - o.getIdx() : comp;
 	}
