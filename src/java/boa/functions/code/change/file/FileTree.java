@@ -42,8 +42,6 @@ public class FileTree {
 			System.out.println("try to add node " + node.getLoc() + " " + node.getChangedFile().getChange()
 					+ " to list " + this.id);
 		// case 1: check if the node is added by some trees
-//		if (forest.db.fileDB.containsKey(node.getLoc())) {
-//			int listIdx = forest.db.fileDB.get(node.getLoc()).getTreeId().getAsInt();
 		if (node.getTreeId() != null) {
 			int listIdx = node.getTreeId().getAsInt();
 			if (listIdx != this.id.getAsInt()) {
@@ -84,38 +82,12 @@ public class FileTree {
 	}
 
 	private void updatePrevNodes(ChangedFileNode node) {
-//		Revision r = node.getRev().getRevision();
-//		int prevCount = node.getChangedFile().getPreviousVersionsCount();
-//		if (forest.debug)
-//			System.out.println("node " + node.getLoc() + " has revision parents: " + r.getParentsCount()
-//					+ " and conetent parents: " + prevCount);
-//		if (r.getParentsCount() == 1 && prevCount > 1) {
-//			ChangedFileNode prevNode = findPreviousNode(node.getChangedFile(), r.getParents(0));
-//			if (prevNode != null)
-//				node.setFirstParent(prevNode);
-//		} else if (r.getParentsCount() == 1 && prevCount == 1) {
-//			int revIdx = node.getChangedFile().getPreviousVersions(0);
-//			int fileIdx = node.getChangedFile().getPreviousIndices(0);
-//			RevNode prevRev = forest.db.revIdxMap.get(revIdx);
-//			node.setFirstParent(new ChangedFileNode(prevRev.getRevision().getFiles(fileIdx), prevRev));
-//		} else if (r.getParentsCount() == 2) {
-//			for (int i = 0; i < r.getParentsCount(); i++) {
-//				ChangedFileNode prevNode = findPreviousNode(node.getChangedFile(), r.getParents(i));
-//				if (prevNode != null)
-//					if (i == 0)
-//						node.setFirstParent(prevNode);
-//					else
-//						node.setSecondParent(prevNode);
-//			}
-//		}
-
 		for (int i = 0; i < node.getRev().getRevision().getParentsCount(); i++) {
 			ChangedFileNode prevNode = getPreviousNode(node, i);
 			if (prevNode != null) {
 				// check if the prevNode is already added to database
-				ChangedFileNode tmp = forest.db.fileDB.get(prevNode.getLoc());
-				if (tmp != null)
-					prevNode = tmp;
+				if (forest.db.fileDB.containsKey(prevNode.getLoc()))
+					prevNode = forest.db.fileDB.get(prevNode.getLoc());
 				if (i == 0)
 					node.setFirstParent(prevNode);
 				else
@@ -128,9 +100,6 @@ public class FileTree {
 		ChangedFile cf = node.getChangedFile();
 		Revision r = node.getRev().getRevision();
 		int prevContentCount = node.getChangedFile().getPreviousVersionsCount();
-//		if (forest.debug)
-//			System.out.println("node " + node.getLoc() + " has revision parents: " + r.getParentsCount()
-//					+ " and conetent parents: " + prevContentCount);
 		// if a file has only one parent and previous content locations has size 1
 		if (r.getParentsCount() == 1 && prevContentCount == 1) {
 			int revIdx = node.getChangedFile().getPreviousVersions(0);

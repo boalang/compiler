@@ -34,8 +34,8 @@ public class DeclTree {
 		if (forest.debug)
 			System.out.println("try to add node " + node.getLoc() + " to list " + this.id);
 		// case 1: check if the node is added by some trees
-		if (forest.db.declDB.containsKey(node.getLoc())) {
-			int listIdx = forest.db.declDB.get(node.getLoc()).getTreeId().getAsInt();
+		if (node.getTreeId() != null) {
+			int listIdx = node.getTreeId().getAsInt();
 			if (listIdx != this.id.getAsInt()) {
 				if (forest.debug)
 					System.out.println("node " + node.getLoc() + " already added to list " + listIdx);

@@ -94,6 +94,11 @@ public class ASTChange {
 				leftDecls = declCollector.getDeclNodes(leftNode);
 			update(leftNode, leftDecls, ChangeKind.ADDED, true);
 		}
+		
+		// left is deleted
+		if (leftNode.getChangedFile().getChange() == ChangeKind.DELETED) {
+			return;
+		}
 
 		// right is deleted
 		if (rightNode.getChangedFile().getChange() == ChangeKind.DELETED) {
@@ -106,6 +111,7 @@ public class ASTChange {
 		if (rightNode.getChangedFile().getChange() != ChangeKind.DELETED) {
 			if (leftDecls == null)
 				leftDecls = declCollector.getDeclNodes(leftNode);
+			
 			List<Declaration> rightDecls = declCollector.getDeclNodes(rightNode);
 			Set<Integer> deleted = Stream.iterate(0, n -> n + 1).limit(leftDecls.size()).collect(Collectors.toSet());
 			Set<Integer> added = Stream.iterate(0, n -> n + 1).limit(rightDecls.size()).collect(Collectors.toSet());

@@ -21,8 +21,8 @@ public class BoaCodeChangeIntrinsics {
 	@FunctionSpec(name = "test3", formalParameters = { "Project" })
 	public static void test2(Project p) throws Exception {
 
-		if (p.getName().equals("ant4eclipse/ant4eclipse"))
-			return;
+//		if (p.getName().equals("ant4eclipse/ant4eclipse"))
+//			return;
 
 		long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
@@ -39,7 +39,7 @@ public class BoaCodeChangeIntrinsics {
 		long afterUsedMem1 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
 		forest.updateASTChanges();
-		DeclChangeForest declForest = new DeclChangeForest(gd, true);
+		DeclChangeForest declForest = new DeclChangeForest(gd, false);
 		List<DeclTree> declTrees = declForest.getTreesAsList();
 		cleanup();
 
