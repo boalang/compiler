@@ -12,6 +12,8 @@ import boa.functions.code.change.declaration.DeclForest;
 import boa.functions.code.change.declaration.DeclTree;
 import boa.functions.code.change.file.FileForest;
 import boa.functions.code.change.file.FileTree;
+import boa.functions.code.change.method.MethodForest;
+import boa.functions.code.change.method.MethodTree;
 import boa.types.Code.CodeRepository;
 import boa.types.Diff.ChangedFile;
 import boa.types.Toplevel.Project;
@@ -41,15 +43,24 @@ public class BoaCodeChangeIntrinsics {
 		forest.updateASTChanges();
 		DeclForest declForest = new DeclForest(gd, false);
 		List<DeclTree> declTrees = declForest.getTreesAsList();
+		MethodForest methodForest = new MethodForest(gd, false);
+		List<MethodTree> methodTrees = methodForest.getTreesAsList();
+//		for (MethodTree tree : methodTrees)
+//			if (tree.getMethodLocs().size() > 4)
+//				System.out.println(tree.getMethodLocs().size());
 		cleanup();
 
 		System.out.println("Distinct Files: " + forest.db.fileNames.size());
 		System.out.println("Total Revs: " + revCount);
 		System.out.println("Total FileTrees: " + fileTrees.size());
 		System.out.println("Total refs: " + gd.refDB.size());
+		
 		System.out.println("Total decl changes: " + gd.declDB.size());
 		System.out.println("Total DeclTrees: " + declTrees.size());
+		
 		System.out.println("Total method changes: " + gd.methodDB.size());
+		System.out.println("Total methodTrees: " + methodTrees.size());
+		
 		System.out.println("Total field changes: " + gd.fieldDB.size());
 		ChangedFile[] LatestSnapshot = getSnapshot(cr, revCount - 1, false);
 		int count = 0;

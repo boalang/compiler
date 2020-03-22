@@ -39,10 +39,15 @@ public class DeclNode extends ChangedASTNode {
 			MethodNode methodNode = new MethodNode(signature, this, idx);
 			methodChangeMap.put(signature, idx);
 			methodChanges.add(methodNode);
-//			methodDB.put(methodNode.getLoc(), methodNode);
 			return methodNode;
 		}
 		return methodChanges.get(methodChangeMap.get(signature));
+	}
+	
+	public MethodNode getMethodChange(String fqn) {
+		if (methodChangeMap.containsKey(fqn))
+			return methodChanges.get(methodChangeMap.get(fqn));
+		return null;
 	}
 
 	public FieldNode getFieldNode(String signature) {
@@ -51,11 +56,17 @@ public class DeclNode extends ChangedASTNode {
 			FieldNode fieldNode = new FieldNode(signature, this, idx);
 			fieldChangeMap.put(signature, idx);
 			fieldChanges.add(fieldNode);
-//			fieldDB.put(fieldNode.getLoc(), fieldNode);
 			return fieldNode;
 		}
 		return fieldChanges.get(fieldChangeMap.get(signature));
 	}
+	
+	public FieldNode getFieldChange(String fqn) {
+		if (fieldChangeMap.containsKey(fqn))
+			return fieldChanges.get(fieldChangeMap.get(fqn));
+		return null;
+	}
+
 
 	public FileNode getFileNode() {
 		return fn;
@@ -129,6 +140,10 @@ public class DeclNode extends ChangedASTNode {
 
 	public void setSecondParent(DeclNode secondParent) {
 		this.secondParent = secondParent;
+	}
+
+	public HashMap<String, Integer> getMethodChangeMap() {
+		return methodChangeMap;
 	}
 
 }
