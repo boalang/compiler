@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -111,7 +112,13 @@ public class BoaNormalFormIntrinsics {
 	 */
 	@FunctionSpec(name = "converttosymbolicname", returnType = "array of Expression", formalParameters = { "Expression", "Expression", "array of Expression"})
 	public static Expression[] convertToSymbolicName(final Expression e, final Expression reciever, final Expression[] arguments) throws Exception {
-		final List<Expression> exps = new ArrayList<Expression>();
+		final Set<Expression> exps = new LinkedHashSet<Expression>();
+
+		if (e.equals(reciever))
+			exps.add(createVariable("$RECEIVER$"));
+		for (int i = 0; i < arguments.length; i++)
+			if (e.equals(arguments[i]))
+				exps.add(createVariable("$ARG$" + Integer.toString(i)));
 
 		final List<Expression[]> convertedExpression = new ArrayList<Expression[]>();
 		for (final Expression sub : e.getExpressionsList())
@@ -146,17 +153,8 @@ public class BoaNormalFormIntrinsics {
 				if (convertedExpression.size() == 0)
 					convertedExpression.add(new Expression[0]);
 
-				for (final List<Expression> e2 : permutate(convertedExpression)) {
-					final Expression replacedExpr = createExpression(e.getKind(), e2.toArray(new Expression[e2.size()]));
-
-					if (replacedExpr.equals(reciever))
-						exps.add(createVariable("$RECEIVER$"));
-
-					for (int i = 0; i < arguments.length; i++) {
-						if (replacedExpr.equals(arguments[i]))
-							exps.add(createVariable("$ARG$" + Integer.toString(i)));
-					}
-				}
+				for (final List<Expression> e2 : permutate(convertedExpression))
+					exps.add(createExpression(e.getKind(), e2.toArray(new Expression[e2.size()])));
 
 				if (exps.size() == 0)
 					exps.add(e);
@@ -172,18 +170,11 @@ public class BoaNormalFormIntrinsics {
 				for (final List<Expression> e2 : permutate(convertedExpression)) {
 					final Expression.Builder b = Expression.newBuilder(e);
 
-					for(int i = 0; i < e2.size(); i++) {
+					for (int i = 0; i < e2.size(); i++) {
 						b.setExpressions(i, e2.get(i));
 					}
-					final Expression replacedExpr1 = b.build();
 
-					if (replacedExpr1.equals(reciever))
-						exps.add(createVariable("$RECEIVER$"));
-
-					for (int i = 0; i < arguments.length; i++) {
-						if (replacedExpr1.equals(arguments[i]))
-							exps.add(createVariable("$ARG$" + Integer.toString(i)));
-					}
+					exps.add(b.build());
 				}
 
 				if (exps.size() == 0)
@@ -221,13 +212,27 @@ public class BoaNormalFormIntrinsics {
 				break;
 
 			case VARACCESS:
+				// split things like o.field
+				final String[] splits = e.getVariable().split("\\.");
+				final Expression first = createVariable(splits[0]);
+
 				// replace with symbolic names
-				if (e.equals(reciever))
-					exps.add(createVariable("$RECEIVER$"));
+				if (first.equals(reciever)) {
+					String tmp = "$RECEIVER$";
+					for (int i = 1; i < splits.length; i++) {
+						tmp += "." + splits[i];
+					}
+					exps.add(createVariable(tmp));
+				}
 
 				for (int i = 0; i < arguments.length; i++) {
-					if (e.equals(arguments[i]))
-						exps.add(createVariable("$ARG$" + Integer.toString(i)));
+					if (first.equals(arguments[i])) {
+						String tmp = "$ARG$" + Integer.toString(i);
+						for (int j = 1; j < splits.length; j++) {
+							tmp += "." + splits[j];
+						}
+						exps.add(createVariable(tmp));
+					}
 				}
 
 				if (exps.size() == 0)
