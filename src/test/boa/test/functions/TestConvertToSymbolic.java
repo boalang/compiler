@@ -18,6 +18,7 @@ package boa.test.functions;
 
 import static org.junit.Assert.assertEquals;
 import static boa.functions.BoaAstIntrinsics.parseexpression;
+import static boa.functions.BoaAstIntrinsics.prettyprint;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -94,6 +95,6 @@ public class TestConvertToSymbolic {
 
 		assertEquals(converted.length, result.length);
 		for (int i = 0; i < converted.length; i++)
-			assertEquals(converted[i], result[i]);
+			assertEquals(prettyprint(converted[i]), prettyprint(result[i]));
 	}
 }
