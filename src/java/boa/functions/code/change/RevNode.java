@@ -3,6 +3,7 @@ package boa.functions.code.change;
 import static boa.functions.code.change.refactoring.BoaRefactoringIntrinsics.isJavaFile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import boa.functions.code.change.file.FileNode;
@@ -13,6 +14,9 @@ public class RevNode {
 	private int revIdx;
 	private Revision rev;
 	private int nContributorSoFar;
+	
+	// changes
+	private HashMap<String, FileNode> fileChangeMap = new HashMap<String, FileNode>();
 
 	public RevNode(int revIdx, Revision rev, int nContributor) {
 		this.revIdx = revIdx;
@@ -29,6 +33,10 @@ public class RevNode {
 		}
 		return fns;
 	}
+	
+	public HashMap<String, FileNode> getFileChangeMap() {
+		return fileChangeMap;
+	}
 
 	public int getRevIdx() {
 		return revIdx;
@@ -42,4 +50,8 @@ public class RevNode {
 		return nContributorSoFar;
 	}
 
+	@Override
+	public String toString() {
+		return revIdx + " " + rev.getId();
+	}
 }

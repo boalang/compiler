@@ -1,59 +1,40 @@
 package boa.functions.code.change.refactoring;
 
-import boa.functions.code.change.Location;
+import boa.functions.code.change.ChangedNode;
 import boa.types.Code.CodeRefactoring;
 
-public class RefactoringBond {
+public class RefactoringBond<T extends ChangedNode> {
 	
-	private Location leftLoc;
-	private Location rightLoc;
+	private T leftNode;
+	private T rightNode;
 	private CodeRefactoring refactoring;
 	private BoaCodeElementLevel level;
 	
-	public RefactoringBond(Location leftLoc, Location rightLoc, CodeRefactoring ref) {
-		this.leftLoc = leftLoc;
-		this.rightLoc = rightLoc;
+	public RefactoringBond(T leftNode, T rightNode, CodeRefactoring ref) {
+		this.leftNode = leftNode;
+		this.rightNode = rightNode;
 		this.refactoring = ref;
 		this.level = BoaCodeElementLevel.getCodeElementLevel(ref.getType());
-	}
-
-	public Location getLeftLoc() {
-		return leftLoc;
-	}
-
-	public void setLeftLoc(Location leftLoc) {
-		this.leftLoc = leftLoc;
-	}
-
-	public Location getRightLoc() {
-		return rightLoc;
-	}
-
-	public void setRightLoc(Location rightLoc) {
-		this.rightLoc = rightLoc;
 	}
 
 	public CodeRefactoring getRefactoring() {
 		return refactoring;
 	}
-
-	public void setRefactoring(CodeRefactoring refactoring) {
-		this.refactoring = refactoring;
-	}
 	
 	public String getType() {
 		return refactoring.getType();
+	}
+	
+	public T getLeftNode() {
+		return leftNode;
+	}
+
+	public T getRightNode() {
+		return rightNode;
 	}
 
 	public BoaCodeElementLevel getLevel() {
 		return level;
 	}
-	
-	public String getRightElement() {
-		return refactoring.getRightSideLocations(0).getCodeElement();
-	}
 
-	public String getLeftElement() {
-		return refactoring.getLeftSideLocations(0).getCodeElement();
-	}
 }

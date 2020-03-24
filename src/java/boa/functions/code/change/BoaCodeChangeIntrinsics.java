@@ -35,34 +35,35 @@ public class BoaCodeChangeIntrinsics {
 		System.out.println(p.getName() + " " + refRevIds.size());
 
 		int revCount = getRevisionsCount(cr);
-		ChangeDataBase gd = new ChangeDataBase(cr, revCount);
-		FileForest forest = new FileForest(gd, false);
-		forest.updateWithRefs(p, refRevIds, null);
+		ChangeDataBase db = new ChangeDataBase(cr, revCount);
+		FileForest forest = new FileForest(db, false);
 		List<FileTree> fileTrees = forest.getTreesAsList();
 
 		long afterUsedMem1 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
 		forest.updateASTChanges();
-		DeclForest declForest = new DeclForest(gd, false);
+		DeclForest declForest = new DeclForest(db, false);
 		List<DeclTree> declTrees = declForest.getTreesAsList();
-		MethodForest methodForest = new MethodForest(gd, false);
+		MethodForest methodForest = new MethodForest(db, false);
 		List<MethodTree> methodTrees = methodForest.getTreesAsList();
-		FieldForest fieldForest = new FieldForest(gd, false);
+		FieldForest fieldForest = new FieldForest(db, false);
 		List<FieldTree> fieldTrees = fieldForest.getTreesAsList();
 		cleanup();
+
+		forest.updateWithRefs(p, refRevIds, null);
 
 		System.out.println("Distinct Files: " + forest.db.fileNames.size());
 		System.out.println("Total Revs: " + revCount);
 		System.out.println("Total FileTrees: " + fileTrees.size());
-		System.out.println("Total refs: " + gd.refDB.size());
-		
-		System.out.println("Total decl changes: " + gd.declDB.size());
+		System.out.println("Total refs: " + db.refDB.size());
+
+		System.out.println("Total decl changes: " + db.declDB.size());
 		System.out.println("Total DeclTrees: " + declTrees.size());
-		
-		System.out.println("Total method changes: " + gd.methodDB.size());
+
+		System.out.println("Total method changes: " + db.methodDB.size());
 		System.out.println("Total methodTrees: " + methodTrees.size());
-		
-		System.out.println("Total field changes: " + gd.fieldDB.size());
+
+		System.out.println("Total field changes: " + db.fieldDB.size());
 		System.out.println("Total fieldTrees: " + fieldTrees.size());
 		
 		ChangedFile[] LatestSnapshot = getSnapshot(cr, revCount - 1, false);

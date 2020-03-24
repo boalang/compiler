@@ -57,7 +57,7 @@ public class ASTChange {
 		return declNode;
 	}
 	
-	private void updateChange(ChangedASTNode node, ChangeKind change, boolean isFirstParent) {
+	private void updateChange(ChangedNode node, ChangeKind change, boolean isFirstParent) {
 		if (isFirstParent)
 			node.setFirstChange(change);
 		else

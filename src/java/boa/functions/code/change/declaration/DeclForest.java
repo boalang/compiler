@@ -1,8 +1,6 @@
 package boa.functions.code.change.declaration;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -15,10 +13,6 @@ public class DeclForest {
 	protected List<DeclTree> trees = new ArrayList<DeclTree>();
 	protected ChangeDataBase db;
 	protected boolean debug = false;
-
-	// considered ref types
-	protected HashSet<String> refTypes = new HashSet<String>(
-			Arrays.asList(new String[] { "Move Class", "Rename Class" }));
 
 	public DeclForest(ChangeDataBase db, boolean debug) throws Exception {
 		this.db = db;

@@ -65,6 +65,8 @@ public class FileTree {
 		// update global nodes
 		forest.db.fileDB.put(node.getLoc(), node);
 		forest.db.fileNames.add(node.getChangedFile().getName());
+		// update RevNode
+		node.getRev().getFileChangeMap().put(node.getChangedFile().getName(), node);
 		// update prev queues
 		updatePrevNodes(node);
 		// push 2nd parent first for dfs first-parent branch first

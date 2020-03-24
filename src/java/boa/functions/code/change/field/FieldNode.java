@@ -1,9 +1,9 @@
 package boa.functions.code.change.field;
 
-import boa.functions.code.change.ChangedASTNode;
+import boa.functions.code.change.ChangedNode;
 import boa.functions.code.change.declaration.DeclNode;
 
-public class FieldNode extends ChangedASTNode {
+public class FieldNode extends ChangedNode {
 
 	private DeclNode declNode;
 	private FieldLocation loc;

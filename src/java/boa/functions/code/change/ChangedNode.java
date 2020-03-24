@@ -5,7 +5,7 @@ import java.util.List;
 
 import boa.types.Shared.ChangeKind;
 
-public abstract class ChangedASTNode {
+public abstract class ChangedNode {
 
 	// code entity identifier in the scope
 	protected String signature;
@@ -19,7 +19,7 @@ public abstract class ChangedASTNode {
 	protected List<Integer> leftRefBondIdxs = new ArrayList<Integer>();
 	protected List<Integer> rightRefBondIdxs = new ArrayList<Integer>();
 
-	public ChangedASTNode(String sig) {
+	public ChangedNode(String sig) {
 		this.signature = sig;
 	}
 

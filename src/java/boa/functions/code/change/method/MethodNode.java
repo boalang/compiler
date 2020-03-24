@@ -1,9 +1,9 @@
 package boa.functions.code.change.method;
 
-import boa.functions.code.change.ChangedASTNode;
+import boa.functions.code.change.ChangedNode;
 import boa.functions.code.change.declaration.DeclNode;
 
-public class MethodNode extends ChangedASTNode {
+public class MethodNode extends ChangedNode {
 
 	private DeclNode declNode;
 	private MethodLocation loc;

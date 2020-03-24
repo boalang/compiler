@@ -3,38 +3,36 @@ package boa.functions.code.change.file;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import boa.functions.code.change.ChangedNode;
 import boa.functions.code.change.RevNode;
 import boa.functions.code.change.TreeObjectId;
 import boa.functions.code.change.declaration.DeclNode;
-import boa.functions.code.change.refactoring.RefactoringBonds;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 
-public class FileNode {
+public class FileNode extends ChangedNode {
 
 	private RevNode r;
 	private ChangedFile cf;
 	private FileLocation loc;
-	private TreeObjectId treeId;
 
 	private FileNode firstParent;
 	private FileNode secondParent;
 
 	// changes
-	private ChangeKind firstChange;
-	private ChangeKind secondChange;
 	private HashMap<String, Integer> declChangeMap = new HashMap<String, Integer>();
 	private List<DeclNode> declChanges = new ArrayList<DeclNode>();
-	private RefactoringBonds leftRefBonds = new RefactoringBonds();
-	private RefactoringBonds rightRefBonds = new RefactoringBonds();
 
 	public FileNode(ChangedFile cf, RevNode r, FileLocation loc) {
+		super(cf.getName());
 		this.cf = cf;
 		this.r = r;
 		this.loc = loc;
 	}
 
 	public FileNode(ChangedFile cf, RevNode r) {
+		super(cf.getName());
 		this.cf = cf;
 		this.r = r;
 		this.loc = new FileLocation(cf.getRevisionIdx(), cf.getFileIdx());
@@ -78,14 +76,6 @@ public class FileNode {
 
 	public RevNode getRev() {
 		return r;
-	}
-
-	public RefactoringBonds getLeftRefBonds() {
-		return leftRefBonds;
-	}
-
-	public RefactoringBonds getRightRefBonds() {
-		return rightRefBonds;
 	}
 
 	public List<Integer> getRevisionParents() {

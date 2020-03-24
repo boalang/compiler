@@ -448,16 +448,10 @@ public class BoaAstIntrinsics {
 		try {
 			final BytesWritable value = new BytesWritable();
 			if (refactoringsMap.get(new Text(p.getName() + " " + r.getId()), value) != null) {
-				// use array copy to avoid extra bytes
-				byte[] data = Arrays.copyOf(value.getBytes(), value.getLength());
-				String[] temp = new String(data, StandardCharsets.UTF_8).split("\\r?\\n");			
-				HashSet<String> set = new HashSet<String>(Arrays.asList(temp));
-				
 				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
 				// defaults to 64, really big ASTs require more
 				_stream.setRecursionLimit(Integer.MAX_VALUE);
 				final boa.types.Code.Change change = boa.types.Code.Change.parseFrom(_stream);
-				
 				return change;
 			}
 		} catch (final Throwable e) {

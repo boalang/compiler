@@ -3,12 +3,12 @@ package boa.functions.code.change.declaration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import boa.functions.code.change.ChangedASTNode;
+import boa.functions.code.change.ChangedNode;
 import boa.functions.code.change.field.FieldNode;
 import boa.functions.code.change.file.FileNode;
 import boa.functions.code.change.method.MethodNode;
 
-public class DeclNode extends ChangedASTNode {
+public class DeclNode extends ChangedNode {
 
 	private FileNode fn;
 	private DeclLocation loc;
