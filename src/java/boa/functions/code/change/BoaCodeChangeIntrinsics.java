@@ -65,7 +65,7 @@ public class BoaCodeChangeIntrinsics {
 
 		System.out.println("Total field changes: " + db.fieldDB.size());
 		System.out.println("Total fieldTrees: " + fieldTrees.size());
-		
+
 		ChangedFile[] LatestSnapshot = getSnapshot(cr, revCount - 1, false);
 		int count = 0;
 		for (ChangedFile cf : LatestSnapshot)

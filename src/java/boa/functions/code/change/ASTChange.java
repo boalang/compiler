@@ -132,7 +132,7 @@ public class ASTChange {
 			for (int i : deleted)
 				update(rightNode, leftDecls.get(i), ChangeKind.DELETED, isFirstParent);
 			for (int j : added)
-				update(leftNode, rightDecls.get(j), ChangeKind.ADDED, isFirstParent);
+				update(rightNode, rightDecls.get(j), ChangeKind.ADDED, isFirstParent);
 		}
 
 	}
