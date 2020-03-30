@@ -32,17 +32,21 @@ public class RefactoringConnector {
 				if (fileBefore == null) {
 					DeclNode leftDecl = fileAfter.getDeclChange(leftDeclSig);
 					DeclNode rightDecl = fileAfter.getDeclChange(rightDeclSig);
-					System.out.println(fileAfter.getDeclChangeMap());
-					System.out.println(leftDeclSig + " " + leftDecl);
-					System.out.println(rightDeclSig + " " + rightDecl);
+//					System.out.println(fileAfter.getDeclChangeMap());
+//					System.out.println(leftDeclSig + " " + leftDecl);
+//					System.out.println(rightDeclSig + " " + rightDecl);
 					if (!leftDecl.getTreeId().equals(rightDecl.getTreeId())) {
-						System.out.println("1 need to link " + ref.getType());
+//						System.out.println("1 need to link " + ref.getType());
+					} else {
+						System.out.println("no need linking " + ref.getType());
 					}
 				} else {
 					DeclNode leftDecl = fileBefore.getDeclChange(leftDeclSig);
 					DeclNode rightDecl = fileAfter.getDeclChange(rightDeclSig);
 					if (!leftDecl.getTreeId().equals(rightDecl.getTreeId())) {
-						System.out.println("2 need to link " + ref.getType());
+//						System.out.println("2 need to link " + ref.getType());
+					} else {
+						System.out.println("no need linking " + ref.getType());
 					}
 				}
 				
