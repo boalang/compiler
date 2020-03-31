@@ -1,6 +1,6 @@
-package boa.functions.code.change.refactoring;
+package boa.functions.code.change;
 
-import boa.functions.code.change.ChangedASTNode;
+import boa.functions.code.change.refactoring.BoaCodeElementLevel;
 import boa.types.Code.CodeRefactoring;
 
 public class RefactoringBond<T extends ChangedASTNode> {

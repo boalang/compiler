@@ -1,4 +1,4 @@
-package boa.functions.code.change.refactoring;
+package boa.functions.code.change;
 
 import java.util.ArrayList;
 import java.util.List;

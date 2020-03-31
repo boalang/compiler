@@ -30,15 +30,27 @@ public class ASTChange {
 		return db;
 	}
 
+	// update all ast nodes in the file
 	public void update(FileNode fileNode, List<Declaration> decls, ChangeKind change, boolean isFirstParent) {
 		for (int i = 0; i < decls.size(); i++) {
 			Declaration decl = decls.get(i);
-			DeclNode declNode = update(fileNode, decl, change, isFirstParent);
-			for (int j = 0; j < decl.getMethodsCount(); j++)
-				update(declNode, decl.getMethods(j), change, isFirstParent);
-			for (int j = 0; j < decl.getFieldsCount(); j++)
-				update(declNode, decl.getFields(j), change, isFirstParent);
+			updateDeclAll(fileNode, decl, change, isFirstParent);
 		}
+	}
+
+	// update all ast nodes in the declaration
+	private void updateDeclAll(FileNode fileNode, Declaration decl, ChangeKind change, boolean isFirstParent) {
+		DeclNode declNode = update(fileNode, decl, change, isFirstParent);
+		for (int j = 0; j < decl.getMethodsCount(); j++)
+			update(declNode, decl.getMethods(j), change, isFirstParent);
+		for (int j = 0; j < decl.getFieldsCount(); j++)
+			update(declNode, decl.getFields(j), change, isFirstParent);
+	}
+
+	private DeclNode update(FileNode fileNode, Declaration decl, ChangeKind change, boolean isFirstParent) {
+		DeclNode declNode = fileNode.getDeclNode(decl.getFullyQualifiedName());
+		updateChange(declNode, change, isFirstParent);
+		return declNode;
 	}
 
 	private void update(DeclNode declNode, Variable v, ChangeKind change, boolean isFirstParent) {
@@ -51,12 +63,6 @@ public class ASTChange {
 		updateChange(methodNode, change, isFirstParent);
 	}
 
-	private DeclNode update(FileNode fileNode, Declaration decl, ChangeKind change, boolean isFirstParent) {
-		DeclNode declNode = fileNode.getDeclNode(decl.getFullyQualifiedName());
-		updateChange(declNode, change, isFirstParent);
-		return declNode;
-	}
-	
 	private void updateChange(ChangedASTNode node, ChangeKind change, boolean isFirstParent) {
 		if (isFirstParent)
 			node.setFirstChange(change);
@@ -64,6 +70,7 @@ public class ASTChange {
 			node.setSecondChange(change);
 	}
 
+	// update all existing ast changes
 	private void updateAllChanges(FileNode rightNode, ChangeKind change, boolean isFirstParent) {
 		for (DeclNode decl : rightNode.getDeclChanges()) {
 			updateChange(decl, change, isFirstParent);
@@ -79,7 +86,6 @@ public class ASTChange {
 			throws Exception {
 		List<Declaration> leftDecls = null;
 
-
 		// both have the same content id (COPIED)
 		if (leftNode.getChangedFile().getObjectId().equals(rightNode.getChangedFile().getObjectId())) {
 			// 2nd parent then add copied as 2nd change
@@ -94,7 +100,7 @@ public class ASTChange {
 				leftDecls = declCollector.getDeclNodes(leftNode);
 			update(leftNode, leftDecls, ChangeKind.ADDED, true);
 		}
-		
+
 		// left is deleted
 		if (leftNode.getChangedFile().getChange() == ChangeKind.DELETED) {
 			return;
@@ -111,7 +117,7 @@ public class ASTChange {
 		if (rightNode.getChangedFile().getChange() != ChangeKind.DELETED) {
 			if (leftDecls == null)
 				leftDecls = declCollector.getDeclNodes(leftNode);
-			
+
 			List<Declaration> rightDecls = declCollector.getDeclNodes(rightNode);
 			Set<Integer> deleted = Stream.iterate(0, n -> n + 1).limit(leftDecls.size()).collect(Collectors.toSet());
 			Set<Integer> added = Stream.iterate(0, n -> n + 1).limit(rightDecls.size()).collect(Collectors.toSet());
@@ -129,16 +135,18 @@ public class ASTChange {
 					}
 				}
 			}
+
+			// need to update all ast nodes
 			for (int i : deleted)
-				update(rightNode, leftDecls.get(i), ChangeKind.DELETED, isFirstParent);
+				updateDeclAll(rightNode, leftDecls.get(i), ChangeKind.DELETED, isFirstParent);
 			for (int j : added)
-				update(rightNode, rightDecls.get(j), ChangeKind.ADDED, isFirstParent);
+				updateDeclAll(rightNode, rightDecls.get(j), ChangeKind.ADDED, isFirstParent);
 		}
 
 	}
 
 	private void compareDecls(Declaration leftDecl, Declaration rightDecl, FileNode rightNode, boolean isFirstParent) {
-		
+
 		// compare fields
 		Set<Integer> deleted1 = Stream.iterate(0, n -> n + 1).limit(leftDecl.getFieldsCount())
 				.collect(Collectors.toSet());
@@ -213,7 +221,6 @@ public class ASTChange {
 			update(declNode, rightDecl.getMethods(j), ChangeKind.MODIFIED, isFirstParent);
 
 	}
-
 
 	private String getSignature(Method m) {
 		StringBuilder sb = new StringBuilder();

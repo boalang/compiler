@@ -7,6 +7,7 @@ import java.util.List;
 import boa.functions.code.change.ChangedASTNode;
 import boa.functions.code.change.RevNode;
 import boa.functions.code.change.declaration.DeclNode;
+import boa.functions.code.change.method.MethodNode;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 
@@ -175,6 +176,13 @@ public class FileNode extends ChangedASTNode implements Comparable<FileNode> {
 	@Override
 	public int compareTo(FileNode o) {
 		return this.loc.compareTo(o.getLoc());
+	}
+
+	public MethodNode getMethodChange(String methodSig, String declSig) {
+		DeclNode dn = getDeclChange(declSig);
+		if (dn != null)
+			return dn.getMethodChange(methodSig);
+		return null;
 	}
 
 }

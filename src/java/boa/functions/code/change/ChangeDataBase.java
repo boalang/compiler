@@ -19,7 +19,6 @@ import boa.functions.code.change.file.FileTree;
 import boa.functions.code.change.method.MethodLocation;
 import boa.functions.code.change.method.MethodNode;
 import boa.functions.code.change.method.MethodTree;
-import boa.functions.code.change.refactoring.RefactoringBond;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 

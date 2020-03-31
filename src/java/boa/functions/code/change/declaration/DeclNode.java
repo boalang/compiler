@@ -44,9 +44,9 @@ public class DeclNode extends ChangedASTNode implements Comparable<DeclNode> {
 		return methodChanges.get(methodChangeMap.get(signature));
 	}
 	
-	public MethodNode getMethodChange(String fqn) {
-		if (methodChangeMap.containsKey(fqn))
-			return methodChanges.get(methodChangeMap.get(fqn));
+	public MethodNode getMethodChange(String sig) {
+		if (methodChangeMap.containsKey(sig))
+			return methodChanges.get(methodChangeMap.get(sig));
 		return null;
 	}
 
@@ -61,9 +61,9 @@ public class DeclNode extends ChangedASTNode implements Comparable<DeclNode> {
 		return fieldChanges.get(fieldChangeMap.get(signature));
 	}
 	
-	public FieldNode getFieldChange(String fqn) {
-		if (fieldChangeMap.containsKey(fqn))
-			return fieldChanges.get(fieldChangeMap.get(fqn));
+	public FieldNode getFieldChange(String sig) {
+		if (fieldChangeMap.containsKey(sig))
+			return fieldChanges.get(fieldChangeMap.get(sig));
 		return null;
 	}
 
