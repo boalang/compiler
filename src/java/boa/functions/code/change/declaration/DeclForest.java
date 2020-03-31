@@ -1,7 +1,6 @@
 package boa.functions.code.change.declaration;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map.Entry;
 
 import boa.functions.code.change.ChangeDataBase;
@@ -10,12 +9,13 @@ import boa.functions.code.change.file.FileNode;
 
 public class DeclForest {
 
-	protected List<DeclTree> trees = new ArrayList<DeclTree>();
+	protected HashMap<Integer, DeclTree> trees;
 	protected ChangeDataBase db;
 	protected boolean debug = false;
 
 	public DeclForest(ChangeDataBase db, boolean debug) throws Exception {
 		this.db = db;
+		this.trees = db.declForest;
 		this.debug = debug;
 		this.buildTrees();
 	}
@@ -29,13 +29,13 @@ public class DeclForest {
 						System.out.println("start new node " + declNode.getLoc());
 					DeclTree tree = new DeclTree(this, declNode, trees.size());
 					if (tree.linkAll())
-						trees.add(tree);
+						trees.put(tree.getId(), tree);
 				}
 			}
 		}
 	}
 
-	public List<DeclTree> getTreesAsList() {
+	public HashMap<Integer, DeclTree> getTrees() {
 		return this.trees;
 	}
 }

@@ -1,9 +1,8 @@
 package boa.functions.code.change.field;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map.Entry;
 
 import boa.functions.code.change.ChangeDataBase;
@@ -12,7 +11,7 @@ import boa.functions.code.change.declaration.DeclNode;
 
 public class FieldForest {
 
-	private List<FieldTree> trees = new ArrayList<FieldTree>();
+	private HashMap<Integer, FieldTree> trees;
 	public final ChangeDataBase db;
 	protected boolean debug = false;
 
@@ -22,6 +21,7 @@ public class FieldForest {
 
 	public FieldForest(ChangeDataBase db, boolean debug) {
 		this.db = db;
+		this.trees = db.fieldForest;
 		this.debug = debug;
 		buildTrees();
 	}
@@ -35,13 +35,13 @@ public class FieldForest {
 						System.out.println("start new node " + n.getLoc());
 					FieldTree tree = new FieldTree(this, n, trees.size());
 					if (tree.linkAll())
-						trees.add(tree);
+						trees.put(tree.getId(), tree);
 				}
 			}
 		}
 	}
 
-	public List<FieldTree> getTreesAsList() {
+	public HashMap<Integer, FieldTree> getTrees() {
 		return this.trees;
 	}
 

@@ -1,9 +1,9 @@
 package boa.functions.code.change.refactoring;
 
-import boa.functions.code.change.ChangedNode;
+import boa.functions.code.change.ChangedASTNode;
 import boa.types.Code.CodeRefactoring;
 
-public class RefactoringBond<T extends ChangedNode> {
+public class RefactoringBond<T extends ChangedASTNode> {
 	
 	private T leftNode;
 	private T rightNode;

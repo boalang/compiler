@@ -1,9 +1,8 @@
 package boa.functions.code.change.method;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map.Entry;
 
 import boa.functions.code.change.ChangeDataBase;
@@ -12,7 +11,7 @@ import boa.functions.code.change.declaration.DeclNode;
 
 public class MethodForest {
 
-	private List<MethodTree> trees = new ArrayList<MethodTree>();
+	private HashMap<Integer, MethodTree> trees;
 	public final ChangeDataBase db;
 	protected boolean debug = false;
 
@@ -20,8 +19,9 @@ public class MethodForest {
 	protected HashSet<String> refTypes = new HashSet<String>(
 			Arrays.asList(new String[] { "Move Class", "Rename Class" }));
 
-	public MethodForest(ChangeDataBase gd, boolean debug) {
-		this.db = gd;
+	public MethodForest(ChangeDataBase db, boolean debug) {
+		this.db = db;
+		this.trees = db.methodForest;
 		this.debug = debug;
 		buildTrees();
 	}
@@ -35,13 +35,13 @@ public class MethodForest {
 						System.out.println("start new node " + mn.getLoc());
 					MethodTree tree = new MethodTree(this, mn, trees.size());
 					if (tree.linkAll())
-						trees.add(tree);
+						trees.put(tree.getId(), tree);
 				}
 			}
 		}
 	}
 
-	public List<MethodTree> getTreesAsList() {
+	public HashMap<Integer, MethodTree> getTrees() {
 		return this.trees;
 	}
 

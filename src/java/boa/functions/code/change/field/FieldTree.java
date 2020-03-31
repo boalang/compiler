@@ -2,19 +2,18 @@ package boa.functions.code.change.field;
 
 import java.util.Stack;
 import java.util.TreeSet;
-import boa.functions.code.change.TreeObjectId;
 import boa.functions.code.change.declaration.DeclNode;
 
 public class FieldTree {
 
 	private final FieldForest forest;
-	private TreeObjectId id;
-	private TreeSet<FieldLocation> fieldLocs = new TreeSet<FieldLocation>();
+	private int id;
+	private TreeSet<FieldNode> fieldNodes = new TreeSet<FieldNode>();
 	private Stack<FieldNode> prevNodes = new Stack<FieldNode>();
 
 	public FieldTree(FieldForest forest, FieldNode node, int treeIdx) {
 		this.forest = forest;
-		this.id = new TreeObjectId(treeIdx);
+		this.id = treeIdx;
 		add(node);
 	}
 
@@ -33,13 +32,12 @@ public class FieldTree {
 		if (forest.debug)
 			System.out.println("try to add node " + node.getLoc() + " to tree " + this.id);
 		// case 1: check if the node is added by some trees
-		if (node.getTreeId() != null) {
-			int treeIdx = node.getTreeId().getAsInt();
-			if (treeIdx != this.id.getAsInt()) {
+		if (node.getTreeId() != -1) {
+			if (node.getTreeId() != id) {
 				if (forest.debug)
-					System.out.println("node " + node.getLoc() + " already added to tree " + treeIdx);
-				String thisId = id.toString();
-				forest.getTreesAsList().get(treeIdx).merge(this).linkAll();
+					System.out.println("node " + node.getLoc() + " already added to tree " + node.getTreeId());
+				int thisId = id;
+				forest.getTrees().get(node.getTreeId()).merge(this).linkAll();
 				if (forest.debug)
 					System.out.println("drop tree " + thisId);
 				return false;
@@ -50,7 +48,7 @@ public class FieldTree {
 		}
 
 		// case 2: update tree
-		fieldLocs.add(node.getLoc());
+		fieldNodes.add(node);
 		// node update tree id
 		node.setTreeId(this.id);
 		// update global nodes
@@ -107,26 +105,32 @@ public class FieldTree {
 		}
 	}
 
-	private FieldTree merge(FieldTree tree) {
+	public FieldTree merge(FieldTree tree) {
 		if (forest.debug)
 			System.out.println("tree " + this.id + " merge tree " + tree.id);
-		// update tree id
-		this.fieldLocs.addAll(tree.fieldLocs);
-		// update tree id
-		tree.id.setId(this.id.getAsInt());
+		// remove tree
+		forest.getTrees().remove(tree.getId());
+		// merge all nodes from tree
+		for (FieldNode fn : tree.getFieldNodes()) {
+			fn.setTreeId(this.id);
+			this.fieldNodes.add(fn);
+		}
 		// merge queues
 		while (!tree.prevNodes.isEmpty()) {
 			FieldNode node = tree.prevNodes.pop();
-			if (!fieldLocs.contains(node.getLoc())) {
+			if (!fieldNodes.contains(node)) {
 				this.prevNodes.push(node);
 			}
 		}
 		return this;
 	}
 
-	public TreeSet<FieldLocation> getMethodLocs() {
-		return fieldLocs;
+	public TreeSet<FieldNode> getFieldNodes() {
+		return fieldNodes;
 	}
 
-	
+	public int getId() {
+		return id;
+	}
+
 }

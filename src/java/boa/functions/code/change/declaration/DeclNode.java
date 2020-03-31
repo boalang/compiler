@@ -3,12 +3,12 @@ package boa.functions.code.change.declaration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import boa.functions.code.change.ChangedNode;
+import boa.functions.code.change.ChangedASTNode;
 import boa.functions.code.change.field.FieldNode;
 import boa.functions.code.change.file.FileNode;
 import boa.functions.code.change.method.MethodNode;
 
-public class DeclNode extends ChangedNode {
+public class DeclNode extends ChangedASTNode implements Comparable<DeclNode> {
 
 	private FileNode fn;
 	private DeclLocation loc;
@@ -144,6 +144,11 @@ public class DeclNode extends ChangedNode {
 
 	public HashMap<String, Integer> getMethodChangeMap() {
 		return methodChangeMap;
+	}
+
+	@Override
+	public int compareTo(DeclNode o) {
+		return this.loc.compareTo(o.getLoc());
 	}
 
 }

@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import boa.functions.code.change.ChangedNode;
+import boa.functions.code.change.ChangedASTNode;
 import boa.functions.code.change.RevNode;
-import boa.functions.code.change.TreeObjectId;
 import boa.functions.code.change.declaration.DeclNode;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 
-public class FileNode extends ChangedNode {
+public class FileNode extends ChangedASTNode implements Comparable<FileNode> {
 
 	private RevNode r;
 	private ChangedFile cf;
@@ -62,11 +61,11 @@ public class FileNode extends ChangedNode {
 		return cf.getFileIdx();
 	}
 
-	public TreeObjectId getTreeId() {
+	public int getTreeId() {
 		return treeId;
 	}
 
-	public void setTreeObjectId(TreeObjectId treeId) {
+	public void setint(int treeId) {
 		this.treeId = treeId;
 	}
 
@@ -171,6 +170,11 @@ public class FileNode extends ChangedNode {
 		if (declChangeMap.containsKey(fqn))
 			return declChanges.get(declChangeMap.get(fqn));
 		return null;
+	}
+
+	@Override
+	public int compareTo(FileNode o) {
+		return this.loc.compareTo(o.getLoc());
 	}
 
 }

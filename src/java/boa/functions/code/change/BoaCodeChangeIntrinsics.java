@@ -4,6 +4,8 @@ import static boa.functions.BoaAstIntrinsics.cleanup;
 import static boa.functions.BoaAstIntrinsics.getRefactoringIdsInSet;
 import static boa.functions.BoaIntrinsics.getRevisionsCount;
 import static boa.functions.BoaIntrinsics.getSnapshot;
+
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -37,17 +39,17 @@ public class BoaCodeChangeIntrinsics {
 		int revCount = getRevisionsCount(cr);
 		ChangeDataBase db = new ChangeDataBase(cr, revCount);
 		FileForest forest = new FileForest(db, false);
-		List<FileTree> fileTrees = forest.getTreesAsList();
+		HashMap<Integer, FileTree> fileTrees = forest.getTrees();
 
 		long afterUsedMem1 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
 		forest.updateASTChanges();
 		DeclForest declForest = new DeclForest(db, false);
-		List<DeclTree> declTrees = declForest.getTreesAsList();
+		HashMap<Integer, DeclTree> declTrees = declForest.getTrees();
 		MethodForest methodForest = new MethodForest(db, false);
-		List<MethodTree> methodTrees = methodForest.getTreesAsList();
+		HashMap<Integer, MethodTree> methodTrees = methodForest.getTrees();
 		FieldForest fieldForest = new FieldForest(db, false);
-		List<FieldTree> fieldTrees = fieldForest.getTreesAsList();
+		HashMap<Integer, FieldTree> fieldTrees = fieldForest.getTrees();
 		cleanup();
 
 		forest.updateWithRefs(p, refRevIds, null);

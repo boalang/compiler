@@ -1,9 +1,9 @@
 package boa.functions.code.change.method;
 
-import boa.functions.code.change.ChangedNode;
+import boa.functions.code.change.ChangedASTNode;
 import boa.functions.code.change.declaration.DeclNode;
 
-public class MethodNode extends ChangedNode {
+public class MethodNode extends ChangedASTNode implements Comparable<MethodNode> {
 
 	private DeclNode declNode;
 	private MethodLocation loc;
@@ -82,6 +82,11 @@ public class MethodNode extends ChangedNode {
 	
 	public boolean hasSecondParent() {
 		return secondParent != null;
+	}
+
+	@Override
+	public int compareTo(MethodNode o) {
+		return this.loc.compareTo(o.getLoc());
 	}
 
 }

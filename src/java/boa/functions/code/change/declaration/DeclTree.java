@@ -3,19 +3,18 @@ package boa.functions.code.change.declaration;
 import java.util.Stack;
 import java.util.TreeSet;
 
-import boa.functions.code.change.TreeObjectId;
 import boa.functions.code.change.file.FileNode;
 
 public class DeclTree {
 
 	private final DeclForest forest;
-	private TreeObjectId id;
-	private TreeSet<DeclLocation> declLocs = new TreeSet<DeclLocation>();
+	private int id;
+	private TreeSet<DeclNode> declNodes = new TreeSet<DeclNode>();
 	private Stack<DeclNode> prevNodes = new Stack<DeclNode>();
 
 	public DeclTree(DeclForest forest, DeclNode node, int treeIdx) {
 		this.forest = forest;
-		this.id = new TreeObjectId(treeIdx);
+		this.id = treeIdx;
 		add(node);
 	}
 
@@ -34,13 +33,12 @@ public class DeclTree {
 		if (forest.debug)
 			System.out.println("try to add node " + node.getLoc() + " to tree " + this.id);
 		// case 1: check if the node is added by some trees
-		if (node.getTreeId() != null) {
-			int treeIdx = node.getTreeId().getAsInt();
-			if (treeIdx != this.id.getAsInt()) {
+		if (node.getTreeId() != -1) {
+			if (node.getTreeId() != id) {
 				if (forest.debug)
-					System.out.println("node " + node.getLoc() + " already added to tree " + treeIdx);
-				String thisId = id.toString();
-				forest.getTreesAsList().get(treeIdx).merge(this).linkAll();
+					System.out.println("node " + node.getLoc() + " already added to tree " + node.getTreeId());
+				int thisId = id;
+				forest.getTrees().get(node.getTreeId()).merge(this).linkAll();
 				if (forest.debug)
 					System.out.println("drop tree " + thisId);
 				return false;
@@ -51,7 +49,7 @@ public class DeclTree {
 		}
 
 		// case 2: update tree
-		declLocs.add(node.getLoc());
+		declNodes.add(node);
 		// node update tree id
 		node.setTreeId(this.id);
 		// update global nodes
@@ -108,25 +106,36 @@ public class DeclTree {
 		}
 	}
 
-	private DeclTree merge(DeclTree tree) {
+	public DeclTree merge(DeclTree tree) {
+		if (tree.getId() == this.id) {
+			System.out.println("same");
+			return this;
+		}
 		if (forest.debug)
 			System.out.println("tree " + this.id + " merge tree " + tree.id);
-		// update tree id
-		this.declLocs.addAll(tree.declLocs);
-		// update tree id
-		tree.id.setId(this.id.getAsInt());
+		// remove tree
+		forest.getTrees().remove(tree.getId());
+		// merge all nodes from tree
+		for (DeclNode dn : tree.getDeclNodes()) {
+			dn.setTreeId(this.id);
+			this.declNodes.add(dn);
+		}
 		// merge queues
 		while (!tree.prevNodes.isEmpty()) {
 			DeclNode node = tree.prevNodes.pop();
-			if (!declLocs.contains(node.getLoc())) {
+			if (!declNodes.contains(node)) {
 				this.prevNodes.push(node);
 			}
 		}
 		return this;
 	}
 
-	public TreeSet<DeclLocation> getDeclLocs() {
-		return declLocs;
+	public TreeSet<DeclNode> getDeclNodes() {
+		return declNodes;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 }

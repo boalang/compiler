@@ -1,10 +1,16 @@
 package boa.functions.code.change;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import boa.functions.code.change.declaration.DeclNode;
+import boa.functions.code.change.declaration.DeclTree;
+import boa.functions.code.change.file.FileForest;
 import boa.functions.code.change.file.FileNode;
+import boa.functions.code.change.file.FileTree;
 import boa.functions.code.change.refactoring.BoaCodeElementLevel;
 import boa.types.Code.CodeRefactoring;
 
@@ -21,35 +27,37 @@ public class RefactoringConnector {
 	}
 
 	public void connect(FileNode fileBefore, FileNode fileAfter, CodeRefactoring ref) {
-		
+
 		switch (BoaCodeElementLevel.getCodeElementLevel(ref.getType())) {
 		case CLASS_LEVEL:
 			if (refTypes.contains(ref.getType())) {
-				
+
 				String leftDeclSig = ref.getLeftSideLocations(0).getCodeElement();
 				String rightDeclSig = ref.getRightSideLocations(0).getCodeElement();
-				
-				if (fileBefore == null) {
-					DeclNode leftDecl = fileAfter.getDeclChange(leftDeclSig);
-					DeclNode rightDecl = fileAfter.getDeclChange(rightDeclSig);
-//					System.out.println(fileAfter.getDeclChangeMap());
-//					System.out.println(leftDeclSig + " " + leftDecl);
-//					System.out.println(rightDeclSig + " " + rightDecl);
-					if (!leftDecl.getTreeId().equals(rightDecl.getTreeId())) {
-//						System.out.println("1 need to link " + ref.getType());
-					} else {
-						System.out.println("no need linking " + ref.getType());
-					}
-				} else {
-					DeclNode leftDecl = fileBefore.getDeclChange(leftDeclSig);
-					DeclNode rightDecl = fileAfter.getDeclChange(rightDeclSig);
-					if (!leftDecl.getTreeId().equals(rightDecl.getTreeId())) {
-//						System.out.println("2 need to link " + ref.getType());
-					} else {
-						System.out.println("no need linking " + ref.getType());
-					}
+
+				DeclNode leftDecl = fileBefore == null ? fileAfter.getDeclChange(leftDeclSig)
+						: fileBefore.getDeclChange(leftDeclSig);
+				DeclNode rightDecl = fileAfter.getDeclChange(rightDeclSig);
+
+				if (leftDecl.getTreeId() != rightDecl.getTreeId()) {
+					
+//					if (rightDecl.getTreeId().id == 3385) {
+//						System.out.println(leftDecl.getTreeId() + " " + rightDecl.getTreeId());
+//						System.out.println(db.declForest.keySet());	
+//						
+//						DeclTree leftTree = db.declForest.get(leftDecl.getTreeId());
+//						DeclTree rightTree = db.declForest.get(rightDecl.getTreeId());
+//						leftTree.merge(rightTree);
+//						
+//						System.out.println(leftDecl.getTreeId() + " " + rightDecl.getTreeId());
+//						System.out.println(db.declForest.keySet());	
+//					} else {
+//						DeclTree leftTree = db.declForest.get(leftDecl.getTreeId());
+//						DeclTree rightTree = db.declForest.get(rightDecl.getTreeId());
+//						leftTree.merge(rightTree);
+//					}
+					
 				}
-				
 			}
 			break;
 		case METHOD_LEVEL:
@@ -61,8 +69,7 @@ public class RefactoringConnector {
 		default:
 			break;
 		}
-		
-		
+
 	}
 
 }

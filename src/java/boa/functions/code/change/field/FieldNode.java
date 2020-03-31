@@ -1,9 +1,9 @@
 package boa.functions.code.change.field;
 
-import boa.functions.code.change.ChangedNode;
+import boa.functions.code.change.ChangedASTNode;
 import boa.functions.code.change.declaration.DeclNode;
 
-public class FieldNode extends ChangedNode {
+public class FieldNode extends ChangedASTNode implements Comparable<FieldNode> {
 
 	private DeclNode declNode;
 	private FieldLocation loc;
@@ -82,6 +82,11 @@ public class FieldNode extends ChangedNode {
 
 	public void setSecondParent(FieldNode secondParent) {
 		this.secondParent = secondParent;
+	}
+
+	@Override
+	public int compareTo(FieldNode o) {
+		return this.loc.compareTo(o.getLoc());
 	}
 
 }

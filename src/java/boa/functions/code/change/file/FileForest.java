@@ -4,6 +4,7 @@ import static boa.functions.BoaAstIntrinsics.*;
 import static boa.functions.code.change.refactoring.BoaRefactoringPredictionIntrinsics.getRefactorings;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,12 +24,13 @@ import boa.types.Toplevel.Project;
 
 public class FileForest {
 
-	private List<FileTree> trees = new ArrayList<FileTree>();
+	private HashMap<Integer, FileTree> trees;
 	public final ChangeDataBase db;
 	protected boolean debug = false;
 
-	public FileForest(ChangeDataBase gd, boolean debug) {
-		this.db = gd;
+	public FileForest(ChangeDataBase db, boolean debug) {
+		this.db = db;
+		this.trees = db.fileForest;
 		this.debug = debug;
 		buildTrees();
 	}
@@ -42,14 +44,14 @@ public class FileForest {
 						System.err.println("start new node " + fn.getLoc());
 					FileTree tree = new FileTree(this, fn, trees.size());
 					if (tree.linkAll())
-						trees.add(tree);
+						trees.put(tree.getId(), tree);
 				}
 			}
 		}
 	}
 
-	public List<FileTree> getTreesAsList() {
-		return this.trees;
+	public HashMap<Integer, FileTree> getTrees() {
+		return trees;
 	}
 
 	// refactoring functions
