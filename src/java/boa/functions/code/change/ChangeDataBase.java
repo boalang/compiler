@@ -3,6 +3,7 @@ package boa.functions.code.change;
 import static boa.functions.BoaIntrinsics.getRevision;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -51,6 +52,13 @@ public class ChangeDataBase {
 
 	// refactoring data
 	public List<RefactoringBond> refDB = new ArrayList<RefactoringBond>();
+	
+	// considered ref types
+	public HashSet<String> refTypes = new HashSet<String>(Arrays.asList(new String[] { 
+			"Move Class", "Rename Class", // CLASS_LEVEL
+			"Rename Method", "Move Method", // METHOD_LEVEL
+			"Move Attribute", "Pull Up Attribute", "Push Down Attribute" // FIELD_LEVEL
+	}));
 
 	public ChangeDataBase(CodeRepository cr, int revCount) {
 		for (int i = 0; i < revCount; i++)

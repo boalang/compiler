@@ -14,6 +14,8 @@ import java.util.Queue;
 
 import boa.functions.code.change.ASTChange;
 import boa.functions.code.change.ChangeDataBase;
+import boa.functions.code.change.RefactoringBond;
+import boa.functions.code.change.RefactoringBonds;
 import boa.functions.code.change.RefactoringConnector;
 import boa.functions.code.change.RevNode;
 import boa.runtime.BoaAbstractVisitor;
@@ -55,66 +57,23 @@ public class FileForest {
 	}
 
 	// refactoring functions
-	public void updateWithRefs(Project p, HashSet<String> refRevIds, Set<String> refTypes) {
+	public void updateWithRefs(Project p, HashSet<String> refRevIds) {
 		
 		RefactoringConnector cnn = new RefactoringConnector(db);
 		for (String id : refRevIds) {
 			RevNode r = db.revIdMap.get(id);
-			List<CodeRefactoring> refs = refTypes == null ? getCodeChange(p, r.getRevision()).getRefactoringsList()
-					: getRefactorings(p, r.getRevision(), refTypes);
+			List<CodeRefactoring> refs = getCodeChange(p, r.getRevision()).getRefactoringsList();
+			RefactoringBonds bonds = new RefactoringBonds();
 			for (CodeRefactoring ref : refs) {
-				if (ref.getType().equals("Change Package"))
-					continue;
-				String beforeFilePath = ref.getLeftSideLocations(0).getFilePath();
-				String afterFilePath = ref.getRightSideLocations(0).getFilePath();
-				FileNode fileBefore = r.getFileChangeMap().get(beforeFilePath);
-				FileNode fileAfter = r.getFileChangeMap().get(afterFilePath);
-				cnn.connect(fileBefore, fileAfter, ref);
-
-//				RefactoringBond refBond = new RefactoringBond(fileBefore.getLoc(), fileAfter.getLoc(), ref);
-//				int refBondIdx = db.refDB.size();
-//				db.refDB.add(refBond);
-//
-//				// update file ref bonds
-//				fileBefore.getRightRefBonds().add(refBond, refBondIdx);
-//				fileAfter.getLeftRefBonds().add(refBond, refBondIdx);
-//				// update tree ref locations
-//				int beforeTreeIdx = db.fileDB.get(fileBefore.getLoc()).getTreeId().getAsInt();
-//				FileTree beforeTree = trees.get(beforeTreeIdx);
-//				beforeTree.fileBeforeRef.add(fileBefore.getLoc());
-//				int afterTreeIdx = db.fileDB.get(fileAfter.getLoc()).getTreeId().getAsInt();
-//				FileTree afterTree = trees.get(afterTreeIdx);
-//				afterTree.fileBeforeRef.add(fileAfter.getLoc());
+				if (db.refTypes.contains(ref.getType())) {
+					RefactoringBond bond = new RefactoringBond(ref);
+					bonds.add(bond, db.refDB.size());
+					db.refDB.add(bond);
+				}
 			}
+			cnn.connect(bonds, r);
 		}
 	}
-
-//	private FileNode findLastModification(String fileName, RevNode r) {
-//		FileNode fn = getFileNodeFrom(fileName, r);
-//		// case: extract interface from added file
-//		if (fn != null && fn.getChangedFile().getChange() == ChangeKind.ADDED) {
-//			return fn;
-//		}
-//		RevNode cur = r;
-//		do {
-//			if (cur.getRevision().getParentsCount() == 0)
-//				return null;
-//			// first parent in main branch
-//			cur = db.revIdxMap.get(cur.getRevision().getParents(0));
-//			fn = getFileNodeFrom(fileName, cur);
-//			if (fn != null) {
-//				return fn;
-//			}
-//
-//		} while (true);
-//	}
-//
-//	private FileNode getFileNodeFrom(String filePath, RevNode r) {
-//		for (ChangedFile cf : r.getRevision().getFilesList())
-//			if (cf.getName().equals(filePath))
-//				return db.fileDB.get(new FileLocation(cf.getRevisionIdx(), cf.getFileIdx()));
-//		return null;
-//	}
 
 	private HashSet<FileLocation> visited = new HashSet<FileLocation>();
 
