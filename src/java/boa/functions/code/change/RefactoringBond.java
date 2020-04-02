@@ -20,7 +20,7 @@ public class RefactoringBond {
 		this.level = BoaCodeElementLevel.getCodeElementLevel(ref.getType());
 		this.leftElement = ref.getLeftSideLocations(0).getCodeElement();
 		this.rightElement = ref.getRightSideLocations(0).getCodeElement();
-		String[] declSigs = getDeclSigsFromMethodLevelRef(ref.getDescription());
+		String[] declSigs = getDeclSigs(ref.getDescription());
 		this.leftDecl = declSigs[0];
 		this.rightDecl = declSigs[1];
 	}
@@ -53,7 +53,7 @@ public class RefactoringBond {
 		return rightDecl;
 	}
 	
-	private String[] getDeclSigsFromMethodLevelRef(String description) {
+	private String[] getDeclSigs(String description) {
 		BoaRefactoringType type = BoaRefactoringType.extractFromDescription(description);
 		Matcher m = type.getRegex().matcher(description);
 		String[] decls = new String[2];

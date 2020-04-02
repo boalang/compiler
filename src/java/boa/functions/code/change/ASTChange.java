@@ -226,6 +226,8 @@ public class ASTChange {
 		StringBuilder sb = new StringBuilder();
 		if (m.getModifiersCount() > 0)
 			sb.append(m.getModifiers(0).getVisibility().toString().toLowerCase() + " ");
+		else
+			sb.append("public "); // if no modifiers, then use "public".
 		sb.append(m.getName() + "(");
 		for (int i = 0; i < m.getArgumentsCount(); i++) {
 			if (i > 0)
@@ -233,11 +235,13 @@ public class ASTChange {
 			Variable v = m.getArguments(i);
 			sb.append(v.getName() + " ");
 			if (v.hasVariableType())
-				sb.append(v.getVariableType().getName());
+				// match refactoring description with no space in type name
+				sb.append(v.getVariableType().getName().replaceAll(" ", ""));
 		}
 		sb.append(")");
 		if (m.hasReturnType())
-			sb.append(" : " + m.getReturnType().getName());
+			// match refactoring description with no space in type name
+			sb.append(" : " + m.getReturnType().getName().replaceAll(" ", ""));
 		return sb.toString();
 	}
 
@@ -245,9 +249,12 @@ public class ASTChange {
 		StringBuilder sb = new StringBuilder();
 		if (v.getModifiersCount() > 0)
 			sb.append(v.getModifiers(0).getVisibility().toString().toLowerCase() + " ");
+		else
+			sb.append("public "); // if no modifiers, then use "public".
 		sb.append(v.getName());
 		if (v.hasVariableType())
-			sb.append(" : " + v.getVariableType().getName());
+			// match refactoring description with no space in type name
+			sb.append(" : " + v.getVariableType().getName().replaceAll(" ", ""));
 		return sb.toString();
 	}
 

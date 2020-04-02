@@ -12,6 +12,8 @@ import boa.functions.code.change.declaration.DeclTree;
 import boa.functions.code.change.field.FieldNode;
 import boa.functions.code.change.field.FieldTree;
 import boa.functions.code.change.file.FileNode;
+import boa.functions.code.change.method.MethodNode;
+import boa.functions.code.change.method.MethodTree;
 import boa.functions.code.change.refactoring.BoaCodeElementLevel;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.Declaration;
@@ -39,6 +41,7 @@ public class RefactoringConnector {
 		this.rev = r;
 		this.finder = new DeclFider();
 		connectClassLevel();
+		connectFieldLevel();
 	}
 
 	private void connectClassLevel() throws Exception {
@@ -54,13 +57,13 @@ public class RefactoringConnector {
 
 	private void updateDeclConnections(FileNode fileBefore, FileNode fileAfter, RefactoringBond bond) throws Exception {
 		// If a file is renamed in this revision, then its fileBefore is null.
-		// But, it's changes is 
+		// But, it's changes is
 		FileNode leftFile = fileBefore == null ? fileAfter : fileBefore;
 		FileNode rightFile = fileAfter;
-		
+
 		String leftDeclSig = bond.getLeftElement();
 		String rightDeclSig = bond.getRightElement();
-		
+
 		DeclNode leftDecl = leftFile.getDeclChange(leftDeclSig);
 		DeclNode rightDecl = rightFile.getDeclChange(rightDeclSig);
 
@@ -73,13 +76,13 @@ public class RefactoringConnector {
 		if (rightDecl.getFirstParent() == null) {
 			rightDecl.setFirstParent(leftDecl);
 			rightDecl.setFirstChange(getChangeKind(bond));
-			connectAll(leftDecl, rightDecl);
+			connectNodesWithSameSig(leftDecl, rightDecl);
 		} else {
 			System.out.println("not null decl " + fileAfter);
 		}
 	}
 
-	private void connectAll(DeclNode leftDecl, DeclNode rightDecl) throws Exception {
+	private void connectNodesWithSameSig(DeclNode leftDecl, DeclNode rightDecl) throws Exception {
 		Declaration left = finder.getDecl(leftDecl);
 		Declaration right = finder.getDecl(rightDecl);
 
@@ -123,7 +126,7 @@ public class RefactoringConnector {
 						if (!prettyprint(leftMethod).equals(prettyprint(rightMethod))) {
 							modified2.add(j);
 						} else {
-							matched2.add(i);
+							matched2.add(j);
 						}
 						deleted2.remove(i);
 						added2.remove(j);
@@ -134,52 +137,88 @@ public class RefactoringConnector {
 		}
 
 		// update field changes
-		for (int j : modified1) {
-			String fieldSig = getSignature(right.getFields(j));
-			FieldNode leftField = leftDecl.getFieldChange(fieldSig);
-			FieldNode rightField = rightDecl.getFieldChange(fieldSig);
-
-			if (leftField.getTreeId() != rightField.getTreeId()) {
-				FieldTree leftTree = db.fieldForest.get(leftField.getTreeId());
-				FieldTree rightTree = db.fieldForest.get(rightField.getTreeId());
-				leftTree.merge(rightTree);
-			}
-
-			if (rightField.getFirstParent() == null) {
-				rightField.setFirstParent(leftField);
-				rightField.setFirstChange(ChangeKind.MODIFIED);
-			} else {
-				System.out.println("not null field " + rightField);
-			}
-		}
-		for (int j : matched1) {
-			String fieldSig = getSignature(right.getFields(j));
-			FieldNode leftField = leftDecl.getFieldChange(fieldSig);
-			FieldNode rightField = rightDecl.getFieldChange(fieldSig);
-
-			if (leftField.getTreeId() != rightField.getTreeId()) {
-				FieldTree leftTree = db.fieldForest.get(leftField.getTreeId());
-				FieldTree rightTree = db.fieldForest.get(rightField.getTreeId());
-				leftTree.merge(rightTree);
-			}
-
-			if (rightField.getFirstParent() == null) {
-				rightField.setFirstParent(leftField);
-				rightField.setFirstChange(ChangeKind.MOVED);
-			} else {
-				System.out.println("not null field " + rightField);
-			}
-		}
+		for (int j : modified1)
+			connectFieldsWithSameSig(getSignature(right.getFields(j)), leftDecl, rightDecl, ChangeKind.MODIFIED);
+		for (int j : matched1)
+			connectFieldsWithSameSig(getSignature(right.getFields(j)), leftDecl, rightDecl, ChangeKind.MOVED);
 
 		// update method changes
-		for (int j : modified2) {
-//			String methodSig = getSignature(right.getMethods(j));
-//			MethodNode leftMethod = right
+		for (int j : modified2)
+			connectMethodsWithSameSig(getSignature(right.getMethods(j)), leftDecl, rightDecl, ChangeKind.MODIFIED);
+		for (int j : matched2)
+			connectMethodsWithSameSig(getSignature(right.getMethods(j)), leftDecl, rightDecl, ChangeKind.MOVED);
+	}
 
+	private void connectFieldsWithSameSig(String sig, DeclNode leftDecl, DeclNode rightDecl, ChangeKind change) {
+		FieldNode leftField = leftDecl.getFieldChange(sig);
+		FieldNode rightField = rightDecl.getFieldChange(sig);
+
+		if (leftField.getTreeId() != rightField.getTreeId()) {
+			FieldTree leftTree = db.fieldForest.get(leftField.getTreeId());
+			FieldTree rightTree = db.fieldForest.get(rightField.getTreeId());
+			leftTree.merge(rightTree);
 		}
-		for (int j : matched2) {
-//			String methodSig = getSignature(right.getMethods(j));
 
+		if (rightField.getFirstParent() == null) {
+			rightField.setFirstParent(leftField);
+			rightField.setFirstChange(change);
+		} else {
+			System.out.println("not null field " + rightField);
+		}
+	}
+
+	private void connectMethodsWithSameSig(String sig, DeclNode leftDecl, DeclNode rightDecl, ChangeKind change) {
+		MethodNode leftMethod = leftDecl.getMethodChange(sig);
+		MethodNode rightMethod = rightDecl.getMethodChange(sig);
+
+		if (leftMethod.getTreeId() != rightMethod.getTreeId()) {
+			MethodTree leftTree = db.methodForest.get(leftMethod.getTreeId());
+			MethodTree rightTree = db.methodForest.get(rightMethod.getTreeId());
+			leftTree.merge(rightTree);
+		}
+
+		if (rightMethod.getFirstParent() == null) {
+			rightMethod.setFirstParent(leftMethod);
+			rightMethod.setFirstChange(change);
+		} else {
+			System.out.println("not null field " + rightMethod);
+		}
+	}
+
+	private void connectFieldLevel() {
+		for (int idx : bonds.getFieldLevel()) {
+			RefactoringBond bond = db.refDB.get(idx);
+			FileNode fileBefore = rev.getFileChangeMap()
+					.get(bond.getRefactoring().getLeftSideLocations(0).getFilePath());
+			FileNode fileAfter = rev.getFileChangeMap()
+					.get(bond.getRefactoring().getRightSideLocations(0).getFilePath());
+		
+			// If a file is renamed in this revision, then its fileBefore is null.
+			// But, it's changes is
+			FileNode leftFile = fileBefore == null ? fileAfter : fileBefore;
+			FileNode rightFile = fileAfter;
+
+			DeclNode leftDecl = leftFile.getDeclChange(bond.getLeftDecl());
+			DeclNode rightDecl = rightFile.getDeclChange(bond.getRightDecl());
+			
+			String leftFieldSig = bond.getLeftElement();
+			String rightFieldSig = bond.getRightElement();
+			
+			FieldNode leftField = leftDecl.getFieldChange(leftFieldSig);
+			FieldNode rightField = rightDecl.getFieldChange(rightFieldSig);
+
+			if (leftField.getTreeId() != rightField.getTreeId()) {
+				FieldTree leftTree = db.fieldForest.get(leftField.getTreeId());
+				FieldTree rightTree = db.fieldForest.get(rightField.getTreeId());
+				leftTree.merge(rightTree);
+			}
+
+			if (rightField.getFirstParent() == null) {
+				rightField.setFirstParent(leftField);
+				rightField.setFirstChange(getChangeKind(bond));
+			} else {
+				System.out.println("not null field " + rightField);
+			}
 		}
 	}
 

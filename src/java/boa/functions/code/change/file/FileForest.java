@@ -1,14 +1,11 @@
 package boa.functions.code.change.file;
 
 import static boa.functions.BoaAstIntrinsics.*;
-import static boa.functions.code.change.refactoring.BoaRefactoringPredictionIntrinsics.getRefactorings;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.Map.Entry;
 import java.util.Queue;
 
@@ -58,7 +55,6 @@ public class FileForest {
 
 	// refactoring functions
 	public void updateWithRefs(Project p, HashSet<String> refRevIds) throws Exception {
-		
 		RefactoringConnector cnn = new RefactoringConnector(db);
 		for (String id : refRevIds) {
 			RevNode r = db.revIdMap.get(id);
