@@ -109,6 +109,10 @@ public class MethodTree {
 	}
 
 	public MethodTree merge(MethodTree tree) {
+		if (tree.getId() == this.id) {
+			System.out.println("same MethodTree");
+			return this;
+		}
 		if (forest.debug)
 			System.out.println("tree " + this.id + " merge tree " + tree.id);
 		// remove tree

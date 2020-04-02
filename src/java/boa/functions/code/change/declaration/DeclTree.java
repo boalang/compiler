@@ -110,7 +110,7 @@ public class DeclTree {
 
 	public DeclTree merge(DeclTree tree) {
 		if (tree.getId() == this.id) {
-			System.out.println("same");
+			System.out.println("same DeclTree");
 			return this;
 		}
 		if (forest.debug)

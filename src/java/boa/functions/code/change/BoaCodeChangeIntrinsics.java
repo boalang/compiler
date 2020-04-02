@@ -50,9 +50,10 @@ public class BoaCodeChangeIntrinsics {
 		HashMap<Integer, MethodTree> methodTrees = methodForest.getTrees();
 		FieldForest fieldForest = new FieldForest(db, false);
 		HashMap<Integer, FieldTree> fieldTrees = fieldForest.getTrees();
-		cleanup();
 
 		forest.updateWithRefs(p, refRevIds); //TODO
+		
+		cleanup();
 
 		System.out.println("Distinct Files: " + forest.db.fileNames.size());
 		System.out.println("Total Revs: " + revCount);

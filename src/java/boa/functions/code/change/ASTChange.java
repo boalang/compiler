@@ -48,18 +48,18 @@ public class ASTChange {
 	}
 
 	private DeclNode update(FileNode fileNode, Declaration decl, ChangeKind change, boolean isFirstParent) {
-		DeclNode declNode = fileNode.getDeclNode(decl.getFullyQualifiedName());
+		DeclNode declNode = fileNode.updateDeclChange(decl.getFullyQualifiedName());
 		updateChange(declNode, change, isFirstParent);
 		return declNode;
 	}
 
 	private void update(DeclNode declNode, Variable v, ChangeKind change, boolean isFirstParent) {
-		FieldNode fieldNode = declNode.getFieldNode(getSignature(v));
+		FieldNode fieldNode = declNode.updateFieldChange(getSignature(v));
 		updateChange(fieldNode, change, isFirstParent);
 	}
 
 	private void update(DeclNode declNode, Method m, ChangeKind change, boolean isFirstParent) {
-		MethodNode methodNode = declNode.getMethodNode(getSignature(m));
+		MethodNode methodNode = declNode.updateMethodChange(getSignature(m));
 		updateChange(methodNode, change, isFirstParent);
 	}
 
@@ -212,7 +212,7 @@ public class ASTChange {
 		for (int j : modified1)
 			update(declNode, rightDecl.getFields(j), ChangeKind.MODIFIED, isFirstParent);
 
-		// update method chagnes
+		// update method changes
 		for (int i : deleted2)
 			update(declNode, leftDecl.getMethods(i), ChangeKind.DELETED, isFirstParent);
 		for (int j : added2)
@@ -222,7 +222,7 @@ public class ASTChange {
 
 	}
 
-	private String getSignature(Method m) {
+	public static String getSignature(Method m) {
 		StringBuilder sb = new StringBuilder();
 		if (m.getModifiersCount() > 0)
 			sb.append(m.getModifiers(0).getVisibility().toString().toLowerCase() + " ");
@@ -241,7 +241,7 @@ public class ASTChange {
 		return sb.toString();
 	}
 
-	private String getSignature(Variable v) {
+	public static String getSignature(Variable v) {
 		StringBuilder sb = new StringBuilder();
 		if (v.getModifiersCount() > 0)
 			sb.append(v.getModifiers(0).getVisibility().toString().toLowerCase() + " ");

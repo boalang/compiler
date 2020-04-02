@@ -57,7 +57,7 @@ public class MethodNode extends ChangedASTNode implements Comparable<MethodNode>
 
 	@Override
 	public String toString() {
-		return declNode + " " + loc.getIdx() + " " + signature;
+		return declNode + " " + loc.getIdx() + " " + signature + " " + firstChange + " " + secondChange;
 	}
 
 	public MethodNode getSecondParent() {

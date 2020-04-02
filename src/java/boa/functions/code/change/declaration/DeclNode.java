@@ -33,7 +33,7 @@ public class DeclNode extends ChangedASTNode implements Comparable<DeclNode> {
 		this.loc = new DeclLocation(fn.getLoc(), size);
 	}
 
-	public MethodNode getMethodNode(String signature) {
+	public MethodNode updateMethodChange(String signature) {
 		if (!methodChangeMap.containsKey(signature)) {
 			int idx = methodChanges.size();
 			MethodNode methodNode = new MethodNode(signature, this, idx);
@@ -50,7 +50,7 @@ public class DeclNode extends ChangedASTNode implements Comparable<DeclNode> {
 		return null;
 	}
 
-	public FieldNode getFieldNode(String signature) {
+	public FieldNode updateFieldChange(String signature) {
 		if (!fieldChangeMap.containsKey(signature)) {
 			int idx = fieldChanges.size();
 			FieldNode fieldNode = new FieldNode(signature, this, idx);

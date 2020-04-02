@@ -7,7 +7,6 @@ import java.util.List;
 import boa.functions.code.change.ChangedASTNode;
 import boa.functions.code.change.RevNode;
 import boa.functions.code.change.declaration.DeclNode;
-import boa.functions.code.change.method.MethodNode;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 
@@ -38,16 +37,21 @@ public class FileNode extends ChangedASTNode implements Comparable<FileNode> {
 		this.loc = new FileLocation(cf.getRevisionIdx(), cf.getFileIdx());
 	}
 
-	public DeclNode getDeclNode(String fqn) {
+	public DeclNode updateDeclChange(String fqn) {
 		if (!declChangeMap.containsKey(fqn)) {
 			int idx = declChanges.size();
 			DeclNode declNode = new DeclNode(fqn, this, idx);
 			declChangeMap.put(fqn, idx);
 			declChanges.add(declNode);
-//			declDB.put(declNode.getLoc(), declNode);
 			return declNode;
 		}
 		return declChanges.get(declChangeMap.get(fqn));
+	}
+
+	public DeclNode getDeclChange(String fqn) {
+		if (declChangeMap.containsKey(fqn))
+			return declChanges.get(declChangeMap.get(fqn));
+		return null;
 	}
 
 	public FileLocation getLoc() {
@@ -109,7 +113,7 @@ public class FileNode extends ChangedASTNode implements Comparable<FileNode> {
 
 	@Override
 	public String toString() {
-		return r.getRevision().getId() + " " + loc + " " + cf.getName() + " " + cf.getChange();
+		return r.getRevision().getId() + " " + loc + " " + cf.getName() + " " + firstChange + " " + secondChange;
 	}
 
 	public List<DeclNode> getDeclChanges() {
@@ -167,22 +171,9 @@ public class FileNode extends ChangedASTNode implements Comparable<FileNode> {
 		return declChangeMap;
 	}
 
-	public DeclNode getDeclChange(String fqn) {
-		if (declChangeMap.containsKey(fqn))
-			return declChanges.get(declChangeMap.get(fqn));
-		return null;
-	}
-
 	@Override
 	public int compareTo(FileNode o) {
 		return this.loc.compareTo(o.getLoc());
-	}
-
-	public MethodNode getMethodChange(String methodSig, String declSig) {
-		DeclNode dn = getDeclChange(declSig);
-		if (dn != null)
-			return dn.getMethodChange(methodSig);
-		return null;
 	}
 
 }

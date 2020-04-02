@@ -67,6 +67,7 @@ public class FieldTree {
 			if (forest.debug)
 				System.out.println("push 1st parent " + node.getFirstParent().getLoc());
 		}
+
 		return true;
 	}
 
@@ -108,6 +109,10 @@ public class FieldTree {
 	}
 
 	public FieldTree merge(FieldTree tree) {
+		if (tree.getId() == this.id) {
+			System.out.println("same DeclTree");
+			return this;
+		}
 		if (forest.debug)
 			System.out.println("tree " + this.id + " merge tree " + tree.id);
 		// remove tree

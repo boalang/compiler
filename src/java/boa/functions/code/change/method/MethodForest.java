@@ -1,8 +1,6 @@
 package boa.functions.code.change.method;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map.Entry;
 
 import boa.functions.code.change.ChangeDataBase;
@@ -14,10 +12,6 @@ public class MethodForest {
 	private HashMap<Integer, MethodTree> trees;
 	public final ChangeDataBase db;
 	protected boolean debug = false;
-
-	// considered ref types
-	protected HashSet<String> refTypes = new HashSet<String>(
-			Arrays.asList(new String[] { "Move Class", "Rename Class" }));
 
 	public MethodForest(ChangeDataBase db, boolean debug) {
 		this.db = db;

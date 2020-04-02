@@ -57,7 +57,7 @@ public class FileForest {
 	}
 
 	// refactoring functions
-	public void updateWithRefs(Project p, HashSet<String> refRevIds) {
+	public void updateWithRefs(Project p, HashSet<String> refRevIds) throws Exception {
 		
 		RefactoringConnector cnn = new RefactoringConnector(db);
 		for (String id : refRevIds) {
@@ -103,6 +103,8 @@ public class FileForest {
 					astChange.compare(leftNode, rightNode, collector, true);
 					queue.offer(leftNode);
 					rightNode.setFirstChange(rightNode.getChangedFile().getChange());
+				} else {
+					rightNode.setFirstChange(ChangeKind.ADDED);
 				}
 
 				// update changes from 2nd parent
