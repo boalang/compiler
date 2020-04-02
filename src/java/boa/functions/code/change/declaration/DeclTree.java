@@ -4,6 +4,7 @@ import java.util.Stack;
 import java.util.TreeSet;
 
 import boa.functions.code.change.file.FileNode;
+import boa.types.Shared.ChangeKind;
 
 public class DeclTree {
 
@@ -72,7 +73,8 @@ public class DeclTree {
 
 	private void updatePrevNodes(DeclNode node) {
 		FileNode fn = node.getFileNode();
-		if (fn.hasFirstParent()) {
+		// if node's first change is added then stop searching first parent
+		if (fn.hasFirstParent() && node.getFirstChange() != ChangeKind.ADDED) {
 			if (forest.debug)
 				System.out.println("file node " + fn.getLoc() + " has 1st parent " + fn.getFirstParent().getLoc());
 			DeclNode firstParent = findPreviousNode(node, fn.getFirstParent());

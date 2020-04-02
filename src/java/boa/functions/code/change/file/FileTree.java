@@ -83,6 +83,9 @@ public class FileTree {
 
 	private void updatePrevNodes(FileNode node) {
 		for (int i = 0; i < node.getRev().getRevision().getParentsCount(); i++) {
+			// if node's first change is added then stop searching first parent
+			if (i == 0 && node.getChangedFile().getChange() == ChangeKind.ADDED)
+				continue;
 			FileNode prevNode = getPreviousNode(node, i);
 			if (prevNode != null) {
 				// check if the prevNode is already added to database

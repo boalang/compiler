@@ -4,6 +4,7 @@ import java.util.Stack;
 import java.util.TreeSet;
 
 import boa.functions.code.change.declaration.DeclNode;
+import boa.types.Shared.ChangeKind;
 
 public class MethodTree {
 
@@ -72,7 +73,8 @@ public class MethodTree {
 
 	private void updatePrevNodes(MethodNode node) {
 		DeclNode dn = node.getDeclNode();
-		if (dn.hasFirstParent()) {
+		// if node's first change is added then stop searching first parent
+		if (dn.hasFirstParent() && node.getFirstChange() != ChangeKind.ADDED) {
 			if (forest.debug)
 				System.out.println("file node " + dn.getLoc() + " has 1st parent " + dn.getFirstParent().getLoc());
 			MethodNode firstParent = findPreviousNode(node, dn.getFirstParent());
