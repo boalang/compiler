@@ -42,6 +42,7 @@ public class RefactoringConnector {
 		this.finder = new DeclFider();
 		connectClassLevel();
 		connectFieldLevel();
+		connectMethodLevel();
 	}
 
 	private void connectClassLevel() throws Exception {
@@ -57,7 +58,6 @@ public class RefactoringConnector {
 
 	private void updateDeclConnections(FileNode fileBefore, FileNode fileAfter, RefactoringBond bond) throws Exception {
 		// If a file is renamed in this revision, then its fileBefore is null.
-		// But, it's changes is
 		FileNode leftFile = fileBefore == null ? fileAfter : fileBefore;
 		FileNode rightFile = fileAfter;
 
@@ -78,7 +78,7 @@ public class RefactoringConnector {
 			rightDecl.setFirstChange(getChangeKind(bond));
 			connectNodesWithSameSig(leftDecl, rightDecl);
 		} else {
-			System.out.println("not null decl " + fileAfter);
+			System.out.println("not null decl 1 " + rightDecl);
 		}
 	}
 
@@ -163,7 +163,7 @@ public class RefactoringConnector {
 			rightField.setFirstParent(leftField);
 			rightField.setFirstChange(change);
 		} else {
-			System.out.println("not null field " + rightField);
+			System.out.println("not null field 1 " + rightField);
 		}
 	}
 
@@ -181,7 +181,7 @@ public class RefactoringConnector {
 			rightMethod.setFirstParent(leftMethod);
 			rightMethod.setFirstChange(change);
 		} else {
-			System.out.println("not null field " + rightMethod);
+			System.out.println("not null method 1 " + rightMethod);
 		}
 	}
 
@@ -192,18 +192,17 @@ public class RefactoringConnector {
 					.get(bond.getRefactoring().getLeftSideLocations(0).getFilePath());
 			FileNode fileAfter = rev.getFileChangeMap()
 					.get(bond.getRefactoring().getRightSideLocations(0).getFilePath());
-		
+
 			// If a file is renamed in this revision, then its fileBefore is null.
-			// But, it's changes is
 			FileNode leftFile = fileBefore == null ? fileAfter : fileBefore;
 			FileNode rightFile = fileAfter;
 
 			DeclNode leftDecl = leftFile.getDeclChange(bond.getLeftDecl());
 			DeclNode rightDecl = rightFile.getDeclChange(bond.getRightDecl());
-			
+
 			String leftFieldSig = bond.getLeftElement();
 			String rightFieldSig = bond.getRightElement();
-			
+
 			FieldNode leftField = leftDecl.getFieldChange(leftFieldSig);
 			FieldNode rightField = rightDecl.getFieldChange(rightFieldSig);
 
@@ -214,34 +213,105 @@ public class RefactoringConnector {
 			}
 
 			if (rightField.getFirstParent() == null) {
-				rightField.setFirstParent(leftField);
+				rightField.setFirstParent(leftField); // TODO need to use ref changes to link multiple nodes
 				rightField.setFirstChange(getChangeKind(bond));
 			} else {
-				System.out.println("not null field " + rightField);
+				System.out.println("not null field 2 " + rightField);
 			}
 		}
 	}
 
-	public void connect(FileNode fileBefore, FileNode fileAfter, CodeRefactoring ref) {
+	private void connectMethodLevel() {
+		for (int idx : bonds.getMethodLevel()) {
+			RefactoringBond bond = db.refDB.get(idx);
+			FileNode fileBefore = rev.getFileChangeMap()
+					.get(bond.getRefactoring().getLeftSideLocations(0).getFilePath());
+			FileNode fileAfter = rev.getFileChangeMap()
+					.get(bond.getRefactoring().getRightSideLocations(0).getFilePath());
 
-		switch (BoaCodeElementLevel.getCodeElementLevel(ref.getType())) {
-		case METHOD_LEVEL:
-			String leftMethodSig = ref.getLeftSideLocations(0).getCodeElement();
-			String rightMethodSig = ref.getRightSideLocations(0).getCodeElement();
+			// If a file is renamed in this revision, then its fileBefore is null.
+			FileNode leftFile = fileBefore == null ? fileAfter : fileBefore;
+			FileNode rightFile = fileAfter;
 
-			FileNode leftFileNode = fileBefore == null ? fileAfter : fileBefore;
-			FileNode rightFileNode = fileAfter;
+			String leftMethodSig = bond.getLeftElement();
+			String rightMethodSig = bond.getRightElement();
 
-//			String leftDeclSig = "";
-//			String rightDeclSig = "";
-//				MethodNode leftMethod = leftFileNode.getMethodChange(leftMethodSig, leftRightDeclSigs[0]);
-//				MethodNode rightMethod = rightFileNode.getMethodChange(rightMethodSig, leftRightDeclSigs[1]);
+//			System.out.println("ref:               " + bond.getRefactoring().getDescription());
+//			System.out.println("ref left element:  " + leftMethodSig);
+//			System.out.println("ref right element: " + rightMethodSig);
+//			System.out.println("ref left file:     " + leftFile);
+//			System.out.println("ref right file:    " + rightFile);
+//			System.out.println("ref left decl:     " + bond.getLeftDecl());
+//			System.out.println("ref right decl:    " + bond.getRightDecl());
 
-			break;
-		default:
-			break;
+			DeclNode leftDecl = leftFile.getDeclChange(bond.getLeftDecl());
+			DeclNode rightDecl = rightFile.getDeclChange(bond.getRightDecl());
+
+			// If a file is A renamed to A' and a method is moved from A to C, then
+			// search all declaration changes in current revision
+			if (leftDecl == null) {
+				for (FileNode fn : rev.getFileChangeMap().values()) {
+					if (fn.getDeclChangeMap().containsKey(bond.getLeftDecl())) {
+						leftDecl = fn.getDeclChange(bond.getLeftDecl());
+					}
+				}
+			}
+
+			MethodNode leftMethod = leftDecl.getMethodChange(leftMethodSig);
+			MethodNode rightMethod = rightDecl.getMethodChange(rightMethodSig);
+
+//			System.out.println("leftMethod:        " + leftMethod);
+//			System.out.println("rightMethod:       " + rightMethod);
+
+			// If a renamed method M is applied in a renamed class A, then search method
+			// changes in the parent of A.
+			if (leftMethod == null && bond.getType().equals("Rename Method") && leftDecl.getFirstParent() != null) {
+				leftMethod = leftDecl.getFirstParent().getMethodChange(leftMethodSig);
+			}
+
+			// If left is null search all method changes in current revision
+			if (leftMethod == null) {
+				for (FileNode fn : rev.getFileChangeMap().values()) {
+					if (fn.getDeclChangeMap().containsKey(bond.getLeftDecl())) {
+						leftDecl = fn.getDeclChange(bond.getLeftDecl());
+						leftMethod = leftDecl.getMethodChange(leftMethodSig);
+//						System.out.println(leftDecl.getMethodChangeMap());
+						if (leftMethod == null) {
+							leftMethod = leftDecl.getMethodChange(leftMethodSig.replace("package", "public"));
+						}
+					}
+				}
+			}
+
+			if (leftMethod == null) {
+				for (FileNode fn : rev.getFileChangeMap().values()) {
+					for (DeclNode dn : fn.getDeclChanges()) {
+//						for (MethodNode mn : dn.getMethodChanges()) {
+//							if (mn.getFirstChange() == ChangeKind.DELETED && mn.getSignature().contentEquals(
+//									"private addExportedPackage(exportPackageDescription ExportPackageDescription) : void"))
+//								System.out.println(dn.getMethodChangeMap());
+//						}
+						if (dn.getMethodChangeMap().containsKey(leftMethodSig))
+							leftMethod = dn.getMethodChange(leftMethodSig);
+					}
+				}
+			}
+
+			System.out.println();
+
+			if (leftMethod.getTreeId() != rightMethod.getTreeId()) {
+				MethodTree leftTree = db.methodForest.get(leftMethod.getTreeId());
+				MethodTree rightTree = db.methodForest.get(rightMethod.getTreeId());
+				leftTree.merge(rightTree);
+			}
+
+			if (rightMethod.getFirstParent() == null) {
+				rightMethod.setFirstParent(leftMethod); // TODO need to use ref changes to link multiple nodes
+				rightMethod.setFirstChange(getChangeKind(bond));
+			} else {
+				System.out.println("not null method 2 " + rightMethod);
+			}
 		}
-
 	}
 
 	private ChangeKind getChangeKind(RefactoringBond bond) {

@@ -51,7 +51,7 @@ public class BoaCodeChangeIntrinsics {
 		FieldForest fieldForest = new FieldForest(db, false);
 		HashMap<Integer, FieldTree> fieldTrees = fieldForest.getTrees();
 
-		forest.updateWithRefs(p, refRevIds); //TODO
+//		forest.updateWithRefs(p, refRevIds); //TODO
 		
 		cleanup();
 

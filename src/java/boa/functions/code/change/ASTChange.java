@@ -15,7 +15,9 @@ import boa.functions.code.change.file.FileForest.DeclCollector;
 import boa.functions.code.change.method.MethodNode;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Method;
+import boa.types.Ast.Modifier;
 import boa.types.Ast.Variable;
+import boa.types.Ast.Modifier.Visibility;
 import boa.types.Shared.ChangeKind;
 
 public class ASTChange {
@@ -224,10 +226,11 @@ public class ASTChange {
 
 	public static String getSignature(Method m) {
 		StringBuilder sb = new StringBuilder();
-		if (m.getModifiersCount() > 0)
-			sb.append(m.getModifiers(0).getVisibility().toString().toLowerCase() + " ");
-		else
-			sb.append("public "); // if no modifiers, then use "public".
+
+		// add modifier
+		sb.append(getModifierAsString(m.getModifiersList()));
+
+		// add method name
 		sb.append(m.getName() + "(");
 		for (int i = 0; i < m.getArgumentsCount(); i++) {
 			if (i > 0)
@@ -239,23 +242,40 @@ public class ASTChange {
 				sb.append(v.getVariableType().getName().replaceAll(" ", ""));
 		}
 		sb.append(")");
+
+		// add return type
 		if (m.hasReturnType())
 			// match refactoring description with no space in type name
 			sb.append(" : " + m.getReturnType().getName().replaceAll(" ", ""));
+
 		return sb.toString();
 	}
 
 	public static String getSignature(Variable v) {
 		StringBuilder sb = new StringBuilder();
-		if (v.getModifiersCount() > 0)
-			sb.append(v.getModifiers(0).getVisibility().toString().toLowerCase() + " ");
-		else
-			sb.append("public "); // if no modifiers, then use "public".
+
+		// add modifier
+		sb.append(getModifierAsString(v.getModifiersList()));
+
+		// add variable name
 		sb.append(v.getName());
+
+		// add variable type
 		if (v.hasVariableType())
 			// match refactoring description with no space in type name
 			sb.append(" : " + v.getVariableType().getName().replaceAll(" ", ""));
+
 		return sb.toString();
+	}
+
+	public static String getModifierAsString(List<Modifier> list) {
+		if (list.size() > 0) {
+			for (Modifier modifier : list)
+				if (modifier.hasVisibility()) {
+					return modifier.getVisibility().toString().toLowerCase() + " ";
+				}
+		}
+		return "public "; // if no modifiers, then use "public".
 	}
 
 }
