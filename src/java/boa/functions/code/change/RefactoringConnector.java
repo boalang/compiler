@@ -14,12 +14,10 @@ import boa.functions.code.change.field.FieldTree;
 import boa.functions.code.change.file.FileNode;
 import boa.functions.code.change.method.MethodNode;
 import boa.functions.code.change.method.MethodTree;
-import boa.functions.code.change.refactoring.BoaCodeElementLevel;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Method;
 import boa.types.Ast.Variable;
-import boa.types.Code.CodeRefactoring;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 
@@ -67,19 +65,18 @@ public class RefactoringConnector {
 		DeclNode leftDecl = leftFile.getDeclChange(leftDeclSig);
 		DeclNode rightDecl = rightFile.getDeclChange(rightDeclSig);
 
+		// merge trees
 		if (leftDecl.getTreeId() != rightDecl.getTreeId()) {
 			DeclTree leftTree = db.declForest.get(leftDecl.getTreeId());
 			DeclTree rightTree = db.declForest.get(rightDecl.getTreeId());
 			leftTree.merge(rightTree);
 		}
 
-		if (rightDecl.getFirstParent() == null) {
-			rightDecl.setFirstParent(leftDecl);
-			rightDecl.setFirstChange(getChangeKind(bond)); // TODO
-			connectNodesWithSameSig(leftDecl, rightDecl);
-		} else {
-			System.out.println("not null decl 1 " + rightDecl);
-		}
+		// update refactoirng-based edges and changes
+		rightDecl.getLeftRefDecls().add(leftDecl);
+		rightDecl.getLeftRefBonds().add(bond);
+
+		connectNodesWithSameSig(leftDecl, rightDecl);
 	}
 
 	private void connectNodesWithSameSig(DeclNode leftDecl, DeclNode rightDecl) throws Exception {
@@ -140,25 +137,27 @@ public class RefactoringConnector {
 		for (int j : modified1)
 			connectFieldsWithSameSig(getSignature(right.getFields(j)), leftDecl, rightDecl, ChangeKind.MODIFIED);
 		for (int j : matched1)
-			connectFieldsWithSameSig(getSignature(right.getFields(j)), leftDecl, rightDecl, ChangeKind.MOVED);
+			connectFieldsWithSameSig(getSignature(right.getFields(j)), leftDecl, rightDecl, ChangeKind.COPIED);
 
 		// update method changes
 		for (int j : modified2)
 			connectMethodsWithSameSig(getSignature(right.getMethods(j)), leftDecl, rightDecl, ChangeKind.MODIFIED);
 		for (int j : matched2)
-			connectMethodsWithSameSig(getSignature(right.getMethods(j)), leftDecl, rightDecl, ChangeKind.MOVED);
+			connectMethodsWithSameSig(getSignature(right.getMethods(j)), leftDecl, rightDecl, ChangeKind.COPIED);
 	}
 
 	private void connectFieldsWithSameSig(String sig, DeclNode leftDecl, DeclNode rightDecl, ChangeKind change) {
 		FieldNode leftField = leftDecl.getFieldChange(sig);
 		FieldNode rightField = rightDecl.getFieldChange(sig);
 
+		// merge trees
 		if (leftField.getTreeId() != rightField.getTreeId()) {
 			FieldTree leftTree = db.fieldForest.get(leftField.getTreeId());
 			FieldTree rightTree = db.fieldForest.get(rightField.getTreeId());
 			leftTree.merge(rightTree);
 		}
 
+		// update name-based edges and changes
 		if (rightField.getFirstParent() == null) {
 			rightField.setFirstParent(leftField);
 			rightField.setFirstChange(change);
@@ -171,12 +170,14 @@ public class RefactoringConnector {
 		MethodNode leftMethod = leftDecl.getMethodChange(sig);
 		MethodNode rightMethod = rightDecl.getMethodChange(sig);
 
+		// merge trees
 		if (leftMethod.getTreeId() != rightMethod.getTreeId()) {
 			MethodTree leftTree = db.methodForest.get(leftMethod.getTreeId());
 			MethodTree rightTree = db.methodForest.get(rightMethod.getTreeId());
 			leftTree.merge(rightTree);
 		}
 
+		// update name-based edges and changes
 		if (rightMethod.getFirstParent() == null) {
 			rightMethod.setFirstParent(leftMethod);
 			rightMethod.setFirstChange(change);
@@ -206,18 +207,16 @@ public class RefactoringConnector {
 			FieldNode leftField = leftDecl.getFieldChange(leftFieldSig);
 			FieldNode rightField = rightDecl.getFieldChange(rightFieldSig);
 
+			// merge trees
 			if (leftField.getTreeId() != rightField.getTreeId()) {
 				FieldTree leftTree = db.fieldForest.get(leftField.getTreeId());
 				FieldTree rightTree = db.fieldForest.get(rightField.getTreeId());
 				leftTree.merge(rightTree);
 			}
 
-			if (rightField.getFirstParent() == null) {
-				rightField.setFirstParent(leftField); // TODO need to use ref changes to link multiple nodes
-				rightField.setFirstChange(getChangeKind(bond));
-			} else {
-//				System.out.println("not null field 2 " + rightField);
-			}
+			// update refactoring-based edges and changes
+			rightField.getLeftRefFields().add(leftField);
+			rightField.getLeftRefBonds().add(bond);
 		}
 	}
 
@@ -305,21 +304,10 @@ public class RefactoringConnector {
 				leftTree.merge(rightTree);
 			}
 
-			if (rightMethod.getFirstParent() == null) {
-				rightMethod.setFirstParent(leftMethod); // TODO need to use ref changes to link multiple nodes
-				rightMethod.setFirstChange(getChangeKind(bond));
-			} else {
-				
-				System.out.println("ref:               " + bond.getRefactoring().getDescription());
-				System.out.println("ref left element:  " + leftMethodSig);
-				System.out.println("ref right element: " + rightMethodSig);
-				System.out.println("ref left file:     " + leftFile);
-				System.out.println("ref right file:    " + rightFile);
-				System.out.println("ref left decl:     " + bond.getLeftDecl());
-				System.out.println("ref right decl:    " + bond.getRightDecl());
-				
-				System.out.println("not null method 2 " + rightMethod);
-			}
+			
+			// update refactoring-based edges and changes
+			rightMethod.getLeftRefMethods().add(leftMethod);
+			rightMethod.getLeftRefBonds().add(bond);
 		}
 	}
 

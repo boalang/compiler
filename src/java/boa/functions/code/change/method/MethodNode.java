@@ -16,7 +16,7 @@ public class MethodNode extends ChangedASTNode implements Comparable<MethodNode>
 	private MethodNode secondParent;
 	
 	// refactoring-based edges
-	private List<MethodNode> beforeRefMethods = new ArrayList<MethodNode>();
+	private List<MethodNode> leftRefMethods = new ArrayList<MethodNode>();
 
 	public MethodNode(String sig, DeclNode declNode, MethodLocation loc) {
 		super(sig);
@@ -97,8 +97,8 @@ public class MethodNode extends ChangedASTNode implements Comparable<MethodNode>
 		return this.loc.compareTo(o.getLoc());
 	}
 
-	public List<MethodNode> getBeforeRefMethods() {
-		return beforeRefMethods;
+	public List<MethodNode> getLeftRefMethods() {
+		return leftRefMethods;
 	}
 
 }

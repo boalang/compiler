@@ -16,7 +16,7 @@ public class FieldNode extends ChangedASTNode implements Comparable<FieldNode> {
 	private FieldNode secondParent;
 	
 	// refactoring-based edges
-	private List<FieldNode> beforeRefFields = new ArrayList<FieldNode>();
+	private List<FieldNode> leftRefFields = new ArrayList<FieldNode>();
 
 	public FieldNode(String sig, DeclNode declNode, FieldLocation loc) {
 		super(sig);
@@ -97,8 +97,8 @@ public class FieldNode extends ChangedASTNode implements Comparable<FieldNode> {
 		return this.loc.compareTo(o.getLoc());
 	}
 
-	public List<FieldNode> getBeforeRefFields() {
-		return beforeRefFields;
+	public List<FieldNode> getLeftRefFields() {
+		return leftRefFields;
 	}
 
 }
