@@ -198,14 +198,24 @@ public class RefactoringConnector {
 			FileNode leftFile = fileBefore == null ? fileAfter : fileBefore;
 			FileNode rightFile = fileAfter;
 
-			DeclNode leftDecl = leftFile.getDeclChange(bond.getLeftDecl());
-			DeclNode rightDecl = rightFile.getDeclChange(bond.getRightDecl());
-
 			String leftFieldSig = bond.getLeftElement();
 			String rightFieldSig = bond.getRightElement();
 
+			DeclNode leftDecl = leftFile.getDeclChange(bond.getLeftDecl());
+			DeclNode rightDecl = rightFile.getDeclChange(bond.getRightDecl());
+			
+			if (leftDecl == null)
+				leftDecl = findDeclNode(bond.getLeftDecl());
+			if (rightDecl == null)
+				rightDecl = findDeclNode(bond.getRightDecl());
+
 			FieldNode leftField = leftDecl.getFieldChange(leftFieldSig);
 			FieldNode rightField = rightDecl.getFieldChange(rightFieldSig);
+			
+			if (leftField == null)
+				leftField = findFieldNode(leftFieldSig, ChangeKind.DELETED);
+			if (rightField == null)
+				rightField = findFieldNode(rightFieldSig, ChangeKind.ADDED);
 
 			// merge trees
 			if (leftField.getTreeId() != rightField.getTreeId()) {
@@ -218,6 +228,17 @@ public class RefactoringConnector {
 			rightField.getLeftRefFields().add(leftField);
 			rightField.getLeftRefBonds().add(bond);
 		}
+	}
+
+	private FieldNode findFieldNode(String sig, ChangeKind change) {
+		for (FileNode fn : rev.getFileChangeMap().values())
+			for (DeclNode dn : fn.getDeclChanges())
+				if (dn.getFieldChangeMap().containsKey(sig)) {
+					FieldNode temp = dn.getFieldChange(sig);
+					if (temp.getFirstChange() == change)
+						return temp;
+				}
+		return null;
 	}
 
 	private void connectMethodLevel() {
@@ -235,96 +256,51 @@ public class RefactoringConnector {
 			String leftMethodSig = bond.getLeftElement();
 			String rightMethodSig = bond.getRightElement();
 
-//			System.out.println("ref:               " + bond.getRefactoring().getDescription());
-//			System.out.println("ref left element:  " + leftMethodSig);
-//			System.out.println("ref right element: " + rightMethodSig);
-//			System.out.println("ref left file:     " + leftFile);
-//			System.out.println("ref right file:    " + rightFile);
-//			System.out.println("ref left decl:     " + bond.getLeftDecl());
-//			System.out.println("ref right decl:    " + bond.getRightDecl());
-
 			DeclNode leftDecl = leftFile.getDeclChange(bond.getLeftDecl());
 			DeclNode rightDecl = rightFile.getDeclChange(bond.getRightDecl());
 
-			// If a file is A renamed to A' and a method is moved from A to C, then
-			// search all declaration changes in current revision
-			if (leftDecl == null) {
-				for (FileNode fn : rev.getFileChangeMap().values()) {
-					if (fn.getDeclChangeMap().containsKey(bond.getLeftDecl())) {
-						leftDecl = fn.getDeclChange(bond.getLeftDecl());
-					}
-				}
-			}
+			if (leftDecl == null)
+				leftDecl = findDeclNode(bond.getLeftDecl());
+			if (rightDecl == null)
+				rightDecl = findDeclNode(bond.getRightDecl());
 
 			MethodNode leftMethod = leftDecl.getMethodChange(leftMethodSig);
 			MethodNode rightMethod = rightDecl.getMethodChange(rightMethodSig);
 
-//			System.out.println("leftMethod:        " + leftMethod);
-//			System.out.println("rightMethod:       " + rightMethod);
+			if (leftMethod == null)
+				leftMethod = findMethodNode(leftMethodSig, ChangeKind.DELETED);
+			if (rightMethod == null)
+				rightMethod = findMethodNode(rightMethodSig, ChangeKind.ADDED);
 
-			// If a renamed method M is applied in a renamed class A, then search method
-			// changes in the parent of A.
-			if (leftMethod == null && bond.getType().equals("Rename Method") && leftDecl.getFirstParent() != null) {
-				leftMethod = leftDecl.getFirstParent().getMethodChange(leftMethodSig);
-			}
-
-			// If left is null search all method changes in current revision
-			if (leftMethod == null) {
-				for (FileNode fn : rev.getFileChangeMap().values()) {
-					if (fn.getDeclChangeMap().containsKey(bond.getLeftDecl())) {
-						leftDecl = fn.getDeclChange(bond.getLeftDecl());
-						leftMethod = leftDecl.getMethodChange(leftMethodSig);
-//						System.out.println(leftDecl.getMethodChangeMap());
-						if (leftMethod == null) {
-							leftMethod = leftDecl.getMethodChange(leftMethodSig.replace("package", "public"));
-						}
-					}
-				}
-			}
-
-			if (leftMethod == null) {
-				for (FileNode fn : rev.getFileChangeMap().values()) {
-					for (DeclNode dn : fn.getDeclChanges()) {
-//						for (MethodNode mn : dn.getMethodChanges()) {
-//							if (mn.getFirstChange() == ChangeKind.DELETED && mn.getSignature().contentEquals(
-//									"private addExportedPackage(exportPackageDescription ExportPackageDescription) : void"))
-//								System.out.println(dn.getMethodChangeMap());
-//						}
-						if (dn.getMethodChangeMap().containsKey(leftMethodSig))
-							leftMethod = dn.getMethodChange(leftMethodSig);
-					}
-				}
-			}
-
-//			System.out.println();
-
+			// merge trees
 			if (leftMethod.getTreeId() != rightMethod.getTreeId()) {
 				MethodTree leftTree = db.methodForest.get(leftMethod.getTreeId());
 				MethodTree rightTree = db.methodForest.get(rightMethod.getTreeId());
 				leftTree.merge(rightTree);
 			}
 
-			
 			// update refactoring-based edges and changes
 			rightMethod.getLeftRefMethods().add(leftMethod);
 			rightMethod.getLeftRefBonds().add(bond);
 		}
 	}
 
-	private ChangeKind getChangeKind(RefactoringBond bond) {
-		switch (bond.getType()) {
-		case "Move Class":
-		case "Move Method":
-		case "Move Attribute":
-		case "Pull Up Attribute":
-		case "Push Down Attribute":
-			return ChangeKind.MOVED;
-		case "Rename Class":
-		case "Rename Method":
-			return ChangeKind.RENAMED;
-		default:
-			return null;
-		}
+	private MethodNode findMethodNode(String sig, ChangeKind change) {
+		for (FileNode fn : rev.getFileChangeMap().values())
+			for (DeclNode dn : fn.getDeclChanges())
+				if (dn.getMethodChangeMap().containsKey(sig)) {
+					MethodNode temp = dn.getMethodChange(sig);
+					if (temp.getFirstChange() == change)
+						return temp;
+				}
+		return null;
+	}
+
+	private DeclNode findDeclNode(String declSig) {
+		for (FileNode fn : rev.getFileChangeMap().values())
+			if (fn.getDeclChangeMap().containsKey(declSig))
+				return fn.getDeclChange(declSig);
+		return null;
 	}
 
 	public class DeclFider extends BoaAbstractVisitor {

@@ -44,7 +44,7 @@ public class ChangeDataBase {
 	public TreeMap<MethodLocation, MethodNode> methodDB = new TreeMap<MethodLocation, MethodNode>();
 	// field change forest
 	public HashMap<Integer, FieldTree> fieldForest = new HashMap<Integer, FieldTree>();
-	
+
 	// method change data
 	public TreeMap<FieldLocation, FieldNode> fieldDB = new TreeMap<FieldLocation, FieldNode>();
 	// method change forest
@@ -52,11 +52,11 @@ public class ChangeDataBase {
 
 	// refactoring data
 	public List<RefactoringBond> refDB = new ArrayList<RefactoringBond>();
-	
+
 	// considered ref types
 	public HashSet<String> refTypes = new HashSet<String>(Arrays.asList(new String[] { 
 			"Move Class", "Rename Class", // CLASS_LEVEL
-			"Rename Method", "Move Method", // METHOD_LEVEL
+			"Rename Method", "Move Method", "Pull Up Method", "Push Down Method", // METHOD_LEVEL
 			"Move Attribute", "Pull Up Attribute", "Push Down Attribute" // FIELD_LEVEL
 	}));
 

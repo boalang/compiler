@@ -17,7 +17,6 @@ import boa.types.Ast.Declaration;
 import boa.types.Ast.Method;
 import boa.types.Ast.Modifier;
 import boa.types.Ast.Variable;
-import boa.types.Ast.Modifier.Visibility;
 import boa.types.Shared.ChangeKind;
 
 public class ASTChange {
@@ -239,14 +238,14 @@ public class ASTChange {
 			sb.append(v.getName() + " ");
 			if (v.hasVariableType())
 				// match refactoring description with no space in type name
-				sb.append(v.getVariableType().getName().replaceAll(" ", ""));
+				sb.append(getTypeAsString(v.getVariableType().getName()));
 		}
 		sb.append(")");
 
 		// add return type
-		if (m.hasReturnType())
-			// match refactoring description with no space in type name
-			sb.append(" : " + m.getReturnType().getName().replaceAll(" ", ""));
+		if (m.hasReturnType()) {
+			sb.append(" : " + getTypeAsString(m.getReturnType().getName()));
+		}
 
 		return sb.toString();
 	}
@@ -262,13 +261,12 @@ public class ASTChange {
 
 		// add variable type
 		if (v.hasVariableType())
-			// match refactoring description with no space in type name
-			sb.append(" : " + v.getVariableType().getName().replaceAll(" ", ""));
+			sb.append(" : " + getTypeAsString(v.getVariableType().getName()));
 
 		return sb.toString();
 	}
 
-	public static String getModifierAsString(List<Modifier> list) {
+	private static String getModifierAsString(List<Modifier> list) {
 		if (list.size() > 0) {
 			for (Modifier modifier : list)
 				if (modifier.hasVisibility()) {
@@ -276,6 +274,11 @@ public class ASTChange {
 				}
 		}
 		return "public "; // if no modifiers, then use "public".
+	}
+	
+	private static String getTypeAsString(String type) {
+		// match refactoring description
+		return type.replace(", ", ",");
 	}
 
 }

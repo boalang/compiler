@@ -18,8 +18,8 @@ public class RefactoringBond {
 	public RefactoringBond(CodeRefactoring ref) {
 		this.refactoring = ref;
 		this.level = BoaCodeElementLevel.getCodeElementLevel(ref.getType());
-		this.leftElement = ref.getLeftSideLocations(0).getCodeElement();
-		this.rightElement = ref.getRightSideLocations(0).getCodeElement();
+		this.leftElement = preprocess(ref.getLeftSideLocations(0).getCodeElement());
+		this.rightElement = preprocess(ref.getRightSideLocations(0).getCodeElement());
 		String[] declSigs = getDeclSigs(ref.getDescription());
 		this.leftDecl = declSigs[0];
 		this.rightDecl = declSigs[1];
@@ -65,6 +65,8 @@ public class RefactoringBond {
             	decls[1] = m.group(2);
             	break;
             }
+            case PUSH_DOWN_OPERATION:
+            case PULL_UP_OPERATION:
 			case MOVE_OPERATION: {
 				decls[0] = m.group(2);
 				decls[1] = m.group(4);
@@ -87,6 +89,15 @@ public class RefactoringBond {
 			}
 		}
 		return decls;
+	}
+	
+	private String preprocess(String element) {
+		String sig = element;
+		if (sig.startsWith("package "))
+			sig = sig.replaceFirst("package ", "public ");
+		if (sig.contains("abstract "))
+			sig = sig.replaceFirst("abstract ", "");
+		return sig;
 	}
 
 }

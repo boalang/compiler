@@ -160,4 +160,8 @@ public class DeclNode extends ChangedASTNode implements Comparable<DeclNode> {
 		return leftRefDecls;
 	}
 
+	public HashMap<String, Integer> getFieldChangeMap() {
+		return fieldChangeMap;
+	}
+
 }

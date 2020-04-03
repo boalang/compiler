@@ -7,8 +7,6 @@ import static boa.functions.BoaIntrinsics.getSnapshot;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-
 import boa.functions.FunctionSpec;
 import boa.functions.code.change.declaration.DeclForest;
 import boa.functions.code.change.declaration.DeclTree;
