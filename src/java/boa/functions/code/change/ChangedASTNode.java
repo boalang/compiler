@@ -13,11 +13,12 @@ public abstract class ChangedASTNode {
 	// tree id
 	protected int treeId = -1;
 
-	// changes
+	// name-based changes
 	protected ChangeKind firstChange;
 	protected ChangeKind secondChange;
-	protected List<Integer> leftRefBondIdxs = new ArrayList<Integer>();
-	protected List<Integer> rightRefBondIdxs = new ArrayList<Integer>();
+	
+	// refactoring-based changes
+	protected List<RefactoringBond> leftRefBonds = new ArrayList<RefactoringBond>();
 
 	public ChangedASTNode(String sig) {
 		this.signature = sig;
@@ -35,12 +36,8 @@ public abstract class ChangedASTNode {
 		this.treeId = treeId;
 	}
 
-	public List<Integer> getLeftRefBondIdxs() {
-		return leftRefBondIdxs;
-	}
-
-	public List<Integer> getRightRefBondIdxs() {
-		return rightRefBondIdxs;
+	public List<RefactoringBond> getLeftRefBonds() {
+		return leftRefBonds;
 	}
 
 	public ChangeKind getFirstChange() {

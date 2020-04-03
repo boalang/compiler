@@ -75,7 +75,7 @@ public class RefactoringConnector {
 
 		if (rightDecl.getFirstParent() == null) {
 			rightDecl.setFirstParent(leftDecl);
-			rightDecl.setFirstChange(getChangeKind(bond));
+			rightDecl.setFirstChange(getChangeKind(bond)); // TODO
 			connectNodesWithSameSig(leftDecl, rightDecl);
 		} else {
 			System.out.println("not null decl 1 " + rightDecl);
@@ -216,7 +216,7 @@ public class RefactoringConnector {
 				rightField.setFirstParent(leftField); // TODO need to use ref changes to link multiple nodes
 				rightField.setFirstChange(getChangeKind(bond));
 			} else {
-				System.out.println("not null field 2 " + rightField);
+//				System.out.println("not null field 2 " + rightField);
 			}
 		}
 	}
@@ -297,7 +297,7 @@ public class RefactoringConnector {
 				}
 			}
 
-			System.out.println();
+//			System.out.println();
 
 			if (leftMethod.getTreeId() != rightMethod.getTreeId()) {
 				MethodTree leftTree = db.methodForest.get(leftMethod.getTreeId());
@@ -309,6 +309,15 @@ public class RefactoringConnector {
 				rightMethod.setFirstParent(leftMethod); // TODO need to use ref changes to link multiple nodes
 				rightMethod.setFirstChange(getChangeKind(bond));
 			} else {
+				
+				System.out.println("ref:               " + bond.getRefactoring().getDescription());
+				System.out.println("ref left element:  " + leftMethodSig);
+				System.out.println("ref right element: " + rightMethodSig);
+				System.out.println("ref left file:     " + leftFile);
+				System.out.println("ref right file:    " + rightFile);
+				System.out.println("ref left decl:     " + bond.getLeftDecl());
+				System.out.println("ref right decl:    " + bond.getRightDecl());
+				
 				System.out.println("not null method 2 " + rightMethod);
 			}
 		}

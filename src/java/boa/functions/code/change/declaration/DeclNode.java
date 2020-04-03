@@ -12,10 +12,15 @@ public class DeclNode extends ChangedASTNode implements Comparable<DeclNode> {
 
 	private FileNode fn;
 	private DeclLocation loc;
+	
+	// name-based edges
 	private DeclNode firstParent;
 	private DeclNode secondParent;
+	
+	// refactoring-based edges
+	private List<DeclNode> beforeRefDecls = new ArrayList<DeclNode>();
 
-	// changes
+	// ast changes in 
 	private HashMap<String, Integer> methodChangeMap = new HashMap<String, Integer>();
 	private List<MethodNode> methodChanges = new ArrayList<MethodNode>();
 	private HashMap<String, Integer> fieldChangeMap = new HashMap<String, Integer>();
@@ -149,6 +154,10 @@ public class DeclNode extends ChangedASTNode implements Comparable<DeclNode> {
 	@Override
 	public int compareTo(DeclNode o) {
 		return this.loc.compareTo(o.getLoc());
+	}
+
+	public List<DeclNode> getBeforeRefDecls() {
+		return beforeRefDecls;
 	}
 
 }

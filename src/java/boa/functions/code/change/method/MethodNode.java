@@ -1,5 +1,8 @@
 package boa.functions.code.change.method;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.functions.code.change.ChangedASTNode;
 import boa.functions.code.change.declaration.DeclNode;
 
@@ -7,8 +10,13 @@ public class MethodNode extends ChangedASTNode implements Comparable<MethodNode>
 
 	private DeclNode declNode;
 	private MethodLocation loc;
+	
+	// name-based edges
 	private MethodNode firstParent;
 	private MethodNode secondParent;
+	
+	// refactoring-based edges
+	private List<MethodNode> beforeRefMethods = new ArrayList<MethodNode>();
 
 	public MethodNode(String sig, DeclNode declNode, MethodLocation loc) {
 		super(sig);
@@ -87,6 +95,10 @@ public class MethodNode extends ChangedASTNode implements Comparable<MethodNode>
 	@Override
 	public int compareTo(MethodNode o) {
 		return this.loc.compareTo(o.getLoc());
+	}
+
+	public List<MethodNode> getBeforeRefMethods() {
+		return beforeRefMethods;
 	}
 
 }

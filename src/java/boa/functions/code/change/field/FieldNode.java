@@ -1,5 +1,8 @@
 package boa.functions.code.change.field;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import boa.functions.code.change.ChangedASTNode;
 import boa.functions.code.change.declaration.DeclNode;
 
@@ -7,8 +10,13 @@ public class FieldNode extends ChangedASTNode implements Comparable<FieldNode> {
 
 	private DeclNode declNode;
 	private FieldLocation loc;
+	
+	// name-based edges
 	private FieldNode firstParent;
 	private FieldNode secondParent;
+	
+	// refactoring-based edges
+	private List<FieldNode> beforeRefFields = new ArrayList<FieldNode>();
 
 	public FieldNode(String sig, DeclNode declNode, FieldLocation loc) {
 		super(sig);
@@ -87,6 +95,10 @@ public class FieldNode extends ChangedASTNode implements Comparable<FieldNode> {
 	@Override
 	public int compareTo(FieldNode o) {
 		return this.loc.compareTo(o.getLoc());
+	}
+
+	public List<FieldNode> getBeforeRefFields() {
+		return beforeRefFields;
 	}
 
 }
