@@ -65,7 +65,7 @@ public class ChangeDataBase {
 			getRev(cr, i);
 	}
 
-	// test
+	// distinct file names
 	public HashSet<String> fileNames = new HashSet<String>();
 
 	private RevNode getRev(CodeRepository cr, int idx) {
