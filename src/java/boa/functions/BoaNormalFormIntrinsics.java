@@ -936,7 +936,8 @@ public class BoaNormalFormIntrinsics {
 				if (o != o2)
 					o = internalReduce((Expression)o2);
 			}
-			return finalReduce((Expression)o);
+			if (o instanceof Expression)
+				return finalReduce((Expression)o);
 		}
 		return createLiteral(o.toString());
 	}
