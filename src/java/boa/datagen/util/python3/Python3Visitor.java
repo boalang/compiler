@@ -211,7 +211,7 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterTfpdef(TfpdefContext ctx) {
-		//System.out.println("ARG " + ctx.getText());
+		//System.out.println("Tfdef" + ctx.getText());
 		if(vb != null) {
 			vb = Variable.newBuilder();
 			vb.setName(ctx.NAME().getText());
@@ -310,6 +310,7 @@ public class Python3Visitor implements Python3Listener{
 	boolean isAssign = false;
 	@Override
 	public void enterAssign(AssignContext ctx) {	
+		//System.out.println("Asign: " + ctx.getText());
 		if(expressions.isEmpty())
 			return;
 		isAssign = true;
@@ -717,6 +718,18 @@ public class Python3Visitor implements Python3Listener{
 	public void exitTry_stmt(Try_stmtContext ctx) {
 		exitStatement();
 	}
+	
+//	@Override
+//	public void enterElse_block(Else_blockContext ctx) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	@Override
+//	public void exitElse_block(Else_blockContext ctx) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	@Override
 	public void enterWith_stmt(With_stmtContext ctx) {
@@ -1148,8 +1161,12 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterPluseq(PluseqContext ctx) {
-		// TODO Auto-generated method stub
-		
+		if(expressions.isEmpty())
+			return;
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.ASSIGN_ADD);
+		eb.addExpressions(expressions.pop());
+		expressions.push(eb);
 	}
 
 	@Override
@@ -1296,8 +1313,12 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterMinuseq(MinuseqContext ctx) {
-		// TODO Auto-generated method stub
-		
+		if(expressions.isEmpty())
+			return;
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.ASSIGN_SUB);
+		eb.addExpressions(expressions.pop());
+		expressions.push(eb);
 	}
 
 	@Override
@@ -1308,7 +1329,12 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterMulteq(MulteqContext ctx) {
-		// TODO Auto-generated method stub
+		if(expressions.isEmpty())
+			return;
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.ASSIGN_MULT);
+		eb.addExpressions(expressions.pop());
+		expressions.push(eb);
 		
 	}
 
@@ -1320,8 +1346,12 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterDiveq(DiveqContext ctx) {
-		// TODO Auto-generated method stub
-		
+		if(expressions.isEmpty())
+			return;
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.ASSIGN_DIV);
+		eb.addExpressions(expressions.pop());
+		expressions.push(eb);
 	}
 
 	@Override
@@ -1332,8 +1362,12 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterRemeq(RemeqContext ctx) {
-		// TODO Auto-generated method stub
-		
+		if(expressions.isEmpty())
+			return;
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.ASSIGN_MOD);
+		eb.addExpressions(expressions.pop());
+		expressions.push(eb);
 	}
 
 	@Override
@@ -1344,7 +1378,12 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterAndeq(AndeqContext ctx) {
-		// TODO Auto-generated method stub
+		if(expressions.isEmpty())
+			return;
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.ASSIGN_BITAND);
+		eb.addExpressions(expressions.pop());
+		expressions.push(eb);
 		
 	}
 
@@ -1356,7 +1395,12 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterOreq(OreqContext ctx) {
-		// TODO Auto-generated method stub
+		if(expressions.isEmpty())
+			return;
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.ASSIGN_BITOR);
+		eb.addExpressions(expressions.pop());
+		expressions.push(eb);
 		
 	}
 
@@ -1368,7 +1412,12 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterXoreq(XoreqContext ctx) {
-		// TODO Auto-generated method stub
+		if(expressions.isEmpty())
+			return;
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.ASSIGN_BITXOR);
+		eb.addExpressions(expressions.pop());
+		expressions.push(eb);
 		
 	}
 
@@ -1380,8 +1429,12 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterLshifteq(LshifteqContext ctx) {
-		// TODO Auto-generated method stub
-		
+		if(expressions.isEmpty())
+			return;
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.ASSIGN_LSHIFT);
+		eb.addExpressions(expressions.pop());
+		expressions.push(eb);
 	}
 
 	@Override
@@ -1392,8 +1445,12 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterRshifteq(RshifteqContext ctx) {
-		// TODO Auto-generated method stub
-		
+		if(expressions.isEmpty())
+			return;
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.ASSIGN_RSHIFT);
+		eb.addExpressions(expressions.pop());
+		expressions.push(eb);
 	}
 
 	@Override
@@ -1404,7 +1461,12 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterPowereq(PowereqContext ctx) {
-		// TODO Auto-generated method stub
+		if(expressions.isEmpty())
+			return;
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.ASSIGN_POW);
+		eb.addExpressions(expressions.pop());
+		expressions.push(eb);
 		
 	}
 
@@ -1436,7 +1498,6 @@ public class Python3Visitor implements Python3Listener{
 		atomEx.push(ctx.getText());
 		
 		if(!isMethodArg) {	// add condition here to avoid any expression
-			
 			if(ctx.getText().startsWith("[")) {
 				Expression.Builder ebr = Expression.newBuilder();
 				ebr.setKind(ExpressionKind.NEWARRAY);
@@ -1461,6 +1522,8 @@ public class Python3Visitor implements Python3Listener{
 		}
 		
 		else {
+
+			
 			if(ctx.getText().startsWith("[")) {
 				Expression.Builder ebr = Expression.newBuilder();
 				ebr.setKind(ExpressionKind.NEWARRAY);
@@ -1468,6 +1531,7 @@ public class Python3Visitor implements Python3Listener{
 				exitArg++;
 			}
 			else if(!atomEx.isEmpty() && isLiteral(atomEx.peek())) {
+				System.out.println("REL " + ctx.getText());
 				Expression.Builder ebr = Expression.newBuilder();
 				ebr.setKind(ExpressionKind.LITERAL);
 				ebr.setLiteral(atomEx.pop());
@@ -1580,12 +1644,8 @@ public class Python3Visitor implements Python3Listener{
 						isOr = false;
 						e = null;
 					}
-					
 				}
-				
 				isCondition = false;
-					
-				
 			}
 			
 			
@@ -1720,6 +1780,7 @@ public class Python3Visitor implements Python3Listener{
 	
 	@Override
 	public void enterArglist(ArglistContext ctx) {
+		//System.out.println("Arglist " + ctx.getText());
 		Expression.Builder eb = Expression.newBuilder();
 		eb.setKind(ExpressionKind.METHODCALL);
 		
@@ -1746,8 +1807,6 @@ public class Python3Visitor implements Python3Listener{
 				eb2.setVariable(trailer);
 				eb.addExpressions(eb2);
 			}
-						
-			
 		}
 		expressions.push(eb);
 		
@@ -1762,7 +1821,7 @@ public class Python3Visitor implements Python3Listener{
 	boolean isMethodArg = false;
 	@Override
 	public void enterArgument(ArgumentContext ctx) {
-		//System.out.println("AA " + ctx.getText());
+		System.out.println("Argument " + ctx.getText());
 		isMethodArg = true;
 	}
 
@@ -1774,23 +1833,25 @@ public class Python3Visitor implements Python3Listener{
 			if(expressions.isEmpty()) 
 				continue;
 			Expression.Builder e = expressions.pop();
+				
 			
-				if(i == exitArg - 1 && !expressions.isEmpty()) //  && expressions.peek().getKind() == ExpressionKind.METHODCALL
-					expressions.peek().addMethodArgs(e);
-				else
-					exitExpression();
+			
+			if(!expressions.isEmpty()) //i == exitArg - 1 && //  && expressions.peek().getKind() == ExpressionKind.METHODCALL
+				expressions.peek().addMethodArgs(e);
+			else
+				exitExpression();
+				
 		}
 		
 		
 		exitArg = 0;
-		//System.out.println("AA END");
+		System.out.println("AA END");
 	}
 	
 	public boolean isLiteral(String text) {
 		if (text == null || text.length() == 0)
 		    return false;
-		
-		boolean isLiteral = text.startsWith("\"");
+		boolean isLiteral = text.startsWith("\"") || text.startsWith("\'");
 		if(!isLiteral) {
 			try {
 				Double.parseDouble(text);
@@ -2012,6 +2073,30 @@ public class Python3Visitor implements Python3Listener{
 	public void exitTestlist_star_expr(Testlist_star_exprContext ctx) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	Boolean isArgAssign = false;
+	@Override
+	public void enterArgeq(ArgeqContext ctx) {
+		
+		System.out.println("PPP "+ expressions.peek().getVariable());
+		
+		if(!expressions.isEmpty()) {
+			//System.out.println("CONT " + expressions.peek().getVariable());
+			
+			Expression.Builder eb = Expression.newBuilder();
+			eb.setKind(ExpressionKind.ASSIGN);
+			eb.addExpressions(expressions.pop());
+			expressions.push(eb);
+			isArgAssign = true;
+		}				
+		
+
+	}
+
+	@Override
+	public void exitArgeq(ArgeqContext ctx) {
+		// TODO Auto-generated method stub
 	}
 
 }

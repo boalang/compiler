@@ -383,6 +383,7 @@ public class RepoMetadata {
 		if (mainLanguage != null)
 			project.setMainLanguage(mainLanguage);
 		if (programmingLanguages != null) {
+			System.out.println("PL!=null");
 			ArrayList<String> langs = new ArrayList<String>();
 			ArrayList<Integer> langLoc = new ArrayList<Integer>();
 			for (int i = 0; i < programmingLanguages.length; i++){
