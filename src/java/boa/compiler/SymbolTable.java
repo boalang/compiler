@@ -596,6 +596,7 @@ public class SymbolTable {
 			boa.aggregators.UniqueAggregator.class,
 			boa.aggregators.VarianceAggregator.class,
 			boa.aggregators.PreconditionAggregator.class,
+			boa.aggregators.ml.LinearRegressionAggregator.class,
 		};
 		for (final Class<?> c : builtinAggs)
 			importAggregator(c);

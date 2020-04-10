@@ -74,6 +74,11 @@ public class DefaultProperties {
 
 	public static String localDataPath = null;
 	
+	// for ML
+	public static String HADOOP_SEQ_FILE_LOCATION = "";
+	public static String HADOOP_OUT_LOCATION = "";
+	//public static String HADOOP_OUT_LOCATION = "/home/tess/Desktop/datagen";
+	
 	@SuppressWarnings("unused")
 	private static String getRoot() {
 		File dir = new File(System.getProperty("user.dir"));

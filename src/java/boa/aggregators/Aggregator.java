@@ -34,10 +34,12 @@ import boa.io.EmitValue;
  */
 public abstract class Aggregator {
 	private long arg;
+	private String mlarg; //for ML
 	@SuppressWarnings("rawtypes")
 	private Context context;
 	private EmitKey key;
 	private boolean combining;
+	private int vectorSize; //for ML
 
 	/**
 	 * Construct an Aggregator.
@@ -60,6 +62,21 @@ public abstract class Aggregator {
 		this.arg = arg;
 	}
 
+	/**
+	 * Construct an Aggregator.
+	 *
+	 * @param arg
+	 *            A String containing the argument to the table
+	 *
+	 */
+	//for ML
+	public Aggregator(final String arg) {
+		this();
+		
+		this.mlarg = arg;
+	}
+	
+	
 	/**
 	 * Reset this aggregator for a new key.
 	 * 
@@ -154,5 +171,14 @@ public abstract class Aggregator {
 
 	public EmitKey getKey() {
 		return this.key;
+	}
+	
+	//for ML
+	public int getVectorSize() {
+		return this.vectorSize;
+	}
+	//for ML
+	public void setVectorSize(int vectorSize) {
+		this.vectorSize = vectorSize;
 	}
 }
