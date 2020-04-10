@@ -38,7 +38,7 @@ import weka.core.Utils;
  * A Boa aggregator for training the model using LinearRegression.
  * 
  * @author ankuraga
- * @author Giang Nguyen
+ * @author giang
  */
 @AggregatorSpec(name = "linearregression", formalParameters = {"string"})
 public class LinearRegressionAggregator extends MLAggregator {
@@ -199,10 +199,10 @@ public class LinearRegressionAggregator extends MLAggregator {
 	public void instanceCreation(ArrayList<String> data){
 		try {
 			Instance instance = new DenseInstance(this.NumOfAttributes);
-			System.out.println(data);
+			//System.out.println(data);
 
 			for(int i=0; i < this.NumOfAttributes; i++) {
-				System.out.println(Double.parseDouble(data.get(i)));
+				//System.out.println(Double.parseDouble(data.get(i)));
 				instance.setValue((Attribute)this.fvAttributes.get(i), Double.parseDouble(data.get(i)));
 			}
 			this.trainingSet.add(instance);

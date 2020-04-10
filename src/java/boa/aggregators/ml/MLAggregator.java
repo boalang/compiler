@@ -39,7 +39,7 @@ import weka.core.Instances;
  * A Boa ML aggregator to train models.
  * 
  * @author ankuraga
- * @author Giang Nguyen
+ * @author giang
  */
 public abstract class MLAggregator extends Aggregator {
 	
