@@ -92,6 +92,9 @@ public class ASTChange {
 			// 2nd parent then add copied as 2nd change
 			if (!isFirstParent && rightNode.getASTChangeCount() != 0)
 				updateAllChanges(rightNode, ChangeKind.COPIED, false);
+			// 1st parent then consider all asts under the file as copied
+			if (isFirstParent)
+				update(rightNode, declCollector.getDeclNodes(rightNode), ChangeKind.COPIED, isFirstParent);
 			return;
 		}
 
@@ -200,7 +203,7 @@ public class ASTChange {
 			// 2nd parent then add copied as 2nd change
 			if (!isFirstParent && rightNode.getASTChangeCount() != 0)
 				updateAllChanges(rightNode, ChangeKind.COPIED, true);
-			// 1st parent then consider all asts under the right declaration as copied
+			// 1st parent then consider all asts under the declaration as copied
 			if (isFirstParent)
 				updateDeclAll(rightNode, rightDecl, ChangeKind.COPIED, isFirstParent);
 			return;
