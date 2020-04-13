@@ -286,7 +286,6 @@ public class GitCommit extends AbstractCommit {
 		String oldPath = diff.getOldPath();
 		String oldObjectId = diff.getOldId().toObjectId().getName();
 		
-		
 		// get old loc before update the map
 		List<FileLoc> oldLocs = objectIdToFileLoc.containsKey(oldObjectId) && !ObjectId.zeroId().getName().equals(oldObjectId)
 				? objectIdToFileLoc.get(oldObjectId) : null;

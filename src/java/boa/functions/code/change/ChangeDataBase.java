@@ -25,6 +25,10 @@ import boa.types.Code.Revision;
 
 public class ChangeDataBase {
 
+	// project data
+	public CodeRepository cr;
+	public int revCount;
+	
 	// revision data
 	public HashSet<String> nContributor = new HashSet<String>();
 	public HashMap<Integer, RevNode> revIdxMap = new HashMap<Integer, RevNode>();
@@ -60,7 +64,11 @@ public class ChangeDataBase {
 			"Move Attribute", "Pull Up Attribute", "Push Down Attribute" // FIELD_LEVEL
 	}));
 
+	
+
 	public ChangeDataBase(CodeRepository cr, int revCount) {
+		this.cr = cr;
+		this.revCount = revCount;
 		for (int i = 0; i < revCount; i++)
 			getRev(cr, i);
 	}

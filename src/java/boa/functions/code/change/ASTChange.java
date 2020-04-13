@@ -200,6 +200,9 @@ public class ASTChange {
 			// 2nd parent then add copied as 2nd change
 			if (!isFirstParent && rightNode.getASTChangeCount() != 0)
 				updateAllChanges(rightNode, ChangeKind.COPIED, true);
+			// 1st parent then consider all asts under the right declaration as copied
+			if (isFirstParent)
+				updateDeclAll(rightNode, rightDecl, ChangeKind.COPIED, isFirstParent);
 			return;
 		}
 

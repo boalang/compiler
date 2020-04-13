@@ -49,8 +49,9 @@ public class BoaCodeChangeIntrinsics {
 		FieldForest fieldForest = new FieldForest(db, false);
 		HashMap<Integer, FieldTree> fieldTrees = fieldForest.getTrees();
 
-		forest.updateWithRefs(p, refRevIds); //TODO
-		
+		forest.updateWithRefs(p, refRevIds);
+		Validation v = new Validation(db).validate();
+
 		cleanup();
 
 		System.out.println("Distinct Files: " + forest.db.fileNames.size());

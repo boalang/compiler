@@ -152,7 +152,12 @@ public class BoaAstIntrinsics {
 			}
 		}
 
-		System.err.println("error with ast: " + f.getChange() + " " + f.getKey() + " from " + f.getName());
+		System.err.println("parsing error at ChangedFile: " + f.getName() 
+							+ " at RevIdx: " + f.getRevisionIdx()
+							+ " at FileIdx: " + f.getFileIdx()
+							+ " with FileChange: " + f.getChange() 
+							+ " with repo key: " + f.getKey());
+		
 		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
 		return emptyAst;
 	}
