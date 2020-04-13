@@ -1146,6 +1146,30 @@ public class Python3BaseListener implements Python3Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTuple_start(Python3Parser.Tuple_startContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTuple_start(Python3Parser.Tuple_startContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTuple_end(Python3Parser.Tuple_endContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTuple_end(Python3Parser.Tuple_endContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAtom(Python3Parser.AtomContext ctx) { }
 	/**
 	 * {@inheritDoc}

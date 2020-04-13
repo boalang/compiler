@@ -950,6 +950,26 @@ public interface Python3Listener extends ParseTreeListener {
 	 */
 	void exitAtom_expr(Python3Parser.Atom_exprContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link Python3Parser#tuple_start}.
+	 * @param ctx the parse tree
+	 */
+	void enterTuple_start(Python3Parser.Tuple_startContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#tuple_start}.
+	 * @param ctx the parse tree
+	 */
+	void exitTuple_start(Python3Parser.Tuple_startContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Python3Parser#tuple_end}.
+	 * @param ctx the parse tree
+	 */
+	void enterTuple_end(Python3Parser.Tuple_endContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Python3Parser#tuple_end}.
+	 * @param ctx the parse tree
+	 */
+	void exitTuple_end(Python3Parser.Tuple_endContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link Python3Parser#atom}.
 	 * @param ctx the parse tree
 	 */

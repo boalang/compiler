@@ -285,6 +285,7 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void enterExpr_stmt(Expr_stmtContext ctx) {
+		System.out.println("Enter expr statement: "+ctx.getText());
 		Statement.Builder sb = Statement.newBuilder();
 		sb.setKind(Statement.StatementKind.EXPRESSION);
 		//sb.addNames(ctx.getText()); // For testing purpose
@@ -296,6 +297,7 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void exitExpr_stmt(Expr_stmtContext ctx) {
 		
+		System.out.println("Exit expr statement: "+ctx.getText());
 		for(int i = 0; i < exitEx; i++) 
 			exitExpression();
 		exitEx = 0;
@@ -310,7 +312,7 @@ public class Python3Visitor implements Python3Listener{
 	boolean isAssign = false;
 	@Override
 	public void enterAssign(AssignContext ctx) {	
-		//System.out.println("Asign: " + ctx.getText());
+		System.out.println("Enter Asign: " + ctx.getText());
 		if(expressions.isEmpty())
 			return;
 		isAssign = true;
@@ -322,7 +324,7 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void exitAssign(AssignContext ctx) {
-
+		System.out.println("Exit assign: " + ctx.getText());
 	}
 
 	@Override
@@ -348,6 +350,8 @@ public class Python3Visitor implements Python3Listener{
 	private void exitExpression() {
 		if(expressions.isEmpty())
 			return;
+		System.out.println("Exit Expr: "+expressions.size());
+
 		Expression.Builder current = expressions.pop();
 		if(!expressions.isEmpty()) {
 			expressions.peek().addExpressions(current.build());
@@ -1054,7 +1058,7 @@ public class Python3Visitor implements Python3Listener{
 		if (expressions.isEmpty()) 
 			return;
 		
-		
+		System.out.println("Enter plus: "+ctx.getText());
 		if(!isArith) {
 			Expression.Builder parentex = expressions.pop();
 			Expression.Builder eb = Expression.newBuilder();
@@ -1083,6 +1087,7 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void exitPlus(PlusContext ctx) {
 		// TODO Auto-generated method stub
+		System.out.println("Exit plus: " + ctx.getText());
 	}
 
 	@Override
@@ -1494,10 +1499,19 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterAtom_expr(Atom_exprContext ctx) {
 
-		//System.out.println("## " + ctx.getText());
+		System.out.println("Enter Atom Expr: " + ctx.getText());
 		atomEx.push(ctx.getText());
 		
+		if(isTuple) {
+			isTuple=false;
+			Expression.Builder ebr = Expression.newBuilder();
+			ebr.setKind(ExpressionKind.TUPLE);
+			expressions.push(ebr);
+			exitEx++;
+		}
+		
 		if(!isMethodArg) {	// add condition here to avoid any expression
+			
 			if(ctx.getText().startsWith("[")) {
 				Expression.Builder ebr = Expression.newBuilder();
 				ebr.setKind(ExpressionKind.NEWARRAY);
@@ -1531,7 +1545,7 @@ public class Python3Visitor implements Python3Listener{
 				exitArg++;
 			}
 			else if(!atomEx.isEmpty() && isLiteral(atomEx.peek())) {
-				System.out.println("REL " + ctx.getText());
+				//System.out.println("REL " + ctx.getText());
 				Expression.Builder ebr = Expression.newBuilder();
 				ebr.setKind(ExpressionKind.LITERAL);
 				ebr.setLiteral(atomEx.pop());
@@ -1560,6 +1574,8 @@ public class Python3Visitor implements Python3Listener{
 //		if(isMethodArg)
 //			return;	
 		
+		System.out.println("Exit Atom Expr: "+ctx.getText());
+
 		if(isNot && !expressions.isEmpty()) {
 			Expression.Builder ebr = Expression.newBuilder();
 			ebr.setKind(ExpressionKind.LOGICAL_NOT);
@@ -1660,7 +1676,7 @@ public class Python3Visitor implements Python3Listener{
 
 	@Override
 	public void exitAtom(AtomContext ctx) {
-		
+
 	}
 
 	@Override
@@ -1780,7 +1796,7 @@ public class Python3Visitor implements Python3Listener{
 	
 	@Override
 	public void enterArglist(ArglistContext ctx) {
-		//System.out.println("Arglist " + ctx.getText());
+		System.out.println("Enter Arglist " + ctx.getText());
 		Expression.Builder eb = Expression.newBuilder();
 		eb.setKind(ExpressionKind.METHODCALL);
 		
@@ -1821,31 +1837,47 @@ public class Python3Visitor implements Python3Listener{
 	boolean isMethodArg = false;
 	@Override
 	public void enterArgument(ArgumentContext ctx) {
-		System.out.println("Argument " + ctx.getText());
+		System.out.println("Enter Argument " + ctx.getText());
 		isMethodArg = true;
 	}
 
 	@Override
 	public void exitArgument(ArgumentContext ctx) {
-		isMethodArg = false;
 		
-		for(int i = 0; i < exitArg; i++) {
-			if(expressions.isEmpty()) 
-				continue;
-			Expression.Builder e = expressions.pop();
-				
-			
-			
-			if(!expressions.isEmpty()) //i == exitArg - 1 && //  && expressions.peek().getKind() == ExpressionKind.METHODCALL
-				expressions.peek().addMethodArgs(e);
-			else
-				exitExpression();
-				
-		}
-		
-		
+		for(int i = 0; i < exitArg-1; i++) 
+			exitExpression();
 		exitArg = 0;
-		System.out.println("AA END");
+		
+		isMethodArg = false;
+		System.out.println("Exit argument: "+ctx.getText());
+		
+		if(expressions.isEmpty()) 
+			return;
+		
+		Expression.Builder e = expressions.pop();
+		
+		
+		
+		if(!expressions.isEmpty()) //i == exitArg - 1 && //  && expressions.peek().getKind() == ExpressionKind.METHODCALL
+			expressions.peek().addMethodArgs(e);
+		
+//		for(int i = 0; i < exitArg; i++) {
+//			if(expressions.isEmpty()) 
+//				continue;
+//			Expression.Builder e = expressions.pop();
+//				
+//			
+//			
+//			if(!expressions.isEmpty()) //i == exitArg - 1 && //  && expressions.peek().getKind() == ExpressionKind.METHODCALL
+//				expressions.peek().addMethodArgs(e);
+//			else
+//				exitExpression();
+//				
+//		}
+//		
+//		
+//		exitArg = 0;
+//		System.out.println("AA END");
 	}
 	
 	public boolean isLiteral(String text) {
@@ -2079,7 +2111,7 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterArgeq(ArgeqContext ctx) {
 		
-		System.out.println("PPP "+ expressions.peek().getVariable());
+		System.out.println("Enter Arg Equal: "+ expressions.peek().getVariable());
 		
 		if(!expressions.isEmpty()) {
 			//System.out.println("CONT " + expressions.peek().getVariable());
@@ -2097,6 +2129,60 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void exitArgeq(ArgeqContext ctx) {
 		// TODO Auto-generated method stub
+	}
+
+	public boolean isTuple=false;
+	@Override
+	public void enterTuple_start(Tuple_startContext ctx) {
+		// TODO Auto-generated method stub
+		System.out.println("Enter tuple start "+ctx.getText());
+		isTuple=true;
+		
+//		Expression.Builder eb = Expression.newBuilder();
+//		eb.setKind(ExpressionKind.TUPLE);
+//		//eb.addExpressions(expressions.pop());
+//		expressions.push(eb);
+		
+	}
+
+	@Override
+	public void exitTuple_start(Tuple_startContext ctx) {
+		// TODO Auto-generated method stub
+		System.out.println("Exit tuple start "+ctx.getText());
+		
+	}
+
+	@Override
+	public void enterTuple_end(Tuple_endContext ctx) {
+		// TODO Auto-generated method stub
+		System.out.println("Enter tuple end "+ctx.getText());
+		
+	}
+
+	@Override
+	public void exitTuple_end(Tuple_endContext ctx) {
+		// TODO Auto-generated method stub
+		System.out.println("Exit tuple start "+ctx.getText());
+		
+		isTuple=false;
+//		
+//		for(int i = 0; i < exitEx; i++) 
+//			exitExpression();
+//		exitArg = 0;
+//		
+//		isMethodArg = false;
+//		System.out.println("Exit argument: "+ctx.getText());
+//		
+//		if(expressions.isEmpty()) 
+//			return;
+//		
+//		Expression.Builder e = expressions.pop();
+//		
+//		
+//		
+//		if(!expressions.isEmpty()) //i == exitArg - 1 && //  && expressions.peek().getKind() == ExpressionKind.METHODCALL
+//			expressions.peek().addMethodArgs(e);
+		
 	}
 
 }

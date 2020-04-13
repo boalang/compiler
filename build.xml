@@ -5,8 +5,8 @@
 	<property name="dst.proto" location="src/compiled-proto" />
 
 	<!-- Java version -->
-	<property name="ant.build.javac.source" value="1.6" />
-	<property name="ant.build.javac.target" value="1.6" />
+	<property name="ant.build.javac.source" value="1.8" />
+	<property name="ant.build.javac.target" value="1.8" />
 
 	<!-- ANTLR version -->
 	<property name="antlr.version" value="4.5" />

@@ -21,7 +21,8 @@ public class TestSequenceFile {
 		Configuration conf = new Configuration();
 		FileSystem fileSystem = FileSystem.get(conf);
 		
-		String astpath = "/Users/sumon/Research/PyDatagen/Fix-for-contract/dataset/ast/data"; //"/Users/mislam/eclipse-workspace/outdata/ast/data";
+		String astpath = "/Users/sayem/Documents/securityStudy/ast/ast/data";
+//		String astpath = "/Users/sayem/Documents/test_boa/output/ast/data"; //"/Users/mislam/eclipse-workspace/outdata/ast/data";
 		Writable key = new LongWritable();
 		BytesWritable val = new BytesWritable();
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(astpath), conf);

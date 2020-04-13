@@ -205,8 +205,11 @@ public abstract class AbstractCommit {
 	Set<String> badp = new HashSet<String>(Arrays.asList(badpaths));
 	
 	Builder processPythonChangeFile(final ChangedFile.Builder fb) {
+		
 		long len = connector.astWriterLen;
 		String path = fb.getName();
+		
+		//System.out.println("changed file" + path);
 
 		final String lowerPath = path.toLowerCase();
 		if (lowerPath.endsWith(".txt"))
