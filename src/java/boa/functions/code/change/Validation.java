@@ -36,8 +36,6 @@ public class Validation {
 	private HashSet<String> methodNodes;
 	private HashSet<String> astNodes;
 
-//	private String field = "org.ant4eclipse.lib.pde/src/org/ant4eclipse/lib/pde/model/buildproperties/PluginBuildProperties.java org.ant4eclipse.lib.pde.model.buildproperties.PluginBuildProperties private _additionalBundles : String[]";
-
 	public Validation(ChangeDataBase db) {
 		this.db = db;
 	}
@@ -46,6 +44,7 @@ public class Validation {
 
 		System.out.println(db.cr.getBranchesList());
 		System.out.println(db.cr.getBranchNamesList());
+		System.out.println();
 
 		ASTCollector astCollector = new ASTCollector();
 		for (int headIdx : db.cr.getBranchesList()) {
@@ -54,6 +53,7 @@ public class Validation {
 				astCollector.visit(cf);
 			}
 
+			System.out.println("branch Idx: " + headIdx + " " + db.revIdxMap.get(headIdx).getRevision().getId());
 			System.out.println("declNodes in last snapshot: " + declNodes.size());
 			System.out.println("fieldNodes in last snapshot: " + fieldNodes.size());
 			System.out.println("methodNodes in last snapshot: " + methodNodes.size());
@@ -61,18 +61,13 @@ public class Validation {
 //			System.out.println(fieldNodes.contains(field));
 
 			validate(headIdx);
-
-			System.out.println("branch Idx: " + headIdx);
+			
+			System.out.println();
 			System.out.println("left declNodes: " + declNodes.size());
 			System.out.println("left fieldNodes: " + fieldNodes.size());
 			System.out.println("left methodNodes: " + methodNodes.size());
 
-			for (String s : declNodes)
-				System.out.println(s);
-
 			System.out.println();
-
-//			break;
 		}
 		return this;
 	}
@@ -89,6 +84,9 @@ public class Validation {
 			// update stack
 			Revision r = cur.getRevision();
 			for (int i = r.getParentsCount() - 1; i >= 0; i--) {
+				// ignore feature branches with no changed files in merge commit
+				if (i == 1 && r.getFilesCount() == 0)
+					continue;
 				int parentIdx = r.getParents(i);
 				if (!visitedRevNodes.contains(parentIdx))
 					stack.push(db.revIdxMap.get(parentIdx));
@@ -139,9 +137,6 @@ public class Validation {
 		String sig = fn.getDeclNode().getFileNode().getSignature() + " " + fn.getDeclNode().getSignature() + " "
 				+ fn.getSignature();
 
-//		if (sig.equals(field))
-//			System.out.println("matchChanges field " + fn + " " + fn.getTreeId());
-
 		// check visited tree
 		if (visitedFieldTrees.contains(fn.getTreeId())) {
 			if (fieldNodes.contains(sig))
@@ -170,6 +165,7 @@ public class Validation {
 	private void matchChanges(MethodNode mn) {
 		String sig = mn.getDeclNode().getFileNode().getSignature() + " " + mn.getDeclNode().getSignature() + " "
 				+ mn.getSignature();
+		
 		// check visited tree
 		if (visitedMethodTrees.contains(mn.getTreeId())) {
 			if (methodNodes.contains(sig))
