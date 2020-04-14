@@ -796,20 +796,28 @@ public final class Diff {
       Source_CSS(51, 701),
       /**
        * <code>SOURCE_PY_ERROR = 800;</code>
+       *
+       * <pre>
+       ** The file represents a Python source file that had a parse error 
+       * </pre>
        */
       SOURCE_PY_ERROR(53, 800),
       /**
-       * <code>SOURCE_PY = 801;</code>
+       * <code>SOURCE_PY_2 = 801;</code>
+       *
+       * <pre>
+       ** The file represents a Python source file that parsed without error as Python 2.x 
+       * </pre>
        */
-      SOURCE_PY(54, 801),
+      SOURCE_PY_2(54, 801),
       /**
-       * <code>SOURCE_PY_2 = 802;</code>
+       * <code>SOURCE_PY_3 = 802;</code>
+       *
+       * <pre>
+       ** The file represents a Python source file that parsed without error as Python 3.x 
+       * </pre>
        */
-      SOURCE_PY_2(55, 802),
-      /**
-       * <code>SOURCE_PY_3 = 803;</code>
-       */
-      SOURCE_PY_3(56, 803),
+      SOURCE_PY_3(55, 802),
       ;
 
       /**
@@ -1366,20 +1374,28 @@ public final class Diff {
       public static final int CSS_ERROR_VALUE = 700;
       /**
        * <code>SOURCE_PY_ERROR = 800;</code>
+       *
+       * <pre>
+       ** The file represents a Python source file that had a parse error 
+       * </pre>
        */
       public static final int SOURCE_PY_ERROR_VALUE = 800;
       /**
-       * <code>SOURCE_PY = 801;</code>
+       * <code>SOURCE_PY_2 = 801;</code>
+       *
+       * <pre>
+       ** The file represents a Python source file that parsed without error as Python 2.x 
+       * </pre>
        */
-      public static final int SOURCE_PY_VALUE = 801;
+      public static final int SOURCE_PY_2_VALUE = 801;
       /**
-       * <code>SOURCE_PY_2 = 802;</code>
+       * <code>SOURCE_PY_3 = 802;</code>
+       *
+       * <pre>
+       ** The file represents a Python source file that parsed without error as Python 3.x 
+       * </pre>
        */
-      public static final int SOURCE_PY_2_VALUE = 802;
-      /**
-       * <code>SOURCE_PY_3 = 803;</code>
-       */
-      public static final int SOURCE_PY_3_VALUE = 803;
+      public static final int SOURCE_PY_3_VALUE = 802;
 
 
       public final int getNumber() { return value; }
@@ -1424,9 +1440,8 @@ public final class Diff {
           case 700: return SOURCE_CSS_ERROR;
           case 701: return Source_CSS;
           case 800: return SOURCE_PY_ERROR;
-          case 801: return SOURCE_PY;
-          case 802: return SOURCE_PY_2;
-          case 803: return SOURCE_PY_3;
+          case 801: return SOURCE_PY_2;
+          case 802: return SOURCE_PY_3;
           default: return null;
         }
       }
@@ -1457,7 +1472,7 @@ public final class Diff {
       }
 
       private static final FileKind[] VALUES = {
-        OTHER, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, SOURCE_JAVA_JLS8, JAVA_ERROR, JLS2, JLS3, JLS4, JLS8, SOURCE_CS_ERROR, SOURCE_CS_CS1, SOURCE_CS_CS2, SOURCE_CS_CS3, SOURCE_CS_CS4, SOURCE_CS_CS5, CS_ERROR, CS1, CS2, CS3, CS4, CS5, SOURCE_JS_ERROR, SOURCE_JS_ES1, SOURCE_JS_ES2, SOURCE_JS_ES3, SOURCE_JS_ES5, SOURCE_JS_ES6, SOURCE_JS_ES7, SOURCE_JS_ES8, JS_ERROR, SOURCE_PHP_ERROR, SOURCE_PHP5, SOURCE_PHP5_3, SOURCE_PHP5_4, SOURCE_PHP5_5, SOURCE_PHP5_6, SOURCE_PHP7_0, SOURCE_PHP7_1, PHP_ERROR, SOURCE_HTML_ERROR, Source_HTML, HTML_ERROR, SOURCE_XML_ERROR, Source_XML, XML_ERROR, SOURCE_CSS_ERROR, Source_CSS, CSS_ERROR, SOURCE_PY_ERROR, SOURCE_PY, SOURCE_PY_2, SOURCE_PY_3, 
+        OTHER, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, SOURCE_JAVA_JLS8, JAVA_ERROR, JLS2, JLS3, JLS4, JLS8, SOURCE_CS_ERROR, SOURCE_CS_CS1, SOURCE_CS_CS2, SOURCE_CS_CS3, SOURCE_CS_CS4, SOURCE_CS_CS5, CS_ERROR, CS1, CS2, CS3, CS4, CS5, SOURCE_JS_ERROR, SOURCE_JS_ES1, SOURCE_JS_ES2, SOURCE_JS_ES3, SOURCE_JS_ES5, SOURCE_JS_ES6, SOURCE_JS_ES7, SOURCE_JS_ES8, JS_ERROR, SOURCE_PHP_ERROR, SOURCE_PHP5, SOURCE_PHP5_3, SOURCE_PHP5_4, SOURCE_PHP5_5, SOURCE_PHP5_6, SOURCE_PHP7_0, SOURCE_PHP7_1, PHP_ERROR, SOURCE_HTML_ERROR, Source_HTML, HTML_ERROR, SOURCE_XML_ERROR, Source_XML, XML_ERROR, SOURCE_CSS_ERROR, Source_CSS, CSS_ERROR, SOURCE_PY_ERROR, SOURCE_PY_2, SOURCE_PY_3, 
       };
 
       public static FileKind valueOf(
@@ -3212,14 +3227,14 @@ public final class Diff {
   static {
     java.lang.String[] descriptorData = {
       "\n\ndiff.proto\022\tboa.types\032\014shared.proto\032\ta" +
-      "st.proto\"\237\n\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
+      "st.proto\"\217\n\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
       "2\025.boa.types.ChangeKind\022-\n\004kind\030\002 \002(\0162\037." +
       "boa.types.ChangedFile.FileKind\022\014\n\004name\030\003" +
       " \002(\t\022\013\n\003key\030\004 \002(\004\022\013\n\003ast\030\005 \002(\010\022)\n\010commen" +
       "ts\030\006 \001(\0132\027.boa.types.CommentsRoot\022&\n\007cha" +
       "nges\030\007 \003(\0162\025.boa.types.ChangeKind\022\026\n\016pre" +
       "vious_names\030\010 \003(\t\022\031\n\021previous_versions\030\t" +
-      " \003(\005\022\030\n\020previous_indices\030\n \003(\005\"\361\007\n\010FileK" +
+      " \003(\005\022\030\n\020previous_indices\030\n \003(\005\"\341\007\n\010FileK" +
       "ind\022\t\n\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003",
       "XML\020\003\022\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_J" +
       "AVA_JLS2\020f\022\024\n\020SOURCE_JAVA_JLS3\020g\022\024\n\020SOUR" +
@@ -3243,9 +3258,8 @@ public final class Diff {
       "TML_ERROR\020\364\003\022\025\n\020SOURCE_XML_ERROR\020\330\004\022\017\n\nS",
       "ource_XML\020\331\004\022\016\n\tXML_ERROR\020\330\004\022\025\n\020SOURCE_C" +
       "SS_ERROR\020\274\005\022\017\n\nSource_CSS\020\275\005\022\016\n\tCSS_ERRO" +
-      "R\020\274\005\022\024\n\017SOURCE_PY_ERROR\020\240\006\022\016\n\tSOURCE_PY\020" +
-      "\241\006\022\020\n\013SOURCE_PY_2\020\242\006\022\020\n\013SOURCE_PY_3\020\243\006\032\002" +
-      "\020\001B\002H\001"
+      "R\020\274\005\022\024\n\017SOURCE_PY_ERROR\020\240\006\022\020\n\013SOURCE_PY_" +
+      "2\020\241\006\022\020\n\013SOURCE_PY_3\020\242\006\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

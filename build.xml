@@ -5,8 +5,8 @@
 	<property name="dst.proto" location="src/compiled-proto" />
 
 	<!-- Java version -->
-	<property name="ant.build.javac.source" value="1.8" />
-	<property name="ant.build.javac.target" value="1.8" />
+	<property name="ant.build.javac.source" value="1.6" />
+	<property name="ant.build.javac.target" value="1.6" />
 
 	<!-- ANTLR version -->
 	<property name="antlr.version" value="4.5" />
@@ -85,7 +85,7 @@
 
 	<target name="-translate-protobuf" depends="-check-protobuf" unless="protobuf.uptodate">
 		<echo level="error" message="Translating Protocol Buffer files to Java" />
-		 <apply executable="/usr/local/bin/protoc" parallel="true"> 
+		 <apply executable="protoc" parallel="true"> 
 			<arg value="--proto_path=${src.proto}" />
 			<arg value="--java_out=src/compiled-proto" />
 			<srcfile />

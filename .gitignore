@@ -1,11 +1,9 @@
-build/
-dist/
-compile/
-output/
-.idea/
+/build/
+/dist/
+/compile/
+/output/
+/.idea/
 /bin/
-/.classpath
-/.project
 /.settings/
 /junitvmwatcher*.properties
-*.DS_Store
+.vscode/

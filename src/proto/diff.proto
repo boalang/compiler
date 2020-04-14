@@ -126,10 +126,12 @@ message ChangedFile {
 		/** @exclude */
 		CSS_ERROR = 700;
 		
+		/** The file represents a Python source file that had a parse error */
 		SOURCE_PY_ERROR = 800;
-		SOURCE_PY = 801;
-		SOURCE_PY_2 = 802;
-		SOURCE_PY_3 = 803;
+		/** The file represents a Python source file that parsed without error as Python 2.x */
+		SOURCE_PY_2 = 801;
+		/** The file represents a Python source file that parsed without error as Python 3.x */
+		SOURCE_PY_3 = 802;
 	}
 	/** The kind of change for this file */
 	required ChangeKind change = 1;

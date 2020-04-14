@@ -77,7 +77,7 @@ public class JavaVisitor extends ASTVisitor {
 		root = node;
 		node.accept(this);
 		return b.build();
-	} 
+	}
 
 	public List<boa.types.Ast.Comment> getComments() {
 		return comments;

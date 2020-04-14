@@ -21231,10 +21231,6 @@ public final class Ast {
       TRAIT_USE(40, 38),
       /**
        * <code>RAISE = 39;</code>
-       *
-       * <pre>
-       ** Python exclusive Statements 
-       * </pre>
        */
       RAISE(41, 39),
       /**
@@ -21441,10 +21437,6 @@ public final class Ast {
       public static final int TRAIT_USE_VALUE = 38;
       /**
        * <code>RAISE = 39;</code>
-       *
-       * <pre>
-       ** Python exclusive Statements 
-       * </pre>
        */
       public static final int RAISE_VALUE = 39;
       /**
