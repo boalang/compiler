@@ -17,15 +17,11 @@
  */
 package boa.graphs.cfg;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 import boa.graphs.Node;
-import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
-import boa.types.Ast.Statement;
 import boa.types.Control.Node.NodeType;
 
 /**
@@ -125,6 +121,10 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 		return this.useVariables;
 	}
 
+	public boolean hasDefVariables() {
+		return this.defVariables != null;
+	}
+
 	public String getDefVariables() {
 		if (this.defVariables == null)
 			processDef();
@@ -155,34 +155,32 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 	}
 
 	private void processDef() {
-		String defVar = "";
-		if (this.expr != null) {
-			if (this.expr.getKind() == ExpressionKind.VARDECL) {
-				final String[] strComponents = this.expr.getVariableDeclsList().get(0).getName().split("\\.");
-				if (strComponents.length > 1) {
-					defVar = strComponents[strComponents.length - 2];
-				} else {
-					defVar = strComponents[0];
-				}
-			} else if (this.expr.getKind() == ExpressionKind.OP_INC || this.expr.getKind() == ExpressionKind.OP_DEC) {
-				if (this.expr.getExpressionsList().get(0).hasVariable()) {
-					final String[] strComponents = this.expr.getExpressionsList().get(0).getVariable().split("\\.");
-					if (strComponents.length > 1) {
-						defVar = strComponents[strComponents.length - 2];
-					} else {
-						defVar = strComponents[0];
-					}
-				}
-			} else if (this.expr.getKind().toString().startsWith("ASSIGN")) {
-				final String[] strComponents = this.expr.getExpressionsList().get(0).getVariable().split("\\.");
-				if (strComponents.length > 1) {
-					defVar = strComponents[strComponents.length - 2];
-				} else {
-					defVar = strComponents[0];
-				}
-			}
+		this.defVariables = expr == null ? "" : processDef(this.expr);
+	}
+
+	private static String processDef(final boa.types.Ast.Expression expr) {
+		if (expr.getKind() == ExpressionKind.VARDECL) {
+			if (expr.getVariableDeclsList().get(0).hasInitializer())
+				return getVar(expr.getVariableDeclsList().get(0).getName());
+			return "";
 		}
-		this.defVariables = defVar;
+		if (expr.getKind() == ExpressionKind.OP_INC || expr.getKind() == ExpressionKind.OP_DEC) {
+			if (expr.getExpressionsList().get(0).hasVariable()) {
+				return getVar(expr.getExpressionsList().get(0).getVariable());
+			}
+			return "";
+		}
+		if (expr.getKind().toString().startsWith("ASSIGN")) {
+			return getVar(expr.getExpressionsList().get(0).getVariable());
+		}
+		String s = "";
+		for (final boa.types.Ast.Expression exprs : expr.getExpressionsList()) {
+			final String d = processDef(exprs);
+			if (d.length() == 0) continue;
+			if (s.length() > 0) s += ", ";
+			s += d;
+		}
+		return s;
 	}
 
 	private void processUse() {
@@ -198,21 +196,21 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 	}
 
 	private static void processUse(final HashSet<String> useVar, final boa.types.Ast.Expression expr) {
+		if (expr.getKind() == ExpressionKind.ASSIGN) {
+			processUse(useVar, expr.getExpressions(1));
+			return;
+		}
 		if (expr.hasVariable()) {
 			if (expr.getExpressionsList().size() != 0) {
 				useVar.add("this");
 			} else {
-				final String[] strComponents = expr.getVariable().split("\\.");
-				if (strComponents.length > 1) {
-					useVar.add(strComponents[strComponents.length - 2]);
-				} else {
-					useVar.add(strComponents[0]);
-				}
+				useVar.add(getVar(expr.getVariable()));
 			}
 		}
-		for (final boa.types.Ast.Expression exprs : expr.getExpressionsList()) {
-			processUse(useVar, exprs);
-		}
+		if (expr.getKind() != ExpressionKind.METHODCALL)
+			for (final boa.types.Ast.Expression exprs : expr.getExpressionsList()) {
+				processUse(useVar, exprs);
+			}
 		for (final boa.types.Ast.Variable vardecls : expr.getVariableDeclsList()) {
 			processUse(useVar, vardecls);
 		}
@@ -225,5 +223,12 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 		if (vardecls.hasInitializer()) {
 			processUse(useVar, vardecls.getInitializer());
 		}
+	}
+
+	private static String getVar(final String v) {
+		final String[] strComponents = v.split("\\.");
+		if (strComponents.length > 1)
+			return strComponents[strComponents.length - 2];
+		return strComponents[0];
 	}
 }

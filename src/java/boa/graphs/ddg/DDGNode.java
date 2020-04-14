@@ -16,11 +16,9 @@
  */
 package boa.graphs.ddg;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import boa.graphs.Edge;
 import boa.graphs.Node;
 import boa.graphs.cfg.CFGNode;
 
@@ -40,7 +38,7 @@ public class DDGNode extends Node<DDGNode, DDGEdge> {
      * @param node control flow graph node
      */
     public DDGNode(final CFGNode node) {
-        this(node.getId());
+        this(node.getNodeId());
         this.stmt = node.getStmt();
         this.expr = node.getExpr();
         this.kind = node.getKind();

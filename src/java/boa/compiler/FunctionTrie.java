@@ -18,13 +18,14 @@
 package boa.compiler;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import boa.types.BoaArray;
 import boa.types.BoaFunction;
 import boa.types.BoaMap;
 import boa.types.BoaName;
+import boa.types.BoaQueue;
 import boa.types.BoaSet;
 import boa.types.BoaStack;
 import boa.types.BoaType;
@@ -37,17 +38,14 @@ import boa.types.BoaVarargs;
  * @author rdyer
  */
 public class FunctionTrie {
-	@SuppressWarnings("rawtypes")
-	private final HashMap trie;
+	private final LinkedHashMap<Object,Object> trie;
 
-	@SuppressWarnings("rawtypes")
 	public FunctionTrie() {
-		this.trie = new HashMap();
+		this.trie = new LinkedHashMap<Object,Object>();
 	}
 
-	@SuppressWarnings("unchecked")
 	public FunctionTrie(final FunctionTrie clone) {
-		this.trie = new HashMap(clone.trie);
+		this.trie = new LinkedHashMap<Object,Object>(clone.trie);
 	}
 
 	private BoaType replaceVar(final BoaType formal, final BoaType actual, final Map<String, BoaType> typeVars) {
@@ -59,7 +57,7 @@ public class FunctionTrie {
 			t2 = ((BoaArray)t2).getType();
 			if (t instanceof BoaTypeVar)
 				return new BoaArray(replaceVar(t, t2, typeVars));
-		} else if (t instanceof BoaMap && t2 instanceof BoaMap) {
+		} else if (t.getClass() == BoaMap.class && t2.getClass() == BoaMap.class) {
 			final BoaType i = ((BoaMap)t).getIndexType();
 			final BoaType i2 = ((BoaMap)t2).getIndexType();
 			t = ((BoaMap)t).getType();
@@ -71,6 +69,11 @@ public class FunctionTrie {
 			t2 = ((BoaStack)t2).getType();
 			if (t instanceof BoaTypeVar)
 				return new BoaStack(replaceVar(t, t2, typeVars));
+		} else if (t instanceof BoaQueue && t2 instanceof BoaQueue) {
+			t = ((BoaQueue)t).getType();
+			t2 = ((BoaQueue)t2).getType();
+			if (t instanceof BoaTypeVar)
+				return new BoaQueue(replaceVar(t, t2, typeVars));
 		} else if (t instanceof BoaSet && t2 instanceof BoaSet) {
 			t = ((BoaSet)t).getType();
 			t2 = ((BoaSet)t2).getType();
@@ -121,6 +124,16 @@ public class FunctionTrie {
 		return this.trie.containsKey(name);
 	}
 
+	public BoaFunction getFunction(final String name) {
+		Object o = this.trie.get(name);
+		while (o instanceof FunctionTrie) {
+			o = ((FunctionTrie)o).trie.values().toArray()[0];
+		}
+		if (o instanceof BoaFunction)
+			return (BoaFunction)o;
+		return null;
+	}
+
 	public BoaFunction getFunction(final String name, final BoaType[] formalParameters) {
 		final Object[] ids = new Object[formalParameters.length + 2];
 
@@ -131,10 +144,9 @@ public class FunctionTrie {
 
 		ids[ids.length - 1] = "";
 
-		return this.getFunction(ids, new HashMap<String, BoaType>());
+		return this.getFunction(ids, new LinkedHashMap<String, BoaType>());
 	}
 
-	@SuppressWarnings("unchecked")
 	private void addFunction(final Object[] ids, final BoaFunction boaFunction) {
 		if (this.trie.containsKey(ids[0])) {
 			if (ids[0].equals("")) {

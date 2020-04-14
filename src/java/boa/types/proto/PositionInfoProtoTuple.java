@@ -7,9 +7,7 @@ import java.util.Map;
 
 import boa.types.BoaInt;
 import boa.types.BoaProtoTuple;
-import boa.types.BoaString;
 import boa.types.BoaType;
-import boa.types.proto.enums.CommentKindProtoMap;
 
 public class PositionInfoProtoTuple extends BoaProtoTuple {
 	private final static List<BoaType> members = new ArrayList<BoaType>();

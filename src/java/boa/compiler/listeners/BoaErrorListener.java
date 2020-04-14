@@ -34,7 +34,12 @@ public abstract class BoaErrorListener extends BaseErrorListener {
 		System.err.print("Encountered " + kind + " error ");
 		if (offendingSymbol != null)
 			System.err.print("\"" + offendingSymbol + "\" ");
-		System.err.println("at line " + line + ", column " + charPositionInLine + ". " + msg);
+		System.err.print("at line " + line + ", ");
+		if (length > 0)
+			System.err.print("columns " + charPositionInLine + "-" + (charPositionInLine + length - 1));
+		else
+			System.err.print("column " + charPositionInLine);
+		System.err.println(". " + msg);
 
 		underlineError(tokens, (Token)offendingSymbol, line, charPositionInLine, length);
 

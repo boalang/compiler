@@ -16,17 +16,25 @@
  */
 package boa.graphs.slicers;
 
-import boa.graphs.pdg.PDG;
-import boa.graphs.pdg.PDGEdge;
-import boa.graphs.pdg.PDGNode;
-import boa.types.Ast.*;
-import boa.types.Control;
-
-import java.util.*;
-
 import static boa.functions.BoaAstIntrinsics.prettyprint;
 import static boa.functions.BoaNormalFormIntrinsics.normalizeExpression;
 import static boa.functions.BoaNormalFormIntrinsics.normalizeStatement;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
+
+import boa.graphs.pdg.PDG;
+import boa.graphs.pdg.PDGEdge;
+import boa.graphs.pdg.PDGNode;
+import boa.types.Ast.Method;
+import boa.types.Control;
 
 /**
  * A forward slicer based on PDG
@@ -104,7 +112,7 @@ public class PDGSlicer {
         this.md = md;
         this.normalize = normalize;
         final PDG pdg = new PDG(md, false);
-        for (Integer i: nids) {
+        for (final Integer i: nids) {
             final PDGNode node = pdg.getNode(i);
             if (node != null)
                 entryNodes.add(node);
@@ -196,7 +204,7 @@ public class PDGSlicer {
      */
     public int getTotalControlNodes() {
         int totalControlNodes = 0;
-        for (PDGNode node: slice)
+        for (final PDGNode node: slice)
             if (node.getKind() == Control.Node.NodeType.CONTROL)
                 totalControlNodes = totalControlNodes + 1;
         return totalControlNodes;
@@ -209,7 +217,7 @@ public class PDGSlicer {
      */
     public int getTotalEdges() {
         int totalEdges = 0;
-        for (PDGNode node: slice)
+        for (final PDGNode node: slice)
             totalEdges = totalEdges + node.getOutEdges().size();
         return totalEdges;
     }
@@ -243,59 +251,59 @@ public class PDGSlicer {
                 final PDGNode node = nodes.pop();
                 // store normalized name mappings of def and use variables at this node
                 // replace use and def variables in the node with their normalized names
-                if (normalize) {
-                    // def variable
-                    if (node.getDefVariable() != null && !node.getDefVariable().equals("")) {
-                        if (!normalizedVars.containsKey(node.getDefVariable())) {
-                            normalizedVars.put(node.getDefVariable(), "var$" + varCount);
-                            varCount++;
-                        }
-                        node.setDefVariable(normalizedVars.get(node.getDefVariable()));
-                    }
-                    // use variables
-                    final HashSet<String> useVars = new HashSet<String>();
-                    for (final String dVar : node.getUseVariables()) {
-                        if (dVar != null) {
-                            if (!normalizedVars.containsKey(dVar)) {
-                                normalizedVars.put(dVar, "var$" + varCount); // FIXME: use string builder
+                if (!slice.contains(node)) {
+                    if (normalize) {
+                        // def variable
+                        if (node.getDefVariable() != null && !node.getDefVariable().equals("")) {
+                            if (!normalizedVars.containsKey(node.getDefVariable())) {
+                                normalizedVars.put(node.getDefVariable(), "var$" + varCount);
                                 varCount++;
                             }
-                            useVars.add(normalizedVars.get(dVar));
+                            node.setDefVariable(normalizedVars.get(node.getDefVariable()));
+                        }
+                        // use variables
+                        final HashSet<String> useVars = new HashSet<String>();
+                        for (final String dVar : node.getUseVariables()) {
+                            if (dVar != null) {
+                                if (!normalizedVars.containsKey(dVar)) {
+                                    normalizedVars.put(dVar, "var$" + varCount); // FIXME: use string builder
+                                    varCount++;
+                                }
+                                useVars.add(normalizedVars.get(dVar));
+                            }
+                        }
+                        node.setUseVariables(useVars);
+                        if (node.hasStmt())
+                            node.setStmt(normalizeStatement(node.getStmt(), normalizedVars));
+                        if (node.hasExpr())
+                            node.setExpr(normalizeExpression(node.getExpr(), normalizedVars));
+
+                        for (final PDGEdge e : node.getOutEdges()) {
+                            final String label = normalizedVars.get(e.getLabel());
+                            if (label != null)
+                                e.setLabel(label);
                         }
                     }
-                    node.setUseVariables(useVars);
-                    if (node.hasStmt())
-                        node.setStmt(normalizeStatement(node.getStmt(), normalizedVars));
+
+                    slice.add(node);
+                    // for hashcode caching
                     if (node.hasExpr())
-                        node.setExpr(normalizeExpression(node.getExpr(), normalizedVars));
-
-                    for (final PDGEdge e: node.getOutEdges()) {
-                        final String label = normalizedVars.get(e.getLabel());
-                        if (label != null)
-                            e.setLabel(label);
-                    }
+                        sb.append(node.getExpr());
+                    if (node.hasStmt())
+                        sb.append(node.getStmt());
+                    // if successor has not been visited, add it
+                    Collections.sort(node.getSuccessors());
+                    for (final PDGNode succ : node.getSuccessors())
+                            nodes.push(succ);
                 }
-
-                slice.add(node);
-                // for hashcode caching
-                if (node.hasExpr())
-                    sb.append(node.getExpr());
-                if (node.hasStmt())
-                    sb.append(node.getStmt());
-                // if successor has not been visited, add it
-                Collections.sort(node.getSuccessors());
-                for (final PDGNode succ : node.getSuccessors())
-                    if (!slice.contains(succ) && !nodes.contains(succ))
-                        nodes.push(succ);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println(prettyprint(md));
             throw e;
         }
 
         // compute and cache hash
         hashcode = sb.toString().hashCode();
-
     }
 
     @Override
@@ -321,7 +329,7 @@ public class PDGSlicer {
                     (node1.hasStmt() && !node2.hasStmt()))
                 return false;
             if (node1.hasStmt() && node2.hasStmt() &&
-                    !node1.getStmt().equals(node2.getStmt())) // use string comparisons?? prettyprint
+                    !node1.getStmt().equals(node2.getStmt()))
                 return false;
 
             // compare expressions
@@ -329,7 +337,7 @@ public class PDGSlicer {
                     (node1.hasExpr() && !node2.hasExpr()))
                 return false;
             if (node1.hasExpr() && node2.hasExpr() &&
-                    !node1.getExpr().equals(node2.getExpr())) // use string comparisons?? prettyprint
+                    !node1.getExpr().equals(node2.getExpr()))
                 return false;
 
             // compare out edges
@@ -355,7 +363,6 @@ public class PDGSlicer {
                 if (!visited2.contains(node2.getSuccessors().get(i)))
                     nodes2.push(node2.getSuccessors().get(i));
             }
-
         }
 
         return true;

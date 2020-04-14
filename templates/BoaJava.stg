@@ -20,6 +20,7 @@ VarDecl(isstatic, type, id) ::= "<if(isstatic)>static <endif><type> ___<id>;<\n>
 ArrayType(type) ::= "<type>[]"
 MapType(key, value) ::= "java.util.HashMap\<<key>, <value>>"
 StackType(value) ::= "java.util.Stack\<<value>>"
+QueueType(value) ::= "java.util.LinkedList\<<value>>"
 SetType(value) ::= "java.util.HashSet\<<value>>"
 Block(statements) ::= <<
 {
@@ -124,18 +125,29 @@ new <type>()
 }
 >>
 
-TupleType(name, fields, types) ::= <<
+TupleType(name, fields, types, protos) ::= <<
 private class <name>
 {
-	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
-	<name>( <fields,types:{field,type|<type> ___<field>}; separator=", "> ){
-		<fields,types:{field,type|this.___<field> = new <type>(___<field>)}; separator="; ">;
+	<fields,types:{field,type|<type> ___<field>;}; separator="\n">
+
+	<name>(<fields,types:{field,type|<type> ___<field>}; separator=", ">) {
+		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = ___<field>;<else>this.___<field> = new <type>(___<field>);<endif>}; separator="\n">
 	}
-	<name>( <name> tmp){
-		<fields,types:{field,type|this.___<field> = new <type>(tmp.___<field>)}; separator="; ">;
+	<name>(<name> tmp) {
+		<fields,types,protos:{field,type,proto|<if(proto)> this.___<field> = tmp.___<field>;<else> this.___<field> = new <type>(tmp.___<field>);<endif>}; separator="\n">
 	}
+
 	public <name> clone() {
-    		return new <name>(this);
+		return new <name>(this);
+	}
+
+	public String toString() {
+		String s = "{";
+		<fields:{field|
+if (s.length() > 1) s += ",";
+s += " <field> = " + this.___<field>;}; separator="\n">
+		s += " }";
+		return s;
 	}
 }<\n>
 >>
@@ -215,7 +227,7 @@ protected void <name>(final <types> <args>) throws Exception
 <endif>
 <if(ret)>
 @Override
-public void traverse(final boa.graphs.cfg.CFGNode node, boolean flag) throws Exception {
+public void traverse(final <types> node, boolean flag) throws Exception {
 		if(flag) {
 			currentResult = new <ret>(preTraverse(node));
 			outputMapObj.put(node.getId(), new <ret>(currentResult));
@@ -225,7 +237,7 @@ public void traverse(final boa.graphs.cfg.CFGNode node, boolean flag) throws Exc
 }
 <else>
 @Override
-public void traverse(final boa.graphs.cfg.CFGNode node, boolean flag) throws Exception {
+public void traverse(final <types> node, boolean flag) throws Exception {
 		preTraverse(node);
 }
 <endif>

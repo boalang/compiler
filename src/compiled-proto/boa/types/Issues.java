@@ -11984,7 +11984,7 @@ public final class Issues {
       "\n\014issues.proto\022\tboa.types\032\014shared.proto\"" +
       "9\n\017IssueRepository\022\013\n\003url\030\001 \002(\t\022\014\n\004name\030" +
       "\002 \001(\t\022\013\n\003key\030\003 \002(\t\".\n\nIssuesRoot\022 \n\006issu" +
-      "es\030\001 \003(\0132\020.boa.types.Issue\"\200\t\n\005Issue\022\n\n\002" +
+      "es\030\001 \003(\0132\020.boa.types.Issue\"\364\010\n\005Issue\022\n\n\002" +
       "id\030\001 \002(\t\022,\n\006status\030\002 \002(\0162\034.boa.types.Iss" +
       "ue.IssueStatus\022!\n\006author\030\003 \002(\0132\021.boa.typ" +
       "es.Person\022#\n\010assignee\030\004 \001(\0132\021.boa.types." +
@@ -12000,31 +12000,30 @@ public final class Issues {
       ".Person\022\016\n\006number\030\036 \002(\r\022+\n\006labels\030\037 \003(\0162" +
       "\033.boa.types.Issue.IssueLabel\022\024\n\014other_st" +
       "atus\030  \001(\t\022\026\n\016other_priority\030! \001(\t\022\024\n\014ot" +
-      "her_labels\030\" \003(\t\022\016\n\006commit\030# \001(\t\"\270\001\n\nIss",
+      "her_labels\030\" \003(\t\022\016\n\006commit\030# \001(\t\"\264\001\n\nIss",
       "ueLabel\022\017\n\013OTHER_LABEL\020\000\022\007\n\003BUG\020\001\022\017\n\013ENH" +
       "ANCEMENT\020\002\022\014\n\010PROPOSAL\020\003\022\010\n\004TASK\020\004\022\013\n\007FE" +
       "ATURE\020\005\022\013\n\007SUPPORT\020\006\022\016\n\nDISCUSSION\020\007\022\021\n\r" +
       "DOCUMENTATION\020\010\022\016\n\nSUGGESTION\020\t\022\014\n\010QUEST" +
-      "ION\020\n\022\010\n\004TEST\020\013\032\002\020\001\"e\n\rIssuePriority\022\022\n\016" +
-      "OTHER_PRIORITY\020\000\022\013\n\007TRIVIAL\020\001\022\t\n\005MINOR\020\002" +
-      "\022\t\n\005MAJOR\020\003\022\014\n\010CRITICAL\020\004\022\013\n\007BLOCKER\020\005\032\002" +
-      "\020\001\"\330\001\n\013IssueStatus\022\020\n\014OTHER_STATUS\020\000\022\007\n\003" +
-      "NEW\020\001\022\010\n\004OPEN\020\002\022\013\n\007ON_HOLD\020\003\022\014\n\010RESOLVED" +
-      "\020\004\022\r\n\tDUPLICATE\020\005\022\013\n\007INVALID\020\006\022\014\n\010WONT_F",
-      "IX\020\007\022\n\n\006CLOSED\020\010\022\t\n\005FIXED\020\t\022\022\n\016NOT_APPLI" +
-      "CABLE\020\n\022\024\n\020NOT_REPRODUCIBLE\020\013\022\014\n\010EXTERNA" +
-      "L\020\014\022\014\n\010ANSWERED\020\r\032\002\020\001\"\177\n\nAttachment\022\013\n\003u" +
-      "rl\030\001 \002(\t\022\020\n\010filename\030\002 \002(\t\022\014\n\004size\030\003 \001(\004" +
-      "\022\014\n\004date\030\004 \001(\004\022!\n\006author\030\005 \001(\0132\021.boa.typ" +
-      "es.Person\022\023\n\013description\030\006 \001(\t\"\206\001\n\014Issue" +
-      "Comment\022\n\n\002id\030\001 \002(\t\022\014\n\004date\030\002 \002(\004\022!\n\006aut" +
-      "hor\030\003 \002(\0132\021.boa.types.Person\022\023\n\013descript" +
-      "ion\030\004 \002(\t\022$\n\005files\030\005 \003(\0132\025.boa.types.Att" +
-      "achment\"\223\001\n\013IssueChange\022\n\n\002id\030\001 \002(\t\022\014\n\004w",
-      "hat\030\002 \002(\t\022\014\n\004date\030\003 \002(\004\022!\n\006author\030\004 \002(\0132" +
-      "\021.boa.types.Person\022\021\n\told_value\030\005 \002(\t\022\021\n" +
-      "\tnew_value\030\006 \002(\t\022\023\n\013description\030\007 \001(\tB\002H" +
-      "\001"
+      "ION\020\n\022\010\n\004TEST\020\013\"a\n\rIssuePriority\022\022\n\016OTHE" +
+      "R_PRIORITY\020\000\022\013\n\007TRIVIAL\020\001\022\t\n\005MINOR\020\002\022\t\n\005" +
+      "MAJOR\020\003\022\014\n\010CRITICAL\020\004\022\013\n\007BLOCKER\020\005\"\324\001\n\013I" +
+      "ssueStatus\022\020\n\014OTHER_STATUS\020\000\022\007\n\003NEW\020\001\022\010\n" +
+      "\004OPEN\020\002\022\013\n\007ON_HOLD\020\003\022\014\n\010RESOLVED\020\004\022\r\n\tDU" +
+      "PLICATE\020\005\022\013\n\007INVALID\020\006\022\014\n\010WONT_FIX\020\007\022\n\n\006",
+      "CLOSED\020\010\022\t\n\005FIXED\020\t\022\022\n\016NOT_APPLICABLE\020\n\022" +
+      "\024\n\020NOT_REPRODUCIBLE\020\013\022\014\n\010EXTERNAL\020\014\022\014\n\010A" +
+      "NSWERED\020\r\"\177\n\nAttachment\022\013\n\003url\030\001 \002(\t\022\020\n\010" +
+      "filename\030\002 \002(\t\022\014\n\004size\030\003 \001(\004\022\014\n\004date\030\004 \001" +
+      "(\004\022!\n\006author\030\005 \001(\0132\021.boa.types.Person\022\023\n" +
+      "\013description\030\006 \001(\t\"\206\001\n\014IssueComment\022\n\n\002i" +
+      "d\030\001 \002(\t\022\014\n\004date\030\002 \002(\004\022!\n\006author\030\003 \002(\0132\021." +
+      "boa.types.Person\022\023\n\013description\030\004 \002(\t\022$\n" +
+      "\005files\030\005 \003(\0132\025.boa.types.Attachment\"\223\001\n\013" +
+      "IssueChange\022\n\n\002id\030\001 \002(\t\022\014\n\004what\030\002 \002(\t\022\014\n",
+      "\004date\030\003 \002(\004\022!\n\006author\030\004 \002(\0132\021.boa.types." +
+      "Person\022\021\n\told_value\030\005 \002(\t\022\021\n\tnew_value\030\006" +
+      " \002(\t\022\023\n\013description\030\007 \001(\tB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

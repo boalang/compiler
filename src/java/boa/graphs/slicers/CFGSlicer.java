@@ -16,6 +16,15 @@
  */
 package boa.graphs.slicers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import boa.graphs.cfg.CFG;
 import boa.graphs.cfg.CFGEdge;
 import boa.graphs.cfg.CFGNode;
@@ -23,11 +32,10 @@ import boa.graphs.trees.PDTree;
 import boa.graphs.trees.TreeNode;
 import boa.runtime.BoaAbstractFixP;
 import boa.runtime.BoaAbstractTraversal;
-import boa.types.Ast.*;
+import boa.types.Ast.Method;
 import boa.types.Control;
-import boa.types.Graph.Traversal.*;
-
-import java.util.*;
+import boa.types.Graph.Traversal.TraversalDirection;
+import boa.types.Graph.Traversal.TraversalKind;
 
 /**
  * A forward slicer based on CFG
@@ -104,8 +112,7 @@ public class CFGSlicer {
         final Set<CFGNode> controlInflNodes = new HashSet<CFGNode>();
         final Map<Integer, Set<CFGNode>> infl = getInfluence(new PDTree(cfg), cfg);
 
-        // TODO: get rid of the traversal
-        final BoaAbstractTraversal slicer = new BoaAbstractTraversal<Set<String>>(true, true) {
+        final BoaAbstractTraversal<Set<String>> slicer = new BoaAbstractTraversal<Set<String>>(true, true) {
             protected Set<String> preTraverse(final CFGNode node) throws Exception {
                 // in(n) = \/(pred) out(pred)
                 final Set<String> in = new HashSet<String>();
@@ -141,7 +148,7 @@ public class CFGSlicer {
 
                 // m -> infl(n)
                 if (inSlice.contains(node) && node.getKind() == Control.Node.NodeType.CONTROL)
-                    controlInflNodes.addAll(infl.get(node.getId()));
+                    controlInflNodes.addAll(infl.get(node.getNodeId()));
 
                 return out;
             }
@@ -158,16 +165,10 @@ public class CFGSlicer {
         };
 
         final BoaAbstractFixP fixp = new BoaAbstractFixP() {
-            public boolean invoke1(final Set<String> current, final Set<String> previous) {
-                final Set<String> curr = new HashSet<String>(current);
-                curr.removeAll(previous);
-                return curr.size() == 0;
-            }
-
             @Override
             @SuppressWarnings({"unchecked"})
             public boolean invoke(final Object current, final Object previous) throws Exception {
-                return invoke1((HashSet<String>) current, (HashSet<String>) previous);
+                return boa.functions.BoaIntrinsics.set_symdiff((HashSet<String>) current, (HashSet<String>) previous).size() == 0;
             }
         };
 
@@ -190,11 +191,12 @@ public class CFGSlicer {
         final Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
         for (final CFGNode n : cfg.getNodes()) {
             if (n.getKind() == Control.Node.NodeType.CONTROL)
-                for (final CFGEdge e : n.getOutEdges())
+                for (final CFGEdge e : n.getOutEdges()) {
                     if (e.getLabel().equals("."))
-                        controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, "F");
+                        controlEdges.put(new Integer[] { e.getSrc().getNodeId(), e.getDest().getNodeId() }, "F");
                     else
-                        controlEdges.put(new Integer[]{e.getSrc().getId(), e.getDest().getId()}, e.getLabel());
+                        controlEdges.put(new Integer[] { e.getSrc().getNodeId(), e.getDest().getNodeId() }, e.getLabel());
+                }
         }
 
         // add the edge: entry ---> start
@@ -206,7 +208,7 @@ public class CFGSlicer {
             if (!contolDependentMap.containsKey(enodes[0]))
                 contolDependentMap.put(enodes[0], new HashSet<CFGNode>());
             while (!srcParent.equals(destination)) {
-                contolDependentMap.get(enodes[0]).add(cfg.getNode(destination.getId()));
+                contolDependentMap.get(enodes[0]).add(cfg.getNode(destination.getNodeId()));
                 destination = destination.getParent();
             }
         }

@@ -1,4 +1,4 @@
-Program(name, numreducers, jobs, jobnames, combineTables, reduceTables, splitsize, seeds, isLocal) ::= <<
+Program(name, staticDeclarations, staticStatements, statements, combineTables, reduceTables, splitsize, seed, isLocal, outputVariableNames) ::= <<
 package boa;
 
 public class <name> extends boa.runtime.BoaRunner {
@@ -16,8 +16,8 @@ public class <name> extends boa.runtime.BoaRunner {
 		job.setCombinerClass(<name>BoaCombiner.class);
 		<endif>
 		<if(isLocal)>
-        job.getConfiguration().setClass("mapred.map.output.compression.codec", org.apache.hadoop.io.compress.DefaultCodec.class, org.apache.hadoop.io.compress.CompressionCodec.class);
-        <endif>
+		job.getConfiguration().setClass("mapred.map.output.compression.codec", org.apache.hadoop.io.compress.DefaultCodec.class, org.apache.hadoop.io.compress.CompressionCodec.class);
+		<endif>
 		job.setReducerClass(<name>BoaReducer.class);
 
 		return job;
@@ -34,7 +34,7 @@ public class <name> extends boa.runtime.BoaRunner {
 	public static void main(String[] args) throws Exception {
 		<if(isLocal)>org.apache.hadoop.util.ToolRunner.run(new <name>(), args);
 		<else> System.exit(org.apache.hadoop.util.ToolRunner.run(new <name>(), args));
-	    <endif>
+		<endif>
 	}
 
 	@Override
@@ -51,10 +51,10 @@ public class <name> extends boa.runtime.BoaRunner {
 			id = Integer.parseInt(line.getOptionValue("job"));
 		else
 			id = 0;
-		
+
 		final org.apache.hadoop.fs.Path[] ins = new org.apache.hadoop.fs.Path[1];
 		ins[0] = new org.apache.hadoop.fs.Path(args[0] + "/projects.seq");
-		
+
 		final org.apache.hadoop.mapreduce.Job jb = job(ins, new org.apache.hadoop.fs.Path(args[1]));
 
 		org.apache.hadoop.conf.Configuration configuration = jb.getConfiguration();
@@ -80,7 +80,7 @@ public class <name> extends boa.runtime.BoaRunner {
 
 		jb.setInputFormatClass(org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat.class);
 
-		jb.setNumReduceTasks(<numreducers>);
+		jb.setNumReduceTasks(<length(outputVariableNames)>);
 
 		if (id > 0)
 			configuration.setInt("boa.hadoop.jobid", id);
@@ -126,31 +126,27 @@ public class <name> extends boa.runtime.BoaRunner {
 		return "\<inputDir> \<outputDir>";
 	}
 
-	static interface BoaJob {
-		void map(final boa.types.Toplevel.Project _input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws Exception;
-	}
-	
 	static class <name>BoaMapper extends boa.runtime.BoaMapper {
-		<seeds:{seed | private static final long seed_<i0> = <seed>; private static java.util.Random rand_<i0> = null;<\n>}>
-		<jobs:{j | <j><\n>}>		/** {@inheritDoc} */
+		<SetVarNames(outputVariableNames)>
+		<staticDeclarations>
+		<if(staticStatements)>
+		{
+			<staticStatements>
+		}
+
+		<endif>
+		/** {@inheritDoc} */
 		@Override
 		protected void map(final org.apache.hadoop.io.Text key, final org.apache.hadoop.io.BytesWritable value, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws java.io.IOException {
 			try {
+				boa.functions.BoaMathIntrinsics.random = new java.util.Random(<seed> + key.hashCode());
 				boa.types.Toplevel.Project _input = boa.types.Toplevel.Project.parseFrom(com.google.protobuf.CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
-				<jobnames:{n | if (rand_<i0> == null) rand_<i0> = new java.util.Random(seed_<i0> + key.hashCode()); boa.functions.BoaMathIntrinsics.random = rand_<i0>; runJob("Job<n>", _job_<n>, _input, context);<\n>}>			} catch (final Throwable e) {
+				<statements:{s | <s><\n>}>
+			} catch (final Throwable e) {
+				LOG.error(e.getClass().getName() + " caught", e);
 				boa.io.BoaOutputCommitter.lastSeenEx = e;
 				throw new java.io.IOException("map failure for key '" + key.toString() + "'", e);
 			}
-		}
-
-		private void runJob(final String name, final BoaJob job, final boa.types.Toplevel.Project input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws Throwable {
-			try {
-				job.map(input, context);
-			} catch (final Throwable e) {
-				LOG.error(name + ": " + e.getClass().getName() + " caught", e);
-				throw e;
-			}
-			context.progress();
 		}
 
 		/** {@inheritDoc} */
@@ -167,31 +163,33 @@ public class <name> extends boa.runtime.BoaRunner {
 			super.cleanup(context);
 		}
 	}
-	
+
 	static class <name>BoaCombiner extends boa.runtime.BoaCombiner {
+		<SetVarNames(outputVariableNames)>
 		public <name>BoaCombiner() {
 			super();
-			
+
 			<combineTables:{t | <t><\n>}>		}
 	}
-	
+
 	static class <name>BoaReducer extends boa.runtime.BoaReducer {
+		<SetVarNames(outputVariableNames)>
 		public <name>BoaReducer() {
 			super();
 
 			<reduceTables:{t | <t><\n>}>		}
 	}
-	
+
 	@Override
 	public org.apache.hadoop.mapreduce.Mapper getMapper() {
 		return new <name>BoaMapper();
 	}
-	
+
 	@Override
 	public boa.runtime.BoaCombiner getCombiner() {
 		return new <name>BoaCombiner();
 	}
-	
+
 	@Override
 	public boa.runtime.BoaReducer getReducer() {
 		return new <name>BoaReducer();
@@ -199,20 +197,10 @@ public class <name> extends boa.runtime.BoaRunner {
 }
 >>
 
-Job(name, staticDeclarations, staticStatements, statements) ::= <<
-private static class Job<name> implements BoaJob {
-	<staticDeclarations>
-	<if(staticStatements)>
-	{
-		<staticStatements>
-	}
-	
-	<endif>
-	public void map(final boa.types.Toplevel.Project _input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws Exception {
-		<statements:{s | <s><\n>}>	}
+SetVarNames(vars) ::= <<
+static {
+	boa.runtime.BoaPartitioner.setVariableNames(new String[] {<vars:{v|<v>}; separator=", ">});
 }
-private static BoaJob _job_<name> = new Job<name>();
-
 >>
 
-EmitStatement(indices, id, job, expression, weight) ::= "context.write(new boa.io.EmitKey(<if(indices)><indices:{idx | \"[\" + (<idx>) + \"]\"}; separator=\" + \">, <endif><id>, <job>), new boa.io.EmitValue(<expression><if(weight)>, <weight><endif>));<\n>"
+EmitStatement(indices, id, expression, weight) ::= "context.write(new boa.io.EmitKey(<if(indices)><indices:{idx | \"[\" + (<idx>) + \"]\"}; separator=\" + \">, <endif><id>), new boa.io.EmitValue(<expression><if(weight)>, <weight><endif>));<\n>"

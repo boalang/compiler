@@ -77,7 +77,7 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 	protected void reduce(final EmitKey key, final Iterable<EmitValue> values, final Context context) throws IOException, InterruptedException {
 		// if we can't combine, just pass the output through
 		// TODO: find away to avoid combiner entirely when non-associative
-		if (!this.aggregators.containsKey(key.getKey())) {
+		if (!this.aggregators.containsKey(key.getName())) {
 			for (final EmitValue value : values)
 				context.write(key, value);
 
@@ -85,7 +85,7 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 		}
 
 		// get the aggregator named by the emit key
-		final Aggregator a = this.aggregators.get(key.getKey());
+		final Aggregator a = this.aggregators.get(key.getName());
 
 		a.setCombining(true);
 		a.start(key);

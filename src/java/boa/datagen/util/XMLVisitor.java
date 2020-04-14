@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import org.dom4j.Document;
 import org.dom4j.Namespace;
 import org.dom4j.Node;
 import org.dom4j.ProcessingInstruction;
-import org.dom4j.dom.*;
+import org.dom4j.dom.DOMAttribute;
+import org.dom4j.dom.DOMAttributeNodeMap;
+import org.dom4j.dom.DOMDocument;
+import org.dom4j.dom.DOMDocumentType;
+import org.dom4j.dom.DOMElement;
+import org.dom4j.dom.DOMProcessingInstruction;
+import org.dom4j.dom.DOMText;
 import org.dom4j.tree.DefaultDocument;
 import org.w3c.dom.NodeList;
 

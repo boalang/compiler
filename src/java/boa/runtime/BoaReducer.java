@@ -77,7 +77,7 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 	@Override
 	protected void reduce(final EmitKey key, final Iterable<EmitValue> values, final Context context) throws IOException, InterruptedException {
 		// get the aggregator named by the emit key
-		final Aggregator a = this.aggregators.get(key.getKey());
+		final Aggregator a = this.aggregators.get(key.getName());
 
 		a.setCombining(false);
 		a.start(key);

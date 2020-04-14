@@ -4,6 +4,7 @@ s1: set of array of int;
 s2: set of set of int;
 s3: set of stack of int;
 s4: set of map[int] of int;
+s5: set of queue of int;
 
 
 ### Testing s1 #############
@@ -60,3 +61,15 @@ foreach(i: int; v4[i]){
 	v5 := values(v4[i]);
 	o << v5[0];
 }
+
+### Testing s5 #############
+q1: queue of int;
+q2: queue of int;
+
+offer(q1, 1);
+offer(q2, 2);
+
+add(s5, q1);
+add(s5, q2);
+
+v5 := values(s5);

@@ -16,28 +16,19 @@
  */
 package boa.compiler.visitors.analysis;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
 
 import boa.compiler.ast.Call;
-import boa.compiler.ast.Comparison;
-import boa.compiler.ast.Component;
-import boa.compiler.ast.Composite;
-import boa.compiler.ast.Conjunction;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
-import boa.compiler.ast.Index;
 import boa.compiler.ast.Node;
-import boa.compiler.TypeCheckException;
-import boa.compiler.ast.Operand;
-import boa.compiler.ast.Pair;
-import boa.compiler.ast.Selector;
-import boa.compiler.ast.Term;
-import boa.compiler.ast.UnaryFactor;
-import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.statements.AssignmentStatement;
 import boa.compiler.ast.statements.VarDeclStatement;
-import boa.types.*;
-import boa.compiler.visitors.*;
+import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
+import boa.compiler.visitors.CFGBuildingVisitor;
+import boa.compiler.visitors.CallFindingVisitor;
+import boa.compiler.visitors.IdentifierFindingVisitor;
 
 /**
  * @author rramu

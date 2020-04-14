@@ -163,6 +163,4 @@ public class BoaSortIntrinsics {
 	public static long[] sortTimeArray(final long[] a, final String ignored) {
 		return BoaSortIntrinsics.sortTimeArray(a);
 	}
-
-	// TODO: implement sortx
 }

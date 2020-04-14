@@ -39,8 +39,8 @@ import boa.graphs.cdg.*;
  * @author rramu
  */
 public abstract class BoaAbstractTraversal<T1> {
-	public java.util.HashMap<Integer, T1> outputMapObj;
-	public java.util.HashMap<Integer, T1> prevOutputMapObj;
+	public java.util.HashMap<Long, T1> outputMapObj;
+	public java.util.HashMap<Long, T1> prevOutputMapObj;
 	public T1 currentResult;
 
 	boolean isLoopSensitive = false;
@@ -52,6 +52,18 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public T1 getValue(final CFGNode node) throws Exception {
+		return (T1)outputMapObj.get(node.getId());
+	}
+
+	public T1 getValue(final CDGNode node) throws Exception {
+		return (T1)outputMapObj.get(node.getId());
+	}
+
+	public T1 getValue(final DDGNode node) throws Exception {
+		return (T1)outputMapObj.get(node.getId());
+	}
+
+	public T1 getValue(final PDGNode node) throws Exception {
 		return (T1)outputMapObj.get(node.getId());
 	}
 
@@ -108,7 +120,7 @@ public abstract class BoaAbstractTraversal<T1> {
 		traverse(cfg, direction, kind);
 	}
 
-	public final void dfsForward(final TreeNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+	public final void dfsForward(final TreeNode node, java.util.Set<Long> visitedNodes) throws Exception {
 		final Stack<TreeNode> s = new Stack<TreeNode>();
 		s.push(node);
 		while (!s.isEmpty()) {
@@ -123,7 +135,7 @@ public abstract class BoaAbstractTraversal<T1> {
 		}
 	}
 
-	public final void dfsForward(final PDGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+	public final void dfsForward(final PDGNode node, java.util.Set<Long> visitedNodes) throws Exception {
 		final Stack<PDGNode> s = new Stack<PDGNode>();
 		s.push(node);
 		while (!s.isEmpty()) {
@@ -138,7 +150,7 @@ public abstract class BoaAbstractTraversal<T1> {
 		}
 	}
 
-	public final void dfsForward(final List<PDGNode> nodes, java.util.Set<Integer> visitedNodes) throws Exception {
+	public final void dfsForward(final List<PDGNode> nodes, java.util.Set<Long> visitedNodes) throws Exception {
 		final Stack<PDGNode> s = new Stack<PDGNode>();
 		s.addAll(nodes);
 		while (!s.isEmpty()) {
@@ -153,7 +165,7 @@ public abstract class BoaAbstractTraversal<T1> {
 		}
 	}
 
-	public final void dfsForward(final CDGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+	public final void dfsForward(final CDGNode node, java.util.Set<Long> visitedNodes) throws Exception {
 		final Stack<CDGNode> s = new Stack<CDGNode>();
 		s.push(node);
 		while (!s.isEmpty()) {
@@ -168,7 +180,7 @@ public abstract class BoaAbstractTraversal<T1> {
 		}
 	}
 
-	public final void dfsForward(final DDGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+	public final void dfsForward(final DDGNode node, java.util.Set<Long> visitedNodes) throws Exception {
 		final Stack<DDGNode> s = new Stack<DDGNode>();
 		s.push(node);
 		while (!s.isEmpty()) {
@@ -183,7 +195,7 @@ public abstract class BoaAbstractTraversal<T1> {
 		}
 	}
 
-	public final void dfsForward(final CFGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+	public final void dfsForward(final CFGNode node, java.util.Set<Long> visitedNodes) throws Exception {
 		final Stack<CFGNode> s = new Stack<CFGNode>();
 		s.push(node);
 		while (!s.isEmpty()) {
@@ -200,7 +212,7 @@ public abstract class BoaAbstractTraversal<T1> {
 		}
 	}
 
-	public final void dfsBackward(final CFGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+	public final void dfsBackward(final CFGNode node, java.util.Set<Long> visitedNodes) throws Exception {
 		final Stack<CFGNode> s = new Stack<CFGNode>();
 		s.push(node);
 		while (!s.isEmpty()) {
@@ -217,7 +229,7 @@ public abstract class BoaAbstractTraversal<T1> {
 		}
 	}
 
-	public final void postorderBackward(final CFGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+	public final void postorderBackward(final CFGNode node, java.util.Set<Long> visitedNodes) throws Exception {
 		// FIXME remove recursion
 		visitedNodes.add(node.getId());
 		for (final CFGNode succ : node.getSuccessors()) {
@@ -228,7 +240,7 @@ public abstract class BoaAbstractTraversal<T1> {
 		traverse(node, false);
 	}
 
-	public final void postorderForward(final CFGNode node, java.util.Set<Integer> visitedNodes) throws Exception {
+	public final void postorderForward(final CFGNode node, java.util.Set<Long> visitedNodes) throws Exception {
 		// FIXME remove recursion
 		visitedNodes.add(node.getId());
 		for (final CFGNode pred : node.getPredecessors()) {
@@ -239,7 +251,7 @@ public abstract class BoaAbstractTraversal<T1> {
 		traverse(node, false);
 	}
 
-	public final void populateWithPostorder(final CFGNode node, java.util.Set<Integer> visitedNodes, Queue<CFGNode> queue) throws Exception {
+	public final void populateWithPostorder(final CFGNode node, java.util.Set<Long> visitedNodes, Queue<CFGNode> queue) throws Exception {
 		// FIXME remove recursion
 		visitedNodes.add(node.getId());
 		for (final CFGNode succ : node.getSuccessors()) {
@@ -250,7 +262,7 @@ public abstract class BoaAbstractTraversal<T1> {
 		queue.offer(node);
 	}
 
-	public final void populateWithReversePostorder(final CFGNode node, java.util.Set<Integer> visitedNodes, Stack<CFGNode> stack) throws Exception {
+	public final void populateWithReversePostorder(final CFGNode node, java.util.Set<Long> visitedNodes, Stack<CFGNode> stack) throws Exception {
 		// FIXME remove recursion
 		visitedNodes.add(node.getId());
 		for (final CFGNode succ : node.getSuccessors()) {
@@ -384,9 +396,10 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void traverse(final boa.graphs.cfg.CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind, final BoaAbstractFixP fixp) throws Exception {
+		if (cfg == null || cfg.getNodes() == null) return;
 		try {
 			if (outputMapObj == null) {
-				outputMapObj = new java.util.HashMap<Integer, T1>();
+				outputMapObj = new java.util.HashMap<Long, T1>();
 			}
 			switch (kind) {
 				case DFS:
@@ -396,13 +409,12 @@ public abstract class BoaAbstractTraversal<T1> {
 				case RANDOM:
 					boolean fixpFlag;
 					do {
-						prevOutputMapObj = new java.util.HashMap<Integer, T1>(outputMapObj);
+						prevOutputMapObj = new java.util.HashMap<Long, T1>(outputMapObj);
 						traverse(cfg, direction, kind);
 						fixpFlag = true;
 						final java.util.HashSet<CFGNode> nl = cfg.getNodes();
 						for (final CFGNode node : nl) {
 							boolean curFlag = outputMapObj.containsKey(node.getId());
-							boolean prevFlag = prevOutputMapObj.containsKey(node.getId());
 							if (curFlag) {
 								if (outputMapObj.containsKey(node.getId()) && prevOutputMapObj.containsKey(node.getId())) {
 									fixpFlag = fixpFlag && fixp.invoke((T1)outputMapObj.get(node.getId()), (T1)prevOutputMapObj.get(node.getId()));
@@ -416,12 +428,12 @@ public abstract class BoaAbstractTraversal<T1> {
 					break;
 				case WORKLIST_POSTORDER:
 				case WORKLIST_REVERSEPOSTORDER:
-					prevOutputMapObj = new java.util.HashMap<Integer, T1>();
+					prevOutputMapObj = new java.util.HashMap<Long, T1>();
 					traverseWithFixp(cfg, direction, kind, fixp);
 					break;
 				case HYBRID:
-					prevOutputMapObj = new java.util.HashMap<Integer, T1>();
-					final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+					prevOutputMapObj = new java.util.HashMap<Long, T1>();
+					final java.util.Set<Long> visitedNodes = new java.util.HashSet<Long>();
 					final CFGNode[] nl = cfg.sortNodes();
 					if (nl.length != 0) {
 						if (this.isFlowSensitive) {
@@ -506,10 +518,10 @@ public abstract class BoaAbstractTraversal<T1> {
 	public final void traverseWithFixp(final CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind, final BoaAbstractFixP fixp) throws Exception {
 		if (preTraverse(cfg)) {
 			if (outputMapObj==null) {
-				outputMapObj = new java.util.HashMap<Integer, T1>();
+				outputMapObj = new java.util.HashMap<Long, T1>();
 			}
 			if (cfg.getNodes().size() != 0) {
-				final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+				final java.util.Set<Long> visitedNodes = new java.util.HashSet<Long>();
 				switch (kind) {
 					case WORKLIST_POSTORDER:
 						Queue<CFGNode> queue = new LinkedList<CFGNode>();
@@ -546,13 +558,14 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void traverse(final boa.graphs.cfg.CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		if (cfg == null || cfg.getNodes() == null) return;
 		try {
 			if (preTraverse(cfg)) {
 				if (outputMapObj == null) {
-					outputMapObj = new java.util.HashMap<Integer, T1>();
+					outputMapObj = new java.util.HashMap<Long, T1>();
 				}
 				if (cfg.getNodes().size() != 0) {
-					final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+					final java.util.Set<Long> visitedNodes = new java.util.HashSet<Long>();
 					final CFGNode[] nl = cfg.sortNodes();
 					switch (kind) {
 						case DFS:
@@ -641,13 +654,14 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void traverse(final boa.graphs.cdg.CDG cdg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		if (cdg == null || cdg.getNodes() == null) return;
 		try {
 			if (preTraverse(cdg)) {
 				if (outputMapObj == null) {
-					outputMapObj = new java.util.HashMap<Integer, T1>();
+					outputMapObj = new java.util.HashMap<Long, T1>();
 				}
 				if (cdg.getNodes().size() != 0) {
-					final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+					final java.util.Set<Long> visitedNodes = new java.util.HashSet<Long>();
 					//final CDGNode[] nl = cdg.sortNodes();
 					switch (kind) {
 						case DFS:
@@ -738,13 +752,14 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void traverse(final boa.graphs.ddg.DDG ddg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		if (ddg == null || ddg.getNodes() == null) return;
 		try {
 			if (preTraverse(ddg)) {
 				if (outputMapObj == null) {
-					outputMapObj = new java.util.HashMap<Integer, T1>();
+					outputMapObj = new java.util.HashMap<Long, T1>();
 				}
 				if (ddg.getNodes().size() != 0) {
-					final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+					final java.util.Set<Long> visitedNodes = new java.util.HashSet<Long>();
 					//final CDGNode[] nl = cdg.sortNodes();
 					switch (kind) {
 						case DFS:
@@ -835,13 +850,14 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void traverse(final boa.graphs.pdg.PDG pdg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		if (pdg == null || pdg.getNodes() == null) return;
 		try {
 			if (preTraverse(pdg)) {
 				if (outputMapObj == null) {
-					outputMapObj = new java.util.HashMap<Integer, T1>();
+					outputMapObj = new java.util.HashMap<Long, T1>();
 				}
 				if (pdg.getNodes().size() != 0) {
-					final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+					final java.util.Set<Long> visitedNodes = new java.util.HashSet<Long>();
 					//final CDGNode[] nl = cdg.sortNodes();
 					switch (kind) {
 						case DFS:
@@ -932,13 +948,14 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void traverse(final boa.graphs.slicers.PDGSlicer pdgslicer, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		if (pdgslicer == null || pdgslicer.getSlice() == null) return;
 		try {
 			if (preTraverse(pdgslicer)) {
 				if (outputMapObj == null) {
-					outputMapObj = new java.util.HashMap<Integer, T1>();
+					outputMapObj = new java.util.HashMap<Long, T1>();
 				}
 				if (pdgslicer.getSlice().size() != 0) {
-					final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+					final java.util.Set<Long> visitedNodes = new java.util.HashSet<Long>();
 					//final CDGNode[] nl = cdg.sortNodes();
 					switch (kind) {
 						case DFS:
@@ -1026,13 +1043,14 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void traverse(final boa.graphs.trees.PDTree tree, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		if (tree == null || tree.getNodes() == null) return;
 		try {
 			if (preTraverse(tree)) {
 				if (outputMapObj == null) {
-					outputMapObj = new java.util.HashMap<Integer, T1>();
+					outputMapObj = new java.util.HashMap<Long, T1>();
 				}
 				if (tree.getNodes().size() != 0) {
-					final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+					final java.util.Set<Long> visitedNodes = new java.util.HashSet<Long>();
 					//final CDGNode[] nl = cdg.sortNodes();
 					switch (kind) {
 						case DFS:

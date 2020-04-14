@@ -1,8 +1,7 @@
 package boa.datagen.util;
 
-import org.eclipse.php.internal.core.ast.nodes.*;
+import org.eclipse.php.internal.core.ast.nodes.ASTError;
 import org.eclipse.php.internal.core.ast.nodes.ASTNode;
-import org.eclipse.php.internal.core.ast.visitor.AbstractVisitor;
 import org.eclipse.php.internal.core.ast.visitor.ApplyAll;
 
 public class PHPErrorCheckVisitor extends ApplyAll{

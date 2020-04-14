@@ -1,0 +1,9 @@
+public class C {
+    public int m() {
+    	int x = 7;
+        if (x < 3) return -1;
+        if (x <= 5 && x >= 3) return 0;
+        if (x > 5) return x;
+        return -1;
+    }
+}
