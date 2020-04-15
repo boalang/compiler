@@ -23,13 +23,6 @@ public class FileNode extends ChangedASTNode implements Comparable<FileNode> {
 	private HashMap<String, Integer> declChangeMap = new HashMap<String, Integer>();
 	private List<DeclNode> declChanges = new ArrayList<DeclNode>();
 
-	public FileNode(ChangedFile cf, RevNode r, FileLocation loc) {
-		super(cf.getName());
-		this.cf = cf;
-		this.r = r;
-		this.loc = loc;
-	}
-
 	public FileNode(ChangedFile cf, RevNode r) {
 		super(cf.getName());
 		this.cf = cf;

@@ -2,10 +2,7 @@ package boa.functions.code.change;
 
 import static boa.functions.code.change.refactoring.BoaRefactoringIntrinsics.isJavaFile;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
 import boa.functions.code.change.file.FileNode;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -14,28 +11,36 @@ public class RevNode {
 	private int revIdx;
 	private Revision rev;
 	private int nContributorSoFar;
-	
-	// changes
+
+	// file changes
 	private HashMap<String, FileNode> fileChangeMap = new HashMap<String, FileNode>();
 
 	public RevNode(int revIdx, Revision rev, int nContributor) {
 		this.revIdx = revIdx;
 		this.rev = rev;
 		this.nContributorSoFar = nContributor;
+		updateFileNodes();
 	}
 
-	public List<FileNode> getJavaFileNodes() {
-		List<FileNode> fns = new ArrayList<FileNode>();
+	private void updateFileNodes() {
 		for (int i = 0; i < rev.getFilesCount(); i++) {
 			ChangedFile cf = rev.getFiles(i);
 			if (isJavaFile(cf.getName()))
-				fns.add(new FileNode(rev.getFiles(i), this));
+				fileChangeMap.put(cf.getName(), new FileNode(cf, this));
 		}
-		return fns;
 	}
-	
+
 	public HashMap<String, FileNode> getFileChangeMap() {
 		return fileChangeMap;
+	}
+	
+	public FileNode getFileNode(String fileName) {
+		return fileChangeMap.get(fileName);
+	}
+	
+	public FileNode getFileNode(int fileIdx) {
+		String fileName = rev.getFiles(fileIdx).getName();
+		return getFileNode(fileName);
 	}
 
 	public int getRevIdx() {

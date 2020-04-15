@@ -65,6 +65,36 @@ public class RefactoringConnector {
 		DeclNode leftDecl = leftFile.getDeclChange(leftDeclSig);
 		DeclNode rightDecl = rightFile.getDeclChange(rightDeclSig);
 
+		if (leftDecl == null)
+			leftDecl = findDeclNode(leftDeclSig);
+		if (rightDecl == null)
+			rightDecl = findDeclNode(rightDeclSig);
+
+		// java parser only support java 8
+		if (leftDecl == null || rightDecl == null)
+			return;
+
+//		System.out.println(rev);
+//		
+//		System.out.println(bond.getType());
+//		System.out.println(bond.getRefactoring().getLeftSideLocations(0).getFilePath());
+//		System.out.println(bond.getRefactoring().getRightSideLocations(0).getFilePath());
+//		
+//		System.out.println(bond.getLeftDecl());
+//		System.out.println(bond.getRightDecl());
+//		
+//		System.out.println();
+//		
+//		System.out.println(leftFile);
+//		System.out.println(rightFile);
+//		
+//		System.out.println(rightFile.getDeclChangeMap().keySet());
+//		
+//		System.out.println(leftDecl);
+//		System.out.println(rightDecl);
+//		
+//		System.out.println();
+
 		// merge trees
 		if (leftDecl.getTreeId() != rightDecl.getTreeId()) {
 			DeclTree leftTree = db.declForest.get(leftDecl.getTreeId());
@@ -162,7 +192,8 @@ public class RefactoringConnector {
 			rightField.setFirstParent(leftField);
 			rightField.setFirstChange(change);
 		} else {
-			System.out.println("not null field 1 " + rightField);
+			if (rightField.getFirstParent() != leftField)
+				System.out.println("parent not null field " + rightField);
 		}
 	}
 
@@ -174,6 +205,10 @@ public class RefactoringConnector {
 		if (leftMethod.getTreeId() != rightMethod.getTreeId()) {
 			MethodTree leftTree = db.methodForest.get(leftMethod.getTreeId());
 			MethodTree rightTree = db.methodForest.get(rightMethod.getTreeId());
+
+			if (rightMethod.getTreeId() == 277)
+				System.out.println("here 1");
+
 			leftTree.merge(rightTree);
 		}
 
@@ -182,7 +217,8 @@ public class RefactoringConnector {
 			rightMethod.setFirstParent(leftMethod);
 			rightMethod.setFirstChange(change);
 		} else {
-			System.out.println("not null method 1 " + rightMethod);
+			if (rightMethod.getFirstParent() != leftMethod)
+				System.out.println("parent not null method " + rightMethod);
 		}
 	}
 
@@ -203,19 +239,46 @@ public class RefactoringConnector {
 
 			DeclNode leftDecl = leftFile.getDeclChange(bond.getLeftDecl());
 			DeclNode rightDecl = rightFile.getDeclChange(bond.getRightDecl());
-			
+
 			if (leftDecl == null)
 				leftDecl = findDeclNode(bond.getLeftDecl());
 			if (rightDecl == null)
 				rightDecl = findDeclNode(bond.getRightDecl());
 
+			// java parser only support java 8
+			if (leftDecl == null || rightDecl == null)
+				return;
+
 			FieldNode leftField = leftDecl.getFieldChange(leftFieldSig);
 			FieldNode rightField = rightDecl.getFieldChange(rightFieldSig);
-			
+
 			if (leftField == null)
 				leftField = findFieldNode(leftFieldSig, ChangeKind.DELETED);
 			if (rightField == null)
 				rightField = findFieldNode(rightFieldSig, ChangeKind.ADDED);
+
+			// java parser only support java 8
+			if (leftField == null || rightField == null)
+				continue;
+
+//			System.out.println(rev);
+//			
+//			System.out.println(bond.getRefactoring().getLeftSideLocations(0).getFilePath());
+//			System.out.println(bond.getRefactoring().getRightSideLocations(0).getFilePath());
+//			
+//			System.out.println(bond.getLeftDecl());
+//			System.out.println(bond.getRightDecl());
+//			
+//			System.out.println(leftFieldSig);
+//			System.out.println(rightFieldSig);
+//			
+//			System.out.println();
+//			
+//			System.out.println(leftFile);
+//			System.out.println(rightFile);
+//			
+//			System.out.println(leftDecl);
+//			System.out.println(rightDecl);
 
 			// merge trees
 			if (leftField.getTreeId() != rightField.getTreeId()) {
@@ -264,6 +327,10 @@ public class RefactoringConnector {
 			if (rightDecl == null)
 				rightDecl = findDeclNode(bond.getRightDecl());
 
+			// java parser only support java 8
+			if (leftDecl == null || rightDecl == null)
+				return;
+
 			MethodNode leftMethod = leftDecl.getMethodChange(leftMethodSig);
 			MethodNode rightMethod = rightDecl.getMethodChange(rightMethodSig);
 
@@ -271,6 +338,10 @@ public class RefactoringConnector {
 				leftMethod = findMethodNode(leftMethodSig, ChangeKind.DELETED);
 			if (rightMethod == null)
 				rightMethod = findMethodNode(rightMethodSig, ChangeKind.ADDED);
+
+			// java parser only support java 8
+			if (leftMethod == null || rightMethod == null)
+				continue;
 
 			// merge trees
 			if (leftMethod.getTreeId() != rightMethod.getTreeId()) {

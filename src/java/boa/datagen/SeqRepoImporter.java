@@ -118,8 +118,8 @@ public class SeqRepoImporter {
 						JsonObject rp = repoArray.get(i).getAsJsonObject();
 						RepoMetadata repo = new RepoMetadata(rp);
 
-						if (!DefaultProperties.projects.contains(repo.name))
-							continue;
+//						if (!DefaultProperties.projects.contains(repo.name))
+//							continue;
 
 						if (repo.id != null && repo.name != null && !processedProjectIds.contains(repo.id)) {
 							Project protobufRepo = repo.toBoaMetaDataProtobuf();
@@ -383,11 +383,11 @@ public class SeqRepoImporter {
 						result.getRepository().close();
 					}
 				}
-				System.err.println(gitDir.getName() + " not exist");
+				System.err.println(gitDir.getAbsolutePath() + " not exist");
 //				return null;
 			} else {
 //				updateProcessedProjects(name);
-				System.err.println(gitDir.getName() + " already exists");
+				System.err.println(gitDir.getAbsolutePath() + " already exists");
 			}
 			
 			if (debug)

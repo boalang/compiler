@@ -64,7 +64,7 @@ public class FileTree {
 		forest.db.fileDB.put(node.getLoc(), node);
 		forest.db.fileNames.add(node.getChangedFile().getName());
 		// update RevNode
-		node.getRev().getFileChangeMap().put(node.getChangedFile().getName(), node);
+//		node.getRev().getFileChangeMap().put(node.getChangedFile().getName(), node); // TODO
 		// update prev queues
 		updatePrevNodes(node);
 		// push 2nd parent first for dfs first-parent branch first
@@ -107,8 +107,7 @@ public class FileTree {
 		if (r.getParentsCount() == 1 && prevContentCount == 1) {
 			int revIdx = node.getChangedFile().getPreviousVersions(0);
 			int fileIdx = node.getChangedFile().getPreviousIndices(0);
-			RevNode prevRev = forest.db.revIdxMap.get(revIdx);
-			return new FileNode(prevRev.getRevision().getFiles(fileIdx), prevRev);
+			return forest.db.revIdxMap.get(revIdx).getFileNode(fileIdx);
 		}
 		return findPreviousNode(cf, r.getParents(i));
 	}
@@ -118,7 +117,7 @@ public class FileTree {
 		String prevName = cf.getChange() == ChangeKind.RENAMED ? cf.getPreviousNames(0) : cf.getName();
 		RevNode cur = forest.db.revIdxMap.get(revParentIdx);
 		do {
-			FileNode node = getFileNode(prevName, cur);
+			FileNode node = cur.getFileNode(prevName);
 			if (node != null)
 				return node;
 			if (cur.getRevision().getParentsCount() == 0)
@@ -128,19 +127,12 @@ public class FileTree {
 		} while (true);
 	}
 
-	private FileNode getFileNode(String filePath, RevNode r) {
-		for (ChangedFile cf : r.getRevision().getFilesList())
-			if (cf.getName().equals(filePath))
-				return new FileNode(cf, r);
-		return null;
-	}
-
 	public FileTree merge(FileTree tree) {
 		if (forest.debug)
 			System.out.println("list " + this.id + " merge list " + tree.id);
 		// remove tree
 		forest.getTrees().remove(tree.getId());
-		
+
 		// merge all nodes from tree
 		for (FileNode fn : tree.getFileNodes()) {
 			fn.setTreeId(this.id);

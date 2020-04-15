@@ -37,7 +37,7 @@ public class FileForest {
 	private void buildTrees() {
 		for (int i = db.revIdxMap.size() - 1; i >= 0; i--) {
 			RevNode r = db.revIdxMap.get(i);
-			for (FileNode fn : r.getJavaFileNodes()) {
+			for (FileNode fn : r.getFileChangeMap().values()) {
 				if (!db.fileDB.containsKey(fn.getLoc())) {
 					if (debug)
 						System.err.println("start new node " + fn.getLoc());

@@ -32,9 +32,9 @@ public class BoaRefactoringSeqGenerator {
 	private static String INPUT_PATH;
 
 	public static void main(String[] args) throws IOException {
-		args = new String[] { "/Users/hyj/test6", "/Users/hyj/test6" };
+//		args = new String[] { "/Users/hyj/test6", "/Users/hyj/test6" };
 //		args = new String[] { "/Users/hyj/git/BoaData/DataSet/aa", "/Users/hyj/git/BoaData/DataSet/aa" };
-//		args = new String[] { "/Users/hyj/hpc_repo_json/detect/output", "/Users/hyj/hpc_repo_json/detect/output" };
+		args = new String[] { "/Users/hyj/hpc_repo_json/detect/output", "/Users/hyj/hpc_repo_json/detect/output" };
 		if (args.length < 2) {
 			System.err.println("args: INPUT_PATH, OUTPUT_PATH");
 		} else {
@@ -45,8 +45,8 @@ public class BoaRefactoringSeqGenerator {
 			Map<String, boa.types.Code.Change> refactoringMap = new TreeMap<String, boa.types.Code.Change>();
 			Map<String, StringBuilder> refactoringIdMap = new TreeMap<String, StringBuilder>();
 			
-//			File dir1 = new File(INPUT_PATH);
-			File dir1 = new File(INPUT_PATH + "/output");
+			File dir1 = new File(INPUT_PATH);
+//			File dir1 = new File(INPUT_PATH + "/output");
 //			File dir2 = new File(INPUT_PATH + "/undone_output");
 //			File dir3 = new File(INPUT_PATH + "/unundone_output");
 //			
