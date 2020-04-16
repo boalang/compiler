@@ -245,9 +245,11 @@ public class BoaIntrinsics {
 				for (int i = 0; i < cf.getChangesCount(); i++) {
 //						ChangedFile pcf = revisions.get(cf.getPreviousVersions(i)).getFiles(cf.getPreviousIndices(i));
 //						String name = pcf.getName();
-					String name = cf.getPreviousNames(i);
-					if (!adds.contains(name) && !dels.contains(name))
-						dels.add(name);
+					if (cf.getPreviousNamesCount() != 0) {
+						String name = cf.getPreviousNames(i);
+						if (!adds.contains(name) && !dels.contains(name))
+							dels.add(name);
+					}
 				}
 				break;
 			default:

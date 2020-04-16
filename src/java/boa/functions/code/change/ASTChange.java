@@ -75,7 +75,6 @@ public class ASTChange {
 	private void updateAllChanges(FileNode rightNode, ChangeKind change, boolean isFirstParent) {
 		for (DeclNode decl : rightNode.getDeclChanges()) {
 			updateChange(decl, change, isFirstParent);
-			decl.setSecondChange(change);
 			for (MethodNode method : decl.getMethodChanges())
 				updateChange(method, change, isFirstParent);
 			for (FieldNode field : decl.getFieldChanges())
@@ -91,7 +90,7 @@ public class ASTChange {
 		if (leftNode.getChangedFile().getObjectId().equals(rightNode.getChangedFile().getObjectId())) {
 			// 2nd parent then add copied as 2nd change
 			if (!isFirstParent && rightNode.getASTChangeCount() != 0)
-				updateAllChanges(rightNode, ChangeKind.COPIED, false);
+				updateAllChanges(rightNode, ChangeKind.COPIED, isFirstParent);
 			// 1st parent then consider all asts under the file as copied
 			if (isFirstParent)
 				update(rightNode, declCollector.getDeclNodes(rightNode), ChangeKind.COPIED, isFirstParent);
@@ -208,7 +207,7 @@ public class ASTChange {
 				+ modified2.size() == 0) {
 			// 2nd parent then add copied as 2nd change
 			if (!isFirstParent && rightNode.getASTChangeCount() != 0)
-				updateAllChanges(rightNode, ChangeKind.COPIED, true);
+				updateAllChanges(rightNode, ChangeKind.COPIED, isFirstParent);
 			// 1st parent then consider all asts under the declaration as copied
 			if (isFirstParent)
 				updateDeclAll(rightNode, rightDecl, ChangeKind.COPIED, isFirstParent);
