@@ -48,7 +48,7 @@ public class BoaCodeChangeIntrinsics {
 		HashMap<Integer, MethodTree> methodTrees = methodForest.getTrees();
 		FieldForest fieldForest = new FieldForest(db, false);
 		HashMap<Integer, FieldTree> fieldTrees = fieldForest.getTrees();
-		
+
 		Validation v = new Validation(db).validate();
 
 		s += v.getOutput();
@@ -88,11 +88,6 @@ public class BoaCodeChangeIntrinsics {
 		System.err.println("File Tree Used " + afterUsedMem1 / 1000000.0 + " MB");
 
 		System.err.println("Parse Files Used " + afterUsedMem2 / 1000000.0 + " MB");
-		
-		
-		RevNode r = db.revIdMap.get("9fe955e88c345e14ffbae516bbefb0b9022198d3");
-		FileNode fn = r.getFileNode("src/java/org/jetbrains/plugins/clojure/ClojureLoader.java");
-		System.out.println(fn.getFirstParent());
 
 		return s;
 	}

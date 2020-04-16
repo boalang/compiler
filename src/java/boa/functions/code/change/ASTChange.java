@@ -157,6 +157,7 @@ public class ASTChange {
 		Set<Integer> added1 = Stream.iterate(0, n -> n + 1).limit(rightDecl.getFieldsCount())
 				.collect(Collectors.toSet());
 		Set<Integer> modified1 = new HashSet<Integer>();
+		Set<Integer> matched1 = new HashSet<Integer>();
 
 		for (int i = 0; i < leftDecl.getFieldsCount(); i++) {
 			Variable leftVar = leftDecl.getFields(i);
@@ -166,6 +167,8 @@ public class ASTChange {
 					if (getSignature(leftVar).equals(getSignature(rightVar))) {
 						if (!prettyprint(leftVar).equals(prettyprint(rightVar)))
 							modified1.add(j);
+						else
+							matched1.add(j);
 						deleted1.remove(i);
 						added1.remove(j);
 						break;
@@ -180,6 +183,7 @@ public class ASTChange {
 		Set<Integer> added2 = Stream.iterate(0, n -> n + 1).limit(rightDecl.getMethodsCount())
 				.collect(Collectors.toSet());
 		Set<Integer> modified2 = new HashSet<Integer>();
+		Set<Integer> matched2 = new HashSet<Integer>();
 
 		for (int i = 0; i < leftDecl.getMethodsCount(); i++) {
 			Method leftMethod = leftDecl.getMethods(i);
@@ -189,6 +193,8 @@ public class ASTChange {
 					if (getSignature(leftMethod).equals(getSignature(rightMethod))) {
 						if (!prettyprint(leftMethod).equals(prettyprint(rightMethod)))
 							modified2.add(j);
+						else
+							matched2.add(j);
 						deleted2.remove(i);
 						added2.remove(j);
 						break;
@@ -227,6 +233,14 @@ public class ASTChange {
 		for (int j : modified2)
 			update(declNode, rightDecl.getMethods(j), ChangeKind.MODIFIED, isFirstParent);
 
+		// if file is renamed, then update all matched asts as copied.
+		if (rightNode.getChangedFile().getChange() == ChangeKind.RENAMED) {
+			for (int j : matched1)
+				update(declNode, rightDecl.getFields(j), ChangeKind.COPIED, isFirstParent);
+			for (int j : matched2)
+				update(declNode, rightDecl.getMethods(j), ChangeKind.COPIED, isFirstParent);
+		}
+		
 	}
 
 	public static String getSignature(Method m) {
@@ -281,7 +295,7 @@ public class ASTChange {
 		}
 		return "public "; // if no modifiers, then use "public".
 	}
-	
+
 	private static String getTypeAsString(String type) {
 		// match refactoring description
 		return type.replace(", ", ",");

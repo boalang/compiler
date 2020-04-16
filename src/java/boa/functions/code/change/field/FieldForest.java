@@ -10,6 +10,7 @@ import boa.functions.code.change.declaration.DeclNode;
 public class FieldForest {
 
 	private HashMap<Integer, FieldTree> trees;
+	private int treeId = 0;
 	public final ChangeDataBase db;
 	protected boolean debug = false;
 
@@ -27,7 +28,7 @@ public class FieldForest {
 				if (!db.fieldDB.containsKey(n.getLoc())) {
 					if (debug)
 						System.out.println("start new node " + n.getLoc());
-					FieldTree tree = new FieldTree(this, n, trees.size());
+					FieldTree tree = new FieldTree(this, n, treeId++);
 					if (tree.linkAll())
 						trees.put(tree.getId(), tree);
 				}

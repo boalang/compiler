@@ -10,6 +10,7 @@ import boa.functions.code.change.file.FileNode;
 public class DeclForest {
 
 	protected HashMap<Integer, DeclTree> trees;
+	private int treeId = 0;
 	protected ChangeDataBase db;
 	protected boolean debug = false;
 
@@ -27,7 +28,7 @@ public class DeclForest {
 				if (!db.declDB.containsKey(declNode.getLoc())) {
 					if (debug)
 						System.out.println("start new node " + declNode.getLoc());
-					DeclTree tree = new DeclTree(this, declNode, trees.size());
+					DeclTree tree = new DeclTree(this, declNode, treeId++);
 					if (tree.linkAll())
 						trees.put(tree.getId(), tree);
 				}

@@ -24,6 +24,7 @@ import boa.types.Toplevel.Project;
 public class FileForest {
 
 	private HashMap<Integer, FileTree> trees;
+	private int treeId = 0;
 	public final ChangeDataBase db;
 	protected boolean debug = false;
 
@@ -41,7 +42,7 @@ public class FileForest {
 				if (!db.fileDB.containsKey(fn.getLoc())) {
 					if (debug)
 						System.err.println("start new node " + fn.getLoc());
-					FileTree tree = new FileTree(this, fn, trees.size());
+					FileTree tree = new FileTree(this, fn, treeId++);
 					if (tree.linkAll())
 						trees.put(tree.getId(), tree);
 				}
