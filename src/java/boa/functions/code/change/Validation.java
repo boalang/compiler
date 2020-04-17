@@ -38,22 +38,47 @@ public class Validation {
 
 	private String s = "";
 
+	// output
+	private int declChanges;
+	private int fieldChanges;
+	private int methodChanges;
+	private int unmatchedDeclChanges;
+	private int unmatchedFieldChanges;
+	private int unmatchedMethodChanges;
+
 	public Validation(ChangeDataBase db) {
 		this.db = db;
 	}
 
-	public Validation validate() throws Exception {
+	private void initial() {
+		visitedFieldTrees = new HashSet<Integer>();
+		visitedMethodTrees = new HashSet<Integer>();
+		visitedDeclTrees = new HashSet<Integer>();
+		visitedRevNodes = new HashSet<Integer>();
+		declNodes = new HashSet<String>();
+		fieldNodes = new HashSet<String>();
+		methodNodes = new HashSet<String>();
+		visitedASTSigs = new HashSet<String>();
+		declChanges = 0;
+		fieldChanges = 0;
+		methodChanges = 0;
+		unmatchedDeclChanges = 0;
+		unmatchedFieldChanges = 0;
+		unmatchedMethodChanges = 0;
+	}
+
+	public double[][] validate() throws Exception {
 
 		ASTCollector astCollector = new ASTCollector();
+		double[][] res = new double[db.cr.getBranchesCount()][6];
 
 		for (int i = 0; i < db.cr.getBranchesCount(); i++) {
 			int headIdx = db.cr.getBranches(i);
 			String head = db.cr.getBranchNames(i);
 
 			initial();
-			for (ChangedFile cf : getSnapshot(db.cr, headIdx, true)) {
+			for (ChangedFile cf : getSnapshot(db.cr, headIdx, true))
 				astCollector.visit(cf);
-			}
 
 			System.out.println(
 					"branch Idx: " + headIdx + " " + db.revIdxMap.get(headIdx).getRevision().getId() + " " + head);
@@ -61,19 +86,42 @@ public class Validation {
 			System.out.println("fieldNodes in last snapshot: " + fieldNodes.size());
 			System.out.println("methodNodes in last snapshot: " + methodNodes.size());
 
+			double lastDecls = declNodes.size();
+			double lastFields = fieldNodes.size();
+			double lastMethods = methodNodes.size();
+
 			validate(headIdx);
 
 			System.out.println();
-			System.out.println("left declNodes: " + declNodes.size());
-			System.out.println("left fieldNodes: " + fieldNodes.size());
-			System.out.println("left methodNodes: " + methodNodes.size());
-			
-			for (String s : methodNodes)
-				System.out.println(s);
+
+			double matchedLastDeclRatio = ratio(declNodes.size(), lastDecls);
+			double matchedLastFieldRatio = ratio(fieldNodes.size(), lastFields);
+			double matchedLastMethodRatio = ratio(methodNodes.size(), lastMethods);
+
+			double matchedDeclRatio = ratio(unmatchedDeclChanges, declChanges);
+			double matchedFieldRatio = ratio(unmatchedFieldChanges, fieldChanges);
+			double matchedMethodRatio = ratio(unmatchedMethodChanges, methodChanges);
+
+			System.out.println(
+					"left declNodes: " + declNodes.size() + " " + matchedLastDeclRatio + " " + matchedDeclRatio);
+			System.out.println(
+					"left fieldNodes: " + fieldNodes.size() + " " + matchedLastFieldRatio + " " + matchedFieldRatio);
+			System.out.println(
+					"left methodNodes: " + methodNodes.size() + " " + matchedLastMethodRatio + " " + matchedMethodRatio);
 
 			System.out.println();
+
+			res[i] = new double[] { 
+					matchedLastDeclRatio, matchedDeclRatio, 
+					matchedLastFieldRatio, matchedFieldRatio,
+					matchedLastMethodRatio, matchedMethodRatio 
+			};
 		}
-		return this;
+		return res;
+	}
+	
+	private double ratio(double unmatched, double total) {
+		return total == 0 ? 1.0 : (1.0 - unmatched / total);
 	}
 
 	private void validate(int headIdx) {
@@ -104,15 +152,18 @@ public class Validation {
 				String declSig = fn.getSignature() + " " + dn.getSignature();
 				matchChanges(dn, declSig);
 				visitedASTSigs.add(declSig);
+				declChanges++;
 				for (FieldNode fieldNode : dn.getFieldChanges()) {
 					String fieldSig = declSig + " " + fieldNode.getSignature();
 					matchChanges(fieldNode, fieldSig);
 					visitedASTSigs.add(fieldSig);
+					fieldChanges++;
 				}
 				for (MethodNode methodNode : dn.getMethodChanges()) {
 					String methodSig = declSig + " " + methodNode.getSignature();
 					matchChanges(methodNode, methodSig);
 					visitedASTSigs.add(methodSig);
+					methodChanges++;
 				}
 			}
 		}
@@ -141,6 +192,7 @@ public class Validation {
 			DeclTree declTree = db.declForest.get(treeId);
 			System.out.println("ERR: cannot find decl " + dn + " tree id: " + dn.getTreeId() + " tree size: "
 					+ declTree.getDeclNodes().size());
+			unmatchedDeclChanges++;
 		}
 	}
 
@@ -167,6 +219,7 @@ public class Validation {
 			FieldTree fieldTree = db.fieldForest.get(treeId);
 			System.out.println("ERR: cannot find field " + fn + " tree id: " + fn.getTreeId() + " tree size: "
 					+ fieldTree.getFieldNodes().size());
+			unmatchedFieldChanges++;
 		}
 	}
 
@@ -191,21 +244,10 @@ public class Validation {
 		} else {
 			int treeId = mn.getTreeId();
 			MethodTree methodTree = db.methodForest.get(treeId);
-
 			System.out.println("ERR: cannot find method " + mn + " tree id: " + mn.getTreeId() + " tree size: "
 					+ methodTree.getMethodNodes().size());
+			unmatchedMethodChanges++;
 		}
-	}
-
-	private void initial() {
-		visitedFieldTrees = new HashSet<Integer>();
-		visitedMethodTrees = new HashSet<Integer>();
-		visitedDeclTrees = new HashSet<Integer>();
-		visitedRevNodes = new HashSet<Integer>();
-		declNodes = new HashSet<String>();
-		fieldNodes = new HashSet<String>();
-		methodNodes = new HashSet<String>();
-		visitedASTSigs = new HashSet<String>();
 	}
 
 	public class ASTCollector extends BoaAbstractVisitor {

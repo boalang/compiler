@@ -180,6 +180,9 @@ public class RefactoringConnector {
 		FieldNode leftField = leftDecl.getFieldChange(sig);
 		FieldNode rightField = rightDecl.getFieldChange(sig);
 
+		if (leftField == null || rightField == null)
+			return;
+
 		// merge trees
 		if (leftField.getTreeId() != rightField.getTreeId()) {
 			FieldTree leftTree = db.fieldForest.get(leftField.getTreeId());
@@ -192,14 +195,17 @@ public class RefactoringConnector {
 			rightField.setFirstParent(leftField);
 			rightField.setFirstChange(change);
 		} else {
-			if (rightField.getFirstParent() != leftField)
-				System.out.println("parent not null field " + rightField);
+//			if (rightField.getFirstParent() != leftField)
+//				System.out.println("parent not null field " + rightField);
 		}
 	}
 
 	private void connectMethodsWithSameSig(String sig, DeclNode leftDecl, DeclNode rightDecl, ChangeKind change) {
 		MethodNode leftMethod = leftDecl.getMethodChange(sig);
 		MethodNode rightMethod = rightDecl.getMethodChange(sig);
+
+		if (leftMethod == null || rightMethod == null)
+			return;
 
 		// merge trees
 		if (leftMethod.getTreeId() != rightMethod.getTreeId()) {
@@ -217,8 +223,8 @@ public class RefactoringConnector {
 			rightMethod.setFirstParent(leftMethod);
 			rightMethod.setFirstChange(change);
 		} else {
-			if (rightMethod.getFirstParent() != leftMethod)
-				System.out.println("parent not null method " + rightMethod);
+//			if (rightMethod.getFirstParent() != leftMethod)
+//				System.out.println("parent not null method " + rightMethod);
 		}
 	}
 

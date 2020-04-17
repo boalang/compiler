@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Queue;
+import java.util.Stack;
 
 import boa.functions.code.change.ASTChange;
 import boa.functions.code.change.ChangeDataBase;
@@ -82,37 +83,44 @@ public class FileForest {
 			FileNode fn = e.getValue();
 			if (visited.contains(fn.getLoc()))
 				continue;
-			Queue<FileNode> queue = new LinkedList<FileNode>();
-			queue.offer(fn);
-			while (!queue.isEmpty()) {
-				FileNode rightNode = queue.poll();
-//				System.out.println(rightNode.getLoc());
+			Stack<FileNode> stack = new Stack<FileNode>();
+			stack.push(fn);
+			while (!stack.isEmpty()) {
+				FileNode rightNode = stack.pop();
+
+				if (debug)
+					System.out.println(rightNode.getLoc());
+				
+				if (visited.contains(rightNode.getLoc()))
+					continue;
+				
 				visited.add(rightNode.getLoc());
 
 				// edge case: added file w/o any further modifications
 				if (rightNode.getChangedFile().getChange() == ChangeKind.ADDED && rightNode.getASTChangeCount() == 0) {
 					astChange.update(rightNode, collector.getDeclNodes(rightNode), ChangeKind.ADDED, true);
 				}
+				
+				// update changes from 2nd parent
+				if (rightNode.hasSecondParent()) {
+					FileNode leftNode = rightNode.getSecondParent();
+					astChange.compare(leftNode, rightNode, collector, false);
+					stack.push(leftNode);
+					ChangeKind change = leftNode.getChangedFile().getObjectId()
+							.equals(rightNode.getChangedFile().getObjectId()) ? ChangeKind.COPIED : ChangeKind.MODIFIED;
+					rightNode.setSecondChange(change);
+				}
 
 				// update changes from 1st parent
 				if (rightNode.hasFirstParent()) {
 					FileNode leftNode = rightNode.getFirstParent();
 					astChange.compare(leftNode, rightNode, collector, true);
-					queue.offer(leftNode);
+					stack.push(leftNode);
 					rightNode.setFirstChange(rightNode.getChangedFile().getChange());
 				} else {
 					rightNode.setFirstChange(ChangeKind.ADDED);
 				}
-
-				// update changes from 2nd parent
-				if (rightNode.hasSecondParent()) {
-					FileNode leftNode = rightNode.getSecondParent();
-					astChange.compare(leftNode, rightNode, collector, false);
-					queue.offer(leftNode);
-					ChangeKind change = leftNode.getChangedFile().getObjectId()
-							.equals(rightNode.getChangedFile().getObjectId()) ? ChangeKind.COPIED : ChangeKind.MODIFIED;
-					rightNode.setSecondChange(change);
-				}
+				
 			}
 		}
 	}

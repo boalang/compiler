@@ -87,6 +87,7 @@ public class FileTree {
 			if (i == 0 && node.getChangedFile().getChange() == ChangeKind.ADDED)
 				continue;
 			FileNode prevNode = getPreviousNode(node, i);
+//			FileNode prevNode = findPreviousNode(node.getChangedFile(), node.getRev().getRevision().getParents(i));
 			if (prevNode != null) {
 				// check if the prevNode is already added to database
 				if (forest.db.fileDB.containsKey(prevNode.getLoc()))
