@@ -6,7 +6,6 @@
 	<classpathentry kind="lib" path="rtlib/protobuf-java-2.5.0.jar"/>
 	<classpathentry kind="lib" path="rtlib/scannotation-1.0.3.jar"/>
 	<classpathentry kind="lib" path="rtlib/ST-4.0.8.jar"/>
-
 	<classpathentry kind="lib" path="lib/antlr-4.5-complete.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-math-2.1.jar"/>
@@ -29,7 +28,6 @@
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.dltk.core_5.7.1.201703020501.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.equinox.common_3.6.0.dist.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.equinox.preferences_3.4.2.dist.jar"/>
-	<classpathentry kind="lib" path="lib/datagen/org.eclipse.jgit-4.0.1.201506240215-r.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.osgi_3.9.1.v20130814-1242.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.php.core_4.3.1.201703301037.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.php.core.parser_4.3.1.201703301037.jar"/>
@@ -39,19 +37,18 @@
 	<classpathentry kind="lib" path="lib/datagen/sac.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/trove-3.0.3.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/xml-security-impl-1.0.jar"/>
-
-	<classpathentry kind="output" path="build/classes" />
-	<classpathentry kind="src" path="build/java" />
-	<classpathentry kind="src" path="src/java" />
-	<classpathentry kind="src" path="src/compiled-proto" />
-
+	<classpathentry kind="src" path="build/java"/>
+	<classpathentry kind="src" path="src/test"/>
+	<classpathentry kind="src" path="src/proto"/>
+	<classpathentry kind="src" path="src/antlr"/>
+	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="src" path="src/compiled-proto"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-
-	<classpathentry kind="src" output="build/tests" path="src/test">
-		<attributes>
-			<attribute name="optional" value="true"/>
-			<attribute name="test" value="true"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="lib/datagen_new/org.eclipse.jgit-5.4.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/refactoring/commons-text-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/refactoring/guava-28.2-jre.jar"/>
+	<classpathentry kind="lib" path="lib/refactoring/org.eclipse.text_3.5.0.jar"/>
+	<classpathentry kind="lib" path="lib/refactoring/RefactoringMiner-2.0.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
 </classpath>

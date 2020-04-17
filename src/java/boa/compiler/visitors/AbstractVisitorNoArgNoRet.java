@@ -389,10 +389,6 @@ public abstract class AbstractVisitorNoArgNoRet {
 		n.getValue().accept(this);
 	}
 
-	public void visit(final ListType n) {
-		n.getValue().accept(this);
-	}
-
 	public void visit(final SetType n) {
 		n.getValue().accept(this);
 	}

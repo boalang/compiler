@@ -21,10 +21,3 @@ q: queue of int;
 arr5: array of queue of int;
 
 arr6: array of queue of int = { q, q, q };
-
-# array of list
-l: list of int;
-
-arr7: array of list of int;
-
-arr8: array of list of int = { l, l, l };

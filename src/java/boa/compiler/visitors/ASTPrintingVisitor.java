@@ -566,16 +566,6 @@ public class ASTPrintingVisitor extends AbstractVisitorNoArgNoRet {
 
 	/** {@inheritDoc} */
 	@Override
-	public void visit(final ListType n) {
-		indent();
-		System.out.println("ListType");
-		indent++;
-		super.visit(n);
-		indent--;
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public void visit(final SetType n) {
 		indent();
 		System.out.println("SetType");

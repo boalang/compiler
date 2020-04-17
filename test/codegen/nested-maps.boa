@@ -69,13 +69,3 @@ mq[q] = "foo";
 if (haskey(mq, q))
 	remove(mq, q);
 lq2 := lookup(mq, q, "foo");
-
-ml: map[list of int] of string;
-clear(ml);
-ll := len(ml);
-v4 := values(ml);
-lst: list of int;
-ml[lst] = "foo";
-if (haskey(ml, lst))
-	remove(ml, lst);
-ll2 := lookup(ml, lst, "foo");

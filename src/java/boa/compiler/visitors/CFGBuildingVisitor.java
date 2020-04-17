@@ -73,7 +73,6 @@ import boa.compiler.ast.statements.WhileStatement;
 import boa.compiler.ast.types.ArrayType;
 import boa.compiler.ast.types.FixPType;
 import boa.compiler.ast.types.FunctionType;
-import boa.compiler.ast.types.ListType;
 import boa.compiler.ast.types.MapType;
 import boa.compiler.ast.types.OutputType;
 import boa.compiler.ast.types.QueueType;
@@ -695,12 +694,6 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final QueueType n) {
-		singleton(n);
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void visit(final ListType n) {
 		singleton(n);
 	}
 

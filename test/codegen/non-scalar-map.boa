@@ -5,7 +5,6 @@ m2: map[set of int] of set of int;
 m3: map[stack of int] of stack of int;
 m4: map[map[set of int] of set of int] of map[array of int] of array of int;
 m5: map[queue of int] of queue of int;
-m6: map[list of int] of list of int;
 
 
 ### Testing m1 #############
@@ -55,7 +54,7 @@ foreach(i: int; k5[0][i]){
 	o << k5[0][i];
 }
 
-### Testing m5 #############
+### Testing s5 #############
 q1: queue of int;
 q2: queue of int;
 
@@ -65,14 +64,3 @@ offer(q2, 2);
 m5[q1] = q2;
 
 v5 := values(m5);
-
-### Testing m6 #############
-l1: list of int;
-l2: list of int;
-
-add(l1, 1);
-add(l2, 2);
-
-m6[l1] = l2;
-
-v6 := values(m6);

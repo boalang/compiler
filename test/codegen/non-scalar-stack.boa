@@ -5,7 +5,6 @@ s2: stack of set of int;
 s3: stack of stack of int;
 s4: stack of map[int] of int;
 s5: stack of queue of int;
-s6: stack of list of int;
 
 
 ### Testing s1 #############
@@ -73,15 +72,3 @@ push(s5, q1);
 push(s5, q2);
 
 v5 := values(s5);
-
-### Testing s6 #############
-l1: list of int;
-l2: list of int;
-
-add(l1, 1);
-add(l2, 2);
-
-push(s6, l1);
-push(s6, l2);
-
-v6 := values(s6);

@@ -23,7 +23,6 @@ import java.util.Map;
 
 import boa.types.BoaArray;
 import boa.types.BoaFunction;
-import boa.types.BoaList;
 import boa.types.BoaMap;
 import boa.types.BoaName;
 import boa.types.BoaQueue;
@@ -75,12 +74,7 @@ public class FunctionTrie {
 			t2 = ((BoaQueue)t2).getType();
 			if (t instanceof BoaTypeVar)
 				return new BoaQueue(replaceVar(t, t2, typeVars));
-		} else if (t instanceof BoaList && t2 instanceof BoaList) {
-			t = ((BoaList)t).getType();
-			t2 = ((BoaList)t2).getType();
-			if (t instanceof BoaTypeVar)
-				return new BoaList(replaceVar(t, t2, typeVars));
-		}  else if (t instanceof BoaSet && t2 instanceof BoaSet) {
+		} else if (t instanceof BoaSet && t2 instanceof BoaSet) {
 			t = ((BoaSet)t).getType();
 			t2 = ((BoaSet)t2).getType();
 			if (t instanceof BoaTypeVar)
