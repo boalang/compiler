@@ -18,16 +18,26 @@
 
 package boa.datagen.util;
 
-import java.util.*;
+import static boa.datagen.util.JavaASTUtil.getFullyQualifiedName;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 
 import org.eclipse.jdt.core.dom.*;
-import boa.datagen.treed.TreedConstants;
-import boa.types.Ast.*;
-import boa.types.Ast.Modifier;
-import boa.types.Ast.Type;
-import boa.types.Shared.ChangeKind;
 
-import static boa.datagen.util.JavaASTUtil.getFullyQualifiedName;
+import boa.types.Ast.Declaration;
+import boa.types.Ast.Method;
+import boa.types.Ast.Modifier;
+import boa.types.Ast.Namespace;
+import boa.types.Ast.PositionInfo;
+import boa.types.Ast.Type;
+import boa.types.Ast.TypeKind;
+import boa.types.Ast.Variable;
 
 /**
  * @author rdyer

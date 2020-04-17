@@ -1,48 +1,35 @@
 package boa.datagen.util;
 
-import boa.types.Ast;
-import boa.types.Ast.*;
-import boa.types.Ast.Comment.CommentKind;
-import boa.types.Ast.Expression.ExpressionKind;
-import boa.types.Ast.ASTRoot;
-import boa.types.Ast.Declaration;
-import boa.types.Ast.Element.ElementKind;
-import boa.types.Ast.Expression;
-import boa.types.Ast.Method;
-import boa.types.Ast.Modifier;
-import boa.types.Ast.Namespace;
-import boa.types.Ast.PositionInfo;
-import boa.types.Ast.Statement;
-import boa.types.Ast.Statement.StatementKind;
-import boa.types.Ast.Type;
-import boa.types.Ast.TypeKind;
-import boa.types.Ast.Variable;
-import boa.types.Ast.Modifier.ModifierKind;
-
-import static org.junit.Assert.assertFalse;
-
-import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import com.steadystate.css.dom.CSSStyleSheetImpl;
+
 import org.eclipse.php.internal.core.PHPVersion;
 import org.eclipse.php.internal.core.ast.nodes.ASTParser;
 import org.eclipse.php.internal.core.ast.nodes.Program;
 import org.jsoup.Connection.KeyVal;
-import org.jsoup.nodes.*;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Comment;
+import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import org.jsoup.nodes.DocumentType;
+import org.jsoup.nodes.FormElement;
+import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
+import org.jsoup.nodes.XmlDeclaration;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ast.AstRoot;
 import org.w3c.css.sac.InputSource;
 
-import com.steadystate.css.dom.CSSStyleSheetImpl;
+import boa.types.Ast;
+import boa.types.Ast.Comment.CommentKind;
+import boa.types.Ast.Element.ElementKind;
+import boa.types.Ast.Namespace;
 
 public class HtmlVisitor {
 	protected Ast.Document.Builder b = Ast.Document.newBuilder();

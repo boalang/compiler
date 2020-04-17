@@ -1,9 +1,8 @@
 package boa.test.datagen.php;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.eclipse.php.internal.core.PHPVersion;
 import org.eclipse.php.internal.core.ast.nodes.ASTParser;
@@ -15,7 +14,6 @@ import boa.datagen.util.FileIO;
 import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.types.Ast.ASTRoot;
-import boa.types.Ast.Namespace;
 
 public class PHPParseTest {
 	

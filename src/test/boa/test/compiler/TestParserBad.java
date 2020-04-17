@@ -83,4 +83,13 @@ public class TestParserBad extends BaseTest {
 				"3,1: error: visit statements must start with 'before' or 'after'"
 			});
 	}
+
+	@Test
+	public void enumExtracomma() throws IOException {
+		parse(load(badDir + "enum-extra-comma.boa"),
+			new String[] { "2,38: no viable alternative at input ',,'",
+				"2,39: error: ';' expected",
+				"2,51: extraneous input '}' expecting {<EOF>, 'of', 'if', 'do', 'map', 'stack', 'queue', 'set', 'for', 'foreach', 'ifall', 'exists', 'not', 'type', 'else', 'case', 'output', 'format', 'while', 'break', 'array', 'static', 'switch', 'return', 'weight', 'default', 'continue', 'function', 'fixp', 'visitor', 'traversal', 'before', 'after', 'stop', ';', '.', '{', '(', '[', 'or', '|', '||', 'and', '&', '&&', '+', '-', '^', '*', '/', '%', '>>', '~', '!', '$', '<<', IntegerLiteral, FloatingPointLiteral, CharacterLiteral, RegexLiteral, MultilineStringLiteral, StringLiteral, TimeLiteral, Identifier}"
+			});
+	}
 }

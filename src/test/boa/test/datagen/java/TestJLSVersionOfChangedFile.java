@@ -73,7 +73,6 @@ public class TestJLSVersionOfChangedFile {
     	return data;
     }
     
-    private String name;
     private ChangedFile changedFile;
 	
 	private static Configuration conf = new Configuration();
@@ -84,7 +83,6 @@ public class TestJLSVersionOfChangedFile {
 	
 	public TestJLSVersionOfChangedFile(String name, ChangedFile input) {
 		DefaultProperties.DEBUG = true;
-		this.name = name;
 		this.changedFile = input;
 	}
 	

@@ -55,6 +55,18 @@ public abstract class BoaAbstractTraversal<T1> {
 		return (T1)outputMapObj.get(node.getId());
 	}
 
+	public T1 getValue(final CDGNode node) throws Exception {
+		return (T1)outputMapObj.get(node.getId());
+	}
+
+	public T1 getValue(final DDGNode node) throws Exception {
+		return (T1)outputMapObj.get(node.getId());
+	}
+
+	public T1 getValue(final PDGNode node) throws Exception {
+		return (T1)outputMapObj.get(node.getId());
+	}
+
 	public void clear() {
 		if (outputMapObj != null)
 			outputMapObj.clear();
@@ -384,6 +396,7 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void traverse(final boa.graphs.cfg.CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind, final BoaAbstractFixP fixp) throws Exception {
+		if (cfg == null || cfg.getNodes() == null) return;
 		try {
 			if (outputMapObj == null) {
 				outputMapObj = new java.util.HashMap<Long, T1>();
@@ -402,7 +415,6 @@ public abstract class BoaAbstractTraversal<T1> {
 						final java.util.HashSet<CFGNode> nl = cfg.getNodes();
 						for (final CFGNode node : nl) {
 							boolean curFlag = outputMapObj.containsKey(node.getId());
-							boolean prevFlag = prevOutputMapObj.containsKey(node.getId());
 							if (curFlag) {
 								if (outputMapObj.containsKey(node.getId()) && prevOutputMapObj.containsKey(node.getId())) {
 									fixpFlag = fixpFlag && fixp.invoke((T1)outputMapObj.get(node.getId()), (T1)prevOutputMapObj.get(node.getId()));
@@ -546,6 +558,7 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void traverse(final boa.graphs.cfg.CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		if (cfg == null || cfg.getNodes() == null) return;
 		try {
 			if (preTraverse(cfg)) {
 				if (outputMapObj == null) {
@@ -641,6 +654,7 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void traverse(final boa.graphs.cdg.CDG cdg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		if (cdg == null || cdg.getNodes() == null) return;
 		try {
 			if (preTraverse(cdg)) {
 				if (outputMapObj == null) {
@@ -738,6 +752,7 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void traverse(final boa.graphs.ddg.DDG ddg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		if (ddg == null || ddg.getNodes() == null) return;
 		try {
 			if (preTraverse(ddg)) {
 				if (outputMapObj == null) {
@@ -835,6 +850,7 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void traverse(final boa.graphs.pdg.PDG pdg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		if (pdg == null || pdg.getNodes() == null) return;
 		try {
 			if (preTraverse(pdg)) {
 				if (outputMapObj == null) {
@@ -932,6 +948,7 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void traverse(final boa.graphs.slicers.PDGSlicer pdgslicer, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		if (pdgslicer == null || pdgslicer.getSlice() == null) return;
 		try {
 			if (preTraverse(pdgslicer)) {
 				if (outputMapObj == null) {
@@ -1026,6 +1043,7 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void traverse(final boa.graphs.trees.PDTree tree, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind) throws Exception {
+		if (tree == null || tree.getNodes() == null) return;
 		try {
 			if (preTraverse(tree)) {
 				if (outputMapObj == null) {

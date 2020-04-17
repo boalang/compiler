@@ -16,11 +16,9 @@
  */
 package boa.graphs.ddg;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import boa.graphs.Edge;
 import boa.graphs.Node;
 import boa.graphs.cfg.CFGNode;
 

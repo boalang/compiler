@@ -432,6 +432,7 @@ public class BoaMetricIntrinsics {
 		nocVisitor.process(decls);
 		return nocVisitor.map;
 	}
+<<<<<<< HEAD
 
 	////////////////////////////////
 	// Response For a Class (RFC) //
@@ -762,4 +763,6 @@ public class BoaMetricIntrinsics {
 		}
 		return metrics;
 	}
+=======
+>>>>>>> refs/heads/master
 }

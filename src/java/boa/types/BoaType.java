@@ -143,6 +143,13 @@ public abstract class BoaType {
 		return names.get(t);
 	}
 
+	/**
+	 * Returns the default value (in the generated code) for this type.
+	 */
+	public String defaultValue() {
+		return "null";
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public boolean equals(final Object that) {

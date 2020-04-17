@@ -1,24 +1,14 @@
 package boa.test.datagen.php;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
-import java.io.File;
 
 import org.eclipse.php.internal.core.PHPVersion;
 import org.eclipse.php.internal.core.ast.nodes.ASTParser;
 import org.eclipse.php.internal.core.ast.nodes.Program;
-import org.mozilla.javascript.CompilerEnvirons;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.ast.AstRoot;
 
-import boa.datagen.util.FileIO;
-import boa.datagen.util.JavaScriptVisitor;
-import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.test.compiler.BaseTest;
 import boa.types.Ast.ASTRoot;
-import boa.types.Ast.Namespace;
 
 public class PHPBaseTest extends BaseTest {
  

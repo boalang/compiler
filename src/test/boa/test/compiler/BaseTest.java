@@ -33,12 +33,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import javax.tools.ToolProvider;
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
@@ -48,23 +48,18 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 
-import org.stringtemplate.v4.ST;
-
 import boa.compiler.SymbolTable;
 import boa.compiler.ast.Start;
-import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.InheritedAttributeTransformer;
+import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.VariableDeclRenameTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
-import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
 import boa.compiler.visitors.PrettyPrintVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
-
 import boa.parser.BoaLexer;
 import boa.parser.BoaParser;
 import boa.parser.BoaParser.StartContext;

@@ -19,7 +19,6 @@ package boa.datagen;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,10 +29,6 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
-
-import com.google.protobuf.CodedInputStream;
-
-import boa.types.Ast.ASTRoot;
 
 /**
  * @author hoan

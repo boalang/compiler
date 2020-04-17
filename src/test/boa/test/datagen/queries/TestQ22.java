@@ -92,10 +92,8 @@ public class TestQ22 extends QueryTest {
 			field ++;
 			org.eclipse.jdt.core.dom.Type type = node.getType();
 			if (type instanceof SimpleType && ((SimpleType)type).getName().getFullyQualifiedName().equals("String")) {
-				for (Object o : node.fragments()) {
-					stringField++;
-					stringField2++;
-				}
+				stringField += node.fragments().size();
+				stringField2 += node.fragments().size();
 			}
 			return true;
 		}

@@ -2018,8 +2018,7 @@ public class BoaAstIntrinsics {
 
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
 		try {
-			final org.eclipse.jdt.core.dom.CompilationUnit cu = (org.eclipse.jdt.core.dom.CompilationUnit) parser
-					.createAST(null);
+			final org.eclipse.jdt.core.dom.CompilationUnit cu = (org.eclipse.jdt.core.dom.CompilationUnit) parser.createAST(null);
 			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
 			cu.accept(errorCheck);
 

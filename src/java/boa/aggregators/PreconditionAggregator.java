@@ -16,13 +16,22 @@
  */
 package boa.aggregators;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import static boa.functions.BoaAstIntrinsics.parseexpression;
+import static boa.functions.BoaAstIntrinsics.prettyprint;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Expression;
-
-import java.io.IOException;
-import java.util.*;
-
-import static boa.functions.BoaAstIntrinsics.*;
 
 /**
  * @author marafat
@@ -31,11 +40,11 @@ import static boa.functions.BoaAstIntrinsics.*;
  */
 @AggregatorSpec(name = "precondition", formalParameters = { "float" })
 public class PreconditionAggregator extends Aggregator {
-	private double sigma = 0.5;
+	private final double sigma;
 	private int args = 0;
 
-	private Map<Expression, Set<String>> precondMethods;
-	private Map<Expression, Set<String>> precondProjects;
+	private final Set<Expression> preconds = new HashSet<Expression>();
+	private final Map<Expression, Set<String>> omega = new HashMap<Expression, Set<String>>();  // preconditions: set of methods
 
 	/**
 	 * Construct a {@link PreconditionAggregator}
@@ -44,21 +53,24 @@ public class PreconditionAggregator extends Aggregator {
 		this(0.5);
 	}
 
+	/**
+	 * Construct a {@link PreconditionAggregator}
+	 *
+	 * @param sigma the cutoff sigma value to use
+	 */
 	public PreconditionAggregator(final double sigma) {
 		this.sigma = sigma;
-		this.precondMethods = new HashMap<Expression, Set<String>>();  //preconditions: set of methods
-		this.precondProjects = new HashMap<Expression, Set<String>>(); //preconditions: set of projects
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		// data expected format: "no_of_args:pid:fq_clientmethodname:precondition"
+		// expected data format: "no_of_args:pid:fq_clientmethodname:precondition"
 		final String[] sData = data.split(":", 4);
 
-		if (Integer.parseInt(sData[0]) > this.args) {
-			this.args = Integer.parseInt(sData[0]);
-		}
+		final int newArgs = Integer.parseInt(sData[0]);
+		if (newArgs > this.args)
+			this.args = newArgs;
 
 		final String project = sData[1];
 		final String clientmethod = sData[2];
@@ -66,34 +78,23 @@ public class PreconditionAggregator extends Aggregator {
 
 		final Expression precondition = parseexpression(precond);
 
-		if (!precondMethods.containsKey(precondition)) {
-			precondMethods.put(precondition, new HashSet<String>());
-			precondProjects.put(precondition, new HashSet<String>());
+		if (!omega.containsKey(precondition)) {
+			omega.put(precondition, new HashSet<String>());
+			preconds.add(precondition);
 		}
 
-		precondMethods.get(precondition).add(project + clientmethod);
-		precondProjects.get(precondition).add(project);
+		omega.get(precondition).add(project + ":" + clientmethod);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void finish() throws IOException, InterruptedException {
-		doInference();
+		inferNonStrictInequalities();
+		mergeConditionsWithImplication();
 
-		final Map<String, Double> filteredPreconds = doFiltering();
-
-		// send to Writer
-		for (final Map.Entry<String, Double> precondConf : doRanking(filteredPreconds)) {
+		for (final Map.Entry<String, Double> precondConf : doRanking(doFiltering())) {
 			this.collect(precondConf.getKey() + ": " + precondConf.getValue());
 		}
-	}
-
-	/**
-	 * Infers preconditions for both projects and method calls
-	 */
-	private void doInference() {
-		precondMethods = mergeConditionsWithImplication(infer(precondMethods));
-		precondProjects = mergeConditionsWithImplication(infer(precondProjects));
 	}
 
 	/**
@@ -101,112 +102,74 @@ public class PreconditionAggregator extends Aggregator {
 	 *
 	 * @return map of all preconditions which include inferred preconditions
 	 */
-	private Map<Expression, Set<String>> infer(Map<Expression, Set<String>> precondMP) {
-		final Map<Expression, Set<String>> infPreconditions = new HashMap<Expression, Set<String>>(precondMP);
-		final Set<Expression> preconds = new HashSet<Expression>(infPreconditions.keySet());
+	private void inferNonStrictInequalities() {
+		final Set<Expression> added = new HashSet<Expression>();
 
-		for (final Expression eqPrecond : preconds) {
-			if (eqPrecond.getKind() == ExpressionKind.EQ) {
-				for (final Expression sineqPrecond : preconds) {
-					if (sineqPrecond.getKind() == ExpressionKind.LT || sineqPrecond.getKind() == ExpressionKind.GT) {
-						if (eqPrecond.getExpressions(0).equals(sineqPrecond.getExpressions(0)) &&
-									eqPrecond.getExpressions(1).equals(sineqPrecond.getExpressions(1))) {
-							final Expression.Builder builder = Expression.newBuilder(sineqPrecond);
+		for (final Expression p : preconds) {
+			if (p.getKind() == ExpressionKind.EQ) {
+				for (final Expression q : preconds) {
+					if (q.getKind() == ExpressionKind.LT || q.getKind() == ExpressionKind.GT) {
+						if (p.getExpressions(0).equals(q.getExpressions(0)) && p.getExpressions(1).equals(q.getExpressions(1))) {
+							final Expression.Builder builder = Expression.newBuilder(q);
 
-							if (sineqPrecond.getKind() == ExpressionKind.GT)
+							if (q.getKind() == ExpressionKind.GT)
 								builder.setKind(ExpressionKind.GTEQ);
 							else
 								builder.setKind(ExpressionKind.LTEQ);
 
-							final Expression nsineqPrecond = builder.build();
+							final Expression t = builder.build();
 
-							if (!preconds.contains(nsineqPrecond))
-								infPreconditions.put(nsineqPrecond, new HashSet<String>());
-
-							if (infPreconditions.get(eqPrecond).size() == infPreconditions.get(sineqPrecond).size()) {
-								Set<String> tempSet = new HashSet<String>(infPreconditions.get(nsineqPrecond));
-								tempSet.addAll(infPreconditions.get(eqPrecond));
-								infPreconditions.get(nsineqPrecond).addAll(tempSet);
+							if (!preconds.contains(t)) {
+								omega.put(t, new HashSet<String>());
+								added.add(t);
 							}
-							else if (infPreconditions.get(eqPrecond).size() > infPreconditions.get(sineqPrecond).size())
-								infPreconditions.get(nsineqPrecond).addAll(infPreconditions.get(sineqPrecond));
-							else
-								infPreconditions.get(nsineqPrecond).addAll(infPreconditions.get(eqPrecond));
 
+							if (omega.get(p).size() == omega.get(q).size()) {
+								omega.get(t).addAll(omega.get(p));
+								omega.get(t).addAll(omega.get(q));
+							} else if (omega.get(p).size() > omega.get(q).size()) {
+								omega.get(t).addAll(omega.get(q));
+							} else {
+								omega.get(t).addAll(omega.get(p));
+							}
 						}
 					}
 				}
 			}
 		}
 
-		return infPreconditions;
+		preconds.addAll(added);
 	}
 
 	/**
 	 * Merges preconditions with implications
 	 *
-	 * @param precondMP inferred Preconditions
 	 * @return map of precondition with "precondition with implication" merged
 	 */
+	private void mergeConditionsWithImplication() {
+		final List<Expression> removed = new ArrayList<Expression>();
 
-	private Map<Expression, Set<String>> mergeConditionsWithImplication(final Map<Expression, Set<String>> precondMP) {
-		final Map<Expression, Set<String>> mergedPreconditions = new HashMap<Expression, Set<String>>(precondMP);
-		final Set<Expression> preconds = new HashSet<Expression>(mergedPreconditions.keySet());
-
-		for (final Expression strongPrecond : preconds) {
-			for (final Expression weakPrecond : preconds) {
-				if (strongPrecond.getKind() == ExpressionKind.EQ
-						&& (weakPrecond.getKind() == ExpressionKind.LTEQ || weakPrecond.getKind() == ExpressionKind.GTEQ)) {
-					if (strongPrecond.getExpressions(0).equals(weakPrecond.getExpressions(0))
-							&& strongPrecond.getExpressions(1).equals(weakPrecond.getExpressions(1)))
-						if (mergedPreconditions.get(strongPrecond).size() <= mergedPreconditions.get(weakPrecond).size())
-							mergedPreconditions.get(weakPrecond).addAll(mergedPreconditions.get(strongPrecond));
-				}
-				else if (strongPrecond.getKind() == ExpressionKind.LT && weakPrecond.getKind() == ExpressionKind.LTEQ ||
-						strongPrecond.getKind() == ExpressionKind.GT && weakPrecond.getKind() == ExpressionKind.GTEQ) {
-					if (strongPrecond.getExpressions(0).equals(weakPrecond.getExpressions(0))
-							&& strongPrecond.getExpressions(1).equals(weakPrecond.getExpressions(1)))
-						if (mergedPreconditions.get(strongPrecond).size() <= mergedPreconditions.get(weakPrecond).size()) {
-							mergedPreconditions.get(weakPrecond).addAll(mergedPreconditions.get(strongPrecond));
-							mergedPreconditions.get(strongPrecond).clear();
+		for (final Expression p : preconds) {
+			if (p.getKind() == ExpressionKind.EQ || p.getKind() == ExpressionKind.LT || p.getKind() == ExpressionKind.GT) {
+				for (final Expression q : preconds) {
+					if ((p.getKind() == ExpressionKind.EQ && q.getKind() == ExpressionKind.LTEQ)
+							|| (p.getKind() == ExpressionKind.EQ && q.getKind() == ExpressionKind.GTEQ)
+							|| (p.getKind() == ExpressionKind.LT && q.getKind() == ExpressionKind.LTEQ)
+							|| (p.getKind() == ExpressionKind.GT && q.getKind() == ExpressionKind.GTEQ)) {
+						if (omega.get(p).size() <= omega.get(q).size()
+								&& p.getExpressions(0).equals(q.getExpressions(0))
+								&& p.getExpressions(1).equals(q.getExpressions(1))) {
+							omega.get(q).addAll(omega.get(p));
+							omega.remove(p);
+							removed.add(p);
+							break;
 						}
-				}
-
-			}
-		}
-
-		return  mergedPreconditions;
-	}
-
-	/**
-	 * Removes specific preconditions like equality which occur too frequently
-	 *
-	 * @param precondMP map of preconditions after inference step
-	 * @return map of preconditons with specific preconditions removed
-	 */
-	private Map<Expression, Set<String>> removeEquality(final Map<Expression, Set<String>> precondMP) {
-		final Map<Expression, Set<String>> filtPreconditions = new HashMap<Expression, Set<String>>(precondMP);
-		final Set<Expression> preconds = new HashSet<Expression>(filtPreconditions.keySet());
-
-		for (final Expression precond : preconds) {
-			if (precond.getKind() == ExpressionKind.OTHER) {
-				filtPreconditions.remove(precond);
-			} else if (precond.getKind() == ExpressionKind.EQ || precond.getKind() == ExpressionKind.NEQ) {
-				try {
-					if (isIntLit(precond.getExpressions(1)) || isFloatLit(precond.getExpressions(1)))
-						filtPreconditions.remove(precond);
-					else if (precond.getExpressions(1).getKind() == ExpressionKind.OP_SUB) {
-						if (isIntLit(precond.getExpressions(1).getExpressions(0)) ||
-								isFloatLit(precond.getExpressions(1).getExpressions(0)))
-							filtPreconditions.remove(precond);
 					}
-				} catch (final Exception e) {
-					e.printStackTrace();
 				}
 			}
 		}
 
-		return filtPreconditions;
+		preconds.removeAll(removed);
 	}
 
 	/**
@@ -215,18 +178,25 @@ public class PreconditionAggregator extends Aggregator {
 	 * @return filtered preconditons map
 	 */
 	private Map<String, Double> doFiltering() {
-		final Map<String, Double> precondConfM = calcConfidence(precondMethods);
-		precondMethods.clear();
+		final Map<Expression, Double> precondConfM = calcConfidence(omega);
 
-		final Map<String, Double> precondConfP = calcConfidence(precondProjects);
-		precondProjects.clear();
+		// generate psi from omega
+		final Map<Expression, Set<String>> psi = new HashMap<Expression, Set<String>>();
+		for (final Expression e : preconds) {
+			psi.put(e, new HashSet<String>());
+
+			for (final String s : omega.get(e)) {
+				psi.get(e).add(s.split(":", 2)[0]);
+			}
+		}
+
+		final Map<Expression, Double> precondConfP = calcConfidence(psi);
 
 		final Map<String, Double> filteredPreconds = new HashMap<String, Double>();
 
-		final Set<String> preconds = precondConfM.keySet();
-		for (final String precond : preconds)
+		for (final Expression precond : precondConfM.keySet())
 			if (precondConfM.get(precond) >= sigma && precondConfP.get(precond) >= sigma)
-				filteredPreconds.put(precond, precondConfM.get(precond)*precondConfP.get(precond));
+				filteredPreconds.put(prettyprint(precond), precondConfM.get(precond) * precondConfP.get(precond));
 
 		return filteredPreconds;
 	}
@@ -237,21 +207,15 @@ public class PreconditionAggregator extends Aggregator {
 	 * @param precondMP map of preconditon and set of clientmethods/projects
 	 * @return map of precondition and confidence
 	 */
-	private Map<String, Double> calcConfidence(final Map<Expression, Set<String>> precondMP) {
-		final Map<String, Double> precondConf = new HashMap<String, Double>();
-		final Set<Expression> preconds = precondMP.keySet();
+	private Map<Expression, Double> calcConfidence(final Map<Expression, Set<String>> precondMP) {
+		final Map<Expression, Double> precondConf = new HashMap<Expression, Double>();
 
 		final Set<String> totalCalls = new HashSet<String>();
 		for (final Expression precond : preconds)
-			if (precondMP.get(precond).size() > 1)
-				totalCalls.addAll(precondMP.get(precond));
+			totalCalls.addAll(precondMP.get(precond));
 
-		for (final Expression precond : preconds) {
-			Double conf = 0.0;
-			if (precondMP.get(precond).size() > 1)
-				conf = precondMP.get(precond).size() / (totalCalls.size() * 1.0);
-			precondConf.put(prettyprint(precond), conf);
-		}
+		for (final Expression precond : preconds)
+			precondConf.put(precond, precondMP.get(precond).size() / (double)totalCalls.size());
 
 		return precondConf;
 	}
@@ -261,10 +225,8 @@ public class PreconditionAggregator extends Aggregator {
 	 *
 	 * @param filteredPreconds map of filtered precondtion
 	 * @return ranked preconditions
-	 * @throws IOException
-	 * @throws InterruptedException
 	 */
-	private List<Map.Entry<String, Double>> doRanking(final Map<String, Double> filteredPreconds) throws IOException, InterruptedException {
+	private List<Map.Entry<String, Double>> doRanking(final Map<String, Double> filteredPreconds) {
 		final Map<String, Double> finalPreconds = new HashMap<String, Double>();
 		final Set<SortedSet<String>> argsComb = kCombinations(); // k = 2^(args+1) - 1
 
@@ -304,12 +266,12 @@ public class PreconditionAggregator extends Aggregator {
 	private Set<SortedSet<String>> kCombinations() {
 		final Set<SortedSet<String>> comb = new HashSet<SortedSet<String>>();
 		final List<String> argList = new ArrayList<String>();
-		comb.add(new TreeSet<String>(Collections.singletonList("rcv$")));
-		argList.add("rcv$");
+		comb.add(new TreeSet<String>(Collections.singletonList("$RECEIVER$")));
+		argList.add("$RECEIVER$");
 
 		for (int i = 0; i < args; i++) {
-			comb.add(new TreeSet<String>(Collections.singletonList("arg$" + Integer.toString(i))));
-			argList.add("arg$" + Integer.toString(i));
+			comb.add(new TreeSet<String>(Collections.singletonList("$ARG$" + Integer.toString(i))));
+			argList.add("$ARG$" + Integer.toString(i));
 		}
 
 		for (final String arg : argList) {
@@ -329,8 +291,7 @@ public class PreconditionAggregator extends Aggregator {
 	 */
 	public class PreconditionComparator implements Comparator<Map.Entry<String, Double>> {
 		public int compare(final Map.Entry<String, Double> p1, final Map.Entry<String, Double> p2) {
-			return (p2.getValue()).compareTo(p1.getValue());
+			return p2.getValue().compareTo(p1.getValue());
 		}
 	}
-
 }

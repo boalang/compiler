@@ -404,6 +404,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						if (!((BoaMap) type).getIndexType().assigns(index))
 							throw new TypeCheckException(node, "invalid index type '" + index + "' for indexing into '" + type + "'");
 
+						if (!n.env.getIsLhs())
+							warn(node, "directly indexing maps can lead to runtime crashes - replace with lookup(" + n.getOperand() + ", " + new PrettyPrintVisitor().startAndReturn(((Index)node).getStart()) + ", <defaultValue>)");
 						type = ((BoaMap) type).getType();
 					} else {
 						throw new TypeCheckException(node, "type '" + type + "' does not allow index operations");
@@ -562,7 +564,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.env = env;
 
 		try {
+            n.env.setIsLhs(true);
 			n.getLhs().accept(this, env);
+            n.env.setIsLhs(false);
 		} catch (final TypeCheckException e) {
 			if (!e.getMessage().startsWith("expected a call to function"))
 				throw e;
@@ -645,6 +649,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			throw new TypeCheckException(n.getId(), "emitting to undeclared output variable '" + id + "'");
 		if (!(type instanceof BoaTable))
 			throw new TypeCheckException(n.getId(), "emitting to non-output variable '" + id + "'");
+
+		Class<?> aggregator = null;
+		try {
+			aggregator = env.getAggregator(id, ((BoaTable)type).getType());
+		} catch (final RuntimeException e) {
+			// do nothing
+		}
+		if (aggregator != null)
+			throw new TypeCheckException(n.getId(), "'" + id + "' is an aggregator function - you must declare an output variable that uses this function, then emit to it");
 
 		final BoaTable t = (BoaTable) type;
 
@@ -818,10 +831,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StopStatement n, final SymbolTable env) {
-		n.env = env;
-
 		if (!env.getIsVisitor())
 			throw new TypeCheckException(n, "Stop statement only allowed inside 'before' visits");
+		if (!env.getLastVisit().isBefore())
+			throw new TypeCheckException(n, "Stop statement not allowed inside 'after' visits");
+
+		n.env = env;
 	}
 
 	/** {@inheritDoc} */
@@ -962,7 +977,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			}
 
 		st.setIsVisitor(true);
+		st.setLastVisit(n);
 		n.getBody().accept(this, st);
+		st.unsetLastVisit();
 		st.unsetIsVisitor();
 	}
 
@@ -1562,5 +1579,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 
 		return boaMap;
+	}
+
+	protected void warn(final Node node, final String msg) {
+		System.err.println("WARNING at line " + node.beginLine + ", columns " + node.beginColumn + "-" + node.endColumn + ": " + msg);
 	}
 }

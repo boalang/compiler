@@ -1,0 +1,2 @@
+# NO
+type T1 = enum { A = "yes", B = "no", ,C = "maybe" };
