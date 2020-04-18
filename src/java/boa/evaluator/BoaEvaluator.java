@@ -47,8 +47,6 @@ public class BoaEvaluator extends BoaMain {
 	private final String DATA_PATH;
 	private final String COMPILATION_DIR;
 	private final String OUTPUT_DIR;
-	
-	public static String GIT_PATH = "";
 
 	public BoaEvaluator(final String prog, final String data) throws IOException {
 		this(prog, data, System.getProperty("java.io.tmpdir") + File.separator + UUID.randomUUID().toString());
@@ -57,7 +55,6 @@ public class BoaEvaluator extends BoaMain {
 	public BoaEvaluator(final String prog, final String data, final String outDir) throws IOException {
 		this.PROG_PATH = prog;
 		this.DATA_PATH = data;
-		this.GIT_PATH = data + "/repos";
 		this.COMPILATION_DIR = "./compile"; // can not customize to be user defined because of classpath issues
 		this.OUTPUT_DIR = outDir;
 
