@@ -125,7 +125,7 @@ public class BoaEvaluator extends BoaMain {
 
 			method.invoke(null, (Object)actualArgs);
 		} catch (final Throwable e) {
-			System.err.print(e);
+			System.err.print(e.getCause());
 		} finally {
 			if (cl != null)
 				try {
