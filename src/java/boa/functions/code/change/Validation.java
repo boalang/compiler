@@ -278,13 +278,13 @@ public class Validation {
 					+ fieldTree.getFieldNodes().size());
 			unmatchedFieldChanges++;
 			
-			if (fn.getSignature().equals("private filterBuilder : EntityFilters.Builder")) {
-				System.out.println();
-				for (FieldNode n : fieldTree.getFieldNodes()) {
-					System.out.println(n + " " + n.getTreeId());
-				}
-				System.out.println();
-			}
+//			if (fn.getSignature().equals("private filterBuilder : EntityFilters.Builder")) {
+//				System.out.println();
+//				for (FieldNode n : fieldTree.getFieldNodes()) {
+//					System.out.println(n + " " + n.getTreeId());
+//				}
+//				System.out.println();
+//			}
 		}
 	}
 

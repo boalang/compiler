@@ -88,25 +88,22 @@ public class FileForest {
 
 				if (debug)
 					System.out.println(rightNode.getLoc());
-				
+
 				if (visited.contains(rightNode.getLoc()))
 					continue;
-				
+
 				visited.add(rightNode.getLoc());
 
 				// edge case: added file w/o any further modifications
 				if (!rightNode.hasFirstParent() && rightNode.getASTChangeCount() == 0) {
-					astChange.update(rightNode, collector.getDeclNodes(rightNode), ChangeKind.ADDED, true);
+					astChange.updateFileAll(rightNode, collector.getDeclNodes(rightNode), ChangeKind.ADDED, true);
 				}
-				
+
 				// update changes from 2nd parent
 				if (rightNode.hasSecondParent()) {
 					FileNode leftNode = rightNode.getSecondParent();
 					astChange.compare(leftNode, rightNode, collector, false);
 					stack.push(leftNode);
-					ChangeKind change = leftNode.getChangedFile().getObjectId()
-							.equals(rightNode.getChangedFile().getObjectId()) ? ChangeKind.COPIED : ChangeKind.MODIFIED;
-					rightNode.setSecondChange(change);
 				}
 
 				// update changes from 1st parent
@@ -114,11 +111,8 @@ public class FileForest {
 					FileNode leftNode = rightNode.getFirstParent();
 					astChange.compare(leftNode, rightNode, collector, true);
 					stack.push(leftNode);
-					rightNode.setFirstChange(rightNode.getChangedFile().getChange());
-				} else {
-					rightNode.setFirstChange(ChangeKind.ADDED);
 				}
-				
+
 			}
 		}
 	}

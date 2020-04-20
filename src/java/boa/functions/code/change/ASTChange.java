@@ -32,7 +32,8 @@ public class ASTChange {
 	}
 
 	// update all ast nodes in the file
-	public void update(FileNode fileNode, List<Declaration> decls, ChangeKind change, boolean isFirstParent) {
+	public void updateFileAll(FileNode fileNode, List<Declaration> decls, ChangeKind change, boolean isFirstParent) {
+		updateChange(fileNode, change, isFirstParent);
 		for (int i = 0; i < decls.size(); i++) {
 			Declaration decl = decls.get(i);
 			updateDeclAll(fileNode, decl, change, isFirstParent);
@@ -72,28 +73,47 @@ public class ASTChange {
 	}
 
 	// update all existing ast changes
-	private void updateAllChanges(FileNode rightNode, ChangeKind change, boolean isFirstParent) {
-		for (DeclNode decl : rightNode.getDeclChanges()) {
-			updateChange(decl, change, isFirstParent);
-			for (MethodNode method : decl.getMethodChanges())
-				updateChange(method, change, isFirstParent);
-			for (FieldNode field : decl.getFieldChanges())
-				updateChange(field, change, isFirstParent);
-		}
+	private void updateAllChanges(DeclNode decl, ChangeKind change, boolean isFirstParent) {
+		updateChange(decl, change, isFirstParent);
+		for (MethodNode method : decl.getMethodChanges())
+			updateChange(method, change, isFirstParent);
+		for (FieldNode field : decl.getFieldChanges())
+			updateChange(field, change, isFirstParent);
 	}
 
 	public void compare(FileNode leftNode, FileNode rightNode, DeclCollector declCollector, boolean isFirstParent)
+			throws Exception {
+		compareASTs(leftNode, rightNode, declCollector, isFirstParent);
+
+		// update right file's change kind
+		ChangeKind change = null;
+		if (!leftNode.getSignature().equals(rightNode.getSignature())) {
+			change = ChangeKind.RENAMED;
+		} else if (leftNode.getChangedFile().getObjectId().equals(rightNode.getChangedFile().getObjectId())) {
+			change = ChangeKind.COPIED;
+		} else {
+			change = rightNode.getChangedFile().getChange();
+		}
+
+		updateChange(rightNode, change, isFirstParent);
+	}
+
+	public void compareASTs(FileNode leftNode, FileNode rightNode, DeclCollector declCollector, boolean isFirstParent)
 			throws Exception {
 		List<Declaration> leftDecls = null;
 
 		// both have the same content id (COPIED)
 		if (leftNode.getChangedFile().getObjectId().equals(rightNode.getChangedFile().getObjectId())) {
-			// 2nd parent then add copied as 2nd change
-			if (!isFirstParent && rightNode.getASTChangeCount() != 0)
-				updateAllChanges(rightNode, ChangeKind.COPIED, isFirstParent);
-			// 1st parent then consider all asts under the file as copied
+
+			// 1st parent then consider all ASTs under the file as copied
 			if (isFirstParent)
-				update(rightNode, declCollector.getDeclNodes(rightNode), ChangeKind.COPIED, isFirstParent);
+				updateFileAll(rightNode, declCollector.getDeclNodes(rightNode), ChangeKind.COPIED, isFirstParent);
+
+			// 2nd parent then add copied as 2nd changes 
+			if (!isFirstParent && rightNode.getASTChangeCount() != 0)
+				for (DeclNode decl : rightNode.getDeclChanges())
+					updateAllChanges(decl, ChangeKind.COPIED, isFirstParent);
+
 			return;
 		}
 
@@ -101,7 +121,7 @@ public class ASTChange {
 		if (leftNode.getChangedFile().getChange() == ChangeKind.ADDED) {
 			if (leftDecls == null)
 				leftDecls = declCollector.getDeclNodes(leftNode);
-			update(leftNode, leftDecls, ChangeKind.ADDED, true);
+			updateFileAll(leftNode, leftDecls, ChangeKind.ADDED, true);
 		}
 
 		// left is deleted
@@ -113,7 +133,7 @@ public class ASTChange {
 		if (rightNode.getChangedFile().getChange() == ChangeKind.DELETED) {
 			if (leftDecls == null)
 				leftDecls = declCollector.getDeclNodes(leftNode);
-			update(rightNode, leftDecls, ChangeKind.DELETED, true);
+			updateFileAll(rightNode, leftDecls, ChangeKind.DELETED, true);
 		}
 
 		// right is modified/renamed/added
@@ -205,12 +225,16 @@ public class ASTChange {
 		// no ast changes
 		if (deleted1.size() + added1.size() + modified1.size() + deleted2.size() + added2.size()
 				+ modified2.size() == 0) {
-			// 2nd parent then add copied as 2nd change
-			if (!isFirstParent && rightNode.getASTChangeCount() != 0)
-				updateAllChanges(rightNode, ChangeKind.COPIED, isFirstParent);
-			// 1st parent then consider all asts under the declaration as copied
+
+			// 1st parent then consider all AST nodes under the decl node
 			if (isFirstParent)
 				updateDeclAll(rightNode, rightDecl, ChangeKind.COPIED, isFirstParent);
+
+			// 2nd parent then add copied as 2nd change for all changes under the decl node
+			DeclNode rightDeclNode = rightNode.getDeclChange(rightDecl.getFullyQualifiedName());
+			if (!isFirstParent && rightDeclNode != null) 
+				updateAllChanges(rightDeclNode, ChangeKind.COPIED, isFirstParent);
+
 			return;
 		}
 
@@ -239,7 +263,7 @@ public class ASTChange {
 			for (int j : matched2)
 				update(declNode, rightDecl.getMethods(j), ChangeKind.COPIED, isFirstParent);
 		}
-		
+
 	}
 
 	public static String getSignature(Method m) {
