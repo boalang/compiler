@@ -1,5 +1,6 @@
 /*
- * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,22 +17,18 @@
  */
 package boa.io;
 
+import java.io.ByteArrayInputStream;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
 import java.util.Arrays;
-import java.lang.reflect.Method;
 
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 
-import boa.functions.BoaCasts;
 import boa.BoaTup;
-import boa.BoaEnumInterface;
+import boa.functions.BoaCasts;
 
 /**
  * A {@link Writable} that contains a datum and an optional metadatum to be
@@ -39,7 +36,6 @@ import boa.BoaEnumInterface;
  * 
  * @author anthonyu
  * @author rdyer
- * @author ankuraga
  */
 public class EmitValue implements Writable {
 	private String[] data;
@@ -247,6 +243,52 @@ public class EmitValue implements Writable {
 	 * Construct an EmitValue.
 	 * 
 	 * @param data
+	 *            A boolean representing the data to be emitted
+	 */
+	public EmitValue(final boolean data) {
+		this(new String[] { BoaCasts.booleanToString(data) }, null);
+	}
+
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
+	 *            A boolean representing the data to be emitted
+	 * @param metadata
+	 *            A {@link String} containing the metadata to be emitted
+	 */
+	public EmitValue(final boolean data, final String metadata) {
+		this(new String[] { BoaCasts.booleanToString(data) }, metadata);
+	}
+
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
+	 *            A boolean representing the data to be emitted
+	 * @param metadata
+	 *            A long representing the metadata to be emitted
+	 */
+	public EmitValue(final boolean data, final long metadata) {
+		this(new String[] { BoaCasts.booleanToString(data) }, BoaCasts.longToString(metadata));
+	}
+
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
+	 *            A boolean representing the data to be emitted
+	 * @param metadata
+	 *            A double representing the metadata to be emitted
+	 */
+	public EmitValue(final boolean data, final double metadata) {
+		this(new String[] { BoaCasts.booleanToString(data) }, BoaCasts.doubleToString(metadata));
+	}
+	
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
 	 *            A {@link BoaTup} containing the data to be emitted
 	 * @param metadata
 	 *            A {@link String} containing the metadata to be emitted
@@ -265,34 +307,7 @@ public class EmitValue implements Writable {
 		this(data, null);
 	}
 	
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            An array of {@link BoaEnumInterface} containing the data to be emitted
-	 * @param metadata
-	 *            A {@link String} containing the metadata to be emitted
-	 */
-	public EmitValue(final BoaEnumInterface[] data, final String metadata) {
-		final String[] strings = new String[data.length];
-
-		for (int i = 0; i < data.length; i++)
-			strings[i] = data[i].toString(); 
-
-		this.data = strings;
-		this.metadata = metadata;
-	}
 	
-	/**
-	 * Construct an EmitValue.
-	 * 
-	 * @param data
-	 *            An array of {@link BoaEnumInterface} containing the data to be emitted
-	 */
-	public EmitValue(final BoaEnumInterface[] data) {
-		this(data, null);
-	}
-
 	/**
 	 * Construct an EmitValue.
 	 * 
@@ -310,7 +325,7 @@ public class EmitValue implements Writable {
 		this.data = strings;
 		this.metadata = metadata;
 	}
-
+	
 	/**
 	 * Construct an EmitValue.
 	 * 
@@ -320,7 +335,7 @@ public class EmitValue implements Writable {
 	public EmitValue(final double[] data) {
 		this(data, null);
 	}
-
+	
 	/**
 	 * Construct an EmitValue.
 	 * 
@@ -383,13 +398,10 @@ public class EmitValue implements Writable {
 	/** {@inheritDoc} */
 	@Override
 	public void write(final DataOutput out) throws IOException {
-		if(this.data == null)
-			out.writeInt(0);
-		else {
-			out.writeInt(this.data.length);
-			for (final String d : this.data)
-				Text.writeString(out, d); 
-		}
+		out.writeInt(this.data.length);
+
+		for (final String d : this.data)
+			Text.writeString(out, d);
 
 		if (this.metadata == null)
 			Text.writeString(out, "");
@@ -427,10 +439,6 @@ public class EmitValue implements Writable {
 		return this.metadata;
 	}
 
-	public BoaTup getTuple() {
-		return this.tdata;
-	}
-
 	/**
 	 * @param metadata
 	 *            the metadatum to set
@@ -438,6 +446,11 @@ public class EmitValue implements Writable {
 	public void setMetadata(final String metadata) {
 		this.metadata = metadata;
 	}
+	
+	public BoaTup getTuple() {
+		return this.tdata;
+	}
+
 
 	@Override
 	public int hashCode() {

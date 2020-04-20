@@ -32,8 +32,6 @@ import boa.types.ml.BoaLinearRegression;
 import boa.types.ml.BoaModel;
 import boa.types.proto.*;
 import boa.types.proto.enums.*;
-import boa.types.BoaEnum;
-
 import boa.compiler.ast.Operand;
 import boa.compiler.ast.statements.VisitStatement;
 
