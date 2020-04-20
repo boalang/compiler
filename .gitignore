@@ -7,3 +7,5 @@
 /.settings/
 /junitvmwatcher*.properties
 .vscode/
+/model/
+Query.jar
