@@ -59,12 +59,10 @@ public class FileTree {
 		// case 2: update tree
 		fileNodes.add(node);
 		// node update tree id
-		node.setint(this.id);
+		node.setTreeId(this.id);
 		// update global nodes
 		forest.db.fileDB.put(node.getLoc(), node);
 		forest.db.fileNames.add(node.getChangedFile().getName());
-		// update RevNode
-//		node.getRev().getFileChangeMap().put(node.getChangedFile().getName(), node); // TODO
 		// update prev queues
 		updatePrevNodes(node);
 		// push 2nd parent first for dfs first-parent branch first
@@ -101,7 +99,6 @@ public class FileTree {
 	}
 
 	private FileNode getPreviousNode(FileNode node, int i) {
-		ChangedFile cf = node.getChangedFile();
 		Revision r = node.getRev().getRevision();
 		int prevContentCount = node.getChangedFile().getPreviousVersionsCount();
 		// if a file has only one parent and previous content locations has size 1
@@ -110,19 +107,21 @@ public class FileTree {
 			int fileIdx = node.getChangedFile().getPreviousIndices(0);
 			return forest.db.revIdxMap.get(revIdx).getFileNode(fileIdx);
 		}
-		return findPreviousNode(cf, r.getParents(i));
+		return findPreviousNode(node, r.getParents(i));
 	}
 
 	// find previous file from parent r
-	private FileNode findPreviousNode(ChangedFile cf, int revParentIdx) {
+	private FileNode findPreviousNode(FileNode fn, int revParentIdx) {
+		ChangedFile cf = fn.getChangedFile();
 		String prevName = cf.getChange() == ChangeKind.RENAMED ? cf.getPreviousNames(0) : cf.getName();
 		RevNode cur = forest.db.revIdxMap.get(revParentIdx);
 		do {
 			FileNode node = cur.getFileNode(prevName);
 			if (node != null)
 				return node;
-			if (cur.getRevision().getParentsCount() == 0)
+			if (cur.getRevision().getParentsCount() == 0) {
 				return null;
+			}
 			// check first-parent branch
 			cur = forest.db.revIdxMap.get(cur.getRevision().getParents(0));
 		} while (true);

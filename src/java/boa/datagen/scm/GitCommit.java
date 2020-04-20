@@ -228,21 +228,21 @@ public class GitCommit extends AbstractCommit {
 			for (final DiffEntry diff : diffs) {
 				if (diff.getChangeType() == ChangeType.MODIFY) {
 					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
-						updateChangedFiles(child, parentIndex, diff, ChangeKind.MODIFIED);
+						updateChangedFiles(parent, child, diff, ChangeKind.MODIFIED);
 					}
 				// RENAMED file may have the same/different object id(s) for old and new
 				} else if (diff.getChangeType() == ChangeType.RENAME) {
 					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
-						updateChangedFiles(child, parentIndex, diff, ChangeKind.RENAMED);
+						updateChangedFiles(parent, child, diff, ChangeKind.RENAMED);
 					}
 				} else if (diff.getChangeType() == ChangeType.COPY) {
 					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
-						updateChangedFiles(child, parentIndex, diff, ChangeKind.COPIED);
+						updateChangedFiles(parent, child, diff, ChangeKind.COPIED);
 					}
 				// ADDED file should not have old path and its old object id is 0's
 				} else if (diff.getChangeType() == ChangeType.ADD) {
 					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
-						updateChangedFiles(child, parentIndex, diff, ChangeKind.ADDED);
+						updateChangedFiles(parent, child, diff, ChangeKind.ADDED);
 					}
 				// DELETED file's new object id is 0's and doesn't have new path
 				} else if (diff.getChangeType() == ChangeType.DELETE) {
@@ -280,7 +280,7 @@ public class GitCommit extends AbstractCommit {
 		df.close();
 	}
 
-	private void updateChangedFiles(final RevCommit child, int parentIndex, final DiffEntry diff, final ChangeKind kind) {
+	private void updateChangedFiles(final RevCommit parent, final RevCommit child, final DiffEntry diff, final ChangeKind kind) {
 		String newPath = diff.getNewPath();
 		String newObjectId = diff.getNewId().toObjectId().getName();
 		String oldPath = diff.getOldPath();

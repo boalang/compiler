@@ -63,7 +63,7 @@ public class FileNode extends ChangedASTNode implements Comparable<FileNode> {
 		return treeId;
 	}
 
-	public void setint(int treeId) {
+	public void setTreeId(int treeId) {
 		this.treeId = treeId;
 	}
 

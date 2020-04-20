@@ -22,14 +22,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
@@ -38,7 +33,6 @@ import org.apache.commons.cli.PosixParser;
 import boa.datagen.forges.github.GetGithubRepoByUser;
 import boa.datagen.forges.github.LocalGitSequenceGenerator;
 import boa.datagen.forges.github.MetaDataMaster;
-import boa.datagen.util.FileIO;
 import boa.datagen.util.Properties;
 
 /**

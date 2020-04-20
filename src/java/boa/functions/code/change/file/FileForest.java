@@ -4,10 +4,8 @@ import static boa.functions.BoaAstIntrinsics.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Queue;
 import java.util.Stack;
 
 import boa.functions.code.change.ASTChange;
@@ -97,7 +95,7 @@ public class FileForest {
 				visited.add(rightNode.getLoc());
 
 				// edge case: added file w/o any further modifications
-				if (rightNode.getChangedFile().getChange() == ChangeKind.ADDED && rightNode.getASTChangeCount() == 0) {
+				if (!rightNode.hasFirstParent() && rightNode.getASTChangeCount() == 0) {
 					astChange.update(rightNode, collector.getDeclNodes(rightNode), ChangeKind.ADDED, true);
 				}
 				

@@ -54,7 +54,7 @@ import boa.types.Toplevel.Project;
 
 public class SeqRepoImporter {
 	private final static boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
-	private final static boolean cache = Properties.getBoolean("cache", DefaultProperties.CACHE);
+//	private final static boolean cache = Properties.getBoolean("cache", DefaultProperties.CACHE);
 
 	private final static File gitRootPath = new File(Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
 	private final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
@@ -134,7 +134,6 @@ public class SeqRepoImporter {
 										break;
 									}
 								}
-//								Thread.sleep(100);
 							}
 							
 							System.err.println("Assigned the " + (++counter) + "th project: " + repo.name 
