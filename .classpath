@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="lib" path="rtlib/antlr-runtime-4.5.jar"/>
 	<classpathentry kind="lib" path="rtlib/commons-cli-1.2.jar"/>
 	<classpathentry kind="lib" path="rtlib/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="rtlib/protobuf-java-2.5.0.jar"/>
 	<classpathentry kind="lib" path="rtlib/scannotation-1.0.3.jar"/>
 	<classpathentry kind="lib" path="rtlib/ST-4.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/antlr-4.5-complete.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-math-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/hadoop-core-1.0.4.jar"/>
@@ -39,6 +37,8 @@
 	<classpathentry kind="lib" path="lib/datagen/trove-3.0.3.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/xml-security-impl-1.0.jar"/>
 	<classpathentry kind="src" path="build/java"/>
+	<classpathentry kind="src" path="src/antlr"/>
+	<classpathentry kind="src" path="src/proto"/>
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="src" path="src/compiled-proto"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
@@ -103,5 +103,55 @@
 	<classpathentry kind="lib" path="lib/hamcrest-core-1.3-sources.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.11-javadoc.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.11-sources.jar"/>
+	<classpathentry kind="lib" path="compile"/>
+	<classpathentry kind="lib" path="lib/dltk-python-sdk-I-I201811220629-201811220629/features/org.eclipse.dltk.python_5.11.0.201811220629.jar"/>
+	<classpathentry kind="lib" path="lib/dltk-python-sdk-I-I201811220629-201811220629/features/org.eclipse.dltk.python.sdk_5.11.0.201811220629.jar"/>
+	<classpathentry kind="lib" path="lib/dltk-python-sdk-I-I201811220629-201811220629/plugins/org.eclipse.dltk.python.activestatedebugger_5.11.0.201811220629.jar"/>
+	<classpathentry kind="lib" path="lib/dltk-python-sdk-I-I201811220629-201811220629/plugins/org.eclipse.dltk.python.activestatedebugger.source_5.11.0.201811220629.jar"/>
+	<classpathentry kind="lib" path="lib/dltk-python-sdk-I-I201811220629-201811220629/plugins/org.eclipse.dltk.python.core_5.11.0.201811220629.jar"/>
+	<classpathentry kind="lib" path="lib/dltk-python-sdk-I-I201811220629-201811220629/plugins/org.eclipse.dltk.python.core.source_5.11.0.201811220629.jar"/>
+	<classpathentry kind="lib" path="lib/dltk-python-sdk-I-I201811220629-201811220629/plugins/org.eclipse.dltk.python.debug_5.11.0.201811220629.jar"/>
+	<classpathentry kind="lib" path="lib/dltk-python-sdk-I-I201811220629-201811220629/plugins/org.eclipse.dltk.python.debug.source_5.11.0.201811220629.jar"/>
+	<classpathentry kind="lib" path="lib/dltk-python-sdk-I-I201811220629-201811220629/plugins/org.eclipse.dltk.python.debug.ui_5.11.0.201811220629.jar"/>
+	<classpathentry kind="lib" path="lib/dltk-python-sdk-I-I201811220629-201811220629/plugins/org.eclipse.dltk.python.debug.ui.source_5.11.0.201811220629.jar"/>
+	<classpathentry kind="lib" path="lib/dltk-python-sdk-I-I201811220629-201811220629/plugins/org.eclipse.dltk.python.launching_5.11.0.201811220629.jar"/>
+	<classpathentry kind="lib" path="lib/dltk-python-sdk-I-I201811220629-201811220629/plugins/org.eclipse.dltk.python.launching.source_5.11.0.201811220629.jar"/>
+	<classpathentry kind="lib" path="lib/dltk-python-sdk-I-I201811220629-201811220629/plugins/org.eclipse.dltk.python.ui_5.11.0.201811220629.jar"/>
+	<classpathentry kind="lib" path="lib/dltk-python-sdk-I-I201811220629-201811220629/plugins/org.eclipse.dltk.python.ui.source_5.11.0.201811220629.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf_2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.ant_2.6.0.v20100521-1846.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.codegen_2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.codegen.ecore_2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.codegen.ecore.ui_2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.codegen.ui_2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.common_2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.common.ui_2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.converter_2.5.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.databinding_1.2.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.databinding.edit_1.2.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.ecore_2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.ecore.change_2.5.0.v20100521-1846.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.ecore.change.edit_2.5.0.v20100521-1846.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.ecore.edit_2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.ecore.editor_2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.ecore.xmi_2.5.0.v20100521-1846.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.edit_2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.edit.ui_2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.exporter_2.6.0.v20100521-1846.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.importer_2.6.0.v20100521-1846.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.importer.ecore_2.6.0.v20100521-1846.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.importer.java_2.6.0.v20100521-1846.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.importer.rose_2.6.0.v20100521-1846.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.mapping_2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.mapping.ecore_2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.mapping.ecore.editor_2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.mapping.ecore2ecore_2.5.0.v20100521-1847.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.mapping.ecore2ecore.editor_2.4.0.v20100521-1847.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.mapping.ecore2xml_2.5.0.v20100521-1847.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.mapping.ecore2xml.ui_2.5.0.v20100521-1847.jar"/>
+	<classpathentry kind="lib" path="lib/emf/plugins/org.eclipse.emf.mapping.ui_2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/org.antlr.runtime_3.0.0.v200803061811.jar"/>
+	<classpathentry kind="lib" path="lib/dltk-core-sdk-I-I201811220629-201811220629 (1)/features/org.eclipse.dltk.core.sdk_5.11.0.201811220629.jar"/>
+	<classpathentry kind="lib" path="lib/antlr-3.3-complete.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

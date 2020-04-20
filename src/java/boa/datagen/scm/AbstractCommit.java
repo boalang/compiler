@@ -21,6 +21,8 @@ package boa.datagen.scm;
 import java.io.*;
 import java.util.*;
 
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CharStream;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile.Writer;
@@ -36,6 +38,22 @@ import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ast.AstRoot;
 import org.w3c.css.sac.InputSource;
+import org.eclipse.dltk.python.internal.core.parser.PythonSourceParser;
+import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
+import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
+import org.eclipse.dltk.ast.parser.IModuleDeclaration;
+import org.eclipse.dltk.compiler.IElementRequestor;
+import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
+import org.eclipse.dltk.compiler.IElementRequestor.ImportInfo;
+import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
+import org.eclipse.dltk.compiler.IElementRequestor.TypeInfo;
+import org.eclipse.dltk.compiler.SourceElementRequestorAdaptor;
+import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.dltk.compiler.env.ModuleSource;
+import org.eclipse.dltk.compiler.problem.IProblemReporter;
+import org.eclipse.dltk.compiler.problem.AbstractProblemReporter;
+import org.eclipse.dltk.compiler.problem.IProblem;
 
 import com.steadystate.css.dom.CSSStyleSheetImpl;
 
@@ -54,6 +72,7 @@ import boa.datagen.util.HtmlVisitor;
 import boa.datagen.util.JavaScriptErrorCheckVisitor;
 import boa.datagen.util.JavaScriptVisitor;
 import boa.datagen.util.JavaVisitor;
+import boa.datagen.util.NewPythonVisitor;
 import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
@@ -572,42 +591,108 @@ public abstract class AbstractCommit {
 		return !errorCheck.hasError;
 	}
 
-	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
-		//System.out.println("Reached Py Parse file");
-		final ASTRoot.Builder ast = ASTRoot.newBuilder();
-		try {
-			Python3Visitor visitor = new Python3Visitor();
-			fb.setKind(FileKind.SOURCE_PY_3);
-			visitor.visit(path, content);
-			if(!visitor.isPython3)
-				fb.setKind(FileKind.SOURCE_PY_2);
-			ast.addNamespaces(visitor.getNamespaces());
-			
-/*			if(visitor.isPython3) {
-				ast.addNamespaces(visitor.getNamespaces());
-			} 
-			else {
-				System.out.println("Entered Python2 Parser.");
-				Python2Visitor visitorp2 = new Python2Visitor();				
-				fb.setKind(FileKind.SOURCE_PY_2);
-				visitorp2.visit(content);
-				ast.addNamespaces(visitorp2.getNamespaces());
+//	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
+//		//System.out.println("Reached Py Parse file");
+//		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+//		try {
+//			Python3Visitor visitor = new Python3Visitor();
+//			fb.setKind(FileKind.SOURCE_PY_3);
+//			visitor.visit(path, content);
+//			if(!visitor.isPython3)
+//				fb.setKind(FileKind.SOURCE_PY_2);
+//			ast.addNamespaces(visitor.getNamespaces());
+//			
+///*			if(visitor.isPython3) {
+//				ast.addNamespaces(visitor.getNamespaces());
+//			} 
+//			else {
+//				System.out.println("Entered Python2 Parser.");
+//				Python2Visitor visitorp2 = new Python2Visitor();				
+//				fb.setKind(FileKind.SOURCE_PY_2);
+//				visitorp2.visit(content);
+//				ast.addNamespaces(visitorp2.getNamespaces());
+//			}
+//*/ 
+//			
+//		} catch (Exception e1) {
+//			e1.printStackTrace();
+//			System.out.println("Error in Python parse. " + e1.getMessage());
+//		}
+//		try {
+//			// System.out.println("writing=" + count + "\t" + path);
+//			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+//			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+//			connector.astWriterLen += bw.getLength();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		return false;
+//	}
+	
+	boolean pythonParsingError;
+
+	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,final boolean storeOnError) {		
+		pythonParsingError=false;
+
+		PythonSourceParser parser= new PythonSourceParser();
+		IModuleSource input=new ModuleSource(content);
+
+		IProblemReporter reporter=new IProblemReporter() {
+			@Override
+			public void reportProblem(IProblem arg0) {
+				pythonParsingError=true;
+				
 			}
-*/ 
-			
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			System.out.println("Error in Python parse. " + e1.getMessage());
-		}
+		};
+		System.out.println("actual source: "+content);
+		org.eclipse.dltk.ast.declarations.ModuleDeclaration module;
+		
 		try {
-			// System.out.println("writing=" + count + "\t" + path);
-			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
-			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
-			connector.astWriterLen += bw.getLength();
-		} catch (IOException e) {
+			module= (ModuleDeclaration) parser.parse(input, reporter);
+		} catch (Exception e) {
+			if (true)
+				System.err.println("Error parsing Python file: " + path + " from: " + projectName);
 			e.printStackTrace();
+			return false;
 		}
-		return false;
+		
+		if(!pythonParsingError) {
+			final ASTRoot.Builder ast = ASTRoot.newBuilder();
+//			IElementRequestor requestor= new org.eclipse.dltk.compiler.SourceElementRequestorAdaptor();
+	
+			NewPythonVisitor visitor=new NewPythonVisitor();
+		
+			try {
+				ast.addNamespaces(visitor.getNamespace(module));
+			} catch (final UnsupportedOperationException e) {
+				return false;
+			} catch (final Throwable e) {
+				if (debug)
+					System.err.println("Error visiting Python file: " + path + " from: " + projectName);
+				e.printStackTrace();
+				System.exit(-1);
+				return false;
+			}
+//			
+//			try {
+//				module.traverse(visitor);
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+			fb.setKind(FileKind.SOURCE_PY_3);
+			
+			try {
+				// System.out.println("writing=" + count + "\t" + path);
+				BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+				connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+				connector.astWriterLen += bw.getLength();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	
+		}
+		return !pythonParsingError;
 	}
 	private boolean parseJavaScriptFile(final String path, final ChangedFile.Builder fb, final String content,
 			final int astLevel, final boolean storeOnError) {
@@ -682,6 +767,7 @@ public abstract class AbstractCommit {
 
 	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
 		try {
+			
 			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
 			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 //			parser.setResolveBindings(true);

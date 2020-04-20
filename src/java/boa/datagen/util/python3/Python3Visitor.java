@@ -1495,6 +1495,7 @@ public class Python3Visitor implements Python3Listener{
 	
 	int exitEx = 0;
 	int exitArg = 0;
+	boolean isArrayAccess=false;
 	
 	@Override
 	public void enterAtom_expr(Atom_exprContext ctx) {
@@ -1518,7 +1519,14 @@ public class Python3Visitor implements Python3Listener{
 				expressions.push(ebr);
 				exitEx++;
 			}
-			else if(!atomEx.isEmpty() && isLiteral(atomEx.peek())) {
+			else if(ctx.getText().endsWith("]")) {
+				Expression.Builder ebr = Expression.newBuilder();
+				ebr.setKind(ExpressionKind.ARRAYACCESS);
+				expressions.push(ebr);
+				isArrayAccess=true;
+				exitEx++;
+			}
+			else if(isArrayAccess==false && !atomEx.isEmpty() && isLiteral(atomEx.peek())) {
 				Expression.Builder ebr = Expression.newBuilder();
 				ebr.setKind(ExpressionKind.LITERAL);
 				ebr.setLiteral(atomEx.pop());
@@ -1576,6 +1584,10 @@ public class Python3Visitor implements Python3Listener{
 		
 		System.out.println("Exit Atom Expr: "+ctx.getText());
 
+		if(ctx.getText().endsWith("]")) {
+			isArrayAccess=false;
+		}
+		
 		if(isNot && !expressions.isEmpty()) {
 			Expression.Builder ebr = Expression.newBuilder();
 			ebr.setKind(ExpressionKind.LOGICAL_NOT);
@@ -1671,12 +1683,27 @@ public class Python3Visitor implements Python3Listener{
 	 
 	@Override
 	public void enterAtom(AtomContext ctx) {
+		System.out.println("Enter atom: "+ctx.getText());
 		atoms.push(ctx.getText());	
+		
+		if(isArrayAccess && isVar(ctx.getText())) {	
+			Expression.Builder ebr = Expression.newBuilder();
+			ebr.setKind(ExpressionKind.VARACCESS);
+			ebr.setVariable(ctx.getText());
+			expressions.peek().addExpressions(ebr);
+		}
+		else if(isArrayAccess && isLiteral(ctx.getText())) {
+			Expression.Builder ebr = Expression.newBuilder();
+			ebr.setKind(ExpressionKind.LITERAL);
+			ebr.setLiteral(atomEx.pop());
+			expressions.peek().addExpressions(ebr);
+		}	
+		
 	}
 
 	@Override
 	public void exitAtom(AtomContext ctx) {
-
+		System.out.println("Exit atom: "+ctx.getText());
 	}
 
 	@Override
@@ -1695,6 +1722,7 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void enterTrailer(TrailerContext ctx) {
 		
+		System.out.println("Enter trailer: "+ctx.getText());
 		if(ctx.getText().startsWith(".")) {
 			trailerMethodCall = true;
 			atoms.push(ctx.getText().substring(1));
@@ -1719,6 +1747,8 @@ public class Python3Visitor implements Python3Listener{
 	@Override
 	public void exitTrailer(TrailerContext ctx) {
 		// TODO Auto-generated method stub
+		System.out.println("Exit trailer: "+ctx.getText());
+
 	}
 	
 
