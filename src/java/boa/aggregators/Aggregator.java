@@ -22,6 +22,7 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer.Context;
 
+import boa.BoaTup;
 import boa.functions.BoaCasts;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
@@ -109,6 +110,8 @@ public abstract class Aggregator {
 	public void aggregate(final double data) throws IOException, InterruptedException, FinishedException {
 		this.aggregate(BoaCasts.doubleToString(data), null);
 	}
+	
+	
 
 	@SuppressWarnings("unchecked")
 	protected void collect(final String data, final String metadata) throws IOException, InterruptedException {
@@ -138,6 +141,13 @@ public abstract class Aggregator {
 
 	protected void collect(final double data) throws IOException, InterruptedException {
 		this.collect(BoaCasts.doubleToString(data), null);
+	}
+	
+	public void aggregate(final BoaTup data, final String metadata) throws IOException, InterruptedException, FinishedException, IllegalAccessException {	
+	}
+
+	public void aggregate(final BoaTup data) throws IOException, InterruptedException, FinishedException, IllegalAccessException {
+		this.aggregate(data, null);
 	}
 
 	public void finish() throws IOException, InterruptedException {

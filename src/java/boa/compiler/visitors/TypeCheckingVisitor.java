@@ -30,6 +30,9 @@ import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 import boa.compiler.transforms.VisitorDesugar;
 import boa.types.*;
+
+import boa.types.ml.BoaLinearRegression;
+import boa.types.ml.BoaModel;
 import boa.types.proto.CodeRepositoryProtoTuple;
 
 /**
@@ -937,6 +940,36 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 			if (rhs != null && !lhs.assigns(rhs) && !env.hasCast(rhs, lhs))
 				throw new TypeCheckException(n.getInitializer(), "incorrect type '" + rhs + "' for assignment to '" + id + ": " + lhs + "'");
+			
+			if (n.getType() instanceof OutputType) {
+                BoaModel model = (BoaModel) SymbolTable.getMLAggregatorType(((OutputType) n.getType()).getId().getToken());
+                if (model != null) {
+                    BoaType t = ((OutputType) n.getType()).type;
+                    List<BoaType> types = new ArrayList<BoaType>();
+
+                    if (t instanceof BoaTable) {
+                        t = ((BoaTable) t).getType();
+                    }
+                    if (t instanceof BoaTuple)
+                        types = ((BoaTuple) t).getTypes();
+                    else if (t instanceof BoaArray)
+                        types.add(((BoaArray) t).getType());
+                    else
+                        types.add(t);
+
+                    if (model instanceof BoaLinearRegression) {
+                        if (!(types.get(types.size() - 1) instanceof BoaInt
+                                || types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+                            throw new TypeCheckException(n, "LinearRegression required class to be numeric or date");
+                        for (int i = 0; i < types.size() - 1; i++) {
+                            if (!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
+                                    types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+                                throw new TypeCheckException(n, "LinearRegression required attributes to be numeric, nominal or date");
+                        }
+                    }
+                }
+            }
+			
 		} else {
 			if (rhs == null)
 				throw new TypeCheckException(n, "variable declaration requires an explicit type or an initializer");
@@ -1400,6 +1433,29 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.getId().accept(this, env);
 	}
 
+	
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visit(final ModelType n, final SymbolTable env) {
+        n.env = env;
+        n.getType().accept(this, env);
+
+        if (env.hasType(n.getId().getToken()))
+            n.type = SymbolTable.getType(n.getId().getToken());
+        else
+            try {
+                n.type = env.get(n.getId().getToken());
+            } catch (final RuntimeException e) {
+                throw new TypeCheckException(n, "invalid identifier '" + n.getId().getToken() + "'", e);
+            }
+
+        if (n.type instanceof BoaLinearRegression)
+            n.type = new BoaLinearRegression(n.getType().type);
+
+    }
+	
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StackType n, final SymbolTable env) {

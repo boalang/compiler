@@ -76,8 +76,10 @@ public class DefaultProperties {
 	
 	// for ML
 	public static String HADOOP_SEQ_FILE_LOCATION = "";
-	public static String HADOOP_OUT_LOCATION = "";
-	//public static String HADOOP_OUT_LOCATION = "/home/tess/Desktop/datagen";
+	//public static String HADOOP_OUT_LOCATION = "";
+	public static String HADOOP_OUT_LOCATION = "./model";
+	public static String localOutput = null;
+
 	
 	@SuppressWarnings("unused")
 	private static String getRoot() {

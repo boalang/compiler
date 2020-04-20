@@ -28,8 +28,11 @@ import org.scannotation.AnnotationDB;
 import boa.aggregators.AggregatorSpec;
 import boa.functions.FunctionSpec;
 import boa.types.*;
+import boa.types.ml.BoaLinearRegression;
+import boa.types.ml.BoaModel;
 import boa.types.proto.*;
 import boa.types.proto.enums.*;
+import boa.types.BoaEnum;
 
 import boa.compiler.ast.Operand;
 import boa.compiler.ast.statements.VisitStatement;
@@ -379,12 +382,16 @@ public class SymbolTable {
 		types.put("float", new BoaFloat());
 		types.put("time", new BoaTime());
 		types.put("string", new BoaString());
-
+		
 		for (final BoaType t : dslTupleTypes)
 			types.put(t.toString(), t);
 
 		for (final BoaType t : dslMapTypes)
 			types.put(t.toString(), t);
+		
+        types.put("LinearRegression", new BoaLinearRegression());
+        types.put("Model", new BoaModel());
+        types.put("tuple", new BoaTuple());
 	}
 
 	public SymbolTable cloneNonLocals() throws IOException {
@@ -756,4 +763,13 @@ public class SymbolTable {
 
 		return r.toString();
 	}
+	
+    public static BoaType getMLAggregatorType(String aggregtorName) {
+        for (Entry<String, BoaType> e : types.entrySet()) {
+            if (e.getKey().equalsIgnoreCase(aggregtorName)) {
+                return e.getValue();
+            }
+        }
+        return null;
+    }
 }
