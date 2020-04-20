@@ -57,7 +57,7 @@ public class BoaCodeChangeIntrinsics {
 		
 		System.out.println("done field");
 		
-//		forest.updateWithRefs(p, refRevIds);
+		forest.updateWithRefs(p, refRevIds);
 
 		double[][] res = new Validation(db).validate();
 

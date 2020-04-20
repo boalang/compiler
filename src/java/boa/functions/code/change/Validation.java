@@ -85,9 +85,10 @@ public class Validation {
 		for (int i = 0; i < db.cr.getBranchesCount(); i++) {
 			int headIdx = db.cr.getBranches(i);
 			String head = db.cr.getBranchNames(i);
-			
-			if (headIdx != 7355) continue;
-			
+
+//			if (headIdx != 7355)
+//				continue;
+
 			initial();
 			for (ChangedFile cf : getSnapshot(db.cr, headIdx, true))
 				astCollector.visit(cf);
@@ -129,13 +130,9 @@ public class Validation {
 
 			System.out.println();
 
-			res[i] = new double[] { 
-					matchedLastFileRatio, matchedFileRatio, 
-					matchedLastDeclRatio, matchedDeclRatio,
-					matchedLastFieldRatio, matchedFieldRatio, 
-					matchedLastMethodRatio, matchedMethodRatio 
-			};
-			
+			res[i] = new double[] { matchedLastFileRatio, matchedFileRatio, matchedLastDeclRatio, matchedDeclRatio,
+					matchedLastFieldRatio, matchedFieldRatio, matchedLastMethodRatio, matchedMethodRatio };
+
 		}
 		return res;
 	}
@@ -201,8 +198,7 @@ public class Validation {
 			return;
 		}
 		// ignore deleted type
-		if (fn.getFirstChange() == ChangeKind.DELETED
-				|| fn.getSecondChange() == ChangeKind.DELETED ) {
+		if (fn.getFirstChange() == ChangeKind.DELETED || fn.getSecondChange() == ChangeKind.DELETED) {
 			visitedFileTrees.add(fn.getTreeId());
 			return;
 		}
@@ -230,8 +226,7 @@ public class Validation {
 			return;
 		}
 		// ignore deleted type
-		if (dn.getFirstChange() == ChangeKind.DELETED
-				|| dn.getSecondChange() == ChangeKind.DELETED) {
+		if (dn.getFirstChange() == ChangeKind.DELETED || dn.getSecondChange() == ChangeKind.DELETED) {
 			visitedDeclTrees.add(dn.getTreeId());
 			return;
 		}
@@ -259,8 +254,7 @@ public class Validation {
 			return;
 		}
 		// ignore deleted type
-		if (fn.getFirstChange() == ChangeKind.DELETED
-				|| fn.getSecondChange() == ChangeKind.DELETED) {
+		if (fn.getFirstChange() == ChangeKind.DELETED || fn.getSecondChange() == ChangeKind.DELETED) {
 			visitedFieldTrees.add(fn.getTreeId());
 			return;
 		}
@@ -277,7 +271,7 @@ public class Validation {
 			System.out.println("ERR: cannot find field " + fn + " tree id: " + fn.getTreeId() + " tree size: "
 					+ fieldTree.getFieldNodes().size());
 			unmatchedFieldChanges++;
-			
+
 //			if (fn.getSignature().equals("private filterBuilder : EntityFilters.Builder")) {
 //				System.out.println();
 //				for (FieldNode n : fieldTree.getFieldNodes()) {
@@ -296,8 +290,7 @@ public class Validation {
 			return;
 		}
 		// ignore deleted type
-		if (mn.getFirstChange() == ChangeKind.DELETED
-				|| mn.getSecondChange() == ChangeKind.DELETED) {
+		if (mn.getFirstChange() == ChangeKind.DELETED || mn.getSecondChange() == ChangeKind.DELETED) {
 			visitedMethodTrees.add(mn.getTreeId());
 			return;
 		}
@@ -314,7 +307,17 @@ public class Validation {
 			System.out.println("ERR: cannot find method " + mn + " tree id: " + mn.getTreeId() + " tree size: "
 					+ methodTree.getMethodNodes().size());
 			unmatchedMethodChanges++;
+
+//			if (mn.getSignature().equals("public catalog() : String")) {
+//				System.out.println();
+//				for (MethodNode n : methodTree.getMethodNodes()) {
+//					System.out.println(n + " " + n.getTreeId());
+//				}
+//				System.out.println();
+//			}
+
 		}
+
 	}
 
 	public class ASTCollector extends BoaAbstractVisitor {

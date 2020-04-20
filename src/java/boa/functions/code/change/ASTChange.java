@@ -96,11 +96,25 @@ public class ASTChange {
 		}
 
 		updateChange(rightNode, change, isFirstParent);
+		
+//		if (rightNode.getLoc().toString().equals("4727 3")) {
+//			System.out.println("  FOund 1 ");
+//			System.out.println(leftNode);
+//			System.out.println(rightNode);
+//			System.out.println();
+//		}
 	}
 
 	public void compareASTs(FileNode leftNode, FileNode rightNode, DeclCollector declCollector, boolean isFirstParent)
 			throws Exception {
 		List<Declaration> leftDecls = null;
+		
+//		if (rightNode.getLoc().toString().equals("4727 3")) {
+//			System.out.println("  FOund 2 ");
+//			System.out.println(leftNode);
+//			System.out.println(rightNode);
+//			System.out.println();
+//		}
 
 		// both have the same content id (COPIED)
 		if (leftNode.getChangedFile().getObjectId().equals(rightNode.getChangedFile().getObjectId())) {
@@ -108,7 +122,7 @@ public class ASTChange {
 			// 1st parent then consider all ASTs under the file as copied
 			if (isFirstParent)
 				updateFileAll(rightNode, declCollector.getDeclNodes(rightNode), ChangeKind.COPIED, isFirstParent);
-
+	
 			// 2nd parent then add copied as 2nd changes 
 			if (!isFirstParent && rightNode.getASTChangeCount() != 0)
 				for (DeclNode decl : rightNode.getDeclChanges())
