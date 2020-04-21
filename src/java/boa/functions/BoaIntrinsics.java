@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import boa.types.Ast.ASTRoot;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -43,8 +44,8 @@ public class BoaIntrinsics {
 	private final static String[] fixingRegex = {
 		"\\bfix(s|es|ing|ed)?\\b",
 		"\\b(error|bug|issue)(s)?\\b",
-		//"\\b(bug|issue|fix)(s)?\\b\\s*(#)?\\s*[0-9]+",
-		//"\\b(bug|issue|fix)\\b\\s*id(s)?\\s*(=)?\\s*[0-9]+"
+		"\\b(bug|issue|fix)(s)?\\b\\s*(#)?\\s*[0-9]+",
+		"\\b(bug|issue|fix)\\b\\s*id(s)?\\s*(=)?\\s*[0-9]+"
 	};
 
 	private final static List<Matcher> fixingMatchers = new ArrayList<Matcher>();
@@ -94,6 +95,39 @@ public class BoaIntrinsics {
 		}
 		return cr.getRevisions((int) index);
 	}
+	
+	@FunctionSpec(name = "getrevisionbyid", returnType = "Revision", formalParameters = { "CodeRepository", "string" })
+	public static Revision getRevisionById(final CodeRepository cr, final String id) {
+		for (int i = 0; i < cr.getRevisionKeysCount(); i++) {
+			long key = cr.getRevisionKeys(i);
+			Revision r = BoaAstIntrinsics.getRevision(key);
+			if (r.getId().equals(id))
+				return r;
+		}
+		for (Revision r : cr.getRevisionsList())
+			if (r.getId().equals(id))
+				return r;
+		return null;
+	}
+	
+	public static List<Revision> getParentRevisions(final CodeRepository cr, final Revision r) {
+		ArrayList<Revision> parents = new ArrayList<Revision>();
+		for (int key : r.getParentsList()) {
+			if (key != -1)
+				parents.add(getRevision(cr, key));
+		}
+		return parents;
+	}
+	
+//	@FunctionSpec(name = "getParsedChangedFiles", returnType = "array of ChangedFile", formalParameters = { "array of ChangedFile"})
+//	public static ChangedFile[] getParsedChangedFiles(final ChangedFile[] files) {
+//		List<ChangedFile> lst = new ArrayList<ChangedFile>();
+//		for (ChangedFile file : files)
+//			if (isJavaFile(file))
+//				lst.add(BoaAstIntrinsics.getParsedChangedFile(file));
+//		BoaAstIntrinsics.cleanup(null);
+//		return lst.toArray(new ChangedFile[0]);
+//	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time", "string..." })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp, final String... kinds) throws Exception {
@@ -114,8 +148,8 @@ public class BoaIntrinsics {
 
 	@FunctionSpec(name = "getsnapshotbyindex", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "int", "string..." })
 	public static ChangedFile[] getSnapshotByIndex(final CodeRepository cr, final long commitOffset, final String... kinds) {
-		if (commitOffset == cr.getHead())
-			return getSnapshot(cr, kinds);
+//		if (commitOffset == cr.getHead())
+//			return getSnapshot(cr, kinds);
 		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
 		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>();
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
@@ -211,9 +245,11 @@ public class BoaIntrinsics {
 				for (int i = 0; i < cf.getChangesCount(); i++) {
 //						ChangedFile pcf = revisions.get(cf.getPreviousVersions(i)).getFiles(cf.getPreviousIndices(i));
 //						String name = pcf.getName();
-					String name = cf.getPreviousNames(i);
-					if (!adds.contains(name) && !dels.contains(name))
-						dels.add(name);
+					if (cf.getPreviousNamesCount() != 0) {
+						String name = cf.getPreviousNames(i);
+						if (!adds.contains(name) && !dels.contains(name))
+							dels.add(name);
+					}
 				}
 				break;
 			default:
@@ -225,22 +261,43 @@ public class BoaIntrinsics {
 				break;
 			}
 		}
-		for (int p : commit.getParentsList()) {
+//		for (int p : commit.getParentsList()) {
+//			if (!queuedCommitIds.contains(p)) {
+//				pq.offer(p);
+//				queuedCommitIds.add(p);
+//			}
+//		}
+		if (commit.getParentsList() != null && commit.getParentsList().size() != 0) {
+			int p = commit.getParentsList().get(0);
 			if (!queuedCommitIds.contains(p)) {
 				pq.offer(p);
 				queuedCommitIds.add(p);
 			}
 		}
 	}
+	
+	@FunctionSpec(name = "updateastcount", returnType = "bool", formalParameters = { "ChangedFile" })
+	public static boolean updateASTCount(ChangedFile cf) {
+		String name = cf.getName();
+		return name.substring(name.lastIndexOf('.') + 1).equals("java");
+	}
+	
 
-	private static boolean isIncluded(ChangedFile cf, String[] kinds) {
+	private static boolean isIncluded(ChangedFile cf, String[] kinds) {		
 		if (kinds == null || kinds.length == 0)
 			return true;
 		final String kindName = cf.getKind().name();
+		final String fileName = cf.getName();
 		for (final String kind : kinds)
-			if (kindName.startsWith(kind))
+			if (kindName.startsWith(kind) || fileName.endsWith(kind))
 				return true;
 		return false;
+	}
+	
+	@FunctionSpec(name = "isjavafile", returnType = "bool", formalParameters = { "ChangedFile" })
+	public static boolean isJavaFile(ChangedFile cf) {
+		String name = cf.getName();
+		return name.substring(name.lastIndexOf('.') + 1).equals("java");
 	}
 
 	@FunctionSpec(name = "getsnapshotbyid", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string" })
@@ -272,6 +329,56 @@ public class BoaIntrinsics {
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time" })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp) throws Exception {
 		return getSnapshot(cr, timestamp, new String[0]);
+	}
+	
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "bool" })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final boolean needAst) {
+		if (needAst) {
+			List<ChangedFile> lst = new ArrayList<ChangedFile>();
+			ChangedFile[] files = getSnapshot(cr);
+			try {
+				for (ChangedFile file : files)
+					if (isJavaFile(file)) {
+						ChangedFile cf = BoaAstIntrinsics.getParsedChangedFile(file);
+						if (cf != null)
+							lst.add(cf);
+					}
+			} catch (Throwable e) {
+				e.printStackTrace();
+				BoaAstIntrinsics.cleanup(null);
+				return new ChangedFile[0];
+			}
+			BoaAstIntrinsics.closeAllMaps();;
+			return lst.toArray(new ChangedFile[0]);
+		}
+		return getSnapshot(cr);
+	}
+	
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "int", "bool" })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long revisionOffset, final boolean needAst) {
+		if (needAst) {
+			List<ChangedFile> lst = new ArrayList<ChangedFile>();
+			ChangedFile[] files = getSnapshotByIndex(cr, revisionOffset, new String[0]);
+			try {
+				for (ChangedFile file : files)
+					if (isJavaFile(file)) {
+						try {
+							ChangedFile cf = BoaAstIntrinsics.getParsedChangedFile(file);
+							if (cf != null)
+								lst.add(cf);
+						} catch (Throwable e) {
+							continue;
+						}
+					}
+			} catch (Throwable e) {
+				e.printStackTrace();
+				BoaAstIntrinsics.cleanup(null);
+				return new ChangedFile[0];
+			}
+			BoaAstIntrinsics.closeAllMaps();
+			return lst.toArray(new ChangedFile[0]);
+		}
+		return getSnapshotByIndex(cr, revisionOffset, new String[0]);
 	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository" })
@@ -315,7 +422,14 @@ public class BoaIntrinsics {
 					if (ocf.getChange() != ChangeKind.DELETED)
 						l.add(ocf);
 				} else {
-					for (int parentId : rev.getParentsList()) {
+//					for (int parentId : rev.getParentsList()) {
+//						if (!queuedRevisionIds.contains(parentId)) {
+//							pq.offer(parentId);
+//							queuedRevisionIds.add(parentId);
+//						}
+//					}
+					if (rev.getParentsList() != null && rev.getParentsList().size() != 0) {
+						int parentId = rev.getParentsList().get(0);
 						if (!queuedRevisionIds.contains(parentId)) {
 							pq.offer(parentId);
 							queuedRevisionIds.add(parentId);
@@ -327,6 +441,21 @@ public class BoaIntrinsics {
 		return l.toArray(new ChangedFile[0]);
 	}
 
+    @FunctionSpec(name = "freemem", returnType = "int")
+	public static long freeMem() {
+		return Runtime.getRuntime().freeMemory();
+	}
+    
+    @FunctionSpec(name = "usedmem", returnType = "int")
+	public static long usedMem() {
+		return Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
+	}
+    
+    @FunctionSpec(name = "print", formalParameters = "string")
+	public static void print(String str) {
+		System.out.println(str);
+	}
+	
 	/**
 	 * Is a Revision's log message indicating it is a fixing revision?
 	 *
@@ -427,6 +556,13 @@ public class BoaIntrinsics {
 		if (s.empty())
 			return null;
 		return s.pop();
+	}
+
+	public static <T> java.util.Stack<T> reverse_stack (final java.util.Stack<T> s) {
+		java.util.Stack<T> tmp = new java.util.Stack<T>();
+		while (!s.empty())
+			tmp.push(s.pop());
+		return tmp;
 	}
 
 	public static <T> T stack_peek(final java.util.Stack<T> s) {
@@ -536,6 +672,7 @@ public class BoaIntrinsics {
 		return arr2;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T[] concat(final T[] first, final T[]... rest) {
 		int totalLength = first.length;
 		for (final T[] array : rest)

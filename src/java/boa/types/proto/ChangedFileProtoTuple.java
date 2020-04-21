@@ -78,6 +78,15 @@ public class ChangedFileProtoTuple extends BoaProtoTuple {
 		
 		names.put("mapped_key", counter++);
 		members.add(new BoaInt());
+		
+		names.put("object_id", counter++);
+		members.add(new BoaString());
+		
+		names.put("revision_idx", counter++);
+		members.add(new BoaInt());
+		
+		names.put("file_idx", counter++);
+		members.add(new BoaInt());
 	}
 
 	/**

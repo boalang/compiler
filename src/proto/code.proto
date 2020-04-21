@@ -69,3 +69,26 @@ message Revision {
 	/** @exclude The offsets of any parent commits */
 	repeated int32 parents = 7;
 }
+
+message Change {
+	repeated CodeRefactoring refactorings = 1; 
+}
+
+message CodeRefactoring {
+	required string type = 1;
+	required string description = 3;
+	repeated Location left_side_locations = 4;
+	repeated Location right_side_locations = 5;
+}
+
+message Location {
+	required string file_path = 1;
+	required string code_element = 2;
+	required string code_element_type = 3;
+	required string description = 4;
+	
+	optional int32 start_line = 5;
+	optional int32 end_line = 6;
+	optional int32 start_column = 7;
+	optional int32 end_column = 8;
+}

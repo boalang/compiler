@@ -28,6 +28,7 @@ import org.dom4j.dom.DOMDocument;
 import org.dom4j.io.SAXReader;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.php.internal.core.PHPVersion;
 import org.eclipse.php.internal.core.ast.nodes.Program;
 import org.jsoup.Jsoup;
@@ -48,6 +49,7 @@ import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
 import boa.datagen.DefaultProperties;
 import boa.datagen.dependencies.PomFile;
+import boa.datagen.scm.GitConnector.FileLoc;
 import boa.datagen.util.CssVisitor;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.HtmlVisitor;
@@ -67,31 +69,50 @@ public abstract class AbstractCommit {
 	protected static final boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	protected static final boolean debugparse = Properties.getBoolean("debugparse", DefaultProperties.DEBUGPARSE);
 	protected static final boolean STORE_ASCII_PRINTABLE_CONTENTS = Properties.getBoolean("ascii", DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
-
+	final static boolean STORE_ASTS = DefaultProperties.STORE_ASTS;
+	
 	protected AbstractConnector connector;
 	protected String projectName;
+	protected long repoKey;
+	protected Map<String, List<FileLoc>> objectIdToFileLoc;
+	protected int commitIdx;
 
 	protected AbstractCommit(AbstractConnector cnn) {
 		this.connector = cnn;
 	}
-
+	
+	// fileNameIndices, changedFiles for ChangedFile
 	protected Map<String, Integer> fileNameIndices = new HashMap<String, Integer>();
-
 	protected List<ChangedFile.Builder> changedFiles = new ArrayList<ChangedFile.Builder>();
 
-	protected ChangedFile.Builder getChangeFile(String path) {
+	protected ChangedFile.Builder getChangeFile(String path, ChangeKind changeKind, String oid) {
 		ChangedFile.Builder cfb = null;
 		Integer index = fileNameIndices.get(path);
 		if (index == null) {
 			cfb = ChangedFile.newBuilder();
-			cfb.setName(path);
+			cfb.setChange(changeKind);
 			cfb.setKind(FileKind.OTHER);
+			cfb.setName(path);
 			cfb.setKey(0);
 			cfb.setAst(false);
+			cfb.setRevisionIdx(commitIdx);
+			cfb.setFileIdx(changedFiles.size());
+			if (!STORE_ASTS) {
+				cfb.setObjectId(oid);
+				cfb.setRepoKey(repoKey);
+			}
+			// check zero id
+			if (objectIdToFileLoc.containsKey(ObjectId.zeroId().getName()))
+				System.err.println("[ERR zero object id]");
+			if (!objectIdToFileLoc.containsKey(oid))
+				objectIdToFileLoc.put(oid, new ArrayList<FileLoc>());
+			objectIdToFileLoc.get(oid).add(new FileLoc(commitIdx, changedFiles.size(), changeKind));
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
-		} else
+		} else {
+			System.err.println("FIND PREVIOUS CFB!!!!!!!!!!!!");
 			cfb = changedFiles.get(index);
+		}
 		return cfb;
 	}
 
@@ -206,10 +227,12 @@ public abstract class AbstractCommit {
 		else if (lowerPath.endsWith(".jar") || lowerPath.endsWith(".class"))
 			fb.setKind(FileKind.BINARY);
 		else if (lowerPath.endsWith(".java")) {
-			final String content = getFileContents(path);
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-			parseJavaFile(path, fb, content, false);
-		} else if (lowerPath.endsWith(".js")) {
+			if (STORE_ASTS) {
+				final String content = getFileContents(path);
+				parseJavaFile(path, fb, content, false);
+			}
+		} /* else if (lowerPath.endsWith(".js")) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JS_ES1);
@@ -304,8 +327,8 @@ public abstract class AbstractCommit {
 				} else if (debugparse)
 					System.err.println("Accepted PHP5_3: revision " + id + ": file " + path);
 			} else if (debugparse)
-				System.err.println("Accepted PHP5: revision " + id + ": file " + path);
-		}/* else if (lowerPath.endsWith(".html") && parse) {
+				System.err.println("Accepted PHP5: revision " + id + ": file " + path); 
+		} else if (lowerPath.endsWith(".html") && parse) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.Source_HTML);

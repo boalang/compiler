@@ -16,9 +16,15 @@
  */
 package boa.datagen;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map.Entry;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
@@ -27,6 +33,7 @@ import org.apache.commons.cli.PosixParser;
 import boa.datagen.forges.github.GetGithubRepoByUser;
 import boa.datagen.forges.github.LocalGitSequenceGenerator;
 import boa.datagen.forges.github.MetaDataMaster;
+import boa.datagen.util.Properties;
 
 /**
  * The main entry point for Boa tools for generating datasets.
@@ -51,6 +58,9 @@ public class BoaGenerator {
 			return;
 		}
 		BoaGenerator.handleCmdOptions(cl, options, args);
+		
+		String projectsPath = "/work/LAS/hridesh-lab/yijia/sutton_dataset/projects.txt";
+		DefaultProperties.projects = getProjects(new File(projectsPath));
 
 		/*
 		 * 1. if user provides local json files 
@@ -84,6 +94,53 @@ public class BoaGenerator {
 		}
 
 		clear();
+		
+		String base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
+		if (DefaultProperties.exceptions.size() != 0) {
+			writeTo(base + "/exceptions_"+System.currentTimeMillis()+".txt");
+		}
+		if (DefaultProperties.processedProjects.size() != 0) {
+			writeProcessedProjects(base + "/processed_"+System.currentTimeMillis()+".txt");
+		}
+	}
+	
+	public static HashSet<String> getProjects(File file) {
+		if (!file.exists())
+			return new HashSet<String>();
+		HashSet<String> set = new HashSet<String>();
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			String line = reader.readLine();
+			while (line != null) {
+				set.add(line);
+				line = reader.readLine();
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return set;
+	}
+	
+	public static void writeTo(String path) throws IOException {
+		FileWriter fw = new FileWriter(path);
+		BufferedWriter bw = new BufferedWriter(fw);
+		for (Entry<String, String> entry : DefaultProperties.exceptions.entrySet()) {
+			bw.write(entry.getKey() + " " + entry.getValue());
+			bw.newLine();
+		}
+		bw.close();
+	}
+	
+	public static void writeProcessedProjects(String path) throws IOException {
+		FileWriter fw = new FileWriter(path);
+		BufferedWriter bw = new BufferedWriter(fw);
+		for (String s : DefaultProperties.processedProjects) {
+			bw.write(s);
+			bw.newLine();
+		}
+		bw.close();
 	}
 
 	private static final void printHelp(Options options, String message) {
@@ -106,7 +163,10 @@ public class BoaGenerator {
 		options.addOption("threads", "threads", true, "number of threads");
 		options.addOption("projects", "projects", true, "maximum number of projects per sequence file");
 		options.addOption("commits", "commits", true, "maximum number of commits of a project to be stored in the project object");
-		options.addOption("nocommits", "nocommits", false, "do not store commits");
+		options.addOption("nocommits", "nocommits", false, "do not store commits");	
+		options.addOption("noasts", "noasts", false, "do not store asts");
+		options.addOption("factor", "factor", true, "max size factor");
+		options.addOption("exceptions", "exceptions", true, "do not generate those projects");
 		options.addOption("size", "size", true, "maximum size of a project object to be stored");
 		options.addOption("libs", "libs", true, "directory to store libraries");
 		options.addOption("output", "output", true, "directory where output is desired");
@@ -192,6 +252,30 @@ public class BoaGenerator {
 		}
 		if (cl.hasOption("nocommits"))
 			DefaultProperties.STORE_COMMITS = false;
+		if (cl.hasOption("noasts")) {
+			DefaultProperties.STORE_ASTS = false;
+		}
+		if (cl.hasOption("exceptions")) {
+			try {
+				DefaultProperties.exceptions = getExcludes(cl.getOptionValue("exceptions"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if (cl.hasOption("factor")) {
+			DefaultProperties.MAX_SIZE_FACTOR = Double.parseDouble(cl.getOptionValue("factor"));
+		}
+	}
+
+	private static HashMap<String, String> getExcludes(String path) throws IOException {
+		String line;
+		File file = new File(path);
+		HashMap<String, String> map = new HashMap<String, String>();
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		while ((line = br.readLine()) != null)
+			map.put(line, "");
+		br.close();
+		return map;
 	}
 
 	//

@@ -44,13 +44,25 @@ public class MetadataCacher {
 			e.printStackTrace();
 		}
 	}
+	
+	public String getUserName() {
+		return this.username;
+	}
 
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	
+	public String getUsername() {
+		return username;
+	}
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public String getPassword() {
+		return password;
 	}
 
 	public boolean isAuthenticated() {
@@ -79,6 +91,7 @@ public class MetadataCacher {
 		} catch (IOException e) {
 			// considered as failed
 		}
+//		System.out.println("authenticate: " + this.authenticated);
 		return this.authenticated;
 	}
 	
@@ -151,7 +164,11 @@ public class MetadataCacher {
 	}
 	
 	public int getNumberOfRemainingLimit() {
-		return Integer.parseInt(this.connection.getHeaderField("X-RateLimit-Remaining"));
+		try {
+			return Integer.parseInt(this.connection.getHeaderField("X-RateLimit-Remaining"));
+		} catch(NumberFormatException e) {
+			return -1;
+		}
 	}
 	
 	public long getLimitResetTime() {

@@ -20,6 +20,7 @@ package boa.evaluator;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.UUID;
@@ -124,7 +125,7 @@ public class BoaEvaluator extends BoaMain {
 
 			method.invoke(null, (Object)actualArgs);
 		} catch (final Throwable e) {
-			System.err.print(e);
+			System.err.print(e.getCause());
 		} finally {
 			if (cl != null)
 				try {

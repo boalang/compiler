@@ -51,6 +51,8 @@ public class JavaVisitor extends ASTVisitor {
 	protected PositionInfo.Builder pos = null;
 	protected String src = null;
 	protected Map<String, Integer> declarationFile, declarationNode;
+	
+	protected int astCount;
 
 	protected Namespace.Builder b = Namespace.newBuilder();
 	protected List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
@@ -66,6 +68,10 @@ public class JavaVisitor extends ASTVisitor {
 	public int getAstLevel() {
 		return astLevel;
 	}
+	
+	public int getAstCount() {
+		return astCount;
+	}
 
 	public void setAstLevel(int astLevel) {
 		if (this.astLevel < astLevel)
@@ -75,6 +81,7 @@ public class JavaVisitor extends ASTVisitor {
 	public JavaVisitor(String src) {
 		super();
 		this.src = src;
+		this.astCount = 0;
 	}
 
 	public JavaVisitor(String src, Map<String, Integer> declarationFile, Map<String, Integer> declarationNode) {
@@ -106,6 +113,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(CompilationUnit node) {
+		astCount++;
 		PackageDeclaration pkg = node.getPackage();
 		if (pkg == null) {
 			b.setName("");
@@ -229,6 +237,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(TypeDeclaration node) {
+		astCount++;
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
 		b.setName(node.getName().getIdentifier());
 		b.setFullyQualifiedName(getFullyQualifiedName(node));
@@ -312,6 +321,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(AnonymousClassDeclaration node) {
+		astCount++;
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
 		b.setName("");
 		b.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
@@ -345,8 +355,8 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(EnumDeclaration node) {
+		astCount++;
 		setAstLevel(JLS3);
-		
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
 		b.setName(node.getName().getIdentifier());
 		b.setKind(boa.types.Ast.TypeKind.ENUM);
@@ -394,8 +404,8 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(AnnotationTypeDeclaration node) {
+		astCount++;
 		setAstLevel(JLS3);
-		
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
 		b.setName(node.getName().getFullyQualifiedName());
 		b.setKind(boa.types.Ast.TypeKind.ANNOTATION);
@@ -563,6 +573,7 @@ public class JavaVisitor extends ASTVisitor {
 	}
 
 	protected Type buildType(ITypeBinding itb) {
+		astCount++;
 		if (itb.getTypeDeclaration() != null)
 			itb = itb.getTypeDeclaration();
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
@@ -624,6 +635,7 @@ public class JavaVisitor extends ASTVisitor {
 	}
 
 	private List<Modifier> buildModifiers(List<?> modifiers) {
+		astCount += modifiers.size();
 		List<Modifier> ms = new ArrayList<Modifier>();
 		Set<String> names = new HashSet<String>();
 		for (Object m : modifiers) {
@@ -650,6 +662,7 @@ public class JavaVisitor extends ASTVisitor {
 	}
 	
 	private List<Modifier> visitAnnotationsList(List<?> annotations) {
+		astCount += annotations.size();
 		List<Modifier> ms = new ArrayList<Modifier>();
 		Set<String> names = new HashSet<String>();
 		for (Object a : annotations) {
@@ -667,6 +680,7 @@ public class JavaVisitor extends ASTVisitor {
 	}
 	
 	private Variable.Builder build(SingleVariableDeclaration svd, TypeKind kind) {
+		astCount += 2;
 		Variable.Builder vb = Variable.newBuilder();
 		vb.setName(svd.getName().getFullyQualifiedName());
 		if (svd.isVarargs()) {
@@ -700,10 +714,12 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(MethodDeclaration node) {
+		astCount++;
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
 		if (node.isConstructor())
 			b.setName("<init>");
+//			b.setName(node.getName().getFullyQualifiedName());
 		else {
 			b.setName(node.getName().getFullyQualifiedName());
 			
@@ -785,8 +801,8 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(AnnotationTypeMemberDeclaration node) {
+		astCount++;
 		setAstLevel(JLS3);
-		
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
 		b.setName(node.getName().getFullyQualifiedName());
@@ -814,6 +830,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(FieldDeclaration node) {
+		astCount++;
 		List<boa.types.Ast.Variable> list = fields.peek();
 		for (Object o : node.fragments()) {
 			VariableDeclarationFragment f = (VariableDeclarationFragment)o;
@@ -846,8 +863,8 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(EnumConstantDeclaration node) {
+		astCount++;
 		setAstLevel(JLS3);
-		
 		List<boa.types.Ast.Variable> list = fields.peek();
 		Variable.Builder b = Variable.newBuilder();
 		b.setName(node.getName().getIdentifier());
@@ -876,8 +893,8 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(MarkerAnnotation node) {
+		astCount++;
 		setAstLevel(JLS3);
-		
 		String name = node.getTypeName().getFullyQualifiedName();
 		if (name.equals("SafeVarargs") || name.equals("SuppressWarnings"))
 			setAstLevel(JLS4);
@@ -888,8 +905,8 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(SingleMemberAnnotation node) {
+		astCount++;
 		setAstLevel(JLS3);
-		
 		String name = node.getTypeName().getFullyQualifiedName();
 		if (name.equals("SafeVarargs") || name.equals("SuppressWarnings"))
 			setAstLevel(JLS4);
@@ -912,8 +929,8 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(NormalAnnotation node) {
+		astCount++;
 		setAstLevel(JLS3);
-		
 		String name = node.getTypeName().getFullyQualifiedName();
 		if (name.equals("SafeVarargs") || name.equals("SuppressWarnings"))
 			setAstLevel(JLS4);
@@ -939,6 +956,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(org.eclipse.jdt.core.dom.Modifier node) {
+		astCount++;
 		boa.types.Ast.Modifier.Builder b = boa.types.Ast.Modifier.newBuilder();
 		if (node.isPublic()) {
 			b.setKind(boa.types.Ast.Modifier.ModifierKind.VISIBILITY);
@@ -990,8 +1008,8 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(AssertStatement node) {
+		astCount++;
 		setAstLevel(JLS2);
-		
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.ASSERT);
@@ -1007,6 +1025,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(Block node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
@@ -1022,6 +1041,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(BreakStatement node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BREAK);
@@ -1037,6 +1057,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(CatchClause node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.CATCH);
@@ -1053,6 +1074,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ConstructorInvocation node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
@@ -1087,6 +1109,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ContinueStatement node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.CONTINUE);
@@ -1102,6 +1125,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(DoStatement node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.DO);
@@ -1117,6 +1141,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(EmptyStatement node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EMPTY);
@@ -1126,8 +1151,8 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(EnhancedForStatement node) {
+		astCount++;
 		setAstLevel(JLS3);
-		
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.FOREACH);
@@ -1145,6 +1170,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ExpressionStatement node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
@@ -1156,6 +1182,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ForStatement node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.FOR);
@@ -1181,6 +1208,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(IfStatement node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.IF);
@@ -1202,6 +1230,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(Initializer node) {
+		astCount++;
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
 		b.setName("<clinit>");
@@ -1222,6 +1251,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(LabeledStatement node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.LABEL);
@@ -1239,6 +1269,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ReturnStatement node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.RETURN);
@@ -1252,6 +1283,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(SuperConstructorInvocation node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
@@ -1291,6 +1323,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(SwitchCase node) {
+		astCount++;
 		if (node.getExpression() instanceof StringLiteral)
 			setAstLevel(JLS4);
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
@@ -1309,6 +1342,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(SwitchStatement node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.SWITCH);
@@ -1325,6 +1359,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(SynchronizedStatement node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.SYNCHRONIZED);
@@ -1341,6 +1376,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ThrowStatement node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.THROW);
@@ -1352,6 +1388,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(TryStatement node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.TRY);
@@ -1375,6 +1412,7 @@ public class JavaVisitor extends ASTVisitor {
 	}
 
 	private void visitFinally(Block node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.FINALLY);
@@ -1388,6 +1426,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(TypeDeclarationStatement node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.TYPEDECL);
@@ -1401,6 +1440,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(VariableDeclarationStatement node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
@@ -1417,6 +1457,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(WhileStatement node) {
+		astCount++;
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.WHILE);
@@ -1435,6 +1476,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ArrayAccess node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveTypeBinding() != null) {
 			b.setReturnType(buildType(node.resolveTypeBinding()));
@@ -1450,6 +1492,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ArrayCreation node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveTypeBinding() != null) {
 			b.setReturnType(buildType(node.resolveTypeBinding()));
@@ -1474,6 +1517,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ArrayInitializer node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveTypeBinding() != null) {
 			b.setReturnType(buildType(node.resolveTypeBinding()));
@@ -1497,6 +1541,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(Assignment node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		node.getLeftHandSide().accept(this);
 		b.addExpressions(expressions.pop());
@@ -1532,6 +1577,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(BooleanLiteral node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		if (node.booleanValue())
@@ -1544,6 +1590,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(CastExpression node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.CAST);
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
@@ -1559,6 +1606,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(CharacterLiteral node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		b.setLiteral(node.getEscapedValue());
@@ -1568,6 +1616,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ClassInstanceCreation node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEW);
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
@@ -1605,6 +1654,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ConditionalExpression node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.CONDITIONAL);
 		node.getExpression().accept(this);
@@ -1619,6 +1669,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(FieldAccess node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveFieldBinding() != null) {
 			IVariableBinding vb = node.resolveFieldBinding();
@@ -1638,6 +1689,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(SimpleName node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveBinding() != null) {
 			if (node.resolveBinding() instanceof IVariableBinding) {
@@ -1659,6 +1711,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(QualifiedName node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveBinding() != null && node.resolveBinding() instanceof IVariableBinding) {
 			IVariableBinding vb = (IVariableBinding) node.resolveBinding();
@@ -1678,6 +1731,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(InfixExpression node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.getOperator() == InfixExpression.Operator.AND)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_AND);
@@ -1747,6 +1801,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(InstanceofExpression node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.TYPECOMPARE);
 		node.getLeftOperand().accept(this);
@@ -1762,6 +1817,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(MethodInvocation node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveMethodBinding() != null) {
 			IMethodBinding mb = node.resolveMethodBinding();
@@ -1797,6 +1853,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(NullLiteral node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		b.setLiteral("null");
@@ -1806,6 +1863,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(NumberLiteral node) {
+		astCount++;
 		if (node.getToken().toLowerCase().startsWith("0b"))
 			setAstLevel(JLS4);
 		if (node.getToken().contains("_"))
@@ -1819,6 +1877,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ParenthesizedExpression node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.PAREN);
 		node.getExpression().accept(this);
@@ -1829,6 +1888,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(PostfixExpression node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.getOperator() == PostfixExpression.Operator.DECREMENT)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_DEC);
@@ -1843,6 +1903,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(PrefixExpression node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.getOperator() == PrefixExpression.Operator.DECREMENT)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_DEC);
@@ -1864,6 +1925,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(StringLiteral node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		b.setLiteral(node.getEscapedValue());
@@ -1873,6 +1935,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(SuperFieldAccess node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveFieldBinding() != null) {
 			IVariableBinding vb = node.resolveFieldBinding();
@@ -1897,6 +1960,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(SuperMethodInvocation node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveMethodBinding() != null) {
 			IMethodBinding mb = node.resolveMethodBinding();
@@ -1931,6 +1995,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ThisExpression node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveTypeBinding() != null) {
 			b.setReturnType(buildType(node.resolveTypeBinding()));
@@ -1946,6 +2011,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(TypeLiteral node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveTypeBinding() != null) {
 			b.setReturnType(buildType(node.resolveTypeBinding()));
@@ -1958,6 +2024,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(VariableDeclarationExpression node) {
+		astCount++;
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.VARDECL);
 		for (Object o : node.fragments()) {
@@ -1971,8 +2038,8 @@ public class JavaVisitor extends ASTVisitor {
 	// begin java 8
 	@Override
 	public boolean visit(LambdaExpression node) {
+		astCount++;
 		setAstLevel(AST.JLS8);
-		
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LAMBDA);
         if (!node.hasParentheses())
@@ -2015,8 +2082,8 @@ public class JavaVisitor extends ASTVisitor {
 	
 	@Override
 	public boolean visit(CreationReference node) {
+		astCount++;
 		setAstLevel(AST.JLS8);
-		
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveMethodBinding() != null) {
 			IMethodBinding mb = node.resolveMethodBinding();
@@ -2049,8 +2116,8 @@ public class JavaVisitor extends ASTVisitor {
 	
 	@Override
 	public boolean visit(ExpressionMethodReference node) {
+		astCount++;
 		setAstLevel(AST.JLS8);
-		
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveMethodBinding() != null) {
 			IMethodBinding mb = node.resolveMethodBinding();
@@ -2080,8 +2147,8 @@ public class JavaVisitor extends ASTVisitor {
 	
 	@Override
 	public boolean visit(SuperMethodReference node) {
+		astCount++;
 		setAstLevel(AST.JLS8);
-		
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveMethodBinding() != null) {
 			IMethodBinding mb = node.resolveMethodBinding();
@@ -2113,8 +2180,8 @@ public class JavaVisitor extends ASTVisitor {
 	
 	@Override
 	public boolean visit(TypeMethodReference node) {
+		astCount++;
 		setAstLevel(AST.JLS8);
-		
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveMethodBinding() != null) {
 			IMethodBinding mb = node.resolveMethodBinding();

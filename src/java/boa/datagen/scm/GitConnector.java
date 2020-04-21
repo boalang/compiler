@@ -48,7 +48,6 @@ import boa.types.Diff.ChangedFile;
 import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 
-
 /**
  * @author rdyer
  * @author josephb
@@ -59,14 +58,13 @@ public class GitConnector extends AbstractConnector {
 	private Repository repository;
 	private Git git;
 	private RevWalk revwalk;
+	private long repoKey;
 
 	public GitConnector(final String path, String projectName) {
 		this.projectName = projectName;
 		try {
 			this.path = path;
-			this.repository = new FileRepositoryBuilder()
-								.setGitDir(new File(path + "/.git"))
-								.build();
+			this.repository = new FileRepositoryBuilder().setGitDir(new File(path)).build();
 			this.git = new Git(this.repository);
 			this.revwalk = new RevWalk(this.repository);
 		} catch (final IOException e) {
@@ -75,7 +73,8 @@ public class GitConnector extends AbstractConnector {
 		}
 	}
 
-	public GitConnector(String path, String projectName, Writer astWriter, long astWriterLen, Writer commitWriter, long commitWriterLen, Writer contentWriter, long contentWriterLen) {
+	public GitConnector(String path, String projectName, Writer astWriter, long astWriterLen, Writer commitWriter,
+			long commitWriterLen, Writer contentWriter, long contentWriterLen, long repoKey) {
 		this(path, projectName);
 		this.astWriter = astWriter;
 		this.commitWriter = commitWriter;
@@ -83,6 +82,7 @@ public class GitConnector extends AbstractConnector {
 		this.astWriterLen = astWriterLen;
 		this.commitWriterLen = commitWriterLen;
 		this.contentWriterLen = contentWriterLen;
+		this.repoKey = repoKey;
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class GitConnector extends AbstractConnector {
 		revwalk.close();
 		repository.close();
 	}
-	
+
 	public void countChangedFiles(List<String> commits, Map<String, Integer> counts) {
 		RevWalk temprevwalk = new RevWalk(repository);
 		try {
@@ -100,9 +100,9 @@ public class GitConnector extends AbstractConnector {
 			revwalk.sort(RevSort.TOPO, true);
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
-			for (final RevCommit rc: revwalk) {
-				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName);
-				System.out.println(rc.getName());
+			for (final RevCommit rc : revwalk) {
+				System.out.println(rc.getId());
+				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName, repoKey, objectIdToRevisionIdx, -1);
 				commits.add(rc.getName());
 				int count = gc.countChangedFiles(rc);
 				counts.put(rc.getName(), count);
@@ -115,20 +115,35 @@ public class GitConnector extends AbstractConnector {
 			temprevwalk.close();
 		}
 	}
+	
+	// file object id tracker for entire commit history
+	Map<String, List<FileLoc>> objectIdToRevisionIdx = new HashMap<String, List<FileLoc>>();
+	
+	public static class FileLoc {
+		int revisionIdx;
+		int locIdx;
+		ChangeKind kind;
+		FileLoc(int revisionIdx, int locIdx, ChangeKind kind) {
+			this.revisionIdx = revisionIdx;
+			this.locIdx = locIdx;
+			this.kind = kind;
+		}
+	}
 
 	@Override
 	public void setRevisions() {
 		RevWalk temprevwalk = new RevWalk(repository);
 		try {
 			revwalk.reset();
-			Set<RevCommit> heads = getHeads();
+			Set<RevCommit> heads = getHeads(); // all branches
+//			RevCommit heads = revwalk.parseCommit(repository.resolve(Constants.HEAD)); // main branch
 			revwalk.markStart(heads);
 			revwalk.sort(RevSort.TOPO, true);
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
-			
+
 			revisionMap = new HashMap<String, Integer>();
-			
+
 			int i = 0;
 			long maxTime = 1000;
 			List<RevCommit> commitList = new ArrayList<RevCommit>();
@@ -136,22 +151,23 @@ public class GitConnector extends AbstractConnector {
 				commitList.add(rc);
 			}
 			if (commitList.size() > MAX_COMMITS) {
-				System.err.println(projectName + " has " + commitList.size() + " commits " + " exceeding the maximum commit size of " + MAX_COMMITS);
-//				return;
+				System.err.println(projectName + " has " + commitList.size() + " commits "
+						+ " exceeding the maximum commit size of " + MAX_COMMITS);
 			}
+
+			for (final RevCommit rc : commitList) {
 				
-			for (final RevCommit rc: commitList) {
-				i++;
 				long startTime = System.currentTimeMillis();
-				
-				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName);
-				
+
+				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName, repoKey, objectIdToRevisionIdx, i);
+
 				gc.setId(rc.getName());
 				try {
 					PersonIdent author = rc.getAuthorIdent();
 					if (author != null)
 						gc.setAuthor(author.getName(), null, author.getEmailAddress());
-				} catch (Exception e) {}
+				} catch (Exception e) {
+				}
 				try {
 					PersonIdent committer = rc.getCommitterIdent();
 					gc.setCommitter(committer.getName(), null, committer.getEmailAddress());
@@ -161,36 +177,41 @@ public class GitConnector extends AbstractConnector {
 				gc.setDate(new Date(((long) rc.getCommitTime()) * 1000));
 				try {
 					gc.setMessage(rc.getFullMessage());
-				} catch (Exception e) {}
+				} catch (Exception e) {
+				}
 				
-				gc.getChangeFiles(rc);
+				gc.updateChangedFiles(rc);
 				gc.fileNameIndices.clear();
-				
+
 				if (commitList.size() > MAX_COMMITS) {
 					revisionMap.put(gc.id, revisionKeys.size());
-					
+
 					Revision revision = gc.asProtobuf(projectName);
+					
 					revisionKeys.add(commitWriterLen);
 					BytesWritable bw = new BytesWritable(revision.toByteArray());
 					commitWriter.append(new LongWritable(commitWriterLen), bw);
 					commitWriterLen += bw.getLength();
 				} else {
 					revisionMap.put(gc.id, revisions.size());
-					
+
 					revisions.add(gc);
 				}
 				
+				i++;
 				if (debug) {
 					long endTime = System.currentTimeMillis();
 					long time = endTime - startTime;
 					if (time > maxTime) {
-						System.out.println(Thread.currentThread().getId() + " Max time " + (time / 1000) + " parsing metadata commit " + i + " " + rc.getName());
+						System.out.println(Thread.currentThread().getId() + " Max time " + (time / 1000)
+								+ " parsing metadata commit " + i + " " + rc.getName());
 						maxTime = time;
 					}
 				}
 			}
-			System.out.println(Thread.currentThread().getId() + " Process metadata of all commits");
 			
+			System.err.println(Thread.currentThread().getId() + " Process metadata of all commits");
+
 			RevCommit head = revwalk.parseCommit(repository.resolve(Constants.HEAD));
 			headCommitOffset = revisionMap.get(head.getName());
 			getBranches();
@@ -208,12 +229,13 @@ public class GitConnector extends AbstractConnector {
 		Set<RevCommit> heads = new HashSet<RevCommit>();
 		try {
 			for (final Ref ref : git.branchList().call()) {
-				heads.add(revwalk.parseCommit(repository.resolve(ref.getName())));
+				RevCommit r = revwalk.parseCommit(repository.resolve(ref.getName()));
+				heads.add(r);
 			}
 		} catch (final GitAPIException e) {
 			if (debug)
 				System.err.println("Git Error reading heads: " + e.getMessage());
-		}catch (final IOException e) {
+		} catch (final IOException e) {
 			if (debug)
 				System.err.println("Git Error reading heads: " + e.getMessage());
 		}
@@ -268,7 +290,11 @@ public class GitConnector extends AbstractConnector {
 					cfb.setKind(FileKind.OTHER);
 					cfb.setKey(0);
 					cfb.setAst(false);
-					GitCommit gc = new GitCommit(this, repository, revwalk, projectName);
+					if (!STORE_ASTS) {
+						cfb.setObjectId(tw.getObjectId(0).getName());
+						cfb.setRepoKey(repoKey);
+					}
+					GitCommit gc = new GitCommit(this, repository, revwalk, projectName, repoKey, objectIdToRevisionIdx, -1);
 					gc.filePathGitObjectIds.put(path, tw.getObjectId(0));
 					gc.processChangeFile(cfb);
 					snapshot.add(cfb.build());
@@ -278,7 +304,7 @@ public class GitConnector extends AbstractConnector {
 			System.err.println(e.getMessage());
 		}
 		tw.close();
-		
+
 		return snapshot;
 	}
 
@@ -302,7 +328,7 @@ public class GitConnector extends AbstractConnector {
 		tw.close();
 		return snapshot;
 	}
-	
+
 	public List<String> logCommitIds() {
 		List<String> commits = new ArrayList<String>();
 		RevWalk temprevwalk = new RevWalk(repository);
@@ -313,8 +339,8 @@ public class GitConnector extends AbstractConnector {
 			revwalk.sort(RevSort.TOPO, true);
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
-			
-			for (final RevCommit rc: revwalk)
+
+			for (final RevCommit rc : revwalk)
 				commits.add(rc.getName());
 		} catch (final IOException e) {
 			e.printStackTrace();

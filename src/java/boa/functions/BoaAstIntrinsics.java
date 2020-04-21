@@ -17,15 +17,17 @@
  */
 package boa.functions;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import com.google.protobuf.CodedInputStream;
-import com.google.protobuf.InvalidProtocolBufferException;
-
+import org.apache.commons.lang.SerializationUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -34,24 +36,25 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.MapFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper.Context;
-import org.eclipse.jdt.core.JavaCore;
+
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jgit.internal.storage.file.ByteArrayFile;
+import org.eclipse.jgit.internal.storage.file.ByteArrayRepositoryBuilder;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jdt.core.JavaCore;
+
+import com.google.protobuf.CodedInputStream;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 import boa.datagen.DefaultProperties;
 import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.JavaVisitor;
-import boa.types.Ast.ASTRoot;
-import boa.types.Ast.CommentsRoot;
-import boa.types.Ast.Declaration;
-import boa.types.Ast.Expression;
-import boa.types.Ast.Method;
-import boa.types.Ast.Modifier;
-import boa.types.Ast.Namespace;
-import boa.types.Ast.Statement;
-import boa.types.Ast.Type;
-import boa.types.Ast.TypeKind;
-import boa.types.Ast.Variable;
+import boa.types.Ast.*;
+import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -69,7 +72,7 @@ import boa.types.Toplevel.Project;
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	static Context context;
-	private static MapFile.Reader map, commentsMap, issuesMap;
+	private static MapFile.Reader map, commitsMap, reposMap, commentsMap, issuesMap, refactoringsMap, refactoringIdsMap;
 
 	private static final Revision emptyRevision;
 	static {
@@ -82,25 +85,13 @@ public class BoaAstIntrinsics {
 		rb.setLog("");
 		emptyRevision = rb.build();
 	}
-	
-	private static MapFile.Reader commitMap;
 
 	public static enum COMMITCOUNTER {
-		GETS_ATTEMPTED,
-		GETS_SUCCEED,
-		GETS_FAILED,
-		GETS_FAIL_MISSING,
-		GETS_FAIL_BADPROTOBUF,
-		GETS_FAIL_BADLOC,
+		GETS_ATTEMPTED, GETS_SUCCEED, GETS_FAILED, GETS_FAIL_MISSING, GETS_FAIL_BADPROTOBUF, GETS_FAIL_BADLOC,
 	};
 
 	public static enum ASTCOUNTER {
-		GETS_ATTEMPTED,
-		GETS_SUCCEED,
-		GETS_FAILED,
-		GETS_FAIL_MISSING,
-		GETS_FAIL_BADPROTOBUF,
-		GETS_FAIL_BADLOC,
+		GETS_ATTEMPTED, GETS_SUCCEED, GETS_FAILED, GETS_FAIL_MISSING, GETS_FAIL_BADPROTOBUF, GETS_FAIL_BADLOC,
 	};
 
 	@FunctionSpec(name = "url", returnType = "string", formalParameters = { "ChangedFile" })
@@ -108,7 +99,7 @@ public class BoaAstIntrinsics {
 		return f.getKey() + "!!" + f.getName();
 	}
 
-	private static final ASTRoot emptyAst = ASTRoot.newBuilder().build();
+	private static final ASTRoot emptyAst = ASTRoot.newBuilder().setAstCount(0).build();
 	private static final CommentsRoot emptyComments = CommentsRoot.newBuilder().build();
 	private static final IssuesRoot emptyIssues = IssuesRoot.newBuilder().build();
 
@@ -120,26 +111,205 @@ public class BoaAstIntrinsics {
 	 */
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "ChangedFile" })
-	public static ASTRoot getast(final ChangedFile f) {
-		if (!f.getAst())
-			return emptyAst;
-
+	public static ASTRoot getast(ChangedFile f) {
 		context.getCounter(ASTCOUNTER.GETS_ATTEMPTED).increment(1);
 
-		if (map == null)
-			openMap();
+		// check new model
+		if (f.hasRepoKey() && f.hasObjectId()) {
+			ASTRoot r = getASTRoot(f);
+			if (r != emptyAst)
+				return r;
+			System.err.print(" [New Model Getast] ");
+		} else {
+			if (map == null)
+				openMap();
 
-		try {
-			final BytesWritable value = new BytesWritable();
-			if (map.get(new LongWritable(f.getKey()), value) == null) {
+			try {
+				final BytesWritable value = new BytesWritable();
+				if (map.get(new LongWritable(f.getKey()), value) == null) {
+					context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
+				} else {
+					final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0,
+							value.getLength());
+					// defaults to 64, really big ASTs require more
+					_stream.setRecursionLimit(Integer.MAX_VALUE);
+					final ASTRoot root = ASTRoot.parseFrom(_stream);
+					context.getCounter(ASTCOUNTER.GETS_SUCCEED).increment(1);
+					return root;
+				}
+			} catch (final InvalidProtocolBufferException e) {
+				e.printStackTrace();
+				context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+			} catch (final IOException e) {
+				e.printStackTrace();
 				context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
+			} catch (final RuntimeException e) {
+				e.printStackTrace();
+				context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
+			} catch (final Error e) {
+				e.printStackTrace();
+				context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+			}
+		}
+
+		System.err.println("parsing error at ChangedFile: " + f.getName() 
+							+ " at RevIdx: " + f.getRevisionIdx()
+							+ " at FileIdx: " + f.getFileIdx()
+							+ " with FileChange: " + f.getChange() 
+							+ " with repo key: " + f.getKey());
+		
+		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
+		return emptyAst;
+	}
+
+	@FunctionSpec(name = "getastcount", returnType = "int", formalParameters = { "ChangedFile" })
+	public static int getAstCount(ChangedFile f) {
+		return getast(f).getAstCount();
+	}
+
+	public static ASTRoot getASTRoot(ChangedFile f) {
+		// if ChangedFile contains ast root
+		if (f.hasRoot())
+			return f.getRoot();
+		return getASTRoot(getContent(f));
+	}
+
+	public static final ASTRoot getASTRoot(final String content) {
+		if (content == null) {
+			System.err.print(" [Null Content] ");
+			return emptyAst;
+		}
+		try {
+			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
+			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
+			parser.setSource(content.toCharArray());
+
+			final Map<?, ?> options = JavaCore.getOptions();
+			JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+			parser.setCompilerOptions(options);
+
+			final CompilationUnit cu;
+			try {
+				cu = (CompilationUnit) parser.createAST(null);
+			} catch (Throwable e) {
+				return emptyAst;
+			}
+
+			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
+			cu.accept(errorCheck);
+
+			if (!errorCheck.hasError) {
+				final ASTRoot.Builder ast = ASTRoot.newBuilder();
+				final JavaVisitor visitor = new JavaVisitor(content);
+				try {
+					ast.addNamespaces(visitor.getNamespaces(cu));
+					ast.setAstCount(visitor.getAstCount());
+					return ast.build();
+				} catch (final Throwable e) {
+					System.exit(-1);
+					System.err.print(" [Parser Error] ");
+					return emptyAst;
+				}
 			} else {
-				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
-				// defaults to 64, really big ASTs require more
-				_stream.setRecursionLimit(Integer.MAX_VALUE);
-				final ASTRoot root = ASTRoot.parseFrom(_stream);
+				System.err.print(" [Java Error] ");
+			}
+			return emptyAst;
+		} catch (final Throwable e) {
+			return emptyAst;
+		}
+	}
+
+	private static long currentRepoKey = Long.MIN_VALUE;
+	private static Repository currentStoredRepository = null;
+
+	@FunctionSpec(name = "getcontent", returnType = "string", formalParameters = { "ChangedFile" })
+	public static String getContent(ChangedFile f) {
+		if (f.hasRepoKey() && f.hasObjectId()) {
+			if (f.getObjectId().startsWith("BOA_DELETED_FILE")) {
+				System.err.println(" [BOA_DELETED_FILE] ");
+				return null;
+			}
+			if (f.getRepoKey() != currentRepoKey || currentStoredRepository == null) {
+				currentRepoKey = f.getRepoKey();
+				BytesWritable value = getValueFromRepoMap(f);
+				if (value != null) {
+					ByteArrayFile file = (ByteArrayFile) SerializationUtils.deserialize(value.getBytes());
+					try {
+						cleanup(null);
+						currentStoredRepository = new ByteArrayRepositoryBuilder().setGitDir(file).build();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				} else {
+					System.err.print(" [Repo Map Value Null] ");
+					cleanup(null);
+					return null;
+				}
+			}
+			try {
+				return getContent(currentStoredRepository, f.getObjectId());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		System.err.print(" [No reposkey or objectid] ");
+		return null;
+	}
+
+	@FunctionSpec(name = "closerepo")
+	public static void closeRepo() {
+		if (currentStoredRepository != null) {
+			currentStoredRepository.close();
+			currentStoredRepository = null;
+		}
+	}
+
+	public static final String getContent(Repository repo, String oid) throws IOException {
+		if (repo == null) {
+			System.err.println("repo null");
+			return null;
+		}
+		ObjectId fileid = ObjectId.fromString(oid);
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
+		String content;
+		try {
+			buffer.reset();
+			byte[] arr = repo.open(fileid, Constants.OBJ_BLOB).getCachedBytes();
+			buffer.write(arr);
+			content = buffer.toString();
+			return content;
+		} catch (final Throwable e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			buffer.flush();
+			buffer.close();
+		}
+	}
+
+	@FunctionSpec(name = "getParsedChangedFile", returnType = "ChangedFile", formalParameters = { "ChangedFile" })
+	public static ChangedFile getParsedChangedFile(ChangedFile f) {
+		ASTRoot ast = getASTRoot(f);
+		if (ast != emptyAst)
+			return f.toBuilder().setRoot(ast).setAst(true).build();
+		else {
+			System.err.println(" [getParsedChangedFile: emptyAst] " + f.getName());
+			return null;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static final BytesWritable getValueFromRepoMap(ChangedFile f) {
+		if (reposMap == null)
+			openRepoMap();
+		try {
+			BytesWritable value = new BytesWritable();
+			if (reposMap.get(new LongWritable(f.getRepoKey()), value) == null) {
+				context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
+				return null;
+			} else {
 				context.getCounter(ASTCOUNTER.GETS_SUCCEED).increment(1);
-				return root;
+				return value;
 			}
 		} catch (final InvalidProtocolBufferException e) {
 			e.printStackTrace();
@@ -154,22 +324,19 @@ public class BoaAstIntrinsics {
 			e.printStackTrace();
 			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
 		}
-
-		System.err.println("error with ast: " + f.getKey() + " from " + f.getName());
-		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
-		return emptyAst;
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	static Revision getRevision(long key) {
 		context.getCounter(COMMITCOUNTER.GETS_ATTEMPTED).increment(1);
-		
-		if (commitMap == null)
+
+		if (commitsMap == null)
 			openCommitMap();
-		
+
 		try {
 			final BytesWritable value = new BytesWritable();
-			if (commitMap.get(new LongWritable(key), value) == null) {
+			if (commitsMap.get(new LongWritable(key), value) == null) {
 				context.getCounter(COMMITCOUNTER.GETS_FAIL_MISSING).increment(1);
 			} else {
 				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
@@ -208,10 +375,8 @@ public class BoaAstIntrinsics {
 	public static CommentsRoot getcomments(final ChangedFile f) {
 		// since we know only certain kinds have comments, filter before looking up
 		final ChangedFile.FileKind kind = f.getKind();
-		if (kind != ChangedFile.FileKind.SOURCE_JAVA_ERROR
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS2
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS3
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4
+		if (kind != ChangedFile.FileKind.SOURCE_JAVA_ERROR && kind != ChangedFile.FileKind.SOURCE_JAVA_JLS2
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS3 && kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS8)
 			return emptyComments;
 
@@ -277,6 +442,95 @@ public class BoaAstIntrinsics {
 	public static void setup(final Context context) {
 		BoaAstIntrinsics.context = context;
 	}
+	
+	@FunctionSpec(name = "get_code_change", returnType = "Change", formalParameters = { "Project",
+			"Revision" })
+	public static boa.types.Code.Change getCodeChange(Project p, Revision r) {
+
+		if (refactoringsMap == null)
+			openRefactoringMap();
+
+		try {
+			final BytesWritable value = new BytesWritable();
+			if (refactoringsMap.get(new Text(p.getName() + " " + r.getId()), value) != null) {
+				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+				// defaults to 64, really big ASTs require more
+				_stream.setRecursionLimit(Integer.MAX_VALUE);
+				final boa.types.Code.Change change = boa.types.Code.Change.parseFrom(_stream);
+				return change;
+			}
+		} catch (final Throwable e) {
+			e.printStackTrace();
+		}
+		return boa.types.Code.Change.newBuilder().build();
+	}
+
+	private static void openRefactoringMap() {
+		try {
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localDataPath, "refactoring");
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"), new Path(
+						conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("refactoring")));
+				fs = FileSystem.get(conf);
+			}
+			refactoringsMap = new MapFile.Reader(fs, p.toString(), conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@FunctionSpec(name = "getrefactoringidsinset", returnType = "set of string", formalParameters = { "Project" })
+	public static HashSet<String> getRefactoringIdsInSet(Project p) {
+		return new HashSet<String>(Arrays.asList(getRefactoringIds(p)));
+	}
+	
+	
+	
+	@FunctionSpec(name = "getrefactoringids", returnType = "array of string", formalParameters = { "Project" })
+	public static String[] getRefactoringIds(Project p) {
+	
+		if (refactoringIdsMap == null)
+			openRefactoringIdMap();
+		
+		try {
+			final BytesWritable value = new BytesWritable();
+			if (refactoringIdsMap.get(new Text(p.getName()), value) != null) {
+				// use array copy to avoid extra bytes
+				byte[] data = Arrays.copyOf(value.getBytes(), value.getLength());
+				String[] temp = new String(data, StandardCharsets.UTF_8).split("\\r?\\n");
+				return temp;
+			}
+		} catch (final Throwable e) {
+			e.printStackTrace();
+		} finally {
+			closeRefactoringIdsMap();
+		}
+		return new String[0];
+	}
+
+	private static void openRefactoringIdMap() {
+		try {
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localDataPath, "refactoringId");
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+						new Path(conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("refactoringId")));
+				fs = FileSystem.get(conf);
+			}
+			refactoringIdsMap = new MapFile.Reader(fs, p.toString(), conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	private static void openMap() {
 		try {
@@ -287,16 +541,31 @@ public class BoaAstIntrinsics {
 				p = new Path(DefaultProperties.localDataPath, "ast");
 				fs = FileSystem.getLocal(conf);
 			} else {
-				p = new Path(
-					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
-					new Path(
-						conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")),
-						new Path("ast")
-					)
-				);
+				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+						new Path(conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("ast")));
 				fs = FileSystem.get(conf);
 			}
 			map = new MapFile.Reader(fs, p.toString(), conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void openRepoMap() {
+		try {
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localDataPath, "repo");
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"), new Path(
+						conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("repo")));
+				fs = FileSystem.get(conf);
+			}
+			reposMap = new MapFile.Reader(fs, p.toString(), conf);
+			System.err.println(" [open repo map] ");
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -311,13 +580,9 @@ public class BoaAstIntrinsics {
 				p = new Path(DefaultProperties.localDataPath, "comments");
 				fs = FileSystem.getLocal(conf);
 			} else {
-				p = new Path(
-					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
-					new Path(
-						conf.get("boa.comments.dir", conf.get("boa.input.dir", "repcache/live")),
-						new Path("comments")
-					)
-				);
+				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+						new Path(conf.get("boa.comments.dir", conf.get("boa.input.dir", "repcache/live")),
+								new Path("comments")));
 				fs = FileSystem.get(conf);
 			}
 			commentsMap = new MapFile.Reader(fs, p.toString(), conf);
@@ -335,13 +600,8 @@ public class BoaAstIntrinsics {
 				p = new Path(DefaultProperties.localDataPath, "issues");
 				fs = FileSystem.getLocal(conf);
 			} else {
-				p = new Path(
-					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
-					new Path(
-						conf.get("boa.issues.dir", conf.get("boa.input.dir", "repcache/live")),
-						new Path("issues")
-					)
-				);
+				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"), new Path(
+						conf.get("boa.issues.dir", conf.get("boa.input.dir", "repcache/live")), new Path("issues")));
 				fs = FileSystem.get(conf);
 			}
 			issuesMap = new MapFile.Reader(fs, p.toString(), conf);
@@ -359,11 +619,11 @@ public class BoaAstIntrinsics {
 				p = new Path(DefaultProperties.localDataPath, "commit");
 				fs = FileSystem.getLocal(conf);
 			} else {
-				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
-						new Path(conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("commit")));
+				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"), new Path(
+						conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("commit")));
 				fs = FileSystem.get(conf);
 			}
-			commitMap = new MapFile.Reader(fs, p.toString(), conf);
+			commitsMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -371,60 +631,75 @@ public class BoaAstIntrinsics {
 
 	@SuppressWarnings("rawtypes")
 	public static void cleanup(final Context context) {
+		closeRepo();
+		closeAllMaps();
+		System.gc();
+	}
+	
+	public static void closeAllMaps() {
 		closeMap();
-		closeCommentMap();
+		closeReposMap();
+		closeCommentsMap();
 		closeIssuesMap();
-		closeCommitMap();
+		closeCommitsMap();
+		closeRefactoringsMap();
+		closeRefactoringIdsMap();
+	}
+	
+	@FunctionSpec(name = "clean_up")
+	public static void cleanup() {
+		cleanup(null);
 	}
 
-	private static void closeMap() {
+	private static void closeMap(MapFile.Reader map) {
 		if (map != null)
 			try {
 				map.close();
 			} catch (final IOException e) {
 				e.printStackTrace();
 			}
+	}
+	
+	private static void closeMap() {
+		closeMap(map);
 		map = null;
 	}
-
-	private static void closeCommentMap() {
-		if (commentsMap != null)
-			try {
-				commentsMap.close();
-			} catch (final IOException e) {
-				e.printStackTrace();
-			}
+	
+	private static void closeReposMap() {
+		closeMap(reposMap);
+		reposMap = null;
+	}
+	
+	private static void closeCommentsMap() {
+		closeMap(commentsMap);
 		commentsMap = null;
 	}
-
+	
 	private static void closeIssuesMap() {
-		if (issuesMap != null)
-			try {
-				issuesMap.close();
-			} catch (final IOException e) {
-				e.printStackTrace();
-			}
+		closeMap(issuesMap);
 		issuesMap = null;
 	}
-
-	private static void closeCommitMap() {
-		if (commitMap != null)
-			try {
-				commitMap.close();
-			} catch (final IOException e) {
-				e.printStackTrace();
-			}
-		commitMap = null;
+	
+	private static void closeCommitsMap() {
+		closeMap(commitsMap);
+		commitsMap = null;
+	}
+	
+	private static void closeRefactoringsMap() {
+		closeMap(refactoringsMap);
+		refactoringsMap = null;
+	}
+	
+	private static void closeRefactoringIdsMap() {
+		closeMap(refactoringIdsMap);
+		refactoringIdsMap = null;
 	}
 
 	@FunctionSpec(name = "type_name", returnType = "string", formalParameters = { "string" })
 	public static String type_name(final String s) {
 		// first, normalize the string
-		final String t = s.replaceAll("<\\s+", "<")
-			.replaceAll(",\\s+", ", ")
-			.replaceAll("\\s*>\\s*", ">")
-			.replaceAll("\\s*&\\s*", " & ")
-			.replaceAll("\\s*\\|\\s*", " | ");
+		final String t = s.replaceAll("<\\s+", "<").replaceAll(",\\s+", ", ").replaceAll("\\s*>\\s*", ">")
+				.replaceAll("\\s*&\\s*", " & ").replaceAll("\\s*\\|\\s*", " | ");
 
 		if (!t.contains("."))
 			return t;
@@ -432,16 +707,11 @@ public class BoaAstIntrinsics {
 		/*
 		 * Remove qualifiers from anywhere in the string...
 		 *
-		 * SomeType                               =>  SomeType
-		 * foo.SomeType                           =>  SomeType
-		 * foo.bar.SomeType                       =>  SomeType
-		 * SomeType<T>                            =>  SomeType<T>
-		 * SomeType<T, S>                         =>  SomeType<T, S>
-		 * SomeType<foo.bar.T, S>                 =>  SomeType<T, S>
-		 * SomeType<T, foo.bar.S>                 =>  SomeType<T, S>
-		 * foo.bar.SomeType<T, foo.bar.S<bar.Q>>  =>  SomeType<T, S<Q>>
-		 * SomeType|foo.Bar                       =>  SomeType|Bar
-		 * foo<T>.bar<T>                          =>  foo<T>.bar<T>
+		 * SomeType => SomeType foo.SomeType => SomeType foo.bar.SomeType => SomeType
+		 * SomeType<T> => SomeType<T> SomeType<T, S> => SomeType<T, S>
+		 * SomeType<foo.bar.T, S> => SomeType<T, S> SomeType<T, foo.bar.S> =>
+		 * SomeType<T, S> foo.bar.SomeType<T, foo.bar.S<bar.Q>> => SomeType<T, S<Q>>
+		 * SomeType|foo.Bar => SomeType|Bar foo<T>.bar<T> => foo<T>.bar<T>
 		 */
 		return t.replaceAll("[^\\s,<>|]+\\.([^\\s\\[.,><|]+)", "$1");
 	}
@@ -456,31 +726,37 @@ public class BoaAstIntrinsics {
 			count++;
 			return true;
 		}
+
 		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final Project node) throws Exception {
 			return true;
 		}
+
 		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final CodeRepository node) throws Exception {
 			return true;
 		}
+
 		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final Revision node) throws Exception {
 			return true;
 		}
+
 		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final ChangedFile node) throws Exception {
 			return true;
 		}
+
 		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final ASTRoot node) throws Exception {
 			return true;
 		}
+
 		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final Person node) throws Exception {
@@ -547,35 +823,37 @@ public class BoaAstIntrinsics {
 	 * The test is a simplified grammar, based on the one from:
 	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
 	 *
-	 * DecimalNumeral:
-	 * 	[0-9] [lL]?
-	 * 	[1-9] [0-9] ([0-9_]* [0-9])? [lL]?
-	 * 	[1-9] [_]+ [0-9] ([0-9_]* [0-9])? [lL]?
+	 * DecimalNumeral: [0-9] [lL]? [1-9] [0-9] ([0-9_]* [0-9])? [lL]? [1-9] [_]+
+	 * [0-9] ([0-9_]* [0-9])? [lL]?
 	 *
-	 * HexNumeral:
-	 * 	0 [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [lL]?
+	 * HexNumeral: 0 [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [lL]?
 	 *
-	 * OctalNumeral:
-	 * 	0 [_]* [0-7] ([0-7_]* [0-7])? [lL]?
+	 * OctalNumeral: 0 [_]* [0-7] ([0-7_]* [0-7])? [lL]?
 	 *
-	 * BinaryNumeral:
-	 * 	0 [bB] [01] ([01_]* [01])? [lL]?
+	 * BinaryNumeral: 0 [bB] [01] ([01_]* [01])? [lL]?
 	 *
-	 * If any of these match, it returns <code>true</code>.  Otherwise it
-	 * returns <code>false</code>.
+	 * If any of these match, it returns <code>true</code>. Otherwise it returns
+	 * <code>false</code>.
 	 *
 	 * @param e the expression to test
 	 * @return true if the expression is an integer literal, otherwise false
 	 */
 	@FunctionSpec(name = "isintlit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isIntLit(final Expression e) throws Exception {
-		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
-		if (!e.hasLiteral()) return false;
-		if (e.getLiteral().matches("^[0-9][lL]?$")) return true;
-		if (e.getLiteral().matches("^[1-9][0-9]([0-9_]*[0-9])?[lL]?$")) return true;
-		if (e.getLiteral().matches("^[1-9][_]+[0-9]([0-9_]*[0-9])?[lL]?$")) return true;
-		if (e.getLiteral().matches("^0[xX][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[lL]?$")) return true;
-		if (e.getLiteral().matches("^0[_]*[0-7]([0-7_]*[0-7])?[lL]?$")) return true;
+		if (e.getKind() != Expression.ExpressionKind.LITERAL)
+			return false;
+		if (!e.hasLiteral())
+			return false;
+		if (e.getLiteral().matches("^[0-9][lL]?$"))
+			return true;
+		if (e.getLiteral().matches("^[1-9][0-9]([0-9_]*[0-9])?[lL]?$"))
+			return true;
+		if (e.getLiteral().matches("^[1-9][_]+[0-9]([0-9_]*[0-9])?[lL]?$"))
+			return true;
+		if (e.getLiteral().matches("^0[xX][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[lL]?$"))
+			return true;
+		if (e.getLiteral().matches("^0[_]*[0-7]([0-7_]*[0-7])?[lL]?$"))
+			return true;
 		return e.getLiteral().matches("^0[bB][01]([01_]*[01])?[lL]?$");
 	}
 
@@ -586,29 +864,40 @@ public class BoaAstIntrinsics {
 	 * The test is a simplified grammar, based on the one from:
 	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
 	 *
-	 * DecimalFloatingPointLiteral:
-	 *  [0-9] ([0-9_]* [0-9])? \\. ([0-9] ([0-9_]* [0-9])?)? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]?
-	 *  \\. [0-9] ([0-9_]* [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]?
-	 *  [0-9] ([0-9_]* [0-9])? [eE] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
-	 *  [0-9] ([0-9_]* [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]
+	 * DecimalFloatingPointLiteral: [0-9] ([0-9_]* [0-9])? \\. ([0-9] ([0-9_]*
+	 * [0-9])?)? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]? \\. [0-9] ([0-9_]*
+	 * [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]? [0-9] ([0-9_]* [0-9])?
+	 * [eE] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]? [0-9] ([0-9_]* [0-9])? ([eE] [+-]?
+	 * [0-9] ([0-9_]* [0-9])?)? [fFdD]
 	 *
-	 * HexadecimalFloatingPointLiteral:
-	 *  0 [Xx] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? \\.? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
-	 *  0 [Xx] ([0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])?)? \\. [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
+	 * HexadecimalFloatingPointLiteral: 0 [Xx] [0-9a-fA-F] ([0-9a-fA-F_]*
+	 * [0-9a-fA-F])? \\.? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]? 0 [Xx]
+	 * ([0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])?)? \\. [0-9a-fA-F] ([0-9a-fA-F_]*
+	 * [0-9a-fA-F])? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
 	 *
 	 * @param e the expression to test
 	 * @return true if the expression is a char literal, otherwise false
 	 */
 	@FunctionSpec(name = "isfloatlit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isFloatLit(final Expression e) throws Exception {
-		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
-		if (!e.hasLiteral()) return false;
-		if (e.getLiteral().matches("^[0-9]([0-9_]*[0-9])?\\.([0-9]([0-9_]*[0-9])?)?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$")) return true;
-		if (e.getLiteral().matches("^\\.[0-9]([0-9_]*[0-9])?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$")) return true;
-		if (e.getLiteral().matches("^[0-9]([0-9_]*[0-9])?[eE][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$")) return true;
-		if (e.getLiteral().matches("^[0-9]([0-9_]*[0-9])?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]$")) return true;
-		if (e.getLiteral().matches("^0[Xx][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?\\.?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$")) return true;
-		return e.getLiteral().matches("^0[Xx]([0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?)?\\.[0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$");
+		if (e.getKind() != Expression.ExpressionKind.LITERAL)
+			return false;
+		if (!e.hasLiteral())
+			return false;
+		if (e.getLiteral()
+				.matches("^[0-9]([0-9_]*[0-9])?\\.([0-9]([0-9_]*[0-9])?)?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$"))
+			return true;
+		if (e.getLiteral().matches("^\\.[0-9]([0-9_]*[0-9])?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$"))
+			return true;
+		if (e.getLiteral().matches("^[0-9]([0-9_]*[0-9])?[eE][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$"))
+			return true;
+		if (e.getLiteral().matches("^[0-9]([0-9_]*[0-9])?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]$"))
+			return true;
+		if (e.getLiteral()
+				.matches("^0[Xx][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?\\.?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$"))
+			return true;
+		return e.getLiteral().matches(
+				"^0[Xx]([0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?)?\\.[0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$");
 	}
 
 	/**
@@ -620,8 +909,10 @@ public class BoaAstIntrinsics {
 	 */
 	@FunctionSpec(name = "ischarlit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isCharLit(final Expression e) throws Exception {
-		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
-		if (!e.hasLiteral()) return false;
+		if (e.getKind() != Expression.ExpressionKind.LITERAL)
+			return false;
+		if (!e.hasLiteral())
+			return false;
 		return e.getLiteral().startsWith("'");
 	}
 
@@ -634,8 +925,10 @@ public class BoaAstIntrinsics {
 	 */
 	@FunctionSpec(name = "isstringlit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isStringLit(final Expression e) throws Exception {
-		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
-		if (!e.hasLiteral()) return false;
+		if (e.getKind() != Expression.ExpressionKind.LITERAL)
+			return false;
+		if (!e.hasLiteral())
+			return false;
 		return e.getLiteral().startsWith("\"");
 	}
 
@@ -648,8 +941,10 @@ public class BoaAstIntrinsics {
 	 */
 	@FunctionSpec(name = "istypelit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isTypeLit(final Expression e) throws Exception {
-		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
-		if (!e.hasLiteral()) return false;
+		if (e.getKind() != Expression.ExpressionKind.LITERAL)
+			return false;
+		if (!e.hasLiteral())
+			return false;
 		return e.getLiteral().endsWith(".class");
 	}
 
@@ -662,8 +957,10 @@ public class BoaAstIntrinsics {
 	 */
 	@FunctionSpec(name = "isboollit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isBoolLit(final Expression e) throws Exception {
-		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
-		if (!e.hasLiteral()) return false;
+		if (e.getKind() != Expression.ExpressionKind.LITERAL)
+			return false;
+		if (!e.hasLiteral())
+			return false;
 		return e.getLiteral().equals("true") || e.getLiteral().equals("false");
 	}
 
@@ -676,8 +973,10 @@ public class BoaAstIntrinsics {
 	 */
 	@FunctionSpec(name = "isnulllit", returnType = "bool", formalParameters = { "Expression" })
 	public static boolean isNullLit(final Expression e) throws Exception {
-		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
-		if (!e.hasLiteral()) return false;
+		if (e.getKind() != Expression.ExpressionKind.LITERAL)
+			return false;
+		if (!e.hasLiteral())
+			return false;
 		return e.getLiteral().equals("null");
 	}
 
@@ -693,11 +992,144 @@ public class BoaAstIntrinsics {
 		return e.getKind() == Expression.ExpressionKind.LITERAL && e.hasLiteral() && e.getLiteral().equals(lit);
 	}
 
+	////////////////////////////////
+	// Operator testing functions */
+	////////////////////////////////
+	@FunctionSpec(name = "isoperator", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isOperator(final Expression e) throws Exception {
+		return isArithmeticOperator(e) || isBitwiseOperator(e) || isLogicalOperator(e) || isRelationalOperator(e);
+	}
+
+	@FunctionSpec(name = "isarithmeticoperator", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isArithmeticOperator(final Expression e) throws Exception {
+		switch (e.getKind()) {
+		case OP_ADD:
+			return true;
+		case OP_SUB:
+			return true;
+		case OP_MULT:
+			return true;
+		case OP_DIV:
+			return true;
+		case OP_MOD:
+			return true;
+		case OP_INC:
+			return true;
+		case OP_DEC:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	@FunctionSpec(name = "isbitwiseoperator", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isBitwiseOperator(final Expression e) throws Exception {
+		switch (e.getKind()) {
+		case BIT_LSHIFT:
+			return true;
+		case BIT_RSHIFT:
+			return true;
+		case BIT_UNSIGNEDRSHIFT:
+			return true;
+		case BIT_AND:
+			return true;
+		case BIT_OR:
+			return true;
+		case BIT_NOT:
+			return true;
+		case BIT_XOR:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	@FunctionSpec(name = "islogicaloperator", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isLogicalOperator(final Expression e) throws Exception {
+		switch (e.getKind()) {
+		case LOGICAL_NOT:
+			return true;
+		case LOGICAL_AND:
+			return true;
+		case LOGICAL_OR:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	@FunctionSpec(name = "isrelationaloperator", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isRelationalOperator(final Expression e) throws Exception {
+		switch (e.getKind()) {
+		case EQ:
+			return true;
+		case NEQ:
+			return true;
+		case LT:
+			return true;
+		case GT:
+			return true;
+		case LTEQ:
+			return true;
+		case GTEQ:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	@FunctionSpec(name = "isassignmentoperator", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isAssignmentOperator(final Expression e) throws Exception {
+		switch (e.getKind()) {
+		case ASSIGN:
+			return true;
+		case ASSIGN_ADD:
+			return true;
+		case ASSIGN_SUB:
+			return true;
+		case ASSIGN_MULT:
+			return true;
+		case ASSIGN_DIV:
+			return true;
+		case ASSIGN_MOD:
+			return true;
+		case ASSIGN_BITXOR:
+			return true;
+		case ASSIGN_BITAND:
+			return true;
+		case ASSIGN_BITOR:
+			return true;
+		case ASSIGN_LSHIFT:
+			return true;
+		case ASSIGN_RSHIFT:
+			return true;
+		case ASSIGN_UNSIGNEDRSHIFT:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	////////////////////////////////
+	// Creation testing functions */
+	////////////////////////////////
+	@FunctionSpec(name = "iscreation", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isCreation(final Expression e) throws Exception {
+		switch (e.getKind()) {
+		case NEW:
+			return true;
+		case NEWARRAY:
+			return true;
+		default:
+			return false;
+		}
+	}
+
 	//////////////////////////////
 	// Collect Annotations Used //
 	//////////////////////////////
 
-	private static class AnnotationCollectingVisitor extends BoaCollectingVisitor<String,Long> {
+	private static class AnnotationCollectingVisitor extends BoaCollectingVisitor<String, Long> {
 		@Override
 		protected boolean preVisit(Modifier node) {
 			if (node.getKind() == Modifier.ModifierKind.ANNOTATION) {
@@ -708,10 +1140,13 @@ public class BoaAstIntrinsics {
 			return true;
 		}
 	}
+
 	private static AnnotationCollectingVisitor annotationCollectingVisitor = new AnnotationCollectingVisitor();
 
-	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "ASTRoot", "map[string] of int" })
-	public static HashMap<String,Long> collect_annotations(final ASTRoot f, final HashMap<String,Long> map) throws Exception {
+	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "ASTRoot",
+			"map[string] of int" })
+	public static HashMap<String, Long> collect_annotations(final ASTRoot f, final HashMap<String, Long> map)
+			throws Exception {
 		annotationCollectingVisitor.initialize(map).visit(f);
 		return annotationCollectingVisitor.map;
 	}
@@ -720,30 +1155,32 @@ public class BoaAstIntrinsics {
 	// Collect Generics Used //
 	///////////////////////////
 
-	private static class GenericsCollectingVisitor extends BoaCollectingVisitor<String,Long> {
+	private static class GenericsCollectingVisitor extends BoaCollectingVisitor<String, Long> {
 		@Override
 		protected boolean preVisit(Type node) {
 			// FIXME
 			/*
-			try {
-				parseGenericType(BoaAstIntrinsics.type_name(node.getName()).trim(), map);
-			} catch (final StackOverflowError e) {
-				System.err.println("STACK ERR: " + node.getName() + " -> " + BoaAstIntrinsics.type_name(node.getName()).trim());
-			}
-			*/
+			 * try { parseGenericType(BoaAstIntrinsics.type_name(node.getName()).trim(),
+			 * map); } catch (final StackOverflowError e) { System.err.println("STACK ERR: "
+			 * + node.getName() + " -> " +
+			 * BoaAstIntrinsics.type_name(node.getName()).trim()); }
+			 */
 			return true;
 		}
 	}
+
 	private static GenericsCollectingVisitor genericsCollectingVisitor = new GenericsCollectingVisitor();
 
-	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "ASTRoot", "map[string] of int" })
-	public static HashMap<String,Long> collect_generic_types(final ASTRoot f, final HashMap<String,Long> map) throws Exception {
+	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "ASTRoot",
+			"map[string] of int" })
+	public static HashMap<String, Long> collect_generic_types(final ASTRoot f, final HashMap<String, Long> map)
+			throws Exception {
 		genericsCollectingVisitor.initialize(map).visit(f);
 		return genericsCollectingVisitor.map;
 	}
 
 	@SuppressWarnings("unused")
-	private static void parseGenericType(final String name, final HashMap<String,Long> counts) {
+	private static void parseGenericType(final String name, final HashMap<String, Long> counts) {
 		if (!name.contains("<") || name.startsWith("<"))
 			return;
 
@@ -806,7 +1243,7 @@ public class BoaAstIntrinsics {
 			}
 	}
 
-	private static void foundType(final String name, final HashMap<String,Long> counts) {
+	private static void foundType(final String name, final HashMap<String, Long> counts) {
 		final String type = name.endsWith("...") ? name.substring(0, name.length() - 3).trim() : name.trim();
 		final long count = counts.containsKey(type) ? counts.get(type) : 0;
 		counts.put(type, count + 1);
@@ -819,6 +1256,7 @@ public class BoaAstIntrinsics {
 	}
 
 	static int indent = 0;
+
 	private static String indent() {
 		String s = "";
 		for (int i = 0; i < indent; i++)
@@ -828,7 +1266,8 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "ASTRoot" })
 	public static String prettyprint(final ASTRoot r) {
-		if (r == null) return "";
+		if (r == null)
+			return "";
 
 		String s = "";
 
@@ -840,7 +1279,8 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Namespace" })
 	public static String prettyprint(final Namespace n) {
-		if (n == null) return "";
+		if (n == null)
+			return "";
 
 		String s = "";
 
@@ -860,82 +1300,89 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Declaration" })
 	public static String prettyprint(final Declaration d) {
-		if (d == null) return "";
+		if (d == null)
+			return "";
 
 		String s = indent() + prettyprint(d.getModifiersList());
 
 		switch (d.getKind()) {
-			case INTERFACE:
-				s += "interface " + d.getName();
-				if (d.getGenericParametersCount() > 0) {
-					s += "<";
-					for (int i = 0; i < d.getGenericParametersCount(); i++) {
-						if (i != 0) s += ", ";
-						s += prettyprint(d.getGenericParameters(i));
-					}
-					s += ">";
+		case INTERFACE:
+			s += "interface " + d.getName();
+			if (d.getGenericParametersCount() > 0) {
+				s += "<";
+				for (int i = 0; i < d.getGenericParametersCount(); i++) {
+					if (i != 0)
+						s += ", ";
+					s += prettyprint(d.getGenericParameters(i));
 				}
-				if (d.getParentsCount() > 0) {
-					s += " extends ";
-					for (int i = 0; i < d.getParentsCount(); i++) {
-						if (i != 0) s += ", ";
+				s += ">";
+			}
+			if (d.getParentsCount() > 0) {
+				s += " extends ";
+				for (int i = 0; i < d.getParentsCount(); i++) {
+					if (i != 0)
+						s += ", ";
+					s += prettyprint(d.getParents(i));
+				}
+			}
+			s += " {\n";
+			break;
+		case ANONYMOUS:
+			break;
+		case ENUM:
+			s += "enum " + d.getName();
+			break;
+		case ANNOTATION:
+			s += "@interface class " + d.getName();
+			if (d.getGenericParametersCount() > 0) {
+				s += "<";
+				for (int i = 0; i < d.getGenericParametersCount(); i++) {
+					if (i != 0)
+						s += ", ";
+					s += prettyprint(d.getGenericParameters(i));
+				}
+				s += ">";
+			}
+			if (d.getParentsCount() > 0) {
+				int i = 0;
+				if (d.getParents(i).getKind() == TypeKind.CLASS)
+					s += " extends " + prettyprint(d.getParents(i++));
+				if (i < d.getParentsCount()) {
+					s += " implements ";
+					for (int j = i; i < d.getParentsCount(); i++) {
+						if (i != j)
+							s += ", ";
 						s += prettyprint(d.getParents(i));
 					}
 				}
-				s += " {\n";
-				break;
-			case ANONYMOUS:
-				break;
-			case ENUM:
-				s += "enum " + d.getName();
-				break;
-			case ANNOTATION:
-				s += "@interface class " + d.getName();
-				if (d.getGenericParametersCount() > 0) {
-					s += "<";
-					for (int i = 0; i < d.getGenericParametersCount(); i++) {
-						if (i != 0) s += ", ";
-						s += prettyprint(d.getGenericParameters(i));
-					}
-					s += ">";
+			}
+			break;
+		default:
+		case CLASS:
+			s += "class " + d.getName();
+			if (d.getGenericParametersCount() > 0) {
+				s += "<";
+				for (int i = 0; i < d.getGenericParametersCount(); i++) {
+					if (i != 0)
+						s += ", ";
+					s += prettyprint(d.getGenericParameters(i));
 				}
-				if (d.getParentsCount() > 0) {
-					int i = 0;
-					if (d.getParents(i).getKind() == TypeKind.CLASS)
-						s += " extends " + prettyprint(d.getParents(i++));
-					if (i < d.getParentsCount()) {
-						s += " implements ";
-						for (int j = i; i < d.getParentsCount(); i++) {
-							if (i != j) s += ", ";
-							s += prettyprint(d.getParents(i));
-						}
+				s += ">";
+			}
+			if (d.getParentsCount() > 0) {
+				int i = 0;
+				if (d.getParents(i).getKind() == TypeKind.CLASS)
+					s += " extends " + prettyprint(d.getParents(i++));
+				if (i < d.getParentsCount()) {
+					s += " implements ";
+					for (int j = i; i < d.getParentsCount(); i++) {
+						if (i != j)
+							s += ", ";
+						s += prettyprint(d.getParents(i));
 					}
 				}
-				break;
-			default:
-			case CLASS:
-				s += "class " + d.getName();
-				if (d.getGenericParametersCount() > 0) {
-					s += "<";
-					for (int i = 0; i < d.getGenericParametersCount(); i++) {
-						if (i != 0) s += ", ";
-						s += prettyprint(d.getGenericParameters(i));
-					}
-					s += ">";
-				}
-				if (d.getParentsCount() > 0) {
-					int i = 0;
-					if (d.getParents(i).getKind() == TypeKind.CLASS)
-						s += " extends " + prettyprint(d.getParents(i++));
-					if (i < d.getParentsCount()) {
-						s += " implements ";
-						for (int j = i; i < d.getParentsCount(); i++) {
-							if (i != j) s += ", ";
-							s += prettyprint(d.getParents(i));
-						}
-					}
-				}
-				break;
+			}
+			break;
 		}
 
 		s += " {\n";
@@ -943,12 +1390,11 @@ public class BoaAstIntrinsics {
 		indent++;
 		for (int i = 0; i < d.getFieldsCount(); i++) {
 			s += indent() + prettyprint(d.getFieldsList().get(i));
-			s += (!d.getFieldsList().get(i).hasVariableType() 
-					&& i < d.getFieldsCount() - 1 
+			s += (!d.getFieldsList().get(i).hasVariableType() && i < d.getFieldsCount() - 1
 					&& !d.getFieldsList().get(i + 1).hasVariableType()) ? ",\n" : ";\n";
 		}
-		for (final Method m : d.getMethodsList()) 
-			s += m.getName().equals("<init>") ? prettyprint(m).replace(" <init>", d.getName()) : prettyprint(m);		
+		for (final Method m : d.getMethodsList())
+			s += m.getName().equals("<init>") ? prettyprint(m).replace(" <init>", d.getName()) : prettyprint(m);
 		for (final Declaration d2 : d.getNestedDeclarationsList())
 			s += prettyprint(d2);
 
@@ -961,14 +1407,16 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Type" })
 	public static String prettyprint(final Type t) {
-		if (t == null) return "";
+		if (t == null)
+			return "";
 
 		return t.getName();
 	}
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Method" })
 	public static String prettyprint(final Method m) {
-		if (m == null) return "";
+		if (m == null)
+			return "";
 		String s = indent() + prettyprint(m.getModifiersList());
 
 		if (m.getGenericParametersCount() > 0) {
@@ -1004,19 +1452,20 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Variable" })
 	public static String prettyprint(final Variable v) {
-		if (v == null) return "";
+		if (v == null)
+			return "";
 
 		String s = "";
 		if (v.getModifiersCount() > 0)
 			s += prettyprint(v.getModifiersList());
-		
+
 		if (v.hasVariableType())
 			s += prettyprint(v.getVariableType()) + " ";
-		
+
 		s += v.getName();
-		
+
 		if (v.getExpressionsCount() != 0)
-			s += "("+ prettyprint(v.getExpressions(0)) +")";
+			s += "(" + prettyprint(v.getExpressions(0)) + ")";
 
 		if (v.hasInitializer())
 			s += " = " + prettyprint(v.getInitializer());
@@ -1035,361 +1484,414 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Statement" })
 	public static String prettyprint(final Statement stmt) {
-		if (stmt == null) return "";
+		if (stmt == null)
+			return "";
 
 		String s = "";
 
 		switch (stmt.getKind()) {
-			case EMPTY:
-				return ";";
+		case EMPTY:
+			return ";";
 
-			case BLOCK:
-				s += "{\n";
-				indent++;
-				for (int i = 0; i < stmt.getStatementsCount(); i++)
-					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
-				indent--;
-				s += indent() + "}";
-				return s;
+		case BLOCK:
+			s += "{\n";
+			indent++;
+			for (int i = 0; i < stmt.getStatementsCount(); i++)
+				s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+			indent--;
+			s += indent() + "}";
+			return s;
 
-			case RETURN:
-				s += "return";
-				if (stmt.getExpressionsCount() > 0)
-					s += " " + prettyprint(stmt.getExpressions(0));
-				s += ";";
-				return s;
-			case BREAK:
-				s += "break";
-				if (stmt.getExpressionsCount() > 0)
-					s += " " + prettyprint(stmt.getExpressions(0));
-				s += ";";
-				return s;
-			case CONTINUE:
-				s += "continue";
-				if (stmt.getExpressionsCount() > 0)
-					s += " " + prettyprint(stmt.getExpressions(0));
-				s += ";";
-				return s;
+		case RETURN:
+			s += "return";
+			if (stmt.getExpressionsCount() > 0)
+				s += " " + prettyprint(stmt.getExpressions(0));
+			s += ";";
+			return s;
+		case BREAK:
+			s += "break";
+			if (stmt.getExpressionsCount() > 0)
+				s += " " + prettyprint(stmt.getExpressions(0));
+			s += ";";
+			return s;
+		case CONTINUE:
+			s += "continue";
+			if (stmt.getExpressionsCount() > 0)
+				s += " " + prettyprint(stmt.getExpressions(0));
+			s += ";";
+			return s;
 
-			case ASSERT:
-				s += "assert ";
-				s += prettyprint(stmt.getConditions(0));
-				if (stmt.getExpressionsCount() > 0)
-					s += " " + prettyprint(stmt.getExpressions(0));
-				s += ";";
-				return s;
+		case ASSERT:
+			s += "assert ";
+			s += prettyprint(stmt.getConditions(0));
+			if (stmt.getExpressionsCount() > 0)
+				s += " " + prettyprint(stmt.getExpressions(0));
+			s += ";";
+			return s;
 
-			case LABEL:
-				return prettyprint(stmt.getExpressions(0)) + ": " + prettyprint(stmt.getStatements(0));
+		case LABEL:
+			return prettyprint(stmt.getExpressions(0)) + ": " + prettyprint(stmt.getStatements(0));
 
-			case CASE:
-				return "case " + prettyprint(stmt.getExpressions(0)) + ":";
+		case CASE:
+			return "case " + prettyprint(stmt.getExpressions(0)) + ":";
 
-			case DEFAULT:
-				return "default:";
+		case DEFAULT:
+			return "default:";
 
-			case EXPRESSION:
-				return prettyprint(stmt.getExpressions(0)) + ";";
+		case EXPRESSION:
+			return prettyprint(stmt.getExpressions(0)) + ";";
 
-			case TYPEDECL:
-				return prettyprint(stmt.getTypeDeclaration());
+		case TYPEDECL:
+			return prettyprint(stmt.getTypeDeclaration());
 
-			case SYNCHRONIZED:
-				s += "synchronized () {\n";
-				indent++;
-				for (int i = 0; i < stmt.getStatementsCount(); i++)
-					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
-				indent--;
-				s += "}";
-				return s;
+		case SYNCHRONIZED:
+			s += "synchronized () {\n";
+			indent++;
+			for (int i = 0; i < stmt.getStatementsCount(); i++)
+				s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+			indent--;
+			s += "}";
+			return s;
 
-			case CATCH:
-				s += indent() + "catch (";
-				s += prettyprint(stmt.getVariableDeclaration());
-				s += ") {\n";
-				indent++;
-				for (int i = 0; i < stmt.getStatementsCount(); i++)
-					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
-				indent--;
-				s += indent() + "}";
-				return s;
+		case CATCH:
+			s += indent() + "catch (";
+			s += prettyprint(stmt.getVariableDeclaration());
+			s += ") {\n";
+			indent++;
+			for (int i = 0; i < stmt.getStatementsCount(); i++)
+				s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+			indent--;
+			s += indent() + "}";
+			return s;
 
-			case FINALLY:
-				s += indent() + "finally {\n";
-				indent++;
-				for (int i = 0; i < stmt.getStatementsCount(); i++)
-					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
-				indent--;
-				s += indent() + "}";
-				return s;
+		case FINALLY:
+			s += indent() + "finally {\n";
+			indent++;
+			for (int i = 0; i < stmt.getStatementsCount(); i++)
+				s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+			indent--;
+			s += indent() + "}";
+			return s;
 
-			case TRY:
-				s += "try";
-				if (stmt.getInitializationsCount() > 0) {
-					s += "(";
-					for (int i = 0; i < stmt.getInitializationsCount(); i++) {
-						if (i > 0)
-							s += ", ";
-						s += prettyprint(stmt.getInitializations(i));
-					}
-					s += ")";
+		case TRY:
+			s += "try";
+			if (stmt.getInitializationsCount() > 0) {
+				s += "(";
+				for (int i = 0; i < stmt.getInitializationsCount(); i++) {
+					if (i > 0)
+						s += ", ";
+					s += prettyprint(stmt.getInitializations(i));
 				}
-				s += " ";
-				for (int i = 0; i < stmt.getStatementsCount(); i++) {
-					s += prettyprint(stmt.getStatements(i)) + "\n";
+				s += ")";
+			}
+			s += " ";
+			for (int i = 0; i < stmt.getStatementsCount(); i++) {
+				s += prettyprint(stmt.getStatements(i)) + "\n";
+			}
+			return s;
+
+		case FOR:
+			s += "for (";
+			if (stmt.hasVariableDeclaration()) {
+				s += prettyprint(stmt.getVariableDeclaration()) + " : " + prettyprint(stmt.getConditions(0));
+			} else {
+				for (int i = 0; i < stmt.getInitializationsCount(); i++) {
+					if (i > 0)
+						s += ", ";
+					s += prettyprint(stmt.getInitializations(i));
 				}
-				return s;
-
-			case FOR:
-				s += "for (";
-				if (stmt.hasVariableDeclaration()) {
-					s += prettyprint(stmt.getVariableDeclaration()) + " : " + prettyprint(stmt.getConditions(0));
-				} else {
-					for (int i = 0; i < stmt.getInitializationsCount(); i++) {
-						if (i > 0)
-							s += ", ";
-						s += prettyprint(stmt.getInitializations(i));
-					}
-					s += "; " + prettyprint(stmt.getConditions(0)) + "; ";
-					for (int i = 0; i < stmt.getUpdatesCount(); i++) {
-						if (i > 0)
-							s += ", ";
-						s += prettyprint(stmt.getUpdates(i));
-					}
+				String condition = stmt.getConditionsCount() == 1 ? prettyprint(stmt.getConditions(0)) : " ";
+				s += "; " + condition + "; ";
+				for (int i = 0; i < stmt.getUpdatesCount(); i++) {
+					if (i > 0)
+						s += ", ";
+					s += prettyprint(stmt.getUpdates(i));
 				}
-				s += ")\n";
+			}
+			s += ")\n";
+			indent++;
+			s += indent() + prettyprint(stmt.getStatements(0)) + "\n";
+			indent--;
+			return s;
+
+		case FOREACH:
+			s += "for (" + prettyprint(stmt.getVariableDeclaration()) + " : " + prettyprint(stmt.getExpressions(0))
+					+ ")\n";
+			s += indent() + prettyprint(stmt.getStatements(0));
+			return s;
+
+		case DO:
+			s += "do\n";
+			indent++;
+			for (int i = 0; i < stmt.getStatementsCount(); i++)
+				s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+			indent--;
+			s += indent() + "while (" + prettyprint(stmt.getConditions(0)) + ");";
+			return s;
+
+		case WHILE:
+			s += "while (" + prettyprint(stmt.getConditions(0)) + ") {\n";
+			indent++;
+			for (int i = 0; i < stmt.getStatementsCount(); i++)
+				s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+			indent--;
+			s += indent() + "}";
+			return s;
+
+		case IF:
+			s += "if (" + prettyprint(stmt.getConditions(0)) + ")\n";
+			indent++;
+			s += indent() + prettyprint(stmt.getStatements(0)) + "\n";
+			indent--;
+			if (stmt.getStatementsCount() > 1) {
+				s += indent() + "else\n";
 				indent++;
-				s += indent() + prettyprint(stmt.getStatements(0)) + "\n";
+				s += indent() + prettyprint(stmt.getStatements(1)) + "\n";
 				indent--;
-				return s;
-				
-			case FOREACH:
-				s += "for (" + prettyprint(stmt.getVariableDeclaration()) + " : " + prettyprint(stmt.getExpressions(0)) + ")\n";
-				s += indent() + prettyprint(stmt.getStatements(0));
-				return s;
-				
+			}
+			return s;
 
-			case DO:
-				s += "do\n";
-				indent++;
-				for (int i = 0; i < stmt.getStatementsCount(); i++)
-					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
-				indent--;
-				s += indent() + "while (" + prettyprint(stmt.getConditions(0)) + ");";
-				return s;
+		case SWITCH:
+			s += "switch (" + prettyprint(stmt.getExpressions(0)) + ") {\n";
+			indent++;
+			for (int i = 0; i < stmt.getStatementsCount(); i++)
+				s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+			indent--;
+			s += indent() + "}";
+			return s;
 
-			case WHILE:
-				s += "while (" + prettyprint(stmt.getConditions(0)) + ") {\n";
-				indent++;
-				for (int i = 0; i < stmt.getStatementsCount(); i++)
-					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
-				indent--;
-				s += indent() + "}";
-				return s;
+		case THROW:
+			return "throw " + prettyprint(stmt.getExpressions(0)) + ";";
 
-			case IF:
-				s += "if (" + prettyprint(stmt.getConditions(0)) + ")\n";
-				indent++;
-				s += indent() + prettyprint(stmt.getStatements(0)) + "\n";
-				indent--;
-				if (stmt.getStatementsCount() > 1) {
-					s += indent() + "else\n";
-					indent++;
-					s += indent() + prettyprint(stmt.getStatements(1)) + "\n";
-					indent--;
-				}
-				return s;
-
-			case SWITCH:
-				s += "switch (" + prettyprint(stmt.getExpressions(0)) + ") {\n";
-				indent++;
-				for (int i = 0; i < stmt.getStatementsCount(); i++)
-					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
-				indent--;
-				s += indent() + "}";
-				return s;
-
-			case THROW:
-				return "throw " + prettyprint(stmt.getExpressions(0)) + ";";
-
-			default: return s;
+		default:
+			return s;
 		}
 	}
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Expression" })
 	public static String prettyprint(final Expression e) {
-		if (e == null) return "";
+		if (e == null)
+			return "";
 
 		String s = "";
 
 		switch (e.getKind()) {
-			case OP_ADD:
-				if (e.getExpressionsCount() == 1)
-					return ppPrefix("+", e);
-				return ppInfix("+", e.getExpressionsList());
-			case OP_SUB:
-				if (e.getExpressionsCount() == 1)
-					return ppPrefix("-", e);
-				return ppInfix("-", e.getExpressionsList());
+		case OP_ADD:
+			if (e.getExpressionsCount() == 1)
+				return ppPrefix("+", e);
+			return ppInfix("+", e.getExpressionsList());
+		case OP_SUB:
+			if (e.getExpressionsCount() == 1)
+				return ppPrefix("-", e);
+			return ppInfix("-", e.getExpressionsList());
 
-			case LOGICAL_AND:           return "(" + ppInfix("&&", e.getExpressionsList()) + ")";
-			case LOGICAL_OR:            return "(" + ppInfix("||", e.getExpressionsList()) + ")";
+		case LOGICAL_AND:
+			return "(" + ppInfix("&&", e.getExpressionsList()) + ")";
+		case LOGICAL_OR:
+			return "(" + ppInfix("||", e.getExpressionsList()) + ")";
 
-			case EQ:                    return ppInfix("==",   e.getExpressionsList());
-			case NEQ:                   return ppInfix("!=",   e.getExpressionsList());
-			case LT:                    return ppInfix("<",    e.getExpressionsList());
-			case GT:                    return ppInfix(">",    e.getExpressionsList());
-			case LTEQ:                  return ppInfix("<=",   e.getExpressionsList());
-			case GTEQ:                  return ppInfix(">=",   e.getExpressionsList());
-			case OP_DIV:                return ppInfix("/",    e.getExpressionsList());
-			case OP_MULT:               return ppInfix("*",    e.getExpressionsList());
-			case OP_MOD:                return ppInfix("%",    e.getExpressionsList());
-			case BIT_AND:               return ppInfix("&",    e.getExpressionsList());
-			case BIT_OR:                return ppInfix("|",    e.getExpressionsList());
-			case BIT_XOR:               return ppInfix("^",    e.getExpressionsList());
-			case BIT_LSHIFT:            return ppInfix("<<",   e.getExpressionsList());
-			case BIT_RSHIFT:            return ppInfix(">>",   e.getExpressionsList());
-			case BIT_UNSIGNEDRSHIFT:    return ppInfix(">>>",  e.getExpressionsList());
-			case ASSIGN:                return ppInfix("=",    e.getExpressionsList());
-			case ASSIGN_ADD:            return ppInfix("+=",   e.getExpressionsList());
-			case ASSIGN_SUB:            return ppInfix("-=",   e.getExpressionsList());
-			case ASSIGN_MULT:           return ppInfix("*=",   e.getExpressionsList());
-			case ASSIGN_DIV:            return ppInfix("/=",   e.getExpressionsList());
-			case ASSIGN_MOD:            return ppInfix("%=",   e.getExpressionsList());
-			case ASSIGN_BITXOR:         return ppInfix("^=",   e.getExpressionsList());
-			case ASSIGN_BITAND:         return ppInfix("&=",   e.getExpressionsList());
-			case ASSIGN_BITOR:          return ppInfix("|=",   e.getExpressionsList());
-			case ASSIGN_LSHIFT:         return ppInfix("<<=",  e.getExpressionsList());
-			case ASSIGN_RSHIFT:         return ppInfix(">>=",  e.getExpressionsList());
-			case ASSIGN_UNSIGNEDRSHIFT: return ppInfix(">>>=", e.getExpressionsList());
+		case EQ:
+			return ppInfix("==", e.getExpressionsList());
+		case NEQ:
+			return ppInfix("!=", e.getExpressionsList());
+		case LT:
+			return ppInfix("<", e.getExpressionsList());
+		case GT:
+			return ppInfix(">", e.getExpressionsList());
+		case LTEQ:
+			return ppInfix("<=", e.getExpressionsList());
+		case GTEQ:
+			return ppInfix(">=", e.getExpressionsList());
+		case OP_DIV:
+			return ppInfix("/", e.getExpressionsList());
+		case OP_MULT:
+			return ppInfix("*", e.getExpressionsList());
+		case OP_MOD:
+			return ppInfix("%", e.getExpressionsList());
+		case BIT_AND:
+			return ppInfix("&", e.getExpressionsList());
+		case BIT_OR:
+			return ppInfix("|", e.getExpressionsList());
+		case BIT_XOR:
+			return ppInfix("^", e.getExpressionsList());
+		case BIT_LSHIFT:
+			return ppInfix("<<", e.getExpressionsList());
+		case BIT_RSHIFT:
+			return ppInfix(">>", e.getExpressionsList());
+		case BIT_UNSIGNEDRSHIFT:
+			return ppInfix(">>>", e.getExpressionsList());
+		case ASSIGN:
+			return ppInfix("=", e.getExpressionsList());
+		case ASSIGN_ADD:
+			return ppInfix("+=", e.getExpressionsList());
+		case ASSIGN_SUB:
+			return ppInfix("-=", e.getExpressionsList());
+		case ASSIGN_MULT:
+			return ppInfix("*=", e.getExpressionsList());
+		case ASSIGN_DIV:
+			return ppInfix("/=", e.getExpressionsList());
+		case ASSIGN_MOD:
+			return ppInfix("%=", e.getExpressionsList());
+		case ASSIGN_BITXOR:
+			return ppInfix("^=", e.getExpressionsList());
+		case ASSIGN_BITAND:
+			return ppInfix("&=", e.getExpressionsList());
+		case ASSIGN_BITOR:
+			return ppInfix("|=", e.getExpressionsList());
+		case ASSIGN_LSHIFT:
+			return ppInfix("<<=", e.getExpressionsList());
+		case ASSIGN_RSHIFT:
+			return ppInfix(">>=", e.getExpressionsList());
+		case ASSIGN_UNSIGNEDRSHIFT:
+			return ppInfix(">>>=", e.getExpressionsList());
 
-			case LOGICAL_NOT: return ppPrefix("!", e);
-			case BIT_NOT:     return ppPrefix("~", e);
+		case LOGICAL_NOT:
+			return ppPrefix("!", e);
+		case BIT_NOT:
+			return ppPrefix("~", e);
 
-			case OP_DEC:
-				if (e.getIsPostfix())
-					return ppPostfix("--", e);
-				return ppPrefix("--", e);
-			case OP_INC:
-				if (e.getIsPostfix())
-					return ppPostfix("++", e);
-				return ppPrefix("++", e);
+		case OP_DEC:
+			if (e.getIsPostfix())
+				return ppPostfix("--", e);
+			return ppPrefix("--", e);
+		case OP_INC:
+			if (e.getIsPostfix())
+				return ppPostfix("++", e);
+			return ppPrefix("++", e);
 
-			case PAREN: return "(" + prettyprint(e.getExpressions(0)) + ")";
-			case LITERAL: return e.getLiteral();
-			case VARACCESS:
-				for (int i = 0; i < e.getExpressionsCount(); i++)
-					s += prettyprint(e.getExpressions(i)) + ".";
-				s += e.getVariable();
-				return s;
-			case CAST: return "(" + e.getNewType().getName() + ")" + prettyprint(e.getExpressions(0));
-			case CONDITIONAL: return prettyprint(e.getExpressions(0)) + " ? " + prettyprint(e.getExpressions(1)) + " : " + prettyprint(e.getExpressions(2));
-			case NULLCOALESCE: return prettyprint(e.getExpressions(0)) + " ?? " + prettyprint(e.getExpressions(1));
+		case PAREN:
+			return "(" + prettyprint(e.getExpressions(0)) + ")";
+		case LITERAL:
+			return e.getLiteral();
+		case VARACCESS:
+			for (int i = 0; i < e.getExpressionsCount(); i++)
+				s += prettyprint(e.getExpressions(i)) + ".";
+			s += e.getVariable();
+			return s;
+		case CAST:
+			return "(" + e.getNewType().getName() + ")" + prettyprint(e.getExpressions(0));
+		case CONDITIONAL:
+			return prettyprint(e.getExpressions(0)) + " ? " + prettyprint(e.getExpressions(1)) + " : "
+					+ prettyprint(e.getExpressions(2));
+		case NULLCOALESCE:
+			return prettyprint(e.getExpressions(0)) + " ?? " + prettyprint(e.getExpressions(1));
 
-			case METHODCALL:
-				for (int i = 0; i < e.getExpressionsCount(); i++)
-					s += prettyprint(e.getExpressions(i)) + ".";
-				if (e.getGenericParametersCount() > 0) {
-					s += "<";
-					for (int i = 0; i < e.getGenericParametersCount(); i++) {
-						if (i > 0)
-							s += ", ";
-						s += prettyprint(e.getGenericParameters(i));
-					}
-					s += ">";
-				}
-				s += e.getMethod() + "(";
-				for (int i = 0; i < e.getMethodArgsCount(); i++) {
+		case METHODCALL:
+			for (int i = 0; i < e.getExpressionsCount(); i++)
+				s += prettyprint(e.getExpressions(i)) + ".";
+			if (e.getGenericParametersCount() > 0) {
+				s += "<";
+				for (int i = 0; i < e.getGenericParametersCount(); i++) {
 					if (i > 0)
 						s += ", ";
-					s += prettyprint(e.getMethodArgs(i));
+					s += prettyprint(e.getGenericParameters(i));
 				}
-				s += ")";
-				return s;
+				s += ">";
+			}
+			s += e.getMethod() + "(";
+			for (int i = 0; i < e.getMethodArgsCount(); i++) {
+				if (i > 0)
+					s += ", ";
+				s += prettyprint(e.getMethodArgs(i));
+			}
+			s += ")";
+			return s;
 
-			case TYPECOMPARE:
-				return prettyprint(e.getExpressions(0)) + " instanceof " + prettyprint(e.getNewType());
+		case TYPECOMPARE:
+			return prettyprint(e.getExpressions(0)) + " instanceof " + prettyprint(e.getNewType());
 
-			case NEWARRAY:
-				s += "new ";
-				final String arrtype = prettyprint(e.getNewType());
-				s += arrtype.substring(0, arrtype.length() - 1);
-				for (int i = 0; i < e.getExpressionsCount(); i++)
-					s += prettyprint(e.getExpressions(i));
-				s += "]";
-				return s;
+		case NEWARRAY:
+			s += "new ";
+			String ty = prettyprint(e.getNewType());
+			if (e.getExpressionsCount() == 1 && e.getExpressions(0).getKind().equals(ExpressionKind.ARRAYINIT))
+				s += ty + prettyprint(e.getExpressions(0));
+			else if (e.getExpressionsCount() == 1)
+				s += ty.substring(0, ty.lastIndexOf(']')) + prettyprint(e.getExpressions(0)) + ']';
+			return s;
 
-			case NEW:
-				s += "new ";
-				s += prettyprint(e.getNewType());
-				if (e.getGenericParametersCount() > 0) {
-					s += "<";
-					for (int i = 0; i < e.getGenericParametersCount(); i++) {
-						if (i > 0)
-							s += ", ";
-						s += prettyprint(e.getGenericParameters(i));
-					}
-					s += ">";
-				}
-				s += "(";
-				for (int i = 0; i < e.getMethodArgsCount(); i++) {
+		case NEW:
+			s += "new ";
+			s += prettyprint(e.getNewType());
+			if (e.getGenericParametersCount() > 0) {
+				s += "<";
+				for (int i = 0; i < e.getGenericParametersCount(); i++) {
 					if (i > 0)
 						s += ", ";
-					s += prettyprint(e.getMethodArgs(i));
+					s += prettyprint(e.getGenericParameters(i));
 				}
-				s += ")";
-				if (e.hasAnonDeclaration())
-					s += prettyprint(e.getAnonDeclaration());
-				return s;
+				s += ">";
+			}
+			s += "(";
+			for (int i = 0; i < e.getMethodArgsCount(); i++) {
+				if (i > 0)
+					s += ", ";
+				s += prettyprint(e.getMethodArgs(i));
+			}
+			s += ")";
+			if (e.hasAnonDeclaration())
+				s += prettyprint(e.getAnonDeclaration());
+			return s;
 
-			case ARRAYACCESS:
-				return prettyprint(e.getExpressions(0)) + "[" + prettyprint(e.getExpressions(1)) + "]";
+		case ARRAYACCESS:
+			return prettyprint(e.getExpressions(0)) + "[" + prettyprint(e.getExpressions(1)) + "]";
 
-			case ARRAYINIT:
-				s += "{";
-				for (int i = 0; i < e.getExpressionsCount(); i++) {
-					if (i > 0)
-						s += ", ";
-					s += prettyprint(e.getExpressions(i));
-				}
-				s += "}";
-				return s;
+		case ARRAYINIT:
+			s += "{";
+			for (int i = 0; i < e.getExpressionsCount(); i++) {
+				if (i > 0)
+					s += ", ";
+				s += prettyprint(e.getExpressions(i));
+			}
+			s += "}";
+			return s;
 
-			case ANNOTATION:
-				return prettyprint(e.getAnnotation());
+		case ANNOTATION:
+			return prettyprint(e.getAnnotation());
 
-			case VARDECL:
-				s += prettyprint(e.getVariableDecls(0).getModifiersList());
-				s += prettyprint(e.getVariableDecls(0).getVariableType()) + " ";
-				for (int i = 0; i < e.getVariableDeclsCount(); i++) {
-					if (i > 0)
-						s += ", ";
-					s += e.getVariableDecls(i).getName();
-					if (e.getVariableDecls(i).hasInitializer())
-						s += " = " + prettyprint(e.getVariableDecls(i).getInitializer());
-				}
-				return s;
+		case VARDECL:
+			s += prettyprint(e.getVariableDecls(0).getModifiersList());
+			s += prettyprint(e.getVariableDecls(0).getVariableType()) + " ";
+			for (int i = 0; i < e.getVariableDeclsCount(); i++) {
+				if (i > 0)
+					s += ", ";
+				s += e.getVariableDecls(i).getName();
+				if (e.getVariableDecls(i).hasInitializer())
+					s += " = " + prettyprint(e.getVariableDecls(i).getInitializer());
+			}
+			return s;
 
-			case LAMBDA:
-				s += "(";
-				for (int i = 0; i < e.getVariableDeclsCount(); i++) {
-					if (i > 0)
-						s += ", ";
-					String type = prettyprint(e.getVariableDecls(i).getVariableType());
-					if (!type.equals("")) 
-						s += type + " ";
-					s += e.getVariableDecls(i).getName();
-				}
-				s += ") -> ";
-				if (e.getStatementsCount() != 0)
-					s += prettyprint(e.getStatements(0));
-				if (e.getExpressionsCount() != 0)
-					s += prettyprint(e.getExpressions(0));
-
+		// TODO
+		case METHOD_REFERENCE:
 			// TODO
-			case METHOD_REFERENCE:
-			default: return s;
+		case LAMBDA:
+			s += "(";
+			for (int i = 0; i < e.getVariableDeclsCount(); i++) {
+				if (i > 0)
+					s += ", ";
+				String type = prettyprint(e.getVariableDecls(i).getVariableType());
+				if (!type.equals(""))
+					s += type + " ";
+				s += e.getVariableDecls(i).getName();
+			}
+			s += ") -> ";
+			if (e.getStatementsCount() != 0)
+				s += prettyprint(e.getStatements(0));
+			if (e.getExpressionsCount() != 0)
+				s += prettyprint(e.getExpressions(0));
+		default:
+			return s;
 		}
+	}
+
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "array of Expression" })
+	public static String prettyprint(final Expression[] es) {
+		String s = "";
+		for (int i = 0; i < es.length; i++) {
+			if (i > 0)
+				s += ", ";
+			s += prettyprint(es[i]);
+		}
+		return s;
 	}
 
 	private static String ppPrefix(final String op, final Expression e) {
@@ -1416,38 +1918,53 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Modifier" })
 	public static String prettyprint(final Modifier m) {
-		if (m == null) return "";
+		if (m == null)
+			return "";
 
 		String s = "";
 
 		switch (m.getKind()) {
-			case OTHER: return m.getOther();
+		case OTHER:
+			return m.getOther();
 
-			case VISIBILITY:
-				switch (m.getVisibility()) {
-					case PUBLIC:    return "public";
-					case PRIVATE:   return "private";
-					case PROTECTED: return "protected";
-					case NAMESPACE: return "namespace";
-					default: return s;
-				}
-
-			case ANNOTATION:
-				s = "@" + m.getAnnotationName();
-				if (m.getAnnotationMembersCount() > 0) s += "(";
-				for (int i = 0; i < m.getAnnotationMembersCount(); i++) {
-					if (i > 0) s += ", ";
-					s += m.getAnnotationMembers(i) + " = " + prettyprint(m.getAnnotationValues(i));
-				}
-				if (m.getAnnotationMembersCount() > 0) s += ")";
+		case VISIBILITY:
+			switch (m.getVisibility()) {
+			case PUBLIC:
+				return "public";
+			case PRIVATE:
+				return "private";
+			case PROTECTED:
+				return "protected";
+			case NAMESPACE:
+				return "namespace";
+			default:
 				return s;
+			}
 
-			case FINAL:        return "final";
-			case STATIC:       return "static";
-			case SYNCHRONIZED: return "synchronized";
-			case ABSTRACT:     return "abstract";
+		case ANNOTATION:
+			s = "@" + m.getAnnotationName();
+			if (m.getAnnotationMembersCount() > 0)
+				s += "(";
+			for (int i = 0; i < m.getAnnotationMembersCount(); i++) {
+				if (i > 0)
+					s += ", ";
+				s += m.getAnnotationMembers(i) + " = " + prettyprint(m.getAnnotationValues(i));
+			}
+			if (m.getAnnotationMembersCount() > 0)
+				s += ")";
+			return s;
 
-			default: return s;
+		case FINAL:
+			return "final";
+		case STATIC:
+			return "static";
+		case SYNCHRONIZED:
+			return "synchronized";
+		case ABSTRACT:
+			return "abstract";
+
+		default:
+			return s;
 		}
 	}
 

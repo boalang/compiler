@@ -207,7 +207,7 @@ public class FileIO {
 		public void run() {
 			File file = new File(path);
 			if (file.exists()) {
-//				System.out.println("Deleting cloned repo " + path);
+				System.err.println("Deleting cloned repo " + path);
 				org.apache.commons.io.FileUtils.deleteQuietly(file);
 			}
 		}

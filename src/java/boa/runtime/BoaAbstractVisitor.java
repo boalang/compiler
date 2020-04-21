@@ -203,8 +203,10 @@ public abstract class BoaAbstractVisitor {
 	}
 	public final void visit(final ChangedFile node) throws Exception {
 		if (preVisit(node)) {
-			visit(BoaAstIntrinsics.getast(node));
-
+			if (node.hasRoot())
+				visit(node.getRoot());
+			else
+				visit(BoaAstIntrinsics.getast(node));
 			postVisit(node);
 		}
 	}

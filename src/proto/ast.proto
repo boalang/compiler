@@ -18,6 +18,8 @@ message ASTRoot {
 	optional int32 key = 4;
 	/**The top-level document of an html, css, or xml DOM*/
 	optional Document document = 5;
+	
+	optional int32 ast_count = 6;
 }
 
 /** A namespace (aka, package) in a source file */

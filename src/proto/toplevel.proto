@@ -80,4 +80,8 @@ message Project {
 	/** The size of the repository in bytes of code **/
 	optional int32 size = 26;
 	optional string main_language = 27;
+	
+	optional bool noast = 28;
+	optional string owner_type = 29;
+	optional string default_branch = 30;
 }

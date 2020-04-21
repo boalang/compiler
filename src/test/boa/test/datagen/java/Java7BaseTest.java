@@ -82,6 +82,7 @@ public class Java7BaseTest extends BaseTest {
 		} catch (final Exception e) {}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected static String parseJava(final String content) {
 		final StringBuilder sb = new StringBuilder();
 		final FileASTRequestor r = new FileASTRequestor() {

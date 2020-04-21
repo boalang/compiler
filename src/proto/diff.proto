@@ -147,4 +147,10 @@ message ChangedFile {
 	repeated int32 previous_versions = 9;
 	/** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits */
 	repeated int32 previous_indices = 10;
+	
+	optional uint64 repo_key = 11;
+	optional string object_id = 12;
+	optional ASTRoot root = 13;
+	optional int32 revision_idx = 14;
+	optional int32 file_idx = 15;
 }

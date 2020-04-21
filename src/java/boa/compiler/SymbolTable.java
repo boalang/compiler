@@ -30,7 +30,9 @@ import boa.functions.FunctionSpec;
 import boa.types.*;
 import boa.types.proto.*;
 import boa.types.proto.enums.*;
-
+import boa.types.proto.refactoring.ChangeProtoTuple;
+import boa.types.proto.refactoring.CodeRefactoringProtoTuple;
+import boa.types.proto.refactoring.LocationProtoTuple;
 import boa.compiler.ast.Operand;
 import boa.compiler.ast.statements.VisitStatement;
 
@@ -96,6 +98,9 @@ public class SymbolTable {
 		new PersonProtoTuple(),
 		new ProjectProtoTuple(),
 		new RevisionProtoTuple(),
+		new ChangeProtoTuple(),
+		new CodeRefactoringProtoTuple(),
+		new LocationProtoTuple(),
 		new StatementProtoTuple(),
 		new TypeProtoTuple(),
 		new VariableProtoTuple(),
@@ -234,6 +239,7 @@ public class SymbolTable {
 		globalFunctions.addFunction("peek", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.stack_peek(${0})"));
 		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "${0}.clear()"));
 		globalFunctions.addFunction("values", new BoaFunction(new BoaArray(new BoaTypeVar("V")), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.basic_array(${0}.toArray(new ${V}[0]))"));
+		globalFunctions.addFunction("popvalues", new BoaFunction(new BoaArray(new BoaTypeVar("V")), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.basic_array(boa.functions.BoaIntrinsics.reverse_stack(${0}).toArray(new ${V}[0]))"));
 
 		// queue functions
 		globalFunctions.addFunction("offer", new BoaFunction(new BoaAny(), new BoaType[] { new BoaQueue(new BoaTypeVar("V")), new BoaTypeVar("V") }, "${0}.offer(${1})"));
@@ -463,11 +469,11 @@ public class SymbolTable {
 		if (id.startsWith("stack of "))
 			return new BoaStack(getType(id.substring("stack of ".length()).trim()));
 
-		if (id.startsWith("set of "))
-			return new BoaSet(getType(id.substring("set of ".length()).trim()));
-
 		if (id.startsWith("queue of "))
 			return new BoaQueue(getType(id.substring("queue of ".length()).trim()));
+		
+		if (id.startsWith("set of "))
+			return new BoaSet(getType(id.substring("set of ".length()).trim()));
 
 		if (id.startsWith("map"))
 			return new BoaMap(getType(id.substring(id.indexOf(" of ") + " of ".length()).trim()),
@@ -562,7 +568,10 @@ public class SymbolTable {
 			boa.functions.BoaSortIntrinsics.class,
 			boa.functions.BoaSpecialIntrinsics.class,
 			boa.functions.BoaStringIntrinsics.class,
-			boa.functions.BoaTimeIntrinsics.class
+			boa.functions.BoaTimeIntrinsics.class,
+			boa.functions.code.change.refactoring.BoaRefactoringIntrinsics.class,
+			boa.functions.code.change.refactoring.BoaRefactoringPredictionIntrinsics.class,
+			boa.functions.code.change.BoaCodeChangeIntrinsics.class
 		};
 		for (final Class<?> c : builtinFuncs)
 			importFunctions(c);

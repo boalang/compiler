@@ -111,6 +111,8 @@ public class RepoMetadata {
 	private String svnRepository;
 	private String gitRepository;
 	private String mainLanguage;
+	private String ownerType;
+	private String defaultBranch;
 	
 
 	private boolean fork = false;
@@ -215,7 +217,17 @@ public class RepoMetadata {
 		if (jsonProject.has(GIT_SIZE)) {
 			JsonElement e = jsonProject.get(GIT_SIZE);
 			if (!e.isJsonNull())
-				this.size = e.getAsInt();
+				this.setSize(e.getAsInt());
+		}
+		if (jsonProject.has("owner")) {
+			JsonElement e = jsonProject.get("owner");
+			if (!e.isJsonNull())
+				this.ownerType = e.getAsJsonObject().get("type").getAsString();
+		}
+		if (jsonProject.has("default_branch")) {
+			JsonElement e = jsonProject.get("default_branch");
+			if (!e.isJsonNull())
+				this.defaultBranch = e.getAsString();
 		}
         /*if (jsonProject.has("databases")) {
 	    	JSONArray jsonDBs = jsonProject.getJSONArray("databases");
@@ -379,6 +391,9 @@ public class RepoMetadata {
 		project.setForked(fork);
 		project.setForks(forks);
 		project.setStars(stars);
+		project.setSize(size);
+		project.setOwnerType(ownerType);
+		project.setDefaultBranch(defaultBranch);
 		if (mainLanguage != null)
 			project.setMainLanguage(mainLanguage);
 		if (programmingLanguages != null) {
@@ -438,5 +453,13 @@ public class RepoMetadata {
 		}
 		Project prj = project.build();
 		return prj;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
 	}
 }

@@ -79,7 +79,7 @@ public class TestJLSVersionOfChangedFile {
 	private static FileSystem fileSystem = null;
 	
 	private static SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
-	private static long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
+	private static long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1, repoWriterLen = 1;
 	
 	public TestJLSVersionOfChangedFile(String name, ChangedFile input) {
 		DefaultProperties.DEBUG = true;
@@ -103,7 +103,7 @@ public class TestJLSVersionOfChangedFile {
 		filecheck.run();
 		String url = "https://github.com/" + repoName + ".git";
 		RepositoryCloner.clone(new String[]{url, gitDir.getAbsolutePath()});
-		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName, astWriter, astWriterLen, commitWriter, commitWriterLen, contentWriter, contentWriterLen);
+		GitConnector conn = new GitConnector(gitDir.getAbsolutePath(), repoName, astWriter, astWriterLen, commitWriter, commitWriterLen, contentWriter, contentWriterLen, repoWriterLen);
 		final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
 		repoBuilder.setKind(RepositoryKind.GIT);
 		repoBuilder.setUrl(url);
