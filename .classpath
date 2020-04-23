@@ -107,5 +107,6 @@
 	<classpathentry kind="lib" path="lib/org.antlr.runtime_3.0.0.v200803061811.jar"/>
 	<classpathentry kind="lib" path="lib/antlr-4.5-complete.jar"/>
 	<classpathentry kind="lib" path="lib/parse.python.jar"/>
+	<classpathentry kind="lib" path="lib/parse.python.antlr.runtime.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
