@@ -335,6 +335,8 @@ public class EmitValue implements Writable {
 	public EmitValue(final double[] data) {
 		this(data, null);
 	}
+
+
 	
 	/**
 	 * Construct an EmitValue.

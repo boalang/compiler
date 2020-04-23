@@ -955,7 +955,7 @@ public class BoaAstIntrinsics {
 		indent--;
 
 		s += indent() + "}\n";
-
+		
 		return s;
 	}
 

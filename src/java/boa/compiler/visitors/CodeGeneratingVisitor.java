@@ -819,6 +819,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final Identifier n) {
 		final String id = n.getToken();
+		System.out.println(n);
+		System.out.println(n.env);
+
 		if (n.env.hasType(id)) {
 			if (n.env.getNeedsBoxing())
 				code.add(SymbolTable.getType(id).toBoxedJavaType());
@@ -1008,10 +1011,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 		String typecast = "";
 		if (rhs.contains(".load(")) {
-
 			rhs = rhs.substring(0,rhs.length()-1) + ", new " +
 					((BoaModel)n.getLhs().type).getType().toJavaType() + "())";
-
 			typecast = "(" + (n.getLhs().type + "").split("\\/")[0] + ")";
 		}
 		st.add("lhs", lhs);

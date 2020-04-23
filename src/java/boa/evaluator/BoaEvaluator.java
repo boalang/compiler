@@ -214,5 +214,6 @@ public class BoaEvaluator extends BoaMain {
 
 		// set localData path in Defaultproperties
 		DefaultProperties.localDataPath = this.DATA_PATH;
+		DefaultProperties.localOutput = this.OUTPUT_DIR;
 	}
 }
