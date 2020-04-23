@@ -26,7 +26,7 @@ import boa.types.Ast.Statement;
 import boa.types.Ast.Statement.StatementKind;
 import boa.types.Ast.TypeKind;
 import boa.types.Ast.Variable;
-public class Python3Visitor implements Python3Listener{
+public class Python3Visitor extends ParseTreeWalker implements Python3Listener{
 	Python3Parser parser;
 	Python3Lexer lexer;
 	
@@ -283,6 +283,7 @@ public class Python3Visitor implements Python3Listener{
 		
 	}
 
+	private boolean assignCustom=false;
 	@Override
 	public void enterExpr_stmt(Expr_stmtContext ctx) {
 		System.out.println("Enter expr statement: "+ctx.getText());
@@ -292,6 +293,17 @@ public class Python3Visitor implements Python3Listener{
 		expStatements.push(ctx.getText());
 		//System.out.println("@@ " + ctx.getText());
 		statements.push(sb);
+		
+		for(int i=0;i<ctx.getChildCount();i++)
+		{
+			System.out.println(ctx.getChild(i).getClass().getName());
+			if(ctx.getChild(i) instanceof AssignContext)
+			{
+				assignCustom=true;
+				System.out.println("Yay");
+				((AssignContext)ctx.getChild(i)).enterRule(this);
+			}
+		}
 	}
 
 	@Override
@@ -312,6 +324,8 @@ public class Python3Visitor implements Python3Listener{
 	boolean isAssign = false;
 	@Override
 	public void enterAssign(AssignContext ctx) {	
+		if(assignCustom)
+			System.out.println("Custom assign");
 		System.out.println("Enter Asign: " + ctx.getText());
 		if(expressions.isEmpty())
 			return;

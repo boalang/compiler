@@ -38,11 +38,14 @@ import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ast.AstRoot;
 import org.w3c.css.sac.InputSource;
+import org.eclipse.dltk.python.core.PythonNature;
 import org.eclipse.dltk.python.internal.core.parser.PythonSourceParser;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
+import org.eclipse.dltk.ast.parser.ISourceParser;
+import org.eclipse.dltk.ast.parser.SourceParserManager;
 import org.eclipse.dltk.compiler.IElementRequestor;
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.ImportInfo;
@@ -658,8 +661,7 @@ public abstract class AbstractCommit {
 		
 		if(!pythonParsingError) {
 			final ASTRoot.Builder ast = ASTRoot.newBuilder();
-//			IElementRequestor requestor= new org.eclipse.dltk.compiler.SourceElementRequestorAdaptor();
-	
+			
 			NewPythonVisitor visitor=new NewPythonVisitor();
 		
 			try {

@@ -19,6 +19,7 @@ import org.eclipse.dltk.ast.declarations.MethodDeclaration;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.ast.declarations.TypeDeclaration;
 import org.eclipse.dltk.ast.expressions.ExpressionConstants;
+import org.eclipse.dltk.ast.expressions.Literal;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.Assignment;
@@ -85,9 +86,9 @@ public class NewPythonVisitor extends ASTVisitor {
 			visit((BinaryExpression) md);
 			opFound=true;
 		}
-		else if(md instanceof NumericLiteral)
+		else if(md instanceof org.eclipse.dltk.ast.expressions.StringLiteral)
 		{
-			visit((NumericLiteral) md);
+			visit((org.eclipse.dltk.ast.expressions.StringLiteral) md);
 			opFound=true;
 		}
 
@@ -139,12 +140,13 @@ public class NewPythonVisitor extends ASTVisitor {
 		return true;
 	
 	}
-	public boolean visit(NumericLiteral md)  {
+	public boolean visit(org.eclipse.dltk.ast.expressions.StringLiteral md)  {
 		
 		System.out.println("Literal: "+md.toString());
 
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
+		
 		
 	    b.setLiteral(md.getValue());
 		expressions.push(b.build());
