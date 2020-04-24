@@ -117,6 +117,7 @@ public class BoaIntrinsics {
 			final Path path = new Path("hdfs://master" + URL);
 			in = fileSystem.open(path);
 			
+			
 			final byte[] b = new byte[(int)fileSystem.getLength(path) + 1];
 		    
 			int c = 0;
@@ -139,7 +140,7 @@ public class BoaIntrinsics {
 				if (bo != null) bo.close();
 			} catch (final Exception e) { e.printStackTrace(); }
 		}
-		
+
 		Classifier clr = (Classifier)unserializedObject;
 		BoaModel m = null;
 		if(clr.toString().contains("Linear Regression")){
