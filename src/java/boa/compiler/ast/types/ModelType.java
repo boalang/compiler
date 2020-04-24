@@ -85,6 +85,7 @@ public class ModelType extends AbstractType {
 	public ModelType clone() {
 		final ModelType m;
 		m = new ModelType(id.clone(), t.clone());
+		//System.out.println("xxxxx");
 		copyFieldsTo(m);
 		return m;
 	}

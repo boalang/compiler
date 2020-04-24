@@ -531,7 +531,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("staticStatements", this.staticInitialization.getCode());
 
 		final List<String> statements = new ArrayList<String>();
+
 		for (final Statement s : n.getStatements()) {
+			//System.out.println(s.toString());
+			System.out.println(s.toString());
+			System.out.println(s.toString());
+
 			s.accept(this);
 			final String statement = code.removeLast();
 			if (!statement.isEmpty())
@@ -819,9 +824,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final Identifier n) {
 		final String id = n.getToken();
-		System.out.println(n);
-		System.out.println(n.env);
-
+		System.out.println(id);
 		if (n.env.hasType(id)) {
 			if (n.env.getNeedsBoxing())
 				code.add(SymbolTable.getType(id).toBoxedJavaType());
@@ -973,7 +976,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final ST st = stg.getInstanceOf("Assignment");
 
 		n.getLhs().accept(this);
-
 		final String lhs = code.removeLast();
 
 		n.getRhs().accept(this);
@@ -1318,6 +1320,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		final BoaType lhsType;
 		if (n.hasType()) {
+			//System.out.println(type);
 			n.env.setId(n.getId().getToken());
 			lhsType = n.getType().type;
 			n.getType().accept(this);
@@ -1885,6 +1888,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		code.add("");
 	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final ModelType n) {
+		visit(n.getType());
+	}
 
 	/** {@inheritDoc} */
 	@Override
@@ -1934,7 +1943,32 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TupleType n) {
-		throw new RuntimeException("unexpected error");
+		final ST st = stg.getInstanceOf("TupleType");
+
+		if (!(n.type instanceof BoaTuple))
+			throw new TypeCheckException(n ,"type " + n.type + " is not a tuple type");
+
+		final BoaTuple tupType = ((BoaTuple) n.type);
+
+		final List<Component> members = n.getMembers();
+		final List<String> fields = new ArrayList<String>();
+		final List<String> types = new ArrayList<String>();
+
+		int fieldCount = 0;
+		for (final Component c : members) {
+			if(c.hasIdentifier()){
+				fields.add(c.getIdentifier().getToken());
+			} else {
+				fields.add("id" + fieldCount++);
+			}
+			types.add(c.getType().type.toJavaType());
+		}
+
+		st.add("name", tupType.toJavaType());
+		st.add("fields", fields);
+		st.add("types", types);
+
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */

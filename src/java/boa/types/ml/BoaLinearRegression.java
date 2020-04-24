@@ -49,6 +49,7 @@ public class BoaLinearRegression extends BoaModel{
 	 *
 	 */
 	public BoaLinearRegression(BoaType t){
+
 		this.t = t;
 	}
 	

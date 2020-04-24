@@ -262,7 +262,22 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	@Override
 	public void visit(final Call n, final SymbolTable env) {
 		n.env = env;
-
+        List<BoaType> expr = this.check(n.getArgs(), env);
+        if (expr.size() > 1) {
+            if (expr.get(0) instanceof BoaModel && expr.get(1) instanceof BoaTuple) {
+                final BoaType t = ((BoaModel) expr.get(0)).getType();
+                if (t instanceof BoaTuple) {
+                    final List<BoaType> mtypes = ((BoaTuple) t).getTypes();
+                    final List<BoaType> vtypes = ((BoaTuple) expr.get(1)).getTypes();
+                    if (mtypes.size() - 1 == vtypes.size()) {
+                        for (int i = 0; i < mtypes.size() - 1; i++)
+                            if (!(mtypes.get(i).toString().equals(vtypes.get(i).toString())))
+                                throw new TypeCheckException(n, "incompatible types for model:" + " required '" + mtypes.get(i) + "', found '" + vtypes.get(i) + "'");
+                    } else
+                        throw new TypeCheckException(n, "'incorrect number of types for model classification '" + "': required " + (mtypes.size() - 1) + ", found " + vtypes.size());
+                }
+            }
+        }
 		if (n.getArgsSize() > 0)
 			n.type = new BoaTuple(this.check(n.getArgs(), env));
 		else
@@ -730,7 +745,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		} catch (final IOException ex) {
 			throw new RuntimeException(e.getClass().getSimpleName() + " caught", ex);
 		}
-
 		n.env = st;
 
 		c.accept(this, st);
@@ -1433,6 +1447,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.getId().accept(this, env);
 	}
 
+
 	
     /**
      * {@inheritDoc}
@@ -1452,6 +1467,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
             }
 
         if (n.type instanceof BoaLinearRegression)
+        	System.out.println(n.getType().type);
             n.type = new BoaLinearRegression(n.getType().type);
 
     }

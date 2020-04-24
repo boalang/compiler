@@ -48,6 +48,9 @@ public abstract class AbstractVisitorNoArgNoRet {
 	}
 
 	public void visit(final Start n) {
+//		System.out.println();
+//		System.out.println("xxxxx");
+//		System.out.println(n.getProgram());
 		n.getProgram().accept(this);
 	}
 
@@ -416,6 +419,7 @@ public abstract class AbstractVisitorNoArgNoRet {
 	}
 	
 	public void visit(final ModelType n) {
+		//System.out.println(n.getType());
 		n.getId().accept(this);
 		n.getType().accept(this);
 	}

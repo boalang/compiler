@@ -142,8 +142,6 @@ public class BoaIntrinsics {
 		
 		Classifier clr = (Classifier)unserializedObject;
 		BoaModel m = null;
-
-
 		if(clr.toString().contains("Linear Regression")){
 			m = new BoaLinearRegression(clr, o);
 		}

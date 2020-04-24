@@ -75,6 +75,7 @@ public class ASTFactory {
 
 	public static Expression createIdentifierExpr(final String name, final SymbolTable env, BoaType t) {
 		final Factor f = new Factor(ASTFactory.createIdentifier(name, env));
+
 		f.env = env;
 
 		final Expression exp = new Expression(
@@ -96,6 +97,7 @@ public class ASTFactory {
 		final Call c = new Call();
 		for (final Expression e : args)
 			c.addArg(e);
+
 		c.env = env;
 
 		exp.getLhs().getLhs().getLhs().getLhs().getLhs().addOp(c);
