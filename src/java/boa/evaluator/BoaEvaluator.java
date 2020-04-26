@@ -20,7 +20,6 @@ package boa.evaluator;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.UUID;
@@ -189,7 +188,6 @@ public class BoaEvaluator extends BoaMain {
 		// output directory already exists, remove it
 		if (this.OUTPUT_DIR != null) {
 			final File outputDir = new File(this.OUTPUT_DIR);
-
 			if (outputDir.exists()) {
 				System.err.print("output directory '" + this.OUTPUT_DIR + "' exists - delete? [Y/n] ");
 				int b = (char)System.in.read();

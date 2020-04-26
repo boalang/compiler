@@ -28,8 +28,8 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.compress.CompressionCodec;
-import org.apache.hadoop.io.compress.SnappyCodec;
+//import org.apache.hadoop.io.compress.CompressionCodec;
+//import org.apache.hadoop.io.compress.SnappyCodec;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -64,8 +64,8 @@ public abstract class BoaRunner extends Configured implements Tool {
 		final Configuration configuration = getConf();
 
 		// faster local reads
-		configuration.setBoolean("dfs.client.read.shortcircuit", true);
-		configuration.setBoolean("dfs.client.read.shortcircuit.skip.checksum", true);
+//		configuration.setBoolean("dfs.client.read.shortcircuit", true);
+//		configuration.setBoolean("dfs.client.read.shortcircuit.skip.checksum", true);
 
 		// by default our MapFile's index every key, which takes up
 		// a lot of memory - this lets you skip keys in the index and
@@ -73,33 +73,37 @@ public abstract class BoaRunner extends Configured implements Tool {
 		//configuration.setLong("io.map.index.skip", 128);
 
 		// map output compression
-		configuration.setBoolean("mapred.compress.map.output", true);
+//		configuration.setBoolean("mapred.compress.map.output", true);
+		configuration.setBoolean("mapreduce.map.output.compress", true);
 		configuration.set("mapred.map.output.compression.type", "BLOCK");
-		configuration.setClass("mapred.map.output.compression.codec", SnappyCodec.class, CompressionCodec.class);
+//		configuration.setClass("mapred.map.output.compression.codec", SnappyCodec.class, CompressionCodec.class);
 
-		configuration.setBoolean("mapred.map.tasks.speculative.execution", false);
-		configuration.setBoolean("mapred.reduce.tasks.speculative.execution", false);
-		configuration.setLong("mapred.job.reuse.jvm.num.tasks", -1);
+//		configuration.setBoolean("mapred.map.tasks.speculative.execution", false);
+//		configuration.setBoolean("mapred.reduce.tasks.speculative.execution", false);
+//		configuration.setLong("mapred.job.reuse.jvm.num.tasks", -1);
+		configuration.setBoolean("mapreduce.map.speculative", false);
+		configuration.setBoolean("mapreduce.reduce.speculative", false);
+		configuration.setBoolean("mapreduce.job.ubertask.enable", true);
 		
 		// set the maximum percentage of map tasks that can fail without 
 		// the job being aborted. 
-		configuration.setLong("mapred.max.map.failures.percent", 50);
+//		configuration.setLong("mapred.max.map.failures.percent", 50);
 		
 		// set map task timeout (1440mins)
 //		configuration.setLong("mapred.task.timeout", 86400000);
 		
 		// set map task timeout (30mins)
-		configuration.setLong("mapred.task.timeout", 1800000);
+//		configuration.setLong("mapred.task.timeout", 1800000);
 		
 		// set max attempt
-		configuration.setLong("mapred.map.max.attempts", 1);
-		configuration.setLong("mapred.reduce.max.attempts", 1);
+//		configuration.setLong("mapred.map.max.attempts", 1);
+//		configuration.setLong("mapred.reduce.max.attempts", 1);
 		
 		// mem to 2GB
 //		configuration.set("mapred.map.child.java.opts", "-Xmx2048m");
 //		configuration.set("mapred.reduce.child.java.opts", "-Xmx2048m");
 
-		final Job job = new Job(configuration);
+		Job job = Job.getInstance(configuration);
 
 		if (ins != null)
 			for (final Path in : ins)
@@ -122,6 +126,7 @@ public abstract class BoaRunner extends Configured implements Tool {
 
 	static {
 		options.addOption("p", "profile", false, "if true, profiles the execution of 1 map task");
+		options.addOption("r", "robust", false, "if true, logs non-IO exceptions and continues");
 		options.addOption("b", "block", false, "if true, wait for job to finish and show status");
 		options.addOption(OptionBuilder.withLongOpt("job")
 										.withDescription("sets the MySql ID to update with this job's status")

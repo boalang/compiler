@@ -66,7 +66,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 		super.abortJob(context, runState);
 
 		final JobClient jobClient = new JobClient(new JobConf(context.getConfiguration()));
-		final RunningJob job = jobClient.getJob((org.apache.hadoop.mapred.JobID) JobID.forName(context.getConfiguration().get("mapred.job.id")));
+		final RunningJob job = jobClient.getJob((org.apache.hadoop.mapred.JobID) JobID.forName(context.getConfiguration().get("mapreduce.job.id")));
 		String diag = "";
 		for (final TaskCompletionEvent event : job.getTaskCompletionEvents(0))
 			switch (event.getTaskStatus()) {

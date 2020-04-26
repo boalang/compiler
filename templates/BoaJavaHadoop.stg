@@ -66,9 +66,11 @@ public class <name> extends boa.runtime.BoaRunner {
 			configuration.set("boa.comments.dir", line.getOptionValue("comments"));
 
 		if (line.hasOption("splitsize"))
-			configuration.setInt("mapred.max.split.size", Integer.parseInt(line.getOptionValue("splitsize")));
+			//configuration.setInt("mapred.max.split.size", Integer.parseInt(line.getOptionValue("splitsize")));
+			configuration.setInt("mapreduce.input.fileinputformat.split.maxsize", Integer.parseInt(line.getOptionValue("splitsize")));
 		else
-			configuration.setInt("mapred.max.split.size", <splitsize>);
+			//configuration.setInt("mapred.max.split.size", <splitsize>);
+			configuration.setInt("mapreduce.input.fileinputformat.split.maxsize", <splitsize>);
 
 		if (line.hasOption("profile")) {
 			configuration.setBoolean("mapred.task.profile", true);

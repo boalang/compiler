@@ -403,9 +403,10 @@ public class BoaRefactoringIntrinsics {
 	public static double[] getStats(Collection<? extends Number> nums) {
 		if (nums == null || nums.size() == 0)
 			return new double[5];
-		Stats stats = Stats.of(nums);
-		return new double[] { stats.min(), stats.max(), stats.mean(), Quantiles.median().compute(nums),
-				stats.populationStandardDeviation() };
+//		Stats stats = Stats.of(nums);
+//		return new double[] { stats.min(), stats.max(), stats.mean(), Quantiles.median().compute(nums),
+//				stats.populationStandardDeviation() };
+		return null;
 	}
 
 	public static String getPackageNameFromFQN(String fqn) {

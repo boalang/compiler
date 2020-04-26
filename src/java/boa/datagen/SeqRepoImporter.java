@@ -38,6 +38,7 @@ import org.eclipse.jgit.errors.LargeObjectException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.internal.storage.file.ByteArrayFile;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
+import org.apache.log4j.PropertyConfigurator;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -75,11 +76,12 @@ public class SeqRepoImporter {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 
+		PropertyConfigurator.configure("/Users/hyj/boa-workspace/compiler/log4j.properties");
 		conf = new Configuration();
 		fileSystem = FileSystem.get(conf);
 		base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 
-		getProcessedProjects();
+//		getProcessedProjects();
 
 		// assign each thread with a worker
 		ImportTask[] workers = new ImportTask[poolSize];
