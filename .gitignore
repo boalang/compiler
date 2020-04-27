@@ -9,4 +9,4 @@
 .vscode/
 /model/
 Query.jar
-.classpath
+/.classpath
