@@ -973,6 +973,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final String lhs = code.removeLast();
 
 		n.getRhs().accept(this);
+		
 		String rhs = code.removeLast();
 		if (n.getLhs().type instanceof BoaTuple && n.getRhs().type instanceof BoaArray) {
 			final Operand op = n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
@@ -1003,6 +1004,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			code.add(lhs.substring(0, idx - ".get(".length()) + ".put(" + lhs.substring(idx, lhs.lastIndexOf(')')) + ", " + rhs + lhs.substring(lhs.lastIndexOf(')')) + ";");
 			return;
 		}
+		
 		String typecast = "";
 		if (rhs.contains(".load(")) {
 			rhs = rhs.substring(0,rhs.length()-1) + ", new " +

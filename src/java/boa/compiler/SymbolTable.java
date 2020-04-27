@@ -380,16 +380,15 @@ public class SymbolTable {
 		types.put("float", new BoaFloat());
 		types.put("time", new BoaTime());
 		types.put("string", new BoaString());
-		
+        types.put("LinearRegression", new BoaLinearRegression());
+        types.put("Model", new BoaModel());
+        types.put("tuple", new BoaTuple());
 		for (final BoaType t : dslTupleTypes)
 			types.put(t.toString(), t);
 
 		for (final BoaType t : dslMapTypes)
 			types.put(t.toString(), t);
-		
-        types.put("LinearRegression", new BoaLinearRegression());
-        types.put("Model", new BoaModel());
-        types.put("tuple", new BoaTuple());
+
 	}
 
 	public SymbolTable cloneNonLocals() throws IOException {

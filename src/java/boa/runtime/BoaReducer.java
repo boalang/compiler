@@ -85,9 +85,7 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 		a.start(key);
 		a.setContext(context);
 
-        int counter = 1;
 		for (final EmitValue value : values)
-
 			try {
                 if (value.getTuple() != null) {
                     a.aggregate(value.getTuple(), value.getMetadata());
@@ -96,9 +94,8 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
                         a.setVectorSize(value.getData().length);
                         setVector = false;
                     }
-				for (final String s : value.getData()) {
+				for (final String s : value.getData()) 
 					a.aggregate(s, value.getMetadata());
-				}
                 }
 			} catch (final FinishedException e) {
 				// we are done

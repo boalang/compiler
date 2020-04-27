@@ -111,8 +111,6 @@ public abstract class Aggregator {
 		this.aggregate(BoaCasts.doubleToString(data), null);
 	}
 	
-	
-
 	@SuppressWarnings("unchecked")
 	protected void collect(final String data, final String metadata) throws IOException, InterruptedException {
 		if (this.combining)
@@ -183,11 +181,10 @@ public abstract class Aggregator {
 		return this.key;
 	}
 	
-	//for ML
 	public int getVectorSize() {
 		return this.vectorSize;
 	}
-	//for ML
+
 	public void setVectorSize(int vectorSize) {
 		this.vectorSize = vectorSize;
 	}

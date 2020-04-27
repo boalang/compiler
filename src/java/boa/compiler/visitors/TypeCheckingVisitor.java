@@ -30,7 +30,6 @@ import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 import boa.compiler.transforms.VisitorDesugar;
 import boa.types.*;
-
 import boa.types.ml.BoaLinearRegression;
 import boa.types.ml.BoaModel;
 import boa.types.proto.CodeRepositoryProtoTuple;
@@ -262,6 +261,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	@Override
 	public void visit(final Call n, final SymbolTable env) {
 		n.env = env;
+		
         List<BoaType> expr = this.check(n.getArgs(), env);
         if (expr.size() > 1) {
             if (expr.get(0) instanceof BoaModel && expr.get(1) instanceof BoaTuple) {
@@ -745,6 +745,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		} catch (final IOException ex) {
 			throw new RuntimeException(e.getClass().getSimpleName() + " caught", ex);
 		}
+		
 		n.env = st;
 
 		c.accept(this, st);

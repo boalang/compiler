@@ -1020,6 +1020,7 @@ public class BoaAstIntrinsics {
 
 		if (v.hasInitializer())
 			s += " = " + prettyprint(v.getInitializer());
+		
 		return s;
 	}
 

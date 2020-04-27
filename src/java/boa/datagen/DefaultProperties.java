@@ -76,11 +76,9 @@ public class DefaultProperties {
 	
 	// for ML
 	public static String localOutput = null;
-
 	public static String HADOOP_SEQ_FILE_LOCATION = "hdfs://master-link-1/outputModel";
 	public static String HADOOP_OUT_LOCATION = "hdfs://master-link-1/outputModel";
 
-	
 	@SuppressWarnings("unused")
 	private static String getRoot() {
 		File dir = new File(System.getProperty("user.dir"));
