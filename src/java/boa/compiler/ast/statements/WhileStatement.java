@@ -72,6 +72,7 @@ public class WhileStatement extends Statement {
 
 	public WhileStatement clone() {
 		final WhileStatement s = new WhileStatement(condition.clone(), body.clone());
+		System.out.println(s);
 		copyFieldsTo(s);
 		return s;
 	}

@@ -9,7 +9,6 @@
 	<classpathentry kind="lib" path="lib/antlr-4.5-complete.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-math-2.1.jar"/>
-	<classpathentry kind="lib" path="lib/hadoop-core-1.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/hamcrest-all-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/hamcrest-core-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.11.jar"/>
@@ -95,12 +94,14 @@
 	<classpathentry kind="lib" path="lib/evaluator/commons-httpclient-3.1.0.redhat-7.jar"/>
 	<classpathentry kind="lib" path="lib/evaluator/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/evaluator/jackson-mapper-asl-1.9.13.jar"/>
+	<classpathentry kind="lib" path="/home/tess/Downloads/weka-3-8-4/weka.jar"/>
+	<classpathentry kind="lib" path="/home/tess/Downloads/weka-3-8-4/weka-src.jar"/>
 	<classpathentry kind="lib" path="/home/tess/Downloads/arpack_combined.jar"/>
 	<classpathentry kind="lib" path="/home/tess/Downloads/core.jar"/>
 	<classpathentry kind="lib" path="/home/tess/Downloads/mtj.jar"/>
-	<classpathentry kind="lib" path="/home/tess/Downloads/weka-3-8-4/weka.jar"/>
 	<classpathentry kind="lib" path="/home/tess/Downloads/org.eclipse.jgit-5.7.0.202003110725-r.jar"/>
 	<classpathentry kind="lib" path="/home/tess/Downloads/jsch-0.1.55.jar"/>
 	<classpathentry kind="lib" path="compile"/>
+	<classpathentry kind="lib" path="lib/hadoop-core-1.0.4.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

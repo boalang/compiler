@@ -139,7 +139,6 @@ public abstract class BoaType {
 
 		if (!names.containsKey(t))
 			names.put(t, kind + "_" + names.size());
-
 		return names.get(t);
 	}
 

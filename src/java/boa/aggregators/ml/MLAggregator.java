@@ -232,9 +232,11 @@ public abstract class MLAggregator extends Aggregator {
     protected void instanceCreation(ArrayList<String> data) {
         try {
             Instance instance = new DenseInstance(this.NumOfAttributes);
-            for (int i = 0; i < this.NumOfAttributes; i++)
+        	
+            for (int i = 0; i < this.NumOfAttributes; i++) {
                 instance.setValue((Attribute) this.fvAttributes.get(i), Double.parseDouble(data.get(i)));
-
+            }
+            	
             trainingSet.add(instance);
         } catch (Exception e) {
             e.printStackTrace();
@@ -292,6 +294,7 @@ public abstract class MLAggregator extends Aggregator {
     protected void aggregate(final String data, final String metadata, String
             name) throws IOException, InterruptedException {
         if (this.count != this.getVectorSize()) {
+
             this.vector.add(data);
             this.count++;
         }

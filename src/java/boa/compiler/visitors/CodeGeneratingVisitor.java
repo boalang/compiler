@@ -533,10 +533,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final List<String> statements = new ArrayList<String>();
 
 		for (final Statement s : n.getStatements()) {
-			//System.out.println(s.toString());
-			System.out.println(s.toString());
-			System.out.println(s.toString());
-
 			s.accept(this);
 			final String statement = code.removeLast();
 			if (!statement.isEmpty())
@@ -824,7 +820,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final Identifier n) {
 		final String id = n.getToken();
-		System.out.println(id);
 		if (n.env.hasType(id)) {
 			if (n.env.getNeedsBoxing())
 				code.add(SymbolTable.getType(id).toBoxedJavaType());
@@ -980,8 +975,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		n.getRhs().accept(this);
 		String rhs = code.removeLast();
-		System.out.println(n.getRhs());
-
 		if (n.getLhs().type instanceof BoaTuple && n.getRhs().type instanceof BoaArray) {
 			final Operand op = n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
 			if (op instanceof Composite) {
@@ -1320,7 +1313,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		final BoaType lhsType;
 		if (n.hasType()) {
-			//System.out.println(type);
 			n.env.setId(n.getId().getToken());
 			lhsType = n.getType().type;
 			n.getType().accept(this);

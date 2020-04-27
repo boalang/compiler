@@ -112,9 +112,13 @@ public class BoaIntrinsics {
 		ObjectInputStream dataIn = null;
 		ByteArrayOutputStream bo = null;
 		try {
+			String hdfsUrl = "hdfs://localhost:9000";
+
 			final Configuration conf = new Configuration();
+			 conf.addResource(new Path("/home/tess/hadoop-2.9.2/etc/hadoop/core-site.xml"));
+			conf.set("fs.defaultFS", hdfsUrl);
 			final FileSystem fileSystem = FileSystem.get(conf);
-			final Path path = new Path("hdfs://master" + URL);
+			final Path path = new Path(hdfsUrl + URL);
 			in = fileSystem.open(path);
 			
 			
