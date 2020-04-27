@@ -388,7 +388,6 @@ public class SymbolTable {
 
 		for (final BoaType t : dslMapTypes)
 			types.put(t.toString(), t);
-
 	}
 
 	public SymbolTable cloneNonLocals() throws IOException {

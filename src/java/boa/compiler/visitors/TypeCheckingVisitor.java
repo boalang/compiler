@@ -745,7 +745,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		} catch (final IOException ex) {
 			throw new RuntimeException(e.getClass().getSimpleName() + " caught", ex);
 		}
-		
+
 		n.env = st;
 
 		c.accept(this, st);

@@ -110,7 +110,7 @@ public abstract class Aggregator {
 	public void aggregate(final double data) throws IOException, InterruptedException, FinishedException {
 		this.aggregate(BoaCasts.doubleToString(data), null);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	protected void collect(final String data, final String metadata) throws IOException, InterruptedException {
 		if (this.combining)

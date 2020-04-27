@@ -955,7 +955,7 @@ public class BoaAstIntrinsics {
 		indent--;
 
 		s += indent() + "}\n";
-		
+
 		return s;
 	}
 
@@ -1020,7 +1020,7 @@ public class BoaAstIntrinsics {
 
 		if (v.hasInitializer())
 			s += " = " + prettyprint(v.getInitializer());
-		
+
 		return s;
 	}
 
