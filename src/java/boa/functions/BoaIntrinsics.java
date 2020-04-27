@@ -266,8 +266,6 @@ public class BoaIntrinsics {
 		else
 			return predval + "";
 	}
-
-	
 	
 	@FunctionSpec(name = "getrevisionscount", returnType = "int", formalParameters = { "CodeRepository" })
 	public static int getRevisionsCount(CodeRepository cr) {

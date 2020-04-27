@@ -453,7 +453,6 @@ public class EmitValue implements Writable {
 		return this.tdata;
 	}
 
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -1447,8 +1447,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		env.set(n.getId().getToken(), n.type);
 		n.getId().accept(this, env);
 	}
-
-
 	
     /**
      * {@inheritDoc}
