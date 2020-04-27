@@ -157,7 +157,7 @@ public class BoaIntrinsics {
 	}
 	
 	@FunctionSpec(name = "classify", returnType = "string", formalParameters = { "Model","tuple"})
-	public static String classify(final BoaModel model, final boa.BoaTup vector) throws Exception {
+	public static String classify(final BoaModel model, final boa.runtime.Tuple vector) throws Exception {
 		int NumOfAttributes = 0;
 		ArrayList<Attribute> fvAttributes = new ArrayList<Attribute>();
 		try {
@@ -184,7 +184,7 @@ public class BoaIntrinsics {
 				}
 			}
 			
-			String[] fields = ((boa.BoaTup)model.getObject()).getFieldNames();
+			String[] fields = ((boa.runtime.Tuple)model.getObject()).getFieldNames();
 			Field lastfield = model.getObject().getClass().getField(fields[fields.length - 1]);
 			if(lastfield.getType().isEnum()) {
 				ArrayList<String> fvNominalVal = new ArrayList<String>();
@@ -235,7 +235,7 @@ public class BoaIntrinsics {
 		}
 		
 		try {
-			String[] fields = ((boa.BoaTup)model.getObject()).getFieldNames();
+			String[] fields = ((boa.runtime.Tuple)model.getObject()).getFieldNames();
 			Field lastfield = model.getObject().getClass().getField(fields[fields.length - 1]);
 			if(lastfield.getType().isEnum()) {
 				ArrayList<String> fvNominalVal = new ArrayList<String>();

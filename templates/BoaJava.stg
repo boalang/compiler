@@ -126,7 +126,7 @@ new <type>()
 >>
 
 TupleType(name, fields, types, protos) ::= <<
-private class <name> implements boa.BoaTup, java.io.Serializable
+private class <name> implements boa.runtime.Tuple, java.io.Serializable
 {	
 	<name>(){}
 	

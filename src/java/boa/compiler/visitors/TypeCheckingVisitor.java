@@ -1466,7 +1466,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
             }
 
         if (n.type instanceof BoaLinearRegression)
-        	System.out.println(n.getType().type);
             n.type = new BoaLinearRegression(n.getType().type);
 
     }

@@ -16,9 +16,9 @@
  */
 package boa.aggregators.ml;
 
-import boa.BoaTup;
 import boa.aggregators.AggregatorSpec;
 import boa.aggregators.FinishedException;
+import boa.runtime.Tuple;
 import weka.classifiers.functions.LinearRegression;
 
 import java.io.IOException;
@@ -45,7 +45,7 @@ public class LinearRegressionAggregator extends MLAggregator {
         aggregate(data, metadata, "LinearRegression");
     }
 
-    public void aggregate(final BoaTup data, final String metadata) throws IOException, InterruptedException, FinishedException, IllegalAccessException {
+    public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException, FinishedException, IllegalAccessException {
         aggregate(data, metadata, "LinearRegression");
     }
 

@@ -27,8 +27,8 @@ import java.util.Arrays;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 
-import boa.BoaTup;
 import boa.functions.BoaCasts;
+import boa.runtime.Tuple;
 
 /**
  * A {@link Writable} that contains a datum and an optional metadatum to be
@@ -41,7 +41,7 @@ public class EmitValue implements Writable {
 	private String[] data;
 	private String metadata;
 	private String[] odata;
-	private BoaTup tdata;
+	private Tuple tdata;
 
 	/**
 	 * Construct an EmitValue.
@@ -289,11 +289,11 @@ public class EmitValue implements Writable {
 	 * Construct an EmitValue.
 	 * 
 	 * @param data
-	 *            A {@link BoaTup} containing the data to be emitted
+	 *            A {@link Tuple} containing the data to be emitted
 	 * @param metadata
 	 *            A {@link String} containing the metadata to be emitted
 	 */
-	public EmitValue(final BoaTup data, final String metadata) {
+	public EmitValue(final Tuple data, final String metadata) {
 		this.tdata = data;
 	}
 	
@@ -301,9 +301,9 @@ public class EmitValue implements Writable {
 	 * Construct an EmitValue.
 	 * 
 	 * @param data
-	 *            A {@link BoaTup} containing the data to be emitted
+	 *            A {@link Tuple} containing the data to be emitted
 	 */
-	public EmitValue(final BoaTup data) {
+	public EmitValue(final Tuple data) {
 		this(data, null);
 	}
 	
@@ -393,7 +393,7 @@ public class EmitValue implements Writable {
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
-			this.tdata = (BoaTup)o;
+			this.tdata = (Tuple)o;
 		}
 	}
 
@@ -449,7 +449,7 @@ public class EmitValue implements Writable {
 		this.metadata = metadata;
 	}
 	
-	public BoaTup getTuple() {
+	public Tuple getTuple() {
 		return this.tdata;
 	}
 

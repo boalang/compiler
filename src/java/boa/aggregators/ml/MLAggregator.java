@@ -16,9 +16,10 @@
  */
 package boa.aggregators.ml;
 
-import boa.BoaTup;
 import boa.aggregators.Aggregator;
 import boa.datagen.DefaultProperties;
+import boa.runtime.Tuple;
+
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
@@ -197,7 +198,7 @@ public abstract class MLAggregator extends Aggregator {
     @Override
     public abstract void aggregate(final String data, final String metadata) throws NumberFormatException, IOException, InterruptedException;
 
-    protected void attributeCreation(BoaTup data, final String name) {
+    protected void attributeCreation(Tuple data, final String name) {
         this.fvAttributes.clear();
         try {
             String[] fieldNames = data.getFieldNames();
@@ -243,7 +244,7 @@ public abstract class MLAggregator extends Aggregator {
         }
     }
 
-    protected void instanceCreation(BoaTup data) {
+    protected void instanceCreation(Tuple data) {
         try {
             int count = 0;
             Instance instance = new DenseInstance(this.NumOfAttributes);
@@ -275,7 +276,6 @@ public abstract class MLAggregator extends Aggregator {
 
 
     protected void attributeCreation(String name) {
-    	System.out.println(this.getVectorSize());
         fvAttributes.clear();
         NumOfAttributes = this.getVectorSize();
         try {
@@ -308,7 +308,7 @@ public abstract class MLAggregator extends Aggregator {
         }
     }
 
-    protected void aggregate(final BoaTup data, final String metadata, String
+    protected void aggregate(final Tuple data, final String metadata, String
             name) throws IOException, InterruptedException {
         if (this.flag != true)
             attributeCreation(data, name);
