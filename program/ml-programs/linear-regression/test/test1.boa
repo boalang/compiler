@@ -1,0 +1,45 @@
+# Predict avg. number of word count for second half of the revisions using the trained ML model 
+
+p: Project = input;
+word: array of string;
+size := 0; 
+firstHalf := 0;
+secondHalf := 0;
+avgfirstHalf := 0;
+avgsecondHalf := 0;
+
+predict: output collection[string] of string;
+
+model: Model;
+model = load("path/to/model");
+
+visit(p, visitor {
+	before repo: CodeRepository -> {
+	  
+	  size = getrevisionscount(CodeRepository);
+	  if((yearof(p.created_date)) > 2015 && monthof(p.created_date) > 5){
+		foreach (i: int; getrevision(repo, i)) {
+			if(size/2 > i)
+				{  
+				 word = splitall(getrevision(repo, i).log, " ");
+			     secondHalf = secondHalf + len(word);	
+				}
+			else {
+			     word = splitall(getrevision(repo, i).log, " ");
+			     firstHalf = firstHalf + len(word);
+			     }
+		}
+		if(size!=0){
+			avgfirstHalf = (firstHalf/size)*2;
+			testInput := {1.2};
+		    predict[p.id] << classify(model, testInput);
+		    
+		}
+		firstHalf = 0;
+        secondHalf = 0;
+	  }
+
+	}	
+});
+
+

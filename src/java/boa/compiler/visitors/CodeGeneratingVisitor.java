@@ -531,7 +531,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("staticStatements", this.staticInitialization.getCode());
 
 		final List<String> statements = new ArrayList<String>();
-
 		for (final Statement s : n.getStatements()) {
 			s.accept(this);
 			final String statement = code.removeLast();

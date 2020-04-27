@@ -145,8 +145,6 @@ public class BoaTuple extends BoaType {
 
 		for (final BoaType t : this.members)
 			s += "_" + cleanType(t.toJavaType());
-		System.out.println("tuple " + this.members.toString());
-
 		return shortenedType(s, "BoaTup");
 	}
 

@@ -56,7 +56,6 @@ public class Identifier extends AbstractType {
 	/** {@inheritDoc} */
 	@Override
 	public void accept(final AbstractVisitorNoArgNoRet v) {
-		//System.out.print(this.env);
 		v.visit(this);
 	}
 
