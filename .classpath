@@ -53,4 +53,5 @@
 			<attribute name="optional" value="true"/>
 			<attribute name="test" value="true"/>
 		</attributes>
-</classpathentry>
+	</classpathentry>
+</classpath>
