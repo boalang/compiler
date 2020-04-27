@@ -77,7 +77,6 @@ public abstract class Aggregator {
 		this.mlarg = arg;
 	}
 	
-	
 	/**
 	 * Reset this aggregator for a new key.
 	 * 

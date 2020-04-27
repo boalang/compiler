@@ -974,7 +974,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		n.getRhs().accept(this);
 		String rhs = code.removeLast();
-		
+
 		if (n.getLhs().type instanceof BoaTuple && n.getRhs().type instanceof BoaArray) {
 			final Operand op = n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
 			if (op instanceof Composite) {
