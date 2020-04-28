@@ -19,25 +19,31 @@ import org.eclipse.dltk.ast.declarations.MethodDeclaration;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.ast.declarations.TypeDeclaration;
 import org.eclipse.dltk.ast.expressions.ExpressionConstants;
+import org.eclipse.dltk.ast.expressions.ExpressionList;
 import org.eclipse.dltk.ast.expressions.Literal;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonTupleExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.Assignment;
 import org.eclipse.dltk.python.parser.ast.expressions.BinaryExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.CallHolder;
+import org.eclipse.dltk.python.parser.ast.expressions.ExtendedVariableReference;
+import org.eclipse.dltk.python.parser.ast.expressions.IndexHolder;
+import org.eclipse.dltk.python.parser.ast.expressions.PrintExpression;
 import 	org.eclipse.dltk.ast.references.VariableReference;
 import org.eclipse.dltk.ast.expressions.NumericLiteral;
-//import boa.types.Ast.Declaration;
-//import boa.types.Ast.Expression;
-//import boa.types.Ast.Method;
-//import boa.types.Ast.Modifier;
-//import boa.types.Ast.Namespace;
-//import boa.types.Ast.PositionInfo;
-//import boa.types.Ast.Statement;
-//import boa.types.Ast.Statement.StatementKind;
-//import boa.types.Ast.Type;
-//import boa.types.Ast.TypeKind;
-//import boa.types.Ast.Variable;
-//import boa.types.Ast.Expression.ExpressionKind;
+import boa.types.Ast.Declaration;
+import boa.types.Ast.Expression;
+import boa.types.Ast.Method;
+import boa.types.Ast.Modifier;
+import boa.types.Ast.Namespace;
+import boa.types.Ast.PositionInfo;
+import boa.types.Ast.Statement;
+import boa.types.Ast.Statement.StatementKind;
+import boa.types.Ast.Type;
+import boa.types.Ast.TypeKind;
+import boa.types.Ast.Variable;
+import boa.types.Ast.Expression.ExpressionKind;
 
 
 import boa.types.Ast.Namespace;
@@ -86,6 +92,22 @@ public class NewPythonVisitor extends ASTVisitor {
 			visit((BinaryExpression) md);
 			opFound=true;
 		}
+		else if(md instanceof PrintExpression)
+		{
+			visit((PrintExpression) md);
+			opFound=true;
+		}
+		
+		else if(md instanceof ExtendedVariableReference)
+		{
+			visit((ExtendedVariableReference) md);
+			opFound=true;
+		}
+		else if(md instanceof PythonTupleExpression)
+		{
+			visit((PythonTupleExpression) md);
+			opFound=true;
+		}
 		else if(md instanceof org.eclipse.dltk.ast.expressions.StringLiteral)
 		{
 			visit((org.eclipse.dltk.ast.expressions.StringLiteral) md);
@@ -101,6 +123,71 @@ public class NewPythonVisitor extends ASTVisitor {
 //    	System.out.println("Exit 2:  "+node.toString());
 //    }
 	
+	public boolean visit(ExtendedVariableReference md) throws Exception  {
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+		if(md.getExpressionCount()>1 && 
+				md.getExpression(md.getExpressionCount()-1) instanceof CallHolder)
+		{
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
+			if(md.getExpression(md.getExpressionCount()-2) instanceof VariableReference)
+			{
+				VariableReference vr=(VariableReference)md.getExpression(md.getExpressionCount()-2);
+				
+				b.setMethod(vr.getName());
+			}
+			for(int i=0;i<md.getExpressionCount()-2;i++)
+			{
+				md.getExpression(i).traverse(this);
+				b.addExpressions(expressions.pop());
+			}
+			CallHolder ch=(CallHolder)md.getExpression(md.getExpressionCount()-1);
+			if(ch.getArguments() instanceof ExpressionList)
+			{
+				ExpressionList el= (ExpressionList)ch.getArguments();
+				for(Object ob : el.getExpressions())
+				{
+					org.eclipse.dltk.ast.expressions.Expression ex=(org.eclipse.dltk.ast.expressions.Expression)ob;
+					ex.traverse(this);
+					b.addMethodArgs(expressions.pop());
+				}
+			}
+			
+		}
+		else if(md.getExpressionCount()>1 && 
+				md.getExpression(md.getExpressionCount()-1) instanceof IndexHolder)
+		{
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYACCESS);
+
+			for(int i=0;i<md.getExpressionCount()-1;i++)
+			{
+				md.getExpression(i).traverse(this);
+				b.addExpressions(expressions.pop());
+			}
+			IndexHolder ch=(IndexHolder)md.getExpression(md.getExpressionCount()-1);
+			//need to fix in python dltk. it's empty now
+			
+			
+		}
+		else
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.EMPTY);
+		expressions.push(b.build());
+		return true;
+	}
+	
+	public boolean visit(PythonTupleExpression md) throws Exception  {
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.TUPLE);
+		for(Object ob : md.getExpressions())
+		{
+			org.eclipse.dltk.ast.expressions.Expression ex=(org.eclipse.dltk.ast.expressions.Expression)ob;
+			ex.traverse(this);
+			b.addExpressions(expressions.pop());
+		}
+		expressions.push(b.build());
+		return true;
+	}
 	
 	public boolean visit(PythonImportAsExpression md)  {
 		b.setName(md.getName());
@@ -111,7 +198,26 @@ public class NewPythonVisitor extends ASTVisitor {
 		return true;
 	}
 	
+	public boolean visit(PrintExpression md) throws Exception  {
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
+		b.setMethod("print");
+		md.getExpression().traverse(this);
+		b.addMethodArgs(expressions.pop());
+		
+		expressions.push(b.build());
+		
+		return true;
+	
+	}
 	public boolean visit(Assignment md) throws Exception  {
+		System.out.println("Enter Assigning: "+md.toString());
+		System.out.println(md.getLeft().getKind());
+		System.out.println(md.getRight().getKind());
+		System.out.println(md.getLeft().getClass().getName());
+		System.out.println(md.getRight().getClass().getName());
+		
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN);
@@ -248,9 +354,14 @@ public class NewPythonVisitor extends ASTVisitor {
 		Statement.Builder sb = Statement.newBuilder();
 		sb.setKind(StatementKind.EXPRESSION);
 
+		Stack<boa.types.Ast.Expression> ex = new Stack<boa.types.Ast.Expression>();
 		while(!expressions.isEmpty())
 		{
-			sb.addExpressions(expressions.pop());
+			ex.push(expressions.pop());
+		}
+		while(!ex.isEmpty())
+		{
+			sb.addExpressions(ex.pop());
 		}
 		b.addStatements(sb.build());
 		return false;

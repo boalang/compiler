@@ -648,10 +648,10 @@ public abstract class AbstractCommit {
 			}
 		};
 		System.out.println("actual source: "+content);
-		org.eclipse.dltk.ast.declarations.ModuleDeclaration module;
+		PythonModuleDeclaration module;
 		
 		try {
-			module= (ModuleDeclaration) parser.parse(input, reporter);
+			module= (PythonModuleDeclaration) parser.parse(input, reporter);
 		} catch (Exception e) {
 			if (true)
 				System.err.println("Error parsing Python file: " + path + " from: " + projectName);
