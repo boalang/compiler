@@ -547,9 +547,7 @@ public class BoaMetricIntrinsics {
 					if (fqnToClassType.containsKey(importedClass))
 						for (Declaration decl : decls)
 							updateMaps(decl.getFullyQualifiedName(), importedClass);
-				
-				// check classes under imported packages
-				// TODO
+
 				return false;
 			}
 			
