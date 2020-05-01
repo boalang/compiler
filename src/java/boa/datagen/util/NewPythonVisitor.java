@@ -24,6 +24,8 @@ import org.eclipse.dltk.ast.expressions.Literal;
 import org.eclipse.dltk.python.parser.ast.PythonArgument;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonListExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTupleExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.Assignment;
 import org.eclipse.dltk.python.parser.ast.expressions.BinaryExpression;
@@ -57,11 +59,12 @@ public class NewPythonVisitor extends ASTVisitor {
 	private ModuleDeclaration root;
 	protected Namespace.Builder b = Namespace.newBuilder();
 	protected Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
-	protected Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
 
-	protected Stack<boa.types.Ast.Variable> fields = new Stack<boa.types.Ast.Variable>();
+	protected Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
 	protected Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
-	
+	protected Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
+	protected Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
+
 	
 	public Namespace getNamespace(ModuleDeclaration node) throws Exception {
 		root = node;
@@ -115,6 +118,16 @@ public class NewPythonVisitor extends ASTVisitor {
 		else if(md instanceof PythonArgument)
 		{
 			visit((PythonArgument) md);
+			opFound=true;
+		}
+		else if(md instanceof PythonSubscriptExpression)
+		{
+			visit((PythonSubscriptExpression) md);
+			opFound=true;
+		}
+		else if(md instanceof PythonListExpression)
+		{
+			visit((PythonListExpression) md);
 			opFound=true;
 		}
 		else if(md instanceof SimpleReference)
@@ -179,7 +192,8 @@ public class NewPythonVisitor extends ASTVisitor {
 				b.addExpressions(expressions.pop());
 			}
 			IndexHolder ch=(IndexHolder)md.getExpression(md.getExpressionCount()-1);
-			//need to fix in python dltk. it's empty now
+			ch.traverse(this);
+			b.addExpressions(expressions.pop());
 			
 			
 		}
@@ -188,6 +202,44 @@ public class NewPythonVisitor extends ASTVisitor {
 		expressions.push(b.build());
 		return true;
 	}
+	
+	public boolean visit(PythonSubscriptExpression md) throws Exception  {
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		
+		//need to handle unary expressions
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYINDEX);
+		if(md.getTest()!=null)
+		{
+			md.getTest().traverse(this);
+			b.addExpressions(expressions.pop());
+		}
+		else
+		{
+			System.out.println("");
+		}
+		if(md.getCondition()!=null)
+		{
+			md.getCondition().traverse(this);
+			b.addExpressions(expressions.pop());
+		}
+		expressions.push(b.build());
+		return true;
+	}
+	public boolean visit(PythonListExpression md) throws Exception  {
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEWARRAY);
+		
+		for(Object ob : md.getExpressions())
+		{
+			org.eclipse.dltk.ast.expressions.Expression ex=(org.eclipse.dltk.ast.expressions.Expression)ob;
+			ex.traverse(this);
+			b.addExpressions(expressions.pop());
+		}
+		expressions.push(b.build());
+		return true;
+	}
+	
 	
 	public boolean visit(PythonTupleExpression md) throws Exception  {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
@@ -223,7 +275,7 @@ public class NewPythonVisitor extends ASTVisitor {
 //			b.addMethodArgs(expressions.pop());
 //		}
 //		
-		expressions.push(b.build());
+		//expressions.push(b.build());
 		
 		return true;
 	
@@ -325,8 +377,20 @@ public class NewPythonVisitor extends ASTVisitor {
 		
 		if(md.getKind()==ExpressionConstants.E_PLUS)
 		{
-			System.out.println("OP ADD found");
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_ADD);	
+			
+			md.getLeft().traverse(this);
+			b.addExpressions(expressions.pop());
+
+			md.getRight().traverse(this);
+			b.addExpressions(expressions.pop());
+			
+			
+			expressions.push(b.build());
+		}
+		else if(md.getKind()==ExpressionConstants.E_NOT_EQUAL)
+		{
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.NEQ);	
 			
 			md.getLeft().traverse(this);
 			b.addExpressions(expressions.pop());
@@ -340,7 +404,6 @@ public class NewPythonVisitor extends ASTVisitor {
 			
 			expressions.push(b.build());
 		}
-		
 		
 
 		return true;
