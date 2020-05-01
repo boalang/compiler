@@ -634,8 +634,10 @@ public abstract class AbstractCommit {
 	
 	boolean pythonParsingError;
 
-	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,final boolean storeOnError) {		
+	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,final boolean storeOnError) {
 		pythonParsingError=false;
+		
+		System.out.println("###################");
 
 		PythonSourceParser parser= new PythonSourceParser();
 		IModuleSource input=new ModuleSource(content);
