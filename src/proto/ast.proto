@@ -364,6 +364,7 @@ message Expression {
 		TRAIT_PRECEDENCE = 99;
 		NAMESPACENAME = 100;
 		TUPLE = 101;
+		ARRAYINDEX = 102;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
