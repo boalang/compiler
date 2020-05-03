@@ -1444,6 +1444,8 @@ public class BoaNormalFormIntrinsics {
 				}
 				if (BoaAstIntrinsics.isFloatLit(e))
 					return Double.parseDouble(e.getLiteral());
+				if (BoaAstIntrinsics.isCharLit(e))
+					return (int)e.getLiteral().charAt(1);
 				return e;
 
 			// return method call, but with each argument reduced
