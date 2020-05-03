@@ -1444,8 +1444,22 @@ public class BoaNormalFormIntrinsics {
 				}
 				if (BoaAstIntrinsics.isFloatLit(e))
 					return Double.parseDouble(e.getLiteral());
-				if (BoaAstIntrinsics.isCharLit(e))
-					return (int)e.getLiteral().charAt(1);
+				if (BoaAstIntrinsics.isCharLit(e)) {
+					final char c = e.getLiteral().charAt(1);
+					if (c == '\\')
+						switch (e.getLiteral().charAt(2)) {
+							case 'n':  return Long.valueOf((long)'\n');
+							case 'b':  return Long.valueOf((long)'\b');
+							case 't':  return Long.valueOf((long)'\t');
+							case 'r':  return Long.valueOf((long)'\r');
+							case 'f':  return Long.valueOf((long)'\f');
+							case '\'': return Long.valueOf((long)'\'');
+							case '\\': return Long.valueOf((long)'\\');
+							case '"':  return Long.valueOf((long)'\"');
+							default: break;
+						}
+					return Long.valueOf((long)c);
+				}
 				return e;
 
 			// return method call, but with each argument reduced
