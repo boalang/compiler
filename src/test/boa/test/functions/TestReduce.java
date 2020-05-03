@@ -615,10 +615,6 @@ public class TestReduce {
 			{"2 * x / 3", " 2 * x / 3"},
 			{"x * (1 / (x + y))", "x / (x + y)"},
 			{"1 / x * (1 / (x + y))", "1 / (x * x + x * y)"},
-
-			// accessors
-			{ "2 * this.x + 2", "2 + 2 * this.x" },
-			{ "(this.x + this.y) / 2", "this.x / 2 + this.y / 2" },
 		});
 	}
 
