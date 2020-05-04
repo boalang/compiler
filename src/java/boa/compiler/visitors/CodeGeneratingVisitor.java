@@ -1012,7 +1012,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			rhs = rhs.substring(0,rhs.length()-1) + ", new " +
 					((BoaModel)n.getLhs().type).getType().toJavaType() + "())";
 			typecast = "(" + (typecast + "").split("\\/")[0] + ")";
-			System.out.println(typecast);
 		}
 		st.add("lhs", lhs);
 		st.add("operator", n.getOp());
