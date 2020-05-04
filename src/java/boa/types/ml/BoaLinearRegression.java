@@ -136,6 +136,6 @@ public class BoaLinearRegression extends BoaModel{
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return "boa.types.ml.BoaLinearRegression";
+		return "linearregression";
 	}
 }

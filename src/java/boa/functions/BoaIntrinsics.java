@@ -120,9 +120,6 @@ public class BoaIntrinsics {
 			final Path p;	
 			p = new Path(conf.get("fs.default.name", "hdfs://boa-njt/"), URL);
 			fs = FileSystem.get(conf);
-			
-		    System.out.println(BoaAstIntrinsics.context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"));
-
 			in = fs.open(p);
 			
 			final byte[] b = new byte[(int)fs.getLength(p) + 1];
@@ -131,7 +128,6 @@ public class BoaIntrinsics {
 			while((c = in.read(b)) != -1){
 				bo.write(b, 0, c);
 			}
-			
 			ByteArrayInputStream bin = new ByteArrayInputStream(bo.toByteArray());
 			dataIn = new ObjectInputStream(bin);
 			unserializedObject = dataIn.readObject();
@@ -170,10 +166,8 @@ public class BoaIntrinsics {
 		Instance instance = new DenseInstance(NumOfAttributes - 1);
 		for(int i=0; i<NumOfAttributes-1; i++) {
 			instance.setValue((Attribute)fvAttributes.get(i), vector[i]);
-			System.out.println(vector[i]);
 		}
 		testingSet.add(instance);
-		
 
 		Classifier classifier = (Classifier) model.getClassifier();
 		double predval = classifier.classifyInstance(testingSet.instance(0));

@@ -132,6 +132,6 @@ public class BoaModel extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return "boa.types.ml.BoaModel";
+		return "model";
 	}
 }
