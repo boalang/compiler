@@ -120,7 +120,6 @@ public class OutputType extends AbstractType {
 	}
 
 	public OutputType (final Identifier id, final Component t, final Component weight) {
-		//System.out.println(id);
 		if (id != null)
 			id.setParent(this);
 		if (t != null)

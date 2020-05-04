@@ -102,11 +102,6 @@ public class BoaIntrinsics {
 		return -1;
 	}
 	
-	public static void setup(final Context context) {
-		BoaAstIntrinsics.context = context;
-		System.out.println(BoaAstIntrinsics.context.getConfiguration());
-	}
-	
 	/**
 	 * Given the model URL, deserialize the model and return Model type
 	 *
@@ -163,18 +158,15 @@ public class BoaIntrinsics {
 	
 	@FunctionSpec(name = "classify", returnType = "string", formalParameters = { "Model","array of int"})
 	public static String classify(final BoaModel model, final long[] vector) throws Exception {
-		//System.out.println(vector[0]);
 		int NumOfAttributes = vector.length + 1;
 		ArrayList<Attribute> fvAttributes = new ArrayList<Attribute>();
 	
 		for(int i=0; i < NumOfAttributes - 1; i++) {
 			fvAttributes.add(new Attribute("Attribute" + i));
 		}
-		//System.out.println(fvAttributes);
 
 		Instances testingSet = new Instances("Classifier", fvAttributes, 1);
 		testingSet.setClassIndex(testingSet.numAttributes() - 1);
-
 		Instance instance = new DenseInstance(NumOfAttributes - 1);
 		for(int i=0; i<NumOfAttributes-1; i++) {
 			instance.setValue((Attribute)fvAttributes.get(i), vector[i]);

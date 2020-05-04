@@ -140,7 +140,6 @@ public abstract class MLAggregator extends Aggregator {
             JobConf job = new JobConf(configuration);
             Path outputPath = FileOutputFormat.getOutputPath(job);
             fileSystem = outputPath.getFileSystem(context.getConfiguration());
-            
             if (DefaultProperties.localOutput != null) {
                 fileSystem.mkdirs(new Path(DefaultProperties.localOutput, new Path("" + boaJobId)));
                 filePath = new Path(DefaultProperties.localOutput, new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));

@@ -276,7 +276,6 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	public static void setup(final Context context) {
 		BoaAstIntrinsics.context = context;
-		System.out.println(BoaAstIntrinsics.context.getConfiguration());
 	}
 
 	private static void openMap() {
@@ -332,7 +331,6 @@ public class BoaAstIntrinsics {
 			final Configuration conf = context.getConfiguration();
 			final FileSystem fs;
 			final Path p;
-
 			if (DefaultProperties.localDataPath != null) {
 				p = new Path(DefaultProperties.localDataPath, "issues");
 				fs = FileSystem.getLocal(conf);
