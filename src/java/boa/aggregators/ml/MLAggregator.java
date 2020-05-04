@@ -17,6 +17,7 @@
 package boa.aggregators.ml;
 
 import boa.aggregators.Aggregator;
+import boa.aggregators.FinishedException;
 import boa.datagen.DefaultProperties;
 import boa.functions.BoaAstIntrinsics;
 import boa.runtime.Tuple;
@@ -54,6 +55,9 @@ public abstract class MLAggregator extends Aggregator {
     protected String[] options;
     protected boolean flag;
     protected int count;
+	private int vectorSize;
+	private String mlarg; 
+
 
     public MLAggregator() {
         this.fvAttributes = new ArrayList<Attribute>();
@@ -61,7 +65,7 @@ public abstract class MLAggregator extends Aggregator {
     }
 
     public MLAggregator(final String s) {
-        super(s);
+        this.mlarg = s;
         this.fvAttributes = new ArrayList<Attribute>();
         this.vector = new ArrayList<String>();
         try {
@@ -95,12 +99,13 @@ public abstract class MLAggregator extends Aggregator {
             fileSystem = outputPath.getFileSystem(context.getConfiguration());
 
             if (DefaultProperties.localOutput != null) {
-                fileSystem.mkdirs(new Path(DefaultProperties.localOutput, new Path("" + boaJobId)));
-                filePath = new Path(DefaultProperties.localOutput, new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "data")));
+                fileSystem.mkdirs(new Path(DefaultProperties.localOutput, new Path("" + boaJobId + "boamodel")));
+                filePath = new Path(DefaultProperties.localOutput, new Path("" + boaJobId + "boamodel", new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
             } else {
-                fileSystem.mkdirs(new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId)));
-                filePath = new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "data")));
+                fileSystem.mkdirs(new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId + "boamodel")));
+                filePath = new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId + "boamodel", new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
             }
+
 
             if (fileSystem.exists(filePath))
                 return;
@@ -141,12 +146,22 @@ public abstract class MLAggregator extends Aggregator {
             Path outputPath = FileOutputFormat.getOutputPath(job);
             fileSystem = outputPath.getFileSystem(context.getConfiguration());
             if (DefaultProperties.localOutput != null) {
-                fileSystem.mkdirs(new Path(DefaultProperties.localOutput, new Path("" + boaJobId)));
-                filePath = new Path(DefaultProperties.localOutput, new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
+                fileSystem.mkdirs(new Path(DefaultProperties.localOutput, new Path("" + boaJobId + "boamodel")));
+                filePath = new Path(DefaultProperties.localOutput, new Path("" + boaJobId + "boamodel", new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
             } else {
-                fileSystem.mkdirs(new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId)));
-                filePath = new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
+                fileSystem.mkdirs(new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId + "boamodel")));
+                filePath = new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId + "boamodel", new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
             }
+//            
+//            
+//            Path p = new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"),
+//            		new Path(configuration.get("boa.ast.dir", configuration.get("boa.input.dir", "repcache/live")), 
+//					new Path("" + boaJobId, 
+//					new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "data"))));;
+//			Path p1 = new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("boa/" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "data")));
+//            
+//			System.out.println(p);
+//			System.out.println(p1);
 
             if (fileSystem.exists(filePath))
                 return;
@@ -311,4 +326,19 @@ public abstract class MLAggregator extends Aggregator {
             attributeCreation(data, name);
         instanceCreation(data);
     }
+    
+	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException, FinishedException, IllegalAccessException {	
+	}
+
+	public void aggregate(final Tuple data) throws IOException, InterruptedException, FinishedException, IllegalAccessException {
+		this.aggregate(data, null);
+	}
+	
+	public int getVectorSize() {
+		return this.vectorSize;
+	}
+
+	public void setVectorSize(int vectorSize) {
+		this.vectorSize = vectorSize;
+	}
 }

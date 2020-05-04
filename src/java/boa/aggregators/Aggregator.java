@@ -35,12 +35,10 @@ import boa.runtime.Tuple;
  */
 public abstract class Aggregator {
 	private long arg;
-	private String mlarg; //for ML
 	@SuppressWarnings("rawtypes")
 	private Context context;
 	private EmitKey key;
 	private boolean combining;
-	private int vectorSize; //for ML
 
 	/**
 	 * Construct an Aggregator.
@@ -61,20 +59,6 @@ public abstract class Aggregator {
 		this();
 
 		this.arg = arg;
-	}
-
-	/**
-	 * Construct an Aggregator.
-	 *
-	 * @param arg
-	 *            A String containing the argument to the table
-	 *
-	 */
-	//for ML
-	public Aggregator(final String arg) {
-		this();
-		
-		this.mlarg = arg;
 	}
 	
 	/**
@@ -139,13 +123,7 @@ public abstract class Aggregator {
 	protected void collect(final double data) throws IOException, InterruptedException {
 		this.collect(BoaCasts.doubleToString(data), null);
 	}
-	
-	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException, FinishedException, IllegalAccessException {	
-	}
 
-	public void aggregate(final Tuple data) throws IOException, InterruptedException, FinishedException, IllegalAccessException {
-		this.aggregate(data, null);
-	}
 
 	public void finish() throws IOException, InterruptedException {
 		// do nothing by default
@@ -178,13 +156,5 @@ public abstract class Aggregator {
 
 	public EmitKey getKey() {
 		return this.key;
-	}
-	
-	public int getVectorSize() {
-		return this.vectorSize;
-	}
-
-	public void setVectorSize(int vectorSize) {
-		this.vectorSize = vectorSize;
 	}
 }

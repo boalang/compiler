@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 
 import boa.aggregators.Aggregator;
 import boa.aggregators.FinishedException;
+import boa.aggregators.ml.MLAggregator;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 
@@ -84,19 +85,23 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 		a.setCombining(false);
 		a.start(key);
 		a.setContext(context);
-
+		
 		for (final EmitValue value : values)
 			try {
-                if (value.getTuple() != null) {
-                    a.aggregate(value.getTuple(), value.getMetadata());
-                } else {
-                    if (setVector && value.getData().length > 1) {
-                        a.setVectorSize(value.getData().length);
-                        setVector = false;
-                    }
-					for (final String s : value.getData()) 
-						a.aggregate(s, value.getMetadata());
-                }
+				if(a.toString().contains("ml")) {
+					MLAggregator mla = (MLAggregator) this.aggregators.get(key.getName());
+					mla = (MLAggregator) a;
+	                if (value.getTuple() != null) 
+	                	mla.aggregate(value.getTuple(), value.getMetadata());
+	                else {
+	                    if (setVector && value.getData().length > 1) {
+	                    	mla.setVectorSize(value.getData().length);
+	                        setVector = false;
+	                    }
+	                }
+				}
+				for (final String s : value.getData()) 
+					a.aggregate(s, value.getMetadata());
 			} catch (final FinishedException e) {
 				// we are done
 				return;
