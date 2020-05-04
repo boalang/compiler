@@ -50,7 +50,6 @@ public class BoaLinearRegression extends BoaModel{
 	 *
 	 */
 	public BoaLinearRegression(BoaType t){
-
 		this.t = t;
 	}
 	
@@ -102,13 +101,7 @@ public class BoaLinearRegression extends BoaModel{
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
-		// if that is a function, check the return type
-		if (that instanceof BoaFunction)
-			return this.assigns(((BoaFunction) that).getType());
-
-		// if that is a component, check the type
-		if (that instanceof BoaName)
-			return this.assigns(((BoaName) that).getType());
+		super.assigns(that);
 
 		// otherwise, if it's not an LR, forget it
 		if (!(that instanceof BoaLinearRegression))

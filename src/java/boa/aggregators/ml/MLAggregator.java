@@ -97,15 +97,14 @@ public abstract class MLAggregator extends Aggregator {
             JobConf job = new JobConf(configuration);
             Path outputPath = FileOutputFormat.getOutputPath(job);
             fileSystem = outputPath.getFileSystem(context.getConfiguration());
-
-            if (DefaultProperties.localOutput != null) {
-                fileSystem.mkdirs(new Path(DefaultProperties.localOutput, new Path("" + boaJobId + "boamodel")));
-                filePath = new Path(DefaultProperties.localOutput, new Path("" + boaJobId + "boamodel", new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
-            } else {
-                fileSystem.mkdirs(new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId + "boamodel")));
-                filePath = new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId + "boamodel", new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
-            }
-
+            String output = null;
+            if (DefaultProperties.localOutput != null)
+            	output = DefaultProperties.localOutput;
+            else
+            	output = configuration.get("fs.default.name", "hdfs://boa-njt/");
+            
+            fileSystem.mkdirs(new Path(output, new Path("" + boaJobId + "/boamodel")));
+            filePath = new Path(output, new Path("" + boaJobId + "/boamodel", new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
 
             if (fileSystem.exists(filePath))
                 return;
@@ -145,23 +144,14 @@ public abstract class MLAggregator extends Aggregator {
             JobConf job = new JobConf(configuration);
             Path outputPath = FileOutputFormat.getOutputPath(job);
             fileSystem = outputPath.getFileSystem(context.getConfiguration());
-            if (DefaultProperties.localOutput != null) {
-                fileSystem.mkdirs(new Path(DefaultProperties.localOutput, new Path("" + boaJobId + "boamodel")));
-                filePath = new Path(DefaultProperties.localOutput, new Path("" + boaJobId + "boamodel", new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
-            } else {
-                fileSystem.mkdirs(new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId + "boamodel")));
-                filePath = new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId + "boamodel", new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
-            }
-//            
-//            
-//            Path p = new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"),
-//            		new Path(configuration.get("boa.ast.dir", configuration.get("boa.input.dir", "repcache/live")), 
-//					new Path("" + boaJobId, 
-//					new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "data"))));;
-//			Path p1 = new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("boa/" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "data")));
-//            
-//			System.out.println(p);
-//			System.out.println(p1);
+            String output = null;
+            if (DefaultProperties.localOutput != null)
+            	output = DefaultProperties.localOutput;
+            else
+            	output = configuration.get("fs.default.name", "hdfs://boa-njt/");
+            
+            fileSystem.mkdirs(new Path(output, new Path("" + boaJobId + "/boamodel")));
+            filePath = new Path(output, new Path("" + boaJobId + "/boamodel", new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
 
             if (fileSystem.exists(filePath))
                 return;
