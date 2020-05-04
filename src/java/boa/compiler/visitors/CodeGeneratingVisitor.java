@@ -1011,11 +1011,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				typecast = "boa.types.ml.BoaLinearRegression";
 			rhs = rhs.substring(0,rhs.length()-1) + ", new " +
 					((BoaModel)n.getLhs().type).getType().toJavaType() + "())";
-			typecast = "(" + (typecast + "").split("\\/")[0] + ")";
+			rhs = "(" + (typecast + "").split("\\/")[0] + ")" + rhs;
 		}
 		st.add("lhs", lhs);
 		st.add("operator", n.getOp());
-		st.add("rhs", typecast + rhs);
+		st.add("rhs", rhs);
 
 		code.add(st.render());
 	}

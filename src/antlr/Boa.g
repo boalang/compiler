@@ -207,7 +207,7 @@ modelType returns [ModelType ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: id=identifier { $ast = new ModelType($id.ast); } OF m=component { $ast.setType($m.ast); }
+	: MODEL OF id=identifier { $ast = new ModelType($id.ast); } OF m=component { $ast.setType($m.ast); }
 	;
 functionType returns [FunctionType ast]
 	locals [int l, int c]
@@ -615,6 +615,7 @@ identifier returns [Identifier ast]
 	| lit=MAP      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=STACK    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=QUEUE    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=MODEL    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=SET      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOR      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOREACH  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
@@ -695,6 +696,7 @@ DO       : 'do';
 MAP      : 'map';
 STACK    : 'stack';
 QUEUE    : 'queue';
+MODEL    : 'Model';
 SET      : 'set';
 FOR      : 'for';
 FOREACH  : 'foreach';

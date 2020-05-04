@@ -1451,7 +1451,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
     public void visit(final ModelType n, final SymbolTable env) {
         n.env = env;
         n.getType().accept(this, env);
-
         if (env.hasType(n.getId().getToken()))
             n.type = SymbolTable.getType(n.getId().getToken());
         else
@@ -1463,6 +1462,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
         if (n.type instanceof BoaLinearRegression)
             n.type = new BoaLinearRegression(n.getType().type);
+        else
+        	throw new TypeCheckException(n, "Model required attributes to be model type");
 
     }
 	

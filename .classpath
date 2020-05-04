@@ -99,6 +99,8 @@
 	<classpathentry kind="lib" path="lib/weka/core.jar"/>
 	<classpathentry kind="lib" path="lib/weka/mtj.jar"/>
 	<classpathentry kind="lib" path="lib/weka/weka.jar"/>
+	<classpathentry kind="lib" path="/home/tess/Downloads/org.eclipse.jgit-5.7.0.202003110725-r.jar"/>
+	<classpathentry kind="lib" path="/home/tess/Downloads/jsch-0.1.55.jar"/>
 	<classpathentry kind="lib" path="compile"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

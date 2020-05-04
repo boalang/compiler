@@ -106,7 +106,7 @@ outputType
 	;
 	
 modelType
-	: identifier OF component
+	: MODEL of identifier OF component
 	;
 
 
@@ -358,6 +358,7 @@ identifier
 	| lit=MAP      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=STACK    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=QUEUE    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=MODEL    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=SET      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOR      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOREACH  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
@@ -423,6 +424,7 @@ DO       : 'do';
 MAP      : 'map';
 STACK    : 'stack';
 QUEUE    : 'queue';
+MODEL    : 'Model';
 SET      : 'set';
 FOR      : 'for';
 FOREACH  : 'foreach';
