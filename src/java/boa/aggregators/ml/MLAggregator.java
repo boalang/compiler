@@ -148,7 +148,6 @@ public abstract class MLAggregator extends Aggregator {
                 filePath = new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
             }
 
-
             if (fileSystem.exists(filePath))
                 return;
 
