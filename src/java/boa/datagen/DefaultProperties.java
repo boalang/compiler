@@ -74,7 +74,6 @@ public class DefaultProperties {
 
 	public static String localDataPath = null;
 	
-	// for ML
 	public static String localOutput = null;
 
 	@SuppressWarnings("unused")

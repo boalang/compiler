@@ -30,37 +30,37 @@ import java.io.IOException;
  */
 @AggregatorSpec(name = "linearregression", formalParameters = {"string"})
 public class LinearRegressionAggregator extends MLAggregator {
-    private LinearRegression model;
+	private LinearRegression model;
 
-    public LinearRegressionAggregator() {
-        this.model = new LinearRegression();
-    }
+	public LinearRegressionAggregator() {
+		this.model = new LinearRegression();
+	}
 
-    public LinearRegressionAggregator(final String s) {
-        super(s);
-    }
+	public LinearRegressionAggregator(final String s) {
+		super(s);
+	}
 
-    @Override
-    public void aggregate(String data, String metadata) throws NumberFormatException, IOException, InterruptedException {
-        aggregate(data, metadata, "LinearRegression");
-    }
+	@Override
+	public void aggregate(String data, String metadata) throws NumberFormatException, IOException, InterruptedException {
+		aggregate(data, metadata, "LinearRegression");
+	}
 
-    public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException, FinishedException, IllegalAccessException {
-        aggregate(data, metadata, "LinearRegression");
-    }
+	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException, FinishedException, IllegalAccessException {
+		aggregate(data, metadata, "LinearRegression");
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void finish() throws IOException, InterruptedException {
-        try {
-            this.model.buildClassifier(this.trainingSet);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("modeling done");
-        this.saveModel(this.model);
-        this.collect(this.model.toString());
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void finish() throws IOException, InterruptedException {
+		try {
+			this.model.buildClassifier(this.trainingSet);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("modeling done");
+		this.saveModel(this.model);
+		this.collect(this.model.toString());
+	}
 }

@@ -759,12 +759,12 @@ public class SymbolTable {
 		return r.toString();
 	}
 	
-    public static BoaType getMLAggregatorType(String aggregtorName) {
-        for (Entry<String, BoaType> e : types.entrySet()) {
-            if (e.getKey().equalsIgnoreCase(aggregtorName)) {
-                return e.getValue();
-            }
-        }
-        return null;
-    }
+	public static BoaType getMLAggregatorType(String aggregtorName) {
+		for (Entry<String, BoaType> e : types.entrySet()) {
+			if (e.getKey().equalsIgnoreCase(aggregtorName)) {
+				return e.getValue();
+			}
+		}
+		return null;
+	}
 }
