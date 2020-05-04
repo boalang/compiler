@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2020, Hridesh Rajan, Robert Dyer, 
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@ package boa.aggregators.ml;
 
 import boa.aggregators.Aggregator;
 import boa.datagen.DefaultProperties;
+import boa.functions.BoaAstIntrinsics;
 import boa.runtime.Tuple;
 
 import org.apache.commons.lang.math.NumberUtils;
@@ -97,8 +98,8 @@ public abstract class MLAggregator extends Aggregator {
                 fileSystem.mkdirs(new Path(DefaultProperties.localOutput, new Path("" + boaJobId)));
                 filePath = new Path(DefaultProperties.localOutput, new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "data")));
             } else {
-                fileSystem.mkdirs(new Path(DefaultProperties.HADOOP_OUT_LOCATION, new Path("" + boaJobId)));
-                filePath = new Path(DefaultProperties.HADOOP_OUT_LOCATION, new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "data")));
+                fileSystem.mkdirs(new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId)));
+                filePath = new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "data")));
             }
 
             if (fileSystem.exists(filePath))
@@ -139,13 +140,13 @@ public abstract class MLAggregator extends Aggregator {
             JobConf job = new JobConf(configuration);
             Path outputPath = FileOutputFormat.getOutputPath(job);
             fileSystem = outputPath.getFileSystem(context.getConfiguration());
-
+            
             if (DefaultProperties.localOutput != null) {
                 fileSystem.mkdirs(new Path(DefaultProperties.localOutput, new Path("" + boaJobId)));
                 filePath = new Path(DefaultProperties.localOutput, new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
             } else {
-                fileSystem.mkdirs(new Path(DefaultProperties.HADOOP_OUT_LOCATION, new Path("" + boaJobId)));
-                filePath = new Path(DefaultProperties.HADOOP_OUT_LOCATION, new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
+                fileSystem.mkdirs(new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId)));
+                filePath = new Path(configuration.get("fs.default.name", "hdfs://boa-njt/"), new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
             }
 
 
@@ -187,9 +188,7 @@ public abstract class MLAggregator extends Aggregator {
     protected void moveFromUnFilteredToFiltered(Instances filteredInstances) {
         int totalUnfilteredInstances = unFilteredInstances.numInstances();
         filteredInstances.addAll(unFilteredInstances.subList(0, totalUnfilteredInstances));
-        while (totalUnfilteredInstances-- > 0) {
-            unFilteredInstances.remove(0);
-        }
+        unFilteredInstances.delete();
     }
 
     /**

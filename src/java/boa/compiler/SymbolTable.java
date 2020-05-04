@@ -382,7 +382,6 @@ public class SymbolTable {
 		types.put("string", new BoaString());
 		types.put("LinearRegression", new BoaLinearRegression());
 		types.put("Model", new BoaModel());
-		types.put("tuple", new BoaTuple());
 		for (final BoaType t : dslTupleTypes)
 			types.put(t.toString(), t);
 

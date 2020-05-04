@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer,
+ * Copyright 2020, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -55,15 +55,12 @@ public class LinearRegressionAggregator extends MLAggregator {
     @Override
     public void finish() throws IOException, InterruptedException {
         try {
-            System.out.println("Linearregression working now with: " + this.trainingSet.numInstances());
-            System.out.println(this.trainingSet);
             this.model.buildClassifier(this.trainingSet);
         } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("modeling done");
         this.saveModel(this.model);
-//		this.saveTrainingSet(this.trainingSet);
         this.collect(this.model.toString());
     }
 }

@@ -244,7 +244,6 @@ public class BoaFunction extends BoaType {
 
 		for (final BoaType t : this.formalParameters)
 			s += "_" + cleanType(t.toJavaType());
-
 		return shortenedType(s, "BoaFunc");
 	}
 

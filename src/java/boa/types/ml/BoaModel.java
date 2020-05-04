@@ -16,10 +16,8 @@
  */
 package boa.types.ml;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+import boa.types.BoaFunction;
 import boa.types.BoaName;
 import boa.types.BoaType;
 import weka.classifiers.Classifier;
@@ -100,12 +98,28 @@ public class BoaModel extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
+		// if that is a function, check the return type
+		if (that instanceof BoaFunction)
+			return this.assigns(((BoaFunction) that).getType());
+
+		// if that is a component, check the type
+		if (that instanceof BoaName)
+			return this.assigns(((BoaName) that).getType());
+
+		// otherwise, if it's not an model, forget it
+		if (!(that instanceof BoaModel))
+			return false;
+
 		return true;
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public boolean accepts(final BoaType that) {
+		// otherwise, if it's not an model, forget it
+		if (!(that instanceof BoaModel))
+			return false;
+
 		return true;
 	}
 
@@ -118,6 +132,6 @@ public class BoaModel extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return "boa.types.ml.BoaModel" + "/" + this.t;
+		return "boa.types.ml.BoaModel";
 	}
 }

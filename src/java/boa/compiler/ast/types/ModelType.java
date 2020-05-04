@@ -56,6 +56,7 @@ public class ModelType extends AbstractType {
 	}
 
 	public ModelType (final Identifier id, final Component t) {
+		System.out.println(id);
 		if (id != null)
 			id.setParent(this);
 		if (t != null)
