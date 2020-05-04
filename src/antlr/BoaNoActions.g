@@ -109,7 +109,6 @@ modelType
 	: MODEL of identifier OF component
 	;
 
-
 functionType
 	: FUNCTION LPAREN (identifier COLON type (COMMA identifier COLON type)*)? RPAREN (COLON type)?
 	| FUNCTION LPAREN ((identifier COLON type | identifier { notifyErrorListeners("function arguments require an identifier and type"); }) (COMMA identifier COLON type | COMMA identifier { notifyErrorListeners("function arguments require an identifier and type"); })*)? RPAREN (COLON type)?

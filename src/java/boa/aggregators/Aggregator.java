@@ -60,7 +60,7 @@ public abstract class Aggregator {
 
 		this.arg = arg;
 	}
-	
+
 	/**
 	 * Reset this aggregator for a new key.
 	 * 
@@ -123,7 +123,6 @@ public abstract class Aggregator {
 	protected void collect(final double data) throws IOException, InterruptedException {
 		this.collect(BoaCasts.doubleToString(data), null);
 	}
-
 
 	public void finish() throws IOException, InterruptedException {
 		// do nothing by default

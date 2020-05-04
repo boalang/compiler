@@ -261,7 +261,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	@Override
 	public void visit(final Call n, final SymbolTable env) {
 		n.env = env;
-        List<BoaType> expr = this.check(n.getArgs(), env);
+		List<BoaType> expr = this.check(n.getArgs(), env);
         if (expr.size() > 1) {
             if (expr.get(0) instanceof BoaModel && expr.get(1) instanceof BoaTuple) {
                 final BoaType t = ((BoaModel) expr.get(0)).getType();
@@ -1416,7 +1416,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		env.set(n.getId().getToken(), n.type);
 		n.getId().accept(this, env);
 
-        BoaModel model = (BoaModel) SymbolTable.getMLAggregatorType(n.getId().getToken());
+		BoaModel model = (BoaModel) SymbolTable.getMLAggregatorType(n.getId().getToken());
         if (model != null) {
             BoaType t = (n.getType()).type;
             List<BoaType> types = new ArrayList<BoaType>();
