@@ -18,6 +18,7 @@ package boa.aggregators.ml;
 
 import boa.aggregators.Aggregator;
 import boa.aggregators.FinishedException;
+import boa.compiler.ast.statements.EmitStatement;
 import boa.datagen.DefaultProperties;
 import boa.functions.BoaAstIntrinsics;
 import boa.runtime.Tuple;
@@ -90,6 +91,7 @@ public abstract class MLAggregator extends Aggregator {
 		FileSystem fileSystem = null;
 		Path filePath = null;
 		ObjectOutputStream objectOut = null;
+
 		try {
 			JobContext context = (JobContext) getContext();
 			Configuration configuration = context.getConfiguration();
@@ -98,14 +100,18 @@ public abstract class MLAggregator extends Aggregator {
 			Path outputPath = FileOutputFormat.getOutputPath(job);
 			fileSystem = outputPath.getFileSystem(context.getConfiguration());
 			String output = null;
+			String subpath = "_" + this.trainingSet.attribute(0).name()+ "_";
 			if (DefaultProperties.localOutput != null)
 				output = DefaultProperties.localOutput;
 			else
 				output = configuration.get("fs.default.name", "hdfs://boa-njt/");
+			for (int i = 1; i < NumOfAttributes; i ++) {
+				//System.out.println(this.trainingSet.attribute(0).name());
+				subpath += "_" + this.trainingSet.attribute(i).name() + "_" ;
+			}
+			fileSystem.mkdirs(new Path(output, new Path("" + boaJobId + "/boamodeldata")));
+			filePath = new Path(output, new Path("" + boaJobId + "/boamodeldata", new Path(("" + getKey()).split("\\[")[0] + subpath + "data")));
 
-			fileSystem.mkdirs(new Path(output, new Path("" + boaJobId + "/boamodel")));
-			filePath = new Path(output, new Path("" + boaJobId + "/boamodel", new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
-			
 			if (fileSystem.exists(filePath))
 				return;
 			
@@ -137,6 +143,8 @@ public abstract class MLAggregator extends Aggregator {
 		FileSystem fileSystem = null;
 		Path filePath = null;
 		ObjectOutputStream objectOut = null;
+		EmitStatement n = null;
+
 		try {
 			JobContext context = (JobContext) getContext();
 			Configuration configuration = context.getConfiguration();
@@ -145,13 +153,17 @@ public abstract class MLAggregator extends Aggregator {
 			Path outputPath = FileOutputFormat.getOutputPath(job);	
 			fileSystem = outputPath.getFileSystem(context.getConfiguration());
 			String output = null;
+			String subpath = "_" + this.trainingSet.attribute(0).name()+ "_";
 			if (DefaultProperties.localOutput != null)
 				output = DefaultProperties.localOutput;
 			else
 				output = configuration.get("fs.default.name", "hdfs://boa-njt/");
-
+			for (int i = 1; i < NumOfAttributes; i ++) {
+				//System.out.println(this.trainingSet.attribute(0).name());
+				subpath += "_" + this.trainingSet.attribute(i).name() + "_" ;
+			}
 			fileSystem.mkdirs(new Path(output, new Path("" + boaJobId + "/boamodel")));
-			filePath = new Path(output, new Path("" + boaJobId + "/boamodel", new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
+			filePath = new Path(output, new Path("" + boaJobId + "/boamodel", new Path(("" + getKey()).split("\\[")[0] + subpath + "ML.model")));
 
 			if (fileSystem.exists(filePath))
 				return;
