@@ -441,6 +441,7 @@
 			<zipfileset excludes="META-INF/" src="lib/refactoring/commons-text-1.7.jar" />
 			<zipfileset excludes="META-INF/" src="lib/refactoring/org.eclipse.text_3.5.0.jar" />
 			<zipfileset excludes="META-INF/" src="lib/refactoring/guava-28.2-jre.jar" />
+			<zipfileset excludes="META-INF/" src="lib/refactoring/eng-projects.jar" />
 		</jar>
 	</target>
 
@@ -468,6 +469,7 @@
 			<zipfileset excludes="META-INF/" src="lib/refactoring/commons-text-1.7.jar" />
 			<zipfileset excludes="META-INF/" src="lib/refactoring/org.eclipse.text_3.5.0.jar" />
 			<zipfileset excludes="META-INF/" src="lib/refactoring/guava-28.2-jre.jar" />
+			<zipfileset excludes="META-INF/" src="lib/refactoring/eng-projects.jar" />
 		</jar>
 	</target>
 

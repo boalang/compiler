@@ -59,5 +59,6 @@
 	<classpathentry kind="lib" path="lib/datagen/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/slf4j-api-1.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/slf4j-log4j12-1.4.3.jar"/>
+	<classpathentry kind="lib" path="lib/refactoring/eng-projects.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
