@@ -13,7 +13,6 @@ import boa.functions.code.change.declaration.DeclTree;
 import boa.functions.code.change.field.FieldForest;
 import boa.functions.code.change.field.FieldTree;
 import boa.functions.code.change.file.FileForest;
-import boa.functions.code.change.file.FileNode;
 import boa.functions.code.change.file.FileTree;
 import boa.functions.code.change.method.MethodForest;
 import boa.functions.code.change.method.MethodTree;
@@ -23,8 +22,8 @@ import boa.types.Toplevel.Project;
 
 public class BoaCodeChangeIntrinsics {
 
-	@FunctionSpec(name = "test3", returnType = "array of array of float", formalParameters = { "Project" })
-	public static double[][] test3(Project p) throws Exception {
+	@FunctionSpec(name = "change_graph_validation", returnType = "array of array of float", formalParameters = { "Project" })
+	public static double[][] changeGraphValidation(Project p) throws Exception {
 
 		long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 

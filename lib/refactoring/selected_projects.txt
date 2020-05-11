@@ -30,12 +30,9 @@ BroadleafCommerce/DemoSite
 BryanHunt/eTrack
 BryanHunt/mongo-emf
 Bukkit/Bukkit
-BullShark/JSpeak
 C4J-Team/C4J
 COMP3111H-Project-Team/BallCraft
 CS2212-2012-G2/SurvivorPool
-Cascading/Impatient
-Cascading/cascading.kryo
 Cascading/maple
 Chorus-bdd/Chorus
 ClockworkMod/DeskSMS
@@ -45,12 +42,10 @@ CraftFire/Bifrost
 CraftFire/CraftCommons
 CubeIsland/AntiGuest
 CypherX/xAuth
-DSpace/dspace-services
 Dandielo/DtlCitizensTrader
 Danny02/JOpenCTM
 DawnScience/dawn-common
 DawnScience/dawn-isenciaui
-DawnScience/dawn-product
 DawnScience/dawn-workflow
 DawnScience/scisoft-ui
 Dedaulus/Cinematty
@@ -74,7 +69,6 @@ FallenMoonNetwork/CanaryLib
 FallenMoonNetwork/CanaryRecode
 FamilySearch/gedcom5-conversion
 FasterXML/aalto-xml
-FasterXML/jackson-annotations
 FasterXML/jackson-core
 FasterXML/jackson-dataformat-csv
 FasterXML/jackson-dataformat-xml
@@ -124,7 +118,6 @@ Jasig/SimpleContentPortlet
 Jasig/WeatherPortlet
 Jasig/WebproxyPortlet
 Jasig/email-preview
-Jasig/portlet-utils
 Jasig/sakai-connector-portlet
 Jasig/sched-assist
 JavaPowder/TheJavaPowder
@@ -157,7 +150,6 @@ MassiveCraft/MassiveCore
 MattiSG/SemWiktionary
 Meaglin/Zones
 Mgiepz/saiku-adhoc
-MiCode/patchrom_tools
 MichaelKohler/HelperTools
 MihaiBalint/TimisoaraPublicTransport
 MikeOrtiz/TouchImageView
@@ -166,7 +158,6 @@ MinecraftWars/Gringotts
 Minequest/MineQuest-2-Core
 Mobiperf/MobiPerf
 Mobiperf/Speedometer
-ModeShape/modeshape-examples
 MongoLink/mongolink
 Monstercraft/MonsterIRC
 Moocar/logback-gelf
@@ -176,7 +167,6 @@ Multiverse/Multiverse-Inventories
 Multiverse/Multiverse-NetherPortals
 Multiverse/Multiverse-Portals
 Nantes1900/Nantes-1900
-NerdNu/KitchenSink
 NerdNu/ModReq
 NessComputing/components-ness-jackson
 NessComputing/components-ness-jersey
@@ -205,7 +195,6 @@ OpenBEL/bel-editor
 OpenBEL/cytoscape-plugins
 OpenBEL/openbel-framework
 OpenMEAP/OpenMEAP
-PEXPlugins/Modifyworld
 PEXPlugins/PermissionsEx
 Pail/Pail
 Permafrost/Tundra
@@ -300,8 +289,6 @@ agmip/agmip-core
 agmip/translator-dssat
 agoncal/agoncal-book-javaee7
 agorava/agorava-core
-agorava/agorava-facebook
-agorava/agorava-twitter
 aharin/inproctester
 airlift/airlift
 aismail/mrts
@@ -387,8 +374,6 @@ arquillian/arquillian-extension-warp
 arquillian/arquillian-graphene
 arquillian/arquillian-testrunner-spock
 arrayexpress/annotare2
-asakusafw/asakusafw-examples
-asakusafw/asakusafw
 asiekierka/64pixels
 asksven/AndroidCommon
 aslakknutsen/arquillian-showcase
@@ -411,8 +396,6 @@ betterphp/BloodMoon
 betterphp/MineBans
 bguerout/jongo
 bingo-open-source/bingo-core
-bioclipse/bioclipse.opentox
-biojava/biojava-legacy
 birkhoff/FastRPG
 bkiers/Liqp
 blackwolf12333/GriefLog
@@ -457,7 +440,6 @@ cbeust/jcommander
 cbeust/testng-eclipse
 ccordenier/tapestry5-hotel-booking
 cens/ohmagePhone
-cescoffier/maven-play2-plugin
 cexbrayat/linkit
 ceylon/ceylon-common
 ceylon/ceylon-module-resolver
@@ -492,7 +474,6 @@ couchbase/couchbase-java-client
 couchbaselabs/TouchDB-Android
 cowtowncoder/low-gc-membuffers
 craigwblake/redline
-crakeron/Vselcalculator
 crosswire/jsword
 croxis/Lift
 ctpconsulting/query
@@ -508,19 +489,16 @@ damagefilter/Cuboids
 damnhandy/Handy-URI-Templates
 dana-i2cat/netconf4j
 danbernier/WordCram
-danhan/fragment_android
 danieldietrich/xtext-protected-regions
 danielflower/maven-gitlog-plugin
 danielnowak/sproc-spring-mapper
 dankurka/gwtphonegap
-dankurka/mgwt.showcase
 dankurka/mgwt
 darkseid/Social-MUD
 darrinholst/sass-java
 dashersw/plantuml
 dashorst/dashboard
 datacite/mds
-datacite/schema
 datasalt/pangool
 datasift/datasift-java
 datasift/dropwizard-extra
@@ -531,7 +509,6 @@ ddossot/mule-erlang-transport
 deanhiller/playorm
 dekellum/iudex
 demoiselle/framework
-demoiselle/report
 dennischen/daily-money
 denoflionsx/PluginsForForestry
 desht/ChessCraft
@@ -547,7 +524,6 @@ directededge/directed-edge-bindings
 djorco/Graneles-SRL
 dkandalov/pomodoro-tm
 dmarcotte/idea-handlebars
-docbook/xslt20-stylesheets
 dooApp/FXForm2
 dostrander/BRB
 dpj/DPJ
@@ -586,8 +562,6 @@ edgaragr/Prestamos
 efsavage/ajah
 eisental/RedstoneChips
 elastic/elasticsearch-mapper-attachments
-elastic/elasticsearch-river-couchdb
-elastic/elasticsearch-river-rabbitmq
 elastic/elasticsearch-river-twitter
 eleybourn/Book-Catalogue
 emilsjolander/StickyListHeaders
@@ -649,9 +623,7 @@ fusesource/jansi
 fusesource/leveldbjni
 fusesource/mqtt-client
 fusesource/stompjms
-gabu/gabubon2
 galeoconsulting/atlassian-rest-cli
-gambitproject/gte
 gamblore/AndroidPunk
 garbagemule/MobArena
 gatein/gatein-common
@@ -663,7 +635,6 @@ geeksville/Gaggle
 gemserk/animation4j
 gemserk/lwjgl
 geoffreywiseman/Moo
-geoloqi/Geoloqi-Android-SDK
 geosolutions-it/geoserver-manager
 getbridge/bridge-java
 gilesp/taskhelper
@@ -671,7 +642,6 @@ gitblit/gitblit
 gitblit/iciql
 gkfabs/AndRoad
 gluster/glusterfs-hadoop
-gmazza/blog-samples
 gmcnew/pax
 goldmansachs/gs-collections
 goneall/SPDX-Tools
@@ -708,7 +678,6 @@ hajoeichler/JenkinsJobConfigGenerator
 hamcrest/JavaHamcrest
 hamnis/json-collection
 hampelratte/lazybones
-haven-jeon/KoNLP
 haveric/StackableItems
 hbutani/SQLWindowing
 hdiv/hdiv
@@ -821,7 +790,6 @@ jbosstm/quickstart
 jbosstools/m2e-apt
 jbundle/osgi-webstart
 jcaddel/maven-s3-wagon
-jclouds/jclouds-cli
 jclouds/jclouds-examples
 jclouds/jclouds-karaf
 jcoleman/tomcat-redis-session-manager
@@ -855,7 +823,6 @@ jenkinsci/envinject-plugin
 jenkinsci/findbugs-plugin
 jenkinsci/fitnesse-plugin
 jenkinsci/global-build-stats-plugin
-jenkinsci/grails-plugin
 jenkinsci/groovy-plugin
 jenkinsci/ivy-plugin
 jenkinsci/jacoco-plugin
@@ -874,7 +841,6 @@ jenkinsci/plot-plugin
 jenkinsci/pmd-plugin
 jenkinsci/promoted-builds-plugin
 jenkinsci/rebuild-plugin
-jenkinsci/redmine-plugin
 jenkinsci/remoting
 jenkinsci/repository-connector-plugin
 jenkinsci/robot-plugin
@@ -907,7 +873,6 @@ jfeinstein10/SlidingMenu
 jglobus/JGlobus
 jgraph/jgraphx
 jhy/jsoup
-jibx/core
 jidesoft/jide-oss
 jillesvangurp/jsonj
 jingwei/krati
@@ -950,7 +915,6 @@ jshiell/checkstyle-idea
 jsmadja/ngdb.com
 jsr107/jsr107tck
 jsunsch/SW807F12
-jsvazic/GAHelloWorld
 jtalks-org/poulpe
 julianhyde/linq4j
 justjoheinz/oosetaskboard
@@ -979,7 +943,6 @@ khmarbaise/supose
 kilim/kilim
 killme2008/Metamorphosis
 killme2008/xmemcached
-kinow/testlink-java-api
 kism3t1/java-game
 kitskub/MyHungerGames
 klnusbaum/UDJ-Android-Client
@@ -987,7 +950,6 @@ kmi/iserve
 knime-mpicbg/knime-scripting
 knowitall/reverb
 kohsuke/args4j
-kolorobot/spring-mvc-quickstart-archetype
 kompiro/quick-junit
 konklone/campyre
 koraktor/mavanagaiata
@@ -1009,7 +971,6 @@ laforge49/JActor
 laforge49/JFile
 laforge49/JID
 larochef/ubiquity
-leaflabs/maple-ide
 leandromoreira/dcpu16
 lemire/JavaFastPFOR
 lemire/javaewah
@@ -1035,15 +996,12 @@ lishid/Orebfuscator
 listba/ProjectAutograph
 litrik/be.norio.twunch.android
 ljader/redmine-mylyn-plugin
-logsaw/logsaw-app
 lookfirst/WePay-Java-SDK
 lordofthejars/nosql-unit
-lounaspaikka/lounaspaikka
 lowasser/LUScheduling
 lruiz/MarkdownPapers
 ltettoni/logic2j
 lukas-krecan/JsonUnit
-lukaszlenart/launch4j-maven-plugin
 lupino3/edumips64
 lutzky/TransportDroidIL
 lwes/lwes-java
@@ -1064,7 +1022,6 @@ maniac103/android_packages_apps_MotoFM
 manuelbua/libgdx-contribs
 manzke/guice-automatic-injection
 mapfish/mapfish-print
-markkerzner/HadoopIlluminated
 marssa/demonstrator-backend
 martint/jmxutils
 masukomi/aspirin
@@ -1149,10 +1106,8 @@ nan21/nan21.dnet.modules
 nandinc/Continuity
 narrowtux/DropChest
 nasa/mct
-nathanmarz/cascalog-contrib
 nathanmarz/elephantdb
 nathanmarz/storm-contrib
-nathanmarz/storm-starter
 nathanmarz/storm
 nbeloglazov/GeekAlarm
 ndw/xmlcalabash1
@@ -1164,7 +1119,6 @@ netmelody/ci-eye
 nettoyeurny/btmidi
 neuland/jade4j
 nexml/nexml.java
-nexr/RHive
 nhasan/Airports
 nhydock/FF1-Battle-System
 nicolasgramlich/AndEngineExamples
@@ -1173,7 +1127,6 @@ nicoulaj/idea-markdown
 nikotsunami/osce
 ning/atlas
 ning/compress
-ning/jvm-compressor-benchmark
 nisovin/MagicSpells
 nitnelave/CreeperHeal
 nodebox/nodebox
@@ -1197,7 +1150,6 @@ ontometrics/scraper
 openGDA/gda-common-rcp
 openaphid/android-flip
 openintents/filemanager
-openintents/notepad
 openintents/openintents
 openintents/safe
 openintents/shoppinglist
@@ -1205,7 +1157,6 @@ openintents/wifiserver
 openlvc/portico
 openpixi/openpixi
 openproject/world
-openshift/jenkins-cloud-plugin
 openshift/openshift-java-client
 openstack-atlas/atlas-lb
 openstreetmap/osmosis
@@ -1218,7 +1169,6 @@ ops4j/org.ops4j.pax.url
 ops4j/org.ops4j.pax.useradmin
 ops4j/org.ops4j.pax.wicket
 orion304/MinecraftTLA
-orrc/fosdem-android
 osate/osate2-plugins
 otaviojava/Easy-Cassandra
 ova2/primefaces-cookbook
@@ -1234,7 +1184,6 @@ peholmst/MVP4Vaadin
 peichhorn/lombok-pg
 pentaho/data-access
 pentaho/modeler
-pepite/play--pdf
 perf4j/perf4j
 perky/Minechem
 perwendel/spark
@@ -1248,7 +1197,6 @@ pgroth/hbase-rdf
 philwebb/springfaces
 pholser/junit-quickcheck
 phylogeography/SPREAD
-picketbox/picketbox-quickstarts
 picketlink/picketlink-idm
 piece/makegood
 pilhuhn/ZwitscherA
@@ -1288,7 +1236,6 @@ pveentjer/Hazelblast
 pyricau/FunkyJFunctional
 qcadoo/qcadoo
 qiniu/java-sdk
-qmx/jitescript
 qos-ch/logback-extensions
 qos-ch/slf4j
 quartzjer/TeleHash
@@ -1299,11 +1246,9 @@ racamirko/Common-Sense-Net-2
 rafaeldff/Iogi
 rafaelsteil/jforum3
 raffaeleguidi/DirectMemory
-ragnraok/android-image-filter
 randi2/randi2
 rasto/lcmc
 raymyers/JHaml
-rcongiu/Hive-JSON-Serde
 rcpoison/jgrapht
 rdelbru/SIREn
 redline-smalltalk/redline-smalltalk
@@ -1323,7 +1268,6 @@ richfaces4/showcase
 riftsaw/riftsaw
 rik0/blogracy
 rinde/RinSim
-ringerc/scrapcode
 riptano/brisk
 rjeschke/txtmark
 rmtheis/android-ocr
@@ -1348,7 +1292,6 @@ rzwitserloot/lombok.ast
 rzwitserloot/lombok
 s4/s4
 sachin-handiekar/jInstagram
-sagioto/forum
 sailthru/sailthru-java-client
 samaxes/minify-maven-plugin
 samskivert/jmustache
@@ -1417,8 +1360,6 @@ smartrics/RestFixture
 smickles/DynamicMarket
 smooks/smooks
 sn3d/lime-mvc
-snowindy/scriptlet4docx
-sntc06/Icequeen
 soatexpert/devoxxFr2012-2
 socialize/socialize-sdk-android
 socialsignin/spring-social-security
@@ -1462,7 +1403,6 @@ spring-projects/spring-integration-extensions
 spring-projects/spring-integration-samples
 spring-projects/spring-migration-analyzer
 spring-projects/spring-social-samples
-spring-projects/spring-webflow-samples
 spring-sprout/egov-data
 spring-sprout/telepathy
 springside/springside4
@@ -1506,7 +1446,6 @@ taoneill/war
 tarka/Anode
 taskadapter/redmine-java-api
 taweili/ardublock
-taylorleese/google-app-engine-jappstart
 tbroyer/gwt-maven-archetypes
 tbuktu/bigint
 tcurdt/jdeb
@@ -1521,12 +1460,9 @@ telecapoland/jamendo-android
 tepi/FilteringTable
 testinfected/simple-petstore
 thasmin/Podax
-thbar/opaz-plugdk
 thechiselgroup/biomixer
 theebe/mgrProject
-thest1/Android-VKontakte-SDK
 thomasjungblut/thomasjungblut-common
-thomasjungblut/tjungblut-math
 threerings/nenya
 threerings/nexus
 threerings/playn
