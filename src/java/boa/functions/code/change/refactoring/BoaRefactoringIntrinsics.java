@@ -14,8 +14,6 @@ import org.refactoringminer.api.RefactoringType;
 
 import static boa.functions.BoaAstIntrinsics.*;
 import static boa.functions.BoaIntrinsics.*;
-import static boa.functions.BoaMetricIntrinsics.getMetrics;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

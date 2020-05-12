@@ -3,14 +3,16 @@ package boa.functions.code.change.declaration;
 import java.util.Stack;
 import java.util.TreeSet;
 
+import boa.functions.code.change.ASTChangeTree;
 import boa.functions.code.change.file.FileNode;
 import boa.types.Shared.ChangeKind;
 
-public class DeclTree {
+public class DeclTree extends ASTChangeTree {
 
 	private final DeclForest forest;
 	private int id;
 	private TreeSet<DeclNode> declNodes = new TreeSet<DeclNode>();
+	private TreeSet<DeclNode> refNodes = new TreeSet<DeclNode>();
 	private Stack<DeclNode> prevNodes = new Stack<DeclNode>();
 
 	public DeclTree(DeclForest forest, DeclNode node, int treeIdx) {
@@ -122,14 +124,20 @@ public class DeclTree {
 			dn.setTreeId(this.id);
 			this.declNodes.add(dn);
 		}
-		// merge queues
+		// merge previous nodes
 		while (!tree.prevNodes.isEmpty()) {
 			DeclNode node = tree.prevNodes.pop();
 			if (!declNodes.contains(node)) {
 				this.prevNodes.push(node);
 			}
 		}
+		// merge refactoring nodes
+		this.refNodes.addAll(tree.refNodes);
 		return this;
+	}
+	
+	public TreeSet<DeclNode> getRefNodes() {
+		return refNodes;
 	}
 
 	public TreeSet<DeclNode> getDeclNodes() {

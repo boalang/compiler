@@ -28,7 +28,7 @@ public class RefactoringConnector {
 	private ChangeDataBase db;
 	private RefactoringBonds bonds;
 	private RevNode rev;
-	private DeclFider finder;
+	private DeclFinder finder;
 
 	public RefactoringConnector(ChangeDataBase db) {
 		this.db = db;
@@ -37,7 +37,7 @@ public class RefactoringConnector {
 	public void connect(RefactoringBonds bonds, RevNode r) throws Exception {
 		this.bonds = bonds;
 		this.rev = r;
-		this.finder = new DeclFider();
+		this.finder = new DeclFinder();
 		connectClassLevel();
 		connectFieldLevel();
 		connectMethodLevel();
@@ -71,29 +71,10 @@ public class RefactoringConnector {
 			rightDecl = findDeclNode(rightDeclSig);
 
 		// java parser only support java 8
-		if (leftDecl == null || rightDecl == null)
+		if (leftDecl == null || rightDecl == null) {
+//			System.err.println("no decl ref");
 			return;
-
-//		System.out.println(rev);
-//		
-//		System.out.println(bond.getType());
-//		System.out.println(bond.getRefactoring().getLeftSideLocations(0).getFilePath());
-//		System.out.println(bond.getRefactoring().getRightSideLocations(0).getFilePath());
-//		
-//		System.out.println(bond.getLeftDecl());
-//		System.out.println(bond.getRightDecl());
-//		
-//		System.out.println();
-//		
-//		System.out.println(leftFile);
-//		System.out.println(rightFile);
-//		
-//		System.out.println(rightFile.getDeclChangeMap().keySet());
-//		
-//		System.out.println(leftDecl);
-//		System.out.println(rightDecl);
-//		
-//		System.out.println();
+		}
 
 		// merge trees
 		if (leftDecl.getTreeId() != rightDecl.getTreeId()) {
@@ -105,6 +86,7 @@ public class RefactoringConnector {
 		// update refactoirng-based edges and changes
 		rightDecl.getLeftRefDecls().add(leftDecl);
 		rightDecl.getLeftRefBonds().add(bond);
+		db.declForest.get(rightDecl.getTreeId()).getRefNodes().add(rightDecl);
 
 		connectNodesWithSameSig(leftDecl, rightDecl);
 	}
@@ -212,9 +194,6 @@ public class RefactoringConnector {
 			MethodTree leftTree = db.methodForest.get(leftMethod.getTreeId());
 			MethodTree rightTree = db.methodForest.get(rightMethod.getTreeId());
 
-			if (rightMethod.getTreeId() == 277)
-				System.out.println("here 1");
-
 			leftTree.merge(rightTree);
 		}
 
@@ -252,8 +231,10 @@ public class RefactoringConnector {
 				rightDecl = findDeclNode(bond.getRightDecl());
 
 			// java parser only support java 8
-			if (leftDecl == null || rightDecl == null)
-				return;
+			if (leftDecl == null || rightDecl == null) {
+//				System.err.println("no field ref");
+				continue;
+			}
 
 			FieldNode leftField = leftDecl.getFieldChange(leftFieldSig);
 			FieldNode rightField = rightDecl.getFieldChange(rightFieldSig);
@@ -264,27 +245,10 @@ public class RefactoringConnector {
 				rightField = findFieldNode(rightFieldSig, ChangeKind.ADDED);
 
 			// java parser only support java 8
-			if (leftField == null || rightField == null)
+			if (leftField == null || rightField == null) {
+//				System.err.println("no field ref");
 				continue;
-
-//			System.out.println(rev);
-//			
-//			System.out.println(bond.getRefactoring().getLeftSideLocations(0).getFilePath());
-//			System.out.println(bond.getRefactoring().getRightSideLocations(0).getFilePath());
-//			
-//			System.out.println(bond.getLeftDecl());
-//			System.out.println(bond.getRightDecl());
-//			
-//			System.out.println(leftFieldSig);
-//			System.out.println(rightFieldSig);
-//			
-//			System.out.println();
-//			
-//			System.out.println(leftFile);
-//			System.out.println(rightFile);
-//			
-//			System.out.println(leftDecl);
-//			System.out.println(rightDecl);
+			}
 
 			// merge trees
 			if (leftField.getTreeId() != rightField.getTreeId()) {
@@ -296,6 +260,7 @@ public class RefactoringConnector {
 			// update refactoring-based edges and changes
 			rightField.getLeftRefFields().add(leftField);
 			rightField.getLeftRefBonds().add(bond);
+			db.fieldForest.get(rightField.getTreeId()).getRefNodes().add(rightField);
 		}
 	}
 
@@ -334,8 +299,10 @@ public class RefactoringConnector {
 				rightDecl = findDeclNode(bond.getRightDecl());
 
 			// java parser only support java 8
-			if (leftDecl == null || rightDecl == null)
-				return;
+			if (leftDecl == null || rightDecl == null) {
+//				System.err.println("no method ref");
+				continue;
+			}
 
 			MethodNode leftMethod = leftDecl.getMethodChange(leftMethodSig);
 			MethodNode rightMethod = rightDecl.getMethodChange(rightMethodSig);
@@ -346,8 +313,10 @@ public class RefactoringConnector {
 				rightMethod = findMethodNode(rightMethodSig, ChangeKind.ADDED);
 
 			// java parser only support java 8
-			if (leftMethod == null || rightMethod == null)
+			if (leftMethod == null || rightMethod == null) {
+//				System.err.println("no method ref");
 				continue;
+			}
 
 			// merge trees
 			if (leftMethod.getTreeId() != rightMethod.getTreeId()) {
@@ -359,6 +328,7 @@ public class RefactoringConnector {
 			// update refactoring-based edges and changes
 			rightMethod.getLeftRefMethods().add(leftMethod);
 			rightMethod.getLeftRefBonds().add(bond);
+			db.methodForest.get(rightMethod.getTreeId()).getRefNodes().add(rightMethod);
 		}
 	}
 
@@ -380,7 +350,7 @@ public class RefactoringConnector {
 		return null;
 	}
 
-	public class DeclFider extends BoaAbstractVisitor {
+	public class DeclFinder extends BoaAbstractVisitor {
 		private Declaration decl;
 		private String declSig;
 		private boolean found;

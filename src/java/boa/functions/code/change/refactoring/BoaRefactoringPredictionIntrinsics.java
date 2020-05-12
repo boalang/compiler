@@ -1,6 +1,5 @@
 package boa.functions.code.change.refactoring;
 
-import java.io.File;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,19 +7,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.refactoringminer.api.RefactoringType;
-
 import java.util.Set;
-import java.util.TreeMap;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import boa.datagen.util.FileIO;
 import boa.functions.FunctionSpec;
-import boa.functions.code.change.RefactoringBond;
-import boa.functions.code.change.RefactoringBonds;
-import boa.functions.code.change.RevNode;
 import boa.functions.code.change.refactoring.features.RevisionFeatureSet;
 import boa.types.Code.CodeRefactoring;
 import boa.types.Code.CodeRepository;
