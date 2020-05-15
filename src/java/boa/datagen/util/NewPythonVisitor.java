@@ -15,6 +15,8 @@ import java.util.Stack;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.ast.declarations.Decorator;
+import org.eclipse.dltk.ast.declarations.FieldDeclaration;
 import org.eclipse.dltk.ast.declarations.MethodDeclaration;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.ast.declarations.TypeDeclaration;
@@ -27,6 +29,9 @@ import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTupleExpression;
+import org.eclipse.dltk.python.parser.ast.statements.ReturnStatement;
+import org.eclipse.dltk.python.parser.ast.statements.SimpleStatement;
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.dltk.python.parser.ast.expressions.Assignment;
 import org.eclipse.dltk.python.parser.ast.expressions.BinaryExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.CallHolder;
@@ -35,6 +40,7 @@ import org.eclipse.dltk.python.parser.ast.expressions.IndexHolder;
 import org.eclipse.dltk.python.parser.ast.expressions.PrintExpression;
 import org.eclipse.dltk.ast.references.SimpleReference;
 import 	org.eclipse.dltk.ast.references.VariableReference;
+import org.eclipse.dltk.ast.statements.Block;
 import org.eclipse.dltk.ast.expressions.NumericLiteral;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Expression;
@@ -66,9 +72,10 @@ public class NewPythonVisitor extends ASTVisitor {
 	protected Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
 
 	
-	public Namespace getNamespace(ModuleDeclaration node) throws Exception {
+	public Namespace getNamespace(ModuleDeclaration node, String name) throws Exception {
 		root = node;
 		node.traverse(this);
+		b.setName(name);
 		return b.build();
 	}
 	
@@ -133,6 +140,16 @@ public class NewPythonVisitor extends ASTVisitor {
 		else if(md instanceof SimpleReference)
 		{
 			visit((SimpleReference) md);
+			opFound=true;
+		}
+		else if(md instanceof ReturnStatement)
+		{
+			visit((ReturnStatement) md);
+			opFound=true;
+		}
+		else if(md instanceof Block)
+		{
+			visit((Block) md);
 			opFound=true;
 		}
 		else if(md instanceof org.eclipse.dltk.ast.expressions.StringLiteral)
@@ -256,7 +273,6 @@ public class NewPythonVisitor extends ASTVisitor {
 	}
 	
 	public boolean visit(PythonImportAsExpression md)  {
-		b.setName(md.getName());
 		String imp = "";
 		imp += md.getName()+" as "+md.getAsName();
 		
@@ -264,20 +280,22 @@ public class NewPythonVisitor extends ASTVisitor {
 		return true;
 	}
 	
-	public boolean visit(PythonArgument md) throws Exception  {
-		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-
-//		ExpressionList el= (ExpressionList)md.get
-//		for(Object ob : md.get)
-//		{
-//			org.eclipse.dltk.ast.expressions.Expression ex=(org.eclipse.dltk.ast.expressions.Expression)ob;
-//			ex.traverse(this);
-//			b.addMethodArgs(expressions.pop());
-//		}
-//		
-		//expressions.push(b.build());
+	public boolean visit(PythonArgument node) throws Exception  {
 		
-		return true;
+		Variable.Builder b = Variable.newBuilder();
+		List<Variable> list = fields.peek();
+	
+		b.setName(node.getName());
+		
+		//to handle argument initialization
+		
+//		if (node.getDefaultValue() != null) {
+//			node.getDefaultValue().accept(this);
+//			b.setInitializer(expressions.pop());
+//		}
+		list.add(b.build());
+		return false;
+		
 	
 	}
 	
@@ -362,6 +380,17 @@ public class NewPythonVisitor extends ASTVisitor {
 		return true;
 	
 	}
+	public boolean visit(ReturnStatement node) throws Exception {
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.RETURN);
+		if (node.getExpression() != null) {
+			node.getExpression().traverse(this);
+			b.addExpressions(expressions.pop());
+		}
+		list.add(b.build());
+		return false;
+	}
 	public boolean visit(BinaryExpression md) throws Exception  {
 		
 	System.out.println("Binary Exp :  "+md.toString());
@@ -379,31 +408,33 @@ public class NewPythonVisitor extends ASTVisitor {
 		{
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_ADD);	
 			
-			md.getLeft().traverse(this);
-			b.addExpressions(expressions.pop());
-
-			md.getRight().traverse(this);
-			b.addExpressions(expressions.pop());
-			
-			
-			expressions.push(b.build());
+		}
+		else if(md.getKind()==ExpressionConstants.E_MULT)
+		{
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_MULT);	
+		}
+		else if(md.getKind()==ExpressionConstants.E_MINUS)
+		{
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_SUB);	
+		}
+		else if(md.getKind()==ExpressionConstants.E_DIV)
+		{
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_DIV);	
 		}
 		else if(md.getKind()==ExpressionConstants.E_NOT_EQUAL)
 		{
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.NEQ);	
 			
-			md.getLeft().traverse(this);
-			b.addExpressions(expressions.pop());
-//			System.out.println("Back to binary exp: "+b.getExpressions(b.getExpressionsCount()-1).toString());
-
-			md.getRight().traverse(this);
-			b.addExpressions(expressions.pop());
-			
-//			System.out.println("Back to binary exp: "+b.getExpressions(b.getExpressionsCount()-1).toString());
-
-			
-			expressions.push(b.build());
 		}
+		
+		md.getLeft().traverse(this);
+		b.addExpressions(expressions.pop());
+
+		md.getRight().traverse(this);
+		b.addExpressions(expressions.pop());
+		
+		
+		expressions.push(b.build());
 		
 
 		return true;
@@ -421,27 +452,146 @@ public class NewPythonVisitor extends ASTVisitor {
 //		return visitGeneral(s);
 //	}
 //
-//	public boolean visit(TypeDeclaration s) throws Exception {
-//		System.out.println("Enter type declaration: "+s.toString());
-//		return visitGeneral(s);
-//	}
-//
-	public boolean visit(MethodDeclaration s) throws Exception {
-		System.out.println("Enter Method Declaration: "+s.toString());
-		for(Object ob : s.getArguments())
-		{
-			PythonArgument ex=(PythonArgument)ob;
-			ex.traverse(this);
-			//b.addMethodArgs(expressions.pop());
-		}
-		return false;
-	}
-
-	public boolean visit(ModuleDeclaration s) throws Exception {
-		System.out.println("Enter Module Declaration: "+s.toString());
-		statements.push(new ArrayList<boa.types.Ast.Statement>());
+	public boolean visit(TypeDeclaration s) throws Exception {
+		System.out.println("Enter type declaration: "+s.toString());
 		return visitGeneral(s);
 	}
+
+	public boolean visit(MethodDeclaration s) throws Exception {
+	
+		
+		System.out.println("Enter Method Declaration: "+s.toString());
+
+		List<boa.types.Ast.Method> list = methods.peek();
+		Method.Builder b = Method.newBuilder();
+		if(s.getRef() instanceof SimpleReference)
+		{
+			b.setName(((SimpleReference) s.getRef()).getName());
+		}
+
+		for(Object ob : s.getArguments())
+		{
+			fields.push(new ArrayList<Variable>());
+			PythonArgument ex=(PythonArgument)ob;
+			ex.traverse(this);
+			List<boa.types.Ast.Variable> fs = fields.pop();
+
+			for (boa.types.Ast.Variable v : fs)
+				b.addArguments(v);
+			
+		}
+		
+		if (s.getStatements() != null) {
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
+			s.getBody().traverse(this);
+			List<boa.types.Ast.Statement> ss = statements.pop();
+			for (boa.types.Ast.Statement st : ss)
+				b.addStatements(st);
+		}
+		
+		Type.Builder tb = Type.newBuilder();
+		String name = "";
+		tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		tb.setName(name);
+		b.setReturnType(tb.build());
+		list.add(b.build());
+		
+		return false;
+	}
+	public boolean visit(Block node) throws Exception {
+		Statement.Builder b = Statement.newBuilder();
+		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
+		fields.push(new ArrayList<boa.types.Ast.Variable>());
+		methods.push(new ArrayList<boa.types.Ast.Method>());
+		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		
+		for ( Object o : node.getStatements()) {
+			((org.eclipse.dltk.ast.ASTNode) o).traverse(this);
+			
+			if (isExpressionStatement((ASTNode) o)==true)
+			{				
+				addStatementExpression();
+			}
+		}
+		List<boa.types.Ast.Statement> ss = statements.pop();
+		List<boa.types.Ast.Declaration> ds = declarations.pop();
+		List<boa.types.Ast.Method> ms = methods.pop();
+		List<boa.types.Ast.Variable> fs = fields.pop();
+		
+		for (boa.types.Ast.Statement st : ss)
+			b.addStatements(st);
+		for (boa.types.Ast.Declaration d : ds)
+			b.addTypeDeclarations(d);
+		for (boa.types.Ast.Method m : ms)
+			b.addMethods(m);
+		for (boa.types.Ast.Variable v : fs)
+			b.addVariableDeclarations(v);
+		
+		statements.peek().add(b.build());
+		
+		return false;
+	}
+	
+	public boolean isExpressionStatement(org.eclipse.dltk.ast.ASTNode o)
+	{
+		if (o instanceof MethodDeclaration)
+			return false;
+		if (o instanceof TypeDeclaration)
+			return false;
+		if (o instanceof FieldDeclaration)
+			return false;
+		if (o instanceof ModuleDeclaration)
+			return false;
+		if (o instanceof Decorator)
+			return false;
+		if (o instanceof SimpleStatement)
+			return false;
+		if (o instanceof org.eclipse.dltk.ast.declarations.Declaration)
+			return false;
+		return true;
+	}
+	public void addStatementExpression()
+	{
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
+		b.addExpressions(expressions.pop());
+		list.add(b.build());
+	}
+	public boolean visit(ModuleDeclaration s) throws Exception {
+		//System.out.println("Enter Module Declaration: "+s.toString());
+		
+		
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
+		fields.push(new ArrayList<boa.types.Ast.Variable>());
+		methods.push(new ArrayList<boa.types.Ast.Method>());
+
+		for ( Object o : s.getStatements()) {
+			((org.eclipse.dltk.ast.ASTNode) o).traverse(this);
+			
+			if (isExpressionStatement((ASTNode) o)==true)
+			{				
+				addStatementExpression();
+			}
+		}
+		List<boa.types.Ast.Statement> ss = statements.pop();
+		List<boa.types.Ast.Declaration> ds = declarations.pop();
+		List<boa.types.Ast.Method> ms = methods.pop();
+		List<boa.types.Ast.Variable> fs = fields.pop();
+		for (boa.types.Ast.Statement st : ss)
+			b.addStatements(st);
+		for (boa.types.Ast.Declaration d : ds)
+			b.addDeclarations(d);
+		for (boa.types.Ast.Method m : ms)
+			b.addMethods(m);
+		for (boa.types.Ast.Variable v : fs)
+			b.addVariables(v);
+		
+		return false;
+	}
+	
 
 //	public boolean endvisit(org.eclipse.dltk.ast.statements.Statement s) throws Exception {
 //		System.out.println("Exit Statement: "+s.toString());
@@ -467,23 +617,23 @@ public class NewPythonVisitor extends ASTVisitor {
 //		return false;
 //	}
 
-	public boolean endvisit(ModuleDeclaration s) throws Exception {
-		System.out.println("Exit Module Declaration: "+s.toString());
-		Statement.Builder sb = Statement.newBuilder();
-		sb.setKind(StatementKind.EXPRESSION);
-
-		Stack<boa.types.Ast.Expression> ex = new Stack<boa.types.Ast.Expression>();
-		while(!expressions.isEmpty())
-		{
-			ex.push(expressions.pop());
-		}
-		while(!ex.isEmpty())
-		{
-			sb.addExpressions(ex.pop());
-		}
-		b.addStatements(sb.build());
-		return false;
-	}
+//	public boolean endvisit(ModuleDeclaration s) throws Exception {
+//		System.out.println("Exit Module Declaration: "+s.toString());
+//		Statement.Builder sb = Statement.newBuilder();
+//		sb.setKind(StatementKind.EXPRESSION);
+//
+//		Stack<boa.types.Ast.Expression> ex = new Stack<boa.types.Ast.Expression>();
+//		while(!expressions.isEmpty())
+//		{
+//			ex.push(expressions.pop());
+//		}
+//		while(!ex.isEmpty())
+//		{
+//			sb.addExpressions(ex.pop());
+//		}
+//		b.addStatements(sb.build());
+//		return false;
+//	}
 	
 	
 }

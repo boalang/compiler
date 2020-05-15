@@ -637,7 +637,7 @@ public abstract class AbstractCommit {
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,final boolean storeOnError) {
 		pythonParsingError=false;
 		
-		System.out.println("###################");
+		System.out.println("################### "+path);
 
 		PythonSourceParser parser= new PythonSourceParser();
 		IModuleSource input=new ModuleSource(content);
@@ -667,7 +667,7 @@ public abstract class AbstractCommit {
 			NewPythonVisitor visitor=new NewPythonVisitor();
 		
 			try {
-				ast.addNamespaces(visitor.getNamespace(module));
+				ast.addNamespaces(visitor.getNamespace(module,path));
 			} catch (final UnsupportedOperationException e) {
 				return false;
 			} catch (final Throwable e) {
