@@ -19,11 +19,13 @@ import org.eclipse.dltk.ast.declarations.Decorator;
 import org.eclipse.dltk.ast.declarations.FieldDeclaration;
 import org.eclipse.dltk.ast.declarations.MethodDeclaration;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
+import org.eclipse.dltk.ast.declarations.ModuleDeclarationWrapper;
 import org.eclipse.dltk.ast.declarations.TypeDeclaration;
 import org.eclipse.dltk.ast.expressions.ExpressionConstants;
 import org.eclipse.dltk.ast.expressions.ExpressionList;
 import org.eclipse.dltk.ast.expressions.Literal;
 import org.eclipse.dltk.python.parser.ast.PythonArgument;
+import org.eclipse.dltk.python.parser.ast.PythonClassDeclaration;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonListExpression;
@@ -31,7 +33,6 @@ import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTupleExpression;
 import org.eclipse.dltk.python.parser.ast.statements.ReturnStatement;
 import org.eclipse.dltk.python.parser.ast.statements.SimpleStatement;
-import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.dltk.python.parser.ast.expressions.Assignment;
 import org.eclipse.dltk.python.parser.ast.expressions.BinaryExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.CallHolder;
@@ -42,6 +43,8 @@ import org.eclipse.dltk.ast.references.SimpleReference;
 import 	org.eclipse.dltk.ast.references.VariableReference;
 import org.eclipse.dltk.ast.statements.Block;
 import org.eclipse.dltk.ast.expressions.NumericLiteral;
+import org.eclipse.dltk.ast.expressions.StringLiteral;
+
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Method;
@@ -71,7 +74,8 @@ public class NewPythonVisitor extends ASTVisitor {
 	protected Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
 	protected Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
 
-	
+	protected Stack<boa.types.Ast.Comment> comments = new Stack<boa.types.Ast.Comment>();
+
 	public Namespace getNamespace(ModuleDeclaration node, String name) throws Exception {
 		root = node;
 		node.traverse(this);
@@ -89,11 +93,16 @@ public class NewPythonVisitor extends ASTVisitor {
 		
 		if (md instanceof PythonImportAsExpression) {
 		  visit((PythonImportAsExpression) md);
-		  //opFound=true;
+		  opFound=true;
 		}
 		else if(md instanceof Assignment)
 		{
 			visit((Assignment) md);
+			opFound=true;
+		}
+		else if(md instanceof TypeDeclaration)
+		{
+			visitTypeDeclaration((TypeDeclaration) md);
 			opFound=true;
 		}
 		else if(md instanceof VariableReference)
@@ -161,11 +170,6 @@ public class NewPythonVisitor extends ASTVisitor {
 		return !opFound;
 	
 	}
-//	
-//	@Override
-//    public void endvisitGeneral(ASTNode node) throws Exception {
-//    	System.out.println("Exit 2:  "+node.toString());
-//    }
 	
 	public boolean visit(ExtendedVariableReference md) throws Exception  {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
@@ -440,21 +444,86 @@ public class NewPythonVisitor extends ASTVisitor {
 		return true;
 	
 	}
-	
+	public boolean visitComment(org.eclipse.dltk.ast.expressions.StringLiteral node) {
+		boa.types.Ast.Comment.Builder b = boa.types.Ast.Comment.newBuilder();
+		String comment=node.getValue();
+		if(comment.startsWith("#"))
+		{
+			b.setKind(boa.types.Ast.Comment.CommentKind.LINE);
+		}
+		else
+		{
+			b.setKind(boa.types.Ast.Comment.CommentKind.DOC);
 
-//	public boolean visit(org.eclipse.dltk.ast.statements.Statement s) throws Exception {
-//		System.out.println("Enter Statement: "+s.toString());
-//		return visitGeneral(s);
-//	}
-//
-//	public boolean visit(org.eclipse.dltk.ast.expressions.Expression s) throws Exception {
-//		System.out.println("Enter Expression: "+s.toString());
-//		return visitGeneral(s);
-//	}
-//
-	public boolean visit(TypeDeclaration s) throws Exception {
-		System.out.println("Enter type declaration: "+s.toString());
-		return visitGeneral(s);
+		}
+
+		b.setValue(comment);
+
+		comments.push(b.build());
+		return false;
+	}
+
+	
+	public boolean visitTypeDeclaration(TypeDeclaration node) throws Exception {
+		System.out.println("Enter type declaration");
+		
+		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
+		
+		if(node.getRef() instanceof SimpleReference)
+		{
+			b.setName(((SimpleReference) node.getRef()).getName());
+		}
+		b.setKind(boa.types.Ast.TypeKind.CLASS);
+//		if (node.getSuperClass() != null) {
+//			Type.Builder tb = Type.newBuilder();
+//			tb.setKind(TypeKind.CLASS);
+//			if (node.getSuperClass() instanceof Identifier) {
+//				tb.setName(((Identifier) node.getSuperClass()).getName());
+//			} else {
+//				node.getSuperClass().accept(this);
+//				tb.setComputedName(expressions.pop());
+//			}
+//			b.addParents(tb.build());
+//		}
+		
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+
+	
+		for (Object d : node.getStatements()) {
+			
+//			if (d instanceof org.eclipse.dltk.ast.expressions.StringLiteral) {
+//				this.visitComment((org.eclipse.dltk.ast.expressions.StringLiteral) d);
+//				b.addComments(comments.pop());
+//			}
+			if (d instanceof MethodDeclaration) {
+				methods.push(new ArrayList<boa.types.Ast.Method>());
+				((MethodDeclaration) d).traverse(this);
+				for (boa.types.Ast.Method m : methods.pop()){
+					b.addMethods(m);
+				}
+			} else if(isDeclarationKind((ASTNode) d)) {
+				declarations.push(new ArrayList<boa.types.Ast.Declaration>());
+				((ASTNode) d).traverse(this);
+				for (boa.types.Ast.Declaration nd : declarations.pop())
+					b.addNestedDeclarations(nd);
+			}
+			else  {
+				((ASTNode) d).traverse(this);
+				if (isExpressionStatement((ASTNode) d)==true)
+				{				
+					addStatementExpression();
+				}
+			}
+		}
+		
+		List<boa.types.Ast.Statement> ss = statements.pop();
+		for (boa.types.Ast.Statement st : ss)
+			b.addStatements(st);
+		
+		declarations.peek().add(b.build());
+		
+		return false;
+		
 	}
 
 	public boolean visit(MethodDeclaration s) throws Exception {
@@ -498,6 +567,7 @@ public class NewPythonVisitor extends ASTVisitor {
 		
 		return false;
 	}
+	
 	public boolean visit(Block node) throws Exception {
 		Statement.Builder b = Statement.newBuilder();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
@@ -533,21 +603,31 @@ public class NewPythonVisitor extends ASTVisitor {
 		return false;
 	}
 	
-	public boolean isExpressionStatement(org.eclipse.dltk.ast.ASTNode o)
+	public boolean isDeclarationKind(org.eclipse.dltk.ast.ASTNode o)
 	{
 		if (o instanceof MethodDeclaration)
-			return false;
+			return true;
 		if (o instanceof TypeDeclaration)
-			return false;
+			return true;
 		if (o instanceof FieldDeclaration)
-			return false;
+			return true;
 		if (o instanceof ModuleDeclaration)
+			return true;
+		if (o instanceof ModuleDeclarationWrapper)
+			return true;
+		if (o instanceof PythonClassDeclaration)
+			return true;
+		if (o instanceof org.eclipse.dltk.ast.declarations.Declaration)
+			return true;
+		return false;
+	}
+	public boolean isExpressionStatement(org.eclipse.dltk.ast.ASTNode o)
+	{
+		if(isDeclarationKind(o))
 			return false;
 		if (o instanceof Decorator)
 			return false;
 		if (o instanceof SimpleStatement)
-			return false;
-		if (o instanceof org.eclipse.dltk.ast.declarations.Declaration)
 			return false;
 		return true;
 	}
@@ -591,49 +671,6 @@ public class NewPythonVisitor extends ASTVisitor {
 		
 		return false;
 	}
-	
-
-//	public boolean endvisit(org.eclipse.dltk.ast.statements.Statement s) throws Exception {
-//		System.out.println("Exit Statement: "+s.toString());
-//		endvisitGeneral(s);
-//		return false;
-//	}
-//
-//	public boolean endvisit(org.eclipse.dltk.ast.expressions.Expression s) throws Exception {
-//		System.out.println("Exit Expression: "+s.toString());
-//		endvisitGeneral(s);
-//		return false;
-//	}
-//
-//	public boolean endvisit(TypeDeclaration s) throws Exception {
-//		System.out.println("Exit Type Declaration: "+s.toString());
-//		endvisitGeneral(s);
-//		return false;
-//	}
-//
-//	public boolean endvisit(MethodDeclaration s) throws Exception {
-//		System.out.println("Exit Method Declaration: "+s.toString());
-//		endvisitGeneral(s);
-//		return false;
-//	}
-
-//	public boolean endvisit(ModuleDeclaration s) throws Exception {
-//		System.out.println("Exit Module Declaration: "+s.toString());
-//		Statement.Builder sb = Statement.newBuilder();
-//		sb.setKind(StatementKind.EXPRESSION);
-//
-//		Stack<boa.types.Ast.Expression> ex = new Stack<boa.types.Ast.Expression>();
-//		while(!expressions.isEmpty())
-//		{
-//			ex.push(expressions.pop());
-//		}
-//		while(!ex.isEmpty())
-//		{
-//			sb.addExpressions(ex.pop());
-//		}
-//		b.addStatements(sb.build());
-//		return false;
-//	}
 	
 	
 }
