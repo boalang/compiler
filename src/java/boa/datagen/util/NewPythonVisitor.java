@@ -26,13 +26,16 @@ import org.eclipse.dltk.ast.expressions.ExpressionList;
 import org.eclipse.dltk.ast.expressions.Literal;
 import org.eclipse.dltk.python.parser.ast.PythonArgument;
 import org.eclipse.dltk.python.parser.ast.PythonClassDeclaration;
+import org.eclipse.dltk.python.parser.ast.PythonExceptStatement;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
+import org.eclipse.dltk.python.parser.ast.PythonTryStatement;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTupleExpression;
 import org.eclipse.dltk.python.parser.ast.statements.ReturnStatement;
 import org.eclipse.dltk.python.parser.ast.statements.SimpleStatement;
+import org.eclipse.php.internal.core.ast.nodes.Identifier;
 import org.eclipse.dltk.python.parser.ast.expressions.Assignment;
 import org.eclipse.dltk.python.parser.ast.expressions.BinaryExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.CallHolder;
@@ -134,6 +137,16 @@ public class NewPythonVisitor extends ASTVisitor {
 		else if(md instanceof PythonArgument)
 		{
 			visit((PythonArgument) md);
+			opFound=true;
+		}
+		else if(md instanceof PythonTryStatement)
+		{
+			visit((PythonTryStatement) md);
+			opFound=true;
+		}
+		else if(md instanceof PythonExceptStatement)
+		{
+			visit((PythonExceptStatement) md);
 			opFound=true;
 		}
 		else if(md instanceof PythonSubscriptExpression)
@@ -629,6 +642,10 @@ public class NewPythonVisitor extends ASTVisitor {
 			return false;
 		if (o instanceof SimpleStatement)
 			return false;
+		if (o instanceof PythonTryStatement)
+			return false;
+		if (o instanceof PythonExceptStatement)
+			return false;
 		return true;
 	}
 	public void addStatementExpression()
@@ -671,6 +688,64 @@ public class NewPythonVisitor extends ASTVisitor {
 		
 		return false;
 	}
+	
+	public boolean visit(PythonTryStatement s) throws Exception {
+		System.out.println("Enter Try: "+s.toString());
+		
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.TRY);
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+
+	    s.getBody().traverse(this);
+			
+		for (Object c : s.getCatchFinallyStatements())
+			((ASTNode) c).traverse(this);
+		
+		List<boa.types.Ast.Statement> ss = statements.pop();
+		for (boa.types.Ast.Statement st : ss)
+			b.addStatements(st);
+		
+		list.add(b.build());
+		
+		return false;
+	}
+	
+	public boolean visit(PythonExceptStatement s) throws Exception {
+		System.out.println("Enter Except: "+s.toString());
+		
+		Statement.Builder b = Statement.newBuilder();
+		List<Statement> list = statements.peek();
+		b.setKind(Statement.StatementKind.CATCH);
+
+
+		if(s.getExpression()!=null)
+		{
+			boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
+			
+			s.getExpression().traverse(this);
+			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+		
+			tb.setComputedName(expressions.pop());
+			tb.setKind(boa.types.Ast.TypeKind.CLASS);
+			vb.setVariableType(tb.build());
+			b.setVariableDeclaration(vb.build());
+		}
+		
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+
+	    s.getBody().traverse(this);
+			
+		
+		List<boa.types.Ast.Statement> ss = statements.pop();
+		for (boa.types.Ast.Statement st : ss)
+			b.addStatements(st);
+		
+		list.add(b.build());
+		
+		return false;
+	}
+	
 	
 	
 }

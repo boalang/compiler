@@ -1577,10 +1577,13 @@ public class PHPVisitor extends AbstractVisitor {
 		b.setKind(boa.types.Ast.Statement.StatementKind.TRY);
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().accept(this);
+		
 		for (Object c : node.catchClauses())
 			((CatchClause) c).accept(this);
+		
 		if (node.finallyClause() != null)
 			node.finallyClause().accept(this);
+		
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
 		list.add(b.build());
