@@ -27,6 +27,7 @@ import org.eclipse.dltk.ast.expressions.Literal;
 import org.eclipse.dltk.python.parser.ast.PythonArgument;
 import org.eclipse.dltk.python.parser.ast.PythonClassDeclaration;
 import org.eclipse.dltk.python.parser.ast.PythonExceptStatement;
+import org.eclipse.dltk.python.parser.ast.PythonForStatement;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import org.eclipse.dltk.python.parser.ast.PythonTryStatement;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
@@ -147,6 +148,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		else if(md instanceof PythonExceptStatement)
 		{
 			visit((PythonExceptStatement) md);
+			opFound=true;
+		}
+		else if(md instanceof PythonForStatement)
+		{
+			visit((PythonForStatement) md);
 			opFound=true;
 		}
 		else if(md instanceof PythonSubscriptExpression)
@@ -742,6 +748,39 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.addStatements(st);
 		
 		list.add(b.build());
+		
+		return false;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public boolean visit(PythonForStatement s) throws Exception {
+		System.out.println("Enter For: "+s.toString());
+		
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.FOR);
+		
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		
+		
+		s.getAction().traverse(this);
+		
+		
+		if(s.getCondition()!= null)
+		{
+			s.getCondition().traverse(this);
+			boa.types.Ast.Expression ex = expressions.pop();
+			b.addConditions(ex);
+		}
+		
+		//if(s.get)
+			
+			
+	    List<boa.types.Ast.Statement> ss = statements.pop();
+	    for (boa.types.Ast.Statement st : ss)
+			b.addStatements(st);
+		list.add(b.build());
+		
 		
 		return false;
 	}
