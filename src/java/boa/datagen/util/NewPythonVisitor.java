@@ -1,6 +1,7 @@
 package boa.datagen.util;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 //
@@ -43,6 +44,8 @@ import org.eclipse.dltk.python.parser.ast.expressions.CallHolder;
 import org.eclipse.dltk.python.parser.ast.expressions.ExtendedVariableReference;
 import org.eclipse.dltk.python.parser.ast.expressions.IndexHolder;
 import org.eclipse.dltk.python.parser.ast.expressions.PrintExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonDictExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonDictExpression.DictNode;
 import org.eclipse.dltk.ast.references.SimpleReference;
 import 	org.eclipse.dltk.ast.references.VariableReference;
 import org.eclipse.dltk.ast.statements.Block;
@@ -107,6 +110,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		else if(md instanceof TypeDeclaration)
 		{
 			visitTypeDeclaration((TypeDeclaration) md);
+			opFound=true;
+		}
+		else if(md instanceof PythonDictExpression)
+		{
+			visit((PythonDictExpression) md);
 			opFound=true;
 		}
 		else if(md instanceof VariableReference)
@@ -330,6 +338,37 @@ public class NewPythonVisitor extends ASTVisitor {
 		md.getExpression().traverse(this);
 		b.addMethodArgs(expressions.pop());
 		
+		expressions.push(b.build());
+		
+		return true;
+	
+	}
+	public boolean visit(PythonDictExpression md) throws Exception  {
+		
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.DICT);
+		
+		Iterator i = md.getfDictionary().iterator();
+		while( i.hasNext()) {
+			
+			boa.types.Ast.Expression.Builder ditem = boa.types.Ast.Expression.newBuilder();
+
+			ditem.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
+			
+			DictNode node = (DictNode)i.next();
+			org.eclipse.dltk.ast.expressions.Expression key = node.getKey( );
+			if( key != null ) {
+				key.traverse( this );
+				ditem.addExpressions(expressions.pop());
+			}
+			org.eclipse.dltk.ast.expressions.Expression value = node.getValue( );
+			if( value != null ) {
+				value.traverse( this );
+				ditem.addExpressions(expressions.pop());
+			}
+			b.addExpressions(ditem);
+		}
 		expressions.push(b.build());
 		
 		return true;
@@ -651,6 +690,8 @@ public class NewPythonVisitor extends ASTVisitor {
 		if (o instanceof PythonTryStatement)
 			return false;
 		if (o instanceof PythonExceptStatement)
+			return false;
+		if (o instanceof PythonForStatement)
 			return false;
 		return true;
 	}

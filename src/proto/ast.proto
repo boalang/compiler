@@ -365,6 +365,7 @@ message Expression {
 		NAMESPACENAME = 100;
 		TUPLE = 101;
 		ARRAYINDEX = 102;
+		DICT=103;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
