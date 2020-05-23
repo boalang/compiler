@@ -31,13 +31,14 @@ import org.eclipse.dltk.python.parser.ast.PythonExceptStatement;
 import org.eclipse.dltk.python.parser.ast.PythonForStatement;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import org.eclipse.dltk.python.parser.ast.PythonTryStatement;
+import org.eclipse.dltk.python.parser.ast.PythonWhileStatement;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTupleExpression;
 import org.eclipse.dltk.python.parser.ast.statements.ReturnStatement;
 import org.eclipse.dltk.python.parser.ast.statements.SimpleStatement;
-import org.eclipse.php.internal.core.ast.nodes.Identifier;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.dltk.python.parser.ast.expressions.Assignment;
 import org.eclipse.dltk.python.parser.ast.expressions.BinaryExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.CallHolder;
@@ -120,6 +121,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		else if(md instanceof VariableReference)
 		{
 			visit((VariableReference) md);
+			opFound=true;
+		}
+		else if(md instanceof PythonWhileStatement)
+		{
+			visit((PythonWhileStatement) md);
 			opFound=true;
 		}
 		else if(md instanceof BinaryExpression)
@@ -693,6 +699,8 @@ public class NewPythonVisitor extends ASTVisitor {
 			return false;
 		if (o instanceof PythonForStatement)
 			return false;
+		if (o instanceof PythonWhileStatement)
+			return false;
 		return true;
 	}
 	public void addStatementExpression()
@@ -793,39 +801,76 @@ public class NewPythonVisitor extends ASTVisitor {
 		return false;
 	}
 	
+	
+	
 	@SuppressWarnings("deprecation")
 	public boolean visit(PythonForStatement s) throws Exception {
 		System.out.println("Enter For: "+s.toString());
 		
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.FOR);
-		
-		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		
 		
-		s.getAction().traverse(this);
+		b.setKind(boa.types.Ast.Statement.StatementKind.FOREACH);
 		
+//		boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
+//		
+//		s.getfMainArguments().traverse(this);
+//		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+//	
+//		tb.setComputedName(expressions.pop());
+//		tb.setKind(boa.types.Ast.TypeKind.OTHER);
+//		vb.setVariableType(tb.build());
+//		b.setVariableDeclaration(vb.build());
 		
 		if(s.getCondition()!= null)
 		{
 			s.getCondition().traverse(this);
 			boa.types.Ast.Expression ex = expressions.pop();
-			b.addConditions(ex);
+			b.addExpressions(ex);
 		}
 		
-		//if(s.get)
-			
-			
-	    List<boa.types.Ast.Statement> ss = statements.pop();
-	    for (boa.types.Ast.Statement st : ss)
-			b.addStatements(st);
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		
+		s.getAction().traverse(this);
+
+		for (boa.types.Ast.Statement ss : statements.pop())
+			b.addStatements(ss);
+		
 		list.add(b.build());
+		
+		return false;
+	}
+	public boolean visit(PythonWhileStatement s) throws Exception {
+		
+//		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+//		List<boa.types.Ast.Statement> list = statements.peek();
+//		b.setKind(boa.types.Ast.Statement.StatementKind.WHILE);
+//		
+//		statements.push(new ArrayList<boa.types.Ast.Statement>());
+//		
+//		
+//		s.getAction().traverse(this);
+//		
+//		
+//		if(s.getCondition()!= null)
+//		{
+//			s.getCondition().traverse(this);
+//			boa.types.Ast.Expression ex = expressions.pop();
+//			b.addConditions(ex);
+//		}
+//		
+//		//if(s.get)
+//			
+//			
+//	    List<boa.types.Ast.Statement> ss = statements.pop();
+//	    for (boa.types.Ast.Statement st : ss)
+//			b.addStatements(st);
+//		list.add(b.build());
 		
 		
 		return false;
 	}
-	
 	
 	
 }
