@@ -213,6 +213,7 @@ functionType returns [FunctionType ast]
 	: FUNCTION LPAREN (id=identifier COLON t=type { $ast.addArg((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn)); } (COMMA id=identifier COLON t=type { $ast.addArg((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn)); })*)? RPAREN (COLON t=type { $ast.setType($t.ast); })?
 	| FUNCTION LPAREN ((id=identifier COLON t=type { $ast.addArg((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn)); } | identifier { notifyErrorListeners("function arguments require an identifier and type"); }) (COMMA id=identifier COLON t=type { $ast.addArg((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn)); } | COMMA identifier { notifyErrorListeners("function arguments require an identifier and type"); })*)? RPAREN (COLON t=type { $ast.setType($t.ast); })?
 	;
+
 fixpType returns [FixPType ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
@@ -520,7 +521,7 @@ operand returns [Operand ast]
 	| fp=floatingPointLiteral                      { $ast = $fp.ast; }
 	| comp=composite                               { $ast = $comp.ast; }
 	| fe=functionExpression                        { $ast = $fe.ast; }
-	| fixpe=fixpExpression                        { $ast = $fixpe.ast; }
+	| fixpe=fixpExpression                         { $ast = $fixpe.ast; }
 	| v=visitorExpression                          { $ast = $v.ast; }
 	| tr=traversalExpression                       { $ast = $tr.ast; }
 	| uf=unaryFactor                               { $ast = $uf.ast; }
@@ -629,9 +630,9 @@ identifier returns [Identifier ast]
 	| lit=DEFAULT  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=CONTINUE { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FUNCTION { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
-	| lit=FIXP { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=FIXP     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=VISITOR  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
-	| lit=TRAVERSAL  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=TRAVERSAL{ notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=BEFORE   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=AFTER    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=STOP     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
@@ -683,40 +684,40 @@ timeLiteral returns [TimeLiteral ast]
 // keywords
 //
 
-OF       : 'of';
-IF       : 'if';
-DO       : 'do';
-MAP      : 'map';
-STACK    : 'stack';
-QUEUE    : 'queue';
-SET      : 'set';
-FOR      : 'for';
-FOREACH  : 'foreach';
-IFALL    : 'ifall';
-EXISTS   : 'exists';
-NOT      : 'not';
-TYPE     : 'type';
-ELSE     : 'else';
-CASE     : 'case';
-OUTPUT   : 'output';
-FORMAT   : 'format';
-WHILE    : 'while';
-BREAK    : 'break';
-ARRAY    : 'array';
-STATIC   : 'static';
-SWITCH   : 'switch';
-RETURN   : 'return';
-WEIGHT   : 'weight';
-DEFAULT  : 'default';
-CONTINUE : 'continue';
-FUNCTION : 'function';
-FIXP : 'fixp';
-VISITOR  : 'visitor';
-TRAVERSAL  : 'traversal';
-BEFORE   : 'before';
-AFTER    : 'after';
-STOP     : 'stop';
-ENUM	 : 'enum';
+OF        : 'of';
+IF        : 'if';
+DO        : 'do';
+MAP       : 'map';
+STACK     : 'stack';
+QUEUE     : 'queue';
+SET       : 'set';
+FOR       : 'for';
+FOREACH   : 'foreach';
+IFALL     : 'ifall';
+EXISTS    : 'exists';
+NOT       : 'not';
+TYPE      : 'type';
+ELSE      : 'else';
+CASE      : 'case';
+OUTPUT    : 'output';
+FORMAT    : 'format';
+WHILE     : 'while';
+BREAK     : 'break';
+ARRAY     : 'array';
+STATIC    : 'static';
+SWITCH    : 'switch';
+RETURN    : 'return';
+WEIGHT    : 'weight';
+DEFAULT   : 'default';
+CONTINUE  : 'continue';
+FUNCTION  : 'function';
+FIXP      : 'fixp';
+VISITOR   : 'visitor';
+TRAVERSAL : 'traversal';
+BEFORE    : 'before';
+AFTER     : 'after';
+STOP      : 'stop';
+ENUM	  : 'enum';
 
 //
 // separators
@@ -737,39 +738,39 @@ RBRACKET  : ']';
 // operators
 //
 
-OR     : 'or';
-ONEOR  : '|';
-TWOOR  : '||';
-AND    : 'and';
-ONEAND : '&';
-TWOAND : '&&';
-INCR   : '++';
-DECR   : '--';
-EQEQ   : '==';
-NEQ    : '!=';
-LT     : '<';
-LTEQ   : '<=';
-GT     : '>';
-GTEQ   : '>=';
-PLUS   : '+';
-MINUS  : '-';
-XOR    : '^';
-STAR   : '*';
-DIV    : '/';
-MOD    : '%';
-RSHIFT : '>>';
-NEG    : '~';
-INV    : '!';
-PLUSEQ : '+=';
-MINUSEQ: '-=';
-STAREQ : '*=';
-DIVEQ  : '/=';
-ONEOREQ: '|=';
-XOREQ  : '^=';
-MODEQ  : '%=';
-ONEANDEQ:'&=';
-RSHIFTEQ:'>>=';
-LSHIFTEQ:'<<=';
+OR       : 'or';
+ONEOR    : '|';
+TWOOR    : '||';
+AND      : 'and';
+ONEAND   : '&';
+TWOAND   : '&&';
+INCR     : '++';
+DECR     : '--';
+EQEQ     : '==';
+NEQ      : '!=';
+LT       : '<';
+LTEQ     : '<=';
+GT       : '>';
+GTEQ     : '>=';
+PLUS     : '+';
+MINUS    : '-';
+XOR      : '^';
+STAR     : '*';
+DIV      : '/';
+MOD      : '%';
+RSHIFT   : '>>';
+NEG      : '~';
+INV      : '!';
+PLUSEQ   : '+=';
+MINUSEQ  : '-=';
+STAREQ   : '*=';
+DIVEQ    : '/=';
+ONEOREQ  : '|=';
+XOREQ    : '^=';
+MODEQ    : '%=';
+ONEANDEQ : '&=';
+RSHIFTEQ : '>>=';
+LSHIFTEQ : '<<=';
 
 //
 // other

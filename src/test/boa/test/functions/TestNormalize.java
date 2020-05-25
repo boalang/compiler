@@ -43,6 +43,9 @@ public class TestNormalize {
     @Parameters(name = "{index}][{0} = {1}")
     public static Collection<String[]> expressions() {
         return Arrays.asList(new String[][]{
+                {"temp - $RECEIVER$.charAt(i) - '0' / 10 == ans", "$RECEIVER$.charAt(i) + 48 / 10 + ans - temp == 0"},
+                {"$ARG$0 == '\\n'", "$ARG$0 == 10"},
+
                 {"$RECEIVER$.length() / 2 == $RECEIVER$.length() / 2.0", "0 == 0"},
 
                 {"a != 0xFFFFFFFFFFFFFFFFL", "a != 0xFFFFFFFFFFFFFFFFL"},
