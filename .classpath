@@ -48,9 +48,7 @@
 	<classpathentry kind="lib" path="lib/evaluator/com.springsource.org.codehaus.jackson.mapper-1.4.2.jar"/>
 	<classpathentry kind="lib" path="lib/evaluator/jackson-mapper-asl-1.9.13.jar"/>
 	<classpathentry kind="lib" path="lib/hadoop2.7/hadoop-auth-2.7.1.jar"/>
-	<classpathentry kind="lib" path="lib/hadoop2.7/hadoop-common-2.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/hadoop2.7/hadoop-mapreduce-client-common-2.7.1.jar"/>
-	<classpathentry kind="lib" path="lib/hadoop2.7/hadoop-mapreduce-client-core-2.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/hadoop2.7/hadoop-mapreduce-client-jobclient-2.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/hadoop2.7/hadoop-mapreduce-client-shuffle-2.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/hadoop2.7/hadoop-yarn-api-2.7.1.jar"/>
@@ -109,5 +107,7 @@
 	<classpathentry kind="lib" path="lib/hadoop2.7/avro-1.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/hadoop2.7/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/hadoop2.7/commons-configuration-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/hadoop-common-2.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/hadoop-mapreduce-client-core-2.7.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
