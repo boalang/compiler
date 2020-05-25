@@ -68,6 +68,23 @@ public class FileForest {
 			cnn.connect(bonds, r);
 		}
 	}
+	
+	public void updateWithRefs(Project p, HashSet<String> refRevIds, String type) throws Exception {
+		RefactoringConnector cnn = new RefactoringConnector(db);
+		for (String id : refRevIds) {
+			RevNode r = db.revIdMap.get(id);
+			List<CodeRefactoring> refs = getCodeChange(p, r.getRevision()).getRefactoringsList();
+			RefactoringBonds bonds = new RefactoringBonds();
+			for (CodeRefactoring ref : refs) {
+				if (type.equals(ref.getType())) {
+					RefactoringBond bond = new RefactoringBond(ref);
+					bonds.add(bond, db.refDB.size());
+					db.refDB.add(bond);
+				}
+			}
+			cnn.connect(bonds, r);
+		}
+	}
 
 	// update AST changes
 	public void updateASTChanges() throws Exception {

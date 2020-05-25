@@ -69,6 +69,11 @@ public class BoaRefactoringIntrinsics {
 		HashSet<String> typeSet = new HashSet<String>(Arrays.asList(DETECTED_TYPES));
 		return typeSet;
 	}
+	
+	@FunctionSpec(name = "refactoring_types", returnType = "array of string")
+	public static String[] refactoringTypes() {
+		return DETECTED_TYPES;
+	}
 
 	@FunctionSpec(name = "findequivalentfilepath", returnType = "string", formalParameters = { "array of string",
 			"string" })

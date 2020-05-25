@@ -224,5 +224,40 @@ public class BoaCodeChangeIntrinsics {
 		
 		return res;
 	}
+	
+	@FunctionSpec(name = "refactoring_entity_count", returnType = "array of int", formalParameters = { "Project", "string" })
+	public static long[] refactoringEntityCount(Project p, String type) throws Exception {
+		long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+
+		CodeRepository cr = p.getCodeRepositories(0);
+		HashSet<String> refRevIds = getRefactoringIdsInSet(p);
+		System.out.println(p.getName() + " " + refRevIds.size());
+
+		int revCount = getRevisionsCount(cr);
+		ChangeDataBase db = new ChangeDataBase(cr, revCount);
+		FileForest forest = new FileForest(db, false);
+		HashMap<Integer, FileTree> fileTrees = forest.getTrees();
+
+		long afterUsedMem1 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+
+		forest.updateASTChanges();
+		DeclForest declForest = new DeclForest(db, false);
+		MethodForest methodForest = new MethodForest(db, false);
+		FieldForest fieldForest = new FieldForest(db, false);
+		forest.updateWithRefs(p, refRevIds, type);
+		
+		long[] res = new Entity(db).execute();
+
+		cleanup();
+		long afterUsedMem2 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+		
+		System.err.println("Before Used " + beforeUsedMem / 1000000.0 + " MB");
+
+		System.err.println("File Tree Used " + afterUsedMem1 / 1000000.0 + " MB");
+
+		System.err.println("Parse Files Used " + afterUsedMem2 / 1000000.0 + " MB");
+		
+		return res;
+	}
 
 }
