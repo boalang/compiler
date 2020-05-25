@@ -103,7 +103,8 @@ public abstract class BoaRunner extends Configured implements Tool {
 //		configuration.set("mapred.map.child.java.opts", "-Xmx2048m");
 //		configuration.set("mapred.reduce.child.java.opts", "-Xmx2048m");
 
-		Job job = Job.getInstance(configuration);
+		final Job job = new Job(configuration);
+//		Job job = Job.getInstance(configuration);
 
 		if (ins != null)
 			for (final Path in : ins)
