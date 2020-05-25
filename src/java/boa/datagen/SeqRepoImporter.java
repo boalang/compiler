@@ -76,7 +76,7 @@ public class SeqRepoImporter {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 
-		PropertyConfigurator.configure("/Users/hyj/boa-workspace/compiler/log4j.properties");
+//		PropertyConfigurator.configure("/Users/hyj/boa-workspace/compiler/log4j.properties");
 		conf = new Configuration();
 		fileSystem = FileSystem.get(conf);
 		base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
