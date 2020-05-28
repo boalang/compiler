@@ -814,9 +814,7 @@ public class NewPythonVisitor extends ASTVisitor {
 		list.add(b.build());
 		
 		return false;
-	}
-	
-	
+	}	
 	
 	@SuppressWarnings("deprecation")
 	public boolean visit(PythonForStatement s) throws Exception {
@@ -826,7 +824,6 @@ public class NewPythonVisitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		
 		b.setKind(boa.types.Ast.Statement.StatementKind.FOREACH);
-		
 		
 		if(s.getfMainArguments() instanceof PythonTestListExpression)
 		{
@@ -855,8 +852,10 @@ public class NewPythonVisitor extends ASTVisitor {
 		
 		return false;
 	}
+	
 	public boolean visit(PythonWhileStatement s) throws Exception {
 		System.out.println("Enter While: "+s.toString());
+		System.out.println("ELSE st" + s.getElseStatement());
 		
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
@@ -864,15 +863,14 @@ public class NewPythonVisitor extends ASTVisitor {
 		
 		b.setKind(boa.types.Ast.Statement.StatementKind.WHILE);
 		
-//		boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
-//		
-//		s.getfMainArguments().traverse(this);
-//		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-//	
-//		tb.setComputedName(expressions.pop());
-//		tb.setKind(boa.types.Ast.TypeKind.OTHER);
-//		vb.setVariableType(tb.build());
-//		b.setVariableDeclaration(vb.build());
+//		if(s.getfMainArguments() instanceof PythonTestListExpression)
+//		{
+//			for(Object ob : ((ExpressionList) s.getfMainArguments()).getExpressions())
+//			{
+//				((ASTNode) ob).traverse(this);
+//				b.addExpressions(expressions.pop());
+//			}
+//		}
 		
 		if(s.getCondition()!= null)
 		{
@@ -881,10 +879,15 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.addExpressions(ex);
 		}
 		
-		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		if (s.getElseStatement() != null) {
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
+			s.getElseStatement().traverse(this);
+			for (boa.types.Ast.Statement ss : statements.pop())
+				b.addStatements(ss);
+		}
 		
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		s.getAction().traverse(this);
-
 		for (boa.types.Ast.Statement ss : statements.pop())
 			b.addStatements(ss);
 		
