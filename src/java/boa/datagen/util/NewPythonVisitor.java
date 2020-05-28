@@ -879,17 +879,17 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.addExpressions(ex);
 		}
 		
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		s.getAction().traverse(this);
+		for (boa.types.Ast.Statement ss : statements.pop())
+			b.addStatements(ss);
+		
 		if (s.getElseStatement() != null) {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
 			s.getElseStatement().traverse(this);
 			for (boa.types.Ast.Statement ss : statements.pop())
 				b.addStatements(ss);
 		}
-		
-		statements.push(new ArrayList<boa.types.Ast.Statement>());
-		s.getAction().traverse(this);
-		for (boa.types.Ast.Statement ss : statements.pop())
-			b.addStatements(ss);
 		
 		list.add(b.build());
 		
