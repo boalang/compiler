@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
-//
 //import org.eclipse.dltk.compiler.IElementRequestor;
 //import org.eclipse.dltk.compiler.SourceElementRequestVisitor;
 //
@@ -13,7 +12,6 @@ import java.util.Stack;
 //import org.eclipse.dltk.ast.expressions.Expression;
 //import org.eclipse.dltk.ast.ASTVisitor;
 //import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
-
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.ast.declarations.Decorator;
@@ -27,9 +25,11 @@ import org.eclipse.dltk.ast.expressions.ExpressionList;
 import org.eclipse.dltk.ast.expressions.Literal;
 import org.eclipse.dltk.python.parser.ast.PythonArgument;
 import org.eclipse.dltk.python.parser.ast.PythonClassDeclaration;
+import org.eclipse.dltk.python.parser.ast.PythonDelStatement;
 import org.eclipse.dltk.python.parser.ast.PythonExceptStatement;
 import org.eclipse.dltk.python.parser.ast.PythonForStatement;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
+import org.eclipse.dltk.python.parser.ast.PythonRaiseStatement;
 import org.eclipse.dltk.python.parser.ast.PythonTryStatement;
 import org.eclipse.dltk.python.parser.ast.PythonWhileStatement;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
@@ -37,6 +37,9 @@ import org.eclipse.dltk.python.parser.ast.expressions.PythonListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTestListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTupleExpression;
+import org.eclipse.dltk.python.parser.ast.statements.BreakStatement;
+import org.eclipse.dltk.python.parser.ast.statements.ContinueStatement;
+import org.eclipse.dltk.python.parser.ast.statements.IfStatement;
 import org.eclipse.dltk.python.parser.ast.statements.ReturnStatement;
 import org.eclipse.dltk.python.parser.ast.statements.SimpleStatement;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
@@ -67,7 +70,6 @@ import boa.types.Ast.TypeKind;
 import boa.types.Ast.Variable;
 import boa.types.Ast.Expression.ExpressionKind;
 
-
 import boa.types.Ast.Namespace;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Statement.StatementKind;
@@ -91,8 +93,6 @@ public class NewPythonVisitor extends ASTVisitor {
 		b.setName(name);
 		return b.build();
 	}
-	
-	
 	
 	@Override
 	public boolean visitGeneral(ASTNode md) throws Exception {
@@ -138,8 +138,7 @@ public class NewPythonVisitor extends ASTVisitor {
 		{
 			visit((PrintExpression) md);
 			opFound=true;
-		}
-		
+		}		
 		else if(md instanceof ExtendedVariableReference)
 		{
 			visit((ExtendedVariableReference) md);
@@ -173,6 +172,31 @@ public class NewPythonVisitor extends ASTVisitor {
 		else if(md instanceof PythonWhileStatement)
 		{
 			visit((PythonWhileStatement) md);
+			opFound=true;
+		}
+		else if(md instanceof IfStatement)
+		{
+			visit((IfStatement) md);
+			opFound=true;
+		}
+		else if(md instanceof BreakStatement)
+		{
+			visit((BreakStatement) md);
+			opFound=true;
+		}
+		else if(md instanceof ContinueStatement)
+		{
+			visit((ContinueStatement) md);
+			opFound=true;
+		}
+		else if(md instanceof PythonRaiseStatement)
+		{
+			visit((PythonRaiseStatement) md);
+			opFound=true;
+		}
+		else if(md instanceof PythonDelStatement)
+		{
+			visit((PythonDelStatement) md);
 			opFound=true;
 		}
 		else if(md instanceof PythonSubscriptExpression)
@@ -716,6 +740,16 @@ public class NewPythonVisitor extends ASTVisitor {
 			return false;
 		if (o instanceof PythonWhileStatement)
 			return false;
+		if (o instanceof IfStatement)
+			return false;
+		if (o instanceof BreakStatement)
+			return false;
+		if (o instanceof ContinueStatement)
+			return false;
+		if (o instanceof PythonRaiseStatement)
+			return false;
+		if (o instanceof PythonDelStatement)
+			return false;
 		return true;
 	}
 	public void addStatementExpression()
@@ -787,7 +821,6 @@ public class NewPythonVisitor extends ASTVisitor {
 		Statement.Builder b = Statement.newBuilder();
 		List<Statement> list = statements.peek();
 		b.setKind(Statement.StatementKind.CATCH);
-
 
 		if(s.getExpression()!=null)
 		{
@@ -861,7 +894,6 @@ public class NewPythonVisitor extends ASTVisitor {
 	
 	public boolean visit(PythonWhileStatement s) throws Exception {
 		System.out.println("Enter While: "+s.toString());
-		System.out.println("ELSE st" + s.getElseStatement());
 		
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
@@ -873,7 +905,7 @@ public class NewPythonVisitor extends ASTVisitor {
 		{
 			s.getCondition().traverse(this);
 			boa.types.Ast.Expression ex = expressions.pop();
-			b.addExpressions(ex);
+			b.addConditions(ex);
 		}
 		
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
@@ -894,5 +926,100 @@ public class NewPythonVisitor extends ASTVisitor {
 		return false;
 	}
 	
+	public boolean visit(IfStatement s) throws Exception {
+		System.out.println("Enter IF: " + s.toString());
+		
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.IF);
+		
+		if(s.getCondition()!= null)
+		{
+			s.getCondition().traverse(this);
+			boa.types.Ast.Expression ex = expressions.pop();
+			b.addConditions(ex);
+		}
+		
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		s.getThen().traverse(this);
+		for (boa.types.Ast.Statement ss : statements.pop())
+			b.addStatements(ss);
+		
+		if (s.getElse() != null) {
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
+			s.getElse().traverse(this);
+			for (boa.types.Ast.Statement ss : statements.pop())
+				b.addStatements(ss);
+		}
+		
+		list.add(b.build());
+		
+		return false;
+	}
 	
+	public boolean visit(BreakStatement s) throws Exception {
+		System.out.println("Enter BREAK: " + s.toString());
+		
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.BREAK);
+		if (s.getExpression() != null) {
+			s.getExpression().traverse(this);
+			b.addExpressions(expressions.pop());
+		}
+		
+		list.add(b.build());
+		
+		return false;
+	}
+	
+	public boolean visit(ContinueStatement s) throws Exception {
+		System.out.println("Enter CONTINUE: " + s.toString());
+		
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.CONTINUE);
+		if (s.getExpression() != null) {
+			s.getExpression().traverse(this);
+			b.addExpressions(expressions.pop());
+		}
+		
+		list.add(b.build());
+		
+		return false;
+	}
+	
+	public boolean visit(PythonRaiseStatement s) throws Exception {
+		System.out.println("Enter RAISE: " + s.toString());
+		
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.RAISE);
+		if (s.getExpression1() != null) {
+			s.getExpression1().traverse(this);
+			b.addExpressions(expressions.pop());
+		}
+		
+		list.add(b.build());
+				
+		return false;
+	}
+	
+	public boolean visit(PythonDelStatement s) throws Exception {
+		System.out.println("Enter DEL: " + s.toString());
+		
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.DEL);
+		if (s.getExpression() != null) {
+			s.getExpression().traverse(this);
+			b.addExpressions(expressions.pop());
+		}
+		
+		list.add(b.build());
+		
+		return false;
+	}
+	
+		
 }

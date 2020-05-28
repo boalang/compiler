@@ -229,6 +229,7 @@ message Statement {
 		RAISE = 39;
 		PASS = 40;
 		PRINT = 41;
+		DEL = 42;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
