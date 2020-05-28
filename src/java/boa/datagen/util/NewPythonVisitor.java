@@ -35,6 +35,7 @@ import org.eclipse.dltk.python.parser.ast.PythonWhileStatement;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonTestListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTupleExpression;
 import org.eclipse.dltk.python.parser.ast.statements.ReturnStatement;
 import org.eclipse.dltk.python.parser.ast.statements.SimpleStatement;
@@ -826,15 +827,15 @@ public class NewPythonVisitor extends ASTVisitor {
 		
 		b.setKind(boa.types.Ast.Statement.StatementKind.FOREACH);
 		
-//		boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
-//		
-//		s.getfMainArguments().traverse(this);
-//		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-//	
-//		tb.setComputedName(expressions.pop());
-//		tb.setKind(boa.types.Ast.TypeKind.OTHER);
-//		vb.setVariableType(tb.build());
-//		b.setVariableDeclaration(vb.build());
+		
+		if(s.getfMainArguments() instanceof PythonTestListExpression)
+		{
+			for(Object ob : ((ExpressionList) s.getfMainArguments()).getExpressions())
+			{
+				((ASTNode) ob).traverse(this);
+				b.addExpressions(expressions.pop());
+			}
+		}
 		
 		if(s.getCondition()!= null)
 		{
