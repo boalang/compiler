@@ -842,11 +842,17 @@ public class NewPythonVisitor extends ASTVisitor {
 		}
 		
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
-		
 		s.getAction().traverse(this);
-
 		for (boa.types.Ast.Statement ss : statements.pop())
 			b.addStatements(ss);
+		
+		// Python enables else statement for the loops. The else statement is added as the second block statement of FOR (similar to else in IF statement).
+		if (s.getfElseStatement() != null) {
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
+			s.getfElseStatement().traverse(this);
+			for (boa.types.Ast.Statement ss : statements.pop())
+				b.addStatements(ss);
+		}
 		
 		list.add(b.build());
 		
@@ -863,15 +869,6 @@ public class NewPythonVisitor extends ASTVisitor {
 		
 		b.setKind(boa.types.Ast.Statement.StatementKind.WHILE);
 		
-//		if(s.getfMainArguments() instanceof PythonTestListExpression)
-//		{
-//			for(Object ob : ((ExpressionList) s.getfMainArguments()).getExpressions())
-//			{
-//				((ASTNode) ob).traverse(this);
-//				b.addExpressions(expressions.pop());
-//			}
-//		}
-		
 		if(s.getCondition()!= null)
 		{
 			s.getCondition().traverse(this);
@@ -884,6 +881,7 @@ public class NewPythonVisitor extends ASTVisitor {
 		for (boa.types.Ast.Statement ss : statements.pop())
 			b.addStatements(ss);
 		
+		// Python enables else statement for the loops. The else statement is added as the second block statement of WHILE (similar to else in IF statement).
 		if (s.getElseStatement() != null) {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
 			s.getElseStatement().traverse(this);
