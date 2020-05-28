@@ -468,6 +468,7 @@ public class NewPythonVisitor extends ASTVisitor {
 		
 	System.out.println("Binary Exp :  "+md.toString());
 		
+		System.out.println(md.getKind());
 		System.out.println(md.getOperator());
 		System.out.println(md.getLeft().getKind());
 		System.out.println(md.getRight().getKind());
@@ -497,8 +498,16 @@ public class NewPythonVisitor extends ASTVisitor {
 		else if(md.getKind()==ExpressionConstants.E_NOT_EQUAL)
 		{
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.NEQ);	
-			
 		}
+		else if(md.getKind()==ExpressionConstants.E_GE)
+		{
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.GTEQ);	
+		}
+		else if(md.getKind()==ExpressionConstants.E_LT)
+		{
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.LT);	
+		}
+		
 		
 		md.getLeft().traverse(this);
 		b.addExpressions(expressions.pop());
