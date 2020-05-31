@@ -49,7 +49,6 @@ import boa.datagen.dependencies.GradleFile;
 import boa.datagen.dependencies.PomFile;
 import boa.datagen.util.FileIO;
 import boa.types.Diff.ChangedFile;
-import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 
 import boa.datagen.scm.GitConnector.FileLoc;
@@ -247,12 +246,12 @@ public class GitCommit extends AbstractCommit {
 				// DELETED file's new object id is 0's and doesn't have new path
 				} else if (diff.getChangeType() == ChangeType.DELETE) {
 					if (diff.getOldMode().getObjectType() == Constants.OBJ_BLOB) {
-						diff.getNewPath();
-						diff.getNewId().toObjectId().getName();
+//						diff.getNewPath();
+//						diff.getNewId().toObjectId().getName();
 						String oldPath = diff.getOldPath();
 						String oldObjectId = diff.getOldId().toObjectId().getName();
 
-						// new object id for building file change linked list
+						// new object id for building file change graph
 						String id = "BOA_DELETED_FILE_" + objectIdToFileLoc.size();
 						ChangedFile.Builder cfb = getChangeFile(oldPath, ChangeKind.DELETED, id);
 						
