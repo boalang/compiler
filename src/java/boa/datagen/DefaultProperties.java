@@ -74,6 +74,8 @@ public class DefaultProperties {
 
 	public static String localDataPath = null;
 	
+	public static String localOutput = null;
+
 	@SuppressWarnings("unused")
 	private static String getRoot() {
 		File dir = new File(System.getProperty("user.dir"));

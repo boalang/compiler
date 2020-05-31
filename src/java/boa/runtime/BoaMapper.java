@@ -55,7 +55,6 @@ public abstract class BoaMapper extends Mapper<Text, BytesWritable, EmitKey, Emi
 	@Override
 	protected void setup(final Mapper<Text, BytesWritable, EmitKey, EmitValue>.Context context) throws IOException, InterruptedException {
 		super.setup(context);
-
 		this.context = context;
 	}
 }

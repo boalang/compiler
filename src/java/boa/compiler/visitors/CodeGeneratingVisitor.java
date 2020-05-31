@@ -37,6 +37,7 @@ import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 import boa.compiler.visitors.analysis.*;
 import boa.types.*;
+import boa.types.ml.BoaModel;
 
 /**
  *
@@ -1003,7 +1004,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			code.add(lhs.substring(0, idx - ".get(".length()) + ".put(" + lhs.substring(idx, lhs.lastIndexOf(')')) + ", " + rhs + lhs.substring(lhs.lastIndexOf(')')) + ";");
 			return;
 		}
-
+		
+		String typecast = "";
+		if (rhs.contains(".load(")) {
+			if (n.getLhs().type.toString() == "linearregression")
+				typecast = "boa.types.ml.BoaLinearRegression";
+			rhs = rhs.substring(0,rhs.length()-1) + ", new " +
+					((BoaModel)n.getLhs().type).getType().toJavaType() + "())";
+			rhs = "(" + (typecast + "").split("\\/")[0] + ")" + rhs;
+		}
 		st.add("lhs", lhs);
 		st.add("operator", n.getOp());
 		st.add("rhs", rhs);
@@ -1874,6 +1883,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		code.add("");
 	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final ModelType n) {
+		visit(n.getType());
+	}
 
 	/** {@inheritDoc} */
 	@Override
@@ -1923,7 +1938,32 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TupleType n) {
-		throw new RuntimeException("unexpected error");
+		final ST st = stg.getInstanceOf("TupleType");
+
+		if (!(n.type instanceof BoaTuple))
+			throw new TypeCheckException(n ,"type " + n.type + " is not a tuple type");
+
+		final BoaTuple tupType = ((BoaTuple) n.type);
+
+		final List<Component> members = n.getMembers();
+		final List<String> fields = new ArrayList<String>();
+		final List<String> types = new ArrayList<String>();
+
+		int fieldCount = 0;
+		for (final Component c : members) {
+			if(c.hasIdentifier()){
+				fields.add(c.getIdentifier().getToken());
+			} else {
+				fields.add("id" + fieldCount++);
+			}
+			types.add(c.getType().type.toJavaType());
+		}
+
+		st.add("name", tupType.toJavaType());
+		st.add("fields", fields);
+		st.add("types", types);
+
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
