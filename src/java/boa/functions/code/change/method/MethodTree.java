@@ -3,14 +3,16 @@ package boa.functions.code.change.method;
 import java.util.Stack;
 import java.util.TreeSet;
 
+import boa.functions.code.change.ASTChangeTree;
 import boa.functions.code.change.declaration.DeclNode;
 import boa.types.Shared.ChangeKind;
 
-public class MethodTree {
+public class MethodTree extends ASTChangeTree {
 
 	private final MethodForest forest;
 	private int id;
 	private TreeSet<MethodNode> methodNodes = new TreeSet<MethodNode>();
+	private TreeSet<MethodNode> refNodes = new TreeSet<MethodNode>();
 	private Stack<MethodNode> prevNodes = new Stack<MethodNode>();
 
 	public MethodTree(MethodForest methodForest, MethodNode node, int treeIdx) {
@@ -129,7 +131,13 @@ public class MethodTree {
 				this.prevNodes.push(node);
 			}
 		}
+		// merge refactoring nodes
+		this.refNodes.addAll(tree.refNodes);
 		return this;
+	}
+	
+	public TreeSet<MethodNode> getRefNodes() {
+		return refNodes;
 	}
 
 	public TreeSet<MethodNode> getMethodNodes() {

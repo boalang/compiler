@@ -2,14 +2,17 @@ package boa.functions.code.change.field;
 
 import java.util.Stack;
 import java.util.TreeSet;
+
+import boa.functions.code.change.ASTChangeTree;
 import boa.functions.code.change.declaration.DeclNode;
 import boa.types.Shared.ChangeKind;
 
-public class FieldTree {
+public class FieldTree extends ASTChangeTree {
 
 	private final FieldForest forest;
 	private int id;
 	private TreeSet<FieldNode> fieldNodes = new TreeSet<FieldNode>();
+	private TreeSet<FieldNode> refNodes = new TreeSet<FieldNode>();
 	private Stack<FieldNode> prevNodes = new Stack<FieldNode>();
 
 	public FieldTree(FieldForest forest, FieldNode node, int treeIdx) {
@@ -129,7 +132,13 @@ public class FieldTree {
 				this.prevNodes.push(node);
 			}
 		}
+		// merge refactoring nodes
+		this.refNodes.addAll(tree.refNodes);
 		return this;
+	}
+	
+	public TreeSet<FieldNode> getRefNodes() {
+		return refNodes;
 	}
 
 	public TreeSet<FieldNode> getFieldNodes() {

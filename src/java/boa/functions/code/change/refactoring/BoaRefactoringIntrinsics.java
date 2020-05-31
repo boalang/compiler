@@ -14,8 +14,10 @@ import org.refactoringminer.api.RefactoringType;
 
 import static boa.functions.BoaAstIntrinsics.*;
 import static boa.functions.BoaIntrinsics.*;
-import static boa.functions.BoaMetricIntrinsics.getMetrics;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -66,6 +68,11 @@ public class BoaRefactoringIntrinsics {
 	public static HashSet<String> getConsideredTypes() {
 		HashSet<String> typeSet = new HashSet<String>(Arrays.asList(DETECTED_TYPES));
 		return typeSet;
+	}
+	
+	@FunctionSpec(name = "refactoring_types", returnType = "array of string")
+	public static String[] refactoringTypes() {
+		return DETECTED_TYPES;
 	}
 
 	@FunctionSpec(name = "findequivalentfilepath", returnType = "string", formalParameters = { "array of string",
@@ -414,6 +421,47 @@ public class BoaRefactoringIntrinsics {
 		if (idx < 0)
 			return fqn;
 		return fqn.substring(0, idx);
+	}
+	
+	//////////////////////////////////////////////////
+	// Engineered Project Names //
+	//////////////////////////////////////////////////
+	@FunctionSpec(name = "eng_projects", returnType = "set of string")
+	public static HashSet<String> engineeredProjects() {
+		InputStream inputStream = BoaRefactoringIntrinsics.class.getResourceAsStream("/engineered_projects.txt");
+		BufferedReader reader;
+		HashSet<String> projects = new HashSet<String>();
+		try {
+			reader = new BufferedReader(new InputStreamReader(inputStream));
+			String line = reader.readLine();
+			while (line != null) {
+				projects.add(line);
+				line = reader.readLine();
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return projects;
+	}
+	
+	@FunctionSpec(name = "selected_projects", returnType = "set of string")
+	public static HashSet<String> selecteddProjects() {
+		InputStream inputStream = BoaRefactoringIntrinsics.class.getResourceAsStream("/selected_projects.txt");
+		BufferedReader reader;
+		HashSet<String> projects = new HashSet<String>();
+		try {
+			reader = new BufferedReader(new InputStreamReader(inputStream));
+			String line = reader.readLine();
+			while (line != null) {
+				projects.add(line);
+				line = reader.readLine();
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return projects;
 	}
 
 	//////////////////////////////////////////////////

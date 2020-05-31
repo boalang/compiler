@@ -1,23 +1,21 @@
 package boa.functions.code.change.file;
 
-import java.util.HashSet;
 import java.util.Stack;
 import java.util.TreeSet;
 
+import boa.functions.code.change.ASTChangeTree;
 import boa.functions.code.change.RevNode;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 
-public class FileTree {
+public class FileTree extends ASTChangeTree {
 
 	private final FileForest forest;
 	private int id;
 	private TreeSet<FileNode> fileNodes = new TreeSet<FileNode>();
+	private TreeSet<FileNode> refNodes = new TreeSet<FileNode>();
 	private Stack<FileNode> prevNodes = new Stack<FileNode>();
-	// refactoring info
-	public HashSet<FileLocation> fileBeforeRef = new HashSet<FileLocation>();
-	public HashSet<FileLocation> fileAfterRef = new HashSet<FileLocation>();
 
 	public FileTree(FileForest fileChangeForest, FileNode node, int treeIdx) {
 		this.forest = fileChangeForest;
@@ -144,11 +142,17 @@ public class FileTree {
 			if (!fileNodes.contains(node))
 				this.prevNodes.push(node);
 		}
+		// merge refactoring nodes
+		this.refNodes.addAll(tree.refNodes);
 		return this;
 	}
 
 	public int getId() {
 		return id;
+	}
+	
+	public TreeSet<FileNode> getRefNodes() {
+		return refNodes;
 	}
 
 	public TreeSet<FileNode> getFileNodes() {

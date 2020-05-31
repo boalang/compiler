@@ -451,9 +451,10 @@ public class BoaIntrinsics {
 		return Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
 	}
     
-    @FunctionSpec(name = "print", formalParameters = "string")
-	public static void print(String str) {
-		System.out.println(str);
+    @FunctionSpec(name = "print", returnType = "bool", formalParameters = { "string" })
+	public static boolean print(final String log) {
+    	System.out.println(log);
+    	return true;
 	}
 	
 	/**

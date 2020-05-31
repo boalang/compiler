@@ -1,19 +1,16 @@
 package boa.functions.code.change.refactoring;
 
-import java.io.File;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
 
+import java.util.Set;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import boa.datagen.util.FileIO;
 import boa.functions.FunctionSpec;
 import boa.functions.code.change.refactoring.features.RevisionFeatureSet;
 import boa.types.Code.CodeRefactoring;
@@ -25,6 +22,7 @@ import boa.types.Toplevel.Project;
 
 import static boa.functions.BoaAstIntrinsics.*;
 import static boa.functions.BoaIntrinsics.*;
+import static boa.functions.BoaIntrinsics.getRevision;
 import static boa.functions.code.change.refactoring.BoaRefactoringIntrinsics.*;
 import static boa.functions.code.change.refactoring.FileChangeLinkedLists.*;
 
@@ -58,6 +56,25 @@ public class BoaRefactoringPredictionIntrinsics {
 			METHOD_LEVEL_REFACTORING_TYPES.add(s);
 		for (String s : fieldLevel)
 			FIELD_LEVEL_REFACTORING_TYPES.add(s);
+	}
+	
+	@FunctionSpec(name = "refactoring_type_count", returnType = "array of int", formalParameters = { "Project" })
+	public static long[] refactoringTypeCount(final Project p) throws Exception {
+		HashSet<String> refRevIds = getRefactoringIdsInSet(p);
+		long[] typesCount = new long[15];
+		CodeRepository cr = p.getCodeRepositories(0);
+		int revCount = getRevisionsCount(cr);
+		for (int i = 0; i < revCount; i++) {
+			Revision r = getRevision(cr, i);
+			if (refRevIds.contains(r.getId())) {
+				List<CodeRefactoring> refs = getCodeChange(p, r).getRefactoringsList();
+				for (CodeRefactoring ref : refs) {
+					int idx = DETECTED_TYPE_IDX_MAP.get(ref.getType());
+					typesCount[idx] = typesCount[idx] + 1;
+				}
+			}
+		}
+		return typesCount;
 	}
 
 	public static HashSet<String> getRefactoringIds(Project p) {

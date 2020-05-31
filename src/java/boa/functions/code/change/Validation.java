@@ -130,8 +130,12 @@ public class Validation {
 
 			System.out.println();
 
-			res[i] = new double[] { matchedLastFileRatio, matchedFileRatio, matchedLastDeclRatio, matchedDeclRatio,
-					matchedLastFieldRatio, matchedFieldRatio, matchedLastMethodRatio, matchedMethodRatio };
+			res[i] = new double[] { 
+					matchedLastFileRatio, matchedFileRatio, 
+					matchedLastDeclRatio, matchedDeclRatio,
+					matchedLastFieldRatio, matchedFieldRatio, 
+					matchedLastMethodRatio, matchedMethodRatio 
+			};
 
 		}
 		return res;
