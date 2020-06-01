@@ -40,6 +40,11 @@
 	<classpathentry kind="lib" path="lib/datagen/trove-3.0.3.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/xml-security-impl-1.0.jar"/>
 
+	<classpathentry kind="lib" path="lib/weka/arpack_combined.jar"/>
+	<classpathentry kind="lib" path="lib/weka/core.jar"/>
+	<classpathentry kind="lib" path="lib/weka/mtj.jar"/>
+	<classpathentry kind="lib" path="lib/weka/weka.jar"/>
+	
 	<classpathentry kind="output" path="build/classes" />
 	<classpathentry kind="src" path="build/java" />
 	<classpathentry kind="src" path="src/java" />
