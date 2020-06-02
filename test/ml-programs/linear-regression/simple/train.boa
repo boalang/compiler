@@ -1,0 +1,8 @@
+p: Project = input;
+
+linear : output linearregression of array of int;
+i:=0;
+while(i<100){
+	linear << {1,2+6*i,3+5*i,4+2*i};
+	i++;
+}

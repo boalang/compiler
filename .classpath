@@ -60,5 +60,9 @@
 	<classpathentry kind="lib" path="lib/datagen/slf4j-api-1.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/slf4j-log4j12-1.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/refactoring/eng-projects.jar"/>
+	<classpathentry kind="lib" path="lib/weka/arpack_combined.jar"/>
+	<classpathentry kind="lib" path="lib/weka/core.jar"/>
+	<classpathentry kind="lib" path="lib/weka/mtj.jar"/>
+	<classpathentry kind="lib" path="lib/weka/weka.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

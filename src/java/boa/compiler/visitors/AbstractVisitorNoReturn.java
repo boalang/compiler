@@ -406,4 +406,9 @@ public abstract class AbstractVisitorNoReturn<ArgTypeT> {
 
 	public void visit(final FixPType n, final ArgTypeT arg) {
 	}
+	
+	public void visit(final ModelType n, final ArgTypeT arg) {
+		n.getId().accept(this, arg);
+		n.getType().accept(this, arg);
+	}
 }

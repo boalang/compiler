@@ -333,7 +333,7 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * factor the literals in the first term if there is any
+	 * Factor the literals in the first term if there is any
 	 *
 	 * @param e the expression to be factored
 	 * @return factored form
@@ -348,21 +348,17 @@ public class BoaNormalFormIntrinsics {
 			case LT:
 			case GTEQ:
 			case LTEQ:
-				Expression literal = null;
-				Expression firstTerm = null;
-				if (e.getExpressions(0).getKind() == ExpressionKind.OP_ADD ||
-					e.getExpressions(0).getKind() == ExpressionKind.OP_SUB) {
-					firstTerm = e.getExpressions(0).getExpressions(0);
+				Expression firstTerm = e.getExpressions(0);
+				if (firstTerm.getKind() == ExpressionKind.OP_ADD || firstTerm.getKind() == ExpressionKind.OP_SUB) {
+					firstTerm = firstTerm.getExpressions(0);
 					while (firstTerm.getKind() == ExpressionKind.OP_ADD || firstTerm.getKind() == ExpressionKind.OP_SUB)
 						firstTerm = firstTerm.getExpressions(0);
-				}
-				else {
-					firstTerm = e.getExpressions(0);
+				} else {
 					if (firstTerm.getExpressionsCount() == 0)
 						return e;
 				}
 
-				literal = getLiteralFromExp(firstTerm);
+				Expression literal = getLiteralFromExp(firstTerm);
 				if (literal == null)
 					return e;
 
@@ -371,15 +367,15 @@ public class BoaNormalFormIntrinsics {
 				if (literal.getKind() == ExpressionKind.OP_DIV) {
 					lhs = reduce(createExpression(ExpressionKind.OP_MULT, e.getExpressions(0), literal.getExpressions(1)));
 					rhs = reduce(createExpression(ExpressionKind.OP_MULT, e.getExpressions(1), literal.getExpressions(1)));
-					if (literal.getExpressions(0).getLiteral() != "1") {
+					if (!literal.getExpressions(0).getLiteral().equals("1")) {
 						lhs = reduce(createExpression(ExpressionKind.OP_DIV, lhs, literal.getExpressions(0)));
 						rhs = reduce(createExpression(ExpressionKind.OP_DIV, rhs, literal.getExpressions(0)));
 					}
-				}
-				else {
+				} else {
 					lhs = reduce(createExpression(ExpressionKind.OP_DIV, e.getExpressions(0), literal));
 					rhs = reduce(createExpression(ExpressionKind.OP_DIV, e.getExpressions(1), literal));
 				}
+
 				return createExpression(e.getKind(), lhs, rhs);
 
 			default:
@@ -388,58 +384,54 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	* get the literal expression from a div or mult expression, assuming the literal is always at front
-	* @param div or mult expression
-	* @return return the literal expression if there is any
-	*         , else return null (exclude the literal "1" in the first term of div)
-	*/
+	 * Get the literal expression from a div or mult expression, assuming the literal is always at front
+	 *
+	 * @param div or mult expression
+	 * @return return the literal expression if there is any
+	 *         else return null (exclude the literal "1" in the first term of div)
+	 */
 	private static Expression getLiteralFromExp(final Expression e) {
-		if (e.getKind() != ExpressionKind.OP_MULT && e.getKind() != ExpressionKind.OP_DIV) {
-			return null;
-		}
-		Expression literal = null;
-		if (e.getKind() == ExpressionKind.OP_MULT &&
-			e.getExpressions(0).getKind() == ExpressionKind.LITERAL)
-			literal = e.getExpressions(0);
-		else if (e.getKind() == ExpressionKind.OP_DIV){
-			Expression numer = null;
-			Expression denom = null;
-			// if 2 / x
-			if (e.getExpressions(0).getKind() == ExpressionKind.LITERAL &&
-				e.getExpressions(0).getLiteral() != "1")
-				numer = e.getExpressions(0);
-			// if 2 * x / y
-			else if (e.getExpressions(0).getKind() == ExpressionKind.OP_MULT &&
-				e.getExpressions(0).getExpressions(0).getKind() == ExpressionKind.LITERAL)
-				numer = e.getExpressions(0).getExpressions(0);
-			// if x / 2 or 3 * x / 2
-			if (e.getExpressions(1).getKind() == ExpressionKind.LITERAL)
-				denom = e.getExpressions(1);
-			// if x / (2 * y) or 3 * x / (2 * y)
-			else if (e.getExpressions(1).getExpressionsCount() > 0 &&
-				e.getExpressions(1).getExpressions(0).getKind() == ExpressionKind.OP_MULT &&
-				e.getExpressions(1).getExpressions(0).getExpressions(0).getKind() == ExpressionKind.LITERAL)
-				denom = e.getExpressions(1).getExpressions(0).getExpressions(0);
+		if (e.getKind() == ExpressionKind.OP_MULT) {
+			// if 2 * x or 2 * x * y
+			if (e.getExpressions(0).getKind() == ExpressionKind.LITERAL)
+				return e.getExpressions(0);
+		} else if (e.getKind() == ExpressionKind.OP_DIV) {
+			Expression numer = e.getExpressions(0);
+			// if (2 * x) / y
+			if (numer.getKind() == ExpressionKind.OP_MULT &&
+					numer.getExpressions(0).getKind() == ExpressionKind.LITERAL)
+				numer = numer.getExpressions(0);
+			// if not 2 / x
+			else if (numer.getKind() != ExpressionKind.LITERAL || numer.getLiteral().equals("1"))
+				numer = null;
 
-			if (denom == null)
-				literal = numer;
-			else if (numer == null)
-				literal = createExpression(ExpressionKind.OP_DIV, createLiteral("1"), denom);
-			else
-				literal = createExpression(ExpressionKind.OP_DIV, numer, denom);
+			Expression denom = e.getExpressions(1);
+			// if x / (2 * y) or (3 * x) / (2 * y)
+			if (denom.getExpressionsCount() > 0 &&
+					denom.getExpressions(0).getKind() == ExpressionKind.OP_MULT &&
+					denom.getExpressions(0).getExpressions(0).getKind() == ExpressionKind.LITERAL)
+				denom = denom.getExpressions(0).getExpressions(0);
+			// if not x / 2 or (3 * x) / 2
+			else if (denom.getKind() != ExpressionKind.LITERAL)
+				return numer;
+
+			if (numer == null)
+				return createExpression(ExpressionKind.OP_DIV, createLiteral("1"), denom);
+			return createExpression(ExpressionKind.OP_DIV, numer, denom);
 		}
-		return literal;
+
+		return null;
 	}
 
 	/**
-	* Divies a number.
-	* This method is used in place of actual division, only when both parts are doubles.
-	* If the resulting division results in an integer value, it returns a long.
-	*
-	* @param num the numerator
-	* @param denom the denominator
-	* @return the result of dividing num by denom
-	*/
+	 * Divides a number.
+	 * This method is used in place of actual division, only when both parts are doubles.
+	 * If the resulting division results in an integer value, it returns a long.
+	 *
+	 * @param num the numerator
+	 * @param denom the denominator
+	 * @return the result of dividing num by denom
+	 */
 	private static Object div(final double num, final double denom) {
 		final double result = num / denom;
 		if (result == (long)result)
@@ -465,35 +457,39 @@ public class BoaNormalFormIntrinsics {
 			case LT:
 			case GTEQ:
 			case LTEQ:
+				final Expression lhs = e.getExpressions(0);
+				final Expression rhs = e.getExpressions(1);
+
+				// if both sides are literals return the expression as is. For ex: 2 == 2 OR "Yes" == "Yes"
+				if (lhs.getKind() == ExpressionKind.LITERAL && rhs.getKind() == ExpressionKind.LITERAL)
+					return e;
+
+				// if string literal is to the left in the comparison then flip the expression and return it
+				if (BoaAstIntrinsics.isStringLit(lhs)) {
+					if (kind != ExpressionKind.EQ && kind != ExpressionKind.NEQ)
+						kind = flipKind(kind);
+
+					return createExpression(kind, rhs, lhs);
+				}
+
 				// Side and Signs are represented as booleans for optimization
 				// Left = true, Right = false, Positive = true, Negative = false
 				final List<Object[]> variableList = new ArrayList<Object[]>();
 				final List<Object[]> literalList = new ArrayList<Object[]>();
 
-				// if both sides are literals return the expression as is. For ex: 2 == 2 OR "Yes" == "Yes"
-				if (e.getExpressions(0).getKind() == ExpressionKind.LITERAL &&
-						e.getExpressions(1).getKind() == ExpressionKind.LITERAL)
-					return e;
-
-				// if string literal is to the left in the comparison then flip the expression and return it
-				if (BoaAstIntrinsics.isStringLit(e.getExpressions(0))) {
-					if (kind != ExpressionKind.EQ && kind != ExpressionKind.NEQ)
-						kind = flipKind(kind);
-
-					return createExpression(kind, e.getExpressions(1), e.getExpressions(0));
-				}
-
-				final Map<Integer, List<Object[]>> componentMapLeft = seperate(e.getExpressions(0), true, true);  // Call seperate on the left expression
+				final Map<Integer, List<Object[]>> componentMapLeft = seperate(lhs, true, true);  // Call seperate on the left expression
 				if (componentMapLeft.containsKey(-1))
 					return e;
+
+				final Map<Integer, List<Object[]>> componentMapRight = seperate(rhs, false, true);  // Call seperate on the right expression
+				if (componentMapRight.containsKey(-1))
+					return e;
+
 				if (componentMapLeft.containsKey(0))
 					variableList.addAll(componentMapLeft.get(0));
 				if (componentMapLeft.containsKey(1))
 					literalList.addAll(componentMapLeft.get(1));
 
-				final Map<Integer, List<Object[]>> componentMapRight = seperate(e.getExpressions(1), false, true);  // Call seperate on the right expression
-				if (componentMapRight.containsKey(-1))
-					return e;
 				if (componentMapRight.containsKey(0))
 					variableList.addAll(componentMapRight.get(0));
 				if (componentMapRight.containsKey(1))
@@ -501,6 +497,7 @@ public class BoaNormalFormIntrinsics {
 
 				if (variableList.isEmpty())
 					return e;
+
 				final Expression variables = combineLeft(variableList);
 
 				final Expression literals;
@@ -510,8 +507,9 @@ public class BoaNormalFormIntrinsics {
 					literals = createExpression(ExpressionKind.OP_ADD, createLiteral("0"));
 
 				return createExpression(kind, variables, literals);
+
 			default:
-				// no comparison operator return the expression as is
+				// no comparison operator, return the expression as is
 				return e;
 		}
 	}
@@ -534,11 +532,6 @@ public class BoaNormalFormIntrinsics {
 			case LT:
 			case GTEQ:
 			case LTEQ:
-				final List<Object[]> leftList = new ArrayList<Object[]>();
-				final List<Object[]> leftListLit = new ArrayList<Object[]>();
-				final List<Object[]> rightList = new ArrayList<Object[]>();
-				final List<Object[]> rightListLit = new ArrayList<Object[]>();
-
 				/*
 				   Each side of an expression is divided and stored in
 				   two lists: one for variables and other for literals
@@ -549,29 +542,39 @@ public class BoaNormalFormIntrinsics {
 				final Map<Integer, List<Object[]>> componentMapLeft = seperate(e.getExpressions(0), true, true);
 				if (componentMapLeft.containsKey(-1))
 					return e;
+
+				final Map<Integer, List<Object[]>> componentMapRight = seperate(e.getExpressions(1), false, true);
+				if (componentMapRight.containsKey(-1))
+					return e;
+
+				final List<Object[]> leftList     = new ArrayList<Object[]>();
+				final List<Object[]> leftListLit  = new ArrayList<Object[]>();
+				final List<Object[]> rightList    = new ArrayList<Object[]>();
+				final List<Object[]> rightListLit = new ArrayList<Object[]>();
+
 				if (componentMapLeft.containsKey(0))
 					leftList.addAll(componentMapLeft.get(0));
 				if (componentMapLeft.containsKey(1))
 					leftListLit.addAll(componentMapLeft.get(1));
 
-				final Map<Integer, List<Object[]>> componentMapRight = seperate(e.getExpressions(1), false, true);
-				if (componentMapRight.containsKey(-1))
+				if (leftList.isEmpty() && leftListLit.isEmpty())
 					return e;
+
 				if (componentMapRight.containsKey(0))
 					rightList.addAll(componentMapRight.get(0));
 				if (componentMapRight.containsKey(1))
 					rightListLit.addAll(componentMapRight.get(1));
 
-				Collections.sort(leftList, new ExpressionArrayComparator());
-				Collections.sort(leftListLit, new ExpressionArrayComparator());
-				Collections.sort(rightList, new ExpressionArrayComparator());
+				if (rightList.isEmpty() && rightListLit.isEmpty())
+					return e;
+
+				Collections.sort(leftList,     new ExpressionArrayComparator());
+				Collections.sort(leftListLit,  new ExpressionArrayComparator());
+				Collections.sort(rightList,    new ExpressionArrayComparator());
 				Collections.sort(rightListLit, new ExpressionArrayComparator());
 
 				leftList.addAll(leftListLit);
 				rightList.addAll(rightListLit);
-
-				if (leftList.isEmpty() || rightList.isEmpty())
-					return e;
 
 				// we want first component of left side to be positive
 				// if first component is negative, flip all the signs and ExpressonKind
@@ -601,13 +604,13 @@ public class BoaNormalFormIntrinsics {
 				// first component could be negative
 				if (isNegative(e) && e.getExpressions(0) instanceof Expression && e.getExpressions(0).getKind() != ExpressionKind.LITERAL)
 					return (Expression)negate(sort((Expression)negate(e)));
-				final List<Object[]> variableList = new ArrayList<Object[]>();
-				final List<Object[]> literalList = new ArrayList<Object[]>();
 
 				final Map<Integer, List<Object[]>> componentMap = seperate(e, true, true);
-
 				if (componentMap.containsKey(-1))
 					return e;
+
+				final List<Object[]> variableList = new ArrayList<Object[]>();
+				final List<Object[]> literalList  = new ArrayList<Object[]>();
 
 				if (componentMap.containsKey(0))
 					variableList.addAll(componentMap.get(0));
@@ -618,7 +621,7 @@ public class BoaNormalFormIntrinsics {
 					return e;
 
 				Collections.sort(variableList, new ExpressionArrayComparator());
-				Collections.sort(literalList, new ExpressionArrayComparator());
+				Collections.sort(literalList,  new ExpressionArrayComparator());
 
 				variableList.addAll(literalList);
 
@@ -704,21 +707,21 @@ public class BoaNormalFormIntrinsics {
 			case OP_MULT:
 			case OP_DIV:
 				final List<Object[]> l = seperateNumDenom(e, 'n');
-				final List<Expression> num= new ArrayList<Expression>();
+				Collections.sort(l, new ExpressionArrayComparator());
+
+				final List<Expression> num = new ArrayList<Expression>();
 				final List<Expression> den = new ArrayList<Expression>();
 
-				Collections.sort(l, new ExpressionArrayComparator());
 				int signCount = 0;
-				for(final Object[] o: l) {
-					if(((Expression)o[0]).getKind() == ExpressionKind.OP_SUB) {
-						if(((Expression)o[0]).getExpressionsCount() == 1 ) {
+				for (final Object[] o: l) {
+					if (((Expression)o[0]).getKind() == ExpressionKind.OP_SUB) {
+						if (((Expression)o[0]).getExpressionsCount() == 1 ) {
 							signCount++;
 							o[0] = ((Expression) o[0]).getExpressions(0);
 						}
 
 					}
-					// if((Byte)o[1] == 0)
-					if(o[1].equals('n'))
+					if (o[1].equals('n'))
 						num.add((Expression) o[0]);
 					else
 						den.add((Expression) o[0]);
@@ -731,18 +734,18 @@ public class BoaNormalFormIntrinsics {
 				else
 					numerator = createExpression(ExpressionKind.OP_MULT, num.toArray(new Expression[num.size()]));
 
-				if(den.size() != 0) {
+				if (den.size() != 0) {
 					Expression denominator = null;
 					if (den.size() == 1)
 						denominator = den.get(0);
 					else
 						denominator = createExpression(ExpressionKind.OP_MULT, den.toArray(new Expression[den.size()]));
 					sortExpr = createExpression(ExpressionKind.OP_DIV, numerator, denominator);
-				}
-				else
+				} else {
 					sortExpr = numerator;
+				}
 
-				if(signCount % 2 == 1)
+				if (signCount % 2 == 1)
 					sortExpr = createExpression(ExpressionKind.OP_SUB, sortExpr);
 
 				final List<Object[]> vList = new ArrayList<Object[]>();
@@ -803,7 +806,7 @@ public class BoaNormalFormIntrinsics {
 			case OP_ADD:
 			case OP_SUB:
 			case PAREN:
-				// these cases will not execute once the expression is fully siimplified
+				// these cases will not execute once the expression is fully simplified
 				result.add(new Object[] {normalize(expr), type});
 				break;
 
@@ -817,7 +820,7 @@ public class BoaNormalFormIntrinsics {
 
 	/**
 	 * Combines an expression list based on the combine rules for the left side.
-	 * The sign of the variable/literal is changed if they are from the right side
+	 * The sign of the variable/literal is changed if they are from the right side.
 	 *
 	 * @param expList the expression list of variable and literals
 	 * @return the combined expression
@@ -825,7 +828,7 @@ public class BoaNormalFormIntrinsics {
 	private static Expression combineLeft(final List<Object[]> expList) {
 		Expression e = (Expression)(expList.get(0))[0];
 
-		if(!(e.getKind() == ExpressionKind.LITERAL && e.getLiteral().equals("0"))) {
+		if (!(e.getKind() == ExpressionKind.LITERAL && e.getLiteral().equals("0"))) {
 			if ((((expList.get(0))[1]).equals(true) && ((expList.get(0))[2]).equals(false)) ||
 					(((expList.get(0))[1]).equals(false) && ((expList.get(0))[2]).equals(true)))
 				e = createExpression(ExpressionKind.OP_SUB, e);
@@ -845,7 +848,7 @@ public class BoaNormalFormIntrinsics {
 
 	/**
 	 * Combines an expression list based on the combine rules for the righ side.
-	 * The sign of the variable/literal is changed if they are from the left side
+	 * The sign of the variable/literal is changed if they are from the left side.
 	 *
 	 * @param expList the expression list of variable and literals
 	 * @return the combined expression
@@ -853,16 +856,16 @@ public class BoaNormalFormIntrinsics {
 	private static Expression combineRight(final List<Object[]> expList) {
 		Expression e = (Expression)(expList.get(0))[0];
 
-		 if (!e.getLiteral().equals("0")) {
-			 if ((((expList.get(0))[1]).equals(true) && ((expList.get(0))[2]).equals(true)) ||
-					 (((expList.get(0))[1]).equals(false) && ((expList.get(0))[2]).equals(false)))
-				 e = createExpression(ExpressionKind.OP_SUB, e);
-		 }
+		if (!(e.getKind() == ExpressionKind.LITERAL && e.getLiteral().equals("0"))) {
+			if ((((expList.get(0))[1]).equals(true) && ((expList.get(0))[2]).equals(true)) ||
+					(((expList.get(0))[1]).equals(false) && ((expList.get(0))[2]).equals(false)))
+				e = createExpression(ExpressionKind.OP_SUB, e);
+		}
 
 		for (int i = 1; i < expList.size(); i++) {
 			if ((((expList.get(i))[1]).equals(false) && ((expList.get(i))[2]).equals(true)) ||
 					(((expList.get(i))[1]).equals(true) && ((expList.get(i))[2]).equals(false)) ||
-						 ((Expression)(expList.get(i))[0]).getLiteral().equals("0"))
+					((Expression)(expList.get(i))[0]).getKind() == ExpressionKind.LITERAL && ((Expression)(expList.get(i))[0]).getLiteral().equals("0"))
 				e = createExpression(ExpressionKind.OP_ADD, e, (Expression)(expList.get(i))[0]);
 			else
 				e = createExpression(ExpressionKind.OP_SUB, e, (Expression)(expList.get(i))[0]);
@@ -872,7 +875,7 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * Flips the ExpressionKind(operator)
+	 * Flips the ExpressionKind (operator)
 	 *
 	 * @param kind the ExpressionKind
 	 * @return flipped kind
@@ -905,11 +908,12 @@ public class BoaNormalFormIntrinsics {
 
 	/**
 	 * Temporary method to convert map to array
+	 *
 	 * @param m map of Expression
 	 * @return array of Expression
 	 */
 	@FunctionSpec(name = "converttoarray", returnType = "array of Expression", formalParameters = { "map[int] of Expression" })
-	public static Expression[] convertToArray(Map<Long, Expression> m) {
+	public static Expression[] convertToArray(final Map<Long, Expression> m) {
 		final Expression[] a = new Expression[m.size()];
 		for (int i = 0; i < m.size(); i++) {
 			a[i] = m.get((long)i);
@@ -1049,6 +1053,7 @@ public class BoaNormalFormIntrinsics {
 							boolean negExp = false;
 							Expression literal = null;
 							Expression exp = null;
+
 							for (int j = 0; j < subExp.getExpressionsCount(); j++){
 								if (subExp.getExpressions(j).getKind() == ExpressionKind.LITERAL) {
 									literal = subExp.getExpressions(j);
@@ -1066,6 +1071,7 @@ public class BoaNormalFormIntrinsics {
 									exp = (Expression)subExp.getExpressions(j);
 								}
 							}
+
 							if (literalCount == 1) {
 								// for cases like 3 * x * y
 								if (subExp.getExpressionsCount() != 2) {
@@ -1150,9 +1156,9 @@ public class BoaNormalFormIntrinsics {
 								else if (doubleCountMap.get(o) == -1.0)
 									results2.add(negate(o));
 								else if (doubleCountMap.get(o) % 1 == 0)
-									results2.add(internalReduce(createExpression(ExpressionKind.OP_MULT, createLiteral("" + Integer.toString(doubleCountMap.get(o).intValue())), o)));
+									results2.add(internalReduce(createExpression(ExpressionKind.OP_MULT, createLiteral(Long.toString(doubleCountMap.get(o).longValue())), o)));
 								else
-									results2.add(internalReduce(createExpression(ExpressionKind.OP_MULT, createLiteral("" + Double.toString(doubleCountMap.get(o))), o)));
+									results2.add(internalReduce(createExpression(ExpressionKind.OP_MULT, createLiteral(Double.toString(doubleCountMap.get(o))), o)));
 							}
 						}
 					}
@@ -1175,8 +1181,8 @@ public class BoaNormalFormIntrinsics {
 			case OP_SUB:
 				// if sub kind is add
 				if (results.size() == 1 &&
-					results.get(0) instanceof Expression &&
-					((Expression)results.get(0)).getKind() == ExpressionKind.OP_ADD) {
+						results.get(0) instanceof Expression &&
+						((Expression)results.get(0)).getKind() == ExpressionKind.OP_ADD) {
 					Expression subExp = (Expression)results.get(0);
 					List<Object> results3 = new ArrayList<Object>();
 					for (int i = 0; i < subExp.getExpressionsCount(); i++) {
@@ -1212,7 +1218,7 @@ public class BoaNormalFormIntrinsics {
 				dval = 1.0;
 				ival = 1L;
 
-				// bring children up if the child node is an mult
+				// bring children up if the child node is a mult
 				for (int i = 0; i < results.size(); i++)
 					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_MULT) {
 						final Expression subExp = (Expression)results.get(i);
@@ -1247,17 +1253,17 @@ public class BoaNormalFormIntrinsics {
 
 				if (results2.size() > 1) {
 					// check for elimination
-					if (results2.get(0) instanceof Double && (Double)results2.get(0) == 0.0)
+					if (isDouble && dval == 0.0)
 						return 0.0;
-					if (results2.get(0) instanceof Long && (Long)results2.get(0) == 0L)
+					if (!isDouble && ival == 0L)
 						return 0L;
 
 					// check for identity
 					boolean hasNumLiteral = true;
-					if (results2.get(0) instanceof Number && results2.get(0) instanceof Long && (Long)results2.get(0) == 1L) {
+					if (!isDouble && ival == 1L) {
 						results2.remove(0);
 						hasNumLiteral = false;
-					} else if (results2.get(0) instanceof Number && results2.get(0) instanceof Long && (Long)results2.get(0) == -1L) {
+					} else if (!isDouble && ival == -1L) {
 						results2.remove(0);
 						results2.set(0, negate(results2.get(0)));
 						hasNumLiteral = false;
@@ -1373,9 +1379,9 @@ public class BoaNormalFormIntrinsics {
 					}
 					if (divLiteral) {
 						if (dval != 1.0)
-							results2.add(createExpression(ExpressionKind.OP_DIV, createLiteral("1"), createLiteral("" + dval)));
+							results2.add(createExpression(ExpressionKind.OP_DIV, createLiteral("1"), createLiteral(Double.toString(dval))));
 						else if (ival != 1L)
-							results2.add(createExpression(ExpressionKind.OP_DIV, createLiteral("1"), createLiteral("" + ival)));
+							results2.add(createExpression(ExpressionKind.OP_DIV, createLiteral("1"), createLiteral(Long.toString(ival))));
 					}
 
 					if (results2.size() == 0) {
@@ -1444,6 +1450,22 @@ public class BoaNormalFormIntrinsics {
 				}
 				if (BoaAstIntrinsics.isFloatLit(e))
 					return Double.parseDouble(e.getLiteral());
+				if (BoaAstIntrinsics.isCharLit(e)) {
+					final char c = e.getLiteral().charAt(1);
+					if (c == '\\')
+						switch (e.getLiteral().charAt(2)) {
+							case 'n':  return Long.valueOf((long)'\n');
+							case 'b':  return Long.valueOf((long)'\b');
+							case 't':  return Long.valueOf((long)'\t');
+							case 'r':  return Long.valueOf((long)'\r');
+							case 'f':  return Long.valueOf((long)'\f');
+							case '\'': return Long.valueOf((long)'\'');
+							case '\\': return Long.valueOf((long)'\\');
+							case '"':  return Long.valueOf((long)'\"');
+							default: break;
+						}
+					return Long.valueOf((long)c);
+				}
 				return e;
 
 			// return method call, but with each argument reduced
@@ -1505,7 +1527,7 @@ public class BoaNormalFormIntrinsics {
 				if (results.size() == 0)
 					return e;
 
-				// want the same message, but with new sub-expressions
+				// want the same expression, but with new sub-expressions
 				b = Expression.newBuilder(e);
 
 				b.clearExpressions();
@@ -1520,7 +1542,7 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * takes an expression to distribute recursively
+	 * Takes an expression to distribute recursively
 	 *
 	 * @param e the expression to distribute
 	 * @return the distribute form of the expression
@@ -1590,6 +1612,7 @@ public class BoaNormalFormIntrinsics {
 		for (Expression sub : e.getExpressionsList()) {
 			if (sub.getKind() == ExpressionKind.PAREN)
 				sub = sub.getExpressions(0);
+
 			if (sub.getKind() == ExpressionKind.OP_ADD) {
 				addResults.add(sub);
 				addTermsNum *= sub.getExpressionsCount();
@@ -1652,68 +1675,58 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * takes an expression to factor recursively
+	 * Takes an expression to factor recursively
 	 *
 	 * @param e the expression to distribute
-	 * @return the factor form of the expression
+	 * @return the factored form of the expression
 	 */
 	private static Expression factorAll(final Expression e) throws Exception {
 		if (e.getExpressionsCount() == 1 && e.getKind() != ExpressionKind.PAREN)
 			return e;
 
-		final List<Object> results = new ArrayList<Object>();
+		final List<Expression> results = new ArrayList<Expression>();
 		for (final Expression sub : e.getExpressionsList())
 			results.add(sub);
 
 		switch (e.getKind()) {
+			case PAREN:
 			case OP_ADD:
-				for (int i = 0; i < results.size(); i++) {
-					if (results.get(i) instanceof Expression)
-						results.set(i, factorAll((Expression)results.get(i)));
-				}
-				return createExpression(e.getKind(), convertArray(results));
+				for (int i = 0; i < results.size(); i++)
+					results.set(i, factorAll(results.get(i)));
+				return createExpression(e.getKind(), results);
 
 			case OP_MULT:
 				boolean hasDiv = false;
 				boolean hasAdd = false;
 				final List<Integer> indexList = new ArrayList<Integer>();
+
 				for (int i = 0; i < results.size(); i++) {
-					if (results.get(i) instanceof Expression
-							&& ((Expression)results.get(i)).getKind() == ExpressionKind.PAREN) {
-						final ExpressionKind subExpKind = ((Expression)((Expression)results.get(i)).getExpressions(0)).getKind();
+					if (results.get(i).getKind() == ExpressionKind.PAREN) {
+						final ExpressionKind subExpKind = results.get(i).getExpressions(0).getKind();
+
 						if (subExpKind == ExpressionKind.OP_DIV) {
 							hasDiv = true;
-							results.set(i, factorAll((Expression)results.get(i)));
+							results.set(i, factorAll(results.get(i)));
 						} else if (subExpKind == ExpressionKind.OP_ADD) {
 							hasAdd = true;
 							indexList.add(i);
 						}
 					}
 				}
-				if (hasDiv && hasAdd) {
-					for (final Integer i : indexList) {
-						if (((Expression)results.get(i)).getKind() == ExpressionKind.PAREN)
-							results.set(i, createExpression(ExpressionKind.PAREN, factor(((Expression)results.get(i)).getExpressions(0))));
-						else
-							results.set(i, factor((Expression)results.get(i)));
-					}
-				}
 
-				return createExpression(e.getKind(), convertArray(results));
+				if (hasDiv && hasAdd)
+					for (final Integer i : indexList)
+						results.set(i, factor(results.get(i)));
+
+				return createExpression(ExpressionKind.OP_MULT, results);
 
 			case OP_DIV:
 				for (int i = 0; i < results.size(); i++)
-					if (results.get(i) instanceof Expression
-							&& ((Expression)results.get(i)).getKind() == ExpressionKind.PAREN
-							&& ((Expression)((Expression)results.get(i)).getExpressions(0)).getKind() == ExpressionKind.OP_ADD)
-						results.set(i, createExpression(ExpressionKind.PAREN, factor(((Expression)results.get(i)).getExpressions(0))));
+					if (results.get(i).getKind() == ExpressionKind.PAREN
+							&& results.get(i).getExpressions(0).getKind() == ExpressionKind.OP_ADD)
+						results.set(i, createExpression(ExpressionKind.PAREN, factor(results.get(i).getExpressions(0))));
 
-				return createExpression(e.getKind(), convertArray(results));
-
-			case PAREN:
-				if (results.get(0) instanceof Expression)
-					results.set(0, factorAll((Expression)results.get(0)));
-				return createExpression(e.getKind(), convertArray(results));
+				return createExpression(ExpressionKind.OP_DIV, results);
 
 			default:
 				break;
@@ -1969,7 +1982,7 @@ public class BoaNormalFormIntrinsics {
 							denominatorList.add(sub);
 						}
 					else
-						denominatorList.add(createLiteral("" + multDiv));
+						denominatorList.add(createLiteral(multDiv.toString()));
 				}
 				if (denominatorList.size() > 0) {
 					// if one div
@@ -2081,18 +2094,21 @@ public class BoaNormalFormIntrinsics {
 				return o;
 
 			// create fraction
-			return createExpression(ExpressionKind.OP_DIV, createLiteral("1"), createLiteral("" + o));
+			return createExpression(ExpressionKind.OP_DIV, createLiteral("1"), createLiteral(o.toString()));
 		}
 
 		final Expression e = (Expression)o;
 		final Expression.Builder b = Expression.newBuilder(e);
+
 		switch (e.getKind()) {
 			case OP_ADD:
 			case OP_SUB:
 				// if literal 1 or -1
-				if (e.getExpressionsCount() == 1 && e.getExpressions(0).getKind() == ExpressionKind.LITERAL)
-					if (Double.parseDouble(e.getExpressions(0).getLiteral()) == 1.0 || Double.parseDouble(e.getExpressions(0).getLiteral()) == -1.0)
+				if (e.getExpressionsCount() == 1 && e.getExpressions(0).getKind() == ExpressionKind.LITERAL) {
+					final String lit = e.getExpressions(0).getLiteral();
+					if ("1".equals(lit) || "-1".equals(lit) || "1.0".equals(lit) || "-1.0".equals(lit))
 						return o;
+				}
 				break;
 
 			case OP_MULT:
@@ -2106,7 +2122,7 @@ public class BoaNormalFormIntrinsics {
 				final boolean negative = isNegative(e.getExpressions(0));
 				final Expression first = negative ? (Expression)negate(e.getExpressions(0)) : e.getExpressions(0);
 
-				if (first.getKind() == ExpressionKind.LITERAL && (first.getLiteral() == "1" || first.getLiteral() == "1.0")) {
+				if (first.getKind() == ExpressionKind.LITERAL && (first.getLiteral().equals("1") || first.getLiteral().equals("1.0"))) {
 					// if only 1 denominator, return denominator
 					if (e.getExpressionsCount() == 2)
 						return negative ? negate(e.getExpressions(1)) : e.getExpressions(1);
@@ -2123,9 +2139,9 @@ public class BoaNormalFormIntrinsics {
 				return b.build();
 
 			case LITERAL:
-				if (Character.isDigit(e.getLiteral().charAt(0)))
-					if (Double.parseDouble(e.getLiteral()) == 1.0 || Double.parseDouble(e.getLiteral()) == -1.0)
-						return e;
+				final String lit = e.getLiteral();
+				if ("1".equals(lit) || "-1".equals(lit) || "1.0".equals(lit) || "-1.0".equals(lit))
+					return o;
 				break;
 
 			case PAREN:
@@ -2149,7 +2165,7 @@ public class BoaNormalFormIntrinsics {
 		final Object neg = negate(o);
 		if (neg instanceof Expression)
 			return (Expression)neg;
-		return createLiteral("" + neg);
+		return createLiteral(neg.toString());
 	}
 
 	/**
@@ -2330,8 +2346,8 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	// convenience literals for comparisons - must clone if you want to use in output
-	private static Expression trueLit = createLiteral("true");
-	private static Expression falseLit = createLiteral("false");
+	private static final Expression trueLit  = createLiteral("true");
+	private static final Expression falseLit = createLiteral("false");
 
 	/**
 	 * Processes an expression (operand).  Handles several simplifications.
@@ -2785,6 +2801,27 @@ public class BoaNormalFormIntrinsics {
 	 * @param exps the operands
 	 * @return the new expression
 	 */
+	public static Expression createExpression(final ExpressionKind kind, final List<Expression> exps) {
+		final Expression.Builder b = Expression.newBuilder();
+
+		b.setKind(kind);
+		for (int i = 0; i < exps.size(); i++) {
+			final Expression e = exps.get(i);
+			if (checkPriority(kind, e, i) > 0)
+				b.addExpressions(createExpression(ExpressionKind.PAREN, e));
+			else
+				b.addExpressions(Expression.newBuilder(e).build());
+		}
+		return b.build();
+	}
+
+	/**
+	 * Creates a new prefix/postfix/infix expression.
+	 *
+	 * @param kind the kind of the expression
+	 * @param exps the operands
+	 * @return the new expression
+	 */
 	public static Expression createExpression(final ExpressionKind kind, final Expression... exps) {
 		final Expression.Builder b = Expression.newBuilder();
 
@@ -2989,18 +3026,19 @@ public class BoaNormalFormIntrinsics {
 				final Expression.Builder eb = Expression.newBuilder(exp);
 				final Ast.Variable v = exp.getVariableDecls(0);
 				final Ast.Variable.Builder vb = Ast.Variable.newBuilder(v);
+
 				if (normalizedVars.containsKey(v.getName()))
 					vb.setName(normalizedVars.get(v.getName()));
 				if (v.getInitializer().getExpressionsList().size() != 0)
 					vb.setInitializer(normalizeExpression(v.getInitializer(), normalizedVars));
 				eb.setVariableDecls(0, vb.build());
+
 				return eb.build();
 
 			case VARACCESS:
 				if (normalizedVars.containsKey(exp.getVariable()))
 					return createVariable(normalizedVars.get(exp.getVariable()));
-				else
-					return exp;
+				return exp;
 
 			case METHODCALL:
 				final Expression.Builder bm = Expression.newBuilder(exp);

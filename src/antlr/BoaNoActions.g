@@ -55,6 +55,7 @@ type
 	| queueType
 	| setType
 	| enumType
+	| modelType
 	| identifier
 	;
 
@@ -102,6 +103,10 @@ setType
 
 outputType
 	: OUTPUT (SET | identifier) (LPAREN expressionList RPAREN)? (LBRACKET component RBRACKET)* OF component (WEIGHT component)? (FORMAT LPAREN expressionList RPAREN)?
+	;
+	
+modelType
+	: MODEL of identifier OF component
 	;
 
 functionType
@@ -352,6 +357,7 @@ identifier
 	| lit=MAP      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=STACK    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=QUEUE    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=MODEL    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=SET      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOR      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOREACH  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
@@ -411,40 +417,41 @@ timeLiteral
 // keywords
 //
 
-OF       : 'of';
-IF       : 'if';
-DO       : 'do';
-MAP      : 'map';
-STACK    : 'stack';
-QUEUE    : 'queue';
-SET      : 'set';
-FOR      : 'for';
-FOREACH  : 'foreach';
-IFALL    : 'ifall';
-EXISTS   : 'exists';
-NOT      : 'not';
-TYPE     : 'type';
-ELSE     : 'else';
-CASE     : 'case';
-OUTPUT   : 'output';
-FORMAT   : 'format';
-WHILE    : 'while';
-BREAK    : 'break';
-ARRAY    : 'array';
-STATIC   : 'static';
-SWITCH   : 'switch';
-RETURN   : 'return';
-WEIGHT   : 'weight';
-DEFAULT  : 'default';
-CONTINUE : 'continue';
-FUNCTION : 'function';
-FIXP : 'fixp';
-VISITOR  : 'visitor';
-TRAVERSAL  : 'traversal';
-BEFORE   : 'before';
-AFTER    : 'after';
-STOP     : 'stop';
-ENUM 	 : 'enum';
+OF        : 'of';
+IF        : 'if';
+DO        : 'do';
+MAP       : 'map';
+STACK     : 'stack';
+QUEUE     : 'queue';
+MODEL     : 'Model';
+SET       : 'set';
+FOR       : 'for';
+FOREACH   : 'foreach';
+IFALL     : 'ifall';
+EXISTS    : 'exists';
+NOT       : 'not';
+TYPE      : 'type';
+ELSE      : 'else';
+CASE      : 'case';
+OUTPUT    : 'output';
+FORMAT    : 'format';
+WHILE     : 'while';
+BREAK     : 'break';
+ARRAY     : 'array';
+STATIC    : 'static';
+SWITCH    : 'switch';
+RETURN    : 'return';
+WEIGHT    : 'weight';
+DEFAULT   : 'default';
+CONTINUE  : 'continue';
+FUNCTION  : 'function';
+FIXP      : 'fixp';
+VISITOR   : 'visitor';
+TRAVERSAL : 'traversal';
+BEFORE    : 'before';
+AFTER     : 'after';
+STOP      : 'stop';
+ENUM	  : 'enum';
 
 //
 // separators
@@ -465,39 +472,39 @@ RBRACKET  : ']';
 // operators
 //
 
-OR     : 'or';
-ONEOR  : '|';
-TWOOR  : '||';
-AND    : 'and';
-ONEAND : '&';
-TWOAND : '&&';
-INCR   : '++';
-DECR   : '--';
-EQEQ   : '==';
-NEQ    : '!=';
-LT     : '<';
-LTEQ   : '<=';
-GT     : '>';
-GTEQ   : '>=';
-PLUS   : '+';
-MINUS  : '-';
-XOR    : '^';
-STAR   : '*';
-DIV    : '/';
-MOD    : '%';
-RSHIFT : '>>';
-NEG    : '~';
-INV    : '!';
-PLUSEQ : '+=';
-MINUSEQ: '-=';
-STAREQ : '*=';
-DIVEQ  : '/=';
-ONEOREQ: '|=';
-XOREQ  : '^=';
-MODEQ  : '%=';
-ONEANDEQ:'&=';
-RSHIFTEQ:'>>=';
-LSHIFTEQ:'<<=';
+OR       : 'or';
+ONEOR    : '|';
+TWOOR    : '||';
+AND      : 'and';
+ONEAND   : '&';
+TWOAND   : '&&';
+INCR     : '++';
+DECR     : '--';
+EQEQ     : '==';
+NEQ      : '!=';
+LT       : '<';
+LTEQ     : '<=';
+GT       : '>';
+GTEQ     : '>=';
+PLUS     : '+';
+MINUS    : '-';
+XOR      : '^';
+STAR     : '*';
+DIV      : '/';
+MOD      : '%';
+RSHIFT   : '>>';
+NEG      : '~';
+INV      : '!';
+PLUSEQ   : '+=';
+MINUSEQ  : '-=';
+STAREQ   : '*=';
+DIVEQ    : '/=';
+ONEOREQ  : '|=';
+XOREQ    : '^=';
+MODEQ    : '%=';
+ONEANDEQ : '&=';
+RSHIFTEQ : '>>=';
+LSHIFTEQ : '<<=';
 
 //
 // other

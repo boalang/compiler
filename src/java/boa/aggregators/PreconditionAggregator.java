@@ -95,6 +95,9 @@ public class PreconditionAggregator extends Aggregator {
 		for (final Map.Entry<String, Double> precondConf : doRanking(doFiltering())) {
 			this.collect(precondConf.getKey() + ": " + precondConf.getValue());
 		}
+
+		preconds.clear();
+		omega.clear();
 	}
 
 	/**

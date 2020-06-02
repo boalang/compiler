@@ -77,6 +77,7 @@ public class DefaultProperties {
 
 	public static String localDataPath = null;
 	
+
 	// excluded repo names
 	public static HashMap<String, String> exceptions = null;
 	// processed repos names
@@ -84,6 +85,9 @@ public class DefaultProperties {
 	// repos names
 	public static HashSet<String> projects = null;
 	
+
+	public static String localOutput = null;
+
 	@SuppressWarnings("unused")
 	private static String getRoot() {
 		File dir = new File(System.getProperty("user.dir"));
