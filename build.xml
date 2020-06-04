@@ -433,7 +433,6 @@
 					<exclude name="**/compiler/" />
 					<exclude name="**/parser/" />
 					<exclude name="**/boa/types/proto/" />
-					<exclude name="**/boa/types/Boa*" />
 				</patternset>
 			</fileset>
 			<zipfileset excludes="META-INF/" src="lib/datagen_new/org.eclipse.jgit-5.4.0-SNAPSHOT.jar" />
@@ -443,6 +442,10 @@
 			<zipfileset excludes="META-INF/" src="lib/refactoring/guava-28.2-jre.jar" />
 			<zipfileset excludes="META-INF/" src="lib/refactoring/eng-projects.jar" />
 			<zipfileset excludes="META-INF/" src="lib/datagen/gson-2.7.jar" />
+			<zipfileset excludes="META-INF/" src="lib/weka/arpack_combined.jar" />
+			<zipfileset excludes="META-INF/" src="lib/weka/core.jar" />
+			<zipfileset excludes="META-INF/" src="lib/weka/mtj.jar" />
+			<zipfileset excludes="META-INF/" src="lib/weka/weka.jar" />
 		</jar>
 	</target>
 
@@ -472,6 +475,10 @@
 			<zipfileset excludes="META-INF/" src="lib/refactoring/guava-28.2-jre.jar" />
 			<zipfileset excludes="META-INF/" src="lib/refactoring/eng-projects.jar" />
 			<zipfileset excludes="META-INF/" src="lib/datagen/gson-2.7.jar" />
+			<zipfileset excludes="META-INF/" src="lib/weka/arpack_combined.jar" />
+			<zipfileset excludes="META-INF/" src="lib/weka/core.jar" />
+			<zipfileset excludes="META-INF/" src="lib/weka/mtj.jar" />
+			<zipfileset excludes="META-INF/" src="lib/weka/weka.jar" />
 		</jar>
 	</target>
 
