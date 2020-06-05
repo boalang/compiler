@@ -109,7 +109,7 @@ public class BoaIntrinsics {
 	 * @return Model type after deserializing
 	 */
 	@FunctionSpec(name = "load", returnType = "LinearRegression", formalParameters = {"string"})
-	public static BoaModel load(final String URL, final Object o) throws Exception {
+	public static BoaModel load(final String jobId, final Object o) throws Exception {
 		Object unserializedObject = null;
 		FSDataInputStream in = null;
 		ObjectInputStream dataIn = null;
@@ -117,8 +117,10 @@ public class BoaIntrinsics {
 		try {
 			final Configuration conf = BoaAstIntrinsics.context.getConfiguration();
 			final FileSystem fs;
-			final Path p;	
-			p = new Path(conf.get("fs.default.name", "hdfs://boa-njt/"), URL);
+			final Path p;
+			String output = DefaultProperties.localOutput != null ? new Path(DefaultProperties.localOutput).toString() + "/../"
+					: conf.get("fs.default.name", "hdfs://boa-njt/");
+			p = new Path(output, new Path("model/job_" + jobId + ".model"));
 			fs = FileSystem.get(conf);
 			in = fs.open(p);
 			
