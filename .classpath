@@ -55,5 +55,17 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/datagen/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/datagen/commons-configuration-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/datagen/slf4j-log4j12-1.4.3.jar"/>
+	<classpathentry kind="lib" path="lib/datagen/slf4j-api-1.4.3.jar"/>
+	<classpathentry kind="lib" path="compile"/>
+	<classpathentry kind="lib" path="lib/evaluator/jackson-mapper-asl-1.9.13.jar"/>
+	<classpathentry kind="lib" path="lib/evaluator/com.springsource.org.codehaus.jackson-1.4.2.jar"/>
+	<classpathentry kind="lib" path="lib/evaluator/com.springsource.org.codehaus.jackson.mapper-1.4.2.jar"/>
+	<classpathentry kind="lib" path="lib/evaluator/commons-configuration-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/evaluator/commons-httpclient-3.1.0.redhat-7.jar"/>
+	<classpathentry kind="lib" path="lib/evaluator/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/datagen/jena-core-2.7.3.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
