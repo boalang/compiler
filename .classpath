@@ -6,7 +6,6 @@
 	<classpathentry kind="lib" path="rtlib/protobuf-java-2.5.0.jar"/>
 	<classpathentry kind="lib" path="rtlib/scannotation-1.0.3.jar"/>
 	<classpathentry kind="lib" path="rtlib/ST-4.0.8.jar"/>
-
 	<classpathentry kind="lib" path="lib/antlr-4.5-complete.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-math-2.1.jar"/>
@@ -39,24 +38,22 @@
 	<classpathentry kind="lib" path="lib/datagen/sac.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/trove-3.0.3.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/xml-security-impl-1.0.jar"/>
-
 	<classpathentry kind="lib" path="lib/weka/arpack_combined.jar"/>
 	<classpathentry kind="lib" path="lib/weka/core.jar"/>
 	<classpathentry kind="lib" path="lib/weka/mtj.jar"/>
 	<classpathentry kind="lib" path="lib/weka/weka.jar"/>
-	
-	<classpathentry kind="output" path="build/classes" />
-	<classpathentry kind="src" path="build/java" />
-	<classpathentry kind="src" path="src/java" />
-	<classpathentry kind="src" path="src/compiled-proto" />
-
+	<classpathentry kind="src" path="build/java"/>
+	<classpathentry kind="src" path="src/antlr"/>
+	<classpathentry kind="src" path="src/proto"/>
+	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="src" path="src/compiled-proto"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-
 	<classpathentry kind="src" output="build/tests" path="src/test">
 		<attributes>
-			<attribute name="optional" value="true"/>
 			<attribute name="test" value="true"/>
+			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="output" path="build/classes"/>
 </classpath>
