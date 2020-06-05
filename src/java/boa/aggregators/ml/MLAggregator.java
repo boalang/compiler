@@ -20,7 +20,6 @@ import boa.aggregators.Aggregator;
 import boa.aggregators.FinishedException;
 import boa.compiler.ast.statements.EmitStatement;
 import boa.datagen.DefaultProperties;
-import boa.functions.BoaAstIntrinsics;
 import boa.runtime.Tuple;
 
 import org.apache.commons.lang.math.NumberUtils;
@@ -57,7 +56,7 @@ public abstract class MLAggregator extends Aggregator {
 	protected boolean flag;
 	protected int count;
 	private int vectorSize;
-	private String mlarg; 
+	private String mlarg;
 
 
 	public MLAggregator() {
@@ -109,8 +108,8 @@ public abstract class MLAggregator extends Aggregator {
 				//System.out.println(this.trainingSet.attribute(0).name());
 				subpath += "_" + this.trainingSet.attribute(i).name() + "_" ;
 			}
-			fileSystem.mkdirs(new Path(output, new Path("" + boaJobId + "/boamodeldata")));
-			filePath = new Path(output, new Path("" + boaJobId + "/boamodeldata", new Path(("" + getKey()).split("\\[")[0] + subpath + "data")));
+			fileSystem.mkdirs(new Path(output, new Path("/model" + boaJobId)));
+			filePath = new Path(output, new Path("/model" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + subpath + "data")));
 
 			if (fileSystem.exists(filePath))
 				return;
@@ -147,23 +146,15 @@ public abstract class MLAggregator extends Aggregator {
 
 		try {
 			JobContext context = (JobContext) getContext();
-			Configuration configuration = context.getConfiguration();
-			int boaJobId = configuration.getInt("boa.hadoop.jobid", 0);
-			JobConf job = new JobConf(configuration);
+			Configuration conf = context.getConfiguration();
+			int boaJobId = conf.getInt("boa.hadoop.jobid", 0);
+			JobConf job = new JobConf(conf);
 			Path outputPath = FileOutputFormat.getOutputPath(job);	
 			fileSystem = outputPath.getFileSystem(context.getConfiguration());
-			String output = null;
-			String subpath = "_" + this.trainingSet.attribute(0).name()+ "_";
-			if (DefaultProperties.localOutput != null)
-				output = DefaultProperties.localOutput;
-			else
-				output = configuration.get("fs.default.name", "hdfs://boa-njt/");
-			for (int i = 1; i < NumOfAttributes; i ++) {
-				//System.out.println(this.trainingSet.attribute(0).name());
-				subpath += "_" + this.trainingSet.attribute(i).name() + "_" ;
-			}
-			fileSystem.mkdirs(new Path(output, new Path("" + boaJobId + "/boamodel")));
-			filePath = new Path(output, new Path("" + boaJobId + "/boamodel", new Path(("" + getKey()).split("\\[")[0] + subpath + "ML.model")));
+			String output = DefaultProperties.localOutput != null ? new Path(DefaultProperties.localOutput).toString() + "/../"
+					: conf.get("fs.default.name", "hdfs://boa-njt/");
+//			fileSystem.mkdirs(new Path(output, new Path("model/job_" + boaJobId)));
+			filePath = new Path(output, new Path("model/job_" + boaJobId + ".model"));
 
 			if (fileSystem.exists(filePath))
 				return;
