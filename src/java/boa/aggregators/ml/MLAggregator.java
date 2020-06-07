@@ -153,8 +153,8 @@ public abstract class MLAggregator extends Aggregator {
 			fileSystem = outputPath.getFileSystem(context.getConfiguration());
 			String output = DefaultProperties.localOutput != null ? new Path(DefaultProperties.localOutput).toString() + "/../"
 					: conf.get("fs.default.name", "hdfs://boa-njt/");
-//			fileSystem.mkdirs(new Path(output, new Path("model/job_" + boaJobId)));
-			filePath = new Path(output, new Path("model/job_" + boaJobId + ".model"));
+			fileSystem.mkdirs(getModelDirPath(output, boaJobId));
+			filePath = getModelFilePath(output, boaJobId, this.getKey().getName());
 
 			if (fileSystem.exists(filePath))
 				return;
@@ -167,7 +167,7 @@ public abstract class MLAggregator extends Aggregator {
 			byte[] serializedObject = byteOutStream.toByteArray();
 
 			out.write(serializedObject);
-
+			
 			this.collect(filePath.toString());
 
 		} catch (Exception e) {
@@ -180,6 +180,14 @@ public abstract class MLAggregator extends Aggregator {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public static Path getModelDirPath(String output, int boaJobId) {
+		return new Path(output, new Path("model/job_" + boaJobId));
+	}
+	
+	public static Path getModelFilePath(String output, int boaJobId, String modelVar) {
+		return new Path(getModelDirPath(output, boaJobId), new Path(modelVar + ".model"));
 	}
 
 	protected void applyFilterToUnfilteredInstances(Filter filter) throws Exception {
