@@ -1,0 +1,10 @@
+p: Project = input;
+linear1 : output linearregression of array of int;
+linear2 : output linearregression of array of int;
+
+i := 1;
+while(i<100){
+	linear1 << {2 + 6 * i , 3 + 5 * i, 4 + 2 * i};
+	linear2 << {2 + 6 * i , 3 + 5 * i, 4 + 2 * i};
+	i++;
+}
