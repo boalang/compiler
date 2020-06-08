@@ -51,6 +51,7 @@ public abstract class MLAggregator extends Aggregator {
 	protected Instances unFilteredInstances;
 	protected ArrayList<String> vector;
 	protected Instances trainingSet;
+	protected Instances testingSet;
 	protected int NumOfAttributes;
 	protected String[] options;
 	protected boolean flag;
@@ -75,11 +76,24 @@ public abstract class MLAggregator extends Aggregator {
 		}
 	}
 
-	public void evaluate(Classifier model, Instances trainingSet) {
+	public void evaluate(Classifier model, Instances set) {
 		try {
-			Evaluation evaluation = new Evaluation(trainingSet);
-			evaluation.evaluateModel(model, trainingSet);
-			this.collect("  Training set evaluation \n " + evaluation.toSummaryString());
+			Evaluation eval = new Evaluation(set);
+			eval.evaluateModel(model, set);
+			String name = set == trainingSet ? "Training" : "Testing";
+			this.collect(eval.toSummaryString("\n" + name + "Set Evaluation:\n", false));
+//			System.out.println("Correct % = " + eval.pctCorrect());
+//			System.out.println("Incorrect % = " + eval.pctIncorrect());
+//			System.out.println("AUC % = " + eval.areaUnderROC(1));
+//			System.out.println("Kappa % = " + eval.kappa());
+//			System.out.println("MAE % = " + eval.meanAbsoluteError());
+//			System.out.println("RMSE % = " + eval.rootMeanSquaredError());
+//			System.out.println("RAE % = " + eval.relativeAbsoluteError());
+//			System.out.println("RRSE % = " + eval.rootRelativeSquaredError());
+//			System.out.println("Precision = " + eval.precision(1));
+//			System.out.println("Recall = " + eval.recall(1));
+//			System.out.println("fMeasure = " + eval.fMeasure(1));
+//			System.out.println("Error Rate = " + eval.errorRate());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -238,20 +252,19 @@ public abstract class MLAggregator extends Aggregator {
 			this.flag = true;
 			this.trainingSet = new Instances(name, this.fvAttributes, 1);
 			this.trainingSet.setClassIndex(this.NumOfAttributes - 1);
+			this.testingSet = new Instances(name, this.fvAttributes, 1);
+			this.testingSet.setClassIndex(this.NumOfAttributes - 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	protected void instanceCreation(ArrayList<String> data) {
+	protected void instanceCreation(ArrayList<String> data, Instances set) {
 		try {
 			Instance instance = new DenseInstance(this.NumOfAttributes);
-        	
-			for (int i = 0; i < this.NumOfAttributes; i++) {
+			for (int i = 0; i < this.NumOfAttributes; i++)
 				instance.setValue((Attribute) this.fvAttributes.get(i), Double.parseDouble(data.get(i)));
-			}
-            	
-			trainingSet.add(instance);
+			set.add(instance);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -289,31 +302,32 @@ public abstract class MLAggregator extends Aggregator {
 
 	protected void attributeCreation(String name) {
 		fvAttributes.clear();
-		NumOfAttributes = this.getVectorSize();
+		NumOfAttributes = this.getVectorSize() - 1;
 		try {
-			for (int i = 0; i < NumOfAttributes; i++) {
+			for (int i = 0; i < NumOfAttributes; i++)
 				fvAttributes.add(new Attribute("Attribute" + i));
-			}
-
 			this.flag = true;
 			trainingSet = new Instances(name, fvAttributes, 1);
 			trainingSet.setClassIndex(NumOfAttributes - 1);
+			testingSet = new Instances(name, fvAttributes, 1);
+			testingSet.setClassIndex(NumOfAttributes - 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	protected void aggregate(final String data, final String metadata, String name) throws IOException, InterruptedException {
-    	if (this.count != this.getVectorSize()) {
-
+		
+		if (this.count < this.getVectorSize() - 1)
         	this.vector.add(data);
-            this.count++;
-        }
+		
+		count++;
 
         if (this.count == this.getVectorSize()) {
         	if (this.flag != true)
             	attributeCreation(name);
-            instanceCreation(this.vector);
+        	Instances set = data.equals("1") ? trainingSet : testingSet;
+            instanceCreation(this.vector, set);
             this.vector = new ArrayList<String>();
             this.count = 0;
         }

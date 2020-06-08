@@ -100,5 +100,10 @@ public class BoaMLIntrinsics {
 		else
 			return predval + "";
 	}
+	
+	@FunctionSpec(name = "train_split", returnType = "int", formalParameters = { "int"})
+	public static Long trainSplit(final long percent) throws Exception {
+		return (long) (Math.random() > (1 - percent / 100.0) ? 1 : 0);
+	}
 
 }

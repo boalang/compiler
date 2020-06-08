@@ -61,6 +61,9 @@ public class LinearRegressionAggregator extends MLAggregator {
 		}
 		System.out.println("modeling done");
 		this.saveModel(this.model);
+		System.out.println("model saved");
+		this.evaluate(this.model, this.trainingSet);
+		this.evaluate(this.model, this.testingSet);
 		this.collect(this.model.toString());
 	}
 }
