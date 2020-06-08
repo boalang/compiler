@@ -33,6 +33,7 @@ import org.eclipse.dltk.python.parser.ast.PythonRaiseStatement;
 import org.eclipse.dltk.python.parser.ast.PythonTryStatement;
 import org.eclipse.dltk.python.parser.ast.PythonWhileStatement;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonLambdaExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTestListExpression;
@@ -42,7 +43,6 @@ import org.eclipse.dltk.python.parser.ast.statements.ContinueStatement;
 import org.eclipse.dltk.python.parser.ast.statements.IfStatement;
 import org.eclipse.dltk.python.parser.ast.statements.ReturnStatement;
 import org.eclipse.dltk.python.parser.ast.statements.SimpleStatement;
-import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.dltk.python.parser.ast.expressions.Assignment;
 import org.eclipse.dltk.python.parser.ast.expressions.BinaryExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.CallHolder;
@@ -107,6 +107,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		else if(md instanceof Assignment)
 		{
 			visit((Assignment) md);
+			opFound=true;
+		}
+		else if(md instanceof PythonLambdaExpression)
+		{
+			visit((PythonLambdaExpression) md);
 			opFound=true;
 		}
 		else if(md instanceof TypeDeclaration)
@@ -285,6 +290,32 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.EMPTY);
 		expressions.push(b.build());
 		return true;
+	}
+	
+	public boolean visit(PythonLambdaExpression node) throws Exception {
+		System.out.println(node.toString());
+		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LAMBDA);
+
+		for(Object ob : node.getArguments())
+		{
+			fields.push(new ArrayList<Variable>());
+			PythonArgument ex=(PythonArgument)ob;
+			ex.traverse(this);
+			List<boa.types.Ast.Variable> fs = fields.pop();
+
+			for (boa.types.Ast.Variable v : fs)
+				eb.addVariableDecls(v);
+		}
+		
+		if (node.getBodyExpression() != null) {
+			node.getBodyExpression().traverse(this);
+			boa.types.Ast.Expression e = expressions.pop();
+			eb.addExpressions(e);
+		}
+		expressions.push(eb.build());
+		
+		return false;
 	}
 	
 	public boolean visit(PythonSubscriptExpression md) throws Exception  {
@@ -519,6 +550,10 @@ public class NewPythonVisitor extends ASTVisitor {
 		else if(md.getKind()==ExpressionConstants.E_DIV)
 		{
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_DIV);	
+		}
+		else if(md.getKind()==ExpressionConstants.E_MOD)
+		{
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_MOD);	
 		}
 		else if(md.getKind()==ExpressionConstants.E_NOT_EQUAL)
 		{
