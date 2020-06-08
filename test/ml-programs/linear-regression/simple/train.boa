@@ -1,8 +1,14 @@
 p: Project = input;
 
 linear : output linearregression of array of int;
-i:=0;
-while(i<100){
-	linear << {1,2+6*i,3+5*i,4+2*i};
+i := 0;
+while(i < 100){
+	x1 := 2 + 6 * i;
+	x2 := 3 + 5 * i;
+	y  := 4 + 2 * i;
+	t  := train_split(75); # choose 75% as training dataset
+	
+	linear1 << { x1, x2, y, t };
+	
 	i++;
 }
