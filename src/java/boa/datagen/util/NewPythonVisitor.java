@@ -24,6 +24,7 @@ import org.eclipse.dltk.ast.expressions.ExpressionConstants;
 import org.eclipse.dltk.ast.expressions.ExpressionList;
 import org.eclipse.dltk.ast.expressions.Literal;
 import org.eclipse.dltk.python.parser.ast.PythonArgument;
+import org.eclipse.dltk.python.parser.ast.PythonAssertStatement;
 import org.eclipse.dltk.python.parser.ast.PythonClassDeclaration;
 import org.eclipse.dltk.python.parser.ast.PythonDelStatement;
 import org.eclipse.dltk.python.parser.ast.PythonExceptStatement;
@@ -167,6 +168,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		else if(md instanceof PythonExceptStatement)
 		{
 			visit((PythonExceptStatement) md);
+			opFound=true;
+		}
+		else if(md instanceof PythonAssertStatement)
+		{
+			visit((PythonAssertStatement) md);
 			opFound=true;
 		}
 		else if(md instanceof PythonForStatement)
@@ -785,6 +791,8 @@ public class NewPythonVisitor extends ASTVisitor {
 			return false;
 		if (o instanceof PythonDelStatement)
 			return false;
+		if (o instanceof PythonAssertStatement)
+			return false;
 		return true;
 	}
 	public void addStatementExpression()
@@ -829,6 +837,9 @@ public class NewPythonVisitor extends ASTVisitor {
 	}
 	
 	public boolean visit(PythonTryStatement s) throws Exception {
+		// have to handle following
+		// try-finally
+		//try-except-else
 		System.out.println("Enter Try: "+s.toString());
 		
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
@@ -1050,6 +1061,20 @@ public class NewPythonVisitor extends ASTVisitor {
 			s.getExpression().traverse(this);
 			b.addExpressions(expressions.pop());
 		}
+		
+		list.add(b.build());
+		
+		return false;
+	}
+	
+	public boolean visit(PythonAssertStatement s) throws Exception {
+		System.out.println("Enter Assert: " + s.toString());
+		
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.ASSERT);
+		
+		//unavailable: getExpression1(), getExpression1()
 		
 		list.add(b.build());
 		
