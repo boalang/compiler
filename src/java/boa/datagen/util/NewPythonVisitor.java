@@ -33,6 +33,7 @@ import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import org.eclipse.dltk.python.parser.ast.PythonRaiseStatement;
 import org.eclipse.dltk.python.parser.ast.PythonTryStatement;
 import org.eclipse.dltk.python.parser.ast.PythonWhileStatement;
+import org.eclipse.dltk.python.parser.ast.PythonYieldStatement;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonLambdaExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonListExpression;
@@ -44,6 +45,7 @@ import org.eclipse.dltk.python.parser.ast.statements.ContinueStatement;
 import org.eclipse.dltk.python.parser.ast.statements.IfStatement;
 import org.eclipse.dltk.python.parser.ast.statements.ReturnStatement;
 import org.eclipse.dltk.python.parser.ast.statements.SimpleStatement;
+import org.eclipse.php.internal.core.ast.nodes.YieldExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.Assignment;
 import org.eclipse.dltk.python.parser.ast.expressions.BinaryExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.CallHolder;
@@ -228,6 +230,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		else if(md instanceof ReturnStatement)
 		{
 			visit((ReturnStatement) md);
+			opFound=true;
+		}
+		else if(md instanceof PythonYieldStatement)
+		{
+			visit((PythonYieldStatement) md);
 			opFound=true;
 		}
 		else if(md instanceof Block)
@@ -573,6 +580,14 @@ public class NewPythonVisitor extends ASTVisitor {
 		{
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.LT);	
 		}
+		else if(md.getKind()==ExpressionConstants.E_GT)
+		{
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.GT);	
+		}
+		else if(md.getKind()==ExpressionConstants.E_EQUAL)
+		{
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.EQ);
+		}
 		
 		
 		md.getLeft().traverse(this);
@@ -783,14 +798,14 @@ public class NewPythonVisitor extends ASTVisitor {
 			return false;
 		if (o instanceof IfStatement)
 			return false;
-		if (o instanceof BreakStatement)
-			return false;
-		if (o instanceof ContinueStatement)
-			return false;
+//		if (o instanceof BreakStatement)
+//			return false;
+//		if (o instanceof ContinueStatement)
+//			return false;
 		if (o instanceof PythonRaiseStatement)
 			return false;
-		if (o instanceof PythonDelStatement)
-			return false;
+//		if (o instanceof PythonDelStatement)
+//			return false;
 		if (o instanceof PythonAssertStatement)
 			return false;
 		return true;
@@ -1081,16 +1096,38 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.addConditions(ex);
 		}
 		
-//		if(s.getfExpression2() != null)
-//		{
-//			s.getfExpression2().traverse(this);
-//			boa.types.Ast.Expression ex = expressions.pop();
-//			b.addExpressions(ex);
-//		}
+		if(s.getfExpression2() != null)
+		{
+			s.getfExpression2().traverse(this);
+			boa.types.Ast.Expression ex = expressions.pop();
+			b.addExpressions(ex);
+		}
 		
 		list.add(b.build());
 		
 		return false;
+	}
+	
+	public boolean visit(PythonYieldStatement s) throws Exception {
+		System.out.println("Enter Yield: " + s.toString());	
+		
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
+		
+		
+		boa.types.Ast.Expression.Builder ex = boa.types.Ast.Expression.newBuilder();
+		ex.setKind(boa.types.Ast.Expression.ExpressionKind.YIELD);
+		
+		if (s.getExpression() != null) {
+			s.getExpression().traverse(this);
+			ex.addExpressions(expressions.pop());
+		}
+		
+		b.addExpressions(ex);
+		
+		list.add(b.build());
+		return false;	
 	}
 	
 		
