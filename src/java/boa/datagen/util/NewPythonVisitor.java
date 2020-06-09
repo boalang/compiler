@@ -45,6 +45,7 @@ import org.eclipse.dltk.python.parser.ast.statements.ContinueStatement;
 import org.eclipse.dltk.python.parser.ast.statements.IfStatement;
 import org.eclipse.dltk.python.parser.ast.statements.ReturnStatement;
 import org.eclipse.dltk.python.parser.ast.statements.SimpleStatement;
+import org.eclipse.dltk.python.parser.ast.statements.TryFinallyStatement;
 import org.eclipse.php.internal.core.ast.nodes.YieldExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.Assignment;
 import org.eclipse.dltk.python.parser.ast.expressions.BinaryExpression;
@@ -230,6 +231,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		else if(md instanceof ReturnStatement)
 		{
 			visit((ReturnStatement) md);
+			opFound=true;
+		}
+		else if(md instanceof TryFinallyStatement)
+		{
+			visit((TryFinallyStatement) md);
 			opFound=true;
 		}
 		else if(md instanceof PythonYieldStatement)
@@ -792,6 +798,8 @@ public class NewPythonVisitor extends ASTVisitor {
 			return false;
 		if (o instanceof PythonExceptStatement)
 			return false;
+		if (o instanceof TryFinallyStatement)
+			return false;
 		if (o instanceof PythonForStatement)
 			return false;
 		if (o instanceof PythonWhileStatement)
@@ -866,6 +874,33 @@ public class NewPythonVisitor extends ASTVisitor {
 			
 		for (Object c : s.getCatchFinallyStatements())
 			((ASTNode) c).traverse(this);
+		
+		if (s.getfElseStatement() != null) {
+			s.getfElseStatement().traverse(this);
+		}
+		
+		List<boa.types.Ast.Statement> ss = statements.pop();
+		for (boa.types.Ast.Statement st : ss)
+			b.addStatements(st);
+		
+		list.add(b.build());
+		
+		return false;
+	}
+	
+	public boolean visit(TryFinallyStatement s) throws Exception {
+		System.out.println("Enter Finally : "+s.toString());
+		
+		Statement.Builder b = Statement.newBuilder();
+		List<Statement> list = statements.peek();
+		b.setKind(Statement.StatementKind.FINALLY);
+		
+		
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		
+		if(s.getfBody()!=null)
+			s.getfBody().traverse(this);
+			
 		
 		List<boa.types.Ast.Statement> ss = statements.pop();
 		for (boa.types.Ast.Statement st : ss)
