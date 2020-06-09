@@ -1072,9 +1072,21 @@ public class NewPythonVisitor extends ASTVisitor {
 		
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.ASSERT);
+		b.setKind(boa.types.Ast.Statement.StatementKind.ASSERT);		
 		
-		//unavailable: getExpression1(), getExpression1()
+		if(s.getfExpression1() != null)
+		{
+			s.getfExpression1().traverse(this);
+			boa.types.Ast.Expression ex = expressions.pop();
+			b.addConditions(ex);
+		}
+		
+//		if(s.getfExpression2() != null)
+//		{
+//			s.getfExpression2().traverse(this);
+//			boa.types.Ast.Expression ex = expressions.pop();
+//			b.addExpressions(ex);
+//		}
 		
 		list.add(b.build());
 		
