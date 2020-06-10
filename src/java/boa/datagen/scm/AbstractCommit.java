@@ -76,8 +76,8 @@ public abstract class AbstractCommit {
 
 	protected Map<String, Integer> fileNameIndices = new HashMap<String, Integer>();
 	protected List<ChangedFile.Builder> changedFiles = new ArrayList<ChangedFile.Builder>();
-	
-	protected ChangedFile.Builder getChangeFile(String path, ChangeKind changeKind) {
+
+	protected ChangedFile.Builder getChangedFile(String path, ChangeKind changeKind) {
 		ChangedFile.Builder cfb = null;
 		Integer index = fileNameIndices.get(path);
 		if (index == null) {
@@ -90,7 +90,7 @@ public abstract class AbstractCommit {
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
 		} else {
-			System.err.println("FIND PREVIOUS CFB!!!!!!!!!!!!");
+			System.err.println("find reduntant changed file during the update proccess");
 			cfb = changedFiles.get(index);
 		}
 		return cfb;

@@ -186,7 +186,7 @@ public class GitCommit extends AbstractCommit {
 				while (tw.next()) {
 					if (!tw.isSubtree()) {
 						String path = tw.getPathString();
-						getChangeFile(path, ChangeKind.ADDED);
+						getChangedFile(path, ChangeKind.ADDED);
 						filePathGitObjectIds.put(path, tw.getObjectId(0));
 					}
 				}
@@ -241,7 +241,7 @@ public class GitCommit extends AbstractCommit {
 					if (diff.getOldMode().getObjectType() == Constants.OBJ_BLOB) {
 						String oldPath = diff.getOldPath();
 						String oldObjectId = diff.getOldId().toObjectId().getName();
-						ChangedFile.Builder cfb = getChangeFile(oldPath, ChangeKind.DELETED);
+						ChangedFile.Builder cfb = getChangedFile(oldPath, ChangeKind.DELETED);
 						filePathGitObjectIds.put(oldPath, diff.getNewId().toObjectId());
 					}
 				}
@@ -258,7 +258,7 @@ public class GitCommit extends AbstractCommit {
 		String newObjectId = diff.getNewId().toObjectId().getName();
 		String oldPath = diff.getOldPath();
 		String oldObjectId = diff.getOldId().toObjectId().getName();
-		ChangedFile.Builder cfb = getChangeFile(newPath, kind);
+		ChangedFile.Builder cfb = getChangedFile(newPath, kind);
 		cfb.addChanges(kind);
 		if (!oldPath.equals(newPath))
 			cfb.addPreviousNames(oldPath);
