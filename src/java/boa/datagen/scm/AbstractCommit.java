@@ -33,7 +33,6 @@ import org.eclipse.php.internal.core.ast.nodes.Program;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.mozilla.javascript.CompilerEnvirons;
-import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ast.AstRoot;
 import org.w3c.css.sac.InputSource;
 
@@ -76,22 +75,24 @@ public abstract class AbstractCommit {
 	}
 
 	protected Map<String, Integer> fileNameIndices = new HashMap<String, Integer>();
-
 	protected List<ChangedFile.Builder> changedFiles = new ArrayList<ChangedFile.Builder>();
-
-	protected ChangedFile.Builder getChangeFile(String path) {
+	
+	protected ChangedFile.Builder getChangeFile(String path, ChangeKind changeKind) {
 		ChangedFile.Builder cfb = null;
 		Integer index = fileNameIndices.get(path);
 		if (index == null) {
 			cfb = ChangedFile.newBuilder();
 			cfb.setName(path);
 			cfb.setKind(FileKind.OTHER);
+			cfb.setChange(changeKind);
 			cfb.setKey(0);
 			cfb.setAst(false);
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
-		} else
+		} else {
+			System.err.println("FIND PREVIOUS CFB!!!!!!!!!!!!");
 			cfb = changedFiles.get(index);
+		}
 		return cfb;
 	}
 
@@ -208,8 +209,8 @@ public abstract class AbstractCommit {
 		else if (lowerPath.endsWith(".java")) {
 			final String content = getFileContents(path);
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-			parseJavaFile(path, fb, content, false);
-		} else if (lowerPath.endsWith(".js")) {
+			parseJavaFile(path, fb, content, false); // parse java file
+		} /* else if (lowerPath.endsWith(".js")) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JS_ES1);
@@ -305,7 +306,7 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted PHP5_3: revision " + id + ": file " + path);
 			} else if (debugparse)
 				System.err.println("Accepted PHP5: revision " + id + ": file " + path);
-		}/* else if (lowerPath.endsWith(".html") && parse) {
+		} else if (lowerPath.endsWith(".html") && parse) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.Source_HTML);

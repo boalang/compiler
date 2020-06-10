@@ -211,9 +211,13 @@ public class BoaIntrinsics {
 				for (int i = 0; i < cf.getChangesCount(); i++) {
 //						ChangedFile pcf = revisions.get(cf.getPreviousVersions(i)).getFiles(cf.getPreviousIndices(i));
 //						String name = pcf.getName();
-					String name = cf.getPreviousNames(i);
-					if (!adds.contains(name) && !dels.contains(name))
-						dels.add(name);
+					
+					// In git system, some renamed files might not have previous names
+					if (cf.getPreviousNamesCount() != 0) {
+						String name = cf.getPreviousNames(i);
+						if (!adds.contains(name) && !dels.contains(name))
+							dels.add(name);
+					}
 				}
 				break;
 			default:
@@ -225,7 +229,9 @@ public class BoaIntrinsics {
 				break;
 			}
 		}
-		for (int p : commit.getParentsList()) {
+		// git system only consider diffs from the first parent
+		if (commit.getParentsList() != null && commit.getParentsList().size() != 0) {
+			int p = commit.getParentsList().get(0);
 			if (!queuedCommitIds.contains(p)) {
 				pq.offer(p);
 				queuedCommitIds.add(p);

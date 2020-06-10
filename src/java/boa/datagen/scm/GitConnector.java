@@ -121,14 +121,15 @@ public class GitConnector extends AbstractConnector {
 		RevWalk temprevwalk = new RevWalk(repository);
 		try {
 			revwalk.reset();
-			Set<RevCommit> heads = getHeads();
+			Set<RevCommit> heads = getHeads(); // all branches
+//			RevCommit heads = revwalk.parseCommit(repository.resolve(Constants.HEAD)); // main branch
 			revwalk.markStart(heads);
 			revwalk.sort(RevSort.TOPO, true);
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
-			
+
 			revisionMap = new HashMap<String, Integer>();
-			
+
 			int i = 0;
 			long maxTime = 1000;
 			List<RevCommit> commitList = new ArrayList<RevCommit>();
@@ -139,9 +140,8 @@ public class GitConnector extends AbstractConnector {
 				System.err.println(projectName + " has " + commitList.size() + " commits " + " exceeding the maximum commit size of " + MAX_COMMITS);
 //				return;
 			}
-				
+
 			for (final RevCommit rc: commitList) {
-				i++;
 				long startTime = System.currentTimeMillis();
 				
 				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName);
@@ -163,12 +163,11 @@ public class GitConnector extends AbstractConnector {
 					gc.setMessage(rc.getFullMessage());
 				} catch (Exception e) {}
 				
-				gc.getChangeFiles(rc);
+				gc.updateChangedFiles(rc);
 				gc.fileNameIndices.clear();
 				
 				if (commitList.size() > MAX_COMMITS) {
 					revisionMap.put(gc.id, revisionKeys.size());
-					
 					Revision revision = gc.asProtobuf(projectName);
 					revisionKeys.add(commitWriterLen);
 					BytesWritable bw = new BytesWritable(revision.toByteArray());
@@ -176,10 +175,11 @@ public class GitConnector extends AbstractConnector {
 					commitWriterLen += bw.getLength();
 				} else {
 					revisionMap.put(gc.id, revisions.size());
-					
 					revisions.add(gc);
 				}
-				
+
+				i++; 
+
 				if (debug) {
 					long endTime = System.currentTimeMillis();
 					long time = endTime - startTime;
@@ -313,8 +313,7 @@ public class GitConnector extends AbstractConnector {
 			revwalk.sort(RevSort.TOPO, true);
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
-			
-			for (final RevCommit rc: revwalk)
+			for (final RevCommit rc : revwalk)
 				commits.add(rc.getName());
 		} catch (final IOException e) {
 			e.printStackTrace();
