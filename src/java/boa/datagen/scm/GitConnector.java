@@ -32,6 +32,11 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile.Writer;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.diff.DiffFormatter;
+import org.eclipse.jgit.diff.RawTextComparator;
+import org.eclipse.jgit.diff.DiffEntry.ChangeType;
+import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
@@ -40,7 +45,10 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevSort;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.treewalk.AbstractTreeIterator;
+import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.util.io.NullOutputStream;
 
 import boa.datagen.DefaultProperties;
 import boa.types.Code.Revision;
@@ -301,6 +309,38 @@ public class GitConnector extends AbstractConnector {
 		}
 		tw.close();
 		return snapshot;
+	}
+	
+	public List<String> getDiffFiles(String commit) {
+		ArrayList<String> files = new ArrayList<String>();
+		try {
+			RevCommit child = revwalk.parseCommit(repository.resolve(commit));
+			if (child.getParentCount() == 0) {
+				TreeWalk tw = new TreeWalk(repository);
+				tw.reset();
+				tw.addTree(child.getTree());
+				tw.setRecursive(true);
+				while (tw.next())
+					if (!tw.isSubtree())
+						files.add(tw.getPathString());
+				tw.close();
+			} else {
+				DiffFormatter df = new DiffFormatter(NullOutputStream.INSTANCE);
+				df.setRepository(repository);
+				df.setDiffComparator(RawTextComparator.DEFAULT);
+				df.setDetectRenames(true);
+				AbstractTreeIterator parentIter = new CanonicalTreeParser(null, repository.newObjectReader(), child.getParent(0).getTree());
+				AbstractTreeIterator childIter = new CanonicalTreeParser(null, repository.newObjectReader(), child.getTree());
+				for (final DiffEntry diff : df.scan(parentIter, childIter))
+					files.add(diff.getChangeType() == ChangeType.DELETE ? diff.getOldPath() : diff.getNewPath());
+				df.close();
+			}
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return files;
 	}
 	
 	public List<String> logCommitIds() {

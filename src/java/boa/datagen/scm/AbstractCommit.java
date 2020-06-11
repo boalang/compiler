@@ -33,6 +33,7 @@ import org.eclipse.php.internal.core.ast.nodes.Program;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.mozilla.javascript.CompilerEnvirons;
+import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ast.AstRoot;
 import org.w3c.css.sac.InputSource;
 
@@ -90,7 +91,7 @@ public abstract class AbstractCommit {
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
 		} else {
-			System.err.println("find reduntant changed file during the update proccess");
+			System.err.println("find redundant changed file during the update proccess");
 			cfb = changedFiles.get(index);
 		}
 		return cfb;
@@ -210,7 +211,7 @@ public abstract class AbstractCommit {
 			final String content = getFileContents(path);
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 			parseJavaFile(path, fb, content, false); // parse java file
-		} /* else if (lowerPath.endsWith(".js")) {
+		} else if (lowerPath.endsWith(".js")) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JS_ES1);
@@ -306,7 +307,7 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted PHP5_3: revision " + id + ": file " + path);
 			} else if (debugparse)
 				System.err.println("Accepted PHP5: revision " + id + ": file " + path);
-		} else if (lowerPath.endsWith(".html") && parse) {
+		}/* else if (lowerPath.endsWith(".html") && parse) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.Source_HTML);
