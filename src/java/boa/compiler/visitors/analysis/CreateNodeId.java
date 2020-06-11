@@ -16,8 +16,6 @@
  */
 package boa.compiler.visitors.analysis;
 
-import java.util.*;
-
 import boa.compiler.ast.Node;
 import boa.compiler.visitors.*;
 
@@ -39,7 +37,7 @@ public class CreateNodeId extends AbstractVisitorNoArgNoRet {
 
 	public void start(final CFGBuildingVisitor cfgBuilder) {
 		final java.util.Set<Node> visitedNodes = new java.util.HashSet<Node>();
-		visitedNodes.add(cfgBuilder.currentStartNodes.get(0));
-		createNodeIds(cfgBuilder.currentStartNodes.get(0), visitedNodes);
+		for (final Node n : cfgBuilder.currentStartNodes)
+			createNodeIds(n, visitedNodes);
 	}
 }

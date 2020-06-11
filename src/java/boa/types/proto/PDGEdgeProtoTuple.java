@@ -43,7 +43,7 @@ public class PDGEdgeProtoTuple extends BoaProtoTuple {
         members.add(new EdgeTypeProtoMap());
 
         names.put("src", counter++);
-        members.add(new BoaString());
+        members.add(new PDGNodeProtoTuple());
 
         names.put("dest", counter++);
         members.add(new PDGNodeProtoTuple());
@@ -62,6 +62,6 @@ public class PDGEdgeProtoTuple extends BoaProtoTuple {
     /** @{inheritDoc} */
     @Override
     public String toJavaType() {
-        return "boa.types.control.Edge";
+        return "boa.types.Control.Edge";
     }
 }

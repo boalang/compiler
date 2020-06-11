@@ -86,7 +86,6 @@ import boa.compiler.ast.types.TupleType;
  * @author hungc
  */
 public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
-	private int id = 0;
 	public List<Node> currentStartNodes;
 	public List<Node> currentEndNodes;
 	public List<Node> currentExitNodes;
@@ -111,6 +110,11 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 		if (stats.size() == 0) {
 			singleton(n);
 		} else {
+			currentStartNodes = new ArrayList<Node>(1);
+			currentStartNodes.add(n);
+			currentEndNodes = new ArrayList<Node>(1);
+			currentEndNodes.add(n);
+			currentExitNodes = emptyList;
 			visitStatements(stats);
 			addNode(n);
 			visitList(stats);
@@ -1382,19 +1386,17 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	}
 
 	private static void connectStartNodesToEndNodesOf(Node start, Node end) {
-		for (Node endNode : end.endNodes) {
-			for (Node startNode : start.startNodes) {
-				endNode.successors.add(startNode);
-				startNode.predecessors.add(endNode);
-			}
-		}
+		if (end.endNodes != null)
+			for (Node endNode : end.endNodes)
+				connectToStartNodesOf(endNode, start);
 	}
 
 	private static void connectToStartNodesOf(Node start, Node end) {
-		for (Node startNode : end.startNodes) {
-			startNode.predecessors.add(start);
-			start.successors.add(startNode);
-		}
+		if (end.startNodes != null)
+			for (Node startNode : end.startNodes) {
+				startNode.predecessors.add(start);
+				start.successors.add(startNode);
+			}
 	}
 
 	private void visitStatements(List<? extends Node> statements) {

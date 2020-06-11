@@ -25,7 +25,6 @@ public class GetGithubRepoByUser {
 		String pageContent = "";
 		MetadataCacher mc = new MetadataCacher(url, username, password);
 		int pageNumber = 0;
-		String id = "";
 		File dir = new File(outDir);
 		if (!dir.exists())
 			dir.mkdirs();

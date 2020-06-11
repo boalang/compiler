@@ -45,4 +45,10 @@ public class BoaBool extends BoaScalar {
 	public String toString() {
 		return "bool";
 	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String defaultValue() {
+		return "false";
+	}
 }

@@ -63,7 +63,6 @@ public class GitHubJsonRetriever {
 		
 
 		for (int i = 0;i < namesList.size(); i++) {
-			ArrayList<String> names = new ArrayList<String>();
 			String name = namesList.get(i);
 			boolean nAssigned = true;
 			while (nAssigned) {

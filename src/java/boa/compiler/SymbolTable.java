@@ -33,6 +33,7 @@ import boa.types.proto.enums.*;
 import boa.compiler.ast.Program;
 
 import boa.compiler.ast.Operand;
+import boa.compiler.ast.statements.VisitStatement;
 
 /**
  * @author anthonyu
@@ -58,14 +59,14 @@ public class SymbolTable {
 	private boolean needsBoxing;
 	private Stack<Boolean> isVisitor = new Stack<Boolean>();
 	private Stack<Boolean> isAnonymousTable = new Stack<Boolean>();
+	private Stack<VisitStatement> lastVisit = new Stack<VisitStatement>();
 	private boolean isTraverse = false;
 	private boolean shadowing = false;
+	private boolean isLhs = false;
 
 	private final static BoaProtoTuple[] dslTupleTypes = {
 		new ASTRootProtoTuple(),
 		new AttachmentProtoTuple(),
-		new NodeProtoTuple(),
-		new EdgeProtoTuple(),
 		new CFGProtoTuple(),
 		new CFGNodeProtoTuple(),
 		new CFGEdgeProtoTuple(),
@@ -210,6 +211,7 @@ public class SymbolTable {
 		globalFunctions.addFunction("regex", new BoaFunction(new BoaString(), new BoaType[] { new BoaName(new BoaScalar()) }, "boa.functions.BoaSpecialIntrinsics.regex(\"${0}\")"));
 
 		// clone functions
+		globalFunctions.addFunction("clone", new BoaFunction(new BoaMap(new BoaTypeVar("K"), new BoaTypeVar("V")), new BoaType[] {new BoaMap(new BoaTypeVar("K"), new BoaTypeVar("V"))}, "(java.util.HashMap)${0}.clone()"));
 		globalFunctions.addFunction("clone", new BoaFunction(new BoaSet(new BoaTypeVar("V")), new BoaType[] {new BoaSet(new BoaTypeVar("V"))}, "(java.util.HashSet)${0}.clone()"));
 		globalFunctions.addFunction("clone", new BoaFunction(new BoaString(), new BoaType[] {new BoaString()}, "new String(${0})"));
 
@@ -289,13 +291,13 @@ public class SymbolTable {
 		// bool to int
 		globalFunctions.addFunction("int", new BoaFunction("boa.functions.BoaCasts.booleanToLong", new BoaInt(), new BoaType[] { new BoaBool() }));
 		// float to int
-		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new BoaFloat() }, "((long)${0})"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new BoaFloat() }, "((long)(${0}))"));
 		// time to int
 		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new BoaTime() }, "${0}"));
 		// string to int
 		globalFunctions.addFunction("int", new BoaFunction("java.lang.Long.decode", new BoaInt(), new BoaType[] { new BoaString() }));
 		// string to int with param base
-		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString(), new BoaInt() }, "java.lang.Long.parseLong(${0}, (int)${1})"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString(), new BoaInt() }, "java.lang.Long.parseLong(${0}, (int)(${1}))"));
 
 		// hashing functions
 		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString() }, "((long)${0}.hashCode())"));
@@ -305,7 +307,7 @@ public class SymbolTable {
 			globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { t }, "((long)${0}.hashCode())"));
 
 		// int to float
-		globalFunctions.addFunction("float", new BoaFunction(new BoaFloat(), new BoaType[] { new BoaInt() }, "(double)${0}"));
+		globalFunctions.addFunction("float", new BoaFunction(new BoaFloat(), new BoaType[] { new BoaInt() }, "((double)(${0}))"));
 		// string to float
 		globalFunctions.addFunction("float", new BoaFunction("java.lang.Double.parseDouble", new BoaFloat(), new BoaType[] { new BoaString() }));
 
@@ -347,13 +349,8 @@ public class SymbolTable {
 			globalFunctions.addFunction(s, new BoaFunction("java.lang.Math." + s, new BoaFloat(), new BoaType[] { new BoaFloat() }));
 
 		// expose the binary functions
-		for (final String s : Arrays.asList("pow", "atan2", "hypot"))
-			globalFunctions.addFunction(s, new BoaFunction("java.lang.Math." + s, new BoaFloat(), new BoaType[] { new BoaFloat(), new BoaFloat() }));
-
-		// these three have capitals in the name
-		globalFunctions.addFunction("ieeeremainder", new BoaFunction("java.lang.Math.IEEEremainder", new BoaFloat(), new BoaType[] { new BoaFloat(), new BoaFloat() }));
-		globalFunctions.addFunction("todegrees", new BoaFunction("java.lang.Math.toDegrees", new BoaFloat(), new BoaType[] { new BoaFloat() }));
-		globalFunctions.addFunction("toradians", new BoaFunction("java.lang.Math.toRadians", new BoaFloat(), new BoaType[] { new BoaFloat() }));
+		for (final String s : Arrays.asList("pow", "atan2", "hypot", "IEEEremainder", "toDegrees", "toRadians"))
+			globalFunctions.addFunction(s.toLowerCase(), new BoaFunction("java.lang.Math." + s, new BoaFloat(), new BoaType[] { new BoaFloat(), new BoaFloat() }));
 
 		// max and min
 		for (final String s : Arrays.asList("max", "min"))
@@ -405,7 +402,9 @@ public class SymbolTable {
 		st.locals = new HashMap<String, BoaType>(this.locals);
 		st.isVisitor = this.isVisitor;
 		st.isAnonymousTable = this.isAnonymousTable;
+		st.lastVisit = this.lastVisit;
 		st.shadowing = this.shadowing;
+		st.isLhs = this.isLhs;
 
 		return st;
 	}
@@ -463,6 +462,9 @@ public class SymbolTable {
 	public static BoaType getType(final String id) {
 		if (types.containsKey(id))
 			return types.get(id);
+
+		if (id.equals("traversal"))
+			return new BoaTraversal();
 
 		if (id.startsWith("array of "))
 			return new BoaArray(getType(id.substring("array of ".length()).trim()));
@@ -737,6 +739,18 @@ public class SymbolTable {
 		return this.isVisitor.peek();
 	}
 
+	public void setLastVisit(final VisitStatement visit) {
+		this.lastVisit.push(visit);
+	}
+
+	public void unsetLastVisit() {
+		this.lastVisit.pop();
+	}
+
+	public VisitStatement getLastVisit() {
+		return this.lastVisit.peek();
+	}
+
 	public void setShadowing(final boolean shadowing) {
 		this.shadowing = shadowing;
 	}
@@ -755,6 +769,14 @@ public class SymbolTable {
 
 	public Program getView(final String viewName) {
 		return views.get(viewName);
+	}
+
+	public void setIsLhs(final boolean isLhs) {
+		this.isLhs = isLhs;
+	}
+
+	public boolean getIsLhs() {
+		return this.isLhs;
 	}
 
 	@Override

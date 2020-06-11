@@ -7,10 +7,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map.Entry;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+
 import boa.types.Code.CodeRepository;
 import boa.types.Code.CodeRepository.RepositoryKind;
 import boa.types.Toplevel.Project;

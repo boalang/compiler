@@ -25,7 +25,6 @@ import java.net.URLClassLoader;
 import java.util.UUID;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.io.FileUtils;
@@ -125,7 +124,7 @@ public class BoaEvaluator extends BoaMain {
 
 			method.invoke(null, (Object)actualArgs);
 		} catch (final Throwable e) {
-			System.err.print(e);
+			System.err.print(e.getCause()); // use getCause to get more information
 		} finally {
 			if (cl != null)
 				try {

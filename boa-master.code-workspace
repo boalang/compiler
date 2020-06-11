@@ -1,0 +1,34 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"peacock.color": "#880000",
+		"workbench.colorCustomizations": {
+			"activityBar.background": "#bb0000",
+			"activityBar.foreground": "#e7e7e7",
+			"activityBar.inactiveForeground": "#e7e7e799",
+			"activityBarBadge.background": "#002000",
+			"activityBarBadge.foreground": "#e7e7e7",
+			"titleBar.activeBackground": "#880000",
+			"titleBar.inactiveBackground": "#88000099",
+			"titleBar.activeForeground": "#e7e7e7",
+			"titleBar.inactiveForeground": "#e7e7e799",
+			"statusBar.background": "#880000",
+			"statusBarItem.hoverBackground": "#bb0000",
+			"statusBar.foreground": "#e7e7e7",
+			"activityBar.activeBackground": "#bb0000",
+			"activityBar.activeBorder": "#002000",
+			"statusBar.border": "#880000",
+			"titleBar.border": "#880000"
+		}
+	},
+	"extensions": {
+		"recommendations": [
+			"vscjava.vscode-java-pack",
+			"ms-vsliveshare.vsliveshare-pack"
+		]
+	}
+}

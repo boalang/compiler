@@ -1,4 +1,4 @@
-Program(jobId, numreducers, staticDeclarations, staticStatements, statements, combineTables, reduceTables, splitsize, seed, isLocal, outputVariableNames) ::= <<
+Program(jobId, staticDeclarations, staticStatements, statements, combineTables, reduceTables, splitsize, seed, isLocal, outputVariableNames) ::= <<
 package boa;
 
 public class Query extends boa.runtime.BoaRunner {
@@ -16,8 +16,8 @@ public class Query extends boa.runtime.BoaRunner {
 		job.setCombinerClass(BoaCombiner.class);
 		<endif>
 		<if(isLocal)>
-        job.getConfiguration().setClass("mapred.map.output.compression.codec", org.apache.hadoop.io.compress.DefaultCodec.class, org.apache.hadoop.io.compress.CompressionCodec.class);
-        <endif>
+		job.getConfiguration().setClass("mapred.map.output.compression.codec", org.apache.hadoop.io.compress.DefaultCodec.class, org.apache.hadoop.io.compress.CompressionCodec.class);
+		<endif>
 		job.setReducerClass(BoaReducer.class);
 
 		return job;
@@ -33,8 +33,8 @@ public class Query extends boa.runtime.BoaRunner {
 
 	public static void main(String[] args) throws Exception {
 		<if(isLocal)>org.apache.hadoop.util.ToolRunner.run(new Query(), args);
-		<else> System.exit(org.apache.hadoop.util.ToolRunner.run(new Query(), args));
-	    <endif>
+		<else>System.exit(org.apache.hadoop.util.ToolRunner.run(new Query(), args));
+		<endif>
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class Query extends boa.runtime.BoaRunner {
 		
 		final org.apache.hadoop.fs.Path[] ins = new org.apache.hadoop.fs.Path[1];
 		ins[0] = new org.apache.hadoop.fs.Path(args[0] + "/projects.seq");
-		
+
 		final org.apache.hadoop.mapreduce.Job jb = job(ins, new org.apache.hadoop.fs.Path(args[1]));
 
 		org.apache.hadoop.conf.Configuration configuration = jb.getConfiguration();
@@ -76,7 +76,7 @@ public class Query extends boa.runtime.BoaRunner {
 
 		jb.setInputFormatClass(org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat.class);
 
-		jb.setNumReduceTasks(<numreducers>);
+		jb.setNumReduceTasks(<length(outputVariableNames)>);
 
 		if (id > 0)
 			configuration.setInt("boa.hadoop.jobid", id);
@@ -123,16 +123,14 @@ public class Query extends boa.runtime.BoaRunner {
 	}
 
 	public static class BoaMapper extends boa.runtime.BoaMapper {
-		static {
-			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames>});
+		<SetVarNames(outputVariableNames)>
+		<staticDeclarations>
+		<if(staticStatements)>
+		{
+			<staticStatements>
 		}
-        <staticDeclarations>
-        <if(staticStatements)>
-        {
-            <staticStatements>
-        }
-        
-        <endif>
+
+		<endif>
 		/** {@inheritDoc} */
 		@Override
 		protected void map(final org.apache.hadoop.io.Text key, final org.apache.hadoop.io.BytesWritable value, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws java.io.IOException {
@@ -164,39 +162,41 @@ public class Query extends boa.runtime.BoaRunner {
 	}
 	
 	public static class BoaCombiner extends boa.runtime.BoaCombiner {
-		static {
-			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames>});
-		}
+		<SetVarNames(outputVariableNames)>
 		public BoaCombiner() {
 			super();
-			
+
 			<combineTables:{t | <t><\n>}>		}
 	}
 	
 	public static class BoaReducer extends boa.runtime.BoaReducer {
-		static {
-			boa.runtime.BoaPartitioner.setVariableNames(new String[] {<outputVariableNames>});
-		}
+		<SetVarNames(outputVariableNames)>
 		public BoaReducer() {
 			super();
 
 			<reduceTables:{t | <t><\n>}>		}
 	}
-	
+
 	@Override
 	public org.apache.hadoop.mapreduce.Mapper getMapper() {
 		return new BoaMapper();
 	}
-	
+
 	@Override
 	public boa.runtime.BoaCombiner getCombiner() {
 		return new BoaCombiner();
 	}
-	
+
 	@Override
 	public boa.runtime.BoaReducer getReducer() {
 		return new BoaReducer();
 	}
+}
+>>
+
+SetVarNames(vars) ::= <<
+static {
+	boa.runtime.BoaPartitioner.setVariableNames(new String[] {<vars:{v|<v>}; separator=", ">});
 }
 >>
 

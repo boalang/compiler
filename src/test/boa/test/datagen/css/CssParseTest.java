@@ -4,11 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 
+import com.steadystate.css.dom.CSSStyleSheetImpl;
+
 import org.junit.Test;
 import org.w3c.css.sac.InputSource;
-
-import com.steadystate.css.dom.CSSStyleSheetImpl;
-import com.steadystate.css.parser.*;
 
 import boa.datagen.util.CssVisitor;
 import boa.datagen.util.FileIO;

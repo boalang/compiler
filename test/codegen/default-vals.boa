@@ -1,0 +1,15 @@
+o: output collection of string;
+
+s: string;
+i: int;
+b: bool;
+t: time;
+f: float;
+
+e: enum { A = "yes", B = "no" };
+v: visitor;
+fun: function(x: int, y: int) : bool;
+tr: traversal;
+fp: fixp;
+
+o << s + ",hi";

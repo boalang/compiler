@@ -25,7 +25,6 @@ import boa.types.BoaInt;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
-import boa.types.proto.enums.ChangeKindProtoMap;
 import boa.types.proto.enums.CommentKindProtoMap;
 
 /**

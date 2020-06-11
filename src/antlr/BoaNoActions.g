@@ -488,39 +488,39 @@ RBRACKET  : ']';
 // operators
 //
 
-OR     : 'or';
-ONEOR  : '|';
-TWOOR  : '||';
-AND    : 'and';
-ONEAND : '&';
-TWOAND : '&&';
-INCR   : '++';
-DECR   : '--';
-EQEQ   : '==';
-NEQ    : '!=';
-LT     : '<';
-LTEQ   : '<=';
-GT     : '>';
-GTEQ   : '>=';
-PLUS   : '+';
-MINUS  : '-';
-XOR    : '^';
-STAR   : '*';
-DIV    : '/';
-MOD    : '%';
-RSHIFT : '>>';
-NEG    : '~';
-INV    : '!';
-PLUSEQ : '+=';
-MINUSEQ: '-=';
-STAREQ : '*=';
-DIVEQ  : '/=';
-ONEOREQ: '|=';
-XOREQ  : '^=';
-MODEQ  : '%=';
-ONEANDEQ:'&=';
-RSHIFTEQ:'>>=';
-LSHIFTEQ:'<<=';
+OR       : 'or';
+ONEOR    : '|';
+TWOOR    : '||';
+AND      : 'and';
+ONEAND   : '&';
+TWOAND   : '&&';
+INCR     : '++';
+DECR     : '--';
+EQEQ     : '==';
+NEQ      : '!=';
+LT       : '<';
+LTEQ     : '<=';
+GT       : '>';
+GTEQ     : '>=';
+PLUS     : '+';
+MINUS    : '-';
+XOR      : '^';
+STAR     : '*';
+DIV      : '/';
+MOD      : '%';
+RSHIFT   : '>>';
+NEG      : '~';
+INV      : '!';
+PLUSEQ   : '+=';
+MINUSEQ  : '-=';
+STAREQ   : '*=';
+DIVEQ    : '/=';
+ONEOREQ  : '|=';
+XOREQ    : '^=';
+MODEQ    : '%=';
+ONEANDEQ : '&=';
+RSHIFTEQ : '>>=';
+LSHIFTEQ : '<<=';
 
 //
 // other
@@ -642,8 +642,8 @@ TimeLiteral
 // views
 //
 
-VIEW        : 'view';
-TABLE       : 'table';
+VIEW		: 'view';
+TABLE		: 'table';
 VIEWTABLE	: 'J' DecimalNumeral (DIV Identifier)+
 			| '@' Identifier DIV Identifier (DIV Identifier)+
 			| Identifier (DIV Identifier)+

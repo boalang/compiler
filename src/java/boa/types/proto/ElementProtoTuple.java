@@ -14,7 +14,7 @@ import boa.types.proto.enums.ElementKindProtoMap;
 public class ElementProtoTuple extends BoaProtoTuple {
 	private final static List<BoaType> members = new ArrayList<BoaType>();
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
-	
+
 	static {
 		int counter = 0;
 
@@ -51,17 +51,14 @@ public class ElementProtoTuple extends BoaProtoTuple {
 		names.put("processing_instruction", counter++);
 		members.add(new BoaProtoList(new AttributeProtoTuple()));
 	}
-	
+
 	public ElementProtoTuple() {
 		super(members, names);
-		// TODO Auto-generated constructor stub
 	}
-	
+
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Ast.Element";
 	}
 }
-
-

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Hridesh Rajan, Robert Dyer,
+ * Copyright 2019, Hridesh Rajan, Robert Dyer, Che Shian Hung
  *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
@@ -17,21 +17,22 @@
  */
 package boa.io;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.FSDataInputStream;
-import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapred.JobClient;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.JobID;
 import org.apache.hadoop.mapred.RunningJob;
 import org.apache.hadoop.mapred.TaskCompletionEvent;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.JobStatus;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter;
 
 /**
  * A {@link FileOutputCommitter} that stores the job results into a database.
@@ -145,7 +146,9 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 			String output = "";
 
 			// ensure the reducer class is initialized in the cleanup task
-			context.getReducerClass().newInstance();
+			try {
+				context.getReducerClass().getConstructor().newInstance();
+			} catch (final ReflectiveOperationException e) { }
 
 			while (true) {
 				final Path path = new Path(outputPath, "part-r-" + String.format("%05d", partNum));
@@ -158,7 +161,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
                 /* FIXME later
 				if (in != null)
 					try { in.close(); } catch (final Exception e) { e.printStackTrace(); }
-				in = fileSystem.open(path);
+				in = fileSystem.open(newpath);
 
 				int numBytes = 0;
 

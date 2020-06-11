@@ -161,6 +161,15 @@ private class <name> extends boa.runtime.Tuple
 		<fields, types, scalars, valids:{field,type,scalar,valid|<if(valid)>v.addT(boa.io.EmitKey.toValue(this.___<field>));<endif>}; separator="\n">
 		return v.build();
 	}
+
+	public String toString() {
+		String s = "{";
+		<fields:{field|
+if (s.length() > 1) s += ",";
+s += " <field> = " + this.___<field>;}; separator="\n">
+		s += " }";
+		return s;
+	}
 }<\n>
 >>
 

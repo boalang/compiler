@@ -562,7 +562,7 @@ parenExpression returns [ParenExpression ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: LPAREN e=expression RPAREN                   { $ast = new ParenExpression($e.ast); }
+	: LPAREN e=expression RPAREN { $ast = new ParenExpression($e.ast); }
 	;
 
 functionExpression returns [FunctionExpression ast]
@@ -776,39 +776,39 @@ RBRACKET  : ']';
 // operators
 //
 
-OR     : 'or';
-ONEOR  : '|';
-TWOOR  : '||';
-AND    : 'and';
-ONEAND : '&';
-TWOAND : '&&';
-INCR   : '++';
-DECR   : '--';
-EQEQ   : '==';
-NEQ    : '!=';
-LT     : '<';
-LTEQ   : '<=';
-GT     : '>';
-GTEQ   : '>=';
-PLUS   : '+';
-MINUS  : '-';
-XOR    : '^';
-STAR   : '*';
-DIV    : '/';
-MOD    : '%';
-RSHIFT : '>>';
-NEG    : '~';
-INV    : '!';
-PLUSEQ : '+=';
-MINUSEQ: '-=';
-STAREQ : '*=';
-DIVEQ  : '/=';
-ONEOREQ: '|=';
-XOREQ  : '^=';
-MODEQ  : '%=';
-ONEANDEQ:'&=';
-RSHIFTEQ:'>>=';
-LSHIFTEQ:'<<=';
+OR       : 'or';
+ONEOR    : '|';
+TWOOR    : '||';
+AND      : 'and';
+ONEAND   : '&';
+TWOAND   : '&&';
+INCR     : '++';
+DECR     : '--';
+EQEQ     : '==';
+NEQ      : '!=';
+LT       : '<';
+LTEQ     : '<=';
+GT       : '>';
+GTEQ     : '>=';
+PLUS     : '+';
+MINUS    : '-';
+XOR      : '^';
+STAR     : '*';
+DIV      : '/';
+MOD      : '%';
+RSHIFT   : '>>';
+NEG      : '~';
+INV      : '!';
+PLUSEQ   : '+=';
+MINUSEQ  : '-=';
+STAREQ   : '*=';
+DIVEQ    : '/=';
+ONEOREQ  : '|=';
+XOREQ    : '^=';
+MODEQ    : '%=';
+ONEANDEQ : '&=';
+RSHIFTEQ : '>>=';
+LSHIFTEQ : '<<=';
 
 //
 // other
@@ -930,8 +930,8 @@ TimeLiteral
 // views
 //
 
-VIEW        : 'view';
-TABLE       : 'table';
+VIEW		: 'view';
+TABLE		: 'table';
 VIEWTABLE	: 'J' DecimalNumeral (DIV Identifier)+
 			| '@' Identifier DIV Identifier (DIV Identifier)+
 			| Identifier (DIV Identifier)+

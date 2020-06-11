@@ -98,4 +98,14 @@ public class TestTypecheckBad extends BaseTest {
 	public void addSetWrongVal() throws IOException {
 		typecheck(load(badDir + "add-set-wrong-val.boa"), "no such function add([set of string, ChangedFile])");
 	}
+
+	@Test
+	public void aggregatorInEmit() throws IOException {
+		typecheck(load(badDir + "aggregator-in-emit.boa"), "'sum' is an aggregator function - you must declare an output variable that uses this function, then emit to it");
+	}
+
+	@Test
+	public void stopInAfter() throws IOException {
+		typecheck(load(badDir + "stop-in-after.boa"), "Stop statement not allowed inside 'after' visits");
+	}
 }

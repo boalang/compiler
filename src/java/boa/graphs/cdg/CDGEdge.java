@@ -17,7 +17,6 @@
 package boa.graphs.cdg;
 
 import boa.graphs.Edge;
-import boa.graphs.Node;
 
 /**
  * Control Dependence Graph edge

@@ -69,6 +69,12 @@ public class BoaName extends BoaScalar {
 		return this.type.toBoxedJavaType();
 	}
 
+	/** {@inheritDoc} */
+	@Override
+	public String defaultValue() {
+		return this.type.defaultValue();
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

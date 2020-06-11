@@ -117,10 +117,6 @@ public class DDG {
         return defUseChain;
     }
 
-    private Set<DDGNode> getUseNodes(final DDGNode node) {
-        return defUseChain.get(node);
-    }
-
     /**
      * Gives back all the def nodes for the given variable
      *

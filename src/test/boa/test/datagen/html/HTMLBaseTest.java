@@ -6,9 +6,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import boa.datagen.util.HtmlVisitor;
-import boa.datagen.util.PHPVisitor;
 import boa.test.compiler.BaseTest;
-import boa.types.Ast.ASTRoot;
 
 public class HTMLBaseTest extends BaseTest {
 

@@ -89,7 +89,7 @@ public class Properties {
     @SuppressWarnings("unchecked")
 	public static <T> T newInstance(final String name) {
 		try {
-			return (T)(Class.forName(name).newInstance());
+			return (T)(Class.forName(name).getDeclaredConstructor().newInstance());
 		} catch (final Exception e) {
 			e.printStackTrace();
 			System.exit(-1);

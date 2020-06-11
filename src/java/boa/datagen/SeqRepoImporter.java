@@ -51,31 +51,32 @@ public class SeqRepoImporter {
 	private final static boolean cache = Properties.getBoolean("cache", DefaultProperties.CACHE);
 
 	private final static File gitRootPath = new File(Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
-
+	final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
+	final static String jsonCachePath = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
+	
 	private final static HashSet<String> processedProjectIds = new HashSet<String>();
 
 	private static Configuration conf = null;
 	private static FileSystem fileSystem = null;
 	private static String base = null;
-
-	private final static int poolSize = Integer.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
-	public static final int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer.valueOf(DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS);
-	final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
-	final static String jsonCachePath = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
-	final static boolean STORE_COMMITS = DefaultProperties.STORE_COMMITS;
 	private static boolean done = false;
+
+	private final static int POOL_SIZE = Integer.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
+	private final static int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer.valueOf(DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS);
+	private final static boolean STORE_COMMITS = DefaultProperties.STORE_COMMITS;
 	
 	public static void main(String[] args) throws IOException, InterruptedException {
 
 		conf = new Configuration();
 		fileSystem = FileSystem.get(conf);
 		base = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
-		
+
 		getProcessedProjects();
 
-		ImportTask[] workers = new ImportTask[poolSize];
-		Thread[] threads = new Thread[poolSize];
-		for (int i = 0; i < poolSize; i++) {
+		// assign each thread with a worker
+		ImportTask[] workers = new ImportTask[POOL_SIZE];
+		Thread[] threads = new Thread[POOL_SIZE];
+		for (int i = 0; i < POOL_SIZE; i++) {
 			workers[i] = new ImportTask(i);
 			threads[i] = new Thread(workers[i]);
 			threads[i].start();
@@ -102,22 +103,23 @@ public class SeqRepoImporter {
 						JsonObject rp = repoArray.get(i).getAsJsonObject();
 						RepoMetadata repo = new RepoMetadata(rp);
 						if (repo.id != null && repo.name != null && !processedProjectIds.contains(repo.id)) {
-							Project protobufRepo = repo.toBoaMetaDataProtobuf();
+							Project project = repo.toBoaMetaDataProtobuf(); // current project instance only contains metadata 
 
 							// System.out.println(jRepo.toString());
 							boolean assigned = false;
 							while (!assigned) {
-								for (int j = 0; j < poolSize; j++) {
+								for (int j = 0; j < POOL_SIZE; j++) {
 									if (workers[j].isReady()) {
-										workers[j].setProject(protobufRepo);
-										workers[j].ready = false;
+										workers[j].setProject(project);
+										workers[j].setReady(false);
 										assigned = true;
 										break;
 									}
 								}
-								Thread.sleep(100);
+//								Thread.sleep(100);
 							}
-							System.out.println((++counter) + ": " + file.getPath() + ": " + i + ": " + repo.id + " " + repo.name);
+							System.out.println("Assigned the " + (++counter) + "th project: " + repo.name + " with id: " + repo.id  
+									+ " from the " + i + "th object of the json file: " + file.getPath());
 						}
 					} catch (Exception e) {
 						System.err.println("Error proccessing item " + i + " of page " + file.getPath());
@@ -126,16 +128,24 @@ public class SeqRepoImporter {
 				}
 			}
 		}
-		for (int j = 0; j < poolSize; j++) {
+		for (int j = 0; j < POOL_SIZE; j++) {
 			while (!workers[j].isReady())
 				Thread.sleep(100);
 		}
-		done = true;
+		setDone(true);
 		
 		// wait for workers to close writers and finish
 		for (Thread thread : threads)
 			while (thread.isAlive())
 				Thread.sleep(1000);
+	}
+
+	synchronized static boolean getDone() {
+		return SeqRepoImporter.done;
+	}
+
+	synchronized static void setDone(boolean done) {
+		SeqRepoImporter.done = done;
 	}
 
 	private static void getProcessedProjects() throws IOException {
@@ -146,17 +156,23 @@ public class SeqRepoImporter {
 			if (name.endsWith(".seq")) {
 				SequenceFile.Reader r = null;
 				try {
+					// the project sequence file contain multiple projects
 					r = new SequenceFile.Reader(fileSystem, file.getPath(), conf);
 					final Text key = new Text();
-					while (r.next(key)) {
-						processedProjectIds.add(key.toString());
-					}
+					HashSet<String> projectIds = new HashSet<>();
+					while (r.next(key))
+						projectIds.add(key.toString());
+					// update processed project set if only if all projects in the sequence file are not corrupted 
+					processedProjectIds.addAll(projectIds); 
 					r.close();
 				} catch (IOException e) {
 					if (r != null)
 						r.close();
-					for (String dir : new String[] { "ast", "commit", "source" })
+					// if one project is corrupted, then delete the project sequence file and its related sequence files
+					for (String dir : new String[] { "project", "ast", "commit", "source" }) {
 						fileSystem.delete(new Path(base + "/" + dir + "/" + name), false);
+						System.out.println("remove " + base + "/" + dir + "/" + name);
+					}
 				}
 			}
 		}
@@ -170,26 +186,19 @@ public class SeqRepoImporter {
 		private String suffix;
 		private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
 		private long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
-		private boolean ready = true;
-		Project project;
+		private volatile boolean ready = true;
+		private volatile Project project;
 
 		public ImportTask(int id) {
-			this.id = id;
+			setId(id);
 		}
 
-		public void setProject(Project protobufRepo) {
-			this.project = protobufRepo;
-		};
-
-		public boolean isReady() {
-			return this.ready;
-		}
-
-		public void openWriters() {
+		public synchronized void openWriters() {
 			long time = System.currentTimeMillis();
-			suffix = id + "-" + time + ".seq";
+			suffix = getId() + "-" + time + ".seq";
 			while (true) {
 				try {
+					System.out.println(Thread.currentThread().getName() + " " + getId() + " " + suffix + " starts!");
 					projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/project/" + suffix),
 							Text.class, BytesWritable.class, CompressionType.BLOCK);
 					astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/ast/" + suffix),
@@ -212,13 +221,14 @@ public class SeqRepoImporter {
 			}
 		}
 
-		public void closeWriters() {
+		public synchronized void closeWriters() {
 			while (true) {
 				try {
 					projectWriter.close();
 					astWriter.close();
 					commitWriter.close();
 					contentWriter.close();
+					System.out.println(Thread.currentThread().getName() + " " + getId() + " " + suffix + " done!!!");
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
@@ -238,8 +248,9 @@ public class SeqRepoImporter {
 		public void run() {
 			openWriters();
 			while (true) {
-				while (this.ready) {
-					if (done)
+				
+				while (isReady()) {
+					if (getDone())
 						break;
 					try {
 						Thread.sleep(10);
@@ -247,28 +258,37 @@ public class SeqRepoImporter {
 						e.printStackTrace();
 					}
 				}
-				if (done)
+				
+				if (getDone())
 					break;
-				try {
+				
+				storeProject : try {
 					final String name = project.getName();
 
 					if (debug)
-						System.out.println(
-								Thread.currentThread().getId() + " Processing " + (allCounter+1) + " project " + project.getId() + " " + name);
+						System.out.println(Thread.currentThread().getName() + " id: " + Thread.currentThread().getId()
+								+ " is processing the " + (allCounter + 1) + "th project: " + name + " with id: "+ project.getId());
 					project = storeRepository(project, 0);
+					
+					if (project == null) // if the project is null then skip this process
+						break storeProject;
+					
 					if (debug)
-						System.out.println(
-								Thread.currentThread().getId() + " Putting in sequence file: " + project.getId());
+						System.out.println(Thread.currentThread().getName() + " id: " + Thread.currentThread().getId() 
+								+ " is putting project " + project.getName() + " in sequence file");
 
+					// store project into sequence file
 					BytesWritable bw = new BytesWritable(project.toByteArray());
 					if (bw.getLength() <= MAX_SIZE_FOR_PROJECT_WITH_COMMITS 
 							|| (project.getCodeRepositoriesCount() > 0 && project.getCodeRepositories(0).getRevisionKeysCount() > 0)) {
+						// Approach 1: if the Project size is acceptable, then directly append the Project instance into the sequence file
 						try {
 							projectWriter.append(new Text(project.getId()), bw);
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
 					} else {
+						// Approach 2: if the size is too large, extract Commit instances and append them into commit sequence file.
 						Project.Builder pb = Project.newBuilder(project);
 						for (CodeRepository.Builder cb : pb.getCodeRepositoriesBuilderList()) {
 							for (Revision.Builder rb : cb.getRevisionsBuilderList()) {
@@ -295,37 +315,38 @@ public class SeqRepoImporter {
 				} catch (Throwable e) {
 					e.printStackTrace();
 				}
-				this.ready = true;
+				setReady(true);
 			}
 			closeWriters();
 		}
 
-		private Project storeRepository(final Project project, final int i) {
-			final CodeRepository repo = project.getCodeRepositories(i);
+		private synchronized Project storeRepository(final Project project, final int i) {
+			final CodeRepository repo = project.getCodeRepositories(i);   // this is an empty code repo
 			final Project.Builder projBuilder = Project.newBuilder(project);
 
 			final String name = project.getName();
 			File gitDir = new File(gitRootPath + "/" + name);
 			
 			if (isFiltered(project))
-				return project;
+				return null; // return null to skip empty project
 
-			// If repository is already cloned delete then re-clone, this should
-			// only happen during recover
+			// If repository is already cloned delete then re-clone, this should only happen during recover
 			FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitRootPath + "/" + project.getName());
 			filecheck.run();
 
+			// clone repository
 			String[] args = { repo.getUrl(), gitDir.getAbsolutePath() };
 			try {
 				RepositoryCloner.clone(args);
 			} catch (Throwable t) {
 				System.err.println("Error cloning " + repo.getUrl());
 				t.printStackTrace();
-				return project;
+				return null; // return null to skip empty project
 			}
 
 			if (debug)
-				System.out.println(Thread.currentThread().getId() + " Has repository: " + name);
+				System.out.println(Thread.currentThread().getName() + " id: " + Thread.currentThread().getId() + " cloned repository: " + name);
+
 			AbstractConnector conn = null;
 			try {
 				conn = new GitConnector(gitDir.getAbsolutePath(), project.getName(), astWriter, astWriterLen, commitWriter, commitWriterLen,
@@ -334,29 +355,32 @@ public class SeqRepoImporter {
 				if (STORE_COMMITS) {
 					List<Object> revisions = conn.getRevisions(project.getName());
 					if (!revisions.isEmpty()) {
-						if (revisions.get(0) instanceof Revision) {
+						if (revisions.get(0) instanceof Revision) { // Approach 1: if the revision object is Revision, add it into the repoBuilder
 							for (final Object rev : revisions) {
 								final Revision.Builder revBuilder = Revision.newBuilder((Revision) rev);
 								repoBuilder.addRevisions(revBuilder);
 							}
-						} else {
+						} else { // Approach 2: else save it as a key pointing to the Revision instance in the commit sequence file
 							for (final Object rev : revisions)
 								repoBuilder.addRevisionKeys((Long) rev);
 						}
 					}
 				}
+
 				if (debug)
-					System.out.println(Thread.currentThread().getId() + " Build head snapshot");
-				repoBuilder.setHead(conn.getHeadCommitOffset());
+					System.out.println(Thread.currentThread().getName() + " id: " + Thread.currentThread().getId() + " is building head snapshot for " + name);
+
+				repoBuilder.setHead(conn.getHeadCommitOffset()); // head commit indicates the latest commit which may not be in the default branch
 				repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot());
-				
 				repoBuilder.addAllBranches(conn.getBranchIndices());
 				repoBuilder.addAllBranchNames(conn.getBranchNames());
 				repoBuilder.addAllTags(conn.getTagIndices());
 				repoBuilder.addAllTagNames(conn.getTagNames());
 
 				projBuilder.setCodeRepositories(i, repoBuilder);
-				return projBuilder.build();
+
+				return projBuilder.build(); // return the completely builded project
+
 			} catch (final Throwable e) {
 				printError(e, "unknown error", project.getName());
 			} finally {
@@ -371,14 +395,14 @@ public class SeqRepoImporter {
 					}
 				}
 				if (!cache) {
-					new Thread(new FileIO.DirectoryRemover(gitRootPath + "/" + project.getName())).start();
+					new Thread(new FileIO.DirectoryRemover(gitRootPath + "/" + name)).start();
 				}
 			}
 
-			return project;
+			return null; // return null to skip error project
 		}
 
-		private boolean isFiltered(Project project) {
+		private synchronized boolean isFiltered(Project project) {
 			if (project.getForked())
 				return true;
 //			if (project.getStars() < 2 && project.getSize() < 100)
@@ -395,9 +419,33 @@ public class SeqRepoImporter {
 				return false;
 			return true;
 		}
+
+		public synchronized Project getProject() {
+			return this.project;
+		}
+		
+		public synchronized void setProject(Project project) {
+			this.project = project;
+		};
+
+		public synchronized boolean isReady() {
+			return this.ready;
+		}
+
+		public synchronized void setReady(boolean ready) {
+			this.ready = ready;
+		}
+
+		public synchronized int getId() {
+			return this.id;
+		}
+
+		public synchronized void setId(int id) {
+			this.id = id;
+		}
 	}
 
-	public static void printError(final Throwable e, final String message, String name) {
+	public synchronized static void printError(final Throwable e, final String message, String name) {
 		System.err.println("ERR: " + message + " proccessing: " + name);
 		if (debug) {
 			e.printStackTrace();
@@ -405,4 +453,6 @@ public class SeqRepoImporter {
 		} else
 			System.err.println(e.getMessage());
 	}
+	
+
 }

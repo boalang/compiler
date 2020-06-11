@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import boa.types.BoaProtoTuple;
-import boa.types.BoaString;
 import boa.types.BoaType;
 import boa.types.proto.enums.EdgeLabelProtoMap;
 
@@ -39,7 +38,7 @@ public class CDGEdgeProtoTuple extends BoaProtoTuple {
         int counter = 0;
 
         names.put("src", counter++);
-        members.add(new BoaString());
+        members.add(new CDGNodeProtoTuple());
 
         names.put("dest", counter++);
         members.add(new CDGNodeProtoTuple());
@@ -58,6 +57,6 @@ public class CDGEdgeProtoTuple extends BoaProtoTuple {
     /** @{inheritDoc} */
     @Override
     public String toJavaType() {
-        return "boa.types.control.Edge";
+        return "boa.types.Control.Edge";
     }
 }

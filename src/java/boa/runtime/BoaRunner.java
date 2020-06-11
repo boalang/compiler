@@ -102,6 +102,8 @@ public abstract class BoaRunner extends Configured implements Tool {
 		job.setOutputValueClass(BytesWritable.class);
 		job.setOutputKeyClass(NullWritable.class);
 
+		job.setPartitionerClass(BoaPartitioner.class);
+
 		return job;
 	}
 

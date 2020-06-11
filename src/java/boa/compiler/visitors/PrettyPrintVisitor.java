@@ -18,14 +18,59 @@
 package boa.compiler.visitors;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 
-import boa.compiler.ast.*;
-import boa.compiler.ast.expressions.*;
-import boa.compiler.ast.literals.*;
-import boa.compiler.ast.statements.*;
-import boa.compiler.ast.types.*;
+import boa.compiler.ast.Call;
+import boa.compiler.ast.Comparison;
+import boa.compiler.ast.Component;
+import boa.compiler.ast.Composite;
+import boa.compiler.ast.Conjunction;
+import boa.compiler.ast.Factor;
+import boa.compiler.ast.Identifier;
+import boa.compiler.ast.Index;
+import boa.compiler.ast.Node;
+import boa.compiler.ast.Pair;
+import boa.compiler.ast.Selector;
+import boa.compiler.ast.Term;
+import boa.compiler.ast.UnaryFactor;
+import boa.compiler.ast.expressions.Expression;
+import boa.compiler.ast.expressions.ParenExpression;
+import boa.compiler.ast.expressions.SimpleExpr;
+import boa.compiler.ast.literals.CharLiteral;
+import boa.compiler.ast.literals.FloatLiteral;
+import boa.compiler.ast.literals.IntegerLiteral;
+import boa.compiler.ast.literals.StringLiteral;
+import boa.compiler.ast.literals.TimeLiteral;
+import boa.compiler.ast.statements.AssignmentStatement;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.BreakStatement;
+import boa.compiler.ast.statements.ContinueStatement;
+import boa.compiler.ast.statements.DoStatement;
+import boa.compiler.ast.statements.EmitStatement;
+import boa.compiler.ast.statements.ExistsStatement;
+import boa.compiler.ast.statements.ExprStatement;
+import boa.compiler.ast.statements.ForStatement;
+import boa.compiler.ast.statements.ForeachStatement;
+import boa.compiler.ast.statements.IfAllStatement;
+import boa.compiler.ast.statements.IfStatement;
+import boa.compiler.ast.statements.PostfixStatement;
+import boa.compiler.ast.statements.ReturnStatement;
+import boa.compiler.ast.statements.StopStatement;
+import boa.compiler.ast.statements.SwitchCase;
+import boa.compiler.ast.statements.SwitchStatement;
+import boa.compiler.ast.statements.TypeDecl;
+import boa.compiler.ast.statements.VarDeclStatement;
+import boa.compiler.ast.statements.VisitStatement;
+import boa.compiler.ast.statements.WhileStatement;
+import boa.compiler.ast.types.ArrayType;
+import boa.compiler.ast.types.FunctionType;
+import boa.compiler.ast.types.MapType;
+import boa.compiler.ast.types.OutputType;
+import boa.compiler.ast.types.QueueType;
+import boa.compiler.ast.types.SetType;
+import boa.compiler.ast.types.StackType;
+import boa.compiler.ast.types.TupleType;
+import boa.compiler.ast.types.VisitorType;
 
 /**
  * A debugging visitor class that pretty prints the Boa AST.

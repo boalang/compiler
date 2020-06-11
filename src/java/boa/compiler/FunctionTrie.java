@@ -39,17 +39,14 @@ import boa.types.BoaProtoTuple;
  * @author rdyer
  */
 public class FunctionTrie {
-	@SuppressWarnings("rawtypes")
-	private final LinkedHashMap trie;
+	private final LinkedHashMap<Object,Object> trie;
 
-	@SuppressWarnings("rawtypes")
 	public FunctionTrie() {
-		this.trie = new LinkedHashMap();
+		this.trie = new LinkedHashMap<Object,Object>();
 	}
 
-	@SuppressWarnings("unchecked")
 	public FunctionTrie(final FunctionTrie clone) {
-		this.trie = new LinkedHashMap(clone.trie);
+		this.trie = new LinkedHashMap<Object,Object>(clone.trie);
 	}
 
 	private BoaType replaceVar(final BoaType formal, final BoaType actual, final Map<String, BoaType> typeVars) {
@@ -61,7 +58,7 @@ public class FunctionTrie {
 			t2 = ((BoaArray)t2).getType();
 			if (t instanceof BoaTypeVar)
 				return new BoaArray(replaceVar(t, t2, typeVars));
-		} else if (t instanceof BoaMap && t2 instanceof BoaMap) {
+		} else if (t.getClass() == BoaMap.class && t2.getClass() == BoaMap.class) {
 			final BoaType i = ((BoaMap)t).getIndexType();
 			final BoaType i2 = ((BoaMap)t2).getIndexType();
 			t = ((BoaMap)t).getType();
@@ -154,7 +151,6 @@ public class FunctionTrie {
 		return this.getFunction(ids, new LinkedHashMap<String, BoaType>());
 	}
 
-	@SuppressWarnings("unchecked")
 	private void addFunction(final Object[] ids, final BoaFunction boaFunction) {
 		if (this.trie.containsKey(ids[0])) {
 			if (ids[0].equals("")) {
