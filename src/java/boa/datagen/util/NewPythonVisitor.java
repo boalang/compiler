@@ -38,6 +38,7 @@ import org.eclipse.dltk.python.parser.ast.PythonYieldStatement;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonLambdaExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonListExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonListForExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTestListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTupleExpression;
@@ -57,6 +58,7 @@ import org.eclipse.dltk.python.parser.ast.expressions.IndexHolder;
 import org.eclipse.dltk.python.parser.ast.expressions.PrintExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonDictExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonDictExpression.DictNode;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonForListExpression;
 import org.eclipse.dltk.ast.references.SimpleReference;
 import org.eclipse.dltk.ast.references.VariableReference;
 import org.eclipse.dltk.ast.statements.Block;
@@ -201,6 +203,12 @@ public class NewPythonVisitor extends ASTVisitor {
 			opFound = true;
 		} else if (md instanceof EmptyStatement) {
 			visit((EmptyStatement) md);
+			opFound = true;
+		} else if (md instanceof PythonListForExpression) {
+			visit((PythonListForExpression) md);
+			opFound = true;
+		} else if (md instanceof PythonForListExpression) {
+			visit((PythonForListExpression) md);
 			opFound = true;
 		}
 		return !opFound;
@@ -360,6 +368,60 @@ public class NewPythonVisitor extends ASTVisitor {
 
 	}
 
+	public boolean visit(PythonForListExpression md) throws Exception {
+
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.FOR_LIST);
+		
+		if(md.getVars()!=null)
+		{
+			md.getVars().traverse(this);
+			b.addExpressions(expressions.pop());
+		}
+		
+		if(md.getFrom()!=null)
+		{
+			md.getFrom().traverse(this);
+			b.addExpressions(expressions.pop());
+		}
+		if(md.getIfList()!=null)
+		{
+			md.getIfList().traverse(this);
+			b.addExpressions(expressions.pop());
+		}
+		expressions.push(b.build());
+
+		return true;
+
+	}
+	
+	public boolean visit(PythonListForExpression md) throws Exception {
+
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAY_COMPREHENSION);
+		
+		if(md.getMaker()!=null)
+		{
+			md.getMaker().traverse(this);
+			b.addExpressions(expressions.pop());
+		}
+		if(md.getExpressions()!=null) {
+		
+			for (Object ob : md.getExpressions()) {
+				org.eclipse.dltk.ast.expressions.Expression ex = (org.eclipse.dltk.ast.expressions.Expression) ob;
+				ex.traverse(this);
+				b.addExpressions(expressions.pop());
+			}
+		}
+		expressions.push(b.build());
+
+		return true;
+
+	}
+
+	
 	public boolean visit(PythonDictExpression md) throws Exception {
 
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
@@ -504,6 +566,24 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.GT);
 		} else if (md.getKind() == ExpressionConstants.E_EQUAL) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.EQ);
+		} else if (md.getKind() == ExpressionConstants.E_LE) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.LTEQ);
+		} else if (md.getKind() == ExpressionConstants.E_RSHIFT) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_RSHIFT);
+		} else if (md.getKind() == ExpressionConstants.E_LSHIFT) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_LSHIFT);
+		} else if (md.getKind() == ExpressionConstants.E_XOR) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_XOR);
+		} else if (md.getKind() == ExpressionConstants.E_IN) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.IN);
+		} else if (md.getKind() == ExpressionConstants.E_NOTIN) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.NOT_IN);
+		} else if (md.getKind() == ExpressionConstants.E_LAND) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.LOGICAL_AND);
+		} else if (md.getKind() == ExpressionConstants.E_LOR) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.LOGICAL_OR);
+		} else if (md.getKind() == ExpressionConstants.E_LNOT) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.LOGICAL_NOT);
 		}
 
 		md.getLeft().traverse(this);
