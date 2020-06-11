@@ -56,6 +56,7 @@ import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.ast.statements.PostfixStatement;
 import boa.compiler.ast.statements.ReturnStatement;
 import boa.compiler.ast.statements.StopStatement;
+import boa.compiler.ast.statements.SubView;
 import boa.compiler.ast.statements.SwitchCase;
 import boa.compiler.ast.statements.SwitchStatement;
 import boa.compiler.ast.statements.TypeDecl;
