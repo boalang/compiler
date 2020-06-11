@@ -315,7 +315,7 @@ public class GitConnector extends AbstractConnector {
 		ArrayList<String> files = new ArrayList<String>();
 		try {
 			RevCommit child = revwalk.parseCommit(repository.resolve(commit));
-			if (child.getParentCount() == 0) {
+			if (child.getParentCount() == 0) { // edge case: for the first commit, consider all files as changes
 				TreeWalk tw = new TreeWalk(repository);
 				tw.reset();
 				tw.addTree(child.getTree());
@@ -324,13 +324,14 @@ public class GitConnector extends AbstractConnector {
 					if (!tw.isSubtree())
 						files.add(tw.getPathString());
 				tw.close();
-			} else {
+			} else { // use jgit diff for changed file detection
 				DiffFormatter df = new DiffFormatter(NullOutputStream.INSTANCE);
 				df.setRepository(repository);
 				df.setDiffComparator(RawTextComparator.DEFAULT);
 				df.setDetectRenames(true);
 				AbstractTreeIterator parentIter = new CanonicalTreeParser(null, repository.newObjectReader(), child.getParent(0).getTree());
 				AbstractTreeIterator childIter = new CanonicalTreeParser(null, repository.newObjectReader(), child.getTree());
+				// DELETE file has no new path
 				for (final DiffEntry diff : df.scan(parentIter, childIter))
 					files.add(diff.getChangeType() == ChangeType.DELETE ? diff.getOldPath() : diff.getNewPath());
 				df.close();
