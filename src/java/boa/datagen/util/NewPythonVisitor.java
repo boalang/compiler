@@ -3,6 +3,7 @@ package boa.datagen.util;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 //import org.eclipse.dltk.compiler.IElementRequestor;
 //import org.eclipse.dltk.compiler.SourceElementRequestVisitor;
@@ -29,6 +30,7 @@ import org.eclipse.dltk.python.parser.ast.PythonClassDeclaration;
 import org.eclipse.dltk.python.parser.ast.PythonDelStatement;
 import org.eclipse.dltk.python.parser.ast.PythonExceptStatement;
 import org.eclipse.dltk.python.parser.ast.PythonForStatement;
+import org.eclipse.dltk.python.parser.ast.PythonImportFromStatement;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import org.eclipse.dltk.python.parser.ast.PythonRaiseStatement;
 import org.eclipse.dltk.python.parser.ast.PythonTryStatement;
@@ -36,12 +38,14 @@ import org.eclipse.dltk.python.parser.ast.PythonWhileStatement;
 import org.eclipse.dltk.python.parser.ast.PythonWithStatement;
 import org.eclipse.dltk.python.parser.ast.PythonYieldStatement;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonImportExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonLambdaExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonListForExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTestListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTupleExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.UnaryExpression;
 import org.eclipse.dltk.python.parser.ast.statements.BreakStatement;
 import org.eclipse.dltk.python.parser.ast.statements.ContinueStatement;
 import org.eclipse.dltk.python.parser.ast.statements.EmptyStatement;
@@ -53,8 +57,10 @@ import org.eclipse.php.internal.core.ast.nodes.YieldExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.Assignment;
 import org.eclipse.dltk.python.parser.ast.expressions.BinaryExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.CallHolder;
+import org.eclipse.dltk.python.parser.ast.expressions.EmptyExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.ExtendedVariableReference;
 import org.eclipse.dltk.python.parser.ast.expressions.IndexHolder;
+import org.eclipse.dltk.python.parser.ast.expressions.NotStrictAssignment;
 import org.eclipse.dltk.python.parser.ast.expressions.PrintExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonDictExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonDictExpression.DictNode;
@@ -111,7 +117,20 @@ public class NewPythonVisitor extends ASTVisitor {
 		if (md instanceof PythonImportAsExpression) {
 			visit((PythonImportAsExpression) md);
 			opFound = true;
-		} else if (md instanceof Assignment) {
+		} 
+		else if (md instanceof PythonImportExpression) {
+			visit((PythonImportExpression) md);
+			opFound = true;
+		}
+		else if (md instanceof PythonImportFromStatement) {
+			visit((PythonImportFromStatement) md);
+			opFound = true;
+		}
+		else if (md instanceof NotStrictAssignment) {
+			visit((NotStrictAssignment) md);
+			opFound = true;
+		}
+		else if (md instanceof Assignment) {
 			visit((Assignment) md);
 			opFound = true;
 		} else if (md instanceof PythonLambdaExpression) {
@@ -211,6 +230,15 @@ public class NewPythonVisitor extends ASTVisitor {
 			visit((PythonForListExpression) md);
 			opFound = true;
 		}
+		else if (md instanceof EmptyExpression) {
+			visit((EmptyExpression) md);
+			opFound = true;
+		}
+		else if (md instanceof UnaryExpression) {
+			visit((UnaryExpression) md);
+			opFound = true;
+		}
+		
 		return !opFound;
 
 	}
@@ -333,6 +361,35 @@ public class NewPythonVisitor extends ASTVisitor {
 		imp += md.getName() + " as " + md.getAsName();
 
 		b.addImports(imp);
+		return true;
+	}
+	public boolean visit(PythonImportExpression md) {
+		String imp = "";
+		imp += md.getName();
+		b.addImports(imp);
+		return true;
+	}
+	public boolean visit(PythonImportFromStatement md) {
+		
+		Map<String, String> imas=md.getImportedAsNames();
+		
+		String moduleName=md.getImportModuleName();
+		
+		if(md.isAllImport())
+		{
+			b.addImports(moduleName+".*");
+		}
+		else {
+			for (Map.Entry<String, String> entry : imas.entrySet()) {
+			    String key = entry.getKey();
+			    String value = entry.getValue();
+			    if(key.equals(value))
+			    	b.addImports(moduleName+"."+key);
+			    else
+			    	b.addImports(moduleName+"."+key+" as "+value);
+			}
+		}
+		
 		return true;
 	}
 
@@ -476,6 +533,44 @@ public class NewPythonVisitor extends ASTVisitor {
 		return true;
 
 	}
+	public boolean visit(NotStrictAssignment md) throws Exception {
+
+
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+		if(md.getKind()==ExpressionConstants.E_PLUS_ASSIGN)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_ADD);
+		else if(md.getKind()==ExpressionConstants.E_MINUS_ASSIGN)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_SUB);
+		else if(md.getKind()==ExpressionConstants.E_MULT_ASSIGN)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_MULT);
+		else if(md.getKind()==ExpressionConstants.E_DIV_ASSIGN)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_DIV);
+		else if(md.getKind()==ExpressionConstants.E_MOD_ASSIGN)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_MOD);
+		else if(md.getKind()==ExpressionConstants.E_RSHIFT_ASSIGN)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_RSHIFT);
+		else if(md.getKind()==ExpressionConstants.E_LSHIFT_ASSIGN)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_LSHIFT);
+		else if(md.getKind()==ExpressionConstants.E_BAND_ASSIGN)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_BITAND);
+		else if(md.getKind()==ExpressionConstants.E_BOR_ASSIGN)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_BITOR);
+		else if(md.getKind()==ExpressionConstants.E_BXOR_ASSIGN)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_BITXOR);
+
+
+		md.getLeft().traverse(this);
+		b.addExpressions(expressions.pop());
+
+		md.getRight().traverse(this);
+		b.addExpressions(expressions.pop());
+
+		expressions.push(b.build());
+
+		return true;
+
+	}
 
 	public boolean visit(SimpleReference md) {
 
@@ -532,6 +627,37 @@ public class NewPythonVisitor extends ASTVisitor {
 		return false;
 	}
 
+	public boolean visit(EmptyExpression md) throws Exception {
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.EMPTY);
+		
+		expressions.push(b.build());
+		
+		return true;
+		
+		
+	}
+	public boolean visit(UnaryExpression md) throws Exception {
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.UNARY);
+		
+		boa.types.Ast.Expression.Builder left = boa.types.Ast.Expression.newBuilder();
+		left.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
+
+		left.setLiteral(md.getOperator());
+		
+		b.addExpressions(left.build());
+		
+		md.getExpression().traverse(this);
+		
+		b.addExpressions(expressions.pop());
+		
+		expressions.push(b.build());
+		
+		return true;
+		
+		
+	}
 	public boolean visit(BinaryExpression md) throws Exception {
 
 		System.out.println("Binary Exp :  " + md.toString());
@@ -584,7 +710,10 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.LOGICAL_OR);
 		} else if (md.getKind() == ExpressionConstants.E_LNOT) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.LOGICAL_NOT);
+		} else if (md.getKind() == ExpressionConstants.E_POWER) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_POW);
 		}
+
 
 		md.getLeft().traverse(this);
 		b.addExpressions(expressions.pop());
@@ -781,6 +910,8 @@ public class NewPythonVisitor extends ASTVisitor {
 		if (o instanceof PythonWhileStatement)
 			return false;
 		if (o instanceof IfStatement)
+			return false;
+		if (o instanceof PythonImportFromStatement)
 			return false;
 //		if (o instanceof BreakStatement)
 //			return false;

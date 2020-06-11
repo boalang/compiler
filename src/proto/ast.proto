@@ -369,6 +369,7 @@ message Expression {
 		DICT=103;
 		FOR_LIST=104;
 		NOT_IN=105;
+		UNARY=106;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
