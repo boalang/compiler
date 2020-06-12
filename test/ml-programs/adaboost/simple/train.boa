@@ -1,5 +1,4 @@
 p: Project = input;
-label := {"yes", "no"};
 ada : output adaboost("yes/no") of {int, int, string};
 i:=0;
 while(i < 4){
