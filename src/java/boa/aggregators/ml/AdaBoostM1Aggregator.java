@@ -63,7 +63,7 @@ public class AdaBoostM1Aggregator extends MLAggregator {
 //        		System.out.println(options[i]);
             this.model = new AdaBoostM1();
             //this.model.setOptions(options);
-            System.out.println(this.trainingSet);
+            this.model.buildClassifier(this.trainingSet);
         } catch (Exception e) {
             e.printStackTrace();
         }
