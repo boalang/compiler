@@ -30,6 +30,7 @@ import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 import boa.compiler.transforms.VisitorDesugar;
 import boa.types.*;
+import boa.types.ml.BoaAdaBoostM1;
 import boa.types.ml.BoaLinearRegression;
 import boa.types.ml.BoaModel;
 import boa.types.proto.CodeRepositoryProtoTuple;
@@ -1438,6 +1439,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						throw new TypeCheckException(n, "LinearRegression required attributes to be numeric, nominal or date");
 				}
 			}
+			
+			if (model instanceof BoaAdaBoostM1) {
+				if (!(types.get(types.size() - 1) instanceof BoaInt || types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+					throw new TypeCheckException(n, "AdaBoostM1 required class to be numeric or date");
+				for (int i = 0; i < types.size() - 1; i++) {
+					if (!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+						throw new TypeCheckException(n, "AdaBoostM1 required attributes to be numeric, nominal or date");
+				}
+			}
 		}
 	}
 	
@@ -1459,6 +1469,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		if (n.type instanceof BoaLinearRegression)
 			n.type = new BoaLinearRegression(n.getType().type);
+		else if (n.type instanceof BoaAdaBoostM1)
+			n.type = new BoaAdaBoostM1(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}

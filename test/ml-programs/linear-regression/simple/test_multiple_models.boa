@@ -2,8 +2,8 @@ p: Project = input;
 predict: output collection of string;
 
 
-model1: Model of LinearRegression of {int, int, int};
-model2: Model of LinearRegression of {int, int, int};
+model1: model of LinearRegression of {int, int, int};
+model2: model of LinearRegression of {int, int, int};
 
 model1 = load(0, "linear1");
 model2 = load(0, "linear2");

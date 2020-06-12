@@ -1009,6 +1009,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (rhs.contains(".load(")) {
 			if (n.getLhs().type.toString() == "linearregression")
 				typecast = "boa.types.ml.BoaLinearRegression";
+			else if (n.getLhs().type.toString() == "adaboost")
+				typecast = "boa.types.ml.BoaAdaBoostM1";
 			rhs = rhs.substring(0,rhs.length()-1) + ", new " +
 					((BoaModel)n.getLhs().type).getType().toJavaType() + "())";
 			rhs = "(" + (typecast + "").split("\\/")[0] + ")" + rhs;

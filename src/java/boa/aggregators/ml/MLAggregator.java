@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A Boa ML aggregator to train models.
@@ -55,6 +56,9 @@ public abstract class MLAggregator extends Aggregator {
 	protected int NumOfAttributes;
 	protected String[] options;
 	protected boolean flag;
+	protected boolean classification = false;
+	protected boolean regression = false;
+	protected ArrayList<String> nominalAttr = new ArrayList<String>();
 	protected int count;
 	private int vectorSize;
 	private String mlarg;
@@ -262,8 +266,16 @@ public abstract class MLAggregator extends Aggregator {
 	protected void instanceCreation(ArrayList<String> data, Instances set) {
 		try {
 			Instance instance = new DenseInstance(this.NumOfAttributes);
-			for (int i = 0; i < this.NumOfAttributes; i++)
-				instance.setValue((Attribute) this.fvAttributes.get(i), Double.parseDouble(data.get(i)));
+			for (int i = 0; i < this.NumOfAttributes; i++) {
+				try {
+					Attribute attr = (Attribute) this.fvAttributes.get(i);
+					instance.setValue(attr, Double.parseDouble(data.get(i)));
+				}
+				catch(NumberFormatException e) {
+					Attribute attr = (Attribute) this.fvAttributes.get(i);
+					instance.setValue(attr, String.valueOf(data.get(i)));
+				}
+			}
 			set.add(instance);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -304,8 +316,12 @@ public abstract class MLAggregator extends Aggregator {
 		fvAttributes.clear();
 		NumOfAttributes = this.getVectorSize() - 1;
 		try {
-			for (int i = 0; i < NumOfAttributes; i++)
+			for (int i = 0; i < NumOfAttributes - 1; i++)
 				fvAttributes.add(new Attribute("Attribute" + i));
+			if (classification == true) 
+				fvAttributes.add(new Attribute("nominal", nominalAttr));
+			else
+				fvAttributes.add(new Attribute("Attribute" + NumOfAttributes));
 			this.flag = true;
 			trainingSet = new Instances(name, fvAttributes, 1);
 			trainingSet.setClassIndex(NumOfAttributes - 1);
@@ -317,15 +333,25 @@ public abstract class MLAggregator extends Aggregator {
 	}
 
 	protected void aggregate(final String data, final String metadata, String name) throws IOException, InterruptedException {
-		
+		if (name == "AdaBoostM1")
+			classification = true;
+		else if (name == "LinearRegression")
+			regression = true;
 		if (this.count < this.getVectorSize() - 1)
         	this.vector.add(data);
-		
+		if (this.mlarg != null) {
+			String[] arrOfStr = this.mlarg.split("/"); 
+			nominalAttr = new ArrayList<String>(Arrays.asList(arrOfStr));
+		}
 		count++;
-
+		if (count == NumOfAttributes) 
+			if (!nominalAttr.contains(data)) 
+				nominalAttr.add(data);
+			
         if (this.count == this.getVectorSize()) {
-        	if (this.flag != true)
+        	if (this.flag != true) 
             	attributeCreation(name);
+        	
         	Instances set = data.equals("1") ? trainingSet : testingSet;
             instanceCreation(this.vector, set);
             this.vector = new ArrayList<String>();

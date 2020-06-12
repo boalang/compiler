@@ -380,43 +380,25 @@ public class EmitValue implements Writable {
 			this.metadata = null;
 		else
 			this.metadata = metadata;
-		
-		final int length = in.readInt();
-		if(length > 0) {
-			byte[] bytes = new byte[length];
-			in.readFully(bytes, 0, length);			
-			ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
-			ObjectInputStream dataIn = new ObjectInputStream(bin);
-			Object o = null;
-			try {
-				o = dataIn.readObject(); 
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-			this.tdata = (Tuple)o;
-		}
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void write(final DataOutput out) throws IOException {
-		out.writeInt(this.data.length);
+		String[] data;
+		if (this.tdata == null)
+			data = this.data;
+		else
+			data = this.tdata.getValues();
+		out.writeInt(data.length);
 
-		for (final String d : this.data)
+		for (final String d : data)
 			Text.writeString(out, d);
 
 		if (this.metadata == null)
 			Text.writeString(out, "");
 		else
 			Text.writeString(out, this.metadata);
-		
-		if (this.tdata == null)
-			out.writeInt(0);
-		else {
-			byte[] serializedObject = this.tdata.serialize(this.tdata);
-			out.writeInt(serializedObject.length);
-			out.write(serializedObject); 
-		}
 	}
 
 	/**
