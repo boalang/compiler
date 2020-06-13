@@ -32,6 +32,7 @@ import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapreduce.JobContext;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
+import weka.classifiers.meta.AdaBoostM1;
 import weka.core.*;
 import weka.filters.Filter;
 
@@ -41,6 +42,7 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * A Boa ML aggregator to train models.
@@ -51,33 +53,47 @@ public abstract class MLAggregator extends Aggregator {
 	protected final ArrayList<Attribute> fvAttributes;
 	protected Instances unFilteredInstances;
 	protected ArrayList<String> vector;
+	protected int trainingPerc;
 	protected Instances trainingSet;
 	protected Instances testingSet;
 	protected int NumOfAttributes;
 	protected String[] options;
 	protected boolean flag;
-	protected boolean classification = false;
-	protected boolean regression = false;
-	protected ArrayList<String> nominalAttr = new ArrayList<String>();
+	protected ArrayList<String> nominalAttr;
 	protected int count;
 	private int vectorSize;
 	private String mlarg;
 
-
 	public MLAggregator() {
-		this.fvAttributes = new ArrayList<Attribute>();
-		this.vector = new ArrayList<String>();
+		fvAttributes = new ArrayList<Attribute>();
+		vector = new ArrayList<String>();
 	}
 
 	public MLAggregator(final String s) {
-		this.mlarg = s;
-		this.fvAttributes = new ArrayList<Attribute>();
-		this.vector = new ArrayList<String>();
+		mlarg = s;
+		fvAttributes = new ArrayList<Attribute>();
+		vector = new ArrayList<String>();
+		nominalAttr = new ArrayList<String>();
 		try {
-			options = Utils.splitOptions(s);
+			options = handleNonWekaOptions(Utils.splitOptions(s));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	// this function is used to handle non-weka options (-s: split, -c: class)
+	private String[] handleNonWekaOptions(String[] opts) {
+		List<String> others = new ArrayList<>();
+		for (int i = 0; i < opts.length; i++) {
+			String cur = opts[i];
+			if (cur.equals("-s"))
+				trainingPerc = Integer.parseInt(opts[++i]);
+			else if (cur.equals("-c"))
+				nominalAttr = new ArrayList<String>(Arrays.asList(opts[++i].split("/")));
+			else
+				others.add(opts[i]);
+		}
+		return others.toArray(new String[0]);
 	}
 
 	public void evaluate(Classifier model, Instances set) {
@@ -85,7 +101,7 @@ public abstract class MLAggregator extends Aggregator {
 			Evaluation eval = new Evaluation(set);
 			eval.evaluateModel(model, set);
 			String name = set == trainingSet ? "Training" : "Testing";
-			this.collect(eval.toSummaryString("\n" + name + "Set Evaluation:\n", false));
+			collect(eval.toSummaryString("\n" + name + "Set Evaluation:\n", false));
 //			System.out.println("Correct % = " + eval.pctCorrect());
 //			System.out.println("Incorrect % = " + eval.pctIncorrect());
 //			System.out.println("AUC % = " + eval.areaUnderROC(1));
@@ -102,8 +118,8 @@ public abstract class MLAggregator extends Aggregator {
 			e.printStackTrace();
 		}
 	}
-	
-	public void saveTrainingSet(Object trainingSet) {
+
+	public void saveTrainingSet(Object set) {
 		FSDataOutputStream out = null;
 		FileSystem fileSystem = null;
 		Path filePath = null;
@@ -117,42 +133,45 @@ public abstract class MLAggregator extends Aggregator {
 			Path outputPath = FileOutputFormat.getOutputPath(job);
 			fileSystem = outputPath.getFileSystem(context.getConfiguration());
 			String output = null;
-			String subpath = "_" + this.trainingSet.attribute(0).name()+ "_";
+			String subpath = "_" + trainingSet.attribute(0).name() + "_";
 			if (DefaultProperties.localOutput != null)
 				output = DefaultProperties.localOutput;
 			else
 				output = configuration.get("fs.default.name", "hdfs://boa-njt/");
-			for (int i = 1; i < NumOfAttributes; i ++) {
-				//System.out.println(this.trainingSet.attribute(0).name());
-				subpath += "_" + this.trainingSet.attribute(i).name() + "_" ;
+			for (int i = 1; i < NumOfAttributes; i++) {
+				// System.out.println(trainingSet.attribute(0).name());
+				subpath += "_" + trainingSet.attribute(i).name() + "_";
 			}
 			fileSystem.mkdirs(new Path(output, new Path("/model" + boaJobId)));
-			filePath = new Path(output, new Path("/model" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + subpath + "data")));
+			filePath = new Path(output,
+					new Path("/model" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + subpath + "data")));
 
 			if (fileSystem.exists(filePath))
 				return;
-			
+
 			out = fileSystem.create(filePath);
 
 			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
 			objectOut = new ObjectOutputStream(byteOutStream);
-			objectOut.writeObject(trainingSet);
+			objectOut.writeObject(set);
 			byte[] serializedObject = byteOutStream.toByteArray();
 
 			out.write(serializedObject);
 
-			this.collect(filePath.toString());
+			collect(filePath.toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (out != null) out.close();
-				if (objectOut != null) objectOut.close();
+				if (out != null)
+					out.close();
+				if (objectOut != null)
+					objectOut.close();
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}
-		}	
+		}
 	}
 
 	public void saveModel(Object model) {
@@ -167,12 +186,13 @@ public abstract class MLAggregator extends Aggregator {
 			Configuration conf = context.getConfiguration();
 			int boaJobId = conf.getInt("boa.hadoop.jobid", 0);
 			JobConf job = new JobConf(conf);
-			Path outputPath = FileOutputFormat.getOutputPath(job);	
+			Path outputPath = FileOutputFormat.getOutputPath(job);
 			fileSystem = outputPath.getFileSystem(context.getConfiguration());
-			String output = DefaultProperties.localOutput != null ? new Path(DefaultProperties.localOutput).toString() + "/../"
+			String output = DefaultProperties.localOutput != null
+					? new Path(DefaultProperties.localOutput).toString() + "/../"
 					: conf.get("fs.default.name", "hdfs://boa-njt/");
 			fileSystem.mkdirs(getModelDirPath(output, boaJobId));
-			filePath = getModelFilePath(output, boaJobId, this.getKey().getName());
+			filePath = getModelFilePath(output, boaJobId, getKey().getName());
 
 			if (fileSystem.exists(filePath))
 				return;
@@ -185,25 +205,27 @@ public abstract class MLAggregator extends Aggregator {
 			byte[] serializedObject = byteOutStream.toByteArray();
 
 			out.write(serializedObject);
-			
-			this.collect(filePath.toString());
+
+			collect(filePath.toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (out != null) out.close();
-				if (objectOut != null) objectOut.close();
+				if (out != null)
+					out.close();
+				if (objectOut != null)
+					objectOut.close();
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	public static Path getModelDirPath(String output, int boaJobId) {
 		return new Path(output, new Path("model/job_" + boaJobId));
 	}
-	
+
 	public static Path getModelFilePath(String output, int boaJobId, String modelVar) {
 		return new Path(getModelDirPath(output, boaJobId), new Path(modelVar + ".model"));
 	}
@@ -225,12 +247,13 @@ public abstract class MLAggregator extends Aggregator {
 
 	/**
 	 * {@inheritDoc}
-	 */	
+	 */
 	@Override
-	public abstract void aggregate(final String data, final String metadata) throws NumberFormatException, IOException, InterruptedException;
+	public abstract void aggregate(final String data, final String metadata)
+			throws NumberFormatException, IOException, InterruptedException;
 
 	protected void attributeCreation(Tuple data, final String name) {
-		this.fvAttributes.clear();
+		fvAttributes.clear();
 		try {
 			String[] fieldNames = data.getFieldNames();
 			int count = 0;
@@ -239,25 +262,25 @@ public abstract class MLAggregator extends Aggregator {
 					ArrayList<String> fvNominalVal = new ArrayList<String>();
 					for (Object obj : data.getValue(fieldNames[i]).getClass().getEnumConstants())
 						fvNominalVal.add(obj.toString());
-					this.fvAttributes.add(new Attribute("Nominal" + count, fvNominalVal));
+					fvAttributes.add(new Attribute("Nominal" + count, fvNominalVal));
 					count++;
 				} else if (data.getValue(fieldNames[i]).getClass().isArray()) {
 					int l = Array.getLength(data.getValue(fieldNames[i])) - 1;
 					for (int j = 0; j <= l; j++) {
-						this.fvAttributes.add(new Attribute("Attribute" + count));
+						fvAttributes.add(new Attribute("Attribute" + count));
 						count++;
 					}
 				} else {
-					this.fvAttributes.add(new Attribute("Attribute" + count));
+					fvAttributes.add(new Attribute("Attribute" + count));
 					count++;
 				}
 			}
-			this.NumOfAttributes = count;
-			this.flag = true;
-			this.trainingSet = new Instances(name, this.fvAttributes, 1);
-			this.trainingSet.setClassIndex(this.NumOfAttributes - 1);
-			this.testingSet = new Instances(name, this.fvAttributes, 1);
-			this.testingSet.setClassIndex(this.NumOfAttributes - 1);
+			NumOfAttributes = count;
+			flag = true;
+			trainingSet = new Instances(name, fvAttributes, 1);
+			trainingSet.setClassIndex(NumOfAttributes - 1);
+			testingSet = new Instances(name, fvAttributes, 1);
+			testingSet.setClassIndex(NumOfAttributes - 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -265,14 +288,13 @@ public abstract class MLAggregator extends Aggregator {
 
 	protected void instanceCreation(ArrayList<String> data, Instances set) {
 		try {
-			Instance instance = new DenseInstance(this.NumOfAttributes);
-			for (int i = 0; i < this.NumOfAttributes; i++) {
+			Instance instance = new DenseInstance(NumOfAttributes);
+			for (int i = 0; i < NumOfAttributes; i++) {
 				try {
-					Attribute attr = (Attribute) this.fvAttributes.get(i);
+					Attribute attr = (Attribute) fvAttributes.get(i);
 					instance.setValue(attr, Double.parseDouble(data.get(i)));
-				}
-				catch(NumberFormatException e) {
-					Attribute attr = (Attribute) this.fvAttributes.get(i);
+				} catch (NumberFormatException e) {
+					Attribute attr = (Attribute) fvAttributes.get(i);
 					instance.setValue(attr, String.valueOf(data.get(i)));
 				}
 			}
@@ -285,24 +307,28 @@ public abstract class MLAggregator extends Aggregator {
 	protected void instanceCreation(Tuple data) {
 		try {
 			int count = 0;
-			Instance instance = new DenseInstance(this.NumOfAttributes);
+			Instance instance = new DenseInstance(NumOfAttributes);
 			String[] fieldNames = data.getFieldNames();
 			for (int i = 0; i < fieldNames.length; i++) {
 				if (data.getValue(fieldNames[i]).getClass().isEnum()) {
-					instance.setValue((Attribute) this.fvAttributes.get(count), String.valueOf(data.getValue(fieldNames[i])));
+					instance.setValue((Attribute) fvAttributes.get(count),
+							String.valueOf(data.getValue(fieldNames[i])));
 					count++;
 				} else if (data.getValue(fieldNames[i]).getClass().isArray()) {
 					int x = Array.getLength(data.getValue(fieldNames[i])) - 1;
 					Object o = data.getValue(fieldNames[i]);
 					for (int j = 0; j <= x; j++) {
-						instance.setValue((Attribute) this.fvAttributes.get(count), Double.parseDouble(String.valueOf(Array.get(o, j))));
+						instance.setValue((Attribute) fvAttributes.get(count),
+								Double.parseDouble(String.valueOf(Array.get(o, j))));
 						count++;
 					}
-				} else {	
+				} else {
 					if (NumberUtils.isNumber(String.valueOf(data.getValue(fieldNames[i]))))
-						instance.setValue((Attribute) this.fvAttributes.get(count), Double.parseDouble(String.valueOf(data.getValue(fieldNames[i]))));
+						instance.setValue((Attribute) fvAttributes.get(count),
+								Double.parseDouble(String.valueOf(data.getValue(fieldNames[i]))));
 					else
-						instance.setValue((Attribute) this.fvAttributes.get(count), String.valueOf(data.getValue(fieldNames[i])));
+						instance.setValue((Attribute) fvAttributes.get(count),
+								String.valueOf(data.getValue(fieldNames[i])));
 					count++;
 				}
 			}
@@ -312,71 +338,68 @@ public abstract class MLAggregator extends Aggregator {
 		}
 	}
 
+	// define attributes for train and test dataset
 	protected void attributeCreation(String name) {
 		fvAttributes.clear();
-		NumOfAttributes = this.getVectorSize() - 1;
+		NumOfAttributes = getVectorSize();
 		try {
-			for (int i = 0; i < NumOfAttributes - 1; i++)
-				fvAttributes.add(new Attribute("Attribute" + i));
-			if (classification == true) 
-				fvAttributes.add(new Attribute("nominal", nominalAttr));
-			else
-				fvAttributes.add(new Attribute("Attribute" + NumOfAttributes));
-			this.flag = true;
+			int classIdx = NumOfAttributes - 1;
+			for (int i = 0; i < NumOfAttributes; i++) {
+				Attribute a = new Attribute("Attribute" + i);
+				if (i == classIdx && isClassification())
+					a = new Attribute("nominal" + i, nominalAttr);
+				fvAttributes.add(a);
+			}
 			trainingSet = new Instances(name, fvAttributes, 1);
-			trainingSet.setClassIndex(NumOfAttributes - 1);
+			trainingSet.setClassIndex(classIdx);
 			testingSet = new Instances(name, fvAttributes, 1);
-			testingSet.setClassIndex(NumOfAttributes - 1);
+			testingSet.setClassIndex(classIdx);
+			flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	protected void aggregate(final String data, final String metadata, String name) throws IOException, InterruptedException {
-		if (name == "AdaBoostM1")
-			classification = true;
-		else if (name == "LinearRegression")
-			regression = true;
-		if (this.count < this.getVectorSize() - 1)
-        	this.vector.add(data);
-		if (this.mlarg != null) {
-			String[] arrOfStr = this.mlarg.split("/"); 
-			nominalAttr = new ArrayList<String>(Arrays.asList(arrOfStr));
+	protected void aggregate(final String data, final String metadata, String name)
+			throws IOException, InterruptedException {
+		if (count++ < getVectorSize())
+			vector.add(data);
+		if (count == getVectorSize()) {
+			if (flag != true)
+				attributeCreation(name);
+			instanceCreation(vector, isTrainData() ? trainingSet : testingSet);
+			vector = new ArrayList<String>();
+			count = 0;
 		}
-		count++;
-		if (count == NumOfAttributes) 
-			if (!nominalAttr.contains(data)) 
-				nominalAttr.add(data);
-			
-        if (this.count == this.getVectorSize()) {
-        	if (this.flag != true) 
-            	attributeCreation(name);
-        	
-        	Instances set = data.equals("1") ? trainingSet : testingSet;
-            instanceCreation(this.vector, set);
-            this.vector = new ArrayList<String>();
-            this.count = 0;
-        }
-    }
-
-    protected void aggregate(final Tuple data, final String metadata, String name) throws IOException, InterruptedException {
-    	if (this.flag != true)
-        	attributeCreation(data, name);
-        instanceCreation(data);
-    }
-
-	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException, FinishedException, IllegalAccessException {	
 	}
 
-	public void aggregate(final Tuple data) throws IOException, InterruptedException, FinishedException, IllegalAccessException {
-		this.aggregate(data, null);
+	private boolean isTrainData() {
+		return Math.random() > (1 - trainingPerc / 100.0);
 	}
-	
+
+	protected void aggregate(final Tuple data, final String metadata, String name)
+			throws IOException, InterruptedException {
+		if (flag != true)
+			attributeCreation(data, name);
+		instanceCreation(data);
+	}
+
+	public void aggregate(final Tuple data, final String metadata)
+			throws IOException, InterruptedException, FinishedException, IllegalAccessException {
+	}
+
+	public void aggregate(final Tuple data)
+			throws IOException, InterruptedException, FinishedException, IllegalAccessException {
+		aggregate(data, null);
+	}
+
 	public int getVectorSize() {
-		return this.vectorSize;
+		return vectorSize;
 	}
 
 	public void setVectorSize(int vectorSize) {
 		this.vectorSize = vectorSize;
 	}
+	
+	abstract boolean isClassification();
 }
