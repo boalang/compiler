@@ -340,7 +340,6 @@ public abstract class MLAggregator extends Aggregator {
 		try {
 			int classIdx = NumOfAttributes - 1;
 			for (int i = 0; i < NumOfAttributes; i++) {
-				System.out.println(i);
 				Attribute a = new Attribute("Attribute" + i);
 				if (i == classIdx && isClassification())
 					a = new Attribute("nominal" + i, nominalAttr);

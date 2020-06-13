@@ -1,12 +1,10 @@
 p: Project = input;
-ada : output adaboost("yes/no") of {int, int, string};
+ada : output adaboost("-c yes/no -s 75") of {int, int, string};
 i:=0;
-while(i < 4){
-	t := train_split(75);
-
+while(i < 100){
 	if (i == 1)
-		ada << {i, i+2, "yes", t};
+		ada << {i, i+2, "yes"};
         if (i != 1)
-		ada << {i, i+2, "no", t};
+			ada << {i, i+2, "no"};
 	i++;
 }
