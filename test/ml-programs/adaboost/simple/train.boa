@@ -2,9 +2,9 @@ p: Project = input;
 ada : output adaboost("-c yes/no -s 75") of {int, int, string};
 i:=0;
 while(i < 100){
-	if (i == 1)
-		ada << {i, i+2, "yes"};
-    if (i != 1)
-		ada << {i, i+2, "no"};
+	label := "yes";
+	if (i % 2 == 0)
+		label = "no";
+	ada << {i + 7, i, label};
 	i++;
 }
