@@ -32,7 +32,6 @@ import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapreduce.JobContext;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
-import weka.classifiers.meta.AdaBoostM1;
 import weka.core.*;
 import weka.filters.Filter;
 
@@ -62,7 +61,7 @@ public abstract class MLAggregator extends Aggregator {
 	protected ArrayList<String> nominalAttr;
 	protected int count;
 	private int vectorSize;
-	private String mlarg;
+//	private String mlarg;
 
 	public MLAggregator() {
 		fvAttributes = new ArrayList<Attribute>();
@@ -70,7 +69,7 @@ public abstract class MLAggregator extends Aggregator {
 	}
 
 	public MLAggregator(final String s) {
-		mlarg = s;
+//		mlarg = s;
 		fvAttributes = new ArrayList<Attribute>();
 		vector = new ArrayList<String>();
 		nominalAttr = new ArrayList<String>();
@@ -155,7 +154,6 @@ public abstract class MLAggregator extends Aggregator {
 			objectOut = new ObjectOutputStream(byteOutStream);
 			objectOut.writeObject(set);
 			byte[] serializedObject = byteOutStream.toByteArray();
-
 			out.write(serializedObject);
 
 			collect(filePath.toString());
@@ -179,7 +177,7 @@ public abstract class MLAggregator extends Aggregator {
 		FileSystem fileSystem = null;
 		Path filePath = null;
 		ObjectOutputStream objectOut = null;
-		EmitStatement n = null;
+//		EmitStatement n = null;
 
 		try {
 			JobContext context = (JobContext) getContext();
@@ -194,20 +192,17 @@ public abstract class MLAggregator extends Aggregator {
 			fileSystem.mkdirs(getModelDirPath(output, boaJobId));
 			filePath = getModelFilePath(output, boaJobId, getKey().getName());
 
-			if (fileSystem.exists(filePath))
-				return;
+			// delete previous model
+			if (fileSystem.exists(filePath) && fileSystem.delete(filePath, true))
+				System.out.println("Deleted previous model");
 
 			out = fileSystem.create(filePath);
-
 			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
 			objectOut = new ObjectOutputStream(byteOutStream);
 			objectOut.writeObject(model);
-			byte[] serializedObject = byteOutStream.toByteArray();
-
-			out.write(serializedObject);
-
-			collect(filePath.toString());
-
+			out.write(byteOutStream.toByteArray());
+			
+			collect("Model is saved to: " + filePath.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -345,6 +340,7 @@ public abstract class MLAggregator extends Aggregator {
 		try {
 			int classIdx = NumOfAttributes - 1;
 			for (int i = 0; i < NumOfAttributes; i++) {
+				System.out.println(i);
 				Attribute a = new Attribute("Attribute" + i);
 				if (i == classIdx && isClassification())
 					a = new Attribute("nominal" + i, nominalAttr);

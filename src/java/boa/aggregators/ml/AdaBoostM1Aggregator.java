@@ -38,24 +38,19 @@ public class AdaBoostM1Aggregator extends MLAggregator {
 
     public AdaBoostM1Aggregator(final String s) {
         super(s);
-        if (model instanceof AdaBoostM1) {}
     }
 
     public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
-//        System.out.println("string data");
     	aggregate(data, metadata, "AdaBoostM1");
     }
 
     public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
-    	System.out.println("Tuple data");
     	aggregate(data, metadata, "AdaBoostM1");
     }
 
     @Override
     public void finish() throws IOException, InterruptedException {
         try {
-        	for(int i = 0; i < options.length; i ++)
-        		System.out.println(options[i]);
             this.model = new AdaBoostM1();
             this.model.setOptions(options);
             this.model.buildClassifier(this.trainingSet);
@@ -65,8 +60,8 @@ public class AdaBoostM1Aggregator extends MLAggregator {
 
         this.saveModel(this.model);
 //        this.saveTrainingSet(this.trainingSet);
-//        this.evaluate(this.model, this.trainingSet);
-//		this.evaluate(this.model, this.testingSet);
+        this.evaluate(this.model, this.trainingSet);
+		this.evaluate(this.model, this.testingSet);
         this.collect(this.model.toString());
     }
     
