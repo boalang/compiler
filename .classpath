@@ -76,5 +76,9 @@
 	<classpathentry kind="lib" path="lib/evaluator/commons-httpclient-3.1.0.redhat-7.jar"/>
 	<classpathentry kind="lib" path="lib/evaluator/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="compile"/>
+	<classpathentry kind="lib" path="lib/weka/arpack_combined.jar"/>
+	<classpathentry kind="lib" path="lib/weka/core.jar"/>
+	<classpathentry kind="lib" path="lib/weka/mtj.jar"/>
+	<classpathentry kind="lib" path="lib/weka/weka.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
