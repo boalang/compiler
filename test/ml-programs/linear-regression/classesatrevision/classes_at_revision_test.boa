@@ -6,7 +6,7 @@ totalMethod:=0;
 totalloc:=0;
 collect : output collection[string][int] of string;
 
-model: Model of LinearRegression of {int,int};
+model: model of LinearRegression of {int,int};
 model = load(job_id: int, model_var: string);
 
 lloc := function(node: ASTRoot) : int {
