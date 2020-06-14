@@ -89,20 +89,17 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 
 		for (final EmitValue value : values)
 			try {
-				if(a.toString().contains("ml")) {
-					MLAggregator mla = (MLAggregator) this.aggregators.get(key.getName());
-					mla = (MLAggregator) a;
-					if (value.getTuple() != null) 
-						mla.aggregate(value.getTuple(), value.getMetadata());
-					else {
-						if (setVector && value.getData().length > 1) {
-							mla.setVectorSize(value.getData().length);
-							setVector = false;
-						}
+				MLAggregator mla = (MLAggregator) a;
+				if (value.getTuple() != null) {
+					mla.aggregate(value.getTuple(), value.getMetadata());
+				} else {
+					if (setVector && value.getData().length > 1) {
+						mla.setVectorSize(value.getData().length);
+						setVector = false;
 					}
+					for (final String s : value.getData()) 
+						a.aggregate(s, value.getMetadata());
 				}
-				for (final String s : value.getData()) 
-					a.aggregate(s, value.getMetadata());
 			} catch (final FinishedException e) {
 				// we are done
 				return;
