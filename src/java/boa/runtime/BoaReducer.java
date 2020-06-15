@@ -91,10 +91,10 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 				if (a instanceof MLAggregator) {
 					MLAggregator mla = (MLAggregator) a;
 					if (value.getTuple() != null) {
-						System.out.println("emit value has tuple ");
+//						System.out.println("emit value has tuple ");
 						mla.aggregate(value.getTuple(), value.getMetadata());
 					} else {
-						System.out.println("emit value has no tuple ");
+//						System.out.println("emit value has no tuple ");
 						if (setVector && value.getData().length > 1) {
 							mla.setVectorSize(value.getData().length);
 							setVector = false;

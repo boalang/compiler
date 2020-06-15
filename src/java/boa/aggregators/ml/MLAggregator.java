@@ -18,7 +18,6 @@ package boa.aggregators.ml;
 
 import boa.aggregators.Aggregator;
 import boa.aggregators.FinishedException;
-import boa.compiler.ast.statements.EmitStatement;
 import boa.datagen.DefaultProperties;
 import boa.runtime.Tuple;
 
@@ -80,7 +79,7 @@ public abstract class MLAggregator extends Aggregator {
 		}
 	}
 
-	// this function is used to handle non-weka options (-s: split, -c: class)
+	// this function is used to handle non-weka options (-s: split)
 	private String[] handleNonWekaOptions(String[] opts) {
 		List<String> others = new ArrayList<>();
 		for (int i = 0; i < opts.length; i++) {
@@ -201,7 +200,7 @@ public abstract class MLAggregator extends Aggregator {
 			objectOut = new ObjectOutputStream(byteOutStream);
 			objectOut.writeObject(model);
 			out.write(byteOutStream.toByteArray());
-			
+
 			collect("Model is saved to: " + filePath.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -286,10 +285,10 @@ public abstract class MLAggregator extends Aggregator {
 			Instance instance = new DenseInstance(NumOfAttributes);
 			for (int i = 0; i < NumOfAttributes; i++) {
 				try {
-					Attribute attr = (Attribute) fvAttributes.get(i);
+					Attribute attr = fvAttributes.get(i);
 					instance.setValue(attr, Double.parseDouble(data.get(i)));
 				} catch (NumberFormatException e) {
-					Attribute attr = (Attribute) fvAttributes.get(i);
+					Attribute attr = fvAttributes.get(i);
 					instance.setValue(attr, String.valueOf(data.get(i)));
 				}
 			}
@@ -299,35 +298,32 @@ public abstract class MLAggregator extends Aggregator {
 		}
 	}
 
-	protected void instanceCreation(Tuple data) {
+	protected void instanceCreation(Tuple data, Instances set) {
 		try {
 			int count = 0;
 			Instance instance = new DenseInstance(NumOfAttributes);
 			String[] fieldNames = data.getFieldNames();
 			for (int i = 0; i < fieldNames.length; i++) {
 				if (data.getValue(fieldNames[i]).getClass().isEnum()) {
-					instance.setValue((Attribute) fvAttributes.get(count),
-							String.valueOf(data.getValue(fieldNames[i])));
+					instance.setValue(fvAttributes.get(count), String.valueOf(data.getValue(fieldNames[i])));
 					count++;
 				} else if (data.getValue(fieldNames[i]).getClass().isArray()) {
 					int x = Array.getLength(data.getValue(fieldNames[i])) - 1;
 					Object o = data.getValue(fieldNames[i]);
 					for (int j = 0; j <= x; j++) {
-						instance.setValue((Attribute) fvAttributes.get(count),
-								Double.parseDouble(String.valueOf(Array.get(o, j))));
+						instance.setValue(fvAttributes.get(count), Double.parseDouble(String.valueOf(Array.get(o, j))));
 						count++;
 					}
 				} else {
 					if (NumberUtils.isNumber(String.valueOf(data.getValue(fieldNames[i]))))
-						instance.setValue((Attribute) fvAttributes.get(count),
+						instance.setValue(fvAttributes.get(count),
 								Double.parseDouble(String.valueOf(data.getValue(fieldNames[i]))));
 					else
-						instance.setValue((Attribute) fvAttributes.get(count),
-								String.valueOf(data.getValue(fieldNames[i])));
+						instance.setValue(fvAttributes.get(count), String.valueOf(data.getValue(fieldNames[i])));
 					count++;
 				}
 			}
-			trainingSet.add(instance);
+			set.add(instance);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -376,7 +372,7 @@ public abstract class MLAggregator extends Aggregator {
 			throws IOException, InterruptedException {
 		if (flag != true)
 			attributeCreation(data, name);
-		instanceCreation(data);
+		instanceCreation(data, isTrainData() ? trainingSet : testingSet);
 	}
 
 	public void aggregate(final Tuple data, final String metadata)
@@ -395,6 +391,6 @@ public abstract class MLAggregator extends Aggregator {
 	public void setVectorSize(int vectorSize) {
 		this.vectorSize = vectorSize;
 	}
-	
+
 	abstract boolean isClassification();
 }
