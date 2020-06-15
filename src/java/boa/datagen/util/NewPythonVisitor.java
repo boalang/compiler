@@ -702,6 +702,14 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.NOT_IN);
 		}
 
+		else if (md.getKind() == ExpressionConstants.E_IS) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.IS);
+		}
+		else if (md.getKind() == ExpressionConstants.E_ISNOT) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.IS_NOT);
+		}
+
+		
 		else if (md.getKind() == ExpressionConstants.E_LAND) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.LOGICAL_AND);
 		} else if (md.getKind() == ExpressionConstants.E_LOR) {

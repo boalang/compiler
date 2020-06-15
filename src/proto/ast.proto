@@ -372,6 +372,8 @@ message Expression {
 		UNARY=106;
 		OP_INT_DIV=107;
 		ASSIGN_INT_DIV=108;
+		IS=109;
+		IS_NOT=110;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
