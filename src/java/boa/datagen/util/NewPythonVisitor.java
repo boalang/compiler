@@ -1222,6 +1222,14 @@ public class NewPythonVisitor extends ASTVisitor {
 			s.getExpression1().traverse(this);
 			b.addExpressions(expressions.pop());
 		}
+		if (s.getExpression2() != null) {
+			s.getExpression1().traverse(this);
+			b.addExpressions(expressions.pop());
+		}
+		if (s.getExpression3() != null) {
+			s.getExpression1().traverse(this);
+			b.addExpressions(expressions.pop());
+		}
 
 		list.add(b.build());
 

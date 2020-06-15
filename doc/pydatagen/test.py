@@ -27,3 +27,14 @@ for i in range(1, 10):
     print(i)
 else:
     print("this is not printed")
+
+while True:
+    print(count)
+else:
+    print("this is not printed")
+
+
+
+raise Exception("Sorry, no numbers below zero")
+raise
+raise Exception ## handled but added as VARACCESS
