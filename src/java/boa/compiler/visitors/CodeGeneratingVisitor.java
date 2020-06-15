@@ -313,6 +313,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final List<String> fields = new ArrayList<String>();
 			final List<String> types = new ArrayList<String>();
 			final List<Boolean> protos = new ArrayList<Boolean>();
+			final List<Boolean> enums = new ArrayList<Boolean>();
 
 			int fieldCount = 0;
 			for (final Component c : members) {
@@ -324,6 +325,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				fieldCount++;
 				BoaType type = c.getType().type;
 				protos.add(type instanceof BoaProtoTuple);
+				enums.add(type instanceof BoaEnum);
 				types.add(type.toBoxedJavaType());
 			}
 
@@ -331,6 +333,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("fields", fields);
 			st.add("types", types);
 			st.add("protos", protos);
+			st.add("enums", enums);
 
 			code.add(st.render());
 		}

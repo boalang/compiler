@@ -19,8 +19,6 @@ package boa.aggregators.ml;
 import boa.runtime.Tuple;
 import boa.aggregators.AggregatorSpec;
 import weka.classifiers.meta.AdaBoostM1;
-import weka.core.Utils;
-
 import java.io.IOException;
 
 /**

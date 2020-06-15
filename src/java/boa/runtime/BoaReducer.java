@@ -25,7 +25,6 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.Reducer.Context;
 import org.apache.log4j.Logger;
 
 import boa.aggregators.Aggregator;
@@ -89,14 +88,21 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 
 		for (final EmitValue value : values)
 			try {
-				MLAggregator mla = (MLAggregator) a;
-				if (value.getTuple() != null) {
-					mla.aggregate(value.getTuple(), value.getMetadata());
-				} else {
-					if (setVector && value.getData().length > 1) {
-						mla.setVectorSize(value.getData().length);
-						setVector = false;
+				if (a instanceof MLAggregator) {
+					MLAggregator mla = (MLAggregator) a;
+					if (value.getTuple() != null) {
+						System.out.println("emit value has tuple ");
+						mla.aggregate(value.getTuple(), value.getMetadata());
+					} else {
+						System.out.println("emit value has no tuple ");
+						if (setVector && value.getData().length > 1) {
+							mla.setVectorSize(value.getData().length);
+							setVector = false;
+						}
+						for (final String s : value.getData()) 
+							a.aggregate(s, value.getMetadata());
 					}
+				} else {
 					for (final String s : value.getData()) 
 						a.aggregate(s, value.getMetadata());
 				}

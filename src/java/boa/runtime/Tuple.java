@@ -17,7 +17,6 @@
 package boa.runtime;
 
 import java.io.IOException;
-import java.lang.ClassNotFoundException;
 
 public interface Tuple {
 	public String[] getValues();
