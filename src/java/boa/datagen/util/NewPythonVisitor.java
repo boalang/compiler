@@ -27,6 +27,7 @@ import org.eclipse.dltk.ast.expressions.Literal;
 import org.eclipse.dltk.python.parser.ast.PythonArgument;
 import org.eclipse.dltk.python.parser.ast.PythonAssertStatement;
 import org.eclipse.dltk.python.parser.ast.PythonClassDeclaration;
+import org.eclipse.dltk.python.parser.ast.PythonConstants;
 import org.eclipse.dltk.python.parser.ast.PythonDelStatement;
 import org.eclipse.dltk.python.parser.ast.PythonExceptStatement;
 import org.eclipse.dltk.python.parser.ast.PythonForStatement;
@@ -117,20 +118,16 @@ public class NewPythonVisitor extends ASTVisitor {
 		if (md instanceof PythonImportAsExpression) {
 			visit((PythonImportAsExpression) md);
 			opFound = true;
-		} 
-		else if (md instanceof PythonImportExpression) {
+		} else if (md instanceof PythonImportExpression) {
 			visit((PythonImportExpression) md);
 			opFound = true;
-		}
-		else if (md instanceof PythonImportFromStatement) {
+		} else if (md instanceof PythonImportFromStatement) {
 			visit((PythonImportFromStatement) md);
 			opFound = true;
-		}
-		else if (md instanceof NotStrictAssignment) {
+		} else if (md instanceof NotStrictAssignment) {
 			visit((NotStrictAssignment) md);
 			opFound = true;
-		}
-		else if (md instanceof Assignment) {
+		} else if (md instanceof Assignment) {
 			visit((Assignment) md);
 			opFound = true;
 		} else if (md instanceof PythonLambdaExpression) {
@@ -229,16 +226,14 @@ public class NewPythonVisitor extends ASTVisitor {
 		} else if (md instanceof PythonForListExpression) {
 			visit((PythonForListExpression) md);
 			opFound = true;
-		}
-		else if (md instanceof EmptyExpression) {
+		} else if (md instanceof EmptyExpression) {
 			visit((EmptyExpression) md);
 			opFound = true;
-		}
-		else if (md instanceof UnaryExpression) {
+		} else if (md instanceof UnaryExpression) {
 			visit((UnaryExpression) md);
 			opFound = true;
 		}
-		
+
 		return !opFound;
 
 	}
@@ -363,33 +358,33 @@ public class NewPythonVisitor extends ASTVisitor {
 		b.addImports(imp);
 		return true;
 	}
+
 	public boolean visit(PythonImportExpression md) {
 		String imp = "";
 		imp += md.getName();
 		b.addImports(imp);
 		return true;
 	}
+
 	public boolean visit(PythonImportFromStatement md) {
-		
-		Map<String, String> imas=md.getImportedAsNames();
-		
-		String moduleName=md.getImportModuleName();
-		
-		if(md.isAllImport())
-		{
-			b.addImports(moduleName+".*");
-		}
-		else {
+
+		Map<String, String> imas = md.getImportedAsNames();
+
+		String moduleName = md.getImportModuleName();
+
+		if (md.isAllImport()) {
+			b.addImports(moduleName + ".*");
+		} else {
 			for (Map.Entry<String, String> entry : imas.entrySet()) {
-			    String key = entry.getKey();
-			    String value = entry.getValue();
-			    if(key.equals(value))
-			    	b.addImports(moduleName+"."+key);
-			    else
-			    	b.addImports(moduleName+"."+key+" as "+value);
+				String key = entry.getKey();
+				String value = entry.getValue();
+				if (key.equals(value))
+					b.addImports(moduleName + "." + key);
+				else
+					b.addImports(moduleName + "." + key + " as " + value);
 			}
 		}
-		
+
 		return true;
 	}
 
@@ -430,20 +425,17 @@ public class NewPythonVisitor extends ASTVisitor {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.FOR_LIST);
-		
-		if(md.getVars()!=null)
-		{
+
+		if (md.getVars() != null) {
 			md.getVars().traverse(this);
 			b.addExpressions(expressions.pop());
 		}
-		
-		if(md.getFrom()!=null)
-		{
+
+		if (md.getFrom() != null) {
 			md.getFrom().traverse(this);
 			b.addExpressions(expressions.pop());
 		}
-		if(md.getIfList()!=null)
-		{
+		if (md.getIfList() != null) {
 			md.getIfList().traverse(this);
 			b.addExpressions(expressions.pop());
 		}
@@ -452,20 +444,19 @@ public class NewPythonVisitor extends ASTVisitor {
 		return true;
 
 	}
-	
+
 	public boolean visit(PythonListForExpression md) throws Exception {
 
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAY_COMPREHENSION);
-		
-		if(md.getMaker()!=null)
-		{
+
+		if (md.getMaker() != null) {
 			md.getMaker().traverse(this);
 			b.addExpressions(expressions.pop());
 		}
-		if(md.getExpressions()!=null) {
-		
+		if (md.getExpressions() != null) {
+
 			for (Object ob : md.getExpressions()) {
 				org.eclipse.dltk.ast.expressions.Expression ex = (org.eclipse.dltk.ast.expressions.Expression) ob;
 				ex.traverse(this);
@@ -478,7 +469,6 @@ public class NewPythonVisitor extends ASTVisitor {
 
 	}
 
-	
 	public boolean visit(PythonDictExpression md) throws Exception {
 
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
@@ -533,32 +523,37 @@ public class NewPythonVisitor extends ASTVisitor {
 		return true;
 
 	}
-	public boolean visit(NotStrictAssignment md) throws Exception {
 
+	public boolean visit(NotStrictAssignment md) throws Exception {
 
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 
-		if(md.getKind()==ExpressionConstants.E_PLUS_ASSIGN)
+		if (md.getKind() == ExpressionConstants.E_PLUS_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_ADD);
-		else if(md.getKind()==ExpressionConstants.E_MINUS_ASSIGN)
+		else if (md.getKind() == ExpressionConstants.E_MINUS_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_SUB);
-		else if(md.getKind()==ExpressionConstants.E_MULT_ASSIGN)
+		else if (md.getKind() == ExpressionConstants.E_MULT_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_MULT);
-		else if(md.getKind()==ExpressionConstants.E_DIV_ASSIGN)
+		else if (md.getKind() == ExpressionConstants.E_DIV_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_DIV);
-		else if(md.getKind()==ExpressionConstants.E_MOD_ASSIGN)
+		else if (md.getKind() == ExpressionConstants.E_MOD_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_MOD);
-		else if(md.getKind()==ExpressionConstants.E_RSHIFT_ASSIGN)
+		else if (md.getKind() == ExpressionConstants.E_POWER_ASSIGN)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_POW);
+		
+		else if (md.getKind() == ExpressionConstants.E_RSHIFT_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_RSHIFT);
-		else if(md.getKind()==ExpressionConstants.E_LSHIFT_ASSIGN)
+		else if (md.getKind() == ExpressionConstants.E_LSHIFT_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_LSHIFT);
-		else if(md.getKind()==ExpressionConstants.E_BAND_ASSIGN)
+		else if (md.getKind() == ExpressionConstants.E_BAND_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_BITAND);
-		else if(md.getKind()==ExpressionConstants.E_BOR_ASSIGN)
+		else if (md.getKind() == ExpressionConstants.E_BOR_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_BITOR);
-		else if(md.getKind()==ExpressionConstants.E_BXOR_ASSIGN)
+		else if (md.getKind() == ExpressionConstants.E_BXOR_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_BITXOR);
-
+		else
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
+		
 
 		md.getLeft().traverse(this);
 		b.addExpressions(expressions.pop());
@@ -630,34 +625,34 @@ public class NewPythonVisitor extends ASTVisitor {
 	public boolean visit(EmptyExpression md) throws Exception {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.EMPTY);
-		
+
 		expressions.push(b.build());
-		
+
 		return true;
-		
-		
+
 	}
+
 	public boolean visit(UnaryExpression md) throws Exception {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.UNARY);
-		
+
 		boa.types.Ast.Expression.Builder left = boa.types.Ast.Expression.newBuilder();
 		left.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 
 		left.setLiteral(md.getOperator());
-		
+
 		b.addExpressions(left.build());
-		
+
 		md.getExpression().traverse(this);
-		
+
 		b.addExpressions(expressions.pop());
-		
+
 		expressions.push(b.build());
-		
+
 		return true;
-		
-		
+
 	}
+
 	public boolean visit(BinaryExpression md) throws Exception {
 
 		System.out.println("Binary Exp :  " + md.toString());
@@ -682,7 +677,14 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_DIV);
 		} else if (md.getKind() == ExpressionConstants.E_MOD) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_MOD);
-		} else if (md.getKind() == ExpressionConstants.E_NOT_EQUAL) {
+		} else if (md.getKind() == ExpressionConstants.E_POWER) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_POW);
+		}
+		else if (md.getKind() == PythonConstants.E_INTEGER_DIV) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_INT_DIV);
+		}
+		
+		else if (md.getKind() == ExpressionConstants.E_NOT_EQUAL) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.NEQ);
 		} else if (md.getKind() == ExpressionConstants.E_GE) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.GTEQ);
@@ -694,25 +696,37 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.EQ);
 		} else if (md.getKind() == ExpressionConstants.E_LE) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.LTEQ);
+		} else if (md.getKind() == ExpressionConstants.E_IN) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.IN);
+		} else if (md.getKind() == ExpressionConstants.E_NOTIN) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.NOT_IN);
+		}
+
+		else if (md.getKind() == ExpressionConstants.E_LAND) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.LOGICAL_AND);
+		} else if (md.getKind() == ExpressionConstants.E_LOR) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.LOGICAL_OR);
+		} else if (md.getKind() == ExpressionConstants.E_LNOT) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.LOGICAL_NOT);
+		}
+		
+		else if (md.getKind() == ExpressionConstants.E_BAND) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_AND);
+		} else if (md.getKind() == ExpressionConstants.E_BOR) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_OR);
 		} else if (md.getKind() == ExpressionConstants.E_RSHIFT) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_RSHIFT);
 		} else if (md.getKind() == ExpressionConstants.E_LSHIFT) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_LSHIFT);
 		} else if (md.getKind() == ExpressionConstants.E_XOR) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_XOR);
-		} else if (md.getKind() == ExpressionConstants.E_IN) {
-			b.setKind(boa.types.Ast.Expression.ExpressionKind.IN);
-		} else if (md.getKind() == ExpressionConstants.E_NOTIN) {
-			b.setKind(boa.types.Ast.Expression.ExpressionKind.NOT_IN);
-		} else if (md.getKind() == ExpressionConstants.E_LAND) {
-			b.setKind(boa.types.Ast.Expression.ExpressionKind.LOGICAL_AND);
-		} else if (md.getKind() == ExpressionConstants.E_LOR) {
-			b.setKind(boa.types.Ast.Expression.ExpressionKind.LOGICAL_OR);
-		} else if (md.getKind() == ExpressionConstants.E_LNOT) {
-			b.setKind(boa.types.Ast.Expression.ExpressionKind.LOGICAL_NOT);
-		} else if (md.getKind() == ExpressionConstants.E_POWER) {
-			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_POW);
-		}
+		} else if (md.getKind() == ExpressionConstants.E_BNOT) {
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_NOT);
+		} 
+		else
+			
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
+
 
 
 		md.getLeft().traverse(this);
@@ -1063,7 +1077,7 @@ public class NewPythonVisitor extends ASTVisitor {
 		if (s.getfMainArguments() instanceof PythonTestListExpression) {
 			for (Object ob : ((ExpressionList) s.getfMainArguments()).getExpressions()) {
 				((ASTNode) ob).traverse(this);
-				
+
 				boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
 				vb.setComputedName(expressions.pop());
 				b.addVariableDeclarations(vb.build());
