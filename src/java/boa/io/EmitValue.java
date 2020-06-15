@@ -302,10 +302,8 @@ public class EmitValue implements Writable {
 	 */
 	public EmitValue(final long[] data, final String metadata) {
 		final String[] strings = new String[data.length];
-
 		for (int i = 0; i < data.length; i++)
 			strings[i] = String.valueOf(data[i]);
-
 		this.data = strings;
 		this.metadata = metadata;
 	}
@@ -323,25 +321,26 @@ public class EmitValue implements Writable {
 	@Override
 	public void readFields(final DataInput in) throws IOException {
 
-		// read data
-		final int length = in.readInt();
-		if (length > 0) {
-			byte[] bytes = new byte[length];
-			in.readFully(bytes, 0, length);
-			Object o = null;
-			try {
-				o = new ObjectInputStream(new ByteArrayInputStream(bytes)).readObject();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			// first check if it is Tuple data
-			if (o instanceof Tuple) {
+		final char type = in.readChar();
+		if (type == 'S') {
+			final int count = in.readInt();
+			this.data = new String[count];
+			for (int i = 0; i < count; i++)
+				this.data[i] = Text.readString(in);
+		} else {
+			final int length = in.readInt();
+			if (length > 0) {
+				byte[] bytes = new byte[length];
+				in.readFully(bytes, 0, length);
+				ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
+				ObjectInputStream dataIn = new ObjectInputStream(bin);
+				Object o = null;
+				try {
+					o = dataIn.readObject();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				this.tdata = (Tuple) o;
-			} else {
-				// read string[] data
-				this.data = new String[length];
-				for (int i = 0; i < length; i++)
-					this.data[i] = Text.readString(in);
 			}
 		}
 
@@ -358,6 +357,7 @@ public class EmitValue implements Writable {
 	public void write(final DataOutput out) throws IOException {
 		// write string[] data
 		if (this.data != null) {
+			out.writeChar('S'); // set date type S
 			out.writeInt(this.data.length);
 			for (final String d : this.data)
 				Text.writeString(out, d);
@@ -365,6 +365,7 @@ public class EmitValue implements Writable {
 
 		// write tuple data
 		if (this.tdata != null) {
+			out.writeChar('T'); // set date type T
 			byte[] serializedObject = this.tdata.serialize(this.tdata);
 			out.writeInt(serializedObject.length);
 			out.write(serializedObject);

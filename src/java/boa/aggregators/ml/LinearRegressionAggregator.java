@@ -32,9 +32,7 @@ import java.io.IOException;
 public class LinearRegressionAggregator extends MLAggregator {
 	private LinearRegression model;
 
-	public LinearRegressionAggregator() {
-		this.model = new LinearRegression();
-	}
+	public LinearRegressionAggregator() {}
 
 	public LinearRegressionAggregator(final String s) {
 		super(s);
@@ -55,6 +53,8 @@ public class LinearRegressionAggregator extends MLAggregator {
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		try {
+			this.model = new LinearRegression();
+			this.model.setOptions(options);
 			this.model.buildClassifier(this.trainingSet);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,10 +63,5 @@ public class LinearRegressionAggregator extends MLAggregator {
 		this.evaluate(this.model, this.trainingSet);
 		this.evaluate(this.model, this.testingSet);
 		this.collect(this.model.toString());
-	}
-
-	@Override
-	boolean isClassification() {
-		return false;
 	}
 }

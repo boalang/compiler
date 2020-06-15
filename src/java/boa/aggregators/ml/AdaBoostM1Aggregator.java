@@ -31,8 +31,7 @@ import java.io.IOException;
 public class AdaBoostM1Aggregator extends MLAggregator {
     private AdaBoostM1 model;
 
-    public AdaBoostM1Aggregator() {
-    }
+    public AdaBoostM1Aggregator() {}
 
     public AdaBoostM1Aggregator(final String s) {
         super(s);
@@ -49,7 +48,7 @@ public class AdaBoostM1Aggregator extends MLAggregator {
     @Override
     public void finish() throws IOException, InterruptedException {
         try {
-            this.model = new AdaBoostM1();
+        	this.model = new AdaBoostM1();
             this.model.setOptions(options);
             this.model.buildClassifier(this.trainingSet);
         } catch (Exception e) {
@@ -62,9 +61,4 @@ public class AdaBoostM1Aggregator extends MLAggregator {
 		this.evaluate(this.model, this.testingSet);
         this.collect(this.model.toString());
     }
-    
-	@Override
-	boolean isClassification() {
-		return true;
-	}
 }

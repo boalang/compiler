@@ -99,7 +99,7 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 							mla.setVectorSize(value.getData().length);
 							setVector = false;
 						}
-						for (final String s : value.getData()) 
+						for (final String s : value.getData())
 							a.aggregate(s, value.getMetadata());
 					}
 				} else {

@@ -1,10 +1,15 @@
+type T = enum {y = "true", n = "false"};
+label: T;
+
 p: Project = input;
-ada : output adaboost("-c yes/no -s 75") of {int, int, string};
-i:=0;
+ada : output adaboost("-s 75") of {int, T, int, T};
+
+i := 0;
 while(i < 100){
-	label := "yes";
+	label = T.y;
 	if (i % 2 == 0)
-		label = "no";
-	ada << {i + 7, i, label};
+		label = T.n;
+	a: T = T.n;
+	ada << {i + 7, a, i, label};
 	i++;
 }

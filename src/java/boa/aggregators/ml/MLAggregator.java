@@ -39,7 +39,6 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -65,6 +64,7 @@ public abstract class MLAggregator extends Aggregator {
 	public MLAggregator() {
 		fvAttributes = new ArrayList<Attribute>();
 		vector = new ArrayList<String>();
+		trainingPerc = 100;
 	}
 
 	public MLAggregator(final String s) {
@@ -72,6 +72,7 @@ public abstract class MLAggregator extends Aggregator {
 		fvAttributes = new ArrayList<Attribute>();
 		vector = new ArrayList<String>();
 		nominalAttr = new ArrayList<String>();
+		trainingPerc = 100;
 		try {
 			options = handleNonWekaOptions(Utils.splitOptions(s));
 		} catch (Exception e) {
@@ -86,8 +87,6 @@ public abstract class MLAggregator extends Aggregator {
 			String cur = opts[i];
 			if (cur.equals("-s"))
 				trainingPerc = Integer.parseInt(opts[++i]);
-			else if (cur.equals("-c"))
-				nominalAttr = new ArrayList<String>(Arrays.asList(opts[++i].split("/")));
 			else
 				others.add(opts[i]);
 		}
@@ -283,15 +282,8 @@ public abstract class MLAggregator extends Aggregator {
 	protected void instanceCreation(ArrayList<String> data, Instances set) {
 		try {
 			Instance instance = new DenseInstance(NumOfAttributes);
-			for (int i = 0; i < NumOfAttributes; i++) {
-				try {
-					Attribute attr = fvAttributes.get(i);
-					instance.setValue(attr, Double.parseDouble(data.get(i)));
-				} catch (NumberFormatException e) {
-					Attribute attr = fvAttributes.get(i);
-					instance.setValue(attr, String.valueOf(data.get(i)));
-				}
-			}
+			for (int i = 0; i < NumOfAttributes; i++)
+				instance.setValue(fvAttributes.get(i), Double.parseDouble(data.get(i)));
 			set.add(instance);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -331,16 +323,13 @@ public abstract class MLAggregator extends Aggregator {
 
 	// define attributes for train and test dataset
 	protected void attributeCreation(String name) {
+		System.out.println(" attributeCreation ");
 		fvAttributes.clear();
 		NumOfAttributes = getVectorSize();
 		try {
 			int classIdx = NumOfAttributes - 1;
-			for (int i = 0; i < NumOfAttributes; i++) {
-				Attribute a = new Attribute("Attribute" + i);
-				if (i == classIdx && isClassification())
-					a = new Attribute("nominal" + i, nominalAttr);
-				fvAttributes.add(a);
-			}
+			for (int i = 0; i < NumOfAttributes; i++)
+				fvAttributes.add(new Attribute("Attribute" + i));
 			trainingSet = new Instances(name, fvAttributes, 1);
 			trainingSet.setClassIndex(classIdx);
 			testingSet = new Instances(name, fvAttributes, 1);
@@ -391,6 +380,4 @@ public abstract class MLAggregator extends Aggregator {
 	public void setVectorSize(int vectorSize) {
 		this.vectorSize = vectorSize;
 	}
-
-	abstract boolean isClassification();
 }
