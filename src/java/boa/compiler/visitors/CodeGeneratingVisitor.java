@@ -283,9 +283,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 				int counter = 0;
 				for (final Expression e : n.getExprs()) {
-					counter++;
 					fields.add("f" + counter);
 					BoaType type = e.type;
+					counter++;
 					types.add(type.toBoxedJavaType());
 					protos.add(type instanceof BoaProtoTuple);
 					enums.add(type instanceof BoaEnum);
