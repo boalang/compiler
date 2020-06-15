@@ -1063,7 +1063,10 @@ public class NewPythonVisitor extends ASTVisitor {
 		if (s.getfMainArguments() instanceof PythonTestListExpression) {
 			for (Object ob : ((ExpressionList) s.getfMainArguments()).getExpressions()) {
 				((ASTNode) ob).traverse(this);
-				b.addExpressions(expressions.pop());
+				
+				boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
+				vb.setComputedName(expressions.pop());
+				b.addVariableDeclarations(vb.build());
 			}
 		}
 

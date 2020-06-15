@@ -104,7 +104,6 @@
 	<classpathentry kind="lib" path="lib/junit-4.11-javadoc.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.11-sources.jar"/>
 	<classpathentry kind="lib" path="compile"/>
-	<classpathentry kind="lib" path="lib/org.antlr.runtime_3.0.0.v200803061811.jar"/>
 	<classpathentry kind="lib" path="lib/antlr-4.5-complete.jar"/>
 	<classpathentry kind="lib" path="lib/parse.python.jar"/>
 	<classpathentry kind="lib" path="lib/parse.python.antlr.runtime.jar"/>
