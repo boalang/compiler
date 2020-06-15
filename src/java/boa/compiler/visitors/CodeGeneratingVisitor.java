@@ -1015,16 +1015,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			return;
 		}
 
-		String typecast = "";
 		if (rhs.contains(".load(")) {
-			rhs = rhs.substring(0,rhs.length()-1) + ", new " +
-					((BoaModel)n.getLhs().type).getType().toJavaType() + "())";
-			typecast = "(" + (n.getLhs().type + "").split("\\/")[0] + ")";
+			rhs = rhs.substring(0,rhs.length()-1) + ", new " + ((BoaModel)n.getLhs().type).getType().toJavaType() + "())";
+			rhs = "(" + (n.getLhs().type + "").split("\\/")[0] + ")" + rhs;
 		}
 
 		st.add("lhs", lhs);
 		st.add("operator", n.getOp());
-		st.add("rhs", typecast + rhs);
+		st.add("rhs", rhs);
 
 		code.add(st.render());
 	}
