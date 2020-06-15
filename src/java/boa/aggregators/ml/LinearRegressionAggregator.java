@@ -17,7 +17,6 @@
 package boa.aggregators.ml;
 
 import boa.aggregators.AggregatorSpec;
-import boa.aggregators.FinishedException;
 import boa.runtime.Tuple;
 import weka.classifiers.functions.LinearRegression;
 
@@ -28,23 +27,29 @@ import java.io.IOException;
  *
  * @author ankuraga
  */
-@AggregatorSpec(name = "linearregression", formalParameters = {"string"})
+@AggregatorSpec(name = "linearregression", formalParameters = { "string" })
 public class LinearRegressionAggregator extends MLAggregator {
 	private LinearRegression model;
 
-	public LinearRegressionAggregator() {}
+	public LinearRegressionAggregator() {
+	}
 
 	public LinearRegressionAggregator(final String s) {
 		super(s);
 	}
 
 	@Override
-	public void aggregate(String data, String metadata) throws NumberFormatException, IOException, InterruptedException {
+	public void aggregate(String[] data, String metadata) throws IOException, InterruptedException {
 		aggregate(data, metadata, "LinearRegression");
 	}
 
-	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException, FinishedException, IllegalAccessException {
+	@Override
+	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
 		aggregate(data, metadata, "LinearRegression");
+	}
+
+	@Override
+	public void aggregate(String data, String metadata) throws IOException, InterruptedException {
 	}
 
 	/**
@@ -64,4 +69,5 @@ public class LinearRegressionAggregator extends MLAggregator {
 		this.evaluate(this.model, this.testingSet);
 		this.collect(this.model.toString());
 	}
+
 }

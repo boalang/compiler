@@ -17,7 +17,6 @@
 package boa.aggregators.ml;
 
 import boa.aggregators.Aggregator;
-import boa.aggregators.FinishedException;
 import boa.datagen.DefaultProperties;
 import boa.runtime.Tuple;
 
@@ -41,15 +40,16 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import static boa.aggregators.ml.Util.*;
+
 /**
  * A Boa ML aggregator to train models.
  *
  * @author ankuraga
  */
 public abstract class MLAggregator extends Aggregator {
-	protected final ArrayList<Attribute> fvAttributes;
+	protected ArrayList<Attribute> fvAttributes;
 	protected Instances unFilteredInstances;
-	protected ArrayList<String> vector;
 	protected int trainingPerc;
 	protected Instances trainingSet;
 	protected Instances testingSet;
@@ -57,27 +57,24 @@ public abstract class MLAggregator extends Aggregator {
 	protected String[] options;
 	protected boolean flag;
 	protected ArrayList<String> nominalAttr;
-	protected int count;
-	private int vectorSize;
-//	private String mlarg;
 
 	public MLAggregator() {
-		fvAttributes = new ArrayList<Attribute>();
-		vector = new ArrayList<String>();
-		trainingPerc = 100;
+		initialize();
 	}
 
 	public MLAggregator(final String s) {
-//		mlarg = s;
-		fvAttributes = new ArrayList<Attribute>();
-		vector = new ArrayList<String>();
-		nominalAttr = new ArrayList<String>();
-		trainingPerc = 100;
+		initialize();
 		try {
 			options = handleNonWekaOptions(Utils.splitOptions(s));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void initialize() {
+		fvAttributes = new ArrayList<Attribute>();
+		nominalAttr = new ArrayList<String>();
+		trainingPerc = 100;
 	}
 
 	// this function is used to handle non-weka options (-s: split)
@@ -97,25 +94,14 @@ public abstract class MLAggregator extends Aggregator {
 		try {
 			Evaluation eval = new Evaluation(set);
 			eval.evaluateModel(model, set);
-			String name = set == trainingSet ? "Training" : "Testing";
-			collect(eval.toSummaryString("\n" + name + "Set Evaluation:\n", false));
-//			System.out.println("Correct % = " + eval.pctCorrect());
-//			System.out.println("Incorrect % = " + eval.pctIncorrect());
-//			System.out.println("AUC % = " + eval.areaUnderROC(1));
-//			System.out.println("Kappa % = " + eval.kappa());
-//			System.out.println("MAE % = " + eval.meanAbsoluteError());
-//			System.out.println("RMSE % = " + eval.rootMeanSquaredError());
-//			System.out.println("RAE % = " + eval.relativeAbsoluteError());
-//			System.out.println("RRSE % = " + eval.rootRelativeSquaredError());
-//			System.out.println("Precision = " + eval.precision(1));
-//			System.out.println("Recall = " + eval.recall(1));
-//			System.out.println("fMeasure = " + eval.fMeasure(1));
-//			System.out.println("Error Rate = " + eval.errorRate());
+			String setName = set == trainingSet ? "Training" : "Testing";
+			collect(summary(eval, setName));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	// TODO: this is not fixed
 	public void saveTrainingSet(Object set) {
 		FSDataOutputStream out = null;
 		FileSystem fileSystem = null;
@@ -175,7 +161,6 @@ public abstract class MLAggregator extends Aggregator {
 		FileSystem fileSystem = null;
 		Path filePath = null;
 		ObjectOutputStream objectOut = null;
-//		EmitStatement n = null;
 
 		try {
 			JobContext context = (JobContext) getContext();
@@ -238,14 +223,10 @@ public abstract class MLAggregator extends Aggregator {
 		unFilteredInstances.delete();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public abstract void aggregate(final String data, final String metadata)
-			throws NumberFormatException, IOException, InterruptedException;
-
+	// create attributes with tuple input data
 	protected void attributeCreation(Tuple data, final String name) {
+		if (flag == true)
+			return;
 		fvAttributes.clear();
 		try {
 			String[] fieldNames = data.getFieldNames();
@@ -279,18 +260,8 @@ public abstract class MLAggregator extends Aggregator {
 		}
 	}
 
-	protected void instanceCreation(ArrayList<String> data, Instances set) {
-		try {
-			Instance instance = new DenseInstance(NumOfAttributes);
-			for (int i = 0; i < NumOfAttributes; i++)
-				instance.setValue(fvAttributes.get(i), Double.parseDouble(data.get(i)));
-			set.add(instance);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	protected void instanceCreation(Tuple data, Instances set) {
+	// create instance this tuple input data
+	private void instanceCreation(Tuple data, Instances set) {
 		try {
 			int count = 0;
 			Instance instance = new DenseInstance(NumOfAttributes);
@@ -321,13 +292,14 @@ public abstract class MLAggregator extends Aggregator {
 		}
 	}
 
-	// define attributes for train and test dataset
-	protected void attributeCreation(String name) {
+	// create attributes with string[] input data
+	private void attributeCreation(String[] data, String name) {
+		if (flag == true)
+			return;
 		fvAttributes.clear();
-		NumOfAttributes = getVectorSize();
 		try {
-			int classIdx = NumOfAttributes - 1;
-			for (int i = 0; i < NumOfAttributes; i++)
+			int classIdx = data.length - 1;
+			for (int i = 0; i < data.length; i++)
 				fvAttributes.add(new Attribute("Attribute" + i));
 			trainingSet = new Instances(name, fvAttributes, 1);
 			trainingSet.setClassIndex(classIdx);
@@ -339,44 +311,36 @@ public abstract class MLAggregator extends Aggregator {
 		}
 	}
 
-	protected void aggregate(final String data, final String metadata, String name)
-			throws IOException, InterruptedException {
-		if (count++ < getVectorSize())
-			vector.add(data);
-		if (count == getVectorSize()) {
-			if (flag != true)
-				attributeCreation(name);
-			instanceCreation(vector, isTrainData() ? trainingSet : testingSet);
-			vector = new ArrayList<String>();
-			count = 0;
+	// create instance this string[] input data
+	private void instanceCreation(String[] data, Instances set) {
+		try {
+			Instance instance = new DenseInstance(data.length);
+			for (int i = 0; i < data.length; i++)
+				instance.setValue(fvAttributes.get(i), Double.parseDouble(data[i]));
+			set.add(instance);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+	}
+
+	protected void aggregate(final String[] data, final String metadata, String name)
+			throws IOException, InterruptedException {
+		attributeCreation(data, name);
+		instanceCreation(data, isTrainData() ? trainingSet : testingSet);
+	}
+
+	protected void aggregate(final Tuple data, final String metadata, String name)
+			throws IOException, InterruptedException {
+		attributeCreation(data, name);
+		instanceCreation(data, isTrainData() ? trainingSet : testingSet);
 	}
 
 	private boolean isTrainData() {
 		return Math.random() > (1 - trainingPerc / 100.0);
 	}
 
-	protected void aggregate(final Tuple data, final String metadata, String name)
-			throws IOException, InterruptedException {
-		if (flag != true)
-			attributeCreation(data, name);
-		instanceCreation(data, isTrainData() ? trainingSet : testingSet);
-	}
+	public abstract void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException;
 
-	public void aggregate(final Tuple data, final String metadata)
-			throws IOException, InterruptedException, FinishedException, IllegalAccessException {
-	}
+	public abstract void aggregate(final String[] data, final String metadata) throws IOException, InterruptedException;
 
-	public void aggregate(final Tuple data)
-			throws IOException, InterruptedException, FinishedException, IllegalAccessException {
-		aggregate(data, null);
-	}
-
-	public int getVectorSize() {
-		return vectorSize;
-	}
-
-	public void setVectorSize(int vectorSize) {
-		this.vectorSize = vectorSize;
-	}
 }

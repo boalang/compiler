@@ -27,38 +27,44 @@ import java.io.IOException;
  * @author ankuraga
  * @author nmtiwari
  */
-@AggregatorSpec(name = "adaboost", formalParameters = {"string"})
+@AggregatorSpec(name = "adaboost", formalParameters = { "string" })
 public class AdaBoostM1Aggregator extends MLAggregator {
-    private AdaBoostM1 model;
+	private AdaBoostM1 model;
 
-    public AdaBoostM1Aggregator() {}
+	public AdaBoostM1Aggregator() {
+	}
 
-    public AdaBoostM1Aggregator(final String s) {
-        super(s);
-    }
+	public AdaBoostM1Aggregator(final String s) {
+		super(s);
+	}
 
-    public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
-    	aggregate(data, metadata, "AdaBoostM1");
-    }
+	@Override
+	public void aggregate(final String[] data, String metadata) throws IOException, InterruptedException {
+		aggregate(data, metadata, "AdaBoostM1");
+	}
 
-    public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
-    	aggregate(data, metadata, "AdaBoostM1");
-    }
+	@Override
+	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
+		aggregate(data, metadata, "AdaBoostM1");
+	}
 
-    @Override
-    public void finish() throws IOException, InterruptedException {
-        try {
-        	this.model = new AdaBoostM1();
-            this.model.setOptions(options);
-            this.model.buildClassifier(this.trainingSet);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	@Override
+	public void aggregate(String data, String metadata) throws IOException, InterruptedException {
+	}
 
-        this.saveModel(this.model);
-//        this.saveTrainingSet(this.trainingSet);
-        this.evaluate(this.model, this.trainingSet);
+	@Override
+	public void finish() throws IOException, InterruptedException {
+		try {
+			this.model = new AdaBoostM1();
+			this.model.setOptions(options);
+			this.model.buildClassifier(this.trainingSet);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		this.saveModel(this.model);
+		this.evaluate(this.model, this.trainingSet);
 		this.evaluate(this.model, this.testingSet);
-        this.collect(this.model.toString());
-    }
+		this.collect(this.model.toString());
+	}
+
 }

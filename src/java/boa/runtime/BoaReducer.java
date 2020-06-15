@@ -80,7 +80,6 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 
 		// get the aggregator named by the emit key
 		final Aggregator a = this.aggregators.get(key.getName());
-		boolean setVector = true;
 		
 		a.setCombining(false);
 		a.start(key);
@@ -91,16 +90,11 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 				if (a instanceof MLAggregator) {
 					MLAggregator mla = (MLAggregator) a;
 					if (value.getTuple() != null) {
-//						System.out.println("emit value has tuple ");
+//						System.out.println("emit value is string[] ");
 						mla.aggregate(value.getTuple(), value.getMetadata());
 					} else {
-//						System.out.println("emit value has no tuple ");
-						if (setVector && value.getData().length > 1) {
-							mla.setVectorSize(value.getData().length);
-							setVector = false;
-						}
-						for (final String s : value.getData())
-							a.aggregate(s, value.getMetadata());
+//						System.out.println("emit value is tuple ");
+						mla.aggregate(value.getData(), value.getMetadata());
 					}
 				} else {
 					for (final String s : value.getData()) 
