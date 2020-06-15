@@ -17,7 +17,6 @@
 package boa.types.ml;
 
 
-import boa.types.BoaArray;
 import boa.types.BoaFunction;
 import boa.types.BoaName;
 import boa.types.BoaType;
@@ -133,7 +132,6 @@ public class BoaModel extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		System.out.println("xxxxx");
 		return "model";
 	}
 }

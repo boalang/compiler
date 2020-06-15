@@ -16,14 +16,7 @@
  */
 package boa.types.ml;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import boa.types.BoaType;
-import boa.types.BoaFunction;
-import boa.types.BoaName;
-
 import weka.classifiers.Classifier;
 /**
  * A {@link BoaType} representing ML model of LinearRegression with attached types.
@@ -129,6 +122,6 @@ public class BoaLinearRegression extends BoaModel{
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return "linearregression";
+		return "boa.types.ml.BoaLinearRegression" + "/" + this.t;
 	}
 }

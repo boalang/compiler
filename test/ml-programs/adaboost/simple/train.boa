@@ -6,10 +6,15 @@ ada : output adaboost("-s 75") of {int, T, int, T};
 
 i := 0;
 while(i < 100){
+
 	label = T.y;
 	if (i % 2 == 0)
 		label = T.n;
-	a: T = T.n;
-	ada << {i + 7, a, i, label};
+
+	x1 := i + 7;
+	x2: T = T.n;
+	x3 := i;
+
+	ada << {x1, x2, x3, label};
 	i++;
 }

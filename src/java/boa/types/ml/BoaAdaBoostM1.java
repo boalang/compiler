@@ -16,13 +16,7 @@
  */
 package boa.types.ml;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import boa.types.BoaType;
-import boa.types.BoaName;
-
 import weka.classifiers.Classifier;
 /**
  * A {@link BoaType} representing ML model of AdaBoostM1 with attached types.
@@ -118,6 +112,6 @@ public class BoaAdaBoostM1 extends BoaModel{
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return "adaboostm1";
+		return "boa.types.ml.BoaAdaBoostM1" + "/" + this.t;
 	}
 }

@@ -323,7 +323,6 @@ public abstract class MLAggregator extends Aggregator {
 
 	// define attributes for train and test dataset
 	protected void attributeCreation(String name) {
-		System.out.println(" attributeCreation ");
 		fvAttributes.clear();
 		NumOfAttributes = getVectorSize();
 		try {

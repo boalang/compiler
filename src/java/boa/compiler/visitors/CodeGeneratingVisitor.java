@@ -278,17 +278,24 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 				final List<String> fields = new ArrayList<String>();
 				final List<String> types = new ArrayList<String>();
+				final List<Boolean> protos = new ArrayList<Boolean>();
+				final List<Boolean> enums = new ArrayList<Boolean>();
 
 				int counter = 0;
 				for (final Expression e : n.getExprs()) {
-					fields.add("f" + counter);
-					types.add(e.type.toBoxedJavaType());
 					counter++;
+					fields.add("f" + counter);
+					BoaType type = e.type;
+					types.add(type.toBoxedJavaType());
+					protos.add(type instanceof BoaProtoTuple);
+					enums.add(type instanceof BoaEnum);
 				}
 
 				st.add("name", name);
 				st.add("fields", fields);
 				st.add("types", types);
+				st.add("protos", protos);
+				st.add("enums", enums);
 
 				code.add(st.render());
 			}
@@ -1007,20 +1014,17 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			code.add(lhs.substring(0, idx - ".get(".length()) + ".put(" + lhs.substring(idx, lhs.lastIndexOf(')')) + ", " + rhs + lhs.substring(lhs.lastIndexOf(')')) + ";");
 			return;
 		}
-		
+
 		String typecast = "";
 		if (rhs.contains(".load(")) {
-			if (n.getLhs().type.toString() == "linearregression")
-				typecast = "boa.types.ml.BoaLinearRegression";
-			else if (n.getLhs().type.toString() == "adaboost")
-				typecast = "boa.types.ml.BoaAdaBoostM1";
 			rhs = rhs.substring(0,rhs.length()-1) + ", new " +
 					((BoaModel)n.getLhs().type).getType().toJavaType() + "())";
-			rhs = "(" + (typecast + "").split("\\/")[0] + ")" + rhs;
+			typecast = "(" + (n.getLhs().type + "").split("\\/")[0] + ")";
 		}
+
 		st.add("lhs", lhs);
 		st.add("operator", n.getOp());
-		st.add("rhs", rhs);
+		st.add("rhs", typecast + rhs);
 
 		code.add(st.render());
 	}
