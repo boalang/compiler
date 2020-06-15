@@ -24,6 +24,10 @@
 
 #### All keywords should be handled as literal, not VARACCESS
 
+#### Exec statement should be handled.
+Similar to print.
+Multiple args of print should also be handled. 
+
 ## Low Priority
 
 #### Following assign operation not supported
