@@ -16,7 +16,6 @@
  */
 package boa.types.ml;
 
-
 import boa.types.BoaFunction;
 import boa.types.BoaName;
 import boa.types.BoaType;
@@ -31,40 +30,37 @@ public class BoaModel extends BoaType {
 	private Classifier clr;
 	private BoaType t;
 	private Object o;
-	
+
 	/**
 	 * Default BoaModel Constructor.
 	 * 
 	 */
-	public BoaModel(){
+	public BoaModel() {
 	}
-	
+
 	/**
 	 * Construct a BoaModel.
 	 * 
-	 * @param t
-	 *            A {@link BoaType} containing the types attached with this model
+	 * @param t A {@link BoaType} containing the types attached with this model
 	 *
 	 */
-	public BoaModel(BoaType t){
+	public BoaModel(BoaType t) {
 		this.t = t;
 	}
-	
+
 	/**
 	 * Construct a BoaModel.
 	 * 
-	 * @param clr
-	 *            A {@link Classifier} containing ML model
+	 * @param clr A {@link Classifier} containing ML model
 	 * 
-	 * @param o
-	 *            A {@link Object} containing type object
+	 * @param o   A {@link Object} containing type object
 	 *
 	 */
-	public BoaModel(Classifier clr, Object o){
+	public BoaModel(Classifier clr, Object o) {
 		this.clr = clr;
 		this.o = o;
 	}
-	
+
 	/**
 	 * Get the classifier of this model.
 	 * 
@@ -74,7 +70,7 @@ public class BoaModel extends BoaType {
 	public Classifier getClassifier() {
 		return this.clr;
 	}
-	
+
 	/**
 	 * Get the type attached with this model.
 	 * 
@@ -84,7 +80,7 @@ public class BoaModel extends BoaType {
 	public BoaType getType() {
 		return this.t;
 	}
-	
+
 	/**
 	 * Get the type object of this model.
 	 * 
@@ -109,17 +105,31 @@ public class BoaModel extends BoaType {
 		// otherwise, if it's not an model, forget it
 		if (!(that instanceof BoaModel))
 			return false;
-		
+
+		// same for the value type
+		if (!((BoaModel) that).t.assigns(this.t))
+			return false;
+
+		// ok
 		return true;
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public boolean accepts(final BoaType that) {
+		// if that is a function, check the return value
+		if (that instanceof BoaFunction)
+			return this.assigns(((BoaFunction) that).getType());
+
 		// otherwise, if it's not an model, forget it
 		if (!(that instanceof BoaModel))
 			return false;
 
+		// same for the value type
+		if (!this.t.accepts(((BoaModel) that).t))
+			return false;
+
+		// ok
 		return true;
 	}
 

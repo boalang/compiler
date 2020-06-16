@@ -18,49 +18,47 @@ package boa.types.ml;
 
 import boa.types.BoaType;
 import weka.classifiers.Classifier;
+
 /**
  * A {@link BoaType} representing ML model of AdaBoostM1 with attached types.
  * 
  * @author ankuraga
  */
-public class BoaAdaBoostM1 extends BoaModel{
+public class BoaAdaBoostM1 extends BoaModel {
 	private Classifier clr;
 	private BoaType t;
 	private Object o;
-	
+
 	/**
 	 * Default BoaAdaBoostM1 Constructor.
 	 * 
 	 */
-	public BoaAdaBoostM1(){
+	public BoaAdaBoostM1() {
 	}
-	
+
 	/**
 	 * Construct a BoaAdaBoostM1.
 	 * 
-	 * @param t
-	 *            A {@link BoaType} containing the types attached with this model
+	 * @param t A {@link BoaType} containing the types attached with this model
 	 *
 	 */
-	public BoaAdaBoostM1(BoaType t){
+	public BoaAdaBoostM1(BoaType t) {
 		this.t = t;
 	}
-	
+
 	/**
 	 * Construct a BoaAdaBoostM1.
 	 * 
-	 * @param clr
-	 *            A {@link Classifier} containing ML model
+	 * @param clr A {@link Classifier} containing ML model
 	 * 
-	 * @param o
-	 *            A {@link Object} containing type object
+	 * @param o   A {@link Object} containing type object
 	 *
 	 */
-	public BoaAdaBoostM1(Classifier clr, Object o){
+	public BoaAdaBoostM1(Classifier clr, Object o) {
 		this.clr = clr;
 		this.o = o;
 	}
-	
+
 	/**
 	 * Get the classifier of this model.
 	 * 
@@ -70,7 +68,7 @@ public class BoaAdaBoostM1 extends BoaModel{
 	public Classifier getClassifier() {
 		return this.clr;
 	}
-	
+
 	/**
 	 * Get the type attached with this model.
 	 * 
@@ -80,7 +78,7 @@ public class BoaAdaBoostM1 extends BoaModel{
 	public BoaType getType() {
 		return this.t;
 	}
-	
+
 	/**
 	 * Get the type object of this model.
 	 * 
@@ -90,25 +88,49 @@ public class BoaAdaBoostM1 extends BoaModel{
 	public Object getObject() {
 		return this.o;
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
+		if (!super.assigns(that))
+			return false;
+
+		// otherwise, if it's not an BoaAdaBoostM1, forget it
+		if (!(that instanceof BoaAdaBoostM1))
+			return false;
+
+		// same for the value type
+		if (!((BoaAdaBoostM1) that).t.assigns(this.t))
+			return false;
+
+		// ok
 		return true;
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public boolean accepts(final BoaType that) {
+		if (!super.assigns(that))
+			return false;
+
+		// otherwise, if it's not an BoaAdaBoostM1, forget it
+		if (!(that instanceof BoaAdaBoostM1))
+			return false;
+
+		// same for the value type
+		if (!((BoaAdaBoostM1) that).t.assigns(this.t))
+			return false;
+
+		// ok
 		return true;
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.ml.BoaAdaBoostM1";
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
