@@ -99,10 +99,6 @@ public class BoaAdaBoostM1 extends BoaModel {
 		if (!(that instanceof BoaAdaBoostM1))
 			return false;
 
-		// same for the value type
-		if (!((BoaAdaBoostM1) that).t.assigns(this.t))
-			return false;
-
 		// ok
 		return true;
 	}
@@ -115,10 +111,6 @@ public class BoaAdaBoostM1 extends BoaModel {
 
 		// otherwise, if it's not an BoaAdaBoostM1, forget it
 		if (!(that instanceof BoaAdaBoostM1))
-			return false;
-
-		// same for the value type
-		if (!((BoaAdaBoostM1) that).t.assigns(this.t))
 			return false;
 
 		// ok

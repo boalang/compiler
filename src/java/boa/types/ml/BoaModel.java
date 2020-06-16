@@ -106,10 +106,6 @@ public class BoaModel extends BoaType {
 		if (!(that instanceof BoaModel))
 			return false;
 
-		// same for the value type
-		if (!((BoaModel) that).t.assigns(this.t))
-			return false;
-
 		// ok
 		return true;
 	}
@@ -123,10 +119,6 @@ public class BoaModel extends BoaType {
 
 		// otherwise, if it's not an model, forget it
 		if (!(that instanceof BoaModel))
-			return false;
-
-		// same for the value type
-		if (!this.t.accepts(((BoaModel) that).t))
 			return false;
 
 		// ok

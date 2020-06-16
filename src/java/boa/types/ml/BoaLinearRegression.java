@@ -100,10 +100,6 @@ public class BoaLinearRegression extends BoaModel {
 		if (!(that instanceof BoaLinearRegression))
 			return false;
 
-		// same for the value type
-		if (!((BoaLinearRegression) that).t.assigns(this.t))
-			return false;
-
 		// ok
 		return true;
 	}
@@ -116,10 +112,6 @@ public class BoaLinearRegression extends BoaModel {
 
 		// otherwise, if it's not an LR, forget it
 		if (!(that instanceof BoaLinearRegression))
-			return false;
-
-		// same for the value type
-		if (!((BoaLinearRegression) that).t.assigns(this.t))
 			return false;
 
 		// ok
