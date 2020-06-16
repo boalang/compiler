@@ -95,10 +95,6 @@ public class BoaAdaBoostM1 extends BoaModel {
 		if (!super.assigns(that))
 			return false;
 
-		// otherwise, if it's not an BoaAdaBoostM1, forget it
-		if (!(that instanceof BoaAdaBoostM1))
-			return false;
-
 		// ok
 		return true;
 	}
@@ -107,10 +103,6 @@ public class BoaAdaBoostM1 extends BoaModel {
 	@Override
 	public boolean accepts(final BoaType that) {
 		if (!super.assigns(that))
-			return false;
-
-		// otherwise, if it's not an BoaAdaBoostM1, forget it
-		if (!(that instanceof BoaAdaBoostM1))
 			return false;
 
 		// ok

@@ -96,10 +96,6 @@ public class BoaLinearRegression extends BoaModel {
 		if (!super.assigns(that))
 			return false;
 
-		// otherwise, if it's not an LR, forget it
-		if (!(that instanceof BoaLinearRegression))
-			return false;
-
 		// ok
 		return true;
 	}
@@ -108,10 +104,6 @@ public class BoaLinearRegression extends BoaModel {
 	@Override
 	public boolean accepts(final BoaType that) {
 		if (!super.assigns(that))
-			return false;
-
-		// otherwise, if it's not an LR, forget it
-		if (!(that instanceof BoaLinearRegression))
 			return false;
 
 		// ok
