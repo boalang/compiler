@@ -28,10 +28,7 @@ import org.scannotation.AnnotationDB;
 import boa.aggregators.AggregatorSpec;
 import boa.functions.FunctionSpec;
 import boa.types.*;
-import boa.types.ml.BoaAdaBoostM1;
-import boa.types.ml.BoaLinearRegression;
-import boa.types.ml.BoaModel;
-import boa.types.ml.BoaZeroR;
+import boa.types.ml.*;
 import boa.types.proto.*;
 import boa.types.proto.enums.*;
 import boa.compiler.ast.Operand;
@@ -388,7 +385,8 @@ public class SymbolTable {
 		types.put("LinearRegression", new BoaLinearRegression());
 		types.put("AdaBoostM1", new BoaAdaBoostM1());
 		types.put("ZeroR", new BoaZeroR());
-		types.put("Vote", new BoaZeroR());
+		types.put("Vote", new BoaVote());
+		types.put("SMO", new BoaSMO());
 
 		for (final BoaType t : dslTupleTypes)
 			types.put(t.toString(), t);
@@ -610,7 +608,8 @@ public class SymbolTable {
 			boa.aggregators.ml.LinearRegressionAggregator.class,
 			boa.aggregators.ml.AdaBoostM1Aggregator.class,
 			boa.aggregators.ml.ZeroRAggregator.class,
-			boa.aggregators.ml.VoteAggregator.class
+			boa.aggregators.ml.VoteAggregator.class,
+			boa.aggregators.ml.SMOAggregator.class
 		};
 		for (final Class<?> c : builtinAggs)
 			importAggregator(c);

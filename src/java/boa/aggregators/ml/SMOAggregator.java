@@ -18,8 +18,7 @@ package boa.aggregators.ml;
 
 import boa.aggregators.AggregatorSpec;
 import boa.runtime.Tuple;
-import weka.classifiers.meta.Vote;
-
+import weka.classifiers.functions.SMO;
 import java.io.IOException;
 
 /**
@@ -27,25 +26,25 @@ import java.io.IOException;
  *
  * @author ankuraga
  */
-@AggregatorSpec(name = "vote", formalParameters = { "string" })
-public class VoteAggregator extends MLAggregator {
-	private Vote model;
+@AggregatorSpec(name = "smo", formalParameters = { "string" })
+public class SMOAggregator extends MLAggregator {
+	private SMO model;
 
-	public VoteAggregator() {
+	public SMOAggregator() {
 	}
 
-	public VoteAggregator(final String s) {
+	public SMOAggregator(final String s) {
 		super(s);
 	}
 
 	@Override
 	public void aggregate(String[] data, String metadata) throws IOException, InterruptedException {
-		aggregate(data, metadata, "Vote");
+		aggregate(data, metadata, "SMO");
 	}
 
 	@Override
 	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
-		aggregate(data, metadata, "Vote");
+		aggregate(data, metadata, "SMO");
 	}
 
 	@Override
@@ -58,7 +57,7 @@ public class VoteAggregator extends MLAggregator {
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		try {
-			this.model = new Vote();
+			this.model = new SMO();
 			this.model.setOptions(options);
 			this.model.buildClassifier(this.trainingSet);
 		} catch (Exception e) {

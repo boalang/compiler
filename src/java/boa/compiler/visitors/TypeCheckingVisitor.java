@@ -30,11 +30,7 @@ import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 import boa.compiler.transforms.VisitorDesugar;
 import boa.types.*;
-import boa.types.ml.BoaAdaBoostM1;
-import boa.types.ml.BoaLinearRegression;
-import boa.types.ml.BoaModel;
-import boa.types.ml.BoaVote;
-import boa.types.ml.BoaZeroR;
+import boa.types.ml.*;
 import boa.types.proto.CodeRepositoryProtoTuple;
 
 /**
@@ -997,6 +993,14 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "Vote required attributes to be numeric, nominal, date or string");
 					}
+				} else if(lhs instanceof BoaSMO) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "SMO required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "SMO required attributes to be numeric or nominal");
+					}
 				}
 			}
 
@@ -1524,6 +1528,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaZeroR(n.getType().type);
 		else if(n.type instanceof BoaVote)
 			n.type = new BoaVote(n.getType().type);
+		else if(n.type instanceof BoaSMO)
+			n.type = new BoaSMO(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}

@@ -15,11 +15,7 @@ import org.apache.hadoop.fs.Path;
 
 import boa.datagen.DefaultProperties;
 import boa.runtime.Tuple;
-import boa.types.ml.BoaAdaBoostM1;
-import boa.types.ml.BoaLinearRegression;
-import boa.types.ml.BoaModel;
-import boa.types.ml.BoaVote;
-import boa.types.ml.BoaZeroR;
+import boa.types.ml.*;
 import weka.classifiers.Classifier;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
@@ -84,10 +80,12 @@ public class BoaMLIntrinsics {
 		} else if (clr.toString().contains("AdaBoostM1")) {
 			m = new BoaAdaBoostM1(clr, o);
 			return (BoaAdaBoostM1) m;
-		} else if(clr.toString().contains("ZeroR")){
+		} else if (clr.toString().contains("ZeroR")) {
 			m = new BoaZeroR(clr, o);
-		} else if(clr.toString().contains("Vote")){
+		} else if (clr.toString().contains("Vote")) {
 			m = new BoaVote(clr, o);
+		} else if (clr.toString().contains("SMO")) {
+			m = new BoaSMO(clr, o);
 		}
 		return m;
 	}
