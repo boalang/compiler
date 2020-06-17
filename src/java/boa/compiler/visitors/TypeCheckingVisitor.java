@@ -1001,6 +1001,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "SMO required attributes to be numeric or nominal");
 					}
+				} else if(lhs instanceof BoaSimpleKMeans) {
+					for(int i=0; i<types.size(); i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "SimpleKMeans required attributes to be numeric or nominal");
+					}
 				}
 			}
 
@@ -1530,6 +1536,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaVote(n.getType().type);
 		else if(n.type instanceof BoaSMO)
 			n.type = new BoaSMO(n.getType().type);
+		else if(n.type instanceof BoaSimpleKMeans)
+			n.type = new BoaSimpleKMeans(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}

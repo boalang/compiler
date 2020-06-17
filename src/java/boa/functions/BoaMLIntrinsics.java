@@ -17,6 +17,7 @@ import boa.datagen.DefaultProperties;
 import boa.runtime.Tuple;
 import boa.types.ml.*;
 import weka.classifiers.Classifier;
+import weka.clusterers.Clusterer;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
@@ -49,7 +50,7 @@ public class BoaMLIntrinsics {
 			fs = FileSystem.get(conf);
 			in = fs.open(p);
 
-			final byte[] b = new byte[(int) fs.getLength(p) + 1];
+			final byte[] b = new byte[(int) fs.getFileStatus(p).getLen() + 1];
 			int c = 0;
 			bo = new ByteArrayOutputStream();
 			while ((c = in.read(b)) != -1) {
@@ -73,25 +74,75 @@ public class BoaMLIntrinsics {
 			}
 		}
 
-		Classifier clr = (Classifier) unserializedObject;
 		BoaModel m = null;
-		if (clr.toString().contains("Linear Regression")) {
-			m = new BoaLinearRegression(clr, o);
-		} else if (clr.toString().contains("AdaBoostM1")) {
-			m = new BoaAdaBoostM1(clr, o);
-			return (BoaAdaBoostM1) m;
-		} else if (clr.toString().contains("ZeroR")) {
-			m = new BoaZeroR(clr, o);
-		} else if (clr.toString().contains("Vote")) {
-			m = new BoaVote(clr, o);
-		} else if (clr.toString().contains("SMO")) {
-			m = new BoaSMO(clr, o);
+
+		if (unserializedObject instanceof Classifier) {
+			// classifier
+			Classifier clr = (Classifier) unserializedObject;
+			String className = clr.getClass().toString();
+			if (className.contains("LinearRegression")) {
+				m = new BoaLinearRegression(clr, o);
+			} else if (className.contains("AdaBoostM1")) {
+				m = new BoaAdaBoostM1(clr, o);
+			} else if (className.contains("ZeroR")) {
+				m = new BoaZeroR(clr, o);
+			} else if (className.contains("Vote")) {
+				m = new BoaVote(clr, o);
+			} else if (className.contains("SMO")) {
+				m = new BoaSMO(clr, o);
+			}
+		} else if (unserializedObject instanceof Clusterer) {
+			// Clusterer
+			Clusterer clu = (Clusterer) unserializedObject;
+			String className = clu.getClass().toString();
+			if (className.contains("SimpleKMeans")) {
+				m = new BoaSimpleKMeans(clu, o);
+			}
 		}
 		return m;
 	}
 
 	@FunctionSpec(name = "classify", returnType = "string", formalParameters = { "model", "array of int" })
 	public static String classify(final BoaModel model, final long[] vector) throws Exception {
+		int NumOfAttributes = vector.length + 1;
+		ArrayList<Attribute> fvAttributes = getAttributes(model, vector);
+
+		Instances testingSet = new Instances("Classifier", fvAttributes, 1);
+		testingSet.setClassIndex(NumOfAttributes - 1);
+
+		Instance instance = new DenseInstance(NumOfAttributes);
+		for (int i = 0; i < NumOfAttributes - 1; i++)
+			instance.setValue((Attribute) fvAttributes.get(i), vector[i]);
+		testingSet.add(instance);
+
+		Classifier classifier = (Classifier) model.getClassifier();
+		double predval = classifier.classifyInstance(testingSet.instance(0));
+
+		return testingSet.classAttribute().isNominal() ? testingSet.classAttribute().value((int) predval)
+				: String.valueOf(predval);
+	}
+
+	@FunctionSpec(name = "cluster", returnType = "string", formalParameters = { "model", "array of int" })
+	public static String cluster(final BoaModel model, final long[] vector) throws Exception {
+		int NumOfAttributes = vector.length + 1;
+		ArrayList<Attribute> fvAttributes = getAttributes(model, vector);
+
+		Instances testingSet = new Instances("Clusterer", fvAttributes, 1);
+		testingSet.setClassIndex(NumOfAttributes - 1);
+
+		Instance instance = new DenseInstance(NumOfAttributes);
+		for (int i = 0; i < NumOfAttributes - 1; i++)
+			instance.setValue((Attribute) fvAttributes.get(i), vector[i]);
+		testingSet.add(instance);
+
+		Clusterer clusterer = (Clusterer) model.getClusterer();
+		double predval = clusterer.clusterInstance(testingSet.instance(0));
+
+		return testingSet.classAttribute().isNominal() ? testingSet.classAttribute().value((int) predval)
+				: String.valueOf(predval);
+	}
+
+	private static ArrayList<Attribute> getAttributes(BoaModel model, long[] vector) {
 		int NumOfAttributes = vector.length + 1;
 		ArrayList<Attribute> fvAttributes = new ArrayList<Attribute>();
 		for (int i = 0; i < NumOfAttributes - 1; i++)
@@ -111,27 +162,58 @@ public class BoaMLIntrinsics {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return fvAttributes;
+	}
+
+	@FunctionSpec(name = "classify", returnType = "string", formalParameters = { "model", "tuple" })
+	public static String classify(final BoaModel model, final Tuple vector) throws Exception {
+		ArrayList<Attribute> fvAttributes = getAttributes(model, vector);
+		int NumOfAttributes = fvAttributes.size();
 
 		Instances testingSet = new Instances("Classifier", fvAttributes, 1);
 		testingSet.setClassIndex(NumOfAttributes - 1);
 
 		Instance instance = new DenseInstance(NumOfAttributes);
+
 		for (int i = 0; i < NumOfAttributes - 1; i++)
-			instance.setValue((Attribute) fvAttributes.get(i), vector[i]);
+			if (NumberUtils.isNumber(vector.getValues()[i]))
+				instance.setValue((Attribute) fvAttributes.get(i), Double.parseDouble(vector.getValues()[i]));
+			else
+				instance.setValue((Attribute) fvAttributes.get(i), vector.getValues()[i]);
 		testingSet.add(instance);
 
 		Classifier classifier = (Classifier) model.getClassifier();
 		double predval = classifier.classifyInstance(testingSet.instance(0));
 
-		if (testingSet.classAttribute().isNominal())
-			return testingSet.classAttribute().value((int) predval);
-		else
-			return predval + "";
+		return testingSet.classAttribute().isNominal() ? testingSet.classAttribute().value((int) predval)
+				: String.valueOf(predval);
 	}
 
-	@FunctionSpec(name = "classify", returnType = "string", formalParameters = { "model", "tuple" })
-	public static String classify(final BoaModel model, final Tuple vector) throws Exception {
-		int NumOfAttributes = 0;
+	@FunctionSpec(name = "cluster", returnType = "string", formalParameters = { "model", "tuple" })
+	public static String cluster(final BoaModel model, final Tuple vector) throws Exception {
+		ArrayList<Attribute> fvAttributes = getAttributes(model, vector);
+		int NumOfAttributes = fvAttributes.size();
+
+		Instances testingSet = new Instances("Classifier", fvAttributes, 1);
+		testingSet.setClassIndex(NumOfAttributes - 1);
+
+		Instance instance = new DenseInstance(NumOfAttributes);
+
+		for (int i = 0; i < NumOfAttributes - 1; i++)
+			if (NumberUtils.isNumber(vector.getValues()[i]))
+				instance.setValue((Attribute) fvAttributes.get(i), Double.parseDouble(vector.getValues()[i]));
+			else
+				instance.setValue((Attribute) fvAttributes.get(i), vector.getValues()[i]);
+		testingSet.add(instance);
+
+		Clusterer clusterer = (Clusterer) model.getClusterer();
+		double predval = clusterer.clusterInstance(testingSet.instance(0));
+
+		return testingSet.classAttribute().isNominal() ? testingSet.classAttribute().value((int) predval)
+				: String.valueOf(predval);
+	}
+
+	private static ArrayList<Attribute> getAttributes(BoaModel model, Tuple vector) {
 		ArrayList<Attribute> fvAttributes = new ArrayList<Attribute>();
 		try {
 			String[] fieldNames = vector.getFieldNames();
@@ -167,31 +249,10 @@ public class BoaMLIntrinsics {
 				fvAttributes.add(new Attribute("Attribute" + count));
 				count++;
 			}
-
-			NumOfAttributes = count;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		Instances testingSet = new Instances("Classifier", fvAttributes, 1);
-		testingSet.setClassIndex(NumOfAttributes - 1);
-
-		Instance instance = new DenseInstance(NumOfAttributes);
-
-		for (int i = 0; i < NumOfAttributes - 1; i++)
-			if (NumberUtils.isNumber(vector.getValues()[i]))
-				instance.setValue((Attribute) fvAttributes.get(i), Double.parseDouble(vector.getValues()[i]));
-			else
-				instance.setValue((Attribute) fvAttributes.get(i), vector.getValues()[i]);
-		testingSet.add(instance);
-
-		Classifier classifier = (Classifier) model.getClassifier();
-		double predval = classifier.classifyInstance(testingSet.instance(0));
-
-		if (testingSet.classAttribute().isNominal())
-			return testingSet.classAttribute().value((int) predval);
-		else
-			return predval + "";
+		return fvAttributes;
 	}
 
 }

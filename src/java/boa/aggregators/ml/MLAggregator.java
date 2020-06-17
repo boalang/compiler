@@ -30,6 +30,8 @@ import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapreduce.JobContext;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
+import weka.clusterers.ClusterEvaluation;
+import weka.clusterers.Clusterer;
 import weka.core.*;
 import weka.filters.Filter;
 
@@ -39,8 +41,6 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-
-import static boa.aggregators.ml.Util.*;
 
 /**
  * A Boa ML aggregator to train models.
@@ -56,6 +56,7 @@ public abstract class MLAggregator extends Aggregator {
 	protected int NumOfAttributes;
 	protected String[] options;
 	protected boolean flag;
+	protected boolean isClusterer;
 	protected ArrayList<String> nominalAttr;
 
 	public MLAggregator() {
@@ -95,7 +96,20 @@ public abstract class MLAggregator extends Aggregator {
 			Evaluation eval = new Evaluation(set);
 			eval.evaluateModel(model, set);
 			String setName = set == trainingSet ? "Training" : "Testing";
-			collect(summary(eval, setName));
+			collect(eval.toSummaryString("\n" + setName + "Set Evaluation:\n", false));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void evaluate(Clusterer clusterer, Instances set) {
+		try {
+			ClusterEvaluation eval = new ClusterEvaluation();
+			eval.setClusterer(clusterer);
+			set.setClassIndex(set.numAttributes() - 1);
+			eval.evaluateClusterer(set);
+			String setName = set == trainingSet ? "Training" : "Testing";
+			collect("\n" + setName + "Set Evaluation:\n" + eval.clusterResultsToString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -176,8 +190,10 @@ public abstract class MLAggregator extends Aggregator {
 			filePath = getModelFilePath(output, boaJobId, getKey().getName());
 
 			// delete previous model
-			if (fileSystem.exists(filePath) && fileSystem.delete(filePath, true))
+			if (fileSystem.exists(filePath)) {
+				fileSystem.delete(filePath, true);
 				System.out.println("Deleted previous model");
+			}
 
 			out = fileSystem.create(filePath);
 			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
@@ -249,12 +265,14 @@ public abstract class MLAggregator extends Aggregator {
 					count++;
 				}
 			}
-			NumOfAttributes = count;
+			NumOfAttributes = count; // use NumOfAttributes for tuple data
 			flag = true;
 			trainingSet = new Instances(name, fvAttributes, 1);
-			trainingSet.setClassIndex(NumOfAttributes - 1);
 			testingSet = new Instances(name, fvAttributes, 1);
-			testingSet.setClassIndex(NumOfAttributes - 1);
+			if (!isClusterer) {
+				trainingSet.setClassIndex(NumOfAttributes - 1);
+				testingSet.setClassIndex(NumOfAttributes - 1);				
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -298,13 +316,14 @@ public abstract class MLAggregator extends Aggregator {
 			return;
 		fvAttributes.clear();
 		try {
-			int classIdx = data.length - 1;
 			for (int i = 0; i < data.length; i++)
 				fvAttributes.add(new Attribute("Attribute" + i));
 			trainingSet = new Instances(name, fvAttributes, 1);
-			trainingSet.setClassIndex(classIdx);
 			testingSet = new Instances(name, fvAttributes, 1);
-			testingSet.setClassIndex(classIdx);
+			if (!isClusterer) {
+				trainingSet.setClassIndex(data.length - 1); // use data length for String[] data
+				testingSet.setClassIndex(data.length - 1);				
+			}
 			flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();

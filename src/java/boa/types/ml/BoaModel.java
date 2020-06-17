@@ -20,6 +20,7 @@ import boa.types.BoaFunction;
 import boa.types.BoaName;
 import boa.types.BoaType;
 import weka.classifiers.Classifier;
+import weka.clusterers.Clusterer;
 
 /**
  * A {@link BoaType} representing model of any ML type.
@@ -27,9 +28,10 @@ import weka.classifiers.Classifier;
  * @author ankuraga
  */
 public class BoaModel extends BoaType {
-	private Classifier clr;
-	private BoaType t;
-	private Object o;
+	protected Classifier clr;
+	protected Clusterer clu;
+	protected BoaType t;
+	protected Object o;
 
 	/**
 	 * Default BoaModel Constructor.
@@ -69,6 +71,29 @@ public class BoaModel extends BoaType {
 	 */
 	public Classifier getClassifier() {
 		return this.clr;
+	}
+	
+	/**
+	 * Construct a BoaModel.
+	 * 
+	 * @param clu A {@link Clusterer} containing ML model
+	 * 
+	 * @param o   A {@link Object} containing type object
+	 *
+	 */
+	public BoaModel(Clusterer clu, Object o) {
+		this.clu = clu;
+		this.o = o;
+	}
+
+	/**
+	 * Get the classifier of this model.
+	 * 
+	 * @return A {@link Clusterer} representing ML model
+	 * 
+	 */
+	public Clusterer getClusterer() {
+		return this.clu;
 	}
 
 	/**
