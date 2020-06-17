@@ -25,9 +25,6 @@ import weka.classifiers.Classifier;
  * @author ankuraga
  */
 public class BoaVote extends BoaModel {
-	private Classifier clr;
-	private BoaType t;
-	private Object o;
 
 	/**
 	 * Default BoaVote Constructor.
@@ -57,36 +54,6 @@ public class BoaVote extends BoaModel {
 	public BoaVote(Classifier clr, Object o) {
 		this.clr = clr;
 		this.o = o;
-	}
-
-	/**
-	 * Get the classifier of this model.
-	 * 
-	 * @return A {@link Classifier} representing ML model
-	 * 
-	 */
-	public Classifier getClassifier() {
-		return this.clr;
-	}
-
-	/**
-	 * Get the type attached with this model.
-	 * 
-	 * @return A {@link BoaType} representing type attached with ML model
-	 * 
-	 */
-	public BoaType getType() {
-		return this.t;
-	}
-
-	/**
-	 * Get the type object of this model.
-	 * 
-	 * @return A {@link Object} representing type object
-	 * 
-	 */
-	public Object getObject() {
-		return this.o;
 	}
 
 	/** {@inheritDoc} */

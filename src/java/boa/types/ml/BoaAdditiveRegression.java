@@ -18,12 +18,14 @@ package boa.types.ml;
 
 import boa.types.BoaType;
 import weka.classifiers.Classifier;
+
 /**
- * A {@link BoaType} representing ML model of AdditiveRegression with attached types.
+ * A {@link BoaType} representing ML model of AdditiveRegression with attached
+ * types.
  * 
  * @author ankuraga
  */
-public class BoaAdditiveRegression extends BoaModel{
+public class BoaAdditiveRegression extends BoaModel {
 	public BoaAdditiveRegression() {
 	}
 
@@ -49,8 +51,9 @@ public class BoaAdditiveRegression extends BoaModel{
 		this.clr = clr;
 		this.o = o;
 	}
-	
-	 /** Get the type object of this model.
+
+	/**
+	 * Get the type object of this model.
 	 * 
 	 * @return A {@link Object} representing type object
 	 * 
@@ -58,7 +61,7 @@ public class BoaAdditiveRegression extends BoaModel{
 	public Object getObject() {
 		return this.o;
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
@@ -74,13 +77,13 @@ public class BoaAdditiveRegression extends BoaModel{
 			return false;
 		return true;
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.ml.BoaAdditiveRegression";
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {

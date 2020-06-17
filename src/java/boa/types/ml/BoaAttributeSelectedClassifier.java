@@ -18,46 +18,44 @@ package boa.types.ml;
 
 import boa.types.BoaType;
 import weka.classifiers.Classifier;
+
 /**
- * A {@link BoaType} representing ML model of AttributeSelectedClassifier with attached types.
+ * A {@link BoaType} representing ML model of AttributeSelectedClassifier with
+ * attached types.
  * 
  * @author ankuraga
  */
-public class BoaAttributeSelectedClassifier extends BoaModel{
+public class BoaAttributeSelectedClassifier extends BoaModel {
 	/**
 	 * Default BoaAttributeSelectedClassifier Constructor.
 	 * 
 	 */
-	public BoaAttributeSelectedClassifier(){
+	public BoaAttributeSelectedClassifier() {
 	}
-	
+
 	/**
 	 * Construct a BoaAttributeSelectedClassifier.
 	 * 
-	 * @param t
-	 *            A {@link BoaType} containing the types attached with this model
+	 * @param t A {@link BoaType} containing the types attached with this model
 	 *
 	 */
-	public BoaAttributeSelectedClassifier(BoaType t){
+	public BoaAttributeSelectedClassifier(BoaType t) {
 		this.t = t;
 	}
-	
+
 	/**
 	 * Construct a BoaAttributeSelectedClassifier.
 	 * 
-	 * @param clr
-	 *            A {@link Classifier} containing ML model
+	 * @param clr A {@link Classifier} containing ML model
 	 * 
-	 * @param o
-	 *            A {@link Object} containing type object
+	 * @param o   A {@link Object} containing type object
 	 *
 	 */
-	public BoaAttributeSelectedClassifier(Classifier clr, Object o){
+	public BoaAttributeSelectedClassifier(Classifier clr, Object o) {
 		this.clr = clr;
 		this.o = o;
 	}
-	
-	
+
 	/**
 	 * Get the type object of this model.
 	 * 
@@ -67,7 +65,7 @@ public class BoaAttributeSelectedClassifier extends BoaModel{
 	public Object getObject() {
 		return this.o;
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
@@ -83,13 +81,13 @@ public class BoaAttributeSelectedClassifier extends BoaModel{
 			return false;
 		return true;
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.ml.BoaAttributeSelectedClassifier";
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {

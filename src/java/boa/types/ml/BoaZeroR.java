@@ -18,77 +18,42 @@ package boa.types.ml;
 
 import boa.types.BoaType;
 import weka.classifiers.Classifier;
+
 /**
  * A {@link BoaType} representing ML model of ZeroR with attached types.
  * 
  * @author ankuraga
  */
-public class BoaZeroR extends BoaModel{
-	private Classifier clr;
-	private BoaType t;
-	private Object o;
+public class BoaZeroR extends BoaModel {
 
 	/**
 	 * Default BoaZeroR Constructor.
 	 * 
 	 */
-	public BoaZeroR(){
+	public BoaZeroR() {
 	}
 
 	/**
 	 * Construct a BoaZeroR.
 	 * 
-	 * @param t
-	 *            A {@link BoaType} containing the types attached with this model
+	 * @param t A {@link BoaType} containing the types attached with this model
 	 *
 	 */
-	public BoaZeroR(BoaType t){
+	public BoaZeroR(BoaType t) {
 		this.t = t;
 	}
 
 	/**
 	 * Construct a BoaZeroR.
 	 * 
-	 * @param clr
-	 *            A {@link Classifier} containing ML model
+	 * @param clr A {@link Classifier} containing ML model
 	 * 
-	 * @param o
-	 *            A {@link Object} containing type object
+	 * @param o   A {@link Object} containing type object
 	 *
 	 */
-	public BoaZeroR(Classifier clr, Object o){
+	public BoaZeroR(Classifier clr, Object o) {
 		this.clr = clr;
 		this.o = o;
-	}
-
-	/**
-	 * Get the classifier of this model.
-	 * 
-	 * @return A {@link Classifier} representing ML model
-	 * 
-	 */
-	public Classifier getClassifier() {
-		return this.clr;
-	}
-
-	/**
-	 * Get the type attached with this model.
-	 * 
-	 * @return A {@link BoaType} representing type attached with ML model
-	 * 
-	 */
-	public BoaType getType() {
-		return this.t;
-	}
-
-	/**
-	 * Get the type object of this model.
-	 * 
-	 * @return A {@link Object} representing type object
-	 * 
-	 */
-	public Object getObject() {
-		return this.o;
 	}
 
 	/** {@inheritDoc} */
