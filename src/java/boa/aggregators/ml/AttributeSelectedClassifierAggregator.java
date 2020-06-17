@@ -18,8 +18,6 @@ package boa.aggregators.ml;
 
 import boa.runtime.Tuple;
 import boa.aggregators.AggregatorSpec;
-import boa.aggregators.FinishedException;
-import weka.classifiers.meta.AdditiveRegression;
 import weka.classifiers.meta.AttributeSelectedClassifier;
 
 import java.io.IOException;

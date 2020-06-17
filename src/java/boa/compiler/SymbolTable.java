@@ -391,6 +391,8 @@ public class SymbolTable {
 		types.put("RandomForest", new BoaRandomForest());
 		types.put("AdditiveRegression", new BoaAdditiveRegression());
 		types.put("AttributeSelectedClassifier", new BoaAttributeSelectedClassifier());
+		types.put("PART", new BoaPART());
+
 		for (final BoaType t : dslTupleTypes)
 			types.put(t.toString(), t);
 
@@ -616,7 +618,8 @@ public class SymbolTable {
 			boa.aggregators.ml.SimpleKMeansAggregator.class,
 			boa.aggregators.ml.RandomForestAggregator.class,
 			boa.aggregators.ml.AdditiveRegressionAggregator.class,
-			boa.aggregators.ml.AttributeSelectedClassifierAggregator.class
+			boa.aggregators.ml.AttributeSelectedClassifierAggregator.class,
+			boa.aggregators.ml.PARTAggregator.class
 		};
 		for (final Class<?> c : builtinAggs)
 			importAggregator(c);

@@ -18,7 +18,8 @@ package boa.aggregators.ml;
 
 import boa.runtime.Tuple;
 import boa.aggregators.AggregatorSpec;
-import weka.classifiers.meta.AdaBoostM1;
+import weka.classifiers.rules.PART;
+
 import java.io.IOException;
 
 /**
@@ -27,25 +28,25 @@ import java.io.IOException;
  * @author ankuraga
  * @author nmtiwari
  */
-@AggregatorSpec(name = "adaboost", formalParameters = { "string" })
-public class AdaBoostM1Aggregator extends MLAggregator {
-	private AdaBoostM1 model;
+@AggregatorSpec(name = "part", formalParameters = { "string" })
+public class PARTAggregator extends MLAggregator {
+	private PART model;
 
-	public AdaBoostM1Aggregator() {
+	public PARTAggregator() {
 	}
 
-	public AdaBoostM1Aggregator(final String s) {
+	public PARTAggregator(final String s) {
 		super(s);
 	}
 
 	@Override
 	public void aggregate(final String[] data, String metadata) throws IOException, InterruptedException {
-		aggregate(data, metadata, "AdaBoostM1");
+		aggregate(data, metadata, "PART");
 	}
 
 	@Override
 	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
-		aggregate(data, metadata, "AdaBoostM1");
+		aggregate(data, metadata, "PART");
 	}
 
 	@Override
@@ -55,7 +56,7 @@ public class AdaBoostM1Aggregator extends MLAggregator {
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		try {
-			this.model = new AdaBoostM1();
+			this.model = new PART();
 			this.model.setOptions(options);
 			this.model.buildClassifier(this.trainingSet);
 		} catch (Exception e) {

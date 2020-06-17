@@ -1,0 +1,13 @@
+type T = enum {y = "true", n = "false"};
+
+p: Project = input;
+predict: output collection of string;
+
+m: model of PART of {int, T, int, T};
+m = load(0, "prt");
+
+x1 := 1;
+x2: T = T.n;
+x3 := 2;
+
+predict << classify(m, {x1, x2, x3});

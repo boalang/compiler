@@ -1096,6 +1096,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							throw new TypeCheckException(n,
 									"AttributeSelectedClassifier required attributes to be numeric, nominal or date");
 					}
+				} else if (lhs instanceof BoaPART) {
+					if (!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "PART required class to be nominal");
+					for (int i = 0; i < types.size() - 1; i++) {
+						if (!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat
+								|| types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime
+								|| types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "PART required attributes to be numeric, nominal or date");
+					}
 				}
 			}
 
@@ -1652,6 +1661,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaAdditiveRegression(n.getType().type);
 		else if (n.type instanceof BoaAttributeSelectedClassifier)
 			n.type = new BoaAttributeSelectedClassifier(n.getType().type);
+		else if(n.type instanceof BoaPART)
+			n.type = new BoaPART(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}

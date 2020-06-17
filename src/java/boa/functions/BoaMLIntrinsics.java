@@ -96,6 +96,8 @@ public class BoaMLIntrinsics {
 				m = new BoaAdditiveRegression(clr, o);
 			} else if (className.contains("AttributeSelectedClassifier")){
 				m = new BoaAttributeSelectedClassifier(clr, o);
+			} else if(className.contains("PART")){
+				m = new BoaPART(clr, o);
 			}
 		} else if (unserializedObject instanceof Clusterer) {
 			// Clusterer
@@ -105,6 +107,8 @@ public class BoaMLIntrinsics {
 				m = new BoaSimpleKMeans(clu, o);
 			}
 		}
+		
+		// TODO PrincipalComponents
 		return m;
 	}
 
