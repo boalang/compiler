@@ -1123,6 +1123,14 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							throw new TypeCheckException(n,
 									"NaiveBayesMultinomialUpdateable required attributes to be numeric");
 					}
+				} else if (lhs instanceof BoaNaiveBayes) {
+					if (!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "NaiveBayes required class to be nominal");
+					for (int i = 0; i < types.size() - 1; i++) {
+						if (!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat
+								|| types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "NaiveBayes required attributes to be numeric or nominal");
+					}
 				}
 			}
 
@@ -1685,6 +1693,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaOneR(n.getType().type);
 		else if (n.type instanceof BoaNaiveBayesMultinomialUpdateable)
 			n.type = new BoaNaiveBayesMultinomialUpdateable(n.getType().type);
+		else if(n.type instanceof BoaNaiveBayes)
+			n.type = new BoaNaiveBayes(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}

@@ -394,6 +394,7 @@ public class SymbolTable {
 		types.put("PART", new BoaPART());
 		types.put("OneR", new BoaOneR());
 		types.put("NaiveBayesMultinomialUpdateable", new BoaNaiveBayesMultinomialUpdateable());
+		types.put("NaiveBayes", new BoaNaiveBayes());
 
 		for (final BoaType t : dslTupleTypes)
 			types.put(t.toString(), t);
@@ -623,7 +624,8 @@ public class SymbolTable {
 			boa.aggregators.ml.AttributeSelectedClassifierAggregator.class,
 			boa.aggregators.ml.PARTAggregator.class,
 			boa.aggregators.ml.OneRAggregator.class,
-			boa.aggregators.ml.NaiveBayesMultinomialUpdateableAggregator.class
+			boa.aggregators.ml.NaiveBayesMultinomialUpdateableAggregator.class,
+			boa.aggregators.ml.NaiveBayesAggregator.class
 		};
 		for (final Class<?> c : builtinAggs)
 			importAggregator(c);

@@ -105,6 +105,8 @@ public class BoaMLIntrinsics {
 			} else if(className.contains("BoaNaiveBayesMultinomial")){
 				// TODO BoaNaiveBayesMultinomial
 				m = new BoaNaiveBayesMultinomial(clr, o);
+			} else if(className.contains("NaiveBayes")){
+				m = new BoaNaiveBayes(clr, o);
 			}
 		} else if (unserializedObject instanceof Clusterer) {
 			// Clusterer
