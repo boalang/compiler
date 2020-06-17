@@ -90,6 +90,8 @@ public class BoaMLIntrinsics {
 				m = new BoaVote(clr, o);
 			} else if (className.contains("SMO")) {
 				m = new BoaSMO(clr, o);
+			} else if(clr.toString().contains("RandomForest")){
+				m = new BoaRandomForest(clr, o);
 			}
 		} else if (unserializedObject instanceof Clusterer) {
 			// Clusterer

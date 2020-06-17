@@ -388,6 +388,7 @@ public class SymbolTable {
 		types.put("Vote", new BoaVote());
 		types.put("SMO", new BoaSMO());
 		types.put("SimpleKMeans", new BoaSimpleKMeans());
+		types.put("RandomForest", new BoaRandomForest());
 
 		for (final BoaType t : dslTupleTypes)
 			types.put(t.toString(), t);
@@ -611,7 +612,8 @@ public class SymbolTable {
 			boa.aggregators.ml.ZeroRAggregator.class,
 			boa.aggregators.ml.VoteAggregator.class,
 			boa.aggregators.ml.SMOAggregator.class,
-			boa.aggregators.ml.SimpleKMeansAggregator.class
+			boa.aggregators.ml.SimpleKMeansAggregator.class,
+			boa.aggregators.ml.RandomForestAggregator.class
 		};
 		for (final Class<?> c : builtinAggs)
 			importAggregator(c);

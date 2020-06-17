@@ -20,39 +20,38 @@ import boa.types.BoaType;
 import weka.classifiers.Classifier;
 
 /**
- * A {@link BoaType} representing ML model of LinearRegression with attached
- * types.
+ * A {@link BoaType} representing ML model of RandomForest with attached types.
  * 
  * @author ankuraga
  */
-public class BoaLinearRegression extends BoaModel {
+public class BoaRandomForest extends BoaModel {
 
 	/**
-	 * Default BoaLinearRegression Constructor.
+	 * Default BoaRandomForest Constructor.
 	 * 
 	 */
-	public BoaLinearRegression() {
+	public BoaRandomForest() {
 	}
 
 	/**
-	 * Construct a BoaLinearRegression.
+	 * Construct a BoaRandomForest.
 	 * 
 	 * @param t A {@link BoaType} containing the types attached with this model
 	 *
 	 */
-	public BoaLinearRegression(BoaType t) {
+	public BoaRandomForest(BoaType t) {
 		this.t = t;
 	}
 
 	/**
-	 * Construct a BoaLinearRegression.
+	 * Construct a BoaRandomForest.
 	 * 
 	 * @param clr A {@link Classifier} containing ML model
 	 * 
 	 * @param o   A {@link Object} containing type object
 	 *
 	 */
-	public BoaLinearRegression(Classifier clr, Object o) {
+	public BoaRandomForest(Classifier clr, Object o) {
 		this.clr = clr;
 		this.o = o;
 	}
@@ -80,12 +79,12 @@ public class BoaLinearRegression extends BoaModel {
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.ml.BoaLinearRegression";
+		return "boa.types.ml.BoaRandomForest";
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return "boa.types.ml.BoaLinearRegression" + "/" + this.t;
+		return "boa.types.ml.BoaRandomForest" + "/" + this.t;
 	}
 }

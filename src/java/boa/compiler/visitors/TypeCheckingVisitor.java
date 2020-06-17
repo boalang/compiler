@@ -1007,6 +1007,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "SimpleKMeans required attributes to be numeric or nominal");
 					}
+				} else if(lhs instanceof BoaRandomForest) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat))
+						throw new TypeCheckException(n, "RandomForest required class to be numeric or nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "RandomForest required attributes to be numeric, nominal or date");
+					}
 				}
 			}
 
@@ -1538,6 +1547,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaSMO(n.getType().type);
 		else if(n.type instanceof BoaSimpleKMeans)
 			n.type = new BoaSimpleKMeans(n.getType().type);
+		else if(n.type instanceof BoaRandomForest)
+			n.type = new BoaRandomForest(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}
