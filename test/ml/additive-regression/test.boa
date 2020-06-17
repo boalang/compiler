@@ -1,0 +1,9 @@
+p: Project = input;
+predict: output collection of string;
+
+m: model of AdditiveRegression of {int, int, int};
+m = load(0, "additive");
+
+x1 := 1;
+x2 := 2;
+predict << classify(m, {x1, x2});
