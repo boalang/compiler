@@ -1,0 +1,11 @@
+type T = enum {y = "true", n = "false"};
+
+p: Project = input;
+predict: output collection of string;
+
+m: model of OneR of {int, T, int, T};
+m = load(0, "oa");
+
+x1 := 1;
+x2: T = T.n;
+x3 := 2;

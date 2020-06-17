@@ -98,6 +98,8 @@ public class BoaMLIntrinsics {
 				m = new BoaAttributeSelectedClassifier(clr, o);
 			} else if(className.contains("PART")){
 				m = new BoaPART(clr, o);
+			} else if(className.contains("OneR")){
+				m = new BoaOneR(clr, o);
 			}
 		} else if (unserializedObject instanceof Clusterer) {
 			// Clusterer
