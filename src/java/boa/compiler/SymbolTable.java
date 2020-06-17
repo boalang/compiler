@@ -31,6 +31,7 @@ import boa.types.*;
 import boa.types.ml.BoaAdaBoostM1;
 import boa.types.ml.BoaLinearRegression;
 import boa.types.ml.BoaModel;
+import boa.types.ml.BoaZeroR;
 import boa.types.proto.*;
 import boa.types.proto.enums.*;
 import boa.compiler.ast.Operand;
@@ -381,10 +382,12 @@ public class SymbolTable {
 		types.put("float", new BoaFloat());
 		types.put("time", new BoaTime());
 		types.put("string", new BoaString());
-		types.put("LinearRegression", new BoaLinearRegression());
-		types.put("AdaBoostM1", new BoaAdaBoostM1());
 		types.put("model", new BoaModel());
 		types.put("tuple", new BoaTuple());
+
+		types.put("LinearRegression", new BoaLinearRegression());
+		types.put("AdaBoostM1", new BoaAdaBoostM1());
+		types.put("ZeroR", new BoaZeroR());
 		for (final BoaType t : dslTupleTypes)
 			types.put(t.toString(), t);
 
@@ -604,6 +607,7 @@ public class SymbolTable {
 			boa.aggregators.PreconditionAggregator.class,
 			boa.aggregators.ml.LinearRegressionAggregator.class,
 			boa.aggregators.ml.AdaBoostM1Aggregator.class,
+			boa.aggregators.ml.ZeroRAggregator.class
 		};
 		for (final Class<?> c : builtinAggs)
 			importAggregator(c);

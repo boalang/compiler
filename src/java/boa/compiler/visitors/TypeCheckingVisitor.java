@@ -33,6 +33,7 @@ import boa.types.*;
 import boa.types.ml.BoaAdaBoostM1;
 import boa.types.ml.BoaLinearRegression;
 import boa.types.ml.BoaModel;
+import boa.types.ml.BoaZeroR;
 import boa.types.proto.CodeRepositoryProtoTuple;
 
 /**
@@ -952,6 +953,42 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 			if (lhs instanceof BoaArray && rhs instanceof BoaTuple)
 				rhs = new BoaArray(((BoaTuple)rhs).getMember(0));
+			
+			if(lhs instanceof BoaModel) {
+				final BoaType t = ((BoaModel)lhs).getType();
+				List<BoaType> types = new ArrayList<BoaType>();
+
+				if (t instanceof BoaTuple)
+					types = ((BoaTuple) t).getTypes();
+				else if(t instanceof BoaArray)
+					types.add(((BoaArray) t).getType());
+				
+				if (lhs instanceof BoaAdaBoostM1) {
+					if (!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "AdaBoostM1 required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if (!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "AdaBoostM1 required attributes to be numeric, nominal or date");
+					}
+				} else if (lhs instanceof BoaLinearRegression) {
+					if (!(types.get(types.size() - 1) instanceof BoaInt || types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "LinearRegression required class to be numeric or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "LinearRegression required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaZeroR) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "ZeroR required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "ZeroR required attributes to be numeric, nominal, date or string");
+					}
+				}
+			}
 
 			if (rhs != null && !lhs.assigns(rhs) && !env.hasCast(rhs, lhs))
 				throw new TypeCheckException(n.getInitializer(), "incorrect type '" + rhs + "' for assignment to '" + id + ": " + lhs + "'");
@@ -1417,7 +1454,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		env.set(n.getId().getToken(), n.type);
 		n.getId().accept(this, env);
 
+		// TODO: What's the purpose of this?
 		BoaModel model = (BoaModel) SymbolTable.getMLAggregatorType(n.getId().getToken());
+		
 		if (model != null) {
 			BoaType t = (n.getType()).type;
 			List<BoaType> types = new ArrayList<BoaType>();
@@ -1471,6 +1510,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaLinearRegression(n.getType().type);
 		else if (n.type instanceof BoaAdaBoostM1)
 			n.type = new BoaAdaBoostM1(n.getType().type);
+		else if (n.type instanceof BoaZeroR)
+			n.type = new BoaZeroR(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}
