@@ -18,6 +18,7 @@ import boa.runtime.Tuple;
 import boa.types.ml.BoaAdaBoostM1;
 import boa.types.ml.BoaLinearRegression;
 import boa.types.ml.BoaModel;
+import boa.types.ml.BoaVote;
 import boa.types.ml.BoaZeroR;
 import weka.classifiers.Classifier;
 import weka.core.Attribute;
@@ -85,6 +86,8 @@ public class BoaMLIntrinsics {
 			return (BoaAdaBoostM1) m;
 		} else if(clr.toString().contains("ZeroR")){
 			m = new BoaZeroR(clr, o);
+		} else if(clr.toString().contains("Vote")){
+			m = new BoaVote(clr, o);
 		}
 		return m;
 	}

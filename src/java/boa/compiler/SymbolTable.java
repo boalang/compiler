@@ -388,6 +388,8 @@ public class SymbolTable {
 		types.put("LinearRegression", new BoaLinearRegression());
 		types.put("AdaBoostM1", new BoaAdaBoostM1());
 		types.put("ZeroR", new BoaZeroR());
+		types.put("Vote", new BoaZeroR());
+
 		for (final BoaType t : dslTupleTypes)
 			types.put(t.toString(), t);
 
@@ -607,7 +609,8 @@ public class SymbolTable {
 			boa.aggregators.PreconditionAggregator.class,
 			boa.aggregators.ml.LinearRegressionAggregator.class,
 			boa.aggregators.ml.AdaBoostM1Aggregator.class,
-			boa.aggregators.ml.ZeroRAggregator.class
+			boa.aggregators.ml.ZeroRAggregator.class,
+			boa.aggregators.ml.VoteAggregator.class
 		};
 		for (final Class<?> c : builtinAggs)
 			importAggregator(c);

@@ -33,6 +33,7 @@ import boa.types.*;
 import boa.types.ml.BoaAdaBoostM1;
 import boa.types.ml.BoaLinearRegression;
 import boa.types.ml.BoaModel;
+import boa.types.ml.BoaVote;
 import boa.types.ml.BoaZeroR;
 import boa.types.proto.CodeRepositoryProtoTuple;
 
@@ -987,6 +988,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "ZeroR required attributes to be numeric, nominal, date or string");
 					}
+				} else if(lhs instanceof BoaVote) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "Vote required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "Vote required attributes to be numeric, nominal, date or string");
+					}
 				}
 			}
 
@@ -1512,6 +1522,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaAdaBoostM1(n.getType().type);
 		else if (n.type instanceof BoaZeroR)
 			n.type = new BoaZeroR(n.getType().type);
+		else if(n.type instanceof BoaVote)
+			n.type = new BoaVote(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}
