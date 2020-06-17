@@ -100,6 +100,8 @@ public class BoaMLIntrinsics {
 				m = new BoaPART(clr, o);
 			} else if(className.contains("OneR")){
 				m = new BoaOneR(clr, o);
+			} else if(className.contains("NaiveBayesMultinomialUpdateable")){
+				m = new BoaNaiveBayesMultinomialUpdateable(clr, o);
 			}
 		} else if (unserializedObject instanceof Clusterer) {
 			// Clusterer
