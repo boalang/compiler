@@ -19,38 +19,47 @@ package boa.types.ml;
 import boa.types.BoaType;
 import weka.classifiers.Classifier;
 /**
- * A {@link BoaType} representing ML model of AdditiveRegression with attached types.
+ * A {@link BoaType} representing ML model of AttributeSelectedClassifier with attached types.
  * 
  * @author ankuraga
  */
-public class BoaAdditiveRegression extends BoaModel{
-	public BoaAdditiveRegression() {
-	}
-
+public class BoaAttributeSelectedClassifier extends BoaModel{
 	/**
-	 * Construct a BoaAdditiveRegression.
+	 * Default BoaAttributeSelectedClassifier Constructor.
 	 * 
-	 * @param t A {@link BoaType} containing the types attached with this model
+	 */
+	public BoaAttributeSelectedClassifier(){
+	}
+	
+	/**
+	 * Construct a BoaAttributeSelectedClassifier.
+	 * 
+	 * @param t
+	 *            A {@link BoaType} containing the types attached with this model
 	 *
 	 */
-	public BoaAdditiveRegression(BoaType t) {
+	public BoaAttributeSelectedClassifier(BoaType t){
 		this.t = t;
 	}
-
+	
 	/**
-	 * Construct a BoaAdditiveRegression.
+	 * Construct a BoaAttributeSelectedClassifier.
 	 * 
-	 * @param clr A {@link Classifier} containing ML model
+	 * @param clr
+	 *            A {@link Classifier} containing ML model
 	 * 
-	 * @param o   A {@link Object} containing type object
+	 * @param o
+	 *            A {@link Object} containing type object
 	 *
 	 */
-	public BoaAdditiveRegression(Classifier clr, Object o) {
+	public BoaAttributeSelectedClassifier(Classifier clr, Object o){
 		this.clr = clr;
 		this.o = o;
 	}
 	
-	 /** Get the type object of this model.
+	
+	/**
+	 * Get the type object of this model.
 	 * 
 	 * @return A {@link Object} representing type object
 	 * 
@@ -78,12 +87,12 @@ public class BoaAdditiveRegression extends BoaModel{
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.ml.BoaAdditiveRegression";
+		return "boa.types.ml.BoaAttributeSelectedClassifier";
 	}
 	
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return "boa.types.ml.BoaAdditiveRegression" + "/" + this.t;
+		return "boa.types.ml.BoaAttributeSelectedClassifier" + "/" + this.t;
 	}
 }

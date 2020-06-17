@@ -94,6 +94,8 @@ public class BoaMLIntrinsics {
 				m = new BoaRandomForest(clr, o);
 			} else if (className.contains("AdditiveRegression")){
 				m = new BoaAdditiveRegression(clr, o);
+			} else if (className.contains("AttributeSelectedClassifier")){
+				m = new BoaAttributeSelectedClassifier(clr, o);
 			}
 		} else if (unserializedObject instanceof Clusterer) {
 			// Clusterer

@@ -1025,6 +1025,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
                                 types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
                             throw new TypeCheckException(n, "AdditiveRegression required attributes to be numeric, nominal or date");
                     }
+				} else if (lhs instanceof BoaAttributeSelectedClassifier) {
+                    if (!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+                            || types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+                        throw new TypeCheckException(n, "AttributeSelectedClassifier required class to be numeric, nominal or date");
+                    for (int i = 0; i < types.size() - 1; i++) {
+                        if (!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
+                                types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+                            throw new TypeCheckException(n, "AttributeSelectedClassifier required attributes to be numeric, nominal or date");
+                    }
 				}
 			}
 
@@ -1560,6 +1569,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaRandomForest(n.getType().type);
 		else if(n.type instanceof BoaAdditiveRegression)
 			n.type = new BoaAdditiveRegression(n.getType().type);
+		else if(n.type instanceof BoaAttributeSelectedClassifier)
+			n.type = new BoaAttributeSelectedClassifier(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}
