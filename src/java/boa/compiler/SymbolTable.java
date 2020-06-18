@@ -403,6 +403,8 @@ public class SymbolTable {
 		types.put("Bagging", new BoaBagging());
 		types.put("BayesNet", new BoaBayesNet());
 		types.put("ClassificationViaRegression", new BoaClassificationViaRegression());
+		types.put("LWL", new BoaLWL());
+		types.put("LogitBoost", new BoaLogitBoost());
 
 		for (final BoaType t : dslTupleTypes)
 			types.put(t.toString(), t);
@@ -639,7 +641,9 @@ public class SymbolTable {
 			boa.aggregators.ml.MultilayerPerceptronAggregator.class,
 			boa.aggregators.ml.BaggingAggregator.class,
 			boa.aggregators.ml.BayesNetAggregator.class,
-			boa.aggregators.ml.ClassificationViaRegressionAggregator.class
+			boa.aggregators.ml.ClassificationViaRegressionAggregator.class,
+			boa.aggregators.ml.LWLAggregator.class,
+			boa.aggregators.ml.LogitBoostAggregator.class
 		};
 		for (final Class<?> c : builtinAggs)
 			importAggregator(c);
