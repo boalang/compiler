@@ -115,6 +115,8 @@ public class BoaMLIntrinsics {
 				m = new BoaMultilayerPerceptron(clr, o);
 			} else if(className.contains("Bagging")){
 				m = new BoaBagging(clr, o);
+			} else if(className.contains("BayesNet")){
+				m = new BoaBayesNet(clr, o);
 			}
 		} else if (unserializedObject instanceof Clusterer) {
 			// Clusterer
