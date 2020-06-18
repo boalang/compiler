@@ -18,7 +18,6 @@ package boa.aggregators.ml;
 
 import boa.runtime.Tuple;
 import boa.aggregators.AggregatorSpec;
-import boa.aggregators.FinishedException;
 import weka.classifiers.meta.ClassificationViaRegression;
 
 import java.io.IOException;
@@ -28,46 +27,45 @@ import java.io.IOException;
  *
  * @author ankuraga
  */
-@AggregatorSpec(name = "classificationviaregression", formalParameters = {"string"})
+@AggregatorSpec(name = "classificationviaregression", formalParameters = { "string" })
 public class ClassificationViaRegressionAggregator extends MLAggregator {
-    private ClassificationViaRegression model;
+	private ClassificationViaRegression model;
 
-    public ClassificationViaRegressionAggregator() {
-    }
-
-    public ClassificationViaRegressionAggregator(final String s) {
-        super(s);
-    }
-
-    public void aggregate(String[] data, final String metadata) throws IOException, InterruptedException {
-        aggregate(data, metadata, "ClassificationViaRegression");
-    }
-
-    public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
-        aggregate(data, metadata, "ClassificationViaRegression");
-    }
-    
-	@Override
-	public void aggregate(String data, String metadata) throws IOException, InterruptedException {	
+	public ClassificationViaRegressionAggregator() {
 	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void finish() throws IOException, InterruptedException {
-        try {
-            this.model = new ClassificationViaRegression();
-            this.model.setOptions(options);
-            this.model.buildClassifier(this.trainingSet);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	public ClassificationViaRegressionAggregator(final String s) {
+		super(s);
+	}
+
+	public void aggregate(String[] data, final String metadata) throws IOException, InterruptedException {
+		aggregate(data, metadata, "ClassificationViaRegression");
+	}
+
+	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
+		aggregate(data, metadata, "ClassificationViaRegression");
+	}
+
+	@Override
+	public void aggregate(String data, String metadata) throws IOException, InterruptedException {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void finish() throws IOException, InterruptedException {
+		try {
+			this.model = new ClassificationViaRegression();
+			this.model.setOptions(options);
+			this.model.buildClassifier(this.trainingSet);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.saveModel(this.model);
 		this.evaluate(this.model, this.trainingSet);
 		this.evaluate(this.model, this.testingSet);
 		this.collect(this.model.toString());
-    }
-
+	}
 
 }

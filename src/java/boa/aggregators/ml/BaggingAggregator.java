@@ -28,46 +28,45 @@ import java.io.IOException;
  *
  * @author ankuraga
  */
-@AggregatorSpec(name = "bagging", formalParameters = {"string"})
+@AggregatorSpec(name = "bagging", formalParameters = { "string" })
 public class BaggingAggregator extends MLAggregator {
-    private Bagging model;
+	private Bagging model;
 
-    public BaggingAggregator() {
-    }
+	public BaggingAggregator() {
+	}
 
-    public BaggingAggregator(final String s) {
-        super(s);
-    }
+	public BaggingAggregator(final String s) {
+		super(s);
+	}
 
-    public void aggregate(String[] data, final String metadata) throws IOException, InterruptedException {
-        aggregate(data, metadata, "Bagging");
-    }
+	public void aggregate(String[] data, final String metadata) throws IOException, InterruptedException {
+		aggregate(data, metadata, "Bagging");
+	}
 
-    public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
-        aggregate(data, metadata, "Bagging");
-    }
+	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
+		aggregate(data, metadata, "Bagging");
+	}
 
 	@Override
 	public void aggregate(String data, String metadata) throws IOException, InterruptedException, FinishedException {
 	}
-	
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void finish() throws IOException, InterruptedException {
-        try {
-            this.model = new Bagging();
-            this.model.setOptions(options);
-            this.model.buildClassifier(this.trainingSet);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void finish() throws IOException, InterruptedException {
+		try {
+			this.model = new Bagging();
+			this.model.setOptions(options);
+			this.model.buildClassifier(this.trainingSet);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.saveModel(this.model);
 		this.evaluate(this.model, this.trainingSet);
 		this.evaluate(this.model, this.testingSet);
 		this.collect(this.model.toString());
-    }
-
+	}
 
 }
