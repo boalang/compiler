@@ -1144,6 +1144,30 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							throw new TypeCheckException(n,
 									"MultiScheme required attributes to be numeric, nominal, date or string");
 					}
+				} else if (lhs instanceof BoaMultilayerPerceptron) {
+					if (!(types.get(types.size() - 1) instanceof BoaEnum
+							|| types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat
+							|| types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n,
+								"MultilayerPerceptron required class to be numeric, nominal or date");
+					for (int i = 0; i < types.size() - 1; i++) {
+						if (!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat
+								|| types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime
+								|| types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n,
+									"MultilayerPerceptron required attributes to be numeric, nominal or date");
+					}
+				} else if (lhs instanceof BoaMultiClassClassifier) {
+					if (!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "MultiClassClassifier required class to be nominal");
+					for (int i = 0; i < types.size() - 1; i++) {
+						if (!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat
+								|| types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime
+								|| types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n,
+									"MultiClassClassifier required attributes to be numeric, nominal or date");
+					}
 				}
 			}
 
@@ -1710,6 +1734,10 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaNaiveBayes(n.getType().type);
 		else if (n.type instanceof BoaMultiScheme)
 			n.type = new BoaMultiScheme(n.getType().type);
+		else if(n.type instanceof BoaMultilayerPerceptron)
+			n.type = new BoaMultilayerPerceptron(n.getType().type);
+		else if(n.type instanceof BoaMultiClassClassifier)
+			n.type = new BoaMultiClassClassifier(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}

@@ -1,0 +1,8 @@
+type T = enum {y = "true", n = "false"};
+p: Project = input;
+predict: output collection of string;
+m: model of MultiClassClassifier of {int, int, T};
+m = load(0, "mc");
+x1 := 1;
+x2 := 2;
+predict << classify(m, {x1, x2});

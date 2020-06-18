@@ -109,6 +109,10 @@ public class BoaMLIntrinsics {
 				m = new BoaNaiveBayes(clr, o);
 			} else if(className.contains("MultiScheme")){
 				m = new BoaMultiScheme(clr, o);
+			} else if(className.contains("MultiClassClassifier")){
+				m = new BoaMultiClassClassifier(clr, o);
+			} else if(className.contains("MultilayerPerceptron")){
+				m = new BoaMultilayerPerceptron(clr, o);
 			}
 		} else if (unserializedObject instanceof Clusterer) {
 			// Clusterer
