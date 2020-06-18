@@ -402,6 +402,7 @@ public class SymbolTable {
 		types.put("MultilayerPerceptron", new BoaMultilayerPerceptron());
 		types.put("Bagging", new BoaBagging());
 		types.put("BayesNet", new BoaBayesNet());
+		types.put("ClassificationViaRegression", new BoaClassificationViaRegression());
 
 		for (final BoaType t : dslTupleTypes)
 			types.put(t.toString(), t);
@@ -637,7 +638,8 @@ public class SymbolTable {
 			boa.aggregators.ml.MultiClassClassifierAggregator.class,
 			boa.aggregators.ml.MultilayerPerceptronAggregator.class,
 			boa.aggregators.ml.BaggingAggregator.class,
-			boa.aggregators.ml.BayesNetAggregator.class
+			boa.aggregators.ml.BayesNetAggregator.class,
+			boa.aggregators.ml.ClassificationViaRegressionAggregator.class
 		};
 		for (final Class<?> c : builtinAggs)
 			importAggregator(c);

@@ -1185,6 +1185,14 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
                                 types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
                             throw new TypeCheckException(n, "BayesNet required attributes to be numeric or nominal");
                     }
+                } else if (lhs instanceof BoaClassificationViaRegression) {
+                    if (!(types.get(types.size() - 1) instanceof BoaEnum))
+                        throw new TypeCheckException(n, "ClassificationViaRegression required class to be nominal");
+                    for (int i = 0; i < types.size() - 1; i++) {
+                        if (!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
+                                types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+                            throw new TypeCheckException(n, "ClassificationViaRegression required attributes to be numeric, nominal or date");
+                    }
                 }
 			}
 
@@ -1759,6 +1767,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaBagging(n.getType().type);
 		else if(n.type instanceof BoaBayesNet)
 			n.type = new BoaBayesNet(n.getType().type);
+		else if(n.type instanceof BoaClassificationViaRegression)
+			n.type = new BoaClassificationViaRegression(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}

@@ -117,6 +117,8 @@ public class BoaMLIntrinsics {
 				m = new BoaBagging(clr, o);
 			} else if(className.contains("BayesNet")){
 				m = new BoaBayesNet(clr, o);
+			}  else if(className.contains("ClassificationViaRegression")){
+				m = new BoaClassificationViaRegression(clr, o);
 			}
 		} else if (unserializedObject instanceof Clusterer) {
 			// Clusterer
