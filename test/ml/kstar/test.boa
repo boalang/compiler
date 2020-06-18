@@ -1,0 +1,8 @@
+type T = enum {y = "true", n = "false"};
+p: Project = input;
+predict: output collection of string;
+ks: model of KStar of {int, int, T};
+ks = load(0, ks);
+x1 := 1;
+x2 := 2;
+predict << classify(ks, {x1, x2});

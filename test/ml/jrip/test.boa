@@ -1,0 +1,8 @@
+type T = enum {y = "true", n = "false"};
+p: Project = input;
+predict: output collection of string;
+jr: model of JRip of {int, int, T};
+jr = load(0, jr);
+x1 := 1;
+x2 := 2;
+predict << classify(jr, {x1, x2});

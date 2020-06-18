@@ -1,0 +1,8 @@
+type T = enum {y = "true", n = "false"};
+p: Project = input;
+predict: output collection of string;
+jm: model of J48 of {int, int, T};
+jm = load(0, jm);
+x1 := 1;
+x2 := 2;
+predict << classify(jm, {x1, x2});

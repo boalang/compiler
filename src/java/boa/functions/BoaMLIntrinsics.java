@@ -34,7 +34,8 @@ public class BoaMLIntrinsics {
 	 * @return Model type after deserializing
 	 */
 	@FunctionSpec(name = "load", returnType = "model", formalParameters = { "int", "model" })
-	public static BoaModel load(final long jobId, BoaModel m, final String identifier, final Object o) throws Exception {
+	public static BoaModel load(final long jobId, BoaModel m, final String identifier, final Object o)
+			throws Exception {
 		Object unserializedObject = null;
 		FSDataInputStream in = null;
 		ObjectInputStream dataIn = null;
@@ -117,14 +118,20 @@ public class BoaMLIntrinsics {
 				m = new BoaBayesNet(clr, o);
 			} else if (className.contains("ClassificationViaRegression")) {
 				m = new BoaClassificationViaRegression(clr, o);
-			} else if(className.contains("LWL")){
+			} else if (className.contains("LWL")) {
 				m = new BoaLWL(clr, o);
-			} else if(className.contains("LogitBoost")){
+			} else if (className.contains("LogitBoost")) {
 				m = new BoaLogitBoost(clr, o);
-			} else if(className.contains("LMT")){
+			} else if (className.contains("LMT")) {
 				m = new BoaLMT(clr, o);
-			} else if(className.contains("Logistic")){
+			} else if (className.contains("Logistic")) {
 				m = new BoaLogisticRegression(clr, o);
+			} else if (className.contains("J48")) {
+				m = new BoaJ48(clr, o);
+			} else if (className.contains("JRip")) {
+				m = new BoaJRip(clr, o);
+			} else if (className.contains("KStar")) {
+				m = new BoaKStar(clr, o);
 			}
 		} else if (unserializedObject instanceof Clusterer) {
 			// Clusterer
