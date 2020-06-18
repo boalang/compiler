@@ -33,8 +33,8 @@ public class BoaMLIntrinsics {
 	 * @param Take URL for the model
 	 * @return Model type after deserializing
 	 */
-	@FunctionSpec(name = "load", returnType = "model", formalParameters = { "int", "string" })
-	public static BoaModel load(final long jobId, final String modelVar, final Object o) throws Exception {
+	@FunctionSpec(name = "load", returnType = "model", formalParameters = { "int", "model" })
+	public static BoaModel load(final long jobId, BoaModel m, final String identifier, final Object o) throws Exception {
 		Object unserializedObject = null;
 		FSDataInputStream in = null;
 		ObjectInputStream dataIn = null;
@@ -46,7 +46,7 @@ public class BoaMLIntrinsics {
 			String output = DefaultProperties.localOutput != null
 					? new Path(DefaultProperties.localOutput).toString() + "/../"
 					: conf.get("fs.default.name", "hdfs://boa-njt/");
-			p = getModelFilePath(output, (int) jobId, modelVar);
+			p = getModelFilePath(output, (int) jobId, identifier);
 			fs = FileSystem.get(conf);
 			in = fs.open(p);
 
@@ -74,8 +74,6 @@ public class BoaMLIntrinsics {
 			}
 		}
 
-		BoaModel m = null;
-
 		if (unserializedObject instanceof Classifier) {
 			// classifier
 			Classifier clr = (Classifier) unserializedObject;
@@ -90,34 +88,34 @@ public class BoaMLIntrinsics {
 				m = new BoaVote(clr, o);
 			} else if (className.contains("SMO")) {
 				m = new BoaSMO(clr, o);
-			} else if (className.contains("RandomForest")){
+			} else if (className.contains("RandomForest")) {
 				m = new BoaRandomForest(clr, o);
-			} else if (className.contains("AdditiveRegression")){
+			} else if (className.contains("AdditiveRegression")) {
 				m = new BoaAdditiveRegression(clr, o);
-			} else if (className.contains("AttributeSelectedClassifier")){
+			} else if (className.contains("AttributeSelectedClassifier")) {
 				m = new BoaAttributeSelectedClassifier(clr, o);
-			} else if(className.contains("PART")){
+			} else if (className.contains("PART")) {
 				m = new BoaPART(clr, o);
-			} else if(className.contains("OneR")){
+			} else if (className.contains("OneR")) {
 				m = new BoaOneR(clr, o);
-			} else if(className.contains("NaiveBayesMultinomialUpdateable")){
+			} else if (className.contains("NaiveBayesMultinomialUpdateable")) {
 				m = new BoaNaiveBayesMultinomialUpdateable(clr, o);
-			} else if(className.contains("BoaNaiveBayesMultinomial")){
+			} else if (className.contains("BoaNaiveBayesMultinomial")) {
 				// TODO BoaNaiveBayesMultinomial
 				m = new BoaNaiveBayesMultinomial(clr, o);
-			} else if(className.contains("NaiveBayes")){
+			} else if (className.contains("NaiveBayes")) {
 				m = new BoaNaiveBayes(clr, o);
-			} else if(className.contains("MultiScheme")){
+			} else if (className.contains("MultiScheme")) {
 				m = new BoaMultiScheme(clr, o);
-			} else if(className.contains("MultiClassClassifier")){
+			} else if (className.contains("MultiClassClassifier")) {
 				m = new BoaMultiClassClassifier(clr, o);
-			} else if(className.contains("MultilayerPerceptron")){
+			} else if (className.contains("MultilayerPerceptron")) {
 				m = new BoaMultilayerPerceptron(clr, o);
-			} else if(className.contains("Bagging")){
+			} else if (className.contains("Bagging")) {
 				m = new BoaBagging(clr, o);
-			} else if(className.contains("BayesNet")){
+			} else if (className.contains("BayesNet")) {
 				m = new BoaBayesNet(clr, o);
-			}  else if(className.contains("ClassificationViaRegression")){
+			} else if (className.contains("ClassificationViaRegression")) {
 				m = new BoaClassificationViaRegression(clr, o);
 			}
 		} else if (unserializedObject instanceof Clusterer) {
@@ -128,7 +126,7 @@ public class BoaMLIntrinsics {
 				m = new BoaSimpleKMeans(clu, o);
 			}
 		}
-		
+
 		// TODO PrincipalComponents
 		return m;
 	}

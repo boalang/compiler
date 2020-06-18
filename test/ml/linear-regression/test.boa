@@ -1,9 +1,9 @@
 p: Project = input;
 predict: output collection of string;
 
-m: model of LinearRegression of {int, int, int};
-m = load(0, "linear");
+linear: model of LinearRegression of {int, int, int};
+linear = load(0, linear);
 
 x1 := 1;
 x2 := 2;
-predict << classify(m, {x1, x2});
+predict << classify(linear, {x1, x2});

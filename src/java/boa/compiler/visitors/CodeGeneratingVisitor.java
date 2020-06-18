@@ -1016,7 +1016,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		if (rhs.contains(".load(")) {
-			rhs = rhs.substring(0,rhs.length()-1) + ", new " + ((BoaModel)n.getLhs().type).getType().toJavaType() + "())";
+			Operand o = n.getLhs().getOperand();
+			if (o instanceof Identifier) {
+				String token = ((Identifier) o).getToken();
+				token = token.substring(0, token.lastIndexOf('_'));
+				rhs = rhs.substring(0,rhs.length()-1) + ", \"" + token + "\"" + ", new " + ((BoaModel)n.getLhs().type).getType().toJavaType() + "())";
+			}
 			rhs = "(" + (n.getLhs().type + "").split("\\/")[0] + ")" + rhs;
 		}
 

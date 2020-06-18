@@ -3,11 +3,11 @@ type T = enum {y = "true", n = "false"};
 p: Project = input;
 predict: output collection of string;
 
-m: model of SimpleKMeans of {int, T, int, T};
-m = load(0, "kmeans");
+kmeans: model of SimpleKMeans of {int, T, int, T};
+kmeans = load(0, kmeans);
 
 x1 := 1;
 x2: T = T.n;
 x3 := 2;
 
-predict << cluster(m, {x1, x2, x3});
+predict << cluster(kmeans, {x1, x2, x3});
