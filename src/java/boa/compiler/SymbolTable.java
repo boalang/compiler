@@ -405,6 +405,8 @@ public class SymbolTable {
 		types.put("ClassificationViaRegression", new BoaClassificationViaRegression());
 		types.put("LWL", new BoaLWL());
 		types.put("LogitBoost", new BoaLogitBoost());
+		types.put("LMT", new BoaLMT());
+		types.put("LogisticRegression", new BoaLogisticRegression());
 
 		for (final BoaType t : dslTupleTypes)
 			types.put(t.toString(), t);
@@ -643,8 +645,11 @@ public class SymbolTable {
 			boa.aggregators.ml.BayesNetAggregator.class,
 			boa.aggregators.ml.ClassificationViaRegressionAggregator.class,
 			boa.aggregators.ml.LWLAggregator.class,
-			boa.aggregators.ml.LogitBoostAggregator.class
+			boa.aggregators.ml.LogitBoostAggregator.class,
+			boa.aggregators.ml.LMTAggregator.class,
+			boa.aggregators.ml.LogisticRegressionAggregator.class
 		};
+
 		for (final Class<?> c : builtinAggs)
 			importAggregator(c);
 

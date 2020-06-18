@@ -1,0 +1,8 @@
+type T = enum {y = "true", n = "false"};
+p: Project = input;
+predict: output collection of string;
+lg: model of LogisticRegression of {int, int, T};
+lg = load(0, lg);
+x1 := 1;
+x2 := 2;
+predict << classify(lg, {x1, x2});

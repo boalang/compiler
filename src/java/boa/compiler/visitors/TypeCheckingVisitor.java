@@ -1221,6 +1221,26 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							throw new TypeCheckException(n,
 									"LogitBoost required attributes to be numeric, nominal or date");
 					}
+				} else if (lhs instanceof BoaLogisticRegression) {
+					if (!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "LogisticRegression required class to be nominal");
+					for (int i = 0; i < types.size() - 1; i++) {
+						if (!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat
+								|| types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime
+								|| types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n,
+									"LogisticRegression required attributes to be numeric, nominal or date");
+					}
+				} else if (lhs instanceof BoaLogitBoost) {
+					if (!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "LogitBoost required class to be nominal");
+					for (int i = 0; i < types.size() - 1; i++) {
+						if (!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat
+								|| types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime
+								|| types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n,
+									"LogitBoost required attributes to be numeric, nominal or date");
+					}
 				}
 			}
 
@@ -1797,10 +1817,14 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaBayesNet(n.getType().type);
 		else if (n.type instanceof BoaClassificationViaRegression)
 			n.type = new BoaClassificationViaRegression(n.getType().type);
-		else if(n.type instanceof BoaLogitBoost)
+		else if (n.type instanceof BoaLogitBoost)
 			n.type = new BoaLogitBoost(n.getType().type);
-		else if(n.type instanceof BoaLWL)
+		else if (n.type instanceof BoaLWL)
 			n.type = new BoaLWL(n.getType().type);
+		else if(n.type instanceof BoaLMT)
+			n.type = new BoaLMT(n.getType().type);
+		else if(n.type instanceof BoaLogisticRegression)
+			n.type = new BoaLogisticRegression(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}

@@ -121,6 +121,10 @@ public class BoaMLIntrinsics {
 				m = new BoaLWL(clr, o);
 			} else if(className.contains("LogitBoost")){
 				m = new BoaLogitBoost(clr, o);
+			} else if(className.contains("LMT")){
+				m = new BoaLMT(clr, o);
+			} else if(className.contains("Logistic")){
+				m = new BoaLogisticRegression(clr, o);
 			}
 		} else if (unserializedObject instanceof Clusterer) {
 			// Clusterer
@@ -131,7 +135,9 @@ public class BoaMLIntrinsics {
 			}
 		}
 
+		// TODO attribute selection:
 		// TODO PrincipalComponents
+		// TODO LSA
 		return m;
 	}
 
