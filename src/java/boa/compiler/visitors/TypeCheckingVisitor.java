@@ -1131,6 +1131,19 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 								|| types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "NaiveBayes required attributes to be numeric or nominal");
 					}
+				} else if (lhs instanceof BoaMultiScheme) {
+					if (!(types.get(types.size() - 1) instanceof BoaEnum
+							|| types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat
+							|| types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "MultiScheme required class to be numeric, nominal or date");
+					for (int i = 0; i < types.size() - 1; i++) {
+						if (!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat
+								|| types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime
+								|| types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n,
+									"MultiScheme required attributes to be numeric, nominal, date or string");
+					}
 				}
 			}
 
@@ -1693,8 +1706,10 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaOneR(n.getType().type);
 		else if (n.type instanceof BoaNaiveBayesMultinomialUpdateable)
 			n.type = new BoaNaiveBayesMultinomialUpdateable(n.getType().type);
-		else if(n.type instanceof BoaNaiveBayes)
+		else if (n.type instanceof BoaNaiveBayes)
 			n.type = new BoaNaiveBayes(n.getType().type);
+		else if (n.type instanceof BoaMultiScheme)
+			n.type = new BoaMultiScheme(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}
