@@ -66,6 +66,7 @@ import org.eclipse.dltk.python.parser.ast.expressions.PrintExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonDictExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonDictExpression.DictNode;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonForListExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonFunctionDecorator;
 import org.eclipse.dltk.ast.references.SimpleReference;
 import org.eclipse.dltk.ast.references.VariableReference;
 import org.eclipse.dltk.ast.statements.Block;
@@ -99,6 +100,7 @@ public class NewPythonVisitor extends ASTVisitor {
 	protected Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
 	protected Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
 	protected Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
+	protected Stack<boa.types.Ast.Modifier> modifiers = new Stack<boa.types.Ast.Modifier>();
 
 	protected Stack<boa.types.Ast.Comment> comments = new Stack<boa.types.Ast.Comment>();
 
@@ -232,6 +234,9 @@ public class NewPythonVisitor extends ASTVisitor {
 		} else if (md instanceof UnaryExpression) {
 			visit((UnaryExpression) md);
 			opFound = true;
+		} else if (md instanceof PythonFunctionDecorator) {
+			visit((PythonFunctionDecorator) md);
+			opFound = true;
 		}
 
 		return !opFound;
@@ -278,6 +283,21 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.EMPTY);
 		expressions.push(b.build());
 		return true;
+	}
+
+	public boolean visit(PythonFunctionDecorator node) throws Exception {
+		boa.types.Ast.Modifier.Builder b = boa.types.Ast.Modifier.newBuilder();
+		b.setKind(boa.types.Ast.Modifier.ModifierKind.ANNOTATION);
+		b.setAnnotationName(node.getName());
+		
+		for (Object ob : ((ExpressionList) node.getArguments()).getExpressions()) {
+			((ASTNode) ob).traverse(this);
+			b.addAnnotationValues(expressions.pop());
+		}
+		
+		modifiers.push(b.build());
+
+		return false;
 	}
 
 	public boolean visit(PythonLambdaExpression node) throws Exception {
@@ -540,7 +560,7 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_MOD);
 		else if (md.getKind() == ExpressionConstants.E_POWER_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_POW);
-		
+
 		else if (md.getKind() == ExpressionConstants.E_RSHIFT_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_RSHIFT);
 		else if (md.getKind() == ExpressionConstants.E_LSHIFT_ASSIGN)
@@ -553,7 +573,6 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_BITXOR);
 		else
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
-		
 
 		md.getLeft().traverse(this);
 		b.addExpressions(expressions.pop());
@@ -679,11 +698,10 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_MOD);
 		} else if (md.getKind() == ExpressionConstants.E_POWER) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_POW);
-		}
-		else if (md.getKind() == PythonConstants.E_INTEGER_DIV) {
+		} else if (md.getKind() == PythonConstants.E_INTEGER_DIV) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_INT_DIV);
 		}
-		
+
 		else if (md.getKind() == ExpressionConstants.E_NOT_EQUAL) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.NEQ);
 		} else if (md.getKind() == ExpressionConstants.E_GE) {
@@ -704,12 +722,10 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		else if (md.getKind() == ExpressionConstants.E_IS) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.IS);
-		}
-		else if (md.getKind() == ExpressionConstants.E_ISNOT) {
+		} else if (md.getKind() == ExpressionConstants.E_ISNOT) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.IS_NOT);
 		}
 
-		
 		else if (md.getKind() == ExpressionConstants.E_LAND) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.LOGICAL_AND);
 		} else if (md.getKind() == ExpressionConstants.E_LOR) {
@@ -717,7 +733,7 @@ public class NewPythonVisitor extends ASTVisitor {
 		} else if (md.getKind() == ExpressionConstants.E_LNOT) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.LOGICAL_NOT);
 		}
-		
+
 		else if (md.getKind() == ExpressionConstants.E_BAND) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_AND);
 		} else if (md.getKind() == ExpressionConstants.E_BOR) {
@@ -730,12 +746,9 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_XOR);
 		} else if (md.getKind() == ExpressionConstants.E_BNOT) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_NOT);
-		} 
-		else
-			
+		} else
+
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
-
-
 
 		md.getLeft().traverse(this);
 		b.addExpressions(expressions.pop());
@@ -850,6 +863,15 @@ public class NewPythonVisitor extends ASTVisitor {
 			List<boa.types.Ast.Statement> ss = statements.pop();
 			for (boa.types.Ast.Statement st : ss)
 				b.addStatements(st);
+		}
+		
+		if(s.getDecorators()!=null)
+		{
+			for(Object ob: s.getDecorators())
+			{
+				((ASTNode)ob).traverse(this);
+				b.addModifiers(modifiers.pop());
+			}
 		}
 
 		Type.Builder tb = Type.newBuilder();
