@@ -1298,6 +1298,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
                                 types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
                             throw new TypeCheckException(n, "DecisionStump required attributes to be numeric, nominal or date");
                     }
+                } else if (lhs instanceof BoaDecisionTable) {
+                    if (!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+                            || types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+                        throw new TypeCheckException(n, "DecisionTable required class to be numeric, nominal or date");
+                    for (int i = 0; i < types.size() - 1; i++) {
+                        if (!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
+                                types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+                            throw new TypeCheckException(n, "DecisionTable required attributes to be numeric, nominal or date");
+                    }
                 }
 			}
 
@@ -1892,6 +1901,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaCVParameterSelection(n.getType().type);
 		else if (n.type instanceof BoaDecisionStump)
 			n.type = new BoaDecisionStump(n.getType().type);
+		else if (n.type instanceof BoaDecisionTable)
+			n.type = new BoaDecisionTable(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}
