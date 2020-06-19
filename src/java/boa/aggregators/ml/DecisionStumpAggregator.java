@@ -19,44 +19,45 @@ package boa.aggregators.ml;
 import boa.runtime.Tuple;
 import boa.aggregators.AggregatorSpec;
 import boa.aggregators.FinishedException;
-import weka.classifiers.meta.CVParameterSelection;
+import weka.classifiers.trees.DecisionStump;
 
 import java.io.IOException;
 
 /**
- * A Boa aggregator for training the model using CVParameterSelection.
+ * A Boa aggregator for training the model using DecisionStump.
  *
  * @author ankuraga
  */
-@AggregatorSpec(name = "cvparameterselection", formalParameters = {"string"})
-public class CVParameterSelectionAggregator extends MLAggregator {
-    private CVParameterSelection model;
+@AggregatorSpec(name = "decisionstump", formalParameters = {"string"})
+public class DecisionStumpAggregator extends MLAggregator {
+    private DecisionStump model;
 
-    public CVParameterSelectionAggregator() {
+    public DecisionStumpAggregator() {
     }
 
-    public CVParameterSelectionAggregator(final String s) {
+    public DecisionStumpAggregator(final String s) {
         super(s);
     }
 
     public void aggregate(String[] data, final String metadata) throws IOException, InterruptedException {
-        aggregate(data, metadata, "CVParameterSelection");
+        aggregate(data, metadata, "DecisionStump");
     }
 
     public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
-        aggregate(data, metadata, "CVParameterSelection");
+        aggregate(data, metadata, "DecisionStump");
     }
     
 	@Override
 	public void aggregate(String data, String metadata) throws IOException, InterruptedException, FinishedException {	
 	}
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void finish() throws IOException, InterruptedException {
         try {
-            this.model = new CVParameterSelection();
+            this.model = new DecisionStump();
             this.model.setOptions(options);
             this.model.buildClassifier(this.trainingSet);
         } catch (Exception e) {
@@ -67,4 +68,6 @@ public class CVParameterSelectionAggregator extends MLAggregator {
 		this.evaluate(this.model, this.testingSet);
 		this.collect(this.model.toString());
     }
+
+
 }

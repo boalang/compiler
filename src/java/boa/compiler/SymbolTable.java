@@ -411,6 +411,7 @@ public class SymbolTable {
 		types.put("JRip", new BoaJRip());
 		types.put("KStar", new BoaKStar());
 		types.put("CVParameterSelection", new BoaCVParameterSelection());
+		types.put("DecisionStump", new BoaDecisionStump());
 
 		for (final BoaType t : dslTupleTypes)
 			types.put(t.toString(), t);
@@ -655,7 +656,8 @@ public class SymbolTable {
 			boa.aggregators.ml.J48Aggregator.class,
 			boa.aggregators.ml.KStarAggregator.class,
 			boa.aggregators.ml.JRipAggregator.class,
-			boa.aggregators.ml.CVParameterSelectionAggregator.class
+			boa.aggregators.ml.CVParameterSelectionAggregator.class,
+			boa.aggregators.ml.DecisionStumpAggregator.class
 		};
 
 		for (final Class<?> c : builtinAggs)
