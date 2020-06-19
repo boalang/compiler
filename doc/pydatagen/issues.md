@@ -24,11 +24,19 @@
 
 #### All keywords should be handled as literal, not VARACCESS
 
-#### Exec statement should be handled.
+#### Decorator handling [RESOLVED]
+Library issue fixed.
+
+#### Exec statement should be handled. [RESOLVED]
 Similar to print.
 Multiple args of print should also be handled. 
 
 ## Low Priority
+
+#### Conditional expression/shorthand if not supported
+```
+print("A") if a > b else print("B")
+```
 
 #### Following assign operation not supported
 ```
