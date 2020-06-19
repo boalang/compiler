@@ -50,6 +50,7 @@ import org.eclipse.dltk.python.parser.ast.expressions.UnaryExpression;
 import org.eclipse.dltk.python.parser.ast.statements.BreakStatement;
 import org.eclipse.dltk.python.parser.ast.statements.ContinueStatement;
 import org.eclipse.dltk.python.parser.ast.statements.EmptyStatement;
+import org.eclipse.dltk.python.parser.ast.statements.ExecStatement;
 import org.eclipse.dltk.python.parser.ast.statements.IfStatement;
 import org.eclipse.dltk.python.parser.ast.statements.ReturnStatement;
 import org.eclipse.dltk.python.parser.ast.statements.SimpleStatement;
@@ -115,9 +116,19 @@ public class NewPythonVisitor extends ASTVisitor {
 	public boolean visitGeneral(ASTNode md) throws Exception {
 		System.out.println("Enter General:  " + md.toString());
 
+//		if(md.toString().startsWith("class org.eclipse.dltk.python.parser.ast.statements.ExecStatement"))
+//		{
+//			System.out.println("REACHED.");
+//		}
+		
 		boolean opFound = false;
+		
+		if (md instanceof ExecStatement) {
+			visit((ExecStatement) md);
+			opFound = true;
+		}
 
-		if (md instanceof PythonImportAsExpression) {
+		else if (md instanceof PythonImportAsExpression) {
 			visit((PythonImportAsExpression) md);
 			opFound = true;
 		} else if (md instanceof PythonImportExpression) {
@@ -1360,6 +1371,21 @@ public class NewPythonVisitor extends ASTVisitor {
 		list.add(b.build());
 
 		return false;
+	}
+	
+	public boolean visit(ExecStatement md) throws Exception {
+		System.out.println("Enter exec: " + md.toString());
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
+		b.setMethod("exec");
+		md.getExpression().traverse(this);
+		b.addMethodArgs(expressions.pop());
+
+		expressions.push(b.build());
+
+		return true;
+
 	}
 
 }
