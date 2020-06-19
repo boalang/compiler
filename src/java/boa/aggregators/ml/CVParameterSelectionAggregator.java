@@ -28,43 +28,44 @@ import java.io.IOException;
  *
  * @author ankuraga
  */
-@AggregatorSpec(name = "cvparameterselection", formalParameters = {"string"})
+@AggregatorSpec(name = "cvparameterselection", formalParameters = { "string" })
 public class CVParameterSelectionAggregator extends MLAggregator {
-    private CVParameterSelection model;
+	private CVParameterSelection model;
 
-    public CVParameterSelectionAggregator() {
-    }
-
-    public CVParameterSelectionAggregator(final String s) {
-        super(s);
-    }
-
-    public void aggregate(String[] data, final String metadata) throws IOException, InterruptedException {
-        aggregate(data, metadata, "CVParameterSelection");
-    }
-
-    public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
-        aggregate(data, metadata, "CVParameterSelection");
-    }
-    
-	@Override
-	public void aggregate(String data, String metadata) throws IOException, InterruptedException, FinishedException {	
+	public CVParameterSelectionAggregator() {
 	}
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void finish() throws IOException, InterruptedException {
-        try {
-            this.model = new CVParameterSelection();
-            this.model.setOptions(options);
-            this.model.buildClassifier(this.trainingSet);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+	public CVParameterSelectionAggregator(final String s) {
+		super(s);
+	}
+
+	public void aggregate(String[] data, final String metadata) throws IOException, InterruptedException {
+		aggregate(data, metadata, "CVParameterSelection");
+	}
+
+	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
+		aggregate(data, metadata, "CVParameterSelection");
+	}
+
+	@Override
+	public void aggregate(String data, String metadata) throws IOException, InterruptedException, FinishedException {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void finish() throws IOException, InterruptedException {
+		try {
+			this.model = new CVParameterSelection();
+			this.model.setOptions(options);
+			this.model.buildClassifier(this.trainingSet);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.saveModel(this.model);
 		this.evaluate(this.model, this.trainingSet);
 		this.evaluate(this.model, this.testingSet);
 		this.collect(this.model.toString());
-    }
+	}
 }
