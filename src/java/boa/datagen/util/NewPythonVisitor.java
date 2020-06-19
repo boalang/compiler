@@ -952,6 +952,8 @@ public class NewPythonVisitor extends ASTVisitor {
 			return false;
 		if (o instanceof Decorator)
 			return false;
+		if(o instanceof ExecStatement)
+			return true;
 		if (o instanceof SimpleStatement)
 			return false;
 		if (o instanceof PythonTryStatement)
