@@ -132,6 +132,8 @@ public class BoaMLIntrinsics {
 				m = new BoaJRip(clr, o);
 			} else if (className.contains("KStar")) {
 				m = new BoaKStar(clr, o);
+			} else if (className.contains("CVParameterSelection")) {
+				m = new BoaCVParameterSelection(clr, o);
 			}
 		} else if (unserializedObject instanceof Clusterer) {
 			// Clusterer
