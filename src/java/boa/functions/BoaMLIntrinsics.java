@@ -138,6 +138,8 @@ public class BoaMLIntrinsics {
 				m = new BoaDecisionStump(clr, o);
 			} else if (className.contains("DecisionTable")) {
 				m = new BoaDecisionTable(clr, o);
+			} else if (className.contains("FilteredClassifier")) {
+				m = new BoaFilteredClassifier(clr, o);
 			}
 		} else if (unserializedObject instanceof Clusterer) {
 			// Clusterer

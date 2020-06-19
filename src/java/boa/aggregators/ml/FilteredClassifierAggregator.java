@@ -19,44 +19,45 @@ package boa.aggregators.ml;
 import boa.runtime.Tuple;
 import boa.aggregators.AggregatorSpec;
 import boa.aggregators.FinishedException;
-import weka.classifiers.rules.DecisionTable;
+import weka.classifiers.meta.FilteredClassifier;
 
 import java.io.IOException;
 
 /**
- * A Boa aggregator for training the model using DecisionTable.
+ * A Boa aggregator for training the model using FilteredClassifier.
  *
  * @author ankuraga
  */
-@AggregatorSpec(name = "decisiontable", formalParameters = {"string"})
-public class DecisionTableAggregator extends MLAggregator {
-    private DecisionTable model;
+@AggregatorSpec(name = "filteredclassifier", formalParameters = {"string"})
+public class FilteredClassifierAggregator extends MLAggregator {
+    private FilteredClassifier model;
 
-    public DecisionTableAggregator() {
+    public FilteredClassifierAggregator() {
     }
 
-    public DecisionTableAggregator(final String s) {
+    public FilteredClassifierAggregator(final String s) {
         super(s);
     }
 
     public void aggregate(String[] data, final String metadata) throws IOException, InterruptedException {
-        aggregate(data, metadata, "DecisionTable");
+        aggregate(data, metadata, "FilteredClassifier");
     }
 
     public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
-        aggregate(data, metadata, "DecisionTable");
+        aggregate(data, metadata, "FilteredClassifier");
     }
     
 	@Override
-	public void aggregate(String data, String metadata) throws IOException, InterruptedException, FinishedException {
+	public void aggregate(String data, String metadata) throws IOException, InterruptedException, FinishedException {	
 	}
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void finish() throws IOException, InterruptedException {
         try {
-            this.model = new DecisionTable();
+            this.model = new FilteredClassifier();
             this.model.setOptions(options);
             this.model.buildClassifier(this.trainingSet);
         } catch (Exception e) {
