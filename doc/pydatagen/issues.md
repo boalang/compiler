@@ -22,7 +22,7 @@
 
 ## High Priority
 
-#### All keywords should be handled as literal, not VARACCESS
+#### All keywords should be handled as literal, not VARACCESS [RESOLVED]
 
 #### Decorator handling [RESOLVED]
 Library issue fixed.
@@ -38,7 +38,7 @@ Multiple args of print should also be handled.
 print("A") if a > b else print("B")
 ```
 
-#### Following assign operation not supported
+#### Following assign operation not supported [RESOLVED]
 ```
 x>>=5
 x<<=5
@@ -47,8 +47,8 @@ x **= 5
 x//=5
 ```
 
-#### `global` statement not handled
-Handled in PythonDLTK library but not handled in Boa.
+#### `global` statement not handled [RESOLVED]
+
 ```
 def myfunc2():
   global x
@@ -92,9 +92,9 @@ In above code, ValueError should not be added as VARACCESS.
                ]
 ```
 
-#### Check for Python 2 support
+#### Check for Python 2 support [Checked]
 
-#### Error for the following expression condition:
+#### Error for the following expression condition: [RESOLVED]
 ```
 if not type(x) is int:
   //something
