@@ -51,6 +51,7 @@ import org.eclipse.dltk.python.parser.ast.statements.BreakStatement;
 import org.eclipse.dltk.python.parser.ast.statements.ContinueStatement;
 import org.eclipse.dltk.python.parser.ast.statements.EmptyStatement;
 import org.eclipse.dltk.python.parser.ast.statements.ExecStatement;
+import org.eclipse.dltk.python.parser.ast.statements.GlobalStatement;
 import org.eclipse.dltk.python.parser.ast.statements.IfStatement;
 import org.eclipse.dltk.python.parser.ast.statements.ReturnStatement;
 import org.eclipse.dltk.python.parser.ast.statements.SimpleStatement;
@@ -125,6 +126,10 @@ public class NewPythonVisitor extends ASTVisitor {
 		
 		if (md instanceof ExecStatement) {
 			visit((ExecStatement) md);
+			opFound = true;
+		}
+		else if (md instanceof GlobalStatement) {
+			visit((GlobalStatement) md);
 			opFound = true;
 		}
 
@@ -571,10 +576,18 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_MOD);
 		else if (md.getKind() == ExpressionConstants.E_POWER_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_POW);
+		else if (md.getKind() == ExpressionConstants.E_DOUBLESTAR_ASSIGN)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_POW);
+		else if (md.getKind() == ExpressionConstants.E_DOUBLEDIV_ASSIGN)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_INT_DIV);
 
 		else if (md.getKind() == ExpressionConstants.E_RSHIFT_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_RSHIFT);
 		else if (md.getKind() == ExpressionConstants.E_LSHIFT_ASSIGN)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_LSHIFT);
+		else if (md.getKind() == ExpressionConstants.E_SR_ASSIGN)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_RSHIFT);
+		else if (md.getKind() == ExpressionConstants.E_SL_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_LSHIFT);
 		else if (md.getKind() == ExpressionConstants.E_BAND_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_BITAND);
@@ -951,6 +964,8 @@ public class NewPythonVisitor extends ASTVisitor {
 		if (isDeclarationKind(o))
 			return false;
 		if (o instanceof Decorator)
+			return false;
+		if (o instanceof GlobalStatement)
 			return false;
 		if(o instanceof ExecStatement)
 			return true;
@@ -1370,6 +1385,28 @@ public class NewPythonVisitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 
 		b.setKind(boa.types.Ast.Statement.StatementKind.EMPTY);
+		list.add(b.build());
+
+		return false;
+	}
+	
+	public boolean visit(GlobalStatement s) throws Exception {
+
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+
+		b.setKind(boa.types.Ast.Statement.StatementKind.GLOBAL);
+		
+		if(s.getExpression() instanceof ExpressionList)
+		{
+			ExpressionList el=(ExpressionList)s.getExpression();
+			for (Object ob :  el.getExpressions()) {
+				((ASTNode) ob).traverse(this);
+				b.addExpressions(expressions.pop());
+			}
+		}
+		
+		
 		list.add(b.build());
 
 		return false;
