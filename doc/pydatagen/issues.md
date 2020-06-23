@@ -22,6 +22,26 @@
 
 ## High Priority
 
+#### Import statements
+This kind of local import is not handled: `from ..foo.bar import a as b, c`
+
+#### Multiple assignments can be in the same line
+```
+a, b = cifar10.load_data() 
+```
+or
+```
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+```
+
+#### Arguments of print statement
+The arguments are added as tuple and for `x_train.shape` AST is EMPTY.
+`print('x_train shape:', x_train.shape)`
+
+#### Array indexing
+This kind of array handling is not handled:
+`input_shape=x_train.shape[1:]`
+
 #### All keywords should be handled as literal, not VARACCESS [RESOLVED]
 
 #### Decorator handling [RESOLVED]
