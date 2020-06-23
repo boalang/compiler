@@ -414,6 +414,9 @@ public class SymbolTable {
 		types.put("DecisionStump", new BoaDecisionStump());
 		types.put("DecisionTable", new BoaDecisionTable());
 		types.put("FilteredClassifier", new BoaFilteredClassifier());
+		types.put("GaussianProcesses", new BoaGaussianProcesses());
+		types.put("InputMappedClassifier", new BoaInputMappedClassifier());
+
 		for (final BoaType t : dslTupleTypes)
 			types.put(t.toString(), t);
 
@@ -660,7 +663,9 @@ public class SymbolTable {
 			boa.aggregators.ml.CVParameterSelectionAggregator.class,
 			boa.aggregators.ml.DecisionStumpAggregator.class,
 			boa.aggregators.ml.DecisionTableAggregator.class,
-			boa.aggregators.ml.FilteredClassifierAggregator.class
+			boa.aggregators.ml.FilteredClassifierAggregator.class,
+			boa.aggregators.ml.GaussianProcessesAggregator.class,
+			boa.aggregators.ml.InputMappedClassifierAggregator.class
 		};
 
 		for (final Class<?> c : builtinAggs)

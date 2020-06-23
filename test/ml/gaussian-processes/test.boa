@@ -1,0 +1,9 @@
+p: Project = input;
+predict: output collection of string;
+
+gp: model of GaussianProcesses of {int, int, int};
+gp = load(0, gp);
+
+x1 := 1;
+x2 := 2;
+predict << classify(gp, {x1, x2});

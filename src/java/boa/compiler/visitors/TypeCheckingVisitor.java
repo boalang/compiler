@@ -1315,6 +1315,23 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
                                 types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
                             throw new TypeCheckException(n, "FilteredClassifier required attributes to be numeric, nominal, date or string");
                     }
+                } else if (lhs instanceof BoaGaussianProcesses) {
+                    if (!(types.get(types.size() - 1) instanceof BoaInt || types.get(types.size() - 1) instanceof BoaTime
+                            || types.get(types.size() - 1) instanceof BoaFloat))
+                        throw new TypeCheckException(n, "GaussianProcesses required class to be numeric or date");
+                    for (int i = 0; i < types.size() - 1; i++) {
+                        if (!(types.get(i) instanceof BoaFloat || types.get(i) instanceof BoaInt || types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaArray))
+                            throw new TypeCheckException(n, "GaussianProcesses required attributes to be nominal or numeric");
+                    }
+                } else if (lhs instanceof BoaInputMappedClassifier) {
+                    if (!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+                            || types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+                        throw new TypeCheckException(n, "InputMappedClassifier required class to be numeric, nominal or date");
+                    for (int i = 0; i < types.size() - 1; i++) {
+                        if (!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
+                                types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
+                            throw new TypeCheckException(n, "InputMappedClassifier required attributes to be numeric, nominal, date or string");
+                    }
                 }
 			}
 
@@ -1913,6 +1930,10 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaDecisionTable(n.getType().type);
 		else if (n.type instanceof BoaFilteredClassifier)
 			n.type = new BoaFilteredClassifier(n.getType().type);
+		else if (n.type instanceof BoaGaussianProcesses)
+			n.type = new BoaGaussianProcesses(n.getType().type);
+		else if (n.type instanceof BoaInputMappedClassifier)
+			n.type = new BoaInputMappedClassifier(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}

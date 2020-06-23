@@ -140,6 +140,10 @@ public class BoaMLIntrinsics {
 				m = new BoaDecisionTable(clr, o);
 			} else if (className.contains("FilteredClassifier")) {
 				m = new BoaFilteredClassifier(clr, o);
+			} else if (className.contains("GaussianProcesses")) {
+				m = new BoaGaussianProcesses(clr, o);
+			} else if (className.contains("InputMappedClassifier")) {
+				m = new BoaInputMappedClassifier(clr, o);
 			}
 		} else if (unserializedObject instanceof Clusterer) {
 			// Clusterer
