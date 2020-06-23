@@ -42,6 +42,70 @@ The arguments are added as tuple and for `x_train.shape` AST is EMPTY.
 This kind of array handling is not handled:
 `input_shape=x_train.shape[1:]`
 
+#### Parameters of the classes are not added
+`class Antirectifier(layers.Layer):`
+
+#### Block comments are added as expression statements
+```
+class Antirectifier(layers.Layer):
+    '''This is the combination of a sample-wise
+    L2 normalization with the concatenation of the
+    positive part of the input with the negative part
+    of the input. The result is a tensor of samples that are
+    twice as large as the input samples.
+    '''
+```
+
+#### Return type of methods might not be needed in Python
+For the following method empty return type is added: 
+```
+def compute_output_shape(self, input_shape):
+        return tuple(shape)
+```
+:
+```
+"name": "call",
+"return_type": {
+  "name": "",
+  "kind": "OTHER"
+},
+"arguments": [
+  {
+     "name": "self"
+  },
+  {
+     "name": "inputs"
+  }
+],
+```
+#### Two attached method calls 
+```
+lines = f.read().split('\n')
+```
+For above code an EMPTY expression is added somehow
+```
+"expressions": [
+  {
+     "kind": "VARACCESS",
+     "variable": "f"
+  },
+  {
+     "kind": "VARACCESS",
+     "variable": "read"
+  },
+  {
+     "kind": "EMPTY"
+  }
+                                 ],
+```
+
+#### This array comprehension is not handled.
+Does not print any AST:
+```
+reverse_input_char_index = dict(
+    (i, char) for char, i in input_token_index.items())
+```
+
 #### All keywords should be handled as literal, not VARACCESS [RESOLVED]
 
 #### Decorator handling [RESOLVED]
