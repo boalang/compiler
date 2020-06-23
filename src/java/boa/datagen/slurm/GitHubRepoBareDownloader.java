@@ -1,4 +1,4 @@
-package boa.datagen.forges.github;
+package boa.datagen.slurm;
 
 import java.io.File;
 import org.eclipse.jgit.api.Git;
@@ -8,6 +8,7 @@ import com.google.gson.JsonParser;
 
 import boa.datagen.util.FileIO;
 
+// Datagen Phase 1: download all bare repositories
 public class GitHubRepoBareDownloader {
 
 	private static String INPUT_PATH; // The directory contains a list of repo json files
@@ -19,61 +20,62 @@ public class GitHubRepoBareDownloader {
 
 		if (args.length < 3) {
 			System.out.println("args: INPUT_NAMES_PATH, OUTPUT_REPOS_PATH, THREAD_NUM");
-		} else {
-			INPUT_PATH = args[0];
-			OUTPUT_REPOS_PATH = args[1];
-			THREAD_NUM = Integer.parseInt(args[2]);
+			return;
+		}
 
-			File input = new File(INPUT_PATH);
+		INPUT_PATH = args[0];
+		OUTPUT_REPOS_PATH = args[1];
+		THREAD_NUM = Integer.parseInt(args[2]);
 
-			DownloadWorker[] workers = new DownloadWorker[THREAD_NUM];
-			Thread[] threads = new Thread[THREAD_NUM];
-			for (int i = 0; i < THREAD_NUM; i++) {
-				workers[i] = new DownloadWorker(i);
-				threads[i] = new Thread(workers[i]);
-				threads[i].start();
-			}
+		File input = new File(INPUT_PATH);
 
-			// assign tasks to workers
-			for (File file : input.listFiles()) {
-				if (!file.getName().endsWith(".json"))
-					continue;
-				JsonElement jsonTree = new JsonParser().parse(FileIO.readFileContents(file));
-				for (JsonElement je : jsonTree.getAsJsonArray()) {
-					String projectName = je.getAsJsonObject().get("html_url").getAsString()
-							.replace("https://github.com/", "");
+		DownloadWorker[] workers = new DownloadWorker[THREAD_NUM];
+		Thread[] threads = new Thread[THREAD_NUM];
+		for (int i = 0; i < THREAD_NUM; i++) {
+			workers[i] = new DownloadWorker(i);
+			threads[i] = new Thread(workers[i]);
+			threads[i].start();
+		}
 
-					boolean assigned = false;
-					while (!assigned) {
-						for (int j = 0; j < THREAD_NUM; j++) {
-							if (workers[j].isReady()) {
-								workers[j].setName(projectName);
-								workers[j].setReady(false);
-								assigned = true;
-								break;
-							}
-						}
-						try {
-							Thread.sleep(100);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
+		// assign tasks to workers
+		for (File file : input.listFiles()) {
+			if (!file.getName().endsWith(".json"))
+				continue;
+			JsonElement jsonTree = new JsonParser().parse(FileIO.readFileContents(file));
+			for (JsonElement je : jsonTree.getAsJsonArray()) {
+				String projectName = je.getAsJsonObject().get("html_url").getAsString().replace("https://github.com/",
+						"");
+
+				boolean assigned = false;
+				while (!assigned) {
+					for (int j = 0; j < THREAD_NUM; j++) {
+						if (workers[j].isReady()) {
+							workers[j].setName(projectName);
+							workers[j].setReady(false);
+							assigned = true;
+							break;
 						}
 					}
-				}
-			}
-
-			// wait for all done
-			for (int j = 0; j < THREAD_NUM; j++) {
-				while (!workers[j].isReady())
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+				}
 			}
-
-			setDone(true);
 		}
+
+		// wait for all done
+		for (int j = 0; j < THREAD_NUM; j++) {
+			while (!workers[j].isReady())
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+		}
+
+		setDone(true);
 
 	}
 
@@ -138,7 +140,7 @@ public class GitHubRepoBareDownloader {
 						result.getRepository().close();
 				}
 			} else {
-				System.out.println("repo " + projectName + "already exists");
+				System.out.println("repo " + projectName + " already exists");
 			}
 		}
 
