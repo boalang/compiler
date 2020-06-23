@@ -28,44 +28,44 @@ import java.io.IOException;
  *
  * @author ankuraga
  */
-@AggregatorSpec(name = "filteredclassifier", formalParameters = {"string"})
+@AggregatorSpec(name = "filteredclassifier", formalParameters = { "string" })
 public class FilteredClassifierAggregator extends MLAggregator {
-    private FilteredClassifier model;
+	private FilteredClassifier model;
 
-    public FilteredClassifierAggregator() {
-    }
-
-    public FilteredClassifierAggregator(final String s) {
-        super(s);
-    }
-
-    public void aggregate(String[] data, final String metadata) throws IOException, InterruptedException {
-        aggregate(data, metadata, "FilteredClassifier");
-    }
-
-    public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
-        aggregate(data, metadata, "FilteredClassifier");
-    }
-    
-	@Override
-	public void aggregate(String data, String metadata) throws IOException, InterruptedException, FinishedException {	
+	public FilteredClassifierAggregator() {
 	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void finish() throws IOException, InterruptedException {
-        try {
-            this.model = new FilteredClassifier();
-            this.model.setOptions(options);
-            this.model.buildClassifier(this.trainingSet);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	public FilteredClassifierAggregator(final String s) {
+		super(s);
+	}
+
+	public void aggregate(String[] data, final String metadata) throws IOException, InterruptedException {
+		aggregate(data, metadata, "FilteredClassifier");
+	}
+
+	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
+		aggregate(data, metadata, "FilteredClassifier");
+	}
+
+	@Override
+	public void aggregate(String data, String metadata) throws IOException, InterruptedException, FinishedException {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void finish() throws IOException, InterruptedException {
+		try {
+			this.model = new FilteredClassifier();
+			this.model.setOptions(options);
+			this.model.buildClassifier(this.trainingSet);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.saveModel(this.model);
 		this.evaluate(this.model, this.trainingSet);
 		this.evaluate(this.model, this.testingSet);
 		this.collect(this.model.toString());
-    }
+	}
 }
