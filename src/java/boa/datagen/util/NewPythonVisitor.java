@@ -32,6 +32,7 @@ import org.eclipse.dltk.python.parser.ast.PythonDelStatement;
 import org.eclipse.dltk.python.parser.ast.PythonExceptStatement;
 import org.eclipse.dltk.python.parser.ast.PythonForStatement;
 import org.eclipse.dltk.python.parser.ast.PythonImportFromStatement;
+import org.eclipse.dltk.python.parser.ast.PythonImportStatement;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import org.eclipse.dltk.python.parser.ast.PythonRaiseStatement;
 import org.eclipse.dltk.python.parser.ast.PythonTryStatement;
@@ -142,7 +143,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		} else if (md instanceof PythonImportFromStatement) {
 			visit((PythonImportFromStatement) md);
 			opFound = true;
-		} else if (md instanceof NotStrictAssignment) {
+		}  else if (md instanceof PythonImportStatement) {
+			visit((PythonImportStatement) md);
+			opFound = true;
+		}
+		else if (md instanceof NotStrictAssignment) {
 			visit((NotStrictAssignment) md);
 			opFound = true;
 		} else if (md instanceof Assignment) {
@@ -254,6 +259,7 @@ public class NewPythonVisitor extends ASTVisitor {
 			visit((PythonFunctionDecorator) md);
 			opFound = true;
 		}
+		
 
 		return !opFound;
 
@@ -299,7 +305,16 @@ public class NewPythonVisitor extends ASTVisitor {
 			ch.traverse(this);
 			b.addExpressions(expressions.pop());
 
-		} else
+		} else if (md.getExpressionCount() > 0
+				&& md.getExpression(md.getExpressionCount() - 1) instanceof VariableReference)
+		{
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
+			for (int i = 0; i < md.getExpressionCount(); i++) {
+				md.getExpression(i).traverse(this);
+				b.addExpressions(expressions.pop());
+			}
+		}
+		else
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.EMPTY);
 		expressions.push(b.build());
 		return true;
@@ -419,6 +434,19 @@ public class NewPythonVisitor extends ASTVisitor {
 		return true;
 	}
 
+	
+	public boolean visit(PythonImportStatement md) throws Exception {
+
+		if(md.getImports()!=null)
+		{
+			for(Object ob: md.getImports())
+			{
+				((ASTNode) ob).traverse(this);
+			}
+		}
+
+		return false;
+	}
 	public boolean visit(PythonImportFromStatement md) {
 
 		Map<String, String> imas = md.getImportedAsNames();
@@ -573,13 +601,19 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		if(md.getLeft()!=null)
 		{
-			md.getLeft().traverse(this);
+			if(md.getLeft() instanceof PythonTestListExpression)
+				visit((PythonTestListExpression) md.getLeft());
+			else
+				md.getLeft().traverse(this);
 			b.addExpressions(expressions.pop());
 		}
 
 		if(md.getRight()!=null)
 		{
-			md.getRight().traverse(this);
+			if(md.getRight() instanceof PythonTestListExpression)
+				visit((PythonTestListExpression) md.getRight());
+			else
+				md.getRight().traverse(this);
 			b.addExpressions(expressions.pop());
 		}
 		expressions.push(b.build());
@@ -1185,6 +1219,27 @@ public class NewPythonVisitor extends ASTVisitor {
 		return false;
 	}
 
+	public boolean visit(PythonTestListExpression s) throws Exception
+	{
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
+			
+		if(s.getExpressions()!=null)
+		{
+			List el=s.getExpressions();
+			if(el!=null)
+			{
+				for (Object ob : el) {
+					((ASTNode) ob).traverse(this);
+					b.addExpressions(expressions.pop());
+				}
+			}
+		}
+		expressions.push(b.build());
+		
+		return false;
+	}
 	@SuppressWarnings("deprecation")
 	public boolean visit(PythonForStatement s) throws Exception {
 //		System.out.println("Enter For: " + s.toString());
