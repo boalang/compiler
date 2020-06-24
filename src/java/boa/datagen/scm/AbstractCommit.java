@@ -649,7 +649,7 @@ public abstract class AbstractCommit {
 				
 			}
 		};
-		System.out.println("actual source: "+content);
+//		System.out.println("actual source: "+content);
 		PythonModuleDeclaration module;
 		
 		try {
@@ -661,7 +661,7 @@ public abstract class AbstractCommit {
 			return false;
 		}
 		
-		if(!pythonParsingError) {
+		if(true) {
 			final ASTRoot.Builder ast = ASTRoot.newBuilder();
 			
 			NewPythonVisitor visitor=new NewPythonVisitor();
@@ -684,7 +684,8 @@ public abstract class AbstractCommit {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-			fb.setKind(FileKind.SOURCE_PY_3);
+			if(!pythonParsingError)
+			 fb.setKind(FileKind.SOURCE_PY_3);
 			
 			try {
 				// System.out.println("writing=" + count + "\t" + path);
