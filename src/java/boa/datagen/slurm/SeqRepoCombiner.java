@@ -125,7 +125,7 @@ public class SeqRepoCombiner {
 							// open a new ast writer if current writer hits the maximum project number
 							if (projectCount >= PROJECT_NUM_IN_AST) {
 								astWriter.close();
-								astWriter = new MapFile.Writer(conf, fs, DATASET_PATH + "/combined/ast" + astCount,
+								astWriter = new MapFile.Writer(conf, fs, DATASET_PATH + "/combined/ast/map" + astCount,
 										LongWritable.class, BytesWritable.class, CompressionType.BLOCK,
 										new DefaultCodec(), null);
 								projectCount = 0;
@@ -159,7 +159,7 @@ public class SeqRepoCombiner {
 		try {
 			projectWriter = SequenceFile.createWriter(fs, conf, new Path(DATASET_PATH + "/combined/projects.seq"),
 					Text.class, BytesWritable.class, compType, compCode);
-			astWriter = new MapFile.Writer(conf, fs, DATASET_PATH + "/combined/ast" + astCount, LongWritable.class,
+			astWriter = new MapFile.Writer(conf, fs, DATASET_PATH + "/combined/ast/map" + astCount, LongWritable.class,
 					BytesWritable.class, compType, compCode, null);
 			commitWriter = new MapFile.Writer(conf, fs, DATASET_PATH + "/combined/commit", LongWritable.class,
 					BytesWritable.class, compType, compCode, null);
