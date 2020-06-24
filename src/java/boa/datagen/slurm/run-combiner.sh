@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=24
 #SBATCH --mem=101G
 #SBATCH --time=30-02:30:02
 
@@ -14,17 +14,21 @@
 module load jdk
 
 JARFILE="./seq-repo-combiner.jar"
-RAM="-Xmx100G"
+RAM="-Xmx100G" # need to change accordingly
 
 # local test
 # OUTPUT_PATH="/Users/hyj/git/BoaData/DataSet/p3test"
+# PROJECT_NUM_IN_AST="1"
 
 # remote
-OUTPUT_PATH="/work/LAS/hridesh-lab/yijia/p3datagen/dataset"
+OUTPUT_PATH="/work/LAS/hridesh-lab/yijia/p3datagen/dataset_new"
+PROJECT_NUM_IN_AST="10000"
 
+# main
 CMD="java ${RAM} -Xss64M -jar \
 ${JARFILE} \
-${OUTPUT_PATH}"
+${OUTPUT_PATH} \
+${PROJECT_NUM_IN_AST}"
 
 echo "Execute: ${CMD}\n"
 ${CMD}

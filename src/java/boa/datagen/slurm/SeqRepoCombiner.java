@@ -1,5 +1,7 @@
 package boa.datagen.slurm;
 
+import java.io.EOFException;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 
@@ -26,51 +28,60 @@ import boa.types.Toplevel.Project;
 //Datagen Phase 3: combine sequence files
 public class SeqRepoCombiner {
 
+	private static String DATASET_PATH; // generated dataset in phase 2
+	private static int PROJECT_NUM_IN_AST; // maximum number of projects in each ast map
+
+	private static FileSystem fs;
+	private static Configuration conf;
+	private static SequenceFile.Writer projectWriter;
+	private static MapFile.Writer astWriter;
+	private static MapFile.Writer commitWriter;
+
 	public static void main(String[] args) {
 
-		if (args.length < 1) {
-			System.err.println("Need args:\n" + "OUTPUT_PATH");
+		if (args.length < 2) {
+			System.err.println("Need args:\n" + "DATASET_PATH\n" + "PROJECT_NUM_IN_AST\n");
 			return;
 		}
 
-		String base = args[0];
-		CompressionType compType = CompressionType.BLOCK;
-		CompressionCodec compCode = new DefaultCodec();
-		Configuration conf = new Configuration();
+		DATASET_PATH = args[0];
+		PROJECT_NUM_IN_AST = Integer.parseInt(args[1]);
 
 		try {
-			FileSystem fs = FileSystem.get(conf);
+			conf = new Configuration();
+			fs = FileSystem.get(conf);
 
-			SequenceFile.Writer projectWriter = SequenceFile.createWriter(fs, conf, new Path(base + "/projects.seq"),
-					Text.class, BytesWritable.class, compType, compCode);
-			MapFile.Writer astWriter = new MapFile.Writer(conf, fs, base + "/ast", LongWritable.class,
-					BytesWritable.class, compType, compCode, null);
-			MapFile.Writer commitWriter = new MapFile.Writer(conf, fs, base + "/commit", LongWritable.class,
-					BytesWritable.class, compType, compCode, null);
+			// remove combined seq files
+			checkAndRemove(DATASET_PATH + "/combined");
 
-			int count = 0;
+			int astCount = 0, fileCount = 0, projectCount = 0;
+			openWriters(astCount);
+
 			long lastAstWriterKey = 0, lastCommitWriterKey = 0;
 			HashSet<String> processedProjectNames = new HashSet<String>();
 			// iterate each directory
-			for (FileStatus file : fs.listStatus(new Path(base + "/project"))) {
+			for (FileStatus file : fs.listStatus(new Path(DATASET_PATH + "/project"))) {
 				if (!file.isDir())
 					continue;
 				// iterate each seq file
 				for (FileStatus seqFile : fs.listStatus(file.getPath())) {
 					if (!seqFile.getPath().getName().endsWith(".seq"))
 						continue;
-					count++;
+					fileCount++;
 					String name = seqFile.getPath().getName();
-					System.out.println("Reading file " + count + " : " + name);
-					SequenceFile.Reader r = new SequenceFile.Reader(fs, seqFile.getPath(), conf);
-					Text textKey = new Text();
-					BytesWritable value = new BytesWritable();
-					
+
+					SequenceFile.Reader r = null;
 					try {
+						System.out.println("Reading file " + fileCount + " : " + name);
+						r = new SequenceFile.Reader(fs, seqFile.getPath(), conf);
+						Text textKey = new Text();
+						BytesWritable value = new BytesWritable();
+
 						String projectName = null;
 						// each seq file should contain only one project
 						while (r.next(textKey, value)) {
-							Project p = Project.parseFrom(CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
+							Project p = Project
+									.parseFrom(CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
 							if (processedProjectNames.contains(p.getName()))
 								continue;
 							projectName = p.getName();
@@ -82,6 +93,7 @@ public class SeqRepoCombiner {
 											long key = cfb.getKey();
 											if (key > 0)
 												cfb.setKey(lastAstWriterKey + key);
+											cfb.setAstKey(astCount);
 										}
 									}
 								} else {
@@ -93,37 +105,89 @@ public class SeqRepoCombiner {
 									long key = cfb.getKey();
 									if (key > 0)
 										cfb.setKey(lastAstWriterKey + key);
+									cfb.setAstKey(astCount);
 								}
 							}
 							projectWriter.append(textKey, new BytesWritable(pb.build().toByteArray()));
 							processedProjectNames.add(projectName);
 
-							// update its corresponding  commit and ast seq
-							lastCommitWriterKey = readAndAppendCommit(conf, fs, commitWriter, base + "/commit/" + projectName + ".seq", lastAstWriterKey, lastCommitWriterKey);
-							lastAstWriterKey = readAndAppendAst(conf, fs, astWriter, base + "/ast/" + projectName + ".seq", lastAstWriterKey);
+							// update its corresponding commit and ast seq
+							lastCommitWriterKey = readAndAppendCommit(conf, fs, commitWriter,
+									DATASET_PATH + "/commit/" + projectName + ".seq", lastAstWriterKey,
+									lastCommitWriterKey, astCount);
+							lastAstWriterKey = readAndAppendAst(conf, fs, astWriter,
+									DATASET_PATH + "/ast/" + projectName + ".seq", lastAstWriterKey);
 
 							System.out.println("Finish project " + projectName);
+
+							projectCount++;
+							astCount++;
+							// open a new ast writer if current writer hits the maximum project number
+							if (projectCount >= PROJECT_NUM_IN_AST) {
+								astWriter.close();
+								astWriter = new MapFile.Writer(conf, fs, DATASET_PATH + "/combined/ast" + astCount,
+										LongWritable.class, BytesWritable.class, CompressionType.BLOCK,
+										new DefaultCodec(), null);
+								projectCount = 0;
+							}
 						}
-					} catch (Exception e) {
-						System.err.println(name);
+					} catch (EOFException e) {
 						e.printStackTrace();
+						System.err.println("ingore project " + name);
+						continue;
+					} catch (Exception e) {
+						e.printStackTrace();
+						System.err.println("ingore project " + name);
 						continue;
 					} finally {
-						r.close();
+						if (r != null)
+							r.close();
 					}
 				}
 			}
-			
-			projectWriter.close();
-			astWriter.close();
-			commitWriter.close();
+
+			closeWriters();
 			fs.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public static long readAndAppendCommit(Configuration conf, FileSystem fileSystem, MapFile.Writer writer, String fileName, long lastAstKey, long lastCommitKey) throws IOException {
+
+	public static void openWriters(int astCount) {
+		CompressionType compType = CompressionType.BLOCK;
+		CompressionCodec compCode = new DefaultCodec();
+		try {
+			projectWriter = SequenceFile.createWriter(fs, conf, new Path(DATASET_PATH + "/combined/projects.seq"),
+					Text.class, BytesWritable.class, compType, compCode);
+			astWriter = new MapFile.Writer(conf, fs, DATASET_PATH + "/combined/ast" + astCount, LongWritable.class,
+					BytesWritable.class, compType, compCode, null);
+			commitWriter = new MapFile.Writer(conf, fs, DATASET_PATH + "/combined/commit", LongWritable.class,
+					BytesWritable.class, compType, compCode, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void closeWriters() {
+		try {
+			projectWriter.close();
+			astWriter.close();
+			commitWriter.close();
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+	}
+
+	private static void checkAndRemove(String path) {
+		File file = new File(path);
+		if (file.exists()) {
+			System.out.println("remove file " + path);
+			org.apache.commons.io.FileUtils.deleteQuietly(file);
+		}
+	}
+
+	public static long readAndAppendCommit(Configuration conf, FileSystem fileSystem, MapFile.Writer writer,
+			String fileName, long lastAstKey, long lastCommitKey, int astCount) throws IOException {
 		long newLastKey = lastCommitKey;
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
 		LongWritable longKey = new LongWritable();
@@ -137,6 +201,7 @@ public class SeqRepoCombiner {
 					long key = cfb.getKey();
 					if (key > 0)
 						cfb.setKey(lastAstKey + key);
+					cfb.setAstKey(astCount);
 				}
 				writer.append(new LongWritable(newLastKey), new BytesWritable(rb.build().toByteArray()));
 			}
@@ -149,7 +214,8 @@ public class SeqRepoCombiner {
 		return newLastKey;
 	}
 
-	public static long readAndAppendAst(Configuration conf, FileSystem fileSystem, MapFile.Writer writer, String fileName, long lastKey) throws IOException {
+	public static long readAndAppendAst(Configuration conf, FileSystem fileSystem, MapFile.Writer writer,
+			String fileName, long lastKey) throws IOException {
 		long newLastKey = lastKey;
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
 		LongWritable longKey = new LongWritable();

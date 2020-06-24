@@ -79,8 +79,7 @@ public class SeqRepoBuilder {
 				JsonObject rp = repoArray.get(i).getAsJsonObject();
 				RepoMetadata repo = new RepoMetadata(rp);
 				if (repo.id != null && repo.name != null) {
-					System.out.println("Processing the " + (++counter) + "th project: " + repo.name + " with id: "
-							+ repo.id + " from the " + i + "th object of the json file: " + file.getPath());
+					System.out.println("Processing the " + (++counter) + "th project: " + repo.name);
 					// generate seq files for this project
 					Project project = repo.toBoaMetaDataProtobuf();
 					process(project);
@@ -94,16 +93,18 @@ public class SeqRepoBuilder {
 	private static void process(Project project) {
 		String projectName = project.getName();
 		String[] writerPaths = openWriters(projectName);
-		
+
 		// if writerPaths is null, then the project is processed.
-		if (writerPaths == null)
+		if (writerPaths == null) {
+			System.out.println(projectName + " seq file is already existing");
 			return;
+		}
 
 		try {
 			project = storeRepository(project, 0);
 			// if the project is null then skip this project
 			if (project == null) {
-				System.err.println(projectName + " is null skip this");
+				System.out.println(projectName + " is null skip this");
 				clear(writerPaths);
 				return;
 			}
@@ -136,6 +137,7 @@ public class SeqRepoBuilder {
 			return;
 		}
 
+		System.out.println(projectName + " finished");
 		closeWriters();
 	}
 
@@ -237,8 +239,6 @@ public class SeqRepoBuilder {
 		suffix = projectName + ".seq";
 		while (true) {
 			try {
-				System.out.println(suffix + " starts!");
-
 				String projectWriterPath = OUTPUT_PATH + "/project/" + suffix;
 
 				// if the project is already processed return null
@@ -278,7 +278,6 @@ public class SeqRepoBuilder {
 				astWriter.close();
 				commitWriter.close();
 				contentWriter.close();
-				System.out.println(suffix + " done!!!");
 				return;
 			} catch (Throwable t) {
 				t.printStackTrace();

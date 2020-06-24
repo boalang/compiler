@@ -13,7 +13,7 @@
 module load jdk
 
 JARFILE="./seq-repo-generator.jar"
-RAM="-Xmx1G"
+RAM="-Xmx1G" # need to change accordingly
 
 # local test
 # SLURM_JOB_TEMPLATE_PATH="slurmJob.sh"
@@ -30,9 +30,10 @@ JSON_INPUT_PATH="/work/LAS/hridesh-lab/longvu/2020_java_dataset/2020_java_json_s
 REPO_INPUT_PATH="/work/LAS/hridesh-lab/longvu/2020_java_dataset/input_repo_java"
 SPLIT_JSON_PATH="split"
 DATAGEN_JAR_PATH="seq-repo-builder.jar"
-OUTPUT_PATH="/work/LAS/hridesh-lab/yijia/p3datagen/dataset"
+OUTPUT_PATH="/work/LAS/hridesh-lab/yijia/p3datagen/dataset_new"
 FILE_NUM_PER_JOB="10"
 
+# main
 CMD="java ${RAM} -Xss64M -jar \
 ${JARFILE} \
 ${SLURM_JOB_TEMPLATE_PATH} \

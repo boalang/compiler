@@ -21,9 +21,9 @@ JARFILE="${1}"
 REPO="${2}"
 JSON_FILES="${3}"
 OUTPUT="${4}"
-RAM="-Xmx24G"
+RAM="-Xmx24G" # need to change accordingly
 
-# ----- run\
+# ----- run
 CMD="java ${RAM} -Xss64M -jar \
 ${JARFILE} \
 ${REPO} \
