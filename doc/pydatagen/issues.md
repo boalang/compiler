@@ -25,16 +25,16 @@
 #### Import statements
 This kind of local import is not handled: `from ..foo.bar import a as b, c`
 
-#### Multiple assignments can be in the same line
+#### Multiple assignments can be in the same line [RESOLVED]
 ```
-a, b = cifar10.load_data() 
+a, b = cifar10.load_data()  
 ```
 or
 ```
 (x_train, y_train), (x_test, y_test) = cifar10.load_data()
 ```
 
-#### Arguments of print statement
+#### Arguments of print statement [RESOLVED]
 The arguments are added as tuple and for `x_train.shape` AST is EMPTY.
 `print('x_train shape:', x_train.shape)`
 
@@ -42,7 +42,7 @@ The arguments are added as tuple and for `x_train.shape` AST is EMPTY.
 This kind of array handling is not handled:
 `input_shape=x_train.shape[1:]`
 
-#### Parameters of the classes are not added
+#### Parameters of the classes are not added [RESOLVED]
 `class Antirectifier(layers.Layer):`
 
 #### Block comments are added as expression statements
@@ -78,7 +78,7 @@ def compute_output_shape(self, input_shape):
   }
 ],
 ```
-#### Two attached method calls 
+#### Two attached method calls [RESOLVED]
 ```
 lines = f.read().split('\n')
 ```

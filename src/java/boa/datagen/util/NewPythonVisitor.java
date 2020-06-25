@@ -258,11 +258,35 @@ public class NewPythonVisitor extends ASTVisitor {
 		} else if (md instanceof PythonFunctionDecorator) {
 			visit((PythonFunctionDecorator) md);
 			opFound = true;
-		}
+		} 
 		
 
 		return !opFound;
 
+	}
+	
+	public boolean visit(VariableReference vr, CallHolder ch) throws Exception
+	{
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
+		
+		b.setMethod(vr.getName());
+		
+		
+		if (ch.getArguments() instanceof ExpressionList) {
+				ExpressionList el = (ExpressionList) ch.getArguments();
+				if(el!=null && el.getExpressions()!=null)
+				{
+					for (Object ob : el.getExpressions()) {
+						org.eclipse.dltk.ast.expressions.Expression ex = (org.eclipse.dltk.ast.expressions.Expression) ob;
+						ex.traverse(this);
+						b.addMethodArgs(expressions.pop());
+					}
+				}
+			}
+		expressions.push(b.build());
+		return false;
 	}
 
 	public boolean visit(ExtendedVariableReference md) throws Exception {
@@ -273,11 +297,17 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 			if (md.getExpression(md.getExpressionCount() - 2) instanceof VariableReference) {
 				VariableReference vr = (VariableReference) md.getExpression(md.getExpressionCount() - 2);
-
 				b.setMethod(vr.getName());
 			}
+			
 			for (int i = 0; i < md.getExpressionCount() - 2; i++) {
-				md.getExpression(i).traverse(this);
+				if(i<md.getExpressionCount() - 3 && md.getExpression(i+1) instanceof CallHolder)
+				{
+					visit((VariableReference) md.getExpression(i), (CallHolder) md.getExpression(i+1));
+					i++;
+				}
+				else
+					md.getExpression(i).traverse(this);
 				b.addExpressions(expressions.pop());
 			}
 			CallHolder ch = (CallHolder) md.getExpression(md.getExpressionCount() - 1);
@@ -298,7 +328,13 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYACCESS);
 
 			for (int i = 0; i < md.getExpressionCount() - 1; i++) {
-				md.getExpression(i).traverse(this);
+				if(i<md.getExpressionCount() - 2 && md.getExpression(i+1) instanceof CallHolder)
+				{
+					visit((VariableReference) md.getExpression(i), (CallHolder) md.getExpression(i+1));
+					i++;
+				}
+				else
+					md.getExpression(i).traverse(this);
 				b.addExpressions(expressions.pop());
 			}
 			IndexHolder ch = (IndexHolder) md.getExpression(md.getExpressionCount() - 1);
@@ -309,8 +345,18 @@ public class NewPythonVisitor extends ASTVisitor {
 				&& md.getExpression(md.getExpressionCount() - 1) instanceof VariableReference)
 		{
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
-			for (int i = 0; i < md.getExpressionCount(); i++) {
-				md.getExpression(i).traverse(this);
+			if (md.getExpression(md.getExpressionCount() - 1) instanceof VariableReference) {
+				VariableReference vr = (VariableReference) md.getExpression(md.getExpressionCount() - 1);
+				b.setVariable(vr.getName());
+			}
+			for (int i = 0; i < md.getExpressionCount()-1; i++) {
+				if(i<md.getExpressionCount() - 1 && md.getExpression(i+1) instanceof CallHolder)
+				{
+					visit((VariableReference) md.getExpression(i), (CallHolder) md.getExpression(i+1));
+					i++;
+				}
+				else
+					md.getExpression(i).traverse(this);
 				b.addExpressions(expressions.pop());
 			}
 		}
@@ -888,17 +934,18 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setName(((SimpleReference) node.getRef()).getName());
 		}
 		b.setKind(boa.types.Ast.TypeKind.CLASS);
-//		if (node.getSuperClass() != null) {
-//			Type.Builder tb = Type.newBuilder();
-//			tb.setKind(TypeKind.CLASS);
-//			if (node.getSuperClass() instanceof Identifier) {
-//				tb.setName(((Identifier) node.getSuperClass()).getName());
-//			} else {
-//				node.getSuperClass().accept(this);
-//				tb.setComputedName(expressions.pop());
-//			}
-//			b.addParents(tb.build());
-//		}
+		
+		
+		if (node.getSuperClassNames() != null) {
+			for(String n: (List<String>) node.getSuperClassNames())
+			{
+				Type.Builder tb = Type.newBuilder();
+				tb.setKind(TypeKind.CLASS);
+				tb.setName(n);
+				b.addParents(tb.build());
+			}
+			
+		}
 
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 
@@ -980,7 +1027,8 @@ public class NewPythonVisitor extends ASTVisitor {
 				b.addModifiers(modifiers.pop());
 			}
 		}
-
+		
+		
 		Type.Builder tb = Type.newBuilder();
 		String name = "";
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
