@@ -100,22 +100,24 @@ public abstract class AbstractCommit {
 	}
 
 	protected Map<String, Integer> fileNameIndices = new HashMap<String, Integer>();
-
 	protected List<ChangedFile.Builder> changedFiles = new ArrayList<ChangedFile.Builder>();
 
-	protected ChangedFile.Builder getChangeFile(String path) {
+	protected ChangedFile.Builder getChangedFile(String path, ChangeKind changeKind) {
 		ChangedFile.Builder cfb = null;
 		Integer index = fileNameIndices.get(path);
 		if (index == null) {
 			cfb = ChangedFile.newBuilder();
 			cfb.setName(path);
 			cfb.setKind(FileKind.OTHER);
+			cfb.setChange(changeKind);
 			cfb.setKey(0);
 			cfb.setAst(false);
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
-		} else
+		} else {
+			System.err.println("find redundant changed file during the update proccess");
 			cfb = changedFiles.get(index);
+		}
 		return cfb;
 	}
 
@@ -212,25 +214,25 @@ public abstract class AbstractCommit {
 //				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
 			} else
 				processPythonChangeFile(cfb); // Only process the Python files and ignore other files liek .java, .js
-				//processChangeFile(cfb); 
+				//processChangeFile(cfb);
 			revision.addFiles(cfb.build());
 		}
 
 		return revision.build();
 	}
-	
-	String[] badpaths = {"spacy/lang/ca/lemmatizer.py", "spacy/lang/da/lemmatizer.py", "spacy/lang/de/lemmatizer.py", 
-			 "spacy/lang/es/lemmatizer.py", "spacy/lang/fr/lemmatizer/lookup.py", "spacy/lang/hu/lemmatizer.py", 
-			 "spacy/lang/id/lemmatizer.py", "spacy/lang/it/lemmatizer.py", "spacy/lang/pt/lemmatizer.py", 
-			 "spacy/lang/ro/lemmatizer.py", "spacy/lang/sv/lemmatizer/lookup.py", "spacy/lang/tr/lemmatizer.py", 
+
+	String[] badpaths = {"spacy/lang/ca/lemmatizer.py", "spacy/lang/da/lemmatizer.py", "spacy/lang/de/lemmatizer.py",
+			 "spacy/lang/es/lemmatizer.py", "spacy/lang/fr/lemmatizer/lookup.py", "spacy/lang/hu/lemmatizer.py",
+			 "spacy/lang/id/lemmatizer.py", "spacy/lang/it/lemmatizer.py", "spacy/lang/pt/lemmatizer.py",
+			 "spacy/lang/ro/lemmatizer.py", "spacy/lang/sv/lemmatizer/lookup.py", "spacy/lang/tr/lemmatizer.py",
 			 "spacy/lang/ur/lemmatizer.py"};
 	Set<String> badp = new HashSet<String>(Arrays.asList(badpaths));
-	
+
 	Builder processPythonChangeFile(final ChangedFile.Builder fb) {
-		
+
 		long len = connector.astWriterLen;
 		String path = fb.getName();
-		
+
 		//System.out.println("changed file" + path);
 
 		final String lowerPath = path.toLowerCase();
@@ -238,20 +240,20 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.TEXT);
 		else if (lowerPath.endsWith(".xml"))
 			fb.setKind(FileKind.XML);
-		
+
 		else if(lowerPath.endsWith(".py")) {
 			if(badp.contains(lowerPath)) {
-				System.out.println(path); 
+				System.out.println(path);
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
 			}
 			else {
 				final String content = getFileContents(path);
-				System.out.println(projectName + ": " + path); 
+				System.out.println(projectName + ": " + path);
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
 				parsePythonFile(path, fb, content, false);
 			}
 		}
-		
+
 		if (connector.astWriterLen > len) {
 			fb.setKey(len);
 			fb.setAst(true);
@@ -259,7 +261,7 @@ public abstract class AbstractCommit {
 
 		return fb;
 	}
-	
+
 	Builder processChangeFile(final ChangedFile.Builder fb) {
 		long len = connector.astWriterLen;
 		String path = fb.getName();
@@ -275,16 +277,16 @@ public abstract class AbstractCommit {
 			final String content = getFileContents(path);
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 			parseJavaFile(path, fb, content, false);
-		} 
+		}
 		// Python AST generation will be handled here
 		else if(lowerPath.endsWith(".py")) {
 			if(badp.contains(lowerPath)) {
-				System.out.println(path); 
+				System.out.println(path);
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
 			}
 			else {
 				final String content = getFileContents(path);
-				System.out.println(projectName + ": " + path); 
+				System.out.println(projectName + ": " + path);
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
 				parsePythonFile(path, fb, content, false);
 			}
@@ -430,7 +432,7 @@ public abstract class AbstractCommit {
 				}
 			}
 		}*/
-		 
+
 		if (connector.astWriterLen > len) {
 			fb.setKey(len);
 			fb.setAst(true);
@@ -550,7 +552,7 @@ public abstract class AbstractCommit {
 		}
 		return true;
 	}
-	
+
 	private boolean parsePHPFile(final String path, final ChangedFile.Builder fb, final String content,
 			final PHPVersion astLevel, final boolean storeOnError) {
 		org.eclipse.php.internal.core.ast.nodes.ASTParser parser = org.eclipse.php.internal.core.ast.nodes.ASTParser
@@ -604,19 +606,19 @@ public abstract class AbstractCommit {
 //			if(!visitor.isPython3)
 //				fb.setKind(FileKind.SOURCE_PY_2);
 //			ast.addNamespaces(visitor.getNamespaces());
-//			
+//
 ///*			if(visitor.isPython3) {
 //				ast.addNamespaces(visitor.getNamespaces());
-//			} 
+//			}
 //			else {
 //				System.out.println("Entered Python2 Parser.");
-//				Python2Visitor visitorp2 = new Python2Visitor();				
+//				Python2Visitor visitorp2 = new Python2Visitor();
 //				fb.setKind(FileKind.SOURCE_PY_2);
 //				visitorp2.visit(content);
 //				ast.addNamespaces(visitorp2.getNamespaces());
 //			}
-//*/ 
-//			
+//*/
+//
 //		} catch (Exception e1) {
 //			e1.printStackTrace();
 //			System.out.println("Error in Python parse. " + e1.getMessage());
@@ -631,12 +633,12 @@ public abstract class AbstractCommit {
 //		}
 //		return false;
 //	}
-	
+
 	boolean pythonParsingError;
 
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,final boolean storeOnError) {
 		pythonParsingError=false;
-		
+
 		System.out.println("################### "+path);
 
 		PythonSourceParser parser= new PythonSourceParser();
@@ -646,12 +648,12 @@ public abstract class AbstractCommit {
 			@Override
 			public void reportProblem(IProblem arg0) {
 				pythonParsingError=true;
-				
+
 			}
 		};
 //		System.out.println("actual source: "+content);
 		PythonModuleDeclaration module;
-		
+
 		try {
 			module= (PythonModuleDeclaration) parser.parse(input, reporter);
 		} catch (Exception e) {
@@ -660,12 +662,12 @@ public abstract class AbstractCommit {
 			e.printStackTrace();
 			return false;
 		}
-		
+
 		if(true) {
 			final ASTRoot.Builder ast = ASTRoot.newBuilder();
-			
+
 			NewPythonVisitor visitor=new NewPythonVisitor();
-		
+
 			try {
 				ast.addNamespaces(visitor.getNamespace(module,path));
 			} catch (final UnsupportedOperationException e) {
@@ -677,7 +679,7 @@ public abstract class AbstractCommit {
 				System.exit(-1);
 				return false;
 			}
-//			
+//
 //			try {
 //				module.traverse(visitor);
 //			} catch (Exception e) {
@@ -686,7 +688,7 @@ public abstract class AbstractCommit {
 //			}
 			if(!pythonParsingError)
 			 fb.setKind(FileKind.SOURCE_PY_3);
-			
+
 			try {
 				// System.out.println("writing=" + count + "\t" + path);
 				BytesWritable bw = new BytesWritable(ast.build().toByteArray());
@@ -695,7 +697,7 @@ public abstract class AbstractCommit {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-	
+
 		}
 		return !pythonParsingError;
 	}
@@ -772,7 +774,7 @@ public abstract class AbstractCommit {
 
 	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
 		try {
-			
+
 			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
 			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 //			parser.setResolveBindings(true);
@@ -785,7 +787,7 @@ public abstract class AbstractCommit {
 			parser.setCompilerOptions(options);
 
 			final CompilationUnit cu;
-			
+
 			try {
 				cu = (CompilationUnit) parser.createAST(null);
 			} catch(Throwable e) {
@@ -794,17 +796,17 @@ public abstract class AbstractCommit {
 
 			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
 			cu.accept(errorCheck);
-			
+
 			if (!errorCheck.hasError || storeOnError) {
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				// final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
 				final JavaVisitor visitor = new JavaVisitor(content);
 				try {
-					
+
 					ast.addNamespaces(visitor.getNamespaces(cu));
-					
+
 //					for (final Comment c : visitor.getComments()) comments.addComments(c);
-					 
+
 				} catch (final Throwable e) {
 					if (debug) {
 						System.err.println("Error visiting Java file: " + path  + " from: " + projectName);
@@ -813,7 +815,7 @@ public abstract class AbstractCommit {
 					System.exit(-1);
 					return false;
 				}
-				
+
 				switch (visitor.getAstLevel()) {
 					case JavaVisitor.JLS2:
 						fb.setKind(FileKind.SOURCE_JAVA_JLS2);
@@ -836,9 +838,9 @@ public abstract class AbstractCommit {
 					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 					connector.astWriterLen += bw.getLength();
 				} catch (IOException e) {
-					if (debug) 
+					if (debug)
 						e.printStackTrace();
-					
+
 				}
 				// fb.setComments(comments);
 			}
@@ -850,7 +852,7 @@ public abstract class AbstractCommit {
 			return false;
 		}
 	}
-	
+
 	protected String processLOC(final String path) {
 		String loc = "";
 
@@ -891,5 +893,5 @@ public abstract class AbstractCommit {
 
 		return loc;
 	}
-	
+
 }

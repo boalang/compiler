@@ -7,4 +7,4 @@
 /.settings/
 /junitvmwatcher*.properties
 .vscode/
-*.DS_Store
+/src/antlr/.antlr
