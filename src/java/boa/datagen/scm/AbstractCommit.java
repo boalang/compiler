@@ -674,7 +674,7 @@ public abstract class AbstractCommit {
 				return false;
 			} catch (final Throwable e) {
 				if (debug)
-					System.err.println("Error visiting Python file: " + path + " from: " + projectName);
+					System.err.println("Error visiting Python file: " + path + " from: " + projectName + "\n" + e.toString());
 				e.printStackTrace();
 				//System.exit(-1);
 				return false;
@@ -687,7 +687,7 @@ public abstract class AbstractCommit {
 //				e.printStackTrace();
 //			}
 			if(!pythonParsingError)
-			 fb.setKind(FileKind.SOURCE_PY_3);
+				fb.setKind(FileKind.SOURCE_PY_3);
 
 			try {
 				// System.out.println("writing=" + count + "\t" + path);
