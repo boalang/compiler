@@ -676,7 +676,7 @@ public abstract class AbstractCommit {
 				if (debug)
 					System.err.println("Error visiting Python file: " + path + " from: " + projectName);
 				e.printStackTrace();
-				System.exit(-1);
+				//System.exit(-1);
 				return false;
 			}
 //
