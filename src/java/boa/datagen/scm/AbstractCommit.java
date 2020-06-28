@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile.Writer;
@@ -58,9 +59,14 @@ import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.compiler.problem.AbstractProblemReporter;
 import org.eclipse.dltk.compiler.problem.IProblem;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.steadystate.css.dom.CSSStyleSheetImpl;
 
 import boa.types.Ast.ASTRoot;
+import boa.types.Ast.Namespace;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Diff.ChangedFile.Builder;
@@ -90,7 +96,8 @@ import boa.datagen.util.JavaErrorCheckVisitor;
 public abstract class AbstractCommit {
 	protected static final boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	protected static final boolean debugparse = Properties.getBoolean("debugparse", DefaultProperties.DEBUGPARSE);
-	protected static final boolean STORE_ASCII_PRINTABLE_CONTENTS = Properties.getBoolean("ascii", DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
+	protected static final boolean STORE_ASCII_PRINTABLE_CONTENTS = Properties.getBoolean("ascii",
+			DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
 
 	protected AbstractConnector connector;
 	protected String projectName;
@@ -210,22 +217,23 @@ public abstract class AbstractCommit {
 		for (ChangedFile.Builder cfb : changedFiles) {
 			cfb.setKind(FileKind.OTHER);
 			if (cfb.getChange() == ChangeKind.DELETED || cfb.getChange() == ChangeKind.UNKNOWN) {
+				System.out.println("UNKNOWN");
 				cfb.setKey(0);
 //				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
 			} else
 				processPythonChangeFile(cfb); // Only process the Python files and ignore other files liek .java, .js
-				//processChangeFile(cfb);
+			// processChangeFile(cfb);
 			revision.addFiles(cfb.build());
 		}
 
 		return revision.build();
 	}
 
-	String[] badpaths = {"spacy/lang/ca/lemmatizer.py", "spacy/lang/da/lemmatizer.py", "spacy/lang/de/lemmatizer.py",
-			 "spacy/lang/es/lemmatizer.py", "spacy/lang/fr/lemmatizer/lookup.py", "spacy/lang/hu/lemmatizer.py",
-			 "spacy/lang/id/lemmatizer.py", "spacy/lang/it/lemmatizer.py", "spacy/lang/pt/lemmatizer.py",
-			 "spacy/lang/ro/lemmatizer.py", "spacy/lang/sv/lemmatizer/lookup.py", "spacy/lang/tr/lemmatizer.py",
-			 "spacy/lang/ur/lemmatizer.py"};
+	String[] badpaths = { "spacy/lang/ca/lemmatizer.py", "spacy/lang/da/lemmatizer.py", "spacy/lang/de/lemmatizer.py",
+			"spacy/lang/es/lemmatizer.py", "spacy/lang/fr/lemmatizer/lookup.py", "spacy/lang/hu/lemmatizer.py",
+			"spacy/lang/id/lemmatizer.py", "spacy/lang/it/lemmatizer.py", "spacy/lang/pt/lemmatizer.py",
+			"spacy/lang/ro/lemmatizer.py", "spacy/lang/sv/lemmatizer/lookup.py", "spacy/lang/tr/lemmatizer.py",
+			"spacy/lang/ur/lemmatizer.py" };
 	Set<String> badp = new HashSet<String>(Arrays.asList(badpaths));
 
 	Builder processPythonChangeFile(final ChangedFile.Builder fb) {
@@ -233,7 +241,7 @@ public abstract class AbstractCommit {
 		long len = connector.astWriterLen;
 		String path = fb.getName();
 
-		//System.out.println("changed file" + path);
+		// System.out.println("changed file" + path);
 
 		final String lowerPath = path.toLowerCase();
 		if (lowerPath.endsWith(".txt"))
@@ -241,16 +249,20 @@ public abstract class AbstractCommit {
 		else if (lowerPath.endsWith(".xml"))
 			fb.setKind(FileKind.XML);
 
-		else if(lowerPath.endsWith(".py")) {
-			if(badp.contains(lowerPath)) {
+		else if (lowerPath.endsWith(".py") || lowerPath.endsWith(".ipynb")) {
+			if (badp.contains(lowerPath)) {
 				System.out.println(path);
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
-			}
-			else {
+			} else {
+				System.out.println(path);
 				final String content = getFileContents(path);
 				System.out.println(projectName + ": " + path);
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
-				parsePythonFile(path, fb, content, false);
+				
+				if(lowerPath.endsWith(".py"))
+					parsePythonFile(path, fb, content, false);
+				if(lowerPath.endsWith(".ipynb"))
+					parseNotebookFile(path, fb, content, false);				
 			}
 		}
 
@@ -279,19 +291,23 @@ public abstract class AbstractCommit {
 			parseJavaFile(path, fb, content, false);
 		}
 		// Python AST generation will be handled here
-		else if(lowerPath.endsWith(".py")) {
-			if(badp.contains(lowerPath)) {
+		else if (lowerPath.endsWith(".py")) {
+			if (badp.contains(lowerPath)) {
 				System.out.println(path);
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
-			}
-			else {
+			} else {
 				final String content = getFileContents(path);
 				System.out.println(projectName + ": " + path);
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
 				parsePythonFile(path, fb, content, false);
 			}
-		}
-		else if (lowerPath.endsWith(".js")) {
+		} else if (lowerPath.endsWith(".ipynb")) {
+			final String content = getFileContents(path);
+			System.out.println(projectName + ": " + path);
+			fb.setKind(FileKind.SOURCE_PY_ERROR);
+			parseNotebookFile(path, fb, content, false);
+			
+		} else if (lowerPath.endsWith(".js")) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JS_ES1);
@@ -387,51 +403,41 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted PHP5_3: revision " + id + ": file " + path);
 			} else if (debugparse)
 				System.err.println("Accepted PHP5: revision " + id + ": file " + path);
-		}/* else if (lowerPath.endsWith(".html") && parse) {
-			final String content = getFileContents(path);
-
-			fb.setKind(FileKind.Source_HTML);
-			if (!HTMLParse(path, fb, content, false, astWriter)) {
-				if (debugparse)
-					System.err.println("Found an HTML parse error in : revision " + id + ": file " + path);
-				fb.setKind(FileKind.SOURCE_HTML_ERROR);
-
-			} else if (debugparse)
-				System.err.println("Accepted HTML: revisison " + id + ": file " + path);
-		} else if (lowerPath.endsWith(".xml") && parse) {
-			final String content = getFileContents(path);
-
-			fb.setKind(FileKind.Source_XML);
-			if (!XMLParse(path, fb, content, false, astWriter)) {
-				if (debugparse)
-					System.err.println("Found an XML parse error in : revision " + id + ": file " + path);
-				fb.setKind(FileKind.SOURCE_XML_ERROR);
-			}else if (debugparse)
-				System.err.println("Accepted XML: revisison " + id + ": file " + path);
-		} else if (lowerPath.endsWith(".css") && parse) {
-			final String content = getFileContents(path);
-
-			fb.setKind(FileKind.Source_CSS);
-			if (!CSSParse(path, fb, content, false, astWriter)) {
-				if (debugparse)
-					System.err.println("Found an CSS parse error in : revision " + id + ": file " + path);
-				fb.setKind(FileKind.SOURCE_CSS_ERROR);
-			}else if (debugparse)
-				System.err.println("Accepted CSS: revisison " + id + ": file " + path);
-		}*/
-		/*else {
-			final String content = getFileContents(path);
-			if (STORE_ASCII_PRINTABLE_CONTENTS && StringUtils.isAsciiPrintable(content)) {
-				try {
-					fb.setKey(connector.contentWriterLen);
-					BytesWritable bw = new BytesWritable(content.getBytes());
-					connector.contentWriter.append(new LongWritable(connector.contentWriterLen), bw);
-					connector.contentWriterLen += bw.getLength();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}*/
+		} /*
+			 * else if (lowerPath.endsWith(".html") && parse) { final String content =
+			 * getFileContents(path);
+			 * 
+			 * fb.setKind(FileKind.Source_HTML); if (!HTMLParse(path, fb, content, false,
+			 * astWriter)) { if (debugparse)
+			 * System.err.println("Found an HTML parse error in : revision " + id +
+			 * ": file " + path); fb.setKind(FileKind.SOURCE_HTML_ERROR);
+			 * 
+			 * } else if (debugparse) System.err.println("Accepted HTML: revisison " + id +
+			 * ": file " + path); } else if (lowerPath.endsWith(".xml") && parse) { final
+			 * String content = getFileContents(path);
+			 * 
+			 * fb.setKind(FileKind.Source_XML); if (!XMLParse(path, fb, content, false,
+			 * astWriter)) { if (debugparse)
+			 * System.err.println("Found an XML parse error in : revision " + id + ": file "
+			 * + path); fb.setKind(FileKind.SOURCE_XML_ERROR); }else if (debugparse)
+			 * System.err.println("Accepted XML: revisison " + id + ": file " + path); }
+			 * else if (lowerPath.endsWith(".css") && parse) { final String content =
+			 * getFileContents(path);
+			 * 
+			 * fb.setKind(FileKind.Source_CSS); if (!CSSParse(path, fb, content, false,
+			 * astWriter)) { if (debugparse)
+			 * System.err.println("Found an CSS parse error in : revision " + id + ": file "
+			 * + path); fb.setKind(FileKind.SOURCE_CSS_ERROR); }else if (debugparse)
+			 * System.err.println("Accepted CSS: revisison " + id + ": file " + path); }
+			 */
+		/*
+		 * else { final String content = getFileContents(path); if
+		 * (STORE_ASCII_PRINTABLE_CONTENTS && StringUtils.isAsciiPrintable(content)) {
+		 * try { fb.setKey(connector.contentWriterLen); BytesWritable bw = new
+		 * BytesWritable(content.getBytes()); connector.contentWriter.append(new
+		 * LongWritable(connector.contentWriterLen), bw); connector.contentWriterLen +=
+		 * bw.getLength(); } catch (IOException e) { e.printStackTrace(); } } }
+		 */
 
 		if (connector.astWriterLen > len) {
 			fb.setKey(len);
@@ -636,26 +642,27 @@ public abstract class AbstractCommit {
 
 	boolean pythonParsingError;
 
-	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,final boolean storeOnError) {
-		pythonParsingError=false;
+	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
+			final boolean storeOnError) {
+		pythonParsingError = false;
+		System.out.println("######## " + path);
 
-		System.out.println("################### "+path);
+		PythonSourceParser parser = new PythonSourceParser();
+		IModuleSource input = new ModuleSource(content);
 
-		PythonSourceParser parser= new PythonSourceParser();
-		IModuleSource input=new ModuleSource(content);
-
-		IProblemReporter reporter=new IProblemReporter() {
+		IProblemReporter reporter = new IProblemReporter() {
 			@Override
 			public void reportProblem(IProblem arg0) {
-				pythonParsingError=true;
+				pythonParsingError = true;
 
 			}
 		};
-//		System.out.println("actual source: "+content);
+		
+		// System.out.println("actual source: " + content);
 		PythonModuleDeclaration module;
 
 		try {
-			module= (PythonModuleDeclaration) parser.parse(input, reporter);
+			module = (PythonModuleDeclaration) parser.parse(input, reporter);
 		} catch (Exception e) {
 			if (true)
 				System.err.println("Error parsing Python file: " + path + " from: " + projectName);
@@ -663,20 +670,23 @@ public abstract class AbstractCommit {
 			return false;
 		}
 
-		if(true) {
+		if (true) {
 			final ASTRoot.Builder ast = ASTRoot.newBuilder();
 
-			NewPythonVisitor visitor=new NewPythonVisitor();
+			NewPythonVisitor visitor = new NewPythonVisitor();
 
 			try {
-				ast.addNamespaces(visitor.getNamespace(module,path));
+				ast.addNamespaces(visitor.getNamespace(module, path));
 			} catch (final UnsupportedOperationException e) {
 				return false;
 			} catch (final Throwable e) {
-				if (debug)
-					System.err.println("Error visiting Python file: " + path + " from: " + projectName + "\n" + e.toString());
+				if (debug) {
+					System.err.println("Error visiting Python file: " + path + " from: " + projectName + "\n");
+					writeToCsv(projectName, path, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+				}
+
 				e.printStackTrace();
-				//System.exit(-1);
+				// System.exit(-1);
 				return false;
 			}
 //
@@ -686,7 +696,7 @@ public abstract class AbstractCommit {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-			if(!pythonParsingError)
+			if (!pythonParsingError)
 				fb.setKind(FileKind.SOURCE_PY_3);
 
 			try {
@@ -701,6 +711,136 @@ public abstract class AbstractCommit {
 		}
 		return !pythonParsingError;
 	}
+	
+	private boolean parseNotebookFile(final String path, final ChangedFile.Builder fb, final String content,
+			final boolean storeOnError) {
+		pythonParsingError = false;
+		System.out.println("@@@@@@@@ " + path);
+		
+		JsonElement jelement = new JsonParser().parse(content);
+	    JsonObject  jobject = jelement.getAsJsonObject();
+	    JsonArray jarray = jobject.getAsJsonArray("cells");
+	    
+	    int count = 0;
+	    ASTRoot.Builder ast = ASTRoot.newBuilder();
+	    Boolean parseSuccess = false;
+	    for(JsonElement cell : jarray) {
+	    	JsonObject c = cell.getAsJsonObject();	    	
+	    	
+	    	if(!c.get("cell_type").getAsString().equals("code") || !c.has("source"))
+	    		continue;
+	    	
+    		count += 1;
+    		JsonArray lines = c.getAsJsonArray("source");
+    		Iterator<JsonElement> iterator = lines.iterator();
+    		
+    		String codeCell = "";
+    		
+            while (iterator.hasNext()) {
+            	
+            	String line = iterator.next().getAsString();
+            	if(NoNotebookErrors(line))
+            		codeCell += line;
+            	else
+            		codeCell += "#" + line;
+            }
+            
+            
+            ////////////////////////////////
+            //////// Parse code here ////
+            
+            
+	    	
+    		PythonSourceParser parser = new PythonSourceParser();
+    		IModuleSource input = new ModuleSource(codeCell);
+    
+    		IProblemReporter reporter = new IProblemReporter() {
+    			@Override
+    			public void reportProblem(IProblem arg0) {
+    				pythonParsingError = true;
+    
+    			}
+    		};
+    		
+    		// System.out.println("actual source: " + codeCell);
+    		PythonModuleDeclaration module;
+    		
+    		try {
+    			module = (PythonModuleDeclaration) parser.parse(input, reporter);
+    		} catch (Exception e) {
+    			if (true)
+    				System.err.println("Error parsing Python file: " + path + " from: " + projectName + ", Cell: " + count);
+    			e.printStackTrace();
+    			continue;
+    		}
+    
+    		if (true) {
+    			
+    			NewPythonVisitor visitor = new NewPythonVisitor();
+  
+    			try {
+    				ast.addNamespaces(visitor.getNamespace(module, "cell:" + count));
+    				parseSuccess = true;
+    			} catch (final UnsupportedOperationException e) {
+    				continue;
+    			} catch (final Throwable e) {
+    				if (debug) {
+    					System.err.println("Error parsing Python file: " + path + " from: " + projectName + ", Cell: " + count);
+    					writeToCsv(projectName, path + "-Cell:" + count, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+    				} 
+    				e.printStackTrace();
+    				continue;
+    			}
+    		}
+            ///////////////////////////////////////// Parsing each cell ends	
+	    }
+	    ////////// Loop ends for all cells
+	    
+	    if (parseSuccess)
+			fb.setKind(FileKind.SOURCE_PY_3);
+	    
+		try {
+			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+			connector.astWriterLen += bw.getLength();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return parseSuccess;
+	}
+	
+	boolean NoNotebookErrors(String line) {
+    	if(line.startsWith("%") || line.startsWith("?"))
+    		return false;
+    	return true;
+    }
+
+	private void writeToCsv(String project, String file, String error) {
+		String file_name = "error-log.csv";
+		try {
+			File f = new File(file_name);
+			if (!f.exists()) {
+				f.createNewFile();
+				FileWriter fw = new FileWriter(f, true);
+				BufferedWriter bw = new BufferedWriter(fw);
+				PrintWriter pw = new PrintWriter(bw);
+				pw.println("Project" + ", " + "File" + ", " + "Error");
+				pw.println(project + ", " + file + ", " + error);
+				pw.close();
+			} else {
+				FileWriter fw = new FileWriter(f, true);
+				BufferedWriter bw = new BufferedWriter(fw);
+				PrintWriter pw = new PrintWriter(bw);
+				pw.println(project + ", " + file + ", " + error);
+				pw.close();
+			}
+		} catch (IOException ioe) {
+			System.out.println("Exception occurred:");
+			ioe.printStackTrace();
+		}
+	}
+
 	private boolean parseJavaScriptFile(final String path, final ChangedFile.Builder fb, final String content,
 			final int astLevel, final boolean storeOnError) {
 		try {
@@ -731,14 +871,13 @@ public abstract class AbstractCommit {
 					// for (final String s : visitor.getImports())
 					// ast.addImports(s);
 					/*
-					 * for (final Comment c : visitor.getComments())
-					 * comments.addComments(c);
+					 * for (final Comment c : visitor.getComments()) comments.addComments(c);
 					 */
 				} catch (final UnsupportedOperationException e) {
 					return false;
 				} catch (final Throwable e) {
 					if (debug)
-						System.err.println("Error visiting JS file: " + path  + " from: " + projectName);
+						System.err.println("Error visiting JS file: " + path + " from: " + projectName);
 					e.printStackTrace();
 					System.exit(-1);
 					return false;
@@ -772,7 +911,8 @@ public abstract class AbstractCommit {
 		return l;
 	}
 
-	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
+	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content,
+			final boolean storeOnError) {
 		try {
 
 			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
@@ -790,7 +930,7 @@ public abstract class AbstractCommit {
 
 			try {
 				cu = (CompilationUnit) parser.createAST(null);
-			} catch(Throwable e) {
+			} catch (Throwable e) {
 				return false;
 			}
 
@@ -809,7 +949,7 @@ public abstract class AbstractCommit {
 
 				} catch (final Throwable e) {
 					if (debug) {
-						System.err.println("Error visiting Java file: " + path  + " from: " + projectName);
+						System.err.println("Error visiting Java file: " + path + " from: " + projectName);
 						e.printStackTrace();
 					}
 					System.exit(-1);
@@ -817,20 +957,20 @@ public abstract class AbstractCommit {
 				}
 
 				switch (visitor.getAstLevel()) {
-					case JavaVisitor.JLS2:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS2);
-						break;
-					case JavaVisitor.JLS3:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS3);
-						break;
-					case JavaVisitor.JLS4:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS4);
-						break;
-					case JavaVisitor.JLS8:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
-						break;
-					default:
-						fb.setKind(FileKind.SOURCE_JAVA_ERROR);
+				case JavaVisitor.JLS2:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS2);
+					break;
+				case JavaVisitor.JLS3:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS3);
+					break;
+				case JavaVisitor.JLS4:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS4);
+					break;
+				case JavaVisitor.JLS8:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS8);
+					break;
+				default:
+					fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 				}
 
 				try {
