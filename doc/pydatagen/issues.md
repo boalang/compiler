@@ -22,10 +22,10 @@
 
 ## High Priority
 
-#### Import statements
+#### Import statements [RESOLVED]
 This kind of local import is not handled: `from ..foo.bar import a as b, c`
 
-#### Import Error
+#### Import Error [RESOLVED]
 These imports are similar but parsed differently
 
 ```
