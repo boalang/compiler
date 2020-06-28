@@ -54,8 +54,8 @@ public class SeqRepoCombiner {
 			// remove combined seq files
 			checkAndRemove(DATASET_PATH + "/combined");
 
-			int astCount = 0, fileCount = 0, projectCount = 0;
-			openWriters(astCount);
+			int astMapSuffix = 0, fileCount = 0, projectCount = 0;
+			openWriters(astMapSuffix);
 
 			long lastAstWriterKey = 0, lastCommitWriterKey = 0;
 			HashSet<String> processedProjectNames = new HashSet<String>();
@@ -93,7 +93,7 @@ public class SeqRepoCombiner {
 											long key = cfb.getKey();
 											if (key > 0)
 												cfb.setKey(lastAstWriterKey + key);
-											cfb.setAstKey(astCount);
+											cfb.setAstKey(astMapSuffix);
 										}
 									}
 								} else {
@@ -105,7 +105,7 @@ public class SeqRepoCombiner {
 									long key = cfb.getKey();
 									if (key > 0)
 										cfb.setKey(lastAstWriterKey + key);
-									cfb.setAstKey(astCount);
+									cfb.setAstKey(astMapSuffix);
 								}
 							}
 							projectWriter.append(textKey, new BytesWritable(pb.build().toByteArray()));
@@ -114,18 +114,18 @@ public class SeqRepoCombiner {
 							// update its corresponding commit and ast seq
 							lastCommitWriterKey = readAndAppendCommit(conf, fs, commitWriter,
 									DATASET_PATH + "/commit/" + projectName + ".seq", lastAstWriterKey,
-									lastCommitWriterKey, astCount);
+									lastCommitWriterKey, astMapSuffix);
 							lastAstWriterKey = readAndAppendAst(conf, fs, astWriter,
 									DATASET_PATH + "/ast/" + projectName + ".seq", lastAstWriterKey);
 
 							System.out.println("Finish project " + projectName);
 
 							projectCount++;
-							astCount++;
 							// open a new ast writer if current writer hits the maximum project number
 							if (projectCount >= PROJECT_NUM_IN_AST) {
+								astMapSuffix++;
 								astWriter.close();
-								astWriter = new MapFile.Writer(conf, fs, DATASET_PATH + "/combined/ast/map" + astCount,
+								astWriter = new MapFile.Writer(conf, fs, DATASET_PATH + "/combined/ast/map" + astMapSuffix,
 										LongWritable.class, BytesWritable.class, CompressionType.BLOCK,
 										new DefaultCodec(), null);
 								projectCount = 0;
@@ -187,7 +187,7 @@ public class SeqRepoCombiner {
 	}
 
 	public static long readAndAppendCommit(Configuration conf, FileSystem fileSystem, MapFile.Writer writer,
-			String fileName, long lastAstKey, long lastCommitKey, int astCount) throws IOException {
+			String fileName, long lastAstKey, long lastCommitKey, int astMapSuffix) throws IOException {
 		long newLastKey = lastCommitKey;
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
 		LongWritable longKey = new LongWritable();
@@ -201,7 +201,7 @@ public class SeqRepoCombiner {
 					long key = cfb.getKey();
 					if (key > 0)
 						cfb.setKey(lastAstKey + key);
-					cfb.setAstKey(astCount);
+					cfb.setAstKey(astMapSuffix);
 				}
 				writer.append(new LongWritable(newLastKey), new BytesWritable(rb.build().toByteArray()));
 			}
