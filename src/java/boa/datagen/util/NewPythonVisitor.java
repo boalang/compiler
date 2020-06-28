@@ -47,6 +47,7 @@ import org.eclipse.dltk.python.parser.ast.expressions.PythonListForExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTestListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTupleExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.ShortHandIfExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.UnaryExpression;
 import org.eclipse.dltk.python.parser.ast.statements.BreakStatement;
 import org.eclipse.dltk.python.parser.ast.statements.ContinueStatement;
@@ -131,6 +132,10 @@ public class NewPythonVisitor extends ASTVisitor {
 		}
 		else if (md instanceof GlobalStatement) {
 			visit((GlobalStatement) md);
+			opFound = true;
+		}
+		else if (md instanceof ShortHandIfExpression) {
+			visit((ShortHandIfExpression) md);
 			opFound = true;
 		}
 
@@ -632,6 +637,37 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		return true;
 
+	}
+	
+	public boolean visit(ShortHandIfExpression s) throws Exception {
+//		System.out.println("Enter IF: " + s.toString());
+
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.CONDITIONAL);
+		
+		if(s.getThen()!=null)
+		{
+			s.getThen().traverse(this);
+			boa.types.Ast.Expression ex = expressions.pop();
+			b.addExpressions(ex);
+		}
+		
+		if (s.getCondition() != null) {
+			s.getCondition().traverse(this);
+			boa.types.Ast.Expression ex = expressions.pop();
+			b.addExpressions(ex);
+		}
+
+		if (s.getElse() != null) {
+			s.getElse().traverse(this);
+			boa.types.Ast.Expression ex = expressions.pop();
+			b.addExpressions(ex);
+		}
+
+		expressions.push(b.build());
+
+		return false;
 	}
 
 	public boolean visit(Assignment md) throws Exception {
@@ -1409,6 +1445,7 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		return false;
 	}
+	
 
 	public boolean visit(BreakStatement s) throws Exception {
 //		System.out.println("Enter BREAK: " + s.toString());

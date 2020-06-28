@@ -126,12 +126,16 @@ For above code an EMPTY expression is added somehow
                                  ],
 ```
 
-#### This array comprehension is not handled.
+#### This array comprehension is not handled. [RESOLVED]
 Does not print any AST:
 ```
 reverse_input_char_index = dict(
     (i, char) for char, i in input_token_index.items())
 ```
+
+#### char in this part : for char, i not printed in ast
+reverse_input_char_index = dict(
+    (i, char) for char, i in input_token_index.items())
 
 #### All keywords should be handled as literal, not VARACCESS [RESOLVED]
 
@@ -144,7 +148,7 @@ Multiple args of print should also be handled.
 
 ## Low Priority
 
-#### Conditional expression/shorthand if not supported
+#### Conditional expression/shorthand if not supported [RESOLVED]
 ```
 print("A") if a > b else print("B")
 ```
