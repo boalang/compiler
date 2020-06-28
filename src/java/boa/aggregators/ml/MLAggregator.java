@@ -60,22 +60,18 @@ public abstract class MLAggregator extends Aggregator {
 	protected ArrayList<String> nominalAttr;
 
 	public MLAggregator() {
-		initialize();
+		fvAttributes = new ArrayList<Attribute>();
+		nominalAttr = new ArrayList<String>();
+		trainingPerc = 100;
 	}
 
 	public MLAggregator(final String s) {
-		initialize();
+		this();
 		try {
 			options = handleNonWekaOptions(Utils.splitOptions(s));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public void initialize() {
-		fvAttributes = new ArrayList<Attribute>();
-		nominalAttr = new ArrayList<String>();
-		trainingPerc = 100;
 	}
 
 	// this function is used to handle non-weka options (-s: split)
@@ -192,9 +188,10 @@ public abstract class MLAggregator extends Aggregator {
 			// delete previous model
 			if (fileSystem.exists(filePath)) {
 				fileSystem.delete(filePath, true);
-				System.out.println("Deleted previous model");
+				System.out.println("deleted previous model");
 			}
 
+			// serialize the model and write to the path 
 			out = fileSystem.create(filePath);
 			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
 			objectOut = new ObjectOutputStream(byteOutStream);

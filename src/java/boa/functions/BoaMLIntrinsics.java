@@ -6,12 +6,16 @@ import java.io.ObjectInputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.deeplearning4j.models.embeddings.reader.impl.BasicModelUtils;
+import org.deeplearning4j.models.word2vec.Word2Vec;
 
 import boa.datagen.DefaultProperties;
 import boa.runtime.Tuple;
@@ -34,12 +38,13 @@ public class BoaMLIntrinsics {
 	 * @return Model type after deserializing
 	 */
 	@FunctionSpec(name = "load", returnType = "model", formalParameters = { "int", "model" })
-	public static BoaModel load(final long jobId, BoaModel m, final String identifier, final Object o)
-			throws Exception {
-		Object unserializedObject = null;
+	public static BoaModel load(final long jobId, BoaModel m, final String identifier, final String type,
+			final Object o) throws Exception {
+		Object object = null;
 		FSDataInputStream in = null;
 		ObjectInputStream dataIn = null;
 		ByteArrayOutputStream bo = null;
+		ByteArrayInputStream bin = null;
 		try {
 			final Configuration conf = BoaAstIntrinsics.context.getConfiguration();
 			final FileSystem fs;
@@ -48,18 +53,18 @@ public class BoaMLIntrinsics {
 					? new Path(DefaultProperties.localOutput).toString() + "/../"
 					: conf.get("fs.default.name", "hdfs://boa-njt/");
 			p = getModelFilePath(output, (int) jobId, identifier);
+
+			// deserialize the model from the path
 			fs = FileSystem.get(conf);
 			in = fs.open(p);
-
 			final byte[] b = new byte[(int) fs.getFileStatus(p).getLen() + 1];
 			int c = 0;
 			bo = new ByteArrayOutputStream();
-			while ((c = in.read(b)) != -1) {
+			while ((c = in.read(b)) != -1)
 				bo.write(b, 0, c);
-			}
-			ByteArrayInputStream bin = new ByteArrayInputStream(bo.toByteArray());
-			dataIn = new ObjectInputStream(bin);
-			unserializedObject = dataIn.readObject();
+			bin = new ByteArrayInputStream(bo.toByteArray());
+			object = new ObjectInputStream(bin).readObject();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -75,9 +80,13 @@ public class BoaMLIntrinsics {
 			}
 		}
 
-		if (unserializedObject instanceof Classifier) {
+		if (object instanceof Word2Vec) {
+			Word2Vec word2Vec = (Word2Vec) object;
+			word2Vec.setModelUtils(new BasicModelUtils<>());
+			return new BoaWord2Vec(word2Vec, o);
+		} else if (object instanceof Classifier) {
 			// classifier
-			Classifier clr = (Classifier) unserializedObject;
+			Classifier clr = (Classifier) object;
 			String className = clr.getClass().toString();
 			if (className.contains("LinearRegression")) {
 				m = new BoaLinearRegression(clr, o);
@@ -145,9 +154,9 @@ public class BoaMLIntrinsics {
 			} else if (className.contains("InputMappedClassifier")) {
 				m = new BoaInputMappedClassifier(clr, o);
 			}
-		} else if (unserializedObject instanceof Clusterer) {
+		} else if (object instanceof Clusterer) {
 			// Clusterer
-			Clusterer clu = (Clusterer) unserializedObject;
+			Clusterer clu = (Clusterer) object;
 			String className = clu.getClass().toString();
 			if (className.contains("SimpleKMeans")) {
 				m = new BoaSimpleKMeans(clu, o);
@@ -311,6 +320,43 @@ public class BoaMLIntrinsics {
 			e.printStackTrace();
 		}
 		return fvAttributes;
+	}
+
+	/* ------------------------------- Word2Vec ------------------------------- */
+	// for more methods please check:
+	// https://github.com/eclipse/deeplearning4j/blob/43fd64358cd96413063a06e63b7d34402555a3ec/deeplearning4j/deeplearning4j-nlp-parent/deeplearning4j-nlp/src/main/java/org/deeplearning4j/models/embeddings/wordvectors/WordVectorsImpl.java
+	// https://github.com/eclipse/deeplearning4j/blob/43fd64358cd96413063a06e63b7d34402555a3ec/deeplearning4j/deeplearning4j-nlp-parent/deeplearning4j-nlp/src/main/java/org/deeplearning4j/models/embeddings/reader/impl/BasicModelUtils.java
+
+	@FunctionSpec(name = "sim", returnType = "float", formalParameters = { "Word2Vec", "string", "string" })
+	public static double sim(final BoaWord2Vec m, final String w1, final String w2) {
+		return m.getW2v().similarity(w1, w2);
+	}
+
+	@FunctionSpec(name = "nearest", returnType = "array of string", formalParameters = { "Word2Vec", "string", "int" })
+	public static String[] nearest(final BoaWord2Vec m, final String w, final long num) {
+		return m.getW2v().wordsNearest(w, (int) num).toArray(new String[0]);
+	}
+
+	@FunctionSpec(name = "vector", returnType = "array of float", formalParameters = { "Word2Vec", "string" })
+	public static double[] vector(final BoaWord2Vec m, final String w) {
+		return m.getW2v().getWordVector(w);
+	}
+
+	@FunctionSpec(name = "arith", returnType = "array of string", formalParameters = { "Word2Vec", "string", "int" })
+	public static String[] arith(final BoaWord2Vec m, final String exp, final long num) {
+		List<String> plus = new LinkedList<String>();
+		List<String> minus = new LinkedList<String>();
+		String[] tokens = exp.split("\\s+");
+		for (int i = 0; i < tokens.length; i++) {
+			String token = tokens[i];
+			if (i == 0 && !token.equals("-") && !token.equals("+"))
+				plus.add(token);
+			else if (token.equals("+"))
+				plus.add(tokens[++i]);
+			else if (token.equals("-"))
+				minus.add(tokens[++i]);
+		}
+		return m.getW2v().wordsNearest(plus, minus, (int) num).toArray(new String[0]);
 	}
 
 }
