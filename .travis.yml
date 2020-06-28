@@ -13,5 +13,7 @@ notifications:
   email:
     recipients:
       - hridesh@iastate.edu
+      - sayem@iastate.edu
+      - sumon@iastate.edu
     on_success: change
     on_failure: always
