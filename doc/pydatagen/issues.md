@@ -25,6 +25,33 @@
 #### Import statements
 This kind of local import is not handled: `from ..foo.bar import a as b, c`
 
+#### Import Error
+These imports are similar but parsed differently
+
+```
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+```
+AST:
+
+```
+"statements": [
+            {
+               "kind": "EXPRESSION",
+               "expressions": [
+                  {
+                     "kind": "VARACCESS",
+                     "variable": "cross_val_score"
+                  }
+               ]
+            }
+         ],
+         "imports": [
+            "sklearn.model_selection.KFold",
+            "sklearn.model_selection."
+         ]
+```
+
 #### Multiple assignments can be in the same line [RESOLVED]
 ```
 a, b = cifar10.load_data()  
