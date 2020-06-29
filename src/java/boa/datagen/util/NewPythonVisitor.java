@@ -263,6 +263,9 @@ public class NewPythonVisitor extends ASTVisitor {
 		} else if (md instanceof PythonFunctionDecorator) {
 			visit((PythonFunctionDecorator) md);
 			opFound = true;
+		} else if (md instanceof NumericLiteral) {
+			visit((NumericLiteral) md);
+			opFound = true;
 		} 
 		
 
@@ -447,6 +450,8 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEWARRAY);
 
+		System.out.println(md.toString());
+		try {
 		if(md.getExpressions()!=null)
 		{
 			for (Object ob : md.getExpressions()) {
@@ -454,6 +459,10 @@ public class NewPythonVisitor extends ASTVisitor {
 				ex.traverse(this);
 				b.addExpressions(expressions.pop());
 			}
+		}
+		}catch(Exception ex)
+		{
+			throw ex;
 		}
 		expressions.push(b.build());
 		return true;
@@ -794,6 +803,19 @@ public class NewPythonVisitor extends ASTVisitor {
 	}
 
 	public boolean visit(org.eclipse.dltk.ast.expressions.StringLiteral md) {
+
+//		System.out.println("Literal: " + md.toString());
+
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
+
+		b.setLiteral(md.getValue());
+		expressions.push(b.build());
+
+		return true;
+
+	}
+	public boolean visit(org.eclipse.dltk.ast.expressions.NumericLiteral md) {
 
 //		System.out.println("Literal: " + md.toString());
 
