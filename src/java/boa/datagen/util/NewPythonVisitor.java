@@ -450,7 +450,7 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEWARRAY);
 
-		System.out.println(md.toString());
+		// System.out.println(md.toString());
 		try {
 		if(md.getExpressions()!=null)
 		{

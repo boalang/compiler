@@ -241,8 +241,6 @@ public abstract class AbstractCommit {
 		long len = connector.astWriterLen;
 		String path = fb.getName();
 
-		// System.out.println("changed file" + path);
-
 		final String lowerPath = path.toLowerCase();
 		if (lowerPath.endsWith(".txt"))
 			fb.setKind(FileKind.TEXT);
@@ -251,10 +249,8 @@ public abstract class AbstractCommit {
 
 		else if (lowerPath.endsWith(".py") || lowerPath.endsWith(".ipynb")) {
 			if (badp.contains(lowerPath)) {
-				System.out.println(path);
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
 			} else {
-				System.out.println(path);
 				final String content = getFileContents(path);
 				System.out.println(projectName + ": " + path);
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
@@ -293,17 +289,14 @@ public abstract class AbstractCommit {
 		// Python AST generation will be handled here
 		else if (lowerPath.endsWith(".py")) {
 			if (badp.contains(lowerPath)) {
-				System.out.println(path);
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
 			} else {
 				final String content = getFileContents(path);
-				System.out.println(projectName + ": " + path);
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
 				parsePythonFile(path, fb, content, false);
 			}
 		} else if (lowerPath.endsWith(".ipynb")) {
 			final String content = getFileContents(path);
-			System.out.println(projectName + ": " + path);
 			fb.setKind(FileKind.SOURCE_PY_ERROR);
 			parseNotebookFile(path, fb, content, false);
 			
