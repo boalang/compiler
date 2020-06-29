@@ -3,11 +3,13 @@ package boa.aggregators.ml;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import org.deeplearning4j.models.word2vec.Word2Vec;
-import org.deeplearning4j.models.word2vec.Word2Vec.Builder;
+import org.deeplearning4j.models.embeddings.loader.VectorsConfiguration;
+import org.deeplearning4j.models.sequencevectors.SequenceVectors;
+import org.deeplearning4j.models.sequencevectors.iterators.AbstractSequenceIterator;
+import org.deeplearning4j.models.sequencevectors.transformers.impl.SentenceTransformer;
+import org.deeplearning4j.models.word2vec.VocabWord;
 import org.deeplearning4j.text.sentenceiterator.CollectionSentenceIterator;
 import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
-import org.deeplearning4j.text.sentenceiterator.SentencePreProcessor;
 import org.deeplearning4j.text.stopwords.StopWords;
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
@@ -17,15 +19,15 @@ import boa.aggregators.AggregatorSpec;
 import boa.runtime.Tuple;
 import weka.core.Utils;
 
-@AggregatorSpec(name = "word2vec", formalParameters = { "string" })
-public class Word2VectorAggregator extends MLAggregator {
+@AggregatorSpec(name = "seq2vec", formalParameters = { "string" })
+public class Sequence2VectorAggregator extends MLAggregator {
 	LinkedList<String> train;
 
-	public Word2VectorAggregator() {
+	public Sequence2VectorAggregator() {
 		train = new LinkedList<String>();
 	}
 
-	public Word2VectorAggregator(final String s) {
+	public Sequence2VectorAggregator(final String s) {
 		this();
 		try {
 			options = Utils.splitOptions(s);
@@ -57,48 +59,48 @@ public class Word2VectorAggregator extends MLAggregator {
 		try {
 			// load train dataset
 			SentenceIterator iter = new CollectionSentenceIterator(train);
-			iter.setPreProcessor(new SentencePreProcessor() {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public String preProcess(String sentence) {
-					return sentence.toLowerCase();
-				}
-			});
 
 			// tokenization and preprocess
 			TokenizerFactory t = new DefaultTokenizerFactory();
 			t.setTokenPreProcessor(new CommonPreprocessor());
 
+			SentenceTransformer transformer = new SentenceTransformer.Builder().iterator(iter).tokenizerFactory(t)
+					.build();
+			AbstractSequenceIterator<VocabWord> itr = new AbstractSequenceIterator.Builder<VocabWord>(transformer)
+					.build();
+
 			// train model
-			Word2Vec.Builder wb = new Word2Vec.Builder();
-			updateOptions(wb);
-			Word2Vec vec = wb.iterate(iter).tokenizerFactory(t).build();
-			vec.fit();
+			SequenceVectors.Builder<VocabWord> sb = new SequenceVectors.Builder<VocabWord>(new VectorsConfiguration());
+			updateOptions(sb);
+			SequenceVectors<VocabWord> sv = sb.iterate(itr).build();
+			sv.fit();
 
 			// save model
-			saveModel(vec);
+			saveModel(sv);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void updateOptions(Builder wb) {
+	private void updateOptions(SequenceVectors.Builder<VocabWord> sb) {
 		for (int i = 0; i < options.length; i++) {
 			String cur = options[i];
 			if (cur.equals("-s"))
 				trainingPerc = Integer.parseInt(options[++i]);
 			else if (cur.equals("-f"))
-				wb.minWordFrequency(Integer.parseInt(options[++i]));
+				sb.minWordFrequency(Integer.parseInt(options[++i]));
 			else if (cur.equals("-lr"))
-				wb.minLearningRate(Integer.parseInt(options[++i]));
+				sb.minLearningRate(Integer.parseInt(options[++i]));
 			else if (cur.equals("-ls"))
-				wb.layerSize(Integer.parseInt(options[++i]));
+				sb.layerSize(Integer.parseInt(options[++i]));
 			else if (cur.equals("-ws"))
-				wb.windowSize(Integer.parseInt(options[++i]));
+				sb.windowSize(Integer.parseInt(options[++i]));
+			else if (cur.equals("-i"))
+				sb.iterations(Integer.parseInt(options[++i]));
+			else if (cur.equals("-b"))
+				sb.batchSize(Integer.parseInt(options[++i]));
 			else if (cur.equals("-stop"))
-				wb.stopWords(StopWords.getStopWords());
+				sb.stopWords(StopWords.getStopWords());
 		}
 	}
-
 }

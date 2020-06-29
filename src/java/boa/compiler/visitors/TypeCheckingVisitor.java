@@ -1360,6 +1360,11 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						if (!(types.get(i) instanceof BoaString))
 							throw new TypeCheckException(n, "BoaWord2Vec required attributes to be string");
 					}
+				} else if (lhs instanceof BoaSequence2Vec) {
+					for (int i = 0; i < types.size(); i++) {
+						if (!(types.get(i) instanceof BoaString))
+							throw new TypeCheckException(n, "BoaSequence2Vec required attributes to be string");
+					}
 				}
 			}
 
@@ -1964,6 +1969,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaInputMappedClassifier(n.getType().type);
 		else if (n.type instanceof BoaWord2Vec)
 			n.type = new BoaWord2Vec(n.getType().type);
+		else if (n.type instanceof BoaSequence2Vec)
+			n.type = new BoaSequence2Vec(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}
