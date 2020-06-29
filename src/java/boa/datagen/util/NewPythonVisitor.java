@@ -270,13 +270,16 @@ public class NewPythonVisitor extends ASTVisitor {
 
 	}
 	
-	public boolean visit(VariableReference vr, CallHolder ch) throws Exception
+	public boolean visit(org.eclipse.dltk.ast.expressions.Expression vr, CallHolder ch) throws Exception
 	{
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
-		
-		b.setMethod(vr.getName());
+
+		if(vr instanceof VariableReference)
+			b.setMethod(((VariableReference)vr).getName());
+		else if(vr instanceof StringLiteral)
+			b.setMethod(((StringLiteral)vr).getValue());
 		
 		
 		if (ch.getArguments() instanceof ExpressionList) {
@@ -297,6 +300,8 @@ public class NewPythonVisitor extends ASTVisitor {
 	public boolean visit(ExtendedVariableReference md) throws Exception {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 
+//		System.out.println(md.toString());
+		
 		if (md.getExpressionCount() > 1  &&
 				md.getExpression(md.getExpressionCount() - 1) instanceof CallHolder) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
@@ -308,7 +313,7 @@ public class NewPythonVisitor extends ASTVisitor {
 			for (int i = 0; i < md.getExpressionCount() - 2; i++) {
 				if(i<md.getExpressionCount() - 3 && md.getExpression(i+1) instanceof CallHolder)
 				{
-					visit((VariableReference) md.getExpression(i), (CallHolder) md.getExpression(i+1));
+					visit(md.getExpression(i), (CallHolder) md.getExpression(i+1));
 					i++;
 				}
 				else
@@ -335,7 +340,7 @@ public class NewPythonVisitor extends ASTVisitor {
 			for (int i = 0; i < md.getExpressionCount() - 1; i++) {
 				if(i<md.getExpressionCount() - 2 && md.getExpression(i+1) instanceof CallHolder)
 				{
-					visit((VariableReference) md.getExpression(i), (CallHolder) md.getExpression(i+1));
+					visit(md.getExpression(i), (CallHolder) md.getExpression(i+1));
 					i++;
 				}
 				else
@@ -357,7 +362,7 @@ public class NewPythonVisitor extends ASTVisitor {
 			for (int i = 0; i < md.getExpressionCount()-1; i++) {
 				if(i<md.getExpressionCount() - 1 && md.getExpression(i+1) instanceof CallHolder)
 				{
-					visit((VariableReference) md.getExpression(i), (CallHolder) md.getExpression(i+1));
+					visit( md.getExpression(i), (CallHolder) md.getExpression(i+1));
 					i++;
 				}
 				else
