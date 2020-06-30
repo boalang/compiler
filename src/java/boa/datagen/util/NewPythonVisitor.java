@@ -350,9 +350,14 @@ public class NewPythonVisitor extends ASTVisitor {
 					md.getExpression(i).traverse(this);
 				b.addExpressions(expressions.pop());
 			}
+			
 			IndexHolder ch = (IndexHolder) md.getExpression(md.getExpressionCount() - 1);
-			ch.traverse(this);
-			b.addExpressions(expressions.pop());
+			if(ch.getIndex()!=null)
+			{
+				ch.traverse(this);
+				b.addExpressions(expressions.pop());
+			}
+			
 
 		} else if (md.getExpressionCount() > 0
 				&& md.getExpression(md.getExpressionCount() - 1) instanceof VariableReference)
@@ -451,7 +456,7 @@ public class NewPythonVisitor extends ASTVisitor {
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEWARRAY);
 
 		System.out.println(md.toString());
-		try {
+		
 		if(md.getExpressions()!=null)
 		{
 			for (Object ob : md.getExpressions()) {
@@ -460,10 +465,7 @@ public class NewPythonVisitor extends ASTVisitor {
 				b.addExpressions(expressions.pop());
 			}
 		}
-		}catch(Exception ex)
-		{
-			throw ex;
-		}
+		
 		expressions.push(b.build());
 		return true;
 	}
