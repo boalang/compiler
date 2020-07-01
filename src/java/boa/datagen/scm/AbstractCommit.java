@@ -710,13 +710,23 @@ public abstract class AbstractCommit {
 		pythonParsingError = false;
 		System.out.println("@@@@@@@@ " + path);
 		
-		JsonElement jelement = new JsonParser().parse(content);
-	    JsonObject  jobject = jelement.getAsJsonObject();
-	    JsonArray jarray = jobject.getAsJsonArray("cells");
-	    
-	    int count = 0;
+		int count = 0;
 	    ASTRoot.Builder ast = ASTRoot.newBuilder();
 	    Boolean parseSuccess = false;
+	    JsonArray jarray;
+	    try {
+	    	JsonElement jelement = new JsonParser().parse(content);
+		    JsonObject  jobject = jelement.getAsJsonObject();
+		    jarray = jobject.getAsJsonArray("cells");
+		} catch (Exception e) {
+			System.out.println("Notebook JSON parse error.\n");
+			e.printStackTrace();
+			return false;
+		}
+	    
+	    
+	    if (jarray == null)
+	    	return false;
 	    for(JsonElement cell : jarray) {
 	    	JsonObject c = cell.getAsJsonObject();	    	
 	    	
@@ -789,9 +799,10 @@ public abstract class AbstractCommit {
 	    }
 	    ////////// Loop ends for all cells
 	    
-	    if (parseSuccess)
-			fb.setKind(FileKind.SOURCE_PY_3);
-	    
+	    if (!parseSuccess)
+	    	return false;
+		
+	    fb.setKind(FileKind.SOURCE_PY_3);
 		try {
 			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
