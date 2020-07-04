@@ -32,7 +32,7 @@ public class BoaPartitioner extends Partitioner<EmitKey, EmitValue> {
 	private static String[] outputVariableNames = new String[0];
 
 	public int getPartition(final EmitKey key, final EmitValue value, final int num) {
-		return getPartitionForVariable(key.getName());
+		return getPartitionForVariable(key.getName()) % num;
 	}
 
 	public static void setVariableNames(final String[] names) {
