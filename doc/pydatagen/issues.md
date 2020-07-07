@@ -24,6 +24,9 @@
 
 #### char2idx = {c: i for i, c in enumerate(idx2char)} 
 
+#### xy = xy[::-1] 
+####  time_series[i:i + seq_length, :]
+
 #### Import statements [RESOLVED]
 This kind of local import is not handled: `from ..foo.bar import a as b, c`
 
