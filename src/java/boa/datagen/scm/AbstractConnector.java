@@ -148,13 +148,14 @@ public abstract class AbstractConnector implements AutoCloseable {
 					break;
 				}
 			}
-			if (commit.parentIndices != null)
-				for (int p : commit.parentIndices) {
-					if (!queuedCommitIds.contains(p)) {
-						pq.offer(p);
-						queuedCommitIds.add(p);
-					}
+			// git system only store changed files different from the first parent commit
+			if (commit.parentIndices != null && commit.parentIndices.length != 0) {
+				int p = commit.parentIndices[0];
+				if (!queuedCommitIds.contains(p)) {
+					pq.offer(p);
+					queuedCommitIds.add(p);
 				}
+			}
 		}
 	}
 	

@@ -16,110 +16,67 @@
  */
 package boa.types.ml;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import boa.types.BoaType;
-import boa.types.BoaFunction;
-import boa.types.BoaName;
-
 import weka.classifiers.Classifier;
+
 /**
- * A {@link BoaType} representing ML model of LinearRegression with attached types.
+ * A {@link BoaType} representing ML model of LinearRegression with attached
+ * types.
  * 
  * @author ankuraga
  */
-public class BoaLinearRegression extends BoaModel{
-	private Classifier clr;
-	private BoaType t;
-	private Object o;
-	
+public class BoaLinearRegression extends BoaModel {
+
 	/**
 	 * Default BoaLinearRegression Constructor.
 	 * 
 	 */
-	public BoaLinearRegression(){
+	public BoaLinearRegression() {
 	}
-	
+
 	/**
 	 * Construct a BoaLinearRegression.
 	 * 
-	 * @param t
-	 *            A {@link BoaType} containing the types attached with this model
+	 * @param t A {@link BoaType} containing the types attached with this model
 	 *
 	 */
-	public BoaLinearRegression(BoaType t){
+	public BoaLinearRegression(BoaType t) {
 		this.t = t;
 	}
-	
+
 	/**
 	 * Construct a BoaLinearRegression.
 	 * 
-	 * @param clr
-	 *            A {@link Classifier} containing ML model
+	 * @param clr A {@link Classifier} containing ML model
 	 * 
-	 * @param o
-	 *            A {@link Object} containing type object
+	 * @param o   A {@link Object} containing type object
 	 *
 	 */
-	public BoaLinearRegression(Classifier clr, Object o){
+	public BoaLinearRegression(Classifier clr, Object o) {
 		this.clr = clr;
 		this.o = o;
 	}
-	
-	/**
-	 * Get the classifier of this model.
-	 * 
-	 * @return A {@link Classifier} representing ML model
-	 * 
-	 */
-	public Classifier getClassifier() {
-		return this.clr;
-	}
-	
-	/**
-	 * Get the type attached with this model.
-	 * 
-	 * @return A {@link BoaType} representing type attached with ML model
-	 * 
-	 */
-	public BoaType getType() {
-		return this.t;
-	}
-	
-	/**
-	 * Get the type object of this model.
-	 * 
-	 * @return A {@link Object} representing type object
-	 * 
-	 */
-	public Object getObject() {
-		return this.o;
-	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
-		super.assigns(that);
-
-		// otherwise, if it's not an LR, forget it
-		if (!(that instanceof BoaLinearRegression))
+		if (!super.assigns(that))
 			return false;
 
+		// ok
 		return true;
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public boolean accepts(final BoaType that) {
-		// otherwise, if it's not an LR, forget it
-		if (!(that instanceof BoaLinearRegression))
+		if (!super.assigns(that))
 			return false;
 
+		// ok
 		return true;
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
@@ -129,6 +86,6 @@ public class BoaLinearRegression extends BoaModel{
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return "linearregression";
+		return "boa.types.ml.BoaLinearRegression" + "/" + this.t;
 	}
 }

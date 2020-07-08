@@ -213,6 +213,18 @@ public class TestBuildSnapshot {
 			assertArrayEquals(expectedFileNames, fileNames);
 		}
 		
+		// test changed files for each commit
+		for (Revision rev : cr.getRevisionsList()) {
+			String[] expectedFileNames = conn.getDiffFiles(rev.getId()).toArray(new String[0]);
+			String[] actualFileNames = new String[rev.getFilesCount()];
+			for (int i = 0; i < actualFileNames.length; i++)
+				actualFileNames[i] = rev.getFiles(i).getName();
+			Arrays.sort(expectedFileNames);
+			Arrays.sort(actualFileNames);
+			System.out.println(rev.getId());
+			assertArrayEquals(expectedFileNames, actualFileNames);
+		}
+		
 		new Thread(new FileIO.DirectoryRemover(gitDir.getAbsolutePath())).start();
 		conn.close();
 		

@@ -1,0 +1,8 @@
+p: Project = input;
+s2v: output seq2vec("-f 2") of {string};
+
+visit(p, visitor {
+	before r : Revision -> {
+		s2v << { r.log };
+	}
+});

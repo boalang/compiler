@@ -1,0 +1,8 @@
+type T = enum {y = "true", n = "false"};
+p: Project = input;
+predict: output collection of string;
+ms: model of MultiScheme of {int, int, T};
+ms = load(0, ms);
+x1 := 1;
+x2 := 2;
+predict << classify(ms, {x1, x2});

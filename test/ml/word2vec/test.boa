@@ -1,0 +1,18 @@
+p: Project = input;
+predict: output collection of string;
+w2v: model of Word2Vec of { string };
+w2v = load(0, w2v);
+
+# nearest words
+words1: array of string = nearest(w2v, "king", 10);
+
+# cosine similarity
+val: float = sim(w2v, "c", "c");
+
+# arithmetic of words: king - queen + woman = man
+words2: array of string = arith(w2v, "king - queen + woman", 10);
+
+# word vector
+vec: array of float = vector(w2v, "king");
+
+predict << string(val);

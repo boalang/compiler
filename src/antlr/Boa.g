@@ -697,7 +697,7 @@ DO        : 'do';
 MAP       : 'map';
 STACK     : 'stack';
 QUEUE     : 'queue';
-MODEL     : 'Model';
+MODEL     : 'model';
 SET       : 'set';
 FOR       : 'for';
 FOREACH   : 'foreach';

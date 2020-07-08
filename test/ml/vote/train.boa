@@ -1,0 +1,20 @@
+type T = enum {y = "true", n = "false"};
+label: T;
+
+p: Project = input;
+v: output vote("-s 75") of {int, T, int, T};
+
+i := 0;
+while(i < 100){
+
+	label = T.y;
+	if (i % 2 == 0)
+		label = T.n;
+
+	x1 := i + 7;
+	x2: T = T.n;
+	x3 := i;
+
+	v << {x1, x2, x3, label};
+	i++;
+}

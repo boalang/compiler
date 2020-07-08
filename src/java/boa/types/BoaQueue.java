@@ -34,9 +34,8 @@ public class BoaQueue extends BoaType {
 	/**
 	 * Construct a {@link BoaQueue}.
 	 * 
-	 * @param boaType
-	 *            A {@link BoaType} representing the type of the values in
-	 *            this queue
+	 * @param boaType A {@link BoaType} representing the type of the values in this
+	 *                queue
 	 */
 	public BoaQueue(final BoaType boaType) {
 		this.type = boaType;
@@ -108,8 +107,7 @@ public class BoaQueue extends BoaType {
 	/**
 	 * Get the type of the values of this queue.
 	 * 
-	 * @return A {@link BoaType} representing the type of the values of this
-	 *         queue
+	 * @return A {@link BoaType} representing the type of the values of this queue
 	 */
 	public BoaType getType() {
 		return this.type;

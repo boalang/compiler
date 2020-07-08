@@ -25,7 +25,6 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.Reducer.Context;
 import org.apache.log4j.Logger;
 
 import boa.aggregators.Aggregator;
@@ -81,7 +80,6 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 
 		// get the aggregator named by the emit key
 		final Aggregator a = this.aggregators.get(key.getName());
-		boolean setVector = true;
 		
 		a.setCombining(false);
 		a.start(key);
@@ -89,20 +87,19 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 
 		for (final EmitValue value : values)
 			try {
-				if(a.toString().contains("ml")) {
-					MLAggregator mla = (MLAggregator) this.aggregators.get(key.getName());
-					mla = (MLAggregator) a;
-					if (value.getTuple() != null) 
+				if (a instanceof MLAggregator) {
+					MLAggregator mla = (MLAggregator) a;
+					if (value.getTuple() != null) {
+//						System.out.println("emit value is string[] ");
 						mla.aggregate(value.getTuple(), value.getMetadata());
-					else {
-						if (setVector && value.getData().length > 1) {
-							mla.setVectorSize(value.getData().length);
-							setVector = false;
-						}
+					} else {
+//						System.out.println("emit value is tuple ");
+						mla.aggregate(value.getData(), value.getMetadata());
 					}
+				} else {
+					for (final String s : value.getData()) 
+						a.aggregate(s, value.getMetadata());
 				}
-				for (final String s : value.getData()) 
-					a.aggregate(s, value.getMetadata());
 			} catch (final FinishedException e) {
 				// we are done
 				return;

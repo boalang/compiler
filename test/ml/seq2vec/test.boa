@@ -1,0 +1,22 @@
+p: Project = input;
+predict: output collection of string;
+s2v: model of Seq2Vec of { string };
+s2v = load(0, s2v);
+
+# nearest words
+words1: array of string = nearest(s2v, "king", 10);
+
+# cosine similarity
+val: float = sim(s2v, "c", "c");
+
+# arithmetic of words: king - queen + woman = man
+words2: array of string = arith(s2v, "king - queen + woman", 10);
+
+# word vector
+vec1: array of float = vector(s2v, "king");
+
+# sequence vector
+seq := {"c", "c", "c", "c"};
+vec2: array of float = vector(s2v, seq);
+
+predict << string(val);

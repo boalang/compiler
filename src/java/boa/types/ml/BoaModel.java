@@ -16,12 +16,11 @@
  */
 package boa.types.ml;
 
-
-import boa.types.BoaArray;
 import boa.types.BoaFunction;
 import boa.types.BoaName;
 import boa.types.BoaType;
 import weka.classifiers.Classifier;
+import weka.clusterers.Clusterer;
 
 /**
  * A {@link BoaType} representing model of any ML type.
@@ -29,43 +28,41 @@ import weka.classifiers.Classifier;
  * @author ankuraga
  */
 public class BoaModel extends BoaType {
-	private Classifier clr;
-	private BoaType t;
-	private Object o;
-	
+	protected Classifier clr;
+	protected Clusterer clu;
+	protected BoaType t;
+	protected Object o;
+
 	/**
 	 * Default BoaModel Constructor.
 	 * 
 	 */
-	public BoaModel(){
+	public BoaModel() {
 	}
-	
+
 	/**
 	 * Construct a BoaModel.
 	 * 
-	 * @param t
-	 *            A {@link BoaType} containing the types attached with this model
+	 * @param t A {@link BoaType} containing the types attached with this model
 	 *
 	 */
-	public BoaModel(BoaType t){
+	public BoaModel(BoaType t) {
 		this.t = t;
 	}
-	
+
 	/**
 	 * Construct a BoaModel.
 	 * 
-	 * @param clr
-	 *            A {@link Classifier} containing ML model
+	 * @param clr A {@link Classifier} containing ML model
 	 * 
-	 * @param o
-	 *            A {@link Object} containing type object
+	 * @param o   A {@link Object} containing type object
 	 *
 	 */
-	public BoaModel(Classifier clr, Object o){
+	public BoaModel(Classifier clr, Object o) {
 		this.clr = clr;
 		this.o = o;
 	}
-	
+
 	/**
 	 * Get the classifier of this model.
 	 * 
@@ -77,6 +74,29 @@ public class BoaModel extends BoaType {
 	}
 	
 	/**
+	 * Construct a BoaModel.
+	 * 
+	 * @param clu A {@link Clusterer} containing ML model
+	 * 
+	 * @param o   A {@link Object} containing type object
+	 *
+	 */
+	public BoaModel(Clusterer clu, Object o) {
+		this.clu = clu;
+		this.o = o;
+	}
+
+	/**
+	 * Get the classifier of this model.
+	 * 
+	 * @return A {@link Clusterer} representing ML model
+	 * 
+	 */
+	public Clusterer getClusterer() {
+		return this.clu;
+	}
+
+	/**
 	 * Get the type attached with this model.
 	 * 
 	 * @return A {@link BoaType} representing type attached with ML model
@@ -85,7 +105,7 @@ public class BoaModel extends BoaType {
 	public BoaType getType() {
 		return this.t;
 	}
-	
+
 	/**
 	 * Get the type object of this model.
 	 * 
@@ -110,17 +130,23 @@ public class BoaModel extends BoaType {
 		// otherwise, if it's not an model, forget it
 		if (!(that instanceof BoaModel))
 			return false;
-		
+
+		// ok
 		return true;
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public boolean accepts(final BoaType that) {
+		// if that is a function, check the return value
+		if (that instanceof BoaFunction)
+			return this.assigns(((BoaFunction) that).getType());
+
 		// otherwise, if it's not an model, forget it
 		if (!(that instanceof BoaModel))
 			return false;
 
+		// ok
 		return true;
 	}
 
@@ -133,7 +159,6 @@ public class BoaModel extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		System.out.println("xxxxx");
 		return "model";
 	}
 }

@@ -125,18 +125,19 @@ new <type>()
 }
 >>
 
-TupleType(name, fields, types, protos) ::= <<
-private class <name> implements boa.runtime.Tuple, java.io.Serializable
+TupleType(name, fields, types, protos, enums) ::= <<
+public static class <name> implements boa.runtime.Tuple, java.io.Serializable
 {	
 	<name>(){}
 	
 	<fields,types:{field,type|<type> ___<field>;}; separator="\n">
 
 	<name>(<fields,types:{field,type|<type> ___<field>}; separator=", ">) {
-		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = ___<field>;<else>this.___<field> = new <type>(___<field>);<endif>}; separator="\n">
+		<fields,types,protos,enums:{field,type,proto,enum|<if(proto)>this.___<field> = ___<field>;<elseif(enum)>this.___<field> = ___<field>;<else>this.___<field> = new <type>(___<field>);<endif>}; separator="\n">
 	}
+	
 	<name>(<name> tmp) {
-		<fields,types,protos:{field,type,proto|<if(proto)> this.___<field> = tmp.___<field>;<else> this.___<field> = new <type>(tmp.___<field>);<endif>}; separator="\n">
+		<fields,types,protos,enums:{field,type,proto,enum|<if(proto)> this.___<field> = tmp.___<field>;<elseif(enum)> this.___<field> = tmp.___<field>;<else> this.___<field> = new <type>(tmp.___<field>);<endif>}; separator="\n">
 	}
 
 	public <name> clone() {

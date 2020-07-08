@@ -1,0 +1,8 @@
+type T = enum {y = "true", n = "false"};
+p: Project = input;
+predict: output collection of string;
+la: model of LWL of {int, int, T};
+la = load(0, la);
+x1 := 1;
+x2 := 2;
+predict << classify(la, {x1, x2});

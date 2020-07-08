@@ -1,0 +1,12 @@
+p: Project = input;
+
+gp : output gaussianprocesses("-s 75") of {int, int, int};
+i := 0;
+while(i < 100){
+	x1 := 2 + 6 * i;
+	x2 := 3 + 5 * i;
+	y  := 4 + 2 * i;
+	gp << { x1, x2, y };
+	
+	i++;
+}

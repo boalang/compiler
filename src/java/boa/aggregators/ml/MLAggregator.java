@@ -17,8 +17,6 @@
 package boa.aggregators.ml;
 
 import boa.aggregators.Aggregator;
-import boa.aggregators.FinishedException;
-import boa.compiler.ast.statements.EmitStatement;
 import boa.datagen.DefaultProperties;
 import boa.runtime.Tuple;
 
@@ -32,6 +30,8 @@ import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapreduce.JobContext;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
+import weka.clusterers.ClusterEvaluation;
+import weka.clusterers.Clusterer;
 import weka.core.*;
 import weka.filters.Filter;
 
@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A Boa ML aggregator to train models.
@@ -47,59 +48,71 @@ import java.util.ArrayList;
  * @author ankuraga
  */
 public abstract class MLAggregator extends Aggregator {
-	protected final ArrayList<Attribute> fvAttributes;
+	protected ArrayList<Attribute> fvAttributes;
 	protected Instances unFilteredInstances;
-	protected ArrayList<String> vector;
+	protected int trainingPerc;
 	protected Instances trainingSet;
 	protected Instances testingSet;
 	protected int NumOfAttributes;
 	protected String[] options;
 	protected boolean flag;
-	protected int count;
-	private int vectorSize;
-	private String mlarg;
-
+	protected boolean isClusterer;
+	protected ArrayList<String> nominalAttr;
 
 	public MLAggregator() {
-		this.fvAttributes = new ArrayList<Attribute>();
-		this.vector = new ArrayList<String>();
+		fvAttributes = new ArrayList<Attribute>();
+		nominalAttr = new ArrayList<String>();
+		trainingPerc = 100;
 	}
 
 	public MLAggregator(final String s) {
-		this.mlarg = s;
-		this.fvAttributes = new ArrayList<Attribute>();
-		this.vector = new ArrayList<String>();
+		this();
 		try {
-			options = Utils.splitOptions(s);
+			options = handleNonWekaOptions(Utils.splitOptions(s));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	// this function is used to handle non-weka options (-s: split)
+	private String[] handleNonWekaOptions(String[] opts) {
+		List<String> others = new ArrayList<>();
+		for (int i = 0; i < opts.length; i++) {
+			String cur = opts[i];
+			if (cur.equals("-s"))
+				trainingPerc = Integer.parseInt(opts[++i]);
+			else
+				others.add(opts[i]);
+		}
+		return others.toArray(new String[0]);
 	}
 
 	public void evaluate(Classifier model, Instances set) {
 		try {
 			Evaluation eval = new Evaluation(set);
 			eval.evaluateModel(model, set);
-			String name = set == trainingSet ? "Training" : "Testing";
-			this.collect(eval.toSummaryString("\n" + name + "Set Evaluation:\n", false));
-//			System.out.println("Correct % = " + eval.pctCorrect());
-//			System.out.println("Incorrect % = " + eval.pctIncorrect());
-//			System.out.println("AUC % = " + eval.areaUnderROC(1));
-//			System.out.println("Kappa % = " + eval.kappa());
-//			System.out.println("MAE % = " + eval.meanAbsoluteError());
-//			System.out.println("RMSE % = " + eval.rootMeanSquaredError());
-//			System.out.println("RAE % = " + eval.relativeAbsoluteError());
-//			System.out.println("RRSE % = " + eval.rootRelativeSquaredError());
-//			System.out.println("Precision = " + eval.precision(1));
-//			System.out.println("Recall = " + eval.recall(1));
-//			System.out.println("fMeasure = " + eval.fMeasure(1));
-//			System.out.println("Error Rate = " + eval.errorRate());
+			String setName = set == trainingSet ? "Training" : "Testing";
+			collect(eval.toSummaryString("\n" + setName + "Set Evaluation:\n", false));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void saveTrainingSet(Object trainingSet) {
+	public void evaluate(Clusterer clusterer, Instances set) {
+		try {
+			ClusterEvaluation eval = new ClusterEvaluation();
+			eval.setClusterer(clusterer);
+			set.setClassIndex(set.numAttributes() - 1);
+			eval.evaluateClusterer(set);
+			String setName = set == trainingSet ? "Training" : "Testing";
+			collect("\n" + setName + "Set Evaluation:\n" + eval.clusterResultsToString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// TODO: this is not fixed
+	public void saveTrainingSet(Object set) {
 		FSDataOutputStream out = null;
 		FileSystem fileSystem = null;
 		Path filePath = null;
@@ -113,42 +126,44 @@ public abstract class MLAggregator extends Aggregator {
 			Path outputPath = FileOutputFormat.getOutputPath(job);
 			fileSystem = outputPath.getFileSystem(context.getConfiguration());
 			String output = null;
-			String subpath = "_" + this.trainingSet.attribute(0).name()+ "_";
+			String subpath = "_" + trainingSet.attribute(0).name() + "_";
 			if (DefaultProperties.localOutput != null)
 				output = DefaultProperties.localOutput;
 			else
 				output = configuration.get("fs.default.name", "hdfs://boa-njt/");
-			for (int i = 1; i < NumOfAttributes; i ++) {
-				//System.out.println(this.trainingSet.attribute(0).name());
-				subpath += "_" + this.trainingSet.attribute(i).name() + "_" ;
+			for (int i = 1; i < NumOfAttributes; i++) {
+				// System.out.println(trainingSet.attribute(0).name());
+				subpath += "_" + trainingSet.attribute(i).name() + "_";
 			}
 			fileSystem.mkdirs(new Path(output, new Path("/model" + boaJobId)));
-			filePath = new Path(output, new Path("/model" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + subpath + "data")));
+			filePath = new Path(output,
+					new Path("/model" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + subpath + "data")));
 
 			if (fileSystem.exists(filePath))
 				return;
-			
+
 			out = fileSystem.create(filePath);
 
 			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
 			objectOut = new ObjectOutputStream(byteOutStream);
-			objectOut.writeObject(trainingSet);
+			objectOut.writeObject(set);
 			byte[] serializedObject = byteOutStream.toByteArray();
-
 			out.write(serializedObject);
 
-			this.collect(filePath.toString());
+			collect(filePath.toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (out != null) out.close();
-				if (objectOut != null) objectOut.close();
+				if (out != null)
+					out.close();
+				if (objectOut != null)
+					objectOut.close();
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}
-		}	
+		}
 	}
 
 	public void saveModel(Object model) {
@@ -156,50 +171,52 @@ public abstract class MLAggregator extends Aggregator {
 		FileSystem fileSystem = null;
 		Path filePath = null;
 		ObjectOutputStream objectOut = null;
-		EmitStatement n = null;
 
 		try {
 			JobContext context = (JobContext) getContext();
 			Configuration conf = context.getConfiguration();
 			int boaJobId = conf.getInt("boa.hadoop.jobid", 0);
 			JobConf job = new JobConf(conf);
-			Path outputPath = FileOutputFormat.getOutputPath(job);	
+			Path outputPath = FileOutputFormat.getOutputPath(job);
 			fileSystem = outputPath.getFileSystem(context.getConfiguration());
-			String output = DefaultProperties.localOutput != null ? new Path(DefaultProperties.localOutput).toString() + "/../"
+			String output = DefaultProperties.localOutput != null
+					? new Path(DefaultProperties.localOutput).toString() + "/../"
 					: conf.get("fs.default.name", "hdfs://boa-njt/");
 			fileSystem.mkdirs(getModelDirPath(output, boaJobId));
-			filePath = getModelFilePath(output, boaJobId, this.getKey().getName());
+			filePath = getModelFilePath(output, boaJobId, getKey().getName());
 
-			if (fileSystem.exists(filePath))
-				return;
+			// delete previous model
+			if (fileSystem.exists(filePath)) {
+				fileSystem.delete(filePath, true);
+				System.out.println("deleted previous model");
+			}
 
+			// serialize the model and write to the path 
 			out = fileSystem.create(filePath);
-
 			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
 			objectOut = new ObjectOutputStream(byteOutStream);
 			objectOut.writeObject(model);
-			byte[] serializedObject = byteOutStream.toByteArray();
+			out.write(byteOutStream.toByteArray());
 
-			out.write(serializedObject);
-			
-			this.collect(filePath.toString());
-
+			collect("Model is saved to: " + filePath.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (out != null) out.close();
-				if (objectOut != null) objectOut.close();
+				if (out != null)
+					out.close();
+				if (objectOut != null)
+					objectOut.close();
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	public static Path getModelDirPath(String output, int boaJobId) {
 		return new Path(output, new Path("model/job_" + boaJobId));
 	}
-	
+
 	public static Path getModelFilePath(String output, int boaJobId, String modelVar) {
 		return new Path(getModelDirPath(output, boaJobId), new Path(modelVar + ".model"));
 	}
@@ -219,14 +236,11 @@ public abstract class MLAggregator extends Aggregator {
 		unFilteredInstances.delete();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */	
-	@Override
-	public abstract void aggregate(final String data, final String metadata) throws NumberFormatException, IOException, InterruptedException;
-
+	// create attributes with tuple input data
 	protected void attributeCreation(Tuple data, final String name) {
-		this.fvAttributes.clear();
+		if (flag == true)
+			return;
+		fvAttributes.clear();
 		try {
 			String[] fieldNames = data.getFieldNames();
 			int count = 0;
@@ -235,122 +249,114 @@ public abstract class MLAggregator extends Aggregator {
 					ArrayList<String> fvNominalVal = new ArrayList<String>();
 					for (Object obj : data.getValue(fieldNames[i]).getClass().getEnumConstants())
 						fvNominalVal.add(obj.toString());
-					this.fvAttributes.add(new Attribute("Nominal" + count, fvNominalVal));
+					fvAttributes.add(new Attribute("Nominal" + count, fvNominalVal));
 					count++;
 				} else if (data.getValue(fieldNames[i]).getClass().isArray()) {
 					int l = Array.getLength(data.getValue(fieldNames[i])) - 1;
 					for (int j = 0; j <= l; j++) {
-						this.fvAttributes.add(new Attribute("Attribute" + count));
+						fvAttributes.add(new Attribute("Attribute" + count));
 						count++;
 					}
 				} else {
-					this.fvAttributes.add(new Attribute("Attribute" + count));
+					fvAttributes.add(new Attribute("Attribute" + count));
 					count++;
 				}
 			}
-			this.NumOfAttributes = count;
-			this.flag = true;
-			this.trainingSet = new Instances(name, this.fvAttributes, 1);
-			this.trainingSet.setClassIndex(this.NumOfAttributes - 1);
-			this.testingSet = new Instances(name, this.fvAttributes, 1);
-			this.testingSet.setClassIndex(this.NumOfAttributes - 1);
+			NumOfAttributes = count; // use NumOfAttributes for tuple data
+			flag = true;
+			trainingSet = new Instances(name, fvAttributes, 1);
+			testingSet = new Instances(name, fvAttributes, 1);
+			if (!isClusterer) {
+				trainingSet.setClassIndex(NumOfAttributes - 1);
+				testingSet.setClassIndex(NumOfAttributes - 1);				
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	protected void instanceCreation(ArrayList<String> data, Instances set) {
+	// create instance this tuple input data
+	private void instanceCreation(Tuple data, Instances set) {
 		try {
-			Instance instance = new DenseInstance(this.NumOfAttributes);
-			for (int i = 0; i < this.NumOfAttributes; i++)
-				instance.setValue((Attribute) this.fvAttributes.get(i), Double.parseDouble(data.get(i)));
+			int count = 0;
+			Instance instance = new DenseInstance(NumOfAttributes);
+			String[] fieldNames = data.getFieldNames();
+			for (int i = 0; i < fieldNames.length; i++) {
+				if (data.getValue(fieldNames[i]).getClass().isEnum()) {
+					instance.setValue(fvAttributes.get(count), String.valueOf(data.getValue(fieldNames[i])));
+					count++;
+				} else if (data.getValue(fieldNames[i]).getClass().isArray()) {
+					int x = Array.getLength(data.getValue(fieldNames[i])) - 1;
+					Object o = data.getValue(fieldNames[i]);
+					for (int j = 0; j <= x; j++) {
+						instance.setValue(fvAttributes.get(count), Double.parseDouble(String.valueOf(Array.get(o, j))));
+						count++;
+					}
+				} else {
+					if (NumberUtils.isNumber(String.valueOf(data.getValue(fieldNames[i]))))
+						instance.setValue(fvAttributes.get(count),
+								Double.parseDouble(String.valueOf(data.getValue(fieldNames[i]))));
+					else
+						instance.setValue(fvAttributes.get(count), String.valueOf(data.getValue(fieldNames[i])));
+					count++;
+				}
+			}
 			set.add(instance);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	protected void instanceCreation(Tuple data) {
-		try {
-			int count = 0;
-			Instance instance = new DenseInstance(this.NumOfAttributes);
-			String[] fieldNames = data.getFieldNames();
-			for (int i = 0; i < fieldNames.length; i++) {
-				if (data.getValue(fieldNames[i]).getClass().isEnum()) {
-					instance.setValue((Attribute) this.fvAttributes.get(count), String.valueOf(data.getValue(fieldNames[i])));
-					count++;
-				} else if (data.getValue(fieldNames[i]).getClass().isArray()) {
-					int x = Array.getLength(data.getValue(fieldNames[i])) - 1;
-					Object o = data.getValue(fieldNames[i]);
-					for (int j = 0; j <= x; j++) {
-						instance.setValue((Attribute) this.fvAttributes.get(count), Double.parseDouble(String.valueOf(Array.get(o, j))));
-						count++;
-					}
-				} else {	
-					if (NumberUtils.isNumber(String.valueOf(data.getValue(fieldNames[i]))))
-						instance.setValue((Attribute) this.fvAttributes.get(count), Double.parseDouble(String.valueOf(data.getValue(fieldNames[i]))));
-					else
-						instance.setValue((Attribute) this.fvAttributes.get(count), String.valueOf(data.getValue(fieldNames[i])));
-					count++;
-				}
-			}
-			trainingSet.add(instance);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	protected void attributeCreation(String name) {
+	// create attributes with string[] input data
+	private void attributeCreation(String[] data, String name) {
+		if (flag == true)
+			return;
 		fvAttributes.clear();
-		NumOfAttributes = this.getVectorSize() - 1;
 		try {
-			for (int i = 0; i < NumOfAttributes; i++)
+			for (int i = 0; i < data.length; i++)
 				fvAttributes.add(new Attribute("Attribute" + i));
-			this.flag = true;
 			trainingSet = new Instances(name, fvAttributes, 1);
-			trainingSet.setClassIndex(NumOfAttributes - 1);
 			testingSet = new Instances(name, fvAttributes, 1);
-			testingSet.setClassIndex(NumOfAttributes - 1);
+			if (!isClusterer) {
+				trainingSet.setClassIndex(data.length - 1); // use data length for String[] data
+				testingSet.setClassIndex(data.length - 1);				
+			}
+			flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	protected void aggregate(final String data, final String metadata, String name) throws IOException, InterruptedException {
-		
-		if (this.count < this.getVectorSize() - 1)
-        	this.vector.add(data);
-		
-		count++;
-
-        if (this.count == this.getVectorSize()) {
-        	if (this.flag != true)
-            	attributeCreation(name);
-        	Instances set = data.equals("1") ? trainingSet : testingSet;
-            instanceCreation(this.vector, set);
-            this.vector = new ArrayList<String>();
-            this.count = 0;
-        }
-    }
-
-    protected void aggregate(final Tuple data, final String metadata, String name) throws IOException, InterruptedException {
-    	if (this.flag != true)
-        	attributeCreation(data, name);
-        instanceCreation(data);
-    }
-
-	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException, FinishedException, IllegalAccessException {	
+	// create instance this string[] input data
+	private void instanceCreation(String[] data, Instances set) {
+		try {
+			Instance instance = new DenseInstance(data.length);
+			for (int i = 0; i < data.length; i++)
+				instance.setValue(fvAttributes.get(i), Double.parseDouble(data[i]));
+			set.add(instance);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	public void aggregate(final Tuple data) throws IOException, InterruptedException, FinishedException, IllegalAccessException {
-		this.aggregate(data, null);
-	}
-	
-	public int getVectorSize() {
-		return this.vectorSize;
+	protected void aggregate(final String[] data, final String metadata, String name)
+			throws IOException, InterruptedException {
+		attributeCreation(data, name);
+		instanceCreation(data, isTrainData() ? trainingSet : testingSet);
 	}
 
-	public void setVectorSize(int vectorSize) {
-		this.vectorSize = vectorSize;
+	protected void aggregate(final Tuple data, final String metadata, String name)
+			throws IOException, InterruptedException {
+		attributeCreation(data, name);
+		instanceCreation(data, isTrainData() ? trainingSet : testingSet);
 	}
+
+	private boolean isTrainData() {
+		return Math.random() > (1 - trainingPerc / 100.0);
+	}
+
+	public abstract void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException;
+
+	public abstract void aggregate(final String[] data, final String metadata) throws IOException, InterruptedException;
+
 }

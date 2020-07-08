@@ -40,7 +40,6 @@ import boa.runtime.Tuple;
 public class EmitValue implements Writable {
 	private String[] data;
 	private String metadata;
-	private String[] odata;
 	private Tuple tdata;
 
 	/**
@@ -53,10 +52,8 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            An array of {@link String} containing the data to be emitted
-	 * @param metadata
-	 *            A {@link String} containing the metadata to be emitted
+	 * @param data     An array of {@link String} containing the data to be emitted
+	 * @param metadata A {@link String} containing the metadata to be emitted
 	 */
 	public EmitValue(final String[] data, final String metadata) {
 		this.data = data;
@@ -66,8 +63,7 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            An array of {@link String} containing the data to be emitted
+	 * @param data An array of {@link String} containing the data to be emitted
 	 */
 	public EmitValue(final String[] data) {
 		this(data, null);
@@ -76,10 +72,8 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            An array of {@link Object} containing the data to be emitted
-	 * @param metadata
-	 *            A {@link String} containing the metadata to be emitted
+	 * @param data     An array of {@link Object} containing the data to be emitted
+	 * @param metadata A {@link String} containing the metadata to be emitted
 	 */
 	public EmitValue(final Object[] data, final String metadata) {
 		final String[] strings = new String[data.length];
@@ -94,8 +88,7 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            An array of {@link String} containing the data to be emitted
+	 * @param data An array of {@link String} containing the data to be emitted
 	 */
 	public EmitValue(final Object[] data) {
 		this(data, null);
@@ -104,8 +97,7 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A {@link String} containing the data to be emitted
+	 * @param data A {@link String} containing the data to be emitted
 	 */
 	public EmitValue(final String data) {
 		this(new String[] { data }, null);
@@ -114,10 +106,8 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A {@link String} containing the data to be emitted
-	 * @param metadata
-	 *            A {@link String} containing the metadata to be emitted
+	 * @param data     A {@link String} containing the data to be emitted
+	 * @param metadata A {@link String} containing the metadata to be emitted
 	 */
 	public EmitValue(final String data, final String metadata) {
 		this(new String[] { data }, metadata);
@@ -126,10 +116,8 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A {@link String} containing the data to be emitted
-	 * @param metadata
-	 *            A long representing the metadata to be emitted
+	 * @param data     A {@link String} containing the data to be emitted
+	 * @param metadata A long representing the metadata to be emitted
 	 */
 	public EmitValue(final String data, final long metadata) {
 		this(new String[] { data }, BoaCasts.longToString(metadata));
@@ -138,10 +126,8 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A {@link String} containing the data to be emitted
-	 * @param metadata
-	 *            A double representing the metadata to be emitted
+	 * @param data     A {@link String} containing the data to be emitted
+	 * @param metadata A double representing the metadata to be emitted
 	 */
 	public EmitValue(final String data, final double metadata) {
 		this(new String[] { data }, BoaCasts.doubleToString(metadata));
@@ -150,8 +136,7 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A long representing the data to be emitted
+	 * @param data A long representing the data to be emitted
 	 */
 	public EmitValue(final long data) {
 		this(new String[] { BoaCasts.longToString(data) }, null);
@@ -160,10 +145,8 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A long representing the data to be emitted
-	 * @param metadata
-	 *            A {@link String} containing the metadata to be emitted
+	 * @param data     A long representing the data to be emitted
+	 * @param metadata A {@link String} containing the metadata to be emitted
 	 */
 	public EmitValue(final long data, final String metadata) {
 		this(new String[] { BoaCasts.longToString(data) }, metadata);
@@ -172,10 +155,8 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A long representing the data to be emitted
-	 * @param metadata
-	 *            A long representing the metadata to be emitted
+	 * @param data     A long representing the data to be emitted
+	 * @param metadata A long representing the metadata to be emitted
 	 */
 	public EmitValue(final long data, final long metadata) {
 		this(new String[] { BoaCasts.longToString(data) }, BoaCasts.longToString(metadata));
@@ -184,10 +165,8 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A long representing the data to be emitted
-	 * @param metadata
-	 *            A double representing the metadata to be emitted
+	 * @param data     A long representing the data to be emitted
+	 * @param metadata A double representing the metadata to be emitted
 	 */
 	public EmitValue(final long data, final double metadata) {
 		this(new String[] { BoaCasts.longToString(data) }, BoaCasts.doubleToString(metadata));
@@ -196,8 +175,7 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A double representing the data to be emitted
+	 * @param data A double representing the data to be emitted
 	 */
 	public EmitValue(final double data) {
 		this(new String[] { BoaCasts.doubleToString(data) }, null);
@@ -206,10 +184,8 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A double representing the data to be emitted
-	 * @param metadata
-	 *            A {@link String} containing the metadata to be emitted
+	 * @param data     A double representing the data to be emitted
+	 * @param metadata A {@link String} containing the metadata to be emitted
 	 */
 	public EmitValue(final double data, final String metadata) {
 		this(new String[] { BoaCasts.doubleToString(data) }, metadata);
@@ -218,10 +194,8 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A double representing the data to be emitted
-	 * @param metadata
-	 *            A long representing the metadata to be emitted
+	 * @param data     A double representing the data to be emitted
+	 * @param metadata A long representing the metadata to be emitted
 	 */
 	public EmitValue(final double data, final long metadata) {
 		this(new String[] { BoaCasts.doubleToString(data) }, BoaCasts.longToString(metadata));
@@ -230,10 +204,8 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A double representing the data to be emitted
-	 * @param metadata
-	 *            A double representing the metadata to be emitted
+	 * @param data     A double representing the data to be emitted
+	 * @param metadata A double representing the metadata to be emitted
 	 */
 	public EmitValue(final double data, final double metadata) {
 		this(new String[] { BoaCasts.doubleToString(data) }, BoaCasts.doubleToString(metadata));
@@ -242,8 +214,7 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A boolean representing the data to be emitted
+	 * @param data A boolean representing the data to be emitted
 	 */
 	public EmitValue(final boolean data) {
 		this(new String[] { BoaCasts.booleanToString(data) }, null);
@@ -252,10 +223,8 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A boolean representing the data to be emitted
-	 * @param metadata
-	 *            A {@link String} containing the metadata to be emitted
+	 * @param data     A boolean representing the data to be emitted
+	 * @param metadata A {@link String} containing the metadata to be emitted
 	 */
 	public EmitValue(final boolean data, final String metadata) {
 		this(new String[] { BoaCasts.booleanToString(data) }, metadata);
@@ -264,10 +233,8 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A boolean representing the data to be emitted
-	 * @param metadata
-	 *            A long representing the metadata to be emitted
+	 * @param data     A boolean representing the data to be emitted
+	 * @param metadata A long representing the metadata to be emitted
 	 */
 	public EmitValue(final boolean data, final long metadata) {
 		this(new String[] { BoaCasts.booleanToString(data) }, BoaCasts.longToString(metadata));
@@ -276,45 +243,37 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A boolean representing the data to be emitted
-	 * @param metadata
-	 *            A double representing the metadata to be emitted
+	 * @param data     A boolean representing the data to be emitted
+	 * @param metadata A double representing the metadata to be emitted
 	 */
 	public EmitValue(final boolean data, final double metadata) {
 		this(new String[] { BoaCasts.booleanToString(data) }, BoaCasts.doubleToString(metadata));
 	}
-	
+
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A {@link Tuple} containing the data to be emitted
-	 * @param metadata
-	 *            A {@link String} containing the metadata to be emitted
+	 * @param data     A {@link Tuple} containing the data to be emitted
+	 * @param metadata A {@link String} containing the metadata to be emitted
 	 */
 	public EmitValue(final Tuple data, final String metadata) {
 		this.tdata = data;
 	}
-	
+
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            A {@link Tuple} containing the data to be emitted
+	 * @param data A {@link Tuple} containing the data to be emitted
 	 */
 	public EmitValue(final Tuple data) {
 		this(data, null);
 	}
-	
-	
+
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            An array of {@link double} containing the data to be emitted
-	 * @param metadata
-	 *            A {@link String} containing the metadata to be emitted
+	 * @param data     An array of {@link double} containing the data to be emitted
+	 * @param metadata A {@link String} containing the metadata to be emitted
 	 */
 	public EmitValue(final double[] data, final String metadata) {
 		final String[] strings = new String[data.length];
@@ -325,33 +284,26 @@ public class EmitValue implements Writable {
 		this.data = strings;
 		this.metadata = metadata;
 	}
-	
+
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            An array of {@link double} containing the data to be emitted
+	 * @param data An array of {@link double} containing the data to be emitted
 	 */
 	public EmitValue(final double[] data) {
 		this(data, null);
 	}
 
-
-	
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            An array of {@link long} containing the data to be emitted
-	 * @param metadata
-	 *            A {@link String} containing the metadata to be emitted
+	 * @param data     An array of {@link long} containing the data to be emitted
+	 * @param metadata A {@link String} containing the metadata to be emitted
 	 */
 	public EmitValue(final long[] data, final String metadata) {
 		final String[] strings = new String[data.length];
-
 		for (int i = 0; i < data.length; i++)
 			strings[i] = String.valueOf(data[i]);
-
 		this.data = strings;
 		this.metadata = metadata;
 	}
@@ -359,8 +311,7 @@ public class EmitValue implements Writable {
 	/**
 	 * Construct an EmitValue.
 	 * 
-	 * @param data
-	 *            An array of {@link long} containing the data to be emitted
+	 * @param data An array of {@link long} containing the data to be emitted
 	 */
 	public EmitValue(final long[] data) {
 		this(data, null);
@@ -369,54 +320,62 @@ public class EmitValue implements Writable {
 	/** {@inheritDoc} */
 	@Override
 	public void readFields(final DataInput in) throws IOException {
-		final int count = in.readInt();
 
-		this.data = new String[count];
-		for (int i = 0; i < count; i++)
-			this.data[i] = Text.readString(in);
+		final char type = in.readChar();
+		if (type == 'S') {
+			final int count = in.readInt();
+			this.data = new String[count];
+			for (int i = 0; i < count; i++)
+				this.data[i] = Text.readString(in);
+		} else {
+			final int length = in.readInt();
+			if (length > 0) {
+				byte[] bytes = new byte[length];
+				in.readFully(bytes, 0, length);
+				ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
+				ObjectInputStream dataIn = new ObjectInputStream(bin);
+				Object o = null;
+				try {
+					o = dataIn.readObject();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				this.tdata = (Tuple) o;
+			}
+		}
 
+		// read metadata
 		final String metadata = Text.readString(in);
 		if (metadata.equals(""))
 			this.metadata = null;
 		else
 			this.metadata = metadata;
-		
-		final int length = in.readInt();
-		if(length > 0) {
-			byte[] bytes = new byte[length];
-			in.readFully(bytes, 0, length);			
-			ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
-			ObjectInputStream dataIn = new ObjectInputStream(bin);
-			Object o = null;
-			try {
-				o = dataIn.readObject(); 
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-			this.tdata = (Tuple)o;
-		}
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void write(final DataOutput out) throws IOException {
-		out.writeInt(this.data.length);
+		// write string[] data
+		if (this.data != null) {
+			out.writeChar('S'); // set date type S
+			out.writeInt(this.data.length);
+			for (final String d : this.data)
+				Text.writeString(out, d);
+		}
 
-		for (final String d : this.data)
-			Text.writeString(out, d);
+		// write tuple data
+		if (this.tdata != null) {
+			out.writeChar('T'); // set date type T
+			byte[] serializedObject = this.tdata.serialize(this.tdata);
+			out.writeInt(serializedObject.length);
+			out.write(serializedObject);
+		}
 
+		// write metadata
 		if (this.metadata == null)
 			Text.writeString(out, "");
 		else
 			Text.writeString(out, this.metadata);
-		
-		if (this.tdata == null)
-			out.writeInt(0);
-		else {
-			byte[] serializedObject = this.tdata.serialize(this.tdata);
-			out.writeInt(serializedObject.length);
-			out.write(serializedObject); 
-		}
 	}
 
 	/**
@@ -427,8 +386,7 @@ public class EmitValue implements Writable {
 	}
 
 	/**
-	 * @param data
-	 *            the data to set
+	 * @param data the data to set
 	 */
 	public void setData(final String[] data) {
 		this.data = data;
@@ -442,13 +400,12 @@ public class EmitValue implements Writable {
 	}
 
 	/**
-	 * @param metadata
-	 *            the metadatum to set
+	 * @param metadata the metadatum to set
 	 */
 	public void setMetadata(final String metadata) {
 		this.metadata = metadata;
 	}
-	
+
 	public Tuple getTuple() {
 		return this.tdata;
 	}

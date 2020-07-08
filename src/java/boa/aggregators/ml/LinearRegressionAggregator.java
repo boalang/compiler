@@ -17,7 +17,6 @@
 package boa.aggregators.ml;
 
 import boa.aggregators.AggregatorSpec;
-import boa.aggregators.FinishedException;
 import boa.runtime.Tuple;
 import weka.classifiers.functions.LinearRegression;
 
@@ -28,12 +27,11 @@ import java.io.IOException;
  *
  * @author ankuraga
  */
-@AggregatorSpec(name = "linearregression", formalParameters = {"string"})
+@AggregatorSpec(name = "linearregression", formalParameters = { "string" })
 public class LinearRegressionAggregator extends MLAggregator {
 	private LinearRegression model;
 
 	public LinearRegressionAggregator() {
-		this.model = new LinearRegression();
 	}
 
 	public LinearRegressionAggregator(final String s) {
@@ -41,12 +39,17 @@ public class LinearRegressionAggregator extends MLAggregator {
 	}
 
 	@Override
-	public void aggregate(String data, String metadata) throws NumberFormatException, IOException, InterruptedException {
+	public void aggregate(String[] data, String metadata) throws IOException, InterruptedException {
 		aggregate(data, metadata, "LinearRegression");
 	}
 
-	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException, FinishedException, IllegalAccessException {
+	@Override
+	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
 		aggregate(data, metadata, "LinearRegression");
+	}
+
+	@Override
+	public void aggregate(String data, String metadata) throws IOException, InterruptedException {
 	}
 
 	/**
@@ -55,15 +58,16 @@ public class LinearRegressionAggregator extends MLAggregator {
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		try {
+			this.model = new LinearRegression();
+			this.model.setOptions(options);
 			this.model.buildClassifier(this.trainingSet);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("modeling done");
 		this.saveModel(this.model);
-		System.out.println("model saved");
 		this.evaluate(this.model, this.trainingSet);
 		this.evaluate(this.model, this.testingSet);
 		this.collect(this.model.toString());
 	}
+
 }

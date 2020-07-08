@@ -76,22 +76,24 @@ public abstract class AbstractCommit {
 	}
 
 	protected Map<String, Integer> fileNameIndices = new HashMap<String, Integer>();
-
 	protected List<ChangedFile.Builder> changedFiles = new ArrayList<ChangedFile.Builder>();
 
-	protected ChangedFile.Builder getChangeFile(String path) {
+	protected ChangedFile.Builder getChangedFile(String path, ChangeKind changeKind) {
 		ChangedFile.Builder cfb = null;
 		Integer index = fileNameIndices.get(path);
 		if (index == null) {
 			cfb = ChangedFile.newBuilder();
 			cfb.setName(path);
 			cfb.setKind(FileKind.OTHER);
+			cfb.setChange(changeKind);
 			cfb.setKey(0);
 			cfb.setAst(false);
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
-		} else
+		} else {
+			System.err.println("find redundant changed file during the update proccess");
 			cfb = changedFiles.get(index);
+		}
 		return cfb;
 	}
 
@@ -208,7 +210,7 @@ public abstract class AbstractCommit {
 		else if (lowerPath.endsWith(".java")) {
 			final String content = getFileContents(path);
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-			parseJavaFile(path, fb, content, false);
+			parseJavaFile(path, fb, content, false); // parse java file
 		} else if (lowerPath.endsWith(".js")) {
 			final String content = getFileContents(path);
 

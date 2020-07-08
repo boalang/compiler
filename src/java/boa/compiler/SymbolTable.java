@@ -28,8 +28,7 @@ import org.scannotation.AnnotationDB;
 import boa.aggregators.AggregatorSpec;
 import boa.functions.FunctionSpec;
 import boa.types.*;
-import boa.types.ml.BoaLinearRegression;
-import boa.types.ml.BoaModel;
+import boa.types.ml.*;
 import boa.types.proto.*;
 import boa.types.proto.enums.*;
 import boa.compiler.ast.Operand;
@@ -380,8 +379,46 @@ public class SymbolTable {
 		types.put("float", new BoaFloat());
 		types.put("time", new BoaTime());
 		types.put("string", new BoaString());
+		types.put("model", new BoaModel());
+		types.put("tuple", new BoaTuple());
+
 		types.put("LinearRegression", new BoaLinearRegression());
-		types.put("Model", new BoaModel());
+		types.put("AdaBoostM1", new BoaAdaBoostM1());
+		types.put("ZeroR", new BoaZeroR());
+		types.put("Vote", new BoaVote());
+		types.put("SMO", new BoaSMO());
+		types.put("SimpleKMeans", new BoaSimpleKMeans());
+		types.put("RandomForest", new BoaRandomForest());
+		types.put("AdditiveRegression", new BoaAdditiveRegression());
+		types.put("AttributeSelectedClassifier", new BoaAttributeSelectedClassifier());
+		types.put("PART", new BoaPART());
+		types.put("OneR", new BoaOneR());
+		types.put("NaiveBayesMultinomialUpdateable", new BoaNaiveBayesMultinomialUpdateable());
+		types.put("NaiveBayes", new BoaNaiveBayes());
+		types.put("MultiScheme", new BoaMultiScheme());
+		types.put("MultilayerPerceptron", new BoaMultilayerPerceptron());
+		types.put("MultiScheme", new BoaMultiScheme());
+		types.put("MultiClassClassifier", new BoaMultiClassClassifier());
+		types.put("MultilayerPerceptron", new BoaMultilayerPerceptron());
+		types.put("Bagging", new BoaBagging());
+		types.put("BayesNet", new BoaBayesNet());
+		types.put("ClassificationViaRegression", new BoaClassificationViaRegression());
+		types.put("LWL", new BoaLWL());
+		types.put("LogitBoost", new BoaLogitBoost());
+		types.put("LMT", new BoaLMT());
+		types.put("LogisticRegression", new BoaLogisticRegression());
+		types.put("J48", new BoaJ48());
+		types.put("JRip", new BoaJRip());
+		types.put("KStar", new BoaKStar());
+		types.put("CVParameterSelection", new BoaCVParameterSelection());
+		types.put("DecisionStump", new BoaDecisionStump());
+		types.put("DecisionTable", new BoaDecisionTable());
+		types.put("FilteredClassifier", new BoaFilteredClassifier());
+		types.put("GaussianProcesses", new BoaGaussianProcesses());
+		types.put("InputMappedClassifier", new BoaInputMappedClassifier());
+		types.put("Word2Vec", new BoaWord2Vec());
+		types.put("Seq2Vec", new BoaSequence2Vec());
+
 		for (final BoaType t : dslTupleTypes)
 			types.put(t.toString(), t);
 
@@ -600,7 +637,41 @@ public class SymbolTable {
 			boa.aggregators.VarianceAggregator.class,
 			boa.aggregators.PreconditionAggregator.class,
 			boa.aggregators.ml.LinearRegressionAggregator.class,
+			boa.aggregators.ml.AdaBoostM1Aggregator.class,
+			boa.aggregators.ml.ZeroRAggregator.class,
+			boa.aggregators.ml.VoteAggregator.class,
+			boa.aggregators.ml.SMOAggregator.class,
+			boa.aggregators.ml.SimpleKMeansAggregator.class,
+			boa.aggregators.ml.RandomForestAggregator.class,
+			boa.aggregators.ml.AdditiveRegressionAggregator.class,
+			boa.aggregators.ml.AttributeSelectedClassifierAggregator.class,
+			boa.aggregators.ml.PARTAggregator.class,
+			boa.aggregators.ml.OneRAggregator.class,
+			boa.aggregators.ml.NaiveBayesMultinomialUpdateableAggregator.class,
+			boa.aggregators.ml.NaiveBayesAggregator.class,
+			boa.aggregators.ml.MultiSchemeAggregator.class,
+			boa.aggregators.ml.MultiClassClassifierAggregator.class,
+			boa.aggregators.ml.MultilayerPerceptronAggregator.class,
+			boa.aggregators.ml.BaggingAggregator.class,
+			boa.aggregators.ml.BayesNetAggregator.class,
+			boa.aggregators.ml.ClassificationViaRegressionAggregator.class,
+			boa.aggregators.ml.LWLAggregator.class,
+			boa.aggregators.ml.LogitBoostAggregator.class,
+			boa.aggregators.ml.LMTAggregator.class,
+			boa.aggregators.ml.LogisticRegressionAggregator.class,
+			boa.aggregators.ml.J48Aggregator.class,
+			boa.aggregators.ml.KStarAggregator.class,
+			boa.aggregators.ml.JRipAggregator.class,
+			boa.aggregators.ml.CVParameterSelectionAggregator.class,
+			boa.aggregators.ml.DecisionStumpAggregator.class,
+			boa.aggregators.ml.DecisionTableAggregator.class,
+			boa.aggregators.ml.FilteredClassifierAggregator.class,
+			boa.aggregators.ml.GaussianProcessesAggregator.class,
+			boa.aggregators.ml.InputMappedClassifierAggregator.class,
+			boa.aggregators.ml.Word2VectorAggregator.class,
+			boa.aggregators.ml.Sequence2VectorAggregator.class
 		};
+
 		for (final Class<?> c : builtinAggs)
 			importAggregator(c);
 

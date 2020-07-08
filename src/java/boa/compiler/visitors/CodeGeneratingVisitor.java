@@ -278,17 +278,24 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 				final List<String> fields = new ArrayList<String>();
 				final List<String> types = new ArrayList<String>();
+				final List<Boolean> protos = new ArrayList<Boolean>();
+				final List<Boolean> enums = new ArrayList<Boolean>();
 
 				int counter = 0;
 				for (final Expression e : n.getExprs()) {
 					fields.add("f" + counter);
-					types.add(e.type.toBoxedJavaType());
+					BoaType type = e.type;
 					counter++;
+					types.add(type.toBoxedJavaType());
+					protos.add(type instanceof BoaProtoTuple);
+					enums.add(type instanceof BoaEnum);
 				}
 
 				st.add("name", name);
 				st.add("fields", fields);
 				st.add("types", types);
+				st.add("protos", protos);
+				st.add("enums", enums);
 
 				code.add(st.render());
 			}
@@ -313,6 +320,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final List<String> fields = new ArrayList<String>();
 			final List<String> types = new ArrayList<String>();
 			final List<Boolean> protos = new ArrayList<Boolean>();
+			final List<Boolean> enums = new ArrayList<Boolean>();
 
 			int fieldCount = 0;
 			for (final Component c : members) {
@@ -324,6 +332,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				fieldCount++;
 				BoaType type = c.getType().type;
 				protos.add(type instanceof BoaProtoTuple);
+				enums.add(type instanceof BoaEnum);
 				types.add(type.toBoxedJavaType());
 			}
 
@@ -331,6 +340,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("fields", fields);
 			st.add("types", types);
 			st.add("protos", protos);
+			st.add("enums", enums);
 
 			code.add(st.render());
 		}
@@ -1004,15 +1014,17 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			code.add(lhs.substring(0, idx - ".get(".length()) + ".put(" + lhs.substring(idx, lhs.lastIndexOf(')')) + ", " + rhs + lhs.substring(lhs.lastIndexOf(')')) + ";");
 			return;
 		}
-		
-		String typecast = "";
+
 		if (rhs.contains(".load(")) {
-			if (n.getLhs().type.toString() == "linearregression")
-				typecast = "boa.types.ml.BoaLinearRegression";
-			rhs = rhs.substring(0,rhs.length()-1) + ", new " +
-					((BoaModel)n.getLhs().type).getType().toJavaType() + "())";
-			rhs = "(" + (typecast + "").split("\\/")[0] + ")" + rhs;
+			Operand o = n.getLhs().getOperand();
+			if (o instanceof Identifier) {
+				String token = ((Identifier) o).getToken();
+				token = token.substring(0, token.lastIndexOf('_'));
+				rhs = rhs.substring(0,rhs.length()-1) + ", \"" + token + "\"" + ", \"" + n.getLhs().type.toJavaType() + "\"" +  ", new " + ((BoaModel)n.getLhs().type).getType().toJavaType() + "())";
+			}
+			rhs = "(" + (n.getLhs().type + "").split("\\/")[0] + ")" + rhs;
 		}
+
 		st.add("lhs", lhs);
 		st.add("operator", n.getOp());
 		st.add("rhs", rhs);
