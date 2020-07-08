@@ -76,6 +76,6 @@
 	<classpathentry kind="lib" path="compile"/>
 	<classpathentry kind="lib" path="lib/parse.python.jar"/>
 	<classpathentry kind="lib" path="lib/parse.python.antlr.runtime.jar"/>
-	<classpathentry kind="lib" path="/Users/sayem/Documents/compiler/lib/customized.dltk.core.jar"/>
+	<classpathentry kind="lib" path="lib/customized.dltk.core.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

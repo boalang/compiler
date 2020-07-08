@@ -8,5 +8,4 @@
 /junitvmwatcher*.properties
 .vscode/
 /src/antlr/.antlr
-*.DS_Store
-Query1.jar
+.DS_Store
