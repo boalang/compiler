@@ -69,6 +69,7 @@ import boa.types.Toplevel.Project;
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	static Context context;
+	private static int curMapSuffix = -1; // only used if the dataset contains multiple ast maps
 	private static MapFile.Reader map, commentsMap, issuesMap;
 
 	private static final Revision emptyRevision;
@@ -126,8 +127,13 @@ public class BoaAstIntrinsics {
 
 		context.getCounter(ASTCOUNTER.GETS_ATTEMPTED).increment(1);
 
-		if (map == null)
-			openMap();
+		// current open map is null OR current ast key doesn't match the one of the chagned file 
+		if (map == null || (curMapSuffix != -1 && curMapSuffix != f.getAstKey())) {
+			if (!f.hasAstKey())
+				openMap();
+			else
+				openMap(f.getAstKey());
+		}
 
 		try {
 			final BytesWritable value = new BytesWritable();
@@ -297,6 +303,31 @@ public class BoaAstIntrinsics {
 				fs = FileSystem.get(conf);
 			}
 			map = new MapFile.Reader(fs, p.toString(), conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void openMap(int mapSuffix) {
+		try {
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localDataPath, "ast/map" + mapSuffix);
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(
+					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+					new Path(
+						conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")),
+						new Path("ast/map" + mapSuffix)
+					)
+				);
+				fs = FileSystem.get(conf);
+			}
+			map = new MapFile.Reader(fs, p.toString(), conf);
+			curMapSuffix = mapSuffix;
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}

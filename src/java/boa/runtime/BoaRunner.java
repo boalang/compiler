@@ -80,6 +80,9 @@ public abstract class BoaRunner extends Configured implements Tool {
 		configuration.setBoolean("mapred.map.tasks.speculative.execution", false);
 		configuration.setBoolean("mapred.reduce.tasks.speculative.execution", false);
 		configuration.setLong("mapred.job.reuse.jvm.num.tasks", -1);
+		
+		// set map task timeout (24hrs * 3)
+		configuration.setLong("mapred.task.timeout", 86400000 * 3);
 
 		final Job job = new Job(configuration);
 
