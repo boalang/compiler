@@ -1,19 +1,13 @@
-package boa.datagen.treed;
+package boa.datagen.treed.python;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.ArrayCreation;
-import org.eclipse.jdt.core.dom.ArrayInitializer;
-import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.core.dom.InfixExpression;
-import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.SwitchStatement;
-import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
+
 
 public class TreedBuilder extends ASTVisitor implements TreedConstants {
 	private int index = 1;
@@ -33,77 +27,23 @@ public class TreedBuilder extends ASTVisitor implements TreedConstants {
 	}
 	
 	@Override
-	public void preVisit(ASTNode node) {
+	public boolean visitGeneral(ASTNode node) {
 		node.setProperty(PROPERTY_INDEX, index++);
 		tree.put(node, new ArrayList<ASTNode>());
 		if (node != root) {
 			ASTNode p = node.getParent();
 			treeDepth.put(node, treeDepth.get(p) + 1);
 		}
+		return true;
 	}
 	
 	@Override
-	public void postVisit(ASTNode node) {
+	public void endvisitGeneral(ASTNode node) {
 		buildTree(node);
 		buildTreeHeight(node);
 		buildVector(node);
 	}
 	
-	@Override
-	public boolean visit(ArrayCreation node) {
-		if (node.dimensions().size() > 10) {
-			node.getType().accept(this);
-			return false;
-		}
-		return super.visit(node);
-	}
-	
-	@Override
-	public boolean visit(ArrayInitializer node) {
-		if (node.expressions().size() > 10)
-			return false;
-		return super.visit(node);
-	}
-	
-	@Override
-	public boolean visit(Block node) {
-		if (node.statements().size() > 100)
-			return false;
-		return super.visit(node);
-	}
-	
-	@Override
-	public boolean visit(InfixExpression node) {
-		List<?> l = node.extendedOperands();
-		if (l != null && l.size() > 10 - 2)
-			return false;
-		return super.visit(node);
-	}
-	
-	@Override
-	public boolean visit(MethodInvocation node) {
-		if (node.arguments().size() > 100) {
-			if (node.getExpression() != null)
-				node.getExpression().accept(this);
-			if (node.typeArguments() != null && !node.typeArguments().isEmpty()) {
-				for (Iterator<?> it = node.typeArguments().iterator(); it.hasNext(); ) {
-					Type t = (Type) it.next();
-					t.accept(this);
-				}
-			}
-			node.getName().accept(this);
-			return false;
-		}
-		return super.visit(node);
-	}
-	
-	@Override
-	public boolean visit(SwitchStatement node) {
-		if (node.statements().size() > 100)
-			return false;
-		return super.visit(node);
-	}
-
 	public void buildTree(ASTNode node) {
 		if (node != root) {
 			ASTNode p = node.getParent();

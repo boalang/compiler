@@ -1,5 +1,6 @@
 syntax = "proto2";
 package boa.types;
+import "shared.proto";
 
 option optimize_for = SPEED;
 
@@ -248,6 +249,8 @@ message Statement {
 	repeated Variable variable_declarations = 14;
 	repeated Declaration type_declarations = 15;
 	repeated string names = 16;
+	
+	optional ChangeKind change = 17;
 }
 
 /** A single expression */

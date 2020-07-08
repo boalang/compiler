@@ -15,6 +15,8 @@ public final class TreedUtils {
 
 	public static char buildLabelForVector(ASTNode node) {
 		char label = (char) node.getNodeType();
+		System.out.println(node.toString());
+
 		if (node instanceof Expression) {
 			if (node.getClass().getSimpleName().endsWith("Literal")) {
 				return (char) (label | (node.toString().hashCode() << 7));

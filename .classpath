@@ -22,7 +22,6 @@
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.core.jobs_3.5.101.dist.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.core.resources_3.7.101.dist.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.core.runtime_3.7.0.dist.jar"/>
-	<classpathentry kind="lib" path="lib/datagen/org.eclipse.dltk.core_5.7.1.201703020501.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.equinox.common_3.6.0.dist.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.equinox.preferences_3.4.2.dist.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.jgit-4.0.1.201506240215-r.jar"/>
@@ -77,5 +76,6 @@
 	<classpathentry kind="lib" path="compile"/>
 	<classpathentry kind="lib" path="lib/parse.python.jar"/>
 	<classpathentry kind="lib" path="lib/parse.python.antlr.runtime.jar"/>
+	<classpathentry kind="lib" path="/Users/sayem/Documents/compiler/lib/customized.dltk.core.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

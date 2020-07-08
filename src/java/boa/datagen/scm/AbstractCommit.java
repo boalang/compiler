@@ -634,6 +634,7 @@ public abstract class AbstractCommit {
 //	}
 
 	boolean pythonParsingError;
+	
 
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
@@ -652,7 +653,7 @@ public abstract class AbstractCommit {
 		};
 		
 		// System.out.println("actual source: " + content);
-		PythonModuleDeclaration module;
+		PythonModuleDeclaration module;		
 
 		try {
 			module = (PythonModuleDeclaration) parser.parse(input, reporter);
@@ -665,9 +666,8 @@ public abstract class AbstractCommit {
 
 		if (true) {
 			final ASTRoot.Builder ast = ASTRoot.newBuilder();
-
 			NewPythonVisitor visitor = new NewPythonVisitor();
-
+			
 			try {
 				ast.addNamespaces(visitor.getNamespace(module, path));
 			} catch (final UnsupportedOperationException e) {
@@ -948,6 +948,7 @@ public abstract class AbstractCommit {
 				try {
 
 					ast.addNamespaces(visitor.getNamespaces(cu));
+
 
 //					for (final Comment c : visitor.getComments()) comments.addComments(c);
 

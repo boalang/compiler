@@ -139,6 +139,7 @@ public class BoaAstIntrinsics {
 				_stream.setRecursionLimit(Integer.MAX_VALUE);
 				final ASTRoot root = ASTRoot.parseFrom(_stream);
 				context.getCounter(ASTCOUNTER.GETS_SUCCEED).increment(1);
+			
 				return root;
 			}
 		} catch (final InvalidProtocolBufferException e) {

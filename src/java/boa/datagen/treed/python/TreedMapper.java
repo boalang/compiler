@@ -1,4 +1,4 @@
-package boa.datagen.treed;
+package boa.datagen.treed.python;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,38 +8,42 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
-import org.eclipse.jdt.core.dom.Assignment;
-import org.eclipse.jdt.core.dom.BreakStatement;
-import org.eclipse.jdt.core.dom.CatchClause;
-import org.eclipse.jdt.core.dom.ClassInstanceCreation;
-import org.eclipse.jdt.core.dom.ContinueStatement;
-import org.eclipse.jdt.core.dom.DoStatement;
-import org.eclipse.jdt.core.dom.EnhancedForStatement;
-import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
-import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.FieldDeclaration;
-import org.eclipse.jdt.core.dom.ForStatement;
-import org.eclipse.jdt.core.dom.InfixExpression;
-import org.eclipse.jdt.core.dom.Initializer;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.Modifier;
-import org.eclipse.jdt.core.dom.PostfixExpression;
-import org.eclipse.jdt.core.dom.PrefixExpression;
-import org.eclipse.jdt.core.dom.ReturnStatement;
-import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.Statement;
-import org.eclipse.jdt.core.dom.SuperMethodInvocation;
-import org.eclipse.jdt.core.dom.SynchronizedStatement;
-import org.eclipse.jdt.core.dom.ThrowStatement;
-import org.eclipse.jdt.core.dom.TryStatement;
-import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
-import org.eclipse.jdt.core.dom.WhileStatement;
-import boa.datagen.util.JavaASTUtil;
+import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.ast.declarations.MethodDeclaration;
+import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
+import org.eclipse.dltk.ast.declarations.TypeDeclaration;
+import org.eclipse.dltk.ast.expressions.Expression;
+import org.eclipse.dltk.ast.expressions.Literal;
+import org.eclipse.dltk.ast.statements.Block;
+import org.eclipse.dltk.ast.statements.Statement;
+import org.eclipse.dltk.python.parser.ast.PythonAssertStatement;
+import org.eclipse.dltk.python.parser.ast.PythonDelStatement;
+import org.eclipse.dltk.python.parser.ast.PythonExceptStatement;
+import org.eclipse.dltk.python.parser.ast.PythonForStatement;
+import org.eclipse.dltk.python.parser.ast.PythonImportStatement;
+import org.eclipse.dltk.python.parser.ast.PythonTryStatement;
+import org.eclipse.dltk.python.parser.ast.PythonWhileStatement;
+import org.eclipse.dltk.python.parser.ast.PythonWithStatement;
+import org.eclipse.dltk.python.parser.ast.PythonYieldStatement;
+import org.eclipse.dltk.python.parser.ast.expressions.Assignment;
+import org.eclipse.dltk.python.parser.ast.expressions.BinaryExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.CallHolder;
+import org.eclipse.dltk.python.parser.ast.expressions.IndexHolder;
+import org.eclipse.dltk.python.parser.ast.expressions.PrintExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonForListExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonLambdaExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonListForExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.UnaryExpression;
+import org.eclipse.dltk.python.parser.ast.statements.BreakStatement;
+import org.eclipse.dltk.python.parser.ast.statements.ContinueStatement;
+import org.eclipse.dltk.python.parser.ast.statements.ExecStatement;
+import org.eclipse.dltk.python.parser.ast.statements.GlobalStatement;
+import org.eclipse.dltk.python.parser.ast.statements.IfStatement;
+import org.eclipse.dltk.python.parser.ast.statements.ReturnStatement;
+import org.eclipse.dltk.python.parser.ast.statements.TryFinallyStatement;
+
 import boa.types.Shared.ChangeKind;
 
 public class TreedMapper implements TreedConstants {
@@ -76,7 +80,7 @@ public class TreedMapper implements TreedConstants {
 		return this.numOfNonNameUnMaps > 0;
 	}
 	
-	public void map() {
+	public void map() throws Exception {
 		buildTrees();
 		mapPivots();
 		mapBottomUp();
@@ -112,13 +116,13 @@ public class TreedMapper implements TreedConstants {
 		return true;
 	}
 
-	public void printChanges() {
+	public void printChanges() throws Exception {
 		printChanges(astM);
 		printChanges(astN);
 	}
 
-	private void printChanges(ASTNode node) {
-		node.accept(new ASTVisitor() {
+	private void printChanges(ASTNode node) throws Exception {
+		ASTVisitor visitor=(new ASTVisitor() {
 			private int indent = 0;
 			
 			private void printIndent() {
@@ -127,7 +131,7 @@ public class TreedMapper implements TreedConstants {
 			}
 			
 			@Override
-			public void preVisit(ASTNode node) {
+			public boolean visitGeneral(ASTNode node) {
 				printIndent();
 				ChangeKind status = (ChangeKind) node.getProperty(PROPERTY_STATUS);
 				System.out.print(TreedUtils.buildASTLabel(node) + ": " + status);
@@ -136,13 +140,15 @@ public class TreedMapper implements TreedConstants {
 					System.out.print(" " + TreedUtils.buildASTLabel(mn));
 				System.out.println();
 				indent++;
+				return true;
 			}
 			
 			@Override
-			public void postVisit(ASTNode node) {
+			public void endvisitGeneral(ASTNode node) {
 				indent--;
 			}
 		});
+		node.traverse(visitor);
 	}
 
 	private void markChanges() {
@@ -155,7 +161,7 @@ public class TreedMapper implements TreedConstants {
 			node.setProperty(PROPERTY_STATUS, ChangeKind.ADDED);
 			numOfChanges++;
 			numOfUnmaps++;
-			if (!(node instanceof SimpleName))
+			if (!(node instanceof Literal))
 				numOfNonNameUnMaps++;
 		}
 		ArrayList<ASTNode> children = tree.get(node);
@@ -169,7 +175,7 @@ public class TreedMapper implements TreedConstants {
 			node.setProperty(PROPERTY_STATUS, ChangeKind.DELETED);
 			numOfChanges++;
 			numOfUnmaps++;
-			if (!(node instanceof SimpleName) && !(node instanceof ReturnStatement) && !(node instanceof BreakStatement) && !(node instanceof ContinueStatement))
+			if (!(node instanceof Literal) && !(node instanceof ReturnStatement) && !(node instanceof BreakStatement) && !(node instanceof ContinueStatement))
 				numOfNonNameUnMaps++;
 		} else {
 			ASTNode mappedNode = maps.keySet().iterator().next();
@@ -438,30 +444,14 @@ public class TreedMapper implements TreedConstants {
 	private boolean labelMatch(ASTNode nodeM, ASTNode nodeN) {
 		if (nodeM.getNodeType() != nodeN.getNodeType())
 			return false;
-		if (nodeM instanceof Assignment)
-			return labelMatch((Assignment) nodeM, (Assignment) nodeN);
-		if (nodeM instanceof InfixExpression)
-			return labelMatch((InfixExpression) nodeM, (InfixExpression) nodeN);
-		if (nodeM instanceof PostfixExpression)
-			return labelMatch((PostfixExpression) nodeM, (PostfixExpression) nodeN);
-		if (nodeM instanceof PrefixExpression)
-			return labelMatch((PrefixExpression) nodeM, (PrefixExpression) nodeN);
+	
+		if (nodeM instanceof Expression)
+			return labelMatch((Expression) nodeM, (Expression) nodeN);
+		
 		return true;
 	}
 
-	private boolean labelMatch(Assignment nodeM, Assignment nodeN) {
-		return nodeM.getOperator().equals(nodeN.getOperator());
-	}
-
-	private boolean labelMatch(InfixExpression nodeM, InfixExpression nodeN) {
-		return nodeM.getOperator().equals(nodeN.getOperator());
-	}
-
-	private boolean labelMatch(PostfixExpression nodeM, PostfixExpression nodeN) {
-		return nodeM.getOperator().equals(nodeN.getOperator());
-	}
-
-	private boolean labelMatch(PrefixExpression nodeM, PrefixExpression nodeN) {
+	private boolean labelMatch(Expression nodeM, Expression nodeN) {
 		return nodeM.getOperator().equals(nodeN.getOperator());
 	}
 	
@@ -525,7 +515,7 @@ public class TreedMapper implements TreedConstants {
 				d = treeDepth.get(node1) - treeDepth.get(node2);
 				if (d != 0)
 					return d;
-				return node1.getStartPosition() - node2.getStartPosition();
+				return node1.start()- node2.start();
 			}
 		});
 		Set<ASTNode> visitedAncestorsM = new HashSet<ASTNode>(), visitedAncestorsN = new HashSet<ASTNode>();
@@ -552,7 +542,7 @@ public class TreedMapper implements TreedConstants {
 				double sim = computeSimilarity(nodeM, nodeN, threshold);
 				if (sim >= threshold) {
 					Pair pair = new Pair(nodeM, nodeN, sim, 
-							-Math.abs((nodeM.getParent().getStartPosition() - nodeM.getStartPosition()) - (nodeN.getParent().getStartPosition() - nodeN.getStartPosition())));
+							-Math.abs((nodeM.getParent().start() - nodeM.start()) - (nodeN.getParent().start() - nodeN.start())));
 					pairs1.add(pair);
 					HashSet<Pair> pairs2 = pairsOfAncestor.get(nodeN);
 					if (pairs2 == null)
@@ -606,22 +596,19 @@ public class TreedMapper implements TreedConstants {
 			return 0;
 		ArrayList<ASTNode> childrenM = tree.get(nodeM), childrenN = tree.get(nodeN);
 		if (childrenM.isEmpty() && childrenN.isEmpty()) {
-			if (nodeM instanceof Modifier) {
-				Modifier mnM = (Modifier) nodeM, mnN = (Modifier) nodeN;
-				if (JavaASTUtil.getType(mnM) != JavaASTUtil.getType(mnN))
-					return 0;
-			}
+		
 			int type = nodeM.getNodeType();
 			double sim = 0;
-			if (type == ASTNode.ARRAY_CREATION 
-					|| type == ASTNode.ARRAY_INITIALIZER 
-					|| type == ASTNode.BLOCK 
-					|| type == ASTNode.INFIX_EXPRESSION 
-					|| type == ASTNode.METHOD_INVOCATION
-					|| type == ASTNode.SWITCH_STATEMENT
-					)
-				sim = MIN_SIM_MOVE;
-			else {
+//			if (type == ASTNode.ARRAY_CREATION 
+//					|| type == ASTNode.ARRAY_INITIALIZER 
+//					|| type == ASTNode.BLOCK 
+//					|| type == ASTNode.INFIX_EXPRESSION 
+//					|| type == ASTNode.METHOD_INVOCATION
+//					|| type == ASTNode.SWITCH_STATEMENT
+//					)
+//				sim = MIN_SIM_MOVE;
+//			else 
+			{
 				String sM = nodeM.toString(), sN = nodeN.toString();
 				int lM = sM.length(), lN = sN.length();
 				if (lM > 1000 || lN > 1000) {
@@ -734,64 +721,117 @@ public class TreedMapper implements TreedConstants {
 				ArrayList<ASTNode> nodesM = getNotYetMatchedNodes(childrenM), nodesN = getNotYetMatchedNodes(childrenN);
 				ArrayList<ASTNode> mappedChildrenM = new ArrayList<ASTNode>(), mappedChildrenN = new ArrayList<ASTNode>();
 				if (nodeM instanceof Statement) {
-					if (nodeM instanceof DoStatement) {
-						mappedChildrenM.add(((DoStatement) nodeM).getBody());
-						mappedChildrenN.add(((DoStatement) nodeN).getBody());
-					} else if (nodeM instanceof EnhancedForStatement) {
-						mappedChildrenM.add(((EnhancedForStatement) nodeM).getBody());
-						mappedChildrenN.add(((EnhancedForStatement) nodeN).getBody());
-					} else if (nodeM instanceof ForStatement) {
-						mappedChildrenM.add(((ForStatement) nodeM).getBody());
-						mappedChildrenN.add(((ForStatement) nodeN).getBody());
-					} else if (nodeM instanceof SynchronizedStatement) {
-						mappedChildrenM.add(((SynchronizedStatement) nodeM).getBody());
-						mappedChildrenN.add(((SynchronizedStatement) nodeN).getBody());
-					} else if (nodeM instanceof ThrowStatement) {
-						mappedChildrenM.add(((ThrowStatement) nodeM).getExpression());
-						mappedChildrenN.add(((ThrowStatement) nodeN).getExpression());
-					} else if (nodeM instanceof TryStatement) {
-						mappedChildrenM.add(((TryStatement) nodeM).getBody());
-						mappedChildrenN.add(((TryStatement) nodeN).getBody());
-					} else if (nodeM instanceof TypeDeclarationStatement) {
-						mappedChildrenM.add(((TypeDeclarationStatement) nodeM).getDeclaration());
-						mappedChildrenN.add(((TypeDeclarationStatement) nodeN).getDeclaration());
-					} else if (nodeM instanceof WhileStatement) {
-						mappedChildrenM.add(((WhileStatement) nodeM).getBody());
-						mappedChildrenN.add(((WhileStatement) nodeN).getBody());
-					}
+					
+					if (nodeM instanceof PythonWhileStatement) {
+						mappedChildrenM.add(((PythonWhileStatement) nodeM).getCondition());
+						mappedChildrenN.add(((PythonWhileStatement) nodeN).getCondition());
+						mappedChildrenM.add(((PythonWhileStatement) nodeM).getAction());
+						mappedChildrenN.add(((PythonWhileStatement) nodeN).getAction());
+						mappedChildrenM.add(((PythonWhileStatement) nodeM).getElseStatement());
+						mappedChildrenN.add(((PythonWhileStatement) nodeN).getElseStatement());
+					} else if (nodeM instanceof PythonForStatement) {
+						mappedChildrenM.add(((PythonForStatement) nodeM).getfMainArguments());
+						mappedChildrenN.add(((PythonForStatement) nodeN).getfMainArguments());
+						mappedChildrenM.add(((PythonForStatement) nodeM).getCondition());
+						mappedChildrenN.add(((PythonForStatement) nodeN).getCondition());
+						mappedChildrenM.add(((PythonForStatement) nodeM).getAction());
+						mappedChildrenN.add(((PythonForStatement) nodeN).getAction());
+						mappedChildrenM.add(((PythonForStatement) nodeM).getfElseStatement());
+						mappedChildrenN.add(((PythonForStatement) nodeN).getfElseStatement());
+					}  else if (nodeM instanceof PythonWithStatement) {
+						mappedChildrenM.add(((PythonWithStatement) nodeM).getBlock());
+						mappedChildrenN.add(((PythonWithStatement) nodeN).getBlock());
+					} else if (nodeM instanceof PythonYieldStatement) {
+						mappedChildrenM.add(((PythonYieldStatement) nodeM).getExpression());
+						mappedChildrenN.add(((PythonYieldStatement) nodeN).getExpression());
+					} else if (nodeM instanceof PythonDelStatement) {
+						mappedChildrenM.add(((PythonDelStatement) nodeM).getExpression());
+						mappedChildrenN.add(((PythonDelStatement) nodeN).getExpression());
+					} else if (nodeM instanceof ContinueStatement) {
+						mappedChildrenM.add(((ContinueStatement) nodeM).getExpression());
+						mappedChildrenN.add(((ContinueStatement) nodeN).getExpression());
+					} else if (nodeM instanceof BreakStatement) {
+						mappedChildrenM.add(((BreakStatement) nodeM).getExpression());
+						mappedChildrenN.add(((BreakStatement) nodeN).getExpression());
+					} else if (nodeM instanceof ExecStatement) {
+						mappedChildrenM.add(((ExecStatement) nodeM).getExpression());
+						mappedChildrenN.add(((ExecStatement) nodeN).getExpression());
+					} else if (nodeM instanceof GlobalStatement) {
+						mappedChildrenM.add(((GlobalStatement) nodeM).getExpression());
+						mappedChildrenN.add(((GlobalStatement) nodeN).getExpression());
+					} else if (nodeM instanceof IfStatement) {
+						mappedChildrenM.add(((IfStatement) nodeM).getCondition());
+						mappedChildrenN.add(((IfStatement) nodeN).getCondition());
+						mappedChildrenM.add(((IfStatement) nodeM).getThen());
+						mappedChildrenN.add(((IfStatement) nodeN).getThen());
+						mappedChildrenM.add(((IfStatement) nodeM).getElse());
+						mappedChildrenN.add(((IfStatement) nodeN).getElse());
+					} else if (nodeM instanceof PythonExceptStatement) {
+						mappedChildrenM.add(((PythonExceptStatement) nodeM).getBody());
+						mappedChildrenN.add(((PythonExceptStatement) nodeN).getBody());
+					} else if (nodeM instanceof TryFinallyStatement) {
+						mappedChildrenM.add(((TryFinallyStatement) nodeM).getfBody());
+						mappedChildrenN.add(((TryFinallyStatement) nodeN).getfBody());
+					} else if (nodeM instanceof PythonTryStatement) {
+						mappedChildrenM.add(((PythonTryStatement) nodeM).getBody());
+						mappedChildrenN.add(((PythonTryStatement) nodeN).getBody());
+						mappedChildrenM.add(((PythonTryStatement) nodeM).getfElseStatement());
+						mappedChildrenN.add(((PythonTryStatement) nodeN).getfElseStatement());
+					} else if (nodeM instanceof ReturnStatement) {
+						mappedChildrenM.add(((ReturnStatement) nodeM).getExpression());
+						mappedChildrenN.add(((ReturnStatement) nodeN).getExpression());
+					} 
+					
 				} else if (nodeM instanceof MethodDeclaration) {
 					mappedChildrenM.add(((MethodDeclaration) nodeM).getBody());
 					mappedChildrenN.add(((MethodDeclaration) nodeN).getBody());
-				} else if (nodeM instanceof CatchClause) {
-					mappedChildrenM.add(((CatchClause) nodeM).getBody());
-					mappedChildrenN.add(((CatchClause) nodeN).getBody());
-				} else if (nodeM instanceof Expression) {
-					if (nodeM instanceof ClassInstanceCreation) {
-						ClassInstanceCreation cicM = (ClassInstanceCreation) nodeM, cicN = (ClassInstanceCreation) nodeN;
-						mappedChildrenM.add(cicM.getExpression());
-						mappedChildrenN.add(cicN.getExpression());
-						if (cicM.getAST().apiLevel() >= AST.JLS3)
-							mappedChildrenM.add(cicM.getType());
-						else
-							mappedChildrenM.add(cicM.getName());
-						if (cicN.getAST().apiLevel() >= AST.JLS3)
-							mappedChildrenN.add(cicN.getType());
-						else
-							mappedChildrenN.add(cicN.getName());
-					} else if (nodeM instanceof MethodInvocation) {
-						MethodInvocation miM = (MethodInvocation) nodeM, miN = (MethodInvocation) nodeN;
-						mappedChildrenM.add(miM.getExpression());
-						mappedChildrenN.add(miN.getExpression());
-						mappedChildrenM.add(miM.getName());
-						mappedChildrenN.add(miN.getName());
-					} else if (nodeM instanceof SuperMethodInvocation) {
-						SuperMethodInvocation miM = (SuperMethodInvocation) nodeM, miN = (SuperMethodInvocation) nodeN;
-						mappedChildrenM.add(miM.getQualifier());
-						mappedChildrenN.add(miN.getQualifier());
-						mappedChildrenM.add(miM.getName());
-						mappedChildrenN.add(miN.getName());
-					}
+				} 
+				else if (nodeM instanceof TypeDeclaration) {
+					mappedChildrenM.add(((TypeDeclaration) nodeM).getBody());
+					mappedChildrenN.add(((TypeDeclaration) nodeN).getBody());
 				}
+				else if (nodeM instanceof Expression) {
+
+					if (nodeM instanceof BinaryExpression) {
+						mappedChildrenM.add(((BinaryExpression) nodeM).getLeft());
+						mappedChildrenN.add(((BinaryExpression) nodeN).getRight());
+					} else if (nodeM instanceof UnaryExpression) {
+						mappedChildrenM.add(((UnaryExpression) nodeM).getExpression());
+						mappedChildrenN.add(((UnaryExpression) nodeN).getExpression());
+					} else if (nodeM instanceof PythonLambdaExpression) {
+						mappedChildrenM.add(((PythonLambdaExpression) nodeM).getBodyExpression());
+						mappedChildrenN.add(((PythonLambdaExpression) nodeN).getBodyExpression());
+					} else if (nodeM instanceof CallHolder) {
+						mappedChildrenM.add(((CallHolder) nodeM).getArguments());
+						mappedChildrenN.add(((CallHolder) nodeN).getArguments());
+					} else if (nodeM instanceof IndexHolder) {
+						mappedChildrenM.add(((IndexHolder) nodeM).getIndex());
+						mappedChildrenN.add(((IndexHolder) nodeN).getIndex());
+					} else if (nodeM instanceof PythonForListExpression) {
+						mappedChildrenM.add(((PythonForListExpression) nodeM).getFrom());
+						mappedChildrenN.add(((PythonForListExpression) nodeN).getFrom());
+						mappedChildrenM.add(((PythonForListExpression) nodeM).getIfList());
+						mappedChildrenN.add(((PythonForListExpression) nodeN).getIfList());
+						mappedChildrenM.add(((PythonForListExpression) nodeM).getVars());
+						mappedChildrenN.add(((PythonForListExpression) nodeN).getVars());
+					} else if (nodeM instanceof PythonListForExpression) {
+						mappedChildrenM.add(((PythonListForExpression) nodeM).getMaker());
+						mappedChildrenN.add(((PythonListForExpression) nodeN).getMaker());
+					} else if (nodeM instanceof PythonSubscriptExpression) {
+						mappedChildrenM.add(((PythonSubscriptExpression) nodeM).getCondition());
+						mappedChildrenN.add(((PythonSubscriptExpression) nodeN).getCondition());
+						mappedChildrenM.add(((PythonSubscriptExpression) nodeM).getSlice());
+						mappedChildrenN.add(((PythonSubscriptExpression) nodeN).getSlice());
+						mappedChildrenM.add(((PythonSubscriptExpression) nodeM).getTest());
+						mappedChildrenN.add(((PythonSubscriptExpression) nodeN).getTest());
+					}
+					
+					else if (nodeM instanceof PrintExpression) {
+						mappedChildrenM.add(((PrintExpression) nodeM).getExpression());
+						mappedChildrenN.add(((PrintExpression) nodeN).getExpression());
+					} 
+				}
+				
 				if (!mappedChildrenM.isEmpty() && !mappedChildrenN.isEmpty()) {
 					for (int i = 0; i < mappedChildrenM.size(); i++) {
 						ASTNode childM = mappedChildrenM.get(i), childN = mappedChildrenN.get(i);
@@ -800,7 +840,7 @@ public class TreedMapper implements TreedConstants {
 								double sim = 0;
 								if (childM.getNodeType() == childN.getNodeType()) {
 									int type = childM.getNodeType();
-									if (type == ASTNode.BLOCK || (treeMap.get(childM).isEmpty() && treeMap.get(childN).isEmpty()))
+									if (childM instanceof Block || (treeMap.get(childM).isEmpty() && treeMap.get(childN).isEmpty()))
 										sim = 1.0;
 									else 
 										sim = computeSimilarity(childM, childN, MIN_SIM);
@@ -914,51 +954,8 @@ public class TreedMapper implements TreedConstants {
 		return nodes;
 	}
 
-	private void mapMoving() {
-		astM.accept(new ASTVisitor() {
-			@Override
-			public boolean visit(AnnotationTypeMemberDeclaration node) {
-				HashMap<ASTNode, Double> maps = treeMap.get(node);
-				if (!maps.isEmpty()) {
-					ASTNode mapped = maps.keySet().iterator().next();
-					mapMoving(node, mapped);
-					return false;
-				}
-				return true;
-			}
-			
-			@Override
-			public boolean visit(EnumConstantDeclaration node) {
-				HashMap<ASTNode, Double> maps = treeMap.get(node);
-				if (!maps.isEmpty()) {
-					ASTNode mapped = maps.keySet().iterator().next();
-					mapMoving(node, mapped);
-					return false;
-				}
-				return true;
-			}
-			
-			@Override
-			public boolean visit(FieldDeclaration node) {
-				HashMap<ASTNode, Double> maps = treeMap.get(node);
-				if (!maps.isEmpty()) {
-					ASTNode mapped = maps.keySet().iterator().next();
-					mapMoving(node, mapped);
-					return false;
-				}
-				return true;
-			}
-			
-			@Override
-			public boolean visit(Initializer node) {
-				HashMap<ASTNode, Double> maps = treeMap.get(node);
-				if (!maps.isEmpty()) {
-					ASTNode mapped = maps.keySet().iterator().next();
-					mapMoving(node, mapped);
-					return false;
-				}
-				return true;
-			}
+	private void mapMoving() throws Exception {
+		astM.traverse(new ASTVisitor() {
 			
 			@Override
 			public boolean visit(MethodDeclaration node) {
@@ -1029,14 +1026,14 @@ public class TreedMapper implements TreedConstants {
 		return children;
 	}
 
-	private void buildTrees() {
+	private void buildTrees() throws Exception {
 		buildTree(astM);
 		buildTree(astN);
 	}
 
-	private void buildTree(final ASTNode root) {
+	private void buildTree(final ASTNode root) throws Exception {
 		final TreedBuilder visitor = new TreedBuilder(root);
-		root.accept(visitor);
+		root.traverse(visitor);
 		tree.putAll(visitor.tree);
 		treeHeight.putAll(visitor.treeHeight);
 		treeDepth.putAll(visitor.treeDepth);
