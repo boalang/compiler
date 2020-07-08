@@ -23,9 +23,9 @@ import weka.clusterers.Clusterer;
  * A {@link BoaType} representing ML model of SimpleKMeans with attached types.
  * 
  * @author ankuraga
+ * @author hyj
  */
 public class BoaSimpleKMeans extends BoaModel {
-
 	/**
 	 * Default BoaSimpleKMeans Constructor.
 	 * 
@@ -56,13 +56,16 @@ public class BoaSimpleKMeans extends BoaModel {
 		this.o = o;
 	}
 
+	@Override
+	public Kind getKind() {
+		return Kind.CLUSTERER;
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
 		if (!super.assigns(that))
 			return false;
-
-		// ok
 		return true;
 	}
 
@@ -71,8 +74,6 @@ public class BoaSimpleKMeans extends BoaModel {
 	public boolean accepts(final BoaType that) {
 		if (!super.assigns(that))
 			return false;
-
-		// ok
 		return true;
 	}
 

@@ -24,9 +24,9 @@ import weka.classifiers.Classifier;
  * types.
  * 
  * @author ankuraga
+ * @author hyj
  */
 public class BoaMultiClassClassifier extends BoaModel {
-
 	/**
 	 * Default BoaMultiClassClassifier Constructor.
 	 * 
@@ -57,13 +57,16 @@ public class BoaMultiClassClassifier extends BoaModel {
 		this.o = o;
 	}
 
+	@Override
+	public Kind getKind() {
+		return Kind.CLASSIFIER;
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
 		if (!super.assigns(that))
 			return false;
-
-		// ok
 		return true;
 	}
 
@@ -72,8 +75,6 @@ public class BoaMultiClassClassifier extends BoaModel {
 	public boolean accepts(final BoaType that) {
 		if (!super.assigns(that))
 			return false;
-
-		// ok
 		return true;
 	}
 

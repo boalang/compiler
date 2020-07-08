@@ -72,7 +72,7 @@ public class BoaModel extends BoaType {
 	public Classifier getClassifier() {
 		return this.clr;
 	}
-	
+
 	/**
 	 * Construct a BoaModel.
 	 * 
@@ -114,6 +114,14 @@ public class BoaModel extends BoaType {
 	 */
 	public Object getObject() {
 		return this.o;
+	}
+
+	public Kind getKind() {
+		return null;
+	}
+
+	public enum Kind {
+		CLASSIFIER, CLUSTERER, VECTOR
 	}
 
 	/** {@inheritDoc} */

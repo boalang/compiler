@@ -257,36 +257,44 @@ public class BoaMLIntrinsics {
 				instance.setValue((Attribute) fvAttributes.get(i), vector.getValues()[i]);
 		testingSet.add(instance);
 
-		Classifier classifier = (Classifier) model.getClassifier();
-		double predval = classifier.classifyInstance(testingSet.instance(0));
+		
+		double predval = -1;
+		
+		if (model.getKind() == BoaModel.Kind.CLASSIFIER) {
+			Classifier classifier = (Classifier) model.getClassifier();
+			predval = classifier.classifyInstance(testingSet.instance(0));
+		} else if (model.getKind() == BoaModel.Kind.CLUSTERER) {
+			Clusterer clusterer = (Clusterer) model.getClusterer();
+			predval = clusterer.clusterInstance(testingSet.instance(0));
+		}
 
 		return testingSet.classAttribute().isNominal() ? testingSet.classAttribute().value((int) predval)
 				: String.valueOf(predval);
 	}
 
-	@FunctionSpec(name = "cluster", returnType = "string", formalParameters = { "model", "tuple" })
-	public static String cluster(final BoaModel model, final Tuple vector) throws Exception {
-		ArrayList<Attribute> fvAttributes = getAttributes(model, vector);
-		int NumOfAttributes = fvAttributes.size();
-
-		Instances testingSet = new Instances("Classifier", fvAttributes, 1);
-		testingSet.setClassIndex(NumOfAttributes - 1);
-
-		Instance instance = new DenseInstance(NumOfAttributes);
-
-		for (int i = 0; i < NumOfAttributes - 1; i++)
-			if (NumberUtils.isNumber(vector.getValues()[i]))
-				instance.setValue((Attribute) fvAttributes.get(i), Double.parseDouble(vector.getValues()[i]));
-			else
-				instance.setValue((Attribute) fvAttributes.get(i), vector.getValues()[i]);
-		testingSet.add(instance);
-
-		Clusterer clusterer = (Clusterer) model.getClusterer();
-		double predval = clusterer.clusterInstance(testingSet.instance(0));
-
-		return testingSet.classAttribute().isNominal() ? testingSet.classAttribute().value((int) predval)
-				: String.valueOf(predval);
-	}
+//	@FunctionSpec(name = "cluster", returnType = "string", formalParameters = { "model", "tuple" })
+//	public static String cluster(final BoaModel model, final Tuple vector) throws Exception {
+//		ArrayList<Attribute> fvAttributes = getAttributes(model, vector);
+//		int NumOfAttributes = fvAttributes.size();
+//
+//		Instances testingSet = new Instances("Classifier", fvAttributes, 1);
+//		testingSet.setClassIndex(NumOfAttributes - 1);
+//
+//		Instance instance = new DenseInstance(NumOfAttributes);
+//
+//		for (int i = 0; i < NumOfAttributes - 1; i++)
+//			if (NumberUtils.isNumber(vector.getValues()[i]))
+//				instance.setValue((Attribute) fvAttributes.get(i), Double.parseDouble(vector.getValues()[i]));
+//			else
+//				instance.setValue((Attribute) fvAttributes.get(i), vector.getValues()[i]);
+//		testingSet.add(instance);
+//
+//		Clusterer clusterer = (Clusterer) model.getClusterer();
+//		double predval = clusterer.clusterInstance(testingSet.instance(0));
+//
+//		return testingSet.classAttribute().isNominal() ? testingSet.classAttribute().value((int) predval)
+//				: String.valueOf(predval);
+//	}
 
 	private static ArrayList<Attribute> getAttributes(BoaModel model, Tuple vector) {
 		ArrayList<Attribute> fvAttributes = new ArrayList<Attribute>();

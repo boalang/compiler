@@ -18,55 +18,49 @@ package boa.types.ml;
 
 import boa.types.BoaType;
 import weka.classifiers.Classifier;
+
 /**
  * A {@link BoaType} representing ML model of Bagging with attached types.
  * 
  * @author ankuraga
+ * @author hyj
  */
-public class BoaBagging extends BoaModel{
+public class BoaBagging extends BoaModel {
 	/**
 	 * Default BoaBagging Constructor.
 	 * 
 	 */
-	public BoaBagging(){
+	public BoaBagging() {
 	}
-	
+
 	/**
 	 * Construct a BoaBagging.
 	 * 
-	 * @param t
-	 *            A {@link BoaType} containing the types attached with this model
+	 * @param t A {@link BoaType} containing the types attached with this model
 	 *
 	 */
-	public BoaBagging(BoaType t){
+	public BoaBagging(BoaType t) {
 		this.t = t;
 	}
-	
+
 	/**
 	 * Construct a BoaBagging.
 	 * 
-	 * @param clr
-	 *            A {@link Classifier} containing ML model
+	 * @param clr A {@link Classifier} containing ML model
 	 * 
-	 * @param o
-	 *            A {@link Object} containing type object
+	 * @param o   A {@link Object} containing type object
 	 *
 	 */
-	public BoaBagging(Classifier clr, Object o){
+	public BoaBagging(Classifier clr, Object o) {
 		this.clr = clr;
 		this.o = o;
 	}
-	
-	/**
-	 * Get the type object of this model.
-	 * 
-	 * @return A {@link Object} representing type object
-	 * 
-	 */
-	public Object getObject() {
-		return this.o;
+
+	@Override
+	public Kind getKind() {
+		return Kind.CLASSIFIER;
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
@@ -82,13 +76,13 @@ public class BoaBagging extends BoaModel{
 			return false;
 		return true;
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.ml.BoaBagging";
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {

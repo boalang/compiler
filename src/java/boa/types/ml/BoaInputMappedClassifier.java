@@ -18,55 +18,50 @@ package boa.types.ml;
 
 import boa.types.BoaType;
 import weka.classifiers.Classifier;
+
 /**
- * A {@link BoaType} representing ML model of InputMappedClassifier with attached types.
+ * A {@link BoaType} representing ML model of InputMappedClassifier with
+ * attached types.
  * 
  * @author ankuraga
+ * @author hyj
  */
-public class BoaInputMappedClassifier extends BoaModel{
+public class BoaInputMappedClassifier extends BoaModel {
 	/**
 	 * Default BoaInputMappedClassifier Constructor.
 	 * 
 	 */
-	public BoaInputMappedClassifier(){
+	public BoaInputMappedClassifier() {
 	}
-	
+
 	/**
 	 * Construct a BoaInputMappedClassifier.
 	 * 
-	 * @param t
-	 *            A {@link BoaType} containing the types attached with this model
+	 * @param t A {@link BoaType} containing the types attached with this model
 	 *
 	 */
-	public BoaInputMappedClassifier(BoaType t){
+	public BoaInputMappedClassifier(BoaType t) {
 		this.t = t;
 	}
-	
+
 	/**
 	 * Construct a BoaInputMappedClassifier.
 	 * 
-	 * @param clr
-	 *            A {@link Classifier} containing ML model
+	 * @param clr A {@link Classifier} containing ML model
 	 * 
-	 * @param o
-	 *            A {@link Object} containing type object
+	 * @param o   A {@link Object} containing type object
 	 *
 	 */
-	public BoaInputMappedClassifier(Classifier clr, Object o){
+	public BoaInputMappedClassifier(Classifier clr, Object o) {
 		this.clr = clr;
 		this.o = o;
 	}
-	
-	/**
-	 * Get the type object of this model.
-	 * 
-	 * @return A {@link Object} representing type object
-	 * 
-	 */
-	public Object getObject() {
-		return this.o;
+
+	@Override
+	public Kind getKind() {
+		return Kind.CLASSIFIER;
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
@@ -82,13 +77,13 @@ public class BoaInputMappedClassifier extends BoaModel{
 			return false;
 		return true;
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.ml.BoaInputMappedClassifier";
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {

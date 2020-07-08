@@ -26,7 +26,6 @@ import boa.types.BoaType;
  * @author hyj
  */
 public class BoaWord2Vec extends BoaModel {
-
 	private Word2Vec w2v;
 
 	/**
@@ -59,13 +58,16 @@ public class BoaWord2Vec extends BoaModel {
 		this.o = o;
 	}
 
+	@Override
+	public Kind getKind() {
+		return Kind.VECTOR;
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
 		if (!super.assigns(that))
 			return false;
-
-		// ok
 		return true;
 	}
 
@@ -74,8 +76,6 @@ public class BoaWord2Vec extends BoaModel {
 	public boolean accepts(final BoaType that) {
 		if (!super.assigns(that))
 			return false;
-
-		// ok
 		return true;
 	}
 

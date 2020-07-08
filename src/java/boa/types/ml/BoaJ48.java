@@ -23,9 +23,9 @@ import weka.classifiers.Classifier;
  * A {@link BoaType} representing ML model of J48 with attached types.
  * 
  * @author ankuraga
+ * @author hyj
  */
 public class BoaJ48 extends BoaModel {
-
 	/**
 	 * Default BoaJ48 Constructor.
 	 * 
@@ -56,13 +56,16 @@ public class BoaJ48 extends BoaModel {
 		this.o = o;
 	}
 
+	@Override
+	public Kind getKind() {
+		return Kind.CLASSIFIER;
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
 		if (!super.assigns(that))
 			return false;
-
-		// ok
 		return true;
 	}
 
@@ -71,8 +74,6 @@ public class BoaJ48 extends BoaModel {
 	public boolean accepts(final BoaType that) {
 		if (!super.assigns(that))
 			return false;
-
-		// ok
 		return true;
 	}
 

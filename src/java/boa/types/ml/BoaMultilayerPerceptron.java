@@ -24,6 +24,7 @@ import weka.classifiers.Classifier;
  * types.
  * 
  * @author ankuraga
+ * @author hyj
  */
 public class BoaMultilayerPerceptron extends BoaModel {
 	/**
@@ -56,13 +57,16 @@ public class BoaMultilayerPerceptron extends BoaModel {
 		this.o = o;
 	}
 
+	@Override
+	public Kind getKind() {
+		return Kind.CLASSIFIER;
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
 		if (!super.assigns(that))
 			return false;
-
-		// ok
 		return true;
 	}
 
@@ -71,8 +75,6 @@ public class BoaMultilayerPerceptron extends BoaModel {
 	public boolean accepts(final BoaType that) {
 		if (!super.assigns(that))
 			return false;
-
-		// ok
 		return true;
 	}
 

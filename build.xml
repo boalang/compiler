@@ -12,8 +12,7 @@
 	<property name="antlr.version" value="4.5" />
 
 	<!-- CheckStyle path -->
-	<taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
-		classpath="lib/checkstyle-6.19-all.jar"/>
+	<taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties" classpath="lib/checkstyle-6.19-all.jar" />
 
 	<!-- debug properties -->
 	<property name="debug.enabled" value="on" />
@@ -23,21 +22,21 @@
 	<!-- paths -->
 	<path id="project.class.path">
 		<fileset dir="lib">
-			<include name="**/*.jar"/>
-			<exclude name="checkstyle-6.19-all.jar"/>
+			<include name="**/*.jar" />
+			<exclude name="checkstyle-6.19-all.jar" />
 		</fileset>
 		<fileset dir="rtlib">
-			<include name="**/*.jar"/>
+			<include name="**/*.jar" />
 		</fileset>
 		<dirset dir="build/classes">
-			<include name="**"/>
+			<include name="**" />
 		</dirset>
 	</path>
 
 	<path id="test.class.path">
 		<path refid="project.class.path" />
 		<dirset dir="build/tests">
-			<include name="**"/>
+			<include name="**" />
 		</dirset>
 		<dirset dir="./compile" />
 	</path>
@@ -85,7 +84,7 @@
 
 	<target name="-translate-protobuf" depends="-check-protobuf" unless="protobuf.uptodate">
 		<echo level="error" message="Translating Protocol Buffer files to Java" />
-		 <apply executable="protoc" parallel="true"> 
+		<apply executable="protoc" parallel="true">
 			<arg value="--proto_path=${src.proto}" />
 			<arg value="--java_out=src/compiled-proto" />
 			<srcfile />
@@ -136,8 +135,8 @@
 
 	<target name="compile-parser" depends="-parser,-check-deps" description="Compile the parser.">
 		<javac includeantruntime="true" srcdir="${src.parser.paths}" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
-			<compilerarg value="-Xlint:unchecked"/>
-			<compilerarg value="-Xlint:deprecation"/>
+			<compilerarg value="-Xlint:unchecked" />
+			<compilerarg value="-Xlint:deprecation" />
 			<classpath refid="project.class.path" />
 		</javac>
 	</target>
@@ -151,8 +150,8 @@
 	<!-- main compilation targets -->
 	<target name="compile" depends="compile-protobuf,compile-parser,-check-deps" description="Compile the compiler.">
 		<javac includeantruntime="true" srcdir="${src.paths}" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
-			<compilerarg value="-Xlint:unchecked"/>
-			<compilerarg value="-Xlint:deprecation"/>
+			<compilerarg value="-Xlint:unchecked" />
+			<compilerarg value="-Xlint:deprecation" />
 			<classpath refid="project.class.path" />
 		</javac>
 	</target>
@@ -175,20 +174,20 @@
 		</delete>
 	</target>
 
-	
+
 	<target name="test" depends="-compile-tests, package" description="Run all unit tests.">
 		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
 				<fileset dir="build/tests">
-					<include name="boa/test/compiler/Test*.class" /> 
-					<include name="boa/test/functions/Test*.class" /> 
+					<include name="boa/test/compiler/Test*.class" />
+					<include name="boa/test/functions/Test*.class" />
 					<!--include name="boa/test/datagen/Test*.class" /-->
 					<!--include name="boa/test/datagen/queries/Test*.class" /-->
-					<include name="boa/test/datagen/java/Test*.class" /> 
-					<include name="boa/test/datagen/js/Test*.class" />  
-					<include name="boa/test/datagen/php/Test*.class" />  
+					<include name="boa/test/datagen/java/Test*.class" />
+					<include name="boa/test/datagen/js/Test*.class" />
+					<include name="boa/test/datagen/php/Test*.class" />
 					<exclude name="**/*$*.class" />
 				</fileset>
 			</batchtest>
@@ -386,8 +385,8 @@
 
 	<target name="-compile-tests" depends="compile,-check-deps">
 		<javac includeantruntime="true" srcdir="src/test" destdir="build/tests" debug="${debug.enabled}" debuglevel="${debug.level}">
-			<compilerarg value="-Xlint:unchecked"/>
-			<compilerarg value="-Xlint:deprecation"/>
+			<compilerarg value="-Xlint:unchecked" />
+			<compilerarg value="-Xlint:deprecation" />
 			<classpath refid="project.class.path" />
 		</javac>
 	</target>
@@ -414,15 +413,15 @@
 	<!-- style checking -->
 	<target name="checkstyle">
 		<checkstyle config="checkstyle.xml">
-			<fileset dir="src/java/boa" includes="**/*.java"/>
-			<fileset dir="src/test" includes="**/*.java"/>
-			<formatter type="plain"/>
+			<fileset dir="src/java/boa" includes="**/*.java" />
+			<fileset dir="src/test" includes="**/*.java" />
+			<formatter type="plain" />
 		</checkstyle>
 	</target>
 
 
 	<!-- packaging -->
-	<target name="package" depends="package-runtime,package-compiler" description="Package both the compiler and runtime JARs."/>
+	<target name="package" depends="package-runtime,package-compiler" description="Package both the compiler and runtime JARs." />
 
 	<target name="package-runtime" depends="compile" description="Package the runtime JAR.">
 		<jar destfile="dist/boa-runtime.jar">
@@ -458,6 +457,23 @@
 			<zipfileset excludes="META-INF/" src="rtlib/protobuf-java-2.5.0.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/scannotation-1.0.3.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/ST-4.0.8.jar" />
+
+			<!-- 
+
+			<fileset dir="lib/weka" includes="**/*.jar"/>
+			<fileset dir="lib/dl4j" includes="**/*.jar"/>
+			
+			<restrict>
+				<name name="**/*.class" />
+				<archives>
+					<zips>
+						<fileset dir="lib/weka" includes="**/*.jar" />
+						<fileset dir="lib/dl4j" includes="**/*.jar" />
+					</zips>
+				</archives>
+			</restrict>
+			
+			-->
 		</jar>
 	</target>
 

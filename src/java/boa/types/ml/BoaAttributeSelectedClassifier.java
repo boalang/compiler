@@ -24,6 +24,7 @@ import weka.classifiers.Classifier;
  * attached types.
  * 
  * @author ankuraga
+ * @author hyj
  */
 public class BoaAttributeSelectedClassifier extends BoaModel {
 	/**
@@ -56,14 +57,9 @@ public class BoaAttributeSelectedClassifier extends BoaModel {
 		this.o = o;
 	}
 
-	/**
-	 * Get the type object of this model.
-	 * 
-	 * @return A {@link Object} representing type object
-	 * 
-	 */
-	public Object getObject() {
-		return this.o;
+	@Override
+	public Kind getKind() {
+		return Kind.CLASSIFIER;
 	}
 
 	/** {@inheritDoc} */

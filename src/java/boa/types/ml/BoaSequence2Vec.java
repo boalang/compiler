@@ -27,7 +27,6 @@ import boa.types.BoaType;
  * @author hyj
  */
 public class BoaSequence2Vec extends BoaModel {
-
 	private SequenceVectors<VocabWord> seq2vec;
 
 	/**
@@ -59,14 +58,17 @@ public class BoaSequence2Vec extends BoaModel {
 		this.seq2vec = seq2vec;
 		this.o = o;
 	}
+	
+	@Override
+	public Kind getKind() {
+		return Kind.VECTOR;
+	}
 
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
 		if (!super.assigns(that))
 			return false;
-
-		// ok
 		return true;
 	}
 
@@ -75,8 +77,6 @@ public class BoaSequence2Vec extends BoaModel {
 	public boolean accepts(final BoaType that) {
 		if (!super.assigns(that))
 			return false;
-
-		// ok
 		return true;
 	}
 
