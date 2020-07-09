@@ -5,14 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-//import org.eclipse.dltk.compiler.IElementRequestor;
-//import org.eclipse.dltk.compiler.SourceElementRequestVisitor;
-//
-//import com.puppycrawl.tools.checkstyle.checks.coding.SuperCloneCheck;
-//
-//import org.eclipse.dltk.ast.expressions.Expression;
-//import org.eclipse.dltk.ast.ASTVisitor;
-//import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.ast.declarations.Decorator;
@@ -90,11 +82,14 @@ import boa.types.Ast.TypeKind;
 import boa.types.Ast.Variable;
 import boa.types.Shared.ChangeKind;
 import boa.types.Ast.Expression.ExpressionKind;
-
 import boa.types.Ast.Namespace;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Statement.StatementKind;
 
+/**
+ * @author Sayem Imtiaz
+ * @author Sumon Biswas
+ */
 public class NewPythonVisitor extends ASTVisitor {
 
 	private ModuleDeclaration root;
@@ -115,15 +110,17 @@ public class NewPythonVisitor extends ASTVisitor {
 		b.setName(name);
 		return b.build();
 	}
+	
+	public Namespace getCellAsNamespace(ModuleDeclaration node, String name, int key) throws Exception {
+		root = node;
+		node.traverse(this);
+		b.setName(name);
+		b.setKey(key);
+		return b.build();
+	}
 
 	@Override
 	public boolean visitGeneral(ASTNode md) throws Exception {
-//		System.out.println("Enter General:  " + md.toString());
-
-//		if(md.toString().startsWith("class org.eclipse.dltk.python.parser.ast.statements.ExecStatement"))
-//		{
-//			System.out.println("REACHED.");
-//		}
 
 		boolean opFound = false;
 

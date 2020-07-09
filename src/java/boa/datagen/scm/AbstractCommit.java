@@ -21,9 +21,6 @@ package boa.datagen.scm;
 import java.io.*;
 import java.util.*;
 
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CharStream;
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile.Writer;
@@ -39,34 +36,10 @@ import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ast.AstRoot;
 import org.w3c.css.sac.InputSource;
-import org.eclipse.dltk.python.core.PythonNature;
-import org.eclipse.dltk.python.internal.core.parser.PythonSourceParser;
-import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
-import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
-import org.eclipse.dltk.ast.parser.IModuleDeclaration;
-import org.eclipse.dltk.ast.parser.ISourceParser;
-import org.eclipse.dltk.ast.parser.SourceParserManager;
-import org.eclipse.dltk.compiler.IElementRequestor;
-import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
-import org.eclipse.dltk.compiler.IElementRequestor.ImportInfo;
-import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
-import org.eclipse.dltk.compiler.IElementRequestor.TypeInfo;
-import org.eclipse.dltk.compiler.SourceElementRequestorAdaptor;
-import org.eclipse.dltk.compiler.env.IModuleSource;
-import org.eclipse.dltk.compiler.env.ModuleSource;
-import org.eclipse.dltk.compiler.problem.IProblemReporter;
-import org.eclipse.dltk.compiler.problem.AbstractProblemReporter;
-import org.eclipse.dltk.compiler.problem.IProblem;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.steadystate.css.dom.CSSStyleSheetImpl;
 
 import boa.types.Ast.ASTRoot;
-import boa.types.Ast.Namespace;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Diff.ChangedFile.Builder;
@@ -86,9 +59,29 @@ import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.XMLVisitor;
-import boa.datagen.util.python2.Python2Visitor;
-import boa.datagen.util.python3.Python3Visitor;
 import boa.datagen.util.JavaErrorCheckVisitor;
+
+import org.eclipse.dltk.python.core.PythonNature;
+import org.eclipse.dltk.python.internal.core.parser.PythonSourceParser;
+import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
+import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
+import org.eclipse.dltk.ast.parser.IModuleDeclaration;
+import org.eclipse.dltk.ast.parser.ISourceParser;
+import org.eclipse.dltk.ast.parser.SourceParserManager;
+import org.eclipse.dltk.compiler.IElementRequestor;
+import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.dltk.compiler.env.ModuleSource;
+import org.eclipse.dltk.compiler.problem.IProblemReporter;
+import org.eclipse.dltk.compiler.problem.AbstractProblemReporter;
+import org.eclipse.dltk.compiler.problem.IProblem;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 
 /**
  * @author rdyer
@@ -96,8 +89,7 @@ import boa.datagen.util.JavaErrorCheckVisitor;
 public abstract class AbstractCommit {
 	protected static final boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	protected static final boolean debugparse = Properties.getBoolean("debugparse", DefaultProperties.DEBUGPARSE);
-	protected static final boolean STORE_ASCII_PRINTABLE_CONTENTS = Properties.getBoolean("ascii",
-			DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
+	protected static final boolean STORE_ASCII_PRINTABLE_CONTENTS = Properties.getBoolean("ascii", DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
 
 	protected AbstractConnector connector;
 	protected String projectName;
@@ -237,7 +229,6 @@ public abstract class AbstractCommit {
 	Set<String> badp = new HashSet<String>(Arrays.asList(badpaths));
 
 	Builder processPythonChangeFile(final ChangedFile.Builder fb) {
-
 		long len = connector.astWriterLen;
 		String path = fb.getName();
 
@@ -246,20 +237,26 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.TEXT);
 		else if (lowerPath.endsWith(".xml"))
 			fb.setKind(FileKind.XML);
+		else if (lowerPath.endsWith(".jar") || lowerPath.endsWith(".class"))
+			fb.setKind(FileKind.BINARY);
 
-		else if (lowerPath.endsWith(".py") || lowerPath.endsWith(".ipynb")) {
+		////// Python AST generation will be handled here ///////
+		else if (lowerPath.endsWith(".py")) {
 			if (badp.contains(lowerPath)) {
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
-			} else {
-				final String content = getFileContents(path);
-				System.out.println(projectName + ": " + path);
-				fb.setKind(FileKind.SOURCE_PY_ERROR);
-				
-				if(lowerPath.endsWith(".py"))
-					parsePythonFile(path, fb, content, false);
-				if(lowerPath.endsWith(".ipynb"))
-					parseNotebookFile(path, fb, content, false);				
 			}
+			else {
+				final String content = getFileContents(path);
+				fb.setKind(FileKind.SOURCE_PY_ERROR);
+				System.out.println(projectName + ": " + path);
+				parsePythonFile(path, fb, content, false);
+			}
+		}
+		else if (lowerPath.endsWith(".ipynb")) {
+			final String content = getFileContents(path);
+			fb.setKind(FileKind.SOURCE_PY_ERROR);
+			System.out.println(projectName + ": " + path);
+			parseNotebookFile(path, fb, content, false);
 		}
 
 		if (connector.astWriterLen > len) {
@@ -284,22 +281,7 @@ public abstract class AbstractCommit {
 		else if (lowerPath.endsWith(".java")) {
 			final String content = getFileContents(path);
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-			parseJavaFile(path, fb, content, false);
-		}
-		// Python AST generation will be handled here
-		else if (lowerPath.endsWith(".py")) {
-			if (badp.contains(lowerPath)) {
-				fb.setKind(FileKind.SOURCE_PY_ERROR);
-			} else {
-				final String content = getFileContents(path);
-				fb.setKind(FileKind.SOURCE_PY_ERROR);
-				parsePythonFile(path, fb, content, false);
-			}
-		} else if (lowerPath.endsWith(".ipynb")) {
-			final String content = getFileContents(path);
-			fb.setKind(FileKind.SOURCE_PY_ERROR);
-			parseNotebookFile(path, fb, content, false);
-			
+			parseJavaFile(path, fb, content, false); // parse java file
 		} else if (lowerPath.endsWith(".js")) {
 			final String content = getFileContents(path);
 
@@ -396,41 +378,47 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted PHP5_3: revision " + id + ": file " + path);
 			} else if (debugparse)
 				System.err.println("Accepted PHP5: revision " + id + ": file " + path);
-		} /*
-			 * else if (lowerPath.endsWith(".html") && parse) { final String content =
-			 * getFileContents(path);
-			 * 
-			 * fb.setKind(FileKind.Source_HTML); if (!HTMLParse(path, fb, content, false,
-			 * astWriter)) { if (debugparse)
-			 * System.err.println("Found an HTML parse error in : revision " + id +
-			 * ": file " + path); fb.setKind(FileKind.SOURCE_HTML_ERROR);
-			 * 
-			 * } else if (debugparse) System.err.println("Accepted HTML: revisison " + id +
-			 * ": file " + path); } else if (lowerPath.endsWith(".xml") && parse) { final
-			 * String content = getFileContents(path);
-			 * 
-			 * fb.setKind(FileKind.Source_XML); if (!XMLParse(path, fb, content, false,
-			 * astWriter)) { if (debugparse)
-			 * System.err.println("Found an XML parse error in : revision " + id + ": file "
-			 * + path); fb.setKind(FileKind.SOURCE_XML_ERROR); }else if (debugparse)
-			 * System.err.println("Accepted XML: revisison " + id + ": file " + path); }
-			 * else if (lowerPath.endsWith(".css") && parse) { final String content =
-			 * getFileContents(path);
-			 * 
-			 * fb.setKind(FileKind.Source_CSS); if (!CSSParse(path, fb, content, false,
-			 * astWriter)) { if (debugparse)
-			 * System.err.println("Found an CSS parse error in : revision " + id + ": file "
-			 * + path); fb.setKind(FileKind.SOURCE_CSS_ERROR); }else if (debugparse)
-			 * System.err.println("Accepted CSS: revisison " + id + ": file " + path); }
-			 */
-		/*
-		 * else { final String content = getFileContents(path); if
-		 * (STORE_ASCII_PRINTABLE_CONTENTS && StringUtils.isAsciiPrintable(content)) {
-		 * try { fb.setKey(connector.contentWriterLen); BytesWritable bw = new
-		 * BytesWritable(content.getBytes()); connector.contentWriter.append(new
-		 * LongWritable(connector.contentWriterLen), bw); connector.contentWriterLen +=
-		 * bw.getLength(); } catch (IOException e) { e.printStackTrace(); } } }
-		 */
+		}/* else if (lowerPath.endsWith(".html") && parse) {
+		final String content = getFileContents(path);
+		fb.setKind(FileKind.Source_HTML);
+		if (!HTMLParse(path, fb, content, false, astWriter)) {
+			if (debugparse)
+				System.err.println("Found an HTML parse error in : revision " + id + ": file " + path);
+			fb.setKind(FileKind.SOURCE_HTML_ERROR);
+		} else if (debugparse)
+			System.err.println("Accepted HTML: revisison " + id + ": file " + path);
+	} else if (lowerPath.endsWith(".xml") && parse) {
+		final String content = getFileContents(path);
+		fb.setKind(FileKind.Source_XML);
+		if (!XMLParse(path, fb, content, false, astWriter)) {
+			if (debugparse)
+				System.err.println("Found an XML parse error in : revision " + id + ": file " + path);
+			fb.setKind(FileKind.SOURCE_XML_ERROR);
+		}else if (debugparse)
+			System.err.println("Accepted XML: revisison " + id + ": file " + path);
+	} else if (lowerPath.endsWith(".css") && parse) {
+		final String content = getFileContents(path);
+		fb.setKind(FileKind.Source_CSS);
+			if (!CSSParse(path, fb, content, false, astWriter)) {
+				if (debugparse)
+					System.err.println("Found an CSS parse error in : revision " + id + ": file " + path);
+				fb.setKind(FileKind.SOURCE_CSS_ERROR);
+			}else if (debugparse)
+				System.err.println("Accepted CSS: revisison " + id + ": file " + path);
+		}*/
+		/*else {
+			final String content = getFileContents(path);
+			if (STORE_ASCII_PRINTABLE_CONTENTS && StringUtils.isAsciiPrintable(content)) {
+				try {
+					fb.setKey(connector.contentWriterLen);
+					BytesWritable bw = new BytesWritable(content.getBytes());
+					connector.contentWriter.append(new LongWritable(connector.contentWriterLen), bw);
+					connector.contentWriterLen += bw.getLength();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}*/
 
 		if (connector.astWriterLen > len) {
 			fb.setKey(len);
@@ -595,51 +583,11 @@ public abstract class AbstractCommit {
 		return !errorCheck.hasError;
 	}
 
-//	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
-//		//System.out.println("Reached Py Parse file");
-//		final ASTRoot.Builder ast = ASTRoot.newBuilder();
-//		try {
-//			Python3Visitor visitor = new Python3Visitor();
-//			fb.setKind(FileKind.SOURCE_PY_3);
-//			visitor.visit(path, content);
-//			if(!visitor.isPython3)
-//				fb.setKind(FileKind.SOURCE_PY_2);
-//			ast.addNamespaces(visitor.getNamespaces());
-//
-///*			if(visitor.isPython3) {
-//				ast.addNamespaces(visitor.getNamespaces());
-//			}
-//			else {
-//				System.out.println("Entered Python2 Parser.");
-//				Python2Visitor visitorp2 = new Python2Visitor();
-//				fb.setKind(FileKind.SOURCE_PY_2);
-//				visitorp2.visit(content);
-//				ast.addNamespaces(visitorp2.getNamespaces());
-//			}
-//*/
-//
-//		} catch (Exception e1) {
-//			e1.printStackTrace();
-//			System.out.println("Error in Python parse. " + e1.getMessage());
-//		}
-//		try {
-//			// System.out.println("writing=" + count + "\t" + path);
-//			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
-//			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
-//			connector.astWriterLen += bw.getLength();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		return false;
-//	}
-
 	boolean pythonParsingError;
-	
 
-	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
-			final boolean storeOnError) {
+	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
 		pythonParsingError = false;
-		System.out.println("######## " + path);
+		//System.out.println("######## " + path);
 
 		PythonSourceParser parser = new PythonSourceParser();
 		IModuleSource input = new ModuleSource(content);
@@ -651,9 +599,9 @@ public abstract class AbstractCommit {
 
 			}
 		};
-		
+
 		// System.out.println("actual source: " + content);
-		PythonModuleDeclaration module;		
+		PythonModuleDeclaration module;
 
 		try {
 			module = (PythonModuleDeclaration) parser.parse(input, reporter);
@@ -667,7 +615,7 @@ public abstract class AbstractCommit {
 		if (true) {
 			final ASTRoot.Builder ast = ASTRoot.newBuilder();
 			NewPythonVisitor visitor = new NewPythonVisitor();
-			
+
 			try {
 				ast.addNamespaces(visitor.getNamespace(module, path));
 			} catch (final UnsupportedOperationException e) {
@@ -677,23 +625,14 @@ public abstract class AbstractCommit {
 					System.err.println("Error visiting Python file: " + path + " from: " + projectName + "\n");
 					writeToCsv(projectName, path, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
 				}
-
 				e.printStackTrace();
-				// System.exit(-1);
 				return false;
 			}
-//
-//			try {
-//				module.traverse(visitor);
-//			} catch (Exception e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+
 			if (!pythonParsingError)
 				fb.setKind(FileKind.SOURCE_PY_3);
 
 			try {
-				// System.out.println("writing=" + count + "\t" + path);
 				BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 				connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 				connector.astWriterLen += bw.getLength();
@@ -704,104 +643,94 @@ public abstract class AbstractCommit {
 		}
 		return !pythonParsingError;
 	}
-	
-	private boolean parseNotebookFile(final String path, final ChangedFile.Builder fb, final String content,
-			final boolean storeOnError) {
+
+	private boolean parseNotebookFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
 		pythonParsingError = false;
-		System.out.println("@@@@@@@@ " + path);
-		
+		//System.out.println("@@@@@@@@ " + path);
+
 		int count = 0;
 	    ASTRoot.Builder ast = ASTRoot.newBuilder();
 	    Boolean parseSuccess = false;
-	    JsonArray jarray;
-	    try {
-	    	JsonElement jelement = new JsonParser().parse(content);
-		    JsonObject  jobject = jelement.getAsJsonObject();
-		    jarray = jobject.getAsJsonArray("cells");
-		} catch (Exception e) {
-			System.out.println("Notebook JSON parse error.\n");
-			e.printStackTrace();
-			return false;
-		}
-	    
-	    
-	    if (jarray == null)
+	    JsonArray cells = parseNotebookJson(content);
+
+	    if(cells == null) {
+	    	System.out.println("Notebook JSON parse error.\n" + path + " from: " + projectName + "\n");
 	    	return false;
-	    for(JsonElement cell : jarray) {
-	    	JsonObject c = cell.getAsJsonObject();	    	
-	    	
+	    }
+
+	    for(JsonElement cell : cells) {
+	    	JsonObject c = cell.getAsJsonObject();
+
 	    	if(!c.get("cell_type").getAsString().equals("code") || !c.has("source"))
 	    		continue;
-	    	
+
     		count += 1;
+    		int exec_count;
+    		try {
+    			exec_count = c.get("execution_count").getAsInt();
+			} catch (Exception e) {
+				exec_count = -1;
+			}
+
+    		//System.out.println("%%%%%%%" + exec_count);
     		JsonArray lines = c.getAsJsonArray("source");
     		Iterator<JsonElement> iterator = lines.iterator();
-    		
+
     		String codeCell = "";
-    		
+
             while (iterator.hasNext()) {
-            	
+
             	String line = iterator.next().getAsString();
             	if(NoNotebookErrors(line))
             		codeCell += line;
             	else
             		codeCell += "#" + line;
             }
-            
-            
-            ////////////////////////////////
-            //////// Parse code here ////
-            
-            
-	    	
+
+            ////////// Parse code here ////////////////////
+
     		PythonSourceParser parser = new PythonSourceParser();
     		IModuleSource input = new ModuleSource(codeCell);
-    
+
     		IProblemReporter reporter = new IProblemReporter() {
     			@Override
     			public void reportProblem(IProblem arg0) {
     				pythonParsingError = true;
-    
     			}
     		};
-    		
+
     		// System.out.println("actual source: " + codeCell);
     		PythonModuleDeclaration module;
-    		
+
     		try {
     			module = (PythonModuleDeclaration) parser.parse(input, reporter);
     		} catch (Exception e) {
-    			if (true)
-    				System.err.println("Error parsing Python file: " + path + " from: " + projectName + ", Cell: " + count);
+				System.err.println("Error parsing notebook cell: " + path + " from: " + projectName + ", Cell: " + count);
     			e.printStackTrace();
     			continue;
     		}
-    
-    		if (true) {
-    			
-    			NewPythonVisitor visitor = new NewPythonVisitor();
-  
-    			try {
-    				ast.addNamespaces(visitor.getNamespace(module, "cell:" + count));
-    				parseSuccess = true;
-    			} catch (final UnsupportedOperationException e) {
-    				continue;
-    			} catch (final Throwable e) {
-    				if (debug) {
-    					System.err.println("Error parsing Python file: " + path + " from: " + projectName + ", Cell: " + count);
-    					writeToCsv(projectName, path + "-Cell:" + count, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
-    				} 
-    				e.printStackTrace();
-    				continue;
-    			}
-    		}
-            ///////////////////////////////////////// Parsing each cell ends	
+
+    		NewPythonVisitor visitor = new NewPythonVisitor();
+			try {
+				ast.addNamespaces(visitor.getCellAsNamespace(module, "cell:" + count, exec_count));
+				parseSuccess = true;
+			} catch (final UnsupportedOperationException e) {
+				continue;
+			} catch (final Throwable e) {
+				if (debug) {
+					System.err.println("Error parsing Python file: " + path + " from: " + projectName + ", Cell: " + count);
+					writeToCsv(projectName, path + "-Cell:" + count, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+				}
+				e.printStackTrace();
+				continue;
+			}
+            ///////// Parsing each cell ends ////////////////////
 	    }
 	    ////////// Loop ends for all cells
-	    
+
 	    if (!parseSuccess)
 	    	return false;
-		
+
 	    fb.setKind(FileKind.SOURCE_PY_3);
 		try {
 			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
@@ -813,7 +742,19 @@ public abstract class AbstractCommit {
 
 		return parseSuccess;
 	}
-	
+
+	private JsonArray parseNotebookJson(final String content) {
+		JsonArray jarray = null;
+		try {
+	    	JsonElement jelement = new JsonParser().parse(content);
+		    JsonObject  jobject = jelement.getAsJsonObject();
+		    jarray = jobject.getAsJsonArray("cells");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return jarray;
+	}
+
 	boolean NoNotebookErrors(String line) {
     	if(line.startsWith("%") || line.startsWith("?"))
     		return false;
@@ -852,7 +793,6 @@ public abstract class AbstractCommit {
 			CompilerEnvirons cp = new CompilerEnvirons();
 			cp.setLanguageVersion(astLevel);
 			final org.mozilla.javascript.Parser parser = new org.mozilla.javascript.Parser(cp);
-
 			AstRoot cu;
 			try {
 				cu = parser.parse(content, null, 0);
@@ -860,11 +800,9 @@ public abstract class AbstractCommit {
 				return false;
 			} catch (org.mozilla.javascript.EvaluatorException ex) {
 				return false;
-			}
-
+			}	
 			final JavaScriptErrorCheckVisitor errorCheck = new JavaScriptErrorCheckVisitor();
 			cu.visit(errorCheck);
-
 			if (!errorCheck.hasError || storeOnError) {
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				// final CommentsRoot.Builder comments =
@@ -875,18 +813,18 @@ public abstract class AbstractCommit {
 					// for (final String s : visitor.getImports())
 					// ast.addImports(s);
 					/*
-					 * for (final Comment c : visitor.getComments()) comments.addComments(c);
+					 * for (final Comment c : visitor.getComments())
+					 * comments.addComments(c);
 					 */
 				} catch (final UnsupportedOperationException e) {
 					return false;
 				} catch (final Throwable e) {
 					if (debug)
-						System.err.println("Error visiting JS file: " + path + " from: " + projectName);
+						System.err.println("Error visiting JS file: " + path  + " from: " + projectName);
 					e.printStackTrace();
 					System.exit(-1);
 					return false;
 				}
-
 				try {
 					// System.out.println("writing=" + count + "\t" + path);
 					BytesWritable bw = new BytesWritable(ast.build().toByteArray());
@@ -897,7 +835,6 @@ public abstract class AbstractCommit {
 				}
 				// fb.setComments(comments);
 			}
-
 			return !errorCheck.hasError;
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -915,29 +852,24 @@ public abstract class AbstractCommit {
 		return l;
 	}
 
-	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content,
-			final boolean storeOnError) {
+	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
 		try {
-
 			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
 			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 //			parser.setResolveBindings(true);
 //			parser.setUnitName(FileIO.getFileName(path));
 //			parser.setEnvironment(null, null, null, true);
 			parser.setSource(content.toCharArray());
-
 			final Map<?, ?> options = JavaCore.getOptions();
 			JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
 			parser.setCompilerOptions(options);
-
 			final CompilationUnit cu;
 
 			try {
 				cu = (CompilationUnit) parser.createAST(null);
-			} catch (Throwable e) {
+			} catch(Throwable e) {
 				return false;
 			}
-
 			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
 			cu.accept(errorCheck);
 
@@ -949,12 +881,11 @@ public abstract class AbstractCommit {
 
 					ast.addNamespaces(visitor.getNamespaces(cu));
 
-
 //					for (final Comment c : visitor.getComments()) comments.addComments(c);
 
 				} catch (final Throwable e) {
 					if (debug) {
-						System.err.println("Error visiting Java file: " + path + " from: " + projectName);
+						System.err.println("Error visiting Java file: " + path  + " from: " + projectName);
 						e.printStackTrace();
 					}
 					System.exit(-1);
@@ -962,22 +893,21 @@ public abstract class AbstractCommit {
 				}
 
 				switch (visitor.getAstLevel()) {
-				case JavaVisitor.JLS2:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS2);
-					break;
-				case JavaVisitor.JLS3:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS3);
-					break;
-				case JavaVisitor.JLS4:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS4);
-					break;
-				case JavaVisitor.JLS8:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS8);
-					break;
-				default:
-					fb.setKind(FileKind.SOURCE_JAVA_ERROR);
+					case JavaVisitor.JLS2:
+						fb.setKind(FileKind.SOURCE_JAVA_JLS2);
+						break;
+					case JavaVisitor.JLS3:
+						fb.setKind(FileKind.SOURCE_JAVA_JLS3);
+						break;
+					case JavaVisitor.JLS4:
+						fb.setKind(FileKind.SOURCE_JAVA_JLS4);
+						break;
+					case JavaVisitor.JLS8:
+						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
+						break;
+					default:
+						fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 				}
-
 				try {
 					BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
@@ -989,7 +919,6 @@ public abstract class AbstractCommit {
 				}
 				// fb.setComments(comments);
 			}
-
 			return !errorCheck.hasError;
 		} catch (final Throwable e) {
 			if (debug)
@@ -1000,43 +929,59 @@ public abstract class AbstractCommit {
 
 	protected String processLOC(final String path) {
 		String loc = "";
-
 		final String lowerPath = path.toLowerCase();
 		if (!(lowerPath.endsWith(".txt") || lowerPath.endsWith(".xml") || lowerPath.endsWith(".java")))
 			return loc;
-
 		final String content = getFileContents(path);
-
 		final File dir = new File(new File(System.getProperty("java.io.tmpdir")), UUID.randomUUID().toString());
 		final File tmpPath = new File(dir, path.substring(0, path.lastIndexOf("/")));
 		tmpPath.mkdirs();
 		final File tmpFile = new File(tmpPath, path.substring(path.lastIndexOf("/") + 1));
 		FileIO.writeFileContents(tmpFile, content);
-
 		try {
 			final Process proc = Runtime.getRuntime()
 					.exec(new String[] { "/home/boa/ohcount/bin/ohcount", "-i", tmpFile.getPath() });
-
 			final BufferedReader outStream = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 			String line = null;
 			while ((line = outStream.readLine()) != null)
 				loc += line;
 			outStream.close();
-
 			proc.waitFor();
 		} catch (final IOException e) {
 			e.printStackTrace();
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
-
 		try {
 			FileIO.delete(dir);
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-
 		return loc;
 	}
 
+	/* This is the old version of parsePython, will be deleted when the new one is fully functional.
+	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
+		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+		try {
+			Python3Visitor visitor = new Python3Visitor();
+			fb.setKind(FileKind.SOURCE_PY_3);
+			visitor.visit(path, content);
+			if(!visitor.isPython3)
+				fb.setKind(FileKind.SOURCE_PY_2);
+			ast.addNamespaces(visitor.getNamespaces());
+
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			System.out.println("Error in Python parse. " + e1.getMessage());
+		}
+		try {
+			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+			connector.astWriterLen += bw.getLength();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	} */
 }
