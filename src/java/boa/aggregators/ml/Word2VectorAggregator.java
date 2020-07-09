@@ -65,17 +65,16 @@ public class Word2VectorAggregator extends MLAggregator {
 					return sentence.toLowerCase();
 				}
 			});
-
-			// tokenization and preprocess
-			TokenizerFactory t = new DefaultTokenizerFactory();
-			t.setTokenPreProcessor(new CommonPreprocessor());
-
-			// train model
+			// word2vec model builder
 			Word2Vec.Builder wb = new Word2Vec.Builder();
-			updateOptions(wb);
+			// tokenization
+			TokenizerFactory t = new DefaultTokenizerFactory();
+			updateOptions(wb, t);
+			t.setTokenPreProcessor(new CommonPreprocessor());
+			// build word2vec model
 			Word2Vec vec = wb.iterate(iter).tokenizerFactory(t).build();
+			// train model
 			vec.fit();
-
 			// save model
 			saveModel(vec);
 		} catch (Exception e) {
@@ -83,7 +82,9 @@ public class Word2VectorAggregator extends MLAggregator {
 		}
 	}
 
-	private void updateOptions(Builder wb) {
+	private void updateOptions(Builder wb, TokenizerFactory t) {
+		if (options == null)
+			return;
 		for (int i = 0; i < options.length; i++) {
 			String cur = options[i];
 			if (cur.equals("-s"))
@@ -98,6 +99,8 @@ public class Word2VectorAggregator extends MLAggregator {
 				wb.windowSize(Integer.parseInt(options[++i]));
 			else if (cur.equals("-stop"))
 				wb.stopWords(StopWords.getStopWords());
+			else if (cur.equals("-tp"))
+				t.setTokenPreProcessor(new CommonPreprocessor());
 		}
 	}
 
