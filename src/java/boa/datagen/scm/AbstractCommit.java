@@ -213,8 +213,8 @@ public abstract class AbstractCommit {
 				cfb.setKey(0);
 //				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
 			} else
-				processPythonChangeFile(cfb); // Only process the Python files and ignore other files liek .java, .js
-			// processChangeFile(cfb);
+				//processPythonChangeFile(cfb); // Only process the Python files and ignore other files e.g., .java, .js
+				processChangeFile(cfb);
 			revision.addFiles(cfb.build());
 		}
 
@@ -282,7 +282,25 @@ public abstract class AbstractCommit {
 			final String content = getFileContents(path);
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 			parseJavaFile(path, fb, content, false); // parse java file
-		} else if (lowerPath.endsWith(".js")) {
+		}
+		else if (lowerPath.endsWith(".py")) {
+			if (badp.contains(lowerPath)) {
+				fb.setKind(FileKind.SOURCE_PY_ERROR);
+			}
+			else {
+				final String content = getFileContents(path);
+				fb.setKind(FileKind.SOURCE_PY_ERROR);
+				System.out.println(projectName + ": " + path);
+				parsePythonFile(path, fb, content, false);
+			}
+		}
+		else if (lowerPath.endsWith(".ipynb")) {
+			final String content = getFileContents(path);
+			fb.setKind(FileKind.SOURCE_PY_ERROR);
+			System.out.println(projectName + ": " + path);
+			parseNotebookFile(path, fb, content, false);
+		}
+		else if (lowerPath.endsWith(".js")) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JS_ES1);

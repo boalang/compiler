@@ -278,7 +278,8 @@ public class GitConnector extends AbstractConnector {
 					cfb.setAst(false);
 					GitCommit gc = new GitCommit(this, repository, revwalk, projectName);
 					gc.filePathGitObjectIds.put(path, tw.getObjectId(0));
-					gc.processPythonChangeFile(cfb);
+					gc.processChangeFile(cfb);
+					// gc.processPythonChangeFile(cfb);
 					snapshot.add(cfb.build());
 				}
 			}
