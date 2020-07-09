@@ -788,6 +788,11 @@ public class TreedMapper implements TreedConstants {
 					} else if (nodeM instanceof PythonImportStatement) {
 						mappedChildrenM.add(((PythonImportStatement) nodeM).getExpression());
 						mappedChildrenN.add(((PythonImportStatement) nodeN).getExpression());
+					} else if (nodeM instanceof PythonImportFromStatement) {
+						mappedChildrenM.add(((PythonImportFromStatement) nodeM).getfImportExpressions());
+						mappedChildrenN.add(((PythonImportFromStatement) nodeN).getfImportExpressions());
+						mappedChildrenM.add(((PythonImportFromStatement) nodeM).getfModuleExpression());
+						mappedChildrenN.add(((PythonImportFromStatement) nodeN).getfModuleExpression());
 					} 
 					
 				} else if (nodeM instanceof MethodDeclaration) {
@@ -844,7 +849,10 @@ public class TreedMapper implements TreedConstants {
 						mappedChildrenM.add(((ShortHandIfExpression) nodeM).getElse());
 						mappedChildrenN.add(((ShortHandIfExpression) nodeN).getElse());
 					}
-					
+					else if (nodeM instanceof PrintExpression) {
+						mappedChildrenM.add(((PrintExpression) nodeM).getExpression());
+						mappedChildrenN.add(((PrintExpression) nodeN).getExpression());
+					} 
 					else if (nodeM instanceof PrintExpression) {
 						mappedChildrenM.add(((PrintExpression) nodeM).getExpression());
 						mappedChildrenN.add(((PrintExpression) nodeN).getExpression());

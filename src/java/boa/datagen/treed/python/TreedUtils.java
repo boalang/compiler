@@ -35,6 +35,7 @@ public final class TreedUtils {
 					((Expression) node).getKind()<=1110)
 				return label + "(" + ((Expression) node).getOperator().toString() + ")";
 		} 
+//		return label + "(" + node.toString() + ")";
 		return label;
 	}
 
