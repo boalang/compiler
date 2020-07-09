@@ -425,6 +425,10 @@ public class NewPythonVisitor extends ASTVisitor {
 			md.getCondition().traverse(this);
 			b.addExpressions(expressions.pop());
 		}
+		if (md.getSlice() != null) {
+			md.getSlice().traverse(this);
+			b.addExpressions(expressions.pop());
+		}
 		expressions.push(b.build());
 		return true;
 	}

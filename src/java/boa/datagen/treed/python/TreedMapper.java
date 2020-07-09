@@ -21,6 +21,7 @@ import org.eclipse.dltk.python.parser.ast.PythonAssertStatement;
 import org.eclipse.dltk.python.parser.ast.PythonDelStatement;
 import org.eclipse.dltk.python.parser.ast.PythonExceptStatement;
 import org.eclipse.dltk.python.parser.ast.PythonForStatement;
+import org.eclipse.dltk.python.parser.ast.PythonImportFromStatement;
 import org.eclipse.dltk.python.parser.ast.PythonImportStatement;
 import org.eclipse.dltk.python.parser.ast.PythonTryStatement;
 import org.eclipse.dltk.python.parser.ast.PythonWhileStatement;
@@ -32,9 +33,11 @@ import org.eclipse.dltk.python.parser.ast.expressions.CallHolder;
 import org.eclipse.dltk.python.parser.ast.expressions.IndexHolder;
 import org.eclipse.dltk.python.parser.ast.expressions.PrintExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonForListExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonImportExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonLambdaExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonListForExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.ShortHandIfExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.UnaryExpression;
 import org.eclipse.dltk.python.parser.ast.statements.BreakStatement;
 import org.eclipse.dltk.python.parser.ast.statements.ContinueStatement;
@@ -452,6 +455,8 @@ public class TreedMapper implements TreedConstants {
 	}
 
 	private boolean labelMatch(Expression nodeM, Expression nodeN) {
+		if(!nodeM.getClass().getSimpleName().equals(nodeN.getClass().getSimpleName()))
+			return false;
 		return nodeM.getOperator().equals(nodeN.getOperator());
 	}
 	
@@ -780,13 +785,20 @@ public class TreedMapper implements TreedConstants {
 					} else if (nodeM instanceof ReturnStatement) {
 						mappedChildrenM.add(((ReturnStatement) nodeM).getExpression());
 						mappedChildrenN.add(((ReturnStatement) nodeN).getExpression());
+					} else if (nodeM instanceof PythonImportStatement) {
+						mappedChildrenM.add(((PythonImportStatement) nodeM).getExpression());
+						mappedChildrenN.add(((PythonImportStatement) nodeN).getExpression());
 					} 
 					
 				} else if (nodeM instanceof MethodDeclaration) {
+					mappedChildrenM.add(((MethodDeclaration) nodeM).getRef());
+					mappedChildrenN.add(((MethodDeclaration) nodeN).getRef());
 					mappedChildrenM.add(((MethodDeclaration) nodeM).getBody());
 					mappedChildrenN.add(((MethodDeclaration) nodeN).getBody());
 				} 
 				else if (nodeM instanceof TypeDeclaration) {
+					mappedChildrenM.add(((TypeDeclaration) nodeM).getRef());
+					mappedChildrenN.add(((TypeDeclaration) nodeN).getRef());
 					mappedChildrenM.add(((TypeDeclaration) nodeM).getBody());
 					mappedChildrenN.add(((TypeDeclaration) nodeN).getBody());
 				}
@@ -824,6 +836,13 @@ public class TreedMapper implements TreedConstants {
 						mappedChildrenN.add(((PythonSubscriptExpression) nodeN).getSlice());
 						mappedChildrenM.add(((PythonSubscriptExpression) nodeM).getTest());
 						mappedChildrenN.add(((PythonSubscriptExpression) nodeN).getTest());
+					} else if (nodeM instanceof ShortHandIfExpression) {
+						mappedChildrenM.add(((ShortHandIfExpression) nodeM).getCondition());
+						mappedChildrenN.add(((ShortHandIfExpression) nodeN).getCondition());
+						mappedChildrenM.add(((ShortHandIfExpression) nodeM).getThen());
+						mappedChildrenN.add(((ShortHandIfExpression) nodeN).getThen());
+						mappedChildrenM.add(((ShortHandIfExpression) nodeM).getElse());
+						mappedChildrenN.add(((ShortHandIfExpression) nodeN).getElse());
 					}
 					
 					else if (nodeM instanceof PrintExpression) {
