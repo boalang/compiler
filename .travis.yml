@@ -8,7 +8,7 @@ addons:
       - junit4
       - ant
       - ant-optional
-script: ant -Dprotobuf.uptodate=true test checkstyle
+script: ant
 notifications:
   email:
     recipients:
