@@ -38,8 +38,14 @@ public class Sequence2VectorAggregator extends MLAggregator {
 
 	@Override
 	public void aggregate(String[] data, String metadata) throws IOException, InterruptedException {
-		for (String s : data)
-			train.add(s);
+		if (metadata != null && metadata.equals("single") && data.length == 1) {
+			aggregate(data[0], null);
+		} else {
+			StringBuilder sb = new StringBuilder();
+			for (String s : data)
+				sb.append(s).append(' ');
+			train.add(sb.toString());
+		}
 	}
 
 	@Override
@@ -59,22 +65,30 @@ public class Sequence2VectorAggregator extends MLAggregator {
 		try {
 			// load train dataset
 			SentenceIterator iter = new CollectionSentenceIterator(train);
-
-			// tokenization and preprocess
+			// seq2vec model builder
+			SequenceVectors.Builder<VocabWord> sb = new SequenceVectors.Builder<VocabWord>(new VectorsConfiguration());
+			// tokenization
 			TokenizerFactory t = new DefaultTokenizerFactory();
-			t.setTokenPreProcessor(new CommonPreprocessor());
-
+			updateOptions(sb, t);
+			// sequence iterator
 			SentenceTransformer transformer = new SentenceTransformer.Builder().iterator(iter).tokenizerFactory(t)
 					.build();
+
+//			while (iter.hasNext()) {
+//	        	System.out.println(iter.nextSentence());
+//	        }
+
 			AbstractSequenceIterator<VocabWord> itr = new AbstractSequenceIterator.Builder<VocabWord>(transformer)
 					.build();
 
-			// train model
-			SequenceVectors.Builder<VocabWord> sb = new SequenceVectors.Builder<VocabWord>(new VectorsConfiguration());
-			updateOptions(sb);
-			SequenceVectors<VocabWord> sv = sb.iterate(itr).build();
-			sv.fit();
+//			while (itr.hasMoreSequences()) {
+//	        	System.out.println(itr.nextSequence().asLabels());
+//	        }
 
+			// build seq2vec model
+			SequenceVectors<VocabWord> sv = sb.iterate(itr).build();
+			// train model
+			sv.fit();
 			// save model
 			saveModel(sv);
 		} catch (Exception e) {
@@ -82,7 +96,9 @@ public class Sequence2VectorAggregator extends MLAggregator {
 		}
 	}
 
-	private void updateOptions(SequenceVectors.Builder<VocabWord> sb) {
+	private void updateOptions(SequenceVectors.Builder<VocabWord> sb, TokenizerFactory t) {
+		if (options == null)
+			return;
 		for (int i = 0; i < options.length; i++) {
 			String cur = options[i];
 			if (cur.equals("-s"))
@@ -101,6 +117,8 @@ public class Sequence2VectorAggregator extends MLAggregator {
 				sb.batchSize(Integer.parseInt(options[++i]));
 			else if (cur.equals("-stop"))
 				sb.stopWords(StopWords.getStopWords());
+			else if (cur.equals("-tp"))
+				t.setTokenPreProcessor(new CommonPreprocessor());
 		}
 	}
 }

@@ -80,7 +80,11 @@
 	<classpathentry kind="lib" path="lib/dl4j/commons-lang3-3.6.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/commons-math3-3.5.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/deeplearning4j-common-1.0.0-beta7.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/deeplearning4j-nlp-1.0.0-beta7.jar"/>
+	<classpathentry kind="lib" path="lib/dl4j/deeplearning4j-nlp-1.0.0-beta7.jar" sourcepath="lib/dl4j/deeplearning4j-nlp-1.0.0-beta7-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/Users/hyj/boa-workspace/dp4j/lib/deeplearning4j-nlp-1.0.0-beta7-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/dl4j/deeplearning4j-nn-1.0.0-beta7.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/gson-2.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/guava-1.0.0-beta7.jar"/>

@@ -23,6 +23,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
@@ -100,7 +101,7 @@ public class EmitValue implements Writable {
 	 * @param data A {@link String} containing the data to be emitted
 	 */
 	public EmitValue(final String data) {
-		this(new String[] { data }, null);
+		this(new String[] { data }, "single");
 	}
 
 	/**
@@ -314,6 +315,30 @@ public class EmitValue implements Writable {
 	 * @param data An array of {@link long} containing the data to be emitted
 	 */
 	public EmitValue(final long[] data) {
+		this(data, null);
+	}
+	
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data     An array of {@link long} containing the data to be emitted
+	 * @param metadata A {@link String} containing the metadata to be emitted
+	 */
+	public EmitValue(final Collection<String> data, final String metadata) {
+		final String[] strings = new String[data.size()];
+		int i = 0;
+		for (String s : data)
+			strings[i++] = s;
+		this.data = strings;
+		this.metadata = metadata;
+	}
+
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data An array of {@link long} containing the data to be emitted
+	 */
+	public EmitValue(final Collection<String> data) {
 		this(data, null);
 	}
 
