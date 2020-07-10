@@ -410,6 +410,7 @@ public class SeqRepoImporter {
 			if (project.getProgrammingLanguagesList().contains("Java")
 					|| project.getProgrammingLanguagesList().contains("JavaScript")
 					|| project.getProgrammingLanguagesList().contains("Python")
+					|| project.getProgrammingLanguagesList().contains("Jupyter Notebook")
 					|| project.getProgrammingLanguagesList().contains("PHP"))
 				return false;
 			String lang = project.getMainLanguage();
@@ -417,6 +418,7 @@ public class SeqRepoImporter {
 					&& (lang.equals("Java")
 						|| lang.equals("JavaScript")
 						|| lang.equals("Python")
+						|| lang.equals("Jupyter Notebook")
 						|| lang.equals("PHP")))
 				return false;
 			return true;

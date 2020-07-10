@@ -213,8 +213,8 @@ public abstract class AbstractCommit {
 				cfb.setKey(0);
 //				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
 			} else
-				//processPythonChangeFile(cfb); // Only process the Python files and ignore other files e.g., .java, .js
 				processChangeFile(cfb);
+				//processPythonChangeFile(cfb); // Only process the Python files and ignore other files e.g., .java, .js
 			revision.addFiles(cfb.build());
 		}
 
