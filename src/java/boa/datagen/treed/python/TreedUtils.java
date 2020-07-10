@@ -2,6 +2,7 @@ package boa.datagen.treed.python;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.expressions.Expression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
 
 public final class TreedUtils {
 
@@ -24,7 +25,7 @@ public final class TreedUtils {
 
 	public static String buildASTLabel(ASTNode node) {
 		String label = node.getClass().getSimpleName();
-		
+				
 		if (node.getClass().getSimpleName().endsWith("Literal")||
 				node.getClass().getSimpleName().endsWith("Reference")) {
 			return label + "(" + node.toString() + ")";

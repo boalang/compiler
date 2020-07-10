@@ -69,8 +69,8 @@ public class test_treed {
 		String fileName1="",fileName2="";
 		if(this.language==1)
 		{
-			fileName1="src/java/boa/datagen/scm/test/v1.py";
-			fileName2="src/java/boa/datagen/scm/test/v2.py";
+			fileName1="src/java/boa/datagen/scm/test/v11.py";
+			fileName2="src/java/boa/datagen/scm/test/v12.py";
 		}
 		else if(this.language==2)
 		{
