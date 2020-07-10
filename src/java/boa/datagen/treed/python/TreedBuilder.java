@@ -12,6 +12,9 @@ import org.eclipse.dltk.ast.ASTVisitor;
 public class TreedBuilder extends ASTVisitor implements TreedConstants {
 	private int index = 1;
 	private ASTNode root;
+	int type=1;
+
+    HashMap<String,Integer> nodeTypes =new HashMap<>();
 	//tree records children for every ast node: node -> childs
 	HashMap<ASTNode, ArrayList<ASTNode>> tree = new HashMap<ASTNode, ArrayList<ASTNode>>();
 	HashMap<ASTNode, Integer> treeHeight = new HashMap<ASTNode, Integer>(), treeDepth = new HashMap<ASTNode, Integer>();
@@ -20,15 +23,23 @@ public class TreedBuilder extends ASTVisitor implements TreedConstants {
 	//direct childs of current node only including itself
 	HashMap<ASTNode, HashMap<String, Integer>> treeVector = new HashMap<ASTNode, HashMap<String, Integer>>(), treeRootVector = new HashMap<ASTNode, HashMap<String, Integer>>();
 	
-	public TreedBuilder(ASTNode root) {
+	public TreedBuilder(ASTNode root,int type,HashMap<String,Integer> nodeTypes) {
 		super();
 		this.root = root;
+		this.type=type;
+		this.nodeTypes=nodeTypes;
 		treeDepth.put(root, 0);
 	}
 	
 	@Override
 	public boolean visitGeneral(ASTNode node) {
 		node.setProperty(PROPERTY_INDEX, index++);
+		
+		String nodeName=node.getClass().getSimpleName();
+		if(!nodeTypes.containsKey(nodeName))
+			nodeTypes.put(nodeName, type++);
+		node.setNodeType(nodeTypes.get(nodeName));
+		
 		tree.put(node, new ArrayList<ASTNode>());
 		if (node != root) {
 			ASTNode p = node.getParent();
