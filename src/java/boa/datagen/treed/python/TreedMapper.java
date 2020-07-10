@@ -51,6 +51,9 @@ import boa.types.Shared.ChangeKind;
 
 public class TreedMapper implements TreedConstants {
 	private ASTNode astM, astN;
+	private HashMap<String,Integer> nodeTypes =new HashMap<>();
+	private int type=1;
+
 	private HashMap<ASTNode, ArrayList<ASTNode>> tree = new HashMap<ASTNode, ArrayList<ASTNode>>();
 	private HashMap<ASTNode, Integer> treeHeight = new HashMap<ASTNode, Integer>(), treeDepth = new HashMap<ASTNode, Integer>();
 	private HashMap<ASTNode, HashMap<String, Integer>> treeVector = new HashMap<ASTNode, HashMap<String, Integer>>();
@@ -725,7 +728,7 @@ public class TreedMapper implements TreedConstants {
 			} else {
 				ArrayList<ASTNode> nodesM = getNotYetMatchedNodes(childrenM), nodesN = getNotYetMatchedNodes(childrenN);
 				ArrayList<ASTNode> mappedChildrenM = new ArrayList<ASTNode>(), mappedChildrenN = new ArrayList<ASTNode>();
-				if (nodeM instanceof Statement) {
+				
 					
 					if (nodeM instanceof PythonWhileStatement) {
 						mappedChildrenM.add(((PythonWhileStatement) nodeM).getCondition());
@@ -795,15 +798,11 @@ public class TreedMapper implements TreedConstants {
 						mappedChildrenN.add(((PythonImportFromStatement) nodeN).getfModuleExpression());
 					} 
 					
-				} else if (nodeM instanceof MethodDeclaration) {
-					mappedChildrenM.add(((MethodDeclaration) nodeM).getRef());
-					mappedChildrenN.add(((MethodDeclaration) nodeN).getRef());
+				 else if (nodeM instanceof MethodDeclaration) {
 					mappedChildrenM.add(((MethodDeclaration) nodeM).getBody());
 					mappedChildrenN.add(((MethodDeclaration) nodeN).getBody());
 				} 
 				else if (nodeM instanceof TypeDeclaration) {
-					mappedChildrenM.add(((TypeDeclaration) nodeM).getRef());
-					mappedChildrenN.add(((TypeDeclaration) nodeN).getRef());
 					mappedChildrenM.add(((TypeDeclaration) nodeM).getBody());
 					mappedChildrenN.add(((TypeDeclaration) nodeN).getBody());
 				}
@@ -985,6 +984,17 @@ public class TreedMapper implements TreedConstants {
 		astM.traverse(new ASTVisitor() {
 			
 			@Override
+			public boolean visitGeneral(ASTNode node) {
+				HashMap<ASTNode, Double> maps = treeMap.get(node);
+				if (!maps.isEmpty()) {
+					ASTNode mapped = maps.keySet().iterator().next();
+					mapMoving(node, mapped);
+					return false;
+				}
+				return true;
+			}
+			
+			@Override
 			public boolean visit(MethodDeclaration node) {
 				HashMap<ASTNode, Double> maps = treeMap.get(node);
 				if (!maps.isEmpty()) {
@@ -1059,8 +1069,10 @@ public class TreedMapper implements TreedConstants {
 	}
 
 	private void buildTree(final ASTNode root) throws Exception {
-		final TreedBuilder visitor = new TreedBuilder(root);
+		final TreedBuilder visitor = new TreedBuilder(root, type, nodeTypes);
 		root.traverse(visitor);
+		this.type=visitor.type;
+		this.nodeTypes=visitor.nodeTypes;
 		tree.putAll(visitor.tree);
 		treeHeight.putAll(visitor.treeHeight);
 		treeDepth.putAll(visitor.treeDepth);

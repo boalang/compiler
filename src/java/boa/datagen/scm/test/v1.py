@@ -6,6 +6,7 @@ from keras.layers import Input, Dense
 class SimpleMnistModel(BaseModel):
     def __init__(self, config):
         super(SimpleMnistModel, self).__init__(config)
+        self.model.add(Dense(16))
         self.build_model()
 
     def build_model(self):
