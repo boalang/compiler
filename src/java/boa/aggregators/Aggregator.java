@@ -25,7 +25,6 @@ import org.apache.hadoop.mapreduce.Reducer.Context;
 import boa.functions.BoaCasts;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
-import boa.runtime.Tuple;
 
 /**
  * The base class for all Boa aggregators.

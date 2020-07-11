@@ -275,6 +275,8 @@ public class JavaVisitor extends ASTVisitor {
 			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
 			b.addParents(tb.build());
 		}
+
+		
 		for (Object d : node.bodyDeclarations()) {
 			if (d instanceof FieldDeclaration) {
 				fields.push(new ArrayList<boa.types.Ast.Variable>());

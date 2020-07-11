@@ -36,8 +36,12 @@ public class Word2VectorAggregator extends MLAggregator {
 
 	@Override
 	public void aggregate(String[] data, String metadata) throws IOException, InterruptedException {
-		for (String s : data)
-			train.add(s);
+		if (metadata != null && metadata.equals("single") && data.length == 1) {
+			aggregate(data[0], null);
+		} else {
+			for (String s : data)
+				train.add(s);
+		}
 	}
 
 	@Override

@@ -431,10 +431,17 @@
 					<include name="com/" />
 					<exclude name="**/compiler/" />
 					<exclude name="**/parser/" />
-					<exclude name="**/boa/types/proto/" />
-					<exclude name="**/boa/types/Boa*" />
 				</patternset>
 			</fileset>
+
+			<!-- dl4j and weka dependencies -->
+			<archives>
+				<zips>
+					<fileset dir="lib/weka" includes="**/*.jar" />
+					<fileset dir="lib/dl4j" excludes="**/macos/" includes="**/*.jar" />
+				</zips>
+			</archives>
+
 		</jar>
 	</target>
 
@@ -458,22 +465,17 @@
 			<zipfileset excludes="META-INF/" src="rtlib/scannotation-1.0.3.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/ST-4.0.8.jar" />
 
-			<!-- 
-
-			<fileset dir="lib/weka" includes="**/*.jar"/>
-			<fileset dir="lib/dl4j" includes="**/*.jar"/>
-			
+			<!-- dl4j and weka dependencies -->
 			<restrict>
 				<name name="**/*.class" />
 				<archives>
 					<zips>
 						<fileset dir="lib/weka" includes="**/*.jar" />
-						<fileset dir="lib/dl4j" includes="**/*.jar" />
+						<fileset dir="lib/dl4j" excludes="**/macos/" includes="**/*.jar" />
 					</zips>
 				</archives>
 			</restrict>
-			
-			-->
+
 		</jar>
 	</target>
 

@@ -89,26 +89,8 @@
 	<classpathentry kind="lib" path="lib/dl4j/gson-2.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/guava-1.0.0-beta7.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/jackson-1.0.0-beta7.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/javacpp-1.5.3.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/javacpp-platform-1.5.3.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/javacv-1.5.3.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/nd4j-api-1.0.0-beta7.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/nd4j-common-1.0.0-beta7.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/nd4j-native-1.0.0-beta7-linux-armhf.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/nd4j-native-1.0.0-beta7-linux-ppc64le.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/nd4j-native-1.0.0-beta7-linux-x86_64.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/nd4j-native-1.0.0-beta7-macosx-x86_64.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/nd4j-native-1.0.0-beta7.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/nd4j-native-api-1.0.0-beta7.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/nd4j-native-platform-1.0.0-beta7.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/nearestneighbor-core-1.0.0-beta7.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/neoitertools-1.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/openblas-0.3.9-1.5.3-linux-arm64.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/openblas-0.3.9-1.5.3-linux-armhf.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/openblas-0.3.9-1.5.3-linux-ppc64le.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/openblas-0.3.9-1.5.3-linux-x86_64.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/openblas-0.3.9-1.5.3-linux-x86.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/openblas-0.3.9-1.5.3-macosx-x86_64.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/openblas-0.3.9-1.5.3.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/openblas-platform-0.3.9-1.5.3.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/opencsv-2.3.jar"/>
@@ -117,17 +99,22 @@
 	<classpathentry kind="lib" path="lib/dl4j/slf4j-api-1.7.21.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/slf4j-simple-1.7.21.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/threadly-4.10.0.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/javacpp-1.5.3-linux-arm64.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/javacpp-1.5.3-linux-armhf.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/javacpp-1.5.3-linux-ppc64le.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/javacpp-1.5.3-linux-x86_64.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/javacpp-1.5.3-linux-x86.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/javacpp-1.5.3-macosx-x86_64.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/jna-4.3.0.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/jna-platform-4.3.0.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/deeplearning4j-core-1.0.0-beta7.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/deeplearning4j-tsne-1.0.0-beta7.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/flatbuffers-java-1.10.0.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="lib/dl4j/nd4j/nd4j-api-1.0.0-beta7.jar"/>
+	<classpathentry kind="lib" path="lib/dl4j/nd4j/nd4j-common-1.0.0-beta7.jar"/>
+	<classpathentry kind="lib" path="lib/dl4j/nd4j/nd4j-native-1.0.0-beta7.jar"/>
+	<classpathentry kind="lib" path="lib/dl4j/nd4j/nd4j-native-api-1.0.0-beta7.jar"/>
+	<classpathentry kind="lib" path="lib/dl4j/nd4j/nd4j-native-platform-1.0.0-beta7.jar"/>
+	<classpathentry kind="lib" path="lib/dl4j/javacpp/javacpp-1.5.3.jar"/>
+	<classpathentry kind="lib" path="lib/dl4j/javacpp/javacpp-platform-1.5.3.jar"/>
+	<classpathentry kind="lib" path="lib/dl4j/javacpp/javacv-1.5.3.jar"/>
+	<classpathentry kind="lib" path="lib/dl4j/macos/javacpp-1.5.3-macosx-x86_64.jar"/>
+	<classpathentry kind="lib" path="lib/dl4j/macos/nd4j-native-1.0.0-beta7-macosx-x86_64.jar"/>
+	<classpathentry kind="lib" path="lib/dl4j/macos/openblas-0.3.9-1.5.3-macosx-x86_64.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
