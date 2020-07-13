@@ -272,8 +272,8 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 
-		if (vr instanceof VariableReference)
-			b.setMethod(((VariableReference) vr).getName());
+		if (vr instanceof SimpleReference)
+			b.setMethod(((SimpleReference) vr).getName());
 		else if (vr instanceof StringLiteral)
 			b.setMethod(((StringLiteral) vr).getValue());
 
@@ -298,9 +298,13 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		if (md.getExpressionCount() > 1 && md.getExpression(md.getExpressionCount() - 1) instanceof CallHolder) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
-			if (md.getExpression(md.getExpressionCount() - 2) instanceof VariableReference) {
-				VariableReference vr = (VariableReference) md.getExpression(md.getExpressionCount() - 2);
+			
+			if (md.getExpression(md.getExpressionCount() - 2) instanceof SimpleReference) {
+				SimpleReference vr = (SimpleReference) md.getExpression(md.getExpressionCount() - 2);
 				b.setMethod(vr.getName());
+			} else if (md.getExpression(md.getExpressionCount() - 2) instanceof StringLiteral) {
+				StringLiteral vr = (StringLiteral) md.getExpression(md.getExpressionCount() - 2);
+				b.setMethod(vr.getValue());
 			}
 
 			for (int i = 0; i < md.getExpressionCount() - 2; i++) {
@@ -342,13 +346,16 @@ public class NewPythonVisitor extends ASTVisitor {
 				b.addExpressions(expressions.pop());
 			}
 
-		} else if (md.getExpressionCount() > 0
-				&& md.getExpression(md.getExpressionCount() - 1) instanceof VariableReference) {
+		} else if (md.getExpressionCount() > 0) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
-			if (md.getExpression(md.getExpressionCount() - 1) instanceof VariableReference) {
-				VariableReference vr = (VariableReference) md.getExpression(md.getExpressionCount() - 1);
+			if (md.getExpression(md.getExpressionCount() - 1) instanceof SimpleReference) {
+				SimpleReference vr = (SimpleReference) md.getExpression(md.getExpressionCount() - 1);
 				b.setVariable(vr.getName());
+			} else if (md.getExpression(md.getExpressionCount() - 1) instanceof StringLiteral) {
+				StringLiteral vr = (StringLiteral) md.getExpression(md.getExpressionCount() - 1);
+				b.setVariable(vr.getValue());
 			}
+			
 			for (int i = 0; i < md.getExpressionCount() - 1; i++) {
 				if (i < md.getExpressionCount() - 1 && md.getExpression(i + 1) instanceof CallHolder) {
 					visit(md.getExpression(i), (CallHolder) md.getExpression(i + 1));
@@ -519,10 +526,10 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		// to handle argument initialization
 
-//		if (node.getDefaultValue() != null) {
-//			node.getDefaultValue().accept(this);
-//			b.setInitializer(expressions.pop());
-//		}
+		if (node.getInitialization() != null) {
+			node.getInitialization().traverse(this);
+			b.setInitializer(expressions.pop());
+		}
 		list.add(b.build());
 		return false;
 
@@ -918,7 +925,8 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_XOR);
 		} else if (md.getKind() == ExpressionConstants.E_BNOT) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_NOT);
-		} else
+		} 
+		else
 
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
 
@@ -962,7 +970,7 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		if (node.getRef() instanceof SimpleReference) {
 			b.setName(((SimpleReference) node.getRef()).getName());
-		}
+		} 
 		b.setKind(boa.types.Ast.TypeKind.CLASS);
 
 		if (node.getSuperClassNames() != null) {
@@ -1271,6 +1279,12 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setVariableDeclaration(vb.build());
 		}
 
+		if (s.getMessage() != null) {
+
+			s.getMessage().traverse(this);
+
+			b.addExpressions(expressions.pop());
+		}
 		if (s.getBody() != null) {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
 

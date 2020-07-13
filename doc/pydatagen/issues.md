@@ -22,16 +22,16 @@
 
 ## High Priority
 
-#### method's default parameter value missing in boa ast
+#### method's default parameter value missing in boa ast [Resolved]
 def create_model(input_shape, anchors_stride_base, num_classes, load_pretrained=True, freeze_body=2,
             weights_path='model_data/yolo_weights.h5'):
             
-#### anchors = [float(x) for x in anchors.split(',')] : float method name missing
+#### anchors = [float(x) for x in anchors.split(',')] : float method name missing [Resolved]
 
-#### char2idx = {c: i for i, c in enumerate(idx2char)} 
+#### char2idx = {c: i for i, c in enumerate(idx2char)} [resolved]
 
-#### xy = xy[::-1] 
-####  time_series[i:i + seq_length, :]
+
+####  time_series[i:i + seq_length, :] [resolved]
 
 #### Import statements [RESOLVED]
 This kind of local import is not handled: `from ..foo.bar import a as b, c`
@@ -283,6 +283,8 @@ In the above example, `True` has been added in the AST as VARACCESS but it might
                   }
                ]
 ```
+
+#### xy = xy[::-1] 
 
 ## General datagen issues (can be fixed later)
 

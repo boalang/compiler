@@ -17,6 +17,7 @@ import org.eclipse.dltk.ast.expressions.Expression;
 import org.eclipse.dltk.ast.expressions.Literal;
 import org.eclipse.dltk.ast.statements.Block;
 import org.eclipse.dltk.ast.statements.Statement;
+import org.eclipse.dltk.python.parser.ast.PythonArgument;
 import org.eclipse.dltk.python.parser.ast.PythonAssertStatement;
 import org.eclipse.dltk.python.parser.ast.PythonDelStatement;
 import org.eclipse.dltk.python.parser.ast.PythonExceptStatement;
@@ -45,27 +46,29 @@ import org.eclipse.dltk.python.parser.ast.statements.ExecStatement;
 import org.eclipse.dltk.python.parser.ast.statements.GlobalStatement;
 import org.eclipse.dltk.python.parser.ast.statements.IfStatement;
 import org.eclipse.dltk.python.parser.ast.statements.ReturnStatement;
+import org.eclipse.dltk.python.parser.ast.statements.SimpleStatement;
 import org.eclipse.dltk.python.parser.ast.statements.TryFinallyStatement;
 
 import boa.types.Shared.ChangeKind;
 
 public class TreedMapper implements TreedConstants {
 	private ASTNode astM, astN;
-	private HashMap<String,Integer> nodeTypes =new HashMap<>();
-	private int type=1;
+	private HashMap<String, Integer> nodeTypes = new HashMap<>();
+	private int type = 1;
 
 	private HashMap<ASTNode, ArrayList<ASTNode>> tree = new HashMap<ASTNode, ArrayList<ASTNode>>();
-	private HashMap<ASTNode, Integer> treeHeight = new HashMap<ASTNode, Integer>(), treeDepth = new HashMap<ASTNode, Integer>();
+	private HashMap<ASTNode, Integer> treeHeight = new HashMap<ASTNode, Integer>(),
+			treeDepth = new HashMap<ASTNode, Integer>();
 	private HashMap<ASTNode, HashMap<String, Integer>> treeVector = new HashMap<ASTNode, HashMap<String, Integer>>();
 	private HashMap<ASTNode, HashMap<ASTNode, Double>> treeMap = new HashMap<ASTNode, HashMap<ASTNode, Double>>();
 	private HashSet<ASTNode> pivotsM = new HashSet<ASTNode>(), pivotsN = new HashSet<ASTNode>();
 	private int numOfChanges = 0, numOfUnmaps = 0, numOfNonNameUnMaps = 0;
-	
+
 	public TreedMapper(ASTNode astM, ASTNode astN) {
 		this.astM = astM;
 		this.astN = astN;
 	}
-	
+
 	public int getNumOfChanges() {
 		return numOfChanges;
 	}
@@ -77,20 +80,20 @@ public class TreedMapper implements TreedConstants {
 	public boolean isChanged() {
 		return this.numOfChanges > 0;
 	}
-	
+
 	public boolean hasUnmap() {
 		return this.numOfUnmaps > 0;
 	}
-	
+
 	public boolean hasNonNameUnmap() {
 		return this.numOfNonNameUnMaps > 0;
 	}
-	
+
 	public void map() throws Exception {
 		buildTrees();
 		mapPivots();
 		mapBottomUp();
-		mapMoving();
+//		mapMoving();
 		mapTopDown();
 		markChanges();
 		markUnchanges(astM);
@@ -128,14 +131,14 @@ public class TreedMapper implements TreedConstants {
 	}
 
 	private void printChanges(ASTNode node) throws Exception {
-		ASTVisitor visitor=(new ASTVisitor() {
+		ASTVisitor visitor = (new ASTVisitor() {
 			private int indent = 0;
-			
+
 			private void printIndent() {
 				for (int i = 0; i < indent; i++)
 					System.out.print("\t");
 			}
-			
+
 			@Override
 			public boolean visitGeneral(ASTNode node) {
 				printIndent();
@@ -148,7 +151,7 @@ public class TreedMapper implements TreedConstants {
 				indent++;
 				return true;
 			}
-			
+
 			@Override
 			public void endvisitGeneral(ASTNode node) {
 				indent--;
@@ -181,7 +184,8 @@ public class TreedMapper implements TreedConstants {
 			node.setProperty(PROPERTY_STATUS, ChangeKind.DELETED);
 			numOfChanges++;
 			numOfUnmaps++;
-			if (!(node instanceof Literal) && !(node instanceof ReturnStatement) && !(node instanceof BreakStatement) && !(node instanceof ContinueStatement))
+			if (!(node instanceof Literal) && !(node instanceof ReturnStatement) && !(node instanceof BreakStatement)
+					&& !(node instanceof ContinueStatement))
 				numOfNonNameUnMaps++;
 		} else {
 			ASTNode mappedNode = maps.keySet().iterator().next();
@@ -244,7 +248,7 @@ public class TreedMapper implements TreedConstants {
 		int i = len, j = lenN;
 		while (i > 0 && j > 0) {
 			if (p[i][j] == 'D') {
-				ASTNode node = nodes.get(i-1), node2 = mappedNodes.get(j-1);
+				ASTNode node = nodes.get(i - 1), node2 = mappedNodes.get(j - 1);
 				if (TreedUtils.buildLabelForVector(node) == TreedUtils.buildLabelForVector(node2)) {
 					node.setProperty(PROPERTY_STATUS, ChangeKind.UNCHANGED);
 					node2.setProperty(PROPERTY_STATUS, ChangeKind.UNCHANGED);
@@ -257,8 +261,7 @@ public class TreedMapper implements TreedConstants {
 				j--;
 			} else if (p[i][j] == 'U') {
 				i--;
-			}
-			else {
+			} else {
 				j--;
 			}
 		}
@@ -285,14 +288,15 @@ public class TreedMapper implements TreedConstants {
 		mapPivots(lM, lN, heightsM, heightsN);
 	}
 
-	private void mapPivots(ArrayList<ASTNode> lM, ArrayList<ASTNode> lN, ArrayList<ASTNode> heightsM, ArrayList<ASTNode> heightsN) {
+	private void mapPivots(ArrayList<ASTNode> lM, ArrayList<ASTNode> lN, ArrayList<ASTNode> heightsM,
+			ArrayList<ASTNode> heightsN) {
 		if (lM.size() * lN.size() > MAX_BIPARTITE_MATCH_SIZE) {
 			lM.clear();
 			lN.clear();
 		}
 		ArrayList<Integer> lcsM = new ArrayList<Integer>(), lcsN = new ArrayList<Integer>();
 		lcs(lM, lN, lcsM, lcsN);
-		for (int i = lcsM.size()-1; i >= 0; i--) {
+		for (int i = lcsM.size() - 1; i >= 0; i--) {
 			int indexM = lcsM.get(i), indexN = lcsN.get(i);
 			ASTNode nodeM = lM.get(indexM), nodeN = lN.get(indexN);
 			setMap(nodeM, nodeN, 1.0);
@@ -327,7 +331,7 @@ public class TreedMapper implements TreedConstants {
 				break;
 		}
 		boolean expanded = false;
-		for (int i = l.size()-1; i >= 0; i--) {
+		for (int i = l.size() - 1; i >= 0; i--) {
 			ASTNode node = l.get(i);
 			if (nodes.contains(node)) {
 				l.remove(i);
@@ -337,7 +341,7 @@ public class TreedMapper implements TreedConstants {
 					expanded = true;
 					for (int j = 0; j < children.size(); j++) {
 						ASTNode child = children.get(j);
-						l.add(i+j, child);
+						l.add(i + j, child);
 						int index = Collections.binarySearch(heights, child, new Comparator<ASTNode>() {
 							@Override
 							public int compare(ASTNode node1, ASTNode node2) {
@@ -363,7 +367,7 @@ public class TreedMapper implements TreedConstants {
 				break;
 		}
 		boolean expanded = false;
-		for (int i = l.size()-1; i >= 0; i--) {
+		for (int i = l.size() - 1; i >= 0; i--) {
 			ASTNode node = l.get(i);
 			if (nodes.contains(node)) {
 				l.remove(i);
@@ -373,7 +377,7 @@ public class TreedMapper implements TreedConstants {
 					expanded = true;
 					for (int j = 0; j < children.size(); j++) {
 						ASTNode child = children.get(j);
-						l.add(i+j, child);
+						l.add(i + j, child);
 						int index = Collections.binarySearch(heights, child, new Comparator<ASTNode>() {
 							@Override
 							public int compare(ASTNode node1, ASTNode node2) {
@@ -396,17 +400,18 @@ public class TreedMapper implements TreedConstants {
 		char[][] p = new char[lenM + 1][lenN + 1];
 		for (int j = 0; j <= lenN; j++)
 			d[1][j] = 0;
-		for (int i = lenM-1; i >= 0; i--) {
+		for (int i = lenM - 1; i >= 0; i--) {
 			ASTNode nodeM = lM.get(i);
 			int hM = treeHeight.get(nodeM);
 			HashMap<String, Integer> vM = treeVector.get(nodeM);
 			for (int j = 0; j <= lenN; j++)
 				d[0][j] = d[1][j];
-			for (int j = lenN-1; j >= 0; j--) {
+			for (int j = lenN - 1; j >= 0; j--) {
 				ASTNode nodeN = lN.get(j);
 				int hN = treeHeight.get(nodeN);
 				HashMap<String, Integer> vN = treeVector.get(nodeN);
-				if (hM == hN && nodeM.getNodeType() == nodeN.getNodeType() && vM.equals(vN) && subtreeMatch(nodeM, nodeN)) {
+				if (hM == hN && nodeM.getNodeType() == nodeN.getNodeType() && vM.equals(vN)
+						&& subtreeMatch(nodeM, nodeN)) {
 					d[1][j] = d[0][j + 1] + 1;
 					p[i][j] = 'D';
 				} else if (d[0][j] >= d[1][j + 1]) {
@@ -450,31 +455,32 @@ public class TreedMapper implements TreedConstants {
 	private boolean labelMatch(ASTNode nodeM, ASTNode nodeN) {
 		if (nodeM.getNodeType() != nodeN.getNodeType())
 			return false;
-	
+
 		if (nodeM instanceof Expression)
 			return labelMatch((Expression) nodeM, (Expression) nodeN);
-		
+
 		return true;
 	}
 
 	private boolean labelMatch(Expression nodeM, Expression nodeN) {
-		if(!nodeM.getClass().getSimpleName().equals(nodeN.getClass().getSimpleName()))
+		if (!nodeM.getClass().getSimpleName().equals(nodeN.getClass().getSimpleName()))
 			return false;
 		return nodeM.getOperator().equals(nodeN.getOperator());
 	}
-	
+
 	@SuppressWarnings("unused")
-	private void lss(ArrayList<ASTNode> lM, ArrayList<ASTNode> lN, ArrayList<Integer> lcsM, ArrayList<Integer> lcsN, double threshold) {
+	private void lss(ArrayList<ASTNode> lM, ArrayList<ASTNode> lN, ArrayList<Integer> lcsM, ArrayList<Integer> lcsN,
+			double threshold) {
 		int lenM = lM.size(), lenN = lN.size();
 		double[][] d = new double[2][lenN + 1];
 		char[][] p = new char[lenM + 1][lenN + 1];
 		for (int j = 0; j <= lenN; j++)
 			d[1][j] = 0;
-		for (int i = lenM-1; i >= 0; i--) {
+		for (int i = lenM - 1; i >= 0; i--) {
 			ASTNode nodeM = lM.get(i);
 			for (int j = 0; j <= lenN; j++)
 				d[0][j] = d[1][j];
-			for (int j = lenN-1; j >= 0; j--) {
+			for (int j = lenN - 1; j >= 0; j--) {
 				ASTNode nodeN = lN.get(j);
 				double sim = computeSimilarity(nodeM, nodeN, threshold);
 				if (nodeM.getNodeType() == nodeN.getNodeType() && sim >= threshold) {
@@ -523,7 +529,7 @@ public class TreedMapper implements TreedConstants {
 				d = treeDepth.get(node1) - treeDepth.get(node2);
 				if (d != 0)
 					return d;
-				return node1.start()- node2.start();
+				return node1.start() - node2.start();
 			}
 		});
 		Set<ASTNode> visitedAncestorsM = new HashSet<ASTNode>(), visitedAncestorsN = new HashSet<ASTNode>();
@@ -549,8 +555,8 @@ public class TreedMapper implements TreedConstants {
 			for (ASTNode nodeN : nodesN) {
 				double sim = computeSimilarity(nodeM, nodeN, threshold);
 				if (sim >= threshold) {
-					Pair pair = new Pair(nodeM, nodeN, sim, 
-							-Math.abs((nodeM.getParent().start() - nodeM.start()) - (nodeN.getParent().start() - nodeN.start())));
+					Pair pair = new Pair(nodeM, nodeN, sim, -Math.abs(
+							(nodeM.getParent().start() - nodeM.start()) - (nodeN.getParent().start() - nodeN.start())));
 					pairs1.add(pair);
 					HashSet<Pair> pairs2 = pairsOfAncestor.get(nodeN);
 					if (pairs2 == null)
@@ -579,22 +585,18 @@ public class TreedMapper implements TreedConstants {
 			matches.add(nodeM);
 			matches.add(nodeN);
 		}
-		/*while (!pairs.isEmpty()) {
-			Pair pair = pairs.get(0);
-			ASTNode nodeM = (ASTNode) pair.getObj1(), nodeN = (ASTNode) pair.getObj2();
-			setMap(nodeM, nodeN, pair.getWeight());
-			nodes.add(nodeM);
-			nodes.add(nodeN);
-			for (Pair p : pairsOfAncestor.get(nodeM))
-				pairs.remove(p);
-			for (Pair p : pairsOfAncestor.get(nodeN))
-				pairs.remove(p);
-		}*/
+		/*
+		 * while (!pairs.isEmpty()) { Pair pair = pairs.get(0); ASTNode nodeM =
+		 * (ASTNode) pair.getObj1(), nodeN = (ASTNode) pair.getObj2(); setMap(nodeM,
+		 * nodeN, pair.getWeight()); nodes.add(nodeM); nodes.add(nodeN); for (Pair p :
+		 * pairsOfAncestor.get(nodeM)) pairs.remove(p); for (Pair p :
+		 * pairsOfAncestor.get(nodeN)) pairs.remove(p); }
+		 */
 		return nodes;
 	}
 
 	private void setMap(ASTNode nodeM, ASTNode nodeN, double w) {
-		//map node of tree 1 to corresponding node of tree 2
+		// map node of tree 1 to corresponding node of tree 2
 		treeMap.get(nodeM).put(nodeN, w);
 		treeMap.get(nodeN).put(nodeM, w);
 	}
@@ -604,7 +606,7 @@ public class TreedMapper implements TreedConstants {
 			return 0;
 		ArrayList<ASTNode> childrenM = tree.get(nodeM), childrenN = tree.get(nodeN);
 		if (childrenM.isEmpty() && childrenN.isEmpty()) {
-		
+
 			int type = nodeM.getNodeType();
 			double sim = 0;
 //			if (type == ASTNode.ARRAY_CREATION 
@@ -627,7 +629,8 @@ public class TreedMapper implements TreedConstants {
 					else
 						sim = lM > lN ? lN * 1.0 / lM : lM * 1.0 / lN;
 				} else
-					sim = StringProcessor.computeCharLCS(StringProcessor.serializeToChars(sM), StringProcessor.serializeToChars(sN));
+					sim = StringProcessor.computeCharLCS(StringProcessor.serializeToChars(sM),
+							StringProcessor.serializeToChars(sN));
 			}
 			sim = threshold + sim * (1 - threshold);
 			return sim;
@@ -635,10 +638,10 @@ public class TreedMapper implements TreedConstants {
 		if (!childrenM.isEmpty() && !childrenN.isEmpty()) {
 			HashMap<String, Integer> vM = treeVector.get(nodeM), vN = treeVector.get(nodeN);
 			double sim = computeSimilarity(vM, vN);
-			/*double[] sims = computeSimilarity(childrenM, childrenN);
-			for (double s : sims)
-				sim += s;
-			return sim / (sims.length + 1);*/
+			/*
+			 * double[] sims = computeSimilarity(childrenM, childrenN); for (double s :
+			 * sims) sim += s; return sim / (sims.length + 1);
+			 */
 			return sim;
 		}
 		return 0;
@@ -663,8 +666,7 @@ public class TreedMapper implements TreedConstants {
 						pairs2 = new HashSet<Pair>();
 					pairs2.add(pair);
 					pairsOfNode.put(node2, pairs2);
-					int index = Collections.binarySearch(pairs, pair,
-							comparator);
+					int index = Collections.binarySearch(pairs, pair, comparator);
 					if (index < 0)
 						pairs.add(-1 - index, pair);
 					else
@@ -682,7 +684,7 @@ public class TreedMapper implements TreedConstants {
 			for (Pair p : pairsOfNode.get(pair.getObj2()))
 				pairs.remove(p);
 		}
-		
+
 		return sims;
 	}
 
@@ -727,137 +729,142 @@ public class TreedMapper implements TreedConstants {
 				return;
 			} else {
 				ArrayList<ASTNode> nodesM = getNotYetMatchedNodes(childrenM), nodesN = getNotYetMatchedNodes(childrenN);
-				ArrayList<ASTNode> mappedChildrenM = new ArrayList<ASTNode>(), mappedChildrenN = new ArrayList<ASTNode>();
-				
-					
-					if (nodeM instanceof PythonWhileStatement) {
-						mappedChildrenM.add(((PythonWhileStatement) nodeM).getCondition());
-						mappedChildrenN.add(((PythonWhileStatement) nodeN).getCondition());
-						mappedChildrenM.add(((PythonWhileStatement) nodeM).getAction());
-						mappedChildrenN.add(((PythonWhileStatement) nodeN).getAction());
-						mappedChildrenM.add(((PythonWhileStatement) nodeM).getElseStatement());
-						mappedChildrenN.add(((PythonWhileStatement) nodeN).getElseStatement());
-					} else if (nodeM instanceof PythonForStatement) {
-						mappedChildrenM.add(((PythonForStatement) nodeM).getfMainArguments());
-						mappedChildrenN.add(((PythonForStatement) nodeN).getfMainArguments());
-						mappedChildrenM.add(((PythonForStatement) nodeM).getCondition());
-						mappedChildrenN.add(((PythonForStatement) nodeN).getCondition());
-						mappedChildrenM.add(((PythonForStatement) nodeM).getAction());
-						mappedChildrenN.add(((PythonForStatement) nodeN).getAction());
-						mappedChildrenM.add(((PythonForStatement) nodeM).getfElseStatement());
-						mappedChildrenN.add(((PythonForStatement) nodeN).getfElseStatement());
-					}  else if (nodeM instanceof PythonWithStatement) {
-						mappedChildrenM.add(((PythonWithStatement) nodeM).getBlock());
-						mappedChildrenN.add(((PythonWithStatement) nodeN).getBlock());
-					} else if (nodeM instanceof PythonYieldStatement) {
-						mappedChildrenM.add(((PythonYieldStatement) nodeM).getExpression());
-						mappedChildrenN.add(((PythonYieldStatement) nodeN).getExpression());
-					} else if (nodeM instanceof PythonDelStatement) {
-						mappedChildrenM.add(((PythonDelStatement) nodeM).getExpression());
-						mappedChildrenN.add(((PythonDelStatement) nodeN).getExpression());
-					} else if (nodeM instanceof ContinueStatement) {
-						mappedChildrenM.add(((ContinueStatement) nodeM).getExpression());
-						mappedChildrenN.add(((ContinueStatement) nodeN).getExpression());
-					} else if (nodeM instanceof BreakStatement) {
-						mappedChildrenM.add(((BreakStatement) nodeM).getExpression());
-						mappedChildrenN.add(((BreakStatement) nodeN).getExpression());
-					} else if (nodeM instanceof ExecStatement) {
-						mappedChildrenM.add(((ExecStatement) nodeM).getExpression());
-						mappedChildrenN.add(((ExecStatement) nodeN).getExpression());
-					} else if (nodeM instanceof GlobalStatement) {
-						mappedChildrenM.add(((GlobalStatement) nodeM).getExpression());
-						mappedChildrenN.add(((GlobalStatement) nodeN).getExpression());
-					} else if (nodeM instanceof IfStatement) {
-						mappedChildrenM.add(((IfStatement) nodeM).getCondition());
-						mappedChildrenN.add(((IfStatement) nodeN).getCondition());
-						mappedChildrenM.add(((IfStatement) nodeM).getThen());
-						mappedChildrenN.add(((IfStatement) nodeN).getThen());
-						mappedChildrenM.add(((IfStatement) nodeM).getElse());
-						mappedChildrenN.add(((IfStatement) nodeN).getElse());
-					} else if (nodeM instanceof PythonExceptStatement) {
-						mappedChildrenM.add(((PythonExceptStatement) nodeM).getBody());
-						mappedChildrenN.add(((PythonExceptStatement) nodeN).getBody());
-					} else if (nodeM instanceof TryFinallyStatement) {
-						mappedChildrenM.add(((TryFinallyStatement) nodeM).getfBody());
-						mappedChildrenN.add(((TryFinallyStatement) nodeN).getfBody());
-					} else if (nodeM instanceof PythonTryStatement) {
-						mappedChildrenM.add(((PythonTryStatement) nodeM).getBody());
-						mappedChildrenN.add(((PythonTryStatement) nodeN).getBody());
-						mappedChildrenM.add(((PythonTryStatement) nodeM).getfElseStatement());
-						mappedChildrenN.add(((PythonTryStatement) nodeN).getfElseStatement());
-					} else if (nodeM instanceof ReturnStatement) {
-						mappedChildrenM.add(((ReturnStatement) nodeM).getExpression());
-						mappedChildrenN.add(((ReturnStatement) nodeN).getExpression());
-					} else if (nodeM instanceof PythonImportStatement) {
-						mappedChildrenM.add(((PythonImportStatement) nodeM).getExpression());
-						mappedChildrenN.add(((PythonImportStatement) nodeN).getExpression());
-					} else if (nodeM instanceof PythonImportFromStatement) {
-						mappedChildrenM.add(((PythonImportFromStatement) nodeM).getfImportExpressions());
-						mappedChildrenN.add(((PythonImportFromStatement) nodeN).getfImportExpressions());
-						mappedChildrenM.add(((PythonImportFromStatement) nodeM).getfModuleExpression());
-						mappedChildrenN.add(((PythonImportFromStatement) nodeN).getfModuleExpression());
-					} 
-					
-				 else if (nodeM instanceof MethodDeclaration) {
+				ArrayList<ASTNode> mappedChildrenM = new ArrayList<ASTNode>(),
+						mappedChildrenN = new ArrayList<ASTNode>();
+
+				if (nodeM instanceof PythonWhileStatement) {
+					mappedChildrenM.add(((PythonWhileStatement) nodeM).getCondition());
+					mappedChildrenN.add(((PythonWhileStatement) nodeN).getCondition());
+					mappedChildrenM.add(((PythonWhileStatement) nodeM).getAction());
+					mappedChildrenN.add(((PythonWhileStatement) nodeN).getAction());
+					mappedChildrenM.add(((PythonWhileStatement) nodeM).getElseStatement());
+					mappedChildrenN.add(((PythonWhileStatement) nodeN).getElseStatement());
+				} else if (nodeM instanceof PythonForStatement) {
+					mappedChildrenM.add(((PythonForStatement) nodeM).getfMainArguments());
+					mappedChildrenN.add(((PythonForStatement) nodeN).getfMainArguments());
+					mappedChildrenM.add(((PythonForStatement) nodeM).getCondition());
+					mappedChildrenN.add(((PythonForStatement) nodeN).getCondition());
+					mappedChildrenM.add(((PythonForStatement) nodeM).getAction());
+					mappedChildrenN.add(((PythonForStatement) nodeN).getAction());
+					mappedChildrenM.add(((PythonForStatement) nodeM).getfElseStatement());
+					mappedChildrenN.add(((PythonForStatement) nodeN).getfElseStatement());
+				} else if (nodeM instanceof PythonWithStatement) {
+					mappedChildrenM.add(((PythonWithStatement) nodeM).getWhat());
+					mappedChildrenN.add(((PythonWithStatement) nodeN).getWhat());
+					mappedChildrenM.add(((PythonWithStatement) nodeM).getAs());
+					mappedChildrenN.add(((PythonWithStatement) nodeN).getAs());
+					mappedChildrenM.add(((PythonWithStatement) nodeM).getBlock());
+					mappedChildrenN.add(((PythonWithStatement) nodeN).getBlock());
+				} else if (nodeM instanceof PythonYieldStatement) {
+					mappedChildrenM.add(((PythonYieldStatement) nodeM).getExpression());
+					mappedChildrenN.add(((PythonYieldStatement) nodeN).getExpression());
+				} else if (nodeM instanceof PythonDelStatement) {
+					mappedChildrenM.add(((PythonDelStatement) nodeM).getExpression());
+					mappedChildrenN.add(((PythonDelStatement) nodeN).getExpression());
+				} else if (nodeM instanceof ContinueStatement) {
+					mappedChildrenM.add(((ContinueStatement) nodeM).getExpression());
+					mappedChildrenN.add(((ContinueStatement) nodeN).getExpression());
+				} else if (nodeM instanceof BreakStatement) {
+					mappedChildrenM.add(((BreakStatement) nodeM).getExpression());
+					mappedChildrenN.add(((BreakStatement) nodeN).getExpression());
+				} else if (nodeM instanceof ExecStatement) {
+					mappedChildrenM.add(((ExecStatement) nodeM).getExpression());
+					mappedChildrenN.add(((ExecStatement) nodeN).getExpression());
+				} else if (nodeM instanceof GlobalStatement) {
+					mappedChildrenM.add(((GlobalStatement) nodeM).getExpression());
+					mappedChildrenN.add(((GlobalStatement) nodeN).getExpression());
+				} else if (nodeM instanceof IfStatement) {
+					mappedChildrenM.add(((IfStatement) nodeM).getCondition());
+					mappedChildrenN.add(((IfStatement) nodeN).getCondition());
+					mappedChildrenM.add(((IfStatement) nodeM).getThen());
+					mappedChildrenN.add(((IfStatement) nodeN).getThen());
+					mappedChildrenM.add(((IfStatement) nodeM).getElse());
+					mappedChildrenN.add(((IfStatement) nodeN).getElse());
+				} else if (nodeM instanceof PythonExceptStatement) {
+					mappedChildrenM.add(((PythonExceptStatement) nodeM).getMessage());
+					mappedChildrenN.add(((PythonExceptStatement) nodeN).getMessage());
+					mappedChildrenM.add(((PythonExceptStatement) nodeM).getBody());
+					mappedChildrenN.add(((PythonExceptStatement) nodeN).getBody());
+				} else if (nodeM instanceof TryFinallyStatement) {
+					mappedChildrenM.add(((TryFinallyStatement) nodeM).getfBody());
+					mappedChildrenN.add(((TryFinallyStatement) nodeN).getfBody());
+				} else if (nodeM instanceof PythonTryStatement) {
+					mappedChildrenM.add(((PythonTryStatement) nodeM).getBody());
+					mappedChildrenN.add(((PythonTryStatement) nodeN).getBody());
+					mappedChildrenM.add(((PythonTryStatement) nodeM).getfElseStatement());
+					mappedChildrenN.add(((PythonTryStatement) nodeN).getfElseStatement());
+				} else if (nodeM instanceof ReturnStatement) {
+					mappedChildrenM.add(((ReturnStatement) nodeM).getExpression());
+					mappedChildrenN.add(((ReturnStatement) nodeN).getExpression());
+				} else if (nodeM instanceof PythonImportStatement) {
+					mappedChildrenM.add(((PythonImportStatement) nodeM).getExpression());
+					mappedChildrenN.add(((PythonImportStatement) nodeN).getExpression());
+				} else if (nodeM instanceof PythonImportFromStatement) {
+					mappedChildrenM.add(((PythonImportFromStatement) nodeM).getfImportExpressions());
+					mappedChildrenN.add(((PythonImportFromStatement) nodeN).getfImportExpressions());
+					mappedChildrenM.add(((PythonImportFromStatement) nodeM).getfModuleExpression());
+					mappedChildrenN.add(((PythonImportFromStatement) nodeN).getfModuleExpression());
+				}
+
+				else if (nodeM instanceof MethodDeclaration) {
 					mappedChildrenM.add(((MethodDeclaration) nodeM).getBody());
 					mappedChildrenN.add(((MethodDeclaration) nodeN).getBody());
-				} 
-				else if (nodeM instanceof TypeDeclaration) {
+				} else if (nodeM instanceof TypeDeclaration) {
 					mappedChildrenM.add(((TypeDeclaration) nodeM).getBody());
 					mappedChildrenN.add(((TypeDeclaration) nodeN).getBody());
 				}
-				else if (nodeM instanceof Expression) {
 
-					if (nodeM instanceof BinaryExpression) {
-						mappedChildrenM.add(((BinaryExpression) nodeM).getLeft());
-						mappedChildrenN.add(((BinaryExpression) nodeN).getRight());
-					} else if (nodeM instanceof UnaryExpression) {
-						mappedChildrenM.add(((UnaryExpression) nodeM).getExpression());
-						mappedChildrenN.add(((UnaryExpression) nodeN).getExpression());
-					} else if (nodeM instanceof PythonLambdaExpression) {
-						mappedChildrenM.add(((PythonLambdaExpression) nodeM).getBodyExpression());
-						mappedChildrenN.add(((PythonLambdaExpression) nodeN).getBodyExpression());
-					} else if (nodeM instanceof CallHolder) {
-						mappedChildrenM.add(((CallHolder) nodeM).getArguments());
-						mappedChildrenN.add(((CallHolder) nodeN).getArguments());
-					} else if (nodeM instanceof IndexHolder) {
-						mappedChildrenM.add(((IndexHolder) nodeM).getIndex());
-						mappedChildrenN.add(((IndexHolder) nodeN).getIndex());
-					} else if (nodeM instanceof PythonForListExpression) {
-						mappedChildrenM.add(((PythonForListExpression) nodeM).getFrom());
-						mappedChildrenN.add(((PythonForListExpression) nodeN).getFrom());
-						mappedChildrenM.add(((PythonForListExpression) nodeM).getIfList());
-						mappedChildrenN.add(((PythonForListExpression) nodeN).getIfList());
-						mappedChildrenM.add(((PythonForListExpression) nodeM).getVars());
-						mappedChildrenN.add(((PythonForListExpression) nodeN).getVars());
-					} else if (nodeM instanceof PythonListForExpression) {
-						mappedChildrenM.add(((PythonListForExpression) nodeM).getMaker());
-						mappedChildrenN.add(((PythonListForExpression) nodeN).getMaker());
-					} else if (nodeM instanceof PythonSubscriptExpression) {
-						mappedChildrenM.add(((PythonSubscriptExpression) nodeM).getCondition());
-						mappedChildrenN.add(((PythonSubscriptExpression) nodeN).getCondition());
-						mappedChildrenM.add(((PythonSubscriptExpression) nodeM).getSlice());
-						mappedChildrenN.add(((PythonSubscriptExpression) nodeN).getSlice());
-						mappedChildrenM.add(((PythonSubscriptExpression) nodeM).getTest());
-						mappedChildrenN.add(((PythonSubscriptExpression) nodeN).getTest());
-					} else if (nodeM instanceof ShortHandIfExpression) {
-						mappedChildrenM.add(((ShortHandIfExpression) nodeM).getCondition());
-						mappedChildrenN.add(((ShortHandIfExpression) nodeN).getCondition());
-						mappedChildrenM.add(((ShortHandIfExpression) nodeM).getThen());
-						mappedChildrenN.add(((ShortHandIfExpression) nodeN).getThen());
-						mappedChildrenM.add(((ShortHandIfExpression) nodeM).getElse());
-						mappedChildrenN.add(((ShortHandIfExpression) nodeN).getElse());
-					}
-					else if (nodeM instanceof PrintExpression) {
-						mappedChildrenM.add(((PrintExpression) nodeM).getExpression());
-						mappedChildrenN.add(((PrintExpression) nodeN).getExpression());
-					} 
-					else if (nodeM instanceof PrintExpression) {
-						mappedChildrenM.add(((PrintExpression) nodeM).getExpression());
-						mappedChildrenN.add(((PrintExpression) nodeN).getExpression());
-					} 
+				else if (nodeM instanceof BinaryExpression) {
+					mappedChildrenM.add(((BinaryExpression) nodeM).getLeft());
+					mappedChildrenN.add(((BinaryExpression) nodeN).getRight());
+				} else if (nodeM instanceof UnaryExpression) {
+					mappedChildrenM.add(((UnaryExpression) nodeM).getExpression());
+					mappedChildrenN.add(((UnaryExpression) nodeN).getExpression());
+				} else if (nodeM instanceof PythonLambdaExpression) {
+					mappedChildrenM.add(((PythonLambdaExpression) nodeM).getBodyExpression());
+					mappedChildrenN.add(((PythonLambdaExpression) nodeN).getBodyExpression());
+				} else if (nodeM instanceof CallHolder) {
+					mappedChildrenM.add(((CallHolder) nodeM).getArguments());
+					mappedChildrenN.add(((CallHolder) nodeN).getArguments());
+				} else if (nodeM instanceof IndexHolder) {
+					mappedChildrenM.add(((IndexHolder) nodeM).getIndex());
+					mappedChildrenN.add(((IndexHolder) nodeN).getIndex());
+				} else if (nodeM instanceof PythonForListExpression) {
+					mappedChildrenM.add(((PythonForListExpression) nodeM).getFrom());
+					mappedChildrenN.add(((PythonForListExpression) nodeN).getFrom());
+					mappedChildrenM.add(((PythonForListExpression) nodeM).getIfList());
+					mappedChildrenN.add(((PythonForListExpression) nodeN).getIfList());
+					mappedChildrenM.add(((PythonForListExpression) nodeM).getVars());
+					mappedChildrenN.add(((PythonForListExpression) nodeN).getVars());
+				} else if (nodeM instanceof PythonListForExpression) {
+					mappedChildrenM.add(((PythonListForExpression) nodeM).getMaker());
+					mappedChildrenN.add(((PythonListForExpression) nodeN).getMaker());
+				} else if (nodeM instanceof PythonSubscriptExpression) {
+					mappedChildrenM.add(((PythonSubscriptExpression) nodeM).getCondition());
+					mappedChildrenN.add(((PythonSubscriptExpression) nodeN).getCondition());
+					mappedChildrenM.add(((PythonSubscriptExpression) nodeM).getSlice());
+					mappedChildrenN.add(((PythonSubscriptExpression) nodeN).getSlice());
+					mappedChildrenM.add(((PythonSubscriptExpression) nodeM).getTest());
+					mappedChildrenN.add(((PythonSubscriptExpression) nodeN).getTest());
+				} else if (nodeM instanceof ShortHandIfExpression) {
+					mappedChildrenM.add(((ShortHandIfExpression) nodeM).getCondition());
+					mappedChildrenN.add(((ShortHandIfExpression) nodeN).getCondition());
+					mappedChildrenM.add(((ShortHandIfExpression) nodeM).getThen());
+					mappedChildrenN.add(((ShortHandIfExpression) nodeN).getThen());
+					mappedChildrenM.add(((ShortHandIfExpression) nodeM).getElse());
+					mappedChildrenN.add(((ShortHandIfExpression) nodeN).getElse());
+				} else if (nodeM instanceof PrintExpression) {
+					mappedChildrenM.add(((PrintExpression) nodeM).getExpression());
+					mappedChildrenN.add(((PrintExpression) nodeN).getExpression());
+				} else if (nodeM instanceof PythonArgument) {
+					mappedChildrenM.add(((PythonArgument) nodeM).getInitialization());
+					mappedChildrenN.add(((PythonArgument) nodeN).getInitialization());
 				}
-				
+				else if (nodeM instanceof SimpleStatement) {
+					mappedChildrenM.add(((SimpleStatement) nodeM).getExpression());
+					mappedChildrenN.add(((SimpleStatement) nodeN).getExpression());
+				}
+
 				if (!mappedChildrenM.isEmpty() && !mappedChildrenN.isEmpty()) {
 					for (int i = 0; i < mappedChildrenM.size(); i++) {
 						ASTNode childM = mappedChildrenM.get(i), childN = mappedChildrenN.get(i);
@@ -866,9 +873,10 @@ public class TreedMapper implements TreedConstants {
 								double sim = 0;
 								if (childM.getNodeType() == childN.getNodeType()) {
 									int type = childM.getNodeType();
-									if (childM instanceof Block || (treeMap.get(childM).isEmpty() && treeMap.get(childN).isEmpty()))
+									if (childM instanceof Block
+											|| (treeMap.get(childM).isEmpty() && treeMap.get(childN).isEmpty()))
 										sim = 1.0;
-									else 
+									else
 										sim = computeSimilarity(childM, childN, MIN_SIM);
 									if (sim >= MIN_SIM) {
 										setMap(childM, childN, MIN_SIM);
@@ -882,7 +890,8 @@ public class TreedMapper implements TreedConstants {
 									}
 								}
 								if (sim < MIN_SIM) {
-									ArrayList<ASTNode> tempM = new ArrayList<ASTNode>(), tempN = new ArrayList<ASTNode>();
+									ArrayList<ASTNode> tempM = new ArrayList<ASTNode>(),
+											tempN = new ArrayList<ASTNode>();
 									tempM.add(childM);
 									tempN.add(childN);
 									int hM = treeHeight.get(childM), hN = treeHeight.get(childN);
@@ -896,7 +905,7 @@ public class TreedMapper implements TreedConstants {
 									}
 									ArrayList<ASTNode> mappedNodes = map(tempM, tempN, MIN_SIM_MOVE);
 									for (int j = 0; j < mappedNodes.size(); j += 2) {
-										ASTNode mappedNodeM = mappedNodes.get(j), mappedNodeN = mappedNodes.get(j+1);
+										ASTNode mappedNodeM = mappedNodes.get(j), mappedNodeN = mappedNodes.get(j + 1);
 										tempM.remove(mappedNodeM);
 										tempN.remove(mappedNodeN);
 									}
@@ -909,40 +918,33 @@ public class TreedMapper implements TreedConstants {
 				}
 				ArrayList<Integer> lcsM = new ArrayList<Integer>(), lcsN = new ArrayList<Integer>();
 				lcs(nodesM, nodesN, lcsM, lcsN);
-				for (int i = lcsM.size()-1; i >= 0; i--) {
+				for (int i = lcsM.size() - 1; i >= 0; i--) {
 					int iM = lcsM.get(i), iN = lcsN.get(i);
 					ASTNode nM = nodesM.get(iM), nN = nodesN.get(iN);
 					setMap(nM, nN, 1.0);
 					nodesM.remove(iM);
 					nodesN.remove(iN);
 				}
-				lcsM.clear(); lcsN.clear();
+				lcsM.clear();
+				lcsN.clear();
 				ArrayList<ASTNode> mappedNodes = map(nodesM, nodesN, MIN_SIM);
 				for (int i = 0; i < mappedNodes.size(); i += 2) {
-					ASTNode mappedNodeM = mappedNodes.get(i), mappedNodeN = mappedNodes.get(i+1);
+					ASTNode mappedNodeM = mappedNodes.get(i), mappedNodeN = mappedNodes.get(i + 1);
 					nodesM.remove(mappedNodeM);
 					nodesN.remove(mappedNodeN);
 				}
-				/*ArrayList<ASTNode> maxsM = new ArrayList<ASTNode>(), maxsN = new ArrayList<ASTNode>();
-				int maxhM = maxHeight(nodesM, maxsM), maxhN = maxHeight(nodesN, maxsN);
-				if (maxhM >= maxhN) {
-					for (ASTNode node : maxsM) {
-						nodesM.remove(node);
-						nodesM.addAll(getNotYetMatchedNodes(tree.get(node)));
-					}
-				}
-				if (maxhN >= maxhM) {
-					for (ASTNode node : maxsN) {
-						nodesN.remove(node);
-						nodesN.addAll(getNotYetMatchedNodes(tree.get(node)));
-					}
-				}
-				mappedNodes = map(nodesM, nodesN, MIN_SIM_MOVE);
-				for (int i = 0; i < mappedNodes.size(); i += 2) {
-					ASTNode mappedNodeM = mappedNodes.get(i), mappedNodeN = mappedNodes.get(i+1);
-					nodesM.remove(mappedNodeM);
-					nodesN.remove(mappedNodeN);
-				}*/
+				/*
+				 * ArrayList<ASTNode> maxsM = new ArrayList<ASTNode>(), maxsN = new
+				 * ArrayList<ASTNode>(); int maxhM = maxHeight(nodesM, maxsM), maxhN =
+				 * maxHeight(nodesN, maxsN); if (maxhM >= maxhN) { for (ASTNode node : maxsM) {
+				 * nodesM.remove(node); nodesM.addAll(getNotYetMatchedNodes(tree.get(node))); }
+				 * } if (maxhN >= maxhM) { for (ASTNode node : maxsN) { nodesN.remove(node);
+				 * nodesN.addAll(getNotYetMatchedNodes(tree.get(node))); } } mappedNodes =
+				 * map(nodesM, nodesN, MIN_SIM_MOVE); for (int i = 0; i < mappedNodes.size(); i
+				 * += 2) { ASTNode mappedNodeM = mappedNodes.get(i), mappedNodeN =
+				 * mappedNodes.get(i+1); nodesM.remove(mappedNodeM); nodesN.remove(mappedNodeN);
+				 * }
+				 */
 			}
 		}
 		for (ASTNode child : childrenM)
@@ -982,7 +984,7 @@ public class TreedMapper implements TreedConstants {
 
 	private void mapMoving() throws Exception {
 		astM.traverse(new ASTVisitor() {
-			
+
 			@Override
 			public boolean visitGeneral(ASTNode node) {
 				HashMap<ASTNode, Double> maps = treeMap.get(node);
@@ -993,7 +995,7 @@ public class TreedMapper implements TreedConstants {
 				}
 				return true;
 			}
-			
+
 			@Override
 			public boolean visit(MethodDeclaration node) {
 				HashMap<ASTNode, Double> maps = treeMap.get(node);
@@ -1009,7 +1011,8 @@ public class TreedMapper implements TreedConstants {
 	}
 
 	private void mapMoving(ASTNode astM, ASTNode astN) {
-		ArrayList<ASTNode> lM = getNotYetMappedDescendantContainers(astM), lN = getNotYetMappedDescendantContainers(astN);
+		ArrayList<ASTNode> lM = getNotYetMappedDescendantContainers(astM),
+				lN = getNotYetMappedDescendantContainers(astN);
 		ArrayList<ASTNode> heightsM = new ArrayList<ASTNode>(lM), heightsN = new ArrayList<ASTNode>(lN);
 		Collections.sort(heightsM, new Comparator<ASTNode>() {
 			@Override
@@ -1026,10 +1029,11 @@ public class TreedMapper implements TreedConstants {
 		mapMoving(lM, lN, heightsM, heightsN);
 	}
 
-	private void mapMoving(ArrayList<ASTNode> lM, ArrayList<ASTNode> lN, ArrayList<ASTNode> heightsM, ArrayList<ASTNode> heightsN) {
+	private void mapMoving(ArrayList<ASTNode> lM, ArrayList<ASTNode> lN, ArrayList<ASTNode> heightsM,
+			ArrayList<ASTNode> heightsN) {
 		ArrayList<ASTNode> mappedNodes = map(lM, lN, MIN_SIM_MOVE);
 		for (int i = 0; i < mappedNodes.size(); i += 2) {
-			ASTNode nodeM = mappedNodes.get(i), nodeN = mappedNodes.get(i+1);
+			ASTNode nodeM = mappedNodes.get(i), nodeN = mappedNodes.get(i + 1);
 			lM.remove(nodeM);
 			lN.remove(nodeN);
 			heightsM.remove(nodeM);
@@ -1071,12 +1075,12 @@ public class TreedMapper implements TreedConstants {
 	private void buildTree(final ASTNode root) throws Exception {
 		final TreedBuilder visitor = new TreedBuilder(root, type, nodeTypes);
 		root.traverse(visitor);
-		this.type=visitor.type;
-		this.nodeTypes=visitor.nodeTypes;
+		this.type = visitor.type;
+		this.nodeTypes = visitor.nodeTypes;
 		tree.putAll(visitor.tree);
 		treeHeight.putAll(visitor.treeHeight);
 		treeDepth.putAll(visitor.treeDepth);
 		treeVector.putAll(visitor.treeVector);
 	}
-	
+
 }

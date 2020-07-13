@@ -7,6 +7,7 @@ class SimpleMnistModel(BaseModel):
     def __init__(self, config,newarg):
         super(SimpleMnistModel, self).__init__(config)
         self.model.add(Dense(16, activation='relu'))
+        char2idx = {"hello": 1, "tello": 2} 
         self.build_model()
 
     def build_model1(self):

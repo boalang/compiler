@@ -7,6 +7,7 @@ class SimpleMnistModel(BaseModel):
     def __init__(self, config):
         super(SimpleMnistModel, self).__init__(config)
         self.model.add(Dense(16))
+        char2idx = {c: i for i, c in enumerate(idx2char)} 
         self.build_model()
 
     def build_model(self):
