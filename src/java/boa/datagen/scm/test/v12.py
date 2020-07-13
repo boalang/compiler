@@ -20,6 +20,10 @@ from yolo4.utils import get_random_data
 
 from callback_eval import Evaluate
 
+num_classes = len(class_names)
+class_index = ['{}'.format(i) for i in range(num_classes)]
+anchors = get_anchors(anchors_path)
+
 def _main():
     print('Please visit https://github.com/miemie2013/Keras-YOLOv4 for more complete model!')
 
@@ -29,14 +33,12 @@ def _main():
     classes_path = 'model_data/voc_classes.txt'
     anchors_path = 'model_data/yolo4_anchors.txt'
     class_names = get_classes(classes_path)
-    num_classes = len(class_names)
-    class_index = ['{}'.format(i) for i in range(num_classes)]
-    anchors = get_anchors(anchors_path)
+    
 
     max_bbox_per_scale = 150
 
     anchors_stride_base = np.array([
-        [[12, 16], [19, 36], [41, 28]],
+        [[12, 16], [19, 36], [40, 28]],
         [[36, 75], [76, 55], [72, 146]],
         [[142, 110], [192, 243], [459, 401]]
     ])
@@ -48,7 +50,11 @@ def _main():
 
     input_shape = (608, 608) # multiple of 32, hw
 
-    model, model_body = create_model(input_shape, anchors_stride_base, num_classes, load_pretrained=False, freeze_body=2, weights_path='yolo4_weight.h5')
+    num_train = len(lines_train)
+
+    num_val = len(lines_val)
+
+    model, model_body = create_model(input_shape, num_classes, anchors_stride_base,load_pretrained=False, freeze_body=2, weights_path='yolo4_weight.h5')
 
     logging = TensorBoard(log_dir=log_dir)
     checkpoint = ModelCheckpoint(log_dir + 'ep{epoch:03d}-loss{loss:.3f}.h5',
@@ -62,14 +68,12 @@ def _main():
     np.random.seed(10101)
     np.random.shuffle(lines_train)
     np.random.seed(None)
-    num_train = len(lines_train)
 
     with open(annotation_val_path) as f:
         lines_val = f.readlines()
     np.random.seed(10101)
     np.random.shuffle(lines_val)
     np.random.seed(None)
-    num_val = len(lines_val)
 
     # Train with frozen layers first, to get a stable loss.
     # Adjust num epochs to your dataset. This step is enough to obtain a not bad model.
@@ -103,11 +107,13 @@ def _main():
     # Further training if needed.
 
 
+def get_muk():
+    a=a+2
 def get_classes(classes_path):
     '''loads the classes'''
     with open(classes_path) as f:
         class_names = f.readlines()
-        HEY=1+2
+       
     class_names = [c.strip() for c in class_names]
     return class_names
 
@@ -115,7 +121,7 @@ def get_anchors(anchors_path):
     '''loads the anchors from a file'''
     with open(anchors_path) as f:
         anchors = f.readline()
-    anchors = [int(x) for x in anchors.split(',')]
+    anchors = [float(x) for x in anchors.split(',')]
     return np.array(anchors).reshape(-1, 2)
 
 
@@ -190,6 +196,8 @@ def random_crop(image, bboxes):
         h, w, _ = image.shape
         max_bbox = np.concatenate([np.min(bboxes[:, 0:2], axis=0), np.max(bboxes[:, 2:4], axis=0)], axis=-1)
 
+        crop_ymax = max(h, int(max_bbox[3] + random.uniform(0, max_d_trans_new)))
+
         max_l_trans = max_bbox[0]
         max_u_trans = max_bbox[1]
         max_r_trans = w - max_bbox[2]
@@ -198,7 +206,6 @@ def random_crop(image, bboxes):
         crop_xmin = max(0, int(max_bbox[0] - random.uniform(0, max_l_trans)))
         crop_ymin = max(0, int(max_bbox[1] - random.uniform(0, max_u_trans)))
         crop_xmax = max(w, int(max_bbox[2] + random.uniform(0, max_r_trans)))
-        crop_ymax = max(h, int(max_bbox[3] + random.uniform(0, max_d_trans)))
 
         image = image[crop_ymin : crop_ymax, crop_xmin : crop_xmax]
 
@@ -208,7 +215,7 @@ def random_crop(image, bboxes):
 
 def random_translate(image, bboxes):
     if random.random() < 0.5:
-        h, w, _ = image.shape
+        h, w, p = image.shape
         max_bbox = np.concatenate([np.min(bboxes[:, 0:2], axis=0), np.max(bboxes[:, 2:4], axis=0)], axis=-1)
 
         max_l_trans = max_bbox[0]
@@ -227,28 +234,12 @@ def random_translate(image, bboxes):
     return image, bboxes
 
 def image_preprocess(image, target_size, gt_boxes):
-    # 传入训练的图片是rgb格式
-    ih, iw = target_size
-    h, w = image.shape[:2]
-    interps = [   # 随机选一种插值方式
-        cv2.INTER_NEAREST,
-        cv2.INTER_LINEAR,
-        cv2.INTER_AREA,
-        cv2.INTER_CUBIC,
-        cv2.INTER_LANCZOS4,
-    ]
-    method = np.random.choice(interps)   # 随机选一种插值方式
-    scale_x = float(iw) / w
-    scale_y = float(ih) / h
-    image = cv2.resize(image, None, None, fx=scale_x, fy=scale_y, interpolation=method)
+   a=2
 
-    pimage = image.astype(np.float32) / 255.
-    if gt_boxes is None:
-        return pimage
-    else:
-        gt_boxes[:, [0, 2]] = gt_boxes[:, [0, 2]] * scale_x
-        gt_boxes[:, [1, 3]] = gt_boxes[:, [1, 3]] * scale_y
-        return pimage, gt_boxes
+def data_generator_wrapper(annotation_lines, batch_size, anchors, num_classes, max_bbox_per_scale, annotation_type):
+    n = len(annotation_lines)
+    if n==0 or batch_size<=0: return None
+    return data_generator(annotation_lines, batch_size, anchors, num_classes, max_bbox_per_scale, annotation_type)
 
 def parse_annotation(annotation, train_input_size, annotation_type):
     line = annotation.split()
@@ -279,13 +270,15 @@ def data_generator(annotation_lines, batch_size, anchors, num_classes, max_bbox_
     i = 0
     #多尺度训练
     train_input_sizes = [320, 352, 384, 416, 448, 480, 512, 544, 576, 608]
-    strides = np.array([8, 16, 32])
+    strides = np.array([8, 16, 32]).test()
 
     while True:
         train_input_size = random.choice(train_input_sizes)
 
         # 输出的网格数
         train_output_sizes = train_input_size // strides
+
+        batch_lbboxes = np.zeros((batch_size, max_bbox_per_scale, 4))
 
         batch_image = np.zeros((batch_size, train_input_size, train_input_size, 3))
 
@@ -298,7 +291,6 @@ def data_generator(annotation_lines, batch_size, anchors, num_classes, max_bbox_
 
         batch_sbboxes = np.zeros((batch_size, max_bbox_per_scale, 4))
         batch_mbboxes = np.zeros((batch_size, max_bbox_per_scale, 4))
-        batch_lbboxes = np.zeros((batch_size, max_bbox_per_scale, 4))
 
         for num in range(batch_size):
             if i == 0:
@@ -318,10 +310,7 @@ def data_generator(annotation_lines, batch_size, anchors, num_classes, max_bbox_
             i = (i + 1) % n
         yield [batch_image, batch_label_sbbox, batch_label_mbbox, batch_label_lbbox, batch_sbboxes, batch_mbboxes, batch_lbboxes], np.zeros(batch_size)
 
-def data_generator_wrapper(annotation_lines, batch_size, anchors, num_classes, max_bbox_per_scale, annotation_type):
-    n = len(annotation_lines)
-    if n==0 or batch_size<=0: return None
-    return data_generator(annotation_lines, batch_size, anchors, num_classes, max_bbox_per_scale, annotation_type)
+
 
 if __name__ == '__main__':
     _main()
