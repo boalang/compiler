@@ -186,6 +186,9 @@ public abstract class AbstractConnector implements AutoCloseable {
 	}
 	
 	public List<Object> getRevisions(final String projectName) {
+		
+		AbstractCommit.previousAst.clear();
+		
 		this.projectName = projectName;
 		
 		setRevisions();
@@ -193,9 +196,14 @@ public abstract class AbstractConnector implements AutoCloseable {
 		long maxTime = 1000;
 		final List<Object> revs = new ArrayList<Object>();
 		if (!revisions.isEmpty()) {
-			for (int i = 0; i < revisions.size(); i++) {
+			int revSize=revisions.size();
+			for (int i = 0; i < revSize; i++) {
 				long startTime = System.currentTimeMillis();
 				final AbstractCommit rev = revisions.get(i);
+				
+				if(i+1==revSize)
+					rev.lastRevision=true;
+				
 				revs.add(rev.asProtobuf(projectName));
 				
 				if (debug) {
@@ -211,7 +219,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 		if (!revisionKeys.isEmpty())
 			revs.addAll(revisionKeys);
 		
-		AbstractCommit.previousAst.clear();
+		
 		
 		return revs;
 	}

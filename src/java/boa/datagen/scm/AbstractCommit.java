@@ -92,6 +92,7 @@ public abstract class AbstractCommit {
 			DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
 
 	static Map<String, ASTNode> previousAst = new HashMap<>();
+	boolean lastRevision = false;
 
 	protected AbstractConnector connector;
 	protected String projectName;
@@ -290,7 +291,7 @@ public abstract class AbstractCommit {
 			} else {
 				final String content = getFileContents(path);
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
-				System.out.println(projectName + ": " + path);
+				// System.out.println(projectName + ": " + path);
 				parsePythonFile(path, fb, content, false);
 			}
 		} else if (lowerPath.endsWith(".ipynb")) {
@@ -588,8 +589,8 @@ public abstract class AbstractCommit {
 
 	boolean pythonParsingError;
 
-	static int counter=0;
-	
+//	static int counter=0;
+
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
 		pythonParsingError = false;
@@ -597,9 +598,11 @@ public abstract class AbstractCommit {
 
 		String fullPath = this.projectName + "/" + path;
 
-		counter++;
+//		counter++;
 
-			System.out.println("commit "+this.id+": "+counter);
+//		if(counter>91)
+//			System.out.println("commit "+this.id+": "+counter);
+		
 		PythonSourceParser parser = new PythonSourceParser();
 		IModuleSource input = new ModuleSource(content);
 
@@ -617,21 +620,20 @@ public abstract class AbstractCommit {
 		try {
 			module = (PythonModuleDeclaration) parser.parse(input, reporter);
 
-			if(this.id!=null)
-			{
-				if (previousAst.containsKey(fullPath)) {
-					boa.datagen.treed.python.TreedMapper tm = new boa.datagen.treed.python.TreedMapper(
-							previousAst.get(fullPath), module);
-	
-					try {
-						tm.map();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+			if (previousAst.containsKey(fullPath)) {
+				boa.datagen.treed.python.TreedMapper tm = new boa.datagen.treed.python.TreedMapper(
+						previousAst.get(fullPath), module);
+
+				try {
+					tm.map();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				previousAst.put(fullPath, module);
 			}
+
+			if (!this.lastRevision)
+				previousAst.put(fullPath, module);
 
 		} catch (Exception e) {
 			if (true)
@@ -643,7 +645,7 @@ public abstract class AbstractCommit {
 		if (true) {
 			final ASTRoot.Builder ast = ASTRoot.newBuilder();
 			NewPythonVisitor visitor = new NewPythonVisitor();
-			visitor.enableDiff=true;
+			visitor.enableDiff = true;
 
 			try {
 				ast.addNamespaces(visitor.getNamespace(module, path));
