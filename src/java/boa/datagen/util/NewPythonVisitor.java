@@ -571,6 +571,8 @@ public class NewPythonVisitor extends ASTVisitor {
 		Variable.Builder b = Variable.newBuilder();
 		List<Variable> list = fields.peek();
 
+		if(node.getName().equals("arg_list"))
+			System.out.println(node.toString());
 		if (enableDiff) {
 			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
 			if (status != ChangeKind.UNCHANGED && status != null)
@@ -940,7 +942,10 @@ public class NewPythonVisitor extends ASTVisitor {
 		}
 		
 		if (node.getExpression() != null) {
-			node.getExpression().traverse(this);
+			if (node.getExpression() instanceof PythonTestListExpression)
+				visit((PythonTestListExpression) node.getExpression());
+			else
+				node.getExpression().traverse(this);
 			b.addExpressions(expressions.pop());
 		}
 		list.add(b.build());

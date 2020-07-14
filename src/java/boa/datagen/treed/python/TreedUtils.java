@@ -11,7 +11,8 @@ public final class TreedUtils {
 		char label = (char) node.getNodeType();
 		
 		if (node.getClass().getSimpleName().endsWith("Literal")||
-				node.getClass().getSimpleName().endsWith("Reference")) {
+				node.getClass().getSimpleName().endsWith("Reference")||
+				node.getClass().getSimpleName().endsWith("Argument")) {
 			return (char) (label | (node.toString().hashCode() << 7));
 		}
 		
@@ -27,7 +28,8 @@ public final class TreedUtils {
 		String label = node.getClass().getSimpleName();
 				
 		if (node.getClass().getSimpleName().endsWith("Literal")||
-				node.getClass().getSimpleName().endsWith("Reference")) {
+				node.getClass().getSimpleName().endsWith("Reference")
+				|| node.getClass().getSimpleName().endsWith("Argument")) {
 			return label + "(" + node.toString() + ")";
 		}
 		
