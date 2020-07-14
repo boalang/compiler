@@ -21,19 +21,22 @@ public class TestSequenceFile {
 		Configuration conf = new Configuration();
 		FileSystem fileSystem = FileSystem.get(conf);
 		
-		String astpath = "/Users/sayem/Documents/securityStudy/ast/ast/data";
-//		String astpath = "/Users/sayem/Documents/test_boa/output/ast/data"; //"/Users/mislam/eclipse-workspace/outdata/ast/data";
+//		String astpath = "/Users/sayem/Documents/securityStudy/ast/ast/data";
+		String astpath = "/Users/sayem/Documents/test_boa/output/ast/data"; //"/Users/mislam/eclipse-workspace/outdata/ast/data";
 		Writable key = new LongWritable();
 		BytesWritable val = new BytesWritable();
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(astpath), conf);
 		//System.setOut(new PrintStream(new File("out.txt")));
+		boa.types.Ast.ASTRoot  ast=null;
 		while (r.next(key, val)) {
-			System.out.println("-- next project -- ");
+//			System.out.println("-- next project -- ");
 			byte[] bytes = val.getBytes();
-			boa.types.Ast.ASTRoot ast = boa.types.Ast.ASTRoot.parseFrom((CodedInputStream.newInstance(bytes, 0, val.getLength())));
-			System.out.println(ast);
-			//break;
+			ast = boa.types.Ast.ASTRoot.parseFrom((CodedInputStream.newInstance(bytes, 0, val.getLength())));
+//			System.out.println(ast);
+//			break;
 		}
+		System.out.println(ast);
+
 		r.close();
 	}
 }

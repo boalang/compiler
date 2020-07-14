@@ -210,6 +210,9 @@ public abstract class AbstractConnector implements AutoCloseable {
 		}
 		if (!revisionKeys.isEmpty())
 			revs.addAll(revisionKeys);
+		
+		AbstractCommit.previousAst.clear();
+		
 		return revs;
 	}
 

@@ -1,4 +1,4 @@
-package boa.datagen.scm;
+package boa.datagen.scm.test;
 
 import java.io.File;
 import java.io.IOException;

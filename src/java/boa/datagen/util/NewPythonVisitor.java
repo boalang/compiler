@@ -69,6 +69,7 @@ import org.eclipse.dltk.ast.statements.Block;
 import org.eclipse.dltk.ast.expressions.NumericLiteral;
 import org.eclipse.dltk.ast.expressions.StringLiteral;
 
+import boa.datagen.treed.python.TreedConstants;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Method;
@@ -92,6 +93,7 @@ import boa.types.Ast.Statement.StatementKind;
  */
 public class NewPythonVisitor extends ASTVisitor {
 
+	public boolean enableDiff = false;
 	private ModuleDeclaration root;
 	protected Namespace.Builder b = Namespace.newBuilder();
 	protected Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
@@ -110,7 +112,7 @@ public class NewPythonVisitor extends ASTVisitor {
 		b.setName(name);
 		return b.build();
 	}
-	
+
 	public Namespace getCellAsNamespace(ModuleDeclaration node, String name, int key) throws Exception {
 		root = node;
 		node.traverse(this);
@@ -272,6 +274,15 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 
+		if (enableDiff) {
+			ChangeKind status1 = (ChangeKind) vr.getProperty(TreedConstants.PROPERTY_STATUS);
+			ChangeKind status2 = (ChangeKind) ch.getProperty(TreedConstants.PROPERTY_STATUS);
+
+			if (status1 != ChangeKind.UNCHANGED && status1 != null)
+				b.setChange(status1);
+			else if (status2 != ChangeKind.UNCHANGED && status2 != null)
+				b.setChange(status2);
+		}
 		if (vr instanceof SimpleReference)
 			b.setMethod(((SimpleReference) vr).getName());
 		else if (vr instanceof StringLiteral)
@@ -296,9 +307,15 @@ public class NewPythonVisitor extends ASTVisitor {
 
 //		System.out.println(md.toString());
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+
 		if (md.getExpressionCount() > 1 && md.getExpression(md.getExpressionCount() - 1) instanceof CallHolder) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
-			
+
 			if (md.getExpression(md.getExpressionCount() - 2) instanceof SimpleReference) {
 				SimpleReference vr = (SimpleReference) md.getExpression(md.getExpressionCount() - 2);
 				b.setMethod(vr.getName());
@@ -355,7 +372,7 @@ public class NewPythonVisitor extends ASTVisitor {
 				StringLiteral vr = (StringLiteral) md.getExpression(md.getExpressionCount() - 1);
 				b.setVariable(vr.getValue());
 			}
-			
+
 			for (int i = 0; i < md.getExpressionCount() - 1; i++) {
 				if (i < md.getExpressionCount() - 1 && md.getExpression(i + 1) instanceof CallHolder) {
 					visit(md.getExpression(i), (CallHolder) md.getExpression(i + 1));
@@ -373,6 +390,13 @@ public class NewPythonVisitor extends ASTVisitor {
 	public boolean visit(PythonFunctionDecorator node) throws Exception {
 		boa.types.Ast.Modifier.Builder b = boa.types.Ast.Modifier.newBuilder();
 		b.setKind(boa.types.Ast.Modifier.ModifierKind.ANNOTATION);
+
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+
 		b.setAnnotationName(node.getName());
 
 		if (node.getArguments() != null) {
@@ -393,6 +417,12 @@ public class NewPythonVisitor extends ASTVisitor {
 //		System.out.println(node.toString());
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LAMBDA);
+
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 
 		if (node.getArguments() != null) {
 			for (Object ob : node.getArguments()) {
@@ -421,6 +451,13 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		// need to handle unary expressions
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYINDEX);
+
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+
 		if (md.getTest() != null) {
 			md.getTest().traverse(this);
 			b.addExpressions(expressions.pop());
@@ -442,6 +479,12 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEWARRAY);
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+
 		if (md.getExpressions() != null) {
 			for (Object ob : md.getExpressions()) {
 				org.eclipse.dltk.ast.expressions.Expression ex = (org.eclipse.dltk.ast.expressions.Expression) ob;
@@ -456,6 +499,12 @@ public class NewPythonVisitor extends ASTVisitor {
 
 	public boolean visit(PythonTupleExpression md) throws Exception {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.TUPLE);
 		if (md.getExpressions() != null) {
@@ -522,6 +571,12 @@ public class NewPythonVisitor extends ASTVisitor {
 		Variable.Builder b = Variable.newBuilder();
 		List<Variable> list = fields.peek();
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		
 		b.setName(node.getName());
 
 		// to handle argument initialization
@@ -538,6 +593,12 @@ public class NewPythonVisitor extends ASTVisitor {
 	public boolean visit(PrintExpression md) throws Exception {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 		b.setMethod("print");
 		if (md.getExpression() != null) {
@@ -557,6 +618,12 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.FOR_LIST);
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		
 		if (md.getVars() != null) {
 			md.getVars().traverse(this);
 			b.addExpressions(expressions.pop());
@@ -582,6 +649,12 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAY_COMPREHENSION);
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		
 		if (md.getMaker() != null) {
 			md.getMaker().traverse(this);
 			b.addExpressions(expressions.pop());
@@ -606,6 +679,12 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.DICT);
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		
 		if (md.getfDictionary() != null) {
 			Iterator i = md.getfDictionary().iterator();
 			while (i.hasNext()) {
@@ -641,6 +720,12 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.CONDITIONAL);
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		
 		if (s.getThen() != null) {
 			s.getThen().traverse(this);
 			boa.types.Ast.Expression ex = expressions.pop();
@@ -675,6 +760,12 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN);
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		
 		if (md.getLeft() != null) {
 			if (md.getLeft() instanceof PythonTestListExpression)
 				visit((PythonTestListExpression) md.getLeft());
@@ -700,6 +791,12 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		
 		if (md.getKind() == ExpressionConstants.E_PLUS_ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN_ADD);
 		else if (md.getKind() == ExpressionConstants.E_MINUS_ASSIGN)
@@ -753,6 +850,13 @@ public class NewPythonVisitor extends ASTVisitor {
 	public boolean visit(SimpleReference md) {
 
 		Variable.Builder vb = Variable.newBuilder();
+		
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				vb.setChange(status);
+		}
+		
 		vb.setName(md.getName());
 
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
@@ -771,6 +875,12 @@ public class NewPythonVisitor extends ASTVisitor {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		
 		b.setVariable(md.getName());
 		expressions.push(b.build());
 
@@ -785,6 +895,12 @@ public class NewPythonVisitor extends ASTVisitor {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		
 		b.setLiteral(md.getValue());
 		expressions.push(b.build());
 
@@ -799,6 +915,12 @@ public class NewPythonVisitor extends ASTVisitor {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		
 		b.setLiteral(md.getValue());
 		expressions.push(b.build());
 
@@ -810,6 +932,13 @@ public class NewPythonVisitor extends ASTVisitor {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.RETURN);
+		
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		
 		if (node.getExpression() != null) {
 			node.getExpression().traverse(this);
 			b.addExpressions(expressions.pop());
@@ -821,7 +950,7 @@ public class NewPythonVisitor extends ASTVisitor {
 	public boolean visit(EmptyExpression md) throws Exception {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.EMPTY);
-
+		
 		expressions.push(b.build());
 
 		return true;
@@ -832,11 +961,22 @@ public class NewPythonVisitor extends ASTVisitor {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.UNARY);
 
+		
+		
 		boa.types.Ast.Expression.Builder left = boa.types.Ast.Expression.newBuilder();
 		left.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 
 		left.setLiteral(md.getOperator());
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+			{
+				b.setChange(status);
+				left.setChange(status);
+			}
+		}
+		
 		b.addExpressions(left.build());
 
 		if (md.getExpression() != null) {
@@ -864,6 +1004,12 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		
 		if (md.getKind() == ExpressionConstants.E_PLUS) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_ADD);
 
@@ -925,8 +1071,7 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_XOR);
 		} else if (md.getKind() == ExpressionConstants.E_BNOT) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_NOT);
-		} 
-		else
+		} else
 
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
 
@@ -968,9 +1113,15 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		
 		if (node.getRef() instanceof SimpleReference) {
 			b.setName(((SimpleReference) node.getRef()).getName());
-		} 
+		}
 		b.setKind(boa.types.Ast.TypeKind.CLASS);
 
 		if (node.getSuperClassNames() != null) {
@@ -1031,6 +1182,12 @@ public class NewPythonVisitor extends ASTVisitor {
 		if (s.getRef() instanceof SimpleReference) {
 			b.setName(((SimpleReference) s.getRef()).getName());
 		}
+		
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 
 		if (s.getArguments() != null) {
 			for (Object ob : s.getArguments()) {
@@ -1073,6 +1230,11 @@ public class NewPythonVisitor extends ASTVisitor {
 	public boolean visit(Block node) throws Exception {
 		Statement.Builder b = Statement.newBuilder();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 		fields.push(new ArrayList<boa.types.Ast.Variable>());
 		methods.push(new ArrayList<boa.types.Ast.Method>());
 		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
@@ -1177,6 +1339,12 @@ public class NewPythonVisitor extends ASTVisitor {
 	public boolean visit(ModuleDeclaration s) throws Exception {
 		// System.out.println("Enter Module Declaration: "+s.toString());
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 		fields.push(new ArrayList<boa.types.Ast.Variable>());
@@ -1216,6 +1384,12 @@ public class NewPythonVisitor extends ASTVisitor {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.TRY);
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 
 		if (s.getBody() != null)
@@ -1245,6 +1419,12 @@ public class NewPythonVisitor extends ASTVisitor {
 		Statement.Builder b = Statement.newBuilder();
 		List<Statement> list = statements.peek();
 		b.setKind(Statement.StatementKind.FINALLY);
+		
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 
@@ -1266,7 +1446,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		Statement.Builder b = Statement.newBuilder();
 		List<Statement> list = statements.peek();
 		b.setKind(Statement.StatementKind.CATCH);
-
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 		if (s.getExpression() != null) {
 			boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
 
@@ -1304,7 +1488,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
-
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 		if (s.getExpressions() != null) {
 			List el = s.getExpressions();
 			if (el != null) {
@@ -1325,7 +1513,11 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
-
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 		b.setKind(boa.types.Ast.Statement.StatementKind.FOREACH);
 
 		if (s.getfMainArguments() != null) {
@@ -1373,7 +1565,11 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
-
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 		b.setKind(boa.types.Ast.Statement.StatementKind.WHILE);
 
 		if (s.getCondition() != null) {
@@ -1409,7 +1605,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.IF);
-
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 		if (s.getCondition() != null) {
 			s.getCondition().traverse(this);
 			boa.types.Ast.Expression ex = expressions.pop();
@@ -1441,6 +1641,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BREAK);
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 		if (s.getExpression() != null) {
 			s.getExpression().traverse(this);
 			b.addExpressions(expressions.pop());
@@ -1457,6 +1662,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.CONTINUE);
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 		if (s.getExpression() != null) {
 			s.getExpression().traverse(this);
 			b.addExpressions(expressions.pop());
@@ -1473,6 +1683,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.RAISE);
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 		if (s.getExpression1() != null) {
 			s.getExpression1().traverse(this);
 			b.addExpressions(expressions.pop());
@@ -1497,6 +1712,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.DEL);
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 		if (s.getExpression() != null) {
 			s.getExpression().traverse(this);
 			b.addExpressions(expressions.pop());
@@ -1513,7 +1733,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.ASSERT);
-
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 		if (s.getfExpression1() != null) {
 			s.getfExpression1().traverse(this);
 			boa.types.Ast.Expression ex = expressions.pop();
@@ -1537,10 +1761,16 @@ public class NewPythonVisitor extends ASTVisitor {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
-
+		
 		boa.types.Ast.Expression.Builder ex = boa.types.Ast.Expression.newBuilder();
 		ex.setKind(boa.types.Ast.Expression.ExpressionKind.YIELD);
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				ex.setChange(status);
+		}
+		
 		if (s.getExpression() != null) {
 			s.getExpression().traverse(this);
 			ex.addExpressions(expressions.pop());
@@ -1559,7 +1789,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 
 		b.setKind(boa.types.Ast.Statement.StatementKind.WITH);
-
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 		if (s.getWhat() != null) {
 			s.getWhat().traverse(this);
 			boa.types.Ast.Expression ex = expressions.pop();
@@ -1603,7 +1837,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 
 		b.setKind(boa.types.Ast.Statement.StatementKind.GLOBAL);
-
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 		if (s.getExpression() instanceof ExpressionList) {
 			ExpressionList el = (ExpressionList) s.getExpression();
 			if (el != null && el.getExpressions() != null) {
@@ -1625,7 +1863,11 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 		b.setMethod("exec");
-
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
 		if (md.getExpression() != null) {
 			md.getExpression().traverse(this);
 			b.addMethodArgs(expressions.pop());

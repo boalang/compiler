@@ -19,6 +19,7 @@ message ASTRoot {
 	optional int32 key = 4;
 	/**The top-level document of an html, css, or xml DOM*/
 	optional Document document = 5;
+	optional ChangeKind change = 6;
 }
 
 /** A namespace (aka, package) in a source file */
@@ -42,6 +43,7 @@ message Namespace {
 	/** The imported namespaces and types */
 	repeated string imports = 12;
 	repeated Variable variables = 13;
+	optional ChangeKind change = 14;
 }
 
 /** A type declaration, such as a class or interface */
@@ -72,6 +74,7 @@ message Declaration {
 	optional int32 declaring_type = 15;
 	/** Nested statements */
 	repeated Statement statements = 16;
+	optional ChangeKind change = 17;
 }
 
 /** The kinds of types in an AST */
@@ -124,6 +127,7 @@ message Type {
 	/** */
 	optional int32 key = 10;
 	optional Expression computed_name = 14;
+	optional ChangeKind change = 15;
 }
 
 /** A method declaration */
@@ -154,6 +158,7 @@ message Method {
 	optional int32 declaring_type = 13;
 	/** */
 	optional Expression computed_name = 14;
+	optional ChangeKind change = 15;
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */
@@ -176,6 +181,7 @@ message Variable {
 	optional Expression computed_name = 11;
 	optional bool dollar_sign = 12;
 	repeated Expression expressions = 13;
+	optional ChangeKind change = 14;
 }
 
 /** A single statement */
@@ -411,6 +417,7 @@ message Expression {
 	optional bool is_static = 27;
 	optional bool has_from = 28;
 	optional Method trait = 29;
+	optional ChangeKind change = 30;
 }
 
 /** A single modifier */
@@ -491,6 +498,7 @@ message Modifier {
 	optional int32 key = 10;
 	/** */
 	optional Scope scope = 11;
+	optional ChangeKind change = 12;
 }
 
 /** @exclude */
@@ -511,6 +519,7 @@ message Comment {
 	required PositionInfo position = 3;
 	/** */
 	optional int32 key = 7;
+	optional ChangeKind change = 8;
 }
 
 /** @exclude */
