@@ -217,9 +217,8 @@ public abstract class AbstractCommit {
 				cfb.setKey(0);
 //				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
 			} else
-				processChangeFile(cfb);
-			// processPythonChangeFile(cfb); // Only process the Python files and ignore
-			// other files e.g., .java, .js
+				processPythonChangeFile(cfb); // Only process the Python files and ignore other files e.g., .java, .js
+				//processChangeFile(cfb);
 			revision.addFiles(cfb.build());
 		}
 
@@ -244,7 +243,6 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.XML);
 		else if (lowerPath.endsWith(".jar") || lowerPath.endsWith(".class"))
 			fb.setKind(FileKind.BINARY);
-
 		////// Python AST generation will be handled here ///////
 		else if (lowerPath.endsWith(".py")) {
 			if (badp.contains(lowerPath)) {
@@ -430,8 +428,8 @@ public abstract class AbstractCommit {
 		}
 
 		return fb;
-	}
-
+	} 
+ 
 	@SuppressWarnings("unused")
 	private boolean HTMLParse(String path, Builder fb, String content, boolean b, Writer astWriter) {
 		Document doc;
@@ -599,7 +597,6 @@ public abstract class AbstractCommit {
 		String fullPath = this.projectName + "/" + path;
 
 //		counter++;
-
 //		if(counter>91)
 //			System.out.println("commit "+this.id+": "+counter);
 		
@@ -678,7 +675,9 @@ public abstract class AbstractCommit {
 	private boolean parseNotebookFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
 		pythonParsingError = false;
-		// System.out.println("@@@@@@@@ " + path);
+		System.out.println("@@@@@@@@ " + path);
+		
+		String fullPath = this.projectName + "/" + path;
 
 		int count = 0;
 		ASTRoot.Builder ast = ASTRoot.newBuilder();
@@ -704,7 +703,6 @@ public abstract class AbstractCommit {
 				exec_count = -1;
 			}
 
-			// System.out.println("%%%%%%%" + exec_count);
 			JsonArray lines = c.getAsJsonArray("source");
 			Iterator<JsonElement> iterator = lines.iterator();
 
