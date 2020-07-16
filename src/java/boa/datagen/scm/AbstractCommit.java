@@ -590,7 +590,6 @@ public abstract class AbstractCommit {
 
 	boolean pythonParsingError;
 
-//	static int counter=0;
 
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
@@ -599,9 +598,8 @@ public abstract class AbstractCommit {
 
 		String fullPath = this.projectName + "/" + path;
 
-//		counter++;
-//		if(counter>91)
-//			System.out.println("commit "+this.id+": "+counter);
+		if(this.lastRevision)
+			System.out.println("commit "+this.id);
 		
 		PythonSourceParser parser = new PythonSourceParser();
 		IModuleSource input = new ModuleSource(content);
