@@ -26,7 +26,7 @@ public class TestSequenceFile {
 		Writable key = new LongWritable();
 		BytesWritable val = new BytesWritable();
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(astpath), conf);
-		//System.setOut(new PrintStream(new File("out.txt")));
+		System.setOut(new PrintStream(new File("out.txt")));
 		boa.types.Ast.ASTRoot  ast=null;
 		while (r.next(key, val)) {
 //			System.out.println("-- next project -- ");
