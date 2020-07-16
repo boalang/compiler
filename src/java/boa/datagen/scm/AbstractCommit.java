@@ -253,7 +253,8 @@ public abstract class AbstractCommit {
 				System.out.println(projectName + ": " + path);
 				parsePythonFile(path, fb, content, false);
 			}
-		} else if (lowerPath.endsWith(".ipynb")) {
+		} 
+		else if (lowerPath.endsWith(".ipynb")) {
 			final String content = getFileContents(path);
 			fb.setKind(FileKind.SOURCE_PY_ERROR);
 			System.out.println(projectName + ": " + path);
@@ -707,9 +708,8 @@ public abstract class AbstractCommit {
 			Iterator<JsonElement> iterator = lines.iterator();
 
 			String codeCell = "";
-
+			
 			while (iterator.hasNext()) {
-
 				String line = iterator.next().getAsString();
 				if (NoNotebookErrors(line))
 					codeCell += line;
@@ -784,12 +784,16 @@ public abstract class AbstractCommit {
 			jarray = jobject.getAsJsonArray("cells");
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
 		return jarray;
 	}
 
 	boolean NoNotebookErrors(String line) {
-		if (line.startsWith("%") || line.startsWith("?"))
+		if (line.startsWith("%") ||
+			line.startsWith("!") ||
+			line.startsWith("?") ||
+			line.endsWith("?"))
 			return false;
 		return true;
 	}
