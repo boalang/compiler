@@ -267,6 +267,12 @@ public class SymbolTable {
 
 		// map to string
         globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "${0}.toString()"));
+        
+        // queue to string
+        globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaQueue(new BoaTypeVar("V")) }, "${0}.toString()"));
+
+        // stack to string
+        globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "${0}.toString()"));
 
 		// current() function inside visits
 		for (final BoaType t : dslTupleTypes)
