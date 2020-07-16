@@ -83,6 +83,9 @@ public abstract class BoaRunner extends Configured implements Tool {
 		
 		// set map task timeout (24hrs * 10)
 		configuration.setLong("mapred.task.timeout", 86400000 * 10);
+		
+		// set append to true
+		configuration.setBoolean("dfs.support.append", true);
 
 		final Job job = new Job(configuration);
 
