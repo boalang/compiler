@@ -96,7 +96,7 @@ public class Word2VectorAggregator extends MLAggregator {
 			else if (cur.equals("-f"))
 				wb.minWordFrequency(Integer.parseInt(options[++i]));
 			else if (cur.equals("-lr"))
-				wb.minLearningRate(Integer.parseInt(options[++i]));
+				wb.minLearningRate(Double.parseDouble(options[++i]));
 			else if (cur.equals("-ls"))
 				wb.layerSize(Integer.parseInt(options[++i]));
 			else if (cur.equals("-ws"))
