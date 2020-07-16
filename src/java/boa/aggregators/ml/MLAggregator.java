@@ -35,11 +35,14 @@ import weka.clusterers.Clusterer;
 import weka.core.*;
 import weka.filters.Filter;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -120,17 +123,19 @@ public abstract class MLAggregator extends Aggregator {
 
 		try {
 			JobContext context = (JobContext) getContext();
-			Configuration configuration = context.getConfiguration();
-			int boaJobId = configuration.getInt("boa.hadoop.jobid", 0);
-			JobConf job = new JobConf(configuration);
+			Configuration conf = context.getConfiguration();
+			int boaJobId = conf.getInt("boa.hadoop.jobid", 0);
+			JobConf job = new JobConf(conf);
 			Path outputPath = FileOutputFormat.getOutputPath(job);
 			fileSystem = outputPath.getFileSystem(context.getConfiguration());
+
+			
 			String output = null;
 			String subpath = "_" + trainingSet.attribute(0).name() + "_";
 			if (DefaultProperties.localOutput != null)
 				output = DefaultProperties.localOutput;
 			else
-				output = configuration.get("fs.default.name", "hdfs://boa-njt/");
+				output = conf.get("fs.default.name", "hdfs://boa-njt/");
 			for (int i = 1; i < NumOfAttributes; i++) {
 				// System.out.println(trainingSet.attribute(0).name());
 				subpath += "_" + trainingSet.attribute(i).name() + "_";
@@ -166,39 +171,43 @@ public abstract class MLAggregator extends Aggregator {
 		}
 	}
 
-	public void saveModel(Object model) {
+	
+	public void saveAndUpdateTrainingSet(LinkedList<String> train) {
 		FSDataOutputStream out = null;
-		FileSystem fileSystem = null;
-		Path filePath = null;
+		FileSystem fs = null;
+		Path modelDirPath = null;
+		Path trainDataPath = null;
 		ObjectOutputStream objectOut = null;
-
+		
 		try {
 			JobContext context = (JobContext) getContext();
 			Configuration conf = context.getConfiguration();
 			int boaJobId = conf.getInt("boa.hadoop.jobid", 0);
 			JobConf job = new JobConf(conf);
 			Path outputPath = FileOutputFormat.getOutputPath(job);
-			fileSystem = outputPath.getFileSystem(context.getConfiguration());
+			fs = outputPath.getFileSystem(context.getConfiguration());
+			
 			String output = DefaultProperties.localOutput != null
 					? new Path(DefaultProperties.localOutput).toString() + "/../"
 					: conf.get("fs.default.name", "hdfs://boa-njt/");
-			fileSystem.mkdirs(getModelDirPath(output, boaJobId));
-			filePath = getModelFilePath(output, boaJobId, getKey().getName());
-
-			// delete previous model
-			if (fileSystem.exists(filePath)) {
-				fileSystem.delete(filePath, true);
-				System.out.println("deleted previous model");
+			
+			modelDirPath = new Path(output, new Path("model/job_" + boaJobId));
+			fs.mkdirs(modelDirPath);
+			trainDataPath = new Path(modelDirPath, new Path(getKey().getName() + ".train"));
+			
+			if (!fs.exists(trainDataPath)) {
+				out = fs.create(trainDataPath);
+			} else {
+				// only works under real hadoop namenode and datanode
+				out = fs.append(trainDataPath);
 			}
-
-			// serialize the model and write to the path 
-			out = fileSystem.create(filePath);
-			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
-			objectOut = new ObjectOutputStream(byteOutStream);
-			objectOut.writeObject(model);
-			out.write(byteOutStream.toByteArray());
-
-			collect("Model is saved to: " + filePath.toString());
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out));
+			for (String line : train) {
+				bw.write(line);
+				bw.newLine();
+			}
+			bw.close();
+			train.clear();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -211,14 +220,52 @@ public abstract class MLAggregator extends Aggregator {
 				e.printStackTrace();
 			}
 		}
+
 	}
 
-	public static Path getModelDirPath(String output, int boaJobId) {
-		return new Path(output, new Path("model/job_" + boaJobId));
-	}
+	public void saveModel(Object model) {
+		FSDataOutputStream out = null;
+		FileSystem fs = null;
+		Path modelDirPath = null;
+		Path modelPath = null;
+		ObjectOutputStream objectOut = null;
 
-	public static Path getModelFilePath(String output, int boaJobId, String modelVar) {
-		return new Path(getModelDirPath(output, boaJobId), new Path(modelVar + ".model"));
+		try {
+			JobContext context = (JobContext) getContext();
+			Configuration conf = context.getConfiguration();
+			int boaJobId = conf.getInt("boa.hadoop.jobid", 0);
+			JobConf job = new JobConf(conf);
+			Path outputPath = FileOutputFormat.getOutputPath(job);
+			fs = outputPath.getFileSystem(context.getConfiguration());
+
+			String output = DefaultProperties.localOutput != null
+					? new Path(DefaultProperties.localOutput).toString() + "/../"
+					: conf.get("fs.default.name", "hdfs://boa-njt/");
+
+			modelDirPath = new Path(output, new Path("model/job_" + boaJobId));
+			fs.mkdirs(modelDirPath);
+			modelPath = new Path(modelDirPath, new Path(getKey().getName() + ".model"));
+
+			// serialize the model and write to the path 
+			out = fs.create(modelPath, true); // overwrite: true
+			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
+			objectOut = new ObjectOutputStream(byteOutStream);
+			objectOut.writeObject(model);
+			out.write(byteOutStream.toByteArray());
+
+			collect("Model is saved to: " + modelPath.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (out != null)
+					out.close();
+				if (objectOut != null)
+					objectOut.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	protected void applyFilterToUnfilteredInstances(Filter filter) throws Exception {

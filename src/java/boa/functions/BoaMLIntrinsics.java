@@ -30,8 +30,6 @@ import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
 
-import static boa.aggregators.ml.MLAggregator.getModelFilePath;
-
 public class BoaMLIntrinsics {
 
 	/**
@@ -52,10 +50,13 @@ public class BoaMLIntrinsics {
 			final Configuration conf = BoaAstIntrinsics.context.getConfiguration();
 			final FileSystem fs;
 			final Path p;
+
 			String output = DefaultProperties.localOutput != null
 					? new Path(DefaultProperties.localOutput).toString() + "/../"
 					: conf.get("fs.default.name", "hdfs://boa-njt/");
-			p = getModelFilePath(output, (int) jobId, identifier);
+
+			Path modelDirPath = new Path(output, new Path("model/job_" + jobId));
+			p = new Path(modelDirPath, new Path(identifier + ".model"));
 
 			// deserialize the model from the path
 			fs = FileSystem.get(conf);
@@ -257,9 +258,8 @@ public class BoaMLIntrinsics {
 				instance.setValue((Attribute) fvAttributes.get(i), vector.getValues()[i]);
 		testingSet.add(instance);
 
-		
 		double predval = -1;
-		
+
 		if (model.getKind() == BoaModel.Kind.CLASSIFIER) {
 			Classifier classifier = (Classifier) model.getClassifier();
 			predval = classifier.classifyInstance(testingSet.instance(0));
@@ -374,14 +374,14 @@ public class BoaMLIntrinsics {
 		}
 		return m.getW2v().wordsNearest(plus, minus, (int) num).toArray(new String[0]);
 	}
-	
+
 	/* ------------------------------- Seq2Vec ------------------------------- */
 
 	@FunctionSpec(name = "sim", returnType = "float", formalParameters = { "Seq2Vec", "string", "string" })
 	public static double sim(final BoaSequence2Vec m, final String w1, final String w2) {
 		return m.getSeq2Vec().similarity(w1, w2);
 	}
-	
+
 	@FunctionSpec(name = "nearest", returnType = "array of string", formalParameters = { "Seq2Vec", "string", "int" })
 	public static String[] nearest(final BoaSequence2Vec m, final String w, final long num) {
 		return m.getSeq2Vec().wordsNearest(w, (int) num).toArray(new String[0]);
@@ -391,7 +391,7 @@ public class BoaMLIntrinsics {
 	public static double[] vector(final BoaSequence2Vec m, final String w) {
 		return m.getSeq2Vec().getWordVector(w);
 	}
-	
+
 	@FunctionSpec(name = "vector", returnType = "array of float", formalParameters = { "Seq2Vec", "array of string" })
 	public static double[] vector(final BoaSequence2Vec m, final String[] sequence) {
 		return m.getSeq2Vec().getWordVectorsMean(Arrays.asList(sequence)).toDoubleVector();

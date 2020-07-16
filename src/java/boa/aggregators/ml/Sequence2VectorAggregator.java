@@ -46,6 +46,8 @@ public class Sequence2VectorAggregator extends MLAggregator {
 				sb.append(s).append(' ');
 			train.add(sb.toString());
 		}
+//		if (DefaultProperties.localOutput == null && freemem() < 50)
+//			saveAndUpdateTrainingSet(train);
 	}
 
 	@Override
@@ -103,15 +105,15 @@ public class Sequence2VectorAggregator extends MLAggregator {
 			String cur = options[i];
 			if (cur.equals("-s"))
 				trainingPerc = Integer.parseInt(options[++i]);
-			else if (cur.equals("-f"))
+			else if (cur.equals("-f")) {
 				sb.minWordFrequency(Integer.parseInt(options[++i]));
-			else if (cur.equals("-lr"))
-				sb.minLearningRate(Integer.parseInt(options[++i]));
-			else if (cur.equals("-ls"))
+			} else if (cur.equals("-lr")) {
+				sb.minLearningRate(Double.parseDouble(options[++i]));
+			} else if (cur.equals("-ls")) {
 				sb.layerSize(Integer.parseInt(options[++i]));
-			else if (cur.equals("-ws"))
+			} else if (cur.equals("-ws")) {
 				sb.windowSize(Integer.parseInt(options[++i]));
-			else if (cur.equals("-i"))
+			} else if (cur.equals("-i"))
 				sb.iterations(Integer.parseInt(options[++i]));
 			else if (cur.equals("-b"))
 				sb.batchSize(Integer.parseInt(options[++i]));
