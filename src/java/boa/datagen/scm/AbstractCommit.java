@@ -255,10 +255,12 @@ public abstract class AbstractCommit {
 			}
 		} 
 		else if (lowerPath.endsWith(".ipynb")) {
-			final String content = getFileContents(path);
-			fb.setKind(FileKind.SOURCE_PY_ERROR);
-			System.out.println(projectName + ": " + path);
-			parseNotebookFile(path, fb, content, false);
+			if(!path.startsWith(".ipynb_checkpoints/") && !path.contains("/.ipynb_checkpoints/")) {
+				final String content = getFileContents(path);
+				fb.setKind(FileKind.SOURCE_PY_ERROR);
+				System.out.println(projectName + ": " + path);
+				parseNotebookFile(path, fb, content, false);
+			}
 		}
 
 		if (connector.astWriterLen > len) {
@@ -710,7 +712,14 @@ public abstract class AbstractCommit {
 			String codeCell = "";
 			
 			while (iterator.hasNext()) {
-				String line = iterator.next().getAsString();
+				String line = "";
+				try {
+					line = iterator.next().getAsString();
+				} catch (Exception e) {
+					System.out.println("Error parsing one line.");
+					e.printStackTrace();
+					line = "";
+				}
 				if (NoNotebookErrors(line))
 					codeCell += line;
 				else
