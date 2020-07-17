@@ -594,7 +594,6 @@ public abstract class AbstractCommit {
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
 		pythonParsingError = false;
-		System.out.println("######## " + path);
 
 		String fullPath = this.projectName + "/" + path;
 

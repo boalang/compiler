@@ -522,6 +522,12 @@ public class NewPythonVisitor extends ASTVisitor {
 		String imp = "";
 		imp += md.getName() + " as " + md.getAsName();
 
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				imp+="["+status.toString()+"]";
+		}
+		
 		b.addImports(imp);
 		return true;
 	}
@@ -529,6 +535,11 @@ public class NewPythonVisitor extends ASTVisitor {
 	public boolean visit(PythonImportExpression md) {
 		String imp = "";
 		imp += md.getName();
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				imp+="["+status.toString()+"]";
+		}
 		b.addImports(imp);
 		return true;
 	}
@@ -546,21 +557,76 @@ public class NewPythonVisitor extends ASTVisitor {
 
 	public boolean visit(PythonImportFromStatement md) {
 
-		Map<String, String> imas = md.getImportedAsNames();
+//		Map<String, String> imas = md.getImportedAsNames();
 
 		String moduleName = md.getImportModuleName();
-
+		
 		if (md.isAllImport()) {
-			b.addImports(moduleName + ".*");
-		} else {
-			for (Map.Entry<String, String> entry : imas.entrySet()) {
-				String key = entry.getKey();
-				String value = entry.getValue();
-				if (key.equals(value))
-					b.addImports(moduleName + "." + key);
-				else
-					b.addImports(moduleName + "." + key + " as " + value);
+			if (enableDiff) {
+				ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != ChangeKind.UNCHANGED && status != null)
+					b.addImports(moduleName+"["+status.toString()+"]");
 			}
+			else 
+				b.addImports(moduleName + ".*");
+		} else {
+			
+			ASTNode fModuleExpression=md.getfModuleExpression();
+			if (fModuleExpression != null) {
+				if (enableDiff) {
+					ChangeKind status = (ChangeKind) fModuleExpression.getProperty(TreedConstants.PROPERTY_STATUS);
+					if (status != ChangeKind.UNCHANGED && status != null)
+						moduleName+="["+status.toString()+"]";
+				}
+			}
+			
+			
+			ASTNode fImportExpressions=md.getfImportExpressions();
+			if (fImportExpressions != null
+					&& fImportExpressions instanceof PythonTestListExpression) {
+				PythonTestListExpression testList = (PythonTestListExpression) fImportExpressions;
+				List/* < Expression > */expressions = testList.getExpressions();
+				if (expressions != null) {
+					Iterator i = expressions.iterator();
+					while( i.hasNext()) {
+						org.eclipse.dltk.ast.expressions.Expression exp = (org.eclipse.dltk.ast.expressions.Expression)i.next();
+					
+						if (exp instanceof PythonImportAsExpression) {
+							PythonImportAsExpression importAsExpression = (PythonImportAsExpression) exp;
+							String name = importAsExpression.getName();
+							String asName = importAsExpression.getAsName();
+							name=moduleName+"."+name+" as "+asName;
+							if (enableDiff) {
+								ChangeKind status = (ChangeKind) exp.getProperty(TreedConstants.PROPERTY_STATUS);
+								if (status != ChangeKind.UNCHANGED && status != null)
+									name+="["+status.toString()+"]";
+							}
+							b.addImports(name);
+						}
+						
+						else if (exp instanceof PythonImportExpression) {
+							String name = ((PythonImportExpression) exp).getName();
+							name=moduleName+"."+name;
+							if (enableDiff) {
+								ChangeKind status = (ChangeKind) exp.getProperty(TreedConstants.PROPERTY_STATUS);
+								if (status != ChangeKind.UNCHANGED && status != null)
+									name+="["+status.toString()+"]";
+							}
+							b.addImports(name);
+						}
+						
+					}
+				}
+			}
+			
+//			for (Map.Entry<String, String> entry : imas.entrySet()) {
+//				String key = entry.getKey();
+//				String value = entry.getValue();
+//				if (key.equals(value))
+//					b.addImports(moduleName + "." + key);
+//				else
+//					b.addImports(moduleName + "." + key + " as " + value);
+//			}
 		}
 
 		return true;

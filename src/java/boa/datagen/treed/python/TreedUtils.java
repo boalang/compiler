@@ -3,6 +3,7 @@ package boa.datagen.treed.python;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.expressions.Expression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonImportExpression;
 
 public final class TreedUtils {
 
@@ -15,6 +16,10 @@ public final class TreedUtils {
 				node.getClass().getSimpleName().endsWith("Argument")) {
 			return (char) (label | (node.toString().hashCode() << 7));
 		}
+		
+		if(node instanceof PythonImportAsExpression
+				|| node instanceof PythonImportExpression)
+			return (char) (label | (node.toString().hashCode() << 7));
 		
 		else if (node instanceof Expression) {
 			if(((Expression) node).getKind()>=1000 &&
@@ -32,6 +37,9 @@ public final class TreedUtils {
 				|| node.getClass().getSimpleName().endsWith("Argument")) {
 			return label + "(" + node.toString() + ")";
 		}
+		if(node instanceof PythonImportAsExpression
+				|| node instanceof PythonImportExpression)
+			return label + "(" + node.toString() + ")";
 		
 		else if (node instanceof Expression) {
 			if(((Expression) node).getKind()>=1000 &&
