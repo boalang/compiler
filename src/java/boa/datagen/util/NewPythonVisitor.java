@@ -558,7 +558,7 @@ public class NewPythonVisitor extends ASTVisitor {
 	public boolean visit(PythonImportFromStatement md) {
 
 //		Map<String, String> imas = md.getImportedAsNames();
-
+		
 		String moduleName = md.getImportModuleName();
 		
 		if (md.isAllImport()) {

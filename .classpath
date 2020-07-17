@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="lib" path="rtlib/antlr-runtime-4.5.jar"/>
 	<classpathentry kind="lib" path="rtlib/commons-cli-1.2.jar"/>
 	<classpathentry kind="lib" path="rtlib/scannotation-1.0.3.jar"/>
 	<classpathentry kind="lib" path="rtlib/ST-4.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/antlr-4.5-complete.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-math-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/hadoop-core-1.0.4.jar"/>
@@ -22,7 +20,6 @@
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.core.contenttype_3.4.100.dist.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.core.jobs_3.5.101.dist.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.core.resources_3.7.101.dist.jar"/>
-	<classpathentry kind="lib" path="lib/datagen/org.eclipse.core.runtime_3.7.0.dist.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.equinox.common_3.6.0.dist.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.equinox.preferences_3.4.2.dist.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.jgit-4.0.1.201506240215-r.jar"/>
@@ -73,10 +70,11 @@
 	<classpathentry kind="lib" path="lib/evaluator/com.springsource.org.codehaus.jackson.mapper-1.4.2.jar"/>
 	<classpathentry kind="lib" path="lib/evaluator/commons-configuration-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/evaluator/commons-httpclient-3.1.0.redhat-7.jar"/>
-	<classpathentry kind="lib" path="lib/evaluator/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="compile"/>
-	<classpathentry kind="lib" path="lib/parse.python.jar"/>
+	<classpathentry kind="lib" path="lib/datagen/org.eclipse.core.runtime_3.7.0.dist.jar"/>
 	<classpathentry kind="lib" path="lib/parse.python.antlr.runtime.jar"/>
 	<classpathentry kind="lib" path="lib/customized.dltk.core.jar"/>
+	<classpathentry kind="lib" path="lib/parse.python.jar"/>
+	<classpathentry kind="lib" path="lib/antlr-4.5-complete.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

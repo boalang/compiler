@@ -597,7 +597,7 @@ public abstract class AbstractCommit {
 
 		String fullPath = this.projectName + "/" + path;
 
-		if(this.lastRevision)
+//		if(this.lastRevision)
 			System.out.println("commit "+this.id);
 		
 		PythonSourceParser parser = new PythonSourceParser();
