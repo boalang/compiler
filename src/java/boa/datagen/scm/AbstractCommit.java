@@ -590,7 +590,6 @@ public abstract class AbstractCommit {
 
 	boolean pythonParsingError;
 
-
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
 		pythonParsingError = false;
@@ -598,7 +597,7 @@ public abstract class AbstractCommit {
 		String fullPath = this.projectName + "/" + path;
 
 //		if(this.lastRevision)
-			System.out.println("commit "+this.id);
+//			System.out.println("commit " + this.id);
 		
 		PythonSourceParser parser = new PythonSourceParser();
 		IModuleSource input = new ModuleSource(content);
@@ -624,7 +623,10 @@ public abstract class AbstractCommit {
 				try {
 					tm.map();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					if (debug) {
+						System.err.println("Tree mapping error" + path + " from: " + projectName + "\n");
+						writeToCsv(projectName, path, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+					}
 					e.printStackTrace();
 				}
 			}
@@ -633,8 +635,10 @@ public abstract class AbstractCommit {
 				previousAst.put(fullPath, module);
 
 		} catch (Exception e) {
-			if (true)
-				System.err.println("Error parsing Python file: " + path + " from: " + projectName);
+			if (debug) {
+				System.err.println("Error visiting Python file: " + path + " from: " + projectName + "\n");
+				writeToCsv(projectName, path, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+			}
 			e.printStackTrace();
 			return false;
 		}
@@ -647,6 +651,10 @@ public abstract class AbstractCommit {
 			try {
 				ast.addNamespaces(visitor.getNamespace(module, path));
 			} catch (final UnsupportedOperationException e) {
+				if (debug) {
+					System.err.println("Unsupported operation Error visiting Python file: " + path + " from: " + projectName + "\n");
+					writeToCsv(projectName, path, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+				}
 				return false;
 			} catch (final Throwable e) {
 				if (debug) {
@@ -665,6 +673,10 @@ public abstract class AbstractCommit {
 				connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 				connector.astWriterLen += bw.getLength();
 			} catch (IOException e) {
+				if (debug) {
+					System.err.println("AST writing error: " + path + " from: " + projectName + "\n");
+					writeToCsv(projectName, path, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+				}
 				e.printStackTrace();
 			}
 
@@ -676,8 +688,6 @@ public abstract class AbstractCommit {
 			final boolean storeOnError) {
 		pythonParsingError = false;
 		System.out.println("@@@@@@@@ " + path);
-		
-		String fullPath = this.projectName + "/" + path;
 
 		int count = 0;
 		ASTRoot.Builder ast = ASTRoot.newBuilder();
@@ -685,7 +695,9 @@ public abstract class AbstractCommit {
 		JsonArray cells = parseNotebookJson(content);
 
 		if (cells == null) {
-			System.out.println("Notebook JSON parse error.\n" + path + " from: " + projectName + "\n");
+			if (debug) {
+				System.err.println("Notebook JSON parse error: " + path + " from: " + projectName + "\n");
+			}
 			return false;
 		}
 
@@ -713,9 +725,12 @@ public abstract class AbstractCommit {
 				try {
 					line = iterator.next().getAsString();
 				} catch (Exception e) {
-					System.out.println("Error parsing one line.");
 					e.printStackTrace();
 					line = "";
+					if (debug) {
+						System.err.println("Error parsing one line in a cell: " + path + ", Cell:" + count + " from: " + projectName + "\n");
+						writeToCsv(projectName, path + ", Cell:" + count, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+					}
 				}
 				if (NoNotebookErrors(line))
 					codeCell += line;
@@ -741,8 +756,10 @@ public abstract class AbstractCommit {
 			try {
 				module = (PythonModuleDeclaration) parser.parse(input, reporter);
 			} catch (Exception e) {
-				System.err
-						.println("Error parsing notebook cell: " + path + " from: " + projectName + ", Cell: " + count);
+				if (debug) {
+					System.err.println("Error parsing notebook cell: " + path + " from: " + projectName + "\n");
+					writeToCsv(projectName, path + ", Cell:" + count, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+				}
 				e.printStackTrace();
 				continue;
 			}
@@ -752,13 +769,15 @@ public abstract class AbstractCommit {
 				ast.addNamespaces(visitor.getCellAsNamespace(module, "cell:" + count, exec_count));
 				parseSuccess = true;
 			} catch (final UnsupportedOperationException e) {
+				if (debug) {
+					System.err.println("Error getting AST for a notebook cell: " + path + ", Cell:" + count + " from: " + projectName + "\n");
+					writeToCsv(projectName, path + ", Cell:" + count, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+				}
 				continue;
 			} catch (final Throwable e) {
 				if (debug) {
-					System.err.println(
-							"Error parsing Python file: " + path + " from: " + projectName + ", Cell: " + count);
-					writeToCsv(projectName, path + "-Cell:" + count,
-							ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+					System.err.println("Error getting AST for a notebook cell: " + path + ", Cell:" + count + " from: " + projectName + "\n");
+					writeToCsv(projectName, path + ", Cell:" + count, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
 				}
 				e.printStackTrace();
 				continue;
@@ -776,6 +795,10 @@ public abstract class AbstractCommit {
 			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 			connector.astWriterLen += bw.getLength();
 		} catch (IOException e) {
+			if (debug) {
+				System.err.println("Error writing AST of a notebook file: " + path + ", Cell:" + count + " from: " + projectName + "\n");
+				writeToCsv(projectName, path + ", Cell:" + count, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+			}
 			e.printStackTrace();
 		}
 
