@@ -383,6 +383,8 @@ message Expression {
 		ASSIGN_INT_DIV=108;
 		IS=109;
 		IS_NOT=110;
+		IMPORT=111;
+		IMPORT_FROM=112;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;

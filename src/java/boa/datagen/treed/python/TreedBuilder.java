@@ -38,9 +38,14 @@ public class TreedBuilder extends ASTVisitor implements TreedConstants {
 			nodeTypes.put(nodeName, type++);
 		node.setNodeType(nodeTypes.get(nodeName));
 		
+//		System.out.println(node.toString());
 		tree.put(node, new ArrayList<ASTNode>());
 		if (node != root) {
 			ASTNode p = node.getParent();
+//			if(p==null)
+//			{
+//				System.out.println("hello");
+//			}
 			treeDepth.put(node, treeDepth.get(p) + 1);
 		}
 		return true;

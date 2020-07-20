@@ -17,8 +17,10 @@ public final class TreedUtils {
 			return (char) (label | (node.toString().hashCode() << 7));
 		}
 		
-		if(node instanceof PythonImportAsExpression
-				|| node instanceof PythonImportExpression)
+		if (node.getClass().getSimpleName().contains("Python") &&
+				node.getClass().getSimpleName().contains("Import"))
+//		if(node instanceof PythonImportAsExpression
+//				|| node instanceof PythonImportExpression)
 			return (char) (label | (node.toString().hashCode() << 7));
 		
 		else if (node instanceof Expression) {
@@ -37,8 +39,10 @@ public final class TreedUtils {
 				|| node.getClass().getSimpleName().endsWith("Argument")) {
 			return label + "(" + node.toString() + ")";
 		}
-		if(node instanceof PythonImportAsExpression
-				|| node instanceof PythonImportExpression)
+		if (node.getClass().getSimpleName().contains("Python") &&
+				node.getClass().getSimpleName().contains("Import"))
+//		if(node instanceof PythonImportAsExpression
+//				|| node instanceof PythonImportExpression)
 			return label + "(" + node.toString() + ")";
 		
 		else if (node instanceof Expression) {
