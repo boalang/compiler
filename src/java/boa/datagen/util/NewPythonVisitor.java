@@ -144,7 +144,7 @@ public class NewPythonVisitor extends ASTVisitor {
 		} else if (md instanceof PythonImportStatement) {
 			visit((PythonImportStatement) md);
 			opFound = true;
-		} 	else if (md instanceof PythonImportAsExpression) {
+		} else if (md instanceof PythonImportAsExpression) {
 			visit((PythonImportAsExpression) md);
 			opFound = true;
 		} else if (md instanceof PythonImportExpression) {
@@ -153,8 +153,7 @@ public class NewPythonVisitor extends ASTVisitor {
 		} else if (md instanceof PythonAllImportExpression) {
 			visit((PythonAllImportExpression) md);
 			opFound = true;
-		}
-		else if (md instanceof NotStrictAssignment) {
+		} else if (md instanceof NotStrictAssignment) {
 			visit((NotStrictAssignment) md);
 			opFound = true;
 		} else if (md instanceof Assignment) {
@@ -220,7 +219,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		} else if (md instanceof PythonDelStatement) {
 			visit((PythonDelStatement) md);
 			opFound = true;
-		} else if (md instanceof PythonSubscriptExpression) {
+		} else if (md instanceof IndexHolder) {
+			visit((IndexHolder) md);
+			opFound = true;
+		} 
+		else if (md instanceof PythonSubscriptExpression) {
 			visit((PythonSubscriptExpression) md);
 			opFound = true;
 		} else if (md instanceof PythonListExpression) {
@@ -451,6 +454,26 @@ public class NewPythonVisitor extends ASTVisitor {
 		return false;
 	}
 
+	public boolean visit(IndexHolder md) throws Exception {
+
+		if (md.getIndex() != null) {
+			md.getIndex().traverse(this);
+		} else {
+			boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+			// need to handle unary expressions
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYINDEX);
+
+			if (enableDiff) {
+				ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+				if (status != ChangeKind.UNCHANGED && status != null)
+					b.setChange(status);
+			}
+			expressions.push(b.build());
+		}
+		return true;
+	}
+
 	public boolean visit(PythonSubscriptExpression md) throws Exception {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 
@@ -527,51 +550,48 @@ public class NewPythonVisitor extends ASTVisitor {
 		String imp = "";
 		imp += md.getName() + " as " + md.getAsName();
 
-		
 		boa.types.Ast.Expression.Builder ex = boa.types.Ast.Expression.newBuilder();
 		ex.setKind(ExpressionKind.IMPORT);
 		ex.setLiteral(imp);
 
-		
 		if (enableDiff) {
 			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
 			if (status != ChangeKind.UNCHANGED && status != null)
 				ex.setChange(status);
 		}
-		
+
 		expressions.push(ex.build());
 		return true;
 	}
+
 	public boolean visit(PythonAllImportExpression md) {
-		
+
 		boa.types.Ast.Expression.Builder ex = boa.types.Ast.Expression.newBuilder();
 		ex.setKind(ExpressionKind.IMPORT);
 		ex.setLiteral("*");
 
-		
 		if (enableDiff) {
 			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
 			if (status != ChangeKind.UNCHANGED && status != null)
 				ex.setChange(status);
 		}
-		
+
 		expressions.push(ex.build());
 		return true;
 	}
 
 	public boolean visit(PythonImportExpression md) {
-		
+
 		boa.types.Ast.Expression.Builder ex = boa.types.Ast.Expression.newBuilder();
 		ex.setKind(ExpressionKind.IMPORT);
 		ex.setLiteral(md.getName());
 
-		
 		if (enableDiff) {
 			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
 			if (status != ChangeKind.UNCHANGED && status != null)
 				ex.setChange(status);
 		}
-		
+
 		expressions.push(ex.build());
 		return true;
 	}
@@ -580,25 +600,21 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		if (md.getImports() != null) {
 			for (Object ob : md.getImports()) {
-				
+
 				if (enableDiff) {
 					ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
-					if (status != ChangeKind.UNCHANGED && status != null)
-					{
+					if (status != ChangeKind.UNCHANGED && status != null) {
 						((ASTNode) ob).traverse(this);
-						
+
 						addStatementExpression();
 					}
 				}
-				
-				if(ob instanceof PythonImportExpression)
-				{
-					b.addImports(((PythonImportExpression)ob).getName());
-				}
-				else if(ob instanceof PythonImportAsExpression)
-				{
-					b.addImports(((PythonImportAsExpression)ob).getName()+ " as " +
-							((PythonImportAsExpression)ob).getAsName());
+
+				if (ob instanceof PythonImportExpression) {
+					b.addImports(((PythonImportExpression) ob).getName());
+				} else if (ob instanceof PythonImportAsExpression) {
+					b.addImports(((PythonImportAsExpression) ob).getName() + " as "
+							+ ((PythonImportAsExpression) ob).getAsName());
 				}
 			}
 		}
@@ -608,54 +624,45 @@ public class NewPythonVisitor extends ASTVisitor {
 
 	public boolean visit(PythonImportFromStatement md) throws Exception {
 
-
 		Map<String, String> imas = md.getImportedAsNames();
 		String moduleName = md.getImportModuleName();
 
-		
 		if (enableDiff) {
 			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-			{
+			if (status != ChangeKind.UNCHANGED && status != null) {
 				boa.types.Ast.Expression.Builder ex = boa.types.Ast.Expression.newBuilder();
 				ex.setKind(ExpressionKind.IMPORT_FROM);
 				ex.setLiteral(moduleName);
 				ex.setChange(status);
 
-				
-				ASTNode fImportExpressions=md.getfImportExpressions();
-				if (fImportExpressions != null
-						&& fImportExpressions instanceof PythonTestListExpression) {
+				ASTNode fImportExpressions = md.getfImportExpressions();
+				if (fImportExpressions != null && fImportExpressions instanceof PythonTestListExpression) {
 					PythonTestListExpression testList = (PythonTestListExpression) fImportExpressions;
-					List/* < Expression > */exps = testList.getExpressions();
+					List/* < Expression > */ exps = testList.getExpressions();
 					if (exps != null) {
 						Iterator i = exps.iterator();
-						while( i.hasNext()) {
-							org.eclipse.dltk.ast.expressions.Expression exp = (org.eclipse.dltk.ast.expressions.Expression)i.next();
-						
+						while (i.hasNext()) {
+							org.eclipse.dltk.ast.expressions.Expression exp = (org.eclipse.dltk.ast.expressions.Expression) i
+									.next();
+
 							exp.traverse(this);
-							
+
 							ex.addExpressions(expressions.pop());
-						
-							
+
 						}
 					}
-				}
-				else if (fImportExpressions != null
-						&& fImportExpressions instanceof PythonAllImportExpression) {
+				} else if (fImportExpressions != null && fImportExpressions instanceof PythonAllImportExpression) {
 					fImportExpressions.traverse(this);
 					ex.addExpressions(expressions.pop());
 				}
-				
+
 				expressions.push(ex.build());
-				
+
 				addStatementExpression();
-				
+
 			}
 		}
-		
-		
-		
+
 		if (md.isAllImport()) {
 			b.addImports(moduleName + ".*");
 		} else {
@@ -855,16 +862,16 @@ public class NewPythonVisitor extends ASTVisitor {
 		return false;
 	}
 
-	void dealExpression(ASTNode ex) throws Exception
-	{
-		if (ex!= null) {
+	void dealExpression(ASTNode ex) throws Exception {
+		if (ex != null) {
 			if (ex instanceof ExpressionList)
 				visit((ExpressionList) ex);
 			else
 				ex.traverse(this);
-			
+
 		}
 	}
+
 	public boolean visit(Assignment md) throws Exception {
 
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
@@ -1046,7 +1053,7 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		if (node.getExpression() != null) {
 			dealExpression(node.getExpression());
-			
+
 			b.addExpressions(expressions.pop());
 		}
 		list.add(b.build());
@@ -1103,7 +1110,6 @@ public class NewPythonVisitor extends ASTVisitor {
 			if (status != ChangeKind.UNCHANGED && status != null)
 				b.setChange(status);
 		}
-		
 
 		if (md.getKind() == ExpressionConstants.E_PLUS) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_ADD);
