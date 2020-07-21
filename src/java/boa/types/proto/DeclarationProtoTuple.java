@@ -26,6 +26,7 @@ import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.ChangeKindProtoMap;
 import boa.types.proto.enums.TypeKindProtoMap;
 
 /**
@@ -78,6 +79,9 @@ public class DeclarationProtoTuple extends BoaProtoTuple {
 		
 		names.put("statements", counter++);
 		members.add(new BoaProtoList(new StatementProtoTuple()));
+		
+		names.put("change", counter++);
+		members.add(new ChangeKindProtoMap());
 	}
 
 	/**

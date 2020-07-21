@@ -27,6 +27,7 @@ import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.ChangeKindProtoMap;
 import boa.types.proto.enums.ExpressionKindProtoMap;
 
 /**
@@ -115,6 +116,9 @@ public class ExpressionProtoTuple extends BoaProtoTuple {
 		
 		names.put("trait", counter++);
 		members.add(new MethodProtoTuple());
+		
+		names.put("change", counter++);
+		members.add(new ChangeKindProtoMap());
 		
 	}
 
