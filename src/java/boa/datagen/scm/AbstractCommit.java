@@ -686,7 +686,7 @@ public abstract class AbstractCommit {
 
 	private boolean parseNotebookFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
-		System.out.println("commit " + this.id);
+		//System.out.println("commit " + this.id);
 		pythonParsingError = false;
 		System.out.println("@@@@@@@@ " + path);
 
