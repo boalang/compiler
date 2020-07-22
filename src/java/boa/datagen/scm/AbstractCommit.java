@@ -254,14 +254,14 @@ public abstract class AbstractCommit {
 				parsePythonFile(path, fb, content, false);
 			}
 		} 
-//		else if (lowerPath.endsWith(".ipynb")) {
-//			if(!path.startsWith(".ipynb_checkpoints/") && !path.contains("/.ipynb_checkpoints/")) {
-//				final String content = getFileContents(path);
-//				fb.setKind(FileKind.SOURCE_PY_ERROR);
-//				System.out.println(projectName + ": " + path);
-//				parseNotebookFile(path, fb, content, false);
-//			}
-//		}
+		else if (lowerPath.endsWith(".ipynb")) {
+			if(!path.startsWith(".ipynb_checkpoints/") && !path.contains("/.ipynb_checkpoints/")) {
+				final String content = getFileContents(path);
+				fb.setKind(FileKind.SOURCE_PY_ERROR);
+				System.out.println(projectName + ": " + path);
+				parseNotebookFile(path, fb, content, false);
+			}
+		}
 
 		if (connector.astWriterLen > len) {
 			fb.setKey(len);

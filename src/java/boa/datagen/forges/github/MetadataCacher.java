@@ -18,6 +18,7 @@ public class MetadataCacher {
 	private boolean authenticated = false;
 	private HttpURLConnection connection = null;
 	private int responseCode = -1;
+	private String responseMessage;
 	private String content = "";
 	
 	public MetadataCacher(String url) {
@@ -130,6 +131,7 @@ public class MetadataCacher {
 	private void getHttpResponseCode() {
 		try {
 			this.responseCode = this.connection.getResponseCode();
+			this.responseMessage = this.connection.getResponseMessage();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
