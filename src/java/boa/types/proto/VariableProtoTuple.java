@@ -27,6 +27,7 @@ import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.ChangeKindProtoMap;
 
 /**
  * A {@link VariableProtoTuple}.
@@ -66,6 +67,9 @@ public class VariableProtoTuple extends BoaProtoTuple {
 		
 		names.put("expressions", counter++);
 		members.add(new BoaProtoList(new ExpressionProtoTuple()));
+		
+		names.put("change", counter++);
+		members.add(new ChangeKindProtoMap());
 	}
 
 	/**

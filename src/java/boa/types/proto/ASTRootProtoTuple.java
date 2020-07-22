@@ -26,6 +26,7 @@ import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.ChangeKindProtoMap;
 
 /**
  * A {@link ASTRootProtoTuple}.
@@ -50,6 +51,9 @@ public class ASTRootProtoTuple extends BoaProtoTuple {
 		
 		names.put("document", counter++);
 		members.add(new DocumentProtoTuple());
+		
+		names.put("change", counter++);
+		members.add(new ChangeKindProtoMap());
 	}
 
 	/**
