@@ -191,14 +191,15 @@ public class BoaEvaluator extends BoaMain {
 
 			if (outputDir.exists()) {
 				System.err.print("output directory '" + this.OUTPUT_DIR + "' exists - delete? [Y/n] ");
-				int b = (char)System.in.read();
-				char ch = (char)b;
+//				int b = (char)System.in.read();
+//				char ch = (char)b;
+				FileUtils.deleteDirectory(outputDir);
 
-				if (b == -1 || ch == 'Y' || ch == 'y' || ch == '\n' || ch == '\r') {
-					FileUtils.deleteDirectory(outputDir);
-				} else {
-					throw new RuntimeException("Please remove or provide a different output directory.");
-				}
+//				if (b == -1 || ch == 'Y' || ch == 'y' || ch == '\n' || ch == '\r') {
+//					FileUtils.deleteDirectory(outputDir);
+//				} else {
+//					throw new RuntimeException("Please remove or provide a different output directory.");
+//				}
 			}
 		}
 

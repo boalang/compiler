@@ -610,12 +610,13 @@ public class NewPythonVisitor extends ASTVisitor {
 					}
 				}
 
-				if (ob instanceof PythonImportExpression) {
-					b.addImports(((PythonImportExpression) ob).getName());
-				} else if (ob instanceof PythonImportAsExpression) {
+				if (ob instanceof PythonImportAsExpression) {
 					b.addImports(((PythonImportAsExpression) ob).getName() + " as "
 							+ ((PythonImportAsExpression) ob).getAsName());
 				}
+				else if (ob instanceof PythonImportExpression) {
+					b.addImports(((PythonImportExpression) ob).getName());
+				} 
 			}
 		}
 
