@@ -127,7 +127,7 @@ public class BoaAstIntrinsics {
 
 		context.getCounter(ASTCOUNTER.GETS_ATTEMPTED).increment(1);
 
-		// current open map is null OR current ast key doesn't match the one of the chagned file 
+		// current open map is null OR current ast key doesn't match the one of the changed file 
 		if (map == null || (curMapSuffix != -1 && curMapSuffix != f.getAstKey())) {
 			if (!f.hasAstKey())
 				openMap();
