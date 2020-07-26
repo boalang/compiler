@@ -62,6 +62,9 @@ public class VariableProtoTuple extends BoaProtoTuple {
 		names.put("declaring_type", counter++);
 		members.add(new BoaInt());
 		
+		names.put("computed_name", counter++);
+		members.add(new ExpressionProtoTuple());
+		
 		names.put("dollar_sign", counter++);
 		members.add(new BoaBool());
 		
