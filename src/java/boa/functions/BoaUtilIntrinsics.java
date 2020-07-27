@@ -64,10 +64,12 @@ public class BoaUtilIntrinsics {
 		StringBuilder sb = new StringBuilder();
 
 		// add modifier
-		sb.append(getModifierAsString(m.getModifiersList()));
+//		sb.append(getModifierAsString(m.getModifiersList()));
 
 		// add method name
 		sb.append(m.getName() + "(");
+		
+		// add method arguments
 		for (int i = 0; i < m.getArgumentsCount(); i++) {
 			if (i > 0)
 				sb.append(", ");
@@ -142,9 +144,6 @@ public class BoaUtilIntrinsics {
 		for (Method m : e2.getValue())
 			added.put(signature(m), m);
 		
-		
-//		System.out.println("before " + deleted.size() + " " + added.size());
-		
 		for (Iterator<Entry<String, Method>> itr = deleted.entrySet().iterator(); itr.hasNext();) {
 			String sig = itr.next().getKey();
 			if (added.containsKey(sig)) {
@@ -152,8 +151,6 @@ public class BoaUtilIntrinsics {
 				added.remove(sig);
 			}
 		}
-		
-//		System.out.println("after " + deleted.size() + " " + added.size());
 		
 		if (deleted.size() == 0 || added.size() == 0)
 			return;
