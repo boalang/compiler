@@ -1,7 +1,6 @@
 package boa.functions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -88,12 +87,12 @@ public class BoaUtilIntrinsics {
 		return sb.toString();
 	}
 
-	private static String getModifierAsString(List<Modifier> list) {
-		for (Modifier modifier : list)
-			if (modifier.hasVisibility())
-				return modifier.getVisibility().toString().toLowerCase() + " ";
-		return "";
-	}
+//	private static String getModifierAsString(List<Modifier> list) {
+//		for (Modifier modifier : list)
+//			if (modifier.hasVisibility())
+//				return modifier.getVisibility().toString().toLowerCase() + " ";
+//		return "";
+//	}
 
 	@FunctionSpec(name = "get_previous_file", returnType = "ChangedFile", formalParameters = { "CodeRepository",
 			"Revision", "ChangedFile" })
@@ -137,9 +136,11 @@ public class BoaUtilIntrinsics {
 
 	private static void update(Entry<String, LinkedList<Method>> e1, Entry<String, LinkedList<Method>> e2,
 			List<String[]> results) {
+		
 		HashMap<String, Method> deleted = new HashMap<String, Method>();
 		for (Method m : e1.getValue())
 			deleted.put(signature(m), m);
+
 		HashMap<String, Method> added = new HashMap<String, Method>();
 		for (Method m : e2.getValue())
 			added.put(signature(m), m);
@@ -156,8 +157,11 @@ public class BoaUtilIntrinsics {
 			return;
 
 		String fqn = e1.getKey();
-		for (Entry<String, Method> entry1 : deleted.entrySet()) {
-			for (Entry<String, Method> entry2 : added.entrySet()) {
+		
+		for (Iterator<Entry<String, Method>> itr1 = deleted.entrySet().iterator(); itr1.hasNext();) {
+			Entry<String, Method> entry1 = itr1.next();
+			for (Iterator<Entry<String, Method>> itr2 = added.entrySet().iterator(); itr2.hasNext();) {
+				Entry<String, Method> entry2 = itr2.next();
 				Method m1 = entry1.getValue();
 				Method m2 = entry2.getValue();
 				if (matchMethodBody(m1, m2)) {
@@ -165,9 +169,12 @@ public class BoaUtilIntrinsics {
 					String[] tokens2 = split(m2.getName());
 					if (tokens1.length > 0 && tokens2.length > 0 && !tokens1[0].equals(tokens2[0])) {
 						results.add(new String[] { fqn + " " + entry1.getKey(), fqn + " " + entry2.getKey() });
+						itr1.remove();
+						itr2.remove();
 						break;
 					}
 				}
+				
 			}
 		}
 	}
@@ -185,10 +192,10 @@ public class BoaUtilIntrinsics {
 		return true;
 	}
 
-	public static void main(String[] args) {
-		String s = "camelCased<List<Integer3[seq2vec]>>_____and_UNDERSCORED<HE>[SHE]_.....__camelCasedDDDDD";
-		System.out.println(Arrays.toString(split(s)));
+//	public static void main(String[] args) {
+//		String s = "camelCased<List<Integer3[seq2vec]>>_____and_UNDERSCORED<HE>[SHE]_.....__camelCasedDDDDD";
+//		System.out.println(Arrays.toString(split(s)));
 //		System.out.println(alphabetFilter(s, "_."));
-	}
+//	}
 
 }
