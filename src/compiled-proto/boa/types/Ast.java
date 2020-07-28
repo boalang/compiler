@@ -1145,6 +1145,51 @@ public final class Ast {
      * <code>optional .boa.types.ChangeKind change = 6;</code>
      */
     boa.types.Shared.ChangeKind getChange();
+
+    // repeated .boa.types.Cell cells = 7;
+    /**
+     * <code>repeated .boa.types.Cell cells = 7;</code>
+     *
+     * <pre>
+     ** The top-level cells in the file 
+     * </pre>
+     */
+    java.util.List<boa.types.Ast.Cell> 
+        getCellsList();
+    /**
+     * <code>repeated .boa.types.Cell cells = 7;</code>
+     *
+     * <pre>
+     ** The top-level cells in the file 
+     * </pre>
+     */
+    boa.types.Ast.Cell getCells(int index);
+    /**
+     * <code>repeated .boa.types.Cell cells = 7;</code>
+     *
+     * <pre>
+     ** The top-level cells in the file 
+     * </pre>
+     */
+    int getCellsCount();
+    /**
+     * <code>repeated .boa.types.Cell cells = 7;</code>
+     *
+     * <pre>
+     ** The top-level cells in the file 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Ast.CellOrBuilder> 
+        getCellsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Cell cells = 7;</code>
+     *
+     * <pre>
+     ** The top-level cells in the file 
+     * </pre>
+     */
+    boa.types.Ast.CellOrBuilder getCellsOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code boa.types.ASTRoot}
@@ -1246,6 +1291,14 @@ public final class Ast {
               }
               break;
             }
+            case 58: {
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+                cells_ = new java.util.ArrayList<boa.types.Ast.Cell>();
+                mutable_bitField0_ |= 0x00000020;
+              }
+              cells_.add(input.readMessage(boa.types.Ast.Cell.PARSER, extensionRegistry));
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -1259,6 +1312,9 @@ public final class Ast {
         }
         if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
           names_ = new com.google.protobuf.UnmodifiableLazyStringList(names_);
+        }
+        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+          cells_ = java.util.Collections.unmodifiableList(cells_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -1468,12 +1524,69 @@ public final class Ast {
       return change_;
     }
 
+    // repeated .boa.types.Cell cells = 7;
+    public static final int CELLS_FIELD_NUMBER = 7;
+    private java.util.List<boa.types.Ast.Cell> cells_;
+    /**
+     * <code>repeated .boa.types.Cell cells = 7;</code>
+     *
+     * <pre>
+     ** The top-level cells in the file 
+     * </pre>
+     */
+    public java.util.List<boa.types.Ast.Cell> getCellsList() {
+      return cells_;
+    }
+    /**
+     * <code>repeated .boa.types.Cell cells = 7;</code>
+     *
+     * <pre>
+     ** The top-level cells in the file 
+     * </pre>
+     */
+    public java.util.List<? extends boa.types.Ast.CellOrBuilder> 
+        getCellsOrBuilderList() {
+      return cells_;
+    }
+    /**
+     * <code>repeated .boa.types.Cell cells = 7;</code>
+     *
+     * <pre>
+     ** The top-level cells in the file 
+     * </pre>
+     */
+    public int getCellsCount() {
+      return cells_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Cell cells = 7;</code>
+     *
+     * <pre>
+     ** The top-level cells in the file 
+     * </pre>
+     */
+    public boa.types.Ast.Cell getCells(int index) {
+      return cells_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Cell cells = 7;</code>
+     *
+     * <pre>
+     ** The top-level cells in the file 
+     * </pre>
+     */
+    public boa.types.Ast.CellOrBuilder getCellsOrBuilder(
+        int index) {
+      return cells_.get(index);
+    }
+
     private void initFields() {
       namespaces_ = java.util.Collections.emptyList();
       names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       key_ = 0;
       document_ = boa.types.Ast.Document.getDefaultInstance();
       change_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      cells_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1488,6 +1601,12 @@ public final class Ast {
       }
       if (hasDocument()) {
         if (!getDocument().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getCellsCount(); i++) {
+        if (!getCells(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -1513,6 +1632,9 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeEnum(6, change_.getNumber());
+      }
+      for (int i = 0; i < cells_.size(); i++) {
+        output.writeMessage(7, cells_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -1547,6 +1669,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(6, change_.getNumber());
+      }
+      for (int i = 0; i < cells_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(7, cells_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1662,6 +1788,7 @@ public final class Ast {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getNamespacesFieldBuilder();
           getDocumentFieldBuilder();
+          getCellsFieldBuilder();
         }
       }
       private static Builder create() {
@@ -1688,6 +1815,12 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000008);
         change_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000010);
+        if (cellsBuilder_ == null) {
+          cells_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000020);
+        } else {
+          cellsBuilder_.clear();
+        }
         return this;
       }
 
@@ -1747,6 +1880,15 @@ public final class Ast {
           to_bitField0_ |= 0x00000004;
         }
         result.change_ = change_;
+        if (cellsBuilder_ == null) {
+          if (((bitField0_ & 0x00000020) == 0x00000020)) {
+            cells_ = java.util.Collections.unmodifiableList(cells_);
+            bitField0_ = (bitField0_ & ~0x00000020);
+          }
+          result.cells_ = cells_;
+        } else {
+          result.cells_ = cellsBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1808,6 +1950,32 @@ public final class Ast {
         if (other.hasChange()) {
           setChange(other.getChange());
         }
+        if (cellsBuilder_ == null) {
+          if (!other.cells_.isEmpty()) {
+            if (cells_.isEmpty()) {
+              cells_ = other.cells_;
+              bitField0_ = (bitField0_ & ~0x00000020);
+            } else {
+              ensureCellsIsMutable();
+              cells_.addAll(other.cells_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.cells_.isEmpty()) {
+            if (cellsBuilder_.isEmpty()) {
+              cellsBuilder_.dispose();
+              cellsBuilder_ = null;
+              cells_ = other.cells_;
+              bitField0_ = (bitField0_ & ~0x00000020);
+              cellsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getCellsFieldBuilder() : null;
+            } else {
+              cellsBuilder_.addAllMessages(other.cells_);
+            }
+          }
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -1821,6 +1989,12 @@ public final class Ast {
         }
         if (hasDocument()) {
           if (!getDocument().isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getCellsCount(); i++) {
+          if (!getCells(i).isInitialized()) {
             
             return false;
           }
@@ -2524,6 +2698,318 @@ public final class Ast {
         change_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
+      }
+
+      // repeated .boa.types.Cell cells = 7;
+      private java.util.List<boa.types.Ast.Cell> cells_ =
+        java.util.Collections.emptyList();
+      private void ensureCellsIsMutable() {
+        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+          cells_ = new java.util.ArrayList<boa.types.Ast.Cell>(cells_);
+          bitField0_ |= 0x00000020;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Cell, boa.types.Ast.Cell.Builder, boa.types.Ast.CellOrBuilder> cellsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Cell> getCellsList() {
+        if (cellsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(cells_);
+        } else {
+          return cellsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public int getCellsCount() {
+        if (cellsBuilder_ == null) {
+          return cells_.size();
+        } else {
+          return cellsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public boa.types.Ast.Cell getCells(int index) {
+        if (cellsBuilder_ == null) {
+          return cells_.get(index);
+        } else {
+          return cellsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public Builder setCells(
+          int index, boa.types.Ast.Cell value) {
+        if (cellsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureCellsIsMutable();
+          cells_.set(index, value);
+          onChanged();
+        } else {
+          cellsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public Builder setCells(
+          int index, boa.types.Ast.Cell.Builder builderForValue) {
+        if (cellsBuilder_ == null) {
+          ensureCellsIsMutable();
+          cells_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          cellsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public Builder addCells(boa.types.Ast.Cell value) {
+        if (cellsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureCellsIsMutable();
+          cells_.add(value);
+          onChanged();
+        } else {
+          cellsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public Builder addCells(
+          int index, boa.types.Ast.Cell value) {
+        if (cellsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureCellsIsMutable();
+          cells_.add(index, value);
+          onChanged();
+        } else {
+          cellsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public Builder addCells(
+          boa.types.Ast.Cell.Builder builderForValue) {
+        if (cellsBuilder_ == null) {
+          ensureCellsIsMutable();
+          cells_.add(builderForValue.build());
+          onChanged();
+        } else {
+          cellsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public Builder addCells(
+          int index, boa.types.Ast.Cell.Builder builderForValue) {
+        if (cellsBuilder_ == null) {
+          ensureCellsIsMutable();
+          cells_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          cellsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public Builder addAllCells(
+          java.lang.Iterable<? extends boa.types.Ast.Cell> values) {
+        if (cellsBuilder_ == null) {
+          ensureCellsIsMutable();
+          super.addAll(values, cells_);
+          onChanged();
+        } else {
+          cellsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public Builder clearCells() {
+        if (cellsBuilder_ == null) {
+          cells_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000020);
+          onChanged();
+        } else {
+          cellsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public Builder removeCells(int index) {
+        if (cellsBuilder_ == null) {
+          ensureCellsIsMutable();
+          cells_.remove(index);
+          onChanged();
+        } else {
+          cellsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public boa.types.Ast.Cell.Builder getCellsBuilder(
+          int index) {
+        return getCellsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public boa.types.Ast.CellOrBuilder getCellsOrBuilder(
+          int index) {
+        if (cellsBuilder_ == null) {
+          return cells_.get(index);  } else {
+          return cellsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public java.util.List<? extends boa.types.Ast.CellOrBuilder> 
+           getCellsOrBuilderList() {
+        if (cellsBuilder_ != null) {
+          return cellsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(cells_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public boa.types.Ast.Cell.Builder addCellsBuilder() {
+        return getCellsFieldBuilder().addBuilder(
+            boa.types.Ast.Cell.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public boa.types.Ast.Cell.Builder addCellsBuilder(
+          int index) {
+        return getCellsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Cell.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Cell cells = 7;</code>
+       *
+       * <pre>
+       ** The top-level cells in the file 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Cell.Builder> 
+           getCellsBuilderList() {
+        return getCellsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Cell, boa.types.Ast.Cell.Builder, boa.types.Ast.CellOrBuilder> 
+          getCellsFieldBuilder() {
+        if (cellsBuilder_ == null) {
+          cellsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Cell, boa.types.Ast.Cell.Builder, boa.types.Ast.CellOrBuilder>(
+                  cells_,
+                  ((bitField0_ & 0x00000020) == 0x00000020),
+                  getParentForChildren(),
+                  isClean());
+          cells_ = null;
+        }
+        return cellsBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.ASTRoot)
@@ -43746,6 +44232,1276 @@ public final class Ast {
     // @@protoc_insertion_point(class_scope:boa.types.Attribute)
   }
 
+  public interface CellOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required .boa.types.Cell.CellKind cell_kind = 1;
+    /**
+     * <code>required .boa.types.Cell.CellKind cell_kind = 1;</code>
+     */
+    boolean hasCellKind();
+    /**
+     * <code>required .boa.types.Cell.CellKind cell_kind = 1;</code>
+     */
+    boa.types.Ast.Cell.CellKind getCellKind();
+
+    // required int32 cell_id = 2;
+    /**
+     * <code>required int32 cell_id = 2;</code>
+     */
+    boolean hasCellId();
+    /**
+     * <code>required int32 cell_id = 2;</code>
+     */
+    int getCellId();
+
+    // required int32 execution_count = 3;
+    /**
+     * <code>required int32 execution_count = 3;</code>
+     */
+    boolean hasExecutionCount();
+    /**
+     * <code>required int32 execution_count = 3;</code>
+     */
+    int getExecutionCount();
+
+    // repeated .boa.types.Namespace namespaces = 4;
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in each cell 
+     * </pre>
+     */
+    java.util.List<boa.types.Ast.Namespace> 
+        getNamespacesList();
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in each cell 
+     * </pre>
+     */
+    boa.types.Ast.Namespace getNamespaces(int index);
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in each cell 
+     * </pre>
+     */
+    int getNamespacesCount();
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in each cell 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
+        getNamespacesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in each cell 
+     * </pre>
+     */
+    boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
+        int index);
+
+    // optional bool parse_error = 5;
+    /**
+     * <code>optional bool parse_error = 5;</code>
+     */
+    boolean hasParseError();
+    /**
+     * <code>optional bool parse_error = 5;</code>
+     */
+    boolean getParseError();
+  }
+  /**
+   * Protobuf type {@code boa.types.Cell}
+   *
+   * <pre>
+   ** A cell in a Jupyter Notebook (.ipynb) file 
+   * </pre>
+   */
+  public static final class Cell extends
+      com.google.protobuf.GeneratedMessage
+      implements CellOrBuilder {
+    // Use Cell.newBuilder() to construct.
+    private Cell(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private Cell(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final Cell defaultInstance;
+    public static Cell getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public Cell getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Cell(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              int rawValue = input.readEnum();
+              boa.types.Ast.Cell.CellKind value = boa.types.Ast.Cell.CellKind.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                cellKind_ = value;
+              }
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              cellId_ = input.readInt32();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              executionCount_ = input.readInt32();
+              break;
+            }
+            case 34: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                namespaces_ = new java.util.ArrayList<boa.types.Ast.Namespace>();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              namespaces_.add(input.readMessage(boa.types.Ast.Namespace.PARSER, extensionRegistry));
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000008;
+              parseError_ = input.readBool();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+          namespaces_ = java.util.Collections.unmodifiableList(namespaces_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Ast.internal_static_boa_types_Cell_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Ast.internal_static_boa_types_Cell_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Ast.Cell.class, boa.types.Ast.Cell.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<Cell> PARSER =
+        new com.google.protobuf.AbstractParser<Cell>() {
+      public Cell parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Cell(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Cell> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code boa.types.Cell.CellKind}
+     *
+     * <pre>
+     ** The kind of cell 
+     * </pre>
+     */
+    public enum CellKind
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>OTHER = 0;</code>
+       */
+      OTHER(0, 0),
+      /**
+       * <code>CODE = 1;</code>
+       */
+      CODE(1, 1),
+      /**
+       * <code>MARKDOWN = 2;</code>
+       */
+      MARKDOWN(2, 2),
+      /**
+       * <code>RAW = 3;</code>
+       */
+      RAW(3, 3),
+      ;
+
+      /**
+       * <code>OTHER = 0;</code>
+       */
+      public static final int OTHER_VALUE = 0;
+      /**
+       * <code>CODE = 1;</code>
+       */
+      public static final int CODE_VALUE = 1;
+      /**
+       * <code>MARKDOWN = 2;</code>
+       */
+      public static final int MARKDOWN_VALUE = 2;
+      /**
+       * <code>RAW = 3;</code>
+       */
+      public static final int RAW_VALUE = 3;
+
+
+      public final int getNumber() { return value; }
+
+      public static CellKind valueOf(int value) {
+        switch (value) {
+          case 0: return OTHER;
+          case 1: return CODE;
+          case 2: return MARKDOWN;
+          case 3: return RAW;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<CellKind>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<CellKind>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<CellKind>() {
+              public CellKind findValueByNumber(int number) {
+                return CellKind.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return boa.types.Ast.Cell.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final CellKind[] VALUES = values();
+
+      public static CellKind valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private CellKind(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:boa.types.Cell.CellKind)
+    }
+
+    private int bitField0_;
+    // required .boa.types.Cell.CellKind cell_kind = 1;
+    public static final int CELL_KIND_FIELD_NUMBER = 1;
+    private boa.types.Ast.Cell.CellKind cellKind_;
+    /**
+     * <code>required .boa.types.Cell.CellKind cell_kind = 1;</code>
+     */
+    public boolean hasCellKind() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required .boa.types.Cell.CellKind cell_kind = 1;</code>
+     */
+    public boa.types.Ast.Cell.CellKind getCellKind() {
+      return cellKind_;
+    }
+
+    // required int32 cell_id = 2;
+    public static final int CELL_ID_FIELD_NUMBER = 2;
+    private int cellId_;
+    /**
+     * <code>required int32 cell_id = 2;</code>
+     */
+    public boolean hasCellId() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required int32 cell_id = 2;</code>
+     */
+    public int getCellId() {
+      return cellId_;
+    }
+
+    // required int32 execution_count = 3;
+    public static final int EXECUTION_COUNT_FIELD_NUMBER = 3;
+    private int executionCount_;
+    /**
+     * <code>required int32 execution_count = 3;</code>
+     */
+    public boolean hasExecutionCount() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required int32 execution_count = 3;</code>
+     */
+    public int getExecutionCount() {
+      return executionCount_;
+    }
+
+    // repeated .boa.types.Namespace namespaces = 4;
+    public static final int NAMESPACES_FIELD_NUMBER = 4;
+    private java.util.List<boa.types.Ast.Namespace> namespaces_;
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in each cell 
+     * </pre>
+     */
+    public java.util.List<boa.types.Ast.Namespace> getNamespacesList() {
+      return namespaces_;
+    }
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in each cell 
+     * </pre>
+     */
+    public java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
+        getNamespacesOrBuilderList() {
+      return namespaces_;
+    }
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in each cell 
+     * </pre>
+     */
+    public int getNamespacesCount() {
+      return namespaces_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in each cell 
+     * </pre>
+     */
+    public boa.types.Ast.Namespace getNamespaces(int index) {
+      return namespaces_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in each cell 
+     * </pre>
+     */
+    public boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
+        int index) {
+      return namespaces_.get(index);
+    }
+
+    // optional bool parse_error = 5;
+    public static final int PARSE_ERROR_FIELD_NUMBER = 5;
+    private boolean parseError_;
+    /**
+     * <code>optional bool parse_error = 5;</code>
+     */
+    public boolean hasParseError() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional bool parse_error = 5;</code>
+     */
+    public boolean getParseError() {
+      return parseError_;
+    }
+
+    private void initFields() {
+      cellKind_ = boa.types.Ast.Cell.CellKind.OTHER;
+      cellId_ = 0;
+      executionCount_ = 0;
+      namespaces_ = java.util.Collections.emptyList();
+      parseError_ = false;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasCellKind()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasCellId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasExecutionCount()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      for (int i = 0; i < getNamespacesCount(); i++) {
+        if (!getNamespaces(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeEnum(1, cellKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(2, cellId_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, executionCount_);
+      }
+      for (int i = 0; i < namespaces_.size(); i++) {
+        output.writeMessage(4, namespaces_.get(i));
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBool(5, parseError_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, cellKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, cellId_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, executionCount_);
+      }
+      for (int i = 0; i < namespaces_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, namespaces_.get(i));
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(5, parseError_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Ast.Cell parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Ast.Cell parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Ast.Cell parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Ast.Cell parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Ast.Cell parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Ast.Cell parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Ast.Cell parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Ast.Cell parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Ast.Cell parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Ast.Cell parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Ast.Cell prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.Cell}
+     *
+     * <pre>
+     ** A cell in a Jupyter Notebook (.ipynb) file 
+     * </pre>
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Ast.CellOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Ast.internal_static_boa_types_Cell_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Ast.internal_static_boa_types_Cell_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Ast.Cell.class, boa.types.Ast.Cell.Builder.class);
+      }
+
+      // Construct using boa.types.Ast.Cell.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getNamespacesFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        cellKind_ = boa.types.Ast.Cell.CellKind.OTHER;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        cellId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        executionCount_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        if (namespacesBuilder_ == null) {
+          namespaces_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+        } else {
+          namespacesBuilder_.clear();
+        }
+        parseError_ = false;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Ast.internal_static_boa_types_Cell_descriptor;
+      }
+
+      public boa.types.Ast.Cell getDefaultInstanceForType() {
+        return boa.types.Ast.Cell.getDefaultInstance();
+      }
+
+      public boa.types.Ast.Cell build() {
+        boa.types.Ast.Cell result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Ast.Cell buildPartial() {
+        boa.types.Ast.Cell result = new boa.types.Ast.Cell(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.cellKind_ = cellKind_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.cellId_ = cellId_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.executionCount_ = executionCount_;
+        if (namespacesBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+            namespaces_ = java.util.Collections.unmodifiableList(namespaces_);
+            bitField0_ = (bitField0_ & ~0x00000008);
+          }
+          result.namespaces_ = namespaces_;
+        } else {
+          result.namespaces_ = namespacesBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.parseError_ = parseError_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Ast.Cell) {
+          return mergeFrom((boa.types.Ast.Cell)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Ast.Cell other) {
+        if (other == boa.types.Ast.Cell.getDefaultInstance()) return this;
+        if (other.hasCellKind()) {
+          setCellKind(other.getCellKind());
+        }
+        if (other.hasCellId()) {
+          setCellId(other.getCellId());
+        }
+        if (other.hasExecutionCount()) {
+          setExecutionCount(other.getExecutionCount());
+        }
+        if (namespacesBuilder_ == null) {
+          if (!other.namespaces_.isEmpty()) {
+            if (namespaces_.isEmpty()) {
+              namespaces_ = other.namespaces_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+            } else {
+              ensureNamespacesIsMutable();
+              namespaces_.addAll(other.namespaces_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.namespaces_.isEmpty()) {
+            if (namespacesBuilder_.isEmpty()) {
+              namespacesBuilder_.dispose();
+              namespacesBuilder_ = null;
+              namespaces_ = other.namespaces_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+              namespacesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getNamespacesFieldBuilder() : null;
+            } else {
+              namespacesBuilder_.addAllMessages(other.namespaces_);
+            }
+          }
+        }
+        if (other.hasParseError()) {
+          setParseError(other.getParseError());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasCellKind()) {
+          
+          return false;
+        }
+        if (!hasCellId()) {
+          
+          return false;
+        }
+        if (!hasExecutionCount()) {
+          
+          return false;
+        }
+        for (int i = 0; i < getNamespacesCount(); i++) {
+          if (!getNamespaces(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Ast.Cell parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Ast.Cell) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required .boa.types.Cell.CellKind cell_kind = 1;
+      private boa.types.Ast.Cell.CellKind cellKind_ = boa.types.Ast.Cell.CellKind.OTHER;
+      /**
+       * <code>required .boa.types.Cell.CellKind cell_kind = 1;</code>
+       */
+      public boolean hasCellKind() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .boa.types.Cell.CellKind cell_kind = 1;</code>
+       */
+      public boa.types.Ast.Cell.CellKind getCellKind() {
+        return cellKind_;
+      }
+      /**
+       * <code>required .boa.types.Cell.CellKind cell_kind = 1;</code>
+       */
+      public Builder setCellKind(boa.types.Ast.Cell.CellKind value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000001;
+        cellKind_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .boa.types.Cell.CellKind cell_kind = 1;</code>
+       */
+      public Builder clearCellKind() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        cellKind_ = boa.types.Ast.Cell.CellKind.OTHER;
+        onChanged();
+        return this;
+      }
+
+      // required int32 cell_id = 2;
+      private int cellId_ ;
+      /**
+       * <code>required int32 cell_id = 2;</code>
+       */
+      public boolean hasCellId() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required int32 cell_id = 2;</code>
+       */
+      public int getCellId() {
+        return cellId_;
+      }
+      /**
+       * <code>required int32 cell_id = 2;</code>
+       */
+      public Builder setCellId(int value) {
+        bitField0_ |= 0x00000002;
+        cellId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 cell_id = 2;</code>
+       */
+      public Builder clearCellId() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        cellId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // required int32 execution_count = 3;
+      private int executionCount_ ;
+      /**
+       * <code>required int32 execution_count = 3;</code>
+       */
+      public boolean hasExecutionCount() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required int32 execution_count = 3;</code>
+       */
+      public int getExecutionCount() {
+        return executionCount_;
+      }
+      /**
+       * <code>required int32 execution_count = 3;</code>
+       */
+      public Builder setExecutionCount(int value) {
+        bitField0_ |= 0x00000004;
+        executionCount_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 execution_count = 3;</code>
+       */
+      public Builder clearExecutionCount() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        executionCount_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // repeated .boa.types.Namespace namespaces = 4;
+      private java.util.List<boa.types.Ast.Namespace> namespaces_ =
+        java.util.Collections.emptyList();
+      private void ensureNamespacesIsMutable() {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+          namespaces_ = new java.util.ArrayList<boa.types.Ast.Namespace>(namespaces_);
+          bitField0_ |= 0x00000008;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder> namespacesBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Namespace> getNamespacesList() {
+        if (namespacesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(namespaces_);
+        } else {
+          return namespacesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public int getNamespacesCount() {
+        if (namespacesBuilder_ == null) {
+          return namespaces_.size();
+        } else {
+          return namespacesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public boa.types.Ast.Namespace getNamespaces(int index) {
+        if (namespacesBuilder_ == null) {
+          return namespaces_.get(index);
+        } else {
+          return namespacesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public Builder setNamespaces(
+          int index, boa.types.Ast.Namespace value) {
+        if (namespacesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNamespacesIsMutable();
+          namespaces_.set(index, value);
+          onChanged();
+        } else {
+          namespacesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public Builder setNamespaces(
+          int index, boa.types.Ast.Namespace.Builder builderForValue) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          namespacesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public Builder addNamespaces(boa.types.Ast.Namespace value) {
+        if (namespacesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNamespacesIsMutable();
+          namespaces_.add(value);
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public Builder addNamespaces(
+          int index, boa.types.Ast.Namespace value) {
+        if (namespacesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNamespacesIsMutable();
+          namespaces_.add(index, value);
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public Builder addNamespaces(
+          boa.types.Ast.Namespace.Builder builderForValue) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.add(builderForValue.build());
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public Builder addNamespaces(
+          int index, boa.types.Ast.Namespace.Builder builderForValue) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public Builder addAllNamespaces(
+          java.lang.Iterable<? extends boa.types.Ast.Namespace> values) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          super.addAll(values, namespaces_);
+          onChanged();
+        } else {
+          namespacesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public Builder clearNamespaces() {
+        if (namespacesBuilder_ == null) {
+          namespaces_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+          onChanged();
+        } else {
+          namespacesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public Builder removeNamespaces(int index) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.remove(index);
+          onChanged();
+        } else {
+          namespacesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public boa.types.Ast.Namespace.Builder getNamespacesBuilder(
+          int index) {
+        return getNamespacesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
+          int index) {
+        if (namespacesBuilder_ == null) {
+          return namespaces_.get(index);  } else {
+          return namespacesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
+           getNamespacesOrBuilderList() {
+        if (namespacesBuilder_ != null) {
+          return namespacesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(namespaces_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public boa.types.Ast.Namespace.Builder addNamespacesBuilder() {
+        return getNamespacesFieldBuilder().addBuilder(
+            boa.types.Ast.Namespace.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public boa.types.Ast.Namespace.Builder addNamespacesBuilder(
+          int index) {
+        return getNamespacesFieldBuilder().addBuilder(
+            index, boa.types.Ast.Namespace.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 4;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in each cell 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Namespace.Builder> 
+           getNamespacesBuilderList() {
+        return getNamespacesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder> 
+          getNamespacesFieldBuilder() {
+        if (namespacesBuilder_ == null) {
+          namespacesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder>(
+                  namespaces_,
+                  ((bitField0_ & 0x00000008) == 0x00000008),
+                  getParentForChildren(),
+                  isClean());
+          namespaces_ = null;
+        }
+        return namespacesBuilder_;
+      }
+
+      // optional bool parse_error = 5;
+      private boolean parseError_ ;
+      /**
+       * <code>optional bool parse_error = 5;</code>
+       */
+      public boolean hasParseError() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional bool parse_error = 5;</code>
+       */
+      public boolean getParseError() {
+        return parseError_;
+      }
+      /**
+       * <code>optional bool parse_error = 5;</code>
+       */
+      public Builder setParseError(boolean value) {
+        bitField0_ |= 0x00000010;
+        parseError_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool parse_error = 5;</code>
+       */
+      public Builder clearParseError() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        parseError_ = false;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.Cell)
+    }
+
+    static {
+      defaultInstance = new Cell(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.Cell)
+  }
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_boa_types_CommentsRoot_descriptor;
   private static
@@ -43821,6 +45577,11 @@ public final class Ast {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_boa_types_Attribute_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_Cell_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_Cell_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -43832,206 +45593,212 @@ public final class Ast {
     java.lang.String[] descriptorData = {
       "\n\tast.proto\022\tboa.types\032\014shared.proto\"4\n\014" +
       "CommentsRoot\022$\n\010comments\030\001 \003(\0132\022.boa.typ" +
-      "es.Comment\"\235\001\n\007ASTRoot\022(\n\nnamespaces\030\001 \003" +
+      "es.Comment\"\275\001\n\007ASTRoot\022(\n\nnamespaces\030\001 \003" +
       "(\0132\024.boa.types.Namespace\022\r\n\005names\030\003 \003(\t\022" +
       "\013\n\003key\030\004 \001(\005\022%\n\010document\030\005 \001(\0132\023.boa.typ" +
       "es.Document\022%\n\006change\030\006 \001(\0162\025.boa.types." +
-      "ChangeKind\"\200\003\n\tNamespace\022\014\n\004name\030\001 \002(\t\022&" +
-      "\n\tmodifiers\030\002 \003(\0132\023.boa.types.Modifier\022," +
-      "\n\014declarations\030\003 \003(\0132\026.boa.types.Declara" +
-      "tion\022(\n\nstatements\030\004 \003(\0132\024.boa.types.Sta",
-      "tement\022\"\n\007methods\030\005 \003(\0132\021.boa.types.Meth" +
-      "od\022*\n\013expressions\030\006 \003(\0132\025.boa.types.Expr" +
-      "ession\022\013\n\003key\030\n \001(\005\022(\n\nnamespaces\030\013 \003(\0132" +
-      "\024.boa.types.Namespace\022\017\n\007imports\030\014 \003(\t\022&" +
-      "\n\tvariables\030\r \003(\0132\023.boa.types.Variable\022%" +
-      "\n\006change\030\016 \001(\0162\025.boa.types.ChangeKind\"\355\003" +
-      "\n\013Declaration\022\014\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(" +
-      "\0162\023.boa.types.TypeKind\022&\n\tmodifiers\030\003 \003(" +
-      "\0132\023.boa.types.Modifier\022+\n\022generic_parame" +
-      "ters\030\004 \003(\0132\017.boa.types.Type\022 \n\007parents\030\005",
-      " \003(\0132\017.boa.types.Type\022\"\n\007methods\030\006 \003(\0132\021" +
-      ".boa.types.Method\022#\n\006fields\030\007 \003(\0132\023.boa." +
-      "types.Variable\0223\n\023nested_declarations\030\010 " +
-      "\003(\0132\026.boa.types.Declaration\022$\n\010comments\030" +
-      "\t \003(\0132\022.boa.types.Comment\022\013\n\003key\030\r \001(\005\022\034" +
-      "\n\024fully_qualified_name\030\016 \001(\t\022\026\n\016declarin" +
-      "g_type\030\017 \001(\005\022(\n\nstatements\030\020 \003(\0132\024.boa.t" +
-      "ypes.Statement\022%\n\006change\030\021 \001(\0162\025.boa.typ" +
-      "es.ChangeKind\"\362\001\n\004Type\022\014\n\004name\030\001 \001(\t\022\034\n\024" +
-      "fully_qualified_name\030\002 \001(\t\022!\n\004kind\030\003 \002(\016",
-      "2\023.boa.types.TypeKind\022\n\n\002id\030\004 \001(\t\022\030\n\020dec" +
-      "laration_file\030\010 \001(\005\022\023\n\013declaration\030\t \001(\005" +
-      "\022\013\n\003key\030\n \001(\005\022,\n\rcomputed_name\030\016 \001(\0132\025.b" +
-      "oa.types.Expression\022%\n\006change\030\017 \001(\0162\025.bo" +
-      "a.types.ChangeKind\"\255\003\n\006Method\022\014\n\004name\030\001 " +
-      "\001(\t\022&\n\tmodifiers\030\002 \003(\0132\023.boa.types.Modif" +
-      "ier\022$\n\013return_type\030\003 \001(\0132\017.boa.types.Typ" +
-      "e\022+\n\022generic_parameters\030\004 \003(\0132\017.boa.type" +
-      "s.Type\022&\n\targuments\030\005 \003(\0132\023.boa.types.Va" +
-      "riable\022(\n\017exception_types\030\006 \003(\0132\017.boa.ty",
-      "pes.Type\022(\n\nstatements\030\007 \003(\0132\024.boa.types" +
-      ".Statement\022$\n\010comments\030\010 \003(\0132\022.boa.types" +
-      ".Comment\022\013\n\003key\030\014 \001(\005\022\026\n\016declaring_type\030" +
-      "\r \001(\005\022,\n\rcomputed_name\030\016 \001(\0132\025.boa.types" +
+      "ChangeKind\022\036\n\005cells\030\007 \003(\0132\017.boa.types.Ce" +
+      "ll\"\200\003\n\tNamespace\022\014\n\004name\030\001 \002(\t\022&\n\tmodifi" +
+      "ers\030\002 \003(\0132\023.boa.types.Modifier\022,\n\014declar" +
+      "ations\030\003 \003(\0132\026.boa.types.Declaration\022(\n\n",
+      "statements\030\004 \003(\0132\024.boa.types.Statement\022\"" +
+      "\n\007methods\030\005 \003(\0132\021.boa.types.Method\022*\n\013ex" +
+      "pressions\030\006 \003(\0132\025.boa.types.Expression\022\013" +
+      "\n\003key\030\n \001(\005\022(\n\nnamespaces\030\013 \003(\0132\024.boa.ty" +
+      "pes.Namespace\022\017\n\007imports\030\014 \003(\t\022&\n\tvariab" +
+      "les\030\r \003(\0132\023.boa.types.Variable\022%\n\006change" +
+      "\030\016 \001(\0162\025.boa.types.ChangeKind\"\355\003\n\013Declar" +
+      "ation\022\014\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023.boa." +
+      "types.TypeKind\022&\n\tmodifiers\030\003 \003(\0132\023.boa." +
+      "types.Modifier\022+\n\022generic_parameters\030\004 \003",
+      "(\0132\017.boa.types.Type\022 \n\007parents\030\005 \003(\0132\017.b" +
+      "oa.types.Type\022\"\n\007methods\030\006 \003(\0132\021.boa.typ" +
+      "es.Method\022#\n\006fields\030\007 \003(\0132\023.boa.types.Va" +
+      "riable\0223\n\023nested_declarations\030\010 \003(\0132\026.bo" +
+      "a.types.Declaration\022$\n\010comments\030\t \003(\0132\022." +
+      "boa.types.Comment\022\013\n\003key\030\r \001(\005\022\034\n\024fully_" +
+      "qualified_name\030\016 \001(\t\022\026\n\016declaring_type\030\017" +
+      " \001(\005\022(\n\nstatements\030\020 \003(\0132\024.boa.types.Sta" +
+      "tement\022%\n\006change\030\021 \001(\0162\025.boa.types.Chang" +
+      "eKind\"\362\001\n\004Type\022\014\n\004name\030\001 \001(\t\022\034\n\024fully_qu",
+      "alified_name\030\002 \001(\t\022!\n\004kind\030\003 \002(\0162\023.boa.t" +
+      "ypes.TypeKind\022\n\n\002id\030\004 \001(\t\022\030\n\020declaration" +
+      "_file\030\010 \001(\005\022\023\n\013declaration\030\t \001(\005\022\013\n\003key\030" +
+      "\n \001(\005\022,\n\rcomputed_name\030\016 \001(\0132\025.boa.types" +
       ".Expression\022%\n\006change\030\017 \001(\0162\025.boa.types." +
-      "ChangeKind\"\365\002\n\010Variable\022\014\n\004name\030\001 \001(\t\022&\n" +
-      "\rvariable_type\030\002 \001(\0132\017.boa.types.Type\022&\n" +
-      "\tmodifiers\030\003 \003(\0132\023.boa.types.Modifier\022*\n" +
-      "\013initializer\030\004 \001(\0132\025.boa.types.Expressio" +
-      "n\022$\n\010comments\030\005 \003(\0132\022.boa.types.Comment\022",
-      "\013\n\003key\030\t \001(\005\022\026\n\016declaring_type\030\n \001(\005\022,\n\r" +
-      "computed_name\030\013 \001(\0132\025.boa.types.Expressi" +
-      "on\022\023\n\013dollar_sign\030\014 \001(\010\022*\n\013expressions\030\r" +
-      " \003(\0132\025.boa.types.Expression\022%\n\006change\030\016 " +
-      "\001(\0162\025.boa.types.ChangeKind\"\264\t\n\tStatement" +
-      "\0220\n\004kind\030\001 \002(\0162\".boa.types.Statement.Sta" +
-      "tementKind\022$\n\010comments\030\002 \003(\0132\022.boa.types" +
-      ".Comment\022(\n\nstatements\030\003 \003(\0132\024.boa.types" +
-      ".Statement\022.\n\017initializations\030\004 \003(\0132\025.bo" +
-      "a.types.Expression\022)\n\nconditions\030\005 \003(\0132\025",
-      ".boa.types.Expression\022&\n\007updates\030\006 \003(\0132\025" +
-      ".boa.types.Expression\0221\n\024variable_declar" +
-      "ation\030\007 \001(\0132\023.boa.types.Variable\0220\n\020type" +
-      "_declaration\030\010 \001(\0132\026.boa.types.Declarati" +
-      "on\022*\n\013expressions\030\t \003(\0132\025.boa.types.Expr" +
-      "ession\022\013\n\003key\030\014 \001(\005\022\"\n\007methods\030\r \003(\0132\021.b" +
-      "oa.types.Method\0222\n\025variable_declarations" +
-      "\030\016 \003(\0132\023.boa.types.Variable\0221\n\021type_decl" +
-      "arations\030\017 \003(\0132\026.boa.types.Declaration\022\r" +
-      "\n\005names\030\020 \003(\t\022%\n\006change\030\021 \001(\0162\025.boa.type",
-      "s.ChangeKind\"\302\004\n\rStatementKind\022\t\n\005OTHER\020" +
-      "\000\022\t\n\005BLOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRESSION" +
-      "\020\003\022\010\n\004EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SYNC\020\004" +
-      "\022\n\n\006RETURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010" +
-      "\022\006\n\002IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTI" +
-      "NUE\020\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007" +
-      "\n\003TRY\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023" +
-      "\022\013\n\007FINALLY\020\024\022\014\n\010DEBUGGER\020\025\022\013\n\007DEFAULT\020\026" +
-      "\022\013\n\007FOREACH\020\027\022\t\n\005FORIN\020\030\022\010\n\004WITH\020\031\022\t\n\005SC" +
-      "OPE\020\032\022\013\n\007DECLARE\020\033\022\n\n\006GLOBAL\020\034\022\010\n\004GOTO\020\035",
-      "\022\017\n\013INLINE_HTML\020\036\022\n\n\006STATIC\020\037\022\010\n\004ECHO\020 \022" +
-      "\021\n\rUSE_NAMESPACE\020!\022\020\n\014USE_CONSTANT\020\"\022\020\n\014" +
-      "USE_FUNCTION\020#\022\017\n\013TRAIT_ALIAS\020$\022\024\n\020TRAIT" +
-      "_PRECEDENCE\020%\022\r\n\tTRAIT_USE\020&\022\t\n\005RAISE\020\'\022" +
-      "\010\n\004PASS\020(\022\t\n\005PRINT\020)\022\007\n\003DEL\020*\032\002\020\001\"\256\024\n\nEx" +
-      "pression\0222\n\004kind\030\001 \002(\0162$.boa.types.Expre" +
-      "ssion.ExpressionKind\022*\n\013expressions\030\002 \003(" +
-      "\0132\025.boa.types.Expression\022+\n\016variable_dec" +
-      "ls\030\003 \003(\0132\023.boa.types.Variable\022!\n\010new_typ" +
-      "e\030\004 \001(\0132\017.boa.types.Type\022+\n\022generic_para",
-      "meters\030\005 \003(\0132\017.boa.types.Type\022\022\n\nis_post" +
-      "fix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010variable\030\010" +
-      " \001(\t\022\016\n\006method\030\t \001(\t\022*\n\013method_args\030\n \003(" +
-      "\0132\025.boa.types.Expression\0220\n\020anon_declara" +
-      "tion\030\013 \001(\0132\026.boa.types.Declaration\022\'\n\nan" +
-      "notation\030\014 \001(\0132\023.boa.types.Modifier\022\021\n\tn" +
-      "o_parens\030\016 \001(\010\022\013\n\003key\030\022 \001(\005\022\'\n\016declaring" +
-      "_type\030\023 \001(\0132\017.boa.types.Type\022$\n\013return_t" +
-      "ype\030\024 \001(\0132\017.boa.types.Type\022\"\n\007methods\030\025 " +
-      "\003(\0132\021.boa.types.Method\022(\n\nstatements\030\026 \003",
-      "(\0132\024.boa.types.Statement\022\030\n\020is_member_ac" +
-      "cess\030\027 \001(\010\022\023\n\013dollar_sign\030\030 \001(\010\0220\n\021compu" +
-      "ted_variable\030\031 \001(\0132\025.boa.types.Expressio" +
-      "n\022.\n\017computed_method\030\032 \001(\0132\025.boa.types.E" +
-      "xpression\022\021\n\tis_static\030\033 \001(\010\022\020\n\010has_from" +
-      "\030\034 \001(\010\022 \n\005trait\030\035 \001(\0132\021.boa.types.Method" +
-      "\022%\n\006change\030\036 \001(\0162\025.boa.types.ChangeKind\"" +
-      "\270\r\n\016ExpressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL" +
-      "\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHOD" +
-      "CALL\020\004\022\010\n\004CAST\020\005\022\017\n\013ARRAYACCESS\020\006\022\r\n\tARR",
-      "AYINIT\020\007\022\020\n\014ARRAYLITERAL\020\007\022\017\n\013TYPECOMPAR" +
-      "E\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n" +
-      "\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006O" +
-      "P_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_L" +
-      "SHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDR" +
-      "SHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_" +
-      "NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013L" +
-      "OGICAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003" +
-      "NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020" +
-      "!\022\017\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006",
-      "ASSIGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&" +
-      "\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASS" +
-      "IGN_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_B" +
-      "ITAND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSHI" +
-      "FT\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGN" +
-      "EDRSHIFT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022\024\n" +
-      "\020METHOD_REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANON_" +
-      "METHOD\0204\022\t\n\005YIELD\0205\022\027\n\023ARRAY_COMPREHENSI" +
-      "ON\0206\022\t\n\005EMPTY\0207\022\010\n\004SHEQ\0208\022\t\n\005SHNEQ\0209\022\020\n\014" +
-      "XML_DOTQUERY\020:\022\022\n\016OBJECT_LITERAL\020;\022\016\n\nME",
-      "THODDECL\020<\022\010\n\004LOOP\020=\022\r\n\tGENERATOR\020>\022\017\n\013X" +
-      "ML_LITERAL\020?\022\022\n\016XML_EXPRESSION\020@\022\023\n\017XML_" +
-      "PROPERTYREF\020A\022\021\n\rXML_MEMBERREF\020B\022\013\n\007XML_" +
-      "DOT\020C\022\016\n\nXML_DOTDOT\020D\022\006\n\002IN\020E\022\n\n\006TYPEOF\020" +
-      "F\022\021\n\rREGEXPLITERAL\020G\022\n\n\006DELETE\020H\022\010\n\004VOID" +
-      "\020I\022\023\n\017HASHTABLEACCESS\020J\022\020\n\014ARRAYELEMENT\020" +
-      "K\022\r\n\tOP_CONCAT\020L\022\n\n\006OP_POW\020M\022\021\n\rASSIGN_C" +
-      "ONCAT\020N\022\016\n\nASSIGN_POW\020O\022\014\n\010BACKTICK\020P\022\r\n" +
-      "\tIDENTICAL\020Q\022\020\n\014NOTIDENTICAL\020R\022\016\n\nSTRING" +
-      "_AND\020S\022\r\n\tSTRING_OR\020T\022\016\n\nSTRING_XOR\020U\022\030\n",
-      "\024OP_THREE_WAY_COMPARE\020V\022\r\n\tOP_UNPACK\020W\022\t" +
-      "\n\005QUOTE\020X\022\020\n\014IGNORE_ERROR\020Y\022\013\n\007REQUIRE\020Z" +
-      "\022\020\n\014REQUIRE_ONCE\020[\022\013\n\007INCLUDE\020\\\022\020\n\014INCLU" +
-      "DE_ONCE\020]\022\010\n\004LIST\020^\022\r\n\tREFERENCE\020_\022\016\n\nRE" +
-      "FLECTION\020`\022\t\n\005CLONE\020a\022\017\n\013TRAIT_ALIAS\020b\022\024" +
-      "\n\020TRAIT_PRECEDENCE\020c\022\021\n\rNAMESPACENAME\020d\022" +
-      "\t\n\005TUPLE\020e\022\016\n\nARRAYINDEX\020f\022\010\n\004DICT\020g\022\014\n\010" +
-      "FOR_LIST\020h\022\n\n\006NOT_IN\020i\022\t\n\005UNARY\020j\022\016\n\nOP_" +
-      "INT_DIV\020k\022\022\n\016ASSIGN_INT_DIV\020l\022\006\n\002IS\020m\022\n\n" +
-      "\006IS_NOT\020n\022\n\n\006IMPORT\020o\022\017\n\013IMPORT_FROM\020p\032\002",
-      "\020\001\"\264\005\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa.type" +
-      "s.Modifier.ModifierKind\0222\n\nvisibility\030\002 " +
-      "\001(\0162\036.boa.types.Modifier.Visibility\022\027\n\017a" +
-      "nnotation_name\030\003 \001(\t\022\032\n\022annotation_membe" +
-      "rs\030\004 \003(\t\0220\n\021annotation_values\030\005 \003(\0132\025.bo" +
-      "a.types.Expression\022\r\n\005other\030\006 \001(\t\022\013\n\003key" +
-      "\030\n \001(\005\022(\n\005scope\030\013 \001(\0162\031.boa.types.Modifi" +
-      "er.Scope\022%\n\006change\030\014 \001(\0162\025.boa.types.Cha" +
-      "ngeKind\"\346\001\n\014ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nV" +
-      "ISIBILITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\014",
-      "\n\010CONSTANT\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED" +
-      "\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\022\t\n\005SCOPE\020\007\022\n\n" +
-      "\006GETTER\020\010\022\n\n\006SETTER\020\t\022\n\n\006NATIVE\020\n\022\014\n\010STR" +
-      "ICTFP\020\013\022\r\n\tTRANSIENT\020\014\022\014\n\010VOLATILE\020\r\032\002\020\001" +
-      "\"a\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022" +
-      "\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE" +
-      "\020\004\022\013\n\007DEFAULT\020\005\032\002\020\001\"$\n\005Scope\022\007\n\003VAR\020\001\022\007\n" +
-      "\003LET\020\002\022\t\n\005CONST\020\003\"\221\002\n\007Comment\022,\n\004kind\030\001 " +
-      "\002(\0162\036.boa.types.Comment.CommentKind\022\r\n\005v" +
-      "alue\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027.boa.types",
-      ".PositionInfo\022\013\n\003key\030\007 \001(\005\022%\n\006change\030\010 \001" +
-      "(\0162\025.boa.types.ChangeKind\"j\n\013CommentKind" +
-      "\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020" +
-      "\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIF" +
-      "ICATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_p" +
-      "os\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003" +
-      " \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(" +
-      "\005\022\017\n\007end_col\030\006 \002(\005\"\233\001\n\010Document\022\r\n\005title" +
-      "\030\001 \001(\t\022$\n\010elements\030\002 \003(\0132\022.boa.types.Ele" +
-      "ment\022$\n\010doc_type\030\003 \001(\0132\022.boa.types.Eleme",
-      "nt\0224\n\026processing_instruction\030\013 \003(\0132\024.boa" +
-      ".types.Attribute\"\267\004\n\007Element\022\013\n\003tag\030\001 \002(" +
-      "\t\022,\n\004kind\030\002 \002(\0162\036.boa.types.Element.Elem" +
-      "entKind\022$\n\010elements\030\003 \003(\0132\022.boa.types.El" +
-      "ement\022\014\n\004text\030\004 \003(\t\022\014\n\004data\030\005 \003(\t\022(\n\natt" +
-      "ributes\030\006 \003(\0132\024.boa.types.Attribute\022$\n\006s" +
-      "cript\030\007 \001(\0132\024.boa.types.Namespace\022!\n\003php" +
-      "\030\010 \001(\0132\024.boa.types.Namespace\022%\n\010var_decl" +
-      "\030\t \003(\0132\023.boa.types.Variable\022\r\n\005title\030\n \001" +
-      "(\t\0224\n\026processing_instruction\030\013 \003(\0132\024.boa",
-      ".types.Attribute\"\317\001\n\013ElementKind\022\t\n\005OTHE" +
-      "R\020\000\022\t\n\005BLOCK\020\001\022\013\n\007IN_LINE\020\002\022\010\n\004FORM\020\003\022\014\n" +
-      "\010DOC_TYPE\020\004\022\017\n\013STYLE_SHEET\020\005\022\r\n\tPAGE_RUL" +
-      "E\020\006\022\016\n\nSTYLE_RULE\020\007\022\022\n\016FONT_FACE_RULE\020\010\022" +
-      "\016\n\nMEDIA_RULE\020\t\022\017\n\013MEDIA_QUERY\020\n\022\017\n\013IMPO" +
-      "RT_RULE\020\013\022\017\n\013XML_ELEMENT\020\014\"\'\n\tAttribute\022" +
-      "\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t*\303\001\n\010TypeKind" +
-      "\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n" +
-      "\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004EN" +
-      "UM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n",
-      "\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005TRAIT\020\t\022\r\n\tP" +
-      "RIMITIVE\020\n\022\t\n\005ARRAY\020\013\032\002\020\001B\002H\001"
+      "ChangeKind\"\255\003\n\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tm" +
+      "odifiers\030\002 \003(\0132\023.boa.types.Modifier\022$\n\013r" +
+      "eturn_type\030\003 \001(\0132\017.boa.types.Type\022+\n\022gen" +
+      "eric_parameters\030\004 \003(\0132\017.boa.types.Type\022&" +
+      "\n\targuments\030\005 \003(\0132\023.boa.types.Variable\022(",
+      "\n\017exception_types\030\006 \003(\0132\017.boa.types.Type" +
+      "\022(\n\nstatements\030\007 \003(\0132\024.boa.types.Stateme" +
+      "nt\022$\n\010comments\030\010 \003(\0132\022.boa.types.Comment" +
+      "\022\013\n\003key\030\014 \001(\005\022\026\n\016declaring_type\030\r \001(\005\022,\n" +
+      "\rcomputed_name\030\016 \001(\0132\025.boa.types.Express" +
+      "ion\022%\n\006change\030\017 \001(\0162\025.boa.types.ChangeKi" +
+      "nd\"\365\002\n\010Variable\022\014\n\004name\030\001 \001(\t\022&\n\rvariabl" +
+      "e_type\030\002 \001(\0132\017.boa.types.Type\022&\n\tmodifie" +
+      "rs\030\003 \003(\0132\023.boa.types.Modifier\022*\n\013initial" +
+      "izer\030\004 \001(\0132\025.boa.types.Expression\022$\n\010com",
+      "ments\030\005 \003(\0132\022.boa.types.Comment\022\013\n\003key\030\t" +
+      " \001(\005\022\026\n\016declaring_type\030\n \001(\005\022,\n\rcomputed" +
+      "_name\030\013 \001(\0132\025.boa.types.Expression\022\023\n\013do" +
+      "llar_sign\030\014 \001(\010\022*\n\013expressions\030\r \003(\0132\025.b" +
+      "oa.types.Expression\022%\n\006change\030\016 \001(\0162\025.bo" +
+      "a.types.ChangeKind\"\264\t\n\tStatement\0220\n\004kind" +
+      "\030\001 \002(\0162\".boa.types.Statement.StatementKi" +
+      "nd\022$\n\010comments\030\002 \003(\0132\022.boa.types.Comment" +
+      "\022(\n\nstatements\030\003 \003(\0132\024.boa.types.Stateme" +
+      "nt\022.\n\017initializations\030\004 \003(\0132\025.boa.types.",
+      "Expression\022)\n\nconditions\030\005 \003(\0132\025.boa.typ" +
+      "es.Expression\022&\n\007updates\030\006 \003(\0132\025.boa.typ" +
+      "es.Expression\0221\n\024variable_declaration\030\007 " +
+      "\001(\0132\023.boa.types.Variable\0220\n\020type_declara" +
+      "tion\030\010 \001(\0132\026.boa.types.Declaration\022*\n\013ex" +
+      "pressions\030\t \003(\0132\025.boa.types.Expression\022\013" +
+      "\n\003key\030\014 \001(\005\022\"\n\007methods\030\r \003(\0132\021.boa.types" +
+      ".Method\0222\n\025variable_declarations\030\016 \003(\0132\023" +
+      ".boa.types.Variable\0221\n\021type_declarations" +
+      "\030\017 \003(\0132\026.boa.types.Declaration\022\r\n\005names\030",
+      "\020 \003(\t\022%\n\006change\030\021 \001(\0162\025.boa.types.Change" +
+      "Kind\"\302\004\n\rStatementKind\022\t\n\005OTHER\020\000\022\t\n\005BLO" +
+      "CK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRESSION\020\003\022\010\n\004EX" +
+      "PR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SYNC\020\004\022\n\n\006RETU" +
+      "RN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010\022\006\n\002IF\020\t" +
+      "\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020\014\022\t\n" +
+      "\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TRY\020\020\022" +
+      "\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\022\013\n\007FINA" +
+      "LLY\020\024\022\014\n\010DEBUGGER\020\025\022\013\n\007DEFAULT\020\026\022\013\n\007FORE" +
+      "ACH\020\027\022\t\n\005FORIN\020\030\022\010\n\004WITH\020\031\022\t\n\005SCOPE\020\032\022\013\n",
+      "\007DECLARE\020\033\022\n\n\006GLOBAL\020\034\022\010\n\004GOTO\020\035\022\017\n\013INLI" +
+      "NE_HTML\020\036\022\n\n\006STATIC\020\037\022\010\n\004ECHO\020 \022\021\n\rUSE_N" +
+      "AMESPACE\020!\022\020\n\014USE_CONSTANT\020\"\022\020\n\014USE_FUNC" +
+      "TION\020#\022\017\n\013TRAIT_ALIAS\020$\022\024\n\020TRAIT_PRECEDE" +
+      "NCE\020%\022\r\n\tTRAIT_USE\020&\022\t\n\005RAISE\020\'\022\010\n\004PASS\020" +
+      "(\022\t\n\005PRINT\020)\022\007\n\003DEL\020*\032\002\020\001\"\256\024\n\nExpression" +
+      "\0222\n\004kind\030\001 \002(\0162$.boa.types.Expression.Ex" +
+      "pressionKind\022*\n\013expressions\030\002 \003(\0132\025.boa." +
+      "types.Expression\022+\n\016variable_decls\030\003 \003(\013" +
+      "2\023.boa.types.Variable\022!\n\010new_type\030\004 \001(\0132",
+      "\017.boa.types.Type\022+\n\022generic_parameters\030\005" +
+      " \003(\0132\017.boa.types.Type\022\022\n\nis_postfix\030\006 \001(" +
+      "\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006" +
+      "method\030\t \001(\t\022*\n\013method_args\030\n \003(\0132\025.boa." +
+      "types.Expression\0220\n\020anon_declaration\030\013 \001" +
+      "(\0132\026.boa.types.Declaration\022\'\n\nannotation" +
+      "\030\014 \001(\0132\023.boa.types.Modifier\022\021\n\tno_parens" +
+      "\030\016 \001(\010\022\013\n\003key\030\022 \001(\005\022\'\n\016declaring_type\030\023 " +
+      "\001(\0132\017.boa.types.Type\022$\n\013return_type\030\024 \001(" +
+      "\0132\017.boa.types.Type\022\"\n\007methods\030\025 \003(\0132\021.bo",
+      "a.types.Method\022(\n\nstatements\030\026 \003(\0132\024.boa" +
+      ".types.Statement\022\030\n\020is_member_access\030\027 \001" +
+      "(\010\022\023\n\013dollar_sign\030\030 \001(\010\0220\n\021computed_vari" +
+      "able\030\031 \001(\0132\025.boa.types.Expression\022.\n\017com" +
+      "puted_method\030\032 \001(\0132\025.boa.types.Expressio" +
+      "n\022\021\n\tis_static\030\033 \001(\010\022\020\n\010has_from\030\034 \001(\010\022 " +
+      "\n\005trait\030\035 \001(\0132\021.boa.types.Method\022%\n\006chan" +
+      "ge\030\036 \001(\0162\025.boa.types.ChangeKind\"\270\r\n\016Expr" +
+      "essionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r\n\tVA" +
+      "RACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010",
+      "\n\004CAST\020\005\022\017\n\013ARRAYACCESS\020\006\022\r\n\tARRAYINIT\020\007" +
+      "\022\020\n\014ARRAYLITERAL\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003N" +
+      "EW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB" +
+      "\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022" +
+      "\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022" +
+      "\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022" +
+      "\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n" +
+      "\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGICAL_A" +
+      "ND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n" +
+      "\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CON",
+      "DITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASSIGN\020$" +
+      "\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSI" +
+      "GN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN_MOD\020" +
+      ")\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_BITAND\020+\022" +
+      "\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\r" +
+      "ASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGNEDRSHIFT" +
+      "\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022\024\n\020METHOD_" +
+      "REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANON_METHOD\0204" +
+      "\022\t\n\005YIELD\0205\022\027\n\023ARRAY_COMPREHENSION\0206\022\t\n\005" +
+      "EMPTY\0207\022\010\n\004SHEQ\0208\022\t\n\005SHNEQ\0209\022\020\n\014XML_DOTQ",
+      "UERY\020:\022\022\n\016OBJECT_LITERAL\020;\022\016\n\nMETHODDECL" +
+      "\020<\022\010\n\004LOOP\020=\022\r\n\tGENERATOR\020>\022\017\n\013XML_LITER" +
+      "AL\020?\022\022\n\016XML_EXPRESSION\020@\022\023\n\017XML_PROPERTY" +
+      "REF\020A\022\021\n\rXML_MEMBERREF\020B\022\013\n\007XML_DOT\020C\022\016\n" +
+      "\nXML_DOTDOT\020D\022\006\n\002IN\020E\022\n\n\006TYPEOF\020F\022\021\n\rREG" +
+      "EXPLITERAL\020G\022\n\n\006DELETE\020H\022\010\n\004VOID\020I\022\023\n\017HA" +
+      "SHTABLEACCESS\020J\022\020\n\014ARRAYELEMENT\020K\022\r\n\tOP_" +
+      "CONCAT\020L\022\n\n\006OP_POW\020M\022\021\n\rASSIGN_CONCAT\020N\022" +
+      "\016\n\nASSIGN_POW\020O\022\014\n\010BACKTICK\020P\022\r\n\tIDENTIC" +
+      "AL\020Q\022\020\n\014NOTIDENTICAL\020R\022\016\n\nSTRING_AND\020S\022\r",
+      "\n\tSTRING_OR\020T\022\016\n\nSTRING_XOR\020U\022\030\n\024OP_THRE" +
+      "E_WAY_COMPARE\020V\022\r\n\tOP_UNPACK\020W\022\t\n\005QUOTE\020" +
+      "X\022\020\n\014IGNORE_ERROR\020Y\022\013\n\007REQUIRE\020Z\022\020\n\014REQU" +
+      "IRE_ONCE\020[\022\013\n\007INCLUDE\020\\\022\020\n\014INCLUDE_ONCE\020" +
+      "]\022\010\n\004LIST\020^\022\r\n\tREFERENCE\020_\022\016\n\nREFLECTION" +
+      "\020`\022\t\n\005CLONE\020a\022\017\n\013TRAIT_ALIAS\020b\022\024\n\020TRAIT_" +
+      "PRECEDENCE\020c\022\021\n\rNAMESPACENAME\020d\022\t\n\005TUPLE" +
+      "\020e\022\016\n\nARRAYINDEX\020f\022\010\n\004DICT\020g\022\014\n\010FOR_LIST" +
+      "\020h\022\n\n\006NOT_IN\020i\022\t\n\005UNARY\020j\022\016\n\nOP_INT_DIV\020" +
+      "k\022\022\n\016ASSIGN_INT_DIV\020l\022\006\n\002IS\020m\022\n\n\006IS_NOT\020",
+      "n\022\n\n\006IMPORT\020o\022\017\n\013IMPORT_FROM\020p\032\002\020\001\"\264\005\n\010M" +
+      "odifier\022.\n\004kind\030\001 \002(\0162 .boa.types.Modifi" +
+      "er.ModifierKind\0222\n\nvisibility\030\002 \001(\0162\036.bo" +
+      "a.types.Modifier.Visibility\022\027\n\017annotatio" +
+      "n_name\030\003 \001(\t\022\032\n\022annotation_members\030\004 \003(\t" +
+      "\0220\n\021annotation_values\030\005 \003(\0132\025.boa.types." +
+      "Expression\022\r\n\005other\030\006 \001(\t\022\013\n\003key\030\n \001(\005\022(" +
+      "\n\005scope\030\013 \001(\0162\031.boa.types.Modifier.Scope" +
+      "\022%\n\006change\030\014 \001(\0162\025.boa.types.ChangeKind\"" +
+      "\346\001\n\014ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILIT",
+      "Y\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\014\n\010CONSTA" +
+      "NT\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SY" +
+      "NC\020\005\022\014\n\010ABSTRACT\020\006\022\t\n\005SCOPE\020\007\022\n\n\006GETTER\020" +
+      "\010\022\n\n\006SETTER\020\t\022\n\n\006NATIVE\020\n\022\014\n\010STRICTFP\020\013\022" +
+      "\r\n\tTRANSIENT\020\014\022\014\n\010VOLATILE\020\r\032\002\020\001\"a\n\nVisi" +
+      "bility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTE" +
+      "CTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DE" +
+      "FAULT\020\005\032\002\020\001\"$\n\005Scope\022\007\n\003VAR\020\001\022\007\n\003LET\020\002\022\t" +
+      "\n\005CONST\020\003\"\221\002\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.bo" +
+      "a.types.Comment.CommentKind\022\r\n\005value\030\002 \002",
+      "(\t\022)\n\010position\030\003 \002(\0132\027.boa.types.Positio" +
+      "nInfo\022\013\n\003key\030\007 \001(\005\022%\n\006change\030\010 \001(\0162\025.boa" +
+      ".types.ChangeKind\"j\n\013CommentKind\022\t\n\005OTHE" +
+      "R\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOC" +
+      "UMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020" +
+      "\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos\030\001 \002(\005" +
+      "\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\t" +
+      "start_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end" +
+      "_col\030\006 \002(\005\"\233\001\n\010Document\022\r\n\005title\030\001 \001(\t\022$" +
+      "\n\010elements\030\002 \003(\0132\022.boa.types.Element\022$\n\010",
+      "doc_type\030\003 \001(\0132\022.boa.types.Element\0224\n\026pr" +
+      "ocessing_instruction\030\013 \003(\0132\024.boa.types.A" +
+      "ttribute\"\267\004\n\007Element\022\013\n\003tag\030\001 \002(\t\022,\n\004kin" +
+      "d\030\002 \002(\0162\036.boa.types.Element.ElementKind\022" +
+      "$\n\010elements\030\003 \003(\0132\022.boa.types.Element\022\014\n" +
+      "\004text\030\004 \003(\t\022\014\n\004data\030\005 \003(\t\022(\n\nattributes\030" +
+      "\006 \003(\0132\024.boa.types.Attribute\022$\n\006script\030\007 " +
+      "\001(\0132\024.boa.types.Namespace\022!\n\003php\030\010 \001(\0132\024" +
+      ".boa.types.Namespace\022%\n\010var_decl\030\t \003(\0132\023" +
+      ".boa.types.Variable\022\r\n\005title\030\n \001(\t\0224\n\026pr",
+      "ocessing_instruction\030\013 \003(\0132\024.boa.types.A" +
+      "ttribute\"\317\001\n\013ElementKind\022\t\n\005OTHER\020\000\022\t\n\005B" +
+      "LOCK\020\001\022\013\n\007IN_LINE\020\002\022\010\n\004FORM\020\003\022\014\n\010DOC_TYP" +
+      "E\020\004\022\017\n\013STYLE_SHEET\020\005\022\r\n\tPAGE_RULE\020\006\022\016\n\nS" +
+      "TYLE_RULE\020\007\022\022\n\016FONT_FACE_RULE\020\010\022\016\n\nMEDIA" +
+      "_RULE\020\t\022\017\n\013MEDIA_QUERY\020\n\022\017\n\013IMPORT_RULE\020" +
+      "\013\022\017\n\013XML_ELEMENT\020\014\"\'\n\tAttribute\022\013\n\003key\030\001" +
+      " \002(\t\022\r\n\005value\030\002 \002(\t\"\324\001\n\004Cell\022+\n\tcell_kin" +
+      "d\030\001 \002(\0162\030.boa.types.Cell.CellKind\022\017\n\007cel" +
+      "l_id\030\002 \002(\005\022\027\n\017execution_count\030\003 \002(\005\022(\n\nn",
+      "amespaces\030\004 \003(\0132\024.boa.types.Namespace\022\023\n" +
+      "\013parse_error\030\005 \001(\010\"6\n\010CellKind\022\t\n\005OTHER\020" +
+      "\000\022\010\n\004CODE\020\001\022\014\n\010MARKDOWN\020\002\022\007\n\003RAW\020\003*\303\001\n\010T" +
+      "ypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFA" +
+      "CE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020" +
+      "\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATI" +
+      "ON\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005TRAIT" +
+      "\020\t\022\r\n\tPRIMITIVE\020\n\022\t\n\005ARRAY\020\013\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -44049,7 +45816,7 @@ public final class Ast {
           internal_static_boa_types_ASTRoot_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ASTRoot_descriptor,
-              new java.lang.String[] { "Namespaces", "Names", "Key", "Document", "Change", });
+              new java.lang.String[] { "Namespaces", "Names", "Key", "Document", "Change", "Cells", });
           internal_static_boa_types_Namespace_descriptor =
             getDescriptor().getMessageTypes().get(2);
           internal_static_boa_types_Namespace_fieldAccessorTable = new
@@ -44128,6 +45895,12 @@ public final class Ast {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Attribute_descriptor,
               new java.lang.String[] { "Key", "Value", });
+          internal_static_boa_types_Cell_descriptor =
+            getDescriptor().getMessageTypes().get(15);
+          internal_static_boa_types_Cell_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_Cell_descriptor,
+              new java.lang.String[] { "CellKind", "CellId", "ExecutionCount", "Namespaces", "ParseError", });
           return null;
         }
       };

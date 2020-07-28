@@ -93,7 +93,7 @@ public class GetReposByLanguage {
 			String dayString = day < 10 ? "0" + day : String.valueOf(day);
 			String time = year + "-" + monthString + "-" + dayString + "T23:59:59Z";
 
-//			String timeLowerLimit = "2018-05-30T23:59:59Z";
+//			String time = "2018-12-21T01:01:01Z";
 //			String time = year + "-" + month + "-" + day + "T23:59:59Z";
 			Gson parser = new Gson();
 			
@@ -110,6 +110,7 @@ public class GetReposByLanguage {
 //				searchURL+="+language:" + language + "+stars:>=" + stars+"+is:public"
 //						+ "+pushed:<=" + time + "&sort=update&order=asc&per_page=100";
 					
+
 				System.out.println(searchURL);
 				MetadataCacher mcSearch = new MetadataCacher(searchURL, tokenSearch.getUserName(), tokenSearch.getToken());
 				mcSearch.authenticate();
