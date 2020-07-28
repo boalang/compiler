@@ -91,9 +91,9 @@ public class GetReposByLanguage {
 
 			String monthString = month < 10 ? "0" + month : String.valueOf(month);
 			String dayString = day < 10 ? "0" + day : String.valueOf(day);
-//			String time = year + "-" + monthString + "-" + dayString + "T23:59:59Z";
+			String time = year + "-" + monthString + "-" + dayString + "T23:59:59Z";
 
-			String time = "2018-05-30T23:59:59Z";
+//			String timeLowerLimit = "2018-05-30T23:59:59Z";
 //			String time = year + "-" + month + "-" + day + "T23:59:59Z";
 			Gson parser = new Gson();
 			
@@ -102,13 +102,13 @@ public class GetReposByLanguage {
 			MetadataCacher mcGetAPI = new MetadataCacher("https://api.github.com/repositories", tokenGetAPI.getUserName(), tokenGetAPI.getToken());
 			mcGetAPI.authenticate();
 			while (true) {
-//				String searchURL = "https://api.github.com/search/repositories?q=language:" + language + "+stars:>=" + stars
-//						+ "+pushed:<=" + time + "&sort=updated&order=desc&per_page=100";
+				String searchURL = "https://api.github.com/search/repositories?q=language:" + language + "+stars:>=" + stars
+						+ "+pushed:<=" + time + "&sort=updated&order=desc&per_page=100";
 				
-				String searchURL = "https://api.github.com/search/repositories?q=";
-				searchURL+="tensorflow+NOT+tutorial+NOT+library+NOT+framework+NOT+tool+NOT+example";
-				searchURL+="+language:" + language + "+stars:>=" + stars+"+is:public"
-						+ "+pushed:>=" + time + "&sort=update&order=desc&per_page=100";
+//				String searchURL = "https://api.github.com/search/repositories?q=";
+//				searchURL+="tensorflow+NOT+tutorial+NOT+library+NOT+framework+NOT+tool+NOT+example";
+//				searchURL+="+language:" + language + "+stars:>=" + stars+"+is:public"
+//						+ "+pushed:<=" + time + "&sort=update&order=asc&per_page=100";
 					
 				System.out.println(searchURL);
 				MetadataCacher mcSearch = new MetadataCacher(searchURL, tokenSearch.getUserName(), tokenSearch.getToken());
@@ -150,6 +150,7 @@ public class GetReposByLanguage {
 							System.out.println(repID + " already written");
 						}
 						String pushed = item.get("pushed_at").getAsString();
+//						String pushed = item.get("updated_at").getAsString();
 						if (pushed.compareTo(time) < 0) {
 							time = pushed;
 						}
@@ -159,6 +160,9 @@ public class GetReposByLanguage {
 				int count = json.get("total_count").getAsInt(); // count will not be static
 				if (count == items.size())
 					break;
+//				if (time.compareTo(timeLowerLimit) < 0) {
+//					break;
+//				}
 			}
 			writeRemainingRepos();
 		}

@@ -671,9 +671,9 @@ public class NewPythonVisitor extends ASTVisitor {
 				String key = entry.getKey();
 				String value = entry.getValue();
 				if (key.equals(value))
-					b.addImports(moduleName + "." + key);
+					b.addImports("from "+moduleName + " " + key);
 				else
-					b.addImports(moduleName + "." + key + " as " + value);
+					b.addImports("from "+moduleName + " " + key + " as " + value);
 			}
 		}
 
