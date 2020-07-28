@@ -3,6 +3,8 @@ package boa.datagen.slurm;
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -26,8 +28,9 @@ public class SeqRepoProjectPartition {
 	private static FileSystem fs;
 	private static Configuration conf;
 
-	private static SequenceFile.Writer fullProjectWriter; // full project writer
-	private static SequenceFile.Writer mediumProjectWriter; // medium project writer
+	private static SequenceFile.Writer fullProjectWriter;
+	private static SequenceFile.Writer mediumProjectWriter;
+	private static SequenceFile.Writer smallProjectWriter;
 
 	public static void main(String[] args) {
 
@@ -66,6 +69,9 @@ public class SeqRepoProjectPartition {
 
 					if (!mediumProjectFilter(p))
 						mediumProjectWriter.append(textKey, new BytesWritable(p.toByteArray()));
+					
+					if (!smallProjectFilter(p))
+						smallProjectWriter.append(textKey, new BytesWritable(p.toByteArray()));
 
 					System.out.println("Finish " + ++projectCount + "th project " + p.getName());
 				}
@@ -86,6 +92,8 @@ public class SeqRepoProjectPartition {
 	}
 
 	private static boolean fullProjectFilter(Project p) {
+
+		// remove these projects
 		switch (p.getName()) {
 		case "lambdalab-mirror/jdk8u-jdk":
 		case "frohoff/jdk7u":
@@ -97,18 +105,31 @@ public class SeqRepoProjectPartition {
 		default:
 			break;
 		}
+	
+		// remove commits larger than 10,000
+		int commitCount = 0;
+		for (CodeRepository cr : p.getCodeRepositoriesList())
+			commitCount = cr.getRevisionsCount() > 0 ? cr.getRevisionsCount() : cr.getRevisionKeysCount();
+		if (commitCount > 10000)
+			return true;
+
 		return false;
 	}
 
 	private static boolean mediumProjectFilter(Project p) {
 		if (fullProjectFilter(p))
 			return true;
-		int commitCount = 0;
-		for (CodeRepository cr : p.getCodeRepositoriesList())
-			commitCount = cr.getRevisionsCount() > 0 ? cr.getRevisionsCount() : cr.getRevisionKeysCount();
-		if (commitCount >= 100 && commitCount <= 2000)
-			return false;
-		return true;
+		if (new Random().nextDouble() > 0.1) // filter out 90%
+			return true;
+		return false;
+	}
+	
+	private static boolean smallProjectFilter(Project p) {
+		if (fullProjectFilter(p))
+			return true;
+		if (new Random().nextDouble() > 0.01) // filter out 99%
+			return true;
+		return false;
 	}
 
 	public static void openWriters(int astCount) {
@@ -121,6 +142,9 @@ public class SeqRepoProjectPartition {
 			mediumProjectWriter = SequenceFile.createWriter(fs, conf,
 					new Path(DATASET_PATH + "/combined/project/medium/projects.seq"), Text.class, BytesWritable.class,
 					compType, compCode);
+			smallProjectWriter = SequenceFile.createWriter(fs, conf,
+					new Path(DATASET_PATH + "/combined/project/small/projects.seq"), Text.class, BytesWritable.class,
+					compType, compCode);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -130,6 +154,7 @@ public class SeqRepoProjectPartition {
 		try {
 			fullProjectWriter.close();
 			mediumProjectWriter.close();
+			smallProjectWriter.close();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
