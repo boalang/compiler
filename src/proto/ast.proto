@@ -20,6 +20,8 @@ message ASTRoot {
 	/**The top-level document of an html, css, or xml DOM*/
 	optional Document document = 5;
 	optional ChangeKind change = 6;
+	/** The top-level cells in the file */
+	repeated Cell cells = 7;
 }
 
 /** A namespace (aka, package) in a source file */
@@ -584,5 +586,24 @@ message Element {
 message Attribute {
 	required string key = 1;
 	required string value = 2;
+}
+
+/** A cell in a Jupyter Notebook (.ipynb) file */
+message Cell {
+	/** The kind of cell */
+	enum CellKind {
+		OTHER = 0;
+		CODE = 1;
+		MARKDOWN = 2;
+		RAW = 3;
+	}
+	required CellKind cell_kind = 1;
+	required int32 cell_id = 2;
+	required int32 execution_count = 3;
+	
+	/** The top-level namespaces in each cell */
+	repeated Namespace namespaces = 4;
+	optional bool parse_error = 5;
+	
 }
 

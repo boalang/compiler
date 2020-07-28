@@ -40,12 +40,16 @@ import org.w3c.css.sac.InputSource;
 import com.steadystate.css.dom.CSSStyleSheetImpl;
 
 import boa.types.Ast.ASTRoot;
+import boa.types.Ast.Cell;
+import boa.types.Ast.Cell.CellKind;
+import boa.types.Ast.Namespace;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Diff.ChangedFile.Builder;
 import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
+import javafx.scene.control.CellBuilder;
 import boa.datagen.DefaultProperties;
 import boa.datagen.dependencies.PomFile;
 import boa.datagen.util.CssVisitor;
@@ -231,6 +235,7 @@ public abstract class AbstractCommit {
 			"spacy/lang/ro/lemmatizer.py", "spacy/lang/sv/lemmatizer/lookup.py", "spacy/lang/tr/lemmatizer.py",
 			"spacy/lang/ur/lemmatizer.py" };
 	Set<String> badp = new HashSet<String>(Arrays.asList(badpaths));
+	boolean include_notebooks = false;
 
 	Builder processPythonChangeFile(final ChangedFile.Builder fb) {
 		long len = connector.astWriterLen;
@@ -253,15 +258,16 @@ public abstract class AbstractCommit {
 				System.out.println(projectName + ": " + path);
 				parsePythonFile(path, fb, content, false);
 			}
-		} 
-//		else if (lowerPath.endsWith(".ipynb")) {
-//			if(!path.startsWith(".ipynb_checkpoints/") && !path.contains("/.ipynb_checkpoints/")) {
-//				final String content = getFileContents(path);
-//				fb.setKind(FileKind.SOURCE_PY_ERROR);
-//				System.out.println(projectName + ": " + path);
-//				parseNotebookFile(path, fb, content, false);
-//			}
-//		}
+		}
+		else if (lowerPath.endsWith(".ipynb")) {
+			if(include_notebooks)
+				if(!path.startsWith(".ipynb_checkpoints/") && !path.contains("/.ipynb_checkpoints/")) {
+					final String content = getFileContents(path);
+					fb.setKind(FileKind.SOURCE_PY_ERROR);
+					System.out.println(projectName + ": " + path);
+					parseNotebookFile(path, fb, content, false);
+				}
+		}
 
 		if (connector.astWriterLen > len) {
 			fb.setKey(len);
@@ -684,32 +690,36 @@ public abstract class AbstractCommit {
 		return !pythonParsingError;
 	}
 
+	boolean cellParseError;
+	boolean notebookParseError;
+	
 	private boolean parseNotebookFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
-		//System.out.println("commit " + this.id);
-		pythonParsingError = false;
-		System.out.println("@@@@@@@@ " + path);
+		System.out.println("commit " + this.id);
+		// System.out.println("@@@@@@@@ " + path);
+		notebookParseError = false;
+		cellParseError = false;
 
-		int count = 0;
-		ASTRoot.Builder ast = ASTRoot.newBuilder();
-		Boolean parseSuccess = false;
+		int cellCount = 0;
+		final ASTRoot.Builder ast = ASTRoot.newBuilder();
 		JsonArray cells = parseNotebookJson(content);
 
 		if (cells == null) {
 			if (debug) {
 				System.err.println("Notebook JSON parse error: " + path + " from: " + projectName + "\n");
 			}
+			notebookParseError = true;
 			return false;
 		}
 
 		for (JsonElement cell : cells) {
+			cellParseError = false;
 			JsonObject c = cell.getAsJsonObject();
-
 			if (!c.get("cell_type").getAsString().equals("code") || !c.has("source"))
 				continue;
 
-			count += 1;
-			int exec_count;
+			cellCount += 1;
+			int exec_count; // Execution count = -1 if its null
 			try {
 				exec_count = c.get("execution_count").getAsInt();
 			} catch (Exception e) {
@@ -729,8 +739,8 @@ public abstract class AbstractCommit {
 					e.printStackTrace();
 					line = "";
 					if (debug) {
-						System.err.println("Error parsing one line in a cell: " + path + ", Cell:" + count + " from: " + projectName + "\n");
-						writeToCsv(projectName, path + ", Cell:" + count, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+						System.err.println("Error parsing one line in a cell: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
+						writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
 					}
 				}
 				if (NoNotebookErrors(line))
@@ -738,6 +748,11 @@ public abstract class AbstractCommit {
 				else
 					codeCell += "#" + line;
 			}
+			
+			Cell.Builder cb = Cell.newBuilder();
+			cb.setCellKind(CellKind.CODE);
+			cb.setCellId(cellCount);
+			cb.setExecutionCount(exec_count);
 
 			////////// Parse code here ////////////////////
 
@@ -747,74 +762,93 @@ public abstract class AbstractCommit {
 			IProblemReporter reporter = new IProblemReporter() {
 				@Override
 				public void reportProblem(IProblem arg0) {
-					pythonParsingError = true;
+					cellParseError = true;
 				}
 			};
 
 			// System.out.println("actual source: " + codeCell);
-			PythonModuleDeclaration module;
+			PythonModuleDeclaration module = null;
 
 			try {
 				module = (PythonModuleDeclaration) parser.parse(input, reporter);
 			} catch (Exception e) {
 				if (debug) {
 					System.err.println("Error parsing notebook cell: " + path + " from: " + projectName + "\n");
-					writeToCsv(projectName, path + ", Cell:" + count, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+					writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
 				}
 				e.printStackTrace();
+				cellParseError = true;
+				cb.setParseError(cellParseError);
+				ast.addCells(cb.build());
 				continue;
 			}
-
+			
 			NewPythonVisitor visitor = new NewPythonVisitor();
+			visitor.enableDiff = false;
+			
 			try {
-				ast.addNamespaces(visitor.getCellAsNamespace(module, "cell:" + count, exec_count));
-				parseSuccess = true;
+				cb.addNamespaces(visitor.getCellAsNamespace(module, "code_cell:" + cellCount));
 			} catch (final UnsupportedOperationException e) {
 				if (debug) {
-					System.err.println("Error getting AST for a notebook cell: " + path + ", Cell:" + count + " from: " + projectName + "\n");
-					writeToCsv(projectName, path + ", Cell:" + count, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
-				}
-				continue;
-			} catch (final Throwable e) {
-				if (debug) {
-					System.err.println("Error getting AST for a notebook cell: " + path + ", Cell:" + count + " from: " + projectName + "\n");
-					writeToCsv(projectName, path + ", Cell:" + count, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+					System.err.println("Error getting AST for a notebook cell: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
+					writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
 				}
 				e.printStackTrace();
-				continue;
+				cellParseError = true;
+			} catch (final Throwable e) {
+				if (debug) {
+					System.err.println("Error getting AST for a notebook cell: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
+					writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+				}
+				e.printStackTrace();
+				cellParseError = true;
 			}
+			
+			cb.setParseError(cellParseError);
+			ast.addCells(cb.build());
 			///////// Parsing each cell ends ////////////////////
 		}
 		////////// Loop ends for all cells
 
-		if (!parseSuccess)
-			return false;
-
-		fb.setKind(FileKind.SOURCE_PY_3);
+		if(cellCount > 0)
+			fb.setKind(FileKind.SOURCE_PY_3);
+		
 		try {
 			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 			connector.astWriterLen += bw.getLength();
 		} catch (IOException e) {
 			if (debug) {
-				System.err.println("Error writing AST of a notebook file: " + path + ", Cell:" + count + " from: " + projectName + "\n");
-				writeToCsv(projectName, path + ", Cell:" + count, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+				System.err.println("Error writing AST of a notebook file: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
+				writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
 			}
 			e.printStackTrace();
 		}
 
-		return parseSuccess;
+		return !notebookParseError;
 	}
 
 	private JsonArray parseNotebookJson(final String content) {
+		int nbformat = -1;
+		JsonObject jobject = null;
 		JsonArray jarray = null;
 		try {
 			JsonElement jelement = new JsonParser().parse(content);
-			JsonObject jobject = jelement.getAsJsonObject();
-			jarray = jobject.getAsJsonArray("cells");
+			jobject = jelement.getAsJsonObject();
+			nbformat = jobject.get("nbformat").getAsInt();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Notebook JSON does not follow nbformat library requirements.");
 			return null;
+		}
+		if(nbformat >= 4) {
+			try {
+				jarray = jobject.getAsJsonArray("cells");
+			} catch (Exception e) {
+				System.out.println("Notebook JSON cells are not present.");
+			}
+		}
+		else {
+			System.out.println("Notebook JSON does not follow nbformat library version requirement.");
 		}
 		return jarray;
 	}

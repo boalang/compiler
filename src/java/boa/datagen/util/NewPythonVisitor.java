@@ -71,6 +71,8 @@ import org.eclipse.dltk.ast.expressions.NumericLiteral;
 import org.eclipse.dltk.ast.expressions.StringLiteral;
 
 import boa.datagen.treed.python.TreedConstants;
+import boa.types.Ast.Cell;
+import boa.types.Ast.Cell.CellKind;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Method;
@@ -83,6 +85,7 @@ import boa.types.Ast.Type;
 import boa.types.Ast.TypeKind;
 import boa.types.Ast.Variable;
 import boa.types.Shared.ChangeKind;
+import javafx.scene.control.CellBuilder;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Namespace;
 import boa.types.Ast.Statement;
@@ -97,6 +100,7 @@ public class NewPythonVisitor extends ASTVisitor {
 	public boolean enableDiff = false;
 	private ModuleDeclaration root;
 	protected Namespace.Builder b = Namespace.newBuilder();
+	protected Cell.Builder cb = Cell.newBuilder();
 	protected Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
 
 	protected Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
@@ -113,12 +117,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		b.setName(name);
 		return b.build();
 	}
-
-	public Namespace getCellAsNamespace(ModuleDeclaration node, String name, int key) throws Exception {
+	
+	public Namespace getCellAsNamespace(ModuleDeclaration node, String name) throws Exception {
 		root = node;
 		node.traverse(this);
 		b.setName(name);
-		b.setKey(key);
 		return b.build();
 	}
 
