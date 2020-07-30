@@ -638,6 +638,7 @@ public abstract class AbstractCommit {
 						e.printStackTrace();
 					}
 					
+					tm.clear();
 					tm=null;
 					System.gc();
 				}

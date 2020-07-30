@@ -88,7 +88,18 @@ public class TreedMapper implements TreedConstants {
 	public boolean hasNonNameUnmap() {
 		return this.numOfNonNameUnMaps > 0;
 	}
-
+	
+	public void clear()
+	{
+		this.nodeTypes.clear();
+		this.tree.clear();
+		this.treeHeight.clear();
+		this.treeDepth.clear();
+		this.treeVector.clear();
+		this.treeMap.clear();
+		this.pivotsM.clear();
+		this.pivotsN.clear();
+	}
 	public void map() throws Exception {
 		buildTrees();
 		mapPivots();
@@ -1081,6 +1092,9 @@ public class TreedMapper implements TreedConstants {
 		treeHeight.putAll(visitor.treeHeight);
 		treeDepth.putAll(visitor.treeDepth);
 		treeVector.putAll(visitor.treeVector);
+		
+		visitor.clear();
+		visitor=null;
 	}
 
 }

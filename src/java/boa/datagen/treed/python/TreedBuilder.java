@@ -21,6 +21,16 @@ public class TreedBuilder extends ASTVisitor implements TreedConstants {
 	//direct childs of current node only including itself
 	HashMap<ASTNode, HashMap<String, Integer>> treeVector = new HashMap<ASTNode, HashMap<String, Integer>>(), treeRootVector = new HashMap<ASTNode, HashMap<String, Integer>>();
 	
+
+	public void clear()
+	{
+		this.nodeTypes.clear();
+		this.tree.clear();
+		this.treeHeight.clear();
+		this.treeDepth.clear();
+		this.treeVector.clear();
+	}
+	
 	public TreedBuilder(ASTNode root,int type,HashMap<String,Integer> nodeTypes) {
 		super();
 		this.root = root;
