@@ -594,7 +594,7 @@ public abstract class AbstractCommit {
 		return !errorCheck.hasError;
 	}
 
-	boolean pythonParsingError, enableDiff=false;
+	boolean pythonParsingError, enableDiff=true;
 
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
@@ -639,9 +639,10 @@ public abstract class AbstractCommit {
 					}
 				}
 	
-				if (!this.lastRevision)
-					previousAst.put(fullPath, module);
+				
 			}
+			if (!this.lastRevision)
+				previousAst.put(fullPath, module);
 
 		} catch (Exception e) {
 			if (debug) {
