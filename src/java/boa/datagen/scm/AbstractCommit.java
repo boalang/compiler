@@ -637,12 +637,16 @@ public abstract class AbstractCommit {
 						}
 						e.printStackTrace();
 					}
+					
+					tm=null;
+					System.gc();
 				}
 	
-				
+				if (!this.lastRevision)
+					previousAst.put(fullPath, module);
 			}
-			if (!this.lastRevision)
-				previousAst.put(fullPath, module);
+			
+			
 
 		} catch (Exception e) {
 			if (debug) {

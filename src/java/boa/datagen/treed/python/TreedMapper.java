@@ -1073,7 +1073,7 @@ public class TreedMapper implements TreedConstants {
 	}
 
 	private void buildTree(final ASTNode root) throws Exception {
-		final TreedBuilder visitor = new TreedBuilder(root, type, nodeTypes);
+		TreedBuilder visitor = new TreedBuilder(root, type, nodeTypes);
 		root.traverse(visitor);
 		this.type = visitor.type;
 		this.nodeTypes = visitor.nodeTypes;
