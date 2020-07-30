@@ -32,6 +32,11 @@ public class SeqRepoProjectPartition {
 	private static SequenceFile.Writer mediumProjectWriter;
 	private static SequenceFile.Writer smallProjectWriter;
 
+	/*
+	 * TODO: We should evenly distributed projects on the sequence file 
+	 * based on commit count. This change can improve query performance
+	 * by leveraging all maps.
+	 */
 	public static void main(String[] args) {
 
 		if (args.length < 1) {
