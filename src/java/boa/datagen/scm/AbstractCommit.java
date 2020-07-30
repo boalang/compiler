@@ -594,7 +594,7 @@ public abstract class AbstractCommit {
 		return !errorCheck.hasError;
 	}
 
-	boolean pythonParsingError;
+	boolean pythonParsingError, enableDiff=false;
 
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
@@ -622,23 +622,26 @@ public abstract class AbstractCommit {
 		try {
 			module = (PythonModuleDeclaration) parser.parse(input, reporter);
 
-			if (previousAst.containsKey(fullPath)) {
-				boa.datagen.treed.python.TreedMapper tm = new boa.datagen.treed.python.TreedMapper(
-						previousAst.get(fullPath), module);
-
-				try {
-					tm.map();
-				} catch (Exception e) {
-					if (debug) {
-						System.err.println("Tree mapping error" + path + " from: " + projectName + "\n");
-						writeToCsv(projectName, path, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+			if(this.enableDiff)
+			{
+				if (previousAst.containsKey(fullPath)) {
+					boa.datagen.treed.python.TreedMapper tm = new boa.datagen.treed.python.TreedMapper(
+							previousAst.get(fullPath), module);
+	
+					try {
+						tm.map();
+					} catch (Exception e) {
+						if (debug) {
+							System.err.println("Tree mapping error" + path + " from: " + projectName + "\n");
+							writeToCsv(projectName, path, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+						}
+						e.printStackTrace();
 					}
-					e.printStackTrace();
 				}
+	
+				if (!this.lastRevision)
+					previousAst.put(fullPath, module);
 			}
-
-			if (!this.lastRevision)
-				previousAst.put(fullPath, module);
 
 		} catch (Exception e) {
 			if (debug) {
@@ -652,7 +655,7 @@ public abstract class AbstractCommit {
 		if (true) {
 			final ASTRoot.Builder ast = ASTRoot.newBuilder();
 			NewPythonVisitor visitor = new NewPythonVisitor();
-			visitor.enableDiff = true;
+			visitor.enableDiff = this.enableDiff;
 
 			try {
 				ast.addNamespaces(visitor.getNamespace(module, path));
