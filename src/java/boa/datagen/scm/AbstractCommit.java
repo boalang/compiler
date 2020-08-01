@@ -229,12 +229,13 @@ public abstract class AbstractCommit {
 		return revision.build();
 	}
 
-	String[] badpaths = { "spacy/lang/ca/lemmatizer.py", "spacy/lang/da/lemmatizer.py", "spacy/lang/de/lemmatizer.py",
-			"spacy/lang/es/lemmatizer.py", "spacy/lang/fr/lemmatizer/lookup.py", "spacy/lang/hu/lemmatizer.py",
-			"spacy/lang/id/lemmatizer.py", "spacy/lang/it/lemmatizer.py", "spacy/lang/pt/lemmatizer.py",
-			"spacy/lang/ro/lemmatizer.py", "spacy/lang/sv/lemmatizer/lookup.py", "spacy/lang/tr/lemmatizer.py",
-			"spacy/lang/ur/lemmatizer.py" };
-	Set<String> badp = new HashSet<String>(Arrays.asList(badpaths));
+//	String[] badpaths = { "spacy/lang/ca/lemmatizer.py", "spacy/lang/da/lemmatizer.py", "spacy/lang/de/lemmatizer.py",
+//			"spacy/lang/es/lemmatizer.py", "spacy/lang/fr/lemmatizer/lookup.py", "spacy/lang/hu/lemmatizer.py",
+//			"spacy/lang/id/lemmatizer.py", "spacy/lang/it/lemmatizer.py", "spacy/lang/pt/lemmatizer.py",
+//			"spacy/lang/ro/lemmatizer.py", "spacy/lang/sv/lemmatizer/lookup.py", "spacy/lang/tr/lemmatizer.py",
+//			"spacy/lang/ur/lemmatizer.py" };
+//	Set<String> badp = new HashSet<String>(Arrays.asList(badpaths));
+	String largeFiles = "spacy/lang/";
 	boolean include_notebooks = false;
 
 	Builder processPythonChangeFile(final ChangedFile.Builder fb) {
@@ -250,7 +251,7 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.BINARY);
 		////// Python AST generation will be handled here ///////
 		else if (lowerPath.endsWith(".py")) {
-			if (badp.contains(lowerPath)) {
+			if (lowerPath.contains(largeFiles)) {
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
 			} else {
 				final String content = getFileContents(path);
@@ -293,7 +294,7 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 			parseJavaFile(path, fb, content, false); // parse java file
 		} else if (lowerPath.endsWith(".py")) {
-			if (badp.contains(lowerPath)) {
+			if (lowerPath.contains(largeFiles)) {
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
 			} else {
 				final String content = getFileContents(path);
