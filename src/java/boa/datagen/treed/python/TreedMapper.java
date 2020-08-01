@@ -1093,8 +1093,6 @@ public class TreedMapper implements TreedConstants {
 		treeDepth.putAll(visitor.treeDepth);
 		treeVector.putAll(visitor.treeVector);
 		
-		visitor.clear();
-		visitor=null;
 	}
 
 }

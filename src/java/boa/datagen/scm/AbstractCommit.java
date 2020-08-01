@@ -640,7 +640,7 @@ public abstract class AbstractCommit {
 					
 					tm.clear();
 					tm=null;
-					System.gc();
+//					System.gc();
 				}
 	
 				if (!this.lastRevision)
