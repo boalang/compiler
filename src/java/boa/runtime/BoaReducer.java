@@ -33,6 +33,8 @@ import boa.aggregators.ml.MLAggregator;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 
+import static boa.functions.BoaUtilIntrinsics.*;
+
 /**
  * A {@link Reducer} that reduces the outputs for a single {@link EmitKey}.
  * 
@@ -85,29 +87,44 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 		a.start(key);
 		a.setContext(context);
 
-		for (final EmitValue value : values)
-			try {
-				if (a instanceof MLAggregator) {
-					MLAggregator mla = (MLAggregator) a;
-					if (value.getTuple() != null) {
-//						System.out.println("emit value is tuple ");
-						mla.aggregate(value.getTuple(), value.getMetadata());
-					}
-					if (value.getData() != null) {
-//						System.out.println("emit value is string[] ");
-						mla.aggregate(value.getData(), value.getMetadata());
-					}
-				} else {
+		if (a instanceof MLAggregator) {
+			// ml aggregator
+			MLAggregator mla = (MLAggregator) a;
+
+			int processedData = 0;
+
+			for (final EmitValue value : values) {
+				processedData++;
+				if (value.getTuple() != null)
+					mla.aggregate(value.getTuple(), value.getMetadata());
+				else if (value.getData() != null)
+					mla.aggregate(value.getData(), value.getMetadata());
+			}
+			
+			if (mla.trainMultipleModels)
+				mla.taskId = context.getTaskAttemptID().getTaskID().toString() 
+					+ "_" + Thread.currentThread().getName() 
+					+ "_" + Thread.currentThread().getId();
+
+			mla.finish();
+
+			System.out.println("boa reducer " 
+					+ " processed: " + processedData 
+					+ " freemem: " + freemem());
+		} else {
+			// regular aggregator
+			for (final EmitValue value : values) {
+				try {
 					for (final String s : value.getData())
 						a.aggregate(s, value.getMetadata());
+				} catch (final FinishedException e) {
+					// we are done
+					return;
+				} catch (final Throwable e) {
+					throw new RuntimeException(e);
 				}
-			} catch (final FinishedException e) {
-				// we are done
-				return;
-			} catch (final Throwable e) {
-				throw new RuntimeException(e);
 			}
-
-		a.finish();
+			a.finish();
+		}
 	}
 }

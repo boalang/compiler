@@ -3,6 +3,7 @@ package boa.aggregators.ml;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import org.deeplearning4j.models.embeddings.learning.impl.elements.SkipGram;
 import org.deeplearning4j.models.embeddings.loader.VectorsConfiguration;
 import org.deeplearning4j.models.sequencevectors.SequenceVectors;
 import org.deeplearning4j.models.sequencevectors.iterators.AbstractSequenceIterator;
@@ -19,18 +20,25 @@ import boa.aggregators.AggregatorSpec;
 import boa.runtime.Tuple;
 import weka.core.Utils;
 
-@AggregatorSpec(name = "seq2vec", formalParameters = { "string" })
+@AggregatorSpec(name = "seq2vec", formalParameters = { "string" }, canCombine = true)
 public class Sequence2VectorAggregator extends MLAggregator {
 	LinkedList<String> train;
 
 	public Sequence2VectorAggregator() {
 		train = new LinkedList<String>();
+		minTrainSize = 1000;
 	}
 
 	public Sequence2VectorAggregator(final String s) {
 		this();
 		try {
 			options = Utils.splitOptions(s);
+			// enable multiple training mode
+			for (int i = 0; i < options.length; i++)
+				if (options[i].equals("-M")) {
+					this.trainMultipleModels = true;
+					break;
+				}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -46,8 +54,6 @@ public class Sequence2VectorAggregator extends MLAggregator {
 				sb.append(s).append(' ');
 			train.add(sb.toString());
 		}
-//		if (DefaultProperties.localOutput == null && freemem() < 50)
-//			saveAndUpdateTrainingSet(train);
 	}
 
 	@Override
@@ -65,32 +71,41 @@ public class Sequence2VectorAggregator extends MLAggregator {
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		try {
-			// load train dataset
-			SentenceIterator iter = new CollectionSentenceIterator(train);
+			// First we build iterator
+			SentenceIterator itr = new CollectionSentenceIterator(train);
+
 			// seq2vec model builder
-			SequenceVectors.Builder<VocabWord> sb = new SequenceVectors.Builder<VocabWord>(new VectorsConfiguration());
+			SequenceVectors.Builder<VocabWord> svb = new SequenceVectors.Builder<VocabWord>(new VectorsConfiguration());
+
 			// tokenization
 			TokenizerFactory t = new DefaultTokenizerFactory();
-			updateOptions(sb, t);
+
+			// update options
+			updateOptions(svb, t);
+
+			// sequence transformer
+			SentenceTransformer transformer = new SentenceTransformer.Builder()
+					.iterator(itr)
+					.tokenizerFactory(t)
+					.build();
+
 			// sequence iterator
-			SentenceTransformer transformer = new SentenceTransformer.Builder().iterator(iter).tokenizerFactory(t)
+			AbstractSequenceIterator<VocabWord> seqItr = new AbstractSequenceIterator
+					.Builder<VocabWord>(transformer)
 					.build();
 
-//			while (iter.hasNext()) {
-//	        	System.out.println(iter.nextSentence());
-//	        }
-
-			AbstractSequenceIterator<VocabWord> itr = new AbstractSequenceIterator.Builder<VocabWord>(transformer)
+			// build a seq2vec model
+			SequenceVectors<VocabWord> sv = svb
+					.iterate(seqItr)
+					.resetModel(true)
+					.trainElementsRepresentation(true)
+					.trainSequencesRepresentation(false)
+					.elementsLearningAlgorithm(new SkipGram<VocabWord>())
 					.build();
 
-//			while (itr.hasMoreSequences()) {
-//	        	System.out.println(itr.nextSequence().asLabels());
-//	        }
-
-			// build seq2vec model
-			SequenceVectors<VocabWord> sv = sb.iterate(itr).build();
 			// train model
 			sv.fit();
+
 			// save model
 			saveModel(sv);
 		} catch (Exception e) {

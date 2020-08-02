@@ -45,6 +45,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static boa.functions.BoaUtilIntrinsics.*;
+
 /**
  * A Boa ML aggregator to train models.
  *
@@ -61,6 +63,10 @@ public abstract class MLAggregator extends Aggregator {
 	protected boolean flag;
 	protected boolean isClusterer;
 	protected ArrayList<String> nominalAttr;
+	
+	public boolean trainMultipleModels;
+	public String taskId;
+	protected int minTrainSize = -1;
 
 	public MLAggregator() {
 		fvAttributes = new ArrayList<Attribute>();
@@ -231,6 +237,12 @@ public abstract class MLAggregator extends Aggregator {
 		ObjectOutputStream objectOut = null;
 
 		try {
+			// serialize the model and write to the path 
+			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
+			objectOut = new ObjectOutputStream(byteOutStream);
+			objectOut.writeObject(model);
+			
+			// make path
 			JobContext context = (JobContext) getContext();
 			Configuration conf = context.getConfiguration();
 			int boaJobId = conf.getInt("boa.hadoop.jobid", 0);
@@ -244,16 +256,19 @@ public abstract class MLAggregator extends Aggregator {
 
 			modelDirPath = new Path(output, new Path("model/job_" + boaJobId));
 			fs.mkdirs(modelDirPath);
+			
 			modelPath = new Path(modelDirPath, new Path(getKey().getName() + ".model"));
-
-			// serialize the model and write to the path 
+			if (trainMultipleModels) {
+				int idx = 0;
+				do {
+					String modelName = getKey().getName() + "_" + taskId + "_" + idx++ + ".model";
+					modelPath = new Path(modelDirPath, new Path(modelName));
+				} while (fs.exists(modelPath));
+			}
 			out = fs.create(modelPath, true); // overwrite: true
-			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
-			objectOut = new ObjectOutputStream(byteOutStream);
-			objectOut.writeObject(model);
 			out.write(byteOutStream.toByteArray());
 
-			collect("Model is saved to: " + modelPath.toString());
+			System.out.println("Model is saved to: " + modelPath.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -400,6 +415,14 @@ public abstract class MLAggregator extends Aggregator {
 
 	private boolean isTrainData() {
 		return Math.random() > (1 - trainingPerc / 100.0);
+	}
+	
+	public boolean passThrough(int dataSize) {
+		if (dataSize < MAX_RECORDS_FOR_SPILL / 900)
+			return true;
+		if (minTrainSize != -1 && dataSize < minTrainSize)
+			return true;
+		return false;
 	}
 
 	public abstract void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException;

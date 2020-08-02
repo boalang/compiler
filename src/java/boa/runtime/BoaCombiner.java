@@ -19,17 +19,17 @@ package boa.runtime;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.hadoop.conf.Configurable;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.log4j.Logger;
-
 import boa.aggregators.Aggregator;
 import boa.aggregators.FinishedException;
+import boa.aggregators.ml.MLAggregator;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 
+import static boa.functions.BoaUtilIntrinsics.*;
 
 /**
  * A {@link Reducer} that pre-reduces the outputs from a single mapper node in
@@ -74,13 +74,13 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 
 	/** {@inheritDoc} */
 	@Override
-	protected void reduce(final EmitKey key, final Iterable<EmitValue> values, final Context context) throws IOException, InterruptedException {
+	protected void reduce(final EmitKey key, final Iterable<EmitValue> values, final Context context)
+			throws IOException, InterruptedException {
 		// if we can't combine, just pass the output through
 		// TODO: find away to avoid combiner entirely when non-associative
 		if (!this.aggregators.containsKey(key.getName())) {
 			for (final EmitValue value : values)
 				context.write(key, value);
-
 			return;
 		}
 
@@ -91,17 +91,55 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 		a.start(key);
 		a.setContext(context);
 
-		for (final EmitValue value : values)
-			try {
-				for (final String s : value.getData())
-					a.aggregate(s, value.getMetadata());
-			} catch (final FinishedException e) {
-				// we are done
+		if (a instanceof MLAggregator) {
+			// ml aggregator
+			MLAggregator mla = (MLAggregator) a;
+			String threadName = Thread.currentThread().getName();
+			int processedData = 0, passedDataSize = 0;
+			
+			if (mla.trainMultipleModels) {
+				// process data
+				for (final EmitValue value : values) {
+					processedData++;
+					if (value.getTuple() != null)
+						mla.aggregate(value.getTuple(), value.getMetadata());
+					else if (value.getData() != null)
+						mla.aggregate(value.getData(), value.getMetadata());
+				}
+				mla.taskId = context.getTaskAttemptID().getTaskID().toString() 
+						+ "_" + Thread.currentThread().getName() 
+						+ "_" + Thread.currentThread().getId();
+				mla.finish();
+			} else {
+				// pass the output through
+				for (final EmitValue value : values) {
+					context.write(key, value);
+					passedDataSize++;
+				}
 				return;
-			} catch (final Throwable e) {
-				throw new RuntimeException(e);
 			}
+			System.out.println("boa combiner " 
+					+ "processed: " + processedData + " "
+					+ "passed: " + passedDataSize + " "
+					+ "freemem: " + freemem() + " "
+					+ context.getTaskAttemptID().getTaskID().toString() + " "
+					+ "at thread " + threadName);
+		} else {
+			// regular aggregator
+			for (final EmitValue value : values) {
+				try {
+					for (final String s : value.getData())
+						a.aggregate(s, value.getMetadata());
+				} catch (final FinishedException e) {
+					// we are done
+					return;
+				} catch (final Throwable e) {
+					throw new RuntimeException(e);
+				}
+			}
+			a.finish();
+		}
 
-		a.finish();
 	}
+
 }

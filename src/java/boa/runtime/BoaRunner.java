@@ -42,6 +42,8 @@ import boa.io.BoaOutputFormat;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 
+import static boa.functions.BoaUtilIntrinsics.*;
+
 /**
  * @author anthonyu
  * @author rdyer
@@ -84,8 +86,11 @@ public abstract class BoaRunner extends Configured implements Tool {
 		// set map task timeout (24hrs * 10)
 		configuration.setLong("mapred.task.timeout", 86400000 * 10);
 		
-		// set append to true
-		configuration.setBoolean("dfs.support.append", true);
+		// set number of records for each combiner
+		configuration.setFloat("io.sort.spill.percent", IO_SORT_SPILL_PERCENT);
+		configuration.setInt("io.sort.mb", IO_SORT_MB);
+		configuration.setFloat("io.sort.record.percent", IO_SORT_RECORD_PERCENT);
+//		System.out.println(configuration.get("io.sort.record.percent"));
 
 		final Job job = new Job(configuration);
 

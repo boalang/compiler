@@ -41,7 +41,7 @@ public class BoaUtilIntrinsics {
 	@FunctionSpec(name = "split", returnType = "array of string", formalParameters = { "string" })
 	public static String[] split(String s) {
 		List<String> splitted = new ArrayList<>();
-		for (String s1 : s.split("\\_+|\\.+|\\,+|\\[+|\\]+|\\<+|\\>+"))
+		for (String s1 : s.split("\\_+|\\.+|\\,+|\\[+|\\]+|\\<+|\\>+|\\s+"))
 			for (String s2 : StringUtils.splitByCharacterTypeCamelCase(s1))
 				splitted.add(s2);
 		return splitted.stream().map(String::toLowerCase).toArray(String[]::new);
@@ -182,20 +182,49 @@ public class BoaUtilIntrinsics {
 	private static boolean matchMethodBody(Method m1, Method m2) {
 		if (m1.getName().equals(m2.getName()))
 			return false;
-		List<Statement> s1 = m1.getStatementsList();
-		List<Statement> s2 = m2.getStatementsList();
-		if (s1.size() != s2.size())
+		if (m1.getStatementsCount() == 0 || m2.getStatementsCount() == 0)
+			return false;
+		List<Statement> s1 = m1.getStatements(0).getStatementsList();
+		List<Statement> s2 = m2.getStatements(0).getStatementsList();
+		if (s1.size() != s2.size() || s1.size() == 0 || s2.size() == 0)
 			return false;
 		for (int i = 0; i < s1.size(); i++)
 			if (!prettyprint(s1.get(i)).equals(prettyprint(s2.get(i))))
 				return false;
 		return true;
 	}
-
+	
 //	public static void main(String[] args) {
-//		String s = "camelCased<List<Integer3[seq2vec]>>_____and_UNDERSCORED<HE>[SHE]_.....__camelCasedDDDDD";
-//		System.out.println(Arrays.toString(split(s)));
-//		System.out.println(alphabetFilter(s, "_."));
+////		String s = "camelCased<List<Integer3[seq2vec]>>_____and_UNDERSCORED<HE>[SHE]_.....__camelCasedDDDDD";
+////		System.out.println(Arrays.toString(split(s)));
+////		System.out.println(alphabetFilter(s, "_."));
+//		
+////		System.out.println(bytesOfString(500));
+////		System.out.println(calculateRecordPercent(50, bytesOfString(500)));
 //	}
+	
+	/*
+	 * web: https://www.javamex.com/tutorials/memory/string_memory_usage.shtml
+	 */
+	public static int bytesOfString(int numOfChars) {
+		return 8 * (int) (((numOfChars * 2) + 45) / 8);
+	}
+	
+	public static float calculateRecordPercent(int combinerMem, int recordMem) {
+		float maxRecords = (float) combinerMem * (1 << 20) / recordMem;
+		MAX_RECORDS_FOR_SPILL = (int) maxRecords + 10;
+		return maxRecords / (IO_SORT_MB * IO_SORT_SPILL_PERCENT * (1 << 16));
+	}
 
+	public static float IO_SORT_SPILL_PERCENT;
+	public static int IO_SORT_MB;
+	public static float IO_SORT_RECORD_PERCENT;
+	public static int MAX_RECORDS_FOR_SPILL;
+
+	static {
+		IO_SORT_SPILL_PERCENT = 0.8f;
+		IO_SORT_MB = 80;
+		IO_SORT_RECORD_PERCENT = calculateRecordPercent(50, bytesOfString(500));
+//		System.out.println(MAX_RECORDS_FOR_SPILL);
+	};
 }
