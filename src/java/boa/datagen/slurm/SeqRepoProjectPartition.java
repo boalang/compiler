@@ -31,6 +31,7 @@ public class SeqRepoProjectPartition {
 	private static SequenceFile.Writer fullProjectWriter;
 	private static SequenceFile.Writer mediumProjectWriter;
 	private static SequenceFile.Writer smallProjectWriter;
+	private static SequenceFile.Writer tinyProjectWriter;
 
 	/*
 	 * TODO: We should evenly distributed projects on the sequence file 
@@ -77,6 +78,9 @@ public class SeqRepoProjectPartition {
 					
 					if (!smallProjectFilter(p))
 						smallProjectWriter.append(textKey, new BytesWritable(p.toByteArray()));
+					
+					if (!tinyProjectFilter(p))
+						tinyProjectWriter.append(textKey, new BytesWritable(p.toByteArray()));
 
 					System.out.println("Finish " + ++projectCount + "th project " + p.getName());
 				}
@@ -136,6 +140,15 @@ public class SeqRepoProjectPartition {
 			return true;
 		return false;
 	}
+	
+	private static boolean tinyProjectFilter(Project p) {
+		if (fullProjectFilter(p))
+			return true;
+		if (new Random().nextDouble() > 0.001) // filter out 99.9%
+			return true;
+		return false;
+	}
+
 
 	public static void openWriters(int astCount) {
 		CompressionType compType = CompressionType.BLOCK;
@@ -150,6 +163,9 @@ public class SeqRepoProjectPartition {
 			smallProjectWriter = SequenceFile.createWriter(fs, conf,
 					new Path(DATASET_PATH + "/combined/project/small/projects.seq"), Text.class, BytesWritable.class,
 					compType, compCode);
+			tinyProjectWriter = SequenceFile.createWriter(fs, conf,
+					new Path(DATASET_PATH + "/combined/project/tiny/projects.seq"), Text.class, BytesWritable.class,
+					compType, compCode);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -160,6 +176,7 @@ public class SeqRepoProjectPartition {
 			fullProjectWriter.close();
 			mediumProjectWriter.close();
 			smallProjectWriter.close();
+			tinyProjectWriter.close();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
