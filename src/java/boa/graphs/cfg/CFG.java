@@ -353,6 +353,8 @@ public class CFG {
 			return traverse_call(cfgNode, root);
 		case NEW:
 			return traverse_instance(cfgNode, root);
+		case YIELD:
+			return traverse_yield(cfgNode, root);
 		default:
 			/*
 			 * final List<Expression> expressionsList =
@@ -381,6 +383,7 @@ public class CFG {
 		case RETURN:
 			return traverse_return(cfgNode, root);
 		case FOR:
+		case FOREACH:
 			return traverse_for(cfgNode, root);
 		case DO:
 			return traverse_do(cfgNode, root);
@@ -390,6 +393,8 @@ public class CFG {
 			return traverse_if(cfgNode, root);
 		case BREAK:
 			return traverse_break(cfgNode, root);
+		case WITH:
+			return traverse_with(cfgNode, root);
 		case CASE:
 			return traverse_case(cfgNode, root);
 		case DEFAULT:
@@ -403,6 +408,7 @@ public class CFG {
 		case TRY:
 			return traverse_try(cfgNode, root);
 		case THROW:
+		case RAISE:
 			return traverse_throw(cfgNode, root);
 		case CATCH:
 			return traverse_catch(cfgNode, root);
@@ -410,6 +416,9 @@ public class CFG {
 			return traverse_finally(cfgNode, root);
 		case ASSERT:
 		case TYPEDECL:
+		case EMPTY:
+		case DEL:
+		case GLOBAL:
 		case OTHER:
 			final CFGNode aNode = new CFGNode(root.getKind().name(), NodeType.OTHER, "", root.getKind().name());
 			aNode.setAstNode(root);
@@ -535,7 +544,14 @@ public class CFG {
 				trueNotEmpty = true;
 			}
 		}
-		if (root.getExpressionsCount() > 1) { // Else
+		if (root.getExpressionsCount()==3) { // Else
+			final CFG falseBranch = traverse(branch, root.getExpressions(2));
+			if (falseBranch.getNodes().size() > 0) {
+				graph.mergeABranch(falseBranch, branch, "F");
+				falseNotEmpty = true;
+			}
+		}
+		else if (root.getExpressionsCount() > 1) { // Else
 			final CFG falseBranch = traverse(branch, root.getExpressions(1));
 			if (falseBranch.getNodes().size() > 0) {
 				graph.mergeABranch(falseBranch, branch, "F");
@@ -633,9 +649,20 @@ public class CFG {
 		graph.mergeABranch(body, control, "T");
 		graph.addBackEdges(body, control, "B");
 
+		boolean trueNotEmpty = false, falseNotEmpty = false;
+
+		if (root.getStatementsCount() > 1) { // Else
+			this.isBranchPresent = true;
+			final CFG falseBranch = traverse(control, root.getStatements(1));
+			if (falseBranch.getNodes().size() > 0) {
+				graph.mergeABranch(falseBranch, control, "F");
+			}
+		}
+		
 		graph.getOuts().clear();
 		graph.adjustBreakNodes("[BREAK]");
 		graph.getOuts().add(control);
+		
 
 		return graph;
 	}
@@ -653,6 +680,14 @@ public class CFG {
 		graph.mergeABranch(branch, control, "T");
 		graph.addBackEdges(branch, control, "B");
 
+		if (root.getStatementsCount() > 1) { // Else
+			this.isBranchPresent = true;
+			final CFG falseBranch = traverse(control, root.getStatements(1));
+			if (falseBranch.getNodes().size() > 0) {
+				graph.mergeABranch(falseBranch, control, "F");
+			}
+		}
+		
 		graph.getOuts().clear();
 		graph.adjustBreakNodes("[BREAK]");
 		graph.getOuts().add(control);
@@ -739,23 +774,60 @@ public class CFG {
 		/*if (root.hasExpression())
 			graph.mergeSeq(traverse(cfgNode, root.getExpression()));
 		*/
+//		for(int i=0;i< root.getExpressionsCount();i++)
+//			graph.mergeSeq(traverse(cfgNode, root.getExpressions(i)));
 		final CFGNode node = new CFGNode("END[throw]", NodeType.OTHER, "END[throw]", "END[throw]");
 		node.setAstNode(root);
 		graph.addReturnNode(node);
 		return graph;
 	}
+	
+	private CFG traverse_yield(final CFGNode cfgNode, final Expression root) {
+		final CFG graph = new CFG();
 
+		final CFGNode node = new CFGNode("END[yield]", NodeType.OTHER, "END[yield]", "END[yield]");
+		node.setAstNode(root);
+		if (root.getExpressionsCount() > 0)
+			node.setAstNode(root.getExpressions(0));
+		graph.addReturnNode(node);
+		return graph;
+	}
+	
 	private CFG traverse_return(final CFGNode cfgNode, final Statement root) {
 		final CFG graph = new CFG();
 		// FIXME what if its "return m();"?
-		/*if (root.hasExpression())
-			graph.mergeSeq(traverse(cfgNode, root.getExpression()));
-		*/
+//		for(int i=0;i< root.getExpressionsCount();i++)
+//			graph.mergeSeq(traverse(cfgNode, root.getExpressions(i)));
+		
 		final CFGNode node = new CFGNode("END[return]", NodeType.OTHER, "END[return]", "END[return]");
 		node.setAstNode(root);
 		if (root.getExpressionsCount() > 0)
 			node.setAstNode(root.getExpressions(0));
 		graph.addReturnNode(node);
+		return graph;
+	}
+
+	private CFG traverse_with(final CFGNode cfgNode, final Statement root) {
+		final CFG graph = new CFG();
+		final CFGNode branch = new CFGNode("WITH", NodeType.OTHER, "WITH", "WITH");
+		branch.setAstNode(root);
+		branch.setPid((cfgNode == null) ? "." : cfgNode.getPid() + cfgNode.getNodeId() + ".");
+		graph.mergeSeq(branch);
+
+		boolean hasBody = false;
+		if (root.getStatementsCount() > 0) {
+			final CFG body = traverse(branch, root.getStatements(0));
+			if (body.nodes.size() > 0) {
+				graph.mergeABranch(body, branch, "T");
+				hasBody = true;
+			} else {
+				graph.outs.add(branch);
+			}
+		}
+
+		if (hasBody)
+			graph.getOuts().remove(branch);
+
 		return graph;
 	}
 
