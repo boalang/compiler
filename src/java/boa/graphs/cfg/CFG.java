@@ -503,7 +503,7 @@ public class CFG {
 		final CFG graph = new CFG();
 
 		final CFGNode branch = new CFGNode("IF", NodeType.CONTROL, "IF", "IF");
-		branch.setAstNode(root.getConditions(0));
+		branch.setAstNode(root);
 		branch.setPid((cfgNode == null) ? "." : cfgNode.getPid() + cfgNode.getNodeId() + ".");
 		graph.mergeSeq(branch);
 
@@ -631,7 +631,7 @@ public class CFG {
 
 		// condition
 		final CFGNode control = new CFGNode("FOR", NodeType.CONTROL, "FOR", "FOR");
-		control.setAstNode(root.getConditions(0));
+		control.setAstNode(root);
 		control.setPid((cfgNode == null) ? "." : cfgNode.getPid() + cfgNode.getNodeId() + ".");
 		graph.mergeSeq(control);
 
@@ -647,7 +647,7 @@ public class CFG {
 		}
 
 		graph.mergeABranch(body, control, "T");
-		graph.addBackEdges(body, control, "B");
+//		graph.addBackEdges(body, control, "B");
 
 		boolean trueNotEmpty = false, falseNotEmpty = false;
 
@@ -655,13 +655,15 @@ public class CFG {
 			this.isBranchPresent = true;
 			final CFG falseBranch = traverse(control, root.getStatements(1));
 			if (falseBranch.getNodes().size() > 0) {
+				falseNotEmpty = true;
 				graph.mergeABranch(falseBranch, control, "F");
 			}
 		}
 		
-		graph.getOuts().clear();
+		//graph.getOuts().clear();
 		graph.adjustBreakNodes("[BREAK]");
-		graph.getOuts().add(control);
+//		if(!falseNotEmpty)
+			graph.getOuts().add(control);
 		
 
 		return graph;
@@ -671,26 +673,32 @@ public class CFG {
 		this.isLoopPresent = true;
 		final CFG graph = new CFG();
 		final CFGNode control = new CFGNode("WHILE", NodeType.CONTROL, "WHILE", "WHILE");
-		control.setAstNode(root.getConditions(0));
+		control.setAstNode(root);
 		control.setPid((cfgNode == null) ? "." : cfgNode.getPid() + cfgNode.getNodeId() + ".");
 		graph.mergeSeq(control);
 
 		final CFG branch = traverse(control, root.getStatements(0));
 		branch.adjustBreakNodes("[CONTINUE]");
 		graph.mergeABranch(branch, control, "T");
-		graph.addBackEdges(branch, control, "B");
+//		graph.addBackEdges(branch, control, "B");
+
+		boolean trueNotEmpty = false, falseNotEmpty = false;
 
 		if (root.getStatementsCount() > 1) { // Else
 			this.isBranchPresent = true;
 			final CFG falseBranch = traverse(control, root.getStatements(1));
 			if (falseBranch.getNodes().size() > 0) {
+				falseNotEmpty = true;
 				graph.mergeABranch(falseBranch, control, "F");
 			}
 		}
 		
-		graph.getOuts().clear();
+		//graph.getOuts().clear();
 		graph.adjustBreakNodes("[BREAK]");
 		graph.getOuts().add(control);
+		
+//		if (falseNotEmpty)
+//			graph.getOuts().remove(control);
 
 		return graph;
 	}

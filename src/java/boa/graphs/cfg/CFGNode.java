@@ -54,8 +54,8 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 		this.objectNameId = convertLabel(objectName);
 	}
 
-	public CFGNode(final String methodName, final NodeType kind, final String className,
-			final String objectName, final int numOfParameters, final HashSet<Integer> datas) {
+	public CFGNode(final String methodName, final NodeType kind, final String className, final String objectName,
+			final int numOfParameters, final HashSet<Integer> datas) {
 		super(kind);
 		this.methodId = convertLabel(methodName);
 		if (className == null) {
@@ -68,8 +68,8 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 		this.numOfParameters = numOfParameters;
 	}
 
-	public CFGNode(final String methodName, final NodeType kind, final String className,
-			final String objectName, final int numOfParameters) {
+	public CFGNode(final String methodName, final NodeType kind, final String className, final String objectName,
+			final int numOfParameters) {
 		super(kind);
 		this.methodId = convertLabel(methodName);
 		this.classNameId = convertLabel(className);
@@ -176,8 +176,10 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 		String s = "";
 		for (final boa.types.Ast.Expression exprs : expr.getExpressionsList()) {
 			final String d = processDef(exprs);
-			if (d.length() == 0) continue;
-			if (s.length() > 0) s += ", ";
+			if (d.length() == 0)
+				continue;
+			if (s.length() > 0)
+				s += ", ";
 			s += d;
 		}
 		return s;
