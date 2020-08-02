@@ -387,6 +387,7 @@ public class SymbolTable {
 		types.put("string", new BoaString());
 		types.put("model", new BoaModel());
 		types.put("tuple", new BoaTuple());
+		types.put("ensemble", new BoaEnsemble());
 
 		types.put("LinearRegression", new BoaLinearRegression());
 		types.put("AdaBoostM1", new BoaAdaBoostM1());

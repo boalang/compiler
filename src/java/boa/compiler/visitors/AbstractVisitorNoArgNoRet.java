@@ -419,4 +419,9 @@ public abstract class AbstractVisitorNoArgNoRet {
 		n.getId().accept(this);
 		n.getType().accept(this);
 	}
+
+	public void visit(final EnsembleType n) {
+		n.getId().accept(this);
+		n.getType().accept(this);
+	}
 }

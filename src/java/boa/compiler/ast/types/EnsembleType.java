@@ -24,9 +24,9 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
 
 /**
  * 
- * @author ankuraga
+ * @author hyj
  */
-public class ModelType extends AbstractType {
+public class EnsembleType extends AbstractType {
 	protected Identifier id;
 	protected Component t;
 
@@ -48,11 +48,11 @@ public class ModelType extends AbstractType {
 		this.t = t;
 	}
 
-	public ModelType (final Identifier id) {
+	public EnsembleType (final Identifier id) {
 		this(id, null);
 	}
 
-	public ModelType (final Identifier id, final Component t) {
+	public EnsembleType (final Identifier id, final Component t) {
 		if (id != null)
 			id.setParent(this);
 		if (t != null)
@@ -79,9 +79,9 @@ public class ModelType extends AbstractType {
 		v.visit(this);
 	}
 
-	public ModelType clone() {
-		final ModelType m = new ModelType(id.clone(), t.clone());
-		copyFieldsTo(m);
-		return m;
+	public EnsembleType clone() {
+		final EnsembleType e = new EnsembleType(id.clone(), t.clone());
+		copyFieldsTo(e);
+		return e;
 	}
 }

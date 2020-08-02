@@ -16,52 +16,30 @@
  */
 package boa.types.ml;
 
-import org.deeplearning4j.models.sequencevectors.SequenceVectors;
-import org.deeplearning4j.models.word2vec.VocabWord;
-
 import boa.types.BoaType;
 
 /**
- * A {@link BoaType} representing ML model of Word2Vec with attached types.
+ * A {@link BoaType} representing ensemble of any ML type.
  * 
  * @author hyj
  */
-public class BoaSequence2Vec extends BoaEnsemble {
-	private SequenceVectors<VocabWord> seq2vec;
+public class BoaEnsemble extends BoaModel {
 
 	/**
-	 * Default BoaVote Constructor.
+	 * Default BoaEnsemble Constructor.
 	 * 
 	 */
-	public BoaSequence2Vec() {
+	public BoaEnsemble() {
 	}
 
 	/**
-	 * Construct a BoaVote.
+	 * Construct a BoaModel.
 	 * 
 	 * @param t A {@link BoaType} containing the types attached with this model
 	 *
 	 */
-	public BoaSequence2Vec(BoaType t) {
+	public BoaEnsemble(BoaType t) {
 		this.t = t;
-	}
-
-	/**
-	 * Construct a BoaVote.
-	 * 
-	 * @param w2v A {@link SequenceVectors} containing ML model
-	 * 
-	 * @param o   A {@link Object} containing type object
-	 *
-	 */
-	public BoaSequence2Vec(SequenceVectors<VocabWord> seq2vec, Object o) {
-		this.seq2vec = seq2vec;
-		this.o = o;
-	}
-	
-	@Override
-	public Kind getKind() {
-		return Kind.VECTOR;
 	}
 
 	/** {@inheritDoc} */
@@ -83,16 +61,12 @@ public class BoaSequence2Vec extends BoaEnsemble {
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.ml.BoaSequence2Vec";
+		return "boa.types.ml.BoaEnsemble";
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return "boa.types.ml.BoaSequence2Vec" + "/" + this.t;
-	}
-
-	public SequenceVectors<VocabWord> getSeq2Vec() {
-		return seq2vec;
+		return "ensemble";
 	}
 }

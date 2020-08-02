@@ -1904,6 +1904,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	/** {@inheritDoc} */
 	@Override
+	public void visit(final EnsembleType n) {
+		visit(n.getType());
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final StackType n) {
 		final ST st = stg.getInstanceOf("StackType");
 

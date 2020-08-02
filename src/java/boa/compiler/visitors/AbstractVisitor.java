@@ -474,4 +474,10 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 		n.getType().accept(this, arg);
 		return null;
 	}
+
+	public ReturnTypeT visit(final EnsembleType n, final ArgTypeT arg) {
+		n.getId().accept(this, arg);
+		n.getType().accept(this, arg);
+		return null;
+	}
 }

@@ -113,6 +113,7 @@ type returns [AbstractType ast]
 	| set=setType    { $ast = $set.ast; }
 	| e=enumType     { $ast = $e.ast; }
 	| model=modelType { $ast = $model.ast; }
+	| ensemble=ensembleType { $ast = $ensemble.ast; }
 	| id=identifier  { $ast = $id.ast; }
 	;
 
@@ -208,6 +209,12 @@ modelType returns [ModelType ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: MODEL OF id=identifier { $ast = new ModelType($id.ast); } OF m=component { $ast.setType($m.ast); }
+	;
+ensembleType returns [EnsembleType ast]
+	locals [int l, int c]
+	@init { $l = getStartLine(); $c = getStartColumn(); }
+	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
+	: ENSEMBLE OF id=identifier { $ast = new EnsembleType($id.ast); } OF m=component { $ast.setType($m.ast); }
 	;
 functionType returns [FunctionType ast]
 	locals [int l, int c]
@@ -617,6 +624,7 @@ identifier returns [Identifier ast]
 	| lit=STACK    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=QUEUE    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=MODEL    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=ENSEMBLE { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=SET      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOR      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOREACH  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
@@ -698,6 +706,7 @@ MAP       : 'map';
 STACK     : 'stack';
 QUEUE     : 'queue';
 MODEL     : 'model';
+ENSEMBLE  : 'ensemble';
 SET       : 'set';
 FOR       : 'for';
 FOREACH   : 'foreach';

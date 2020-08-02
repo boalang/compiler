@@ -26,6 +26,7 @@ import weka.clusterers.Clusterer;
  * A {@link BoaType} representing model of any ML type.
  * 
  * @author ankuraga
+ * @author hyj
  */
 public class BoaModel extends BoaType {
 	protected Classifier clr;

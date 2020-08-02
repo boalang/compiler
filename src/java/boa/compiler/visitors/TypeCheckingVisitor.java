@@ -265,7 +265,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.env = env;
 		List<BoaType> expr = this.check(n.getArgs(), env);
 		if (expr.size() > 1) {
-			if (expr.get(0) instanceof BoaModel && expr.get(1) instanceof BoaTuple) {
+			if ((expr.get(0) instanceof BoaModel || expr.get(0) instanceof BoaEnsemble)
+					&& expr.get(1) instanceof BoaTuple) {
 				final BoaType t = ((BoaModel) expr.get(0)).getType();
 				if (t instanceof BoaTuple) {
 					final List<BoaType> mtypes = ((BoaTuple) t).getTypes();
@@ -986,7 +987,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			if (lhs instanceof BoaArray && rhs instanceof BoaTuple)
 				rhs = new BoaArray(((BoaTuple) rhs).getMember(0));
 
-			if (lhs instanceof BoaModel) {
+			if (lhs instanceof BoaModel || lhs instanceof BoaEnsemble) {
 				final BoaType t = ((BoaModel) lhs).getType();
 				List<BoaType> types = new ArrayList<BoaType>();
 
@@ -1870,9 +1871,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						throw new TypeCheckException(n,
 								"LinearRegression required attributes to be numeric, nominal or date");
 				}
-			}
-
-			if (model instanceof BoaAdaBoostM1) {
+			} else if (model instanceof BoaAdaBoostM1) {
 				if (!(types.get(types.size() - 1) instanceof BoaInt || types.get(types.size() - 1) instanceof BoaFloat
 						|| types.get(types.size() - 1) instanceof BoaTime))
 					throw new TypeCheckException(n, "AdaBoostM1 required class to be numeric or date");
@@ -1885,6 +1884,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				}
 			}
 		}
+
 	}
 
 	/**
@@ -1973,6 +1973,28 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaSequence2Vec(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void visit(final EnsembleType n, final SymbolTable env) {
+		n.env = env;
+		n.getType().accept(this, env);
+		if (env.hasType(n.getId().getToken()))
+			n.type = SymbolTable.getType(n.getId().getToken());
+		else
+			try {
+				n.type = env.get(n.getId().getToken());
+			} catch (final RuntimeException e) {
+				throw new TypeCheckException(n, "invalid identifier '" + n.getId().getToken() + "'", e);
+			}
+		
+		if (n.type instanceof BoaSequence2Vec)
+			n.type = new BoaSequence2Vec(n.getType().type);
+		else
+			throw new TypeCheckException(n, "Ensemble required attributes to be ensemble type");
 	}
 
 	/** {@inheritDoc} */
