@@ -16,6 +16,7 @@
  */
 package boa.types.ml;
 
+import org.apache.hadoop.fs.FileStatus;
 import org.deeplearning4j.models.sequencevectors.SequenceVectors;
 import org.deeplearning4j.models.word2vec.VocabWord;
 
@@ -58,7 +59,12 @@ public class BoaSequence2Vec extends BoaEnsemble {
 		this.seq2vec = seq2vec;
 		this.o = o;
 	}
-	
+
+	public BoaSequence2Vec(FileStatus[] files, Object o) {
+		this.files = files;
+		this.o = o;
+	}
+
 	@Override
 	public Kind getKind() {
 		return Kind.VECTOR;

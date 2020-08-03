@@ -2,6 +2,7 @@ package boa.functions;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -13,13 +14,14 @@ import java.util.List;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.PathFilter;
 import org.deeplearning4j.models.embeddings.reader.impl.BasicModelUtils;
 import org.deeplearning4j.models.sequencevectors.SequenceVectors;
 import org.deeplearning4j.models.word2vec.VocabWord;
 import org.deeplearning4j.models.word2vec.Word2Vec;
-
 import boa.datagen.DefaultProperties;
 import boa.runtime.Tuple;
 import boa.types.ml.*;
@@ -41,6 +43,8 @@ public class BoaMLIntrinsics {
 	@FunctionSpec(name = "load", returnType = "model", formalParameters = { "int", "model" })
 	public static BoaModel load(final long jobId, BoaModel m, final String identifier, final String type,
 			final Object o) throws Exception {
+
+		// single model
 		Object object = null;
 		FSDataInputStream in = null;
 		ObjectInputStream dataIn = null;
@@ -60,6 +64,11 @@ public class BoaMLIntrinsics {
 
 			// deserialize the model from the path
 			fs = FileSystem.get(conf);
+
+			// check ensemble
+			if (!fs.exists(p))
+				return ensembleModel(conf, fs, modelDirPath, identifier, type, o);
+
 			in = fs.open(p);
 			final byte[] b = new byte[(int) fs.getFileStatus(p).getLen() + 1];
 			int c = 0;
@@ -68,6 +77,8 @@ public class BoaMLIntrinsics {
 				bo.write(b, 0, c);
 			bin = new ByteArrayInputStream(bo.toByteArray());
 			object = new ObjectInputStream(bin).readObject();
+			
+			fs.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -178,6 +189,24 @@ public class BoaMLIntrinsics {
 		return m;
 	}
 
+	private static BoaModel ensembleModel(Configuration conf, FileSystem fs, Path modelDirPath, String identifier,
+			String type, Object o) throws IOException {
+		String prefix = identifier + "_task";
+		FileStatus[] files = fs.listStatus(modelDirPath, new PathFilter() {
+			@Override
+			public boolean accept(Path path) {
+				String name = path.getName();
+				return name.endsWith(".model") && name.startsWith(prefix);
+			}
+		});
+		if (files.length != 0) {
+			if (type.contains("BoaSequence2Vec")) {
+				return new BoaSequence2Vec(files, o);
+			}
+		}
+		return null;
+	}
+
 	@FunctionSpec(name = "classify", returnType = "string", formalParameters = { "model", "array of int" })
 	public static String classify(final BoaModel model, final long[] vector) throws Exception {
 		int NumOfAttributes = vector.length + 1;
@@ -271,30 +300,6 @@ public class BoaMLIntrinsics {
 		return testingSet.classAttribute().isNominal() ? testingSet.classAttribute().value((int) predval)
 				: String.valueOf(predval);
 	}
-
-//	@FunctionSpec(name = "cluster", returnType = "string", formalParameters = { "model", "tuple" })
-//	public static String cluster(final BoaModel model, final Tuple vector) throws Exception {
-//		ArrayList<Attribute> fvAttributes = getAttributes(model, vector);
-//		int NumOfAttributes = fvAttributes.size();
-//
-//		Instances testingSet = new Instances("Classifier", fvAttributes, 1);
-//		testingSet.setClassIndex(NumOfAttributes - 1);
-//
-//		Instance instance = new DenseInstance(NumOfAttributes);
-//
-//		for (int i = 0; i < NumOfAttributes - 1; i++)
-//			if (NumberUtils.isNumber(vector.getValues()[i]))
-//				instance.setValue((Attribute) fvAttributes.get(i), Double.parseDouble(vector.getValues()[i]));
-//			else
-//				instance.setValue((Attribute) fvAttributes.get(i), vector.getValues()[i]);
-//		testingSet.add(instance);
-//
-//		Clusterer clusterer = (Clusterer) model.getClusterer();
-//		double predval = clusterer.clusterInstance(testingSet.instance(0));
-//
-//		return testingSet.classAttribute().isNominal() ? testingSet.classAttribute().value((int) predval)
-//				: String.valueOf(predval);
-//	}
 
 	private static ArrayList<Attribute> getAttributes(BoaModel model, Tuple vector) {
 		ArrayList<Attribute> fvAttributes = new ArrayList<Attribute>();
@@ -412,5 +417,12 @@ public class BoaMLIntrinsics {
 				minus.add(tokens[++i]);
 		}
 		return m.getSeq2Vec().wordsNearest(plus, minus, (int) num).toArray(new String[0]);
+	}
+	
+	@FunctionSpec(name = "models", returnType = "bool", formalParameters = { "Seq2Vec" })
+	public static boolean models(final BoaSequence2Vec m) {
+		for (FileStatus file : m.getFiles())
+			System.out.println(file.getPath().getName());
+		return true;
 	}
 }

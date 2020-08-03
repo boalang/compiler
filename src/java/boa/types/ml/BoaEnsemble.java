@@ -16,6 +16,8 @@
  */
 package boa.types.ml;
 
+import org.apache.hadoop.fs.FileStatus;
+
 import boa.types.BoaType;
 
 /**
@@ -24,6 +26,7 @@ import boa.types.BoaType;
  * @author hyj
  */
 public class BoaEnsemble extends BoaModel {
+	protected FileStatus[] files;
 
 	/**
 	 * Default BoaEnsemble Constructor.
@@ -40,6 +43,10 @@ public class BoaEnsemble extends BoaModel {
 	 */
 	public BoaEnsemble(BoaType t) {
 		this.t = t;
+	}
+	
+	public FileStatus[] getFiles() {
+		return files;
 	}
 
 	/** {@inheritDoc} */
