@@ -387,6 +387,7 @@ message Expression {
 		IS_NOT=110;
 		IMPORT=111;
 		IMPORT_FROM=112;
+		CALLHOLDER=113;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;

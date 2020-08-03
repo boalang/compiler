@@ -26,6 +26,7 @@ import boa.functions.BoaAstIntrinsics;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Method;
+import boa.types.Ast.Namespace;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Statement.StatementKind;
 import boa.types.Ast.Variable;
@@ -60,7 +61,6 @@ public class CFG {
 	public CFG(final Method method) {
 		this(method, "this");
 	}
-
 	public CFG(final Method method, final String cls_name) {
 		this.md = method;
 		this.class_name = cls_name;
@@ -660,7 +660,7 @@ public class CFG {
 			}
 		}
 		
-		//graph.getOuts().clear();
+//		graph.getOuts().clear();
 		graph.adjustBreakNodes("[BREAK]");
 //		if(!falseNotEmpty)
 			graph.getOuts().add(control);
@@ -693,7 +693,7 @@ public class CFG {
 			}
 		}
 		
-		//graph.getOuts().clear();
+//		graph.getOuts().clear();
 		graph.adjustBreakNodes("[BREAK]");
 		graph.getOuts().add(control);
 		

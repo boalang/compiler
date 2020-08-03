@@ -226,6 +226,10 @@ public class NewPythonVisitor extends ASTVisitor {
 			visit((IndexHolder) md);
 			opFound = true;
 		} 
+		else if (md instanceof CallHolder) {
+			visit((CallHolder) md);
+			opFound = true;
+		} 
 		else if (md instanceof PythonSubscriptExpression) {
 			visit((PythonSubscriptExpression) md);
 			opFound = true;
@@ -280,24 +284,16 @@ public class NewPythonVisitor extends ASTVisitor {
 
 	}
 
-	public boolean visit(org.eclipse.dltk.ast.expressions.Expression vr, CallHolder ch) throws Exception {
+	public boolean visit(CallHolder ch) throws Exception {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.CALLHOLDER);
 
 		if (enableDiff) {
-			ChangeKind status1 = (ChangeKind) vr.getProperty(TreedConstants.PROPERTY_STATUS);
 			ChangeKind status2 = (ChangeKind) ch.getProperty(TreedConstants.PROPERTY_STATUS);
-
-			if (status1 != ChangeKind.UNCHANGED && status1 != null)
-				b.setChange(status1);
-			else if (status2 != ChangeKind.UNCHANGED && status2 != null)
+			 if (status2 != ChangeKind.UNCHANGED && status2 != null)
 				b.setChange(status2);
 		}
-		if (vr instanceof SimpleReference)
-			b.setMethod(((SimpleReference) vr).getName());
-		else if (vr instanceof StringLiteral)
-			b.setMethod(((StringLiteral) vr).getValue());
 
 		if (ch.getArguments() instanceof ExpressionList) {
 			ExpressionList el = (ExpressionList) ch.getArguments();
@@ -305,12 +301,48 @@ public class NewPythonVisitor extends ASTVisitor {
 				for (Object ob : el.getExpressions()) {
 					org.eclipse.dltk.ast.expressions.Expression ex = (org.eclipse.dltk.ast.expressions.Expression) ob;
 					ex.traverse(this);
-					b.addMethodArgs(expressions.pop());
+					b.addExpressions(expressions.pop());
 				}
 			}
 		}
 		expressions.push(b.build());
 		return false;
+	}
+	public int visitForMethodCall(ExtendedVariableReference md, int index) throws Exception {
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
+		
+		ASTNode vr=md.getExpression(index);
+
+		if (enableDiff) {
+			ChangeKind status1 = (ChangeKind) vr.getProperty(TreedConstants.PROPERTY_STATUS);
+
+			if (status1 != ChangeKind.UNCHANGED && status1 != null)
+				b.setChange(status1);
+		}
+		
+		if (vr instanceof SimpleReference)
+			b.setMethod(((SimpleReference) vr).getName());
+		else if (vr instanceof StringLiteral)
+			b.setMethod(((StringLiteral) vr).getValue());
+		
+		int j=index+1;
+		for(int i=j;i<md.getExpressionCount();i++)
+		{
+			if(md.getExpression(i)==null)
+				break;
+			if(md.getExpression(i) instanceof CallHolder)
+			{
+				j=i;
+				md.getExpression(i).traverse(this);
+				b.addMethodArgs(expressions.pop());
+			}
+			else
+				break;
+		}
+		expressions.push(b.build());
+		return j;
 	}
 
 	public boolean visit(ExtendedVariableReference md) throws Exception {
@@ -326,32 +358,36 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		if (md.getExpressionCount() > 1 && md.getExpression(md.getExpressionCount() - 1) instanceof CallHolder) {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
-
-			if (md.getExpression(md.getExpressionCount() - 2) instanceof SimpleReference) {
-				SimpleReference vr = (SimpleReference) md.getExpression(md.getExpressionCount() - 2);
-				b.setMethod(vr.getName());
-			} else if (md.getExpression(md.getExpressionCount() - 2) instanceof StringLiteral) {
-				StringLiteral vr = (StringLiteral) md.getExpression(md.getExpressionCount() - 2);
-				b.setMethod(vr.getValue());
+			
+			int methodNameIndex=0;
+			for(int i=md.getExpressionCount()-1;i>=0;i--)
+			{
+				if (md.getExpression(i) instanceof SimpleReference) {
+					SimpleReference vr = (SimpleReference) md.getExpression(i);
+					b.setMethod(vr.getName());
+					methodNameIndex=i;
+					break;
+				} else if (md.getExpression(i) instanceof StringLiteral) {
+					StringLiteral vr = (StringLiteral) md.getExpression(i);
+					b.setMethod(vr.getValue());
+					methodNameIndex=i;
+					break;
+				}
 			}
+			
 
-			for (int i = 0; i < md.getExpressionCount() - 2; i++) {
-				if (i < md.getExpressionCount() - 3 && md.getExpression(i + 1) instanceof CallHolder) {
-					visit(md.getExpression(i), (CallHolder) md.getExpression(i + 1));
-					i++;
+			for (int i = 0; i < methodNameIndex; i++) {
+				if (i < methodNameIndex && md.getExpression(i + 1) instanceof CallHolder) {
+					i=visitForMethodCall(md,i);
 				} else
 					md.getExpression(i).traverse(this);
 				b.addExpressions(expressions.pop());
 			}
-			CallHolder ch = (CallHolder) md.getExpression(md.getExpressionCount() - 1);
-			if (ch.getArguments() instanceof ExpressionList) {
-				ExpressionList el = (ExpressionList) ch.getArguments();
-				if (el != null && el.getExpressions() != null) {
-					for (Object ob : el.getExpressions()) {
-						org.eclipse.dltk.ast.expressions.Expression ex = (org.eclipse.dltk.ast.expressions.Expression) ob;
-						ex.traverse(this);
-						b.addMethodArgs(expressions.pop());
-					}
+			for (int i = methodNameIndex+1; i < md.getExpressionCount(); i++) {
+				if(md.getExpression(i)!=null && md.getExpression(i) instanceof CallHolder)
+				{
+					md.getExpression(i).traverse(this);
+					b.addMethodArgs(expressions.pop());
 				}
 			}
 
@@ -361,8 +397,7 @@ public class NewPythonVisitor extends ASTVisitor {
 
 			for (int i = 0; i < md.getExpressionCount() - 1; i++) {
 				if (i < md.getExpressionCount() - 2 && md.getExpression(i + 1) instanceof CallHolder) {
-					visit(md.getExpression(i), (CallHolder) md.getExpression(i + 1));
-					i++;
+					i=visitForMethodCall(md,i);
 				} else
 					md.getExpression(i).traverse(this);
 				b.addExpressions(expressions.pop());
@@ -386,7 +421,7 @@ public class NewPythonVisitor extends ASTVisitor {
 
 			for (int i = 0; i < md.getExpressionCount() - 1; i++) {
 				if (i < md.getExpressionCount() - 1 && md.getExpression(i + 1) instanceof CallHolder) {
-					visit(md.getExpression(i), (CallHolder) md.getExpression(i + 1));
+					i=visitForMethodCall(md,i);
 					i++;
 				} else
 					md.getExpression(i).traverse(this);
@@ -563,7 +598,7 @@ public class NewPythonVisitor extends ASTVisitor {
 				ex.setChange(status);
 		}
 
-		expressions.push(ex.build());
+		//expressions.push(ex.build());
 		return true;
 	}
 
@@ -579,7 +614,7 @@ public class NewPythonVisitor extends ASTVisitor {
 				ex.setChange(status);
 		}
 
-		expressions.push(ex.build());
+		//expressions.push(ex.build());
 		return true;
 	}
 
@@ -595,7 +630,7 @@ public class NewPythonVisitor extends ASTVisitor {
 				ex.setChange(status);
 		}
 
-		expressions.push(ex.build());
+		//expressions.push(ex.build());
 		return true;
 	}
 
@@ -607,9 +642,9 @@ public class NewPythonVisitor extends ASTVisitor {
 				if (enableDiff) {
 					ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
 					if (status != ChangeKind.UNCHANGED && status != null) {
-						((ASTNode) ob).traverse(this);
+						//((ASTNode) ob).traverse(this);
 
-						addStatementExpression();
+						//addStatementExpression();
 					}
 				}
 
@@ -649,20 +684,20 @@ public class NewPythonVisitor extends ASTVisitor {
 							org.eclipse.dltk.ast.expressions.Expression exp = (org.eclipse.dltk.ast.expressions.Expression) i
 									.next();
 
-							exp.traverse(this);
+							//exp.traverse(this);
 
-							ex.addExpressions(expressions.pop());
+							//ex.addExpressions(expressions.pop());
 
 						}
 					}
 				} else if (fImportExpressions != null && fImportExpressions instanceof PythonAllImportExpression) {
-					fImportExpressions.traverse(this);
-					ex.addExpressions(expressions.pop());
+					//fImportExpressions.traverse(this);
+					//ex.addExpressions(expressions.pop());
 				}
 
-				expressions.push(ex.build());
+				//expressions.push(ex.build());
 
-				addStatementExpression();
+				//addStatementExpression();
 
 			}
 		}

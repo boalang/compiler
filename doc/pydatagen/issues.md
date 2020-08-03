@@ -22,6 +22,16 @@
 
 ## High Priority
 
+#### [Resolved]
+def fun11(a):
+    def fun22(b):
+        print(b)
+    if 2==3:
+        a=4
+    return fun22
+
+fun11(12)(7) ## call like not supported now
+
 #### method's default parameter value missing in boa ast [Resolved]
 def create_model(input_shape, anchors_stride_base, num_classes, load_pretrained=True, freeze_body=2,
             weights_path='model_data/yolo_weights.h5'):

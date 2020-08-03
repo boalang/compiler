@@ -28,7 +28,9 @@ import boa.graphs.slicers.PDGSlicer;
 import boa.graphs.trees.PDTree;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
+import boa.types.Ast.Statement.StatementKind;
 import boa.types.Ast.Method;
+import boa.types.Ast.Namespace;
 import boa.types.Ast.Variable;
 import boa.types.Control.Node;
 import boa.runtime.BoaAbstractTraversal;
@@ -46,6 +48,22 @@ public class BoaGraphIntrinsics {
 	@FunctionSpec(name = "getcfg", returnType = "CFG", formalParameters = { "Method" })
 	public static CFG getcfg(final Method method) {
 		return new CFG(method).get();
+	}
+	
+	@FunctionSpec(name = "getcfg", returnType = "CFG", formalParameters = { "Namespace" })
+	public static CFG getcfg(final Namespace ns) {
+		Method.Builder b = Method.newBuilder();
+		b.setName(ns.getName());
+		for (int i=0; i<ns.getStatementsCount(); i++)
+		{
+//			if(ns.getStatements(i).getKind()==StatementKind.EXPRESSION)
+//			{
+//				if(ns.getStatements(i).getE==StatementKind.EXPRESSION)
+//			}
+			b.addStatements(ns.getStatements(i));
+		}
+		
+		return new CFG(b.build(), true).get();
 	}
 
 	@FunctionSpec(name = "getpdtree", returnType = "PDTree", formalParameters = { "Method" })
