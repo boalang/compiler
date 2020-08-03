@@ -33,6 +33,8 @@ import weka.core.Instance;
 import weka.core.Instances;
 
 public class BoaMLIntrinsics {
+	
+	public static final Configuration conf = BoaAstIntrinsics.context.getConfiguration();
 
 	/**
 	 * Given the model URL, deserialize the model and return Model type
@@ -42,58 +44,23 @@ public class BoaMLIntrinsics {
 	 */
 	@FunctionSpec(name = "load", returnType = "model", formalParameters = { "int", "model" })
 	public static BoaModel load(final long jobId, BoaModel m, final String identifier, final String type,
-			final Object o) throws Exception {
+			final Object o) {
 
-		// single model
-		Object object = null;
-		FSDataInputStream in = null;
-		ObjectInputStream dataIn = null;
-		ByteArrayOutputStream bo = null;
-		ByteArrayInputStream bin = null;
-		try {
-			final Configuration conf = BoaAstIntrinsics.context.getConfiguration();
-			final FileSystem fs;
-			final Path p;
+		String output = DefaultProperties.localOutput != null
+				? new Path(DefaultProperties.localOutput).toString() + "/../"
+				: conf.get("fs.default.name", "hdfs://boa-njt/");
 
-			String output = DefaultProperties.localOutput != null
-					? new Path(DefaultProperties.localOutput).toString() + "/../"
-					: conf.get("fs.default.name", "hdfs://boa-njt/");
+		Path modelDirPath = new Path(output, new Path("model/job_" + jobId));
+		final Path p = new Path(modelDirPath, new Path(identifier + ".model"));
 
-			Path modelDirPath = new Path(output, new Path("model/job_" + jobId));
-			p = new Path(modelDirPath, new Path(identifier + ".model"));
-
-			// deserialize the model from the path
-			fs = FileSystem.get(conf);
-
-			// check ensemble
+		try (FileSystem fs = FileSystem.get(conf)) {
 			if (!fs.exists(p))
 				return ensembleModel(conf, fs, modelDirPath, identifier, type, o);
-
-			in = fs.open(p);
-			final byte[] b = new byte[(int) fs.getFileStatus(p).getLen() + 1];
-			int c = 0;
-			bo = new ByteArrayOutputStream();
-			while ((c = in.read(b)) != -1)
-				bo.write(b, 0, c);
-			bin = new ByteArrayInputStream(bo.toByteArray());
-			object = new ObjectInputStream(bin).readObject();
-			
-			fs.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (in != null)
-					in.close();
-				if (dataIn != null)
-					dataIn.close();
-				if (bo != null)
-					bo.close();
-			} catch (final Exception e) {
-				e.printStackTrace();
-			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
+
+		Object object = deserialize(p);
 
 		if (object instanceof Word2Vec) {
 			Word2Vec word2Vec = (Word2Vec) object;
@@ -187,6 +154,38 @@ public class BoaMLIntrinsics {
 		// TODO PrincipalComponents
 		// TODO LSA
 		return m;
+	}
+
+	public static Object deserialize(Path p) {
+		Object object = null;
+		FSDataInputStream in = null;
+		ObjectInputStream dataIn = null;
+		ByteArrayOutputStream bo = null;
+		ByteArrayInputStream bin = null;
+		try (FileSystem fs = FileSystem.get(conf)) {
+			in = fs.open(p);
+			final byte[] b = new byte[(int) fs.getFileStatus(p).getLen() + 1];
+			int c = 0;
+			bo = new ByteArrayOutputStream();
+			while ((c = in.read(b)) != -1)
+				bo.write(b, 0, c);
+			bin = new ByteArrayInputStream(bo.toByteArray());
+			object = new ObjectInputStream(bin).readObject();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (in != null)
+					in.close();
+				if (dataIn != null)
+					dataIn.close();
+				if (bo != null)
+					bo.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return object;
 	}
 
 	private static BoaModel ensembleModel(Configuration conf, FileSystem fs, Path modelDirPath, String identifier,
@@ -382,26 +381,49 @@ public class BoaMLIntrinsics {
 
 	/* ------------------------------- Seq2Vec ------------------------------- */
 
+	// TODO: ensemble
 	@FunctionSpec(name = "sim", returnType = "float", formalParameters = { "Seq2Vec", "string", "string" })
 	public static double sim(final BoaSequence2Vec m, final String w1, final String w2) {
 		return m.getSeq2Vec().similarity(w1, w2);
 	}
 
+	// TODO: ensemble
 	@FunctionSpec(name = "nearest", returnType = "array of string", formalParameters = { "Seq2Vec", "string", "int" })
 	public static String[] nearest(final BoaSequence2Vec m, final String w, final long num) {
 		return m.getSeq2Vec().wordsNearest(w, (int) num).toArray(new String[0]);
 	}
 
+	// TODO: ensemble
 	@FunctionSpec(name = "vector", returnType = "array of float", formalParameters = { "Seq2Vec", "string" })
 	public static double[] vector(final BoaSequence2Vec m, final String w) {
 		return m.getSeq2Vec().getWordVector(w);
 	}
 
 	@FunctionSpec(name = "vector", returnType = "array of float", formalParameters = { "Seq2Vec", "array of string" })
-	public static double[] vector(final BoaSequence2Vec m, final String[] sequence) {
-		return m.getSeq2Vec().getWordVectorsMean(Arrays.asList(sequence)).toDoubleVector();
+	public static double[] vector(final BoaSequence2Vec m, final String[] seq) {
+		
+		if (m.getSeq2Vec() != null)
+			return m.getSeq2Vec().getWordVectorsMean(Arrays.asList(seq)).toDoubleVector();
+		
+		if (m.getFiles().length != 0)
+			return m.vector(seq);
+		
+		return null;
+	}
+	
+	@FunctionSpec(name = "vector", returnType = "array of float", formalParameters = { "Seq2Vec", "queue of string" })
+	public static double[] vector(final BoaSequence2Vec m, final LinkedList<String> seq) {
+		
+		if (m.getSeq2Vec() != null)
+			return m.getSeq2Vec().getWordVectorsMean(seq).toDoubleVector();
+		
+		if (m.getFiles().length != 0)
+			return m.vector(seq);
+		
+		return null;
 	}
 
+	// TODO: ensemble
 	@FunctionSpec(name = "arith", returnType = "array of string", formalParameters = { "Seq2Vec", "string", "int" })
 	public static String[] arith(final BoaSequence2Vec m, final String exp, final long num) {
 		List<String> plus = new LinkedList<String>();
@@ -418,11 +440,5 @@ public class BoaMLIntrinsics {
 		}
 		return m.getSeq2Vec().wordsNearest(plus, minus, (int) num).toArray(new String[0]);
 	}
-	
-	@FunctionSpec(name = "models", returnType = "bool", formalParameters = { "Seq2Vec" })
-	public static boolean models(final BoaSequence2Vec m) {
-		for (FileStatus file : m.getFiles())
-			System.out.println(file.getPath().getName());
-		return true;
-	}
+
 }

@@ -1,0 +1,13 @@
+# ensemble seq2vec train
+p: Project = input;
+s2v: output seq2vec("-M -f 1 -lr 0.025 -ls 150 -b 250 -i 1") of queue of string;
+
+q: queue of string;
+offer(q, "game");
+offer(q, "week");
+
+visit(p, visitor {
+	before r : Revision -> {
+		s2v << q;
+	}
+});

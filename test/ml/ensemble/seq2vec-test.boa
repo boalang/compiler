@@ -1,0 +1,12 @@
+# ensemble seq2vec test
+p: Project = input;
+predict: output collection of string;
+s2v: ensemble of Seq2Vec of array of string;
+s2v = load(0, s2v);
+
+
+q: queue of string;
+offer(q, "game");
+offer(q, "week");
+
+predict << string(vector(s2v, q));

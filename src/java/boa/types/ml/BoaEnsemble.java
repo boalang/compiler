@@ -16,6 +16,8 @@
  */
 package boa.types.ml;
 
+import static boa.functions.BoaMLIntrinsics.deserialize;
+
 import org.apache.hadoop.fs.FileStatus;
 
 import boa.types.BoaType;
@@ -27,6 +29,7 @@ import boa.types.BoaType;
  */
 public class BoaEnsemble extends BoaModel {
 	protected FileStatus[] files;
+	private int index;
 
 	/**
 	 * Default BoaEnsemble Constructor.
@@ -76,4 +79,18 @@ public class BoaEnsemble extends BoaModel {
 	public String toString() {
 		return "ensemble";
 	}
+	
+	public boolean hasNext() {
+		return index < files.length;
+	}
+	
+	public Object next() {
+		System.out.println(files[index].getPath().getName());
+		return deserialize(files[index++].getPath());
+	}
+	
+	public void resetIndex() {
+		index = 0;
+	}
+
 }

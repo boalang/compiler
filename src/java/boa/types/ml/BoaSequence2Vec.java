@@ -16,9 +16,15 @@
  */
 package boa.types.ml;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.hadoop.fs.FileStatus;
+import org.deeplearning4j.models.embeddings.reader.impl.BasicModelUtils;
 import org.deeplearning4j.models.sequencevectors.SequenceVectors;
 import org.deeplearning4j.models.word2vec.VocabWord;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 
 import boa.types.BoaType;
 
@@ -100,5 +106,57 @@ public class BoaSequence2Vec extends BoaEnsemble {
 
 	public SequenceVectors<VocabWord> getSeq2Vec() {
 		return seq2vec;
+	}
+
+	public double[] vector(final String[] seq) {
+		return vector(Arrays.asList(seq));
+	}
+
+	public double[] vector(final List<String> seq) {
+		if (seq.size() == 0)
+			return null;
+
+		// use word arrays to store vectors for each word from different embeddings
+		INDArray[] wordArrays = new INDArray[seq.size()];
+
+		int layerSize = 0;
+
+		// iterate each model
+		resetIndex();
+		while (hasNext()) {
+			SequenceVectors<VocabWord> m = nextModel();
+			if (m == null)
+				continue;
+			layerSize = m.getLayerSize();
+			int row = 0;
+			for (String word : seq) {
+				INDArray arr = m.getWordVectorMatrix(word);
+
+				// if current embedding doesn't contain the word, use zeros
+				if (arr == null)
+					arr = Nd4j.zeros(1, layerSize);
+				wordArrays[row] = wordArrays[row] == null ? arr : Nd4j.vstack(wordArrays[row], arr);
+				row++;
+			}
+		}
+
+		INDArray seqArr = wordArrays[0].mean(0).reshape(1, layerSize);
+
+		for (int i = 1; i < wordArrays.length; i++) {
+			seqArr = Nd4j.vstack(seqArr, wordArrays[i].mean(0).reshape(1, layerSize));
+		}
+
+		return seqArr.mean(0).dup().data().asDouble();
+	}
+
+	@SuppressWarnings("unchecked")
+	public SequenceVectors<VocabWord> nextModel() {
+		Object o = next();
+		if (o instanceof SequenceVectors) {
+			SequenceVectors<VocabWord> s2v = (SequenceVectors<VocabWord>) o;
+			s2v.setModelUtils(new BasicModelUtils<>());
+			return s2v;
+		}
+		return null;
 	}
 }

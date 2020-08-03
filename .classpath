@@ -105,7 +105,11 @@
 	<classpathentry kind="lib" path="lib/dl4j/deeplearning4j-tsne-1.0.0-beta7.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/flatbuffers-java-1.10.0.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/commons-lang-2.6.jar"/>
-	<classpathentry kind="lib" path="lib/dl4j/nd4j/nd4j-api-1.0.0-beta7.jar"/>
+	<classpathentry kind="lib" path="lib/dl4j/nd4j/nd4j-api-1.0.0-beta7.jar" sourcepath="lib/dl4j/nd4j/nd4j-api-1.0.0-beta7-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/Users/hyj/boa-workspace/compiler/lib/dl4j/nd4j/nd4j-api-1.0.0-beta7-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/dl4j/nd4j/nd4j-common-1.0.0-beta7.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/nd4j/nd4j-native-1.0.0-beta7.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/nd4j/nd4j-native-api-1.0.0-beta7.jar"/>
