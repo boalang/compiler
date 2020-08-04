@@ -86,6 +86,9 @@ public class StatementProtoTuple extends BoaProtoTuple {
 		names.put("change", counter++);
 		members.add(new ChangeKindProtoMap());
 		
+		names.put("id", counter++);
+		members.add(new BoaInt());
+		
 	}
 
 	/**

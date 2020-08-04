@@ -120,6 +120,9 @@ public class ExpressionProtoTuple extends BoaProtoTuple {
 		names.put("change", counter++);
 		members.add(new ChangeKindProtoMap());
 		
+		names.put("id", counter++);
+		members.add(new BoaInt());
+		
 	}
 
 	/**

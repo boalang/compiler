@@ -184,6 +184,7 @@ message Variable {
 	optional bool dollar_sign = 12;
 	repeated Expression expressions = 13;
 	optional ChangeKind change = 14;
+	optional int32 id = 15;
 }
 
 /** A single statement */
@@ -259,6 +260,8 @@ message Statement {
 	repeated string names = 16;
 	
 	optional ChangeKind change = 17;
+	
+	optional int32 id=18;
 }
 
 /** A single expression */
@@ -423,6 +426,7 @@ message Expression {
 	optional bool has_from = 28;
 	optional Method trait = 29;
 	optional ChangeKind change = 30;
+	optional int32 id=31;
 }
 
 /** A single modifier */
