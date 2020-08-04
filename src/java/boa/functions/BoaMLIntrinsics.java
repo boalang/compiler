@@ -53,7 +53,8 @@ public class BoaMLIntrinsics {
 		Path modelDirPath = new Path(output, new Path("model/job_" + jobId));
 		final Path p = new Path(modelDirPath, new Path(identifier + ".model"));
 
-		try (FileSystem fs = FileSystem.get(conf)) {
+		try {
+			final FileSystem fs = FileSystem.get(conf);
 			if (!fs.exists(p))
 				return ensembleModel(conf, fs, modelDirPath, identifier, type, o);
 		} catch (IOException e1) {
@@ -162,7 +163,8 @@ public class BoaMLIntrinsics {
 		ObjectInputStream dataIn = null;
 		ByteArrayOutputStream bo = null;
 		ByteArrayInputStream bin = null;
-		try (FileSystem fs = FileSystem.get(conf)) {
+		try {
+			final FileSystem fs = FileSystem.get(conf);
 			in = fs.open(p);
 			final byte[] b = new byte[(int) fs.getFileStatus(p).getLen() + 1];
 			int c = 0;
@@ -198,9 +200,14 @@ public class BoaMLIntrinsics {
 				return name.endsWith(".model") && name.startsWith(prefix);
 			}
 		});
+		
+		Path[] paths = new Path[files.length];
+		for (int i = 0; i < paths.length; i++)
+			paths[i] = files[i].getPath();
+		
 		if (files.length != 0) {
 			if (type.contains("BoaSequence2Vec")) {
-				return new BoaSequence2Vec(files, o);
+				return new BoaSequence2Vec(paths, o);
 			}
 		}
 		return null;
@@ -405,7 +412,7 @@ public class BoaMLIntrinsics {
 		if (m.getSeq2Vec() != null)
 			return m.getSeq2Vec().getWordVectorsMean(Arrays.asList(seq)).toDoubleVector();
 		
-		if (m.getFiles().length != 0)
+		if (m.getPaths().length != 0)
 			return m.vector(seq);
 		
 		return null;
@@ -417,7 +424,7 @@ public class BoaMLIntrinsics {
 		if (m.getSeq2Vec() != null)
 			return m.getSeq2Vec().getWordVectorsMean(seq).toDoubleVector();
 		
-		if (m.getFiles().length != 0)
+		if (m.getPaths().length != 0)
 			return m.vector(seq);
 		
 		return null;

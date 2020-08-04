@@ -1,4 +1,5 @@
 /*
+
  * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
@@ -18,7 +19,7 @@ package boa.types.ml;
 
 import static boa.functions.BoaMLIntrinsics.deserialize;
 
-import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.Path;
 
 import boa.types.BoaType;
 
@@ -28,7 +29,7 @@ import boa.types.BoaType;
  * @author hyj
  */
 public class BoaEnsemble extends BoaModel {
-	protected FileStatus[] files;
+	protected Path[] paths;
 	private int index;
 
 	/**
@@ -48,8 +49,8 @@ public class BoaEnsemble extends BoaModel {
 		this.t = t;
 	}
 	
-	public FileStatus[] getFiles() {
-		return files;
+	public Path[] getPaths() {
+		return paths;
 	}
 
 	/** {@inheritDoc} */
@@ -81,12 +82,13 @@ public class BoaEnsemble extends BoaModel {
 	}
 	
 	public boolean hasNext() {
-		return index < files.length;
+		return index < paths.length;
 	}
 	
 	public Object next() {
-		System.out.println(files[index].getPath().getName());
-		return deserialize(files[index++].getPath());
+		Path p = paths[index++];
+		Object o = deserialize(p);
+		return o;
 	}
 	
 	public void resetIndex() {

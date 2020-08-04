@@ -19,7 +19,7 @@ package boa.types.ml;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.Path;
 import org.deeplearning4j.models.embeddings.reader.impl.BasicModelUtils;
 import org.deeplearning4j.models.sequencevectors.SequenceVectors;
 import org.deeplearning4j.models.word2vec.VocabWord;
@@ -66,8 +66,8 @@ public class BoaSequence2Vec extends BoaEnsemble {
 		this.o = o;
 	}
 
-	public BoaSequence2Vec(FileStatus[] files, Object o) {
-		this.files = files;
+	public BoaSequence2Vec(Path[] paths, Object o) {
+		this.paths = paths;
 		this.o = o;
 	}
 
@@ -130,8 +130,7 @@ public class BoaSequence2Vec extends BoaEnsemble {
 			layerSize = m.getLayerSize();
 			int row = 0;
 			for (String word : seq) {
-				INDArray arr = m.getWordVectorMatrix(word);
-
+				INDArray arr = m.getWordVectorMatrix(word);				
 				// if current embedding doesn't contain the word, use zeros
 				if (arr == null)
 					arr = Nd4j.zeros(1, layerSize);
