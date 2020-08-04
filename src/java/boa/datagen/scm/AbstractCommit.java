@@ -228,14 +228,16 @@ public abstract class AbstractCommit {
 
 		return revision.build();
 	}
-
-//	String[] badpaths = { "spacy/lang/ca/lemmatizer.py", "spacy/lang/da/lemmatizer.py", "spacy/lang/de/lemmatizer.py",
-//			"spacy/lang/es/lemmatizer.py", "spacy/lang/fr/lemmatizer/lookup.py", "spacy/lang/hu/lemmatizer.py",
-//			"spacy/lang/id/lemmatizer.py", "spacy/lang/it/lemmatizer.py", "spacy/lang/pt/lemmatizer.py",
-//			"spacy/lang/ro/lemmatizer.py", "spacy/lang/sv/lemmatizer/lookup.py", "spacy/lang/tr/lemmatizer.py",
-//			"spacy/lang/ur/lemmatizer.py" };
-//	Set<String> badp = new HashSet<String>(Arrays.asList(badpaths));
+	
+	//	String[] badpaths = { "spacy/lang/ca/lemmatizer.py", "spacy/lang/da/lemmatizer.py", "spacy/lang/de/lemmatizer.py",
+	//	"spacy/lang/es/lemmatizer.py", "spacy/lang/fr/lemmatizer/lookup.py", "spacy/lang/hu/lemmatizer.py",
+	//	"spacy/lang/id/lemmatizer.py", "spacy/lang/it/lemmatizer.py", "spacy/lang/pt/lemmatizer.py",
+	//	"spacy/lang/ro/lemmatizer.py", "spacy/lang/sv/lemmatizer/lookup.py", "spacy/lang/tr/lemmatizer.py",
+	//	"spacy/lang/ur/lemmatizer.py" };
+	//Set<String> badp = new HashSet<String>(Arrays.asList(badpaths));
 	String largeFiles = "spacy/lang/";
+	String[] excludeProjects = {"ryfeus/lambda-packs", "sorenlind/lemmy"};
+	Set<String> badProjects = new HashSet<String>(Arrays.asList(excludeProjects));
 	boolean include_notebooks = false;
 
 	Builder processPythonChangeFile(final ChangedFile.Builder fb) {
