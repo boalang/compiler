@@ -253,13 +253,15 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.BINARY);
 		////// Python AST generation will be handled here ///////
 		else if (lowerPath.endsWith(".py")) {
-			if (lowerPath.contains(largeFiles)) {
-				fb.setKind(FileKind.SOURCE_PY_ERROR);
-			} else {
-				final String content = getFileContents(path);
-				fb.setKind(FileKind.SOURCE_PY_ERROR);
-				System.out.println(projectName + ": " + path);
-				parsePythonFile(path, fb, content, false);
+			if (!badProjects.contains(projectName)) {
+				if (lowerPath.contains(largeFiles)) {
+					fb.setKind(FileKind.SOURCE_PY_ERROR);
+				} else {
+					final String content = getFileContents(path);
+					fb.setKind(FileKind.SOURCE_PY_ERROR);
+					System.out.println(projectName + ": " + path);
+					parsePythonFile(path, fb, content, false);
+				}
 			}
 		}
 		else if (lowerPath.endsWith(".ipynb")) {
