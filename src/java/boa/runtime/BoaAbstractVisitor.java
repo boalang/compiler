@@ -103,6 +103,9 @@ public abstract class BoaAbstractVisitor {
 	protected boolean preVisit(final Person node) throws Exception {
 		return defaultPreVisit();
 	}
+	protected boolean preVisit(final Cell node) throws Exception {
+		return defaultPreVisit();
+	}
 
 	/**
 	 * Provides a default action for post-visiting nodes.
@@ -153,6 +156,9 @@ public abstract class BoaAbstractVisitor {
 		defaultPostVisit();
 	}
 	protected void postVisit(final Person node) throws Exception {
+		defaultPostVisit();
+	}
+	protected void postVisit(final Cell node) throws Exception {
 		defaultPostVisit();
 	}
 
@@ -214,6 +220,11 @@ public abstract class BoaAbstractVisitor {
 			final int namespacesSize = namespacesList.size();
 			for (int i = 0; i < namespacesSize; i++)
 				visit(namespacesList.get(i));
+			
+			final List<Cell> cellsList = node.getCellsList();
+			final int cellsSize = cellsList.size();
+			for (int i = 0; i < cellsSize; i++)
+				visit(cellsList.get(i));
 
 			postVisit(node);
 		}
@@ -402,6 +413,16 @@ public abstract class BoaAbstractVisitor {
 	}
 	public final void visit(final Person node) throws Exception {
 		if (preVisit(node)) {
+			postVisit(node);
+		}
+	}
+	public final void visit(final Cell node) throws Exception {
+		if (preVisit(node)) {
+			final List<Namespace> namespacesList = node.getNamespacesList();
+			final int namespacesSize = namespacesList.size();
+			for (int i = 0; i < namespacesSize; i++)
+				visit(namespacesList.get(i));
+
 			postVisit(node);
 		}
 	}

@@ -21,54 +21,55 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import boa.types.BoaBool;
 import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.CellKindProtoMap;
 import boa.types.proto.enums.ChangeKindProtoMap;
+import boa.types.proto.enums.StatementKindProtoMap;
 
 /**
- * A {@link ASTRootProtoTuple}.
+ * A {@link CellProtoTuple}.
  * 
- * @author rdyer
+ * @author sumon
  */
-public class ASTRootProtoTuple extends BoaProtoTuple {
+public class CellProtoTuple extends BoaProtoTuple {
 	private final static List<BoaType> members = new ArrayList<BoaType>();
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
 		int counter = 0;
-
+		
+		names.put("cell_kind", counter++);
+		members.add(new CellKindProtoMap());
+		
+		names.put("cell_id", counter++);
+		members.add(new BoaInt());
+		
+		names.put("execution_count", counter++);
+		members.add(new BoaInt());
+		
 		names.put("namespaces", counter++);
 		members.add(new BoaProtoList(new NamespaceProtoTuple()));
 		
-		names.put("names", counter++);
-		members.add(new BoaProtoList(new BoaString()));
+		names.put("parse_error", counter++);
+		members.add(new BoaBool());
 		
-		names.put("key", counter++);
-		members.add(new BoaInt());
-		
-		names.put("document", counter++);
-		members.add(new DocumentProtoTuple());
-		
-		names.put("change", counter++);
-		members.add(new ChangeKindProtoMap());
-		
-		names.put("cells", counter++);
-		members.add(new BoaProtoList(new CellProtoTuple()));
 	}
 
 	/**
-	 * Construct a {@link ASTRootProtoTuple}.
+	 * Construct a {@link NamespaceProtoTuple2}.
 	 */
-	public ASTRootProtoTuple() {
+	public CellProtoTuple() {
 		super(members, names);
 	}
 
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.Ast.ASTRoot";
+		return "boa.types.Ast.Cell";
 	}
 }

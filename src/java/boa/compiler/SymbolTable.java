@@ -99,6 +99,8 @@ public class SymbolTable {
 		new StatementProtoTuple(),
 		new TypeProtoTuple(),
 		new VariableProtoTuple(),
+		new CellProtoTuple(),
+
 	};
 	private final static BoaProtoMap[] dslMapTypes = {
 		new NodeTypeProtoMap(),
@@ -119,6 +121,7 @@ public class SymbolTable {
 		new TraversalDirectionProtoMap(),
 		new TypeKindProtoMap(),
 		new VisibilityProtoMap(),
+		new CellKindProtoMap()
 	};
 
 	static {
