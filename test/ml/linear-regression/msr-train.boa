@@ -1,0 +1,31 @@
+# linear regression - train
+# input X: no. of classes, no. of methods 
+# predict Y: no. of lines of code 
+p: Project = input;
+linear: output linearregression("-s 75") of { int, int, int };
+
+totalClass  := 0;
+totalMethod := 0;
+totalLOC    := 0;
+
+visit(p, visitor {
+	before cr : CodeRepository -> {
+		snapshot := getsnapshot(cr);
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+
+	before d : Declaration -> {
+		if (d.kind == TypeKind.CLASS)
+			totalClass++;
+		totalMethod = totalMethod + len(d.methods);
+	}
+
+	before s : Statement -> {
+		if (s.kind != StatementKind.BLOCK)
+			totalLOC++;
+	}
+});
+
+linear << { totalClass, totalMethod, totalLOC };

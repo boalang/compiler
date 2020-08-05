@@ -1,0 +1,32 @@
+# linear regression - test
+p: Project = input;
+o: output collection of string;
+
+linear: model of LinearRegression of { int, int, int };
+linear = load(88468, linear);
+
+totalClass  := 0;
+totalMethod := 0;
+totalLOC    := 0;
+
+visit(p, visitor {
+	before cr : CodeRepository -> {
+		snapshot := getsnapshot(cr);
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+
+	before d : Declaration -> {
+		if (d.kind == TypeKind.CLASS)
+			totalClass++;
+		totalMethod = totalMethod + len(d.methods);
+	}
+
+	before s : Statement -> {
+		if (s.kind != StatementKind.BLOCK)
+			totalLOC++;
+	}
+});
+
+o << "Predict: " + string(classify(linear, { totalClass, totalMethod })) + "Actual: " + string(totalLOC);
