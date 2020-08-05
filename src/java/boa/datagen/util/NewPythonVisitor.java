@@ -1129,6 +1129,8 @@ public class NewPythonVisitor extends ASTVisitor {
 	public boolean visit(EmptyExpression md) throws Exception {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.EMPTY);
+		if(enableDiff)
+			b.setId(this.id++);
 
 		expressions.push(b.build());
 
@@ -2020,7 +2022,10 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
-
+		
+		if(enableDiff)
+			b.setId(this.id++);
+		
 		b.setKind(boa.types.Ast.Statement.StatementKind.EMPTY);
 		list.add(b.build());
 
