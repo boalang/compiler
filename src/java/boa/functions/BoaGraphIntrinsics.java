@@ -26,6 +26,7 @@ import boa.graphs.pdg.PDG;
 import boa.graphs.slicers.CFGSlicer;
 import boa.graphs.slicers.PDGSlicer;
 import boa.graphs.trees.PDTree;
+import boa.types.Ast.Declaration;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Statement.StatementKind;
@@ -60,6 +61,17 @@ public class BoaGraphIntrinsics {
 //			{
 //				if(ns.getStatements(i).getE==StatementKind.EXPRESSION)
 //			}
+			b.addStatements(ns.getStatements(i));
+		}
+		
+		return new CFG(b.build(), true).get();
+	}
+	@FunctionSpec(name = "getcfg", returnType = "CFG", formalParameters = { "Declaration" })
+	public static CFG getcfg(final Declaration ns) {
+		Method.Builder b = Method.newBuilder();
+		b.setName(ns.getName());
+		for (int i=0; i<ns.getStatementsCount(); i++)
+		{
 			b.addStatements(ns.getStatements(i));
 		}
 		
