@@ -1,0 +1,46 @@
+# logistic regression - test
+p: Project = input;
+o: output collection of string;
+
+type T = enum {y = "y", n = "n"};
+
+lr: model of LogisticRegression of {int, T, T};
+lr = load(88470, lr);
+
+words: array of string;
+
+size			:= getrevisionscount(p.code_repositories[0]);
+count			:= 8; 
+first_half		:= 0;
+second_half		:= 0;
+avg_first_half	:= 0;
+avg_second_half	:= 0;
+
+if (size != 0) {
+	visit(p, visitor {
+		before cr : CodeRepository -> {
+			for (i := 0; i < size; i++) {
+				r := getrevision(cr, i);
+				words = splitall(r.log, " ");
+				if(size / 2 < i)
+					first_half = first_half + len(words);
+				else
+					second_half = second_half + len(words);
+			}
+
+			avg_first_half = first_half / size * 2;
+			avg_second_half = second_half / size * 2;
+			
+			x1 := size / 2;
+			x2: T = T.n;
+			y := "n";
+			if (avg_first_half >= count)
+				x2 = T.y;
+			if (avg_second_half >= count)
+				y = "y";
+
+			o << "Predict: " + string(classify(lr, { x1, x2 })) + " Actual: " + y;
+			stop;
+		}
+	});	
+}

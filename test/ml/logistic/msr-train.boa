@@ -1,0 +1,46 @@
+# logistic regression - train
+# z: word count of the revision log
+# Input X: no. of first half revisions, no. of avg. word count for first half of the revisions >= z
+# Input y: no. of avg. word count for second half of the revisions >= z
+p: Project = input;
+type T = enum {y = "y", n = "n"};
+lr: output logistic("-s 75") of { int, T, T };
+
+words: array of string;
+
+size			:= getrevisionscount(p.code_repositories[0]);
+count			:= 8; 
+first_half		:= 0;
+second_half		:= 0;
+avg_first_half	:= 0;
+avg_second_half	:= 0;
+
+if (size != 0) {
+	visit(p, visitor {
+		before cr : CodeRepository -> {
+
+			for (i := 0; i < size; i++) {
+				r := getrevision(cr, i);
+				words = splitall(r.log, " ");
+				if(size / 2 < i)
+					first_half = first_half + len(words);
+				else
+					second_half = second_half + len(words);
+			}
+
+			avg_first_half = first_half / size * 2;
+			avg_second_half = second_half / size * 2;
+			
+			x1: int = size / 2;
+			x2: T = T.n;
+			y: T = T.n;
+			if (avg_first_half >= count)
+				x2 = T.y;
+			if (avg_second_half >= count)
+				y = T.y;
+
+			lr << { x1, x2, y };
+			stop;
+		}
+	});	
+}
