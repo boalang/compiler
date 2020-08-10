@@ -53,6 +53,7 @@ import org.eclipse.dltk.python.parser.ast.expressions.PythonImportExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonLambdaExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonListForExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonSetExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTestListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTupleExpression;
@@ -225,7 +226,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		} else if (md instanceof PythonListExpression) {
 			visit((PythonListExpression) md);
 			opFound = true;
-		} else if (md instanceof SimpleReference) {
+		} else if (md instanceof PythonSetExpression) {
+			visit((PythonSetExpression) md);
+			opFound = true;
+		}  
+		else if (md instanceof SimpleReference) {
 			visit((SimpleReference) md);
 			opFound = true;
 		} else if (md instanceof ReturnStatement) {
@@ -559,6 +564,30 @@ public class NewPythonVisitor extends ASTVisitor {
 		expressions.push(b.build());
 		return true;
 	}
+	public boolean visit(PythonSetExpression md) throws Exception {
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.SET);
+
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+
+		if (md.getExpressions() != null) {
+			for (Object ob : md.getExpressions()) {
+				org.eclipse.dltk.ast.expressions.Expression ex = (org.eclipse.dltk.ast.expressions.Expression) ob;
+				ex.traverse(this);
+				b.addExpressions(expressions.pop());
+			}
+		}
+
+		expressions.push(b.build());
+		return true;
+	}
+
 
 	public boolean visit(PythonTupleExpression md) throws Exception {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
@@ -911,7 +940,10 @@ public class NewPythonVisitor extends ASTVisitor {
 
 	void dealExpression(ASTNode ex) throws Exception {
 		if (ex != null) {
-			if (ex instanceof ExpressionList)
+			if(ex instanceof PythonSetExpression || ex instanceof PythonListExpression 
+					|| ex instanceof PythonTupleExpression || ex instanceof PythonListForExpression)
+				ex.traverse(this);
+			else if (ex instanceof ExpressionList)
 				visit((ExpressionList) ex);
 			else
 				ex.traverse(this);
