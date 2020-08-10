@@ -42,14 +42,12 @@ import com.steadystate.css.dom.CSSStyleSheetImpl;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Cell;
 import boa.types.Ast.Cell.CellKind;
-import boa.types.Ast.Namespace;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Diff.ChangedFile.Builder;
 import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
-import javafx.scene.control.CellBuilder;
 import boa.datagen.DefaultProperties;
 import boa.datagen.dependencies.PomFile;
 import boa.datagen.util.CssVisitor;
@@ -65,19 +63,12 @@ import boa.datagen.util.Properties;
 import boa.datagen.util.XMLVisitor;
 import boa.datagen.util.JavaErrorCheckVisitor;
 
-import org.eclipse.dltk.python.core.PythonNature;
 import org.eclipse.dltk.python.internal.core.parser.PythonSourceParser;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
-import org.eclipse.dltk.ast.parser.IModuleDeclaration;
-import org.eclipse.dltk.ast.parser.ISourceParser;
-import org.eclipse.dltk.ast.parser.SourceParserManager;
-import org.eclipse.dltk.compiler.IElementRequestor;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
-import org.eclipse.dltk.compiler.problem.AbstractProblemReporter;
 import org.eclipse.dltk.compiler.problem.IProblem;
 
 import com.google.gson.JsonArray;
@@ -608,8 +599,7 @@ public abstract class AbstractCommit {
 		String fullPath = this.projectName + "/" + path;
 
 //		if(this.lastRevision)
-//			System.out.println("commit " + this.id);
-		
+//			System.out.println("commit " + this.id);		
 		PythonSourceParser parser = new PythonSourceParser();
 		IModuleSource input = new ModuleSource(content);
 
@@ -617,7 +607,6 @@ public abstract class AbstractCommit {
 			@Override
 			public void reportProblem(IProblem arg0) {
 				pythonParsingError = true;
-
 			}
 		};
 
@@ -645,14 +634,11 @@ public abstract class AbstractCommit {
 					
 					tm.clear();
 					tm=null;
-//					System.gc();
 				}
 	
 				if (!this.lastRevision)
 					previousAst.put(fullPath, module);
-			}
-			
-			
+			}		
 
 		} catch (Exception e) {
 			if (debug) {
@@ -700,6 +686,12 @@ public abstract class AbstractCommit {
 				e.printStackTrace();
 			}
 
+		}
+		if(debug) {
+			if(pythonParsingError)
+				writeErrorLog(projectName, path, this.id);
+			else
+				writeSuccessLog(projectName, path, this.id);
 		}
 		return !pythonParsingError;
 	}
@@ -886,6 +878,56 @@ public abstract class AbstractCommit {
 				BufferedWriter bw = new BufferedWriter(fw);
 				PrintWriter pw = new PrintWriter(bw);
 				pw.println("Project" + ", " + "File" + ", " + "Error");
+				pw.println(project + ", " + file + ", " + error);
+				pw.close();
+			} else {
+				FileWriter fw = new FileWriter(f, true);
+				BufferedWriter bw = new BufferedWriter(fw);
+				PrintWriter pw = new PrintWriter(bw);
+				pw.println(project + ", " + file + ", " + error);
+				pw.close();
+			}
+		} catch (IOException ioe) {
+			System.out.println("Exception occurred:");
+			ioe.printStackTrace();
+		}
+	}
+	
+	private void writeErrorLog(String project, String file, String error) {
+		String file_name = "parse-error-log.csv";
+		try {
+			File f = new File(file_name);
+			if (!f.exists()) {
+				f.createNewFile();
+				FileWriter fw = new FileWriter(f, true);
+				BufferedWriter bw = new BufferedWriter(fw);
+				PrintWriter pw = new PrintWriter(bw);
+				pw.println("Project" + ", " + "File" + ", " + "Commit");
+				pw.println(project + ", " + file + ", " + error);
+				pw.close();
+			} else {
+				FileWriter fw = new FileWriter(f, true);
+				BufferedWriter bw = new BufferedWriter(fw);
+				PrintWriter pw = new PrintWriter(bw);
+				pw.println(project + ", " + file + ", " + error);
+				pw.close();
+			}
+		} catch (IOException ioe) {
+			System.out.println("Exception occurred:");
+			ioe.printStackTrace();
+		}
+	}
+	
+	private void writeSuccessLog(String project, String file, String error) {
+		String file_name = "parse-success-log.csv";
+		try {
+			File f = new File(file_name);
+			if (!f.exists()) {
+				f.createNewFile();
+				FileWriter fw = new FileWriter(f, true);
+				BufferedWriter bw = new BufferedWriter(fw);
+				PrintWriter pw = new PrintWriter(bw);
+				pw.println("Project" + ", " + "File" + ", " + "Commit");
 				pw.println(project + ", " + file + ", " + error);
 				pw.close();
 			} else {
