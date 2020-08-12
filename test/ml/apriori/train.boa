@@ -1,0 +1,56 @@
+# -------------- association - apriori -------------- 
+# Application: co-changed file mining
+# --------------------------------------------------- 
+# Input: Pairs of co-changed java files in a project.
+# Output: Top 10 rules.
+p: Project = input;
+ap: output apriori("-MI 10 -C 0.3 -A file1:file2") of array of string;
+
+pair := function(e1: string, e2: string) : array of string {
+	arr: array of string;
+	arr = new(arr, 2, e1);
+	arr[1] = e2;
+	return arr;
+};
+
+revision_filter := function(r: Revision) : bool {
+	# only consider not merged commits
+	if (len(r.parents) == 1)
+		return false;
+	return true;
+};
+
+file_filter := function(cf: ChangedFile, file_set: set of string) : bool {
+	# only consider the modified files
+	if (contains(file_set, cf.name) && cf.change == ChangeKind.MODIFIED)
+		return false;
+	return true;
+};
+
+main := function() {
+	# only consider the java files in the last snapshot
+	file_set: set of string;
+	snapshot := getsnapshot(p.code_repositories[0]);
+	foreach (i: int; isjava(snapshot[i]))
+		add(file_set, snapshot[i].name);
+	
+	# each transaction represents a pair of co-changed java files in a revision
+	visit(p, visitor {
+		before r : Revision -> {
+			if (!revision_filter(r)) {
+				foreach (i: int; !file_filter(r.files[i], file_set)) {
+					file_name1 := r.files[i].name;
+					for (j := i + 1; j < len(r.files); j++) {
+						if (!file_filter(r.files[j], file_set)) {
+							file_name2 := r.files[j].name;
+							ap << pair(file_name1, file_name2);
+						}
+					}
+				}
+			}
+			stop;
+		}
+	});
+};
+
+main();

@@ -122,7 +122,7 @@ public class BoaModel extends BoaType {
 	}
 
 	public enum Kind {
-		CLASSIFIER, CLUSTERER, VECTOR
+		CLASSIFIER, CLUSTERER, VECTOR, ASSOCIATION
 	}
 
 	/** {@inheritDoc} */

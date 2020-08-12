@@ -35,14 +35,11 @@ import weka.clusterers.Clusterer;
 import weka.core.*;
 import weka.filters.Filter;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static boa.functions.BoaUtilIntrinsics.*;
@@ -62,15 +59,13 @@ public abstract class MLAggregator extends Aggregator {
 	protected String[] options;
 	protected boolean flag;
 	protected boolean isClusterer;
-	protected ArrayList<String> nominalAttr;
-	
+
 	public boolean trainMultipleModels;
 	public String taskId;
 	protected int minTrainSize = -1;
 
 	public MLAggregator() {
 		fvAttributes = new ArrayList<Attribute>();
-		nominalAttr = new ArrayList<String>();
 		trainingPerc = 100;
 	}
 
@@ -106,7 +101,7 @@ public abstract class MLAggregator extends Aggregator {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void evaluate(Clusterer clusterer, Instances set) {
 		try {
 			ClusterEvaluation eval = new ClusterEvaluation();
@@ -120,115 +115,6 @@ public abstract class MLAggregator extends Aggregator {
 		}
 	}
 
-	// TODO: this is not fixed
-	public void saveTrainingSet(Object set) {
-		FSDataOutputStream out = null;
-		FileSystem fileSystem = null;
-		Path filePath = null;
-		ObjectOutputStream objectOut = null;
-
-		try {
-			JobContext context = (JobContext) getContext();
-			Configuration conf = context.getConfiguration();
-			int boaJobId = conf.getInt("boa.hadoop.jobid", 0);
-			JobConf job = new JobConf(conf);
-			Path outputPath = FileOutputFormat.getOutputPath(job);
-			fileSystem = outputPath.getFileSystem(context.getConfiguration());
-
-			
-			String output = null;
-			String subpath = "_" + trainingSet.attribute(0).name() + "_";
-			if (DefaultProperties.localOutput != null)
-				output = DefaultProperties.localOutput;
-			else
-				output = conf.get("fs.default.name", "hdfs://boa-njt/");
-			for (int i = 1; i < NumOfAttributes; i++) {
-				// System.out.println(trainingSet.attribute(0).name());
-				subpath += "_" + trainingSet.attribute(i).name() + "_";
-			}
-			fileSystem.mkdirs(new Path(output, new Path("/model" + boaJobId)));
-			filePath = new Path(output,
-					new Path("/model" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + subpath + "data")));
-
-			if (fileSystem.exists(filePath))
-				return;
-
-			out = fileSystem.create(filePath);
-
-			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
-			objectOut = new ObjectOutputStream(byteOutStream);
-			objectOut.writeObject(set);
-			byte[] serializedObject = byteOutStream.toByteArray();
-			out.write(serializedObject);
-
-			collect(filePath.toString());
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (out != null)
-					out.close();
-				if (objectOut != null)
-					objectOut.close();
-			} catch (final Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	
-	public void saveAndUpdateTrainingSet(LinkedList<String> train) {
-		FSDataOutputStream out = null;
-		FileSystem fs = null;
-		Path modelDirPath = null;
-		Path trainDataPath = null;
-		ObjectOutputStream objectOut = null;
-		
-		try {
-			JobContext context = (JobContext) getContext();
-			Configuration conf = context.getConfiguration();
-			int boaJobId = conf.getInt("boa.hadoop.jobid", 0);
-			JobConf job = new JobConf(conf);
-			Path outputPath = FileOutputFormat.getOutputPath(job);
-			fs = outputPath.getFileSystem(context.getConfiguration());
-			
-			String output = DefaultProperties.localOutput != null
-					? new Path(DefaultProperties.localOutput).toString() + "/../"
-					: conf.get("fs.default.name", "hdfs://boa-njt/");
-			
-			modelDirPath = new Path(output, new Path("model/job_" + boaJobId));
-			fs.mkdirs(modelDirPath);
-			trainDataPath = new Path(modelDirPath, new Path(getKey().getName() + ".train"));
-			
-			if (!fs.exists(trainDataPath)) {
-				out = fs.create(trainDataPath);
-			} else {
-				// only works under real hadoop namenode and datanode
-				out = fs.append(trainDataPath);
-			}
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out));
-			for (String line : train) {
-				bw.write(line);
-				bw.newLine();
-			}
-			bw.close();
-			train.clear();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (out != null)
-					out.close();
-				if (objectOut != null)
-					objectOut.close();
-			} catch (final Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
-
 	public void saveModel(Object model) {
 		FSDataOutputStream out = null;
 		FileSystem fs = null;
@@ -237,11 +123,11 @@ public abstract class MLAggregator extends Aggregator {
 		ObjectOutputStream objectOut = null;
 
 		try {
-			// serialize the model and write to the path 
+			// serialize the model and write to the path
 			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
 			objectOut = new ObjectOutputStream(byteOutStream);
 			objectOut.writeObject(model);
-			
+
 			// make path
 			JobContext context = (JobContext) getContext();
 			Configuration conf = context.getConfiguration();
@@ -256,7 +142,7 @@ public abstract class MLAggregator extends Aggregator {
 
 			modelDirPath = new Path(output, new Path("model/job_" + boaJobId));
 			fs.mkdirs(modelDirPath);
-			
+
 			modelPath = new Path(modelDirPath, new Path(getKey().getName() + ".model"));
 			if (trainMultipleModels) {
 				int idx = 0;
@@ -330,7 +216,7 @@ public abstract class MLAggregator extends Aggregator {
 			testingSet = new Instances(name, fvAttributes, 1);
 			if (!isClusterer) {
 				trainingSet.setClassIndex(NumOfAttributes - 1);
-				testingSet.setClassIndex(NumOfAttributes - 1);				
+				testingSet.setClassIndex(NumOfAttributes - 1);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -355,11 +241,11 @@ public abstract class MLAggregator extends Aggregator {
 						count++;
 					}
 				} else {
-					if (NumberUtils.isNumber(String.valueOf(data.getValue(fieldNames[i]))))
-						instance.setValue(fvAttributes.get(count),
-								Double.parseDouble(String.valueOf(data.getValue(fieldNames[i]))));
+					String val = String.valueOf(data.getValue(fieldNames[i]));
+					if (NumberUtils.isNumber(val))
+						instance.setValue(fvAttributes.get(count), Double.parseDouble(val));
 					else
-						instance.setValue(fvAttributes.get(count), String.valueOf(data.getValue(fieldNames[i])));
+						instance.setValue(fvAttributes.get(count), val);
 					count++;
 				}
 			}
@@ -381,7 +267,7 @@ public abstract class MLAggregator extends Aggregator {
 			testingSet = new Instances(name, fvAttributes, 1);
 			if (!isClusterer) {
 				trainingSet.setClassIndex(data.length - 1); // use data length for String[] data
-				testingSet.setClassIndex(data.length - 1);				
+				testingSet.setClassIndex(data.length - 1);
 			}
 			flag = true;
 		} catch (Exception e) {
@@ -416,7 +302,7 @@ public abstract class MLAggregator extends Aggregator {
 	private boolean isTrainData() {
 		return Math.random() > (1 - trainingPerc / 100.0);
 	}
-	
+
 	public boolean passThrough(int dataSize) {
 		if (dataSize < MAX_RECORDS_FOR_SPILL / 900)
 			return true;
