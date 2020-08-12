@@ -195,12 +195,12 @@ public class BoaUtilIntrinsics {
 	}
 	
 //	public static void main(String[] args) {
-////		String s = "camelCased<List<Integer3[seq2vec]>>_____and_UNDERSCORED<HE>[SHE]_.....__camelCasedDDDDD";
-////		System.out.println(Arrays.toString(split(s)));
-////		System.out.println(alphabetFilter(s, "_."));
-//		
-////		System.out.println(bytesOfString(500));
-////		System.out.println(calculateRecordPercent(50, bytesOfString(500)));
+//		String s = "camelCased<List<Integer3[seq2vec]>>_____and_UNDERSCORED<HE>[SHE]_.....__camelCasedDDDDD";
+//		System.out.println(Arrays.toString(split(s)));
+//		System.out.println(alphabetFilter(s, "_."));
+		
+//		System.out.println(bytesOfString(500));
+//		System.out.println(calculateRecordPercent(100, bytesOfString(500)));
 //	}
 	
 	/*
@@ -223,8 +223,8 @@ public class BoaUtilIntrinsics {
 
 	static {
 		IO_SORT_SPILL_PERCENT = 0.8f;
-		IO_SORT_MB = 80;
-		IO_SORT_RECORD_PERCENT = calculateRecordPercent(50, bytesOfString(500));
+		IO_SORT_MB = 100;
+		IO_SORT_RECORD_PERCENT = calculateRecordPercent(200, bytesOfString(500));
 //		System.out.println(MAX_RECORDS_FOR_SPILL);
 	};
 }

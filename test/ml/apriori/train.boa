@@ -53,4 +53,5 @@ main := function() {
 	});
 };
 
-main();
+if (p.name == "picoded/JavaCommons-dstack")
+	main();

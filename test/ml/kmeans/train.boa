@@ -2,19 +2,16 @@ type T = enum {y = "true", n = "false"};
 label: T;
 
 p: Project = input;
-kmeans: output simplekmeans("-s 75") of {int, T, int, T};
+kmeans: output simplekmeans("-s 75 -N 2") of {int, T, int, T};
 
 i := 0;
 while(i < 100){
 
-	label = T.y;
-	if (i % 2 == 0)
-		label = T.n;
-
-	x1 := i + 7;
+	x1    := i + 7;
 	x2: T = T.n;
-	x3 := i;
+	x3    := i;
+	x4: T = T.y;
 
-	kmeans << {x1, x2, x3, label};
+	kmeans << {x1, x2, x3, x4};
 	i++;
 }

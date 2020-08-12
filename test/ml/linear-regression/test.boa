@@ -4,6 +4,13 @@ predict: output collection of string;
 linear: model of LinearRegression of {int, int, int};
 linear = load(0, linear);
 
-x1 := 1;
-x2 := 2;
-predict << classify(linear, {x1, x2});
+i := 0;
+while(i < 1000){
+	x1 := int(rand() * 100);
+	x2 := int(rand() * 100);
+
+	y  := 5 * x1 + 6 * x2;
+
+	predict << "Predict: " + string(classify(linear, {x1, x2})) + " Actual: " + string(y);	
+	i++;
+}

@@ -90,9 +90,7 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 		if (a instanceof MLAggregator) {
 			// ml aggregator
 			MLAggregator mla = (MLAggregator) a;
-
 			int processedData = 0;
-
 			for (final EmitValue value : values) {
 				processedData++;
 				if (value.getTuple() != null)
@@ -100,14 +98,11 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 				else if (value.getData() != null)
 					mla.aggregate(value.getData(), value.getMetadata());
 			}
-			
+			mla.finish();
 			if (mla.trainMultipleModels)
 				mla.taskId = context.getTaskAttemptID().getTaskID().toString() 
 					+ "_" + Thread.currentThread().getName() 
 					+ "_" + Thread.currentThread().getId();
-
-			mla.finish();
-
 			System.out.println("boa reducer " 
 					+ " processed: " + processedData 
 					+ " freemem: " + freemem());
@@ -117,6 +112,7 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 				try {
 					for (final String s : value.getData())
 						a.aggregate(s, value.getMetadata());
+					a.finish();
 				} catch (final FinishedException e) {
 					// we are done
 					return;
@@ -124,7 +120,6 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 					throw new RuntimeException(e);
 				}
 			}
-			a.finish();
 		}
 	}
 }

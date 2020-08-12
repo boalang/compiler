@@ -425,6 +425,7 @@ public class SymbolTable {
 		types.put("InputMappedClassifier", new BoaInputMappedClassifier());
 		types.put("Word2Vec", new BoaWord2Vec());
 		types.put("Seq2Vec", new BoaSequence2Vec());
+		types.put("Apriori", new BoaApriori());
 
 		for (final BoaType t : dslTupleTypes)
 			types.put(t.toString(), t);
@@ -677,7 +678,8 @@ public class SymbolTable {
 			boa.aggregators.ml.GaussianProcessesAggregator.class,
 			boa.aggregators.ml.InputMappedClassifierAggregator.class,
 			boa.aggregators.ml.Word2VectorAggregator.class,
-			boa.aggregators.ml.Sequence2VectorAggregator.class
+			boa.aggregators.ml.Sequence2VectorAggregator.class,
+			boa.aggregators.ml.AprioriAggregator.class
 		};
 
 		for (final Class<?> c : builtinAggs)

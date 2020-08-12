@@ -1,0 +1,49 @@
+# additive regression - train
+# predict the no. of fixing revisions for a projects
+p: Project = input;
+additive: output additiveregression("-s 75") of {int, int, int, int, int, int, int, int};
+
+cr := p.code_repositories[0];
+commit_count := getrevisionscount(cr);
+author_set: set of string;
+file_set: set of string;
+
+age := function() : int {
+	t1 := getrevision(cr, 0).commit_date;
+	t2 := getrevision(cr, commit_count - 1).commit_date;
+	return 1 + (yearof(t2) - yearof(t1)) * 12 + monthof(t2) - monthof(t1);
+};
+
+life_time := age(); # in months
+added_count := 0;
+modified_count := 0;
+deleted_count := 0;
+fixing_count := 0;
+
+visit(p, visitor {
+	before r : Revision -> {
+		foreach (i: int; isjava(r.files[i])) {
+			file := r.files[i];
+			add(file_set, file.name);
+			if (file.change == ChangeKind.ADDED)
+				added_count++;
+			else if (file.change == ChangeKind.MODIFIED)
+				modified_count++;
+			else if (file.change == ChangeKind.DELETED)
+				deleted_count++;
+		}
+		add(author_set, r.committer.username);
+		if (isfixingrevision(r.log))
+			fixing_count++;
+	}
+});
+
+author_count := len(author_set);
+file_count := len(file_set);
+
+additive << {
+	commit_count, life_time, 
+	author_count, file_count, 
+	added_count, modified_count, deleted_count, 
+	fixing_count
+};
