@@ -59,7 +59,8 @@ public class AprioriAggregator extends MLAggregator {
 			if (cur.equals("-A")) {
 				attributeNames = Lists.newArrayList();
 				for (String name : options[++i].split(":"))
-					attributeNames.add(name);
+					if (!name.equals(""))
+						attributeNames.add(name);
 			} else {
 				others.add(options[i]);		
 			}
@@ -96,7 +97,7 @@ public class AprioriAggregator extends MLAggregator {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void handlePostOptions() {
 		for (int i = 0; i < options.length; i++) {
 			String cur = options[i];
@@ -126,14 +127,20 @@ public class AprioriAggregator extends MLAggregator {
 	}
 
 	private void attributeCreation() {
-		HashSet<String> fvNominalVal = Sets.newHashSet();
-		for (String[] data : dataList) {
-			fvNominalVal.add(data[0]);
-			fvNominalVal.add(data[1]);
-		}
-		List<String> nomialVals = new ArrayList<>(fvNominalVal);
+		List<HashSet<String>> nominalSets = Lists.newArrayList();
 		for (int i = 0; i < attributeNames.size(); i++)
-			fvAttributes.add(new Attribute(attributeNames.get(i), nomialVals));
+			nominalSets.add(Sets.newHashSet());
+
+		for (String[] data : dataList)
+			for (int i = 0; i < data.length; i++)
+				nominalSets.get(i).add(data[i]);
+
+		List<List<String>> nomialLists = Lists.newArrayList();
+		for (HashSet<String> set : nominalSets)
+			nomialLists.add(new ArrayList<>(set));
+
+		for (int i = 0; i < attributeNames.size(); i++)
+			fvAttributes.add(new Attribute(attributeNames.get(i), nomialLists.get(i)));
 	}
 
 }
