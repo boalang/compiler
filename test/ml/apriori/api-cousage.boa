@@ -1,0 +1,97 @@
+# -------------- association - apriori -------------- 
+# Application: API co-usage rule mining
+# --------------------------------------------------- 
+# Input: Pairs of co-usage class references between two versions of one method.
+# Output: Top 10 rules.
+p: Project = input;
+ap: output apriori("-MI 10 -C 0.3 -A added1:added2") of array of string;
+
+pair := function(e1: string, e2: string) : array of string {
+	arr: array of string;
+	arr = new(arr, 2, e1);
+	arr[1] = e2;
+	return arr;
+};
+
+revision_filter := function(r: Revision) : bool {
+	# only consider not merged commits
+	if (len(r.parents) == 1)
+		return false;
+	return true;
+};
+
+file_filter := function(cf: ChangedFile) : bool {
+	# only consider the modified Java files
+	if (isjava(cf) && cf.change == ChangeKind.MODIFIED)
+		return false;
+	return true;
+};
+
+decl_filter := function(d: Declaration) : bool {
+	# ignore non-class declaration
+	if (d.kind != TypeKind.CLASS)
+		return true;
+	return false;
+};
+
+s: stack of Declaration; # class name stack
+method_queue: queue of Method;
+ast_map: map[string] of queue of Method; # (file-level) class fully qualified name -> methods
+
+init_method_queue := function() { 
+	tmp: queue of Method;
+	method_queue = tmp;
+};
+
+init_ast_map := function() : map[string] of queue of Method { 
+	tmp: map[string] of queue of Method;
+	res := ast_map;
+	ast_map = tmp;
+	return res;
+};
+
+ast_collector := visitor {
+	before d : Declaration -> {
+		if (!decl_filter(d)) {
+			push(s, d);
+			foreach (i: int; d.methods[i])
+				offer(method_queue, d.methods[i]);
+			# update ast map for each declaration collected from the file
+			ast_map[d.fully_qualified_name] = method_queue;
+			init_method_queue();
+			foreach (i: int; d.nested_declarations[i])
+				visit(d.nested_declarations[i]);
+			pop(s);
+		}
+		stop;
+	}
+};
+
+main := function() {
+	cr := p.code_repositories[0];
+	visit(p, visitor {
+		before r : Revision -> {
+			if (!revision_filter(r)) {
+				foreach (i: int; !file_filter(r.files[i])) {
+					current_file := r.files[i];
+					previous_file := get_previous_file(cr, r, current_file);
+					if (!def(previous_file))
+						continue;
+					# collect ast from current file
+					visit(current_file, ast_collector);
+					cur_ast := init_ast_map();
+					# collect ast from previous file
+					visit(previous_file, ast_collector);
+					prev_ast := init_ast_map();			
+					# pair: [deletedAPI, addedAPI]
+					pairs := cousage_apis(prev_ast, cur_ast);
+					foreach (j: int; pairs[j])
+						ap << pairs[j];
+				}
+			}
+			stop;
+		}
+	});
+};
+
+main();
