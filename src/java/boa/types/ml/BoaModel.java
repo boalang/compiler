@@ -16,11 +16,13 @@
  */
 package boa.types.ml;
 
+import java.util.ArrayList;
 import boa.types.BoaFunction;
 import boa.types.BoaName;
 import boa.types.BoaType;
 import weka.classifiers.Classifier;
 import weka.clusterers.Clusterer;
+import weka.core.Attribute;
 
 /**
  * A {@link BoaType} representing model of any ML type.
@@ -95,6 +97,10 @@ public class BoaModel extends BoaType {
 	 */
 	public Clusterer getClusterer() {
 		return this.clu;
+	}
+	
+	public ArrayList<Attribute> getAttributes() {
+		return null;
 	}
 
 	/**

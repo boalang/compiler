@@ -22,6 +22,8 @@ import org.deeplearning4j.models.embeddings.reader.impl.BasicModelUtils;
 import org.deeplearning4j.models.sequencevectors.SequenceVectors;
 import org.deeplearning4j.models.word2vec.VocabWord;
 import org.deeplearning4j.models.word2vec.Word2Vec;
+
+import boa.aggregators.ml.wrap.KMeans;
 import boa.datagen.DefaultProperties;
 import boa.runtime.Tuple;
 import boa.types.ml.*;
@@ -33,7 +35,7 @@ import weka.core.Instance;
 import weka.core.Instances;
 
 public class BoaMLIntrinsics {
-	
+
 	public static final Configuration conf = BoaAstIntrinsics.context.getConfiguration();
 
 	/**
@@ -142,13 +144,8 @@ public class BoaMLIntrinsics {
 			} else if (className.contains("InputMappedClassifier")) {
 				m = new BoaInputMappedClassifier(clr, o);
 			}
-		} else if (object instanceof Clusterer) {
-			// Clusterer
-			Clusterer clu = (Clusterer) object;
-			String className = clu.getClass().toString();
-			if (className.contains("SimpleKMeans")) {
-				m = new BoaSimpleKMeans(clu, o);
-			}
+		} else if (object instanceof KMeans) {
+			m = new BoaSimpleKMeans((KMeans) object, o);
 		}
 
 		// TODO attribute selection:
@@ -200,11 +197,11 @@ public class BoaMLIntrinsics {
 				return name.endsWith(".model") && name.startsWith(prefix);
 			}
 		});
-		
+
 		Path[] paths = new Path[files.length];
 		for (int i = 0; i < paths.length; i++)
 			paths[i] = files[i].getPath();
-		
+
 		if (files.length != 0) {
 			if (type.contains("BoaSequence2Vec")) {
 				return new BoaSequence2Vec(paths, o);
@@ -226,31 +223,36 @@ public class BoaMLIntrinsics {
 			instance.setValue((Attribute) fvAttributes.get(i), vector[i]);
 		testingSet.add(instance);
 
-		Classifier classifier = (Classifier) model.getClassifier();
-		double predval = classifier.classifyInstance(testingSet.instance(0));
+		double predval = -1;
+
+		if (model.getKind() == BoaModel.Kind.CLASSIFIER) {
+			Classifier classifier = (Classifier) model.getClassifier();
+			predval = classifier.classifyInstance(testingSet.instance(0));
+		} else if (model.getKind() == BoaModel.Kind.CLUSTERER) {
+			Clusterer clusterer = (Clusterer) model.getClusterer();
+			predval = clusterer.clusterInstance(testingSet.instance(0));
+		}
 
 		return testingSet.classAttribute().isNominal() ? testingSet.classAttribute().value((int) predval)
 				: String.valueOf(predval);
 	}
 
-	@FunctionSpec(name = "cluster", returnType = "string", formalParameters = { "model", "array of int" })
-	public static String cluster(final BoaModel model, final long[] vector) throws Exception {
-		int NumOfAttributes = vector.length + 1;
-		ArrayList<Attribute> fvAttributes = getAttributes(model, vector);
+	@FunctionSpec(name = "classify", returnType = "string", formalParameters = { "model", "array of string" })
+	public static String classify(final BoaModel model, final String[] vector) throws Exception {
+		BoaSimpleKMeans m = (BoaSimpleKMeans) model;
+		ArrayList<Attribute> fvAttributes = m.getAttributes();
+		Instances testingSet = new Instances("Classifier", fvAttributes, 1);
 
-		Instances testingSet = new Instances("Clusterer", fvAttributes, 1);
-		testingSet.setClassIndex(NumOfAttributes - 1);
-
-		Instance instance = new DenseInstance(NumOfAttributes);
-		for (int i = 0; i < NumOfAttributes - 1; i++)
-			instance.setValue((Attribute) fvAttributes.get(i), vector[i]);
+		Instance instance = new DenseInstance(vector.length);
+		for (int i = 0; i < vector.length; i++)
+			if (NumberUtils.isNumber(vector[i]))
+				instance.setValue(fvAttributes.get(i), Double.parseDouble(vector[i]));
+			else
+				instance.setValue(fvAttributes.get(i), vector[i]);
 		testingSet.add(instance);
 
-		Clusterer clusterer = (Clusterer) model.getClusterer();
-		double predval = clusterer.clusterInstance(testingSet.instance(0));
-
-		return testingSet.classAttribute().isNominal() ? testingSet.classAttribute().value((int) predval)
-				: String.valueOf(predval);
+		int res = m.getClusterer().clusterInstance(testingSet.instance(0));
+		return String.valueOf(res);
 	}
 
 	private static ArrayList<Attribute> getAttributes(BoaModel model, long[] vector) {
@@ -408,25 +410,25 @@ public class BoaMLIntrinsics {
 
 	@FunctionSpec(name = "vector", returnType = "array of float", formalParameters = { "Seq2Vec", "array of string" })
 	public static double[] vector(final BoaSequence2Vec m, final String[] seq) {
-		
+
 		if (m.getSeq2Vec() != null)
 			return m.getSeq2Vec().getWordVectorsMean(Arrays.asList(seq)).toDoubleVector();
-		
+
 		if (m.getPaths().length != 0)
 			return m.vector(seq);
-		
+
 		return null;
 	}
-	
+
 	@FunctionSpec(name = "vector", returnType = "array of float", formalParameters = { "Seq2Vec", "queue of string" })
 	public static double[] vector(final BoaSequence2Vec m, final LinkedList<String> seq) {
-		
+
 		if (m.getSeq2Vec() != null)
 			return m.getSeq2Vec().getWordVectorsMean(seq).toDoubleVector();
-		
+
 		if (m.getPaths().length != 0)
 			return m.vector(seq);
-		
+
 		return null;
 	}
 

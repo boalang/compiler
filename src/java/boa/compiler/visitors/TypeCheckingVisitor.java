@@ -1055,7 +1055,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				} else if (lhs instanceof BoaSimpleKMeans) {
 					for (int i = 0; i < types.size(); i++) {
 						if (!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat
-								|| types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
+								|| types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray
+								|| types.get(i) instanceof BoaString))
 							throw new TypeCheckException(n,
 									"SimpleKMeans required attributes to be numeric or nominal");
 					}
@@ -1990,7 +1991,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			} catch (final RuntimeException e) {
 				throw new TypeCheckException(n, "invalid identifier '" + n.getId().getToken() + "'", e);
 			}
-		
+
 		if (n.type instanceof BoaSequence2Vec)
 			n.type = new BoaSequence2Vec(n.getType().type);
 		else

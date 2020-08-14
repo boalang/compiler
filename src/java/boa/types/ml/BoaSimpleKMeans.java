@@ -16,8 +16,11 @@
  */
 package boa.types.ml;
 
+import java.util.ArrayList;
+import boa.aggregators.ml.wrap.KMeans;
 import boa.types.BoaType;
 import weka.clusterers.Clusterer;
+import weka.core.Attribute;
 
 /**
  * A {@link BoaType} representing ML model of SimpleKMeans with attached types.
@@ -26,6 +29,9 @@ import weka.clusterers.Clusterer;
  * @author hyj
  */
 public class BoaSimpleKMeans extends BoaModel {
+
+	private KMeans model;
+
 	/**
 	 * Default BoaSimpleKMeans Constructor.
 	 * 
@@ -43,17 +49,19 @@ public class BoaSimpleKMeans extends BoaModel {
 		this.t = t;
 	}
 
-	/**
-	 * Construct a BoaSimpleKMeans.
-	 * 
-	 * @param clu A {@link Clusterer} containing ML model
-	 * 
-	 * @param o   A {@link Object} containing type object
-	 *
-	 */
-	public BoaSimpleKMeans(Clusterer clu, Object o) {
-		this.clu = clu;
+	public BoaSimpleKMeans(KMeans m, Object o) {
+		this.model = m;
 		this.o = o;
+	}
+
+	@Override
+	public Clusterer getClusterer() {
+		return this.model.model;
+	}
+
+	@Override
+	public ArrayList<Attribute> getAttributes() {
+		return this.model.attributes;
 	}
 
 	@Override

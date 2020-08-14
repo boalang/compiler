@@ -106,7 +106,6 @@ public abstract class MLAggregator extends Aggregator {
 		try {
 			ClusterEvaluation eval = new ClusterEvaluation();
 			eval.setClusterer(clusterer);
-			set.setClassIndex(set.numAttributes() - 1);
 			eval.evaluateClusterer(set);
 			String setName = set == trainingSet ? "Training" : "Testing";
 			collect("\n" + setName + "Set Evaluation:\n" + eval.clusterResultsToString());
@@ -299,8 +298,8 @@ public abstract class MLAggregator extends Aggregator {
 		instanceCreation(data, isTrainData() ? trainingSet : testingSet);
 	}
 
-	private boolean isTrainData() {
-		return Math.random() > (1 - trainingPerc / 100.0);
+	protected boolean isTrainData() {
+		return Math.random() >= (1 - trainingPerc / 100.0);
 	}
 
 	public boolean passThrough(int dataSize) {
