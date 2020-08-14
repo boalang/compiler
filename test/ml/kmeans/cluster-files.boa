@@ -1,0 +1,49 @@
+# -------------- clusterer - kmeans -------------- 
+# Application: cluster java files in the last snapshot
+# --------------------------------------------------- 
+# Input: java file features
+p: Project = input;
+kmeans: output simplekmeans(
+	"-N 3 -V "			# other options
+	+ "-s 75 "			# 75% as training data
+	+ "-A "				# attribute names
+	+ "DeclCount:"		# 1) no. of type declarations
+	+ "MethodCount:"	# 2) no. of methods
+	+ "FieldCount:" 	# 3) no. of fields
+	+ "TestFile:"	    # 4) True or False
+) of array of string;
+
+decl_count := 0;
+method_count := 0;
+field_count := 0;
+test := false;
+
+visit(p, visitor {	
+	before cr : CodeRepository -> {
+		snapshot := getsnapshot(cr);
+		foreach (i: int; isjava(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before cf : ChangedFile -> {
+		decl_count = 0;
+		method_count = 0;
+		field_count = 0;
+		test = strfind("test", lowercase(cf.name)) > -1;
+	}
+	after cf : ChangedFile -> {
+		features := { 
+			string(decl_count), string(method_count), 
+			string(field_count), string(test)
+		};
+		kmeans << features;
+	}
+	before d : Declaration -> {
+		decl_count++;
+		method_count = method_count + len(d.methods);
+		field_count = field_count + len(d.fields);
+		foreach (i: int; d.nested_declarations[i])
+			visit(d.nested_declarations[i]);
+		stop;
+	}
+});

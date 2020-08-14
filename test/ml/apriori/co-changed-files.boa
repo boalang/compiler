@@ -53,5 +53,5 @@ main := function() {
 	});
 };
 
-if (p.name == "picoded/JavaCommons-dstack")
+if (p.name == "Afrozaar/wp-api-v2-client-android")
 	main();

@@ -1,0 +1,55 @@
+# -------------- clusterer - kmeans -------------- 
+# Application: cluster revisions
+# --------------------------------------------------- 
+# Input: revision features
+p: Project = input;
+kmeans: output simplekmeans(
+	"-N 3 -V "			 # other options
+	+ "-s 75 "			 # 75% as training data
+	+ "-A "				 # attribute names
+	+ "FileCount:"		 # 1) no. of changed files
+	+ "JavaFileCount:"	 # 2) no. of Java changed files
+	+ "LogWordCount:" 	 # 3) no. of words in the commit log
+	+ "isBugFixing:"	 # 4) True or False
+	+ "CommitPeriod"	 # 5) no. of days after its parent commit
+) of array of string;
+
+cr := p.code_repositories[0];
+
+days := function(r: Revision) : int {
+	parent_idx: int;
+	if (len(r.parents) == 0)
+		return 0;
+	else if (len(r.parents) == 1)
+		parent_idx = r.parents[0];
+	else
+		parent_idx = r.parents[1];
+	t1 := getrevision(cr, parent_idx).commit_date;
+	t2 := r.commit_date;
+	return 1 + (yearof(t2) - yearof(t1)) * 365 + dayofyear(t2) - dayofyear(t1);
+};
+
+visit(p, visitor {
+	before r : Revision -> {
+		file_count := 0;		# 1)
+		java_file_count := 0;	# 2)
+		log_word_count := 0;	# 3)
+		bug_fixing := false;	# 4)
+		commit_period := 0;		# 5)
+		
+		file_count = len(r.files);
+		foreach(i: int; isjava(r.files[i]))
+			java_file_count++;
+		bug_fixing = isfixingrevision(r.log);
+		log_word_count = len(splitall(r.log, " "));
+		commit_period = days(r);
+		
+		features := {
+			string(file_count), string(java_file_count), string(log_word_count),
+			string(bug_fixing), string(commit_period)
+		};
+		
+		kmeans << features;
+		stop;
+	}
+});

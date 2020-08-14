@@ -1,0 +1,71 @@
+# -------------- clusterer - kmeans-------------- 
+# Application: cluster projects
+# --------------------------------------------------- 
+# Input: project features
+p: Project = input;
+kmeans: output simplekmeans(
+	"-N 3 -V "			# other options
+	+ "-s 75 "			# 75% as training data
+	+ "-A "				# attribute names
+	+ "LineOfCode:"		# 1) no. of statements in the latest snapshot
+	+ "FileCount:"		# 2) no. of files in the latest snapshot
+	+ "CommitCount:"	# 3) no. of commits
+	+ "AuthorCount:"	# 4) no. of committers
+	+ "LifeTime:"		# 5) no. of months
+	+ "FixingCount:"	# 6) no. of bug fixing revisions
+	+ "Forks:"			# 7) no. of forks
+	+ "stars:"			# 8) no. of stars
+	+ "UnitTesting"		# 9) True or False
+) of array of string;
+
+cr := p.code_repositories[0];
+author_set: set of string;
+
+loc := 0;								# 1)
+file_count := 0;						# 2)
+commit_count := getrevisionscount(cr);	# 3)
+author_count := 0;						# 4)
+life_time := 0;							# 5)
+fixing_count := 0;						# 6)
+fork_count := p.forks;					# 7)
+star_count := p.stars;					# 8)
+unit_test := false;						# 9)
+
+months := function() : int {
+	t1 := getrevision(cr, 0).commit_date;
+	t2 := getrevision(cr, commit_count - 1).commit_date;
+	return 1 + (yearof(t2) - yearof(t1)) * 12 + monthof(t2) - monthof(t1);
+};
+
+visit(p, visitor {
+	before cr : CodeRepository -> {
+		snapshot := getsnapshot(cr);
+		file_count = len(snapshot);
+		foreach (i: int; isjava(snapshot[i]))
+			visit(snapshot[i]);
+	}
+	before r : Revision -> {
+		add(author_set, r.committer.username);
+		if (isfixingrevision(r.log))
+			fixing_count++;
+		stop;
+	}
+	before ns : Namespace -> {
+		if (!unit_test)
+			foreach (i: int; ns.imports[i])
+				if (strfind("org.junit", ns.imports[i]) > -1)
+					unit_test = true;
+	}
+	before s : Statement -> loc++;
+});
+
+life_time = months();	
+author_count = len(author_set);
+
+features := {
+	string(loc), string(file_count), string(commit_count),
+	string(author_count), string(life_time), string(fixing_count),
+	string(fork_count), string(star_count), string(unit_test)
+};
+
+kmeans << features;
