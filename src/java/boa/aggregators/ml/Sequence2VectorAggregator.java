@@ -103,11 +103,15 @@ public class Sequence2VectorAggregator extends MLAggregator {
 					.elementsLearningAlgorithm(new SkipGram<VocabWord>())
 					.build();
 
+			String info = "";
 			// train model
 			sv.fit();
-
+			info += "\n=== Model is trained ===\n";
 			// save model
 			saveModel(sv);
+			info += "\n=== Model is Saved ===\n";
+			info += "\n=== Model Configuration ===\n" + sv.getConfiguration().toString();
+			collect(info);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

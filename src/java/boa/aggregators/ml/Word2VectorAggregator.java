@@ -77,10 +77,16 @@ public class Word2VectorAggregator extends MLAggregator {
 			t.setTokenPreProcessor(new CommonPreprocessor());
 			// build word2vec model
 			Word2Vec vec = wb.iterate(iter).tokenizerFactory(t).build();
+
+			String info = "";
 			// train model
 			vec.fit();
+			info += "\n=== Model is trained ===\n";
 			// save model
 			saveModel(vec);
+			info += "\n=== Model is Saved ===\n";
+			info += "\n=== Model Configuration ===\n" + vec.getConfiguration().toString();
+			collect(info);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
