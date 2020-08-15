@@ -1,0 +1,62 @@
+# -------------- regression - linear regression -------------- 
+# Application: predict the no. of bug fixing revisions in a project
+# ------------------------------------------------------------ 
+# Input X: project features
+# Output Y: no. of bug fixing revisions in a project
+p: Project = input;
+linear: output linearregression("-s 75") of array of int;
+
+cr := p.code_repositories[0];
+author_set: set of string;
+
+loc := 0;								# x1
+file_count := 0;						# x2
+test_file_count := 0;					# x3
+decl_count := 0;						# x4
+method_count := 0;						# x5
+field_count := 0;						# x6
+commit_count := getrevisionscount(cr);	# x7
+author_count := 0;						# x8
+life_time := 0;							# x9
+fixing_count := 0;						# y
+
+months := function() : int {
+	t1 := getrevision(cr, 0).commit_date;
+	t2 := getrevision(cr, commit_count - 1).commit_date;
+	return 1 + (yearof(t2) - yearof(t1)) * 12 + monthof(t2) - monthof(t1);
+};
+
+visit(p, visitor {
+	before cr : CodeRepository -> {
+		snapshot := getsnapshot(cr);
+		file_count = len(snapshot);
+		foreach (i: int; isjava(snapshot[i]))
+			visit(snapshot[i]);
+	}
+	before r : Revision -> {
+		add(author_set, r.committer.username);
+		if (isfixingrevision(r.log))
+			fixing_count++;
+		stop;
+	}
+	before cf : ChangedFile -> {
+		if (strfind("test", lowercase(cf.name)) > -1)
+			test_file_count++;
+	}
+	before d : Declaration -> {
+		decl_count++;
+		method_count = method_count + len(d.methods);
+		field_count = field_count + len(d.fields);
+	}
+	before s : Statement -> loc++;
+});
+
+life_time = months();	
+author_count = len(author_set);
+
+linear << { 
+	loc, file_count, test_file_count, 
+	decl_count, method_count, field_count,
+	commit_count, author_count, life_time,
+	fixing_count
+};

@@ -1,0 +1,27 @@
+# guassian processes - train
+# predict the no. of ast nodes for a projects
+p: Project = input;
+gp : output gaussianprocesses("-s 75") of {int, int, int, int};
+
+decl_count := 0;
+method_count := 0;
+field_count := 0;
+node_count := 0;
+
+visit(p, visitor {
+	before cr : CodeRepository -> {
+		snapshot := getsnapshot(cr);
+		foreach (i: int; isjava(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before d : Declaration -> {
+		decl_count++;
+		node_count++;
+		method_count = method_count + len(d.methods);
+		field_count = field_count + len(d.fields);
+	}
+	before _ -> node_count++;
+});
+
+gp << { decl_count, method_count, field_count, node_count };

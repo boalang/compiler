@@ -1,0 +1,45 @@
+type L = enum {y = "buggy", n = "notbuggy"};
+type T = { changes: int, contributors: set of string, buggy: bool };
+
+p: Project = input;
+# loc, no. of contributors, no. of changes, no. of method calls, buggy
+jm: output j48("-s 75") of {int, int, int, int, L};
+file_map: map[string] of T; 
+
+visit(p, visitor {
+	before r : Revision -> {
+		contributor := r.committer.username;
+		is_fixing := false;
+		if (isfixingrevision(r.log))
+			is_fixing = true;
+		foreach (i: int; isjava(r.files[i])) {
+			file_name := r.files[i].name;
+			if (!haskey(file_map, file_name)) {
+				tmp: set of string;
+				file_map[file_name] = { 0, tmp, false };
+			}
+			t := file_map[file_name];
+			t.changes = t.changes + 1;
+			add(t.contributors, contributor);
+			t.buggy = is_fixing;
+		}
+		stop;
+	}
+	after cr : CodeRepository -> {
+		snapshot := getsnapshot(cr);
+		foreach (i: int; isjava(snapshot[i])) {
+			file := snapshot[i];
+			loc := 0;
+			method_calls := 0;
+			visit(file, visitor {
+				before s : Statement -> loc++;
+				before e : Expression -> if (e.kind == ExpressionKind.METHODCALL) method_calls++;
+			});
+			t := file_map[file.name];
+			label: L = L.n;
+			if (t.buggy)
+				label = L.y;
+			jm << { loc, len(t.contributors), t.changes, method_calls, label };
+		}
+	}
+});
