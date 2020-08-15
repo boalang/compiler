@@ -65,9 +65,10 @@ public class LMTAggregator extends MLAggregator {
 			e.printStackTrace();
 		}
 		this.saveModel(this.model);
+		String info = "\n=== Model Info ===\n" + this.model.toString();
+		this.collect(info);
 		this.evaluate(this.model, this.trainingSet);
 		this.evaluate(this.model, this.testingSet);
-		this.collect(this.model.toString());
 	}
 
 }

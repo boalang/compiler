@@ -96,7 +96,9 @@ public abstract class MLAggregator extends Aggregator {
 			Evaluation eval = new Evaluation(set);
 			eval.evaluateModel(model, set);
 			String setName = set == trainingSet ? "Training" : "Testing";
-			collect(eval.toSummaryString("\n" + setName + "Set Evaluation:\n", false));
+			String res = eval.toSummaryString("\n=== " + setName + " Set Evaluation ===\n", false);
+			res += "\n" + eval.toClassDetailsString() + "\n";
+			collect(res);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
