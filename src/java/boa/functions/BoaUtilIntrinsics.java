@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.nd4j.shade.guava.collect.Sets;
+import org.nd4j.shade.protobuf.common.collect.Maps;
 
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.*;
@@ -380,4 +381,143 @@ public class BoaUtilIntrinsics {
 		IO_SORT_RECORD_PERCENT = calculateRecordPercent(200, bytesOfString(500));
 //		System.out.println(MAX_RECORDS_FOR_SPILL);
 	};
+	
+	
+	public static void main(String[] args) {
+		maintainedMap();
+	}
+	
+	@FunctionSpec(name = "maintained_map", returnType = "map[string] of string")
+	public static HashMap<String, String> maintainedMap() {
+		HashMap<String, String> map = Maps.newHashMap();
+		String s = "nhaarman/ListViewAnimations	Archived\n" + 
+				"lucasr/twoway-view	Archived\n" + 
+				"mcxiaoke/android-volley	Archived\n" + 
+				"stephanenicolas/robospice	Archived\n" + 
+				"pedrovgs/DraggablePanel	Archived\n" + 
+				"chanjarster/weixin-java-tools	Archived\n" + 
+				"M66B/XPrivacy	Archived\n" + 
+				"TonicArtos/StickyGridHeaders	Archived\n" + 
+				"guardianproject/ChatSecureAndroid	Archived\n" + 
+				"lucasr/smoothie	Archived\n" + 
+				"tjake/Solandra	Archived\n" + 
+				"rahatarmanahmed/CircularProgressView	Archived\n" + 
+				"ai212983/android-spinnerwheel	Archived\n" + 
+				"pires/android-obd-reader	Archived\n" + 
+				"nicoulaj/idea-markdown	Archived\n" + 
+				"scottyab/AESCrypt-Android	Archived\n" + 
+				"JakeWharton/ActionBarSherlock	FSE\n" + 
+				"cyrilmottier/GreenDroid	FSE\n" + 
+				"pakerfeldt/android-viewflow	FSE\n" + 
+				"flavienlaurent/datetimepicker	FSE\n" + 
+				"sd6352051/NiftyDialogEffects	FSE\n" + 
+				"tjerkw/Android-SlideExpandableListView	FSE\n" + 
+				"dmytrodanylyk/circular-progress-button	FSE\n" + 
+				"openaphid/android-flip	FSE\n" + 
+				"square/dagger	FSE\n" + 
+				"square/otto	FSE\n" + 
+				"roboguice/roboguice	FSE\n" + 
+				"RomainPiel/Shimmer-android	FSE\n" + 
+				"facebook/react	Active\n" + 
+				"facebook/react-native	Active\n" + 
+				"nodejs/node	Active\n" + 
+				"atom/atom	Active\n" + 
+				"ionic-team/ionic	Active\n" + 
+				"getlantern/lantern	Active\n" + 
+				"ReactiveX/RxJava	Active\n" + 
+				"google/protobuf	Active\n" + 
+				"google/guava	Active\n" + 
+				"JetBrains/kotlin	Active\n" + 
+				"PhilJay/MPAndroidChart	Active\n" + 
+				"bumptech/glide	Active\n" + 
+				"syncthing/syncthing	Active\n" + 
+				"RocketChat/Rocket.Chat	Active\n" + 
+				"getsentry/sentry	Active\n" + 
+				"grpc/grpc	Active\n" + 
+				"alibaba/fastjson	Active\n" + 
+				"minio/minio	Active\n" + 
+				"scala/scala	Active\n" + 
+				"metabase/metabase	Active\n" + 
+				"bazelbuild/bazel	Active\n" + 
+				"openzipkin/zipkin	Active\n" + 
+				"cakephp/cakephp	Active\n" + 
+				"gradle/gradle	Active\n" + 
+				"dropwizard/dropwizard	Active\n" + 
+				"hankcs/HanLP	Active\n" + 
+				"zulip/zulip	Active\n" + 
+				"naver/pinpoint	Active\n" + 
+				"dropwizard/metrics	Active\n" + 
+				"trello/RxLifecycle	Active\n" + 
+				"magento/magento2	Active\n" + 
+				"dgraph-io/dgraph	Active\n" + 
+				"Netflix/eureka	Active\n" + 
+				"swagger-api/swagger-core	Active\n" + 
+				"bookshelf/bookshelf	Active\n" + 
+				"kickstarter/android-oss	Active\n" + 
+				"sockeqwe/mosby	Active\n" + 
+				"evernote/android-job	Active\n" + 
+				"ory/hydra	Active\n" + 
+				"codecentric/spring-boot-admin	Active\n" + 
+				"medcl/elasticsearch-analysis-ik	Active\n" + 
+				"grpc/grpc-java	Active\n" + 
+				"snowplow/snowplow	Active\n" + 
+				"davemorrissey/subsampling-scale-image-view	Active\n" + 
+				"apereo/cas	Active\n" + 
+				"ben-manes/caffeine	Active\n" + 
+				"ag-grid/ag-grid	Active\n" + 
+				"TooTallNate/Java-WebSocket	Active\n" + 
+				"zaproxy/zaproxy	Active\n" + 
+				"bolt/bolt	Active\n" + 
+				"mesosphere/marathon	Active\n" + 
+				"rqlite/rqlite	Active\n" + 
+				"checkstyle/checkstyle	Active\n" + 
+				"Alluxio/alluxio	Active\n" + 
+				"orientechnologies/orientdb	Active\n" + 
+				"socketio/engine.io	Active\n" + 
+				"NLPchina/elasticsearch-sql	Active\n" + 
+				"spotify/annoy	Active\n" + 
+				"wdullaer/MaterialDateTimePicker	Active\n" + 
+				"pili-engineering/PLDroidPlayer	Active\n" + 
+				"TykTechnologies/tyk	Active\n" + 
+				"basho/riak	Active\n" + 
+				"Tencent/GT	Active\n" + 
+				"Studio-42/elFinder	Active\n" + 
+				"tsuru/tsuru	Active\n" + 
+				"mapbox/mapbox-gl-native	Active\n" + 
+				"owncloud/android	Active\n" + 
+				"vavr-io/vavr	Active\n" + 
+				"Ereza/CustomActivityOnCrash	Active\n" + 
+				"termux/termux-app	Active\n" + 
+				"dlew/joda-time-android	Active\n" + 
+				"graphql-java/graphql-java	Active\n" + 
+				"cryptomator/cryptomator	Active\n" + 
+				"mongodb/mongo-java-driver	Active\n" + 
+				"junit-team/junit5	Active\n" + 
+				"spotify/helios	Active\n" + 
+				"tarantool/tarantool	Active\n" + 
+				"nutzam/nutz	Active\n" + 
+				"pwittchen/ReactiveNetwork	Active\n" + 
+				"azkaban/azkaban	Active\n" + 
+				"infobyte/faraday	Active\n" + 
+				"conan-io/conan	Active\n" + 
+				"MediaBrowser/Emby	Active\n" + 
+				"LWJGL/lwjgl3	Active\n" + 
+				"ionic-team/ionic-native	Active\n" + 
+				"btraceio/btrace	Active\n" + 
+				"TwidereProject/Twidere-Android	Active\n" + 
+				"Netflix/archaius	Active\n" + 
+				"Polidea/RxAndroidBle	Active\n" + 
+				"WebGoat/WebGoat	Active\n" + 
+				"igniterealtime/Openfire	Active\n" + 
+				"tdebatty/java-string-similarity	Active\n" + 
+				"M66B/NetGuard	Active\n" + 
+				"codeclimate/codeclimate	Active\n" + 
+				"cloudfoundry/bosh	Active";
+		for (String row : s.split("\n")) {
+			String[] arr = row.split("\\s+");
+			map.put(arr[0], arr[1]);
+		}
+		return map;
+	}
+	
 }
