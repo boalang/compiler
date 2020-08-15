@@ -1,0 +1,38 @@
+type L = enum {y = "buggy", n = "notbuggy"};
+type T = { changes: int, contributors: set of string, buggy: bool };
+
+p: Project = input;
+# no. of contributors, no. of changes, buggy
+bg: output bagging("-s 75") of {int, int, L};
+file_map: map[string] of T; 
+
+visit(p, visitor {
+	before r : Revision -> {
+		contributor := r.committer.username;
+		is_fixing := false;
+		if (isfixingrevision(r.log))
+			is_fixing = true;
+		foreach (i: int; isjava(r.files[i])) {
+			file_name := r.files[i].name;
+			if (!haskey(file_map, file_name)) {
+				tmp: set of string;
+				file_map[file_name] = { 0, tmp, false };
+			}
+			t := file_map[file_name];
+			t.changes = t.changes + 1;
+			add(t.contributors, contributor);
+			t.buggy = is_fixing;
+		}
+		stop;
+	}
+	after cr : CodeRepository -> {
+		snapshot := getsnapshot(cr);
+		foreach (i: int; isjava(snapshot[i])) {
+			t := file_map[snapshot[i].name];
+			label: L = L.n;
+			if (t.buggy)
+				label = L.y;
+			bg << { len(t.contributors), t.changes, label };
+		}
+	}
+});
