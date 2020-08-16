@@ -1,0 +1,99 @@
+type L = enum { y = "refactoring-prone", n = "not-refactoring-prone" };
+type T = {
+	added: int, 
+	deleted: int, 
+	modified: int,
+	changes: int,
+	first_update: time,
+	last_update: time,
+	contributors: set of string,
+	cochanged: int,
+	refactored: bool
+};
+
+p: Project = input;
+bn: output bayesnet("-s 75") of {int, int, int, int, int, int, int, int, L};
+
+file_map: map[string] of T;
+cr := p.code_repositories[0]; 
+
+new_tuple := function(first_commit_date: time) : T {
+	tmp1: set of string;
+	tmp2: set of string;
+	t: T = { 0, 0, 0, 0, first_commit_date, time(0), tmp1, 0, false };
+	return t;
+};
+
+changed_loc := function(r: Revision, cur: ChangedFile, t: T) {
+	if (cur.change != ChangeKind.MODIFIED && cur.change != ChangeKind.RENAMED)
+		return;
+	prev := get_previous_file(cr, r, cur);
+	if (!def(prev))
+		return;
+	diff := 0;
+	visit(prev, visitor { before s : Statement -> diff++; });
+	visit(cur, visitor { before s : Statement -> diff--; });
+	if (diff > 0)
+		t.added = t.added + diff;
+	else if (diff < 0)
+		t.deleted = t.deleted + diff * -1;
+	else
+		t.modified = t.modified + 1;
+};
+
+is_refactoring_revision := function(r: Revision) : bool {
+	msg := lowercase(r.log);
+	patterns := { "refactor", "move", "extract", "rename", "pull up", "push down" };
+	foreach (i: int; patterns[i])
+		if (strfind(patterns[i], msg) > -1)
+			return true;
+	return false;
+};
+
+days := function(t1: time, t2: time) : int {
+	return 1 + (yearof(t2) - yearof(t1)) * 365 + dayofyear(t2) - dayofyear(t1);
+};
+
+visit(p, visitor {
+	before r : Revision -> {
+		contributor := r.committer.username;
+		foreach (i: int; isjava(r.files[i])) {
+			file := r.files[i];
+			file_name := file.name;
+			if (!haskey(file_map, file_name)) file_map[file_name] = new_tuple(r.commit_date);
+
+			t := file_map[file_name];
+			t.changes = t.changes + 1;
+			add(t.contributors, contributor);
+			changed_loc(r, file, t);
+			t.last_update = r.commit_date;
+			t.cochanged = t.cochanged + len(r.files);
+			refactor := false;
+			if (is_refactoring_revision(r)) refactor = true;
+			t.refactored = refactor;
+		}
+		stop;
+	}
+	after cr : CodeRepository -> {
+		snapshot := getsnapshot(cr);
+		foreach (i: int; isjava(snapshot[i])) {
+			file := snapshot[i];
+			
+			loc := 0;
+			visit(file, visitor { before s : Statement -> loc++; });
+
+			t := file_map[file.name];
+
+			label: L = L.n;
+			if (t.refactored)
+				label = L.y;
+
+			bn << { 
+				loc, t.added, t.deleted, t.modified, 
+				t.changes, days(t.first_update, t.last_update), 
+				len(t.contributors), t.cochanged, 
+				label
+			};
+		}
+	}
+});

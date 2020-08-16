@@ -1,0 +1,68 @@
+type L = enum {y = "buggy", n = "notbuggy"};
+type T = { changes: int, contributors: set of string };
+
+p: Project = input;
+# changed files, changed loc, no. of contributors, no. of changes, buggy
+ada: output adaboost("-s 75") of {int, int, int, int, L};
+
+file_map: map[string] of T;
+cr := p.code_repositories[0]; 
+
+visit(p, visitor {
+	before r : Revision -> {
+		contributor := r.committer.username;
+		foreach (i: int; isjava(r.files[i])) {
+			file_name := r.files[i].name;
+			if (!haskey(file_map, file_name)) {
+				tmp: set of string;
+				file_map[file_name] = { 0, tmp };
+			}
+			t := file_map[file_name];
+			t.changes = t.changes + 1;
+			add(t.contributors, contributor);
+		}
+		stop;
+	}
+});
+
+changed_loc := function(r: Revision, cur: ChangedFile) : int {
+	if (cur.change != ChangeKind.MODIFIED && cur.change != ChangeKind.RENAMED)
+		return 0;
+	prev := get_previous_file(cr, r, cur);
+	if (!def(prev))
+		return 0;
+	count := 0;
+	visit(prev, visitor { before s : Statement -> count++; });
+	visit(cur, visitor { before s : Statement -> count--; });
+	if (count < 0)
+		count = count * -1;
+	return count;	
+};
+
+visit(p, visitor {
+	before r : Revision -> {
+		file_count := 0;
+		changed_loc_count := 0;
+		contributor_count := 0;
+		file_change_count := 0;
+		
+		foreach (i: int; isjava(r.files[i])) {
+			file := r.files[i];
+			file_count++;
+			changed_loc_count = changed_loc_count + changed_loc(r, file);
+			t := file_map[file.name];
+			contributor_count = contributor_count + len(t.contributors);
+			file_change_count = file_change_count + t.changes;
+		}
+
+		label: L = L.n;
+		if (isfixingrevision(r.log))
+			label = L.y;
+
+		ada << { 
+			file_count, changed_loc_count, contributor_count, file_change_count,
+			label
+		};
+		stop;
+	}
+});
