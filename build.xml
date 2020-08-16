@@ -434,13 +434,15 @@
 				</patternset>
 			</fileset>
 
-			<!-- dl4j and weka dependencies -->
+			<!-- dl4j and weka dependencies
 			<archives>
 				<zips>
 					<fileset dir="lib/weka" includes="**/*.jar" />
 					<fileset dir="lib/dl4j" excludes="**/macos/" includes="**/*.jar" />
 				</zips>
 			</archives>
+			
+			 -->
 
 		</jar>
 	</target>
@@ -465,7 +467,7 @@
 			<zipfileset excludes="META-INF/" src="rtlib/scannotation-1.0.3.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/ST-4.0.8.jar" />
 
-			<!-- dl4j and weka dependencies -->
+			<!-- dl4j and weka dependencies
 			<restrict>
 				<name name="**/*.class" />
 				<archives>
@@ -475,6 +477,8 @@
 					</zips>
 				</archives>
 			</restrict>
+			
+			-->
 
 		</jar>
 	</target>
