@@ -21,7 +21,8 @@ visit(p, visitor {
 			t := file_map[file_name];
 			t.changes = t.changes + 1;
 			add(t.contributors, contributor);
-			t.buggy = is_fixing;
+			if (is_fixing)
+				t.buggy = true;
 		}
 		stop;
 	}

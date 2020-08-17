@@ -9,7 +9,7 @@ type T = {
 };
 
 p: Project = input;
-vt: output vote("-s 75") of {int, int, int, int, int, int, L};
+s: output smo("-s 75") of {int, int, int, int, int, int, L};
 
 file_map: map[string] of T;
 cr := p.code_repositories[0]; 
@@ -86,7 +86,7 @@ visit(p, visitor {
 			if (t.refactored)
 				label = L.y;
 
-			vt << { 
+			s << { 
 				loc, t.added, t.deleted, t.modified, 
 				t.changes, len(t.contributors), 
 				label

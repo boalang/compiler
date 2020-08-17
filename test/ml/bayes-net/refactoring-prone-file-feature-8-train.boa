@@ -57,10 +57,14 @@ days := function(t1: time, t2: time) : int {
 visit(p, visitor {
 	before r : Revision -> {
 		contributor := r.committer.username;
+		refactor := false;
+		if (is_refactoring_revision(r))
+			refactor = true;
 		foreach (i: int; isjava(r.files[i])) {
 			file := r.files[i];
 			file_name := file.name;
-			if (!haskey(file_map, file_name)) file_map[file_name] = new_tuple(r.commit_date);
+			if (!haskey(file_map, file_name))
+				file_map[file_name] = new_tuple(r.commit_date);
 
 			t := file_map[file_name];
 			t.changes = t.changes + 1;
@@ -68,9 +72,8 @@ visit(p, visitor {
 			changed_loc(r, file, t);
 			t.last_update = r.commit_date;
 			t.cochanged = t.cochanged + len(r.files);
-			refactor := false;
-			if (is_refactoring_revision(r)) refactor = true;
-			t.refactored = refactor;
+			if (refactor)
+				t.refactored = true;
 		}
 		stop;
 	}
