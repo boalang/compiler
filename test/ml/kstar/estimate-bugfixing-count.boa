@@ -1,0 +1,38 @@
+# -------------- classifier - kstar -------------- 
+# Application: estimate refactoring count in the commit history
+# --------------------------------------------------- 
+# Input X: no. of first half revisions, no. of bugfixing revisions in the first half revisions
+# Output y: If the no. of bugfixing revisions in second half revisions is larger.
+p: Project = input;
+type T = enum {y = "y", n = "n"};
+ks: output kstar("-s 75") of { int, int, T };
+
+size := getrevisionscount(p.code_repositories[0]);
+first_half := 0;
+second_half := 0;
+
+if (size != 0) {
+	visit(p, visitor {
+		before cr : CodeRepository -> {
+
+			for (i := 0; i < size; i++) {
+				r := getrevision(cr, i);
+				if (isfixingrevision(r.log)) {
+					if(i < size / 2)
+						first_half = first_half + 1;
+					else
+						second_half = second_half + 1;
+				}
+			}
+			
+			x1 := size / 2;
+			x2 := first_half;
+			y: T = T.n;
+			if (second_half >= first_half)
+				y = T.y;
+
+			ks << { x1, x2, y };
+			stop;
+		}
+	});	
+}
