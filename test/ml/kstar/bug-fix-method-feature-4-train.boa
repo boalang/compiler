@@ -99,7 +99,7 @@ visit(p, visitor {
 					
 					loc := 0;
 					method_calls := 0;
-					visit(decl, visitor {
+					visit(m, visitor {
 						before s : Statement -> loc++;
 						before e : Expression -> if (e.kind == ExpressionKind.METHODCALL) method_calls++;
 					});
