@@ -1,0 +1,120 @@
+# -------------- classifier - kstar -------------- 
+# Application: bugfixing-prone method classifier
+# --------------------------------------------------- 
+# Input: method-level metrics of a class
+# Output: if the method is bugfixing-prone.
+type L = enum {y = "buggy", n = "notbuggy"};
+type T = { changes: int, contributors: set of string, buggy: bool };
+
+p: Project = input;
+kst: output kstar("-s 75") of {int, int, int, int, T};
+o: output collection of string;
+method_map: map[string] of T;
+
+revision_filter := function(r: Revision) : bool {
+	# only consider not merged commits
+	if (len(r.parents) == 1)
+		return false;
+	return true;
+};
+
+file_filter := function(cf: ChangedFile) : bool {
+	# only consider the modified Java files
+	if (isjava(cf) && cf.change == ChangeKind.MODIFIED)
+		return false;
+	return true;
+};
+
+decl_filter := function(d: Declaration) : bool {
+	# ignore non-class declaration
+	if (d.kind != TypeKind.CLASS)
+		return true;
+	return false;
+};
+
+cr := p.code_repositories[0];
+class_queue: queue of Declaration;
+
+init_class_queue := function() : queue of Declaration { 
+	tmp: queue of Declaration;
+	res := class_queue;
+	class_queue = tmp;
+	return res;
+};
+
+class_collector := visitor {
+	before d : Declaration -> {
+		if (!decl_filter(d)) {
+			offer(class_queue, d);
+			foreach (i: int; d.nested_declarations[i])
+				visit(d.nested_declarations[i]);
+		}
+		stop;
+	}
+};
+
+visit(p, visitor {
+	before r : Revision -> {
+		contributor := r.committer.username;
+		is_fixing := false;
+		if (isfixingrevision(r.log))
+			is_fixing = true;
+		foreach (i: int; !file_filter(r.files[i])) {
+			current_file := r.files[i];
+			previous_file := get_previous_file(cr, r, current_file);
+			if (!def(previous_file))
+				continue;
+			visit(current_file, class_collector);
+			cur := init_class_queue();
+			visit(previous_file, class_collector);
+			prev := init_class_queue();
+
+			sigs := modified_methods(prev, cur);
+			foreach (j: int; sigs[j]) {
+				sig := current_file.name + " " + sigs[j];
+				if (!haskey(method_map, sig)) {
+					tmp: set of string;
+					method_map[sig] = { 0, tmp, false };
+				}
+				t := method_map[sig];
+				t.changes = t.changes + 1;
+				add(t.contributors, contributor);
+				if (is_fixing)
+					t.buggy = true;
+			}
+		}
+		stop;
+	}
+	after cr : CodeRepository -> {
+		snapshot := getsnapshot(cr);
+		foreach (i: int; isjava(snapshot[i])) {
+			file := snapshot[i];
+			visit(file, class_collector);
+			classes := values(init_class_queue());
+			foreach (j: int; classes[j]) {
+				decl := classes[j];
+				foreach (k: int; decl.methods[k]) {
+					m := decl.methods[k];
+					sig := file.name + " " + decl.fully_qualified_name + " " + signature(m);
+					
+					loc := 0;
+					method_calls := 0;
+					visit(decl, visitor {
+						before s : Statement -> loc++;
+						before e : Expression -> if (e.kind == ExpressionKind.METHODCALL) method_calls++;
+					});
+					
+					label: L = L.n;
+					if (haskey(method_map, sig)) {
+						t := method_map[sig];
+						if (t.buggy)
+							label = L.y;
+						kst << { loc, len(t.contributors), t.changes, method_calls, label };
+					} else {
+						kst << { loc, 1, 0, method_calls, label };
+					}
+				}
+			}
+		}
+	}
+});
