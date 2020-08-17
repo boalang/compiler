@@ -7,7 +7,7 @@ type L = enum {y = "buggy", n = "notbuggy"};
 type T = { changes: int, contributors: set of string, buggy: bool };
 
 p: Project = input;
-kst: output kstar("-s 75") of {int, int, int, int, T};
+one: output oner("-s 75") of {int, int, int, int, T};
 o: output collection of string;
 method_map: map[string] of T;
 
@@ -109,9 +109,9 @@ visit(p, visitor {
 						t := method_map[sig];
 						if (t.buggy)
 							label = L.y;
-						kst << { loc, len(t.contributors), t.changes, method_calls, label };
+						one << { loc, len(t.contributors), t.changes, method_calls, label };
 					} else {
-						kst << { loc, 1, 0, method_calls, label };
+						one << { loc, 1, 0, method_calls, label };
 					}
 				}
 			}

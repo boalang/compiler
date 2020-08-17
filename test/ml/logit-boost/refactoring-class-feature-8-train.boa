@@ -1,0 +1,177 @@
+# -------------- classifier - logitboost -------------- 
+# Application: refactoring-prone class classifier
+# --------------------------------------------------- 
+# Input: class-level metrics of a class
+# Output: if the class is refactoring-prone.
+type L = enum { y = "refactoring-prone", n = "not-refactoring-prone" };
+type T = {
+	added: int, 
+	deleted: int, 
+	modified: int,
+	changes: int,
+	first_update: time,
+	last_update: time,
+	contributors: set of string,
+	cochanged: int,
+	refactored: bool
+};
+
+p: Project = input;
+lb: output logitboost("-s 75") of {int, int, int, int, int, int, int, int, L};
+o: output collection of string;
+o << "";
+
+class_map: map[string] of T;
+cr := p.code_repositories[0];
+class_queue: queue of Declaration;
+
+revision_filter := function(r: Revision) : bool {
+	# only consider not merged commits
+	if (len(r.parents) == 1)
+		return false;
+	return true;
+};
+
+file_filter := function(cf: ChangedFile) : bool {
+	# only consider the modified Java files
+	if (isjava(cf) && cf.change == ChangeKind.MODIFIED)
+		return false;
+	return true;
+};
+
+decl_filter := function(d: Declaration) : bool {
+	# ignore non-class declaration
+	if (d.kind != TypeKind.CLASS)
+		return true;
+	return false;
+};
+
+init_class_queue := function() : queue of Declaration { 
+	tmp: queue of Declaration;
+	res := class_queue;
+	class_queue = tmp;
+	return res;
+};
+
+class_collector := visitor {
+	before d : Declaration -> {
+		if (!decl_filter(d)) {
+			offer(class_queue, d);
+			foreach (i: int; d.nested_declarations[i])
+				visit(d.nested_declarations[i]);
+		}
+		stop;
+	}
+};
+
+new_tuple := function(first_commit_date: time) : T {
+	tmp1: set of string;
+	tmp2: set of string;
+	t: T = { 0, 0, 0, 0, first_commit_date, time(0), tmp1, 0, false };
+	return t;
+};
+
+changed_loc := function(prev: Declaration, cur: Declaration, t: T) {
+	diff := 0;
+	visit(prev, visitor { before s : Statement -> diff++; });
+	visit(cur, visitor { before s : Statement -> diff--; });
+	if (diff > 0)
+		t.added = t.added + diff;
+	else if (diff < 0)
+		t.deleted = t.deleted + diff * -1;
+	else
+		t.modified = t.modified + 1;
+};
+
+is_refactoring_revision := function(r: Revision) : bool {
+	msg := lowercase(r.log);
+	patterns := { "refactor", "move", "extract", "rename", "pull up", "push down" };
+	foreach (i: int; patterns[i])
+		if (strfind(patterns[i], msg) > -1)
+			return true;
+	return false;
+};
+
+days := function(t1: time, t2: time) : int {
+	return 1 + (yearof(t2) - yearof(t1)) * 365 + dayofyear(t2) - dayofyear(t1);
+};
+
+get_class := function(cf: ChangedFile, fqn: string) : Declaration {
+	decl: Declaration;
+	visit(cf, visitor { 
+		before d : Declaration -> {
+			if (d.fully_qualified_name == fqn)
+				decl = d;
+			foreach (i: int; d.nested_declarations[i])
+				visit(d.nested_declarations[i]);
+			stop;
+		}
+	});
+	return decl;
+};
+
+visit(p, visitor {
+	before r : Revision -> {
+		if (revision_filter(r))
+			stop;
+		contributor := r.committer.username;
+		refactor := false;
+		if (is_refactoring_revision(r))
+			refactor = true;
+		foreach (i: int; !file_filter(r.files[i])) {
+			current_file := r.files[i];
+			previous_file := get_previous_file(cr, r, current_file);
+			if (!def(previous_file))
+				continue;
+			visit(current_file, class_collector);
+			cur := init_class_queue();
+			visit(previous_file, class_collector);
+			prev := init_class_queue();
+			
+			fqns := modified_classes(prev, cur);
+			foreach (j: int; fqns[j]) {
+				sig := current_file.name + " " + fqns[j];
+				if (!haskey(class_map, sig))
+					class_map[sig] = new_tuple(r.commit_date);
+				t := class_map[sig];
+				t.changes = t.changes + 1;
+				add(t.contributors, contributor);
+				changed_loc(get_class(previous_file, fqns[j]), get_class(current_file, fqns[j]), t);
+				t.last_update = r.commit_date;
+				t.cochanged = t.cochanged + len(r.files);
+				if (refactor)
+					t.refactored = true;
+			}
+		}
+		stop;
+	}
+	after cr : CodeRepository -> {
+		snapshot := getsnapshot(cr);
+		foreach (i: int; isjava(snapshot[i])) {
+			file := snapshot[i];
+			visit(file, class_collector);
+			classes := values(init_class_queue());
+			foreach (j: int; classes[j]) {
+				decl := classes[j];
+				loc := 0;
+				visit(decl, visitor { before s : Statement -> loc++; });
+				sig := file.name + " " + decl.fully_qualified_name;
+
+				label: L = L.n;
+				if (haskey(class_map, sig)) {
+					t := class_map[sig];
+					if (t.refactored)
+						label = L.y;
+					lb << { 
+						loc, t.added, t.deleted, t.modified, 
+						t.changes, days(t.first_update, t.last_update), 
+						len(t.contributors), t.cochanged, 
+						label 
+					};
+				} else {
+					lb << { loc, 1, 0, 0, 0, 0, 1, 0, label };
+				}
+			}
+		}
+	}
+});
