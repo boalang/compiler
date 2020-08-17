@@ -1,3 +1,4 @@
+
 # -------------- classifier - multiclassclassifier -------------- 
 # Application: refactoring-prone method classifier
 # --------------------------------------------------- 
@@ -14,7 +15,14 @@ type T = {
 };
 
 p: Project = input;
-imc: output inputmappedclassifier("-s 75") of {int, int, int, int, int, int, L};
+imc: output inputmappedclassifier(
+	"-s 75 "
+	 + " -W weka.classifiers.rules.OneR"
+	 + " -W weka.classifiers.rules.ZeroR"
+	 + " -W weka.classifiers.rules.JRip"
+	 + " -W weka.classifiers.bayes.NaiveBayes"
+	 + " -W weka.classifiers.bayes.BayesNet"
+) of {int, int, int, int, int, int, L};
 
 method_map: map[string] of T;
 cr := p.code_repositories[0];

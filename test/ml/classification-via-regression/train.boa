@@ -2,7 +2,12 @@ type T = enum {y = "true", n = "false"};
 label: T;
 p: Project = input;
 
-cvr : output classificationviaregression("-s 75") of {int, T, int, T};
+cvr : output classificationviaregression(
+	"-s 75 "
+	 + " -W weka.classifiers.rules.J48"
+	 + " -W weka.classifiers.rules.M5P"
+	 + " -W weka.classifiers.rules.RandomForest"
+) of {int, T, int, T};
 
 i := 0;
 while(i < 100){

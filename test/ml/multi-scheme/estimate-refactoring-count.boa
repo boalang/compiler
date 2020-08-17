@@ -5,7 +5,14 @@
 # Output y: If the no. of refactoring revisions in second half revisions is larger.
 p: Project = input;
 type T = enum {y = "y", n = "n"};
-ms: output multischeme("-s 75") of { int, int, T };
+ms: output multischeme(
+    "-s 75 "
+	 + " -B weka.classifiers.rules.OneR"
+	 + " -B weka.classifiers.rules.ZeroR"
+	 + " -B weka.classifiers.rules.JRip"
+	 + " -B weka.classifiers.bayes.NaiveBayes"
+	 + " -B weka.classifiers.bayes.BayesNet"    
+) of { int, int, T };
 
 size := getrevisionscount(p.code_repositories[0]);
 first_half := 0;
@@ -27,7 +34,7 @@ if (size != 0) {
 			for (i := 0; i < size; i++) {
 				r := getrevision(cr, i);
 				if (is_refactoring_revision(r)) {
-					if(i < size / 2)
+					if(size / 2 < i)
 						first_half = first_half + 1;
 					else
 						second_half = second_half + 1;

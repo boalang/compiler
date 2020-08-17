@@ -19,7 +19,6 @@ package boa.aggregators.ml;
 import boa.aggregators.AggregatorSpec;
 import boa.runtime.Tuple;
 import weka.classifiers.meta.Vote;
-
 import java.io.IOException;
 
 /**

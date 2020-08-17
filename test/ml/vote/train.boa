@@ -1,20 +1,31 @@
-type T = enum {y = "true", n = "false"};
+type T = enum {y = "true", n = "false", c = "white"};
 label: T;
 
 p: Project = input;
-v: output vote("-s 75") of {int, T, int, T};
+ks: output vote(
+	"-s 75 "
+	 + " -B weka.classifiers.rules.OneR"
+	 + " -B weka.classifiers.rules.ZeroR"
+	 + " -B weka.classifiers.rules.JRip"
+	 + " -B weka.classifiers.bayes.NaiveBayes"
+	 + " -B weka.classifiers.bayes.BayesNet"
+) of {int, int, int, int, int, T};
 
 i := 0;
 while(i < 100){
 
 	label = T.y;
-	if (i % 2 == 0)
+	if (i % 3 == 0)
 		label = T.n;
+	else if (i % 2 == 0)
+		label = T.c;
 
-	x1 := i + 7;
-	x2: T = T.n;
-	x3 := i;
+	x1 := 2 + 6 * i;
+	x2 := 3 + 5 * i;
+	x3 := 3 + 7 * i;
+	x4 := 3 + 8 * i;
+	x5 := 3 + 9 * i;
 
-	v << {x1, x2, x3, label};
+	ks << {x1, x2, x3, x4, x5, label};
 	i++;
 }
