@@ -1,0 +1,110 @@
+# -------------- classifier - vote -------------- 
+# Application: maintenance tasks classifier with metrics
+# --------------------------------------------------- 
+# Input X: diffs in a revision
+# Output Y: maintenance task
+p: Project = input;
+type L = enum {p = "perfective", c = "corrective", a = "adaptive", u = "undefined"};
+type T = {
+	added_loc: int, 
+	deleted_loc: int, 
+	modified_loc: int
+};
+
+vt: output vote(
+	"-s 75 "
+	 + " -B weka.classifiers.rules.OneR"
+	 + " -B weka.classifiers.rules.ZeroR"
+	 + " -B weka.classifiers.rules.JRip"
+	 + " -B weka.classifiers.bayes.NaiveBayes"
+	 + " -B weka.classifiers.bayes.BayesNet"
+) of { int, int, int, int, int, int, int, T };
+
+cr := p.code_repositories[0];
+# Perfective: improving the system and its design.
+perfective_arr := {"package","organize","refactor","upgrade","improve","clean","clean up","cleanup","cleanups","cleaned","removed","remove","removing","moved","directory","major"};
+# Corrective: fixing faults, functional and non-functional.
+corrective_arr := {"bug","bugs","fix","fixed","fixes","fixing", "incorrect","correct"};
+# Adaptive: introducing new features into the system.
+adaptive_arr := {"add","new","modify","update","doc","javadoc","java-doc","translation","build","docs"};
+
+class_count := {0, 0, 0};
+
+update := function(log: string, arr: array of string, idx: int) {
+	foreach (i: int; strfind(arr[i], log) > -1)
+		class_count[idx] = idx + 1;
+};
+
+max_index := function() : int {
+	max_class_count := 0;
+	idx := -1;
+	foreach (i: int; class_count[i]) {
+		if (class_count[i] > max_class_count) {
+			max_class_count = class_count[i];
+			idx = i;
+		}
+	}
+	return idx;
+};
+
+get_label := function(idx: int) : L {
+	label: L;
+	if (idx == -1)
+		label = L.u;
+	else if (idx == 0)
+		label = L.p;
+	else if (idx == 1)
+		label = L.c;
+	else
+		label = L.a;
+	return label; 
+};
+
+changed_loc := function(r: Revision, cur: ChangedFile, t: T) {
+	prev := get_previous_file(cr, r, cur);
+	if (!def(prev))
+		return;
+	diff := 0;
+	visit(prev, visitor { before s : Statement -> diff++; });
+	visit(cur, visitor { before s : Statement -> diff--; });
+	if (diff > 0)
+		t.added_loc = t.added_loc + diff;
+	else if (diff < 0)
+		t.deleted_loc = t.deleted_loc + diff * -1;
+	else
+		t.modified_loc = t.modified_loc + 1;
+};
+
+visit(p, visitor {
+	before r : Revision -> {
+		added_files := 0; 
+		deleted_files := 0;
+		modified_files := 0;
+		t: T = {0, 0, 0};
+		foreach (i: int; isjava(r.files[i])) {
+			file := r.files[i];
+			if (file.change == ChangeKind.MODIFIED || file.change == ChangeKind.RENAMED) {
+				modified_files++;
+				changed_loc(r, r.files[i], t);
+			} else if (file.change == ChangeKind.DELETED) {
+				deleted_files++;
+			} else if (file.change == ChangeKind.ADDED) {
+				added_files++;
+			}
+		}
+		word_count := len(splitall(r.log, "\\s+"));
+		class_count = {0, 0, 0};
+		msg := lowercase(r.log);
+		update(msg, perfective_arr, 0);
+		update(msg, corrective_arr, 1);
+		update(msg, adaptive_arr, 2);
+		label := get_label(max_index());
+		
+		vt << {
+			added_files, deleted_files, modified_files,
+			t.added_loc, t.deleted_loc, t.modified_loc, word_count,
+			label
+		};
+		stop;
+	}
+});
