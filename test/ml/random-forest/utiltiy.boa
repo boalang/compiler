@@ -1,0 +1,100 @@
+type L = enum {y = "utility", n = "notutility"};
+
+p: Project = input;
+rf: output randomforest("-s 90") of {int, int, int, int, int, int, int, int, float, float, L};
+
+cr := p.code_repositories[0];
+contribution_map: map[string] of int;
+owner := getrevision(cr, 0).committer.username;
+util := util_map();
+
+forks_count := p.forks; # Number of forks created by developers
+merged_commits := 0; # Number of pull requests merged by the project developers
+commit_count := getrevisionscount(cr); # Number of commits performed by developers
+max_days := 0; #  Maximum number of consecutive days without commits
+max_contribution := 0; # Number of commits of the developer with the highest number of commits
+new_contributors := 0;  # Number of contributors who made their first commit in the considered period
+distinct_contributors := 0; # Number of distinct contributors that committed in the considered period
+owner_commits := 0; #  Number of commits performed by a given owner
+commit_freq := 0.0;
+test_ratio := 0.0;
+
+days := function(r: Revision, parent_idx: int) : int {
+	t1 := getrevision(cr, parent_idx).commit_date;
+	t2 := r.commit_date;
+	return 1 + (yearof(t2) - yearof(t1)) * 365 + dayofyear(t2) - dayofyear(t1);
+};
+
+months := function() : int {
+	t1 := getrevision(cr, 0).commit_date;
+	t2 := getrevision(cr, commit_count - 1).commit_date;
+	return 1 + (yearof(t2) - yearof(t1)) * 12 + monthof(t2) - monthof(t1);
+};
+
+is_test := function(cf: ChangedFile) : bool {
+	file_name := lowercase(cf.name);
+	if (strfind("test", file_name) > -1)
+		return true;
+	found := false;
+	visit(cf, visitor {
+		before ns: Namespace -> {
+			foreach (i: int; ns.imports[i])
+				if (strfind("test", ns.imports[i]) > -1)
+					found = true;
+			stop;
+		}
+	});
+	return found;
+};
+
+visit(p, visitor {
+	before r : Revision -> {
+		if (len(r.parents) == 2)
+			merged_commits++;
+
+		foreach (i: int; r.parents[i]) {
+			day_count := days(r, r.parents[i]);
+			if (day_count > max_days)
+				max_days = day_count;
+		}
+		
+		contributor := r.committer.username;
+		if (!haskey(contribution_map, contributor))
+			contribution_map[contributor] = 0;
+		contribution_map[contributor] = contribution_map[contributor] + 1;
+		contribution := contribution_map[contributor];
+		if (contribution > max_contribution)
+			max_contribution = contribution;
+	}
+	after cr : CodeRepository -> {
+		contributors := keys(contribution_map);
+		foreach (i: int; contributors[i])
+			if (contribution_map[contributors[i]] == 1)
+				new_contributors++;
+		distinct_contributors = len(contribution_map);
+		owner_commits = contribution_map[owner];
+		
+		loc := 0;
+		tloc := 0;
+		snapshot := getsnapshot(cr);
+		foreach (i: int; snapshot[i]) {
+			if (is_test(snapshot[i]))
+				visit(snapshot[i], visitor { before s: Statement -> tloc++; });
+			else
+				visit(snapshot[i], visitor { before s: Statement -> loc++; });
+		}
+		test_ratio = tloc * 1.0 / loc;
+		commit_freq = commit_count * 1.0 / months();
+		
+		label: L = L.n;
+		if (util[p.name] == "project")
+			label = L.y;
+		rf << {
+			forks_count, merged_commits, commit_count, 
+			max_days, max_contribution, new_contributors, 
+			distinct_contributors, owner_commits,
+			commit_freq, test_ratio,
+			label
+		};
+	}
+});

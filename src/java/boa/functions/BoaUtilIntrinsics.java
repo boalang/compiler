@@ -546,5 +546,73 @@ public class BoaUtilIntrinsics {
 		}
 		return map;
 	}
+	
+	@FunctionSpec(name = "org_map", returnType = "map[string] of string")
+	public static HashMap<String, String> orgMap() {
+		HashMap<String, String> map = Maps.newHashMap();
+		String s = "project,class\n" + 
+				"Netflix/SimianArmy,project\n" + 
+				"apache/sqoop,project\n" + 
+				"apache/mahout,project\n" + 
+				"apache/flume,project\n" + 
+				"github/maven-plugins,project\n" + 
+				"jenkinsci/github-plugin,project\n" + 
+				"jenkinsci/violations-plugin,project\n" + 
+				"twitter/hbc,project\n" + 
+				"apache/tez,project\n" + 
+				"twitter/hraven,project\n" + 
+				"jenkinsci/mesos-plugin,project\n" + 
+				"jenkinsci/docker-plugin,project\n" + 
+				"airbnb/plog,project\n" + 
+				"google/openrtb,project\n" + 
+				"twitter/elephant-bird,project\n" + 
+				"facebook/stetho,project\n" + 
+				"rstoyanchev/dispatch-test,notproject\n" + 
+				"rewbs/ljcu.findbugs.ext,notproject\n" + 
+				"loboweissmann/groovy-grails-na-pratica,notproject\n" + 
+				"kevin-ww/text.classfication,notproject\n" + 
+				"knighthunter09/XPEDIA,notproject\n" + 
+				"mohitsehgal/MapsApp2,notproject\n" + 
+				"Robbi-Blechdose/StarTrekMod,notproject";
+		for (String row : s.split("\n")) {
+			String[] arr = row.split(",");
+			map.put(arr[0], arr[1]);
+		}
+		return map;
+	}
+	
+	@FunctionSpec(name = "util_map", returnType = "map[string] of string")
+	public static HashMap<String, String> utilMap() {
+		HashMap<String, String> map = Maps.newHashMap();
+		String s = "samirahmed/Iris-Voice-Automation,project\n" + 
+				"aamattos/GMF-Tooling-Visual-Editor,project\n" + 
+				"steveliles/dsl4xml,project\n" + 
+				"verdigris/HappyNewYear,project\n" + 
+				"sonatype/maven-guide-en,project\n" + 
+				"generators-io-projects/generators,project\n" + 
+				"bingoohuang/buka,project\n" + 
+				"jlagerweij/swagger-springweb-maven-plugin,project\n" + 
+				"liulhdarks/darks-codec,project\n" + 
+				"safaci2000/google-voice-java,project\n" + 
+				"v3l0c1r4pt0r/HistoriaPojazdu,project\n" + 
+				"lucasr/dspec,project\n" + 
+				"Kalbintion/Kdkbot,project\n" + 
+				"jjbunn/MultipathODL,project\n" + 
+				"PiDyGB/android-slidinglayout,project\n" + 
+				"lazymaniac/LexSem,project\n" + 
+				"eetac/android-logging-log4j,project\n" + 
+				"rstoyanchev/dispatch-test,notproject\n" + 
+				"rewbs/ljcu.findbugs.ext,notproject\n" + 
+				"loboweissmann/groovy-grails-na-pratica,notproject\n" + 
+				"kevin-ww/text.classfication,notproject\n" + 
+				"knighthunter09/XPEDIA,notproject\n" + 
+				"mohitsehgal/MapsApp2,notproject\n" + 
+				"Robbi-Blechdose/StarTrekMod,notproject";
+		for (String row : s.split("\n")) {
+			String[] arr = row.split(",");
+			map.put(arr[0], arr[1]);
+		}
+		return map;
+	}
 
 }
