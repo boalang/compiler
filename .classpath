@@ -70,10 +70,6 @@
 	<classpathentry kind="lib" path="lib/evaluator/commons-configuration-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/evaluator/commons-httpclient-3.1.0.redhat-7.jar"/>
 	<classpathentry kind="lib" path="compile"/>
-	<classpathentry kind="lib" path="lib/weka/arpack_combined.jar"/>
-	<classpathentry kind="lib" path="lib/weka/core.jar"/>
-	<classpathentry kind="lib" path="lib/weka/mtj.jar"/>
-	<classpathentry kind="lib" path="lib/weka/weka.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/commons-codec-1.10.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/commons-compress-1.18.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/commons-io-2.5.jar"/>
@@ -120,5 +116,33 @@
 	<classpathentry kind="lib" path="lib/dl4j/macos/javacpp-1.5.3-macosx-x86_64.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/macos/nd4j-native-1.0.0-beta7-macosx-x86_64.jar"/>
 	<classpathentry kind="lib" path="lib/dl4j/macos/openblas-0.3.9-1.5.3-macosx-x86_64.jar"/>
+	<classpathentry kind="lib" path="lib/weka/arpack_combined_all-0.1.jar"/>
+	<classpathentry kind="lib" path="lib/weka/bounce-0.18.jar"/>
+	<classpathentry kind="lib" path="lib/weka/core-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/weka/FastInfoset-1.2.16.jar"/>
+	<classpathentry kind="lib" path="lib/weka/istack-commons-runtime-3.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/weka/jakarta.activation-api-1.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/weka/jakarta.xml.bind-api-2.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/weka/java-cup-11b-20160615.jar"/>
+	<classpathentry kind="lib" path="lib/weka/java-cup-runtime-11b-20160615.jar"/>
+	<classpathentry kind="lib" path="lib/weka/jaxb-runtime-2.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/weka/jclipboardhelper-0.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/weka/jfilechooser-bookmarks-0.1.6.jar"/>
+	<classpathentry kind="lib" path="lib/weka/jniloader-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/weka/mtj-1.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/weka/native_ref-java-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/weka/native_system-java-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/weka/netlib-java-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/weka/netlib-native_ref-linux-armhf-1.1-natives.jar"/>
+	<classpathentry kind="lib" path="lib/weka/netlib-native_ref-linux-i686-1.1-natives.jar"/>
+	<classpathentry kind="lib" path="lib/weka/netlib-native_ref-linux-x86_64-1.1-natives.jar"/>
+	<classpathentry kind="lib" path="lib/weka/netlib-native_ref-osx-x86_64-1.1-natives.jar"/>
+	<classpathentry kind="lib" path="lib/weka/netlib-native_system-linux-armhf-1.1-natives.jar"/>
+	<classpathentry kind="lib" path="lib/weka/netlib-native_system-linux-i686-1.1-natives.jar"/>
+	<classpathentry kind="lib" path="lib/weka/netlib-native_system-linux-x86_64-1.1-natives.jar"/>
+	<classpathentry kind="lib" path="lib/weka/netlib-native_system-osx-x86_64-1.1-natives.jar"/>
+	<classpathentry kind="lib" path="lib/weka/stax-ex-1.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/weka/txw2-2.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/weka/weka-stable-3.8.4.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
