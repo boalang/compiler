@@ -17,7 +17,7 @@
 package boa.aggregators.ml;
 
 import boa.aggregators.AggregatorSpec;
-import boa.aggregators.ml.wrap.KMeans;
+import boa.aggregators.ml.util.KMeans;
 import boa.runtime.Tuple;
 import weka.clusterers.SimpleKMeans;
 import weka.core.Attribute;
@@ -136,7 +136,7 @@ public class SimpleKMeansAggregator extends MLAggregator {
 					instance.setValue(fvAttributes.get(i), data[i]);
 				else
 					instance.setValue(fvAttributes.get(i), Double.parseDouble(data[i]));
-			if (isTrainData())
+			if (pick(trainingPerc))
 				trainingSet.add(instance);
 			else
 				testingSet.add(instance);

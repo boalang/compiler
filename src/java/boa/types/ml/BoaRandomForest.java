@@ -16,6 +16,8 @@
  */
 package boa.types.ml;
 
+import org.apache.hadoop.fs.Path;
+
 import boa.types.BoaType;
 import weka.classifiers.Classifier;
 
@@ -25,7 +27,7 @@ import weka.classifiers.Classifier;
  * @author ankuraga
  * @author hyj
  */
-public class BoaRandomForest extends BoaModel {
+public class BoaRandomForest extends BoaEnsemble {
 	/**
 	 * Default BoaRandomForest Constructor.
 	 * 
@@ -53,6 +55,11 @@ public class BoaRandomForest extends BoaModel {
 	 */
 	public BoaRandomForest(Classifier clr, Object o) {
 		this.clr = clr;
+		this.o = o;
+	}
+
+	public BoaRandomForest(Path[] paths, Object o) {
+		this.paths = paths;
 		this.o = o;
 	}
 

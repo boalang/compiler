@@ -17,7 +17,8 @@
 package boa.types.ml;
 
 import java.util.ArrayList;
-import boa.aggregators.ml.wrap.KMeans;
+
+import boa.aggregators.ml.util.KMeans;
 import boa.types.BoaType;
 import weka.clusterers.Clusterer;
 import weka.core.Attribute;

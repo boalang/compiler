@@ -1,4 +1,4 @@
-package boa.aggregators.ml.wrap;
+package boa.aggregators.ml.util;
 
 import java.io.Serializable;
 import java.util.ArrayList;

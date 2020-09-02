@@ -92,54 +92,68 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 		a.setContext(context);
 
 		if (a instanceof MLAggregator) {
-			// ml aggregator
-			MLAggregator mla = (MLAggregator) a;
-			String threadName = Thread.currentThread().getName();
-			int processedData = 0, passedDataSize = 0;
-			
-			if (mla.trainMultipleModels) {
-				// process data
-				for (final EmitValue value : values) {
-					processedData++;
-					if (value.getTuple() != null)
-						mla.aggregate(value.getTuple(), value.getMetadata());
-					else if (value.getData() != null)
-						mla.aggregate(value.getData(), value.getMetadata());
-				}
-				mla.taskId = context.getTaskAttemptID().getTaskID().toString() 
-						+ "_" + Thread.currentThread().getName() 
-						+ "_" + Thread.currentThread().getId();
-				mla.finish();
-			} else {
-				// pass the output through
-				for (final EmitValue value : values) {
-					context.write(key, value);
-					passedDataSize++;
-				}
-				return;
-			}
-			System.out.println("boa combiner " 
-					+ "processed: " + processedData + " "
-					+ "passed: " + passedDataSize + " "
-					+ "freemem: " + freemem() + " "
-					+ context.getTaskAttemptID().getTaskID().toString() + " "
-					+ "at thread " + threadName);
+			handleMLAggregator(a, key, values, context);
 		} else {
-			// regular aggregator
-			for (final EmitValue value : values) {
-				try {
-					for (final String s : value.getData())
-						a.aggregate(s, value.getMetadata());
-				} catch (final FinishedException e) {
-					// we are done
-					return;
-				} catch (final Throwable e) {
-					throw new RuntimeException(e);
-				}
-			}
-			a.finish();
+			handleRegularAggregator(a, key, values, context);
 		}
 
+	}
+
+	private void handleMLAggregator(Aggregator a, EmitKey key, Iterable<EmitValue> values,
+			Reducer<EmitKey, EmitValue, EmitKey, EmitValue>.Context context) throws IOException, InterruptedException {
+		MLAggregator mla = (MLAggregator) a;
+		String threadName = Thread.currentThread().getName();
+		int processedData = 0, passedDataSize = 0;
+		
+		if (mla.trainWithCombiner) {
+			boolean isReducer = false;
+			for (final EmitValue value : values) {
+				// reducer may call combiner
+				if (value.getModel() != null || value.getTrain() != null || value.getTest() != null) {					
+					context.write(key, value);
+					passedDataSize++;
+					isReducer = true;
+					continue;
+				}
+				processedData++;
+				
+				if (isReducer)
+					System.out.println(value);
+				
+				if (value.getTuple() != null)
+					mla.aggregate(value.getTuple(), value.getMetadata());
+				else if (value.getData() != null)
+					mla.aggregate(value.getData(), value.getMetadata());
+			}
+
+			if (!isReducer)
+				mla.finish();
+		} else {
+			// pass the output through
+			for (final EmitValue value : values)
+				context.write(key, value);
+			return;
+		}
+
+		System.out.println("boa combiner for ML processed: " + processedData + " " + "passed: " + passedDataSize + " "
+				+ "freemem: " + freemem() + " " + context.getTaskAttemptID().getTaskID().toString() + " " + "at thread "
+				+ threadName);
+	}
+
+	private void handleRegularAggregator(Aggregator a, EmitKey key, Iterable<EmitValue> values,
+			Reducer<EmitKey, EmitValue, EmitKey, EmitValue>.Context context) throws IOException, InterruptedException {
+		for (final EmitValue value : values) {
+			try {
+				for (final String s : value.getData())
+					a.aggregate(s, value.getMetadata());
+			} catch (final FinishedException e) {
+				// we are done
+				return;
+			} catch (final Throwable e) {
+				throw new RuntimeException(e);
+			}
+		}
+		a.finish();
 	}
 
 }

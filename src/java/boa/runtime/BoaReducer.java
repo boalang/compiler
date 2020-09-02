@@ -30,9 +30,9 @@ import org.apache.log4j.Logger;
 import boa.aggregators.Aggregator;
 import boa.aggregators.FinishedException;
 import boa.aggregators.ml.MLAggregator;
+import boa.aggregators.ml.util.MLSeqCombiner;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
-
 import static boa.functions.BoaUtilIntrinsics.*;
 
 /**
@@ -88,38 +88,52 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 		a.setContext(context);
 
 		if (a instanceof MLAggregator) {
-			// ml aggregator
-			MLAggregator mla = (MLAggregator) a;
-			int processedData = 0;
-			for (final EmitValue value : values) {
-				processedData++;
-				if (value.getTuple() != null)
-					mla.aggregate(value.getTuple(), value.getMetadata());
-				else if (value.getData() != null)
-					mla.aggregate(value.getData(), value.getMetadata());
-			}
-			mla.finish();
-			if (mla.trainMultipleModels)
-				mla.taskId = context.getTaskAttemptID().getTaskID().toString() 
-					+ "_" + Thread.currentThread().getName() 
-					+ "_" + Thread.currentThread().getId();
-			System.out.println("boa reducer " 
-					+ " processed: " + processedData 
-					+ " freemem: " + freemem());
+			handleMLAggregator(a, key, values, context);
 		} else {
-			// regular aggregator
-			for (final EmitValue value : values) {
-				try {
-					for (final String s : value.getData())
-						a.aggregate(s, value.getMetadata());
-					a.finish();
-				} catch (final FinishedException e) {
-					// we are done
-					return;
-				} catch (final Throwable e) {
-					throw new RuntimeException(e);
-				}
+			handleRegularAggregator(a, key, values, context);
+		}
+	}
+
+	private void handleMLAggregator(Aggregator a, EmitKey key, Iterable<EmitValue> values,
+			Reducer<EmitKey, EmitValue, Text, NullWritable>.Context context) throws IOException, InterruptedException {
+
+		// ml aggregator
+		MLAggregator mla = (MLAggregator) a;
+
+		if (mla.trainWithCombiner) {
+			System.out.println("boa reducer train with combiner");
+			MLSeqCombiner combiner = new MLSeqCombiner(key, values, context);
+			mla.collectToOutput(combiner.combine());
+			return;
+		}
+
+		// single model
+		int processedData = 0;
+		for (final EmitValue value : values) {
+			processedData++;
+			if (value.getTuple() != null)
+				mla.aggregate(value.getTuple(), value.getMetadata());
+			else if (value.getData() != null)
+				mla.aggregate(value.getData(), value.getMetadata());
+		}
+		mla.finish();
+
+		System.out.println("boa reducer for ML processed: " + processedData + " freemem: " + freemem());
+	}
+
+	private void handleRegularAggregator(Aggregator a, EmitKey key, Iterable<EmitValue> values,
+			Reducer<EmitKey, EmitValue, Text, NullWritable>.Context context) throws IOException, InterruptedException {
+		for (final EmitValue value : values) {
+			try {
+				for (final String s : value.getData())
+					a.aggregate(s, value.getMetadata());
+			} catch (final FinishedException e) {
+				// we are done
+				return;
+			} catch (final Throwable e) {
+				throw new RuntimeException(e);
 			}
 		}
+		a.finish();
 	}
 }

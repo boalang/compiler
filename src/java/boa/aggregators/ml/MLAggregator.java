@@ -17,6 +17,7 @@
 package boa.aggregators.ml;
 
 import boa.aggregators.Aggregator;
+
 import boa.datagen.DefaultProperties;
 import boa.runtime.Tuple;
 
@@ -42,17 +43,18 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-import static boa.functions.BoaUtilIntrinsics.*;
-
 /**
  * A Boa ML aggregator to train models.
  *
  * @author ankuraga
+ * @author hyj
  */
 public abstract class MLAggregator extends Aggregator {
-	protected ArrayList<Attribute> fvAttributes;
+	protected ArrayList<Attribute> fvAttributes = new ArrayList<Attribute>();
 	protected Instances unFilteredInstances;
-	protected int trainingPerc;
+	protected float trainingPerc = 100;
+	protected float evalTrainPerc = 100;
+	protected float evalTestPerc = 100;
 	protected Instances trainingSet;
 	protected Instances testingSet;
 	protected int NumOfAttributes;
@@ -60,17 +62,16 @@ public abstract class MLAggregator extends Aggregator {
 	protected boolean flag;
 	protected boolean isClusterer;
 
-	public boolean trainMultipleModels;
+	public boolean trainWithCombiner;
 	public String taskId;
-	protected int minTrainSize = -1;
+	public Path modelPath;
+	
+	public boolean incrementalLearning;
 
 	public MLAggregator() {
-		fvAttributes = new ArrayList<Attribute>();
-		trainingPerc = 100;
 	}
 
 	public MLAggregator(final String s) {
-		this();
 		try {
 			options = handleNonWekaOptions(Utils.splitOptions(s));
 		} catch (Exception e) {
@@ -84,7 +85,15 @@ public abstract class MLAggregator extends Aggregator {
 		for (int i = 0; i < opts.length; i++) {
 			String cur = opts[i];
 			if (cur.equals("-s"))
-				trainingPerc = Integer.parseInt(opts[++i]);
+				trainingPerc = Float.parseFloat(opts[++i]);
+			else if (cur.equals("-en"))
+				trainWithCombiner = true;
+			else if (cur.equals("-eva_train"))
+				evalTrainPerc = Float.parseFloat(opts[++i]);
+			else if (cur.equals("-eva_test"))
+				evalTestPerc = Float.parseFloat(opts[++i]);
+			else if (cur.equals("-el"))
+				incrementalLearning = true;
 			else
 				others.add(opts[i]);
 		}
@@ -113,60 +122,6 @@ public abstract class MLAggregator extends Aggregator {
 			collect("\n" + setName + "Set Evaluation:\n" + eval.clusterResultsToString());
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-	}
-
-	public void saveModel(Object model) {
-		FSDataOutputStream out = null;
-		FileSystem fs = null;
-		Path modelDirPath = null;
-		Path modelPath = null;
-		ObjectOutputStream objectOut = null;
-
-		try {
-			// serialize the model and write to the path
-			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
-			objectOut = new ObjectOutputStream(byteOutStream);
-			objectOut.writeObject(model);
-
-			// make path
-			JobContext context = (JobContext) getContext();
-			Configuration conf = context.getConfiguration();
-			int boaJobId = conf.getInt("boa.hadoop.jobid", 0);
-			JobConf job = new JobConf(conf);
-			Path outputPath = FileOutputFormat.getOutputPath(job);
-			fs = outputPath.getFileSystem(context.getConfiguration());
-
-			String output = DefaultProperties.localOutput != null
-					? new Path(DefaultProperties.localOutput).toString() + "/../"
-					: conf.get("fs.default.name", "hdfs://boa-njt/");
-
-			modelDirPath = new Path(output, new Path("model/job_" + boaJobId));
-			fs.mkdirs(modelDirPath);
-
-			modelPath = new Path(modelDirPath, new Path(getKey().getName() + ".model"));
-			if (trainMultipleModels) {
-				int idx = 0;
-				do {
-					String modelName = getKey().getName() + "_" + taskId + "_" + idx++ + ".model";
-					modelPath = new Path(modelDirPath, new Path(modelName));
-				} while (fs.exists(modelPath));
-			}
-			out = fs.create(modelPath, true); // overwrite: true
-			out.write(byteOutStream.toByteArray());
-
-			System.out.println("Model is saved to: " + modelPath.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (out != null)
-					out.close();
-				if (objectOut != null)
-					objectOut.close();
-			} catch (final Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -225,7 +180,7 @@ public abstract class MLAggregator extends Aggregator {
 	}
 
 	// create instance this tuple input data
-	private void instanceCreation(Tuple data, Instances set) {
+	protected void instanceCreation(Tuple data, Instances set) {
 		try {
 			int count = 0;
 			Instance instance = new DenseInstance(NumOfAttributes);
@@ -257,7 +212,7 @@ public abstract class MLAggregator extends Aggregator {
 	}
 
 	// create attributes with string[] input data
-	private void attributeCreation(String[] data, String name) {
+	protected void attributeCreation(String[] data, String name) {
 		if (flag == true)
 			return;
 		fvAttributes.clear();
@@ -277,7 +232,7 @@ public abstract class MLAggregator extends Aggregator {
 	}
 
 	// create instance this string[] input data
-	private void instanceCreation(String[] data, Instances set) {
+	protected void instanceCreation(String[] data, Instances set) {
 		try {
 			Instance instance = new DenseInstance(data.length);
 			for (int i = 0; i < data.length; i++)
@@ -291,29 +246,187 @@ public abstract class MLAggregator extends Aggregator {
 	protected void aggregate(final String[] data, final String metadata, String name)
 			throws IOException, InterruptedException {
 		attributeCreation(data, name);
-		instanceCreation(data, isTrainData() ? trainingSet : testingSet);
+		instanceCreation(data, pick(trainingPerc) ? trainingSet : testingSet);
 	}
 
 	protected void aggregate(final Tuple data, final String metadata, String name)
 			throws IOException, InterruptedException {
 		attributeCreation(data, name);
-		instanceCreation(data, isTrainData() ? trainingSet : testingSet);
+		instanceCreation(data, pick(trainingPerc) ? trainingSet : testingSet);
 	}
 
-	protected boolean isTrainData() {
-		return Math.random() >= (1 - trainingPerc / 100.0);
+	protected boolean pick(float perc) {
+		return Math.random() > (1 - perc / 100.0);
 	}
-
-	public boolean passThrough(int dataSize) {
-		if (dataSize < MAX_RECORDS_FOR_SPILL / 900)
-			return true;
-		if (minTrainSize != -1 && dataSize < minTrainSize)
-			return true;
-		return false;
+	
+	protected Instances reduceInstances(Instances dataset, float perc) {
+		Instances tmp = new Instances(dataset, 0);
+		for (Instance instance : dataset)
+			if (pick(perc))
+				tmp.add(instance);
+		return tmp;
 	}
 
 	public abstract void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException;
 
 	public abstract void aggregate(final String[] data, final String metadata) throws IOException, InterruptedException;
+
+	public void saveModel(Object model) {
+		FSDataOutputStream out = null;
+		ObjectOutputStream objectOut = null;
+
+		try {
+			// serialize the model and write to the path
+			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
+			objectOut = new ObjectOutputStream(byteOutStream);
+			objectOut.writeObject(model);
+
+			// make path
+			JobContext context = (JobContext) getContext();
+			Configuration conf = context.getConfiguration();
+			int boaJobId = conf.getInt("boa.hadoop.jobid", 0);
+			JobConf job = new JobConf(conf);
+			Path outputPath = FileOutputFormat.getOutputPath(job);
+			FileSystem fs = outputPath.getFileSystem(context.getConfiguration());
+
+			String output = DefaultProperties.localOutput != null
+					? new Path(DefaultProperties.localOutput).toString() + "/../"
+					: conf.get("fs.default.name", "hdfs://boa-njt/");
+
+			Path modelDirPath = new Path(output, new Path("model/job_" + boaJobId));
+			fs.mkdirs(modelDirPath);
+
+			modelPath = new Path(modelDirPath, new Path(getKey().getName() + ".model"));
+			if (trainWithCombiner && taskId != null) {
+				int idx = 0;
+				do {
+					String modelName = getKey().getName() + "_" + taskId + "_" + idx++ + ".model";
+					modelPath = new Path(modelDirPath, new Path(modelName));
+				} while (fs.exists(modelPath));
+			}
+			out = fs.create(modelPath, true); // overwrite: true
+			out.write(byteOutStream.toByteArray());
+
+			System.out.println("Model is saved to: " + modelPath.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (out != null)
+					out.close();
+				if (objectOut != null)
+					objectOut.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void saveModel(Object model, String name) {
+		FSDataOutputStream out = null;
+		ObjectOutputStream objectOut = null;
+
+		try {
+			// serialize the model and write to the path
+			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
+			objectOut = new ObjectOutputStream(byteOutStream);
+			objectOut.writeObject(model);
+
+			// make path
+			JobContext context = (JobContext) getContext();
+			Configuration conf = context.getConfiguration();
+			int boaJobId = conf.getInt("boa.hadoop.jobid", 0);
+			JobConf job = new JobConf(conf);
+			Path outputPath = FileOutputFormat.getOutputPath(job);
+			FileSystem fs = outputPath.getFileSystem(context.getConfiguration());
+
+			String output = DefaultProperties.localOutput != null
+					? new Path(DefaultProperties.localOutput).toString() + "/../"
+					: conf.get("fs.default.name", "hdfs://boa-njt/");
+
+			Path modelDirPath = new Path(output, new Path("model/job_" + boaJobId));
+			fs.mkdirs(modelDirPath);
+
+			modelPath = new Path(modelDirPath, new Path(getKey().getName() + "_" + name + ".model"));
+			out = fs.create(modelPath, true); // overwrite: true
+			out.write(byteOutStream.toByteArray());
+
+			System.out.println("Model is saved to: " + modelPath.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (out != null)
+					out.close();
+				if (objectOut != null)
+					objectOut.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void saveDataset(Instances dataset) {
+		FSDataOutputStream out = null;
+		ObjectOutputStream objectOut = null;
+
+		try {
+			// serialize the model and write to the path
+			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
+			objectOut = new ObjectOutputStream(byteOutStream);
+			objectOut.writeObject(dataset);
+
+			// make path
+			JobContext context = (JobContext) getContext();
+			Configuration conf = context.getConfiguration();
+			int boaJobId = conf.getInt("boa.hadoop.jobid", 0);
+			JobConf job = new JobConf(conf);
+			Path outputPath = FileOutputFormat.getOutputPath(job);
+			FileSystem fs = outputPath.getFileSystem(context.getConfiguration());
+
+			String output = DefaultProperties.localOutput != null
+					? new Path(DefaultProperties.localOutput).toString() + "/../"
+					: conf.get("fs.default.name", "hdfs://boa-njt/");
+
+			Path modelDirPath = new Path(output, new Path("model/job_" + boaJobId));
+			fs.mkdirs(modelDirPath);
+
+			String extension = dataset == trainingSet ? ".train" : ".test";
+
+			Path datasetPath = new Path(modelDirPath, new Path(getKey().getName() + extension));
+			if (trainWithCombiner && taskId != null) {
+				int idx = 0;
+				do {
+					String modelName = getKey().getName() + "_" + taskId + "_" + idx++ + extension;
+					datasetPath = new Path(modelDirPath, new Path(modelName));
+				} while (fs.exists(datasetPath));
+			}
+			out = fs.create(datasetPath, true); // overwrite: true
+			out.write(byteOutStream.toByteArray());
+
+			System.out.println("Dataset is saved to: " + datasetPath.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (out != null)
+					out.close();
+				if (objectOut != null)
+					objectOut.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void collectToOutput(String s) {
+		try {
+			this.collect(s);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

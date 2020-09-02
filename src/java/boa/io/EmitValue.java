@@ -18,10 +18,13 @@
 package boa.io;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -30,6 +33,7 @@ import org.apache.hadoop.io.Writable;
 
 import boa.functions.BoaCasts;
 import boa.runtime.Tuple;
+import weka.core.Instances;
 
 /**
  * A {@link Writable} that contains a datum and an optional metadatum to be
@@ -39,9 +43,50 @@ import boa.runtime.Tuple;
  * @author rdyer
  */
 public class EmitValue implements Writable {
-	private String[] data;
-	private String metadata;
-	private Tuple tdata;
+	protected String[] data;
+	protected String metadata;
+	protected Tuple tdata;
+
+	private Object model;
+	private Instances train;
+	private Instances test;
+
+	public EmitValue(final Object model, final String metadata) {
+		this.model = model;
+		this.metadata = metadata;
+	}
+
+	public EmitValue(final Instances data, final String metadata) {
+		if (metadata.equals("train"))
+			this.train = data;
+		else if (metadata.equals("test"))
+			this.test = data;
+		this.metadata = metadata;
+	}
+
+	public Object getModel() {
+		return model;
+	}
+
+	public void setModel(Object model) {
+		this.model = model;
+	}
+
+	public Instances getTrain() {
+		return train;
+	}
+
+	public void setTrain(Instances train) {
+		this.train = train;
+	}
+
+	public Instances getTest() {
+		return test;
+	}
+
+	public void setTest(Instances test) {
+		this.test = test;
+	}
 
 	/**
 	 * Construct an EmitValue.
@@ -317,7 +362,7 @@ public class EmitValue implements Writable {
 	public EmitValue(final long[] data) {
 		this(data, null);
 	}
-	
+
 	/**
 	 * Construct an EmitValue.
 	 * 
@@ -345,62 +390,73 @@ public class EmitValue implements Writable {
 	/** {@inheritDoc} */
 	@Override
 	public void readFields(final DataInput in) throws IOException {
+		// read metadta
+		String meta = Text.readString(in);
+		metadata = meta.equals("") ? null : meta;
 
-		final char type = in.readChar();
-		if (type == 'S') {
-			final int count = in.readInt();
-			this.data = new String[count];
-			for (int i = 0; i < count; i++)
-				this.data[i] = Text.readString(in);
+		if (meta.equals("model")) {
+			int length = in.readInt();
+			byte[] bytes = new byte[length];
+			in.readFully(bytes, 0, length);
+			model = deserialize(bytes);
+		} else if (meta.equals("train")) {
+			int length = in.readInt();
+			byte[] bytes = new byte[length];
+			in.readFully(bytes, 0, length);
+			train = (Instances) deserialize(bytes);
+		} else if (meta.equals("test")) {
+			int length = in.readInt();
+			byte[] bytes = new byte[length];
+			in.readFully(bytes, 0, length);
+			test = (Instances) deserialize(bytes);
 		} else {
-			final int length = in.readInt();
-			if (length > 0) {
+			char type = in.readChar();
+			if (type == 'S') {
+				int length = in.readInt();
+				this.data = new String[length];
+				for (int i = 0; i < length; i++)
+					this.data[i] = Text.readString(in);
+			} else if (type == 'T') {
+				int length = in.readInt();
 				byte[] bytes = new byte[length];
 				in.readFully(bytes, 0, length);
-				ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
-				ObjectInputStream dataIn = new ObjectInputStream(bin);
-				Object o = null;
-				try {
-					o = dataIn.readObject();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				this.tdata = (Tuple) o;
+				this.tdata = (Tuple) deserialize(bytes);
 			}
 		}
 
-		// read metadata
-		final String metadata = Text.readString(in);
-		if (metadata.equals(""))
-			this.metadata = null;
-		else
-			this.metadata = metadata;
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void write(final DataOutput out) throws IOException {
-		// write string[] data
-		if (this.data != null) {
+		// write metadata
+		String meta = this.metadata == null ? "" : this.metadata;
+		Text.writeString(out, meta);
+
+		byte[] bytes = null;
+		if (meta.equals("model")) {
+			bytes = serialize(model);
+			out.writeInt(bytes.length);
+			out.write(bytes);
+		} else if (meta.equals("train")) {
+			bytes = serialize(train);
+			out.writeInt(bytes.length);
+			out.write(bytes);
+		} else if (meta.equals("test")) {
+			bytes = serialize(test);
+			out.writeInt(bytes.length);
+			out.write(bytes);
+		} else if (this.data != null) {
 			out.writeChar('S'); // set date type S
 			out.writeInt(this.data.length);
 			for (final String d : this.data)
 				Text.writeString(out, d);
-		}
-
-		// write tuple data
-		if (this.tdata != null) {
+		} else if (this.tdata != null) {
 			out.writeChar('T'); // set date type T
 			byte[] serializedObject = this.tdata.serialize(this.tdata);
 			out.writeInt(serializedObject.length);
 			out.write(serializedObject);
 		}
-
-		// write metadata
-		if (this.metadata == null)
-			Text.writeString(out, "");
-		else
-			Text.writeString(out, this.metadata);
 	}
 
 	/**
@@ -467,5 +523,49 @@ public class EmitValue implements Writable {
 	@Override
 	public String toString() {
 		return Arrays.toString(this.data) + ":" + this.metadata;
+	}
+
+	public static byte[] serialize(Object o) {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutputStream out = null;
+		byte[] bytes = null;
+		try {
+			out = new ObjectOutputStream(bos);
+			out.writeObject(o);
+			out.flush();
+			bytes = bos.toByteArray();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				bos.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		return bytes;
+	}
+
+	public static Object deserialize(byte[] bytes) {
+		ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+		ObjectInput in = null;
+		Object o = null;
+		try {
+			in = new ObjectInputStream(bis);
+			o = in.readObject();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (in != null) {
+					in.close();
+				}
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		return o;
 	}
 }

@@ -26,7 +26,6 @@ public class Sequence2VectorAggregator extends MLAggregator {
 
 	public Sequence2VectorAggregator() {
 		train = new LinkedList<String>();
-		minTrainSize = 1000;
 	}
 
 	public Sequence2VectorAggregator(final String s) {
@@ -36,7 +35,7 @@ public class Sequence2VectorAggregator extends MLAggregator {
 			// enable multiple training mode
 			for (int i = 0; i < options.length; i++)
 				if (options[i].equals("-M")) {
-					this.trainMultipleModels = true;
+					this.trainWithCombiner = true;
 					break;
 				}
 		} catch (Exception e) {

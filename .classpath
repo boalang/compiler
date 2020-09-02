@@ -143,6 +143,10 @@
 	<classpathentry kind="lib" path="lib/weka/netlib-native_system-osx-x86_64-1.1-natives.jar"/>
 	<classpathentry kind="lib" path="lib/weka/stax-ex-1.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/weka/txw2-2.3.2.jar"/>
-	<classpathentry kind="lib" path="lib/weka/weka-stable-3.8.4.jar"/>
+	<classpathentry kind="lib" path="lib/weka/weka-stable-3.8.4.jar" sourcepath="lib/weka/weka-stable-3.8.4-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/Users/hyj/boa-workspace/compiler/lib/weka/weka-stable-3.8.4-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

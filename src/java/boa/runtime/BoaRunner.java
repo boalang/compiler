@@ -90,7 +90,14 @@ public abstract class BoaRunner extends Configured implements Tool {
 		configuration.setFloat("io.sort.spill.percent", IO_SORT_SPILL_PERCENT);
 		configuration.setInt("io.sort.mb", IO_SORT_MB);
 		configuration.setFloat("io.sort.record.percent", IO_SORT_RECORD_PERCENT);
-//		System.out.println(configuration.get("io.sort.record.percent"));
+		
+		// reduce merge phase
+		configuration.setFloat("mapred.job.shuffle.input.buffer.percent", (float) 0.01);
+		configuration.setFloat("mapred.job.shuffle.merge.percent", (float) 0.01);
+		
+		System.out.println(configuration.get("mapred.job.shuffle.input.buffer.percent"));
+		System.out.println(configuration.get("mapred.job.shuffle.merge.percent"));
+		System.out.println(configuration.get("mapred.job.reduce.input.buffer.percent"));
 
 		final Job job = new Job(configuration);
 

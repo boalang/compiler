@@ -485,7 +485,7 @@ public class BoaUtilIntrinsics {
 	static {
 		IO_SORT_SPILL_PERCENT = 0.8f;
 		IO_SORT_MB = 100;
-		IO_SORT_RECORD_PERCENT = calculateRecordPercent(200, bytesOfString(500));
+		IO_SORT_RECORD_PERCENT = calculateRecordPercent(50, bytesOfString(400));
 //		System.out.println(MAX_RECORDS_FOR_SPILL);
 	};
 

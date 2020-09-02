@@ -40,16 +40,65 @@ public class LWLAggregator extends MLAggregator {
 
 	@Override
 	public void aggregate(String[] data, String metadata) throws IOException, InterruptedException {
-		aggregate(data, metadata, "LWL");
+		if (!incrementalLearning) {
+			aggregate(data, metadata, "LWL");
+		} else {
+			attributeCreation(data, "LWL");
+			if (pick(trainingPerc)) {
+				instanceCreation(data, trainingSet);
+				try {
+					incrementalLearning();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				instanceCreation(data, testingSet);
+				if (testingSet != null) {
+					if (!pick(evalTestPerc))
+						testingSet.remove(testingSet.numInstances() - 1);
+				}
+			}
+		}
 	}
 
 	@Override
 	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
-		aggregate(data, metadata, "LWL");
+		if (!incrementalLearning) {
+			aggregate(data, metadata, "LWL");
+		} else {
+			attributeCreation(data, "LWL");
+			if (pick(trainingPerc)) {
+				instanceCreation(data, trainingSet);
+				try {
+					incrementalLearning();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				instanceCreation(data, testingSet);
+				if (testingSet != null) {
+					if (!pick(evalTestPerc))
+						testingSet.remove(testingSet.numInstances() - 1);
+				}
+			}
+		}
 	}
 
 	@Override
 	public void aggregate(String data, String metadata) throws IOException, InterruptedException {
+	}
+	
+	public void incrementalLearning() throws Exception {
+		if (model == null) {
+			model = new LWL();
+			model.setOptions(options);
+			model.buildClassifier(this.trainingSet);
+		}
+		if (trainingSet != null) {
+			model.updateClassifier(trainingSet.lastInstance());
+			if (!pick(evalTrainPerc))
+				trainingSet.remove(trainingSet.numInstances() - 1);
+		}
 	}
 
 	/**
@@ -57,17 +106,21 @@ public class LWLAggregator extends MLAggregator {
 	 */
 	@Override
 	public void finish() throws IOException, InterruptedException {
-		try {
-			this.model = new LWL();
-			this.model.setOptions(options);
-			this.model.buildClassifier(this.trainingSet);
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (!incrementalLearning) {
+			try {
+				this.model = new LWL();
+				this.model.setOptions(options);
+				this.model.buildClassifier(this.trainingSet);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		this.saveModel(this.model);
 		String info = "\n=== Model Info ===\n" + this.model.toString();
 		this.collect(info);
+		System.out.println("train size: " + trainingSet.numInstances());
 		this.evaluate(this.model, this.trainingSet);
+		System.out.println("test size: " + testingSet.numInstances());
 		this.evaluate(this.model, this.testingSet);
 	}
 

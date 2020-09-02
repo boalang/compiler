@@ -17,17 +17,22 @@
 package boa.aggregators.ml;
 
 import boa.aggregators.AggregatorSpec;
+import boa.io.EmitKey;
+import boa.io.EmitValue;
 import boa.runtime.Tuple;
 import weka.classifiers.trees.RandomForest;
 
 import java.io.IOException;
 
+import org.apache.hadoop.mapreduce.Reducer;
+
 /**
  * A Boa aggregator for training the model using LinearRegression.
  *
  * @author ankuraga
+ * @author hyj
  */
-@AggregatorSpec(name = "randomforest", formalParameters = { "string" })
+@AggregatorSpec(name = "randomforest", formalParameters = { "string" }, canCombine = true)
 public class RandomForestAggregator extends MLAggregator {
 	private RandomForest model;
 
@@ -57,18 +62,41 @@ public class RandomForestAggregator extends MLAggregator {
 	 */
 	@Override
 	public void finish() throws IOException, InterruptedException {
+		if (trainingSet.numInstances() == 0)
+			return;
+
 		try {
 			this.model = new RandomForest();
 			this.model.setOptions(options);
 			this.model.buildClassifier(this.trainingSet);
+			
+			if (trainWithCombiner) {
+
+				@SuppressWarnings("unchecked")
+				Reducer<EmitKey, EmitValue, EmitKey, EmitValue>.Context context = getContext();
+				EmitKey key = getKey();
+				context.write(key, new EmitValue(model, "model"));
+
+				context.write(key, new EmitValue(reduceInstances(trainingSet, evalTrainPerc), "train"));
+				System.out.println("trainingSet: " + trainingSet.numInstances());
+
+				if (testingSet.numInstances() != 0)
+					context.write(key, new EmitValue(reduceInstances(testingSet, evalTestPerc), "test"));
+				System.out.println("testingSet: " + testingSet.numInstances());
+
+			} else {
+
+				this.saveModel(this.model);
+
+				String info = "\n=== Model Info ===\n" + this.model.toString();
+				this.collect(info);
+
+				this.evaluate(this.model, this.trainingSet);
+				this.evaluate(this.model, this.testingSet);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.saveModel(this.model);
-		String info = "\n=== Model Info ===\n" + this.model.toString();
-		this.collect(info);
-		this.evaluate(this.model, this.trainingSet);
-		this.evaluate(this.model, this.testingSet);
 	}
 
 }

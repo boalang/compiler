@@ -656,7 +656,7 @@ public class SymbolTable {
 			boa.aggregators.ml.AttributeSelectedClassifierAggregator.class,
 			boa.aggregators.ml.PARTAggregator.class,
 			boa.aggregators.ml.OneRAggregator.class,
-			boa.aggregators.ml.NaiveBayesMultinomialUpdateableAggregator.class,
+			boa.aggregators.ml.NaiveBayesUpdateableAggregator.class,
 			boa.aggregators.ml.NaiveBayesAggregator.class,
 			boa.aggregators.ml.MultiSchemeAggregator.class,
 			boa.aggregators.ml.MultiClassClassifierAggregator.class,

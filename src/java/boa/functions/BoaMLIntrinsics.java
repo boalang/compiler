@@ -23,7 +23,7 @@ import org.deeplearning4j.models.sequencevectors.SequenceVectors;
 import org.deeplearning4j.models.word2vec.VocabWord;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 
-import boa.aggregators.ml.wrap.KMeans;
+import boa.aggregators.ml.util.KMeans;
 import boa.datagen.DefaultProperties;
 import boa.runtime.Tuple;
 import boa.types.ml.*;
