@@ -47,14 +47,8 @@ public class EmitValue implements Writable {
 	protected String metadata;
 	protected Tuple tdata;
 
-	private Object model;
 	private Instances train;
 	private Instances test;
-
-	public EmitValue(final Object model, final String metadata) {
-		this.model = model;
-		this.metadata = metadata;
-	}
 
 	public EmitValue(final Instances data, final String metadata) {
 		if (metadata.equals("train"))
@@ -62,14 +56,6 @@ public class EmitValue implements Writable {
 		else if (metadata.equals("test"))
 			this.test = data;
 		this.metadata = metadata;
-	}
-
-	public Object getModel() {
-		return model;
-	}
-
-	public void setModel(Object model) {
-		this.model = model;
 	}
 
 	public Instances getTrain() {
@@ -394,12 +380,7 @@ public class EmitValue implements Writable {
 		String meta = Text.readString(in);
 		metadata = meta.equals("") ? null : meta;
 
-		if (meta.equals("model")) {
-			int length = in.readInt();
-			byte[] bytes = new byte[length];
-			in.readFully(bytes, 0, length);
-			model = deserialize(bytes);
-		} else if (meta.equals("train")) {
+		if (meta.equals("train")) {
 			int length = in.readInt();
 			byte[] bytes = new byte[length];
 			in.readFully(bytes, 0, length);
@@ -434,11 +415,7 @@ public class EmitValue implements Writable {
 		Text.writeString(out, meta);
 
 		byte[] bytes = null;
-		if (meta.equals("model")) {
-			bytes = serialize(model);
-			out.writeInt(bytes.length);
-			out.write(bytes);
-		} else if (meta.equals("train")) {
+		if (meta.equals("train")) {
 			bytes = serialize(train);
 			out.writeInt(bytes.length);
 			out.write(bytes);

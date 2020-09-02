@@ -69,28 +69,24 @@ public class RandomForestAggregator extends MLAggregator {
 			this.model = new RandomForest();
 			this.model.setOptions(options);
 			this.model.buildClassifier(this.trainingSet);
-			
-			if (trainWithCombiner) {
+			this.saveModel(this.model);
 
+			if (trainWithCombiner) {
 				@SuppressWarnings("unchecked")
 				Reducer<EmitKey, EmitValue, EmitKey, EmitValue>.Context context = getContext();
 				EmitKey key = getKey();
-				context.write(key, new EmitValue(model, "model"));
-
+				// pass the path of trained model
+				context.write(key, new EmitValue(modelPath.toString(), "model_path"));
+				// pass the training set for evaluation
 				context.write(key, new EmitValue(reduceInstances(trainingSet, evalTrainPerc), "train"));
 				System.out.println("trainingSet: " + trainingSet.numInstances());
-
+				// pass the testing set for evaluation
 				if (testingSet.numInstances() != 0)
 					context.write(key, new EmitValue(reduceInstances(testingSet, evalTestPerc), "test"));
 				System.out.println("testingSet: " + testingSet.numInstances());
-
 			} else {
-
-				this.saveModel(this.model);
-
 				String info = "\n=== Model Info ===\n" + this.model.toString();
 				this.collect(info);
-
 				this.evaluate(this.model, this.trainingSet);
 				this.evaluate(this.model, this.testingSet);
 			}

@@ -96,10 +96,9 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 
 	private void handleMLAggregator(Aggregator a, EmitKey key, Iterable<EmitValue> values,
 			Reducer<EmitKey, EmitValue, Text, NullWritable>.Context context) throws IOException, InterruptedException {
-
-		// ml aggregator
 		MLAggregator mla = (MLAggregator) a;
 
+		// combined trained models to one sequence file
 		if (mla.trainWithCombiner) {
 			System.out.println("boa reducer train with combiner");
 			MLSeqCombiner combiner = new MLSeqCombiner(key, values, context);

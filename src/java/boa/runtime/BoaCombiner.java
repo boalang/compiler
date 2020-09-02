@@ -106,10 +106,12 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 		int processedData = 0, passedDataSize = 0;
 		
 		if (mla.trainWithCombiner) {
+			// train a model with combiner at map phase
 			boolean isReducer = false;
 			for (final EmitValue value : values) {
 				// reducer may call combiner
-				if (value.getModel() != null || value.getTrain() != null || value.getTest() != null) {					
+				if (isEmitValueFromCombiner(value)) {	
+					System.out.println("boa combiner pass to reducer");
 					context.write(key, value);
 					passedDataSize++;
 					isReducer = true;
@@ -138,6 +140,13 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 		System.out.println("boa combiner for ML processed: " + processedData + " " + "passed: " + passedDataSize + " "
 				+ "freemem: " + freemem() + " " + context.getTaskAttemptID().getTaskID().toString() + " " + "at thread "
 				+ threadName);
+	}
+	
+	private boolean isEmitValueFromCombiner(EmitValue value) {
+		if (value.getTrain() != null || value.getTest() != null)
+			return true;
+		String meta = value.getMetadata();
+		return meta != null && meta.equals("model_path");
 	}
 
 	private void handleRegularAggregator(Aggregator a, EmitKey key, Iterable<EmitValue> values,

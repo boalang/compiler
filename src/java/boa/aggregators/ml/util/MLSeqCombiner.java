@@ -1,8 +1,9 @@
 package boa.aggregators.ml.util;
 
 import java.io.IOException;
-
+import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
@@ -22,8 +23,6 @@ import boa.io.EmitValue;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.core.Instances;
-
-import static boa.io.EmitValue.*;
 
 public class MLSeqCombiner {
 
@@ -52,7 +51,7 @@ public class MLSeqCombiner {
 	public String combine() {
 		setPaths();
 		buildSeqFiles();
-		System.out.println("finish combining " + modelCount);
+		System.out.println("finish combining " + modelCount + " models");
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("\n====== Trained and Combined " + modelCount + " Models ======\n\n");
@@ -80,10 +79,10 @@ public class MLSeqCombiner {
 		for (final EmitValue value : values) {
 			String meta = value.getMetadata();
 			if (meta != null) {
-				if (meta.equals("model")) {
-					Object model = value.getModel();
+				if (meta.equals("model_path")) {
+					String modelPath = value.getData()[0];
 					try {
-						BytesWritable bw = new BytesWritable(serialize(model));
+						BytesWritable bw = new BytesWritable(getBytes(modelPath));
 						modelWriter.append(new Text(String.valueOf(modelCount++)), bw);
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -102,6 +101,27 @@ public class MLSeqCombiner {
 			}
 		}
 		closeWriters();
+	}
+
+	private byte[] getBytes(String modelPath) {
+		Path path = new Path(modelPath);
+		FSDataInputStream in = null;
+		byte[] bytes = null;
+		try {
+			in = fs.open(path);
+			bytes = IOUtils.toByteArray(in);
+			fs.delete(path, true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (in != null)
+					in.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return bytes;
 	}
 
 	public String evaluate(Classifier model, Instances set) {
@@ -130,8 +150,8 @@ public class MLSeqCombiner {
 					: conf.get("fs.default.name", "hdfs://boa-njt/");
 			modelDirPath = new Path(output, new Path("model/job_" + boaJobId));
 			modelSeqPath = new Path(modelDirPath, new Path(key.getName() + "_model.seq"));
-			if (fs.exists(modelDirPath))
-				fs.delete(modelDirPath, true);
+			if (fs.exists(modelSeqPath))
+				fs.delete(modelSeqPath, true);
 			fs.mkdirs(modelDirPath);
 		} catch (IOException e) {
 			e.printStackTrace();
