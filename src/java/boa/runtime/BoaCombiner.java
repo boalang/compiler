@@ -110,8 +110,7 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 			boolean isReducer = false;
 			for (final EmitValue value : values) {
 				// reducer may call combiner
-				if (isEmitValueFromCombiner(value)) {	
-					System.out.println("boa combiner pass to reducer");
+				if (isEmitValueFromCombiner(value)) {
 					context.write(key, value);
 					passedDataSize++;
 					isReducer = true;

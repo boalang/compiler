@@ -22,6 +22,18 @@ public class MyVote extends Vote {
 	private double[] instanceNumPredictions;
 	private Instances dataset;
 
+	public double[][] getInstanceProbs() {
+		return instanceProbs;
+	}
+
+	public double[] getInstanceNumPredictions() {
+		return instanceNumPredictions;
+	}
+
+	public Instances getDataset() {
+		return dataset;
+	}
+
 	public MyVote(Path path) {
 		classifiers = new SeqCollection<Classifier>(path);
 	}
@@ -37,6 +49,33 @@ public class MyVote extends Vote {
 			postprocess();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void preprocess() throws Exception {
+		for (Classifier classifier : classifiers) {
+			switch (m_CombinationRule) {
+			case AVERAGE_RULE:
+				preprocessDistributionForInstanceAverage(classifier);
+				break;
+			case PRODUCT_RULE:
+				preprocessDistributionForInstanceProduct(classifier);
+				break;
+			case MAJORITY_VOTING_RULE:
+				preprocessDistributionForInstanceMajorityVoting(classifier);
+				break;
+			case MIN_RULE:
+				preprocessDistributionForInstanceMin(classifier);
+				break;
+			case MAX_RULE:
+				preprocessDistributionForInstanceMax(classifier);
+				break;
+			case MEDIAN_RULE:
+				preprocessClassifyInstance(classifier);
+				break;
+			default:
+				throw new IllegalStateException("Unknown combination rule '" + m_CombinationRule + "'!");
+			}
 		}
 	}
 
@@ -62,58 +101,6 @@ public class MyVote extends Vote {
 			break;
 		default:
 			throw new IllegalStateException("Unknown combination rule '" + m_CombinationRule + "'!");
-		}
-	}
-
-	private void postprocessDistributionForInstanceMax() {
-		// TODO Auto-generated method stub
-
-	}
-
-	private void postprocessDistributionForInstanceMin() {
-		// TODO Auto-generated method stub
-
-	}
-
-	private void postprocessDistributionForInstanceMajorityVoting() {
-		// TODO Auto-generated method stub
-
-	}
-
-	private void postprocessDistributionForInstanceProduct() {
-		// TODO Auto-generated method stub
-
-	}
-
-	private void postprocessDistributionForInstanceAverage() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void preprocess() throws Exception {
-		for (Classifier classifier : classifiers) {
-			switch (m_CombinationRule) {
-			case AVERAGE_RULE:
-				preprocessDistributionForInstanceAverage(classifier);
-				break;
-			case PRODUCT_RULE:
-				preprocessDistributionForInstanceProduct(classifier);
-				break;
-			case MAJORITY_VOTING_RULE:
-				preprocessDistributionForInstanceMajorityVoting(classifier);
-				break;
-			case MIN_RULE:
-				preprocessDistributionForInstanceMin(classifier);
-				break;
-			case MAX_RULE:
-				preprocessDistributionForInstanceMax(classifier);
-				break;
-			case MEDIAN_RULE:
-				preprocessClassifyInstance(classifier);
-				break;
-			default:
-				throw new IllegalStateException("Unknown combination rule '" + m_CombinationRule + "'!");
-			}
 		}
 	}
 
@@ -152,6 +139,14 @@ public class MyVote extends Vote {
 		return result;
 	}
 
+	public double[] distributionForInstance(int instanceIdx) throws Exception {
+		double[] result = instanceProbs[instanceIdx];
+		Instance instance = dataset.instance(instanceIdx);
+		if (!instance.classAttribute().isNumeric() && (Utils.sum(result) > 0))
+			Utils.normalize(result);
+		return result;
+	}
+
 	@Override
 	protected double classifyInstanceMedian(Instance instance) throws Exception {
 		List<Double> results = Lists.newArrayList();
@@ -176,7 +171,10 @@ public class MyVote extends Vote {
 
 	private void preprocessClassifyInstance(Classifier classifier) {
 		// TODO Auto-generated method stub
+	}
 
+	private void postprocessClassifyInstance() {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -207,7 +205,6 @@ public class MyVote extends Vote {
 				}
 			}
 		} else {
-
 			// Should normalize "probability" distribution
 			if (Utils.sum(probs) > 0) {
 				Utils.normalize(probs);
@@ -231,7 +228,7 @@ public class MyVote extends Vote {
 		}
 	}
 
-	private void postprocessClassifyInstance() {
+	private void postprocessDistributionForInstanceAverage() {
 		for (int i = 0; i < instanceProbs.length; i++) {
 			double[] probs = instanceProbs[i];
 			if (dataset.classAttribute().isNumeric()) {
@@ -251,6 +248,7 @@ public class MyVote extends Vote {
 		}
 	}
 
+	/* ---------------------------- Product ---------------------------- */
 	@Override
 	protected double[] distributionForInstanceProduct(Instance instance) throws Exception {
 
@@ -288,6 +286,11 @@ public class MyVote extends Vote {
 		// TODO Auto-generated method stub
 	}
 
+	private void postprocessDistributionForInstanceProduct() {
+		// TODO Auto-generated method stub
+	}
+
+	/* ---------------------------- Majority Voting ---------------------------- */
 	@Override
 	protected double[] distributionForInstanceMajorityVoting(Instance instance) throws Exception {
 
@@ -357,6 +360,11 @@ public class MyVote extends Vote {
 		// TODO Auto-generated method stub
 	}
 
+	private void postprocessDistributionForInstanceMajorityVoting() {
+		// TODO Auto-generated method stub
+	}
+
+	/* ---------------------------------- MAX ---------------------------------- */
 	@Override
 	protected double[] distributionForInstanceMax(Instance instance) throws Exception {
 
@@ -396,6 +404,12 @@ public class MyVote extends Vote {
 
 	}
 
+	private void postprocessDistributionForInstanceMax() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/* ---------------------------------- Min ---------------------------------- */
 	@Override
 	protected double[] distributionForInstanceMin(Instance instance) throws Exception {
 
@@ -432,7 +446,10 @@ public class MyVote extends Vote {
 
 	private void preprocessDistributionForInstanceMin(Classifier classifier) {
 		// TODO Auto-generated method stub
+	}
 
+	private void postprocessDistributionForInstanceMin() {
+		// TODO Auto-generated method stub
 	}
 
 	@Override

@@ -21,7 +21,6 @@ import boa.datagen.DefaultProperties;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 import weka.classifiers.Classifier;
-import weka.classifiers.Evaluation;
 import weka.core.Instances;
 
 public class MLSeqCombiner {
@@ -60,13 +59,15 @@ public class MLSeqCombiner {
 
 		if (trainInstances != null && trainInstances.numInstances() != 0) {
 			System.out.println("start to evaluate train data " + trainInstances.numInstances());
-			sb.append(evaluate(v, trainInstances));
+			sb.append(evaluate(trainInstances));
+//			sb.append(evaluate(v, trainInstances));
 			System.out.println("finish evaluating train data");			
 		}
 
 		if (testInstances != null && testInstances.numInstances() != 0) {
-			System.out.println("start to evaluate train data " + testInstances.numInstances());
-			sb.append(evaluate(v, testInstances));
+			System.out.println("start to evaluate test data " + testInstances.numInstances());
+			sb.append(evaluate(testInstances));
+//			sb.append(evaluate(v, testInstances));
 			System.out.println("finish evaluating test data");			
 		}
 
@@ -127,8 +128,22 @@ public class MLSeqCombiner {
 	public String evaluate(Classifier model, Instances set) {
 		String res = "";
 		try {
-			Evaluation eval = new Evaluation(set);
+			MyEvaluation eval = new MyEvaluation(set);
 			eval.evaluateModel(model, set);
+			String s = trainInstances == set ? "Train" : "Test";
+			res = eval.toSummaryString("\n====== " + s + " Dataset Evaluation ======\n", false);
+			res += "\n" + eval.toClassDetailsString() + "\n";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	public String evaluate(Instances set) {
+		String res = "";
+		try {
+			MyVote v = new MyVote(modelSeqPath, set, 1);
+			MyEvaluation eval = new MyEvaluation(v);
 			String s = trainInstances == set ? "Train" : "Test";
 			res = eval.toSummaryString("\n====== " + s + " Dataset Evaluation ======\n", false);
 			res += "\n" + eval.toClassDetailsString() + "\n";
