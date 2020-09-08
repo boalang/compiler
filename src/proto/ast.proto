@@ -605,11 +605,14 @@ message Cell {
 	}
 	required CellKind cell_kind = 1;
 	required int32 cell_id = 2;
-	required int32 execution_count = 3;
+	optional int32 execution_count = 3;
 	
 	/** The top-level namespaces in each cell */
 	repeated Namespace namespaces = 4;
 	optional bool parse_error = 5;
+	
+	/** For markdown cells */
+	optional string markdown_text = 6;
 	
 }
 

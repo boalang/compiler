@@ -44516,13 +44516,13 @@ public final class Ast {
      */
     int getCellId();
 
-    // required int32 execution_count = 3;
+    // optional int32 execution_count = 3;
     /**
-     * <code>required int32 execution_count = 3;</code>
+     * <code>optional int32 execution_count = 3;</code>
      */
     boolean hasExecutionCount();
     /**
-     * <code>required int32 execution_count = 3;</code>
+     * <code>optional int32 execution_count = 3;</code>
      */
     int getExecutionCount();
 
@@ -44580,6 +44580,33 @@ public final class Ast {
      * <code>optional bool parse_error = 5;</code>
      */
     boolean getParseError();
+
+    // optional string markdown_text = 6;
+    /**
+     * <code>optional string markdown_text = 6;</code>
+     *
+     * <pre>
+     ** For markdown cells 
+     * </pre>
+     */
+    boolean hasMarkdownText();
+    /**
+     * <code>optional string markdown_text = 6;</code>
+     *
+     * <pre>
+     ** For markdown cells 
+     * </pre>
+     */
+    java.lang.String getMarkdownText();
+    /**
+     * <code>optional string markdown_text = 6;</code>
+     *
+     * <pre>
+     ** For markdown cells 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getMarkdownTextBytes();
   }
   /**
    * Protobuf type {@code boa.types.Cell}
@@ -44668,6 +44695,11 @@ public final class Ast {
             case 40: {
               bitField0_ |= 0x00000008;
               parseError_ = input.readBool();
+              break;
+            }
+            case 50: {
+              bitField0_ |= 0x00000010;
+              markdownText_ = input.readBytes();
               break;
             }
           }
@@ -44849,17 +44881,17 @@ public final class Ast {
       return cellId_;
     }
 
-    // required int32 execution_count = 3;
+    // optional int32 execution_count = 3;
     public static final int EXECUTION_COUNT_FIELD_NUMBER = 3;
     private int executionCount_;
     /**
-     * <code>required int32 execution_count = 3;</code>
+     * <code>optional int32 execution_count = 3;</code>
      */
     public boolean hasExecutionCount() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required int32 execution_count = 3;</code>
+     * <code>optional int32 execution_count = 3;</code>
      */
     public int getExecutionCount() {
       return executionCount_;
@@ -44937,12 +44969,68 @@ public final class Ast {
       return parseError_;
     }
 
+    // optional string markdown_text = 6;
+    public static final int MARKDOWN_TEXT_FIELD_NUMBER = 6;
+    private java.lang.Object markdownText_;
+    /**
+     * <code>optional string markdown_text = 6;</code>
+     *
+     * <pre>
+     ** For markdown cells 
+     * </pre>
+     */
+    public boolean hasMarkdownText() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional string markdown_text = 6;</code>
+     *
+     * <pre>
+     ** For markdown cells 
+     * </pre>
+     */
+    public java.lang.String getMarkdownText() {
+      java.lang.Object ref = markdownText_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          markdownText_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string markdown_text = 6;</code>
+     *
+     * <pre>
+     ** For markdown cells 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getMarkdownTextBytes() {
+      java.lang.Object ref = markdownText_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        markdownText_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       cellKind_ = boa.types.Ast.Cell.CellKind.OTHER;
       cellId_ = 0;
       executionCount_ = 0;
       namespaces_ = java.util.Collections.emptyList();
       parseError_ = false;
+      markdownText_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -44954,10 +45042,6 @@ public final class Ast {
         return false;
       }
       if (!hasCellId()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasExecutionCount()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -44989,6 +45073,9 @@ public final class Ast {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeBool(5, parseError_);
       }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBytes(6, getMarkdownTextBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -45017,6 +45104,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(5, parseError_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(6, getMarkdownTextBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -45153,6 +45244,8 @@ public final class Ast {
         }
         parseError_ = false;
         bitField0_ = (bitField0_ & ~0x00000010);
+        markdownText_ = "";
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -45206,6 +45299,10 @@ public final class Ast {
           to_bitField0_ |= 0x00000008;
         }
         result.parseError_ = parseError_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.markdownText_ = markdownText_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -45260,6 +45357,11 @@ public final class Ast {
         if (other.hasParseError()) {
           setParseError(other.getParseError());
         }
+        if (other.hasMarkdownText()) {
+          bitField0_ |= 0x00000020;
+          markdownText_ = other.markdownText_;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -45270,10 +45372,6 @@ public final class Ast {
           return false;
         }
         if (!hasCellId()) {
-          
-          return false;
-        }
-        if (!hasExecutionCount()) {
           
           return false;
         }
@@ -45374,22 +45472,22 @@ public final class Ast {
         return this;
       }
 
-      // required int32 execution_count = 3;
+      // optional int32 execution_count = 3;
       private int executionCount_ ;
       /**
-       * <code>required int32 execution_count = 3;</code>
+       * <code>optional int32 execution_count = 3;</code>
        */
       public boolean hasExecutionCount() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required int32 execution_count = 3;</code>
+       * <code>optional int32 execution_count = 3;</code>
        */
       public int getExecutionCount() {
         return executionCount_;
       }
       /**
-       * <code>required int32 execution_count = 3;</code>
+       * <code>optional int32 execution_count = 3;</code>
        */
       public Builder setExecutionCount(int value) {
         bitField0_ |= 0x00000004;
@@ -45398,7 +45496,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required int32 execution_count = 3;</code>
+       * <code>optional int32 execution_count = 3;</code>
        */
       public Builder clearExecutionCount() {
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -45752,6 +45850,104 @@ public final class Ast {
         return this;
       }
 
+      // optional string markdown_text = 6;
+      private java.lang.Object markdownText_ = "";
+      /**
+       * <code>optional string markdown_text = 6;</code>
+       *
+       * <pre>
+       ** For markdown cells 
+       * </pre>
+       */
+      public boolean hasMarkdownText() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional string markdown_text = 6;</code>
+       *
+       * <pre>
+       ** For markdown cells 
+       * </pre>
+       */
+      public java.lang.String getMarkdownText() {
+        java.lang.Object ref = markdownText_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          markdownText_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string markdown_text = 6;</code>
+       *
+       * <pre>
+       ** For markdown cells 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getMarkdownTextBytes() {
+        java.lang.Object ref = markdownText_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          markdownText_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string markdown_text = 6;</code>
+       *
+       * <pre>
+       ** For markdown cells 
+       * </pre>
+       */
+      public Builder setMarkdownText(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        markdownText_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string markdown_text = 6;</code>
+       *
+       * <pre>
+       ** For markdown cells 
+       * </pre>
+       */
+      public Builder clearMarkdownText() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        markdownText_ = getDefaultInstance().getMarkdownText();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string markdown_text = 6;</code>
+       *
+       * <pre>
+       ** For markdown cells 
+       * </pre>
+       */
+      public Builder setMarkdownTextBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        markdownText_ = value;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Cell)
     }
 
@@ -46051,17 +46247,17 @@ public final class Ast {
       "_FACE_RULE\020\010\022\016\n\nMEDIA_RULE\020\t\022\017\n\013MEDIA_QU" +
       "ERY\020\n\022\017\n\013IMPORT_RULE\020\013\022\017\n\013XML_ELEMENT\020\014\"" +
       "\'\n\tAttribute\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t" +
-      "\"\324\001\n\004Cell\022+\n\tcell_kind\030\001 \002(\0162\030.boa.types",
+      "\"\353\001\n\004Cell\022+\n\tcell_kind\030\001 \002(\0162\030.boa.types",
       ".Cell.CellKind\022\017\n\007cell_id\030\002 \002(\005\022\027\n\017execu" +
-      "tion_count\030\003 \002(\005\022(\n\nnamespaces\030\004 \003(\0132\024.b" +
-      "oa.types.Namespace\022\023\n\013parse_error\030\005 \001(\010\"" +
-      "6\n\010CellKind\022\t\n\005OTHER\020\000\022\010\n\004CODE\020\001\022\014\n\010MARK" +
-      "DOWN\020\002\022\007\n\003RAW\020\003*\303\001\n\010TypeKind\022\t\n\005OTHER\020\000\022" +
-      "\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003" +
-      "\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUM" +
-      "ERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022" +
-      "\013\n\007GENERIC\020\010\022\t\n\005TRAIT\020\t\022\r\n\tPRIMITIVE\020\n\022\t" +
-      "\n\005ARRAY\020\013\032\002\020\001B\002H\001"
+      "tion_count\030\003 \001(\005\022(\n\nnamespaces\030\004 \003(\0132\024.b" +
+      "oa.types.Namespace\022\023\n\013parse_error\030\005 \001(\010\022" +
+      "\025\n\rmarkdown_text\030\006 \001(\t\"6\n\010CellKind\022\t\n\005OT" +
+      "HER\020\000\022\010\n\004CODE\020\001\022\014\n\010MARKDOWN\020\002\022\007\n\003RAW\020\003*\303" +
+      "\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINT" +
+      "ERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STR" +
+      "UCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNO" +
+      "TATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005T" +
+      "RAIT\020\t\022\r\n\tPRIMITIVE\020\n\022\t\n\005ARRAY\020\013\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -46163,7 +46359,7 @@ public final class Ast {
           internal_static_boa_types_Cell_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Cell_descriptor,
-              new java.lang.String[] { "CellKind", "CellId", "ExecutionCount", "Namespaces", "ParseError", });
+              new java.lang.String[] { "CellKind", "CellId", "ExecutionCount", "Namespaces", "ParseError", "MarkdownText", });
           return null;
         }
       };

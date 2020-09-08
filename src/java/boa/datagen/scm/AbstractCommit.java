@@ -590,7 +590,7 @@ public abstract class AbstractCommit {
 		return !errorCheck.hasError;
 	}
 
-	boolean pythonParsingError, enableDiff = true;
+	boolean pythonParsingError, enableDiff = false;
 
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
@@ -721,100 +721,133 @@ public abstract class AbstractCommit {
 		for (JsonElement cell : cells) {
 			cellParseError = false;
 			JsonObject c = cell.getAsJsonObject();
-			if (!c.get("cell_type").getAsString().equals("code") || !c.has("source"))
-				continue;
-
-			cellCount += 1;
-			int exec_count; // Execution count = -1 if its null
-			try {
-				exec_count = c.get("execution_count").getAsInt();
-			} catch (Exception e) {
-				exec_count = -1;
-			}
-
-			JsonArray lines = c.getAsJsonArray("source");
-			Iterator<JsonElement> iterator = lines.iterator();
-
-			String codeCell = "";
 			
-			while (iterator.hasNext()) {
-				String line = "";
+			if (c.get("cell_type").getAsString().equals("markdown") && c.has("source")) {
+				cellCount += 1;
+				
+
+				JsonArray lines = c.getAsJsonArray("source");
+				Iterator<JsonElement> iterator = lines.iterator();
+
+				String codeCell = "";
+				
+				while (iterator.hasNext()) {
+					String line = "";
+					try {
+						line = iterator.next().getAsString();
+					} catch (Exception e) {
+						e.printStackTrace();
+						line = "";
+						if (debug) {
+							System.err.println("Error parsing one line in a markdown cell: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
+							writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+						}
+					}
+					codeCell += line;
+				}
+				
+				Cell.Builder cb = Cell.newBuilder();
+				cb.setCellKind(CellKind.MARKDOWN);
+				cb.setCellId(cellCount);
+				cb.setMarkdownText(codeCell);
+				ast.addCells(cb.build());
+			}
+			
+			if (c.get("cell_type").getAsString().equals("code") && c.has("source")) {
+				cellCount += 1;
+				int exec_count; // Execution count = -1 if its null
 				try {
-					line = iterator.next().getAsString();
+					exec_count = c.get("execution_count").getAsInt();
 				} catch (Exception e) {
-					e.printStackTrace();
-					line = "";
+					exec_count = -1;
+				}
+
+				JsonArray lines = c.getAsJsonArray("source");
+				Iterator<JsonElement> iterator = lines.iterator();
+
+				String codeCell = "";
+				
+				while (iterator.hasNext()) {
+					String line = "";
+					try {
+						line = iterator.next().getAsString();
+					} catch (Exception e) {
+						e.printStackTrace();
+						line = "";
+						if (debug) {
+							System.err.println("Error parsing one line in a cell: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
+							writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+						}
+					}
+					if (NoNotebookErrors(line))
+						codeCell += line;
+					else
+						codeCell += "#" + line;
+				}
+				
+				Cell.Builder cb = Cell.newBuilder();
+				cb.setCellKind(CellKind.CODE);
+				cb.setCellId(cellCount);
+				cb.setExecutionCount(exec_count);
+
+				////////// Parse code here ////////////////////
+
+				PythonSourceParser parser = new PythonSourceParser();
+				IModuleSource input = new ModuleSource(codeCell);
+
+				IProblemReporter reporter = new IProblemReporter() {
+					@Override
+					public void reportProblem(IProblem arg0) {
+						cellParseError = true;
+					}
+				};
+
+				// System.out.println("actual source: " + codeCell);
+				PythonModuleDeclaration module = null;
+
+				try {
+					module = (PythonModuleDeclaration) parser.parse(input, reporter);
+				} catch (Exception e) {
 					if (debug) {
-						System.err.println("Error parsing one line in a cell: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
+						System.err.println("Error parsing notebook cell: " + path + " from: " + projectName + "\n");
 						writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
 					}
+					e.printStackTrace();
+					cellParseError = true;
+					cb.setParseError(cellParseError);
+					ast.addCells(cb.build());
+					continue;
 				}
-				if (NoNotebookErrors(line))
-					codeCell += line;
-				else
-					codeCell += "#" + line;
-			}
-			
-			Cell.Builder cb = Cell.newBuilder();
-			cb.setCellKind(CellKind.CODE);
-			cb.setCellId(cellCount);
-			cb.setExecutionCount(exec_count);
-
-			////////// Parse code here ////////////////////
-
-			PythonSourceParser parser = new PythonSourceParser();
-			IModuleSource input = new ModuleSource(codeCell);
-
-			IProblemReporter reporter = new IProblemReporter() {
-				@Override
-				public void reportProblem(IProblem arg0) {
+				
+				NewPythonVisitor visitor = new NewPythonVisitor();
+				visitor.enableDiff = false;
+				
+				try {
+					cb.addNamespaces(visitor.getCellAsNamespace(module, "code_cell:" + cellCount));
+				} catch (final UnsupportedOperationException e) {
+					if (debug) {
+						System.err.println("Error getting AST for a notebook cell: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
+						writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+					}
+					e.printStackTrace();
+					cellParseError = true;
+				} catch (final Throwable e) {
+					if (debug) {
+						System.err.println("Error getting AST for a notebook cell: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
+						writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+					}
+					e.printStackTrace();
 					cellParseError = true;
 				}
-			};
-
-			// System.out.println("actual source: " + codeCell);
-			PythonModuleDeclaration module = null;
-
-			try {
-				module = (PythonModuleDeclaration) parser.parse(input, reporter);
-			} catch (Exception e) {
-				if (debug) {
-					System.err.println("Error parsing notebook cell: " + path + " from: " + projectName + "\n");
-					writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
-				}
-				e.printStackTrace();
-				cellParseError = true;
+				
 				cb.setParseError(cellParseError);
 				ast.addCells(cb.build());
-				continue;
+				///////// Parsing each cell ends ////////////////////
 			}
+
 			
-			NewPythonVisitor visitor = new NewPythonVisitor();
-			visitor.enableDiff = false;
-			
-			try {
-				cb.addNamespaces(visitor.getCellAsNamespace(module, "code_cell:" + cellCount));
-			} catch (final UnsupportedOperationException e) {
-				if (debug) {
-					System.err.println("Error getting AST for a notebook cell: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
-					writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
-				}
-				e.printStackTrace();
-				cellParseError = true;
-			} catch (final Throwable e) {
-				if (debug) {
-					System.err.println("Error getting AST for a notebook cell: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
-					writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
-				}
-				e.printStackTrace();
-				cellParseError = true;
-			}
-			
-			cb.setParseError(cellParseError);
-			ast.addCells(cb.build());
-			///////// Parsing each cell ends ////////////////////
 		}
-		////////// Loop ends for all cells
+		////////// Cell loop ends for all cells
 
 		if(cellCount > 0)
 			fb.setKind(FileKind.SOURCE_PY_3);
@@ -860,10 +893,8 @@ public abstract class AbstractCommit {
 	}
 
 	boolean NoNotebookErrors(String line) {
-		if (line.startsWith("%") ||
-			line.startsWith("!") ||
-			line.startsWith("?") ||
-			line.endsWith("?"))
+		if (line.startsWith("%") || line.startsWith("!") ||
+			line.startsWith("?") || line.endsWith("?"))
 			return false;
 		return true;
 	}
