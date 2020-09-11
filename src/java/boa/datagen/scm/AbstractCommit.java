@@ -50,6 +50,7 @@ import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
 import boa.datagen.DefaultProperties;
 import boa.datagen.dependencies.PomFile;
+import boa.datagen.generic.treed.BoaToPythonConverter;
 import boa.datagen.util.CssVisitor;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.HtmlVisitor;
@@ -673,7 +674,20 @@ public abstract class AbstractCommit {
 
 			if (!pythonParsingError)
 				fb.setKind(FileKind.SOURCE_PY_3);
-
+			
+			PythonModuleDeclaration md1;
+			BoaToPythonConverter boaToPythonConverter=new BoaToPythonConverter();
+			try {
+				
+				md1=(PythonModuleDeclaration) 
+						boaToPythonConverter.visit(ast.getNamespaces(0));
+				if(this.lastRevision)
+					System.out.println("hello");
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 			try {
 				BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 				connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);

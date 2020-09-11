@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.ast.declarations.Argument;
 import org.eclipse.dltk.ast.declarations.MethodDeclaration;
 import org.eclipse.dltk.ast.declarations.TypeDeclaration;
 import org.eclipse.dltk.ast.expressions.ExpressionList;
@@ -58,6 +59,7 @@ import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Cell;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Expression;
+import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Method;
 import boa.types.Ast.Modifier;
 import boa.types.Ast.Namespace;
@@ -74,22 +76,30 @@ public class BoaToPythonConverter {
 		
 		for (boa.types.Ast.Variable st : node.getVariablesList())
 		{
-			ast.addStatement(visit(st));
+			ASTNode chast=visit(st);
+			if(chast!=null)
+				ast.addStatement(chast);
 		}
 		
 		for (boa.types.Ast.Statement st : node.getStatementsList())
 		{
-			ast.addStatement(visit(st));
+			ASTNode chast=visit(st);
+			if(chast!=null)
+				ast.addStatement(chast);
 		}
 		
 		for (boa.types.Ast.Declaration st : node.getDeclarationsList())
 		{
-			ast.addStatement(visit(st));
+			ASTNode chast=visit(st);
+			if(chast!=null)
+				ast.addStatement(chast);
 		}
 		
 		for (boa.types.Ast.Method st : node.getMethodsList())
 		{
-			ast.addStatement(visit(st));
+			ASTNode chast=visit(st);
+			if(chast!=null)
+				ast.addStatement(chast);
 		}
 
 		return ast;
@@ -100,23 +110,31 @@ public class BoaToPythonConverter {
 		
 		for (boa.types.Ast.Type st : node.getParentsList())
 		{
-			ast.addSuperClass(visit(st));
+			ASTNode chast=visit(st);
+			if(chast!=null)
+				ast.addSuperClass(chast);
 		}
 		
 		List<ASTNode> sts=new ArrayList<ASTNode>();
 		for (boa.types.Ast.Statement st : node.getStatementsList())
 		{
-			sts.add(visit(st));
+			ASTNode chast=visit(st);
+			if(chast!=null)
+				sts.add(chast);
 		}
 		
 		for (boa.types.Ast.Declaration st : node.getNestedDeclarationsList())
 		{
-			sts.add(visit(st));
+			ASTNode chast=visit(st);
+			if(chast!=null)
+				sts.add(chast);
 		}
 		
 		for (boa.types.Ast.Method st : node.getMethodsList())
 		{
-			sts.add(visit(st));
+			ASTNode chast=visit(st);
+			if(chast!=null)
+				sts.add(chast);
 		}
 		
 		ast.setBody(wrapInBlock(sts));
@@ -135,13 +153,17 @@ public class BoaToPythonConverter {
 
 		for (boa.types.Ast.Variable st : node.getArgumentsList())
 		{
-			ast.addArgument(visitArgument(st));
+			ASTNode chast=visitArgument(st);
+			if(chast!=null)
+				ast.addArgument((Argument) chast);
 		}
 		
 		List<ASTNode> sts=new ArrayList<ASTNode>();
 		for (boa.types.Ast.Statement st : node.getStatementsList())
 		{
-			ast.acceptBody((Block) visit(st));
+			Block chast=(Block) visit(st);
+			if(chast!=null)
+				ast.acceptBody(chast);
 		}
 		
 		return ast;
@@ -162,6 +184,8 @@ public class BoaToPythonConverter {
 			return visitGlobalStatement(node);
 		if(node.getKind()==StatementKind.EMPTY)
 			return visitEmptyStatement(node);
+		if(node.getKind()==StatementKind.EXPRESSION)
+			return visitExpressionStatement(node);
 		
 		return null;
 	}
@@ -172,54 +196,49 @@ public class BoaToPythonConverter {
 		
 		for (boa.types.Ast.Variable st : node.getVariableDeclarationsList())
 		{
-			sts.add(visit(st));
+			ASTNode chast=visit(st);
+			if(chast!=null)
+				sts.add(chast);
 		}
 		
 		for (boa.types.Ast.Statement st : node.getStatementsList())
 		{
-			sts.add(visit(st));
+			ASTNode chast=visit(st);
+			if(chast!=null)
+				sts.add(chast);
 		}
 		
 		for (boa.types.Ast.Declaration st : node.getTypeDeclarationsList())
 		{
-			sts.add(visit(st));
+			ASTNode chast=visit(st);
+			if(chast!=null)
+				sts.add(chast);
 		}
 		
 		for (boa.types.Ast.Method st : node.getMethodsList())
 		{
-			sts.add(visit(st));
+			ASTNode chast=visit(st);
+			if(chast!=null)
+				sts.add(chast);
 		}
 		
 		return wrapInBlock(sts);
 	}
 
 	public final ASTNode visit(final Expression node) throws Exception {
-		final List<Expression> expressionsList = node.getExpressionsList();
-		final int expressionsSize = expressionsList.size();
-		for (int i = 0; i < expressionsSize; i++)
-			visit(expressionsList.get(i));
-
-		final List<Variable> varDeclsList = node.getVariableDeclsList();
-		final int varDeclsSize = varDeclsList.size();
-		for (int i = 0; i < varDeclsSize; i++)
-			visit(varDeclsList.get(i));
-
-		if (node.hasNewType())
-			visit(node.getNewType());
-
-		final List<Type> genericParametersList = node.getGenericParametersList();
-		final int genericParametersSize = genericParametersList.size();
-		for (int i = 0; i < genericParametersSize; i++)
-			visit(genericParametersList.get(i));
-
-		final List<Expression> methodArgsList = node.getMethodArgsList();
-		final int methodArgsSize = methodArgsList.size();
-		for (int i = 0; i < methodArgsSize; i++)
-			visit(methodArgsList.get(i));
-
-		if (node.hasAnonDeclaration())
-			visit(node.getAnonDeclaration());
 		
+		if(node.getKind()==ExpressionKind.METHODCALL ||
+				node.getKind()==ExpressionKind.ARRAYACCESS ||
+				(node.getKind()==ExpressionKind.VARACCESS && node.getExpressionsCount()>0))
+			return visitExtendedExpression(node);
+		else if(node.getKind()==ExpressionKind.VARACCESS)
+			return visitReferenceExpression(node);
+		else if(node.getKind().toString().startsWith("ASSIGN"))
+			return visitAssignExpression(node);
+		else if(node.getKind()==ExpressionKind.LITERAL)
+			return visitLiteralExpression(node);
+		else if(node.getKind()==ExpressionKind.OTHER)
+			return visitOtherExpression(node);
 		return null;
 
 	}
@@ -286,7 +305,11 @@ public class BoaToPythonConverter {
 		PythonTryStatement ast=null;
 		return ast;
 	}
+	
 	public final ASTNode visitExpressionStatement(final Statement node) throws Exception {
+		if(node.getExpressionsCount()==1)
+			return visit(node.getExpressions(0));
+		
 		return null;
 	}
 	public final ASTNode visitReturnStatement(final Statement node) throws Exception {
@@ -296,15 +319,69 @@ public class BoaToPythonConverter {
 	
 	
 	public final ASTNode visitOtherExpression(final Expression node) throws Exception {
-		ExpressionList ast=null;
-		return ast;
+		return wrapInExpressionList(node.getExpressionsList());
 	}
 	public final ASTNode visitCallHolderExpression(final Expression node) throws Exception {
-		CallHolder ast=null;
-		return ast;
+		if(node.getMethodArgsCount()==0)
+			return new CallHolder(0, 0, new EmptyExpression());
+		else
+		{
+			Expression l=node.getMethodArgs(0);
+			if(l.getExpressionsCount()==0)
+				return new CallHolder(0, 0, new EmptyExpression());
+			else
+				return new CallHolder(0, 0, wrapInExpressionList(l.getExpressionsList()));
+		}
 	}
+	
 	public final ASTNode visitExtendedExpression(final Expression node) throws Exception {
-		ExtendedVariableReference ast=null;
+		ExtendedVariableReference ast;
+		boolean methodInserted=false;
+		
+		if(node.getExpressionsCount()==0)
+		{
+			 ast=new ExtendedVariableReference(new VariableReference(0, 0, node.getMethod()));
+			 methodInserted=true;
+		}
+		else 
+			ast=new ExtendedVariableReference(
+				(org.eclipse.dltk.ast.expressions.Expression) visit(node.getExpressions(0)));
+		
+		final List<Expression> expressionsList = node.getExpressionsList();
+		final int expressionsSize = expressionsList.size();
+		for (int i = 1; i < expressionsSize; i++)
+		{
+			Expression ex=expressionsList.get(i);
+			if(ex.getKind()==ExpressionKind.VARACCESS)
+				ast.addExpression((org.eclipse.dltk.ast.expressions.Expression) 
+						visit(ex));
+			else if(ex.getKind()==ExpressionKind.METHODCALL)
+			{
+				ast.addExpression(new VariableReference(0, 0, ex.getMethod()));
+				
+				ast.addExpression((org.eclipse.dltk.ast.expressions.Expression) 
+						visitCallHolderExpression(ex));
+			}
+			else if(ex.getKind()==ExpressionKind.ARRAYINDEX)
+			{
+				ast.addExpression((org.eclipse.dltk.ast.expressions.Expression) 
+						visitIndexExpression(ex));
+			}
+		}
+		
+		if(node.getKind()==ExpressionKind.METHODCALL)
+		{
+			if(methodInserted==false)
+				ast.addExpression(new VariableReference(0, 0, node.getMethod()));
+			
+			ast.addExpression((org.eclipse.dltk.ast.expressions.Expression) 
+					visitCallHolderExpression(node));
+		}
+		else if(node.getKind()==ExpressionKind.VARACCESS)
+		{
+			ast.addExpression(new VariableReference(0, 0, node.getVariable()));
+		}
+		
 		return ast;
 	}
 	public final ASTNode visitLambdaExpression(final Expression node) throws Exception {
@@ -316,9 +393,24 @@ public class BoaToPythonConverter {
 		return ast;
 	}
 	public final ASTNode visitIndexExpression(final Expression node) throws Exception {
-		IndexHolder ast=null;
-		PythonSubscriptExpression ast2=null;
-		return ast;
+		if(node.getExpressionsCount()==0)
+			return new IndexHolder(0, 0, new EmptyExpression());
+		else
+		{
+			PythonSubscriptExpression ast=new PythonSubscriptExpression();
+			ast.setTest((org.eclipse.dltk.ast.expressions.Expression) 
+					visit(node.getExpressions(0)));
+			
+			if(node.getExpressionsCount()>1)
+				ast.setCondition((org.eclipse.dltk.ast.expressions.Expression) 
+					visit(node.getExpressions(1)));
+			
+			if(node.getExpressionsCount()>2)
+				ast.setSlice((org.eclipse.dltk.ast.expressions.Expression) 
+					visit(node.getExpressions(2)));
+		
+			return ast;
+		}
 	}
 	public final ASTNode visitListExpression(final Expression node) throws Exception {
 		PythonListExpression ast=null;
@@ -355,19 +447,20 @@ public class BoaToPythonConverter {
 		return ast;
 	}
 	public final ASTNode visitAssignExpression(final Expression node) throws Exception {
-		Assignment ast=null;
-		return ast;
-	}
-	public final ASTNode visitNotStrictAssignExpression(final Expression node) throws Exception {
-		NotStrictAssignment ast=null;
-		return ast;
+		if(node.getExpressionsCount()<2)
+			return null;
+		
+		org.eclipse.dltk.ast.statements.Statement left=(org.eclipse.dltk.ast.statements.Statement) visit(node.getExpressions(0));
+		org.eclipse.dltk.ast.statements.Statement right=(org.eclipse.dltk.ast.statements.Statement) visit(node.getExpressions(1));
+		
+		return new Assignment(left, right);
 	}
 	public final ASTNode visitReferenceExpression(final Expression node) throws Exception {
-		VariableReference ast=null;
+		VariableReference ast=new VariableReference(0, 0, node.getVariable());
 		return ast;
 	}
 	public final ASTNode visitLiteralExpression(final Expression node) throws Exception {
-		StringLiteral ast=null;
+		StringLiteral ast=new StringLiteral(0, 0, node.getLiteral());
 		return ast;
 	}
 	public final ASTNode visitEmptyExpression(final Expression node) throws Exception {
@@ -386,7 +479,8 @@ public class BoaToPythonConverter {
 	public final Block wrapInBlock(List<ASTNode> l)
 	{
 		Block ast=new Block();
-		ast.acceptStatements(l);
+		if(l!=null)
+			ast.acceptStatements(l);
 		return ast;
 	}
 	
@@ -397,8 +491,25 @@ public class BoaToPythonConverter {
 			org.eclipse.dltk.ast.expressions.Expression ex=
 					(org.eclipse.dltk.ast.expressions.Expression) visit(e);
 			
-			ast.addExpression(ex);
+			if(ex!=null)
+				ast.addExpression(ex);
 		}
 		return ast;
+	}
+	
+	public boolean isBinaryExpressionKind(final Expression node)
+	{
+		if(node.getExpressionsCount()!=2) return false;
+		
+		return node.getKind().toString().startsWith("OP")||
+				node.getKind().toString().endsWith("EQ") ||
+				node.getKind().toString().endsWith("IN") ||
+				node.getKind().toString().startsWith("IS")||
+				node.getKind().toString().startsWith("LOGICAL")||
+				node.getKind().toString().startsWith("BIT")||
+				node.getKind()==ExpressionKind.GT ||
+				node.getKind()==ExpressionKind.LT ||
+				node.getKind()==ExpressionKind.OTHER
+				;
 	}
 }
