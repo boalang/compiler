@@ -9,7 +9,11 @@ import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.ast.declarations.MethodDeclaration;
 import org.eclipse.dltk.ast.declarations.TypeDeclaration;
 import org.eclipse.dltk.ast.expressions.ExpressionList;
+import org.eclipse.dltk.ast.expressions.StringLiteral;
 import org.eclipse.dltk.ast.references.SimpleReference;
+import org.eclipse.dltk.ast.references.VariableReference;
+import org.eclipse.dltk.ast.statements.Block;
+import org.eclipse.dltk.python.parser.ast.PythonArgument;
 import org.eclipse.dltk.python.parser.ast.PythonAssertStatement;
 import org.eclipse.dltk.python.parser.ast.PythonDelStatement;
 import org.eclipse.dltk.python.parser.ast.PythonExceptStatement;
@@ -20,12 +24,34 @@ import org.eclipse.dltk.python.parser.ast.PythonTryStatement;
 import org.eclipse.dltk.python.parser.ast.PythonWhileStatement;
 import org.eclipse.dltk.python.parser.ast.PythonWithStatement;
 import org.eclipse.dltk.python.parser.ast.PythonYieldStatement;
+import org.eclipse.dltk.python.parser.ast.expressions.Assignment;
+import org.eclipse.dltk.python.parser.ast.expressions.BinaryExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.CallHolder;
+import org.eclipse.dltk.python.parser.ast.expressions.EmptyExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.ExtendedVariableReference;
+import org.eclipse.dltk.python.parser.ast.expressions.IndexHolder;
+import org.eclipse.dltk.python.parser.ast.expressions.NotStrictAssignment;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonAllImportExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonDictExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonForListExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonFunctionDecorator;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonImportExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonLambdaExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonListExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonListForExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonSetExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonTupleExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.ShortHandIfExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.UnaryExpression;
 import org.eclipse.dltk.python.parser.ast.statements.BreakStatement;
 import org.eclipse.dltk.python.parser.ast.statements.ContinueStatement;
 import org.eclipse.dltk.python.parser.ast.statements.EmptyStatement;
 import org.eclipse.dltk.python.parser.ast.statements.ExecStatement;
 import org.eclipse.dltk.python.parser.ast.statements.GlobalStatement;
 import org.eclipse.dltk.python.parser.ast.statements.IfStatement;
+import org.eclipse.dltk.python.parser.ast.statements.ReturnStatement;
 import org.eclipse.dltk.python.parser.ast.statements.TryFinallyStatement;
 
 import boa.types.Ast.ASTRoot;
@@ -38,6 +64,7 @@ import boa.types.Ast.Namespace;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Type;
 import boa.types.Ast.Variable;
+import boa.types.Ast.Statement.StatementKind;
 
 public class BoaToPythonConverter {
 
@@ -45,87 +72,77 @@ public class BoaToPythonConverter {
 		
 		PythonModuleDeclaration ast=new PythonModuleDeclaration(0);
 		
-		final List<Declaration> declarationsList = node.getDeclarationsList();
-		final int declarationsSize = declarationsList.size();
-		for (int i = 0; i < declarationsSize; i++)
-			visit(declarationsList.get(i));
-
-		final List<Modifier> modifiersList = node.getModifiersList();
-		final int modifiersSize = modifiersList.size();
-		for (int i = 0; i < modifiersSize; i++)
-			visit(modifiersList.get(i));
+		for (boa.types.Ast.Variable st : node.getVariablesList())
+		{
+			ast.addStatement(visit(st));
+		}
 		
+		for (boa.types.Ast.Statement st : node.getStatementsList())
+		{
+			ast.addStatement(visit(st));
+		}
+		
+		for (boa.types.Ast.Declaration st : node.getDeclarationsList())
+		{
+			ast.addStatement(visit(st));
+		}
+		
+		for (boa.types.Ast.Method st : node.getMethodsList())
+		{
+			ast.addStatement(visit(st));
+		}
+
 		return ast;
 	}
 
 	public final ASTNode visit(final Declaration node) throws Exception {
 		TypeDeclaration ast=new TypeDeclaration(node.getName(), 0, 0, 0, 0);
 		
-		final List<Modifier> modifiersList = node.getModifiersList();
-		final int modifiersSize = modifiersList.size();
-		for (int i = 0; i < modifiersSize; i++)
-			visit(modifiersList.get(i));
-
-		final List<Type> genericParamsList = node.getGenericParametersList();
-		final int genericParamsSize = genericParamsList.size();
-		for (int i = 0; i < genericParamsSize; i++)
-			visit(genericParamsList.get(i));
-
-		final List<Type> parentsList = node.getParentsList();
-		final int parentsSize = parentsList.size();
-		for (int i = 0; i < parentsSize; i++)
-			visit(parentsList.get(i));
-
-		final List<Method> methodsList = node.getMethodsList();
-		final int methodsSize = methodsList.size();
-		for (int i = 0; i < methodsSize; i++)
-			visit(methodsList.get(i));
-
-		final List<Variable> fieldsList = node.getFieldsList();
-		final int fieldsSize = fieldsList.size();
-		for (int i = 0; i < fieldsSize; i++)
-			visit(fieldsList.get(i));
-
-		final List<Declaration> nestedList = node.getNestedDeclarationsList();
-		final int nestedSize = nestedList.size();
-		for (int i = 0; i < nestedSize; i++)
-			visit(nestedList.get(i));
+		for (boa.types.Ast.Type st : node.getParentsList())
+		{
+			ast.addSuperClass(visit(st));
+		}
+		
+		List<ASTNode> sts=new ArrayList<ASTNode>();
+		for (boa.types.Ast.Statement st : node.getStatementsList())
+		{
+			sts.add(visit(st));
+		}
+		
+		for (boa.types.Ast.Declaration st : node.getNestedDeclarationsList())
+		{
+			sts.add(visit(st));
+		}
+		
+		for (boa.types.Ast.Method st : node.getMethodsList())
+		{
+			sts.add(visit(st));
+		}
+		
+		ast.setBody(wrapInBlock(sts));
+		
 		
 		return ast;
 	}
 
-	public final void visit(final Type node) throws Exception {
-
+	public final ASTNode visit(final Type node) throws Exception {
+		SimpleReference ast=new SimpleReference(0, 0, node.getName());
+		return ast;
 	}
 
 	public final ASTNode visit(final Method node) throws Exception {
 		MethodDeclaration ast=new MethodDeclaration(node.getName(), 0, 0, 0, 0);
-		visit(node.getReturnType());
 
-		final List<Modifier> modifiersList = node.getModifiersList();
-		final int modifiersSize = modifiersList.size();
-		for (int i = 0; i < modifiersSize; i++)
-			visit(modifiersList.get(i));
-
-		final List<Type> genericParametersList = node.getGenericParametersList();
-		final int genericParametersSize = genericParametersList.size();
-		for (int i = 0; i < genericParametersSize; i++)
-			visit(genericParametersList.get(i));
-
-		final List<Variable> argumentsList = node.getArgumentsList();
-		final int argumentsSize = argumentsList.size();
-		for (int i = 0; i < argumentsSize; i++)
-			visit(argumentsList.get(i));
-
-		final List<Type> exceptionTypesList = node.getExceptionTypesList();
-		final int exceptionTypesSize = exceptionTypesList.size();
-		for (int i = 0; i < exceptionTypesSize; i++)
-			visit(exceptionTypesList.get(i));
-
-		final List<Statement> statementsList = node.getStatementsList();
-		final int statementsSize = statementsList.size();
-		for (int i = 0; i < statementsSize; i++)
-			visit(statementsList.get(i));
+		for (boa.types.Ast.Variable st : node.getArgumentsList())
+		{
+			ast.addArgument(visitArgument(st));
+		}
+		
+		List<ASTNode> sts=new ArrayList<ASTNode>();
+		for (boa.types.Ast.Statement st : node.getStatementsList())
+		{
+			ast.acceptBody((Block) visit(st));
+		}
 		
 		return ast;
 
@@ -134,51 +151,49 @@ public class BoaToPythonConverter {
 	public final ASTNode visit(final Variable node) throws Exception {
 		SimpleReference ast=new SimpleReference(0, 0, node.getName());
 		
-		visit(node.getVariableType());
-
-		final List<Modifier> modifiersList = node.getModifiersList();
-		final int modifiersSize = modifiersList.size();
-		for (int i = 0; i < modifiersSize; i++)
-			visit(modifiersList.get(i));
-
-		if (node.hasInitializer())
-			visit(node.getInitializer());
-		
 		return ast;
 	}
 
-	public final void visit(final Statement node) throws Exception {
-		final List<Statement> statementsList = node.getStatementsList();
-		final int statementsSize = statementsList.size();
-		for (int i = 0; i < statementsSize; i++)
-			visit(statementsList.get(i));
-
-		final List<Expression> initsList = node.getInitializationsList();
-		final int initsSize = initsList.size();
-		for (int i = 0; i < initsSize; i++)
-			visit(initsList.get(i));
-
-		final List<Expression> conditionsList = node.getConditionsList();
-		final int conditionsSize = conditionsList.size();
-		for (int i = 0; i < conditionsSize; i++)
-			visit(conditionsList.get(i));
-
-		final List<Expression> updatesList = node.getUpdatesList();
-		final int updatesSize = updatesList.size();
-		for (int i = 0; i < updatesSize; i++)
-			visit(updatesList.get(i));
-
-		if (node.hasVariableDeclaration())
-			visit(node.getVariableDeclaration());
-
-		if (node.hasTypeDeclaration())
-			visit(node.getTypeDeclaration());
-
-		if (node.getExpressionsCount() > 0)
-			visit(node.getExpressions(0));
+	public final ASTNode visit(final Statement node) throws Exception {
+		
+		if(node.getKind()==StatementKind.BLOCK)
+			return visitBlock(node);
+		if(node.getKind()==StatementKind.GLOBAL)
+			return visitGlobalStatement(node);
+		if(node.getKind()==StatementKind.EMPTY)
+			return visitEmptyStatement(node);
+		
+		return null;
+	}
+	
+	public final ASTNode visitBlock(final Statement node) throws Exception {
+		
+		List<ASTNode> sts=new ArrayList<ASTNode>();
+		
+		for (boa.types.Ast.Variable st : node.getVariableDeclarationsList())
+		{
+			sts.add(visit(st));
+		}
+		
+		for (boa.types.Ast.Statement st : node.getStatementsList())
+		{
+			sts.add(visit(st));
+		}
+		
+		for (boa.types.Ast.Declaration st : node.getTypeDeclarationsList())
+		{
+			sts.add(visit(st));
+		}
+		
+		for (boa.types.Ast.Method st : node.getMethodsList())
+		{
+			sts.add(visit(st));
+		}
+		
+		return wrapInBlock(sts);
 	}
 
-	public final void visit(final Expression node) throws Exception {
+	public final ASTNode visit(final Expression node) throws Exception {
 		final List<Expression> expressionsList = node.getExpressionsList();
 		final int expressionsSize = expressionsList.size();
 		for (int i = 0; i < expressionsSize; i++)
@@ -204,22 +219,19 @@ public class BoaToPythonConverter {
 
 		if (node.hasAnonDeclaration())
 			visit(node.getAnonDeclaration());
+		
+		return null;
 
-	}
-
-	public final void visit(final Modifier node) throws Exception {
-		final List<Expression> annotationValuesList = node.getAnnotationValuesList();
-		final int annotationValuesSize = annotationValuesList.size();
-		for (int i = 0; i < annotationValuesSize; i++)
-			visit(annotationValuesList.get(i));
 	}
 	
 	public final ASTNode visitGlobalStatement(final Statement node) throws Exception {
-		GlobalStatement ast=new GlobalStatement(0, 0, null);
-		return ast;
+		if(node.getExpressionsCount()>0)
+			return new GlobalStatement(0, 0, 
+					wrapInExpressionList(node.getExpressionsList()));
+		return null;
 	}
 	public final ASTNode visitEmptyStatement(final Statement node) throws Exception {
-		EmptyStatement ast=new EmptyStatement(null);
+		EmptyStatement ast=new EmptyStatement(0, 0);
 		return ast;
 	}
 	public final ASTNode visitWithStatement(final Statement node) throws Exception {
@@ -277,10 +289,116 @@ public class BoaToPythonConverter {
 	public final ASTNode visitExpressionStatement(final Statement node) throws Exception {
 		return null;
 	}
+	public final ASTNode visitReturnStatement(final Statement node) throws Exception {
+		ReturnStatement ast=null;
+		return ast;
+	}
+	
 	
 	public final ASTNode visitOtherExpression(final Expression node) throws Exception {
 		ExpressionList ast=null;
 		return ast;
 	}
+	public final ASTNode visitCallHolderExpression(final Expression node) throws Exception {
+		CallHolder ast=null;
+		return ast;
+	}
+	public final ASTNode visitExtendedExpression(final Expression node) throws Exception {
+		ExtendedVariableReference ast=null;
+		return ast;
+	}
+	public final ASTNode visitLambdaExpression(final Expression node) throws Exception {
+		PythonLambdaExpression ast=null;
+		return ast;
+	}
+	public final ASTNode visitDecoratorExpression(final Expression node) throws Exception {
+		PythonFunctionDecorator ast=null;
+		return ast;
+	}
+	public final ASTNode visitIndexExpression(final Expression node) throws Exception {
+		IndexHolder ast=null;
+		PythonSubscriptExpression ast2=null;
+		return ast;
+	}
+	public final ASTNode visitListExpression(final Expression node) throws Exception {
+		PythonListExpression ast=null;
+		return ast;
+	}
+	public final ASTNode visitSetExpression(final Expression node) throws Exception {
+		PythonSetExpression ast=null;
+		return ast;
+	}
+	public final ASTNode visitTupleExpression(final Expression node) throws Exception {
+		PythonTupleExpression ast=null;
+		return ast;
+	}
+	public final PythonArgument visitArgument(final Variable node) throws Exception {
+		PythonArgument ast=new PythonArgument();
+		ast.setArgumentName(node.getName());
+		ast.setInitializationExpression(visit(node.getInitializer()));
+		return ast;
+	}
+	public final ASTNode visitForListExpression(final Expression node) throws Exception {
+		PythonForListExpression ast=null;
+		return ast;
+	}
+	public final ASTNode visitListForExpression(final Expression node) throws Exception {
+		PythonListForExpression ast=null;
+		return ast;
+	}
+	public final ASTNode visitDictExpression(final Expression node) throws Exception {
+		PythonDictExpression ast=null;
+		return ast;
+	}
+	public final ASTNode visitConditionalExpression(final Expression node) throws Exception {
+		ShortHandIfExpression ast=null;
+		return ast;
+	}
+	public final ASTNode visitAssignExpression(final Expression node) throws Exception {
+		Assignment ast=null;
+		return ast;
+	}
+	public final ASTNode visitNotStrictAssignExpression(final Expression node) throws Exception {
+		NotStrictAssignment ast=null;
+		return ast;
+	}
+	public final ASTNode visitReferenceExpression(final Expression node) throws Exception {
+		VariableReference ast=null;
+		return ast;
+	}
+	public final ASTNode visitLiteralExpression(final Expression node) throws Exception {
+		StringLiteral ast=null;
+		return ast;
+	}
+	public final ASTNode visitEmptyExpression(final Expression node) throws Exception {
+		EmptyExpression ast=null;
+		return ast;
+	}
+	public final ASTNode visitUnaryExpression(final Expression node) throws Exception {
+		UnaryExpression ast=null;
+		return ast;
+	}
+	public final ASTNode visitBinaryExpression(final Expression node) throws Exception {
+		BinaryExpression ast=null;
+		return ast;
+	}
 	
+	public final Block wrapInBlock(List<ASTNode> l)
+	{
+		Block ast=new Block();
+		ast.acceptStatements(l);
+		return ast;
+	}
+	
+	public final ExpressionList wrapInExpressionList(List<Expression> l) throws Exception
+	{
+		ExpressionList ast=new ExpressionList();
+		for (Expression e : l) {
+			org.eclipse.dltk.ast.expressions.Expression ex=
+					(org.eclipse.dltk.ast.expressions.Expression) visit(e);
+			
+			ast.addExpression(ex);
+		}
+		return ast;
+	}
 }
