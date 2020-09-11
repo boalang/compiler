@@ -591,7 +591,7 @@ public abstract class AbstractCommit {
 		return !errorCheck.hasError;
 	}
 
-	boolean pythonParsingError, enableDiff = true;
+	boolean pythonParsingError, enableDiff = false;
 
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
@@ -675,18 +675,18 @@ public abstract class AbstractCommit {
 			if (!pythonParsingError)
 				fb.setKind(FileKind.SOURCE_PY_3);
 			
-			PythonModuleDeclaration md1;
-			BoaToPythonConverter boaToPythonConverter=new BoaToPythonConverter();
-			try {
-				
-				md1=(PythonModuleDeclaration) 
-						boaToPythonConverter.visit(ast.getNamespaces(0));
-				if(this.lastRevision)
-					System.out.println("hello");
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+//			PythonModuleDeclaration md1;
+//			BoaToPythonConverter boaToPythonConverter=new BoaToPythonConverter();
+//			try {
+//				
+//				md1=(PythonModuleDeclaration) 
+//						boaToPythonConverter.visit(ast.getNamespaces(0));
+//				if(this.lastRevision)
+//					System.out.println("hello");
+//			} catch (Exception e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
 			
 			try {
 				BytesWritable bw = new BytesWritable(ast.build().toByteArray());

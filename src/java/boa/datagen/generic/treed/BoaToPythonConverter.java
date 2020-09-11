@@ -9,6 +9,7 @@ import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.ast.declarations.Argument;
 import org.eclipse.dltk.ast.declarations.MethodDeclaration;
 import org.eclipse.dltk.ast.declarations.TypeDeclaration;
+import org.eclipse.dltk.ast.expressions.ExpressionConstants;
 import org.eclipse.dltk.ast.expressions.ExpressionList;
 import org.eclipse.dltk.ast.expressions.StringLiteral;
 import org.eclipse.dltk.ast.references.SimpleReference;
@@ -16,6 +17,7 @@ import org.eclipse.dltk.ast.references.VariableReference;
 import org.eclipse.dltk.ast.statements.Block;
 import org.eclipse.dltk.python.parser.ast.PythonArgument;
 import org.eclipse.dltk.python.parser.ast.PythonAssertStatement;
+import org.eclipse.dltk.python.parser.ast.PythonConstants;
 import org.eclipse.dltk.python.parser.ast.PythonDelStatement;
 import org.eclipse.dltk.python.parser.ast.PythonExceptStatement;
 import org.eclipse.dltk.python.parser.ast.PythonForStatement;
@@ -231,12 +233,22 @@ public class BoaToPythonConverter {
 				node.getKind()==ExpressionKind.ARRAYACCESS ||
 				(node.getKind()==ExpressionKind.VARACCESS && node.getExpressionsCount()>0))
 			return visitExtendedExpression(node);
+		
 		else if(node.getKind()==ExpressionKind.VARACCESS)
 			return visitReferenceExpression(node);
+		
 		else if(node.getKind().toString().startsWith("ASSIGN"))
 			return visitAssignExpression(node);
+		
 		else if(node.getKind()==ExpressionKind.LITERAL)
 			return visitLiteralExpression(node);
+		
+		else if(node.getKind()==ExpressionKind.UNARY)
+			return visitUnaryExpression(node);
+		
+		else if(isBinaryExpressionKind(node))
+			return visitBinaryExpression(node);
+		
 		else if(node.getKind()==ExpressionKind.OTHER)
 			return visitOtherExpression(node);
 		return null;
@@ -453,7 +465,11 @@ public class BoaToPythonConverter {
 		org.eclipse.dltk.ast.statements.Statement left=(org.eclipse.dltk.ast.statements.Statement) visit(node.getExpressions(0));
 		org.eclipse.dltk.ast.statements.Statement right=(org.eclipse.dltk.ast.statements.Statement) visit(node.getExpressions(1));
 		
-		return new Assignment(left, right);
+		if(node.getKind()==ExpressionKind.ASSIGN)
+			return new Assignment(left, right);
+		else
+			return new NotStrictAssignment(left, getAssignKindMapping(node), right);
+		
 	}
 	public final ASTNode visitReferenceExpression(final Expression node) throws Exception {
 		VariableReference ast=new VariableReference(0, 0, node.getVariable());
@@ -468,12 +484,20 @@ public class BoaToPythonConverter {
 		return ast;
 	}
 	public final ASTNode visitUnaryExpression(final Expression node) throws Exception {
-		UnaryExpression ast=null;
-		return ast;
+		if(node.getExpressionsCount()<2)
+			return null;
+		
+		return new UnaryExpression(0, 0, getUnaryKindMapping(node.getExpressions(0)), 
+				(org.eclipse.dltk.ast.statements.Statement) visit(node.getExpressions(1)));
 	}
 	public final ASTNode visitBinaryExpression(final Expression node) throws Exception {
-		BinaryExpression ast=null;
-		return ast;
+		if(node.getExpressionsCount()<2)
+			return null;
+		
+		org.eclipse.dltk.ast.statements.Statement left=(org.eclipse.dltk.ast.statements.Statement) visit(node.getExpressions(0));
+		org.eclipse.dltk.ast.statements.Statement right=(org.eclipse.dltk.ast.statements.Statement) visit(node.getExpressions(1));
+		
+		return new BinaryExpression(left, getBinaryExpressionKindMapping(node), right);
 	}
 	
 	public final Block wrapInBlock(List<ASTNode> l)
@@ -511,5 +535,140 @@ public class BoaToPythonConverter {
 				node.getKind()==ExpressionKind.LT ||
 				node.getKind()==ExpressionKind.OTHER
 				;
+	}
+	public int getBinaryExpressionKindMapping(final Expression md)
+	{
+		if (md.getKind() == ExpressionKind.OP_ADD)
+			return ExpressionConstants.E_PLUS;
+		
+		if (md.getKind() == ExpressionKind.OP_MULT)
+			return ExpressionConstants.E_MULT;
+		
+		if (md.getKind() == ExpressionKind.OP_SUB)
+			return ExpressionConstants.E_MINUS;
+		
+		if (md.getKind() == ExpressionKind.OP_DIV)
+			return ExpressionConstants.E_DIV;
+		
+		if (md.getKind() == ExpressionKind.OP_MOD)
+			return ExpressionConstants.E_MOD;
+		
+		if (md.getKind() == ExpressionKind.OP_POW)
+			return ExpressionConstants.E_POWER;
+		
+		if (md.getKind() == ExpressionKind.OP_INT_DIV)
+			return PythonConstants.E_INTEGER_DIV;
+		
+		if (md.getKind() == ExpressionKind.NEQ)
+			return ExpressionConstants.E_NOT_EQUAL;
+		
+		if (md.getKind() == ExpressionKind.GTEQ)
+			return ExpressionConstants.E_GE;
+		
+		if (md.getKind() == ExpressionKind.LT)
+			return ExpressionConstants.E_LT;
+		
+		if (md.getKind() == ExpressionKind.GT)
+			return ExpressionConstants.E_GT;
+		
+		if (md.getKind() == ExpressionKind.EQ)
+			return ExpressionConstants.E_EQUAL;
+		
+		if (md.getKind() == ExpressionKind.LTEQ)
+			return ExpressionConstants.E_LE;
+		
+		if (md.getKind() == ExpressionKind.IN)
+			return ExpressionConstants.E_IN;
+		
+		if (md.getKind() == ExpressionKind.NOT_IN)
+			return ExpressionConstants.E_NOTIN;
+		
+		if (md.getKind() == ExpressionKind.IS)
+			return ExpressionConstants.E_IS;
+		
+		if (md.getKind() == ExpressionKind.IS_NOT)
+			return ExpressionConstants.E_ISNOT;
+		
+		if (md.getKind() == ExpressionKind.LOGICAL_AND)
+			return ExpressionConstants.E_LAND;
+		
+		if (md.getKind() == ExpressionKind.LOGICAL_OR)
+			return ExpressionConstants.E_LOR;
+		
+		if (md.getKind() == ExpressionKind.LOGICAL_NOT)
+			return ExpressionConstants.E_LNOT;
+		
+		if (md.getKind() == ExpressionKind.BIT_AND)
+			return ExpressionConstants.E_BAND;
+		
+		if (md.getKind() == ExpressionKind.BIT_OR)
+			return ExpressionConstants.E_BOR;
+		
+		if (md.getKind() == ExpressionKind.BIT_RSHIFT)
+			return ExpressionConstants.E_RSHIFT;
+		
+		if (md.getKind() == ExpressionKind.BIT_LSHIFT)
+			return ExpressionConstants.E_LSHIFT;
+		
+		if (md.getKind() == ExpressionKind.BIT_XOR)
+			return ExpressionConstants.E_XOR;
+		
+		if (md.getKind() == ExpressionKind.BIT_NOT)
+			return ExpressionConstants.E_BNOT;
+		
+		return ExpressionConstants.E_SINGLE_ARROW;
+	}
+	public int getAssignKindMapping(final Expression md)
+	{
+		if (md.getKind() == ExpressionKind.ASSIGN_ADD)
+			return ExpressionConstants.E_PLUS_ASSIGN;
+		
+		if (md.getKind() == ExpressionKind.ASSIGN_SUB)
+			return ExpressionConstants.E_MINUS_ASSIGN;
+		
+		if (md.getKind() == ExpressionKind.ASSIGN_MULT)
+			return ExpressionConstants.E_MULT_ASSIGN;
+		
+		if (md.getKind() == ExpressionKind.ASSIGN_DIV)
+			return ExpressionConstants.E_DIV_ASSIGN;
+		
+		if (md.getKind() == ExpressionKind.ASSIGN_MOD)
+			return ExpressionConstants.E_MOD_ASSIGN;
+		
+		if (md.getKind() == ExpressionKind.ASSIGN_POW)
+			return ExpressionConstants.E_POWER_ASSIGN;
+		
+		if (md.getKind() == ExpressionKind.ASSIGN_INT_DIV)
+			return ExpressionConstants.E_DOUBLEDIV_ASSIGN;
+		
+		if (md.getKind() == ExpressionKind.ASSIGN_RSHIFT)
+			return ExpressionConstants.E_RSHIFT_ASSIGN;
+		
+		if (md.getKind() == ExpressionKind.ASSIGN_LSHIFT)
+			return ExpressionConstants.E_LSHIFT_ASSIGN;
+		
+		if (md.getKind() == ExpressionKind.ASSIGN_BITAND)
+			return ExpressionConstants.E_BAND_ASSIGN;
+		
+		if (md.getKind() == ExpressionKind.ASSIGN_BITOR)
+			return ExpressionConstants.E_BOR_ASSIGN;
+		
+		if (md.getKind() == ExpressionKind.ASSIGN_BITXOR)
+			return ExpressionConstants.E_BXOR_ASSIGN;
+		
+		return ExpressionConstants.E_ASSIGN;
+	}
+	public int getUnaryKindMapping(final Expression md)
+	{
+		if(md.getLiteral()=="+")
+			return ExpressionConstants.E_PLUS;
+		if(md.getLiteral()=="-")
+			return ExpressionConstants.E_MINUS;
+		if(md.getLiteral()=="~")
+			return ExpressionConstants.E_BNOT;
+		if(md.getLiteral()=="!")
+			return ExpressionConstants.E_LNOT;
+	
+		return -1;
 	}
 }
