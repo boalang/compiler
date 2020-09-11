@@ -50,7 +50,7 @@ import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
 import boa.datagen.DefaultProperties;
 import boa.datagen.dependencies.PomFile;
-import boa.datagen.generic.treed.BoaToPythonConverter;
+import boa.datagen.treed.python.BoaToPythonConverter;
 import boa.datagen.util.CssVisitor;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.HtmlVisitor;

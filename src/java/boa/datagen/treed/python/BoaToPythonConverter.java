@@ -1,4 +1,4 @@
-package boa.datagen.generic.treed;
+package boa.datagen.treed.python;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -21,7 +21,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 
-import boa.datagen.generic.treed.BoaToPythonConverter;
+import boa.datagen.treed.python.BoaToPythonConverter;
 import boa.datagen.util.NewPythonVisitor;
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.CodeRepository;
