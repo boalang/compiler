@@ -21,8 +21,6 @@ import boa.aggregators.ml.util.KMeans;
 import boa.runtime.Tuple;
 import weka.clusterers.SimpleKMeans;
 import weka.core.Attribute;
-import weka.core.DenseInstance;
-import weka.core.Instance;
 import weka.core.Instances;
 
 import java.io.IOException;
@@ -105,8 +103,6 @@ public class SimpleKMeansAggregator extends MLAggregator {
 			this.saveModel(this.model);
 			this.collect(printModelOptions() + "\n" + this.model.toString());
 			this.evaluate(m, trainingSet);
-			if (trainingPerc != 100)
-				this.evaluate(m, testingSet);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -128,19 +124,6 @@ public class SimpleKMeansAggregator extends MLAggregator {
 
 	private void instanceCreation() {
 		trainingSet = new Instances("SimpleKMeans", this.fvAttributes, 1);
-		testingSet = new Instances("SimpleKMeans", this.fvAttributes, 1);
-		for (String[] data : dataList) {
-			Instance instance = new DenseInstance(fvAttributes.size());
-			for (int i = 0; i < data.length; i++)
-				if (isNominalVal[i])
-					instance.setValue(fvAttributes.get(i), data[i]);
-				else
-					instance.setValue(fvAttributes.get(i), Double.parseDouble(data[i]));
-			if (pick(trainingPerc))
-				trainingSet.add(instance);
-			else
-				testingSet.add(instance);
-		}
 	}
 
 	private void attributeCreation() {

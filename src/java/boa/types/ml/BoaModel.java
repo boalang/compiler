@@ -16,13 +16,22 @@
  */
 package boa.types.ml;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+
+import org.apache.commons.lang.math.NumberUtils;
+
+import boa.runtime.Tuple;
 import boa.types.BoaFunction;
 import boa.types.BoaName;
 import boa.types.BoaType;
 import weka.classifiers.Classifier;
 import weka.clusterers.Clusterer;
 import weka.core.Attribute;
+import weka.core.DenseInstance;
+import weka.core.Instance;
+import weka.core.Instances;
 
 /**
  * A {@link BoaType} representing model of any ML type.
@@ -35,6 +44,8 @@ public class BoaModel extends BoaType {
 	protected Clusterer clu;
 	protected BoaType t;
 	protected Object o;
+	protected Instances data;
+	protected ArrayList<Attribute> fvAttributes;
 
 	/**
 	 * Default BoaModel Constructor.
@@ -98,7 +109,7 @@ public class BoaModel extends BoaType {
 	public Clusterer getClusterer() {
 		return this.clu;
 	}
-	
+
 	public ArrayList<Attribute> getAttributes() {
 		return null;
 	}
@@ -175,5 +186,134 @@ public class BoaModel extends BoaType {
 	@Override
 	public String toString() {
 		return "model";
+	}
+
+	public String classify(long[] vector) {
+		int NumOfAttributes = vector.length + 1;
+		if (fvAttributes == null)
+			fvAttributes = getAttributes(vector);
+		if (data == null) {
+			data = new Instances("Classifier", fvAttributes, 1);
+			data.setClassIndex(NumOfAttributes - 1);
+		}
+
+		Instance instance = new DenseInstance(NumOfAttributes);
+		for (int i = 0; i < NumOfAttributes - 1; i++)
+			instance.setValue(fvAttributes.get(i), vector[i]);
+		data.add(instance);
+
+		double predval = -1;
+		try {
+			if (this.getKind() == BoaModel.Kind.CLASSIFIER) {
+				predval = clr.classifyInstance(data.instance(0));
+			} else if (this.getKind() == BoaModel.Kind.CLUSTERER) {
+				predval = clu.clusterInstance(data.instance(0));
+			}
+			data.remove(0);
+		} catch (Exception e) {
+		}
+
+		String predict = data.classAttribute().isNominal() ? data.classAttribute().value((int) predval)
+				: String.valueOf(predval);
+		return predict;
+	}
+
+	private ArrayList<Attribute> getAttributes(long[] vector) {
+		int NumOfAttributes = vector.length + 1;
+		ArrayList<Attribute> fvAttributes = new ArrayList<Attribute>();
+		for (int i = 0; i < NumOfAttributes - 1; i++)
+			fvAttributes.add(new Attribute("Attribute" + i));
+
+		try {
+			Field[] fields = ((Tuple) o).getClass().getDeclaredFields();
+			Field lastfield = fields[fields.length - 1];
+			if (lastfield.getType().isEnum()) {
+				ArrayList<String> fvNominalVal = new ArrayList<String>();
+				for (Object obj : lastfield.getType().getEnumConstants())
+					fvNominalVal.add(obj.toString());
+				fvAttributes.add(new Attribute("Nominal" + (NumOfAttributes - 1), fvNominalVal));
+			} else {
+				fvAttributes.add(new Attribute("Attribute" + (NumOfAttributes - 1)));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return fvAttributes;
+	}
+	
+	public String classify(Tuple vector) {
+		if (fvAttributes == null)
+			fvAttributes = getAttributes(vector);
+		int NumOfAttributes = fvAttributes.size();
+		if (data == null) {
+			data = new Instances("Classifier", fvAttributes, 1);
+			data.setClassIndex(NumOfAttributes - 1);
+		}
+
+		Instance instance = new DenseInstance(NumOfAttributes);
+
+		for (int i = 0; i < NumOfAttributes - 1; i++)
+			if (NumberUtils.isNumber(vector.getValues()[i]))
+				instance.setValue((Attribute) fvAttributes.get(i), Double.parseDouble(vector.getValues()[i]));
+			else
+				instance.setValue((Attribute) fvAttributes.get(i), vector.getValues()[i]);
+		data.add(instance);
+
+		double predval = -1;
+		try {
+			if (this.getKind() == BoaModel.Kind.CLASSIFIER) {
+				predval = clr.classifyInstance(data.instance(0));
+			} else if (this.getKind() == BoaModel.Kind.CLUSTERER) {
+				predval = clu.clusterInstance(data.instance(0));
+			}
+			data.remove(0);
+		} catch (Exception e) {
+		}
+
+		String predict = data.classAttribute().isNominal() ? data.classAttribute().value((int) predval)
+				: String.valueOf(predval);
+		return predict;
+	}
+	
+	private ArrayList<Attribute> getAttributes(Tuple vector) {
+		ArrayList<Attribute> fvAttributes = new ArrayList<Attribute>();
+		try {
+			String[] fieldNames = vector.getFieldNames();
+			int count = 0;
+			for (int i = 0; i < fieldNames.length; i++) {
+				if (vector.getValue(fieldNames[i]).getClass().isEnum()) {
+					ArrayList<String> fvNominalVal = new ArrayList<String>();
+					for (Object obj : vector.getValue(fieldNames[i]).getClass().getEnumConstants())
+						fvNominalVal.add(obj.toString());
+					fvAttributes.add(new Attribute("Nominal" + count, fvNominalVal));
+					count++;
+				} else if (vector.getValue(fieldNames[i]).getClass().isArray()) {
+					int l = Array.getLength(vector.getValue(fieldNames[i])) - 1;
+					for (int j = 0; j <= l; j++) {
+						fvAttributes.add(new Attribute("Attribute" + count));
+						count++;
+					}
+				} else {
+					fvAttributes.add(new Attribute("Attribute" + count));
+					count++;
+				}
+			}
+
+			Field[] fields = ((Tuple) o).getClass().getDeclaredFields();
+			Field lastfield = fields[fields.length - 1];
+			if (lastfield.getType().isEnum()) {
+				ArrayList<String> fvNominalVal = new ArrayList<String>();
+				for (Object obj : lastfield.getType().getEnumConstants())
+					fvNominalVal.add(obj.toString());
+				fvAttributes.add(new Attribute("Nominal" + count, fvNominalVal));
+				count++;
+			} else {
+				fvAttributes.add(new Attribute("Attribute" + count));
+				count++;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return fvAttributes;
 	}
 }

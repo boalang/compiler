@@ -43,6 +43,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import static boa.functions.BoaMathIntrinsics.*;
+
 /**
  * A Boa ML aggregator to train models.
  *
@@ -52,11 +54,7 @@ import java.util.List;
 public abstract class MLAggregator extends Aggregator {
 	protected ArrayList<Attribute> fvAttributes = new ArrayList<Attribute>();
 	protected Instances unFilteredInstances;
-	protected float trainingPerc = 100;
-	protected float evalTrainPerc = 100;
-	protected float evalTestPerc = 100;
 	protected Instances trainingSet;
-	protected Instances testingSet;
 	protected int NumOfAttributes;
 	protected String[] options;
 	protected boolean flag;
@@ -83,14 +81,8 @@ public abstract class MLAggregator extends Aggregator {
 		List<String> others = new ArrayList<>();
 		for (int i = 0; i < opts.length; i++) {
 			String cur = opts[i];
-			if (cur.equals("-s"))
-				trainingPerc = Float.parseFloat(opts[++i]);
-			else if (cur.equals("-en"))
+			if (cur.equals("-en"))
 				trainWithCombiner = true;
-			else if (cur.equals("-eva_train"))
-				evalTrainPerc = Float.parseFloat(opts[++i]);
-			else if (cur.equals("-eva_test"))
-				evalTestPerc = Float.parseFloat(opts[++i]);
 			else if (cur.equals("-el"))
 				incrementalLearning = true;
 			else
@@ -168,10 +160,10 @@ public abstract class MLAggregator extends Aggregator {
 			NumOfAttributes = count; // use NumOfAttributes for tuple data
 			flag = true;
 			trainingSet = new Instances(name, fvAttributes, 1);
-			testingSet = new Instances(name, fvAttributes, 1);
+//			testingSet = new Instances(name, fvAttributes, 1);
 			if (!isClusterer) {
 				trainingSet.setClassIndex(NumOfAttributes - 1);
-				testingSet.setClassIndex(NumOfAttributes - 1);
+//				testingSet.setClassIndex(NumOfAttributes - 1);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -219,10 +211,10 @@ public abstract class MLAggregator extends Aggregator {
 			for (int i = 0; i < data.length; i++)
 				fvAttributes.add(new Attribute("Attribute" + i));
 			trainingSet = new Instances(name, fvAttributes, 1);
-			testingSet = new Instances(name, fvAttributes, 1);
+//			testingSet = new Instances(name, fvAttributes, 1);
 			if (!isClusterer) {
 				trainingSet.setClassIndex(data.length - 1); // use data length for String[] data
-				testingSet.setClassIndex(data.length - 1);
+//				testingSet.setClassIndex(data.length - 1);
 			}
 			flag = true;
 		} catch (Exception e) {
@@ -245,25 +237,19 @@ public abstract class MLAggregator extends Aggregator {
 	protected void aggregate(final String[] data, final String metadata, String name)
 			throws IOException, InterruptedException {
 		attributeCreation(data, name);
-		instanceCreation(data, pick(trainingPerc) ? trainingSet : testingSet);
+		instanceCreation(data, trainingSet);
 	}
 
 	protected void aggregate(final Tuple data, final String metadata, String name)
 			throws IOException, InterruptedException {
 		attributeCreation(data, name);
-		instanceCreation(data, pick(trainingPerc) ? trainingSet : testingSet);
+		instanceCreation(data, trainingSet);
 	}
 
 	protected boolean pick(float perc) {
-		return Math.random() > (1 - perc / 100.0);
-	}
-
-	protected Instances reduceInstances(Instances dataset, float perc) {
-		Instances tmp = new Instances(dataset, 0);
-		for (Instance instance : dataset)
-			if (pick(perc))
-				tmp.add(instance);
-		return tmp;
+		double random = rand();
+		System.out.println(random);
+		return random > (1 - perc / 100.0);
 	}
 
 	public abstract void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException;
@@ -299,8 +285,7 @@ public abstract class MLAggregator extends Aggregator {
 			if (trainWithCombiner) {
 				int idx = 0;
 				do {
-					String modelName = getKey().getName() 
-							+ "_" + getContext().getTaskAttemptID().getTaskID().toString()
+					String modelName = getKey().getName() + "_" + getContext().getTaskAttemptID().getTaskID().toString()
 							+ "_" + idx++ + ".model";
 					modelPath = new Path(modelDirPath, new Path(modelName));
 				} while (fs.exists(modelPath));
@@ -309,61 +294,6 @@ public abstract class MLAggregator extends Aggregator {
 			out.write(byteOutStream.toByteArray());
 
 			System.out.println("Model is saved to: " + modelPath.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (out != null)
-					out.close();
-				if (objectOut != null)
-					objectOut.close();
-			} catch (final Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public void saveDataset(Instances dataset) {
-		FSDataOutputStream out = null;
-		ObjectOutputStream objectOut = null;
-
-		try {
-			// serialize the model and write to the path
-			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
-			objectOut = new ObjectOutputStream(byteOutStream);
-			objectOut.writeObject(dataset);
-
-			// make path
-			JobContext context = (JobContext) getContext();
-			Configuration conf = context.getConfiguration();
-			int boaJobId = conf.getInt("boa.hadoop.jobid", 0);
-			JobConf job = new JobConf(conf);
-			Path outputPath = FileOutputFormat.getOutputPath(job);
-			FileSystem fs = outputPath.getFileSystem(context.getConfiguration());
-
-			String output = DefaultProperties.localOutput != null
-					? new Path(DefaultProperties.localOutput).toString() + "/../"
-					: conf.get("fs.default.name", "hdfs://boa-njt/");
-
-			Path modelDirPath = new Path(output, new Path("model/job_" + boaJobId));
-			fs.mkdirs(modelDirPath);
-
-			String extension = dataset == trainingSet ? ".train" : ".test";
-
-			Path datasetPath = new Path(modelDirPath, new Path(getKey().getName() + extension));
-			if (trainWithCombiner) {
-				int idx = 0;
-				do {
-					String modelName = getKey().getName() 
-							+ "_" + getContext().getTaskAttemptID().getTaskID().toString()
-							+ "_" + idx++ + extension;
-					datasetPath = new Path(modelDirPath, new Path(modelName));
-				} while (fs.exists(datasetPath));
-			}
-			out = fs.create(datasetPath, true); // overwrite: true
-			out.write(byteOutStream.toByteArray());
-
-			System.out.println("Dataset is saved to: " + datasetPath.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

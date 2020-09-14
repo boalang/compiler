@@ -68,6 +68,5 @@ public class GaussianProcessesAggregator extends MLAggregator {
 		String info = "\n=== Model Info ===\n" + this.model.toString();
 		this.collect(info);
 		this.evaluate(this.model, this.trainingSet);
-		this.evaluate(this.model, this.testingSet);
     }
 }

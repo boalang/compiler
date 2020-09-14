@@ -44,20 +44,6 @@ public class NaiveBayesUpdateableAggregator extends MLAggregator {
 			aggregate(data, metadata, "NaiveBayesUpdateable");
 		} else {
 			attributeCreation(data, "NaiveBayesUpdateable");
-			if (pick(trainingPerc)) {
-				instanceCreation(data, trainingSet);
-				try {
-					incrementalLearning();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {
-				instanceCreation(data, testingSet);
-				if (testingSet != null) {
-					if (!pick(evalTestPerc))
-						testingSet.remove(testingSet.numInstances() - 1);
-				}
-			}
 		}
 	}
 
@@ -67,20 +53,6 @@ public class NaiveBayesUpdateableAggregator extends MLAggregator {
 			aggregate(data, metadata, "LWL");
 		} else {
 			attributeCreation(data, "LWL");
-			if (pick(trainingPerc)) {
-				instanceCreation(data, trainingSet);
-				try {
-					incrementalLearning();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {
-				instanceCreation(data, testingSet);
-				if (testingSet != null) {
-					if (!pick(evalTestPerc))
-						testingSet.remove(testingSet.numInstances() - 1);
-				}
-			}
 		}
 	}
 
@@ -96,8 +68,8 @@ public class NaiveBayesUpdateableAggregator extends MLAggregator {
 		}
 		if (trainingSet != null) {
 			model.updateClassifier(trainingSet.lastInstance());
-			if (!pick(evalTrainPerc))
-				trainingSet.remove(trainingSet.numInstances() - 1);
+//			if (!pick(evalTrainPerc))
+//				trainingSet.remove(trainingSet.numInstances() - 1);
 		}
 	}
 
@@ -117,8 +89,6 @@ public class NaiveBayesUpdateableAggregator extends MLAggregator {
 		this.collect(info);
 		System.out.println("train size: " + trainingSet.numInstances());
 		this.evaluate(this.model, this.trainingSet);
-		System.out.println("test size: " + testingSet.numInstances());
-		this.evaluate(this.model, this.testingSet);
 	}
 
 }

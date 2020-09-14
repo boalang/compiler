@@ -679,7 +679,8 @@ public class SymbolTable {
 			boa.aggregators.ml.InputMappedClassifierAggregator.class,
 			boa.aggregators.ml.Word2VectorAggregator.class,
 			boa.aggregators.ml.Sequence2VectorAggregator.class,
-			boa.aggregators.ml.AprioriAggregator.class
+			boa.aggregators.ml.AprioriAggregator.class,
+			boa.aggregators.ml.EvaluationAggregator.class
 		};
 
 		for (final Class<?> c : builtinAggs)

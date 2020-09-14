@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 
 import boa.aggregators.Aggregator;
 import boa.aggregators.FinishedException;
+import boa.aggregators.ml.EvaluationAggregator;
 import boa.aggregators.ml.MLAggregator;
 import boa.aggregators.ml.util.MLSeqCombiner;
 import boa.io.EmitKey;
@@ -124,8 +125,12 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 			Reducer<EmitKey, EmitValue, Text, NullWritable>.Context context) throws IOException, InterruptedException {
 		for (final EmitValue value : values) {
 			try {
-				for (final String s : value.getData())
-					a.aggregate(s, value.getMetadata());
+				if (a instanceof EvaluationAggregator) {
+					((EvaluationAggregator) a).aggregate(value.getData(), value.getMetadata());
+				} else {
+					for (final String s : value.getData())
+						a.aggregate(s, value.getMetadata());					
+				}
 			} catch (final FinishedException e) {
 				// we are done
 				return;

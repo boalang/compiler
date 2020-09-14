@@ -22,17 +22,7 @@ public class MyVote extends Vote {
 	private double[] instanceNumPredictions;
 	private Instances dataset;
 
-	public double[][] getInstanceProbs() {
-		return instanceProbs;
-	}
 
-	public double[] getInstanceNumPredictions() {
-		return instanceNumPredictions;
-	}
-
-	public Instances getDataset() {
-		return dataset;
-	}
 
 	public MyVote(Path path) {
 		classifiers = new SeqCollection<Classifier>(path);
@@ -49,6 +39,43 @@ public class MyVote extends Vote {
 			postprocess();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public double[][] getInstanceProbs() {
+		return instanceProbs;
+	}
+
+	public double[] getInstanceNumPredictions() {
+		return instanceNumPredictions;
+	}
+
+	public Instances getDataset() {
+		return dataset;
+	}
+	
+	public void setCombinationRule(String rule) {
+		switch (rule) {
+		case "AVG":
+			m_CombinationRule = AVERAGE_RULE;
+			break;
+		case "PROD":
+			m_CombinationRule = PRODUCT_RULE;
+			break;
+		case "MAJ":
+			m_CombinationRule = MAJORITY_VOTING_RULE;
+			break;
+		case "MIN":
+			m_CombinationRule = MIN_RULE;
+			break;
+		case "MAX":
+			m_CombinationRule = MAX_RULE;
+			break;
+		case "MED":
+			m_CombinationRule = MEDIAN_RULE;
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -139,9 +166,8 @@ public class MyVote extends Vote {
 		return result;
 	}
 
-	public double[] distributionForInstance(int instanceIdx) throws Exception {
+	public double[] distributionForInstance(int instanceIdx, Instance instance) throws Exception {
 		double[] result = instanceProbs[instanceIdx];
-		Instance instance = dataset.instance(instanceIdx);
 		if (!instance.classAttribute().isNumeric() && (Utils.sum(result) > 0))
 			Utils.normalize(result);
 		return result;

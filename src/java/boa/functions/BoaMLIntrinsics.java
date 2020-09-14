@@ -4,8 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -14,21 +12,19 @@ import java.util.List;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
-import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.fs.PathFilter;
 import org.deeplearning4j.models.embeddings.reader.impl.BasicModelUtils;
 import org.deeplearning4j.models.sequencevectors.SequenceVectors;
 import org.deeplearning4j.models.word2vec.VocabWord;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 
 import boa.aggregators.ml.util.KMeans;
+import boa.aggregators.ml.util.MyVote;
 import boa.datagen.DefaultProperties;
 import boa.runtime.Tuple;
 import boa.types.ml.*;
 import weka.classifiers.Classifier;
-import weka.clusterers.Clusterer;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
@@ -48,22 +44,8 @@ public class BoaMLIntrinsics {
 	public static BoaModel load(final long jobId, BoaModel m, final String identifier, final String type,
 			final Object o) {
 
-		String output = DefaultProperties.localOutput != null
-				? new Path(DefaultProperties.localOutput).toString() + "/../"
-				: conf.get("fs.default.name", "hdfs://boa-njt/");
-
-		Path modelDirPath = new Path(output, new Path("model/job_" + jobId));
-		final Path p = new Path(modelDirPath, new Path(identifier + ".model"));
-
-		try {
-			final FileSystem fs = FileSystem.get(conf);
-			if (!fs.exists(p))
-				return ensembleModel(conf, fs, modelDirPath, identifier, type, o);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-
-		Object object = deserialize(p);
+		Path p = getModelPath(jobId, identifier);
+		Object object = p.getName().endsWith(".seq") ? new MyVote(p) : deserialize(p);
 
 		if (object instanceof Word2Vec) {
 			Word2Vec word2Vec = (Word2Vec) object;
@@ -77,71 +59,70 @@ public class BoaMLIntrinsics {
 		} else if (object instanceof Classifier) {
 			// classifier
 			Classifier clr = (Classifier) object;
-			String className = clr.getClass().toString();
-			if (className.contains("LinearRegression")) {
+			if (type.contains("LinearRegression")) {
 				m = new BoaLinearRegression(clr, o);
-			} else if (className.contains("AdaBoostM1")) {
+			} else if (type.contains("AdaBoostM1")) {
 				m = new BoaAdaBoostM1(clr, o);
-			} else if (className.contains("ZeroR")) {
+			} else if (type.contains("ZeroR")) {
 				m = new BoaZeroR(clr, o);
-			} else if (className.contains("Vote")) {
+			} else if (type.contains("Vote")) {
 				m = new BoaVote(clr, o);
-			} else if (className.contains("SMO")) {
+			} else if (type.contains("SMO")) {
 				m = new BoaSMO(clr, o);
-			} else if (className.contains("RandomForest")) {
+			} else if (type.contains("RandomForest")) {
 				m = new BoaRandomForest(clr, o);
-			} else if (className.contains("AdditiveRegression")) {
+			} else if (type.contains("AdditiveRegression")) {
 				m = new BoaAdditiveRegression(clr, o);
-			} else if (className.contains("AttributeSelectedClassifier")) {
+			} else if (type.contains("AttributeSelectedClassifier")) {
 				m = new BoaAttributeSelectedClassifier(clr, o);
-			} else if (className.contains("PART")) {
+			} else if (type.contains("PART")) {
 				m = new BoaPART(clr, o);
-			} else if (className.contains("OneR")) {
+			} else if (type.contains("OneR")) {
 				m = new BoaOneR(clr, o);
-			} else if (className.contains("NaiveBayesMultinomialUpdateable")) {
+			} else if (type.contains("NaiveBayesMultinomialUpdateable")) {
 				m = new BoaNaiveBayesMultinomialUpdateable(clr, o);
-			} else if (className.contains("BoaNaiveBayesMultinomial")) {
+			} else if (type.contains("BoaNaiveBayesMultinomial")) {
 				// TODO BoaNaiveBayesMultinomial
 				m = new BoaNaiveBayesMultinomial(clr, o);
-			} else if (className.contains("NaiveBayes")) {
+			} else if (type.contains("NaiveBayes")) {
 				m = new BoaNaiveBayes(clr, o);
-			} else if (className.contains("MultiScheme")) {
+			} else if (type.contains("MultiScheme")) {
 				m = new BoaMultiScheme(clr, o);
-			} else if (className.contains("MultiClassClassifier")) {
+			} else if (type.contains("MultiClassClassifier")) {
 				m = new BoaMultiClassClassifier(clr, o);
-			} else if (className.contains("MultilayerPerceptron")) {
+			} else if (type.contains("MultilayerPerceptron")) {
 				m = new BoaMultilayerPerceptron(clr, o);
-			} else if (className.contains("Bagging")) {
+			} else if (type.contains("Bagging")) {
 				m = new BoaBagging(clr, o);
-			} else if (className.contains("BayesNet")) {
+			} else if (type.contains("BayesNet")) {
 				m = new BoaBayesNet(clr, o);
-			} else if (className.contains("ClassificationViaRegression")) {
+			} else if (type.contains("ClassificationViaRegression")) {
 				m = new BoaClassificationViaRegression(clr, o);
-			} else if (className.contains("LWL")) {
+			} else if (type.contains("LWL")) {
 				m = new BoaLWL(clr, o);
-			} else if (className.contains("LogitBoost")) {
+			} else if (type.contains("LogitBoost")) {
 				m = new BoaLogitBoost(clr, o);
-			} else if (className.contains("LMT")) {
+			} else if (type.contains("LMT")) {
 				m = new BoaLMT(clr, o);
-			} else if (className.contains("Logistic")) {
+			} else if (type.contains("Logistic")) {
 				m = new BoaLogisticRegression(clr, o);
-			} else if (className.contains("J48")) {
+			} else if (type.contains("J48")) {
 				m = new BoaJ48(clr, o);
-			} else if (className.contains("JRip")) {
+			} else if (type.contains("JRip")) {
 				m = new BoaJRip(clr, o);
-			} else if (className.contains("KStar")) {
+			} else if (type.contains("KStar")) {
 				m = new BoaKStar(clr, o);
-			} else if (className.contains("CVParameterSelection")) {
+			} else if (type.contains("CVParameterSelection")) {
 				m = new BoaCVParameterSelection(clr, o);
-			} else if (className.contains("DecisionStump")) {
+			} else if (type.contains("DecisionStump")) {
 				m = new BoaDecisionStump(clr, o);
-			} else if (className.contains("DecisionTable")) {
+			} else if (type.contains("DecisionTable")) {
 				m = new BoaDecisionTable(clr, o);
-			} else if (className.contains("FilteredClassifier")) {
+			} else if (type.contains("FilteredClassifier")) {
 				m = new BoaFilteredClassifier(clr, o);
-			} else if (className.contains("GaussianProcesses")) {
+			} else if (type.contains("GaussianProcesses")) {
 				m = new BoaGaussianProcesses(clr, o);
-			} else if (className.contains("InputMappedClassifier")) {
+			} else if (type.contains("InputMappedClassifier")) {
 				m = new BoaInputMappedClassifier(clr, o);
 			}
 		} else if (object instanceof KMeans) {
@@ -152,6 +133,36 @@ public class BoaMLIntrinsics {
 		// TODO PrincipalComponents
 		// TODO LSA
 		return m;
+	}
+
+	@FunctionSpec(name = "load", returnType = "model", formalParameters = { "int", "model", "string" })
+	public static BoaModel load(final long jobId, BoaModel m, final String rule, final String identifier,
+			final String type, final Object o) {
+		m = load(jobId, m, identifier, type, o);
+		Classifier c = m.getClassifier();
+		if (c instanceof MyVote)
+			((MyVote) c).setCombinationRule(rule);
+		return m;
+	}
+
+	private static Path getModelPath(long jobId, String identifier) {
+		String output = DefaultProperties.localOutput != null
+				? new Path(DefaultProperties.localOutput).toString() + "/../"
+				: conf.get("fs.default.name", "hdfs://boa-njt/");
+
+		Path modelDirPath = new Path(output, new Path("model/job_" + jobId));
+		Path singleModelPath = new Path(modelDirPath, new Path(identifier + ".model"));
+		Path ensembleModelPath = new Path(modelDirPath, new Path(identifier + "_model.seq"));
+		try {
+			final FileSystem fs = FileSystem.get(conf);
+			if (fs.exists(singleModelPath))
+				return singleModelPath;
+			if (fs.exists(ensembleModelPath))
+				return ensembleModelPath;
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		return null;
 	}
 
 	public static Object deserialize(Path p) {
@@ -187,54 +198,14 @@ public class BoaMLIntrinsics {
 		return object;
 	}
 
-	private static BoaModel ensembleModel(Configuration conf, FileSystem fs, Path modelDirPath, String identifier,
-			String type, Object o) throws IOException {
-		String prefix = identifier + "_task";
-		FileStatus[] files = fs.listStatus(modelDirPath, new PathFilter() {
-			@Override
-			public boolean accept(Path path) {
-				String name = path.getName();
-				return name.endsWith(".model") && name.startsWith(prefix);
-			}
-		});
-
-		Path[] paths = new Path[files.length];
-		for (int i = 0; i < paths.length; i++)
-			paths[i] = files[i].getPath();
-
-		if (files.length != 0) {
-			if (type.contains("BoaSequence2Vec")) {
-				return new BoaSequence2Vec(paths, o);
-			}
-		}
-		return null;
-	}
-
 	@FunctionSpec(name = "classify", returnType = "string", formalParameters = { "model", "array of int" })
 	public static String classify(final BoaModel model, final long[] vector) throws Exception {
-		int NumOfAttributes = vector.length + 1;
-		ArrayList<Attribute> fvAttributes = getAttributes(model, vector);
+		return model.classify(vector);
+	}
 
-		Instances testingSet = new Instances("Classifier", fvAttributes, 1);
-		testingSet.setClassIndex(NumOfAttributes - 1);
-
-		Instance instance = new DenseInstance(NumOfAttributes);
-		for (int i = 0; i < NumOfAttributes - 1; i++)
-			instance.setValue((Attribute) fvAttributes.get(i), vector[i]);
-		testingSet.add(instance);
-
-		double predval = -1;
-
-		if (model.getKind() == BoaModel.Kind.CLASSIFIER) {
-			Classifier classifier = (Classifier) model.getClassifier();
-			predval = classifier.classifyInstance(testingSet.instance(0));
-		} else if (model.getKind() == BoaModel.Kind.CLUSTERER) {
-			Clusterer clusterer = (Clusterer) model.getClusterer();
-			predval = clusterer.clusterInstance(testingSet.instance(0));
-		}
-
-		return testingSet.classAttribute().isNominal() ? testingSet.classAttribute().value((int) predval)
-				: String.valueOf(predval);
+	@FunctionSpec(name = "classify", returnType = "string", formalParameters = { "model", "tuple" })
+	public static String classify(final BoaModel model, final Tuple vector) throws Exception {
+		return model.classify(vector);
 	}
 
 	@FunctionSpec(name = "classify", returnType = "string", formalParameters = { "model", "array of string" })
@@ -253,102 +224,6 @@ public class BoaMLIntrinsics {
 
 		int res = m.getClusterer().clusterInstance(testingSet.instance(0));
 		return String.valueOf(res);
-	}
-
-	private static ArrayList<Attribute> getAttributes(BoaModel model, long[] vector) {
-		int NumOfAttributes = vector.length + 1;
-		ArrayList<Attribute> fvAttributes = new ArrayList<Attribute>();
-		for (int i = 0; i < NumOfAttributes - 1; i++)
-			fvAttributes.add(new Attribute("Attribute" + i));
-
-		try {
-			Field[] fields = ((Tuple) model.getObject()).getClass().getDeclaredFields();
-			Field lastfield = fields[fields.length - 1];
-			if (lastfield.getType().isEnum()) {
-				ArrayList<String> fvNominalVal = new ArrayList<String>();
-				for (Object obj : lastfield.getType().getEnumConstants())
-					fvNominalVal.add(obj.toString());
-				fvAttributes.add(new Attribute("Nominal" + (NumOfAttributes - 1), fvNominalVal));
-			} else {
-				fvAttributes.add(new Attribute("Attribute" + (NumOfAttributes - 1)));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return fvAttributes;
-	}
-
-	@FunctionSpec(name = "classify", returnType = "string", formalParameters = { "model", "tuple" })
-	public static String classify(final BoaModel model, final Tuple vector) throws Exception {
-		ArrayList<Attribute> fvAttributes = getAttributes(model, vector);
-		int NumOfAttributes = fvAttributes.size();
-
-		Instances testingSet = new Instances("Classifier", fvAttributes, 1);
-		testingSet.setClassIndex(NumOfAttributes - 1);
-
-		Instance instance = new DenseInstance(NumOfAttributes);
-
-		for (int i = 0; i < NumOfAttributes - 1; i++)
-			if (NumberUtils.isNumber(vector.getValues()[i]))
-				instance.setValue((Attribute) fvAttributes.get(i), Double.parseDouble(vector.getValues()[i]));
-			else
-				instance.setValue((Attribute) fvAttributes.get(i), vector.getValues()[i]);
-		testingSet.add(instance);
-
-		double predval = -1;
-
-		if (model.getKind() == BoaModel.Kind.CLASSIFIER) {
-			Classifier classifier = (Classifier) model.getClassifier();
-			predval = classifier.classifyInstance(testingSet.instance(0));
-		} else if (model.getKind() == BoaModel.Kind.CLUSTERER) {
-			Clusterer clusterer = (Clusterer) model.getClusterer();
-			predval = clusterer.clusterInstance(testingSet.instance(0));
-		}
-
-		return testingSet.classAttribute().isNominal() ? testingSet.classAttribute().value((int) predval)
-				: String.valueOf(predval);
-	}
-
-	private static ArrayList<Attribute> getAttributes(BoaModel model, Tuple vector) {
-		ArrayList<Attribute> fvAttributes = new ArrayList<Attribute>();
-		try {
-			String[] fieldNames = vector.getFieldNames();
-			int count = 0;
-			for (int i = 0; i < fieldNames.length; i++) {
-				if (vector.getValue(fieldNames[i]).getClass().isEnum()) {
-					ArrayList<String> fvNominalVal = new ArrayList<String>();
-					for (Object obj : vector.getValue(fieldNames[i]).getClass().getEnumConstants())
-						fvNominalVal.add(obj.toString());
-					fvAttributes.add(new Attribute("Nominal" + count, fvNominalVal));
-					count++;
-				} else if (vector.getValue(fieldNames[i]).getClass().isArray()) {
-					int l = Array.getLength(vector.getValue(fieldNames[i])) - 1;
-					for (int j = 0; j <= l; j++) {
-						fvAttributes.add(new Attribute("Attribute" + count));
-						count++;
-					}
-				} else {
-					fvAttributes.add(new Attribute("Attribute" + count));
-					count++;
-				}
-			}
-
-			Field[] fields = ((Tuple) model.getObject()).getClass().getDeclaredFields();
-			Field lastfield = fields[fields.length - 1];
-			if (lastfield.getType().isEnum()) {
-				ArrayList<String> fvNominalVal = new ArrayList<String>();
-				for (Object obj : lastfield.getType().getEnumConstants())
-					fvNominalVal.add(obj.toString());
-				fvAttributes.add(new Attribute("Nominal" + count, fvNominalVal));
-				count++;
-			} else {
-				fvAttributes.add(new Attribute("Attribute" + count));
-				count++;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return fvAttributes;
 	}
 
 	/* ------------------------------- Word2Vec ------------------------------- */

@@ -1,6 +1,8 @@
 package boa.aggregators.ml.util;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
@@ -20,7 +22,8 @@ import org.apache.hadoop.mapreduce.Reducer;
 import boa.datagen.DefaultProperties;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
-import weka.classifiers.Classifier;
+import weka.core.Attribute;
+import weka.core.Instance;
 import weka.core.Instances;
 
 public class MLSeqCombiner {
@@ -29,9 +32,6 @@ public class MLSeqCombiner {
 	private Configuration conf;
 	private Path modelDirPath;
 	private Path modelSeqPath;
-
-	private Instances trainInstances;
-	private Instances testInstances;
 
 	private Reducer<EmitKey, EmitValue, Text, NullWritable>.Context context;
 	private Iterable<EmitValue> values;
@@ -48,33 +48,24 @@ public class MLSeqCombiner {
 	}
 
 	public String combine() {
-		setPaths();
 		buildSeqFiles();
 		System.out.println("finish combining " + modelCount + " models");
-
 		StringBuilder sb = new StringBuilder();
 		sb.append("\n====== Trained and Combined " + modelCount + " Models ======\n\n");
-		MyVote v = new MyVote(modelSeqPath);
-		sb.append(v.toString());
-
-		if (trainInstances != null && trainInstances.numInstances() != 0) {
-			System.out.println("start to evaluate train data " + trainInstances.numInstances());
-			sb.append(evaluate(trainInstances));
-//			sb.append(evaluate(v, trainInstances));
-			System.out.println("finish evaluating train data");			
-		}
-
-		if (testInstances != null && testInstances.numInstances() != 0) {
-			System.out.println("start to evaluate test data " + testInstances.numInstances());
-			sb.append(evaluate(testInstances));
-//			sb.append(evaluate(v, testInstances));
-			System.out.println("finish evaluating test data");			
-		}
-
 		return sb.toString();
 	}
 
+	public Instances getInstances(String name, Instance instance) {
+		ArrayList<Attribute> list = new ArrayList<>();
+		for (int i = 0; i < instance.numAttributes(); i++)
+			list.add(instance.attribute(i));
+		Instances instances = new Instances(name, list, 0);
+		instances.add(instance);
+		return instances;
+	}
+
 	private void buildSeqFiles() {
+		setPaths();
 		openWriters();
 		modelCount = 0;
 		for (final EmitValue value : values) {
@@ -88,16 +79,6 @@ public class MLSeqCombiner {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-				} else if (meta.equals("train")) {
-					if (trainInstances == null)
-						trainInstances = new Instances(value.getTrain());
-					else
-						trainInstances.addAll(value.getTrain());
-				} else if (meta.equals("test")) {
-					if (testInstances == null)
-						testInstances = new Instances(value.getTest());
-					else
-						testInstances.addAll(value.getTest());
 				}
 			}
 		}
@@ -125,34 +106,6 @@ public class MLSeqCombiner {
 		return bytes;
 	}
 
-	public String evaluate(Classifier model, Instances set) {
-		String res = "";
-		try {
-			MyEvaluation eval = new MyEvaluation(set);
-			eval.evaluateModel(model, set);
-			String s = trainInstances == set ? "Train" : "Test";
-			res = eval.toSummaryString("\n====== " + s + " Dataset Evaluation ======\n", false);
-			res += "\n" + eval.toClassDetailsString() + "\n";
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return res;
-	}
-	
-	public String evaluate(Instances set) {
-		String res = "";
-		try {
-			MyVote v = new MyVote(modelSeqPath, set, 1);
-			MyEvaluation eval = new MyEvaluation(v);
-			String s = trainInstances == set ? "Train" : "Test";
-			res = eval.toSummaryString("\n====== " + s + " Dataset Evaluation ======\n", false);
-			res += "\n" + eval.toClassDetailsString() + "\n";
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return res;
-	}
-
 	private void setPaths() {
 		try {
 			conf = context.getConfiguration();
@@ -177,6 +130,7 @@ public class MLSeqCombiner {
 		CompressionType compType = CompressionType.BLOCK;
 		CompressionCodec compCode = new DefaultCodec();
 		try {
+			System.out.println("build writers");
 			modelWriter = SequenceFile.createWriter(fs, conf, modelSeqPath, Text.class, BytesWritable.class, compType,
 					compCode);
 		} catch (Exception e) {

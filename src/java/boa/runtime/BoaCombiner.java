@@ -142,8 +142,6 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 	}
 	
 	private boolean isEmitValueFromCombiner(EmitValue value) {
-		if (value.getTrain() != null || value.getTest() != null)
-			return true;
 		String meta = value.getMetadata();
 		return meta != null && meta.equals("model_path");
 	}

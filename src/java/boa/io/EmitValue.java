@@ -33,7 +33,6 @@ import org.apache.hadoop.io.Writable;
 
 import boa.functions.BoaCasts;
 import boa.runtime.Tuple;
-import weka.core.Instances;
 
 /**
  * A {@link Writable} that contains a datum and an optional metadatum to be
@@ -46,33 +45,6 @@ public class EmitValue implements Writable {
 	protected String[] data;
 	protected String metadata;
 	protected Tuple tdata;
-
-	private Instances train;
-	private Instances test;
-
-	public EmitValue(final Instances data, final String metadata) {
-		if (metadata.equals("train"))
-			this.train = data;
-		else if (metadata.equals("test"))
-			this.test = data;
-		this.metadata = metadata;
-	}
-
-	public Instances getTrain() {
-		return train;
-	}
-
-	public void setTrain(Instances train) {
-		this.train = train;
-	}
-
-	public Instances getTest() {
-		return test;
-	}
-
-	public void setTest(Instances test) {
-		this.test = test;
-	}
 
 	/**
 	 * Construct an EmitValue.
@@ -380,29 +352,17 @@ public class EmitValue implements Writable {
 		String meta = Text.readString(in);
 		metadata = meta.equals("") ? null : meta;
 
-		if (meta.equals("train")) {
+		char type = in.readChar();
+		if (type == 'S') {
+			int length = in.readInt();
+			this.data = new String[length];
+			for (int i = 0; i < length; i++)
+				this.data[i] = Text.readString(in);
+		} else if (type == 'T') {
 			int length = in.readInt();
 			byte[] bytes = new byte[length];
 			in.readFully(bytes, 0, length);
-			train = (Instances) deserialize(bytes);
-		} else if (meta.equals("test")) {
-			int length = in.readInt();
-			byte[] bytes = new byte[length];
-			in.readFully(bytes, 0, length);
-			test = (Instances) deserialize(bytes);
-		} else {
-			char type = in.readChar();
-			if (type == 'S') {
-				int length = in.readInt();
-				this.data = new String[length];
-				for (int i = 0; i < length; i++)
-					this.data[i] = Text.readString(in);
-			} else if (type == 'T') {
-				int length = in.readInt();
-				byte[] bytes = new byte[length];
-				in.readFully(bytes, 0, length);
-				this.tdata = (Tuple) deserialize(bytes);
-			}
+			this.tdata = (Tuple) deserialize(bytes);
 		}
 
 	}
@@ -414,16 +374,7 @@ public class EmitValue implements Writable {
 		String meta = this.metadata == null ? "" : this.metadata;
 		Text.writeString(out, meta);
 
-		byte[] bytes = null;
-		if (meta.equals("train")) {
-			bytes = serialize(train);
-			out.writeInt(bytes.length);
-			out.write(bytes);
-		} else if (meta.equals("test")) {
-			bytes = serialize(test);
-			out.writeInt(bytes.length);
-			out.write(bytes);
-		} else if (this.data != null) {
+		if (this.data != null) {
 			out.writeChar('S'); // set date type S
 			out.writeInt(this.data.length);
 			for (final String d : this.data)

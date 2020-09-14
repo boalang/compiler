@@ -97,9 +97,7 @@ public class Word2VectorAggregator extends MLAggregator {
 			return;
 		for (int i = 0; i < options.length; i++) {
 			String cur = options[i];
-			if (cur.equals("-s"))
-				trainingPerc = Integer.parseInt(options[++i]);
-			else if (cur.equals("-f"))
+			if (cur.equals("-f"))
 				wb.minWordFrequency(Integer.parseInt(options[++i]));
 			else if (cur.equals("-lr"))
 				wb.minLearningRate(Double.parseDouble(options[++i]));

@@ -39,17 +39,27 @@ public class BoaMathIntrinsics {
 	public static double rand() {
 		return BoaMathIntrinsics.random.nextDouble();
 	}
+	
+	@FunctionSpec(name = "setseed", returnType = "bool", formalParameters = { "int" })
+	public static boolean setSeed(final long s) {
+		random.setSeed(s);
+		return true;
+	}
+	
+	@FunctionSpec(name = "pick", returnType = "bool", formalParameters = { "float" })
+	public static boolean pick(final double percent) {
+		double random = rand();
+		return random > (1 - percent / 100);
+	}
 
 	/**
 	 * Return a random integer x in the range 0 &lt;= x &lt; n.
 	 * 
-	 * @param a
-	 *            A int representing one greater than the maximum value desired
+	 * @param a A int representing one greater than the maximum value desired
 	 * 
 	 * @return A random integer x in the range 0 &lt;= x &lt; n
 	 * 
-	 * @throws IllegalArgumentException
-	 *             When n < 1
+	 * @throws IllegalArgumentException When n < 1
 	 */
 	@FunctionSpec(name = "nrand", returnType = "int", formalParameters = { "int" })
 	public static long nrand(final long n) {
@@ -62,8 +72,7 @@ public class BoaMathIntrinsics {
 	/**
 	 * Round to the nearest integer not larger in absolute value.
 	 * 
-	 * @param a
-	 *            A double
+	 * @param a A double
 	 * 
 	 * @return The nearest integer to <em>a</em> not larger in absolute value
 	 */
@@ -84,8 +93,7 @@ public class BoaMathIntrinsics {
 	/**
 	 * The hyperbolic arc sine function.
 	 * 
-	 * @param d
-	 *            A double
+	 * @param d A double
 	 * 
 	 * @return The hyperbolic arc sine of <em>d</em>
 	 */
@@ -97,8 +105,7 @@ public class BoaMathIntrinsics {
 	/**
 	 * The hyperbolic arc cosine function.
 	 * 
-	 * @param d
-	 *            A double
+	 * @param d A double
 	 * 
 	 * @return The hyperbolic arc cosine of <em>d</em>
 	 */
@@ -110,8 +117,7 @@ public class BoaMathIntrinsics {
 	/**
 	 * The hyperbolic arc tangent function.
 	 * 
-	 * @param d
-	 *            A double
+	 * @param d A double
 	 * 
 	 * @return The hyperbolic arc tangent of <em>d</em>
 	 */
@@ -123,8 +129,7 @@ public class BoaMathIntrinsics {
 	/**
 	 * Tests if a double value is NaN.
 	 * 
-	 * @param v
-	 *            A double
+	 * @param v A double
 	 * 
 	 * @return True if <em>v</em> is NaN, false otherwise
 	 */
@@ -136,8 +141,7 @@ public class BoaMathIntrinsics {
 	/**
 	 * Tests if a double value is infinite.
 	 * 
-	 * @param v
-	 *            A double
+	 * @param v A double
 	 * 
 	 * @return True if <em>v</em> is infinite, false otherwise
 	 */
@@ -149,8 +153,7 @@ public class BoaMathIntrinsics {
 	/**
 	 * Tests if a double value is not infinite or NaN.
 	 * 
-	 * @param v
-	 *            A double
+	 * @param v A double
 	 * 
 	 * @return True if <em>v</em> is neither infinite nor NaN, false otherwise
 	 */
@@ -162,14 +165,14 @@ public class BoaMathIntrinsics {
 	/**
 	 * Tests if a float value is neither zero, subnormal, infinite, nor NaN.
 	 * 
-	 * @param v
-	 *            A double
+	 * @param v A double
 	 * 
 	 * @return True if <em>v</em> is neither zero, subnormal, infinite, nor NaN;
 	 *         false otherwise
 	 */
 	@FunctionSpec(name = "isnormal", returnType = "bool", formalParameters = { "float" })
 	public static boolean isNormal(final double v) {
-		return v != 0.0 && v > 0x0.fffffffffffffp-1022 && !BoaMathIntrinsics.isNaN(v) && !BoaMathIntrinsics.isInfinite(v);
+		return v != 0.0 && v > 0x0.fffffffffffffp-1022 && !BoaMathIntrinsics.isNaN(v)
+				&& !BoaMathIntrinsics.isInfinite(v);
 	}
 }

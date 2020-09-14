@@ -50,6 +50,8 @@ public class RandomForestAggregator extends MLAggregator {
 
 	@Override
 	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
+		
+		System.out.println(data.toString());
 		aggregate(data, metadata, "RandomForest");
 	}
 
@@ -77,18 +79,10 @@ public class RandomForestAggregator extends MLAggregator {
 				EmitKey key = getKey();
 				// pass the path of trained model
 				context.write(key, new EmitValue(modelPath.toString(), "model_path"));
-				// pass the training set for evaluation
-				context.write(key, new EmitValue(reduceInstances(trainingSet, evalTrainPerc), "train"));
-				System.out.println("trainingSet: " + trainingSet.numInstances());
-				// pass the testing set for evaluation
-				if (testingSet.numInstances() != 0)
-					context.write(key, new EmitValue(reduceInstances(testingSet, evalTestPerc), "test"));
-				System.out.println("testingSet: " + testingSet.numInstances());
 			} else {
 				String info = "\n=== Model Info ===\n" + this.model.toString();
 				this.collect(info);
 				this.evaluate(this.model, this.trainingSet);
-				this.evaluate(this.model, this.testingSet);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

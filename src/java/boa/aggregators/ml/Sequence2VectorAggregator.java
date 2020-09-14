@@ -121,9 +121,7 @@ public class Sequence2VectorAggregator extends MLAggregator {
 			return;
 		for (int i = 0; i < options.length; i++) {
 			String cur = options[i];
-			if (cur.equals("-s"))
-				trainingPerc = Integer.parseInt(options[++i]);
-			else if (cur.equals("-f")) {
+			if (cur.equals("-f")) {
 				sb.minWordFrequency(Integer.parseInt(options[++i]));
 			} else if (cur.equals("-lr")) {
 				sb.minLearningRate(Double.parseDouble(options[++i]));
