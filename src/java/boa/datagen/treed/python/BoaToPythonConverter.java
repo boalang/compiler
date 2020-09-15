@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.ast.DLTKToken;
 import org.eclipse.dltk.ast.declarations.Argument;
 import org.eclipse.dltk.ast.declarations.MethodDeclaration;
 import org.eclipse.dltk.ast.declarations.TypeDeclaration;
@@ -182,11 +183,39 @@ public class BoaToPythonConverter {
 		
 		if(node.getKind()==StatementKind.BLOCK)
 			return visitBlock(node);
-		if(node.getKind()==StatementKind.GLOBAL)
+		else if(node.getKind()==StatementKind.GLOBAL)
 			return visitGlobalStatement(node);
-		if(node.getKind()==StatementKind.EMPTY)
+		else if(node.getKind()==StatementKind.EMPTY)
 			return visitEmptyStatement(node);
-		if(node.getKind()==StatementKind.EXPRESSION)
+		else if(node.getKind()==StatementKind.TRY)
+			return visitTryStatement(node);
+		else if(node.getKind()==StatementKind.FINALLY)
+			return visitTryFinallyStatement(node);
+		else if(node.getKind()==StatementKind.CATCH)
+			return visitExceptStatement(node);
+		else if(node.getKind()==StatementKind.WHILE)
+			return visitWhileStatement(node);
+		else if(node.getKind()==StatementKind.IF)
+			return visitIfStatement(node);
+		else if(node.getKind()==StatementKind.BREAK)
+			return visitBreakStatement(node);
+		else if(node.getKind()==StatementKind.CONTINUE)
+			return visitContinueStatement(node);
+		else if(node.getKind()==StatementKind.RAISE)
+			return visitRaiseStatement(node);
+		else if(node.getKind()==StatementKind.DEL)
+			return visitDelStatement(node);
+		else if(node.getKind()==StatementKind.ASSERT)
+			return visitDelStatement(node);
+		else if(node.getKind()==StatementKind.WITH)
+			return visitWithStatement(node);
+		else if(node.getKind()==StatementKind.FOREACH)
+			return visitWithStatement(node);
+		else if(node.getKind()==StatementKind.EMPTY)
+			return visitEmptyStatement(node);
+		else if(node.getKind()==StatementKind.RETURN)
+			return visitReturnStatement(node);
+		else if(node.getKind()==StatementKind.EXPRESSION)
 			return visitExpressionStatement(node);
 		
 		return null;
@@ -246,6 +275,36 @@ public class BoaToPythonConverter {
 		else if(node.getKind()==ExpressionKind.UNARY)
 			return visitUnaryExpression(node);
 		
+		else if(node.getKind()==ExpressionKind.LAMBDA)
+			return visitLambdaExpression(node);
+		
+		else if(node.getKind()==ExpressionKind.EMPTY)
+			return visitEmptyExpression(node);
+		
+		else if(node.getKind()==ExpressionKind.NEWARRAY)
+			return visitListExpression(node);
+		
+		else if(node.getKind()==ExpressionKind.SET)
+			return visitSetExpression(node);
+		
+		else if(node.getKind()==ExpressionKind.TUPLE)
+			return visitTupleExpression(node);
+		
+		else if(node.getKind()==ExpressionKind.FOR_LIST)
+			return visitForListExpression(node);
+		
+		else if(node.getKind()==ExpressionKind.ARRAY_COMPREHENSION)
+			return visitListForExpression(node);
+		
+		else if(node.getKind()==ExpressionKind.DICT)
+			return visitDictExpression(node);
+		
+		else if(node.getKind()==ExpressionKind.CONDITIONAL)
+			return visitConditionalExpression(node);
+		
+		else if(node.getKind()==ExpressionKind.YIELD)
+			return visitYieldExpression(node);
+		
 		else if(isBinaryExpressionKind(node))
 			return visitBinaryExpression(node);
 		
@@ -266,23 +325,97 @@ public class BoaToPythonConverter {
 		return ast;
 	}
 	public final ASTNode visitWithStatement(final Statement node) throws Exception {
-		PythonWithStatement ast=new PythonWithStatement(null, null, null, null, 0, 0);
+		PythonWithStatement ast=null;
+		org.eclipse.dltk.ast.expressions.Expression asExp=null;
+		org.eclipse.dltk.ast.expressions.Expression whatExp=null;
+		if(node.getVariableDeclaration()!=null)
+		{
+			if(node.getVariableDeclaration().getComputedName()!=null)
+			{
+				asExp=(org.eclipse.dltk.ast.expressions.Expression) visit(node.getVariableDeclaration().getComputedName());
+			}
+		}
+		if(node.getExpressionsCount()>=1)
+		{
+			ASTNode chast=visit(node.getExpressions(0));
+			if(chast!=null)
+				whatExp=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		org.eclipse.dltk.ast.expressions.Expression body=null;
+		if(node.getStatementsCount()>=1)
+		{
+			ASTNode chast=visit(node.getStatements(0));
+			if(chast!=null)
+				body=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		ast=new PythonWithStatement(new DLTKToken(), whatExp, asExp, (Block) body, 0, 0);
 		return ast;
 	}
-	public final ASTNode visitYieldStatement(final Statement node) throws Exception {
-		PythonYieldStatement ast=new PythonYieldStatement(null, null);
-		return ast;
-	}
+	
 	public final ASTNode visitAssertStatement(final Statement node) throws Exception {
-		PythonAssertStatement ast=new PythonAssertStatement(null,null,null);
+		PythonAssertStatement ast=null;
+		org.eclipse.dltk.ast.expressions.Expression exp1=null;
+		org.eclipse.dltk.ast.expressions.Expression exp2=null;
+		if(node.getConditionsCount()>=1)
+		{
+			ASTNode chast=visit(node.getConditions(0));
+			if(chast!=null) {
+				exp1=(org.eclipse.dltk.ast.expressions.Expression) chast;
+			}
+		}
+		if(node.getExpressionsCount()>=1)
+		{
+			ASTNode chast=visit(node.getExpressions(1));
+			if(chast!=null) {
+				exp2=(org.eclipse.dltk.ast.expressions.Expression) chast;
+			}
+		}
+		ast=new PythonAssertStatement(new DLTKToken(), exp1, exp2);
 		return ast;
 	}
 	public final ASTNode visitDelStatement(final Statement node) throws Exception {
-		PythonDelStatement ast=new PythonDelStatement(null,null);
+		PythonDelStatement ast=null;
+		org.eclipse.dltk.ast.expressions.Expression exp1=null;
+		if(node.getExpressionsCount()>=1)
+		{
+			ASTNode chast=visit(node.getExpressions(0));
+			if(chast!=null) {
+				exp1=(org.eclipse.dltk.ast.expressions.Expression) chast;
+			}
+		}
+		ast=new PythonDelStatement(new DLTKToken(), exp1);
 		return ast;
 	}
 	public final ASTNode visitRaiseStatement(final Statement node) throws Exception {
-		PythonRaiseStatement ast=new PythonRaiseStatement(null);
+		PythonRaiseStatement ast=new PythonRaiseStatement(new DLTKToken());
+		org.eclipse.dltk.ast.expressions.Expression exp1=null;
+		org.eclipse.dltk.ast.expressions.Expression exp2=null;
+		org.eclipse.dltk.ast.expressions.Expression exp3=null;
+		if(node.getExpressionsCount()>=1)
+		{
+			ASTNode chast=visit(node.getExpressions(0));
+			if(chast!=null) {
+				exp1=(org.eclipse.dltk.ast.expressions.Expression) chast;
+				ast.acceptExpression1(exp1);
+			}
+		}
+		if(node.getExpressionsCount()>=2)
+		{
+			ASTNode chast=visit(node.getExpressions(1));
+			if(chast!=null) {
+				exp2=(org.eclipse.dltk.ast.expressions.Expression) chast;
+				ast.acceptExpression2(exp2);
+			}
+		}
+		if(node.getExpressionsCount()>=3)
+		{
+			ASTNode chast=visit(node.getExpressions(2));
+			if(chast!=null) {
+				exp3=(org.eclipse.dltk.ast.expressions.Expression) chast;
+				ast.acceptExpression3(exp3);
+			}
+		}
+		
 		return ast;
 	}
 	public final ASTNode visitContinueStatement(final Statement node) throws Exception {
@@ -295,26 +428,168 @@ public class BoaToPythonConverter {
 	}
 	public final ASTNode visitIfStatement(final Statement node) throws Exception {
 		IfStatement ast=null;
+		org.eclipse.dltk.ast.expressions.Expression cond=null;
+		if(node.getConditionsCount()>=1)
+		{
+			ASTNode chast=visit(node.getConditions(0));
+			if(chast!=null)
+				cond=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		org.eclipse.dltk.ast.expressions.Expression body=null;
+		if(node.getStatementsCount()>=1)
+		{
+			ASTNode chast=visit(node.getStatements(0));
+			if(chast!=null)
+				body=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		org.eclipse.dltk.ast.expressions.Expression elseBlock=null;
+		if(node.getStatementsCount()>=2)
+		{
+			ASTNode chast=visit(node.getStatements(1));
+			if(chast!=null)
+				elseBlock=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		ast=new IfStatement(new DLTKToken(), cond, body);
+		if(elseBlock!=null)
+			ast.setElse(elseBlock);
 		return ast;
 	}
 	public final ASTNode visitWhileStatement(final Statement node) throws Exception {
 		PythonWhileStatement ast=null;
+		org.eclipse.dltk.ast.expressions.Expression cond=null;
+		if(node.getConditionsCount()>=1)
+		{
+			ASTNode chast=visit(node.getConditions(0));
+			if(chast!=null)
+				cond=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		org.eclipse.dltk.ast.expressions.Expression body=null;
+		if(node.getStatementsCount()>=1)
+		{
+			ASTNode chast=visit(node.getStatements(0));
+			if(chast!=null)
+				body=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		org.eclipse.dltk.ast.expressions.Expression elseBlock=null;
+		if(node.getStatementsCount()>=2)
+		{
+			ASTNode chast=visit(node.getStatements(1));
+			if(chast!=null)
+				elseBlock=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		ast=new PythonWhileStatement(new DLTKToken(), cond, body);
+		if(elseBlock!=null)
+			ast.setElseStatement(elseBlock);
 		return ast;
 	}
 	public final ASTNode visitForStatement(final Statement node) throws Exception {
 		PythonForStatement ast=null;
+		ExpressionList mains=new ExpressionList();
+		for(Variable v: node.getVariableDeclarationsList())
+		{
+			if(v.getComputedName()!=null)
+			{
+				ASTNode chast=visit(v.getComputedName());
+				if(chast!=null)
+				{
+					org.eclipse.dltk.ast.expressions.Expression tex=
+							(org.eclipse.dltk.ast.expressions.Expression) chast;
+					mains.addExpression(tex);
+				}
+			}
+		}
+		org.eclipse.dltk.ast.expressions.Expression cond=null;
+		if(node.getConditionsCount()>=1)
+		{
+			ASTNode chast=visit(node.getConditions(0));
+			if(chast!=null)
+				cond=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		org.eclipse.dltk.ast.expressions.Expression body=null;
+		if(node.getStatementsCount()>=1)
+		{
+			ASTNode chast=visit(node.getStatements(0));
+			if(chast!=null)
+				body=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		org.eclipse.dltk.ast.expressions.Expression elseBlock=null;
+		if(node.getStatementsCount()>=2)
+		{
+			ASTNode chast=visit(node.getStatements(1));
+			if(chast!=null)
+				elseBlock=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		ast=new PythonForStatement(new DLTKToken(), mains, 
+				cond, (Block) body);
 		return ast;
 	}
 	public final ASTNode visitTryFinallyStatement(final Statement node) throws Exception {
 		TryFinallyStatement ast=null;
+		org.eclipse.dltk.ast.expressions.Expression body=null;
+		if(node.getStatementsCount()>=1)
+		{
+			ASTNode chast=visit(node.getStatements(0));
+			if(chast!=null)
+				body=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		ast=new TryFinallyStatement(new DLTKToken(), (Block) body);
+
 		return ast;
 	}
 	public final ASTNode visitExceptStatement(final Statement node) throws Exception {
 		PythonExceptStatement ast=null;
+		org.eclipse.dltk.ast.expressions.Expression exp=null;
+		org.eclipse.dltk.ast.expressions.Expression msg=null;
+		if(node.getVariableDeclaration()!=null)
+		{
+			if(node.getVariableDeclaration().getComputedName()!=null)
+			{
+				exp=(org.eclipse.dltk.ast.expressions.Expression) visit(node.getVariableDeclaration().getComputedName());
+			}
+		}
+		if(node.getExpressionsCount()>=1)
+		{
+			ASTNode chast=visit(node.getExpressions(0));
+			if(chast!=null)
+				msg=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		org.eclipse.dltk.ast.expressions.Expression body=null;
+		if(node.getStatementsCount()>=1)
+		{
+			ASTNode chast=visit(node.getStatements(0));
+			if(chast!=null)
+				body=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		ast=new PythonExceptStatement(new DLTKToken(), exp, msg, (Block) body);
 		return ast;
 	}
+	
 	public final ASTNode visitTryStatement(final Statement node) throws Exception {
-		PythonTryStatement ast=null;
+		PythonTryStatement ast=null ;
+		org.eclipse.dltk.ast.expressions.Expression body=null;
+		if(node.getStatementsCount()>=1)
+		{
+			ASTNode chast=visit(node.getStatements(0));
+			if(chast!=null)
+				body=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		org.eclipse.dltk.ast.expressions.Expression elseBlock=null;
+		List catches = new ArrayList();
+		for(int i=1;i<node.getStatementsCount();i++)
+		{
+			ASTNode chast=visit(node.getStatements(i));
+			if(chast!=null)
+			{
+				if(chast instanceof PythonExceptStatement ||
+						chast instanceof TryFinallyStatement)
+					catches.add(chast);
+				else
+					elseBlock=(org.eclipse.dltk.ast.expressions.Expression) chast;
+			}
+		}
+		ast=new PythonTryStatement(new DLTKToken(), (Block) body, catches);
+		if(elseBlock!=null)
+			ast.setElseStatement(elseBlock);
 		return ast;
 	}
 	
@@ -326,9 +601,18 @@ public class BoaToPythonConverter {
 	}
 	public final ASTNode visitReturnStatement(final Statement node) throws Exception {
 		ReturnStatement ast=null;
+		org.eclipse.dltk.ast.expressions.Expression exp1=null;
+		org.eclipse.dltk.ast.expressions.Expression exp2=null;
+		if(node.getConditionsCount()>=1)
+		{
+			ASTNode chast=visit(node.getConditions(0));
+			if(chast!=null) {
+				exp1=(org.eclipse.dltk.ast.expressions.Expression) chast;
+			}
+		}
+		ast=new ReturnStatement(new DLTKToken(), exp1, 0);
 		return ast;
 	}
-	
 	
 	public final ASTNode visitOtherExpression(final Expression node) throws Exception {
 		return wrapInExpressionList(node.getExpressionsList());
@@ -345,7 +629,19 @@ public class BoaToPythonConverter {
 				return new CallHolder(0, 0, wrapInExpressionList(l.getExpressionsList()));
 		}
 	}
-	
+	public final ASTNode visitYieldExpression(final Expression node) throws Exception {
+		PythonYieldStatement ast=null;
+		org.eclipse.dltk.ast.expressions.Expression exp1=null;
+		if(node.getExpressionsCount()>=1)
+		{
+			ASTNode chast=visit(node.getExpressions(0));
+			if(chast!=null) {
+				exp1=(org.eclipse.dltk.ast.expressions.Expression) chast;
+			}
+		}
+		ast=new PythonYieldStatement(new DLTKToken(), exp1);
+		return ast;
+	}
 	public final ASTNode visitExtendedExpression(final Expression node) throws Exception {
 		ExtendedVariableReference ast;
 		boolean methodInserted=false;
@@ -397,8 +693,23 @@ public class BoaToPythonConverter {
 		return ast;
 	}
 	public final ASTNode visitLambdaExpression(final Expression node) throws Exception {
-		PythonLambdaExpression ast=null;
-		return ast;
+		PythonLambdaExpression ast=null ;
+		
+		List<PythonArgument> arg=new ArrayList<PythonArgument>();
+		for (boa.types.Ast.Variable st : node.getVariableDeclsList())
+		{
+			ASTNode chast=visit(st);
+			if(chast!=null)
+				arg.add((PythonArgument) chast);
+		}
+		ASTNode exp=null;
+		if(node.getExpressionsCount()==1)
+		{
+			ASTNode chast=visit(node.getExpressions(0));
+			if(chast!=null)
+				exp=chast;
+		}
+		return new PythonLambdaExpression(new DLTKToken(), arg, (org.eclipse.dltk.ast.expressions.Expression) exp);
 	}
 	public final ASTNode visitDecoratorExpression(final Expression node) throws Exception {
 		PythonFunctionDecorator ast=null;
@@ -425,15 +736,33 @@ public class BoaToPythonConverter {
 		}
 	}
 	public final ASTNode visitListExpression(final Expression node) throws Exception {
-		PythonListExpression ast=null;
+		PythonListExpression ast=new PythonListExpression();
+		for (boa.types.Ast.Expression st : node.getExpressionsList())
+		{
+			ASTNode chast=visit(st);
+			if(chast!=null)
+				ast.addExpression((org.eclipse.dltk.ast.expressions.Expression) chast);
+		}
 		return ast;
 	}
 	public final ASTNode visitSetExpression(final Expression node) throws Exception {
-		PythonSetExpression ast=null;
+		PythonSetExpression ast=new PythonSetExpression();
+		for (boa.types.Ast.Expression st : node.getExpressionsList())
+		{
+			ASTNode chast=visit(st);
+			if(chast!=null)
+				ast.addExpression((org.eclipse.dltk.ast.expressions.Expression) chast);
+		}
 		return ast;
 	}
 	public final ASTNode visitTupleExpression(final Expression node) throws Exception {
-		PythonTupleExpression ast=null;
+		PythonTupleExpression ast=new PythonTupleExpression();
+		for (boa.types.Ast.Expression st : node.getExpressionsList())
+		{
+			ASTNode chast=visit(st);
+			if(chast!=null)
+				ast.addExpression((org.eclipse.dltk.ast.expressions.Expression) chast);
+		}
 		return ast;
 	}
 	public final PythonArgument visitArgument(final Variable node) throws Exception {
@@ -444,18 +773,84 @@ public class BoaToPythonConverter {
 	}
 	public final ASTNode visitForListExpression(final Expression node) throws Exception {
 		PythonForListExpression ast=null;
+		org.eclipse.dltk.ast.expressions.Expression exp1=null;
+		org.eclipse.dltk.ast.expressions.Expression exp2=null;
+		if(node.getExpressionsCount()>=1)
+		{
+			ASTNode chast=visit(node.getExpressions(0));
+			if(chast!=null)
+				exp1=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		if(node.getExpressionsCount()>=2)
+		{
+			ASTNode chast=visit(node.getExpressions(1));
+			if(chast!=null)
+				exp2=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		ast=new PythonForListExpression(exp1,exp2);
+		if(node.getExpressionsCount()>=3)
+		{
+			ASTNode chast=visit(node.getExpressions(2));
+			if(chast!=null)
+				ast.setIfListExpression((ExpressionList) chast);
+		}
 		return ast;
 	}
 	public final ASTNode visitListForExpression(final Expression node) throws Exception {
 		PythonListForExpression ast=null;
+		org.eclipse.dltk.ast.expressions.Expression exp=null;
+		if(node.getExpressionsCount()>=1)
+		{
+			ASTNode chast=visit(node.getExpressions(0));
+			if(chast!=null)
+				exp=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		ast=new PythonListForExpression(exp);
+		for (int i=1;i<node.getExpressionsCount();i++)
+		{
+			ASTNode chast=visit(node.getExpressions(i));
+			if(chast!=null)
+				ast.addExpression((org.eclipse.dltk.ast.expressions.Expression) chast);
+		}
 		return ast;
 	}
 	public final ASTNode visitDictExpression(final Expression node) throws Exception {
-		PythonDictExpression ast=null;
+		PythonDictExpression ast=new PythonDictExpression();
+		for (boa.types.Ast.Expression st : node.getExpressionsList())
+		{
+			if(st.getExpressionsCount()==2)
+			{
+				ASTNode key=visit(st.getExpressions(0));
+				ASTNode value=visit(st.getExpressions(1));
+				ast.putExpression((org.eclipse.dltk.ast.expressions.Expression)key, (org.eclipse.dltk.ast.expressions.Expression)value);
+			}
+		}
 		return ast;
 	}
 	public final ASTNode visitConditionalExpression(final Expression node) throws Exception {
-		ShortHandIfExpression ast=null;
+		ShortHandIfExpression ast=null ;
+		org.eclipse.dltk.ast.expressions.Expression exp1=null;
+		org.eclipse.dltk.ast.expressions.Expression exp2=null;
+		org.eclipse.dltk.ast.expressions.Expression exp3=null;
+		if(node.getExpressionsCount()>=1)
+		{
+			ASTNode chast=visit(node.getExpressions(0));
+			if(chast!=null)
+				exp1=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		if(node.getExpressionsCount()>=2)
+		{
+			ASTNode chast=visit(node.getExpressions(1));
+			if(chast!=null)
+				exp2=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		if(node.getExpressionsCount()>=3)
+		{
+			ASTNode chast=visit(node.getExpressions(2));
+			if(chast!=null)
+				exp3=(org.eclipse.dltk.ast.expressions.Expression) chast;
+		}
+		ast=new ShortHandIfExpression(exp1,exp2,exp3);
 		return ast;
 	}
 	public final ASTNode visitAssignExpression(final Expression node) throws Exception {
@@ -480,8 +875,7 @@ public class BoaToPythonConverter {
 		return ast;
 	}
 	public final ASTNode visitEmptyExpression(final Expression node) throws Exception {
-		EmptyExpression ast=null;
-		return ast;
+		return new EmptyExpression();
 	}
 	public final ASTNode visitUnaryExpression(final Expression node) throws Exception {
 		if(node.getExpressionsCount()<2)

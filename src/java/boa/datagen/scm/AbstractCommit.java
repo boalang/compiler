@@ -591,7 +591,7 @@ public abstract class AbstractCommit {
 		return !errorCheck.hasError;
 	}
 
-	boolean pythonParsingError, enableDiff = false;
+	boolean pythonParsingError, enableDiff = true;
 
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
