@@ -50,8 +50,6 @@ public class RandomForestAggregator extends MLAggregator {
 
 	@Override
 	public void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException {
-		
-		System.out.println(data.toString());
 		aggregate(data, metadata, "RandomForest");
 	}
 

@@ -1,8 +1,0 @@
-type T = enum {y = "true", n = "false"};
-p: Project = input;
-predict: output collection of string;
-nbmu: model of NaiveBayesMultinomialUpdateable of {int, int, T};
-nbmu = load(0, nbmu);
-x1 := 1;
-x2 := 2;
-predict << classify(nbmu, {x1, x2});

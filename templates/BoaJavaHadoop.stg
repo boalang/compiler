@@ -141,6 +141,7 @@ public class <name> extends boa.runtime.BoaRunner {
 			try {
 				boa.functions.BoaMathIntrinsics.random = new java.util.Random(<seed> + key.hashCode());
 				boa.types.Toplevel.Project _input = boa.types.Toplevel.Project.parseFrom(com.google.protobuf.CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
+				boa.functions.BoaMathIntrinsics.mlRandom = new java.util.Random(_input.getName().hashCode());
 				<statements:{s | <s><\n>}>
 			} catch (final Throwable e) {
 				LOG.error(e.getClass().getName() + " caught", e);

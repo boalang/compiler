@@ -34,7 +34,6 @@ import weka.classifiers.Evaluation;
 import weka.clusterers.ClusterEvaluation;
 import weka.clusterers.Clusterer;
 import weka.core.*;
-import weka.filters.Filter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -53,7 +52,6 @@ import static boa.functions.BoaMathIntrinsics.*;
  */
 public abstract class MLAggregator extends Aggregator {
 	protected ArrayList<Attribute> fvAttributes = new ArrayList<Attribute>();
-	protected Instances unFilteredInstances;
 	protected Instances trainingSet;
 	protected int NumOfAttributes;
 	protected String[] options;
@@ -114,21 +112,6 @@ public abstract class MLAggregator extends Aggregator {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	protected void applyFilterToUnfilteredInstances(Filter filter) throws Exception {
-		unFilteredInstances = Filter.useFilter(unFilteredInstances, filter);
-	}
-
-	protected void applyFilterToUnfilteredInstances(Filter filter, Instances filteredInstances) throws Exception {
-		unFilteredInstances = Filter.useFilter(unFilteredInstances, filter);
-		moveFromUnFilteredToFiltered(filteredInstances);
-	}
-
-	protected void moveFromUnFilteredToFiltered(Instances filteredInstances) {
-		int totalUnfilteredInstances = unFilteredInstances.numInstances();
-		filteredInstances.addAll(unFilteredInstances.subList(0, totalUnfilteredInstances));
-		unFilteredInstances.delete();
 	}
 
 	// create attributes with tuple input data
