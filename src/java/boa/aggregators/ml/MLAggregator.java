@@ -38,8 +38,6 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-import static boa.functions.BoaMathIntrinsics.*;
-
 /**
  * A Boa ML aggregator to train models.
  *
@@ -196,12 +194,6 @@ public abstract class MLAggregator extends Aggregator {
 			throws IOException, InterruptedException {
 		attributeCreation(data, name);
 		instanceCreation(data, instances);
-	}
-
-	protected boolean pick(float perc) {
-		double random = rand();
-		System.out.println(random);
-		return random > (1 - perc / 100.0);
 	}
 
 	public abstract void aggregate(final Tuple data, final String metadata) throws IOException, InterruptedException;
