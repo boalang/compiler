@@ -104,20 +104,21 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 			Reducer<EmitKey, EmitValue, EmitKey, EmitValue>.Context context) throws IOException, InterruptedException {
 		MLAggregator mla = (MLAggregator) a;
 		String threadName = Thread.currentThread().getName();
-		int processedData = 0, passedDataSize = 0;
+		int processed = 0, passed = 0;
 		
+		boolean isReducer = false;
 		if (mla.trainWithCombiner || mla instanceof EvaluationAggregator) {
 			// train a model with combiner at map phase
-			boolean isReducer = false;
+			isReducer = false;
 			for (final EmitValue value : values) {
 				// reducer may call combiner
-				if (isEmitValueFromCombiner(value)) {
+				if (isEmitValueFromMapCombiner(value)) {
 					context.write(key, value);
-					passedDataSize++;
+					passed++;
 					isReducer = true;
 					continue;
 				}
-				processedData++;
+				processed++;
 				if (value.getTuple() != null)
 					mla.aggregate(value.getTuple(), value.getMetadata());
 				else if (value.getData() != null)
@@ -132,13 +133,13 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 				context.write(key, value);
 			return;
 		}
-
-		System.out.println("boa combiner for ML processed: " + processedData + " " + "passed: " + passedDataSize + " "
+		String phase = isReducer ? "reduce phase" : "map phase";
+		System.out.println("boa combiner in " + phase + " for ML processed: " + processed + " " + "passed: " + passed + " "
 				+ "freemem: " + freemem() + " " + context.getTaskAttemptID().getTaskID().toString() + " " + "at thread "
 				+ threadName);
 	}
 	
-	private boolean isEmitValueFromCombiner(EmitValue value) {
+	private boolean isEmitValueFromMapCombiner(EmitValue value) {
 		String meta = value.getMetadata();
 		return meta != null && (meta.equals("model_path") || meta.equals("expected_predicted"));
 	}

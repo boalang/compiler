@@ -98,7 +98,9 @@ public abstract class BoaRunner extends Configured implements Tool {
 //		System.out.println(configuration.get("mapred.job.shuffle.input.buffer.percent"));
 //		System.out.println(configuration.get("mapred.job.shuffle.merge.percent"));
 //		System.out.println(configuration.get("mapred.job.reduce.input.buffer.percent"));
-
+//		System.out.println(configuration.get("mapred.compress.map.output"));
+//		System.out.println(configuration.get("mapred.map.output.compression.codec"));
+		
 		final Job job = new Job(configuration);
 
 		if (ins != null)
