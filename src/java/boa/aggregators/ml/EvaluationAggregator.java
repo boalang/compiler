@@ -16,8 +16,6 @@ import boa.runtime.Tuple;
 @AggregatorSpec(name = "evaluation", formalParameters = { "string" })
 public class EvaluationAggregator extends MLAggregator {
 
-	private String name;
-
 	private HashMap<String, Integer> classes;
 
 	private long[][] matrix;
@@ -47,8 +45,6 @@ public class EvaluationAggregator extends MLAggregator {
 				classes = Maps.newHashMap();
 				for (String c : options[++i].split(":"))
 					classes.put(c, classes.size());
-			} else if (cur.equals("-name")) {
-				name = options[++i];
 			}
 		}
 	}
@@ -81,9 +77,7 @@ public class EvaluationAggregator extends MLAggregator {
 		calculate(matrix, results);
 
 		StringBuilder sb = new StringBuilder();
-		sb.append("############## " + name + " ##############\n")
-			.append("      Precision   Recall   F1-Score   Support\n")	
-			.append(results);
+		sb.append("Precision   Recall   F1-Score   Support\n").append(results);
 		this.collect(sb.toString());
 	}
 
