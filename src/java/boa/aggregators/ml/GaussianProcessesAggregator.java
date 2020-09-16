@@ -60,13 +60,12 @@ public class GaussianProcessesAggregator extends MLAggregator {
         try {
             this.model = new GaussianProcesses();
             this.model.setOptions(options);
-            this.model.buildClassifier(this.trainingSet);
+            this.model.buildClassifier(this.instances);
         } catch (Exception e) {
             e.printStackTrace();
         }
         this.saveModel(this.model);
 		String info = "\n=== Model Info ===\n" + this.model.toString();
 		this.collect(info);
-		this.evaluate(this.model, this.trainingSet);
     }
 }

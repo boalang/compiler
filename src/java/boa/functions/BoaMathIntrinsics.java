@@ -29,6 +29,7 @@ import java.util.Random;
  */
 public class BoaMathIntrinsics {
 	public static Random random = new Random();
+	public static Random mlRandom = new Random();
 
 	/**
 	 * Return a random floating point number x in the range 0.0 &lt; x &lt; 1.0.
@@ -40,15 +41,9 @@ public class BoaMathIntrinsics {
 		return BoaMathIntrinsics.random.nextDouble();
 	}
 	
-	@FunctionSpec(name = "setseed", returnType = "bool", formalParameters = { "int" })
-	public static boolean setSeed(final long s) {
-		random.setSeed(s);
-		return true;
-	}
-	
 	@FunctionSpec(name = "pick", returnType = "bool", formalParameters = { "float" })
 	public static boolean pick(final double percent) {
-		double random = rand();
+		double random = mlRandom.nextDouble();
 		return random > (1 - percent / 100);
 	}
 

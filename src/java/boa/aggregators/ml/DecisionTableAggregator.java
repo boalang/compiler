@@ -59,7 +59,7 @@ public class DecisionTableAggregator extends MLAggregator {
 		try {
 			this.model = new DecisionTable();
 			this.model.setOptions(options);
-			this.model.buildClassifier(this.trainingSet);
+			this.model.buildClassifier(this.instances);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -29,10 +29,6 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapred.FileOutputFormat;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapreduce.JobContext;
-import weka.classifiers.Classifier;
-import weka.classifiers.Evaluation;
-import weka.clusterers.ClusterEvaluation;
-import weka.clusterers.Clusterer;
 import weka.core.*;
 
 import java.io.ByteArrayOutputStream;
@@ -52,7 +48,7 @@ import static boa.functions.BoaMathIntrinsics.*;
  */
 public abstract class MLAggregator extends Aggregator {
 	protected ArrayList<Attribute> fvAttributes = new ArrayList<Attribute>();
-	protected Instances trainingSet;
+	protected Instances instances;
 	protected int NumOfAttributes;
 	protected String[] options;
 	protected boolean flag;
@@ -89,31 +85,6 @@ public abstract class MLAggregator extends Aggregator {
 		return others.toArray(new String[0]);
 	}
 
-	public void evaluate(Classifier model, Instances set) {
-		try {
-			Evaluation eval = new Evaluation(set);
-			eval.evaluateModel(model, set);
-			String setName = set == trainingSet ? "Training" : "Testing";
-			String res = eval.toSummaryString("\n=== " + setName + " Set Evaluation ===\n", false);
-			res += "\n" + eval.toClassDetailsString() + "\n";
-			collect(res);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void evaluate(Clusterer clusterer, Instances set) {
-		try {
-			ClusterEvaluation eval = new ClusterEvaluation();
-			eval.setClusterer(clusterer);
-			eval.evaluateClusterer(set);
-			String setName = set == trainingSet ? "Training" : "Testing";
-			collect("\n" + setName + "Set Evaluation:\n" + eval.clusterResultsToString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	// create attributes with tuple input data
 	protected void attributeCreation(Tuple data, final String name) {
 		if (flag == true)
@@ -142,11 +113,9 @@ public abstract class MLAggregator extends Aggregator {
 			}
 			NumOfAttributes = count; // use NumOfAttributes for tuple data
 			flag = true;
-			trainingSet = new Instances(name, fvAttributes, 1);
-//			testingSet = new Instances(name, fvAttributes, 1);
+			instances = new Instances(name, fvAttributes, 1);
 			if (!isClusterer) {
-				trainingSet.setClassIndex(NumOfAttributes - 1);
-//				testingSet.setClassIndex(NumOfAttributes - 1);
+				instances.setClassIndex(NumOfAttributes - 1);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -193,10 +162,10 @@ public abstract class MLAggregator extends Aggregator {
 		try {
 			for (int i = 0; i < data.length; i++)
 				fvAttributes.add(new Attribute("Attribute" + i));
-			trainingSet = new Instances(name, fvAttributes, 1);
+			instances = new Instances(name, fvAttributes, 1);
 //			testingSet = new Instances(name, fvAttributes, 1);
 			if (!isClusterer) {
-				trainingSet.setClassIndex(data.length - 1); // use data length for String[] data
+				instances.setClassIndex(data.length - 1); // use data length for String[] data
 //				testingSet.setClassIndex(data.length - 1);
 			}
 			flag = true;
@@ -220,13 +189,13 @@ public abstract class MLAggregator extends Aggregator {
 	protected void aggregate(final String[] data, final String metadata, String name)
 			throws IOException, InterruptedException {
 		attributeCreation(data, name);
-		instanceCreation(data, trainingSet);
+		instanceCreation(data, instances);
 	}
 
 	protected void aggregate(final Tuple data, final String metadata, String name)
 			throws IOException, InterruptedException {
 		attributeCreation(data, name);
-		instanceCreation(data, trainingSet);
+		instanceCreation(data, instances);
 	}
 
 	protected boolean pick(float perc) {

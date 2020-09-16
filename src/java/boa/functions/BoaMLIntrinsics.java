@@ -145,7 +145,7 @@ public class BoaMLIntrinsics {
 		return m;
 	}
 
-	private static Path getModelPath(long jobId, String identifier) {
+	public static Path getModelPath(long jobId, String identifier) {
 		String output = DefaultProperties.localOutput != null
 				? new Path(DefaultProperties.localOutput).toString() + "/../"
 				: conf.get("fs.default.name", "hdfs://boa-njt/");

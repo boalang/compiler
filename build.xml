@@ -421,9 +421,27 @@
 
 
 	<!-- packaging -->
-	<target name="package" depends="package-runtime,package-compiler" description="Package both the compiler and runtime JARs." />
+	<target name="package" description="Package both the compiler and runtime JARs.">
+		<!-- 
+		<parallel threadCount="2">
+            <antcall target="package-mlrt"/>
+            <antcall target="package-ml"/>
+        </parallel>
+         -->
+        <parallel threadCount="2">
+            <antcall target="package-runtime"/>
+            <antcall target="package-compiler"/>
+        </parallel>
+    </target>
 
-	<target name="package-runtime" depends="compile" description="Package the runtime JAR.">
+	<target name="package-fast" description="Package both the compiler and runtime JARs.">
+        <parallel threadCount="2">
+            <antcall target="package-runtime"/>
+            <antcall target="package-compiler"/>
+        </parallel>
+    </target>
+
+	<target name="package-runtime" description="Package the runtime JAR.">
 		<jar destfile="dist/boa-runtime.jar">
 			<fileset dir="build/classes">
 				<patternset>
@@ -433,21 +451,11 @@
 					<exclude name="**/parser/" />
 				</patternset>
 			</fileset>
-
-			<!-- dl4j and weka dependencies
-			<archives>
-				<zips>
-					<fileset dir="lib/weka" includes="**/*.jar" />
-					<fileset dir="lib/dl4j" excludes="**/macos/" includes="**/*.jar" />
-				</zips>
-			</archives>
-			
-			 -->
-
+			<zipfileset excludes="META-INF/" src="dist/mlrt.jar" />
 		</jar>
 	</target>
 
-	<target name="package-compiler" depends="compile" description="Package the compiler JAR.">
+	<target name="package-compiler" description="Package the compiler JAR.">
 		<jar destfile="dist/boa-compiler.jar">
 			<manifest>
 				<attribute name="Main-Class" value="boa.BoaMain" />
@@ -466,8 +474,27 @@
 			<zipfileset excludes="META-INF/" src="rtlib/protobuf-java-2.5.0.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/scannotation-1.0.3.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/ST-4.0.8.jar" />
+			<zipfileset excludes="META-INF/" src="dist/ml.jar" />
+		</jar>
+	</target>
 
+	<target name="package-mlrt" description="Package the ML RT JARs.">
+		<jar destfile="dist/mlrt.jar">
 			<!-- dl4j and weka dependencies
+			-->
+			<archives>
+				<zips>
+					<fileset dir="lib/weka" includes="**/*.jar" />
+					<fileset dir="lib/dl4j" excludes="**/macos/" includes="**/*.jar" />
+				</zips>
+			</archives>
+		</jar>
+	</target>
+
+	<target name="package-ml" description="Package the ML JARs.">
+		<jar destfile="dist/ml.jar">
+			<!-- dl4j and weka dependencies
+			-->
 			<restrict>
 				<name name="**/*.class" />
 				<archives>
@@ -477,9 +504,6 @@
 					</zips>
 				</archives>
 			</restrict>
-			
-			-->
-
 		</jar>
 	</target>
 

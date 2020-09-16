@@ -98,11 +98,10 @@ public class SimpleKMeansAggregator extends MLAggregator {
 		try {
 			SimpleKMeans m = new SimpleKMeans();
 			m.setOptions(options);
-			m.buildClusterer(this.trainingSet);
+			m.buildClusterer(this.instances);
 			this.model = new KMeans(m, getAttributes());
 			this.saveModel(this.model);
 			this.collect(printModelOptions() + "\n" + this.model.toString());
-			this.evaluate(m, trainingSet);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -110,8 +109,8 @@ public class SimpleKMeansAggregator extends MLAggregator {
 
 	private ArrayList<Attribute> getAttributes() {
 		ArrayList<Attribute> attributes = Lists.newArrayList();
-		for (int i = 0; i < trainingSet.numAttributes(); i++)
-			attributes.add(trainingSet.attribute(i));
+		for (int i = 0; i < instances.numAttributes(); i++)
+			attributes.add(instances.attribute(i));
 		return attributes;
 	}
 
@@ -123,7 +122,7 @@ public class SimpleKMeansAggregator extends MLAggregator {
 	}
 
 	private void instanceCreation() {
-		trainingSet = new Instances("SimpleKMeans", this.fvAttributes, 1);
+		instances = new Instances("SimpleKMeans", this.fvAttributes, 1);
 	}
 
 	private void attributeCreation() {

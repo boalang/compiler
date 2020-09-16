@@ -62,13 +62,13 @@ public class RandomForestAggregator extends MLAggregator {
 	 */
 	@Override
 	public void finish() throws IOException, InterruptedException {
-		if (trainingSet.numInstances() == 0)
+		if (instances.numInstances() == 0)
 			return;
 
 		try {
 			this.model = new RandomForest();
 			this.model.setOptions(options);
-			this.model.buildClassifier(this.trainingSet);
+			this.model.buildClassifier(this.instances);
 			this.saveModel(this.model);
 
 			if (trainWithCombiner) {
@@ -80,7 +80,6 @@ public class RandomForestAggregator extends MLAggregator {
 			} else {
 				String info = "\n=== Model Info ===\n" + this.model.toString();
 				this.collect(info);
-				this.evaluate(this.model, this.trainingSet);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

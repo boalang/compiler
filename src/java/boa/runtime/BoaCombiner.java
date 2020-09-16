@@ -25,6 +25,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.log4j.Logger;
 import boa.aggregators.Aggregator;
 import boa.aggregators.FinishedException;
+import boa.aggregators.ml.EvaluationAggregator;
 import boa.aggregators.ml.MLAggregator;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
@@ -105,7 +106,7 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 		String threadName = Thread.currentThread().getName();
 		int processedData = 0, passedDataSize = 0;
 		
-		if (mla.trainWithCombiner) {
+		if (mla.trainWithCombiner || mla instanceof EvaluationAggregator) {
 			// train a model with combiner at map phase
 			boolean isReducer = false;
 			for (final EmitValue value : values) {
@@ -117,10 +118,6 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 					continue;
 				}
 				processedData++;
-				
-				if (isReducer)
-					System.out.println(value);
-				
 				if (value.getTuple() != null)
 					mla.aggregate(value.getTuple(), value.getMetadata());
 				else if (value.getData() != null)
@@ -143,7 +140,7 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 	
 	private boolean isEmitValueFromCombiner(EmitValue value) {
 		String meta = value.getMetadata();
-		return meta != null && meta.equals("model_path");
+		return meta != null && (meta.equals("model_path") || meta.equals("expected_predicted"));
 	}
 
 	private void handleRegularAggregator(Aggregator a, EmitKey key, Iterable<EmitValue> values,

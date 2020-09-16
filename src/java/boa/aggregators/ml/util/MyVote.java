@@ -22,16 +22,14 @@ public class MyVote extends Vote {
 	private double[] instanceNumPredictions;
 	private Instances dataset;
 
-
-
 	public MyVote(Path path) {
 		classifiers = new SeqCollection<Classifier>(path);
 	}
 
-	public MyVote(Path path, Instances dataset, int rule) {
+	public MyVote(Path path, Instances dataset, String rule) {
 		classifiers = new SeqCollection<Classifier>(path);
 		this.dataset = dataset;
-		m_CombinationRule = rule;
+		this.setCombinationRule(rule);
 		instanceProbs = new double[dataset.numInstances()][dataset.numClasses()];
 		instanceNumPredictions = new double[dataset.numInstances()];
 		try {
@@ -41,7 +39,50 @@ public class MyVote extends Vote {
 			e.printStackTrace();
 		}
 	}
-	
+
+	public String[] getResult(int instanceIdx) throws Exception {
+		double predictedDoubleVal, expectedDoubleVal;
+		double[] dist = instanceProbs[instanceIdx];
+		Instance instance = dataset.instance(instanceIdx);
+		int index;
+
+		switch (m_CombinationRule) {
+		case AVERAGE_RULE:
+		case PRODUCT_RULE:
+		case MAJORITY_VOTING_RULE:
+		case MIN_RULE:
+		case MAX_RULE:
+			if (instance.classAttribute().isNominal()) {
+				index = Utils.maxIndex(dist);
+				if (dist[index] == 0) {
+					predictedDoubleVal = Utils.missingValue();
+				} else {
+					predictedDoubleVal = index;
+				}
+			} else if (instance.classAttribute().isNumeric()) {
+				predictedDoubleVal = dist[0];
+			} else {
+				predictedDoubleVal = Utils.missingValue();
+			}
+			break;
+		case MEDIAN_RULE:
+			predictedDoubleVal = classifyInstanceMedian(instance);
+			break;
+		default:
+			throw new IllegalStateException("Unknown combination rule '" + m_CombinationRule + "'!");
+		}
+
+		expectedDoubleVal = instance.classValue();
+		String expected = instance.classAttribute().isNominal()
+				? instance.classAttribute().value((int) expectedDoubleVal)
+				: String.valueOf(expectedDoubleVal);
+		String predicted = instance.classAttribute().isNominal()
+				? instance.classAttribute().value((int) predictedDoubleVal)
+				: String.valueOf(predictedDoubleVal);
+
+		return new String[] { expected, predicted };
+	}
+
 	public double[][] getInstanceProbs() {
 		return instanceProbs;
 	}
@@ -53,7 +94,7 @@ public class MyVote extends Vote {
 	public Instances getDataset() {
 		return dataset;
 	}
-	
+
 	public void setCombinationRule(String rule) {
 		switch (rule) {
 		case "AVG":

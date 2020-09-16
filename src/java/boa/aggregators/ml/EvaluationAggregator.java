@@ -2,19 +2,30 @@ package boa.aggregators.ml;
 
 import java.io.IOException;
 import java.util.HashMap;
+
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapreduce.Reducer;
 import org.nd4j.shade.protobuf.common.collect.Maps;
 
 import boa.aggregators.AggregatorSpec;
 import boa.aggregators.FinishedException;
+import boa.aggregators.ml.util.MyVote;
+import boa.io.EmitKey;
+import boa.io.EmitValue;
 import boa.runtime.Tuple;
+
+import static boa.functions.BoaMLIntrinsics.getModelPath;
 
 /**
  * A Boa aggregator for evaluating actual and predicted value.
  *
  * @author hyj
  */
-@AggregatorSpec(name = "evaluation", formalParameters = { "string" })
+@AggregatorSpec(name = "evaluation", formalParameters = { "string" }, canCombine = true)
 public class EvaluationAggregator extends MLAggregator {
+
+	private long jobId;
+	private String identifier, rule;
 
 	private HashMap<String, Integer> classes;
 
@@ -32,21 +43,28 @@ public class EvaluationAggregator extends MLAggregator {
 	}
 
 	private void initialize() {
-		updateClasses();
-		int size = classes.size();
-		matrix = new long[size][size];
-		results = new Results(classes);
-	}
 
-	private void updateClasses() {
 		for (int i = 0; i < options.length; i++) {
 			String cur = options[i];
 			if (cur.equals("-class")) {
 				classes = Maps.newHashMap();
 				for (String c : options[++i].split(":"))
 					classes.put(c, classes.size());
+			} else if (cur.equals("-job")) {
+				jobId = Long.parseLong(options[++i]);
+			} else if (cur.equals("-id")) {
+				identifier = options[++i];
+			} else if (cur.equals("-rule")) {
+				rule = options[++i];
 			}
 		}
+
+		if (!isCombining()) {
+			int size = classes.size();
+			matrix = new long[size][size];
+			results = new Results(classes);
+		}
+
 	}
 
 	@Override
@@ -55,18 +73,15 @@ public class EvaluationAggregator extends MLAggregator {
 
 	@Override
 	public void aggregate(Tuple data, String metadata) throws IOException, InterruptedException {
+		aggregate(data, metadata, "model");
 	}
 
 	@Override
 	public void aggregate(String data[], String metadata) throws IOException, InterruptedException {
-//		System.out.println(data[0]);
-		update(matrix, data, metadata);
-	}
-
-	private void update(long[][] m, String[] data, String metadata) {
-		int predicted = classes.get(data[0]);
-		int expected = classes.get(data[1]);
-		m[predicted][expected]++;
+		if (isCombining())
+			aggregate(data, metadata, "model");
+		else
+			matrix[classes.get(data[0])][classes.get(data[1])]++;
 	}
 
 	/**
@@ -74,11 +89,25 @@ public class EvaluationAggregator extends MLAggregator {
 	 */
 	@Override
 	public void finish() throws IOException, InterruptedException {
-		calculate(matrix, results);
-
-		StringBuilder sb = new StringBuilder();
-		sb.append("Precision   Recall   F1-Score   Support\n").append(results);
-		this.collect(sb.toString());
+		if (isCombining()) {
+			Path path = getModelPath(jobId, identifier);
+			MyVote vote = new MyVote(path, instances, rule);
+			@SuppressWarnings("unchecked")
+			Reducer<EmitKey, EmitValue, EmitKey, EmitValue>.Context context = getContext();
+			EmitKey key = getKey();
+			for (int i = 0; i < instances.numInstances(); i++) {
+				try {
+					context.write(key, new EmitValue(vote.getResult(i), "expected_predicted"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		} else {
+			calculate(matrix, results);
+			StringBuilder sb = new StringBuilder();
+			sb.append("Precision   Recall   F1-Score   Support\n").append(results);
+			this.collect(sb.toString());
+		}
 	}
 
 	private void calculate(long[][] m, Results results) {

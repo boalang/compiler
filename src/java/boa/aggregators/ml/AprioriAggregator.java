@@ -90,7 +90,7 @@ public class AprioriAggregator extends MLAggregator {
 			this.model = new Apriori();
 			handlePostOptions();
 			this.model.setOptions(options);
-			this.model.buildAssociations(this.trainingSet);
+			this.model.buildAssociations(this.instances);
 			this.saveModel(this.model);
 			this.collect(printModelOptions() + "\n" + this.model.toString());
 		} catch (Exception e) {
@@ -117,12 +117,12 @@ public class AprioriAggregator extends MLAggregator {
 	}
 
 	private void instanceCreation() {
-		trainingSet = new Instances("Apriori", this.fvAttributes, 1);
+		instances = new Instances("Apriori", this.fvAttributes, 1);
 		for (String[] data : dataList) {
 			Instance instance = new DenseInstance(fvAttributes.size());
 			for (int i = 0; i < data.length; i++)
 				instance.setValue(fvAttributes.get(i), data[i]);
-			trainingSet.add(instance);
+			instances.add(instance);
 		}
 	}
 
