@@ -29,7 +29,7 @@ public class EvaluationAggregator extends MLAggregator {
 
 	private HashMap<String, Integer> classes;
 
-	private long[][] matrix;
+	private long[][] matrix; // rows: predicted cols: expected
 
 	private Results results;
 
@@ -78,10 +78,11 @@ public class EvaluationAggregator extends MLAggregator {
 
 	@Override
 	public void aggregate(String data[], String metadata) throws IOException, InterruptedException {
-		if (isCombining())
+		if (isCombining()) {
 			aggregate(data, metadata, "model");
-		else
+		} else {
 			matrix[classes.get(data[0])][classes.get(data[1])]++;
+		}
 	}
 
 	/**
@@ -97,7 +98,7 @@ public class EvaluationAggregator extends MLAggregator {
 			EmitKey key = getKey();
 			for (int i = 0; i < instances.numInstances(); i++) {
 				try {
-					context.write(key, new EmitValue(vote.getResult(i), "expected_predicted"));
+					context.write(key, new EmitValue(vote.getResult(i), "predicted_expected"));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -147,7 +148,7 @@ public class EvaluationAggregator extends MLAggregator {
 		results.accuracy = results.total == 0 ? 0 : (double) correct / results.total;
 
 		for (int i = 0; i < results.macro.length; i++)
-			results.macro[i] /= 3;
+			results.macro[i] /= m.length;
 
 		for (int i = 0; i < results.weighted.length; i++)
 			results.weighted[i] /= results.total == 0 ? 1 : results.total;
@@ -211,7 +212,8 @@ class Results {
 	}
 
 	public String str(double d) {
-		return String.format("%.1f", d * 100);
+//		return String.format("%.1f", d * 100);
+		return String.format("%.3f", d);
 	}
 }
 

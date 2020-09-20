@@ -141,7 +141,7 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 	
 	private boolean isEmitValueFromMapCombiner(EmitValue value) {
 		String meta = value.getMetadata();
-		return meta != null && (meta.equals("model_path") || meta.equals("expected_predicted"));
+		return meta != null && (meta.equals("model_path") || meta.equals("predicted_expected"));
 	}
 
 	private void handleRegularAggregator(Aggregator a, EmitKey key, Iterable<EmitValue> values,

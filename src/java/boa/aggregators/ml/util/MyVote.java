@@ -80,7 +80,7 @@ public class MyVote extends Vote {
 				? instance.classAttribute().value((int) predictedDoubleVal)
 				: String.valueOf(predictedDoubleVal);
 
-		return new String[] { expected, predicted };
+		return new String[] { predicted, expected };
 	}
 
 	public double[][] getInstanceProbs() {
