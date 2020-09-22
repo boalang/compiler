@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<site>
-   <feature url="features/org.eclipse.dltk.python_5.11.0.201811220629.jar" id="org.eclipse.dltk.python" version="5.11.0.201811220629"/>
-   <feature url="features/org.eclipse.dltk.python.sdk_5.11.0.201811220629.jar" id="org.eclipse.dltk.python.sdk" version="5.11.0.201811220629"/>
-</site>
