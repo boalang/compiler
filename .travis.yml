@@ -8,7 +8,6 @@ addons:
       - junit4
       - ant
       - ant-optional
-      - parse.python.antlr.runtime
 script: ant -Dprotobuf.uptodate=true test checkstyle
 notifications:
   email:
