@@ -94,7 +94,6 @@ public class test_treed {
 	    }
 	    else
 	    {
-	    	//test change
 	    	 org.eclipse.dltk.ast.ASTNode v1=getPythonAst(version1);
 			 org.eclipse.dltk.ast.ASTNode v2=getPythonAst(version2);
 			 
