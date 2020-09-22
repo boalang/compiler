@@ -4,15 +4,16 @@ jdk:
   - openjdk8
 addons:
   apt:
+    update: true
     packages:
       - junit4
       - ant
       - ant-optional
+     
 script: ant -Dprotobuf.uptodate=true test checkstyle
 notifications:
   email:
     recipients:
-      - hridesh@iastate.edu
       - sayem@iastate.edu
       - sumon@iastate.edu
     on_success: change
