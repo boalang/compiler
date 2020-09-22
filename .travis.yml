@@ -4,12 +4,11 @@ jdk:
   - openjdk8
 addons:
   apt:
-    update: true
     packages:
       - junit4
       - ant
       - ant-optional
-     
+      - parse.python.antlr.runtime
 script: ant -Dprotobuf.uptodate=true test checkstyle
 notifications:
   email:
