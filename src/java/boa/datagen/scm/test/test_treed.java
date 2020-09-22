@@ -94,14 +94,20 @@ public class test_treed {
 	    }
 	    else
 	    {
+	    	//test change
 	    	 org.eclipse.dltk.ast.ASTNode v1=getPythonAst(version1);
 			 org.eclipse.dltk.ast.ASTNode v2=getPythonAst(version2);
+			 
+			 Object ob1=v1;
+			 Object ob2=v2;
+			 System.out.println(v1.hashCode()+" "+ob1.hashCode());
+			 System.out.println(v2.hashCode()+" "+ob2.hashCode());
 			    
 			 boa.datagen.treed.python.TreedMapper tm=new boa.datagen.treed.python.TreedMapper(v1,v2);
 			    
 			  try {
 				tm.map();
-				tm.printChanges();
+//				tm.printChanges();
 
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -112,8 +118,11 @@ public class test_treed {
 	public static void main(String []args)
 	{
 		test_treed tt=new test_treed();
+		Object ob=tt;
+		System.out.println(tt.hashCode());
+		System.out.println(ob.hashCode());
 		try {
-			tt.test_treed_client();
+			((test_treed) ob).test_treed_client();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
