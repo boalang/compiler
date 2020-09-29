@@ -275,6 +275,762 @@ public class NewPythonVisitor extends ASTVisitor {
 
 	}
 
+	public boolean visit(ModuleDeclaration s) throws Exception {
+		// System.out.println("Enter Module Declaration: "+s.toString());
+
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
+		fields.push(new ArrayList<boa.types.Ast.Variable>());
+		methods.push(new ArrayList<boa.types.Ast.Method>());
+
+		if (s.getStatements() != null) {
+			for (Object o : s.getStatements()) {
+				((org.eclipse.dltk.ast.ASTNode) o).traverse(this);
+
+				if (isExpressionStatement((ASTNode) o) == true) {
+					addStatementExpression();
+				}
+			}
+		}
+		List<boa.types.Ast.Statement> ss = statements.pop();
+		List<boa.types.Ast.Declaration> ds = declarations.pop();
+		List<boa.types.Ast.Method> ms = methods.pop();
+		List<boa.types.Ast.Variable> fs = fields.pop();
+		for (boa.types.Ast.Statement st : ss)
+			b.addStatements(st);
+		for (boa.types.Ast.Declaration d : ds)
+			b.addDeclarations(d);
+		for (boa.types.Ast.Method m : ms)
+			b.addMethods(m);
+		for (boa.types.Ast.Variable v : fs)
+			b.addVariables(v);
+
+		return false;
+	}
+
+	public boolean visitTypeDeclaration(TypeDeclaration node) throws Exception {
+//		System.out.println("Enter type declaration");
+
+		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
+
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+
+		if (node.getRef() instanceof SimpleReference) {
+			b.setName(((SimpleReference) node.getRef()).getName());
+		}
+		b.setKind(boa.types.Ast.TypeKind.CLASS);
+
+		if (node.getSuperClassNames() != null) {
+			for (String n : (List<String>) node.getSuperClassNames()) {
+				Type.Builder tb = Type.newBuilder();
+				tb.setKind(TypeKind.CLASS);
+				tb.setName(n);
+				b.addParents(tb.build());
+			}
+
+		}
+
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+
+		if (node.getStatements() != null) {
+			for (Object d : node.getStatements()) {
+
+				// if (d instanceof org.eclipse.dltk.ast.expressions.StringLiteral) {
+				// this.visitComment((org.eclipse.dltk.ast.expressions.StringLiteral) d);
+				// b.addComments(comments.pop());
+				// }
+				if (d instanceof MethodDeclaration) {
+					methods.push(new ArrayList<boa.types.Ast.Method>());
+					((MethodDeclaration) d).traverse(this);
+					for (boa.types.Ast.Method m : methods.pop()) {
+						b.addMethods(m);
+					}
+				} else if (isDeclarationKind((ASTNode) d)) {
+					declarations.push(new ArrayList<boa.types.Ast.Declaration>());
+					((ASTNode) d).traverse(this);
+					for (boa.types.Ast.Declaration nd : declarations.pop())
+						b.addNestedDeclarations(nd);
+				} else {
+					((ASTNode) d).traverse(this);
+					if (isExpressionStatement((ASTNode) d) == true) {
+						addStatementExpression();
+					}
+				}
+			}
+		}
+
+		List<boa.types.Ast.Statement> ss = statements.pop();
+		for (boa.types.Ast.Statement st : ss)
+			b.addStatements(st);
+
+		declarations.peek().add(b.build());
+
+		return false;
+
+	}
+
+	public boolean visit(MethodDeclaration s) throws Exception {
+
+//		System.out.println("Enter Method Declaration: " + s.toString());
+
+		List<boa.types.Ast.Method> list = methods.peek();
+		Method.Builder b = Method.newBuilder();
+		if (s.getRef() instanceof SimpleReference) {
+			b.setName(((SimpleReference) s.getRef()).getName());
+		}
+
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+
+		if (s.getArguments() != null) {
+			for (Object ob : s.getArguments()) {
+				fields.push(new ArrayList<Variable>());
+				PythonArgument ex = (PythonArgument) ob;
+				ex.traverse(this);
+				List<boa.types.Ast.Variable> fs = fields.pop();
+
+				for (boa.types.Ast.Variable v : fs)
+					b.addArguments(v);
+
+			}
+		}
+
+		if (s.getStatements() != null) {
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
+			s.getBody().traverse(this);
+			List<boa.types.Ast.Statement> ss = statements.pop();
+			for (boa.types.Ast.Statement st : ss)
+				b.addStatements(st);
+		}
+
+		if (s.getDecorators() != null) {
+			for (Object ob : s.getDecorators()) {
+				((ASTNode) ob).traverse(this);
+				b.addModifiers(modifiers.pop());
+			}
+		}
+
+		Type.Builder tb = Type.newBuilder();
+		String name = "";
+		tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		tb.setName(name);
+		b.setReturnType(tb.build());
+		list.add(b.build());
+
+		return false;
+	}
+
+	//Statement handling begins
+	
+	public boolean visit(Block node) throws Exception {
+		Statement.Builder b = Statement.newBuilder();
+		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
+		if (enableDiff) {
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		fields.push(new ArrayList<boa.types.Ast.Variable>());
+		methods.push(new ArrayList<boa.types.Ast.Method>());
+		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+
+		if (node.getStatements() != null) {
+			for (Object o : node.getStatements()) {
+				((org.eclipse.dltk.ast.ASTNode) o).traverse(this);
+
+				if (isExpressionStatement((ASTNode) o) == true) {
+					addStatementExpression();
+				}
+			}
+		}
+		List<boa.types.Ast.Statement> ss = statements.pop();
+		List<boa.types.Ast.Declaration> ds = declarations.pop();
+		List<boa.types.Ast.Method> ms = methods.pop();
+		List<boa.types.Ast.Variable> fs = fields.pop();
+
+		for (boa.types.Ast.Statement st : ss)
+			b.addStatements(st);
+		for (boa.types.Ast.Declaration d : ds)
+			b.addTypeDeclarations(d);
+		for (boa.types.Ast.Method m : ms)
+			b.addMethods(m);
+		for (boa.types.Ast.Variable v : fs)
+			b.addVariableDeclarations(v);
+
+		statements.peek().add(b.build());
+
+		return false;
+	}
+
+	public boolean visit(PythonTryStatement s) throws Exception {
+		// have to handle following
+		// try-finally
+		// try-except-else
+//		System.out.println("Enter Try: " + s.toString());
+
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.TRY);
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+
+		if (s.getBody() != null)
+			s.getBody().traverse(this);
+
+		if (s.getCatchFinallyStatements() != null) {
+			for (Object c : s.getCatchFinallyStatements())
+				((ASTNode) c).traverse(this);
+		}
+
+		if (s.getfElseStatement() != null) {
+			s.getfElseStatement().traverse(this);
+		}
+
+		List<boa.types.Ast.Statement> ss = statements.pop();
+		for (boa.types.Ast.Statement st : ss)
+			b.addStatements(st);
+
+		list.add(b.build());
+
+		return false;
+	}
+
+	public boolean visit(TryFinallyStatement s) throws Exception {
+//		System.out.println("Enter Finally : " + s.toString());
+
+		Statement.Builder b = Statement.newBuilder();
+		List<Statement> list = statements.peek();
+		b.setKind(Statement.StatementKind.FINALLY);
+
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+
+		if (s.getfBody() != null)
+			s.getfBody().traverse(this);
+
+		List<boa.types.Ast.Statement> ss = statements.pop();
+		for (boa.types.Ast.Statement st : ss)
+			b.addStatements(st);
+
+		list.add(b.build());
+
+		return false;
+	}
+
+	public boolean visit(PythonExceptStatement s) throws Exception {
+//		System.out.println("Enter Except: " + s.toString());
+
+		Statement.Builder b = Statement.newBuilder();
+		List<Statement> list = statements.peek();
+		b.setKind(Statement.StatementKind.CATCH);
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		if (s.getExpression() != null) {
+			boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
+
+			if (enableDiff) {
+				vb.setId(this.id++);
+			}
+			dealExpression(s.getExpression());
+			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+
+			tb.setComputedName(expressions.pop());
+			tb.setKind(boa.types.Ast.TypeKind.CLASS);
+			vb.setVariableType(tb.build());
+			b.setVariableDeclaration(vb.build());
+		}
+
+		if (s.getMessage() != null) {
+
+			dealExpression(s.getMessage());
+
+			b.addExpressions(expressions.pop());
+		}
+		if (s.getBody() != null) {
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
+
+			s.getBody().traverse(this);
+
+			List<boa.types.Ast.Statement> ss = statements.pop();
+			for (boa.types.Ast.Statement st : ss)
+				b.addStatements(st);
+		}
+
+		list.add(b.build());
+
+		return false;
+	}
+
+	public boolean visit(ExpressionList s) throws Exception {
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		if (s.getExpressions() != null) {
+			List el = s.getExpressions();
+			if (el != null) {
+				for (Object ob : el) {
+					((ASTNode) ob).traverse(this);
+					b.addExpressions(expressions.pop());
+				}
+			}
+		}
+		expressions.push(b.build());
+
+		return false;
+	}
+
+	@SuppressWarnings("deprecation")
+	public boolean visit(PythonForStatement s) throws Exception {
+//		System.out.println("Enter For: " + s.toString());
+
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		b.setKind(boa.types.Ast.Statement.StatementKind.FOREACH);
+
+		if (s.getfMainArguments() != null) {
+			if (s.getfMainArguments() instanceof ExpressionList) {
+				if (((ExpressionList) s.getfMainArguments()).getExpressions() != null) {
+					for (Object ob : ((ExpressionList) s.getfMainArguments()).getExpressions()) {
+						((ASTNode) ob).traverse(this);
+
+						boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
+						if (enableDiff)
+							vb.setId(this.id++);
+						vb.setComputedName(expressions.pop());
+						b.addVariableDeclarations(vb.build());
+					}
+				}
+			}
+		}
+		if (s.getCondition() != null) {
+			dealExpression(s.getCondition());
+			boa.types.Ast.Expression ex = expressions.pop();
+//			b.addExpressions(ex);
+			b.addConditions(ex);
+		}
+
+		if (s.getAction() != null) {
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
+			s.getAction().traverse(this);
+			for (boa.types.Ast.Statement ss : statements.pop())
+				b.addStatements(ss);
+		}
+
+		// Python enables else statement for the loops. The else statement is added as
+		// the second block statement of FOR (similar to else in IF statement).
+		if (s.getfElseStatement() != null) {
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
+			s.getfElseStatement().traverse(this);
+			for (boa.types.Ast.Statement ss : statements.pop())
+				b.addStatements(ss);
+		}
+
+		list.add(b.build());
+
+		return false;
+	}
+
+	public boolean visit(PythonWhileStatement s) throws Exception {
+//		System.out.println("Enter While: " + s.toString());
+
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		b.setKind(boa.types.Ast.Statement.StatementKind.WHILE);
+
+		if (s.getCondition() != null) {
+			dealExpression(s.getCondition());
+			boa.types.Ast.Expression ex = expressions.pop();
+			b.addConditions(ex);
+		}
+
+		if (s.getAction() != null) {
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
+			s.getAction().traverse(this);
+			for (boa.types.Ast.Statement ss : statements.pop())
+				b.addStatements(ss);
+		}
+
+		// Python enables else statement for the loops. The else statement is added as
+		// the second block statement of WHILE (similar to else in IF statement).
+		if (s.getElseStatement() != null) {
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
+			s.getElseStatement().traverse(this);
+			for (boa.types.Ast.Statement ss : statements.pop())
+				b.addStatements(ss);
+		}
+
+		list.add(b.build());
+
+		return false;
+	}
+
+	public boolean visit(IfStatement s) throws Exception {
+//		System.out.println("Enter IF: " + s.toString());
+
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.IF);
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		if (s.getCondition() != null) {
+			dealExpression(s.getCondition());
+			boa.types.Ast.Expression ex = expressions.pop();
+			b.addConditions(ex);
+		}
+
+		if (s.getThen() != null) {
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
+			s.getThen().traverse(this);
+			for (boa.types.Ast.Statement ss : statements.pop())
+				b.addStatements(ss);
+		}
+
+		if (s.getElse() != null) {
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
+			s.getElse().traverse(this);
+			for (boa.types.Ast.Statement ss : statements.pop())
+				b.addStatements(ss);
+		}
+
+		list.add(b.build());
+
+		return false;
+	}
+
+	public boolean visit(BreakStatement s) throws Exception {
+//		System.out.println("Enter BREAK: " + s.toString());
+
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.BREAK);
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		if (s.getExpression() != null) {
+			dealExpression(s.getExpression());
+			b.addExpressions(expressions.pop());
+		}
+
+		list.add(b.build());
+
+		return false;
+	}
+
+	public boolean visit(ContinueStatement s) throws Exception {
+//		System.out.println("Enter CONTINUE: " + s.toString());
+
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.CONTINUE);
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		if (s.getExpression() != null) {
+			dealExpression(s.getExpression());
+			b.addExpressions(expressions.pop());
+		}
+
+		list.add(b.build());
+
+		return false;
+	}
+
+	public boolean visit(PythonRaiseStatement s) throws Exception {
+//		System.out.println("Enter RAISE: " + s.toString());
+
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.RAISE);
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		if (s.getExpression1() != null) {
+			dealExpression(s.getExpression1());
+			b.addExpressions(expressions.pop());
+		}
+		if (s.getExpression2() != null) {
+			dealExpression(s.getExpression2());
+			b.addExpressions(expressions.pop());
+		}
+		if (s.getExpression3() != null) {
+			dealExpression(s.getExpression3());
+			b.addExpressions(expressions.pop());
+		}
+
+		list.add(b.build());
+
+		return false;
+	}
+
+	public boolean visit(PythonDelStatement s) throws Exception {
+//		System.out.println("Enter DEL: " + s.toString());
+
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.DEL);
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		if (s.getExpression() != null) {
+			dealExpression(s.getExpression());
+			b.addExpressions(expressions.pop());
+		}
+
+		list.add(b.build());
+
+		return false;
+	}
+
+	public boolean visit(PythonAssertStatement s) throws Exception {
+//		System.out.println("Enter Assert: " + s.toString());
+
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.ASSERT);
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		if (s.getfExpression1() != null) {
+			dealExpression(s.getfExpression1());
+			boa.types.Ast.Expression ex = expressions.pop();
+			b.addConditions(ex);
+		}
+
+		if (s.getfExpression2() != null) {
+			dealExpression(s.getfExpression2());
+			boa.types.Ast.Expression ex = expressions.pop();
+			b.addExpressions(ex);
+		}
+
+		list.add(b.build());
+
+		return false;
+	}
+
+	public boolean visit(PythonYieldStatement s) throws Exception {
+//		System.out.println("Enter Yield: " + s.toString());
+
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
+
+		boa.types.Ast.Expression.Builder ex = boa.types.Ast.Expression.newBuilder();
+		ex.setKind(boa.types.Ast.Expression.ExpressionKind.YIELD);
+
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				ex.setChange(status);
+		}
+
+		if (s.getExpression() != null) {
+			dealExpression(s.getExpression());
+			ex.addExpressions(expressions.pop());
+		}
+
+		b.addExpressions(ex);
+
+		list.add(b.build());
+		return false;
+	}
+
+	public boolean visit(PythonWithStatement s) throws Exception {
+//		System.out.println("Enter With: " + s.toString());
+
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+
+		b.setKind(boa.types.Ast.Statement.StatementKind.WITH);
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		if (s.getWhat() != null) {
+			dealExpression(s.getWhat());
+			boa.types.Ast.Expression ex = expressions.pop();
+			b.addExpressions(ex);
+		}
+
+		// Check if adding the variable name as ComputedName is okay
+		if (s.getAs() != null) {
+			dealExpression(s.getAs());
+			boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
+			if (enableDiff)
+				vb.setId(this.id++);
+			vb.setComputedName(expressions.pop());
+			b.addVariableDeclarations(vb.build());
+		}
+
+		if (s.getBlock() != null) {
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
+			s.getBlock().traverse(this);
+			for (boa.types.Ast.Statement ss : statements.pop())
+				b.addStatements(ss);
+		}
+
+		list.add(b.build());
+		return false;
+	}
+
+	public boolean visit(EmptyStatement s) throws Exception {
+//		System.out.println("Enter pass: " + s.toString());
+
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+
+		if (enableDiff)
+			b.setId(this.id++);
+
+		b.setKind(boa.types.Ast.Statement.StatementKind.EMPTY);
+		list.add(b.build());
+
+		return false;
+	}
+
+	public boolean visit(GlobalStatement s) throws Exception {
+
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+
+		b.setKind(boa.types.Ast.Statement.StatementKind.GLOBAL);
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		if (s.getExpression() instanceof ExpressionList) {
+			ExpressionList el = (ExpressionList) s.getExpression();
+			if (el != null && el.getExpressions() != null) {
+				for (Object ob : el.getExpressions()) {
+					((ASTNode) ob).traverse(this);
+					b.addExpressions(expressions.pop());
+				}
+			}
+		}
+
+		list.add(b.build());
+
+		return false;
+	}
+
+	public boolean visit(ExecStatement md) throws Exception {
+//		System.out.println("Enter exec: " + md.toString());
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
+		b.setMethod("exec");
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+		if (md.getExpression() != null) {
+			dealExpression(md.getExpression());
+			b.addMethodArgs(expressions.pop());
+		}
+
+		expressions.push(b.build());
+
+		return true;
+
+	}
+
+	public boolean visit(ReturnStatement node) throws Exception {
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.RETURN);
+
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+
+		if (node.getExpression() != null) {
+			dealExpression(node.getExpression());
+
+			b.addExpressions(expressions.pop());
+		}
+		list.add(b.build());
+		return false;
+	}
+	
+	// statement handling ends
+
+	// expression handling
 	public boolean visit(CallHolder ch) throws Exception {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 
@@ -1116,26 +1872,7 @@ public class NewPythonVisitor extends ASTVisitor {
 
 	}
 
-	public boolean visit(ReturnStatement node) throws Exception {
-		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.RETURN);
-
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-
-		if (node.getExpression() != null) {
-			dealExpression(node.getExpression());
-
-			b.addExpressions(expressions.pop());
-		}
-		list.add(b.build());
-		return false;
-	}
+	
 
 	public boolean visit(EmptyExpression md) throws Exception {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
@@ -1290,165 +2027,7 @@ public class NewPythonVisitor extends ASTVisitor {
 		return false;
 	}
 
-	public boolean visitTypeDeclaration(TypeDeclaration node) throws Exception {
-//		System.out.println("Enter type declaration");
-
-		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
-
-		if (enableDiff) {
-			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-
-		if (node.getRef() instanceof SimpleReference) {
-			b.setName(((SimpleReference) node.getRef()).getName());
-		}
-		b.setKind(boa.types.Ast.TypeKind.CLASS);
-
-		if (node.getSuperClassNames() != null) {
-			for (String n : (List<String>) node.getSuperClassNames()) {
-				Type.Builder tb = Type.newBuilder();
-				tb.setKind(TypeKind.CLASS);
-				tb.setName(n);
-				b.addParents(tb.build());
-			}
-
-		}
-
-		statements.push(new ArrayList<boa.types.Ast.Statement>());
-
-		if (node.getStatements() != null) {
-			for (Object d : node.getStatements()) {
-
-				// if (d instanceof org.eclipse.dltk.ast.expressions.StringLiteral) {
-				// this.visitComment((org.eclipse.dltk.ast.expressions.StringLiteral) d);
-				// b.addComments(comments.pop());
-				// }
-				if (d instanceof MethodDeclaration) {
-					methods.push(new ArrayList<boa.types.Ast.Method>());
-					((MethodDeclaration) d).traverse(this);
-					for (boa.types.Ast.Method m : methods.pop()) {
-						b.addMethods(m);
-					}
-				} else if (isDeclarationKind((ASTNode) d)) {
-					declarations.push(new ArrayList<boa.types.Ast.Declaration>());
-					((ASTNode) d).traverse(this);
-					for (boa.types.Ast.Declaration nd : declarations.pop())
-						b.addNestedDeclarations(nd);
-				} else {
-					((ASTNode) d).traverse(this);
-					if (isExpressionStatement((ASTNode) d) == true) {
-						addStatementExpression();
-					}
-				}
-			}
-		}
-
-		List<boa.types.Ast.Statement> ss = statements.pop();
-		for (boa.types.Ast.Statement st : ss)
-			b.addStatements(st);
-
-		declarations.peek().add(b.build());
-
-		return false;
-
-	}
-
-	public boolean visit(MethodDeclaration s) throws Exception {
-
-//		System.out.println("Enter Method Declaration: " + s.toString());
-
-		List<boa.types.Ast.Method> list = methods.peek();
-		Method.Builder b = Method.newBuilder();
-		if (s.getRef() instanceof SimpleReference) {
-			b.setName(((SimpleReference) s.getRef()).getName());
-		}
-
-		if (enableDiff) {
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-
-		if (s.getArguments() != null) {
-			for (Object ob : s.getArguments()) {
-				fields.push(new ArrayList<Variable>());
-				PythonArgument ex = (PythonArgument) ob;
-				ex.traverse(this);
-				List<boa.types.Ast.Variable> fs = fields.pop();
-
-				for (boa.types.Ast.Variable v : fs)
-					b.addArguments(v);
-
-			}
-		}
-
-		if (s.getStatements() != null) {
-			statements.push(new ArrayList<boa.types.Ast.Statement>());
-			s.getBody().traverse(this);
-			List<boa.types.Ast.Statement> ss = statements.pop();
-			for (boa.types.Ast.Statement st : ss)
-				b.addStatements(st);
-		}
-
-		if (s.getDecorators() != null) {
-			for (Object ob : s.getDecorators()) {
-				((ASTNode) ob).traverse(this);
-				b.addModifiers(modifiers.pop());
-			}
-		}
-
-		Type.Builder tb = Type.newBuilder();
-		String name = "";
-		tb.setKind(boa.types.Ast.TypeKind.OTHER);
-		tb.setName(name);
-		b.setReturnType(tb.build());
-		list.add(b.build());
-
-		return false;
-	}
-
-	public boolean visit(Block node) throws Exception {
-		Statement.Builder b = Statement.newBuilder();
-		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
-		if (enableDiff) {
-			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-		fields.push(new ArrayList<boa.types.Ast.Variable>());
-		methods.push(new ArrayList<boa.types.Ast.Method>());
-		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
-		statements.push(new ArrayList<boa.types.Ast.Statement>());
-
-		if (node.getStatements() != null) {
-			for (Object o : node.getStatements()) {
-				((org.eclipse.dltk.ast.ASTNode) o).traverse(this);
-
-				if (isExpressionStatement((ASTNode) o) == true) {
-					addStatementExpression();
-				}
-			}
-		}
-		List<boa.types.Ast.Statement> ss = statements.pop();
-		List<boa.types.Ast.Declaration> ds = declarations.pop();
-		List<boa.types.Ast.Method> ms = methods.pop();
-		List<boa.types.Ast.Variable> fs = fields.pop();
-
-		for (boa.types.Ast.Statement st : ss)
-			b.addStatements(st);
-		for (boa.types.Ast.Declaration d : ds)
-			b.addTypeDeclarations(d);
-		for (boa.types.Ast.Method m : ms)
-			b.addMethods(m);
-		for (boa.types.Ast.Variable v : fs)
-			b.addVariableDeclarations(v);
-
-		statements.peek().add(b.build());
-
-		return false;
-	}
+	// util methods
 
 	public boolean isDeclarationKind(org.eclipse.dltk.ast.ASTNode o) {
 		if (o instanceof MethodDeclaration)
@@ -1519,576 +2098,6 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setId(this.id++);
 		}
 		list.add(b.build());
-	}
-
-	public boolean visit(ModuleDeclaration s) throws Exception {
-		// System.out.println("Enter Module Declaration: "+s.toString());
-
-		if (enableDiff) {
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-
-		statements.push(new ArrayList<boa.types.Ast.Statement>());
-		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
-		fields.push(new ArrayList<boa.types.Ast.Variable>());
-		methods.push(new ArrayList<boa.types.Ast.Method>());
-
-		if (s.getStatements() != null) {
-			for (Object o : s.getStatements()) {
-				((org.eclipse.dltk.ast.ASTNode) o).traverse(this);
-
-				if (isExpressionStatement((ASTNode) o) == true) {
-					addStatementExpression();
-				}
-			}
-		}
-		List<boa.types.Ast.Statement> ss = statements.pop();
-		List<boa.types.Ast.Declaration> ds = declarations.pop();
-		List<boa.types.Ast.Method> ms = methods.pop();
-		List<boa.types.Ast.Variable> fs = fields.pop();
-		for (boa.types.Ast.Statement st : ss)
-			b.addStatements(st);
-		for (boa.types.Ast.Declaration d : ds)
-			b.addDeclarations(d);
-		for (boa.types.Ast.Method m : ms)
-			b.addMethods(m);
-		for (boa.types.Ast.Variable v : fs)
-			b.addVariables(v);
-
-		return false;
-	}
-
-	public boolean visit(PythonTryStatement s) throws Exception {
-		// have to handle following
-		// try-finally
-		// try-except-else
-//		System.out.println("Enter Try: " + s.toString());
-
-		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.TRY);
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-
-		statements.push(new ArrayList<boa.types.Ast.Statement>());
-
-		if (s.getBody() != null)
-			s.getBody().traverse(this);
-
-		if (s.getCatchFinallyStatements() != null) {
-			for (Object c : s.getCatchFinallyStatements())
-				((ASTNode) c).traverse(this);
-		}
-
-		if (s.getfElseStatement() != null) {
-			s.getfElseStatement().traverse(this);
-		}
-
-		List<boa.types.Ast.Statement> ss = statements.pop();
-		for (boa.types.Ast.Statement st : ss)
-			b.addStatements(st);
-
-		list.add(b.build());
-
-		return false;
-	}
-
-	public boolean visit(TryFinallyStatement s) throws Exception {
-//		System.out.println("Enter Finally : " + s.toString());
-
-		Statement.Builder b = Statement.newBuilder();
-		List<Statement> list = statements.peek();
-		b.setKind(Statement.StatementKind.FINALLY);
-
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-
-		statements.push(new ArrayList<boa.types.Ast.Statement>());
-
-		if (s.getfBody() != null)
-			s.getfBody().traverse(this);
-
-		List<boa.types.Ast.Statement> ss = statements.pop();
-		for (boa.types.Ast.Statement st : ss)
-			b.addStatements(st);
-
-		list.add(b.build());
-
-		return false;
-	}
-
-	public boolean visit(PythonExceptStatement s) throws Exception {
-//		System.out.println("Enter Except: " + s.toString());
-
-		Statement.Builder b = Statement.newBuilder();
-		List<Statement> list = statements.peek();
-		b.setKind(Statement.StatementKind.CATCH);
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-		if (s.getExpression() != null) {
-			boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
-
-			if (enableDiff) {
-				vb.setId(this.id++);
-			}
-			dealExpression(s.getExpression());
-			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-
-			tb.setComputedName(expressions.pop());
-			tb.setKind(boa.types.Ast.TypeKind.CLASS);
-			vb.setVariableType(tb.build());
-			b.setVariableDeclaration(vb.build());
-		}
-
-		if (s.getMessage() != null) {
-
-			dealExpression(s.getMessage());
-
-			b.addExpressions(expressions.pop());
-		}
-		if (s.getBody() != null) {
-			statements.push(new ArrayList<boa.types.Ast.Statement>());
-
-			s.getBody().traverse(this);
-
-			List<boa.types.Ast.Statement> ss = statements.pop();
-			for (boa.types.Ast.Statement st : ss)
-				b.addStatements(st);
-		}
-
-		list.add(b.build());
-
-		return false;
-	}
-
-	public boolean visit(ExpressionList s) throws Exception {
-		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-		if (s.getExpressions() != null) {
-			List el = s.getExpressions();
-			if (el != null) {
-				for (Object ob : el) {
-					((ASTNode) ob).traverse(this);
-					b.addExpressions(expressions.pop());
-				}
-			}
-		}
-		expressions.push(b.build());
-
-		return false;
-	}
-
-	@SuppressWarnings("deprecation")
-	public boolean visit(PythonForStatement s) throws Exception {
-//		System.out.println("Enter For: " + s.toString());
-
-		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-		b.setKind(boa.types.Ast.Statement.StatementKind.FOREACH);
-
-		if (s.getfMainArguments() != null) {
-			if (s.getfMainArguments() instanceof ExpressionList) {
-				if (((ExpressionList) s.getfMainArguments()).getExpressions() != null) {
-					for (Object ob : ((ExpressionList) s.getfMainArguments()).getExpressions()) {
-						((ASTNode) ob).traverse(this);
-
-						boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
-						if (enableDiff)
-							vb.setId(this.id++);
-						vb.setComputedName(expressions.pop());
-						b.addVariableDeclarations(vb.build());
-					}
-				}
-			}
-		}
-		if (s.getCondition() != null) {
-			dealExpression(s.getCondition());
-			boa.types.Ast.Expression ex = expressions.pop();
-//			b.addExpressions(ex);
-			b.addConditions(ex);
-		}
-
-		if (s.getAction() != null) {
-			statements.push(new ArrayList<boa.types.Ast.Statement>());
-			s.getAction().traverse(this);
-			for (boa.types.Ast.Statement ss : statements.pop())
-				b.addStatements(ss);
-		}
-
-		// Python enables else statement for the loops. The else statement is added as
-		// the second block statement of FOR (similar to else in IF statement).
-		if (s.getfElseStatement() != null) {
-			statements.push(new ArrayList<boa.types.Ast.Statement>());
-			s.getfElseStatement().traverse(this);
-			for (boa.types.Ast.Statement ss : statements.pop())
-				b.addStatements(ss);
-		}
-
-		list.add(b.build());
-
-		return false;
-	}
-
-	public boolean visit(PythonWhileStatement s) throws Exception {
-//		System.out.println("Enter While: " + s.toString());
-
-		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-		b.setKind(boa.types.Ast.Statement.StatementKind.WHILE);
-
-		if (s.getCondition() != null) {
-			dealExpression(s.getCondition());
-			boa.types.Ast.Expression ex = expressions.pop();
-			b.addConditions(ex);
-		}
-
-		if (s.getAction() != null) {
-			statements.push(new ArrayList<boa.types.Ast.Statement>());
-			s.getAction().traverse(this);
-			for (boa.types.Ast.Statement ss : statements.pop())
-				b.addStatements(ss);
-		}
-
-		// Python enables else statement for the loops. The else statement is added as
-		// the second block statement of WHILE (similar to else in IF statement).
-		if (s.getElseStatement() != null) {
-			statements.push(new ArrayList<boa.types.Ast.Statement>());
-			s.getElseStatement().traverse(this);
-			for (boa.types.Ast.Statement ss : statements.pop())
-				b.addStatements(ss);
-		}
-
-		list.add(b.build());
-
-		return false;
-	}
-
-	public boolean visit(IfStatement s) throws Exception {
-//		System.out.println("Enter IF: " + s.toString());
-
-		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.IF);
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-		if (s.getCondition() != null) {
-			dealExpression(s.getCondition());
-			boa.types.Ast.Expression ex = expressions.pop();
-			b.addConditions(ex);
-		}
-
-		if (s.getThen() != null) {
-			statements.push(new ArrayList<boa.types.Ast.Statement>());
-			s.getThen().traverse(this);
-			for (boa.types.Ast.Statement ss : statements.pop())
-				b.addStatements(ss);
-		}
-
-		if (s.getElse() != null) {
-			statements.push(new ArrayList<boa.types.Ast.Statement>());
-			s.getElse().traverse(this);
-			for (boa.types.Ast.Statement ss : statements.pop())
-				b.addStatements(ss);
-		}
-
-		list.add(b.build());
-
-		return false;
-	}
-
-	public boolean visit(BreakStatement s) throws Exception {
-//		System.out.println("Enter BREAK: " + s.toString());
-
-		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.BREAK);
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-		if (s.getExpression() != null) {
-			dealExpression(s.getExpression());
-			b.addExpressions(expressions.pop());
-		}
-
-		list.add(b.build());
-
-		return false;
-	}
-
-	public boolean visit(ContinueStatement s) throws Exception {
-//		System.out.println("Enter CONTINUE: " + s.toString());
-
-		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.CONTINUE);
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-		if (s.getExpression() != null) {
-			dealExpression(s.getExpression());
-			b.addExpressions(expressions.pop());
-		}
-
-		list.add(b.build());
-
-		return false;
-	}
-
-	public boolean visit(PythonRaiseStatement s) throws Exception {
-//		System.out.println("Enter RAISE: " + s.toString());
-
-		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.RAISE);
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-		if (s.getExpression1() != null) {
-			dealExpression(s.getExpression1());
-			b.addExpressions(expressions.pop());
-		}
-		if (s.getExpression2() != null) {
-			dealExpression(s.getExpression2());
-			b.addExpressions(expressions.pop());
-		}
-		if (s.getExpression3() != null) {
-			dealExpression(s.getExpression3());
-			b.addExpressions(expressions.pop());
-		}
-
-		list.add(b.build());
-
-		return false;
-	}
-
-	public boolean visit(PythonDelStatement s) throws Exception {
-//		System.out.println("Enter DEL: " + s.toString());
-
-		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.DEL);
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-		if (s.getExpression() != null) {
-			dealExpression(s.getExpression());
-			b.addExpressions(expressions.pop());
-		}
-
-		list.add(b.build());
-
-		return false;
-	}
-
-	public boolean visit(PythonAssertStatement s) throws Exception {
-//		System.out.println("Enter Assert: " + s.toString());
-
-		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.ASSERT);
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-		if (s.getfExpression1() != null) {
-			dealExpression(s.getfExpression1());
-			boa.types.Ast.Expression ex = expressions.pop();
-			b.addConditions(ex);
-		}
-
-		if (s.getfExpression2() != null) {
-			dealExpression(s.getfExpression2());
-			boa.types.Ast.Expression ex = expressions.pop();
-			b.addExpressions(ex);
-		}
-
-		list.add(b.build());
-
-		return false;
-	}
-
-	public boolean visit(PythonYieldStatement s) throws Exception {
-//		System.out.println("Enter Yield: " + s.toString());
-
-		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
-
-		boa.types.Ast.Expression.Builder ex = boa.types.Ast.Expression.newBuilder();
-		ex.setKind(boa.types.Ast.Expression.ExpressionKind.YIELD);
-
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				ex.setChange(status);
-		}
-
-		if (s.getExpression() != null) {
-			dealExpression(s.getExpression());
-			ex.addExpressions(expressions.pop());
-		}
-
-		b.addExpressions(ex);
-
-		list.add(b.build());
-		return false;
-	}
-
-	public boolean visit(PythonWithStatement s) throws Exception {
-//		System.out.println("Enter With: " + s.toString());
-
-		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
-
-		b.setKind(boa.types.Ast.Statement.StatementKind.WITH);
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-		if (s.getWhat() != null) {
-			dealExpression(s.getWhat());
-			boa.types.Ast.Expression ex = expressions.pop();
-			b.addExpressions(ex);
-		}
-
-		// Check if adding the variable name as ComputedName is okay
-		if (s.getAs() != null) {
-			dealExpression(s.getAs());
-			boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
-			if (enableDiff)
-				vb.setId(this.id++);
-			vb.setComputedName(expressions.pop());
-			b.addVariableDeclarations(vb.build());
-		}
-
-		if (s.getBlock() != null) {
-			statements.push(new ArrayList<boa.types.Ast.Statement>());
-			s.getBlock().traverse(this);
-			for (boa.types.Ast.Statement ss : statements.pop())
-				b.addStatements(ss);
-		}
-
-		list.add(b.build());
-		return false;
-	}
-
-	public boolean visit(EmptyStatement s) throws Exception {
-//		System.out.println("Enter pass: " + s.toString());
-
-		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
-
-		if (enableDiff)
-			b.setId(this.id++);
-
-		b.setKind(boa.types.Ast.Statement.StatementKind.EMPTY);
-		list.add(b.build());
-
-		return false;
-	}
-
-	public boolean visit(GlobalStatement s) throws Exception {
-
-		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
-
-		b.setKind(boa.types.Ast.Statement.StatementKind.GLOBAL);
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) s.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-		if (s.getExpression() instanceof ExpressionList) {
-			ExpressionList el = (ExpressionList) s.getExpression();
-			if (el != null && el.getExpressions() != null) {
-				for (Object ob : el.getExpressions()) {
-					((ASTNode) ob).traverse(this);
-					b.addExpressions(expressions.pop());
-				}
-			}
-		}
-
-		list.add(b.build());
-
-		return false;
-	}
-
-	public boolean visit(ExecStatement md) throws Exception {
-//		System.out.println("Enter exec: " + md.toString());
-		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
-		b.setMethod("exec");
-		if (enableDiff) {
-			b.setId(this.id++);
-			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != ChangeKind.UNCHANGED && status != null)
-				b.setChange(status);
-		}
-		if (md.getExpression() != null) {
-			dealExpression(md.getExpression());
-			b.addMethodArgs(expressions.pop());
-		}
-
-		expressions.push(b.build());
-
-		return true;
-
 	}
 
 }

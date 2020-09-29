@@ -24,6 +24,7 @@ import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import boa.datagen.treed.python.BoaToPythonConverter;
 import boa.datagen.util.NewPythonVisitor;
 import boa.types.Ast.ASTRoot;
+import boa.types.Ast.Statement;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -42,6 +43,48 @@ public class BoaSlicerIntrinsics {
 	private static final ASTRoot emptyAst = ASTRoot.newBuilder().build();
 	
 	@SuppressWarnings("unchecked")
+//	@FunctionSpec(name = "getdiff", returnType = "ASTRoot", formalParameters = { "ChangedFile","ChangedFile","string" })
+//	public static ASTRoot getdiff(final ChangedFile current,final ChangedFile previous
+//			,final String direction) {
+//		ASTRoot.Builder modifiedCurrentAst = ASTRoot.newBuilder();
+//		ASTRoot.Builder modifiedPreviousAst = ASTRoot.newBuilder();
+//		
+//		ASTRoot currentAst=getast(current);
+//
+//		if (currentAst.getNamespacesCount()==0)
+//			return emptyAst;
+//		
+//		ASTRoot previousAst=getast(previous);
+//		
+//		if (previousAst.getNamespacesCount()==0)
+//			return emptyAst;
+//		
+//		try {
+//			
+//			boa.datagen.treed.generic.TreedMapper tm = new boa.datagen.treed.generic.TreedMapper(
+//					previousAst.getNamespaces(0), currentAst.getNamespaces(0));
+//
+//			tm.map();
+//			
+//			
+//			modifiedCurrentAst.addNamespaces(tm.getCurrentChanges());
+//			modifiedPreviousAst.addNamespaces(tm.getPreviousChanges());
+//			
+//			tm.clear();
+//			
+//			tm=null;
+//			
+//		} catch (Exception e1) {
+//			e1.printStackTrace();
+//			return emptyAst;
+//		}
+//		
+//		if(direction.equalsIgnoreCase("forward"))
+//			return modifiedCurrentAst.build();
+//		return modifiedPreviousAst.build();
+//	}
+	
+//	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getdiff", returnType = "ASTRoot", formalParameters = { "ChangedFile","ChangedFile","string" })
 	public static ASTRoot getdiff(final ChangedFile current,final ChangedFile previous
 			,final String direction) {

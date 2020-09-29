@@ -1,4 +1,4 @@
-package boa.datagen.treed.python;
+package boa.datagen.treed.generic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -170,6 +170,7 @@ public class BoaToPythonConverter {
 		}
 		
 		return ast;
+
 	}
 
 	public final ASTNode visit(final Variable node) throws Exception {
@@ -602,9 +603,9 @@ public class BoaToPythonConverter {
 		ReturnStatement ast=null;
 		org.eclipse.dltk.ast.expressions.Expression exp1=null;
 		org.eclipse.dltk.ast.expressions.Expression exp2=null;
-		if(node.getExpressionsCount()>=1)
+		if(node.getConditionsCount()>=1)
 		{
-			ASTNode chast=visit(node.getExpressions(0));
+			ASTNode chast=visit(node.getConditions(0));
 			if(chast!=null) {
 				exp1=(org.eclipse.dltk.ast.expressions.Expression) chast;
 			}
@@ -720,8 +721,7 @@ public class BoaToPythonConverter {
 		else
 		{
 			PythonSubscriptExpression ast=new PythonSubscriptExpression();
-			if(node.getExpressionsCount()>0)
-				ast.setTest((org.eclipse.dltk.ast.expressions.Expression) 
+			ast.setTest((org.eclipse.dltk.ast.expressions.Expression) 
 					visit(node.getExpressions(0)));
 			
 			if(node.getExpressionsCount()>1)
@@ -768,9 +768,7 @@ public class BoaToPythonConverter {
 	public final PythonArgument visitArgument(final Variable node) throws Exception {
 		PythonArgument ast=new PythonArgument();
 		ast.setArgumentName(node.getName());
-		
-		if(node.getInitializer()!=null)
-			ast.setInitializationExpression(visit(node.getInitializer()));
+		ast.setInitializationExpression(visit(node.getInitializer()));
 		return ast;
 	}
 	public final ASTNode visitForListExpression(final Expression node) throws Exception {

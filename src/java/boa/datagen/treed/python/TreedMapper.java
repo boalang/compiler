@@ -827,6 +827,8 @@ public class TreedMapper implements TreedConstants {
 
 				else if (nodeM instanceof BinaryExpression) {
 					mappedChildrenM.add(((BinaryExpression) nodeM).getLeft());
+					mappedChildrenN.add(((BinaryExpression) nodeN).getLeft());
+					mappedChildrenM.add(((BinaryExpression) nodeM).getRight());
 					mappedChildrenN.add(((BinaryExpression) nodeN).getRight());
 				} else if (nodeM instanceof UnaryExpression) {
 					mappedChildrenM.add(((UnaryExpression) nodeM).getExpression());
@@ -875,7 +877,7 @@ public class TreedMapper implements TreedConstants {
 					mappedChildrenM.add(((SimpleStatement) nodeM).getExpression());
 					mappedChildrenN.add(((SimpleStatement) nodeN).getExpression());
 				}
-
+				
 				if (!mappedChildrenM.isEmpty() && !mappedChildrenN.isEmpty()) {
 					for (int i = 0; i < mappedChildrenM.size(); i++) {
 						ASTNode childM = mappedChildrenM.get(i), childN = mappedChildrenN.get(i);
@@ -892,11 +894,11 @@ public class TreedMapper implements TreedConstants {
 									if (sim >= MIN_SIM) {
 										setMap(childM, childN, MIN_SIM);
 										if (TreedUtils.buildASTLabel(childM).equals(TreedUtils.buildASTLabel(childN))) {
-											childM.setProperty(PROPERTY_MAP, ChangeKind.UNCHANGED);
-											childN.setProperty(PROPERTY_MAP, ChangeKind.UNCHANGED);
+											childM.setProperty(PROPERTY_STATUS, ChangeKind.UNCHANGED);
+											childN.setProperty(PROPERTY_STATUS, ChangeKind.UNCHANGED);
 										} else {
-											childM.setProperty(PROPERTY_MAP, ChangeKind.RENAMED);
-											childN.setProperty(PROPERTY_MAP, ChangeKind.RENAMED);
+											childM.setProperty(PROPERTY_STATUS, ChangeKind.RENAMED);
+											childN.setProperty(PROPERTY_STATUS, ChangeKind.RENAMED);
 										}
 									}
 								}
