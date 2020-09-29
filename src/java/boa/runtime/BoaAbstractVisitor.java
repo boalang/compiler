@@ -231,6 +231,13 @@ public abstract class BoaAbstractVisitor {
 	}
 	public final void visit(final Namespace node) throws Exception {
 		if (preVisit(node)) {
+			
+			for(Statement v: node.getStatementsList())
+				visit(v);
+			
+			for(Method v: node.getMethodsList())
+				visit(v);
+			
 			final List<Declaration> declarationsList = node.getDeclarationsList();
 			final int declarationsSize = declarationsList.size();
 			for (int i = 0; i < declarationsSize; i++)
@@ -240,6 +247,7 @@ public abstract class BoaAbstractVisitor {
 			final int modifiersSize = modifiersList.size();
 			for (int i = 0; i < modifiersSize; i++)
 				visit(modifiersList.get(i));
+			
 
 			postVisit(node);
 		}
@@ -261,6 +269,9 @@ public abstract class BoaAbstractVisitor {
 			for (int i = 0; i < parentsSize; i++)
 				visit(parentsList.get(i));
 
+			for(Statement v: node.getStatementsList())
+				visit(v);
+			
 			final List<Method> methodsList = node.getMethodsList();
 			final int methodsSize = methodsList.size();
 			for (int i = 0; i < methodsSize; i++)
@@ -361,6 +372,12 @@ public abstract class BoaAbstractVisitor {
 
 			if (node.getExpressionsCount() > 0)
 				visit(node.getExpressions(0));
+			
+			for(Method v: node.getMethodsList())
+				visit(v);
+			
+			for(Declaration v: node.getTypeDeclarationsList())
+				visit(v);
 
 			postVisit(node);
 		}

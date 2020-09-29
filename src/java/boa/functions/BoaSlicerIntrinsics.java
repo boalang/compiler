@@ -23,6 +23,7 @@ import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 
 import boa.datagen.treed.python.BoaToPythonConverter;
 import boa.datagen.util.NewPythonVisitor;
+import boa.graphs.slicers.python.ForwardSlicer;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Statement;
 import boa.types.Code.CodeRepository;
@@ -152,6 +153,15 @@ public class BoaSlicerIntrinsics {
 			rev = rev.getParentsCount() == 0 ? null : getRevision(cr, rev.getParents(0));
 		}
 		return null;
+	}
+	
+	@FunctionSpec(name = "getmodification", returnType = "array of int", formalParameters = { "ASTRoot","array of string" })
+	public static long[] getmodification(final ASTRoot changedFile, String[] sliceCriteria) {
+		long[] arr = new long[1];
+		
+		ForwardSlicer slicer=new ForwardSlicer(changedFile);
+		
+		return arr;
 	}
 	
 	public static ASTRoot pythonAstToBoaAST(final PythonModuleDeclaration module, final String path) throws Exception {

@@ -182,38 +182,52 @@ public class BoaToPythonConverter {
 		
 		if(node.getKind()==StatementKind.BLOCK)
 			return visitBlock(node);
+		
 		else if(node.getKind()==StatementKind.GLOBAL)
 			return visitGlobalStatement(node);
+		
 		else if(node.getKind()==StatementKind.EMPTY)
 			return visitEmptyStatement(node);
+		
 		else if(node.getKind()==StatementKind.TRY)
 			return visitTryStatement(node);
+		
 		else if(node.getKind()==StatementKind.FINALLY)
 			return visitTryFinallyStatement(node);
+		
 		else if(node.getKind()==StatementKind.CATCH)
 			return visitExceptStatement(node);
+		
 		else if(node.getKind()==StatementKind.WHILE)
 			return visitWhileStatement(node);
+		
 		else if(node.getKind()==StatementKind.IF)
 			return visitIfStatement(node);
+		
 		else if(node.getKind()==StatementKind.BREAK)
 			return visitBreakStatement(node);
+		
 		else if(node.getKind()==StatementKind.CONTINUE)
 			return visitContinueStatement(node);
+		
 		else if(node.getKind()==StatementKind.RAISE)
 			return visitRaiseStatement(node);
+		
 		else if(node.getKind()==StatementKind.DEL)
 			return visitDelStatement(node);
+		
 		else if(node.getKind()==StatementKind.ASSERT)
-			return visitDelStatement(node);
+			return visitAssertStatement(node);
+		
 		else if(node.getKind()==StatementKind.WITH)
 			return visitWithStatement(node);
+		
 		else if(node.getKind()==StatementKind.FOREACH)
-			return visitWithStatement(node);
-		else if(node.getKind()==StatementKind.EMPTY)
-			return visitEmptyStatement(node);
+			return visitForStatement(node);
+		
 		else if(node.getKind()==StatementKind.RETURN)
 			return visitReturnStatement(node);
+		
 		else if(node.getKind()==StatementKind.EXPRESSION)
 			return visitExpressionStatement(node);
 		
@@ -327,11 +341,11 @@ public class BoaToPythonConverter {
 		PythonWithStatement ast=null;
 		org.eclipse.dltk.ast.expressions.Expression asExp=null;
 		org.eclipse.dltk.ast.expressions.Expression whatExp=null;
-		if(node.getVariableDeclaration()!=null)
+		if(node.getVariableDeclarationsCount()!=0)
 		{
-			if(node.getVariableDeclaration().getComputedName()!=null)
+			if(node.getVariableDeclarations(0).getComputedName()!=null)
 			{
-				asExp=(org.eclipse.dltk.ast.expressions.Expression) visit(node.getVariableDeclaration().getComputedName());
+				asExp=(org.eclipse.dltk.ast.expressions.Expression) visit(node.getVariableDeclarations(0).getComputedName());
 			}
 		}
 		if(node.getExpressionsCount()>=1)
