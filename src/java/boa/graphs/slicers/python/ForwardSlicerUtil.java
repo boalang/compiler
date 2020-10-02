@@ -7,6 +7,8 @@ import java.util.Stack;
 
 import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
+import boa.types.Ast.Statement;
+import boa.types.Ast.Variable;
 
 public class ForwardSlicerUtil {
 
@@ -23,6 +25,19 @@ public class ForwardSlicerUtil {
 
 		return node.getExpressionsCount() == 2;
 	}
+	
+	public static boolean isMethodCallKind(Expression node) {
+		return node.getKind()==ExpressionKind.METHODCALL;
+	}
+	
+	public static boolean isCfgDefined(String scope) {
+		if(!Status.cfgMap.containsKey(scope)) return false;
+		if(Status.cfgMap.get(scope)==null) return false;
+		if(Status.cfgMap.get(scope).getNodes()==null ||
+				Status.cfgMap.get(scope).getNodes().size()<1)
+			return false;
+		return true;
+	}
 
 	// returns map of variable names: for example, a,b=2,3 -> return [(a, id),(b,id)]
 	public static HashMap<String, Integer> getIdentiferNames(Expression node) {
@@ -31,7 +46,7 @@ public class ForwardSlicerUtil {
 		if (node == null)
 			return ret;
 
-		if (node.getKind() == ExpressionKind.OTHER) {
+		if (node.getKind() == ExpressionKind.OTHER || node.getKind() == ExpressionKind.TUPLE) {
 			for (Expression e : node.getExpressionsList()) {
 				ret.put(convertExpressionToString(e), e.getId());
 			}
@@ -85,5 +100,22 @@ public class ForwardSlicerUtil {
 
 		return str;
 	}
+	
+	// returns map of variable names: for example, with open() as pd -> return [(pd, id)]
+		public static HashMap<String, Integer> getIdentiferNames(Statement node) {
+			HashMap<String, Integer> ret = new HashMap<String, Integer>();
+
+			if (node == null)
+				return ret;
+
+			for (Variable e : node.getVariableDeclarationsList()) {
+				if(e.hasName())
+					ret.put(e.getName(), e.getId());
+				else if(e.hasComputedName() && e.getComputedName().hasVariable())
+					ret.put( e.getComputedName().getVariable(), e.getComputedName().getId());
+			}
+
+			return ret;
+		}
 
 }

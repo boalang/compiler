@@ -13,6 +13,7 @@ import boa.types.Ast.Expression;
 import boa.types.Ast.Method;
 import boa.types.Ast.Namespace;
 import boa.types.Ast.Statement;
+import boa.types.Ast.Statement.StatementKind;
 import boa.types.Ast.Type;
 import boa.types.Ast.Variable;
 
@@ -52,7 +53,7 @@ public class TreedBuilder implements TreedConstants {
 	}
 
 	void preVisitCommonProperty(Object node, Object parent) {
-		
+
 		treeParent.put(node,  parent);
 		
 		propertyIndex.put(Integer.toHexString(node.hashCode()), index++);
@@ -130,16 +131,21 @@ public class TreedBuilder implements TreedConstants {
 	}
 
 	void visit(Statement node, Object parent) {
-		preVisitCommonProperty(node, parent);
-
-		visitVariables(node.getVariableDeclarationsList(), node);
-		visitExpressions(node.getExpressionsList(), node);
-		visitExpressions(node.getConditionsList(), node);
-		visitStatements(node.getStatementsList(), node);
-		visitDeclarations(node.getTypeDeclarationsList(), node);
-		visitMethods(node.getMethodsList(), node);
-
-		commonPostVisit(node, parent);
+		if(node.getKind()==StatementKind.EXPRESSION)
+			visit(node.getExpressions(0), parent);
+		else
+		{
+			preVisitCommonProperty(node, parent);
+	
+			visitVariables(node.getVariableDeclarationsList(), node);
+			visitExpressions(node.getExpressionsList(), node);
+			visitExpressions(node.getConditionsList(), node);
+			visitStatements(node.getStatementsList(), node);
+			visitDeclarations(node.getTypeDeclarationsList(), node);
+			visitMethods(node.getMethodsList(), node);
+	
+			commonPostVisit(node, parent);
+		}
 
 	}
 

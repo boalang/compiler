@@ -78,7 +78,8 @@ public class TreeChangeSetter implements TreedConstants {
 
 		Statement.Builder b=node.toBuilder(); 
 		
-		b.setChange((ChangeKind) this.propertyStatus.get(Integer.toHexString(node.hashCode())));
+		if(this.propertyStatus.containsKey(Integer.toHexString(node.hashCode())))
+			b.setChange((ChangeKind) this.propertyStatus.get(Integer.toHexString(node.hashCode())));
 		
 		b.clearVariableDeclarations();
 		for(Variable v: node.getVariableDeclarationsList())
