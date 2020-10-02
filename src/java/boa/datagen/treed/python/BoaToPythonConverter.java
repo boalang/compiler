@@ -22,6 +22,8 @@ import org.eclipse.dltk.python.parser.ast.PythonConstants;
 import org.eclipse.dltk.python.parser.ast.PythonDelStatement;
 import org.eclipse.dltk.python.parser.ast.PythonExceptStatement;
 import org.eclipse.dltk.python.parser.ast.PythonForStatement;
+import org.eclipse.dltk.python.parser.ast.PythonImportFromStatement;
+import org.eclipse.dltk.python.parser.ast.PythonImportStatement;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import org.eclipse.dltk.python.parser.ast.PythonRaiseStatement;
 import org.eclipse.dltk.python.parser.ast.PythonTryStatement;
@@ -46,6 +48,7 @@ import org.eclipse.dltk.python.parser.ast.expressions.PythonListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonListForExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSetExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonTestListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTupleExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.ShortHandIfExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.UnaryExpression;
@@ -58,6 +61,8 @@ import org.eclipse.dltk.python.parser.ast.statements.IfStatement;
 import org.eclipse.dltk.python.parser.ast.statements.ReturnStatement;
 import org.eclipse.dltk.python.parser.ast.statements.TryFinallyStatement;
 
+import boa.functions.BoaStringIntrinsics;
+import boa.graphs.slicers.python.Status;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Cell;
 import boa.types.Ast.Declaration;
@@ -104,10 +109,51 @@ public class BoaToPythonConverter {
 			if(chast!=null)
 				ast.addStatement(chast);
 		}
+		
+		for(String imp: node.getImportsList())
+		{
+			if(imp.startsWith("from"))
+			{
+				String[] p1 = BoaStringIntrinsics.splitall(imp, "from");
+				if (p1.length > 1) {
+					imp = BoaStringIntrinsics.trim(p1[1]);
+					
+					long v = BoaStringIntrinsics.indexOf(" as ", imp);
+					if (v == -1) {
+						String[] p2 = BoaStringIntrinsics.splitall(imp, " ");
+						PythonTestListExpression ptl=new PythonTestListExpression();
+						ptl.addExpression((org.eclipse.dltk.ast.expressions.Expression) this.makeImportExpression(p2[1]));
+						ast.addStatement(new PythonImportFromStatement(new DLTKToken(), 
+								new VariableReference(0, 0, p2[0]), ptl));
+						
+						}
+					} else {
+						String[] p2 = BoaStringIntrinsics.splitall(imp, " ");
+						PythonTestListExpression ptl=new PythonTestListExpression();
+						ptl.addExpression((org.eclipse.dltk.ast.expressions.Expression) this.makeImportASExpression(p2[1],p2[3]));
+						ast.addStatement(new PythonImportFromStatement(new DLTKToken(), 
+								new VariableReference(0, 0, p2[0]), ptl));
+					}
+			}
+			else
+			{
+				long v = BoaStringIntrinsics.indexOf(" as ", imp);
+				if(v==-1)
+				{
+					ast.addStatement(new PythonImportStatement(new DLTKToken(), 
+							(org.eclipse.dltk.ast.expressions.Expression) this.makeImportExpression(imp)));
+				}
+				else
+					ast.addStatement(new PythonImportStatement(new DLTKToken(), 
+							this.makeImportASExpression(
+									BoaStringIntrinsics.substring(imp, 0, v),
+									BoaStringIntrinsics.substring(imp, v + 4))));
+			}
+		}
 
 		return ast;
 	}
-
+	
 	public final ASTNode visit(final Declaration node) throws Exception {
 		TypeDeclaration ast=new TypeDeclaration(node.getName(), 0, 0, 0, 0);
 		
@@ -654,6 +700,16 @@ public class BoaToPythonConverter {
 		}
 		ast=new PythonYieldStatement(new DLTKToken(), exp1);
 		return ast;
+	}
+	public ASTNode makeImportExpression(String name)
+	{
+		if(name.equals("*")) return new PythonAllImportExpression();
+		return new PythonImportExpression(new DLTKToken(0, name));
+	}
+	public PythonImportAsExpression makeImportASExpression(String name, String asName)
+	{
+		return new PythonImportAsExpression(new DLTKToken(0, name),
+				new DLTKToken(0, asName));
 	}
 	public final ASTNode visitExtendedExpression(final Expression node) throws Exception {
 		ExtendedVariableReference ast;

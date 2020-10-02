@@ -86,7 +86,7 @@ import boa.types.Shared.ChangeKind;
  */
 public class NewPythonVisitor extends ASTVisitor {
 
-	private int id = 0;
+	private int id = 1;
 	public boolean enableDiff = false;
 	private ModuleDeclaration root;
 	protected Namespace.Builder b = Namespace.newBuilder();

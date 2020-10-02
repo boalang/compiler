@@ -1,10 +1,12 @@
 package boa.graphs.slicers.python;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
 import boa.functions.BoaGraphIntrinsics;
+import boa.functions.BoaStringIntrinsics;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Expression;
@@ -20,18 +22,87 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 	
 	@Override
 	protected boolean preVisit(final Namespace node) throws Exception {
-		Status.scopeTracer.push(node.getName());
-		Status.cfgMap.put(Status.getCurrentScope(), 
-				BoaGraphIntrinsics.getcfg(node));
+		Status.globalScopeNameStack.push(node.getName());
+		Status.cfgMap.put(Status.getCurrentScope(), BoaGraphIntrinsics.getcfg(node));
 		Status.cfgToAstIdMapper();
-		
+
+		for (String imp : node.getImportsList()) {
+			if (imp.matches("^\\..*") || imp.equals("")) // ignore relative imports
+				continue;
+
+			boolean flag = false;
+
+			for (String lib : Status.moduleFilter) {
+				if (imp.matches("^" + lib + ".*") || imp.matches("^from " + lib + ".*")) {
+					Status.isModuleFound = true;
+					flag = true;
+					break;
+				}
+			}
+
+			for (String lib : Status.libraryFilter) {
+				if (imp.matches("^" + lib + ".*") || imp.matches("^from " + lib + ".*")) {
+					flag = true;
+					break;
+				}
+			}
+			if (!flag)
+				continue;
+
+			if (imp.matches("^from .*")) {
+				String[] p1 = BoaStringIntrinsics.splitall(imp, "from");
+				if (p1.length > 1) {
+					imp = BoaStringIntrinsics.trim(p1[1]);
+					if (imp.matches("^\\..*"))
+						continue;
+
+					long v = BoaStringIntrinsics.indexOf(" as ", imp);
+					if (v == -1) {
+						String[] p2 = BoaStringIntrinsics.splitall(imp, " ");
+						if (p2.length == 2) {
+							Status.importMap.put(p2[1], p2[0] + "." + p2[1]);
+						}
+					} else {
+						Status.importMap.put(BoaStringIntrinsics.substring(imp, v + 4), BoaStringIntrinsics
+								.stringReplace(BoaStringIntrinsics.substring(imp, 0, v), " ", ".", true));
+					}
+				}
+			} else {
+				long v = BoaStringIntrinsics.indexOf(" as ", imp);
+				if (v != -1)
+					Status.importMap.put(BoaStringIntrinsics.substring(imp, v + 4),
+							BoaStringIntrinsics.substring(imp, 0, v));
+				else {
+					Status.importMap.put(imp, imp);
+
+					v = BoaStringIntrinsics.indexOf(".", imp);
+					if (v > 0) {
+						Status.importMap.put(BoaStringIntrinsics.substring(imp, v),
+								BoaStringIntrinsics.substring(imp, 0, v));
+					}
+				}
+			}
+
+		}
+
+		if (!Status.isModuleFound)
+			return false;
+
+//		for (String lib : Status.moduleFilter) {
+//			Status.importMap.put(lib, lib);
+//
+//		}
+//		for (String lib : Status.libraryFilter) {
+//			Status.importMap.put(lib, lib);
+//		}
+
 		return defaultPreVisit();
 	}
 	
 	@Override
 	protected boolean preVisit(final Declaration node) throws Exception {
 		
-		Status.scopeTracer.push(node.getName());
+		Status.globalScopeNameStack.push(node.getName());
 		Status.cfgMap.put(Status.getCurrentScope(), 
 				BoaGraphIntrinsics.getcfg(node));
 		Status.cfgToAstIdMapper();
@@ -41,7 +112,7 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 	
 	@Override
 	protected boolean preVisit(final Method node) throws Exception {
-		Status.scopeTracer.push(node.getName());
+		Status.globalScopeNameStack.push(node.getName());
 		
 		Status.cfgMap.put(Status.getCurrentScope(), 
 				BoaGraphIntrinsics.getcfg(node));
@@ -68,7 +139,7 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 	protected boolean preVisit(final Expression node) throws Exception {
 		if(ForwardSlicerUtil.isMethodCallKind(node))
 		{
-			Status.statementScope.push("call");
+			Status.statementScopeStack.push("call");
 		}
 		
 		if(Status.isMethodCallScope())
@@ -76,8 +147,9 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 		
 		if(ForwardSlicerUtil.isProperAssignKind(node))
 		{
-			this.addToDefintions(ForwardSlicerUtil.
-					getIdentiferNames(node.getExpressions(0)));
+			HashMap<String, Integer> ids=ForwardSlicerUtil.
+					getIdentiferNames(node.getExpressions(0));
+			this.addToDefintions(ids);
 		}
 		
 		return defaultPreVisit();
@@ -89,7 +161,8 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 		for (Map.Entry<String, Integer> entry : mp.entrySet()) {
 		    String identiferName = entry.getKey();
 		    Integer location = entry.getValue();
-		    if(!identiferName.equals("_") && !identiferName.equals("."))
+		    if(!identiferName.equals("_") && !identiferName.equals(".") &&
+		    		!identiferName.equals(""))
 		    	SymbolTable.addToDefintions(scope, identiferName, location);
 		}
 	}
@@ -98,28 +171,28 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 	protected void postVisit(final Expression node) throws Exception {
 		if(ForwardSlicerUtil.isMethodCallKind(node))
 		{
-			Status.statementScope.pop();
+			Status.statementScopeStack.pop();
 		}
 		defaultPostVisit();
 	}
 	
 	@Override
 	protected void postVisit(final Namespace node) throws Exception {
-		Status.scopeTracer.pop();
+		Status.globalScopeNameStack.pop();
 		
 		defaultPostVisit();
 	}
 	
 	@Override
 	protected void postVisit(final Declaration node) throws Exception {
-		Status.scopeTracer.pop();
+		Status.globalScopeNameStack.pop();
 		
 		defaultPostVisit();
 	}
 
 	@Override
 	protected void postVisit(final Method node) throws Exception {
-		Status.scopeTracer.pop();
+		Status.globalScopeNameStack.pop();
 		
 		defaultPostVisit();
 	}

@@ -18,13 +18,13 @@ public class SymbolTable {
 			st.defintions.put(key, new ArrayList<Integer>());
 		}
 		
-		ArrayList al=st.getLocations(scope, key);
+		ArrayList al=st.getDefLocations(scope, key);
 		
 		al.add(location);
 		st.defintions.put(key, al);
 	}
 	
-	public static ArrayList<Integer> getLocations(String scope, String key)
+	public static ArrayList<Integer> getDefLocations(String scope, String key)
 	{
 		SymbolTable st=getSymbolTableForScope(scope);
 		
@@ -67,5 +67,11 @@ public class SymbolTable {
 		    
 		    printDefintions(st);
 		}
+	}
+	
+	public void clear()
+	{
+		this.defintions.clear();
+		this.uses.clear();
 	}
 }

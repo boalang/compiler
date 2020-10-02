@@ -11,7 +11,7 @@ import boa.types.Ast.Statement;
 import boa.types.Ast.Variable;
 
 public class ForwardSlicerUtil {
-
+	
 	public static boolean isAssignKind(Expression node) {
 		if (node == null)
 			return false;
@@ -30,13 +30,12 @@ public class ForwardSlicerUtil {
 		return node.getKind()==ExpressionKind.METHODCALL;
 	}
 	
-	public static boolean isCfgDefined(String scope) {
-		if(!Status.cfgMap.containsKey(scope)) return false;
-		if(Status.cfgMap.get(scope)==null) return false;
-		if(Status.cfgMap.get(scope).getNodes()==null ||
-				Status.cfgMap.get(scope).getNodes().size()<1)
-			return false;
-		return true;
+	public static List<Expression> expandOtherExpressions(Expression node) {
+		if(node.getKind()==ExpressionKind.OTHER || node.getKind()==ExpressionKind.TUPLE)
+			return node.getExpressionsList();
+		List<Expression> lst=new ArrayList<Expression>();
+		lst.add(node);
+		return lst;
 	}
 
 	// returns map of variable names: for example, a,b=2,3 -> return [(a, id),(b,id)]

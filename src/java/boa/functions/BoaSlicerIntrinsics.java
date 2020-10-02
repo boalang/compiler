@@ -155,11 +155,12 @@ public class BoaSlicerIntrinsics {
 		return null;
 	}
 	
-	@FunctionSpec(name = "getmodification", returnType = "array of int", formalParameters = { "ASTRoot","array of string" })
-	public static long[] getmodification(final ASTRoot changedFile, String[] sliceCriteria) {
+	@FunctionSpec(name = "getmodification", returnType = "array of int", formalParameters = { "ASTRoot", "array of string", "array of string" })
+	public static long[] getmodification(final ASTRoot changedFile, String[] moduleFilter, 
+			String[] filterCriteria) {
 		long[] arr = new long[1];
 		
-		ForwardSlicer slicer=new ForwardSlicer(changedFile);
+		ForwardSlicer slicer=new ForwardSlicer(changedFile, moduleFilter, filterCriteria);
 		
 		return arr;
 	}
