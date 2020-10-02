@@ -50,6 +50,11 @@ public class Status {
 	{
 		return convertStackToString(globalScopeNameStack, ".");
 	}
+	public static String getParentScope(String scope)
+	{
+		if(scope.lastIndexOf(".")==-1) return "";
+		return scope.substring(0, scope.lastIndexOf("."));
+	}
 	
 	public static boolean isMethodCallScope()
 	{

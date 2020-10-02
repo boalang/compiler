@@ -1,22 +1,10 @@
 package boa.graphs.slicers.python;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import boa.functions.BoaGraphIntrinsics;
 import boa.functions.BoaStringIntrinsics;
-import boa.runtime.BoaAbstractVisitor;
-import boa.types.Ast.Declaration;
-import boa.types.Ast.Expression;
-import boa.types.Ast.Method;
-import boa.types.Ast.Namespace;
-import boa.types.Ast.Statement;
-import boa.types.Ast.Expression.ExpressionKind;
-import boa.types.Ast.Statement.StatementKind;
 
-public class NameResolver extends BoaAbstractVisitor {
+public class NameResolver {
 	public static String getReachableAliasMappedName(String usedIdentifierName, 
 			Integer useAstLocation)
 	{
@@ -25,12 +13,28 @@ public class NameResolver extends BoaAbstractVisitor {
 	public static String getReachableAliasMappedName(String usedIdentifierName, 
 			Integer useAstLocation, String scope)
 	{
-		ArrayList<Integer> defs=SymbolTable.getDefLocations(scope, usedIdentifierName);
+		String targetScope=scope;
+		while(!scope.equals(""))
+		{
+			 String str=getReachableAliasMappedNameResolvedScope(usedIdentifierName, 
+					 useAstLocation, scope, targetScope);
+			 if(str.equals("-")) return "-";
+			 if(!str.equals("")) return str;
+			 scope=Status.getParentScope(scope);
+		}
+		return "";
+	}
+	
+	private static String getReachableAliasMappedNameResolvedScope(String usedIdentifierName, 
+			Integer useAstLocation, String sourceScope, String targetScope)
+	{
+		ArrayList<Integer> defs=SymbolTable.getDefLocations(sourceScope, usedIdentifierName);
 		if(defs==null || defs.size()==0) return ""; //not defined in this scope
 		
 		for(Integer loc: defs)
 		{
-			if(Status.aliasName.containsKey(loc) && CfgUtil.isAstNodesReachable(loc, useAstLocation, usedIdentifierName, scope))
+			if(Status.aliasName.containsKey(loc) && CfgUtil.isAstNodesReachable(loc, 
+					useAstLocation, usedIdentifierName, sourceScope, targetScope))
 			{
 				return Status.aliasName.get(loc);
 			}
@@ -102,96 +106,4 @@ public class NameResolver extends BoaAbstractVisitor {
 		return ret;
 	}
 	
-	protected boolean preVisit(final Namespace node) throws Exception {
-		Status.globalScopeNameStack.push(node.getName());
-	
-		return defaultPreVisit();
-	}
-	
-	@Override
-	protected boolean preVisit(final Declaration node) throws Exception {
-		
-		Status.globalScopeNameStack.push(node.getName());
-
-		return defaultPreVisit();
-	}
-	
-	
-	@Override
-	protected boolean preVisit(final Method node) throws Exception {
-		Status.globalScopeNameStack.push(node.getName());
-		
-		return defaultPreVisit();
-	}
-	
-	@Override
-	protected boolean preVisit(final Expression node) throws Exception {
-		if(ForwardSlicerUtil.isMethodCallKind(node))
-		{
-			Status.statementScopeStack.push("call");
-		}
-		
-		if(Status.isMethodCallScope())
-			return defaultPreVisit();
-		
-		if(ForwardSlicerUtil.isProperAssignKind(node))
-		{
-			List<Expression> leftExps=ForwardSlicerUtil.expandOtherExpressions(node.getExpressions(0));
-			List<Expression> rightExps=ForwardSlicerUtil.expandOtherExpressions(node.getExpressions(1));
-
-			if(leftExps.size()==rightExps.size())
-			{
-				for(int i=0;i<rightExps.size();i++)
-				{
-					if(rightExps.get(i).getKind()!=ExpressionKind.METHODCALL &&
-							rightExps.get(i).getKind()!=ExpressionKind.VARACCESS &&
-							rightExps.get(i).getKind()!=ExpressionKind.ARRAYACCESS)
-						continue;
-					
-					String identiferName=ForwardSlicerUtil.convertExpressionToString(leftExps.get(i));
-					 if(!identiferName.equals("_") && !identiferName.equals(".") &&
-					    		!identiferName.equals(""))
-					 {
-						 String rightIdentifierName=ForwardSlicerUtil.convertExpressionToString(rightExps.get(i));
-						 
-						 String mt2=NameResolver.resolveImport(rightIdentifierName, rightExps.get(i).getId());
-						 if(!mt2.equals(""))
-							 Status.aliasName.put(leftExps.get(i).getId(), mt2);
-					 }
-				}
-			}
-		}
-		
-		return defaultPreVisit();
-	}
-	
-	@Override
-	protected void postVisit(final Expression node) throws Exception {
-		if(ForwardSlicerUtil.isMethodCallKind(node))
-		{
-			Status.statementScopeStack.pop();
-		}
-		defaultPostVisit();
-	}
-	
-	@Override
-	protected void postVisit(final Namespace node) throws Exception {
-		Status.globalScopeNameStack.pop();
-		
-		defaultPostVisit();
-	}
-	
-	@Override
-	protected void postVisit(final Declaration node) throws Exception {
-		Status.globalScopeNameStack.pop();
-		
-		defaultPostVisit();
-	}
-
-	@Override
-	protected void postVisit(final Method node) throws Exception {
-		Status.globalScopeNameStack.pop();
-		
-		defaultPostVisit();
-	}
 }

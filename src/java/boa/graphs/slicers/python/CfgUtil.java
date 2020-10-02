@@ -24,16 +24,24 @@ public class CfgUtil {
 	public static boolean isAstNodesReachable(Integer sourceId, Integer targetId, 
 			String identifierName)
 	{
-		return isAstNodesReachable(sourceId,targetId, identifierName, Status.getCurrentScope());
+		return isAstNodesReachable(sourceId,targetId, identifierName, Status.getCurrentScope(), Status.getCurrentScope());
 	}
 	
 	public static boolean isAstNodesReachable(Integer sourceId, Integer targetId, 
-			String identifierName, String scope)
+			String identifierName, String sourceScope, String targetScope)
 	{
 		if(!Status.cfgToAstIdMap.containsKey(sourceId)) return false;
 		if(!Status.cfgToAstIdMap.containsKey(targetId)) return false;
-		return isCfgNodesReachable(Status.cfgToAstIdMap.get(sourceId), Status.cfgToAstIdMap.get(targetId), 
-				identifierName, scope);
+		
+		sourceId=Status.cfgToAstIdMap.get(sourceId);
+		targetId=Status.cfgToAstIdMap.get(targetId);
+		
+		if(!sourceScope.equals(targetScope))
+		{
+			sourceId=0;
+		}
+		return isCfgNodesReachable(sourceId, targetId, 
+				identifierName, targetScope);
 	}
 
 	public static boolean isCfgNodesReachable(Integer sourceId, Integer targetId, String identifierName, String scope) {

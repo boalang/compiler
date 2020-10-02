@@ -22,7 +22,7 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 	
 	@Override
 	protected boolean preVisit(final Namespace node) throws Exception {
-		Status.globalScopeNameStack.push(node.getName());
+		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
 		Status.cfgMap.put(Status.getCurrentScope(), BoaGraphIntrinsics.getcfg(node));
 		Status.cfgToAstIdMapper();
 
@@ -102,7 +102,7 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 	@Override
 	protected boolean preVisit(final Declaration node) throws Exception {
 		
-		Status.globalScopeNameStack.push(node.getName());
+		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
 		Status.cfgMap.put(Status.getCurrentScope(), 
 				BoaGraphIntrinsics.getcfg(node));
 		Status.cfgToAstIdMapper();
@@ -112,7 +112,7 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 	
 	@Override
 	protected boolean preVisit(final Method node) throws Exception {
-		Status.globalScopeNameStack.push(node.getName());
+		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
 		
 		Status.cfgMap.put(Status.getCurrentScope(), 
 				BoaGraphIntrinsics.getcfg(node));

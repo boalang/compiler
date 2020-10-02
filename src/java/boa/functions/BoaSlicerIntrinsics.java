@@ -161,7 +161,11 @@ public class BoaSlicerIntrinsics {
 		long[] arr = new long[1];
 		
 		ForwardSlicer slicer=new ForwardSlicer(changedFile, moduleFilter, filterCriteria);
-		
+		try {
+			slicer.visit(changedFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return arr;
 	}
 	
