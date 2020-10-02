@@ -32,7 +32,7 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("Slices: ");
+//		System.out.println("Slices: ");
 	}
 	
 	protected boolean preVisit(final Namespace node) throws Exception {
@@ -63,14 +63,13 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		{
 			Status.statementScopeStack.push("call");
 		}
-		
 		if(ForwardSlicerUtil.isMethodCallKind(node))
 		{
 			String identifierName=ForwardSlicerUtil.convertExpressionToString(node);
 			 
 			 String mt2=NameResolver.resolveImport(identifierName, node.getId());
-			 if(!mt2.equals(""))
-				 System.out.println(mt2+" : "+node.getId());
+//			 if(!mt2.equals(""))
+//				 System.out.println(mt2+" : "+node.getId());
 			 
 		}
 		

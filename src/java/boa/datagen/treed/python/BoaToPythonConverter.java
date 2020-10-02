@@ -580,6 +580,8 @@ public class BoaToPythonConverter {
 		}
 		ast=new PythonForStatement(new DLTKToken(), mains, 
 				cond, (Block) body);
+		if(elseBlock!=null)
+			ast.acceptElse(elseBlock);
 		return ast;
 	}
 	public final ASTNode visitTryFinallyStatement(final Statement node) throws Exception {
