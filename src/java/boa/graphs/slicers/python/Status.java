@@ -260,23 +260,3 @@ public class Status {
 		}
 	}
 }
-
-enum SliceStatus
-{
-	SLICE_DONE, //program point p is impacted and fits filter criteria
-	NOT_CANDIDATE, //Doesn't fit filter criteria
-	CANDIDATE_NOT_SLICED //fits but not sliced
-}
-
-enum JumpStatus
-{
-	JUMP_MADE,
-	JUMP_NOT_MADE,
-	RETURN_IMPACTED //jump made and return impacted
-}
-
-class Pair<T,U>
-{
-	T first;
-	U second;
-}
