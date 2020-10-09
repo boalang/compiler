@@ -11,9 +11,16 @@ public class SymbolTable {
 	
 	HashMap<String, ArrayList<Integer> > criteria = new HashMap<String, ArrayList<Integer>>();
 
-	public static void addToDefintions(String scope, String key, Integer location)
+	public static void addToDefintions(String key, Integer location)
 	{
+		String scope=Status.getCurrentScope();
+
 		SymbolTable st=getSymbolTableForScope(scope);
+		
+		if(Status.isDirectClassScope() && !key.startsWith("self."))
+		{
+			key="self."+key;
+		}
 		
 		if(!st.defintions.containsKey(key))
 		{
@@ -26,10 +33,17 @@ public class SymbolTable {
 		st.defintions.put(key, al);
 	}
 	
-	public static void addToCriteria(String scope, String key, Integer location)
+	public static void addToCriteria(String key, Integer location)
 	{
+		String scope=Status.getCurrentScope();
+
 		SymbolTable st=getSymbolTableForScope(scope);
 		
+		if(Status.isDirectClassScope() && !key.startsWith("self."))
+		{
+			key="self."+key;
+		}
+				
 		if(!st.criteria.containsKey(key))
 		{
 			st.criteria.put(key, new ArrayList<Integer>());

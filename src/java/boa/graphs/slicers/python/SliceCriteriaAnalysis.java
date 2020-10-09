@@ -6,7 +6,7 @@ import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Shared.ChangeKind;
 
-public class ChangeImpactAnalysis {
+public class SliceCriteriaAnalysis {
 
 	public static boolean isImpacted(String usedIdentifierName, Integer useAstLocation) {
 		return isImpacted(usedIdentifierName, useAstLocation, Status.getCurrentScope());
@@ -97,5 +97,29 @@ public class ChangeImpactAnalysis {
 				return true;
 		}
 		return false;
+	}
+	
+	public static SliceStatus addSliceToResult(Expression node)
+	{
+		if(node.hasId())
+		{
+			String identifierName = ForwardSlicerUtil.convertExpressionToString(node);
+
+			String mt2 = NameResolver.resolveImport(identifierName, node.getId());
+			
+			if(!mt2.equals(""))
+			{
+				if(isExpressionImpacted(node) || isExpressionImpacted(node))
+				{
+					if (Status.DEBUG)
+						System.out.println("Sliced line# "+mt2);
+					
+					return SliceStatus.SLICE_DONE;
+				}
+				
+				return SliceStatus.CANDIDATE_NOT_SLICED;
+			}
+		}
+		return SliceStatus.NOT_CANDIDATE;
 	}
 }

@@ -135,5 +135,19 @@ public class ForwardSlicerUtil {
 
 		return ret;
 	}
+	public static List<String> getIdentiferNamesAsList(Statement node) {
+		ArrayList<String> ret = new ArrayList<String>();
+
+		if (node == null)
+			return ret;
+
+		for (Variable e : node.getVariableDeclarationsList()) {
+			if (e.hasName())
+				ret.add(e.getName());
+			else if (e.hasComputedName() && e.getComputedName().hasVariable())
+				ret.add(e.getComputedName().getVariable());
+		}
+		return ret;
+	}
 	
 }

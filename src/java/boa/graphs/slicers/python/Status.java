@@ -18,6 +18,10 @@ import boa.types.Ast.Variable;
 public class Status {
 	public static Stack<String> globalScopeNameStack;
 	public static Stack<String> statementScopeStack;
+	public static Stack<String> namespaceScopeStack;
+	public static Stack<String> acrossInStack;
+
+
 	
 	public static HashMap<String, SymbolTable> symbolTable;
 	public static HashMap<String, CFG> cfgMap;
@@ -29,16 +33,27 @@ public class Status {
 	public static HashMap<Integer, String> aliasName;
 	public static boolean isModuleFound=false;
 	public static boolean hasBeenRedefinedAnywhere=false;
+	public static String acrossInStackSeparator="-";
+	
 	public static HashMap<String, String> importMap;
+	public static HashMap<String, String> objectNameMap;
+	public static Integer nameResolveDepth=0;
 	
 	public static boolean changeImpactAnalysisFlag=false;
 	public static boolean acrossInFlag=false;
+	public static boolean acrossInSessionActive=false;
 
+	public static boolean DEBUG=false;
 	
+	public static Integer maximumCallDepth=20;
+	public static Integer currentCallDepth=0;
+
 	static
 	{
 		statementScopeStack=new Stack<String>();
 		globalScopeNameStack=new Stack<String>();
+		namespaceScopeStack=new Stack<String>();
+		acrossInStack=new Stack<String>();
 		symbolTable=new HashMap<String, SymbolTable>();
 		cfgMap=new HashMap<String, CFG>();
 		astMethodMap=new HashMap<String, Method>();
@@ -47,10 +62,14 @@ public class Status {
 		moduleFilter=new ArrayList<String>();
 		aliasName=new HashMap<Integer, String>();
 		importMap=new HashMap<String, String>();
+		objectNameMap=new HashMap<String, String>();
 	}
 	
 	public static String getCurrentScope()
 	{
+		if(acrossInSessionActive)
+			return convertStackToString(acrossInStack, acrossInStackSeparator);
+		
 		return convertStackToString(globalScopeNameStack, ".");
 	}
 	public static String getParentScope(String scope)
@@ -58,7 +77,29 @@ public class Status {
 		if(scope.lastIndexOf(".")==-1) return "";
 		return scope.substring(0, scope.lastIndexOf("."));
 	}
-	
+	public static Integer getNumScope(String scope)
+	{
+		return scope.split("\\.").length;
+	}
+	public static boolean isDirectClassScope()
+	{
+		if(namespaceScopeStack.isEmpty()) return false;
+		return namespaceScopeStack.peek().equals("class");
+	}
+	public static boolean hasClassScope()
+	{
+		if(namespaceScopeStack.isEmpty()) return false;
+		for(Object s: namespaceScopeStack.toArray())
+		{
+			if(s.equals("class")) return true;
+		}
+		return false;
+	}
+	public static boolean isDirectMethodScope()
+	{
+		if(namespaceScopeStack.isEmpty()) return false;
+		return namespaceScopeStack.peek().equals("method");
+	}
 	public static boolean isMethodCallScope()
 	{
 		if(statementScopeStack.isEmpty()) return false;
@@ -153,6 +194,8 @@ public class Status {
 	{
 		statementScopeStack.clear();
 		globalScopeNameStack.clear();
+		namespaceScopeStack.clear();
+		acrossInStack.clear();
 		for(Map.Entry<String, SymbolTable> entry : symbolTable.entrySet())
 		{
 			entry.getValue().clear();
@@ -164,6 +207,7 @@ public class Status {
 		moduleFilter.clear();
 		aliasName.clear();
 		importMap.clear();
+		objectNameMap.clear();
 	}
 	public static void setLibraryFilter(String[] b)
 	{
@@ -188,4 +232,18 @@ public class Status {
 			System.out.println(entry.getKey()+" ==> " + entry.getValue());
 		}
 	}
+}
+
+enum SliceStatus
+{
+	SLICE_DONE, //program point p is impacted and fits filter criteria
+	NOT_CANDIDATE, //Doesn't fit filter criteria
+	CANDIDATE_NOT_SLICED //fits but not sliced
+}
+
+enum JumpStatus
+{
+	JUMP_MADE,
+	JUMP_NOT_MADE,
+	RETURN_IMPACTED //jump made and return impacted
 }

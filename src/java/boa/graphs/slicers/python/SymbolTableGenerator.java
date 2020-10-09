@@ -96,6 +96,7 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 //			Status.importMap.put(lib, lib);
 //		}
 
+		Status.objectNameMap.put(Status.getCurrentScope(),Status.getCurrentScope());
 		return defaultPreVisit();
 	}
 	
@@ -103,6 +104,7 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 	protected boolean preVisit(final Declaration node) throws Exception {
 		
 		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
+		Status.objectNameMap.put(Status.getCurrentScope(),Status.getCurrentScope());
 		Status.cfgMap.put(Status.getCurrentScope(), 
 				BoaGraphIntrinsics.getcfg(node));
 		Status.cfgToAstIdMapper();
@@ -113,7 +115,8 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 	@Override
 	protected boolean preVisit(final Method node) throws Exception {
 		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
-		
+		Status.objectNameMap.put(Status.getCurrentScope(),Status.getCurrentScope());
+
 		Status.cfgMap.put(Status.getCurrentScope(), 
 				BoaGraphIntrinsics.getcfg(node));
 		Status.cfgToAstIdMapper();
@@ -155,15 +158,13 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 		return defaultPreVisit();
 	}
 	private void addToDefintions(HashMap<String, Integer> mp)
-	{
-		String scope=Status.getCurrentScope();
-		
+	{		
 		for (Map.Entry<String, Integer> entry : mp.entrySet()) {
 		    String identiferName = entry.getKey();
 		    Integer location = entry.getValue();
 		    if(!identiferName.equals("_") && !identiferName.equals(".") &&
 		    		!identiferName.equals(""))
-		    	SymbolTable.addToDefintions(scope, identiferName, location);
+		    	SymbolTable.addToDefintions(identiferName, location);
 		}
 	}
 	
