@@ -10,30 +10,35 @@ import boa.graphs.cfg.CFGNode;
 import boa.types.Ast.Statement.StatementKind;
 
 public class CfgUtil {
-	static boolean [] visitedCfgNode;
-	
-	
-	public static boolean isAstNodesReachable(Integer sourceId, Integer targetId, 
-			String identifierName)
-	{
-		return isAstNodesReachable(sourceId,targetId, identifierName, Status.getCurrentScope(), Status.getCurrentScope());
+	static boolean[] visitedCfgNode;
+
+	public static boolean isAstNodesReachable(Integer sourceId, Integer targetId, String identifierName) {
+		return isAstNodesReachable(sourceId, targetId, identifierName, Status.getCurrentScope(),
+				Status.getCurrentScope());
 	}
-	
-	public static boolean isAstNodesReachable(Integer sourceId, Integer targetId, 
-			String identifierName, String sourceScope, String targetScope)
-	{
-		if(!Status.cfgToAstIdMap.containsKey(sourceId)) return false;
-		if(!Status.cfgToAstIdMap.containsKey(targetId)) return false;
-		
-		sourceId=Status.cfgToAstIdMap.get(sourceId);
-		targetId=Status.cfgToAstIdMap.get(targetId);
-		
-		if(!sourceScope.equals(targetScope))
-		{
-			sourceId=0;
+
+	public static boolean isAstNodesReachable(Integer sourceId, Integer targetId, String identifierName,
+			String sourceScope, String targetScope) {
+		if (!Status.cfgToAstIdMap.containsKey(sourceId))
+			return false;
+		if (!Status.cfgToAstIdMap.containsKey(targetId))
+			return false;
+
+		sourceId = Status.cfgToAstIdMap.get(sourceId);
+		targetId = Status.cfgToAstIdMap.get(targetId);
+		if (!sourceScope.equals(targetScope)) {
+			sourceId = 0;
+			if (Status.acrossInSessionActive) {
+				if (Status.callPointMap.containsKey(sourceScope)) {
+					sourceId = Status.callPointMap.get(sourceScope);
+					if (!Status.cfgToAstIdMap.containsKey(sourceId))
+						return false;
+					sourceId = Status.cfgToAstIdMap.get(sourceId);
+				}
+			}
 		}
-		return isCfgNodesReachable(sourceId, targetId, 
-				identifierName, targetScope);
+
+		return isCfgNodesReachable(sourceId, targetId, identifierName, targetScope);
 	}
 
 	public static boolean isCfgNodesReachable(Integer sourceId, Integer targetId, String identifierName, String scope) {
@@ -86,14 +91,15 @@ public class CfgUtil {
 		return pathFound;
 
 	}
-	
+
 	public static boolean isCfgDefined(String scope) {
-		if(!Status.cfgMap.containsKey(scope)) return false;
-		if(Status.cfgMap.get(scope)==null) return false;
-		if(Status.cfgMap.get(scope).getNodes()==null ||
-				Status.cfgMap.get(scope).getNodes().size()<1)
+		if (!Status.cfgMap.containsKey(scope))
+			return false;
+		if (Status.cfgMap.get(scope) == null)
+			return false;
+		if (Status.cfgMap.get(scope).getNodes() == null || Status.cfgMap.get(scope).getNodes().size() < 1)
 			return false;
 		return true;
 	}
-	
+
 }

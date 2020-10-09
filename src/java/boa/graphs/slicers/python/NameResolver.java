@@ -6,7 +6,7 @@ import boa.functions.BoaStringIntrinsics;
 
 public class NameResolver {
 	public static String getReachableAliasMappedName(String usedIdentifierName, Integer useAstLocation) {
-		return getReachableAliasMappedName(usedIdentifierName, useAstLocation, Status.getCurrentScope());
+		return getReachableAliasMappedName(usedIdentifierName, useAstLocation, Status.getProperCurrentScope());
 	}
 
 	public static String getReachableAliasMappedName(String usedIdentifierName, Integer useAstLocation, String scope) {
@@ -32,9 +32,10 @@ public class NameResolver {
 			return ""; // not defined in this scope
 
 		for (Integer loc : defs) {
-			if (Status.aliasName.containsKey(loc)
+			String resolvedName=SymbolTable.getAliasResolvedName(sourceScope, loc);
+			if (resolvedName!="" 
 					&& CfgUtil.isAstNodesReachable(loc, useAstLocation, usedIdentifierName, sourceScope, targetScope)) {
-				return Status.aliasName.get(loc);
+				return resolvedName;
 			}
 		}
 		return "-"; // defined in this scope, but not reachable
@@ -42,24 +43,20 @@ public class NameResolver {
 
 	public static String resolveName(String usedIdentifierName, Integer useAstLocation) {
 
-		String importName=resolveImport(usedIdentifierName, useAstLocation, Status.getCurrentScope());
+		String importName=resolveImport(usedIdentifierName, useAstLocation);
 		if(importName!="") return importName;
-		return resolveObjectName(usedIdentifierName, useAstLocation, Status.getCurrentScope());
+		return resolveObjectName(usedIdentifierName, useAstLocation);
 	}
+
 
 	public static String resolveImport(String usedIdentifierName, Integer useAstLocation) {
 
-		return resolveImport(usedIdentifierName, useAstLocation, Status.getCurrentScope());
-	}
-
-	public static String resolveImport(String usedIdentifierName, Integer useAstLocation, String scope) {
-
-		String str = resolveImportInternal(usedIdentifierName, useAstLocation, scope);
+		String str = resolveImportInternal(usedIdentifierName, useAstLocation);
 		Status.nameResolveDepth = -1;
 		if (Status.nameResolveDepth != -1) {
 			Integer importDepth = Status.nameResolveDepth;
 			Status.nameResolveDepth = -1;
-			resolveObjectNameInternal(usedIdentifierName, useAstLocation, scope);
+			resolveObjectNameInternal(usedIdentifierName, useAstLocation);
 			if (Status.nameResolveDepth == -1)
 				return str;
 			if (Status.nameResolveDepth <= importDepth)
@@ -69,7 +66,7 @@ public class NameResolver {
 		return str;
 	}
 
-	private static String resolveImportInternal(String usedIdentifierName, Integer useAstLocation, String scope) {
+	private static String resolveImportInternal(String usedIdentifierName, Integer useAstLocation) {
 		String[] tarr = BoaStringIntrinsics.splitall(usedIdentifierName, "\\.");
 		if (tarr.length == 0)
 			return "";
@@ -80,7 +77,7 @@ public class NameResolver {
 				str = str + "." + tarr[j];
 			str = BoaStringIntrinsics.substring(str, 1);
 
-			String mt1 = getReachableAliasMappedName(str, useAstLocation, scope);
+			String mt1 = getReachableAliasMappedName(str, useAstLocation);
 
 			if (mt1.equals("-"))
 				return "";
@@ -121,19 +118,15 @@ public class NameResolver {
 		return ret;
 	}
 
+
 	public static String resolveObjectName(String usedIdentifierName, Integer useAstLocation) {
 
-		return resolveObjectName(usedIdentifierName, useAstLocation, Status.getCurrentScope());
-	}
-
-	public static String resolveObjectName(String usedIdentifierName, Integer useAstLocation, String scope) {
-
-		String str = resolveObjectNameInternal(usedIdentifierName, useAstLocation, scope);
+		String str = resolveObjectNameInternal(usedIdentifierName, useAstLocation);
 		Status.nameResolveDepth = -1;
 		if (Status.nameResolveDepth != -1) {
 			Integer objectDepth = Status.nameResolveDepth;
 			Status.nameResolveDepth = -1;
-			resolveImportInternal(usedIdentifierName, useAstLocation, scope);
+			resolveImportInternal(usedIdentifierName, useAstLocation);
 			if (Status.nameResolveDepth == -1)
 				return str;
 			if (Status.nameResolveDepth <= objectDepth)
@@ -143,7 +136,7 @@ public class NameResolver {
 		return str;
 	}
 
-	private static String resolveObjectNameInternal(String usedIdentifierName, Integer useAstLocation, String scope) {
+	private static String resolveObjectNameInternal(String usedIdentifierName, Integer useAstLocation) {
 		String[] tarr = BoaStringIntrinsics.splitall(usedIdentifierName, "\\.");
 		if (tarr.length == 0)
 			return "";
@@ -157,7 +150,7 @@ public class NameResolver {
 				str = str + "." + tarr[j];
 			str = BoaStringIntrinsics.substring(str, 1);
 
-			String mt1 = getReachableAliasMappedName(str, useAstLocation, scope);
+			String mt1 = getReachableAliasMappedName(str, useAstLocation);
 
 			if (mt1.equals("-"))
 				return "";

@@ -1,7 +1,9 @@
 package boa.graphs.slicers.python;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.ASTRoot;
@@ -16,18 +18,20 @@ import boa.types.Ast.Statement.StatementKind;
 public class ForwardSlicer extends BoaAbstractVisitor {
 
 	ASTRoot root;
+	AcrossInVisitor acrossInVisitor=new AcrossInVisitor();
 
 	public ForwardSlicer(ASTRoot _root, String[] moduleFilter, String[] filterCriteria, boolean changeImpactFlag,
 			boolean acrossInFlag) {
 		this.root = _root;
 
 		Status.DEBUG = true;
-		Status.acrossInFlag=true;
 
 		Status.setLibraryFilter(filterCriteria);
 		Status.setModuleFilter(moduleFilter);
 		Status.changeImpactAnalysisFlag = changeImpactFlag;
 		Status.acrossInFlag = acrossInFlag;
+
+		Status.acrossInFlag=true;
 
 		SymbolTableGenerator st = new SymbolTableGenerator();
 
@@ -68,45 +72,31 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 
 	@Override
 	protected boolean preVisit(final Statement node) throws Exception {
+		if(node.getKind()==StatementKind.ASSERT) return false;
 
-		if (node.getKind() == StatementKind.FOREACH || node.getKind() == StatementKind.WITH) {
-			if (node.getExpressionsCount() > 0 && node.hasId()) {
-				List<Expression> rightExps = ForwardSlicerUtil.expandOtherExpressions(node.getExpressions(0));
-				List<String> leftIdentifiers = ForwardSlicerUtil.getIdentiferNamesAsList(node);
-				if (leftIdentifiers != null) {
-					this.addForNameResolution(leftIdentifiers.toArray(new String[0]), node.getId(), rightExps);
-					this.addForCriteria(leftIdentifiers.toArray(new String[0]), node.getId(), rightExps);
-				}
-			}
-		}
-
+		handleStatementForSymbolTable(node);
 		return defaultPreVisit();
 	}
 
 	@Override
 	protected boolean preVisit(final Expression node) throws Exception {
-		if (ForwardSlicerUtil.isMethodCallKind(node)) {
-			Status.statementScopeStack.push("call");
-		}
 
 		if (ForwardSlicerUtil.isMethodCallKind(node)) {
 			if(SliceCriteriaAnalysis.addSliceToResult(node)==SliceStatus.NOT_CANDIDATE)
 			{
-				
+				acrossInVisitor.initiateJump(node);
 			}
 		}
 
-		if (ForwardSlicerUtil.isProperAssignKind(node)) {
-			if (Status.isMethodCallScope())
-				return defaultPreVisit();
+		if (ForwardSlicerUtil.isProperAssignKind(node) && !Status.isMethodCallScope()) {
 
-			List<Expression> leftExps = ForwardSlicerUtil.expandOtherExpressions(node.getExpressions(0));
-			List<Expression> rightExps = ForwardSlicerUtil.expandOtherExpressions(node.getExpressions(1));
-
-			this.addForNameResolution(leftExps, rightExps);
-			this.addForCriteria(leftExps, rightExps);
+			handleExpressionForSymbolTable(node);
 		}
 
+		if (ForwardSlicerUtil.isMethodCallKind(node)) {
+			Status.statementScopeStack.push("call");
+		}
+		
 		return defaultPreVisit();
 	}
 
@@ -138,20 +128,47 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		Status.namespaceScopeStack.pop();
 		defaultPostVisit();
 	}
+	
+	public static void handleStatementForSymbolTable(Statement node)
+	{
+		if (node.getKind() == StatementKind.FOREACH || node.getKind() == StatementKind.WITH) {
+			if (node.getExpressionsCount() > 0 && node.hasId()) {
+				List<Expression> rightExps = ForwardSlicerUtil.expandOtherExpressions(node.getExpressions(0));
+				HashMap<String, Integer> leftIdentifiers = ForwardSlicerUtil.getIdentiferNames(node);
+				if (leftIdentifiers != null) {
+					addForNameResolution(leftIdentifiers, rightExps);
+					addForCriteria(leftIdentifiers, rightExps);
+				}
+			}
+		}
+	}
+	public static void handleExpressionForSymbolTable(Expression node)
+	{
+		if (ForwardSlicerUtil.isProperAssignKind(node)) {
 
-	void addForCriteria(String[] leftIdentifiers, Integer id, List<Expression> rightExps) {
+			List<Expression> leftExps = ForwardSlicerUtil.expandOtherExpressions(node.getExpressions(0));
+			List<Expression> rightExps = ForwardSlicerUtil.expandOtherExpressions(node.getExpressions(1));
+
+			addForNameResolution(leftExps, rightExps);
+			addForCriteria(leftExps, rightExps);
+		}
+	}
+
+	public static void addForCriteria(HashMap<String, Integer> leftIdentifiers, List<Expression> rightExps) {
 		List<Expression> left = new ArrayList<Expression>();
-		for (int i = 0; i < leftIdentifiers.length; i++) {
-			Expression.Builder ex = Expression.newBuilder();
-			ex.setVariable(leftIdentifiers[i]);
-			ex.setId(id);
+		for (Map.Entry<String, Integer> entry : leftIdentifiers.entrySet()) {
+		    String identiferName = entry.getKey();
+		    Integer location = entry.getValue();
+		    Expression.Builder ex = Expression.newBuilder();
+			ex.setVariable(identiferName);
+			ex.setId(location);
 			ex.setKind(ExpressionKind.VARACCESS);
 			left.add(ex.build());
 		}
 		addForCriteria(left, rightExps);
 	}
 
-	void addForCriteria(List<Expression> leftExps, List<Expression> rightExps) {
+	public static void addForCriteria(List<Expression> leftExps, List<Expression> rightExps) {
 		String scope = Status.getCurrentScope();
 
 		if (leftExps.size() == rightExps.size()) {
@@ -214,12 +231,15 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		}
 	}
 
-	void addForNameResolution(String[] leftIdentifiers, Integer id, List<Expression> rightExps) {
+	public static void addForNameResolution(HashMap<String, Integer> leftIdentifiers, List<Expression> rightExps) {
 		List<Expression> left = new ArrayList<Expression>();
-		for (int i = 0; i < leftIdentifiers.length; i++) {
-			Expression.Builder ex = Expression.newBuilder();
-			ex.setVariable(leftIdentifiers[i]);
-			ex.setId(id);
+
+		for (Map.Entry<String, Integer> entry : leftIdentifiers.entrySet()) {
+		    String identiferName = entry.getKey();
+		    Integer location = entry.getValue();
+		    Expression.Builder ex = Expression.newBuilder();
+			ex.setVariable(identiferName);
+			ex.setId(location);
 			ex.setKind(ExpressionKind.VARACCESS);
 			left.add(ex.build());
 		}
@@ -227,7 +247,7 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 
 	}
 
-	void addForNameResolution(List<Expression> leftExps, List<Expression> rightExps) {
+	public static void addForNameResolution(List<Expression> leftExps, List<Expression> rightExps) {
 		if (leftExps.size() == rightExps.size()) {
 			for (int i = 0; i < rightExps.size(); i++) {
 				if (rightExps.get(i).getKind() != ExpressionKind.METHODCALL
@@ -241,8 +261,7 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 
 					String mt2 = NameResolver.resolveName(rightIdentifierName, rightExps.get(i).getId());
 					if (!mt2.equals("")) {
-						Status.aliasName.put(leftExps.get(i).getId(), mt2);
-						
+						SymbolTable.addToAliasSet(leftExps.get(i).getId(), mt2);
 						if (Status.DEBUG)
 							System.out.println("Mapping for alias: " + identiferName + " ==> " + mt2);
 					}

@@ -128,7 +128,8 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 	
 	@Override
 	protected boolean preVisit(final Statement node) throws Exception {
-		
+		if(node.getKind()==StatementKind.ASSERT) return false;
+
 		if(node.getKind()==StatementKind.FOREACH || node.getKind()==StatementKind.WITH)
 		{
 			this.addToDefintions(ForwardSlicerUtil.
@@ -140,21 +141,18 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 	
 	@Override
 	protected boolean preVisit(final Expression node) throws Exception {
-		if(ForwardSlicerUtil.isMethodCallKind(node))
-		{
-			Status.statementScopeStack.push("call");
-		}
-		
-		if(Status.isMethodCallScope())
-			return defaultPreVisit();
-		
-		if(ForwardSlicerUtil.isProperAssignKind(node))
+				
+		if(ForwardSlicerUtil.isProperAssignKind(node) && !Status.isMethodCallScope())
 		{
 			HashMap<String, Integer> ids=ForwardSlicerUtil.
 					getIdentiferNames(node.getExpressions(0));
 			this.addToDefintions(ids);
 		}
 		
+		if(ForwardSlicerUtil.isMethodCallKind(node))
+		{
+			Status.statementScopeStack.push("call");
+		}
 		return defaultPreVisit();
 	}
 	private void addToDefintions(HashMap<String, Integer> mp)

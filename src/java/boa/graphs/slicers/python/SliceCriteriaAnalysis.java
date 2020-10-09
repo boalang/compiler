@@ -9,7 +9,7 @@ import boa.types.Shared.ChangeKind;
 public class SliceCriteriaAnalysis {
 
 	public static boolean isImpacted(String usedIdentifierName, Integer useAstLocation) {
-		return isImpacted(usedIdentifierName, useAstLocation, Status.getCurrentScope());
+		return isImpacted(usedIdentifierName, useAstLocation, Status.getProperCurrentScope());
 	}
 
 	public static boolean isImpacted(String usedIdentifierName, Integer useAstLocation, String scope) {
@@ -112,7 +112,7 @@ public class SliceCriteriaAnalysis {
 				if(isExpressionImpacted(node) || isExpressionImpacted(node))
 				{
 					if (Status.DEBUG)
-						System.out.println("Sliced line# "+mt2);
+						System.out.println("\nSliced line# "+mt2);
 					
 					return SliceStatus.SLICE_DONE;
 				}

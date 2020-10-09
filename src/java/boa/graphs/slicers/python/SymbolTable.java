@@ -11,6 +11,22 @@ public class SymbolTable {
 	
 	HashMap<String, ArrayList<Integer> > criteria = new HashMap<String, ArrayList<Integer>>();
 
+	HashMap<Integer, String > aliasSet = new HashMap<Integer, String>();
+
+	public static void addToAliasSet(Integer location, String resolvedName)
+	{
+		String scope=Status.getCurrentScope();
+
+		SymbolTable st=getSymbolTableForScope(scope);
+		
+		if(Status.isDirectClassScope() && !resolvedName.startsWith("self."))
+		{
+			resolvedName="self."+resolvedName;
+		}
+
+		st.aliasSet.put(location, resolvedName);
+	}
+	
 	public static void addToDefintions(String key, Integer location)
 	{
 		String scope=Status.getCurrentScope();
@@ -66,6 +82,17 @@ public class SymbolTable {
 		return st.defintions.get(key);
 	}
 	
+	public static String getAliasResolvedName(String scope, Integer location)
+	{
+		SymbolTable st=getSymbolTableForScope(scope);
+		
+		if(!st.aliasSet.containsKey(location))
+		{
+			return "";
+		}
+		return st.aliasSet.get(location);
+	}
+	
 	public static ArrayList<Integer> getCriteriaLocations(String scope, String key)
 	{
 		SymbolTable st=getSymbolTableForScope(scope);
@@ -75,6 +102,18 @@ public class SymbolTable {
 			return new ArrayList<Integer>();
 		}
 		return st.criteria.get(key);
+	}
+	public static void removeAliasMap(String scope)
+	{
+		SymbolTable st=getSymbolTableForScope(scope);
+		
+		st.aliasSet.clear();
+	}
+	public static void removeCriteriaMap(String scope)
+	{
+		SymbolTable st=getSymbolTableForScope(scope);
+		
+		st.criteria.clear();
 	}
 	
 	public static SymbolTable getSymbolTableForScope(String scope)
@@ -115,5 +154,7 @@ public class SymbolTable {
 	{
 		this.defintions.clear();
 		this.uses.clear();
+		this.aliasSet.clear();
+		this.criteria.clear();
 	}
 }

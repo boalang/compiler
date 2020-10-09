@@ -30,11 +30,14 @@ public class Status {
 	
 	public static List<String> libraryFilter;
 	public static List<String> moduleFilter;
-	public static HashMap<Integer, String> aliasName;
+//	public static HashMap<Integer, String> aliasName;
 	public static boolean isModuleFound=false;
 	public static boolean hasBeenRedefinedAnywhere=false;
 	public static String acrossInStackSeparator="-";
-	
+	public static HashMap<String, Integer> callPointMap;
+	public static HashMap<String, Integer> acrossInParameterMap;
+
+
 	public static HashMap<String, String> importMap;
 	public static HashMap<String, String> objectNameMap;
 	public static Integer nameResolveDepth=0;
@@ -58,9 +61,10 @@ public class Status {
 		cfgMap=new HashMap<String, CFG>();
 		astMethodMap=new HashMap<String, Method>();
 		cfgToAstIdMap=new HashMap<Integer, Integer>();
+		callPointMap=new HashMap<String, Integer>();
+		acrossInParameterMap=new HashMap<String, Integer>();
 		libraryFilter=new ArrayList<String>();
 		moduleFilter=new ArrayList<String>();
-		aliasName=new HashMap<Integer, String>();
 		importMap=new HashMap<String, String>();
 		objectNameMap=new HashMap<String, String>();
 	}
@@ -72,10 +76,32 @@ public class Status {
 		
 		return convertStackToString(globalScopeNameStack, ".");
 	}
+	public static String getProperCurrentScope()
+	{
+		if(acrossInSessionActive) return acrossInStack.peek();
+		return getCurrentScope();
+	}
 	public static String getParentScope(String scope)
 	{
 		if(scope.lastIndexOf(".")==-1) return "";
-		return scope.substring(0, scope.lastIndexOf("."));
+		String parScope= scope.substring(0, scope.lastIndexOf("."));
+		
+		if(acrossInSessionActive && callPointMap.containsKey(parScope))
+		{
+			String str="";
+			for(String tmp: acrossInStack.toArray(new String[0])) {
+				if (str != "")
+					str = str + acrossInStackSeparator + tmp;
+				else
+					str = tmp;
+				if(tmp.equals(parScope))
+				{
+					break;
+				}
+			}
+			return str;
+		}
+		return parScope;
 	}
 	public static Integer getNumScope(String scope)
 	{
@@ -205,9 +231,10 @@ public class Status {
 		astMethodMap.clear();
 		libraryFilter.clear();
 		moduleFilter.clear();
-		aliasName.clear();
 		importMap.clear();
+		callPointMap.clear();
 		objectNameMap.clear();
+		acrossInParameterMap.clear();
 	}
 	public static void setLibraryFilter(String[] b)
 	{
@@ -246,4 +273,10 @@ enum JumpStatus
 	JUMP_MADE,
 	JUMP_NOT_MADE,
 	RETURN_IMPACTED //jump made and return impacted
+}
+
+class Pair<T,U>
+{
+	T first;
+	U second;
 }

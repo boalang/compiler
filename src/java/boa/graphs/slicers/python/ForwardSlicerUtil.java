@@ -7,12 +7,25 @@ import java.util.Stack;
 
 import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
+import boa.types.Ast.Method;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Variable;
 import boa.types.Shared.ChangeKind;
 
 public class ForwardSlicerUtil {
 
+	public static Integer getNumMethodFormalArg(Method m) {
+//		if(m.getArgumentsCount()==0) return 0;
+//		l:=len(m.arguments);	
+//		if(l==0) return 0;
+//		if(getDeclaredVariableName(m.arguments[0])=="self")
+//		{
+//			return l - 1;
+//		}
+//		return l;
+		return 0;
+	}
+	
 	public static boolean isAssignKind(Expression node) {
 		if (node == null)
 			return false;
