@@ -30,6 +30,9 @@ public class Status {
 	public static boolean isModuleFound=false;
 	public static boolean hasBeenRedefinedAnywhere=false;
 	public static HashMap<String, String> importMap;
+	
+	public static boolean changeImpactAnalysisFlag=false;
+	public static boolean acrossInFlag=false;
 
 	
 	static

@@ -12,14 +12,6 @@ import boa.types.Ast.Statement.StatementKind;
 public class CfgUtil {
 	static boolean [] visitedCfgNode;
 	
-	public static boolean isCfgDefined(String scope) {
-		if(!Status.cfgMap.containsKey(scope)) return false;
-		if(Status.cfgMap.get(scope)==null) return false;
-		if(Status.cfgMap.get(scope).getNodes()==null ||
-				Status.cfgMap.get(scope).getNodes().size()<1)
-			return false;
-		return true;
-	}
 	
 	public static boolean isAstNodesReachable(Integer sourceId, Integer targetId, 
 			String identifierName)
@@ -93,6 +85,15 @@ public class CfgUtil {
 
 		return pathFound;
 
+	}
+	
+	public static boolean isCfgDefined(String scope) {
+		if(!Status.cfgMap.containsKey(scope)) return false;
+		if(Status.cfgMap.get(scope)==null) return false;
+		if(Status.cfgMap.get(scope).getNodes()==null ||
+				Status.cfgMap.get(scope).getNodes().size()<1)
+			return false;
+		return true;
 	}
 	
 }

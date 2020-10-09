@@ -9,6 +9,8 @@ public class SymbolTable {
 	HashMap<String, ArrayList<Integer> > defintions = new HashMap<String, ArrayList<Integer>>();
 	HashMap<String, ArrayList<Integer> > uses = new HashMap<String, ArrayList<Integer>>();
 	
+	HashMap<String, ArrayList<Integer> > criteria = new HashMap<String, ArrayList<Integer>>();
+
 	public static void addToDefintions(String scope, String key, Integer location)
 	{
 		SymbolTable st=getSymbolTableForScope(scope);
@@ -24,6 +26,21 @@ public class SymbolTable {
 		st.defintions.put(key, al);
 	}
 	
+	public static void addToCriteria(String scope, String key, Integer location)
+	{
+		SymbolTable st=getSymbolTableForScope(scope);
+		
+		if(!st.criteria.containsKey(key))
+		{
+			st.criteria.put(key, new ArrayList<Integer>());
+		}
+		
+		ArrayList al=st.getCriteriaLocations(scope, key);
+		
+		al.add(location);
+		st.criteria.put(key, al);
+	}
+	
 	public static ArrayList<Integer> getDefLocations(String scope, String key)
 	{
 		SymbolTable st=getSymbolTableForScope(scope);
@@ -33,6 +50,17 @@ public class SymbolTable {
 			return new ArrayList<Integer>();
 		}
 		return st.defintions.get(key);
+	}
+	
+	public static ArrayList<Integer> getCriteriaLocations(String scope, String key)
+	{
+		SymbolTable st=getSymbolTableForScope(scope);
+		
+		if(!st.criteria.containsKey(key))
+		{
+			return new ArrayList<Integer>();
+		}
+		return st.criteria.get(key);
 	}
 	
 	public static SymbolTable getSymbolTableForScope(String scope)
