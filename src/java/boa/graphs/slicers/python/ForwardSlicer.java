@@ -59,6 +59,10 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 
 		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
 		Status.namespaceScopeStack.push("class");
+		
+		if(Status.DEBUG)
+			System.out.println("In class: "+node.getName());
+		
 		return defaultPreVisit();
 	}
 
@@ -66,6 +70,12 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 	protected boolean preVisit(final Method node) throws Exception {
 		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
 		Status.namespaceScopeStack.push("method");
+		
+		if(node.getName().equals("fun3"))
+			System.out.println("");
+		
+		if(Status.DEBUG)
+			System.out.println("In method: "+node.getName());
 		
 		return defaultPreVisit();
 	}
@@ -259,7 +269,11 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 				if (!identiferName.equals("_") && !identiferName.equals(".") && !identiferName.equals("")) {
 					String rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(rightExps.get(i));
 
-					String mt2 = NameResolver.resolveName(rightIdentifierName, rightExps.get(i).getId());
+					String mt2 = NameResolver.resolveImport(rightIdentifierName, rightExps.get(i).getId());
+					if(mt2.equals(""))
+					{
+						mt2 = AcrossInVisitor.resolveMethodNameForJump(rightIdentifierName, rightExps.get(i).getId());
+					}
 					if (!mt2.equals("")) {
 						SymbolTable.addToAliasSet(leftExps.get(i).getId(), mt2);
 						if (Status.DEBUG)

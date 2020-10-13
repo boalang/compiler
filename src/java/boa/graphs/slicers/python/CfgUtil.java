@@ -26,16 +26,21 @@ public class CfgUtil {
 
 		sourceId = Status.cfgToAstIdMap.get(sourceId);
 		targetId = Status.cfgToAstIdMap.get(targetId);
-		if (!sourceScope.equals(targetScope)) {
-			sourceId = 0;
+		
+		if (!sourceScope.equals(Status.getAcrossInScopeFromProper(targetScope))) {
 			if (Status.acrossInSessionActive) {
 				if (Status.callPointMap.containsKey(sourceScope)) {
-					sourceId = Status.callPointMap.get(sourceScope);
-					if (!Status.cfgToAstIdMap.containsKey(sourceId))
+					Integer callpointId = Status.callPointMap.get(sourceScope);
+					if (!Status.cfgToAstIdMap.containsKey(callpointId))
 						return false;
-					sourceId = Status.cfgToAstIdMap.get(sourceId);
+					callpointId = Status.cfgToAstIdMap.get(callpointId);
+					
+					if(!isCfgNodesReachable(sourceId, callpointId, identifierName, sourceScope))
+						return false;
 				}
 			}
+			
+			sourceId = 0;
 		}
 
 		return isCfgNodesReachable(sourceId, targetId, identifierName, targetScope);

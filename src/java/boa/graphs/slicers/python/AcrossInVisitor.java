@@ -40,6 +40,22 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		for (int i = 0; i < statementsSize; i++)
 			visit(statementsList.get(i));
 		
+		final List<Expression> initsList = node.getInitializationsList();
+		final int initsSize = initsList.size();
+		for (int i = 0; i < initsSize; i++)
+			visit(initsList.get(i));
+
+		final List<Expression> conditionsList = node.getConditionsList();
+		final int conditionsSize = conditionsList.size();
+		for (int i = 0; i < conditionsSize; i++)
+			visit(conditionsList.get(i));
+		
+		if (node.hasVariableDeclaration())
+			visit(node.getVariableDeclaration());
+
+		if (node.getExpressionsCount() > 0)
+			visit(node.getExpressions(0));
+		
 		return false;
 	}
 	@Override
@@ -82,6 +98,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		Status.namespaceScopeStack.pop();
 		String scope=Status.getCurrentScope();
 		SymbolTable.removeCriteriaMap(scope);
+		SymbolTable.removeAliasMap(scope);
 		defaultPostVisit();
 	}
 
@@ -129,14 +146,19 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		Status.callPointMap.put(methodName, mainNode.getId());
 		
 		String scope=Status.getCurrentScope();
-		Status.acrossInStack.push(scope+Status.acrossInStackSeparator+methodName);
+		String nextScope=scope+Status.acrossInStackSeparator+methodName;
 		
-		Status.currentCallDepth=Status.currentCallDepth+1;
-		
-		visit(Status.astMethodMap.get(methodName));
-		
-		Status.acrossInStack.pop();
-		Status.currentCallDepth=Status.currentCallDepth-1;
+		if(this.mapParameter(Status.astMethodMap.get(methodName), node, nextScope))
+		{
+			Status.acrossInStack.push(methodName);
+
+			Status.currentCallDepth = Status.currentCallDepth + 1;
+
+			visit(Status.astMethodMap.get(methodName));
+
+			Status.acrossInStack.pop();
+			Status.currentCallDepth = Status.currentCallDepth - 1;
+		}
 		visitedScope.remove(methodName);
 		Status.callPointMap.remove(methodName);
 		
@@ -146,9 +168,66 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		return JumpStatus.JUMP_MADE;
 	}
 	
-	public static boolean mapParameter(Method targetMethod, Expression callSite, String resolvedMethodName)
+	public static boolean mapParameter(Method targetMethod, Expression callSite, String nextScope)
 	{
-		return false;
+		if(ForwardSlicerUtil.getNumMethodFormalArg(targetMethod)!=ForwardSlicerUtil.getNumMethodActualArg(callSite))
+			return false;
+		int j=0;
+		if(ForwardSlicerUtil.hasSelfArg(targetMethod)) j=1;
+		for(Expression ex: callSite.getMethodArgs(0).getExpressionsList())
+		{
+			String leftIdentiferName=ForwardSlicerUtil.getIdentiferName(targetMethod.getArguments(j));
+			Integer leftId=targetMethod.getArguments(j).getId();
+			
+			boolean flagCriteria=false;
+			
+			if(ForwardSlicerUtil.isProperAssignKind(ex))
+			{
+				if (SliceCriteriaAnalysis.isExpressionModified(ex.getExpressions(1))
+						|| SliceCriteriaAnalysis.isExpressionImpacted(ex.getExpressions(1)))
+				{
+					flagCriteria=true;
+
+				}
+				
+				String rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(ex.getExpressions(1));
+
+				String mt2 = NameResolver.resolveName(rightIdentifierName,ex.getExpressions(1).getId());
+				if (!mt2.equals("")) {
+					SymbolTable.addToAliasSet(leftId, mt2, nextScope);
+					if (Status.DEBUG)
+						System.out.println("Mapping for alias(parameter-mapping): " + leftIdentiferName + " ==> " + mt2);
+				}
+			}
+			else if (SliceCriteriaAnalysis.isExpressionModified(ex)
+					|| SliceCriteriaAnalysis.isExpressionImpacted(ex))
+			{
+				flagCriteria=true;
+				
+				String rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(ex);
+
+				String mt2 = NameResolver.resolveName(rightIdentifierName,ex.getId());
+				if (!mt2.equals("")) {
+					SymbolTable.addToAliasSet(leftId, mt2, nextScope);
+					if (Status.DEBUG)
+						System.out.println("Mapping for alias(parameter-mapping): " + leftIdentiferName + " ==> " + mt2);
+				}
+
+			}
+			
+			if(flagCriteria)
+			{
+				SymbolTable.addToCriteria(leftIdentiferName, 
+						leftId, nextScope);
+				if(Status.DEBUG)
+				{
+					System.out.println("Adding in slice criteria (parameter-mapping), Scope: " + nextScope + ", Variable:"
+							+ leftIdentiferName + ",Location: " + leftId);
+				}
+			}
+			j++;
+		}
+		return true;
 	}
 
 	public static String resolveMethodNameForJump(String methodName, Integer id) {
@@ -162,9 +241,9 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		return tmp;
 	}
 
-	public static String resolveMethodNameForJump(String methodName) {
+	private static String resolveMethodNameForJump(String methodName) {
 
-		String scope = Status.getCurrentScope();
+		String scope = Status.getProperCurrentScope();
 		String[] tarr = BoaStringIntrinsics.splitall(methodName, "\\.");
 		if (tarr.length == 0)
 			return "";

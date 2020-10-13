@@ -16,6 +16,7 @@ import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Statement.StatementKind;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Type;
+import boa.types.Ast.Variable;
 
 public class SymbolTableGenerator extends BoaAbstractVisitor {
 	
@@ -120,8 +121,15 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 		Status.cfgMap.put(Status.getCurrentScope(), 
 				BoaGraphIntrinsics.getcfg(node));
 		Status.cfgToAstIdMapper();
+		for(Variable v: node.getArgumentsList())
+		{
+			Status.cfgToAstIdVariableMapper(v, 0);
+		}
 		
 		Status.astMethodMap.put(Status.getCurrentScope(), node);
+		
+		this.addToDefintions(ForwardSlicerUtil.
+				getArgumentsMap(node));
 		
 		return defaultPreVisit();
 	}

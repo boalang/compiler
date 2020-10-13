@@ -15,7 +15,7 @@ public class SliceCriteriaAnalysis {
 	public static boolean isImpacted(String usedIdentifierName, Integer useAstLocation, String scope) {
 		String targetScope = scope;
 		while (!scope.equals("")) {
-			if (isImpacted(usedIdentifierName, useAstLocation, scope, targetScope))
+			if (isImpacted(usedIdentifierName, useAstLocation, Status.getAcrossInScopeFromProper(scope), targetScope))
 				return true;
 			scope = Status.getParentScope(scope);
 		}
@@ -107,13 +107,17 @@ public class SliceCriteriaAnalysis {
 
 			String mt2 = NameResolver.resolveImport(identifierName, node.getId());
 			
+			if (Status.DEBUG)
+				System.out.println("Trying to slice: "+identifierName+", resolved to: "+mt2);
+			
 			if(!mt2.equals(""))
 			{
 				if(isExpressionImpacted(node) || isExpressionImpacted(node))
 				{
 					if (Status.DEBUG)
-						System.out.println("\nSliced line# "+mt2);
-					
+					{	
+				        System.out.println(Status.ANSI_GREEN+"Sliced line# "+mt2+Status.ANSI_RESET);
+					}
 					return SliceStatus.SLICE_DONE;
 				}
 				

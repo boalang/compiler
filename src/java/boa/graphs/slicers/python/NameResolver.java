@@ -12,7 +12,7 @@ public class NameResolver {
 	public static String getReachableAliasMappedName(String usedIdentifierName, Integer useAstLocation, String scope) {
 		String targetScope = scope;
 		while (!scope.equals("")) {
-			String str = getReachableAliasMappedNameResolvedScope(usedIdentifierName, useAstLocation, scope,
+			String str = getReachableAliasMappedNameResolvedScope(usedIdentifierName, useAstLocation, Status.getAcrossInScopeFromProper(scope),
 					targetScope);
 			if (str.equals("-"))
 				return "-";

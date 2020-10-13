@@ -13,10 +13,8 @@ public class SymbolTable {
 
 	HashMap<Integer, String > aliasSet = new HashMap<Integer, String>();
 
-	public static void addToAliasSet(Integer location, String resolvedName)
+	public static void addToAliasSet(Integer location, String resolvedName, String scope)
 	{
-		String scope=Status.getCurrentScope();
-
 		SymbolTable st=getSymbolTableForScope(scope);
 		
 		if(Status.isDirectClassScope() && !resolvedName.startsWith("self."))
@@ -25,6 +23,10 @@ public class SymbolTable {
 		}
 
 		st.aliasSet.put(location, resolvedName);
+	}
+	public static void addToAliasSet(Integer location, String resolvedName)
+	{
+		addToAliasSet(location, resolvedName, Status.getCurrentScope());
 	}
 	
 	public static void addToDefintions(String key, Integer location)
@@ -49,10 +51,8 @@ public class SymbolTable {
 		st.defintions.put(key, al);
 	}
 	
-	public static void addToCriteria(String key, Integer location)
+	public static void addToCriteria(String key, Integer location, String scope)
 	{
-		String scope=Status.getCurrentScope();
-
 		SymbolTable st=getSymbolTableForScope(scope);
 		
 		if(Status.isDirectClassScope() && !key.startsWith("self."))
@@ -69,6 +69,11 @@ public class SymbolTable {
 		
 		al.add(location);
 		st.criteria.put(key, al);
+	}
+	
+	public static void addToCriteria(String key, Integer location)
+	{
+		addToCriteria(key, location, Status.getCurrentScope());
 	}
 	
 	public static ArrayList<Integer> getDefLocations(String scope, String key)

@@ -14,18 +14,29 @@ import boa.types.Shared.ChangeKind;
 
 public class ForwardSlicerUtil {
 
+	public static boolean hasSelfArg(Method m) {
+		if (m.getArgumentsCount() == 0)
+			return false;
+		if (getIdentiferName(m.getArguments(0)).equals("self")) {
+			return true;
+		}
+		return false;
+	}
 	public static Integer getNumMethodFormalArg(Method m) {
-//		if(m.getArgumentsCount()==0) return 0;
-//		l:=len(m.arguments);	
-//		if(l==0) return 0;
-//		if(getDeclaredVariableName(m.arguments[0])=="self")
-//		{
-//			return l - 1;
-//		}
-//		return l;
-		return 0;
+		if (m.getArgumentsCount() == 0)
+			return 0;
+		if (getIdentiferName(m.getArguments(0)).equals("self")) {
+			return m.getArgumentsCount() - 1;
+		}
+		return m.getArgumentsCount();
 	}
 	
+	public static Integer getNumMethodActualArg(Expression m) {
+		if(m.getMethodArgsCount()==0) return 0;
+		if(m.getMethodArgs(0).getExpressionsCount()==0) return 0;
+		return m.getMethodArgs(0).getExpressionsCount();
+	}
+
 	public static boolean isAssignKind(Expression node) {
 		if (node == null)
 			return false;
@@ -69,7 +80,7 @@ public class ForwardSlicerUtil {
 
 		return ret;
 	}
-	
+
 	public static List<String> getIdentiferNamesAsList(Expression node) {
 		List<String> ret = new ArrayList<String>();
 
@@ -148,6 +159,23 @@ public class ForwardSlicerUtil {
 
 		return ret;
 	}
+	
+	public static HashMap<String, Integer> getArgumentsMap(Method node) {
+		HashMap<String, Integer> ret = new HashMap<String, Integer>();
+
+		if (node == null)
+			return ret;
+
+		for (Variable e : node.getArgumentsList()) {
+			if (e.hasName())
+				ret.put(e.getName(), e.getId());
+			else if (e.hasComputedName() && e.getComputedName().hasVariable())
+				ret.put(e.getComputedName().getVariable(), e.getComputedName().getId());
+		}
+
+		return ret;
+	}
+	
 	public static List<String> getIdentiferNamesAsList(Statement node) {
 		ArrayList<String> ret = new ArrayList<String>();
 
@@ -155,12 +183,17 @@ public class ForwardSlicerUtil {
 			return ret;
 
 		for (Variable e : node.getVariableDeclarationsList()) {
-			if (e.hasName())
-				ret.add(e.getName());
-			else if (e.hasComputedName() && e.getComputedName().hasVariable())
-				ret.add(e.getComputedName().getVariable());
+			ret.add(getIdentiferName(e));
 		}
 		return ret;
 	}
-	
+
+	public static String getIdentiferName(Variable e) {
+		if (e.hasName())
+			return e.getName();
+		else if (e.hasComputedName() && e.getComputedName().hasVariable())
+			return e.getComputedName().getVariable();
+		return "";
+	}
+
 }
