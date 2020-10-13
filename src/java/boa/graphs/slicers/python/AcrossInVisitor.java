@@ -33,6 +33,15 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 
 		if(node.getKind()==StatementKind.ASSERT) return false;
 		
+		if(node.getKind()==StatementKind.RETURN && node.getExpressionsCount()>0)
+		{
+			if(SliceCriteriaAnalysis.isExpressionModified(node.getExpressions(0)) ||
+					SliceCriteriaAnalysis.isExpressionImpacted(node.getExpressions(0)))
+			{
+				Status.returnImpacted.put(Status.getCurrentScope(), true);
+			}
+		}
+		
 		ForwardSlicer.handleStatementForSymbolTable(node);
 		
 		final List<Statement> statementsList = node.getStatementsList();
@@ -67,8 +76,20 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 	@Override
 	protected boolean preVisit(final Expression node) throws Exception {
 	
+		if(node.getKind()==ExpressionKind.YIELD && node.getExpressionsCount()>0)
+		{
+			if(SliceCriteriaAnalysis.isExpressionModified(node.getExpressions(0)) ||
+					SliceCriteriaAnalysis.isExpressionImpacted(node.getExpressions(0)))
+			{
+				Status.returnImpacted.put(Status.getCurrentScope(), true);
+			}
+		}
+		
+		
 		if (ForwardSlicerUtil.isProperAssignKind(node) && !Status.isMethodCallScope()) {
 			ForwardSlicer.handleExpressionForSymbolTable(node);
+			
+			makeJump(node);
 		}
 		
 		if (ForwardSlicerUtil.isMethodCallKind(node)) {
@@ -130,11 +151,39 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 				Status.currentCallDepth>=Status.maximumCallDepth)
 			return JumpStatus.JUMP_NOT_MADE;
 
-		Expression node = mainNode;
-		if (ForwardSlicerUtil.isProperAssignKind(mainNode))
-			node = mainNode.getExpressions(1);
+		List<Expression> leftExps=new ArrayList<Expression>();
+		List<Expression> rightExps=new ArrayList<Expression>();
 
-		String methodName = resolveMethodNameForJump(ForwardSlicerUtil.convertExpressionToString(node), node.getId());
+		if (ForwardSlicerUtil.isProperAssignKind(mainNode))
+		{
+			leftExps=ForwardSlicerUtil.expandOtherExpressions(mainNode.getExpressions(0));
+			rightExps=ForwardSlicerUtil.expandOtherExpressions(mainNode.getExpressions(1));
+			
+			if(rightExps.size()!=1 && rightExps.size()!=leftExps.size())
+				return JumpStatus.JUMP_NOT_MADE;
+			
+			if(rightExps.size()==leftExps.size())
+			{
+				JumpStatus jumpStatus=JumpStatus.JUMP_NOT_MADE;
+				for(int i=0;i<leftExps.size();i++)
+				{
+					if(makeJump(leftExps.get(i), rightExps.get(i))==JumpStatus.JUMP_MADE)
+						jumpStatus=JumpStatus.JUMP_MADE;
+				}
+				return jumpStatus;
+			}
+			else
+				return makeJump(mainNode.getExpressions(0), mainNode.getExpressions(1));
+		}
+		else
+			return makeJump(null, mainNode);
+	}
+	
+	private JumpStatus makeJump(Expression left, Expression right) throws Exception {
+		if (right==null || right.getKind()!=ExpressionKind.METHODCALL)
+			return JumpStatus.JUMP_NOT_MADE;
+
+		String methodName = resolveMethodNameForJump(ForwardSlicerUtil.convertExpressionToString(right), right.getId());
 
 		if(Status.DEBUG)
 			System.out.println("Resolved method name for across-in jump: "+methodName);
@@ -143,12 +192,12 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 			return JumpStatus.JUMP_NOT_MADE;
 				
 		visitedScope.put(methodName, true);
-		Status.callPointMap.put(methodName, mainNode.getId());
+		Status.callPointMap.put(methodName, right.getId());
 		
 		String scope=Status.getCurrentScope();
 		String nextScope=scope+Status.acrossInStackSeparator+methodName;
 		
-		if(this.mapParameter(Status.astMethodMap.get(methodName), node, nextScope))
+		if(this.mapParameter(Status.astMethodMap.get(methodName), right, nextScope))
 		{
 			Status.acrossInStack.push(methodName);
 
@@ -156,6 +205,20 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 
 			visit(Status.astMethodMap.get(methodName));
 
+			if(left!=null && Status.returnImpacted.containsKey(nextScope))
+			{
+				Status.returnImpacted.remove(nextScope);
+				for(Expression ex: ForwardSlicerUtil.expandOtherExpressions(left))
+				{
+					SymbolTable.addToCriteria(ForwardSlicerUtil.convertExpressionToString(ex), 
+							ex.getId(), scope);
+					if(Status.DEBUG)
+					{
+						System.out.println("Adding in slice criteria (return-mapping), Scope: " + scope + ", Variable:"
+								+ ForwardSlicerUtil.convertExpressionToString(ex) + ",Location: " + ex.getId());
+					}
+				}
+			}
 			Status.acrossInStack.pop();
 			Status.currentCallDepth = Status.currentCallDepth - 1;
 		}

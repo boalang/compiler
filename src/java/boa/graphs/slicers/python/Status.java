@@ -26,6 +26,8 @@ public class Status {
 	public static HashMap<String, Method> astMethodMap;
 	public static HashMap<Integer, Integer> cfgToAstIdMap;
 
+	public static HashMap<String, Boolean> returnImpacted;
+
 	public static List<String> libraryFilter;
 	public static List<String> moduleFilter;
 //	public static HashMap<Integer, String> aliasName;
@@ -67,6 +69,7 @@ public class Status {
 		moduleFilter = new ArrayList<String>();
 		importMap = new HashMap<String, String>();
 		objectNameMap = new HashMap<String, String>();
+		returnImpacted=new HashMap<String, Boolean>();
 	}
 
 	public static String getCurrentScope() {
@@ -232,6 +235,7 @@ public class Status {
 		callPointMap.clear();
 		objectNameMap.clear();
 		acrossInParameterMap.clear();
+		returnImpacted.clear();
 	}
 
 	public static void setLibraryFilter(String[] b) {

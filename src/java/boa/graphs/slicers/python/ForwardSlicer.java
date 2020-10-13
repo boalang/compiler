@@ -101,6 +101,8 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		if (ForwardSlicerUtil.isProperAssignKind(node) && !Status.isMethodCallScope()) {
 
 			handleExpressionForSymbolTable(node);
+			
+			acrossInVisitor.initiateJump(node);
 		}
 
 		if (ForwardSlicerUtil.isMethodCallKind(node)) {
