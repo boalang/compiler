@@ -3,8 +3,10 @@ package boa.graphs.slicers.python;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 import boa.graphs.cfg.CFG;
@@ -25,6 +27,7 @@ public class Status {
 	public static HashMap<String, CFG> cfgMap;
 	public static HashMap<String, Method> astMethodMap;
 	public static HashMap<Integer, Integer> cfgToAstIdMap;
+	public static Set<Integer> slicedSet;
 
 	public static HashMap<String, Boolean> returnImpacted;
 
@@ -70,6 +73,7 @@ public class Status {
 		importMap = new HashMap<String, String>();
 		objectNameMap = new HashMap<String, String>();
 		returnImpacted=new HashMap<String, Boolean>();
+		slicedSet=new HashSet<Integer>();
 	}
 
 	public static String getCurrentScope() {
@@ -85,6 +89,9 @@ public class Status {
 			return acrossInStack.peek();
 		}
 		return getCurrentScope();
+	}
+	public static String getProperScope(String scope) {
+		return scope.substring(scope.lastIndexOf(Status.acrossInStackSeparator)+1);
 	}
 
 	public static String getParentScope(String scope) {
@@ -236,6 +243,7 @@ public class Status {
 		objectNameMap.clear();
 		acrossInParameterMap.clear();
 		returnImpacted.clear();
+		slicedSet.clear();
 	}
 
 	public static void setLibraryFilter(String[] b) {

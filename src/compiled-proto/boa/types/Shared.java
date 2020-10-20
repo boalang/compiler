@@ -89,6 +89,10 @@ public final class Shared {
      * <code>UNMAPPED = 9;</code>
      */
     UNMAPPED(11, 9),
+    /**
+     * <code>IMPACTED = 10;</code>
+     */
+    IMPACTED(12, 10),
     ;
 
     /**
@@ -195,6 +199,10 @@ public final class Shared {
      * <code>UNMAPPED = 9;</code>
      */
     public static final int UNMAPPED_VALUE = 9;
+    /**
+     * <code>IMPACTED = 10;</code>
+     */
+    public static final int IMPACTED_VALUE = 10;
 
 
     public final int getNumber() { return value; }
@@ -211,6 +219,7 @@ public final class Shared {
         case 7: return MERGED;
         case 8: return UNCHANGED;
         case 9: return UNMAPPED;
+        case 10: return IMPACTED;
         default: return null;
       }
     }
@@ -241,7 +250,7 @@ public final class Shared {
     }
 
     private static final ChangeKind[] VALUES = {
-      UNKNOWN, ADDED, DELETED, REMOVED, MODIFIED, CHANGED, RENAMED, MOVED, COPIED, MERGED, UNCHANGED, UNMAPPED, 
+      UNKNOWN, ADDED, DELETED, REMOVED, MODIFIED, CHANGED, RENAMED, MOVED, COPIED, MERGED, UNCHANGED, UNMAPPED, IMPACTED, 
     };
 
     public static ChangeKind valueOf(
@@ -1223,11 +1232,11 @@ public final class Shared {
     java.lang.String[] descriptorData = {
       "\n\014shared.proto\022\tboa.types\"<\n\006Person\022\020\n\010u" +
       "sername\030\001 \002(\t\022\021\n\treal_name\030\002 \001(\t\022\r\n\005emai" +
-      "l\030\003 \001(\t*\252\001\n\nChangeKind\022\013\n\007UNKNOWN\020\000\022\t\n\005A" +
+      "l\030\003 \001(\t*\270\001\n\nChangeKind\022\013\n\007UNKNOWN\020\000\022\t\n\005A" +
       "DDED\020\001\022\013\n\007DELETED\020\002\022\013\n\007REMOVED\020\002\022\014\n\010MODI" +
       "FIED\020\003\022\013\n\007CHANGED\020\003\022\013\n\007RENAMED\020\004\022\t\n\005MOVE" +
       "D\020\005\022\n\n\006COPIED\020\006\022\n\n\006MERGED\020\007\022\r\n\tUNCHANGED" +
-      "\020\010\022\014\n\010UNMAPPED\020\t\032\002\020\001B\002H\001"
+      "\020\010\022\014\n\010UNMAPPED\020\t\022\014\n\010IMPACTED\020\n\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

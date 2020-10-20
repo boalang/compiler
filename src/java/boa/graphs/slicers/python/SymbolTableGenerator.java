@@ -26,7 +26,7 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
 		Status.cfgMap.put(Status.getCurrentScope(), BoaGraphIntrinsics.getcfg(node));
 		Status.cfgToAstIdMapper();
-
+		
 		for (String imp : node.getImportsList()) {
 			if (imp.matches("^\\..*") || imp.equals("")) // ignore relative imports
 				continue;
@@ -64,6 +64,7 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 							Status.importMap.put(p2[1], p2[0] + "." + p2[1]);
 						}
 					} else {
+
 						Status.importMap.put(BoaStringIntrinsics.substring(imp, v + 4), BoaStringIntrinsics
 								.stringReplace(BoaStringIntrinsics.substring(imp, 0, v), " ", ".", true));
 					}
@@ -71,8 +72,10 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 			} else {
 				long v = BoaStringIntrinsics.indexOf(" as ", imp);
 				if (v != -1)
+				{
 					Status.importMap.put(BoaStringIntrinsics.substring(imp, v + 4),
 							BoaStringIntrinsics.substring(imp, 0, v));
+				}
 				else {
 					Status.importMap.put(imp, imp);
 
@@ -88,7 +91,7 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 
 		if (!Status.isModuleFound)
 			return false;
-
+		
 //		for (String lib : Status.moduleFilter) {
 //			Status.importMap.put(lib, lib);
 //

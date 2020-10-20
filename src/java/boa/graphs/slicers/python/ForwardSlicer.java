@@ -19,9 +19,9 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 
 	ASTRoot root;
 	AcrossInVisitor acrossInVisitor=new AcrossInVisitor();
+	boolean firstTurn=true;
 
-	public ForwardSlicer(ASTRoot _root, String[] moduleFilter, String[] filterCriteria, boolean changeImpactFlag,
-			boolean acrossInFlag) {
+	public ForwardSlicer(ASTRoot _root, String[] moduleFilter, String[] filterCriteria, boolean changeImpactFlag) {
 		this.root = _root;
 
 		Status.DEBUG = true;
@@ -29,9 +29,7 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		Status.setLibraryFilter(filterCriteria);
 		Status.setModuleFilter(moduleFilter);
 		Status.changeImpactAnalysisFlag = changeImpactFlag;
-		Status.acrossInFlag = acrossInFlag;
 
-		Status.acrossInFlag=true;
 
 		SymbolTableGenerator st = new SymbolTableGenerator();
 
@@ -46,6 +44,25 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public ASTRoot initiateVisit(boolean acrossInFlag)
+	{
+		Status.acrossInFlag = false;
+		try {
+			this.visit(root);
+			Status.acrossInFlag = acrossInFlag;
+			firstTurn=false;
+			this.visit(root);
+			
+			ASTRoot.Builder retAst=ASTRoot.newBuilder();
+			retAst.addNamespaces(new TreeChangeSetter().visit(root.getNamespaces(0)));
+			return retAst.build();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	protected boolean preVisit(final Namespace node) throws Exception {
@@ -71,9 +88,6 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
 		Status.namespaceScopeStack.push("method");
 		
-		if(node.getName().equals("fun3"))
-			System.out.println("");
-		
 		if(Status.DEBUG)
 			System.out.println("In method: "+node.getName());
 		
@@ -84,14 +98,15 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 	protected boolean preVisit(final Statement node) throws Exception {
 		if(node.getKind()==StatementKind.ASSERT) return false;
 
-		handleStatementForSymbolTable(node);
+		if(firstTurn)
+			handleStatementForSymbolTable(node);
 		return defaultPreVisit();
 	}
 
 	@Override
 	protected boolean preVisit(final Expression node) throws Exception {
 
-		if (ForwardSlicerUtil.isMethodCallKind(node)) {
+		if (ForwardSlicerUtil.isMethodCallKind(node) && !firstTurn) {
 			if(SliceCriteriaAnalysis.addSliceToResult(node)==SliceStatus.NOT_CANDIDATE)
 			{
 				acrossInVisitor.initiateJump(node);
@@ -99,10 +114,10 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		}
 
 		if (ForwardSlicerUtil.isProperAssignKind(node) && !Status.isMethodCallScope()) {
-
-			handleExpressionForSymbolTable(node);
-			
-			acrossInVisitor.initiateJump(node);
+			if(firstTurn)
+				handleExpressionForSymbolTable(node);
+			else
+				acrossInVisitor.initiateJump(node);
 		}
 
 		if (ForwardSlicerUtil.isMethodCallKind(node)) {
@@ -196,7 +211,7 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 							|| SliceCriteriaAnalysis.isExpressionImpacted(rightExps.get(i))) {
 
 						if (rightExps.get(i).getKind() == ExpressionKind.METHODCALL) {
-							String mt2 = NameResolver.resolveImport(rightIdentifierName, rightExps.get(i).getId());
+							String mt2 = NameResolver.resolveImport(rightIdentifierName,leftExps.get(i).getId(), rightExps.get(i).getId());
 							if (!mt2.equals("")) {
 								SymbolTable.addToCriteria(identiferName, leftExps.get(i).getId());
 								
@@ -223,7 +238,7 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 			if (SliceCriteriaAnalysis.isExpressionModified(rightExps.get(0))
 					|| SliceCriteriaAnalysis.isExpressionImpacted(rightExps.get(0))) {
 
-				String mt2 = NameResolver.resolveImport(rightIdentifierName, rightExps.get(0).getId());
+				String mt2 = NameResolver.resolveImport(rightIdentifierName,leftExps.get(0).getId(), rightExps.get(0).getId());
 				if (!mt2.equals("")) {
 					for (Expression ex : leftExps) {
 						String identiferName = ForwardSlicerUtil.convertExpressionToString(ex);
@@ -270,11 +285,14 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 				String identiferName = ForwardSlicerUtil.convertExpressionToString(leftExps.get(i));
 				if (!identiferName.equals("_") && !identiferName.equals(".") && !identiferName.equals("")) {
 					String rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(rightExps.get(i));
-
-					String mt2 = NameResolver.resolveImport(rightIdentifierName, rightExps.get(i).getId());
+					
+//					if(rightIdentifierName.equals("tf.morehabijbaji"))
+//						System.out.println("debug");
+					
+					String mt2 = NameResolver.resolveImport(rightIdentifierName,leftExps.get(i).getId(), rightExps.get(i).getId());
 					if(mt2.equals(""))
 					{
-						mt2 = AcrossInVisitor.resolveMethodNameForJump(rightIdentifierName, rightExps.get(i).getId());
+						mt2 = AcrossInVisitor.resolveMethodNameForJump(rightIdentifierName,leftExps.get(i).getId(), rightExps.get(i).getId());
 					}
 					if (!mt2.equals("")) {
 						SymbolTable.addToAliasSet(leftExps.get(i).getId(), mt2);

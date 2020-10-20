@@ -155,18 +155,17 @@ public class BoaSlicerIntrinsics {
 		return null;
 	}
 	
-	@FunctionSpec(name = "getmodification", returnType = "array of int", formalParameters = { "ASTRoot", "array of string", "array of string" })
-	public static long[] getmodification(final ASTRoot changedFile, String[] moduleFilter, 
+	@FunctionSpec(name = "getmodification", returnType = "ASTRoot", formalParameters = { "ASTRoot", "array of string", "array of string" })
+	public static ASTRoot getmodification(final ASTRoot changedFile, String[] moduleFilter, 
 			String[] filterCriteria) {
-		long[] arr = new long[1];
 		
-		ForwardSlicer slicer=new ForwardSlicer(changedFile, moduleFilter, filterCriteria, true, false);
-		try {
-			slicer.visit(changedFile);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return arr;
+		ForwardSlicer slicer=new ForwardSlicer(changedFile, moduleFilter, filterCriteria, true);
+		ASTRoot retAst= slicer.initiateVisit(true);
+		
+		if(retAst==null) return emptyAst;
+		
+		return retAst;
+		
 	}
 	
 	public static ASTRoot pythonAstToBoaAST(final PythonModuleDeclaration module, final String path) throws Exception {

@@ -48,4 +48,6 @@ enum ChangeKind {
 	UNCHANGED = 8;
 	
 	UNMAPPED = 9;
+	
+	IMPACTED = 10;
 }

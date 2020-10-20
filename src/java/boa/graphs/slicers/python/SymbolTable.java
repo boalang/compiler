@@ -78,6 +78,8 @@ public class SymbolTable {
 	
 	public static ArrayList<Integer> getDefLocations(String scope, String key)
 	{
+		scope=Status.getProperScope(scope);
+		
 		SymbolTable st=getSymbolTableForScope(scope);
 		
 		if(!st.defintions.containsKey(key))

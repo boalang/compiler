@@ -28,17 +28,25 @@ public class CfgUtil {
 		targetId = Status.cfgToAstIdMap.get(targetId);
 		
 		if (!sourceScope.equals(Status.getAcrossInScopeFromProper(targetScope))) {
+			Integer intermediateCfgTargetId = -1;
+
 			if (Status.acrossInSessionActive) {
 				if (Status.callPointMap.containsKey(sourceScope)) {
 					Integer callpointId = Status.callPointMap.get(sourceScope);
 					if (!Status.cfgToAstIdMap.containsKey(callpointId))
 						return false;
-					callpointId = Status.cfgToAstIdMap.get(callpointId);
-					
-					if(!isCfgNodesReachable(sourceId, callpointId, identifierName, sourceScope))
-						return false;
+					intermediateCfgTargetId = Status.cfgToAstIdMap.get(callpointId);
 				}
 			}
+			else
+			{
+				if(!isCfgDefined(sourceScope)) return false;
+				intermediateCfgTargetId=(int) Status.cfgMap.
+						get(Status.getProperScope(sourceScope)).getExitNode().getId();
+			}
+			
+			if(intermediateCfgTargetId!=-1 && !isCfgNodesReachable(sourceId, intermediateCfgTargetId, identifierName, sourceScope))
+				return false;
 			
 			sourceId = 0;
 		}
@@ -47,6 +55,8 @@ public class CfgUtil {
 	}
 
 	public static boolean isCfgNodesReachable(Integer sourceId, Integer targetId, String identifierName, String scope) {
+		scope=Status.getProperScope(scope);
+		
 		if (!isCfgDefined(scope))
 			return false;
 

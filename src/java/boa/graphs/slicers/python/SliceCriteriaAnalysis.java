@@ -15,25 +15,30 @@ public class SliceCriteriaAnalysis {
 	public static boolean isImpacted(String usedIdentifierName, Integer useAstLocation, String scope) {
 		String targetScope = scope;
 		while (!scope.equals("")) {
-			if (isImpacted(usedIdentifierName, useAstLocation, Status.getAcrossInScopeFromProper(scope), targetScope))
+			CfgReachbilityStatus reachbilityStatus=isImpacted(usedIdentifierName, useAstLocation, 
+					Status.getAcrossInScopeFromProper(scope),
+					targetScope);
+			if (reachbilityStatus==CfgReachbilityStatus.REACHABLE)
 				return true;
+			if (reachbilityStatus==CfgReachbilityStatus.UNREACHABLE)
+				return false;
 			scope = Status.getParentScope(scope);
 		}
 		return false;
 	}
 
-	private static boolean isImpacted(String usedIdentifierName, Integer useAstLocation, String sourceScope,
+	private static CfgReachbilityStatus isImpacted(String usedIdentifierName, Integer useAstLocation, String sourceScope,
 			String targetScope) {
 		ArrayList<Integer> criterias = SymbolTable.getCriteriaLocations(sourceScope, usedIdentifierName);
 		if (criterias == null || criterias.size() == 0)
-			return false; // not defined in this scope
+			return CfgReachbilityStatus.NOT_DEFINED; // not defined in this scope
 
 		for (Integer loc : criterias) {
 			if (CfgUtil.isAstNodesReachable(loc, useAstLocation, usedIdentifierName, sourceScope, targetScope)) {
-				return true;
+				return CfgReachbilityStatus.REACHABLE;
 			}
 		}
-		return false;
+		return CfgReachbilityStatus.UNREACHABLE;
 	}
 
 	public static boolean isExpressionImpacted(Expression node) {
@@ -105,19 +110,23 @@ public class SliceCriteriaAnalysis {
 		{
 			String identifierName = ForwardSlicerUtil.convertExpressionToString(node);
 
-			String mt2 = NameResolver.resolveImport(identifierName, node.getId());
+//			if(identifierName.equals("tf.habijabi"))
+//				System.out.println("debug");
+			
+			String mt2 = NameResolver.resolveImport(identifierName,null, node.getId());
 			
 			if (Status.DEBUG)
 				System.out.println("Trying to slice: "+identifierName+", resolved to: "+mt2);
 			
 			if(!mt2.equals(""))
 			{
-				if(isExpressionImpacted(node) || isExpressionImpacted(node))
+				if(isExpressionModified(node) || isExpressionImpacted(node))
 				{
 					if (Status.DEBUG)
 					{	
 				        System.out.println(Status.ANSI_GREEN+"Sliced line# "+mt2+Status.ANSI_RESET);
 					}
+					Status.slicedSet.add(node.getId());
 					return SliceStatus.SLICE_DONE;
 				}
 				
