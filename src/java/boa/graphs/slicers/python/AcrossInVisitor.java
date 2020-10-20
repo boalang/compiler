@@ -231,16 +231,18 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 			String leftIdentiferName = ForwardSlicerUtil.getIdentiferName(targetMethod.getArguments(j));
 			Integer leftId = targetMethod.getArguments(j).getId();
 
-			boolean flagCriteria = false;
-
 			if (ForwardSlicerUtil.isProperAssignKind(ex)) {
+				String rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(ex.getExpressions(0));
+
 				if (SliceCriteriaAnalysis.isExpressionModified(ex.getExpressions(1))
 						|| SliceCriteriaAnalysis.isExpressionImpacted(ex.getExpressions(1))) {
-					flagCriteria = true;
-
+					SymbolTable.addToCriteria(rightIdentifierName, leftId, nextScope);
+					if (Status.DEBUG) {
+						System.out.println("Adding in slice criteria (parameter-mapping), Scope: " + nextScope
+								+ ", Variable:" + rightIdentifierName + ",Location: " + leftId);
+					}
 				}
-
-				String rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(ex.getExpressions(1));
+			    rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(ex.getExpressions(1));
 
 				String mt2 = NameResolver.resolveName(rightIdentifierName, ex.getExpressions(0).getId(),
 						ex.getExpressions(1).getId());
@@ -252,8 +254,12 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 				}
 			} else if (SliceCriteriaAnalysis.isExpressionModified(ex)
 					|| SliceCriteriaAnalysis.isExpressionImpacted(ex)) {
-				flagCriteria = true;
-
+				
+				SymbolTable.addToCriteria(leftIdentiferName, leftId, nextScope);
+				if (Status.DEBUG) {
+					System.out.println("Adding in slice criteria (parameter-mapping), Scope: " + nextScope
+							+ ", Variable:" + leftIdentiferName + ",Location: " + leftId);
+				}
 				String rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(ex);
 
 				String mt2 = NameResolver.resolveName(rightIdentifierName, null, ex.getId());
@@ -264,14 +270,6 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 								.println("Mapping for alias(parameter-mapping): " + leftIdentiferName + " ==> " + mt2);
 				}
 
-			}
-
-			if (flagCriteria) {
-				SymbolTable.addToCriteria(leftIdentiferName, leftId, nextScope);
-				if (Status.DEBUG) {
-					System.out.println("Adding in slice criteria (parameter-mapping), Scope: " + nextScope
-							+ ", Variable:" + leftIdentiferName + ",Location: " + leftId);
-				}
 			}
 			j++;
 		}
@@ -284,9 +282,12 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 
 		if (tmp == "")
 			tmp = methodName;
+		methodName=tmp;
 		tmp = resolveMethodNameForJump(tmp);
+		if (tmp == "" && methodName.startsWith("self."))
+			tmp = methodName.substring(5);
 
-		return tmp;
+		return resolveMethodNameForJump(tmp);
 	}
 
 	private static String resolveMethodNameForJump(String methodName) {

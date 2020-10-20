@@ -2,3 +2,4 @@
 2. In calling scope, check for instances of self.variable
 3. whole snapshot analysis?
 4. call-graph path traversal only? identify start nodes?
+5. callback handle
