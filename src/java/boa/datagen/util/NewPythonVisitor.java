@@ -339,6 +339,12 @@ public class NewPythonVisitor extends ASTVisitor {
 			}
 
 		}
+		if (node.getDecorators() != null) {
+			for (Object ob : node.getDecorators()) {
+				((ASTNode) ob).traverse(this);
+				b.addModifiers(modifiers.pop());
+			}
+		}
 
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 
@@ -423,11 +429,14 @@ public class NewPythonVisitor extends ASTVisitor {
 			}
 		}
 
-		Type.Builder tb = Type.newBuilder();
-		String name = "";
-		tb.setKind(boa.types.Ast.TypeKind.OTHER);
-		tb.setName(name);
-		b.setReturnType(tb.build());
+		if(s.getReturnType()!=null)
+		{
+			Type.Builder tb = Type.newBuilder();
+			dealExpression(s.getReturnType());
+			tb.setComputedName(expressions.pop());
+			tb.setKind(boa.types.Ast.TypeKind.OTHER);
+			b.setReturnType(tb.build());
+		}
 		list.add(b.build());
 
 		return false;
@@ -1515,6 +1524,13 @@ public class NewPythonVisitor extends ASTVisitor {
 		if (node.getInitialization() != null) {
 			dealExpression(node.getInitialization());
 			b.setInitializer(expressions.pop());
+		}
+		if (node.getDataType() != null) {
+			Type.Builder tb = Type.newBuilder();
+			dealExpression(node.getDataType());
+			tb.setComputedName(expressions.pop());
+			tb.setKind(boa.types.Ast.TypeKind.OTHER);
+			b.setVariableType(tb.build());
 		}
 		list.add(b.build());
 		return false;
