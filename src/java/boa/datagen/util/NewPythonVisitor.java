@@ -14,6 +14,7 @@ import org.eclipse.dltk.ast.declarations.MethodDeclaration;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.ast.declarations.ModuleDeclarationWrapper;
 import org.eclipse.dltk.ast.declarations.TypeDeclaration;
+import org.eclipse.dltk.ast.expressions.Expression;
 import org.eclipse.dltk.ast.expressions.ExpressionConstants;
 import org.eclipse.dltk.ast.expressions.ExpressionList;
 import org.eclipse.dltk.ast.expressions.NumericLiteral;
@@ -57,6 +58,7 @@ import org.eclipse.dltk.python.parser.ast.expressions.PythonSetExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTestListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTupleExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonWithExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.ShortHandIfExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.UnaryExpression;
 import org.eclipse.dltk.python.parser.ast.statements.BreakStatement;
@@ -176,7 +178,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		} else if (md instanceof ExtendedVariableReference) {
 			visit((ExtendedVariableReference) md);
 			opFound = true;
-		} else if (md instanceof PythonTupleExpression) {
+		}  else if (md instanceof PythonWithExpression) {
+			visit((PythonWithExpression) md);
+			opFound = true;
+		}
+		else if (md instanceof PythonTupleExpression) {
 			visit((PythonTupleExpression) md);
 			opFound = true;
 		} else if (md instanceof PythonArgument) {
@@ -924,20 +930,27 @@ public class NewPythonVisitor extends ASTVisitor {
 			if (status != ChangeKind.UNCHANGED && status != null)
 				b.setChange(status);
 		}
-		if (s.getWhat() != null) {
-			dealExpression(s.getWhat());
-			boa.types.Ast.Expression ex = expressions.pop();
-			b.addExpressions(ex);
-		}
+		if(s.getWithExps()!=null)
+		{
+			for(PythonWithExpression ex: s.getWithExps())
+			{
+				if(ex.getAs()!=null)
+				{
+					fields.push(new ArrayList<Variable>());
+					
+					dealExpression(ex);
 
-		// Check if adding the variable name as ComputedName is okay
-		if (s.getAs() != null) {
-			dealExpression(s.getAs());
-			boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
-			if (enableDiff)
-				vb.setId(this.id++);
-			vb.setComputedName(expressions.pop());
-			b.addVariableDeclarations(vb.build());
+					List<boa.types.Ast.Variable> fs = fields.pop();
+
+					for (boa.types.Ast.Variable v : fs)
+						b.addVariableDeclarations(v);
+				}
+				else
+				{
+					dealExpression(ex);
+					b.addExpressions(expressions.pop());
+				}
+			}
 		}
 
 		if (s.getBlock() != null) {
@@ -1533,6 +1546,50 @@ public class NewPythonVisitor extends ASTVisitor {
 			b.setVariableType(tb.build());
 		}
 		list.add(b.build());
+		return false;
+
+	}
+	
+	public boolean visit(PythonWithExpression node) throws Exception {
+		
+		if(node.getWhat()!=null)
+		{
+			dealExpression(node.getWhat());
+
+			if(node.getAs()!=null)
+			{
+				Variable.Builder b = Variable.newBuilder();
+				List<Variable> list = fields.peek();
+				
+				b.setInitializer(expressions.pop());
+				
+				dealExpression(node.getAs());
+
+				b.setComputedName(expressions.pop());
+				
+				if (enableDiff) {
+					b.setId(this.id++);
+					ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+					if (status != ChangeKind.UNCHANGED && status != null)
+						b.setChange(status);
+				}
+				list.add(b.build());
+				
+			}
+			return false;
+			
+		}
+		boa.types.Ast.Expression.Builder ex=boa.types.Ast.Expression.newBuilder();
+
+		if (enableDiff) {
+			ex.setId(this.id++);
+			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				ex.setChange(status);
+		}
+	    ex.setKind(ExpressionKind.EMPTY);
+
+		expressions.push(ex.build());
 		return false;
 
 	}

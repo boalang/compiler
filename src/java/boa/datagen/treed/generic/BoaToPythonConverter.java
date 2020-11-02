@@ -47,6 +47,7 @@ import org.eclipse.dltk.python.parser.ast.expressions.PythonListForExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSetExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonTupleExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonWithExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.ShortHandIfExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.UnaryExpression;
 import org.eclipse.dltk.python.parser.ast.statements.BreakStatement;
@@ -328,19 +329,30 @@ public class BoaToPythonConverter {
 		PythonWithStatement ast=null;
 		org.eclipse.dltk.ast.expressions.Expression asExp=null;
 		org.eclipse.dltk.ast.expressions.Expression whatExp=null;
-		if(node.getVariableDeclaration()!=null)
+		List<PythonWithExpression> withExpressions=new ArrayList<PythonWithExpression>();
+		
+		for(Variable v: node.getVariableDeclarationsList())
 		{
-			if(node.getVariableDeclaration().getComputedName()!=null)
+			if(v.getInitializer()!=null && v.getComputedName()!=null)
 			{
-				asExp=(org.eclipse.dltk.ast.expressions.Expression) visit(node.getVariableDeclaration().getComputedName());
+				ASTNode chast=visit(v.getInitializer());
+				if(chast!=null)
+					whatExp=(org.eclipse.dltk.ast.expressions.Expression) chast;
+				
+				asExp=(org.eclipse.dltk.ast.expressions.Expression) visit(v.
+						getComputedName());
+				withExpressions.add(new PythonWithExpression(new DLTKToken(), whatExp, asExp, 0, 0));
 			}
 		}
-		if(node.getExpressionsCount()>=1)
+
+		for(Expression ex: node.getExpressionsList())
 		{
-			ASTNode chast=visit(node.getExpressions(0));
+			ASTNode chast=visit(ex);
 			if(chast!=null)
 				whatExp=(org.eclipse.dltk.ast.expressions.Expression) chast;
+			withExpressions.add(new PythonWithExpression(new DLTKToken(), whatExp, null, 0, 0));
 		}
+
 		org.eclipse.dltk.ast.expressions.Expression body=null;
 		if(node.getStatementsCount()>=1)
 		{
@@ -348,7 +360,7 @@ public class BoaToPythonConverter {
 			if(chast!=null)
 				body=(org.eclipse.dltk.ast.expressions.Expression) chast;
 		}
-		ast=new PythonWithStatement(new DLTKToken(), whatExp, asExp, (Block) body, 0, 0);
+		ast=new PythonWithStatement(new DLTKToken(), withExpressions, (Block) body, 0, 0);
 		return ast;
 	}
 	

@@ -38,6 +38,7 @@ import org.eclipse.dltk.python.parser.ast.expressions.PythonImportExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonLambdaExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonListForExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonSubscriptExpression;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonWithExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.ShortHandIfExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.UnaryExpression;
 import org.eclipse.dltk.python.parser.ast.statements.BreakStatement;
@@ -760,13 +761,15 @@ public class TreedMapper implements TreedConstants {
 					mappedChildrenM.add(((PythonForStatement) nodeM).getfElseStatement());
 					mappedChildrenN.add(((PythonForStatement) nodeN).getfElseStatement());
 				} else if (nodeM instanceof PythonWithStatement) {
-					mappedChildrenM.add(((PythonWithStatement) nodeM).getWhat());
-					mappedChildrenN.add(((PythonWithStatement) nodeN).getWhat());
-					mappedChildrenM.add(((PythonWithStatement) nodeM).getAs());
-					mappedChildrenN.add(((PythonWithStatement) nodeN).getAs());
 					mappedChildrenM.add(((PythonWithStatement) nodeM).getBlock());
 					mappedChildrenN.add(((PythonWithStatement) nodeN).getBlock());
-				} else if (nodeM instanceof PythonYieldStatement) {
+				} else if (nodeM instanceof PythonWithExpression) {
+					mappedChildrenM.add(((PythonWithExpression) nodeM).getWhat());
+					mappedChildrenN.add(((PythonWithExpression) nodeN).getWhat());
+					mappedChildrenM.add(((PythonWithExpression) nodeM).getAs());
+					mappedChildrenN.add(((PythonWithExpression) nodeN).getAs());
+				}
+				else if (nodeM instanceof PythonYieldStatement) {
 					mappedChildrenM.add(((PythonYieldStatement) nodeM).getExpression());
 					mappedChildrenN.add(((PythonYieldStatement) nodeN).getExpression());
 				} else if (nodeM instanceof PythonDelStatement) {
