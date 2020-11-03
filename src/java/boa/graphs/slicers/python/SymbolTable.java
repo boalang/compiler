@@ -55,7 +55,8 @@ public class SymbolTable {
 	{
 		SymbolTable st=getSymbolTableForScope(scope);
 		
-		if(Status.isDirectClassScope() && !key.startsWith("self."))
+		if(Status.isDirectClassScope() && !Status.isParameterMapping
+				&& !key.startsWith("self."))
 		{
 			key="self."+key;
 		}

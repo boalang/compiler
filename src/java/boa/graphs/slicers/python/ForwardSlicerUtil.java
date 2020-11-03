@@ -175,6 +175,14 @@ public class ForwardSlicerUtil {
 
 		return ret;
 	}
+	public static String getVariableName(Variable e)
+	{
+		if (e.hasName())
+			return e.getName();
+		else if (e.hasComputedName() && e.getComputedName().hasVariable())
+			return e.getComputedName().getVariable();
+		return "";
+	}
 	
 	public static List<String> getIdentiferNamesAsList(Statement node) {
 		ArrayList<String> ret = new ArrayList<String>();

@@ -90,7 +90,10 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 		}
 
 		if (!Status.isModuleFound)
+		{
+			postVisit(node);
 			return false;
+		}
 		
 //		for (String lib : Status.moduleFilter) {
 //			Status.importMap.put(lib, lib);

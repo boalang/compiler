@@ -120,11 +120,14 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 	}
 
 	public JumpStatus initiateJump(Expression mainNode) throws Exception {
-
+				
 		if (Status.DEBUG)
 			System.out.println(
 					"Initiating across-in traversal for: " + ForwardSlicerUtil.convertExpressionToString(mainNode));
 
+		if(ForwardSlicerUtil.convertExpressionToString(mainNode).
+				equals("cls1fun1"))
+			System.out.println("");
 		visitedScope.clear();
 
 		String scope = Status.getCurrentScope();
@@ -140,7 +143,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 
 		if (Status.DEBUG)
 			System.out.println("Exiting across-in traversal: " + jumpStatus.toString());
-
+		
 		return jumpStatus;
 	}
 
@@ -224,6 +227,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 	public static boolean mapParameter(Method targetMethod, Expression callSite, String nextScope) {
 		if (ForwardSlicerUtil.getNumMethodFormalArg(targetMethod) != ForwardSlicerUtil.getNumMethodActualArg(callSite))
 			return false;
+		Status.isParameterMapping=true;
 		int j = 0;
 		if (ForwardSlicerUtil.hasSelfArg(targetMethod))
 			j = 1;
@@ -273,6 +277,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 			}
 			j++;
 		}
+		Status.isParameterMapping=false;
 		return true;
 	}
 

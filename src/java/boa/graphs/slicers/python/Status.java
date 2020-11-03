@@ -49,6 +49,7 @@ public class Status {
 	public static boolean acrossInSessionActive = false;
 
 	public static boolean DEBUG = false;
+	public static boolean isParameterMapping = false;
 
 	public static Integer maximumCallDepth = 20;
 	public static Integer currentCallDepth = 0;

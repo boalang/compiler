@@ -14,12 +14,13 @@ import boa.types.Ast.Namespace;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Statement.StatementKind;
+import boa.types.Ast.Variable;
 
 public class ForwardSlicer extends BoaAbstractVisitor {
 
 	ASTRoot root;
-	AcrossInVisitor acrossInVisitor=new AcrossInVisitor();
-	boolean firstTurn=true;
+	AcrossInVisitor acrossInVisitor = new AcrossInVisitor();
+	boolean firstTurn = true;
 
 	public ForwardSlicer(ASTRoot _root, String[] moduleFilter, String[] filterCriteria, boolean changeImpactFlag) {
 		this.root = _root;
@@ -29,7 +30,6 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		Status.setLibraryFilter(filterCriteria);
 		Status.setModuleFilter(moduleFilter);
 		Status.changeImpactAnalysisFlag = changeImpactFlag;
-
 
 		SymbolTableGenerator st = new SymbolTableGenerator();
 
@@ -45,20 +45,19 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 			e.printStackTrace();
 		}
 	}
-	
-	public ASTRoot initiateVisit(boolean acrossInFlag)
-	{
+
+	public ASTRoot initiateVisit(boolean acrossInFlag) {
 		Status.acrossInFlag = false;
 		try {
 			this.visit(root);
 			Status.acrossInFlag = acrossInFlag;
-			firstTurn=false;
+			firstTurn = false;
 			this.visit(root);
-			
-			ASTRoot.Builder retAst=ASTRoot.newBuilder();
+
+			ASTRoot.Builder retAst = ASTRoot.newBuilder();
 			retAst.addNamespaces(new TreeChangeSetter().visit(root.getNamespaces(0)));
 			return retAst.build();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -76,10 +75,10 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 
 		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
 		Status.namespaceScopeStack.push("class");
-		
-		if(Status.DEBUG)
-			System.out.println("In class: "+node.getName());
-		
+
+		if (Status.DEBUG)
+			System.out.println("In class: " + node.getName());
+
 		return defaultPreVisit();
 	}
 
@@ -87,18 +86,19 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 	protected boolean preVisit(final Method node) throws Exception {
 		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
 		Status.namespaceScopeStack.push("method");
-		
-		if(Status.DEBUG)
-			System.out.println("In method: "+node.getName());
-		
+
+		if (Status.DEBUG)
+			System.out.println("In method: " + node.getName());
+
 		return defaultPreVisit();
 	}
 
 	@Override
 	protected boolean preVisit(final Statement node) throws Exception {
-		if(node.getKind()==StatementKind.ASSERT) return false;
+		if (node.getKind() == StatementKind.ASSERT)
+			return false;
 
-		if(firstTurn)
+		if (firstTurn)
 			handleStatementForSymbolTable(node);
 		return defaultPreVisit();
 	}
@@ -107,14 +107,13 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 	protected boolean preVisit(final Expression node) throws Exception {
 
 		if (ForwardSlicerUtil.isMethodCallKind(node) && !firstTurn) {
-			if(SliceCriteriaAnalysis.addSliceToResult(node)==SliceStatus.NOT_CANDIDATE)
-			{
+			if (SliceCriteriaAnalysis.addSliceToResult(node) == SliceStatus.NOT_CANDIDATE) {
 				acrossInVisitor.initiateJump(node);
 			}
 		}
 
 		if (ForwardSlicerUtil.isProperAssignKind(node) && !Status.isMethodCallScope()) {
-			if(firstTurn)
+			if (firstTurn)
 				handleExpressionForSymbolTable(node);
 			else
 				acrossInVisitor.initiateJump(node);
@@ -123,7 +122,7 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		if (ForwardSlicerUtil.isMethodCallKind(node)) {
 			Status.statementScopeStack.push("call");
 		}
-		
+
 		return defaultPreVisit();
 	}
 
@@ -155,22 +154,44 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		Status.namespaceScopeStack.pop();
 		defaultPostVisit();
 	}
-	
-	public static void handleStatementForSymbolTable(Statement node)
-	{
+
+	public static void handleStatementForSymbolTable(Statement node) {
 		if (node.getKind() == StatementKind.FOREACH || node.getKind() == StatementKind.WITH) {
-			if (node.getExpressionsCount() > 0 && node.hasId()) {
-				List<Expression> rightExps = ForwardSlicerUtil.expandOtherExpressions(node.getExpressions(0));
-				HashMap<String, Integer> leftIdentifiers = ForwardSlicerUtil.getIdentiferNames(node);
-				if (leftIdentifiers != null) {
-					addForNameResolution(leftIdentifiers, rightExps);
-					addForCriteria(leftIdentifiers, rightExps);
+
+			List<Expression> rightExps = new ArrayList<>();
+			HashMap<String, Integer> leftIdentifiers = new HashMap<String, Integer>();
+
+			if (node.getKind() == StatementKind.WITH) {
+				if (node.hasId()) {
+
+					for (Variable b : node.getVariableDeclarationsList()) {
+						if (b.hasInitializer()) {
+							rightExps.add(b.getInitializer());
+							leftIdentifiers.put(ForwardSlicerUtil.getVariableName(b), b.getId());
+						}
+
+					}
+
 				}
+			}
+			if (node.getKind() == StatementKind.FOREACH) {
+				if (node.hasId()) {
+
+					for (Expression b : node.getConditionsList()) {
+						rightExps.add(b);
+					}
+
+				}
+				leftIdentifiers=ForwardSlicerUtil.getIdentiferNames(node);
+			}
+			if (leftIdentifiers != null) {
+				addForNameResolution(leftIdentifiers, rightExps);
+				addForCriteria(leftIdentifiers, rightExps);
 			}
 		}
 	}
-	public static void handleExpressionForSymbolTable(Expression node)
-	{
+
+	public static void handleExpressionForSymbolTable(Expression node) {
 		if (ForwardSlicerUtil.isProperAssignKind(node)) {
 
 			List<Expression> leftExps = ForwardSlicerUtil.expandOtherExpressions(node.getExpressions(0));
@@ -184,9 +205,9 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 	public static void addForCriteria(HashMap<String, Integer> leftIdentifiers, List<Expression> rightExps) {
 		List<Expression> left = new ArrayList<Expression>();
 		for (Map.Entry<String, Integer> entry : leftIdentifiers.entrySet()) {
-		    String identiferName = entry.getKey();
-		    Integer location = entry.getValue();
-		    Expression.Builder ex = Expression.newBuilder();
+			String identiferName = entry.getKey();
+			Integer location = entry.getValue();
+			Expression.Builder ex = Expression.newBuilder();
 			ex.setVariable(identiferName);
 			ex.setId(location);
 			ex.setKind(ExpressionKind.VARACCESS);
@@ -211,20 +232,21 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 							|| SliceCriteriaAnalysis.isExpressionImpacted(rightExps.get(i))) {
 
 						if (rightExps.get(i).getKind() == ExpressionKind.METHODCALL) {
-							String mt2 = NameResolver.resolveImport(rightIdentifierName,leftExps.get(i).getId(), rightExps.get(i).getId());
+							String mt2 = NameResolver.resolveImport(rightIdentifierName, leftExps.get(i).getId(),
+									rightExps.get(i).getId());
 							if (!mt2.equals("")) {
 								SymbolTable.addToCriteria(identiferName, leftExps.get(i).getId());
-								
+
 								if (Status.DEBUG)
 									System.out.println("Adding in slice criteria, Scope: " + scope + ", Variable:"
-										+ identiferName + ",Location: " + leftExps.get(i).getId());
+											+ identiferName + ",Location: " + leftExps.get(i).getId());
 							}
 						} else {
 							SymbolTable.addToCriteria(identiferName, leftExps.get(i).getId());
-							
+
 							if (Status.DEBUG)
 								System.out.println("Adding in slice criteria, Scope: " + scope + ", Variable:"
-									+ identiferName + ",Location: " + leftExps.get(i).getId());
+										+ identiferName + ",Location: " + leftExps.get(i).getId());
 
 						}
 
@@ -238,7 +260,8 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 			if (SliceCriteriaAnalysis.isExpressionModified(rightExps.get(0))
 					|| SliceCriteriaAnalysis.isExpressionImpacted(rightExps.get(0))) {
 
-				String mt2 = NameResolver.resolveImport(rightIdentifierName,leftExps.get(0).getId(), rightExps.get(0).getId());
+				String mt2 = NameResolver.resolveImport(rightIdentifierName, leftExps.get(0).getId(),
+						rightExps.get(0).getId());
 				if (!mt2.equals("")) {
 					for (Expression ex : leftExps) {
 						String identiferName = ForwardSlicerUtil.convertExpressionToString(ex);
@@ -246,10 +269,10 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 						if (!identiferName.equals("_") && !identiferName.equals(".") && !identiferName.equals("")) {
 
 							SymbolTable.addToCriteria(identiferName, ex.getId());
-							
+
 							if (Status.DEBUG)
 								System.out.println("Adding in slice criteria, Scope: " + scope + ", Variable:"
-									+ identiferName + ",Location: " + ex.getId());
+										+ identiferName + ",Location: " + ex.getId());
 						}
 					}
 				}
@@ -262,9 +285,9 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		List<Expression> left = new ArrayList<Expression>();
 
 		for (Map.Entry<String, Integer> entry : leftIdentifiers.entrySet()) {
-		    String identiferName = entry.getKey();
-		    Integer location = entry.getValue();
-		    Expression.Builder ex = Expression.newBuilder();
+			String identiferName = entry.getKey();
+			Integer location = entry.getValue();
+			Expression.Builder ex = Expression.newBuilder();
 			ex.setVariable(identiferName);
 			ex.setId(location);
 			ex.setKind(ExpressionKind.VARACCESS);
@@ -285,14 +308,15 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 				String identiferName = ForwardSlicerUtil.convertExpressionToString(leftExps.get(i));
 				if (!identiferName.equals("_") && !identiferName.equals(".") && !identiferName.equals("")) {
 					String rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(rightExps.get(i));
-					
+
 //					if(rightIdentifierName.equals("tf.morehabijbaji"))
 //						System.out.println("debug");
-					
-					String mt2 = NameResolver.resolveImport(rightIdentifierName,leftExps.get(i).getId(), rightExps.get(i).getId());
-					if(mt2.equals(""))
-					{
-						mt2 = AcrossInVisitor.resolveMethodNameForJump(rightIdentifierName,leftExps.get(i).getId(), rightExps.get(i).getId());
+
+					String mt2 = NameResolver.resolveImport(rightIdentifierName, leftExps.get(i).getId(),
+							rightExps.get(i).getId());
+					if (mt2.equals("")) {
+						mt2 = AcrossInVisitor.resolveMethodNameForJump(rightIdentifierName, leftExps.get(i).getId(),
+								rightExps.get(i).getId());
 					}
 					if (!mt2.equals("")) {
 						SymbolTable.addToAliasSet(leftExps.get(i).getId(), mt2);
