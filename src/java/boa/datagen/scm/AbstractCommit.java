@@ -702,10 +702,12 @@ public abstract class AbstractCommit {
 
 		}
 		if(debug) {
-			if(pythonParsingError)
-				writeErrorLog(projectName, path, this.id);
-			else
-				writeSuccessLog(projectName, path, this.id);
+			if(this.id != null) {
+				if(pythonParsingError)
+					writeErrorLog(projectName, path, this.id);
+				else
+					writeSuccessLog(projectName, path, this.id);
+			}
 		}
 		return !pythonParsingError;
 	}
