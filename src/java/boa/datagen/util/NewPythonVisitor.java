@@ -820,6 +820,8 @@ public class NewPythonVisitor extends ASTVisitor {
 			if (status != ChangeKind.UNCHANGED && status != null)
 				b.setChange(status);
 		}
+		
+		//to handle: Raise a from b
 		if (s.getExpression1() != null) {
 			dealExpression(s.getExpression1());
 			b.addExpressions(expressions.pop());
