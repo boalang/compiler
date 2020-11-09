@@ -381,6 +381,9 @@ public abstract class BoaAbstractVisitor {
 
 			if (node.hasAnonDeclaration())
 				visit(node.getAnonDeclaration());
+			
+			for (Statement statement : node.getStatementsList())
+				visit(statement);
 
 			postVisit(node);
 		}

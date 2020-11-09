@@ -755,13 +755,13 @@ public class BoaAstIntrinsics {
 		@Override
 		protected boolean preVisit(Type node) {
 			// FIXME
-			/*
+			
 			try {
 				parseGenericType(BoaAstIntrinsics.type_name(node.getName()).trim(), map);
 			} catch (final StackOverflowError e) {
 				System.err.println("STACK ERR: " + node.getName() + " -> " + BoaAstIntrinsics.type_name(node.getName()).trim());
 			}
-			*/
+			
 			return true;
 		}
 	}

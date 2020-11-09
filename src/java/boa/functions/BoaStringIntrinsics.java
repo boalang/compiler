@@ -204,6 +204,11 @@ public class BoaStringIntrinsics {
 		else
 			return str.replaceFirst(Pattern.quote(lit), rep);
 	}
+	
+	@FunctionSpec(name = "strreplaceall", returnType = "string", formalParameters = { "string", "string", "string" })
+	public static String stringReplaceAll(final String str, final String regex, final String rep) {
+		return str.replaceAll(regex, rep);
+	}
 
 	// cache the regular expression patterns for performance
 	private static Map<String, Matcher> matchers = new HashMap<String, Matcher>();
