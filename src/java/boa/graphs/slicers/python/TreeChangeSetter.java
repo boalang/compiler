@@ -10,6 +10,7 @@ import org.eclipse.dltk.ast.ASTVisitor;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Expression;
+import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Method;
 import boa.types.Ast.Namespace;
 import boa.types.Ast.Statement;
@@ -54,7 +55,7 @@ public class TreeChangeSetter {
 	Variable visit(Variable node) {
 		Variable.Builder b=node.toBuilder();
 		
-		if(!node.hasChange() && Status.slicedSet.contains(node.getId()))
+		if(!node.hasChange() && Status.slicedMap.containsKey(node.getId()))
 			b.setChange(ChangeKind.IMPACTED);
 				
 		if(node.getComputedName()!=null)
@@ -71,7 +72,7 @@ public class TreeChangeSetter {
 
 		Statement.Builder b=node.toBuilder(); 
 		
-		if(!node.hasChange() && Status.slicedSet.contains(node.getId()))
+		if(!node.hasChange() && Status.slicedMap.containsKey(node.getId()))
 			b.setChange(ChangeKind.IMPACTED);
 		
 		b.clearVariableDeclarations();
@@ -166,7 +167,7 @@ public class TreeChangeSetter {
 	Type visit(Type node) {
 		Type.Builder b=node.toBuilder(); 
 		
-		if(!node.hasChange() && Status.slicedSet.contains(node.getId()))
+		if(!node.hasChange() && Status.slicedMap.containsKey(node.getId()))
 			b.setChange(ChangeKind.IMPACTED);
 		
 		if(node.getComputedName()!=null)
@@ -179,8 +180,12 @@ public class TreeChangeSetter {
 
 		Expression.Builder b=node.toBuilder(); 
 		
-		if(!node.hasChange() && Status.slicedSet.contains(node.getId()))
+		if(!node.hasChange() && Status.slicedMap.containsKey(node.getId()))
+		{
 			b.setChange(ChangeKind.IMPACTED);
+			if(node.getKind()==ExpressionKind.METHODCALL)
+				b.setMethod(Status.slicedMap.get(node.getId()));
+		}
 		
 		b.setKind(node.getKind());
 		

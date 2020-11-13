@@ -86,12 +86,12 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		if (ForwardSlicerUtil.isProperAssignKind(node) && !Status.isMethodCallScope()) {
 			ForwardSlicer.handleExpressionForSymbolTable(node);
 
-			makeJump(node);
+			makeJump(node,false);
 		}
 
 		if (ForwardSlicerUtil.isMethodCallKind(node)) {
 			if (SliceCriteriaAnalysis.addSliceToResult(node) == SliceStatus.NOT_CANDIDATE) {
-				makeJump(node);
+				makeJump(node,false);
 			}
 		}
 
@@ -116,18 +116,16 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		String scope = Status.getCurrentScope();
 		SymbolTable.removeCriteriaMap(scope);
 		SymbolTable.removeAliasMap(scope);
+		Status.symbolTable.remove(scope);
 		defaultPostVisit();
 	}
 
-	public JumpStatus initiateJump(Expression mainNode) throws Exception {
+	public JumpStatus initiateJump(Expression mainNode, boolean isCallback) throws Exception {
 				
 		if (Status.DEBUG)
 			System.out.println(
 					"Initiating across-in traversal for: " + ForwardSlicerUtil.convertExpressionToString(mainNode));
 
-		if(ForwardSlicerUtil.convertExpressionToString(mainNode).
-				equals("cls1fun1"))
-			System.out.println("");
 		visitedScope.clear();
 
 		String scope = Status.getCurrentScope();
@@ -136,7 +134,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		Status.acrossInSessionActive = true;
 		Status.currentCallDepth = 0;
 
-		JumpStatus jumpStatus = makeJump(mainNode);
+		JumpStatus jumpStatus = makeJump(mainNode, isCallback);
 
 		Status.acrossInSessionActive = false;
 		Status.acrossInStack.clear();
@@ -147,7 +145,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		return jumpStatus;
 	}
 
-	public JumpStatus makeJump(Expression mainNode) throws Exception {
+	public JumpStatus makeJump(Expression mainNode, boolean isCallback) throws Exception {
 		if (!Status.acrossInFlag || !mainNode.hasId() || Status.currentCallDepth >= Status.maximumCallDepth)
 			return JumpStatus.JUMP_NOT_MADE;
 
@@ -164,18 +162,20 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 			if (rightExps.size() == leftExps.size()) {
 				JumpStatus jumpStatus = JumpStatus.JUMP_NOT_MADE;
 				for (int i = 0; i < leftExps.size(); i++) {
-					if (makeJump(leftExps.get(i), rightExps.get(i)) == JumpStatus.JUMP_MADE)
+					if (makeJump(leftExps.get(i), rightExps.get(i), isCallback) == JumpStatus.JUMP_MADE)
 						jumpStatus = JumpStatus.JUMP_MADE;
 				}
 				return jumpStatus;
 			} else
-				return makeJump(mainNode.getExpressions(0), mainNode.getExpressions(1));
+				return makeJump(mainNode.getExpressions(0), 
+						mainNode.getExpressions(1), isCallback);
 		} else
-			return makeJump(null, mainNode);
+			return makeJump(null, mainNode, isCallback);
 	}
 
-	private JumpStatus makeJump(Expression left, Expression right) throws Exception {
-		if (right == null || right.getKind() != ExpressionKind.METHODCALL)
+	private JumpStatus makeJump(Expression left, Expression right, boolean isCallback) throws Exception {
+		if (right == null || (right.getKind() != ExpressionKind.METHODCALL && 
+				right.getKind() != ExpressionKind.VARACCESS))
 			return JumpStatus.JUMP_NOT_MADE;
 		Integer leftId = null;
 		if (left != null)
@@ -195,7 +195,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		String scope = Status.getCurrentScope();
 		String nextScope = scope + Status.acrossInStackSeparator + methodName;
 
-		if (this.mapParameter(Status.astMethodMap.get(methodName), right, nextScope)) {
+		if (isCallback || this.mapParameter(Status.astMethodMap.get(methodName), right, nextScope)) {
 			Status.acrossInStack.push(methodName);
 
 			Status.currentCallDepth = Status.currentCallDepth + 1;
@@ -203,7 +203,6 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 			visit(Status.astMethodMap.get(methodName));
 
 			if (left != null && Status.returnImpacted.containsKey(nextScope)) {
-				Status.returnImpacted.remove(nextScope);
 				for (Expression ex : ForwardSlicerUtil.expandOtherExpressions(left)) {
 					SymbolTable.addToCriteria(ForwardSlicerUtil.convertExpressionToString(ex), ex.getId(), scope);
 					if (Status.DEBUG) {
@@ -212,7 +211,9 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 					}
 				}
 			}
+
 			Status.acrossInStack.pop();
+	
 			Status.currentCallDepth = Status.currentCallDepth - 1;
 		}
 		visitedScope.remove(methodName);
@@ -221,6 +222,10 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		if (Status.DEBUG)
 			System.out.println("Across-in jump made to " + methodName);
 
+		if (Status.returnImpacted.containsKey(nextScope)) {
+			Status.returnImpacted.remove(nextScope);
+			return JumpStatus.RETURN_IMPACTED;
+		}
 		return JumpStatus.JUMP_MADE;
 	}
 

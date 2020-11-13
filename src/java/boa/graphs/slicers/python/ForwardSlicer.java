@@ -25,7 +25,7 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 	public ForwardSlicer(ASTRoot _root, String[] moduleFilter, String[] filterCriteria, boolean changeImpactFlag) {
 		this.root = _root;
 
-		Status.DEBUG = true;
+		Status.DEBUG = false;
 
 		Status.setLibraryFilter(filterCriteria);
 		Status.setModuleFilter(moduleFilter);
@@ -56,6 +56,9 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 
 			ASTRoot.Builder retAst = ASTRoot.newBuilder();
 			retAst.addNamespaces(new TreeChangeSetter().visit(root.getNamespaces(0)));
+			
+			Status.clear();
+			
 			return retAst.build();
 
 		} catch (Exception e) {
@@ -108,7 +111,7 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 
 		if (ForwardSlicerUtil.isMethodCallKind(node) && !firstTurn) {
 			if (SliceCriteriaAnalysis.addSliceToResult(node) == SliceStatus.NOT_CANDIDATE) {
-				acrossInVisitor.initiateJump(node);
+				acrossInVisitor.initiateJump(node, false);
 			}
 		}
 
@@ -116,7 +119,7 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 			if (firstTurn)
 				handleExpressionForSymbolTable(node);
 			else
-				acrossInVisitor.initiateJump(node);
+				acrossInVisitor.initiateJump(node, false);
 		}
 
 		if (ForwardSlicerUtil.isMethodCallKind(node)) {

@@ -27,7 +27,8 @@ public class Status {
 	public static HashMap<String, CFG> cfgMap;
 	public static HashMap<String, Method> astMethodMap;
 	public static HashMap<Integer, Integer> cfgToAstIdMap;
-	public static Set<Integer> slicedSet;
+	public static HashMap<Integer, String> slicedMap;
+
 
 	public static HashMap<String, Boolean> returnImpacted;
 
@@ -74,7 +75,7 @@ public class Status {
 		importMap = new HashMap<String, String>();
 		objectNameMap = new HashMap<String, String>();
 		returnImpacted=new HashMap<String, Boolean>();
-		slicedSet=new HashSet<Integer>();
+		slicedMap = new HashMap<Integer, String>();
 	}
 
 	public static String getCurrentScope() {
@@ -237,14 +238,14 @@ public class Status {
 		symbolTable.clear();
 		cfgMap.clear();
 		astMethodMap.clear();
-		libraryFilter.clear();
-		moduleFilter.clear();
+//		libraryFilter.clear();
+//		moduleFilter.clear();
 		importMap.clear();
 		callPointMap.clear();
 		objectNameMap.clear();
 		acrossInParameterMap.clear();
 		returnImpacted.clear();
-		slicedSet.clear();
+		slicedMap.clear();
 	}
 
 	public static void setLibraryFilter(String[] b) {

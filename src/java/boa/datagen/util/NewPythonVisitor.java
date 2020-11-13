@@ -662,7 +662,6 @@ public class NewPythonVisitor extends ASTVisitor {
 		if (s.getCondition() != null) {
 			dealExpression(s.getCondition());
 			boa.types.Ast.Expression ex = expressions.pop();
-//			b.addExpressions(ex);
 			b.addConditions(ex);
 		}
 

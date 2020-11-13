@@ -1,4 +1,6 @@
 2. In calling scope, check for instances of self.variable [priority high]
 3. whole snapshot analysis? [medium]
 4. call-graph path traversal only? identify start nodes? [low]
-5. callback handle [high]
+5. callback handle [high] [Done]
+6. To add a resolved name field in Boa AST
+7. check boa to python conversion

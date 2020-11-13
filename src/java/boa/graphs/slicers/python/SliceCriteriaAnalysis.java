@@ -8,6 +8,8 @@ import boa.types.Shared.ChangeKind;
 
 public class SliceCriteriaAnalysis {
 
+	static AcrossInVisitor acrossInVisitor=new AcrossInVisitor();
+	
 	public static boolean isImpacted(String usedIdentifierName, Integer useAstLocation) {
 		return isImpacted(usedIdentifierName, useAstLocation, Status.getProperCurrentScope());
 	}
@@ -104,7 +106,7 @@ public class SliceCriteriaAnalysis {
 		return false;
 	}
 	
-	public static SliceStatus addSliceToResult(Expression node)
+	public static SliceStatus addSliceToResult(Expression node) throws Exception
 	{
 		if(node.hasId())
 		{
@@ -120,13 +122,42 @@ public class SliceCriteriaAnalysis {
 			
 			if(!mt2.equals(""))
 			{
+				boolean doSlice=false;
 				if(isExpressionModified(node) || isExpressionImpacted(node))
+				{
+					doSlice=true;
+				}
+				else //check callbacks
+				{
+					if(ForwardSlicerUtil.getNumMethodActualArg(node)>0)
+					{
+						for (Expression ex : node.getMethodArgs(0).getExpressionsList()) {
+							if(ForwardSlicerUtil.isProperAssignKind(ex) && 
+									ex.getExpressions(1).getKind()==ExpressionKind.VARACCESS)
+							{
+								if(Status.acrossInSessionActive && acrossInVisitor.makeJump(ex.getExpressions(1), true)==JumpStatus.RETURN_IMPACTED)
+									doSlice=true;
+								else if(!Status.acrossInSessionActive && acrossInVisitor.initiateJump(ex.getExpressions(1), true)==JumpStatus.RETURN_IMPACTED)
+									doSlice=true;
+							}
+							else if(ex.getKind()==ExpressionKind.VARACCESS)
+							{
+								if(Status.acrossInSessionActive && acrossInVisitor.makeJump(ex, true)==JumpStatus.RETURN_IMPACTED)
+									doSlice=true;
+								else if(!Status.acrossInSessionActive && acrossInVisitor.initiateJump(ex, true)==JumpStatus.RETURN_IMPACTED)
+									doSlice=true;
+							}
+						}
+					}
+				}
+				
+				if(doSlice)
 				{
 					if (Status.DEBUG)
 					{	
 				        System.out.println(Status.ANSI_GREEN+"Sliced line# "+mt2+Status.ANSI_RESET);
 					}
-					Status.slicedSet.add(node.getId());
+					Status.slicedMap.put(node.getId(), mt2);
 					return SliceStatus.SLICE_DONE;
 				}
 				
