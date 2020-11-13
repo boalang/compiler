@@ -187,7 +187,7 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 				}
 				leftIdentifiers=ForwardSlicerUtil.getIdentiferNames(node);
 			}
-			if (leftIdentifiers != null) {
+			if (leftIdentifiers != null && leftIdentifiers.size()>0) {
 				addForNameResolution(leftIdentifiers, rightExps);
 				addForCriteria(leftIdentifiers, rightExps);
 			}
@@ -199,9 +199,12 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 
 			List<Expression> leftExps = ForwardSlicerUtil.expandOtherExpressions(node.getExpressions(0));
 			List<Expression> rightExps = ForwardSlicerUtil.expandOtherExpressions(node.getExpressions(1));
-
-			addForNameResolution(leftExps, rightExps);
-			addForCriteria(leftExps, rightExps);
+			
+			if(leftExps!=null && leftExps.size()>0)
+			{
+				addForNameResolution(leftExps, rightExps);
+				addForCriteria(leftExps, rightExps);
+			}
 		}
 	}
 

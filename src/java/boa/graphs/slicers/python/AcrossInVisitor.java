@@ -174,9 +174,13 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 	}
 
 	private JumpStatus makeJump(Expression left, Expression right, boolean isCallback) throws Exception {
-		if (right == null || (right.getKind() != ExpressionKind.METHODCALL && 
-				right.getKind() != ExpressionKind.VARACCESS))
+		if (right == null)
 			return JumpStatus.JUMP_NOT_MADE;
+		if(isCallback==false && right.getKind() != ExpressionKind.METHODCALL)
+			return JumpStatus.JUMP_NOT_MADE;
+		if(isCallback && right.getKind() != ExpressionKind.VARACCESS)
+			return JumpStatus.JUMP_NOT_MADE;
+		
 		Integer leftId = null;
 		if (left != null)
 			leftId = left.getId();
