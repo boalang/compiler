@@ -3,5 +3,5 @@
 4. call-graph path traversal only? identify start nodes? [low]
 5. callback handle [high] [Done]
 6. To add a resolved name field in Boa AST
-7. check boa to python conversion
-8. dnn_api(user_defined_method()) -> whne not a callback, chekc that too
+7. check boa to python conversion [75% done: One more final check needed]
+8. dnn_api(user_defined_method()) -> when not a callback, check that too [done]

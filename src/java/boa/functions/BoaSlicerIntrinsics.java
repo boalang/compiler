@@ -135,7 +135,7 @@ public class BoaSlicerIntrinsics {
 	@FunctionSpec(name = "get_previous_file", returnType = "ChangedFile", formalParameters = { "CodeRepository",
 			"Revision", "ChangedFile" })
 	public static ChangedFile getPreviousFile(CodeRepository cr, Revision rev, ChangedFile cf) {
-		System.out.println("Retreiving old revision from: "+rev.getId());
+//		System.out.println("Retreiving old revision from: "+rev.getId());
 		String prevName = cf.getChange() == ChangeKind.RENAMED ? cf.getPreviousNames(0) : cf.getName();
 		rev = rev.getParentsCount() == 0 ? null : getRevision(cr, rev.getParents(0));
 		while (rev != null) {

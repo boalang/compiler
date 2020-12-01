@@ -133,18 +133,21 @@ public class SliceCriteriaAnalysis {
 					{
 						for (Expression ex : node.getMethodArgs(0).getExpressionsList()) {
 							if(ForwardSlicerUtil.isProperAssignKind(ex) && 
-									ex.getExpressions(1).getKind()==ExpressionKind.VARACCESS)
+									(ex.getExpressions(1).getKind()==ExpressionKind.VARACCESS || ex.getExpressions(1).getKind()==ExpressionKind.METHODCALL))
 							{
-								if(Status.acrossInSessionActive && acrossInVisitor.makeJump(ex.getExpressions(1), true)==JumpStatus.RETURN_IMPACTED)
+								if(Status.acrossInSessionActive && acrossInVisitor.makeJump(ex.getExpressions(1), 
+										ex.getExpressions(1).getKind()==ExpressionKind.VARACCESS)==JumpStatus.RETURN_IMPACTED)
 									doSlice=true;
-								else if(!Status.acrossInSessionActive && acrossInVisitor.initiateJump(ex.getExpressions(1), true)==JumpStatus.RETURN_IMPACTED)
+								else if(!Status.acrossInSessionActive && 
+										acrossInVisitor.initiateJump(ex.getExpressions(1), 
+												ex.getExpressions(1).getKind()==ExpressionKind.VARACCESS)==JumpStatus.RETURN_IMPACTED)
 									doSlice=true;
 							}
-							else if(ex.getKind()==ExpressionKind.VARACCESS)
+							else if(ex.getKind()==ExpressionKind.VARACCESS || ex.getKind()==ExpressionKind.METHODCALL)
 							{
-								if(Status.acrossInSessionActive && acrossInVisitor.makeJump(ex, true)==JumpStatus.RETURN_IMPACTED)
+								if(Status.acrossInSessionActive && acrossInVisitor.makeJump(ex, ex.getKind()==ExpressionKind.VARACCESS)==JumpStatus.RETURN_IMPACTED)
 									doSlice=true;
-								else if(!Status.acrossInSessionActive && acrossInVisitor.initiateJump(ex, true)==JumpStatus.RETURN_IMPACTED)
+								else if(!Status.acrossInSessionActive && acrossInVisitor.initiateJump(ex, ex.getKind()==ExpressionKind.VARACCESS)==JumpStatus.RETURN_IMPACTED)
 									doSlice=true;
 							}
 						}
