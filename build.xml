@@ -435,7 +435,9 @@
 					<exclude name="**/boa/types/proto/" />
 					<exclude name="**/boa/types/Boa*" />
 				</patternset>
-			</fileset>
+			</fileset>			
+			<zipgroupfileset includes="parse.python.jar" dir="lib"/>
+			<zipgroupfileset includes="customized.dltk.core.jar" dir="lib"/>
 		</jar>
 	</target>
 
@@ -452,6 +454,8 @@
 					<include name="templates/" />
 				</patternset>
 			</fileset>
+			<zipgroupfileset includes="customized.dltk.core.jar" dir="lib"/>
+			<zipgroupfileset includes="parse.python.jar" dir="lib"/>
 			<zipfileset excludes="META-INF/" src="rtlib/antlr-runtime-${antlr.version}.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/commons-cli-1.2.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/log4j-1.2.15.jar" />
