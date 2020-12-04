@@ -110,20 +110,17 @@ public class BoaToPythonConverter {
 
 		for (String imp : node.getImportsList()) {
 			if (imp.startsWith("from")) {
-				String[] p1 = BoaStringIntrinsics.splitall(imp, "from");
-				if (p1.length > 1) {
-					imp = BoaStringIntrinsics.trim(p1[1]);
+				imp = imp.substring("from".length());
+				imp = BoaStringIntrinsics.trim(imp);
 
-					long v = BoaStringIntrinsics.indexOf(" as ", imp);
-					if (v == -1) {
-						String[] p2 = BoaStringIntrinsics.splitall(imp, " ");
-						PythonTestListExpression ptl = new PythonTestListExpression();
-						ptl.addExpression(
-								(org.eclipse.dltk.ast.expressions.Expression) this.makeImportExpression(p2[1]));
-						ast.addStatement(new PythonImportFromStatement(new DLTKToken(),
-								new VariableReference(0, 0, p2[0]), ptl));
+				long v = BoaStringIntrinsics.indexOf(" as ", imp);
+				if (v == -1) {
+					String[] p2 = BoaStringIntrinsics.splitall(imp, " ");
+					PythonTestListExpression ptl = new PythonTestListExpression();
+					ptl.addExpression((org.eclipse.dltk.ast.expressions.Expression) this.makeImportExpression(p2[1]));
+					ast.addStatement(
+							new PythonImportFromStatement(new DLTKToken(), new VariableReference(0, 0, p2[0]), ptl));
 
-					}
 				} else {
 					String[] p2 = BoaStringIntrinsics.splitall(imp, " ");
 					PythonTestListExpression ptl = new PythonTestListExpression();
@@ -132,6 +129,7 @@ public class BoaToPythonConverter {
 					ast.addStatement(
 							new PythonImportFromStatement(new DLTKToken(), new VariableReference(0, 0, p2[0]), ptl));
 				}
+
 			} else {
 				long v = BoaStringIntrinsics.indexOf(" as ", imp);
 				if (v == -1) {
@@ -719,15 +717,17 @@ public class BoaToPythonConverter {
 	}
 
 	public final ASTNode visitExtendedExpression(final Expression node) throws Exception {
-		ExtendedVariableReference ast;
+		ExtendedVariableReference ast=null;
 		boolean methodInserted = false;
 
-		if (node.getExpressionsCount() == 0 && node.hasMethod()) {
+		if (node.getExpressionsCount() == 0 && node.getKind()==ExpressionKind.METHODCALL) {
 			ast = new ExtendedVariableReference(new VariableReference(0, 0, node.getMethod()));
 			methodInserted = true;
-		} else
+		} else if(node.getExpressionsCount() >0)
 			ast = new ExtendedVariableReference(
 					(org.eclipse.dltk.ast.expressions.Expression) visit(node.getExpressions(0)));
+		else
+			return null;
 
 		final List<Expression> expressionsList = node.getExpressionsList();
 		final int expressionsSize = expressionsList.size();
@@ -737,11 +737,11 @@ public class BoaToPythonConverter {
 				ast.addExpression((org.eclipse.dltk.ast.expressions.Expression) visit(ex));
 			else if (ex.getKind() == ExpressionKind.METHODCALL) {
 				ast.addExpression(new VariableReference(0, 0, ex.getMethod()));
-				
-				List<CallHolder> calls=visitCallHolderInMethodCallExpression(ex);
-				for(CallHolder cl: calls)
+
+				List<CallHolder> calls = visitCallHolderInMethodCallExpression(ex);
+				for (CallHolder cl : calls)
 					ast.addExpression(cl);
-				
+
 			} else if (ex.getKind() == ExpressionKind.ARRAYINDEX) {
 				ast.addExpression((org.eclipse.dltk.ast.expressions.Expression) visitIndexExpression(ex));
 			}
@@ -751,8 +751,8 @@ public class BoaToPythonConverter {
 			if (methodInserted == false)
 				ast.addExpression(new VariableReference(0, 0, node.getMethod()));
 
-			List<CallHolder> calls=visitCallHolderInMethodCallExpression(node);
-			for(CallHolder cl: calls)
+			List<CallHolder> calls = visitCallHolderInMethodCallExpression(node);
+			for (CallHolder cl : calls)
 				ast.addExpression(cl);
 
 		} else if (node.getKind() == ExpressionKind.VARACCESS) {

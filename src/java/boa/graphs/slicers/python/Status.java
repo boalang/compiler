@@ -37,7 +37,7 @@ public class Status {
 //	public static HashMap<Integer, String> aliasName;
 	public static boolean isModuleFound = false;
 	public static boolean hasBeenRedefinedAnywhere = false;
-	public static String acrossInStackSeparator = "-";
+	public static String acrossInStackSeparator = "->";
 	public static HashMap<String, Integer> callPointMap;
 	public static HashMap<String, Integer> acrossInParameterMap;
 

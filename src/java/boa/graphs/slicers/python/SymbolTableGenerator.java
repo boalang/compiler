@@ -19,14 +19,13 @@ import boa.types.Ast.Type;
 import boa.types.Ast.Variable;
 
 public class SymbolTableGenerator extends BoaAbstractVisitor {
-	
-	
+
 	@Override
 	protected boolean preVisit(final Namespace node) throws Exception {
 		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
 		Status.cfgMap.put(Status.getCurrentScope(), BoaGraphIntrinsics.getcfg(node));
 		Status.cfgToAstIdMapper();
-		
+
 		for (String imp : node.getImportsList()) {
 			if (imp.matches("^\\..*") || imp.equals("")) // ignore relative imports
 				continue;
@@ -51,32 +50,29 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 				continue;
 
 			if (imp.matches("^from .*")) {
-				String[] p1 = BoaStringIntrinsics.splitall(imp, "from");
-				if (p1.length > 1) {
-					imp = BoaStringIntrinsics.trim(p1[1]);
-					if (imp.matches("^\\..*"))
-						continue;
+				imp = imp.substring("from".length());
+				imp = BoaStringIntrinsics.trim(imp);
+				if (imp.matches("^\\..*"))
+					continue;
 
-					long v = BoaStringIntrinsics.indexOf(" as ", imp);
-					if (v == -1) {
-						String[] p2 = BoaStringIntrinsics.splitall(imp, " ");
-						if (p2.length == 2) {
-							Status.importMap.put(p2[1], p2[0] + "." + p2[1]);
-						}
-					} else {
-
-						Status.importMap.put(BoaStringIntrinsics.substring(imp, v + 4), BoaStringIntrinsics
-								.stringReplace(BoaStringIntrinsics.substring(imp, 0, v), " ", ".", true));
+				long v = BoaStringIntrinsics.indexOf(" as ", imp);
+				if (v == -1) {
+					String[] p2 = BoaStringIntrinsics.splitall(imp, " ");
+					if (p2.length == 2) {
+						Status.importMap.put(p2[1], p2[0] + "." + p2[1]);
 					}
+				} else {
+
+					Status.importMap.put(BoaStringIntrinsics.substring(imp, v + 4), BoaStringIntrinsics
+							.stringReplace(BoaStringIntrinsics.substring(imp, 0, v), " ", ".", true));
 				}
+
 			} else {
 				long v = BoaStringIntrinsics.indexOf(" as ", imp);
-				if (v != -1)
-				{
+				if (v != -1) {
 					Status.importMap.put(BoaStringIntrinsics.substring(imp, v + 4),
 							BoaStringIntrinsics.substring(imp, 0, v));
-				}
-				else {
+				} else {
 					Status.importMap.put(imp, imp);
 
 					v = BoaStringIntrinsics.indexOf(".", imp);
@@ -89,12 +85,11 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 
 		}
 
-		if (!Status.isModuleFound)
-		{
+		if (!Status.isModuleFound) {
 			postVisit(node);
 			return false;
 		}
-		
+
 //		for (String lib : Status.moduleFilter) {
 //			Status.importMap.put(lib, lib);
 //
@@ -103,112 +98,100 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 //			Status.importMap.put(lib, lib);
 //		}
 
-		Status.objectNameMap.put(Status.getCurrentScope(),Status.getCurrentScope());
+		Status.objectNameMap.put(Status.getCurrentScope(), Status.getCurrentScope());
 		return defaultPreVisit();
 	}
-	
+
 	@Override
 	protected boolean preVisit(final Declaration node) throws Exception {
-		
+
 		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
-		Status.objectNameMap.put(Status.getCurrentScope(),Status.getCurrentScope());
-		Status.cfgMap.put(Status.getCurrentScope(), 
-				BoaGraphIntrinsics.getcfg(node));
+		Status.objectNameMap.put(Status.getCurrentScope(), Status.getCurrentScope());
+		Status.cfgMap.put(Status.getCurrentScope(), BoaGraphIntrinsics.getcfg(node));
 		Status.cfgToAstIdMapper();
 		return defaultPreVisit();
 	}
-	
-	
+
 	@Override
 	protected boolean preVisit(final Method node) throws Exception {
 		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
-		Status.objectNameMap.put(Status.getCurrentScope(),Status.getCurrentScope());
+		Status.objectNameMap.put(Status.getCurrentScope(), Status.getCurrentScope());
 
-		Status.cfgMap.put(Status.getCurrentScope(), 
-				BoaGraphIntrinsics.getcfg(node));
+		Status.cfgMap.put(Status.getCurrentScope(), BoaGraphIntrinsics.getcfg(node));
 		Status.cfgToAstIdMapper();
-		for(Variable v: node.getArgumentsList())
-		{
+		for (Variable v : node.getArgumentsList()) {
 			Status.cfgToAstIdVariableMapper(v, 0);
 		}
-		
+
 		Status.astMethodMap.put(Status.getCurrentScope(), node);
-		
-		this.addToDefintions(ForwardSlicerUtil.
-				getArgumentsMap(node));
-		
+
+		this.addToDefintions(ForwardSlicerUtil.getArgumentsMap(node));
+
 		return defaultPreVisit();
 	}
-	
+
 	@Override
 	protected boolean preVisit(final Statement node) throws Exception {
-		if(node.getKind()==StatementKind.ASSERT) return false;
+		if (node.getKind() == StatementKind.ASSERT)
+			return false;
 
-		if(node.getKind()==StatementKind.FOREACH || node.getKind()==StatementKind.WITH)
-		{
-			this.addToDefintions(ForwardSlicerUtil.
-					getIdentiferNames(node));
+		if (node.getKind() == StatementKind.FOREACH || node.getKind() == StatementKind.WITH) {
+			this.addToDefintions(ForwardSlicerUtil.getIdentiferNames(node));
 		}
-		
+
 		return defaultPreVisit();
 	}
-	
+
 	@Override
 	protected boolean preVisit(final Expression node) throws Exception {
-				
-		if(ForwardSlicerUtil.isProperAssignKind(node) && !Status.isMethodCallScope())
-		{
-			HashMap<String, Integer> ids=ForwardSlicerUtil.
-					getIdentiferNames(node.getExpressions(0));
+
+		if (ForwardSlicerUtil.isProperAssignKind(node) && !Status.isMethodCallScope()) {
+			HashMap<String, Integer> ids = ForwardSlicerUtil.getIdentiferNames(node.getExpressions(0));
 			this.addToDefintions(ids);
 		}
-		
-		if(ForwardSlicerUtil.isMethodCallKind(node))
-		{
+
+		if (ForwardSlicerUtil.isMethodCallKind(node)) {
 			Status.statementScopeStack.push("call");
 		}
 		return defaultPreVisit();
 	}
-	private void addToDefintions(HashMap<String, Integer> mp)
-	{		
+
+	private void addToDefintions(HashMap<String, Integer> mp) {
 		for (Map.Entry<String, Integer> entry : mp.entrySet()) {
-		    String identiferName = entry.getKey();
-		    Integer location = entry.getValue();
-		    if(!identiferName.equals("_") && !identiferName.equals(".") &&
-		    		!identiferName.equals(""))
-		    	SymbolTable.addToDefintions(identiferName, location);
+			String identiferName = entry.getKey();
+			Integer location = entry.getValue();
+			if (!identiferName.equals("_") && !identiferName.equals(".") && !identiferName.equals(""))
+				SymbolTable.addToDefintions(identiferName, location);
 		}
 	}
-	
+
 	@Override
 	protected void postVisit(final Expression node) throws Exception {
-		if(ForwardSlicerUtil.isMethodCallKind(node))
-		{
+		if (ForwardSlicerUtil.isMethodCallKind(node)) {
 			Status.statementScopeStack.pop();
 		}
 		defaultPostVisit();
 	}
-	
+
 	@Override
 	protected void postVisit(final Namespace node) throws Exception {
 		Status.globalScopeNameStack.pop();
-		
+
 		defaultPostVisit();
 	}
-	
+
 	@Override
 	protected void postVisit(final Declaration node) throws Exception {
 		Status.globalScopeNameStack.pop();
-		
+
 		defaultPostVisit();
 	}
 
 	@Override
 	protected void postVisit(final Method node) throws Exception {
 		Status.globalScopeNameStack.pop();
-		
+
 		defaultPostVisit();
 	}
-	
 
 }

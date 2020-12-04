@@ -40,9 +40,10 @@ public class CfgUtil {
 			}
 			else
 			{
-				if(!isCfgDefined(sourceScope)) return false;
+				if(!isCfgDefined(Status.getProperScope(sourceScope))) return false;
 				intermediateCfgTargetId=(int) Status.cfgMap.
 						get(Status.getProperScope(sourceScope)).getExitNode().getId();
+			
 			}
 			
 			if(intermediateCfgTargetId!=-1 && !isCfgNodesReachable(sourceId, intermediateCfgTargetId, identifierName, sourceScope))

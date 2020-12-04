@@ -89,6 +89,7 @@ public class BoaSlicerIntrinsics {
 	@FunctionSpec(name = "getdiff", returnType = "ASTRoot", formalParameters = { "ChangedFile","ChangedFile","string" })
 	public static ASTRoot getdiff(final ChangedFile current,final ChangedFile previous
 			,final String direction) {
+				
 		ASTRoot currentAst=getast(current);
 
 		if (currentAst.getNamespacesCount()==0)
@@ -124,6 +125,7 @@ public class BoaSlicerIntrinsics {
 
 		} catch (Exception e1) {
 			e1.printStackTrace();
+//			new Exception(current.getName()+": "+e1.getMessage()).printStackTrace();
 			return emptyAst;
 		}
 		

@@ -838,6 +838,15 @@ public class BoaAstIntrinsics {
 
 		return s;
 	}
+	
+	@FunctionSpec(name = "getastcount", returnType = "int", formalParameters = { "ChangedFile" })
+	public static long getastcount(final ChangedFile n) {
+		try {
+			return lenVisitor.getCount(n);
+		} catch (Exception e) {
+			return 0;
+		}
+	}
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Namespace" })
 	public static String prettyprint(final Namespace n) {
