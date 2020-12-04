@@ -47,6 +47,11 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 	}
 
 	public ASTRoot initiateVisit(boolean acrossInFlag) {
+		
+		if (!Status.isModuleFound) {
+			return root;
+		}
+		
 		Status.acrossInFlag = false;
 		try {
 			this.visit(root);
@@ -64,7 +69,7 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return root;
 	}
 
 	protected boolean preVisit(final Namespace node) throws Exception {
