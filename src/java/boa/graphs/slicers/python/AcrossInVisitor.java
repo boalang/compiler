@@ -126,8 +126,6 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 			System.out.println(
 					"Initiating across-in traversal for: " + ForwardSlicerUtil.convertExpressionToString(mainNode));
 
-		visitedScope.clear();
-
 		String scope = Status.getCurrentScope();
 		Status.acrossInStack.push(scope);
 
@@ -138,6 +136,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 
 		Status.acrossInSessionActive = false;
 		Status.acrossInStack.clear();
+		visitedScope.clear();
 
 		if (Status.DEBUG)
 			System.out.println("Exiting across-in traversal: " + jumpStatus.toString());

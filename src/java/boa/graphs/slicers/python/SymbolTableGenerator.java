@@ -58,6 +58,12 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 				long v = BoaStringIntrinsics.indexOf(" as ", imp);
 				if (v == -1) {
 					String[] p2 = BoaStringIntrinsics.splitall(imp, " ");
+					if(p2.length<2)
+					{
+						p2=new String[2];
+						p2[0]=imp.substring(0, imp.lastIndexOf("."));
+						p2[1]=imp.substring(imp.lastIndexOf(".")+1);
+					}
 					if (p2.length == 2) {
 						Status.importMap.put(p2[1], p2[0] + "." + p2[1]);
 					}
