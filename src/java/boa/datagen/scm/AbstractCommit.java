@@ -597,7 +597,11 @@ public abstract class AbstractCommit {
 			final boolean storeOnError) {
 		pythonParsingError = false;
 
-		String fullPath = this.projectName + "/" + path;
+		String fullPath = this.projectName + "/";
+		if(fb.hasChange()&&fb.getChange()==ChangeKind.RENAMED)
+			fullPath+=fb.getPreviousNames(0);
+		else
+			fullPath+=path;
 
 //		if(this.lastRevision)
 //			System.out.println("commit " + this.id);		

@@ -93,10 +93,22 @@ public class TreedMapper implements TreedConstants {
 	public void clear()
 	{
 		this.nodeTypes.clear();
+		for (ASTNode key : tree.keySet()) {
+			if(tree.get(key)!=null)
+				tree.get(key).clear();
+		}
 		this.tree.clear();
 		this.treeHeight.clear();
 		this.treeDepth.clear();
+		for (ASTNode key : treeVector.keySet()) {
+			if(treeVector.get(key)!=null)
+				treeVector.get(key).clear();
+		}
 		this.treeVector.clear();
+		for (ASTNode key : treeMap.keySet()) {
+			if(treeMap.get(key)!=null)
+				treeMap.get(key).clear();
+		}
 		this.treeMap.clear();
 		this.pivotsM.clear();
 		this.pivotsN.clear();
@@ -233,6 +245,10 @@ public class TreedMapper implements TreedConstants {
 
 	private void markChanges(ArrayList<ASTNode> nodes, ArrayList<ASTNode> mappedNodes) {
 		int len = nodes.size(), lenN = mappedNodes.size();
+		
+		if(len*lenN>TreedConstants.MAX_BIPARTITE_MATCH_SIZE)
+			return;
+		
 		int[][] d = new int[2][lenN + 1];
 		char[][] p = new char[len + 1][lenN + 1];
 		d[1][0] = 0;
@@ -408,6 +424,10 @@ public class TreedMapper implements TreedConstants {
 
 	private void lcs(ArrayList<ASTNode> lM, ArrayList<ASTNode> lN, ArrayList<Integer> lcsM, ArrayList<Integer> lcsN) {
 		int lenM = lM.size(), lenN = lN.size();
+		
+		if(lenM*lenN>TreedConstants.MAX_BIPARTITE_MATCH_SIZE)
+			return;
+		
 		int[][] d = new int[2][lenN + 1];
 		char[][] p = new char[lenM + 1][lenN + 1];
 		for (int j = 0; j <= lenN; j++)
