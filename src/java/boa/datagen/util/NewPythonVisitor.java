@@ -76,6 +76,7 @@ import boa.types.Ast.Cell;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Method;
 import boa.types.Ast.Namespace;
+import boa.types.Ast.PositionInfo;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Type;
 import boa.types.Ast.TypeKind;
@@ -178,11 +179,10 @@ public class NewPythonVisitor extends ASTVisitor {
 		} else if (md instanceof ExtendedVariableReference) {
 			visit((ExtendedVariableReference) md);
 			opFound = true;
-		}  else if (md instanceof PythonWithExpression) {
+		} else if (md instanceof PythonWithExpression) {
 			visit((PythonWithExpression) md);
 			opFound = true;
-		}
-		else if (md instanceof PythonTupleExpression) {
+		} else if (md instanceof PythonTupleExpression) {
 			visit((PythonTupleExpression) md);
 			opFound = true;
 		} else if (md instanceof PythonArgument) {
@@ -357,10 +357,10 @@ public class NewPythonVisitor extends ASTVisitor {
 		if (node.getStatements() != null) {
 			for (Object d : node.getStatements()) {
 
-				// if (d instanceof org.eclipse.dltk.ast.expressions.StringLiteral) {
-				// this.visitComment((org.eclipse.dltk.ast.expressions.StringLiteral) d);
-				// b.addComments(comments.pop());
-				// }
+//				if (d instanceof org.eclipse.dltk.ast.expressions.StringLiteral) {
+//					this.visitComment((org.eclipse.dltk.ast.expressions.StringLiteral) d);
+//					b.addComments(comments.pop());
+//				} 
 				if (d instanceof MethodDeclaration) {
 					methods.push(new ArrayList<boa.types.Ast.Method>());
 					((MethodDeclaration) d).traverse(this);
@@ -435,8 +435,7 @@ public class NewPythonVisitor extends ASTVisitor {
 			}
 		}
 
-		if(s.getReturnType()!=null)
-		{
+		if (s.getReturnType() != null) {
 			Type.Builder tb = Type.newBuilder();
 			dealExpression(s.getReturnType());
 			tb.setComputedName(expressions.pop());
@@ -448,8 +447,8 @@ public class NewPythonVisitor extends ASTVisitor {
 		return false;
 	}
 
-	//Statement handling begins
-	
+	// Statement handling begins
+
 	public boolean visit(Block node) throws Exception {
 		Statement.Builder b = Statement.newBuilder();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
@@ -465,10 +464,17 @@ public class NewPythonVisitor extends ASTVisitor {
 
 		if (node.getStatements() != null) {
 			for (Object o : node.getStatements()) {
-				((org.eclipse.dltk.ast.ASTNode) o).traverse(this);
 
-				if (isExpressionStatement((ASTNode) o) == true) {
-					addStatementExpression();
+//				if (o instanceof org.eclipse.dltk.ast.expressions.StringLiteral) {
+//					this.visitComment((org.eclipse.dltk.ast.expressions.StringLiteral) o);
+//					b.addComments(comments.pop());
+//				} else 
+				{
+
+					((org.eclipse.dltk.ast.ASTNode) o).traverse(this);
+					if (isExpressionStatement((ASTNode) o) == true) {
+						addStatementExpression();
+					}
 				}
 			}
 		}
@@ -819,8 +825,8 @@ public class NewPythonVisitor extends ASTVisitor {
 			if (status != ChangeKind.UNCHANGED && status != null)
 				b.setChange(status);
 		}
-		
-		//to handle: Raise a from b
+
+		// to handle: Raise a from b
 		if (s.getExpression1() != null) {
 			dealExpression(s.getExpression1());
 			b.addExpressions(expressions.pop());
@@ -931,23 +937,18 @@ public class NewPythonVisitor extends ASTVisitor {
 			if (status != ChangeKind.UNCHANGED && status != null)
 				b.setChange(status);
 		}
-		if(s.getWithExps()!=null)
-		{
-			for(PythonWithExpression ex: s.getWithExps())
-			{
-				if(ex.getAs()!=null)
-				{
+		if (s.getWithExps() != null) {
+			for (PythonWithExpression ex : s.getWithExps()) {
+				if (ex.getAs() != null) {
 					fields.push(new ArrayList<Variable>());
-					
+
 					dealExpression(ex);
 
 					List<boa.types.Ast.Variable> fs = fields.pop();
 
 					for (boa.types.Ast.Variable v : fs)
 						b.addVariableDeclarations(v);
-				}
-				else
-				{
+				} else {
 					dealExpression(ex);
 					b.addExpressions(expressions.pop());
 				}
@@ -1050,7 +1051,7 @@ public class NewPythonVisitor extends ASTVisitor {
 		list.add(b.build());
 		return false;
 	}
-	
+
 	// statement handling ends
 
 	// expression handling
@@ -1550,24 +1551,22 @@ public class NewPythonVisitor extends ASTVisitor {
 		return false;
 
 	}
-	
+
 	public boolean visit(PythonWithExpression node) throws Exception {
-		
-		if(node.getWhat()!=null)
-		{
+
+		if (node.getWhat() != null) {
 			dealExpression(node.getWhat());
 
-			if(node.getAs()!=null)
-			{
+			if (node.getAs() != null) {
 				Variable.Builder b = Variable.newBuilder();
 				List<Variable> list = fields.peek();
-				
+
 				b.setInitializer(expressions.pop());
-				
+
 				dealExpression(node.getAs());
 
 				b.setComputedName(expressions.pop());
-				
+
 				if (enableDiff) {
 					b.setId(this.id++);
 					ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
@@ -1575,12 +1574,12 @@ public class NewPythonVisitor extends ASTVisitor {
 						b.setChange(status);
 				}
 				list.add(b.build());
-				
+
 			}
 			return false;
-			
+
 		}
-		boa.types.Ast.Expression.Builder ex=boa.types.Ast.Expression.newBuilder();
+		boa.types.Ast.Expression.Builder ex = boa.types.Ast.Expression.newBuilder();
 
 		if (enableDiff) {
 			ex.setId(this.id++);
@@ -1588,7 +1587,7 @@ public class NewPythonVisitor extends ASTVisitor {
 			if (status != ChangeKind.UNCHANGED && status != null)
 				ex.setChange(status);
 		}
-	    ex.setKind(ExpressionKind.EMPTY);
+		ex.setKind(ExpressionKind.EMPTY);
 
 		expressions.push(ex.build());
 		return false;
@@ -1946,8 +1945,6 @@ public class NewPythonVisitor extends ASTVisitor {
 
 	}
 
-	
-
 	public boolean visit(EmptyExpression md) throws Exception {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.EMPTY);
@@ -2093,8 +2090,17 @@ public class NewPythonVisitor extends ASTVisitor {
 				b.setKind(boa.types.Ast.Comment.CommentKind.DOC);
 
 			}
-		}
+		} else
+			comment = "";
+		PositionInfo.Builder value = boa.types.Ast.PositionInfo.newBuilder();
+		value.setStartPos(0);
+		value.setEndCol(0);
+		value.setEndLine(0);
+		value.setStartCol(0);
+		value.setStartLine(0);
+		value.setLength(comment.length());
 
+		b.setPosition(value);
 		b.setValue(comment);
 
 		comments.push(b.build());
