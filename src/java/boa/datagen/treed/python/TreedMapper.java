@@ -243,11 +243,19 @@ public class TreedMapper implements TreedConstants {
 			markAstM(child);
 	}
 
+	boolean matchingSizeCheck(int len, int lenN)
+	{
+		if(len>=TreedConstants.MAX_BIPARTITE_MATCH_SIZE_X && lenN>=TreedConstants.MAX_BIPARTITE_MATCH_SIZE_Y)
+			return false;
+		if(len*lenN>TreedConstants.MAX_BIPARTITE_MATCH_SIZE_X*TreedConstants.MAX_BIPARTITE_MATCH_SIZE_Y)
+			return false;
+		return true;
+	}
 	private void markChanges(ArrayList<ASTNode> nodes, ArrayList<ASTNode> mappedNodes) {
 		int len = nodes.size(), lenN = mappedNodes.size();
 		
-		if(len*lenN>TreedConstants.MAX_BIPARTITE_MATCH_SIZE)
-			return;
+		
+		if(matchingSizeCheck(len, lenN)==false) return;
 		
 		int[][] d = new int[2][lenN + 1];
 		char[][] p = new char[len + 1][lenN + 1];
@@ -318,7 +326,8 @@ public class TreedMapper implements TreedConstants {
 
 	private void mapPivots(ArrayList<ASTNode> lM, ArrayList<ASTNode> lN, ArrayList<ASTNode> heightsM,
 			ArrayList<ASTNode> heightsN) {
-		if (lM.size() * lN.size() > MAX_BIPARTITE_MATCH_SIZE) {
+		if(matchingSizeCheck(lM.size(), lN.size())==false)
+		{
 			lM.clear();
 			lN.clear();
 		}
@@ -425,7 +434,7 @@ public class TreedMapper implements TreedConstants {
 	private void lcs(ArrayList<ASTNode> lM, ArrayList<ASTNode> lN, ArrayList<Integer> lcsM, ArrayList<Integer> lcsN) {
 		int lenM = lM.size(), lenN = lN.size();
 		
-		if(lenM*lenN>TreedConstants.MAX_BIPARTITE_MATCH_SIZE)
+		if(matchingSizeCheck(lenM, lenN)==false)
 			return;
 		
 		int[][] d = new int[2][lenN + 1];
@@ -579,6 +588,12 @@ public class TreedMapper implements TreedConstants {
 	}
 
 	private ArrayList<ASTNode> map(ArrayList<ASTNode> nodesM, ArrayList<ASTNode> nodesN, double threshold) {
+		ArrayList<ASTNode> nodes = new ArrayList<ASTNode>();
+
+		if(matchingSizeCheck(nodesM.size(), nodesN.size())==false)
+			return nodes;
+
+		
 		HashMap<ASTNode, HashSet<Pair>> pairsOfAncestor = new HashMap<ASTNode, HashSet<Pair>>();
 		ArrayList<Pair> pairs = new ArrayList<Pair>();
 		PairDescendingOrder comparator = new PairDescendingOrder();
@@ -604,7 +619,6 @@ public class TreedMapper implements TreedConstants {
 			}
 			pairsOfAncestor.put(nodeM, pairs1);
 		}
-		ArrayList<ASTNode> nodes = new ArrayList<ASTNode>();
 		Set<ASTNode> matches = new HashSet<ASTNode>();
 		for (int i = 0; i < pairs.size(); i++) {
 			Pair pair = pairs.get(i);
@@ -683,6 +697,10 @@ public class TreedMapper implements TreedConstants {
 	private double[] computeSimilarity(ArrayList<ASTNode> l1, ArrayList<ASTNode> l2) {
 		double[] sims = new double[Math.max(l1.size(), l2.size())];
 		Arrays.fill(sims, 0.0);
+
+		if(matchingSizeCheck(l1.size(), l2.size())==false)
+			return sims;
+		
 		HashMap<ASTNode, HashSet<Pair>> pairsOfNode = new HashMap<ASTNode, HashSet<Pair>>();
 		ArrayList<Pair> pairs = new ArrayList<Pair>();
 		PairDescendingOrder comparator = new PairDescendingOrder();

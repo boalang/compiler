@@ -603,7 +603,7 @@ public abstract class AbstractCommit {
 		else
 			fullPath+=path;
 
-//		if(this.lastRevision)
+//		if(path.endsWith("squad_ids.py"))
 //			System.out.println("commit " + this.id);		
 		PythonSourceParser parser = new PythonSourceParser();
 		IModuleSource input = new ModuleSource(content);
