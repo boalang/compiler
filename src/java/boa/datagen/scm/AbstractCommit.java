@@ -228,7 +228,13 @@ public abstract class AbstractCommit {
 	//	"spacy/lang/ur/lemmatizer.py" };
 	//Set<String> badp = new HashSet<String>(Arrays.asList(badpaths));
 	String largeFiles = "spacy/lang/";
-	String[] excludeProjects = {"ryfeus/lambda-packs", "sorenlind/lemmy"};
+	String[] excludeProjects = {"ryfeus/lambda-packs", "sorenlind/lemmy", // excluded in the 1st version of the evolution datagen 
+								"MycroftAI/mycroft-core", "balcilar/3D-CNN-Emotion-Recognition", // excluded in the 2nd version (large) of the evolution datagen
+								"roclark/sportsreference", "CODEJIN/HNet_on_Tensorflow"}; // Possibly single large files
+								// https://github.com/roclark/sportsreference/blob/master/sportsreference/fb/squad_ids.py
+								// https://github.com/CODEJIN/HNet_on_Tensorflow/blob/master/QT_UI/Image_Resources_rc.py
+	
+	
 	Set<String> badProjects = new HashSet<String>(Arrays.asList(excludeProjects));
 	boolean include_notebooks = false;
 
