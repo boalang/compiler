@@ -37,8 +37,11 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 			st.visit(this.root);
 
 			if (Status.DEBUG) {
-				SymbolTable.printSymbolTable();
-				Status.printMap(Status.importMap);
+				if(ForwardSlicerUtil.isDebugBitSet())
+				{
+					SymbolTable.printSymbolTable();
+					Status.printMap(Status.importMap);
+				}
 			}
 
 		} catch (Exception e) {
@@ -85,7 +88,10 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		Status.namespaceScopeStack.push("class");
 
 		if (Status.DEBUG)
-			System.out.println("In class: " + node.getName());
+		{
+			if(ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_STACK_TRACE_BIT))
+				System.out.println("In class: " + node.getName());
+		}
 
 		return defaultPreVisit();
 	}
@@ -96,7 +102,10 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		Status.namespaceScopeStack.push("method");
 
 		if (Status.DEBUG)
-			System.out.println("In method: " + node.getName());
+		{
+			if(ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_STACK_TRACE_BIT))
+				System.out.println("In method: " + node.getName());
+		}
 
 		return defaultPreVisit();
 	}
@@ -248,14 +257,14 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 							if (!mt2.equals("")) {
 								SymbolTable.addToCriteria(identiferName, leftExps.get(i).getId());
 
-								if (Status.DEBUG)
+								if (Status.DEBUG && ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_CRITERIA_BIT))
 									System.out.println("Adding in slice criteria, Scope: " + scope + ", Variable:"
 											+ identiferName + ",Location: " + leftExps.get(i).getId());
 							}
 						} else {
 							SymbolTable.addToCriteria(identiferName, leftExps.get(i).getId());
 
-							if (Status.DEBUG)
+							if (Status.DEBUG && ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_CRITERIA_BIT))
 								System.out.println("Adding in slice criteria, Scope: " + scope + ", Variable:"
 										+ identiferName + ",Location: " + leftExps.get(i).getId());
 
@@ -281,7 +290,7 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 
 							SymbolTable.addToCriteria(identiferName, ex.getId());
 
-							if (Status.DEBUG)
+							if (Status.DEBUG && ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_CRITERIA_BIT))
 								System.out.println("Adding in slice criteria, Scope: " + scope + ", Variable:"
 										+ identiferName + ",Location: " + ex.getId());
 						}
@@ -331,7 +340,7 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 					}
 					if (!mt2.equals("")) {
 						SymbolTable.addToAliasSet(leftExps.get(i).getId(), mt2);
-						if (Status.DEBUG)
+						if (Status.DEBUG && ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ALIAS_BIT))
 							System.out.println("Mapping for alias: " + identiferName + " ==> " + mt2);
 					}
 				}

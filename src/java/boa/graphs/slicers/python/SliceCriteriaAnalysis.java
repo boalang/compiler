@@ -117,11 +117,14 @@ public class SliceCriteriaAnalysis {
 			
 			String mt2 = NameResolver.resolveImport(identifierName,null, node.getId());
 			
-			if (Status.DEBUG)
-				System.out.println("Trying to slice: "+identifierName+", resolved to: "+mt2);
-			
+//			if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_SLICING_BIT))
+//				System.out.println("Trying to slice: "+identifierName+", resolved to: "+mt2);
+//			
 			if(!mt2.equals(""))
 			{
+				if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_SLICING_BIT))
+					System.out.println("Trying to slice: "+identifierName+", resolved to: "+mt2);
+				
 				boolean doSlice=false;
 				if(isExpressionModified(node) || isExpressionImpacted(node))
 				{
@@ -156,7 +159,7 @@ public class SliceCriteriaAnalysis {
 				
 				if(doSlice)
 				{
-					if (Status.DEBUG)
+					if (Status.DEBUG && ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_SLICING_BIT))
 					{	
 				        System.out.println(Status.ANSI_GREEN+"Sliced line# "+mt2+Status.ANSI_RESET);
 					}

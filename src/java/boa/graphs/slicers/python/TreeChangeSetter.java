@@ -142,11 +142,11 @@ public class TreeChangeSetter {
 		{
 			b.addParents(visit(v));
 		}
-
 		return b.build();
 	}
 
 	Method visit(Method node) {
+	
 		Method.Builder b=node.toBuilder(); 
 		
 		b.clearStatements();
@@ -160,7 +160,6 @@ public class TreeChangeSetter {
 		{
 			b.addArguments(visit(v));
 		}
-		
 		return b.build();
 	}
 
@@ -180,11 +179,18 @@ public class TreeChangeSetter {
 
 		Expression.Builder b=node.toBuilder(); 
 		
-		if(!node.hasChange() && Status.slicedMap.containsKey(node.getId()))
+		if(node.getKind()==ExpressionKind.METHODCALL)
 		{
-			b.setChange(ChangeKind.IMPACTED);
+//			System.out.println(node.getMethod()+" "+Status.slicedMap.containsKey(node.getId())+" "+(node.hasChange()?node.getChange().toString(): ""));
+		}
+		if(Status.slicedMap.containsKey(node.getId()))
+		{
 			if(node.getKind()==ExpressionKind.METHODCALL)
 				b.setMethod(Status.slicedMap.get(node.getId()));
+			if(!node.hasChange())
+			{
+				b.setChange(ChangeKind.IMPACTED);
+			}
 		}
 		
 		b.setKind(node.getKind());
@@ -213,7 +219,11 @@ public class TreeChangeSetter {
 		{
 			b.addExpressions(visit(v));
 		}
-		
+		b.clearMethodArgs();
+		for(Expression v: node.getMethodArgsList())
+		{
+			b.addMethodArgs(visit(v));
+		}
 		return b.build();
 	}
 

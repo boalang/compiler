@@ -14,6 +14,18 @@ import boa.types.Shared.ChangeKind;
 
 public class ForwardSlicerUtil {
 
+	public static boolean isDebugBitSet()
+	{
+		if(((1<<Status.DEBUG_ALL_BIT) & Status.DEBUG_LEVEL)>0) 
+			return true;
+		return false;
+	}
+	public static boolean isDebugBitSet(int bit)
+	{
+		if(((1<<bit) & Status.DEBUG_LEVEL)>0) return true;
+		if(((1<<Status.DEBUG_ALL_BIT) & Status.DEBUG_LEVEL)>0) return true;
+		return false;
+	}
 	public static boolean hasSelfArg(Method m) {
 		if (m.getArgumentsCount() == 0)
 			return false;

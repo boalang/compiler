@@ -18,6 +18,16 @@ import boa.types.Ast.Statement;
 import boa.types.Ast.Variable;
 
 public class Status {
+	//80: stack trace and slicing
+	public static int DEBUG_LEVEL=80; //Bit 0: ALL, Bit 1: Criteria, Bit 2: Alias Criteria, Bit 3: Across-in, Bit 4: Slicing
+	public static int DEBUG_ALL_BIT=0;
+	public static int DEBUG_CRITERIA_BIT=1;
+	public static int DEBUG_ALIAS_BIT=2;
+	public static int DEBUG_ACROSS_IN_BIT=3;
+	public static int DEBUG_SLICING_BIT=4; //16
+	public static int DEBUG_NAME_RESOLVE_BIT=5;
+	public static int DEBUG_STACK_TRACE_BIT=6;
+	
 	public static Stack<String> globalScopeNameStack;
 	public static Stack<String> statementScopeStack;
 	public static Stack<String> namespaceScopeStack;

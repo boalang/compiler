@@ -122,7 +122,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 
 	public JumpStatus initiateJump(Expression mainNode, boolean isCallback) throws Exception {
 				
-		if (Status.DEBUG)
+		if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT))
 			System.out.println(
 					"Initiating across-in traversal for: " + ForwardSlicerUtil.convertExpressionToString(mainNode));
 
@@ -138,7 +138,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		Status.acrossInStack.clear();
 		visitedScope.clear();
 
-		if (Status.DEBUG)
+		if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT))
 			System.out.println("Exiting across-in traversal: " + jumpStatus.toString());
 		
 		return jumpStatus;
@@ -186,7 +186,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		String methodName = resolveMethodNameForJump(ForwardSlicerUtil.convertExpressionToString(right), leftId,
 				right.getId());
 
-		if (Status.DEBUG)
+		if (Status.DEBUG && ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT))
 			System.out.println("Resolved method name for across-in jump: " + methodName);
 
 		if (methodName == "" || visitedScope.containsKey(methodName))
@@ -208,7 +208,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 			if (left != null && Status.returnImpacted.containsKey(nextScope)) {
 				for (Expression ex : ForwardSlicerUtil.expandOtherExpressions(left)) {
 					SymbolTable.addToCriteria(ForwardSlicerUtil.convertExpressionToString(ex), ex.getId(), scope);
-					if (Status.DEBUG) {
+					if (Status.DEBUG&& Status.DEBUG_LEVEL<=1) {
 						System.out.println("Adding in slice criteria (return-mapping), Scope: " + scope + ", Variable:"
 								+ ForwardSlicerUtil.convertExpressionToString(ex) + ",Location: " + ex.getId());
 					}
@@ -222,7 +222,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		visitedScope.remove(methodName);
 		Status.callPointMap.remove(methodName);
 
-		if (Status.DEBUG)
+		if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT))
 			System.out.println("Across-in jump made to " + methodName);
 
 		if (Status.returnImpacted.containsKey(nextScope)) {
@@ -249,7 +249,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 				if (SliceCriteriaAnalysis.isExpressionModified(ex.getExpressions(1))
 						|| SliceCriteriaAnalysis.isExpressionImpacted(ex.getExpressions(1))) {
 					SymbolTable.addToCriteria(rightIdentifierName, leftId, nextScope);
-					if (Status.DEBUG) {
+					if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT)) {
 						System.out.println("Adding in slice criteria (parameter-mapping), Scope: " + nextScope
 								+ ", Variable:" + rightIdentifierName + ",Location: " + leftId);
 					}
@@ -260,7 +260,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 						ex.getExpressions(1).getId());
 				if (!mt2.equals("")) {
 					SymbolTable.addToAliasSet(leftId, mt2, nextScope);
-					if (Status.DEBUG)
+					if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT))
 						System.out
 								.println("Mapping for alias(parameter-mapping): " + leftIdentiferName + " ==> " + mt2);
 				}
@@ -268,7 +268,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 					|| SliceCriteriaAnalysis.isExpressionImpacted(ex)) {
 				
 				SymbolTable.addToCriteria(leftIdentiferName, leftId, nextScope);
-				if (Status.DEBUG) {
+				if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT)) {
 					System.out.println("Adding in slice criteria (parameter-mapping), Scope: " + nextScope
 							+ ", Variable:" + leftIdentiferName + ",Location: " + leftId);
 				}
@@ -277,7 +277,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 				String mt2 = NameResolver.resolveName(rightIdentifierName, null, ex.getId());
 				if (!mt2.equals("")) {
 					SymbolTable.addToAliasSet(leftId, mt2, nextScope);
-					if (Status.DEBUG)
+					if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT))
 						System.out
 								.println("Mapping for alias(parameter-mapping): " + leftIdentiferName + " ==> " + mt2);
 				}
