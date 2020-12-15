@@ -1,3 +1,0 @@
-1. Current code probably implements GumTree algorithm (have to check again)
-2. Working on JDT ASTNode. Should be made to work with Boa AST (so, have to enable visit structure in Boa AST if not present.)
-3. For Python, can make it work for dltk ASTNode, however, it has to be done at data generation step then.

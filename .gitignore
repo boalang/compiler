@@ -13,3 +13,5 @@ Query1.jar
 out.txt
 Sample.jar
 error-log.csv
+parse-error-log.csv
+parse-success-log.csv
