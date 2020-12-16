@@ -5,3 +5,16 @@
 6. To add a resolved name field in Boa AST
 7. check boa to python conversion [75% done: One more final check needed]
 8. dnn_api(user_defined_method()) -> when not a callback, check that too [done]
+
+
+Issue:
+        1.
+        cpm_3_2 =self.conv_3_2(cpm_3_1,training=training) //changed
+
+        return tf.concat([cpm1,cpm_2_2,cpm_3_2],axis=3) //not detected
+        
+        2.
+        net_train, _, cost, _ = model(x, is_train=True, reuse=False)
+        
+        return impact mapping position-wise
+        
