@@ -55,8 +55,8 @@ public class TreeChangeSetter {
 	Variable visit(Variable node) {
 		Variable.Builder b=node.toBuilder();
 		
-		if(!node.hasChange() && Status.slicedMap.containsKey(node.getId()))
-			b.setChange(ChangeKind.IMPACTED);
+//		if(!node.hasChange() && Status.resolvedNameMap.containsKey(node.getId()))
+//			b.setChange(ChangeKind.IMPACTED);
 				
 		if(node.getComputedName()!=null)
 			b.setComputedName(visit(node.getComputedName()));
@@ -72,9 +72,9 @@ public class TreeChangeSetter {
 
 		Statement.Builder b=node.toBuilder(); 
 		
-		if(!node.hasChange() && Status.slicedMap.containsKey(node.getId()))
-			b.setChange(ChangeKind.IMPACTED);
-		
+//		if(!node.hasChange() && Status.resolvedNameMap.containsKey(node.getId()))
+//			b.setChange(ChangeKind.IMPACTED);
+//		
 		b.clearVariableDeclarations();
 		for(Variable v: node.getVariableDeclarationsList())
 		{
@@ -166,31 +166,36 @@ public class TreeChangeSetter {
 	Type visit(Type node) {
 		Type.Builder b=node.toBuilder(); 
 		
-		if(!node.hasChange() && Status.slicedMap.containsKey(node.getId()))
-			b.setChange(ChangeKind.IMPACTED);
+//		if(!node.hasChange() && Status.resolvedNameMap.containsKey(node.getId()))
+//			b.setChange(ChangeKind.IMPACTED);
 		
 		if(node.getComputedName()!=null)
 			b.setComputedName(visit(node.getComputedName()));
 		
 		return b.build();
 	}
-
+	
+	boolean shouldModifyChange(ChangeKind node)
+	{
+		if(node==ChangeKind.UNCHANGED || node==ChangeKind.UNKNOWN
+				|| node==ChangeKind.UNMAPPED || node==ChangeKind.MOVED) return true;
+		return false;
+	}
 	Expression visit(Expression node) {
 
 		Expression.Builder b=node.toBuilder(); 
 		
-		if(node.getKind()==ExpressionKind.METHODCALL)
+		b.setChange(node.getChange());
+		if(shouldModifyChange(node.getChange()))
 		{
-//			System.out.println(node.getMethod()+" "+Status.slicedMap.containsKey(node.getId())+" "+(node.hasChange()?node.getChange().toString(): ""));
+			if(Status.sliceSet.contains(node.getId()))
+				b.setChange(ChangeKind.IMPACTED);
 		}
-		if(Status.slicedMap.containsKey(node.getId()))
+		
+		if(Status.resolvedNameMap.containsKey(node.getId()))
 		{
 			if(node.getKind()==ExpressionKind.METHODCALL)
-				b.setMethod(Status.slicedMap.get(node.getId()));
-			if(!node.hasChange())
-			{
-				b.setChange(ChangeKind.IMPACTED);
-			}
+				b.setMethod(Status.resolvedNameMap.get(node.getId()));
 		}
 		
 		b.setKind(node.getKind());

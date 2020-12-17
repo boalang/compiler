@@ -157,13 +157,15 @@ public class SliceCriteriaAnalysis {
 					}
 				}
 				
+				Status.resolvedNameMap.put(node.getId(), mt2);
+				
 				if(doSlice)
 				{
 					if (Status.DEBUG && ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_SLICING_BIT))
 					{	
 				        System.out.println(Status.ANSI_GREEN+"Sliced line# "+mt2+Status.ANSI_RESET);
 					}
-					Status.slicedMap.put(node.getId(), mt2);
+					Status.sliceSet.add(node.getId());
 					return SliceStatus.SLICE_DONE;
 				}
 				

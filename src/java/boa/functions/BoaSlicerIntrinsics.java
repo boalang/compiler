@@ -24,6 +24,7 @@ import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import boa.datagen.treed.python.BoaToPythonConverter;
 import boa.datagen.util.NewPythonVisitor;
 import boa.graphs.slicers.python.ForwardSlicer;
+import boa.graphs.slicers.python.Status;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Statement;
 import boa.types.Code.CodeRepository;
@@ -32,6 +33,11 @@ import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 
 import static boa.functions.BoaIntrinsics.*;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import static boa.functions.BoaAstIntrinsics.*;
 
 /**
@@ -171,6 +177,26 @@ public class BoaSlicerIntrinsics {
 		
 		return retAst;
 		
+	}
+	
+	@FunctionSpec(name = "getpythonimportmodules", returnType = "array of string", formalParameters = { "ASTRoot",  "array of string" })
+	public static String[] getpythonimportmodules(final ASTRoot ast, String[] moduleFilter) {
+		if(ast==null || ast.getNamespacesCount()==0 ||
+				ast.getNamespaces(0).getImportsCount()==0) return new String[0];
+
+		Set<String> result=new HashSet<String>();
+		for (String imp : ast.getNamespaces(0).getImportsList()) {
+			if (imp.matches("^\\..*") || imp.equals("")) // ignore relative imports
+				continue;
+
+			for (String lib : moduleFilter) {
+				if (imp.matches("^" + lib + ".*") || imp.matches("^from " + lib + ".*")) {
+					result.add(lib);
+					break;
+				}
+			}
+		}
+		return result.toArray(new String[0]);
 	}
 	
 	public static ASTRoot pythonAstToBoaAST(final PythonModuleDeclaration module, final String path) throws Exception {
