@@ -422,12 +422,12 @@
 
 	<!-- packaging -->
 	<target name="package" description="Package both the compiler and runtime JARs.">
-		<!-- 
+		<!--  
 		<parallel threadCount="2">
             <antcall target="package-mlrt"/>
             <antcall target="package-ml"/>
         </parallel>
-         -->
+        -->
         <parallel threadCount="2">
             <antcall target="package-runtime"/>
             <antcall target="package-compiler"/>
