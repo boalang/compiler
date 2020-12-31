@@ -70,7 +70,7 @@ public class CfgUtil {
 			}
 		}
 
-		Status.hasBeenRedefinedAnywhere = false;
+//		Status.hasBeenRedefinedAnywhere = false;
 
 		visitedCfgNode = new boolean[cfg.getNodes().size()];
 
@@ -91,12 +91,14 @@ public class CfgUtil {
 					}
 				}
 				if (ids != null && ids.containsKey(identifierName)) {
-					Status.hasBeenRedefinedAnywhere = true;
+//					Status.hasBeenRedefinedAnywhere = true;
 					continue;
 				}
 			}
 			if (t.getId() == targetId) {
 				pathFound = true;
+				st.clear();
+				return true;
 			}
 
 			for (CFGNode v : t.getSuccessors())

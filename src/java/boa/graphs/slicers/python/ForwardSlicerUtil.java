@@ -136,6 +136,31 @@ public class ForwardSlicerUtil {
 
 		return str;
 	}
+	public static String convertExpressionToString(Expression node, int until) {
+		String str = "";
+		String tmp = "";
+		
+		int j=0;
+		for (Expression e : node.getExpressionsList()) {
+			if(j>until) break;
+			j++;
+			tmp = "";
+			if (e.getKind() == ExpressionKind.ARRAYACCESS) {
+				if (e.getExpressionsCount() > 0) {
+					tmp = getExpressionKeyText(e.getExpressions(0));
+				}
+			} else
+				tmp = getExpressionKeyText(e);
+
+			if (tmp != "")
+				str = str + "." + tmp;
+		}
+
+		if (str != "")
+			str = str.substring(1);
+
+		return str;
+	}
 
 	public static String getExpressionKeyText(Expression node) {
 		String str = "";

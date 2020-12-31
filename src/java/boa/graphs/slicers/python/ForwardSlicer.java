@@ -25,8 +25,6 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 	public ForwardSlicer(ASTRoot _root, String[] moduleFilter, String[] filterCriteria, boolean changeImpactFlag) {
 		this.root = _root;
 
-		Status.DEBUG = false;
-
 		Status.setLibraryFilter(filterCriteria);
 		Status.setModuleFilter(moduleFilter);
 		Status.changeImpactAnalysisFlag = changeImpactFlag;
@@ -124,7 +122,7 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 	protected boolean preVisit(final Expression node) throws Exception {
 
 		if (ForwardSlicerUtil.isMethodCallKind(node) && !firstTurn) {
-			if (SliceCriteriaAnalysis.addSliceToResult(node) == SliceStatus.NOT_CANDIDATE) {
+			if (SliceCriteriaAnalysis.addSliceToResult(null, node) == SliceStatus.NOT_CANDIDATE) {
 				acrossInVisitor.initiateJump(node, false);
 			}
 		}

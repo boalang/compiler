@@ -18,8 +18,8 @@ import boa.types.Ast.Statement;
 import boa.types.Ast.Variable;
 
 public class Status {
-	//80: stack trace and slicing
-	public static int DEBUG_LEVEL=80; //Bit 0: ALL, Bit 1: Criteria, Bit 2: Alias Criteria, Bit 3: Across-in, Bit 4: Slicing
+	//80: stack trace and slicing, 16 just slicing
+	public static int DEBUG_LEVEL=16; //Bit 0: ALL, Bit 1: Criteria, Bit 2: Alias Criteria, Bit 3: Across-in, Bit 4: Slicing
 	public static int DEBUG_ALL_BIT=0;
 	public static int DEBUG_CRITERIA_BIT=1;
 	public static int DEBUG_ALIAS_BIT=2;
@@ -27,6 +27,7 @@ public class Status {
 	public static int DEBUG_SLICING_BIT=4; //16
 	public static int DEBUG_NAME_RESOLVE_BIT=5;
 	public static int DEBUG_STACK_TRACE_BIT=6;
+	public static boolean DEBUG = false;
 	
 	public static Stack<String> globalScopeNameStack;
 	public static Stack<String> statementScopeStack;
@@ -47,7 +48,7 @@ public class Status {
 	public static List<String> moduleFilter;
 //	public static HashMap<Integer, String> aliasName;
 	public static boolean isModuleFound = false;
-	public static boolean hasBeenRedefinedAnywhere = false;
+//	public static boolean hasBeenRedefinedAnywhere = false;
 	public static String acrossInStackSeparator = "->";
 	public static HashMap<String, Integer> callPointMap;
 	public static HashMap<String, Integer> acrossInParameterMap;
@@ -60,11 +61,12 @@ public class Status {
 	public static boolean acrossInFlag = false;
 	public static boolean acrossInSessionActive = false;
 
-	public static boolean DEBUG = false;
 	public static boolean isParameterMapping = false;
 
-	public static Integer maximumCallDepth = 20;
+	public static Integer maximumCallDepth = 10;
 	public static Integer currentCallDepth = 0;
+	
+	public static boolean enableParamterSlicing=true;
 
 	//Library: https://github.com/mihnita/ansi-econsole/blob/master/AnsiConTest/src/AnsiConTest.java
     public static final String ANSI_RESET = "\u001b[m";  // Text Reset
@@ -262,7 +264,8 @@ public class Status {
 	}
 
 	public static void setLibraryFilter(String[] b) {
-		libraryFilter = Arrays.asList(b);
+		if(b!=null)
+			libraryFilter = Arrays.asList(b);
 	}
 
 	public static void setModuleFilter(String[] b) {

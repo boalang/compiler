@@ -90,7 +90,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		}
 
 		if (ForwardSlicerUtil.isMethodCallKind(node)) {
-			if (SliceCriteriaAnalysis.addSliceToResult(node) == SliceStatus.NOT_CANDIDATE) {
+			if (SliceCriteriaAnalysis.addSliceToResult(null, node) == SliceStatus.NOT_CANDIDATE) {
 				makeJump(node,false);
 			}
 		}

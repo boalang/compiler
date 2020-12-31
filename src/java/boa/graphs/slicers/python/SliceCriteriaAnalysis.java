@@ -88,7 +88,7 @@ public class SliceCriteriaAnalysis {
 	}
 
 	public static boolean hasChanged(ChangeKind node) {
-		if (node != ChangeKind.UNCHANGED && node != ChangeKind.UNKNOWN && node != ChangeKind.UNMAPPED)
+		if (node != ChangeKind.MOVED && node != ChangeKind.UNCHANGED && node != ChangeKind.UNKNOWN && node != ChangeKind.UNMAPPED)
 			return true;
 		return false;
 	}
@@ -105,15 +105,62 @@ public class SliceCriteriaAnalysis {
 		}
 		return false;
 	}
+	public static boolean isExpressionImpactedOrModified(Expression node, Integer until) {
+		if(until==null) return isExpressionModified(node) | isExpressionImpacted(node);
+		for(int i=0; i<=until && i<node.getExpressionsCount();i++)
+		{
+			if(isExpressionModified(node.getExpressions(i)) || 
+					isExpressionImpacted(node.getExpressions(i))) return true;
+		}
+		return false;
+	}
 	
-	public static SliceStatus addSliceToResult(Expression node) throws Exception
+	static void sliceMethodParam(Expression node) throws Exception
+	{
+		if(ForwardSlicerUtil.getNumMethodActualArg(node)>0)
+		{
+			for (Expression ex : node.getMethodArgs(0).getExpressionsList()) {
+				if(ForwardSlicerUtil.isProperAssignKind(ex) && 
+						(ex.getExpressions(1).getKind()==ExpressionKind.VARACCESS || ex.getExpressions(1).getKind()==ExpressionKind.METHODCALL))
+				{
+					if(isExpressionModified(ex.getExpressions(1)) 
+							|| isExpressionImpacted(ex.getExpressions(1)))
+					{
+						Status.sliceSet.add(ex.getExpressions(1).getId());
+					}
+					else if(Status.acrossInSessionActive && acrossInVisitor.makeJump(ex.getExpressions(1), 
+							ex.getExpressions(1).getKind()==ExpressionKind.VARACCESS)==JumpStatus.RETURN_IMPACTED)
+						Status.sliceSet.add(ex.getExpressions(1).getId());
+					else if(!Status.acrossInSessionActive && 
+							acrossInVisitor.initiateJump(ex.getExpressions(1), 
+									ex.getExpressions(1).getKind()==ExpressionKind.VARACCESS)==JumpStatus.RETURN_IMPACTED)
+						Status.sliceSet.add(ex.getExpressions(1).getId());
+				}
+				else if(ex.getKind()==ExpressionKind.VARACCESS || ex.getKind()==ExpressionKind.METHODCALL)
+				{
+					if(isExpressionModified(ex) 
+							|| isExpressionImpacted(ex))
+					{
+						Status.sliceSet.add(ex.getId());
+					}
+					else if(Status.acrossInSessionActive && acrossInVisitor.makeJump(ex, ex.getKind()==ExpressionKind.VARACCESS)==JumpStatus.RETURN_IMPACTED)
+						Status.sliceSet.add(ex.getId());
+					else if(!Status.acrossInSessionActive && acrossInVisitor.initiateJump(ex, ex.getKind()==ExpressionKind.VARACCESS)==JumpStatus.RETURN_IMPACTED)
+						Status.sliceSet.add(ex.getId());
+				}
+				
+			}
+		}
+	}
+	public static SliceStatus addSliceToResult(Integer until, Expression node) throws Exception
 	{
 		if(node.hasId())
 		{
-			String identifierName = ForwardSlicerUtil.convertExpressionToString(node);
-
-//			if(identifierName.equals("tf.habijabi"))
-//				System.out.println("debug");
+			String identifierName="";
+			if(until==null)
+				identifierName = ForwardSlicerUtil.convertExpressionToString(node);
+			else
+				identifierName = ForwardSlicerUtil.convertExpressionToString(node, until);
 			
 			String mt2 = NameResolver.resolveImport(identifierName,null, node.getId());
 			
@@ -125,39 +172,30 @@ public class SliceCriteriaAnalysis {
 				if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_SLICING_BIT))
 					System.out.println("Trying to slice: "+identifierName+", resolved to: "+mt2);
 				
+				if(until==null)
+				{
+					int i=0;
+					for(Expression ex: node.getExpressionsList())
+					{
+						if(ex.getKind()==ExpressionKind.METHODCALL)
+						{
+							addSliceToResult(i, node);
+						}
+						i++;
+					}
+				}
+				sliceMethodParam(node);
+				
 				boolean doSlice=false;
-				if(isExpressionModified(node) || isExpressionImpacted(node))
+				if(isExpressionImpactedOrModified(node, until))
 				{
 					doSlice=true;
 				}
-				else //check callbacks
-				{
-					if(ForwardSlicerUtil.getNumMethodActualArg(node)>0)
-					{
-						for (Expression ex : node.getMethodArgs(0).getExpressionsList()) {
-							if(ForwardSlicerUtil.isProperAssignKind(ex) && 
-									(ex.getExpressions(1).getKind()==ExpressionKind.VARACCESS || ex.getExpressions(1).getKind()==ExpressionKind.METHODCALL))
-							{
-								if(Status.acrossInSessionActive && acrossInVisitor.makeJump(ex.getExpressions(1), 
-										ex.getExpressions(1).getKind()==ExpressionKind.VARACCESS)==JumpStatus.RETURN_IMPACTED)
-									doSlice=true;
-								else if(!Status.acrossInSessionActive && 
-										acrossInVisitor.initiateJump(ex.getExpressions(1), 
-												ex.getExpressions(1).getKind()==ExpressionKind.VARACCESS)==JumpStatus.RETURN_IMPACTED)
-									doSlice=true;
-							}
-							else if(ex.getKind()==ExpressionKind.VARACCESS || ex.getKind()==ExpressionKind.METHODCALL)
-							{
-								if(Status.acrossInSessionActive && acrossInVisitor.makeJump(ex, ex.getKind()==ExpressionKind.VARACCESS)==JumpStatus.RETURN_IMPACTED)
-									doSlice=true;
-								else if(!Status.acrossInSessionActive && acrossInVisitor.initiateJump(ex, ex.getKind()==ExpressionKind.VARACCESS)==JumpStatus.RETURN_IMPACTED)
-									doSlice=true;
-							}
-						}
-					}
-				}
 				
-				Status.resolvedNameMap.put(node.getId(), mt2);
+				int id=node.getId();
+				if(until!=null) id=node.getExpressions(until).getId();
+				
+				Status.resolvedNameMap.put(id, mt2);
 				
 				if(doSlice)
 				{
@@ -165,7 +203,7 @@ public class SliceCriteriaAnalysis {
 					{	
 				        System.out.println(Status.ANSI_GREEN+"Sliced line# "+mt2+Status.ANSI_RESET);
 					}
-					Status.sliceSet.add(node.getId());
+					Status.sliceSet.add(id);
 					return SliceStatus.SLICE_DONE;
 				}
 				
