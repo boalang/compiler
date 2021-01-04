@@ -42,6 +42,7 @@ import com.steadystate.css.dom.CSSStyleSheetImpl;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Cell;
 import boa.types.Ast.Cell.CellKind;
+import boa.types.Ast.Namespace;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Diff.ChangedFile.Builder;
@@ -67,6 +68,7 @@ import boa.datagen.util.JavaErrorCheckVisitor;
 import org.eclipse.dltk.python.internal.core.parser.PythonSourceParser;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
@@ -604,13 +606,15 @@ public abstract class AbstractCommit {
 		pythonParsingError = false;
 
 		String fullPath = this.projectName + "/";
+		String curPath = fullPath+path;
 		if(fb.hasChange()&&fb.getChange()==ChangeKind.RENAMED)
 			fullPath+=fb.getPreviousNames(0);
 		else
 			fullPath+=path;
 
-//		if(path.endsWith("squad_ids.py"))
+//		if(this.id.equals("070246304a02d133a2c64710f617c41c2ca76c11"))
 //			System.out.println("commit " + this.id);		
+		
 		PythonSourceParser parser = new PythonSourceParser();
 		IModuleSource input = new ModuleSource(content);
 
@@ -622,7 +626,7 @@ public abstract class AbstractCommit {
 		};
 
 		// System.out.println("actual source: " + content);
-		PythonModuleDeclaration module;
+		PythonModuleDeclaration module, prevModule=null;
 
 		try {
 			module = (PythonModuleDeclaration) parser.parse(input, reporter);
@@ -635,6 +639,7 @@ public abstract class AbstractCommit {
 	
 					try {
 						tm.map();
+						prevModule=(PythonModuleDeclaration)previousAst.get(fullPath);
 					} catch (Exception e) {
 						if (debug) {
 							System.err.println("Tree mapping error" + path + " from: " + projectName + "\n");
@@ -648,7 +653,11 @@ public abstract class AbstractCommit {
 				}
 	
 				if (!this.lastRevision)
-					previousAst.put(fullPath, module);
+				{
+					previousAst.put(curPath, module);
+					if(!curPath.equals(fullPath))
+						previousAst.remove(fullPath);
+				}
 			}		
 
 		} catch (Exception e) {
@@ -667,6 +676,14 @@ public abstract class AbstractCommit {
 
 			try {
 				ast.addNamespaces(visitor.getNamespace(module, path));
+				
+				if(prevModule!=null)
+				{
+					NewPythonVisitor visitorPrev = new NewPythonVisitor();
+					visitorPrev.enableDiff = this.enableDiff;
+					ast.addNamespaces(visitorPrev.getNamespace(prevModule, fullPath));
+				}
+				
 			} catch (final UnsupportedOperationException e) {
 				if (debug) {
 					System.err.println("Unsupported operation Error visiting Python file: " + path + " from: " + projectName + "\n");
