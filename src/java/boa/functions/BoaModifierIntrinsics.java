@@ -483,7 +483,7 @@ public class BoaModifierIntrinsics {
 	/**
 	 * Returns a specific Annotation Modifier, if it exists otherwise returns null.
 	 * 
-	 * @param d the Namespace to check
+	 * @param decl the Namespace to check
 	 * @param name the annotation to look for
 	 * @return the annotation Modifier or null
 	 */
@@ -501,7 +501,7 @@ public class BoaModifierIntrinsics {
 	/**
 	 * Returns if the Namespace has the specified modifier.
 	 * 
-	 * @param d the Namespace to examine
+	 * @param decl the Namespace to examine
 	 * @param kind the ModifierKind to test for
 	 * @return true if d contains a modifier kind
 	 */
@@ -517,7 +517,7 @@ public class BoaModifierIntrinsics {
 	/**
 	 * Returns if the Namespace has the specified visibility modifier.
 	 * 
-	 * @param d the Namespace to examine
+	 * @param decl the Namespace to examine
 	 * @param v the Visibility modifier to test for
 	 * @return true if d contains a visibility modifier v
 	 */
@@ -533,7 +533,7 @@ public class BoaModifierIntrinsics {
 	/**
 	 * Returns if the Namespace has a FINAL modifier.
 	 * 
-	 * @param d the Namespace to check
+	 * @param decl the Namespace to check
 	 * @return true if d has a FINAL modifier
 	 */
 	@FunctionSpec(name = "has_modifier_final", returnType = "bool", formalParameters = { "Namespace" })
@@ -544,7 +544,7 @@ public class BoaModifierIntrinsics {
 	/**
 	 * Returns if the Namespace has a STATIC modifier.
 	 * 
-	 * @param d the Namespace to check
+	 * @param decl the Namespace to check
 	 * @return true if d has a STATIC modifier
 	 */
 	@FunctionSpec(name = "has_modifier_static", returnType = "bool", formalParameters = { "Namespace" })
@@ -555,7 +555,7 @@ public class BoaModifierIntrinsics {
 	/**
 	 * Returns if the Namespace has a SYNCHRONIZED modifier.
 	 * 
-	 * @param d the Namespace to check
+	 * @param decl the Namespace to check
 	 * @return true if d has a SYNCHRONIZED modifier
 	 */
 	@FunctionSpec(name = "has_modifier_synchronized", returnType = "bool", formalParameters = { "Namespace" })
@@ -566,7 +566,7 @@ public class BoaModifierIntrinsics {
 	/**
 	 * Returns if the Namespace has an Annotation.
 	 * 
-	 * @param d the Namespace to check
+	 * @param decl the Namespace to check
 	 * @return true if d has an annotation
 	 */
 	@FunctionSpec(name = "has_annotation", returnType = "bool", formalParameters = { "Namespace" })
@@ -577,7 +577,7 @@ public class BoaModifierIntrinsics {
 	/**
 	 * Returns if the Namespace has an Annotation with the given name.
 	 * 
-	 * @param d the Namespace to check
+	 * @param decl the Namespace to check
 	 * @param name the annotation name to look for
 	 * @return true if d has an annotation with the given name
 	 */
@@ -589,7 +589,7 @@ public class BoaModifierIntrinsics {
 	/**
 	 * Returns if the Namespace has a PUBLIC visibility modifier.
 	 * 
-	 * @param d the Namespace to check
+	 * @param decl the Namespace to check
 	 * @return true if d has a PUBLIC visibility modifier
 	 */
 	@FunctionSpec(name = "has_modifier_public", returnType = "bool", formalParameters = { "Namespace" })
@@ -600,7 +600,7 @@ public class BoaModifierIntrinsics {
 	/**
 	 * Returns if the Namespace has a PRIVATE visibility modifier.
 	 * 
-	 * @param d the Namespace to check
+	 * @param decl the Namespace to check
 	 * @return true if d has a PRIVATE visibility modifier
 	 */
 	@FunctionSpec(name = "has_modifier_private", returnType = "bool", formalParameters = { "Namespace" })
@@ -611,7 +611,7 @@ public class BoaModifierIntrinsics {
 	/**
 	 * Returns if the Namespace has a PROTECTED visibility modifier.
 	 * 
-	 * @param d the Namespace to check
+	 * @param decl the Namespace to check
 	 * @return true if d has a PROTECTED visibility modifier
 	 */
 	@FunctionSpec(name = "has_modifier_protected", returnType = "bool", formalParameters = { "Namespace" })
@@ -622,7 +622,7 @@ public class BoaModifierIntrinsics {
 	/**
 	 * Returns if the Namespace has a NAMESPACE visibility modifier.
 	 * 
-	 * @param d the Namespace to check
+	 * @param decl the Namespace to check
 	 * @return true if d has a NAMESPACE visibility modifier
 	 */
 	@FunctionSpec(name = "has_modifier_namespace", returnType = "bool", formalParameters = { "Namespace" })

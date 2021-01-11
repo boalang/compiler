@@ -1,5 +1,6 @@
-package boa.functions;
+package boa.functions.ds;
 
+import boa.functions.FunctionSpec;
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.*;
 import boa.types.Ast.Expression.ExpressionKind;
@@ -9,13 +10,9 @@ import boa.types.Diff.ChangedFile;
 import boa.types.Toplevel.Project;
 
 import static boa.functions.BoaIntrinsics.getSnapshot;
-import static boa.functions.BoaAstIntrinsics.*;
+//import static boa.functions.BoaAstIntrinsics.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class BoaDSIntrinsics {
 
@@ -23,33 +20,30 @@ public class BoaDSIntrinsics {
 	public static String[] test(final Project p) throws Exception {
 		CodeRepository cr = p.getCodeRepositories(0);
 		ChangedFile[] snapshot = getSnapshot(cr);
-		Set<String> nodes = collectNodes(snapshot);
-		List<Features> featureList = collectClassFeatures(snapshot, nodes);
-		String[] res = new String[featureList.size()];
-		int idx = 0;
-		for (Features f : featureList)
-			res[idx++] = f.toString();
-		return res;
+		
+		Map<String, Source> sources = getSources(snapshot);
+
+		return new String[0];
 	}
 
-	private static Set<String> collectNodes(ChangedFile[] snapshot) throws Exception {
-		Set<String> nodes = new HashSet<>();
-		BoaAbstractVisitor visitor = new BoaAbstractVisitor() {
-			@Override
-			protected boolean preVisit(Declaration d) throws Exception {
-				if (declFilter(d))
-					return false;
-				for (Variable v : d.getFieldsList())
-					if (v.getVariableType().getName().equals(d.getName()))
-						nodes.add(d.getName());
-				for (Declaration next : d.getNestedDeclarationsList())
-					visit(next);
-				return false;
-			}
-		};
-		for (ChangedFile cf : snapshot)
-			visitor.visit(cf);
-		return nodes;
+	private static Map<String, Source> getSources(ChangedFile[] snapshot) throws Exception {
+		Map<String, ClassTrie> tempSources = new HashMap<>();
+		for (ChangedFile cf : snapshot) {
+			String fileName = cf.getName();
+			if (fileName.indexOf(".java") < 0)
+				continue;
+			int idx = fileName.indexOf('/');
+			String root = "root";
+			if (idx > 0)
+				root = fileName.substring(0, idx);
+			tempSources.computeIfAbsent(root, k -> new ClassTrie()).update(cf);
+		}
+		
+		Map<String, Source> sources = new HashMap<>();
+		for (Map.Entry<String, ClassTrie> e : tempSources.entrySet()) {
+			sources.put(e.getKey(), new Source(e.getKey(), e.getValue()));
+		}
+		return sources;
 	}
 
 	private static List<Features> collectClassFeatures(ChangedFile[] snapshot, Set<String> nodes) throws Exception {
@@ -147,8 +141,8 @@ public class BoaDSIntrinsics {
 		return res;
 	}
 
-	private static boolean declFilter(Declaration d) {
-		return d.getKind() != TypeKind.CLASS;
+	public static boolean declFilter(Declaration d) {
+		return d.getKind() != TypeKind.CLASS || d.getFullyQualifiedName().indexOf('.') < 0;
 	}
 
 	@FunctionSpec(name = "immutable", returnType = "bool", formalParameters = { "Variable" })
