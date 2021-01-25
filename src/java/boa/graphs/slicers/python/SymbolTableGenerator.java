@@ -8,6 +8,8 @@ import java.util.Stack;
 import boa.functions.BoaGraphIntrinsics;
 import boa.functions.BoaStringIntrinsics;
 import boa.runtime.BoaAbstractVisitor;
+import boa.types.Ast.ASTRoot;
+import boa.types.Ast.Cell;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Method;
@@ -20,6 +22,18 @@ import boa.types.Ast.Variable;
 
 public class SymbolTableGenerator extends BoaAbstractVisitor {
 
+	
+	@Override
+	protected boolean preVisit(final ASTRoot node) throws Exception {
+		final List<Namespace> namespacesList = node.getNamespacesList();		
+		if(Status.BACKWARD)
+			visit(namespacesList.get(1));
+		else
+			visit(namespacesList.get(0));
+		
+		return false;
+	}
+	
 	@Override
 	protected boolean preVisit(final Namespace node) throws Exception {
 		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));

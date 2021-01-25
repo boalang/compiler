@@ -29,6 +29,10 @@ public class Status {
 	public static int DEBUG_STACK_TRACE_BIT=6;
 	public static boolean DEBUG = false;
 	
+	public static boolean BACKWARD=false;
+	
+	public static boolean CRIERIA_FLAG=true;
+	
 	public static Stack<String> globalScopeNameStack;
 	public static Stack<String> statementScopeStack;
 	public static Stack<String> namespaceScopeStack;

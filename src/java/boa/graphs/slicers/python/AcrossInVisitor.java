@@ -86,12 +86,12 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		if (ForwardSlicerUtil.isProperAssignKind(node) && !Status.isMethodCallScope()) {
 			ForwardSlicer.handleExpressionForSymbolTable(node);
 
-			makeJump(node,false);
+			makeJump(node, false);
 		}
 
 		if (ForwardSlicerUtil.isMethodCallKind(node)) {
 			if (SliceCriteriaAnalysis.addSliceToResult(null, node) == SliceStatus.NOT_CANDIDATE) {
-				makeJump(node,false);
+				makeJump(node, false);
 			}
 		}
 
@@ -121,8 +121,8 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 	}
 
 	public JumpStatus initiateJump(Expression mainNode, boolean isCallback) throws Exception {
-				
-		if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT))
+
+		if (Status.DEBUG && ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT))
 			System.out.println(
 					"Initiating across-in traversal for: " + ForwardSlicerUtil.convertExpressionToString(mainNode));
 
@@ -138,9 +138,9 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 		Status.acrossInStack.clear();
 		visitedScope.clear();
 
-		if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT))
+		if (Status.DEBUG && ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT))
 			System.out.println("Exiting across-in traversal: " + jumpStatus.toString());
-		
+
 		return jumpStatus;
 	}
 
@@ -166,8 +166,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 				}
 				return jumpStatus;
 			} else
-				return makeJump(mainNode.getExpressions(0), 
-						mainNode.getExpressions(1), isCallback);
+				return makeJump(mainNode.getExpressions(0), mainNode.getExpressions(1), isCallback);
 		} else
 			return makeJump(null, mainNode, isCallback);
 	}
@@ -175,11 +174,11 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 	private JumpStatus makeJump(Expression left, Expression right, boolean isCallback) throws Exception {
 		if (right == null)
 			return JumpStatus.JUMP_NOT_MADE;
-		if(isCallback==false && right.getKind() != ExpressionKind.METHODCALL)
+		if (isCallback == false && right.getKind() != ExpressionKind.METHODCALL)
 			return JumpStatus.JUMP_NOT_MADE;
-		if(isCallback && right.getKind() != ExpressionKind.VARACCESS)
+		if (isCallback && right.getKind() != ExpressionKind.VARACCESS)
 			return JumpStatus.JUMP_NOT_MADE;
-		
+
 		Integer leftId = null;
 		if (left != null)
 			leftId = left.getId();
@@ -208,7 +207,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 			if (left != null && Status.returnImpacted.containsKey(nextScope)) {
 				for (Expression ex : ForwardSlicerUtil.expandOtherExpressions(left)) {
 					SymbolTable.addToCriteria(ForwardSlicerUtil.convertExpressionToString(ex), ex.getId(), scope);
-					if (Status.DEBUG&& Status.DEBUG_LEVEL<=1) {
+					if (Status.DEBUG && Status.DEBUG_LEVEL <= 1) {
 						System.out.println("Adding in slice criteria (return-mapping), Scope: " + scope + ", Variable:"
 								+ ForwardSlicerUtil.convertExpressionToString(ex) + ",Location: " + ex.getId());
 					}
@@ -216,13 +215,13 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 			}
 
 			Status.acrossInStack.pop();
-	
+
 			Status.currentCallDepth = Status.currentCallDepth - 1;
 		}
 		visitedScope.remove(methodName);
 		Status.callPointMap.remove(methodName);
 
-		if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT))
+		if (Status.DEBUG && ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT))
 			System.out.println("Across-in jump made to " + methodName);
 
 		if (Status.returnImpacted.containsKey(nextScope)) {
@@ -235,7 +234,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 	public static boolean mapParameter(Method targetMethod, Expression callSite, String nextScope) {
 		if (ForwardSlicerUtil.getNumMethodFormalArg(targetMethod) != ForwardSlicerUtil.getNumMethodActualArg(callSite))
 			return false;
-		Status.isParameterMapping=true;
+		Status.isParameterMapping = true;
 		int j = 0;
 		if (ForwardSlicerUtil.hasSelfArg(targetMethod))
 			j = 1;
@@ -246,38 +245,45 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 			if (ForwardSlicerUtil.isProperAssignKind(ex)) {
 				String rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(ex.getExpressions(0));
 
-				if (SliceCriteriaAnalysis.isExpressionModified(ex.getExpressions(1))
-						|| SliceCriteriaAnalysis.isExpressionImpacted(ex.getExpressions(1))) {
-					SymbolTable.addToCriteria(rightIdentifierName, leftId, nextScope);
-					if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT)) {
-						System.out.println("Adding in slice criteria (parameter-mapping), Scope: " + nextScope
-								+ ", Variable:" + rightIdentifierName + ",Location: " + leftId);
+				if (Status.CRIERIA_FLAG) {
+					if (SliceCriteriaAnalysis.isExpressionModified(ex.getExpressions(1))
+							|| SliceCriteriaAnalysis.isExpressionImpacted(ex.getExpressions(1))) {
+						SymbolTable.addToCriteria(rightIdentifierName, leftId, nextScope);
+						if (Status.DEBUG && ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT)) {
+							System.out.println("Adding in slice criteria (parameter-mapping), Scope: " + nextScope
+									+ ", Variable:" + rightIdentifierName + ",Location: " + leftId);
+						}
 					}
 				}
-			    rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(ex.getExpressions(1));
+				rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(ex.getExpressions(1));
 
 				String mt2 = NameResolver.resolveName(rightIdentifierName, ex.getExpressions(0).getId(),
 						ex.getExpressions(1).getId());
 				if (!mt2.equals("")) {
 					SymbolTable.addToAliasSet(leftId, mt2, nextScope);
-					if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT))
+					if (Status.DEBUG && ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT))
 						System.out
 								.println("Mapping for alias(parameter-mapping): " + leftIdentiferName + " ==> " + mt2);
 				}
-			} else if (SliceCriteriaAnalysis.isExpressionModified(ex)
-					|| SliceCriteriaAnalysis.isExpressionImpacted(ex)) {
-				
-				SymbolTable.addToCriteria(leftIdentiferName, leftId, nextScope);
-				if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT)) {
-					System.out.println("Adding in slice criteria (parameter-mapping), Scope: " + nextScope
-							+ ", Variable:" + leftIdentiferName + ",Location: " + leftId);
+			} else {
+
+				if (Status.CRIERIA_FLAG) {
+					if (SliceCriteriaAnalysis.isExpressionModified(ex)
+							|| SliceCriteriaAnalysis.isExpressionImpacted(ex)) {
+
+						SymbolTable.addToCriteria(leftIdentiferName, leftId, nextScope);
+						if (Status.DEBUG && ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT)) {
+							System.out.println("Adding in slice criteria (parameter-mapping), Scope: " + nextScope
+									+ ", Variable:" + leftIdentiferName + ",Location: " + leftId);
+						}
+					}
 				}
 				String rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(ex);
 
 				String mt2 = NameResolver.resolveName(rightIdentifierName, null, ex.getId());
 				if (!mt2.equals("")) {
 					SymbolTable.addToAliasSet(leftId, mt2, nextScope);
-					if (Status.DEBUG&& ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT))
+					if (Status.DEBUG && ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_ACROSS_IN_BIT))
 						System.out
 								.println("Mapping for alias(parameter-mapping): " + leftIdentiferName + " ==> " + mt2);
 				}
@@ -285,7 +291,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 			}
 			j++;
 		}
-		Status.isParameterMapping=false;
+		Status.isParameterMapping = false;
 		return true;
 	}
 
@@ -295,7 +301,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 
 		if (tmp == "")
 			tmp = methodName;
-		methodName=tmp;
+		methodName = tmp;
 		tmp = resolveMethodNameForJump(tmp);
 		if (tmp == "" && methodName.startsWith("self."))
 			tmp = methodName.substring(5);

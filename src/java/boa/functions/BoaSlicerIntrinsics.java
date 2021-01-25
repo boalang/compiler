@@ -179,6 +179,23 @@ public class BoaSlicerIntrinsics {
 		
 	}
 	
+	@FunctionSpec(name = "getmodificationbackward", returnType = "ASTRoot", formalParameters = { "ASTRoot", "array of string", "array of string" })
+	public static ASTRoot getmodificationbackward(final ASTRoot changedFile, String[] moduleFilter, 
+			String[] filterCriteria) {
+		
+		if(changedFile.getNamespacesCount()!=2) return changedFile;
+		
+		Status.BACKWARD=true;
+		
+		ForwardSlicer slicer=new ForwardSlicer(changedFile, moduleFilter, filterCriteria, true);
+		ASTRoot retAst= slicer.initiateVisit(true);
+		
+		if(retAst==null) return emptyAst;
+		
+		return retAst;
+		
+	}
+	
 	@FunctionSpec(name = "getpythonimportmodules", returnType = "array of string", formalParameters = { "ASTRoot",  "array of string" })
 	public static String[] getpythonimportmodules(final ASTRoot ast, String[] moduleFilter) {
 		if(ast==null || ast.getNamespacesCount()==0 ||

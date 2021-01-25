@@ -22,6 +22,8 @@ public class TreeChangeSetter {
 
 	protected Namespace visit(Namespace node) {
 
+//		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
+
 		Namespace.Builder b=node.toBuilder();
 				
 		b.clearVariables();
@@ -47,6 +49,8 @@ public class TreeChangeSetter {
 		{
 			b.addMethods(visit(v));
 		}
+		
+//		Status.globalScopeNameStack.pop();
 		
 		return b.build();
 
@@ -117,6 +121,8 @@ public class TreeChangeSetter {
 
 	Declaration visit(Declaration node) {
 
+//		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
+
 		Declaration.Builder b=node.toBuilder(); 
 		
 		b.clearStatements();
@@ -142,11 +148,15 @@ public class TreeChangeSetter {
 		{
 			b.addParents(visit(v));
 		}
+		
+//		Status.globalScopeNameStack.pop();
 		return b.build();
 	}
 
 	Method visit(Method node) {
 	
+//		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
+
 		Method.Builder b=node.toBuilder(); 
 		
 		b.clearStatements();
@@ -160,6 +170,8 @@ public class TreeChangeSetter {
 		{
 			b.addArguments(visit(v));
 		}
+		
+//		Status.globalScopeNameStack.pop();
 		return b.build();
 	}
 
@@ -172,6 +184,20 @@ public class TreeChangeSetter {
 		if(node.getComputedName()!=null)
 			b.setComputedName(visit(node.getComputedName()));
 		
+		return b.build();
+	}
+	
+	Expression handleExpressionMethodCall(Expression node, String resolvedName)
+	{
+		Expression.Builder b=node.toBuilder();
+		b.setMethod(resolvedName);
+		b.setKind(node.getKind());
+		
+		b.clearMethodArgs();
+		for(Expression v: node.getMethodArgsList())
+		{
+			b.addMethodArgs(visit(v));
+		}
 		return b.build();
 	}
 	
@@ -192,11 +218,39 @@ public class TreeChangeSetter {
 				b.setChange(ChangeKind.IMPACTED);
 		}
 		
-		if(Status.resolvedNameMap.containsKey(node.getId()))
+		
+		boolean methodCallExpAlreadyAdded=false;
+		if(node.getKind()==ExpressionKind.METHODCALL)
 		{
-			if(node.getKind()==ExpressionKind.METHODCALL)
-				b.setMethod(Status.resolvedNameMap.get(node.getId()));
+			String identifierName = ForwardSlicerUtil.convertExpressionToString(node);
+			identifierName=NameResolver.resolveImport(identifierName,null, node.getId());
+			if(!identifierName.equals(""))
+			{
+				b.setMethod(identifierName);
+				b.clearExpressions();
+				int i=0;
+				for(Expression ex: node.getExpressionsList())
+				{
+					if(ex.getKind()==ExpressionKind.METHODCALL)
+					{
+						identifierName = ForwardSlicerUtil.convertExpressionToString(node, i);
+						identifierName=NameResolver.resolveImport(identifierName,null, node.getId());
+						b.addExpressions(handleExpressionMethodCall(ex, identifierName));
+					}
+					else
+						b.addExpressions(visit(ex));
+					i++;
+				}
+				methodCallExpAlreadyAdded=true;
+			}
+			else
+				b.setMethod(node.getMethod());
 		}
+//		if(Status.resolvedNameMap.containsKey(node.getId()))
+//		{
+//			if(node.getKind()==ExpressionKind.METHODCALL)
+//				b.setMethod(Status.resolvedNameMap.get(node.getId()));
+//		}
 		
 		b.setKind(node.getKind());
 		
@@ -212,17 +266,19 @@ public class TreeChangeSetter {
 			b.addStatements(visit(v));
 		}
 		
-		
 		b.clearMethods();
 		for(Method v: node.getMethodsList())
 		{
 			b.addMethods(visit(v));
 		}
 		
-		b.clearExpressions();
-		for(Expression v: node.getExpressionsList())
+		if(methodCallExpAlreadyAdded==false) //comment this line in normal mode
 		{
-			b.addExpressions(visit(v));
+			b.clearExpressions();
+			for(Expression v: node.getExpressionsList())
+			{
+				b.addExpressions(visit(v));
+			}
 		}
 		b.clearMethodArgs();
 		for(Expression v: node.getMethodArgsList())

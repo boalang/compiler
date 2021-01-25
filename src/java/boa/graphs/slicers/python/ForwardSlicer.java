@@ -23,6 +23,9 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 	boolean firstTurn = true;
 
 	public ForwardSlicer(ASTRoot _root, String[] moduleFilter, String[] filterCriteria, boolean changeImpactFlag) {
+		//remove
+		Status.CRIERIA_FLAG=false;
+		
 		this.root = _root;
 
 		Status.setLibraryFilter(filterCriteria);
@@ -61,7 +64,10 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 			this.visit(root);
 
 			ASTRoot.Builder retAst = ASTRoot.newBuilder();
-			retAst.addNamespaces(new TreeChangeSetter().visit(root.getNamespaces(0)));
+			if(Status.BACKWARD)
+				retAst.addNamespaces(new TreeChangeSetter().visit(root.getNamespaces(1)));
+			else
+				retAst.addNamespaces(new TreeChangeSetter().visit(root.getNamespaces(0)));
 			
 			Status.clear();
 			
@@ -73,6 +79,17 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 		return root;
 	}
 
+	@Override
+	protected boolean preVisit(final ASTRoot node) throws Exception {
+		final List<Namespace> namespacesList = node.getNamespacesList();		
+		if(Status.BACKWARD)
+			visit(namespacesList.get(1));
+		else
+			visit(namespacesList.get(0));
+		
+		return false;
+	}
+	
 	protected boolean preVisit(final Namespace node) throws Exception {
 		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
 
@@ -221,6 +238,9 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 	}
 
 	public static void addForCriteria(HashMap<String, Integer> leftIdentifiers, List<Expression> rightExps) {
+		if(Status.CRIERIA_FLAG==false) 
+			return;
+		
 		List<Expression> left = new ArrayList<Expression>();
 		for (Map.Entry<String, Integer> entry : leftIdentifiers.entrySet()) {
 			String identiferName = entry.getKey();
@@ -235,6 +255,9 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 	}
 
 	public static void addForCriteria(List<Expression> leftExps, List<Expression> rightExps) {
+		if(Status.CRIERIA_FLAG==false) 
+			return;
+		
 		String scope = Status.getCurrentScope();
 
 		if (leftExps.size() == rightExps.size()) {

@@ -221,10 +221,10 @@ public class SliceCriteriaAnalysis {
 				{
 					id=node.getExpressions(until).getId();
 				}
-					
+	
 				if(doSlice)
 				{
-					Status.resolvedNameMap.put(id, mt2); //when couting call-sites, put it outside of this if or calculate call-site count separately
+//					Status.resolvedNameMap.put(id, mt2);
 					
 					if (Status.DEBUG && ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_SLICING_BIT))
 					{	
