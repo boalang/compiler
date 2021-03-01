@@ -34,7 +34,7 @@ public class GetReposByLanguage {
 		TokenList tokens = new TokenList(args[0]);
 		String outDir = args[1];
 		stars = Integer.parseInt(args[2]);
-		String[] languages = args[3].split(" ");
+		String[] languages = args[3].split(";");
 
 		if (args.length > 3) {
 			String langArgs = "";
