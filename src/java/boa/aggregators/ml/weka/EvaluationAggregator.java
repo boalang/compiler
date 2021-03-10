@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.nd4j.shade.protobuf.common.collect.Maps;
 
 import boa.aggregators.AggregatorSpec;
 import boa.aggregators.FinishedException;
@@ -47,7 +46,7 @@ public class EvaluationAggregator extends MLAggregator {
 		for (int i = 0; i < options.length; i++) {
 			String cur = options[i];
 			if (cur.equals("-class")) {
-				classes = Maps.newHashMap();
+				classes = new HashMap<>();
 				for (String c : options[++i].split(":"))
 					classes.put(c, classes.size());
 			} else if (cur.equals("-job")) {

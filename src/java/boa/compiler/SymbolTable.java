@@ -423,8 +423,8 @@ public class SymbolTable {
 		types.put("FilteredClassifier", new BoaFilteredClassifier());
 		types.put("GaussianProcesses", new BoaGaussianProcesses());
 		types.put("InputMappedClassifier", new BoaInputMappedClassifier());
-		types.put("Word2Vec", new BoaWord2Vec());
-		types.put("Seq2Vec", new BoaSequence2Vec());
+//		types.put("Word2Vec", new BoaWord2Vec());
+//		types.put("Seq2Vec", new BoaSequence2Vec());
 		types.put("Apriori", new BoaApriori());
 
 		for (final BoaType t : dslTupleTypes)

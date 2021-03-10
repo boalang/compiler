@@ -22,9 +22,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import org.apache.commons.compress.utils.Lists;
-import org.nd4j.shade.guava.collect.Sets;
-
 import boa.runtime.Tuple;
 import boa.aggregators.AggregatorSpec;
 import weka.associations.Apriori;
@@ -57,7 +54,7 @@ public class AprioriAggregator extends MLAggregator {
 		for (int i = 0; i < options.length; i++) {
 			String cur = options[i];
 			if (cur.equals("-A")) {
-				attributeNames = Lists.newArrayList();
+				attributeNames = new ArrayList<>();
 				for (String name : options[++i].split(":"))
 					if (!name.equals(""))
 						attributeNames.add(name);
@@ -71,7 +68,7 @@ public class AprioriAggregator extends MLAggregator {
 	@Override
 	public void aggregate(String[] data, String metadata) throws IOException, InterruptedException {
 		if (dataList == null)
-			dataList = Lists.newArrayList();
+			dataList = new ArrayList<>();
 		dataList.add(data);
 	}
 
@@ -127,15 +124,15 @@ public class AprioriAggregator extends MLAggregator {
 	}
 
 	private void attributeCreation() {
-		List<HashSet<String>> nominalSets = Lists.newArrayList();
+		List<HashSet<String>> nominalSets = new ArrayList<>();
 		for (int i = 0; i < attributeNames.size(); i++)
-			nominalSets.add(Sets.newHashSet());
+			nominalSets.add(new HashSet<>());
 
 		for (String[] data : dataList)
 			for (int i = 0; i < data.length; i++)
 				nominalSets.get(i).add(data[i]);
 
-		List<List<String>> nomialLists = Lists.newArrayList();
+		List<List<String>> nomialLists = new ArrayList<>();
 		for (HashSet<String> set : nominalSets)
 			nomialLists.add(new ArrayList<>(set));
 

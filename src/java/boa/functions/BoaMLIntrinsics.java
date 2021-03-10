@@ -5,19 +5,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.deeplearning4j.models.embeddings.reader.impl.BasicModelUtils;
-import org.deeplearning4j.models.sequencevectors.SequenceVectors;
-import org.deeplearning4j.models.word2vec.VocabWord;
-import org.deeplearning4j.models.word2vec.Word2Vec;
+//import org.deeplearning4j.models.embeddings.reader.impl.BasicModelUtils;
+//import org.deeplearning4j.models.sequencevectors.SequenceVectors;
+//import org.deeplearning4j.models.word2vec.VocabWord;
+//import org.deeplearning4j.models.word2vec.Word2Vec;
 
 import boa.aggregators.ml.util.KMeans;
 import boa.aggregators.ml.util.MyVote;
@@ -47,16 +43,17 @@ public class BoaMLIntrinsics {
 		Path p = getModelPath(jobId, identifier);
 		Object object = p.getName().endsWith(".seq") ? new MyVote(p) : deserialize(p);
 
-		if (object instanceof Word2Vec) {
-			Word2Vec word2Vec = (Word2Vec) object;
-			word2Vec.setModelUtils(new BasicModelUtils<>());
-			return new BoaWord2Vec(word2Vec, o);
-		} else if (object instanceof SequenceVectors) {
-			@SuppressWarnings("unchecked")
-			SequenceVectors<VocabWord> seq2vec = (SequenceVectors<VocabWord>) object;
-			seq2vec.setModelUtils(new BasicModelUtils<>());
-			return new BoaSequence2Vec(seq2vec, o);
-		} else if (object instanceof Classifier) {
+//		if (object instanceof Word2Vec) {
+//			Word2Vec word2Vec = (Word2Vec) object;
+//			word2Vec.setModelUtils(new BasicModelUtils<>());
+//			return new BoaWord2Vec(word2Vec, o);
+//		} else if (object instanceof SequenceVectors) {
+//			@SuppressWarnings("unchecked")
+//			SequenceVectors<VocabWord> seq2vec = (SequenceVectors<VocabWord>) object;
+//			seq2vec.setModelUtils(new BasicModelUtils<>());
+//			return new BoaSequence2Vec(seq2vec, o);
+//		} else 
+		if (object instanceof Classifier) {
 			// classifier
 			Classifier clr = (Classifier) object;
 			if (type.contains("LinearRegression")) {
@@ -231,98 +228,98 @@ public class BoaMLIntrinsics {
 	// https://github.com/eclipse/deeplearning4j/blob/43fd64358cd96413063a06e63b7d34402555a3ec/deeplearning4j/deeplearning4j-nlp-parent/deeplearning4j-nlp/src/main/java/org/deeplearning4j/models/embeddings/wordvectors/WordVectorsImpl.java
 	// https://github.com/eclipse/deeplearning4j/blob/43fd64358cd96413063a06e63b7d34402555a3ec/deeplearning4j/deeplearning4j-nlp-parent/deeplearning4j-nlp/src/main/java/org/deeplearning4j/models/embeddings/reader/impl/BasicModelUtils.java
 
-	@FunctionSpec(name = "sim", returnType = "float", formalParameters = { "Word2Vec", "string", "string" })
-	public static double sim(final BoaWord2Vec m, final String w1, final String w2) {
-		return m.getW2v().similarity(w1, w2);
-	}
-
-	@FunctionSpec(name = "nearest", returnType = "array of string", formalParameters = { "Word2Vec", "string", "int" })
-	public static String[] nearest(final BoaWord2Vec m, final String w, final long num) {
-		return m.getW2v().wordsNearest(w, (int) num).toArray(new String[0]);
-	}
-
-	@FunctionSpec(name = "vector", returnType = "array of float", formalParameters = { "Word2Vec", "string" })
-	public static double[] vector(final BoaWord2Vec m, final String w) {
-		return m.getW2v().getWordVector(w);
-	}
-
-	@FunctionSpec(name = "arith", returnType = "array of string", formalParameters = { "Word2Vec", "string", "int" })
-	public static String[] arith(final BoaWord2Vec m, final String exp, final long num) {
-		List<String> plus = new LinkedList<String>();
-		List<String> minus = new LinkedList<String>();
-		String[] tokens = exp.split("\\s+");
-		for (int i = 0; i < tokens.length; i++) {
-			String token = tokens[i];
-			if (i == 0 && !token.equals("-") && !token.equals("+"))
-				plus.add(token);
-			else if (token.equals("+"))
-				plus.add(tokens[++i]);
-			else if (token.equals("-"))
-				minus.add(tokens[++i]);
-		}
-		return m.getW2v().wordsNearest(plus, minus, (int) num).toArray(new String[0]);
-	}
+//	@FunctionSpec(name = "sim", returnType = "float", formalParameters = { "Word2Vec", "string", "string" })
+//	public static double sim(final BoaWord2Vec m, final String w1, final String w2) {
+//		return m.getW2v().similarity(w1, w2);
+//	}
+//
+//	@FunctionSpec(name = "nearest", returnType = "array of string", formalParameters = { "Word2Vec", "string", "int" })
+//	public static String[] nearest(final BoaWord2Vec m, final String w, final long num) {
+//		return m.getW2v().wordsNearest(w, (int) num).toArray(new String[0]);
+//	}
+//
+//	@FunctionSpec(name = "vector", returnType = "array of float", formalParameters = { "Word2Vec", "string" })
+//	public static double[] vector(final BoaWord2Vec m, final String w) {
+//		return m.getW2v().getWordVector(w);
+//	}
+//
+//	@FunctionSpec(name = "arith", returnType = "array of string", formalParameters = { "Word2Vec", "string", "int" })
+//	public static String[] arith(final BoaWord2Vec m, final String exp, final long num) {
+//		List<String> plus = new LinkedList<String>();
+//		List<String> minus = new LinkedList<String>();
+//		String[] tokens = exp.split("\\s+");
+//		for (int i = 0; i < tokens.length; i++) {
+//			String token = tokens[i];
+//			if (i == 0 && !token.equals("-") && !token.equals("+"))
+//				plus.add(token);
+//			else if (token.equals("+"))
+//				plus.add(tokens[++i]);
+//			else if (token.equals("-"))
+//				minus.add(tokens[++i]);
+//		}
+//		return m.getW2v().wordsNearest(plus, minus, (int) num).toArray(new String[0]);
+//	}
 
 	/* ------------------------------- Seq2Vec ------------------------------- */
 
-	// TODO: ensemble
-	@FunctionSpec(name = "sim", returnType = "float", formalParameters = { "Seq2Vec", "string", "string" })
-	public static double sim(final BoaSequence2Vec m, final String w1, final String w2) {
-		return m.getSeq2Vec().similarity(w1, w2);
-	}
-
-	// TODO: ensemble
-	@FunctionSpec(name = "nearest", returnType = "array of string", formalParameters = { "Seq2Vec", "string", "int" })
-	public static String[] nearest(final BoaSequence2Vec m, final String w, final long num) {
-		return m.getSeq2Vec().wordsNearest(w, (int) num).toArray(new String[0]);
-	}
-
-	// TODO: ensemble
-	@FunctionSpec(name = "vector", returnType = "array of float", formalParameters = { "Seq2Vec", "string" })
-	public static double[] vector(final BoaSequence2Vec m, final String w) {
-		return m.getSeq2Vec().getWordVector(w);
-	}
-
-	@FunctionSpec(name = "vector", returnType = "array of float", formalParameters = { "Seq2Vec", "array of string" })
-	public static double[] vector(final BoaSequence2Vec m, final String[] seq) {
-
-		if (m.getSeq2Vec() != null)
-			return m.getSeq2Vec().getWordVectorsMean(Arrays.asList(seq)).toDoubleVector();
-
-		if (m.getPaths().length != 0)
-			return m.vector(seq);
-
-		return null;
-	}
-
-	@FunctionSpec(name = "vector", returnType = "array of float", formalParameters = { "Seq2Vec", "queue of string" })
-	public static double[] vector(final BoaSequence2Vec m, final LinkedList<String> seq) {
-
-		if (m.getSeq2Vec() != null)
-			return m.getSeq2Vec().getWordVectorsMean(seq).toDoubleVector();
-
-		if (m.getPaths().length != 0)
-			return m.vector(seq);
-
-		return null;
-	}
-
-	// TODO: ensemble
-	@FunctionSpec(name = "arith", returnType = "array of string", formalParameters = { "Seq2Vec", "string", "int" })
-	public static String[] arith(final BoaSequence2Vec m, final String exp, final long num) {
-		List<String> plus = new LinkedList<String>();
-		List<String> minus = new LinkedList<String>();
-		String[] tokens = exp.split("\\s+");
-		for (int i = 0; i < tokens.length; i++) {
-			String token = tokens[i];
-			if (i == 0 && !token.equals("-") && !token.equals("+"))
-				plus.add(token);
-			else if (token.equals("+"))
-				plus.add(tokens[++i]);
-			else if (token.equals("-"))
-				minus.add(tokens[++i]);
-		}
-		return m.getSeq2Vec().wordsNearest(plus, minus, (int) num).toArray(new String[0]);
-	}
+//	// TODO: ensemble
+//	@FunctionSpec(name = "sim", returnType = "float", formalParameters = { "Seq2Vec", "string", "string" })
+//	public static double sim(final BoaSequence2Vec m, final String w1, final String w2) {
+//		return m.getSeq2Vec().similarity(w1, w2);
+//	}
+//
+//	// TODO: ensemble
+//	@FunctionSpec(name = "nearest", returnType = "array of string", formalParameters = { "Seq2Vec", "string", "int" })
+//	public static String[] nearest(final BoaSequence2Vec m, final String w, final long num) {
+//		return m.getSeq2Vec().wordsNearest(w, (int) num).toArray(new String[0]);
+//	}
+//
+//	// TODO: ensemble
+//	@FunctionSpec(name = "vector", returnType = "array of float", formalParameters = { "Seq2Vec", "string" })
+//	public static double[] vector(final BoaSequence2Vec m, final String w) {
+//		return m.getSeq2Vec().getWordVector(w);
+//	}
+//
+//	@FunctionSpec(name = "vector", returnType = "array of float", formalParameters = { "Seq2Vec", "array of string" })
+//	public static double[] vector(final BoaSequence2Vec m, final String[] seq) {
+//
+//		if (m.getSeq2Vec() != null)
+//			return m.getSeq2Vec().getWordVectorsMean(Arrays.asList(seq)).toDoubleVector();
+//
+//		if (m.getPaths().length != 0)
+//			return m.vector(seq);
+//
+//		return null;
+//	}
+//
+//	@FunctionSpec(name = "vector", returnType = "array of float", formalParameters = { "Seq2Vec", "queue of string" })
+//	public static double[] vector(final BoaSequence2Vec m, final LinkedList<String> seq) {
+//
+//		if (m.getSeq2Vec() != null)
+//			return m.getSeq2Vec().getWordVectorsMean(seq).toDoubleVector();
+//
+//		if (m.getPaths().length != 0)
+//			return m.vector(seq);
+//
+//		return null;
+//	}
+//
+//	// TODO: ensemble
+//	@FunctionSpec(name = "arith", returnType = "array of string", formalParameters = { "Seq2Vec", "string", "int" })
+//	public static String[] arith(final BoaSequence2Vec m, final String exp, final long num) {
+//		List<String> plus = new LinkedList<String>();
+//		List<String> minus = new LinkedList<String>();
+//		String[] tokens = exp.split("\\s+");
+//		for (int i = 0; i < tokens.length; i++) {
+//			String token = tokens[i];
+//			if (i == 0 && !token.equals("-") && !token.equals("+"))
+//				plus.add(token);
+//			else if (token.equals("+"))
+//				plus.add(tokens[++i]);
+//			else if (token.equals("-"))
+//				minus.add(tokens[++i]);
+//		}
+//		return m.getSeq2Vec().wordsNearest(plus, minus, (int) num).toArray(new String[0]);
+//	}
 
 }

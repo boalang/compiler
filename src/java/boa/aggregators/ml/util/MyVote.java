@@ -1,10 +1,10 @@
 package boa.aggregators.ml.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import org.apache.hadoop.fs.Path;
-import org.nd4j.shade.guava.collect.Lists;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.meta.Vote;
@@ -216,7 +216,7 @@ public class MyVote extends Vote {
 
 	@Override
 	protected double classifyInstanceMedian(Instance instance) throws Exception {
-		List<Double> results = Lists.newArrayList();
+		List<Double> results = new ArrayList<>();
 
 		for (Classifier classifier : classifiers) {
 			double pred = classifier.classifyInstance(instance);

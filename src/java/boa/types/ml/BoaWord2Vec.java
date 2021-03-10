@@ -16,82 +16,82 @@
  */
 package boa.types.ml;
 
-import org.deeplearning4j.models.word2vec.Word2Vec;
-
-import boa.types.BoaType;
-
-/**
- * A {@link BoaType} representing ML model of Word2Vec with attached types.
- * 
- * @author hyj
- */
-public class BoaWord2Vec extends BoaModel {
-	private Word2Vec w2v;
-
-	/**
-	 * Default BoaVote Constructor.
-	 * 
-	 */
-	public BoaWord2Vec() {
-	}
-
-	/**
-	 * Construct a BoaVote.
-	 * 
-	 * @param t A {@link BoaType} containing the types attached with this model
-	 *
-	 */
-	public BoaWord2Vec(BoaType t) {
-		this.t = t;
-	}
-
-	/**
-	 * Construct a BoaVote.
-	 * 
-	 * @param w2v A {@link Word2Vec} containing ML model
-	 * 
-	 * @param o   A {@link Object} containing type object
-	 *
-	 */
-	public BoaWord2Vec(Word2Vec w2v, Object o) {
-		this.w2v = w2v;
-		this.o = o;
-	}
-
-	@Override
-	public Kind getKind() {
-		return Kind.VECTOR;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean assigns(final BoaType that) {
-		if (!super.assigns(that))
-			return false;
-		return true;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean accepts(final BoaType that) {
-		if (!super.assigns(that))
-			return false;
-		return true;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.ml.BoaWord2Vec";
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "boa.types.ml.BoaWord2Vec" + "/" + this.t;
-	}
-
-	public Word2Vec getW2v() {
-		return w2v;
-	}
-}
+//import org.deeplearning4j.models.word2vec.Word2Vec;
+//
+//import boa.types.BoaType;
+//
+///**
+// * A {@link BoaType} representing ML model of Word2Vec with attached types.
+// * 
+// * @author hyj
+// */
+//public class BoaWord2Vec extends BoaModel {
+//	private Word2Vec w2v;
+//
+//	/**
+//	 * Default BoaVote Constructor.
+//	 * 
+//	 */
+//	public BoaWord2Vec() {
+//	}
+//
+//	/**
+//	 * Construct a BoaVote.
+//	 * 
+//	 * @param t A {@link BoaType} containing the types attached with this model
+//	 *
+//	 */
+//	public BoaWord2Vec(BoaType t) {
+//		this.t = t;
+//	}
+//
+//	/**
+//	 * Construct a BoaVote.
+//	 * 
+//	 * @param w2v A {@link Word2Vec} containing ML model
+//	 * 
+//	 * @param o   A {@link Object} containing type object
+//	 *
+//	 */
+//	public BoaWord2Vec(Word2Vec w2v, Object o) {
+//		this.w2v = w2v;
+//		this.o = o;
+//	}
+//
+//	@Override
+//	public Kind getKind() {
+//		return Kind.VECTOR;
+//	}
+//
+//	/** {@inheritDoc} */
+//	@Override
+//	public boolean assigns(final BoaType that) {
+//		if (!super.assigns(that))
+//			return false;
+//		return true;
+//	}
+//
+//	/** {@inheritDoc} */
+//	@Override
+//	public boolean accepts(final BoaType that) {
+//		if (!super.assigns(that))
+//			return false;
+//		return true;
+//	}
+//
+//	/** {@inheritDoc} */
+//	@Override
+//	public String toJavaType() {
+//		return "boa.types.ml.BoaWord2Vec";
+//	}
+//
+//	/** {@inheritDoc} */
+//	@Override
+//	public String toString() {
+//		return "boa.types.ml.BoaWord2Vec" + "/" + this.t;
+//	}
+//
+//	public Word2Vec getW2v() {
+//		return w2v;
+//	}
+//}

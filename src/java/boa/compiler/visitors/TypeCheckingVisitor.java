@@ -1357,17 +1357,18 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							throw new TypeCheckException(n,
 									"InputMappedClassifier required attributes to be numeric, nominal, date or string");
 					}
-				} else if (lhs instanceof BoaWord2Vec) {
-					for (int i = 0; i < types.size(); i++) {
-						if (!(types.get(i) instanceof BoaString))
-							throw new TypeCheckException(n, "BoaWord2Vec required attributes to be string");
-					}
-				} else if (lhs instanceof BoaSequence2Vec) {
-					for (int i = 0; i < types.size(); i++) {
-						if (!(types.get(i) instanceof BoaString))
-							throw new TypeCheckException(n, "BoaSequence2Vec required attributes to be string");
-					}
-				}
+				} 
+//				else if (lhs instanceof BoaWord2Vec) {
+//					for (int i = 0; i < types.size(); i++) {
+//						if (!(types.get(i) instanceof BoaString))
+//							throw new TypeCheckException(n, "BoaWord2Vec required attributes to be string");
+//					}
+//				} else if (lhs instanceof BoaSequence2Vec) {
+//					for (int i = 0; i < types.size(); i++) {
+//						if (!(types.get(i) instanceof BoaString))
+//							throw new TypeCheckException(n, "BoaSequence2Vec required attributes to be string");
+//					}
+//				}
 			}
 
 			if (rhs != null && !lhs.assigns(rhs) && !env.hasCast(rhs, lhs))
@@ -1968,10 +1969,10 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaGaussianProcesses(n.getType().type);
 		else if (n.type instanceof BoaInputMappedClassifier)
 			n.type = new BoaInputMappedClassifier(n.getType().type);
-		else if (n.type instanceof BoaWord2Vec)
-			n.type = new BoaWord2Vec(n.getType().type);
-		else if (n.type instanceof BoaSequence2Vec)
-			n.type = new BoaSequence2Vec(n.getType().type);
+//		else if (n.type instanceof BoaWord2Vec)
+//			n.type = new BoaWord2Vec(n.getType().type);
+//		else if (n.type instanceof BoaSequence2Vec)
+//			n.type = new BoaSequence2Vec(n.getType().type);
 		else
 			throw new TypeCheckException(n, "Model required attributes to be model type");
 	}
@@ -1992,10 +1993,10 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				throw new TypeCheckException(n, "invalid identifier '" + n.getId().getToken() + "'", e);
 			}
 
-		if (n.type instanceof BoaSequence2Vec)
-			n.type = new BoaSequence2Vec(n.getType().type);
-		else
-			throw new TypeCheckException(n, "Ensemble required attributes to be ensemble type");
+//		if (n.type instanceof BoaSequence2Vec)
+//			n.type = new BoaSequence2Vec(n.getType().type);
+//		else
+//			throw new TypeCheckException(n, "Ensemble required attributes to be ensemble type");
 	}
 
 	/** {@inheritDoc} */

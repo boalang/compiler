@@ -8,10 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
-import org.nd4j.shade.guava.collect.Sets;
-import org.nd4j.shade.protobuf.common.collect.Maps;
 
 import boa.runtime.BoaAbstractVisitor;
 import boa.types.Ast.*;
@@ -268,7 +265,7 @@ public class BoaUtilIntrinsics {
 		HashSet<String> deletedTypes = collectTypes(m1);
 		HashSet<String> addedTypes = collectTypes(m2);
 
-		HashSet<String> commons = Sets.newHashSet(deletedTypes);
+		HashSet<String> commons = new HashSet<>(deletedTypes);
 		commons.retainAll(addedTypes);
 
 		deletedTypes.removeAll(commons);
@@ -283,7 +280,7 @@ public class BoaUtilIntrinsics {
 	}
 
 	private static HashSet<String> collectTypes(Method m) {
-		HashSet<String> types = Sets.newHashSet();
+		HashSet<String> types = new HashSet<>();
 		BoaAbstractVisitor v = new BoaAbstractVisitor() {
 			@Override
 			protected boolean preVisit(final Type type) throws Exception {
@@ -344,7 +341,7 @@ public class BoaUtilIntrinsics {
 		HashSet<String> deletedTypes = collectTypes(m1);
 		HashSet<String> addedTypes = collectTypes(m2);
 
-		HashSet<String> commons = Sets.newHashSet(deletedTypes);
+		HashSet<String> commons = new HashSet<>(deletedTypes);
 		commons.retainAll(addedTypes);
 
 		deletedTypes.removeAll(commons);
@@ -388,8 +385,8 @@ public class BoaUtilIntrinsics {
 	private static List<List<Variable>> getFieldDiffs(Declaration d1, Declaration d2) {
 		List<Variable> deletedFields = new ArrayList<>(d1.getFieldsList());
 		List<Variable> addedFields = new ArrayList<>(d2.getFieldsList());
-		List<Variable> modifiedFieldsBefore = Lists.newArrayList();
-		List<Variable> modifiedFieldsAfter = Lists.newArrayList();
+		List<Variable> modifiedFieldsBefore = new ArrayList<>();
+		List<Variable> modifiedFieldsAfter = new ArrayList<>();
 
 		for (Iterator<Variable> itr1 = deletedFields.iterator(); itr1.hasNext();) {
 			Variable v1 = itr1.next();
@@ -406,7 +403,7 @@ public class BoaUtilIntrinsics {
 				}
 			}
 		}
-		List<List<Variable>> results = Lists.newArrayList();
+		List<List<Variable>> results = new ArrayList<>();
 		results.add(deletedFields);
 		results.add(addedFields);
 		results.add(modifiedFieldsBefore);
@@ -438,8 +435,8 @@ public class BoaUtilIntrinsics {
 	private static List<List<Method>> getMethodDiffs(Declaration d1, Declaration d2) {
 		List<Method> deletedMethods = new ArrayList<>(d1.getMethodsList());
 		List<Method> addedMethods = new ArrayList<>(d2.getMethodsList());
-		List<Method> modifiedMethodsBefore = Lists.newArrayList();
-		List<Method> modifiedMethodsAfter = Lists.newArrayList();
+		List<Method> modifiedMethodsBefore = new ArrayList<>();
+		List<Method> modifiedMethodsAfter = new ArrayList<>();
 
 		for (Iterator<Method> itr1 = deletedMethods.iterator(); itr1.hasNext();) {
 			Method m1 = itr1.next();
@@ -456,7 +453,7 @@ public class BoaUtilIntrinsics {
 				}
 			}
 		}
-		List<List<Method>> results = Lists.newArrayList();
+		List<List<Method>> results = new ArrayList<>();
 		results.add(deletedMethods);
 		results.add(addedMethods);
 		results.add(modifiedMethodsBefore);
@@ -491,7 +488,7 @@ public class BoaUtilIntrinsics {
 
 	@FunctionSpec(name = "maintained_map", returnType = "map[string] of string")
 	public static HashMap<String, String> maintainedMap() {
-		HashMap<String, String> map = Maps.newHashMap();
+		HashMap<String, String> map = new HashMap<>();
 		String s = "nhaarman/ListViewAnimations	Archived\n" + "lucasr/twoway-view	Archived\n"
 				+ "mcxiaoke/android-volley	Archived\n" + "stephanenicolas/robospice	Archived\n"
 				+ "pedrovgs/DraggablePanel	Archived\n" + "chanjarster/weixin-java-tools	Archived\n"
@@ -549,7 +546,7 @@ public class BoaUtilIntrinsics {
 	
 	@FunctionSpec(name = "org_map", returnType = "map[string] of string")
 	public static HashMap<String, String> orgMap() {
-		HashMap<String, String> map = Maps.newHashMap();
+		HashMap<String, String> map = new HashMap<>();
 		String s = "project,class\n" + 
 				"Netflix/SimianArmy,project\n" + 
 				"apache/sqoop,project\n" + 
@@ -583,7 +580,7 @@ public class BoaUtilIntrinsics {
 	
 	@FunctionSpec(name = "util_map", returnType = "map[string] of string")
 	public static HashMap<String, String> utilMap() {
-		HashMap<String, String> map = Maps.newHashMap();
+		HashMap<String, String> map = new HashMap<>();
 		String s = "samirahmed/Iris-Voice-Automation,project\n" + 
 				"aamattos/GMF-Tooling-Visual-Editor,project\n" + 
 				"steveliles/dsl4xml,project\n" + 
