@@ -602,7 +602,6 @@ public class SymbolTable {
 			boa.functions.BoaGraphIntrinsics.class,
 			boa.functions.BoaIntrinsics.class,
 			boa.functions.BoaMLIntrinsics.class,
-			boa.functions.ds.BoaDSIntrinsics.class,
 			boa.functions.BoaMetricIntrinsics.class,
 			boa.functions.BoaNormalFormIntrinsics.class,
 			boa.functions.BoaModifierIntrinsics.class,
