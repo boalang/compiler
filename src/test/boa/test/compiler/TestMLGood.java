@@ -16,16 +16,21 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class TestMLGood extends BaseTest {
 	final private static String rootDir = "test/ml/";
-
+	
 	@Parameters(name = "{0}")
 	public static List<String[]> data() {
 		final List<String[]> files = new ArrayList<String[]>();
-		for (final File f : new File(rootDir).listFiles())
-			if (f.isDirectory())
-				for (final File f1 : f.listFiles())
-					if (!f1.isDirectory() && f1.getName().endsWith(".boa"))
-						files.add(new String[] { f1.getPath(), null });
+		addTestFiles(files, new File(rootDir));
 		return files;
+	}
+	
+	private static void addTestFiles(List<String[]> files, File file) {
+		for (final File f : file.listFiles()) {
+			if (f.isDirectory())
+				addTestFiles(files, f);
+			else if (f.getName().endsWith(".boa"))
+				files.add(new String[] { f.getPath(), null });
+		}
 	}
 
 	private String fileName;

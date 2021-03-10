@@ -17,14 +17,14 @@ import java.util.*;
 public class BoaDSIntrinsics {
 
 	@FunctionSpec(name = "test", returnType = "array of string", formalParameters = { "Project" })
-	public static String[] test(final Project p) throws Exception {
-		CodeRepository cr = p.getCodeRepositories(0);
-		ChangedFile[] snapshot = getSnapshot(cr);
-		
-		Map<String, Source> sources = getSources(snapshot);
-
-		return new String[0];
-	}
+//	public static String[] test(final Project p) throws Exception {
+//		CodeRepository cr = p.getCodeRepositories(0);
+//		ChangedFile[] snapshot = getSnapshot(cr);
+//		
+//		Map<String, Source> sources = getSources(snapshot);
+//
+//		return new String[0];
+//	}
 
 	private static Map<String, Source> getSources(ChangedFile[] snapshot) throws Exception {
 		Map<String, ClassTrie> tempSources = new HashMap<>();

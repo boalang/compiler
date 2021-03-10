@@ -29,9 +29,9 @@ import org.apache.log4j.Logger;
 
 import boa.aggregators.Aggregator;
 import boa.aggregators.FinishedException;
-import boa.aggregators.ml.EvaluationAggregator;
-import boa.aggregators.ml.MLAggregator;
 import boa.aggregators.ml.util.MLSeqCombiner;
+import boa.aggregators.ml.weka.EvaluationAggregator;
+import boa.aggregators.ml.weka.MLAggregator;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 import static boa.functions.BoaUtilIntrinsics.*;

@@ -485,7 +485,9 @@
 			<archives>
 				<zips>
 					<fileset dir="lib/weka" includes="**/*.jar" />
+					<!--
 					<fileset dir="lib/dl4j" excludes="**/macos/" includes="**/*.jar" />
+					-->
 				</zips>
 			</archives>
 		</jar>
@@ -500,7 +502,9 @@
 				<archives>
 					<zips>
 						<fileset dir="lib/weka" includes="**/*.jar" />
+						<!--
 						<fileset dir="lib/dl4j" excludes="**/macos/" includes="**/*.jar" />
+						-->
 					</zips>
 				</archives>
 			</restrict>

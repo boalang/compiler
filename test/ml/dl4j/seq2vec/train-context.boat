@@ -1,0 +1,10 @@
+## ------- Seq2Vec - train - context -------------
+p: Project = input;
+s2v: output seq2vec("-f 2 -tp") of string;
+
+visit(p, visitor {
+	before r : Revision -> {
+		s2v << r.log;
+		stdout(r.log);
+	}
+});

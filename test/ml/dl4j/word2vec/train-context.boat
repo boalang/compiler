@@ -1,0 +1,11 @@
+#p: Project = input;
+#w2v: output word2vec("-f 2 -ls 100 -ws 5 -stop") of string;
+#
+#visit(p, visitor {
+#	before r : Revision -> {
+#		w2v << r.log;
+#	}
+#});
+
+p: Project = input;
+o: output collection of stirng;
