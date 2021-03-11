@@ -8,7 +8,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 import boa.aggregators.AggregatorSpec;
 import boa.aggregators.FinishedException;
-import boa.aggregators.ml.util.MyVote;
+import boa.aggregators.ml.util.Ensemble;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 import boa.runtime.Tuple;
@@ -91,7 +91,7 @@ public class EvaluationAggregator extends MLAggregator {
 	public void finish() throws IOException, InterruptedException {
 		if (isCombining()) {
 			Path path = getModelPath(jobId, identifier);
-			MyVote vote = new MyVote(path, instances, rule);
+			Ensemble vote = new Ensemble(path, instances, rule);
 			@SuppressWarnings("unchecked")
 			Reducer<EmitKey, EmitValue, EmitKey, EmitValue>.Context context = getContext();
 			EmitKey key = getKey();

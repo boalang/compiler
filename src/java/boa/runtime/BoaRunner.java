@@ -42,7 +42,7 @@ import boa.io.BoaOutputFormat;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 
-import static boa.functions.BoaUtilIntrinsics.*;
+import static boa.aggregators.ml.util.BoaMLProperty.*;
 
 /**
  * @author anthonyu

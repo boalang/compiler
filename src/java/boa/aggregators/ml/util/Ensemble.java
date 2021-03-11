@@ -12,7 +12,7 @@ import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.Utils;
 
-public class MyVote extends Vote {
+public class Ensemble extends Vote {
 
 	private static final long serialVersionUID = 1L;
 
@@ -22,11 +22,11 @@ public class MyVote extends Vote {
 	private double[] instanceNumPredictions;
 	private Instances dataset;
 
-	public MyVote(Path path) {
+	public Ensemble(Path path) {
 		classifiers = new SeqCollection<Classifier>(path);
 	}
 
-	public MyVote(Path path, Instances dataset, String rule) {
+	public Ensemble(Path path, Instances dataset, String rule) {
 		classifiers = new SeqCollection<Classifier>(path);
 		this.dataset = dataset;
 		this.setCombinationRule(rule);

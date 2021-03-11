@@ -16,7 +16,7 @@ import org.apache.hadoop.fs.Path;
 //import org.deeplearning4j.models.word2vec.Word2Vec;
 
 import boa.aggregators.ml.util.KMeans;
-import boa.aggregators.ml.util.MyVote;
+import boa.aggregators.ml.util.Ensemble;
 import boa.datagen.DefaultProperties;
 import boa.runtime.Tuple;
 import boa.types.ml.*;
@@ -41,7 +41,7 @@ public class BoaMLIntrinsics {
 			final Object o) {
 
 		Path p = getModelPath(jobId, identifier);
-		Object object = p.getName().endsWith(".seq") ? new MyVote(p) : deserialize(p);
+		Object object = p.getName().endsWith(".seq") ? new Ensemble(p) : deserialize(p);
 
 //		if (object instanceof Word2Vec) {
 //			Word2Vec word2Vec = (Word2Vec) object;
@@ -137,8 +137,8 @@ public class BoaMLIntrinsics {
 			final String type, final Object o) {
 		m = load(jobId, m, identifier, type, o);
 		Classifier c = m.getClassifier();
-		if (c instanceof MyVote)
-			((MyVote) c).setCombinationRule(rule);
+		if (c instanceof Ensemble)
+			((Ensemble) c).setCombinationRule(rule);
 		return m;
 	}
 
