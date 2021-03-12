@@ -217,6 +217,21 @@ public class BoaModel extends BoaType {
 				: String.valueOf(predval);
 		return predict;
 	}
+	
+	public static String predict(Classifier clr, Instance instance) {
+		double predval = -1;
+		try {
+			predval = clr.classifyInstance(instance);
+		} catch (Exception e) {
+		}
+		String predict = instance.classAttribute().isNominal() ? instance.classAttribute().value((int) predval)
+				: String.valueOf(predval);
+		return predict;
+	}
+	
+	public static String expected(Instance instance) {
+		return instance.classAttribute().value((int) instance.classValue());
+	}
 
 	private ArrayList<Attribute> getAttributes(long[] vector) {
 		int NumOfAttributes = vector.length + 1;

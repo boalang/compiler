@@ -1,8 +1,6 @@
 package boa.aggregators.ml.util;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
@@ -22,9 +20,6 @@ import org.apache.hadoop.mapreduce.Reducer;
 import boa.datagen.DefaultProperties;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
-import weka.core.Attribute;
-import weka.core.Instance;
-import weka.core.Instances;
 
 public class MLSeqCombiner {
 
@@ -55,15 +50,6 @@ public class MLSeqCombiner {
 		return sb.toString();
 	}
 
-	public Instances getInstances(String name, Instance instance) {
-		ArrayList<Attribute> list = new ArrayList<>();
-		for (int i = 0; i < instance.numAttributes(); i++)
-			list.add(instance.attribute(i));
-		Instances instances = new Instances(name, list, 0);
-		instances.add(instance);
-		return instances;
-	}
-
 	private void buildSeqFiles() {
 		setPaths();
 		openWriters();
@@ -73,6 +59,7 @@ public class MLSeqCombiner {
 			if (meta != null) {
 				if (meta.equals("model_path")) {
 					String modelPath = value.getData()[0];
+					System.out.println(modelPath);
 					try {
 						BytesWritable bw = new BytesWritable(getBytes(modelPath));
 						modelWriter.append(new Text(String.valueOf(modelCount++)), bw);

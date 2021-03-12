@@ -12,8 +12,13 @@ import boa.aggregators.ml.util.Ensemble;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 import boa.runtime.Tuple;
+import weka.classifiers.Classifier;
+import weka.core.Instance;
 
 import static boa.functions.BoaMLIntrinsics.getModelPath;
+import static boa.functions.BoaMLIntrinsics.deserialize;
+import static boa.types.ml.BoaModel.predict;
+import static boa.types.ml.BoaModel.expected;
 
 /**
  * A Boa aggregator for evaluating actual and predicted value.
@@ -33,15 +38,17 @@ public class EvaluationAggregator extends MLAggregator {
 	private Results results;
 
 	public EvaluationAggregator() {
-		initialize();
+		init();
 	}
 
 	public EvaluationAggregator(String s) {
 		super(s);
-		initialize();
+		init();
 	}
 
-	private void initialize() {
+	private void init() {
+		
+		rule = "AVG";
 
 		for (int i = 0; i < options.length; i++) {
 			String cur = options[i];
@@ -91,15 +98,27 @@ public class EvaluationAggregator extends MLAggregator {
 	public void finish() throws IOException, InterruptedException {
 		if (isCombining()) {
 			Path path = getModelPath(jobId, identifier);
-			Ensemble vote = new Ensemble(path, instances, rule);
 			@SuppressWarnings("unchecked")
 			Reducer<EmitKey, EmitValue, EmitKey, EmitValue>.Context context = getContext();
 			EmitKey key = getKey();
-			for (int i = 0; i < instances.numInstances(); i++) {
-				try {
-					context.write(key, new EmitValue(vote.getResult(i), "predicted_expected"));
-				} catch (Exception e) {
-					e.printStackTrace();
+			if (path.getName().endsWith(".seq")) {
+				Ensemble ensemble = new Ensemble(path, instances, rule);
+				for (int i = 0; i < instances.numInstances(); i++) {
+					try {
+						context.write(key, new EmitValue(ensemble.getResult(i), "predicted_expected"));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			} else {
+				Classifier clr = (Classifier) deserialize(path);
+				for (Instance instance : instances) {
+					String[] result = new String[] { predict(clr, instance), expected(instance) };
+					try {
+						context.write(key, new EmitValue(result, "predicted_expected"));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		} else {

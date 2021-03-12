@@ -96,6 +96,7 @@ public class SeqCollection<E> implements Iterable<E> {
 			try {
 				conf = new Configuration();
 				fs = FileSystem.get(conf);
+				System.out.println(path);
 				reader = new SequenceFile.Reader(fs, path, conf);
 			} catch (Exception e) {
 				e.printStackTrace();

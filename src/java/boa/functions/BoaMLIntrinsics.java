@@ -150,6 +150,7 @@ public class BoaMLIntrinsics {
 		Path modelDirPath = new Path(output, new Path("model/job_" + jobId));
 		Path singleModelPath = new Path(modelDirPath, new Path(identifier + ".model"));
 		Path ensembleModelPath = new Path(modelDirPath, new Path(identifier + "_model.seq"));
+
 		try {
 			final FileSystem fs = FileSystem.get(conf);
 			if (fs.exists(singleModelPath))
