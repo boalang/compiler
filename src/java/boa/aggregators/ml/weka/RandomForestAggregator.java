@@ -70,6 +70,7 @@ public class RandomForestAggregator extends MLAggregator {
 			this.model.setOptions(options);
 			this.model.buildClassifier(this.instances);
 			this.saveModel(this.model);
+			System.out.println("trained Random Forest model");
 
 			if (trainWithCombiner) {
 				@SuppressWarnings("unchecked")
