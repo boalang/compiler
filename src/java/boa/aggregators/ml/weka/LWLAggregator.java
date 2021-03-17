@@ -17,17 +17,22 @@
 package boa.aggregators.ml.weka;
 
 import boa.aggregators.AggregatorSpec;
+import boa.io.EmitKey;
+import boa.io.EmitValue;
 import boa.runtime.Tuple;
 import weka.classifiers.lazy.LWL;
 
 import java.io.IOException;
 
+import org.apache.hadoop.mapreduce.Reducer;
+
 /**
  * A Boa aggregator for training the model using LWL.
  *
  * @author ankuraga
+ * @author hyj
  */
-@AggregatorSpec(name = "lwl", formalParameters = { "string" })
+@AggregatorSpec(name = "lwl", formalParameters = { "string" }, canCombine = true)
 public class LWLAggregator extends MLAggregator {
 	private LWL model;
 
@@ -83,14 +88,23 @@ public class LWLAggregator extends MLAggregator {
 				this.model = new LWL();
 				this.model.setOptions(options);
 				this.model.buildClassifier(this.instances);
+				this.saveModel(this.model);
+				System.out.println("trained AdaBoostM1 model");
+				
+				if (trainWithCombiner) {
+					@SuppressWarnings("unchecked")
+					Reducer<EmitKey, EmitValue, EmitKey, EmitValue>.Context context = getContext();
+					EmitKey key = getKey();
+					// pass the path of trained model
+					context.write(key, new EmitValue(modelPath.toString(), "model_path"));
+				} else {
+					String info = "\n=== Model Info ===\n" + this.model.toString();
+					this.collect(info);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		this.saveModel(this.model);
-		String info = "\n=== Model Info ===\n" + this.model.toString();
-		this.collect(info);
-		System.out.println("train size: " + instances.numInstances());
 	}
 
 }
