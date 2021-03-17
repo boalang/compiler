@@ -30,6 +30,7 @@ import org.apache.hadoop.mapreduce.Reducer;
  * A Boa aggregator for training the model using Logistic.
  *
  * @author ankuraga
+ * @author hyj
  */
 @AggregatorSpec(name = "logistic", formalParameters = { "string" }, canCombine = true)
 public class LogisticRegressionAggregator extends MLAggregator {

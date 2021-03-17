@@ -58,6 +58,7 @@ public abstract class MLAggregator extends Aggregator {
 	public boolean incrementalLearning;
 
 	public MLAggregator() {
+		options = new String[0];
 	}
 
 	public MLAggregator(final String s) {
