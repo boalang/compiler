@@ -1,0 +1,46 @@
+type L = enum {y = "buggy", n = "notbuggy"};
+type T = { loc: int, method_calls: int, changes: int, contributors: set of string, buggy: bool };
+
+p: Project = input;
+jc: output jrip("-en") of {int, int, int, int, L};
+
+file_map: map[string] of T;
+
+update_file_map := function(file_name: string, contributor: string, is_fixing: bool) {
+	if (!haskey(file_map, file_name)) {
+		new_set: set of string;
+		file_map[file_name] = { 0, 0, 0, new_set, false };
+	}
+	t := file_map[file_name];
+	t.changes = t.changes + 1;
+	add(t.contributors, contributor);
+	if (is_fixing)
+		t.buggy = true;
+};
+
+visit(p, visitor {
+	before r : Revision -> {
+		is_fixing := isfixingrevision(r.log);
+		foreach (i: int; isjava(r.files[i]))
+			update_file_map(r.files[i].name, r.committer.username, is_fixing);
+		stop;
+	}
+	after cr : CodeRepository -> {
+		snapshot := getsnapshot(cr);
+		foreach (i: int; isjava(snapshot[i])) {
+			t := file_map[snapshot[i].name];
+			if (!def(t))
+				continue;
+			visit(snapshot[i], visitor {
+				before s : Statement -> t.loc = t.loc + 1;
+				before e : Expression -> if (e.kind == ExpressionKind.METHODCALL) t.method_calls = t.method_calls + 1;
+			});
+			label: L = L.n;
+			if (t.buggy)
+				label = L.y;
+
+			if (pick(75.0)) # pick train data
+				jc << { t.loc, len(t.contributors), t.changes, t.method_calls, label };
+		}
+	}
+});
