@@ -17,16 +17,21 @@
 package boa.aggregators.ml.weka;
 
 import boa.aggregators.AggregatorSpec;
+import boa.io.EmitKey;
+import boa.io.EmitValue;
 import boa.runtime.Tuple;
 import weka.classifiers.lazy.KStar;
 import java.io.IOException;
+
+import org.apache.hadoop.mapreduce.Reducer;
 
 /**
  * A Boa aggregator for training the model using KStar.
  *
  * @author ankuraga
+ * @author hyj
  */
-@AggregatorSpec(name = "kstar", formalParameters = { "string" })
+@AggregatorSpec(name = "kstar", formalParameters = { "string" }, canCombine = true)
 public class KStarAggregator extends MLAggregator {
 	private KStar model;
 
@@ -60,12 +65,22 @@ public class KStarAggregator extends MLAggregator {
 			this.model = new KStar();
 			this.model.setOptions(options);
 			this.model.buildClassifier(this.instances);
+			this.saveModel(this.model);
+			System.out.println("trained KStar model");
+			
+			if (trainWithCombiner) {
+				@SuppressWarnings("unchecked")
+				Reducer<EmitKey, EmitValue, EmitKey, EmitValue>.Context context = getContext();
+				EmitKey key = getKey();
+				// pass the path of trained model
+				context.write(key, new EmitValue(modelPath.toString(), "model_path"));
+			} else {
+				String info = "\n=== Model Info ===\n" + this.model.toString();
+				this.collect(info);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.saveModel(this.model);
-		String info = "\n=== Model Info ===\n" + this.model.toString();
-		this.collect(info);
 	}
 
 }
