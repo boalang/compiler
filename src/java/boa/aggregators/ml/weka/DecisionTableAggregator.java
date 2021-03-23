@@ -66,7 +66,7 @@ public class DecisionTableAggregator extends MLAggregator {
 			this.model.setOptions(options);
 			this.model.buildClassifier(this.instances);
 			this.saveModel(this.model);
-			System.out.println("trained BayesNet model");
+			System.out.println("trained DecisionTable model");
 			
 			if (trainWithCombiner) {
 				@SuppressWarnings("unchecked")
