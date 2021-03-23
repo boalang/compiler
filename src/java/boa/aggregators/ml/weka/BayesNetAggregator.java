@@ -81,9 +81,6 @@ public class BayesNetAggregator extends MLAggregator {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.saveModel(this.model);
-		String info = "\n=== Model Info ===\n" + this.model.toString();
-		this.collect(info);
 	}
 
 }

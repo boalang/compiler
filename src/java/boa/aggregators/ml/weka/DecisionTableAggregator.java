@@ -19,16 +19,21 @@ package boa.aggregators.ml.weka;
 import boa.runtime.Tuple;
 import boa.aggregators.AggregatorSpec;
 import boa.aggregators.FinishedException;
+import boa.io.EmitKey;
+import boa.io.EmitValue;
 import weka.classifiers.rules.DecisionTable;
 
 import java.io.IOException;
+
+import org.apache.hadoop.mapreduce.Reducer;
 
 /**
  * A Boa aggregator for training the model using DecisionTable.
  *
  * @author ankuraga
+ * @author hyj
  */
-@AggregatorSpec(name = "decisiontable", formalParameters = { "string" })
+@AggregatorSpec(name = "decisiontable", formalParameters = { "string" }, canCombine = true)
 public class DecisionTableAggregator extends MLAggregator {
 	private DecisionTable model;
 
@@ -60,11 +65,21 @@ public class DecisionTableAggregator extends MLAggregator {
 			this.model = new DecisionTable();
 			this.model.setOptions(options);
 			this.model.buildClassifier(this.instances);
+			this.saveModel(this.model);
+			System.out.println("trained BayesNet model");
+			
+			if (trainWithCombiner) {
+				@SuppressWarnings("unchecked")
+				Reducer<EmitKey, EmitValue, EmitKey, EmitValue>.Context context = getContext();
+				EmitKey key = getKey();
+				// pass the path of trained model
+				context.write(key, new EmitValue(modelPath.toString(), "model_path"));
+			} else {
+				String info = "\n=== Model Info ===\n" + this.model.toString();
+				this.collect(info);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.saveModel(this.model);
-		String info = "\n=== Model Info ===\n" + this.model.toString();
-		this.collect(info);
 	}
 }
