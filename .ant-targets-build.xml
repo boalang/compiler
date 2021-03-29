@@ -13,6 +13,7 @@ java-to-boa
 package
 package-compiler
 package-runtime
+python-to-boa
 test
 test-codegen
 test-compiler
