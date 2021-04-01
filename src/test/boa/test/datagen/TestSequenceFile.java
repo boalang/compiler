@@ -48,8 +48,10 @@ public class TestSequenceFile extends Java8BaseTest {
 		fileSystem = FileSystem.get(conf);
 		Path projectPath = new Path("dataset/projects.seq"), dataPath = new Path("dataset/data");
 		if (fileSystem.exists(projectPath) && fileSystem.exists(dataPath)) {
-			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
-			ar = new SequenceFile.Reader(fileSystem, dataPath, conf);
+//			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
+			pr = new SequenceFile.Reader(conf, SequenceFile.Reader.file(projectPath));
+//			ar = new SequenceFile.Reader(fileSystem, dataPath, conf);
+			ar = new SequenceFile.Reader(conf, SequenceFile.Reader.file(dataPath));
 		}
 	}
 	
@@ -75,8 +77,10 @@ public class TestSequenceFile extends Java8BaseTest {
 		fileSystem = FileSystem.get(conf);
 		Path projectPath = new Path(path + "/projects.seq"), dataPath = new Path(path + "/ast/data");
 		if (fileSystem.exists(projectPath) && fileSystem.exists(dataPath)) {
-			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
-			ar = new SequenceFile.Reader(fileSystem, dataPath, conf);
+//			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
+			pr = new SequenceFile.Reader(conf, SequenceFile.Reader.file(projectPath));
+//			ar = new SequenceFile.Reader(fileSystem, dataPath, conf);
+			ar = new SequenceFile.Reader(conf, SequenceFile.Reader.file(dataPath));
 		}
 		Set<Long> cfKeys = new HashSet<Long>(), astKeys = new HashSet<Long>();
 		Writable key = new Text();
@@ -187,10 +191,12 @@ public class TestSequenceFile extends Java8BaseTest {
 	private static void openMaps(String path) {
 		try {
 			final Configuration conf = new Configuration();
-			final FileSystem fs;
-			fs = FileSystem.getLocal(conf);
-			astMap = new MapFile.Reader(fs, new Path(path + "/ast").toString(), conf);
-			commitMap = new MapFile.Reader(fs, new Path(path + "/commit").toString(), conf);
+//			final FileSystem fs;
+//			fs = FileSystem.getLocal(conf);
+//			astMap = new MapFile.Reader(fs, new Path(path + "/ast").toString(), conf);
+			astMap = new MapFile.Reader(new Path(path + "/ast"), conf);
+//			commitMap = new MapFile.Reader(fs, new Path(path + "/commit").toString(), conf);
+			commitMap = new MapFile.Reader(new Path(path + "/commit"), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}

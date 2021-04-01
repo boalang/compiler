@@ -15,13 +15,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
+import org.apache.hadoop.io.SequenceFile.Writer;
 import org.eclipse.jgit.lib.Constants;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -76,7 +76,7 @@ public class TestJLSVersionOfChangedFile {
     private ChangedFile changedFile;
 	
 	private static Configuration conf = new Configuration();
-	private static FileSystem fileSystem = null;
+//	private static FileSystem fileSystem = null;
 	
 	private static SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
 	private static long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
@@ -94,7 +94,7 @@ public class TestJLSVersionOfChangedFile {
 	}
 	
 	private static CodeRepository buildCodeRepository(String repoName) throws Exception {
-		fileSystem = FileSystem.get(conf);
+//		fileSystem = FileSystem.get(conf);
 		
 		System.out.println("Repo: " + repoName);
 		File gitDir = new File("dataset/repos/" + repoName);
@@ -183,14 +183,26 @@ public class TestJLSVersionOfChangedFile {
 		String suffix = time + ".seq";
 		while (true) {
 			try {
-				projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/project/" + suffix),
-						Text.class, BytesWritable.class, CompressionType.BLOCK);
-				astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/ast/" + suffix),
-						LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
-				commitWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/commit/" + suffix),
-						LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
-				contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/source/" + suffix),
-						LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
+//				projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/project/" + suffix),
+//						Text.class, BytesWritable.class, CompressionType.BLOCK);
+				projectWriter = SequenceFile.createWriter(conf, Writer.file(new Path(base + "/project/" + suffix)),
+						Writer.keyClass(Text.class), Writer.valueClass(BytesWritable.class),
+						Writer.compression(CompressionType.BLOCK));
+//				astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/ast/" + suffix),
+//						LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
+				astWriter = SequenceFile.createWriter(conf, Writer.file(new Path(base + "/ast/" + suffix)),
+						Writer.keyClass(LongWritable.class), Writer.valueClass(BytesWritable.class),
+						Writer.compression(CompressionType.BLOCK));
+//				commitWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/commit/" + suffix),
+//						LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
+				commitWriter = SequenceFile.createWriter(conf, Writer.file(new Path(base + "/commit/" + suffix)),
+						Writer.keyClass(LongWritable.class), Writer.valueClass(BytesWritable.class),
+						Writer.compression(CompressionType.BLOCK));
+//				contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/source/" + suffix),
+//						LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
+				contentWriter = SequenceFile.createWriter(conf, Writer.file(new Path(base + "/source/" + suffix)),
+						Writer.keyClass(LongWritable.class), Writer.valueClass(BytesWritable.class),
+						Writer.compression(CompressionType.BLOCK));
 				break;
 			} catch (Throwable t) {
 				t.printStackTrace();

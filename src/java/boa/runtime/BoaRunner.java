@@ -81,7 +81,8 @@ public abstract class BoaRunner extends Configured implements Tool {
 		configuration.setBoolean("mapred.reduce.tasks.speculative.execution", false);
 		configuration.setLong("mapred.job.reuse.jvm.num.tasks", -1);
 
-		final Job job = new Job(configuration);
+//		final Job job = new Job(configuration);
+		final Job job = Job.getInstance(configuration);
 
 		if (ins != null)
 			for (final Path in : ins)

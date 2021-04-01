@@ -14,7 +14,6 @@ import java.util.Random;
 import com.google.protobuf.CodedInputStream;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.IntWritable;
@@ -67,9 +66,10 @@ public class TestBuildSnapshotFromSequenceFile {
     	List<Object[]> data = new ArrayList<Object[]>();
     	
 		Configuration conf = new Configuration();
-		FileSystem fileSystem = FileSystem.get(conf);
+//		FileSystem fileSystem = FileSystem.get(conf);
 		Path projectPath = new Path(dataPath, "projects.seq");
-		SequenceFile.Reader pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
+//		SequenceFile.Reader pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
+		SequenceFile.Reader pr = new SequenceFile.Reader(conf, SequenceFile.Reader.file(projectPath));
 		Writable key = new Text();
 		BytesWritable val = new BytesWritable();
 		while (pr.next(key, val)) {
@@ -154,7 +154,8 @@ public class TestBuildSnapshotFromSequenceFile {
 			new FileIO.DirectoryRemover(outDir.getAbsolutePath()).run();
 		
 		Configuration conf = new Configuration();
-		Job job = new Job(conf, "read sequence file");
+//		Job job = new Job(conf, "read sequence file");
+		Job job = Job.getInstance(conf);
 		job.setJarByClass(TestBuildSnapshotFromSequenceFile.class);
 		job.setMapperClass(SequenceFileReaderMapper.class);
 		job.setCombinerClass(SequenceFileReaderReducer.class);

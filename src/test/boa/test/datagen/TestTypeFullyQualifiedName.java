@@ -33,8 +33,10 @@ public class TestTypeFullyQualifiedName {
 		fileSystem = FileSystem.get(conf);
 		Path projectPath = new Path("dataset/projects.seq"), dataPath = new Path("dataset/data");
 		if (fileSystem.exists(projectPath) && fileSystem.exists(dataPath)) {
-			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
-			ar = new SequenceFile.Reader(fileSystem, dataPath, conf);
+//			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
+			pr = new SequenceFile.Reader(conf, SequenceFile.Reader.file(projectPath));
+//			ar = new SequenceFile.Reader(fileSystem, dataPath, conf);
+			ar = new SequenceFile.Reader(conf, SequenceFile.Reader.file(dataPath));
 		}
 	}
 
