@@ -28,6 +28,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.MapFile;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
+import org.apache.hadoop.io.SequenceFile.Writer;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.compress.BZip2Codec;
 import org.apache.hadoop.io.compress.CompressionCodec;
@@ -46,6 +47,7 @@ import boa.types.Toplevel.Project;
 /**
  * @author hoan
  * @author hridesh
+ * @author hyj
  */
 public class SeqCombiner {
 
@@ -71,9 +73,20 @@ public class SeqCombiner {
 				compressionCode = new SnappyCodec();
 		}
 		
-		SequenceFile.Writer projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/projects.seq"), Text.class, BytesWritable.class, compressionType, compressionCode);
-		MapFile.Writer astWriter = new MapFile.Writer(conf, fileSystem, base + "/ast", LongWritable.class, BytesWritable.class, compressionType, compressionCode, null);
-		MapFile.Writer commitWriter = new MapFile.Writer(conf, fileSystem, base + "/commit", LongWritable.class, BytesWritable.class, compressionType, compressionCode, null);
+//		SequenceFile.Writer projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/projects.seq"), Text.class, BytesWritable.class, compressionType, compressionCode);
+		SequenceFile.Writer projectWriter = SequenceFile.createWriter(conf, Writer.file(new Path(base + "/projects.seq")),
+				Writer.keyClass(Text.class), Writer.valueClass(BytesWritable.class),
+				Writer.compression(compressionType, compressionCode));
+
+//		MapFile.Writer astWriter = new MapFile.Writer(conf, fileSystem, base + "/ast", LongWritable.class, BytesWritable.class, compressionType, compressionCode, null);
+		MapFile.Writer astWriter = new MapFile.Writer(conf, new Path(base + "/ast"),
+				MapFile.Writer.keyClass(LongWritable.class), MapFile.Writer.valueClass(BytesWritable.class),
+				MapFile.Writer.compression(compressionType, compressionCode));
+
+//		MapFile.Writer commitWriter = new MapFile.Writer(conf, fileSystem, base + "/commit", LongWritable.class, BytesWritable.class, compressionType, compressionCode, null);
+		MapFile.Writer commitWriter = new MapFile.Writer(conf, new Path(base + "/commit"),
+				MapFile.Writer.keyClass(LongWritable.class), MapFile.Writer.valueClass(BytesWritable.class),
+				MapFile.Writer.compression(compressionType, compressionCode));
 		
 		FileStatus[] files = fileSystem.listStatus(new Path(base + "/project"), new PathFilter() {
 			
@@ -88,7 +101,8 @@ public class SeqCombiner {
 			FileStatus file = files[i];
 			String name = file.getPath().getName();
 			System.out.println("Reading file " + (i+1) + " in " + files.length + ": " + name);
-			SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, file.getPath(), conf);
+//			SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, file.getPath(), conf);
+			SequenceFile.Reader r = new SequenceFile.Reader(conf, SequenceFile.Reader.file(file.getPath()));
 			Text textKey = new Text();
 			BytesWritable value = new BytesWritable();
 			try {
@@ -135,7 +149,8 @@ public class SeqCombiner {
 
 	public static long readAndAppendCommit(Configuration conf, FileSystem fileSystem, MapFile.Writer writer, String fileName, long lastAstKey, long lastCommitKey) throws IOException {
 		long newLastKey = lastCommitKey;
-		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
+//		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
+		SequenceFile.Reader r = new SequenceFile.Reader(conf, SequenceFile.Reader.file(new Path(fileName)));
 		LongWritable longKey = new LongWritable();
 		BytesWritable value = new BytesWritable();
 		try {
@@ -161,7 +176,8 @@ public class SeqCombiner {
 
 	public static long readAndAppendAst(Configuration conf, FileSystem fileSystem, MapFile.Writer writer, String fileName, long lastKey) throws IOException {
 		long newLastKey = lastKey;
-		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
+//		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(fileName), conf);
+		SequenceFile.Reader r = new SequenceFile.Reader(conf, SequenceFile.Reader.file(new Path(fileName)));
 		LongWritable longKey = new LongWritable();
 		BytesWritable value = new BytesWritable();
 		try {

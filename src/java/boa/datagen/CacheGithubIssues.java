@@ -13,6 +13,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.SequenceFile.Writer;
 
 import boa.datagen.forges.github.IssueMetaData;
 import boa.datagen.util.FileIO;
@@ -75,8 +76,10 @@ public class CacheGithubIssues {
 		suffix = "-" + time + ".seq";
 		while (true) {
 			try {
-				issueWriter = SequenceFile.createWriter(fileSystem, conf, new Path(jsonCachePath + "/issues" + suffix),
-						Text.class, BytesWritable.class);
+//				issueWriter = SequenceFile.createWriter(fileSystem, conf, new Path(jsonCachePath + "/issues" + suffix),
+//						Text.class, BytesWritable.class);
+				issueWriter = SequenceFile.createWriter(conf, Writer.file(new Path(jsonCachePath + "/issues" + suffix)),
+						Writer.keyClass(Text.class), Writer.valueClass(BytesWritable.class));
 				break;
 			} catch (Throwable t) {
 				t.printStackTrace();

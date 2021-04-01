@@ -27,7 +27,6 @@ import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -119,7 +118,6 @@ public class BoaAstIntrinsics {
 	 * @param f the ChangedFile to get a snapshot of the AST for
 	 * @return the AST, or an empty AST on any sort of error
 	 */
-	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "ChangedFile" })
 	public static ASTRoot getast(final ChangedFile f) {
 		if (!f.getAst())
@@ -166,7 +164,6 @@ public class BoaAstIntrinsics {
 		return emptyAst;
 	}
 
-	@SuppressWarnings("unchecked")
 	static Revision getRevision(long key) {
 		context.getCounter(COMMITCOUNTER.GETS_ATTEMPTED).increment(1);
 		
@@ -287,11 +284,11 @@ public class BoaAstIntrinsics {
 	private static void openMap() {
 		try {
 			final Configuration conf = context.getConfiguration();
-			final FileSystem fs;
+//			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
 				p = new Path(DefaultProperties.localDataPath, "ast");
-				fs = FileSystem.getLocal(conf);
+//				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
 					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
@@ -300,9 +297,10 @@ public class BoaAstIntrinsics {
 						new Path("ast")
 					)
 				);
-				fs = FileSystem.get(conf);
+//				fs = FileSystem.get(conf);s
 			}
-			map = new MapFile.Reader(fs, p.toString(), conf);
+//			map = new MapFile.Reader(fs, p.toString(), conf);
+			map = new MapFile.Reader(p, conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -311,11 +309,11 @@ public class BoaAstIntrinsics {
 	private static void openMap(int mapSuffix) {
 		try {
 			final Configuration conf = context.getConfiguration();
-			final FileSystem fs;
+//			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
 				p = new Path(DefaultProperties.localDataPath, "ast/map" + mapSuffix);
-				fs = FileSystem.getLocal(conf);
+//				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
 					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
@@ -324,9 +322,10 @@ public class BoaAstIntrinsics {
 						new Path("ast/map" + mapSuffix)
 					)
 				);
-				fs = FileSystem.get(conf);
+//				fs = FileSystem.get(conf);
 			}
-			map = new MapFile.Reader(fs, p.toString(), conf);
+//			map = new MapFile.Reader(fs, p.toString(), conf);
+			map = new MapFile.Reader(p, conf);
 			curMapSuffix = mapSuffix;
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -336,11 +335,11 @@ public class BoaAstIntrinsics {
 	private static void openCommentMap() {
 		try {
 			final Configuration conf = context.getConfiguration();
-			final FileSystem fs;
+//			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
 				p = new Path(DefaultProperties.localDataPath, "comments");
-				fs = FileSystem.getLocal(conf);
+//				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
 					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
@@ -349,9 +348,10 @@ public class BoaAstIntrinsics {
 						new Path("comments")
 					)
 				);
-				fs = FileSystem.get(conf);
+//				fs = FileSystem.get(conf);
 			}
-			commentsMap = new MapFile.Reader(fs, p.toString(), conf);
+//			commentsMap = new MapFile.Reader(fs, p.toString(), conf);
+			commentsMap = new MapFile.Reader(p, conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -360,11 +360,11 @@ public class BoaAstIntrinsics {
 	private static void openIssuesMap() {
 		try {
 			final Configuration conf = context.getConfiguration();
-			final FileSystem fs;
+//			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
 				p = new Path(DefaultProperties.localDataPath, "issues");
-				fs = FileSystem.getLocal(conf);
+//				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
 					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
@@ -373,9 +373,10 @@ public class BoaAstIntrinsics {
 						new Path("issues")
 					)
 				);
-				fs = FileSystem.get(conf);
+//				fs = FileSystem.get(conf);
 			}
-			issuesMap = new MapFile.Reader(fs, p.toString(), conf);
+//			issuesMap = new MapFile.Reader(fs, p.toString(), conf);
+			issuesMap = new MapFile.Reader(p, conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -384,17 +385,18 @@ public class BoaAstIntrinsics {
 	private static void openCommitMap() {
 		try {
 			final Configuration conf = context.getConfiguration();
-			final FileSystem fs;
+//			final FileSystem fs;
 			final Path p;
 			if (DefaultProperties.localDataPath != null) {
 				p = new Path(DefaultProperties.localDataPath, "commit");
-				fs = FileSystem.getLocal(conf);
+//				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
 						new Path(conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")), new Path("commit")));
-				fs = FileSystem.get(conf);
+//				fs = FileSystem.get(conf);
 			}
-			commitMap = new MapFile.Reader(fs, p.toString(), conf);
+//			commitMap = new MapFile.Reader(fs, p.toString(), conf);
+			commitMap = new MapFile.Reader(p, conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}

@@ -31,6 +31,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
+import org.apache.hadoop.io.SequenceFile.Writer;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -157,7 +158,8 @@ public class SeqRepoImporter {
 				SequenceFile.Reader r = null;
 				try {
 					// the project sequence file contain multiple projects
-					r = new SequenceFile.Reader(fileSystem, file.getPath(), conf);
+//					r = new SequenceFile.Reader(fileSystem, file.getPath(), conf);
+					r = new SequenceFile.Reader(conf, SequenceFile.Reader.file(file.getPath()));
 					final Text key = new Text();
 					HashSet<String> projectIds = new HashSet<>();
 					while (r.next(key))
@@ -199,14 +201,30 @@ public class SeqRepoImporter {
 			while (true) {
 				try {
 					System.out.println(Thread.currentThread().getName() + " " + getId() + " " + suffix + " starts!");
-					projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/project/" + suffix),
-							Text.class, BytesWritable.class, CompressionType.BLOCK);
-					astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/ast/" + suffix),
-							LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
-					commitWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/commit/" + suffix),
-							LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
-					contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/source/" + suffix),
-							LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
+//					projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/project/" + suffix),
+//							Text.class, BytesWritable.class, CompressionType.BLOCK);
+					projectWriter = SequenceFile.createWriter(conf, Writer.file(new Path(base + "/project/" + suffix)),
+							Writer.keyClass(Text.class), Writer.valueClass(BytesWritable.class),
+							Writer.compression(CompressionType.BLOCK));
+					
+//					astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/ast/" + suffix),
+//							LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
+					astWriter = SequenceFile.createWriter(conf, Writer.file(new Path(base + "/ast/" + suffix)),
+							Writer.keyClass(LongWritable.class), Writer.valueClass(BytesWritable.class),
+							Writer.compression(CompressionType.BLOCK));
+
+//					commitWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/commit/" + suffix),
+//							LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
+					commitWriter = SequenceFile.createWriter(conf, Writer.file(new Path(base + "/commit/" + suffix)),
+							Writer.keyClass(LongWritable.class), Writer.valueClass(BytesWritable.class),
+							Writer.compression(CompressionType.BLOCK));
+					
+//					contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/source/" + suffix),
+//							LongWritable.class, BytesWritable.class, CompressionType.BLOCK);
+					contentWriter = SequenceFile.createWriter(conf, Writer.file(new Path(base + "/source/" + suffix)),
+							Writer.keyClass(LongWritable.class), Writer.valueClass(BytesWritable.class),
+							Writer.compression(CompressionType.BLOCK));
+
 					astWriterLen = 1;
 					commitWriterLen = 1;
 					contentWriterLen = 1;

@@ -24,11 +24,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.SequenceFile.Writer;
 
 /**
  * @author hoan
@@ -38,11 +38,12 @@ public class ASTSeqSort {
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
-		FileSystem fs = FileSystem.get(conf);
+//		FileSystem fs = FileSystem.get(conf);
 		
 		String inPath = args[0];
 		Map<String, BytesWritable> map = new HashMap<String, BytesWritable>();
-		SequenceFile.Reader reader = new SequenceFile.Reader(fs, new Path(inPath + "/ast.seq"), conf);
+//		SequenceFile.Reader reader = new SequenceFile.Reader(fs, new Path(inPath + "/ast.seq"), conf);
+		SequenceFile.Reader reader = new SequenceFile.Reader(conf, SequenceFile.Reader.file(new Path(inPath + "/ast.seq")));
 		Text key = new Text();
 		BytesWritable val = new BytesWritable();
 		while (reader.next(key, val)) {
@@ -54,7 +55,9 @@ public class ASTSeqSort {
 		List<String> list = new ArrayList<String>(map.keySet());
 		Collections.sort(list);
 		
-		SequenceFile.Writer w = SequenceFile.createWriter(fs, conf, new Path(inPath + "/ast.seq"), Text.class, BytesWritable.class);
+//		SequenceFile.Writer w = SequenceFile.createWriter(fs, conf, new Path(inPath + "/ast.seq"), Text.class, BytesWritable.class);
+		SequenceFile.Writer w = SequenceFile.createWriter(conf, Writer.file(new Path(inPath + "/ast.seq")),
+				Writer.keyClass(Text.class), Writer.valueClass(BytesWritable.class));
 		for (String k : list) {
 			w.append(new Text(k), map.get(k));
 		}
