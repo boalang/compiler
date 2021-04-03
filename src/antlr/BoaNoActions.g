@@ -55,6 +55,7 @@ type
 	| queueType
 	| setType
 	| enumType
+	| modelType
 	| identifier
 	;
 
@@ -102,6 +103,10 @@ setType
 
 outputType
 	: OUTPUT (SET | identifier) (LPAREN expressionList RPAREN)? (LBRACKET component RBRACKET)* OF component (WEIGHT component)? (FORMAT LPAREN expressionList RPAREN)?
+	;
+	
+modelType
+	: MODEL of identifier OF component
 	;
 
 functionType
@@ -352,6 +357,7 @@ identifier
 	| lit=MAP      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=STACK    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=QUEUE    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=MODEL    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=SET      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOR      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FOREACH  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
@@ -417,6 +423,7 @@ DO        : 'do';
 MAP       : 'map';
 STACK     : 'stack';
 QUEUE     : 'queue';
+MODEL     : 'model';
 SET       : 'set';
 FOR       : 'for';
 FOREACH   : 'foreach';

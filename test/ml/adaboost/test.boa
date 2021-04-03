@@ -1,0 +1,13 @@
+type T = enum {y = "true", n = "false"};
+
+p: Project = input;
+predict: output collection of string;
+
+ada: model of AdaBoostM1 of {int, T, int, T};
+ada = load(0, ada);
+
+x1 := 1;
+x2: T = T.n;
+x3 := 2;
+
+predict << classify(ada, {x1, x2, x3});

@@ -414,4 +414,9 @@ public abstract class AbstractVisitorNoArgNoRet {
 
 	public void visit(final FixPType n) {
 	}
+	
+	public void visit(final ModelType n) {
+		n.getId().accept(this);
+		n.getType().accept(this);
+	}
 }

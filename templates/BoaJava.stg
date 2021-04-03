@@ -125,16 +125,19 @@ new <type>()
 }
 >>
 
-TupleType(name, fields, types, protos) ::= <<
-private class <name>
-{
+TupleType(name, fields, types, protos, enums) ::= <<
+public static class <name> implements boa.runtime.Tuple, java.io.Serializable
+{	
+	<name>(){}
+	
 	<fields,types:{field,type|<type> ___<field>;}; separator="\n">
 
 	<name>(<fields,types:{field,type|<type> ___<field>}; separator=", ">) {
-		<fields,types,protos:{field,type,proto|<if(proto)>this.___<field> = ___<field>;<else>this.___<field> = new <type>(___<field>);<endif>}; separator="\n">
+		<fields,types,protos,enums:{field,type,proto,enum|<if(proto)>this.___<field> = ___<field>;<elseif(enum)>this.___<field> = ___<field>;<else>this.___<field> = new <type>(___<field>);<endif>}; separator="\n">
 	}
+	
 	<name>(<name> tmp) {
-		<fields,types,protos:{field,type,proto|<if(proto)> this.___<field> = tmp.___<field>;<else> this.___<field> = new <type>(tmp.___<field>);<endif>}; separator="\n">
+		<fields,types,protos,enums:{field,type,proto,enum|<if(proto)> this.___<field> = tmp.___<field>;<elseif(enum)> this.___<field> = tmp.___<field>;<else> this.___<field> = new <type>(tmp.___<field>);<endif>}; separator="\n">
 	}
 
 	public <name> clone() {
@@ -148,6 +151,30 @@ if (s.length() > 1) s += ",";
 s += " <field> = " + this.___<field>;}; separator="\n">
 		s += " }";
 		return s;
+	}
+	
+	public byte[] serialize(Object o) throws java.io.IOException { 
+		java.io.ByteArrayOutputStream byteOutStream = new java.io.ByteArrayOutputStream();
+		java.io.ObjectOutputStream objectOut = new java.io.ObjectOutputStream(byteOutStream);
+		objectOut.writeObject(o);
+		objectOut.close();
+		return byteOutStream.toByteArray();
+	}
+	
+	public String[] getValues() {
+		return new String[] {<fields:{field|String.valueOf(this.___<field>)}; separator=", "> };
+	}
+	
+	public String[] getFieldNames() { 
+		return new String[] {<fields:{field|"___<field>"}; separator=", "> };
+	}
+	
+	public Object getValue(String f) {
+		<fields:{field| 
+		if(f.equals("___<field>")) 
+			return ___<field>;
+		}; separator=" ">
+		return "empty";
 	}
 }<\n>
 >>

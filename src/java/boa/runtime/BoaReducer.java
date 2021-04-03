@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 
 import boa.aggregators.Aggregator;
 import boa.aggregators.FinishedException;
+import boa.aggregators.ml.MLAggregator;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 
@@ -76,17 +77,29 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 	/** {@inheritDoc} */
 	@Override
 	protected void reduce(final EmitKey key, final Iterable<EmitValue> values, final Context context) throws IOException, InterruptedException {
+
 		// get the aggregator named by the emit key
 		final Aggregator a = this.aggregators.get(key.getName());
-
+		
 		a.setCombining(false);
 		a.start(key);
 		a.setContext(context);
 
 		for (final EmitValue value : values)
 			try {
-				for (final String s : value.getData())
-					a.aggregate(s, value.getMetadata());
+				if (a instanceof MLAggregator) {
+					MLAggregator mla = (MLAggregator) a;
+					if (value.getTuple() != null) {
+//						System.out.println("emit value is string[] ");
+						mla.aggregate(value.getTuple(), value.getMetadata());
+					} else {
+//						System.out.println("emit value is tuple ");
+						mla.aggregate(value.getData(), value.getMetadata());
+					}
+				} else {
+					for (final String s : value.getData()) 
+						a.aggregate(s, value.getMetadata());
+				}
 			} catch (final FinishedException e) {
 				// we are done
 				return;
