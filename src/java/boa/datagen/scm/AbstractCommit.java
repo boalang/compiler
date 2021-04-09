@@ -229,12 +229,12 @@ public abstract class AbstractCommit {
 	//	"spacy/lang/ro/lemmatizer.py", "spacy/lang/sv/lemmatizer/lookup.py", "spacy/lang/tr/lemmatizer.py",
 	//	"spacy/lang/ur/lemmatizer.py" };
 	//Set<String> badp = new HashSet<String>(Arrays.asList(badpaths));
-	String largeFiles = "spacy/lang/";
+	String largeFiles1 = "spacy/lang/";
+	String largeFiles2 = "/mlxtend/data/mnist.py";
 	String[] excludeProjects = {"ryfeus/lambda-packs", "sorenlind/lemmy", // excluded in the 1st version of the evolution datagen 
 								"MycroftAI/mycroft-core", "balcilar/3D-CNN-Emotion-Recognition", // excluded in the 2nd version (large) of the evolution datagen
 								"roclark/sportsreference", "CODEJIN/HNet_on_Tensorflow"}; // Possibly single large files
-								// https://github.com/roclark/sportsreference/blob/master/sportsreference/fb/squad_ids.py
-								// https://github.com/CODEJIN/HNet_on_Tensorflow/blob/master/QT_UI/Image_Resources_rc.py
+								//"rasbt/mlxtend"}; //excluded for ML-Verse-with-Diff
 	
 	
 	Set<String> badProjects = new HashSet<String>(Arrays.asList(excludeProjects));
@@ -254,7 +254,7 @@ public abstract class AbstractCommit {
 		////// Python AST generation will be handled here ///////
 		else if (lowerPath.endsWith(".py")) {
 			if (!badProjects.contains(projectName)) {
-				if (lowerPath.contains(largeFiles)) {
+				if (lowerPath.contains(largeFiles1) || lowerPath.contains(largeFiles2)) {
 					fb.setKind(FileKind.SOURCE_PY_ERROR);
 				} else {
 					final String content = getFileContents(path);
@@ -298,7 +298,7 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 			parseJavaFile(path, fb, content, false); // parse java file
 		} else if (lowerPath.endsWith(".py")) {
-			if (lowerPath.contains(largeFiles)) {
+			if (lowerPath.contains(largeFiles1) || lowerPath.contains(largeFiles2)) {
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
 			} else {
 				final String content = getFileContents(path);
@@ -599,7 +599,7 @@ public abstract class AbstractCommit {
 		return !errorCheck.hasError;
 	}
 
-	boolean pythonParsingError, enableDiff = false;
+	boolean pythonParsingError, enableDiff = true;
 
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
