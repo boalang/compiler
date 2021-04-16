@@ -340,6 +340,8 @@ public class NewPythonVisitor extends ASTVisitor {
 		if (node.getSuperClassNames() != null) {
 			for (String n : (List<String>) node.getSuperClassNames()) {
 				Type.Builder tb = Type.newBuilder();
+				if (enableDiff)
+					tb.setId(this.id++);
 				tb.setKind(TypeKind.CLASS);
 				tb.setName(n);
 				b.addParents(tb.build());

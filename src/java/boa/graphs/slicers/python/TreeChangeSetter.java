@@ -146,7 +146,10 @@ public class TreeChangeSetter {
 		b.clearParents();
 		for(Type v: node.getParentsList())
 		{
-			b.addParents(visit(v));
+			if(!Status.CLASS_PARENT_NAME_RESOLVE)
+				b.addParents(visit(v));
+			else
+				b.addParents(visitClassParent(v));
 		}
 		
 //		Status.globalScopeNameStack.pop();
@@ -172,6 +175,28 @@ public class TreeChangeSetter {
 		}
 		
 //		Status.globalScopeNameStack.pop();
+		return b.build();
+	}
+	
+	Type visitClassParent(Type node) {
+		Type.Builder b=node.toBuilder(); 
+		
+		String identifierName =node.getName();
+		identifierName=NameResolver.resolveImport(identifierName,null, node.getId());
+		if(!identifierName.equals(""))
+		{
+			b.setName(identifierName);
+		}
+		else
+		{
+			identifierName =node.getName();
+			identifierName=NameResolver.resolveObjectName(identifierName,null, node.getId());
+			if(!identifierName.equals(""))
+			{
+				b.setName(identifierName);
+			}
+		}
+		
 		return b.build();
 	}
 

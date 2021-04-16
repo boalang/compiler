@@ -23,8 +23,8 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 	boolean firstTurn = true;
 
 	public ForwardSlicer(ASTRoot _root, String[] moduleFilter, String[] filterCriteria, boolean changeImpactFlag) {
-		//remove
-		Status.CRIERIA_FLAG=false;
+		
+//		Status.CRIERIA_FLAG=false; //remove
 		
 		this.root = _root;
 

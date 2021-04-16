@@ -15,6 +15,7 @@ import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Method;
 import boa.types.Ast.Statement;
+import boa.types.Ast.Type;
 import boa.types.Ast.Variable;
 
 public class Status {
@@ -32,6 +33,8 @@ public class Status {
 	public static boolean BACKWARD=false;
 	
 	public static boolean CRIERIA_FLAG=true;
+
+	public static boolean CLASS_PARENT_NAME_RESOLVE=false;
 	
 	public static Stack<String> globalScopeNameStack;
 	public static Stack<String> statementScopeStack;
@@ -224,6 +227,14 @@ public class Status {
 		}
 		if (node.hasInitializer()) {
 			cfgToAstIdExpressionMapper(node.getInitializer(), id);
+		}
+	}
+	static void cfgToAstIdTypeMapper(Type node, Integer id) {
+		if (node.hasId()) {
+			cfgToAstIdMap.put(node.getId(), id);
+		}
+		if (node.hasComputedName()) {
+			cfgToAstIdExpressionMapper(node.getComputedName(), id);
 		}
 	}
 

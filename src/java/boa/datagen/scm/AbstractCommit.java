@@ -260,6 +260,8 @@ public abstract class AbstractCommit {
 					final String content = getFileContents(path);
 					fb.setKind(FileKind.SOURCE_PY_ERROR);
 					System.out.println(projectName + ": " + path);
+					if(path.equals("mlxtend/data/mnist.py"))
+						System.out.println("gotcha");
 					parsePythonFile(path, fb, content, false);
 				}
 			}
@@ -599,7 +601,7 @@ public abstract class AbstractCommit {
 		return !errorCheck.hasError;
 	}
 
-	boolean pythonParsingError, enableDiff = false;
+	boolean pythonParsingError, enableDiff = true;
 
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
