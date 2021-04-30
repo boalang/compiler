@@ -142,7 +142,6 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 
 			final int MAX_OUTPUT = 64 * 1024 - 1;
 			final byte[] b = new byte[MAX_OUTPUT];
-			int length = 0;
 			String output = "";
 
 			// ensure the reducer class is initialized in the cleanup task
@@ -172,9 +171,8 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 				int numBytes = 0;
 
 				while ((numBytes = in.read(b)) > 0) {
-					if (length < MAX_OUTPUT)
+					if (output.length() < MAX_OUTPUT)
 						output += new String(b, 0, numBytes);
-					length += numBytes;
 
 					this.context.progress();
 				}
@@ -182,8 +180,9 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 
 			try {
 				ps = con.prepareStatement("UPDATE boa_output SET length=?, web_result=?, hash=MD5(web_result) WHERE id=" + jobId);
+				int length = output.length();
 				ps.setLong(1, length);
-				ps.setString(2, output.substring(0, length < MAX_OUTPUT ? length : MAX_OUTPUT));
+				ps.setString(2, output.substring(0, length < MAX_OUTPUT ? (int)length : MAX_OUTPUT));
 				ps.executeUpdate();
 			} finally {
 				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
