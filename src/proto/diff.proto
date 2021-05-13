@@ -147,4 +147,6 @@ message ChangedFile {
 	repeated int32 previous_versions = 9;
 	/** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits */
 	repeated int32 previous_indices = 10;
+	
+	optional int32 ast_key = 11;
 }
