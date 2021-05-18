@@ -12452,9 +12452,9 @@ public final class Ast {
      */
     boa.types.Ast.TypeKind getKind();
 
-    // optional string id = 4;
+    // optional int32 id = 4;
     /**
-     * <code>optional string id = 4;</code>
+     * <code>optional int32 id = 4;</code>
      *
      * <pre>
      ** @exclude 
@@ -12462,22 +12462,13 @@ public final class Ast {
      */
     boolean hasId();
     /**
-     * <code>optional string id = 4;</code>
+     * <code>optional int32 id = 4;</code>
      *
      * <pre>
      ** @exclude 
      * </pre>
      */
-    java.lang.String getId();
-    /**
-     * <code>optional string id = 4;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
-     */
-    com.google.protobuf.ByteString
-        getIdBytes();
+    int getId();
 
     // optional int32 declaration_file = 8;
     /**
@@ -12633,9 +12624,9 @@ public final class Ast {
               }
               break;
             }
-            case 34: {
+            case 32: {
               bitField0_ |= 0x00000008;
-              id_ = input.readBytes();
+              id_ = input.readInt32();
               break;
             }
             case 64: {
@@ -12851,11 +12842,11 @@ public final class Ast {
       return kind_;
     }
 
-    // optional string id = 4;
+    // optional int32 id = 4;
     public static final int ID_FIELD_NUMBER = 4;
-    private java.lang.Object id_;
+    private int id_;
     /**
-     * <code>optional string id = 4;</code>
+     * <code>optional int32 id = 4;</code>
      *
      * <pre>
      ** @exclude 
@@ -12865,45 +12856,14 @@ public final class Ast {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional string id = 4;</code>
+     * <code>optional int32 id = 4;</code>
      *
      * <pre>
      ** @exclude 
      * </pre>
      */
-    public java.lang.String getId() {
-      java.lang.Object ref = id_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          id_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string id = 4;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
-     */
-    public com.google.protobuf.ByteString
-        getIdBytes() {
-      java.lang.Object ref = id_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        id_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public int getId() {
+      return id_;
     }
 
     // optional int32 declaration_file = 8;
@@ -13020,7 +12980,7 @@ public final class Ast {
       name_ = "";
       fullyQualifiedName_ = "";
       kind_ = boa.types.Ast.TypeKind.OTHER;
-      id_ = "";
+      id_ = 0;
       declarationFile_ = 0;
       declaration_ = 0;
       key_ = 0;
@@ -13059,7 +13019,7 @@ public final class Ast {
         output.writeEnum(3, kind_.getNumber());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(4, getIdBytes());
+        output.writeInt32(4, id_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeInt32(8, declarationFile_);
@@ -13099,7 +13059,7 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getIdBytes());
+          .computeInt32Size(4, id_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
@@ -13248,7 +13208,7 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000002);
         kind_ = boa.types.Ast.TypeKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000004);
-        id_ = "";
+        id_ = 0;
         bitField0_ = (bitField0_ & ~0x00000008);
         declarationFile_ = 0;
         bitField0_ = (bitField0_ & ~0x00000010);
@@ -13362,9 +13322,7 @@ public final class Ast {
           setKind(other.getKind());
         }
         if (other.hasId()) {
-          bitField0_ |= 0x00000008;
-          id_ = other.id_;
-          onChanged();
+          setId(other.getId());
         }
         if (other.hasDeclarationFile()) {
           setDeclarationFile(other.getDeclarationFile());
@@ -13666,10 +13624,10 @@ public final class Ast {
         return this;
       }
 
-      // optional string id = 4;
-      private java.lang.Object id_ = "";
+      // optional int32 id = 4;
+      private int id_ ;
       /**
-       * <code>optional string id = 4;</code>
+       * <code>optional int32 id = 4;</code>
        *
        * <pre>
        ** @exclude 
@@ -13679,62 +13637,30 @@ public final class Ast {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>optional string id = 4;</code>
+       * <code>optional int32 id = 4;</code>
        *
        * <pre>
        ** @exclude 
        * </pre>
        */
-      public java.lang.String getId() {
-        java.lang.Object ref = id_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          id_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public int getId() {
+        return id_;
       }
       /**
-       * <code>optional string id = 4;</code>
+       * <code>optional int32 id = 4;</code>
        *
        * <pre>
        ** @exclude 
        * </pre>
        */
-      public com.google.protobuf.ByteString
-          getIdBytes() {
-        java.lang.Object ref = id_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          id_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string id = 4;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public Builder setId(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
+      public Builder setId(int value) {
+        bitField0_ |= 0x00000008;
         id_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string id = 4;</code>
+       * <code>optional int32 id = 4;</code>
        *
        * <pre>
        ** @exclude 
@@ -13742,24 +13668,7 @@ public final class Ast {
        */
       public Builder clearId() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        id_ = getDefaultInstance().getId();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string id = 4;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public Builder setIdBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        id_ = value;
+        id_ = 0;
         onChanged();
         return this;
       }
@@ -46751,7 +46660,7 @@ public final class Ast {
       "tement\022%\n\006change\030\021 \001(\0162\025.boa.types.Chang" +
       "eKind\"\362\001\n\004Type\022\014\n\004name\030\001 \001(\t\022\034\n\024fully_qu",
       "alified_name\030\002 \001(\t\022!\n\004kind\030\003 \002(\0162\023.boa.t" +
-      "ypes.TypeKind\022\n\n\002id\030\004 \001(\t\022\030\n\020declaration" +
+      "ypes.TypeKind\022\n\n\002id\030\004 \001(\005\022\030\n\020declaration" +
       "_file\030\010 \001(\005\022\023\n\013declaration\030\t \001(\005\022\013\n\003key\030" +
       "\n \001(\005\022,\n\rcomputed_name\030\016 \001(\0132\025.boa.types" +
       ".Expression\022%\n\006change\030\017 \001(\0162\025.boa.types." +

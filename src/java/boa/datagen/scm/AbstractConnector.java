@@ -189,6 +189,9 @@ public abstract class AbstractConnector implements AutoCloseable {
 		
 		AbstractCommit.previousAst.clear();
 		
+		AbstractCommit.previousFileRev.clear();
+		AbstractCommit.fileRevMap.clear();
+		
 		this.projectName = projectName;
 		
 		setRevisions();
@@ -219,7 +222,29 @@ public abstract class AbstractConnector implements AutoCloseable {
 		if (!revisionKeys.isEmpty())
 			revs.addAll(revisionKeys);
 		
-		
+		if(!AbstractCommit.fileRevMap.isEmpty())
+		{
+			double pyChurn=0.0;
+			double dataChurn=0.0;
+			double h5Churn=0.0;
+			
+			for(String key: AbstractCommit.fileRevMap.keySet())
+			{
+				double churnRate=AbstractCommit.fileRevMap.get(key).size()/(double)
+						revisions.size();
+				if(key.equals("py"))
+					pyChurn=churnRate;
+				else if(key.equals("csv"))
+					dataChurn=churnRate;
+				else 
+					h5Churn=churnRate;
+			}
+			String []header={"Project",
+					"Python Churn Rate","Data Churn Rate", "H5 Churn Rate"};
+			String []data={projectName,Double.toString(pyChurn),
+					Double.toString(dataChurn),Double.toString(h5Churn)};
+			AbstractCommit.writeToFile("project_churn_data.csv", header, data);
+		}
 		
 		return revs;
 	}

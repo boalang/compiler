@@ -56,6 +56,9 @@ public class CfgUtil {
 	}
 
 	public static boolean isCfgNodesReachable(Integer sourceId, Integer targetId, String identifierName, String scope) {
+		
+		if(sourceId==targetId) return false;
+		
 		scope=Status.getProperScope(scope);
 		
 		if (!isCfgDefined(scope))
@@ -80,6 +83,12 @@ public class CfgUtil {
 			CFGNode t = st.pop();
 			visitedCfgNode[(int) t.getId()] = true;
 
+			if (t.getId() == targetId) {
+				pathFound = true;
+				st.clear();
+				return true;
+			}
+			
 			if (t.getId() != sourceId) {
 				HashMap<String, Integer> ids = null;
 
@@ -95,12 +104,7 @@ public class CfgUtil {
 					continue;
 				}
 			}
-			if (t.getId() == targetId) {
-				pathFound = true;
-				st.clear();
-				return true;
-			}
-
+			
 			for (CFGNode v : t.getSuccessors())
 				if (!visitedCfgNode[(int) v.getId()])
 					st.push(v);

@@ -77,7 +77,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 	protected boolean preVisit(final Expression node) throws Exception {
 
 		if (node.getKind() == ExpressionKind.YIELD && node.getExpressionsCount() > 0) {
-			if (SliceCriteriaAnalysis.isExpressionModified(node.getExpressions(0))
+			if ( SliceCriteriaAnalysis.isExpressionModified(node.getExpressions(0))
 					|| SliceCriteriaAnalysis.isExpressionImpacted(node.getExpressions(0))) {
 				Status.returnImpacted.put(Status.getCurrentScope(), true);
 			}
@@ -268,7 +268,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 			} else {
 
 				if (Status.CRIERIA_FLAG) {
-					if (SliceCriteriaAnalysis.isExpressionModified(ex)
+					if ( SliceCriteriaAnalysis.isExpressionModified(ex)
 							|| SliceCriteriaAnalysis.isExpressionImpacted(ex)) {
 
 						SymbolTable.addToCriteria(leftIdentiferName, leftId, nextScope);

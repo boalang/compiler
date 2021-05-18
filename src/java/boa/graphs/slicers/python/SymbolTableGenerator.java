@@ -110,13 +110,13 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 			return false;
 		}
 
-//		for (String lib : Status.moduleFilter) {
-//			Status.importMap.put(lib, lib);
-//
-//		}
-//		for (String lib : Status.libraryFilter) {
-//			Status.importMap.put(lib, lib);
-//		}
+		for (String lib : Status.moduleFilter) {
+			Status.importMap.put(lib, lib);
+
+		}
+		for (String lib : Status.libraryFilter) {
+			Status.importMap.put(lib, lib);
+		}
 
 		Status.objectNameMap.put(Status.getCurrentScope(), Status.getCurrentScope());
 		return defaultPreVisit();
@@ -126,9 +126,31 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 	protected boolean preVisit(final Declaration node) throws Exception {
 
 		Status.globalScopeNameStack.push(node.getName().replace(".", "_"));
-		Status.objectNameMap.put(Status.getCurrentScope(), Status.getCurrentScope());
-		Status.cfgMap.put(Status.getCurrentScope(), BoaGraphIntrinsics.getcfg(node));
+		
+		String c_scope=Status.getCurrentScope();
+		Status.objectNameMap.put(c_scope, c_scope);
+		
+		if(Status.CLASS_PARENT_NAME_RESOLVE)
+		{
+			String p_scope;
+			
+			p_scope=BoaStringIntrinsics.substring(c_scope, 
+					BoaStringIntrinsics.lastIndexOf("/", c_scope), 
+					BoaStringIntrinsics.lastIndexOf(".", c_scope));
+			
+			p_scope=BoaStringIntrinsics.stringReplace(c_scope, p_scope, "", true);
+			p_scope=BoaStringIntrinsics.stringReplace(p_scope, "/", ".", true);
+			
+			
+			Status.importMap.put(node.getName(), p_scope);
+		}
+		
+		Status.cfgMap.put(c_scope, BoaGraphIntrinsics.getcfg(node));
 		Status.cfgToAstIdMapper();
+		for (Type v : node.getParentsList()) {
+			Status.cfgToAstIdTypeMapper(v, 0);
+		}
+
 		return defaultPreVisit();
 	}
 

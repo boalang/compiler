@@ -121,7 +121,7 @@ message Type {
 	/** The kind of the type */
 	required TypeKind kind = 3;
 	/** @exclude */
-	optional string id = 4;
+	optional int32 id = 4;
 	/** the index of the file (in the list of files in the snapshot) containing the declaration of this type */
 	optional int32 declaration_file = 8;
 	/** the key of the node containing the declaration of this type in the AST of the file */

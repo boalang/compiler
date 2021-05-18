@@ -24,6 +24,8 @@ import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import boa.datagen.treed.python.BoaToPythonConverter;
 import boa.datagen.util.NewPythonVisitor;
 import boa.graphs.slicers.python.ForwardSlicer;
+import boa.graphs.slicers.python.InitialSliceCriteriaMode;
+import boa.graphs.slicers.python.SliceOutputLevel;
 import boa.graphs.slicers.python.Status;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Statement;
@@ -170,8 +172,45 @@ public class BoaSlicerIntrinsics {
 		
 		if(changedFile.getNamespacesCount()==0) return changedFile;
 		
-		ForwardSlicer slicer=new ForwardSlicer(changedFile, moduleFilter, filterCriteria, true);
+		ForwardSlicer slicer=new ForwardSlicer(changedFile, moduleFilter, filterCriteria);
 		ASTRoot retAst= slicer.initiateVisit(true);
+		
+		if(retAst==null) return emptyAst;
+		
+		return retAst;
+		
+	}
+	@FunctionSpec(name = "getslicebystatementcriteria", returnType = "ASTRoot", 
+			formalParameters = { "ASTRoot", "array of string", "array of string", "array of array of string" })
+	public static ASTRoot getslicebystatementcriteria(final ASTRoot changedFile, String[] moduleFilter, 
+			String[] filterCriteria, String[][] initialCriteriaStatementPatter) {
+		
+		if(changedFile.getNamespacesCount()==0) return changedFile;
+		
+		Status.setInitialStatementCriteria(initialCriteriaStatementPatter);
+		Status.CRITERIA_MODE=InitialSliceCriteriaMode.STATEMENT;
+//		Status.SLICE_OUTPUT_LEVEL=SliceOutputLevel.EXPRESSION;
+
+		ForwardSlicer slicer=new ForwardSlicer(changedFile, moduleFilter, filterCriteria);
+		ASTRoot retAst= slicer.initiateVisit(false);
+		
+		if(retAst==null) return emptyAst;
+		
+		return retAst;
+		
+	}
+	
+	@FunctionSpec(name = "resolveclassparent", returnType = "ASTRoot", formalParameters = { "ASTRoot", "array of string", "array of string" })
+	public static ASTRoot resolveClassParent(final ASTRoot changedFile, String[] moduleFilter, 
+			String[] filterCriteria) {
+		
+		if(changedFile.getNamespacesCount()==0) return changedFile;
+		
+		Status.CLASS_PARENT_NAME_RESOLVE=true;
+		Status.CRIERIA_FLAG=false;
+				
+		ForwardSlicer slicer=new ForwardSlicer(changedFile, moduleFilter, filterCriteria);
+		ASTRoot retAst= slicer.initiateVisit(false);
 		
 		if(retAst==null) return emptyAst;
 		
@@ -187,7 +226,7 @@ public class BoaSlicerIntrinsics {
 		
 		Status.BACKWARD=true;
 		
-		ForwardSlicer slicer=new ForwardSlicer(changedFile, moduleFilter, filterCriteria, true);
+		ForwardSlicer slicer=new ForwardSlicer(changedFile, moduleFilter, filterCriteria);
 		ASTRoot retAst= slicer.initiateVisit(true);
 		
 		if(retAst==null) return emptyAst;

@@ -15,10 +15,13 @@ import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Method;
 import boa.types.Ast.Statement;
+import boa.types.Ast.Type;
 import boa.types.Ast.Variable;
 
 public class Status {
-	//80: stack trace and slicing, 16 just slicing
+	//80: stack trace and slicing, 16 just slicing, 
+	//18 slice criteria and criteria identifier tracking
+	//22 slice criteria+criteria tracker+alias tracker
 	public static int DEBUG_LEVEL=16; //Bit 0: ALL, Bit 1: Criteria, Bit 2: Alias Criteria, Bit 3: Across-in, Bit 4: Slicing
 	public static int DEBUG_ALL_BIT=0;
 	public static int DEBUG_CRITERIA_BIT=1;
@@ -27,12 +30,16 @@ public class Status {
 	public static int DEBUG_SLICING_BIT=4; //16
 	public static int DEBUG_NAME_RESOLVE_BIT=5;
 	public static int DEBUG_STACK_TRACE_BIT=6;
-	public static boolean DEBUG = false;
+	public static boolean DEBUG = true;
 	
 	public static boolean BACKWARD=false;
 	
 	public static boolean CRIERIA_FLAG=true;
-	
+
+	public static boolean CLASS_PARENT_NAME_RESOLVE=false;
+	public static InitialSliceCriteriaMode CRITERIA_MODE=InitialSliceCriteriaMode.CHANGE;
+	public static SliceOutputLevel SLICE_OUTPUT_LEVEL=SliceOutputLevel.METHODCALL;
+
 	public static Stack<String> globalScopeNameStack;
 	public static Stack<String> statementScopeStack;
 	public static Stack<String> namespaceScopeStack;
@@ -48,6 +55,8 @@ public class Status {
 
 	public static HashMap<String, Boolean> returnImpacted;
 
+	public static String [][]statementInitialCriteriaPattern;
+	
 	public static List<String> libraryFilter;
 	public static List<String> moduleFilter;
 //	public static HashMap<Integer, String> aliasName;
@@ -61,7 +70,6 @@ public class Status {
 	public static HashMap<String, String> objectNameMap;
 	public static Integer nameResolveDepth = 0;
 
-	public static boolean changeImpactAnalysisFlag = false;
 	public static boolean acrossInFlag = false;
 	public static boolean acrossInSessionActive = false;
 
@@ -226,6 +234,14 @@ public class Status {
 			cfgToAstIdExpressionMapper(node.getInitializer(), id);
 		}
 	}
+	static void cfgToAstIdTypeMapper(Type node, Integer id) {
+		if (node.hasId()) {
+			cfgToAstIdMap.put(node.getId(), id);
+		}
+		if (node.hasComputedName()) {
+			cfgToAstIdExpressionMapper(node.getComputedName(), id);
+		}
+	}
 
 	static void cfgToAstIdStatementMapper(Statement node, Integer id) {
 		if (node.hasId()) {
@@ -265,6 +281,9 @@ public class Status {
 		returnImpacted.clear();
 		resolvedNameMap.clear();
 		sliceSet.clear();
+		
+//		if(CRITERIA_MODE==InitialSliceCriteriaMode.STATEMENT)
+//			statementInitialCriteriaPattern.clear();
 	}
 
 	public static void setLibraryFilter(String[] b) {
@@ -274,6 +293,10 @@ public class Status {
 
 	public static void setModuleFilter(String[] b) {
 		moduleFilter = Arrays.asList(b);
+	}
+	public static void setInitialStatementCriteria(String[][] b) {
+		if(b!=null)
+			statementInitialCriteriaPattern = b;
 	}
 
 	public static void printMap(HashMap<String, String> mp) {

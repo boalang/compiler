@@ -78,6 +78,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
@@ -90,6 +92,9 @@ public abstract class AbstractCommit {
 			DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
 
 	static Map<String, ASTNode> previousAst = new HashMap<>();
+	static Map<String,Integer> previousFileRev=new HashedMap();
+	static Map<String,Set<String>> fileRevMap=new HashedMap();
+	
 	boolean lastRevision = false;
 
 	protected AbstractConnector connector;
@@ -243,7 +248,11 @@ public abstract class AbstractCommit {
 	Builder processPythonChangeFile(final ChangedFile.Builder fb) {
 		long len = connector.astWriterLen;
 		String path = fb.getName();
-
+		
+		System.out.println("Revision ID: "+this.id+", Processing: "+path);
+		
+		collectDataEvolutionaryInfo(path, fb);
+		
 		final String lowerPath = path.toLowerCase();
 		if (lowerPath.endsWith(".txt"))
 			fb.setKind(FileKind.TEXT);
@@ -281,6 +290,7 @@ public abstract class AbstractCommit {
 
 		return fb;
 	}
+	
 
 	Builder processChangeFile(final ChangedFile.Builder fb) {
 		long len = connector.astWriterLen;
@@ -598,7 +608,43 @@ public abstract class AbstractCommit {
 		}
 		return !errorCheck.hasError;
 	}
-
+	
+	
+	boolean collectDataEvolutionaryInfo(final String path,final ChangedFile.Builder fb)
+	{
+		if(this.id==null)
+			return false;
+		
+//		String prevPath ="";
+//		if(fb.hasChange()&&fb.getChange()==ChangeKind.RENAMED)
+//			prevPath+=fb.getPreviousNames(0);
+//		else
+//			prevPath+=path;		
+//		
+		String key=path.substring(path.lastIndexOf('.')+1);
+		if (key.equals("py") || key.equals("csv")|| key.equals("h5"))
+		{
+			if(!fileRevMap.containsKey(key))
+				fileRevMap.put(key,new HashSet<String>());
+			Set<String> tmpSet=fileRevMap.get(key);
+			tmpSet.add(this.id);
+			
+			fileRevMap.put(key, tmpSet);
+			
+//			if(fb.getChange()==ChangeKind.ADDED)
+//				previousFileRev.put(prevPath, 0);
+//			else if(previousFileRev.containsKey(prevPath))
+//			{
+//				previousFileRev.put(path, previousFileRev.get(prevPath)+1);
+//				
+//				if(fb.getChange()==ChangeKind.RENAMED)
+//					previousFileRev.remove(prevPath);
+//			}
+		}
+		
+		return true;
+	}
+	
 	boolean pythonParsingError, enableDiff = false;
 
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
@@ -606,11 +652,11 @@ public abstract class AbstractCommit {
 		pythonParsingError = false;
 
 		String fullPath = this.projectName + "/";
-		String curPath = fullPath+path;
 		if(fb.hasChange()&&fb.getChange()==ChangeKind.RENAMED)
 			fullPath+=fb.getPreviousNames(0);
 		else
 			fullPath+=path;
+		String curPath = fullPath+path;
 
 //		if(this.id.equals("070246304a02d133a2c64710f617c41c2ca76c11"))
 //			System.out.println("commit " + this.id);		
@@ -1007,6 +1053,31 @@ public abstract class AbstractCommit {
 		return true;
 	}
 
+	static void writeToFile(String file_name, String []header, String []data) {
+		try {
+			File f = new File(file_name);
+			if (!f.exists()) {
+				f.createNewFile();
+				FileWriter fw = new FileWriter(f, true);
+				BufferedWriter bw = new BufferedWriter(fw);
+				PrintWriter pw = new PrintWriter(bw);
+				
+				pw.println(String.join(",", header));
+				
+				pw.println(String.join(",", data));
+				pw.close();
+			} else {
+				FileWriter fw = new FileWriter(f, true);
+				BufferedWriter bw = new BufferedWriter(fw);
+				PrintWriter pw = new PrintWriter(bw);
+				pw.println(String.join(",", data));
+				pw.close();
+			}
+		} catch (IOException ioe) {
+			System.out.println("Exception occurred:");
+			ioe.printStackTrace();
+		}
+	}
 	private void writeToCsv(String project, String file, String error) {
 		String file_name = "error-log.csv";
 		try {
