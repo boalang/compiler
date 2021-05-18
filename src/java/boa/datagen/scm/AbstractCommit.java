@@ -239,17 +239,16 @@ public abstract class AbstractCommit {
 	String[] excludeProjects = {"ryfeus/lambda-packs", "sorenlind/lemmy", // excluded in the 1st version of the evolution datagen 
 								"MycroftAI/mycroft-core", "balcilar/3D-CNN-Emotion-Recognition", // excluded in the 2nd version (large) of the evolution datagen
 								"roclark/sportsreference", "CODEJIN/HNet_on_Tensorflow"}; // Possibly single large files
-								//"rasbt/mlxtend"}; //excluded for ML-Verse-with-Diff
-	
-	
+								//"rasbt/mlxtend"}; //excluded for ML-Verse-with-Diff	
 	Set<String> badProjects = new HashSet<String>(Arrays.asList(excludeProjects));
+	boolean pythonParsingError, enableDiff = false; 
 	boolean include_notebooks = false;
 
 	Builder processPythonChangeFile(final ChangedFile.Builder fb) {
 		long len = connector.astWriterLen;
 		String path = fb.getName();
 		
-		System.out.println("Revision ID: "+this.id+", Processing: "+path);
+		//System.out.println("Revision ID: "+this.id+", Processing: "+path);
 		
 		collectDataEvolutionaryInfo(path, fb);
 		
@@ -644,8 +643,7 @@ public abstract class AbstractCommit {
 		
 		return true;
 	}
-	
-	boolean pythonParsingError, enableDiff = false;
+
 
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
@@ -787,7 +785,6 @@ public abstract class AbstractCommit {
 
 	boolean cellParseError;
 	boolean notebookParseError;
-	private Object String;
 	
 	private boolean parseNotebookFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
