@@ -645,7 +645,7 @@ public abstract class AbstractCommit {
 		return true;
 	}
 	
-	boolean pythonParsingError, enableDiff = true;
+	boolean pythonParsingError, enableDiff = false;
 
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
