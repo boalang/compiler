@@ -22,7 +22,7 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 	AcrossInVisitor acrossInVisitor = new AcrossInVisitor();
 	boolean firstTurn = true;
 
-	public ForwardSlicer(ASTRoot _root, String[] moduleFilter, String[] filterCriteria, boolean changeImpactFlag) {
+	public ForwardSlicer(ASTRoot _root, String[] moduleFilter, String[] filterCriteria) {
 		
 //		Status.CRIERIA_FLAG=false; //remove
 		
@@ -30,7 +30,6 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 
 		Status.setLibraryFilter(filterCriteria);
 		Status.setModuleFilter(moduleFilter);
-		Status.changeImpactAnalysisFlag = changeImpactFlag;
 
 		SymbolTableGenerator st = new SymbolTableGenerator();
 
@@ -268,8 +267,12 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 				if (!identiferName.equals("_") && !identiferName.equals(".") && !identiferName.equals("")) {
 
 					String rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(rightExps.get(i));
-
+					
+					if(matchInitialStatementCriteria(leftExps.get(i), rightExps.get(i)))
+						continue;
+				
 					if (SliceCriteriaAnalysis.isExpressionModified(rightExps.get(i))
+							
 							|| SliceCriteriaAnalysis.isExpressionImpacted(rightExps.get(i))) {
 
 						if (rightExps.get(i).getKind() == ExpressionKind.METHODCALL) {
@@ -292,13 +295,18 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 						}
 
 					}
+					
 
 				}
 			}
 		} else if (rightExps.size() == 1 && rightExps.get(0).getKind() == ExpressionKind.METHODCALL) {
+			
+//			if(matchInitialStatementCriteria(leftExps.get(i), rightExps.get(0)))
+//				continue;
+			
 			String rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(rightExps.get(0));
 
-			if (SliceCriteriaAnalysis.isExpressionModified(rightExps.get(0))
+			if ( SliceCriteriaAnalysis.isExpressionModified(rightExps.get(0))
 					|| SliceCriteriaAnalysis.isExpressionImpacted(rightExps.get(0))) {
 
 				String mt2 = NameResolver.resolveImport(rightIdentifierName, leftExps.get(0).getId(),
@@ -350,9 +358,6 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 				if (!identiferName.equals("_") && !identiferName.equals(".") && !identiferName.equals("")) {
 					String rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(rightExps.get(i));
 
-//					if(rightIdentifierName.equals("tf.morehabijbaji"))
-//						System.out.println("debug");
-
 					String mt2 = NameResolver.resolveImport(rightIdentifierName, leftExps.get(i).getId(),
 							rightExps.get(i).getId());
 					if (mt2.equals("")) {
@@ -367,5 +372,51 @@ public class ForwardSlicer extends BoaAbstractVisitor {
 				}
 			}
 		}
+	}
+	
+	public static boolean matchInitialStatementCriteria(Expression left, Expression right)
+	{
+		if(Status.CRITERIA_MODE!=InitialSliceCriteriaMode.STATEMENT)
+		{
+			return false;
+		}
+		
+		String rightIdentifierName = ForwardSlicerUtil.convertExpressionToString(right);
+		String identiferName = ForwardSlicerUtil.convertExpressionToString(left);
+		String scope = Status.getCurrentScope();
+		
+		for(int i=0;i<Status.statementInitialCriteriaPattern.length;i++)
+		{
+			boolean doAdd=false;
+			if(Status.statementInitialCriteriaPattern[i][0].equals("_") || 
+					identiferName.matches(Status.statementInitialCriteriaPattern[i][0]))
+			{
+				if(Status.statementInitialCriteriaPattern[i][1].equals("_"))
+					doAdd=true;
+				if(right.getKind()==ExpressionKind.METHODCALL)
+				{
+					String mt2 = NameResolver.resolveImport(rightIdentifierName, left.getId(),
+							right.getId());
+					if (!mt2.equals("") && mt2.matches(Status.statementInitialCriteriaPattern[i][1]))
+					{
+						doAdd=true;
+					}
+				}
+				else if(rightIdentifierName.matches(Status.statementInitialCriteriaPattern[i][1]))
+					doAdd=true;
+				
+				if (doAdd)
+				{
+					SymbolTable.addToCriteria(identiferName, left.getId());
+					
+					if (Status.DEBUG && ForwardSlicerUtil.isDebugBitSet(Status.DEBUG_CRITERIA_BIT))
+						System.out.println("Adding in slice criteria, Scope: " + scope + ", Variable:"
+								+ identiferName + ",Location: " + left.getId());
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 }

@@ -110,13 +110,13 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 			return false;
 		}
 
-//		for (String lib : Status.moduleFilter) {
-//			Status.importMap.put(lib, lib);
-//
-//		}
-//		for (String lib : Status.libraryFilter) {
-//			Status.importMap.put(lib, lib);
-//		}
+		for (String lib : Status.moduleFilter) {
+			Status.importMap.put(lib, lib);
+
+		}
+		for (String lib : Status.libraryFilter) {
+			Status.importMap.put(lib, lib);
+		}
 
 		Status.objectNameMap.put(Status.getCurrentScope(), Status.getCurrentScope());
 		return defaultPreVisit();
