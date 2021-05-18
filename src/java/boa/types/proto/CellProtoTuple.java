@@ -58,6 +58,21 @@ public class CellProtoTuple extends BoaProtoTuple {
 		names.put("parse_error", counter++);
 		members.add(new BoaBool());
 		
+		names.put("markdown_text", counter++);
+		members.add(new BoaString());
+		
+		names.put("output_type", counter++);
+		members.add(new BoaString());
+		
+		names.put("error_name", counter++);
+		members.add(new BoaString());
+		
+		names.put("error_value", counter++);
+		members.add(new BoaString());
+		
+		names.put("traceback", counter++);
+		members.add(new BoaString());
+		
 	}
 
 	/**

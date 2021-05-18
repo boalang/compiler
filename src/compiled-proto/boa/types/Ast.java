@@ -44607,6 +44607,78 @@ public final class Ast {
      */
     com.google.protobuf.ByteString
         getMarkdownTextBytes();
+
+    // optional string output_type = 7;
+    /**
+     * <code>optional string output_type = 7;</code>
+     *
+     * <pre>
+     ** For including error output of a codecell 
+     * </pre>
+     */
+    boolean hasOutputType();
+    /**
+     * <code>optional string output_type = 7;</code>
+     *
+     * <pre>
+     ** For including error output of a codecell 
+     * </pre>
+     */
+    java.lang.String getOutputType();
+    /**
+     * <code>optional string output_type = 7;</code>
+     *
+     * <pre>
+     ** For including error output of a codecell 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getOutputTypeBytes();
+
+    // optional string error_name = 8;
+    /**
+     * <code>optional string error_name = 8;</code>
+     */
+    boolean hasErrorName();
+    /**
+     * <code>optional string error_name = 8;</code>
+     */
+    java.lang.String getErrorName();
+    /**
+     * <code>optional string error_name = 8;</code>
+     */
+    com.google.protobuf.ByteString
+        getErrorNameBytes();
+
+    // optional string error_value = 9;
+    /**
+     * <code>optional string error_value = 9;</code>
+     */
+    boolean hasErrorValue();
+    /**
+     * <code>optional string error_value = 9;</code>
+     */
+    java.lang.String getErrorValue();
+    /**
+     * <code>optional string error_value = 9;</code>
+     */
+    com.google.protobuf.ByteString
+        getErrorValueBytes();
+
+    // optional string traceback = 10;
+    /**
+     * <code>optional string traceback = 10;</code>
+     */
+    boolean hasTraceback();
+    /**
+     * <code>optional string traceback = 10;</code>
+     */
+    java.lang.String getTraceback();
+    /**
+     * <code>optional string traceback = 10;</code>
+     */
+    com.google.protobuf.ByteString
+        getTracebackBytes();
   }
   /**
    * Protobuf type {@code boa.types.Cell}
@@ -44700,6 +44772,26 @@ public final class Ast {
             case 50: {
               bitField0_ |= 0x00000010;
               markdownText_ = input.readBytes();
+              break;
+            }
+            case 58: {
+              bitField0_ |= 0x00000020;
+              outputType_ = input.readBytes();
+              break;
+            }
+            case 66: {
+              bitField0_ |= 0x00000040;
+              errorName_ = input.readBytes();
+              break;
+            }
+            case 74: {
+              bitField0_ |= 0x00000080;
+              errorValue_ = input.readBytes();
+              break;
+            }
+            case 82: {
+              bitField0_ |= 0x00000100;
+              traceback_ = input.readBytes();
               break;
             }
           }
@@ -45024,6 +45116,190 @@ public final class Ast {
       }
     }
 
+    // optional string output_type = 7;
+    public static final int OUTPUT_TYPE_FIELD_NUMBER = 7;
+    private java.lang.Object outputType_;
+    /**
+     * <code>optional string output_type = 7;</code>
+     *
+     * <pre>
+     ** For including error output of a codecell 
+     * </pre>
+     */
+    public boolean hasOutputType() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional string output_type = 7;</code>
+     *
+     * <pre>
+     ** For including error output of a codecell 
+     * </pre>
+     */
+    public java.lang.String getOutputType() {
+      java.lang.Object ref = outputType_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          outputType_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string output_type = 7;</code>
+     *
+     * <pre>
+     ** For including error output of a codecell 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getOutputTypeBytes() {
+      java.lang.Object ref = outputType_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        outputType_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional string error_name = 8;
+    public static final int ERROR_NAME_FIELD_NUMBER = 8;
+    private java.lang.Object errorName_;
+    /**
+     * <code>optional string error_name = 8;</code>
+     */
+    public boolean hasErrorName() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional string error_name = 8;</code>
+     */
+    public java.lang.String getErrorName() {
+      java.lang.Object ref = errorName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          errorName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string error_name = 8;</code>
+     */
+    public com.google.protobuf.ByteString
+        getErrorNameBytes() {
+      java.lang.Object ref = errorName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        errorName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional string error_value = 9;
+    public static final int ERROR_VALUE_FIELD_NUMBER = 9;
+    private java.lang.Object errorValue_;
+    /**
+     * <code>optional string error_value = 9;</code>
+     */
+    public boolean hasErrorValue() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional string error_value = 9;</code>
+     */
+    public java.lang.String getErrorValue() {
+      java.lang.Object ref = errorValue_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          errorValue_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string error_value = 9;</code>
+     */
+    public com.google.protobuf.ByteString
+        getErrorValueBytes() {
+      java.lang.Object ref = errorValue_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        errorValue_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional string traceback = 10;
+    public static final int TRACEBACK_FIELD_NUMBER = 10;
+    private java.lang.Object traceback_;
+    /**
+     * <code>optional string traceback = 10;</code>
+     */
+    public boolean hasTraceback() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional string traceback = 10;</code>
+     */
+    public java.lang.String getTraceback() {
+      java.lang.Object ref = traceback_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          traceback_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string traceback = 10;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTracebackBytes() {
+      java.lang.Object ref = traceback_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        traceback_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       cellKind_ = boa.types.Ast.Cell.CellKind.OTHER;
       cellId_ = 0;
@@ -45031,6 +45307,10 @@ public final class Ast {
       namespaces_ = java.util.Collections.emptyList();
       parseError_ = false;
       markdownText_ = "";
+      outputType_ = "";
+      errorName_ = "";
+      errorValue_ = "";
+      traceback_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -45076,6 +45356,18 @@ public final class Ast {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeBytes(6, getMarkdownTextBytes());
       }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBytes(7, getOutputTypeBytes());
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeBytes(8, getErrorNameBytes());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeBytes(9, getErrorValueBytes());
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeBytes(10, getTracebackBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -45108,6 +45400,22 @@ public final class Ast {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(6, getMarkdownTextBytes());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(7, getOutputTypeBytes());
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(8, getErrorNameBytes());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(9, getErrorValueBytes());
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(10, getTracebackBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -45246,6 +45554,14 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000010);
         markdownText_ = "";
         bitField0_ = (bitField0_ & ~0x00000020);
+        outputType_ = "";
+        bitField0_ = (bitField0_ & ~0x00000040);
+        errorName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000080);
+        errorValue_ = "";
+        bitField0_ = (bitField0_ & ~0x00000100);
+        traceback_ = "";
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -45303,6 +45619,22 @@ public final class Ast {
           to_bitField0_ |= 0x00000010;
         }
         result.markdownText_ = markdownText_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.outputType_ = outputType_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.errorName_ = errorName_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.errorValue_ = errorValue_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.traceback_ = traceback_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -45360,6 +45692,26 @@ public final class Ast {
         if (other.hasMarkdownText()) {
           bitField0_ |= 0x00000020;
           markdownText_ = other.markdownText_;
+          onChanged();
+        }
+        if (other.hasOutputType()) {
+          bitField0_ |= 0x00000040;
+          outputType_ = other.outputType_;
+          onChanged();
+        }
+        if (other.hasErrorName()) {
+          bitField0_ |= 0x00000080;
+          errorName_ = other.errorName_;
+          onChanged();
+        }
+        if (other.hasErrorValue()) {
+          bitField0_ |= 0x00000100;
+          errorValue_ = other.errorValue_;
+          onChanged();
+        }
+        if (other.hasTraceback()) {
+          bitField0_ |= 0x00000200;
+          traceback_ = other.traceback_;
           onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
@@ -45948,6 +46300,326 @@ public final class Ast {
         return this;
       }
 
+      // optional string output_type = 7;
+      private java.lang.Object outputType_ = "";
+      /**
+       * <code>optional string output_type = 7;</code>
+       *
+       * <pre>
+       ** For including error output of a codecell 
+       * </pre>
+       */
+      public boolean hasOutputType() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional string output_type = 7;</code>
+       *
+       * <pre>
+       ** For including error output of a codecell 
+       * </pre>
+       */
+      public java.lang.String getOutputType() {
+        java.lang.Object ref = outputType_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          outputType_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string output_type = 7;</code>
+       *
+       * <pre>
+       ** For including error output of a codecell 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getOutputTypeBytes() {
+        java.lang.Object ref = outputType_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          outputType_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string output_type = 7;</code>
+       *
+       * <pre>
+       ** For including error output of a codecell 
+       * </pre>
+       */
+      public Builder setOutputType(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000040;
+        outputType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string output_type = 7;</code>
+       *
+       * <pre>
+       ** For including error output of a codecell 
+       * </pre>
+       */
+      public Builder clearOutputType() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        outputType_ = getDefaultInstance().getOutputType();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string output_type = 7;</code>
+       *
+       * <pre>
+       ** For including error output of a codecell 
+       * </pre>
+       */
+      public Builder setOutputTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000040;
+        outputType_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional string error_name = 8;
+      private java.lang.Object errorName_ = "";
+      /**
+       * <code>optional string error_name = 8;</code>
+       */
+      public boolean hasErrorName() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional string error_name = 8;</code>
+       */
+      public java.lang.String getErrorName() {
+        java.lang.Object ref = errorName_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          errorName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string error_name = 8;</code>
+       */
+      public com.google.protobuf.ByteString
+          getErrorNameBytes() {
+        java.lang.Object ref = errorName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          errorName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string error_name = 8;</code>
+       */
+      public Builder setErrorName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000080;
+        errorName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string error_name = 8;</code>
+       */
+      public Builder clearErrorName() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        errorName_ = getDefaultInstance().getErrorName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string error_name = 8;</code>
+       */
+      public Builder setErrorNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000080;
+        errorName_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional string error_value = 9;
+      private java.lang.Object errorValue_ = "";
+      /**
+       * <code>optional string error_value = 9;</code>
+       */
+      public boolean hasErrorValue() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional string error_value = 9;</code>
+       */
+      public java.lang.String getErrorValue() {
+        java.lang.Object ref = errorValue_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          errorValue_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string error_value = 9;</code>
+       */
+      public com.google.protobuf.ByteString
+          getErrorValueBytes() {
+        java.lang.Object ref = errorValue_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          errorValue_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string error_value = 9;</code>
+       */
+      public Builder setErrorValue(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
+        errorValue_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string error_value = 9;</code>
+       */
+      public Builder clearErrorValue() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        errorValue_ = getDefaultInstance().getErrorValue();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string error_value = 9;</code>
+       */
+      public Builder setErrorValueBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
+        errorValue_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional string traceback = 10;
+      private java.lang.Object traceback_ = "";
+      /**
+       * <code>optional string traceback = 10;</code>
+       */
+      public boolean hasTraceback() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional string traceback = 10;</code>
+       */
+      public java.lang.String getTraceback() {
+        java.lang.Object ref = traceback_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          traceback_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string traceback = 10;</code>
+       */
+      public com.google.protobuf.ByteString
+          getTracebackBytes() {
+        java.lang.Object ref = traceback_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          traceback_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string traceback = 10;</code>
+       */
+      public Builder setTraceback(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        traceback_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string traceback = 10;</code>
+       */
+      public Builder clearTraceback() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        traceback_ = getDefaultInstance().getTraceback();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string traceback = 10;</code>
+       */
+      public Builder setTracebackBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        traceback_ = value;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Cell)
     }
 
@@ -46247,17 +46919,20 @@ public final class Ast {
       "_FACE_RULE\020\010\022\016\n\nMEDIA_RULE\020\t\022\017\n\013MEDIA_QU" +
       "ERY\020\n\022\017\n\013IMPORT_RULE\020\013\022\017\n\013XML_ELEMENT\020\014\"" +
       "\'\n\tAttribute\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t" +
-      "\"\353\001\n\004Cell\022+\n\tcell_kind\030\001 \002(\0162\030.boa.types",
+      "\"\274\002\n\004Cell\022+\n\tcell_kind\030\001 \002(\0162\030.boa.types",
       ".Cell.CellKind\022\017\n\007cell_id\030\002 \002(\005\022\027\n\017execu" +
       "tion_count\030\003 \001(\005\022(\n\nnamespaces\030\004 \003(\0132\024.b" +
       "oa.types.Namespace\022\023\n\013parse_error\030\005 \001(\010\022" +
-      "\025\n\rmarkdown_text\030\006 \001(\t\"6\n\010CellKind\022\t\n\005OT" +
-      "HER\020\000\022\010\n\004CODE\020\001\022\014\n\010MARKDOWN\020\002\022\007\n\003RAW\020\003*\303" +
-      "\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINT" +
-      "ERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STR" +
-      "UCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNO" +
-      "TATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005T" +
-      "RAIT\020\t\022\r\n\tPRIMITIVE\020\n\022\t\n\005ARRAY\020\013\032\002\020\001B\002H\001"
+      "\025\n\rmarkdown_text\030\006 \001(\t\022\023\n\013output_type\030\007 " +
+      "\001(\t\022\022\n\nerror_name\030\010 \001(\t\022\023\n\013error_value\030\t" +
+      " \001(\t\022\021\n\ttraceback\030\n \001(\t\"6\n\010CellKind\022\t\n\005O" +
+      "THER\020\000\022\010\n\004CODE\020\001\022\014\n\010MARKDOWN\020\002\022\007\n\003RAW\020\003*" +
+      "\303\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tIN" +
+      "TERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006ST" +
+      "RUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANN",
+      "OTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005" +
+      "TRAIT\020\t\022\r\n\tPRIMITIVE\020\n\022\t\n\005ARRAY\020\013\032\002\020\001B\002H" +
+      "\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -46359,7 +47034,7 @@ public final class Ast {
           internal_static_boa_types_Cell_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Cell_descriptor,
-              new java.lang.String[] { "CellKind", "CellId", "ExecutionCount", "Namespaces", "ParseError", "MarkdownText", });
+              new java.lang.String[] { "CellKind", "CellId", "ExecutionCount", "Namespaces", "ParseError", "MarkdownText", "OutputType", "ErrorName", "ErrorValue", "Traceback", });
           return null;
         }
       };

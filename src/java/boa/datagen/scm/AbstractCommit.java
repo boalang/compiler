@@ -599,7 +599,7 @@ public abstract class AbstractCommit {
 		return !errorCheck.hasError;
 	}
 
-	boolean pythonParsingError, enableDiff = true;
+	boolean pythonParsingError, enableDiff = false;
 
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
@@ -741,11 +741,13 @@ public abstract class AbstractCommit {
 
 	boolean cellParseError;
 	boolean notebookParseError;
+	private Object String;
 	
 	private boolean parseNotebookFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
-		System.out.println("commit " + this.id);
+		// System.out.println("commit " + this.id);
 		// System.out.println("@@@@@@@@ " + path);
+		
 		notebookParseError = false;
 		cellParseError = false;
 
@@ -828,7 +830,7 @@ public abstract class AbstractCommit {
 						codeCell += "#" + line;
 				}
 				
-				Cell.Builder cb = Cell.newBuilder();
+				Cell.Builder cb = Cell.newBuilder(); 
 				cb.setCellKind(CellKind.CODE);
 				cb.setCellId(cellCount);
 				cb.setExecutionCount(exec_count);
@@ -884,9 +886,72 @@ public abstract class AbstractCommit {
 				}
 				
 				cb.setParseError(cellParseError);
-				ast.addCells(cb.build());
+				
 				///////// Parsing each cell ends ////////////////////
-			}
+				
+				if (c.has("outputs")) {
+					
+				    
+				    JsonArray jarray = c.get("outputs").getAsJsonArray();
+				    JsonObject jobject = null;
+				    
+				    if(jarray.size() > 0) {
+
+				    	jobject = jarray.get(0).getAsJsonObject();
+  
+					    if(jobject != null) {
+					    	if(jobject.has("ename") && jobject.has("evalue")) {
+					    		String ename, evalue, output_type, traceback; 
+					    		ename = jobject.get("ename").getAsString();
+					    		evalue = jobject.get("evalue").getAsString();
+					    		cb.setErrorName(ename);
+					    		cb.setErrorValue(evalue);
+					    		if(jobject.has("output_type")) {
+					    			output_type = jobject.get("output_type").getAsString();
+					    			cb.setOutputType(output_type);
+					    		}
+					    			
+					    		if(jobject.has("traceback")) {
+					    			
+					    			JsonArray tr = jobject.get("traceback").getAsJsonArray();
+									Iterator<JsonElement> it = tr.iterator();
+
+									String trace = "";
+									
+									while (it.hasNext()) {
+										String line = "";
+										try {
+											line = it.next().getAsString();
+										} catch (Exception e) {
+											e.printStackTrace();
+											line = "";
+											if (debug) {
+												System.err.println("Error parsing one line in a cell: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
+												writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+											}
+										}
+										trace += line;
+										
+									}
+					    			
+					    			cb.setTraceback(trace);
+					    		}
+				    				
+					    	}
+					    	
+					    }
+					    
+				    }
+				    
+			    	
+			
+				}	
+				
+				ast.addCells(cb.build());
+					
+			}	
+	
+			
 
 			
 		}

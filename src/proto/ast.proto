@@ -614,5 +614,16 @@ message Cell {
 	/** For markdown cells */
 	optional string markdown_text = 6;
 	
+	/** For including error output of a codecell */
+	optional string output_type = 7;
+	optional string error_name = 8;
+	optional string error_value = 9;
+	optional string traceback = 10;
+	
+	/** Add this later for other output types 
+	optional string output_name = 11;
+	optional string output_text = 12; 
+	*/
+	
 }
 
