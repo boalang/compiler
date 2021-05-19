@@ -268,7 +268,7 @@ public abstract class AbstractCommit {
 					final String content = getFileContents(path);
 					fb.setKind(FileKind.SOURCE_PY_ERROR);
 					System.out.println(projectName + ": " + path);
-					//parsePythonFile(path, fb, content, false);
+					parsePythonFile(path, fb, content, false);
 				}
 			}
 		}
@@ -611,7 +611,7 @@ public abstract class AbstractCommit {
 	
 	boolean collectDataEvolutionaryInfo(final String path,final ChangedFile.Builder fb)
 	{
-		if(this.id==null)
+		if(this.id==null || fb.getChange()==ChangeKind.ADDED)
 			return false;
 		
 //		String prevPath ="";
