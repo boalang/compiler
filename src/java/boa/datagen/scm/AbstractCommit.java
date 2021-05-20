@@ -621,6 +621,11 @@ public abstract class AbstractCommit {
 //			prevPath+=path;		
 //		
 		String key=path.substring(path.lastIndexOf('.')+1);
+		if(key.equals(".pkl") || key.equals(".pth") || key.equals(".onnx")
+				|| key.equals(".pt") || key.equals(".pb")
+				|| key.equals(".ckpt"))
+			key="h5";
+		
 		if (key.equals("py") || key.equals("csv")|| key.equals("h5"))
 		{
 			if(!fileRevMap.containsKey(key))
