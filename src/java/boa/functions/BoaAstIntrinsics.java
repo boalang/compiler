@@ -38,6 +38,14 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 
+import org.eclipse.dltk.python.internal.core.parser.PythonSourceParser;
+import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
+import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.dltk.compiler.env.ModuleSource;
+import org.eclipse.dltk.compiler.problem.IProblemReporter;
+import org.eclipse.dltk.compiler.problem.IProblem;
+import boa.datagen.util.NewPythonVisitor;
+
 import boa.datagen.DefaultProperties;
 import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.JavaVisitor;
@@ -1520,6 +1528,39 @@ public class BoaAstIntrinsics {
 				ast.addNamespaces(visitor.getNamespaces(cu));
 			}
 		} catch (final Exception e) {
+			// do nothing
+		}
+
+		return ast.build();
+	}
+
+	/**
+	 * Converts a string into an AST.
+	 *
+	 * @param s the string to parse/convert
+	 * @return the AST representation of the string
+	 */
+	@FunctionSpec(name = "parsepy", returnType = "ASTRoot", formalParameters = { "string" })
+	public static ASTRoot parsepy(final String s) {
+		final StringBuilder sb = new StringBuilder();
+
+		PythonSourceParser parser = new PythonSourceParser();
+		IModuleSource input = new ModuleSource(s);
+
+		IProblemReporter reporter = new IProblemReporter() {
+			@Override
+			public void reportProblem(IProblem arg0) {
+			}
+		};
+
+		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+		NewPythonVisitor visitor = new NewPythonVisitor();
+		visitor.enableDiff = false;
+
+		try {
+			PythonModuleDeclaration module = (PythonModuleDeclaration) parser.parse(input, reporter);
+			ast.addNamespaces(visitor.getNamespace(module, ""));
+		} catch (final Throwable e) {
 			// do nothing
 		}
 
