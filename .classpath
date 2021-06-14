@@ -43,7 +43,11 @@
 	<classpathentry kind="src" path="src/proto"/>
 	<classpathentry kind="src" path="src/compiled-proto"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/datagen/app-1.3.200-v20130910-1609.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/commons-beanutils-1.8.3.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/commons-collections-3.2.1.jar"/>
@@ -76,5 +80,20 @@
 	<classpathentry kind="lib" path="lib/evaluator/commons-httpclient-3.1.0.redhat-7.jar"/>
 	<classpathentry kind="lib" path="lib/evaluator/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="compile"/>
+	<classpathentry kind="lib" path="/home/david/Desktop/compiler/lib/datagen/org.eclipse.dltk.core_5.7.1.201703020501.jar"/>
+	<classpathentry kind="lib" path="/home/david/Desktop/compiler/lib/datagen/org.eclipse.equinox.common-3.14.100.jar"/>
+	<classpathentry kind="lib" path="/home/david/Desktop/compiler/lib/datagen/org.eclipse.core.resources-3.14.0.jar"/>
+	<classpathentry kind="lib" path="/home/david/Desktop/compiler/lib/datagen/org.eclipse.core.expressions-3.7.100.jar"/>
+	<classpathentry kind="lib" path="/home/david/Desktop/compiler/lib/datagen/org.eclipse.jdt.core-3.25.0.jar"/>
+	<classpathentry kind="lib" path="/home/david/Desktop/compiler/lib/datagen/org.eclipse.core.filesystem-1.7.700.jar"/>
+	<classpathentry kind="lib" path="/home/david/Desktop/compiler/lib/datagen/org.eclipse.equinox.preferences-3.8.200.jar"/>
+	<classpathentry kind="lib" path="/home/david/Desktop/compiler/lib/datagen/org.eclipse.equinox.registry-3.10.100.jar"/>
+	<classpathentry kind="lib" path="/home/david/Desktop/compiler/lib/datagen/org.eclipse.core.contenttype-3.7.900.jar"/>
+	<classpathentry kind="lib" path="/home/david/Desktop/compiler/lib/datagen/org.eclipse.text-3.11.0.jar"/>
+	<classpathentry kind="lib" path="/home/david/Desktop/compiler/lib/datagen/org.eclipse.core.runtime-3.20.100.jar"/>
+	<classpathentry kind="lib" path="/home/david/Desktop/compiler/lib/datagen/org.eclipse.osgi-3.16.200.jar"/>
+	<classpathentry kind="lib" path="/home/david/Desktop/compiler/lib/datagen/org.eclipse.core.commands-3.9.800.jar"/>
+	<classpathentry kind="lib" path="/home/david/Desktop/compiler/lib/datagen/org.eclipse.core.jobs-3.10.1100.jar"/>
+	<classpathentry kind="lib" path="/home/david/Desktop/compiler/lib/datagen/org.eclipse.equinox.app-1.5.100.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

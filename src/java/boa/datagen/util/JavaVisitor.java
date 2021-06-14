@@ -1971,7 +1971,7 @@ public class JavaVisitor extends ASTVisitor {
 	// begin java 8
 	@Override
 	public boolean visit(LambdaExpression node) {
-		setAstLevel(AST.JLS8);
+		setAstLevel(JLS8);
 		
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LAMBDA);
