@@ -1464,7 +1464,7 @@ public class BoaAstIntrinsics {
 		parser.setSource(s.toCharArray());
 
 		@SuppressWarnings("rawtypes")
-		final Map options = JavaCore.getOptions();
+		final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
 		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
 		parser.setCompilerOptions(options);
 
@@ -1495,7 +1495,7 @@ public class BoaAstIntrinsics {
 		parser.setSource(s.toCharArray());
 
 		@SuppressWarnings("rawtypes")
-		final Map options = JavaCore.getOptions();
+		final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
 		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
 		parser.setCompilerOptions(options);
 
