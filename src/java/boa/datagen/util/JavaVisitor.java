@@ -45,7 +45,7 @@ import boa.types.Ast.Variable;
 public class JavaVisitor extends ASTVisitor {
 	public static final String PROPERTY_INDEX = "i";
 	@SuppressWarnings("deprecation")
-	public static final int JLS1 = 1, JLS2 = AST.JLS2, JLS3 = AST.JLS3, JLS4 = AST.JLS4, JLS8 = AST.JLS8;
+	public static final int JLS1 = 1, JLS2 = 2, JLS3 = 3, JLS4 = 4, JLS8 = 8;
 	
 	protected CompilationUnit root = null;
 	protected PositionInfo.Builder pos = null;
@@ -748,7 +748,7 @@ public class JavaVisitor extends ASTVisitor {
 			}
 		}
 		if (node.getReceiverType() != null) {
-			setAstLevel(AST.JLS8);
+			setAstLevel(JLS8);
 			
 			Variable.Builder vb = Variable.newBuilder();
 			vb.setName("this");
@@ -2015,7 +2015,7 @@ public class JavaVisitor extends ASTVisitor {
 	
 	@Override
 	public boolean visit(CreationReference node) {
-		setAstLevel(AST.JLS8);
+		setAstLevel(JLS8);
 		
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveMethodBinding() != null) {
@@ -2049,7 +2049,7 @@ public class JavaVisitor extends ASTVisitor {
 	
 	@Override
 	public boolean visit(ExpressionMethodReference node) {
-		setAstLevel(AST.JLS8);
+		setAstLevel(JLS8);
 		
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveMethodBinding() != null) {
@@ -2080,7 +2080,7 @@ public class JavaVisitor extends ASTVisitor {
 	
 	@Override
 	public boolean visit(SuperMethodReference node) {
-		setAstLevel(AST.JLS8);
+		setAstLevel(JLS8);
 		
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveMethodBinding() != null) {
@@ -2113,7 +2113,7 @@ public class JavaVisitor extends ASTVisitor {
 	
 	@Override
 	public boolean visit(TypeMethodReference node) {
-		setAstLevel(AST.JLS8);
+		setAstLevel(JLS8);
 		
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveMethodBinding() != null) {

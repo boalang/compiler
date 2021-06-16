@@ -1459,7 +1459,7 @@ public class BoaAstIntrinsics {
 	 */
 	@FunctionSpec(name = "parseexpression", returnType = "Expression", formalParameters = { "string" })
 	public static Expression parseexpression(final String s) {
-		final ASTParser parser = ASTParser.newParser(AST.JLS8);
+		final ASTParser parser = ASTParser.newParser(8);
 		parser.setKind(ASTParser.K_EXPRESSION);
 		parser.setSource(s.toCharArray());
 
@@ -1490,7 +1490,7 @@ public class BoaAstIntrinsics {
 	 */
 	@FunctionSpec(name = "parse", returnType = "ASTRoot", formalParameters = { "string" })
 	public static ASTRoot parse(final String s) {
-		final ASTParser parser = ASTParser.newParser(AST.JLS8);
+		final ASTParser parser = ASTParser.newParser(8);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(s.toCharArray());
 
