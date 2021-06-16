@@ -542,6 +542,7 @@ public class BoaIntrinsics {
 		return arr2;
 	}
 
+	@SafeVarargs
 	public static <T> T[] concat(final T[] first, final T[]... rest) {
 		int totalLength = first.length;
 		for (final T[] array : rest)

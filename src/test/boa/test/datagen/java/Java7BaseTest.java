@@ -55,7 +55,7 @@ import boa.test.datagen.UglyMathCommentsExtractor;
  * @author rdyer
  */
 public class Java7BaseTest extends BaseTest {
-	protected static int astLevel = AST.JLS8;
+	protected static int astLevel = 8;
 	protected static String javaVersion = JavaCore.VERSION_1_8;
 	protected static JavaVisitor visitor = new JavaVisitor("");
 
@@ -68,7 +68,7 @@ public class Java7BaseTest extends BaseTest {
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(content.toCharArray());
 
-		final Map<?, ?> options = JavaCore.getOptions();
+		final Map<String, String> options = JavaCore.getOptions();
 		JavaCore.setComplianceOptions(javaVersion, options);
 		parser.setCompilerOptions(options);
 
@@ -100,8 +100,8 @@ public class Java7BaseTest extends BaseTest {
 		};
 		Map<String, String> fileContents = new HashMap<String, String>();
 		fileContents.put("", content);
-		@SuppressWarnings("rawtypes")
-		Map options = JavaCore.getOptions();
+//		@SuppressWarnings("rawtypes")
+		Map<String,String> options = JavaCore.getOptions();
 		options.put(JavaCore.COMPILER_COMPLIANCE, javaVersion);
 		options.put(JavaCore.COMPILER_SOURCE, javaVersion);
 		ASTParser parser = ASTParser.newParser(astLevel);

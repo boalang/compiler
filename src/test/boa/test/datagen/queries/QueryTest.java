@@ -140,13 +140,13 @@ public abstract class QueryTest {
 	
 	protected void visitPath(String path, org.eclipse.jdt.core.dom.ASTVisitor visitor) {
 		ObjectId oi = filePathGitObjectIds.get(path);
-		final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
+		final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(8);
 		parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 		final String content = getFileContents(oi);
 
 		parser.setSource(content.toCharArray());
 
-		final Map<?, ?> options = JavaCore.getOptions();
+		final Map<String, String> options = JavaCore.getOptions();
 		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
 		parser.setCompilerOptions(options);
 
