@@ -268,12 +268,16 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Block n) {
-		stream.println("{");
-		indent++;
-		super.visit(n);
-		indent--;
-		indent();
-		stream.print("}");
+		if (n.getStatementsSize() == 1 && n.getStatement(0) instanceof Block) {
+			n.getStatement(0).accept(this);
+		} else {
+			stream.println("{");
+			indent++;
+			super.visit(n);
+			indent--;
+			indent();
+			stream.print("}");
+		}
 	}
 
 	/** {@inheritDoc} */
