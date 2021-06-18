@@ -97,19 +97,21 @@ public class RecursiveFunctionTransformer extends AbstractVisitorNoArgNoRet {
 		final List<VarDeclStatement> decls = finder.getDecls();
 
 		// generate stacks for each local
-		final Block b = n.getBody();
+		if (decls.size() > 0) {
+			final Block b = n.getBody();
 
-		for (final VarDeclStatement v : decls) {
-			final StackType st = new StackType(new Component(v.type.toAST(b.env)));
-			st.env = b.env;
-			final VarDeclStatement var = ASTFactory.createVarDecl(varPrefix + v.getId().getToken(), st, new BoaStack(v.type), b.env);
+			for (final VarDeclStatement v : decls) {
+				final StackType st = new StackType(new Component(v.type.toAST(b.env)));
+				st.env = b.env;
+				final VarDeclStatement var = ASTFactory.createVarDecl(varPrefix + v.getId().getToken(), st, new BoaStack(v.type), b.env);
 
-			b.env.set(var.getId().getToken(), var.type);
-			b.getStatements().add(0, var);
+				b.env.set(var.getId().getToken(), var.type);
+				b.getStatements().add(0, var);
+			}
+
+			// generate push/pop around each call out
+			new CallWrapper(decls).start(n.getBody());
 		}
-
-		// generate push/pop around each call out
-		new CallWrapper(decls).start(n.getBody());
 
 		super.visit(n);
 	}
