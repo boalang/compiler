@@ -29,7 +29,7 @@ import boa.compiler.ast.types.*;
  * @author ankuraga
  * @author rramu
  */
-public abstract class AbstractVisitorNoArgNoRet {
+public abstract class AbstractVisitorNoArgNoRet extends AbstractVisitorBase {
 	public void dfs(final Node node, final java.util.Set<Integer> visitedNodes) {
 		visitedNodes.add(node.nodeId);
 		node.accept(this);

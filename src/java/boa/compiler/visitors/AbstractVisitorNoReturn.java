@@ -32,7 +32,7 @@ import boa.compiler.ast.types.*;
  *
  * @param <ArgTypeT> the type of the argument to pass down the tree while visiting
  */
-public abstract class AbstractVisitorNoReturn<ArgTypeT> {
+public abstract class AbstractVisitorNoReturn<ArgTypeT> extends AbstractVisitorBase {
 	protected void initialize(final ArgTypeT arg) { }
 
 	public void start(final Node n, final ArgTypeT arg) {

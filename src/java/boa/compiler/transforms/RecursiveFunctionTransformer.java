@@ -18,6 +18,7 @@ package boa.compiler.transforms;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import boa.compiler.ast.Call;
 import boa.compiler.ast.Comparison;
@@ -40,6 +41,7 @@ import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.Term;
 import boa.compiler.ast.types.StackType;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
+import boa.compiler.visitors.analysis.CallGraphAnalysis;
 import boa.types.BoaAny;
 import boa.types.BoaFunction;
 import boa.types.BoaInt;
@@ -51,9 +53,7 @@ import boa.types.BoaType;
  * Finds all recursive user functions and automatically turns their locals
  * into stacks that push/pop on (potentially) recursive calls.
  *
- * FIXME it just assumes every function/call is recursive
- *       this is safe - but over-approximate and slow
- * FIXME saves everything, even if not used after a call
+ * FIXME saves every local, even if not used after a call
  *       this is safe - but over-approximate and slow
  *
  * @author rdyer
@@ -88,29 +88,45 @@ public class RecursiveFunctionTransformer extends AbstractVisitorNoArgNoRet {
 		}
 	}
 
+	private CallGraphAnalysis calls = new CallGraphAnalysis();
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final Program n) {
+		calls.start(n);
+		calls.fixedpoint();
+
+		super.visit(n);
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FunctionExpression n) {
-		// find the locals needing saved
-		final VarDeclFinder finder = new VarDeclFinder();
-		finder.start(n.getBody());
-		final List<VarDeclStatement> decls = finder.getDecls();
+		final String name = getFunctionName(n);
 
-		// generate stacks for each local
-		if (decls.size() > 0) {
-			final Block b = n.getBody();
+		// if this function is (mutually) recursive, transform it
+		if (calls.getCalls(name).contains(name)) {
+			// find the locals needing saved
+			final VarDeclFinder finder = new VarDeclFinder();
+			finder.start(n.getBody());
+			final List<VarDeclStatement> decls = finder.getDecls();
 
-			for (final VarDeclStatement v : decls) {
-				final StackType st = new StackType(new Component(v.type.toAST(b.env)));
-				st.env = b.env;
-				final VarDeclStatement var = ASTFactory.createVarDecl(varPrefix + v.getId().getToken(), st, new BoaStack(v.type), b.env);
+			// generate stacks for each local
+			if (decls.size() > 0) {
+				final Block b = n.getBody();
 
-				b.env.set(var.getId().getToken(), var.type);
-				b.getStatements().add(0, var);
+				for (final VarDeclStatement v : decls) {
+					final StackType st = new StackType(new Component(v.type.toAST(b.env)));
+					st.env = b.env;
+					final VarDeclStatement var = ASTFactory.createVarDecl(varPrefix + v.getId().getToken(), st, new BoaStack(v.type), b.env);
+
+					b.env.set(var.getId().getToken(), var.type);
+					b.getStatements().add(0, var);
+				}
+
+				// generate push/pop around each recursive call out
+				new CallWrapper(decls, calls.getCalls(name)).start(n.getBody());
 			}
-
-			// generate push/pop around each call out
-			new CallWrapper(decls).start(n.getBody());
 		}
 
 		super.visit(n);
@@ -118,10 +134,12 @@ public class RecursiveFunctionTransformer extends AbstractVisitorNoArgNoRet {
 
 	protected class CallWrapper extends AbstractVisitorNoArgNoRet {
 		private List<VarDeclStatement> decls;
+		private Set<String> calls;
 		private long counter;
 
-		public CallWrapper(final List<VarDeclStatement> decls) {
+		public CallWrapper(final List<VarDeclStatement> decls, final Set<String> calls) {
 			this.decls = decls;
+			this.calls = calls;
 		}
 
 		/** {@inheritDoc} */
@@ -138,7 +156,7 @@ public class RecursiveFunctionTransformer extends AbstractVisitorNoArgNoRet {
 			if (n.getOpsSize() == 1 && n.getOp(0) instanceof Call && n.getOperand() instanceof Identifier) {
 				final String id = ((Identifier)n.getOperand()).getToken();
 
-				if (n.env.hasLocalFunction(id)) {
+				if (calls.contains(id) && n.env.hasLocalFunction(id)) {
 					final BoaType retType = n.getOp(0).type;
 
 					// generate stack pushs
