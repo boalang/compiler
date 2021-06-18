@@ -81,7 +81,7 @@ public class RecursiveFunctionTransformer extends AbstractVisitorNoArgNoRet {
 		/** {@inheritDoc} */
 		@Override
 		public void visit(final VarDeclStatement n) {
-			if (n.type instanceof BoaTable)
+			if (n.type instanceof BoaTable || n.type instanceof BoaFunction)
 				return;
 
 			decls.add(n);
