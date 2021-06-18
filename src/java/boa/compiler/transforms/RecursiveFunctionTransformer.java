@@ -105,7 +105,7 @@ public class RecursiveFunctionTransformer extends AbstractVisitorNoArgNoRet {
 		final String name = getFunctionName(n);
 
 		// if this function is (mutually) recursive, transform it
-		if (calls.getCalls(name).contains(name)) {
+		if (name != null && calls.getCalls(name).contains(name)) {
 			// find the locals needing saved
 			final VarDeclFinder finder = new VarDeclFinder();
 			finder.start(n.getBody());

@@ -53,7 +53,8 @@ public class CallGraphAnalysis extends AbstractVisitorNoArgNoRet {
 				final Set<String> newc = new LinkedHashSet<String>();
 
 				for (final String s : calls.get(f))
-					newc.addAll(calls.get(s));
+					if (calls.containsKey(s))
+						newc.addAll(calls.get(s));
 				calls.get(f).addAll(newc);
 
 				if (calls.get(f).size() != len)
@@ -72,7 +73,10 @@ public class CallGraphAnalysis extends AbstractVisitorNoArgNoRet {
 		super.visit(n);
 
 		finder.start(n.getBody());
-		calls.put(getFunctionName(n), new LinkedHashSet<String>(finder.getCalls()));
+		final String name = getFunctionName(n);
+
+		if (name != null)
+			calls.put(name, new LinkedHashSet<String>(finder.getCalls()));
 	}
 
 	protected class UDFCallFinder extends AbstractVisitorNoArgNoRet {
