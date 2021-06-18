@@ -137,7 +137,7 @@ public class ASTPrintingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final Identifier n) {
 		indent();
-		System.out.println("Identifier");
+		System.out.println("Identifier - " + n.getToken());
 		indent++;
 		super.visit(n);
 		indent--;
