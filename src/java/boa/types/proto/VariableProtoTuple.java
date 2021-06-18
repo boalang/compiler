@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,7 @@ import boa.types.BoaType;
 
 /**
  * A {@link VariableProtoTuple}.
- * 
+ *
  * @author rdyer
  */
 public class VariableProtoTuple extends BoaProtoTuple {
@@ -54,16 +54,16 @@ public class VariableProtoTuple extends BoaProtoTuple {
 
 		names.put("comments", counter++);
 		members.add(new BoaProtoList(new CommentProtoTuple()));
-		
+
 		names.put("key", counter++);
 		members.add(new BoaInt());
-		
+
 		names.put("declaring_type", counter++);
 		members.add(new BoaInt());
-		
+
 		names.put("dollar_sign", counter++);
 		members.add(new BoaBool());
-		
+
 		names.put("expressions", counter++);
 		members.add(new BoaProtoList(new ExpressionProtoTuple()));
 	}

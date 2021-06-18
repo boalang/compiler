@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@ package boa.types;
 
 /**
  * A type variable for use with functions that return types dependent on their argument types.
- * 
+ *
  * @author rdyer
  */
 public class BoaTypeVar extends BoaScalar {

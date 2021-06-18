@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -19,9 +19,12 @@ package boa.types;
 
 import java.util.List;
 
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.SymbolTable;
+
 /**
  * A {@link BoaType} representing an aggregator that can be emitted to.
- * 
+ *
  * @author anthonyu
  * @author rdyer
  */
@@ -33,7 +36,7 @@ public class BoaTable extends BoaType {
 
 	/**
 	 * Construct a BoaTable.
-	 * 
+	 *
 	 * @param types
 	 *            A {@link List} of {@link BoaType} representing the types of
 	 *            this BoaTable
@@ -44,14 +47,14 @@ public class BoaTable extends BoaType {
 
 	/**
 	 * Construct a BoaTable.
-	 * 
+	 *
 	 * @param type
 	 *            A {@link BoaType} representing the type of this BoaTable
-	 * 
+	 *
 	 * @param subscripts
 	 *            A {@link List} of {@link String} containing the names of the
 	 *            subscripts of this BoaTable
-	 * 
+	 *
 	 * @param indexTypes
 	 *            A {@link List} of {@link BoaScalar} representing the index
 	 *            types of this BoaTable
@@ -62,18 +65,17 @@ public class BoaTable extends BoaType {
 
 	/**
 	 * Construct a BoaTable.
-	 * 
+	 *
 	 * @param type
 	 *            A {@link BoaType} representing the type of this BoaTable
-	 * 
+	 *
 	 * @param indexTypes
 	 *            A {@link List} of {@link BoaScalar} representing the index
 	 *            types of this BoaTable
-	 * 
+	 *
 	 * @param weightType
 	 *            A {@link BoaScalar} representing the weight type of this
 	 *            BoaTable
-	 * 
 	 */
 	public BoaTable(final BoaType type, final List<BoaScalar> indexTypes, final BoaScalar weightType, final boolean canOmitWeight) {
 		this.type = type;
@@ -84,7 +86,7 @@ public class BoaTable extends BoaType {
 
 	/**
 	 * Return the number of indices this table has.
-	 * 
+	 *
 	 * @return An int containing the number of types each emit to this table
 	 *         will require
 	 */
@@ -96,10 +98,9 @@ public class BoaTable extends BoaType {
 
 	/**
 	 * Get the type of value to be emitted to this table.
-	 * 
+	 *
 	 * @return A {@link BoaType} representing the type of the value to be
 	 *         emitted to this table
-	 * 
 	 */
 	public BoaType getType() {
 		return this.type;
@@ -107,13 +108,13 @@ public class BoaTable extends BoaType {
 
 	/**
 	 * Get the type of the index at that position.
-	 * 
+	 *
 	 * @param position
 	 *            An int representing the position
-	 * 
+	 *
 	 * @return A {@link BoaScalar} representing the type of the index at that
 	 *         position
-	 * 
+	 *
 	 */
 	public BoaScalar getIndex(final int position) {
 		return this.indexTypes.get(position);
@@ -121,11 +122,11 @@ public class BoaTable extends BoaType {
 
 	/**
 	 * Returns whether this table will accept an emit of those types.
-	 * 
+	 *
 	 * @param types
 	 *            An {@link List} of {@link BoaType} containing the types to
 	 *            be emitted
-	 * 
+	 *
 	 * @return True if this table will accept them, false otherwise
 	 */
 	@Override
@@ -140,10 +141,10 @@ public class BoaTable extends BoaType {
 
 	/**
 	 * Returns whether this table will accept an weight of that type.
-	 * 
+	 *
 	 * @param that
 	 *            An {@link BoaType} containing the weight type of the emit
-	 * 
+	 *
 	 * @return True if this table will accept it, false otherwise
 	 */
 	public boolean acceptsWeight(final BoaType that) {
@@ -157,11 +158,10 @@ public class BoaTable extends BoaType {
 
 	/**
 	 * Set the type of the values to be emitted to this table.
-	 * 
+	 *
 	 * @param types
 	 *            A {@link BoaType} representing the type of the values to be
 	 *            emitted to this table
-	 * 
 	 */
 	public void setType(final BoaType type) {
 		this.type = type;
@@ -169,10 +169,9 @@ public class BoaTable extends BoaType {
 
 	/**
 	 * Get the types of the indices into this table.
-	 * 
+	 *
 	 * @return A {@link List} of {@link BoaScalar} representing the types of
 	 *         the indices into this table
-	 * 
 	 */
 	public List<BoaScalar> getIndexTypes() {
 		return this.indexTypes;
@@ -180,11 +179,10 @@ public class BoaTable extends BoaType {
 
 	/**
 	 * Set the types of the indices into this table.
-	 * 
+	 *
 	 * @param indexTypes
 	 *            A {@link List} of {@link BoaScalar} representing the types
 	 *            of the indices into this table
-	 * 
 	 */
 	public void setIndexTypes(final List<BoaScalar> indexTypes) {
 		this.indexTypes = indexTypes;
@@ -192,10 +190,9 @@ public class BoaTable extends BoaType {
 
 	/**
 	 * Get the type of the weight of this table.
-	 * 
+	 *
 	 * @return A {@link BoaScalar} representing the type of the weight of
 	 *         this table
-	 * 
 	 */
 	public BoaScalar getWeightType() {
 		return this.weightType;
@@ -207,11 +204,10 @@ public class BoaTable extends BoaType {
 
 	/**
 	 * Set the type of the weight of this table.
-	 * 
+	 *
 	 * @param weightType
 	 *            A {@link BoaScalar} representing the type of the weight of
 	 *            this table
-	 * 
 	 */
 	public void setWeightType(final BoaScalar weightType) {
 		this.weightType = weightType;
@@ -254,6 +250,12 @@ public class BoaTable extends BoaType {
 		} else if (!this.weightType.equals(other.weightType))
 			return false;
 		return true;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public AbstractType toAST(final SymbolTable env) {
+		throw new RuntimeException("toAST() not supported on BoaTable");
 	}
 
 	/** {@inheritDoc} */

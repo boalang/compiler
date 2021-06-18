@@ -57,6 +57,7 @@ import boa.compiler.listeners.LexerErrorListener;
 import boa.compiler.listeners.ParserErrorListener;
 import boa.compiler.transforms.InheritedAttributeTransformer;
 import boa.compiler.transforms.LocalAggregationTransformer;
+import boa.compiler.transforms.RecursiveFunctionTransformer;
 import boa.compiler.transforms.VariableDeclRenameTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.ASTPrintingVisitor;
@@ -145,6 +146,7 @@ public class BoaCompiler extends BoaMain {
 					new VariableDeclRenameTransformer().start(p);
 					new InheritedAttributeTransformer().start(p);
 					new LocalAggregationTransformer().start(p);
+					new RecursiveFunctionTransformer().start(p);
 					new VisitorOptimizingTransformer().start(p);
 
 					if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);

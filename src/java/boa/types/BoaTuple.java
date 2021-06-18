@@ -1,7 +1,8 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2017-2021, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
- *                 and Bowling Green State University
+ *                 Bowling Green State University
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +23,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import boa.compiler.ast.Component;
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.ast.types.TupleType;
+import boa.compiler.SymbolTable;
+
 /**
  * A {@link BoaType} representing a data structure with named members of
  * arbitrary type.
- * 
+ *
  * @author anthonyu
  * @author rdyer
  */
@@ -88,10 +94,11 @@ public class BoaTuple extends BoaType {
 	}
 
 	/**
-	 * 
+	 * Test to see if this tuple contains a specific member.
+	 *
 	 * @param member
 	 *            A {@link String} containing the name of the member
-	 * 
+	 *
 	 * @return true if a member exists in this tuple with the given name
 	 */
 	public boolean hasMember(final String member) {
@@ -100,12 +107,11 @@ public class BoaTuple extends BoaType {
 
 	/**
 	 * Return the type of the member identified by a given index.
-	 * 
+	 *
 	 * @param index
 	 *            An int containing the index of the member
-	 * 
+	 *
 	 * @return A {@link BoaType} representing the type of the member
-	 * 
 	 */
 	public BoaType getMember(final int index) {
 		return this.members.get(index);
@@ -113,12 +119,11 @@ public class BoaTuple extends BoaType {
 
 	/**
 	 * Return the type of the member identified by a given name.
-	 * 
+	 *
 	 * @param member
 	 *            A {@link String} containing the name of the member
-	 * 
+	 *
 	 * @return A {@link BoaType} representing the type of the member
-	 * 
 	 */
 	public BoaType getMember(final String member) {
 		return this.members.get(this.names.get(member));
@@ -137,6 +142,20 @@ public class BoaTuple extends BoaType {
 
 	public List<BoaType> getTypes() {
 		return this.members;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public AbstractType toAST(final SymbolTable env) {
+		final TupleType t = new TupleType();
+		t.env = env;
+		for (final BoaType m : this.members) {
+			final Component c = new Component(m.toAST(env));
+			t.addMember(c);
+			c.env = env;
+		}
+		t.type = this;
+		return t;
 	}
 
 	@Override
@@ -183,6 +202,6 @@ public class BoaTuple extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return "tuple " + this.members.toString();
+		return this.members.toString().replaceAll(",", ", ").replaceAll("\\[", "{ ").replaceAll("\\]", " }");
 	}
 }

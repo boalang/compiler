@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ import java.util.Set;
 
 /**
  * A {@link BoaTuple} representing a protocol buffer tuple.
- * 
+ *
  * @author rdyer
  */
 public class BoaProtoTuple extends BoaTuple {
@@ -78,7 +78,7 @@ public class BoaProtoTuple extends BoaTuple {
 	/**
 	 * The set of all types that may be visited when starting a
 	 * visit from this type.
-	 * 
+	 *
 	 * @return the set of reachable types
 	 */
 	@SuppressWarnings("unchecked")

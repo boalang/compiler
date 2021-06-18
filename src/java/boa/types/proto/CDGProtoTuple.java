@@ -31,30 +31,29 @@ import boa.types.BoaType;
  * @author marafat
  */
 public class CDGProtoTuple extends BoaProtoTuple {
-    private final static List<BoaType> members = new ArrayList<BoaType>();
-    private final static Map<String, Integer> names = new HashMap<String, Integer>();
+	private final static List<BoaType> members = new ArrayList<BoaType>();
+	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-    static {
-        int counter = 0;
+	static {
+		int counter = 0;
 
-        names.put("nodes", counter++);
-        members.add(new BoaSet(new CDGNodeProtoTuple()));
+		names.put("nodes", counter++);
+		members.add(new BoaSet(new CDGNodeProtoTuple()));
 
-        names.put("cfg", counter++);
-        members.add(new CFGProtoTuple());
-    }
+		names.put("cfg", counter++);
+		members.add(new CFGProtoTuple());
+	}
 
-    /**
-     * Construct a {@link CDGProtoTuple}.
-     */
-    public CDGProtoTuple() {
-        super(members, names);
-    }
+	/**
+	 * Construct a {@link CDGProtoTuple}.
+	 */
+	public CDGProtoTuple() {
+		super(members, names);
+	}
 
-    /** @{inheritDoc} */
-    @Override
-    public String toJavaType() {
-        return "boa.graphs.cdg.CDG";
-    }
-
+	/** @{inheritDoc} */
+	@Override
+	public String toJavaType() {
+		return "boa.graphs.cdg.CDG";
+	}
 }

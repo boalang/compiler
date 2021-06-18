@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -20,10 +20,15 @@ package boa.types;
 import java.util.Arrays;
 import java.util.List;
 
+import boa.compiler.ast.Component;
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.ast.types.FunctionType;
+import boa.compiler.SymbolTable;
+
 /**
  * A {@link BoaType} that represents a function, its return value, and its
  * formal parameters.
- * 
+ *
  * @author anthonyu
  * @author rdyer
  */
@@ -35,10 +40,9 @@ public class BoaFunction extends BoaType {
 
 	/**
 	 * Construct a BoaFunction.
-	 * 
+	 *
 	 * @param type
 	 *            A {@link BoaType} representing the return type
-	 * 
 	 */
 	public BoaFunction(final BoaType type) {
 		this.type = type;
@@ -46,14 +50,13 @@ public class BoaFunction extends BoaType {
 
 	/**
 	 * Construct a BoaFunction.
-	 * 
+	 *
 	 * @param type
 	 *            A {@link BoaType} representing the return type
-	 * 
+	 *
 	 * @param formalParameters
 	 *            An array of {@link BoaType} containing the type of each
 	 *            formal parameter
-	 * 
 	 */
 	public BoaFunction(final BoaType type, final BoaType[] formalParameters) {
 		this(type);
@@ -63,17 +66,16 @@ public class BoaFunction extends BoaType {
 
 	/**
 	 * Construct a BoaFunction.
-	 * 
+	 *
 	 * @param type
 	 *            A {@link BoaType} representing the return type
-	 * 
+	 *
 	 * @param formalParameters
 	 *            An array of {@link BoaType} containing the type of each
 	 *            formal parameter
-	 * 
+	 *
 	 * @param macro
 	 *            A snippet of Java code that can be used as a macro
-	 * 
 	 */
 	public BoaFunction(final BoaType type, final BoaType[] formalParameters, final String macro) {
 		this(type, formalParameters);
@@ -83,17 +85,16 @@ public class BoaFunction extends BoaType {
 
 	/**
 	 * Construct a BoaFunction.
-	 * 
+	 *
 	 * @param name
 	 *            A {@link String} containing the canonical name of the function
-	 * 
+	 *
 	 * @param type
 	 *            A {@link BoaType} representing the return type
-	 * 
+	 *
 	 * @param formalParameters
 	 *            An array of {@link BoaType} containing the type of each
 	 *            formal parameter
-	 * 
 	 */
 	public BoaFunction(final String name, final BoaType type, final BoaType[] formalParameters) {
 		this(type, formalParameters);
@@ -134,10 +135,10 @@ public class BoaFunction extends BoaType {
 
 	/**
 	 * Return the type of the parameter at a given position.
-	 * 
+	 *
 	 * @param position
 	 *            An int containing the desired position
-	 * 
+	 *
 	 * @return A {@link BoaType} representing the type of that parameter
 	 */
 	public BoaType getParameter(final int position) {
@@ -146,10 +147,9 @@ public class BoaFunction extends BoaType {
 
 	/**
 	 * Returns the number of formal parameters for this function.
-	 * 
+	 *
 	 * @return An int containing the number of formal parameters for this
 	 *         function
-	 * 
 	 */
 	public int countParameters() {
 		return this.formalParameters.length;
@@ -157,9 +157,8 @@ public class BoaFunction extends BoaType {
 
 	/**
 	 * Returns whether this function has a name.
-	 * 
+	 *
 	 * @return True iff this function has a name
-	 * 
 	 */
 	public boolean hasName() {
 		return this.name != null;
@@ -167,9 +166,8 @@ public class BoaFunction extends BoaType {
 
 	/**
 	 * Returns whether this function has a macro.
-	 * 
+	 *
 	 * @return True iff this function has a macro
-	 * 
 	 */
 	public boolean hasMacro() {
 		return this.macro != null;
@@ -177,10 +175,9 @@ public class BoaFunction extends BoaType {
 
 	/**
 	 * Get the return type of this function.
-	 * 
+	 *
 	 * @return A {@link BoaType} representing the return type of this
 	 *         function
-	 * 
 	 */
 	public BoaType getType() {
 		return this.type;
@@ -188,11 +185,10 @@ public class BoaFunction extends BoaType {
 
 	/**
 	 * Set the return type of this function.
-	 * 
+	 *
 	 * @param type
 	 *            A {@link BoaType} representing the return type of this
 	 *            function
-	 * 
 	 */
 	public void setType(final BoaType type) {
 		this.type = type;
@@ -200,10 +196,9 @@ public class BoaFunction extends BoaType {
 
 	/**
 	 * Get the types of the formal parameters of this function.
-	 * 
+	 *
 	 * @return An array of {@link BoaType} containing the types of the formal
 	 *         arguments of this function
-	 * 
 	 */
 	public BoaType[] getFormalParameters() {
 		return this.formalParameters;
@@ -211,11 +206,10 @@ public class BoaFunction extends BoaType {
 
 	/**
 	 * Set the types of the formal parameters of this function.
-	 * 
+	 *
 	 * @param formalArgs
 	 *            An array of {@link BoaType} containing the types of the
 	 *            formal arguments of this function
-	 * 
 	 */
 	public void setFormalParameters(final BoaType[] formalParameters) {
 		this.formalParameters = formalParameters;
@@ -235,6 +229,21 @@ public class BoaFunction extends BoaType {
 
 	public void setMacro(final String macro) {
 		this.macro = macro;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public AbstractType toAST(final SymbolTable env) {
+		final Component retType = new Component(this.type.toAST(env));
+		final FunctionType t = new FunctionType(retType);
+		for (final BoaType arg : this.formalParameters) {
+			final Component c = new Component(arg.toAST(env));
+			c.env = env;
+			t.addArg(c);
+		}
+		retType.env = t.env = env;
+		t.type = this;
+		return t;
 	}
 
 	/** {@inheritDoc} */

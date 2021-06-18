@@ -31,32 +31,32 @@ import boa.types.proto.enums.EdgeLabelProtoMap;
  * @author marafat
  */
 public class CDGEdgeProtoTuple extends BoaProtoTuple {
-    private final static List<BoaType> members = new ArrayList<BoaType>();
-    private final static Map<String, Integer> names = new HashMap<String, Integer>();
+	private final static List<BoaType> members = new ArrayList<BoaType>();
+	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-    static {
-        int counter = 0;
+	static {
+		int counter = 0;
 
-        names.put("src", counter++);
-        members.add(new CDGNodeProtoTuple());
+		names.put("src", counter++);
+		members.add(new CDGNodeProtoTuple());
 
-        names.put("dest", counter++);
-        members.add(new CDGNodeProtoTuple());
+		names.put("dest", counter++);
+		members.add(new CDGNodeProtoTuple());
 
-        names.put("label", counter++);
-        members.add(new EdgeLabelProtoMap());
-    }
+		names.put("label", counter++);
+		members.add(new EdgeLabelProtoMap());
+	}
 
-    /**
-     * Construct a {@link CDGEdgeProtoTuple}.
-     */
-    public CDGEdgeProtoTuple() {
-        super(members, names);
-    }
+	/**
+	 * Construct a {@link CDGEdgeProtoTuple}.
+	 */
+	public CDGEdgeProtoTuple() {
+		super(members, names);
+	}
 
-    /** @{inheritDoc} */
-    @Override
-    public String toJavaType() {
-        return "boa.types.Control.Edge";
-    }
+	/** @{inheritDoc} */
+	@Override
+	public String toJavaType() {
+		return "boa.types.Control.Edge";
+	}
 }
