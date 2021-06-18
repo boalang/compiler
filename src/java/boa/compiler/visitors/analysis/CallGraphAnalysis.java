@@ -25,6 +25,7 @@ import boa.compiler.ast.Call;
 import boa.compiler.ast.expressions.FunctionExpression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
+import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 
 /**
@@ -42,7 +43,14 @@ public class CallGraphAnalysis extends AbstractVisitorNoArgNoRet {
 		calls.clear();
 	}
 
-	public void fixedpoint() {
+	/** {@inheritDoc} */
+	@Override
+	public void start(final Node n) {
+		super.start(n);
+		fixedpoint();
+	}
+
+	protected void fixedpoint() {
 		boolean changed = true;
 
 		while (changed) {

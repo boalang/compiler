@@ -94,8 +94,6 @@ public class RecursiveFunctionTransformer extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final Program n) {
 		calls.start(n);
-		calls.fixedpoint();
-
 		super.visit(n);
 	}
 
