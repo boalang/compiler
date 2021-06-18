@@ -21,6 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import boa.compiler.ast.Identifier;
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.SymbolTable;
+
 /**
  * A {@link BoaTuple} representing a protocol buffer tuple.
  *
@@ -66,6 +70,14 @@ public class BoaProtoTuple extends BoaTuple {
 
 		// forget it
 		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public AbstractType toAST(final SymbolTable env) {
+		final AbstractType t = new Identifier(this.toString());
+		t.env = env;
+		return t;
 	}
 
 	/** {@inheritDoc} */
