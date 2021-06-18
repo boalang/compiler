@@ -539,7 +539,8 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		stream.print("(");
 		n.getComponent().accept(this);
 		stream.print(") : ");
-		n.getReturnType().accept(this);
+		if (n.hasReturnType())
+			n.getReturnType().accept(this);
 		stream.print(" ");
 		n.getBody().accept(this);
 	}
