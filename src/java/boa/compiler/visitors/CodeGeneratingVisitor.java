@@ -1923,7 +1923,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TupleType n) {
-		throw new RuntimeException("unexpected error");
+		code.add(((BoaTuple)n.type).toJavaType());
 	}
 
 	/** {@inheritDoc} */
