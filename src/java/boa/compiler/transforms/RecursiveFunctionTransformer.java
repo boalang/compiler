@@ -123,7 +123,7 @@ public class RecursiveFunctionTransformer extends AbstractVisitorNoArgNoRet {
 				}
 
 				// generate push/pop around each recursive call out
-				new CallWrapper(decls, calls.getCalls(name)).start(n.getBody());
+				new CallWrapper(decls, name).start(n.getBody());
 			}
 		}
 
@@ -132,12 +132,12 @@ public class RecursiveFunctionTransformer extends AbstractVisitorNoArgNoRet {
 
 	protected class CallWrapper extends AbstractVisitorNoArgNoRet {
 		private List<VarDeclStatement> decls;
-		private Set<String> calls;
+		private String name;
 		private long counter;
 
-		public CallWrapper(final List<VarDeclStatement> decls, final Set<String> calls) {
+		public CallWrapper(final List<VarDeclStatement> decls, final String name) {
 			this.decls = decls;
-			this.calls = calls;
+			this.name = name;
 		}
 
 		/** {@inheritDoc} */
@@ -153,8 +153,9 @@ public class RecursiveFunctionTransformer extends AbstractVisitorNoArgNoRet {
 
 			if (n.getOpsSize() == 1 && n.getOp(0) instanceof Call && n.getOperand() instanceof Identifier) {
 				final String id = ((Identifier)n.getOperand()).getToken();
+				final Set<String> targetCalls = calls.getCalls(id);
 
-				if (calls.contains(id) && n.env.hasLocalFunction(id)) {
+				if (targetCalls != null && targetCalls.contains(name) && n.env.hasLocalFunction(id)) {
 					final BoaType retType = n.getOp(0).type;
 
 					// generate stack pushs
