@@ -125,6 +125,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 */
 	protected class VarDeclCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		private boolean nest;
+		private CodeGeneratingVisitor cg;
+
+		public VarDeclCodeGeneratingVisitor(final CodeGeneratingVisitor cg) {
+			this.cg = cg;
+		}
 
 		/** {@inheritDoc} */
 		@Override
@@ -191,6 +196,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			if (n.isStatic())
 				st.add("isstatic", true);
+
+			if (n.isInit()) {
+				n.getType().accept(cg);
+				st.add("init", "new " + cg.code.removeLast() + "()");
+			}
 
 			code.add(st.render());
 		}
@@ -498,7 +508,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		this.seed = seed;
 		this.isLocal = isLocal;
 
-		varDecl = new VarDeclCodeGeneratingVisitor();
+		varDecl = new VarDeclCodeGeneratingVisitor(this);
 		staticInitialization = new StaticInitializationCodeGeneratingVisitor();
 		functionDeclarator = new FunctionDeclaratorCodeGeneratingVisitor();
 		tupleDeclarator = new TupleDeclaratorCodeGeneratingVisitor();
@@ -1298,7 +1308,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final VarDeclStatement n) {
-		if (n.isStatic()) {
+		if (n.isStatic() || n.isInit()) {
 			code.add("");
 			return;
 		}

@@ -117,6 +117,7 @@ public class RecursiveFunctionTransformer extends AbstractVisitorNoArgNoRet {
 					final StackType st = new StackType(new Component(v.type.toAST(b.env)));
 					st.env = b.env;
 					final VarDeclStatement var = ASTFactory.createVarDecl(varPrefix + v.getId().getToken(), st, new BoaStack(v.type), b.env);
+					var.setInit(true);
 
 					b.env.set(var.getId().getToken(), var.type);
 					b.getStatements().add(0, var);

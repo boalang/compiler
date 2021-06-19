@@ -16,7 +16,7 @@ identifierMap ::= [
 		default : {___<id>}
 ]
 		
-VarDecl(isstatic, type, id) ::= "<if(isstatic)>static <endif><type> ___<id>;<\n>"
+VarDecl(isstatic, init, type, id) ::= "<if(isstatic)>static <endif><type> ___<id><if(init)> = <init><endif>;<\n>"
 ArrayType(type) ::= "<type>[]"
 MapType(key, value) ::= "java.util.HashMap\<<key>, <value>>"
 StackType(value) ::= "java.util.Stack\<<value>>"
