@@ -409,7 +409,6 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		n.getBody().accept(this);
 		outdentBlock(n.getBody());
 		if (n.hasElse()) {
-			indent();
 			stream.print(" else ");
 			indentBlock(n.getElse());
 			n.getElse().accept(this);
