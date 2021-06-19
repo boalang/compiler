@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,7 @@ import boa.types.proto.enums.EdgeLabelProtoMap;
 
 /**
  * A {@link CFGEdgeProtoTuple}.
- * 
+ *
  * @author rramu
  */
 public class CFGEdgeProtoTuple extends BoaProtoTuple {
@@ -40,11 +40,11 @@ public class CFGEdgeProtoTuple extends BoaProtoTuple {
 		names.put("label", counter++);
 		members.add(new EdgeLabelProtoMap());
 
-        names.put("src", counter++);
-        members.add(new CFGNodeProtoTuple());
+		names.put("src", counter++);
+		members.add(new CFGNodeProtoTuple());
 
-        names.put("dest", counter++);
-        members.add(new CFGNodeProtoTuple());
+		names.put("dest", counter++);
+		members.add(new CFGNodeProtoTuple());
 	}
 
 	/**

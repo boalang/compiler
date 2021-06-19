@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,10 +16,14 @@
  */
 package boa.types;
 
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.SymbolTable;
+
 /**
  * A {@link BoaType} representing any other scalar value type.
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
 public class BoaScalar extends BoaType {
 	/** {@inheritDoc} */
@@ -73,6 +77,12 @@ public class BoaScalar extends BoaType {
 			return false;
 
 		return this.getClass().equals(obj.getClass());
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public AbstractType toAST(final SymbolTable env) {
+		throw new RuntimeException("toAST() not supported on BoaScalar");
 	}
 
 	@Override

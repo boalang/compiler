@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,9 +21,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import boa.compiler.ast.Identifier;
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.SymbolTable;
+
 /**
  * A {@link BoaTuple} representing a protocol buffer tuple.
- * 
+ *
  * @author rdyer
  */
 public class BoaProtoTuple extends BoaTuple {
@@ -70,6 +74,14 @@ public class BoaProtoTuple extends BoaTuple {
 
 	/** {@inheritDoc} */
 	@Override
+	public AbstractType toAST(final SymbolTable env) {
+		final AbstractType t = new Identifier(this.toString());
+		t.env = env;
+		return t;
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public String toString() {
 		final String type = toJavaType();
 		return type.substring(type.lastIndexOf('.') + 1);
@@ -78,7 +90,7 @@ public class BoaProtoTuple extends BoaTuple {
 	/**
 	 * The set of all types that may be visited when starting a
 	 * visit from this type.
-	 * 
+	 *
 	 * @return the set of reachable types
 	 */
 	@SuppressWarnings("unchecked")

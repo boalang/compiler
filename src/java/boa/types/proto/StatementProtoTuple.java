@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,7 @@ import boa.types.proto.enums.StatementKindProtoMap;
 
 /**
  * A {@link StatementProtoTuple}.
- * 
+ *
  * @author rdyer
  */
 public class StatementProtoTuple extends BoaProtoTuple {
@@ -67,28 +67,27 @@ public class StatementProtoTuple extends BoaProtoTuple {
 
 		names.put("expressions", counter++);
 		members.add(new BoaProtoList(new ExpressionProtoTuple()));
-		
+
 		names.put("key", counter++);
 		members.add(new BoaInt());
-		
+
 		names.put("methods", counter++);
 		members.add(new BoaProtoList(new MethodProtoTuple()));
-		
+
 		names.put("variable_declarations", counter++);
 		members.add(new BoaProtoList(new VariableProtoTuple()));
-		
+
 		names.put("type_declarations", counter++);
 		members.add(new BoaProtoList(new DeclarationProtoTuple()));
-		
+
 		names.put("names", counter++);
 		members.add(new BoaProtoList(new BoaString()));
-		
+
 		names.put("change", counter++);
 		members.add(new ChangeKindProtoMap());
-		
+
 		names.put("id", counter++);
 		members.add(new BoaInt());
-		
 	}
 
 	/**

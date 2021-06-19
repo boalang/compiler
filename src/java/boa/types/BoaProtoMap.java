@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2017, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -21,7 +21,7 @@ import com.google.protobuf.ProtocolMessageEnum;
 
 /**
  * A {@link BoaMap}, which is actually a Protocol Buffer enum.
- * 
+ *
  * @author rdyer
  */
 public class BoaProtoMap extends BoaMap {
@@ -41,7 +41,7 @@ public class BoaProtoMap extends BoaMap {
 
 	/**
 	 * Returns if this protobuf enum has the specified attribute.
-	 * 
+	 *
 	 * @param s the attribute to check for
 	 * @return true if it has the attribute s
 	 */

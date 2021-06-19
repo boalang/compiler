@@ -26,6 +26,7 @@ import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Operand;
+import boa.compiler.ast.statements.AssignmentStatement;
 import boa.compiler.ast.statements.ExprStatement;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.Term;
@@ -44,6 +45,7 @@ public class ASTFactory {
 				type
 			);
 		type.type = var.type = t;
+		var.env = env;
 		return var;
 	}
 
@@ -71,6 +73,16 @@ public class ASTFactory {
 		final Identifier id = new Identifier(name);
 		id.env = env;
 		return id;
+	}
+
+	public static AssignmentStatement createAssignment(final String name, final Expression init, final BoaType t, final SymbolTable env) {
+		final AssignmentStatement var = new AssignmentStatement(
+				new Factor(ASTFactory.createIdentifier(name, env)),
+				init
+			);
+		var.type = init.type = t;
+		var.env = init.env = env;
+		return var;
 	}
 
 	public static Expression createIdentifierExpr(final String name, final SymbolTable env, BoaType t) {

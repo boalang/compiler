@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2021, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +17,15 @@
  */
 package boa.types;
 
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.ast.Identifier;
+import boa.compiler.SymbolTable;
+
 /**
  * A {@link BoaScalar} representing an double precision floating point value.
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
 public class BoaFloat extends BoaScalar {
 	/** {@inheritDoc} */
@@ -59,6 +65,14 @@ public class BoaFloat extends BoaScalar {
 	@Override
 	public boolean accepts(final BoaType that) {
 		return this.assigns(that);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public AbstractType toAST(final SymbolTable env) {
+		final AbstractType t = new Identifier("float");
+		t.env = env;
+		return t;
 	}
 
 	/** {@inheritDoc} */

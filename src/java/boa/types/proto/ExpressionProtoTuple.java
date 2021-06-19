@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@ import boa.types.proto.enums.ExpressionKindProtoMap;
 
 /**
  * A {@link ExpressionProtoTuple}.
- * 
+ *
  * @author rdyer
  */
 public class ExpressionProtoTuple extends BoaProtoTuple {
@@ -77,52 +77,51 @@ public class ExpressionProtoTuple extends BoaProtoTuple {
 
 		names.put("annotation", counter++);
 		members.add(new ModifierProtoTuple());
-		
+
 		names.put("no_parens", counter++);
 		members.add(new BoaBool());
-		
+
 		names.put("key", counter++);
 		members.add(new BoaInt());
-		
+
 		names.put("declaring_type", counter++);
 		members.add(new TypeProtoTuple());
-		
+
 		names.put("return_type", counter++);
 		members.add(new TypeProtoTuple());
-		
+
 		names.put("methods", counter++);
 		members.add(new BoaProtoList(new MethodProtoTuple()));
-		
+
 		names.put("statements", counter++);
 		members.add(new BoaProtoList(new StatementProtoTuple()));
-		
+
 		names.put("is_member_access", counter++);
 		members.add(new BoaBool());
-		
+
 		names.put("dolar_sign", counter++);
 		members.add(new BoaBool());
-		
+
 		names.put("computed_variable", counter++);
 		members.add(new ExpressionProtoTuple());
-		
+
 		names.put("computed_method", counter++);
 		members.add(new ExpressionProtoTuple());
-		
+
 		names.put("is_static", counter++);
 		members.add(new BoaBool());
-		
+
 		names.put("has_from", counter++);
 		members.add(new BoaBool());
-		
+
 		names.put("trait", counter++);
 		members.add(new MethodProtoTuple());
-		
+
 		names.put("change", counter++);
 		members.add(new ChangeKindProtoMap());
-		
+
 		names.put("id", counter++);
 		members.add(new BoaInt());
-		
 	}
 
 	/**

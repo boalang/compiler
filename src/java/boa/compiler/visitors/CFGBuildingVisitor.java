@@ -102,6 +102,12 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 
 	/** {@inheritDoc} */
 	@Override
+	public void initialize() {
+		this.order = new ArrayList<Node>();
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final Block n) {
 		List<Statement> stats = n.getStatements();
 
@@ -480,7 +486,7 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final SwitchStatement n) {
 		Expression selector = n.getCondition();
-		List<SwitchCase> cases = n.getCases();
+		List<SwitchCase> cases = new ArrayList<SwitchCase>(n.getCases());
 
 		// fill the start/end/exit nodes
 		selector.accept(this);
@@ -887,14 +893,12 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FixPStatement n) {
-		this.order = new ArrayList<Node>();
 		n.getBody().accept(this);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TraverseStatement n) {
-		this.order = new ArrayList<Node>();
 		n.getBody().accept(this);
 	}
 
