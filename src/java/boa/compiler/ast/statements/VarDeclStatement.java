@@ -30,9 +30,18 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  */
 public class VarDeclStatement extends Statement {
 	protected boolean isStatic;
+	protected boolean isInit = false;
 	protected Identifier identifier;
 	protected AbstractType t;
 	protected Expression initializer;
+
+	public boolean isInit() {
+		return isInit;
+	}
+
+	public void setInit(final boolean isInit) {
+		this.isInit = isInit;
+	}
 
 	public boolean isStatic() {
 		return isStatic;
