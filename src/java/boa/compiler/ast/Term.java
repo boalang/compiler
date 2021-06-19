@@ -57,6 +57,10 @@ public class Term extends Node {
 		return rhs;
 	}
 
+	public void replaceLhs(final Factor lhs) {
+		this.lhs = lhs;
+	}
+
 	public int getRhsSize() {
 		return rhs.size();
 	}
