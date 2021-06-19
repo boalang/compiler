@@ -480,7 +480,7 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final SwitchStatement n) {
 		Expression selector = n.getCondition();
-		List<SwitchCase> cases = n.getCases();
+		List<SwitchCase> cases = new ArrayList<SwitchCase>(n.getCases());
 
 		// fill the start/end/exit nodes
 		selector.accept(this);
