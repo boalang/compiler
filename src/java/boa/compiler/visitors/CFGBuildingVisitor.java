@@ -102,6 +102,12 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 
 	/** {@inheritDoc} */
 	@Override
+	public void initialize() {
+		this.order = new ArrayList<Node>();
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final Block n) {
 		List<Statement> stats = n.getStatements();
 
@@ -887,14 +893,12 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FixPStatement n) {
-		this.order = new ArrayList<Node>();
 		n.getBody().accept(this);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TraverseStatement n) {
-		this.order = new ArrayList<Node>();
 		n.getBody().accept(this);
 	}
 
