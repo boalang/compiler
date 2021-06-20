@@ -197,11 +197,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (n.isStatic())
 				st.add("isstatic", true);
 
-			if (n.isInit()) {
-				n.getType().accept(cg);
-				st.add("init", "new " + cg.code.removeLast() + "()");
-			}
-
 			code.add(st.render());
 		}
 	}
@@ -1308,7 +1303,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final VarDeclStatement n) {
-		if (n.isStatic() || n.isInit()) {
+		if (n.isStatic()) {
 			code.add("");
 			return;
 		}
