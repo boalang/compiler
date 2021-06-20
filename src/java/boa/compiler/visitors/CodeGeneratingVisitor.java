@@ -1503,7 +1503,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		final CFGBuildingVisitor cfgBuilder = new CFGBuildingVisitor();
-		n.accept(cfgBuilder);
+		cfgBuilder.start(n);
 		new CreateNodeId().start(cfgBuilder);
 
 		final HashSet<Identifier> aliastSet = new LocalMayAliasAnalysis().start(cfgBuilder, traversalId);
