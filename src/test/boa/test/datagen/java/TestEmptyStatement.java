@@ -9,7 +9,7 @@ public class TestEmptyStatement extends Java8BaseTest {
 	@Test
 	public void emptyStatement() throws IOException {
 		testWrapped(
-			load("test/datagen/java/EmptyStatement.java").trim(),
+			"test/datagen/java/EmptyStatement.java",
 			load("test/datagen/boa/EmptyStatement.boa").trim()
 		);
 	}

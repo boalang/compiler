@@ -1,1 +1,6 @@
-m(Person::compareByAge);
+class t {
+   void m() {
+	   m(Person::compareByAge);
+	   
+   }
+}

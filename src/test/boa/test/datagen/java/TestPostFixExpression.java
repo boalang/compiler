@@ -9,7 +9,7 @@ public class TestPostFixExpression extends Java8BaseTest {
 	@Test
 	public void postFixExpression() throws IOException {
 		testWrapped(
-			load("test/datagen/java/PostFixIncExpression.java").trim(),
+			"test/datagen/java/PostFixIncExpression.java",
 			load("test/datagen/boa/PostFixIncExpression.boa").trim()
 		);
 	}
@@ -17,7 +17,7 @@ public class TestPostFixExpression extends Java8BaseTest {
 	@Test
 	public void postFixDecExpression() throws IOException {
 		testWrapped(
-			load("test/datagen/java/PostFixDecExpression.java").trim(),
+			"test/datagen/java/PostFixDecExpression.java",
 			load("test/datagen/boa/PostFixDecExpression.boa").trim()
 		);
 	}

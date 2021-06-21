@@ -9,7 +9,7 @@ public class TestDoStatement extends Java8BaseTest {
 	@Test
 	public void doStatement() throws IOException {
 		testWrapped(
-			load("test/datagen/java/DoStatement.java").trim(),
+			"test/datagen/java/DoStatement.java",
 			load("test/datagen/boa/DoStatement.boa").trim()
 		);
 	}
@@ -17,7 +17,7 @@ public class TestDoStatement extends Java8BaseTest {
 	@Test
 	public void doStatementWithBreak() throws IOException {
 		testWrapped(
-			load("test/datagen/java/DoStatementWithBreak.java").trim(),
+			"test/datagen/java/DoStatementWithBreak.java",
 			load("test/datagen/boa/DoStatementWithBreak.boa").trim()
 		);
 	}
@@ -25,7 +25,7 @@ public class TestDoStatement extends Java8BaseTest {
 	@Test
 	public void doStatementWithContinue() throws IOException {
 		testWrapped(
-			load("test/datagen/java/DoStatementWithContinue.java").trim(),
+			"test/datagen/java/DoStatementWithContinue.java",
 			load("test/datagen/boa/DoStatementWithContinue.boa").trim()
 		);
 	}

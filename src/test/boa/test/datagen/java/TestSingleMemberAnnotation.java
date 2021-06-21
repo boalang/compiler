@@ -12,7 +12,7 @@ public class TestSingleMemberAnnotation extends Java8BaseTest {
 	public void singleMemberAnnotation() throws IOException {
 		assertEquals(
 			load("test/datagen/boa/SingleMemberAnnotation.boa").trim(),
-			parseJava(load("test/datagen/java/SingleMemberAnnotation.java")).trim()
+			parseJava("test/datagen/java/SingleMemberAnnotation.java").trim()
 		);
 		
 	}

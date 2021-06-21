@@ -9,9 +9,10 @@ public class TestArrayAccess extends Java8BaseTest {
 	@Test
 	public void arrayAccess() throws IOException {
 		testWrapped(
-			load("test/datagen/java/ArrayAccess.java").trim(),
+			"test/datagen/java/ArrayAccess.java",
 			load("test/datagen/boa/ArrayAccess.boa").trim()
 		);
 	}
+	
 	
 }

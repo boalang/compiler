@@ -1,3 +1,4 @@
 public class FieldDeclaration{
-int x;
+      int x;
 }
+;

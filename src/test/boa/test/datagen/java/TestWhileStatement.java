@@ -9,7 +9,7 @@ public class TestWhileStatement extends Java8BaseTest {
 	@Test
 	public void whileStatement() throws IOException {
 		testWrapped(
-			load("test/datagen/java/WhileStatement.java").trim(),
+			"test/datagen/java/WhileStatement.java",
 			load("test/datagen/boa/WhileStatement.boa").trim()
 		);
 	}

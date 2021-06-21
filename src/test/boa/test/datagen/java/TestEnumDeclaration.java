@@ -12,7 +12,7 @@ public class TestEnumDeclaration extends Java8BaseTest {
 	public void enumDeclaration() throws IOException {
 		assertEquals(
 			load("test/datagen/boa/EnumDeclaration.boa").trim(),
-			parseJava(load("test/datagen/java/EnumDeclaration.java")).trim()
+			parseJava("test/datagen/java/EnumDeclaration.java").trim()
 		);
 	}
 	

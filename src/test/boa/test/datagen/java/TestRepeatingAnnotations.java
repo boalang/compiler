@@ -31,7 +31,7 @@ public class TestRepeatingAnnotations extends Java8BaseTest {
 	public void repeatedAnnotation() throws IOException {
 		assertEquals(
 			load("test/datagen/boa/repeating-annot.boa").trim(),
-			parseJava(load("test/datagen/java/repeating-annot.java")).trim()
+			parseJava("test/datagen/java/repeating-annot.java").trim()
 		);
 	}
 }

@@ -1,1 +1,6 @@
-super.method();
+class t {
+   void m() {
+	   super.method();
+	   
+   }
+}

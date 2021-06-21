@@ -9,7 +9,7 @@ public class TestTypeDeclarationStatement extends Java8BaseTest {
 	@Test
 	public void typeDeclarationStatement() throws IOException {
 		testWrapped(
-			load("test/datagen/java/TypeDeclarationStatement.java").trim(),
+			"test/datagen/java/TypeDeclarationStatement.java",
 			load("test/datagen/boa/TypeDeclarationStatement.boa").trim()
 		);
 	}

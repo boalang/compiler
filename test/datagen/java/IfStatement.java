@@ -1,1 +1,8 @@
-if (true) {}
+class t {
+   void m() {
+	   if (true) {
+		   ;
+	   }
+      
+   }
+}

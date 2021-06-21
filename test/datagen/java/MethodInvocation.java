@@ -1,1 +1,6 @@
-x.myMethod();
+class t {
+   void m() {
+	   x.myMethod();
+	   
+   }
+}

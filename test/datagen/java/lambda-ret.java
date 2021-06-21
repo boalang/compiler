@@ -1,1 +1,6 @@
-MathOperation multiplication = (int a, int b) -> { return a * b; }
+class t {
+   void m() {
+	   MathOperation multiplication = (int a, int b) -> { return a * b; }
+	   
+   }
+}

@@ -1,1 +1,6 @@
-String x = (String ) 5;
+class t {
+   void m() {
+	   String x = (String ) 5;
+      
+   }
+}

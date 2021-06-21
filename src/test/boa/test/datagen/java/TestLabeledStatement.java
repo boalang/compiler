@@ -9,7 +9,7 @@ public class TestLabeledStatement extends Java8BaseTest {
 	@Test
 	public void labeledSatement() throws IOException {
 		testWrapped(
-			load("test/datagen/java/LabeledStatement.java").trim(),
+			"test/datagen/java/LabeledStatement.java",
 			load("test/datagen/boa/LabeledStatement.boa").trim()
 		);
 	}

@@ -9,7 +9,7 @@ public class TestPreFixExpresssion extends Java8BaseTest {
 	@Test
 	public void preFixExpression() throws IOException {
 		testWrapped(
-			load("test/datagen/java/PreFixIncExpression.java").trim(),
+			"test/datagen/java/PreFixIncExpression.java",
 			load("test/datagen/boa/PreFixIncExpression.boa").trim()
 		);
 	}
@@ -17,7 +17,7 @@ public class TestPreFixExpresssion extends Java8BaseTest {
 	@Test
 	public void preFixDecExpression() throws IOException {
 		testWrapped(
-			load("test/datagen/java/PreFixDecExpression.java").trim(),
+			"test/datagen/java/PreFixDecExpression.java",
 			load("test/datagen/boa/PreFixDecExpression.boa").trim()
 		);
 	}
@@ -25,7 +25,7 @@ public class TestPreFixExpresssion extends Java8BaseTest {
 	@Test
 	public void preFixPlusExpression() throws IOException {
 		testWrapped(
-			load("test/datagen/java/PreFixPlusExpression.java").trim(),
+			"test/datagen/java/PreFixPlusExpression.java",
 			load("test/datagen/boa/PreFixPlusExpression.boa").trim()
 		);
 	}
@@ -33,7 +33,7 @@ public class TestPreFixExpresssion extends Java8BaseTest {
 	@Test
 	public void preFixSubExpression() throws IOException {
 		testWrapped(
-			load("test/datagen/java/PreFixSubExpression.java").trim(),
+			"test/datagen/java/PreFixSubExpression.java",
 			load("test/datagen/boa/PreFixSubExpression.boa").trim()
 		);
 	}
@@ -41,7 +41,7 @@ public class TestPreFixExpresssion extends Java8BaseTest {
 	@Test
 	public void preFixComplimentExpression() throws IOException {
 		testWrapped(
-			load("test/datagen/java/PreFixComplimentExpression.java").trim(),
+			"test/datagen/java/PreFixComplimentExpression.java",
 			load("test/datagen/boa/PreFixComplimentExpression.boa").trim()
 		);
 	}
@@ -49,7 +49,7 @@ public class TestPreFixExpresssion extends Java8BaseTest {
 	@Test
 	public void preFixLogicalNotExpression() throws IOException {
 		testWrapped(
-			load("test/datagen/java/PreFixLogicalNotExpression.java").trim(),
+			"test/datagen/java/PreFixLogicalNotExpression.java",
 			load("test/datagen/boa/PreFixLogicalNotExpression.boa").trim()
 		);
 	}

@@ -1,1 +1,6 @@
-x += (int x) -> x + y;
+class t {
+   void m() {
+	   x += (int x) -> x + y;
+	   
+   }
+}

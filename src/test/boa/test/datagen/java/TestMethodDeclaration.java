@@ -12,7 +12,7 @@ public class TestMethodDeclaration extends Java8BaseTest {
 	public void methodDeclaration() throws IOException {
 		assertEquals(
 			load("test/datagen/boa/MethodDeclaration.boa").trim(),
-			parseJava(load("test/datagen/java/MethodDeclaration.java")).trim()
+			parseJava("test/datagen/java/MethodDeclaration.java").trim()
 		);
 	}
 	
@@ -20,7 +20,7 @@ public class TestMethodDeclaration extends Java8BaseTest {
 	public void methodDeclaration2() throws IOException {
 		assertEquals(
 			load("test/datagen/boa/MethodDeclaration2.boa").trim(),
-			parseJava(load("test/datagen/java/MethodDeclaration2.java")).trim()
+			parseJava("test/datagen/java/MethodDeclaration2.java").trim()
 		);
 	}
 }

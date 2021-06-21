@@ -1,3 +1,8 @@
-do{
-	continue;
-}while(true)
+class t {
+   void m() {
+      do{
+      	continue;
+      }while(true)
+      ;
+   }
+}

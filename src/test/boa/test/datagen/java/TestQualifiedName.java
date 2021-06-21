@@ -9,7 +9,7 @@ public class TestQualifiedName extends Java8BaseTest {
 	@Test
 	public void qualifiedName() throws IOException {
 		testWrapped(
-			load("test/datagen/java/QualifiedName.java").trim(),
+			"test/datagen/java/QualifiedName.java",
 			load("test/datagen/boa/QualifiedName.boa").trim()
 		);
 	}

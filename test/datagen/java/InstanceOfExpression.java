@@ -1,1 +1,6 @@
-z = x instanceof y;
+class t {
+   void m() {
+	   z = x instanceof y;
+	   
+   }
+}

@@ -1,1 +1,6 @@
-y = this.x;
+class t {
+   void m() {
+	   y = this.x; 
+	   
+   }
+}

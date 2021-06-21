@@ -1,3 +1,8 @@
 class t {
-	void m(Test this) {}
+   void m() {
+	   class t {
+			void m(Test this) {}
+		}  
+	   
+   }
 }

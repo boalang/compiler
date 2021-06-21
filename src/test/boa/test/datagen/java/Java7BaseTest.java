@@ -82,7 +82,7 @@ public class Java7BaseTest extends BaseTest {
 		} catch (final Exception e) {}
 	}
 
-	protected static String parseJava(final String content) {
+	public static String parseJava(final String path) {
 		final StringBuilder sb = new StringBuilder();
 		final FileASTRequestor r = new FileASTRequestor() {
 			@Override
@@ -99,7 +99,7 @@ public class Java7BaseTest extends BaseTest {
 			}
 		};
 		Map<String, String> fileContents = new HashMap<String, String>();
-		fileContents.put("", content);
+//		fileContents.put("", content);
 //		@SuppressWarnings("rawtypes")
 		Map<String,String> options = JavaCore.getOptions();
 		options.put(JavaCore.COMPILER_COMPLIANCE, javaVersion);
@@ -108,10 +108,15 @@ public class Java7BaseTest extends BaseTest {
 		parser.setCompilerOptions(options);
 		parser.setEnvironment(new String[0], new String[]{}, new String[]{}, true);
 		parser.setResolveBindings(true);
-		parser.createASTs(fileContents, new String[]{""}, null, new String[0], r, null);
-
+		String [] paths =  new String[1];
+		paths[0] = path;
+		parser.createASTs(paths, null, new String[0], r, null);
+		
+//		System.out.println("This is from parseJava: \n" + FileIO.normalizeEOL(sb.toString()));
 		return FileIO.normalizeEOL(sb.toString());
 	}
+	
+	
 
 	protected static String getWrapped(final String content) {
 		String s = "class t {\n   void m() {\n      " + content.replaceAll("\n", "\n      ");
@@ -121,8 +126,8 @@ public class Java7BaseTest extends BaseTest {
 		return s;
 	}
 
-	protected static String parseWrapped(final String content) {
-		return parseJava(getWrapped(content));
+	protected static String parseWrapped(final String path) {
+		return parseJava(path);
 	}
 
 	public static void testWrapped(final String java, final String expected) {

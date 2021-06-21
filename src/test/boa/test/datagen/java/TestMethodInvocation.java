@@ -9,7 +9,7 @@ public class TestMethodInvocation extends Java8BaseTest {
 	@Test
 	public void methodInvocation() throws IOException {
 		testWrapped(
-			load("test/datagen/java/MethodInvocation.java").trim(),
+			"test/datagen/java/MethodInvocation.java",
 			load("test/datagen/boa/MethodInvocation.boa").trim()
 		);
 	}

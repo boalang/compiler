@@ -1,1 +1,6 @@
-y = !x;
+class t {
+   void m() {
+	   y = !x;
+	   
+   }
+}

@@ -29,7 +29,7 @@ public class TestLambda extends Java8BaseTest {
 	@Test
 	public void lambda() throws IOException {
 		testWrapped(
-			load("test/datagen/java/lambda.java").trim(),
+			"test/datagen/java/lambda.java",
 			load("test/datagen/boa/lambda.boa").trim()
 		);
 	}
@@ -37,7 +37,7 @@ public class TestLambda extends Java8BaseTest {
 	@Test
 	public void lambda2() throws IOException {
 		testWrapped(
-			load("test/datagen/java/lambda2.java").trim(),
+			"test/datagen/java/lambda2.java",
 			load("test/datagen/boa/lambda2.boa").trim()
 		);
 	}
@@ -45,7 +45,7 @@ public class TestLambda extends Java8BaseTest {
 	@Test
 	public void lambdaWithReturn() throws IOException {
 		testWrapped(
-			load("test/datagen/java/lambda-ret.java").trim(),
+			"test/datagen/java/lambda-ret.java",
 			load("test/datagen/boa/lambda-ret.boa").trim()
 		);
 	}
@@ -53,7 +53,7 @@ public class TestLambda extends Java8BaseTest {
 	@Test
 	public void lambdaWithTypeDecl() throws IOException {
 		testWrapped(
-			load("test/datagen/java/lambda-withtype.java").trim(),
+			"test/datagen/java/lambda-withtype.java",
 			load("test/datagen/boa/lambda-withtype.boa").trim()
 		);
 	}
@@ -61,7 +61,7 @@ public class TestLambda extends Java8BaseTest {
 	@Test
 	public void lambdaNoArg() throws IOException {
 		testWrapped(
-			load("test/datagen/java/lambda-noarg.java").trim(),
+			"test/datagen/java/lambda-noarg.java",
 			load("test/datagen/boa/lambda-noarg.boa").trim()
 		);
 	}
@@ -69,7 +69,7 @@ public class TestLambda extends Java8BaseTest {
 	@Test
 	public void lambdaNoReturn() throws IOException {
 		testWrapped(
-			load("test/datagen/java/lambda-noret.java").trim(),
+			"test/datagen/java/lambda-noret.java",
 			load("test/datagen/boa/lambda-noret.boa").trim()
 		);
 	}
@@ -77,7 +77,7 @@ public class TestLambda extends Java8BaseTest {
 	@Test
 	public void lambdaNoTypeDecl() throws IOException {
 		testWrapped(
-			load("test/datagen/java/lambda-notype.java").trim(),
+			"test/datagen/java/lambda-notype.java",
 			load("test/datagen/boa/lambda-notype.boa").trim()
 		);
 	}
@@ -85,7 +85,7 @@ public class TestLambda extends Java8BaseTest {
 	@Test
 	public void lambdaNoParen() throws IOException {
 		testWrapped(
-			load("test/datagen/java/lambda-noparen.java").trim(),
+			"test/datagen/java/lambda-noparen.java",
 			load("test/datagen/boa/lambda-noparen.boa").trim()
 		);
 	}

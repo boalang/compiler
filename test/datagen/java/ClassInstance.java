@@ -1,1 +1,6 @@
-Person x = new Person(name);
+class t {
+   void m() {
+	   Person x = new Person(name);
+      
+   }
+}

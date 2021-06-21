@@ -1,1 +1,6 @@
-super();
+class t {
+   void m() {
+	   super();  
+	   
+   }
+}

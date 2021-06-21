@@ -12,7 +12,7 @@ public class TestAnnotationTypeDeclaration extends Java8BaseTest {
 	public void annotationTypeDeclaration() throws IOException {
 		assertEquals(
 			load("test/datagen/boa/AnnotationTypeDeclaration.boa").trim(),
-			parseJava(load("test/datagen/java/AnnotationTypeDeclaration.java")).trim()
+			parseJava("test/datagen/java/AnnotationTypeDeclaration.java").trim()
 		);
 		
 	}

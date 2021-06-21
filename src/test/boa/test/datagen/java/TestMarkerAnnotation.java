@@ -12,7 +12,7 @@ public class TestMarkerAnnotation extends Java8BaseTest {
 	public void markerAnnotation() throws IOException {
 		assertEquals(
 			load("test/datagen/boa/MarkerAnnotation.boa").trim(),
-			parseJava(load("test/datagen/java/MarkerAnnotation.java")).trim()
+			parseJava("test/datagen/java/MarkerAnnotation.java").trim()
 		);
 		
 	}

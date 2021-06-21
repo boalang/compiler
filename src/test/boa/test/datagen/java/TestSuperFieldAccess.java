@@ -9,7 +9,7 @@ public class TestSuperFieldAccess extends Java8BaseTest {
 	@Test
 	public void superFieldAccess() throws IOException {
 		testWrapped(
-			load("test/datagen/java/SuperFieldAccess.java").trim(),
+			"test/datagen/java/SuperFieldAccess.java",
 			load("test/datagen/boa/SuperFieldAccess.boa").trim()
 		);
 	}

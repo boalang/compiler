@@ -9,7 +9,7 @@ public class TestConditionalExpression extends Java8BaseTest {
 	@Test
 	public void conditionalExpression() throws IOException {
 		testWrapped(
-			load("test/datagen/java/ConditionalExpression.java").trim(),
+			"test/datagen/java/ConditionalExpression.java",
 			load("test/datagen/boa/ConditionalExpression.boa").trim()
 		);
 	}

@@ -1,1 +1,6 @@
-switch(x){}
+class t {
+   void m() {
+	   switch(x){}
+	   
+   }
+}

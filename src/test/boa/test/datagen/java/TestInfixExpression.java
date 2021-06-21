@@ -9,7 +9,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionAnd() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionAnd.java").trim(),
+			"test/datagen/java/InfixExpressionAnd.java",
 			load("test/datagen/boa/InfixExpressionAnd.boa").trim()
 		);
 	}
@@ -17,7 +17,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionLogicalAnd() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionLogicalAnd.java").trim(),
+			"test/datagen/java/InfixExpressionLogicalAnd.java",
 			load("test/datagen/boa/InfixExpressionLogicalAnd.boa").trim()
 		);
 	}
@@ -25,7 +25,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionLogicalOr() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionLogicalOr.java").trim(),
+			"test/datagen/java/InfixExpressionLogicalOr.java",
 			load("test/datagen/boa/InfixExpressionLogicalOr.boa").trim()
 		);
 	}
@@ -33,7 +33,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionDivide() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionDivide.java").trim(),
+			"test/datagen/java/InfixExpressionDivide.java",
 			load("test/datagen/boa/InfixExpressionDivide.boa").trim()
 		);
 	}
@@ -41,7 +41,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionEquals() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionEquals.java").trim(),
+			"test/datagen/java/InfixExpressionEquals.java",
 			load("test/datagen/boa/InfixExpressionEquals.boa").trim()
 		);
 	}
@@ -49,7 +49,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionGreaterThen() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionGreaterThen.java").trim(),
+			"test/datagen/java/InfixExpressionGreaterThen.java",
 			load("test/datagen/boa/InfixExpressionGreaterThen.boa").trim()
 		);
 	}
@@ -57,7 +57,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionGreaterEqual() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionGreaterEqual.java").trim(),
+			"test/datagen/java/InfixExpressionGreaterEqual.java",
 			load("test/datagen/boa/InfixExpressionGreaterEqual.boa").trim()
 		);
 	}
@@ -65,7 +65,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionLeftShift() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionLeftShift.java").trim(),
+			"test/datagen/java/InfixExpressionLeftShift.java",
 			load("test/datagen/boa/InfixExpressionLeftShift.boa").trim()
 		);
 	}
@@ -73,7 +73,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionLessThen() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionLessThen.java").trim(),
+			"test/datagen/java/InfixExpressionLessThen.java",
 			load("test/datagen/boa/InfixExpressionLessThen.boa").trim()
 		);
 	}
@@ -81,7 +81,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionLessEqual() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionLessEqual.java").trim(),
+			"test/datagen/java/InfixExpressionLessEqual.java",
 			load("test/datagen/boa/InfixExpressionLessEqual.boa").trim()
 		);
 	}
@@ -89,7 +89,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionMinus() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionMinus.java").trim(),
+			"test/datagen/java/InfixExpressionMinus.java",
 			load("test/datagen/boa/InfixExpressionMinus.boa").trim()
 		);
 	}
@@ -97,7 +97,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionNotEqual() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionNotEqual.java").trim(),
+			"test/datagen/java/InfixExpressionNotEqual.java",
 			load("test/datagen/boa/InfixExpressionNotEqual.boa").trim()
 		);
 	}
@@ -105,7 +105,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionOr() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionOr.java").trim(),
+			"test/datagen/java/InfixExpressionOr.java",
 			load("test/datagen/boa/InfixExpressionOr.boa").trim()
 		);
 	}
@@ -113,7 +113,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionPlus() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionPlus.java").trim(),
+			"test/datagen/java/InfixExpressionPlus.java",
 			load("test/datagen/boa/InfixExpressionPlus.boa").trim()
 		);
 	}
@@ -121,7 +121,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionRemainder() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionRemainder.java").trim(),
+			"test/datagen/java/InfixExpressionRemainder.java",
 			load("test/datagen/boa/InfixExpressionRemainder.boa").trim()
 		);
 	}
@@ -129,7 +129,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionRightShiftSigned() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionRightShiftSigned.java").trim(),
+			"test/datagen/java/InfixExpressionRightShiftSigned.java",
 			load("test/datagen/boa/InfixExpressionRightShiftSigned.boa").trim()
 		);
 	}
@@ -137,7 +137,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionRightShiftUnsigned() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionRightShiftUnsigned.java").trim(),
+			"test/datagen/java/InfixExpressionRightShiftUnsigned.java",
 			load("test/datagen/boa/InfixExpressionRightShiftUnsigned.boa").trim()
 		);
 	}
@@ -145,7 +145,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionTimes() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionTimes.java").trim(),
+			"test/datagen/java/InfixExpressionTimes.java",
 			load("test/datagen/boa/InfixExpressionTimes.boa").trim()
 		);
 	}
@@ -153,7 +153,7 @@ public class TestInfixExpression extends Java8BaseTest {
 	@Test
 	public void infixExpressionXor() throws IOException {
 		testWrapped(
-			load("test/datagen/java/InfixExpressionXor.java").trim(),
+			"test/datagen/java/InfixExpressionXor.java",
 			load("test/datagen/boa/InfixExpressionXor.boa").trim()
 		);
 	}

@@ -9,7 +9,7 @@ public class TestIfStatement extends Java8BaseTest {
 	@Test
 	public void ifStatement() throws IOException {
 		testWrapped(
-			load("test/datagen/java/IfStatement.java").trim(),
+			"test/datagen/java/IfStatement.java",
 			load("test/datagen/boa/IfStatement.boa").trim()
 		);
 	}

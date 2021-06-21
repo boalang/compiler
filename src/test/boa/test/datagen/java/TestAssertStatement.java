@@ -9,7 +9,7 @@ public class TestAssertStatement extends Java8BaseTest {
 	@Test
 	public void assertStatement() throws IOException {
 		testWrapped(
-			load("test/datagen/java/Assert.java").trim(),
+			"test/datagen/java/Assert.java",
 			load("test/datagen/boa/Assert.boa").trim()
 		);
 	}

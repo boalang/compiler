@@ -1,1 +1,6 @@
-x = "Hello World";
+class t {
+	void m() {
+		x = "Hello World";
+
+	}
+}

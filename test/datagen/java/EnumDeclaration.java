@@ -1,4 +1,4 @@
-public enum myEnum {
-  ONE = "one",
-  TWO = "two",
-};
+ public enum myEnum {
+        ONE = "one",
+        TWO = "two",
+ };

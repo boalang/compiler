@@ -1,1 +1,6 @@
-y += x -> x + x;
+class t {
+   void m() {
+	   y += x -> x + x;
+	   
+   }
+}

@@ -9,7 +9,7 @@ public class TestForStatement extends Java8BaseTest {
 	@Test
 	public void forStatement() throws IOException {
 		testWrapped(
-			load("test/datagen/java/ForStatement.java").trim(),
+			"test/datagen/java/ForStatement.java",
 			load("test/datagen/boa/ForStatement.boa").trim()
 		);
 	}

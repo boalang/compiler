@@ -9,7 +9,7 @@ public class TestReturnStatement extends Java8BaseTest {
 	@Test
 	public void returnNull() throws IOException {
 		testWrapped(
-			load("test/datagen/java/ReturnNull.java").trim(),
+			"test/datagen/java/ReturnNull.java",
 			load("test/datagen/boa/ReturnNull.boa").trim()
 		);
 	}
@@ -17,7 +17,7 @@ public class TestReturnStatement extends Java8BaseTest {
 	@Test
 	public void returnNumberLiteral() throws IOException {
 		testWrapped(
-			load("test/datagen/java/ReturnNumberLiteral.java").trim(),
+			"test/datagen/java/ReturnNumberLiteral.java",
 			load("test/datagen/boa/ReturnNumberLiteral.boa").trim()
 		);
 	}

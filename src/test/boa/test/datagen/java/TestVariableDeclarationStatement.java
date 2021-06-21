@@ -9,7 +9,7 @@ public class TestVariableDeclarationStatement extends Java8BaseTest {
 	@Test
 	public void variableDeclarationStatement() throws IOException {
 		testWrapped(
-			load("test/datagen/java/VariableDeclarationStatement.java").trim(),
+			"test/datagen/java/VariableDeclarationStatement.java",
 			load("test/datagen/boa/VariableDeclarationStatement.boa").trim()
 		);
 	}

@@ -1,1 +1,6 @@
-m(super::sayHello);
+class t {
+   void m() {
+	   m(super::sayHello);
+	   
+   }
+}

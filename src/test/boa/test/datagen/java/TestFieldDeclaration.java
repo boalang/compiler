@@ -12,7 +12,7 @@ public class TestFieldDeclaration extends Java8BaseTest {
 	public void fieldDeclaration() throws IOException {
 		assertEquals(
 			load("test/datagen/boa/FieldDeclaration.boa").trim(),
-			parseJava(load("test/datagen/java/FieldDeclaration.java")).trim()
+			parseJava("test/datagen/java/FieldDeclaration.java").trim()
 		);
 	}
 	

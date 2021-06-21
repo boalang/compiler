@@ -1,1 +1,6 @@
-m(Item::new);
+class t {
+   void m() {
+	   m(Item::new);
+	   
+   }
+}

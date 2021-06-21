@@ -9,7 +9,7 @@ public class TestSuperConstructorInvocation extends Java8BaseTest {
 	@Test
 	public void superConstructorInvocation() throws IOException {
 		testWrapped(
-			load("test/datagen/java/SuperConstructorInvocation.java").trim(),
+			"test/datagen/java/SuperConstructorInvocation.java",
 			load("test/datagen/boa/SuperConstructorInvocation.boa").trim()
 		);
 	}

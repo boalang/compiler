@@ -9,7 +9,7 @@ public class TestParanthesizedExpression extends Java8BaseTest {
 	@Test
 	public void paranthesizedExpression() throws IOException {
 		testWrapped(
-			load("test/datagen/java/ParanthesizedExpression.java").trim(),
+			"test/datagen/java/ParanthesizedExpression.java",
 			load("test/datagen/boa/ParanthesizedExpression.boa").trim()
 		);
 	}

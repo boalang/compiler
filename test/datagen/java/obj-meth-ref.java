@@ -1,1 +1,6 @@
-m(o::compare);
+class t {
+   void m() {
+	   m(o::compare);
+	   
+   }
+}

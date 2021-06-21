@@ -1,3 +1,8 @@
-@MyAnnotation
-public class MarkerAnnotation {
+class t {
+   void m() {
+	   @MyAnnotation
+	   public class MarkerAnnotation {
+	   }  
+	   
+   }
 }

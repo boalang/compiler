@@ -9,7 +9,7 @@ public class TestStringLiteral extends Java8BaseTest {
 	@Test
 	public void stringLiteral() throws IOException {
 		testWrapped(
-			load("test/datagen/java/StringLiteral.java").trim(),
+			"test/datagen/java/StringLiteral.java",
 			load("test/datagen/boa/StringLiteral.boa").trim()
 		);
 	}

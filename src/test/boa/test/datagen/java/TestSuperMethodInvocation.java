@@ -9,7 +9,7 @@ public class TestSuperMethodInvocation extends Java8BaseTest {
 	@Test
 	public void superMethodInvocation() throws IOException {
 		testWrapped(
-			load("test/datagen/java/SuperMethodInvocation.java").trim(),
+			"test/datagen/java/SuperMethodInvocation.java",
 			load("test/datagen/boa/SuperMethodInvocation.boa").trim()
 		);
 	}

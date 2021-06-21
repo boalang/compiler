@@ -31,7 +31,7 @@ public class TestReceiverParameter extends Java8BaseTest {
 	public void receiverParameter() throws IOException {
 		assertEquals(
 			load("test/datagen/boa/rcv-param.boa").trim(),
-			parseJava(load("test/datagen/java/rcv-param.java")).trim()
+			parseJava("test/datagen/java/rcv-param.java").trim()
 		);
 	}
 
@@ -39,7 +39,7 @@ public class TestReceiverParameter extends Java8BaseTest {
 	public void receiverParameterInner() throws IOException {
 		assertEquals(
 			load("test/datagen/boa/rcv-param-inner.boa").trim(),
-			parseJava(load("test/datagen/java/rcv-param-inner.java")).trim()
+			parseJava("test/datagen/java/rcv-param-inner.java").trim()
 		);
 	}
 }

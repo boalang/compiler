@@ -1,1 +1,6 @@
-return null;
+class t {
+   void m() {
+	   return null; 
+	   
+   }
+}

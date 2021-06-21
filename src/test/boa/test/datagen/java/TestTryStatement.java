@@ -9,7 +9,7 @@ public class TestTryStatement extends Java8BaseTest {
 	@Test
 	public void tryStatement() throws IOException {
 		testWrapped(
-			load("test/datagen/java/TryStatement.java").trim(),
+			"test/datagen/java/TryStatement.java",
 			load("test/datagen/boa/TryStatement.boa").trim()
 		);
 	}

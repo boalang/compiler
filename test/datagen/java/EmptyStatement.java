@@ -1,0 +1,5 @@
+class t {
+   void m() {
+      ;
+   }
+}

@@ -9,7 +9,7 @@ public class TestAnonymousClassDeclaration extends Java8BaseTest {
 	@Test
 	public void anonymousClassDeclaration() throws IOException {
 		testWrapped(
-			load("test/datagen/java/AnonymousClassDeclaration.java").trim(),
+			"test/datagen/java/AnonymousClassDeclaration.java",
 			load("test/datagen/boa/AnonymousClassDeclaration.boa").trim()
 		);
 	}

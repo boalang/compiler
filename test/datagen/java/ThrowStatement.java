@@ -1,1 +1,6 @@
-throw new RuntimeException();
+class t {
+   void m() {
+	   throw new RuntimeException();
+	   
+   }
+}

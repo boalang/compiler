@@ -1,3 +1,5 @@
 interface I {
-	default String notRequired() {}
+	default String notRequired() {
+	}
 }
+;
