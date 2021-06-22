@@ -7,7 +7,7 @@ on:
   push:
     branches:
       - master
-      - 'compiler-????-??'
+      - compiler-*
   pull_request:
     branches:
       - master
