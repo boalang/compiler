@@ -33,7 +33,7 @@ import boa.io.EmitValue;
  */
 public abstract class GraphAggregator extends Aggregator {
 	protected Set<String> neighbors;
-	protected Map<String,String> weights;
+	protected Map<String, String> weights;
 
 	/** {@inheritDoc} */
 	@Override
@@ -41,7 +41,7 @@ public abstract class GraphAggregator extends Aggregator {
 		super.start(key);
 
 		this.neighbors = new HashSet<String>();
-		this.weights = new HashMap<String,String>();
+		this.weights = new HashMap<String, String>();
 	}
 
 	/** {@inheritDoc} */

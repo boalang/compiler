@@ -953,7 +953,8 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final IfAllStatement n) {
 		Component initS = n.getVar();
-		List<Component> init = new ArrayList<Component>(); init.add(initS);
+		List<Component> init = new ArrayList<Component>();
+		init.add(initS);
 		Expression cond = n.getCondition();
 		Block thenpart = n.getBody();
 
@@ -993,7 +994,8 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final ExistsStatement n) {
 		Component initS = n.getVar();
-		List<Component> init = new ArrayList<Component>(); init.add(initS);
+		List<Component> init = new ArrayList<Component>();
+		init.add(initS);
 		Expression cond = n.getCondition();
 		Block thenpart = n.getBody();
 

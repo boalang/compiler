@@ -52,14 +52,14 @@ public class Component extends AbstractType {
 		this.t = t;
 	}
 
-	public Component () {
+	public Component() {
 	}
 
-	public Component (final AbstractType t) {
+	public Component(final AbstractType t) {
 		this(null, t);
 	}
 
-	public Component (final Identifier id, final AbstractType t) {
+	public Component(final Identifier id, final AbstractType t) {
 		if (id != null)
 			id.setParent(this);
 		if (t != null)
@@ -70,7 +70,7 @@ public class Component extends AbstractType {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

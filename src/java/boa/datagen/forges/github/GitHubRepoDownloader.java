@@ -42,7 +42,7 @@ public class GitHubRepoDownloader {
 	public void orchastrate(int totalFiles) {
 		int i;
 		TokenList tokens = new TokenList(this.tokenFile);
-		GitHubRepoDownloaderWorker workers[] = new GitHubRepoDownloaderWorker[MAX_NUM_THREADS];
+		GitHubRepoDownloaderWorker[] workers = new GitHubRepoDownloaderWorker[MAX_NUM_THREADS];
 		Thread[] threads = new Thread[MAX_NUM_THREADS];
 		for (i = 0; i < MAX_NUM_THREADS; i++) {
 			GitHubRepoDownloaderWorker worker = new GitHubRepoDownloaderWorker(this.inPutDir, this.outPutDir, tokens);

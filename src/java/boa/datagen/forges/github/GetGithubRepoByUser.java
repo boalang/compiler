@@ -9,7 +9,7 @@ import boa.datagen.util.FileIO;
 public class GetGithubRepoByUser {
 
 	/**
-	 * @param args
+	 * @param args command-line arguments
 	 */
 	public static void main(String[] args) {
 

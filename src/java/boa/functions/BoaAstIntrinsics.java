@@ -69,7 +69,9 @@ import boa.types.Toplevel.Project;
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	static Context context;
-	private static MapFile.Reader map, commentsMap, issuesMap;
+	private static MapFile.Reader map;
+	private static MapFile.Reader commentsMap;
+	private static MapFile.Reader issuesMap;
 
 	private static final Revision emptyRevision;
 	static {
@@ -544,24 +546,24 @@ public class BoaAstIntrinsics {
 	 * Returns <code>true</code> if the expression <code>e</code> is of kind
 	 * <code>LITERAL</code> and is an integer literal.
 	 *
-	 * The test is a simplified grammar, based on the one from:
+	 * <p>The test is a simplified grammar, based on the one from:
 	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
 	 *
-	 * DecimalNumeral:
+	 * <p>DecimalNumeral:
 	 * 	[0-9] [lL]?
 	 * 	[1-9] [0-9] ([0-9_]* [0-9])? [lL]?
 	 * 	[1-9] [_]+ [0-9] ([0-9_]* [0-9])? [lL]?
 	 *
-	 * HexNumeral:
+	 * <p>HexNumeral:
 	 * 	0 [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [lL]?
 	 *
-	 * OctalNumeral:
+	 * <p>OctalNumeral:
 	 * 	0 [_]* [0-7] ([0-7_]* [0-7])? [lL]?
 	 *
-	 * BinaryNumeral:
+	 * <p>BinaryNumeral:
 	 * 	0 [bB] [01] ([01_]* [01])? [lL]?
 	 *
-	 * If any of these match, it returns <code>true</code>.  Otherwise it
+	 * <p>If any of these match, it returns <code>true</code>.  Otherwise it
 	 * returns <code>false</code>.
 	 *
 	 * @param e the expression to test
@@ -583,16 +585,16 @@ public class BoaAstIntrinsics {
 	 * Returns <code>true</code> if the expression <code>e</code> is of kind
 	 * <code>LITERAL</code> and is a float literal.
 	 *
-	 * The test is a simplified grammar, based on the one from:
+	 * <p>The test is a simplified grammar, based on the one from:
 	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
 	 *
-	 * DecimalFloatingPointLiteral:
+	 * <p>DecimalFloatingPointLiteral:
 	 *  [0-9] ([0-9_]* [0-9])? \\. ([0-9] ([0-9_]* [0-9])?)? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]?
 	 *  \\. [0-9] ([0-9_]* [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]?
 	 *  [0-9] ([0-9_]* [0-9])? [eE] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
 	 *  [0-9] ([0-9_]* [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]
 	 *
-	 * HexadecimalFloatingPointLiteral:
+	 * <p>HexadecimalFloatingPointLiteral:
 	 *  0 [Xx] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? \\.? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
 	 *  0 [Xx] ([0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])?)? \\. [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
 	 *
@@ -697,7 +699,7 @@ public class BoaAstIntrinsics {
 	// Collect Annotations Used //
 	//////////////////////////////
 
-	private static class AnnotationCollectingVisitor extends BoaCollectingVisitor<String,Long> {
+	private static class AnnotationCollectingVisitor extends BoaCollectingVisitor<String, Long> {
 		@Override
 		protected boolean preVisit(Modifier node) {
 			if (node.getKind() == Modifier.ModifierKind.ANNOTATION) {
@@ -711,7 +713,7 @@ public class BoaAstIntrinsics {
 	private static AnnotationCollectingVisitor annotationCollectingVisitor = new AnnotationCollectingVisitor();
 
 	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "ASTRoot", "map[string] of int" })
-	public static HashMap<String,Long> collect_annotations(final ASTRoot f, final HashMap<String,Long> map) throws Exception {
+	public static HashMap<String, Long> collect_annotations(final ASTRoot f, final HashMap<String, Long> map) throws Exception {
 		annotationCollectingVisitor.initialize(map).visit(f);
 		return annotationCollectingVisitor.map;
 	}
@@ -720,7 +722,7 @@ public class BoaAstIntrinsics {
 	// Collect Generics Used //
 	///////////////////////////
 
-	private static class GenericsCollectingVisitor extends BoaCollectingVisitor<String,Long> {
+	private static class GenericsCollectingVisitor extends BoaCollectingVisitor<String, Long> {
 		@Override
 		protected boolean preVisit(Type node) {
 			// FIXME
@@ -737,13 +739,13 @@ public class BoaAstIntrinsics {
 	private static GenericsCollectingVisitor genericsCollectingVisitor = new GenericsCollectingVisitor();
 
 	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "ASTRoot", "map[string] of int" })
-	public static HashMap<String,Long> collect_generic_types(final ASTRoot f, final HashMap<String,Long> map) throws Exception {
+	public static HashMap<String, Long> collect_generic_types(final ASTRoot f, final HashMap<String, Long> map) throws Exception {
 		genericsCollectingVisitor.initialize(map).visit(f);
 		return genericsCollectingVisitor.map;
 	}
 
 	@SuppressWarnings("unused")
-	private static void parseGenericType(final String name, final HashMap<String,Long> counts) {
+	private static void parseGenericType(final String name, final HashMap<String, Long> counts) {
 		if (!name.contains("<") || name.startsWith("<"))
 			return;
 
@@ -806,7 +808,7 @@ public class BoaAstIntrinsics {
 			}
 	}
 
-	private static void foundType(final String name, final HashMap<String,Long> counts) {
+	private static void foundType(final String name, final HashMap<String, Long> counts) {
 		final String type = name.endsWith("...") ? name.substring(0, name.length() - 3).trim() : name.trim();
 		final long count = counts.containsKey(type) ? counts.get(type) : 0;
 		counts.put(type, count + 1);
@@ -1385,9 +1387,11 @@ public class BoaAstIntrinsics {
 					s += prettyprint(e.getStatements(0));
 				if (e.getExpressionsCount() != 0)
 					s += prettyprint(e.getExpressions(0));
+				return s;
 
 			// TODO
-			case METHOD_REFERENCE:
+			case METHOD_REFERENCE: return s;
+
 			default: return s;
 		}
 	}

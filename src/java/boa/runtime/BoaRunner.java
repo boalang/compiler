@@ -58,7 +58,6 @@ public abstract class BoaRunner extends Configured implements Tool {
 	 *            A {@link Path} containing the location of the output file
 	 * 
 	 * @return A {@link Job} describing the work to be done by this Boa job
-	 * @throws IOException
 	 */
 	public Job job(final Path[] ins, final Path out) throws IOException {
 		final Configuration configuration = getConf();
@@ -144,7 +143,7 @@ public abstract class BoaRunner extends Configured implements Tool {
 
 	public abstract String getUsage();
 
-	public abstract Mapper<?,?,?,?> getMapper();
+	public abstract Mapper<?, ?, ?, ?> getMapper();
 
 	public abstract BoaCombiner getCombiner();
 

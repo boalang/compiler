@@ -22,7 +22,9 @@ import boa.datagen.scm.GitConnector;
 
 public class LocalGitSequenceGenerator {
 
-	private static SequenceFile.Writer projectWriter, astWriter, contentWriter;
+	private static SequenceFile.Writer projectWriter;
+	private static SequenceFile.Writer astWriter;
+	private static SequenceFile.Writer contentWriter;
 	private static Configuration conf = null;
 	private static FileSystem fileSystem = null;
 

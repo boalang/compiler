@@ -33,7 +33,7 @@ public class ExprStatement extends Statement {
 		return e;
 	}
 
-	public ExprStatement (final Expression e) {
+	public ExprStatement(final Expression e) {
 		if (e != null)
 			e.setParent(this);
 		this.e = e;
@@ -41,7 +41,7 @@ public class ExprStatement extends Statement {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

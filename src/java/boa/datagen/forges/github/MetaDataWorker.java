@@ -37,7 +37,10 @@ public class MetaDataWorker implements Runnable {
 	private final String language_url_footer = "/languages";
 	private final String repo_url_header = "https://api.github.com/repos/";
 	private HashMap<String, byte[]> projects = new HashMap<String, byte[]>();
-	private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
+	private SequenceFile.Writer projectWriter;
+	private SequenceFile.Writer astWriter;
+	private SequenceFile.Writer commitWriter;
+	private SequenceFile.Writer contentWriter;
 	private final static boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	private final static boolean cache = Properties.getBoolean("cache", DefaultProperties.CACHE);
 	private final static File gitRootPath = new File(

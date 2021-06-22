@@ -162,7 +162,7 @@ public class BoaGraphIntrinsics {
 	public static HashSet<String> getVariableUsed(final Node node) {
 		final HashSet<String> varused = new HashSet<String>();
 		if (node.getExpression() != null) {
-			traverseExpr(varused,node.getExpression());
+			traverseExpr(varused, node.getExpression());
 		}
 		return varused;
 	}

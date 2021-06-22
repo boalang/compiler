@@ -53,7 +53,7 @@ import boa.types.BoaType;
  * Finds all recursive user functions and automatically turns their locals
  * into stacks that push/pop on (potentially) recursive calls.
  *
- * FIXME saves every local, even if not used after a call
+ * <p>FIXME saves every local, even if not used after a call
  *       this is safe - but over-approximate and slow
  *
  * @author rdyer

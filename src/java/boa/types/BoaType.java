@@ -94,7 +94,7 @@ public abstract class BoaType {
 		return false;
 	}
 
-	public abstract AbstractType toAST(final SymbolTable env);// { return null; }
+	public abstract AbstractType toAST(final SymbolTable env);
 
 	/**
 	 * Returns a string representation of the Java equivalent of this Boa
@@ -132,11 +132,12 @@ public abstract class BoaType {
 	}
 
 	/**
+	 * Converts a string representation of a type into a shortened name.
+	 * Caches the results so similar types have the same name.
 	 *
-	 *
-	 * @param t
-	 * @param kind
-	 * @return
+	 * @param t the string representation of the type
+	 * @param kind the kind of type, used for generating the name
+	 * @return the shortened type name
 	 */
 	protected String shortenedType(final String t, final String kind) {
 		if (!shortNamesMap.containsKey(kind))

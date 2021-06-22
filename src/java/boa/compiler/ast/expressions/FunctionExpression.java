@@ -40,7 +40,7 @@ public class FunctionExpression extends Operand {
 		return body;
 	}
 
-	public FunctionExpression (final AbstractType t, final Block body) {
+	public FunctionExpression(final AbstractType t, final Block body) {
 		if (t != null)
 			t.setParent(this);
 		if (body != null)
@@ -51,7 +51,7 @@ public class FunctionExpression extends Operand {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

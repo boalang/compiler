@@ -38,14 +38,14 @@ import boa.types.BoaVarargs;
  * @author rdyer
  */
 public class FunctionTrie {
-	private final LinkedHashMap<Object,Object> trie;
+	private final LinkedHashMap<Object, Object> trie;
 
 	public FunctionTrie() {
-		this.trie = new LinkedHashMap<Object,Object>();
+		this.trie = new LinkedHashMap<Object, Object>();
 	}
 
 	public FunctionTrie(final FunctionTrie clone) {
-		this.trie = new LinkedHashMap<Object,Object>(clone.trie);
+		this.trie = new LinkedHashMap<Object, Object>(clone.trie);
 	}
 
 	private BoaType replaceVar(final BoaType formal, final BoaType actual, final Map<String, BoaType> typeVars) {

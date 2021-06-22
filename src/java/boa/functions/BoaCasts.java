@@ -86,7 +86,7 @@ public class BoaCasts {
 	 * 
 	 * @return A long containing the time represented by <em>s</em>.
 	 * 
-	 * @throws ParseException
+	 * @throws ParseException if the time string is invalid
 	 */
 	public static long stringToTime(final String s, final String tz) throws ParseException {
 		final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy");
@@ -104,7 +104,7 @@ public class BoaCasts {
 	 * 
 	 * @return A long containing the time represented by <em>s</em>.
 	 * 
-	 * @throws ParseException
+	 * @throws ParseException if the time string is invalid
 	 */
 	public static long stringToTime(final String s) throws ParseException {
 		return BoaCasts.stringToTime(s, "PST8PDT");
@@ -166,7 +166,6 @@ public class BoaCasts {
 	 *            A String containing the time zone to be used for formatting
 	 * 
 	 * @return A {@link String} containing the time represented by <em>t</em>.
-	 * 
 	 */
 	public static String timeToString(final long t, final String tz) {
 		final SimpleDateFormat boaDateFormat = new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy");
@@ -187,7 +186,6 @@ public class BoaCasts {
 	 *            A long containing a time
 	 * 
 	 * @return A {@link String} containing the time represented by <em>t</em>.
-	 * 
 	 */
 	public static String timeToString(final long t) {
 		return BoaCasts.timeToString(t, "PST8PDT");

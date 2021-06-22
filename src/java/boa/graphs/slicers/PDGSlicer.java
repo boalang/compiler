@@ -55,7 +55,6 @@ public class PDGSlicer {
      * @param md method
      * @param node PDGNode
      * @param normalize if true expression of each node is normalized
-     * @throws Exception
      */
     public PDGSlicer(final Method md, final PDGNode node, final boolean normalize) throws Exception {
         this.md = md;
@@ -72,7 +71,6 @@ public class PDGSlicer {
      * @param md method
      * @param nodes array of PDGNodes
      * @param normalize if true expression of each node is normalized
-     * @throws Exception
      */
     public PDGSlicer(final Method md, final PDGNode[] nodes, final boolean normalize) throws Exception {
         this.md = md;
@@ -87,7 +85,6 @@ public class PDGSlicer {
      * @param md method
      * @param nid node id of the PDGNode
      * @param normalize if true expression of each node is normalized
-     * @throws Exception
      */
     public PDGSlicer(final Method md, final int nid, final boolean normalize) throws Exception {
         this.md = md;
@@ -106,7 +103,6 @@ public class PDGSlicer {
      * @param md method
      * @param nids array of PDGNode ids
      * @param normalize if true expression of each node is normalized
-     * @throws Exception
      */
     public PDGSlicer(final Method md, final Integer[] nids, final boolean normalize) throws Exception {
         this.md = md;
@@ -128,7 +124,6 @@ public class PDGSlicer {
      * @param pdg PDG graph
      * @param nid PDGNode id
      * @param normalize if true expression of each node is normalized
-     * @throws Exception
      */
     public PDGSlicer(final PDG pdg, final int nid, final boolean normalize) throws Exception {
         this.md = pdg.getMethod();
@@ -146,7 +141,6 @@ public class PDGSlicer {
      * @param pdg PDG graph
      * @param nids array of PDGNode ids
      * @param normalize if true expression of each node is normalized
-     * @throws Exception
      */
     public PDGSlicer(final PDG pdg, final Integer[] nids, final boolean normalize) throws Exception {
         this.md = pdg.getMethod();
@@ -325,19 +319,19 @@ public class PDGSlicer {
             final PDGNode node1 = nodes1.pop();
             final PDGNode node2 = nodes2.pop();
             // compare statements
-            if ((!node1.hasStmt() && node2.hasStmt()) ||
-                    (node1.hasStmt() && !node2.hasStmt()))
+            if ((!node1.hasStmt() && node2.hasStmt())
+                    || (node1.hasStmt() && !node2.hasStmt()))
                 return false;
-            if (node1.hasStmt() && node2.hasStmt() &&
-                    !node1.getStmt().equals(node2.getStmt()))
+            if (node1.hasStmt() && node2.hasStmt()
+                    && !node1.getStmt().equals(node2.getStmt()))
                 return false;
 
             // compare expressions
-            if ((!node1.hasExpr() && node2.hasStmt()) ||
-                    (node1.hasExpr() && !node2.hasExpr()))
+            if ((!node1.hasExpr() && node2.hasStmt())
+                    || (node1.hasExpr() && !node2.hasExpr()))
                 return false;
-            if (node1.hasExpr() && node2.hasExpr() &&
-                    !node1.getExpr().equals(node2.getExpr()))
+            if (node1.hasExpr() && node2.hasExpr()
+                    && !node1.getExpr().equals(node2.getExpr()))
                 return false;
 
             // compare out edges
@@ -353,8 +347,8 @@ public class PDGSlicer {
                 if (outEdges1.size() != outEdges2.size())
                     return false;
                 for (int j = 0; j < outEdges1.size(); j++) {
-                    if (outEdges1.get(j).getKind() != outEdges2.get(j).getKind() ||
-                            !outEdges1.get(j).getLabel().equals(outEdges2.get(j).getLabel()))
+                    if (outEdges1.get(j).getKind() != outEdges2.get(j).getKind()
+                            || !outEdges1.get(j).getLabel().equals(outEdges2.get(j).getLabel()))
                         return false;
                 }
 

@@ -138,7 +138,7 @@ public class HtmlVisitor {
 
 	public void visit(org.jsoup.nodes.Comment node) {
 		boa.types.Ast.Comment.Builder b = boa.types.Ast.Comment.newBuilder();
-		b.setKind(CommentKind.OTHER);// FIXME
+		b.setKind(CommentKind.OTHER); // FIXME
 		b.setValue(node.getData());
 //		b.setPosition(node.) FIXME
 		comments.add(b.build());
