@@ -241,7 +241,8 @@ public abstract class AbstractCommit {
 								"roclark/sportsreference", "CODEJIN/HNet_on_Tensorflow"}; // Possibly single large files
 								//"rasbt/mlxtend"}; //excluded for ML-Verse-with-Diff	
 	Set<String> badProjects = new HashSet<String>(Arrays.asList(excludeProjects));
-	boolean pythonParsingError, enableDiff = false; 
+	boolean pythonParsingError=false;
+	boolean enableDiff = true; 
 	boolean include_notebooks = false;
 
 	Builder processPythonChangeFile(final ChangedFile.Builder fb) {
@@ -250,7 +251,7 @@ public abstract class AbstractCommit {
 		
 		//System.out.println("Revision ID: "+this.id+", Processing: "+path);
 		
-		collectDataEvolutionaryInfo(path, fb);
+//		collectDataEvolutionaryInfo(path, fb);
 		
 		final String lowerPath = path.toLowerCase();
 		if (lowerPath.endsWith(".txt"))
@@ -268,7 +269,7 @@ public abstract class AbstractCommit {
 					final String content = getFileContents(path);
 					fb.setKind(FileKind.SOURCE_PY_ERROR);
 					System.out.println(projectName + ": " + path);
-					//parsePythonFile(path, fb, content, false);
+					parsePythonFile(path, fb, content, false);
 				}
 			}
 		}
