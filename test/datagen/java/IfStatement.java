@@ -1,8 +1,6 @@
 class t {
    void m() {
-	   if (true) {
-		   ;
-	   }
+	   if (true) {}
       
    }
 }
