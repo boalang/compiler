@@ -51,6 +51,7 @@ import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.JavaVisitor;
 import boa.functions.langmode.JavaLangMode;
 import boa.functions.langmode.LangMode;
+import boa.functions.langmode.PythonLangMode;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.CommentsRoot;
 import boa.types.Ast.Declaration;
@@ -659,6 +660,7 @@ public class BoaAstIntrinsics {
 	}
 
 	private static final LangMode javaLang = new JavaLangMode();
+	private static final LangMode pyLang = new PythonLangMode();
 
 	private static ChangedFile.FileKind curLang = ChangedFile.FileKind.SOURCE_JAVA_JLS8;
 	private static LangMode lang = javaLang;
@@ -675,6 +677,11 @@ public class BoaAstIntrinsics {
 		curLang = l;
 
 		switch (curLang) {
+		case SOURCE_PY_2:
+		case SOURCE_PY_3:
+			lang = pyLang;
+			break;
+
 		default:
 			lang = javaLang;
 			break;
