@@ -253,7 +253,7 @@ public abstract class AbstractVisitorNoReturn<ArgTypeT> extends AbstractVisitorB
 		for (final Identifier id : n.getIdList())
 			id.accept(this, arg);
 		if (n.hasCondition())
-			n.getCondition().accept(this,arg);
+			n.getCondition().accept(this, arg);
 		if(n.getReturnType()!=null) {
 			n.getReturnType().accept(this, arg);
 		}
@@ -269,7 +269,7 @@ public abstract class AbstractVisitorNoReturn<ArgTypeT> extends AbstractVisitorB
 		for (final Identifier id : n.getIdList())
 			id.accept(this, arg);
 		if (n.hasCondition())
-			n.getCondition().accept(this,arg);
+			n.getCondition().accept(this, arg);
 		if(n.getReturnType()!=null) {
 			n.getReturnType().accept(this, arg);
 		}

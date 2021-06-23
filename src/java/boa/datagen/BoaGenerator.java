@@ -70,8 +70,7 @@ public class BoaGenerator {
 				e.printStackTrace();
 			}
 			SeqCombiner.main(new String[0]);
-		} else if (tokenAvailable) { // when user provides local repo and does
-										// not have json files
+		} else if (tokenAvailable) { // when user provides local repo and doesn't have json files
 			MetaDataMaster mdm = new MetaDataMaster();
 			mdm.downloadRepoNames(DefaultProperties.TOKEN, DefaultProperties.OUTPUT);
 

@@ -12,7 +12,7 @@ import org.junit.Test;
 public class TestQ3 extends QueryTest {
 	
 	@Test
-	public void testQ3 () throws MissingObjectException, IncorrectObjectTypeException, IOException {
+	public void testQ3() throws MissingObjectException, IncorrectObjectTypeException, IOException {
 		int classes = 0;
 		int projectId = 140492550;
 		List<String> snapshot = setPaths();

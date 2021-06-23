@@ -24,7 +24,7 @@ package boa.types;
 public class BoaTypeVar extends BoaScalar {
 	private String name;
 
-	public BoaTypeVar (String name) {
+	public BoaTypeVar(String name) {
 		this.name = name;
 	}
 

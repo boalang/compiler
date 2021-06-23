@@ -2,7 +2,7 @@ package boa.test.datagen.queries;
 
 import org.junit.Test;
 
-public class TestAnnot_names extends QueryTest{
+public class TestAnnotNames extends QueryTest{
 	
 	@Test
 	public void testAnnot_names() {

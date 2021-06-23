@@ -11,7 +11,8 @@ import java.net.URL;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public class Forker {
-	private String username, password;
+	private String username;
+	private String password;
 	private HttpURLConnection connection = null;
 	private String urlHeader = "https://api.github.com/repos/";
 	private String urlFooter = "/forks";
@@ -21,7 +22,8 @@ public class Forker {
 		final int numThreads = 1;
 		final int totalFiles = new File(args[0]).listFiles().length;
 		final int shareSize = totalFiles/numThreads;
-		int start = 0, end = 0;
+		int start = 0;
+		int end = 0;
 		
 		for (int i = 0; i < numThreads -1; i++){
 			start = end;

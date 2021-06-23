@@ -45,12 +45,17 @@ import boa.types.Ast.Variable;
 public class JavaVisitor extends ASTVisitor {
 	public static final String PROPERTY_INDEX = "i";
 	@SuppressWarnings("deprecation")
-	public static final int JLS1 = 1, JLS2 = AST.JLS2, JLS3 = AST.JLS3, JLS4 = AST.JLS4, JLS8 = AST.JLS8;
+	public static final int JLS1 = 1;
+	public static final int JLS2 = AST.JLS2;
+	public static final int JLS3 = AST.JLS3;
+	public static final int JLS4 = AST.JLS4;
+	public static final int JLS8 = AST.JLS8;
 	
 	protected CompilationUnit root = null;
 	protected PositionInfo.Builder pos = null;
 	protected String src = null;
-	protected Map<String, Integer> declarationFile, declarationNode;
+	protected Map<String, Integer> declarationFile;
+	protected Map<String, Integer> declarationNode;
 
 	protected Namespace.Builder b = Namespace.newBuilder();
 	protected List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();

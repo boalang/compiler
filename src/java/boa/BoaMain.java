@@ -65,7 +65,7 @@ public class BoaMain {
         }
     }
 
-    protected static final void printHelp (final Options options, final String message) {
+    protected static final void printHelp(final Options options, final String message) {
         if (message != null) System.err.println(message);
 
         final HelpFormatter help = new HelpFormatter();

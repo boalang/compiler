@@ -156,7 +156,7 @@ public class TraverseStatement extends Statement {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

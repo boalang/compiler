@@ -16,7 +16,7 @@ import org.junit.Test;
 public class TestQ1 extends QueryTest {
 	
 	@Test
-	public void testQ1 () throws MissingObjectException, IncorrectObjectTypeException, IOException {
+	public void testQ1() throws MissingObjectException, IncorrectObjectTypeException, IOException {
 		int abstractKw = 0;
 		int classes = 0;
 		int projectId = 140492550;

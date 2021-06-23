@@ -31,9 +31,9 @@ public class GitHubJsonRetrieverWorker implements Runnable {
 		this.index = i;
 	}
 
-	public boolean isReady() {return available;}
+	public boolean isReady() { return available; }
 
-	public void readyFalse() {this.available = false;}
+	public void readyFalse() { this.available = false; }
 	
 	public void downloadRepoMetaDataForRepoIn() {
 		Token tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");

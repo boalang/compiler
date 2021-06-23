@@ -40,13 +40,19 @@ public abstract class AbstractConnector implements AutoCloseable {
 	protected String path;
 	protected List<AbstractCommit> revisions = new ArrayList<AbstractCommit>();
 	protected List<Long> revisionKeys = new ArrayList<Long>();
-	protected List<String> branchNames = new ArrayList<String>(), tagNames = new ArrayList<String>();
-	protected List<Integer> branchIndices = new ArrayList<Integer>(), tagIndices = new ArrayList<Integer>();
+	protected List<String> branchNames = new ArrayList<String>();
+	protected List<String> tagNames = new ArrayList<String>();
+	protected List<Integer> branchIndices = new ArrayList<Integer>();
+	protected List<Integer> tagIndices = new ArrayList<Integer>();
 	protected Map<String, Integer> revisionMap = new HashMap<String, Integer>();
 	protected String projectName;
 	protected int headCommitOffset = -1;
-	protected SequenceFile.Writer astWriter, commitWriter, contentWriter;
-	protected long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
+	protected SequenceFile.Writer astWriter;
+	protected SequenceFile.Writer commitWriter;
+	protected SequenceFile.Writer contentWriter;
+	protected long astWriterLen = 1;
+	protected long commitWriterLen = 1;
+	protected long contentWriterLen = 1;
 
 	public long getAstWriterLen() {
 		return astWriterLen;
@@ -77,7 +83,8 @@ public abstract class AbstractConnector implements AutoCloseable {
 	}
 
 	public void getSnapshot(int commitOffset, List<ChangedFile> snapshot) {
-		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>(); 
+		Set<String> adds = new HashSet<String>(); 
+		Set<String> dels = new HashSet<String>(); 
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
 			@Override
 			public int compare(Integer i1, Integer i2) {

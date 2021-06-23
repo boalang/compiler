@@ -52,13 +52,13 @@ public class TestConvertToSymbolic {
 			{ "o.size()", "o", "o", "$RECEIVER$.size(),,$ARG$0.size()" },
 			{ "o.size()", "o", "o.size()", "$ARG$0,,$RECEIVER$.size()" },
 
-            { "start.length", "", "start,mid,end", "$ARG$0.length"},
-            { "mid + end", "", "start,mid,end", "$ARG$1 + $ARG$2"},
-            { "mid++ < start", "", "start,mid,end", "$ARG$1++ < $ARG$0"},
+			{ "start.length", "", "start,mid,end", "$ARG$0.length"},
+			{ "mid + end", "", "start,mid,end", "$ARG$1 + $ARG$2"},
+			{ "mid++ < start", "", "start,mid,end", "$ARG$1++ < $ARG$0"},
 			{ "o.o2.size() < start", "o", "o.size()", "$RECEIVER$.o2.size() < start" },
-            { "start.length >= mid + end", "", "start,mid,end", "$ARG$0.length >= $ARG$1 + $ARG$2"},
+			{ "start.length >= mid + end", "", "start,mid,end", "$ARG$0.length >= $ARG$1 + $ARG$2"},
 
-            { "start.length >= mid + end", "", "start,mid,start.length", "$ARG$2 >= $ARG$1 + end,,$ARG$0.length >= $ARG$1 + end"},
+			{ "start.length >= mid + end", "", "start,mid,start.length", "$ARG$2 >= $ARG$1 + end,,$ARG$0.length >= $ARG$1 + end"},
 		});
 	}
 
@@ -87,11 +87,11 @@ public class TestConvertToSymbolic {
 	@Test
 	public void testConversion() throws Exception {
 		final Expression[] result = BoaNormalFormIntrinsics.convertToSymbolicName(e, rcv, args);
-        /*
+		/*
 		for (int i = 0; i < result.length; i++)
-            System.err.println(boa.functions.BoaAstIntrinsics.prettyprint(result[i]));
-        System.err.println("----");
-        */
+			System.err.println(boa.functions.BoaAstIntrinsics.prettyprint(result[i]));
+		System.err.println("----");
+		*/
 
 		assertEquals(converted.length, result.length);
 		for (int i = 0; i < converted.length; i++)

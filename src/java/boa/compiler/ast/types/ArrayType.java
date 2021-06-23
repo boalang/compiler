@@ -33,7 +33,7 @@ public class ArrayType extends AbstractType {
 		return value;
 	}
 
-	public ArrayType (final Component value) {
+	public ArrayType(final Component value) {
 		if (value != null)
 			value.setParent(this);
 		this.value = value;
@@ -41,7 +41,7 @@ public class ArrayType extends AbstractType {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

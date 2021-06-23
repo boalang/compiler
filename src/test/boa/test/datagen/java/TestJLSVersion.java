@@ -68,8 +68,13 @@ public class TestJLSVersion {
 	private static Configuration conf = new Configuration();
 	private static FileSystem fileSystem = null;
 	
-	private static SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
-	private static long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
+	private static SequenceFile.Writer projectWriter;
+	private static SequenceFile.Writer astWriter;
+	private static SequenceFile.Writer commitWriter;
+	private static SequenceFile.Writer contentWriter;
+	private static long astWriterLen = 1;
+	private static long commitWriterLen = 1;
+	private static long contentWriterLen = 1;
 	
 	public TestJLSVersion(String name, ChangedFile input) {
 		DefaultProperties.DEBUG = true;
@@ -117,7 +122,8 @@ public class TestJLSVersion {
 		conn.getSnapshot(conn.getHeadCommitOffset(), snapshot1);
 //		System.out.println("Finish building head snapshot");
 		List<String> snapshot2 = conn.getSnapshot(Constants.HEAD);
-		Set<String> s1 = new HashSet<String>(), s2 = new HashSet<String>(snapshot2);
+		Set<String> s1 = new HashSet<String>();
+		Set<String> s2 = new HashSet<String>(snapshot2);
 		for (ChangedFile cf : snapshot1)
 			s1.add(cf.getName());
 //		System.out.println("Test head snapshot");

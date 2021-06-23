@@ -31,7 +31,8 @@ public class TestTypeFullyQualifiedName {
 
 	public TestTypeFullyQualifiedName() throws IOException {
 		fileSystem = FileSystem.get(conf);
-		Path projectPath = new Path("dataset/projects.seq"), dataPath = new Path("dataset/data");
+		Path projectPath = new Path("dataset/projects.seq");
+		Path dataPath = new Path("dataset/data");
 		if (fileSystem.exists(projectPath) && fileSystem.exists(dataPath)) {
 			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
 			ar = new SequenceFile.Reader(fileSystem, dataPath, conf);

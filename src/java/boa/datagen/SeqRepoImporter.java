@@ -116,7 +116,7 @@ public class SeqRepoImporter {
 										break;
 									}
 								}
-//								Thread.sleep(100);
+								// Thread.sleep(100);
 							}
 							System.out.println("Assigned the " + (++counter) + "th project: " + repo.name + " with id: " + repo.id  
 									+ " from the " + i + "th object of the json file: " + file.getPath());
@@ -182,10 +182,16 @@ public class SeqRepoImporter {
 
 	public static class ImportTask implements Runnable {
 		private int id;
-		private int counter = 0, allCounter = 0;
+		private int counter = 0;
+		private int allCounter = 0;
 		private String suffix;
-		private SequenceFile.Writer projectWriter, astWriter, commitWriter, contentWriter;
-		private long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
+		private SequenceFile.Writer projectWriter;
+		private SequenceFile.Writer astWriter;
+		private SequenceFile.Writer commitWriter;
+		private SequenceFile.Writer contentWriter;
+		private long astWriterLen = 1;
+		private long commitWriterLen = 1;
+		private long contentWriterLen = 1;
 		private volatile boolean ready = true;
 		private volatile Project project;
 
@@ -405,8 +411,8 @@ public class SeqRepoImporter {
 		private synchronized boolean isFiltered(Project project) {
 			if (project.getForked())
 				return true;
-//			if (project.getStars() < 2 && project.getSize() < 100)
-//				return true;
+			// if (project.getStars() < 2 && project.getSize() < 100)
+			// 	return true;
 			if (project.getProgrammingLanguagesList().contains("Java")
 					|| project.getProgrammingLanguagesList().contains("JavaScript")
 					|| project.getProgrammingLanguagesList().contains("Python")

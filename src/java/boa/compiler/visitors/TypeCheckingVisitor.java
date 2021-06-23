@@ -1154,7 +1154,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.getLhs().accept(this, env);
 		BoaType type = n.getLhs().type;
 
-		// only allow '+' (concat) on arrays
+		// only allow '+' (concat) on arrays and strings
 		if (type instanceof BoaArray) {
 			for (final String s : n.getOps())
 				if (!s.equals("+"))
@@ -1166,7 +1166,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				if (!(t.type instanceof BoaArray) || !valType.assigns(((BoaArray)t.type).getType()))
 					throw new TypeCheckException(t, "invalid array concatenation, found: " + t.type + " expected: " + type);
 			}
-		// only allow '+' (concat) on strings
 		} else if (type instanceof BoaString) {
 			for (final String s : n.getOps())
 				if (!s.equals("+"))
@@ -1488,7 +1487,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				else if (f.getOperand() instanceof TimeLiteral)
 					fieldType = new BoaTime();
 				values.add(((ILiteral)(f.getOperand())).getLiteral());
-				types.add(new BoaEnum(c.getIdentifier().getToken(),((ILiteral)(f.getOperand())).getLiteral(),fieldType));
+				types.add(new BoaEnum(c.getIdentifier().getToken(), ((ILiteral)(f.getOperand())).getLiteral(), fieldType));
 			}
 		}
 

@@ -53,7 +53,7 @@ import boa.types.BoaType;
  * Finds all recursive user functions and automatically turns their locals
  * into stacks that push/pop on (potentially) recursive calls.
  *
- * FIXME saves every local, even if not used after a call
+ * <p>FIXME saves every local, even if not used after a call
  *       this is safe - but over-approximate and slow
  *
  * @author rdyer
@@ -116,11 +116,10 @@ public class RecursiveFunctionTransformer extends AbstractVisitorNoArgNoRet {
 				for (final VarDeclStatement v : decls) {
 					final StackType st = new StackType(new Component(v.type.toAST(b.env)));
 					st.env = b.env;
-					final VarDeclStatement var = ASTFactory.createVarDecl(varPrefix + v.getId().getToken(), st, new BoaStack(v.type), b.env);
-					var.setInit(true);
+					final VarDeclStatement var = ASTFactory.createVarDecl(name + varPrefix + v.getId().getToken(), st, new BoaStack(v.type), b.env);
 
 					b.env.set(var.getId().getToken(), var.type);
-					b.getStatements().add(0, var);
+					n.getParent().insertStatementBefore(var);
 				}
 
 				// generate push/pop around each recursive call out
@@ -164,7 +163,7 @@ public class RecursiveFunctionTransformer extends AbstractVisitorNoArgNoRet {
 						n.insertStatementBefore(ASTFactory.createCall("push",
 							n.env,
 							new BoaAny(),
-							ASTFactory.createIdentifierExpr(varPrefix + v.getId().getToken(), n.env, new BoaStack(v.type)),
+							ASTFactory.createIdentifierExpr(this.name + varPrefix + v.getId().getToken(), n.env, new BoaStack(v.type)),
 							ASTFactory.createIdentifierExpr(v.getId().getToken(), n.env, v.type)));
 
 					// lift call into tmp
@@ -191,7 +190,7 @@ public class RecursiveFunctionTransformer extends AbstractVisitorNoArgNoRet {
 						n.insertStatementBefore(ASTFactory.createAssignment(v.getId().getToken(),
 							ASTFactory.createCall("pop", n.env,
 								v.type,
-								ASTFactory.createIdentifierExpr(varPrefix + v.getId().getToken(), n.env, new BoaStack(v.type))).getExpr(),
+								ASTFactory.createIdentifierExpr(this.name + varPrefix + v.getId().getToken(), n.env, new BoaStack(v.type))).getExpr(),
 							retType,
 							n.env));
 
