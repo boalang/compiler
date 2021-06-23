@@ -208,6 +208,8 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final ChangedFile node) throws Exception {
+		BoaAstIntrinsics.setlang(node.getKind());
+
 		if (preVisit(node)) {
 			visit(BoaAstIntrinsics.getast(node));
 
