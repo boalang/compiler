@@ -272,7 +272,10 @@ public class PythonLangMode implements LangMode {
 
 		String s = "";
 
-		s += v.getName();
+		if (v.hasComputedName())
+			s += v.getComputedName();
+		else
+			s += v.getName();
 
 		if (v.hasVariableType())
 			s += " : " + prettyprint(v.getVariableType());
@@ -537,11 +540,17 @@ public class PythonLangMode implements LangMode {
 			case METHODCALL:
 				for (int i = 0; i < e.getExpressionsCount(); i++)
 					s += prettyprint(e.getExpressions(i)) + ".";
-				s += e.getMethod() + "(";
-				for (int i = 0; i < e.getMethodArgsCount(); i++) {
+				s += e.getMethod();
+				for (int i = 0; i < e.getMethodArgsCount(); i++)
+					s += prettyprint(e.getMethodArgs(i));
+				return s;
+
+			case CALLHOLDER:
+				s += "(";
+				for (int i = 0; i < e.getExpressionsCount(); i++) {
 					if (i > 0)
 						s += ", ";
-					s += prettyprint(e.getMethodArgs(i));
+					s += prettyprint(e.getExpressions(i));
 				}
 				s += ")";
 				return s;
