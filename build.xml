@@ -374,7 +374,7 @@
 		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-specific" depends="-compile-tests" description="Run a specific test case.">
-		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
+		<junit fork="yes" haltonfailure="no" showoutput="yes" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<test name="${test.case}">
 				<formatter type="plain" usefile="false" />

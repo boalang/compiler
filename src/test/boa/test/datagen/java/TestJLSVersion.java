@@ -46,6 +46,7 @@ public class TestJLSVersion {
 
     @Parameters(name = "{index}: {0}")
     public static List<Object[]> data() throws Exception {
+		DefaultProperties.DEBUG = true;
     	List<Object[]> data = new ArrayList<Object[]>();
 		CodeRepository cr = buildCodeRepository("boalang/test-datagen");
 		String[][] commits = new String[][] {
@@ -72,7 +73,6 @@ public class TestJLSVersion {
 	private static long astWriterLen = 1, commitWriterLen = 1, contentWriterLen = 1;
 	
 	public TestJLSVersion(String name, ChangedFile input) {
-		DefaultProperties.DEBUG = true;
 		this.changedFile = input;
 	}
 	
