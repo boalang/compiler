@@ -1300,8 +1300,8 @@ public class JavaVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Statement.StatementKind.DEFAULT);
 		else
 			b.setKind(boa.types.Ast.Statement.StatementKind.CASE);
-		if (node.expressions() != null) {
-			((ASTNode) node.expressions()).accept(this);
+		if (node.expressions() != null && node.expressions().size()>0) {
+			((ASTNode) node.expressions().get(0)).accept(this);
 			b.addExpressions(expressions.pop());
 		}
 		list.add(b.build());
