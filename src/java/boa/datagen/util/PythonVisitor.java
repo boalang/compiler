@@ -50,6 +50,7 @@ import org.eclipse.dltk.python.parser.ast.expressions.PythonDictExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonDictExpression.DictNode;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonForListExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonFunctionDecorator;
+import org.eclipse.dltk.python.parser.ast.expressions.PythonGeneratorExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonImportAsExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonImportExpression;
 import org.eclipse.dltk.python.parser.ast.expressions.PythonLambdaExpression;
@@ -88,7 +89,7 @@ import boa.types.Shared.ChangeKind;
  * @author Sayem Imtiaz
  * @author Sumon Biswas
  */
-public class NewPythonVisitor extends ASTVisitor {
+public class PythonVisitor extends ASTVisitor {
 
 	private int id = 1;
 	public boolean enableDiff = false;
@@ -231,7 +232,11 @@ public class NewPythonVisitor extends ASTVisitor {
 		} else if (md instanceof PythonListExpression) {
 			visit((PythonListExpression) md);
 			opFound = true;
-		} else if (md instanceof PythonSetExpression) {
+		} else if (md instanceof PythonGeneratorExpression) {
+			visit((PythonGeneratorExpression) md);
+			opFound = true;
+		} 
+		else if (md instanceof PythonSetExpression) {
 			visit((PythonSetExpression) md);
 			opFound = true;
 		} else if (md instanceof SimpleReference) {
@@ -1336,6 +1341,27 @@ public class NewPythonVisitor extends ASTVisitor {
 			}
 		}
 
+		expressions.push(b.build());
+		return true;
+	}
+	
+	public boolean visit(PythonGeneratorExpression md) throws Exception {
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.GENERATOR);
+
+		if (enableDiff) {
+			b.setId(this.id++);
+			ChangeKind status = (ChangeKind) md.getProperty(TreedConstants.PROPERTY_STATUS);
+			if (status != ChangeKind.UNCHANGED && status != null)
+				b.setChange(status);
+		}
+
+		if (md.getGenerator() != null) {
+			md.getGenerator().traverse(this);
+			b.addExpressions(expressions.pop());
+		}
+		
 		expressions.push(b.build());
 		return true;
 	}

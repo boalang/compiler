@@ -58,7 +58,7 @@ import boa.datagen.util.HtmlVisitor;
 import boa.datagen.util.JavaScriptErrorCheckVisitor;
 import boa.datagen.util.JavaScriptVisitor;
 import boa.datagen.util.JavaVisitor;
-import boa.datagen.util.NewPythonVisitor;
+import boa.datagen.util.PythonVisitor;
 import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
@@ -721,7 +721,7 @@ public abstract class AbstractCommit {
 
 		if (true) {
 			final ASTRoot.Builder ast = ASTRoot.newBuilder();
-			NewPythonVisitor visitor = new NewPythonVisitor();
+			PythonVisitor visitor = new PythonVisitor();
 			visitor.enableDiff = this.enableDiff;
 
 			try {
@@ -729,7 +729,7 @@ public abstract class AbstractCommit {
 				
 				if(prevModule!=null)
 				{
-					NewPythonVisitor visitorPrev = new NewPythonVisitor();
+					PythonVisitor visitorPrev = new PythonVisitor();
 					visitorPrev.enableDiff = this.enableDiff;
 					ast.addNamespaces(visitorPrev.getNamespace(prevModule, fullPath));
 				}
@@ -913,7 +913,7 @@ public abstract class AbstractCommit {
 					continue;
 				}
 				
-				NewPythonVisitor visitor = new NewPythonVisitor();
+				PythonVisitor visitor = new PythonVisitor();
 				visitor.enableDiff = false;
 				
 				try {

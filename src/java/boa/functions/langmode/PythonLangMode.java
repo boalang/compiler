@@ -25,7 +25,7 @@ import org.eclipse.dltk.python.internal.core.parser.PythonSourceParser;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.env.ModuleSource;
-import boa.datagen.util.NewPythonVisitor;
+import boa.datagen.util.PythonVisitor;
 
 import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.JavaVisitor;
@@ -709,7 +709,7 @@ public class PythonLangMode implements LangMode {
 		IModuleSource input = new ModuleSource(s);
 
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
-		NewPythonVisitor visitor = new NewPythonVisitor();
+		PythonVisitor visitor = new PythonVisitor();
 		visitor.enableDiff = false;
 
 		try {
