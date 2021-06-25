@@ -125,6 +125,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 */
 	protected class VarDeclCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		private boolean nest;
+		private CodeGeneratingVisitor cg;
+
+		public VarDeclCodeGeneratingVisitor(final CodeGeneratingVisitor cg) {
+			this.cg = cg;
+		}
 
 		/** {@inheritDoc} */
 		@Override
@@ -498,7 +503,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		this.seed = seed;
 		this.isLocal = isLocal;
 
-		varDecl = new VarDeclCodeGeneratingVisitor();
+		varDecl = new VarDeclCodeGeneratingVisitor(this);
 		staticInitialization = new StaticInitializationCodeGeneratingVisitor();
 		functionDeclarator = new FunctionDeclaratorCodeGeneratingVisitor();
 		tupleDeclarator = new TupleDeclaratorCodeGeneratingVisitor();
@@ -1327,8 +1332,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		lastVarDecl = "___" + n.getId().getToken();
 
 		if (!n.hasInitializer()) {
-			if (lhsType instanceof BoaProtoMap ||
-					!(lhsType instanceof BoaMap || lhsType instanceof BoaStack || lhsType instanceof BoaQueue || lhsType instanceof BoaSet)) {
+			if (lhsType instanceof BoaProtoMap
+					|| !(lhsType instanceof BoaMap || lhsType instanceof BoaStack || lhsType instanceof BoaQueue || lhsType instanceof BoaSet)) {
 				st.add("rhs", n.type.defaultValue());
 				code.add(st.render());
 				return;
@@ -1493,7 +1498,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		final CFGBuildingVisitor cfgBuilder = new CFGBuildingVisitor();
-		n.accept(cfgBuilder);
+		cfgBuilder.start(n);
 		new CreateNodeId().start(cfgBuilder);
 
 		final HashSet<Identifier> aliastSet = new LocalMayAliasAnalysis().start(cfgBuilder, traversalId);
@@ -1923,7 +1928,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TupleType n) {
-		throw new RuntimeException("unexpected error");
+		code.add(((BoaTuple)n.type).toJavaType());
 	}
 
 	/** {@inheritDoc} */

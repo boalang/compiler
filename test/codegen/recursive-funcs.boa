@@ -1,0 +1,26 @@
+o: output sum of int;
+
+f := function(i: int) : int {
+    x := i + 2;
+    s := "hi";
+    if (i == 10)
+        return f(0) * (f(1) + f(2));
+    if (i > len(s))
+        return f(f(i - 1));
+    return x;
+};
+
+f2 := function(p: Project) : int {
+    x := 2;
+    visit(p, visitor {
+        before Statement -> {
+            y := 2;
+            x = 5;
+            x = y + f2(p);
+            stop;
+        }
+    });
+    return x;
+};
+
+o << f(3);

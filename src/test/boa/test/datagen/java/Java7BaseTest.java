@@ -132,37 +132,37 @@ public class Java7BaseTest extends BaseTest {
 
 	public static void testWrapped(final String java, final String expected) {
 		assertEquals(
-				"{\n" +
-						"   \"namespaces\": [\n" +
-						"      {\n" +
-						"         \"name\": \"\",\n" +
-						"         \"declarations\": [\n" +
-						"            {\n" +
-						"               \"name\": \"t\",\n" +
-						"               \"kind\": \"CLASS\",\n" +
-						"               \"methods\": [\n" +
-						"                  {\n" +
-						"                     \"name\": \"m\",\n" +
-						"                     \"return_type\": {\n" +
-						"                        \"name\": \"void\",\n" +
-						"                        \"kind\": \"PRIMITIVE\"\n" +
-						"                     },\n" +
-						"                     \"statements\": [\n" +
-						"                        {\n" +
-						"                           \"kind\": \"BLOCK\",\n" +
-						"                           \"statements\": [\n" +
-						"                              " + expected.replaceAll("\n", "\n                              ") + "\n" +
-						"                           ]\n" +
-						"                        }\n" +
-						"                     ]\n" +
-						"                  }\n" +
-						"               ],\n" +
-						"               \"fully_qualified_name\": \"t\"\n" +
-						"            }\n" +
-						"         ]\n" +
-						"      }\n" +
-						"   ]\n" +
-						"}",
+				"{\n"
+						+ "   \"namespaces\": [\n"
+						+ "      {\n"
+						+ "         \"name\": \"\",\n"
+						+ "         \"declarations\": [\n"
+						+ "            {\n"
+						+ "               \"name\": \"t\",\n"
+						+ "               \"kind\": \"CLASS\",\n"
+						+ "               \"methods\": [\n"
+						+ "                  {\n"
+						+ "                     \"name\": \"m\",\n"
+						+ "                     \"return_type\": {\n"
+						+ "                        \"name\": \"void\",\n"
+						+ "                        \"kind\": \"PRIMITIVE\"\n"
+						+ "                     },\n"
+						+ "                     \"statements\": [\n"
+						+ "                        {\n"
+						+ "                           \"kind\": \"BLOCK\",\n"
+						+ "                           \"statements\": [\n"
+						+ "                              " + expected.replaceAll("\n", "\n                              ") + "\n"
+						+ "                           ]\n"
+						+ "                        }\n"
+						+ "                     ]\n"
+						+ "                  }\n"
+						+ "               ],\n"
+						+ "               \"fully_qualified_name\": \"t\"\n"
+						+ "            }\n"
+						+ "         ]\n"
+						+ "      }\n"
+						+ "   ]\n"
+						+ "}",
 						parseWrapped(java).trim()
 				);
 	}

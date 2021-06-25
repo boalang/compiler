@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2021, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +17,14 @@
  */
 package boa.types;
 
+import boa.compiler.ast.Component;
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.ast.types.StackType;
+import boa.compiler.SymbolTable;
+
 /**
  * A {@link BoaType} representing a stack of values.
- * 
+ *
  * @author rdyer
  */
 public class BoaStack extends BoaType {
@@ -33,7 +39,7 @@ public class BoaStack extends BoaType {
 
 	/**
 	 * Construct a {@link BoaStack}.
-	 * 
+	 *
 	 * @param boaType
 	 *            A {@link BoaType} representing the type of the values in
 	 *            this stack
@@ -107,12 +113,21 @@ public class BoaStack extends BoaType {
 
 	/**
 	 * Get the type of the values of this stack.
-	 * 
+	 *
 	 * @return A {@link BoaType} representing the type of the values of this
 	 *         stack
 	 */
 	public BoaType getType() {
 		return this.type;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public AbstractType toAST(final SymbolTable env) {
+		final Component c = new Component(this.type.toAST(env));
+		final AbstractType t = new StackType(c);
+		c.env = t.env = env;
+		return t;
 	}
 
 	/** {@inheritDoc} */

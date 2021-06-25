@@ -166,15 +166,15 @@ public class SymbolTable {
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString() }, "((long)${0}.length())"));
 
 		// traversal functions
-		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new CFGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))},"${1}.getValue(${0})"));
-		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaAny(), new BoaType[] { new CFGNodeProtoTuple()},"getValue(${0})"));
-		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new CDGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))},"${1}.getValue(${0})"));
-		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaAny(), new BoaType[] { new CDGNodeProtoTuple()},"getValue(${0})"));
-		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new DDGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))},"${1}.getValue(${0})"));
-		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaAny(), new BoaType[] { new DDGNodeProtoTuple()},"getValue(${0})"));
-		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new PDGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))},"${1}.getValue(${0})"));
-		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaAny(), new BoaType[] { new PDGNodeProtoTuple()},"getValue(${0})"));
-		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaTraversal()},"${0}.clear()"));
+		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new CFGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))}, "${1}.getValue(${0})"));
+		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaAny(), new BoaType[] { new CFGNodeProtoTuple()}, "getValue(${0})"));
+		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new CDGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))}, "${1}.getValue(${0})"));
+		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaAny(), new BoaType[] { new CDGNodeProtoTuple()}, "getValue(${0})"));
+		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new DDGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))}, "${1}.getValue(${0})"));
+		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaAny(), new BoaType[] { new DDGNodeProtoTuple()}, "getValue(${0})"));
+		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new PDGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))}, "${1}.getValue(${0})"));
+		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaAny(), new BoaType[] { new PDGNodeProtoTuple()}, "getValue(${0})"));
+		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaTraversal()}, "${0}.clear()"));
 
 		// graph functions
 		globalFunctions.addFunction("getoutedge", new BoaFunction(new CFGEdgeProtoTuple(), new BoaType[] { new CFGNodeProtoTuple(), new CFGNodeProtoTuple() }, "${0}.getOutEdge(${1}).newBuilder().build()"));
@@ -205,9 +205,9 @@ public class SymbolTable {
 		globalFunctions.addFunction("regex", new BoaFunction(new BoaString(), new BoaType[] { new BoaName(new BoaScalar()) }, "boa.functions.BoaSpecialIntrinsics.regex(\"${0}\")"));
 
 		// clone functions
-		globalFunctions.addFunction("clone", new BoaFunction(new BoaMap(new BoaTypeVar("K"), new BoaTypeVar("V")), new BoaType[] {new BoaMap(new BoaTypeVar("K"), new BoaTypeVar("V"))},"(java.util.HashMap)${0}.clone()"));
-		globalFunctions.addFunction("clone", new BoaFunction(new BoaSet(new BoaTypeVar("V")), new BoaType[] {new BoaSet(new BoaTypeVar("V"))},"(java.util.HashSet)${0}.clone()"));
-		globalFunctions.addFunction("clone", new BoaFunction(new BoaString(), new BoaType[] {new BoaString()},"new String(${0})"));
+		globalFunctions.addFunction("clone", new BoaFunction(new BoaMap(new BoaTypeVar("K"), new BoaTypeVar("V")), new BoaType[] {new BoaMap(new BoaTypeVar("K"), new BoaTypeVar("V"))}, "(java.util.HashMap)${0}.clone()"));
+		globalFunctions.addFunction("clone", new BoaFunction(new BoaSet(new BoaTypeVar("V")), new BoaType[] {new BoaSet(new BoaTypeVar("V"))}, "(java.util.HashSet)${0}.clone()"));
+		globalFunctions.addFunction("clone", new BoaFunction(new BoaString(), new BoaType[] {new BoaString()}, "new String(${0})"));
 
 		// visitors
 		for (final BoaType t : dslTupleTypes) {
@@ -218,14 +218,14 @@ public class SymbolTable {
 		globalFunctions.addFunction("_cur_visitor", new BoaFunction(new BoaVisitor(), new BoaType[] { }, "this"));
 
 		// traversal
-		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new CFGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal()}, "${3}.traverse(${0},${1},${2})"));
-		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new CFGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${3}.traverse(${0},${1},${2},${4})"));
-		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new CDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal()}, "${3}.traverse(${0},${1},${2})"));
-		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new CDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${3}.traverse(${0},${1},${2},${4})"));
-		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new DDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal()}, "${3}.traverse(${0},${1},${2})"));
-		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new DDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${3}.traverse(${0},${1},${2},${4})"));
-		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new PDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal()}, "${3}.traverse(${0},${1},${2})"));
-		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new PDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${3}.traverse(${0},${1},${2},${4})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new CFGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal()}, "${3}.traverse(${0}, ${1}, ${2})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new CFGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${3}.traverse(${0}, ${1}, ${2}, ${4})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new CDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal()}, "${3}.traverse(${0}, ${1}, ${2})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new CDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${3}.traverse(${0}, ${1}, ${2}, ${4})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new DDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal()}, "${3}.traverse(${0}, ${1}, ${2})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new DDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${3}.traverse(${0}, ${1}, ${2}, ${4})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new PDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal()}, "${3}.traverse(${0}, ${1}, ${2})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new PDGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${3}.traverse(${0}, ${1}, ${2}, ${4})"));
 
 
 		// stack functions
@@ -266,7 +266,7 @@ public class SymbolTable {
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaSet(new BoaTypeVar("V")) }, "${0}.toString()"));
 
 		// map to string
-        globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "${0}.toString()"));
+		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "${0}.toString()"));
 
 		// current() function inside visits
 		for (final BoaType t : dslTupleTypes)
@@ -605,7 +605,7 @@ public class SymbolTable {
 			final AnnotationDB db = new AnnotationDB();
 			db.setScanMethodAnnotations(true);
 			db.setScanClassAnnotations(true);
-//			db.setScanPackages(new String[] {"boa.aggregators", "boa.functions"});
+			//db.setScanPackages(new String[] {"boa.aggregators", "boa.functions"});
 
 			for (final URL url : urls)
 				db.scanArchives(url);

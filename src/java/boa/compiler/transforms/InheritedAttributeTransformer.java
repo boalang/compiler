@@ -46,9 +46,9 @@ import boa.types.BoaStack;
 /**
  * Converts use of current(T) inherited attributes in visitors into stack variables.
  *
- * General algorithm:
+ * <p>General algorithm:
  *
- * 1) Find each instance of VisitorExpression, then for each:
+ * <p>1) Find each instance of VisitorExpression, then for each:
  *    a) Find all instances of "current(T)" in the visitor
  *    b) Collect set of all unique types T found in 1a
  *    c) For each type T in the set from 1b:
@@ -100,7 +100,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArgNoRet {
 	 */
 	private class FindCurrentForVisitors extends AbstractVisitorNoArgNoRet{
 		protected final Set<BoaTuple> currents = new HashSet<BoaTuple>();
-		protected final Map<BoaTuple,List<Factor>> factorMap = new HashMap<BoaTuple,List<Factor>>();
+		protected final Map<BoaTuple, List<Factor>> factorMap = new HashMap<BoaTuple, List<Factor>>();
 
 		/** @{inheritDoc} */
 		@Override
@@ -114,7 +114,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArgNoRet {
 			return currents;
 		}
 
-		public Map<BoaTuple,List<Factor>> getFactorList() {
+		public Map<BoaTuple, List<Factor>> getFactorList() {
 			return factorMap;
 		}
 
@@ -220,7 +220,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArgNoRet {
 					final Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), vs.getComponent().getIdentifier().getToken(), e);
 					vs.getBody().getStatements().add(0, pushToStack);
 				} else {
-				//            b) Otherwise, add a 'before T' clause with a 's_t_#.push(node)'
+					//        b) Otherwise, add a 'before T' clause with a 's_t_#.push(node)'
 					final Block blk;
 					final Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), "node", e);
 
@@ -242,12 +242,12 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArgNoRet {
 				//            a) If the visitor has a 'after T' clause, add 's_t_#.pop()' as the first statement
 				if (getVS.getAfterMap().containsKey(typeToFind)) {
 					final VisitStatement vs = getVS.getAfterMap().get(typeToFind);
-					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(),e);
+					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(), e);
 					vs.getBody().getStatements().add(popFromStack);
 				} else {
-				//            b) Otherwise, add a 'after T' clause with a 's_t_#.pop()'
+					//        b) Otherwise, add a 'after T' clause with a 's_t_#.pop()'
 					final Block blk;
-					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(),e);
+					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(), e);
 
 					if (getVS.getAfterMap().containsKey("_")) {
 						blk = getVS.getAfterMap().get("_").getBody().clone();

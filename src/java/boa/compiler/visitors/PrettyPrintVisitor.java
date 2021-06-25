@@ -1,7 +1,8 @@
 /*
- * Copyright 2017, Hridesh Rajan, Robert Dyer
+ * Copyright 2017-2021, Hridesh Rajan, Robert Dyer
  *                 Iowa State University of Science and Technology
- *                 and Bowling Green State University
+ *                 Bowling Green State University
+ *                 and University of Nebraska Board of Trustees
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ import boa.compiler.ast.Comparison;
 import boa.compiler.ast.Component;
 import boa.compiler.ast.Composite;
 import boa.compiler.ast.Conjunction;
+import boa.compiler.ast.EnumBodyDeclaration;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Index;
@@ -34,8 +36,12 @@ import boa.compiler.ast.Selector;
 import boa.compiler.ast.Term;
 import boa.compiler.ast.UnaryFactor;
 import boa.compiler.ast.expressions.Expression;
+import boa.compiler.ast.expressions.FixPExpression;
+import boa.compiler.ast.expressions.FunctionExpression;
 import boa.compiler.ast.expressions.ParenExpression;
 import boa.compiler.ast.expressions.SimpleExpr;
+import boa.compiler.ast.expressions.TraversalExpression;
+import boa.compiler.ast.expressions.VisitorExpression;
 import boa.compiler.ast.literals.CharLiteral;
 import boa.compiler.ast.literals.FloatLiteral;
 import boa.compiler.ast.literals.IntegerLiteral;
@@ -49,6 +55,7 @@ import boa.compiler.ast.statements.DoStatement;
 import boa.compiler.ast.statements.EmitStatement;
 import boa.compiler.ast.statements.ExistsStatement;
 import boa.compiler.ast.statements.ExprStatement;
+import boa.compiler.ast.statements.FixPStatement;
 import boa.compiler.ast.statements.ForStatement;
 import boa.compiler.ast.statements.ForeachStatement;
 import boa.compiler.ast.statements.IfAllStatement;
@@ -58,17 +65,21 @@ import boa.compiler.ast.statements.ReturnStatement;
 import boa.compiler.ast.statements.StopStatement;
 import boa.compiler.ast.statements.SwitchCase;
 import boa.compiler.ast.statements.SwitchStatement;
+import boa.compiler.ast.statements.TraverseStatement;
 import boa.compiler.ast.statements.TypeDecl;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.statements.VisitStatement;
 import boa.compiler.ast.statements.WhileStatement;
 import boa.compiler.ast.types.ArrayType;
+import boa.compiler.ast.types.EnumType;
+import boa.compiler.ast.types.FixPType;
 import boa.compiler.ast.types.FunctionType;
 import boa.compiler.ast.types.MapType;
 import boa.compiler.ast.types.OutputType;
 import boa.compiler.ast.types.QueueType;
 import boa.compiler.ast.types.SetType;
 import boa.compiler.ast.types.StackType;
+import boa.compiler.ast.types.TraversalType;
 import boa.compiler.ast.types.TupleType;
 import boa.compiler.ast.types.VisitorType;
 
@@ -146,6 +157,12 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		n.getType().accept(this);
 	}
 
+	public void visit(final EnumBodyDeclaration n) {
+		n.getIdentifier().accept(this);
+		stream.print(" = ");
+		n.getExp().accept(this);
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Composite n) {
@@ -164,7 +181,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 			else seen = true;
 			e.accept(this);
 		}
-		stream.print("}");
+		stream.print(" }");
 	}
 
 	/** {@inheritDoc} */
@@ -251,12 +268,16 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Block n) {
-		stream.println("{");
-		indent++;
-		super.visit(n);
-		indent--;
-		indent();
-		stream.println("}");
+		if (n.getStatementsSize() == 1 && n.getStatement(0) instanceof Block) {
+			n.getStatement(0).accept(this);
+		} else {
+			stream.println("{");
+			indent++;
+			super.visit(n);
+			indent--;
+			indent();
+			stream.print("}");
+		}
 	}
 
 	/** {@inheritDoc} */
@@ -277,10 +298,10 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final DoStatement n) {
 		indent();
-		stream.println("do");
+		stream.print("do ");
 		n.getBody().accept(this);
 		indent();
-		stream.print("while (");
+		stream.print(" while (");
 		n.getCondition().accept(this);
 		stream.println(");");
 	}
@@ -317,6 +338,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		indentBlock(n.getBody());
 		n.getBody().accept(this);
 		outdentBlock(n.getBody());
+		stream.println("");
 	}
 
 	/** {@inheritDoc} */
@@ -339,6 +361,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		indentBlock(n.getBody());
 		n.getBody().accept(this);
 		outdentBlock(n.getBody());
+		stream.println("");
 	}
 
 	/** {@inheritDoc} */
@@ -357,6 +380,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		indentBlock(n.getBody());
 		n.getBody().accept(this);
 		outdentBlock(n.getBody());
+		stream.println("");
 	}
 
 	/** {@inheritDoc} */
@@ -371,6 +395,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		indentBlock(n.getBody());
 		n.getBody().accept(this);
 		outdentBlock(n.getBody());
+		stream.println("");
 	}
 
 	/** {@inheritDoc} */
@@ -382,16 +407,14 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		stream.print(") ");
 		indentBlock(n.getBody());
 		n.getBody().accept(this);
+		outdentBlock(n.getBody());
 		if (n.hasElse()) {
-			outdentBlock(n.getBody());
-			indent();
-			stream.println("else ");
+			stream.print(" else ");
 			indentBlock(n.getElse());
 			n.getElse().accept(this);
 			outdentBlock(n.getElse());
-		} else {
-			outdentBlock(n.getBody());
 		}
+		stream.println("");
 	}
 
 	/** {@inheritDoc} */
@@ -441,6 +464,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		indentBlock(n.getBody());
 		n.getBody().accept(this);
 		outdentBlock(n.getBody());
+		stream.println("");
 	}
 
 	/** {@inheritDoc} */
@@ -465,7 +489,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		indent();
 		stream.print("type ");
 		n.getId().accept(this);
-		stream.print(" =");
+		stream.print(" = ");
 		n.getType().accept(this);
 		stream.println(";");
 	}
@@ -507,6 +531,30 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		}
 		stream.print(" -> ");
 		n.getBody().accept(this);
+		stream.println("");
+	}
+
+	public void visit(final TraverseStatement n) {
+		stream.print("(");
+		n.getComponent().accept(this);
+		stream.print(") : ");
+		if (n.hasReturnType())
+			n.getReturnType().accept(this);
+		stream.print(" ");
+		n.getBody().accept(this);
+	}
+
+	public void visit(final FixPStatement n) {
+		stream.print("(");
+		n.getParam1().getIdentifier().accept(this);
+		stream.print(", ");
+		n.getParam2().getIdentifier().accept(this);
+		stream.print(" : ");
+		n.getParam2().getType().accept(this);
+		stream.print(") : ");
+		n.getReturnType().accept(this);
+		stream.print(" ");
+		n.getBody().accept(this);
 	}
 
 	/** {@inheritDoc} */
@@ -515,8 +563,9 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		indent();
 		stream.print("while (");
 		n.getCondition().accept(this);
-		stream.println(")");
+		stream.print(") ");
 		n.getBody().accept(this);
+		stream.println("");
 	}
 
 	//
@@ -530,6 +579,14 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 			stream.print(" || ");
 			n.getRhs(i).accept(this);
 		}
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final FunctionExpression n) {
+		n.getType().accept(this);
+		stream.print(" ");
+		n.getBody().accept(this);
 	}
 
 	/** {@inheritDoc} */
@@ -550,6 +607,20 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		}
 	}
 
+	public void visit(final VisitorExpression n) {
+		super.visit(n);
+	}
+
+	public void visit(final TraversalExpression n) {
+		n.getType().accept(this);
+		n.getBody().getStatement(0).accept(this);
+	}
+
+	public void visit(final FixPExpression n) {
+		n.getType().accept(this);
+		n.getBody().getStatement(0).accept(this);
+	}
+
 	//
 	// types
 	//
@@ -563,7 +634,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FunctionType n) {
-		stream.print("function (");
+		stream.print("function(");
 		boolean seen = false;
 		for (final Component c : n.getArgs()) {
 			if (seen) stream.print(", ");
@@ -575,7 +646,6 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 			stream.print(" : ");
 			n.getType().accept(this);
 		}
-		stream.println();
 	}
 
 	/** {@inheritDoc} */
@@ -651,10 +721,29 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		stream.print(" }");
 	}
 
+	public void visit(final EnumType n) {
+		stream.print("enum { ");
+		boolean seen = false;
+		for (final EnumBodyDeclaration c : n.getMembers()) {
+			if (seen) stream.print(", ");
+			else seen = true;
+			c.accept(this);
+		}
+		stream.print(" }");
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final VisitorType n) {
 		stream.print("visitor ");
+	}
+
+	public void visit(final TraversalType n) {
+		stream.print("traversal");
+	}
+
+	public void visit(final FixPType n) {
+		stream.print("fixp");
 	}
 
 	//

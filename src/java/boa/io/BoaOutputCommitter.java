@@ -104,13 +104,28 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 				ps2.setString(1, error == null ? "" : error);
 				ps2.executeUpdate();
 			} finally {
-				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
-				try { if (ps2 != null) ps2.close(); } catch (final Exception e) { e.printStackTrace(); }
+				try {
+					if (ps != null)
+						ps.close();
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
+				try {
+					if (ps2 != null)
+						ps2.close();
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
 		} finally {
-			try { if (con != null) con.close(); } catch (final Exception e) { e.printStackTrace(); }
+			try {
+				if (con != null)
+					con.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -133,7 +148,12 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 				ps.executeUpdate();
 			} catch (final Exception e) {
 			} finally {
-				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
+				try {
+					if (ps != null)
+						ps.close();
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
 			}
 
 			fileSystem.mkdirs(new Path("/boa", new Path("" + jobId)));
@@ -166,7 +186,11 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 				fileSystem.rename(path, newpath);
 
 				if (in != null)
-					try { in.close(); } catch (final Exception e) { e.printStackTrace(); }
+					try {
+						in.close();
+					} catch (final Exception e) {
+						e.printStackTrace();
+					}
 				in = fileSystem.open(newpath);
 
 				int numBytes = 0;
@@ -189,14 +213,34 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 					ps.setString(2, output.substring(0, MAX_OUTPUT));
 				ps.executeUpdate();
 			} finally {
-				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
+				try {
+					if (ps != null)
+						ps.close();
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
 		} finally {
-			try { if (con != null) con.close(); } catch (final Exception e) { e.printStackTrace(); }
-			try { if (in != null) in.close(); } catch (final Exception e) { e.printStackTrace(); }
-			try { if (fileSystem != null) fileSystem.close(); } catch (final Exception e) { e.printStackTrace(); }
+			try {
+				if (con != null)
+					con.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				if (in != null)
+					in.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				if (fileSystem != null)
+					fileSystem.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -213,12 +257,22 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 				ps.setString(1, id);
 				ps.executeUpdate();
 			} finally {
-				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
+				try {
+					if (ps != null)
+						ps.close();
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
 		} finally {
-			try { if (con != null) con.close(); } catch (final Exception e) { e.printStackTrace(); }
+			try {
+				if (con != null)
+					con.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

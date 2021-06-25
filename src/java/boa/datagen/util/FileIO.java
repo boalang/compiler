@@ -119,7 +119,8 @@ public class FileIO {
 	    	URL url = new URL(prefix);
 	        is = url.openStream();
 	        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-		    String line, last = null;
+		    String line;
+		    String last = null;
 	        while ((line = br.readLine()) != null) {
 	        	line = line.trim();
 	        	if (line.startsWith("<a ")) {
@@ -163,7 +164,8 @@ public class FileIO {
 	}
 
 	public static String getFile(String outPath, String name, String link) throws IOException {
-		File dir = new File(outPath), file = new File(dir, name);
+		File dir = new File(outPath);
+		File file = new File(dir, name);
 		if (!file.exists()) {
 			URL url = new URL(link);
 			ReadableByteChannel rbc = Channels.newChannel(url.openStream());

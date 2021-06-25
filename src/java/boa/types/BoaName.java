@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2021, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +17,15 @@
  */
 package boa.types;
 
+import boa.compiler.ast.Component;
+import boa.compiler.ast.Identifier;
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.ast.types.TupleType;
+import boa.compiler.SymbolTable;
+
 /**
  * @author anthonyu
+ * @author rdyer
  */
 public class BoaName extends BoaScalar {
 	private final BoaType type;
@@ -52,6 +60,19 @@ public class BoaName extends BoaScalar {
 	@Override
 	public boolean accepts(final BoaType that) {
 		return this.type.accepts(that);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public AbstractType toAST(final SymbolTable env) {
+		final Component t;
+		if (this.id == null)
+			t = new Component(this.type.toAST(env));
+		else
+			t = new Component(new Identifier(this.id), this.type.toAST(env));
+		t.env = env;
+		t.type = this;
+		return t;
 	}
 
 	@Override

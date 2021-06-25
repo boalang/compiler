@@ -76,11 +76,11 @@ public class Conjunction extends Node {
 		rhs.add(c);
 	}
 
-	public Conjunction () {
+	public Conjunction() {
 		this(null);
 	}
 
-	public Conjunction (final Comparison lhs) {
+	public Conjunction(final Comparison lhs) {
 		if (lhs != null)
 			lhs.setParent(this);
 		this.lhs = lhs;
@@ -88,7 +88,7 @@ public class Conjunction extends Node {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

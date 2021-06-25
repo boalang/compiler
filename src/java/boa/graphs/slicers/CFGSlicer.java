@@ -103,7 +103,6 @@ public class CFGSlicer {
      *
      * @param cfg control flow graph
      * @param slicingNodes variable to be used for method slicing
-     * @throws Exception
      */
     private void getSlice(final CFG cfg, final List<CFGNode> slicingNodes) throws Exception {
         if (slicingNodes.size() == 0) return;

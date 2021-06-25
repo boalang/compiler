@@ -17,7 +17,7 @@ import org.junit.Test;
 public class TestQ19 extends QueryTest {
 	
 	@Test
-	public void testQ19 () throws MissingObjectException, IncorrectObjectTypeException, IOException {
+	public void testQ19() throws MissingObjectException, IncorrectObjectTypeException, IOException {
 		int methods = 0;
 		int methodsMax = 0;
 		int methodsMin = Integer.MAX_VALUE;

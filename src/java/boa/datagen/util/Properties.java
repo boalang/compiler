@@ -47,7 +47,7 @@ public class Properties {
 	/**
 	 * Gets a property.
 	 *
-	 * If the property was set by the system, get it there. Otherwise attempt
+	 * <p>If the property was set by the system, get it there. Otherwise attempt
 	 * to get from the properties files and fall back to the defaultVal given.
 	 *
 	 * @param key the property to retrieve
@@ -64,7 +64,7 @@ public class Properties {
 	/**
 	 * Gets a boolean property.
 	 *
-	 * If the property was set by the system, get it there. Otherwise attempt
+	 * <p>If the property was set by the system, get it there. Otherwise attempt
 	 * to get from the properties files and fall back to the defaultVal given.
 	 *
 	 * @param key the property to retrieve
@@ -81,7 +81,7 @@ public class Properties {
 	/**
 	 * Helper method to create instances of objects from their string names.
 	 *
-	 * On an error, it stops the program.
+	 * <p>On an error, it stops the program.
 	 *
 	 * @param name the name of the class to instantiate
 	 * @return the newly created instance

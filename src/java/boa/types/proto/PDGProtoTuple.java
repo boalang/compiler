@@ -31,26 +31,26 @@ import java.util.Map;
  * @author marafat
  */
 public class PDGProtoTuple extends BoaProtoTuple {
-    private final static List<BoaType> members = new ArrayList<BoaType>();
-    private final static Map<String, Integer> names = new HashMap<String, Integer>();
+	private final static List<BoaType> members = new ArrayList<BoaType>();
+	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-    static {
-        int counter = 0;
+	static {
+		int counter = 0;
 
-        names.put("nodes", counter++);
-        members.add(new BoaSet(new PDGNodeProtoTuple()));
-    }
+		names.put("nodes", counter++);
+		members.add(new BoaSet(new PDGNodeProtoTuple()));
+	}
 
-    /**
-     * Construct a {@link PDGProtoTuple}.
-     */
-    public PDGProtoTuple() {
-        super(members, names);
-    }
+	/**
+	 * Construct a {@link PDGProtoTuple}.
+	 */
+	public PDGProtoTuple() {
+		super(members, names);
+	}
 
-    /** @{inheritDoc} */
-    @Override
-    public String toJavaType() {
-        return "boa.graphs.pdg.PDG";
-    }
+	/** @{inheritDoc} */
+	@Override
+	public String toJavaType() {
+		return "boa.graphs.pdg.PDG";
+	}
 }

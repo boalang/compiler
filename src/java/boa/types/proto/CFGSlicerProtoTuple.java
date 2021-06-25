@@ -29,26 +29,26 @@ import java.util.Map;
  * @author marafat
  */
 public class CFGSlicerProtoTuple extends BoaProtoTuple {
-    private final static List<BoaType> members = new ArrayList<BoaType>();
-    private final static Map<String, Integer> names = new HashMap<String, Integer>();
+	private final static List<BoaType> members = new ArrayList<BoaType>();
+	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-    static {
-        int counter = 0;
+	static {
+		int counter = 0;
 
-        names.put("slice", counter++);
-        members.add(new BoaArray(new StatementProtoTuple()));
-    }
+		names.put("slice", counter++);
+		members.add(new BoaArray(new StatementProtoTuple()));
+	}
 
-    /**
-     * Construct a {@link CFGSlicerProtoTuple}.
-     */
-    public CFGSlicerProtoTuple() {
-        super(members, names);
-    }
+	/**
+	 * Construct a {@link CFGSlicerProtoTuple}.
+	 */
+	public CFGSlicerProtoTuple() {
+		super(members, names);
+	}
 
-    /** @{inheritDoc} */
-    @Override
-    public String toJavaType() {
-        return "boa.graphs.slicers.CFGSlicer";
-    }
+	/** @{inheritDoc} */
+	@Override
+	public String toJavaType() {
+		return "boa.graphs.slicers.CFGSlicer";
+	}
 }

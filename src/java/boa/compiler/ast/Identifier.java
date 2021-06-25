@@ -37,13 +37,13 @@ public class Identifier extends AbstractType {
 		this.token = token;
 	}
 
-	public Identifier (final String token) {
+	public Identifier(final String token) {
 		this.token = token;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

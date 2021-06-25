@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ import boa.types.BoaType;
 
 /**
  * A {@link NamespaceProtoTuple}.
- * 
+ *
  * @author rdyer
  */
 public class NamespaceProtoTuple extends BoaProtoTuple {
@@ -47,25 +47,25 @@ public class NamespaceProtoTuple extends BoaProtoTuple {
 
 		names.put("declarations", counter++);
 		members.add(new BoaProtoList(new DeclarationProtoTuple()));
-		
+
 		names.put("statements", counter++);
 		members.add(new BoaProtoList(new StatementProtoTuple()));
-		
+
 		names.put("methods", counter++);
 		members.add(new BoaProtoList(new MethodProtoTuple()));
-		
+
 		names.put("expressions", counter++);
 		members.add(new BoaProtoList(new ExpressionProtoTuple()));
-		
+
 		names.put("key", counter++);
 		members.add(new BoaInt());
-		
+
 		names.put("namespaces", counter++);
 		members.add(new BoaProtoList(new NamespaceProtoTuple()));
 
 		names.put("imports", counter++);
 		members.add(new BoaProtoList(new BoaString()));
-		
+
 		names.put("variables", counter++);
 		members.add(new BoaProtoList(new VariableProtoTuple()));
 	}
