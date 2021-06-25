@@ -80,7 +80,6 @@ public class TestJLSVersion {
 	public void testJLSVersion() throws Exception {
 		String kind = changedFile.getKind().name();
 		String version = kind.substring(kind.lastIndexOf('_') + 1);
-		System.out.println("file name is: " + changedFile.getName() + "----->" + version);
 		assertThat(changedFile.getName(), Matchers.containsString("/" + version + "/"));
 	}
 	
