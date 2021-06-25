@@ -172,7 +172,7 @@ public class PDG {
      * Returns the PDG node for the given node id. If not found then returns null
      *
      * @param id node id
-     * @return
+     * @return the PDG node
      */
     public PDGNode getNode(final int id) {
         for (final PDGNode n : nodes)
@@ -309,19 +309,19 @@ public class PDG {
                 final PDGNode node1 = nodes1.pop();
                 final PDGNode node2 = nodes2.pop();
                 // compare statements
-                if ((!node1.hasStmt() && node2.hasStmt()) ||
-                        (node1.hasStmt() && !node2.hasStmt()))
+                if ((!node1.hasStmt() && node2.hasStmt())
+                        || (node1.hasStmt() && !node2.hasStmt()))
                     return false;
-                if (node1.hasStmt() && node2.hasStmt() &&
-                        !node1.getStmt().equals(node2.getStmt())) // use string comparisons?? prettyprint
+                if (node1.hasStmt() && node2.hasStmt()
+                        && !node1.getStmt().equals(node2.getStmt())) // use string comparisons?? prettyprint
                     return false;
 
                 // compare expressions
-                if ((!node1.hasExpr() && node2.hasStmt()) ||
-                        (node1.hasExpr() && !node2.hasExpr()))
+                if ((!node1.hasExpr() && node2.hasStmt())
+                        || (node1.hasExpr() && !node2.hasExpr()))
                     return false;
-                if (node1.hasExpr() && node2.hasExpr() &&
-                        !node1.getExpr().equals(node2.getExpr())) // use string comparisons?? prettyprint
+                if (node1.hasExpr() && node2.hasExpr()
+                        && !node1.getExpr().equals(node2.getExpr())) // use string comparisons?? prettyprint
                     return false;
 
                 // compare out edges
@@ -337,8 +337,8 @@ public class PDG {
                     if (outEdges1.size() != outEdges2.size())
                         return false;
                     for (int j = 0; j < outEdges1.size(); j++) {
-                        if (outEdges1.get(j).getKind() != outEdges2.get(j).getKind() ||
-                                !outEdges1.get(j).getLabel().equals(outEdges2.get(j).getLabel()))
+                        if (outEdges1.get(j).getKind() != outEdges2.get(j).getKind()
+                                || !outEdges1.get(j).getLabel().equals(outEdges2.get(j).getLabel()))
                             return false;
                     }
 

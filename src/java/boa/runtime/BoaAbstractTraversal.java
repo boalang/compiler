@@ -669,13 +669,13 @@ public abstract class BoaAbstractTraversal<T1> {
 								case FORWARD:
 									dfsForward(cdg.getEntryNode(), visitedNodes);
 									break;
-								default:
 								//case BACKWARD:
+								default:
 									//dfsBackward(cdg.getExitNode(), visitedNodes);
 									break;
 							}
 							break;
-/*
+						/*
 						case POSTORDER:
 							postorderBackward(cdg.getEntryNode(), visitedNodes);
 							break;
@@ -773,7 +773,7 @@ public abstract class BoaAbstractTraversal<T1> {
 									break;
 							}
 							break;
-/*
+						/*
 						case POSTORDER:
 							postorderBackward(cdg.getEntryNode(), visitedNodes);
 							break;
@@ -871,7 +871,7 @@ public abstract class BoaAbstractTraversal<T1> {
 									break;
 							}
 							break;
-/*
+						/*
 						case POSTORDER:
 							postorderBackward(cdg.getEntryNode(), visitedNodes);
 							break;
@@ -969,7 +969,7 @@ public abstract class BoaAbstractTraversal<T1> {
 									break;
 							}
 							break;
-/*
+						/*
 						case POSTORDER:
 							postorderBackward(cdg.getEntryNode(), visitedNodes);
 							break;
@@ -1064,7 +1064,7 @@ public abstract class BoaAbstractTraversal<T1> {
 									break;
 							}
 							break;
-/*
+						/*
 						case POSTORDER:
 							postorderBackward(cdg.getEntryNode(), visitedNodes);
 							break;

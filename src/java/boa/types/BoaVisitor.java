@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +16,13 @@
  */
 package boa.types;
 
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.ast.types.VisitorType;
+import boa.compiler.SymbolTable;
+
 /**
  * A {@link BoaType} that represents a visitor.
- * 
+ *
  * @author rdyer
  */
 public class BoaVisitor extends BoaType {
@@ -35,6 +39,15 @@ public class BoaVisitor extends BoaType {
 			return false;
 
 		return true;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public AbstractType toAST(final SymbolTable env) {
+		final AbstractType t = new VisitorType();
+		t.env = env;
+		t.type = this;
+		return t;
 	}
 
 	/** {@inheritDoc} */

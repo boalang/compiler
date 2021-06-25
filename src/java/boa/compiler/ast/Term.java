@@ -57,6 +57,10 @@ public class Term extends Node {
 		return rhs;
 	}
 
+	public void replaceLhs(final Factor lhs) {
+		this.lhs = lhs;
+	}
+
 	public int getRhsSize() {
 		return rhs.size();
 	}
@@ -70,7 +74,7 @@ public class Term extends Node {
 		rhs.add(f);
 	}
 
-	public Term (final Factor lhs) {
+	public Term(final Factor lhs) {
 		if (lhs != null)
 			lhs.setParent(this);
 		this.lhs = lhs;
@@ -78,7 +82,7 @@ public class Term extends Node {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

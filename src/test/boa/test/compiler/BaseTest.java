@@ -55,6 +55,7 @@ import boa.compiler.SymbolTable;
 import boa.compiler.ast.Start;
 import boa.compiler.transforms.InheritedAttributeTransformer;
 import boa.compiler.transforms.LocalAggregationTransformer;
+import boa.compiler.transforms.RecursiveFunctionTransformer;
 import boa.compiler.transforms.VariableDeclRenameTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.CodeGeneratingVisitor;
@@ -103,7 +104,7 @@ public abstract class BaseTest {
 		final List<String> foundErr = new ArrayList<String>();
 		final BoaLexer lexer = new BoaLexer(new ANTLRInputStream(new StringReader(input)));
 		lexer.removeErrorListeners();
-		lexer.addErrorListener(new BaseErrorListener () {
+		lexer.addErrorListener(new BaseErrorListener() {
 			@Override
 			public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
 				foundErr.add(line + "," + charPositionInLine + ": " + msg);
@@ -184,7 +185,7 @@ public abstract class BaseTest {
 			parser.reset();
 
 			parser.removeErrorListeners();
-			parser.addErrorListener(new BaseErrorListener () {
+			parser.addErrorListener(new BaseErrorListener() {
 				@Override
 				public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
 					foundErr.add(line + "," + charPositionInLine + ": " + msg);
@@ -258,6 +259,7 @@ public abstract class BaseTest {
 			new VariableDeclRenameTransformer().start(p);
 			new InheritedAttributeTransformer().start(p);
 			new LocalAggregationTransformer().start(p);
+			new RecursiveFunctionTransformer().start(p);
 			new VisitorOptimizingTransformer().start(p);
 
 			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("Test", 64 * 1024 * 1024, seed, false);

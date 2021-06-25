@@ -33,13 +33,13 @@ public class TimeLiteral extends Operand implements ILiteral {
 		return literal;
 	}
 
-	public TimeLiteral (final String literal) {
+	public TimeLiteral(final String literal) {
 		this.literal = literal;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ import boa.types.BoaType;
 
 /**
  * A {@link ASTRootProtoTuple}.
- * 
+ *
  * @author rdyer
  */
 public class ASTRootProtoTuple extends BoaProtoTuple {

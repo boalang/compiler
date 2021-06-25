@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,9 +19,12 @@ package boa.types;
 import java.util.HashSet;
 import java.util.Set;
 
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.SymbolTable;
+
 /**
  * A {@link BoaType} representing an array of values that is a BoaProtoTuple member.
- * 
+ *
  * @author rdyer
  */
 public class BoaProtoList extends BoaType {
@@ -35,7 +38,7 @@ public class BoaProtoList extends BoaType {
 
 	/**
 	 * Construct a BoaProtoList.
-	 * 
+	 *
 	 * @param boaType
 	 *            A {@link BoaType} representing the type of the elements in
 	 *            this array
@@ -109,7 +112,7 @@ public class BoaProtoList extends BoaType {
 
 	/**
 	 * Get the element type of this array.
-	 * 
+	 *
 	 * @return A {@link BoaType} representing the element type of this
 	 *         array
 	 */
@@ -119,7 +122,7 @@ public class BoaProtoList extends BoaType {
 
 	/**
 	 * Set the element type of this array.
-	 * 
+	 *
 	 * @param type
 	 *            A {@link BoaType} representing the element type of this
 	 *            array
@@ -162,6 +165,12 @@ public class BoaProtoList extends BoaType {
 			return false;
 
 		return true;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public AbstractType toAST(final SymbolTable env) {
+		throw new RuntimeException("toAST() not supported on BoaProtoList");
 	}
 
 	/** {@inheritDoc} */

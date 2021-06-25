@@ -170,7 +170,6 @@ public class PDTree {
      *
      * @param cfg control flow graph
      * @return map of nodes and corresponding set of post-dominator nodes
-     * @throws Exception
      */
     private Map<CFGNode, BitSet> computePostDomonitors(final CFG cfg) {
         final CFGNode[] cfgNodes = cfg.reverseSortNodes();

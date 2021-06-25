@@ -1,0 +1,47 @@
+o: output top(10)[id: string] of int weight int;
+a: array of int = { 1, 2, 3 };
+type t = { int, s: string };
+myt: t = { 3, "f" };
+f := function(i: int) : int {
+    return i + 3;
+};
+s := StatementKind.IF;
+switch (s) {
+    case StatementKind.IF: {
+        break;
+    }
+    default: {
+        break;
+    }
+}
+type e = enum { A = 1, B = 2, C = 3 };
+init := traversal(node: CFGNode): string {
+    return string(node.id);
+};
+type T = { dom: set of string, dummy: int };
+fixp1 := fixp(curr, prev: T) : bool {
+    if (len(difference(curr.dom, prev.dom)) == 0) {
+        return true;
+    }
+    return false;
+};
+visit(input, visitor {
+    before n: Statement -> {
+        stop;
+    }
+    after Expression, Modifier -> {
+        myt.s = "s";
+    }
+});
+foreach (i: int; input.programming_languages[i] != "foo") {
+    f(5);
+}
+do {
+    f(5);
+} while (f(5) != 5);
+if (5 > 5) {
+    while (f(5) != 5) {
+        f(5);
+    }
+}
+o["foo" + "bar"] << 5 weight f(3);

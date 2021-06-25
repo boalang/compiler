@@ -22,7 +22,7 @@ public class GithubRepositoryNameDownloader {
 	}
 
 	/**
-	 * @param args
+	 * @param args command-line arguments
 	 */
 	public static void downloadRepoNames(String[] args) {
 		String outDir = Config.githubRepoListDir;
@@ -43,7 +43,8 @@ public class GithubRepositoryNameDownloader {
 		Arrays.sort(files, new Comparator<File>() {
 			@Override
 			public int compare(File f1, File f2) {
-				int n1 = getNumber(f1.getName()), n2 = getNumber(f2.getName());
+				int n1 = getNumber(f1.getName());
+				int n2 = getNumber(f2.getName());
 				return n1 - n2;
 			}
 

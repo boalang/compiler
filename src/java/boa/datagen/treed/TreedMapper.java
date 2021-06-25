@@ -43,13 +43,18 @@ import boa.datagen.util.JavaASTUtil;
 import boa.types.Shared.ChangeKind;
 
 public class TreedMapper implements TreedConstants {
-	private ASTNode astM, astN;
+	private ASTNode astM;
+	private ASTNode astN;
 	private HashMap<ASTNode, ArrayList<ASTNode>> tree = new HashMap<ASTNode, ArrayList<ASTNode>>();
-	private HashMap<ASTNode, Integer> treeHeight = new HashMap<ASTNode, Integer>(), treeDepth = new HashMap<ASTNode, Integer>();
+	private HashMap<ASTNode, Integer> treeHeight = new HashMap<ASTNode, Integer>();
+	private HashMap<ASTNode, Integer> treeDepth = new HashMap<ASTNode, Integer>();
 	private HashMap<ASTNode, HashMap<String, Integer>> treeVector = new HashMap<ASTNode, HashMap<String, Integer>>();
 	private HashMap<ASTNode, HashMap<ASTNode, Double>> treeMap = new HashMap<ASTNode, HashMap<ASTNode, Double>>();
-	private HashSet<ASTNode> pivotsM = new HashSet<ASTNode>(), pivotsN = new HashSet<ASTNode>();
-	private int numOfChanges = 0, numOfUnmaps = 0, numOfNonNameUnMaps = 0;
+	private HashSet<ASTNode> pivotsM = new HashSet<ASTNode>();
+	private HashSet<ASTNode> pivotsN = new HashSet<ASTNode>();
+	private int numOfChanges = 0;
+	private int numOfUnmaps = 0;
+	private int numOfNonNameUnMaps = 0;
 	
 	public TreedMapper(ASTNode astM, ASTNode astN) {
 		this.astM = astM;
@@ -179,7 +184,8 @@ public class TreedMapper implements TreedConstants {
 				astM.setProperty(PROPERTY_STATUS, ChangeKind.UNCHANGED);
 				astN.setProperty(PROPERTY_STATUS, ChangeKind.UNCHANGED);
 			} else {
-				ASTNode p = node.getParent(), mp = mappedNode.getParent();
+				ASTNode p = node.getParent();
+				ASTNode mp = mappedNode.getParent();
 				if (!treeMap.get(p).containsKey(mp)) {
 					node.setProperty(PROPERTY_STATUS, ChangeKind.MOVED);
 					mappedNode.setProperty(PROPERTY_STATUS, ChangeKind.MOVED);
@@ -193,7 +199,8 @@ public class TreedMapper implements TreedConstants {
 				}
 			}
 			// mark moving for children
-			ArrayList<ASTNode> children = tree.get(node), mappedChildren = tree.get(mappedNode);
+			ArrayList<ASTNode> children = tree.get(node);
+			ArrayList<ASTNode> mappedChildren = tree.get(mappedNode);
 			if (!children.isEmpty() && !mappedChildren.isEmpty()) {
 				markChanges(children, mappedChildren);
 			}
@@ -204,7 +211,8 @@ public class TreedMapper implements TreedConstants {
 	}
 
 	private void markChanges(ArrayList<ASTNode> nodes, ArrayList<ASTNode> mappedNodes) {
-		int len = nodes.size(), lenN = mappedNodes.size();
+		int len = nodes.size();
+		int lenN = mappedNodes.size();
 		int[][] d = new int[2][lenN + 1];
 		char[][] p = new char[len + 1][lenN + 1];
 		d[1][0] = 0;
@@ -229,10 +237,12 @@ public class TreedMapper implements TreedConstants {
 				}
 			}
 		}
-		int i = len, j = lenN;
+		int i = len;
+		int j = lenN;
 		while (i > 0 && j > 0) {
 			if (p[i][j] == 'D') {
-				ASTNode node = nodes.get(i-1), node2 = mappedNodes.get(j-1);
+				ASTNode node = nodes.get(i-1);
+				ASTNode node2 = mappedNodes.get(j-1);
 				if (TreedUtils.buildLabelForVector(node) == TreedUtils.buildLabelForVector(node2)) {
 					node.setProperty(PROPERTY_STATUS, ChangeKind.UNCHANGED);
 					node2.setProperty(PROPERTY_STATUS, ChangeKind.UNCHANGED);
@@ -256,8 +266,10 @@ public class TreedMapper implements TreedConstants {
 		for (ASTNode node : tree.keySet())
 			treeMap.put(node, new HashMap<ASTNode, Double>());
 		setMap(astM, astN, 1.0);
-		ArrayList<ASTNode> lM = getChildrenContainers(astM), lN = getChildrenContainers(astN);
-		ArrayList<ASTNode> heightsM = new ArrayList<ASTNode>(lM), heightsN = new ArrayList<ASTNode>(lN);
+		ArrayList<ASTNode> lM = getChildrenContainers(astM);
+		ArrayList<ASTNode> lN = getChildrenContainers(astN);
+		ArrayList<ASTNode> heightsM = new ArrayList<ASTNode>(lM);
+		ArrayList<ASTNode> heightsN = new ArrayList<ASTNode>(lN);
 		Collections.sort(heightsM, new Comparator<ASTNode>() {
 			@Override
 			public int compare(ASTNode node1, ASTNode node2) {
@@ -278,11 +290,14 @@ public class TreedMapper implements TreedConstants {
 			lM.clear();
 			lN.clear();
 		}
-		ArrayList<Integer> lcsM = new ArrayList<Integer>(), lcsN = new ArrayList<Integer>();
+		ArrayList<Integer> lcsM = new ArrayList<Integer>();
+		ArrayList<Integer> lcsN = new ArrayList<Integer>();
 		lcs(lM, lN, lcsM, lcsN);
 		for (int i = lcsM.size()-1; i >= 0; i--) {
-			int indexM = lcsM.get(i), indexN = lcsN.get(i);
-			ASTNode nodeM = lM.get(indexM), nodeN = lN.get(indexN);
+			int indexM = lcsM.get(i);
+			int indexN = lcsN.get(i);
+			ASTNode nodeM = lM.get(indexM);
+			ASTNode nodeN = lN.get(indexN);
 			setMap(nodeM, nodeN, 1.0);
 			pivotsM.add(nodeM);
 			pivotsN.add(nodeN);
@@ -294,7 +309,8 @@ public class TreedMapper implements TreedConstants {
 		while (!lM.isEmpty() && !lN.isEmpty()) {
 			int hM = treeHeight.get(heightsM.get(0));
 			int hN = treeHeight.get(heightsN.get(0));
-			boolean expandedM = false, expandedN = false;
+			boolean expandedM = false;
+			boolean expandedN = false;
 			if (hM >= hN)
 				expandedM = expandForPivots(lM, heightsM, hM);
 			if (hN >= hM)
@@ -379,7 +395,8 @@ public class TreedMapper implements TreedConstants {
 	}
 
 	private void lcs(ArrayList<ASTNode> lM, ArrayList<ASTNode> lN, ArrayList<Integer> lcsM, ArrayList<Integer> lcsN) {
-		int lenM = lM.size(), lenN = lN.size();
+		int lenM = lM.size();
+		int lenN = lN.size();
 		int[][] d = new int[2][lenN + 1];
 		char[][] p = new char[lenM + 1][lenN + 1];
 		for (int j = 0; j <= lenN; j++)
@@ -406,7 +423,8 @@ public class TreedMapper implements TreedConstants {
 				}
 			}
 		}
-		int i = 0, j = 0;
+		int i = 0;
+		int j = 0;
 		while (i < lenM && j < lenN) {
 			if (p[i][j] == 'D') {
 				lcsM.add(i);
@@ -423,7 +441,8 @@ public class TreedMapper implements TreedConstants {
 	private boolean subtreeMatch(ASTNode nodeM, ASTNode nodeN) {
 		if (!labelMatch(nodeM, nodeN))
 			return false;
-		ArrayList<ASTNode> childrenM = tree.get(nodeM), childrenN = tree.get(nodeN);
+		ArrayList<ASTNode> childrenM = tree.get(nodeM);
+		ArrayList<ASTNode> childrenN = tree.get(nodeN);
 		if (childrenM.size() != childrenN.size())
 			return false;
 		if (childrenM.size() == 0)
@@ -467,7 +486,8 @@ public class TreedMapper implements TreedConstants {
 	
 	@SuppressWarnings("unused")
 	private void lss(ArrayList<ASTNode> lM, ArrayList<ASTNode> lN, ArrayList<Integer> lcsM, ArrayList<Integer> lcsN, double threshold) {
-		int lenM = lM.size(), lenN = lN.size();
+		int lenM = lM.size();
+		int lenN = lN.size();
 		double[][] d = new double[2][lenN + 1];
 		char[][] p = new char[lenM + 1][lenN + 1];
 		for (int j = 0; j <= lenN; j++)
@@ -491,7 +511,8 @@ public class TreedMapper implements TreedConstants {
 				}
 			}
 		}
-		int i = 0, j = 0;
+		int i = 0;
+		int j = 0;
 		while (i < lenM && j < lenN) {
 			if (p[i][j] == 'D') {
 				lcsM.add(i);
@@ -528,10 +549,12 @@ public class TreedMapper implements TreedConstants {
 				return node1.getStartPosition() - node2.getStartPosition();
 			}
 		});
-		Set<ASTNode> visitedAncestorsM = new HashSet<ASTNode>(), visitedAncestorsN = new HashSet<ASTNode>();
+		Set<ASTNode> visitedAncestorsM = new HashSet<ASTNode>();
+		Set<ASTNode> visitedAncestorsN = new HashSet<ASTNode>();
 		for (ASTNode nodeM : heightsM) {
 			ASTNode nodeN = treeMap.get(nodeM).keySet().iterator().next();
-			ArrayList<ASTNode> ancestorsM = new ArrayList<ASTNode>(), ancestorsN = new ArrayList<ASTNode>();
+			ArrayList<ASTNode> ancestorsM = new ArrayList<ASTNode>();
+			ArrayList<ASTNode> ancestorsN = new ArrayList<ASTNode>();
 			ancestorsM.removeAll(visitedAncestorsM);
 			ancestorsN.removeAll(visitedAncestorsN);
 			getNotYetMappedAncestors(nodeM, ancestorsM);
@@ -572,7 +595,8 @@ public class TreedMapper implements TreedConstants {
 		Set<ASTNode> matches = new HashSet<ASTNode>();
 		for (int i = 0; i < pairs.size(); i++) {
 			Pair pair = pairs.get(i);
-			ASTNode nodeM = (ASTNode) pair.getObj1(), nodeN = (ASTNode) pair.getObj2();
+			ASTNode nodeM = (ASTNode) pair.getObj1();
+			ASTNode nodeN = (ASTNode) pair.getObj2();
 			if (matches.contains(nodeM) || matches.contains(nodeN))
 				continue;
 			setMap(nodeM, nodeN, pair.getWeight());
@@ -603,10 +627,12 @@ public class TreedMapper implements TreedConstants {
 	private double computeSimilarity(ASTNode nodeM, ASTNode nodeN, double threshold) {
 		if (nodeM.getNodeType() != nodeN.getNodeType())
 			return 0;
-		ArrayList<ASTNode> childrenM = tree.get(nodeM), childrenN = tree.get(nodeN);
+		ArrayList<ASTNode> childrenM = tree.get(nodeM);
+		ArrayList<ASTNode> childrenN = tree.get(nodeN);
 		if (childrenM.isEmpty() && childrenN.isEmpty()) {
 			if (nodeM instanceof Modifier) {
-				Modifier mnM = (Modifier) nodeM, mnN = (Modifier) nodeN;
+				Modifier mnM = (Modifier) nodeM;
+				Modifier mnN = (Modifier) nodeN;
 				if (JavaASTUtil.getType(mnM) != JavaASTUtil.getType(mnN))
 					return 0;
 			}
@@ -621,8 +647,10 @@ public class TreedMapper implements TreedConstants {
 					)
 				sim = MIN_SIM_MOVE;
 			else {
-				String sM = nodeM.toString(), sN = nodeN.toString();
-				int lM = sM.length(), lN = sN.length();
+				String sM = nodeM.toString();
+				String sN = nodeN.toString();
+				int lM = sM.length();
+				int lN = sN.length();
 				if (lM > 1000 || lN > 1000) {
 					if (lM == 0 && lN == 0)
 						sim = 1;
@@ -637,7 +665,8 @@ public class TreedMapper implements TreedConstants {
 			return sim;
 		}
 		if (!childrenM.isEmpty() && !childrenN.isEmpty()) {
-			HashMap<String, Integer> vM = treeVector.get(nodeM), vN = treeVector.get(nodeN);
+			HashMap<String, Integer> vM = treeVector.get(nodeM);
+			HashMap<String, Integer> vN = treeVector.get(nodeN);
 			double sim = computeSimilarity(vM, vN);
 			/*double[] sims = computeSimilarity(childrenM, childrenN);
 			for (double s : sims)
@@ -730,8 +759,10 @@ public class TreedMapper implements TreedConstants {
 				mapUnchangedNodes(nodeM, nodeN);
 				return;
 			} else {
-				ArrayList<ASTNode> nodesM = getNotYetMatchedNodes(childrenM), nodesN = getNotYetMatchedNodes(childrenN);
-				ArrayList<ASTNode> mappedChildrenM = new ArrayList<ASTNode>(), mappedChildrenN = new ArrayList<ASTNode>();
+				ArrayList<ASTNode> nodesM = getNotYetMatchedNodes(childrenM);
+				ArrayList<ASTNode> nodesN = getNotYetMatchedNodes(childrenN);
+				ArrayList<ASTNode> mappedChildrenM = new ArrayList<ASTNode>();
+				ArrayList<ASTNode> mappedChildrenN = new ArrayList<ASTNode>();
 				if (nodeM instanceof Statement) {
 					if (nodeM instanceof DoStatement) {
 						mappedChildrenM.add(((DoStatement) nodeM).getBody());
@@ -766,7 +797,8 @@ public class TreedMapper implements TreedConstants {
 					mappedChildrenN.add(((CatchClause) nodeN).getBody());
 				} else if (nodeM instanceof Expression) {
 					if (nodeM instanceof ClassInstanceCreation) {
-						ClassInstanceCreation cicM = (ClassInstanceCreation) nodeM, cicN = (ClassInstanceCreation) nodeN;
+						ClassInstanceCreation cicM = (ClassInstanceCreation) nodeM;
+						ClassInstanceCreation cicN = (ClassInstanceCreation) nodeN;
 						mappedChildrenM.add(cicM.getExpression());
 						mappedChildrenN.add(cicN.getExpression());
 						if (cicM.getAST().apiLevel() >= AST.JLS3)
@@ -778,13 +810,15 @@ public class TreedMapper implements TreedConstants {
 						else
 							mappedChildrenN.add(cicN.getName());
 					} else if (nodeM instanceof MethodInvocation) {
-						MethodInvocation miM = (MethodInvocation) nodeM, miN = (MethodInvocation) nodeN;
+						MethodInvocation miM = (MethodInvocation) nodeM;
+						MethodInvocation miN = (MethodInvocation) nodeN;
 						mappedChildrenM.add(miM.getExpression());
 						mappedChildrenN.add(miN.getExpression());
 						mappedChildrenM.add(miM.getName());
 						mappedChildrenN.add(miN.getName());
 					} else if (nodeM instanceof SuperMethodInvocation) {
-						SuperMethodInvocation miM = (SuperMethodInvocation) nodeM, miN = (SuperMethodInvocation) nodeN;
+						SuperMethodInvocation miM = (SuperMethodInvocation) nodeM;
+						SuperMethodInvocation miN = (SuperMethodInvocation) nodeN;
 						mappedChildrenM.add(miM.getQualifier());
 						mappedChildrenN.add(miN.getQualifier());
 						mappedChildrenM.add(miM.getName());
@@ -793,7 +827,8 @@ public class TreedMapper implements TreedConstants {
 				}
 				if (!mappedChildrenM.isEmpty() && !mappedChildrenN.isEmpty()) {
 					for (int i = 0; i < mappedChildrenM.size(); i++) {
-						ASTNode childM = mappedChildrenM.get(i), childN = mappedChildrenN.get(i);
+						ASTNode childM = mappedChildrenM.get(i);
+						ASTNode childN = mappedChildrenN.get(i);
 						if (childM != null && childN != null) {
 							if (treeMap.get(childM).isEmpty() && treeMap.get(childN).isEmpty()) {
 								double sim = 0;
@@ -815,10 +850,12 @@ public class TreedMapper implements TreedConstants {
 									}
 								}
 								if (sim < MIN_SIM) {
-									ArrayList<ASTNode> tempM = new ArrayList<ASTNode>(), tempN = new ArrayList<ASTNode>();
+									ArrayList<ASTNode> tempM = new ArrayList<ASTNode>();
+									ArrayList<ASTNode> tempN = new ArrayList<ASTNode>();
 									tempM.add(childM);
 									tempN.add(childN);
-									int hM = treeHeight.get(childM), hN = treeHeight.get(childN);
+									int hM = treeHeight.get(childM);
+									int hN = treeHeight.get(childN);
 									if (hM >= hN) {
 										tempM.remove(childM);
 										tempM.addAll(getNotYetMatchedNodes(tree.get(childM)));
@@ -829,7 +866,8 @@ public class TreedMapper implements TreedConstants {
 									}
 									ArrayList<ASTNode> mappedNodes = map(tempM, tempN, MIN_SIM_MOVE);
 									for (int j = 0; j < mappedNodes.size(); j += 2) {
-										ASTNode mappedNodeM = mappedNodes.get(j), mappedNodeN = mappedNodes.get(j+1);
+										ASTNode mappedNodeM = mappedNodes.get(j);
+										ASTNode mappedNodeN = mappedNodes.get(j+1);
 										tempM.remove(mappedNodeM);
 										tempN.remove(mappedNodeN);
 									}
@@ -840,19 +878,24 @@ public class TreedMapper implements TreedConstants {
 						nodesN.remove(childN);
 					}
 				}
-				ArrayList<Integer> lcsM = new ArrayList<Integer>(), lcsN = new ArrayList<Integer>();
+				ArrayList<Integer> lcsM = new ArrayList<Integer>();
+				ArrayList<Integer> lcsN = new ArrayList<Integer>();
 				lcs(nodesM, nodesN, lcsM, lcsN);
 				for (int i = lcsM.size()-1; i >= 0; i--) {
-					int iM = lcsM.get(i), iN = lcsN.get(i);
-					ASTNode nM = nodesM.get(iM), nN = nodesN.get(iN);
+					int iM = lcsM.get(i);
+					int iN = lcsN.get(i);
+					ASTNode nM = nodesM.get(iM);
+					ASTNode nN = nodesN.get(iN);
 					setMap(nM, nN, 1.0);
 					nodesM.remove(iM);
 					nodesN.remove(iN);
 				}
-				lcsM.clear(); lcsN.clear();
+				lcsM.clear();
+				lcsN.clear();
 				ArrayList<ASTNode> mappedNodes = map(nodesM, nodesN, MIN_SIM);
 				for (int i = 0; i < mappedNodes.size(); i += 2) {
-					ASTNode mappedNodeM = mappedNodes.get(i), mappedNodeN = mappedNodes.get(i+1);
+					ASTNode mappedNodeM = mappedNodes.get(i);
+					ASTNode mappedNodeN = mappedNodes.get(i+1);
 					nodesM.remove(mappedNodeM);
 					nodesN.remove(mappedNodeN);
 				}
@@ -900,7 +943,8 @@ public class TreedMapper implements TreedConstants {
 
 	private void mapUnchangedNodes(ASTNode nodeM, ASTNode nodeN) {
 		setMap(nodeM, nodeN, 1.0);
-		ArrayList<ASTNode> childrenM = tree.get(nodeM), childrenN = tree.get(nodeN);
+		ArrayList<ASTNode> childrenM = tree.get(nodeM);
+		ArrayList<ASTNode> childrenN = tree.get(nodeN);
 		for (int i = 0; i < childrenM.size(); i++)
 			mapUnchangedNodes(childrenM.get(i), childrenN.get(i));
 	}
@@ -974,8 +1018,10 @@ public class TreedMapper implements TreedConstants {
 	}
 
 	private void mapMoving(ASTNode astM, ASTNode astN) {
-		ArrayList<ASTNode> lM = getNotYetMappedDescendantContainers(astM), lN = getNotYetMappedDescendantContainers(astN);
-		ArrayList<ASTNode> heightsM = new ArrayList<ASTNode>(lM), heightsN = new ArrayList<ASTNode>(lN);
+		ArrayList<ASTNode> lM = getNotYetMappedDescendantContainers(astM);
+		ArrayList<ASTNode> lN = getNotYetMappedDescendantContainers(astN);
+		ArrayList<ASTNode> heightsM = new ArrayList<ASTNode>(lM);
+		ArrayList<ASTNode> heightsN = new ArrayList<ASTNode>(lN);
 		Collections.sort(heightsM, new Comparator<ASTNode>() {
 			@Override
 			public int compare(ASTNode node1, ASTNode node2) {
@@ -994,7 +1040,8 @@ public class TreedMapper implements TreedConstants {
 	private void mapMoving(ArrayList<ASTNode> lM, ArrayList<ASTNode> lN, ArrayList<ASTNode> heightsM, ArrayList<ASTNode> heightsN) {
 		ArrayList<ASTNode> mappedNodes = map(lM, lN, MIN_SIM_MOVE);
 		for (int i = 0; i < mappedNodes.size(); i += 2) {
-			ASTNode nodeM = mappedNodes.get(i), nodeN = mappedNodes.get(i+1);
+			ASTNode nodeM = mappedNodes.get(i);
+			ASTNode nodeN = mappedNodes.get(i+1);
 			lM.remove(nodeM);
 			lN.remove(nodeN);
 			heightsM.remove(nodeM);
@@ -1003,7 +1050,8 @@ public class TreedMapper implements TreedConstants {
 		while (!lM.isEmpty() && !lN.isEmpty()) {
 			int hM = treeHeight.get(heightsM.get(0));
 			int hN = treeHeight.get(heightsN.get(0));
-			boolean expandedM = false, expandedN = false;
+			boolean expandedM = false;
+			boolean expandedN = false;
 			if (hM >= hN)
 				expandedM = expandForMoving(lM, heightsM, hM);
 			if (hN >= hM)

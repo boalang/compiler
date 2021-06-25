@@ -28,7 +28,7 @@ import java.util.Stack;
 /**
  * Outputs the AST in JSON-style format.
  *
- * NOTE: This is not intended as legitimate JSON.
+ * <p>NOTE: This is not intended as legitimate JSON.
  */
 public class JSONStyleASTPrinter extends Indenter implements IASTPrinter {
 

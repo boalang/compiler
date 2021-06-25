@@ -52,7 +52,7 @@ public class GitHubJsonRetriever {
 
 	public void orchastrate() {
 		TokenList tokens = new TokenList(this.TokenFile);
-		GitHubJsonRetrieverWorker workers[] = new GitHubJsonRetrieverWorker[MAX_NUM_THREADS];
+		GitHubJsonRetrieverWorker[] workers = new GitHubJsonRetrieverWorker[MAX_NUM_THREADS];
 		Thread[] threads = new Thread[MAX_NUM_THREADS];
 		for (int i = 0; i < MAX_NUM_THREADS; i++) {
 			GitHubJsonRetrieverWorker worker = new GitHubJsonRetrieverWorker(this.OutPutDir, tokens, i);
@@ -62,7 +62,7 @@ public class GitHubJsonRetriever {
 		}
 		
 
-		for (int i = 0;i < namesList.size(); i++) {
+		for (int i = 0; i < namesList.size(); i++) {
 			String name = namesList.get(i);
 			boolean nAssigned = true;
 			while (nAssigned) {

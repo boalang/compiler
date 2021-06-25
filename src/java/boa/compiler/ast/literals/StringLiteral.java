@@ -33,19 +33,19 @@ public class StringLiteral extends Operand implements ILiteral {
 		return literal;
 	}
 
-	public StringLiteral (final boolean regex, final String literal) {
+	public StringLiteral(final boolean regex, final String literal) {
 		this(literal);
 		if (regex)
 			this.literal = "\"" + literal.substring(1, literal.length() - 1).replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
 	}
 
-	public StringLiteral (final String literal) {
+	public StringLiteral(final String literal) {
 		this.literal = literal;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

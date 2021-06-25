@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,7 @@ import boa.types.proto.enums.TypeKindProtoMap;
 
 /**
  * A {@link DeclarationProtoTuple}.
- * 
+ *
  * @author rdyer
  */
 public class DeclarationProtoTuple extends BoaProtoTuple {
@@ -66,16 +66,16 @@ public class DeclarationProtoTuple extends BoaProtoTuple {
 
 		names.put("comments", counter++);
 		members.add(new BoaProtoList(new CommentProtoTuple()));
-		
+
 		names.put("key", counter++);
 		members.add(new BoaInt());
-		
+
 		names.put("fully_qualified_name", counter++);
 		members.add(new BoaString());
-		
+
 		names.put("declaring_type", counter++);
 		members.add(new BoaInt());
-		
+
 		names.put("statements", counter++);
 		members.add(new BoaProtoList(new StatementProtoTuple()));
 	}

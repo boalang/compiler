@@ -16,7 +16,8 @@ import org.apache.maven.model.Repository;
 import boa.datagen.util.FileIO;
 
 public class PomFile {
-	private String id, path;
+	private String id;
+	private String path;
 	private PomFile parent;
 	HashMap<String, String> properties = new HashMap<String, String>();
 	HashMap<String, String> managedDependencies = new HashMap<String, String>();

@@ -19,8 +19,10 @@ public class TreedBuilder extends ASTVisitor implements TreedConstants {
 	private int index = 1;
 	private ASTNode root;
 	HashMap<ASTNode, ArrayList<ASTNode>> tree = new HashMap<ASTNode, ArrayList<ASTNode>>();
-	HashMap<ASTNode, Integer> treeHeight = new HashMap<ASTNode, Integer>(), treeDepth = new HashMap<ASTNode, Integer>();
-	HashMap<ASTNode, HashMap<String, Integer>> treeVector = new HashMap<ASTNode, HashMap<String, Integer>>(), treeRootVector = new HashMap<ASTNode, HashMap<String, Integer>>();
+	HashMap<ASTNode, Integer> treeHeight = new HashMap<ASTNode, Integer>();
+	HashMap<ASTNode, Integer> treeDepth = new HashMap<ASTNode, Integer>();
+	HashMap<ASTNode, HashMap<String, Integer>> treeVector = new HashMap<ASTNode, HashMap<String, Integer>>();
+	HashMap<ASTNode, HashMap<String, Integer>> treeRootVector = new HashMap<ASTNode, HashMap<String, Integer>>();
 	
 	public TreedBuilder(ASTNode root) {
 		super();
@@ -121,7 +123,8 @@ public class TreedBuilder extends ASTVisitor implements TreedConstants {
 
 	private void buildVector(ASTNode node) {
 		ArrayList<ASTNode> children = tree.get(node);
-		HashMap<String, Integer> vector = new HashMap<String, Integer>(), rootVector = new HashMap<String, Integer>();
+		HashMap<String, Integer> vector = new HashMap<String, Integer>();
+		HashMap<String, Integer> rootVector = new HashMap<String, Integer>();
 		char label = TreedUtils.buildLabelForVector(node);
 		String feature = "" + label;
 		rootVector.put(feature, 1);

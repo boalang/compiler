@@ -1,7 +1,8 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2017-2021, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
- *                 and Bowling Green State University
+ *                 Bowling Green State University
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +21,12 @@ package boa.types;
 import java.util.HashMap;
 import java.util.Map;
 
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.SymbolTable;
+
 /**
  * Base class for the types in Boa.
- * 
+ *
  * @author anthonyu
  * @author rdyer
  */
@@ -34,10 +38,10 @@ public abstract class BoaType {
 	 * Returns the type that results from an expression of this type and an
 	 * expression of that type in an arithmetic expression. (e.g. an int plus a
 	 * float results in an expression of type float).
-	 * 
+	 *
 	 * @param that
 	 *            A BoaType representing the other expression's type
-	 * 
+	 *
 	 * @return A BoaType representing the type of the resulting expression
 	 */
 	public BoaScalar arithmetics(final BoaType that) {
@@ -48,7 +52,7 @@ public abstract class BoaType {
 	/**
 	 * Returns true when an expression of that type may be assigned to a
 	 * variable of this type.
-	 * 
+	 *
 	 * @return A boolean representing whether an expression of that type may be
 	 *         assigned to a variable of this type
 	 */
@@ -60,7 +64,7 @@ public abstract class BoaType {
 	/**
 	 * Returns true when an expression of that type may be used as a formal
 	 * parameter of this type.
-	 * 
+	 *
 	 * @return A boolean representing whether an expression of that type may be
 	 *         used as a formal parameter of this type
 	 */
@@ -72,7 +76,7 @@ public abstract class BoaType {
 	/**
 	 * Returns true when an expression of that type may be compared to an
 	 * expression of this type.
-	 * 
+	 *
 	 * @return A boolean representing whether an expression of that type may be
 	 *         compared to an expression of this type
 	 */
@@ -90,10 +94,12 @@ public abstract class BoaType {
 		return false;
 	}
 
+	public abstract AbstractType toAST(final SymbolTable env);
+
 	/**
 	 * Returns a string representation of the Java equivalent of this Boa
 	 * type.
-	 * 
+	 *
 	 * @return A String containing the name of the Java type equivalent to this
 	 *         Boa type
 	 */
@@ -104,7 +110,7 @@ public abstract class BoaType {
 	/**
 	 * Returns a string representation of the boxed Java equivalent of this Boa
 	 * type.
-	 * 
+	 *
 	 * @return A String containing the name of the boxed Java type equivalent to this
 	 *         Boa type
 	 */
@@ -126,11 +132,12 @@ public abstract class BoaType {
 	}
 
 	/**
+	 * Converts a string representation of a type into a shortened name.
+	 * Caches the results so similar types have the same name.
 	 *
-	 *
-	 * @param t
-	 * @param kind
-	 * @return
+	 * @param t the string representation of the type
+	 * @param kind the kind of type, used for generating the name
+	 * @return the shortened type name
 	 */
 	protected String shortenedType(final String t, final String kind) {
 		if (!shortNamesMap.containsKey(kind))

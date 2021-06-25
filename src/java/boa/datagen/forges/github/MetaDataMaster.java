@@ -14,14 +14,12 @@ import boa.datagen.util.FileIO;
 import boa.datagen.util.Properties;
 
 public class MetaDataMaster {
-
 	private final boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	private final int poolSize = Integer
 			.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
-	 MetaDataWorker workers[];
+	MetaDataWorker[] workers;
 
 	public MetaDataMaster() {
-
 	}
 
 	public void downloadRepoNames(String tokenList, String outPath) {
@@ -45,7 +43,8 @@ public class MetaDataMaster {
 		Arrays.sort(files, new Comparator<File>() {
 			@Override
 			public int compare(File f1, File f2) {
-				int n1 = getNumber(f1.getName()), n2 = getNumber(f2.getName());
+				int n1 = getNumber(f1.getName());
+				int n2 = getNumber(f2.getName());
 				return n1 - n2;
 			}
 
@@ -84,8 +83,7 @@ public class MetaDataMaster {
 						parsedRepos.add(repo);
 					}
 					FileIO.writeFileContents(new File(outDir + "/jsons/page-" + pageNumber + ".json"), parsedRepos.toString());
-					
-					
+
 					processMetadata(repos);
 					id = getLastId(pageContent);
 				}
@@ -96,7 +94,6 @@ public class MetaDataMaster {
 					if (!mc.authenticate())
 						continue;
 					numOfRemainingRequests = mc.getNumberOfRemainingLimit();
-					;
 					time = mc.getLimitResetTime();
 				} else if (numOfRemainingRequests <= 0) {
 					System.out.println("Current token got exhausted, going for next token");
@@ -105,7 +102,6 @@ public class MetaDataMaster {
 					if (!mc.authenticate())
 						continue;
 					numOfRemainingRequests = mc.getNumberOfRemainingLimit();
-					;
 					time = mc.getLimitResetTime();
 				} else {
 					mc = new MetadataCacher(url + "?since=" + id, tok.getUserName(), tok.getToken());
@@ -116,7 +112,7 @@ public class MetaDataMaster {
 		} else {
 			System.out.println("Authentication failed!");
 		}
-		
+
 		for (MetaDataWorker t : workers) {
 			while (!t.isAvailable()) {
 				try {
@@ -126,7 +122,8 @@ public class MetaDataMaster {
 					e.printStackTrace();
 				}
 			}
-			t.close();//close writers for this worker.
+			t.close(); //close writers for this worker.
+
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
@@ -152,6 +149,7 @@ public class MetaDataMaster {
 					}
 					break;
 				}
+
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -160,15 +158,13 @@ public class MetaDataMaster {
 				}
 			}
 		}
-		
-	
-		
 	}
 
 	private  String getLastId(String pageContent) {
 		int start = pageContent.length();
 		if (start == 0)
 			return "0";
+
 		while (true) {
 			String p = "{\"id\":";
 			start = pageContent.lastIndexOf(p, start);
@@ -182,5 +178,4 @@ public class MetaDataMaster {
 			}
 		}
 	}
-
 }

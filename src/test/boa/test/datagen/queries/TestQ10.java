@@ -17,7 +17,7 @@ import org.junit.Test;
 public class TestQ10 extends QueryTest {
 	
 	@Test
-	public void testQ10 () throws MissingObjectException, IncorrectObjectTypeException, IOException {
+	public void testQ10() throws MissingObjectException, IncorrectObjectTypeException, IOException {
 		int methods = 0;
 		int methodsMax = 0;
 		int methodsMin = Integer.MAX_VALUE;
@@ -65,7 +65,7 @@ public class TestQ10 extends QueryTest {
 		
 		@Override
 		public void endVisit(AnonymousClassDeclaration node) {
-			if (methods2 > 0) {classes ++;}
+			if (methods2 > 0) { classes++; }
 			if (maxMethods < methods2)
 				maxMethods = methods2;
 			if (minMethods > methods2)
@@ -77,7 +77,7 @@ public class TestQ10 extends QueryTest {
 		public void endVisit(TypeDeclaration node) {
 			if (node.isInterface())
 				return;
-			if (methods2 > 0) {classes ++;}
+			if (methods2 > 0) { classes++; }
 			if (maxMethods < methods2)
 				maxMethods = methods2;
 			if (minMethods > methods2)
@@ -87,8 +87,8 @@ public class TestQ10 extends QueryTest {
 		
 		@Override
 		public boolean visit(MethodDeclaration node) {
-			methods ++;
-			methods2 ++;
+			methods++;
+			methods2++;
 			return true;
 		}
 	}
