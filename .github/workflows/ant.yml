@@ -8,6 +8,7 @@ on:
     branches:
       - master
       - compiler-*
+      - jlf-j16
   pull_request:
     branches:
       - master
