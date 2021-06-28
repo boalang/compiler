@@ -1,6 +1,7 @@
 class t {
    void m() {
-	   class x{}
-	   
+      class x {
+      }
+      ;
    }
 }

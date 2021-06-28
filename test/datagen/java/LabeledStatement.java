@@ -1,5 +1,5 @@
 class t {
-   void m() {
+	void m() {
 	   Label:
 	   
    }

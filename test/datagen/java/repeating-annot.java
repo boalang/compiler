@@ -1,7 +1,4 @@
-class t {
-   void m() {
-	   @Annot(1) @Annot(2) class C {
-	   }
-	   
-   }
+@Annot(1)
+@Annot(2)
+class C {
 }
