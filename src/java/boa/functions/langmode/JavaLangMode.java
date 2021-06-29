@@ -25,6 +25,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 
+import boa.datagen.DefaultProperties;
 import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.JavaVisitor;
 import boa.types.Ast.ASTRoot;
@@ -864,7 +865,7 @@ public class JavaLangMode implements LangMode {
 	 * @return the AST representation of the string
 	 */
 	public Expression parseexpression(final String s) {
-		final ASTParser parser = ASTParser.newParser(8);
+		final ASTParser parser = ASTParser.newParser(DefaultProperties.DEFAULT_VERSION);
 		parser.setKind(ASTParser.K_EXPRESSION);
 		parser.setSource(s.toCharArray());
 
@@ -894,7 +895,7 @@ public class JavaLangMode implements LangMode {
 	 * @return the AST representation of the string
 	 */
 	public ASTRoot parse(final String s) {
-		final ASTParser parser = ASTParser.newParser(8);
+		final ASTParser parser = ASTParser.newParser(DefaultProperties.DEFAULT_VERSION);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(s.toCharArray());
 

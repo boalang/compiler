@@ -589,7 +589,7 @@ public abstract class AbstractCommit {
 
 	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
 		try {
-			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS15);
+			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(DefaultProperties.DEFAULT_VERSION);
 			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 //			parser.setResolveBindings(true);
 //			parser.setUnitName(FileIO.getFileName(path));

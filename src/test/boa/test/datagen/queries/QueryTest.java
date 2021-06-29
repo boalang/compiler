@@ -30,6 +30,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.junit.Before;
 
+import boa.datagen.DefaultProperties;
 import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.GitConnector;
 import boa.datagen.util.FileIO;
@@ -140,7 +141,7 @@ public abstract class QueryTest {
 	
 	protected void visitPath(String path, org.eclipse.jdt.core.dom.ASTVisitor visitor) {
 		ObjectId oi = filePathGitObjectIds.get(path);
-		final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(8);
+		final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(DefaultProperties.DEFAULT_VERSION);
 		parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 		final String content = getFileContents(oi);
 

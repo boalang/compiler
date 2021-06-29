@@ -44,6 +44,7 @@ import static org.junit.Assert.assertEquals;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Declaration;
 import boa.types.Diff.ChangedFile;
+import boa.datagen.DefaultProperties;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.JavaVisitor;
 import boa.datagen.util.ProtoMessageVisitor;
@@ -55,7 +56,7 @@ import boa.test.datagen.UglyMathCommentsExtractor;
  * @author rdyer
  */
 public class Java7BaseTest extends BaseTest {
-	protected static int astLevel = 8;
+	protected static int astLevel = DefaultProperties.DEFAULT_VERSION;
 	protected static String javaVersion = JavaCore.VERSION_1_8;
 	protected static JavaVisitor visitor = new JavaVisitor("");
 
@@ -112,7 +113,7 @@ public class Java7BaseTest extends BaseTest {
 		paths[0] = path;
 		parser.createASTs(paths, null, new String[0], r, null);
 		
-//		System.out.println("This is from parseJava: \n" + FileIO.normalizeEOL(sb.toString()));
+		System.out.println("This is from parseJava: \n" + FileIO.normalizeEOL(sb.toString()));
 		return FileIO.normalizeEOL(sb.toString());
 	}
 	

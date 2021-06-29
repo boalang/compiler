@@ -77,6 +77,9 @@ public class DefaultProperties {
 
 	public static String localDataPath = null;
 	
+	//default version 
+	public static int DEFAULT_VERSION = 15;
+	
 	@SuppressWarnings("unused")
 	private static String getRoot() {
 		File dir = new File(System.getProperty("user.dir"));
