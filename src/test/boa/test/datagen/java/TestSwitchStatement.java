@@ -22,4 +22,11 @@ public class TestSwitchStatement extends Java8BaseTest {
 		);
 	}
 	
+	@Test
+	public void switchCaseMultExps() throws IOException {
+		testWrapped(
+			"test/datagen/java/SwitchCaseMultExps.java",
+			load("test/datagen/boa/SwitchCaseMultExps.boa").trim()
+		);
+	}
 }
