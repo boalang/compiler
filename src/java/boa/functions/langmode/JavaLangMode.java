@@ -865,7 +865,7 @@ public class JavaLangMode implements LangMode {
 	 * @return the AST representation of the string
 	 */
 	public Expression parseexpression(final String s) {
-		final ASTParser parser = ASTParser.newParser(DefaultProperties.DEFAULT_VERSION);
+		final ASTParser parser = ASTParser.newParser(DefaultProperties.DEFAULT_JAVA_ASTLEVEL);
 		parser.setKind(ASTParser.K_EXPRESSION);
 		parser.setSource(s.toCharArray());
 
@@ -895,7 +895,7 @@ public class JavaLangMode implements LangMode {
 	 * @return the AST representation of the string
 	 */
 	public ASTRoot parse(final String s) {
-		final ASTParser parser = ASTParser.newParser(DefaultProperties.DEFAULT_VERSION);
+		final ASTParser parser = ASTParser.newParser(DefaultProperties.DEFAULT_JAVA_ASTLEVEL);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(s.toCharArray());
 

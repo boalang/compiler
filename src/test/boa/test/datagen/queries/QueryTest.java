@@ -141,7 +141,7 @@ public abstract class QueryTest {
 	
 	protected void visitPath(String path, org.eclipse.jdt.core.dom.ASTVisitor visitor) {
 		ObjectId oi = filePathGitObjectIds.get(path);
-		final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(DefaultProperties.DEFAULT_VERSION);
+		final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(DefaultProperties.DEFAULT_JAVA_ASTLEVEL);
 		parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 		final String content = getFileContents(oi);
 

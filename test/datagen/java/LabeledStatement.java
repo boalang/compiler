@@ -1,6 +1,6 @@
 class t {
 	void m() {
-	   Label:
+	   Label:;
 	   
    }
 }

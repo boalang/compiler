@@ -56,7 +56,7 @@ import boa.test.datagen.UglyMathCommentsExtractor;
  * @author rdyer
  */
 public class Java7BaseTest extends BaseTest {
-	protected static int astLevel = DefaultProperties.DEFAULT_VERSION;
+	protected static int astLevel = DefaultProperties.DEFAULT_JAVA_ASTLEVEL;
 	protected static String javaVersion = JavaCore.VERSION_1_8;
 	protected static JavaVisitor visitor = new JavaVisitor("");
 

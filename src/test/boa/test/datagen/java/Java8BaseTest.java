@@ -28,7 +28,7 @@ import boa.datagen.util.JavaVisitor;
  */
 public class Java8BaseTest extends Java7BaseTest {
 	private static void setJava8() {
-		astLevel = DefaultProperties.DEFAULT_VERSION;
+		astLevel = DefaultProperties.DEFAULT_JAVA_ASTLEVEL;
 		javaVersion = JavaCore.VERSION_1_8;
 		visitor = new JavaVisitor("");
 	}

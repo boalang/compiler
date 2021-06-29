@@ -78,7 +78,7 @@ public class DefaultProperties {
 	public static String localDataPath = null;
 	
 	//default version 
-	public static int DEFAULT_VERSION = 15;
+	public static int DEFAULT_JAVA_ASTLEVEL = 15;
 	
 	@SuppressWarnings("unused")
 	private static String getRoot() {
