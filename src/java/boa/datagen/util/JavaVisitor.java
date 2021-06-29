@@ -1298,7 +1298,8 @@ public class JavaVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(SwitchCase node) {
 		//getExpression() is deprecated, use expressions() (see JLS 12) 
-		if (node.getExpression() instanceof StringLiteral)
+		if (node.getExpression() instanceof StringLiteral 
+				|| (node.expressions() != null && node.expressions().size()>0 && node.expressions().get(0) instanceof StringLiteral))
 			setAstLevel(JLS4);
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
