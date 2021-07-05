@@ -126,6 +126,21 @@ message ChangedFile {
 		Source_CSS = 701;
 		/** @exclude */
 		CSS_ERROR = 700;
+
+		/** The file represents a Kotlin source file that had a parse error */
+		SOURCE_KOTLIN_ERROR = 800;
+		/** The file represents a Kotlin source file that parsed without error as 1.5.x+ */
+		SOURCE_KOTLIN_1_5 = 815;
+		/** The file represents a Kotlin source file that parsed without error as 1.4.x+ */
+		SOURCE_KOTLIN_1_4 = 814;
+		/** The file represents a Kotlin source file that parsed without error as 1.3.x+ */
+		SOURCE_KOTLIN_1_3 = 813;
+		/** The file represents a Kotlin source file that parsed without error as 1.2.x+ */
+		SOURCE_KOTLIN_1_2 = 812;
+		/** The file represents a Kotlin source file that parsed without error as 1.1.x+ */
+		SOURCE_KOTLIN_1_1 = 811;
+		/** The file represents a Kotlin source file that parsed without error as 1.0.x+ */
+		SOURCE_KOTLIN_1_0 = 810;
 	}
 	/** The kind of change for this file */
 	required ChangeKind change = 1;
