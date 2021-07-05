@@ -51,7 +51,9 @@ public class JavaVisitor extends ASTVisitor {
 	public static final int JLS3 = 3;
 	public static final int JLS4 = 4;
 	public static final int JLS8 = 8;
+	public static final int JLS10 = 10;
 	public static final int JLS14 = 14;
+	public static final int JLS15 = 15;
 
 	protected CompilationUnit root = null;
 	protected PositionInfo.Builder pos = null;
@@ -2158,6 +2160,19 @@ public class JavaVisitor extends ASTVisitor {
 
 		return false;
 	}
+	
+	// begin java 15 (expression)
+	@Override
+	public boolean visit(TextBlock node) {
+		setAstLevel(JLS15);
+		
+		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
+		eb.setLiteral(node.getEscapedValue());
+		expressions.push(eb.build());
+		
+		return false;
+	}
 
 	//////////////////////////////////////////////////////////////
 	// Utility methods
@@ -2270,6 +2285,7 @@ public class JavaVisitor extends ASTVisitor {
 
 		return t.getName().getFullyQualifiedName();
 	}
+	
 
 	//////////////////////////////////////////////////////////////
 	// Unused node types
