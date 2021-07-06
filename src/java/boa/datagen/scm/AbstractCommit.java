@@ -358,12 +358,12 @@ public abstract class AbstractCommit {
 					BytesWritable bw = new BytesWritable(content.getBytes());
 					connector.contentWriter.append(new LongWritable(connector.contentWriterLen), bw);
 					connector.contentWriterLen += bw.getLength();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					e.printStackTrace();
 				}
 			}
 		}*/
-		 
+
 		if (connector.astWriterLen > len) {
 			fb.setKey(len);
 			fb.setAst(true);
@@ -379,7 +379,7 @@ public abstract class AbstractCommit {
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
 		try {
 			doc = Jsoup.parse(content);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			if (debug) {
 				System.err.println("Error parsing HTML file: " + path);
 				e.printStackTrace();
@@ -402,7 +402,7 @@ public abstract class AbstractCommit {
 			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 			connector.astWriterLen += bw.getLength();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		return true;
@@ -417,7 +417,7 @@ public abstract class AbstractCommit {
 			org.dom4j.dom.DOMDocumentFactory di = new org.dom4j.dom.DOMDocumentFactory();
 			SAXReader reader = new SAXReader(di);
 			doc = reader.read(content);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			if (debug) {
 				System.err.println("Error parsing HTML file: " + path);
 				e.printStackTrace();
@@ -440,7 +440,7 @@ public abstract class AbstractCommit {
 			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 			connector.astWriterLen += bw.getLength();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		return true;
@@ -455,7 +455,7 @@ public abstract class AbstractCommit {
 			com.steadystate.css.parser.CSSOMParser parser = new com.steadystate.css.parser.CSSOMParser();
 			InputSource source = new InputSource(new StringReader(content));
 			sSheet = (CSSStyleSheetImpl) parser.parseStyleSheet(source, null, null);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			if (debug) {
 				System.err.println("Error parsing HTML file: " + path);
 				e.printStackTrace();
@@ -478,12 +478,12 @@ public abstract class AbstractCommit {
 			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 			connector.astWriterLen += bw.getLength();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		return true;
 	}
-	
+
 	private boolean parsePHPFile(final String path, final ChangedFile.Builder fb, final String content,
 			final PHPVersion astLevel, final boolean storeOnError) {
 		org.eclipse.php.internal.core.ast.nodes.ASTParser parser = org.eclipse.php.internal.core.ast.nodes.ASTParser
@@ -494,7 +494,7 @@ public abstract class AbstractCommit {
 			cu = parser.createAST(null);
 			if (cu == null)
 				return false;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			if (debug)
 				System.err.println("Error parsing PHP file: " + path + " from: " + projectName);
 			// e.printStackTrace();
@@ -520,7 +520,7 @@ public abstract class AbstractCommit {
 				BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 				connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 				connector.astWriterLen += bw.getLength();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -538,9 +538,9 @@ public abstract class AbstractCommit {
 			AstRoot cu;
 			try {
 				cu = parser.parse(content, null, 0);
-			} catch (java.lang.IllegalArgumentException ex) {
+			} catch (final java.lang.IllegalArgumentException ex) {
 				return false;
-			} catch (org.mozilla.javascript.EvaluatorException ex) {
+			} catch (final org.mozilla.javascript.EvaluatorException ex) {
 				return false;
 			}
 
@@ -575,7 +575,7 @@ public abstract class AbstractCommit {
 					BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 					connector.astWriterLen += bw.getLength();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					e.printStackTrace();
 				}
 				// fb.setComments(comments);
@@ -633,26 +633,27 @@ public abstract class AbstractCommit {
 			parser.setCompilerOptions(options);
 
 			final CompilationUnit cu;
-			
+
 			try {
 				cu = (CompilationUnit) parser.createAST(null);
-			} catch(Throwable e) {
+			} catch (final Throwable e) {
 				return false;
 			}
 
 			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
 			cu.accept(errorCheck);
-			
+
 			if (!errorCheck.hasError || storeOnError) {
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				// final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
 				final JavaVisitor visitor = new JavaVisitor(content);
 				try {
-					
+
 					ast.addNamespaces(visitor.getNamespaces(cu));
-					
-//					for (final Comment c : visitor.getComments()) comments.addComments(c);
-					 
+
+//					for (final Comment c : visitor.getComments())
+//						comments.addComments(c);
+
 				} catch (final Throwable e) {
 					if (debug) {
 						System.err.println("Error visiting Java file: " + path  + " from: " + projectName);
@@ -661,7 +662,7 @@ public abstract class AbstractCommit {
 					System.exit(-1);
 					return false;
 				}
-				
+
 				switch (visitor.getAstLevel()) {
 					case JavaVisitor.JLS2:
 						fb.setKind(FileKind.SOURCE_JAVA_JLS2);
@@ -683,10 +684,9 @@ public abstract class AbstractCommit {
 					BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 					connector.astWriterLen += bw.getLength();
-				} catch (IOException e) {
-					if (debug) 
+				} catch (final IOException e) {
+					if (debug)
 						e.printStackTrace();
-					
 				}
 				// fb.setComments(comments);
 			}
@@ -749,5 +749,4 @@ public abstract class AbstractCommit {
 
 		return loc;
 	}
-	
 }
