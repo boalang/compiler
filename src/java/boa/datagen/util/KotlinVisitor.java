@@ -61,7 +61,9 @@ public class KotlinVisitor {
 	protected Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
 	protected Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
 	protected Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
-	
+
+	protected String pkgName = "";
+
 	public static final int KLS10 = 10;
 	public static final int KLS11 = 11;
 	public static final int KLS12 = 12;
@@ -77,12 +79,13 @@ public class KotlinVisitor {
 	public Namespace getNamespaces(final List<Ast> n) {
 		root = n;
 		startvisit(n);
+		b.setName(pkgName);
 		return b.build();
 	}
 
-    public boa.types.Ast.Expression getExpression() {
-        return expressions.pop();
-    }
+	public boa.types.Ast.Expression getExpression() {
+		return expressions.pop();
+	}
 
 	public void startvisit(final List<Ast> n) {
 		for (final Ast ast : n)
@@ -90,7 +93,6 @@ public class KotlinVisitor {
 	}
 
 	public void startvisit(final Ast n) {
-		b.setName("");
 		if (n instanceof PackageHeader)
 			visit((PackageHeader) n);
 		else if (n instanceof Import)
@@ -142,7 +144,7 @@ public class KotlinVisitor {
 	}
 
 	protected void visit(final PackageHeader n) {
-		b.setName(getIdentifier(n.getIdentifier()));
+		pkgName = getIdentifier(n.getIdentifier());
 		//b.addAllModifiers(visitAnnotationsList(pkg.annotations()));
 	}
 
