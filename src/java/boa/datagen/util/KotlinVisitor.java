@@ -57,7 +57,7 @@ public class KotlinVisitor {
 
 	protected Namespace.Builder b = Namespace.newBuilder();
 	protected Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
-	protected Stack<boa.types.Ast.Modifier> modifiers = new Stack<boa.types.Ast.Modifier>();
+	protected Stack<List<boa.types.Ast.Modifier>> modifiers = new Stack<List<boa.types.Ast.Modifier>>();
 	protected Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
 	protected Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
 	protected Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
@@ -194,13 +194,60 @@ public class KotlinVisitor {
 
 		vb.setName(getIdentifier(n.getIdentifier()));
 
+		// Set the type.
+		if(!getIdentifier(n.getType()).equals(""))
+			vb.setVariableType(boa.types.Ast.Type.newBuilder()
+					   .setName(getIdentifier(n.getType()))
+					   .setKind(boa.types.Ast.TypeKind.OTHER)
+					   .build());
+
+		// Handle any potential modifiers on a variable.
+		modifiers.push(new ArrayList<Modifier>());
+		for (final KlassModifier m: n.getModifiers())
+			visit(m);
+		vb.addAllModifiers(modifiers.pop());
+
+		// Add any/all expressions providing values.
+		for (final Ast ex: n.getExpressions()) {
+			int numExpressionsStart = expressions.size();
+			startvisit(ex);
+			int numExpressions = expressions.size();
+			if (numExpressions > numExpressionsStart)
+				for (int i = 0 ; i < numExpressions - numExpressionsStart; i++)
+					vb.addExpressions(expressions.pop());
+		}
+
 		fields.peek().add(vb.build());
 	}
 
 	protected void visitDeclarationVal(final KlassDeclaration n) {
+		// Generally, see definition of `visitDeclarationVar`
 		final boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
 
 		vb.setName(getIdentifier(n.getIdentifier()));
+
+		if(!getIdentifier(n.getType()).equals(""))
+			vb.setVariableType(boa.types.Ast.Type.newBuilder()
+					   .setName(getIdentifier(n.getType()))
+					   .setKind(boa.types.Ast.TypeKind.OTHER)
+					   .build());
+
+		modifiers.push(new ArrayList<Modifier>());
+		// Note: `val x = 5` is roughly equivalent to `final int x = 5`
+		modifiers.peek().add(boa.types.Ast.Modifier.newBuilder()
+				     .setKind(boa.types.Ast.Modifier.ModifierKind.FINAL).build());
+		for (final KlassModifier m: n.getModifiers())
+			visit(m);
+		vb.addAllModifiers(modifiers.pop());
+
+		for (final Ast ex: n.getExpressions()) {
+			int numExpressionsStart = expressions.size();
+			startvisit(ex);
+			int numExpressions = expressions.size();
+			if (numExpressions > numExpressionsStart)
+				for (int i = 0 ; i < numExpressions - numExpressionsStart; i++)
+					vb.addExpressions(expressions.pop());
+		}
 
 		fields.peek().add(vb.build());
 	}
@@ -212,10 +259,10 @@ public class KotlinVisitor {
 		db.setName(getIdentifier(n.getIdentifier()));
 		db.setFullyQualifiedName(fullyQualified(getIdentifier(n.getIdentifier())));
 
+		modifiers.push(new ArrayList<Modifier>());
 		for (final KlassModifier m : n.getModifiers())
 			visit(m);
-		while (!modifiers.isEmpty())
-			db.addModifiers(modifiers.pop());
+		db.addAllModifiers(modifiers.pop());
 
 		declarations.push(new ArrayList<Declaration>());
 		fields.push(new ArrayList<Variable>());
