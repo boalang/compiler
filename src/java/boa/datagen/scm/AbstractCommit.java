@@ -59,14 +59,15 @@ import boa.datagen.dependencies.PomFile;
 import boa.datagen.util.CssVisitor;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.HtmlVisitor;
+import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.JavaScriptErrorCheckVisitor;
 import boa.datagen.util.JavaScriptVisitor;
 import boa.datagen.util.JavaVisitor;
+import boa.datagen.util.KotlinVisitor;
 import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.XMLVisitor;
-import boa.datagen.util.JavaErrorCheckVisitor;
 
 /**
  * @author rdyer
@@ -599,13 +600,34 @@ public abstract class AbstractCommit {
 		}
 
 		try {
-//			final KotlinVisitor visitor = new KotlinVisitor();
+			final KotlinVisitor visitor = new KotlinVisitor();
 			final ASTRoot.Builder ast = ASTRoot.newBuilder();
 
-//			visitor.startvisit(astList.get());
-//			ast.addNamespaces(visitor.getNamespaces(cu));
+			ast.addNamespaces(visitor.getNamespaces(astList.get()));
 
-			fb.setKind(FileKind.SOURCE_KOTLIN_1_5);
+			switch (visitor.getAstLevel()) {
+				case KotlinVisitor.KLS10:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_0);
+					break;
+				case KotlinVisitor.KLS11:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_1);
+					break;
+				case KotlinVisitor.KLS12:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_2);
+					break;
+				case KotlinVisitor.KLS13:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_3);
+					break;
+				case KotlinVisitor.KLS14:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_4);
+					break;
+				case KotlinVisitor.KLS15:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_5);
+					break;
+				default:
+					fb.setKind(FileKind.SOURCE_KOTLIN_ERROR);
+					break;
+			}
 
 			final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
