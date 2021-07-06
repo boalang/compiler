@@ -40,7 +40,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
@@ -102,7 +102,7 @@ public abstract class BaseTest {
 
 	protected CommonTokenStream lex(final String input, final int[] ids, final String[] strings, final String[] errors) throws IOException {
 		final List<String> foundErr = new ArrayList<String>();
-		final BoaLexer lexer = new BoaLexer(new ANTLRInputStream(new StringReader(input)));
+		final BoaLexer lexer = new BoaLexer(CharStreams.fromReader(new StringReader(input)));
 		lexer.removeErrorListeners();
 		lexer.addErrorListener(new BaseErrorListener() {
 			@Override
@@ -181,7 +181,7 @@ public abstract class BaseTest {
 			p = parser.start();
 		} catch (final Exception e) {
 			// fall-back to LL mode parsing if SLL fails
-			tokens.reset();
+			tokens.seek(0);
 			parser.reset();
 
 			parser.removeErrorListeners();
