@@ -1496,7 +1496,10 @@ public class KotlinVisitor {
 		boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
 
 		mb.setKind(boa.types.Ast.Modifier.ModifierKind.ANNOTATION);
-		mb.setAnnotationName(typeName((DefaultAstNode)n.getChildren().get(3)));
+		DefaultAstNode ast = (DefaultAstNode)n.getChildren().get(3);
+		ast = (DefaultAstNode)ast.getChildren().get(0);
+		ast = (DefaultAstNode)ast.getChildren().get(0);
+		mb.setAnnotationName(typeName(ast));
 		// FIXME doesnt store the values
 		//mb.addAnnotationMembers();
 		//mb.addAnnotationValues();
