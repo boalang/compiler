@@ -309,13 +309,1127 @@ public class KotlinVisitor {
 		case "fileAnnotation":
 			visitFileAnnot(n);
 			break;
-
+		case "typeAlias":
+			visitTypeAlias(n);
+			break;
+		case "declaration":
+			visitDeclaration(n);
+			break;
+		case "primaryConstructor":
+			visitPrimaryConstructor(n);
+			break;
+		case "delegationSpecifiers":
+			visitDelegationSpecifiers(n);
+			break;
+		case "delegationSpecifier":
+			visitDelegationSpecifier(n);
+			break;
+		case "constructorInvocation":
+			visitConstructorInvocation(n);
+			break;
+		case "annotatedDelegationSpecifier":
+			visitAnnotatedDelegationSpecifier(n);
+			break;
+		case "explicitDelegation":
+			visitExplicitDelegation(n);
+			break;
+		case "typeParameters":
+			visitTypeParameters(n);
+			break;
+		case "typeParameter":
+			visitTypeParameter(n);
+			break;
+		case "typeConstraints":
+			visitTypeConstraints(n);
+			break;
+		case "typeConstraint":
+			visitTypeConstraint(n);
+			break;
+		case "classMemberDeclarations":
+			visitClassMemberDeclarations(n);
+			break;
+		case "classMemberDeclaration":
+			visitClassMemberDeclaration(n);
+			break;
+		case "anonymousInitializer":
+			visitAnonymousInitializer(n);
+			break;
+		case "companionObject":
+			visitCompanionObject(n);
+			break;
+		case "functionValueParameters":
+			visitFunctionValueParameters(n);
+			break;
+		case "functionValueParameter":
+			visitFunctionValueParameter(n);
+			break;
+		case "functionDeclaration":
+			visitFunctionDeclaration(n);
+			break;
+		case "functionBody":
+			visitFunctionBody(n);
+			break;
+		case "variableDeclaration":
+			visitVariableDeclaration(n);
+			break;
+		case "multiVariableDeclaration":
+			visitMultiVariableDeclaration(n);
+			break;
+		case "propertyDeclaration":
+			visitPropertyDeclaration(n);
+			break;
+		case "propertyDelegate":
+			visitPropertyDelegate(n);
+			break;
+		case "getter":
+			visitGetter(n);
+			break;
+		case "setter":
+			visitSetter(n);
+			break;
+		case "parametersWithOptionalType":
+			visitParametersWithOptionalType(n);
+			break;
+		case "parameterWithOptionalType":
+			visitParameterWithOptionalType(n);
+			break;
+		case "parameter":
+			visitParameter(n);
+			break;
+		case "objectDeclaration":
+			visitObjectDeclaration(n);
+			break;
+		case "secondaryConstructor":
+			visitSecondaryConstructor(n);
+			break;
+		case "constructorDelegationCall":
+			visitConstructorDelegationCall(n);
+			break;
+		case "enumClassBody":
+			visitEnumClassBody(n);
+			break;
+		case "enumEntries":
+			visitEnumEntries(n);
+			break;
+		case "enumEntry":
+			visitEnumEntry(n);
+			break;
+		case "type":
+			visitType(n);
+			break;
+		case "typeReference":
+			visitTypeReference(n);
+			break;
+		case "nullableType":
+			visitNullableType(n);
+			break;
+		case "quest":
+			visitQuest(n);
+			break;
+		case "userType":
+			visitUserType(n);
+			break;
+		case "simpleUserType":
+			visitSimpleUserType(n);
+			break;
+		case "typeProjection":
+			visitTypeProjection(n);
+			break;
+		case "typeProjectionModifiers":
+			visitTypeProjectionModifiers(n);
+			break;
+		case "typeProjectionModifier":
+			visitTypeProjectionModifier(n);
+			break;
+		case "functionType":
+			visitFunctionType(n);
+			break;
+		case "functionTypeParameters":
+			visitFunctionTypeParameters(n);
+			break;
+		case "parenthesizedType":
+			visitParenthesizedType(n);
+			break;
+		case "receiverType":
+			visitReceiverType(n);
+			break;
+		case "parenthesizedUserType":
+			visitParenthesizedUserType(n);
+			break;
+		case "statements":
+			visitStatements(n);
+			break;
+		case "statement":
+			visitStatement(n);
+			break;
+		case "label":
+			visitLabel(n);
+			break;
+		case "controlStructureBody":
+			visitControlStructureBody(n);
+			break;
+		case "block":
+			visitBlock(n);
+			break;
+		case "loopStatement":
+			visitLoopStatement(n);
+			break;
+		case "forStatement":
+			visitForStatement(n);
+			break;
+		case "whileStatement":
+			visitWhileStatement(n);
+			break;
+		case "doWhileStatement":
+			visitDoWhileStatement(n);
+			break;
+		case "assignment":
+			visitAssignment(n);
+			break;
+		case "semi":
+			visitSemi(n);
+			break;
+		case "semis":
+			visitSemis(n);
+			break;
+		case "expression":
+			visitExpression(n);
+			break;
+		case "disjunction":
+			visitDisjunction(n);
+			break;
+		case "conjunction":
+			visitConjunction(n);
+			break;
+		case "equality":
+			visitEquality(n);
+			break;
+		case "comparison":
+			visitComparison(n);
+			break;
+		case "genericCallLikeComparison":
+			visitGenericCallLikeComparison(n);
+			break;
+		case "infixOperation":
+			visitInfixOperation(n);
+			break;
+		case "elvisExpression":
+			visitElvisExpression(n);
+			break;
+		case "elvis":
+			visitElvis(n);
+			break;
+		case "infixFunctionCall":
+			visitInfixFunctionCall(n);
+			break;
+		case "rangeExpression":
+			visitRangeExpression(n);
+			break;
+		case "additiveExpression":
+			visitAdditiveExpression(n);
+			break;
+		case "multiplicativeExpression":
+			visitMultiplicativeExpression(n);
+			break;
+		case "asExpression":
+			visitAsExpression(n);
+			break;
+		case "prefixUnaryExpression":
+			visitPrefixUnaryExpression(n);
+			break;
+		case "unaryPrefix":
+			visitUnaryPrefix(n);
+			break;
+		case "postfixUnaryExpression":
+			visitPostfixUnaryExpression(n);
+			break;
+		case "postfixUnarySuffix":
+			visitPostfixUnarySuffix(n);
+			break;
+		case "directlyAssignableExpression":
+			visitDirectlyAssignableExpression(n);
+			break;
+		case "parenthesizedDirectlyAssignableExpression":
+			visitParenthesizedDirectlyAssignableExpression(n);
+			break;
+		case "assignableExpression":
+			visitAssignableExpression(n);
+			break;
+		case "parenthesizedAssignableExpression":
+			visitParenthesizedAssignableExpression(n);
+			break;
+		case "assignableSuffix":
+			visitAssignableSuffix(n);
+			break;
+		case "indexingSuffix":
+			visitIndexingSuffix(n);
+			break;
+		case "navigationSuffix":
+			visitNavigationSuffix(n);
+			break;
+		case "callSuffix":
+			visitCallSuffix(n);
+			break;
+		case "annotatedLambda":
+			visitAnnotatedLambda(n);
+			break;
+		case "typeArguments":
+			visitTypeArguments(n);
+			break;
+		case "valueArguments":
+			visitValueArguments(n);
+			break;
+		case "valueArgument":
+			visitValueArgument(n);
+			break;
+		case "primaryExpression":
+			visitPrimaryExpression(n);
+			break;
+		case "parenthesizedExpression":
+			visitParenthesizedExpression(n);
+			break;
+		case "collectionLiteral":
+			visitCollectionLiteral(n);
+			break;
+		case "literalConstant":
+			visitLiteralConstant(n);
+			break;
+		case "stringLiteral":
+			visitStringLiteral(n);
+			break;
+		case "lineStringLiteral":
+			visitLineStringLiteral(n);
+			break;
+		case "multiLineStringLiteral":
+			visitMultiLineStringLiteral(n);
+			break;
+		case "lineStringContent":
+			visitLineStringContent(n);
+			break;
+		case "lineStringExpression":
+			visitLineStringExpression(n);
+			break;
+		case "multiLineStringContent":
+			visitMultiLineStringContent(n);
+			break;
+		case "multiLineStringExpression":
+			visitMultiLineStringExpression(n);
+			break;
+		case "lambdaLiteral":
+			visitLambdaLiteral(n);
+			break;
+		case "lambdaParameters":
+			visitLambdaParameters(n);
+			break;
+		case "lambdaParameter":
+			visitLambdaParameter(n);
+			break;
+		case "anonymousFunction":
+			visitAnonymousFunction(n);
+			break;
+		case "functionLiteral":
+			visitFunctionLiteral(n);
+			break;
+		case "objectLiteral":
+			visitObjectLiteral(n);
+			break;
+		case "thisExpression":
+			visitThisExpression(n);
+			break;
+		case "superExpression":
+			visitSuperExpression(n);
+			break;
+		case "ifExpression":
+			visitIfExpression(n);
+			break;
+		case "whenSubject":
+			visitWhenSubject(n);
+			break;
+		case "whenExpression":
+			visitWhenExpression(n);
+			break;
+		case "whenEntry":
+			visitWhenEntry(n);
+			break;
+		case "whenCondition":
+			visitWhenCondition(n);
+			break;
+		case "rangeTest":
+			visitRangeTest(n);
+			break;
+		case "typeTest":
+			visitTypeTest(n);
+			break;
+		case "tryExpression":
+			visitTryExpression(n);
+			break;
+		case "catchBlock":
+			visitCatchBlock(n);
+			break;
+		case "finallyBlock":
+			visitFinallyBlock(n);
+			break;
+		case "jumpExpression":
+			visitJumpExpression(n);
+			break;
+		case "callableReference":
+			visitCallableReference(n);
+			break;
+		case "assignmentAndOperator":
+			visitAssignmentAndOperator(n);
+			break;
+		case "equalityOperator":
+			visitEqualityOperator(n);
+			break;
+		case "comparisonOperator":
+			visitComparisonOperator(n);
+			break;
+		case "inOperator":
+			visitInOperator(n);
+			break;
+		case "isOperator":
+			visitIsOperator(n);
+			break;
+		case "additiveOperator":
+			visitAdditiveOperator(n);
+			break;
+		case "multiplicativeOperator":
+			visitMultiplicativeOperator(n);
+			break;
+		case "asOperator":
+			visitAsOperator(n);
+			break;
+		case "prefixUnaryOperator":
+			visitPrefixUnaryOperator(n);
+			break;
+		case "postfixUnaryOperator":
+			visitPostfixUnaryOperator(n);
+			break;
+		case "excl":
+			visitExcl(n);
+			break;
+		case "memberAccessOperator":
+			visitMemberAccessOperator(n);
+			break;
+		case "safeNav":
+			visitSafeNav(n);
+			break;
+		case "modifiers":
+			visitModifiers(n);
+			break;
+		case "parameterModifiers":
+			visitParameterModifiers(n);
+			break;
+		case "modifier":
+			visitModifier(n);
+			break;
+		case "typeModifiers":
+			visitTypeModifiers(n);
+			break;
+		case "typeModifier":
+			visitTypeModifier(n);
+			break;
+		case "classModifier":
+			visitClassModifier(n);
+			break;
+		case "memberModifier":
+			visitMemberModifier(n);
+			break;
+		case "visibilityModifier":
+			visitVisibilityModifier(n);
+			break;
+		case "varianceModifier":
+			visitVarianceModifier(n);
+			break;
+		case "typeParameterModifiers":
+			visitTypeParameterModifiers(n);
+			break;
+		case "typeParameterModifier":
+			visitTypeParameterModifier(n);
+			break;
+		case "functionModifier":
+			visitFunctionModifier(n);
+			break;
+		case "propertyModifier":
+			visitPropertyModifier(n);
+			break;
+		case "inheritanceModifier":
+			visitInheritanceModifier(n);
+			break;
+		case "parameterModifier":
+			visitParameterModifier(n);
+			break;
+		case "reificationModifier":
+			visitReificationModifier(n);
+			break;
+		case "platformModifier":
+			visitPlatformModifier(n);
+			break;
+		case "annotation":
+			visitAnnotation(n);
+			break;
+		case "singleAnnotation":
+			visitSingleAnnotation(n);
+			break;
+		case "multiAnnotation":
+			visitMultiAnnotation(n);
+			break;
+		case "annotationUseSiteTarget":
+			visitAnnotationUseSiteTarget(n);
+			break;
+		case "unescapedAnnotation":
+			visitUnescapedAnnotation(n);
+			break;
+		case "simpleIdentifier":
+			visitSimpleIdentifier(n);
+			break;
+		case "identifier":
+			visitIdentifier(n);
+			break;
 		default:
+			System.err.println("unknown kotlin DefaultAstNode type: " + n.getDescription());
 			for (final Ast a : n.getChildren())
 				startvisit(a);
 			break;
 		}
 	}
+
+	protected void visitTypeAlias(DefaultAstNode n) {
+
+	}
+
+	protected void	visitDeclaration(DefaultAstNode n) {
+
+	}
+
+	protected void	visitPrimaryConstructor(DefaultAstNode n) {
+
+	}
+
+	protected void	visitDelegationSpecifiers(DefaultAstNode n) {
+
+	}
+
+	protected void	visitDelegationSpecifier(DefaultAstNode n) {
+
+	}
+
+	protected void	visitConstructorInvocation(DefaultAstNode n) {
+
+	}
+
+	protected void	visitAnnotatedDelegationSpecifier(DefaultAstNode n) {
+
+	}
+
+	protected void	visitExplicitDelegation(DefaultAstNode n) {
+
+	}
+
+	protected void	visitTypeParameters(DefaultAstNode n) {
+
+	}
+
+	protected void	visitTypeParameter(DefaultAstNode n) {
+
+	}
+
+	protected void	visitTypeConstraints(DefaultAstNode n) {
+
+	}
+
+	protected void	visitTypeConstraint(DefaultAstNode n) {
+
+	}
+
+	protected void	visitClassMemberDeclarations(DefaultAstNode n) {
+
+	}
+
+	protected void	visitClassMemberDeclaration(DefaultAstNode n) {
+
+	}
+
+	protected void	visitAnonymousInitializer(DefaultAstNode n) {
+
+	}
+
+	protected void	visitCompanionObject(DefaultAstNode n) {
+
+	}
+
+	protected void	visitFunctionValueParameters(DefaultAstNode n) {
+
+	}
+
+	protected void	visitFunctionValueParameter(DefaultAstNode n) {
+
+	}
+
+	protected void	visitFunctionDeclaration(DefaultAstNode n) {
+
+	}
+
+	protected void	visitFunctionBody(DefaultAstNode n) {
+
+	}
+
+	protected void	visitVariableDeclaration(DefaultAstNode n) {
+
+	}
+
+	protected void	visitMultiVariableDeclaration(DefaultAstNode n) {
+
+	}
+
+	protected void	visitPropertyDeclaration(DefaultAstNode n) {
+
+	}
+
+	protected void	visitPropertyDelegate(DefaultAstNode n) {
+
+	}
+
+	protected void	visitGetter(DefaultAstNode n) {
+
+	}
+
+	protected void	visitSetter(DefaultAstNode n) {
+
+	}
+
+	protected void	visitParametersWithOptionalType(DefaultAstNode n) {
+
+	}
+
+	protected void	visitParameterWithOptionalType(DefaultAstNode n) {
+
+	}
+
+	protected void	visitParameter(DefaultAstNode n) {
+
+	}
+
+	protected void	visitObjectDeclaration(DefaultAstNode n) {
+
+	}
+
+	protected void	visitSecondaryConstructor(DefaultAstNode n) {
+
+	}
+
+	protected void	visitConstructorDelegationCall(DefaultAstNode n) {
+
+	}
+
+	protected void	visitEnumClassBody(DefaultAstNode n) {
+
+	}
+
+	protected void visitEnumEntries(DefaultAstNode n) {
+
+	}
+
+	protected void visitEnumEntry(DefaultAstNode n) {
+
+	}
+
+	protected void	visitType(DefaultAstNode n) {
+
+	}
+
+	protected void	visitTypeReference(DefaultAstNode n) {
+
+	}
+
+	protected void	visitNullableType(DefaultAstNode n) {
+
+	}
+
+	protected void	visitQuest(DefaultAstNode n) {
+
+	}
+
+	protected void	visitUserType(DefaultAstNode n) {
+
+	}
+
+	protected void	visitSimpleUserType(DefaultAstNode n) {
+
+	}
+
+	protected void	visitTypeProjection(DefaultAstNode n) {
+
+	}
+
+	protected void	visitTypeProjectionModifiers(DefaultAstNode n) {
+
+	}
+
+	protected void	visitTypeProjectionModifier(DefaultAstNode n) {
+
+	}
+
+	protected void	visitFunctionType(DefaultAstNode n) {
+
+	}
+
+	protected void	visitFunctionTypeParameters(DefaultAstNode n) {
+
+	}
+
+	protected void	visitParenthesizedType(DefaultAstNode n) {
+
+	}
+
+	protected void	visitReceiverType(DefaultAstNode n) {
+
+	}
+
+	protected void	visitParenthesizedUserType(DefaultAstNode n) {
+
+	}
+
+	protected void	visitStatements(DefaultAstNode n) {
+
+	}
+
+	protected void	visitStatement(DefaultAstNode n) {
+
+	}
+
+	protected void visitLabel(DefaultAstNode n) {
+
+	}
+
+	protected void visitControlStructureBody(DefaultAstNode n) {
+
+	}
+
+	protected void visitBlock(DefaultAstNode n) {
+
+	}
+
+	protected void visitLoopStatement(DefaultAstNode n) {
+
+	}
+
+	protected void visitForStatement(DefaultAstNode n) {
+
+	}
+
+	protected void visitWhileStatement(DefaultAstNode n) {
+
+	}
+
+	protected void visitDoWhileStatement(DefaultAstNode n) {
+
+	}
+
+	protected void visitAssignment(DefaultAstNode n) {
+
+	}
+
+	protected void visitSemi(DefaultAstNode n) {
+
+	}
+
+	protected void visitSemis(DefaultAstNode n) {
+
+	}
+
+	protected void visitExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitDisjunction(DefaultAstNode n) {
+
+	}
+
+	protected void visitConjunction(DefaultAstNode n) {
+
+	}
+
+	protected void visitEquality(DefaultAstNode n) {
+
+	}
+
+	protected void visitComparison(DefaultAstNode n) {
+
+	}
+
+	protected void visitGenericCallLikeComparison(DefaultAstNode n) {
+
+	}
+
+	protected void visitInfixOperation(DefaultAstNode n) {
+
+	}
+
+	protected void visitElvisExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitElvis(DefaultAstNode n) {
+
+	}
+
+	protected void visitInfixFunctionCall(DefaultAstNode n) {
+
+	}
+
+	protected void visitRangeExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitAdditiveExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitMultiplicativeExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitAsExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitPrefixUnaryExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitUnaryPrefix(DefaultAstNode n) {
+
+	}
+
+	protected void visitPostfixUnaryExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitPostfixUnarySuffix(DefaultAstNode n) {
+
+	}
+
+	protected void visitDirectlyAssignableExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitParenthesizedDirectlyAssignableExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitAssignableExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitParenthesizedAssignableExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitAssignableSuffix(DefaultAstNode n) {
+
+	}
+
+	protected void visitIndexingSuffix(DefaultAstNode n) {
+
+	}
+
+	protected void visitNavigationSuffix(DefaultAstNode n) {
+
+	}
+
+	protected void visitCallSuffix(DefaultAstNode n) {
+
+	}
+
+	protected void visitAnnotatedLambda(DefaultAstNode n) {
+
+	}
+
+	protected void visitTypeArguments(DefaultAstNode n) {
+
+	}
+
+	protected void visitValueArguments(DefaultAstNode n) {
+
+	}
+
+	protected void visitValueArgument(DefaultAstNode n) {
+
+	}
+
+	protected void visitPrimaryExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitParenthesizedExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitCollectionLiteral(DefaultAstNode n) {
+
+	}
+
+	protected void visitLiteralConstant(DefaultAstNode n) {
+
+	}
+
+	protected void visitStringLiteral(DefaultAstNode n) {
+
+	}
+
+	protected void visitLineStringLiteral(DefaultAstNode n) {
+
+	}
+
+	protected void visitMultiLineStringLiteral(DefaultAstNode n) {
+
+	}
+
+	protected void visitLineStringContent(DefaultAstNode n) {
+
+	}
+
+	protected void visitLineStringExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitMultiLineStringContent(DefaultAstNode n) {
+
+	}
+
+	protected void visitMultiLineStringExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitLambdaLiteral(DefaultAstNode n) {
+
+	}
+
+	protected void visitLambdaParameters(DefaultAstNode n) {
+
+	}
+
+	protected void visitLambdaParameter(DefaultAstNode n) {
+
+	}
+
+	protected void visitAnonymousFunction(DefaultAstNode n) {
+
+	}
+
+	protected void visitFunctionLiteral(DefaultAstNode n) {
+
+	}
+
+	protected void visitObjectLiteral(DefaultAstNode n) {
+
+	}
+
+	protected void visitThisExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitSuperExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitIfExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitWhenSubject(DefaultAstNode n) {
+
+	}
+
+	protected void visitWhenExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitWhenEntry(DefaultAstNode n) {
+
+	}
+
+	protected void visitWhenCondition(DefaultAstNode n) {
+
+	}
+
+	protected void visitRangeTest(DefaultAstNode n) {
+
+	}
+
+	protected void visitTypeTest(DefaultAstNode n) {
+
+	}
+
+	protected void visitTryExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitCatchBlock(DefaultAstNode n) {
+
+	}
+
+	protected void visitFinallyBlock(DefaultAstNode n) {
+
+	}
+
+	protected void visitJumpExpression(DefaultAstNode n) {
+
+	}
+
+	protected void visitCallableReference(DefaultAstNode n) {
+
+	}
+
+	protected void visitAssignmentAndOperator(DefaultAstNode n) {
+
+	}
+
+	protected void visitEqualityOperator(DefaultAstNode n) {
+
+	}
+
+	protected void visitComparisonOperator(DefaultAstNode n) {
+
+	}
+
+	protected void visitInOperator(DefaultAstNode n) {
+
+	}
+
+	protected void visitIsOperator(DefaultAstNode n) {
+
+	}
+
+	protected void visitAdditiveOperator(DefaultAstNode n) {
+
+	}
+
+	protected void visitMultiplicativeOperator(DefaultAstNode n) {
+
+	}
+
+	protected void visitAsOperator(DefaultAstNode n) {
+
+	}
+
+	protected void visitPrefixUnaryOperator(DefaultAstNode n) {
+
+	}
+
+	protected void visitPostfixUnaryOperator(DefaultAstNode n) {
+
+	}
+
+	protected void visitExcl(DefaultAstNode n) {
+
+	}
+
+	protected void visitMemberAccessOperator(DefaultAstNode n) {
+
+	}
+
+	protected void visitSafeNav(DefaultAstNode n) {
+
+	}
+
+	protected void visitModifiers(DefaultAstNode n) {
+
+	}
+
+	protected void visitParameterModifiers(DefaultAstNode n) {
+
+	}
+
+	protected void visitModifier(DefaultAstNode n) {
+
+	}
+
+	protected void visitTypeModifiers(DefaultAstNode n) {
+
+	}
+
+	protected void visitTypeModifier(DefaultAstNode n) {
+
+	}
+
+	protected void visitClassModifier(DefaultAstNode n) {
+
+	}
+
+	protected void visitMemberModifier(DefaultAstNode n) {
+
+	}
+
+	protected void visitVisibilityModifier(DefaultAstNode n) {
+
+	}
+
+	protected void visitVarianceModifier(DefaultAstNode n) {
+
+	}
+
+	protected void visitTypeParameterModifiers(DefaultAstNode n) {
+
+	}
+
+	protected void visitTypeParameterModifier(DefaultAstNode n) {
+
+	}
+
+	protected void visitFunctionModifier(DefaultAstNode n) {
+
+	}
+
+	protected void visitPropertyModifier(DefaultAstNode n) {
+
+	}
+
+	protected void visitInheritanceModifier(DefaultAstNode n) {
+
+	}
+
+	protected void visitParameterModifier(DefaultAstNode n) {
+
+	}
+
+	protected void visitReificationModifier(DefaultAstNode n) {
+
+	}
+
+	protected void visitPlatformModifier(DefaultAstNode n) {
+
+	}
+
+	protected void visitAnnotation(DefaultAstNode n) {
+
+	}
+
+	protected void visitSingleAnnotation(DefaultAstNode n) {
+
+	}
+
+	protected void visitMultiAnnotation(DefaultAstNode n) {
+
+	}
+
+	protected void visitAnnotationUseSiteTarget(DefaultAstNode n) {
+
+	}
+
+	protected void visitUnescapedAnnotation(DefaultAstNode n) {
+
+	}
+
+	protected void visitSimpleIdentifier(DefaultAstNode n) {
+
+	}
+
+	protected void visitIdentifier(DefaultAstNode n) {
+
+	}
+
 
 	protected void visitFileAnnot(final DefaultAstNode n) {
 		boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
