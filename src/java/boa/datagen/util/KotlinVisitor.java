@@ -170,9 +170,76 @@ public class KotlinVisitor {
 		System.out.print("KlassDeclaration(" + n.getKeyword() + " ");
 		System.out.print(getIdentifier(n.getIdentifier()));
 		System.out.println(")");
+		switch (n.getKeyword()) {
+		case "var":
+			visitDeclarationVar(n);
+			break;
+		case "val":
+			visitDeclarationVal(n);
+			break;
+		case "class":
+			visitDeclarationClass(n);
+			break;
+		case "interface":
+			visitDeclarationInterface(n);
+			break;
+		case "companion object":
+			visitDeclarationCompanionObject(n);
+			break;
+		case "object":
+			visitDeclarationObject(n);
+			break;
+		case "constructor":
+			visitDeclarationConstructor(n);
+			break;
+		case "argument":
+			visitDeclarationArgument(n);
+			break;
+		case "parameter":
+			visitDeclarationParameter(n);
+			break;
+		default:
+			System.err.println("unknown kotlin declaration: " n.getKeyword());
+		}
 		indent += 2;
 		startvisit(n.getChildren());
 		indent -= 2;
+	}
+
+	protected void visitDeclarationVar(final KlassDeclaration n) {
+
+	}
+
+	protected void visitDeclarationVal(final KlassDeclaration n) {
+
+	}
+
+	protected void visitDeclarationClass(final KlassDeclaration n) {
+
+	}
+
+	protected void visitDeclarationInterface(final KlassDeclaration n) {
+
+	}
+
+	protected void visitDeclarationCompanionObject(final KlassDeclaration n) {
+
+	}
+
+	protected void visitDeclarationObject(final KlassDeclaration n) {
+
+	}
+
+	protected void visitDeclarationConstructor(final KlassDeclaration n) {
+
+	}
+
+	protected void visitDeclarationArgument(final KlassDeclaration n) {
+
+	}
+
+	protected void visitDeclarationParameter(final KlassDeclaration n) {
+
 	}
 
 	protected void visit(final KlassModifier n) {
