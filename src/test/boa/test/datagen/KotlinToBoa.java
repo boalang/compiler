@@ -36,7 +36,6 @@ import boa.types.Ast.ASTRoot;
  */
 public class KotlinToBoa {
 	protected static String parseKotlin(final String content) {
-		try {
 			final StringBuilder sb = new StringBuilder();
 
 			final AstSource source = new AstSource.String("", content);
@@ -49,9 +48,6 @@ public class KotlinToBoa {
 			sb.append(JsonFormat.printToString(ast.build()));
 
 			return FileIO.normalizeEOL(sb.toString());
-		} catch (final Throwable e) {
-			return "";
-		}
 	}
 
 	public static void main(String[] args) {
