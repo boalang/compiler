@@ -1,7 +1,8 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, Hoan Nguyen
+ * Copyright 2016-2021, Hridesh Rajan, Robert Dyer, Hoan Nguyen
  *                 Iowa State University of Science and Technology
- *                 and Bowling Green State University
+ *                 Bowling Green State University
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +39,13 @@ import org.mozilla.javascript.ast.AstRoot;
 import org.w3c.css.sac.InputSource;
 
 import com.steadystate.css.dom.CSSStyleSheetImpl;
+
+import kotlin.Unit;
+import kotlinx.ast.common.ast.Ast;
+import kotlinx.ast.common.AstResult;
+import kotlinx.ast.common.AstSource;
+import kotlinx.ast.grammar.kotlin.common.SummaryKt;
+import kotlinx.ast.grammar.kotlin.target.antlr.java.KotlinGrammarAntlrJavaParser;
 
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.Revision;
@@ -211,6 +219,9 @@ public abstract class AbstractCommit {
 			final String content = getFileContents(path);
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 			parseJavaFile(path, fb, content, false); // parse java file
+		} else if (lowerPath.endsWith(".kt")) {
+			fb.setKind(FileKind.SOURCE_KOTLIN_ERROR);
+			parseKotlinFile(path, fb, getFileContents(path), false);
 		} else if (lowerPath.endsWith(".js")) {
 			final String content = getFileContents(path);
 
@@ -577,14 +588,35 @@ public abstract class AbstractCommit {
 		}
 	}
 
-	public Map<String, String> getLOC() {
-		final Map<String, String> l = new HashMap<String, String>();
+	private boolean parseKotlinFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
+		AstResult<Unit, List<Ast>> astList = null;
 
-		for (final ChangedFile.Builder cf : changedFiles)
-			if (cf.getChange() != ChangeKind.DELETED)
-				l.put(cf.getName(), processLOC(cf.getName()));
+		try {
+			AstSource source = new AstSource.String(path, content);
+			astList = SummaryKt.summary(KotlinGrammarAntlrJavaParser.INSTANCE.parseKotlinFile(source), true);
+		} catch (final Throwable e) {
+			return false;
+		}
 
-		return l;
+		try {
+//			final KotlinVisitor visitor = new KotlinVisitor();
+			final ASTRoot.Builder ast = ASTRoot.newBuilder();
+
+//			visitor.startvisit(astList.get());
+//			ast.addNamespaces(visitor.getNamespaces(cu));
+
+			fb.setKind(FileKind.SOURCE_KOTLIN_1_5);
+
+			final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+			connector.astWriterLen += bw.getLength();
+		} catch (final IOException e) {
+			if (debug)
+				e.printStackTrace();
+			return false;
+		}
+
+		return true;
 	}
 
 	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
@@ -666,7 +698,17 @@ public abstract class AbstractCommit {
 			return false;
 		}
 	}
-	
+
+	public Map<String, String> getLOC() {
+		final Map<String, String> l = new HashMap<String, String>();
+
+		for (final ChangedFile.Builder cf : changedFiles)
+			if (cf.getChange() != ChangeKind.DELETED)
+				l.put(cf.getName(), processLOC(cf.getName()));
+
+		return l;
+	}
+
 	protected String processLOC(final String path) {
 		String loc = "";
 
