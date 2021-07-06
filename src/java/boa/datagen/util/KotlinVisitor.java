@@ -77,18 +77,18 @@ public class KotlinVisitor {
 
 	public Namespace getNamespaces(final List<Ast> n) {
 		root = n;
-        declarations.push(new ArrayList<Declaration>());
-        fields.push(new ArrayList<Variable>());
+		declarations.push(new ArrayList<Declaration>());
+		fields.push(new ArrayList<Variable>());
 
 		startvisit(n);
 
-        final List<Declaration> decls = declarations.pop();
-        for (final Declaration d : decls)
-            b.addDeclarations(d);
+		final List<Declaration> decls = declarations.pop();
+		for (final Declaration d : decls)
+			b.addDeclarations(d);
 
-        final List<Variable> fs = fields.pop();
-        for (final Variable v : fs)
-            b.addVariables(v);
+		final List<Variable> fs = fields.pop();
+		for (final Variable v : fs)
+			b.addVariables(v);
 
 		return b.build();
 	}
@@ -136,7 +136,7 @@ public class KotlinVisitor {
 	}
 
 	protected void visit(final PackageHeader n) {
-        b.setName(getIdentifier(n.getIdentifier()));
+		b.setName(getIdentifier(n.getIdentifier()));
 	}
 
 	protected void visit(final Import n) {
@@ -192,40 +192,40 @@ public class KotlinVisitor {
 	protected void visitDeclarationVar(final KlassDeclaration n) {
 		final boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
 
-        vb.setName(getIdentifier(n.getIdentifier()));
+		vb.setName(getIdentifier(n.getIdentifier()));
 
-        fields.peek().add(vb.build());
+		fields.peek().add(vb.build());
 	}
 
 	protected void visitDeclarationVal(final KlassDeclaration n) {
 		final boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
 
-        vb.setName(getIdentifier(n.getIdentifier()));
+		vb.setName(getIdentifier(n.getIdentifier()));
 
-        fields.peek().add(vb.build());
+		fields.peek().add(vb.build());
 	}
 
 	protected void visitDeclarationClass(final KlassDeclaration n) {
 		final boa.types.Ast.Declaration.Builder db = boa.types.Ast.Declaration.newBuilder();
 
-        db.setKind(boa.types.Ast.TypeKind.CLASS);
-        db.setName(getIdentifier(n.getIdentifier()));
-        db.setFullyQualifiedName(fullyQualified(getIdentifier(n.getIdentifier())));
+		db.setKind(boa.types.Ast.TypeKind.CLASS);
+		db.setName(getIdentifier(n.getIdentifier()));
+		db.setFullyQualifiedName(fullyQualified(getIdentifier(n.getIdentifier())));
 
-        for (final KlassModifier m : n.getModifiers())
-            visit(m);
+		for (final KlassModifier m : n.getModifiers())
+			visit(m);
 		while (!modifiers.isEmpty())
 			db.addModifiers(modifiers.pop());
 
-        declarations.push(new ArrayList<Declaration>());
-        fields.push(new ArrayList<Variable>());
+		declarations.push(new ArrayList<Declaration>());
+		fields.push(new ArrayList<Variable>());
 
-        startvisit(n.getExpressions());
+		startvisit(n.getExpressions());
 
-        db.addAllFields(fields.pop());
-        db.addAllNestedDeclarations(declarations.pop());
+		db.addAllFields(fields.pop());
+		db.addAllNestedDeclarations(declarations.pop());
 
-        declarations.peek().add(db.build());
+		declarations.peek().add(db.build());
 	}
 
 	protected void visitDeclarationInterface(final KlassDeclaration n) {
@@ -1450,7 +1450,7 @@ public class KotlinVisitor {
 
 		mb.setKind(boa.types.Ast.Modifier.ModifierKind.ANNOTATION);
 		mb.setAnnotationName(typeName((DefaultAstNode)n.getChildren().get(3)));
-        // FIXME doesnt store the values
+		// FIXME doesnt store the values
 		//mb.addAnnotationMembers();
 		//mb.addAnnotationValues();
 
@@ -1486,25 +1486,24 @@ public class KotlinVisitor {
 	}
 
 	protected String typeName(final DefaultAstNode n) {
-		switch (n.getDescription()) {
-		case "userType":
-            // FIXME does not handle qualified names
-			return typeName((DefaultAstNode)n.getChildren().get(0));
+		final List<String> parts = new ArrayList<String>();
 
-		case "simpleUserType":
-			return typeName((DefaultAstNode)n.getChildren().get(0));
+		for (final Ast child : n.getChildren())
+			if (child instanceof DefaultAstNode)
+				parts.add(typeName((DefaultAstNode)child));
+			else if (child instanceof DefaultAstTerminal)
+				parts.add(typeName((DefaultAstTerminal)child));
 
-		case "simpleIdentifier":
-			return getIdentifier((DefaultAstTerminal)n.getChildren().get(0));
+		return String.join("", parts);
+	}
 
-		default:
-			return typeName((DefaultAstNode)n.getChildren().get(0));
-		}
+	protected String typeName(final DefaultAstTerminal n) {
+		return n.getText();
 	}
 
 	protected String fullyQualified(final String name) {
-        if (b.getName().isEmpty())
-            return name;
-        return b.getName() + "." + name;
-    }
+		if (b.getName().isEmpty())
+			return name;
+		return b.getName() + "." + name;
+	}
 }
